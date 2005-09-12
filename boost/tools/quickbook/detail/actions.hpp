@@ -666,6 +666,7 @@ namespace quickbook
         macros_type             macro;
         std::string             source_mode;
         code_action             code;
+        code_action             code_block;
         inline_code_action      inline_code;
         phrase_action           paragraph, h1, h2, h3, h4, h5, h6;
         markup_action           hr;

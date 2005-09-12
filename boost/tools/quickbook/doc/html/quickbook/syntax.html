@@ -258,8 +258,45 @@ the true business precept.]
             <tt class="computeroutput"><span class="string">"'"</span></tt>. Note too that <tt class="literal">`some code`</tt> is prefered over
             <tt class="literal">[^some code]</tt>. </td></tr></tbody>
 </table></div>
-<a name="syntax.source_mode"></a><h3>
+<a name="syntax.code_blocks"></a><h3>
 <a name="id372930"></a>
+      Code blocks
+    </h3>
+<p>
+      Preformatted code simply starts with a space or a tab (See <a href="syntax.html#syntax.code">Code</a>).
+      However, such a simple syntax cannot be used as phrase elements in list (See
+      <a href="syntax.html#syntax.ordered_lists">Ordered lists</a> and <a href="syntax.html#syntax.unordered_lists">Unordered
+      lists</a>), tables <a href="syntax.html#syntax.tables">Tables</a>, etc. Inline
+      code (see above) can. The problem is, inline code does not allow formatting
+      with newlines, spaces, and tabs. These are lost.
+    </p>
+<p>
+      We provide a phrase level markup that is a mix between the two. By using the
+      double-tick, instead of the single-tick, we are telling QuickBook to use reformatted
+      blocks of code. Example:
+    </p>
+<pre class="programlisting"><tt class="literal">``
+    #include &lt;iostream&gt;
+
+    int main()
+    {
+        std::cout &lt;&lt; "Hello, World!" &lt;&lt; std::endl;
+        return 0;
+    }
+``
+</tt></pre>
+<p>
+      will generate:
+    </p>
+<pre class="programlisting"><tt class="literal"><span class="preprocessor">#include</span><span class="special"> &lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span><span class="keyword">
+
+int</span><span class="identifier"> main</span><span class="special">()</span><span class="special">
+{</span><span class="identifier">
+    std</span><span class="special">::</span><span class="identifier">cout</span><span class="special"> &lt;&lt;</span><span class="string"> "Hello, World!"</span><span class="special"> &lt;&lt;</span><span class="identifier"> std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span><span class="keyword">
+    return</span><span class="number"> 0</span><span class="special">;</span><span class="special">
+}</span></tt></pre>
+<a name="syntax.source_mode"></a><h3>
+<a name="id442424"></a>
       Source Mode
     </h3>
 <p>
@@ -289,7 +326,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
     </p>
 <div class="informaltable">
 <h4>
-<a name="id372147"></a><span class="table-title">Supported Source Modes</span>
+<a name="id442520"></a><span class="table-title">Supported Source Modes</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -319,7 +356,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
             are lowercase.</td></tr></tbody>
 </table></div>
 <a name="syntax.line_break"></a><h3>
-<a name="id442394"></a>
+<a name="id442589"></a>
       line-break
     </h3>
 <pre class="programlisting"><tt class="literal">[br]
@@ -332,7 +369,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
             <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.</td></tr></tbody>
 </table></div>
 <a name="syntax.anchors"></a><h3>
-<a name="id442469"></a>
+<a name="id442664"></a>
       Anchors
     </h3>
 <pre class="programlisting"><tt class="literal">[#named_anchor]
@@ -344,7 +381,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
       <a href="syntax.html#syntax.section">here</a> and <a href="syntax.html#syntax.headings">here</a>.
     </p>
 <a name="syntax.links"></a><h3>
-<a name="id442530"></a>
+<a name="id442724"></a>
       Links
     </h3>
 <pre class="programlisting"><tt class="literal">[@http://www.boost.org this is [*boost's] website....]
@@ -370,7 +407,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
 <p>
       see <a href="http://spirit.sourceforge.net/" target="_top">http://spirit.sourceforge.net/</a></p>
 <a name="syntax.anchor_links"></a><h3>
-<a name="id442602"></a>
+<a name="id442797"></a>
       Anchor links
     </h3>
 <p>
@@ -383,7 +420,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
       more info.
     </p>
 <a name="syntax.refentry_links"></a><h3>
-<a name="id442645"></a>
+<a name="id442839"></a>
       refentry links
     </h3>
 <p>
@@ -406,7 +443,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
       &gt;xml.refentry&lt;/link&gt;</tt>.
     </p>
 <a name="syntax.function__class__member__enum_or_header_links"></a><h3>
-<a name="id442706"></a>
+<a name="id442900"></a>
       function, class, member, enum or header links
     </h3>
 <p>
@@ -429,7 +466,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
       would have "boost::bar::baz" as the link text.
     </p>
 <a name="syntax.escape"></a><h3>
-<a name="id442752"></a>
+<a name="id442947"></a>
       Escape
     </h3>
 <p>
@@ -455,7 +492,7 @@ escape (no processing/formatting)
             the escape. The text must conform to <a href="http://www.boost.org/doc/html/boostbook.html" target="_top">BoostBook</a>/<a href="http://www.docbook.org/" target="_top">DocBook</a> syntax.</td></tr></tbody>
 </table></div>
 <a name="syntax.single_char_escape"></a><h3>
-<a name="id442844"></a>
+<a name="id443039"></a>
       Single char escape
     </h3>
 <p>
@@ -469,17 +506,17 @@ escape (no processing/formatting)
       <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.
     </p>
 <a name="syntax.images__terminal_"></a><h3>
-<a name="id442937"></a>
+<a name="id443132"></a>
       Images (terminal)
     </h3>
 <pre class="programlisting"><tt class="literal">[$image.jpg]
 </tt></pre>
 <a name="syntax.block_level_elements"></a><h2>
-<a name="id442955"></a>
+<a name="id443149"></a>
       Block Level Elements
     </h2>
 <a name="syntax.document"></a><h3>
-<a name="id442966"></a>
+<a name="id443160"></a>
       Document
     </h3>
 <p>
@@ -532,7 +569,7 @@ escape (no processing/formatting)
       field is omitted, a default value of <tt class="literal">c++</tt> will be used.
     </p>
 <a name="syntax.section"></a><h3>
-<a name="id443109"></a>
+<a name="id443304"></a>
       Section
     </h3>
 <p>
@@ -558,7 +595,7 @@ escape (no processing/formatting)
       Sections can nest, and that results in a hierarchy in the table of contents.
     </p>
 <a name="syntax.xinclude"></a><h3>
-<a name="id443182"></a>
+<a name="id443377"></a>
       xinclude
     </h3>
 <p>
@@ -571,7 +608,7 @@ escape (no processing/formatting)
       reference section.
     </p>
 <a name="syntax.paragraphs"></a><h3>
-<a name="id443210"></a>
+<a name="id443405"></a>
       Paragraphs
     </h3>
 <p>
@@ -580,7 +617,7 @@ escape (no processing/formatting)
       from the context.
     </p>
 <a name="syntax.ordered_lists"></a><h3>
-<a name="id443223"></a>
+<a name="id443418"></a>
       Ordered lists
     </h3>
 <pre class="programlisting"><tt class="literal"># One
@@ -602,7 +639,7 @@ escape (no processing/formatting)
       </li>
 </ol></div>
 <a name="syntax.list_hierarchies"></a><h3>
-<a name="id443260"></a>
+<a name="id443454"></a>
       List Hierarchies
     </h3>
 <p>
@@ -663,7 +700,7 @@ escape (no processing/formatting)
       </li>
 </ol></div>
 <a name="syntax.long_list_lines"></a><h3>
-<a name="id443343"></a>
+<a name="id443537"></a>
       Long List Lines
     </h3>
 <p>
@@ -692,7 +729,7 @@ escape (no processing/formatting)
       </li>
 </ol></div>
 <a name="syntax.unordered_lists"></a><h3>
-<a name="id443390"></a>
+<a name="id443584"></a>
       Unordered lists
     </h3>
 <pre class="programlisting"><tt class="literal">* First
@@ -714,7 +751,7 @@ escape (no processing/formatting)
       </li>
 </ul></div>
 <a name="syntax.mixed_lists"></a><h3>
-<a name="id443421"></a>
+<a name="id443616"></a>
       Mixed lists
     </h3>
 <p>
@@ -824,7 +861,7 @@ escape (no processing/formatting)
 </li>
 </ol></div>
 <a name="syntax.code"></a><h3>
-<a name="id443547"></a>
+<a name="id443742"></a>
       Code
     </h3>
 <p>
@@ -860,7 +897,7 @@ def</span><span class="identifier"> cookForHtml</span><span class="special">(</s
     </p>
 <pre class="programlisting"><tt class="literal"><span class="identifier">using</span> <a href="../index.html" target="_top">quickbook</a><span class="special">::</span><a href="highlight.html" target="_top">syntax_highlight</a><span class="special">;</span></tt></pre>
 <a name="syntax.preformatted"></a><h3>
-<a name="id443813"></a>
+<a name="id444008"></a>
       Preformatted
     </h3>
 <p>
@@ -894,7 +931,7 @@ def</span><span class="identifier"> cookForHtml</span><span class="special">(</s
       inside <tt class="literal">pre</tt> blocks.
     </p>
 <a name="syntax.blockquote"></a><h3>
-<a name="id443911"></a>
+<a name="id444106"></a>
       Blockquote
     </h3>
 <pre class="programlisting"><tt class="literal">[:sometext...]
@@ -903,7 +940,7 @@ def</span><span class="identifier"> cookForHtml</span><span class="special">(</s
         Indents the paragraph. This applies to one paragraph only.
       </p></blockquote></div>
 <a name="syntax.headings"></a><h3>
-<a name="id443936"></a>
+<a name="id444131"></a>
       Headings
     </h3>
 <pre class="programlisting"><tt class="literal">[h1 Heading 1]
@@ -914,27 +951,27 @@ def</span><span class="identifier"> cookForHtml</span><span class="special">(</s
 [h6 Heading 6]
 </tt></pre>
 <a name="syntax.heading_1"></a><h1>
-<a name="id443957"></a>
+<a name="id444152"></a>
       Heading 1
     </h1>
 <a name="syntax.heading_2"></a><h2>
-<a name="id443968"></a>
+<a name="id444163"></a>
       Heading 2
     </h2>
 <a name="syntax.heading_3"></a><h3>
-<a name="id443979"></a>
+<a name="id444174"></a>
       Heading 3
     </h3>
 <a name="syntax.heading_4"></a><h4>
-<a name="id443990"></a>
+<a name="id444185"></a>
       Heading 4
     </h4>
 <a name="syntax.heading_5"></a><h5>
-<a name="id444001"></a>
+<a name="id444196"></a>
       Heading 5
     </h5>
 <a name="syntax.heading_6"></a><h3>
-<a name="id444011"></a>
+<a name="id444206"></a>
       Heading 6
     </h3>
 <p>
@@ -953,7 +990,7 @@ def</span><span class="identifier"> cookForHtml</span><span class="special">(</s
       and <a href="syntax.html#syntax.section">Section</a> for more info.
     </p>
 <a name="syntax.macros"></a><h3>
-<a name="id444097"></a>
+<a name="id444292"></a>
       Macros
     </h3>
 <pre class="programlisting"><tt class="literal">[def macro_identifier some text]
@@ -1006,7 +1043,7 @@ sf_logo
 <p>
       Hi <a href="http://spirit.sourceforge.net" target="_top">Spirit</a><span class="inlinemediaobject"><img src="../images/smiley.png"></span></p>
 <a name="syntax.predefined_macros"></a><h3>
-<a name="id444272"></a>
+<a name="id444467"></a>
       Predefined Macros
     </h3>
 <p>
@@ -1014,7 +1051,7 @@ sf_logo
     </p>
 <div class="informaltable">
 <h4>
-<a name="id444284"></a><span class="table-title">Predefined Macros</span>
+<a name="id444479"></a><span class="table-title">Predefined Macros</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -1036,8 +1073,8 @@ sf_logo
 <tr>
 <td>__TIME__</td>
 <td>The current time</td>
-<td>03:14:07
-            AM</td>
+<td>07:15:50
+            PM</td>
 </tr>
 <tr>
 <td>__FILENAME__</td>
@@ -1048,7 +1085,7 @@ sf_logo
 </table>
 </div>
 <a name="syntax.blurbs"></a><h3>
-<a name="id444342"></a>
+<a name="id444537"></a>
       Blurbs
     </h3>
 <pre class="programlisting"><tt class="literal">[blurb :-) [*An eye catching advertisement or note...]\n\n
@@ -1072,7 +1109,7 @@ sf_logo
             in C++. </td></tr></tbody>
 </table></div>
 <a name="syntax.tables"></a><h3>
-<a name="id444402"></a>
+<a name="id444597"></a>
       Tables
     </h3>
 <pre class="programlisting"><tt class="literal">[table A Simple Table
@@ -1087,7 +1124,7 @@ sf_logo
     </p>
 <div class="informaltable">
 <h4>
-<a name="id444424"></a><span class="table-title">A Simple Table</span>
+<a name="id444619"></a><span class="table-title">A Simple Table</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -1147,7 +1184,7 @@ sf_logo
     </p>
 <div class="informaltable">
 <h4>
-<a name="id444513"></a><span class="table-title">Table with fat cells</span>
+<a name="id444708"></a><span class="table-title">Table with fat cells</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -1174,8 +1211,52 @@ sf_logo
 </tbody>
 </table>
 </div>
+<p>
+      Here's how to have preformatted blocks of code in a table cell:
+    </p>
+<pre class="programlisting"><tt class="literal">[table Table with code
+    [[Comment] [Code]]
+    [
+        [My first program]
+        [``
+            #include &lt;iostream&gt;
+
+            int main()
+            {
+                std::cout &lt;&lt; "Hello, World!" &lt;&lt; std::endl;
+                return 0;
+            }
+        ``]
+    ]
+]
+</tt></pre>
+<div class="informaltable">
+<h4>
+<a name="id444772"></a><span class="table-title">Table with code</span>
+</h4>
+<table class="table">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>Comment</th>
+<th>Code</th>
+</tr></thead>
+<tbody><tr>
+<td>My first program</td>
+<td><pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><tt class="literal"><span class="comment">#include &lt;iostream&gt;
+</span><span class="identifier">
+int</span><span class="identifier"> main</span><span class="special">()</span><span class="special">
+{</span><span class="identifier">
+    std</span><span class="special">::</span><span class="identifier">cout</span><span class="special"> &lt;&lt;</span><span class="string"> "Hello, World!"</span><span class="special"> &lt;&lt;</span><span class="identifier"> std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span><span class="keyword">
+    return</span><span class="number"> 0</span><span class="special">;</span><span class="special">
+}</span></tt></pre></td>
+</tr></tbody>
+</table>
+</div>
 <a name="syntax.variable_lists"></a><h3>
-<a name="id444557"></a>
+<a name="id444908"></a>
       Variable Lists
     </h3>
 <pre class="programlisting"><tt class="literal">[variablelist A Variable List
@@ -1211,7 +1292,7 @@ sf_logo
       this as a "definition list".
     </p>
 <a name="syntax.include"></a><h3>
-<a name="id444614"></a>
+<a name="id444964"></a>
       Include
     </h3>
 <p>

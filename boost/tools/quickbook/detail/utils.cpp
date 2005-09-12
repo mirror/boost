@@ -55,19 +55,22 @@ namespace quickbook { namespace detail
     // un-indent a code segment
     void unindent(std::string& program)
     {
+        std::string::size_type const start = program.find_first_not_of("\r\n");
+        program.erase(0, start); // erase leading newlines
+
         std::string::size_type const n = program.find_first_not_of(" \t");
-        BOOST_ASSERT( std::string::npos != n );
-        program.erase( 0, n );
+        BOOST_ASSERT(std::string::npos != n);
+        program.erase(0, n);
 
         std::string::size_type pos = 0;
-        while( std::string::npos != ( pos = program.find( '\n', pos ) ) )
+        while (std::string::npos != (pos = program.find('\n', pos )))
         {
-            if( std::string::npos == ( pos = program.find_first_not_of('\n', pos) ) )
+            if (std::string::npos == (pos = program.find_first_not_of('\n', pos)))
             {
                 break;
             }
 
-            program.erase( pos, n );
+            program.erase(pos, n);
         }
     }
 

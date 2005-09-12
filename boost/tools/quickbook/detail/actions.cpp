@@ -617,6 +617,7 @@ namespace quickbook
         , source_mode("c++")
         , code(out, source_mode, macro)
         , inline_code(phrase, source_mode, macro)
+        , code_block(phrase, source_mode, macro)
         , paragraph(out, phrase, section_id, paragraph_pre, paragraph_post)
         , h1(out, phrase, section_id, h1_pre, h1_post, true)
         , h2(out, phrase, section_id, h2_pre, h2_post, true)

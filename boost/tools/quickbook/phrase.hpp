@@ -91,6 +91,7 @@ namespace quickbook
                 common =
                         actions.macro                   [actions.do_macro]
                     |   phrase_markup
+                    |   code_block
                     |   inline_code
                     |   simple_format
                     |   escape
@@ -107,6 +108,15 @@ namespace quickbook
                         ) >> eps_p('`')
                     )                                   [actions.inline_code]
                     >>  '`'
+                    ;
+
+                code_block =
+                    "``" >>
+                    (
+                       *(anychar_p - "``")
+                            >> eps_p("``")
+                    )                                   [actions.code_block]
+                    >>  "``"
                     ;
 
                 simple_format =
@@ -291,7 +301,7 @@ namespace quickbook
                             link, hard_space, eol, inline_code, simple_format, 
                             simple_bold, simple_italic, simple_underline, 
                             simple_teletype, simple_strikethrough, source_mode,
-                            quote;
+                            quote, code_block;
 
             rule<Scanner> const&
             start() const { return common; }
