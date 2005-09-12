@@ -496,18 +496,18 @@ namespace quickbook
             return;
         }
 
-        if (actions.doc_version.empty())
+        if (actions.qbk_major_version == 0)
         {
-            // hard code version to v1.1
-            actions.doc_major_version = 1;
-            actions.doc_minor_version = 1;
-            actions.doc_version_n = 101;
-            std::cerr << "Warning: Document version undefined. "
+            // hard code quickbook version to v1.1
+            actions.qbk_major_version = 1;
+            actions.qbk_minor_version = 1;
+            actions.qbk_version_n = 101;
+            std::cerr << "Warning: Quickbook version undefined. "
                 "Version 1.1 is assumed" << std::endl;
         }
         else
         {
-            actions.doc_version_n = (actions.doc_major_version * 100) + actions.doc_minor_version; 
+            actions.qbk_version_n = (actions.qbk_major_version * 100) + actions.qbk_minor_version; 
         }
 
         out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -541,7 +541,7 @@ namespace quickbook
             ;
         }
 
-        if (actions.doc_version_n < 103)
+        if (actions.qbk_version_n < 103)
         {
             // version < 1.3 compatibility
             actions.doc_license = actions.doc_license_1_1;
@@ -691,9 +691,9 @@ namespace quickbook
         , include(*this)
         , extract_doc_license(doc_license, phrase)
         , extract_doc_purpose(doc_purpose, phrase)
-        , doc_major_version(0)
-        , doc_minor_version(0)
-        , doc_version_n(0)
+        , qbk_major_version(0)
+        , qbk_minor_version(0)
+        , qbk_version_n(0)
     {
         // turn off __FILENAME__ macro on debug mode = true
         std::string filename_str = debug_mode ? 

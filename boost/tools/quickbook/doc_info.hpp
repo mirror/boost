@@ -50,7 +50,12 @@ namespace quickbook
                             (ch_p('[') | ']' | eol_p)
                             )
                         )                           [assign_a(actions.doc_title)]
-                    >> 
+                    >>  !(
+                            space >> '[' >>
+                                quickbook_version
+                            >> space >> ']'
+                        )
+                    >>
                         *(
                             space >> '[' >>
                             (
@@ -70,12 +75,17 @@ namespace quickbook
                     >> ']' >> +eol_p
                     ;
 
+                quickbook_version =
+                        "quickbook" >> hard_space
+                    >>  (   uint_p                  [assign_a(actions.qbk_major_version)]
+                            >> '.' 
+                            >>  uint2_t()           [assign_a(actions.qbk_minor_version)]
+                        )
+                    ;
+
                 doc_version =
                         "version" >> hard_space
-                    >>  (   uint_p                  [assign_a(actions.doc_major_version)]
-                            >> '.' 
-                            >>  uint2_t()           [assign_a(actions.doc_minor_version)]
-                        )                           [assign_a(actions.doc_version)]
+                    >> (*(anychar_p - ']'))         [assign_a(actions.doc_version)]
                     ;
 
                 doc_id =
@@ -167,7 +177,7 @@ namespace quickbook
             rule<Scanner>   doc_info, doc_title, doc_version, doc_id, doc_dirname,
                             doc_copyright, doc_purpose,doc_category, doc_authors,
                             doc_author, comment, space, hard_space, doc_license,
-                            doc_last_revision, doc_source_mode, phrase;
+                            doc_last_revision, doc_source_mode, phrase, quickbook_version;
             phrase_grammar<Actions> common;
 
             rule<Scanner> const&

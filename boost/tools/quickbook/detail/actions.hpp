@@ -638,9 +638,9 @@ namespace quickbook
         std::string             doc_type;
         std::string             doc_title;
         std::string             doc_version;
-        unsigned                doc_major_version;
-        unsigned                doc_minor_version;
-        unsigned                doc_version_n; // doc_major_version * 100 + doc_minor_version
+        unsigned                qbk_major_version;
+        unsigned                qbk_minor_version;
+        unsigned                qbk_version_n; // qbk_major_version * 100 + qbk_minor_version
         std::string             doc_id;
         std::string             doc_dirname;
         copyright_list          doc_copyright_years;

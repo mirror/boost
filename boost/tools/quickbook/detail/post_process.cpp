@@ -81,30 +81,12 @@ namespace quickbook
             }
         }
 
-        bool break_after(char prev)
-        {
-            switch (prev)
-            {
-                case '>':
-                case '=':
-                case ';':
-                case ',':
-                    // no '.' and '?'. the space algorithm below 
-                    // already does the right thing.
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        bool break_before(char ch)
+        bool break_line(char ch) const
         {
             switch (ch)
             {
-                case '<':
-                case '(':
-                case '[':
-                case '{':
+                case '<': // tag
+                    return std::isspace(prev) || prev == '>'; // only if " <" or "><"
                 case '&':
                     return true;
                 default:
@@ -143,14 +125,11 @@ namespace quickbook
             {
                 // we can break tag boundaries and stuff after 
                 // delimiters if they are not inside strings
-                if (!in_string 
-                    && column >= linewidth 
-                    && (break_before(ch) || break_after(prev)))
+                if (!in_string && column >= linewidth && break_line(ch))
                     cr();
                 out += ch;
                 ++column;
             }
-
 
             prev = ch;
         }
