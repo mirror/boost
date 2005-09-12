@@ -100,7 +100,9 @@ explicit template argument, as shown below.
 <h4><tt>BOOST_CLASS_REQUIRE</tt></h4>
 
 The <tt>BOOST_CLASS_REQUIRE</tt> macro can be used inside a class
-definition to check whether some type models a concept. 
+definition to check whether some type models a concept.  Make sure
+that the arguments to this macro are simply identifiers. You may need
+to use typedef to get your types into this form.
 
 <pre>
   // In my library:
