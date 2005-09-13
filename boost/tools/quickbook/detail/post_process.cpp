@@ -328,6 +328,8 @@ namespace quickbook
                 state.printer_.align_indent();
             }
             state.printer_.print_tag(f, l, is_flow_tag);
+            if (!is_flow_tag)
+                state.printer_.cr();
             state.tags.pop();                     
         }
         
