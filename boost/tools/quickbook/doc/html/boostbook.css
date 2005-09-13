@@ -202,7 +202,7 @@
     div.table table tr td
     {
         padding: 0.5em;
-        text-align: justify;
+        text-align: left;
         font-size: 11pt;
     }
 
