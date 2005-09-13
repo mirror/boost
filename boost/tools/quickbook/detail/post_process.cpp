@@ -246,18 +246,18 @@ namespace quickbook
                     >>  "</programlisting>"
                     ;
 
-                // What's the business of lexeme_d['>' >> *ch_p(' ')]; ?
+                // What's the business of lexeme_d['>' >> *space_p]; ?
                 // It is there to preserve the space after the tag that is
                 // otherwise consumed by the space_p skipper.
                 
-                start_tag = '<' >> tag >> *(anychar_p - '>') >> lexeme_d['>' >> *ch_p(' ')];
+                start_tag = '<' >> tag >> *(anychar_p - '>') >> lexeme_d['>' >> *space_p];
                 start_end_tag = 
-                        '<' >> tag >> *(anychar_p - ('/' | ch_p('>'))) >> lexeme_d["/>" >> *ch_p(' ')]
-                    |   "<?" >> tag >> *(anychar_p - '?') >> lexeme_d["?>" >> *ch_p(' ')]
-                    |   "<!" >> tag >> *(anychar_p - '>') >> lexeme_d['>' >> *ch_p(' ')]
+                        '<' >> tag >> *(anychar_p - ('/' | ch_p('>'))) >> lexeme_d["/>" >> *space_p]
+                    |   "<?" >> tag >> *(anychar_p - '?') >> lexeme_d["?>" >> *space_p]
+                    |   "<!" >> tag >> *(anychar_p - '>') >> lexeme_d['>' >> *space_p]
                     ;
                 content = lexeme_d[ +(anychar_p - '<') ];
-                end_tag = "</" >> +(anychar_p - '>') >> lexeme_d['>' >> *ch_p(' ')];
+                end_tag = "</" >> +(anychar_p - '>') >> lexeme_d['>' >> *space_p];
 
                 markup = 
                         code            [bind(&tidy_grammar::do_code, &self, _1, _2)]
