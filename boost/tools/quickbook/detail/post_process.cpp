@@ -87,8 +87,6 @@ namespace quickbook
             {
                 case '<': // tag
                     return std::isspace(prev) || prev == '>'; // only if " <" or "><"
-                case '&':
-                    return true;
                 default:
                     return false;
             }
