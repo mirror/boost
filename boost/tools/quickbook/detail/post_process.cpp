@@ -96,8 +96,21 @@ namespace quickbook
 
         void print(char ch)
         {
-            // what's the proper way to not break strings?
-            if (ch == '"' && prev != '\\')
+            // Print a char. Attempt to break the line if we are exceeding
+            // the target linewidth. The linewidth is not an absolute limit.
+            // There are many cases where a line will exceed the linewidth 
+            // and there is no way to properly break the line. Preformatted
+            // code that exceeds the linewidth are examples. We cannot break
+            // preformatted code. We shall not attempt to be very strict with
+            // line breaking. What's more important is to have a reproducable
+            // output (i.e. processing two logically equivalent xml files 
+            // results in two lexically equivalent xml files). *** pretty 
+            // formatting is a secondary goal ***
+
+            // Strings will occur only in tag attributes. Normal content
+            // will have &quot; instead. We shall deal only with tag 
+            // attributes here.
+            if (ch == '"')
                 in_string = !in_string; // don't break strings!
 
             if (!in_string && std::isspace(ch))

@@ -221,8 +221,10 @@ main(int argc, char* argv[])
         else
         {
             time_t t = std::time(0);
-            quickbook::current_time = localtime(&t);
-            quickbook::current_gm_time = gmtime(&t);
+            static tm lt = *localtime(&t);
+            static tm gmt = *gmtime(&t);
+            quickbook::current_time = &lt;
+            quickbook::current_gm_time = &gmt;
             quickbook::debug_mode = false;
         }
 
