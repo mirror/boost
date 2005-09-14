@@ -51,7 +51,7 @@ namespace quickbook
     struct phrase_grammar : grammar<phrase_grammar<Actions> >
     {
         phrase_grammar(Actions& actions, bool& is_not_preformatted)
-            : actions(actions), is_not_preformatted(is_not_preformatted) {}
+            : is_not_preformatted(is_not_preformatted), actions(actions) {}
 
         template <typename Scanner>
         struct definition
