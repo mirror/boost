@@ -15,6 +15,8 @@
 #pragma warning(disable:4127)
 #endif
 
+void test_options3();
+
 void test_independent_subs()
 {
    using namespace boost::regex_constants;
@@ -258,6 +260,13 @@ void test_options2()
    TEST_REGEX_SEARCH("(?<=a(?i)b)(\\w\\w)c", perl, "ABxxc", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("(?<=a(?i)b)(\\w\\w)c", perl, "abxxC", match_default, make_array(-2, -2));
 
+   TEST_REGEX_SEARCH("(?<=^.{4})(?:bar|cat)", perl, "fooocat", match_default, make_array(4, 7, -2, -2));
+   TEST_REGEX_SEARCH("(?<=^.{4})(?:bar|cat)", perl, "foocat", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("(?<=^a{4})(?:bar|cat)", perl, "aaaacat", match_default, make_array(4, 7, -2, -2));
+   TEST_REGEX_SEARCH("(?<=^a{4})(?:bar|cat)", perl, "aaacat", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("(?<=^[[:alpha:]]{4})(?:bar|cat)", perl, "aaaacat", match_default, make_array(4, 7, -2, -2));
+   TEST_REGEX_SEARCH("(?<=^[[:alpha:]]{4})(?:bar|cat)", perl, "aaacat", match_default, make_array(-2, -2));
+
    TEST_REGEX_SEARCH("(?<=ab(?i)x(?-i)y|(?i)z|b)ZZ", perl, "abxyZZ", match_default, make_array(4, 6, -2, -2));
    TEST_REGEX_SEARCH("(?<=ab(?i)x(?-i)y|(?i)z|b)ZZ", perl, "abXyZZ", match_default, make_array(4, 6, -2, -2));
    TEST_REGEX_SEARCH("(?:ab(?i)x(?-i)y|(?i)z|b)ZZ", perl, "ZZZ", match_default, make_array(0, 3, -2, -2));
@@ -315,6 +324,12 @@ void test_options2()
    TEST_REGEX_SEARCH("(?s).", perl, "\n", match_default|match_not_dot_newline, make_array(0, 1, -2, -2));
    TEST_REGEX_SEARCH("(?-s).", perl, "\n", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("(?-s).", perl, "\n", match_default|match_not_dot_newline, make_array(-2, -2));
+   test_options3();
+}
+
+void test_options3()
+{
+   using namespace boost::regex_constants;
 
    TEST_REGEX_SEARCH(".+", perl, "  \n  ", match_default, make_array(0, 5, -2, -2));
    TEST_REGEX_SEARCH(".+", perl, "  \n  ", match_default|match_not_dot_newline, make_array(0, 2, -2, 3, 5, -2, -2));

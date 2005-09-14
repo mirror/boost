@@ -762,6 +762,7 @@ void basic_regex_creator<charT, traits>::create_startmaps(re_syntax_base* state)
       state = p.second;
       v.pop_back();
 
+      // Build maps:
       create_startmap(state->next.p, static_cast<re_alt*>(state)->_map, &static_cast<re_alt*>(state)->can_be_null, mask_take);
       m_bad_repeats = 0;
       create_startmap(static_cast<re_alt*>(state)->alt.p, static_cast<re_alt*>(state)->_map, &static_cast<re_alt*>(state)->can_be_null, mask_skip);
@@ -806,14 +807,40 @@ int basic_regex_creator<charT, traits>::calculate_backstep(re_syntax_base* state
       case syntax_element_set:
          result += 1;
          break;
-      case syntax_element_backref:
-      case syntax_element_rep:
-      case syntax_element_combining:
       case syntax_element_dot_rep:
       case syntax_element_char_rep:
       case syntax_element_short_set_rep:
+      case syntax_element_backref:
+      case syntax_element_rep:
+      case syntax_element_combining:
       case syntax_element_long_set_rep:
       case syntax_element_backstep:
+         {
+            re_repeat* rep = static_cast<re_repeat *>(state);
+            // adjust the type of the state to allow for faster matching:
+            state->type = this->get_repeat_type(state);
+            if((state->type == syntax_element_dot_rep) 
+               || (state->type == syntax_element_char_rep)
+               || (state->type == syntax_element_short_set_rep))
+            {
+               if(rep->max != rep->min)
+                  return -1;
+               result += static_cast<int>(rep->min);
+               state = rep->alt.p;
+               continue;
+            }
+            else if((state->type == syntax_element_long_set_rep)) 
+            {
+               BOOST_ASSERT(rep->next.p->type == syntax_element_long_set);
+               if(static_cast<re_set_long<mask_type>*>(rep->next.p)->singleton == 0)
+                  return -1;
+               if(rep->max != rep->min)
+                  return -1;
+               result += static_cast<int>(rep->min);
+               state = rep->alt.p;
+               continue;
+            }
+         }
          return -1;
       case syntax_element_long_set:
          if(static_cast<re_set_long<mask_type>*>(state)->singleton == 0)
@@ -1027,7 +1054,7 @@ void basic_regex_creator<charT, traits>::create_startmap(re_syntax_base* state, 
          return;
       case syntax_element_endmark:
          // need to handle independent subs as a special case:
-         if(static_cast<re_brace*>(state)->index == -3)
+         if(static_cast<re_brace*>(state)->index < 0)
          {
             // can be null, any character can match:
             set_all_masks(l_map, mask);

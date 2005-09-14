@@ -42,7 +42,7 @@ public:
    bool init(BidirectionalIterator first)
    {
       base = first;
-      return u32regex_search(first, end, what, re, flags);
+      return u32regex_search(first, end, what, re, flags, base);
    }
    bool compare(const u32regex_iterator_implementation& that)
    {
@@ -53,15 +53,15 @@ public:
    { return what; }
    bool next()
    {
-      if(what.prefix().first != what[0].second)
-         flags |= match_prev_avail;
+      //if(what.prefix().first != what[0].second)
+      //   flags |= match_prev_avail;
       BidirectionalIterator next_start = what[0].second;
       match_flag_type f(flags);
       if(!what.length())
          f |= regex_constants::match_not_initial_null;
-      if(base != next_start)
-         f |= regex_constants::match_not_bob;
-      bool result = u32regex_search(next_start, end, what, re, f);
+      //if(base != next_start)
+      //   f |= regex_constants::match_not_bob;
+      bool result = u32regex_search(next_start, end, what, re, f, base);
       if(result)
          what.set_base(base);
       return result;

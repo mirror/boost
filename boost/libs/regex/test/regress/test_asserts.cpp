@@ -41,13 +41,16 @@ void test_forward_lookahead_asserts()
    TEST_REGEX_SEARCH("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$", perl, "abC3", match_default, make_array(0, 4, -2, -2));
    TEST_REGEX_SEARCH("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$", perl, "ABCD3", match_default, make_array(-2, -2));
 
+   // bug report test cases:
+   TEST_REGEX_SEARCH("(?=.{1,10}$).*.", perl, "AAAAA", match_default, make_array(0, 5, -2, -2));
+
    // lookbehind assertions, added 2004-04-30
    TEST_REGEX_SEARCH("/\\*.*(?<=\\*)/", perl, "/**/", match_default, make_array(0, 4, -2, -2));
    TEST_REGEX_SEARCH("/\\*.*(?<=\\*)/", perl, "/*****/   ", match_default, make_array(0, 7, -2, -2));
    TEST_REGEX_SEARCH("(?<=['\"]).*?(?=['\"])", perl, " 'ac' ", match_default, make_array(2, 4, -2, -2));
    TEST_REGEX_SEARCH("(?<=['\"]).*?(?=['\"])", perl, " \"ac\" ", match_default, make_array(2, 4, -2, -2));
    TEST_REGEX_SEARCH("(?<=['\"]).*?(?<!\\\\)(?=['\"])", perl, " \"ac\" ", match_default, make_array(2, 4, -2, -2));
-   TEST_REGEX_SEARCH("(?<=['\"]).*?(?<!\\\\)(?=['\"])", perl, " \"ac\\\"\" ", match_default, make_array(2, 6, -2, -2));
+   TEST_REGEX_SEARCH("(?<=['\"]).*?(?<!\\\\)(?=['\"])", perl, " \"ac\\\" \" ", match_default, make_array(2, 7, -2, -2));
    // lookbehind, with nested lookahead! :
    TEST_REGEX_SEARCH("/\\*.*(?<=(?=[[:punct:]])\\*)/", perl, "/**/", match_default, make_array(0, 4, -2, -2));
    TEST_REGEX_SEARCH("/\\*.*(?<=(?![[:alnum:]])\\*)/", perl, "/**/", match_default, make_array(0, 4, -2, -2));

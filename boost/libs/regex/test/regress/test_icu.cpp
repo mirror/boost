@@ -209,7 +209,10 @@ void test_icu(const wchar_t&, const test_regex_search_tag& )
 #if !defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(__IBMCPP__)
       r.assign(expression.begin(), expression.end(), syntax_options);
 #else
-      r.assign(&*expression.begin(), expression.size(), syntax_options);
+      if(expression.size())
+         r.assign(&*expression.begin(), expression.size(), syntax_options);
+      else
+         r.assign(static_cast<UChar32 const*>(0), expression.size(), syntax_options);
 #endif
       if(r.status())
       {
@@ -379,7 +382,11 @@ void test_icu(const wchar_t&, const test_invalid_regex_tag&)
 #if !defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(__IBMCPP__)
       if(0 == r.assign(expression.begin(), expression.end(), syntax_options | boost::regex_constants::no_except).status())
 #else
-      if(0 == r.assign(&*expression.begin(), expression.size(), syntax_options | boost::regex_constants::no_except).status())
+      if(expression.size())
+         r.assign(&*expression.begin(), expression.size(), syntax_options | boost::regex_constants::no_except);
+      else
+         r.assign(static_cast<UChar32 const*>(0), static_cast<boost::u32regex::size_type>(0), syntax_options | boost::regex_constants::no_except);
+      if(0 == r.status())
 #endif
       {
          BOOST_REGEX_TEST_ERROR("Expression compiled when it should not have done so.", wchar_t);
@@ -397,7 +404,10 @@ void test_icu(const wchar_t&, const test_invalid_regex_tag&)
 #if !defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(__IBMCPP__)
       r.assign(expression.begin(), expression.end(), syntax_options);
 #else
-      r.assign(&*expression.begin(), expression.size(), syntax_options);
+      if(expression.size())
+         r.assign(&*expression.begin(), expression.size(), syntax_options);
+      else
+         r.assign(static_cast<UChar32 const*>(0), static_cast<boost::u32regex::size_type>(0), syntax_options);
 #endif
 #ifdef BOOST_NO_EXCEPTIONS
       if(r.status())
@@ -492,7 +502,10 @@ void test_icu(const wchar_t&, const test_regex_replace_tag&)
 #if !defined(BOOST_NO_MEMBER_TEMPLATES) && !defined(__IBMCPP__)
       r.assign(expression.begin(), expression.end(), syntax_options);
 #else
-      r.assign(&*expression.begin(), expression.size(), syntax_options);
+      if(expression.size())
+         r.assign(&*expression.begin(), expression.size(), syntax_options);
+      else
+         r.assign(static_cast<UChar32 const*>(0), static_cast<boost::u32regex::size_type>(0), syntax_options);
 #endif
       if(r.status())
       {
@@ -552,10 +565,13 @@ void test_icu(const wchar_t&, const test_regex_replace_tag&)
          // Now with UnicodeString:
          //
          UnicodeString expression16u, text16u, format16u, result16u, found16u;
-         expression16u.setTo(&*expression16.begin(), expression16.size());
-         text16u.setTo(&*text16.begin(), text16.size());
+         if(expression16.size())
+            expression16u.setTo(&*expression16.begin(), expression16.size());
+         if(text16.size())
+            text16u.setTo(&*text16.begin(), text16.size());
          format16u.setTo(&*format16.begin(), format16.size()-1);
-         result16u.setTo(&*result16.begin(), result16.size());
+         if(result16.size())
+            result16u.setTo(&*result16.begin(), result16.size());
          r = boost::make_u32regex(expression16.begin(), expression16.end(), syntax_options);
          found16u = boost::u32regex_replace(text16u, r, format16u, opts);
          if(result16u != found16u)
@@ -589,10 +605,13 @@ void test_icu(const wchar_t&, const test_regex_replace_tag&)
          // Now with std::string and UTF-8:
          //
          std::string expression8s, text8s, format8s, result8s, found8s;
-         expression8s.assign(&*expression8.begin(), expression8.size());
-         text8s.assign(&*text8.begin(), text8.size());
+         if(expression8.size())
+            expression8s.assign(&*expression8.begin(), expression8.size());
+         if(text8.size())
+            text8s.assign(&*text8.begin(), text8.size());
          format8s.assign(&*format8.begin(), format8.size()-1);
-         result8s.assign(&*result8.begin(), result8.size());
+         if(result8.size())
+            result8s.assign(&*result8.begin(), result8.size());
          r = boost::make_u32regex(expression8.begin(), expression8.end(), syntax_options);
          found8s = boost::u32regex_replace(text8s, r, format8s, opts);
          if(result8s != found8s)

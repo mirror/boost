@@ -57,7 +57,15 @@
          Initialise all the data members of the unicode_iterators: this keeps gcc from 
          issuing needless warnings.
          <LI>
-            Ported the ICU integration code to VC6 and VC7.</LI></UL>
+         Ported the ICU integration code to VC6 and VC7.
+         <LI>
+         Ensured code is STLport debug mode clean.
+         <LI>
+         Fixed lookbehind assertions so that fixed length repeats are permitted, and so 
+         that regex iteration allows lookbehind to look back before the current search 
+         range (into the last match).
+         <LI>
+            Fixed strange bug with non-greedy repeats inside forward lookahead assertions.</LI></UL>
       <P>Boost 1.33.0.</P>
       <UL>
          <LI>

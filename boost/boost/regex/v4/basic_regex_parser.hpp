@@ -1729,6 +1729,8 @@ bool basic_regex_parser<charT, traits>::parse_perl_extension()
       // lets assume that we have a (?imsx) group and try and parse it:
       //
       regex_constants::syntax_option_type opts = parse_options();
+      if(m_position == m_end)
+         return false;
       // make a note of whether we have a case change:
       m_has_case_change = ((opts & regbase::icase) != (this->flags() & regbase::icase));
       pb->index = markid = 0;

@@ -272,7 +272,10 @@ public:
    {
       typedef typename traits::string_type seq_type;
       seq_type a(arg_first, arg_last);
-      assign(&*a.begin(), &*a.begin() + a.size(), f);
+      if(a.size())
+         assign(&*a.begin(), &*a.begin() + a.size(), f);
+      else
+         assign(static_cast<const charT*>(0), static_cast<const charT*>(0), f);
    }
 
    template <class ST, class SA>
@@ -296,9 +299,13 @@ public:
    {
       typedef typename traits::string_type seq_type;
       seq_type a(arg_first, arg_last);
-      const charT* p1 = &*a.begin();
-      const charT* p2 = &*a.begin() + a.size();
-      return assign(p1, p2, f);
+      if(a.size())
+      {
+         const charT* p1 = &*a.begin();
+         const charT* p2 = &*a.begin() + a.size();
+         return assign(p1, p2, f);
+      }
+      return assign(static_cast<const charT*>(0), static_cast<const charT*>(0), f);
    }
 #else
    unsigned int BOOST_REGEX_CALL set_expression(const std::basic_string<charT>& p, flag_type f = regex_constants::normal)

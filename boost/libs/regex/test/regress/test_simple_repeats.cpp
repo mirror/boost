@@ -15,6 +15,8 @@
 #pragma warning(disable:4127)
 #endif
 
+void test_simple_repeats2();
+
 void test_simple_repeats()
 {
    using namespace boost::regex_constants;
@@ -111,6 +113,11 @@ void test_simple_repeats()
    TEST_REGEX_SEARCH("^a{0,1}?$", perl, "aaaaa", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("^(?:a){0,1}?$", perl, "aaaaa", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("^a(?:bc)?", perl, "abcbc", match_any|match_all, make_array(-2, -2));
+}
+
+void test_simple_repeats2()
+{
+   using namespace boost::regex_constants;
 
    TEST_INVALID_REGEX("a{}", perl);
    TEST_INVALID_REGEX("a{", perl);

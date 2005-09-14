@@ -324,7 +324,8 @@ public:
    perl_matcher(BidiIterator first, BidiIterator end, 
       match_results<BidiIterator, Allocator>& what, 
       const basic_regex<char_type, traits>& e,
-      match_flag_type f);
+      match_flag_type f,
+      BidiIterator base);
 
    bool match();
    bool find();
@@ -409,6 +410,8 @@ private:
    BidiIterator restart;
    // where the current search started from, acts as base for $` during grep:
    BidiIterator search_base;
+   // how far we can go back when matching lookbehind:
+   BidiIterator backstop;
    // the expression being examined:
    const basic_regex<char_type, traits>& re;
    // the expression's traits class:

@@ -53,5 +53,15 @@ void test_grep()
    TEST_REGEX_SEARCH("a|\\Ab", perl, "b ab", match_default, make_array(0, 1, -2, 2, 3, -2, -2));
    TEST_REGEX_SEARCH("a|^b", perl, "b ab\nb", match_default, make_array(0, 1, -2, 2, 3, -2, 5, 6, -2, -2));
    TEST_REGEX_SEARCH("a|\\<b", perl, "b ab\nb", match_default, make_array(0, 1, -2, 2, 3, -2, 5, 6, -2, -2));
+
+   TEST_REGEX_SEARCH("\\Aabc", perl, "abcabc", match_default, make_array(0, 3, -2, -2));
+   TEST_REGEX_SEARCH("^abc", perl, "abcabc", match_default, make_array(0, 3, -2, -2));
+   TEST_REGEX_SEARCH("\\<abc", perl, "abcabc", match_default, make_array(0, 3, -2, -2));
+   TEST_REGEX_SEARCH("\\babc", perl, "abcabc", match_default, make_array(0, 3, -2, -2));
+   TEST_REGEX_SEARCH("(?<=\\Aabc)?abc", perl, "abcabc", match_default, make_array(0, 3, -2, 3, 6, -2, -2));
+   TEST_REGEX_SEARCH("(?<=^abc)?abc", perl, "abcabc", match_default, make_array(0, 3, -2, 3, 6, -2, -2));
+   TEST_REGEX_SEARCH("(?<=\\<abc)?abc", perl, "abcabc", match_default, make_array(0, 3, -2, 3, 6, -2, -2));
+   TEST_REGEX_SEARCH("(?<=\\babc)?abc", perl, "abcabc", match_default, make_array(0, 3, -2, 3, 6, -2, -2));
+   TEST_REGEX_SEARCH("(?<=^).{2}|(?<=^.{3}).{2}", perl, "123456789", match_default, make_array(0, 2, -2, 3, 5, -2, -2));
 }
 

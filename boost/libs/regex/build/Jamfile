@@ -47,6 +47,10 @@ rule check-icu-config ( )
          {
             gICU_LIBS += <library-file>$(ICU_PATH)/lib/cygicuuc.dll ;
          }
+         else if [ GLOB $(ICU_PATH)/lib : cygicuuc32.dll ]
+         {
+            gICU_LIBS += <library-file>$(ICU_PATH)/lib/cygicuuc32.dll ;
+         }
          else if [ GLOB /usr/local/lib : cygicuuc.dll ]
          {
             gICU_LIBS += <library-file>/usr/local/lib/cygicuuc.dll ;
@@ -84,6 +88,10 @@ rule check-icu-config ( )
          else if [ GLOB $(ICU_PATH)/lib : cygicuin.dll ]
          {
             gICU_LIBS += <library-file>$(ICU_PATH)/lib/cygicuin.dll ;
+         }
+         else if [ GLOB $(ICU_PATH)/lib : cygicuin32.dll ]
+         {
+            gICU_LIBS += <library-file>$(ICU_PATH)/lib/cygicuin32.dll ;
          }
          else if [ GLOB /usr/local/lib : cygicuin.dll ]
          {
@@ -252,6 +260,8 @@ stage stage/lib : <lib>boost_regex <dll>boost_regex
 install regex lib
     : <dll>boost_regex <lib>boost_regex
     ;
+
+
 
 
 

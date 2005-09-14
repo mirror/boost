@@ -53,6 +53,7 @@ class regex_token_iterator_implementation
    typedef sub_match<BidirectionalIterator>      value_type;
 
    match_results<BidirectionalIterator> what;   // current match
+   BidirectionalIterator                base;    // start of search area
    BidirectionalIterator                end;    // end of search area
    const regex_type                     re;    // the expression
    match_flag_type                      flags;  // match flags
@@ -97,7 +98,8 @@ public:
    bool init(BidirectionalIterator first)
    {
       N = 0;
-      if(regex_search(first, end, what, re, flags) == true)
+      base = first;
+      if(regex_search(first, end, what, re, flags, base) == true)
       {
          N = 0;
          result = ((subs[N] == -1) ? what.prefix() : what[(int)subs[N]]);
@@ -134,10 +136,10 @@ public:
          result =((subs[N] == -1) ? what.prefix() : what[subs[N]]);
          return true;
       }
-      if(what.prefix().first != what[0].second)
-         flags |= match_prev_avail | regex_constants::match_not_bob;
+      //if(what.prefix().first != what[0].second)
+      //   flags |= /*match_prev_avail |*/ regex_constants::match_not_bob;
       BidirectionalIterator last_end(what[0].second);
-      if(regex_search(last_end, end, what, re, ((what[0].first == what[0].second) ? flags | regex_constants::match_not_initial_null : flags)))
+      if(regex_search(last_end, end, what, re, ((what[0].first == what[0].second) ? flags | regex_constants::match_not_initial_null : flags), base))
       {
          N =0;
          result =((subs[N] == -1) ? what.prefix() : what[subs[N]]);

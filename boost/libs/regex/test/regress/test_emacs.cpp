@@ -15,6 +15,8 @@
 #pragma warning(disable:4127)
 #endif
 
+void test_emacs2();
+
 void test_emacs()
 {
    using namespace boost::regex_constants;
@@ -132,6 +134,13 @@ void test_emacs()
    TEST_REGEX_SEARCH("a+\\(?#b+\\)b+", emacs, "xaaabbba", match_default, make_array(1, 7, -2, -2));
    TEST_REGEX_SEARCH("\\(a\\)\\(?:b\\|$\\)", emacs, "ab", match_default, make_array(0, 2, 0, 1, -2, -2));
    TEST_REGEX_SEARCH("\\(a\\)\\(?:b\\|$\\)", emacs, "a", match_default, make_array(0, 1, 0, 1, -2, -2));
+   test_emacs2();
+}
+
+void test_emacs2()
+{
+   using namespace boost::regex_constants;
+
 
    TEST_REGEX_SEARCH("\\ss+", emacs, "a  b", match_default, make_array(1, 3, -2, -2));
    TEST_REGEX_SEARCH("\\Ss+", emacs, " ab ", match_default, make_array(1, 3, -2, -2));

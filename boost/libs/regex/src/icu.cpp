@@ -19,6 +19,7 @@
 
 #include <boost/regex/config.hpp>
 #ifdef BOOST_HAS_ICU
+#define BOOST_REGEX_ICU_INSTANTIATE
 #include <boost/regex/icu.hpp>
 
 namespace boost{
@@ -38,11 +39,18 @@ icu_regex_traits_implementation::string_type icu_regex_traits_implementation::do
       t.push_back(*i++);
 #endif
    ::uint8_t result[100];
-   ::int32_t len = pcoll->getSortKey(&*t.begin(), static_cast< ::int32_t>(t.size()), result, sizeof(result));
+   ::int32_t len;
+   if(t.size())
+      len = pcoll->getSortKey(&*t.begin(), static_cast< ::int32_t>(t.size()), result, sizeof(result));
+   else
+      len = pcoll->getSortKey(static_cast<UChar const*>(0), static_cast< ::int32_t>(0), result, sizeof(result));
    if(std::size_t(len) > sizeof(result))
    {
       scoped_array< ::uint8_t> presult(new ::uint8_t[len+1]);
-      len = pcoll->getSortKey(&*t.begin(), static_cast< ::int32_t>(t.size()), presult.get(), len+1);
+      if(t.size())
+         len = pcoll->getSortKey(&*t.begin(), static_cast< ::int32_t>(t.size()), presult.get(), len+1);
+      else
+         len = pcoll->getSortKey(static_cast<UChar const*>(0), static_cast< ::int32_t>(0), presult.get(), len+1);
       if((0 == presult[len-1]) && (len > 1))
          --len;
 #ifndef BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
@@ -398,10 +406,12 @@ icu_regex_traits::char_class_type icu_regex_traits::lookup_classname(const char_
             ++i;
          }
       }
-      id = ::boost::re_detail::get_default_class_id(&*s.begin(), &*s.begin() + s.size());
+      if(s.size())
+         id = ::boost::re_detail::get_default_class_id(&*s.begin(), &*s.begin() + s.size());
       if(id >= 0)
          return masks[id+1];
-      result = lookup_icu_mask(&*s.begin(), &*s.begin() + s.size());
+      if(s.size())
+         result = lookup_icu_mask(&*s.begin(), &*s.begin() + s.size());
       if(result != 0)
          return result;
    }
