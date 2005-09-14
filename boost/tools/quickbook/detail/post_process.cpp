@@ -33,7 +33,7 @@ namespace quickbook
             column = current_indent;
         }
 
-        void cr()
+        void break_line()
         {
             out.erase(out.find_last_not_of(' ')+1); // trim trailing spaces
             out += '\n';
@@ -66,7 +66,7 @@ namespace quickbook
                     else
                     {
                         // nope, line is not empty. do a hard CR
-                        cr();
+                        break_line();
                     }
                 }
                 else
@@ -78,17 +78,6 @@ namespace quickbook
                         ++column;
                     }
                 }
-            }
-        }
-
-        bool break_line(char ch) const
-        {
-            switch (ch)
-            {
-                case '<': // tag
-                    return std::isspace(prev) || prev == '>'; // only if " <" or "><"
-                default:
-                    return false;
             }
         }
 
@@ -118,7 +107,7 @@ namespace quickbook
                 {
                     if (column >= linewidth)
                     {
-                        cr();
+                        break_line();
                         if (column == 0 && ch == ' ')
                         {
                             ++column;
@@ -136,8 +125,11 @@ namespace quickbook
             {
                 // we can break tag boundaries and stuff after 
                 // delimiters if they are not inside strings
-                if (!in_string && column >= linewidth && break_line(ch))
-                    cr();
+                // and *only-if* the preceding char is a space
+                if (!in_string 
+                    && column >= linewidth 
+                    && (ch == '<' && std::isspace(prev)))
+                    break_line();
                 out += ch;
                 ++column;
             }
@@ -296,7 +288,7 @@ namespace quickbook
                 state.printer_.align_indent();
             state.printer_.print_tag(f, l, is_flow_tag);
             if (!is_flow_tag)
-                state.printer_.cr();
+                state.printer_.break_line();
         }
 
         void do_start_tag(iter_type f, iter_type l) const
@@ -309,7 +301,7 @@ namespace quickbook
             if (!is_flow_tag)
             {
                 state.current_indent += indent;
-                state.printer_.cr();
+                state.printer_.break_line();
             }
         }
 
@@ -328,7 +320,7 @@ namespace quickbook
             }
             state.printer_.print_tag(f, l, is_flow_tag);
             if (!is_flow_tag)
-                state.printer_.cr();
+                state.printer_.break_line();
             state.tags.pop();                     
         }
         

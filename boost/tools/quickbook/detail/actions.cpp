@@ -479,7 +479,7 @@ namespace quickbook
         {
             // default value for last-revision is now
 
-            char strdate[ 30 ];
+            char strdate[64];
             strftime(
                 strdate, sizeof(strdate),
                 (debug_mode ? 

@@ -41,7 +41,7 @@
       past a single block.
     </p>
 <a name="syntax.comments"></a><h2>
-<a name="id373064"></a>
+<a name="id372272"></a>
       Comments
     </h2>
 <p>
@@ -50,11 +50,11 @@
 <pre class="programlisting"><tt class="literal">[/ comment (no output generated) ]
 </tt></pre>
 <a name="syntax.phrase_level_elements"></a><h2>
-<a name="id373084"></a>
+<a name="id372292"></a>
       Phrase Level Elements
     </h2>
 <a name="syntax.font_styles"></a><h3>
-<a name="id373095"></a>
+<a name="id372303"></a>
       Font Styles
     </h3>
 <pre class="programlisting"><tt class="literal">['italic], [*bold], [_underline], [^teletype], [-strikethrough]
@@ -73,7 +73,7 @@
     </p>
 <p><span class="bold"><b><span class="emphasis"><em>bold-italic</em></span></b></span></p>
 <a name="syntax.quotes"></a><h3>
-<a name="id371782"></a>
+<a name="id374096"></a>
       Quotes
     </h3>
 <pre class="programlisting"><tt class="literal">["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
@@ -100,7 +100,7 @@ the true business precept.]
 <p>&#8220;<span class="quote">Here's the rule for bargains: &#8216;<span class="quote">Do other men, for they would do
       you.</span>&#8217; That's the true business precept.</span>&#8221;</p>
 <a name="syntax.simple_formatting"></a><h3>
-<a name="id371844"></a>
+<a name="id374158"></a>
       Simple formatting
     </h3>
 <p>
@@ -144,7 +144,7 @@ the true business precept.]
 </ul></div>
 <div class="informaltable">
 <h4>
-<a name="id372050"></a><span class="table-title">More Formatting Samples</span>
+<a name="id442392"></a><span class="table-title">More Formatting Samples</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -167,7 +167,8 @@ the true business precept.]
 </tr>
 <tr>
 <td><tt class="literal">* Not bold* *Not bold * * Not bold *</tt></td>
-<td>* Not bold* *Not bold * * Not bold *</td>
+<td>*
+            Not bold* *Not bold * * Not bold *</td>
 </tr>
 <tr>
 <td><tt class="literal">This*Isn't*Bold (no bold)</tt></td>
@@ -176,8 +177,7 @@ the true business precept.]
 </tr>
 <tr>
 <td><tt class="literal">(*Bold Inside*) (parenthesis not bold)</tt></td>
-<td>(<span class="bold"><b>Bold Inside</b></span>) (parenthesis not
-            bold)</td>
+<td>(<span class="bold"><b>Bold Inside</b></span>) (parenthesis not bold)</td>
 </tr>
 <tr>
 <td><tt class="literal">*(Bold Outside)* (parenthesis bold)</tt></td>
@@ -201,7 +201,8 @@ the true business precept.]
 <tr>
 <td><tt class="literal">*This is bold* this is not *but this is*</tt></td>
 <td>
-<span class="bold"><b>This is bold</b></span> this is not <span class="bold"><b>but this is</b></span>
+<span class="bold"><b>This is bold</b></span> this is not <span class="bold"><b>but
+            this is</b></span>
 </td>
 </tr>
 <tr>
@@ -226,15 +227,15 @@ the true business precept.]
 <div class="informaltable"><table class="table">
 <colgroup><col></colgroup>
 <tbody><tr><td class="blurb">
-<span class="inlinemediaobject"><img src="../images/note.png"></span> Thanks to David Barrett,
-            author of <a href="http://quinthar.com/qwikiwiki/index.php?page=Home" target="_top">Qwiki</a>,
+<span class="inlinemediaobject"><img src="../images/note.png"></span>
+            Thanks to David Barrett, author of <a href="http://quinthar.com/qwikiwiki/index.php?page=Home" target="_top">Qwiki</a>,
             for sharing these samples and teaching me these obscure formatting rules.
             I wasn't sure at all if <a href="http://spirit.sourceforge.net" target="_top">Spirit</a>,
             being more or less a formal EBNF parser, can handle the context sensitivity
             and ambiguity.</td></tr></tbody>
 </table></div>
 <a name="syntax.inline_code"></a><h3>
-<a name="id372804"></a>
+<a name="id372918"></a>
       Inline code
     </h3>
 <p>
@@ -247,19 +248,21 @@ the true business precept.]
       will generate:
     </p>
 <p>
-      This text has inlined code
-      <tt class="computeroutput"><span class="keyword">int</span><span class="identifier"> main</span><span class="special">()</span><span class="special"> {</span><span class="keyword"> return</span><span class="number"> 0</span><span class="special">;</span><span class="special"> }</span></tt>in it. The code will be syntax highlighted.
+      This text has inlined code <tt class="computeroutput"><span class="keyword">int</span><span class="identifier"> main</span><span class="special">()</span><span class="special">
+      {</span><span class="keyword"> return</span><span class="number"> 0</span><span class="special">;</span><span class="special"> }</span></tt> in it. The
+      code will be syntax highlighted.
     </p>
 <div class="informaltable"><table class="table">
 <colgroup><col></colgroup>
 <tbody><tr><td class="blurb">
-<span class="inlinemediaobject"><img src="../images/note.png"></span>Note that we simply enclose
-            the code with the tick: <tt class="literal">"`"</tt>, not the single quote:
-            <tt class="computeroutput"><span class="string">"'"</span></tt>. Note too that <tt class="literal">`some code`</tt> is prefered over
-            <tt class="literal">[^some code]</tt>. </td></tr></tbody>
+<span class="inlinemediaobject"><img src="../images/note.png"></span>
+            Note that we simply enclose the code with the tick: <tt class="literal">"`"</tt>,
+            not the single quote: <tt class="computeroutput"><span class="string">"'"</span></tt>.
+            Note too that <tt class="literal">`some code`</tt> is prefered over <tt class="literal">[^some
+            code]</tt>. </td></tr></tbody>
 </table></div>
 <a name="syntax.code_blocks"></a><h3>
-<a name="id372930"></a>
+<a name="id371824"></a>
       Code blocks
     </h3>
 <p>
@@ -296,7 +299,7 @@ int</span><span class="identifier"> main</span><span class="special">()</span><s
     return</span><span class="number"> 0</span><span class="special">;</span><span class="special">
 }</span></tt></pre>
 <a name="syntax.source_mode"></a><h3>
-<a name="id442424"></a>
+<a name="id372019"></a>
       Source Mode
     </h3>
 <p>
@@ -318,15 +321,14 @@ C++ comment `// looks like this` whereas a Python comment [python]
       will generate:
     </p>
 <p>
-      Python's
-      <tt class="computeroutput"><span class="keyword">import</span></tt>is rather like C++'s
-      <tt class="computeroutput"><span class="preprocessor">#include</span></tt>. A C++ comment
-      <tt class="computeroutput"><span class="comment">// looks like this</span></tt>whereas a Python comment
-      <tt class="computeroutput"><span class="comment">#looks like this</span></tt>.
+      Python's <tt class="computeroutput"><span class="keyword">import</span></tt> is rather like
+      C++'s <tt class="computeroutput"><span class="preprocessor">#include</span></tt>. A C++ comment
+      <tt class="computeroutput"><span class="comment">// looks like this</span></tt> whereas a Python
+      comment <tt class="computeroutput"><span class="comment">#looks like this</span></tt>.
     </p>
 <div class="informaltable">
 <h4>
-<a name="id442520"></a><span class="table-title">Supported Source Modes</span>
+<a name="id442499"></a><span class="table-title">Supported Source Modes</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -352,11 +354,11 @@ C++ comment `// looks like this` whereas a Python comment [python]
 <div class="informaltable"><table class="table">
 <colgroup><col></colgroup>
 <tbody><tr><td class="blurb">
-<span class="inlinemediaobject"><img src="../images/note.png"></span> The source mode strings
-            are lowercase.</td></tr></tbody>
+<span class="inlinemediaobject"><img src="../images/note.png"></span>
+            The source mode strings are lowercase.</td></tr></tbody>
 </table></div>
 <a name="syntax.line_break"></a><h3>
-<a name="id442589"></a>
+<a name="id442568"></a>
       line-break
     </h3>
 <pre class="programlisting"><tt class="literal">[br]
@@ -364,12 +366,12 @@ C++ comment `// looks like this` whereas a Python comment [python]
 <div class="informaltable"><table class="table">
 <colgroup><col></colgroup>
 <tbody><tr><td class="blurb">
-<span class="inlinemediaobject"><img src="../images/note.png"></span> Note that
-            <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt>is now preferred over
-            <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.</td></tr></tbody>
+<span class="inlinemediaobject"><img src="../images/note.png"></span>
+            Note that <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt>
+            is now preferred over <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.</td></tr></tbody>
 </table></div>
 <a name="syntax.anchors"></a><h3>
-<a name="id442664"></a>
+<a name="id442643"></a>
       Anchors
     </h3>
 <pre class="programlisting"><tt class="literal">[#named_anchor]
@@ -381,7 +383,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
       <a href="syntax.html#syntax.section">here</a> and <a href="syntax.html#syntax.headings">here</a>.
     </p>
 <a name="syntax.links"></a><h3>
-<a name="id442724"></a>
+<a name="id442703"></a>
       Links
     </h3>
 <pre class="programlisting"><tt class="literal">[@http://www.boost.org this is [*boost's] website....]
@@ -407,7 +409,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
 <p>
       see <a href="http://spirit.sourceforge.net/" target="_top">http://spirit.sourceforge.net/</a></p>
 <a name="syntax.anchor_links"></a><h3>
-<a name="id442797"></a>
+<a name="id442776"></a>
       Anchor links
     </h3>
 <p>
@@ -416,11 +418,11 @@ C++ comment `// looks like this` whereas a Python comment [python]
 <pre class="programlisting"><tt class="literal">[link section_id.normalized_header_text The link text]
 </tt></pre>
 <p>
-      See sections <a href="syntax.html#syntax.section">Section</a> and <a href="syntax.html#syntax.headings">Headings</a>for
-      more info.
+      See sections <a href="syntax.html#syntax.section">Section</a> and <a href="syntax.html#syntax.headings">Headings</a>
+      for more info.
     </p>
 <a name="syntax.refentry_links"></a><h3>
-<a name="id442839"></a>
+<a name="id442818"></a>
       refentry links
     </h3>
 <p>
@@ -429,8 +431,8 @@ C++ comment `// looks like this` whereas a Python comment [python]
 <pre class="programlisting"><tt class="literal">[link xml.refentry The link text]
 </tt></pre>
 <p>
-      This gets converted into <tt class="literal">&lt;link linkend="xml.refentry"
-      &gt;The link text&lt;/link&gt;</tt>.
+      This gets converted into <tt class="literal">&lt;link linkend="xml.refentry"&gt;The
+      link text&lt;/link&gt;</tt>.
     </p>
 <p>
       Like URLs, the link text is optional. If this is not present, the link text
@@ -439,11 +441,10 @@ C++ comment `// looks like this` whereas a Python comment [python]
 <pre class="programlisting"><tt class="literal">[link xml.refentry]
 </tt></pre>
 <p>
-      This gets converted into <tt class="literal">&lt;link linkend="xml.refentry"
-      &gt;xml.refentry&lt;/link&gt;</tt>.
+      This gets converted into <tt class="literal">&lt;link linkend="xml.refentry"&gt;xml.refentry&lt;/link&gt;</tt>.
     </p>
 <a name="syntax.function__class__member__enum_or_header_links"></a><h3>
-<a name="id442900"></a>
+<a name="id442879"></a>
       function, class, member, enum or header links
     </h3>
 <p>
@@ -466,7 +467,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
       would have "boost::bar::baz" as the link text.
     </p>
 <a name="syntax.escape"></a><h3>
-<a name="id442947"></a>
+<a name="id442926"></a>
       Escape
     </h3>
 <p>
@@ -488,35 +489,35 @@ escape (no processing/formatting)
 <div class="informaltable"><table class="table">
 <colgroup><col></colgroup>
 <tbody><tr><td class="blurb">
-<span class="inlinemediaobject"><img src="../images/alert.png"></span> Be careful when using
-            the escape. The text must conform to <a href="http://www.boost.org/doc/html/boostbook.html" target="_top">BoostBook</a>/<a href="http://www.docbook.org/" target="_top">DocBook</a> syntax.</td></tr></tbody>
+<span class="inlinemediaobject"><img src="../images/alert.png"></span>
+            Be careful when using the escape. The text must conform to <a href="http://www.boost.org/doc/html/boostbook.html" target="_top">BoostBook</a>/<a href="http://www.docbook.org/" target="_top">DocBook</a> syntax.</td></tr></tbody>
 </table></div>
 <a name="syntax.single_char_escape"></a><h3>
-<a name="id443039"></a>
+<a name="id443018"></a>
       Single char escape
     </h3>
 <p>
       The backslash may be used to escape a single punctuation character. The punctuation
       immediately after the backslash is passed without any processing. This is useful
-      when we need to escape QuickBook punctuations such as
-      <tt class="computeroutput"><span class="special">[</span></tt>and
-      <tt class="computeroutput"><span class="special">]</span></tt>. For example, how do you escape the triple quote? Simple: <tt class="literal">\'\'\'</tt></p>
-<p><tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt>has a special meaning. It is used to generate line breaks. Note that
-      <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt>is now preferred over
-      <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.
+      when we need to escape QuickBook punctuations such as <tt class="computeroutput"><span class="special">[</span></tt>
+      and <tt class="computeroutput"><span class="special">]</span></tt>. For example, how do you
+      escape the triple quote? Simple: <tt class="literal">\'\'\'</tt></p>
+<p><tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt>
+      has a special meaning. It is used to generate line breaks. Note that <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt> is now
+      preferred over <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.
     </p>
 <a name="syntax.images__terminal_"></a><h3>
-<a name="id443132"></a>
+<a name="id443111"></a>
       Images (terminal)
     </h3>
 <pre class="programlisting"><tt class="literal">[$image.jpg]
 </tt></pre>
 <a name="syntax.block_level_elements"></a><h2>
-<a name="id443149"></a>
+<a name="id443128"></a>
       Block Level Elements
     </h2>
 <a name="syntax.document"></a><h3>
-<a name="id443160"></a>
+<a name="id443139"></a>
       Document
     </h3>
 <p>
@@ -569,7 +570,7 @@ escape (no processing/formatting)
       field is omitted, a default value of <tt class="literal">c++</tt> will be used.
     </p>
 <a name="syntax.section"></a><h3>
-<a name="id443304"></a>
+<a name="id443283"></a>
       Section
     </h3>
 <p>
@@ -583,8 +584,7 @@ escape (no processing/formatting)
       and become the id. Valid characters are <tt class="literal">a-Z</tt>, <tt class="literal">A-Z</tt>,
       <tt class="literal">0-9</tt> and <tt class="literal">_</tt>. All non-valid characters are
       converted to underscore and all upper-case are converted to lower case. Thus:
-      "The Section Title" will be normalized to "the_section_title
-      ".
+      "The Section Title" will be normalized to "the_section_title".
     </p>
 <p>
       End a section with:
@@ -595,7 +595,7 @@ escape (no processing/formatting)
       Sections can nest, and that results in a hierarchy in the table of contents.
     </p>
 <a name="syntax.xinclude"></a><h3>
-<a name="id443377"></a>
+<a name="id443359"></a>
       xinclude
     </h3>
 <p>
@@ -608,7 +608,7 @@ escape (no processing/formatting)
       reference section.
     </p>
 <a name="syntax.paragraphs"></a><h3>
-<a name="id443405"></a>
+<a name="id443387"></a>
       Paragraphs
     </h3>
 <p>
@@ -617,7 +617,7 @@ escape (no processing/formatting)
       from the context.
     </p>
 <a name="syntax.ordered_lists"></a><h3>
-<a name="id443418"></a>
+<a name="id443400"></a>
       Ordered lists
     </h3>
 <pre class="programlisting"><tt class="literal"># One
@@ -639,7 +639,7 @@ escape (no processing/formatting)
       </li>
 </ol></div>
 <a name="syntax.list_hierarchies"></a><h3>
-<a name="id443454"></a>
+<a name="id443437"></a>
       List Hierarchies
     </h3>
 <p>
@@ -700,7 +700,7 @@ escape (no processing/formatting)
       </li>
 </ol></div>
 <a name="syntax.long_list_lines"></a><h3>
-<a name="id443537"></a>
+<a name="id443520"></a>
       Long List Lines
     </h3>
 <p>
@@ -729,7 +729,7 @@ escape (no processing/formatting)
       </li>
 </ol></div>
 <a name="syntax.unordered_lists"></a><h3>
-<a name="id443584"></a>
+<a name="id443567"></a>
       Unordered lists
     </h3>
 <pre class="programlisting"><tt class="literal">* First
@@ -751,7 +751,7 @@ escape (no processing/formatting)
       </li>
 </ul></div>
 <a name="syntax.mixed_lists"></a><h3>
-<a name="id443616"></a>
+<a name="id443598"></a>
       Mixed lists
     </h3>
 <p>
@@ -861,7 +861,7 @@ escape (no processing/formatting)
 </li>
 </ol></div>
 <a name="syntax.code"></a><h3>
-<a name="id443742"></a>
+<a name="id443724"></a>
       Code
     </h3>
 <p>
@@ -897,7 +897,7 @@ def</span><span class="identifier"> cookForHtml</span><span class="special">(</s
     </p>
 <pre class="programlisting"><tt class="literal"><span class="identifier">using</span> <a href="../index.html" target="_top">quickbook</a><span class="special">::</span><a href="highlight.html" target="_top">syntax_highlight</a><span class="special">;</span></tt></pre>
 <a name="syntax.preformatted"></a><h3>
-<a name="id444008"></a>
+<a name="id443990"></a>
       Preformatted
     </h3>
 <p>
@@ -931,7 +931,7 @@ def</span><span class="identifier"> cookForHtml</span><span class="special">(</s
       inside <tt class="literal">pre</tt> blocks.
     </p>
 <a name="syntax.blockquote"></a><h3>
-<a name="id444106"></a>
+<a name="id444088"></a>
       Blockquote
     </h3>
 <pre class="programlisting"><tt class="literal">[:sometext...]
@@ -940,7 +940,7 @@ def</span><span class="identifier"> cookForHtml</span><span class="special">(</s
         Indents the paragraph. This applies to one paragraph only.
       </p></blockquote></div>
 <a name="syntax.headings"></a><h3>
-<a name="id444131"></a>
+<a name="id444113"></a>
       Headings
     </h3>
 <pre class="programlisting"><tt class="literal">[h1 Heading 1]
@@ -951,27 +951,27 @@ def</span><span class="identifier"> cookForHtml</span><span class="special">(</s
 [h6 Heading 6]
 </tt></pre>
 <a name="syntax.heading_1"></a><h1>
-<a name="id444152"></a>
+<a name="id444134"></a>
       Heading 1
     </h1>
 <a name="syntax.heading_2"></a><h2>
-<a name="id444163"></a>
+<a name="id444145"></a>
       Heading 2
     </h2>
 <a name="syntax.heading_3"></a><h3>
-<a name="id444174"></a>
+<a name="id444156"></a>
       Heading 3
     </h3>
 <a name="syntax.heading_4"></a><h4>
-<a name="id444185"></a>
+<a name="id444167"></a>
       Heading 4
     </h4>
 <a name="syntax.heading_5"></a><h5>
-<a name="id444196"></a>
+<a name="id444178"></a>
       Heading 5
     </h5>
 <a name="syntax.heading_6"></a><h3>
-<a name="id444206"></a>
+<a name="id444188"></a>
       Heading 6
     </h3>
 <p>
@@ -990,7 +990,7 @@ def</span><span class="identifier"> cookForHtml</span><span class="special">(</s
       and <a href="syntax.html#syntax.section">Section</a> for more info.
     </p>
 <a name="syntax.macros"></a><h3>
-<a name="id444292"></a>
+<a name="id444274"></a>
       Macros
     </h3>
 <pre class="programlisting"><tt class="literal">[def macro_identifier some text]
@@ -1011,10 +1011,11 @@ sf_logo
 <div class="informaltable"><table class="table">
 <colgroup><col></colgroup>
 <tbody><tr><td class="blurb">
-<span class="inlinemediaobject"><img src="../images/tip.png"></span> It's a good idea to use
-            macro identifiers that are distinguishable. For instance, in this document,
-            macro identifiers have two leading and trailing underscores (e.g. <tt class="literal">__spirit__</tt>).
-            The reason is to avoid unwanted macro replacement.</td></tr></tbody>
+<span class="inlinemediaobject"><img src="../images/tip.png"></span>
+            It's a good idea to use macro identifiers that are distinguishable. For
+            instance, in this document, macro identifiers have two leading and trailing
+            underscores (e.g. <tt class="literal">__spirit__</tt>). The reason is to avoid
+            unwanted macro replacement.</td></tr></tbody>
 </table></div>
 <p>
       Links (URLS) and images are good candidates for macros. <span class="bold"><b>1</b></span>)
@@ -1030,7 +1031,7 @@ sf_logo
 [def __spirit__     [@http://spirit.sourceforge.net Spirit]]
 </tt></pre>
 <p>
-      (See <a href="syntax.html#syntax.images__terminal_">Images</a>and <a href="syntax.html#syntax.links">Links</a>)
+      (See <a href="syntax.html#syntax.images__terminal_">Images</a> and <a href="syntax.html#syntax.links">Links</a>)
     </p>
 <p>
       Invoking these macros:
@@ -1043,7 +1044,7 @@ sf_logo
 <p>
       Hi <a href="http://spirit.sourceforge.net" target="_top">Spirit</a><span class="inlinemediaobject"><img src="../images/smiley.png"></span></p>
 <a name="syntax.predefined_macros"></a><h3>
-<a name="id444467"></a>
+<a name="id444449"></a>
       Predefined Macros
     </h3>
 <p>
@@ -1051,7 +1052,7 @@ sf_logo
     </p>
 <div class="informaltable">
 <h4>
-<a name="id444479"></a><span class="table-title">Predefined Macros</span>
+<a name="id444461"></a><span class="table-title">Predefined Macros</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -1068,13 +1069,13 @@ sf_logo
 <tr>
 <td>__DATE__</td>
 <td>Today's date</td>
-<td>2005-Sep-12</td>
+<td>2005-Sep-14</td>
 </tr>
 <tr>
 <td>__TIME__</td>
 <td>The current time</td>
-<td>07:33:12
-            PM</td>
+<td>10:10:42
+            AM</td>
 </tr>
 <tr>
 <td>__FILENAME__</td>
@@ -1085,7 +1086,7 @@ sf_logo
 </table>
 </div>
 <a name="syntax.blurbs"></a><h3>
-<a name="id444537"></a>
+<a name="id444520"></a>
       Blurbs
     </h3>
 <pre class="programlisting"><tt class="literal">[blurb :-) [*An eye catching advertisement or note...]\n\n
@@ -1101,15 +1102,14 @@ sf_logo
 <div class="informaltable"><table class="table">
 <colgroup><col></colgroup>
 <tbody><tr><td class="blurb">
-<span class="inlinemediaobject"><img src="../images/smiley.png"></span><span class="bold"><b>An
-            eye catching advertisement or note...</b></span><br><br><a href="http://spirit.sourceforge.net" target="_top">Spirit</a>
-            is an object-oriented recursive-descent parser generator framework implemented
+<span class="inlinemediaobject"><img src="../images/smiley.png"></span><span class="bold"><b>An eye catching advertisement or note...</b></span><br><br><a href="http://spirit.sourceforge.net" target="_top">Spirit</a> is an
+            object-oriented recursive-descent parser generator framework implemented
             using template meta-programming techniques. Expression templates allow
             us to approximate the syntax of Extended Backus-Normal Form (EBNF) completely
             in C++. </td></tr></tbody>
 </table></div>
 <a name="syntax.tables"></a><h3>
-<a name="id444597"></a>
+<a name="id444579"></a>
       Tables
     </h3>
 <pre class="programlisting"><tt class="literal">[table A Simple Table
@@ -1124,7 +1124,7 @@ sf_logo
     </p>
 <div class="informaltable">
 <h4>
-<a name="id444619"></a><span class="table-title">A Simple Table</span>
+<a name="id444601"></a><span class="table-title">A Simple Table</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -1184,7 +1184,7 @@ sf_logo
     </p>
 <div class="informaltable">
 <h4>
-<a name="id444708"></a><span class="table-title">Table with fat cells</span>
+<a name="id444690"></a><span class="table-title">Table with fat cells</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -1198,7 +1198,7 @@ sf_logo
 <tbody>
 <tr>
 <td>Row 0, Col 0: a small cell</td>
-<td>Row 0, Col 1: A very
+<td> Row 0, Col 1: A very
             big cell...A very big cell...A very big cell... A very big cell...A very
             big cell...A very big cell... A very big cell...A very big cell...A very
             big cell... </td>
@@ -1232,7 +1232,7 @@ sf_logo
 </tt></pre>
 <div class="informaltable">
 <h4>
-<a name="id444772"></a><span class="table-title">Table with code</span>
+<a name="id444754"></a><span class="table-title">Table with code</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -1256,7 +1256,7 @@ int</span><span class="identifier"> main</span><span class="special">()</span><s
 </table>
 </div>
 <a name="syntax.variable_lists"></a><h3>
-<a name="id444908"></a>
+<a name="id444890"></a>
       Variable Lists
     </h3>
 <pre class="programlisting"><tt class="literal">[variablelist A Variable List
@@ -1292,7 +1292,7 @@ int</span><span class="identifier"> main</span><span class="special">()</span><s
       this as a "definition list".
     </p>
 <a name="syntax.include"></a><h3>
-<a name="id444964"></a>
+<a name="id444946"></a>
       Include
     </h3>
 <p>
@@ -1326,8 +1326,8 @@ int</span><span class="identifier"> main</span><span class="special">()</span><s
 <p>
       When using this form, all auto-generated anchors will use "someid"
       as a unique prefix. So for instance, if there is a section in someother.qbk
-      named "Intro", the named anchor for that section will be "someid.intro
-      ", and you can link to it with <tt class="literal">[link someid.intro The Intro]</tt>.
+      named "Intro", the named anchor for that section will be "someid.intro",
+      and you can link to it with <tt class="literal">[link someid.intro The Intro]</tt>.
     </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

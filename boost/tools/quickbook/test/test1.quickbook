@@ -11,10 +11,11 @@
     ]
 ]
 
-[/ QuickBook Document version 1.1 ]
+[/ QuickBook Document version 1.3 ]
 [/ Sept 24, 2002 ]
 [/ Sept 2, 2004 ]
 [/ Feb 14, 2005 ]
+[/ Sept 13, 2005 ]
 
 [/ Some links]
 
@@ -202,6 +203,43 @@ Note that we simply enclose the code with the tick: [^'''"`"'''], not the
 single quote: `"'"`. Note too that [^'''`some code`'''] is prefered over
 [^'''[^some code]'''].
 ]
+
+[h3 Code blocks]
+
+Preformatted code simply starts with a space or a tab (See [link syntax.code 
+Code]). However, such a simple syntax cannot be used as phrase elements in lists
+(See [link syntax.ordered_lists Ordered lists] and [link syntax.unordered_lists 
+Unordered lists]), tables (See [link syntax.tables Tables]), etc. Inline code (see 
+above) can. The problem is, inline code does not allow formatting with newlines,
+spaces, and tabs. These are lost. 
+
+We provide a phrase level markup that is a mix between the two. By using the 
+double-tick, instead of the single-tick, we are telling QuickBook to use 
+preformatted blocks of code. Example:
+
+[pre
+\`\`
+    #include <iostream>
+
+    int main()
+    {
+        std::cout << "Hello, World!" << std::endl;
+        return 0;
+    }
+\`\`
+]
+
+will generate:
+
+``
+    #include <iostream>
+
+    int main()
+    {
+        std::cout << "Hello, World!" << std::endl;
+        return 0;
+    }
+``
 
 [h3 Source Mode]
 
@@ -843,6 +881,42 @@ and thus:
     [
         [Row 1, Col 0: a small cell]
         [Row 1, Col 1: a small cell]
+    ]
+]
+
+Here's how to have preformatted blocks of code in a table cell:
+
+[pre'''
+[table Table with code
+    [[Comment] [Code]]
+    [
+        [My first program]
+        ['''\`\`
+            #include <iostream>
+
+            int main()
+            {
+                std::cout << "Hello, World!" << std::endl;
+                return 0;
+            }
+        \`\`''']
+    ]
+]
+''']
+
+[table Table with code
+    [[Comment] [Code]]
+    [
+        [My first program]
+        [``
+            #include <iostream>
+
+            int main()
+            {
+                std::cout << "Hello, World!" << std::endl;
+                return 0;
+            }
+        ``]
     ]
 ]
 
