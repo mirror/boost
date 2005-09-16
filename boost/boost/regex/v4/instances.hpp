@@ -119,13 +119,7 @@ template class BOOST_REGEX_DECL ::boost::re_detail::perl_matcher< std::basic_str
 namespace re_detail{
 template BOOST_REGEX_DECL
 std::locale cpp_regex_traits_base<BOOST_REGEX_CHAR_T>::imbue(const std::locale& l);
-/*
-template BOOST_REGEX_DECL
-void cpp_regex_traits_char_layer<BOOST_REGEX_CHAR_T>::init();
-template BOOST_REGEX_DECL
-typename cpp_regex_traits_char_layer<BOOST_REGEX_CHAR_T>::string_type 
-   cpp_regex_traits_char_layer<BOOST_REGEX_CHAR_T>::get_default_message(regex_constants::syntax_type i);
-   */
+
 template BOOST_REGEX_DECL
 cpp_regex_traits_implementation<BOOST_REGEX_CHAR_T>::string_type 
    cpp_regex_traits_implementation<BOOST_REGEX_CHAR_T>::transform_primary(const BOOST_REGEX_CHAR_T* p1, const BOOST_REGEX_CHAR_T* p2) const;
@@ -181,7 +175,10 @@ template BOOST_REGEX_DECL bool perl_matcher<BOOST_REGEX_CHAR_T const *, match_re
 template BOOST_REGEX_DECL bool perl_matcher<BOOST_REGEX_CHAR_T const *, match_results< const BOOST_REGEX_CHAR_T* >::allocator_type BOOST_REGEX_TRAITS_T >::find();
 } // namespace
 
-#if (defined(__GLIBCPP__) || defined(__GLIBCXX__)) && !defined(BOOST_REGEX_ICU_INSTANCES)
+#if (defined(__GLIBCPP__) || defined(__GLIBCXX__)) \
+   && !defined(BOOST_REGEX_ICU_INSTANCES)\
+   && !defined(__SGI_STL_PORT)\
+   && !defined(_STLPORT_VERSION)
 // std:basic_string<>::const_iterator instances as well:
 template BOOST_REGEX_DECL void BOOST_REGEX_CALL 
    match_results<std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator>::maybe_assign(
