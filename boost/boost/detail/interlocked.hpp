@@ -23,11 +23,12 @@
 
 # include <windows.h>
 
-# define BOOST_INTERLOCKED_INCREMENT ::InterlockedIncrement
-# define BOOST_INTERLOCKED_DECREMENT ::InterlockedDecrement
-# define BOOST_INTERLOCKED_COMPARE_EXCHANGE ::InterlockedCompareExchange
-# define BOOST_INTERLOCKED_EXCHANGE ::InterlockedExchange
-# define BOOST_INTERLOCKED_COMPARE_EXCHANGE_POINTER ::InterlockedCompareExchangePointer
+# define BOOST_INTERLOCKED_INCREMENT InterlockedIncrement
+# define BOOST_INTERLOCKED_DECREMENT InterlockedDecrement
+# define BOOST_INTERLOCKED_COMPARE_EXCHANGE InterlockedCompareExchange
+# define BOOST_INTERLOCKED_EXCHANGE InterlockedExchange
+# define BOOST_INTERLOCKED_COMPARE_EXCHANGE_POINTER InterlockedCompareExchangePointer
+# define BOOST_INTERLOCKED_EXCHANGE_POINTER InterlockedExchangePointer
 
 #elif defined( BOOST_MSVC ) || defined( BOOST_INTEL_WIN )
 
@@ -42,11 +43,16 @@ extern "C" long __cdecl _InterlockedExchange( long volatile *, long);
 # pragma intrinsic( _InterlockedExchange )
 # if defined(_M_IA64) || defined(_M_AMD64)
 extern "C" void* __cdecl _InterlockedCompareExchangePointer( void* volatile *, void*, void* );
+extern "C" void* __cdecl _InterlockedExchangePointer( void* volatile *, void* );
 #  pragma intrinsic( _InterlockedCompareExchangePointer )
+#  pragma intrinsic( _InterlockedExchangePointer )
 #  define BOOST_INTERLOCKED_COMPARE_EXCHANGE_POINTER ::_InterlockedCompareExchangePointer
+#  define BOOST_INTERLOCKED_EXCHANGE_POINTER ::_InterlockedExchangePointer
 # else
 #  define BOOST_INTERLOCKED_COMPARE_EXCHANGE_POINTER(dest,exchange,compare) \
     ((void*)BOOST_INTERLOCKED_COMPARE_EXCHANGE((long volatile*)(dest),(long)(exchange),(long)(compare)))
+#  define BOOST_INTERLOCKED_EXCHANGE_POINTER(dest,exchange) \
+    ((void*)BOOST_INTERLOCKED_EXCHANGE((long volatile*)(dest),(long)(exchange)))
 # endif
 
 # define BOOST_INTERLOCKED_INCREMENT ::_InterlockedIncrement
