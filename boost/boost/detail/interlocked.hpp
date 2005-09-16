@@ -82,6 +82,8 @@ extern "C" __declspec(dllimport) long __stdcall InterlockedExchange( long volati
 # define BOOST_INTERLOCKED_EXCHANGE ::boost::detail::InterlockedExchange
 # define BOOST_INTERLOCKED_COMPARE_EXCHANGE_POINTER(dest,exchange,compare) \
     ((void*)BOOST_INTERLOCKED_COMPARE_EXCHANGE((long volatile*)(dest),(long)(exchange),(long)(compare)))
+# define BOOST_INTERLOCKED_EXCHANGE_POINTER(dest,exchange) \
+    ((void*)BOOST_INTERLOCKED_EXCHANGE((long volatile*)(dest),(long)(exchange)))
 
 #else
 
