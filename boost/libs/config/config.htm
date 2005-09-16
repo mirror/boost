@@ -1235,31 +1235,35 @@ void g() { return f(); }</pre>
          ABI, that at least in theory there 3200 combinations, and that's without 
          considering runtime library variations.&nbsp; Fortunately these variations can 
          be managed by #pragma's that tell the compiler what ABI to use for the types 
-         declared in your library, in order to avoid sprinkling #pragma's all over the 
-         boost headers, there are some prefix and suffix headers that do the job, 
-         typical usage would be:</P>
+         declared in your library. In order to avoid sprinkling #pragma's all over the 
+         boost headers, there are some prefix and suffix headers that do the job. 
+      Typical usage is:</P>
+      <P><b>my_library.cpp</b></P>
+      <blockquote>
       <PRE>#ifndef MY_INCLUDE_GUARD
 #define MY_INCLUDE_GUARD
 
 // all includes go here:
-#include &lt;boost/config.hpp&gt;
+<b>#include &lt;boost/config.hpp&gt;</b>
 #include &lt;whatever&gt;
 
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_PREFIX
-#endif
+<b>#include &lt;boost/config/abi_prefix.hpp&gt;  // must be the last #include</b>
 
 namespace boost{
 // your code goes here
 } 
 
-#ifdef BOOST_HAS_ABI_HEADERS
-#  include BOOST_ABI_SUFFIX
-#endif
-
+<b>#include &lt;boost/config/abi_suffix.hpp&gt;  // pops abi_prefix.hpp pragmas</b>
 
 #endif // include guard
 </PRE>
+      </blockquote>
+      <P><b>my_library.cpp</b></P>
+      <blockquote>
+        <pre>...
+<b>// nothing special need be done in the implementation file</b>
+...</pre>
+      </blockquote>
       <P>The user can disable this mechanism by defining BOOST_DISABLE_ABI_HEADERS, or 
          they can define BOOST_ABI_PREFIX and/or BOOST_ABI_SUFFIX to point to their own 
          prefix/suffix headers if they so wish.</P>
@@ -1280,7 +1284,6 @@ namespace boost{
          search path, and the compiler and linker do the rest.&nbsp; Boost.config 
          supports this via the header &lt;boost/config/auto_link.hpp&gt;, before 
          including this header one or more of the following macros need to be defined:</P>
-      <P>
          <TABLE id="Table1" cellSpacing="1" cellPadding="1" width="100%" border="1">
             <TR>
                <TD>BOOST_LIB_NAME</TD>
@@ -1298,25 +1301,39 @@ namespace boost{
                   (useful for debugging).</TD>
             </TR>
          </TABLE>
-      </P>
       <P>If the compiler supports this mechanism, then it will be told to link against 
          the appropriately named library, the actual algorithm used to mangle the name 
          of the library is documented inside &lt;boost/config/auto_link.hpp&gt; and has 
          to match that used to create the libraries via bjam 's install rules.</P>
-      <P>Typical usage would be:</P>
-      <PRE>//
-// Don't include auto-linking code if the user has disabled it by
-// defining BOOST_WHATEVER_NO_LIB, or if this is one of our own
-// source files (signified by BOOST_WHATEVER_SOURCE):
+      <P>Typical usage is:</P>
+      <P><b>my_library.hpp</b></P>
+      <blockquote>
+      <PRE>...
 //
-#if !defined(BOOST_WHATEVER_NO_LIB) &amp;&amp; !defined(BOOST_WHATEVER_SOURCE)
-#  define BOOST_LIB_NAME boost_whatever
-#  ifdef BOOST_WHATEVER_DYN_LINK
+// Don't include auto-linking code if the user has disabled it by
+// defining BOOST_ALL_NO_LIB, or BOOST_MY_LIBRARY_NO_LIB, or if this 
+// is one of our own source files (signified by BOOST_MY_LIBRARY_SOURCE):
+//
+<b>#if !defined(BOOST_ALL_NO_LIB) &amp;&amp; !defined(BOOST_MY_LIBRARY_NO_LIB) &amp;&amp; !defined(BOOST_MY_LIBRARY_SOURCE)
+#  define BOOST_LIB_NAME boost_my_library
+#  ifdef BOOST_MY_LIBRARY_DYN_LINK
 #     define BOOST_DYN_LINK
 #  endif
 #  include &lt;boost/config/auto_link.hpp&gt;
 #endif
+</b>...
 </PRE>
+      </blockquote>
+      <p><b>my_library.cpp</b></p>
+      <blockquote>
+        <pre>// define BOOST_MY_LIBRARY_SOURCE so that the header knows that the
+// library is being built (possibly exporting rather than importing code)
+//
+<b>#define BOOST_MY_LIBRARY_SOURCE</b> 
+
+<b>#include &lt;boost/my_library/my_library.hpp&gt;</b>
+...</pre>
+      </blockquote>
       <H2>Guidelines for Boost Authors</H2>
       <p>The <a href="../../boost/config.hpp">boost/config.hpp</a> header is used to 
          pass configuration information to other boost files, allowing them to cope with 
