@@ -22,11 +22,11 @@ namespace dxpr
 
 double time_match(const std::string& re, const std::string& text, bool icase)
 {
-   try{
-   boost::xpressive::sregex e;
-   e = (icase ? 
-            boost::xpressive::sregex(boost::xpressive::sregex::compile(re))
-            : boost::xpressive::sregex(boost::xpressive::sregex::compile(re, boost::xpressive::regex_constants::icase)));
+    try{
+    boost::xpressive::regex_constants::syntax_option_type flags = boost::xpressive::regex_constants::optimize;
+    if(icase)
+        flags = flags | boost::xpressive::regex_constants::icase;
+    boost::xpressive::sregex e(boost::xpressive::sregex::compile(re, flags));
     boost::xpressive::smatch what;
     boost::timer tim;
     int iter = 1;
@@ -75,11 +75,11 @@ struct noop
 
 double time_find_all(const std::string& re, const std::string& text, bool icase)
 {
-   try{
-   boost::xpressive::sregex e;
-   e = (icase ? 
-            boost::xpressive::sregex(boost::xpressive::sregex::compile(re))
-            : boost::xpressive::sregex(boost::xpressive::sregex::compile(re, boost::xpressive::regex_constants::icase)));
+    try{
+    boost::xpressive::regex_constants::syntax_option_type flags = boost::xpressive::regex_constants::optimize;
+    if(icase)
+        flags = flags | boost::xpressive::regex_constants::icase;
+    boost::xpressive::sregex e(boost::xpressive::sregex::compile(re, flags));
     boost::xpressive::smatch what;
     boost::timer tim;
     int iter = 1;
@@ -115,12 +115,12 @@ double time_find_all(const std::string& re, const std::string& text, bool icase)
         result = (std::min)(run, result);
     }
     return result / iter;
-   }
-   catch(const std::exception& e)
-   {
-      std::cout << "Exception: " << e.what() << std::endl;
-      return -1;
-   }
+    }
+    catch(const std::exception& e)
+    {
+        std::cout << "Exception: " << e.what() << std::endl;
+        return -1;
+    }
 }
 
 }

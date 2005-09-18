@@ -84,7 +84,7 @@ int handle_argument(const std::string& what)
       time_pcre = true;
 #endif
 #ifdef BOOST_HAS_XPRESSIVE
-   else if(what == "-xpressive")
+   else if(what == "-xpressive" || what == "-dxpr")
       time_xpressive = true;
 #endif
    else if(what == "-all")
@@ -160,6 +160,9 @@ int show_usage()
 #endif
 #ifdef BOOST_HAS_PCRE
       "      -pcre  Apply tests to PCRE library\n"
+#endif
+#ifdef BOOST_HAS_XPRESSIVE
+      "      -dxpr  Apply tests to dynamic xpressive library\n"
 #endif
       "      -all   Apply tests to all libraries\n\n"
       "   test options:\n"
