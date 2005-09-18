@@ -36,5 +36,38 @@ Timings:
   plain time: 0.781
   named parameter time: 0.766
 
+----------------- Test #2 ----------------
+
+Testers: 
+  Chris Frey
+
+Date:
+  2005-09-17
+
+Compiler: 
+  Linux kernel 2.4.27
+  gcc version 3.3.6 (Gentoo 3.3.6, ssp-3.3.6-1.0, pie-8.7.8)
+
+Command lines:
+  g++ -c -o efficiency.o -ftemplate-depth-100 -funroll-loops \
+      -O3 -finline-functions -Wno-inline -DNDEBUG  efficiency.cpp
+
+  g++ -o efficiency.exe efficiency.o -Wl,--strip-all  
+
+Machine:
+  IBM Thinkpad 770Z, running on AC power
+  Intel Pentium II 366Mhz
+
+Timings:
+  Run #1 results discarded per standard practice
+
+  Run #2
+  plain time:           6.42
+  named parameter time: 7.34
+
+  Run #3
+  plain time:           6.42
+  named parameter time: 7.34
+
 -----------------------------------------
 
