@@ -13,6 +13,7 @@
 
 #ifdef BOOST_HAS_XPRESSIVE
 #include <cassert>
+#include <iostream>
 #include <boost/timer.hpp>
 #include <boost/xpressive/xpressive.hpp>
 
@@ -21,6 +22,7 @@ namespace dxpr
 
 double time_match(const std::string& re, const std::string& text, bool icase)
 {
+   try{
    boost::xpressive::sregex e;
    e = (icase ? 
             boost::xpressive::sregex(boost::xpressive::sregex::compile(re))
@@ -56,6 +58,12 @@ double time_match(const std::string& re, const std::string& text, bool icase)
         result = (std::min)(run, result);
     }
     return result / iter;
+   }
+   catch(const std::exception& e)
+   {
+      std::cout << "Exception: " << e.what() << std::endl;
+      return -1;
+   }
 }
 
 struct noop
@@ -67,6 +75,7 @@ struct noop
 
 double time_find_all(const std::string& re, const std::string& text, bool icase)
 {
+   try{
    boost::xpressive::sregex e;
    e = (icase ? 
             boost::xpressive::sregex(boost::xpressive::sregex::compile(re))
@@ -106,6 +115,12 @@ double time_find_all(const std::string& re, const std::string& text, bool icase)
         result = (std::min)(run, result);
     }
     return result / iter;
+   }
+   catch(const std::exception& e)
+   {
+      std::cout << "Exception: " << e.what() << std::endl;
+      return -1;
+   }
 }
 
 }

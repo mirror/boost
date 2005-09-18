@@ -53,6 +53,13 @@ double time_match(const std::string& re, const std::string& text, bool icase)
 bool dummy_grep_proc(const boost::smatch&)
 { return true; }
 
+struct noop
+{
+    void operator()( boost::smatch const & ) const
+    {
+    }
+};
+
 double time_find_all(const std::string& re, const std::string& text, bool icase)
 {
    boost::regex e(re, (icase ? boost::regex::perl | boost::regex::icase : boost::regex::perl));
@@ -67,7 +74,9 @@ double time_find_all(const std::string& re, const std::string& text, bool icase)
       tim.restart();
       for(counter = 0; counter < iter; ++counter)
       {
-         boost::regex_grep(&dummy_grep_proc, text, e);
+         boost::sregex_iterator begin( text.begin(), text.end(), e ), end;
+         std::for_each( begin, end, noop() );
+         //boost::regex_grep(&dummy_grep_proc, text, e);
       }
       result = tim.elapsed();
       iter *= 2;
