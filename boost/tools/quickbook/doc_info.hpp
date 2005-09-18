@@ -72,7 +72,7 @@ namespace quickbook
                             )
                             >> space >> ']' >> +eol_p
                         )
-                    >> ']' >> +eol_p
+                    >> space >> ']' >> +eol_p
                     ;
 
                 quickbook_version =
