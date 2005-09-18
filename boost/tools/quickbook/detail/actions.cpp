@@ -695,6 +695,9 @@ namespace quickbook
         , end_section(out, "</section>")
         , xinclude(out)
         , include(*this)
+        , level(0)
+        , level_up(level)
+        , level_down(level)
     {
         // turn off __FILENAME__ macro on debug mode = true
         std::string filename_str = debug_mode ? 

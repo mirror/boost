@@ -88,8 +88,8 @@ namespace quickbook
 
                 block_markup =
                         '['
-                    >>  (   begin_section
-                        |   end_section
+                    >>  (   begin_section               [actions.level_up]
+                        |   end_section                 [actions.level_down]
                         |   headings
                         |   blurb
                         |   blockquote

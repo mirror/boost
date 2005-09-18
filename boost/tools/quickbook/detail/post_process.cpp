@@ -339,12 +339,23 @@ namespace quickbook
         if (linewidth == -1)
             linewidth = 80;     // set default to 80
 
-        std::string tidy;
-        tidy_compiler state(tidy, linewidth);
-        tidy_grammar g(state, indent);
-        parse_info<iter_type> r = parse(in.begin(), in.end(), g, space_p);
-        assert(r.full); // this should not happen!
-        out << tidy;
+        try
+        {
+            std::string tidy;
+            tidy_compiler state(tidy, linewidth);
+            tidy_grammar g(state, indent);
+            parse_info<iter_type> r = parse(in.begin(), in.end(), g, space_p);
+            assert(r.full); // this should not happen!
+            out << tidy;
+        }
+        
+        catch(...)
+        {
+            std::cerr 
+            <<  "Error Post Processing Failed. " 
+            << std::endl;
+            out << in;
+        }
     }
 }
 

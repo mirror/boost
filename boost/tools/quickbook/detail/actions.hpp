@@ -616,6 +616,40 @@ namespace quickbook
         std::stringstream&  phrase;
     };
 
+    struct level_up_action
+    {
+        level_up_action(int& level)
+            : level(level) {}
+
+        void operator()(iterator const&, iterator const&) const
+        {
+            ++level;
+        }
+
+        int& level;
+    };
+
+    struct level_down_action
+    {
+        level_down_action(int& level)
+            : level(level) {}
+
+        void operator()(iterator const& first, iterator const& last) const
+        {
+            --level;
+            if (level < 0)
+            {
+                boost::spirit::file_position const pos = first.get_position();
+                std::cerr
+                    << "Unmatched [endsect] at: \"" << pos.file
+                    << "\" line " << pos.line
+                    << ", column " << pos.column << ".\n";
+            }
+        }
+
+        int& level;
+    };
+
     ///////////////////////////////////////////////////////////////////////////
     //
     //  Our actions
@@ -740,6 +774,10 @@ namespace quickbook
         markup_action           end_section;
         xinclude_action         xinclude;
         include_action          include;
+        
+        int                     level;
+        level_up_action         level_up;
+        level_down_action       level_down;
     };
 }
 
