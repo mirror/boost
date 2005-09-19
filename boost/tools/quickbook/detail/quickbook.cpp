@@ -49,7 +49,8 @@ namespace quickbook
         using std::ifstream;
         using std::istream_iterator;
 
-        ifstream in(filename);
+        ifstream in(filename,
+            std::ios_base::binary | std::ios_base::in);
 
         if (!in)
         {
