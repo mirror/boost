@@ -63,9 +63,9 @@ namespace quickbook { namespace detail
         program.erase(0, n);
 
         std::string::size_type pos = 0;
-        while (std::string::npos != (pos = program.find('\n', pos )))
+        while (std::string::npos != (pos = program.find_first_of("\r\n", pos)))
         {
-            if (std::string::npos == (pos = program.find_first_not_of('\n', pos)))
+            if (std::string::npos == (pos = program.find_first_not_of("\r\n", pos)))
             {
                 break;
             }
