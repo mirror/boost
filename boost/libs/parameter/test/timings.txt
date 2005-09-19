@@ -69,5 +69,60 @@ Timings:
   plain time:           6.42
   named parameter time: 7.34
 
+----------------- Test #2 ----------------
+
+Testers: 
+  Stuar Dootson
+
+Date:
+  2005-09-18
+
+Machine:
+  Athlon 64 3500+ laptop, running on AC power
+  Windows XP SP2
+
+
+Compiler: Visual C++ 7.1
+
+ command line: 
+   cl -O2 efficiency.cpp -EHsc -I\lib\boost\include\boost-1_33
+
+ Results:
+   plain time:           <ignored>
+   named parameter time: <ignored>
+   plain time:           1.453
+   named parameter time: 1.437
+   plain time:           1.453
+   named parameter time: 1.453
+
+Compiler: Visual C++ 8.0
+
+ command-line:
+   cl -O2 efficiency.cpp -EHsc -I\lib\boost\include\boost-1_33
+
+ Results:
+   plain time:           <ignored>
+   named parameter time: <ignored>
+   plain time:           1.438
+   named parameter time: 1.453
+   plain time:           1.438
+   named parameter time: 1.437
+
+Compiler: Mingw gcc 3.4.2
+
+ command-line:
+   g++ -c -o efficiency.o -ftemplate-depth-100 -funroll-loops -O3
+       -finline-functions -Wno-inline -DNDEBUG  efficiency.cpp
+       -I\lib\boost\include\boost-1_33
+   g++ -o efficiency.exe efficiency.o -Wl,--strip-all 
+
+ Results:
+   plain time:           <ignored>
+   named parameter time: <ignored>
+   plain time:           1.14
+   named parameter time: 1.422
+   plain time:           1.125
+   named parameter time: 1.406
+
 -----------------------------------------
 
