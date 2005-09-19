@@ -18,6 +18,8 @@
 namespace quickbook
 {
     using namespace boost::spirit;
+    extern unsigned qbk_major_version;
+    extern unsigned qbk_minor_version;
 
     template <typename Actions>
     struct doc_info_grammar
@@ -77,9 +79,9 @@ namespace quickbook
 
                 quickbook_version =
                         "quickbook" >> hard_space
-                    >>  (   uint_p                  [assign_a(actions.qbk_major_version)]
+                    >>  (   uint_p                  [assign_a(qbk_major_version)]
                             >> '.' 
-                            >>  uint2_t()           [assign_a(actions.qbk_minor_version)]
+                            >>  uint2_t()           [assign_a(qbk_minor_version)]
                         )
                     ;
 

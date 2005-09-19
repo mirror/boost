@@ -28,12 +28,31 @@ namespace quickbook
     {
         if (out)
         {
-            std::string  str = phrase.str();
-            if (anchor)
+            std::string str = phrase.str();
+            phrase.str(std::string());
+            out << pre << str << post;
+        }
+    }
+
+    void anchored_phrase_action::operator()(iterator const& first, iterator const& last) const
+    {
+        if (out)
+        {
+            std::string str = phrase.str();
+            if (qbk_version_n < 103) // version 1.2 and below
+            {
                 out << "<anchor id=\""
                     << section_id << '.'
                     << detail::make_identifier(str.begin(), str.end())
                     << "\" />";
+            }
+            else // version 1.3 and above
+            {
+                out << "<anchor id=\""
+                    << qualified_section_id << '.'
+                    << detail::make_identifier(str.begin(), str.end())
+                    << "\" />";
+            }
             phrase.str(std::string());
             out << pre << str << post;
         }
@@ -52,7 +71,7 @@ namespace quickbook
 
     void list_action::operator()(iterator const& first, iterator const& last) const
     {
-        assert(!list_marks.empty()); // there must be at least one item in the stack
+        BOOST_ASSERT(!list_marks.empty()); // there must be at least one item in the stack
         std::string  str = list_buffer.str();
         list_buffer.str(std::string());
         out << str;
@@ -81,18 +100,18 @@ namespace quickbook
             }
             else // must be a tab
             {
-                assert(mark == '\t');
+                BOOST_ASSERT(mark == '\t');
                 // hardcoded tab to 4 for now
                 new_indent = ((new_indent + 4) / 4) * 4;
             }
         }
 
         char mark = *first;
-        assert(mark == '#' || mark == '*'); // expecting a mark
+        BOOST_ASSERT(mark == '#' || mark == '*'); // expecting a mark
 
         if (indent == -1) // the very start
         {
-            assert(new_indent == 0);
+            BOOST_ASSERT(new_indent == 0);
         }
 
         if (new_indent > indent)
@@ -108,7 +127,7 @@ namespace quickbook
 
                 std::string str = out.str();
                 std::string::size_type pos = str.rfind("\n</listitem>");
-                assert(pos <= str.size());
+                BOOST_ASSERT(pos <= str.size());
                 str.erase(str.begin()+pos, str.end());
                 out.str(std::string());
                 out << str;
@@ -118,7 +137,7 @@ namespace quickbook
 
         else if (new_indent < indent)
         {
-            assert(!list_marks.empty());
+            BOOST_ASSERT(!list_marks.empty());
             indent = new_indent;
 
             while (!list_marks.empty() && (indent < list_marks.top().second))
@@ -387,11 +406,52 @@ namespace quickbook
     {
         if (section_id.empty())
             section_id = detail::make_identifier(first, last);
-        phrase << "\n<section id=\"" << library_id << "." << section_id << "\">\n";
+
+        if (level != 0)
+            qualified_section_id += '.';
+        else
+            BOOST_ASSERT(qualified_section_id.empty());
+        qualified_section_id += section_id;
+        ++level;
+
+        if (qbk_version_n < 103) // version 1.2 and below
+        {
+            phrase << "\n<section id=\"" 
+                << library_id << "." << section_id << "\">\n";
+        }
+        else // version 1.3 and above
+        {
+            phrase << "\n<section id=\"" << library_id 
+                << "." << qualified_section_id << "\">\n";
+        }
         phrase << "<title>";
         while (first != last)
             detail::print_char(*first++, phrase);
         phrase << "</title>\n";
+    }
+
+    void pop_sect_action::operator()(iterator const& first, iterator const& last) const
+    {
+        --level;
+        if (level < 0)
+        {
+            boost::spirit::file_position const pos = first.get_position();
+            std::cerr
+                << "Mismatched [endsect] at: \"" << pos.file
+                << "\" line " << pos.line
+                << ", column " << pos.column << ".\n";
+        }
+        if (level == 0)
+        {
+            qualified_section_id.clear();
+        }
+        else
+        {
+            std::string::size_type const n = 
+                qualified_section_id.find_last_of('.');
+            BOOST_ASSERT(std::string::npos != n);
+            qualified_section_id.erase(n, std::string::npos);
+        }
     }
 
     void xinclude_action::operator()(iterator first, iterator last) const
@@ -496,18 +556,18 @@ namespace quickbook
             return;
         }
 
-        if (actions.qbk_major_version == 0)
+        if (qbk_major_version == 0)
         {
             // hard code quickbook version to v1.1
-            actions.qbk_major_version = 1;
-            actions.qbk_minor_version = 1;
-            actions.qbk_version_n = 101;
+            qbk_major_version = 1;
+            qbk_minor_version = 1;
+            qbk_version_n = 101;
             std::cerr << "Warning: Quickbook version undefined. "
                 "Version 1.1 is assumed" << std::endl;
         }
         else
         {
-            actions.qbk_version_n = (actions.qbk_major_version * 100) + actions.qbk_minor_version; 
+            qbk_version_n = (qbk_major_version * 100) + qbk_minor_version; 
         }
 
         out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -541,7 +601,7 @@ namespace quickbook
             ;
         }
 
-        if (actions.qbk_version_n < 103)
+        if (qbk_version_n < 103)
         {
             // version < 1.3 compatibility
             actions.doc_license = actions.doc_license_1_1;
@@ -612,9 +672,6 @@ namespace quickbook
     actions::actions(char const* filein_, std::ostream &out_)
         : filename(fs::complete(fs::path(filein_, fs::native)))
         , out(out_)
-        , qbk_major_version(0)
-        , qbk_minor_version(0)
-        , qbk_version_n(0)
         , extract_doc_license(doc_license, phrase)
         , extract_doc_purpose(doc_purpose, phrase)
         , table_span(0)
@@ -623,17 +680,17 @@ namespace quickbook
         , code(out, source_mode, macro)
         , code_block(phrase, source_mode, macro)
         , inline_code(phrase, source_mode, macro)
-        , paragraph(out, phrase, section_id, paragraph_pre, paragraph_post)
-        , h1(out, phrase, section_id, h1_pre, h1_post, true)
-        , h2(out, phrase, section_id, h2_pre, h2_post, true)
-        , h3(out, phrase, section_id, h3_pre, h3_post, true)
-        , h4(out, phrase, section_id, h4_pre, h4_post, true)
-        , h5(out, phrase, section_id, h5_pre, h5_post, true)
-        , h6(out, phrase, section_id, h6_pre, h6_post, true)
+        , paragraph(out, phrase, paragraph_pre, paragraph_post)
+        , h1(out, phrase, section_id, qualified_section_id, h1_pre, h1_post)
+        , h2(out, phrase, section_id, qualified_section_id, h2_pre, h2_post)
+        , h3(out, phrase, section_id, qualified_section_id, h3_pre, h3_post)
+        , h4(out, phrase, section_id, qualified_section_id, h4_pre, h4_post)
+        , h5(out, phrase, section_id, qualified_section_id, h5_pre, h5_post)
+        , h6(out, phrase, section_id, qualified_section_id, h6_pre, h6_post)
         , hr(out, hr_)
-        , blurb(out, phrase, section_id, blurb_pre, blurb_post)
-        , blockquote(out, phrase, section_id, blockquote_pre, blockquote_post)
-        , preformatted(out, phrase, section_id, preformatted_pre, preformatted_post)
+        , blurb(out, phrase, blurb_pre, blurb_post)
+        , blockquote(out, phrase, blockquote_pre, blockquote_post)
+        , preformatted(out, phrase, preformatted_pre, preformatted_post)
         , plain_char(phrase)
         , raw_char(phrase)
         , image(phrase)
@@ -642,7 +699,7 @@ namespace quickbook
         , indent(-1)
         , list(out, list_buffer, indent, list_marks)
         , list_format(list_buffer, indent, list_marks)
-        , list_item(list_buffer, phrase, section_id, list_item_pre, list_item_post)
+        , list_item(list_buffer, phrase, list_item_pre, list_item_post)
         , funcref_pre(phrase, funcref_pre_)
         , funcref_post(phrase, funcref_post_)
         , classref_pre(phrase, classref_pre_)
@@ -691,13 +748,12 @@ namespace quickbook
         , start_cell(phrase, table_span)
         , end_cell(phrase, end_cell_)
         , anchor(out)
-        , begin_section(out, doc_id, section_id)
+        , begin_section(out, doc_id, section_id, level, qualified_section_id)
         , end_section(out, "</section>")
         , xinclude(out)
         , include(*this)
         , level(0)
-        , level_up(level)
-        , level_down(level)
+        , pop_sect(level, qualified_section_id)
     {
         // turn off __FILENAME__ macro on debug mode = true
         std::string filename_str = debug_mode ? 

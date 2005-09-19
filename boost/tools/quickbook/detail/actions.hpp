@@ -32,6 +32,9 @@ namespace quickbook
     extern tm* current_time; // the current time
     extern tm* current_gm_time; // the current UTC time
     extern bool debug_mode; 
+    extern unsigned qbk_major_version;
+    extern unsigned qbk_minor_version;
+    extern unsigned qbk_version_n; // qbk_major_version * 100 + qbk_minor_version
 
     // forward declarations
     struct actions;
@@ -130,32 +133,53 @@ namespace quickbook
 
     struct phrase_action
     {
-        //  Handles paragraph, h1, h2, h3, h4, h5, h6,
         //  blurb, blockquote, preformatted, list_item,
         //  unordered_list, ordered_list
 
         phrase_action(
             std::ostream&       out,
             std::stringstream&  phrase,
-            std::string&        section_id,
             std::string const&  pre,
-            std::string const&  post,
-            bool                anchor = false)
+            std::string const&  post)
         : out(out)
         , phrase(phrase)
-        , section_id(section_id)
         , pre(pre)
-        , post(post)
-        , anchor(anchor) {}
+        , post(post) {}
 
         void operator()(iterator const& first, iterator const& last) const;
 
         std::ostream&       out;
         std::stringstream&  phrase;
-        std::string&        section_id;
         std::string         pre;
         std::string         post;
-        bool                anchor;
+    };
+
+    struct anchored_phrase_action
+    {
+        //  Handles paragraph, h1, h2, h3, h4, h5, h6,
+
+        anchored_phrase_action(
+            std::ostream&       out,
+            std::stringstream&  phrase,
+            std::string const&  section_id,
+            std::string const&  qualified_section_id,
+            std::string const&  pre,
+            std::string const&  post)
+        : out(out)
+        , phrase(phrase)
+        , section_id(section_id)
+        , qualified_section_id(qualified_section_id)
+        , pre(pre)
+        , post(post) {}
+
+        void operator()(iterator const& first, iterator const& last) const;
+
+        std::ostream&       out;
+        std::stringstream&  phrase;
+        std::string const&  section_id;
+        std::string const&  qualified_section_id;
+        std::string         pre;
+        std::string         post;
     };
 
     struct simple_phrase_action
@@ -542,16 +566,22 @@ namespace quickbook
         begin_section_action(
             std::ostream& phrase
           , std::string& library_id
-          , std::string& section_id)
+          , std::string& section_id
+          , int& level
+          , std::string& qualified_section_id)
         : phrase(phrase)
         , library_id(library_id)
-        , section_id(section_id) {}
+        , section_id(section_id)
+        , level(level)
+        , qualified_section_id(qualified_section_id) {}
 
         void operator()(iterator first, iterator last) const;
 
         std::ostream& phrase;
         std::string& library_id;
         std::string& section_id;
+        int& level;
+        std::string& qualified_section_id;
     };
 
     struct xinclude_action
@@ -616,38 +646,17 @@ namespace quickbook
         std::stringstream&  phrase;
     };
 
-    struct level_up_action
+    struct pop_sect_action
     {
-        level_up_action(int& level)
-            : level(level) {}
+        pop_sect_action(
+              int& level
+            , std::string& qualified_section_id)
+            : level(level)
+            , qualified_section_id(qualified_section_id) {}
 
-        void operator()(iterator const&, iterator const&) const
-        {
-            ++level;
-        }
-
+        void operator()(iterator const& first, iterator const& last) const;
         int& level;
-    };
-
-    struct level_down_action
-    {
-        level_down_action(int& level)
-            : level(level) {}
-
-        void operator()(iterator const& first, iterator const& last) const
-        {
-            --level;
-            if (level < 0)
-            {
-                boost::spirit::file_position const pos = first.get_position();
-                std::cerr
-                    << "Unmatched [endsect] at: \"" << pos.file
-                    << "\" line " << pos.line
-                    << ", column " << pos.column << ".\n";
-            }
-        }
-
-        int& level;
+        std::string& qualified_section_id;
     };
 
     ///////////////////////////////////////////////////////////////////////////
@@ -672,9 +681,6 @@ namespace quickbook
         std::string             doc_type;
         std::string             doc_title;
         std::string             doc_version;
-        unsigned                qbk_major_version;
-        unsigned                qbk_minor_version;
-        unsigned                qbk_version_n; // qbk_major_version * 100 + qbk_minor_version
         std::string             doc_id;
         std::string             doc_dirname;
         copyright_list          doc_copyright_years;
@@ -702,7 +708,8 @@ namespace quickbook
         code_action             code;
         code_action             code_block;
         inline_code_action      inline_code;
-        phrase_action           paragraph, h1, h2, h3, h4, h5, h6;
+        phrase_action           paragraph;
+        anchored_phrase_action  h1, h2, h3, h4, h5, h6;
         markup_action           hr;
         phrase_action           blurb, blockquote, preformatted;
         plain_char_action       plain_char;
@@ -776,8 +783,8 @@ namespace quickbook
         include_action          include;
         
         int                     level;
-        level_up_action         level_up;
-        level_down_action       level_down;
+        pop_sect_action         pop_sect;
+        std::string             qualified_section_id;
     };
 }
 

@@ -27,7 +27,7 @@ namespace quickbook
                 
         void indent()
         {
-            assert(current_indent >= 0); // this should not happen!
+            BOOST_ASSERT(current_indent >= 0); // this should not happen!
             for (int i = 0; i < current_indent; ++i)
                 out += ' ';
             column = current_indent;
@@ -157,7 +157,7 @@ namespace quickbook
                 // carriage return anyway. Let us remove extra right
                 // spaces.
                 std::string str(f, l);
-                assert(f != l); // this should not happen
+                BOOST_ASSERT(f != l); // this should not happen
                 iter_type i = str.end();
                 while (i != str.begin() && std::isspace(*(i-1)))
                     --i;
@@ -345,7 +345,7 @@ namespace quickbook
             tidy_compiler state(tidy, linewidth);
             tidy_grammar g(state, indent);
             parse_info<iter_type> r = parse(in.begin(), in.end(), g, space_p);
-            assert(r.full); // this should not happen!
+            BOOST_ASSERT(r.full); // this should not happen!
             out << tidy;
         }
         
