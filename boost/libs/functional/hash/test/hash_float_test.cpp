@@ -86,7 +86,6 @@ void float_tests(char const* name, T* = 0)
                 std::cout<<"x1(denorm_min) == x1(-infinity) == "<<x1(minus_infinity)<<"\n";
             }
         }
-
         if(std::numeric_limits<T>::has_quiet_NaN) {
             if(x1(std::numeric_limits<T>::quiet_NaN()) == x1(infinity)) {
                 std::cout<<"x1(quiet_NaN) == x1(infinity) == "<<x1(infinity)<<"\n";
@@ -136,6 +135,10 @@ void float_tests(char const* name, T* = 0)
         if(x1(std::numeric_limits<T>::denorm_min()) == x1(zero)) {
             std::cout<<"x1(denorm_min) == x1(zero) == "<<x1(zero)<<"\n";
         }
+#if !BOOST_WORKAROUND(__DECCXX_VER,<70190006)
+        // The Tru64/CXX standard library prior to 7.1 contains a bug in the
+        // specialization of std::numeric_limits::denorm_min() for long
+        // doubles which causes this test to fail.
         BOOST_CHECK_MESSAGE(x1(std::numeric_limits<T>::denorm_min()) ==
             HASH_NAMESPACE::hash_value(std::numeric_limits<T>::denorm_min()),
             "x1(std::numeric_limits<T>::denorm_min()) = "
@@ -144,6 +147,7 @@ void float_tests(char const* name, T* = 0)
                 << HASH_NAMESPACE::hash_value(
                     std::numeric_limits<T>::denorm_min())
                 << "\nx1(0) = "<<x1(0)<<"\n");
+#endif
     }
 
 // NaN also causes borland to crash.
