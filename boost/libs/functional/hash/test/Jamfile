@@ -46,6 +46,7 @@ rule hash-test-output ( name + )
             [ hash-test hash_set_test ]
             [ hash-test hash_map_test ]
             [ hash-test link_test link_test_2 ]
+            [ hash-test container_fwd_test ]
         ;
 }
 
