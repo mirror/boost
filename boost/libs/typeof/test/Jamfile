@@ -19,6 +19,15 @@ test-suite "typeof"
 	[ compile template_tpl.cpp : <define>BOOST_TYPEOF_NATIVE : template_tpl_native ]
 	[ compile template_tpl.cpp : <define>BOOST_TYPEOF_COMPLIANT : template_tpl_emulation ]
 
+	[ compile template_enum.cpp : <define>BOOST_TYPEOF_NATIVE : template_enum_native ]
+	[ compile template_enum.cpp : <define>BOOST_TYPEOF_COMPLIANT : template_enum_emulation ]
+
+	[ compile template_dependent.cpp : <define>BOOST_TYPEOF_NATIVE : template_dependent_native ]
+	[ compile template_dependent.cpp : <define>BOOST_TYPEOF_COMPLIANT : template_dependent_emulation ]
+
+	[ compile template_multiword.cpp : <define>BOOST_TYPEOF_NATIVE : template_multiword_native ]
+	[ compile template_multiword.cpp : <define>BOOST_TYPEOF_COMPLIANT : template_multiword_emulation ]
+
 	[ compile modifiers.cpp : <define>BOOST_TYPEOF_NATIVE : modifiers_native ]
 	[ compile modifiers.cpp : <define>BOOST_TYPEOF_COMPLIANT : modifiers_emulation ]
 
@@ -39,4 +48,13 @@ test-suite "typeof"
 
 	[ compile lvalue.cpp : <define>BOOST_TYPEOF_NATIVE : lvalue_native ]
 	[ compile lvalue.cpp : <define>BOOST_TYPEOF_COMPLIANT : lvalue_emulation ]
+
+	[ compile noncopyable.cpp : <define>BOOST_TYPEOF_NATIVE : noncopyable_native ]
+	[ compile noncopyable.cpp : <define>BOOST_TYPEOF_COMPLIANT : noncopyable_emulation ]
+
+	[ compile std.cpp : <define>BOOST_TYPEOF_NATIVE : std_native ]
+	[ compile std.cpp : <define>BOOST_TYPEOF_COMPLIANT : std_emulation ]
+
+	[ link odr1.cpp odr2.cpp : <define>BOOST_TYPEOF_NATIVE : odr_native ]
+	[ link odr1.cpp odr2.cpp : <define>BOOST_TYPEOF_COMPLIANT : odr_emulation ]
 	;
