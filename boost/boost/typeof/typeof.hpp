@@ -31,12 +31,12 @@
 #   include <boost/typeof/message.hpp>
 
 #	if !defined BOOST_TYPEOF_KEYWORD
-#		define BOOST_TYPEOF_KEYWORD __typeof__
+#		define BOOST_TYPEOF_KEYWORD typeof
 #	endif
 
-    /* Native __typeof__ can accept either type or value.
+    /* Native typeof can accept either type or value.
     Something like "int()" can be viewed either way, but 
-    __typeof__ consideres it a type.  We force it otherwise
+    typeof consideres it a type.  We force it otherwise
     to ensure consistensy with emulation */
 
     namespace boost { namespace type_of {
