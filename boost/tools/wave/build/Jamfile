@@ -20,7 +20,5 @@ exe wave
       <vc-7_1><*><rtti>off        # workaround for compiler bug
     :
       release
-      <runtime-link>static
-      <threading>single
     ;
 
