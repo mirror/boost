@@ -116,7 +116,7 @@ namespace quickbook
 
         if (new_indent > indent)
         {
-           indent = new_indent;
+            indent = new_indent;
             list_marks.push(mark_type(mark, indent));
             if (list_marks.size() > 1)
             {

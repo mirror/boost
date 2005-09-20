@@ -25,7 +25,7 @@
 #pragma warning(disable:4355)
 #endif
 
-#define QUICKBOOK_VERSION "Quickbook Version 1.1"
+#define QUICKBOOK_VERSION "Quickbook Version 1.3"
 
 namespace quickbook
 {
