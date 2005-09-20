@@ -61,6 +61,7 @@ public:
       m_negate = false;
       m_has_digraphs = false;
       m_classes = 0;
+      m_negated_classes = 0;
       m_empty = true;
    }
 
@@ -90,6 +91,11 @@ public:
    void add_class(mask_type m)
    {
       m_classes |= m;
+      m_empty = false;
+   }
+   void add_negated_class(mask_type m)
+   {
+      m_negated_classes |= m;
       m_empty = false;
    }
    void add_equivalent(const digraph_type& s)
@@ -148,18 +154,23 @@ public:
    {
       return m_classes;
    }
+   mask_type negated_classes()const
+   {
+      return m_negated_classes;
+   }
    bool empty()const
    {
       return m_empty;
    }
 private:
-   std::vector<digraph_type> m_singles;        // a list of single characters to match
-   std::vector<digraph_type> m_ranges;         // a list of end points of our ranges
-   bool                      m_negate;         // true if the set is to be negated
-   bool                      m_has_digraphs;   // true if we have digraphs present
-   mask_type                 m_classes;        // character classes to match
-   bool                      m_empty;          // whether we've added anything yet
-   std::vector<digraph_type> m_equivalents;    // a list of equivalence classes
+   std::vector<digraph_type> m_singles;         // a list of single characters to match
+   std::vector<digraph_type> m_ranges;          // a list of end points of our ranges
+   bool                      m_negate;          // true if the set is to be negated
+   bool                      m_has_digraphs;    // true if we have digraphs present
+   mask_type                 m_classes;         // character classes to match
+   mask_type                 m_negated_classes; // negated character classes to match
+   bool                      m_empty;           // whether we've added anything yet
+   std::vector<digraph_type> m_equivalents;     // a list of equivalence classes
 };
    
 template <class charT, class traits>
@@ -350,11 +361,14 @@ re_syntax_base* basic_regex_creator<charT, traits>::append_set(
    result->cranges = static_cast<unsigned int>(::boost::re_detail::distance(char_set.ranges_begin(), char_set.ranges_end())) / 2;
    result->cequivalents = static_cast<unsigned int>(::boost::re_detail::distance(char_set.equivalents_begin(), char_set.equivalents_end()));
    result->cclasses = char_set.classes();
+   result->cnclasses = char_set.negated_classes();
    if(flags() & regbase::icase)
    {
       // adjust classes as needed:
       if(((result->cclasses & m_lower_mask) == m_lower_mask) || ((result->cclasses & m_upper_mask) == m_upper_mask))
          result->cclasses |= m_alpha_mask;
+      if(((result->cnclasses & m_lower_mask) == m_lower_mask) || ((result->cnclasses & m_upper_mask) == m_upper_mask))
+         result->cnclasses |= m_alpha_mask;
    }
 
    result->isnot = char_set.is_negated();
@@ -592,6 +606,24 @@ re_syntax_base* basic_regex_creator<charT, traits>::append_set(
       for(unsigned i = 0; i < (1u << CHAR_BIT); ++i)
       {
          if(this->m_traits.isctype(static_cast<charT>(i), m))
+            result->_map[i] = true;
+      }
+   }
+   //
+   // and now the negated classes:
+   //
+   m = char_set.negated_classes();
+   if(flags() & regbase::icase)
+   {
+      // adjust m as needed:
+      if(((m & m_lower_mask) == m_lower_mask) || ((m & m_upper_mask) == m_upper_mask))
+         m |= m_alpha_mask;
+   }
+   if(m != 0)
+   {
+      for(unsigned i = 0; i < (1u << CHAR_BIT); ++i)
+      {
+         if(0 == this->m_traits.isctype(static_cast<charT>(i), m))
             result->_map[i] = true;
       }
    }

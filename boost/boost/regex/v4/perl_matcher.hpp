@@ -226,6 +226,8 @@ iterator BOOST_REGEX_CALL re_is_set_member(iterator next,
    }
    if(traits_inst.isctype(col, set_->cclasses) == true)
       return set_->isnot ? next : ++next;
+   if((set_->cnclasses != 0) && (traits_inst.isctype(col, set_->cnclasses) == false))
+      return set_->isnot ? next : ++next;
    return set_->isnot ? ++next : next;
 }
 

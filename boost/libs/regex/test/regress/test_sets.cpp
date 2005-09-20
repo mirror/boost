@@ -241,20 +241,29 @@ void test_sets2()
    TEST_REGEX_SEARCH("\\l+", perl, "ABabcAB", match_default, make_array(2, 5, -2, -2));
    TEST_REGEX_SEARCH("[\\l]+", perl, "ABabcAB", match_default, make_array(2, 5, -2, -2));
    TEST_INVALID_REGEX("[\\l-a]", perl);
-   TEST_INVALID_REGEX("[\\L]", perl);
+   TEST_REGEX_SEARCH("[\\L]+", perl, "abABCab", match_default, make_array(2, 5, -2, -2));
+   TEST_REGEX_SEARCH("[[:^lower:]]+", perl, "abABCab", match_default, make_array(2, 5, -2, -2));
    TEST_REGEX_SEARCH("\\L+", perl, "abABCab", match_default, make_array(2, 5, -2, -2));
    TEST_REGEX_SEARCH("\\u+", perl, "abABCab", match_default, make_array(2, 5, -2, -2));
    TEST_REGEX_SEARCH("[\\u]+", perl, "abABCab", match_default, make_array(2, 5, -2, -2));
-   TEST_INVALID_REGEX("[\\U]", perl);
+   TEST_REGEX_SEARCH("[\\U]+", perl, "ABabcAB", match_default, make_array(2, 5, -2, -2));
+   TEST_REGEX_SEARCH("[[:^upper:]]+", perl, "ABabcAB", match_default, make_array(2, 5, -2, -2));
    TEST_REGEX_SEARCH("\\U+", perl, "ABabcAB", match_default, make_array(2, 5, -2, -2));
    TEST_REGEX_SEARCH("\\d+", perl, "AB012AB", match_default, make_array(2, 5, -2, -2));
    TEST_REGEX_SEARCH("[\\d]+", perl, "AB012AB", match_default, make_array(2, 5, -2, -2));
-   TEST_INVALID_REGEX("[\\D]", perl);
+   TEST_REGEX_SEARCH("[\\D]+", perl, "01abc01", match_default, make_array(2, 5, -2, -2));
+   TEST_REGEX_SEARCH("[[:^digit:]]+", perl, "01abc01", match_default, make_array(2, 5, -2, -2));
    TEST_REGEX_SEARCH("\\D+", perl, "01abc01", match_default, make_array(2, 5, -2, -2));
    TEST_REGEX_SEARCH("\\s+", perl, "AB   AB", match_default, make_array(2, 5, -2, -2));
    TEST_REGEX_SEARCH("[\\s]+", perl, "AB   AB", match_default, make_array(2, 5, -2, -2));
-   TEST_INVALID_REGEX("[\\S]", perl);
+   TEST_REGEX_SEARCH("[\\S]+", perl, "  abc  ", match_default, make_array(2, 5, -2, -2));
+   TEST_REGEX_SEARCH("[[:^space:]]+", perl, "  abc  ", match_default, make_array(2, 5, -2, -2));
    TEST_REGEX_SEARCH("\\S+", perl, "  abc  ", match_default, make_array(2, 5, -2, -2));
+   TEST_REGEX_SEARCH("\\s+", perl, "AB   AB", match_default, make_array(2, 5, -2, -2));
+   TEST_REGEX_SEARCH("[\\w]+", perl, "AB_   AB", match_default, make_array(0, 3, -2, 6, 8, -2, -2));
+   TEST_REGEX_SEARCH("[\\W]+", perl, "AB_   AB", match_default, make_array(3, 6, -2, -2));
+   TEST_REGEX_SEARCH("[[:^word:]]+", perl, "AB_   AB", match_default, make_array(3, 6, -2, -2));
+   TEST_REGEX_SEARCH("\\W+", perl, "AB_   AB", match_default, make_array(3, 6, -2, -2));
    test_sets2c();
 }
 

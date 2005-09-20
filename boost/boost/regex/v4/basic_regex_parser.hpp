@@ -1013,12 +1013,13 @@ bool basic_regex_parser<charT, traits>::parse_set()
             else if(this->m_traits.escape_syntax_type(*m_position)
                == regex_constants::escape_type_not_class)
             {
-               // negated character classes aren't supported:
+               // negated character class:
                char_class_type m = this->m_traits.lookup_classname(m_position, m_position+1);
                if(m != 0)
                {
-                  fail(regex_constants::error_escape, m_position - m_base);
-                  return false;
+                  char_set.add_negated_class(m);
+                  ++m_position;
+                  break;
                }
             }
             // not a character class, just a regular escape:
@@ -1094,6 +1095,15 @@ bool basic_regex_parser<charT, traits>::parse_inner_set(basic_char_set<charT, tr
          fail(regex_constants::error_brack, m_position - m_base);
          return false;
       }
+      //
+      // check for negated class:
+      //
+      bool negated = false;
+      if(this->m_traits.syntax_type(*name_first) == regex_constants::syntax_caret)
+      {
+         ++name_first;
+         negated = true;
+      }
       typedef typename traits::char_class_type mask_type;
       mask_type m = this->m_traits.lookup_classname(name_first, name_last);
       if(m == 0)
@@ -1125,7 +1135,10 @@ bool basic_regex_parser<charT, traits>::parse_inner_set(basic_char_set<charT, tr
          fail(regex_constants::error_ctype, name_first - m_base);
          return false;
       }
-      char_set.add_class(m);
+      if(negated == false)
+         char_set.add_class(m);
+      else
+         char_set.add_negated_class(m);
       ++m_position;
       break;
    }
