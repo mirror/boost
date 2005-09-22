@@ -20,6 +20,9 @@
 #include <boost/numeric/ublas/storage_sparse.hpp>
 #include <boost/numeric/ublas/vector_expression.hpp>
 #include <boost/numeric/ublas/detail/vector_assign.hpp>
+#if BOOST_UBLAS_TYPE_CHECK
+#include <boost/numeric/ublas/vector.hpp>
+#endif
 
 // Iterators based on ideas of Jeremy Siek
 
