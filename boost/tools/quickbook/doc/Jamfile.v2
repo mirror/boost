@@ -1,7 +1,7 @@
 project boost/quickbook/doc ;
 
 import boostbook : boostbook ;
-using quickbook : quickbook ;
+using quickbook ;
 
 boostbook quickbook
     :
