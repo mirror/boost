@@ -91,8 +91,4 @@ extern "C" __declspec(dllimport) long __stdcall InterlockedExchange( long volati
 
 #endif
 
-#define BOOST_INTERLOCKED_READ(x) BOOST_INTERLOCKED_COMPARE_EXCHANGE(x,0,0)
-#define BOOST_INTERLOCKED_READ_POINTER(x) BOOST_INTERLOCKED_COMPARE_EXCHANGE_POINTER(x,0,0)
-
-
 #endif // #ifndef BOOST_DETAIL_INTERLOCKED_HPP_INCLUDED
