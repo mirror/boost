@@ -39,7 +39,11 @@
         preprocessor macros, causing programs using Boost.Signals and
         Qt together to fail to compile. Although this is a problem
         with Qt and not Boost.Signals, a user can use the two systems
-        together by defining the <code>BOOST_SIGNALS_NAMESPACE</code>
+        together with a little extra effort. There are two ways to do
+        this:</para>
+
+        <para>The first way involves defining
+        the <code>BOOST_SIGNALS_NAMESPACE</code> 
         macro to some other identifier (e.g., <code>signalslib</code>)
         when building and using the Boost.Signals library. Then the
         namespace of the Boost.Signals library will be
@@ -53,6 +57,26 @@
     namespace signals = BOOST_SIGNALS_NAMESPACE;
   }
 </programlisting>
+
+        <para>The second way, provided by Frank Hess, involves
+        creating a header <code>signalslib.hpp</code> that contains
+          the following code:</para>
+
+        <programlisting>#ifdef signals
+#error "signalslib.hpp must be included before any qt header"
+#endif
+
+#include &lt;boost/signal.hpp&gt;
+namespace boost
+{
+  namespace signalslib = signals;
+}</programlisting>
+
+        <para>This header must be included before any Qt headers. Once
+        it has been included, you can refer to the Signals library via
+        the namespace <code>boost::signalslib</code>. This option is
+        preferable to the first option because it can be used without
+        recompiling the Signals library binary. </para>
       </answer>
     </qandaentry>
   </qandaset>
