@@ -118,26 +118,26 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
     private:
         BOOST_UBLAS_INLINE
-        void resize_internal (size_type size, value_type init, bool preserve) {
+        void resize_internal (const size_type size, const value_type init, const bool preserve) {
             if (size != size_) {
-                pointer data;
+                pointer p_data = data_;
                 if (size) {
-                    data = alloc_.allocate (size);
+                    data_ = alloc_.allocate (size);
                     if (preserve) {
-                        const_iterator si = begin ();
-                        pointer di = data;
+                        pointer si = p_data;
+                        pointer di = data_;
                         if (size < size_) {
-                            for (; di != data + size; ++di) {
+                            for (; di != data_ + size; ++di) {
                                 alloc_.construct (di, *si);
                                 ++si;
                             }
                         }
                         else {
-                            for (const_iterator si_end = end (); si != si_end; ++si) {
+                            for (pointer si = p_data; si != p_data + size_; ++si) {
                                 alloc_.construct (di, *si);
                                 ++di;
                             }
-                            for (; di != data + size; ++di) {
+                            for (; di != data_ + size; ++di) {
                                 alloc_.construct (di, init);
                             }
                         }
@@ -146,26 +146,22 @@ namespace boost { namespace numeric { namespace ublas {
                         // ISSUE some compilers may zero POD here
 #ifdef BOOST_UBLAS_USEFUL_ARRAY_PLACEMENT_NEW
                         // array form fails on some compilers due to size cookie, is it standard conforming?
-                        new (data) value_type[size];
+                        new (data_) value_type[size];
 #else
-                        for (pointer d = data; d != data + size; ++d)
-                            new (d) value_type;
+                        for (pointer di = data_; di != data_ + size; ++di)
+                            new (di) value_type;
 #endif
-                    }                    
+                    }
                 }
 
                 if (size_) {
-                    const iterator i_end = end();
-                    for (iterator i = begin(); i != i_end; ++i) {
-                        iterator_destroy (i); 
-                    }
-                    alloc_.deallocate (data_, size_);
+                    for (pointer si = p_data; si != p_data + size_; ++si)
+                        alloc_.destroy (si);
+                    alloc_.deallocate (p_data, size_);
                 }
 
-                if (size)
-                    data_ = data;
 #ifndef NDEBUG            
-                else
+                if (!size)
                     data_ = 0;    // simplify debugging by giving data_ a definate value
 #endif
                 size_ = size;
