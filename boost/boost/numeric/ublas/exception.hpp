@@ -208,7 +208,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
 #if BOOST_UBLAS_CHECK_ENABLE
-// FIXME for performance reasons we better use macros
+// Macros are equivilent to 
 //    template<class E>
 //    BOOST_UBLAS_INLINE
 //    void check (bool expression, const E &e) {
@@ -221,8 +221,6 @@ namespace boost { namespace numeric { namespace ublas {
 //        if (! expression)
 //            e.raise ();
 //    }
-// Dan Muller reported problems with COMO in GUI applications
-// So we need a new preprocessor symbol:
 #ifndef BOOST_UBLAS_NO_STD_CERR
 #define BOOST_UBLAS_CHECK(expression, e) \
     if (! (expression)) { \
@@ -247,22 +245,20 @@ namespace boost { namespace numeric { namespace ublas {
     }
 #endif
 #else
-// FIXME for performance reasons we better use macros
+// Macros are equivilent to 
 //    template<class E>
 //    BOOST_UBLAS_INLINE
 //    void check (bool expression, const E &e) {}
 //    template<class E>
 //    BOOST_UBLAS_INLINE
 //    void check_ex (bool expression, const char *file, int line, const E &e) {}
-#define BOOST_UBLAS_CHECK(expression, e) \
-    if (! (expression) );
-#define BOOST_UBLAS_CHECK_EX(expression, file, line, e) \
-    if (! (expression) );
+#define BOOST_UBLAS_CHECK(expression, e)
+#define BOOST_UBLAS_CHECK_EX(expression, file, line, e)
 #endif
 
 
 #ifndef BOOST_UBLAS_USE_FAST_SAME
-// FIXME for performance reasons we better use macros
+// Macro is equivilent to 
 //    template<class T>
 //    BOOST_UBLAS_INLINE
 //    const T &same_impl (const T &size1, const T &size2) {
@@ -281,7 +277,7 @@ namespace boost { namespace numeric { namespace ublas {
     }
 #define BOOST_UBLAS_SAME(size1, size2) same_impl_ex ((size1), (size2), __FILE__, __LINE__)
 #else
-// FIXME for performance reasons we better use macros
+// Macros are equivilent to 
 //    template<class T>
 //    BOOST_UBLAS_INLINE
 //    const T &same_impl (const T &size1, const T &size2) {
