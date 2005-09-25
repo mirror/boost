@@ -5,8 +5,8 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 	</head>
 	<body text="#000000" bgColor="#ffffff">
-		<h1><IMG height="86" alt="boost.png (6897 bytes)" src="../../boost.png" width="277" align="middle">intrusive_ptr 
-			class template</h1>
+		<h1><A href="../.."><IMG height="86" alt="boost.png (6897 bytes)" src="../../boost.png" width="277" align="middle"
+					border="0"></A>intrusive_ptr class template</h1>
 		<p>
 			<A href="#Introduction">Introduction</A><br>
 			<A href="#Synopsis">Synopsis</A><br>
@@ -31,11 +31,11 @@
 		<P>The main reasons to use <STRONG>intrusive_ptr</STRONG> are:</P>
 		<UL>
 			<LI>
-				Some existing frameworks or OSes provide objects with embedded reference 
-				counts;</LI>
+			Some existing frameworks or OSes provide objects with embedded reference 
+			counts;
 			<LI>
-				The memory footprint of <STRONG>intrusive_ptr</STRONG> is the same as the 
-				corresponding raw pointer;</LI>
+				The memory footprint of <STRONG>intrusive_ptr</STRONG>
+			is the same as the corresponding raw pointer;
 			<LI>
 				<STRONG>intrusive_ptr&lt;T&gt;</STRONG> can be constructed from an arbitrary 
 				raw pointer of type <STRONG>T *</STRONG>.</LI></UL>
@@ -196,26 +196,26 @@ intrusive_ptr &amp; operator=(T * r);</pre>
 			<p><b>Returns:</b> <code>a.get() != b.get()</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
 		</blockquote>
-		<pre>template&lt;class T&gt;
-  bool operator==(intrusive_ptr&lt;T&gt; const &amp; a, T * b); // never throws</pre>
+		<pre>template&lt;class T, class U&gt;
+  bool operator==(intrusive_ptr&lt;T&gt; const &amp; a, U * b); // never throws</pre>
 		<blockquote>
 			<p><b>Returns:</b> <code>a.get() == b</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
 		</blockquote>
-		<pre>template&lt;class T&gt;
-  bool operator!=(intrusive_ptr&lt;T&gt; const &amp; a, T * b); // never throws</pre>
+		<pre>template&lt;class T, class U&gt;
+  bool operator!=(intrusive_ptr&lt;T&gt; const &amp; a, U * b); // never throws</pre>
 		<blockquote>
 			<p><b>Returns:</b> <code>a.get() != b</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
 		</blockquote>
-		<pre>template&lt;class T&gt;
-  bool operator==(T * a, intrusive_ptr&lt;T&gt; const &amp; b); // never throws</pre>
+		<pre>template&lt;class T, class U&gt;
+  bool operator==(T * a, intrusive_ptr&lt;U&gt; const &amp; b); // never throws</pre>
 		<blockquote>
 			<p><b>Returns:</b> <code>a == b.get()</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
 		</blockquote>
-		<pre>template&lt;class T&gt;
-  bool operator!=(T * a, intrusive_ptr&lt;T&gt; const &amp; b); // never throws</pre>
+		<pre>template&lt;class T, class U&gt;
+  bool operator!=(T * a, intrusive_ptr&lt;U&gt; const &amp; b); // never throws</pre>
 		<blockquote>
 			<p><b>Returns:</b> <code>a != b.get()</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
@@ -278,9 +278,9 @@ intrusive_ptr &amp; operator=(T * r);</pre>
 		<p>
 			$Date$</p>
 		<p>
-			<small>Copyright © 2003 Peter Dimov. Permission to copy, use, modify, sell and 
-			distribute this document is granted provided this copyright notice appears in 
-			all copies. This document is provided "as is" without express or implied 
-			warranty, and with no claim as to its suitability for any purpose.</small></p>
+			<small>Copyright © 2003-2005 Peter Dimov. Permission to copy, use, modify, sell and 
+				distribute this document is granted provided this copyright notice appears in 
+				all copies. This document is provided "as is" without express or implied 
+				warranty, and with no claim as to its suitability for any purpose.</small></p>
 	</body>
 </html>

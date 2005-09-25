@@ -174,22 +174,22 @@ template<class T, class U> inline bool operator!=(intrusive_ptr<T> const & a, in
     return a.get() != b.get();
 }
 
-template<class T> inline bool operator==(intrusive_ptr<T> const & a, T * b)
+template<class T, class U> inline bool operator==(intrusive_ptr<T> const & a, U * b)
 {
     return a.get() == b;
 }
 
-template<class T> inline bool operator!=(intrusive_ptr<T> const & a, T * b)
+template<class T, class U> inline bool operator!=(intrusive_ptr<T> const & a, U * b)
 {
     return a.get() != b;
 }
 
-template<class T> inline bool operator==(T * a, intrusive_ptr<T> const & b)
+template<class T, class U> inline bool operator==(T * a, intrusive_ptr<U> const & b)
 {
     return a == b.get();
 }
 
-template<class T> inline bool operator!=(T * a, intrusive_ptr<T> const & b)
+template<class T, class U> inline bool operator!=(T * a, intrusive_ptr<U> const & b)
 {
     return a != b.get();
 }
