@@ -87,9 +87,18 @@ template<class T, class Y> void sp_enable_shared_from_this( shared_count const &
     if(pe != 0) pe->_internal_weak_this._internal_assign(const_cast<Y*>(px), pn);
 }
 
+#ifdef sgi
+// Turn off: the last argument of the varargs function "sp_enable_shared_from_this" is unnamed
+# pragma set woff 3506
+#endif
+
 inline void sp_enable_shared_from_this( shared_count const & /*pn*/, ... )
 {
 }
+
+#ifdef sgi
+# pragma reset woff 3506
+#endif
 
 } // namespace detail
 
