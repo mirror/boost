@@ -17,6 +17,10 @@
        output. If this list is empty, all libraries will be included. -->
   <xsl:param name="boost.include.libraries" select="''"/>
 
+  <!-- A space-separated list of xml elements in the input file for which
+       whitespace should be preserved -->
+  <xsl:preserve-space elements="programlisting"/>
+
   <xsl:template match="library-reference">
     <xsl:choose>
       <xsl:when test="ancestor::library-reference">
