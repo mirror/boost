@@ -37,13 +37,13 @@ namespace boost{namespace type_of{
 
     //////////////////////////
 
-    template<size_t n, bool Overflow> 
+    template<std::size_t n, bool Overflow> 
     struct pack
     {
         enum {value = (n + 1) * 2 + (Overflow ? 1 : 0)};
     };
 
-    template<size_t m> 
+    template<std::size_t m> 
     struct unpack
     {
         enum {value = (m / 2) - 1};
@@ -52,14 +52,14 @@ namespace boost{namespace type_of{
 
     ////////////////////////////////
 
-    template<class V, size_t n, bool overflow = (n >= 0x3fffffff)>
+    template<class V, std::size_t n, bool overflow = (n >= 0x3fffffff)>
     struct encode_size_t : push_back<
         V, 
         boost::mpl::size_t<pack<n, false>::value> 
     >
     {};
 
-    template<class V, size_t n>
+    template<class V, std::size_t n>
     struct encode_size_t<V, n, true> : push_back<typename push_back<
         V,
         boost::mpl::size_t<pack<n % 0x3ffffffe, true>::value> >::type,
@@ -73,22 +73,22 @@ namespace boost{namespace type_of{
 
     ///////////////////////////
 
-    template<size_t n, class Iter, bool overflow> 
+    template<std::size_t n, class Iter, bool overflow> 
     struct decode_size_t;
 
-    template<size_t n, class Iter> 
+    template<std::size_t n, class Iter> 
     struct decode_size_t<n, Iter, false>
     {
         enum {value = n};
         typedef Iter iter;
     };
 
-    template<size_t n, class Iter> 
+    template<std::size_t n, class Iter> 
     struct decode_size_t<n, Iter, true>
     {
         enum {m = Iter::type::value};
 
-        enum {value = (size_t)m * 0x3ffffffe + n};
+        enum {value = (std::size_t)m * 0x3ffffffe + n};
         typedef typename Iter::next iter;
     };
 
@@ -103,7 +103,7 @@ namespace boost{namespace type_of{
 
         typedef typename Iter::next nextpos;
         
-        static const T value = (T)(size_t)decode_size_t<n, nextpos, overflow>::value;
+        static const T value = (T)(std::size_t)decode_size_t<n, nextpos, overflow>::value;
 
         typedef typename decode_size_t<n, nextpos, overflow>::iter iter;
     };
