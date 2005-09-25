@@ -5,8 +5,8 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 	</head>
 	<body bgcolor="#ffffff" text="#000000">
-		<h1><img src="../../boost.png" alt="boost.png (6897 bytes)" align="middle" width="277" height="86"><a name="scoped_ptr">scoped_ptr</a>
-			class template</h1>
+		<h1><A href="../../index.htm"><img src="../../boost.png" alt="boost.png (6897 bytes)" align="middle" width="277" height="86"
+					border="0"></A>scoped_ptr class template</h1>
 		<p>The <b>scoped_ptr</b> class template stores a pointer to a dynamically allocated 
 			object. (Dynamically allocated objects are allocated with the C++ <b>new</b> expression.) 
 			The object pointed to is guaranteed to be deleted, either on destruction of the <b>scoped_ptr</b>, 
@@ -48,6 +48,8 @@
      T * <a href="#indirection">operator-&gt;</a>() const; // never throws
      T * <a href="#get">get</a>() const; // never throws
      
+     operator <A href="#conversions" ><i>unspecified-bool-type</i></A>() const; // never throws
+
      void <a href="#swap">swap</a>(scoped_ptr &amp; b); // never throws
   };
 
@@ -90,6 +92,10 @@
 		<pre>T * get() const; // never throws</pre>
 		<p>Returns the stored pointer. <b>T</b> need not be a complete type. See the smart 
 			pointer <a href="smart_ptr.htm#common_requirements">common requirements</a>.</p>
+		<h3><a name="conversions">conversions</a></h3>
+		<pre>operator <i>unspecified-bool-type</i> () const; // never throws</pre>
+		<p>Returns an unspecified value that, when used in boolean contexts, is equivalent 
+			to <code>get() != 0</code>.</p>
 		<h3><a name="swap">swap</a></h3>
 		<pre>void swap(scoped_ptr &amp; b); // never throws</pre>
 		<p>Exchanges the contents of the two smart pointers. <b>T</b> need not be a 
@@ -150,8 +156,8 @@ Buckle my shoe</pre>
 		<p>One common usage of <b>scoped_ptr</b> is to implement a handle/body (also called 
 			pimpl) idiom which avoids exposing the body (implementation) in the header 
 			file.</p>
-		<p>The <a href="example/scoped_ptr_example_test.cpp">scoped_ptr_example_test.cpp</a> sample 
-			program includes a header file, <a href="example/scoped_ptr_example.hpp">scoped_ptr_example.hpp</a>, 
+		<p>The <a href="example/scoped_ptr_example_test.cpp">scoped_ptr_example_test.cpp</a>
+			sample program includes a header file, <a href="example/scoped_ptr_example.hpp">scoped_ptr_example.hpp</a>, 
 			which uses a <b>scoped_ptr&lt;&gt;</b> to an incomplete type to hide the 
 			implementation. The instantiation of member functions which require a complete 
 			type occurs in the <a href="example/scoped_ptr_example.cpp">scoped_ptr_example.cpp</a>
@@ -165,10 +171,10 @@ Buckle my shoe</pre>
 			given context. Use <STRONG>std::auto_ptr</STRONG> where transfer of ownership 
 			is required. (supplied by Dave Abrahams)</p>
 		<hr>
-		<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan -->
+		<p>Revised <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B %Y" startspan --> 
 			09 January 2003<!--webbot bot="Timestamp" endspan i-checksum="32310" --></p>
 		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
-			Copyright 2002 Peter Dimov. Permission to copy, use, modify, sell and 
+			Copyright 2002-2005 Peter Dimov. Permission to copy, use, modify, sell and 
 			distribute this document is granted provided this copyright notice appears in 
 			all copies. This document is provided "as is" without express or implied 
 			warranty, and with no claim as to its suitability for any purpose.</p>

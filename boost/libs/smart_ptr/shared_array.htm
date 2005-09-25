@@ -5,8 +5,8 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 	</head>
 	<body bgcolor="#ffffff" text="#000000">
-		<h1><img src="../../boost.png" alt="boost.png (6897 bytes)" align="middle" width="277" height="86">shared_array 
-			class template</h1>
+		<h1><A href="../../index.htm"><img src="../../boost.png" alt="boost.png (6897 bytes)" align="middle" width="277" height="86"
+					border="0"></A>shared_array class template</h1>
 		<p>The <b>shared_array</b> class template stores a pointer to a dynamically 
 			allocated array. (Dynamically allocated array are allocated with the C++ <b>new[]</b>
 			expression.) The object pointed to is guaranteed to be deleted when the last <b>shared_array</b>
@@ -52,6 +52,8 @@
 
       bool <a href="#unique">unique</a>() const; // never throws
       long <a href="#use_count">use_count</a>() const; // never throws
+
+      operator <A href="#conversions" ><i>unspecified-bool-type</i></A>() const; // never throws
 
       void <a href="#swap">swap</a>(shared_array&lt;T&gt; &amp; b); // never throws
   };
@@ -139,6 +141,10 @@
 			implementations of <b>shared_array</b> that do not use an explicit reference 
 			count, it might be removed from some future version. Thus it should be used for 
 			debugging purposes only, and not production code.</p>
+		<h3><a name="conversions">conversions</a></h3>
+		<pre>operator <i>unspecified-bool-type</i> () const; // never throws</pre>
+		<p>Returns an unspecified value that, when used in boolean contexts, is equivalent 
+			to <code>get() != 0</code>.</p>
 		<h3><a name="swap">swap</a></h3>
 		<pre>void swap(shared_ptr &amp; b); // never throws</pre>
 		<p>Exchanges the contents of the two smart pointers. <b>T</b> need not be a 
@@ -172,9 +178,9 @@ template&lt;class T&gt;
 			<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan --> 
 			09 January 2003<!--webbot bot="Timestamp" endspan i-checksum="32310" --></p>
 		<p>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler. 
-			Permission to copy, use, modify, sell and distribute this document is granted 
-			provided this copyright notice appears in all copies. This document is provided 
-			"as is" without express or implied warranty, and with no claim as to its 
-			suitability for any purpose.</p>
+			Copyright 2002-2005 Peter Dimov. Permission to copy, use, modify, sell and 
+			distribute this document is granted provided this copyright notice appears in 
+			all copies. This document is provided "as is" without express or implied 
+			warranty, and with no claim as to its suitability for any purpose.</p>
 	</body>
 </html>
