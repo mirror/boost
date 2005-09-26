@@ -86,59 +86,32 @@ int main()
 {
     using boost::mem_fn;
 
-    mem_fn(&X::f0)( X() );
     mem_fn(&X::f0)( make() );
-
-    mem_fn(&X::g0)( X() );
     mem_fn(&X::g0)( make() );
 
-    mem_fn(&X::f1)( X(), 1 );
     mem_fn(&X::f1)( make(), 1 );
-
-    mem_fn(&X::g1)( X(), 1 );
     mem_fn(&X::g1)( make(), 1 );
 
-    mem_fn(&X::f2)( X(), 1, 2 );
     mem_fn(&X::f2)( make(), 1, 2 );
-
-    mem_fn(&X::g2)( X(), 1, 2 );
     mem_fn(&X::g2)( make(), 1, 2 );
 
-    mem_fn(&X::f3)( X(), 1, 2, 3 );
     mem_fn(&X::f3)( make(), 1, 2, 3 );
-
-    mem_fn(&X::g3)( X(), 1, 2, 3 );
     mem_fn(&X::g3)( make(), 1, 2, 3 );
 
-    mem_fn(&X::f4)( X(), 1, 2, 3, 4 );
     mem_fn(&X::f4)( make(), 1, 2, 3, 4 );
-
-    mem_fn(&X::g4)( X(), 1, 2, 3, 4 );
     mem_fn(&X::g4)( make(), 1, 2, 3, 4 );
 
-    mem_fn(&X::f5)( X(), 1, 2, 3, 4, 5 );
     mem_fn(&X::f5)( make(), 1, 2, 3, 4, 5 );
-
-    mem_fn(&X::g5)( X(), 1, 2, 3, 4, 5 );
     mem_fn(&X::g5)( make(), 1, 2, 3, 4, 5 );
 
-    mem_fn(&X::f6)( X(), 1, 2, 3, 4, 5, 6 );
     mem_fn(&X::f6)( make(), 1, 2, 3, 4, 5, 6 );
-
-    mem_fn(&X::g6)( X(), 1, 2, 3, 4, 5, 6 );
     mem_fn(&X::g6)( make(), 1, 2, 3, 4, 5, 6 );
 
-    mem_fn(&X::f7)( X(), 1, 2, 3, 4, 5, 6, 7 );
     mem_fn(&X::f7)( make(), 1, 2, 3, 4, 5, 6, 7 );
-
-    mem_fn(&X::g7)( X(), 1, 2, 3, 4, 5, 6, 7 );
     mem_fn(&X::g7)( make(), 1, 2, 3, 4, 5, 6, 7 );
 
-    mem_fn(&X::f8)( X(), 1, 2, 3, 4, 5, 6, 7, 8 );
     mem_fn(&X::f8)( make(), 1, 2, 3, 4, 5, 6, 7, 8 );
-
-    mem_fn(&X::g8)( X(), 1, 2, 3, 4, 5, 6, 7, 8 );
     mem_fn(&X::g8)( make(), 1, 2, 3, 4, 5, 6, 7, 8 );
 
-    return detect_errors( hash == 23558 );
+    return detect_errors( hash == 2155 );
 }
