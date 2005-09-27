@@ -8,6 +8,7 @@
 #define BOOST_DETAIL_CONTAINER_FWD_HPP
 
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <cstddef>
 
 #if !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION) && \
@@ -34,6 +35,12 @@ namespace std
     template <class T> class allocator;
 
     template <class charT, class traits, class Allocator> class basic_string;
+
+#if BOOST_WORKAROUND(__GNUC__, < 3) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
+    template <class charT> class string_char_traits;
+#else
+    template <class charT> class char_traits;
+#endif
 
 #if !defined(BOOST_CONTAINER_FWD_BAD_DEQUE)
     template <class T, class Allocator> class deque;
