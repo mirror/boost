@@ -1,9 +1,16 @@
 #include <boost/functional/detail/container_fwd.hpp>
 
-template <class charT, class traits, class Allocator>
-void test(std::basic_string<charT, traits, Allocator> const&)
+#if BOOST_WORKAROUND(__GNUC__, < 3) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
+template <class charT, class Allocator>
+void test(std::basic_string<charT, std::string_char_traits<charT>, Allocator> const&)
 {
 }
+#else
+template <class charT, class Allocator>
+void test(std::basic_string<charT, std::char_traits<charT>, Allocator> const&)
+{
+}
+#endif
     
 template <class T, class Allocator>
 void test(std::deque<T, Allocator> const&)
