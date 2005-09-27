@@ -57,6 +57,11 @@
 #     include <cstring>
 #     undef strcmp
 #  endif
+   // fix broken errno declaration:
+#  include <errno.h>
+#  ifndef errno
+#     define errno errno
+#  endif
 
 //
 // new bug in 5.61:
