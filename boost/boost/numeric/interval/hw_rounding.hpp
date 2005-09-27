@@ -23,6 +23,8 @@
 #  include <boost/numeric/interval/detail/ppc_rounding_control.hpp>
 #elif defined(sparc) || defined(__sparc__)
 #  include <boost/numeric/interval/detail/sparc_rounding_control.hpp>
+#elif defined(alpha) || defined(__alpha__)
+#  include <boost/numeric/interval/detail/alpha_rounding_control.hpp>
 #endif
 
 #if defined(BOOST_NUMERIC_INTERVAL_NO_HARDWARE) && (defined(__USE_ISOC99) || defined(__MSL__))
