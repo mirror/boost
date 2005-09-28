@@ -14,6 +14,7 @@
 #include <boost/preprocessor/tuple/eat.hpp>
 #include <boost/preprocessor/seq/transform.hpp>
 #include <boost/preprocessor/seq/for_each_i.hpp>
+#include <boost/preprocessor/seq/cat.hpp>
 
 #include <boost/typeof/encode_decode.hpp>
 #include <boost/typeof/int_encoding.hpp>
