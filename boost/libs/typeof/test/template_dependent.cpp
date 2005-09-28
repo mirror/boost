@@ -8,4 +8,4 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(t,
                                (BOOST_TYPEOF_INTEGRAL(P0))
                                )
 
-BOOST_STATIC_ASSERT((boost::type_of::test<t<int, 5>()>::value));
+BOOST_STATIC_ASSERT((boost::type_of::test<t<int, 5> >::value));
