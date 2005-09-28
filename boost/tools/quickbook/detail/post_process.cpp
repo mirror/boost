@@ -204,6 +204,9 @@ namespace quickbook
             flow_tags.insert("sbr");
             flow_tags.insert("quote");
             flow_tags.insert("code");
+            flow_tags.insert("type");
+            flow_tags.insert("paramtype");
+
         }
         
         bool is_flow_tag(std::string const& tag)
