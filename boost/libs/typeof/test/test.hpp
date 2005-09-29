@@ -15,14 +15,14 @@ namespace boost { namespace type_of {
     struct test_wrapper{};
 
     template<class T> 
-    test_wrapper<T, T> test_helper(test_wrapper<T, T>*);
+    T test_make(T*);
 
     template<class T> 
     struct test
     {
         enum {value = boost::is_same<
-            BOOST_TYPEOF_TPL(test_helper(reinterpret_cast<test_wrapper<T, T>*>(0))),
-            test_wrapper<T, T>
+            BOOST_TYPEOF_TPL(test_make((test_wrapper<T, int>*)0)),
+            test_wrapper<T, int>
             >::value
         };
     };
