@@ -275,7 +275,29 @@ namespace quickbook
         void do_code(iter_type f, iter_type l) const
         {
             state.out += '\n';
-            state.out += std::string(f, l);
+            // print the string taking care of line 
+            // ending CR/LF platform issues
+            for (iter_type i = f; i != l; ++i)
+            {
+                if (*i == '\n')
+                {
+                    state.out += '\n';
+                    ++i;
+                    if (i != l && *i != '\r')
+                        state.out += *i;
+                }
+                else if (*i == '\r')
+                {
+                    state.out += '\n';
+                    ++i;
+                    if (i != l && *i != '\n')
+                        state.out += *i;
+                }
+                else
+                {
+                    state.out += *i;
+                }
+            }
             state.out += '\n';
             state.printer_.indent();
         }

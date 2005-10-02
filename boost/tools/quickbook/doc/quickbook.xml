@@ -742,7 +742,9 @@ escape (no processing/formatting)
     <para>
       Paragraphs start left-flushed and are terminated by two or more newlines. No
       markup is needed for paragraphs. QuickBook automatically detects paragraphs
-      from the context.
+      from the context. Block markups [section, endsect, h1, h2, h3, h4, h5, h6,
+      blurb, (block-quote) ':', pre, def, table and include ] may also terminate
+      a paragraph.
     </para>
     <anchor id="syntax.ordered_lists" />
     <bridgehead renderas="sect3">
@@ -1234,10 +1236,10 @@ sf_logo
         </thead>
         <tbody>
           <row>
-            <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Sep-14</entry>
+            <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Oct-02</entry>
           </row>
           <row>
-            <entry>__TIME__</entry><entry>The current time</entry><entry>10:15:07
+            <entry>__TIME__</entry><entry>The current time</entry><entry>10:23:38
             AM</entry>
           </row>
           <row>

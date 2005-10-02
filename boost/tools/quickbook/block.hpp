@@ -17,6 +17,7 @@
 #include <boost/spirit/utility/chset.hpp>
 #include <boost/spirit/actor/assign_actor.hpp>
 #include <boost/spirit/dynamic/if.hpp>
+#include <boost/spirit/symbols/symbols.hpp>
 
 namespace quickbook
 {
@@ -87,7 +88,7 @@ namespace quickbook
                     ;
 
                 block_markup =
-                        '['
+                        '[' >> space
                     >>  (   begin_section
                         |   end_section                 [actions.pop_sect]
                         |   headings
@@ -100,7 +101,7 @@ namespace quickbook
                         |   xinclude
                         |   include
                         )
-                    >>  (   (']' >> +eol)
+                    >>  (   (space >> ']' >> +eol)
                         |   eps_p                       [actions.error]
                         )
                     ;
@@ -297,13 +298,22 @@ namespace quickbook
                     >> +eol
                     ;
 
+                paragraph_end_markups =
+                    "section", "endsect", "h1", "h2", "h3", "h4", "h5", "h6",
+                    "blurb", ":", "pre", "def", "table", "include"
+                    ;
+
+                paragraph_end =
+                    '[' >> space >> paragraph_end_markups | eol >> eol
+                    ;
+
                 paragraph =
                    *(   common
                     |   (anychar_p -                    // Make sure we don't go past
-                            (eol >> eol)                // a single block.
+                            paragraph_end               // a single block.
                         )                               [actions.plain_char]
                     )
-                    >> +eol
+                    >> (eps_p('[') | +eol)
                     ;
 
                 phrase =
@@ -324,7 +334,8 @@ namespace quickbook
                             table, table_row, variablelist, varlistentry, 
                             varlistterm, varlistitem, table_cell, preformatted, 
                             list_item, begin_section, end_section, xinclude, 
-                            include, hard_space, eol;
+                            include, hard_space, eol, paragraph_end;
+            symbols<>       paragraph_end_markups;
             
             phrase_grammar<Actions> common;
 

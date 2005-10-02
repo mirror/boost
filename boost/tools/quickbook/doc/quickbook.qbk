@@ -486,9 +486,10 @@ reference section.
 
 Paragraphs start left-flushed and are terminated by two or more newlines. No
 markup is needed for paragraphs. QuickBook automatically detects paragraphs from
-the context.
-
-[h3 Ordered lists]
+the context. Block markups \[section, endsect, h1, h2, h3, h4, h5, h6, blurb, 
+(block-quote) ':', pre, def, table and include \] may also terminate a paragraph.
+[h3 Ordered lists] 
+[/ ...removed leading newline above (before h3) to test paragraph termination]
 
 [pre
 # One
@@ -727,7 +728,7 @@ inside =pre= blocks.
 [h5 Heading 5]
 [h6 Heading 6]
 
-Headings 1-3 [h1 h2 and h3] will automatically have anchors with normalized
+Headings 1-3 \[h1 h2 and h3\] will automatically have anchors with normalized
 names with [^name="section_id.normalized_header_text"] (i.e. valid characters are
 =a-z=, =A-Z=, =0-9= and =_=. All non-valid characters are converted to underscore
 and all upper-case are converted to lower-case. For example: Heading

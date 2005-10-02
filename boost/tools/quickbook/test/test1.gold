@@ -359,8 +359,7 @@ the true business precept.]
     
 <programlisting><literal>``
     #include &lt;iostream&gt;
-
-    int main()
+    int main()
     {
         std::cout &lt;&lt; &quot;Hello, World!&quot; &lt;&lt; std::endl;
         return 0;
@@ -375,8 +374,7 @@ the true business precept.]
 <programlisting>
 <literal>
 <phrase role="preprocessor">#include</phrase><phrase role="special"> &lt;</phrase><phrase role="identifier">iostream</phrase><phrase role="special">&gt;</phrase><phrase role="keyword">
-
-int</phrase><phrase role="identifier"> main</phrase><phrase role="special">()</phrase><phrase role="special">
+int</phrase><phrase role="identifier"> main</phrase><phrase role="special">()</phrase><phrase role="special">
 {</phrase><phrase role="identifier">
     std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase><phrase role="special"> &lt;&lt;</phrase><phrase role="string"> &quot;Hello, World!&quot;</phrase><phrase role="special"> &lt;&lt;</phrase><phrase role="identifier"> std</phrase><phrase role="special">::</phrase><phrase role="identifier">endl</phrase><phrase role="special">;</phrase><phrase role="keyword">
     return</phrase><phrase role="number"> 0</phrase><phrase role="special">;</phrase><phrase role="special">
@@ -742,7 +740,9 @@ escape (no processing/formatting)
     <para>
       Paragraphs start left-flushed and are terminated by two or more newlines. No
       markup is needed for paragraphs. QuickBook automatically detects paragraphs
-      from the context.
+      from the context. Block markups [section, endsect, h1, h2, h3, h4, h5, h6,
+      blurb, (block-quote) ':', pre, def, table and include ] may also terminate
+      a paragraph.
     </para>
     <anchor id="syntax.ordered_lists" />
     <bridgehead renderas="sect3">
@@ -1010,8 +1010,7 @@ escape (no processing/formatting)
 <programlisting>
 <literal>
 <phrase role="preprocessor">#include</phrase><phrase role="special"> &lt;</phrase><phrase role="identifier">iostream</phrase><phrase role="special">&gt;</phrase><phrase role="keyword">
-
-int</phrase><phrase role="identifier"> main</phrase><phrase role="special">()</phrase><phrase role="special">
+int</phrase><phrase role="identifier"> main</phrase><phrase role="special">()</phrase><phrase role="special">
 {</phrase><phrase role="comment">
     // Sample code
 </phrase><phrase role="identifier">    std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase><phrase role="special"> &lt;&lt;</phrase><phrase role="string"> &quot;Hello, World\n&quot;</phrase><phrase role="special">;</phrase><phrase role="keyword">
@@ -1025,8 +1024,7 @@ int</phrase><phrase role="identifier"> main</phrase><phrase role="special">()</p
 <programlisting>
 <literal>
 <phrase role="keyword">import</phrase><phrase role="identifier"> cgi</phrase><phrase role="keyword">
-
-def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special">(</phrase><phrase role="identifier">text</phrase><phrase role="special">):</phrase><phrase role="string">
+def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special">(</phrase><phrase role="identifier">text</phrase><phrase role="special">):</phrase><phrase role="string">
     '''&quot;Cooks&quot; the input text for HTML.'''</phrase><phrase role="keyword">
     
     return</phrase><phrase role="identifier"> cgi</phrase><phrase role="special">.</phrase><phrase role="identifier">escape</phrase><phrase role="special">(</phrase><phrase role="identifier">text</phrase><phrase role="special">)</phrase></literal>
@@ -1037,8 +1035,7 @@ def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special
     
 <programlisting><literal>[def __syntax_highlight__ [@quickbook/highlight.html syntax_highlight]]
 [def __quickbook__ [@index.html quickbook]]
-
-    using __quickbook__::__syntax_highlight__;
+    using __quickbook__::__syntax_highlight__;
 </literal></programlisting>
     <para>
       Generates:
@@ -1058,14 +1055,10 @@ def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special
     </para>
     
 <programlisting><literal>[pre
-
-    Some *preformatted* text                    Some *preformatted* text
-
-        Some *preformatted* text            Some *preformatted* text
-
-            Some *preformatted* text    Some *preformatted* text
-
-]
+    Some *preformatted* text                    Some *preformatted* text
+        Some *preformatted* text            Some *preformatted* text
+            Some *preformatted* text    Some *preformatted* text
+]
 </literal></programlisting>
     <para>
       Spaces, tabs and newlines are rendered as-is. Unlike all quickbook block level
@@ -1074,12 +1067,9 @@ def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special
     </para>
     
 <programlisting><literal>Some <emphasis role="bold">preformatted</emphasis> text                    Some <emphasis role="bold">preformatted</emphasis> text
-
-    Some <emphasis role="bold">preformatted</emphasis> text            Some <emphasis role="bold">preformatted</emphasis> text
-
-        Some <emphasis role="bold">preformatted</emphasis> text    Some <emphasis role="bold">preformatted</emphasis> text
-
-</literal></programlisting>
+    Some <emphasis role="bold">preformatted</emphasis> text            Some <emphasis role="bold">preformatted</emphasis> text
+        Some <emphasis role="bold">preformatted</emphasis> text    Some <emphasis role="bold">preformatted</emphasis> text
+</literal></programlisting>
     <para>
       Notice that unlike Code, phrase markup such as font style is still permitted
       inside <literal>pre</literal> blocks.
@@ -1376,8 +1366,7 @@ sf_logo
         [My first program]
         [``
             #include &lt;iostream&gt;
-
-            int main()
+            int main()
             {
                 std::cout &lt;&lt; &quot;Hello, World!&quot; &lt;&lt; std::endl;
                 return 0;
@@ -1676,29 +1665,25 @@ int</phrase><phrase role="identifier"> main</phrase><phrase role="special">()</p
         )</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-doc_version</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+doc_version</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="string"> &quot;[version&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-doc_id</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+doc_id</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="string"> &quot;[id&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-doc_dirname</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+doc_dirname</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="string"> &quot;[dirname&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-doc_copyright</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+doc_copyright</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="string"> &quot;[copyright&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> +(</phrase><phrase role="identifier"> repeat_p</phrase><phrase role="special">(</phrase><phrase role="number">4</phrase><phrase role="special">)[</phrase><phrase role="identifier">digit_p</phrase><phrase role="special">]</phrase><phrase role="special">
@@ -1708,22 +1693,19 @@ doc_copyright</phrase><phrase role="special"> =</phrase><phrase role="identifier
     &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-doc_purpose</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+doc_purpose</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="string"> &quot;[purpose&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-doc_category</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+doc_category</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="string"> &quot;[category&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-doc_author</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+doc_author</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char">  '['</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ','</phrase><phrase role="special">))</phrase><phrase role="special">
@@ -1731,8 +1713,7 @@ doc_author</phrase><phrase role="special"> =</phrase><phrase role="identifier">
     &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char">  ']'</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-doc_authors</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+doc_authors</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="string"> &quot;[authors&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier"> doc_author</phrase><phrase role="special">
@@ -1741,22 +1722,19 @@ doc_authors</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         )</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-doc_license</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+doc_license</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="string"> &quot;[license&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-doc_last_revision</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+doc_last_revision</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="string"> &quot;[last-revision&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-doc_source_mode</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+doc_source_mode</phrase><phrase role="special"> =</phrase><phrase role="identifier">
     space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="string"> &quot;[source-mode&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">
@@ -1765,16 +1743,13 @@ doc_source_mode</phrase><phrase role="special"> =</phrase><phrase role="identifi
        )</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier"> space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-comment</phrase><phrase role="special"> =</phrase><phrase role="string">
+comment</phrase><phrase role="special"> =</phrase><phrase role="string">
     &quot;[/&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-space</phrase><phrase role="special"> =</phrase><phrase role="special">
+space</phrase><phrase role="special"> =</phrase><phrase role="special">
     *(</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> comment</phrase><phrase role="special">)</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-hard_space</phrase><phrase role="special"> =</phrase><phrase role="special">
+hard_space</phrase><phrase role="special"> =</phrase><phrase role="special">
     (</phrase><phrase role="identifier">eps_p</phrase><phrase role="special"> -</phrase><phrase role="special"> (</phrase><phrase role="identifier">alnum_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">))</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> space</phrase><phrase role="comment">  // must not be followed by
 </phrase><phrase role="special">    ;</phrase><phrase role="comment">                                   // alpha-numeric or underscore
 </phrase></literal>
@@ -1787,8 +1762,7 @@ hard_space</phrase><phrase role="special"> =</phrase><phrase role="special">
 <phrase role="identifier">library</phrase><phrase role="special"> =</phrase><phrase role="special">
     *(</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> comment</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> blocks</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> blank</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-blocks</phrase><phrase role="special"> =</phrase><phrase role="special">
+blocks</phrase><phrase role="special"> =</phrase><phrase role="special">
    +(</phrase><phrase role="identifier">   block_markup</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   code</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   list</phrase><phrase role="special">
@@ -1798,19 +1772,15 @@ blocks</phrase><phrase role="special"> =</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   eol</phrase><phrase role="special">
     )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-space</phrase><phrase role="special"> =</phrase><phrase role="special">
+space</phrase><phrase role="special"> =</phrase><phrase role="special">
     *(</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> comment</phrase><phrase role="special">)</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-blank</phrase><phrase role="special"> =</phrase><phrase role="special">
+blank</phrase><phrase role="special"> =</phrase><phrase role="special">
     *(</phrase><phrase role="identifier">blank_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> comment</phrase><phrase role="special">)</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-eol</phrase><phrase role="special"> =</phrase><phrase role="identifier"> blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> eol_p</phrase><phrase role="special">
+eol</phrase><phrase role="special"> =</phrase><phrase role="identifier"> blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> eol_p</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-close_bracket</phrase><phrase role="special"> =</phrase><phrase role="char">
+close_bracket</phrase><phrase role="special"> =</phrase><phrase role="char">
     ']'</phrase><phrase role="special"> |</phrase><phrase role="identifier">
     if_p</phrase><phrase role="special">(</phrase><phrase role="identifier">var</phrase><phrase role="special">(</phrase><phrase role="identifier">is_not_preformatted</phrase><phrase role="special">))</phrase><phrase role="special">
     [</phrase><phrase role="identifier">
@@ -1825,14 +1795,12 @@ hard_space</phrase><phrase role="special"> =</phrase><phrase role="special">
 comment</phrase><phrase role="special"> =</phrase><phrase role="string">
     &quot;[/&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-hr</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+hr</phrase><phrase role="special"> =</phrase><phrase role="identifier">
     str_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;----&quot;</phrase><phrase role="special">)</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier"> eol</phrase><phrase role="special">)</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-block_markup</phrase><phrase role="special"> =</phrase><phrase role="char">
+block_markup</phrase><phrase role="special"> =</phrase><phrase role="char">
         '['</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="identifier">   begin_section</phrase><phrase role="special">
         |</phrase><phrase role="identifier">   end_section</phrase><phrase role="special">
@@ -1850,8 +1818,7 @@ block_markup</phrase><phrase role="special"> =</phrase><phrase role="char">
         |</phrase><phrase role="identifier">   eps_p</phrase><phrase role="special">
         )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-begin_section</phrase><phrase role="special"> =</phrase><phrase role="string">
+begin_section</phrase><phrase role="special"> =</phrase><phrase role="string">
        &quot;section&quot;</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="char">':'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">alnum_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">))</phrase><phrase role="special">
@@ -1860,53 +1827,44 @@ begin_section</phrase><phrase role="special"> =</phrase><phrase role="string">
     &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier">
             close_bracket</phrase><phrase role="special">))</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-end_section</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+end_section</phrase><phrase role="special"> =</phrase><phrase role="identifier">
     str_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;endsect&quot;</phrase><phrase role="special">)</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-headings</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+headings</phrase><phrase role="special"> =</phrase><phrase role="identifier">
     h1</phrase><phrase role="special"> |</phrase><phrase role="identifier"> h2</phrase><phrase role="special"> |</phrase><phrase role="identifier"> h3</phrase><phrase role="special"> |</phrase><phrase role="identifier"> h4</phrase><phrase role="special"> |</phrase><phrase role="identifier"> h5</phrase><phrase role="special"> |</phrase><phrase role="identifier"> h6</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-h1</phrase><phrase role="special"> =</phrase><phrase role="string"> &quot;h1&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="identifier">
+h1</phrase><phrase role="special"> =</phrase><phrase role="string"> &quot;h1&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="identifier">
 h2</phrase><phrase role="special"> =</phrase><phrase role="string"> &quot;h2&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="identifier">
 h3</phrase><phrase role="special"> =</phrase><phrase role="string"> &quot;h3&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="identifier">
 h4</phrase><phrase role="special"> =</phrase><phrase role="string"> &quot;h4&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="identifier">
 h5</phrase><phrase role="special"> =</phrase><phrase role="string"> &quot;h5&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="identifier">
 h6</phrase><phrase role="special"> =</phrase><phrase role="string"> &quot;h6&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="identifier">
-
-blurb</phrase><phrase role="special"> =</phrase><phrase role="string">
+blurb</phrase><phrase role="special"> =</phrase><phrase role="string">
     &quot;blurb&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-blockquote</phrase><phrase role="special"> =</phrase><phrase role="char">
+blockquote</phrase><phrase role="special"> =</phrase><phrase role="char">
     ':'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier">
     phrase</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-preformatted</phrase><phrase role="special"> =</phrase><phrase role="string">
+preformatted</phrase><phrase role="special"> =</phrase><phrase role="string">
     &quot;pre&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> !</phrase><phrase role="identifier">eol</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-def_macro</phrase><phrase role="special"> =</phrase><phrase role="string">
+def_macro</phrase><phrase role="special"> =</phrase><phrase role="string">
     &quot;def&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier"> identifier</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier"> blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-table</phrase><phrase role="special"> =</phrase><phrase role="string">
+table</phrase><phrase role="special"> =</phrase><phrase role="string">
     &quot;table&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier"> eol</phrase><phrase role="special">))</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  +</phrase><phrase role="identifier">eol</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  *</phrase><phrase role="identifier">table_row</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier">  eps_p</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-table_row</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+table_row</phrase><phrase role="special"> =</phrase><phrase role="identifier">
     space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier">  ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'['</phrase><phrase role="special">)</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">
@@ -1919,8 +1877,7 @@ table_row</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         |</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">
     )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-table_cell</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+table_cell</phrase><phrase role="special"> =</phrase><phrase role="identifier">
     space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier">  ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'['</phrase><phrase role="special">)</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">
@@ -1933,16 +1890,14 @@ table_cell</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         |</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">
     )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-variablelist</phrase><phrase role="special"> =</phrase><phrase role="string">
+variablelist</phrase><phrase role="special"> =</phrase><phrase role="string">
     &quot;variablelist&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier"> eol</phrase><phrase role="special">))</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  +</phrase><phrase role="identifier">eol</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  *</phrase><phrase role="identifier">varlistentry</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier">  eps_p</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-varlistentry</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+varlistentry</phrase><phrase role="special"> =</phrase><phrase role="identifier">
     space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier">  ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'['</phrase><phrase role="special">)</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">
@@ -1956,8 +1911,7 @@ varlistentry</phrase><phrase role="special"> =</phrase><phrase role="identifier"
         |</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">
     )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-varlistterm</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+varlistterm</phrase><phrase role="special"> =</phrase><phrase role="identifier">
     space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier">  ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'['</phrase><phrase role="special">)</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">
@@ -1970,8 +1924,7 @@ varlistterm</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         |</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">
     )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-varlistitem</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+varlistitem</phrase><phrase role="special"> =</phrase><phrase role="identifier">
     space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier">  ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'['</phrase><phrase role="special">)</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">
@@ -1984,15 +1937,13 @@ varlistitem</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         |</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">
     )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-xinclude</phrase><phrase role="special"> =</phrase><phrase role="string">
+xinclude</phrase><phrase role="special"> =</phrase><phrase role="string">
        &quot;xinclude&quot;</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier">
             close_bracket</phrase><phrase role="special">))</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-include</phrase><phrase role="special"> =</phrase><phrase role="string">
+include</phrase><phrase role="special"> =</phrase><phrase role="string">
        &quot;include&quot;</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> 
@@ -2004,12 +1955,10 @@ include</phrase><phrase role="special"> =</phrase><phrase role="string">
     &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier">
             close_bracket</phrase><phrase role="special">))</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-identifier</phrase><phrase role="special"> =</phrase><phrase role="special">
+identifier</phrase><phrase role="special"> =</phrase><phrase role="special">
     *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special"> (</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-source_mode</phrase><phrase role="special"> =</phrase><phrase role="special">
+source_mode</phrase><phrase role="special"> =</phrase><phrase role="special">
    (</phrase><phrase role="identifier">
        str_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;c++&quot;</phrase><phrase role="special">)</phrase><phrase role="special">
        |</phrase><phrase role="string">   &quot;python&quot;</phrase><phrase role="special">
@@ -2023,13 +1972,11 @@ code</phrase><phrase role="special"> =</phrase><phrase role="special">
     )</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-code_line</phrase><phrase role="special"> =</phrase><phrase role="special">
+code_line</phrase><phrase role="special"> =</phrase><phrase role="special">
     ((</phrase><phrase role="identifier">ch_p</phrase><phrase role="special">(</phrase><phrase role="char">' '</phrase><phrase role="special">)</phrase><phrase role="special"> |</phrase><phrase role="char"> '\t'</phrase><phrase role="special">))</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier"> eol</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> eol</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-list</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+list</phrase><phrase role="special"> =</phrase><phrase role="identifier">
     eps_p</phrase><phrase role="special">(</phrase><phrase role="identifier">ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'*'</phrase><phrase role="special">)</phrase><phrase role="special"> |</phrase><phrase role="char"> '#'</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
    +(</phrase><phrase role="special">
         (*</phrase><phrase role="identifier">blank_p</phrase><phrase role="special">
@@ -2038,8 +1985,7 @@ list</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         &gt;&gt;</phrase><phrase role="identifier"> list_item</phrase><phrase role="special">
     )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-list_item</phrase><phrase role="special"> =</phrase><phrase role="special">
+list_item</phrase><phrase role="special"> =</phrase><phrase role="special">
    *(</phrase><phrase role="identifier">   common</phrase><phrase role="special">
     |</phrase><phrase role="special">   (</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
             (</phrase><phrase role="identifier">   eol_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> *</phrase><phrase role="identifier">blank_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">(</phrase><phrase role="identifier">ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'*'</phrase><phrase role="special">)</phrase><phrase role="special"> |</phrase><phrase role="char"> '#'</phrase><phrase role="special">)</phrase><phrase role="special">
@@ -2049,8 +1995,7 @@ list_item</phrase><phrase role="special"> =</phrase><phrase role="special">
     )</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-common</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+common</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         self</phrase><phrase role="special">.</phrase><phrase role="identifier">actions</phrase><phrase role="special">.</phrase><phrase role="identifier">macro</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   phrase_markup</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   inline_code</phrase><phrase role="special">
@@ -2058,8 +2003,7 @@ common</phrase><phrase role="special"> =</phrase><phrase role="identifier">
     |</phrase><phrase role="identifier">   escape</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   comment</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-inline_code</phrase><phrase role="special"> =</phrase><phrase role="char">
+inline_code</phrase><phrase role="special"> =</phrase><phrase role="char">
     '`'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
     (</phrase><phrase role="special">
        *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
@@ -2070,16 +2014,14 @@ inline_code</phrase><phrase role="special"> =</phrase><phrase role="char">
     )</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char">  '`'</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-simple_format</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+simple_format</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         simple_bold</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   simple_italic</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   simple_underline</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   simple_teletype</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   simple_strikethrough</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-simple_bold</phrase><phrase role="special"> =</phrase><phrase role="char">
+simple_bold</phrase><phrase role="special"> =</phrase><phrase role="char">
     '*'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
     (</phrase><phrase role="special">
         (</phrase><phrase role="identifier">   graph_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="comment">                  // graph_p must follow '*'
@@ -2099,8 +2041,7 @@ simple_bold</phrase><phrase role="special"> =</phrase><phrase role="char">
     )</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char"> '*'</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-simple_italic</phrase><phrase role="special"> =</phrase><phrase role="char">
+simple_italic</phrase><phrase role="special"> =</phrase><phrase role="char">
     '/'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
     (</phrase><phrase role="special">
         (</phrase><phrase role="identifier">   graph_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="comment">                  // graph_p must follow '/'
@@ -2120,8 +2061,7 @@ simple_italic</phrase><phrase role="special"> =</phrase><phrase role="char">
     )</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char"> '/'</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-simple_underline</phrase><phrase role="special"> =</phrase><phrase role="char">
+simple_underline</phrase><phrase role="special"> =</phrase><phrase role="char">
     '_'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
     (</phrase><phrase role="special">
         (</phrase><phrase role="identifier">   graph_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="comment">                  // graph_p must follow '_'
@@ -2141,8 +2081,7 @@ simple_underline</phrase><phrase role="special"> =</phrase><phrase role="char">
     )</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char"> '_'</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-simple_teletype</phrase><phrase role="special"> =</phrase><phrase role="char">
+simple_teletype</phrase><phrase role="special"> =</phrase><phrase role="char">
     '='</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
     (</phrase><phrase role="special">
         (</phrase><phrase role="identifier">   graph_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="comment">                  // graph_p must follow '='
@@ -2162,8 +2101,7 @@ simple_teletype</phrase><phrase role="special"> =</phrase><phrase role="char">
     )</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char"> '='</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-simple_strikethrough</phrase><phrase role="special"> =</phrase><phrase role="char">
+simple_strikethrough</phrase><phrase role="special"> =</phrase><phrase role="char">
     '-'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
     (</phrase><phrase role="special">
         (</phrase><phrase role="identifier">   graph_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="comment">                  // graph_p must follow '-'
@@ -2183,8 +2121,7 @@ simple_strikethrough</phrase><phrase role="special"> =</phrase><phrase role="cha
     )</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char"> '-'</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-paragraph</phrase><phrase role="special"> =</phrase><phrase role="special">
+paragraph</phrase><phrase role="special"> =</phrase><phrase role="special">
    *(</phrase><phrase role="identifier">   common</phrase><phrase role="special">
     |</phrase><phrase role="special">   (</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="comment">                    // Make sure we don't go past
 </phrase><phrase role="special">            (</phrase><phrase role="identifier">eol</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> eol</phrase><phrase role="special">)</phrase><phrase role="comment">                // a single block.
@@ -2192,16 +2129,14 @@ paragraph</phrase><phrase role="special"> =</phrase><phrase role="special">
     )</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-phrase</phrase><phrase role="special"> =</phrase><phrase role="special">
+phrase</phrase><phrase role="special"> =</phrase><phrase role="special">
    *(</phrase><phrase role="identifier">   common</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   comment</phrase><phrase role="special">
     |</phrase><phrase role="special">   (</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier">
             close_bracket</phrase><phrase role="special">)</phrase><phrase role="special">
     )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-phrase_markup</phrase><phrase role="special"> =</phrase><phrase role="char">
+phrase_markup</phrase><phrase role="special"> =</phrase><phrase role="char">
         '['</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="identifier">   image</phrase><phrase role="special">
         |</phrase><phrase role="identifier">   url</phrase><phrase role="special">
@@ -2222,8 +2157,7 @@ phrase_markup</phrase><phrase role="special"> =</phrase><phrase role="char">
         )</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="char">  ']'</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-escape</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+escape</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         str_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;\\n&quot;</phrase><phrase role="special">)</phrase><phrase role="special">
     |</phrase><phrase role="char">   '\\'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> punct_p</phrase><phrase role="special">
     |</phrase><phrase role="special">   (</phrase><phrase role="string">
@@ -2232,14 +2166,12 @@ escape</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         &gt;&gt;</phrase><phrase role="string">  &quot;'''&quot;</phrase><phrase role="special">
         )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-image</phrase><phrase role="special"> =</phrase><phrase role="char">
+image</phrase><phrase role="special"> =</phrase><phrase role="char">
         '$'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> blank</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier">
             close_bracket</phrase><phrase role="special">))</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-url</phrase><phrase role="special"> =</phrase><phrase role="char">
+url</phrase><phrase role="special"> =</phrase><phrase role="char">
         '@'</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
             (</phrase><phrase role="char">']'</phrase><phrase role="special"> |</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">)))</phrase><phrase role="special">
@@ -2247,8 +2179,7 @@ url</phrase><phrase role="special"> =</phrase><phrase role="char">
         |</phrase><phrase role="special">   (</phrase><phrase role="identifier">hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">)</phrase><phrase role="special">
         )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-link</phrase><phrase role="special"> =</phrase><phrase role="string">
+link</phrase><phrase role="special"> =</phrase><phrase role="string">
         &quot;link&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
             (</phrase><phrase role="char">']'</phrase><phrase role="special"> |</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">)))</phrase><phrase role="special">
@@ -2256,16 +2187,14 @@ link</phrase><phrase role="special"> =</phrase><phrase role="string">
         |</phrase><phrase role="special">   (</phrase><phrase role="identifier">hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">)</phrase><phrase role="special">
         )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-anchor</phrase><phrase role="special"> =</phrase><phrase role="char">
+anchor</phrase><phrase role="special"> =</phrase><phrase role="char">
         '#'</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier">  blank</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="special">   *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier">
                 close_bracket</phrase><phrase role="special">)</phrase><phrase role="special">
         )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-funcref</phrase><phrase role="special"> =</phrase><phrase role="string">
+funcref</phrase><phrase role="special"> =</phrase><phrase role="string">
     &quot;funcref&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
             (</phrase><phrase role="char">']'</phrase><phrase role="special"> |</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">)))</phrase><phrase role="special">
@@ -2273,8 +2202,7 @@ funcref</phrase><phrase role="special"> =</phrase><phrase role="string">
         |</phrase><phrase role="special">   (</phrase><phrase role="identifier">hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">)</phrase><phrase role="special">
         )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-classref</phrase><phrase role="special"> =</phrase><phrase role="string">
+classref</phrase><phrase role="special"> =</phrase><phrase role="string">
     &quot;classref&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
             (</phrase><phrase role="char">']'</phrase><phrase role="special"> |</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">)))</phrase><phrase role="special">
@@ -2282,8 +2210,7 @@ classref</phrase><phrase role="special"> =</phrase><phrase role="string">
         |</phrase><phrase role="special">   (</phrase><phrase role="identifier">hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">)</phrase><phrase role="special">
         )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-memberref</phrase><phrase role="special"> =</phrase><phrase role="string">
+memberref</phrase><phrase role="special"> =</phrase><phrase role="string">
     &quot;memberref&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
             (</phrase><phrase role="char">']'</phrase><phrase role="special"> |</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">)))</phrase><phrase role="special">
@@ -2291,8 +2218,7 @@ memberref</phrase><phrase role="special"> =</phrase><phrase role="string">
         |</phrase><phrase role="special">   (</phrase><phrase role="identifier">hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">)</phrase><phrase role="special">
         )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-enumref</phrase><phrase role="special"> =</phrase><phrase role="string">
+enumref</phrase><phrase role="special"> =</phrase><phrase role="string">
     &quot;enumref&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
             (</phrase><phrase role="char">']'</phrase><phrase role="special"> |</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">)))</phrase><phrase role="special">
@@ -2300,8 +2226,7 @@ enumref</phrase><phrase role="special"> =</phrase><phrase role="string">
         |</phrase><phrase role="special">   (</phrase><phrase role="identifier">hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">)</phrase><phrase role="special">
         )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-headerref</phrase><phrase role="special"> =</phrase><phrase role="string">
+headerref</phrase><phrase role="special"> =</phrase><phrase role="string">
     &quot;headerref&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
             (</phrase><phrase role="char">']'</phrase><phrase role="special"> |</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">)))</phrase><phrase role="special">
@@ -2309,28 +2234,23 @@ headerref</phrase><phrase role="special"> =</phrase><phrase role="string">
         |</phrase><phrase role="special">   (</phrase><phrase role="identifier">hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">)</phrase><phrase role="special">
         )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-bold</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+bold</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'*'</phrase><phrase role="special">)</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier">  blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-italic</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+italic</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'\''</phrase><phrase role="special">)</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier">  blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-underline</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+underline</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'_'</phrase><phrase role="special">)</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier">  blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-teletype</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+teletype</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'^'</phrase><phrase role="special">)</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier">  blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-strikethrough</phrase><phrase role="special"> =</phrase><phrase role="identifier">
+strikethrough</phrase><phrase role="special"> =</phrase><phrase role="identifier">
         ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'-'</phrase><phrase role="special">)</phrase><phrase role="special">
     &gt;&gt;</phrase><phrase role="identifier">  blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
     ;</phrase>
@@ -2356,20 +2276,16 @@ strikethrough</phrase><phrase role="special"> =</phrase><phrase role="identifier
     |</phrase><phrase role="identifier">   anychar_p</phrase><phrase role="special">
     )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-macro</phrase><phrase role="special">
+macro</phrase><phrase role="special">
     =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> self</phrase><phrase role="special">.</phrase><phrase role="identifier">macro</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-preprocessor</phrase><phrase role="special">
+preprocessor</phrase><phrase role="special">
     =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="char"> '#'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> ((</phrase><phrase role="identifier">alpha_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> *(</phrase><phrase role="identifier">alnum_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">))</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-comment</phrase><phrase role="special">
+comment</phrase><phrase role="special">
     =</phrase><phrase role="special">   +(*</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">comment_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;//&quot;</phrase><phrase role="special">)</phrase><phrase role="special"> |</phrase><phrase role="identifier"> comment_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;/*&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;*/&quot;</phrase><phrase role="special">)))</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-keyword</phrase><phrase role="special">
+keyword</phrase><phrase role="special">
     =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> keyword_</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">eps_p</phrase><phrase role="special"> -</phrase><phrase role="special"> (</phrase><phrase role="identifier">alnum_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">))</phrase><phrase role="special">
     ;</phrase><phrase role="comment">   // make sure we recognize whole words only
 </phrase><phrase role="identifier">
@@ -2389,20 +2305,16 @@ keyword_</phrase><phrase role="special">
         &quot;typename&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;union&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;unsigned&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;using&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;virtual&quot;</phrase><phrase role="special">,</phrase><phrase role="string">
         &quot;void&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;volatile&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;wchar_t&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;while&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;xor_eq&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;xor&quot;</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-special</phrase><phrase role="special">
+special</phrase><phrase role="special">
     =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">chset_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;~!%^&amp;*()+={[}]:;,&lt;.&gt;?/|\\-&quot;</phrase><phrase role="special">)</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-string_</phrase><phrase role="special">
+string_</phrase><phrase role="special">
     =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> !</phrase><phrase role="identifier">as_lower_d</phrase><phrase role="special">[</phrase><phrase role="char">'l'</phrase><phrase role="special">]</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> confix_p</phrase><phrase role="special">(</phrase><phrase role="char">'&quot;'</phrase><phrase role="special">,</phrase><phrase role="special"> *</phrase><phrase role="identifier">c_escape_ch_p</phrase><phrase role="special">,</phrase><phrase role="char"> '&quot;'</phrase><phrase role="special">)</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-char_</phrase><phrase role="special">
+char_</phrase><phrase role="special">
     =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> !</phrase><phrase role="identifier">as_lower_d</phrase><phrase role="special">[</phrase><phrase role="char">'l'</phrase><phrase role="special">]</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> confix_p</phrase><phrase role="special">(</phrase><phrase role="char">'\''</phrase><phrase role="special">,</phrase><phrase role="special"> *</phrase><phrase role="identifier">c_escape_ch_p</phrase><phrase role="special">,</phrase><phrase role="char"> '\''</phrase><phrase role="special">)</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-number</phrase><phrase role="special">
+number</phrase><phrase role="special">
     =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
         (</phrase><phrase role="identifier">   as_lower_d</phrase><phrase role="special">[</phrase><phrase role="string">&quot;0x&quot;</phrase><phrase role="special">]</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hex_p</phrase><phrase role="special">
         |</phrase><phrase role="char">   '0'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> oct_p</phrase><phrase role="special">
@@ -2410,8 +2322,7 @@ number</phrase><phrase role="special">
         )</phrase><phrase role="special">
         &gt;&gt;</phrase><phrase role="special">  *</phrase><phrase role="identifier">as_lower_d</phrase><phrase role="special">[</phrase><phrase role="identifier">chset_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;ldfu&quot;</phrase><phrase role="special">)]</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-identifier</phrase><phrase role="special">
+identifier</phrase><phrase role="special">
     =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> ((</phrase><phrase role="identifier">alpha_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> *(</phrase><phrase role="identifier">alnum_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">))</phrase><phrase role="special">
     ;</phrase>
 </literal>
@@ -2437,16 +2348,13 @@ identifier</phrase><phrase role="special">
     |</phrase><phrase role="identifier">   anychar_p</phrase><phrase role="special">
     )</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-acro</phrase><phrase role="special">
+acro</phrase><phrase role="special">
    =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> self</phrase><phrase role="special">.</phrase><phrase role="identifier">macro</phrase><phrase role="special">
    ;</phrase><phrase role="identifier">
-
-comment</phrase><phrase role="special">
+comment</phrase><phrase role="special">
     =</phrase><phrase role="special">   +(*</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> comment_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;#&quot;</phrase><phrase role="special">))</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-keyword</phrase><phrase role="special">
+keyword</phrase><phrase role="special">
     =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> keyword_</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">eps_p</phrase><phrase role="special"> -</phrase><phrase role="special"> (</phrase><phrase role="identifier">alnum_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">))</phrase><phrase role="special">
     ;</phrase><phrase role="comment">   // make sure we recognize whole words only
 </phrase><phrase role="identifier">
@@ -2458,27 +2366,23 @@ keyword_</phrase><phrase role="special">
     &quot;class&quot;</phrase><phrase role="special">,</phrase><phrase role="string">     &quot;except&quot;</phrase><phrase role="special">,</phrase><phrase role="string">    &quot;if&quot;</phrase><phrase role="special">,</phrase><phrase role="string">        &quot;or&quot;</phrase><phrase role="special">,</phrase><phrase role="string">        &quot;while&quot;</phrase><phrase role="special">,</phrase><phrase role="string">    
     &quot;continue&quot;</phrase><phrase role="special">,</phrase><phrase role="string">  &quot;exec&quot;</phrase><phrase role="special">,</phrase><phrase role="string">      &quot;import&quot;</phrase><phrase role="special">,</phrase><phrase role="string">    &quot;pass&quot;</phrase><phrase role="special">,</phrase><phrase role="string">      &quot;yield&quot;</phrase><phrase role="special">,</phrase><phrase role="string">   
     &quot;def&quot;</phrase><phrase role="special">,</phrase><phrase role="string">       &quot;finally&quot;</phrase><phrase role="special">,</phrase><phrase role="string">   &quot;in&quot;</phrase><phrase role="special">,</phrase><phrase role="string">        &quot;print&quot;</phrase><phrase role="special">,</phrase><phrase role="comment">
-
-    // Technically &quot;as&quot; and &quot;None&quot; are not yet keywords (at Python
+    // Technically &quot;as&quot; and &quot;None&quot; are not yet keywords (at Python
     // 2.4). They are destined to become keywords, and we treat them 
     // as such for syntax highlighting purposes.
 </phrase><phrase role="string">               
     &quot;as&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;None&quot;</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-special</phrase><phrase role="special">
+special</phrase><phrase role="special">
     =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">chset_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;~!%^&amp;*()+={[}]:;,&lt;.&gt;/|\\-&quot;</phrase><phrase role="special">)</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-string_prefix</phrase><phrase role="special">
+string_prefix</phrase><phrase role="special">
     =</phrase><phrase role="identifier">    as_lower_d</phrase><phrase role="special">[</phrase><phrase role="identifier">str_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;u&quot;</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> !</phrase><phrase role="identifier"> str_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;r&quot;</phrase><phrase role="special">)]</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
            
 string_</phrase><phrase role="special">
     =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> !</phrase><phrase role="identifier"> string_prefix</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">long_string</phrase><phrase role="special"> |</phrase><phrase role="identifier"> short_string</phrase><phrase role="special">)</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-short_string</phrase><phrase role="special">
+short_string</phrase><phrase role="special">
     =</phrase><phrase role="identifier">   confix_p</phrase><phrase role="special">(</phrase><phrase role="char">'&quot;'</phrase><phrase role="special">,</phrase><phrase role="special"> *</phrase><phrase role="identifier"> c_escape_ch_p</phrase><phrase role="special">,</phrase><phrase role="char"> '&quot;'</phrase><phrase role="special">)</phrase><phrase role="special"> |</phrase><phrase role="identifier">
         confix_p</phrase><phrase role="special">(</phrase><phrase role="char">'\''</phrase><phrase role="special">,</phrase><phrase role="special"> *</phrase><phrase role="identifier"> c_escape_ch_p</phrase><phrase role="special">,</phrase><phrase role="char"> '\''</phrase><phrase role="special">)</phrase><phrase role="special">    
     ;</phrase><phrase role="identifier">
@@ -2497,8 +2401,7 @@ number</phrase><phrase role="special">
         )</phrase><phrase role="special">
         &gt;&gt;</phrase><phrase role="special">  *</phrase><phrase role="identifier">as_lower_d</phrase><phrase role="special">[</phrase><phrase role="identifier">chset_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;lj&quot;</phrase><phrase role="special">)]</phrase><phrase role="special">
     ;</phrase><phrase role="identifier">
-
-identifier</phrase><phrase role="special">
+identifier</phrase><phrase role="special">
     =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> ((</phrase><phrase role="identifier">alpha_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> *(</phrase><phrase role="identifier">alnum_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">))</phrase><phrase role="special">
     ;</phrase>
 </literal>

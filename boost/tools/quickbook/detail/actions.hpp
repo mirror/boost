@@ -22,6 +22,11 @@
 #include "../syntax_highlight.hpp"
 #include "utils.hpp"
 
+#ifdef BOOST_MSVC
+// disable copy/assignment could not be generated, unreferenced formal params
+#pragma warning(disable : 4511 4512 4100)
+#endif
+
 namespace quickbook
 {
     namespace fs = boost::filesystem;
