@@ -399,7 +399,7 @@ namespace boost { namespace numeric { namespace ublas {
             real_type t = real_type ();
             size_type size (e ().size ());
             for (size_type i = 0; i < size; ++ i) {
-                real_type u (type_traits<value_type>::norm_1 (e () (i)));
+                real_type u (type_traits<value_type>::type_abs (e () (i)));
                 t += u;
             }
             return t;
