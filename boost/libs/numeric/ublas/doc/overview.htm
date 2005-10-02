@@ -284,24 +284,30 @@ matrices.</p>
 <th align="left">Comment</th>
 </tr>
 <tr>
-<td><code>_asum</code></td>
+<td><code>sasum</code> OR <code>dasum</code></td>
 <td><code>norm_1 (x)</code></td>
-<td><em>sum |x</em><sub><em>i</em></sub><em>|</em></td>
-<td>Computes the sum norm of a vector.</td>
+<td><em>sum x<sub>i</sub></em></td>
+<td>Computes the <em>l<sub>1</sub></em> (sum) norm of a real vector.</td>
+</tr>
+<tr>
+<td><code>scasum</code> OR <code>dzasum</code></td>
+<td><em>no equivilent</em></td>
+<td><em>sum re(x<sub>i</sub>) + sum im(x<sub>i</sub>)</em></td>
+<td>Computes the sum of elements of a complex vector.</td>
 </tr>
 <tr>
 <td><code>_nrm2</code></td>
 <td><code>norm_2 (x)</code></td>
 <td><em>sqrt (sum
 |x</em><sub><em>i</em></sub>|<sup><em>2</em></sup> <em>)</em></td>
-<td>Computes the euclidean norm of a vector.</td>
+<td>Computes the <em>l<sub>inf</sub></em> (euclidean) norm of a vector.</td>
 </tr>
 <tr>
 <td><code>i_amax</code></td>
 <td><code>norm_inf (x)<br />
 norm_inf_index (x)</code></td>
 <td><em>max |x</em><sub><em>i</em></sub><em>|</em></td>
-<td>Computes the maximum norm of a vector.<br />
+<td>Computes the <em>l<sub>2</sub></em> (maximum) norm of a vector.<br />
 BLAS computes the index of the first element having this
 value.</td>
 </tr>
