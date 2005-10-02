@@ -55,6 +55,6 @@ test-suite "typeof"
 	[ compile std.cpp : <define>BOOST_TYPEOF_NATIVE : std_native ]
 	[ compile std.cpp : <define>BOOST_TYPEOF_COMPLIANT : std_emulation ]
 
-	[ link odr1.cpp odr2.cpp : <define>BOOST_TYPEOF_NATIVE : odr_native ]
-	[ link odr1.cpp odr2.cpp : <define>BOOST_TYPEOF_COMPLIANT : odr_emulation ]
+	[ run odr1.cpp odr2.cpp : : : <define>BOOST_TYPEOF_NATIVE : odr_native ]
+	[ run odr1.cpp odr2.cpp : : : <define>BOOST_TYPEOF_COMPLIANT : odr_emulation ]
 	;
