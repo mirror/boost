@@ -42,6 +42,8 @@ Boost V1.33.1
   a #line directive was encountered.
 - Fixed wrong line numbering in reference comments of the tests t_5_002.cpp and 
   t_5_035.cpp.
+- Made sure, that preprocessor expression errors get ignored for 'passive' 
+  #elif branches.
 
 Boost V1.33.0
 Version 1.2

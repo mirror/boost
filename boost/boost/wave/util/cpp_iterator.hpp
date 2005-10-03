@@ -251,7 +251,7 @@ public:
                 pos_.get_file().c_str()
             )), 
         seen_newline(true), must_emit_line_directive(false),
-        act_pos(ctx_.get_main_pos()), last_line(0),
+        act_pos(ctx_.get_main_pos()), //last_line(0),
         eater(need_preserve_comments(ctx_.get_language()))
     {
         act_pos.set_file(pos_.get_file());
@@ -322,7 +322,7 @@ private:
     bool must_emit_line_directive;  // must emit a line directive
     result_type act_token;          // current token
     typename result_type::position_type &act_pos;   // current fileposition (references the macromap)
-    int last_line;                  // line number of the previous token
+//    unsigned int last_line;         // line number of the previous token
         
     token_sequence_type unput_queue;     // tokens to be preprocessed again
     token_sequence_type pending_queue;   // tokens already preprocessed
@@ -381,8 +381,8 @@ pp_iterator_functor<ContextT>::returned_from_include()
         ctx.set_current_filename(iter_ctx->real_filename.c_str());
 #endif 
 
-        last_line = iter_ctx->line;
-        act_pos.set_line(last_line);
+//        last_line = iter_ctx->line;
+        act_pos.set_line(iter_ctx->line);
         act_pos.set_column(0);
         
     // restore the actual current directory 
@@ -514,7 +514,7 @@ bool returned_from_include_file = returned_from_include();
 //            last_line = current_line;
 
             act_pos = act_token.get_position();
-            last_line = act_pos.get_line();
+//            last_line = act_pos.get_line();
             
         // act accordingly on the current token
         token_id id = token_id(act_token);
@@ -631,7 +631,7 @@ typename ContextT::position_type pos = act_token.get_position();
         // account for the newline emitted here
             act_pos.set_line(act_pos.get_line()-1);
             iter_ctx->emitted_lines = act_pos.get_line();
-            --last_line;
+//            --last_line;
         
         // the #line directive has to be pushed back into the pending queue in 
         // reverse order
@@ -1065,8 +1065,8 @@ fs::path native_path(file_path, fs::native);
         ctx.set_current_filename(iter_ctx->real_filename.c_str());
 #endif 
 
-        last_line = iter_ctx->line;
-        act_pos.set_line(last_line);
+//        last_line = iter_ctx->line;
+        act_pos.set_line(iter_ctx->line);
         act_pos.set_column(0);
     }
 }
@@ -1533,7 +1533,7 @@ string_type file_name;
     if (!file_name.empty())     // reuse current file name 
         act_pos.set_file(file_name.c_str());
     act_pos.set_line(line);
-    last_line = act_token.get_position().get_line();
+//    last_line = act_token.get_position().get_line();
     
 //typename result_type::position_type nextline_pos = act_pos;
 //    
