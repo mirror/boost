@@ -98,7 +98,7 @@ an STL container counts. If it has nested `iterator` and `const_iterator` types 
 and `end()` member functions, _foreach_ will automatically know how to iterate over
 it. It is in this way that _iterator_range_ and _sub_range_ work with _foreach_.]
 
-See the section on [link boost_foreach.extending_boost_foreach Extending _foreach_] to find
+See the section on [link foreach.extending_boost_foreach Extending _foreach_] to find
 out how to make _foreach_ work with other types.
 
 [h2 Examples]
@@ -159,7 +159,7 @@ Iterate over an expression that returns a sequence by value (i.e. an r-value):
     }    
 
 Iterating over r-values doesn't work on some older compilers. Check the 
-[link boost_foreach.portability Portability] section to see whether your
+[link foreach.portability Portability] section to see whether your
 compiler supports this.    
 
 [h2 Making _foreach_ Prettier]
@@ -229,7 +229,7 @@ can now use _foreach_ to iterate over your type.
     }
 
 There are some portability issues you should be aware of when extending _foreach_. Be sure
-to check out the [link boost_foreach.portability Portability] section.
+to check out the [link foreach.portability Portability] section.
 
 [endsect]
 
