@@ -90,9 +90,12 @@
 
 #if defined(__GNUC__) && !defined(BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL)
 //
-// Figure out when Intel is emulating this gcc bug:
+// Figure out when Intel is emulating this gcc bug
+// (All Intel versions prior to 9.0.26, and versions
+// later than that if they are set up to emulate gcc 3.2
+// or earlier):
 //
-#  if ((__GNUC__ == 3) && (__GNUC_MINOR__ <= 2)) || (BOOST_INTEL <= 900)
+#  if ((__GNUC__ == 3) && (__GNUC_MINOR__ <= 2)) || (BOOST_INTEL < 900) || (__INTEL_COMPILER_BUILD_DATE < 20050912)
 #     define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #  endif
 #endif
