@@ -11,17 +11,26 @@
 # $Date$
 # $Revision$
 
+import pp
 import shutil
 import os.path
 import os
+import string
 import sys
+
+preprocess_cmd = open( "preprocess.cmd" ).readlines()[0]
 
 def process( file, boost_root, dst_dir, mode ):
     file_path = "%s.hpp" % os.path.splitext( file )[0]
+    os.system( preprocess_cmd % {
+          'boost_root': boost_root
+        , 'mode': mode
+        , 'file': file
+        , 'file_path': file_path
+        } )
 
-    os.system( "preprocess %s %s %s %s" % ( boost_root, mode, file, file_path ) )
     os.rename( file_path, "%s.tmp" % file_path )
-    os.system( "python pp.py %s.tmp %s" % ( file_path, file_path ) )
+    pp.main( "%s.tmp" % file_path, file_path )
     os.remove( "%s.tmp" % file_path )
 
     filename = os.path.basename(file_path)
@@ -75,5 +84,5 @@ if __name__ == '__main__':
     main(
           ["bcc", "bcc551", "gcc", "msvc60", "msvc70", "mwcw", "dmc", "no_ctps", "no_ttp", "plain"]
         , "src"
-        , "boost\\mpl\\aux_\\preprocessed"
+        , os.path.join( "boost", "mpl", "aux_", "preprocessed" )
         )

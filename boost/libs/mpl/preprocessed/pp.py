@@ -247,9 +247,10 @@ class pretty:
         self.output.write(line)
         self.prev_line = line
 
-def main():
-    p = pretty(os.path.basename(sys.argv[2]))
-    for line in fileinput.input(sys.argv[1]):
+def main( src, dest ):
+    p = pretty( os.path.basename( dest ) )
+    for line in fileinput.input( src ):
         p.process(line)
 
-main()
+if __name__ == '__main__':    
+    main( sys.argv[1], sys.argv[2] )
