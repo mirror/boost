@@ -91,4 +91,6 @@ int main()
     test(x9);
     test(x10);
     test(x11);
+
+    return 0;
 }
