@@ -4,7 +4,7 @@
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
-	<ulink url="http://www.boost.org/LICENSE_1_0.txt">
+    <ulink url="http://www.boost.org/LICENSE_1_0.txt">
             http://www.boost.org/LICENSE_1_0.txt
         </ulink>)
     ]
@@ -22,21 +22,21 @@ by utilizing the C++ template argument deduction facility.  Consider `std::pair`
 In order to instantiate this class template and create a temporary object of this instantiation, 
 one has to supply both type parameters and value parameters:
 
-	std::pair<int, double>(5, 3.14159);
+    std::pair<int, double>(5, 3.14159);
 
 To avoid this duplication, STL supplies the `std::make_pair` object generator.  
 When it is used, the types of template parameters are deduced from supplied function arguments:
 
-	std::make_pair(5, 3.14159);
+    std::make_pair(5, 3.14159);
 
 For the temporary objects it is enough.  However, when a named object needs to be allocated, 
 the problem appears again:
 
-	std::pair<int, double> p(5, 3.14159);
+    std::pair<int, double> p(5, 3.14159);
 
 The object generator no longer helps:
 
-	std::pair<int, double> p = std::make_pair(5, 3.14159);
+    std::pair<int, double> p = std::make_pair(5, 3.14159);
 
 It would be nice to deduce the type of the object (on the left) from the expression 
 it is initialized with (on the right), but the current C++ syntax does not allow for this.
@@ -45,37 +45,37 @@ The above example demonstrates the essence of the problem but does not demonstra
 Many libraries, especially expression template libraries, create objects of really complicated types, 
 and go a long way to hide this complexity behind object generators.  Consider a nit Boost.Lambda functor:
 
-	_1 > 15 && _2 < 20
+    _1 > 15 && _2 < 20
 
 If one wanted to allocate a named copy of such an innocently looking functor, 
 she would have to specify something like this:
  
-	lambda_functor<
-		lambda_functor_base<
-			logical_action<and_action>,
-			tuple<
-				lambda_functor<
-					lambda_functor_base<
-						relational_action<greater_action>,
-						tuple<
-							lambda_functor<placeholder<1> >,
-							int const
- 						> 
-					> 
-				>,
-				lambda_functor<
-					lambda_functor_base<
-						relational_action<less_action>,
-						tuple<
-							lambda_functor<placeholder<2> >,
-							int const 
-						> 
-					> 
-				>
-			> 
-		> 
-	> 
-	f = _1 > 15 && _2 < 20;
+    lambda_functor<
+        lambda_functor_base<
+            logical_action<and_action>,
+            tuple<
+                lambda_functor<
+                    lambda_functor_base<
+                        relational_action<greater_action>,
+                        tuple<
+                            lambda_functor<placeholder<1> >,
+                            int const
+                        > 
+                    > 
+                >,
+                lambda_functor<
+                    lambda_functor_base<
+                        relational_action<less_action>,
+                        tuple<
+                            lambda_functor<placeholder<2> >,
+                            int const 
+                        > 
+                    > 
+                >
+            > 
+        > 
+    > 
+    f = _1 > 15 && _2 < 20;
 
 
 Not exactly elegant.  To solve this problem, the C++ standard committee is considering 
@@ -87,11 +87,11 @@ The `typeof` operator (or `decltype`, which is a slightly different flavor of `t
 allows one to determine the type of an expression at compile time.  Using `typeof`, 
 the above example can be simplified drastically:
 
-	typeof(_1 > 15 && _2 < 20) f = _1 > 15 && _2 < 20;
+    typeof(_1 > 15 && _2 < 20) f = _1 > 15 && _2 < 20;
 
 Much better, but some duplication still exists.  The `auto` type solves the rest of the problem:
 
-	auto f = _1 > 15 && _2 < 20;
+    auto f = _1 > 15 && _2 < 20;
 
 [endsect]
 
@@ -774,11 +774,11 @@ We get the following error message from VC7.1
 [pre 
     error C2504: 'boost::type_of::'anonymous-namespace'::encode_type_impl<V,Type_Not_Registered_With_Typeof_System>' : base
     class undefined
-	    with 
-	    \[
-		    V=boost::type_of::'anonymous-namespace'::encode_type_impl<boost::mpl::vector0<boost::mpl::na>,std::pair<X,Y<int,true>>>::V0,
-		    Type_Not_Registered_With_Typeof_System=X
-	    \]
+        with 
+        \[
+            V=boost::type_of::'anonymous-namespace'::encode_type_impl<boost::mpl::vector0<boost::mpl::na>,std::pair<X,Y<int,true>>>::V0,
+            Type_Not_Registered_With_Typeof_System=X
+        \]
 ]
  
 Inspecting this error message, we see that the compiler complains about `X`
@@ -790,11 +790,11 @@ Recompiling, we get a new error message from VC7.1
 [pre 
     error C2504: 'boost::type_of::'anonymous-namespace'::encode_type_impl<V,Type_Not_Registered_With_Typeof_System>' : base
     class undefined
-	    with
-	    \[
-		    V=boost::type_of::'anonymous-namespace'::encode_type_impl<boost::mpl::vector0<boost::mpl::na>,std::pair<X,Y<int,true>>>::V1,
-		    Type_Not_Registered_With_Typeof_System=Y<int,true>
-	    \]
+        with
+        \[
+            V=boost::type_of::'anonymous-namespace'::encode_type_impl<boost::mpl::vector0<boost::mpl::na>,std::pair<X,Y<int,true>>>::V1,
+            Type_Not_Registered_With_Typeof_System=Y<int,true>
+        \]
 ]
  
 Inspecting this error message, we see that the compiler complains about `Y<int,true>`.
@@ -841,8 +841,8 @@ as nested classes.  Instead, instantiations can be registered:
 
 [section:cont Contributed By:]
 
-* Compliant compilers 	--	Arkadiy Vertleyb, Peder Holt
-* MSVC 6.5, 7.0, 7.1 	-- 	Igor Chesnokov, Peder Holt
+* Compliant compilers   --  Arkadiy Vertleyb, Peder Holt
+* MSVC 6.5, 7.0, 7.1    --  Igor Chesnokov, Peder Holt
 
 [endsect]
 
