@@ -55,10 +55,13 @@ int main () {
 </tbody>
 </table>
 <h4>Model of</h4>
-<p><a href="container_concept.htm#vector">Vector</a> .</p>
+<p><a href="container_concept.htm#vector">Vector</a>,
+<a href="http://www.sgi.com/tech/stl/RandomAccessContainer.html">RandomAccessContainer</a>
+</p>
 <h4>Type requirements</h4>
 <p>None, except for those imposed by the requirements of <a href=
-"container_concept.htm#vector">Vector</a> .</p>
+"container_concept.htm#vector">Vector</a>
+and <a href="http://www.sgi.com/tech/stl/RandomAccessContainer.html">RandomAccessContainer</a>.</p>
 <h4>Public base classes</h4>
 <p><code>vector_container&lt;vector&lt;T, A&gt; &gt;</code></p>
 <h4>Members</h4>
@@ -154,6 +157,16 @@ preseved when specified.</td>
 <td><code>size_type size () const</code></td>
 <td><a href="expression_concept.htm#vector_expression">VectorExpression</a></td>
 <td>Returns the size of the <code>vector</code>.</td>
+</tr>
+<tr>
+<td><code>size_type max_size () const</code></td>
+<td><a href="http://www.sgi.com/tech/stl/RandomAccessContainer.html">RandomAccessContainer</a></td>
+<td>Returns the upper bound on the size of the <code>vector</code>.</td>
+</tr>
+<tr>
+<td><code>bool empty () const</code></td>
+<td><a href="http://www.sgi.com/tech/stl/RandomAccessContainer.html">RandomAccessContainer</a></td>
+<td>Equivilent to <code>size () == 0</code>.</td>
 </tr>
 <tr>
 <td><code>const array_type&amp; data () const</code></td>
