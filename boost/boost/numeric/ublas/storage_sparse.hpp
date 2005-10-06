@@ -299,6 +299,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (size_ <= capacity_, internal_logic ());
         }
 
+		// Random Access Container
         BOOST_UBLAS_INLINE
         size_type size () const {
             return size_;
@@ -307,7 +308,16 @@ namespace boost { namespace numeric { namespace ublas {
         size_type capacity () const {
             return capacity_;
         }
-
+        BOOST_UBLAS_INLINE
+        size_type max_size () const {
+        	return 0; //TODO
+        }
+       
+        BOOST_UBLAS_INLINE
+        bool empty () const {
+            return size_ == 0;
+        }
+        	
         // Element access
         BOOST_UBLAS_INLINE
         data_reference operator [] (key_type i) {

@@ -20,10 +20,10 @@
 #include <cassert>
 #include <cstddef>
 #include <algorithm>
+#include <limits>
 
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/limits.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/and.hpp>

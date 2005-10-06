@@ -293,6 +293,10 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
                 return *it_;
             }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
 
             // Index
             BOOST_UBLAS_INLINE
@@ -385,6 +389,10 @@ namespace boost { namespace numeric { namespace ublas {
             reference operator * () const {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
                 return *it_;
+            }
+            BOOST_UBLAS_INLINE
+            reference operator [] (difference_type n) const {
+            	return *(*this + n);
             }
 
             // Index
@@ -742,6 +750,10 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
                 return *it_;
             }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
 
             // Index
             BOOST_UBLAS_INLINE
@@ -834,6 +846,10 @@ namespace boost { namespace numeric { namespace ublas {
             reference operator * () const {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
                 return *it_;
+            }
+            BOOST_UBLAS_INLINE
+            reference operator [] (difference_type n) const {
+            	return *(*this + n);
             }
 
             // Index
@@ -1190,6 +1206,10 @@ namespace boost { namespace numeric { namespace ublas {
                 // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
 
             // Index
             BOOST_UBLAS_INLINE
@@ -1290,6 +1310,10 @@ namespace boost { namespace numeric { namespace ublas {
             reference operator * () const {
                 // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
+            }
+            BOOST_UBLAS_INLINE
+            reference operator [] (difference_type n) const {
+            	return *(*this + n);
             }
 
             // Index
@@ -1647,6 +1671,10 @@ namespace boost { namespace numeric { namespace ublas {
                 // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
 
             // Index
             BOOST_UBLAS_INLINE
@@ -1747,6 +1775,10 @@ namespace boost { namespace numeric { namespace ublas {
             reference operator * () const {
                 // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
+            }
+            BOOST_UBLAS_INLINE
+            reference operator [] (difference_type n) const {
+            	return *(*this + n);
             }
 
             // Index
@@ -2103,6 +2135,10 @@ namespace boost { namespace numeric { namespace ublas {
                 // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
 
             // Index
             BOOST_UBLAS_INLINE
@@ -2203,6 +2239,10 @@ namespace boost { namespace numeric { namespace ublas {
             reference operator * () const {
                 // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
+            }
+            BOOST_UBLAS_INLINE
+            reference operator [] (difference_type n) const {
+            	return *(*this + n);
             }
 
             // Index
@@ -2596,6 +2636,10 @@ namespace boost { namespace numeric { namespace ublas {
             const_reference operator * () const {
                 return *it_;
             }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
             BOOST_UBLAS_INLINE
@@ -2726,6 +2770,10 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             reference operator * () const {
                 return *it_;
+            }
+            BOOST_UBLAS_INLINE
+            reference operator [] (difference_type n) const {
+            	return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -2863,6 +2911,10 @@ namespace boost { namespace numeric { namespace ublas {
             const_reference operator * () const {
                 return *it_;
             }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
             BOOST_UBLAS_INLINE
@@ -2993,6 +3045,10 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             reference operator * () const {
                 return *it_;
+            }
+            BOOST_UBLAS_INLINE
+            reference operator [] (difference_type n) const {
+            	return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -3492,6 +3548,10 @@ namespace boost { namespace numeric { namespace ublas {
                 // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
             BOOST_UBLAS_INLINE
@@ -3626,6 +3686,10 @@ namespace boost { namespace numeric { namespace ublas {
             reference operator * () const {
                 // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
+            }
+            BOOST_UBLAS_INLINE
+            reference operator [] (difference_type n) const {
+            	return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -3767,6 +3831,10 @@ namespace boost { namespace numeric { namespace ublas {
                 // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
             BOOST_UBLAS_INLINE
@@ -3901,6 +3969,10 @@ namespace boost { namespace numeric { namespace ublas {
             reference operator * () const {
                 // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
+            }
+            BOOST_UBLAS_INLINE
+            reference operator [] (difference_type n) const {
+            	return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -4410,6 +4482,10 @@ namespace boost { namespace numeric { namespace ublas {
                 // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
             BOOST_UBLAS_INLINE
@@ -4544,6 +4620,10 @@ namespace boost { namespace numeric { namespace ublas {
             reference operator * () const {
                 // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
+            }
+            BOOST_UBLAS_INLINE
+            reference operator [] (difference_type n) const {
+            	return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -4685,6 +4765,10 @@ namespace boost { namespace numeric { namespace ublas {
                 // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
             }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
             BOOST_UBLAS_INLINE
@@ -4819,6 +4903,10 @@ namespace boost { namespace numeric { namespace ublas {
             reference operator * () const {
                 // FIXME replace find with at_element
                 return (*this) ().data_ (*it1_, *it2_);
+            }
+            BOOST_UBLAS_INLINE
+            reference operator [] (difference_type n) const {
+            	return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION

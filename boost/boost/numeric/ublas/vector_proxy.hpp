@@ -310,6 +310,10 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
                 return *it_;
             }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
 
             // Index
             BOOST_UBLAS_INLINE
@@ -402,6 +406,10 @@ namespace boost { namespace numeric { namespace ublas {
             reference operator * () const {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
                 return *it_;
+            }
+            BOOST_UBLAS_INLINE
+            reference operator [] (difference_type n) const {
+            	return *(*this + n);
             }
 
             // Index
@@ -810,6 +818,10 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
                 return (*this) ().data_ (*it_);
             }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
 
             // Index
             BOOST_UBLAS_INLINE
@@ -904,6 +916,11 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
                 return (*this) ().data_ (*it_);
             }
+            BOOST_UBLAS_INLINE
+            reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
+
 
             // Index
             BOOST_UBLAS_INLINE
@@ -1326,6 +1343,10 @@ return true;
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
                 return (*this) ().data_ (*it_);
             }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
 
             // Index
             BOOST_UBLAS_INLINE
@@ -1419,6 +1440,10 @@ return true;
                 // FIXME replace find with at_element
                 BOOST_UBLAS_CHECK (index () < (*this) ().size (), bad_index ());
                 return (*this) ().data_ (*it_);
+            }
+            BOOST_UBLAS_INLINE
+            reference operator [] (difference_type n) const {
+            	return *(*this + n);
             }
 
             // Index

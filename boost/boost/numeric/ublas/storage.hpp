@@ -177,6 +177,17 @@ namespace boost { namespace numeric { namespace ublas {
             resize_internal (size, init, true);
         }
                     
+		// Random Access Container
+        BOOST_UBLAS_INLINE
+        size_type max_size () const {
+        	return ALLOC ().max_size();
+        }
+        
+        BOOST_UBLAS_INLINE
+        bool empty () const {
+            return size_ == 0;
+        }
+        	
         BOOST_UBLAS_INLINE
         size_type size () const {
             return size_;
@@ -335,6 +346,17 @@ namespace boost { namespace numeric { namespace ublas {
             size_ = size;
         }
 
+		// Random Access Container
+        BOOST_UBLAS_INLINE
+        size_type max_size () const {
+        	return ALLOC ().max_size();
+        }
+        
+        BOOST_UBLAS_INLINE
+        bool empty () const {
+            return size_ == 0;
+        }
+        	
         BOOST_UBLAS_INLINE
         size_type size () const {
             return size_;
@@ -486,6 +508,17 @@ namespace boost { namespace numeric { namespace ublas {
             data_ = data;
         }
 
+		// Random Access Container
+        BOOST_UBLAS_INLINE
+        size_type max_size () const {
+        	return std::numeric_limits<size_type>::max ();
+        }
+        
+        BOOST_UBLAS_INLINE
+        bool empty () const {
+            return size_ == 0;
+        }
+        	
         BOOST_UBLAS_INLINE
         size_type size () const {
             return size_;
@@ -614,13 +647,17 @@ namespace boost { namespace numeric { namespace ublas {
             return size_;
         }
 
-        // Assignment
-        basic_range operator=( basic_range const& r ) {
-           start_ = r.start_ ;
-           size_ = r.size_ ;
-           return *this ;
+		// Random Access Container
+        BOOST_UBLAS_INLINE
+        size_type max_size () const {
+        	return size_;
         }
-
+        
+        BOOST_UBLAS_INLINE
+        bool empty () const {
+            return size_ == 0;
+        }
+        	
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
@@ -706,6 +743,11 @@ namespace boost { namespace numeric { namespace ublas {
                 BOOST_UBLAS_CHECK ((*this) ().start () <= it_, bad_index ());
                 BOOST_UBLAS_CHECK (it_ < (*this) ().start () + (*this) ().size (), bad_index ());
                 return it_;
+            }
+
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
             }
 
             // Index
@@ -819,6 +861,17 @@ namespace boost { namespace numeric { namespace ublas {
             return size_;
         }
 
+		// Random Access Container
+        BOOST_UBLAS_INLINE
+        size_type max_size () const {
+        	return size_;
+        }
+        
+        BOOST_UBLAS_INLINE
+        bool empty () const {
+            return size_ == 0;
+        }
+        	
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
@@ -910,6 +963,11 @@ namespace boost { namespace numeric { namespace ublas {
             const_reference operator * () const {
                 BOOST_UBLAS_CHECK (it_ < (*this) ().size (), bad_index ());
                 return (*this) ().start () + it_* (*this) ().stride ();
+            }
+
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
             }
 
             // Index
@@ -1033,6 +1091,17 @@ namespace boost { namespace numeric { namespace ublas {
             return data_;
         }
 
+		// Random Access Container
+        BOOST_UBLAS_INLINE
+        size_type max_size () const {
+        	return size_;
+        }
+        
+        BOOST_UBLAS_INLINE
+        bool empty () const {
+            return data_.size () == 0;
+        }
+        	
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i) const {
@@ -1155,6 +1224,11 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             const_reference operator * () const {
                 return (*this) () (it_);
+            }
+
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
             }
 
             // Index

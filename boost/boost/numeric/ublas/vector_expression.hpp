@@ -385,6 +385,10 @@ namespace boost { namespace numeric { namespace ublas {
             const_reference operator * () const {
                 return functor_type::apply (*it_);
             }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
 
             // Index
             BOOST_UBLAS_INLINE
@@ -822,6 +826,10 @@ namespace boost { namespace numeric { namespace ublas {
             const_reference operator * () const {
                 return dereference (iterator_category ());
             }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
 
             // Index
             BOOST_UBLAS_INLINE
@@ -1085,6 +1093,10 @@ namespace boost { namespace numeric { namespace ublas {
             const_reference operator * () const {
                 return functor_type::apply (it1_, *it2_);
             }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
+            }
 
             // Index
             BOOST_UBLAS_INLINE
@@ -1305,6 +1317,10 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             const_reference operator * () const {
                 return functor_type::apply (*it1_, it2_);
+            }
+            BOOST_UBLAS_INLINE
+            const_reference operator [] (difference_type n) const {
+            	return *(*this + n);
             }
 
             // Index
