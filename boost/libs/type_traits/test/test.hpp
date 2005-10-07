@@ -19,6 +19,11 @@
 #pragma option -w-8008 -w-8066
 #endif
 
+#ifdef _MSC_VER
+// We have to turn off warnings that occur within the test suite:
+#pragma warning(disable:4127)
+#endif
+
 //
 // basic configuration:
 //
@@ -53,7 +58,7 @@ boost::unit_test_framework::test_suite* get_master_unit(const char* name = 0);
 class unit_initialiser
 {
 public:
-   unit_initialiser(void (*f)(), const char* name)
+   unit_initialiser(void (*f)(), const char* /*name*/)
    {
       get_master_unit("Type Traits")->add( BOOST_TEST_CASE(f) );
    }
