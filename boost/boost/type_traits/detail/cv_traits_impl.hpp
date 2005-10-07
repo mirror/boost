@@ -11,8 +11,8 @@
 #ifndef BOOST_TT_DETAIL_CV_TRAITS_IMPL_HPP_INCLUDED
 #define BOOST_TT_DETAIL_CV_TRAITS_IMPL_HPP_INCLUDED
 
-#include "boost/config.hpp"
-#include "boost/detail/workaround.hpp"
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
@@ -23,7 +23,7 @@
 namespace boost {
 namespace detail {
 #else
-#include "boost/type_traits/detail/yes_no_type.hpp"
+#include <boost/type_traits/detail/yes_no_type.hpp>
 namespace boost {
 namespace type_traits {
 namespace gcc8503 {

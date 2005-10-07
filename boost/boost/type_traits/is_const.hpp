@@ -21,22 +21,22 @@
 #ifndef BOOST_TT_IS_CONST_HPP_INCLUDED
 #define BOOST_TT_IS_CONST_HPP_INCLUDED
 
-#include "boost/config.hpp"
+#include <boost/config.hpp>
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#   include "boost/type_traits/detail/cv_traits_impl.hpp"
+#   include <boost/type_traits/detail/cv_traits_impl.hpp>
 #   ifdef __GNUC__
 #       include <boost/type_traits/is_reference.hpp>
 #   endif
 #else
-#   include "boost/type_traits/is_reference.hpp"
-#   include "boost/type_traits/is_array.hpp"
-#   include "boost/type_traits/detail/yes_no_type.hpp"
-#   include "boost/type_traits/detail/false_result.hpp"
+#   include <boost/type_traits/is_reference.hpp>
+#   include <boost/type_traits/is_array.hpp>
+#   include <boost/type_traits/detail/yes_no_type.hpp>
+#   include <boost/type_traits/detail/false_result.hpp>
 #endif
 
 // should be the last #include
-#include "boost/type_traits/detail/bool_trait_def.hpp"
+#include <boost/type_traits/detail/bool_trait_def.hpp>
 
 namespace boost {
 
@@ -128,7 +128,7 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_const,T,::boost::detail::is_const_impl<T>::value
 
 } // namespace boost
 
-#include "boost/type_traits/detail/bool_trait_undef.hpp"
+#include <boost/type_traits/detail/bool_trait_undef.hpp>
 
 #endif // BOOST_TT_IS_CONST_HPP_INCLUDED
 

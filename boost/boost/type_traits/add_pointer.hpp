@@ -9,10 +9,10 @@
 #ifndef BOOST_TT_ADD_POINTER_HPP_INCLUDED
 #define BOOST_TT_ADD_POINTER_HPP_INCLUDED
 
-#include "boost/type_traits/remove_reference.hpp"
+#include <boost/type_traits/remove_reference.hpp>
 
 // should be the last #include
-#include "boost/type_traits/detail/type_trait_def.hpp"
+#include <boost/type_traits/detail/type_trait_def.hpp>
 
 namespace boost {
 
@@ -67,6 +67,6 @@ BOOST_TT_AUX_TYPE_TRAIT_DEF1(add_pointer,T,typename detail::add_pointer_impl<T>:
 
 } // namespace boost
 
-#include "boost/type_traits/detail/type_trait_undef.hpp"
+#include <boost/type_traits/detail/type_trait_undef.hpp>
 
 #endif // BOOST_TT_ADD_POINTER_HPP_INCLUDED

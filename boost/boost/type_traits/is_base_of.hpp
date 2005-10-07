@@ -9,10 +9,10 @@
 #ifndef BOOST_TT_IS_BASE_OF_HPP_INCLUDED
 #define BOOST_TT_IS_BASE_OF_HPP_INCLUDED
 
-#include "boost/type_traits/is_base_and_derived.hpp"
+#include <boost/type_traits/is_base_and_derived.hpp>
 
 // should be the last #include
-#include "boost/type_traits/detail/bool_trait_def.hpp"
+#include <boost/type_traits/detail/bool_trait_def.hpp>
 
 namespace boost {
 
@@ -31,6 +31,6 @@ BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_2(typename Base,typename Derived,is_base_o
 
 } // namespace boost
 
-#include "boost/type_traits/detail/bool_trait_undef.hpp"
+#include <boost/type_traits/detail/bool_trait_undef.hpp>
 
 #endif // BOOST_TT_IS_BASE_AND_DERIVED_HPP_INCLUDED

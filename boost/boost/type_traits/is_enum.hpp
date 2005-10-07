@@ -11,15 +11,15 @@
 #ifndef BOOST_TT_IS_ENUM_HPP_INCLUDED
 #define BOOST_TT_IS_ENUM_HPP_INCLUDED
 
-#include "boost/type_traits/add_reference.hpp"
-#include "boost/type_traits/is_arithmetic.hpp"
-#include "boost/type_traits/is_reference.hpp"
-#include "boost/type_traits/is_convertible.hpp"
-#include "boost/type_traits/is_array.hpp"
+#include <boost/type_traits/add_reference.hpp>
+#include <boost/type_traits/is_arithmetic.hpp>
+#include <boost/type_traits/is_reference.hpp>
+#include <boost/type_traits/is_convertible.hpp>
+#include <boost/type_traits/is_array.hpp>
 #ifdef __GNUC__
 #include <boost/type_traits/is_function.hpp>
 #endif
-#include "boost/type_traits/config.hpp"
+#include <boost/type_traits/config.hpp>
 #if defined(BOOST_TT_HAS_CONFORMING_IS_CLASS_IMPLEMENTATION) 
 #  include <boost/type_traits/is_class.hpp>
 #  include <boost/type_traits/is_union.hpp>
@@ -27,7 +27,7 @@
 
 
 // should be the last #include
-#include "boost/type_traits/detail/bool_trait_def.hpp"
+#include <boost/type_traits/detail/bool_trait_def.hpp>
 
 namespace boost {
 
@@ -175,6 +175,6 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_enum,T,false)
 
 } // namespace boost
 
-#include "boost/type_traits/detail/bool_trait_undef.hpp"
+#include <boost/type_traits/detail/bool_trait_undef.hpp>
 
 #endif // BOOST_TT_IS_ENUM_HPP_INCLUDED

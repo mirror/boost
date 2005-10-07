@@ -12,22 +12,22 @@
 #ifndef BOOST_TT_IS_CONVERTIBLE_HPP_INCLUDED
 #define BOOST_TT_IS_CONVERTIBLE_HPP_INCLUDED
 
-#include "boost/type_traits/detail/yes_no_type.hpp"
-#include "boost/type_traits/config.hpp"
-#include "boost/type_traits/is_array.hpp"
-#include "boost/type_traits/add_reference.hpp"
-#include "boost/type_traits/ice.hpp"
-#include "boost/type_traits/is_arithmetic.hpp"
+#include <boost/type_traits/detail/yes_no_type.hpp>
+#include <boost/type_traits/config.hpp>
+#include <boost/type_traits/is_array.hpp>
+#include <boost/type_traits/add_reference.hpp>
+#include <boost/type_traits/ice.hpp>
+#include <boost/type_traits/is_arithmetic.hpp>
 #ifndef BOOST_NO_IS_ABSTRACT
-#include "boost/type_traits/is_abstract.hpp"
+#include <boost/type_traits/is_abstract.hpp>
 #endif
 
 #if defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
-#   include "boost/type_traits/is_void.hpp"
+#   include <boost/type_traits/is_void.hpp>
 #endif
 
 // should be always the last #include directive
-#include "boost/type_traits/detail/bool_trait_def.hpp"
+#include <boost/type_traits/detail/bool_trait_def.hpp>
 
 namespace boost {
 
@@ -198,10 +198,16 @@ struct is_convertible_basic_impl
     static ::boost::type_traits::no_type BOOST_TT_DECL _m_check(...);
     static ::boost::type_traits::yes_type BOOST_TT_DECL _m_check(To);
     static From _m_from;
-
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4244)
+#endif
     BOOST_STATIC_CONSTANT(bool, value =
         sizeof( _m_check(_m_from) ) == sizeof(::boost::type_traits::yes_type)
         );
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 };
 
 #endif // is_convertible_impl
@@ -349,6 +355,6 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF2(is_convertible,From,To,(::boost::detail::is_convert
 
 } // namespace boost
 
-#include "boost/type_traits/detail/bool_trait_undef.hpp"
+#include <boost/type_traits/detail/bool_trait_undef.hpp>
 
 #endif // BOOST_TT_IS_CONVERTIBLE_HPP_INCLUDED
