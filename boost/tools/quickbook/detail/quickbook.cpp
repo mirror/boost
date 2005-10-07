@@ -14,6 +14,7 @@
 #include "actions.hpp"
 #include <boost/spirit/iterator/position_iterator.hpp>
 #include <boost/program_options.hpp>
+#include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/ref.hpp>
 
@@ -125,9 +126,9 @@ namespace quickbook
     }
 
     static int
-    parse(char const* filein_, std::ostream& out, bool ignore_docinfo = false)
+        parse(char const* filein_, fs::path const& outdir, std::ostream& out, bool ignore_docinfo = false)
     {
-        actions actor(filein_, out);
+        actions actor(filein_, outdir, out);
         return parse(filein_, actor);
     }
 
@@ -139,7 +140,12 @@ namespace quickbook
       , int linewidth)
     {
         std::stringstream buffer;
-        int result = parse(filein_, buffer);
+        fs::path outdir = fs::path(fileout_, fs::native).branch_path();
+        if (outdir.empty())
+        {
+            outdir = fs::path(".", fs::no_check);
+        }
+        int result = parse(filein_, outdir, buffer);
         if (result == 0)
         {
             std::ofstream fileout(fileout_);
@@ -167,6 +173,9 @@ main(int argc, char* argv[])
         using boost::program_options::notify;
         using boost::program_options::value;
         using boost::program_options::positional_options_description;
+
+        // First thing, the filesystem should record the current working directory.
+        boost::filesystem::initial_path();
 
         options_description desc("Allowed options");
         desc.add_options()

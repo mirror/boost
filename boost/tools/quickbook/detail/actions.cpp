@@ -7,6 +7,9 @@
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
+#include <numeric>
+#include <functional>
+#include <boost/iterator/transform_iterator.hpp>
 #include "./actions.hpp"
 
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
@@ -454,10 +457,52 @@ namespace quickbook
         }
     }
 
+    fs::path string_to_path(std::string const& str)
+    {
+        return fs::path(str, fs::no_check);
+    }
+
+    inline fs::path path_difference(fs::path const& outdir, fs::path const& xmlfile)
+    {
+        fs::path::iterator out = outdir.begin(), xml = xmlfile.begin();
+        fs::path outtmp("", fs::no_check), xmltmp("", fs::no_check), result("", fs::no_check);
+        for(;out != outdir.end() && xml != xmlfile.end(); ++out, ++xml)
+        {
+            outtmp /= fs::path(*out, fs::no_check);
+            xmltmp /= fs::path(*xml, fs::no_check);
+            if(!fs::equivalent(outtmp, xmltmp))
+                break;
+        }
+        std::ptrdiff_t parents = std::distance(out, outdir.end());
+        for(std::ptrdiff_t i=0; i<parents; ++i)
+            result /= "..";
+        return std::accumulate(
+            boost::make_transform_iterator(xml, &string_to_path)
+          , boost::make_transform_iterator(xmlfile.end(), &string_to_path)
+          , result
+          , std::divides<fs::path>()
+        );
+    }
+
     void xinclude_action::operator()(iterator first, iterator last) const
     {
+        // Given an xml file to include and the current filename, calculate the
+        // path to the XML file relative to the output directory.
+        fs::path xmlfile(std::string(first, last), fs::no_check);
+        if (!xmlfile.is_complete())
+        {
+            fs::path infile = actions.filename;
+            infile = fs::complete(infile);
+            infile.normalize();
+            xmlfile = infile.branch_path() / xmlfile;
+            xmlfile.normalize();
+            fs::path outdir = actions.outdir;
+            outdir = fs::complete(outdir);
+            outdir.normalize();
+            xmlfile = path_difference(outdir, xmlfile);
+        }
         out << "\n<xi:include href=\"";
-        detail::print_string(detail::escape_uri(std::string(first, last)), out);
+        detail::print_string(detail::escape_uri(xmlfile.string()), out);
         out << "\" />\n";
     }
 
@@ -669,8 +714,9 @@ namespace quickbook
         phrase.str(std::string());
     }
 
-    actions::actions(char const* filein_, std::ostream &out_)
+    actions::actions(char const* filein_, fs::path const& outdir_, std::ostream &out_)
         : filename(fs::complete(fs::path(filein_, fs::native)))
+        , outdir(outdir_)
         , out(out_)
         , extract_doc_license(doc_license, phrase)
         , extract_doc_purpose(doc_purpose, phrase)
@@ -750,7 +796,7 @@ namespace quickbook
         , anchor(out)
         , begin_section(out, doc_id, section_id, level, qualified_section_id)
         , end_section(out, "</section>")
-        , xinclude(out)
+        , xinclude(out, *this)
         , include(*this)
         , level(0)
         , pop_sect(level, qualified_section_id)

@@ -592,13 +592,13 @@ namespace quickbook
     struct xinclude_action
     {
         // Handles XML includes
-
-        xinclude_action(std::ostream& out_)
-            : out(out_) {}
+        xinclude_action(std::ostream& out_, quickbook::actions& actions_)
+            : out(out_), actions(actions_) {}
 
         void operator()(iterator first, iterator last) const;
 
         std::ostream& out;
+        quickbook::actions& actions;
     };
 
     struct include_action
@@ -671,9 +671,10 @@ namespace quickbook
     ///////////////////////////////////////////////////////////////////////////
     struct actions
     {
-        actions(char const* filein_, std::ostream &out_);
+        actions(char const* filein_, fs::path const& outdir, std::ostream &out_);
 
         fs::path                filename;
+        fs::path                outdir;
         std::string             macro_id;
         std::string             phrase_save;
         std::string             table_title;
