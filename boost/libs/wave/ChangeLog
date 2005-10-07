@@ -44,6 +44,7 @@ Boost V1.33.1
   t_5_035.cpp.
 - Made sure, that preprocessor expression errors get ignored for 'passive' 
   #elif branches.
+- Fixed an issue reported by the gcc debug stl.
 
 Boost V1.33.0
 Version 1.2
