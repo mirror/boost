@@ -30,7 +30,7 @@
     <xsl:apply-templates select="class|class-specialization|
                                  struct|struct-specialization|
                                  union|union-specialization|
-                                 typedef|enum" mode="synopsis">
+                                 typedef|enum|data-member" mode="synopsis">
       <xsl:with-param name="indentation" select="$indentation + 2"/>
     </xsl:apply-templates>
     
@@ -82,7 +82,7 @@
     <xsl:apply-templates select="class|class-specialization|
                                  struct|struct-specialization|
                                  union|union-specialization|enum|function|
-                                 overloaded-function"
+                                 overloaded-function|data-member" 
       mode="namespace-reference"/>
   </xsl:template>
 

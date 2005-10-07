@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
 
+  <xsl:include href="global.xsl"/>
   <xsl:strip-space elements="inherit purpose"/>
 
   <!-- When true, the stylesheet will emit compact definitions of
@@ -844,6 +845,11 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
   <xsl:template match="data-member" mode="synopsis">
     <xsl:param name="indentation"/>
 
+    <xsl:choose>
+      <xsl:when test="ancestor::class|ancestor::class-specialization|
+                      ancestor::struct|ancestor::struct-specialization|
+                      ancestor::union|ancestor::union-specialization">
+
     <!-- Spacing -->
     <xsl:if 
       test="not(local-name(preceding-sibling::*[position()=1])=local-name(.))">
@@ -867,6 +873,26 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
     <xsl:text> </xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>;</xsl:text>
+
+      </xsl:when>
+      <xsl:otherwise>
+       <xsl:call-template name="global-synopsis">
+         <xsl:with-param name="indentation" select="$indentation"/>
+       </xsl:call-template>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- Data member reference -->
+  <xsl:template match="data-member" mode="reference">
+    <xsl:choose>
+      <xsl:when test="ancestor::class|ancestor::class-specialization|
+                      ancestor::struct|ancestor::struct-specialization|
+                      ancestor::union|ancestor::union-specialization"/>
+      <xsl:otherwise>
+        <xsl:call-template name="global-reference"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- Enumeration synopsis -->

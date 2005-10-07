@@ -670,7 +670,9 @@ Cannot handle sectiondef with kind=<xsl:value-of select="@kind"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:when test="@kind='variable'">
-        <xsl:call-template name="variable"/>
+        <xsl:call-template name="variable">
+          <xsl:with-param name="in-file" select="$in-file"/>
+        </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
         <xsl:message>
@@ -965,6 +967,8 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
 
   <!-- Handle member variables -->
   <xsl:template name="variable">
+    <xsl:param name="in-file"/>
+    <xsl:if test="contains(string(location/attribute::file), $in-file)">
     <data-member>
       <xsl:attribute name="name">
         <xsl:value-of select="name/text()"/>
@@ -985,6 +989,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
       <xsl:apply-templates select="briefdescription" mode="passthrough"/>
       <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
     </data-member>
+    </xsl:if>
   </xsl:template>
 
   <!-- Things we ignore directly -->
