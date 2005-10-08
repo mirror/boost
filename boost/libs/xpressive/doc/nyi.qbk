@@ -13,7 +13,6 @@ The following features are planned for xpressive 2.0:\n
 
 * syntax_option_type::collate
 * POSIX collation sequences such as [^'''[.a.]'''] and [^'''[=a=]''']
-* Look-behind assertions [^(?<=...)] and [^(?<!...)]
 * Semantic actions
 * Fine-grained control over the dynamic regex syntax
 * Improved localization support, possibly as a custom facet for `std::locale`

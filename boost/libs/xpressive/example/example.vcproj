@@ -176,6 +176,9 @@
 			<File
 				RelativePath="..\..\..\boost\xpressive\xpressive_static.hpp">
 			</File>
+			<File
+				RelativePath="..\..\..\boost\xpressive\xpressive_typeof.hpp">
+			</File>
 			<Filter
 				Name="detail"
 				Filter="">

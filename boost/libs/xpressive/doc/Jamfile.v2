@@ -8,20 +8,8 @@ toolset.using quickbook ;
 
 doxygen autodoc
     :
-        ../../../boost/xpressive/basic_regex.hpp
-        ../../../boost/xpressive/match_results.hpp
-        ../../../boost/xpressive/regex_algorithms.hpp
-        ../../../boost/xpressive/regex_compiler.hpp
-        ../../../boost/xpressive/regex_constants.hpp
-        ../../../boost/xpressive/regex_error.hpp
-        ../../../boost/xpressive/regex_iterator.hpp
-        ../../../boost/xpressive/regex_primitives.hpp
-        ../../../boost/xpressive/regex_token_iterator.hpp
-        ../../../boost/xpressive/regex_traits.hpp
-        ../../../boost/xpressive/sub_match.hpp
-        ../../../boost/xpressive/traits/c_regex_traits.hpp
-        ../../../boost/xpressive/traits/cpp_regex_traits.hpp
-        ../../../boost/xpressive/traits/null_regex_traits.hpp
+         [ glob ../../../boost/xpressive/*.hpp ]
+         [ glob ../../../boost/xpressive/traits/*.hpp ]
     :
         <doxygen:param>EXTRACT_ALL=YES
         <doxygen:param>PREDEFINED=BOOST_XPRESSIVE_DOXYGEN_INVOKED
