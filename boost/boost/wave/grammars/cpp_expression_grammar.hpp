@@ -676,7 +676,7 @@ expression_grammar_gen<TokenT>::evaluate(
     iterator_type next = hit.stop;
     
         while (next != last) {
-            switch (token_id(*next)) {
+            switch (static_cast<unsigned int>(token_id(*next))) {
             case T_SPACE:
             case T_SPACE2:
             case T_CCOMMENT:

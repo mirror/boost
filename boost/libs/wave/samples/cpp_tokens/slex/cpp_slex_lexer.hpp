@@ -553,7 +553,7 @@ public:
                 if (T_CONTLINE != id) {
                 //  The cast should avoid spurious warnings about missing case labels 
                 //  for the other token ids's.
-                    switch ((unsigned int)id) {   
+                    switch (static_cast<unsigned int>(id)) {   
                     case T_IDENTIFIER:
                     // test identifier characters for validity (throws if 
                     // invalid chars found)

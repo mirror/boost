@@ -584,7 +584,7 @@ token_type startof_argument_list = *next;
                 curr_token.get_value().c_str(), main_pos);
         }
         
-        switch (id) {
+        switch (static_cast<unsigned int>(id)) {
         case T_LEFTPAREN:
             ++nested_parenthesis_level;
             argument->push_back(*next);

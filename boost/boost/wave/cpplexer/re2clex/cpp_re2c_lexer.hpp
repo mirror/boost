@@ -141,7 +141,7 @@ lexer<IteratorT, PositionT>::get()
     unsigned int actline = scanner.line;
     token_id id = token_id(scan(&scanner));
     
-    switch (id) {
+    switch (static_cast<unsigned int>(id)) {
     case T_IDENTIFIER:
     // test identifier characters for validity (throws if invalid chars found)
         value = string_type((char const *)scanner.tok, 

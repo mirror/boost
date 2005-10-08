@@ -440,7 +440,7 @@ token_id id = T_ANY;
     
 // cleanup of certain tokens required
     seen_newline = skipped_newline;
-    switch (id) {
+    switch (static_cast<unsigned int>(id)) {
     case T_NONREPLACABLE_IDENTIFIER:
         act_token.set_token_id(T_IDENTIFIER);
         break;
@@ -879,7 +879,7 @@ const_child_iterator_t end_child_it = (*root.begin()).children.end();
 
 token_id id = cpp_grammar_type::found_directive;
 
-    switch (id) {
+    switch (static_cast<unsigned int>(id)) {
     case T_PP_QHEADER:      // #include "..."
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
     case T_PP_QHEADER_NEXT: // #include_next "..."
