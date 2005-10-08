@@ -9,7 +9,7 @@
 =============================================================================*/
 #include <numeric>
 #include <functional>
-#include <boost/iterator/transform_iterator.hpp>
+#include <boost/lambda/lambda.hpp>
 #include "./actions.hpp"
 
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
@@ -457,48 +457,29 @@ namespace quickbook
         }
     }
 
-    fs::path string_to_path(std::string const& str)
+    fs::path path_difference(fs::path const& outdir, fs::path const& xmlfile)
     {
-        return fs::path(str, fs::no_check);
-    }
-
-    inline fs::path path_difference(fs::path const& outdir, fs::path const& xmlfile)
-    {
+        fs::path outtmp, xmltmp, result;
         fs::path::iterator out = outdir.begin(), xml = xmlfile.begin();
-        fs::path outtmp("", fs::no_check), xmltmp("", fs::no_check), result("", fs::no_check);
-        for(;out != outdir.end() && xml != xmlfile.end(); ++out, ++xml)
+        for(; out != outdir.end() && xml != xmlfile.end(); ++out, ++xml)
         {
-            outtmp /= fs::path(*out, fs::no_check);
-            xmltmp /= fs::path(*xml, fs::no_check);
-            if(!fs::equivalent(outtmp, xmltmp))
+            if(!fs::equivalent(outtmp /= *out, xmltmp /= *xml))
                 break;
         }
-        std::ptrdiff_t parents = std::distance(out, outdir.end());
-        for(std::ptrdiff_t i=0; i<parents; ++i)
-            result /= "..";
-        return std::accumulate(
-            boost::make_transform_iterator(xml, &string_to_path)
-          , boost::make_transform_iterator(xmlfile.end(), &string_to_path)
-          , result
-          , std::divides<fs::path>()
-        );
+        std::for_each(out, outdir.end(), boost::lambda::var(result) /= "..");
+        return std::accumulate(xml, xmlfile.end(), result, std::divides<fs::path>());
     }
 
     void xinclude_action::operator()(iterator first, iterator last) const
     {
         // Given an xml file to include and the current filename, calculate the
         // path to the XML file relative to the output directory.
-        fs::path xmlfile(std::string(first, last), fs::no_check);
+        fs::path xmlfile(std::string(first, last));
         if (!xmlfile.is_complete())
         {
-            fs::path infile = actions.filename;
-            infile = fs::complete(infile);
-            infile.normalize();
-            xmlfile = infile.branch_path() / xmlfile;
-            xmlfile.normalize();
-            fs::path outdir = actions.outdir;
-            outdir = fs::complete(outdir);
-            outdir.normalize();
+            fs::path infile = fs::complete(actions.filename).normalize();
+            xmlfile = (infile.branch_path() / xmlfile).normalize();
+            fs::path outdir = fs::complete(actions.outdir).normalize();
             xmlfile = path_difference(outdir, xmlfile);
         }
         out << "\n<xi:include href=\"";

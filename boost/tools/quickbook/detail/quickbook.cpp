@@ -18,6 +18,7 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/ref.hpp>
 
+#include <stdexcept>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -142,9 +143,7 @@ namespace quickbook
         std::stringstream buffer;
         fs::path outdir = fs::path(fileout_, fs::native).branch_path();
         if (outdir.empty())
-        {
-            outdir = fs::path(".", fs::no_check);
-        }
+            outdir = ".";
         int result = parse(filein_, outdir, buffer);
         if (result == 0)
         {
@@ -176,6 +175,14 @@ main(int argc, char* argv[])
 
         // First thing, the filesystem should record the current working directory.
         boost::filesystem::initial_path();
+
+        if(!boost::filesystem::path::default_name_check_writable())
+        {
+            throw std::runtime_error("filesystem::default_name_check_writable");
+        }
+
+        // By default, don't do path validation
+        boost::filesystem::path::default_name_check(boost::filesystem::no_check);
 
         options_description desc("Allowed options");
         desc.add_options()
