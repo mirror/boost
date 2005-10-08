@@ -14,6 +14,7 @@
 #define CPP_MACROMAP_HPP_CB8F51B0_A3F0_411C_AEF4_6FF631B8B414_INCLUDED
 
 #include <cstdlib>
+#include <cstdio>
 #include <ctime>
 
 #include <list>
