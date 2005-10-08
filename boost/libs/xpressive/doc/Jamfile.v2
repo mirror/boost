@@ -1,7 +1,10 @@
-project boost-sandbox/xpressive/doc ;
+# Copyright Eric Niebler 2005. Use, modification, and distribution are
+# subject to the Boost Software License, Version 1.0. (See accompanying
+# file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-using boostbook ;
-using doxygen ;
+import toolset ;
+toolset.using doxygen ;
+toolset.using quickbook ;
 
 doxygen autodoc
     :
@@ -31,11 +34,15 @@ doxygen autodoc
         <doxygen:param>SEARCH_INCLUDES=YES
     ;
 
-boostbook xpressive
+xml xpressive
     :
-        xpressive.xml
+        xpressive.qbk
     :
         <xsl:param>toc.max.depth=3
         <xsl:param>toc.section.depth=3
-        <xsl:param>chunk.section.depth=3
+    ;
+
+boostbook standalone
+    :
+        xpressive
     ;
