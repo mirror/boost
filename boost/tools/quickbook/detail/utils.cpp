@@ -47,9 +47,9 @@ namespace quickbook { namespace detail
     char
     filter_identifier_char(char ch)
     {
-        if (!std::isalnum(ch))
+        if (!std::isalnum(static_cast<unsigned char>(ch)))
             ch = '_';
-        return std::tolower(ch);
+        return static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
     }
 
     // un-indent a code segment
@@ -94,7 +94,7 @@ namespace quickbook { namespace detail
         for (std::string::size_type n = 0; n < uri.size(); ++n)
         {
             static char const mark[] = "-_.!~*'()?\\/";
-            if((!isalnum(uri[n]) || 127 < static_cast<unsigned char>(uri[n]))
+            if((!std::isalnum(static_cast<unsigned char>(uri[n])) || 127 < static_cast<unsigned char>(uri[n]))
               && 0 == std::strchr(mark, uri[n]))
             {
                 static char const hex[] = "0123456789abcdef";

@@ -100,10 +100,10 @@ namespace quickbook
             if (ch == '"')
                 in_string = !in_string; // don't break strings!
 
-            if (!in_string && std::isspace(ch))
+            if (!in_string && std::isspace(static_cast<unsigned char>(ch)))
             {
                 // we can break spaces if they are not inside strings
-                if (!std::isspace(prev))
+                if (!std::isspace(static_cast<unsigned char>(prev)))
                 {
                     if (column >= linewidth)
                     {
@@ -128,7 +128,7 @@ namespace quickbook
                 // and *only-if* the preceding char is a space
                 if (!in_string 
                     && column >= linewidth 
-                    && (ch == '<' && std::isspace(prev)))
+                    && (ch == '<' && std::isspace(static_cast<unsigned char>(prev))))
                     break_line();
                 out += ch;
                 ++column;
@@ -159,7 +159,7 @@ namespace quickbook
                 std::string str(f, l);
                 BOOST_ASSERT(f != l); // this should not happen
                 iter_type i = str.end();
-                while (i != str.begin() && std::isspace(*(i-1)))
+                while (i != str.begin() && std::isspace(static_cast<unsigned char>(*(i-1))))
                     --i;
                 print(str.begin(), i);
             }            
