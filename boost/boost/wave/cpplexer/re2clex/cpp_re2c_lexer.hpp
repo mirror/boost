@@ -75,7 +75,7 @@ public:
     }
 
 // error reporting from the re2c generated lexer
-    static int report_error(Scanner *s, char *, ...);
+    static int report_error(Scanner const* s, char const *, ...);
 
 private:
     static char const *tok_names[];
@@ -260,7 +260,7 @@ lexer<IteratorT, PositionT>::get()
 
 template <typename IteratorT, typename PositionT>
 inline int 
-lexer<IteratorT, PositionT>::report_error(Scanner *s, char *msg, ...)
+lexer<IteratorT, PositionT>::report_error(Scanner const *s, char const *msg, ...)
 {
     BOOST_ASSERT(0 != s);
     BOOST_ASSERT(0 != msg);
