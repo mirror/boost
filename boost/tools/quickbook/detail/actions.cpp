@@ -9,7 +9,7 @@
 =============================================================================*/
 #include <numeric>
 #include <functional>
-#include <boost/lambda/lambda.hpp>
+#include <boost/bind.hpp>
 #include "./actions.hpp"
 
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
@@ -457,6 +457,8 @@ namespace quickbook
         }
     }
 
+    typedef std::divides<fs::path> concat;
+
     fs::path path_difference(fs::path const& outdir, fs::path const& xmlfile)
     {
         fs::path outtmp, xmltmp, result;
@@ -466,8 +468,9 @@ namespace quickbook
             if(!fs::equivalent(outtmp /= *out, xmltmp /= *xml))
                 break;
         }
-        std::for_each(out, outdir.end(), boost::lambda::var(result) /= "..");
-        return std::accumulate(xml, xmlfile.end(), result, std::divides<fs::path>());
+        if(out != outdir.begin())
+            result = std::accumulate(out, outdir.end(), result, boost::bind(concat(), _1, ".."));
+        return std::accumulate(xml, xmlfile.end(), result, concat());
     }
 
     void xinclude_action::operator()(iterator first, iterator last) const
