@@ -534,6 +534,9 @@
 				<File
 					RelativePath="..\..\..\boost\xpressive\proto\proto_fwd.hpp">
 				</File>
+				<File
+					RelativePath="..\..\..\boost\xpressive\proto\proto_typeof.hpp">
+				</File>
 				<Filter
 					Name="compiler"
 					Filter="">

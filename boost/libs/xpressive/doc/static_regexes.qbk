@@ -6,7 +6,7 @@ The feature that really sets xpressive apart from other C/C++ regular
 expression libraries is the ability to author a regular expression using C++
 expressions. xpressive achieves this through operator overloading, using a
 technique called ['expression templates] to embed a mini-language dedicated
-to text manipulation within C++. These "static regexes" have many advantages
+to pattern matching within C++. These "static regexes" have many advantages
 over their string-based brethren. In particular, static regexes:
 
 * are syntax-checked at compile-time; they will never fail at run-time due to
@@ -18,8 +18,7 @@ over their string-based brethren. In particular, static regexes:
   require no state tables, virtual functions, byte-code or calls through
   function pointers that cannot be resolved at compile time.
 * are not limited to searching for patterns in strings. You can declare a
-  static regex that finds patterns in an array of integers, or records, or
-  anything really.
+  static regex that finds patterns in an array of integers, for instance.
 
 Since we compose static regexes using C++ expressions, we are constrained by
 the rules for legal C++ expressions. Unfortunately, that means that
@@ -29,12 +28,9 @@ legal C++.
 
 [h2 Construction and Assignment]
 
-You create a static regex by assigning one to an object of type
-_basic_regex_. (You can use the table in the [link
-user_s_guide.quick_start.know_your_iterator_type Quick Start] to pick the
-right _basic_regex_ typedef for the iterator type you will use.) For
-instance, the following defines a regex that can be used to find patterns in
-objects of type `std::string`:
+You create a static regex by assigning one to an object of type _basic_regex_.
+For instance, the following defines a regex that can be used to find patterns
+in objects of type `std::string`:
 
     sregex re = '$' >> +_d >> '.' >> _d >> _d;
 

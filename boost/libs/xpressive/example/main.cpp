@@ -146,6 +146,7 @@ void example3()
 
 void example4()
 {
+    #ifndef BOOST_XPRESSIVE_NO_WREGEX
     std::wstring str( L"This is his face." );
 
     // find a whole word
@@ -159,6 +160,7 @@ void example4()
         wsmatch const &what = *cur;
         std::wcout << what[0] << L'\n';
     }
+    #endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
