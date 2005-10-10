@@ -50,8 +50,8 @@ ICU_LINK_OPTS=
 !MESSAGE Hint: set ICU_PATH on the nmake command line to point 
 !MESSAGE to your ICU installation if you have one.
 !ELSE
-ICU_COMPILE_OPTS= -DBOOST_HAS_ICU=1 -I$(ICU_PATH)\include
-ICU_LINK_OPTS= /LIBPATH:$(ICU_PATH)\lib icuin.lib icuuc.lib
+ICU_COMPILE_OPTS= -DBOOST_HAS_ICU=1 -I"$(ICU_PATH)\include"
+ICU_LINK_OPTS= /LIBPATH:"$(ICU_PATH)\lib" icuin.lib icuuc.lib
 !MESSAGE Building Boost.Regex with ICU in $(ICU_PATH)
 !ENDIF
 
@@ -78,7 +78,7 @@ install : stlport_check all
 main_dir :
 	@if not exist "vc7-stlport\$(NULL)" mkdir vc7-stlport
 
-stlport_check : $(STLPORT_PATH)\stlport\string
+stlport_check : "$(STLPORT_PATH)\stlport\string"
 	echo
 
 
@@ -88,55 +88,55 @@ stlport_check : $(STLPORT_PATH)\stlport\string
 #
 ########################################################
 vc7-stlport/libboost_regex-vc7-mt-sp-1_33/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/c_regex_traits.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sp-1_33/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/cpp_regex_traits.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sp-1_33/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/cregex.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sp-1_33/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/fileiter.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sp-1_33/icu.obj: ../src/icu.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/icu.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/icu.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sp-1_33/instances.obj: ../src/instances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/instances.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/instances.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sp-1_33/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/posix_api.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sp-1_33/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/regex.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sp-1_33/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/regex_debug.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sp-1_33/regex_raw_buffer.obj: ../src/regex_raw_buffer.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/regex_raw_buffer.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/regex_raw_buffer.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sp-1_33/regex_traits_defaults.obj: ../src/regex_traits_defaults.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/regex_traits_defaults.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/regex_traits_defaults.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sp-1_33/static_mutex.obj: ../src/static_mutex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/static_mutex.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/static_mutex.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sp-1_33/usinstances.obj: ../src/usinstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/usinstances.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/usinstances.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sp-1_33/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/w32_regex_traits.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sp-1_33/wc_regex_traits.obj: ../src/wc_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/wc_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/wc_regex_traits.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sp-1_33/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/wide_posix_api.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sp-1_33/winstances.obj: ../src/winstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/winstances.cpp
+	cl $(INCLUDES) /nologo /MT /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D_MT /DWIN32 /DNDEBUG /D_MBCS /D_LIB /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sp-1_33.pdb ../src/winstances.cpp
 
 libboost_regex-vc7-mt-sp-1_33_dir :
 	@if not exist "vc7-stlport\libboost_regex-vc7-mt-sp-1_33\$(NULL)" mkdir vc7-stlport\libboost_regex-vc7-mt-sp-1_33
@@ -156,55 +156,55 @@ libboost_regex-vc7-mt-sp-1_33_clean :
 #
 ########################################################
 vc7-stlport/boost_regex-vc7-mt-p-1_33/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I"$(STLPORT_PATH)\stlport" /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/c_regex_traits.cpp
 
 vc7-stlport/boost_regex-vc7-mt-p-1_33/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I"$(STLPORT_PATH)\stlport" /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/cpp_regex_traits.cpp
 
 vc7-stlport/boost_regex-vc7-mt-p-1_33/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I"$(STLPORT_PATH)\stlport" /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/cregex.cpp
 
 vc7-stlport/boost_regex-vc7-mt-p-1_33/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I"$(STLPORT_PATH)\stlport" /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/fileiter.cpp
 
 vc7-stlport/boost_regex-vc7-mt-p-1_33/icu.obj: ../src/icu.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/icu.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I"$(STLPORT_PATH)\stlport" /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/icu.cpp
 
 vc7-stlport/boost_regex-vc7-mt-p-1_33/instances.obj: ../src/instances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/instances.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I"$(STLPORT_PATH)\stlport" /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/instances.cpp
 
 vc7-stlport/boost_regex-vc7-mt-p-1_33/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I"$(STLPORT_PATH)\stlport" /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/posix_api.cpp
 
 vc7-stlport/boost_regex-vc7-mt-p-1_33/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I"$(STLPORT_PATH)\stlport" /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/regex.cpp
 
 vc7-stlport/boost_regex-vc7-mt-p-1_33/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I"$(STLPORT_PATH)\stlport" /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/regex_debug.cpp
 
 vc7-stlport/boost_regex-vc7-mt-p-1_33/regex_raw_buffer.obj: ../src/regex_raw_buffer.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/regex_raw_buffer.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I"$(STLPORT_PATH)\stlport" /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/regex_raw_buffer.cpp
 
 vc7-stlport/boost_regex-vc7-mt-p-1_33/regex_traits_defaults.obj: ../src/regex_traits_defaults.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/regex_traits_defaults.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I"$(STLPORT_PATH)\stlport" /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/regex_traits_defaults.cpp
 
 vc7-stlport/boost_regex-vc7-mt-p-1_33/static_mutex.obj: ../src/static_mutex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/static_mutex.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I"$(STLPORT_PATH)\stlport" /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/static_mutex.cpp
 
 vc7-stlport/boost_regex-vc7-mt-p-1_33/usinstances.obj: ../src/usinstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/usinstances.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I"$(STLPORT_PATH)\stlport" /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/usinstances.cpp
 
 vc7-stlport/boost_regex-vc7-mt-p-1_33/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I"$(STLPORT_PATH)\stlport" /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/w32_regex_traits.cpp
 
 vc7-stlport/boost_regex-vc7-mt-p-1_33/wc_regex_traits.obj: ../src/wc_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/wc_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I"$(STLPORT_PATH)\stlport" /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/wc_regex_traits.cpp
 
 vc7-stlport/boost_regex-vc7-mt-p-1_33/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I"$(STLPORT_PATH)\stlport" /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/wide_posix_api.cpp
 
 vc7-stlport/boost_regex-vc7-mt-p-1_33/winstances.obj: ../src/winstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I$(STLPORT_PATH)\stlport /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/winstances.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /I"$(STLPORT_PATH)\stlport" /Gy /I../../../ /DBOOST_REGEX_DYN_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-p-1_33.pdb ../src/winstances.cpp
 
 boost_regex-vc7-mt-p-1_33_dir :
 	@if not exist "vc7-stlport\boost_regex-vc7-mt-p-1_33\$(NULL)" mkdir vc7-stlport\boost_regex-vc7-mt-p-1_33
@@ -216,7 +216,7 @@ boost_regex-vc7-mt-p-1_33_clean :
 	del vc7-stlport\boost_regex-vc7-mt-p-1_33\*.pch
 
 ./vc7-stlport/boost_regex-vc7-mt-p-1_33.lib : vc7-stlport/boost_regex-vc7-mt-p-1_33/c_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/cpp_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/cregex.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/fileiter.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/icu.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/instances.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/posix_api.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/regex.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/regex_debug.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/regex_raw_buffer.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/regex_traits_defaults.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/static_mutex.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/usinstances.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/w32_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/wc_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/wide_posix_api.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/winstances.obj
-	link kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"vc7-stlport/boost_regex-vc7-mt-p-1_33.pdb" /debug /machine:I386 /out:"vc7-stlport/boost_regex-vc7-mt-p-1_33.dll" /implib:"vc7-stlport/boost_regex-vc7-mt-p-1_33.lib" /LIBPATH:$(STLPORT_PATH)\lib $(XLFLAGS) $(ICU_LINK_OPTS)  vc7-stlport/boost_regex-vc7-mt-p-1_33/c_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/cpp_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/cregex.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/fileiter.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/icu.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/instances.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/posix_api.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/regex.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/regex_debug.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/regex_raw_buffer.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/regex_traits_defaults.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/static_mutex.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/usinstances.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/w32_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/wc_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/wide_posix_api.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/winstances.obj
+	link kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"vc7-stlport/boost_regex-vc7-mt-p-1_33.pdb" /debug /machine:I386 /out:"vc7-stlport/boost_regex-vc7-mt-p-1_33.dll" /implib:"vc7-stlport/boost_regex-vc7-mt-p-1_33.lib" /LIBPATH:"$(STLPORT_PATH)\lib" $(XLFLAGS) $(ICU_LINK_OPTS)  vc7-stlport/boost_regex-vc7-mt-p-1_33/c_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/cpp_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/cregex.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/fileiter.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/icu.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/instances.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/posix_api.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/regex.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/regex_debug.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/regex_raw_buffer.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/regex_traits_defaults.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/static_mutex.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/usinstances.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/w32_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/wc_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/wide_posix_api.obj vc7-stlport/boost_regex-vc7-mt-p-1_33/winstances.obj
 
 ########################################################
 #
@@ -224,55 +224,55 @@ boost_regex-vc7-mt-p-1_33_clean :
 #
 ########################################################
 vc7-stlport/libboost_regex-vc7-mt-p-1_33/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/c_regex_traits.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-p-1_33/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/cpp_regex_traits.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-p-1_33/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/cregex.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-p-1_33/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/fileiter.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-p-1_33/icu.obj: ../src/icu.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/icu.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/icu.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-p-1_33/instances.obj: ../src/instances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/instances.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/instances.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-p-1_33/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/posix_api.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-p-1_33/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/regex.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-p-1_33/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/regex_debug.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-p-1_33/regex_raw_buffer.obj: ../src/regex_raw_buffer.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/regex_raw_buffer.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/regex_raw_buffer.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-p-1_33/regex_traits_defaults.obj: ../src/regex_traits_defaults.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/regex_traits_defaults.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/regex_traits_defaults.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-p-1_33/static_mutex.obj: ../src/static_mutex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/static_mutex.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/static_mutex.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-p-1_33/usinstances.obj: ../src/usinstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/usinstances.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/usinstances.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-p-1_33/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/w32_regex_traits.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-p-1_33/wc_regex_traits.obj: ../src/wc_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/wc_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/wc_regex_traits.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-p-1_33/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/wide_posix_api.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-p-1_33/winstances.obj: ../src/winstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/winstances.cpp
+	cl $(INCLUDES) /nologo /MD /W3 /GX /O2 /GB /GF /Gy /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /DNDEBUG /DWIN32 /D_WINDOWS /D_MBCS /D_USRDLL /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-p-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-p-1_33.pdb ../src/winstances.cpp
 
 libboost_regex-vc7-mt-p-1_33_dir :
 	@if not exist "vc7-stlport\libboost_regex-vc7-mt-p-1_33\$(NULL)" mkdir vc7-stlport\libboost_regex-vc7-mt-p-1_33
@@ -292,55 +292,55 @@ libboost_regex-vc7-mt-p-1_33_clean :
 #
 ########################################################
 vc7-stlport/boost_regex-vc7-mt-gdp-1_33/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/c_regex_traits.cpp
 
 vc7-stlport/boost_regex-vc7-mt-gdp-1_33/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/cpp_regex_traits.cpp
 
 vc7-stlport/boost_regex-vc7-mt-gdp-1_33/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/cregex.cpp
 
 vc7-stlport/boost_regex-vc7-mt-gdp-1_33/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/fileiter.cpp
 
 vc7-stlport/boost_regex-vc7-mt-gdp-1_33/icu.obj: ../src/icu.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/icu.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/icu.cpp
 
 vc7-stlport/boost_regex-vc7-mt-gdp-1_33/instances.obj: ../src/instances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/instances.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/instances.cpp
 
 vc7-stlport/boost_regex-vc7-mt-gdp-1_33/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/posix_api.cpp
 
 vc7-stlport/boost_regex-vc7-mt-gdp-1_33/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/regex.cpp
 
 vc7-stlport/boost_regex-vc7-mt-gdp-1_33/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/regex_debug.cpp
 
 vc7-stlport/boost_regex-vc7-mt-gdp-1_33/regex_raw_buffer.obj: ../src/regex_raw_buffer.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/regex_raw_buffer.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/regex_raw_buffer.cpp
 
 vc7-stlport/boost_regex-vc7-mt-gdp-1_33/regex_traits_defaults.obj: ../src/regex_traits_defaults.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/regex_traits_defaults.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/regex_traits_defaults.cpp
 
 vc7-stlport/boost_regex-vc7-mt-gdp-1_33/static_mutex.obj: ../src/static_mutex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/static_mutex.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/static_mutex.cpp
 
 vc7-stlport/boost_regex-vc7-mt-gdp-1_33/usinstances.obj: ../src/usinstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/usinstances.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/usinstances.cpp
 
 vc7-stlport/boost_regex-vc7-mt-gdp-1_33/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/w32_regex_traits.cpp
 
 vc7-stlport/boost_regex-vc7-mt-gdp-1_33/wc_regex_traits.obj: ../src/wc_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/wc_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/wc_regex_traits.cpp
 
 vc7-stlport/boost_regex-vc7-mt-gdp-1_33/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/wide_posix_api.cpp
 
 vc7-stlport/boost_regex-vc7-mt-gdp-1_33/winstances.obj: ../src/winstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/winstances.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_DYN_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/boost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb ../src/winstances.cpp
 
 boost_regex-vc7-mt-gdp-1_33_dir :
 	@if not exist "vc7-stlport\boost_regex-vc7-mt-gdp-1_33\$(NULL)" mkdir vc7-stlport\boost_regex-vc7-mt-gdp-1_33
@@ -352,7 +352,7 @@ boost_regex-vc7-mt-gdp-1_33_clean :
 	del vc7-stlport\boost_regex-vc7-mt-gdp-1_33\*.pch
 
 ./vc7-stlport/boost_regex-vc7-mt-gdp-1_33.lib : vc7-stlport/boost_regex-vc7-mt-gdp-1_33/c_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/cpp_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/cregex.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/fileiter.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/icu.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/instances.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/posix_api.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/regex.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/regex_debug.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/regex_raw_buffer.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/regex_traits_defaults.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/static_mutex.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/usinstances.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/w32_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/wc_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/wide_posix_api.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/winstances.obj
-	link kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"vc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb" /debug /machine:I386 /out:"vc7-stlport/boost_regex-vc7-mt-gdp-1_33.dll" /implib:"vc7-stlport/boost_regex-vc7-mt-gdp-1_33.lib" /LIBPATH:$(STLPORT_PATH)\lib $(XLFLAGS) $(ICU_LINK_OPTS)  vc7-stlport/boost_regex-vc7-mt-gdp-1_33/c_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/cpp_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/cregex.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/fileiter.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/icu.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/instances.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/posix_api.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/regex.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/regex_debug.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/regex_raw_buffer.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/regex_traits_defaults.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/static_mutex.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/usinstances.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/w32_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/wc_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/wide_posix_api.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/winstances.obj
+	link kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"vc7-stlport/boost_regex-vc7-mt-gdp-1_33.pdb" /debug /machine:I386 /out:"vc7-stlport/boost_regex-vc7-mt-gdp-1_33.dll" /implib:"vc7-stlport/boost_regex-vc7-mt-gdp-1_33.lib" /LIBPATH:"$(STLPORT_PATH)\lib" $(XLFLAGS) $(ICU_LINK_OPTS)  vc7-stlport/boost_regex-vc7-mt-gdp-1_33/c_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/cpp_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/cregex.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/fileiter.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/icu.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/instances.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/posix_api.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/regex.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/regex_debug.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/regex_raw_buffer.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/regex_traits_defaults.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/static_mutex.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/usinstances.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/w32_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/wc_regex_traits.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/wide_posix_api.obj vc7-stlport/boost_regex-vc7-mt-gdp-1_33/winstances.obj
 
 ########################################################
 #
@@ -360,55 +360,55 @@ boost_regex-vc7-mt-gdp-1_33_clean :
 #
 ########################################################
 vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/c_regex_traits.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/cpp_regex_traits.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/cregex.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/fileiter.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/icu.obj: ../src/icu.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/icu.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/icu.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/instances.obj: ../src/instances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/instances.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/instances.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/posix_api.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/regex.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/regex_debug.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/regex_raw_buffer.obj: ../src/regex_raw_buffer.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/regex_raw_buffer.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/regex_raw_buffer.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/regex_traits_defaults.obj: ../src/regex_traits_defaults.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/regex_traits_defaults.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/regex_traits_defaults.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/static_mutex.obj: ../src/static_mutex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/static_mutex.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/static_mutex.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/usinstances.obj: ../src/usinstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/usinstances.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/usinstances.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/w32_regex_traits.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/wc_regex_traits.obj: ../src/wc_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/wc_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/wc_regex_traits.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/wide_posix_api.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/winstances.obj: ../src/winstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/winstances.cpp
+	cl $(INCLUDES) /nologo /MTd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I..\..\..\ /D__STL_DEBUG /D_STLP_DEBUG /DWIN32 /D_MT /D_DEBUG /D_MBCS /D_LIB /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-sgdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-sgdp-1_33.pdb ../src/winstances.cpp
 
 libboost_regex-vc7-mt-sgdp-1_33_dir :
 	@if not exist "vc7-stlport\libboost_regex-vc7-mt-sgdp-1_33\$(NULL)" mkdir vc7-stlport\libboost_regex-vc7-mt-sgdp-1_33
@@ -428,55 +428,55 @@ libboost_regex-vc7-mt-sgdp-1_33_clean :
 #
 ########################################################
 vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/c_regex_traits.obj: ../src/c_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/c_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/c_regex_traits.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/cpp_regex_traits.obj: ../src/cpp_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/cpp_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/cpp_regex_traits.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/cregex.obj: ../src/cregex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/cregex.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/cregex.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/fileiter.obj: ../src/fileiter.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/fileiter.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/fileiter.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/icu.obj: ../src/icu.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/icu.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/icu.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/instances.obj: ../src/instances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/instances.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/instances.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/posix_api.obj: ../src/posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/posix_api.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/posix_api.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/regex.obj: ../src/regex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/regex.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/regex.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/regex_debug.obj: ../src/regex_debug.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/regex_debug.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/regex_debug.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/regex_raw_buffer.obj: ../src/regex_raw_buffer.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/regex_raw_buffer.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/regex_raw_buffer.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/regex_traits_defaults.obj: ../src/regex_traits_defaults.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/regex_traits_defaults.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/regex_traits_defaults.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/static_mutex.obj: ../src/static_mutex.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/static_mutex.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/static_mutex.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/usinstances.obj: ../src/usinstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/usinstances.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/usinstances.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/w32_regex_traits.obj: ../src/w32_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/w32_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/w32_regex_traits.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/wc_regex_traits.obj: ../src/wc_regex_traits.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/wc_regex_traits.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/wc_regex_traits.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/wide_posix_api.obj: ../src/wide_posix_api.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/wide_posix_api.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/wide_posix_api.cpp
 
 vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/winstances.obj: ../src/winstances.cpp $(ALL_HEADER)
-	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I$(STLPORT_PATH)\stlport /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/winstances.cpp
+	cl $(INCLUDES) /nologo /MDd /W3 /Gm /GX /Zi /Od /I"$(STLPORT_PATH)\stlport" /I../../../ /DBOOST_REGEX_STATIC_LINK /D__STL_DEBUG /D_STLP_DEBUG /D_DEBUG /DWIN32 /D_WINDOWS /D_MBCS /DUSRDLL /GX /RTC1 /Zc:wchar_t /c $(CXXFLAGS) $(ICU_COMPILE_OPTS) -Y- -Fo./vc7-stlport/libboost_regex-vc7-mt-gdp-1_33/ -Fdvc7-stlport/libboost_regex-vc7-mt-gdp-1_33.pdb ../src/winstances.cpp
 
 libboost_regex-vc7-mt-gdp-1_33_dir :
 	@if not exist "vc7-stlport\libboost_regex-vc7-mt-gdp-1_33\$(NULL)" mkdir vc7-stlport\libboost_regex-vc7-mt-gdp-1_33
