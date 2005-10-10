@@ -13,6 +13,8 @@
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
+# pragma warning(push)
+# pragma warning(disable : 4127) // conditional expression is constant
 #endif
 
 #include <boost/assert.hpp>
@@ -219,9 +221,10 @@ inline sequence<BidiIterT> make_charset_xpression
 {
     typedef typename TraitsT::char_type char_type;
     bool const icase = (0 != (regex_constants::icase_ & flags));
+    bool const optimize = 1 == sizeof(char_type) && 0 != (regex_constants::optimize & flags);
 
     // don't care about compile speed -- fold eveything into a bitset<256>
-    if(1 == sizeof(char_type) && 0 != (regex_constants::optimize & flags))
+    if(optimize)
     {
         typedef basic_chset<char_type> charset_type;
         charset_type charset(chset.basic_chset());
@@ -280,7 +283,7 @@ inline sequence<BidiIterT> make_posix_charset_xpression
     typename TraitsT::char_class_type m
   , bool no
   , regex_constants::syntax_option_type flags
-  , TraitsT const &traits
+  , TraitsT const & //traits
 )
 {
     typedef typename iterator_value<BidiIterT>::type char_type;
@@ -354,5 +357,9 @@ inline sequence<BidiIterT> make_assert_word(CondT, TraitsT const &traits)
 }
 
 }}} // namespace boost::xpressive::detail
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma warning(pop)
+#endif
 
 #endif

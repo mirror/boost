@@ -81,7 +81,7 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename OpT, typename StateT, typename VisitorT>
         static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &, VisitorT &visitor, int mark_nbr = -1)
+        call(OpT const &op, StateT const &, VisitorT &, int mark_nbr = -1)
         {
             return proto::noop(mark_begin_matcher(mark_nbr))
                 >> (op >> proto::noop(mark_end_matcher(mark_nbr)));

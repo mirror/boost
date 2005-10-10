@@ -11,6 +11,9 @@
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
+# pragma warning(push)
+# pragma warning(disable : 4127) // conditional expression constant
+# pragma warning(disable : 4100) // unreferenced formal parameter
 #endif
 
 #include <algorithm>
@@ -132,6 +135,9 @@ struct set_initializer
 {
 };
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma warning(pop)
+#endif
 
 }}} // namespace boost::xpressive::detail
 

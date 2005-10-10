@@ -47,6 +47,9 @@ namespace boost { namespace xpressive { namespace detail
         {
             this->ref = this->val;
         }
+
+    private:
+        restore_impl &operator =(restore_impl const &);
     };
 
     template<typename T>

@@ -219,6 +219,9 @@ private:
             get_pointer(xpr)->link(this->linker_);
             get_pointer(xpr)->peek(this->peeker_);
         }
+
+    private:
+        alt_link_pred &operator =(alt_link_pred const &);
     };
 
     template<typename BidiIterT>

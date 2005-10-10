@@ -14,6 +14,7 @@
 #endif
 
 #include <boost/shared_ptr.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/access.hpp>
 #include <boost/xpressive/detail/core/action_state.hpp>
@@ -78,6 +79,7 @@ struct match_flags
 //
 template<typename BidiIterT>
 struct state_type
+  : noncopyable
 {
     typedef core_access<BidiIterT> access;
     typedef match_context<BidiIterT> match_context;

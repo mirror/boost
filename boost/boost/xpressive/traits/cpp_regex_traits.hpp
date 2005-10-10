@@ -486,8 +486,8 @@ private:
     /// INTERNAL ONLY
     struct char_class_pair
     {
-        char_type const *const class_name_;
-        char_class_type const class_type_;
+        char_type const *class_name_;
+        char_class_type class_type_;
     };
 
     ///////////////////////////////////////////////////////////////////////////////

@@ -48,6 +48,9 @@ namespace boost { namespace xpressive { namespace detail
         {
             return get_pointer(xpr)->BOOST_NESTED_TEMPLATE push_match<NextT>(this->state_);
         }
+
+    private:
+        alt_match_pred &operator =(alt_match_pred const &);
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -184,6 +187,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
     private:
+        alternate_matcher &operator =(alternate_matcher const &);
 
         bool can_match_(char_type ch, TraitsT const &traits) const
         {

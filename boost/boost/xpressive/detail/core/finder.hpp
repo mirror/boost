@@ -10,12 +10,13 @@
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
+# pragma warning(push)
+# pragma warning(disable : 4189) // local variable is initialized but not referenced
 #endif
 
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/regex_impl.hpp>
 #include <boost/xpressive/detail/utility/boyer_moore.hpp>
-//#include <boost/xpressive/detail/core/matchers.hpp>
 #include <boost/xpressive/detail/utility/hash_peek_bitset.hpp>
 
 namespace boost { namespace xpressive { namespace detail
@@ -43,6 +44,9 @@ struct boyer_moore_finder
     }
 
 private:
+    boyer_moore_finder(boyer_moore_finder const &);
+    boyer_moore_finder &operator =(boyer_moore_finder const &);
+
     boyer_moore<BidiIterT, TraitsT> bm_;
 };
 
@@ -70,6 +74,8 @@ struct hash_peek_finder
     }
 
 private:
+    hash_peek_finder(hash_peek_finder const &);
+    hash_peek_finder &operator =(hash_peek_finder const &);
 
     template<typename ICaseT>
     BidiIterT find_(BidiIterT begin, BidiIterT end, TraitsT const &traits, ICaseT) const
@@ -123,6 +129,8 @@ struct line_start_finder
     }
 
 private:
+    line_start_finder(line_start_finder const &);
+    line_start_finder &operator =(line_start_finder const &);
 
     char_class_type newline_;
 };
@@ -171,10 +179,16 @@ struct line_start_finder<BidiIterT, TraitsT, 1u>
     }
 
 private:
+    line_start_finder(line_start_finder const &);
+    line_start_finder &operator =(line_start_finder const &);
 
     bool bits_[256];
 };
 
 }}}
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma warning(pop)
+#endif
 
 #endif

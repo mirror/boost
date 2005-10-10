@@ -59,6 +59,9 @@ struct xpression_adaptor
     {
         this->xpr_.peek(peeker);
     }
+
+private:
+    xpression_adaptor &operator =(xpression_adaptor const &);
 };
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -39,7 +39,7 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename OpT, typename StateT, typename VisitorT>
         static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &state, VisitorT &visitor)
+        call(OpT const &op, StateT const &state, VisitorT &)
         {
             typedef alternate_matcher<alternates_list<OpT>, typename VisitorT::traits_type> alt_matcher;
             return make_static_xpression(alt_matcher(op), state);

@@ -82,23 +82,23 @@ struct xpression_peeker
 
     ///////////////////////////////////////////////////////////////////////////////
     // modifiers
-    void fail()
+    void fail(bool do_fail = true)
     {
-        this->bset_->set_all();
+        if(do_fail)
+        {
+            this->bset_->set_all();
+        }
     }
 
     template<typename XprT>
-    peek_next<XprT> peek(XprT const &xpr)
+    peek_next<XprT> peek(XprT const &)
     {
-        if(!peek_next<XprT>::value)
-        {
-            this->fail(); // fail, we're done
-        }
+        this->fail(!peek_next<XprT>::value);
         return peek_next<XprT>();
     }
 
     template<typename TraitsT>
-    mpl::true_ peek(assert_bol_matcher<TraitsT> const &xpr)
+    mpl::true_ peek(assert_bol_matcher<TraitsT> const &)
     {
         this->line_start_ = true;
         return mpl::true_();

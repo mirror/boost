@@ -11,6 +11,8 @@
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
+# pragma warning(push)
+# pragma warning(disable : 4127) // conditional expression constant
 #endif
 
 #include <algorithm>
@@ -56,6 +58,9 @@ private:
 
         T *const begin_, *curr_, *const end_;
         chunk *back_, *next_;
+
+    private:
+        chunk &operator =(chunk const &);
     };
 
     chunk *current_chunk_;
@@ -239,5 +244,9 @@ namespace
 }
 
 }}} // namespace boost::xpressive::detail
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma warning(pop)
+#endif
 
 #endif

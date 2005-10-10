@@ -8,6 +8,14 @@
 #ifndef BOOST_XPRESSIVE_DETAIL_STATIC_MODIFIER_HPP_EAN_10_04_2005
 #define BOOST_XPRESSIVE_DETAIL_STATIC_MODIFIER_HPP_EAN_10_04_2005
 
+// MS compatible compilers support #pragma once
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma once
+# pragma warning(push)
+# pragma warning(disable : 4510) // default constructor could not be generated
+# pragma warning(disable : 4610) // user defined constructor required
+#endif
+
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/regex_constants.hpp>
 
@@ -44,5 +52,9 @@ namespace boost { namespace xpressive { namespace detail
     };
 
 }}}
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma warning(pop)
+#endif
 
 #endif

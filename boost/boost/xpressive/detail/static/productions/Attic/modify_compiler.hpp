@@ -50,7 +50,7 @@ namespace boost { namespace xpressive { namespace detail
             new_visitor.swap(visitor);
             struct local // for swapping state back after proto::compile returns
             {   ~local() { v->swap(*nv); }
-                VisitorT *const v; new_visitor_type *const nv;
+                VisitorT * v; new_visitor_type * nv;
             } const undo = { &visitor, &new_visitor };
             ignore_unused(&undo);
             return proto::compile(proto::right(op), state, new_visitor, seq_tag());

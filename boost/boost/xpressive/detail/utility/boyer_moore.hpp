@@ -14,6 +14,8 @@
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
+# pragma warning(push)
+# pragma warning(disable : 4100) // unreferenced formal parameter
 #endif
 
 #include <climits>  // for UCHAR_MAX
@@ -21,6 +23,7 @@
 #include <utility>  // for std::max
 #include <vector>
 #include <boost/mpl/bool.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
@@ -28,22 +31,12 @@
 namespace boost { namespace xpressive { namespace detail
 {
 
-/////////////////////////////////////////////////////////////////////////////////
-//// case_fold
-//template<typename TraitsT>
-//struct case_fold
-//  : is_convertible<
-//        typename TraitsT::version_tag *
-//      , regex_traits_version_1_case_fold_tag *
-//    >
-//{
-//};
-
 ///////////////////////////////////////////////////////////////////////////////
 // boyer_moore
 //
-template<typename BidiIterT, typename TraitsT> //, bool CaseFoldT = case_fold<TraitsT>::value>
+template<typename BidiIterT, typename TraitsT>
 struct boyer_moore
+  : noncopyable
 {
     typedef typename iterator_value<BidiIterT>::type char_type;
     typedef TraitsT traits_type;
@@ -200,5 +193,9 @@ private:
 };
 
 }}} // namespace boost::xpressive::detail
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma warning(pop)
+#endif
 
 #endif

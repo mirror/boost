@@ -11,6 +11,8 @@
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
+# pragma warning(push)
+# pragma warning(disable : 4100) // unreferenced formal parameter
 #endif
 
 #include <string>
@@ -80,5 +82,9 @@ namespace boost { namespace xpressive { namespace detail
     }
 
 }}} // namespace boost::xpressive::detail
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma warning(pop)
+#endif
 
 #endif

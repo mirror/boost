@@ -92,7 +92,7 @@ struct matchable
 
     virtual std::size_t get_width(state_type<BidiIterT> *state) const = 0;
 
-    virtual void link(xpression_linker<char_type> &linker) const {}
+    virtual void link(xpression_linker<char_type> &) const {}
 
     virtual void peek(xpression_peeker<char_type> &peeker) const
     {
@@ -101,10 +101,10 @@ struct matchable
 
     virtual sequence<BidiIterT> quantify
     (
-        quant_spec const &spec
-      , std::size_t &hidden_mark_count
-      , sequence<BidiIterT> seq
-      , alternates_factory<BidiIterT> const &factory
+        quant_spec const & //spec
+      , std::size_t & //hidden_mark_count
+      , sequence<BidiIterT> //seq
+      , alternates_factory<BidiIterT> const &//factory
     ) const
     {
         throw regex_error(regex_constants::error_badrepeat, "expression cannot be quantified");

@@ -205,6 +205,8 @@ struct static_xpression
 
 private: // hide this
 
+    static_xpression &operator =(static_xpression const &);
+
     template<typename CharT>
     void peek_next_(mpl::true_, xpression_peeker<CharT> &peeker) const
     {
@@ -254,7 +256,7 @@ struct no_next
   : xpression_base
 {
     template<typename CharT>
-    void link(xpression_linker<CharT> &linker) const
+    void link(xpression_linker<CharT> &) const
     {
     }
 
@@ -282,6 +284,8 @@ struct alternates_list
       : AlternatesT(alternates)
     {
     }
+private:
+    alternates_list &operator =(alternates_list const &);
 };
 
 }}} // namespace boost::xpressive::detail

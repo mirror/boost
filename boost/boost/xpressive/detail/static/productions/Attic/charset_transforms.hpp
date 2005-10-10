@@ -77,6 +77,8 @@ namespace boost { namespace xpressive { namespace detail
         }
 
     private:
+        charset_state &operator =(charset_state const &);
+
         CharSetT &charset_;
         traits_type const &traits_;
     };
@@ -117,7 +119,7 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename OpT, typename StateT, typename VisitorT>
         static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &state, VisitorT &visitor, bool complement = false)
+        call(OpT const &op, StateT const &, VisitorT &visitor, bool complement = false)
         {
             typedef typename apply<OpT, StateT, VisitorT>::matcher_type matcher_type;
             matcher_type matcher;

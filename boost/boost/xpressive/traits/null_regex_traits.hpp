@@ -17,6 +17,7 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/utility/never_true.hpp>
+#include <boost/xpressive/detail/utility/ignore_unused.hpp>
 
 namespace boost { namespace xpressive
 {
@@ -53,6 +54,7 @@ struct null_regex_traits
     /// \return true.
     bool operator ==(null_regex_traits<char_type> const &that) const
     {
+        detail::ignore_unused(&that);
         return true;
     }
 
@@ -61,6 +63,7 @@ struct null_regex_traits
     /// \return false.
     bool operator !=(null_regex_traits<char_type> const &that) const
     {
+        detail::ignore_unused(&that);
         return false;
     }
 
@@ -157,6 +160,8 @@ struct null_regex_traits
     template<typename FwdIterT>
     static string_type lookup_collatename(FwdIterT begin, FwdIterT end)
     {
+        detail::ignore_unused(&begin);
+        detail::ignore_unused(&end);
         return string_type();
     }
 
@@ -170,6 +175,9 @@ struct null_regex_traits
     template<typename FwdIterT>
     static char_class_type lookup_classname(FwdIterT begin, FwdIterT end, bool icase)
     {
+        detail::ignore_unused(&begin);
+        detail::ignore_unused(&end);
+        detail::ignore_unused(&icase);
         return 0;
     }
 
@@ -181,6 +189,8 @@ struct null_regex_traits
     /// \return false
     static bool isctype(char_type ch, char_class_type mask)
     {
+        detail::ignore_unused(&ch);
+        detail::ignore_unused(&mask);
         return false;
     }
 
@@ -191,6 +201,8 @@ struct null_regex_traits
     /// \return -1
     static int value(char_type ch, int radix)
     {
+        detail::ignore_unused(&ch);
+        detail::ignore_unused(&radix);
         return -1;
     }
 

@@ -197,6 +197,9 @@ namespace boost { namespace xpressive { namespace detail
             }
             return this->min_ * this->xpr_.get_width(state);
         }
+
+    private:
+        simple_repeat_matcher &operator =(simple_repeat_matcher const &);
     };
 
     // BUGBUG can all non-greedy quantification be done with the fixed width quantifier?

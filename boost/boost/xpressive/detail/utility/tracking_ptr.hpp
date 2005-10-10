@@ -185,6 +185,9 @@ private:
             this->deps_.insert(dep);
 
             // also inherit dep's dependencies
+            // BUGBUG this is O(N log N) because we are doing N individual
+            // insert ops. Change to use a filter/transform iterator so we
+            // can call the range insert function and get this down to O(N).
             typename dependents_type::iterator cur = dep->deps_.begin();
             typename dependents_type::iterator end = dep->deps_.end();
             typename dependents_type::iterator tmp;

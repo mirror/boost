@@ -347,7 +347,7 @@ private:
         case BOOST_XPR_CHAR_(char_type, 'x'): this->flag_(set, ignore_white_space); break;
         case BOOST_XPR_CHAR_(char_type, ':'): ++begin; // fall-through
         case BOOST_XPR_CHAR_(char_type, ')'): return token_no_mark;
-        case BOOST_XPR_CHAR_(char_type, '-'): if(!(set = !set)) break; // else fall-through
+        case BOOST_XPR_CHAR_(char_type, '-'): if(false == (set = !set)) break; // else fall-through
         default: throw regex_error(error_paren, "unknown pattern modifier");
         }
         while(detail::ensure(++begin != end, error_paren, "incomplete extension"), true);

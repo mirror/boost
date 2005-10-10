@@ -11,6 +11,8 @@
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
+# pragma warning(push)
+# pragma warning(disable : 4100) // unreferenced formal parameter
 #endif
 
 #include <boost/mpl/bool.hpp>
@@ -72,5 +74,9 @@ namespace boost { namespace xpressive { namespace detail
     };
 
 }}}
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma warning(pop)
+#endif
 
 #endif

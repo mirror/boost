@@ -14,6 +14,7 @@
 #endif
 
 #include <vector>
+#include <boost/noncopyable.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/utility/tracking_ptr.hpp>
 
@@ -25,6 +26,7 @@ namespace boost { namespace xpressive { namespace detail
 //
 template<typename BidiIterT>
 struct finder
+  : noncopyable
 {
     virtual ~finder() {}
     virtual bool operator ()(state_type<BidiIterT> &state) const = 0;

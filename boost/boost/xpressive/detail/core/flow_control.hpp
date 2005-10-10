@@ -16,6 +16,7 @@
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/regex_impl.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
+#include <boost/xpressive/detail/utility/ignore_unused.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -33,6 +34,7 @@ inline bool push_context_match
 {
     // save state
     match_context<BidiIterT> context = state.push_context(impl, next, context);
+    detail::ignore_unused(&context);
 
     // match the nested regex
     bool success = impl.xpr_->match(state);
