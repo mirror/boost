@@ -33,7 +33,7 @@ namespace boost { namespace xpressive { namespace detail
         };
 
         template<typename OpT, typename StateT, typename VisitorT>
-        static StateT const &call(OpT const &op, StateT const &state, VisitorT &visitor)
+        static StateT const &call(OpT const &op, StateT const &state, VisitorT &)
         {
             return state.set(set_branch::get_matcher(op)), state;
         }

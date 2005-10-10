@@ -153,7 +153,7 @@ inline void set_range(compound_charset<TraitsT> &chset, CharT from, CharT to, Tr
 }
 
 template<typename TraitsT>
-inline void set_class(compound_charset<TraitsT> &chset, typename TraitsT::char_class_type char_class, bool no, TraitsT const &traits, bool icase)
+inline void set_class(compound_charset<TraitsT> &chset, typename TraitsT::char_class_type char_class, bool no, TraitsT const &, bool icase)
 {
     chset.set_class(char_class, no, icase);
 }
