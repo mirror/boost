@@ -31,7 +31,7 @@ _regexpp_, representing regular expressions as strings. Or you can use it as you
 writing your regexes as C++ expressions, enjoying all the benefits of an embedded language
 dedicated to text manipulation. What's more, you can mix the two to get the benefits of
 both, writing regular expression ['grammars] in which some of the regular expressions are 
-statically bound -- hard-coded and syntax-checked by the compiler -- and others are dynamically
+statically bound -- hard-coded and syntax\-checked by the compiler \-- and others are dynamically
 bound and specified at runtime. These regular expressions can refer to each other recursively,
 matching patterns in strings that ordinary regular expressions cannot.
 

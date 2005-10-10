@@ -100,8 +100,13 @@ and dynamic.
 
 [include acknowledgements.qbk]
 
+[section Appendices]
+
 [include nyi.qbk]
 
 [include regexpp_diffs.qbk]
 
 [include perf.qbk]
+
+[endsect]
+

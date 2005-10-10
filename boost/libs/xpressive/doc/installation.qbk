@@ -22,7 +22,7 @@ Likewise, you can include `xpressive_dynamic.hpp` if you only plan on using dyna
 [h2 Requirements]
 
 xpressive depends on Boost. You can download the latest version of the Boost
-libraries from [@http://boost.org]. xpressive requires Boost version 1.31 or higher.
+libraries from [@http://boost.org]. xpressive requires Boost version 1.33 or higher.
 
 [h2 Supported Compilers]
 
