@@ -166,12 +166,14 @@ namespace quickbook
         anchored_phrase_action(
             std::ostream&       out,
             std::stringstream&  phrase,
+            std::string const&  library_id,
             std::string const&  section_id,
             std::string const&  qualified_section_id,
             std::string const&  pre,
             std::string const&  post)
         : out(out)
         , phrase(phrase)
+        , library_id(library_id)
         , section_id(section_id)
         , qualified_section_id(qualified_section_id)
         , pre(pre)
@@ -181,6 +183,7 @@ namespace quickbook
 
         std::ostream&       out;
         std::stringstream&  phrase;
+        std::string const&  library_id;
         std::string const&  section_id;
         std::string const&  qualified_section_id;
         std::string         pre;

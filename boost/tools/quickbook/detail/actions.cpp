@@ -52,7 +52,7 @@ namespace quickbook
             else // version 1.3 and above
             {
                 out << "<anchor id=\""
-                    << qualified_section_id << '.'
+                    << library_id << '.' << qualified_section_id << '.'
                     << detail::make_identifier(str.begin(), str.end())
                     << "\" />";
             }
@@ -711,12 +711,12 @@ namespace quickbook
         , code_block(phrase, source_mode, macro)
         , inline_code(phrase, source_mode, macro)
         , paragraph(out, phrase, paragraph_pre, paragraph_post)
-        , h1(out, phrase, section_id, qualified_section_id, h1_pre, h1_post)
-        , h2(out, phrase, section_id, qualified_section_id, h2_pre, h2_post)
-        , h3(out, phrase, section_id, qualified_section_id, h3_pre, h3_post)
-        , h4(out, phrase, section_id, qualified_section_id, h4_pre, h4_post)
-        , h5(out, phrase, section_id, qualified_section_id, h5_pre, h5_post)
-        , h6(out, phrase, section_id, qualified_section_id, h6_pre, h6_post)
+        , h1(out, phrase, doc_id, section_id, qualified_section_id, h1_pre, h1_post)
+        , h2(out, phrase, doc_id, section_id, qualified_section_id, h2_pre, h2_post)
+        , h3(out, phrase, doc_id, section_id, qualified_section_id, h3_pre, h3_post)
+        , h4(out, phrase, doc_id, section_id, qualified_section_id, h4_pre, h4_post)
+        , h5(out, phrase, doc_id, section_id, qualified_section_id, h5_pre, h5_post)
+        , h6(out, phrase, doc_id, section_id, qualified_section_id, h6_pre, h6_post)
         , hr(out, hr_)
         , blurb(out, phrase, blurb_pre, blurb_post)
         , blockquote(out, phrase, blockquote_pre, blockquote_post)
