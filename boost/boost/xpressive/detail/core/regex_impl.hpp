@@ -40,11 +40,25 @@ struct regex_impl
     typedef typename iterator_value<BidiIterT>::type char_type;
 
     regex_impl()
-      : xpr_()
+      : enable_reference_tracking<regex_impl<BidiIterT> >()
+      , xpr_()
       , traits_()
       , finder_()
       , mark_count_(0)
       , hidden_mark_count_(0)
+    {
+        #ifdef BOOST_XPRESSIVE_DEBUG_CYCLE_TEST
+        ++instances;
+        #endif
+    }
+
+    regex_impl(regex_impl<BidiIterT> const &that)
+      : enable_reference_tracking<regex_impl<BidiIterT> >(that)
+      , xpr_(that.xpr_)
+      , traits_(that.traits_)
+      , finder_(that.finder_)
+      , mark_count_(that.mark_count_)
+      , hidden_mark_count_(that.hidden_mark_count_)
     {
         #ifdef BOOST_XPRESSIVE_DEBUG_CYCLE_TEST
         ++instances;

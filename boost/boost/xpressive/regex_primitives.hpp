@@ -37,7 +37,7 @@ namespace {
 #endif
 
 /// INTERNAL ONLY (for backwards compatibility)
-detail::uint_t const repeat_max = UINT_MAX-1;
+unsigned int const repeat_max = UINT_MAX-1;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief For infinite repetition of a sub-expression.
@@ -45,7 +45,7 @@ detail::uint_t const repeat_max = UINT_MAX-1;
 /// Magic value used with the repeat\<\>() function template
 /// to specify an unbounded repeat. Use as: repeat<17, inf>('a').
 /// The equivalent in perl is /a{17,}/.
-detail::uint_t const inf = UINT_MAX-1;
+unsigned int const inf = UINT_MAX-1;
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Successfully matches nothing.
@@ -390,7 +390,7 @@ proto::op_proxy<
 > const set = {};
 
 ///////////////////////////////////////////////////////////////////////////////
-/// Sub-match placeholder, like $& in Perl
+/// \brief Sub-match placeholder, like $& in Perl
 proto::op_proxy<detail::mark_tag, int> const s0 = {0};
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -417,6 +417,25 @@ proto::op_proxy<detail::mark_tag, int> const s9 = {9};
 
 #ifndef BOOST_XPRESSIVE_DOXYGEN_INVOKED
 } // unnamed-namespace
+#endif
+
+// NOTE: For the purpose of xpressive's documentation, make icase() look like an
+// ordinary function. In reality, it is a function object defined in detail/icase.hpp
+// so that it can serve double-duty as regex_constants::icase, the syntax_option_type.
+#ifdef BOOST_XPRESSIVE_DOXYGEN_INVOKED
+///////////////////////////////////////////////////////////////////////////////
+/// \brief Makes a sub-expression case-insensitive.
+///
+/// Use icase() to make a sub-expression case-insensitive. For instance,
+/// "foo" >> icase(set['b'] >> "ar") will match "foo" exactly followed by
+/// "bar" irrespective of case.
+template<typename XprT>
+inline proto::binary_op<detail::icase_modifier, typename as_xpr_type<XprT>::type, modifier_tag> const
+icase(XprT const &xpr)
+{
+    detail::icase_modifier mod;
+    return proto::make_op<modifier_tag>(mod, as_xpr(xpr));
+}
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -546,7 +565,7 @@ before(XprT const &xpr)
 /// after(xpr) succeeds if the xpr sub-expression would match at the current
 /// position minus N in the sequence, where N is the width of xpr. xpr is not included in
 /// the match. For instance,  after("foo") succeeds if we are after a "foo". Look-behind
-/// assertions can be negated with the bit-compliment operator.
+/// assertions can be negated with the bit-complement operator.
 ///
 /// \attention after(xpr) is equivalent to the perl (?<=...) extension.
 /// ~after(xpr) is a negative look-behind assertion, equivalent to the
@@ -565,16 +584,6 @@ after(XprT const &xpr)
 {
     return proto::make_op<detail::lookbehind_tag<true> >(as_xpr(xpr));
 }
-
-#ifdef BOOST_XPRESSIVE_DOXYGEN_INVOKED
-///////////////////////////////////////////////////////////////////////////////
-/// \brief Makes a sub-expression case-insensitive.
-///
-/// To make a sub-expression case-insensitive, use the sub-expression as an
-/// argument to icase's function-call operator. For instance, "foo" >> icase("bar")
-/// will match "foo" exactly followed by "bar" irrespective of case. 
-detail::modifier_op<detail::icase_modifier> const icase = { {}, regex_constants::icase_ };
-#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Specify a regex traits or a std::locale.

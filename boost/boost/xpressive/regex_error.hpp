@@ -17,6 +17,20 @@
 #include <stdexcept>
 #include <boost/xpressive/regex_constants.hpp>
 
+//{{AFX_DOC_COMMENT
+///////////////////////////////////////////////////////////////////////////////
+// This is a hack to get Doxygen to show the inheritance relation between
+// regex_error and std::runtime_error.
+#ifdef BOOST_XPRESSIVE_DOXYGEN_INVOKED
+/// INTERNAL ONLY
+namespace std
+{
+    /// INTERNAL ONLY
+    struct runtime_error {};
+}
+#endif
+//}}AFX_DOC_COMMENT
+
 namespace boost { namespace xpressive
 {
 

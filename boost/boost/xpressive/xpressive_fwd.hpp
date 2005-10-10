@@ -113,37 +113,47 @@ namespace boost { namespace xpressive
     typedef basic_regex<std::string::const_iterator>                sregex;
     typedef basic_regex<char const *>                               cregex;
 
+    #ifndef BOOST_XPRESSIVE_NO_WREGEX
+    typedef basic_regex<std::wstring::const_iterator>               wsregex;
+    typedef basic_regex<wchar_t const *>                            wcregex;
+    #endif
+
     typedef regex_compiler<std::string::const_iterator>             sregex_compiler;
     typedef regex_compiler<char const *>                            cregex_compiler;
+
+    #ifndef BOOST_XPRESSIVE_NO_WREGEX
+    typedef regex_compiler<std::wstring::const_iterator>            wsregex_compiler;
+    typedef regex_compiler<wchar_t const *>                         wcregex_compiler;
+    #endif
 
     typedef regex_iterator<std::string::const_iterator>             sregex_iterator;
     typedef regex_iterator<char const *>                            cregex_iterator;
 
+    #ifndef BOOST_XPRESSIVE_NO_WREGEX
+    typedef regex_iterator<std::wstring::const_iterator>            wsregex_iterator;
+    typedef regex_iterator<wchar_t const *>                         wcregex_iterator;
+    #endif
+
     typedef regex_token_iterator<std::string::const_iterator>       sregex_token_iterator;
     typedef regex_token_iterator<char const *>                      cregex_token_iterator;
 
+    #ifndef BOOST_XPRESSIVE_NO_WREGEX
+    typedef regex_token_iterator<std::wstring::const_iterator>      wsregex_token_iterator;
+    typedef regex_token_iterator<wchar_t const *>                   wcregex_token_iterator;
+    #endif
+
     typedef match_results<std::string::const_iterator>              smatch;
     typedef match_results<char const *>                             cmatch;
+
+    #ifndef BOOST_XPRESSIVE_NO_WREGEX
+    typedef match_results<std::wstring::const_iterator>             wsmatch;
+    typedef match_results<wchar_t const *>                          wcmatch;
+    #endif
 
     typedef regex_id_filter_predicate<std::string::const_iterator>  sregex_id_filter_predicate;
     typedef regex_id_filter_predicate<char const *>                 cregex_id_filter_predicate;
 
     #ifndef BOOST_XPRESSIVE_NO_WREGEX
-    typedef basic_regex<std::wstring::const_iterator>               wsregex;
-    typedef basic_regex<wchar_t const *>                            wcregex;
-
-    typedef regex_compiler<std::wstring::const_iterator>            wsregex_compiler;
-    typedef regex_compiler<wchar_t const *>                         wcregex_compiler;
-    
-    typedef regex_iterator<std::wstring::const_iterator>            wsregex_iterator;
-    typedef regex_iterator<wchar_t const *>                         wcregex_iterator;
-    
-    typedef regex_token_iterator<std::wstring::const_iterator>      wsregex_token_iterator;
-    typedef regex_token_iterator<wchar_t const *>                   wcregex_token_iterator;
-    
-    typedef match_results<std::wstring::const_iterator>             wsmatch;
-    typedef match_results<wchar_t const *>                          wcmatch;
-    
     typedef regex_id_filter_predicate<std::wstring::const_iterator> wsregex_id_filter_predicate;
     typedef regex_id_filter_predicate<wchar_t const *>              wcregex_id_filter_predicate;
     #endif
