@@ -20,7 +20,7 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/iterator/detail/config_def.hpp>
-#include <boost/python/detail/is_xxx.hpp>
+#include <boost/detail/is_xxx.hpp>
 
 #include <boost/preprocessor/repetition/enum.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
@@ -91,9 +91,9 @@ namespace aux
 {
   // Defines metafunctions, is_required and is_optional, that
   // identify required<...> and optional<...> specializations.
-  BOOST_PYTHON_IS_XXX_DEF(required, required, 2)
-  BOOST_PYTHON_IS_XXX_DEF(optional, optional, 2)
-  BOOST_PYTHON_IS_XXX_DEF(unnamed, unnamed, 2)
+  BOOST_DETAIL_IS_XXX_DEF(required, required, 2)
+  BOOST_DETAIL_IS_XXX_DEF(optional, optional, 2)
+  BOOST_DETAIL_IS_XXX_DEF(unnamed, unnamed, 2)
 
   //
   // key_type, has_default, and predicate --

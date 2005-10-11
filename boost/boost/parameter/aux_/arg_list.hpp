@@ -6,17 +6,19 @@
 #ifndef ARG_LIST_050329_HPP
 #define ARG_LIST_050329_HPP
 
-#include <boost/mpl/apply.hpp>
-#include <boost/type_traits/add_reference.hpp>
-
-#include <boost/preprocessor/repetition/enum_params.hpp>
-#include <boost/preprocessor/facilities/intercept.hpp>
-
 #include <boost/parameter/aux_/void.hpp>
 #include <boost/parameter/aux_/result_of0.hpp>
 #include <boost/parameter/aux_/default.hpp>
 #include <boost/parameter/aux_/parameter_requirements.hpp>
 #include <boost/parameter/config.hpp>
+
+#include <boost/mpl/apply.hpp>
+
+#include <boost/type_traits/add_reference.hpp>
+#include <boost/type_traits/is_same.hpp>
+
+#include <boost/preprocessor/repetition/enum_params.hpp>
+#include <boost/preprocessor/facilities/intercept.hpp>
 
 namespace boost { namespace parameter { 
 
