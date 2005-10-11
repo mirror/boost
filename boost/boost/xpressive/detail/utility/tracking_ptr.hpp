@@ -17,11 +17,15 @@
 # include <iosfwd>
 #endif
 #include <set>
+#include <functional>
+#include <boost/config.hpp>
 #include <boost/assert.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
+#include <boost/iterator/iterator_facade.hpp>
+#include <boost/iterator/filter_iterator.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -29,16 +33,111 @@ namespace boost { namespace xpressive { namespace detail
 template<typename TypeT>
 struct tracking_ptr;
 
+template<typename DerivedT>
+struct enable_reference_tracking;
+
+///////////////////////////////////////////////////////////////////////////////
+// weak_iterator
+//  steps through a set of weak_ptr, converts to shared_ptrs on the fly and
+//  removes from the set the weak_ptrs that have expired.
+template<typename DerivedT>
+struct weak_iterator
+  : boost::iterator_facade
+    <
+        weak_iterator<DerivedT>
+      , boost::shared_ptr<DerivedT>
+      , std::forward_iterator_tag
+      , boost::shared_ptr<DerivedT> const &
+    >
+{
+    typedef std::set<boost::weak_ptr<DerivedT> > set_type;
+    typedef typename set_type::iterator base_iterator;
+
+    weak_iterator()
+      : cur_()
+      , iter_()
+      , set_(0)
+    {
+    }
+
+    weak_iterator(base_iterator iter, set_type *set)
+      : cur_()
+      , iter_(iter)
+      , set_(set)
+    {
+        this->satisfy_();
+    }
+
+private:
+    friend class boost::iterator_core_access;
+
+    boost::shared_ptr<DerivedT> const &dereference() const
+    {
+        return this->cur_;
+    }
+
+    void increment()
+    {
+        ++this->iter_;
+        this->satisfy_();
+    }
+
+    bool equal(weak_iterator const &that) const
+    {
+        return this->iter_ == that.iter_;
+    }
+
+    void satisfy_()
+    {
+        while(this->iter_ != this->set_->end())
+        {
+            this->cur_ = this->iter_->lock();
+            if(this->cur_)
+                return;
+            base_iterator tmp = this->iter_++;
+            this->set_->erase(tmp);
+        }
+        this->cur_.reset();
+    }
+
+    boost::shared_ptr<DerivedT> cur_;
+    base_iterator iter_;
+    set_type *set_;
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 // reference_deleter
 //
 template<typename DerivedT>
 struct reference_deleter
 {
-    void operator ()(std::set<shared_ptr<DerivedT> > *refs) const
+    void operator ()(void *pv) const
     {
-        refs->clear();
+        typedef enable_reference_tracking<DerivedT> impl_type;
+        impl_type *pimpl = static_cast<impl_type *>(pv);
+        pimpl->refs_.clear();
     }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// filter_self
+//  for use with a filter_iterator to filter a node out of a list of dependencies
+template<typename DerivedT>
+struct filter_self
+  : std::unary_function<boost::shared_ptr<DerivedT>, bool>
+{
+    filter_self(enable_reference_tracking<DerivedT> *self)
+      : self_(self)
+    {
+    }
+
+    bool operator() (boost::shared_ptr<DerivedT> const &that) const
+    {
+        return this->self_ != that.get();
+    }
+
+private:
+    enable_reference_tracking<DerivedT> *self_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -50,6 +149,7 @@ template<typename DerivedT>
 struct enable_reference_tracking
   : enable_shared_from_this<DerivedT>
 {
+    typedef enable_reference_tracking<DerivedT> this_type;
     typedef std::set<shared_ptr<DerivedT> > references_type;
     typedef std::set<weak_ptr<DerivedT> > dependents_type;
 
@@ -74,11 +174,15 @@ struct enable_reference_tracking
         this->derived_() = DerivedT();
     }
 
-    void track_reference(shared_ptr<DerivedT> const &ref)
+    void track_reference(shared_ptr<DerivedT> const &that)
     {
-        this->refs_.insert(ref);
-        // also inherit ref's references
-        this->refs_.insert(ref->refs_.begin(), ref->refs_.end());
+        // avoid some unbounded memory growth in certain circumstances by
+        // opportunistically removing stale dependencies from "that"
+        that->purge_stale_deps_();
+        // add "that" as a reference
+        this->refs_.insert(that);
+        // also inherit that's references
+        this->refs_.insert(that->refs_.begin(), that->refs_.end());
     }
 
     //{{AFX_DEBUG
@@ -100,9 +204,10 @@ protected:
     }
 
     enable_reference_tracking(enable_reference_tracking<DerivedT> const &that)
-      : refs_(that.refs_)
+      : refs_()
       , deps_()
     {
+        this->operator =(that);
     }
 
     enable_reference_tracking<DerivedT> &operator =(enable_reference_tracking<DerivedT> const &that)
@@ -121,6 +226,7 @@ protected:
 private:
 
     friend struct tracking_ptr<DerivedT>;
+    friend struct reference_deleter<DerivedT>;
 
     DerivedT &derived_()
     {
@@ -132,9 +238,9 @@ private:
         return !this->deps_.empty();
     }
 
-    shared_ptr<references_type> get_ref_deleter_()
+    shared_ptr<void> get_ref_deleter_()
     {
-        return shared_ptr<references_type>(& this->refs_, reference_deleter<DerivedT>());
+        return shared_ptr<void>(static_cast<void*>(this), reference_deleter<DerivedT>());
     }
 
     void update_references_()
@@ -143,7 +249,7 @@ private:
         typename references_type::iterator end = this->refs_.end();
         for(; cur != end; ++cur)
         {
-            if(this != cur->get())
+            if(this != cur->get()) // not necessary, but avoids a call to shared_from_this()
             {
                 // for each reference, add this as a dependency
                 (*cur)->track_dependency_(this->shared_from_this());
@@ -158,22 +264,12 @@ private:
         // thereby spreading out the reference counting responsibility evenly.
         if(!this->refs_.empty())
         {
-            typename dependents_type::iterator cur = this->deps_.begin();
-            typename dependents_type::iterator end = this->deps_.end();
-            typename dependents_type::iterator tmp;
-            while(cur != end)
+            weak_iterator<DerivedT> cur(this->deps_.begin(), &this->deps_);
+            weak_iterator<DerivedT> end(this->deps_.end(), &this->deps_);
+
+            for(; cur != end; ++cur)
             {
-                if(shared_ptr<DerivedT> dep = cur->lock())
-                {
-                    dep->track_reference(this->shared_from_this());
-                    ++cur;
-                }
-                else
-                {
-                    // remove stale dependency
-                    tmp = cur++;
-                    this->deps_.erase(tmp);
-                }
+                (*cur)->track_reference(this->shared_from_this());
             }
         }
     }
@@ -182,32 +278,28 @@ private:
     {
         if(this != dep.get()) // never add ourself as a dependency
         {
+            // add dep as a dependency
             this->deps_.insert(dep);
 
+            filter_self<DerivedT> not_self(this);
+            weak_iterator<DerivedT> begin(dep->deps_.begin(), &dep->deps_);
+            weak_iterator<DerivedT> end(dep->deps_.end(), &dep->deps_);
+
             // also inherit dep's dependencies
-            // BUGBUG this is O(N log N) because we are doing N individual
-            // insert ops. Change to use a filter/transform iterator so we
-            // can call the range insert function and get this down to O(N).
-            typename dependents_type::iterator cur = dep->deps_.begin();
-            typename dependents_type::iterator end = dep->deps_.end();
-            typename dependents_type::iterator tmp;
-            for(; cur != end; ++cur)
-            {
-                if(shared_ptr<DerivedT> dep2 = cur->lock())
-                {
-                    if(this != dep2.get()) // never add ourself as a dependency
-                    {
-                        this->deps_.insert(dep2);
-                    }
-                }
-                else
-                {
-                    // remove stale dependency
-                    tmp = cur++;
-                    dep->deps_.erase(tmp);
-                }
-            }
+            this->deps_.insert(
+                boost::make_filter_iterator(not_self, begin, end)
+              , boost::make_filter_iterator(not_self, end, end)
+            );
         }
+    }
+
+    void purge_stale_deps_()
+    {
+        weak_iterator<DerivedT> cur(this->deps_.begin(), &this->deps_);
+        weak_iterator<DerivedT> end(this->deps_.end(), &this->deps_);
+
+        for(; cur != end; ++cur)
+            ;
     }
 
     //{{AFX_DEBUG
@@ -386,7 +478,7 @@ private:
 
     // mutable to allow lazy initialization
     mutable shared_ptr<TypeT> data_;
-    mutable shared_ptr<std::set<shared_ptr<TypeT> > > refs_;
+    mutable shared_ptr<void> refs_;
 };
 
 }}} // namespace boost::xpressive::detail
