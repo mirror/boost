@@ -108,13 +108,25 @@ struct keyword : noncopyable
 // name in namespace tag_namespace, and declares and initializes a
 // reference in an anonymous namespace to a singleton instance of that
 // type.
+
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+
+# define BOOST_PARAMETER_KEYWORD(tag_namespace,name)                \
+    namespace tag_namespace { struct name; }                        \
+    static ::boost::parameter::keyword<tag_namespace::name>& name   \
+       = ::boost::parameter::keyword<tag_namespace::name>::get();
+
+#else
+
 #define BOOST_PARAMETER_KEYWORD(tag_namespace,name)                 \
-   namespace tag_namespace { struct name; }                         \
-   namespace                                                        \
-   {                                                                \
+    namespace tag_namespace { struct name; }                        \
+    namespace                                                       \
+    {                                                               \
        ::boost::parameter::keyword<tag_namespace::name>& name       \
        = ::boost::parameter::keyword<tag_namespace::name>::get();   \
-   }
+    }
+
+#endif
 
 }} // namespace boost::parameter
 
