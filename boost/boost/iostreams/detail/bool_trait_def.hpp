@@ -29,7 +29,7 @@
       template<typename T> \
       struct impl { \
            BOOST_STATIC_CONSTANT(bool, value = \
-               (sizeof(helper(static_cast<T*>(0))) == \
+               (sizeof(BOOST_PP_CAT(trait, _impl_)::helper(static_cast<T*>(0))) == \
                 sizeof(type_traits::yes_type))); \
       }; \
     } \
