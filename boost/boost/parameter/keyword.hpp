@@ -105,13 +105,16 @@ struct keyword : noncopyable
 
 // Reduces boilerplate required to declare and initialize keywords
 // without violating ODR.  Declares a keyword tag type with the given
-// name in namespace tag_namespace, and declares and initializes a 
-// 
-#define BOOST_PARAMETER_KEYWORD(tag_namespace,name)             \
-   namespace tag_namespace { struct name; }                     \
-   ::boost::parameter::keyword<tag_namespace::name>& name       \
-   = ::boost::parameter::keyword<tag_namespace::name>::get();
-
+// name in namespace tag_namespace, and declares and initializes a
+// reference in an anonymous namespace to a singleton instance of that
+// type.
+#define BOOST_PARAMETER_KEYWORD(tag_namespace,name)                 \
+   namespace tag_namespace { struct name; }                         \
+   namespace                                                        \
+   {                                                                \
+       ::boost::parameter::keyword<tag_namespace::name>& name       \
+       = ::boost::parameter::keyword<tag_namespace::name>::get();   \
+   }
 
 }} // namespace boost::parameter
 
