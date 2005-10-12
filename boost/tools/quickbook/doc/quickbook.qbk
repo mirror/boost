@@ -160,7 +160,7 @@ are much stricter.
   We do not want the rest of the document to be rendered bold just because we
   forgot a trailing '*'.
 * A line starting with the star will be interpreted as an unordered list.
-  See [link syntax.unordered_lists Unordered lists].
+  See [link quickbook.syntax.unordered_lists Unordered lists].
 
 [table More Formatting Samples
     [[Markup]                                           [Result]]
@@ -206,10 +206,10 @@ single quote: `"'"`. Note too that [^'''`some code`'''] is prefered over
 
 [h3 Code blocks]
 
-Preformatted code simply starts with a space or a tab (See [link syntax.code 
+Preformatted code simply starts with a space or a tab (See [link quickbook.syntax.code 
 Code]). However, such a simple syntax cannot be used as phrase elements in lists
-(See [link syntax.ordered_lists Ordered lists] and [link syntax.unordered_lists 
-Unordered lists]), tables (See [link syntax.tables Tables]), etc. Inline code (see 
+(See [link quickbook.syntax.ordered_lists Ordered lists] and [link quickbook.syntax.unordered_lists 
+Unordered lists]), tables (See [link quickbook.syntax.tables Tables]), etc. Inline code (see 
 above) can. The problem is, inline code does not allow formatting with newlines,
 spaces, and tabs. These are lost. 
 
@@ -246,7 +246,7 @@ will generate:
 If a document contains more than one type of source code then the source mode
 may be changed dynamically as the document is processed. All QuickBook
 documents are initially in C++ mode by default, though an alternative initial value 
-may be set in the [link syntax.document Document Info] section.
+may be set in the [link quickbook.syntax.document Document Info] section.
 
 To change the source mode, use the [^\[source-mode\]] markup, where
 =source-mode= is one of the supported modes. For example, this:
@@ -287,8 +287,8 @@ C++ comment `// looks like this` whereas a Python comment [python]
 
 A named anchor is a hook that can be referenced by a link elsewhere in the
 document. You can then reference an anchor with [^'''[link named_anchor Some link text]'''].
-More on anchors [link syntax.anchor_links here], [link syntax.section here] and
-[link syntax.headings here].
+More on anchors [link quickbook.syntax.anchor_links here], [link quickbook.syntax.section here] and
+[link quickbook.syntax.headings here].
 
 [h3 Links]
 
@@ -324,7 +324,7 @@ You can link within a document using:
 [link section_id.normalized_header_text The link text]
 ''']
 
-See sections [link syntax.section Section] and [link syntax.headings Headings]
+See sections [link quickbook.syntax.section Section] and [link quickbook.syntax.headings Headings]
 for more info.
 
 [h3 refentry links]
@@ -446,7 +446,7 @@ In its absence, version 1.1 is assumed.
 =license=, =last-revision= and =source-mode= are optional information.
 
 =source-type= is a lowercase string setting the initial 
-[link syntax.source_mode source mode]. If the =source-mode= field is omitted, a
+[link quickbook.syntax.source_mode source mode]. If the =source-mode= field is omitted, a
 default value of =c++= will be used.
 
 [h3 Section]
@@ -630,7 +630,7 @@ will generate:
 [h3 Code]
 
 Preformatted code starts with a space or a tab. The code will be
-syntax highlighted according to the current [link syntax.source_mode source mode]:
+syntax highlighted according to the current [link quickbook.syntax.source_mode source mode]:
 
 [c++]
 
@@ -738,8 +738,8 @@ and all upper-case are converted to lower-case. For example: Heading
 [link section_id.normalized_header_text The link text]
 ''']
 
-to link to them. See [link syntax.anchor_links Anchor links] and
-[link syntax.section Section] for more info.
+to link to them. See [link quickbook.syntax.anchor_links Anchor links] and
+[link quickbook.syntax.section Section] for more info.
 
 [h3 Macros]
 
@@ -778,8 +778,8 @@ Some more examples:
 [def __spirit__     [@http://spirit.sourceforge.net Spirit]]
 ''']
 
-(See [link syntax.images__terminal_ Images]
-and [link syntax.links Links])
+(See [link quickbook.syntax.images__terminal_ Images]
+and [link quickbook.syntax.links Links])
 
 Invoking these macros:
 
