@@ -179,7 +179,7 @@ inline bool regex_search_impl
         bool const not_null = state.flags_.match_not_null_;
         state.flags_.match_prev_avail_ = state.flags_.match_prev_avail_ || !state.bos();
         restore null_restore = save(state.flags_.match_not_null_, not_null || not_initial_null);
-        ignore_unused(&null_restore);
+        detail::ignore_unused(&null_restore);
 
         regex_impl<BidiIterT> const &impl = *access::get_regex_impl(re);
         BidiIterT const begin = state.cur_, end = state.end_;

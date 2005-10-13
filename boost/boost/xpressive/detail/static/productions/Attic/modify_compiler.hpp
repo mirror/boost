@@ -22,6 +22,17 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     ///////////////////////////////////////////////////////////////////////////////
+    // scoped_swap
+    //  for swapping state back after proto::compile returns
+    template<typename OldT, typename NewT>
+    struct scoped_swap
+    {
+        ~scoped_swap() { this->old_->swap(*this->new_); }
+        OldT *old_;
+        NewT *new_;
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
     // modify_compiler
     struct modify_compiler
     {
@@ -48,11 +59,8 @@ namespace boost { namespace xpressive { namespace detail
             typedef typename apply<OpT, StateT, VisitorT>::visitor_type new_visitor_type;
             new_visitor_type new_visitor(proto::left(op).call(visitor));
             new_visitor.swap(visitor);
-            struct local // for swapping state back after proto::compile returns
-            {   ~local() { v->swap(*nv); }
-                VisitorT * v; new_visitor_type * nv;
-            } const undo = { &visitor, &new_visitor };
-            ignore_unused(&undo);
+            scoped_swap<VisitorT, new_visitor_type> const undo = {&visitor, &new_visitor};
+            detail::ignore_unused(&undo);
             return proto::compile(proto::right(op), state, new_visitor, seq_tag());
         }
     };
