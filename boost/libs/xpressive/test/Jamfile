@@ -11,34 +11,46 @@ subproject libs/xpressive/test ;
 # bring in rules for testing
 import testing ;
 
+# A bug in the Win32 intel compilers causes compilation of one of our
+# tests to take forever when debug symbols are enabled. This rule
+# turns them off when added to the requirements section
+local rule turn-off-intel-debug-symbols ( toolset variant : properties * )
+{
+    if $(NT) && [ MATCH (.*intel.*) : $(toolset) ]
+    {
+        properties = [ difference $(properties) : <debug-symbols>on ] <debug-symbols>off ;
+    }
+    return $(properties) ;
+}
+
 # Make tests run by default.
 DEPENDS all : test ;
 
 {
     test-suite "xpressive"
-        : [ run test1.cpp ]
-          [ run test2.cpp ]
-          [ run test3.cpp ]
-          [ run test4.cpp ]
-          [ run test5.cpp ]
-          [ run test6.cpp ]
-          [ run test7.cpp ]
-          [ run test8.cpp ]
-          [ run test9.cpp ]
-          [ run test1u.cpp ]
-          [ run test2u.cpp ]
-          [ run test3u.cpp ]
-          [ run test4u.cpp ]
-          [ run test5u.cpp ]
-          [ run test6u.cpp ]
-          [ run test7u.cpp ]
-          [ run test8u.cpp ]
-          [ run test9u.cpp ]
-          [ run misc1.cpp ]
-          [ run test_cycles.cpp ]
-          [ run test_non_char.cpp ]
-          [ run test_static.cpp ]
-          [ run test_dynamic.cpp ]
+        : [ run test1.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test2.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test3.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test4.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test5.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test6.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test7.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test8.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test9.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test1u.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test2u.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test3u.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test4u.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test5u.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test6u.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test7u.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test8u.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test9u.cpp : : : turn-off-intel-debug-symbols ]
+          [ run misc1.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test_cycles.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test_non_char.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test_static.cpp : : : turn-off-intel-debug-symbols ]
+          [ run test_dynamic.cpp : : : turn-off-intel-debug-symbols ]
           [ compile test_basic_regex.cpp ]
           [ compile test_match_results.cpp ]
           [ compile test_regex_algorithms.cpp ]
