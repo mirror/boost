@@ -9,7 +9,7 @@
 //  Metrowerks standard library:
 
 #ifndef __MSL_CPP__
-#  include <utility>
+#  include <iosfwd>
 #  ifndef __MSL_CPP__
 #     error This is not the MSL standard library!
 #  endif

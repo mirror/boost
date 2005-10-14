@@ -12,7 +12,7 @@
 //  Dinkumware standard library config:
 
 #if !defined(_YVALS) && !defined(_CPPLIB_VER)
-#include <utility>
+#include <iosfwd>
 #if !defined(_YVALS) && !defined(_CPPLIB_VER)
 #error This is not the Dinkumware lib!
 #endif

@@ -8,7 +8,7 @@
 //  Modena C++ standard library (comes with KAI C++)
 
 #if !defined(MSIPL_COMPILE_H)
-#  include <utility>
+#  include <iosfwd>
 #  if !defined(__MSIPL_COMPILE_H)
 #      error "This is not the Modena C++ library!"
 #  endif

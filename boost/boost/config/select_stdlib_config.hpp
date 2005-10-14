@@ -12,12 +12,12 @@
 // locate which std lib we are using and define BOOST_STDLIB_CONFIG as needed:
 
 // we need to include a std lib header here in order to detect which
-// library is in use, use <utility> as it's about the smallest
+// library is in use, use <iosfwd> as it's about the smallest
 // of the std lib headers - do not rely on this header being included -
 // users can short-circuit this header if they know whose std lib
 // they are using.
 
-#include <utility>
+#include <iosfwd>
 
 #if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
 // STLPort library; this _must_ come first, otherwise since

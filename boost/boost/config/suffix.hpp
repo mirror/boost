@@ -243,6 +243,12 @@
 //
 #  if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901)
 #     define BOOST_HAS_STDINT_H
+#     ifndef BOOST_HAS_LOG1P
+#        define BOOST_HAS_LOG1P
+#     endif
+#     ifndef BOOST_HAS_EXPM1
+#        define BOOST_HAS_EXPM1
+#     endif
 #  endif
 
 //
@@ -535,6 +541,7 @@ namespace boost{
 #  endif
 
 #endif
+
 
 
 

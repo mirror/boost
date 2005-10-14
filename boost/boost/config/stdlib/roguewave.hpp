@@ -10,7 +10,7 @@
 //  Rogue Wave std lib:
 
 #if !defined(__STD_RWCOMPILER_H__) && !defined(_RWSTD_VER)
-#  include <utility>
+#  include <iosfwd>
 #  if !defined(__STD_RWCOMPILER_H__) && !defined(_RWSTD_VER)
 #     error This is not the Rogue Wave standard library
 #  endif
