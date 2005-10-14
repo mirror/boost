@@ -17,6 +17,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <set>
 #include <ctime>
 
 namespace fs = boost::filesystem;
@@ -35,6 +36,38 @@ std::stringstream config_test1;
 std::stringstream config_test1a;
 std::stringstream config_test2;
 std::stringstream jamfile;
+std::set<std::string> macro_list;
+
+
+void write_config_info()
+{
+   // load the file into memory so we can scan it:
+   fs::ifstream ifs(config_path / "config_info.cpp");
+   std::string file_text;
+   std::copy(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>(), std::back_inserter(file_text));
+   ifs.close();
+   // create macro list:
+   std::stringstream ss;
+   for(std::set<std::string>::const_iterator i(macro_list.begin()), j(macro_list.end());
+      i != j;
+      ++i)
+   {
+      ss << "   PRINT_MACRO(" << *i << ");\n";
+   }
+   std::string macros = ss.str();
+   // scan for Boost macro block:
+   boost::regex re("BEGIN\\s+GENERATED\\s+BLOCK\\s+DO\\s+NOT\\s+EDIT\\s+THIS[^\\n]+\\n(.*?)\\n\\s+//\\s*END\\s+GENERATED\\s+BLOCK");
+   boost::smatch what;
+   if(boost::regex_search(file_text, what, re))
+   {
+      std::string new_text;
+      new_text.append(what.prefix().first, what[1].first);
+      new_text.append(macros);
+      new_text.append(what[1].second, what.suffix().second);
+      fs::ofstream ofs(config_path / "config_info.cpp");
+      ofs << new_text;
+   }
+}
 
 void write_config_test()
 {
@@ -158,6 +191,7 @@ void process_ipp_file(const fs::path& file, bool positive_test)
    if(boost::regex_search(file_text, macro_match, macro_regex))
    {
       macro_name = macro_match[1];
+      macro_list.insert(macro_name);
       namespace_name = boost::regex_replace(file_text, macro_regex, "\\L$1", boost::format_first_only | boost::format_no_copy);
    }
    if(macro_name.empty())
@@ -232,5 +266,6 @@ int cpp_main(int argc, char* argv[])
    }
    write_config_test();
    write_jamfile();
+   write_config_info();
    return 0;
 }

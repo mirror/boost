@@ -1,4 +1,4 @@
-//  This file was automatically generated on Fri Dec 17 11:13:11 2004
+//  This file was automatically generated on Fri Oct 14 18:38:49 2005
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -315,6 +315,11 @@ namespace boost_has_clock_gettime = empty_boost;
 #else
 namespace boost_has_dirent_h = empty_boost;
 #endif
+#ifdef BOOST_HAS_EXPM1
+#include "boost_has_expm1.ipp"
+#else
+namespace boost_has_expm1 = empty_boost;
+#endif
 #ifdef BOOST_HAS_FTIME
 #include "boost_has_ftime.ipp"
 #else
@@ -329,6 +334,11 @@ namespace boost_has_gettimeofday = empty_boost;
 #include "boost_has_hash.ipp"
 #else
 namespace boost_has_hash = empty_boost;
+#endif
+#ifdef BOOST_HAS_LOG1P
+#include "boost_has_log1p.ipp"
+#else
+namespace boost_has_log1p = empty_boost;
 #endif
 #ifdef BOOST_HAS_LONG_LONG
 #include "boost_has_long_long.ipp"
@@ -415,6 +425,91 @@ namespace boost_has_stdint_h = empty_boost;
 #else
 namespace boost_has_stlp_use_facet = empty_boost;
 #endif
+#ifdef BOOST_HAS_TR1_ARRAY
+#include "boost_has_tr1_array.ipp"
+#else
+namespace boost_has_tr1_array = empty_boost;
+#endif
+#ifdef BOOST_HAS_TR1_BIND
+#include "boost_has_tr1_bind.ipp"
+#else
+namespace boost_has_tr1_bind = empty_boost;
+#endif
+#ifdef BOOST_HAS_TR1_COMPLEX_OVERLOADS
+#include "boost_has_tr1_complex_over.ipp"
+#else
+namespace boost_has_tr1_complex_overloads = empty_boost;
+#endif
+#ifdef BOOST_HAS_TR1_COMPLEX_INVERSE_TRIG
+#include "boost_has_tr1_complex_trig.ipp"
+#else
+namespace boost_has_tr1_complex_inverse_trig = empty_boost;
+#endif
+#ifdef BOOST_HAS_TR1_FUNCTION
+#include "boost_has_tr1_function.ipp"
+#else
+namespace boost_has_tr1_function = empty_boost;
+#endif
+#ifdef BOOST_HAS_TR1_HASH
+#include "boost_has_tr1_hash.ipp"
+#else
+namespace boost_has_tr1_hash = empty_boost;
+#endif
+#ifdef BOOST_HAS_TR1_MEM_FN
+#include "boost_has_tr1_mem_fn.ipp"
+#else
+namespace boost_has_tr1_mem_fn = empty_boost;
+#endif
+#ifdef BOOST_HAS_TR1_RANDOM
+#include "boost_has_tr1_random.ipp"
+#else
+namespace boost_has_tr1_random = empty_boost;
+#endif
+#ifdef BOOST_HAS_TR1_REFERENCE_WRAPPER
+#include "boost_has_tr1_ref_wrap.ipp"
+#else
+namespace boost_has_tr1_reference_wrapper = empty_boost;
+#endif
+#ifdef BOOST_HAS_TR1_ARRAY
+#include "boost_has_tr1_regex.ipp"
+#else
+namespace boost_has_tr1_array = empty_boost;
+#endif
+#ifdef BOOST_HAS_TR1_RESULT_OF
+#include "boost_has_tr1_result_of.ipp"
+#else
+namespace boost_has_tr1_result_of = empty_boost;
+#endif
+#ifdef BOOST_HAS_TR1_SHARED_PTR
+#include "boost_has_tr1_shared_ptr.ipp"
+#else
+namespace boost_has_tr1_shared_ptr = empty_boost;
+#endif
+#ifdef BOOST_HAS_TR1_TUPLE
+#include "boost_has_tr1_tuple.ipp"
+#else
+namespace boost_has_tr1_tuple = empty_boost;
+#endif
+#ifdef BOOST_HAS_TR1_TYPE_TRAITS
+#include "boost_has_tr1_type_traits.ipp"
+#else
+namespace boost_has_tr1_type_traits = empty_boost;
+#endif
+#ifdef BOOST_HAS_TR1_UNORDERED_MAP
+#include "boost_has_tr1_unordered_map.ipp"
+#else
+namespace boost_has_tr1_unordered_map = empty_boost;
+#endif
+#ifdef BOOST_HAS_TR1_UNORDERED_SET
+#include "boost_has_tr1_unordered_set.ipp"
+#else
+namespace boost_has_tr1_unordered_set = empty_boost;
+#endif
+#ifdef BOOST_HAS_TR1_UTILITY
+#include "boost_has_tr1_utility.ipp"
+#else
+namespace boost_has_tr1_utility = empty_boost;
+#endif
 #ifdef BOOST_HAS_UNISTD_H
 #include "boost_has_unistd_h.ipp"
 #else
@@ -458,6 +553,11 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_HAS_DIRENT_H at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
+   if(0 != boost_has_expm1::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_EXPM1 at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
    if(0 != boost_has_ftime::test())
    {
       std::cerr << "Failed test for BOOST_HAS_FTIME at: " << __FILE__ << ":" << __LINE__ << std::endl;
@@ -471,6 +571,11 @@ int main( int, char *[] )
    if(0 != boost_has_hash::test())
    {
       std::cerr << "Failed test for BOOST_HAS_HASH at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_log1p::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_LOG1P at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_has_long_long::test())
@@ -556,6 +661,91 @@ int main( int, char *[] )
    if(0 != boost_has_stlp_use_facet::test())
    {
       std::cerr << "Failed test for BOOST_HAS_STLP_USE_FACET at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_tr1_array::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_TR1_ARRAY at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_tr1_bind::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_TR1_BIND at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_tr1_complex_overloads::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_TR1_COMPLEX_OVERLOADS at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_tr1_complex_inverse_trig::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_TR1_COMPLEX_INVERSE_TRIG at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_tr1_function::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_TR1_FUNCTION at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_tr1_hash::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_TR1_HASH at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_tr1_mem_fn::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_TR1_MEM_FN at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_tr1_random::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_TR1_RANDOM at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_tr1_reference_wrapper::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_TR1_REFERENCE_WRAPPER at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_tr1_array::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_TR1_ARRAY at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_tr1_result_of::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_TR1_RESULT_OF at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_tr1_shared_ptr::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_TR1_SHARED_PTR at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_tr1_tuple::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_TR1_TUPLE at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_tr1_type_traits::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_TR1_TYPE_TRAITS at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_tr1_unordered_map::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_TR1_UNORDERED_MAP at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_tr1_unordered_set::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_TR1_UNORDERED_SET at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_has_tr1_utility::test())
+   {
+      std::cerr << "Failed test for BOOST_HAS_TR1_UTILITY at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_has_unistd_h::test())
