@@ -44,7 +44,7 @@ struct empty_helper_t1 : public T
 private:
    // suppress compiler warnings:
    empty_helper_t1(const empty_helper_t1&);
-   empty_helper_t1 operator=(const empty_helper_t1&);
+   empty_helper_t1& operator=(const empty_helper_t1&);
 };
 
 struct empty_helper_t2 { int i[256]; };
