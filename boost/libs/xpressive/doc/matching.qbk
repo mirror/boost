@@ -17,7 +17,7 @@ algorithm.]
 
 The input can be a `std::string`, a C-style null-terminated string or a pair of iterators. In all cases,
 the type of the iterator used to traverse the input sequence must match the iterator type used to declare
-the regex object. (You can use the table in the [link user_s_guide.quick_start.know_your_iterator_type Quick Start] to
+the regex object. (You can use the table in the [link boost_xpressive.user_s_guide.quick_start.know_your_iterator_type Quick Start] to
 find the correct regex type for your iterator.)
 
     cregex cre = +_w;  // this regex can match C-style strings
@@ -58,7 +58,7 @@ of the flags and their meanings.
         // should never get here!!!
     }
 
-Click [link user_s_guide.examples.see_if_a_whole_string_matches_a_regex here] to see a complete example program that
+Click [link boost_xpressive.user_s_guide.examples.see_if_a_whole_string_matches_a_regex here] to see a complete example program that
 shows how to use _regex_match_. And check the _regex_match_ reference to see a complete list of the available
 overloads.
 
@@ -74,7 +74,7 @@ type of your regex matches the iterator type of your input sequence. As with _re
 provide a _match_results_ struct to receive the results of the search, and a _match_flag_type_ bitmask to 
 control how the match is evaluated.
 
-Click [link user_s_guide.examples.see_if_a_string_contains_a_sub_string_that_matches_a_regex here] to see a complete
+Click [link boost_xpressive.user_s_guide.examples.see_if_a_string_contains_a_sub_string_that_matches_a_regex here] to see a complete
 example program that shows how to use _regex_search_. And check the _regex_search_ reference to see a complete
 list of the available overloads.
 

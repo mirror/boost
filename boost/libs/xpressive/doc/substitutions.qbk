@@ -33,7 +33,7 @@ Ther is her face
 
 Notice that ['all] the occurrences of `"his"` have been replaced with `"her"`.
 
-Click [link user_s_guide.examples.replace_all_sub_strings_that_match_a_regex here] to see a complete
+Click [link boost_xpressive.user_s_guide.examples.replace_all_sub_strings_that_match_a_regex here] to see a complete
 example program that shows how to use _regex_replace_. And check the _regex_replace_ reference
 to see a complete list of the available overloads.
 

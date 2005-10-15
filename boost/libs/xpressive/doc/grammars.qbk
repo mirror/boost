@@ -197,7 +197,7 @@ This program displays the following:
 Here you can see how the results are nested and that they are stored in the order in which they
 are found.
 
-[blurb __tip__ See the definition of [link user_s_guide.examples.display_a_tree_of_nested_results output_nested_results] in the
+[blurb __tip__ See the definition of [link boost_xpressive.user_s_guide.examples.display_a_tree_of_nested_results output_nested_results] in the
 [link boost_xpressive.user_s_guide.examples Examples] section.]
 
 [h2 Filtering Nested Results]

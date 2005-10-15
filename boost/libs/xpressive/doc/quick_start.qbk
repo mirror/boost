@@ -50,12 +50,12 @@ that and more. Below is a quick reference:
 
 [table Tasks and Tools
     [[To do this ...]                                                                                                                                                                       [Use this ...]]
-    [[__tip__ [link user_s_guide.examples.see_if_a_whole_string_matches_a_regex See if a whole string matches a regex]]                                                                                          [The _regex_match_ algorithm]]
-    [[__tip__ [link user_s_guide.examples.see_if_a_string_contains_a_sub_string_that_matches_a_regex See if a string contains a sub-string that matches a regex]]                                                [The _regex_search_ algorithm]]
-    [[__tip__ [link user_s_guide.examples.replace_all_sub_strings_that_match_a_regex Replace all sub-strings that match a regex]]                                                                                [The _regex_replace_ algorithm]]
-    [[__tip__ [link user_s_guide.examples.find_all_the_sub_strings_that_match_a_regex_and_step_through_them_one_at_a_time Find all the sub-strings that match a regex and step through them one at a time]]      [The _regex_iterator_ class]]
-    [[__tip__ [link user_s_guide.examples.split_a_string_into_tokens_that_each_match_a_regex Split a string into tokens that each match a regex]]                                                                [The _regex_token_iterator_ class]]
-    [[__tip__ [link user_s_guide.examples.split_a_string_using_a_regex_as_a_delimiter Split a string using a regex as a delimiter]]                                                                              [The _regex_token_iterator_ class]]
+    [[__tip__ [link boost_xpressive.user_s_guide.examples.see_if_a_whole_string_matches_a_regex See if a whole string matches a regex]]                                                                                          [The _regex_match_ algorithm]]
+    [[__tip__ [link boost_xpressive.user_s_guide.examples.see_if_a_string_contains_a_sub_string_that_matches_a_regex See if a string contains a sub-string that matches a regex]]                                                [The _regex_search_ algorithm]]
+    [[__tip__ [link boost_xpressive.user_s_guide.examples.replace_all_sub_strings_that_match_a_regex Replace all sub-strings that match a regex]]                                                                                [The _regex_replace_ algorithm]]
+    [[__tip__ [link boost_xpressive.user_s_guide.examples.find_all_the_sub_strings_that_match_a_regex_and_step_through_them_one_at_a_time Find all the sub-strings that match a regex and step through them one at a time]]      [The _regex_iterator_ class]]
+    [[__tip__ [link boost_xpressive.user_s_guide.examples.split_a_string_into_tokens_that_each_match_a_regex Split a string into tokens that each match a regex]]                                                                [The _regex_token_iterator_ class]]
+    [[__tip__ [link boost_xpressive.user_s_guide.examples.split_a_string_using_a_regex_as_a_delimiter Split a string using a regex as a delimiter]]                                                                              [The _regex_token_iterator_ class]]
 ]
 
 These algorithms and classes are described in excruciating detail in the Reference section.

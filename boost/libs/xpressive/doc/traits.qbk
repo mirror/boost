@@ -7,7 +7,7 @@ how are case-insensitive comparisons performed? The locale-sensitive behavior is
 xpressive provides three traits class templates: `cpp_regex_traits<>`, `c_regex_traits<>` and `null_regex_traits<>`.
 The first wraps a `std::locale`, the second wraps the global C locale, and the third is a stub traits type for
 use when searching non-character data. All traits templates conform to the
-[link user_s_guide.concepts.traits_requirements Regex Traits Concept].
+[link boost_xpressive.user_s_guide.concepts.traits_requirements Regex Traits Concept].
 
 [h2 Setting the Default Regex Trait]
 
@@ -59,8 +59,8 @@ part of a static regex. For example:
 
 With xpressive static regexes, you are not limitted to searching for patterns in character sequences.
 You can search for patterns in raw bytes, integers, or anything that conforms to the
-[link user_s_guide.concepts.chart_requirements Char Concept]. The `null_regex_traits<>` makes it simple. It is a
-stub implementation of the [link user_s_guide.concepts.traits_requirements Regex Traits Concept]. It recognizes
+[link boost_xpressive.user_s_guide.concepts.chart_requirements Char Concept]. The `null_regex_traits<>` makes it simple. It is a
+stub implementation of the [link boost_xpressive.user_s_guide.concepts.traits_requirements Regex Traits Concept]. It recognizes
 no character classes and does no case-sensitive mappings. 
 
 For example, with `null_regex_traits<>`, you can write a static regex to find a pattern in a
