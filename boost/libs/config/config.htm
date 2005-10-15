@@ -74,8 +74,8 @@
       <p>you will see a list of the items being checked as the script works its way 
          through the regression tests. Note that the configure script only really 
          auto-detects your compiler if it's called g++, c++ or CC. If you are using some 
-         other compiler you will need to set one or more of the following 
-         environment variables:</p>
+         other compiler you will need to set one or more of the following environment 
+         variables:</p>
       <table border="1" cellpadding="7" cellspacing="1" width="624">
          <tr>
             <td valign="top" width="50%"><p align="center"><b>Variable</b></p>
@@ -122,14 +122,15 @@ sh ./configure</pre>
          committing a configure-modified user.hpp to the cvs repository (something you 
          will not be thanked for!).</p>
       <p>Option 2: give the header a more memorable name, and place it somewhere 
-         convenient; then, define the macro BOOST_USER_CONFIG to point to it. For example 
-         create a new sub-directory &lt;boost-root&gt;/boost/config/user/, and copy the 
-         header there; for example as "multithread-gcc-config.hpp". Then, when compiling 
-         add the command line option: 
-         -DBOOST_USER_CONFIG="&lt;boost/config/user/multithread-gcc-config.hpp&gt;", and boost 
-         will use the new configuration header. This option allows you to generate more 
-         than one configuration header, and to keep them separate from the boost source 
-         - so that updates to the source do not interfere with your configuration.</p>
+         convenient; then, define the macro BOOST_USER_CONFIG to point to it. For 
+         example create a new sub-directory &lt;boost-root&gt;/boost/config/user/, and 
+         copy the header there; for example as "multithread-gcc-config.hpp". Then, when 
+         compiling add the command line option: 
+         -DBOOST_USER_CONFIG="&lt;boost/config/user/multithread-gcc-config.hpp&gt;", and 
+         boost will use the new configuration header. This option allows you to generate 
+         more than one configuration header, and to keep them separate from the boost 
+         source - so that updates to the source do not interfere with your 
+         configuration.</p>
       <h4><a name="user_settable"></a>User settable options</h4>
       <p>There are some configuration-options that represent user choices, rather than 
          compiler defects or platform specific options. These are listed in 
@@ -844,6 +845,11 @@ void g() { return f(); }</pre>
             <td>Platform</td>
             <td>The platform has the POSIX header &lt;dirent.h&gt;.</td>
          </tr>
+         <TR>
+            <TD>BOOST_HAS_EXPM1</TD>
+            <TD>Platform</TD>
+            <TD>The platform has the functions expm1 expm1f and expm1l in &lt;math.h&gt;</TD>
+         </TR>
          <tr>
             <td>BOOST_HAS_FTIME</td>
             <td>Platform</td>
@@ -860,6 +866,12 @@ void g() { return f(); }</pre>
             <td valign="top" width="37%">The C++ implementation provides the (SGI) hash_set or 
                hash_map classes.</td>
          </tr>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_LOG1P</TD>
+            <TD vAlign="top" width="15%">Platform</TD>
+            <TD vAlign="top" width="37%">The platform has the functions log1p, log1pf and 
+               log1pl in &lt;math.h&gt;.</TD>
+         </TR>
          <tr>
             <td>BOOST_HAS_LONG_LONG</td>
             <td>Compiler</td>
@@ -948,6 +960,114 @@ void g() { return f(); }</pre>
                std::use_facet, but has a workaround class-version that does the job. This is 
                primarily for the STLport std lib.</td>
          </tr>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1_ARRAY</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">The library has a TR1 conforming version of 
+               &lt;array&gt;</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1_COMPLEX_OVERLOADS</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">The library has a version of &lt;complex&gt; that 
+               supports passing scalars&nbsp;to the complex number algorithms.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1_COMPLEX_INVERSE_TRIG</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">The library has a version of &lt;complex&gt; that 
+               includes the new inverse trig functions from TR1.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1_REFERENCE_WRAPPER</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">The library has TR1 conforming reference wrappers in 
+               &lt;functional&gt;.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1_RESULT_OF</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">The library has a TR1 conforming result_of template 
+               in &lt;functional&gt;.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1_MEM_FN</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">The library has a TR1 conforming mem_fn function 
+               template in &lt;functional&gt;.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1_BIND</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">The library has a TR1 conforming&nbsp;bind function 
+               template in &lt;functional&gt;.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1_FUNCTION</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">The library has a TR1 conforming&nbsp;<EM>function</EM>
+               class template in &lt;functional&gt;.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1_HASH</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">The library has a TR1 conforming&nbsp;<EM>hash </EM>function 
+               template in &lt;functional&gt;.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1_SHARED_PTR</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">The library has a TR1 conforming&nbsp;<EM>shared_ptr </EM>
+               class template in &lt;memory&gt;.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1_RANDOM</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">The library has a TR1 conforming version of 
+               &lt;random&gt;.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1_REGEX</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">The library has a TR1 conforming version of 
+               &lt;regex&gt;.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1_TUPLE</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">The library has a TR1 conforming version of 
+               &lt;tuple&gt;.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1_TYPE_TRAITS</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">The library has a TR1 conforming version of 
+               &lt;type_traits&gt;.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1_UTILITY</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">The library has the TR1 additions to &lt;utility&gt; 
+               (tuple interface to std::pair).</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1_UNORDERED_MAP</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">The library has a TR1 conforming version of 
+               &lt;unordered_map&gt;.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1_UNORDERED_SET</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">The library has a TR1 conforming version of 
+               &lt;unordered_set&gt;.</TD>
+         </TR>
+         <TR>
+            <TD vAlign="top" width="48%">BOOST_HAS_TR1</TD>
+            <TD vAlign="top" width="15%">Standard library</TD>
+            <TD vAlign="top" width="37%">Implies all the other BOOST_HAS_TR1_* macros should 
+               be set.</TD>
+         </TR>
          <tr>
             <td valign="top" width="48%">BOOST_HAS_THREADS</td>
             <td valign="top" width="15%">Platform/compiler</td>
@@ -1136,8 +1256,8 @@ void g() { return f(); }</pre>
          </tr>
       </table>
       <h4><a name="info_macros"></a>Boost Informational Macros</h4>
-      <p>The following macros describe boost features; these are, generally speaking 
-         the only boost macros that should be tested in user code.</p>
+      <p>The following macros describe boost features; these are, generally speaking the 
+         only boost macros that should be tested in user code.</p>
       <table border="1" cellpadding="7" cellspacing="1" width="100%">
          <tr>
             <td valign="top" width="33%"><p align="center"><b>Macro</b></p>
@@ -1237,10 +1357,10 @@ void g() { return f(); }</pre>
          be managed by #pragma's that tell the compiler what ABI to use for the types 
          declared in your library. In order to avoid sprinkling #pragma's all over the 
          boost headers, there are some prefix and suffix headers that do the job. 
-      Typical usage is:</P>
+         Typical usage is:</P>
       <P><b>my_library.cpp</b></P>
       <blockquote>
-      <PRE>#ifndef MY_INCLUDE_GUARD
+         <PRE>#ifndef MY_INCLUDE_GUARD
 #define MY_INCLUDE_GUARD
 
 // all includes go here:
@@ -1260,7 +1380,7 @@ namespace boost{
       </blockquote>
       <P><b>my_library.cpp</b></P>
       <blockquote>
-        <pre>...
+         <pre>...
 <b>// nothing special need be done in the implementation file</b>
 ...</pre>
       </blockquote>
@@ -1284,23 +1404,23 @@ namespace boost{
          search path, and the compiler and linker do the rest.&nbsp; Boost.config 
          supports this via the header &lt;boost/config/auto_link.hpp&gt;, before 
          including this header one or more of the following macros need to be defined:</P>
-         <TABLE id="Table1" cellSpacing="1" cellPadding="1" width="100%" border="1">
-            <TR>
-               <TD>BOOST_LIB_NAME</TD>
-               <TD>
-                  Required: An&nbsp;identifier containing the basename of the library, for 
-                  example 'boost_regex'.</TD>
-            </TR>
-            <TR>
-               <TD>BOOST_DYN_LINK</TD>
-               <TD>Optional: when set link to dll rather than static library.</TD>
-            </TR>
-            <TR>
-               <TD>BOOST_LIB_DIAGNOSTIC</TD>
-               <TD>Optional: when set the header will print out the name of the library selected 
-                  (useful for debugging).</TD>
-            </TR>
-         </TABLE>
+      <TABLE id="Table1" cellSpacing="1" cellPadding="1" width="100%" border="1">
+         <TR>
+            <TD>BOOST_LIB_NAME</TD>
+            <TD>
+               Required: An&nbsp;identifier containing the basename of the library, for 
+               example 'boost_regex'.</TD>
+         </TR>
+         <TR>
+            <TD>BOOST_DYN_LINK</TD>
+            <TD>Optional: when set link to dll rather than static library.</TD>
+         </TR>
+         <TR>
+            <TD>BOOST_LIB_DIAGNOSTIC</TD>
+            <TD>Optional: when set the header will print out the name of the library selected 
+               (useful for debugging).</TD>
+         </TR>
+      </TABLE>
       <P>If the compiler supports this mechanism, then it will be told to link against 
          the appropriately named library, the actual algorithm used to mangle the name 
          of the library is documented inside &lt;boost/config/auto_link.hpp&gt; and has 
@@ -1308,7 +1428,7 @@ namespace boost{
       <P>Typical usage is:</P>
       <P><b>my_library.hpp</b></P>
       <blockquote>
-      <PRE>...
+         <PRE>...
 //
 // Don't include auto-linking code if the user has disabled it by
 // defining BOOST_ALL_NO_LIB, or BOOST_MY_LIBRARY_NO_LIB, or if this 
@@ -1326,7 +1446,7 @@ namespace boost{
       </blockquote>
       <p><b>my_library.cpp</b></p>
       <blockquote>
-        <pre>// define BOOST_MY_LIBRARY_SOURCE so that the header knows that the
+         <pre>// define BOOST_MY_LIBRARY_SOURCE so that the header knows that the
 // library is being built (possibly exporting rather than importing code)
 //
 <b>#define BOOST_MY_LIBRARY_SOURCE</b> 
@@ -1535,4 +1655,3 @@ int test()
       <p>&nbsp;</p>
    </body>
 </html>
-
