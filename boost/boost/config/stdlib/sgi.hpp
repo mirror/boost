@@ -10,7 +10,7 @@
 //  generic SGI STL:
 
 #if !defined(__STL_CONFIG_H)
-#  include <iosfwd>
+#  include <limits>
 #  if !defined(__STL_CONFIG_H)
 #      error "This is not the SGI STL!"
 #  endif

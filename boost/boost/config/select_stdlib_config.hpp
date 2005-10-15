@@ -12,12 +12,17 @@
 // locate which std lib we are using and define BOOST_STDLIB_CONFIG as needed:
 
 // we need to include a std lib header here in order to detect which
-// library is in use, use <iosfwd> as it's about the smallest
+// library is in use, use <iosfwd> and <limits> as they're about the smallest
 // of the std lib headers - do not rely on this header being included -
 // users can short-circuit this header if they know whose std lib
 // they are using.
+// PLEASE NOTE that the config system must not include any of the headers
+// that are modified by TR1 (<memory>, <functional> or <utility>) not even
+// indirectly.  If they do so then the Boost TR1 implementation will be unusable.
+//
 
 #include <iosfwd>
+#include <limits>
 
 #if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
 // STLPort library; this _must_ come first, otherwise since
