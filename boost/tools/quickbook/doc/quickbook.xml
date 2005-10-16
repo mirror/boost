@@ -102,7 +102,7 @@
       such as un-matched closing brackets do not go haywire and corrupt anything
       past a single block.
     </para>
-    <anchor id="syntax.comments" />
+    <anchor id="quickbook.syntax.comments" />
     <bridgehead renderas="sect2">
       Comments
     </bridgehead>
@@ -110,19 +110,19 @@
       Can be placed anywhere.
     </para>
     
-<programlisting><literal>[/ comment (no output generated) ]
-</literal></programlisting>
-    <anchor id="syntax.phrase_level_elements" />
+<programlisting>[/ comment (no output generated) ]
+</programlisting>
+    <anchor id="quickbook.syntax.phrase_level_elements" />
     <bridgehead renderas="sect2">
       Phrase Level Elements
     </bridgehead>
-    <anchor id="syntax.font_styles" />
+    <anchor id="quickbook.syntax.font_styles" />
     <bridgehead renderas="sect3">
       Font Styles
     </bridgehead>
     
-<programlisting><literal>['italic], [*bold], [_underline], [^teletype], [-strikethrough]
-</literal></programlisting>
+<programlisting>['italic], [*bold], [_underline], [^teletype], [-strikethrough]
+</programlisting>
     <para>
       will generate:
     </para>
@@ -135,21 +135,21 @@
       Like all non-terminal phrase level elements, this can of course be nested:
     </para>
     
-<programlisting><literal>[*['bold-italic]]
-</literal></programlisting>
+<programlisting>[*['bold-italic]]
+</programlisting>
     <para>
       will generate:
     </para>
     <para>
       <emphasis role="bold"><emphasis>bold-italic</emphasis></emphasis>
     </para>
-    <anchor id="syntax.quotes" />
+    <anchor id="quickbook.syntax.quotes" />
     <bridgehead renderas="sect3">
       Quotes
     </bridgehead>
     
-<programlisting><literal>["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
-</literal></programlisting>
+<programlisting>["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
+</programlisting>
     <para>
       will generate:
     </para>
@@ -165,9 +165,9 @@
       Like all phrase elements, quotes may be nested. Example:
     </para>
     
-<programlisting><literal>["Here's the rule for bargains: ["Do other men, for they would do you.] That's 
+<programlisting>["Here's the rule for bargains: ["Do other men, for they would do you.] That's 
 the true business precept.]
-</literal></programlisting>
+</programlisting>
     <para>
       will generate:
     </para>
@@ -175,7 +175,7 @@ the true business precept.]
       <quote>Here's the rule for bargains: <quote>Do other men, for they would do
       you.</quote> That's the true business precept.</quote>
     </para>
-    <anchor id="syntax.simple_formatting" />
+    <anchor id="quickbook.syntax.simple_formatting" />
     <bridgehead renderas="sect3">
       Simple formatting
     </bridgehead>
@@ -183,8 +183,8 @@ the true business precept.]
       Simple markup for formatting text, common in many applications, is now supported:
     </para>
     
-<programlisting><literal>/italic/, *bold*, _underline_, =teletype=, -strikethrough-
-</literal></programlisting>
+<programlisting>/italic/, *bold*, _underline_, =teletype=, -strikethrough-
+</programlisting>
     <para>
       will generate:
     </para>
@@ -220,7 +220,7 @@ the true business precept.]
       </listitem>
       <listitem>
         A line starting with the star will be interpreted as an unordered list. See
-        <link linkend="syntax.unordered_lists">Unordered lists</link>.
+        <link linkend="quickbook.syntax.unordered_lists">Unordered lists</link>.
       </listitem>
     </itemizedlist>
     <informaltable frame="all">
@@ -304,7 +304,7 @@ the true business precept.]
         </tbody>
       </tgroup>
     </informaltable>
-    <anchor id="syntax.inline_code" />
+    <anchor id="quickbook.syntax.inline_code" />
     <bridgehead renderas="sect3">
       Inline code
     </bridgehead>
@@ -313,16 +313,16 @@ the true business precept.]
       We provide a very simple markup for this. For example, this:
     </para>
     
-<programlisting><literal>This text has inlined code `int main() { return 0; }` in it.
-</literal></programlisting>
+<programlisting>This text has inlined code `int main() { return 0; }` in it.
+</programlisting>
     <para>
       will generate:
     </para>
     <para>
-      This text has inlined code <code><phrase role="keyword">int</phrase><phrase
-      role="identifier"> main</phrase><phrase role="special">()</phrase><phrase role="special">
-      {</phrase><phrase role="keyword"> return</phrase><phrase role="number"> 0</phrase><phrase
-      role="special">;</phrase><phrase role="special"> }</phrase></code> in it. The
+      This text has inlined code <code><phrase role="keyword">int</phrase> <phrase
+      role="identifier">main</phrase><phrase role="special">()</phrase> <phrase role="special">{</phrase>
+      <phrase role="keyword">return</phrase> <phrase role="number">0</phrase><phrase
+      role="special">;</phrase> <phrase role="special">}</phrase></code> in it. The
       code will be syntax highlighted.
     </para>
     <informaltable frame="all">
@@ -339,17 +339,18 @@ the true business precept.]
         </tbody>
       </tgroup>
     </informaltable>
-    <anchor id="syntax.code_blocks" />
+    <anchor id="quickbook.syntax.code_blocks" />
     <bridgehead renderas="sect3">
       Code blocks
     </bridgehead>
     <para>
-      Preformatted code simply starts with a space or a tab (See <link linkend="syntax.code">Code</link>).
+      Preformatted code simply starts with a space or a tab (See <link linkend="quickbook.syntax.code">Code</link>).
       However, such a simple syntax cannot be used as phrase elements in lists (See
-      <link linkend="syntax.ordered_lists">Ordered lists</link> and <link linkend="syntax.unordered_lists">Unordered
-      lists</link>), tables (See <link linkend="syntax.tables">Tables</link>), etc.
-      Inline code (see above) can. The problem is, inline code does not allow formatting
-      with newlines, spaces, and tabs. These are lost.
+      <link linkend="quickbook.syntax.ordered_lists">Ordered lists</link> and <link
+      linkend="quickbook.syntax.unordered_lists">Unordered lists</link>), tables
+      (See <link linkend="quickbook.syntax.tables">Tables</link>), etc. Inline code
+      (see above) can. The problem is, inline code does not allow formatting with
+      newlines, spaces, and tabs. These are lost.
     </para>
     <para>
       We provide a phrase level markup that is a mix between the two. By using the
@@ -357,7 +358,7 @@ the true business precept.]
       blocks of code. Example:
     </para>
     
-<programlisting><literal>``
+<programlisting>``
     #include &lt;iostream&gt;
 
     int main()
@@ -366,25 +367,23 @@ the true business precept.]
         return 0;
     }
 ``
-</literal></programlisting>
+</programlisting>
     <para>
       will generate:
     </para>
     <para>
       
 <programlisting>
-<literal>
-<phrase role="preprocessor">#include</phrase><phrase role="special"> &lt;</phrase><phrase role="identifier">iostream</phrase><phrase role="special">&gt;</phrase><phrase role="keyword">
+<phrase role="preprocessor">#include</phrase> <phrase role="special">&lt;</phrase><phrase role="identifier">iostream</phrase><phrase role="special">&gt;</phrase>
 
-int</phrase><phrase role="identifier"> main</phrase><phrase role="special">()</phrase><phrase role="special">
-{</phrase><phrase role="identifier">
-    std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase><phrase role="special"> &lt;&lt;</phrase><phrase role="string"> &quot;Hello, World!&quot;</phrase><phrase role="special"> &lt;&lt;</phrase><phrase role="identifier"> std</phrase><phrase role="special">::</phrase><phrase role="identifier">endl</phrase><phrase role="special">;</phrase><phrase role="keyword">
-    return</phrase><phrase role="number"> 0</phrase><phrase role="special">;</phrase><phrase role="special">
-}</phrase>
-</literal>
+<phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase>
+<phrase role="special">{</phrase>
+    <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase> <phrase role="special">&lt;&lt;</phrase> <phrase role="string">&quot;Hello, World!&quot;</phrase> <phrase role="special">&lt;&lt;</phrase> <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">endl</phrase><phrase role="special">;</phrase>
+    <phrase role="keyword">return</phrase> <phrase role="number">0</phrase><phrase role="special">;</phrase>
+<phrase role="special">}</phrase>
 </programlisting>
     </para>
-    <anchor id="syntax.source_mode" />
+    <anchor id="quickbook.syntax.source_mode" />
     <bridgehead renderas="sect3">
       Source Mode
     </bridgehead>
@@ -392,7 +391,8 @@ int</phrase><phrase role="identifier"> main</phrase><phrase role="special">()</p
       If a document contains more than one type of source code then the source mode
       may be changed dynamically as the document is processed. All QuickBook documents
       are initially in C++ mode by default, though an alternative initial value may
-      be set in the <link linkend="syntax.document">Document Info</link> section.
+      be set in the <link linkend="quickbook.syntax.document">Document Info</link>
+      section.
     </para>
     <para>
       To change the source mode, use the <literal>[source-mode]</literal> markup,
@@ -400,10 +400,10 @@ int</phrase><phrase role="identifier"> main</phrase><phrase role="special">()</p
       this:
     </para>
     
-<programlisting><literal>Python's [python] `import` is rather like C++'s [c++] `#include`. A
+<programlisting>Python's [python] `import` is rather like C++'s [c++] `#include`. A
 C++ comment `// looks like this` whereas a Python comment [python]
 `# looks like this`.
-</literal></programlisting>
+</programlisting>
     <para>
       will generate:
     </para>
@@ -444,13 +444,13 @@ C++ comment `// looks like this` whereas a Python comment [python]
         </tbody>
       </tgroup>
     </informaltable>
-    <anchor id="syntax.line_break" />
+    <anchor id="quickbook.syntax.line_break" />
     <bridgehead renderas="sect3">
       line-break
     </bridgehead>
     
-<programlisting><literal>[br]
-</literal></programlisting>
+<programlisting>[br]
+</programlisting>
     <informaltable frame="all">
       <?dbhtml table-width="74%" ?>
       <tgroup cols="1">
@@ -464,26 +464,26 @@ C++ comment `// looks like this` whereas a Python comment [python]
         </tbody>
       </tgroup>
     </informaltable>
-    <anchor id="syntax.anchors" />
+    <anchor id="quickbook.syntax.anchors" />
     <bridgehead renderas="sect3">
       Anchors
     </bridgehead>
     
-<programlisting><literal>[#named_anchor]
-</literal></programlisting>
+<programlisting>[#named_anchor]
+</programlisting>
     <para>
       A named anchor is a hook that can be referenced by a link elsewhere in the
       document. You can then reference an anchor with <literal>[link named_anchor
-      Some link text]</literal>. More on anchors <link linkend="syntax.anchor_links">here</link>,
-      <link linkend="syntax.section">here</link> and <link linkend="syntax.headings">here</link>.
+      Some link text]</literal>. More on anchors <link linkend="quickbook.syntax.anchor_links">here</link>,
+      <link linkend="quickbook.syntax.section">here</link> and <link linkend="quickbook.syntax.headings">here</link>.
     </para>
-    <anchor id="syntax.links" />
+    <anchor id="quickbook.syntax.links" />
     <bridgehead renderas="sect3">
       Links
     </bridgehead>
     
-<programlisting><literal>[@http://www.boost.org this is [*boost's] website....]
-</literal></programlisting>
+<programlisting>[@http://www.boost.org this is [*boost's] website....]
+</programlisting>
     <para>
       will generate:
     </para>
@@ -495,21 +495,21 @@ C++ comment `// looks like this` whereas a Python comment [python]
       URL links where the link text is the link itself is common. Example:
     </para>
     
-<programlisting><literal>see http://spirit.sourceforge.net/
-</literal></programlisting>
+<programlisting>see http://spirit.sourceforge.net/
+</programlisting>
     <para>
       so, when the text is absent in a link markup, the URL is assumed. Example:
     </para>
     
-<programlisting><literal>see [@http://spirit.sourceforge.net/]
-</literal></programlisting>
+<programlisting>see [@http://spirit.sourceforge.net/]
+</programlisting>
     <para>
       will generate:
     </para>
     <para>
       see <ulink url="http://spirit.sourceforge.net/">http://spirit.sourceforge.net/</ulink>
     </para>
-    <anchor id="syntax.anchor_links" />
+    <anchor id="quickbook.syntax.anchor_links" />
     <bridgehead renderas="sect3">
       Anchor links
     </bridgehead>
@@ -517,13 +517,13 @@ C++ comment `// looks like this` whereas a Python comment [python]
       You can link within a document using:
     </para>
     
-<programlisting><literal>[link section_id.normalized_header_text The link text]
-</literal></programlisting>
+<programlisting>[link section_id.normalized_header_text The link text]
+</programlisting>
     <para>
-      See sections <link linkend="syntax.section">Section</link> and <link linkend="syntax.headings">Headings</link>
-      for more info.
+      See sections <link linkend="quickbook.syntax.section">Section</link> and <link
+      linkend="quickbook.syntax.headings">Headings</link> for more info.
     </para>
-    <anchor id="syntax.refentry_links" />
+    <anchor id="quickbook.syntax.refentry_links" />
     <bridgehead renderas="sect3">
       refentry links
     </bridgehead>
@@ -531,8 +531,8 @@ C++ comment `// looks like this` whereas a Python comment [python]
       In addition, you can link internally to an XML refentry like:
     </para>
     
-<programlisting><literal>[link xml.refentry The link text]
-</literal></programlisting>
+<programlisting>[link xml.refentry The link text]
+</programlisting>
     <para>
       This gets converted into <literal>&lt;link linkend=&quot;xml.refentry&quot;&gt;The
       link text&lt;/link&gt;</literal>.
@@ -542,12 +542,12 @@ C++ comment `// looks like this` whereas a Python comment [python]
       will automatically be the refentry. Example:
     </para>
     
-<programlisting><literal>[link xml.refentry]
-</literal></programlisting>
+<programlisting>[link xml.refentry]
+</programlisting>
     <para>
       This gets converted into <literal>&lt;link linkend=&quot;xml.refentry&quot;&gt;xml.refentry&lt;/link&gt;</literal>.
     </para>
-    <anchor id="syntax.function__class__member__enum_or_header_links" />
+    <anchor id="quickbook.syntax.function__class__member__enum_or_header_links" />
     <bridgehead renderas="sect3">
       function, class, member, enum or header links
     </bridgehead>
@@ -556,23 +556,23 @@ C++ comment `// looks like this` whereas a Python comment [python]
       section, you can use:
     </para>
     
-<programlisting><literal>[funcref fully::qualified::function_name The link text]
+<programlisting>[funcref fully::qualified::function_name The link text]
 [classref fully::qualified::class_name The link text]
 [memberref fully::qualified::member_name The link text]
 [enumref fully::qualified::enum_name The link text]
 [headerref path/to/header.hpp The link text]
-</literal></programlisting>
+</programlisting>
     <para>
       Again, the link text is optional. If this is not present, the link text will
       automatically be the function, class, member or enum. Example:
     </para>
     
-<programlisting><literal>[classref boost::bar::baz]
-</literal></programlisting>
+<programlisting>[classref boost::bar::baz]
+</programlisting>
     <para>
       would have &quot;boost::bar::baz&quot; as the link text.
     </para>
-    <anchor id="syntax.escape" />
+    <anchor id="quickbook.syntax.escape" />
     <bridgehead renderas="sect3">
       Escape
     </bridgehead>
@@ -580,19 +580,19 @@ C++ comment `// looks like this` whereas a Python comment [python]
       The escape mark-up is used when we don't want to do any processing.
     </para>
     
-<programlisting><literal>'''
+<programlisting>'''
 escape (no processing/formatting)
 '''
-</literal></programlisting>
+</programlisting>
     <para>
       Escaping allows us to pass XML markup to <ulink url="http://www.boost.org/doc/html/boostbook.html">BoostBook</ulink>
       or <ulink url="http://www.docbook.org/">DocBook</ulink>. For example:
     </para>
     
-<programlisting><literal>'''
+<programlisting>'''
 &lt;emphasis role=&quot;bold&quot;&gt;This is direct XML markup&lt;/emphasis&gt;
 '''
-</literal></programlisting>
+</programlisting>
     <para>
       <emphasis role="bold">This is direct XML markup</emphasis>
     </para>
@@ -608,7 +608,7 @@ escape (no processing/formatting)
         </tbody>
       </tgroup>
     </informaltable>
-    <anchor id="syntax.single_char_escape" />
+    <anchor id="quickbook.syntax.single_char_escape" />
     <bridgehead renderas="sect3">
       Single char escape
     </bridgehead>
@@ -626,18 +626,18 @@ escape (no processing/formatting)
       preferred over <code><phrase role="special">[</phrase><phrase role="identifier">br</phrase><phrase
       role="special">]</phrase></code>.
     </para>
-    <anchor id="syntax.images__terminal_" />
+    <anchor id="quickbook.syntax.images__terminal_" />
     <bridgehead renderas="sect3">
       Images (terminal)
     </bridgehead>
     
-<programlisting><literal>[$image.jpg]
-</literal></programlisting>
-    <anchor id="syntax.block_level_elements" />
+<programlisting>[$image.jpg]
+</programlisting>
+    <anchor id="quickbook.syntax.block_level_elements" />
     <bridgehead renderas="sect2">
       Block Level Elements
     </bridgehead>
-    <anchor id="syntax.document" />
+    <anchor id="quickbook.syntax.document" />
     <bridgehead renderas="sect3">
       Document
     </bridgehead>
@@ -646,7 +646,7 @@ escape (no processing/formatting)
       this:
     </para>
     
-<programlisting><literal>[document-type The Document Title
+<programlisting>[document-type The Document Title
     [quickbook 1.3]
     [version 1.0]
     [id the_document_name]
@@ -658,7 +658,7 @@ escape (no processing/formatting)
     [license The document's license]
     [source-mode source-type]
 ]
-</literal></programlisting>
+</programlisting>
     <para>
       Where document-type is one of:
     </para>
@@ -691,10 +691,10 @@ escape (no processing/formatting)
     </para>
     <para>
       <literal>source-type</literal> is a lowercase string setting the initial <link
-      linkend="syntax.source_mode">source mode</link>. If the <literal>source-mode</literal>
+      linkend="quickbook.syntax.source_mode">source mode</link>. If the <literal>source-mode</literal>
       field is omitted, a default value of <literal>c++</literal> will be used.
     </para>
-    <anchor id="syntax.section" />
+    <anchor id="quickbook.syntax.section" />
     <bridgehead renderas="sect3">
       Section
     </bridgehead>
@@ -702,8 +702,8 @@ escape (no processing/formatting)
       Starting a new section is accomplished with:
     </para>
     
-<programlisting><literal>[section:id The Section Title]
-</literal></programlisting>
+<programlisting>[section:id The Section Title]
+</programlisting>
     <para>
       where <emphasis>id</emphasis> is optional. id will be the filename of the generated
       section. If it is not present, &quot;The Section Title&quot; will be normalized
@@ -716,12 +716,12 @@ escape (no processing/formatting)
       End a section with:
     </para>
     
-<programlisting><literal>[endsect]
-</literal></programlisting>
+<programlisting>[endsect]
+</programlisting>
     <para>
       Sections can nest, and that results in a hierarchy in the table of contents.
     </para>
-    <anchor id="syntax.xinclude" />
+    <anchor id="quickbook.syntax.xinclude" />
     <bridgehead renderas="sect3">
       xinclude
     </bridgehead>
@@ -729,13 +729,13 @@ escape (no processing/formatting)
       You can include another XML file with:
     </para>
     
-<programlisting><literal>[xinclude file.xml]
-</literal></programlisting>
+<programlisting>[xinclude file.xml]
+</programlisting>
     <para>
       This is useful when file.xml has been generated by Doxygen and contains your
       reference section.
     </para>
-    <anchor id="syntax.paragraphs" />
+    <anchor id="quickbook.syntax.paragraphs" />
     <bridgehead renderas="sect3">
       Paragraphs
     </bridgehead>
@@ -746,15 +746,15 @@ escape (no processing/formatting)
       blurb, (block-quote) ':', pre, def, table and include ] may also terminate
       a paragraph.
     </para>
-    <anchor id="syntax.ordered_lists" />
+    <anchor id="quickbook.syntax.ordered_lists" />
     <bridgehead renderas="sect3">
       Ordered lists
     </bridgehead>
     
-<programlisting><literal># One
+<programlisting># One
 # Two
 # Three
-</literal></programlisting>
+</programlisting>
     <para>
       will generate:
     </para>
@@ -769,7 +769,7 @@ escape (no processing/formatting)
         Three
       </listitem>
     </orderedlist>
-    <anchor id="syntax.list_hierarchies" />
+    <anchor id="quickbook.syntax.list_hierarchies" />
     <bridgehead renderas="sect3">
       List Hierarchies
     </bridgehead>
@@ -777,7 +777,7 @@ escape (no processing/formatting)
       List hierarchies are supported. Example:
     </para>
     
-<programlisting><literal># One
+<programlisting># One
 # Two
 # Three
     # Three.a
@@ -788,7 +788,7 @@ escape (no processing/formatting)
         # Four.a.i
         # Four.a.ii
 # Five
-</literal></programlisting>
+</programlisting>
     <para>
       will generate:
     </para>
@@ -833,7 +833,7 @@ escape (no processing/formatting)
         Five
       </listitem>
     </orderedlist>
-    <anchor id="syntax.long_list_lines" />
+    <anchor id="quickbook.syntax.long_list_lines" />
     <bridgehead renderas="sect3">
       Long List Lines
     </bridgehead>
@@ -841,14 +841,14 @@ escape (no processing/formatting)
       Long lines will be wrapped appropriately. Example:
     </para>
     
-<programlisting><literal># A short item.
+<programlisting># A short item.
 # A very long item. A very long item. A very long item.
   A very long item. A very long item. A very long item.
   A very long item. A very long item. A very long item.
   A very long item. A very long item. A very long item.
   A very long item. A very long item. A very long item.
 # A short item.
-</literal></programlisting>
+</programlisting>
     <orderedlist>
       <listitem>
         A short item.
@@ -863,15 +863,15 @@ escape (no processing/formatting)
         A short item.
       </listitem>
     </orderedlist>
-    <anchor id="syntax.unordered_lists" />
+    <anchor id="quickbook.syntax.unordered_lists" />
     <bridgehead renderas="sect3">
       Unordered lists
     </bridgehead>
     
-<programlisting><literal>* First
+<programlisting>* First
 * Second
 * Third
-</literal></programlisting>
+</programlisting>
     <para>
       will generate:
     </para>
@@ -886,7 +886,7 @@ escape (no processing/formatting)
         Third
       </listitem>
     </itemizedlist>
-    <anchor id="syntax.mixed_lists" />
+    <anchor id="quickbook.syntax.mixed_lists" />
     <bridgehead renderas="sect3">
       Mixed lists
     </bridgehead>
@@ -894,14 +894,14 @@ escape (no processing/formatting)
       Mixed lists (ordered and unordered) are supported. Example:
     </para>
     
-<programlisting><literal># One
+<programlisting># One
 # Two
 # Three
     * Three.a
     * Three.b
     * Three.c
 # Four
-</literal></programlisting>
+</programlisting>
     <para>
       will generate:
     </para>
@@ -934,7 +934,7 @@ escape (no processing/formatting)
       And...
     </para>
     
-<programlisting><literal># 1
+<programlisting># 1
     * 1.a
         # 1.a.1
         # 1.a.2
@@ -946,7 +946,7 @@ escape (no processing/formatting)
         # 2.b.2
             * 2.b.2.a
             * 2.b.2.b
-</literal></programlisting>
+</programlisting>
     <para>
       will generate:
     </para>
@@ -998,59 +998,56 @@ escape (no processing/formatting)
         </itemizedlist>
       </listitem>
     </orderedlist>
-    <anchor id="syntax.code" />
+    <anchor id="quickbook.syntax.code" />
     <bridgehead renderas="sect3">
       Code
     </bridgehead>
     <para>
       Preformatted code starts with a space or a tab. The code will be syntax highlighted
-      according to the current <link linkend="syntax.source_mode">source mode</link>:
+      according to the current <link linkend="quickbook.syntax.source_mode">source
+      mode</link>:
     </para>
     <para>
     </para>
     
 <programlisting>
-<literal>
-<phrase role="preprocessor">#include</phrase><phrase role="special"> &lt;</phrase><phrase role="identifier">iostream</phrase><phrase role="special">&gt;</phrase><phrase role="keyword">
+<phrase role="preprocessor">#include</phrase> <phrase role="special">&lt;</phrase><phrase role="identifier">iostream</phrase><phrase role="special">&gt;</phrase>
 
-int</phrase><phrase role="identifier"> main</phrase><phrase role="special">()</phrase><phrase role="special">
-{</phrase><phrase role="comment">
-    // Sample code
-</phrase><phrase role="identifier">    std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase><phrase role="special"> &lt;&lt;</phrase><phrase role="string"> &quot;Hello, World\n&quot;</phrase><phrase role="special">;</phrase><phrase role="keyword">
-    return</phrase><phrase role="number"> 0</phrase><phrase role="special">;</phrase><phrase role="special">
-}</phrase>
-</literal>
+<phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase>
+<phrase role="special">{</phrase>
+    <phrase role="comment">// Sample code
+</phrase>    <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase> <phrase role="special">&lt;&lt;</phrase> <phrase role="string">&quot;Hello, World\n&quot;</phrase><phrase role="special">;</phrase>
+    <phrase role="keyword">return</phrase> <phrase role="number">0</phrase><phrase role="special">;</phrase>
+<phrase role="special">}</phrase>
 </programlisting>
     <para>
     </para>
     
 <programlisting>
-<literal>
-<phrase role="keyword">import</phrase><phrase role="identifier"> cgi</phrase><phrase role="keyword">
+<phrase role="keyword">import</phrase> <phrase role="identifier">cgi</phrase>
 
-def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special">(</phrase><phrase role="identifier">text</phrase><phrase role="special">):</phrase><phrase role="string">
-    '''&quot;Cooks&quot; the input text for HTML.'''</phrase><phrase role="keyword">
+<phrase role="keyword">def</phrase> <phrase role="identifier">cookForHtml</phrase><phrase role="special">(</phrase><phrase role="identifier">text</phrase><phrase role="special">):</phrase>
+    <phrase role="string">'''&quot;Cooks&quot; the input text for HTML.'''</phrase>
     
-    return</phrase><phrase role="identifier"> cgi</phrase><phrase role="special">.</phrase><phrase role="identifier">escape</phrase><phrase role="special">(</phrase><phrase role="identifier">text</phrase><phrase role="special">)</phrase></literal>
+    <phrase role="keyword">return</phrase> <phrase role="identifier">cgi</phrase><phrase role="special">.</phrase><phrase role="identifier">escape</phrase><phrase role="special">(</phrase><phrase role="identifier">text</phrase><phrase role="special">)</phrase>
 </programlisting>
     <para>
       Macros that are already defined are expanded in source code. Example:
     </para>
     
-<programlisting><literal>[def __syntax_highlight__ [@quickbook/highlight.html syntax_highlight]]
+<programlisting>[def __syntax_highlight__ [@quickbook/highlight.html syntax_highlight]]
 [def __quickbook__ [@index.html quickbook]]
 
     using __quickbook__::__syntax_highlight__;
-</literal></programlisting>
+</programlisting>
     <para>
       Generates:
     </para>
     
 <programlisting>
-<literal>
-<phrase role="identifier">using</phrase>&nbsp;<ulink url="index.html">quickbook</ulink><phrase role="special">::</phrase><ulink url="quickbook/highlight.html">syntax_highlight</ulink><phrase role="special">;</phrase></literal>
+<phrase role="identifier">using</phrase> <ulink url="index.html">quickbook</ulink><phrase role="special">::</phrase><ulink url="quickbook/highlight.html">syntax_highlight</ulink><phrase role="special">;</phrase>
 </programlisting>
-    <anchor id="syntax.preformatted" />
+    <anchor id="quickbook.syntax.preformatted" />
     <bridgehead renderas="sect3">
       Preformatted
     </bridgehead>
@@ -1059,7 +1056,7 @@ def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special
       cases, use the <literal>[pre ... ]</literal> markup block.
     </para>
     
-<programlisting><literal>[pre
+<programlisting>[pre
 
     Some *preformatted* text                    Some *preformatted* text
 
@@ -1068,69 +1065,69 @@ def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special
             Some *preformatted* text    Some *preformatted* text
 
 ]
-</literal></programlisting>
+</programlisting>
     <para>
       Spaces, tabs and newlines are rendered as-is. Unlike all quickbook block level
       markup, pre (and Code) are the only ones that allow multiple newlines. The
       markup above will generate:
     </para>
     
-<programlisting><literal>Some <emphasis role="bold">preformatted</emphasis> text                    Some <emphasis role="bold">preformatted</emphasis> text
+<programlisting>Some <emphasis role="bold">preformatted</emphasis> text                    Some <emphasis role="bold">preformatted</emphasis> text
 
     Some <emphasis role="bold">preformatted</emphasis> text            Some <emphasis role="bold">preformatted</emphasis> text
 
         Some <emphasis role="bold">preformatted</emphasis> text    Some <emphasis role="bold">preformatted</emphasis> text
 
-</literal></programlisting>
+</programlisting>
     <para>
       Notice that unlike Code, phrase markup such as font style is still permitted
       inside <literal>pre</literal> blocks.
     </para>
-    <anchor id="syntax.blockquote" />
+    <anchor id="quickbook.syntax.blockquote" />
     <bridgehead renderas="sect3">
       Blockquote
     </bridgehead>
     
-<programlisting><literal>[:sometext...]
-</literal></programlisting>
+<programlisting>[:sometext...]
+</programlisting>
     <blockquote>
       <para>
         Indents the paragraph. This applies to one paragraph only.
       </para>
     </blockquote>
-    <anchor id="syntax.headings" />
+    <anchor id="quickbook.syntax.headings" />
     <bridgehead renderas="sect3">
       Headings
     </bridgehead>
     
-<programlisting><literal>[h1 Heading 1]
+<programlisting>[h1 Heading 1]
 [h2 Heading 2]
 [h3 Heading 3]
 [h4 Heading 4]
 [h5 Heading 5]
 [h6 Heading 6]
-</literal></programlisting>
-    <anchor id="syntax.heading_1" />
+</programlisting>
+    <anchor id="quickbook.syntax.heading_1" />
     <bridgehead renderas="sect1">
       Heading 1
     </bridgehead>
-    <anchor id="syntax.heading_2" />
+    <anchor id="quickbook.syntax.heading_2" />
     <bridgehead renderas="sect2">
       Heading 2
     </bridgehead>
-    <anchor id="syntax.heading_3" />
+    <anchor id="quickbook.syntax.heading_3" />
     <bridgehead renderas="sect3">
       Heading 3
     </bridgehead>
-    <anchor id="syntax.heading_4" />
+    <anchor id="quickbook.syntax.heading_4" />
     <bridgehead renderas="sect4">
       Heading 4
     </bridgehead>
-    <anchor id="syntax.heading_5" />
+    <anchor id="quickbook.syntax.heading_5" />
     <bridgehead renderas="sect5">
       Heading 5
     </bridgehead>
-    <anchor id="syntax.heading_6" />
+    <anchor id="quickbook.syntax.heading_6" />
     <bridgehead renderas="sect6">
       Heading 6
     </bridgehead>
@@ -1144,19 +1141,19 @@ def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special
       You can use:
     </para>
     
-<programlisting><literal>[link section_id.normalized_header_text The link text]
-</literal></programlisting>
+<programlisting>[link section_id.normalized_header_text The link text]
+</programlisting>
     <para>
-      to link to them. See <link linkend="syntax.anchor_links">Anchor links</link>
-      and <link linkend="syntax.section">Section</link> for more info.
+      to link to them. See <link linkend="quickbook.syntax.anchor_links">Anchor links</link>
+      and <link linkend="quickbook.syntax.section">Section</link> for more info.
     </para>
-    <anchor id="syntax.macros" />
+    <anchor id="quickbook.syntax.macros" />
     <bridgehead renderas="sect3">
       Macros
     </bridgehead>
     
-<programlisting><literal>[def macro_identifier some text]
-</literal></programlisting>
+<programlisting>[def macro_identifier some text]
+</programlisting>
     <para>
       When a macro is defined, the identifier replaces the text anywhere in the file,
       in paragraphs, in markups, etc. macro_identifier is a string of non-white space
@@ -1164,9 +1161,9 @@ def</phrase><phrase role="identifier"> cookForHtml</phrase><phrase role="special
       up). Example:
     </para>
     
-<programlisting><literal>[def sf_logo [$http://sourceforge.net/sflogo.php?group_id=28447&amp;type=1]]
+<programlisting>[def sf_logo [$http://sourceforge.net/sflogo.php?group_id=28447&amp;type=1]]
 sf_logo
-</literal></programlisting>
+</programlisting>
     <para>
       Now everywhere the sf_logo is placed, the picture will be inlined.
     </para>
@@ -1198,18 +1195,19 @@ sf_logo
       Some more examples:
     </para>
     
-<programlisting><literal>[def :-)            [$theme/smiley.png]]
+<programlisting>[def :-)            [$theme/smiley.png]]
 [def __spirit__     [@http://spirit.sourceforge.net Spirit]]
-</literal></programlisting>
+</programlisting>
     <para>
-      (See <link linkend="syntax.images__terminal_">Images</link> and <link linkend="syntax.links">Links</link>)
+      (See <link linkend="quickbook.syntax.images__terminal_">Images</link> and
+      <link linkend="quickbook.syntax.links">Links</link>)
     </para>
     <para>
       Invoking these macros:
     </para>
     
-<programlisting><literal>Hi __spirit__  :-)
-</literal></programlisting>
+<programlisting>Hi __spirit__  :-)
+</programlisting>
     <para>
       will generate this:
     </para>
@@ -1217,7 +1215,7 @@ sf_logo
       Hi <ulink url="http://spirit.sourceforge.net">Spirit</ulink> <inlinemediaobject><imageobject><imagedata
       fileref="images/smiley.png"></imagedata></imageobject></inlinemediaobject>
     </para>
-    <anchor id="syntax.predefined_macros" />
+    <anchor id="quickbook.syntax.predefined_macros" />
     <bridgehead renderas="sect3">
       Predefined Macros
     </bridgehead>
@@ -1236,30 +1234,30 @@ sf_logo
         </thead>
         <tbody>
           <row>
-            <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Oct-02</entry>
+            <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Oct-17</entry>
           </row>
           <row>
-            <entry>__TIME__</entry><entry>The current time</entry><entry>10:23:38
+            <entry>__TIME__</entry><entry>The current time</entry><entry>12:10:28
             AM</entry>
           </row>
           <row>
-            <entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>C:\dev\boost\tools\quickbook\doc\quickbook.qbk</entry>
+            <entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>/home/joao/sandbox/boost/tools/quickbook/doc/quickbook.qbk</entry>
           </row>
         </tbody>
       </tgroup>
     </informaltable>
-    <anchor id="syntax.blurbs" />
+    <anchor id="quickbook.syntax.blurbs" />
     <bridgehead renderas="sect3">
       Blurbs
     </bridgehead>
     
-<programlisting><literal>[blurb :-) [*An eye catching advertisement or note...]\n\n
+<programlisting>[blurb :-) [*An eye catching advertisement or note...]\n\n
     __spirit__ is an object-oriented recursive-descent parser generator framework
     implemented using template meta-programming techniques. Expression templates
     allow us to approximate the syntax of Extended Backus-Normal Form (EBNF)
     completely in C++.
 ]
-</literal></programlisting>
+</programlisting>
     <para>
       will generate this:
     </para>
@@ -1279,18 +1277,18 @@ sf_logo
         </tbody>
       </tgroup>
     </informaltable>
-    <anchor id="syntax.tables" />
+    <anchor id="quickbook.syntax.tables" />
     <bridgehead renderas="sect3">
       Tables
     </bridgehead>
     
-<programlisting><literal>[table A Simple Table
+<programlisting>[table A Simple Table
     [[Heading 1] [Heading 2] [Heading 3]]
     [[R0-C0]     [R0-C1]     [R0-C2]]
     [[R1-C0]     [R1-C1]     [R1-C2]]
     [[R2-C0]     [R2-C1]     [R2-C2]]
 ]
-</literal></programlisting>
+</programlisting>
     <para>
       will generate:
     </para>
@@ -1324,7 +1322,7 @@ sf_logo
       ]. The syntax is free-format and allows big cells to be formatted nicely. Example:
     </para>
     
-<programlisting><literal>[table Table with fat cells
+<programlisting>[table Table with fat cells
     [[Heading 1] [Heading 2]]
     [
         [Row 0, Col 0: a small cell]
@@ -1340,7 +1338,7 @@ sf_logo
         [Row 1, Col 1: a small cell]
     ]
 ]
-</literal></programlisting>
+</programlisting>
     <para>
       and thus:
     </para>
@@ -1372,7 +1370,7 @@ sf_logo
       Here's how to have preformatted blocks of code in a table cell:
     </para>
     
-<programlisting><literal>[table Table with code
+<programlisting>[table Table with code
     [[Comment] [Code]]
     [
         [My first program]
@@ -1387,7 +1385,7 @@ sf_logo
         ``]
     ]
 ]
-</literal></programlisting>
+</programlisting>
     <informaltable frame="all">
       <bridgehead renderas="sect4">
         <phrase role="table-title">Table with code</phrase>
@@ -1402,31 +1400,30 @@ sf_logo
           <row>
             <entry>My first program</entry><entry>
 <programlisting>
-<literal>
 <phrase role="comment">#include &lt;iostream&gt;
-</phrase><phrase role="identifier">
-int</phrase><phrase role="identifier"> main</phrase><phrase role="special">()</phrase><phrase role="special">
-{</phrase><phrase role="identifier">
-    std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase><phrase role="special"> &lt;&lt;</phrase><phrase role="string"> &quot;Hello, World!&quot;</phrase><phrase role="special"> &lt;&lt;</phrase><phrase role="identifier"> std</phrase><phrase role="special">::</phrase><phrase role="identifier">endl</phrase><phrase role="special">;</phrase><phrase role="keyword">
-    return</phrase><phrase role="number"> 0</phrase><phrase role="special">;</phrase><phrase role="special">
-}</phrase></literal>
+</phrase>
+<phrase role="identifier">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase>
+<phrase role="special">{</phrase>
+    <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase> <phrase role="special">&lt;&lt;</phrase> <phrase role="string">&quot;Hello, World!&quot;</phrase> <phrase role="special">&lt;&lt;</phrase> <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">endl</phrase><phrase role="special">;</phrase>
+    <phrase role="keyword">return</phrase> <phrase role="number">0</phrase><phrase role="special">;</phrase>
+<phrase role="special">}</phrase>
 </programlisting>
             </entry>
           </row>
         </tbody>
       </tgroup>
     </informaltable>
-    <anchor id="syntax.variable_lists" />
+    <anchor id="quickbook.syntax.variable_lists" />
     <bridgehead renderas="sect3">
       Variable Lists
     </bridgehead>
     
-<programlisting><literal>[variablelist A Variable List
+<programlisting>[variablelist A Variable List
     [[term 1] [The definition of term 1]]
     [[term 2] [The definition of term 2]]
     [[term 3] [The definition of term 3]]
 ]
-</literal></programlisting>
+</programlisting>
     <para>
       will generate:
     </para>
@@ -1451,7 +1448,7 @@ int</phrase><phrase role="identifier"> main</phrase><phrase role="special">()</p
       second column contains the definitions. Those familiar with HTML will recognize
       this as a &quot;definition list&quot;.
     </para>
-    <anchor id="syntax.include" />
+    <anchor id="quickbook.syntax.include" />
     <bridgehead renderas="sect3">
       Include
     </bridgehead>
@@ -1459,8 +1456,8 @@ int</phrase><phrase role="identifier"> main</phrase><phrase role="special">()</p
       You can include one QuickBook file from another. The syntax is simply:
     </para>
     
-<programlisting><literal>[include someother.qbk]
-</literal></programlisting>
+<programlisting>[include someother.qbk]
+</programlisting>
     <para>
       The included file will be processed as if it had be cut and pasted into the
       current document, with the following exceptions:
@@ -1483,8 +1480,8 @@ int</phrase><phrase role="identifier"> main</phrase><phrase role="special">()</p
       for the included file. You can use it like this:
     </para>
     
-<programlisting><literal>[include:someid someother.qbk]
-</literal></programlisting>
+<programlisting>[include:someid someother.qbk]
+</programlisting>
     <para>
       When using this form, all auto-generated anchors will use &quot;someid&quot;
       as a unique prefix. So for instance, if there is a section in someother.qbk
@@ -1644,866 +1641,5 @@ int</phrase><phrase role="identifier"> main</phrase><phrase role="special">()</p
         </tbody>
       </tgroup>
     </informaltable>
-  </section>
-  <section id="quickbook.docinfo">
-    <title> Library Document Grammar</title>
-    <para>
-    </para>
-    
-<programlisting>
-<literal>
-<phrase role="identifier">doc_info</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char">  '['</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="identifier">   str_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;book&quot;</phrase><phrase role="special">)</phrase><phrase role="special">
-        |</phrase><phrase role="string">   &quot;article&quot;</phrase><phrase role="special">
-        |</phrase><phrase role="string">   &quot;library&quot;</phrase><phrase role="special">
-        |</phrase><phrase role="string">   &quot;chapter&quot;</phrase><phrase role="special">
-        |</phrase><phrase role="string">   &quot;part&quot;</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="special">  *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
-            (</phrase><phrase role="identifier">ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'['</phrase><phrase role="special">)</phrase><phrase role="special"> |</phrase><phrase role="char"> ']'</phrase><phrase role="special"> |</phrase><phrase role="identifier"> eol_p</phrase><phrase role="special">)</phrase><phrase role="special">
-            )</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> *(</phrase><phrase role="identifier"> doc_version</phrase><phrase role="special">
-        |</phrase><phrase role="identifier"> doc_id</phrase><phrase role="special">
-        |</phrase><phrase role="identifier"> doc_dirname</phrase><phrase role="special">
-        |</phrase><phrase role="identifier"> doc_copyright</phrase><phrase role="special">
-        |</phrase><phrase role="identifier"> doc_purpose</phrase><phrase role="special">
-        |</phrase><phrase role="identifier"> doc_category</phrase><phrase role="special">
-        |</phrase><phrase role="identifier"> doc_authors</phrase><phrase role="special">
-        |</phrase><phrase role="identifier"> doc_license</phrase><phrase role="special">
-        |</phrase><phrase role="identifier"> doc_last_revision</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-doc_version</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="string"> &quot;[version&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-doc_id</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="string"> &quot;[id&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-doc_dirname</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="string"> &quot;[dirname&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-doc_copyright</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="string"> &quot;[copyright&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> +(</phrase><phrase role="identifier"> repeat_p</phrase><phrase role="special">(</phrase><phrase role="number">4</phrase><phrase role="special">)[</phrase><phrase role="identifier">digit_p</phrase><phrase role="special">]</phrase><phrase role="special">
-          &gt;&gt;</phrase><phrase role="identifier"> space</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier"> space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-doc_purpose</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="string"> &quot;[purpose&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-doc_category</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="string"> &quot;[category&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-doc_author</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char">  '['</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ','</phrase><phrase role="special">))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char">  ','</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char">  ']'</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-doc_authors</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="string"> &quot;[authors&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier"> doc_author</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> *(</phrase><phrase role="char">   ','</phrase><phrase role="special">
-            &gt;&gt;</phrase><phrase role="identifier">  doc_author</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-doc_license</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="string"> &quot;[license&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-doc_last_revision</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="string"> &quot;[last-revision&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-doc_source_mode</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-    space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="string"> &quot;[source-mode&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">
-          str_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;c++&quot;</phrase><phrase role="special">)</phrase><phrase role="special"> 
-       |</phrase><phrase role="string">  &quot;python&quot;</phrase><phrase role="special">
-       )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier"> space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol_p</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-comment</phrase><phrase role="special"> =</phrase><phrase role="string">
-    &quot;[/&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-space</phrase><phrase role="special"> =</phrase><phrase role="special">
-    *(</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> comment</phrase><phrase role="special">)</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-hard_space</phrase><phrase role="special"> =</phrase><phrase role="special">
-    (</phrase><phrase role="identifier">eps_p</phrase><phrase role="special"> -</phrase><phrase role="special"> (</phrase><phrase role="identifier">alnum_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">))</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> space</phrase><phrase role="comment">  // must not be followed by
-</phrase><phrase role="special">    ;</phrase><phrase role="comment">                                   // alpha-numeric or underscore
-</phrase></literal>
-</programlisting>
-  </section>
-  <section id="quickbook.quickbook">
-    <title> QuickBook Grammar</title> 
-<programlisting>
-<literal>
-<phrase role="identifier">library</phrase><phrase role="special"> =</phrase><phrase role="special">
-    *(</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> comment</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> blocks</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> blank</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-blocks</phrase><phrase role="special"> =</phrase><phrase role="special">
-   +(</phrase><phrase role="identifier">   block_markup</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   code</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   list</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   hr</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   comment</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> *</phrase><phrase role="identifier">eol</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   paragraph</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   eol</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-space</phrase><phrase role="special"> =</phrase><phrase role="special">
-    *(</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> comment</phrase><phrase role="special">)</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-blank</phrase><phrase role="special"> =</phrase><phrase role="special">
-    *(</phrase><phrase role="identifier">blank_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> comment</phrase><phrase role="special">)</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-eol</phrase><phrase role="special"> =</phrase><phrase role="identifier"> blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> eol_p</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-close_bracket</phrase><phrase role="special"> =</phrase><phrase role="char">
-    ']'</phrase><phrase role="special"> |</phrase><phrase role="identifier">
-    if_p</phrase><phrase role="special">(</phrase><phrase role="identifier">var</phrase><phrase role="special">(</phrase><phrase role="identifier">is_not_preformatted</phrase><phrase role="special">))</phrase><phrase role="special">
-    [</phrase><phrase role="identifier">
-        eol_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> eol_p</phrase><phrase role="comment">                  // Make sure that we don't go
-</phrase><phrase role="special">    ]</phrase><phrase role="comment">                                   // past a single block, except
-</phrase><phrase role="special">    ;</phrase><phrase role="comment">                                   // when preformatted.
-</phrase><phrase role="identifier">
-hard_space</phrase><phrase role="special"> =</phrase><phrase role="special">
-    (</phrase><phrase role="identifier">eps_p</phrase><phrase role="special"> -</phrase><phrase role="special"> (</phrase><phrase role="identifier">alnum_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">))</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> space</phrase><phrase role="comment">  // must not be followed by
-</phrase><phrase role="special">    ;</phrase><phrase role="comment">                                   // alpha-numeric or underscore
-</phrase><phrase role="identifier">
-comment</phrase><phrase role="special"> =</phrase><phrase role="string">
-    &quot;[/&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="char"> ']'</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="char"> ']'</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-hr</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-    str_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;----&quot;</phrase><phrase role="special">)</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier"> eol</phrase><phrase role="special">)</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-block_markup</phrase><phrase role="special"> =</phrase><phrase role="char">
-        '['</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="identifier">   begin_section</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   end_section</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   headings</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   blurb</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   blockquote</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   preformatted</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   def_macro</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   table</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   variablelist</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   xinclude</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   include</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="special">   (</phrase><phrase role="char">']'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol</phrase><phrase role="special">)</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   eps_p</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-begin_section</phrase><phrase role="special"> =</phrase><phrase role="string">
-       &quot;section&quot;</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="char">':'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">alnum_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">))</phrase><phrase role="special">
-        |</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier">
-            close_bracket</phrase><phrase role="special">))</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-end_section</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-    str_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;endsect&quot;</phrase><phrase role="special">)</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-headings</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-    h1</phrase><phrase role="special"> |</phrase><phrase role="identifier"> h2</phrase><phrase role="special"> |</phrase><phrase role="identifier"> h3</phrase><phrase role="special"> |</phrase><phrase role="identifier"> h4</phrase><phrase role="special"> |</phrase><phrase role="identifier"> h5</phrase><phrase role="special"> |</phrase><phrase role="identifier"> h6</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-h1</phrase><phrase role="special"> =</phrase><phrase role="string"> &quot;h1&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="identifier">
-h2</phrase><phrase role="special"> =</phrase><phrase role="string"> &quot;h2&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="identifier">
-h3</phrase><phrase role="special"> =</phrase><phrase role="string"> &quot;h3&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="identifier">
-h4</phrase><phrase role="special"> =</phrase><phrase role="string"> &quot;h4&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="identifier">
-h5</phrase><phrase role="special"> =</phrase><phrase role="string"> &quot;h5&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="identifier">
-h6</phrase><phrase role="special"> =</phrase><phrase role="string"> &quot;h6&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="identifier">
-
-blurb</phrase><phrase role="special"> =</phrase><phrase role="string">
-    &quot;blurb&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-blockquote</phrase><phrase role="special"> =</phrase><phrase role="char">
-    ':'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier">
-    phrase</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-preformatted</phrase><phrase role="special"> =</phrase><phrase role="string">
-    &quot;pre&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> !</phrase><phrase role="identifier">eol</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-def_macro</phrase><phrase role="special"> =</phrase><phrase role="string">
-    &quot;def&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier"> identifier</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier"> blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-table</phrase><phrase role="special"> =</phrase><phrase role="string">
-    &quot;table&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier"> eol</phrase><phrase role="special">))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  +</phrase><phrase role="identifier">eol</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  *</phrase><phrase role="identifier">table_row</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier">  eps_p</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-table_row</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-    space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier">  ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'['</phrase><phrase role="special">)</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">
-    (</phrase><phrase role="special">
-        (</phrase><phrase role="special">
-            *</phrase><phrase role="identifier">table_cell</phrase><phrase role="special">
-            &gt;&gt;</phrase><phrase role="identifier">  ch_p</phrase><phrase role="special">(</phrase><phrase role="char">']'</phrase><phrase role="special">)</phrase><phrase role="special">
-            &gt;&gt;</phrase><phrase role="identifier">  space</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-        |</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-table_cell</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-    space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier">  ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'['</phrase><phrase role="special">)</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">
-    (</phrase><phrase role="special">
-        (</phrase><phrase role="identifier">
-            phrase</phrase><phrase role="special">
-            &gt;&gt;</phrase><phrase role="identifier">  ch_p</phrase><phrase role="special">(</phrase><phrase role="char">']'</phrase><phrase role="special">)</phrase><phrase role="special">
-            &gt;&gt;</phrase><phrase role="identifier">  space</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-        |</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-variablelist</phrase><phrase role="special"> =</phrase><phrase role="string">
-    &quot;variablelist&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier"> eol</phrase><phrase role="special">))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  +</phrase><phrase role="identifier">eol</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  *</phrase><phrase role="identifier">varlistentry</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier">  eps_p</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-varlistentry</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-    space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier">  ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'['</phrase><phrase role="special">)</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">
-    (</phrase><phrase role="special">
-        (</phrase><phrase role="identifier">
-            varlistterm</phrase><phrase role="special">
-            &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">varlistitem</phrase><phrase role="special">
-            &gt;&gt;</phrase><phrase role="identifier">  ch_p</phrase><phrase role="special">(</phrase><phrase role="char">']'</phrase><phrase role="special">)</phrase><phrase role="special">
-            &gt;&gt;</phrase><phrase role="identifier">  space</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-        |</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-varlistterm</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-    space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier">  ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'['</phrase><phrase role="special">)</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">
-    (</phrase><phrase role="special">
-        (</phrase><phrase role="identifier">
-            phrase</phrase><phrase role="special">
-            &gt;&gt;</phrase><phrase role="identifier">  ch_p</phrase><phrase role="special">(</phrase><phrase role="char">']'</phrase><phrase role="special">)</phrase><phrase role="special">
-            &gt;&gt;</phrase><phrase role="identifier">  space</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-        |</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-varlistitem</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-    space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier">  ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'['</phrase><phrase role="special">)</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">
-    (</phrase><phrase role="special">
-        (</phrase><phrase role="identifier">
-            phrase</phrase><phrase role="special">
-            &gt;&gt;</phrase><phrase role="identifier">  ch_p</phrase><phrase role="special">(</phrase><phrase role="char">']'</phrase><phrase role="special">)</phrase><phrase role="special">
-            &gt;&gt;</phrase><phrase role="identifier">  space</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-        |</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-xinclude</phrase><phrase role="special"> =</phrase><phrase role="string">
-       &quot;xinclude&quot;</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier">
-            close_bracket</phrase><phrase role="special">))</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-include</phrase><phrase role="special"> =</phrase><phrase role="string">
-       &quot;include&quot;</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> 
-   !(</phrase><phrase role="char">
-        ':'</phrase><phrase role="special">
-        &gt;&gt;</phrase><phrase role="special"> (*((</phrase><phrase role="identifier">alnum_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">)</phrase><phrase role="special"> -</phrase><phrase role="identifier"> space_p</phrase><phrase role="special">))</phrase><phrase role="special">
-        &gt;&gt;</phrase><phrase role="identifier"> space</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier">
-            close_bracket</phrase><phrase role="special">))</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-identifier</phrase><phrase role="special"> =</phrase><phrase role="special">
-    *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special"> (</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="char"> ']'</phrase><phrase role="special">))</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-source_mode</phrase><phrase role="special"> =</phrase><phrase role="special">
-   (</phrase><phrase role="identifier">
-       str_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;c++&quot;</phrase><phrase role="special">)</phrase><phrase role="special">
-       |</phrase><phrase role="string">   &quot;python&quot;</phrase><phrase role="special">
-   )</phrase><phrase role="special">
-   ;</phrase><phrase role="identifier">
-            
-code</phrase><phrase role="special"> =</phrase><phrase role="special">
-    (</phrase><phrase role="identifier">
-        code_line</phrase><phrase role="special">
-        &gt;&gt;</phrase><phrase role="special"> *(*</phrase><phrase role="identifier">eol</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> code_line</phrase><phrase role="special">)</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-code_line</phrase><phrase role="special"> =</phrase><phrase role="special">
-    ((</phrase><phrase role="identifier">ch_p</phrase><phrase role="special">(</phrase><phrase role="char">' '</phrase><phrase role="special">)</phrase><phrase role="special"> |</phrase><phrase role="char"> '\t'</phrase><phrase role="special">))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier"> eol</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> eol</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-list</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-    eps_p</phrase><phrase role="special">(</phrase><phrase role="identifier">ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'*'</phrase><phrase role="special">)</phrase><phrase role="special"> |</phrase><phrase role="char"> '#'</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
-   +(</phrase><phrase role="special">
-        (*</phrase><phrase role="identifier">blank_p</phrase><phrase role="special">
-        &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'*'</phrase><phrase role="special">)</phrase><phrase role="special"> |</phrase><phrase role="char"> '#'</phrase><phrase role="special">))</phrase><phrase role="special">
-        &gt;&gt;</phrase><phrase role="special"> *</phrase><phrase role="identifier">blank_p</phrase><phrase role="special">
-        &gt;&gt;</phrase><phrase role="identifier"> list_item</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-list_item</phrase><phrase role="special"> =</phrase><phrase role="special">
-   *(</phrase><phrase role="identifier">   common</phrase><phrase role="special">
-    |</phrase><phrase role="special">   (</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
-            (</phrase><phrase role="identifier">   eol_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> *</phrase><phrase role="identifier">blank_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">(</phrase><phrase role="identifier">ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'*'</phrase><phrase role="special">)</phrase><phrase role="special"> |</phrase><phrase role="char"> '#'</phrase><phrase role="special">)</phrase><phrase role="special">
-            |</phrase><phrase role="special">   (</phrase><phrase role="identifier">eol</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> eol</phrase><phrase role="special">)</phrase><phrase role="special">
-            )</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-common</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        self</phrase><phrase role="special">.</phrase><phrase role="identifier">actions</phrase><phrase role="special">.</phrase><phrase role="identifier">macro</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   phrase_markup</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   inline_code</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   simple_format</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   escape</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   comment</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-inline_code</phrase><phrase role="special"> =</phrase><phrase role="char">
-    '`'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
-    (</phrase><phrase role="special">
-       *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
-            (</phrase><phrase role="char">   '`'</phrase><phrase role="special">
-            |</phrase><phrase role="special">   (</phrase><phrase role="identifier">eol</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> eol</phrase><phrase role="special">)</phrase><phrase role="comment">            // Make sure that we don't go
-</phrase><phrase role="special">            )</phrase><phrase role="comment">                           // past a single block
-</phrase><phrase role="special">        )</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">(</phrase><phrase role="char">'`'</phrase><phrase role="special">)</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char">  '`'</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-simple_format</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        simple_bold</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   simple_italic</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   simple_underline</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   simple_teletype</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   simple_strikethrough</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-simple_bold</phrase><phrase role="special"> =</phrase><phrase role="char">
-    '*'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
-    (</phrase><phrase role="special">
-        (</phrase><phrase role="identifier">   graph_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="comment">                  // graph_p must follow '*'
-</phrase><phrase role="special">            *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
-                (</phrase><phrase role="identifier">   eol</phrase><phrase role="comment">                 // Make sure that we don't go
-</phrase><phrase role="special">                |</phrase><phrase role="special">   (</phrase><phrase role="identifier">graph_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="char"> '*'</phrase><phrase role="special">)</phrase><phrase role="comment">    // past a single line
-</phrase><phrase role="special">                )</phrase><phrase role="special">
-            )</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> graph_p</phrase><phrase role="comment">                // graph_p must precede '*'
-</phrase><phrase role="special">            &gt;&gt;</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">(</phrase><phrase role="char">'*'</phrase><phrase role="special">
-                &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> punct_p</phrase><phrase role="special">))</phrase><phrase role="comment"> // space_p or punct_p must
-</phrase><phrase role="special">        )</phrase><phrase role="comment">                               // follow '*'
-</phrase><phrase role="special">    |</phrase><phrase role="special">   (</phrase><phrase role="identifier">
-            graph_p</phrase><phrase role="comment">                     // A single char. e.g. *c*
-</phrase><phrase role="special">            &gt;&gt;</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">(</phrase><phrase role="char">'*'</phrase><phrase role="special">
-                &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> punct_p</phrase><phrase role="special">))</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char"> '*'</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-simple_italic</phrase><phrase role="special"> =</phrase><phrase role="char">
-    '/'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
-    (</phrase><phrase role="special">
-        (</phrase><phrase role="identifier">   graph_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="comment">                  // graph_p must follow '/'
-</phrase><phrase role="special">            *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
-                (</phrase><phrase role="identifier">   eol</phrase><phrase role="comment">                 // Make sure that we don't go
-</phrase><phrase role="special">                |</phrase><phrase role="special">   (</phrase><phrase role="identifier">graph_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="char"> '/'</phrase><phrase role="special">)</phrase><phrase role="comment">    // past a single line
-</phrase><phrase role="special">                )</phrase><phrase role="special">
-            )</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> graph_p</phrase><phrase role="comment">                // graph_p must precede '/'
-</phrase><phrase role="special">            &gt;&gt;</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">(</phrase><phrase role="char">'/'</phrase><phrase role="special">
-                &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> punct_p</phrase><phrase role="special">))</phrase><phrase role="comment"> // space_p or punct_p must
-</phrase><phrase role="special">        )</phrase><phrase role="comment">                               // follow '/'
-</phrase><phrase role="special">    |</phrase><phrase role="special">   (</phrase><phrase role="identifier">
-            graph_p</phrase><phrase role="comment">                     // A single char. e.g. /c/
-</phrase><phrase role="special">            &gt;&gt;</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">(</phrase><phrase role="char">'/'</phrase><phrase role="special">
-                &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> punct_p</phrase><phrase role="special">))</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char"> '/'</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-simple_underline</phrase><phrase role="special"> =</phrase><phrase role="char">
-    '_'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
-    (</phrase><phrase role="special">
-        (</phrase><phrase role="identifier">   graph_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="comment">                  // graph_p must follow '_'
-</phrase><phrase role="special">            *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
-                (</phrase><phrase role="identifier">   eol</phrase><phrase role="comment">                 // Make sure that we don't go
-</phrase><phrase role="special">                |</phrase><phrase role="special">   (</phrase><phrase role="identifier">graph_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="char"> '_'</phrase><phrase role="special">)</phrase><phrase role="comment">    // past a single line
-</phrase><phrase role="special">                )</phrase><phrase role="special">
-            )</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> graph_p</phrase><phrase role="comment">                // graph_p must precede '_'
-</phrase><phrase role="special">            &gt;&gt;</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">(</phrase><phrase role="char">'_'</phrase><phrase role="special">
-                &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> punct_p</phrase><phrase role="special">))</phrase><phrase role="comment"> // space_p or punct_p must
-</phrase><phrase role="special">        )</phrase><phrase role="comment">                               // follow '_'
-</phrase><phrase role="special">    |</phrase><phrase role="special">   (</phrase><phrase role="identifier">
-            graph_p</phrase><phrase role="comment">                     // A single char. e.g. _c_
-</phrase><phrase role="special">            &gt;&gt;</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">(</phrase><phrase role="char">'_'</phrase><phrase role="special">
-                &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> punct_p</phrase><phrase role="special">))</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char"> '_'</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-simple_teletype</phrase><phrase role="special"> =</phrase><phrase role="char">
-    '='</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
-    (</phrase><phrase role="special">
-        (</phrase><phrase role="identifier">   graph_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="comment">                  // graph_p must follow '='
-</phrase><phrase role="special">            *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
-                (</phrase><phrase role="identifier">   eol</phrase><phrase role="comment">                 // Make sure that we don't go
-</phrase><phrase role="special">                |</phrase><phrase role="special">   (</phrase><phrase role="identifier">graph_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="char"> '='</phrase><phrase role="special">)</phrase><phrase role="comment">    // past a single line
-</phrase><phrase role="special">                )</phrase><phrase role="special">
-            )</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> graph_p</phrase><phrase role="comment">                // graph_p must precede '='
-</phrase><phrase role="special">            &gt;&gt;</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">(</phrase><phrase role="char">'='</phrase><phrase role="special">
-                &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> punct_p</phrase><phrase role="special">))</phrase><phrase role="comment"> // space_p or punct_p must
-</phrase><phrase role="special">        )</phrase><phrase role="comment">                               // follow '='
-</phrase><phrase role="special">    |</phrase><phrase role="special">   (</phrase><phrase role="identifier">
-            graph_p</phrase><phrase role="comment">                     // A single char. e.g. =c=
-</phrase><phrase role="special">            &gt;&gt;</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">(</phrase><phrase role="char">'='</phrase><phrase role="special">
-                &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> punct_p</phrase><phrase role="special">))</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char"> '='</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-simple_strikethrough</phrase><phrase role="special"> =</phrase><phrase role="char">
-    '-'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
-    (</phrase><phrase role="special">
-        (</phrase><phrase role="identifier">   graph_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="comment">                  // graph_p must follow '-'
-</phrase><phrase role="special">            *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
-                (</phrase><phrase role="identifier">   eol</phrase><phrase role="comment">                 // Make sure that we don't go
-</phrase><phrase role="special">                |</phrase><phrase role="special">   (</phrase><phrase role="identifier">graph_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="char"> '-'</phrase><phrase role="special">)</phrase><phrase role="comment">    // past a single line
-</phrase><phrase role="special">                )</phrase><phrase role="special">
-            )</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> graph_p</phrase><phrase role="comment">                // graph_p must precede '-'
-</phrase><phrase role="special">            &gt;&gt;</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">(</phrase><phrase role="char">'-'</phrase><phrase role="special">
-                &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> punct_p</phrase><phrase role="special">))</phrase><phrase role="comment"> // space_p or punct_p must
-</phrase><phrase role="special">        )</phrase><phrase role="comment">                               // follow '-'
-</phrase><phrase role="special">    |</phrase><phrase role="special">   (</phrase><phrase role="identifier">
-            graph_p</phrase><phrase role="comment">                     // A single char. e.g. =c=
-</phrase><phrase role="special">            &gt;&gt;</phrase><phrase role="identifier"> eps_p</phrase><phrase role="special">(</phrase><phrase role="char">'-'</phrase><phrase role="special">
-                &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> |</phrase><phrase role="identifier"> punct_p</phrase><phrase role="special">))</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char"> '-'</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-paragraph</phrase><phrase role="special"> =</phrase><phrase role="special">
-   *(</phrase><phrase role="identifier">   common</phrase><phrase role="special">
-    |</phrase><phrase role="special">   (</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="comment">                    // Make sure we don't go past
-</phrase><phrase role="special">            (</phrase><phrase role="identifier">eol</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> eol</phrase><phrase role="special">)</phrase><phrase role="comment">                // a single block.
-</phrase><phrase role="special">        )</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">eol</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-phrase</phrase><phrase role="special"> =</phrase><phrase role="special">
-   *(</phrase><phrase role="identifier">   common</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   comment</phrase><phrase role="special">
-    |</phrase><phrase role="special">   (</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier">
-            close_bracket</phrase><phrase role="special">)</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-phrase_markup</phrase><phrase role="special"> =</phrase><phrase role="char">
-        '['</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="identifier">   image</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   url</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   link</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   anchor</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   source_mode</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   funcref</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   classref</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   memberref</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   enumref</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   headerref</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   bold</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   italic</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   underline</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   teletype</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   strikethrough</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   str_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;br&quot;</phrase><phrase role="special">)</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="char">  ']'</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-escape</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        str_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;\\n&quot;</phrase><phrase role="special">)</phrase><phrase role="special">
-    |</phrase><phrase role="char">   '\\'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> punct_p</phrase><phrase role="special">
-    |</phrase><phrase role="special">   (</phrase><phrase role="string">
-            &quot;'''&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> !</phrase><phrase role="identifier">eol</phrase><phrase role="special">
-        &gt;&gt;</phrase><phrase role="special">  *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="string"> &quot;'''&quot;</phrase><phrase role="special">)</phrase><phrase role="special">
-        &gt;&gt;</phrase><phrase role="string">  &quot;'''&quot;</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-image</phrase><phrase role="special"> =</phrase><phrase role="char">
-        '$'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> blank</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special"> (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier">
-            close_bracket</phrase><phrase role="special">))</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-url</phrase><phrase role="special"> =</phrase><phrase role="char">
-        '@'</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
-            (</phrase><phrase role="char">']'</phrase><phrase role="special"> |</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">)))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="identifier">   eps_p</phrase><phrase role="special">(</phrase><phrase role="char">']'</phrase><phrase role="special">)</phrase><phrase role="special">
-        |</phrase><phrase role="special">   (</phrase><phrase role="identifier">hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">)</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-link</phrase><phrase role="special"> =</phrase><phrase role="string">
-        &quot;link&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
-            (</phrase><phrase role="char">']'</phrase><phrase role="special"> |</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">)))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="identifier">   eps_p</phrase><phrase role="special">(</phrase><phrase role="char">']'</phrase><phrase role="special">)</phrase><phrase role="special">
-        |</phrase><phrase role="special">   (</phrase><phrase role="identifier">hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">)</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-anchor</phrase><phrase role="special"> =</phrase><phrase role="char">
-        '#'</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier">  blank</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="special">   *(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="identifier">
-                close_bracket</phrase><phrase role="special">)</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-funcref</phrase><phrase role="special"> =</phrase><phrase role="string">
-    &quot;funcref&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
-            (</phrase><phrase role="char">']'</phrase><phrase role="special"> |</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">)))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="identifier">   eps_p</phrase><phrase role="special">(</phrase><phrase role="char">']'</phrase><phrase role="special">)</phrase><phrase role="special">
-        |</phrase><phrase role="special">   (</phrase><phrase role="identifier">hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">)</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-classref</phrase><phrase role="special"> =</phrase><phrase role="string">
-    &quot;classref&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
-            (</phrase><phrase role="char">']'</phrase><phrase role="special"> |</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">)))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="identifier">   eps_p</phrase><phrase role="special">(</phrase><phrase role="char">']'</phrase><phrase role="special">)</phrase><phrase role="special">
-        |</phrase><phrase role="special">   (</phrase><phrase role="identifier">hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">)</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-memberref</phrase><phrase role="special"> =</phrase><phrase role="string">
-    &quot;memberref&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
-            (</phrase><phrase role="char">']'</phrase><phrase role="special"> |</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">)))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="identifier">   eps_p</phrase><phrase role="special">(</phrase><phrase role="char">']'</phrase><phrase role="special">)</phrase><phrase role="special">
-        |</phrase><phrase role="special">   (</phrase><phrase role="identifier">hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">)</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-enumref</phrase><phrase role="special"> =</phrase><phrase role="string">
-    &quot;enumref&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
-            (</phrase><phrase role="char">']'</phrase><phrase role="special"> |</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">)))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="identifier">   eps_p</phrase><phrase role="special">(</phrase><phrase role="char">']'</phrase><phrase role="special">)</phrase><phrase role="special">
-        |</phrase><phrase role="special">   (</phrase><phrase role="identifier">hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">)</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-headerref</phrase><phrase role="special"> =</phrase><phrase role="string">
-    &quot;headerref&quot;</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (*(</phrase><phrase role="identifier">anychar_p</phrase><phrase role="special"> -</phrase><phrase role="special">
-            (</phrase><phrase role="char">']'</phrase><phrase role="special"> |</phrase><phrase role="identifier"> hard_space</phrase><phrase role="special">)))</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="special">  (</phrase><phrase role="identifier">   eps_p</phrase><phrase role="special">(</phrase><phrase role="char">']'</phrase><phrase role="special">)</phrase><phrase role="special">
-        |</phrase><phrase role="special">   (</phrase><phrase role="identifier">hard_space</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">)</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-bold</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'*'</phrase><phrase role="special">)</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier">  blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-italic</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'\''</phrase><phrase role="special">)</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier">  blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-underline</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'_'</phrase><phrase role="special">)</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier">  blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-teletype</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'^'</phrase><phrase role="special">)</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier">  blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-strikethrough</phrase><phrase role="special"> =</phrase><phrase role="identifier">
-        ch_p</phrase><phrase role="special">(</phrase><phrase role="char">'-'</phrase><phrase role="special">)</phrase><phrase role="special">
-    &gt;&gt;</phrase><phrase role="identifier">  blank</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> phrase</phrase><phrase role="special">
-    ;</phrase>
-</literal>
-</programlisting>
-  </section>
-  <section id="quickbook.highlight">
-    <title> C++ Syntax Highlighting Grammar</title> 
-<programlisting>
-<literal>
-<phrase role="identifier">program</phrase><phrase role="special">
-    =</phrase><phrase role="special">
-    *(</phrase><phrase role="identifier">  macro</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   preprocessor</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   comment</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   keyword</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   identifier</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   special</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   string_</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   char_</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   number</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   space_p</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   anychar_p</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-macro</phrase><phrase role="special">
-    =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> self</phrase><phrase role="special">.</phrase><phrase role="identifier">macro</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-preprocessor</phrase><phrase role="special">
-    =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="char"> '#'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> ((</phrase><phrase role="identifier">alpha_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> *(</phrase><phrase role="identifier">alnum_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">))</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-comment</phrase><phrase role="special">
-    =</phrase><phrase role="special">   +(*</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">comment_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;//&quot;</phrase><phrase role="special">)</phrase><phrase role="special"> |</phrase><phrase role="identifier"> comment_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;/*&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;*/&quot;</phrase><phrase role="special">)))</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-keyword</phrase><phrase role="special">
-    =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> keyword_</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">eps_p</phrase><phrase role="special"> -</phrase><phrase role="special"> (</phrase><phrase role="identifier">alnum_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">))</phrase><phrase role="special">
-    ;</phrase><phrase role="comment">   // make sure we recognize whole words only
-</phrase><phrase role="identifier">
-keyword_</phrase><phrase role="special">
-    =</phrase><phrase role="string">   &quot;and_eq&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;and&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;asm&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;auto&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;bitand&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;bitor&quot;</phrase><phrase role="special">,</phrase><phrase role="string">
-        &quot;bool&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;break&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;case&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;catch&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;char&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;class&quot;</phrase><phrase role="special">,</phrase><phrase role="string">
-        &quot;compl&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;const_cast&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;const&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;continue&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;default&quot;</phrase><phrase role="special">,</phrase><phrase role="string">
-        &quot;delete&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;do&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;double&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;dynamic_cast&quot;</phrase><phrase role="special">,</phrase><phrase role="string">  &quot;else&quot;</phrase><phrase role="special">,</phrase><phrase role="string">
-        &quot;enum&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;explicit&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;export&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;extern&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;false&quot;</phrase><phrase role="special">,</phrase><phrase role="string">
-        &quot;float&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;for&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;friend&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;goto&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;if&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;inline&quot;</phrase><phrase role="special">,</phrase><phrase role="string">
-        &quot;int&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;long&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;mutable&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;namespace&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;new&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;not_eq&quot;</phrase><phrase role="special">,</phrase><phrase role="string">
-        &quot;not&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;operator&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;or_eq&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;or&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;private&quot;</phrase><phrase role="special">,</phrase><phrase role="string">
-        &quot;protected&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;public&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;register&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;reinterpret_cast&quot;</phrase><phrase role="special">,</phrase><phrase role="string">
-        &quot;return&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;short&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;signed&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;sizeof&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;static&quot;</phrase><phrase role="special">,</phrase><phrase role="string">
-        &quot;static_cast&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;struct&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;switch&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;template&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;this&quot;</phrase><phrase role="special">,</phrase><phrase role="string">
-        &quot;throw&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;true&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;try&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;typedef&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;typeid&quot;</phrase><phrase role="special">,</phrase><phrase role="string">
-        &quot;typename&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;union&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;unsigned&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;using&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;virtual&quot;</phrase><phrase role="special">,</phrase><phrase role="string">
-        &quot;void&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;volatile&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;wchar_t&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;while&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;xor_eq&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;xor&quot;</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-special</phrase><phrase role="special">
-    =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">chset_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;~!%^&amp;*()+={[}]:;,&lt;.&gt;?/|\\-&quot;</phrase><phrase role="special">)</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-string_</phrase><phrase role="special">
-    =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> !</phrase><phrase role="identifier">as_lower_d</phrase><phrase role="special">[</phrase><phrase role="char">'l'</phrase><phrase role="special">]</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> confix_p</phrase><phrase role="special">(</phrase><phrase role="char">'&quot;'</phrase><phrase role="special">,</phrase><phrase role="special"> *</phrase><phrase role="identifier">c_escape_ch_p</phrase><phrase role="special">,</phrase><phrase role="char"> '&quot;'</phrase><phrase role="special">)</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-char_</phrase><phrase role="special">
-    =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> !</phrase><phrase role="identifier">as_lower_d</phrase><phrase role="special">[</phrase><phrase role="char">'l'</phrase><phrase role="special">]</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> confix_p</phrase><phrase role="special">(</phrase><phrase role="char">'\''</phrase><phrase role="special">,</phrase><phrase role="special"> *</phrase><phrase role="identifier">c_escape_ch_p</phrase><phrase role="special">,</phrase><phrase role="char"> '\''</phrase><phrase role="special">)</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-number</phrase><phrase role="special">
-    =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
-        (</phrase><phrase role="identifier">   as_lower_d</phrase><phrase role="special">[</phrase><phrase role="string">&quot;0x&quot;</phrase><phrase role="special">]</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hex_p</phrase><phrase role="special">
-        |</phrase><phrase role="char">   '0'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> oct_p</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   real_p</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-        &gt;&gt;</phrase><phrase role="special">  *</phrase><phrase role="identifier">as_lower_d</phrase><phrase role="special">[</phrase><phrase role="identifier">chset_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;ldfu&quot;</phrase><phrase role="special">)]</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-identifier</phrase><phrase role="special">
-    =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> ((</phrase><phrase role="identifier">alpha_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> *(</phrase><phrase role="identifier">alnum_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">))</phrase><phrase role="special">
-    ;</phrase>
-</literal>
-</programlisting>
-  </section>
-  <section id="quickbook.pyhighlight">
-    <title> Python Syntax Highlighting Grammar</title>
-    <para>
-    </para>
-    
-<programlisting>
-<literal>
-<phrase role="identifier">program</phrase><phrase role="special">
-    =</phrase><phrase role="special">
-    *(</phrase><phrase role="identifier">  macro</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   comment</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   keyword</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   identifier</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   special</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   string_</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   number</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   space_p</phrase><phrase role="special">
-    |</phrase><phrase role="identifier">   anychar_p</phrase><phrase role="special">
-    )</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-acro</phrase><phrase role="special">
-   =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> self</phrase><phrase role="special">.</phrase><phrase role="identifier">macro</phrase><phrase role="special">
-   ;</phrase><phrase role="identifier">
-
-comment</phrase><phrase role="special">
-    =</phrase><phrase role="special">   +(*</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> comment_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;#&quot;</phrase><phrase role="special">))</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-keyword</phrase><phrase role="special">
-    =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> keyword_</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">eps_p</phrase><phrase role="special"> -</phrase><phrase role="special"> (</phrase><phrase role="identifier">alnum_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">))</phrase><phrase role="special">
-    ;</phrase><phrase role="comment">   // make sure we recognize whole words only
-</phrase><phrase role="identifier">
-keyword_</phrase><phrase role="special">
-    =</phrase><phrase role="string">
-    &quot;and&quot;</phrase><phrase role="special">,</phrase><phrase role="string">       &quot;del&quot;</phrase><phrase role="special">,</phrase><phrase role="string">       &quot;for&quot;</phrase><phrase role="special">,</phrase><phrase role="string">       &quot;is&quot;</phrase><phrase role="special">,</phrase><phrase role="string">        &quot;raise&quot;</phrase><phrase role="special">,</phrase><phrase role="string">    
-    &quot;assert&quot;</phrase><phrase role="special">,</phrase><phrase role="string">    &quot;elif&quot;</phrase><phrase role="special">,</phrase><phrase role="string">      &quot;from&quot;</phrase><phrase role="special">,</phrase><phrase role="string">      &quot;lambda&quot;</phrase><phrase role="special">,</phrase><phrase role="string">    &quot;return&quot;</phrase><phrase role="special">,</phrase><phrase role="string">   
-    &quot;break&quot;</phrase><phrase role="special">,</phrase><phrase role="string">     &quot;else&quot;</phrase><phrase role="special">,</phrase><phrase role="string">      &quot;global&quot;</phrase><phrase role="special">,</phrase><phrase role="string">    &quot;not&quot;</phrase><phrase role="special">,</phrase><phrase role="string">       &quot;try&quot;</phrase><phrase role="special">,</phrase><phrase role="string">  
-    &quot;class&quot;</phrase><phrase role="special">,</phrase><phrase role="string">     &quot;except&quot;</phrase><phrase role="special">,</phrase><phrase role="string">    &quot;if&quot;</phrase><phrase role="special">,</phrase><phrase role="string">        &quot;or&quot;</phrase><phrase role="special">,</phrase><phrase role="string">        &quot;while&quot;</phrase><phrase role="special">,</phrase><phrase role="string">    
-    &quot;continue&quot;</phrase><phrase role="special">,</phrase><phrase role="string">  &quot;exec&quot;</phrase><phrase role="special">,</phrase><phrase role="string">      &quot;import&quot;</phrase><phrase role="special">,</phrase><phrase role="string">    &quot;pass&quot;</phrase><phrase role="special">,</phrase><phrase role="string">      &quot;yield&quot;</phrase><phrase role="special">,</phrase><phrase role="string">   
-    &quot;def&quot;</phrase><phrase role="special">,</phrase><phrase role="string">       &quot;finally&quot;</phrase><phrase role="special">,</phrase><phrase role="string">   &quot;in&quot;</phrase><phrase role="special">,</phrase><phrase role="string">        &quot;print&quot;</phrase><phrase role="special">,</phrase><phrase role="comment">
-
-    // Technically &quot;as&quot; and &quot;None&quot; are not yet keywords (at Python
-    // 2.4). They are destined to become keywords, and we treat them 
-    // as such for syntax highlighting purposes.
-</phrase><phrase role="string">               
-    &quot;as&quot;</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;None&quot;</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-special</phrase><phrase role="special">
-    =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> +</phrase><phrase role="identifier">chset_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;~!%^&amp;*()+={[}]:;,&lt;.&gt;/|\\-&quot;</phrase><phrase role="special">)</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-string_prefix</phrase><phrase role="special">
-    =</phrase><phrase role="identifier">    as_lower_d</phrase><phrase role="special">[</phrase><phrase role="identifier">str_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;u&quot;</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> !</phrase><phrase role="identifier"> str_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;r&quot;</phrase><phrase role="special">)]</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-           
-string_</phrase><phrase role="special">
-    =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> !</phrase><phrase role="identifier"> string_prefix</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> (</phrase><phrase role="identifier">long_string</phrase><phrase role="special"> |</phrase><phrase role="identifier"> short_string</phrase><phrase role="special">)</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-short_string</phrase><phrase role="special">
-    =</phrase><phrase role="identifier">   confix_p</phrase><phrase role="special">(</phrase><phrase role="char">'&quot;'</phrase><phrase role="special">,</phrase><phrase role="special"> *</phrase><phrase role="identifier"> c_escape_ch_p</phrase><phrase role="special">,</phrase><phrase role="char"> '&quot;'</phrase><phrase role="special">)</phrase><phrase role="special"> |</phrase><phrase role="identifier">
-        confix_p</phrase><phrase role="special">(</phrase><phrase role="char">'\''</phrase><phrase role="special">,</phrase><phrase role="special"> *</phrase><phrase role="identifier"> c_escape_ch_p</phrase><phrase role="special">,</phrase><phrase role="char"> '\''</phrase><phrase role="special">)</phrase><phrase role="special">    
-    ;</phrase><phrase role="identifier">
-       
-long_string</phrase><phrase role="special">
-    =</phrase><phrase role="identifier">   confix_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;'''&quot;</phrase><phrase role="special">,</phrase><phrase role="special"> *</phrase><phrase role="identifier"> lex_escape_ch_p</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;'''&quot;</phrase><phrase role="special">)</phrase><phrase role="special"> |</phrase><phrase role="identifier">
-        confix_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;\&quot;\&quot;\&quot;&quot;</phrase><phrase role="special">,</phrase><phrase role="special"> *</phrase><phrase role="identifier"> lex_escape_ch_p</phrase><phrase role="special">,</phrase><phrase role="string"> &quot;\&quot;\&quot;\&quot;&quot;</phrase><phrase role="special">)</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-           
-number</phrase><phrase role="special">
-    =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special">
-        (</phrase><phrase role="identifier">
-            as_lower_d</phrase><phrase role="special">[</phrase><phrase role="string">&quot;0x&quot;</phrase><phrase role="special">]</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> hex_p</phrase><phrase role="special">
-        |</phrase><phrase role="char">   '0'</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="identifier"> oct_p</phrase><phrase role="special">
-        |</phrase><phrase role="identifier">   real_p</phrase><phrase role="special">
-        )</phrase><phrase role="special">
-        &gt;&gt;</phrase><phrase role="special">  *</phrase><phrase role="identifier">as_lower_d</phrase><phrase role="special">[</phrase><phrase role="identifier">chset_p</phrase><phrase role="special">(</phrase><phrase role="string">&quot;lj&quot;</phrase><phrase role="special">)]</phrase><phrase role="special">
-    ;</phrase><phrase role="identifier">
-
-identifier</phrase><phrase role="special">
-    =</phrase><phrase role="special">   *</phrase><phrase role="identifier">space_p</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> ((</phrase><phrase role="identifier">alpha_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">)</phrase><phrase role="special"> &gt;&gt;</phrase><phrase role="special"> *(</phrase><phrase role="identifier">alnum_p</phrase><phrase role="special"> |</phrase><phrase role="char"> '_'</phrase><phrase role="special">))</phrase><phrase role="special">
-    ;</phrase>
-</literal>
-</programlisting>
   </section>
 </part>
