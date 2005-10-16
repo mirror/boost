@@ -61,7 +61,6 @@ rule quickbook-test ( target-name : input ? : reference-output ? : requirements 
                 <testing.input-file>$(reference-output)
                 <testing.input-file>$(target-name).boostbook
         ]
-
         ;
 
     modules.poke testing : .all-tests : \$\(all-tests\) $(t) ;
