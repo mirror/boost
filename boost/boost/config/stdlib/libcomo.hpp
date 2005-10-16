@@ -10,7 +10,7 @@
 //  Comeau STL:
 
 #if !defined(__LIBCOMO__)
-#  include <iosfwd>
+#  include <utility>
 #  if !defined(__LIBCOMO__)
 #      error "This is not the Comeau STL!"
 #  endif
