@@ -1307,7 +1307,7 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         void erase_element (size_type i) {
             BOOST_UBLAS_CHECK (i < size_, bad_index ());
-            return (data_ [i] = value_type/*zero*/());
+            data_ [i] = value_type/*zero*/();
         }
         
         // Zeroing
