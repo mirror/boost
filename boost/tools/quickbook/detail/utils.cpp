@@ -37,11 +37,7 @@ namespace quickbook { namespace detail
     void
     print_space(char ch, std::ostream& out)
     {
-        switch (ch)
-        {
-            case ' ': out << "&nbsp;";  break;
-            default:  out << ch;        break;
-        }
+        out << ch;
     }
 
     char
