@@ -217,8 +217,7 @@ namespace quickbook
             std::string program(first, last);
             detail::unindent(program);
             
-            out << "<programlisting>\n"
-                << "<literal>\n";
+            out << "<programlisting>\n";
 
             // print the code with syntax coloring
             if (source_mode == "c++")
@@ -230,8 +229,7 @@ namespace quickbook
                 parse(program.begin(), program.end(), python_p);
             }
             
-            out << "</literal>\n"
-                << "</programlisting>\n";
+            out << "</programlisting>\n";
         }
     }
 

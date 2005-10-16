@@ -84,8 +84,8 @@ namespace quickbook
     
         const char* blockquote_pre      = "<blockquote><para>";
         const char* blockquote_post     = "</para></blockquote>";
-        const char* preformatted_pre    = "<programlisting><literal>";
-        const char* preformatted_post   = "</literal></programlisting>";
+        const char* preformatted_pre    = "<programlisting>";
+        const char* preformatted_post   = "</programlisting>";
         const char* list_item_pre       = "<listitem>\n";
         const char* list_item_post      = "\n</listitem>";
         const char* bold_pre_           = "<emphasis role=\"bold\">";
