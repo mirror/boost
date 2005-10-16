@@ -21,122 +21,129 @@ template<class M, int N>
 struct test_my_matrix {
     typedef typename M::value_type value_type;
 
+    template<class VP>
+    void test_container_with (VP &v1) const {
+        // Container type tests in addition to expression types
+        // Insert and erase
+        v1.insert_element (0,0, 55);
+        v1.erase_element (1,1);
+        v1.clear ();
+    }
+    
     template<class MP>
-    void test_with (MP &m1, MP &m2, MP &m3) const {
-        {
-            value_type t;
+    void test_expression_with (MP &m1, MP &m2, MP &m3) const {
+        value_type t;
 
-            // Default Construct
-            default_construct<MP>::test ();
-            
-            // Copy and swap
-            initialize_matrix (m1);
-            initialize_matrix (m2);
-            m1 = m2;
-            std::cout << "m1 = m2 = " << m1 << std::endl;
-            m1.assign_temporary (m2);
-            std::cout << "m1.assign_temporary (m2) = " << m1 << std::endl;
-            m1.swap (m2);
-            std::cout << "m1.swap (m2) = " << m1 << " " << m2 << std::endl;
+        // Default Construct
+        default_construct<MP>::test ();
+        
+        // Copy and swap
+        initialize_matrix (m1);
+        initialize_matrix (m2);
+        m1 = m2;
+        std::cout << "m1 = m2 = " << m1 << std::endl;
+        m1.assign_temporary (m2);
+        std::cout << "m1.assign_temporary (m2) = " << m1 << std::endl;
+        m1.swap (m2);
+        std::cout << "m1.swap (m2) = " << m1 << " " << m2 << std::endl;
 
-            // Zero assignment
-            m1 = ublas::zero_matrix<> (m1.size1 (), m1.size2 ());
-            std::cout << "m1.zero_matrix = " << m1 << std::endl;
-            m1 = m2;
+        // Zero assignment
+        m1 = ublas::zero_matrix<> (m1.size1 (), m1.size2 ());
+        std::cout << "m1.zero_matrix = " << m1 << std::endl;
+        m1 = m2;
 
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
             // Project range and slice
-            initialize_matrix (m1);
-            initialize_matrix (m2);
-            project (m1, ublas::range(0,1),ublas::range(0,1)) = project (m2, ublas::range(0,1),ublas::range(0,1));
-            project (m1, ublas::range(0,1),ublas::range(0,1)) = project (m2, ublas::slice(0,1,1),ublas::slice(0,1,1));
-            project (m1, ublas::slice(2,-1,2),ublas::slice(2,-1,2)) = project (m2, ublas::slice(0,1,2),ublas::slice(0,1,2));
-            project (m1, ublas::slice(2,-1,2),ublas::slice(2,-1,2)) = project (m2, ublas::range(0,2),ublas::range(0,2));
-            std::cout << "m1 = range/slice " << m1 << std::endl;
+        initialize_matrix (m1);
+        initialize_matrix (m2);
+        project (m1, ublas::range(0,1),ublas::range(0,1)) = project (m2, ublas::range(0,1),ublas::range(0,1));
+        project (m1, ublas::range(0,1),ublas::range(0,1)) = project (m2, ublas::slice(0,1,1),ublas::slice(0,1,1));
+        project (m1, ublas::slice(2,-1,2),ublas::slice(2,-1,2)) = project (m2, ublas::slice(0,1,2),ublas::slice(0,1,2));
+        project (m1, ublas::slice(2,-1,2),ublas::slice(2,-1,2)) = project (m2, ublas::range(0,2),ublas::range(0,2));
+        std::cout << "m1 = range/slice " << m1 << std::endl;
 #endif
 
             // Unary matrix operations resulting in a matrix
-            initialize_matrix (m1);
-            m2 = - m1;
-            std::cout << "- m1 = " << m2 << std::endl;
-            m2 = ublas::conj (m1);
-            std::cout << "conj (m1) = " << m2 << std::endl;
+        initialize_matrix (m1);
+        m2 = - m1;
+        std::cout << "- m1 = " << m2 << std::endl;
+        m2 = ublas::conj (m1);
+        std::cout << "conj (m1) = " << m2 << std::endl;
 
-            // Binary matrix operations resulting in a matrix
-            initialize_matrix (m1);
-            initialize_matrix (m2);
-            m3 = m1 + m2;
-            std::cout << "m1 + m2 = " << m3 << std::endl;
-            m3 = m1 - m2;
-            std::cout << "m1 - m2 = " << m3 << std::endl;
-            m3 = ublas::element_prod (m1, m2);
-            std::cout << "element_prod (m1, m2) = " << m3 << std::endl;
+        // Binary matrix operations resulting in a matrix
+        initialize_matrix (m1);
+        initialize_matrix (m2);
+        m3 = m1 + m2;
+        std::cout << "m1 + m2 = " << m3 << std::endl;
+        m3 = m1 - m2;
+        std::cout << "m1 - m2 = " << m3 << std::endl;
+        m3 = ublas::element_prod (m1, m2);
+        std::cout << "element_prod (m1, m2) = " << m3 << std::endl;
 
-            // Scaling a matrix
-            t = N;
-            initialize_matrix (m1);
-            m2 = value_type (1.) * m1;
-            std::cout << "1. * m1 = " << m2 << std::endl;
-            m2 = t * m1;
-            std::cout << "N * m1 = " << m2 << std::endl;
-            initialize_matrix (m1);
-            m2 = m1 * value_type (1.);
-            std::cout << "m1 * 1. = " << m2 << std::endl;
-            m2 = m1 * t;
-            std::cout << "m1 * N = " << m2 << std::endl;
+        // Scaling a matrix
+        t = N;
+        initialize_matrix (m1);
+        m2 = value_type (1.) * m1;
+        std::cout << "1. * m1 = " << m2 << std::endl;
+        m2 = t * m1;
+        std::cout << "N * m1 = " << m2 << std::endl;
+        initialize_matrix (m1);
+        m2 = m1 * value_type (1.);
+        std::cout << "m1 * 1. = " << m2 << std::endl;
+        m2 = m1 * t;
+        std::cout << "m1 * N = " << m2 << std::endl;
 
-            // Some assignments
-            initialize_matrix (m1);
-            initialize_matrix (m2);
-            m2 += m1;
-            std::cout << "m2 += m1 = " << m2 << std::endl;
-            m2 -= m1;
-            std::cout << "m2 -= m1 = " << m2 << std::endl;
-            m2 = m2 + m1;
-            std::cout << "m2 = m2 + m1 = " << m2 << std::endl;
-            m2 = m2 - m1;
-            std::cout << "m2 = m2 - m1 = " << m2 << std::endl;
-            m1 *= value_type (1.);
-            std::cout << "m1 *= 1. = " << m1 << std::endl;
-            m1 *= t;
-            std::cout << "m1 *= N = " << m1 << std::endl;
+        // Some assignments
+        initialize_matrix (m1);
+        initialize_matrix (m2);
+        m2 += m1;
+        std::cout << "m2 += m1 = " << m2 << std::endl;
+        m2 -= m1;
+        std::cout << "m2 -= m1 = " << m2 << std::endl;
+        m2 = m2 + m1;
+        std::cout << "m2 = m2 + m1 = " << m2 << std::endl;
+        m2 = m2 - m1;
+        std::cout << "m2 = m2 - m1 = " << m2 << std::endl;
+        m1 *= value_type (1.);
+        std::cout << "m1 *= 1. = " << m1 << std::endl;
+        m1 *= t;
+        std::cout << "m1 *= N = " << m1 << std::endl;
 
-            // Transpose
-            initialize_matrix (m1);
-            m2 = ublas::trans (m1);
-            std::cout << "trans (m1) = " << m2 << std::endl;
+        // Transpose
+        initialize_matrix (m1);
+        m2 = ublas::trans (m1);
+        std::cout << "trans (m1) = " << m2 << std::endl;
 
-            // Hermitean
-            initialize_matrix (m1);
-            m2 = ublas::herm (m1);
-            std::cout << "herm (m1) = " << m2 << std::endl;
+        // Hermitean
+        initialize_matrix (m1);
+        m2 = ublas::herm (m1);
+        std::cout << "herm (m1) = " << m2 << std::endl;
 
-            // Matrix multiplication
-            initialize_matrix (m1);
-            initialize_matrix (m2);
-            m3 = ublas::prod (m1, m2);
-            std::cout << "prod (m1, m2) = " << m3 << std::endl;
-        }
+        // Matrix multiplication
+        initialize_matrix (m1);
+        initialize_matrix (m2);
+        m3 = ublas::prod (m1, m2);
+        std::cout << "prod (m1, m2) = " << m3 << std::endl;
     }
+
     void operator () () const {
-        {
-            M m1 (N, N), m2 (N, N), m3 (N, N);
-            test_with (m1, m2, m3);
+        M m1 (N, N), m2 (N, N), m3 (N, N);
+        test_expression_with (m1, m2, m3);
+        test_container_with (m1);
 
 #ifdef USE_RANGE
-            ublas::matrix_range<M> mr1 (m1, ublas::range (0, N), ublas::range (0, N)),
-                                   mr2 (m2, ublas::range (0, N), ublas::range (0, N)),
-                                   mr3 (m3, ublas::range (0, N), ublas::range (0, N));
-            test_with (mr1, mr2, mr3);
+        ublas::matrix_range<M> mr1 (m1, ublas::range (0, N), ublas::range (0, N)),
+                               mr2 (m2, ublas::range (0, N), ublas::range (0, N)),
+                               mr3 (m3, ublas::range (0, N), ublas::range (0, N));
+        test_expression_with (mr1, mr2, mr3);
 #endif
 
 #ifdef USE_SLICE
-            ublas::matrix_slice<M> ms1 (m1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
-                                   ms2 (m2, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
-                                   ms3 (m3, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
-            test_with (ms1, ms2, ms3);
+        ublas::matrix_slice<M> ms1 (m1, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
+                               ms2 (m2, ublas::slice (0, 1, N), ublas::slice (0, 1, N)),
+                               ms3 (m3, ublas::slice (0, 1, N), ublas::slice (0, 1, N));
+        test_expression_with (ms1, ms2, ms3);
 #endif
-        }
     }
 };
 
