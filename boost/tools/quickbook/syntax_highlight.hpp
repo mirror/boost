@@ -41,7 +41,8 @@ namespace quickbook
             {
                 program
                     =
-                    *(  macro
+                    *(  (+space_p)      [Space(self.out)]
+                    |   self.macro      [self.do_macro]
                     |   preprocessor    [Process("preprocessor", self.out)]
                     |   comment         [Process("comment", self.out)]
                     |   keyword         [Process("keyword", self.out)]
@@ -50,27 +51,20 @@ namespace quickbook
                     |   string_         [Process("string", self.out)]
                     |   char_           [Process("char", self.out)]
                     |   number          [Process("number", self.out)]
-                    |   space_p         [Space(self.out)]
                     |   anychar_p       [Unexpected(self.out)]
                     )
                     ;
 
-                macro
-                    =   eps_p(*space_p >> self.macro)
-                    >> (*space_p)       [Space(self.out)]
-                    >> self.macro       [self.do_macro]
-                    ;
-
                 preprocessor
-                    =   *space_p >> '#' >> ((alpha_p | '_') >> *(alnum_p | '_'))
+                    =   '#' >> ((alpha_p | '_') >> *(alnum_p | '_'))
                     ;
 
                 comment
-                    =   +(*space_p >> (comment_p("//") | comment_p("/*", "*/")))
+                    =   comment_p("//") | comment_p("/*", "*/")
                     ;
 
                 keyword
-                    =   *space_p >> keyword_ >> (eps_p - (alnum_p | '_'))
+                    =   keyword_ >> (eps_p - (alnum_p | '_'))
                     ;   // make sure we recognize whole words only
 
                 keyword_
@@ -91,20 +85,19 @@ namespace quickbook
                     ;
 
                 special
-                    =   *space_p >> +chset_p("~!%^&*()+={[}]:;,<.>?/|\\-")
+                    =   +chset_p("~!%^&*()+={[}]:;,<.>?/|\\-")
                     ;
 
                 string_
-                    =   *space_p >> !as_lower_d['l'] >> confix_p('"', *c_escape_ch_p, '"')
+                    =   !as_lower_d['l'] >> confix_p('"', *c_escape_ch_p, '"')
                     ;
 
                 char_
-                    =   *space_p >> !as_lower_d['l'] >> confix_p('\'', *c_escape_ch_p, '\'')
+                    =   !as_lower_d['l'] >> confix_p('\'', *c_escape_ch_p, '\'')
                     ;
 
                 number
-                    =   *space_p >>
-                        (
+                    =   (
                             as_lower_d["0x"] >> hex_p
                         |   '0' >> oct_p
                         |   real_p
@@ -113,7 +106,7 @@ namespace quickbook
                     ;
 
                 identifier
-                    =   *space_p >> ((alpha_p | '_') >> *(alnum_p | '_'))
+                    =   (alpha_p | '_') >> *(alnum_p | '_')
                     ;
             }
 
@@ -153,30 +146,24 @@ namespace quickbook
             {
                 program
                     =
-                    *(  macro
+                    *(  (+space_p)          [Space(self.out)]
+                    |   self.macro      [self.do_macro]
                     |   comment         [Process("comment", self.out)]
                     |   keyword         [Process("keyword", self.out)]
                     |   identifier      [Process("identifier", self.out)]
                     |   special         [Process("special", self.out)]
                     |   string_         [Process("string", self.out)]
                     |   number          [Process("number", self.out)]
-                    |   space_p
                     |   anychar_p       [Unexpected(self.out)]
                     )
                     ;
 
-                macro
-                    =   eps_p(*space_p >> self.macro)
-                    >> (*space_p)       [Space(self.out)]
-                    >> self.macro       [self.do_macro]
-                    ;
-
                 comment
-                    =   +(*space_p >> comment_p("#"))
+                    =   comment_p("#")
                     ;
 
                 keyword
-                    =   *space_p >> keyword_ >> (eps_p - (alnum_p | '_'))
+                    =   keyword_ >> (eps_p - (alnum_p | '_'))
                     ;   // make sure we recognize whole words only
 
                 keyword_
@@ -196,7 +183,7 @@ namespace quickbook
                     ;
 
                 special
-                    =   *space_p >> +chset_p("~!%^&*()+={[}]:;,<.>/|\\-")
+                    =   +chset_p("~!%^&*()+={[}]:;,<.>/|\\-")
                     ;
 
                 string_prefix
@@ -204,7 +191,7 @@ namespace quickbook
                     ;
                 
                 string_
-                    =   *space_p >> ! string_prefix >> (long_string | short_string)
+                    =   ! string_prefix >> (long_string | short_string)
                     ;
 
                 short_string
@@ -220,8 +207,7 @@ namespace quickbook
                     ;
                 
                 number
-                    =   *space_p >>
-                        (
+                    =   (
                             as_lower_d["0x"] >> hex_p
                         |   '0' >> oct_p
                         |   real_p
@@ -230,7 +216,7 @@ namespace quickbook
                     ;
 
                 identifier
-                    =   *space_p >> ((alpha_p | '_') >> *(alnum_p | '_'))
+                    =   (alpha_p | '_') >> *(alnum_p | '_')
                     ;
             }
 
