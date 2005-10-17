@@ -21,6 +21,8 @@ namespace quickbook { namespace detail
             case '&': out << "&amp;";   break;
             case '"': out << "&quot;";  break;
             default:  out << ch;        break;
+            // note &apos; is not included. see the curse of apos: 
+            // http://fishbowl.pastiche.org/2003/07/01/the_curse_of_apos
         }
     }
 
