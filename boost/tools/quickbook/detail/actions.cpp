@@ -349,13 +349,15 @@ namespace quickbook
             actions.out << "<informaltable frame=\"all\">\n"
                          << "<bridgehead renderas=\"sect4\">";
 
-            actions.out << "<phrase role=\"table-title\">";
             std::string::iterator first = actions.table_title.begin();
             std::string::iterator last = actions.table_title.end();
-            while (first != last)
-                detail::print_char(*first++, actions.out);
-            actions.out << "</phrase>";
-
+            if (first != last) // allow no title
+            {
+                actions.out << "<phrase role=\"table-title\">";
+                while (first != last)
+                    detail::print_char(*first++, actions.out);
+                actions.out << "</phrase>";
+            }
             actions.out << "</bridgehead>\n"
                          << "<tgroup cols=\"" << actions.table_span << "\">\n";
 

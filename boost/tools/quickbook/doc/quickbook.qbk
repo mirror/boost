@@ -842,10 +842,11 @@ will generate:
     [[R3-C0]     [R3-C1]     [R3-C2]]
 ]
 
-The first row of the table is automatically treated as the table header; that is,
-it is wrapped in [^<thead>...</thead>] XML tags. Note that unlike the original QuickDoc,
-the columns are nested in [ cells... ]. The syntax is free-format and allows big
-cells to be formatted nicely. Example:
+The table title is optional. The first row of the table is automatically 
+treated as the table header; that is, it is wrapped in 
+[^<thead>...</thead>] XML tags. Note that unlike the original QuickDoc, the 
+columns are nested in [ cells... ]. The syntax is free-format and allows 
+big cells to be formatted nicely. Example:
 
 [pre'''
 [table Table with fat cells

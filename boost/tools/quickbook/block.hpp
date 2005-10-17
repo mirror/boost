@@ -205,7 +205,8 @@ namespace quickbook
                     ;
 
                 table =
-                    "table" >> hard_space
+                    "table" 
+                    >>  (eps_p(*blank_p >> eol_p) | hard_space)
                     >>  (*(anychar_p - eol))            [assign_a(actions.table_title)]
                     >>  +eol
                     >>  *table_row
