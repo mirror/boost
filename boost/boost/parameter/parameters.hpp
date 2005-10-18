@@ -66,6 +66,9 @@ namespace aux { struct use_default {}; }
 // required<...>, wrapper, it is treated as though optional<k> were
 // specified.
 //
+// If a keyword k is specified with unnamed<...>, that keyword
+// will be automatically deduced from the argument list.
+//
 template <class Tag, class Predicate = aux::use_default>
 struct required
 {
@@ -90,7 +93,7 @@ struct unnamed
 namespace aux
 {
   // Defines metafunctions, is_required and is_optional, that
-  // identify required<...> and optional<...> specializations.
+  // identify required<...>, optional<...> and unnamed<...> specializations.
   BOOST_DETAIL_IS_XXX_DEF(required, required, 2)
   BOOST_DETAIL_IS_XXX_DEF(optional, optional, 2)
   BOOST_DETAIL_IS_XXX_DEF(unnamed, unnamed, 2)
@@ -104,7 +107,7 @@ namespace aux
   // argument type is required match.
   //
   // a ParameterSpec is a specialization of either keyword<...>,
-  // required<...> or optional<...>.
+  // required<...>, optional<...> or unnamed<...>
   //
   
   // helper for key_type<...>, below.
@@ -159,6 +162,7 @@ namespace aux
          mpl::or_<
               is_optional<T>
             , is_required<T>
+            , is_unnamed<T>
           >
         , get_predicate<T>
         , mpl::identity<mpl::always<mpl::true_> >
