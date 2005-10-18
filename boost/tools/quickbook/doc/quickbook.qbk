@@ -63,6 +63,39 @@ Features include:
 * CSS support
 
 [endsect]
+
+[section:change_log ['Change Log]]
+
+[h3 Version 1.3]
+
+* Quickbook file inclusion \[include\].
+* Strikethrough font style: -strikethrough-
+* Better xml output (pretty layout). Check out the generated XML.
+* Regression testing facility: to make sure your document will always be
+  compatible (full backward compatibility) regardless of changes to
+  QuickBook.
+* Code cleanup and refactoring.
+* Allow phrase markup in the doc-info.
+* Preformatted code blocks via \`\`code\`\` (double ticks) allows code in tables 
+  and lists, for example.
+* Quickbook versioning; allows full backward compatibility. You have to add
+  \[quickbook 1.3\] to the doc-info header to enable the new features. Without
+  this, QuickBook will assume that the document is a pre-1.3 document.
+* Better (intuitive) paragraph termination. Some markups may terminate a paragraph.
+  Example:``
+  [section x]
+  blah...
+  [endsect]``
+* Fully qualified section and headers. Subsection names are concatenated to the
+  ID to avoid clashing. Example: `doc_name.sect_name.sub_sect_name.sub_sub_sect_name`
+* Better &nbsp; and whitespace handling in code snippets.
+* \[xinclude\] fixes up the relative path to the target XML file when 
+  input_directory is not the same as the output_directory.
+* Allow untitled tables.
+* Allow phrase markups in section titles.
+
+[endsect]
+
 [section:syntax Syntax Summary]
 
 A QuickBook document is composed of one or more blocks. An example of

@@ -572,12 +572,14 @@ namespace quickbook
         // Handles begin page
 
         begin_section_action(
-            std::ostream& phrase
+            std::ostream& out
+          , std::stringstream& phrase
           , std::string& library_id
           , std::string& section_id
           , int& level
           , std::string& qualified_section_id)
-        : phrase(phrase)
+        : out(out)
+        , phrase(phrase)
         , library_id(library_id)
         , section_id(section_id)
         , level(level)
@@ -585,12 +587,30 @@ namespace quickbook
 
         void operator()(iterator first, iterator last) const;
 
-        std::ostream& phrase;
+        std::ostream& out;
+        std::stringstream& phrase;
         std::string& library_id;
         std::string& section_id;
         int& level;
         std::string& qualified_section_id;
     };
+
+    struct end_section_action
+    {
+        end_section_action(
+            std::ostream& out
+          , int& level
+          , std::string& qualified_section_id)
+        : out(out)
+        , level(level)
+        , qualified_section_id(qualified_section_id) {}
+
+        void operator()(iterator first, iterator last) const;
+
+        std::ostream& out;
+        int& level;
+        std::string& qualified_section_id;
+   };
 
     struct xinclude_action
     {
@@ -652,19 +672,6 @@ namespace quickbook
 
         std::string&        out;
         std::stringstream&  phrase;
-    };
-
-    struct pop_sect_action
-    {
-        pop_sect_action(
-              int& level
-            , std::string& qualified_section_id)
-            : level(level)
-            , qualified_section_id(qualified_section_id) {}
-
-        void operator()(iterator const& first, iterator const& last) const;
-        int& level;
-        std::string& qualified_section_id;
     };
 
     ///////////////////////////////////////////////////////////////////////////
@@ -787,12 +794,11 @@ namespace quickbook
         anchor_action           anchor;
 
         begin_section_action    begin_section;
-        markup_action           end_section;
+        end_section_action      end_section;
         xinclude_action         xinclude;
         include_action          include;
         
         int                     level;
-        pop_sect_action         pop_sect;
         std::string             qualified_section_id;
     };
 }

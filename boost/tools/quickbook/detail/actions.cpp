@@ -419,22 +419,34 @@ namespace quickbook
 
         if (qbk_version_n < 103) // version 1.2 and below
         {
-            phrase << "\n<section id=\"" 
+            out << "\n<section id=\"" 
                 << library_id << "." << section_id << "\">\n";
         }
         else // version 1.3 and above
         {
-            phrase << "\n<section id=\"" << library_id 
+            out << "\n<section id=\"" << library_id 
                 << "." << qualified_section_id << "\">\n";
         }
-        phrase << "<title>";
-        while (first != last)
-            detail::print_char(*first++, phrase);
-        phrase << "</title>\n";
+        if (qbk_version_n < 103) // version 1.2 and below
+        {
+            out << "<title>";
+            while (first != last)
+                detail::print_char(*first++, out);
+            out << "</title>\n";
+        }
+        else
+        {
+            std::string str;
+            str = phrase.str();
+            phrase.str(std::string());
+            out << "<title>" << str << "</title>\n";
+        }
     }
 
-    void pop_sect_action::operator()(iterator const& first, iterator const& last) const
+    void end_section_action::operator()(iterator first, iterator last) const
     {
+        out << "</section>";
+
         --level;
         if (level < 0)
         {
@@ -778,12 +790,11 @@ namespace quickbook
         , start_cell(phrase, table_span)
         , end_cell(phrase, end_cell_)
         , anchor(out)
-        , begin_section(out, doc_id, section_id, level, qualified_section_id)
-        , end_section(out, "</section>")
+        , begin_section(out, phrase, doc_id, section_id, level, qualified_section_id)
+        , end_section(out, level, qualified_section_id)
         , xinclude(out, *this)
         , include(*this)
         , level(0)
-        , pop_sect(level, qualified_section_id)
     {
         // turn off __FILENAME__ macro on debug mode = true
         std::string filename_str = debug_mode ? 

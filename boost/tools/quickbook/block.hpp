@@ -90,7 +90,7 @@ namespace quickbook
                 block_markup =
                         '[' >> space
                     >>  (   begin_section
-                        |   end_section                 [actions.pop_sect]
+                        |   end_section
                         |   headings
                         |   blurb
                         |   blockquote
@@ -112,8 +112,7 @@ namespace quickbook
                     >>  (':' >> (*(alnum_p | '_'))      [assign_a(actions.section_id)]
                         | eps_p                         [assign_a(actions.section_id)]
                         )
-                    >> (*(anychar_p -
-                            close_bracket))             [actions.begin_section]
+                    >> phrase                           [actions.begin_section]
                     ;
 
                 end_section =
