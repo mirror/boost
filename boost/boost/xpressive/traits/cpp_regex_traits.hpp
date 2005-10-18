@@ -495,25 +495,24 @@ private:
     /// INTERNAL ONLY
     static char_class_pair const &char_class(std::size_t j)
     {
-        using namespace detail;
         static char_class_pair const s_char_class_map[] =
         {
-            { BOOST_XPR_CSTR_(char_type, "alnum"),  mask_cast<std::ctype_base::alnum>::value }
-          , { BOOST_XPR_CSTR_(char_type, "alpha"),  mask_cast<std::ctype_base::alpha>::value }
-          , { BOOST_XPR_CSTR_(char_type, "blank"),  std_ctype_blank }
-          , { BOOST_XPR_CSTR_(char_type, "cntrl"),  mask_cast<std::ctype_base::cntrl>::value }
-          , { BOOST_XPR_CSTR_(char_type, "d"),      mask_cast<std::ctype_base::digit>::value }
-          , { BOOST_XPR_CSTR_(char_type, "digit"),  mask_cast<std::ctype_base::digit>::value }
-          , { BOOST_XPR_CSTR_(char_type, "graph"),  mask_cast<std::ctype_base::graph>::value }
-          , { BOOST_XPR_CSTR_(char_type, "lower"),  mask_cast<std::ctype_base::lower>::value }
-          , { BOOST_XPR_CSTR_(char_type, "newline"),std_ctype_newline }
-          , { BOOST_XPR_CSTR_(char_type, "print"),  mask_cast<std::ctype_base::print>::value }
-          , { BOOST_XPR_CSTR_(char_type, "punct"),  mask_cast<std::ctype_base::punct>::value }
-          , { BOOST_XPR_CSTR_(char_type, "s"),      mask_cast<std::ctype_base::space>::value }
-          , { BOOST_XPR_CSTR_(char_type, "space"),  mask_cast<std::ctype_base::space>::value }
-          , { BOOST_XPR_CSTR_(char_type, "upper"),  mask_cast<std::ctype_base::upper>::value }
-          , { BOOST_XPR_CSTR_(char_type, "w"),      mask_cast<std::ctype_base::alnum>::value | std_ctype_underscore }
-          , { BOOST_XPR_CSTR_(char_type, "xdigit"), mask_cast<std::ctype_base::xdigit>::value }
+            { BOOST_XPR_CSTR_(char_type, "alnum"),  detail::mask_cast<std::ctype_base::alnum>::value }
+          , { BOOST_XPR_CSTR_(char_type, "alpha"),  detail::mask_cast<std::ctype_base::alpha>::value }
+          , { BOOST_XPR_CSTR_(char_type, "blank"),  detail::std_ctype_blank }
+          , { BOOST_XPR_CSTR_(char_type, "cntrl"),  detail::mask_cast<std::ctype_base::cntrl>::value }
+          , { BOOST_XPR_CSTR_(char_type, "d"),      detail::mask_cast<std::ctype_base::digit>::value }
+          , { BOOST_XPR_CSTR_(char_type, "digit"),  detail::mask_cast<std::ctype_base::digit>::value }
+          , { BOOST_XPR_CSTR_(char_type, "graph"),  detail::mask_cast<std::ctype_base::graph>::value }
+          , { BOOST_XPR_CSTR_(char_type, "lower"),  detail::mask_cast<std::ctype_base::lower>::value }
+          , { BOOST_XPR_CSTR_(char_type, "newline"),detail::std_ctype_newline }
+          , { BOOST_XPR_CSTR_(char_type, "print"),  detail::mask_cast<std::ctype_base::print>::value }
+          , { BOOST_XPR_CSTR_(char_type, "punct"),  detail::mask_cast<std::ctype_base::punct>::value }
+          , { BOOST_XPR_CSTR_(char_type, "s"),      detail::mask_cast<std::ctype_base::space>::value }
+          , { BOOST_XPR_CSTR_(char_type, "space"),  detail::mask_cast<std::ctype_base::space>::value }
+          , { BOOST_XPR_CSTR_(char_type, "upper"),  detail::mask_cast<std::ctype_base::upper>::value }
+          , { BOOST_XPR_CSTR_(char_type, "w"),      detail::mask_cast<std::ctype_base::alnum>::value | detail::std_ctype_underscore }
+          , { BOOST_XPR_CSTR_(char_type, "xdigit"), detail::mask_cast<std::ctype_base::xdigit>::value }
           , { 0, 0 }
         };
         return s_char_class_map[j];

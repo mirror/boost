@@ -118,7 +118,7 @@ struct regex_compiler
         impl.hidden_mark_count_ = this->hidden_mark_count_;
 
         // optimization: get the peek chars OR the boyer-moore search string
-        detail::optimize_regex(impl, this->rxtraits());
+        detail::optimize_regex(impl, this->rxtraits(), detail::is_random<BidiIterT>());
 
         return detail::core_access<BidiIterT>::make_regex(impl);
     }

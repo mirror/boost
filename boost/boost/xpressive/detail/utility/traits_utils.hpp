@@ -28,15 +28,15 @@ namespace boost { namespace xpressive { namespace detail
     // char_cast
     //
     template<typename ToCharT, typename FromCharT, typename TraitsT>
-    inline typename enable_if<is_same<ToCharT, FromCharT>, ToCharT>::type
-    char_cast(FromCharT from, TraitsT const &)
+    inline ToCharT
+    char_cast(FromCharT from, TraitsT const &, typename enable_if<is_same<ToCharT, FromCharT> >::type * = 0)
     {
         return from;
     }
 
     template<typename ToCharT, typename FromCharT, typename TraitsT>
-    inline typename disable_if<is_same<ToCharT, FromCharT>, ToCharT>::type
-    char_cast(FromCharT from, TraitsT const &traits)
+    inline ToCharT
+    char_cast(FromCharT from, TraitsT const &traits, typename disable_if<is_same<ToCharT, FromCharT> >::type * = 0)
     {
         BOOST_MPL_ASSERT((is_same<FromCharT, char>));
         return traits.widen(from);
@@ -46,15 +46,15 @@ namespace boost { namespace xpressive { namespace detail
     // string_cast
     //
     template<typename ToCharT, typename FromCharT, typename TraitsT>
-    inline typename enable_if<is_same<ToCharT, FromCharT>, std::basic_string<ToCharT> const &>::type
-    string_cast(std::basic_string<FromCharT> const &from, TraitsT const &)
+    inline std::basic_string<ToCharT> const &
+    string_cast(std::basic_string<FromCharT> const &from, TraitsT const &, typename enable_if<is_same<ToCharT, FromCharT> >::type * = 0)
     {
         return from;
     }
 
     template<typename ToCharT, typename FromCharT, typename TraitsT>
-    inline typename disable_if<is_same<ToCharT, FromCharT>, std::basic_string<ToCharT> const>::type
-    string_cast(std::basic_string<FromCharT> const &from, TraitsT const &traits)
+    inline std::basic_string<ToCharT> const
+    string_cast(std::basic_string<FromCharT> const &from, TraitsT const &traits, typename disable_if<is_same<ToCharT, FromCharT> >::type * = 0)
     {
         BOOST_MPL_ASSERT((is_same<FromCharT, char>));
         std::basic_string<ToCharT> to;

@@ -18,7 +18,7 @@
 #ifndef NDEBUG
 # include <iosfwd>
 #endif
-#include <boost/utility/enable_if.hpp>
+#include <boost/mpl/bool.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/regex_traits.hpp>
 #include <boost/xpressive/regex_constants.hpp>
@@ -38,8 +38,7 @@ namespace boost { namespace xpressive { namespace detail
 // optimize_regex
 //
 template<typename BidiIterT, typename TraitsT>
-inline typename enable_if<is_random<BidiIterT> >::type
-optimize_regex(regex_impl<BidiIterT> &impl, TraitsT const &traits)
+inline void optimize_regex(regex_impl<BidiIterT> &impl, TraitsT const &traits, mpl::true_)
 {
     typedef typename iterator_value<BidiIterT>::type char_type;
 
@@ -83,8 +82,7 @@ optimize_regex(regex_impl<BidiIterT> &impl, TraitsT const &traits)
 // optimize_regex
 //
 template<typename BidiIterT, typename TraitsT>
-inline typename disable_if<is_random<BidiIterT> >::type
-optimize_regex(regex_impl<BidiIterT> &impl, TraitsT const &traits)
+inline void optimize_regex(regex_impl<BidiIterT> &impl, TraitsT const &traits, mpl::false_)
 {
     typedef typename iterator_value<BidiIterT>::type char_type;
 
@@ -291,7 +289,7 @@ private:
         visitor.impl().xpr_->link(linker);
 
         // optimization: get the peek chars OR the boyer-moore search string
-        detail::optimize_regex(visitor.impl(), visitor.traits());
+        detail::optimize_regex(visitor.impl(), visitor.traits(), detail::is_random<BidiIterT>());
 
         // copy the implementation
         this->impl_.tracking_copy(visitor.impl());

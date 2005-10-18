@@ -135,7 +135,7 @@ namespace boost { namespace xpressive { namespace detail
     template<typename ActionT>
     struct action_matcher;
 
-    template<typename XprT>
+    template<typename XprT, bool IsOpT = proto::is_op<XprT>::value>
     struct as_xpr_type;
 
     template<typename XprT>

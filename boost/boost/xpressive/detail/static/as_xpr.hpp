@@ -14,6 +14,7 @@
 #endif
 
 #include <boost/ref.hpp>
+#include <boost/mpl/if.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/apply.hpp>
@@ -121,32 +122,33 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // matcher_generator
-    //
-    template<typename MatcherT>
-    struct matcher_generator
-    {
-        typedef proto::unary_op
-        <
-            typename as_matcher_type<MatcherT>::type
-          , proto::noop_tag
-        > type;
-    };
-
     ///////////////////////////////////////////////////////////////////////////////
     // as_xpr_type
     //
     template<typename XprT>
-    struct as_xpr_type
+    struct as_xpr_type<XprT, true> // is_op == true
     {
-        typedef typename mpl::eval_if
+        typedef XprT type;
+
+        static XprT const &call(XprT const &xpr)
+        {
+            return xpr;
+        }
+    };
+
+    template<typename XprT>
+    struct as_xpr_type<XprT, false>
+    {
+        typedef proto::unary_op
         <
-            proto::is_op<XprT>
-          , mpl::identity<XprT>
-          , matcher_generator<XprT>
-        >::type type;
+            typename as_matcher_type<XprT>::type
+          , proto::noop_tag
+        > type;
+
+        static type const call(XprT const &xpr)
+        {
+            return proto::noop(detail::as_matcher_type<XprT>::call(xpr));
+        }
     };
 
 }}} // namespace boost::xpressive::detail
@@ -159,25 +161,15 @@ namespace boost { namespace xpressive
     // as_xpr (from a literal to an xpression)
     //
     template<typename XprT>
-    inline typename enable_if
+    inline typename mpl::if_
     <
         proto::is_op<XprT>
       , XprT const &
+      , typename detail::as_xpr_type<XprT>::type const
     >::type
     as_xpr(XprT const &xpr)
     {
-        return xpr;
-    }
-
-    template<typename XprT>
-    inline typename lazy_disable_if
-    <
-        proto::is_op<XprT>
-      , detail::as_xpr_type<XprT>
-    >::type
-    as_xpr(XprT const &xpr)
-    {
-        return proto::noop(detail::as_matcher_type<XprT>::call(xpr));
+        return detail::as_xpr_type<XprT>::call(xpr);
     }
 
 }} // namespace boost::xpressive
