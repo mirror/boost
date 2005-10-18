@@ -242,38 +242,38 @@ struct arg_list : Next
     // reached, indicating no matching argument was passed, the
     // default is returned, or if no default_ or lazy_default was
     // passed, compilation fails.
-    reference get(keyword<key_type> const& x) const
+    reference get(keyword<key_type> const&) const
     {
         return arg.value;
     }
 
     template <class Default>
-    reference get(default_<key_type,Default> x) const
+    reference get(default_<key_type,Default>) const
     {
         return arg.value;
     }
 
     template <class Default>
-    reference get(lazy_default<key_type, Default> x) const
+    reference get(lazy_default<key_type, Default>) const
     {
         return arg.value;
     }
     
 #else
 
-    reference operator[](keyword<key_type> const& x) const
+    reference operator[](keyword<key_type> const&) const
     {
         return arg.value;
     }
 
     template <class Default>
-    reference operator[](default_<key_type, Default> x) const
+    reference operator[](default_<key_type, Default>) const
     {
         return arg.value;
     }
 
     template <class Default>
-    reference operator[](lazy_default<key_type, Default> x) const
+    reference operator[](lazy_default<key_type, Default>) const
     {
         return arg.value;
     }

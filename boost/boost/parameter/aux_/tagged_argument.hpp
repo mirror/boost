@@ -43,6 +43,11 @@ struct tagged_argument
     }
     
     reference value;
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1310))
+    // warning suppression
+ private:
+    void operator=(tagged_argument const&);
+#endif 
 };
 
 // Defines a metafunction, is_tagged_argument, that identifies
