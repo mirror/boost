@@ -375,7 +375,11 @@ namespace aux
                   typename tag<typename ParameterSpec::key_type, Arg const>::type
                 , Tail
               >
-            , eval_tail<Arg, DefaultTag>
+            ,
+#if BOOST_WORKAROUND(__GNUC__, < 3)
+              typename unnamed_list<ParameterSpec, Tail>::template
+#endif
+              eval_tail<Arg, DefaultTag>
           >::type type;
       };
   };
