@@ -339,6 +339,16 @@ namespace aux
       };
   };
 
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+  template<class T>
+  struct is_string_literal : mpl::false_
+  {};
+
+  template<int N>
+  struct is_string_literal<char const[N]> : mpl::true_
+  {};
+#endif
+  
   // Used by as_tagged_argument to match a given 
   // argument with a list of unnamed specs.
   //
@@ -373,10 +383,20 @@ namespace aux
       template <class Arg, class DefaultTag>
       struct apply
       {
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+          typedef typename mpl::if_<
+              is_string_literal<Arg>
+            , char const*
+            , Arg
+          >::type const arg_type;
+#else
+          typedef Arg const arg_type;
+#endif
+
           typedef typename mpl::eval_if<
               typename mpl::apply1<typename ParameterSpec::predicate, Arg>::type
             , mpl::pair<
-                  typename tag<typename ParameterSpec::key_type, Arg const>::type
+                  typename tag<typename ParameterSpec::key_type, arg_type>::type
                 , Tail
               >
             ,
