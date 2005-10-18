@@ -143,7 +143,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Conversion to reference - may be invalidated
         BOOST_UBLAS_INLINE
         value_type& ref () const {
-            const pointer p = (*this) ().find_element (i_, i_);
+            const pointer p = (*this) ().find_element (i_, j_);
             if (!p)
                 return (*this) ().insert_element (i_, j_, value_type/*zero*/());
             else
