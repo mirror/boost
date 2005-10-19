@@ -6,6 +6,7 @@
 
 # See http://www.boost.org/libs/iostreams for documentation.
 
+import stlport ;
 
 rule test-iostreams ( sources * : requirements * ) {
     return [
