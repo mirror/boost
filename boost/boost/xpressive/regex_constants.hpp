@@ -97,7 +97,7 @@ enum syntax_option_type
     not_dot_newline     = 1 << 12,  ///< Specifies that the . metacharacter does not match the
                                     ///< newline character \\n.
                                     ///<
-    ignore_white_space  = 1 << 13,  ///< Specifies that non-escaped white-space is not significant.
+    ignore_white_space  = 1 << 13   ///< Specifies that non-escaped white-space is not significant.
                                     ///<
 };
 
@@ -176,7 +176,7 @@ enum match_flag_type
                                         ///< then only the first occurrence of the regular
                                         ///< expression is replaced.
                                         ///<
-    format_literal          = 1 << 17,  ///< Treat the format string as a literal.
+    format_literal          = 1 << 17   ///< Treat the format string as a literal.
                                         ///<
 };
 
@@ -220,7 +220,7 @@ enum error_type
     error_badlookbehind,        ///< An attempt to create a variable-width look-behind assertion
                                 ///< was detected.
                                 ///<
-    error_internal,             ///< An internal error has occured.
+    error_internal              ///< An internal error has occured.
                                 ///<
 };
 
