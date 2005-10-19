@@ -9,11 +9,11 @@
 #define BOOST_XPRESSIVE_DETAIL_STATIC_PRODUCTIONS_ALT_COMPILERS_HPP_EAN_10_04_2005
 
 #include <boost/version.hpp>
-#include <boost/spirit/fusion/sequence/cons.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/compiler/fold.hpp>
 #include <boost/xpressive/proto/compiler/branch.hpp>
+#include <boost/xpressive/detail/utility/cons.hpp>
 #include <boost/xpressive/detail/utility/dont_care.hpp>
 #include <boost/xpressive/detail/static/productions/domain_tags.hpp>
 
@@ -92,30 +92,5 @@ namespace boost { namespace proto
     };
 
 }}
-
-// Before Boost v1.34, Fusion cons lists were not valid MPL sequences.
-#if 0 //BOOST_VERSION < 103400
-namespace boost { namespace mpl
-{
-    template<typename Iterator>
-    struct next;
-
-    template<typename Cons>
-    struct next<fusion::cons_iterator<Cons> >
-      : fusion::cons_detail::next_traits_impl<fusion::cons_iterator<Cons> >
-    {
-    };
-
-    template<typename Iterator>
-    struct deref;
-
-    template<typename Cons>
-    struct deref<fusion::cons_iterator<Cons> >
-      : fusion::cons_detail::value_traits_impl<fusion::cons_iterator<Cons> >
-    {
-    };
-
-}}
-#endif
 
 #endif
