@@ -214,19 +214,29 @@ namespace quickbook
         if (out)
         {
             // preprocess the code section to remove the initial indentation
-            std::string program(first, last);
-            detail::unindent(program);
-            
+            std::string program_(first, last);
+            detail::unindent(program_);
+
+            // $$$ fix me $$$ this is wasteful. we have to convert
+            // back to a vector<char> so we can use the same iterator type 
+            // used by the rest of the system, otherwise, it is wasteful 
+            // of function template instantiations
+
+            std::vector<char> program(program_.begin(), program_.end());
+            iterator first_(program.begin(), program.end());
+            iterator last_(program.end(), program.end());
+            first_.set_position(first.get_position());
+
             out << "<programlisting>\n";
 
             // print the code with syntax coloring
             if (source_mode == "c++")
             {
-                parse(program.begin(), program.end(), cpp_p);
+                parse(first_, last_, cpp_p);
             }
             else if (source_mode == "python")
             {
-                parse(program.begin(), program.end(), python_p);
+                parse(first_, last_, python_p);
             }
             
             out << "</programlisting>\n";
@@ -719,9 +729,9 @@ namespace quickbook
         , table_span(0)
         , table_header()
         , source_mode("c++")
-        , code(out, source_mode, macro)
-        , code_block(phrase, source_mode, macro)
-        , inline_code(phrase, source_mode, macro)
+        , code(out, source_mode, macro, *this)
+        , code_block(phrase, source_mode, macro, *this)
+        , inline_code(phrase, source_mode, macro, *this)
         , paragraph(out, phrase, paragraph_pre, paragraph_post)
         , h1(out, phrase, doc_id, section_id, qualified_section_id, h1_pre, h1_post)
         , h2(out, phrase, doc_id, section_id, qualified_section_id, h2_pre, h2_post)

@@ -21,6 +21,7 @@
 #include <boost/filesystem/operations.hpp>
 #include "../syntax_highlight.hpp"
 #include "utils.hpp"
+#include "../phrase.hpp"
 
 #ifdef BOOST_MSVC
 // disable copy/assignment could not be generated, unreferenced formal params
@@ -338,6 +339,58 @@ namespace quickbook
         std::ostream& out;
     };
 
+    struct escape_back_grammar : public grammar<escape_back_grammar>
+    {
+        escape_back_grammar(actions& escape_actions)
+            : escape_actions(escape_actions) {}
+
+        template <typename Scanner>
+        struct definition
+        {
+            definition(escape_back_grammar const& self)
+                : common(self.escape_actions, unused)
+                , unused(false)
+            {
+                phrase =
+                   *(   common
+                    |   (anychar_p - ']')   [self.escape_actions.plain_char]
+                    )
+                    ;
+            }
+
+            rule<Scanner> phrase;
+            phrase_grammar<actions> common;
+            bool unused;
+
+            rule<Scanner> const&
+            start() const { return phrase; }
+        };
+
+        actions& escape_actions;
+    };
+
+    struct escape_back
+    {
+        // Escapes back from code to quickbook
+
+        escape_back(std::ostream& out, actions& escape_actions)
+            : out(out), phrase(escape_actions), escape_actions(escape_actions) {}
+
+        template <typename Iterator>
+        void operator()(Iterator first, Iterator last) const
+        {
+            std::string save = escape_actions.phrase.str(); // save
+            parse(first, last, phrase);
+            std::string str = escape_actions.phrase.str();
+            escape_actions.phrase.str(save); // restore
+            out << str;
+        }
+
+        std::ostream& out;
+        escape_back_grammar phrase;
+        actions& escape_actions;
+    };
+
     typedef symbols<std::string> macros_type;
 
     struct code_action
@@ -346,11 +399,12 @@ namespace quickbook
 
         code_action(std::ostream& out,
                     std::string const & source_mode,
-                    macros_type const& macro)
+                    macros_type const& macro,
+                    actions& escape_actions)
         : out(out)
         , source_mode(source_mode)
-        , cpp_p(out, macro, do_macro_action(out))
-        , python_p(out, macro, do_macro_action(out))
+        , cpp_p(out, macro, do_macro_action(out), escape_actions)
+        , python_p(out, macro, do_macro_action(out), escape_actions)
         {
         }
 
@@ -364,6 +418,8 @@ namespace quickbook
           , space
           , macros_type
           , do_macro_action
+          , escape_back
+          , actions
           , unexpected_char
           , std::ostream>
         cpp_p;
@@ -373,6 +429,8 @@ namespace quickbook
           , space
           , macros_type
           , do_macro_action
+          , escape_back
+          , actions
           , unexpected_char
           , std::ostream>
         python_p;
@@ -384,11 +442,12 @@ namespace quickbook
 
         inline_code_action(std::ostream& out,
                            std::string const& source_mode,
-                           macros_type const& macro)
+                           macros_type const& macro,
+                           actions& escape_actions)
         : out(out)
         , source_mode(source_mode)
-        , cpp_p(out, macro, do_macro_action(out))
-        , python_p(out, macro, do_macro_action(out))
+        , cpp_p(out, macro, do_macro_action(out), escape_actions)
+        , python_p(out, macro, do_macro_action(out), escape_actions)
         {}
 
         void operator()(iterator first, iterator last) const;
@@ -401,6 +460,8 @@ namespace quickbook
           , space
           , macros_type
           , do_macro_action
+          , escape_back
+          , actions
           , unexpected_char
           , std::ostream>
         cpp_p;
@@ -410,6 +471,8 @@ namespace quickbook
           , space
           , macros_type
           , do_macro_action
+          , escape_back
+          , actions
           , unexpected_char
           , std::ostream>
         python_p;

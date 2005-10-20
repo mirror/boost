@@ -93,6 +93,7 @@ Features include:
   input_directory is not the same as the output_directory.
 * Allow untitled tables.
 * Allow phrase markups in section titles.
+* Allow escaping back to QuickBook from code, code blocks and inline code.
 
 [endsect]
 
@@ -700,6 +701,24 @@ Generates:
 [def __quickbook__ [@index.html quickbook]]
 
     using __quickbook__::__syntax_highlight__;
+
+[h3 Escaping Back To QuickBook]
+
+Inside code, code blocks and inline code, you may switch back to QuickBook 
+using a language specific delimiter (in C++ and Python -- the tripple-dot 
+"..."). Example:
+
+[pre'''
+void foo() // ...See: [@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]...
+{
+}
+''']
+
+Will generate:
+
+    void foo() // ...See: [@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]...
+    {
+    }
 
 [h3 Preformatted]
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-<part id="quickbook" name="quickbook" dirname="quickbook" last-revision="$Date$"
+<part id="quickbook" name="quickbook" dirname="quickbook" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
  xmlns:xi="http://www.w3.org/2001/XInclude">
   <partinfo>
     <author>
@@ -125,7 +125,8 @@
         Example:
 <programlisting>
 <phrase role="special">[</phrase><phrase role="identifier">section</phrase> <phrase role="identifier">x</phrase><phrase role="special">]</phrase>
-<phrase role="identifier">blah</phrase><phrase role="special">...</phrase>
+<phrase role="identifier">blah</phrase>
+[endsect<phrase role="special">...</phrase>
 <phrase role="special">[</phrase><phrase role="identifier">endsect</phrase><phrase role="special">]</phrase></programlisting>
       </listitem>
       <listitem>
@@ -1112,6 +1113,35 @@ escape (no processing/formatting)
 <programlisting>
 <phrase role="identifier">using</phrase> <ulink url="index.html">quickbook</ulink><phrase role="special">::</phrase><ulink url="quickbook/highlight.html">syntax_highlight</ulink><phrase role="special">;</phrase>
 </programlisting>
+    <anchor id="quickbook.syntax.escaping_back_to_quickbook" />
+    <bridgehead renderas="sect3">
+      Escaping Back To QuickBook
+    </bridgehead>
+    <para>
+      Inside Code, Code Blocks and inline code, you may switch back to QuickBook
+      using a language specific delimiter (in C++ and Python -- the tripple-dot &quot;...&quot;).
+      Example:
+    </para>
+    
+<programlisting>    void foo() // ... *foo is ever so bold*
+    {
+    }
+</programlisting>
+    <para>
+      Will generate:
+    </para>
+    
+<programlisting>
+<phrase role="identifier">void</phrase> <phrase role="identifier">foo</phrase><phrase role="special">()</phrase> <phrase role="special">//</phrase>  <emphasis role="bold">foo is ever so bold</emphasis>
+{
+}
+<phrase role="special">...</phrase> <phrase role="special">*</phrase><phrase role="identifier">foo</phrase> <phrase role="keyword">is</phrase> <phrase role="identifier">ever</phrase> <phrase role="identifier">so</phrase> <phrase role="identifier">bold</phrase><phrase role="special">*</phrase>
+<phrase role="special">{</phrase>
+<phrase role="special">}</phrase>
+</programlisting>
+    <para>
+      Notice the comment in bold.
+    </para>
     <anchor id="quickbook.syntax.preformatted" />
     <bridgehead renderas="sect3">
       Preformatted
@@ -1299,14 +1329,14 @@ sf_logo
         </thead>
         <tbody>
           <row>
-            <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Oct-18</entry>
+            <entry>__DATE__</entry><entry>Today's date</entry><entry>2000-Dec-20</entry>
           </row>
           <row>
-            <entry>__TIME__</entry><entry>The current time</entry><entry>11:48:12
-            AM</entry>
+            <entry>__TIME__</entry><entry>The current time</entry><entry>12:00:00
+            PM</entry>
           </row>
           <row>
-            <entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>C:\dev\boost\tools\quickbook\doc\quickbook.qbk</entry>
+            <entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>NO_FILENAME_MACRO_GENERATED_IN_DEBUG_MODE</entry>
           </row>
         </tbody>
       </tgroup>

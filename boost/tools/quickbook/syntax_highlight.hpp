@@ -26,13 +26,15 @@ namespace quickbook
       , typename Space
       , typename Macro
       , typename DoMacro
+      , typename Escape
+      , typename EscapeActions
       , typename Unexpected
       , typename Out>
     struct cpp_highlight
-    : public grammar<cpp_highlight<Process, Space, Macro, DoMacro, Unexpected, Out> >
+    : public grammar<cpp_highlight<Process, Space, Macro, DoMacro, Escape, EscapeActions, Unexpected, Out> >
     {
-        cpp_highlight(Out& out, Macro const& macro, DoMacro do_macro)
-        : out(out), macro(macro), do_macro(do_macro) {}
+        cpp_highlight(Out& out, Macro const& macro, DoMacro do_macro, EscapeActions& escape_actions)
+        : out(out), macro(macro), do_macro(do_macro), escape_actions(escape_actions) {}
 
         template <typename Scanner>
         struct definition
@@ -43,6 +45,7 @@ namespace quickbook
                     =
                     *(  (+space_p)      [Space(self.out)]
                     |   self.macro      [self.do_macro]
+                    |   escape
                     |   preprocessor    [Process("preprocessor", self.out)]
                     |   comment         [Process("comment", self.out)]
                     |   keyword         [Process("keyword", self.out)]
@@ -53,6 +56,12 @@ namespace quickbook
                     |   number          [Process("number", self.out)]
                     |   anychar_p       [Unexpected(self.out)]
                     )
+                    ;
+                
+                escape
+                    = "..." 
+                    >> (+(anychar_p - "..." ))  [Escape(self.out, self.escape_actions)]
+                    >> "..."
                     ;
 
                 preprocessor
@@ -111,7 +120,7 @@ namespace quickbook
             }
 
             rule<Scanner>   program, macro, preprocessor, comment, special,
-                            string_, char_, number, identifier, keyword;
+                            string_, char_, number, identifier, keyword, escape;
             symbols<>       keyword_;
 
             rule<Scanner> const&
@@ -121,6 +130,7 @@ namespace quickbook
         Out& out;
         Macro const& macro;
         DoMacro do_macro;
+        EscapeActions& escape_actions;
     };
 
     // Grammar for Python highlighting
@@ -131,13 +141,15 @@ namespace quickbook
       , typename Space
       , typename Macro
       , typename DoMacro
+      , typename Escape
+      , typename EscapeActions
       , typename Unexpected
       , typename Out>
     struct python_highlight
-    : public grammar<python_highlight<Process, Space, Macro, DoMacro, Unexpected, Out> >
+    : public grammar<python_highlight<Process, Space, Macro, DoMacro, Escape, EscapeActions, Unexpected, Out> >
     {
-        python_highlight(Out& out, Macro const& macro, DoMacro do_macro)
-        : out(out), macro(macro), do_macro(do_macro) {}
+        python_highlight(Out& out, Macro const& macro, DoMacro do_macro, EscapeActions& escape_actions)
+        : out(out), macro(macro), do_macro(do_macro), escape_actions(escape_actions) {}
 
         template <typename Scanner>
         struct definition
@@ -146,8 +158,9 @@ namespace quickbook
             {
                 program
                     =
-                    *(  (+space_p)          [Space(self.out)]
+                    *(  (+space_p)      [Space(self.out)]
                     |   self.macro      [self.do_macro]
+                    |   escape          
                     |   comment         [Process("comment", self.out)]
                     |   keyword         [Process("keyword", self.out)]
                     |   identifier      [Process("identifier", self.out)]
@@ -156,6 +169,12 @@ namespace quickbook
                     |   number          [Process("number", self.out)]
                     |   anychar_p       [Unexpected(self.out)]
                     )
+                    ;
+
+                escape
+                    = "..." 
+                    >> (+(anychar_p - "..." ))  [Escape(self.out, self.escape_actions)]
+                    >> "..."
                     ;
 
                 comment
@@ -222,7 +241,7 @@ namespace quickbook
 
             rule<Scanner>   program, macro, comment, special,
                             string_, string_prefix, short_string, long_string,
-                            number, identifier, keyword;
+                            number, identifier, keyword, escape;
             symbols<>       keyword_;
 
             rule<Scanner> const&
@@ -232,6 +251,7 @@ namespace quickbook
         Out& out;
         Macro const& macro;
         DoMacro do_macro;
+        EscapeActions& escape_actions;
     };
 }
 
