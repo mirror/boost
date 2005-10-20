@@ -705,18 +705,18 @@ Generates:
 [h3 Escaping Back To QuickBook]
 
 Inside code, code blocks and inline code, you may switch back to QuickBook 
-using a language specific delimiter (in C++ and Python -- the tripple-dot 
+using a language specific delimiter (in C++ and Python -- the triple-dot 
 "..."). Example:
 
 [pre'''
-void foo() // ...See: [@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]...
+void ...[@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]...()
 {
 }
 ''']
 
 Will generate:
 
-    void foo() // ...See: [@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]...
+    void ...[@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]...()
     {
     }
 

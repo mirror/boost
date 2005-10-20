@@ -913,10 +913,10 @@ escape (no processing/formatting)
     </h3>
 <p>
       Inside code, code blocks and inline code, you may switch back to QuickBook
-      using a language specific delimiter (in C++ and Python -- the tripple-dot "...").
+      using a language specific delimiter (in C++ and Python -- the triple-dot "...").
       Example:
     </p>
-<pre class="programlisting">void foo() // ...See: [@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]...
+<pre class="programlisting">void ...[@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]...()
 {
 }
 </pre>
@@ -924,12 +924,12 @@ escape (no processing/formatting)
       Will generate:
     </p>
 <pre class="programlisting">
-<span class="identifier">void</span> <span class="identifier">foo</span><span class="special">()</span> <span class="special">//</span> See: <a href="http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz" target="_top">foo</a>
+<span class="identifier">void</span> <a href="http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz" target="_top">foo</a><span class="special">()</span>
 <span class="special">{</span>
 <span class="special">}</span>
 </pre>
 <a name="quickbook.syntax.preformatted"></a><h3>
-<a name="id444139"></a>
+<a name="id444126"></a>
       Preformatted
     </h3>
 <p>
@@ -963,7 +963,7 @@ escape (no processing/formatting)
       inside <tt class="literal">pre</tt> blocks.
     </p>
 <a name="quickbook.syntax.blockquote"></a><h3>
-<a name="id444229"></a>
+<a name="id444216"></a>
       Blockquote
     </h3>
 <pre class="programlisting">[:sometext...]
@@ -972,7 +972,7 @@ escape (no processing/formatting)
         Indents the paragraph. This applies to one paragraph only.
       </p></blockquote></div>
 <a name="quickbook.syntax.headings"></a><h3>
-<a name="id444248"></a>
+<a name="id444236"></a>
       Headings
     </h3>
 <pre class="programlisting">[h1 Heading 1]
@@ -983,27 +983,27 @@ escape (no processing/formatting)
 [h6 Heading 6]
 </pre>
 <a name="quickbook.syntax.heading_1"></a><h1>
-<a name="id444264"></a>
+<a name="id444251"></a>
       Heading 1
     </h1>
 <a name="quickbook.syntax.heading_2"></a><h2>
-<a name="id444273"></a>
+<a name="id444261"></a>
       Heading 2
     </h2>
 <a name="quickbook.syntax.heading_3"></a><h3>
-<a name="id444284"></a>
+<a name="id444271"></a>
       Heading 3
     </h3>
 <a name="quickbook.syntax.heading_4"></a><h4>
-<a name="id444295"></a>
+<a name="id444282"></a>
       Heading 4
     </h4>
 <a name="quickbook.syntax.heading_5"></a><h5>
-<a name="id444306"></a>
+<a name="id444294"></a>
       Heading 5
     </h5>
 <a name="quickbook.syntax.heading_6"></a><h3>
-<a name="id444318"></a>
+<a name="id444305"></a>
       Heading 6
     </h3>
 <p>
@@ -1022,7 +1022,7 @@ escape (no processing/formatting)
       and <a href="syntax.html#quickbook.syntax.section">Section</a> for more info.
     </p>
 <a name="quickbook.syntax.macros"></a><h3>
-<a name="id444403"></a>
+<a name="id444390"></a>
       Macros
     </h3>
 <pre class="programlisting">[def macro_identifier some text]
@@ -1077,7 +1077,7 @@ sf_logo
 <p>
       Hi <a href="http://spirit.sourceforge.net" target="_top">Spirit</a><span class="inlinemediaobject"><img src="../images/smiley.png"></span></p>
 <a name="quickbook.syntax.predefined_macros"></a><h3>
-<a name="id444570"></a>
+<a name="id444557"></a>
       Predefined Macros
     </h3>
 <p>
@@ -1085,7 +1085,7 @@ sf_logo
     </p>
 <div class="informaltable">
 <h4>
-<a name="id444583"></a><span class="table-title">Predefined Macros</span>
+<a name="id444570"></a><span class="table-title">Predefined Macros</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -1107,7 +1107,7 @@ sf_logo
 <tr>
 <td>__TIME__</td>
 <td>The current time</td>
-<td>02:26:40
+<td>02:35:53
             AM</td>
 </tr>
 <tr>
@@ -1119,7 +1119,7 @@ sf_logo
 </table>
 </div>
 <a name="quickbook.syntax.blurbs"></a><h3>
-<a name="id444643"></a>
+<a name="id444630"></a>
       Blurbs
     </h3>
 <pre class="programlisting">[blurb :-) [*An eye catching advertisement or note...]\n\n
@@ -1142,7 +1142,7 @@ sf_logo
             in C++. </td></tr></tbody>
 </table></div>
 <a name="quickbook.syntax.tables"></a><h3>
-<a name="id444700"></a>
+<a name="id444687"></a>
       Tables
     </h3>
 <pre class="programlisting">[table A Simple Table
@@ -1157,7 +1157,7 @@ sf_logo
     </p>
 <div class="informaltable">
 <h4>
-<a name="id444720"></a><span class="table-title">A Simple Table</span>
+<a name="id444707"></a><span class="table-title">A Simple Table</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -1218,7 +1218,7 @@ sf_logo
     </p>
 <div class="informaltable">
 <h4>
-<a name="id444802"></a><span class="table-title">Table with fat cells</span>
+<a name="id444789"></a><span class="table-title">Table with fat cells</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -1266,7 +1266,7 @@ sf_logo
 </pre>
 <div class="informaltable">
 <h4>
-<a name="id444863"></a><span class="table-title">Table with code</span>
+<a name="id444850"></a><span class="table-title">Table with code</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -1292,7 +1292,7 @@ sf_logo
 </table>
 </div>
 <a name="quickbook.syntax.variable_lists"></a><h3>
-<a name="id445010"></a>
+<a name="id444997"></a>
       Variable Lists
     </h3>
 <pre class="programlisting">[variablelist A Variable List
@@ -1328,7 +1328,7 @@ sf_logo
       this as a "definition list".
     </p>
 <a name="quickbook.syntax.include"></a><h3>
-<a name="id445065"></a>
+<a name="id445052"></a>
       Include
     </h3>
 <p>
