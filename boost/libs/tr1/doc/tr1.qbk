@@ -128,7 +128,9 @@ instances of `reference_wrapper<T>`.
    } // namespace tr1
    } // namespace std
 
-[*Configuration:] Define the macro BOOST_HAS_TR1_REFERENCE_WRAPPER if your
+[*Configuration:] 
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_REFERENCE_WRAPPER if your
 standard library implements this part of TR1.
 
 [*Standard Conformity:]
@@ -196,7 +198,9 @@ and [@../../libs/smart_ptr/weak_ptr.htm weak_ptr] documentation.
    } // namespace tr1
    } // namespace std
 
-[*Configuration:] Define the macro BOOST_HAS_TR1_SHARED_PTR if your
+[*Configuration:] 
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_SHARED_PTR if your
 standard library implements this part of TR1.
 
 [*Standard Conformity:] There are no known deviations from the standard when 
@@ -237,8 +241,10 @@ type.  For more information
    } // namespace tr1
    } // namespace std
 
-[*Configuration:] Define the macro BOOST_HAS_TR1_RESULT_OF if your
-   standard library implements this part of TR1.
+[*Configuration:] 
+[@../../libs/config/index.html Boost.Config] should (automatically) define 
+the macro BOOST_HAS_TR1_RESULT_OF if your
+standard library implements this part of TR1.
    
 [*Standard Conformity:] No known problems.
 
@@ -270,7 +276,8 @@ Boost.Mem_fn documentation].
    } // namespace std
 
 [*Configuration:]
-Define the macro BOOST_HAS_TR1_MEM_FN if your
+[@../../libs/config/index.html Boost.Config] should (automatically) define 
+the macro BOOST_HAS_TR1_MEM_FN if your
 standard library implements this part of TR1.
 
 [*Standard Conformity:]
@@ -321,7 +328,9 @@ Boost.Bind documentation].
    } // namespace tr1
    } // namespace std
 
-[*Configuration:] Define the macro BOOST_HAS_TR1_BIND if your
+[*Configuration:] 
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_BIND if your
 standard library implements this part of TR1.
 
 [*Standard Conformity:]
@@ -379,7 +388,8 @@ Boost.Function documentation].
    } // namespace std
 
 [*Configuration:]
-Define the macro BOOST_HAS_TR1_FUNCTION if your
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_FUNCTION if your
 standard library implements this part of TR1.
 
 [*Standard Conformity:]
@@ -487,7 +497,8 @@ refer to the [@../../libs/type_traits/index.html Boost.Type_traits documentation
    } // namespace std
 
 [*Configuration:]
-Define the macro BOOST_HAS_TR1_TYPE_TRAITS if your
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_TYPE_TRAITS if your
 standard library implements this part of TR1.
 
 [*Standard Conformity:]
@@ -589,7 +600,8 @@ For more information see the [@../../libs/random/index.html Boost.Random documen
    } // namespace std
 
 [*Configuration:]
-Define the macro BOOST_HAS_TR1_RANDOM if your
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_RANDOM if your
 standard library implements this part of TR1.
 
 [*Standard Conformity:]
@@ -677,7 +689,8 @@ For more information see the [@../../libs/tuple/index.html Boost Tuple Library D
    } // namespace std
 
 [*Configuration:]
-Define the macro BOOST_HAS_TR1_TUPLE if your
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_TUPLE if your
 standard library implements this part of TR1.
 
 [*Standard Conformity:]
@@ -714,7 +727,8 @@ The existing class template std::pair, can also be accessed using the
    } // namespace std
 
 [*Configuration:]
-Define the macro BOOST_HAS_TR1_UTILITY if your
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_UTILITY if your
 standard library implements this part of TR1.
 
 [*Standard Conformity:]
@@ -765,7 +779,8 @@ to the [@../../libs/array/index.html Boost.Array documentation].
    } // namespace std
 
 [*Configuration:]
-Define the macro BOOST_HAS_TR1_ARRAY if your
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_ARRAY if your
 standard library implements this part of TR1.
 
 [*Standard Conformity:]
@@ -821,7 +836,8 @@ documentation for more information.
    } // namespace std
 
 [*Configuration:]
-Define the macro BOOST_HAS_TR1_HASH if your
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_HASH if your
 standard library implements this part of TR1.
 
 [*Standard Conformity:]
@@ -1031,7 +1047,8 @@ Boost.Regex documentation].
 
    
 [*Configuration:]
-Define the macro BOOST_HAS_TR1_REGEX if your
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_REGEX if your
 standard library implements this part of TR1.
 
 [*Standard Conformity:]
@@ -1112,7 +1129,8 @@ the type `double`.
       pow (const Arithmetic& x, const complex<Real>& y);
    
 [*Configuration:]
-Define the macro BOOST_HAS_TR1_COMPLEX_OVERLOADS if your
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_COMPLEX_OVERLOADS if your
 standard library implements the additional overloads for the existing
 complex arithmetic functions.
 
@@ -1135,6 +1153,8 @@ are overloaded
 for arguments of type `std::complex<T>`.  
 These algorithms are entirely
 classical, and behave as specified in the C99 standard section 7.3.5.
+See the [link boost_math_tr1_additions.inverse_complex Boost.Math documentation 
+for more information].
    
    namespace std {
    namespace tr1 {
@@ -1151,7 +1171,8 @@ classical, and behave as specified in the C99 standard section 7.3.5.
    } // namespace std
 
 [*Configuration:]
-Define the macro BOOST_HAS_TR1_COMPLEX_INVERSE_TRIG
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_COMPLEX_INVERSE_TRIG
 if your standard library implements the additional inverse trig functions.
 
 [*Standard Conformity:]
@@ -1338,7 +1359,8 @@ hoped to change soon.
    } // namespace std
 
 [*Configuration:]
-Define the macro BOOST_HAS_TR1_UNORDERED_SET if your
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_UNORDERED_SET if your
 standard library implements this part of TR1.
 
 [*Standard Conformity:]
@@ -1388,7 +1410,8 @@ hoped to change soon.
    } // namespace std
 
 [*Configuration:]
-Define the macro BOOST_HAS_TR1_UNORDERED_MAP if your
+[@../../libs/config/index.html Boost.Config] should (automatically) define
+the macro BOOST_HAS_TR1_UNORDERED_MAP if your
 standard library implements this part of TR1.
 
 [*Standard Conformity:]
