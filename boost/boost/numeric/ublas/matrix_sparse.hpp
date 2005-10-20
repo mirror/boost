@@ -4308,7 +4308,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (filled_ > 0, external_logic ());
             -- filled_;
             sorted_filled_ = (std::min) (sorted_filled_, filled_);
-            sorted_ = sorted_filled_ = filled;
+            sorted_ = sorted_filled_ = filled_;
             storage_invariants ();
         }
 
