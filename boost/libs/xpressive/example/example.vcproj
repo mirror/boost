@@ -421,7 +421,13 @@
 						RelativePath="..\..\..\boost\xpressive\detail\utility\algorithm.hpp">
 					</File>
 					<File
+						RelativePath="..\..\..\boost\xpressive\detail\utility\any.hpp">
+					</File>
+					<File
 						RelativePath="..\..\..\boost\xpressive\detail\utility\boyer_moore.hpp">
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\detail\utility\cons.hpp">
 					</File>
 					<File
 						RelativePath="..\..\..\boost\xpressive\detail\utility\dont_care.hpp">
