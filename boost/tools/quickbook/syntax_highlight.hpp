@@ -15,6 +15,7 @@
 #include <boost/spirit/utility/chset.hpp>
 #include <boost/spirit/symbols/symbols.hpp>
 #include <boost/spirit/utility/escape_char.hpp>
+#include "../phrase.hpp"
 
 namespace quickbook
 {
@@ -26,12 +27,13 @@ namespace quickbook
       , typename Space
       , typename Macro
       , typename DoMacro
-      , typename Escape
+      , typename PreEscape
+      , typename PostEscape
       , typename EscapeActions
       , typename Unexpected
       , typename Out>
     struct cpp_highlight
-    : public grammar<cpp_highlight<Process, Space, Macro, DoMacro, Escape, EscapeActions, Unexpected, Out> >
+    : public grammar<cpp_highlight<Process, Space, Macro, DoMacro, PreEscape, PostEscape, EscapeActions, Unexpected, Out> >
     {
         cpp_highlight(Out& out, Macro const& macro, DoMacro do_macro, EscapeActions& escape_actions)
         : out(out), macro(macro), do_macro(do_macro), escape_actions(escape_actions) {}
@@ -40,6 +42,8 @@ namespace quickbook
         struct definition
         {
             definition(cpp_highlight const& self)
+                : common(self.escape_actions, unused)
+                , unused(false)
             {
                 program
                     =
@@ -57,14 +61,17 @@ namespace quickbook
                     |   anychar_p       [Unexpected(self.out)]
                     )
                     ;
-                
-                qbk_phrase 
-                    = anychar_p >> (qbk_phrase | eps_p(str_p("]]")));
+
+                qbk_phrase =
+                   *(   common
+                    |   (anychar_p - ']')   [self.escape_actions.plain_char]
+                    )
+                    ;
 
                 escape
-                    = "[[" 
-                    >> qbk_phrase       [Escape(self.out, self.escape_actions)]
-                    >> "]]"
+                    = str_p("[[")           [PreEscape(self.escape_actions, save)]
+                    >> qbk_phrase
+                    >> str_p("]]")          [PostEscape(self.out, self.escape_actions, save)]
                     ;
 
                 preprocessor
@@ -124,7 +131,11 @@ namespace quickbook
 
             rule<Scanner>   program, macro, preprocessor, comment, special, string_, 
                             char_, number, identifier, keyword, qbk_phrase, escape;
-            symbols<>       keyword_;
+
+            symbols<> keyword_;
+            phrase_grammar<EscapeActions> common;
+            std::string save;
+            bool unused;
 
             rule<Scanner> const&
             start() const { return program; }
@@ -144,12 +155,13 @@ namespace quickbook
       , typename Space
       , typename Macro
       , typename DoMacro
-      , typename Escape
+      , typename PreEscape
+      , typename PostEscape
       , typename EscapeActions
       , typename Unexpected
       , typename Out>
     struct python_highlight
-    : public grammar<python_highlight<Process, Space, Macro, DoMacro, Escape, EscapeActions, Unexpected, Out> >
+    : public grammar<python_highlight<Process, Space, Macro, DoMacro, PreEscape, PostEscape, EscapeActions, Unexpected, Out> >
     {
         python_highlight(Out& out, Macro const& macro, DoMacro do_macro, EscapeActions& escape_actions)
         : out(out), macro(macro), do_macro(do_macro), escape_actions(escape_actions) {}
@@ -158,6 +170,8 @@ namespace quickbook
         struct definition
         {
             definition(python_highlight const& self)
+                : common(self.escape_actions, unused)
+                , unused(false)
             {
                 program
                     =
@@ -174,13 +188,16 @@ namespace quickbook
                     )
                     ;
 
-                qbk_phrase 
-                    = anychar_p >> (qbk_phrase | eps_p(str_p("]]")));
+                qbk_phrase =
+                   *(   common
+                    |   (anychar_p - ']')   [self.escape_actions.plain_char]
+                    )
+                    ;
 
                 escape
-                    = "[[" 
-                    >> qbk_phrase       [Escape(self.out, self.escape_actions)]
-                    >> "]]"
+                    = str_p("[[")           [PreEscape(self.escape_actions, save)]
+                    >> qbk_phrase
+                    >> str_p("]]")          [PostEscape(self.out, self.escape_actions, save)]
                     ;
 
                 comment
@@ -248,7 +265,11 @@ namespace quickbook
             rule<Scanner>   program, macro, comment, special, string_, string_prefix, 
                             short_string, long_string, number, identifier, keyword, 
                             qbk_phrase, escape;
-            symbols<>       keyword_;
+
+            symbols<> keyword_;
+            phrase_grammar<EscapeActions> common;
+            std::string save;
+            bool unused;
 
             rule<Scanner> const&
             start() const { return program; }
