@@ -1155,7 +1155,7 @@ escape (no processing/formatting)
     </para>
     
 <programlisting>
-<phrase role="identifier">good</phrase> <ulink url="http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz">foo</ulink><phrase role="special">()</phrase>
+<phrase role="identifier">void</phrase> <ulink url="http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz">foo</ulink><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
@@ -1353,7 +1353,7 @@ sf_logo
             <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Oct-21</entry>
           </row>
           <row>
-            <entry>__TIME__</entry><entry>The current time</entry><entry>06:38:26
+            <entry>__TIME__</entry><entry>The current time</entry><entry>06:43:35
             PM</entry>
           </row>
           <row>
