@@ -382,21 +382,27 @@ namespace quickbook
         // Does the actual syntax highlighing of code
 
         code_action(std::ostream& out,
-                    std::string const & source_mode,
+                    std::stringstream& phrase,
+                    std::stringstream& temp,
+                    std::string const& source_mode,
                     macros_type const& macro,
                     actions& escape_actions)
         : out(out)
+        , phrase(phrase)
+        , temp(temp)
         , source_mode(source_mode)
-        , cpp_p(out, macro, do_macro_action(out), escape_actions)
-        , python_p(out, macro, do_macro_action(out), escape_actions)
+        , cpp_p(temp, macro, do_macro_action(temp), escape_actions)
+        , python_p(temp, macro, do_macro_action(temp), escape_actions)
         {
         }
 
         void operator()(iterator first, iterator last) const;
 
         std::ostream& out;
+        std::stringstream& phrase;
+        std::stringstream& temp;
         std::string const& source_mode;
-        
+
         cpp_highlight<
             span
           , space
@@ -426,21 +432,24 @@ namespace quickbook
     {
         // Does the actual syntax highlighing of code inlined in text
 
-        inline_code_action(std::ostream& out,
+        inline_code_action(std::stringstream& out,
+                           std::stringstream& temp,
                            std::string const& source_mode,
                            macros_type const& macro,
                            actions& escape_actions)
         : out(out)
+        , temp(temp)
         , source_mode(source_mode)
-        , cpp_p(out, macro, do_macro_action(out), escape_actions)
-        , python_p(out, macro, do_macro_action(out), escape_actions)
+        , cpp_p(temp, macro, do_macro_action(temp), escape_actions)
+        , python_p(temp, macro, do_macro_action(temp), escape_actions)
         {}
 
         void operator()(iterator first, iterator last) const;
 
-        std::ostream& out;
+        std::stringstream& out;
         std::string const& source_mode;
-        
+        std::stringstream& temp;
+
         cpp_highlight<
             span
           , space
@@ -767,6 +776,7 @@ namespace quickbook
         std::string             section_id;
         std::string             previous;
         std::stringstream       phrase;
+        std::stringstream       temp;
         unsigned                table_span;
         std::string             table_header;
 

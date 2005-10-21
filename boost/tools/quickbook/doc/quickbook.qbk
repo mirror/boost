@@ -724,7 +724,7 @@ void [[[@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]]]()
 
 Will generate:
 
-    void [[[@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]]]()
+    good [[[@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]]]()
     {
     }
 

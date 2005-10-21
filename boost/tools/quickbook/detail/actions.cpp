@@ -213,6 +213,9 @@ namespace quickbook
     {
         if (out)
         {
+            std::string save = phrase.str();
+            phrase.str(std::string());
+
             // preprocess the code section to remove the initial indentation
             std::string program_(first, last);
             detail::unindent(program_);
@@ -227,8 +230,6 @@ namespace quickbook
             iterator last_(program.end(), program.end());
             first_.set_position(first.get_position());
 
-            out << "<programlisting>\n";
-
             // print the code with syntax coloring
             if (source_mode == "c++")
             {
@@ -239,28 +240,39 @@ namespace quickbook
                 parse(first_, last_, python_p);
             }
             
+            std::string str = temp.str();
+            temp.str(std::string());
+            phrase.str(std::string());
+            phrase << save;
+
+            out << "<programlisting>\n";
+            out << str;
             out << "</programlisting>\n";
         }
     }
 
     void inline_code_action::operator()(iterator first, iterator last) const
     {
-        if (out)
+        std::string save = out.str();
+        out.str(std::string());
+ 
+        // print the code with syntax coloring
+        if (source_mode == "c++")
         {
-            out << "<code>";
-
-            // print the code with syntax coloring
-            if (source_mode == "c++")
-            {
-                parse(first, last, cpp_p);
-            }
-            else if (source_mode == "python")
-            {
-                parse(first, last, python_p);
-            }
-            
-            out << "</code>";
+            parse(first, last, cpp_p);
         }
+        else if (source_mode == "python")
+        {
+            parse(first, last, python_p);
+        }
+        std::string str = temp.str();
+        temp.str(std::string());
+        out.str(std::string());
+
+        out << save;
+        out << "<code>";
+        out << str;
+        out << "</code>";
     }
 
     void raw_char_action::operator()(char ch) const
@@ -729,9 +741,9 @@ namespace quickbook
         , table_span(0)
         , table_header()
         , source_mode("c++")
-        , code(out, source_mode, macro, *this)
-        , code_block(phrase, source_mode, macro, *this)
-        , inline_code(phrase, source_mode, macro, *this)
+        , code(out, phrase, temp, source_mode, macro, *this)
+        , code_block(phrase, phrase, temp, source_mode, macro, *this)
+        , inline_code(phrase, temp, source_mode, macro, *this)
         , paragraph(out, phrase, paragraph_pre, paragraph_post)
         , h1(out, phrase, doc_id, section_id, qualified_section_id, h1_pre, h1_post)
         , h2(out, phrase, doc_id, section_id, qualified_section_id, h2_pre, h2_post)

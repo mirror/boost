@@ -125,8 +125,7 @@
         Example:
 <programlisting>
 <phrase role="special">[</phrase><phrase role="identifier">section</phrase> <phrase role="identifier">x</phrase><phrase role="special">]</phrase>
-<phrase role="identifier">blah</phrase>
-[endsect<phrase role="special">...</phrase>
+<phrase role="identifier">blah</phrase><phrase role="special">...</phrase>
 <phrase role="special">[</phrase><phrase role="identifier">endsect</phrase><phrase role="special">]</phrase></programlisting>
       </listitem>
       <listitem>
@@ -1143,10 +1142,11 @@ escape (no processing/formatting)
       to avoid conflicts with the target syntax (e.g. c++). In case you need to switch
       back to QuickBook markup inside code, you can do so using a language specific
       <emphasis>escape-back</emphasis> delimiter. In C++ and Python, the delimiter
-      is the triple-dot <code><phrase role="special">...</phrase></code>). Example:
+      is the double square brackets: <code><phrase role="special">[[</phrase></code>
+      and <code><phrase role="special">]]</phrase></code>. Example:
     </para>
     
-<programlisting>void ...[@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]...()
+<programlisting>void [[[@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]]]()
 {
 }
 </programlisting>
@@ -1155,7 +1155,7 @@ escape (no processing/formatting)
     </para>
     
 <programlisting>
-<phrase role="identifier">void</phrase> <ulink url="http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz">foo</ulink><phrase role="special">()</phrase>
+<phrase role="identifier">good</phrase> <ulink url="http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz">foo</ulink><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
@@ -1353,8 +1353,8 @@ sf_logo
             <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Oct-21</entry>
           </row>
           <row>
-            <entry>__TIME__</entry><entry>The current time</entry><entry>09:24:15
-            AM</entry>
+            <entry>__TIME__</entry><entry>The current time</entry><entry>06:38:26
+            PM</entry>
           </row>
           <row>
             <entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>C:\dev\boost\tools\quickbook\doc\quickbook.qbk</entry>
