@@ -714,17 +714,17 @@ Inside code, code blocks and inline code, QuickBook does not allow any
 markup to avoid conflicts with the target syntax (e.g. c++). In case you 
 need to switch back to QuickBook markup inside code, you can do so using a 
 language specific /escape-back/ delimiter. In C++ and Python, the delimiter 
-is the double percent: `%%`. Example:
+is the double square brackets: `[[` and `]]`. Example:
 
 [pre'''
-void %%[@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]%%()
+void [[[@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]]]()
 {
 }
 ''']
 
 Will generate:
 
-    void %%[@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]%%()
+    void [[[@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]]]()
     {
     }
 

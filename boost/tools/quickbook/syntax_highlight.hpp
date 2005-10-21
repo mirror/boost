@@ -58,11 +58,13 @@ namespace quickbook
                     )
                     ;
                 
+                qbk_phrase 
+                    = anychar_p >> (qbk_phrase | eps_p(str_p("]]")));
+
                 escape
-                    = "%%" 
-                    >> ((+(anychar_p - "%%" ))  
-                            >> eps_p(str_p("%%"))) [Escape(self.out, self.escape_actions)]
-                    >> "%%"
+                    = "[[" 
+                    >> qbk_phrase       [Escape(self.out, self.escape_actions)]
+                    >> "]]"
                     ;
 
                 preprocessor
@@ -120,8 +122,8 @@ namespace quickbook
                     ;
             }
 
-            rule<Scanner>   program, macro, preprocessor, comment, special,
-                            string_, char_, number, identifier, keyword, escape;
+            rule<Scanner>   program, macro, preprocessor, comment, special, string_, 
+                            char_, number, identifier, keyword, qbk_phrase, escape;
             symbols<>       keyword_;
 
             rule<Scanner> const&
@@ -172,11 +174,13 @@ namespace quickbook
                     )
                     ;
 
+                qbk_phrase 
+                    = anychar_p >> (qbk_phrase | eps_p(str_p("]]")));
+
                 escape
-                    = "%%" 
-                    >> ((+(anychar_p - "%%" ))  
-                            >> eps_p(str_p("%%"))) [Escape(self.out, self.escape_actions)]
-                    >> "%%"
+                    = "[[" 
+                    >> qbk_phrase       [Escape(self.out, self.escape_actions)]
+                    >> "]]"
                     ;
 
                 comment
@@ -241,9 +245,9 @@ namespace quickbook
                     ;
             }
 
-            rule<Scanner>   program, macro, comment, special,
-                            string_, string_prefix, short_string, long_string,
-                            number, identifier, keyword, escape;
+            rule<Scanner>   program, macro, comment, special, string_, string_prefix, 
+                            short_string, long_string, number, identifier, keyword, 
+                            qbk_phrase, escape;
             symbols<>       keyword_;
 
             rule<Scanner> const&
