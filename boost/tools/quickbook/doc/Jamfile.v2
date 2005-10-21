@@ -9,4 +9,5 @@ boostbook quickbook
     :
         <xsl:param>boost.root=../../../..
         <xsl:param>boost.libraries=../../../../libs/libraries.htm
-    ;
+        <xsl:param>generate.section.toc.level=2
+;

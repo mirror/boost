@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-<part id="quickbook" name="quickbook" dirname="quickbook" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
+<reference id="quickbook" name="quickbook" dirname="quickbook" last-revision="$Date$"
  xmlns:xi="http://www.w3.org/2001/XInclude">
-  <partinfo>
+  <referenceinfo>
     <author>
       <firstname>Joel</firstname> <surname>de Guzman</surname>
     </author>
@@ -18,10 +18,10 @@
         file LICENSE_1_0.txt or copy at <ulink url="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</ulink>)
       </para>
     </legalnotice>
-    <partpurpose>
+    <referencepurpose>
       <emphasis>WikiWiki</emphasis> style documentation tool
-    </partpurpose>
-  </partinfo>
+    </referencepurpose>
+  </referenceinfo>
   <title>quickbook 1.3</title>
   <section id="quickbook.intro">
     <title> Introduction</title>
@@ -148,6 +148,9 @@
       </listitem>
       <listitem>
         Allow phrase markups in section titles.
+      </listitem>
+      <listitem>
+        Allow escaping back to QuickBook from code, code blocks and inline code.
       </listitem>
     </itemizedlist>
   </section>
@@ -733,16 +736,34 @@ escape (no processing/formatting)
         book
       </listitem>
       <listitem>
+        article
+      </listitem>
+      <listitem>
         library
+      </listitem>
+      <listitem>
+        chapter
       </listitem>
       <listitem>
         part
       </listitem>
       <listitem>
-        article
+        appendix
       </listitem>
       <listitem>
-        chapter
+        preface
+      </listitem>
+      <listitem>
+        qandadiv
+      </listitem>
+      <listitem>
+        qandaset
+      </listitem>
+      <listitem>
+        reference
+      </listitem>
+      <listitem>
+        set
       </listitem>
     </itemizedlist>
     <para>
@@ -1118,29 +1139,29 @@ escape (no processing/formatting)
       Escaping Back To QuickBook
     </bridgehead>
     <para>
-      Inside Code, Code Blocks and inline code, you may switch back to QuickBook
-      using a language specific delimiter (in C++ and Python -- the tripple-dot &quot;...&quot;).
-      Example:
+      Inside code, code blocks and inline code, QuickBook does not allow any markup
+      to avoid conflicts with the target syntax (e.g. c++). In case you need to switch
+      back to QuickBook markup inside code, you can do so using a language specific
+      <emphasis>escape-back</emphasis> delimiter. In C++ and Python, the delimiter
+      is the triple-dot <code><phrase role="special">...</phrase></code>). Example:
     </para>
     
-<programlisting>    void foo() // ... *foo is ever so bold*
-    {
-    }
+<programlisting>void ...[@http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz foo]...()
+{
+}
 </programlisting>
     <para>
       Will generate:
     </para>
     
 <programlisting>
-<phrase role="identifier">void</phrase> <phrase role="identifier">foo</phrase><phrase role="special">()</phrase> <phrase role="special">//</phrase>  <emphasis role="bold">foo is ever so bold</emphasis>
-{
-}
-<phrase role="special">...</phrase> <phrase role="special">*</phrase><phrase role="identifier">foo</phrase> <phrase role="keyword">is</phrase> <phrase role="identifier">ever</phrase> <phrase role="identifier">so</phrase> <phrase role="identifier">bold</phrase><phrase role="special">*</phrase>
+<phrase role="identifier">void</phrase> <ulink url="http://en.wikipedia.org/wiki/Foo#Foo.2C_Bar_and_Baz">foo</ulink><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
     <para>
-      Notice the comment in bold.
+      When escaping from code to QuickBook, only phrase level markups are allowed.
+      Block level markups like lists, tables etc. are not allowed.
     </para>
     <anchor id="quickbook.syntax.preformatted" />
     <bridgehead renderas="sect3">
@@ -1329,14 +1350,14 @@ sf_logo
         </thead>
         <tbody>
           <row>
-            <entry>__DATE__</entry><entry>Today's date</entry><entry>2000-Dec-20</entry>
+            <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Oct-21</entry>
           </row>
           <row>
-            <entry>__TIME__</entry><entry>The current time</entry><entry>12:00:00
-            PM</entry>
+            <entry>__TIME__</entry><entry>The current time</entry><entry>09:24:15
+            AM</entry>
           </row>
           <row>
-            <entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>NO_FILENAME_MACRO_GENERATED_IN_DEBUG_MODE</entry>
+            <entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>C:\dev\boost\tools\quickbook\doc\quickbook.qbk</entry>
           </row>
         </tbody>
       </tgroup>
@@ -1628,6 +1649,12 @@ sf_logo
             <entry>inline code</entry><entry><literal>`int main();`</literal></entry>
           </row>
           <row>
+            <entry>code block</entry><entry><literal>``int main();``</literal></entry>
+          </row>
+          <row>
+            <entry>code escape</entry><entry><literal>...from c++ to QuickBook...</literal></entry>
+          </row>
+          <row>
             <entry>line break</entry><entry><literal>[br] or \n</literal></entry>
           </row>
           <row>
@@ -1738,4 +1765,4 @@ sf_logo
       </tgroup>
     </informaltable>
   </section>
-</part>
+</reference>

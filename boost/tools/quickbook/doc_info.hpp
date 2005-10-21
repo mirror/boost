@@ -14,6 +14,7 @@
 #include <boost/spirit/core.hpp>
 #include <boost/spirit/actor.hpp>
 #include <boost/spirit/utility/loops.hpp>
+#include <boost/spirit/symbols/symbols.hpp>
 
 namespace quickbook
 {
@@ -38,15 +39,16 @@ namespace quickbook
             {
                 Actions& actions = self.actions;
 
+                doc_types =
+                    "book", "article", "library", "chapter", "part"
+                  , "appendix", "preface", "qandadiv", "qandaset"
+                  , "reference", "set"
+                ;
+                
                 doc_info =
-                        space
-                    >>  '['
-                    >>  (   str_p("book")
-                        |   "article"
-                        |   "library"
-                        |   "chapter"
-                        |   "part"
-                        )                           [assign_a(actions.doc_type)]
+                    space
+                    >> '[' >> space
+                    >> (doc_types >> eps_p)         [assign_a(actions.doc_type)]
                     >> hard_space
                     >>  (  *(anychar_p -
                             (ch_p('[') | ']' | eol_p)
@@ -181,6 +183,7 @@ namespace quickbook
                             doc_author, comment, space, hard_space, doc_license,
                             doc_last_revision, doc_source_mode, phrase, quickbook_version;
             phrase_grammar<Actions> common;
+            symbols<> doc_types;
 
             rule<Scanner> const&
             start() const { return doc_info; }

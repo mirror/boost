@@ -59,9 +59,10 @@ namespace quickbook
                     ;
                 
                 escape
-                    = "..." 
-                    >> (+(anychar_p - "..." ))  [Escape(self.out, self.escape_actions)]
-                    >> "..."
+                    = "%%" 
+                    >> ((+(anychar_p - "%%" ))  
+                            >> eps_p(str_p("%%"))) [Escape(self.out, self.escape_actions)]
+                    >> "%%"
                     ;
 
                 preprocessor
@@ -172,9 +173,10 @@ namespace quickbook
                     ;
 
                 escape
-                    = "..." 
-                    >> (+(anychar_p - "..." ))  [Escape(self.out, self.escape_actions)]
-                    >> "..."
+                    = "%%" 
+                    >> ((+(anychar_p - "%%" ))  
+                            >> eps_p(str_p("%%"))) [Escape(self.out, self.escape_actions)]
+                    >> "%%"
                     ;
 
                 comment
