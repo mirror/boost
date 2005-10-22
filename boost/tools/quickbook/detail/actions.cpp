@@ -164,13 +164,24 @@ namespace quickbook
         }
     }
 
+    void span::operator()(iterator first, iterator const& last) const
+    {
+        if (out)
+        {
+            out << "<phrase role=\"" << name << "\">";
+            while (first != last)
+                detail::print_char(*first++, out);
+            out << "</phrase>";
+        }
+    }
+
     void unexpected_char::operator()(char) const
     {
         if (out)
             out << '#'; // print out an unexpected character
     }
 
-    void anchor_action::operator()(iterator first, iterator last) const
+    void anchor_action::operator()(iterator first, iterator const& last) const
     {
         if (out)
         {
@@ -209,7 +220,28 @@ namespace quickbook
         }
     }
 
-    void code_action::operator()(iterator first, iterator last) const
+    void space::operator()(iterator first, iterator const& last) const
+    {
+        if (out)
+        {
+            while (first != last)
+                detail::print_space(*first++, out);
+        }
+    }
+
+    void pre_escape_back::operator()(iterator const& first, iterator const& last) const
+    {
+        save = escape_actions.phrase.str(); // save the stream
+    }
+
+    void post_escape_back::operator()(iterator const& first, iterator const& last) const
+    {
+        std::string str = escape_actions.phrase.str();
+        escape_actions.phrase.str(save); // restore the stream
+        out << str;
+    }
+
+    void code_action::operator()(iterator const& first, iterator const& last) const
     {
         if (out)
         {
@@ -251,7 +283,7 @@ namespace quickbook
         }
     }
 
-    void inline_code_action::operator()(iterator first, iterator last) const
+    void inline_code_action::operator()(iterator const& first, iterator const& last) const
     {
         std::string save = out.str();
         out.str(std::string());
@@ -295,7 +327,7 @@ namespace quickbook
         detail::print_char(*first, phrase);
     }
 
-    void image_action::operator()(iterator first, iterator last) const
+    void image_action::operator()(iterator first, iterator const& last) const
     {
         phrase << "<inlinemediaobject><imageobject><imagedata fileref=\"";
         while (first != last)
@@ -319,7 +351,7 @@ namespace quickbook
         actions.phrase.str(actions.phrase_save);
     }
 
-    void link_action::operator()(iterator first, iterator last) const
+    void link_action::operator()(iterator first, iterator const& last) const
     {
         iterator save = first;
         phrase << tag;
@@ -427,7 +459,7 @@ namespace quickbook
         ++span;
     }
 
-    void begin_section_action::operator()(iterator first, iterator last) const
+    void begin_section_action::operator()(iterator first, iterator const& last) const
     {
         if (section_id.empty())
             section_id = detail::make_identifier(first, last);
@@ -465,7 +497,7 @@ namespace quickbook
         }
     }
 
-    void end_section_action::operator()(iterator first, iterator last) const
+    void end_section_action::operator()(iterator const& first, iterator const& last) const
     {
         out << "</section>";
 
@@ -507,7 +539,7 @@ namespace quickbook
         return std::accumulate(xml, xmlfile.end(), result, concat());
     }
 
-    void xinclude_action::operator()(iterator first, iterator last) const
+    void xinclude_action::operator()(iterator const& first, iterator const& last) const
     {
         // Given an xml file to include and the current filename, calculate the
         // path to the XML file relative to the output directory.
@@ -524,7 +556,7 @@ namespace quickbook
         out << "\" />\n";
     }
 
-    void include_action::operator()(iterator first, iterator last) const
+    void include_action::operator()(iterator const& first, iterator const& last) const
     {
         fs::path filein(std::string(first, last), fs::native);
         std::string doc_type, doc_id, doc_dirname, doc_last_revision;

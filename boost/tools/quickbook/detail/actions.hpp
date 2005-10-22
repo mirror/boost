@@ -259,17 +259,7 @@ namespace quickbook
         span(char const* name, std::ostream& out)
         : name(name), out(out) {}
 
-        template <typename Iterator>
-        void operator()(Iterator first, Iterator last) const
-        {
-            if (out)
-            {
-                out << "<phrase role=\"" << name << "\">";
-                while (first != last)
-                    detail::print_char(*first++, out);
-                out << "</phrase>";
-            }
-        }
+        void operator()(iterator first, iterator const& last) const;
 
         char const* name;
         std::ostream& out;
@@ -294,7 +284,7 @@ namespace quickbook
         anchor_action(std::ostream& out)
             : out(out) {}
 
-        void operator()(iterator first, iterator last) const;
+        void operator()(iterator first, iterator const& last) const;
 
         std::ostream& out;
     };
@@ -323,16 +313,7 @@ namespace quickbook
         space(std::ostream& out)
         : out(out) {}
 
-        template <typename Iterator>
-        void operator()(Iterator first, Iterator last) const
-        {
-            if (out)
-            {
-                while (first != last)
-                    detail::print_space(*first++, out);
-            }
-        }
-
+        void operator()(iterator first, iterator const& last) const;
         void operator()(char ch) const;
 
         std::ostream& out;
@@ -345,11 +326,7 @@ namespace quickbook
         pre_escape_back(actions& escape_actions, std::string& save)
             : escape_actions(escape_actions), save(save) {}
 
-        template <typename Iterator>
-        void operator()(Iterator first, Iterator last) const
-        {
-            save = escape_actions.phrase.str(); // save the stream
-        }
+        void operator()(iterator const& first, iterator const& last) const;
 
         actions& escape_actions;
         std::string& save;
@@ -362,13 +339,7 @@ namespace quickbook
         post_escape_back(std::ostream& out, actions& escape_actions, std::string& save)
             : out(out), escape_actions(escape_actions), save(save) {}
 
-        template <typename Iterator>
-        void operator()(Iterator first, Iterator last) const
-        {
-            std::string str = escape_actions.phrase.str();
-            escape_actions.phrase.str(save); // restore the stream
-            out << str;
-        }
+        void operator()(iterator const& first, iterator const& last) const;
 
         std::ostream& out;
         actions& escape_actions;
@@ -376,6 +347,29 @@ namespace quickbook
     };
 
     typedef symbols<std::string> macros_type;
+    typedef cpp_highlight<
+        span
+      , space
+      , macros_type
+      , do_macro_action
+      , pre_escape_back
+      , post_escape_back
+      , actions
+      , unexpected_char
+      , std::ostream>
+    cpp_p_type;
+        
+    typedef python_highlight<
+        span
+      , space
+      , macros_type
+      , do_macro_action
+      , pre_escape_back
+      , post_escape_back
+      , actions
+      , unexpected_char
+      , std::ostream>
+    python_p_type;
 
     struct code_action
     {
@@ -396,36 +390,15 @@ namespace quickbook
         {
         }
 
-        void operator()(iterator first, iterator last) const;
+        void operator()(iterator const& first, iterator const& last) const;
 
         std::ostream& out;
         std::stringstream& phrase;
         std::stringstream& temp;
         std::string const& source_mode;
 
-        cpp_highlight<
-            span
-          , space
-          , macros_type
-          , do_macro_action
-          , pre_escape_back
-          , post_escape_back
-          , actions
-          , unexpected_char
-          , std::ostream>
-        cpp_p;
-        
-        python_highlight<
-            span
-          , space
-          , macros_type
-          , do_macro_action
-          , pre_escape_back
-          , post_escape_back
-          , actions
-          , unexpected_char
-          , std::ostream>
-        python_p;
+        cpp_p_type cpp_p;
+        python_p_type python_p;
     };
 
     struct inline_code_action
@@ -444,35 +417,14 @@ namespace quickbook
         , python_p(temp, macro, do_macro_action(temp), escape_actions)
         {}
 
-        void operator()(iterator first, iterator last) const;
+        void operator()(iterator const& first, iterator const& last) const;
 
         std::stringstream& out;
         std::string const& source_mode;
         std::stringstream& temp;
 
-        cpp_highlight<
-            span
-          , space
-          , macros_type
-          , do_macro_action
-          , pre_escape_back
-          , post_escape_back
-          , actions
-          , unexpected_char
-          , std::ostream>
-        cpp_p;
-        
-        python_highlight<
-            span
-          , space
-          , macros_type
-          , do_macro_action
-          , pre_escape_back
-          , post_escape_back
-          , actions
-          , unexpected_char
-          , std::ostream>
-        python_p;
+        cpp_p_type cpp_p;
+        python_p_type python_p;
     };
 
     struct raw_char_action
@@ -510,7 +462,7 @@ namespace quickbook
         image_action(std::ostream& phrase)
         : phrase(phrase) {}
 
-        void operator()(iterator first, iterator last) const;
+        void operator()(iterator first, iterator const& last) const;
 
         std::ostream& phrase;
     };
@@ -569,7 +521,7 @@ namespace quickbook
         link_action(std::ostream& phrase, char const* tag)
         : phrase(phrase), tag(tag) {}
 
-        void operator()(iterator first, iterator last) const;
+        void operator()(iterator first, iterator const& last) const;
 
         std::ostream& phrase;
         char const* tag;
@@ -645,7 +597,7 @@ namespace quickbook
         , level(level)
         , qualified_section_id(qualified_section_id) {}
 
-        void operator()(iterator first, iterator last) const;
+        void operator()(iterator first, iterator const& last) const;
 
         std::ostream& out;
         std::stringstream& phrase;
@@ -665,7 +617,7 @@ namespace quickbook
         , level(level)
         , qualified_section_id(qualified_section_id) {}
 
-        void operator()(iterator first, iterator last) const;
+        void operator()(iterator const& first, iterator const& last) const;
 
         std::ostream& out;
         int& level;
@@ -678,7 +630,7 @@ namespace quickbook
         xinclude_action(std::ostream& out_, quickbook::actions& actions_)
             : out(out_), actions(actions_) {}
 
-        void operator()(iterator first, iterator last) const;
+        void operator()(iterator const& first, iterator const& last) const;
 
         std::ostream& out;
         quickbook::actions& actions;
@@ -691,7 +643,7 @@ namespace quickbook
         include_action(quickbook::actions& actions_)
             : actions(actions_) {}
 
-        void operator()(iterator first, iterator last) const;
+        void operator()(iterator const& first, iterator const& last) const;
 
         quickbook::actions& actions;
     };

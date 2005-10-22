@@ -1054,7 +1054,7 @@ and you can link to it with [^\[link someid.intro The Intro\]].
     [[source mode]          [[^\[c++\]] or [^\[python\]]]]
     [[inline code]          [[^'''`int main();`''']]]
     [[code block]           [[^'''``int main();``''']]]
-    [[code escape]          [[^'''...from c++ to QuickBook...''']]]
+    [[code escape]          [[^'''[[from c++ to QuickBook]]''']]]
     [[line break]           [[^'''[br] or \n''']]]
     [[anchor]               [[^'''[#anchor]''']]]
     [[link]                 [[^'''[@http://www.boost.org Boost]''']]]
