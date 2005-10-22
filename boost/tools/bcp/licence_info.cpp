@@ -15,7 +15,7 @@ std::pair<const license_info*, int> get_licenses()
    static const char* generic_author_sig = 
       "(?:"
          "(?:"
-            "Copyright|\\(c\\)|©"
+            "Copyright|\\(c\\)|\xA9"
          ")[[:blank:]]+"
       "){1,2}"
       "(?:"
@@ -717,3 +717,4 @@ std::string format_authors_name(const std::string& name)
 
    return boost::regex_replace(name, e, formatter, boost::match_default | boost::format_all);
 }
+
