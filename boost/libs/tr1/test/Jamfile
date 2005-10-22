@@ -111,7 +111,8 @@ rule test_all
         <include>../../../boost/tr1/tr1  
         <sysinclude>../../../boost/tr1/tr1 
         <include>../../../boost/tr1/tr1/bcc32 
-        <define>TEST_STD=1 ] ;
+        <define>TEST_STD=1
+      : tr1_$(file3)_test ] ;
    }
    for local file4 in [ GLOB ../../type_traits/test : tricky*test.cpp ]
    {
@@ -122,7 +123,8 @@ rule test_all
         <include>../../../boost/tr1/tr1  
         <sysinclude>../../../boost/tr1/tr1
         <include>../../../boost/tr1/tr1/bcc32 
-        <define>TEST_STD=1 ] ;
+        <define>TEST_STD=1
+      : tr1_$(file4)_test ] ;
    }
    for local file5 in [ GLOB ./std_headers : *.cpp ]
    {
@@ -138,6 +140,7 @@ rule test_all
 }
 
 test-suite tr1 : [ test_all r ] ; 
+
 
 
 
