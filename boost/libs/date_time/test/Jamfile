@@ -148,6 +148,12 @@ local DATE_TIME_PROPERTIES = <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <defi
    [ run local_time/testposix_time_zone.cpp
      <lib>../build/boost_date_time
     : : : $(DATE_TIME_PROPERTIES) ]
+   [ run local_time/testwcustom_time_zone.cpp
+     <lib>../build/boost_date_time
+    : : : $(DATE_TIME_PROPERTIES) ]
+   [ run local_time/testwposix_time_zone.cpp
+     <lib>../build/boost_date_time
+    : : : $(DATE_TIME_PROPERTIES) ]
    [ run local_time/testtz_database.cpp
      <lib>../build/boost_date_time
     : : : $(DATE_TIME_PROPERTIES) ]
