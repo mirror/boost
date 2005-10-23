@@ -42,10 +42,10 @@ namespace date_time {
    * string is a '-', all other '-' will be treated as delimiters.
    * Accepted delimiters are "-:,.". 
    */
-  template<class time_duration>
+  template<class time_duration, class char_type>
   inline
   time_duration
-  parse_delimited_time_duration(const std::string& s)
+  str_from_delimited_time_duration(const std::basic_string<char_type>& s)
   {
     unsigned short min=0, sec =0;
     int hour =0; 
@@ -53,16 +53,17 @@ namespace date_time {
     boost::int64_t fs=0;
     int pos = 0;
       
-    typedef typename std::basic_string<char>::traits_type traits_type;
-    typedef boost::char_separator<char, traits_type> char_separator_type;
+    typedef typename std::basic_string<char_type>::traits_type traits_type;
+    typedef boost::char_separator<char_type, traits_type> char_separator_type;
     typedef boost::tokenizer<char_separator_type,
-                             std::basic_string<char>::const_iterator,
-                             std::basic_string<char> > tokenizer;
-    typedef boost::tokenizer<char_separator_type,
-                             std::basic_string<char>::const_iterator,
-                             std::basic_string<char> >::iterator tokenizer_iterator;
-    
-    char_separator_type sep("-:,.");
+                             typename std::basic_string<char_type>::const_iterator,
+                             std::basic_string<char_type> > tokenizer;
+    typedef typename boost::tokenizer<char_separator_type,
+                             typename std::basic_string<char_type>::const_iterator,
+                             typename std::basic_string<char_type> >::iterator tokenizer_iterator;
+   
+    char_type sep_chars[5] = {'-',':',',','.'};
+    char_separator_type sep(sep_chars);
     tokenizer tok(s,sep);
     for(tokenizer_iterator beg=tok.begin(); beg!=tok.end();++beg){
       switch(pos) {
@@ -124,6 +125,24 @@ namespace date_time {
     else {
       return time_duration(hour, min, sec, fs);
     }
+  }
+  
+  //! Creates a time_duration object from a delimited string
+  /*! Expected format for string is "[-]h[h][:mm][:ss][.fff]".
+   * If the number of fractional digits provided is greater than the 
+   * precision of the time duration type then the extra digits are 
+   * truncated.
+   *
+   * A negative duration will be created if the first character in
+   * string is a '-', all other '-' will be treated as delimiters.
+   * Accepted delimiters are "-:,.". 
+   */
+  template<class time_duration>
+  inline
+  time_duration
+  parse_delimited_time_duration(const std::string& s)
+  {
+    return str_from_delimited_time_duration<time_duration,char>(s);
   }
 
   //! Utility function to split appart string

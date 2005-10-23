@@ -29,7 +29,7 @@ namespace date_time {
    * Note that this class is intended to be used as a shared
    * resource (hence the derivation from boost::counted_base.  
    */
-  template<typename time_type, typename CharT = char>
+  template<typename time_type, typename CharT>
   class time_zone_base  {
   public:
     typedef CharT char_type;
