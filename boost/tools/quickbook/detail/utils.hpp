@@ -27,6 +27,9 @@ namespace quickbook { namespace detail
     void
     print_space(char ch, std::ostream& out);
 
+    void
+    convert_nbsp(std::basic_string<char>& str);
+
     char
     filter_identifier_char(char ch);
 

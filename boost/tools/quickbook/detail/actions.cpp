@@ -32,6 +32,7 @@ namespace quickbook
         if (out)
         {
             std::string str = phrase.str();
+            detail::convert_nbsp(str);
             phrase.str(std::string());
             out << pre << str << post;
         }
@@ -42,6 +43,7 @@ namespace quickbook
         if (out)
         {
             std::string str = phrase.str();
+            detail::convert_nbsp(str);
             if (qbk_version_n < 103) // version 1.2 and below
             {
                 out << "<anchor id=\""

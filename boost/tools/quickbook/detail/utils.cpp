@@ -42,6 +42,14 @@ namespace quickbook { namespace detail
         out << ch;
     }
 
+    void
+    convert_nbsp(std::basic_string<char>& str)
+    {
+        std::string::size_type pos;
+        while (std::string::npos != (pos = str.find("> <")))
+            str.replace(pos, 3, ">&nbsp;<");
+    }
+
     char
     filter_identifier_char(char ch)
     {
