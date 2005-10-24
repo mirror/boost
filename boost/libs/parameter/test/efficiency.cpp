@@ -85,7 +85,7 @@ namespace test
   // Call objects of the given Accumulator type repeatedly with x as
   // an argument.
   template <class Accumulator, class Arg>
-  void hammer(Arg const& x)
+  void hammer(Arg const& x, long const repeats)
   {
       // Strategy: because the sum in an accumulator after each call
       // depends on the previous value of the sum, the CPU's pipeline
@@ -112,7 +112,7 @@ namespace test
       
       Accumulator a[number_of_accumulators];
       
-      for (long iteration = 0; iteration < 1000000; ++iteration)
+      for (long iteration = 0; iteration < repeats; ++iteration)
       {
           for (Accumulator* ap = a;  ap < a + number_of_accumulators; ++ap)
           {
@@ -131,19 +131,19 @@ namespace test
   // Measure the time required to hammer accumulators of the given
   // type with the argument x.
   template <class Accumulator, class T>
-  double measure(T const& x)
+  double measure(T const& x, long const repeats)
   {
       // Hammer accumulators a couple of times to ensure the
       // instruction cache is full of our test code, and that we don't
       // measure the cost of a page fault for accessing the data page
       // containing the memory where the accumulators will be
       // allocated
-      hammer<Accumulator>(x);
-      hammer<Accumulator>(x);
+      hammer<Accumulator>(x, repeats);
+      hammer<Accumulator>(x, repeats);
 
       // Now start a timer
       boost::timer time;
-      hammer<Accumulator>(x);  // This time, we'll measure
+      hammer<Accumulator>(x, repeats);  // This time, we'll measure
       return time.elapsed();
   }
 }
@@ -151,16 +151,32 @@ namespace test
 int main()
 {
     using namespace test;
+
+    // first decide how many repetitions to measure
+    long repeats = 100;
+    double measured = 0;
+    while (measured < 1.0 && repeats <= 10000000)
+    {
+        repeats *= 10;
+        
+        boost::timer time;
+
+        hammer<plain_weight_running_total<double> >(.1, repeats);
+        hammer<named_param_weight_running_total<double> >(
+            (weight = .1, value = .2), repeats);
+
+        measured = time.elapsed();
+    }
     
     std::cout
         << "plain time:           "
-        << measure<plain_weight_running_total<double> >(.1)
+        << measure<plain_weight_running_total<double> >(.1, repeats)
         << std::endl;
     
     std::cout
         << "named parameter time: "
         << measure<named_param_weight_running_total<double> >(
-            (weight = .1, value = .2)
+            (weight = .1, value = .2), repeats
         )
         << std::endl;
 

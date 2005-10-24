@@ -3,7 +3,6 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <iostream>
-#include <ostream>
 #include <boost/parameter/keyword.hpp>
 
 namespace graphs
