@@ -136,6 +136,7 @@ struct tagged_argument;
 template <class TaggedArg, class Next = empty_arg_list>
 struct arg_list : Next
 {
+    typedef arg_list<TaggedArg,Next> self;
     typedef typename TaggedArg::key_type key_type;
     typedef typename TaggedArg::value_type value_type;
     typedef typename TaggedArg::reference reference;
@@ -305,16 +306,14 @@ struct arg_list : Next
     using Next::satisfies;
 #endif
 
-#if !BOOST_WORKAROUND(__BORLANDC__,BOOST_TESTED_AT(0x564))
     // Comma operator to compose argument list without using parameters<>.
     // Useful for argument lists with undetermined length.
     template <class KW, class T2>
-    arg_list<tagged_argument<KW, T2>, arg_list> 
-    operator,(tagged_argument<KW, T2> x) const
+    arg_list<tagged_argument<KW, T2>, self> 
+    operator,(tagged_argument<KW,T2> x)
     {
-        return arg_list<tagged_argument<KW, T2>, arg_list>(x, *this);
+        return arg_list<tagged_argument<KW,T2>, self>(x, *this);
     }
-#endif 
 };
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)  // ETI workaround
