@@ -425,6 +425,7 @@ namespace quickbook
             actions.out << "<tbody>\n";
 
             std::string str = actions.phrase.str();
+            detail::convert_nbsp(str);
             actions.phrase.str(std::string());
             actions.out << str;
 
