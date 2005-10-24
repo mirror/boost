@@ -92,7 +92,9 @@ namespace std{ namespace tr1{
 #include <boost/function.hpp>
 #include <boost/detail/workaround.hpp>
 
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570))
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570)) \
+	&& !BOOST_WORKAROUND(BOOST_MSVC, < 1310) \
+	&& !defined(BOOST_FUNCTION_NO_FUNCTION_TYPE_SYNTAX)
 namespace std{ namespace tr1{
 
    using ::boost::bad_function_call;

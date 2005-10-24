@@ -21,11 +21,18 @@ namespace std{
    using :: atan2;
 #endif
 
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 template <class T>
 inline BOOST_TR1_MATH_RETURN(double) arg(const T& t)
 {
    return ::std::atan2(0.0, static_cast<double>(t));
 }
+#else
+inline double arg(const double& t)
+{
+   return ::std::atan2(0.0, t);
+}
+#endif
 inline long double arg(const long double& t)
 {
    return ::std::atan2(0.0L, static_cast<long double>(t));
@@ -35,12 +42,19 @@ inline float arg(const float& t)
    return ::std::atan2(0.0F, static_cast<float>(t));
 }
 
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 template <class T>
 inline BOOST_TR1_MATH_RETURN(double) norm(const T& t)
 {
    double r = static_cast<double>(t);
    return r*r;
 }
+#else
+inline double norm(const double& t)
+{
+   return t*t;
+}
+#endif
 inline long double norm(const long double& t)
 {
    long double l = t;
@@ -75,7 +89,7 @@ inline std::complex<float> conj(const float& t)
    return ct;
 }
 
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570))
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570)) && !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
 inline complex<double> polar(const char& rho, const char& theta = 0)
 { return ::std::polar(static_cast<double>(rho), static_cast<double>(theta)); }
 inline complex<double> polar(const unsigned char& rho, const unsigned char& theta = 0)
@@ -115,11 +129,18 @@ inline complex<typename ::boost::tr1_detail::promote_to_real<T, U>::type>
 }
 #endif
 
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 template <class T>
 inline BOOST_TR1_MATH_RETURN(double) imag(const T& )
 {
    return 0;
 }
+#else
+inline double imag(const double& )
+{
+   return 0;
+}
+#endif
 inline long double imag(const long double& )
 {
    return 0;
@@ -129,11 +150,18 @@ inline float imag(const float& )
    return 0;
 }
 
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 template <class T>
 inline BOOST_TR1_MATH_RETURN(double) real(const T& t)
 {
    return static_cast<double>(t);
 }
+#else
+inline double real(const double& t)
+{
+   return t;
+}
+#endif
 inline long double real(const long double& t)
 {
    return t;

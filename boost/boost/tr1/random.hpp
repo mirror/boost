@@ -31,9 +31,9 @@ public:
    // types
    typedef UIntType result_type;
    // parameter values
-   static const UIntType multiplier = a;
-   static const UIntType increment = c;
-   static const UIntType modulus = m;
+   BOOST_STATIC_CONSTANT(UIntType, multiplier = a);
+   BOOST_STATIC_CONSTANT(UIntType, increment = c);
+   BOOST_STATIC_CONSTANT(UIntType, modulus = m);
    // constructors and member function
    explicit linear_congruential(unsigned long x0 = 1)
       : m_gen(x0){}
@@ -116,17 +116,17 @@ public:
    // types
    typedef UIntType result_type;
    // parameter values
-   static const int word_size = w;
-   static const int state_size = n;
-   static const int shift_size = m;
-   static const int mask_bits = r;
-   static const UIntType parameter_a = a;
-   static const int output_u = u;
-   static const int output_s = s;
-   static const UIntType output_b = b;
-   static const int output_t = t;
-   static const UIntType output_c = c;
-   static const int output_l = l;
+   BOOST_STATIC_CONSTANT(int, word_size = w);
+   BOOST_STATIC_CONSTANT(int, state_size = n);
+   BOOST_STATIC_CONSTANT(int, shift_size = m);
+   BOOST_STATIC_CONSTANT(int, mask_bits = r);
+   BOOST_STATIC_CONSTANT(UIntType, parameter_a = a);
+   BOOST_STATIC_CONSTANT(int, output_u = u);
+   BOOST_STATIC_CONSTANT(int, output_s = s);
+   BOOST_STATIC_CONSTANT(UIntType, output_b = b);
+   BOOST_STATIC_CONSTANT(int, output_t = t);
+   BOOST_STATIC_CONSTANT(UIntType, output_c = c);
+   BOOST_STATIC_CONSTANT(int, output_l = l);
    // constructors and member function
    mersenne_twister(){}
    explicit mersenne_twister(unsigned long value)
@@ -138,7 +138,7 @@ public:
    void seed()
    { m_gen.seed(); }
    void seed(unsigned long value)
-   { m_gen.seed(value == 0 ? 4357UL : value); }
+   { m_gen.seed(value == 0 ? 5489UL : value); }
    template<class Gen> void seed(Gen& g)
    { init2(g, ::boost::is_integral<Gen>()); }
    result_type min BOOST_PREVENT_MACRO_SUBSTITUTION() const
@@ -200,9 +200,9 @@ public:
    // types
    typedef IntType result_type;
    // parameter values
-   static const IntType modulus = m;
-   static const int long_lag = r;
-   static const int short_lag = s;
+   BOOST_STATIC_CONSTANT(IntType, modulus = m);
+   BOOST_STATIC_CONSTANT(int, long_lag = r);
+   BOOST_STATIC_CONSTANT(int, short_lag = s);
 
    // constructors and member function
    subtract_with_carry(){}
@@ -273,9 +273,9 @@ public:
    // types
    typedef RealType result_type;
    // parameter values
-   static const int word_size = w;
-   static const int long_lag = r;
-   static const int short_lag = s;
+   BOOST_STATIC_CONSTANT(int, word_size = w);
+   BOOST_STATIC_CONSTANT(int, long_lag = r);
+   BOOST_STATIC_CONSTANT(int, short_lag = s);
 
    // constructors and member function
    subtract_with_carry_01(){}
@@ -352,8 +352,8 @@ public:
    typedef UniformRandomNumberGenerator2 base2_type;
    typedef unsigned long result_type;
    // parameter values
-   static const int shift1 = s1;
-   static const int shift2 = s2;
+   BOOST_STATIC_CONSTANT(int, shift1 = s1);
+   BOOST_STATIC_CONSTANT(int, shift2 = s2);
    // constructors and member function
    xor_combine(){ init_minmax(); }
    xor_combine(const base1_type & rng1, const base2_type & rng2)
