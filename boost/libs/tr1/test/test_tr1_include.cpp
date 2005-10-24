@@ -8,10 +8,10 @@
 
 #ifdef TEST_STD_HEADERS
 
+#include <memory>
 #include <array>
 #include <complex>
 #include <functional>
-#include <memory>
 #include <random>
 #include <regex>
 #include <tuple>

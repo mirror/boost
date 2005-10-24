@@ -88,20 +88,20 @@ int test_main(int, char*[])
       typedef std::tr1::mersenne_twister< ::boost::uint32_t,32,351,175,19,0xccab8ee7,11,7,0x31b6ab00,15,0xffe50000,17> mt11213b;
       mt11213b a1;
       mt11213b a2(a1);
-      validate("mt11213b", a1, 0xa37d3c92u);
+      validate("mt11213b", a1, 3809585648u);
       a1 = a2;
-      validate("mt11213b", a2, 0xa37d3c92u);
-      validate("mt11213b", a1, 0xa37d3c92u);
-      a1.seed(0);
-      validate("mt11213b", a1, 0xa37d3c92u);
-      a1 = mt11213b(0);
-      validate("mt11213b", a1, 0xa37d3c92u);
+      validate("mt11213b", a2, 3809585648u);
+      validate("mt11213b", a1, 3809585648u);
+      a1.seed(0u);
+      validate("mt11213b", a1, 3809585648u);
+      a1 = mt11213b(5489u);
+      validate("mt11213b", a1, 3809585648u);
       mt_seed s1(4357UL);
       a1.seed(s1);
-      validate("mt11213b", a1, 0xa37d3c92u);
+      validate("mt11213b", a1, 2742893714u);
       mt_seed s2(4357UL);
       mt11213b a3(s2);
-      validate("mt11213b", a3, 0xa37d3c92u);
+      validate("mt11213b", a3, 2742893714u);
    }while(0);
 
    do{
@@ -197,7 +197,7 @@ int test_main(int, char*[])
       std::tr1::minstd_rand r2;
       validate("std::tr1::minstd_rand", r2, 399268537u);
       std::tr1::mt19937 r3;
-      validate("std::tr1::mt19937", r3, 3346425566u);
+      validate("std::tr1::mt19937", r3, 4123659995u);
       std::tr1::ranlux3 r4;
       validate("std::tr1::ranlux3", r4, 5957620u);
       std::tr1::ranlux4 r5;
