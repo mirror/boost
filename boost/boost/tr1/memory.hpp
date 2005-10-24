@@ -31,6 +31,11 @@ template<class T, class U> shared_ptr<T> const_pointer_cast(shared_ptr<U> const 
 template<class D, class T> D * get_deleter(shared_ptr<T> const & p);
 template<class T> class enable_shared_from_this;
 
+namespace detail{
+class shared_count;
+class weak_count;
+}
+
 }
 
 namespace std{ namespace tr1{
