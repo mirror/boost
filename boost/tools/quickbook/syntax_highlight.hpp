@@ -15,7 +15,7 @@
 #include <boost/spirit/utility/chset.hpp>
 #include <boost/spirit/symbols/symbols.hpp>
 #include <boost/spirit/utility/escape_char.hpp>
-#include "../phrase.hpp"
+#include "./phrase.hpp"
 
 namespace quickbook
 {
