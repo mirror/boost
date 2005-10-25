@@ -91,9 +91,16 @@ namespace detail
     umaskex_t const unused_mask<In, Out, Done>::value;
     #endif
 
+    // Reserve some bits for the implementation
+    #if defined(__GLIBCXX__) && __GLIBCXX__ >= 20050301
+    umaskex_t const std_ctype_reserved = 0x8000;
+    #else
+    umaskex_t const std_ctype_reserved = 0;
+    #endif
+
     // Bitwise-or all the ctype masks together
-    umaskex_t const all_ctype_masks =
-        mask_cast<std::ctype_base::alnum>::value | mask_cast<std::ctype_base::alpha>::value
+    umaskex_t const all_ctype_masks = std_ctype_reserved
+      | mask_cast<std::ctype_base::alnum>::value | mask_cast<std::ctype_base::alpha>::value
       | mask_cast<std::ctype_base::cntrl>::value | mask_cast<std::ctype_base::digit>::value
       | mask_cast<std::ctype_base::graph>::value | mask_cast<std::ctype_base::lower>::value
       | mask_cast<std::ctype_base::print>::value | mask_cast<std::ctype_base::punct>::value
@@ -143,14 +150,15 @@ namespace detail
             for(i = 0; i <= UCHAR_MAX; ++i)
             {
                 this->masks_[i] = static_cast<umask_t>(tmp[i]);
+		BOOST_ASSERT(0 == (this->masks_[i] & (std_ctype_underscore | std_ctype_blank | std_ctype_newline)));
             }
 
-            this->masks_[static_cast<unsigned char>('_')] |= detail::std_ctype_underscore;
-            this->masks_[static_cast<unsigned char>(' ')] |= detail::std_ctype_blank;
-            this->masks_[static_cast<unsigned char>('\t')] |= detail::std_ctype_blank;
-            this->masks_[static_cast<unsigned char>('\n')] |= detail::std_ctype_newline;
-            this->masks_[static_cast<unsigned char>('\r')] |= detail::std_ctype_newline;
-            this->masks_[static_cast<unsigned char>('\f')] |= detail::std_ctype_newline;
+            this->masks_[static_cast<unsigned char>('_')] |= std_ctype_underscore;
+            this->masks_[static_cast<unsigned char>(' ')] |= std_ctype_blank;
+            this->masks_[static_cast<unsigned char>('\t')] |= std_ctype_blank;
+            this->masks_[static_cast<unsigned char>('\n')] |= std_ctype_newline;
+            this->masks_[static_cast<unsigned char>('\r')] |= std_ctype_newline;
+            this->masks_[static_cast<unsigned char>('\f')] |= std_ctype_newline;
         }
  
         umaskex_t masks_[UCHAR_MAX + 1];
