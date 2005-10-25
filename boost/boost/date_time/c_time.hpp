@@ -60,7 +60,12 @@ namespace date_time {
         result = gmtime_r(t, result);
         return result;
       }
-#else
+#else // BOOST_HAS_THREADS
+
+#if (defined(_MSC_VER) && (_MSC_VER >= 1400))
+#pragma warning(push) // preserve warning settings
+#pragma warning(disable : 4996) // disable depricated localtime/gmtime warning on vc8
+#endif // _MSC_VER >= 1400
       //! requires a pointer to a user created std::tm struct
       inline
       static std::tm* localtime(const std::time_t* t, std::tm* result)
@@ -75,6 +80,10 @@ namespace date_time {
         result = std::gmtime(t);
         return result;
       }
+#if (defined(_MSC_VER) && (_MSC_VER >= 1400))
+#pragma warning(pop) // restore warnings to previous state
+#endif // _MSC_VER >= 1400
+
 #endif // BOOST_HAS_THREADS
   };
 }} // namespaces
