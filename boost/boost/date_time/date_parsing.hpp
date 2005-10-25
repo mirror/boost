@@ -41,7 +41,7 @@ namespace date_time {
     while(i < inp.length()) {
       tmp += static_cast<char>(std::tolower(inp.at(i++)));
 #else
-      std::locale loc("");
+      static const std::locale loc("");
       while(i < inp.length()) {
         // tolower and others were brought in to std for borland >= v564
         // in compiler_config.hpp
