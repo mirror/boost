@@ -45,7 +45,11 @@ namespace test
   struct plain_weight_running_total
   {
       plain_weight_running_total()
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+        : sum(T())
+#else
         : sum()
+#endif 
       {}
       
       void operator()(T w)
@@ -64,7 +68,11 @@ namespace test
   struct named_param_weight_running_total
   {
       named_param_weight_running_total()
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+        : sum(T())
+#else
         : sum()
+#endif 
       {}
 
       template <class ArgumentPack>
