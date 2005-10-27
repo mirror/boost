@@ -122,6 +122,11 @@ namespace boost { namespace program_options {
             funciton. 
         */
         basic_command_line_parser& allow_unregistered();
+        
+        using detail::cmdline::style_parser;
+
+        basic_command_line_parser& extra_style_parser(style_parser s);
+
     private:
         const options_description* m_desc;
     };

@@ -84,6 +84,15 @@ namespace boost { namespace program_options {
         return *this;
     }
 
+    template<class charT>
+    basic_command_line_parser<charT>& 
+    basic_command_line_parser<charT>::extra_style_parser(style_parser s)
+    {
+        detail::cmdline::extra_style_parser(s);
+        return *this;
+    }
+
+
 
     template<class charT>    
     basic_parsed_options<charT>
