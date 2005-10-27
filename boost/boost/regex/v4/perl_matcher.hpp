@@ -29,7 +29,7 @@ BOOST_REGEX_DECL void BOOST_REGEX_CALL verify_options(boost::regex_constants::sy
 // function can_start:
 //
 template <class charT>
-bool can_start(charT c, const unsigned char* map, unsigned char mask)
+inline bool can_start(charT c, const unsigned char* map, unsigned char mask)
 {
    return ((c < static_cast<charT>(0)) ? true : ((c >= static_cast<charT>(1 << CHAR_BIT)) ? true : map[c] & mask));
 }
@@ -327,7 +327,13 @@ public:
       match_results<BidiIterator, Allocator>& what, 
       const basic_regex<char_type, traits>& e,
       match_flag_type f,
-      BidiIterator base);
+      BidiIterator base)
+      :  m_result(what), base(first), last(end), 
+         position(first), backstop(base), re(e), traits_inst(e.get_traits()), 
+         m_independent(false), next_count(&rep_obj), rep_obj(&next_count)
+   {
+      construct_init(e, f);
+   }
 
    bool match();
    bool find();
@@ -338,10 +344,8 @@ public:
    { m_match_flags &= ~f; }
 
 private:
-   void construct_init(BidiIterator first, BidiIterator end, 
-      match_results<BidiIterator, Allocator>& what, 
-      const basic_regex<char_type, traits>& e,
-      match_flag_type f);
+   void construct_init(const basic_regex<char_type, traits>& e, match_flag_type f);
+
    bool find_imp();
    bool match_imp();
 #ifdef BOOST_REGEX_HAS_MS_STACK_GUARD

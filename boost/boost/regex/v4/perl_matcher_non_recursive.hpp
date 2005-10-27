@@ -164,7 +164,10 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_all_states()
                raise_error(traits_inst, regex_constants::error_space);
             if((m_match_flags & match_partial) && (position == last) && (position != search_base))
                m_has_partial_match = true;
-            if(false == unwind(false))
+            bool successful_unwind = unwind(false);
+            if((m_match_flags & match_partial) && (position == last) && (position != search_base))
+               m_has_partial_match = true;
+            if(false == successful_unwind)
                return m_recursive_result;
          }
       }

@@ -265,6 +265,7 @@ basic_regex_creator<charT, traits>::basic_regex_creator(regex_data<charT, traits
    m_lower_mask = m_traits.lookup_classname(l, l + 5);
    m_upper_mask = m_traits.lookup_classname(u, u + 5);
    m_alpha_mask = m_traits.lookup_classname(a, a + 5);
+   m_pdata->m_word_mask = m_word_mask;
    BOOST_ASSERT(m_word_mask != 0); 
    BOOST_ASSERT(m_mask_space != 0); 
    BOOST_ASSERT(m_lower_mask != 0); 
@@ -765,7 +766,7 @@ void basic_regex_creator<charT, traits>::create_startmaps(re_syntax_base* state)
          {
             // Oops error:
             if(0 == this->m_pdata->m_status) // update the error code if not already set
-               this->m_pdata->m_status = boost::regex_constants::error_brack;
+               this->m_pdata->m_status = boost::regex_constants::error_bad_pattern;
             //
             // clear the expression, we should be empty:
             //
@@ -776,8 +777,8 @@ void basic_regex_creator<charT, traits>::create_startmaps(re_syntax_base* state)
             //
             if(0 == (this->flags() & regex_constants::no_except))
             {
-               std::string message = this->m_pdata->m_ptraits->error_string(boost::regex_constants::error_brack);
-               boost::regex_error e(message, boost::regex_constants::error_brack, 0);
+               std::string message = this->m_pdata->m_ptraits->error_string(boost::regex_constants::error_bad_pattern);
+               boost::regex_error e(message, boost::regex_constants::error_bad_pattern, 0);
                e.raise();
             }
          }

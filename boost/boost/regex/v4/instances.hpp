@@ -167,10 +167,7 @@ template BOOST_REGEX_DECL void BOOST_REGEX_CALL
 
 namespace re_detail{
 template BOOST_REGEX_DECL void perl_matcher<BOOST_REGEX_CHAR_T const *, match_results< const BOOST_REGEX_CHAR_T* >::allocator_type BOOST_REGEX_TRAITS_T >::construct_init(
-      BOOST_REGEX_CHAR_T const * first, BOOST_REGEX_CHAR_T const * end, 
-      match_results<BOOST_REGEX_CHAR_T const *>& what, 
-      const basic_regex<BOOST_REGEX_CHAR_T BOOST_REGEX_TRAITS_T >& e,
-      match_flag_type f);
+      const basic_regex<BOOST_REGEX_CHAR_T BOOST_REGEX_TRAITS_T >& e, match_flag_type f);
 template BOOST_REGEX_DECL bool perl_matcher<BOOST_REGEX_CHAR_T const *, match_results< const BOOST_REGEX_CHAR_T* >::allocator_type BOOST_REGEX_TRAITS_T >::match();
 template BOOST_REGEX_DECL bool perl_matcher<BOOST_REGEX_CHAR_T const *, match_results< const BOOST_REGEX_CHAR_T* >::allocator_type BOOST_REGEX_TRAITS_T >::find();
 } // namespace
@@ -186,10 +183,7 @@ template BOOST_REGEX_DECL void BOOST_REGEX_CALL
 
 namespace re_detail{
 template BOOST_REGEX_DECL void perl_matcher<std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator, match_results< std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator >::allocator_type, boost::regex_traits<BOOST_REGEX_CHAR_T > >::construct_init(
-      std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator first, std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator end, 
-      match_results<std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator>& what, 
-      const basic_regex<BOOST_REGEX_CHAR_T>& e,
-      match_flag_type f);
+      const basic_regex<BOOST_REGEX_CHAR_T>& e, match_flag_type f);
 template BOOST_REGEX_DECL bool perl_matcher<std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator, match_results< std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator >::allocator_type, boost::regex_traits<BOOST_REGEX_CHAR_T > >::match();
 template BOOST_REGEX_DECL bool perl_matcher<std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator, match_results< std::basic_string<BOOST_REGEX_CHAR_T>::const_iterator >::allocator_type, boost::regex_traits<BOOST_REGEX_CHAR_T > >::find();
 } // namespace

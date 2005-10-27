@@ -501,25 +501,39 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_char_repeat()
    const re_repeat* rep = static_cast<const re_repeat*>(pstate);
    BOOST_ASSERT(1 == static_cast<const re_literal*>(rep->next.p)->length);
    const char_type what = *reinterpret_cast<const char_type*>(static_cast<const re_literal*>(rep->next.p) + 1);
-   unsigned count = 0;
    //
    // start by working out how much we can skip:
    //
    bool greedy = (rep->greedy) && (!(m_match_flags & regex_constants::match_any) || m_independent);   
-   std::size_t desired = greedy ? rep->max : rep->min;
+   std::size_t count, desired;
    if(::boost::is_random_access_iterator<BidiIterator>::value)
    {
-      BidiIterator end = position;
-      std::advance(end, (std::min)((unsigned)::boost::re_detail::distance(position, last), desired));
-      BidiIterator origin(position);
-      while((position != end) && (traits_inst.translate(*position, icase) == what))
+      desired = 
+         (std::min)(
+            (std::size_t)(greedy ? rep->max : rep->min),
+            (std::size_t)::boost::re_detail::distance(position, last));
+      count = desired;
+      ++desired;
+      if(icase)
       {
-         ++position;
+         while(--desired && (traits_inst.translate_nocase(*position) == what))
+         {
+            ++position;
+         }
       }
-      count = (unsigned)::boost::re_detail::distance(origin, position);
+      else
+      {
+         while(--desired && (traits_inst.translate(*position) == what))
+         {
+            ++position;
+         }
+      }
+      count = count - desired;
    }
    else
    {
+      count = 0;
+      desired = greedy ? rep->max : rep->min;
       while((count < desired) && (position != last) && (traits_inst.translate(*position, icase) == what))
       {
          ++position;

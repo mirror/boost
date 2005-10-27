@@ -32,25 +32,10 @@ namespace boost{
 namespace re_detail{
 
 template <class BidiIterator, class Allocator, class traits>
-perl_matcher<BidiIterator, Allocator, traits>::perl_matcher(BidiIterator first, BidiIterator end, 
-   match_results<BidiIterator, Allocator>& what, 
-   const basic_regex<char_type, traits>& e,
-   match_flag_type f,
-   BidiIterator b)
-   :  m_result(what), base(first), last(end), 
-      position(first), backstop(b), re(e), traits_inst(e.get_traits()), 
-      m_independent(false), next_count(&rep_obj), rep_obj(&next_count)
-{
-   construct_init(first, last, what, e, f);
-}
-
-template <class BidiIterator, class Allocator, class traits>
-void perl_matcher<BidiIterator, Allocator, traits>::construct_init(BidiIterator first, BidiIterator end, 
-   match_results<BidiIterator, Allocator>& what, 
-   const basic_regex<char_type, traits>& e,
-   match_flag_type f)
+void perl_matcher<BidiIterator, Allocator, traits>::construct_init(const basic_regex<char_type, traits>& e, match_flag_type f)
 { 
    typedef typename regex_iterator_traits<BidiIterator>::iterator_category category;
+   typedef typename basic_regex<char_type, traits>::flag_type expression_flag_type;
    
    if(e.empty())
    {
@@ -60,13 +45,14 @@ void perl_matcher<BidiIterator, Allocator, traits>::construct_init(BidiIterator 
    }
    pstate = 0;
    m_match_flags = f;
-   icase = re.flags() & regex_constants::icase;
    estimate_max_state_count(static_cast<category*>(0));
+   expression_flag_type re_f = re.flags();
+   icase = re_f & regex_constants::icase;
    if(!(m_match_flags & (match_perl|match_posix)))
    {
-      if((re.flags() & (regbase::main_option_type|regbase::no_perl_ex)) == 0)
+      if((re_f & (regbase::main_option_type|regbase::no_perl_ex)) == 0)
          m_match_flags |= match_perl;
-      else if((re.flags() & (regbase::main_option_type|regbase::emacs_ex)) == (regbase::basic_syntax_group|regbase::emacs_ex))
+      else if((re_f & (regbase::main_option_type|regbase::emacs_ex)) == (regbase::basic_syntax_group|regbase::emacs_ex))
          m_match_flags |= match_perl;
       else
          m_match_flags |= match_posix;
@@ -83,8 +69,7 @@ void perl_matcher<BidiIterator, Allocator, traits>::construct_init(BidiIterator 
    m_backup_state = 0;
 #endif
    // find the value to use for matching word boundaries:
-   const char_type w = static_cast<char_type>('w');
-   m_word_mask = traits_inst.lookup_classname(&w, &w+1);
+   m_word_mask = re.get_data().m_word_mask; 
    // find bitmask to use for matching '.':
    match_any_mask = static_cast<unsigned char>((f & match_not_dot_newline) ? re_detail::test_not_newline : re_detail::test_newline);
 }
@@ -104,7 +89,7 @@ void perl_matcher<BidiIterator, Allocator, traits>::estimate_max_state_count(std
 }
 
 template <class BidiIterator, class Allocator, class traits>
-void perl_matcher<BidiIterator, Allocator, traits>::estimate_max_state_count(void*)
+inline void perl_matcher<BidiIterator, Allocator, traits>::estimate_max_state_count(void*)
 {
    // we don't know how long the sequence is:
    max_state_count = BOOST_REGEX_MAX_STATE_COUNT;
@@ -112,21 +97,9 @@ void perl_matcher<BidiIterator, Allocator, traits>::estimate_max_state_count(voi
 
 #ifdef BOOST_REGEX_HAS_MS_STACK_GUARD
 template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::protected_call(
+inline bool perl_matcher<BidiIterator, Allocator, traits>::protected_call(
    protected_proc_type proc)
 {
-   /*
-   __try{
-      return (this->*proc)();
-   }__except(EXCEPTION_STACK_OVERFLOW == GetExceptionCode())
-   {
-      reset_stack_guard_page();
-   }
-   // we only get here after a stack overflow:
-   raise_error<traits>(traits_inst, regex_constants::error_size);
-   // and we never really get here at all:
-   return false;
-   */
    ::boost::re_detail::concrete_protected_call
       <perl_matcher<BidiIterator, Allocator, traits> >
       obj(this, proc);
@@ -136,7 +109,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::protected_call(
 #endif
 
 template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::match()
+inline bool perl_matcher<BidiIterator, Allocator, traits>::match()
 {
 #ifdef BOOST_REGEX_HAS_MS_STACK_GUARD
    return protected_call(&perl_matcher<BidiIterator, Allocator, traits>::match_imp);
@@ -185,7 +158,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_imp()
 }
 
 template <class BidiIterator, class Allocator, class traits>
-bool perl_matcher<BidiIterator, Allocator, traits>::find()
+inline bool perl_matcher<BidiIterator, Allocator, traits>::find()
 {
 #ifdef BOOST_REGEX_HAS_MS_STACK_GUARD
    return protected_call(&perl_matcher<BidiIterator, Allocator, traits>::find_imp);

@@ -766,6 +766,7 @@ bool basic_regex_parser<charT, traits>::parse_repeat(std::size_t low, std::size_
       case syntax_element_soft_buffer_end:
       case syntax_element_restart_continue:
       case syntax_element_jump:
+      case syntax_element_startmark:
          // can't legally repeat any of the above:
          fail(regex_constants::error_badrepeat, m_position - m_base);
          return false;
@@ -1342,6 +1343,10 @@ bool valid_value(charT c, int v)
 template <class charT, class traits>
 charT basic_regex_parser<charT, traits>::unescape_character()
 {
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4127)
+#endif
    charT result(0);
    if(m_position == m_end)
    {
@@ -1494,6 +1499,9 @@ charT basic_regex_parser<charT, traits>::unescape_character()
    }
    ++m_position;
    return result;
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 }
 
 template <class charT, class traits>
@@ -1737,6 +1745,9 @@ bool basic_regex_parser<charT, traits>::parse_perl_extension()
       }
       break;
       }
+   case regex_constants::syntax_close_mark:
+      fail(regex_constants::error_badrepeat, m_position - m_base);
+      return false;
    default:
       //
       // lets assume that we have a (?imsx) group and try and parse it:
