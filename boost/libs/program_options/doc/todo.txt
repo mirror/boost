@@ -1,4 +1,6 @@
 
+Make parse_config_file("foo.cfg", desc) work.
+
 Document handling of positional options which depends on precedding options. 
 I.e scanning the parsed options and creating new variables_map when we see
 a positional option. (Email from Tony).

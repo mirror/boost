@@ -37,3 +37,10 @@
 <!ENTITY command_line_parser
      "<classname alt='boost::program_options::command_line_parser'>command_line_parser</classname>">
 
+<!ENTITY basic_command_line_parser
+     "<classname alt='boost::program_options::basic_command_line_parser'>basic_command_line_parser</classname>">
+
+
+<!ENTITY basic_option
+     "<classname alt='boost::program_options::basic_option'>basic_option</classname>">
+
