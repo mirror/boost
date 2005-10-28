@@ -38,7 +38,8 @@
         BOOST_BIND_RETURN l_(type<result_type>(), f_, a, 0);
     }
 
-#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING) \
+ && !BOOST_WORKAROUND(__EDG_VERSION__, <= 238)
 
     template<class A1> result_type operator()(A1 const & a1)
     {
@@ -66,7 +67,8 @@
         BOOST_BIND_RETURN l_(type<result_type>(), f_, a, 0);
     }
 
-#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING) \
+ && !BOOST_WORKAROUND(__EDG_VERSION__, <= 238)
 
     template<class A1, class A2> result_type operator()(A1 const & a1, A2 & a2)
     {
