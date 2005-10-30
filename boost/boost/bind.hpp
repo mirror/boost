@@ -113,38 +113,23 @@ template<class T> class type {};
 
 // unwrap
 
-template<class F> inline F & unwrap(F * f, long)
+template<class F> struct unwrapper
 {
-    return *f;
-}
+    static inline F & unwrap( F & f, long )
+    {
+        return f;
+    }
 
-template<class F> inline F & unwrap(reference_wrapper<F> * f, int)
-{
-    return f->get();
-}
+    template<class F2> static inline F2 & unwrap( reference_wrapper<F2> const & f, int )
+    {
+        return f->get();
+    }
 
-template<class F> inline F & unwrap(reference_wrapper<F> const * f, int)
-{
-    return f->get();
-}
-
-#if !( defined(__MWERKS__) && BOOST_WORKAROUND(__MWERKS__, <= 0x3004) )
-
-template<class R, class T> inline _mfi::dm<R, T> unwrap(R T::* * pm, int)
-{
-    return _mfi::dm<R, T>(*pm);
-}
-
-#if !BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600))
-// IBM/VisualAge 6.0 is not able to handle this overload.
-template<class R, class T> inline _mfi::dm<R, T> unwrap(R T::* const * pm, int)
-{
-    return _mfi::dm<R, T>(*pm);
-}
-#endif
-
-
-#endif
+    template<class R, class T> static inline _mfi::dm<R, T> unwrap( R T::* pm, int )
+    {
+        return _mfi::dm<R, T>( pm );
+    }
+};
 
 // listN
 
@@ -166,22 +151,22 @@ public:
 
     template<class R, class F, class A> R operator()(type<R>, F & f, A &, long)
     {
-        return unwrap(&f, 0)();
+        return unwrapper<F>::unwrap(f, 0)();
     }
 
     template<class R, class F, class A> R operator()(type<R>, F const & f, A &, long) const
     {
-        return unwrap(&f, 0)();
+        return unwrapper<F const>::unwrap(f, 0)();
     }
 
     template<class F, class A> void operator()(type<void>, F & f, A &, int)
     {
-        unwrap(&f, 0)();
+        unwrapper<F>::unwrap(f, 0)();
     }
 
     template<class F, class A> void operator()(type<void>, F const & f, A &, int) const
     {
-        unwrap(&f, 0)();
+        unwrapper<F const>::unwrap(f, 0)();
     }
 
     template<class V> void accept(V &) const
@@ -216,22 +201,22 @@ public:
 
     template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(&f, 0)(a[a1_]);
+        return unwrapper<F>::unwrap(f, 0)(a[a1_]);
     }
 
     template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(&f, 0)(a[a1_]);
+        return unwrapper<F const>::unwrap(f, 0)(a[a1_]);
     }
 
     template<class F, class A> void operator()(type<void>, F & f, A & a, int)
     {
-        unwrap(&f, 0)(a[a1_]);
+        unwrapper<F>::unwrap(f, 0)(a[a1_]);
     }
 
     template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
     {
-        unwrap(&f, 0)(a[a1_]);
+        unwrapper<F const>::unwrap(f, 0)(a[a1_]);
     }
 
     template<class V> void accept(V & v) const
@@ -273,22 +258,22 @@ public:
 
     template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(&f, 0)(a[a1_], a[a2_]);
+        return unwrapper<F>::unwrap(f, 0)(a[a1_], a[a2_]);
     }
 
     template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(&f, 0)(a[a1_], a[a2_]);
+        return unwrapper<F const>::unwrap(f, 0)(a[a1_], a[a2_]);
     }
 
     template<class F, class A> void operator()(type<void>, F & f, A & a, int)
     {
-        unwrap(&f, 0)(a[a1_], a[a2_]);
+        unwrapper<F>::unwrap(f, 0)(a[a1_], a[a2_]);
     }
 
     template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
     {
-        unwrap(&f, 0)(a[a1_], a[a2_]);
+        unwrapper<F const>::unwrap(f, 0)(a[a1_], a[a2_]);
     }
 
     template<class V> void accept(V & v) const
@@ -334,22 +319,22 @@ public:
 
     template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_]);
+        return unwrapper<F>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_]);
     }
 
     template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_]);
+        return unwrapper<F const>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_]);
     }
 
     template<class F, class A> void operator()(type<void>, F & f, A & a, int)
     {
-        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_]);
+        unwrapper<F>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_]);
     }
 
     template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
     {
-        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_]);
+        unwrapper<F const>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_]);
     }
 
     template<class V> void accept(V & v) const
@@ -399,22 +384,22 @@ public:
 
     template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
+        return unwrapper<F>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
     }
 
     template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
+        return unwrapper<F const>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
     }
 
     template<class F, class A> void operator()(type<void>, F & f, A & a, int)
     {
-        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
+        unwrapper<F>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
     }
 
     template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
     {
-        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
+        unwrapper<F const>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_]);
     }
 
     template<class V> void accept(V & v) const
@@ -470,22 +455,22 @@ public:
 
     template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
+        return unwrapper<F>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
     }
 
     template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
+        return unwrapper<F const>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
     }
 
     template<class F, class A> void operator()(type<void>, F & f, A & a, int)
     {
-        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
+        unwrapper<F>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
     }
 
     template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
     {
-        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
+        unwrapper<F const>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_]);
     }
 
     template<class V> void accept(V & v) const
@@ -545,22 +530,22 @@ public:
 
     template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
+        return unwrapper<F>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
     }
 
     template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
+        return unwrapper<F const>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
     }
 
     template<class F, class A> void operator()(type<void>, F & f, A & a, int)
     {
-        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
+        unwrapper<F>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
     }
 
     template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
     {
-        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
+        unwrapper<F const>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_]);
     }
 
     template<class V> void accept(V & v) const
@@ -624,22 +609,22 @@ public:
 
     template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
+        return unwrapper<F>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
     }
 
     template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
+        return unwrapper<F const>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
     }
 
     template<class F, class A> void operator()(type<void>, F & f, A & a, int)
     {
-        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
+        unwrapper<F>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
     }
 
     template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
     {
-        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
+        unwrapper<F const>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_]);
     }
 
     template<class V> void accept(V & v) const
@@ -708,22 +693,22 @@ public:
 
     template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
+        return unwrapper<F>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
     }
 
     template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
+        return unwrapper<F const>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
     }
 
     template<class F, class A> void operator()(type<void>, F & f, A & a, int)
     {
-        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
+        unwrapper<F>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
     }
 
     template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
     {
-        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
+        unwrapper<F const>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_]);
     }
 
     template<class V> void accept(V & v) const
@@ -796,22 +781,22 @@ public:
 
     template<class R, class F, class A> R operator()(type<R>, F & f, A & a, long)
     {
-        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
+        return unwrapper<F>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
     }
 
     template<class R, class F, class A> R operator()(type<R>, F const & f, A & a, long) const
     {
-        return unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
+        return unwrapper<F const>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
     }
 
     template<class F, class A> void operator()(type<void>, F & f, A & a, int)
     {
-        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
+        unwrapper<F>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
     }
 
     template<class F, class A> void operator()(type<void>, F const & f, A & a, int) const
     {
-        unwrap(&f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
+        unwrapper<F const>::unwrap(f, 0)(a[a1_], a[a2_], a[a3_], a[a4_], a[a5_], a[a6_], a[a7_], a[a8_], a[a9_]);
     }
 
     template<class V> void accept(V & v) const
