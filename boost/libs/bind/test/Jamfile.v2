@@ -23,6 +23,7 @@ test-suite "bind"
       [ run bind_function_test.cpp ]
       [ run bind_lookup_problem_test.cpp ]
       [ run bind_rv_sp_test.cpp ]
+      [ compile bind_unary_addr.cpp ]
       [ run mem_fn_test.cpp ]
       [ run mem_fn_void_test.cpp ]
       [ run mem_fn_derived_test.cpp ]
