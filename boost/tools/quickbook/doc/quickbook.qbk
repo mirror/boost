@@ -1,4 +1,4 @@
-[reference quickbook
+[article quickbook
     [quickbook 1.3]
     [version 1.3]
     [authors [de Guzman, Joel], [Niebler, Eric]]
@@ -64,12 +64,11 @@ Features include:
 
 [endsect]
 
-[section:change_log ['Change Log]]
+[section:change_log Change Log]
 
 [h3 Version 1.3]
 
 * Quickbook file inclusion \[include\].
-* Strikethrough font style: -strikethrough-
 * Better xml output (pretty layout). Check out the generated XML.
 * Regression testing facility: to make sure your document will always be
   compatible (full backward compatibility) regardless of changes to
@@ -174,12 +173,12 @@ That's the true business precept.]
 Simple markup for formatting text, common in many applications, is now supported:
 
 [pre'''
-/italic/, *bold*, _underline_, =teletype=, -strikethrough-
+/italic/, *bold*, _underline_, =teletype=
 ''']
 
 will generate:
 
-/italic/, *bold*, _underline_, =teletype=, -strikethrough-
+/italic/, *bold*, _underline_, =teletype=
 
 Unlike QuickBook's standard formatting scheme, the rules for simpler alternatives
 are much stricter.
@@ -1050,7 +1049,7 @@ and you can link to it with [^\[link someid.intro The Intro\]].
     [[[*bold]]              [[^'''[*bold] or *bold*''']]]
     [[[_underline]]         [[^'''[_underline] or _underline_''']]]
     [[[^teletype]]          [[^'''[^teletype] or =teletype=''']]]
-    [[[-strikethrough]]     [[^'''[-strikethrough] or -strikethrough-''']]]
+    [[[-strikethrough]]     [[^'''[-strikethrough]''']]]
     [[source mode]          [[^\[c++\]] or [^\[python\]]]]
     [[inline code]          [[^'''`int main();`''']]]
     [[code block]           [[^'''``int main();``''']]]

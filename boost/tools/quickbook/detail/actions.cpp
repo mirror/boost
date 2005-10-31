@@ -526,20 +526,19 @@ namespace quickbook
         }
     }
 
-    typedef std::divides<fs::path> concat;
-
     fs::path path_difference(fs::path const& outdir, fs::path const& xmlfile)
     {
-        fs::path outtmp, xmltmp, result;
+        fs::path outtmp, xmltmp;
         fs::path::iterator out = outdir.begin(), xml = xmlfile.begin();
         for(; out != outdir.end() && xml != xmlfile.end(); ++out, ++xml)
         {
             if(!fs::equivalent(outtmp /= *out, xmltmp /= *xml))
                 break;
         }
-        if(out != outdir.begin())
-            result = std::accumulate(out, outdir.end(), result, boost::bind(concat(), _1, ".."));
-        return std::accumulate(xml, xmlfile.end(), result, concat());
+        std::divides<fs::path> concat;
+        out = (out == outdir.begin()) ? outdir.end() : out;
+        xmltmp = std::accumulate(out, outdir.end(), fs::path(), boost::bind(concat, _1, ".."));
+        return std::accumulate(xml, xmlfile.end(), xmltmp, concat);
     }
 
     void xinclude_action::operator()(iterator const& first, iterator const& last) const

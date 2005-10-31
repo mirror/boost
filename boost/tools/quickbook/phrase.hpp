@@ -124,7 +124,7 @@ namespace quickbook
                     |   simple_italic
                     |   simple_underline
                     |   simple_teletype
-                    |   simple_strikethrough
+                    //|   simple_strikethrough
                     ;
 
                 simple_markup(simple_bold, 
@@ -135,8 +135,8 @@ namespace quickbook
                     '_', actions.simple_underline, eol);
                 simple_markup(simple_teletype, 
                     '=', actions.simple_teletype, eol);
-                simple_markup(simple_strikethrough, 
-                    '-', actions.simple_strikethrough, eol);
+                //simple_markup(simple_strikethrough, 
+                //    '-', actions.simple_strikethrough, eol);
 
                 phrase =
                    *(   common
@@ -300,7 +300,7 @@ namespace quickbook
                             classref, memberref, enumref, headerref, anchor, 
                             link, hard_space, eol, inline_code, simple_format, 
                             simple_bold, simple_italic, simple_underline, 
-                            simple_teletype, simple_strikethrough, source_mode,
+                            simple_teletype, source_mode, //simple_strikethrough,
                             quote, code_block;
 
             rule<Scanner> const&

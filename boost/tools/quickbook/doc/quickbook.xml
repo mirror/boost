@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-<reference id="quickbook" name="quickbook" dirname="quickbook" last-revision="$Date$"
+<article id="quickbook" name="quickbook" dirname="quickbook" last-revision="$Date$"
  xmlns:xi="http://www.w3.org/2001/XInclude">
-  <referenceinfo>
+  <articleinfo>
     <author>
       <firstname>Joel</firstname> <surname>de Guzman</surname>
     </author>
@@ -18,10 +18,10 @@
         file LICENSE_1_0.txt or copy at <ulink url="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</ulink>)
       </para>
     </legalnotice>
-    <referencepurpose>
+    <articlepurpose>
       <emphasis>WikiWiki</emphasis> style documentation tool
-    </referencepurpose>
-  </referenceinfo>
+    </articlepurpose>
+  </articleinfo>
   <title>quickbook 1.3</title>
   <section id="quickbook.intro">
     <title> Introduction</title>
@@ -86,17 +86,13 @@
     </itemizedlist>
   </section>
   <section id="quickbook.change_log">
-    <title> <emphasis>Change Log</emphasis></title> <anchor id="quickbook.change_log.version_1_3"
-    />
+    <title> Change Log</title> <anchor id="quickbook.change_log.version_1_3" />
     <bridgehead renderas="sect3">
       Version 1.3
     </bridgehead>
     <itemizedlist>
       <listitem>
         Quickbook file inclusion [include].
-      </listitem>
-      <listitem>
-        Strikethrough font style: <emphasis role="strikethrough">strikethrough</emphasis>
       </listitem>
       <listitem>
         Better xml output (pretty layout). Check out the generated XML.
@@ -124,7 +120,7 @@
         Better (intuitive) paragraph termination. Some markups may terminate a paragraph.
         Example:
 <programlisting>
-<phrase role="special">[</phrase><phrase role="identifier">section</phrase> <phrase role="identifier">x</phrase><phrase role="special">]</phrase>
+<phrase role="special">[</phrase><phrase role="identifier">section</phrase>&nbsp;<phrase role="identifier">x</phrase><phrase role="special">]</phrase>
 <phrase role="identifier">blah</phrase><phrase role="special">...</phrase>
 <phrase role="special">[</phrase><phrase role="identifier">endsect</phrase><phrase role="special">]</phrase></programlisting>
       </listitem>
@@ -251,15 +247,14 @@ the true business precept.]
       Simple markup for formatting text, common in many applications, is now supported:
     </para>
     
-<programlisting>/italic/, *bold*, _underline_, =teletype=, -strikethrough-
+<programlisting>/italic/, *bold*, _underline_, =teletype=
 </programlisting>
     <para>
       will generate:
     </para>
     <para>
       <emphasis>italic</emphasis>, <emphasis role="bold">bold</emphasis>, <emphasis
-      role="underline">underline</emphasis>, <literal>teletype</literal>, <emphasis
-      role="strikethrough">strikethrough</emphasis>
+      role="underline">underline</emphasis>, <literal>teletype</literal>
     </para>
     <para>
       Unlike QuickBook's standard formatting scheme, the rules for simpler alternatives
@@ -387,11 +382,11 @@ the true business precept.]
       will generate:
     </para>
     <para>
-      This text has inlined code <code><phrase role="keyword">int</phrase> <phrase
-      role="identifier">main</phrase><phrase role="special">()</phrase> <phrase role="special">{</phrase>
-      <phrase role="keyword">return</phrase> <phrase role="number">0</phrase><phrase
-      role="special">;</phrase> <phrase role="special">}</phrase></code> in it. The
-      code will be syntax highlighted.
+      This text has inlined code <code><phrase role="keyword">int</phrase>&nbsp;<phrase
+      role="identifier">main</phrase><phrase role="special">()</phrase>&nbsp;<phrase
+      role="special">{</phrase>&nbsp;<phrase role="keyword">return</phrase>&nbsp;<phrase
+      role="number">0</phrase><phrase role="special">;</phrase>&nbsp;<phrase role="special">}</phrase></code>
+      in it. The code will be syntax highlighted.
     </para>
     <informaltable frame="all">
       <?dbhtml table-width="74%" ?>
@@ -442,12 +437,12 @@ the true business precept.]
     <para>
       
 <programlisting>
-<phrase role="preprocessor">#include</phrase> <phrase role="special">&lt;</phrase><phrase role="identifier">iostream</phrase><phrase role="special">&gt;</phrase>
+<phrase role="preprocessor">#include</phrase>&nbsp;<phrase role="special">&lt;</phrase><phrase role="identifier">iostream</phrase><phrase role="special">&gt;</phrase>
 
-<phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase>
+<phrase role="keyword">int</phrase>&nbsp;<phrase role="identifier">main</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
-    <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase> <phrase role="special">&lt;&lt;</phrase> <phrase role="string">&quot;Hello, World!&quot;</phrase> <phrase role="special">&lt;&lt;</phrase> <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">endl</phrase><phrase role="special">;</phrase>
-    <phrase role="keyword">return</phrase> <phrase role="number">0</phrase><phrase role="special">;</phrase>
+    <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase>&nbsp;<phrase role="special">&lt;&lt;</phrase>&nbsp;<phrase role="string">&quot;Hello, World!&quot;</phrase>&nbsp;<phrase role="special">&lt;&lt;</phrase>&nbsp;<phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">endl</phrase><phrase role="special">;</phrase>
+    <phrase role="keyword">return</phrase>&nbsp;<phrase role="number">0</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
     </para>
@@ -1328,7 +1323,7 @@ sf_logo
       will generate this:
     </para>
     <para>
-      Hi <ulink url="http://spirit.sourceforge.net">Spirit</ulink> <inlinemediaobject><imageobject><imagedata
+      Hi <ulink url="http://spirit.sourceforge.net">Spirit</ulink>&nbsp;<inlinemediaobject><imageobject><imagedata
       fileref="images/smiley.png"></imagedata></imageobject></inlinemediaobject>
     </para>
     <anchor id="quickbook.syntax.predefined_macros" />
@@ -1350,14 +1345,14 @@ sf_logo
         </thead>
         <tbody>
           <row>
-            <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Oct-21</entry>
+            <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Oct-30</entry>
           </row>
           <row>
-            <entry>__TIME__</entry><entry>The current time</entry><entry>06:43:35
+            <entry>__TIME__</entry><entry>The current time</entry><entry>05:04:09
             PM</entry>
           </row>
           <row>
-            <entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>C:\dev\boost\tools\quickbook\doc\quickbook.qbk</entry>
+            <entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>C:\boost\cvs\boost\tools\quickbook\doc\quickbook.qbk</entry>
           </row>
         </tbody>
       </tgroup>
@@ -1382,8 +1377,8 @@ sf_logo
       <tgroup cols="1">
         <tbody>
           <row>
-            <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/smiley.png"></imagedata></imageobject></inlinemediaobject>
-            <emphasis role="bold">An eye catching advertisement or note...</emphasis><sbr/>
+            <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/smiley.png"></imagedata></imageobject></inlinemediaobject>&nbsp;<emphasis
+            role="bold">An eye catching advertisement or note...</emphasis><sbr/>
             <sbr/> <ulink url="http://spirit.sourceforge.net">Spirit</ulink> is an
             object-oriented recursive-descent parser generator framework implemented
             using template meta-programming techniques. Expression templates allow
@@ -1519,10 +1514,10 @@ sf_logo
 <programlisting>
 <phrase role="comment">#include &lt;iostream&gt;
 </phrase>
-<phrase role="identifier">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase>
+<phrase role="identifier">int</phrase>&nbsp;<phrase role="identifier">main</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
-    <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase> <phrase role="special">&lt;&lt;</phrase> <phrase role="string">&quot;Hello, World!&quot;</phrase> <phrase role="special">&lt;&lt;</phrase> <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">endl</phrase><phrase role="special">;</phrase>
-    <phrase role="keyword">return</phrase> <phrase role="number">0</phrase><phrase role="special">;</phrase>
+    <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase>&nbsp;<phrase role="special">&lt;&lt;</phrase>&nbsp;<phrase role="string">&quot;Hello, World!&quot;</phrase>&nbsp;<phrase role="special">&lt;&lt;</phrase>&nbsp;<phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">endl</phrase><phrase role="special">;</phrase>
+    <phrase role="keyword">return</phrase>&nbsp;<phrase role="number">0</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
             </entry>
@@ -1639,8 +1634,7 @@ sf_logo
             or =teletype=</literal></entry>
           </row>
           <row>
-            <entry><emphasis role="strikethrough">strikethrough</emphasis></entry><entry><literal>[-strikethrough]
-            or -strikethrough-</literal></entry>
+            <entry><emphasis role="strikethrough">strikethrough</emphasis></entry><entry><literal>[-strikethrough]</literal></entry>
           </row>
           <row>
             <entry>source mode</entry><entry><literal>[c++]</literal> or <literal>[python]</literal></entry>
@@ -1652,7 +1646,7 @@ sf_logo
             <entry>code block</entry><entry><literal>``int main();``</literal></entry>
           </row>
           <row>
-            <entry>code escape</entry><entry><literal>...from c++ to QuickBook...</literal></entry>
+            <entry>code escape</entry><entry><literal>[[from c++ to QuickBook]]</literal></entry>
           </row>
           <row>
             <entry>line break</entry><entry><literal>[br] or \n</literal></entry>
@@ -1765,4 +1759,4 @@ sf_logo
       </tgroup>
     </informaltable>
   </section>
-</reference>
+</article>

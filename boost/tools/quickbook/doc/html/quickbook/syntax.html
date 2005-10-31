@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../index.html" title="quickbook 1.3">
 <link rel="up" href="../index.html" title="quickbook 1.3">
-<link rel="prev" href="change_log.html" title="Change Log">
+<link rel="prev" href="change_log.html" title=" Change Log">
 <link rel="next" href="ref.html" title=" Quick Reference">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -41,7 +41,7 @@
       past a single block.
     </p>
 <a name="quickbook.syntax.comments"></a><h2>
-<a name="id373425"></a>
+<a name="id377804"></a>
       Comments
     </h2>
 <p>
@@ -50,11 +50,11 @@
 <pre class="programlisting">[/ comment (no output generated) ]
 </pre>
 <a name="quickbook.syntax.phrase_level_elements"></a><h2>
-<a name="id442301"></a>
+<a name="id377825"></a>
       Phrase Level Elements
     </h2>
 <a name="quickbook.syntax.font_styles"></a><h3>
-<a name="id442309"></a>
+<a name="id377834"></a>
       Font Styles
     </h3>
 <pre class="programlisting">['italic], [*bold], [_underline], [^teletype], [-strikethrough]
@@ -73,7 +73,7 @@
     </p>
 <p><span class="bold"><b><span class="emphasis"><em>bold-italic</em></span></b></span></p>
 <a name="quickbook.syntax.quotes"></a><h3>
-<a name="id442378"></a>
+<a name="id378094"></a>
       Quotes
     </h3>
 <pre class="programlisting">["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
@@ -100,18 +100,18 @@ the true business precept.]
 <p>&#8220;<span class="quote">Here's the rule for bargains: &#8216;<span class="quote">Do other men, for they would do
       you.</span>&#8217; That's the true business precept.</span>&#8221;</p>
 <a name="quickbook.syntax.simple_formatting"></a><h3>
-<a name="id373627"></a>
+<a name="id378152"></a>
       Simple formatting
     </h3>
 <p>
       Simple markup for formatting text, common in many applications, is now supported:
     </p>
-<pre class="programlisting">/italic/, *bold*, _underline_, =teletype=, -strikethrough-
+<pre class="programlisting">/italic/, *bold*, _underline_, =teletype=
 </pre>
 <p>
       will generate:
     </p>
-<p><span class="emphasis"><em>italic</em></span>, <span class="bold"><b>bold</b></span>, <span class="underline">underline</span>, <tt class="literal">teletype</tt>, <span class="strikethrough">strikethrough</span></p>
+<p><span class="emphasis"><em>italic</em></span>, <span class="bold"><b>bold</b></span>, <span class="underline">underline</span>, <tt class="literal">teletype</tt></p>
 <p>
       Unlike QuickBook's standard formatting scheme, the rules for simpler alternatives
       are much stricter.
@@ -144,7 +144,7 @@ the true business precept.]
 </ul></div>
 <div class="informaltable">
 <h4>
-<a name="id373823"></a><span class="table-title">More Formatting Samples</span>
+<a name="id378341"></a><span class="table-title">More Formatting Samples</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -235,7 +235,7 @@ the true business precept.]
             and ambiguity.</td></tr></tbody>
 </table></div>
 <a name="quickbook.syntax.inline_code"></a><h3>
-<a name="id371837"></a>
+<a name="id376304"></a>
       Inline code
     </h3>
 <p>
@@ -248,9 +248,8 @@ the true business precept.]
       will generate:
     </p>
 <p>
-      This text has inlined code <tt class="computeroutput"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span> <span class="special">{</span>
-      <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span> <span class="special">}</span></tt> in it. The
-      code will be syntax highlighted.
+      This text has inlined code <tt class="computeroutput"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span> <span class="special">{</span> <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span> <span class="special">}</span></tt>
+      in it. The code will be syntax highlighted.
     </p>
 <div class="informaltable"><table class="table">
 <colgroup><col></colgroup>
@@ -262,7 +261,7 @@ the true business precept.]
             code]</tt>. </td></tr></tbody>
 </table></div>
 <a name="quickbook.syntax.code_blocks"></a><h3>
-<a name="id371964"></a>
+<a name="id376433"></a>
       Code blocks
     </h3>
 <p>
@@ -292,16 +291,16 @@ the true business precept.]
       will generate:
     </p>
 <pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 
-<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
-    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Hello, World!"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Hello, World!"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
 <span class="special">}</span>
 </pre>
 <a name="quickbook.syntax.source_mode"></a><h3>
-<a name="id442550"></a>
+<a name="id446952"></a>
       Source Mode
     </h3>
 <p>
@@ -331,7 +330,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
     </p>
 <div class="informaltable">
 <h4>
-<a name="id442641"></a><span class="table-title">Supported Source Modes</span>
+<a name="id447043"></a><span class="table-title">Supported Source Modes</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -361,7 +360,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
             The source mode strings are lowercase.</td></tr></tbody>
 </table></div>
 <a name="quickbook.syntax.line_break"></a><h3>
-<a name="id442708"></a>
+<a name="id447110"></a>
       line-break
     </h3>
 <pre class="programlisting">[br]
@@ -374,7 +373,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
             is now preferred over <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.</td></tr></tbody>
 </table></div>
 <a name="quickbook.syntax.anchors"></a><h3>
-<a name="id442778"></a>
+<a name="id447180"></a>
       Anchors
     </h3>
 <pre class="programlisting">[#named_anchor]
@@ -386,7 +385,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
       <a href="syntax.html#quickbook.syntax.section">here</a> and <a href="syntax.html#quickbook.syntax.headings">here</a>.
     </p>
 <a name="quickbook.syntax.links"></a><h3>
-<a name="id442831"></a>
+<a name="id447233"></a>
       Links
     </h3>
 <pre class="programlisting">[@http://www.boost.org this is [*boost's] website....]
@@ -412,7 +411,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
 <p>
       see <a href="http://spirit.sourceforge.net/" target="_top">http://spirit.sourceforge.net/</a></p>
 <a name="quickbook.syntax.anchor_links"></a><h3>
-<a name="id442891"></a>
+<a name="id447293"></a>
       Anchor links
     </h3>
 <p>
@@ -424,7 +423,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
       See sections <a href="syntax.html#quickbook.syntax.section">Section</a> and <a href="syntax.html#quickbook.syntax.headings">Headings</a> for more info.
     </p>
 <a name="quickbook.syntax.refentry_links"></a><h3>
-<a name="id442927"></a>
+<a name="id447329"></a>
       refentry links
     </h3>
 <p>
@@ -446,7 +445,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
       This gets converted into <tt class="literal">&lt;link linkend="xml.refentry"&gt;xml.refentry&lt;/link&gt;</tt>.
     </p>
 <a name="quickbook.syntax.function__class__member__enum_or_header_links"></a><h3>
-<a name="id442977"></a>
+<a name="id447380"></a>
       function, class, member, enum or header links
     </h3>
 <p>
@@ -469,7 +468,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
       would have "boost::bar::baz" as the link text.
     </p>
 <a name="quickbook.syntax.escape"></a><h3>
-<a name="id443020"></a>
+<a name="id447422"></a>
       Escape
     </h3>
 <p>
@@ -495,7 +494,7 @@ escape (no processing/formatting)
             Be careful when using the escape. The text must conform to <a href="http://www.boost.org/doc/html/boostbook.html" target="_top">BoostBook</a>/<a href="http://www.docbook.org/" target="_top">DocBook</a> syntax.</td></tr></tbody>
 </table></div>
 <a name="quickbook.syntax.single_char_escape"></a><h3>
-<a name="id443109"></a>
+<a name="id447511"></a>
       Single char escape
     </h3>
 <p>
@@ -509,17 +508,17 @@ escape (no processing/formatting)
       preferred over <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.
     </p>
 <a name="quickbook.syntax.images__terminal_"></a><h3>
-<a name="id443204"></a>
+<a name="id447606"></a>
       Images (terminal)
     </h3>
 <pre class="programlisting">[$image.jpg]
 </pre>
 <a name="quickbook.syntax.block_level_elements"></a><h2>
-<a name="id443221"></a>
+<a name="id447623"></a>
       Block Level Elements
     </h2>
 <a name="quickbook.syntax.document"></a><h3>
-<a name="id443229"></a>
+<a name="id447631"></a>
       Document
     </h3>
 <p>
@@ -590,7 +589,7 @@ escape (no processing/formatting)
       field is omitted, a default value of <tt class="literal">c++</tt> will be used.
     </p>
 <a name="quickbook.syntax.section"></a><h3>
-<a name="id443382"></a>
+<a name="id447783"></a>
       Section
     </h3>
 <p>
@@ -615,7 +614,7 @@ escape (no processing/formatting)
       Sections can nest, and that results in a hierarchy in the table of contents.
     </p>
 <a name="quickbook.syntax.xinclude"></a><h3>
-<a name="id443449"></a>
+<a name="id447851"></a>
       xinclude
     </h3>
 <p>
@@ -628,7 +627,7 @@ escape (no processing/formatting)
       reference section.
     </p>
 <a name="quickbook.syntax.paragraphs"></a><h3>
-<a name="id443472"></a>
+<a name="id447874"></a>
       Paragraphs
     </h3>
 <p>
@@ -639,7 +638,7 @@ escape (no processing/formatting)
       a paragraph.
     </p>
 <a name="quickbook.syntax.ordered_lists"></a><h3>
-<a name="id443489"></a>
+<a name="id447891"></a>
       Ordered lists
     </h3>
 <pre class="programlisting"># One
@@ -661,7 +660,7 @@ escape (no processing/formatting)
       </li>
 </ol></div>
 <a name="quickbook.syntax.list_hierarchies"></a><h3>
-<a name="id443524"></a>
+<a name="id447926"></a>
       List Hierarchies
     </h3>
 <p>
@@ -722,7 +721,7 @@ escape (no processing/formatting)
       </li>
 </ol></div>
 <a name="quickbook.syntax.long_list_lines"></a><h3>
-<a name="id443604"></a>
+<a name="id448006"></a>
       Long List Lines
     </h3>
 <p>
@@ -751,7 +750,7 @@ escape (no processing/formatting)
       </li>
 </ol></div>
 <a name="quickbook.syntax.unordered_lists"></a><h3>
-<a name="id443648"></a>
+<a name="id448050"></a>
       Unordered lists
     </h3>
 <pre class="programlisting">* First
@@ -773,7 +772,7 @@ escape (no processing/formatting)
       </li>
 </ul></div>
 <a name="quickbook.syntax.mixed_lists"></a><h3>
-<a name="id443674"></a>
+<a name="id448076"></a>
       Mixed lists
     </h3>
 <p>
@@ -883,7 +882,7 @@ escape (no processing/formatting)
 </li>
 </ol></div>
 <a name="quickbook.syntax.code"></a><h3>
-<a name="id443793"></a>
+<a name="id448195"></a>
       Code
     </h3>
 <p>
@@ -926,7 +925,7 @@ escape (no processing/formatting)
 <span class="identifier">using</span> <a href="../index.html" target="_top">quickbook</a><span class="special">::</span><a href="highlight.html" target="_top">syntax_highlight</a><span class="special">;</span>
 </pre>
 <a name="quickbook.syntax.escaping_back_to_quickbook"></a><h3>
-<a name="id444070"></a>
+<a name="id448473"></a>
       Escaping Back To QuickBook
     </h3>
 <p>
@@ -954,7 +953,7 @@ escape (no processing/formatting)
       Block level markups like lists, tables etc. are not allowed.
     </p>
 <a name="quickbook.syntax.preformatted"></a><h3>
-<a name="id444161"></a>
+<a name="id448563"></a>
       Preformatted
     </h3>
 <p>
@@ -988,7 +987,7 @@ escape (no processing/formatting)
       inside <tt class="literal">pre</tt> blocks.
     </p>
 <a name="quickbook.syntax.blockquote"></a><h3>
-<a name="id444250"></a>
+<a name="id448652"></a>
       Blockquote
     </h3>
 <pre class="programlisting">[:sometext...]
@@ -997,7 +996,7 @@ escape (no processing/formatting)
         Indents the paragraph. This applies to one paragraph only.
       </p></blockquote></div>
 <a name="quickbook.syntax.headings"></a><h3>
-<a name="id444270"></a>
+<a name="id448672"></a>
       Headings
     </h3>
 <pre class="programlisting">[h1 Heading 1]
@@ -1008,27 +1007,27 @@ escape (no processing/formatting)
 [h6 Heading 6]
 </pre>
 <a name="quickbook.syntax.heading_1"></a><h1>
-<a name="id444286"></a>
+<a name="id448688"></a>
       Heading 1
     </h1>
 <a name="quickbook.syntax.heading_2"></a><h2>
-<a name="id444297"></a>
+<a name="id448699"></a>
       Heading 2
     </h2>
 <a name="quickbook.syntax.heading_3"></a><h3>
-<a name="id444308"></a>
+<a name="id448710"></a>
       Heading 3
     </h3>
 <a name="quickbook.syntax.heading_4"></a><h4>
-<a name="id444320"></a>
+<a name="id448722"></a>
       Heading 4
     </h4>
 <a name="quickbook.syntax.heading_5"></a><h5>
-<a name="id444331"></a>
+<a name="id448733"></a>
       Heading 5
     </h5>
 <a name="quickbook.syntax.heading_6"></a><h3>
-<a name="id444342"></a>
+<a name="id448744"></a>
       Heading 6
     </h3>
 <p>
@@ -1047,7 +1046,7 @@ escape (no processing/formatting)
       and <a href="syntax.html#quickbook.syntax.section">Section</a> for more info.
     </p>
 <a name="quickbook.syntax.macros"></a><h3>
-<a name="id444427"></a>
+<a name="id448829"></a>
       Macros
     </h3>
 <pre class="programlisting">[def macro_identifier some text]
@@ -1100,9 +1099,9 @@ sf_logo
       will generate this:
     </p>
 <p>
-      Hi <a href="http://spirit.sourceforge.net" target="_top">Spirit</a><span class="inlinemediaobject"><img src="../images/smiley.png"></span></p>
+      Hi <a href="http://spirit.sourceforge.net" target="_top">Spirit</a> <span class="inlinemediaobject"><img src="../images/smiley.png"></span></p>
 <a name="quickbook.syntax.predefined_macros"></a><h3>
-<a name="id444594"></a>
+<a name="id448998"></a>
       Predefined Macros
     </h3>
 <p>
@@ -1110,7 +1109,7 @@ sf_logo
     </p>
 <div class="informaltable">
 <h4>
-<a name="id444607"></a><span class="table-title">Predefined Macros</span>
+<a name="id449010"></a><span class="table-title">Predefined Macros</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -1127,24 +1126,24 @@ sf_logo
 <tr>
 <td>__DATE__</td>
 <td>Today's date</td>
-<td>2005-Oct-21</td>
+<td>2005-Oct-30</td>
 </tr>
 <tr>
 <td>__TIME__</td>
 <td>The current time</td>
-<td>06:42:32
+<td>05:02:31
             PM</td>
 </tr>
 <tr>
 <td>__FILENAME__</td>
 <td>Quickbook source filename</td>
-<td>C:\dev\boost\tools\quickbook\doc\quickbook.qbk</td>
+<td>C:\boost\cvs\boost\tools\quickbook\doc\quickbook.qbk</td>
 </tr>
 </tbody>
 </table>
 </div>
 <a name="quickbook.syntax.blurbs"></a><h3>
-<a name="id444667"></a>
+<a name="id449070"></a>
       Blurbs
     </h3>
 <pre class="programlisting">[blurb :-) [*An eye catching advertisement or note...]\n\n
@@ -1160,14 +1159,14 @@ sf_logo
 <div class="informaltable"><table class="table">
 <colgroup><col></colgroup>
 <tbody><tr><td class="blurb">
-<span class="inlinemediaobject"><img src="../images/smiley.png"></span><span class="bold"><b>An eye catching advertisement or note...</b></span><br><br><a href="http://spirit.sourceforge.net" target="_top">Spirit</a> is an
+<span class="inlinemediaobject"><img src="../images/smiley.png"></span> <span class="bold"><b>An eye catching advertisement or note...</b></span><br><br><a href="http://spirit.sourceforge.net" target="_top">Spirit</a> is an
             object-oriented recursive-descent parser generator framework implemented
             using template meta-programming techniques. Expression templates allow
             us to approximate the syntax of Extended Backus-Normal Form (EBNF) completely
             in C++. </td></tr></tbody>
 </table></div>
 <a name="quickbook.syntax.tables"></a><h3>
-<a name="id444724"></a>
+<a name="id449129"></a>
       Tables
     </h3>
 <pre class="programlisting">[table A Simple Table
@@ -1182,7 +1181,7 @@ sf_logo
     </p>
 <div class="informaltable">
 <h4>
-<a name="id444744"></a><span class="table-title">A Simple Table</span>
+<a name="id449149"></a><span class="table-title">A Simple Table</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -1243,7 +1242,7 @@ sf_logo
     </p>
 <div class="informaltable">
 <h4>
-<a name="id444839"></a><span class="table-title">Table with fat cells</span>
+<a name="id449231"></a><span class="table-title">Table with fat cells</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -1291,7 +1290,7 @@ sf_logo
 </pre>
 <div class="informaltable">
 <h4>
-<a name="id444894"></a><span class="table-title">Table with code</span>
+<a name="id449292"></a><span class="table-title">Table with code</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -1307,17 +1306,17 @@ sf_logo
 <td><pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
 <span class="comment">#include &lt;iostream&gt;
 </span>
-<span class="identifier">int</span> <span class="identifier">main</span><span class="special">()</span>
+<span class="identifier">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
-    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Hello, World!"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Hello, World!"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
 <span class="special">}</span>
 </pre></td>
 </tr></tbody>
 </table>
 </div>
 <a name="quickbook.syntax.variable_lists"></a><h3>
-<a name="id445041"></a>
+<a name="id449441"></a>
       Variable Lists
     </h3>
 <pre class="programlisting">[variablelist A Variable List
@@ -1353,7 +1352,7 @@ sf_logo
       this as a "definition list".
     </p>
 <a name="quickbook.syntax.include"></a><h3>
-<a name="id445096"></a>
+<a name="id449496"></a>
       Include
     </h3>
 <p>

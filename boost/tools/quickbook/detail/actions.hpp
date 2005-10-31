@@ -411,8 +411,8 @@ namespace quickbook
                            macros_type const& macro,
                            actions& escape_actions)
         : out(out)
-        , temp(temp)
         , source_mode(source_mode)
+        , temp(temp)
         , cpp_p(temp, macro, do_macro_action(temp), escape_actions)
         , python_p(temp, macro, do_macro_action(temp), escape_actions)
         {}
