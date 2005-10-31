@@ -165,8 +165,8 @@ The STL contains predefined function objects for some common cases (such as <lit
 As an example, one possible implementation for the standard <literal>plus</literal> template is:
 
 <programlisting>
-<![CDATA[template <class T> : public binary_function<T, T, T>
-struct plus {
+<![CDATA[template <class T> 
+struct plus : public binary_function<T, T, T> {
   T operator()(const T& i, const T& j) const {
     return i + j; 
   }
