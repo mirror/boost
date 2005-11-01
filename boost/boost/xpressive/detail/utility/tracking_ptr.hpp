@@ -45,9 +45,8 @@ struct weak_iterator
   : boost::iterator_facade
     <
         weak_iterator<DerivedT>
-      , boost::shared_ptr<DerivedT>
+      , boost::shared_ptr<DerivedT> const
       , std::forward_iterator_tag
-      , boost::shared_ptr<DerivedT> const &
     >
 {
     typedef std::set<boost::weak_ptr<DerivedT> > set_type;
@@ -131,7 +130,7 @@ struct filter_self
     {
     }
 
-    bool operator() (boost::shared_ptr<DerivedT> const &that) const
+    bool operator ()(boost::shared_ptr<DerivedT> const &that) const
     {
         return this->self_ != that.get();
     }

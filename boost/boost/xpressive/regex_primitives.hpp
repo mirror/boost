@@ -364,8 +364,8 @@ proto::op_proxy<
 ///
 /// Useful when constructing recursive regular expression objects. The 'self'
 /// identifier is a short-hand for the current regex object. For instance,
-/// sregex rx = '(' >> self >> ')'; will create a regex object that matches
-/// balanced parens such as "((()))".
+/// sregex rx = '(' >> (self | epsilon) >> ')'; will create a regex object that
+/// matches balanced parens such as "((()))".
 proto::op_proxy<
     proto::unary_op<detail::self_placeholder, proto::noop_tag>
 > const self = {};

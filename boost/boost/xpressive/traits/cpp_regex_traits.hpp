@@ -432,8 +432,8 @@ struct cpp_regex_traits
         str.imbue(this->getloc());
         str << (8 == radix ? std::oct : (16 == radix ? std::hex : std::dec));
         str << ch;
-        str >> val; // if this fails, it leaves val unchanged (-1)
-        return val;
+        str >> val;
+        return str.fail() ? -1 : val;
     }
 
     /// Imbues *this with loc

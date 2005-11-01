@@ -183,7 +183,7 @@ namespace boost { namespace xpressive { namespace detail
         template<typename BidiIterT, typename NextT>
         bool match(state_type<BidiIterT> &state, NextT const &next) const
         {
-            if(!this->can_match_(*state.cur_, traits_cast<TraitsT>(state)))
+            if(!state.eos() && !this->can_match_(*state.cur_, traits_cast<TraitsT>(state)))
             {
                 return false;
             }
