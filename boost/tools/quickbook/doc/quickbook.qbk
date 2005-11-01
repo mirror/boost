@@ -58,7 +58,7 @@
 [def __escape_back__        [link quickbook.syntax.block.escape_back Escaping Back To QuickBook]]
 [def __preformatted__       [link quickbook.syntax.block.preformatted Preformatted]]
 [def __blockquote__         [link quickbook.syntax.block.blockquote Blockquote]]
-[def __headings__           [link quickbook.syntax.block.headings Headings]]
+[def __heading__            [link quickbook.syntax.block.headings Heading]]
 [def __macros__             [link quickbook.syntax.block.macros Macros]]
 [def __predefined_macros__  [link quickbook.syntax.block.predefined_macros Predefined Macros]]
 [def __blurbs__             [link quickbook.syntax.block.blurbs Blurbs]]
@@ -324,7 +324,7 @@ will generate:
 If a document contains more than one type of source code then the source
 mode may be changed dynamically as the document is processed. All QuickBook
 documents are initially in C++ mode by default, though an alternative
-initial value may be set in the __doc_info__ section.
+initial value may be set in the __document__ section.
 
 To change the source mode, use the [^\[source-mode\]] markup, where
 =source-mode= is one of the supported modes. For example, this:
@@ -1151,12 +1151,12 @@ and you can link to it with [^\[link someid.intro The Intro\]].
     [[code]                 [No markup. Preformatted code starts with a space or a tab.]        [__code__]]
     [[preformatted]         [[^'''[pre preformatted]''']]                   [__preformatted__]]
     [[block quote]          [[^'''[:sometext...]''']]                       [__blockquote__]]
-    [[heading 1]            [[^'''[h1 Heading 1]''']]                       [__headings__]]
-    [[heading 2]            [[^'''[h2 Heading 2]''']]                       [__headings__]]
-    [[heading 3]            [[^'''[h3 Heading 3]''']]                       [__headings__]]
-    [[heading 4]            [[^'''[h4 Heading 4]''']]                       [__headings__]]
-    [[heading 5]            [[^'''[h5 Heading 5]''']]                       [__headings__]]
-    [[heading 6]            [[^'''[h6 Heading 6]''']]                       [__headings__]]
+    [[heading 1]            [[^'''[h1 Heading 1]''']]                       [__heading__]]
+    [[heading 2]            [[^'''[h2 Heading 2]''']]                       [__heading__]]
+    [[heading 3]            [[^'''[h3 Heading 3]''']]                       [__heading__]]
+    [[heading 4]            [[^'''[h4 Heading 4]''']]                       [__heading__]]
+    [[heading 5]            [[^'''[h5 Heading 5]''']]                       [__heading__]]
+    [[heading 6]            [[^'''[h6 Heading 6]''']]                       [__heading__]]
     [[macro]                [[^'''[def macro_identifier some text]''']]     [__macros__]]
     [[blurb]                [[^'''[blurb advertisement or note...]''']]     [__blurbs__]]
     [[table]                [[^[table Title\n \[\[a\]\[b\]\[c\]\]\n    \[\[a\]\[b\]\[c\]\]\n\]]]    [__tables__]]
