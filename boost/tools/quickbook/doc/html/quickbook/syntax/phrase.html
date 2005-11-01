@@ -1,0 +1,519 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title> Phrase Level Elements</title>
+<link rel="stylesheet" href="../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<link rel="start" href="../../index.html" title="quickbook 1.3">
+<link rel="up" href="../syntax.html" title=" Syntax Summary">
+<link rel="prev" href="comments.html" title="Comments">
+<link rel="next" href="block.html" title=" Block Level Elements">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%">
+<td valign="top"><img alt="boost.png (6897 bytes)" width="277" height="86" src="../../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../more/index.htm">More</a></td>
+</table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="comments.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../syntax.html"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="block.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="quickbook.syntax.phrase"></a> Phrase Level Elements</h3></div></div></div>
+<div class="toc"><dl>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.font_styles">Font Styles</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.quotes">Quotes</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.simple_formatting">Simple formatting</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.inline_code">Inline code</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.code_blocks">Code blocks</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.source_mode">Source Mode</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.line_break">line-break</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.anchors">Anchors</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.links">Links</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.anchor_links">Anchor links</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.refentry_links">refentry links</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.code_links"> Code Links</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.escape">Escape</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.single_char_escape">Single char escape</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.images">Images</a></span></dt>
+</dl></div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="quickbook.syntax.phrase.font_styles"></a>Font Styles</h4></div></div></div>
+<pre class="programlisting">['italic], [*bold], [_underline], [^teletype], [-strikethrough]
+</pre>
+<p>
+          will generate:
+        </p>
+<p><span class="emphasis"><em>italic</em></span>, <span class="bold"><b>bold</b></span>, <span class="underline">underline</span>, <tt class="literal">teletype</tt>, <span class="strikethrough">strikethrough</span></p>
+<p>
+          Like all non-terminal phrase level elements, this can of course be nested:
+        </p>
+<pre class="programlisting">[*['bold-italic]]
+</pre>
+<p>
+          will generate:
+        </p>
+<p><span class="bold"><b><span class="emphasis"><em>bold-italic</em></span></b></span></p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="quickbook.syntax.phrase.quotes"></a>Quotes</h4></div></div></div>
+<pre class="programlisting">["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
+</pre>
+<p>
+          will generate:
+        </p>
+<p>&#8220;<span class="quote">A question that sometimes drives me hazy: am I or are the others
+          crazy?</span>&#8221;--Einstein
+        </p>
+<p>
+          Note the proper left and right quote marks. Also, while you can simply
+          use ordinary quotes like "quoted", our quote, above, will generate
+          correct DocBook quotes (e.g. &lt;quote&gt;quoted&lt;/quote&gt;).
+        </p>
+<p>
+          Like all phrase elements, quotes may be nested. Example:
+        </p>
+<pre class="programlisting">["Here's the rule for bargains: ["Do other men, for they would do you.] That's
+the true business precept.]
+</pre>
+<p>
+          will generate:
+        </p>
+<p>&#8220;<span class="quote">Here's the rule for bargains: &#8216;<span class="quote">Do other men, for they would
+          do you.</span>&#8217; That's the true business precept.</span>&#8221;</p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="quickbook.syntax.phrase.simple_formatting"></a>Simple formatting</h4></div></div></div>
+<p>
+          Simple markup for formatting text, common in many applications, is now
+          supported:
+        </p>
+<pre class="programlisting">/italic/, *bold*, _underline_, =teletype=
+</pre>
+<p>
+          will generate:
+        </p>
+<p><span class="emphasis"><em>italic</em></span>, <span class="bold"><b>bold</b></span>, <span class="underline">underline</span>, <tt class="literal">teletype</tt></p>
+<p>
+          Unlike QuickBook's standard formatting scheme, the rules for simpler alternatives
+          are much stricter.
+        </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+            Simple markups cannot nest. You can combine a simple markup with a nestable
+            markup.
+          </li>
+<li>
+            A non-space character must follow the leading markup
+          </li>
+<li>
+            A non-space character must precede the trailing markup
+          </li>
+<li>
+            A space or a punctuation must follow the trailing markup
+          </li>
+<li>
+            If the matching markup cannot be found within a line, the formatting
+            will not be applied. This is to ensure that un-matched formatting markups,
+            which can be a common mistake, does not corrupt anything past a single
+            line. We do not want the rest of the document to be rendered bold just
+            because we forgot a trailing '*'.
+          </li>
+<li>
+            A line starting with the star will be interpreted as an unordered list.
+            See <a href="block.html#quickbook.syntax.block.lists.unordered_lists" title="Unordered lists">Unordered
+            lists</a>.
+          </li>
+</ul></div>
+<div class="informaltable">
+<h4>
+<a name="id372869"></a><span class="table-title">More Formatting Samples</span>
+</h4>
+<table class="table">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>Markup</th>
+<th>Result</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><tt class="literal">*Bold*</tt></td>
+<td><span class="bold"><b>Bold</b></span></td>
+</tr>
+<tr>
+<td><tt class="literal">*Is bold*</tt></td>
+<td><span class="bold"><b>Is
+                bold</b></span></td>
+</tr>
+<tr>
+<td><tt class="literal">* Not bold* *Not bold * * Not bold *</tt></td>
+<td>*
+                Not bold* *Not bold * * Not bold *</td>
+</tr>
+<tr>
+<td><tt class="literal">This*Isn't*Bold (no bold)</tt></td>
+<td>This*Isn't*Bold
+                (no bold)</td>
+</tr>
+<tr>
+<td><tt class="literal">(*Bold Inside*) (parenthesis not bold)</tt></td>
+<td>(<span class="bold"><b>Bold Inside</b></span>) (parenthesis not bold)</td>
+</tr>
+<tr>
+<td><tt class="literal">*(Bold Outside)* (parenthesis bold)</tt></td>
+<td>
+<span class="bold"><b>(Bold Outside)</b></span> (parenthesis bold)</td>
+</tr>
+<tr>
+<td><tt class="literal">3*4*5 = 60 (no bold)</tt></td>
+<td>3*4*5
+                = 60 (no bold)</td>
+</tr>
+<tr>
+<td><tt class="literal">3 * 4 * 5 = 60 (no bold)</tt></td>
+<td>3
+                * 4 * 5 = 60 (no bold)</td>
+</tr>
+<tr>
+<td><tt class="literal">3 *4* 5 = 60 (4 is bold)</tt></td>
+<td>3
+                <span class="bold"><b>4</b></span> 5 = 60 (4 is bold)</td>
+</tr>
+<tr>
+<td><tt class="literal">*This is bold* this is not *but this is*</tt></td>
+<td>
+<span class="bold"><b>This is bold</b></span> this is not <span class="bold"><b>but
+                this is</b></span>
+</td>
+</tr>
+<tr>
+<td><tt class="literal">*This is bold*.</tt></td>
+<td>
+<span class="bold"><b>This is bold</b></span>.</td>
+</tr>
+<tr>
+<td><tt class="literal">*B*. (bold B)</tt></td>
+<td>
+<span class="bold"><b>B</b></span>.
+                (bold B)</td>
+</tr>
+<tr>
+<td><tt class="literal">['*Bold-Italic*]</tt></td>
+<td><span class="emphasis"><em><span class="bold"><b>Bold-Italic</b></span></em></span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="informaltable"><table class="table">
+<colgroup><col></colgroup>
+<tbody><tr><td class="blurb">
+<span class="inlinemediaobject"><img src="../../images/note.png"></span>
+                Thanks to David Barrett, author of <a href="http://quinthar.com/qwikiwiki/index.php?page=Home" target="_top">Qwiki</a>,
+                for sharing these samples and teaching me these obscure formatting
+                rules. I wasn't sure at all if <a href="http://spirit.sourceforge.net" target="_top">Spirit</a>,
+                being more or less a formal EBNF parser, can handle the context sensitivity
+                and ambiguity.</td></tr></tbody>
+</table></div>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="quickbook.syntax.phrase.inline_code"></a>Inline code</h4></div></div></div>
+<p>
+          Inlining code in paragraphs is quite common when writing C++ documentation.
+          We provide a very simple markup for this. For example, this:
+        </p>
+<pre class="programlisting">This text has inlined code `int main() { return 0; }` in it.
+</pre>
+<p>
+          will generate:
+        </p>
+<p>
+          This text has inlined code <tt class="computeroutput"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span> <span class="special">{</span> <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span> <span class="special">}</span></tt> in it. The code will be syntax highlighted.
+        </p>
+<div class="informaltable"><table class="table">
+<colgroup><col></colgroup>
+<tbody><tr><td class="blurb">
+<span class="inlinemediaobject"><img src="../../images/note.png"></span>
+                Note that we simply enclose the code with the tick: <tt class="literal">"`"</tt>,
+                not the single quote: <tt class="computeroutput"><span class="string">"'"</span></tt>.
+                Note too that <tt class="literal">`some code`</tt> is prefered over <tt class="literal">[^some
+                code]</tt>. </td></tr></tbody>
+</table></div>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="quickbook.syntax.phrase.code_blocks"></a>Code blocks</h4></div></div></div>
+<p>
+          Preformatted code simply starts with a space or a tab (See <a href="block.html#quickbook.syntax.block.code" title="Code">Code</a>).
+          However, such a simple syntax cannot be used as phrase elements in lists
+          (See <a href="block.html#quickbook.syntax.block.lists.ordered_lists" title="Ordered lists">Ordered
+          lists</a> and <a href="block.html#quickbook.syntax.block.lists.unordered_lists" title="Unordered lists">Unordered
+          lists</a>), tables (See <a href="block.html#quickbook.syntax.block.tables" title="Tables">Tables</a>),
+          etc. Inline code (see above) can. The problem is, inline code does not
+          allow formatting with newlines, spaces, and tabs. These are lost.
+        </p>
+<p>
+          We provide a phrase level markup that is a mix between the two. By using
+          the double-tick, instead of the single-tick, we are telling QuickBook to
+          use preformatted blocks of code. Example:
+        </p>
+<pre class="programlisting">``
+    #include &lt;iostream&gt;
+
+    int main()
+    {
+        std::cout &lt;&lt; "Hello, World!" &lt;&lt; std::endl;
+        return 0;
+    }
+``
+</pre>
+<p>
+          will generate:
+        </p>
+<pre class="programlisting">
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span>
+<span class="special">{</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Hello, World!"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="quickbook.syntax.phrase.source_mode"></a>Source Mode</h4></div></div></div>
+<p>
+          If a document contains more than one type of source code then the source
+          mode may be changed dynamically as the document is processed. All QuickBook
+          documents are initially in C++ mode by default, though an alternative initial
+          value may be set in the __doc<span class="underline">info</span>_
+          section.
+        </p>
+<p>
+          To change the source mode, use the <tt class="literal">[source-mode]</tt> markup,
+          where <tt class="literal">source-mode</tt> is one of the supported modes. For
+          example, this:
+        </p>
+<pre class="programlisting">Python's [python] `import` is rather like C++'s [c++] `#include`. A
+C++ comment `// looks like this` whereas a Python comment [python]
+`# looks like this`.
+</pre>
+<p>
+          will generate:
+        </p>
+<p>
+          Python's <tt class="computeroutput"><span class="keyword">import</span></tt> is rather
+          like C++'s <tt class="computeroutput"><span class="preprocessor">#include</span></tt>.
+          A C++ comment <tt class="computeroutput"><span class="comment">// looks like this</span></tt>
+          whereas a Python comment <tt class="computeroutput"><span class="comment">#looks like this</span></tt>.
+        </p>
+<div class="informaltable">
+<h4>
+<a name="id442641"></a><span class="table-title">Supported Source Modes</span>
+</h4>
+<table class="table">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>Mode</th>
+<th>Source Mode Markup</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>C++</td>
+<td><tt class="literal">[c++]</tt></td>
+</tr>
+<tr>
+<td>Python</td>
+<td><tt class="literal">[python]</tt></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="informaltable"><table class="table">
+<colgroup><col></colgroup>
+<tbody><tr><td class="blurb">
+<span class="inlinemediaobject"><img src="../../images/note.png"></span>
+                The source mode strings are lowercase.</td></tr></tbody>
+</table></div>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="quickbook.syntax.phrase.line_break"></a>line-break</h4></div></div></div>
+<pre class="programlisting">[br]
+</pre>
+<div class="informaltable"><table class="table">
+<colgroup><col></colgroup>
+<tbody><tr><td class="blurb">
+<span class="inlinemediaobject"><img src="../../images/note.png"></span>
+                Note that <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt>
+                is now preferred over <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.</td></tr></tbody>
+</table></div>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="quickbook.syntax.phrase.anchors"></a>Anchors</h4></div></div></div>
+<pre class="programlisting">[#named_anchor]
+</pre>
+<p>
+          A named anchor is a hook that can be referenced by a link elsewhere in
+          the document. You can then reference an anchor with <tt class="literal">[link named_anchor
+          Some link text]</tt>. See <a href="phrase.html#quickbook.syntax.phrase.anchor_links" title="Anchor links">Anchor
+          links</a>, <a href="block.html#quickbook.syntax.block.section" title="Section">Section</a>
+          and <span class="underline">_heading</span>_.
+        </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="quickbook.syntax.phrase.links"></a>Links</h4></div></div></div>
+<pre class="programlisting">[@http://www.boost.org this is [*boost's] website....]
+</pre>
+<p>
+          will generate:
+        </p>
+<p><a href="http://www.boost.org" target="_top">this is <span class="bold"><b>boost's</b></span>
+          website....</a></p>
+<p>
+          URL links where the link text is the link itself is common. Example:
+        </p>
+<pre class="programlisting">see http://spirit.sourceforge.net/
+</pre>
+<p>
+          so, when the text is absent in a link markup, the URL is assumed. Example:
+        </p>
+<pre class="programlisting">see [@http://spirit.sourceforge.net/]
+</pre>
+<p>
+          will generate:
+        </p>
+<p>
+          see <a href="http://spirit.sourceforge.net/" target="_top">http://spirit.sourceforge.net/</a></p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="quickbook.syntax.phrase.anchor_links"></a>Anchor links</h4></div></div></div>
+<p>
+          You can link within a document using:
+        </p>
+<pre class="programlisting">[link section_id.normalized_header_text The link text]
+</pre>
+<p>
+          See sections <a href="block.html#quickbook.syntax.block.section" title="Section">Section</a>
+          and <span class="underline">_heading</span>_ for more info.
+        </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="quickbook.syntax.phrase.refentry_links"></a>refentry links</h4></div></div></div>
+<p>
+          In addition, you can link internally to an XML refentry like:
+        </p>
+<pre class="programlisting">[link xml.refentry The link text]
+</pre>
+<p>
+          This gets converted into <tt class="literal">&lt;link linkend="xml.refentry"&gt;The
+          link text&lt;/link&gt;</tt>.
+        </p>
+<p>
+          Like URLs, the link text is optional. If this is not present, the link
+          text will automatically be the refentry. Example:
+        </p>
+<pre class="programlisting">[link xml.refentry]
+</pre>
+<p>
+          This gets converted into <tt class="literal">&lt;link linkend="xml.refentry"&gt;xml.refentry&lt;/link&gt;</tt>.
+        </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="quickbook.syntax.phrase.code_links"></a> Code Links</h4></div></div></div>
+<p>
+          If you want to link to a function, class, member, enum or header in the
+          reference section, you can use:
+        </p>
+<pre class="programlisting">[funcref fully::qualified::function_name The link text]
+[classref fully::qualified::class_name The link text]
+[memberref fully::qualified::member_name The link text]
+[enumref fully::qualified::enum_name The link text]
+[headerref path/to/header.hpp The link text]
+</pre>
+<p>
+          Again, the link text is optional. If this is not present, the link text
+          will automatically be the function, class, member or enum. Example:
+        </p>
+<pre class="programlisting">[classref boost::bar::baz]
+</pre>
+<p>
+          would have "boost::bar::baz" as the link text.
+        </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="quickbook.syntax.phrase.escape"></a>Escape</h4></div></div></div>
+<p>
+          The escape mark-up is used when we don't want to do any processing.
+        </p>
+<pre class="programlisting">'''
+escape (no processing/formatting)
+'''
+</pre>
+<p>
+          Escaping allows us to pass XML markup to <a href="http://www.boost.org/doc/html/boostbook.html" target="_top">BoostBook</a>
+          or <a href="http://www.docbook.org/" target="_top">DocBook</a>. For example:
+        </p>
+<pre class="programlisting">'''
+&lt;emphasis role="bold"&gt;This is direct XML markup&lt;/emphasis&gt;
+'''
+</pre>
+<p><span class="bold"><b>This is direct XML markup</b></span></p>
+<div class="informaltable"><table class="table">
+<colgroup><col></colgroup>
+<tbody><tr><td class="blurb">
+<span class="inlinemediaobject"><img src="../../images/alert.png"></span>
+                Be careful when using the escape. The text must conform to <a href="http://www.boost.org/doc/html/boostbook.html" target="_top">BoostBook</a>/<a href="http://www.docbook.org/" target="_top">DocBook</a> syntax.</td></tr></tbody>
+</table></div>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="quickbook.syntax.phrase.single_char_escape"></a>Single char escape</h4></div></div></div>
+<p>
+          The backslash may be used to escape a single punctuation character. The
+          punctuation immediately after the backslash is passed without any processing.
+          This is useful when we need to escape QuickBook punctuations such as <tt class="computeroutput"><span class="special">[</span></tt> and <tt class="computeroutput"><span class="special">]</span></tt>.
+          For example, how do you escape the triple quote? Simple: <tt class="literal">\'\'\'</tt></p>
+<p><tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt>
+          has a special meaning. It is used to generate line breaks. Note that <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt> is
+          now preferred over <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.
+        </p>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="quickbook.syntax.phrase.images"></a>Images</h4></div></div></div>
+<pre class="programlisting">[$image.jpg]
+</pre>
+</div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2002, 2004 Joel de Guzman, Eric Niebler</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="comments.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../syntax.html"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="block.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

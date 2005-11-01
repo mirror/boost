@@ -27,6 +27,45 @@
 [def __boostbook__  [@http://www.boost.org/doc/html/boostbook.html BoostBook]]
 [def __docbook__    [@http://www.docbook.org/ DocBook]]
 
+[def __comments__           [link quickbook.syntax.comments Comments]]
+
+[def __font_styles__        [link quickbook.syntax.phrase.font_styles Font Styles]]
+[def __quotes__             [link quickbook.syntax.phrase.quotes Quotes]]
+[def __simple_formatting__  [link quickbook.syntax.phrase.simple_formatting formatting Simple formatting]]
+[def __inline_code__        [link quickbook.syntax.phrase.inline_code Inline code]]
+[def __code_blocks__        [link quickbook.syntax.phrase.code_blocks Code blocks]]
+[def __source_mode__        [link quickbook.syntax.phrase.source_mode Source Mode]]
+[def __line_break__         [link quickbook.syntax.phrase.line_break line-break]]
+[def __anchors__            [link quickbook.syntax.phrase.anchors Anchors]]
+[def __links__              [link quickbook.syntax.phrase.links Links]]
+[def __anchor_links__       [link quickbook.syntax.phrase.anchor_links Anchor links]]
+[def __refentry_links__     [link quickbook.syntax.phrase.refentry_links refentry links]]
+[def __code_links__         [link quickbook.syntax.phrase.code_links function, class, member, enum or header links]]
+[def __escape__             [link quickbook.syntax.phrase.escape Escape]]
+[def __single_char_escape__ [link quickbook.syntax.phrase.single_char_escape Single char escape]]
+[def __images__             [link quickbook.syntax.phrase.images Images]]
+
+[def __document__           [link quickbook.syntax.block.document Document]]
+[def __section__            [link quickbook.syntax.block.section Section]]
+[def __xinclude__           [link quickbook.syntax.block.xinclude  xinclude]]
+[def __paragraphs__         [link quickbook.syntax.block.paragraphs Paragraphs]]
+[def __ordered_lists__      [link quickbook.syntax.block.lists.ordered_lists Ordered lists]]
+[def __list_hierarchies__   [link quickbook.syntax.block.lists.list_hierarchies List Hierarchies]]
+[def __long_list_lines__    [link quickbook.syntax.block.lists.long_list_lines Long List Lines]]
+[def __unordered_lists__    [link quickbook.syntax.block.lists.unordered_lists Unordered lists]]
+[def __mixed_lists__        [link quickbook.syntax.block.lists.mixed_lists Mixed lists]]
+[def __code__               [link quickbook.syntax.block.code Code]]
+[def __escape_back__        [link quickbook.syntax.block.escape_back Escaping Back To QuickBook]]
+[def __preformatted__       [link quickbook.syntax.block.preformatted Preformatted]]
+[def __blockquote__         [link quickbook.syntax.block.blockquote Blockquote]]
+[def __headings__           [link quickbook.syntax.block.headings Headings]]
+[def __macros__             [link quickbook.syntax.block.macros Macros]]
+[def __predefined_macros__  [link quickbook.syntax.block.predefined_macros Predefined Macros]]
+[def __blurbs__             [link quickbook.syntax.block.blurbs Blurbs]]
+[def __tables__             [link quickbook.syntax.block.tables Tables]]
+[def __variable_lists__     [link quickbook.syntax.block.variable_lists Variable Lists]]
+[def __include__            [link quickbook.syntax.block.include Include]]
+
 [section:intro Introduction]
 
 [:[*['["Why program by hand in five days what you can spend five years of your
@@ -75,7 +114,7 @@ Features include:
   QuickBook.
 * Code cleanup and refactoring.
 * Allow phrase markup in the doc-info.
-* Preformatted code blocks via \`\`code\`\` (double ticks) allows code in tables 
+* Preformatted code blocks via \`\`code\`\` (double ticks) allows code in tables
   and lists, for example.
 * Quickbook versioning; allows full backward compatibility. You have to add
   \[quickbook 1.3\] to the doc-info header to enable the new features. Without
@@ -88,7 +127,7 @@ Features include:
 * Fully qualified section and headers. Subsection names are concatenated to the
   ID to avoid clashing. Example: `doc_name.sect_name.sub_sect_name.sub_sub_sect_name`
 * Better &nbsp; and whitespace handling in code snippets.
-* \[xinclude\] fixes up the relative path to the target XML file when 
+* \[xinclude\] fixes up the relative path to the target XML file when
   input_directory is not the same as the output_directory.
 * Allow untitled tables.
 * Allow phrase markups in section titles.
@@ -112,7 +151,7 @@ Phrases in each block cannot contain a block terminator. This way, syntax errors
 such as un-matched closing brackets do not go haywire and corrupt anything past
 a single block.
 
-[h2 Comments]
+[section Comments]
 
 Can be placed anywhere.
 
@@ -120,9 +159,11 @@ Can be placed anywhere.
 '''[/ comment (no output generated) ]'''
 ]
 
-[h2 Phrase Level Elements]
+[endsect]
 
-[h3 Font Styles]
+[section:phrase Phrase Level Elements]
+
+[section Font Styles]
 
 [pre'''
 ['italic], [*bold], [_underline], [^teletype], [-strikethrough]
@@ -142,7 +183,8 @@ will generate:
 
 [*['bold-italic]]
 
-[h3 Quotes]
+[endsect]
+[section Quotes]
 
 [pre'''
 ["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
@@ -152,23 +194,24 @@ will generate:
 
 ["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
 
-Note the proper left and right quote marks. Also, while you can simply use 
-ordinary quotes like "quoted", our quote, above, will generate correct DocBook 
+Note the proper left and right quote marks. Also, while you can simply use
+ordinary quotes like "quoted", our quote, above, will generate correct DocBook
 quotes (e.g. <quote>quoted</quote>).
 
 Like all phrase elements, quotes may be nested. Example:
 
 [pre'''
-["Here's the rule for bargains: ["Do other men, for they would do you.] That's 
+["Here's the rule for bargains: ["Do other men, for they would do you.] That's
 the true business precept.]
 ''']
 
 will generate:
 
-["Here's the rule for bargains: ["Do other men, for they would do you.] 
+["Here's the rule for bargains: ["Do other men, for they would do you.]
 That's the true business precept.]
 
-[h3 Simple formatting]
+[endsect]
+[section Simple formatting]
 
 Simple markup for formatting text, common in many applications, is now supported:
 
@@ -193,7 +236,7 @@ are much stricter.
   We do not want the rest of the document to be rendered bold just because we
   forgot a trailing '*'.
 * A line starting with the star will be interpreted as an unordered list.
-  See [link quickbook.syntax.unordered_lists Unordered lists].
+  See __unordered_lists__.
 
 [table More Formatting Samples
     [[Markup]                                           [Result]]
@@ -217,7 +260,8 @@ are much stricter.
 and teaching me these obscure formatting rules. I wasn't sure at all if __spirit__,
 being more or less a formal EBNF parser, can handle the context sensitivity and ambiguity.]
 
-[h3 Inline code]
+[endsect]
+[section Inline code]
 
 Inlining code in paragraphs is quite common when writing C++ documentation. We
 provide a very simple markup for this. For example, this:
@@ -237,17 +281,17 @@ single quote: `"'"`. Note too that [^'''`some code`'''] is prefered over
 [^'''[^some code]'''].
 ]
 
-[h3 Code blocks]
+[endsect]
+[section Code blocks]
 
-Preformatted code simply starts with a space or a tab (See [link quickbook.syntax.code 
-Code]). However, such a simple syntax cannot be used as phrase elements in lists
-(See [link quickbook.syntax.ordered_lists Ordered lists] and [link quickbook.syntax.unordered_lists 
-Unordered lists]), tables (See [link quickbook.syntax.tables Tables]), etc. Inline code (see 
-above) can. The problem is, inline code does not allow formatting with newlines,
-spaces, and tabs. These are lost. 
+Preformatted code simply starts with a space or a tab (See __code__).
+However, such a simple syntax cannot be used as phrase elements in lists
+(See __ordered_lists__ and __unordered_lists__), tables (See __tables__),
+etc. Inline code (see above) can. The problem is, inline code does not
+allow formatting with newlines, spaces, and tabs. These are lost.
 
-We provide a phrase level markup that is a mix between the two. By using the 
-double-tick, instead of the single-tick, we are telling QuickBook to use 
+We provide a phrase level markup that is a mix between the two. By using the
+double-tick, instead of the single-tick, we are telling QuickBook to use
 preformatted blocks of code. Example:
 
 [pre
@@ -274,12 +318,13 @@ will generate:
     }
 ``
 
-[h3 Source Mode]
+[endsect]
+[section Source Mode]
 
-If a document contains more than one type of source code then the source mode
-may be changed dynamically as the document is processed. All QuickBook
-documents are initially in C++ mode by default, though an alternative initial value 
-may be set in the [link quickbook.syntax.document Document Info] section.
+If a document contains more than one type of source code then the source
+mode may be changed dynamically as the document is processed. All QuickBook
+documents are initially in C++ mode by default, though an alternative
+initial value may be set in the __doc_info__ section.
 
 To change the source mode, use the [^\[source-mode\]] markup, where
 =source-mode= is one of the supported modes. For example, this:
@@ -304,7 +349,8 @@ C++ comment `// looks like this` whereas a Python comment [python]
 
 [blurb __note__ The source mode strings are lowercase.]
 
-[h3 line-break]
+[endsect]
+[section line-break]
 
 [pre'''
 [br]
@@ -312,18 +358,19 @@ C++ comment `// looks like this` whereas a Python comment [python]
 
 [blurb __note__ Note that `\n` is now preferred over `[br]`.]
 
-[h3 Anchors]
+[endsect]
+[section Anchors]
 
 [pre'''
 [#named_anchor]
 ''']
 
 A named anchor is a hook that can be referenced by a link elsewhere in the
-document. You can then reference an anchor with [^'''[link named_anchor Some link text]'''].
-More on anchors [link quickbook.syntax.anchor_links here], [link quickbook.syntax.section here] and
-[link quickbook.syntax.headings here].
+document. You can then reference an anchor with [^'''[link named_anchor
+Some link text]''']. See __anchor_links__, __section__ and __heading__.
 
-[h3 Links]
+[endsect]
+[section Links]
 
 [pre'''
 [@http://www.boost.org this is [*boost's] website....]
@@ -349,7 +396,8 @@ will generate:
 
 see [@http://spirit.sourceforge.net/]
 
-[h3 Anchor links]
+[endsect]
+[section Anchor links]
 
 You can link within a document using:
 
@@ -357,10 +405,10 @@ You can link within a document using:
 [link section_id.normalized_header_text The link text]
 ''']
 
-See sections [link quickbook.syntax.section Section] and [link quickbook.syntax.headings Headings]
-for more info.
+See sections __section__ and __heading__ for more info.
 
-[h3 refentry links]
+[endsect]
+[section refentry links]
 
 In addition, you can link internally to an XML refentry like:
 
@@ -379,7 +427,8 @@ automatically be the refentry. Example:
 
 This gets converted into [^<link linkend="xml.refentry">xml.refentry</link>].
 
-[h3 function, class, member, enum or header links]
+[endsect]
+[section:code_links Code Links]
 
 If you want to link to a function, class, member, enum or header in the reference
 section, you can use:
@@ -401,7 +450,8 @@ automatically be the function, class, member or enum. Example:
 
 would have "boost::bar::baz" as the link text.
 
-[h3 Escape]
+[endsect]
+[section Escape]
 
 The escape mark-up is used when we don't want to do any processing.
 
@@ -426,7 +476,8 @@ Escaping allows us to pass XML markup to __boostbook__ or __docbook__. For examp
 [blurb __alert__ Be careful when using the escape. The text must conform to
 __boostbook__/__docbook__ syntax.]
 
-[h3 Single char escape]
+[endsect]
+[section Single char escape]
 
 The backslash may be used to escape a single punctuation character. The
 punctuation immediately after the backslash is passed without any processing.
@@ -436,15 +487,18 @@ For example, how do you escape the triple quote? Simple: [^\\'\\'\\']
 `\n` has a special meaning. It is used to generate line breaks. Note that `\n`
 is now preferred over `[br]`.
 
-[h3 Images (terminal)]
+[endsect]
+[section Images]
 
 [pre'''
 [$image.jpg]
 ''']
 
-[h2 Block Level Elements]
+[endsect]
+[endsect]
+[section:block Block Level Elements]
 
-[h3 Document]
+[section Document]
 
 Every document must begin with a Document Info section, which should look
 like this:
@@ -484,11 +538,11 @@ In its absence, version 1.1 is assumed.
 =version=, =id=, =dirname=, =copyright=, =purpose=, =category=, =authors=,
 =license=, =last-revision= and =source-mode= are optional information.
 
-=source-type= is a lowercase string setting the initial 
-[link quickbook.syntax.source_mode source mode]. If the =source-mode= field is omitted, a
-default value of =c++= will be used.
+=source-type= is a lowercase string setting the initial __source_mode__. If
+the =source-mode= field is omitted, a default value of =c++= will be used.
 
-[h3 Section]
+[endsect]
+[section Section]
 
 Starting a new section is accomplished with:
 
@@ -510,7 +564,8 @@ End a section with:
 
 Sections can nest, and that results in a hierarchy in the table of contents.
 
-[h3 xinclude]
+[endsect]
+[section xinclude]
 
 You can include another XML file with:
 
@@ -521,14 +576,18 @@ You can include another XML file with:
 This is useful when file.xml has been generated by Doxygen and contains your
 reference section.
 
-[h3 Paragraphs]
+[endsect]
+[section Paragraphs]
 
 Paragraphs start left-flushed and are terminated by two or more newlines. No
 markup is needed for paragraphs. QuickBook automatically detects paragraphs from
-the context. Block markups \[section, endsect, h1, h2, h3, h4, h5, h6, blurb, 
+the context. Block markups \[section, endsect, h1, h2, h3, h4, h5, h6, blurb,
 (block-quote) ':', pre, def, table and include \] may also terminate a paragraph.
-[h3 Ordered lists] 
-[/ ...removed leading newline above (before h3) to test paragraph termination]
+
+[endsect]
+
+[section Lists]
+[section Ordered lists]
 
 [pre
 # One
@@ -542,7 +601,8 @@ will generate:
 # Two
 # Three
 
-[h3 List Hierarchies]
+[endsect]
+[section List Hierarchies]
 
 List hierarchies are supported. Example:
 
@@ -574,7 +634,8 @@ will generate:
         # Four.a.ii
 # Five
 
-[h3 Long List Lines]
+[endsect]
+[section Long List Lines]
 
 Long lines will be wrapped appropriately. Example:
 
@@ -596,7 +657,8 @@ Long lines will be wrapped appropriately. Example:
   A very long item. A very long item. A very long item.
 # A short item.
 
-[h3 Unordered lists]
+[endsect]
+[section Unordered lists]
 
 [pre'''
 * First
@@ -610,7 +672,8 @@ will generate:
 * Second
 * Third
 
-[h3 Mixed lists]
+[endsect]
+[section Mixed lists]
 
 Mixed lists (ordered and unordered) are supported. Example:
 
@@ -666,10 +729,13 @@ will generate:
             * 2.b.2.a
             * 2.b.2.b
 
-[h3 Code]
+[endsect]
+[endsect]
+
+[section Code]
 
 Preformatted code starts with a space or a tab. The code will be
-syntax highlighted according to the current [link quickbook.syntax.source_mode source mode]:
+syntax highlighted according to the current __source_mode__:
 
 [c++]
 
@@ -688,7 +754,7 @@ syntax highlighted according to the current [link quickbook.syntax.source_mode s
 
     def cookForHtml(text):
         '''"Cooks" the input text for HTML.'''
-        
+
         return cgi.escape(text)
 
 Macros that are already defined are expanded in source code. Example:
@@ -707,12 +773,13 @@ Generates:
 
     using __quickbook__::__syntax_highlight__;
 
-[h3 Escaping Back To QuickBook]
+[endsect]
+[section:escape_back Escaping Back To QuickBook]
 
-Inside code, code blocks and inline code, QuickBook does not allow any 
-markup to avoid conflicts with the target syntax (e.g. c++). In case you 
-need to switch back to QuickBook markup inside code, you can do so using a 
-language specific /escape-back/ delimiter. In C++ and Python, the delimiter 
+Inside code, code blocks and inline code, QuickBook does not allow any
+markup to avoid conflicts with the target syntax (e.g. c++). In case you
+need to switch back to QuickBook markup inside code, you can do so using a
+language specific /escape-back/ delimiter. In C++ and Python, the delimiter
 is the double tick (back-quote): "\`\`" and "\`\`". Example:
 
 [pre'''
@@ -727,10 +794,11 @@ Will generate:
     {
     }
 
-When escaping from code to QuickBook, only phrase level markups are 
+When escaping from code to QuickBook, only phrase level markups are
 allowed. Block level markups like lists, tables etc. are not allowed.
 
-[h3 Preformatted]
+[endsect]
+[section Preformatted]
 
 Sometimes, you don't want some preformatted text to be parsed as C++. In such
 cases, use the [^[pre ... \]] markup block.
@@ -764,7 +832,8 @@ Some *preformatted* text                    Some *preformatted* text
 Notice that unlike Code, phrase markup such as font style is still permitted
 inside =pre= blocks.
 
-[h3 Blockquote]
+[endsect]
+[section Blockquote]
 
 [pre
 '''[:sometext...]'''
@@ -772,7 +841,8 @@ inside =pre= blocks.
 
 [:Indents the paragraph. This applies to one paragraph only.]
 
-[h3 Headings]
+[endsect]
+[section Headings]
 
 [pre'''
 [h1 Heading 1]
@@ -800,10 +870,10 @@ and all upper-case are converted to lower-case. For example: Heading
 [link section_id.normalized_header_text The link text]
 ''']
 
-to link to them. See [link quickbook.syntax.anchor_links Anchor links] and
-[link quickbook.syntax.section Section] for more info.
+to link to them. See __anchor_links__ and __section__ for more info.
 
-[h3 Macros]
+[endsect]
+[section Macros]
 
 [pre'''
 [def macro_identifier some text]
@@ -840,8 +910,7 @@ Some more examples:
 [def __spirit__     [@http://spirit.sourceforge.net Spirit]]
 ''']
 
-(See [link quickbook.syntax.images__terminal_ Images]
-and [link quickbook.syntax.links Links])
+(See __images__ and __links__)
 
 Invoking these macros:
 
@@ -853,7 +922,8 @@ will generate this:
 
 Hi __spirit__ :-)
 
-[h3 Predefined Macros]
+[endsect]
+[section Predefined Macros]
 
 Quickbook has some predefined macros that you can already use.
 
@@ -864,7 +934,8 @@ Quickbook has some predefined macros that you can already use.
     [['''__FILENAME__''']   [Quickbook source filename]     [__FILENAME__]]
 ]
 
-[h3 Blurbs]
+[endsect]
+[section Blurbs]
 
 [pre'''
 [blurb :-) [*An eye catching advertisement or note...]\n\n
@@ -884,7 +955,8 @@ will generate this:
     (EBNF) completely in C++.
 ]
 
-[h3 Tables]
+[endsect]
+[section Tables]
 
 [pre'''
 [table A Simple Table
@@ -904,10 +976,10 @@ will generate:
     [[R3-C0]     [R3-C1]     [R3-C2]]
 ]
 
-The table title is optional. The first row of the table is automatically 
-treated as the table header; that is, it is wrapped in 
-[^<thead>...</thead>] XML tags. Note that unlike the original QuickDoc, the 
-columns are nested in [ cells... ]. The syntax is free-format and allows 
+The table title is optional. The first row of the table is automatically
+treated as the table header; that is, it is wrapped in
+[^<thead>...</thead>] XML tags. Note that unlike the original QuickDoc, the
+columns are nested in [ cells... ]. The syntax is free-format and allows
 big cells to be formatted nicely. Example:
 
 [pre'''
@@ -984,7 +1056,8 @@ Here's how to have preformatted blocks of code in a table cell:
     ]
 ]
 
-[h3 Variable Lists]
+[endsect]
+[section Variable Lists]
 
 [pre'''
 [variablelist A Variable List
@@ -1007,7 +1080,8 @@ only 2 "columns" are allowed. The first column contains the terms, and
 the second column contains the definitions. Those familiar with HTML
 will recognize this as a "definition list".
 
-[h3 Include]
+[endsect]
+[section Include]
 
 You can include one QuickBook file from another. The syntax is simply:
 
@@ -1040,52 +1114,54 @@ named "Intro", the named anchor for that section will be "someid.intro",
 and you can link to it with [^\[link someid.intro The Intro\]].
 
 [endsect]
+[endsect]
+[endsect]
 [section:ref Quick Reference]
 
 [table Syntax Compendium
-    [[To do this...]        [Use this...]]
-    [[comment]              [[^'''[/ some comment]''']]]
-    [[['italics]]           [[^'''['italics] or /italics/''']]]
-    [[[*bold]]              [[^'''[*bold] or *bold*''']]]
-    [[[_underline]]         [[^'''[_underline] or _underline_''']]]
-    [[[^teletype]]          [[^'''[^teletype] or =teletype=''']]]
-    [[[-strikethrough]]     [[^'''[-strikethrough]''']]]
-    [[source mode]          [[^\[c++\]] or [^\[python\]]]]
-    [[inline code]          [[^'''`int main();`''']]]
-    [[code block]           [[^'''``int main();``''']]]
-    [[code escape]          [[^'''[[from c++ to QuickBook]]''']]]
-    [[line break]           [[^'''[br] or \n''']]]
-    [[anchor]               [[^'''[#anchor]''']]]
-    [[link]                 [[^'''[@http://www.boost.org Boost]''']]]
-    [[anchor link]          [[^'''[link section.anchor Link text]''']]]
-    [[refentry link]        [[^'''[link xml.refentry Link text]''']]]
-    [[function link]        [[^'''[funcref fully::qualified::function_name Link text]''']]]
-    [[class link]           [[^'''[classref fully::qualified::class_name Link text]''']]]
-    [[member link]          [[^'''[memberref fully::qualified::member_name Link text]''']]]
-    [[enum link]            [[^'''[enumref fully::qualified::enum_name Link text]''']]]
-    [[header link]          [[^'''[headerref path/to/header.hpp Link text]''']]]
-    [[escape]               [[^\'\'\'escaped text (no processing/formatting)\'\'\']]]
-    [[single char escape]   [[^\\c]]]
-    [[images]               [[^'''[$image.jpg]''']]]
-    [[begin section]        [[^'''[section The Section Title]''']]]
-    [[end section]          [[^'''[endsect]''']]]
-    [[paragraph]            [No markup. Paragraphs start left-flushed and are terminated by two or more newlines.]]
-    [[ordered list]         [[^# one\n# two\n# three\n]]]
-    [[unordered list]       [[^\* one\n\* two\n\* three\n]]]
-    [[code]                 [No markup. Preformatted code starts with a space or a tab.]]
-    [[preformatted]         [[^'''[pre preformatted]''']]]
-    [[block quote]          [[^'''[:sometext...]''']]]
-    [[heading 1]            [[^'''[h1 Heading 1]''']]]
-    [[heading 2]            [[^'''[h2 Heading 2]''']]]
-    [[heading 3]            [[^'''[h3 Heading 3]''']]]
-    [[heading 4]            [[^'''[h4 Heading 4]''']]]
-    [[heading 5]            [[^'''[h5 Heading 5]''']]]
-    [[heading 6]            [[^'''[h6 Heading 6]''']]]
-    [[macro]                [[^'''[def macro_identifier some text]''']]]
-    [[blurb]                [[^'''[blurb advertisement or note...]''']]]
-    [[table]                [[^[table Title\n \[\[a\]\[b\]\[c\]\]\n    \[\[a\]\[b\]\[c\]\]\n\]]]]
-    [[variablelist]         [[^[variablelist Title\n \[\[a\]\[b\]\]\n    \[\[a\]\[b\]\]\n\]]]]
-    [[include]              [[^'''[include someother.qbk]''']]]
+    [[To do this...]        [Use this...]                                   [See this...]]
+    [[comment]              [[^'''[/ some comment]''']]                     [__comments__]]
+    [[['italics]]           [[^'''['italics] or /italics/''']]              [__font_styles__ and __simple_formatting__]]
+    [[[*bold]]              [[^'''[*bold] or *bold*''']]                    [__font_styles__ and __simple_formatting__]]
+    [[[_underline]]         [[^'''[_underline] or _underline_''']]          [__font_styles__ and __simple_formatting__]]
+    [[[^teletype]]          [[^'''[^teletype] or =teletype=''']]            [__font_styles__ and __simple_formatting__]]
+    [[[-strikethrough]]     [[^'''[-strikethrough]''']]                     [__font_styles__ and __simple_formatting__]]
+    [[source mode]          [[^\[c++\]] or [^\[python\]]]                   [__source_mode__]]
+    [[inline code]          [[^'''`int main();`''']]                        [__inline_code__]]
+    [[code block]           [[^'''``int main();``''']]                      [__code__]]
+    [[code escape]          [[^'''``from c++ to QuickBook``''']]            [__escape_back__]]
+    [[line break]           [[^'''[br] or \n''']]                           [__line_break__]]
+    [[anchor]               [[^'''[#anchor]''']]                            [__anchors__]]
+    [[link]                 [[^'''[@http://www.boost.org Boost]''']]        [__links__]]
+    [[anchor link]          [[^'''[link section.anchor Link text]''']]      [__anchor_links__]]
+    [[refentry link]        [[^'''[link xml.refentry Link text]''']]        [__refentry_links__]]
+    [[function link]        [[^'''[funcref fully::qualified::function_name Link text]''']]      [__code_links__]]
+    [[class link]           [[^'''[classref fully::qualified::class_name Link text]''']]        [__code_links__]]
+    [[member link]          [[^'''[memberref fully::qualified::member_name Link text]''']]      [__code_links__]]
+    [[enum link]            [[^'''[enumref fully::qualified::enum_name Link text]''']]          [__code_links__]]
+    [[header link]          [[^'''[headerref path/to/header.hpp Link text]''']]                 [__code_links__]]
+    [[escape]               [[^\'\'\'escaped text (no processing/formatting)\'\'\']]            [__escape__]]
+    [[single char escape]   [[^\\c]]                                        [__single_char_escape__]]
+    [[images]               [[^'''[$image.jpg]''']]                         [__images__]]
+    [[begin section]        [[^'''[section The Section Title]''']]          [__section__]]
+    [[end section]          [[^'''[endsect]''']]                            [__section__]]
+    [[paragraph]            [No markup. Paragraphs start left-flushed and are terminated by two or more newlines.]  [__paragraphs__]]
+    [[ordered list]         [[^# one\n# two\n# three\n]]                    [__ordered_lists__]]
+    [[unordered list]       [[^\* one\n\* two\n\* three\n]]                 [__unordered_lists__]]
+    [[code]                 [No markup. Preformatted code starts with a space or a tab.]        [__code__]]
+    [[preformatted]         [[^'''[pre preformatted]''']]                   [__preformatted__]]
+    [[block quote]          [[^'''[:sometext...]''']]                       [__blockquote__]]
+    [[heading 1]            [[^'''[h1 Heading 1]''']]                       [__headings__]]
+    [[heading 2]            [[^'''[h2 Heading 2]''']]                       [__headings__]]
+    [[heading 3]            [[^'''[h3 Heading 3]''']]                       [__headings__]]
+    [[heading 4]            [[^'''[h4 Heading 4]''']]                       [__headings__]]
+    [[heading 5]            [[^'''[h5 Heading 5]''']]                       [__headings__]]
+    [[heading 6]            [[^'''[h6 Heading 6]''']]                       [__headings__]]
+    [[macro]                [[^'''[def macro_identifier some text]''']]     [__macros__]]
+    [[blurb]                [[^'''[blurb advertisement or note...]''']]     [__blurbs__]]
+    [[table]                [[^[table Title\n \[\[a\]\[b\]\[c\]\]\n    \[\[a\]\[b\]\[c\]\]\n\]]]    [__tables__]]
+    [[variablelist]         [[^[variablelist Title\n \[\[a\]\[b\]\]\n    \[\[a\]\[b\]\]\n\]]]       [__variable_lists__]]
+    [[include]              [[^'''[include someother.qbk]''']]              [__include__]]
 ]
 
 [endsect]
