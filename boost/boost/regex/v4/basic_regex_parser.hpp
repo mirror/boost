@@ -1220,6 +1220,17 @@ void basic_regex_parser<charT, traits>::parse_set_literal(basic_char_set<charT, 
          char_set.add_range(start_range, end_range);
          if(this->m_traits.syntax_type(*m_position) == regex_constants::syntax_dash)
          {
+			   if(m_end == ++m_position)
+			   {
+				   fail(regex_constants::error_brack, m_position - m_base);
+				   return;
+			   }
+			   if(this->m_traits.syntax_type(*m_position) == regex_constants::syntax_close_set)
+			   {
+               // trailing - :
+               --m_position;
+               return;
+			   }
             fail(regex_constants::error_range, m_position - m_base);
             return;
          }
