@@ -37,6 +37,8 @@ void test_sets()
    TEST_REGEX_SEARCH("a[^]b]c", extended, "adc", match_default, make_array(0, 3, -2, -2));
    TEST_REGEX_SEARCH("a[^-b]c", extended, "adc", match_default, make_array(0, 3, -2, -2));
    TEST_REGEX_SEARCH("a[b-]c", extended, "a-c", match_default, make_array(0, 3, -2, -2));
+   TEST_REGEX_SEARCH("a[a-z-]c", extended, "a-c", match_default, make_array(0, 3, -2, -2));
+   TEST_REGEX_SEARCH("a[a-z-]+c", extended, "aaz-c", match_default, make_array(0, 5, -2, -2));
    TEST_INVALID_REGEX("a[b", extended);
    TEST_INVALID_REGEX("a[", extended);
    TEST_INVALID_REGEX("a[]", extended);
