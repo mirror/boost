@@ -64,14 +64,17 @@ namespace quickbook
 
                 qbk_phrase =
                    *(   common
-                    |   (anychar_p - ']')   [self.escape_actions.plain_char]
+                    |   (anychar_p - str_p("``"))   [self.escape_actions.plain_char]
                     )
                     ;
 
                 escape
-                    = str_p("[[")           [PreEscape(self.escape_actions, save)]
-                    >> qbk_phrase
-                    >> str_p("]]")          [PostEscape(self.out, self.escape_actions, save)]
+                    = str_p("``")           [PreEscape(self.escape_actions, save)]
+                    >>  (
+                            (+(anychar_p - "``") >> eps_p("``"))
+                            & qbk_phrase
+                        )
+                    >> str_p("``")          [PostEscape(self.out, self.escape_actions, save)]
                     ;
 
                 preprocessor
@@ -190,14 +193,17 @@ namespace quickbook
 
                 qbk_phrase =
                    *(   common
-                    |   (anychar_p - ']')   [self.escape_actions.plain_char]
+                    |   (anychar_p - str_p("``"))   [self.escape_actions.plain_char]
                     )
                     ;
 
                 escape
-                    = str_p("[[")           [PreEscape(self.escape_actions, save)]
-                    >> qbk_phrase
-                    >> str_p("]]")          [PostEscape(self.out, self.escape_actions, save)]
+                    = str_p("``")           [PreEscape(self.escape_actions, save)]
+                    >>  (
+                            (+(anychar_p - "``") >> eps_p("``"))
+                            & qbk_phrase
+                        )
+                    >> str_p("``")          [PostEscape(self.out, self.escape_actions, save)]
                     ;
 
                 comment
