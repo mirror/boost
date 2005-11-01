@@ -120,9 +120,9 @@ template<class F> struct unwrapper
         return f;
     }
 
-    template<class F2> static inline F2 & unwrap( reference_wrapper<F2> const & f, int )
+    template<class F2> static inline F2 & unwrap( reference_wrapper<F2> rf, int )
     {
-        return f->get();
+        return rf.get();
     }
 
     template<class R, class T> static inline _mfi::dm<R, T> unwrap( R T::* pm, int )
