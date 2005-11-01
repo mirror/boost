@@ -378,7 +378,7 @@ namespace boost { namespace numeric { namespace ublas {
         // BOOST_UBLAS_INLINE This function seems to be big. So we do not let the compiler inline it.    
         std::pair<iterator,bool> insert (const value_type &p) {
             iterator it = detail::lower_bound (begin (), end (), p, detail::less_pair<value_type> ());
-            if (it->first == p.first)
+            if (it != end () && it->first == p.first)
                 return std::make_pair (it, false);
             difference_type n = it - begin ();
             BOOST_UBLAS_CHECK (size () == 0 || size () == size_type (n), external_logic ());
