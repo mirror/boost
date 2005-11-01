@@ -42,7 +42,7 @@ namespace posix_time {
   //! Convert a time_duration to a tm structure truncating any fractional seconds and zeroing fields for date components 
   inline
   std::tm to_tm(const boost::posix_time::time_duration& td) {
-    tm timetm;
+    std::tm timetm;
     timetm.tm_year = 0;
     timetm.tm_mon = 0;
     timetm.tm_mday = 0;
