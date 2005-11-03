@@ -1548,12 +1548,23 @@ template<class F, class A1, class A2, class A3, class A4, class A5, class A6, cl
 
 // data member pointers
 
-/*
+#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 
-#if defined(__GNUC__) && (__GNUC__ == 2)
+template<class R, class T, class A1>
+_bi::bind_t< R, _mfi::dm<R, T>, typename _bi::list_av_1<A1>::type >
+    BOOST_BIND(R T::*f, A1 a1)
+{
+    typedef _mfi::dm<R, T> F;
+    typedef typename _bi::list_av_1<A1>::type list_type;
+    return _bi::bind_t<R, F, list_type>( F(f), list_type(a1) );
+}
+
+#else
 
 namespace _bi
 {
+
+#if defined(__GNUC__) && (__GNUC__ == 2)
 
 template<class T> struct add_cref
 {
@@ -1565,45 +1576,62 @@ template<class T> struct add_cref< T & >
     typedef T const & type;
 };
 
-template<> struct add_cref<void>
+template<> struct add_cref< void >
 {
     typedef void type;
 };
 
+#endif
+
+template<class M, class R> struct dm_result
+{
+    typedef M type;
+};
+
+template<class M, class R> struct dm_result< M, R& >
+{
+    typedef M const & type;
+};
+
 } // namespace _bi
 
-template<class R, class T, class A1>
-_bi::bind_t< typename _bi::add_cref<R>::type, _mfi::dm<R, T>, typename _bi::list_av_1<A1>::type >
-    BOOST_BIND(R T::*f, A1 a1)
+#if defined(__GNUC__) && (__GNUC__ == 2)
+
+template<class M, class T, class A1>
+_bi::bind_t< typename _bi::add_cref<M>::type, _mfi::dm<M, T>, typename _bi::list_av_1<A1>::type >
+    BOOST_BIND( M T::*f, A1 a1 )
 {
-    typedef _mfi::dm<R, T> F;
+    typedef typename _bi::add_cref<M>::type result_type;
+    typedef _mfi::dm<M, T> F;
     typedef typename _bi::list_av_1<A1>::type list_type;
-    return _bi::bind_t<typename _bi::add_cref<R>::type, F, list_type>(F(f), list_type(a1));
+    return _bi::bind_t<result_type, F, list_type>(F(f), list_type(a1));
 }
 
 #else
 
-template<class R, class T, class A1>
-_bi::bind_t< R const &, _mfi::dm<R, T>, typename _bi::list_av_1<A1>::type >
-    BOOST_BIND(R T::*f, A1 a1)
+template<class M, class T, class A1>
+_bi::bind_t< M const &, _mfi::dm<M, T>, typename _bi::list_av_1<A1>::type >
+    BOOST_BIND( M T::*f, A1 a1 )
 {
-    typedef _mfi::dm<R, T> F;
+    typedef M const & result_type;
+    typedef _mfi::dm<M, T> F;
     typedef typename _bi::list_av_1<A1>::type list_type;
-    return _bi::bind_t<R const &, F, list_type>(F(f), list_type(a1));
+    return _bi::bind_t<result_type, F, list_type>(F(f), list_type(a1));
 }
 
 #endif
 
-*/
-
-template<class R, class T, class A1>
-_bi::bind_t< R, _mfi::dm<R, T>, typename _bi::list_av_1<A1>::type >
-    BOOST_BIND(R T::*f, A1 a1)
+template<class M, class T, class R2, class F2, class L2>
+_bi::bind_t< typename _bi::dm_result<M, R2>::type, _mfi::dm<M, T>, typename _bi::list_av_1< _bi::bind_t<R2, F2, L2> >::type >
+    BOOST_BIND( M T::*f, _bi::bind_t<R2, F2, L2> a1 )
 {
-    typedef _mfi::dm<R, T> F;
-    typedef typename _bi::list_av_1<A1>::type list_type;
-    return _bi::bind_t<R, F, list_type>( F(f), list_type(a1) );
+    typedef typename _bi::dm_result<M, R2>::type result_type;
+    typedef typename _bi::list_av_1< _bi::bind_t<R2, F2, L2> >::type list_type;
+    typedef _mfi::dm<M, T> F;
+    return _bi::bind_t< result_type, F, list_type >( F(f), list_type(a1) );
 }
+
+#endif
 
 } // namespace boost
 
