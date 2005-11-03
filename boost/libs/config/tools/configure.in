@@ -65,6 +65,19 @@ esac
 ]
 )
 
+dnl figure out which version of sed to use, on some platforms
+dnl the version in the path is not Unix conforming (MacOS X ? )
+
+if test -f /bin/sed ; then
+   SED=/bin/sed
+else
+   if test -f /usr/bin/sed ; then
+      SED=/usr/bin/sed
+   else
+      SED=sed
+   fi
+fi
+
 dnl Set the boost main directory.
 AC_MSG_CHECKING(for boost main tree)
 boost_base=
@@ -74,7 +87,7 @@ AC_ARG_WITH(boost,
   #echo "--with boost is set"
   if test "x$withval" != "x"; then
     if test "x$withval" != no; then
-      boost_base=`echo "$withval" | sed 's,//*,/,g' | sed 's,/$,,'`
+      boost_base=`echo "$withval" | $SED 's,//*,/,g' | $SED 's,/$,,'`
       #echo boost_base=$boost_base
       if test -f "$boost_base/boost/config.hpp"; then
         if test -f "$boost_base/libs/config/configure"; then :; else
@@ -146,9 +159,9 @@ AC_CHECK_LIB(rt, clock)
 #
 for file in $boost_base/libs/config/test/boost_no*.ipp; do
 
-   basename=`echo $file | sed 's/.*boost_\(.*\)\.ipp/\1/'`
-   macroname=`cat $file | grep '^//[[]    []]*MACRO:' | sed 's/.*MACRO:[[]    []]*\([[]_A-Z0-9[]]*\).*/\1/'`
-   title=`cat $file | grep '^//[[]  []]*TITLE:' | sed 's/.*TITLE:[[]    []]*\([[]^  []].*\)/\1/'`
+   basename=`echo $file | $SED 's/.*boost_\(.*\)\.ipp/\1/'`
+   macroname=`cat $file | grep '^//[[ 	]]*MACRO:' | $SED 's/.*MACRO:[[ 	]]*\([[_A-Z0-9]]*\).*/\1/'`
+   title=`cat $file | grep '^//[[ 	]]*TITLE:' | $SED 's/.*TITLE:[[ 	]]*\([[^ 	]].*\)/\1/'`
    namespace=`echo $macroname | tr [[A-Z]] [[a-z]]`
 
 #echo file      = $file
@@ -214,9 +227,9 @@ done
 #
 for file in $boost_base/libs/config/test/boost_has*.ipp; do
 
-   basename=`echo $file | sed 's/.*boost_\(.*\)\.ipp/\1/'`
-   macroname=`cat $file | grep '^//[[]    []]*MACRO:' | sed 's/.*MACRO:[[]    []]*\([[]_A-Z0-9[]]*\).*/\1/'`
-   title=`cat $file | grep '^//[[]  []]*TITLE:' | sed 's/.*TITLE:[[]    []]*\([[]^  []].*\)/\1/'`
+   basename=`echo $file | $SED 's/.*boost_\(.*\)\.ipp/\1/'`
+   macroname=`cat $file | grep '^//[[ 	]]*MACRO:' | $SED 's/.*MACRO:[[ 	]]*\([[_A-Z0-9]]*\).*/\1/'`
+   title=`cat $file | grep '^//[[ 	]]*TITLE:' | $SED 's/.*TITLE:[[ 	]]*\([[^ 	]].*\)/\1/'`
    namespace=`echo $macroname | tr [[A-Z]] [[a-z]]`
 
 #  echo $file
@@ -415,6 +428,7 @@ cat_conts="$cat_conts"
 )
 
 fi
+
 
 
 
