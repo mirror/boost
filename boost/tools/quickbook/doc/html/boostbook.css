@@ -187,14 +187,13 @@
     .table table
     {
         width: 92%;
-        margin-left: 4%;
-        margin-right: 4%;
+        margin: 0% 4% 0% 4%;
     }
     
     div.informaltable table, 
     div.table table
     {
-        padding: 4px;
+        padding: 4px 0px 4px 0px;
     }
     
     /* Table Cells */
@@ -222,7 +221,7 @@
         font-size: 10pt; /* A little bit smaller than the main text */
         line-height: 1.2;
     }
-    
+
     td.blurb img
     {
         padding: 1pt;
@@ -352,7 +351,7 @@
         {
             background-color: #F0F0F0;
         }
-    
+
         div.informaltable table tr th, 
         div.table table tr th
         {
