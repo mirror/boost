@@ -45,7 +45,7 @@ bool bcp_implementation::is_binary_file(const fs::path& p)
       if(pos != m_cvs_paths.end()) return pos->second;
    }
    static const boost::regex e(
-      "(.*\\."
+      ".*\\."
       "(?:"
          "c|cxx|cpp|h|hxx|hpp|inc|html?|css|mak|in"
       ")"
