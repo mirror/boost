@@ -132,6 +132,7 @@ Features include:
 * Allow untitled tables.
 * Allow phrase markups in section titles.
 * Allow escaping back to QuickBook from code, code blocks and inline code.
+* Footnotes, with the \[footnote This is the footnote\] syntax.
 
 [endsect]
 
@@ -493,6 +494,19 @@ is now preferred over `[br]`.
 [pre'''
 [$image.jpg]
 ''']
+
+[endsect]
+[section Footnotes]
+
+As of version 1.3, QuickBook supports footnotes. Just put the text of the
+footnote in a `[footnote]` block, and the text will be put at the bottom
+of the current page. For example, this:
+
+[pre'''
+[footnote A sample footnote]
+''']
+
+will generate this[footnote A sample footnote].
 
 [endsect]
 [endsect]

@@ -164,6 +164,7 @@ namespace quickbook
                         |   teletype
                         |   strikethrough
                         |   quote
+                        |   footnote
                         |   str_p("br")                 [actions.break_]
                         )
                     >>  ']'
@@ -292,6 +293,11 @@ namespace quickbook
                     |   "python"
                     )                                   [assign_a(actions.source_mode)]
                     ;
+
+                footnote =
+                        str_p("footnote")               [actions.footnote_pre]
+                    >>  blank >> phrase                 [actions.footnote_post]
+                    ;
             }
             
             rule<Scanner>   space, blank, comment, phrase, phrase_markup, image, 
@@ -301,7 +307,7 @@ namespace quickbook
                             link, hard_space, eol, inline_code, simple_format, 
                             simple_bold, simple_italic, simple_underline, 
                             simple_teletype, source_mode, //simple_strikethrough,
-                            quote, code_block;
+                            quote, code_block, footnote;
 
             rule<Scanner> const&
             start() const { return common; }

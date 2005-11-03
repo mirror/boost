@@ -127,6 +127,8 @@ namespace quickbook
         const char* enumref_post_       = "</enumname>";
         const char* headerref_pre_      = "<headername alt=\"";
         const char* headerref_post_     = "</headername>";
+        const char* footnote_pre_       = "<footnote><para>";
+        const char* footnote_post_      = "</para></footnote>";
     }
     
     struct error_action
@@ -776,6 +778,8 @@ namespace quickbook
         markup_action           strikethrough_post;
         markup_action           quote_pre;
         markup_action           quote_post;
+        markup_action           footnote_pre;
+        markup_action           footnote_post;
 
         simple_phrase_action    simple_bold;
         simple_phrase_action    simple_italic;

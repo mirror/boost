@@ -41,6 +41,7 @@
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.escape">Escape</a></span></dt>
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.single_char_escape">Single char escape</a></span></dt>
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.images">Images</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.footnotes">Footnotes</a></span></dt>
 </dl></div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
@@ -135,7 +136,7 @@ the true business precept.]
 </ul></div>
 <div class="informaltable">
 <h4>
-<a name="id372869"></a><span class="table-title">More Formatting Samples</span>
+<a name="id378349"></a><span class="table-title">More Formatting Samples</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -321,7 +322,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
         </p>
 <div class="informaltable">
 <h4>
-<a name="id442648"></a><span class="table-title">Supported Source Modes</span>
+<a name="id447052"></a><span class="table-title">Supported Source Modes</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -506,6 +507,28 @@ escape (no processing/formatting)
 <a name="quickbook.syntax.phrase.images"></a>Images</h4></div></div></div>
 <pre class="programlisting">[$image.jpg]
 </pre>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="quickbook.syntax.phrase.footnotes"></a>Footnotes</h4></div></div></div>
+<p>
+          As of version 1.3, QuickBook supports footnotes. Just put the text of the
+          footnote in a <tt class="computeroutput"><span class="special">[</span><span class="identifier">footnote</span><span class="special">]</span></tt> block, and the text will be put at the
+          bottom of the current page. For example, this:
+        </p>
+<pre class="programlisting">[footnote A sample footnote]
+</pre>
+<p>
+          will generate this
+          <sup>[<a name="id447656" href="#ftn.id447656">1</a>]</sup>
+          .
+        </p>
+</div>
+<div class="footnotes">
+<br><hr width="100" align="left">
+<div class="footnote"><p><sup>[<a name="ftn.id447656" href="#id447656">1</a>] </sup>
+              A sample footnote
+            </p></div>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
