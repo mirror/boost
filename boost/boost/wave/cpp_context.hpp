@@ -52,8 +52,8 @@ namespace wave {
 //                      defaults to the 
 //                          iteration_context_policies::load_file_to_string
 //                      type
-//      TraceT          The trace policy to use for trace and include file
-//                      notification callback.
+//      HooksT          The hooks policy to use for different notification 
+//                      callbacks.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -61,7 +61,7 @@ template <
     typename IteratorT,
     typename LexIteratorT, 
     typename InputPolicyT = iteration_context_policies::load_file_to_string,
-    typename TraceT = context_policies::default_preprocessing_hooks
+    typename HooksT = context_policies::default_preprocessing_hooks
 >
 class context {
 
@@ -73,7 +73,7 @@ public:
     
 // public typedefs
     typedef typename LexIteratorT::token_type       token_type;
-    typedef context<IteratorT, LexIteratorT, InputPolicyT, TraceT> 
+    typedef context<IteratorT, LexIteratorT, InputPolicyT, HooksT> 
         self_type;
     
     typedef IteratorT                               target_iterator_type;
@@ -88,7 +88,7 @@ public:
         token_sequence_type;
 
 // types of the policies
-    typedef TraceT                                  trace_policy_type;
+    typedef HooksT                                  hook_policy_type;
     
 private:
 // stack of shared_ptr's to the pending iteration contexts 
@@ -104,12 +104,12 @@ private:
     
 public:
     context(target_iterator_type const &first_, target_iterator_type const &last_, 
-            char const *fname = "<Unknown>", TraceT const &trace_ = TraceT())
+            char const *fname = "<Unknown>", HooksT const &hooks_ = HooksT())
     :   first(first_), last(last_), filename(fname)
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
         , current_filename(fname)
 #endif 
-        , macros(*this), language(boost::wave::support_cpp), trace(trace_)
+        , macros(*this), language(boost::wave::support_cpp), hooks(hooks_)
     {
         macros.init_predefined_macros(fname);
         includes.init_initial_path();
@@ -181,16 +181,16 @@ public:
     iter_size_type get_max_include_nesting_depth() const
         { return iter_ctxs.get_max_include_nesting_depth(); }
 
-// access the trace policy
-    trace_policy_type &get_trace_policy() 
-        { return trace; }
+// access the hooks policy
+    hook_policy_type &get_hooks() 
+        { return hooks; }
 
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
 protected:
     friend class boost::wave::pp_iterator<
-        boost::wave::context<IteratorT, lexer_type, InputPolicyT, TraceT> >;
+        boost::wave::context<IteratorT, lexer_type, InputPolicyT, HooksT> >;
     friend class boost::wave::impl::pp_iterator_functor<
-        boost::wave::context<IteratorT, lexer_type, InputPolicyT, TraceT> >;
+        boost::wave::context<IteratorT, lexer_type, InputPolicyT, HooksT> >;
 #endif
     
 // maintain include paths (helper functions)
@@ -271,20 +271,8 @@ public:
     bool interpret_pragma(ContainerT &pending, token_type const &option, 
         ContainerT const &values, token_type const &act_token)
     {
-        return trace.interpret_pragma(*this, pending, option, values, 
+        return hooks.interpret_pragma(*this, pending, option, values, 
             act_token);
-    }
-    template <typename ParametersT, typename DefinitionT>
-    void defined_macro(token_type const &name, bool is_functionlike, 
-        ParametersT const &parameters, DefinitionT const &definition, 
-        bool is_predefined)
-    {
-        trace.defined_macro(name, is_functionlike, parameters, definition, 
-            is_predefined);
-    }
-    void undefined_macro(token_type const &token)
-    {
-        trace.undefined_macro(token);
     }
     
 private:
@@ -301,7 +289,7 @@ private:
     iteration_context_stack_type iter_ctxs;       // iteration contexts
     boost::wave::util::macromap<self_type> macros;  // map of defined macros
     boost::wave::language_support language;       // supported language/extensions
-    trace_policy_type trace;                      // trace policy instance
+    hook_policy_type hooks;                      // hook policy instance
 };
 
 ///////////////////////////////////////////////////////////////////////////////

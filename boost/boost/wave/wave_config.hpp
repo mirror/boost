@@ -15,6 +15,7 @@
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
+
 #include <boost/version.hpp>
 #include <boost/spirit/version.hpp>
 #include <boost/wave/wave_version.hpp>
@@ -187,7 +188,7 @@
 //#define BOOST_SPIRIT_DEBUG
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Debug flags for the Wave library, possible flags spcified below.
+//  Debug flags for the Wave library, possible flags specified below.
 //
 //  Note: These flags take effect only if the BOOST_SPIRIT_DEBUG constant
 //        above is defined as well.

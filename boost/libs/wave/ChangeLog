@@ -22,6 +22,14 @@ TODO (known issues):
 
 CHANGELOG
 
+- Version 1.2.2
+- Added three new preprocessing hooks: 'found_directive', 'skipped_token' and 
+  'evaluated_conditional_expression' (thanks to Andreas Sæbjørnsen for the 
+  suggestions).
+- Removed hook forwarding functions in the context_type.
+- Added missing include_next case branches for get_directivename() function.
+
+
 Boost V1.33.1
 - Version 1.2.1
 - Fixed bug reported as Sourceforge bug 1274584.

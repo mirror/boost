@@ -84,7 +84,7 @@ struct cpp_grammar_gen
     static bool found_eof;
 
 //  the found_directive contains the token_id of the recognized pp directive
-    static boost::wave::token_id found_directive;
+    static token_type found_directive;
         
 //  parse the cpp_grammar and return the resulting parse tree    
     static boost::spirit::tree_parse_info<iterator_type> 
@@ -100,14 +100,16 @@ cpp_grammar_rule_ids
 
 template <typename LexIteratorT>
 typename LexIteratorT::token_type::position_type 
-    cpp_grammar_gen<LexIteratorT>::pos_of_newline;
+    cpp_grammar_gen<LexIteratorT>::pos_of_newline = 
+        typename LexIteratorT::token_type::position_type();
 
 template <typename LexIteratorT>
 bool cpp_grammar_gen<LexIteratorT>::found_eof = false;
 
 template <typename LexIteratorT>
-boost::wave::token_id cpp_grammar_gen<LexIteratorT>::found_directive = 
-    boost::wave::T_EOF;
+typename cpp_grammar_gen<LexIteratorT>::token_type
+    cpp_grammar_gen<LexIteratorT>::found_directive = 
+        typename cpp_grammar_gen<LexIteratorT>::token_type();
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace grammars

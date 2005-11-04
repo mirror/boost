@@ -357,7 +357,7 @@ pp_iterator_functor<ContextT>::returned_from_include()
 {
     if (iter_ctx->first == iter_ctx->last && ctx.get_iteration_depth() > 0) {
     // call the include policy trace function
-        ctx.get_trace_policy().returning_from_include_file();
+        ctx.get_hooks().returning_from_include_file();
         
     // restore the previous iteration context after finishing the preprocessing 
     // of the included file
@@ -542,6 +542,7 @@ bool returned_from_include_file = returned_from_include();
                 
                 if (!ctx.get_if_block_status()) {
                 // skip this token because of the disabled #if block
+                    ctx.get_hooks().skipped_token(act_token);
                     continue;
                 }
                 return act_token; 
@@ -572,6 +573,7 @@ bool returned_from_include_file = returned_from_include();
                 }
 
             // next token
+                ctx.get_hooks().skipped_token(act_token);
                 ++iter_ctx->first;
             }
             
@@ -877,8 +879,11 @@ parse_node_value_type const &nodeval = get_first_leaf(*root.begin()).value;
 const_child_iterator_t begin_child_it = (*root.begin()).children.begin();
 const_child_iterator_t end_child_it = (*root.begin()).children.end();
 
-token_id id = cpp_grammar_type::found_directive;
+token_id id = token_id(cpp_grammar_type::found_directive);
 
+    // call preprocessing hook
+    ctx.get_hooks().found_directive(cpp_grammar_type::found_directive);     
+    
     switch (static_cast<unsigned int>(id)) {
     case T_PP_QHEADER:      // #include "..."
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
@@ -1018,7 +1023,7 @@ char const *current_name = 0;   // never try to match current file name
 #endif
 
 // call the include policy trace function
-    ctx.get_trace_policy().found_include_directive(f, include_next);
+    ctx.get_hooks().found_include_directive(f, include_next);
 
     if (!ctx.find_include_file (file_path, dir_path, is_system, current_name)) {
         BOOST_WAVE_THROW(preprocess_exception, bad_include_file, 
@@ -1046,7 +1051,7 @@ fs::path native_path(file_path, fs::native);
             act_pos, ctx.get_language()));
 
     // call the include policy trace function
-        ctx.get_trace_policy().opened_include_file(dir_path, file_path,
+        ctx.get_hooks().opened_include_file(dir_path, file_path,
             ctx.get_iteration_depth(), is_system);
 
     // store current file position
@@ -1252,10 +1257,15 @@ pp_iterator_functor<ContextT>::on_ifdef(
     typename parse_tree_type::const_iterator const &end)
 {
 get_token_value<result_type, parse_node_type> get_value;
-bool is_defined = ctx.is_defined_macro(
-        make_ref_transform_iterator((*begin).children.begin(), get_value), 
-        make_ref_transform_iterator((*begin).children.end(), get_value));
+token_sequence_type toexpand;
 
+    std::copy(make_ref_transform_iterator((*begin).children.begin(), get_value), 
+        make_ref_transform_iterator((*begin).children.end(), get_value),
+        std::inserter(toexpand, toexpand.end()));
+
+bool is_defined = ctx.is_defined_macro(toexpand.begin(), toexpand.end());
+
+    ctx.get_hooks().evaluated_conditional_expression(toexpand, is_defined);
     ctx.enter_if_block(is_defined);
 }
 
@@ -1271,10 +1281,15 @@ pp_iterator_functor<ContextT>::on_ifndef(
     typename parse_tree_type::const_iterator const &end)
 {
 get_token_value<result_type, parse_node_type> get_value;
-bool is_defined = ctx.is_defined_macro(
-        make_ref_transform_iterator((*begin).children.begin(), get_value), 
-        make_ref_transform_iterator((*begin).children.end(), get_value));
+token_sequence_type toexpand;
 
+    std::copy(make_ref_transform_iterator((*begin).children.begin(), get_value), 
+        make_ref_transform_iterator((*begin).children.end(), get_value),
+        std::inserter(toexpand, toexpand.end()));
+
+bool is_defined = ctx.is_defined_macro(toexpand.begin(), toexpand.end());
+
+    ctx.get_hooks().evaluated_conditional_expression(toexpand, is_defined);
     ctx.enter_if_block(!is_defined);
 }
 
@@ -1359,9 +1374,12 @@ token_sequence_type toexpand;
 #endif
 
 // parse the expression and enter the #if block
-    ctx.enter_if_block(grammars::expression_grammar_gen<result_type>::
+bool if_status = grammars::expression_grammar_gen<result_type>::
             evaluate(expanded.begin(), expanded.end(), act_pos,
-                ctx.get_if_block_status()));
+                ctx.get_if_block_status());
+                
+    ctx.get_hooks().evaluated_conditional_expression(toexpand, if_status);
+    ctx.enter_if_block(if_status);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1421,9 +1439,12 @@ token_sequence_type toexpand;
 #endif
 
 // parse the expression and enter the #elif block
-    ctx.enter_elif_block(grammars::expression_grammar_gen<result_type>::
+bool if_status = grammars::expression_grammar_gen<result_type>::
             evaluate(expanded.begin(), expanded.end(), act_pos,
-                ctx.get_if_block_status()));
+                ctx.get_if_block_status());
+                
+    ctx.get_hooks().evaluated_conditional_expression(toexpand, if_status);
+    ctx.enter_elif_block(if_status);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

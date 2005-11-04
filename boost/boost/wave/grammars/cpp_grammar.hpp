@@ -91,18 +91,18 @@ namespace impl {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+    template <typename TokenT>
     struct store_found_directive {
 
-        store_found_directive(boost::wave::token_id &found_directive_) 
+        store_found_directive(TokenT &found_directive_) 
         :   found_directive(found_directive_) {}
         
-        template <typename TokenT>
         void operator()(TokenT const &token) const
         {
-            found_directive = boost::wave::token_id(token);
+            found_directive = token;
         }
         
-        boost::wave::token_id &found_directive;
+        TokenT &found_directive;
     };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -143,14 +143,15 @@ namespace impl {
 
 ///////////////////////////////////////////////////////////////////////////////
 // Encapsulation of the C++ preprocessor grammar.
-template <typename PositionT>
+template <typename TokenT>
 struct cpp_grammar : 
-    public boost::spirit::grammar<cpp_grammar<PositionT> >
+    public boost::spirit::grammar<cpp_grammar<TokenT> >
 {
-    typedef cpp_grammar<PositionT>          grammar_t;
-    typedef impl::store_position<PositionT> store_pos_t;
-    typedef impl::store_found_eof           store_found_eof_t;
-    typedef impl::store_found_directive     store_found_directive_t;
+    typedef typename TokenT::position_type  position_type;
+    typedef cpp_grammar<position_type>      grammar_type;
+    typedef impl::store_position<position_type> store_pos_type;
+    typedef impl::store_found_eof           store_found_eof_type;
+    typedef impl::store_found_directive<TokenT> store_found_directive_type;
     
     template <typename ScannerT>
     struct definition
@@ -166,27 +167,27 @@ struct cpp_grammar :
         typedef 
             boost::spirit::scanner<typename ScannerT::iterator_t, policies_t> 
             non_tree_scanner_t;
-        typedef boost::spirit::rule<non_tree_scanner_t> no_tree_rule_t;
+        typedef boost::spirit::rule<non_tree_scanner_t> no_tree_rule_type;
 
     // 'normal' (parse_tree generating) rule type
-        typedef boost::spirit::rule<ScannerT> rule_t;
+        typedef boost::spirit::rule<ScannerT> rule_type;
 
-        rule_t pp_statement;
-        rule_t include_file, system_include_file, macro_include_file;
-        rule_t plain_define, macro_definition, macro_parameters;
-        rule_t undefine;
-        rule_t ppifdef, ppifndef, ppif, ppelse, ppelif, ppendif;
-        rule_t ppline; 
-        rule_t pperror;
-        rule_t ppwarning;
-        rule_t pppragma;
-        rule_t illformed;
-        rule_t ppqualifiedname;
-        rule_t eol_tokens;
-        no_tree_rule_t ppsp;
+        rule_type pp_statement;
+        rule_type include_file, system_include_file, macro_include_file;
+        rule_type plain_define, macro_definition, macro_parameters;
+        rule_type undefine;
+        rule_type ppifdef, ppifndef, ppif, ppelse, ppelif, ppendif;
+        rule_type ppline; 
+        rule_type pperror;
+        rule_type ppwarning;
+        rule_type pppragma;
+        rule_type illformed;
+        rule_type ppqualifiedname;
+        rule_type eol_tokens;
+        no_tree_rule_type ppsp;
 #if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
-        rule_t ppregion;
-        rule_t ppendregion;
+        rule_type ppregion;
+        rule_type ppendregion;
 #endif
 
         definition(cpp_grammar const &self) 
@@ -274,19 +275,19 @@ struct cpp_grammar :
         // #include ...
             include_file            // include "..."
                 =   ch_p(T_PP_QHEADER) 
-                    [ store_found_directive_t(self.found_directive) ]
+                    [ store_found_directive_type(self.found_directive) ]
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
                 |   ch_p(T_PP_QHEADER_NEXT)
-                    [ store_found_directive_t(self.found_directive) ]
+                    [ store_found_directive_type(self.found_directive) ]
 #endif 
                 ;
 
             system_include_file     // include <...>
                 =   ch_p(T_PP_HHEADER) 
-                    [ store_found_directive_t(self.found_directive) ]
+                    [ store_found_directive_type(self.found_directive) ]
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
                 |   ch_p(T_PP_HHEADER_NEXT)
-                    [ store_found_directive_t(self.found_directive) ]
+                    [ store_found_directive_type(self.found_directive) ]
 #endif 
                 ;
 
@@ -294,10 +295,10 @@ struct cpp_grammar :
                 =   no_node_d
                     [
                         ch_p(T_PP_INCLUDE)
-                        [ store_found_directive_t(self.found_directive) ]
+                        [ store_found_directive_type(self.found_directive) ]
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
                     |   ch_p(T_PP_INCLUDE_NEXT)
-                        [ store_found_directive_t(self.found_directive) ]
+                        [ store_found_directive_type(self.found_directive) ]
 #endif
                     ]
                     >> *(   anychar_p -
@@ -310,7 +311,7 @@ struct cpp_grammar :
                 =   no_node_d
                     [
                         ch_p(T_PP_DEFINE) 
-                        [ store_found_directive_t(self.found_directive) ]
+                        [ store_found_directive_type(self.found_directive) ]
                         >> +ppsp
                     ]
                     >>  (   ch_p(T_IDENTIFIER) 
@@ -361,7 +362,7 @@ struct cpp_grammar :
                 =   no_node_d
                     [
                         ch_p(T_PP_UNDEF) 
-                        [ store_found_directive_t(self.found_directive) ]
+                        [ store_found_directive_type(self.found_directive) ]
                         >> +ppsp
                     ]
                     >>  (   ch_p(T_IDENTIFIER) 
@@ -376,7 +377,7 @@ struct cpp_grammar :
                 =   no_node_d
                     [
                         ch_p(T_PP_IFDEF) 
-                        [ store_found_directive_t(self.found_directive) ]
+                        [ store_found_directive_type(self.found_directive) ]
                         >> +ppsp
                     ]
                     >>  ppqualifiedname
@@ -386,7 +387,7 @@ struct cpp_grammar :
                 =   no_node_d
                     [
                         ch_p(T_PP_IFNDEF) 
-                        [ store_found_directive_t(self.found_directive) ]
+                        [ store_found_directive_type(self.found_directive) ]
                         >> +ppsp
                     ]
                     >>  ppqualifiedname
@@ -396,7 +397,7 @@ struct cpp_grammar :
                 =   no_node_d
                     [
                         ch_p(T_PP_IF) 
-                        [ store_found_directive_t(self.found_directive) ]
+                        [ store_found_directive_type(self.found_directive) ]
                         >> *ppsp
                     ]
                     >> +(   anychar_p -
@@ -408,7 +409,7 @@ struct cpp_grammar :
                 =   no_node_d
                     [
                         ch_p(T_PP_ELSE)
-                        [ store_found_directive_t(self.found_directive) ]
+                        [ store_found_directive_type(self.found_directive) ]
                     ]
                 ;
 
@@ -416,7 +417,7 @@ struct cpp_grammar :
                 =   no_node_d
                     [
                         ch_p(T_PP_ELIF) 
-                        [ store_found_directive_t(self.found_directive) ]
+                        [ store_found_directive_type(self.found_directive) ]
                         >> *ppsp
                     ]
                     >> +(   anychar_p -
@@ -428,7 +429,7 @@ struct cpp_grammar :
                 =   no_node_d
                     [
                         ch_p(T_PP_ENDIF)
-                        [ store_found_directive_t(self.found_directive) ]
+                        [ store_found_directive_type(self.found_directive) ]
                     ]
                 ;
 
@@ -437,7 +438,7 @@ struct cpp_grammar :
                 =   no_node_d
                     [
                         ch_p(T_PP_LINE) 
-                        [ store_found_directive_t(self.found_directive) ]
+                        [ store_found_directive_type(self.found_directive) ]
                         >> *ppsp
                     ]
                     >> +(   anychar_p -
@@ -451,7 +452,7 @@ struct cpp_grammar :
                 =   no_node_d
                     [
                         ch_p(T_MSEXT_PP_REGION) 
-                        [ store_found_directive_t(self.found_directive) ]
+                        [ store_found_directive_type(self.found_directive) ]
                         >> +ppsp
                     ]
                     >>  ppqualifiedname
@@ -462,7 +463,7 @@ struct cpp_grammar :
                 =   no_node_d
                     [
                         ch_p(T_MSEXT_PP_ENDREGION) 
-                        [ store_found_directive_t(self.found_directive) ]
+                        [ store_found_directive_type(self.found_directive) ]
                     ]
                 ;
 #endif
@@ -490,7 +491,7 @@ struct cpp_grammar :
                 =   no_node_d
                     [
                         ch_p(T_PP_ERROR) 
-                        [ store_found_directive_t(self.found_directive) ]
+                        [ store_found_directive_type(self.found_directive) ]
                         >> *ppsp
                     ]
                     >> *(   anychar_p -
@@ -503,7 +504,7 @@ struct cpp_grammar :
                 =   no_node_d
                     [
                         ch_p(T_PP_WARNING) 
-                        [ store_found_directive_t(self.found_directive) ]
+                        [ store_found_directive_type(self.found_directive) ]
                         >> *ppsp
                     ]
                     >> *(   anychar_p -
@@ -516,7 +517,7 @@ struct cpp_grammar :
                 =   no_node_d
                     [
                         ch_p(T_PP_PRAGMA)
-                        [ store_found_directive_t(self.found_directive) ]
+                        [ store_found_directive_type(self.found_directive) ]
                     ] 
                     >> *(   anychar_p -
                             (ch_p(T_NEWLINE) | ch_p(T_CPPCOMMENT) | ch_p(T_EOF)) 
@@ -543,12 +544,12 @@ struct cpp_grammar :
                     [
                         *ppsp 
                         >>  (   ch_p(T_NEWLINE)
-                                [ store_pos_t(self.pos_of_newline) ]
+                                [ store_pos_type(self.pos_of_newline) ]
                             |   ch_p(T_CPPCOMMENT)
-                                [ store_pos_t(self.pos_of_newline) ]
+                                [ store_pos_type(self.pos_of_newline) ]
                             |   ch_p(T_EOF)
-                                [ store_pos_t(self.pos_of_newline) ]
-                                [ store_found_eof_t(self.found_eof) ]
+                                [ store_pos_type(self.pos_of_newline) ]
+                                [ store_found_eof_type(self.found_eof) ]
                             )
                     ]
                 ;
@@ -580,17 +581,17 @@ struct cpp_grammar :
         }
 
     // start rule of this grammar
-        rule_t const& start() const
+        rule_type const& start() const
         { return pp_statement; }
     };
 
     cpp_grammar_rule_ids &rule_ids;
-    PositionT &pos_of_newline;
+    position_type &pos_of_newline;
     bool &found_eof;
-    boost::wave::token_id &found_directive;
+    TokenT &found_directive;
     
-    cpp_grammar(cpp_grammar_rule_ids &rule_ids_, PositionT &pos_of_newline_,
-            bool &found_eof_, boost::wave::token_id &found_directive_)
+    cpp_grammar(cpp_grammar_rule_ids &rule_ids_, position_type &pos_of_newline_,
+            bool &found_eof_, TokenT &found_directive_)
     :   rule_ids(rule_ids_), pos_of_newline(pos_of_newline_), 
         found_eof(found_eof_), found_directive(found_directive_)
     { 
@@ -675,19 +676,24 @@ namespace {
         switch (static_cast<unsigned int>(id)) {
         case T_PP_QHEADER:
         case T_PP_HHEADER:
-        case T_PP_INCLUDE:  return "#include";
-        case T_PP_DEFINE:   return "#define";
-        case T_PP_UNDEF:    return "#undef";
-        case T_PP_IFDEF:    return "#ifdef";
-        case T_PP_IFNDEF:   return "#ifndef";
-        case T_PP_IF:       return "#if";
-        case T_PP_ELSE:     return "#else";
-        case T_PP_ELIF:     return "#elif";
-        case T_PP_ENDIF:    return "#endif";
-        case T_PP_LINE:     return "#line";
-        case T_PP_ERROR:    return "#error";
-        case T_PP_WARNING:  return "#warning";
-        case T_PP_PRAGMA:   return "#pragma";
+        case T_PP_INCLUDE:        return "#include";
+#if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
+        case T_PP_QHEADER_NEXT:
+        case T_PP_HHEADER_NEXT:
+        case T_PP_INCLUDE_NEXT:   return "#include_next";
+#endif 
+        case T_PP_DEFINE:         return "#define";
+        case T_PP_UNDEF:          return "#undef";
+        case T_PP_IFDEF:          return "#ifdef";
+        case T_PP_IFNDEF:         return "#ifndef";
+        case T_PP_IF:             return "#if";
+        case T_PP_ELSE:           return "#else";
+        case T_PP_ELIF:           return "#elif";
+        case T_PP_ENDIF:          return "#endif";
+        case T_PP_LINE:           return "#line";
+        case T_PP_ERROR:          return "#error";
+        case T_PP_WARNING:        return "#warning";
+        case T_PP_PRAGMA:         return "#pragma";
         default:
             return "#unknown directive";
         }
@@ -704,11 +710,11 @@ cpp_grammar_gen<LexIteratorT>::parse_cpp_grammar (
     using namespace boost::spirit;
     using namespace boost::wave;
     
-    pos_of_newline = position_type();  // reset position
-    found_eof = false;              // reset flag
-    found_directive = T_EOF;        // reset found directive
+    pos_of_newline = position_type();   // reset position
+    found_eof = false;                  // reset flag
+    found_directive = token_type();     // reset found directive
     
-    cpp_grammar<position_type> g(
+    cpp_grammar<token_type> g(
         rule_ids, pos_of_newline, found_eof, found_directive);
     
     tree_parse_info<LexIteratorT> hit = pt_parse (first, last, g);
@@ -721,9 +727,9 @@ cpp_grammar_gen<LexIteratorT>::parse_cpp_grammar (
     }
 #endif
 
-    if (!hit.match && found_directive != T_EOF) {
+    if (!hit.match && token_id(found_directive) != T_EOF) {
     // recognized invalid directive
-    std::string directive = get_directivename(found_directive);
+    std::string directive = get_directivename(token_id(found_directive));
     
         BOOST_WAVE_THROW(preprocess_exception, ill_formed_directive, 
             directive.c_str(), act_pos);

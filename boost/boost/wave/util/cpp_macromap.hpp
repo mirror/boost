@@ -280,7 +280,8 @@ typename defined_macros_type::iterator it = current_scope->find(name.get_value()
     std::swap((*p.first).second->macrodefinition, definition);
     
 // call the context supplied preprocessing hook
-    ctx.defined_macro(name, has_parameters, (*p.first).second->macroparameters, 
+    ctx.get_hooks().defined_macro(name, has_parameters, 
+        (*p.first).second->macroparameters, 
         (*p.first).second->macrodefinition, is_predefined);
     return true;
 }
@@ -362,7 +363,7 @@ macromap<ContextT>::remove_macro(token_type const &token,
         current_macros->erase(it);
         
     // call the context supplied preprocessing hook function
-        ctx.undefined_macro(token);
+        ctx.get_hooks().undefined_macro(token);
         return true;
     }
     else if (impl::is_special_macroname(name)) {
@@ -1095,7 +1096,7 @@ ContainerT replacement_list;
             }
                 
         // inject tracing support
-            ctx.get_trace_policy().expanding_function_like_macro(
+            ctx.get_hooks().expanding_function_like_macro(
                 macro_def.macroname, macro_def.macroparameters, 
                 macro_def.macrodefinition, curr_token, arguments);
         
@@ -1105,7 +1106,7 @@ ContainerT replacement_list;
         }
         else {
         // defined as an object-like macro
-            ctx.get_trace_policy().expanding_object_like_macro(
+            ctx.get_hooks().expanding_object_like_macro(
                 macro_def.macroname, macro_def.macrodefinition, curr_token);
 
         bool found = false;
@@ -1137,7 +1138,7 @@ ContainerT replacement_list;
         }
         else {
         // defined as an object-like macro (expand it)
-            ctx.get_trace_policy().expanding_object_like_macro(
+            ctx.get_hooks().expanding_object_like_macro(
                 macro_def.macroname, macro_def.macrodefinition, curr_token);
 
         bool found = false;
@@ -1159,12 +1160,12 @@ ContainerT replacement_list;
 // rescan the replacement list
 ContainerT expanded_list;
 
-    ctx.get_trace_policy().expanded_macro(replacement_list);
+    ctx.get_hooks().expanded_macro(replacement_list);
     
     rescan_replacement_list(curr_token, macro_def, replacement_list, 
         expanded_list, expand_operator_defined, first, last);
     
-    ctx.get_trace_policy().rescanned_macro(expanded_list);  
+    ctx.get_hooks().rescanned_macro(expanded_list);  
     expanded.splice(expanded.end(), expanded_list);
     return true;        // rescan is required
 }

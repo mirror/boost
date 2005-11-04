@@ -223,6 +223,55 @@ struct default_preprocessing_hooks {
     undefined_macro(TokenT const &macro_name)
     {}
     
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //  The function 'found_directive' is called, whenever a preprocessor 
+    //  directive was encountered, but before the corresponding action is 
+    //  executed.
+    //
+    //  The parameter 'directive' is a reference to the token holding the 
+    //  preprocessing directive.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename TokenT>
+    void
+    found_directive(TokenT const& directive)
+    {}
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //  The function 'evaluated_conditional_expression' is called, whenever a 
+    //  conditional preprocessing expression was evaluated (the expression
+    //  given to a #if, #ifdef or #ifndef directive)
+    //
+    //  The parameter 'expression' holds the non-expanded token sequence
+    //  comprising the evaluated expression.
+    //
+    //  The parameter expression_value contains the result of the evaluation of
+    //  the expression in the current preprocessing context.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename ContainerT>
+    void
+    evaluated_conditional_expression(ContainerT const& expression, 
+        bool expression_value)
+    {}
+    
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //  The function 'skipped_token' is called, whenever a token is about to be
+    //  skipped due to a false preprocessor condition (code fragments to be
+    //  skipped inside the not evaluated conditional #if/#else/#endif branches).
+    //
+    //  The parameter 'token' refers to the token to be skipped.
+    //  
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename TokenT>
+    void
+    skipped_token(TokenT const& token)
+    {}
+
 };
 
 ///////////////////////////////////////////////////////////////////////////////
