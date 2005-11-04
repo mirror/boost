@@ -295,6 +295,9 @@ void print_compiler_macros()
   PRINT_MACRO(__DM__);
   PRINT_MACRO(__osf__);
   PRINT_MACRO(__OSF__);
+  PRINT_MACRO(__QNXNTO__);
+  PRINT_MACRO(__QNX__);
+  PRINT_MACRO(_NTO_VERSION);
 }
 
 void print_stdlib_macros()
