@@ -398,10 +398,22 @@ public:
         <overloaded-function name="any_cast">
           <signature>
             <template>
-              <template-type-parameter name="ValueType"/>
+              <template-type-parameter name="T"/>
             </template>
             
-            <type>ValueType</type>
+            <type>T</type>
+            
+            <parameter name="operand">
+              <paramtype><classname>any</classname> &amp;</paramtype>
+            </parameter>
+          </signature>
+          
+          <signature>
+            <template>
+              <template-type-parameter name="T"/>
+            </template>
+            
+            <type>T</type>
             
             <parameter name="operand">
               <paramtype>const <classname>any</classname> &amp;</paramtype>
@@ -438,20 +450,18 @@ public:
 
           <returns><simpara> If passed a pointer, it returns a
           similarly qualified pointer to the value content if
-          successful, otherwise null is returned. If passed a value or
-          reference, it returns a copy of the value content if
-          successful.</simpara></returns>
+	  successful, otherwise null is returned.
+	  If T is ValueType, it returns a copy of the held value, otherwise, if T is a reference 
+	  to (possibly const qualified) ValueType, it returns a reference to the held 
+	  value.</simpara></returns>
 
           <throws><simpara>Overloads taking an
           <code><classname>any</classname></code> pointer do not
-          throw; the overload taking an
+          throw; overloads taking an
           <code><classname>any</classname></code> value or reference
           throws <code><classname>bad_any_cast</classname></code> if
           unsuccessful.</simpara></throws>
 
-          <rationale><simpara>The value/reference version returns a
-          copy because the C++ keyword casts return
-          copies.</simpara></rationale>
         </overloaded-function>
       </namespace>
     </header>
