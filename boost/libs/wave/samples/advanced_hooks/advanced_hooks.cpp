@@ -75,14 +75,14 @@ boost::wave::util::file_position_type current_position;
 
     // The preprocessor iterator shouldn't be constructed directly. It is 
     // to be generated through a wave::context<> object. This wave:context<> 
-    // object is to be used additionally to initialize and define different 
+    // object additionally may be used to initialize and define different 
     // parameters of the actual preprocessing (not done here).
     //
     // The preprocessing of the input stream is done on the fly behind the 
     // scenes during iteration over the context_type::iterator_type stream.
     context_type ctx (instring.begin(), instring.end(), argv[1]);
 
-    // analyze the input file, print out the preprocessed hooks
+    // analyze the input file, print out the preprocessed tokens
     context_type::iterator_type first = ctx.begin();
     context_type::iterator_type last = ctx.end();
         

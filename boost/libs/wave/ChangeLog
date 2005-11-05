@@ -65,7 +65,7 @@ Version 1.2
 - Fixed compilation if BOOST_WAVE_DUMP_PARSE_TREE is defined.
 - Fixed lexer error message wrt long_long mode.
 - Stefan Seefeld fixed a bug in the lexer, where include_next was assumed for
-  includeed files containg a "include_" in their name.
+  included files containg a "include_" in their name.
 - Fixed some trigraph token id's in the lexers.
 - Added column information to the re2c generated lexer.
 - Added tests for the different lexers.

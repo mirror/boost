@@ -21,24 +21,6 @@
 #include <boost/wave/util/macro_helpers.hpp>
 #include <boost/wave/preprocessing_hooks.hpp>
 
-namespace {
-
-    char const *get_directivename(boost::wave::token_id id)
-    {
-        using namespace boost::wave;
-        switch (static_cast<unsigned int>(id)) {
-        case T_PP_IFDEF:          return "#ifdef";
-        case T_PP_IFNDEF:         return "#ifndef";
-        case T_PP_IF:             return "#if";
-        case T_PP_ELSE:           return "#else";
-        case T_PP_ELIF:           return "#elif";
-        case T_PP_ENDIF:          return "#endif";
-        default:
-            return "#unknown directive";
-        }
-    }
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 //  
 //  The advanced_preprocessing_hooks policy class is used to register some
@@ -77,12 +59,12 @@ public:
         case T_PP_IFNDEF:
         case T_PP_IF:
         case T_PP_ELIF:
-            std::cout << "// " << get_directivename(id) << " ";
+            std::cout << "// " << directive.get_value() << " ";
             break;
             
         case T_PP_ELSE:
         case T_PP_ENDIF:
-            std::cout << "// " << get_directivename(id) << std::endl;
+            std::cout << "// " << directive.get_value() << std::endl;
             need_comment = true;
             break;
 
