@@ -519,6 +519,9 @@ public:
     }
 }
 </pre>
+		<p>Note that you no longer need to manually initialize the <code>weak_ptr</code> member 
+			in <code><A href="enable_shared_from_this.html">enable_shared_from_this</A></code>. 
+			Constructing a <code>shared_ptr</code> to <code>impl</code> takes care of that.</p>
 		<h2><A name="handle">Using <code>shared_ptr</code> as a smart counted handle</A></h2>
 		<p>Some library interfaces use opaque handles, a variation of the <A href="#incomplete">
 				incomplete class technique</A> described above. An example:</p>
