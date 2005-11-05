@@ -21,10 +21,15 @@ rule test_all
    for local file in [ GLOB $(BOOST_ROOT)/libs/tr1/test : test*.cpp ]
    {
       all_rules += [ compile $(file) ] ;
-      all_rules += [ compile $(file) : <sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 <include>$(BOOST_ROOT)/boost/tr1/tr1 <include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 <define>TEST_STD_HEADERS=1 : std_$(file:B) ] ;
+      all_rules += [ compile $(file) 
+         : <sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 
+           <include>$(BOOST_ROOT)/boost/tr1/tr1 
+           <include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+           <define>TEST_STD_HEADERS=1 : std_$(file:B) ] ;
    }
    for local fileb in [ GLOB $(BOOST_ROOT)/libs/tr1/test : run*.cpp ]
    {
+      all_rules += [ run $(fileb) ] ;
       all_rules += [ run $(fileb) 
       :  # additional args
       :  # test-files
@@ -32,99 +37,30 @@ rule test_all
 		<sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 
 		<include>$(BOOST_ROOT)/boost/tr1/tr1 
 		<include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
-		<define>TEST_STD_HEADERS=1  ] ;
+		<define>TEST_STD_HEADERS=1 : std_$(fileb:B)  ] ;
    }
-   for local file2 in [ GLOB $(BOOST_ROOT)/libs/config/test : has_tr1*fail.cpp ]
+   for local file2 in [ GLOB $(BOOST_ROOT)/libs/tr1/test/config : has_tr1*fail.cpp ]
    {
-      all_rules += [ compile-fail $(file2) ] ;
+      local test = [ compile-fail $(file2) ] ;
+      all_rules += $(test) ;
    }
-   for local filec in [ GLOB $(BOOST_ROOT)/libs/config/test : has_tr1*pass.cpp ]
+   for local filec in [ GLOB $(BOOST_ROOT)/libs/tr1/test/config : has_tr1*pass.cpp ]
    {
-      all_rules += [ compile $(filec) ] ;
+      local test = [ compile $(filec) ] ;
+      all_rules += $(test) ;
    }
    
-   #
-   # type traits tests:
-   #
-   local all_type_traits = 
-      is_void
-      is_integral
-      is_floating_point
-      is_array
-      is_pointer
-      is_reference
-      is_member_obj
-      is_member_func
-      is_enum
-      is_union
-      is_class
-      is_function
-      is_arithmetic
-      is_fundamental
-      is_object
-      is_scalar
-      is_compound
-      is_member_pointer
-      is_const
-      is_volatile
-      is_pod
-      is_empty
-      is_polymorphic
-      is_abstract
-      has_trivial_constr
-      has_trivial_copy
-      has_trivial_assign
-      has_trivial_destructor
-      has_nothrow_constr
-      has_nothrow_copy
-      has_nothrow_assign
-      has_virtual_destructor
-      is_signed
-      is_unsigned
-      alignment_of
-      rank
-      extent
-      is_same
-      is_base_of
-      is_convertible
-      remove_const
-      remove_volatile
-      remove_cv
-      add_const
-      add_volatile
-      add_cv
-      remove_reference
-      add_reference
-      remove_extent
-      remove_all_extents
-      remove_pointer
-      add_pointer
-      aligned_storage
-;
-
-   for local file3 in $(all_type_traits)
+   for local file3 in [ GLOB $(BOOST_ROOT)/libs/tr1/test/type_traits : *.cpp ]
    {
-      all_rules += [ run $(BOOST_ROOT)/libs/type_traits/test/$(file3)_test.cpp 
+      all_rules += [ run $(file3) 
       :  # additional args
       :  # test-files
       :  # requirements
         <include>$(BOOST_ROOT)/boost/tr1/tr1  
         <sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 
         <include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
-        <define>TEST_STD=1
-      : tr1_$(file3)_test ] ;
-   }
-   for local file4 in [ GLOB $(BOOST_ROOT)/libs/type_traits/test : tricky*test.cpp ]
-   {
-      all_rules += [ run $(file4) 
-      :  # additional args
-      :  # test-files
-      :  # requirements
-        <include>$(BOOST_ROOT)/boost/tr1/tr1  
-        <sysinclude>$(BOOST_ROOT)/boost/tr1/tr1
-        <include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
-        <define>TEST_STD=1
-      : tr1_$(file4)_test ] ;
+        <include>$(BOOST_ROOT)/libs/type_traits/test 
+        <define>TEST_STD=1 ] ;
    }
    for local file5 in [ GLOB $(BOOST_ROOT)/libs/tr1/test/std_headers : *.cpp ]
    {
