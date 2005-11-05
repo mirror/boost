@@ -28,7 +28,9 @@ CHANGELOG
   suggestions).
 - Removed hook forwarding functions in the context_type.
 - Added missing include_next case branches for get_directivename() function.
-
+- Switched to Re2C V0.9.10
+- Added new sample: advanced_hooks.
+- Fixed a possible buffer overflow in the cpplexer and cpp exception classes.
 
 Boost V1.33.1
 - Version 1.2.1
