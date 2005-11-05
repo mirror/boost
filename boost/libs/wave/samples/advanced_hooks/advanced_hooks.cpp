@@ -55,7 +55,7 @@ boost::wave::util::file_position_type current_position;
         }
         instream.unsetf(std::ios::skipws);
         instring = std::string(std::istreambuf_iterator<char>(instream.rdbuf()),
-                                std::istreambuf_iterator<char>());
+                               std::istreambuf_iterator<char>());
             
     //  The template boost::wave::cpplexer::lex_token<> is the token type to be 
     //  used by the Wave library.

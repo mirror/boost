@@ -100,8 +100,8 @@ public:
     //  The parameter 'expression' holds the non-expanded token sequence
     //  comprising the evaluated expression.
     //
-    //  The parameter expression_value contains the result of the evaluation of
-    //  the expression in the current preprocessing context.
+    //  The parameter 'expression_value' contains the result of the evaluation 
+    //  of the expression in the current preprocessing context.
     //
     ///////////////////////////////////////////////////////////////////////////
     template <typename ContainerT>

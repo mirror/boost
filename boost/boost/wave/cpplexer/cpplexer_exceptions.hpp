@@ -92,7 +92,7 @@ public:
     :   line(line_), column(column_) 
     {
         unsigned int off = 0;
-        while (off < sizeof(filename) && *filename_)
+        while (off < sizeof(filename)-1 && *filename_)
             filename[off++] = *filename_++;
         filename[off] = 0;
     }

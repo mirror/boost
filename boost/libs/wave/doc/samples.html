@@ -48,6 +48,22 @@
 <span class="preprocessor">    #else</span>
 <span class="preprocessor">    #  include</span> <span class="literal">&quot;file_b.h&quot;</span>
 <span class="preprocessor">    #endif</span></pre>
+<h2 dir="ltr">The advanced_hooks sample</h2>
+<p dir="ltr">The <tt>advanced_hooks</tt> sample is based on the <tt>quick_start</tt> sample mentioned above. It shows how you may want to use the advanced preprocessing hooks of the <tt>Wave</tt> library to get in the output not only the preprocessed tokens from the evaluated conditional blocks, but also the tokens recognized inside the non-evaluated conditional blocks. To make the generated token stream useful for further processing the tokens from the non-evaluated conditional blocks are commented out. </p>
+<p dir="ltr">Here is a small sample what the <tt>advanced_hooks</tt> sample does. Consider the following input: </p>
+<pre>    <span class="preprocessor">#define</span> TEST 1
+<span class="preprocessor">    #if</span> <span class="keyword">defined</span>(TEST)
+    <span class="string">&quot;TEST was defined: &quot;</span> TEST
+    <span class="preprocessor">#else</span>
+    <span class="string">&quot;TEST was not defined!&quot;</span>
+    <span class="preprocessor">#endif</span></pre>
+<p>which will produce as its output:</p>
+<pre><span class="comment">    //&quot;#if defined(TEST)</span>
+    <span class="string">&quot;TEST was defined: &quot;</span> 1
+    <span class="comment">//&quot;#else</span>
+    <span class="comment">//&quot;TEST was not defined!&quot;</span>
+    <span class="comment">//&quot;#endif</span></pre>
+<p dir="ltr">As you can see, the sample application prints out the conditional directives in a commented out manner as well. </p>
 <h2 dir="ltr">The  wave sample</h2>
 <p dir="ltr">Because of its general usefulness the <tt>wave</tt> sample is not located in the sample directory of the library, but inside the tools directory of Boost. The wave sample is usable as a full fledged preprocessor executable 
   on top of any other C++ compiler. It outputs the textual representation of the 
@@ -88,9 +104,8 @@ preprocessed tokens generated from a given input file. It is described in more d
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated:
-  <!-- #BeginDate format:fcAm1m -->Sunday, May 15, 2005  12:23<!-- #EndDate -->
-  </span>
-</p>
+  <!-- #BeginDate format:fcAm1m -->Thursday, November 3, 2005  21:32<!-- #EndDate -->
+  </span></p>
 <p>&nbsp;</p>
 </body>
 </html>
