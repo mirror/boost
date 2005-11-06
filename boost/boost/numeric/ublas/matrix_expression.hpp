@@ -480,7 +480,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -645,7 +645,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -944,7 +944,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -1079,7 +1079,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -1407,7 +1407,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -1542,7 +1542,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -1882,25 +1882,25 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             void increment (packed_random_access_iterator_tag, difference_type n) {
-            	while (n > 0) {
-            		increment (packed_random_access_iterator_tag ());
-            		--n;
-            	}
-            	while (n < 0) {
-            		decrement (packed_random_access_iterator_tag ());
-            		++n;
-            	}
+                while (n > 0) {
+                    increment (packed_random_access_iterator_tag ());
+                    --n;
+                }
+                while (n < 0) {
+                    decrement (packed_random_access_iterator_tag ());
+                    ++n;
+                }
             }
             BOOST_UBLAS_INLINE
             void decrement (packed_random_access_iterator_tag, difference_type n) {
-            	while (n > 0) {
-            		decrement (packed_random_access_iterator_tag ());
-            		--n;
-            	}
-            	while (n < 0) {
-            		increment (packed_random_access_iterator_tag ());
-            		++n;
-            	}
+                while (n > 0) {
+                    decrement (packed_random_access_iterator_tag ());
+                    --n;
+                }
+                while (n < 0) {
+                    increment (packed_random_access_iterator_tag ());
+                    ++n;
+                }
             }
             BOOST_UBLAS_INLINE
             value_type dereference (packed_random_access_iterator_tag) const {
@@ -1958,25 +1958,25 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             void increment (sparse_bidirectional_iterator_tag, difference_type n) {
-            	while (n > 0) {
-            		increment (sparse_bidirectional_iterator_tag ());
-            		--n;
-            	}
-            	while (n < 0) {
-            		decrement (sparse_bidirectional_iterator_tag ());
-            		++n;
-            	}
+                while (n > 0) {
+                    increment (sparse_bidirectional_iterator_tag ());
+                    --n;
+                }
+                while (n < 0) {
+                    decrement (sparse_bidirectional_iterator_tag ());
+                    ++n;
+                }
             }
             BOOST_UBLAS_INLINE
             void decrement (sparse_bidirectional_iterator_tag, difference_type n) {
-            	while (n > 0) {
-            		decrement (sparse_bidirectional_iterator_tag ());
-            		--n;
-            	}
-            	while (n < 0) {
-            		increment (sparse_bidirectional_iterator_tag ());
-            		++n;
-            	}
+                while (n > 0) {
+                    decrement (sparse_bidirectional_iterator_tag ());
+                    --n;
+                }
+                while (n < 0) {
+                    increment (sparse_bidirectional_iterator_tag ());
+                    ++n;
+                }
             }
             BOOST_UBLAS_INLINE
             value_type dereference (sparse_bidirectional_iterator_tag) const {
@@ -2031,7 +2031,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -2197,25 +2197,25 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             void increment (packed_random_access_iterator_tag, difference_type n) {
-            	while (n > 0) {
-            		increment (packed_random_access_iterator_tag ());
-            		--n;
-            	}
-            	while (n < 0) {
-            		decrement (packed_random_access_iterator_tag ());
-            		++n;
-            	}
+                while (n > 0) {
+                    increment (packed_random_access_iterator_tag ());
+                    --n;
+                }
+                while (n < 0) {
+                    decrement (packed_random_access_iterator_tag ());
+                    ++n;
+                }
             }
             BOOST_UBLAS_INLINE
             void decrement (packed_random_access_iterator_tag, difference_type n) {
-            	while (n > 0) {
-            		decrement (packed_random_access_iterator_tag ());
-            		--n;
-            	}
-            	while (n < 0) {
-            		increment (packed_random_access_iterator_tag ());
-            		++n;
-            	}
+                while (n > 0) {
+                    decrement (packed_random_access_iterator_tag ());
+                    --n;
+                }
+                while (n < 0) {
+                    increment (packed_random_access_iterator_tag ());
+                    ++n;
+                }
             }
             BOOST_UBLAS_INLINE
             value_type dereference (packed_random_access_iterator_tag) const {
@@ -2273,25 +2273,25 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             void increment (sparse_bidirectional_iterator_tag, difference_type n) {
-            	while (n > 0) {
-            		increment (sparse_bidirectional_iterator_tag ());
-            		--n;
-            	}
-            	while (n < 0) {
-            		decrement (sparse_bidirectional_iterator_tag ());
-            		++n;
-            	}
+                while (n > 0) {
+                    increment (sparse_bidirectional_iterator_tag ());
+                    --n;
+                }
+                while (n < 0) {
+                    decrement (sparse_bidirectional_iterator_tag ());
+                    ++n;
+                }
             }
             BOOST_UBLAS_INLINE
             void decrement (sparse_bidirectional_iterator_tag, difference_type n) {
-            	while (n > 0) {
-            		decrement (sparse_bidirectional_iterator_tag ());
-            		--n;
-            	}
-            	while (n < 0) {
-            		increment (sparse_bidirectional_iterator_tag ());
-            		++n;
-            	}
+                while (n > 0) {
+                    decrement (sparse_bidirectional_iterator_tag ());
+                    --n;
+                }
+                while (n < 0) {
+                    increment (sparse_bidirectional_iterator_tag ());
+                    ++n;
+                }
             }
             BOOST_UBLAS_INLINE
             value_type dereference (sparse_bidirectional_iterator_tag) const {
@@ -2346,7 +2346,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -2679,7 +2679,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -2822,7 +2822,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -3112,7 +3112,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -3255,7 +3255,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -3615,7 +3615,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
             // Index
@@ -4005,7 +4005,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
             // Index
@@ -4437,7 +4437,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION
@@ -4663,7 +4663,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
 #ifndef BOOST_UBLAS_NO_NESTED_CLASS_RELATION

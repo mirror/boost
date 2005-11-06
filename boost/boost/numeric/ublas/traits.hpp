@@ -86,7 +86,7 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         real_type type_abs (const_reference t) {
-            return std::abs (t);	// must use explict std:: as bultin types are not in std namespace
+            return std::abs (t);    // must use explict std:: as bultin types are not in std namespace
         }
         static
         BOOST_UBLAS_INLINE

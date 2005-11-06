@@ -74,10 +74,10 @@ namespace boost { namespace numeric { namespace ublas {
             vector_assign<scalar_assign> (*this, ae);
         }
 
-		// Random Access Container
+        // Random Access Container
         BOOST_UBLAS_INLINE
         size_type max_size () const {
-        	return data_.max_size ();
+            return data_.max_size ();
         }
         
         BOOST_UBLAS_INLINE
@@ -337,7 +337,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(it_ + n);
+                return *(it_ + n);
             }
 
             // Index
@@ -438,7 +438,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             reference operator [] (difference_type n) const {
-            	return *(it_ + n);
+                return *(it_ + n);
             }
 
             // Index
@@ -720,6 +720,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             bool operator == (const const_iterator &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
+                detail::ignore_unused_variable_warning(it);
                 return true;
             }
         };
@@ -1132,7 +1133,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
             // Index
@@ -1502,7 +1503,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(it_ + n);
+                return *(it_ + n);
             }
 
             // Index
@@ -1603,7 +1604,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             reference operator [] (difference_type n) const {
-            	return *(it_ + n);
+                return *(it_ + n);
             }
 
             // Index

@@ -312,7 +312,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
             // Index
@@ -409,7 +409,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
             // Index
@@ -820,7 +820,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
             // Index
@@ -918,7 +918,7 @@ namespace boost { namespace numeric { namespace ublas {
             }
             BOOST_UBLAS_INLINE
             reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
 
@@ -1345,7 +1345,7 @@ return true;
             }
             BOOST_UBLAS_INLINE
             const_reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
             // Index
@@ -1443,7 +1443,7 @@ return true;
             }
             BOOST_UBLAS_INLINE
             reference operator [] (difference_type n) const {
-            	return *(*this + n);
+                return *(*this + n);
             }
 
             // Index

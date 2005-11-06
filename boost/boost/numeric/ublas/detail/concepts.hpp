@@ -207,7 +207,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename C::iterator iterator_type;
 
         void constraints () {
-        	// NOTE - Not Mutable_ReversibleContainerConcept
+            // NOTE - Not Mutable_ReversibleContainerConcept
             function_requires< ReversibleContainerConcept<container_type> >();
             container_type c = container_type ();
             value_type t = value_type ();
