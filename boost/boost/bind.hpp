@@ -1581,9 +1581,28 @@ template< class R, class T > struct add_cref< R (T::*) (), 1 >
     typedef void type;
 };
 
+#if !( defined(__IBMCPP__) && BOOST_WORKAROUND( __IBMCPP__, BOOST_TESTED_AT(600) ) )
+
 template< class R, class T > struct add_cref< R (T::*) () const, 1 >
 {
     typedef void type;
+};
+
+#endif
+
+template<class R> struct isref
+{
+    enum value_type { value = 0 };
+};
+
+template<class R> struct isref< R& >
+{
+    enum value_type { value = 1 };
+};
+
+template<class R> struct isref< R* >
+{
+    enum value_type { value = 1 };
 };
 
 template<class Pm, class A1> struct dm_result
@@ -1593,12 +1612,8 @@ template<class Pm, class A1> struct dm_result
 
 template<class Pm, class R, class F, class L> struct dm_result< Pm, bind_t<R, F, L> >
 {
-    typedef typename add_cref< Pm, 0 >::type type;
-};
-
-template<class Pm, class R, class F, class L> struct dm_result< Pm, bind_t<R&, F, L> >
-{
-    typedef typename add_cref< Pm, 1 >::type type;
+    typedef typename bind_t<R, F, L>::result_type result_type;
+    typedef typename add_cref< Pm, isref< result_type >::value >::type type;
 };
 
 } // namespace _bi
