@@ -10,9 +10,9 @@
 #  include <boost/tr1/detail/config.hpp>
 #  ifdef BOOST_HAS_TR1_RANDOM
 #     ifdef BOOST_HAS_INCLUDE_NEXT
-#        include_next <BOOST_TR1_HEADER(random)>
+#        include_next BOOST_TR1_HEADER(random)
 #     else
-#        include BOOST_TR1_STD_HEADER(BOOST_TR1_HEADER(random))
+#        include BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(random))
 #     endif
 #  else
 #     include <boost/tr1/random.hpp>

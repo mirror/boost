@@ -14,7 +14,11 @@
    || defined(BOOST_HAS_TR1_BIND)\
    || defined(BOOST_HAS_TR1_FUNCTION)\
    || defined(BOOST_HAS_TR1_HASH)
-#  include <BOOST_TR1_HEADER(functional)>
+#  ifdef BOOST_HAS_INCLUDE_NEXT
+#     include_next BOOST_TR1_HEADER(functional)
+#  else
+#     include BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(functional))
+#  endif
 #endif
 
 #ifndef BOOST_HAS_TR1_REFERENCE_WRAPPER

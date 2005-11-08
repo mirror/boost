@@ -18,22 +18,37 @@
 #include <cstddef>
 
 #  if (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) && !defined(__BORLANDC__)
-#     define BOOST_TR1_STD_HEADER(name) <../stlport/##name>
+#     define BOOST_TR1_STD_HEADER(name) <../stlport/name>
 #  else
-#     define BOOST_TR1_STD_HEADER(name) <../include/##name>
+#     define BOOST_TR1_STD_HEADER(name) <../include/name>
 #  endif
 
 #if defined(__GNUC__) && !defined(BOOST_HAS_INCLUDE_NEXT)
 #  define BOOST_HAS_INCLUDE_NEXT
 #endif
-#if defined(__GLIBCXX__) && !defined(BOOST_TR1_HEADER)
-#  define BOOST_TR1_HEADER(name) tr1/##name
-#endif
-#if !defined(BOOST_TR1_HEADER)
-#  define BOOST_TR1_HEADER(name) name
+#  include <boost/config.hpp>
+
+//
+// We may be in the middle of parsing boost/config.hpp
+// when this header is included, so don't rely on config
+// stuff in the rest of this header...
+//
+// Find our actual std lib:
+//
+#ifdef BOOST_HAS_INCLUDE_NEXT
+#  include_next <utility>
+#else
+#  include BOOST_TR1_STD_HEADER(utility)
 #endif
 
-#  include <boost/config.hpp>
+#if defined(__GLIBCXX__) && !defined(BOOST_TR1_PATH)
+#  define BOOST_TR1_PATH(name) tr1/name
+#endif
+#if !defined(BOOST_TR1_HEADER)
+#  define BOOST_TR1_PATH(name) name
+#endif
+
+#define BOOST_TR1_HEADER(name) <BOOST_TR1_PATH(name)>
 
 #ifdef BOOST_HAS_TR1
    // turn on support for everything:

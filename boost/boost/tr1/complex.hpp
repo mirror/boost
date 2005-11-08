@@ -224,9 +224,9 @@ using boost::math::fabs;
 #else
 
 #  ifdef BOOST_HAS_INCLUDE_NEXT
-#     include_next <BOOST_TR1_HEADER(complex)>
+#     include_next BOOST_TR1_HEADER(complex)
 #  else
-#     include BOOST_TR1_STD_HEADER(BOOST_TR1_HEADER(complex))
+#     include BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(complex))
 #  endif
 
 #endif

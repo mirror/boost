@@ -9,7 +9,7 @@
 
 #ifdef BOOST_HAS_TR1_ARRAY
 
-#  include <BOOST_TR1_HEADER(array)>
+#  include BOOST_TR1_HEADER(array)
 
 #else
 

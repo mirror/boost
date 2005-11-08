@@ -9,7 +9,7 @@
 #  include <boost/tr1/detail/config.hpp>
 
 #ifdef BOOST_HAS_TR1_RANDOM
-#  include <BOOST_TR1_HEADER(random)>
+#  include BOOST_TR1_HEADER(random)
 #else
 // Boost.Random:
 #include <boost/random.hpp>

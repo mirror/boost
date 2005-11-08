@@ -9,7 +9,7 @@
 
 #ifdef BOOST_HAS_TR1_TUPLE
 
-#  include <BOOST_TR1_HEADER(tuple)>
+#  include BOOST_TR1_HEADER(tuple)
 
 #else
 

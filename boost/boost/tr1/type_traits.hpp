@@ -8,7 +8,7 @@
 #  include <boost/tr1/detail/config.hpp>
 
 #ifdef BOOST_HAS_TR1_TYPE_TRAITS
-#  include <BOOST_TR1_HEADER(type_traits)>
+#  include BOOST_TR1_HEADER(type_traits)
 #else
 // Boost Type Traits:
 #include <boost/type_traits.hpp>

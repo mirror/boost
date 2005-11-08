@@ -10,9 +10,9 @@
 #  include <boost/tr1/detail/config.hpp>
 #  ifdef BOOST_HAS_TR1_REGEX
 #     ifdef BOOST_HAS_INCLUDE_NEXT
-#        include_next <BOOST_TR1_HEADER(regex)>
+#        include_next BOOST_TR1_HEADER(regex)
 #     else
-#        include BOOST_TR1_STD_HEADER(BOOST_TR1_HEADER(regex))
+#        include BOOST_TR1_STD_HEADER(BOOST_TR1_PATH(regex))
 #     endif
 #  else
 #     include <boost/tr1/regex.hpp>

@@ -9,7 +9,7 @@
 
 #ifdef BOOST_HAS_TR1_REGEX
 
-#  include <BOOST_TR1_HEADER(regex)>
+#  include BOOST_TR1_HEADER(regex)
 
 #else
 
