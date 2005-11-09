@@ -23,7 +23,7 @@ rule test_all
       all_rules += [ compile $(file) ] ;
       all_rules += [ compile $(file) 
          : <sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 
-           <include>$(BOOST_ROOT)/boost/tr1/tr1 
+           #<include>$(BOOST_ROOT)/boost/tr1/tr1 
            <include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
            <define>TEST_STD_HEADERS=1 : std_$(file:B) ] ;
    }
@@ -35,7 +35,7 @@ rule test_all
       :  # test-files
       :  # requirements
 		<sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 
-		<include>$(BOOST_ROOT)/boost/tr1/tr1 
+		#<include>$(BOOST_ROOT)/boost/tr1/tr1 
 		<include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
 		<define>TEST_STD_HEADERS=1 : std_$(fileb:B)  ] ;
    }
@@ -56,7 +56,7 @@ rule test_all
       :  # additional args
       :  # test-files
       :  # requirements
-        <include>$(BOOST_ROOT)/boost/tr1/tr1  
+        #<include>$(BOOST_ROOT)/boost/tr1/tr1  
         <sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 
         <include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
         <include>$(BOOST_ROOT)/libs/type_traits/test 
@@ -66,7 +66,7 @@ rule test_all
    {
       all_rules += [ compile $(file5) 
       :   
-        <include>$(BOOST_ROOT)/boost/tr1/tr1 
+        #<include>$(BOOST_ROOT)/boost/tr1/tr1 
         <sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 
         <include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
         <define>TEST_STD=1 ] ;
