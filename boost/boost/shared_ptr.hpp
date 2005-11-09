@@ -146,6 +146,13 @@ public:
         boost::detail::sp_enable_shared_from_this( pn, p, p );
     }
 
+    // As above, but with allocator. A's copy constructor shall not throw.
+
+    template<class Y, class D, class A> shared_ptr( Y * p, D d, A a ): px( p ), pn( p, d, a )
+    {
+        boost::detail::sp_enable_shared_from_this( pn, p, p );
+    }
+
 //  generated copy constructor, assignment, destructor are fine...
 
 //  except that Borland C++ has a bug, and g++ with -Wsynth warns
@@ -246,9 +253,14 @@ public:
         this_type(p).swap(*this);
     }
 
-    template<class Y, class D> void reset(Y * p, D d)
+    template<class Y, class D> void reset( Y * p, D d )
     {
-        this_type(p, d).swap(*this);
+        this_type( p, d ).swap( *this );
+    }
+
+    template<class Y, class D, class A> void reset( Y * p, D d, A a )
+    {
+        this_type( p, d, a ).swap( *this );
     }
 
     reference operator* () const // never throws
