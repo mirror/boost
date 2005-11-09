@@ -738,6 +738,7 @@ struct RegexConcept
    RegexConcept& operator=(const RegexConcept&);
 };
 
+#ifndef BOOST_REGEX_TEST_STD
 //
 // BoostRegexConcept:
 // Test every interface in the Boost implementation:
@@ -849,6 +850,8 @@ struct BoostRegexConcept
    BoostRegexConcept(const BoostRegexConcept&);
    BoostRegexConcept& operator=(const BoostRegexConcept&);
 };
+
+#endif // BOOST_REGEX_TEST_STD
 
 }
 
