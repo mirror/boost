@@ -66,7 +66,7 @@ BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_2(typename T,unsigned long N,is_reference,
 
 #ifdef BOOST_MSVC
 #   pragma warning(push)
-#   pragma warning(disable: 4181)
+#   pragma warning(disable: 4181 4097)
 #endif
 
 namespace detail {
