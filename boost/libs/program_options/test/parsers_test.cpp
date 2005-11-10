@@ -192,11 +192,44 @@ void test_environment()
     // which already has a value.
 }
 
+void test_unregistered()
+{
+    options_description desc;
+
+    char* cmdline1_[] = { "--foo=12", "--bar", "1"};
+    vector<string> cmdline1 = sv(cmdline1_,
+                                 sizeof(cmdline1_)/sizeof(cmdline1_[0]));
+    vector<option> a1 = 
+        command_line_parser(cmdline1).options(desc).allow_unregistered().run()
+        .options;
+
+    BOOST_REQUIRE(a1.size() == 3);
+    BOOST_CHECK(a1[0].string_key == "foo");
+    BOOST_CHECK(a1[0].unregistered == true);
+    BOOST_REQUIRE(a1[0].value.size() == 1);
+    BOOST_CHECK(a1[0].value[0] == "12");
+    BOOST_CHECK(a1[1].string_key == "bar");
+    BOOST_CHECK(a1[1].unregistered == true);
+    BOOST_CHECK(a1[2].string_key == "");
+    BOOST_CHECK(a1[2].unregistered == false);
+    
+
+    vector<string> a2 = collect_unrecognized(a1, include_positional);
+    BOOST_CHECK(a2[0] == "--foo=12");
+    BOOST_CHECK(a2[1] == "--bar");
+    BOOST_CHECK(a2[2] == "1");
+
+
+
+    
+}
+
 int test_main(int, char* [])
 {
     test_command_line();
     test_config_file();
     test_environment();
+    test_unregistered();
     return 0;
 }
 
