@@ -13,6 +13,8 @@
 //  See http://www.boost.org/libs/smart_ptr/weak_ptr.htm for documentation.
 //
 
+#include <memory> // boost.TR1 include order fix
+#include <boost/detail/shared_count.hpp>
 #include <boost/shared_ptr.hpp>
 
 #ifdef BOOST_MSVC  // moved here to work around VC++ compiler crash

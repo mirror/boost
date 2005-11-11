@@ -29,7 +29,7 @@
 #include <boost/detail/sp_counted_base.hpp>
 #include <boost/detail/sp_counted_impl.hpp>
 
-#include <memory>           // std::auto_ptr, std::allocator
+#include <memory>           // std::auto_ptr
 #include <functional>       // std::less
 #include <new>              // std::bad_alloc
 #include <typeinfo>         // std::type_info in get_deleter

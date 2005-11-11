@@ -31,7 +31,10 @@
 #include <boost/detail/quick_allocator.hpp>
 #endif
 
+#if defined(BOOST_SP_USE_STD_ALLOCATOR)
 #include <memory>           // std::allocator
+#endif
+
 #include <typeinfo>         // std::type_info in get_deleter
 #include <cstddef>          // std::size_t
 

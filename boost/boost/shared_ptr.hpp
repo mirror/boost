@@ -20,13 +20,14 @@
 #include <boost/detail/shared_ptr_nmt.hpp>
 #else
 
+#include <memory>               // for std::auto_ptr
+
 #include <boost/assert.hpp>
 #include <boost/checked_delete.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/detail/shared_count.hpp>
 #include <boost/detail/workaround.hpp>
 
-#include <memory>               // for std::auto_ptr
 #include <algorithm>            // for std::swap
 #include <functional>           // for std::less
 #include <typeinfo>             // for std::bad_cast
