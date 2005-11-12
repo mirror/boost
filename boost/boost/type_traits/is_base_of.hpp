@@ -10,6 +10,8 @@
 #define BOOST_TT_IS_BASE_OF_HPP_INCLUDED
 
 #include <boost/type_traits/is_base_and_derived.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/detail/ice_or.hpp>
 
 // should be the last #include
 #include <boost/type_traits/detail/bool_trait_def.hpp>
@@ -20,7 +22,9 @@ BOOST_TT_AUX_BOOL_TRAIT_DEF2(
       is_base_of
     , Base
     , Derived
-    , (::boost::detail::is_base_and_derived_impl<Base,Derived>::value)
+    , (::boost::type_traits::ice_or<      
+         (::boost::detail::is_base_and_derived_impl<Base,Derived>::value),
+         (::boost::is_same<Base,Derived>::value)>::value)
     )
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION

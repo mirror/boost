@@ -18,13 +18,11 @@
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/type_traits/ice.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
+#include <boost/type_traits/is_void.hpp>
 #ifndef BOOST_NO_IS_ABSTRACT
 #include <boost/type_traits/is_abstract.hpp>
 #endif
 
-#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
-#   include <boost/type_traits/is_void.hpp>
-#endif
 
 // should be always the last #include directive
 #include <boost/type_traits/detail/bool_trait_def.hpp>
@@ -219,12 +217,15 @@ struct is_convertible_impl
 {
     typedef typename add_reference<From>::type ref_type;
     enum { value =
-        ::boost::type_traits::ice_and<
-            ::boost::detail::is_convertible_basic_impl<ref_type, To>::value,
-            ::boost::type_traits::ice_not<
-                ::boost::is_array<To>::value
+        (::boost::type_traits::ice_and<
+            ::boost::type_traits::ice_or<
+               ::boost::detail::is_convertible_basic_impl<ref_type,To>::value,
+               ::boost::is_void<To>::value
             >::value,
-        >::value };
+            ::boost::type_traits::ice_not<
+               ::boost::is_array<To>::value
+            >::value
+        >::value) };
 };
 #elif !defined(__BORLANDC__) || __BORLANDC__ > 0x551
 template <typename From, typename To>
@@ -233,7 +234,10 @@ struct is_convertible_impl
     typedef typename add_reference<From>::type ref_type;
     BOOST_STATIC_CONSTANT(bool, value =
         (::boost::type_traits::ice_and<
-            ::boost::detail::is_convertible_basic_impl<ref_type,To>::value,
+            ::boost::type_traits::ice_or<
+               ::boost::detail::is_convertible_basic_impl<ref_type,To>::value,
+               ::boost::is_void<To>::value
+            >::value,
             ::boost::type_traits::ice_not<
                ::boost::is_array<To>::value
             >::value
@@ -338,14 +342,14 @@ struct is_convertible_impl_dispatch
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename To,is_convertible,void,To,false)
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename From,is_convertible,From,void,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename From,is_convertible,From,void,true)
 #ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
 BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename To,is_convertible,void const,To,false)
 BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename To,is_convertible,void volatile,To,false)
 BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename To,is_convertible,void const volatile,To,false)
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename From,is_convertible,From,void const,false)
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename From,is_convertible,From,void volatile,false)
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename From,is_convertible,From,void const volatile,false)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename From,is_convertible,From,void const,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename From,is_convertible,From,void volatile,true)
+BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1(typename From,is_convertible,From,void const volatile,true)
 #endif
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
