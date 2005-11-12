@@ -35,7 +35,10 @@ struct align_calc
 
 TT_TEST_BEGIN(alignment_of)
 
+#ifndef TEST_STD
+// This test is not required to work for non-boost implementations:
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::alignment_of<void>::value, 0);
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::alignment_of<char>::value, ALIGNOF(char));
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::alignment_of<short>::value, ALIGNOF(short));
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::alignment_of<int>::value, ALIGNOF(int));

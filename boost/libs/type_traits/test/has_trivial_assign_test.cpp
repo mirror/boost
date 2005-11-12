@@ -15,122 +15,156 @@
 TT_TEST_BEGIN(has_trivial_assign)
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<bool>::value, true);
+#ifndef TEST_STD
+// unspecified behaviour:
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<bool const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<bool volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<bool const volatile>::value, false);
+#endif
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<signed char>::value, true);
+#ifndef TEST_STD
+// unspecified behaviour:
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<signed char const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<signed char volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<signed char const volatile>::value, false);
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned char>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<char>::value, true);
+#ifndef TEST_STD
+// unspecified behaviour:
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned char const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<char const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned char volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<char volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned char const volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<char const volatile>::value, false);
+#endif
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned short>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<short>::value, true);
+#ifndef TEST_STD
+// unspecified behaviour:
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned short const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<short const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned short volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<short volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned short const volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<short const volatile>::value, false);
-
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned int>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<int>::value, true);
+#ifndef TEST_STD
+// unspecified behaviour:
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned int const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<int const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned int volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<int volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned int const volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<int const volatile>::value, false);
-
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned long>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<long>::value, true);
+#ifndef TEST_STD
+// unspecified behaviour:
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned long const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<long const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned long volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<long volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned long const volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<long const volatile>::value, false);
-
+#endif
 #ifdef BOOST_HAS_LONG_LONG
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign< ::boost::ulong_long_type>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign< ::boost::long_long_type>::value, true);
+#ifndef TEST_STD
+// unspecified behaviour:
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign< ::boost::ulong_long_type const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign< ::boost::long_long_type const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign< ::boost::ulong_long_type volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign< ::boost::long_long_type volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign< ::boost::ulong_long_type const volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign< ::boost::long_long_type const volatile>::value, false);
-
+#endif
 #endif
 
 #ifdef BOOST_HAS_MS_INT64
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned __int8>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<__int8>::value, true);
+#ifndef TEST_STD
+// unspecified behaviour:
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned __int8 const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<__int8 const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned __int8 volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<__int8 volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned __int8 const volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<__int8 const volatile>::value, false);
-
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned __int16>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<__int16>::value, true);
+#ifndef TEST_STD
+// unspecified behaviour:
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned __int16 const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<__int16 const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned __int16 volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<__int16 volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned __int16 const volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<__int16 const volatile>::value, false);
-
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned __int32>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<__int32>::value, true);
+#ifndef TEST_STD
+// unspecified behaviour:
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned __int32 const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<__int32 const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned __int32 volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<__int32 volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned __int32 const volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<__int32 const volatile>::value, false);
-
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned __int64>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<__int64>::value, true);
+#ifndef TEST_STD
+// unspecified behaviour:
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned __int64 const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<__int64 const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned __int64 volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<__int64 volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<unsigned __int64 const volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<__int64 const volatile>::value, false);
-
+#endif
 #endif
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<float>::value, true);
+#ifndef TEST_STD
+// unspecified behaviour:
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<float const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<float volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<float const volatile>::value, false);
-
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<double>::value, true);
+#ifndef TEST_STD
+// unspecified behaviour:
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<double const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<double volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<double const volatile>::value, false);
-
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<long double>::value, true);
+#ifndef TEST_STD
+// unspecified behaviour:
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<long double const>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<long double volatile>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<long double const volatile>::value, false);
-
+#endif
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<int>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<void*>::value, true);
+#ifndef TEST_STD
+// unspecified behaviour:
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<int*const>::value, false);
+#endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<f1>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<f2>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_assign<f3>::value, true);

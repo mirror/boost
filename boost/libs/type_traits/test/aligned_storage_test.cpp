@@ -8,6 +8,7 @@
 #include "check_integral_constant.hpp"
 #ifdef TEST_STD
 #  include <type_traits>
+#  include <boost/type_traits/type_with_alignment.hpp> // max_align and long_long_type
 #else
 #  include <boost/type_traits/alignment_of.hpp>
 #  include <boost/type_traits/aligned_storage.hpp>
@@ -52,16 +53,19 @@ void check(const T&)
    BOOST_CHECK(::tt::is_pod<t2>::value == true);
 #endif
 
+#ifndef TEST_STD
+   // Non-Tr1 behaviour:
    typedef typename tt::aligned_storage<T::value,-1L>::type t3;
    t3 as3 = { 0, };
    must_be_pod<t3> pod3;
    no_unused_warning(as3);
    no_unused_warning(pod3);
    BOOST_MESSAGE(typeid(t3).name());
-   BOOST_CHECK(::tt::alignment_of<t3>::value == ::boost::alignment_of< ::boost::detail::max_align>::value);
+   BOOST_CHECK(::tt::alignment_of<t3>::value == ::tt::alignment_of< ::boost::detail::max_align>::value);
    BOOST_CHECK((sizeof(t3) % T::value) == 0);
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
    BOOST_CHECK(::tt::is_pod<t3>::value == true);
+#endif
 #endif
 }
 

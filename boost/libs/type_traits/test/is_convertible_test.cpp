@@ -38,16 +38,20 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<polymorphic_derived1,polymor
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<polymorphic_derived2,polymorphic_base>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<polymorphic_base,polymorphic_derived1>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<polymorphic_base,polymorphic_derived2>::value), false);
+#ifndef TEST_STD
+// Ill-formed behaviour, supported by Boost as an extension:
 #ifndef BOOST_NO_IS_ABSTRACT
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<test_abc1,test_abc1>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<Base,test_abc1>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<polymorphic_derived2,test_abc1>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int,test_abc1>::value), false);
 #endif
-   
+#endif
+
 // The following four do not compile without member template support:
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,void>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<float,void>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<void,void>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<void,float>::value), false);
 
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<enum1, int>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<Derived*, Base*>::value), true);

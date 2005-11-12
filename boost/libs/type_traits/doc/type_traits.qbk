@@ -1673,14 +1673,15 @@ expression that evaluates to /true/.]
    template <class Base, class Derived>
    struct is_base_of : public __tof {};
   
-__inherit If Base is base class of type Derived then inherits from __true_type, 
+__inherit If Base is base class of type Derived or if both types are the same
+then inherits from __true_type, 
 otherwise inherits from __false_type.
 
 This template will detect non-public base classes, and ambiguous base classes.
 
-Note that a class is not considered to be it's own base class, 
-likewise, if either `Base` or `Derived` are non-class types, 
-then the class will always inherit from __false_type.
+Note that `is_base_of<X,X>` will always inherit from __true_type.  [*This is the
+case even if `X` is not a class type].  This is a change in behaviour 
+from Boost-1.33 in order to track the Technical Report on C++ Library Extensions.
 
 Types `Base` and `Derived` must not be incomplete types.
 

@@ -18,8 +18,8 @@
 TT_TEST_BEGIN(is_base_of)
 
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<Derived,Base>::value), false);
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<Derived,Derived>::value), false);
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<Base,Base>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<Derived,Derived>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<Base,Base>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<Base,Derived>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<Base,MultiBase>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<Derived,MultiBase>::value), true);
@@ -30,7 +30,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<Base,void>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<Base,const void>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<void,Derived>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<const void,Derived>::value), false);
-BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<int, int>::value), false);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<int, int>::value), true);  // really it is!!!!!
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<const int, int>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<VB,VD>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_base_of<VD,VB>::value), false);

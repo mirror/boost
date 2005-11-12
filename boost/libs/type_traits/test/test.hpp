@@ -329,6 +329,7 @@ struct non_empty : private boost::noncopyable
 struct test_abc1
 {
    test_abc1();
+   virtual ~test_abc1();
    test_abc1(const test_abc1&);
    test_abc1& operator=(const test_abc1&);
    virtual void foo() = 0;
@@ -337,6 +338,7 @@ struct test_abc1
 
 struct test_abc2
 {
+   virtual ~test_abc2();
    virtual void foo() = 0;
    virtual void foo2() = 0;
 };
@@ -350,6 +352,7 @@ struct incomplete_type;
 
 struct polymorphic_base
 {
+   virtual ~polymorphic_base();
    virtual void method();
 };
 
