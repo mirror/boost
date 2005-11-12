@@ -30,7 +30,7 @@
 [def __comments__           [link quickbook.syntax.comments Comments]]
 
 [def __font_styles__        [link quickbook.syntax.phrase.font_styles Font Styles]]
-[def __quotes__             [link quickbook.syntax.phrase.quotes Quotes]]
+[def __quotations__         [link quickbook.syntax.phrase.quotations Quotations]]
 [def __simple_formatting__  [link quickbook.syntax.phrase.simple_formatting formatting Simple formatting]]
 [def __inline_code__        [link quickbook.syntax.phrase.inline_code Inline code]]
 [def __code_blocks__        [link quickbook.syntax.phrase.code_blocks Code blocks]]
@@ -185,7 +185,7 @@ will generate:
 [*['bold-italic]]
 
 [endsect]
-[section Quotes]
+[section Quotations]
 
 [pre'''
 ["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
@@ -196,10 +196,10 @@ will generate:
 ["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
 
 Note the proper left and right quote marks. Also, while you can simply use
-ordinary quotes like "quoted", our quote, above, will generate correct DocBook
-quotes (e.g. <quote>quoted</quote>).
+ordinary quote marks like "quoted", our quotation, above, will generate correct 
+DocBook quotations (e.g. <quote>quoted</quote>).
 
-Like all phrase elements, quotes may be nested. Example:
+Like all phrase elements, quotations may be nested. Example:
 
 [pre'''
 ["Here's the rule for bargains: ["Do other men, for they would do you.] That's

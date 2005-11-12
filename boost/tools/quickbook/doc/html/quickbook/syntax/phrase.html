@@ -27,7 +27,7 @@
 <a name="quickbook.syntax.phrase"></a> Phrase Level Elements</h3></div></div></div>
 <div class="toc"><dl>
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.font_styles">Font Styles</a></span></dt>
-<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.quotes">Quotes</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.quotations">Quotations</a></span></dt>
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.simple_formatting">Simple formatting</a></span></dt>
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.inline_code">Inline code</a></span></dt>
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.code_blocks">Code blocks</a></span></dt>
@@ -64,7 +64,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.quotes"></a>Quotes</h4></div></div></div>
+<a name="quickbook.syntax.phrase.quotations"></a>Quotations</h4></div></div></div>
 <pre class="programlisting">["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
 </pre>
 <p>
@@ -75,11 +75,11 @@
         </p>
 <p>
           Note the proper left and right quote marks. Also, while you can simply
-          use ordinary quotes like "quoted", our quote, above, will generate
-          correct DocBook quotes (e.g. &lt;quote&gt;quoted&lt;/quote&gt;).
+          use ordinary quote marks like "quoted", our quotation, above,
+          will generate correct DocBook quotations (e.g. &lt;quote&gt;quoted&lt;/quote&gt;).
         </p>
 <p>
-          Like all phrase elements, quotes may be nested. Example:
+          Like all phrase elements, quotations may be nested. Example:
         </p>
 <pre class="programlisting">["Here's the rule for bargains: ["Do other men, for they would do you.] That's
 the true business precept.]
@@ -136,7 +136,7 @@ the true business precept.]
 </ul></div>
 <div class="informaltable">
 <h4>
-<a name="id378349"></a><span class="table-title">More Formatting Samples</span>
+<a name="id372883"></a><span class="table-title">More Formatting Samples</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -322,7 +322,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
         </p>
 <div class="informaltable">
 <h4>
-<a name="id447052"></a><span class="table-title">Supported Source Modes</span>
+<a name="id442662"></a><span class="table-title">Supported Source Modes</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -519,16 +519,8 @@ escape (no processing/formatting)
 <pre class="programlisting">[footnote A sample footnote]
 </pre>
 <p>
-          will generate this
-          <sup>[<a name="id447656" href="#ftn.id447656">1</a>]</sup>
-          .
+          will generate this[footnote A sample footnote].
         </p>
-</div>
-<div class="footnotes">
-<br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id447656" href="#id447656">1</a>] </sup>
-              A sample footnote
-            </p></div>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
