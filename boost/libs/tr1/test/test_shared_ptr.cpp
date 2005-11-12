@@ -22,9 +22,9 @@ struct base
 struct derived : public base{};
 struct derived_deleter
 {
-   void operator()(base*b)
+   void operator()(derived*b)
    {
-      delete static_cast<derived*>(b);
+      delete b;
    }
 };
 

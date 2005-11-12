@@ -27,7 +27,7 @@ void check_placeholder(T)
 template <class Binder, class R>
 void check_bind0(Binder b, R r)
 {
-   //BOOST_STATIC_ASSERT(::std::tr1::is_bind_expression<B>::value);
+   //BOOST_STATIC_ASSERT(::std::tr1::is_bind_expression<Binder>::value);
    verify_return_type(b(), r);
 
    typedef typename Binder::result_type result_type;
@@ -37,7 +37,7 @@ void check_bind0(Binder b, R r)
 template <class Binder, class R, class A1>
 void check_bind1(Binder b, R r, A1 a1)
 {
-   //BOOST_STATIC_ASSERT(::std::tr1::is_bind_expression<B>::value);
+   //BOOST_STATIC_ASSERT(::std::tr1::is_bind_expression<Binder>::value);
    verify_return_type(b(a1), r);
 }
 
@@ -68,6 +68,11 @@ int main()
    //check_bind0(std::tr1::bind<double>(&test_proc, 0, 0, 0), double(0));
    check_bind1(std::tr1::bind(&test_proc, 0, 0, std::tr1::placeholders::_1), double(0), 0);
    check_bind1(std::tr1::bind(&test_proc, std::tr1::placeholders::_1, 0, 0), double(0), 0);
+   
+   check_bind0(std::tr1::bind(test_proc, 0, 0, 0), double(0));
+   //check_bind0(std::tr1::bind<double>(test_proc, 0, 0, 0), double(0));
+   check_bind1(std::tr1::bind(test_proc, 0, 0, std::tr1::placeholders::_1), double(0), 0);
+   check_bind1(std::tr1::bind(test_proc, std::tr1::placeholders::_1, 0, 0), double(0), 0);
 
    check_bind0(std::tr1::bind(std::plus<double>(), 0, 1), double(0));
    check_bind0(std::tr1::bind<double>(std::plus<double>(), 1, 0), double(0));
