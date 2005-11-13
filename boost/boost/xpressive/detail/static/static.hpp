@@ -72,7 +72,8 @@ struct stacked_xpression
     template<typename BidiIterT>
     bool match(state_type<BidiIterT> &state) const
     {
-        return this->NextT::BOOST_NESTED_TEMPLATE push_match<TopT>(state);
+        return static_cast<NextT const *>(this)->
+            BOOST_NESTED_TEMPLATE push_match<TopT>(state);
     }
 
     // top_match
