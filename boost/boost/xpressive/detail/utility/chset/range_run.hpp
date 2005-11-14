@@ -44,16 +44,6 @@ struct range
 
 //////////////////////////////////
 template<typename CharT>
-struct range_char_compare
-{
-    bool operator()(range<CharT> const &x, const CharT y) const
-    {
-        return x.first_ < y;
-    }
-};
-
-//////////////////////////////////
-template<typename CharT>
 struct range_compare
 {
     bool operator()(range<CharT> const &x, range<CharT> const &y) const

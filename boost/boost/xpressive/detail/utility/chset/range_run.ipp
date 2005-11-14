@@ -91,7 +91,13 @@ inline bool range_run<CharT>::test(CharT v) const
         return false;
     }
 
-    const_iterator iter = std::lower_bound(this->run_.begin(), this->run_.end(), v, range_char_compare<CharT>());
+    const_iterator iter = std::lower_bound(
+        this->run_.begin()
+      , this->run_.end()
+      , range<CharT>(v, v)
+      , range_compare<CharT>()
+    );
+
     return (iter != this->run_.end() && iter->includes(v))
         || (iter != this->run_.begin() && (--iter)->includes(v));
 }
