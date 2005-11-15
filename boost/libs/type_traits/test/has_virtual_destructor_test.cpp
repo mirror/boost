@@ -15,6 +15,12 @@
 #include <iostream>
 #include <stdexcept>
 
+class polymorphic_no_virtual_destructor
+{
+public:
+   virtual void method() = 0;
+};
+
 TT_TEST_BEGIN(has_virtual_destructor)
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<int>::value, false);
@@ -38,8 +44,9 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<void>::value, false);
 
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<VB>::value, true, false);
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<VD>::value, true, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<test_abc1>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<test_abc2>::value, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<test_abc1>::value, true);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<test_abc2>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<polymorphic_no_virtual_destructor>::value, false);
 #ifndef BOOST_NO_STD_LOCALE
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::iostream>::value, true, false);
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_virtual_destructor<std::basic_streambuf<char> >::value, true, false);
