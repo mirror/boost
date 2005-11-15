@@ -73,7 +73,9 @@ using ::boost::regex_traits;
 // [7.8] Class template basic_regex
 using ::boost::basic_regex;
 using ::boost::regex;
+#ifndef BOOST_NO_WREGEX
 using ::boost::wregex;
+#endif
 
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570))
 // [7.8.6] basic_regex swap
@@ -84,16 +86,24 @@ using ::boost::swap;
 using ::boost::sub_match;
 
 using ::boost::csub_match;
+#ifndef BOOST_NO_WREGEX
 using ::boost::wcsub_match;
+#endif
 using ::boost::ssub_match;
+#ifndef BOOST_NO_WREGEX
 using ::boost::wssub_match;
+#endif
 
 // [7.10] Class template match_results
 using ::boost::match_results;
 using ::boost::cmatch;
+#ifndef BOOST_NO_WREGEX
 using ::boost::wcmatch;
+#endif
 using ::boost::smatch;
+#ifndef BOOST_NO_WREGEX
 using ::boost::wsmatch;
+#endif
 
 using ::boost::regex_match;
 
@@ -106,16 +116,24 @@ using ::boost::regex_replace;
 // [7.12.1] Class template regex_iterator
 using ::boost::regex_iterator;
 using ::boost::cregex_iterator;
+#ifndef BOOST_NO_WREGEX
 using ::boost::wcregex_iterator;
+#endif
 using ::boost::sregex_iterator;
+#ifndef BOOST_NO_WREGEX
 using ::boost::wsregex_iterator;
+#endif
 
 // [7.12.2] Class template regex_token_iterator
 using ::boost::regex_token_iterator;
 using ::boost::cregex_token_iterator;
+#ifndef BOOST_NO_WREGEX
 using ::boost::wcregex_token_iterator;
+#endif
 using ::boost::sregex_token_iterator;
+#ifndef BOOST_NO_WREGEX
 using ::boost::wsregex_token_iterator;
+#endif
 
 } } // namespaces
 
