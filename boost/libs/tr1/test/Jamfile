@@ -20,11 +20,13 @@ rule test_all
    local all_rules = ;
    for local file in [ GLOB $(BOOST_ROOT)/libs/tr1/test : test*.cpp ]
    {
-      all_rules += [ compile $(file) ] ;
+      all_rules += [ compile $(file)
+         : <include>$(BOOST_ROOT) ] ;
       all_rules += [ compile $(file) 
          : #<sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 
            <include>$(BOOST_ROOT)/boost/tr1/tr1 
            <include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+           <include>$(BOOST_ROOT) 
            <define>TEST_STD_HEADERS=1 : std_$(file:B) ] ;
    }
    for local fileb in [ GLOB $(BOOST_ROOT)/libs/tr1/test : run*.cpp ]
@@ -37,16 +39,17 @@ rule test_all
 		#<sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 
 		<include>$(BOOST_ROOT)/boost/tr1/tr1 
 		<include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+      <include>$(BOOST_ROOT) 
 		<define>TEST_STD_HEADERS=1 : std_$(fileb:B)  ] ;
    }
    for local file2 in [ GLOB $(BOOST_ROOT)/libs/tr1/test/config : has_tr1*fail.cpp ]
    {
-      local test = [ compile-fail $(file2) ] ;
+      local test = [ compile-fail $(file2) : <include>$(BOOST_ROOT) ] ;
       all_rules += $(test) ;
    }
    for local filec in [ GLOB $(BOOST_ROOT)/libs/tr1/test/config : has_tr1*pass.cpp ]
    {
-      local test = [ compile $(filec) ] ;
+      local test = [ compile $(filec) : <include>$(BOOST_ROOT) ] ;
       all_rules += $(test) ;
    }
    
@@ -60,6 +63,7 @@ rule test_all
         #<sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 
         <include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
         <include>$(BOOST_ROOT)/libs/type_traits/test 
+        <include>$(BOOST_ROOT) 
         <define>TEST_STD=1 ] ;
    }
    for local file5 in [ GLOB $(BOOST_ROOT)/libs/tr1/test/std_headers : *.cpp ]
@@ -69,6 +73,7 @@ rule test_all
         <include>$(BOOST_ROOT)/boost/tr1/tr1 
         #<sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 
         <include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+        <include>$(BOOST_ROOT) 
         <define>TEST_STD=1 ] ;
    }
    #ECHO $(all_rules) ;
