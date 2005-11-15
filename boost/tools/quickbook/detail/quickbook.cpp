@@ -130,7 +130,13 @@ namespace quickbook
         parse(char const* filein_, fs::path const& outdir, std::ostream& out, bool ignore_docinfo = false)
     {
         actions actor(filein_, outdir, out);
-        return parse(filein_, actor);
+        bool r = parse(filein_, actor);
+        if (actor.level != 0)
+            std::cerr 
+                << "Warning missing [endsect] detected at end of file: " 
+                << filein_
+                << std::endl;
+        return r;
     }
 
     static int
