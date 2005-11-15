@@ -10,9 +10,11 @@
 #include <boost/parameter/aux_/result_of0.hpp>
 #include <boost/parameter/aux_/default.hpp>
 #include <boost/parameter/aux_/parameter_requirements.hpp>
+#include <boost/parameter/aux_/yesno.hpp>
 #include <boost/parameter/config.hpp>
 
 #include <boost/mpl/apply.hpp>
+#include <boost/mpl/assert.hpp>
 
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -41,6 +43,7 @@ namespace aux {
 // Terminates arg_list<> and represents an empty list.  Since this
 // is just the terminating case you might want to look at arg_list
 // first, to get a feel for what's really happening here.
+
 struct empty_arg_list
 {
     empty_arg_list() {}
@@ -65,6 +68,12 @@ struct empty_arg_list
         };
     };
 
+#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+    // Terminator for has_key, indicating that the keyword is unique
+    template <class KW>
+    static no_tag has_key(KW*);
+#endif
+    
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
     || (BOOST_WORKAROUND(__GNUC__, < 3)) \
     || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
@@ -127,6 +136,11 @@ struct empty_arg_list
     satisfies(ParameterRequirements*);
 };
 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+template<class KW>
+no_tag operator*(empty_arg_list, KW*);
+#endif
+
 // Forward declaration for arg_list::operator,
 template <class KW, class T>
 struct tagged_argument;
@@ -182,6 +196,24 @@ struct arg_list : Next
         };
     };
 
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+    friend yes_tag operator*(arg_list, key_type*);
+# define BOOST_PARAMETER_CALL_HAS_KEY(next, key) (*(next*)0 * (key*)0)
+#else
+    // Overload for key_type, so the assert below will fire if the
+    // same keyword is used again
+    static yes_tag has_key(key_type*);
+    using Next::has_key;
+# define BOOST_PARAMETER_CALL_HAS_KEY(next, key) next::has_key((key*)0)  
+#endif
+
+    BOOST_MPL_ASSERT_MSG(
+        sizeof(BOOST_PARAMETER_CALL_HAS_KEY(Next,key_type)) == sizeof(no_tag)
+      , duplicate_keyword, (key_type)
+    );
+
+#undef BOOST_PARAMETER_CALL_HAS_KEY
+    
     //
     // Begin implementation of indexing operators for looking up
     // specific arguments by name
