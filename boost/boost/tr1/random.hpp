@@ -463,7 +463,7 @@ void xor_combine<UniformRandomNumberGenerator1, s1, UniformRandomNumberGenerator
    result_type d = (m_b2.max)() << s2;
    result_type m, temp;
 
-   m = 0x1u << ((sizeof(result_type) * CHAR_BIT) - 1);
+   m = 0x1uL << ((sizeof(result_type) * CHAR_BIT) - 1);
    while (m != 0) {
       if (~a & c & m) {
          temp = (a | m) & (static_cast<result_type>(0u) - m);
@@ -491,7 +491,7 @@ void xor_combine<UniformRandomNumberGenerator1, s1, UniformRandomNumberGenerator
    c = (m_b2.min)() << s2;
    d = (m_b2.max)() << s2;
 
-   m = 0x1u << ((sizeof(result_type) * CHAR_BIT) - 1);
+   m = 0x1uL << ((sizeof(result_type) * CHAR_BIT) - 1);
 
    while (m != 0) {
       if (b & d & m) {
