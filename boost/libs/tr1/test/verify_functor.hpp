@@ -37,6 +37,22 @@ void verify_unary_functor(F f, B)
 }
 
 template <class F, class B>
+void verify_field_functor(F f, B)
+{
+   // same as verify_unary_functor, but no nested result_type
+   // because it depends on the argument type.
+   typedef typename B::argument_type arg_type;
+   typedef typename B::result_type result_type;
+   static arg_type a;
+
+   typedef typename boost::remove_reference<result_type>::type result_value;
+   verify_return_type(f(a), result_value());
+   result_type r = f(a);
+   (void)r;
+}
+
+
+template <class F, class B>
 void verify_binary_functor(F f, B)
 {
 #ifndef NO_INHERT_TEST

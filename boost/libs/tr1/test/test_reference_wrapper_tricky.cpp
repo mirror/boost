@@ -47,26 +47,30 @@ int main()
    BOOST_STATIC_ASSERT((::boost::is_base_and_derived<std::binary_function<const test_type*, char, int>, std::tr1::reference_wrapper<int (test_type::*)(char)const> >::value));
    BOOST_STATIC_ASSERT((::boost::is_base_and_derived<std::binary_function<int, char, double>, std::tr1::reference_wrapper<functor2> >::value));
 
+   test_type* ptt = 0;
+   test_type const* cptt = 0;
+   int zero = 0;
+
    // now check operator():
    std::tr1::reference_wrapper<double (int)>* pr1;
    verify_return_type((*pr1)(0), double());
    std::tr1::reference_wrapper<double (*)(int)>* pr2;
    verify_return_type((*pr2)(0), double());
    std::tr1::reference_wrapper<int (test_type::*)()>* pr3;
-   verify_return_type((*pr3)(0), int());
+   verify_return_type((*pr3)(ptt), int());
    std::tr1::reference_wrapper<int (test_type::*)()const>* pr4;
-   verify_return_type((*pr4)(0), int());
+   verify_return_type((*pr4)(cptt), int());
    std::tr1::reference_wrapper<functor1>* pr5;
-   verify_return_type((*pr5)(0), double());
+   verify_return_type((*pr5)(zero), double());
 
    std::tr1::reference_wrapper<double (int, char)>* pr1b;
    verify_return_type((*pr1b)(0,0), double());
    std::tr1::reference_wrapper<double (*)(int, char)>* pr2b;
    verify_return_type((*pr2b)(0,0), double());
    std::tr1::reference_wrapper<int (test_type::*)(char)>* pr3b;
-   verify_return_type((*pr3b)(0,0), int());
-   std::tr1::reference_wrapper<int (test_type::*)()const>* pr4b;
-   verify_return_type((*pr4b)(0,0), int());
-   std::tr1::reference_wrapper<functor1>* pr5b;
-   verify_return_type((*pr5b)(0,0), double());
+   verify_return_type((*pr3b)(ptt,zero), int());
+   std::tr1::reference_wrapper<int (test_type::*)(char)const>* pr4b;
+   verify_return_type((*pr4b)(cptt,zero), int());
+   std::tr1::reference_wrapper<functor2>* pr5b;
+   verify_return_type((*pr5b)(zero, zero), double());
 }

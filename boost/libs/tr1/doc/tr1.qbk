@@ -57,6 +57,27 @@ add `boost-install-path/boost/tr1/tr1` to your compiler's include search path.
 Note that you must not copy the headers in boost/tr1/tr1 into a directory
 called "include", doing so will cause them to cease working.
 
+[blurb [*Important Note #1]\n\n
+The include path order is very important if you want this library to work 
+correctly.  If you get compiler errors then suspect the include paths.  The
+correct order is:\n\n
+1) boost-root/boost/tr1/tr1\n
+2) boost-root\n
+3) Any other standard library replacements (STLport for example).\n
+4) Your regular standard library.]
+
+[blurb [*Important Note #2: Borland C++ Users]\n\n
+Borland's compiler has a particularly broken form of `#include`, that
+will actually look for a file named `array.h` if you `#include <array>`.
+In order to make this library work with Borland's compiler you will need to
+set up the include paths as follows:\n\n
+1) boost-root/boost/tr1/tr1/bcc32\n
+2) boost-root/boost/tr1/tr1\n
+3) boost-root\n
+4) Any other standard library replacements (STLport for example).\n
+5) Your regular standard library.]
+
+
 [endsect]
 
 [endsect]

@@ -31,7 +31,8 @@ struct test
 
 int main()
 {
-   verify_unary_functor(std::tr1::mem_fn(&test::field), std::unary_function<test const*, const expected_result&>());
+   verify_field_functor(std::tr1::mem_fn(&test::field), std::unary_function<test const*, const expected_result&>());
+   verify_field_functor(std::tr1::mem_fn(&test::field), std::unary_function<test*, expected_result&>());
    verify_unary_functor(std::tr1::mem_fn(&test::nullary), std::unary_function<test*, expected_result>());
    verify_unary_functor(std::tr1::mem_fn(&test::nullary_c), std::unary_function<test const*, expected_result>());
    //verify_unary_functor(std::tr1::mem_fn(&test::nullary_v), std::unary_function<test volatile*, expected_result>());
