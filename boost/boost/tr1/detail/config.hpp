@@ -18,7 +18,12 @@
 #include <cstddef>
 
 #  if (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) && !defined(__BORLANDC__)
-#     define BOOST_TR1_STD_HEADER(name) <../stlport/name>
+#     ifdef __SUNPRO_CC
+         // can't use <../stlport/name> since some compilers put stlport in a different directory:
+#        define BOOST_TR1_STD_HEADER(name) <stl/../name>
+#     else
+#        define BOOST_TR1_STD_HEADER(name) <../stlport/name>
+#     endif
 #  else
 #     define BOOST_TR1_STD_HEADER(name) <../include/name>
 #  endif
