@@ -178,7 +178,9 @@ inline complex<typename boost::tr1_detail::largest_real<T, U>::type>
    typedef complex<typename boost::tr1_detail::largest_real<T, U>::type> result_type;
    typedef typename boost::mpl::if_<boost::is_same<result_type, complex<T> >, result_type const&, result_type>::type cast1_type;
    typedef typename boost::mpl::if_<boost::is_same<result_type, complex<U> >, result_type const&, result_type>::type cast2_type;
-   return std::pow(static_cast<cast1_type>(x), static_cast<cast2_type>(y));
+   cast1_type x1(x);
+   cast2_type y1(y);
+   return std::pow(x1, y1);
 }
 template<class T, class U> 
 inline complex<typename boost::tr1_detail::promote_to_real<T, U>::type>
@@ -187,7 +189,10 @@ inline complex<typename boost::tr1_detail::promote_to_real<T, U>::type>
    typedef typename boost::tr1_detail::promote_to_real<T, U>::type real_type;
    typedef complex<typename ::boost::tr1_detail::promote_to_real<T, U>::type> result_type;
    typedef typename boost::mpl::if_<boost::is_same<result_type, complex<T> >, result_type const&, result_type>::type cast1_type;
-   return std::pow(static_cast<cast1_type>(x), static_cast<real_type>(y));
+   real_type r = y;
+   cast1_type x1(x);
+   std::complex<real_type> y1(r);
+   return std::pow(x1, y1);
 }
 
 template<class T, class U> 
@@ -197,7 +202,10 @@ inline complex<typename boost::tr1_detail::promote_to_real<T, U>::type>
    typedef typename boost::tr1_detail::promote_to_real<T, U>::type real_type;
    typedef complex<typename ::boost::tr1_detail::promote_to_real<T, U>::type> result_type;
    typedef typename boost::mpl::if_<boost::is_same<result_type, complex<U> >, result_type const&, result_type>::type cast_type;
-   return std::pow(result_type(static_cast<real_type>(x)), static_cast<cast_type>(y));
+   real_type r = x;
+   std::complex<real_type> x1(r);
+   cast_type y1(y);
+   return std::pow(x1, y1);
 }
 
 }
