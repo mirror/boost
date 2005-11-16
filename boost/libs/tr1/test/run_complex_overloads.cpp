@@ -36,8 +36,10 @@
 template <class T, class U>
 void check(const T& t, const U& u)
 {
+   static const T two = 2;
+   static const T factor = std::pow(two, 1-std::numeric_limits<T>::digits) * 200;
    BOOST_STATIC_ASSERT((::boost::is_same<T,U>::value));
-   BOOST_CHECK_CLOSE(t, u, std::numeric_limits<T>::epsilon() * 100 * 2);
+   BOOST_CHECK_CLOSE(t, u, factor);
 }
 
 template <class T, class U>
