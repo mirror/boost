@@ -131,7 +131,7 @@ namespace boost { namespace xpressive { namespace detail
     template<typename BidiIterT, typename ICaseT, typename TraitsT>
     struct transmogrify<BidiIterT, ICaseT, TraitsT, posix_charset_placeholder>
     {
-        typedef posix_charset_matcher<TraitsT, ICaseT::value> type;
+        typedef posix_charset_matcher<TraitsT> type;
 
         template<typename VisitorT>
         static type call(posix_charset_placeholder const &m, VisitorT &visitor)

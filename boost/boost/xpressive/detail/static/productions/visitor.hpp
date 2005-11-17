@@ -74,7 +74,7 @@ namespace boost { namespace xpressive { namespace detail
         template<bool ByRefT>
         void visit_(regex_placeholder<BidiIterT, ByRefT> const &rex)
         {
-            // when visiting a regex embedded by reference, track the references
+            // when visiting an embedded regex, track the references
             this->impl_.track_reference(rex.impl_);
         }
 

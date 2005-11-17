@@ -307,7 +307,7 @@ inline void parse_charset
                 {
                     char_class_type chclass = rxtraits.lookup_classname(start, tmp, icase);
                     ensure(0 != chclass, error_ctype, "unknown class name");
-                    chset.set_class(chclass, invert, icase);
+                    chset.set_class(chclass, invert);
                     continue;
                 }
                 begin = iprev; // un-get this token
@@ -327,7 +327,7 @@ inline void parse_charset
             {
                 char_class_type upper_ = lookup_classname(rxtraits, "upper");
                 BOOST_ASSERT(0 != upper_);
-                chset.set_class(esc.class_, rxtraits.isctype(*begin++, upper_), icase);
+                chset.set_class(esc.class_, rxtraits.isctype(*begin++, upper_));
             }
             else
             {

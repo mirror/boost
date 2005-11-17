@@ -389,7 +389,7 @@ inline void set_range(basic_chset<CharT> &chset, CharT from, CharT to, TraitsT c
 }
 
 template<typename CharT, typename TraitsT>
-inline void set_class(basic_chset<CharT> &chset, typename TraitsT::char_class_type char_class, bool no, TraitsT const &traits, bool icase)
+inline void set_class(basic_chset<CharT> &chset, typename TraitsT::char_class_type char_class, bool no, TraitsT const &traits)
 {
     BOOST_MPL_ASSERT_RELATION(1, ==, sizeof(CharT));
     for(std::size_t i = 0; i <= UCHAR_MAX; ++i)

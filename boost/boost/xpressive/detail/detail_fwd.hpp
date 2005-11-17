@@ -84,7 +84,7 @@ namespace boost { namespace xpressive { namespace detail
 
     struct alternate_end_matcher;
 
-    template<typename TraitsT, bool ICaseT>
+    template<typename TraitsT>
     struct posix_charset_matcher;
 
     template<typename BidiIterT>
@@ -297,7 +297,7 @@ namespace boost { namespace xpressive { namespace detail
     void set_range(compound_charset<TraitsT> &chset, CharT from, CharT to, TraitsT const &traits, bool icase);
 
     template<typename TraitsT>
-    void set_class(compound_charset<TraitsT> &chset, typename TraitsT::char_class_type char_class, bool no, TraitsT const &traits, bool icase);
+    void set_class(compound_charset<TraitsT> &chset, typename TraitsT::char_class_type char_class, bool no, TraitsT const &traits);
 
     template<typename CharT, typename TraitsT>
     void set_char(basic_chset<CharT> &chset, CharT ch, TraitsT const &traits, bool icase);
@@ -306,7 +306,7 @@ namespace boost { namespace xpressive { namespace detail
     void set_range(basic_chset<CharT> &chset, CharT from, CharT to, TraitsT const &traits, bool icase);
 
     template<typename CharT, typename TraitsT>
-    void set_class(basic_chset<CharT> &chset, typename TraitsT::char_class_type char_class, bool no, TraitsT const &traits, bool icase);
+    void set_class(basic_chset<CharT> &chset, typename TraitsT::char_class_type char_class, bool no, TraitsT const &traits);
 
 }}} // namespace boost::xpressive::detail
 

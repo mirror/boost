@@ -128,10 +128,10 @@ struct xpression_peeker
         return mpl::false_();
     }
 
-    template<typename TraitsT, bool ICaseT>
-    mpl::false_ peek(posix_charset_matcher<TraitsT, ICaseT> const &xpr)
+    template<typename TraitsT>
+    mpl::false_ peek(posix_charset_matcher<TraitsT> const &xpr)
     {
-        this->bset_->set_class(xpr.mask_, xpr.not_, ICaseT, this->get_traits_<TraitsT>());
+        this->bset_->set_class(xpr.mask_, xpr.not_, this->get_traits_<TraitsT>());
         return mpl::false_();
     }
 

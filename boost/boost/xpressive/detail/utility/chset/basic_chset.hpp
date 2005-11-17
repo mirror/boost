@@ -143,7 +143,7 @@ template<typename CharT, typename TraitsT>
 void set_range(basic_chset<CharT> &chset, CharT from, CharT to, TraitsT const &traits, bool icase);
 
 template<typename CharT, typename TraitsT>
-void set_class(basic_chset<CharT> &chset, typename TraitsT::char_class_type char_class, bool no, TraitsT const &traits, bool icase);
+void set_class(basic_chset<CharT> &chset, typename TraitsT::char_class_type char_class, bool no, TraitsT const &traits);
 
 }}} // namespace boost::xpressive::detail
 

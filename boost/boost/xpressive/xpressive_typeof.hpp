@@ -74,7 +74,7 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::alternate_matcher, (typ
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::simple_repeat_matcher, (typename)(bool))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::regex_byref_matcher, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::regex_matcher, (typename))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::posix_charset_matcher, (typename)(bool))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::posix_charset_matcher, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::assert_word_matcher, (typename)(typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::range_matcher, (typename)(bool))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::xpressive::detail::keeper_matcher, (typename))

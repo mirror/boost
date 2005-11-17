@@ -26,12 +26,11 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // posix_charset_matcher
     //
-    template<typename TraitsT, bool ICaseT>
+    template<typename TraitsT>
     struct posix_charset_matcher
       : quant_style_fixed_width<1>
     {
         typedef TraitsT traits_type;
-        typedef mpl::bool_<ICaseT> icase_type;
         typedef typename TraitsT::char_class_type char_class_type;
 
         posix_charset_matcher(char_class_type m, bool no)
@@ -45,7 +44,7 @@ namespace boost { namespace xpressive { namespace detail
         bool match(state_type<BidiIterT> &state, NextT const &next) const
         {
             if(state.eos() || this->not_ == traits_cast<TraitsT>(state).isctype(
-               detail::translate(*state.cur_, traits_cast<TraitsT>(state), icase_type()), this->mask_))
+                *state.cur_, this->mask_))
             {
                 return false;
             }

@@ -82,7 +82,7 @@ struct hash_peek_bitset
     }
 
     template<typename TraitsT>
-    void set_class(typename TraitsT::char_class_type char_class, bool no, bool /*icase*/, TraitsT const &traits)
+    void set_class(typename TraitsT::char_class_type char_class, bool no, TraitsT const &traits)
     {
         if(1 != sizeof(char_type))
         {

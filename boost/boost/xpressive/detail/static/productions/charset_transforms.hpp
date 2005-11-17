@@ -61,9 +61,9 @@ namespace boost { namespace xpressive { namespace detail
             }
         }
 
-        void set(posix_charset_matcher<traits_type, icase_type::value> const &posix) const
+        void set(posix_charset_matcher<traits_type> const &posix) const
         {
-            set_class(this->charset_.charset_, posix.mask_, posix.not_, this->traits_, icase_type::value);
+            set_class(this->charset_.charset_, posix.mask_, posix.not_, this->traits_);
         }
 
         template<typename UnknownT>

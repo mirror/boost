@@ -25,12 +25,20 @@
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/utility/literals.hpp>
 
+// From John Maddock:
+// Fix for gcc prior to 3.4: std::ctype<wchar_t> doesn't allow masks to be combined, for example:
+// std::use_facet<std::ctype<wchar_t> >(locale()).is(std::ctype_base::lower|std::ctype_base::upper, L'a');
+// incorrectly returns false.
+// NOTE: later version of the gcc define __GLIBCXX__, not __GLIBCPP__
+#if BOOST_WORKAROUND(__GLIBCPP__, != 0)
+# define BOOST_XPRESSIVE_BUGGY_CTYPE_FACET
+#endif
+
 namespace boost { namespace xpressive
 {
 
 namespace detail
 {
-
     // define an unsigned integral typedef of the same size as std::ctype_base::mask
     typedef boost::uint_t<sizeof(std::ctype_base::mask) * CHAR_BIT>::least umask_t;
     BOOST_MPL_ASSERT_RELATION(sizeof(std::ctype_base::mask), ==, sizeof(umask_t));
@@ -41,7 +49,7 @@ namespace detail
     // = 14 total bits needed
     int const umaskex_bits = (14 > (sizeof(umask_t) * CHAR_BIT)) ? 14 : sizeof(umask_t) * CHAR_BIT;
 
-    // define an unsigned integral type larger than umask_t (+3 for the 3 extra bitmasks below)
+    // define an unsigned integral type with at least umaskex_bits
     typedef boost::uint_t<umaskex_bits>::fast umaskex_t;
     BOOST_MPL_ASSERT_RELATION(sizeof(umask_t), <=, sizeof(umaskex_t));
 
@@ -67,6 +75,7 @@ namespace detail
     umaskex_t const mask_cast<MaskT>::value;
     #endif
 
+    #ifndef BOOST_XPRESSIVE_BUGGY_CTYPE_FACET
     // an unsigned integer with the highest bit set
     umaskex_t const highest_bit = 1 << (sizeof(umaskex_t) * CHAR_BIT - 1);
 
@@ -91,6 +100,18 @@ namespace detail
     umaskex_t const unused_mask<In, Out, Done>::value;
     #endif
 
+    umaskex_t const std_ctype_alnum = mask_cast<std::ctype_base::alnum>::value;
+    umaskex_t const std_ctype_alpha = mask_cast<std::ctype_base::alpha>::value;
+    umaskex_t const std_ctype_cntrl = mask_cast<std::ctype_base::cntrl>::value;
+    umaskex_t const std_ctype_digit = mask_cast<std::ctype_base::digit>::value;
+    umaskex_t const std_ctype_graph = mask_cast<std::ctype_base::graph>::value;
+    umaskex_t const std_ctype_lower = mask_cast<std::ctype_base::lower>::value;
+    umaskex_t const std_ctype_print = mask_cast<std::ctype_base::print>::value;
+    umaskex_t const std_ctype_punct = mask_cast<std::ctype_base::punct>::value;
+    umaskex_t const std_ctype_space = mask_cast<std::ctype_base::space>::value;
+    umaskex_t const std_ctype_upper = mask_cast<std::ctype_base::upper>::value;
+    umaskex_t const std_ctype_xdigit = mask_cast<std::ctype_base::xdigit>::value;
+
     // Reserve some bits for the implementation
     #if defined(__GLIBCXX__) && __GLIBCXX__ >= 20050209
     umaskex_t const std_ctype_reserved = 0x8000;
@@ -100,21 +121,66 @@ namespace detail
 
     // Bitwise-or all the ctype masks together
     umaskex_t const all_ctype_masks = std_ctype_reserved
-      | mask_cast<std::ctype_base::alnum>::value | mask_cast<std::ctype_base::alpha>::value
-      | mask_cast<std::ctype_base::cntrl>::value | mask_cast<std::ctype_base::digit>::value
-      | mask_cast<std::ctype_base::graph>::value | mask_cast<std::ctype_base::lower>::value
-      | mask_cast<std::ctype_base::print>::value | mask_cast<std::ctype_base::punct>::value
-      | mask_cast<std::ctype_base::space>::value | mask_cast<std::ctype_base::upper>::value
-      | mask_cast<std::ctype_base::xdigit>::value;
+      | std_ctype_alnum | std_ctype_alpha | std_ctype_cntrl | std_ctype_digit
+      | std_ctype_graph | std_ctype_lower | std_ctype_print | std_ctype_punct
+      | std_ctype_space | std_ctype_upper | std_ctype_xdigit;
 
     // define a new mask for "underscore" ("word" == alnum | underscore)
-    umaskex_t const std_ctype_underscore = unused_mask<all_ctype_masks>::value;
+    umaskex_t const non_std_ctype_underscore = unused_mask<all_ctype_masks>::value;
 
     // define a new mask for "blank"
-    umaskex_t const std_ctype_blank = unused_mask<all_ctype_masks | std_ctype_underscore>::value;
+    umaskex_t const non_std_ctype_blank = unused_mask<all_ctype_masks | non_std_ctype_underscore>::value;
 
     // define a new mask for "newline"
-    umaskex_t const std_ctype_newline = unused_mask<all_ctype_masks | std_ctype_underscore | std_ctype_blank>::value;
+    umaskex_t const non_std_ctype_newline = unused_mask<all_ctype_masks | non_std_ctype_underscore | non_std_ctype_blank>::value;
+
+    #else
+    ///////////////////////////////////////////////////////////////////////////////
+    // Ugly work-around for buggy ctype facets.
+    umaskex_t const std_ctype_alnum = 1 << 0;
+    umaskex_t const std_ctype_alpha = 1 << 1;
+    umaskex_t const std_ctype_cntrl = 1 << 2;
+    umaskex_t const std_ctype_digit = 1 << 3;
+    umaskex_t const std_ctype_graph = 1 << 4;
+    umaskex_t const std_ctype_lower = 1 << 5;
+    umaskex_t const std_ctype_print = 1 << 6;
+    umaskex_t const std_ctype_punct = 1 << 7;
+    umaskex_t const std_ctype_space = 1 << 8;
+    umaskex_t const std_ctype_upper = 1 << 9;
+    umaskex_t const std_ctype_xdigit = 1 << 10;
+    umaskex_t const non_std_ctype_underscore = 1 << 11;
+    umaskex_t const non_std_ctype_blank = 1 << 12;
+    umaskex_t const non_std_ctype_newline = 1 << 13;
+
+    static umaskex_t const std_masks[] = 
+    {
+        mask_cast<std::ctype_base::alnum>::value
+      , mask_cast<std::ctype_base::alpha>::value
+      , mask_cast<std::ctype_base::cntrl>::value
+      , mask_cast<std::ctype_base::digit>::value
+      , mask_cast<std::ctype_base::graph>::value
+      , mask_cast<std::ctype_base::lower>::value
+      , mask_cast<std::ctype_base::print>::value
+      , mask_cast<std::ctype_base::punct>::value
+      , mask_cast<std::ctype_base::space>::value
+      , mask_cast<std::ctype_base::upper>::value
+      , mask_cast<std::ctype_base::xdigit>::value
+      , non_std_ctype_underscore
+      , non_std_ctype_blank
+      , non_std_ctype_newline
+    };
+
+    inline int log2(umaskex_t i)
+    {
+        return "\0\0\1\0\2\0\0\0\3"[i & 0xf]
+             + "\0\4\5\0\6\0\0\0\7"[(i & 0xf0) >> 04]
+             + "\0\10\11\0\12\0\0\0\13"[(i & 0xf00) >> 010]
+             + "\0\14\15\0\16\0\0\0\17"[(i & 0xf000) >> 014];
+    }
+    #endif
+
+    // convenient constant for the extra masks
+    umaskex_t const non_std_ctype_masks = non_std_ctype_underscore | non_std_ctype_blank | non_std_ctype_newline;
 
     ///////////////////////////////////////////////////////////////////////////////
     // cpp_regex_traits_base
@@ -150,15 +216,15 @@ namespace detail
             for(i = 0; i <= UCHAR_MAX; ++i)
             {
                 this->masks_[i] = static_cast<umask_t>(tmp[i]);
-		BOOST_ASSERT(0 == (this->masks_[i] & (std_ctype_underscore | std_ctype_blank | std_ctype_newline)));
+                BOOST_ASSERT(0 == (this->masks_[i] & (non_std_ctype_underscore | non_std_ctype_blank | non_std_ctype_newline)));
             }
 
-            this->masks_[static_cast<unsigned char>('_')] |= std_ctype_underscore;
-            this->masks_[static_cast<unsigned char>(' ')] |= std_ctype_blank;
-            this->masks_[static_cast<unsigned char>('\t')] |= std_ctype_blank;
-            this->masks_[static_cast<unsigned char>('\n')] |= std_ctype_newline;
-            this->masks_[static_cast<unsigned char>('\r')] |= std_ctype_newline;
-            this->masks_[static_cast<unsigned char>('\f')] |= std_ctype_newline;
+            this->masks_[static_cast<unsigned char>('_')] |= non_std_ctype_underscore;
+            this->masks_[static_cast<unsigned char>(' ')] |= non_std_ctype_blank;
+            this->masks_[static_cast<unsigned char>('\t')] |= non_std_ctype_blank;
+            this->masks_[static_cast<unsigned char>('\n')] |= non_std_ctype_newline;
+            this->masks_[static_cast<unsigned char>('\r')] |= non_std_ctype_newline;
+            this->masks_[static_cast<unsigned char>('\f')] |= non_std_ctype_newline;
         }
  
         umaskex_t masks_[UCHAR_MAX + 1];
@@ -380,7 +446,7 @@ struct cpp_regex_traits
     char_class_type lookup_classname(FwdIterT begin, FwdIterT end, bool icase) const
     {
         static detail::umaskex_t const icase_masks =
-            detail::mask_cast<std::ctype_base::lower>::value | detail::mask_cast<std::ctype_base::upper>::value;
+            detail::std_ctype_lower | detail::std_ctype_upper;
 
         BOOST_ASSERT(begin != end);
         char_class_type char_class = this->lookup_classname_impl_(begin, end);
@@ -464,7 +530,25 @@ private:
     /// INTERNAL ONLY
     bool isctype_impl_(char_type ch, char_class_type mask, mpl::size_t<1>) const
     {
+        #ifndef BOOST_XPRESSIVE_BUGGY_CTYPE_FACET
+
         return 0 != (this->masks_[static_cast<unsigned char>(ch)] & mask);
+
+        #else
+
+        detail::umaskex_t m = this->masks_[static_cast<unsigned char>(ch)];
+        while(detail::umaskex_t i = (mask & (~mask+1)))
+        {
+            if(m & detail::std_masks[detail::log2(i)])
+            {
+                return true;
+            }
+            mask &= ~i;
+        }
+
+        return false;
+
+        #endif
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -472,17 +556,35 @@ private:
     /// INTERNAL ONLY
     bool isctype_impl_(char_type ch, char_class_type mask, std::size_t) const
     {
-        if(this->ctype_->is(static_cast<std::ctype_base::mask>((detail::umask_t)mask), ch))
+        #ifndef BOOST_XPRESSIVE_BUGGY_CTYPE_FACET
+
+        if(this->ctype_->is((std::ctype_base::mask)(detail::umask_t)mask, ch))
         {
             return true;
         }
 
+        #else
+
+        detail::umaskex_t tmp = mask & ~detail::non_std_ctype_masks;
+        while(detail::umaskex_t i = (tmp & (~tmp+1)))
+        {
+            std::ctype_base::mask m = (std::ctype_base::mask)(detail::umask_t)
+                detail::std_masks[detail::log2(i)];
+            if(this->ctype_->is(m, ch))
+            {
+                return true;
+            }
+            tmp &= ~i;
+        }
+
+        #endif
+
         switch(ch)
         {
-        case L'\t': return 0 != (mask & detail::std_ctype_blank);
-        case L'_': return 0 != (mask & detail::std_ctype_underscore);
+        case L'\t': return 0 != (mask & detail::non_std_ctype_blank);
+        case L'_': return 0 != (mask & detail::non_std_ctype_underscore);
         case L'\n': case L'\r': case L'\f': case 0x2028u: case 0x2029u: case 0x85u:
-            return 0 != (mask & detail::std_ctype_newline);
+            return 0 != (mask & detail::non_std_ctype_newline);
         default:;
         }
 
@@ -505,22 +607,22 @@ private:
     {
         static char_class_pair const s_char_class_map[] =
         {
-            { BOOST_XPR_CSTR_(char_type, "alnum"),  detail::mask_cast<std::ctype_base::alnum>::value }
-          , { BOOST_XPR_CSTR_(char_type, "alpha"),  detail::mask_cast<std::ctype_base::alpha>::value }
-          , { BOOST_XPR_CSTR_(char_type, "blank"),  detail::std_ctype_blank }
-          , { BOOST_XPR_CSTR_(char_type, "cntrl"),  detail::mask_cast<std::ctype_base::cntrl>::value }
-          , { BOOST_XPR_CSTR_(char_type, "d"),      detail::mask_cast<std::ctype_base::digit>::value }
-          , { BOOST_XPR_CSTR_(char_type, "digit"),  detail::mask_cast<std::ctype_base::digit>::value }
-          , { BOOST_XPR_CSTR_(char_type, "graph"),  detail::mask_cast<std::ctype_base::graph>::value }
-          , { BOOST_XPR_CSTR_(char_type, "lower"),  detail::mask_cast<std::ctype_base::lower>::value }
-          , { BOOST_XPR_CSTR_(char_type, "newline"),detail::std_ctype_newline }
-          , { BOOST_XPR_CSTR_(char_type, "print"),  detail::mask_cast<std::ctype_base::print>::value }
-          , { BOOST_XPR_CSTR_(char_type, "punct"),  detail::mask_cast<std::ctype_base::punct>::value }
-          , { BOOST_XPR_CSTR_(char_type, "s"),      detail::mask_cast<std::ctype_base::space>::value }
-          , { BOOST_XPR_CSTR_(char_type, "space"),  detail::mask_cast<std::ctype_base::space>::value }
-          , { BOOST_XPR_CSTR_(char_type, "upper"),  detail::mask_cast<std::ctype_base::upper>::value }
-          , { BOOST_XPR_CSTR_(char_type, "w"),      detail::mask_cast<std::ctype_base::alnum>::value | detail::std_ctype_underscore }
-          , { BOOST_XPR_CSTR_(char_type, "xdigit"), detail::mask_cast<std::ctype_base::xdigit>::value }
+            { BOOST_XPR_CSTR_(char_type, "alnum"),  detail::std_ctype_alnum }
+          , { BOOST_XPR_CSTR_(char_type, "alpha"),  detail::std_ctype_alpha }
+          , { BOOST_XPR_CSTR_(char_type, "blank"),  detail::non_std_ctype_blank }
+          , { BOOST_XPR_CSTR_(char_type, "cntrl"),  detail::std_ctype_cntrl }
+          , { BOOST_XPR_CSTR_(char_type, "d"),      detail::std_ctype_digit }
+          , { BOOST_XPR_CSTR_(char_type, "digit"),  detail::std_ctype_digit }
+          , { BOOST_XPR_CSTR_(char_type, "graph"),  detail::std_ctype_graph }
+          , { BOOST_XPR_CSTR_(char_type, "lower"),  detail::std_ctype_lower }
+          , { BOOST_XPR_CSTR_(char_type, "newline"),detail::non_std_ctype_newline }
+          , { BOOST_XPR_CSTR_(char_type, "print"),  detail::std_ctype_print }
+          , { BOOST_XPR_CSTR_(char_type, "punct"),  detail::std_ctype_punct }
+          , { BOOST_XPR_CSTR_(char_type, "s"),      detail::std_ctype_space }
+          , { BOOST_XPR_CSTR_(char_type, "space"),  detail::std_ctype_space }
+          , { BOOST_XPR_CSTR_(char_type, "upper"),  detail::std_ctype_upper }
+          , { BOOST_XPR_CSTR_(char_type, "w"),      detail::std_ctype_alnum | detail::non_std_ctype_underscore }
+          , { BOOST_XPR_CSTR_(char_type, "xdigit"), detail::std_ctype_xdigit }
           , { 0, 0 }
         };
         return s_char_class_map[j];
@@ -533,11 +635,12 @@ private:
     static char_class_type lookup_classname_impl_(FwdIterT begin, FwdIterT end)
     {
         // find the classname
-        for(std::size_t j = 0; 0 != cpp_regex_traits::char_class(j).class_name_; ++j)
+        typedef cpp_regex_traits<CharT> this_t;
+        for(std::size_t j = 0; 0 != this_t::char_class(j).class_name_; ++j)
         {
-            if(compare_(cpp_regex_traits::char_class(j).class_name_, begin, end))
+            if(this_t::compare_(this_t::char_class(j).class_name_, begin, end))
             {
-                return cpp_regex_traits::char_class(j).class_type_;
+                return this_t::char_class(j).class_type_;
             }
         }
         return 0;

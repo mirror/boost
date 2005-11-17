@@ -246,16 +246,8 @@ inline sequence<BidiIterT> make_charset_xpression
     else if(chset.basic_chset().empty() && chset.posix_no().empty())
     {
         BOOST_ASSERT(0 != chset.posix_yes());
-        if(icase)
-        {
-            posix_charset_matcher<TraitsT, true> matcher(chset.posix_yes(), chset.is_inverted());
-            return make_dynamic_xpression<BidiIterT>(matcher);
-        }
-        else
-        {
-            posix_charset_matcher<TraitsT, false> matcher(chset.posix_yes(), chset.is_inverted());
-            return make_dynamic_xpression<BidiIterT>(matcher);
-        }
+        posix_charset_matcher<TraitsT> matcher(chset.posix_yes(), chset.is_inverted());
+        return make_dynamic_xpression<BidiIterT>(matcher);
     }
 
     // default, slow
@@ -282,23 +274,12 @@ inline sequence<BidiIterT> make_posix_charset_xpression
 (
     typename TraitsT::char_class_type m
   , bool no
-  , regex_constants::syntax_option_type flags
+  , regex_constants::syntax_option_type //flags
   , TraitsT const & //traits
 )
 {
-    typedef typename iterator_value<BidiIterT>::type char_type;
-    bool const icase = (0 != (regex_constants::icase_ & flags));
-
-    if(icase)
-    {
-        posix_charset_matcher<TraitsT, true> charset(m, no);
-        return make_dynamic_xpression<BidiIterT>(charset);
-    }
-    else
-    {
-        posix_charset_matcher<TraitsT, false> charset(m, no);
-        return make_dynamic_xpression<BidiIterT>(charset);
-    }
+    posix_charset_matcher<TraitsT> charset(m, no);
+    return make_dynamic_xpression<BidiIterT>(charset);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
