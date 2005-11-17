@@ -216,7 +216,9 @@ namespace detail
             for(i = 0; i <= UCHAR_MAX; ++i)
             {
                 this->masks_[i] = static_cast<umask_t>(tmp[i]);
+                #ifndef BOOST_XPRESSIVE_BUGGY_CTYPE_FACET
                 BOOST_ASSERT(0 == (this->masks_[i] & (non_std_ctype_underscore | non_std_ctype_blank | non_std_ctype_newline)));
+                #endif
             }
 
             this->masks_[static_cast<unsigned char>('_')] |= non_std_ctype_underscore;
