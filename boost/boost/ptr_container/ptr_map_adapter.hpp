@@ -178,7 +178,7 @@ namespace ptr_container_detail
     public:
 
         BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_map_adapter_base, 
-                                                 base_type );
+                                                 base_type )
 
         template< class Compare, class Allocator >
         explicit ptr_map_adapter_base( const Compare& comp,
