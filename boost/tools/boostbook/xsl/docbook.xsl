@@ -421,4 +421,34 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
   <xsl:template match="*" mode="namespace-reference">
     <xsl:apply-templates select="." mode="reference"/>
   </xsl:template>
+  
+  <!-- Make the various blocks immediately below a "part" be
+       "chapter"-s. Must also take into account turning
+       chapters within chpaters into sections. -->
+  <xsl:template match="part/part|part/article">
+    <chapter>
+      <xsl:for-each select="./@*">
+        <xsl:attribute name="{name(.)}">
+          <xsl:value-of select="."/>
+        </xsl:attribute>
+      </xsl:for-each>
+      <xsl:apply-templates/>
+    </chapter>
+  </xsl:template>
+  <xsl:template match="part/part/partinfo|part/article/articleinfo">
+    <chapterinfo><xsl:apply-templates/></chapterinfo>
+  </xsl:template>
+  <xsl:template match="part/part/chapter">
+    <section>
+      <xsl:for-each select="./@*">
+        <xsl:attribute name="{name(.)}">
+          <xsl:value-of select="."/>
+        </xsl:attribute>
+      </xsl:for-each>
+      <xsl:apply-templates/>
+    </section>
+  </xsl:template>
+  <xsl:template match="part/part/chapter/chapterinfo">
+    <sectioninfo><xsl:apply-templates/></sectioninfo>
+  </xsl:template>
 </xsl:stylesheet>
