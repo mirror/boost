@@ -41,7 +41,7 @@ operator<< (std::ostream &stream,
     token_id id = token_id(t);
     stream << setw(16) 
         << left << boost::wave::get_token_name(id) << " ("
-        << "#" << BASEID_FROM_TOKEN(id);
+        << "#" << setw(3) << BASEID_FROM_TOKEN(id);
 
     if (ExtTokenTypeMask & id) {
     // this is an extended token id
