@@ -3,9 +3,11 @@ project boost/quickbook/doc ;
 import boostbook : boostbook ;
 using quickbook ;
 
-boostbook quickbook
+xml quickbook : quickbook.qbk ;
+
+boostbook standalone
     :
-        quickbook.qbk
+        quickbook
     :
         <xsl:param>boost.root=../../../..
         <xsl:param>boost.libraries=../../../../libs/libraries.htm
