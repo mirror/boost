@@ -493,9 +493,7 @@ static char const *tok_names[] = {
     };   
      
     unsigned int id = BASEID_FROM_TOKEN(tokid)-T_FIRST_TOKEN;
-
-    BOOST_ASSERT(id < T_LAST_TOKEN-T_FIRST_TOKEN);
-    return tok_names[id];
+    return (id < T_LAST_TOKEN-T_FIRST_TOKEN) ? tok_names[id] : "<UnknownToken>";
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -630,8 +628,8 @@ static char const *tok_names[] = {
     /* 375 */   "#endif",
     /* 376 */   "#error",
     /* 377 */   "#line",
-    /* 378 */   "#pragma ",
-    /* 379 */   "#undef ",
+    /* 378 */   "#pragma",
+    /* 379 */   "#undef",
     /* 380 */   "#warning",
     /* 381 */   "",   // identifier
     /* 382 */   "",   // octalint
@@ -678,9 +676,7 @@ static char const *tok_names[] = {
     };   
      
     unsigned int id = BASEID_FROM_TOKEN(tokid)-T_FIRST_TOKEN;
-
-    BOOST_ASSERT(id < T_LAST_TOKEN-T_FIRST_TOKEN);
-    return tok_names[id];
+    return (id < T_LAST_TOKEN-T_FIRST_TOKEN) ? tok_names[id] : "<UnknownToken>";
 }
 
 ///////////////////////////////////////////////////////////////////////////////
