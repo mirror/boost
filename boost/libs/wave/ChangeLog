@@ -31,6 +31,11 @@ CHANGELOG
 - Switched to Re2C V0.9.10
 - Added new sample: advanced_hooks.
 - Fixed a possible buffer overflow in the cpplexer and cpp exception classes.
+- Made the cpp_grammar thread safe.
+- Removed the need for the get_directivename() function. Fixed typos in the 
+  predefined token table.
+- Removed assertions from get_token_name() and get_token_value() and replaced 
+  these with more meaningful code.
 
 Boost V1.33.1
 - Version 1.2.1
