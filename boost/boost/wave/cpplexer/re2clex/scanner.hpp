@@ -48,7 +48,6 @@ typedef struct Scanner {
     aq_queue eol_offsets;
     int enable_ms_extensions;   /* enable MS extensions */
     int act_in_c99_mode;        /* lexer works in C99 mode */
-    int act_in_cpp0x_mode;      /* lexer works in C++0x mode */
 } Scanner;
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -113,7 +113,6 @@ lexer<IteratorT, PositionT>::lexer(IteratorT const &first,
 // not used by the lexer
     scanner.enable_ms_extensions = 0;
     scanner.act_in_c99_mode = 0;
-    scanner.act_in_cpp0x_mode = 0;
 
     boost::ignore_unused_variable_warning(language);
 }
