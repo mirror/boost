@@ -51,8 +51,11 @@ rule toolset::require-wide-char-io-support ( toolset variant : subvariant-path p
         echo **** wide char i/o not supported by libcomo standard library **** ;
         properties = [ impose-requirements $(properties) : <build>no ] ;
     case "mingw*" :
-        echo **** wide char i/o not supported by the mingw standard library **** ;
-        properties = [ impose-requirements $(properties) : <build>no ] ;
+        if ! [ MATCH "^([5][.][0])$" : [ get-values <stlport-version> : $(properties) ] ]
+        {
+            echo **** wide char i/o not supported by the mingw standard library **** ;
+            properties = [ impose-requirements $(properties) : <build>no ] ;
+        }
     }
     return $(subvariant-path) $(properties) ;
 }
@@ -80,3 +83,36 @@ rule toolset::require-shared-libraries-support ( toolset variant : subvariant-pa
     }
     return $(subvariant-path) $(properties) ;
 }
+
+# certain tool sets display warnings which are not applicable to the serialization library
+rule toolset::suppress-warnings ( toolset variant : subvariant-path properties * )
+{
+    switch $(toolset) {
+    case "vc-8*" :
+        properties = [ impose-requirements $(properties) : <cxxflags>"-wd4996" ] ;    
+    case "*cygwin*" :
+        properties = [ impose-requirements $(properties) : <cxxflags>"-Wno-non-virtual-dtor -Wno-ctor-dtor-privacy" ] ;
+    case "gcc*" :
+        properties = [ impose-requirements $(properties) : <cxxflags>"-Wno-non-virtual-dtor -Wno-ctor-dtor-privacy" ] ;
+    case "mingw*" :
+        properties = [ impose-requirements $(properties) : <cxxflags>"-Wno-non-virtual-dtor -Wno-ctor-dtor-privacy" ] ;
+    case "borland*" :
+        properties = [ impose-requirements $(properties) : <cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062 -w-8008 -w-0018 -w-8066" ] ;
+    }
+    return $(subvariant-path) $(properties) ;
+}
+
+# set optimization switches for certain toolsets. We do it here rather than in the
+# Jamfile requirements because here we can use a regex for the compiler name.
+rule toolset::optimizations ( toolset variant : subvariant-path properties * )
+{
+    switch $(toolset) {
+    case "vc*" :
+        properties = [ impose-requirements $(properties) : <cxxflags>"-Gy" ] ;    
+    case "msvc" :
+        properties = [ impose-requirements $(properties) : <cxxflags>"-Gy" ] ;
+    }
+    return $(subvariant-path) $(properties) ;
+}
+
+
