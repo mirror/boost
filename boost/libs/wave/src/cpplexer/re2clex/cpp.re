@@ -6,10 +6,13 @@
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+    This is a lexer conforming to the Standard with a few exceptions.
+    So it does allow the '$' to be part of identifiers. If you need strict 
+    Standards conforming behaviour, please include the lexer definition 
+    provided in the file strict_cpp.re.
+
     TODO: 
-        It also may be necessary to add $ to identifiers, for asm. 
         handle errors better.
-        have some easier way to parse strings instead of files (done) 
 =============================================================================*/
 
 /*!re2c

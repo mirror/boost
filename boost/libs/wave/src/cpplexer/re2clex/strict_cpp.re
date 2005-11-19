@@ -1,3 +1,20 @@
+/*=============================================================================
+    Boost.Wave: A Standard compliant C++ preprocessor library
+
+    Copyright (c) 2001 Daniel C. Nuffer
+    Copyright (c) 2001-2005 Hartmut Kaiser. 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+    This is a strict lexer conforming to the Standard as close as possible.
+    It does not allow the '$' to be part of identifiers. If you need the '$'
+    character in identifiers please include the lexer definition provided
+    in the cpp.re file.
+    
+    TODO: 
+        handle errors better.
+=============================================================================*/
+
 /*!re2c
 any                = [\t\v\f\r\n\040-\377];
 OctalDigit         = [0-7];
