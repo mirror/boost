@@ -36,7 +36,11 @@ CHANGELOG
   predefined token table.
 - Removed assertions from get_token_name() and get_token_value() and replaced 
   these with more meaningful code.
-
+- Added the BOOST_WAVE_USE_STRICT_LEXER configuration constant which allows to
+  decide, whether the '$' character will be recognized as a part of identifiers
+  or not (the default is BOOST_WAVE_USE_STRICT_LEXER == 0, i.e. '$' will be
+  recognized as part of identifiers).
+  
 Boost V1.33.1
 - Version 1.2.1
 - Fixed bug reported as Sourceforge bug 1274584.

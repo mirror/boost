@@ -104,7 +104,6 @@ public:
     //
     //  The parameter 'token' refers to the token to be skipped.
     //  
-    //
     ///////////////////////////////////////////////////////////////////////////
     template <typename TokenT>
     void
@@ -121,6 +120,7 @@ public:
             need_comment = true;
     }
 
+private:
     bool need_comment;
 };
 

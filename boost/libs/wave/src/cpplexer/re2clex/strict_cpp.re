@@ -1,17 +1,3 @@
-/*=============================================================================
-    Boost.Wave: A Standard compliant C++ preprocessor library
-
-    Copyright (c) 2001 Daniel C. Nuffer
-    Copyright (c) 2001-2005 Hartmut Kaiser. 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
-    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
-    TODO: 
-        It also may be necessary to add $ to identifiers, for asm. 
-        handle errors better.
-        have some easier way to parse strings instead of files (done) 
-=============================================================================*/
-
 /*!re2c
 any                = [\t\v\f\r\n\040-\377];
 OctalDigit         = [0-7];
@@ -230,9 +216,9 @@ Pound              = "#" | "??=" | "%:";
     "??/"           { RET(T_ANY_TRIGRAPH); }
 
 
-    ([a-zA-Z_$] | UniversalChar) ([a-zA-Z_0-9$] | UniversalChar)*
+    ([a-zA-Z_] | UniversalChar) ([a-zA-Z_0-9] | UniversalChar)*
         { RET(T_IDENTIFIER); }
-    
+
     Integer LongIntegerSuffix
         { RET(T_LONGINTLIT); }
 

@@ -111,9 +111,9 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 //  data required for initialization of the lexer (token definitions)
-#define OR      "|"
-#define Q(c)    "\\" c
-#define TRI(c)  Q("?") Q("?") c
+#define OR                  "|"
+#define Q(c)                "\\" c
+#define TRI(c)              Q("?") Q("?") c
 
 // definition of some subtoken regexps to simplify the regex definitions
 #define BLANK               "[ \\t]"
@@ -342,7 +342,11 @@ lexer<IteratorT, PositionT>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(MSEXT_PP_REGION, POUNDDEF PPSPACE "region"),
     TOKEN_DATA(MSEXT_PP_ENDREGION, POUNDDEF PPSPACE "endregion"),
 #endif // BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
+#if BOOST_WAVE_USE_STRICT_LEXER != 0
     TOKEN_DATA(IDENTIFIER, "([a-zA-Z_]" OR UNIVERSALCHAR ")([a-zA-Z0-9_]" OR UNIVERSALCHAR ")*"),
+#else
+    TOKEN_DATA(IDENTIFIER, "([a-zA-Z_$]" OR UNIVERSALCHAR ")([a-zA-Z0-9_$]" OR UNIVERSALCHAR ")*"),
+#endif
 //  TOKEN_DATA(OCTALINT, "0" OCTALDIGIT "*" INTEGER_SUFFIX "?"),
 //  TOKEN_DATA(DECIMALINT, "[1-9]" DIGIT "*" INTEGER_SUFFIX "?"),
 //  TOKEN_DATA(HEXAINT, "(0x|0X)" HEXDIGIT "+" INTEGER_SUFFIX "?"),

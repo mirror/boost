@@ -264,6 +264,19 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+//  Decide whether to use a strict C++ lexer.
+//  
+//  If this is defined to something != 0, then the C++ lexers recognize the 
+//  strict C99/C++ basic source character set. If it is not defined or defined 
+//  to zero, the C++ lexers recognize the '$' character as part of identifiers.
+//
+//  The default is to recognize the '$' character as part of identifiers.
+//
+#if !defined(BOOST_WAVE_USE_STRICT_LEXER)
+#define BOOST_WAVE_USE_STRICT_LEXER 0
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
 //  configure Boost.Pool thread support (for now: no thread support at all)
 #if !defined(BOOST_NO_MT)
 #define BOOST_NO_MT
@@ -275,7 +288,11 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //  Wave needs at least 4 parameters for phoenix actors
+#if !defined(PHOENIX_LIMIT)
 #define PHOENIX_LIMIT 6
+#elif PHOENIX_LIMIT < 4
+#error "Wave needs PHOENIX_LIMIT to be set at least to 4!"
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 //  Auto library naming

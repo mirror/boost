@@ -216,6 +216,7 @@ public:
 private:
     typedef typename ContextT::lexer_type               lexer_type;
     typedef typename result_type::string_type           string_type;
+    typedef typename result_type::position_type         position_type;
     typedef boost::wave::grammars::cpp_grammar_gen<lexer_type> 
         cpp_grammar_type;
 
@@ -251,7 +252,7 @@ public:
                 pos_.get_file().c_str()
             )), 
         seen_newline(true), must_emit_line_directive(false),
-        act_pos(ctx_.get_main_pos()), //last_line(0),
+        act_pos(ctx_.get_main_pos()), 
         eater(need_preserve_comments(ctx_.get_language()))
     {
         act_pos.set_file(pos_.get_file());
@@ -276,7 +277,8 @@ protected:
     result_type const &pp_token(bool consider_emitting_line_directive = false);
 
     bool pp_directive();
-    bool dispatch_directive(boost::spirit::tree_parse_info<lexer_type> const &hit);
+    bool dispatch_directive(boost::spirit::tree_parse_info<lexer_type> const &hit,
+        result_type const& found_directive);
 
     void on_include(string_type const &s, bool is_system, bool include_next);
     void on_include(typename parse_tree_type::const_iterator const &begin,
@@ -322,7 +324,6 @@ private:
     bool must_emit_line_directive;  // must emit a line directive
     result_type act_token;          // current token
     typename result_type::position_type &act_pos;   // current fileposition (references the macromap)
-//    unsigned int last_line;         // line number of the previous token
         
     token_sequence_type unput_queue;     // tokens to be preprocessed again
     token_sequence_type pending_queue;   // tokens already preprocessed
@@ -381,7 +382,6 @@ pp_iterator_functor<ContextT>::returned_from_include()
         ctx.set_current_filename(iter_ctx->real_filename.c_str());
 #endif 
 
-//        last_line = iter_ctx->line;
         act_pos.set_line(iter_ctx->line);
         act_pos.set_column(0);
         
@@ -507,14 +507,8 @@ bool returned_from_include_file = returned_from_include();
 
         // adjust the current position (line and column)
         bool was_seen_newline = seen_newline || returned_from_include_file;
-//        int current_line = act_token.get_position().get_line();
-//        
-//            act_pos.set_line(act_pos.get_line() + current_line - last_line);
-//            act_pos.set_column(act_token.get_position().get_column());
-//            last_line = current_line;
 
             act_pos = act_token.get_position();
-//            last_line = act_pos.get_line();
             
         // act accordingly on the current token
         token_id id = token_id(act_token);
@@ -577,19 +571,20 @@ bool returned_from_include_file = returned_from_include();
                 ++iter_ctx->first;
             }
             
-        } while (iter_ctx->first != iter_ctx->last || returned_from_include());
+        } while ((iter_ctx->first != iter_ctx->last) || 
+                 (returned_from_include_file = returned_from_include()));
     }
     
-    if (returned_from_include_file) {
-    // if there was an '#include' statement on the last line of the main file 
-    // we have to return an additional newline token
-        seen_newline = true;
-        
-        whitespace.shift_tokens(T_NEWLINE);  // whitespace controller
-        return act_token = result_type(T_NEWLINE, 
-            typename result_type::string_type("\n"), 
-            cpp_grammar_type::pos_of_newline);
-    }
+//    if (returned_from_include_file) {
+//    // if there was an '#include' statement on the last line of the main file 
+//    // we have to return an additional newline token
+//        seen_newline = true;
+//        
+//        whitespace.shift_tokens(T_NEWLINE);  // whitespace controller
+//        return act_token = result_type(T_NEWLINE, 
+//            typename result_type::string_type("\n"), 
+//            cpp_grammar_type::pos_of_newline);
+//    }
     
 // overall eof reached
     if (ctx.get_if_block_depth() > 0) {
@@ -633,7 +628,6 @@ typename ContextT::position_type pos = act_token.get_position();
         // account for the newline emitted here
             act_pos.set_line(act_pos.get_line()-1);
             iter_ctx->emitted_lines = act_pos.get_line();
-//            --last_line;
         
         // the #line directive has to be pushed back into the pending queue in 
         // reverse order
@@ -829,17 +823,20 @@ lexer_type it = iter_ctx->first;
 
 // found a pp directive, so try to identify it, start with the pp_token
 bool found_eof = false;
+result_type found_directive;
+
 boost::spirit::tree_parse_info<lexer_type> hit = 
-    cpp_grammar_type::parse_cpp_grammar(it, iter_ctx->last, found_eof, act_pos);
+    cpp_grammar_type::parse_cpp_grammar(it, iter_ctx->last, act_pos, found_eof, 
+        found_directive);
 
     if (hit.match) {
     // position the iterator past the matched sequence to allow 
-    // resynchronisation, if an error occurs
+    // resynchronization, if an error occurs
         iter_ctx->first = hit.stop;
         
     // found a valid pp directive, dispatch to the correct function to handle 
     // the found pp directive
-    bool result = dispatch_directive (hit);
+    bool result = dispatch_directive (hit, found_directive);
     
         if (found_eof) {
         // The line was terminated with an end of file token.
@@ -861,7 +858,8 @@ boost::spirit::tree_parse_info<lexer_type> hit =
 template <typename ContextT> 
 inline bool
 pp_iterator_functor<ContextT>::dispatch_directive(
-    boost::spirit::tree_parse_info<lexer_type> const &hit)
+    boost::spirit::tree_parse_info<lexer_type> const &hit,
+    result_type const& found_directive)
 {
     using namespace cpplexer;
     using namespace boost::spirit;
@@ -879,10 +877,10 @@ parse_node_value_type const &nodeval = get_first_leaf(*root.begin()).value;
 const_child_iterator_t begin_child_it = (*root.begin()).children.begin();
 const_child_iterator_t end_child_it = (*root.begin()).children.end();
 
-token_id id = token_id(cpp_grammar_type::found_directive);
+token_id id = token_id(found_directive);
 
     // call preprocessing hook
-    ctx.get_hooks().found_directive(cpp_grammar_type::found_directive);     
+    ctx.get_hooks().found_directive(found_directive);     
     
     switch (static_cast<unsigned int>(id)) {
     case T_PP_QHEADER:      // #include "..."
@@ -1070,7 +1068,6 @@ fs::path native_path(file_path, fs::native);
         ctx.set_current_filename(iter_ctx->real_filename.c_str());
 #endif 
 
-//        last_line = iter_ctx->line;
         act_pos.set_line(iter_ctx->line);
         act_pos.set_column(0);
     }
@@ -1151,12 +1148,12 @@ token_sequence_type macrodefinition;
 bool has_parameters = false;
 
     boost::wave::util::retrieve_macroname(node, 
-        cpp_grammar_type::rule_ids.plain_define_id, macroname, 
+        BOOST_WAVE_PLAIN_DEFINE_ID, macroname, 
         act_token.get_position());
     has_parameters = boost::wave::util::retrieve_macrodefinition(node, 
-        cpp_grammar_type::rule_ids.macro_parameters_id, macroparameters, act_token);
+        BOOST_WAVE_MACRO_PARAMETERS_ID, macroparameters, act_token);
     boost::wave::util::retrieve_macrodefinition(node, 
-        cpp_grammar_type::rule_ids.macro_definition_id, macrodefinition, act_token);
+        BOOST_WAVE_MACRO_DEFINITION_ID, macrodefinition, act_token);
 
     if (has_parameters) {
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
@@ -1554,7 +1551,6 @@ string_type file_name;
     if (!file_name.empty())     // reuse current file name 
         act_pos.set_file(file_name.c_str());
     act_pos.set_line(line);
-//    last_line = act_token.get_position().get_line();
     
 //typename result_type::position_type nextline_pos = act_pos;
 //    

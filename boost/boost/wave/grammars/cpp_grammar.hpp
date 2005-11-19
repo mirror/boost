@@ -39,29 +39,6 @@ namespace impl {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  store_position 
-//
-//      The store_position functor extracts the actual file position from the 
-//      supplied token.
-//
-///////////////////////////////////////////////////////////////////////////////
-
-    template <typename PositionT>
-    struct store_position {
-
-        store_position(PositionT &pos_) : pos(pos_) {}
-        
-        template <typename TokenT>
-        void operator()(TokenT const &token) const
-        {
-            pos = token.get_position();
-        }
-        
-        PositionT &pos;
-    };
-
-///////////////////////////////////////////////////////////////////////////////
-//
 //  store_found_eof
 //
 //      The store_found_eof functor sets a given flag if the T_EOF token was 
@@ -149,7 +126,6 @@ struct cpp_grammar :
 {
     typedef typename TokenT::position_type  position_type;
     typedef cpp_grammar<position_type>      grammar_type;
-    typedef impl::store_position<position_type> store_pos_type;
     typedef impl::store_found_eof           store_found_eof_type;
     typedef impl::store_found_directive<TokenT> store_found_directive_type;
     
@@ -167,10 +143,14 @@ struct cpp_grammar :
         typedef 
             boost::spirit::scanner<typename ScannerT::iterator_t, policies_t> 
             non_tree_scanner_t;
-        typedef boost::spirit::rule<non_tree_scanner_t> no_tree_rule_type;
+        typedef 
+            boost::spirit::rule<non_tree_scanner_t, boost::spirit::dynamic_parser_tag> 
+            no_tree_rule_type;
 
     // 'normal' (parse_tree generating) rule type
-        typedef boost::spirit::rule<ScannerT> rule_type;
+        typedef 
+            boost::spirit::rule<ScannerT, boost::spirit::dynamic_parser_tag> 
+            rule_type;
 
         rule_type pp_statement;
         rule_type include_file, system_include_file, macro_include_file;
@@ -198,30 +178,30 @@ struct cpp_grammar :
             using namespace boost::wave::util;
 
         // save the rule id's for later use
-            self.rule_ids.pp_statement_id = pp_statement.id().to_long();
-            self.rule_ids.include_file_id = include_file.id().to_long();
-            self.rule_ids.sysinclude_file_id = system_include_file.id().to_long();
-            self.rule_ids.macroinclude_file_id = macro_include_file.id().to_long();
-            self.rule_ids.plain_define_id = plain_define.id().to_long();
-            self.rule_ids.macro_parameters_id = macro_parameters.id().to_long();
-            self.rule_ids.macro_definition_id = macro_definition.id().to_long();
-            self.rule_ids.undefine_id = undefine.id().to_long();
-            self.rule_ids.ifdef_id = ppifdef.id().to_long();
-            self.rule_ids.ifndef_id = ppifndef.id().to_long();
-            self.rule_ids.if_id = ppif.id().to_long();
-            self.rule_ids.elif_id = ppelif.id().to_long();
-            self.rule_ids.else_id = ppelse.id().to_long();
-            self.rule_ids.endif_id = ppendif.id().to_long();
-            self.rule_ids.line_id = ppline.id().to_long();
-            self.rule_ids.error_id = pperror.id().to_long();
-            self.rule_ids.warning_id = ppwarning.id().to_long();
-            self.rule_ids.pragma_id = pppragma.id().to_long();
-            self.rule_ids.illformed_id = illformed.id().to_long();
-            self.rule_ids.ppspace_id = ppsp.id().to_long();
-            self.rule_ids.ppqualifiedname_id = ppqualifiedname.id().to_long();
+            pp_statement.set_id(BOOST_WAVE_PP_STATEMENT_ID);
+            include_file.set_id(BOOST_WAVE_INCLUDE_FILE_ID);
+            system_include_file.set_id(BOOST_WAVE_SYSINCLUDE_FILE_ID);
+            macro_include_file.set_id(BOOST_WAVE_MACROINCLUDE_FILE_ID);
+            plain_define.set_id(BOOST_WAVE_PLAIN_DEFINE_ID);
+            macro_parameters.set_id(BOOST_WAVE_MACRO_PARAMETERS_ID);
+            macro_definition.set_id(BOOST_WAVE_MACRO_DEFINITION_ID);
+            undefine.set_id(BOOST_WAVE_UNDEFINE_ID);
+            ppifdef.set_id(BOOST_WAVE_IFDEF_ID);
+            ppifndef.set_id(BOOST_WAVE_IFNDEF_ID);
+            ppif.set_id(BOOST_WAVE_IF_ID);
+            ppelif.set_id(BOOST_WAVE_ELIF_ID);
+            ppelse.set_id(BOOST_WAVE_ELSE_ID);
+            ppendif.set_id(BOOST_WAVE_ENDIF_ID);
+            ppline.set_id(BOOST_WAVE_LINE_ID);
+            pperror.set_id(BOOST_WAVE_ERROR_ID);
+            ppwarning.set_id(BOOST_WAVE_WARNING_ID);
+            pppragma.set_id(BOOST_WAVE_PRAGMA_ID);
+            illformed.set_id(BOOST_WAVE_ILLFORMED_ID);
+            ppsp.set_id(BOOST_WAVE_PPSPACE_ID);
+            ppqualifiedname.set_id(BOOST_WAVE_PPQUALIFIEDNAME_ID);
 #if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
-            self.rule_ids.region_id = ppregion.id().to_long();
-            self.rule_ids.endregion_id = ppendregion.id().to_long();
+            ppregion.set_id(BOOST_WAVE_REGION_ID);
+            ppendregion.set_id(BOOST_WAVE_ENDREGION_ID);
 #endif
 
 #if BOOST_WAVE_DUMP_PARSE_TREE != 0
@@ -544,11 +524,8 @@ struct cpp_grammar :
                     [
                         *ppsp 
                         >>  (   ch_p(T_NEWLINE)
-                                [ store_pos_type(self.pos_of_newline) ]
                             |   ch_p(T_CPPCOMMENT)
-                                [ store_pos_type(self.pos_of_newline) ]
                             |   ch_p(T_EOF)
-                                [ store_pos_type(self.pos_of_newline) ]
                                 [ store_found_eof_type(self.found_eof) ]
                             )
                     ]
@@ -585,15 +562,11 @@ struct cpp_grammar :
         { return pp_statement; }
     };
 
-    cpp_grammar_rule_ids &rule_ids;
-    position_type &pos_of_newline;
     bool &found_eof;
     TokenT &found_directive;
     
-    cpp_grammar(cpp_grammar_rule_ids &rule_ids_, position_type &pos_of_newline_,
-            bool &found_eof_, TokenT &found_directive_)
-    :   rule_ids(rule_ids_), pos_of_newline(pos_of_newline_), 
-        found_eof(found_eof_), found_directive(found_directive_)
+    cpp_grammar(bool &found_eof_, TokenT &found_directive_)
+    :   found_eof(found_eof_), found_directive(found_directive_)
     { 
         BOOST_SPIRIT_DEBUG_TRACE_GRAMMAR_NAME(*this, "cpp_grammar", 
             TRACE_CPP_GRAMMAR); 
@@ -604,7 +577,7 @@ struct cpp_grammar :
     struct map_ruleid_to_name :
         public std::map<boost::spirit::parser_id, std::string> 
     {
-        typedef std::map<boost::spirit::parser_id, std::string> base_t;
+        typedef std::map<boost::spirit::parser_id, std::string> base_type;
 
         void init_rule_id_to_name_map(cpp_grammar const &self)
         {
@@ -613,36 +586,37 @@ struct cpp_grammar :
                 char const *rule_name;
             } 
             init_ruleid_name_map[] = {
-                { self.rule_ids.pp_statement_id, "pp_statement" },
-                { self.rule_ids.include_file_id, "include_file" },
-                { self.rule_ids.sysinclude_file_id, "system_include_file" },
-                { self.rule_ids.macroinclude_file_id, "macro_include_file" },
-                { self.rule_ids.plain_define_id, "plain_define" },
-                { self.rule_ids.macro_parameters_id, "macro_parameters" },
-                { self.rule_ids.macro_definition_id, "macro_definition" },
-                { self.rule_ids.undefine_id, "undefine" },
-                { self.rule_ids.ifdef_id, "ppifdef" },
-                { self.rule_ids.ifndef_id, "ppifndef" },
-                { self.rule_ids.if_id, "ppif" },
-                { self.rule_ids.elif_id, "ppelif" },
-                { self.rule_ids.else_id, "ppelse" },
-                { self.rule_ids.endif_id, "ppendif" },
-                { self.rule_ids.line_id, "ppline" },
-                { self.rule_ids.error_id, "pperror" },
-                { self.rule_ids.warning_id, "ppwarning" },
-                { self.rule_ids.pragma_id, "pppragma" },
-                { self.rule_ids.illformed_id, "illformed" },
-                { self.rule_ids.ppqualifiedname_id, "ppqualifiedname" },
+                { BOOST_WAVE_PP_STATEMENT_ID, "pp_statement" },
+                { BOOST_WAVE_INCLUDE_FILE_ID, "include_file" },
+                { BOOST_WAVE_SYSINCLUDE_FILE_ID "system_include_file" },
+                { BOOST_WAVE_MACROINCLUDE_FILE_ID, "macro_include_file" },
+                { BOOST_WAVE_PLAIN_DEFINE_ID, "plain_define" },
+                { BOOST_WAVE_MACRO_PARAMETERS_ID, "macro_parameters" },
+                { BOOST_WAVE_MACRO_DEFINITION_ID, "macro_definition" },
+                { BOOST_WAVE_UNDEFINE_ID, "undefine" },
+                { BOOST_WAVE_IFDEF_ID, "ppifdef" },
+                { BOOST_WAVE_IFNDEF_ID, "ppifndef" },
+                { BOOST_WAVE_IF_ID, "ppif" },
+                { BOOST_WAVE_ELIF_ID, "ppelif" },
+                { BOOST_WAVE_ELSE_ID, "ppelse" },
+                { BOOST_WAVE_ENDIF_ID, "ppendif" },
+                { BOOST_WAVE_LINE_ID, "ppline" },
+                { BOOST_WAVE_ERROR_ID, "pperror" },
+                { BOOST_WAVE_WARNING_ID, "ppwarning" },
+                { BOOST_WAVE_PRAGMA_ID, "pppragma" },
+                { BOOST_WAVE_ILLFORMED_ID, "illformed" },
+                { BOOST_WAVE_PPSPACE_ID, "ppspace" },
+                { BOOST_WAVE_PPQUALIFIEDNAME_ID, "ppqualifiedname" },
 #if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
-                { self.rule_ids.region_id, "ppregion" },
-                { self.rule_ids.endregion_id, "ppendregion" },
+                { BOOST_WAVE_REGION_ID, "ppregion" },
+                { BOOST_WAVE_ENDREGION_ID, "ppendregion" },
 #endif
                 { 0 }
             };
 
         // initialize parser_id to rule_name map
             for (int i = 0; 0 != init_ruleid_name_map[i].parser_id; ++i)
-                base_t::insert(base_t::value_type(
+                base_type::insert(base_type::value_type(
                     boost::spirit::parser_id(init_ruleid_name_map[i].parser_id), 
                     std::string(init_ruleid_name_map[i].rule_name))
                 );
@@ -668,55 +642,18 @@ struct cpp_grammar :
 #define BOOST_WAVE_GRAMMAR_GEN_INLINE inline
 #endif 
 
-namespace {
-
-    char const *get_directivename(boost::wave::token_id id)
-    {
-        using namespace boost::wave;
-        switch (static_cast<unsigned int>(id)) {
-        case T_PP_QHEADER:
-        case T_PP_HHEADER:
-        case T_PP_INCLUDE:        return "#include";
-#if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
-        case T_PP_QHEADER_NEXT:
-        case T_PP_HHEADER_NEXT:
-        case T_PP_INCLUDE_NEXT:   return "#include_next";
-#endif 
-        case T_PP_DEFINE:         return "#define";
-        case T_PP_UNDEF:          return "#undef";
-        case T_PP_IFDEF:          return "#ifdef";
-        case T_PP_IFNDEF:         return "#ifndef";
-        case T_PP_IF:             return "#if";
-        case T_PP_ELSE:           return "#else";
-        case T_PP_ELIF:           return "#elif";
-        case T_PP_ENDIF:          return "#endif";
-        case T_PP_LINE:           return "#line";
-        case T_PP_ERROR:          return "#error";
-        case T_PP_WARNING:        return "#warning";
-        case T_PP_PRAGMA:         return "#pragma";
-        default:
-            return "#unknown directive";
-        }
-    }
-}
-
 template <typename LexIteratorT>
 BOOST_WAVE_GRAMMAR_GEN_INLINE 
 boost::spirit::tree_parse_info<LexIteratorT>
 cpp_grammar_gen<LexIteratorT>::parse_cpp_grammar (
     LexIteratorT const &first, LexIteratorT const &last,
-    bool &found_eof_, position_type const &act_pos)
+    position_type const &act_pos, bool &found_eof,
+    token_type &found_directive)
 {
     using namespace boost::spirit;
     using namespace boost::wave;
     
-    pos_of_newline = position_type();   // reset position
-    found_eof = false;                  // reset flag
-    found_directive = token_type();     // reset found directive
-    
-    cpp_grammar<token_type> g(
-        rule_ids, pos_of_newline, found_eof, found_directive);
-    
+    cpp_grammar<token_type> g(found_eof, found_directive);
     tree_parse_info<LexIteratorT> hit = pt_parse (first, last, g);
     
 #if BOOST_WAVE_DUMP_PARSE_TREE != 0
@@ -729,13 +666,10 @@ cpp_grammar_gen<LexIteratorT>::parse_cpp_grammar (
 
     if (!hit.match && token_id(found_directive) != T_EOF) {
     // recognized invalid directive
-    std::string directive = get_directivename(token_id(found_directive));
-    
         BOOST_WAVE_THROW(preprocess_exception, ill_formed_directive, 
-            directive.c_str(), act_pos);
+            found_directive.get_value().c_str(), act_pos);
     }
 
-    found_eof_ = found_eof;
     return hit;
 }
 

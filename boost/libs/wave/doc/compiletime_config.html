@@ -99,6 +99,12 @@
     <td class="table_cells"><code>BOOST_</code><code>WAVE_SUPPORT_INCLUDE_NEXT</code></td>
     <td class="table_cells"><p>If defined, then the <code>#include_next</code> directive is supported by <tt>Wave</tt>. This is syntactically equivalent to the <code>#include</code> directives, but may be used to inherit a header file (i.e. to include a file, which is named as the current file containing the <code>#include_next</code>).</p></td>
   </tr>
+  <tr>
+    <td class="table_cells"><code>BOOST_WAVE_USE_STRICT_LEXER</code></td>
+    <td class="table_cells"><p>If this is defined to something != 0, then the C/C++ lexers recognize the 
+      strict C99/C++ basic source character set. If it is not defined or defined 
+    to zero, the lexers recognize the <span class="string">'$'</span> character as part of identifiers.</p></td>
+  </tr>
 </table>
 <P dir="ltr"><b><a name="using_custom_lexer"></a>Using a different token type or lexer type in conjunction with Wave </b></P>
 <P dir="ltr">It is possible to use the <tt>Wave</tt> library while using your own token and/or lexer types. This may be achieved by providing your lexer type as the second template parameter while instantiating the <tt>boost::wave::context&lt;&gt;</tt> object. The token type used by the library is derived from the <tt>token_type</tt> typedef to be provided by the lexer type. If you want to provide your own token type only, you may use the <tt>boost::wave::lex_iterator&lt;&gt;</tt> type contained with the library. This type needs to be parametrized with the token type to use. </P>
@@ -197,7 +203,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Sunday, May 15, 2005  12:23<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Saturday, November 19, 2005  11:17<!-- #EndDate -->
 </span></p>
 </body>
 </html>
