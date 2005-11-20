@@ -52,6 +52,7 @@ template wave-lexer-test
         <include>$(BOOST_ROOT) 
         <sysinclude>$(BOOST_ROOT)
         <vc-7_1><*><rtti>off           # workaround for compiler bug
+        <vc-7_1-stlport><*><rtti>off
         std::locale-support
     : 
 #        <runtime-link>static
@@ -71,6 +72,7 @@ template wave-test
         <include>$(BOOST_ROOT) 
         <sysinclude>$(BOOST_ROOT)
         <vc-7_1><*><rtti>off           # workaround for compiler bug
+        <vc-7_1-stlport><*><rtti>off
         std::locale-support
     : 
 #        <runtime-link>static

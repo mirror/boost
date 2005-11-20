@@ -66,7 +66,9 @@ Boost V1.33.1
 - Made sure, that preprocessor expression errors get ignored for 'passive' 
   #elif branches.
 - Fixed an issue reported by the gcc debug stl.
+- Added the <vc-7_1-stlport><*><rtti>off directive to all of the V1 Jamfiles.
 
+Wed Aug 17 20:21:00 CST 2005
 Boost V1.33.0
 Version 1.2
 - Fixed name clash wrt T_DIVIDE on FreeBSD.

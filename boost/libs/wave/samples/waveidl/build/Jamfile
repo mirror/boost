@@ -24,6 +24,7 @@ exe waveidl
     :
       <sysinclude>$(BOOST_ROOT)
       <vc-7_1><*><rtti>off        # workaround for compiler bug
+      <vc-7_1-stlport><*><rtti>off
     :
       <runtime-link>static
       <threading>single
