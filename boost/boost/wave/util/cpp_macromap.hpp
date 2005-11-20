@@ -706,23 +706,23 @@ iterator_type first_it = gen_type::generate(first);
 iterator_type last_it = gen_type::generate(last);
 
 on_exit::assign<IteratorT, iterator_type> on_exit(first, first_it);
-bool was_whitespace = false;
+// bool was_whitespace = false;
 ContainerT pending_queue;
     
     while (!pending_queue.empty() || first_it != last_it) {
     token_type t = expand_tokensequence_worker(pending_queue, first_it, 
                     last_it, expand_operator_defined);
-    bool is_whitespace = IS_CATEGORY(t, WhiteSpaceTokenType) &&
-        T_PLACEHOLDER != token_id(t);
-
-        if (!was_whitespace || !is_whitespace) {
-            if (is_whitespace && T_SPACE != token_id(t)) {
-                t.set_token_id(T_SPACE);
-                t.set_value(" ");
-            }
+//     bool is_whitespace = IS_CATEGORY(t, WhiteSpaceTokenType) &&
+//         T_PLACEHOLDER != token_id(t);
+// 
+//         if (!was_whitespace || !is_whitespace) {
+//             if (is_whitespace && T_SPACE != token_id(t)) {
+//                 t.set_token_id(T_SPACE);
+//                 t.set_value(" ");
+//             }
             expanded.push_back(t);
-        }
-        was_whitespace = is_whitespace;
+//         }
+//         was_whitespace = is_whitespace;
     }
 
 // should have returned all expanded tokens

@@ -39,15 +39,15 @@ namespace fs = boost::filesystem;
 ///////////////////////////////////////////////////////////////////////////////
 // testwave version definitions
 #define TESTWAVE_VERSION_MAJOR           0
-#define TESTWAVE_VERSION_MINOR           3
+#define TESTWAVE_VERSION_MINOR           4
 #define TESTWAVE_VERSION_SUBMINOR        0
 
 ///////////////////////////////////////////////////////////////////////////////
 // workaround for missing ostringstream
 #ifdef BOOST_NO_STRINGSTREAM
 #include <strstream>
-#define TESTWAVE_OSSTREAM std::ostrstream
-std::string TESTWAVE_GETSTRING(std::ostrstream& ss)
+#define BOOST_WAVETEST_OSSTREAM std::ostrstream
+std::string BOOST_WAVETEST_GETSTRING(std::ostrstream& ss)
 {
     ss << ends;
     std::string rval = ss.str();
@@ -56,8 +56,8 @@ std::string TESTWAVE_GETSTRING(std::ostrstream& ss)
 }
 #else
 #include <sstream>
-#define TESTWAVE_GETSTRING(ss) ss.str()
-#define TESTWAVE_OSSTREAM std::ostringstream
+#define BOOST_WAVETEST_GETSTRING(ss) ss.str()
+#define BOOST_WAVETEST_OSSTREAM std::ostringstream
 #endif
 
 namespace {
@@ -551,27 +551,89 @@ testwave_app::extract_special_information(std::string const& filename,
             if (T_CCOMMENT == id) {
                 std::string value = (*it).get_value().c_str();
                 if (flag == value[2]) {
-                    std::string thiscontent(value.substr(3, value.size()-5));
-                    
-                    if (9 == debuglevel) {
-                        std::cerr << "extract_special_information: extracted: " 
-                                  << thiscontent << std::endl;
+                    if (value.size() > 3 && '(' == value[3]) {
+                        std::size_t p = value.find_first_of(")");
+                        if (std::string::npos == p) {
+                            std::cerr 
+                                << "testwave: missing closing parenthesis in '"
+                                << flag << "()' directive" << std::endl;
+                            return false;
+                        }
+                        std::string source = value.substr(4, p-4);
+                        std::string result, error;
+                        bool pp_result = preprocess_file(filename, source, result, error);
+                        if (!pp_result) {
+                            std::cerr 
+                                << "testwave: preprocessing error in '" << flag
+                                << "()' directive: " << error << std::endl;
+                            return false;
+                        }
+                        
+                        // include this text into the extracted information 
+                        // only if the result is not zero
+                        if (0 != atoi(result.c_str())) {
+                            std::string thiscontent(value.substr(p+1));
+                            if (9 == debuglevel) {
+                                std::cerr << "extract_special_information: extracted: " 
+                                          << thiscontent << std::endl;
+                            }
+                            trim_whitespace(thiscontent);
+                            content += thiscontent;
+                        }
                     }
-                    trim_whitespace(thiscontent);
-                    content += thiscontent;
+                    else {
+                        std::string thiscontent(value.substr(3, value.size()-5));
+                        if (9 == debuglevel) {
+                            std::cerr << "extract_special_information: extracted: " 
+                                      << thiscontent << std::endl;
+                        }
+                        trim_whitespace(thiscontent);
+                        content += thiscontent;
+                    }
                 }
             }
             else if (T_CPPCOMMENT == id) {
                 std::string value = (*it).get_value().c_str();
                 if (flag == value[2]) {
-                    std::string thiscontent(value.substr((' ' == value[3]) ? 4 : 3));
-
-                    if (9 == debuglevel) {
-                        std::cerr << "extract_special_information: extracted: " 
-                                  << thiscontent;
+                    if (value.size() > 3 && '(' == value[3]) {
+                        std::size_t p = value.find_first_of(")");
+                        if (std::string::npos == p) {
+                            std::cerr 
+                                << "testwave: missing closing parenthesis in '"
+                                << flag << "()' directive" << std::endl;
+                            return false;
+                        }
+                        std::string source = value.substr(4, p-4);
+                        std::string result, error;
+                        bool pp_result = preprocess_file(filename, source, result, error);
+                        if (!pp_result) {
+                            std::cerr 
+                                << "testwave: preprocessing error in '" << flag
+                                << "()' directive: " << error << std::endl;
+                            return false;
+                        }
+                        
+                        // include this text into the extracted information 
+                        // only if the result is not zero
+                        if (0 != atoi(result.c_str())) {
+                            std::string thiscontent(value.substr((' ' == value[p+1]) ? p+2 : p+1));
+                            if (9 == debuglevel) {
+                                std::cerr << "extract_special_information: extracted: " 
+                                          << thiscontent << std::endl;
+                            }
+                            trim_whitespace(thiscontent);
+                            content += thiscontent;
+                        }
                     }
-                    trim_whitespace(content);
-                    content += thiscontent;
+                    else {
+                        std::string thiscontent(value.substr((' ' == value[3]) ? 4 : 3));
+                        if (9 == debuglevel) {
+                            std::cerr << "extract_special_information: extracted: " 
+                                      << thiscontent;
+                        }
+                        trim_whitespace(content);
+                        content += thiscontent;
+                    }
                 }
             }
         }
@@ -679,7 +741,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
         std::cerr << "initialise_options: initialising options" << std::endl;
     }
 
-//  initialise the given context from the parsed options
+//  initialize the given context from the parsed options
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
 // enable C99 mode, if appropriate (implies variadics)
     if (vm.count("c99")) {
@@ -841,29 +903,13 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
     }
 
     if (9 == debuglevel) {
-        std::cerr << "initialise_options: succeeded to initialise options" 
+        std::cerr << "initialise_options: succeeded to initialize options" 
                   << std::endl;
     }
     return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-#ifdef BOOST_NO_STRINGSTREAM
-#include <strstream>
-#define BOOST_WAVETEST_OSSTREAM std::ostrstream
-std::string BOOST_WAVETEST_GETSTRING(std::ostrstream& ss)
-{
-    ss << ends;
-    std::string rval = ss.str();
-    ss.freeze(false);
-    return rval;
-}
-#else
-#include <sstream>
-#define BOOST_WAVETEST_GETSTRING(ss) ss.str()
-#define BOOST_WAVETEST_OSSTREAM std::ostringstream
-#endif
-
 //  construct a SIZEOF macro definition string and predefine this macro
 template <typename Context>
 inline bool 
@@ -943,15 +989,30 @@ testwave_app::add_max_definition(Context& ctx, char const *name)
     return true;
 }
 
-#undef BOOST_WAVETEST_GETSTRING
-#undef BOOST_WAVETEST_OSSTREAM
+//  Predefine __TESTWAVE_HAS_STRICT_LEXER__
+template <typename Context>
+inline bool 
+testwave_app::add_strict_lexer_definition(Context& ctx)
+{
+    std::string macro("__TESTWAVE_HAS_STRICT_LEXER__=1");
+    if (!ctx.add_macro_definition(macro)) {
+        std::cerr << "testwave: failed to predefine macro: " << macro 
+                  << std::endl;
+        return false;
+    }
+    else if (9 == debuglevel) {
+        std::cerr << "add_strict_lexer_definition: predefined macro: " << macro 
+                  << std::endl;
+    }
+    return true;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 //  Add special predefined macros to the context object.
 //
 //  This adds a lot of macros to the test environment, which allows to adjust 
-//  the testcases for different platforms.
+//  the test cases for different platforms.
 //
 ///////////////////////////////////////////////////////////////////////////////
 template <typename Context>
@@ -1007,7 +1068,12 @@ testwave_app::add_predefined_macros(Context& ctx)
         std::cerr << "testwave: failed to add a predefined macro (MAX)." 
                   << std::endl;
     }
+
+#if BOOST_WAVE_USE_STRICT_LEXER != 0
+    return add_strict_lexer_definition(ctx);
+#else
     return true;
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1020,7 +1086,7 @@ bool
 testwave_app::preprocess_file(std::string filename, std::string const& instr, 
     std::string& result, std::string& error)
 {
-//  create the wave::context object and initialise it from the file to 
+//  create the wave::context object and initialize it from the file to 
 //  preprocess (may contain options inside of special comments)
     typedef boost::wave::cpplexer::lex_token<> token_type;
     typedef boost::wave::cpplexer::lex_iterator<token_type> lexer_type;
@@ -1033,14 +1099,14 @@ testwave_app::preprocess_file(std::string filename, std::string const& instr,
     }
 
     try {    
-    //  create preprocesing context
+    //  create preprocessing context
         context_type ctx(instr.begin(), instr.end(), filename.c_str());
 
-    //  initialise the context from the options given on the command line
+    //  initialize the context from the options given on the command line
         if (!initialise_options(ctx, global_vm))
             return false;
 
-    //  extract the options from the input data and initialise the context 
+    //  extract the options from the input data and initialize the context 
         if (!extract_options(filename, instr, ctx))
             return false;
 
@@ -1070,24 +1136,24 @@ testwave_app::preprocess_file(std::string filename, std::string const& instr,
     }
     catch (boost::wave::cpplexer::lexing_exception const& e) {
     // some lexer error
-        TESTWAVE_OSSTREAM strm;
+        BOOST_WAVETEST_OSSTREAM strm;
         std::string filename = e.file_name();
         strm 
             << handle_filepath(filename) << "(" << e.line_no() << "): "
             << e.description() << std::endl;
             
-        error = TESTWAVE_GETSTRING(strm);
+        error = BOOST_WAVETEST_GETSTRING(strm);
         return false;
     }
     catch (boost::wave::cpp_exception const& e) {
     // some preprocessing error
-        TESTWAVE_OSSTREAM strm;
+        BOOST_WAVETEST_OSSTREAM strm;
         std::string filename = e.file_name();
         strm 
             << handle_filepath(filename) << "(" << e.line_no() << "): "
             << e.description() << std::endl;
             
-        error = TESTWAVE_GETSTRING(strm);
+        error = BOOST_WAVETEST_GETSTRING(strm);
         return false;
     }
     

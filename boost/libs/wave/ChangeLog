@@ -40,7 +40,9 @@ CHANGELOG
   decide, whether the '$' character will be recognized as a part of identifiers
   or not (the default is BOOST_WAVE_USE_STRICT_LEXER == 0, i.e. '$' will be
   recognized as part of identifiers).
-  
+- Added the possibility to testwave to extract a tagged comment based on a
+  preprocessor constant (testwave V0.4.0).
+
 Boost V1.33.1
 - Version 1.2.1
 - Fixed bug reported as Sourceforge bug 1274584.

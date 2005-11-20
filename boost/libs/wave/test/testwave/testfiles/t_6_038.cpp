@@ -22,8 +22,10 @@
 //        character.
 
 //  From ISO 9899:1990 / Corrigendum 1. 
-//E t_6_038.cpp(26): error: ill formed preprocessor directive: #define
+#if defined(__TESTWAVE_HAS_STRICT_LEXER__)
+//E(__TESTWAVE_HAS_STRICT_LEXER__) t_6_038.cpp(27): error: ill formed preprocessor directive: #define
 #define THIS$AND$THAT(a, b)     ((a) + (b))
+#endif
 
 // Note: the following definition is legal (object-like macro).
 //       #define THIS $AND$THAT(a, b)    ((a) + (b))

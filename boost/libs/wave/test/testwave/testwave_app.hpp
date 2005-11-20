@@ -110,6 +110,10 @@ protected:
     template <typename T, typename Context>
     bool add_max_definition(Context& ctx, char const *name);
 
+    //  Predefine __TESTWAVE_HAS_STRICT_LEXER__
+    template <typename Context>
+    bool add_strict_lexer_definition(Context& ctx);
+
 private:
     int debuglevel;
     boost::program_options::options_description desc_options;
