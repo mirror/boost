@@ -14,6 +14,7 @@
 # pragma warning(push)
 # pragma warning(disable : 4127) // conditional expression constant
 # pragma warning(disable : 4100) // unreferenced formal parameter
+# pragma warning(disable : 4351) // vc8 new behavior: elements of array 'foo' will be default initialized
 #endif
 
 #include <algorithm>

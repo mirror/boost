@@ -165,17 +165,13 @@ namespace detail
       , mask_cast<std::ctype_base::space>::value
       , mask_cast<std::ctype_base::upper>::value
       , mask_cast<std::ctype_base::xdigit>::value
-      , non_std_ctype_underscore
-      , non_std_ctype_blank
-      , non_std_ctype_newline
     };
 
     inline int log2(umaskex_t i)
     {
         return "\0\0\1\0\2\0\0\0\3"[i & 0xf]
              + "\0\4\5\0\6\0\0\0\7"[(i & 0xf0) >> 04]
-             + "\0\10\11\0\12\0\0\0\13"[(i & 0xf00) >> 010]
-             + "\0\14\15\0\16\0\0\0\17"[(i & 0xf000) >> 014];
+             + "\0\10\11\0\12\0\0\0\13"[(i & 0xf00) >> 010];
     }
     #endif
 
@@ -190,18 +186,68 @@ namespace detail
     struct cpp_regex_traits_base
     {
     protected:
-        template<typename TraitsT>
-        void imbue(TraitsT const &tr)
+        void imbue(std::locale const &)
         {
         }
+
+        static bool is(std::ctype<CharT> const &ct, CharT ch, umaskex_t mask)
+        {
+            #ifndef BOOST_XPRESSIVE_BUGGY_CTYPE_FACET
+
+            if(ct.is((std::ctype_base::mask)(umask_t)mask, ch))
+            {
+                return true;
+            }
+
+            #else
+
+            umaskex_t tmp = mask & ~non_std_ctype_masks;
+            for(umaskex_t i; 0 != (i = (tmp & (~tmp+1))); tmp &= ~i)
+            {
+                std::ctype_base::mask m = (std::ctype_base::mask)(umask_t)std_masks[log2(i)];
+                if(ct.is(m, ch))
+                {
+                    return true;
+                }
+            }
+
+            #endif
+
+            return ((mask & non_std_ctype_blank) && cpp_regex_traits_base::is_blank(ch))
+                || ((mask & non_std_ctype_underscore) && cpp_regex_traits_base::is_underscore(ch))
+                || ((mask & non_std_ctype_newline) && cpp_regex_traits_base::is_newline(ch));
+        }
+
+    private:
+        static bool is_blank(CharT ch)
+        {
+            BOOST_MPL_ASSERT_RELATION('\t', ==, L'\t');
+            return L'\t' == ch;
+        }
+
+        static bool is_underscore(CharT ch)
+        {
+            BOOST_MPL_ASSERT_RELATION('_', ==, L'_');
+            return L'_' == ch;
+        }
+
+        static bool is_newline(CharT ch)
+        {
+            BOOST_MPL_ASSERT_RELATION('\r', ==, L'\r');
+            BOOST_MPL_ASSERT_RELATION('\n', ==, L'\n');
+            BOOST_MPL_ASSERT_RELATION('\f', ==, L'\f');
+            return L'\r' == ch || L'\n' == ch || L'\f' == ch
+                || (1 < SizeOfCharT && (0x2028u == ch || 0x2029u == ch || 0x85u == ch));
+        }
     };
+
+    #ifndef BOOST_XPRESSIVE_BUGGY_CTYPE_FACET
 
     template<typename CharT>
     struct cpp_regex_traits_base<CharT, 1>
     {
     protected:
-        template<typename TraitsT>
-        void imbue(TraitsT const &tr)
+        void imbue(std::locale const &loc)
         {
             int i = 0;
             CharT allchars[UCHAR_MAX + 1];
@@ -210,15 +256,13 @@ namespace detail
                 allchars[i] = static_cast<CharT>(i);
             }
 
-            std::ctype<CharT> const &ct = BOOST_USE_FACET(std::ctype<CharT>, tr.getloc());
+            std::ctype<CharT> const &ct = BOOST_USE_FACET(std::ctype<CharT>, loc);
             std::ctype_base::mask tmp[UCHAR_MAX + 1];
             ct.is(allchars, allchars + UCHAR_MAX + 1, tmp);
             for(i = 0; i <= UCHAR_MAX; ++i)
             {
                 this->masks_[i] = static_cast<umask_t>(tmp[i]);
-                #ifndef BOOST_XPRESSIVE_BUGGY_CTYPE_FACET
                 BOOST_ASSERT(0 == (this->masks_[i] & (non_std_ctype_underscore | non_std_ctype_blank | non_std_ctype_newline)));
-                #endif
             }
 
             this->masks_[static_cast<unsigned char>('_')] |= non_std_ctype_underscore;
@@ -229,19 +273,15 @@ namespace detail
             this->masks_[static_cast<unsigned char>('\f')] |= non_std_ctype_newline;
         }
  
+        bool is(std::ctype<CharT> const &, CharT ch, umaskex_t mask) const
+        {
+            return 0 != (this->masks_[static_cast<unsigned char>(ch)] & mask);
+        }
+
+    private:
         umaskex_t masks_[UCHAR_MAX + 1];
     };
 
-    #ifndef BOOST_XPRESSIVE_NO_WREGEX
-    template<std::size_t SizeOfCharT>
-    struct cpp_regex_traits_base<wchar_t, SizeOfCharT>
-    {
-    protected:
-        template<typename TraitsT>
-        static void imbue(TraitsT const &)
-        {
-        }
-    };
     #endif
 
     template<typename CharT>
@@ -480,7 +520,7 @@ struct cpp_regex_traits
     ///     otherwise.
     bool isctype(char_type ch, char_class_type mask) const
     {
-        return this->isctype_impl_(ch, mask, mpl::sizeof_<char_type>());
+        return this->base_type::is(*this->ctype_, ch, mask);
     }
 
     /// Convert a digit character into the integer it represents.
@@ -514,7 +554,7 @@ struct cpp_regex_traits
         this->loc_ = loc;
         this->ctype_ = &BOOST_USE_FACET(std::ctype<char_type>, this->loc_);
         //this->collate_ = &BOOST_USE_FACET(std::collate<char_type>, this->loc_);
-        this->base_type::imbue(*this);
+        this->base_type::imbue(this->loc_);
         return old_loc;
     }
 
@@ -526,72 +566,6 @@ struct cpp_regex_traits
     }
 
 private:
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // isctype_impl_
-    /// INTERNAL ONLY
-    bool isctype_impl_(char_type ch, char_class_type mask, mpl::size_t<1>) const
-    {
-        #ifndef BOOST_XPRESSIVE_BUGGY_CTYPE_FACET
-
-        return 0 != (this->masks_[static_cast<unsigned char>(ch)] & mask);
-
-        #else
-
-        detail::umaskex_t m = this->masks_[static_cast<unsigned char>(ch)];
-        while(detail::umaskex_t i = (mask & (~mask+1)))
-        {
-            if(m & detail::std_masks[detail::log2(i)])
-            {
-                return true;
-            }
-            mask &= ~i;
-        }
-
-        return false;
-
-        #endif
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // isctype_impl_
-    /// INTERNAL ONLY
-    bool isctype_impl_(char_type ch, char_class_type mask, std::size_t) const
-    {
-        #ifndef BOOST_XPRESSIVE_BUGGY_CTYPE_FACET
-
-        if(this->ctype_->is((std::ctype_base::mask)(detail::umask_t)mask, ch))
-        {
-            return true;
-        }
-
-        #else
-
-        detail::umaskex_t tmp = mask & ~detail::non_std_ctype_masks;
-        while(detail::umaskex_t i = (tmp & (~tmp+1)))
-        {
-            std::ctype_base::mask m = (std::ctype_base::mask)(detail::umask_t)
-                detail::std_masks[detail::log2(i)];
-            if(this->ctype_->is(m, ch))
-            {
-                return true;
-            }
-            tmp &= ~i;
-        }
-
-        #endif
-
-        switch(ch)
-        {
-        case L'\t': return 0 != (mask & detail::non_std_ctype_blank);
-        case L'_': return 0 != (mask & detail::non_std_ctype_underscore);
-        case L'\n': case L'\r': case L'\f': case 0x2028u: case 0x2029u: case 0x85u:
-            return 0 != (mask & detail::non_std_ctype_newline);
-        default:;
-        }
-
-        return false;
-    }
 
     ///////////////////////////////////////////////////////////////////////////////
     // char_class_pair
