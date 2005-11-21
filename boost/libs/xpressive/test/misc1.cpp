@@ -8,6 +8,7 @@
 #include <iostream>
 #include <boost/test/minimal.hpp>
 #include <boost/xpressive/xpressive.hpp>
+#include <boost/xpressive/traits/cpp_regex_traits.hpp>
 
 using namespace boost::xpressive;
 
