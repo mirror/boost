@@ -13,6 +13,11 @@
 
 #include <boost/wave/wave_config.hpp>
 
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
 namespace wave {
@@ -204,5 +209,10 @@ set_support_options(language_support language, language_support option)
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace wave
 }   // namespace boost 
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #endif // !defined(LANGUAGE_SUPPORT_HPP_93EDD057_2DEF_44BC_BC9F_FDABB9F51AFA_INCLUDED)

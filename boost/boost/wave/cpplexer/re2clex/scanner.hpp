@@ -12,7 +12,13 @@
 #if !defined(SCANNER_HPP_F4FB01EB_E75C_4537_A146_D34B9895EF37_INCLUDED)
 #define SCANNER_HPP_F4FB01EB_E75C_4537_A146_D34B9895EF37_INCLUDED
 
+#include <boost/wave/wave_config.hpp>
 #include <boost/wave/cpplexer/re2clex/aq.hpp>
+
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
@@ -55,5 +61,10 @@ typedef struct Scanner {
 }   // namespace cpplexer
 }   // namespace wave
 }   // namespace boost
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #endif // !defined(SCANNER_HPP_F4FB01EB_E75C_4537_A146_D34B9895EF37_INCLUDED)

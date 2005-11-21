@@ -25,10 +25,6 @@
 #include <boost/wave/cpplexer/cpp_lex_token.hpp>      // token type
 #include <boost/wave/cpplexer/cpp_lex_iterator.hpp>   // lexer type
 
-//  this header includes the cpplexer::new_lexer_gen template used for the 
-//  explicit template specialisation below
-#include <boost/wave/cpplexer/re2clex/cpp_re2c_lexer.hpp>
-
 //  test application related headers
 #include "cmd_line_utils.hpp"
 #include "testwave_app.hpp"
@@ -487,15 +483,6 @@ testwave_app::read_file(std::string const& filename, std::string& instr)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-//
-//  This explicit template instantiation is needed for the function
-//  extract_expected_output below, which needs the lexer to be instantiated 
-//  with a std::string::const_iterator template parameter.
-//
-///////////////////////////////////////////////////////////////////////////////
-template 
-struct boost::wave::cpplexer::new_lexer_gen<std::string::const_iterator>;
-
 namespace {
 
     std::string const& trim_whitespace(std::string& value)

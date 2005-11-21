@@ -13,8 +13,20 @@
 #if !defined(CPP_LEX_INTERFACE_HPP_E83F52A4_90AC_4FBE_A9A7_B65F7F94C497_INCLUDED)
 #define CPP_LEX_INTERFACE_HPP_E83F52A4_90AC_4FBE_A9A7_B65F7F94C497_INCLUDED
 
+#include <boost/wave/wave_config.hpp>
 #include <boost/wave/util/file_position.hpp>
 #include <boost/wave/language_support.hpp>
+
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
+
+// suppress warnings about dependent classes not being exported from the dll
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable : 4251 4231 4660)
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
@@ -32,7 +44,7 @@ template <
     typename IteratorT, 
     typename PositionT = boost::wave::util::file_position_type
 >
-struct new_lexer_gen
+struct BOOST_WAVE_DECL new_lexer_gen
 {
 //  The NewLexer function allows the opaque generation of a new lexer object.
 //  It is coupled to the token type to allow to decouple the lexer/token 
@@ -77,5 +89,10 @@ struct lex_input_interface
 }   // namespace cpplexer
 }   // namespace wave
 }   // namespace boost 
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #endif // !defined(CPP_LEX_INTERFACE_HPP_E83F52A4_90AC_4FBE_A9A7_B65F7F94C497_INCLUDED)

@@ -9,6 +9,7 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
+#define BOOST_WAVE_SOURCE 1
 #include <boost/wave/wave_config.hpp>          // configuration data
 
 #if BOOST_WAVE_SEPARATE_LEXER_INSTANTIATION != 0
@@ -23,6 +24,11 @@
 //  The following file needs to be included only once throughout the whole
 //  program.
 #include <boost/wave/cpplexer/re2clex/cpp_re2c_lexer.hpp>
+
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -43,5 +49,12 @@
 
 template struct boost::wave::cpplexer::new_lexer_gen<
     BOOST_WAVE_STRINGTYPE::iterator>;
+template struct boost::wave::cpplexer::new_lexer_gen<
+    BOOST_WAVE_STRINGTYPE::const_iterator>;
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #endif // BOOST_WAVE_SEPARATE_LEXER_INSTANTIATION != 0

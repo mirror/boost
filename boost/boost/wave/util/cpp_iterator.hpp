@@ -47,6 +47,11 @@
 #include <boost/wave/cpp_exceptions.hpp>
 #include <boost/wave/language_support.hpp>
 
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
 namespace wave {
@@ -167,13 +172,11 @@ typename ContextT::token_sequence_type macrodefinition;
 bool has_parameters = false;
 
     boost::wave::util::retrieve_macroname(*hit.trees.begin(), 
-        predef_macros_type::rule_ids.plain_define_id, macroname, act_pos);
+        BOOST_WAVE_PLAIN_DEFINE_ID, macroname, act_pos);
     has_parameters = boost::wave::util::retrieve_macrodefinition(*hit.trees.begin(), 
-        predef_macros_type::rule_ids.macro_parameters_id, macroparameters, 
-        token_type());
+        BOOST_WAVE_MACRO_PARAMETERS_ID, macroparameters, token_type());
     boost::wave::util::retrieve_macrodefinition(*hit.trees.begin(), 
-        predef_macros_type::rule_ids.macro_definition_id, macrodefinition,
-        token_type());
+        BOOST_WAVE_MACRO_DEFINITION_ID, macrodefinition, token_type());
 
 //  If no macrodefinition is given, and the macro string does not end with a 
 //  '=', then the macro should be defined with the value '1'
@@ -1804,5 +1807,10 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace wave
 }   // namespace boost
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #endif // !defined(CPP_ITERATOR_HPP_175CA88F_7273_43FA_9039_BCF7459E1F29_INCLUDED)

@@ -14,6 +14,12 @@
 #define BOOST_SPIRIT_PATTERN_PARSER_HPP
 
 #include <boost/spirit/core/primitives/primitives.hpp>
+#include <boost/wave/wave_config.hpp>
+
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
@@ -51,5 +57,10 @@ namespace util {
 }   // namespace util
 }   // namespace wave
 }   // namespace boost
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #endif // defined(BOOST_SPIRIT_PATTERN_PARSER_HPP)

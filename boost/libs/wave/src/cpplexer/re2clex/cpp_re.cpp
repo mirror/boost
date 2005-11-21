@@ -12,6 +12,7 @@
         have some easier way to parse strings instead of files (done) 
 =============================================================================*/
 
+#define BOOST_WAVE_SOURCE 1
 #include <ctime>
 #include <cstdlib>
 #include <cstdio>
@@ -20,7 +21,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#include <boost/config.hpp>
+#include <boost/wave/wave_config.hpp>          // configuration data
 
 #if defined(BOOST_HAS_UNISTD_H)
 #include <unistd.h>
@@ -35,6 +36,11 @@
 #include <boost/wave/cpplexer/re2clex/aq.hpp>
 #include <boost/wave/cpplexer/re2clex/scanner.hpp>
 #include <boost/wave/cpplexer/re2clex/cpp_re.hpp>
+
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 #if defined(BOOST_MSVC)
@@ -417,4 +423,9 @@ boost::wave::token_id scan(Scanner *s)
 #undef YYLIMIT
 #undef YYMARKER
 #undef YYFILL
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 

@@ -16,10 +16,15 @@
 #include <set>
 #include <utility>
 
+#include <boost/wave/wave_config.hpp>
+
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 
-#include <boost/wave/wave_config.hpp>
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
@@ -253,5 +258,10 @@ void include_paths::set_current_directory(char const *path_)
 }   // namespace util
 }   // namespace wave
 }   // namespace boost
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #endif // !defined(CPP_include_paths_HPP_AF620DA4_B3D2_4221_AD91_8A1ABFFB6944_INCLUDED)

@@ -295,6 +295,25 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+//  Set up dll import/export options
+#if defined(BOOST_HAS_DECLSPEC) && \
+    (defined(BOOST_WAVE_DYN_LINK) || defined(BOOST_ALL_DYN_LINK)) && \
+    !defined(BOOST_WAVE_STATIC_LINK)
+    
+#if defined(BOOST_WAVE_SOURCE)
+#define BOOST_WAVE_DECL __declspec(dllexport)
+#define BOOST_WAVE_BUILD_DLL
+#else
+#define BOOST_WAVE_DECL __declspec(dllimport)
+#endif
+
+#endif // building a shared library
+
+#ifndef BOOST_WAVE_DECL
+#define BOOST_WAVE_DECL
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
 //  Auto library naming
 #if BOOST_VERSION >= 103100   
 // auto link features work beginning from Boost V1.31.0
@@ -306,6 +325,10 @@
 // tell the auto-link code to select a dll when required:
 #if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_WAVE_DYN_LINK)
 #define BOOST_DYN_LINK
+#endif
+
+#ifdef BOOST_WAVE_DIAG
+#define BOOST_LIB_DIAGNOSTIC
 #endif
 
 #include <boost/config/auto_link.hpp>

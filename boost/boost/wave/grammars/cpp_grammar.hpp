@@ -30,6 +30,11 @@
 
 #include <boost/wave/cpp_exceptions.hpp>
 
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
 namespace wave { 
@@ -177,7 +182,7 @@ struct cpp_grammar :
             using namespace boost::wave;
             using namespace boost::wave::util;
 
-        // save the rule id's for later use
+        // set the rule id's for later use
             pp_statement.set_id(BOOST_WAVE_PP_STATEMENT_ID);
             include_file.set_id(BOOST_WAVE_INCLUDE_FILE_ID);
             system_include_file.set_id(BOOST_WAVE_SYSINCLUDE_FILE_ID);
@@ -679,5 +684,10 @@ cpp_grammar_gen<LexIteratorT>::parse_cpp_grammar (
 }   // namespace grammars
 }   // namespace wave
 }   // namespace boost 
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #endif // !defined(CPP_GRAMMAR_HPP_FEAEBC2E_2734_428B_A7CA_85E5A415E23E_INCLUDED)

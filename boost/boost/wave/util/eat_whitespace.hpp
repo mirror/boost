@@ -16,6 +16,11 @@
 #include <boost/wave/wave_config.hpp>   
 #include <boost/wave/token_ids.hpp>   
 
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
 namespace wave {
@@ -182,6 +187,11 @@ eat_whitespace<TokenT>::whitespace(TokenT &token, bool &skipped_newline)
 }   // namespace util
 }   // namespace wave
 }   // namespace boost
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #endif // !defined(EAT_WHITESPACE_HPP_4CE9AD17_F82D_4AB2_A117_555DF0DCC801_INCLUDED)
 

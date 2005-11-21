@@ -84,6 +84,11 @@ class StoragePolicy
 #include <stdexcept>
 #include <cstddef>
 
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
 namespace wave {
@@ -2335,5 +2340,10 @@ flex_string<E1, T, A, S>::npos = (typename flex_string<E1, T, A, S>::size_type)(
 }   // namespace util
 }   // namespace wave
 }   // namespace boost
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #endif // FLEX_STRING_INC_

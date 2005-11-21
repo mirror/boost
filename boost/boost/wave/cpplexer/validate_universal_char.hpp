@@ -14,8 +14,14 @@
 
 #include <boost/assert.hpp>
 
+#include <boost/wave/wave_config.hpp>
 #include <boost/wave/util/file_position.hpp>
 #include <boost/wave/cpplexer/cpplexer_exceptions.hpp>
+
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
@@ -310,5 +316,10 @@ typename StringT::size_type pos = name.find_first_of('\\');
 }   // namespace cpplexer
 }   // namespace wave
 }   // namespace boost
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #endif // !defined(VALIDATE_UNIVERSAL_CHAR_HPP_55F1B811_CD76_4C72_8344_CBC69CF3B339_INCLUDED)

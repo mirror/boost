@@ -21,6 +21,11 @@
 #include <boost/wave/grammars/cpp_predef_macros_gen.hpp>
 #include <boost/wave/util/pattern_parser.hpp>
 
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
 namespace wave {
@@ -41,9 +46,10 @@ struct predefined_macros_grammar :
     struct definition
     {
     // 'normal' (parse_tree generating) rule type
-        typedef boost::spirit::rule<ScannerT> rule_t;
+        typedef boost::spirit::rule<ScannerT, boost::spirit::dynamic_parser_tag> 
+            rule_type;
 
-        rule_t plain_define, macro_definition, macro_parameters;
+        rule_type plain_define, macro_definition, macro_parameters;
 
         definition(predefined_macros_grammar const &self) 
         {
@@ -52,10 +58,10 @@ struct predefined_macros_grammar :
             using namespace boost::wave;
             using namespace boost::wave::util;
             
-        // save the rule id's for later use
-            self.rule_ids.plain_define_id = plain_define.id().to_long();
-            self.rule_ids.macro_parameters_id = macro_parameters.id().to_long();
-            self.rule_ids.macro_definition_id = macro_definition.id().to_long();
+        // set the rule id's for later use
+            plain_define.set_id(BOOST_WAVE_PLAIN_DEFINE_ID);
+            macro_parameters.set_id(BOOST_WAVE_MACRO_PARAMETERS_ID);
+            macro_definition.set_id(BOOST_WAVE_MACRO_DEFINITION_ID);
 
         // recognizes command line defined macro syntax, i.e.
         //  -DMACRO
@@ -111,14 +117,11 @@ struct predefined_macros_grammar :
         }
 
     // start rule of this grammar
-        rule_t const& start() const
+        rule_type const& start() const
         { return plain_define; }
     };
 
-    predefined_macros_grammar_rule_ids &rule_ids;
-    
-    predefined_macros_grammar(predefined_macros_grammar_rule_ids &rule_ids_) 
-    :   rule_ids(rule_ids_)
+    predefined_macros_grammar() 
     { 
         BOOST_SPIRIT_DEBUG_TRACE_GRAMMAR_NAME(*this, 
             "predefined_macros_grammar", TRACE_PREDEF_MACROS_GRAMMAR); 
@@ -149,7 +152,7 @@ boost::spirit::tree_parse_info<LexIteratorT>
 predefined_macros_grammar_gen<LexIteratorT>::parse_predefined_macro (
     LexIteratorT const &first, LexIteratorT const &last)
 {
-    predefined_macros_grammar g(rule_ids);
+    predefined_macros_grammar g;
     return boost::spirit::pt_parse (first, last, g);
 }
 
@@ -159,5 +162,10 @@ predefined_macros_grammar_gen<LexIteratorT>::parse_predefined_macro (
 }   // namespace grammars
 }   // namespace wave
 }   // namespace boost
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #endif // !defined(CPP_PREDEF_MACROS_GRAMMAR_HPP_53858C9A_C202_4D60_AD92_DC9CAE4DBB43_INCLUDED)

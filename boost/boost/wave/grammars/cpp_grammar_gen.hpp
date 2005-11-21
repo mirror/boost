@@ -11,10 +11,21 @@
 #if !defined(CPP_GRAMMAR_GEN_HPP_80CB8A59_5411_4E45_B406_62531A12FB99_INCLUDED)
 #define CPP_GRAMMAR_GEN_HPP_80CB8A59_5411_4E45_B406_62531A12FB99_INCLUDED
 
-#include <boost/spirit/tree/parse_tree.hpp>
-
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/language_support.hpp>
+
+#include <boost/spirit/tree/parse_tree.hpp>
+
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
+
+// suppress warnings about dependent classes not being exported from the dll
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable : 4251 4231 4660)
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
@@ -61,7 +72,7 @@ namespace grammars {
 ///////////////////////////////////////////////////////////////////////////////
 
 template <typename LexIteratorT>
-struct cpp_grammar_gen
+struct BOOST_WAVE_DECL cpp_grammar_gen
 {
     typedef LexIteratorT                          iterator_type;
     typedef typename LexIteratorT::token_type     token_type;
@@ -78,5 +89,10 @@ struct cpp_grammar_gen
 }   // namespace grammars
 }   // namespace wave
 }   // namespace boost
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #endif // !defined(CPP_GRAMMAR_GEN_HPP_80CB8A59_5411_4E45_B406_62531A12FB99_INCLUDED)

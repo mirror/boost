@@ -46,6 +46,11 @@
 #endif // SPIRIT_VERSION >= 0x1700
 #endif // !defined(spirit_append_actor)
 
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 //  Encapsulation of the grammar for evaluation of constant preprocessor
@@ -731,5 +736,10 @@ expression_grammar_gen<TokenT>::evaluate(
 }   // namespace grammars
 }   // namespace wave
 }   // namespace boost
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #endif // !defined(CPP_EXPRESSION_GRAMMAR_HPP_099CD1A4_A6C0_44BE_8F24_0B00F5BE5674_INCLUDED)

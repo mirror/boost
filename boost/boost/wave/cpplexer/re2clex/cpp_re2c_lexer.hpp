@@ -38,6 +38,11 @@
 #include <boost/wave/cpplexer/re2clex/scanner.hpp>
 #include <boost/wave/cpplexer/re2clex/cpp_re.hpp>
 
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
 namespace wave {
@@ -337,7 +342,7 @@ token_cache<typename lexer<IteratorT, PositionT>::string_type> const
 //  It is coupled to the iterator type to allow to decouple the lexer/iterator 
 //  configurations at compile time.
 //
-//  This function is declared inside the cpp_slex_token.hpp file, which is 
+//  This function is declared inside the cpp_lex_token.hpp file, which is 
 //  referenced by the source file calling the lexer and the source file, which
 //  instantiates the lex_functor. But is is defined here, so it will be 
 //  instantiated only while compiling the source file, which instantiates the 
@@ -366,4 +371,9 @@ new_lexer_gen<IteratorT, PositionT>::new_lexer(IteratorT const &first,
 }   // namespace wave
 }   // namespace boost 
      
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
+
 #endif // !defined(CPP_RE2C_LEXER_HPP_B81A2629_D5B1_4944_A97D_60254182B9A8_INCLUDED)

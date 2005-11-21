@@ -11,7 +11,13 @@
 #if !defined(PREPROCESSING_HOOKS_HPP_338DE478_A13C_4B63_9BA9_041C917793B8_INCLUDED)
 #define PREPROCESSING_HOOKS_HPP_338DE478_A13C_4B63_9BA9_041C917793B8_INCLUDED
 
+#include <boost/wave/wave_config.hpp>
 #include <vector>
+
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
@@ -278,5 +284,10 @@ struct default_preprocessing_hooks {
 }   // namespace context_policies
 }   // namespace wave
 }   // namespace boost
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #endif // !defined(PREPROCESSING_HOOKS_HPP_338DE478_A13C_4B63_9BA9_041C917793B8_INCLUDED)

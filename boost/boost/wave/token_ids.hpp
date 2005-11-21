@@ -18,6 +18,11 @@
 
 #include <boost/wave/wave_config.hpp>
 
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 //  Allow external redefinition of the token identifiers to use
 #if !defined(BOOST_WAVE_TOKEN_IDS_DEFINED)
@@ -684,6 +689,11 @@ static char const *tok_names[] = {
 }   // namespace boost
 
 #endif // #if !defined(BOOST_WAVE_TOKEN_IDS_DEFINED)
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #endif // !defined(TOKEN_IDS_HPP_414E9A58_F079_4789_8AFF_513815CE475B_INCLUDED)
 

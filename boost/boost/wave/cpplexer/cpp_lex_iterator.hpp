@@ -20,11 +20,17 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/spirit/iterator/multi_pass.hpp>
 
+#include <boost/wave/wave_config.hpp>
 #include <boost/wave/util/file_position.hpp>
 #include <boost/wave/util/functor_input.hpp>
 #include <boost/wave/cpplexer/cpp_lex_interface.hpp>
 
 #include <boost/wave/language_support.hpp>
+
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
 
 #if 0 != __COMO_VERSION__
 #define BOOST_WAVE_EOF_PREFIX static
@@ -166,6 +172,11 @@ public:
 }   // namespace cpplexer
 }   // namespace wave
 }   // namespace boost
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #undef BOOST_WAVE_EOF_PREFIX
 

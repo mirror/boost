@@ -7,6 +7,7 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
+#define BOOST_WAVE_SOURCE 1
 #include <boost/wave/wave_config.hpp>
 
 #if BOOST_WAVE_SEPARATE_GRAMMAR_INSTANTIATION != 0
@@ -18,6 +19,17 @@
 #include <boost/wave/cpplexer/cpp_lex_iterator.hpp>
 
 #include <boost/wave/grammars/cpp_expression_grammar.hpp>
+
+// this must occur after all of the includes and before any code appears
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_PREFIX
+#endif
+
+// suppress warnings about dependent classes not being exported from the dll
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable : 4251 4231 4660)
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 //  
@@ -31,6 +43,11 @@
 typedef boost::wave::cpplexer::lex_token<> token_type;
 
 template struct boost::wave::grammars::expression_grammar_gen<token_type>;
+
+// the suffix header occurs after all of the code
+#ifdef BOOST_HAS_ABI_HEADERS
+#include BOOST_ABI_SUFFIX
+#endif
 
 #endif // #if BOOST_WAVE_SEPARATE_GRAMMAR_INSTANTIATION != 0
 

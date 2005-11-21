@@ -42,7 +42,11 @@ CHANGELOG
   recognized as part of identifiers).
 - Added the possibility to testwave to extract a tagged comment based on a
   preprocessor constant (testwave V0.4.0).
-
+- Made the predefined_macros_grammar thread safe.
+- Added dll support for the generated Wave libraries.
+- Added the const_iterator based exlicit instantiations for the Re2C lexer to 
+  the built Wave library and dll.
+  
 Boost V1.33.1
 - Version 1.2.1
 - Fixed bug reported as Sourceforge bug 1274584.

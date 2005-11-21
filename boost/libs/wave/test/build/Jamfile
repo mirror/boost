@@ -55,8 +55,6 @@ template wave-lexer-test
         <vc-7_1-stlport><*><rtti>off
         std::locale-support
     : 
-#        <runtime-link>static
-#        <threading>single
         debug                          # build variants
     ;
 
@@ -75,8 +73,23 @@ template wave-test
         <vc-7_1-stlport><*><rtti>off
         std::locale-support
     : 
-#        <runtime-link>static
-#        <threading>single
+        debug                          # build variants
+    ;
+
+template wave-test-dll
+    : 
+        <dll>../../build/boost_wave    # sources
+        <dll>../../../program_options/build/boost_program_options
+        <dll>../../../filesystem/build/boost_filesystem
+    : 
+        <include>$(BOOST_ROOT) 
+        <sysinclude>$(BOOST_ROOT)
+        <vc-7_1><*><rtti>off           # workaround for compiler bug
+        <vc-7_1-stlport><*><rtti>off
+        std::locale-support
+        <define>BOOST_ALL_DYN_LINK=1
+        <runtime-link>dynamic
+    : 
         debug                          # build variants
     ;
 
@@ -85,6 +98,25 @@ template wave-test
 #
 test-suite wave
     :
+        # test the wave preprocessing component (dll version)
+        [   
+            run
+            # sources
+                <template>wave-test-dll 
+                ../testwave/$(TESTWAVE_SOURCES).cpp
+            :
+            # arguments
+                $(TESTWAVE_ARGUMENTS) 
+                --config-file=$(TESTWAVE_DIR)/$(TESTWAVE_FILES)
+            :
+            # input files
+            :
+            # requirements
+                <define>BOOST_LIB_DIAGNOSTIC=1
+            :
+            # name
+                testwave_dll
+        ]
         # test the wave preprocessing component
         [   
             run
@@ -99,11 +131,12 @@ test-suite wave
             # input files
             :
             # requirements
+                <define>BOOST_LIB_DIAGNOSTIC=1
             :
             # name
                 testwave
         ]
-        # test the different wave lexing components 
+        # test the Slex wave lexing component
         [   
             run
             # sources
@@ -115,10 +148,12 @@ test-suite wave
             # input files
             :
             # requirements
+                <define>BOOST_LIB_DIAGNOSTIC=1
             :
             # name
                 test_slex_lexer
         ]
+        # test the Re2C wave lexing component
         [   
             run
             # sources
@@ -130,6 +165,7 @@ test-suite wave
             # input files
             :
             # requirements
+                <define>BOOST_LIB_DIAGNOSTIC=1
             :
             # name
                 test_re2c_lexer
