@@ -33,11 +33,11 @@
 
 #include <vector>
 #include <stdexcept>
-#include <cassert>
 #include <string>
 #include <cctype>
 #include <algorithm> // for find_if
 #include <boost/config.hpp>
+#include <boost/assert.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/mpl/if.hpp>
 
@@ -327,7 +327,7 @@ namespace boost{
         InputIterator>::iterator_category> assigner;
 
 
-      assert(!offsets_.empty());
+      BOOST_ASSERT(!offsets_.empty());
     
       assigner::clear(tok);
       InputIterator start(next);
