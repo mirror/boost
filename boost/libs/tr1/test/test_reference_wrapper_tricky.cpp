@@ -73,4 +73,9 @@ int main()
    verify_return_type((*pr4b)(cptt,zero), int());
    std::tr1::reference_wrapper<functor2>* pr5b;
    verify_return_type((*pr5b)(zero, zero), double());
+
+   // check implicit convertion:
+   int i = 0;
+   int& ri = std::tr1::ref(i);
+   const int& cri = std::tr1::cref(i);
 }

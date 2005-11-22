@@ -31,7 +31,7 @@ rule test_all
    }
    for local fileb in [ GLOB $(BOOST_ROOT)/libs/tr1/test : run*.cpp ]
    {
-      all_rules += [ run $(fileb) ] ;
+      all_rules += [ run $(fileb) : : : <include>$(BOOST_ROOT) ] ;
       all_rules += [ run $(fileb) 
       :  # additional args
       :  # test-files

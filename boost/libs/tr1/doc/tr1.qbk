@@ -159,6 +159,8 @@ The Boost version of this this component does not currently support
 function call invocation (2.1.2.4), or derivation from std::unary_function 
 or std::binary_function (2.1.2 paragraphs 3 and 4).
 
+The Boost version is not implicitly convertible to T& as the TR requires.
+
 [endsect]
 
 [section:ptrs Smart Pointers.]
@@ -305,7 +307,7 @@ standard library implements this part of TR1.
 The Boost implementation does not produce functors that inherit from
 `std::unary_function` or `std::binary_function`, nor does it function
 correctly with pointers to volatile member functions (these should
-be extremely rare in practice however).</para>
+be extremely rare in practice however).
 
 [endsect]
 
