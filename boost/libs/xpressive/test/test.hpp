@@ -34,11 +34,12 @@ using namespace boost::xpressive;
 template<typename CharT>
 inline std::vector<std::basic_string<CharT> > backrefs(CharT const *br0, ...)
 {
+    using namespace std;
     std::vector<std::basic_string<CharT> > backrefs;
     if(0 != br0)
     {
         backrefs.push_back(br0);
-        std::va_list va;
+        va_list va;
         va_start(va, br0);
         CharT const *brN;
         while(0 != (brN = va_arg(va, CharT const *)))
