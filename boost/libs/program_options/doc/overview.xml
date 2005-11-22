@@ -353,6 +353,13 @@ pd.add("output-file", 2).add_optional("input-file", -1);
         In the above example, the first two positional options will be associated
         with name "output-file", and any others with the name "input-file".
       </para>
+
+    <warning>
+      <para>The &positional_options_desc; class only specifies translation from
+      position to name, and the option name should still be registered with
+      an instance of the &options_description; class.</para>
+    </warning>
+
       
     </section>
               
@@ -560,8 +567,15 @@ notify(vm);
           
           <row>
             <entry>&parse_command_line;</entry>
-            <entry>parses command line</entry>
+            <entry>parses command line (simpified interface)</entry>
           </row>
+
+          <row>
+            <entry>&basic_command_line_parser;</entry>
+            <entry>parses command line (extended interface)</entry>
+          </row>
+
+
           <row>
             <entry>&parse_config_file;</entry>
             <entry>parses config file</entry>
