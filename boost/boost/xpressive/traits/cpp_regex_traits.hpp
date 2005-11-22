@@ -261,7 +261,7 @@ namespace detail
             for(i = 0; i <= UCHAR_MAX; ++i)
             {
                 this->masks_[i] = static_cast<umask_t>(tmp[i]);
-                BOOST_ASSERT(0 == (this->masks_[i] & (non_std_ctype_underscore | non_std_ctype_blank | non_std_ctype_newline)));
+                BOOST_ASSERT(0 == (this->masks_[i] & non_std_ctype_masks));
             }
 
             this->masks_[static_cast<unsigned char>('_')] |= non_std_ctype_underscore;
@@ -538,7 +538,7 @@ struct cpp_regex_traits
         std::basic_stringstream<char_type> str;
         str.imbue(this->getloc());
         str << (8 == radix ? std::oct : (16 == radix ? std::hex : std::dec));
-        str << ch;
+        str.put(ch);
         str >> val;
         return str.fail() ? -1 : val;
     }
