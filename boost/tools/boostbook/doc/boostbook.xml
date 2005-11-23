@@ -107,7 +107,11 @@ std::cout &lt;&lt; f(5, 3) &gt;&gt; std::endl;
                                      url="http://xmlsoft.org/XSLT/">libxslt source</ulink>.</listitem>
         </itemizedlist>
       </listitem>
-        <listitem><simpara><command>doxygen</command>:</simpara> Available from <ulink>http://www.doxygen.org</ulink></listitem>
+      <listitem><simpara><command>doxygen</command>:</simpara>
+        <itemizedlist>
+          <listitem>Available <ulink url="http://www.doxygen.org">here</ulink>.</listitem>
+        </itemizedlist>
+      </listitem>
     </itemizedlist>
 
     <section id="boostbook.setup.autounix">
