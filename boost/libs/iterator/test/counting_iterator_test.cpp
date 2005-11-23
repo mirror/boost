@@ -277,6 +277,7 @@ int main()
     // Test user-defined type.
 
     test_integer3<my_int1, std::forward_iterator_tag, int>();
+    test_integer3<long, std::random_access_iterator_tag, int>();
     test_integer<my_int2>();
     test_integer<my_int3>();
     
