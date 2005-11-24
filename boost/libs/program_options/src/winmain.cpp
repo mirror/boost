@@ -12,10 +12,12 @@ namespace boost { namespace program_options {
 
     using namespace std;
 
-    // The rules for windows command line are pretty funny, see
+    // Take a command line string and splits in into tokens, according
+    // to the rules windows command line processor uses.
+    // 
+    // The rules are pretty funny, see
     //    http://article.gmane.org/gmane.comp.lib.boost.user/3005
     //    http://msdn.microsoft.com/library/en-us/vccelng/htm/progs_12.asp
-    
     BOOST_PROGRAM_OPTIONS_DECL
     std::vector<std::string> split_winmain(const std::string& input)
     {
@@ -23,7 +25,7 @@ namespace boost { namespace program_options {
 
         string::const_iterator i = input.begin(), e = input.end();
         for(;i != e; ++i)
-            if (!isspace(*i))
+            if (!isspace((unsigned char)*i))
                 break;
        
         if (i != e) {
@@ -55,11 +57,11 @@ namespace boost { namespace program_options {
                         current.append(backslash_count, '\\');
                         backslash_count = 0;
                     }
-                    if (isspace(*i) && !inside_quoted) {
+                    if (isspace((unsigned char*)*i) && !inside_quoted) {
                         // Space outside quoted section terminate the current argument
                         result.push_back(current);
                         current.resize(0);
-                        for(;i != e && isspace(*i); ++i)
+                        for(;i != e && isspace((unsigned char*)*i); ++i)
                             ;
                         --i;
                     } else {                  
