@@ -32,4 +32,5 @@ test-suite ptr_container :
     [ sc-test iterator_test ]
     [ sc-test tut1 ]   
     [ sc-test indirect_fun ]
+#    [ sc-test serialization ]
     ;
