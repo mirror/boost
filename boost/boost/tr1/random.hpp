@@ -15,7 +15,7 @@
 #include <boost/random.hpp>
 #include <boost/nondet_random.hpp>
 #include <boost/tr1/detail/functor2iterator.hpp>
-#include <boost/type_traits/is_integral.hpp>
+#include <boost/type_traits/is_fundamental.hpp>
 #include <boost/type_traits/is_same.hpp>
 
 namespace std { namespace tr1{
@@ -47,7 +47,7 @@ public:
    { m_gen.seed(x0); }
    template<class Gen> void seed(Gen& g)
    { 
-      init2(g, ::boost::is_integral<Gen>());
+      init2(g, ::boost::is_fundamental<Gen>());
    }
    result_type min BOOST_PREVENT_MACRO_SUBSTITUTION() const
    { return (m_gen.min)(); }
@@ -89,7 +89,7 @@ private:
    template <class Gen>
    void init1(Gen& g, const ::boost::false_type&)
    {
-      init2(g, ::boost::is_integral<Gen>());
+      init2(g, ::boost::is_fundamental<Gen>());
    }
    template <class Gen>
    void init2(Gen& g, const ::boost::true_type&)
@@ -99,8 +99,8 @@ private:
    template <class Gen>
    void init2(Gen& g, const ::boost::false_type&)
    {
-      typedef typename Gen::result_type gen_rt;
-      boost::tr1_details::functor2iterator<Gen, gen_rt> f1(g), f2;
+      //typedef typename Gen::result_type gen_rt;
+      boost::tr1_details::functor2iterator<Gen, unsigned long> f1(g), f2;
       m_gen.seed(f1, f2);
    }
    impl_type m_gen;
@@ -140,7 +140,7 @@ public:
    void seed(unsigned long value)
    { m_gen.seed(value == 0 ? 5489UL : value); }
    template<class Gen> void seed(Gen& g)
-   { init2(g, ::boost::is_integral<Gen>()); }
+   { init2(g, ::boost::is_fundamental<Gen>()); }
    result_type min BOOST_PREVENT_MACRO_SUBSTITUTION() const
    { return (m_gen.min)(); }
    result_type max BOOST_PREVENT_MACRO_SUBSTITUTION() const
@@ -178,7 +178,7 @@ private:
    template <class Gen>
    void init1(Gen& g, const ::boost::false_type&)
    {
-      init2(g, ::boost::is_integral<Gen>());
+      init2(g, ::boost::is_fundamental<Gen>());
    }
    template <class Gen>
    void init2(Gen& g, const ::boost::true_type&)
@@ -213,7 +213,7 @@ public:
    void seed(unsigned long value = 19780503ul)
    { m_gen.seed(value == 0 ? 19780503UL : value); }
    template<class Gen> void seed(Gen& g)
-   { init2(g, ::boost::is_integral<Gen>()); }
+   { init2(g, ::boost::is_fundamental<Gen>()); }
    result_type min BOOST_PREVENT_MACRO_SUBSTITUTION() const
    { return (m_gen.min)(); }
    result_type max BOOST_PREVENT_MACRO_SUBSTITUTION() const
@@ -251,7 +251,7 @@ private:
    template <class Gen>
    void init1(Gen& g, const ::boost::false_type&)
    {
-      init2(g, ::boost::is_integral<Gen>());
+      init2(g, ::boost::is_fundamental<Gen>());
    }
    template <class Gen>
    void init2(Gen& g, const ::boost::true_type&)
@@ -286,7 +286,7 @@ public:
    void seed(unsigned long value = 19780503UL)
    { m_gen.seed(value == 0 ? 19780503UL : value); }
    template<class Gen> void seed(Gen& g)
-   { init2(g, ::boost::is_integral<Gen>()); }
+   { init2(g, ::boost::is_fundamental<Gen>()); }
    result_type min BOOST_PREVENT_MACRO_SUBSTITUTION() const
    { return (m_gen.min)(); }
    result_type max BOOST_PREVENT_MACRO_SUBSTITUTION() const
@@ -324,7 +324,7 @@ private:
    template <class Gen>
    void init1(Gen& g, const ::boost::false_type&)
    {
-      init2(g, ::boost::is_integral<Gen>());
+      init2(g, ::boost::is_fundamental<Gen>());
    }
    template <class Gen>
    void init2(Gen& g, const ::boost::true_type&)
@@ -334,8 +334,8 @@ private:
    template <class Gen>
    void init2(Gen& g, const ::boost::false_type&)
    {
-      typedef typename Gen::result_type gen_rt;
-      boost::tr1_details::functor2iterator<Gen, gen_rt> f1(g), f2;
+      //typedef typename Gen::result_type gen_rt;
+      boost::tr1_details::functor2iterator<Gen, unsigned long> f1(g), f2;
       m_gen.seed(f1, f2);
    }
    ::boost::random::subtract_with_carry_01<RealType, w, s, r, 0> m_gen;
@@ -377,7 +377,7 @@ public:
    }
    template<class Gen> void seed(Gen& g)
    {
-      init2(g, ::boost::is_integral<Gen>());
+      init2(g, ::boost::is_fundamental<Gen>());
    }
 
    const base1_type& base1() const
@@ -430,7 +430,7 @@ private:
    template <class Gen>
    void init1(Gen& g, const ::boost::false_type&)
    {
-      init2(g, ::boost::is_integral<Gen>());
+      init2(g, ::boost::is_fundamental<Gen>());
    }
    template <class Gen>
    void init2(Gen& g, const ::boost::true_type&)

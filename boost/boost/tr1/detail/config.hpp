@@ -26,6 +26,8 @@
 #     endif
 #  else
 #     define BOOST_TR1_STD_HEADER(name) <../include/name>
+#  elif defined(__HP_aCC)
+#     define BOOST_TR1_STD_HEADER(name) <../include_std/name>
 #  endif
 
 #if defined(__GNUC__) && !defined(BOOST_HAS_INCLUDE_NEXT)
