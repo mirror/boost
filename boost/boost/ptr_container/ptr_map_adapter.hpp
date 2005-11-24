@@ -111,7 +111,8 @@ namespace ptr_container_detail
                                                      CloneAllocator > 
             base_type;
 
-        typedef ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator> this_type;
+        typedef ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator>  this_type;
+		typedef typename map_config<T,VoidPtrMap>::value_type      no_ptr_type;
         
     public:
 
@@ -278,6 +279,11 @@ namespace ptr_container_detail
             where.base()->second = ptr.release();   // nothrow, commit
             return move( old );
         }
+
+		auto_type replace( iterator where, std::auto_ptr<no_ptr_type> x )
+		{
+			return replace( where, x.release() );
+		}
                                                                                      
     };
     
@@ -298,6 +304,8 @@ namespace ptr_container_detail
     {
         typedef ptr_container_detail::ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator> 
             base_type;
+		typedef typename ptr_container_detail::map_config<T,VoidPtrMap>::value_type 
+			no_ptr_type;
     
     public:    
         typedef BOOST_DEDUCED_TYPENAME base_type::iterator 
@@ -400,6 +408,11 @@ namespace ptr_container_detail
             return std::make_pair( iterator( res.first ), res.second );  // nothrow   
         }
 
+		std::pair<iterator,bool> insert( key_type& key, std::auto_ptr<no_ptr_type> x )
+		{
+			return insert( key, x.release() );
+		}
+
         bool transfer( iterator object, 
                        ptr_map_adapter& from ) // strong
         {
@@ -449,6 +462,9 @@ namespace ptr_container_detail
     {
         typedef ptr_container_detail::ptr_map_adapter_base<T,VoidPtrMultiMap,CloneAllocator>
              base_type;
+
+		typedef typename ptr_container_detail::map_config<T,VoidPtrMultiMap>::value_type
+			no_ptr_type;
         
     public: // typedefs
         typedef BOOST_DEDUCED_TYPENAME base_type::iterator           
@@ -545,6 +561,11 @@ namespace ptr_container_detail
             ptr.release();              // notrow
             return iterator( res );           
         }
+
+		iterator insert( key_type& key, std::auto_ptr<no_ptr_type> x )
+		{
+			return insert( key, x.release() );
+		}
 
         
         void transfer( iterator object, 

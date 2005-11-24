@@ -284,6 +284,11 @@ namespace ptr_container_detail
             return std::make_pair( iterator( res.first ), res.second );     
         }
 
+		std::pair<iterator,bool> insert( std::auto_ptr<key_type> x )
+		{
+			return insert( x.release() );
+		}
+
         
         iterator insert( iterator where, key_type* x ) // strong
         {
@@ -296,6 +301,11 @@ namespace ptr_container_detail
                 ptr.release();                                                  
             return iterator( res);
         }
+
+		iterator insert( iterator where, std::auto_ptr<key_type> x )
+		{
+			return insert( where, x.release() );
+		}
         
         template< typename InputIterator >
         void insert( InputIterator first, InputIterator last ) // basic
@@ -423,6 +433,11 @@ namespace ptr_container_detail
         {
             return base_type::insert( before, x ); 
         } 
+
+		iterator insert( iterator before, std::auto_ptr<key_type> x )
+		{
+			return insert( before, x.release() );
+		}
     
         iterator insert( key_type* x ) // strong                                      
         {   
@@ -434,6 +449,11 @@ namespace ptr_container_detail
             ptr.release();                                                      
             return iterator( res );                                             
         }
+
+		iterator insert( std::auto_ptr<key_type> x )
+		{
+			return insert( x.release() );
+		}
     
         template< typename InputIterator >
         void insert( InputIterator first, InputIterator last ) // basic

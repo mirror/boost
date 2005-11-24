@@ -152,7 +152,8 @@ namespace ptr_container_detail
         
         typedef BOOST_DEDUCED_TYPENAME base_type::scoped_deleter scoped_deleter;
 
-        typedef ptr_sequence_adapter<T,VoidPtrSeq,CloneAllocator> this_type;
+        typedef ptr_sequence_adapter<T,VoidPtrSeq,CloneAllocator>                         this_type;
+		typedef typename ptr_container_detail::sequence_config<T,VoidPtrSeq>::value_type  no_ptr_type;
          
     public:
         typedef BOOST_DEDUCED_TYPENAME base_type::value_type  value_type; 
@@ -186,6 +187,11 @@ namespace ptr_container_detail
             ptr.release();                     // nothrow
         }
 
+		void push_back( std::auto_ptr<no_ptr_type> x )
+		{
+			push_back( x.release() );
+		}
+		
         void push_front( value_type x )                
         {
             this->enforce_null_policy( x, "Null pointer in 'push_front()'" );
@@ -193,7 +199,12 @@ namespace ptr_container_detail
             auto_type ptr( x );                // nothrow
             this->c_private().push_front( x ); // strong, commit
             ptr.release();                     // nothrow
-        } 
+        }
+
+		void push_front( std::auto_ptr<no_ptr_type> x )
+		{
+			push_front( x.release() );
+		}
 
         auto_type pop_back()
         {

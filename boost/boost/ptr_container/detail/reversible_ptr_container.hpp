@@ -452,6 +452,11 @@ namespace ptr_container_detail
             return res;
         }
 
+		iterator insert( iterator before, std::auto_ptr<Ty_> x )
+		{
+			return insert( before, x.release() );
+		}
+
         iterator erase( iterator x ) // nothrow
         {
             BOOST_ASSERT( !empty() );
@@ -515,6 +520,11 @@ namespace ptr_container_detail
             return boost::ptr_container_detail::move( old );
         }
 
+		auto_type replace( iterator where, std::auto_ptr<Ty_> x )
+		{
+			return replace( where, x.release() ); 
+		}
+
         auto_type replace( size_type idx, Ty_* x ) // strong
         {
             enforce_null_policy( x, "Null pointer in 'replace()'" );
@@ -528,6 +538,11 @@ namespace ptr_container_detail
             c_[idx] = ptr.release();                       // nothrow, commit
             return boost::ptr_container_detail::move( old );
         } 
+
+		auto_type replace( size_type idx, std::auto_ptr<Ty_> x )
+		{
+			return replace( idx, x.release() );
+		}
         
     }; // 'reversible_ptr_container'
 
