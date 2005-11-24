@@ -223,11 +223,13 @@ int cpp_main(int /*argc*/, char * /*argv*/[])
    print_cpp_info(wchar_t(0), "wchar_t");
 #endif
 
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x560)
    boost::c_regex_traits<char> a;
    print_sort_syntax(a, "boost::c_regex_traits<char>");
 #ifndef BOOST_NO_WREGEX
    boost::c_regex_traits<wchar_t> b;
    print_sort_syntax(b, "boost::c_regex_traits<wchar_t>");
+#endif
 #endif
 #ifndef BOOST_NO_STD_LOCALE
    boost::cpp_regex_traits<char> c;

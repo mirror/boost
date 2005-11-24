@@ -24,13 +24,8 @@
 #if !defined(BOOST_NO_STD_STRING)
 #include <map>
 #include <list>
-#ifdef BOOST_REGEX_V3
-#include <boost/regex/v3/fileiter.hpp>
-typedef unsigned match_flag_type;
-#else
 #include <boost/regex/v4/fileiter.hpp>
 typedef boost::match_flag_type match_flag_type;
-#endif
 #include <cstdio>
 
 namespace boost{
@@ -584,7 +579,7 @@ const std::size_t RegEx::npos = static_cast<std::size_t>(~0UL);
 //
 namespace std{
 template<> template<>
-basic_string<char>&
+basic_string<char>& BOOST_REGEX_DECL
 basic_string<char>::replace<const char*>(char* f1, char* f2, const char* i1, const char* i2)
 {
    unsigned insert_pos = f1 - begin();
@@ -605,7 +600,29 @@ basic_string<char>::replace<const char*>(char* f1, char* f2, const char* i1, con
    }
    return *this;
 }
+template<> template<>
+basic_string<wchar_t>& BOOST_REGEX_DECL
+basic_string<wchar_t>::replace<const wchar_t*>(wchar_t* f1, wchar_t* f2, const wchar_t* i1, const wchar_t* i2)
+{
+   unsigned insert_pos = f1 - begin();
+   unsigned remove_len = f2 - f1;
+   unsigned insert_len = i2 - i1;
+   unsigned org_size = size();
+   if(insert_len > remove_len)
+   {
+      append(insert_len-remove_len, ' ');
+      std::copy_backward(begin() + insert_pos + remove_len, begin() + org_size, end());
+      std::copy(i1, i2, begin() + insert_pos);
+   }
+   else
+   {
+      std::copy(begin() + insert_pos + remove_len, begin() + org_size, begin() + insert_pos + insert_len);
+      std::copy(i1, i2, begin() + insert_pos);
+      erase(size() + insert_len - remove_len);
+   }
+   return *this;
 }
+} // namespace std
 #endif
 
 #endif

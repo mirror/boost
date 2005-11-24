@@ -105,7 +105,14 @@ void w32_regex_traits_char_layer<char>::init()
    for(int ii = 0; ii < (1 << CHAR_BIT); ++ii)
       char_map[ii] = static_cast<char>(ii);
    int r = ::LCMapStringA(this->m_locale, LCMAP_LOWERCASE, char_map, 1 << CHAR_BIT, this->m_lower_map, 1 << CHAR_BIT);
-   BOOST_ASSERT(r == 1 << CHAR_BIT);
+   BOOST_ASSERT(r != 0);
+   if(r < (1 << CHAR_BIT))
+   {
+      // if we have multibyte characters then not all may have been given
+      // a lower case mapping:
+      for(int jj = r; jj < (1 << CHAR_BIT); ++jj)
+         this->m_lower_map[jj] = static_cast<char>(jj);
+   }
    r = ::GetStringTypeExA(this->m_locale, CT_CTYPE1, char_map, 1 << CHAR_BIT, this->m_type_map);
    BOOST_ASSERT(0 != r);
 }
