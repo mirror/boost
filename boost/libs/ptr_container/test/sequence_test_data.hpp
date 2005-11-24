@@ -61,6 +61,7 @@ void reversible_container_test()
     BOOST_DEDUCED_TYPENAME C::size_type s2                = c.max_size();
     hide_warning(s2);
     c.push_back( new T );
+	c.push_back( std::auto_ptr<B>( new T ) );
     bool b                                                = c.empty();
     BOOST_CHECK( !c.empty() );
     b                                                     = is_null( c.begin() );
@@ -79,6 +80,7 @@ void reversible_container_test()
 
     c.pop_back(); 
     c.insert( c.end(), new T );
+	c.insert( c.end(), std::auto_ptr<B>( new T ) );
 
 #ifdef BOOST_NO_SFINAE
 #else
@@ -110,7 +112,8 @@ void reversible_container_test()
     std::auto_ptr<C> ap = c.release();
     c                   = c2.clone();
     BOOST_CHECK( !c.empty() );
-    auto_type ptr2      = c.replace(c.begin(), new T );
+    auto_type ptr2      = c.replace( c.begin(), new T );
+	ptr2                = c.replace( c.begin(), std::auto_ptr<B>( new T ) );
     BOOST_MESSAGE( "finished release/clone/replace test" ); 
                      
     c3.push_back( new T );
@@ -234,7 +237,6 @@ void random_access_algorithms_test()
     c.merge( c2 );
     BOOST_CHECK( c2.empty() );
     BOOST_CHECK( c.size() == 9u );
-    BOOST_CHECK( is_sorted< std::less_equal<int> >( c ) );
- 
+    BOOST_CHECK( is_sorted< std::less_equal<int> >( c ) ); 
 }
 

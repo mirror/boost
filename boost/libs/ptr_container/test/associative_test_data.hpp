@@ -55,7 +55,9 @@ void ptr_set_test()
     
     T* t = new T;
     c.insert( c.end(), t );    
+	c.insert( c.end(), std::auto_ptr<B>( new T ) );
     c.insert( new T ); 
+	c.insert( std::auto_ptr<B>( new T ) );
     c3.insert( c.begin(), c.end() ); 
     c.erase( c.begin() );
     c3.erase( c3.begin(), c3.end() );

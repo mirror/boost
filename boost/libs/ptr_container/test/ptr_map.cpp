@@ -15,8 +15,9 @@
 #include <boost/range/sub_range.hpp>
 #include <boost/cast.hpp>
 #include <cstdlib>
-#include <string>
 #include <iostream>
+#include <memory>
+#include <string>
 
 template< typename C, typename B, typename T >
 void ptr_map_test();
@@ -98,7 +99,7 @@ void ptr_map_test()
     a_key = get_next_key( a_key );
     c.insert( a_key, new T );
     a_key = get_next_key( a_key );
-    c.insert( a_key, new T );
+    c.insert( a_key, std::auto_ptr<B>( new T ) );
     typename C::auto_type ptr2  = c.release( c.begin() );
     std::auto_ptr<C> ap         = c.release();
     c                           = c2.clone();
@@ -128,6 +129,7 @@ void ptr_map_test()
 
     BOOST_CHECK( !c3.empty() );
     c3.replace( c3.begin(), new T );
+	c3.replace( c3.begin(), std::auto_ptr<B>( new T ) );
     BOOST_MESSAGE( "finished set/map interface test" );
 
     // @todo: make macro with algorithms so that the right erase() is called.

@@ -26,7 +26,9 @@ void test_set()
 
     BOOST_CHECK_THROW( set.insert( 0 ), bad_ptr_container_operation );
     set.insert( new int(0) );
+	set.insert( std::auto_ptr<int>( new int(1) ) );
     BOOST_CHECK_THROW( (set.replace(set.begin(), 0 )), bad_ptr_container_operation );
+	BOOST_CHECK_THROW( (set.replace(set.begin(), std::auto_ptr<int>(0) )), bad_ptr_container_operation );
 }
 
 using boost::unit_test::test_suite;
