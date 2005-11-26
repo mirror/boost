@@ -114,17 +114,16 @@ namespace boost { namespace proto
 
     ///////////////////////////////////////////////////////////////////////////////
     // post-fix operators
-    // BUGBUG fixme
     template<typename ArgT>
-    unary_op<ArgT, post_inc_tag> const
-    operator ++(op_base<ArgT> const &arg, int)
+    inline typename lazy_enable_if<is_op<ArgT>, unary_op_generator<ArgT, post_inc_tag> >::type const
+    operator ++(ArgT const &arg, int)
     {
         return make_op<post_inc_tag>(arg.cast());
     }
 
     template<typename ArgT>
-    unary_op<ArgT, post_dec_tag> const
-    operator --(op_base<ArgT> const &arg, int)
+    inline typename lazy_enable_if<is_op<ArgT>, unary_op_generator<ArgT, post_dec_tag> >::type const
+    operator --(ArgT const &arg, int)
     {
         return make_op<post_dec_tag>(arg.cast());
     }

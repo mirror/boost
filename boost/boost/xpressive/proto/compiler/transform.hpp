@@ -86,11 +86,7 @@ namespace boost { namespace proto
         };
 
         template<typename OpT, typename StateT, typename VisitorT>
-        static typename mpl::if_<
-            is_proxy<OpT>
-          , typename arg_type<OpT>::type const
-          , typename arg_type<OpT>::type const &
-        >::type
+        static typename arg_type<OpT>::const_reference
         call(OpT const &op, StateT const &, VisitorT &)
         {
             return proto::arg(op);
@@ -108,11 +104,7 @@ namespace boost { namespace proto
         };
 
         template<typename OpT, typename StateT, typename VisitorT>
-        static typename mpl::if_<
-            is_proxy<OpT>
-          , typename left_type<OpT>::type const
-          , typename left_type<OpT>::type const &
-        >::type
+        static typename left_type<OpT>::const_reference
         call(OpT const &op, StateT const &, VisitorT &)
         {
             return proto::left(op);
@@ -130,11 +122,7 @@ namespace boost { namespace proto
         };
 
         template<typename OpT, typename StateT, typename VisitorT>
-        static typename mpl::if_<
-            is_proxy<OpT>
-          , typename right_type<OpT>::type const
-          , typename right_type<OpT>::type const &
-        >::type
+        static typename right_type<OpT>::const_reference
         call(OpT const &op, StateT const &, VisitorT &)
         {
             return proto::right(op);

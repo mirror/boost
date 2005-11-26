@@ -170,23 +170,32 @@ namespace boost { namespace proto
     template<typename FirstT, typename SecondT>
     struct compose_transforms;
 
-    template<typename ArgT, typename TagT>
-    typename value_type<ArgT>::type const &arg(unary_op<ArgT, TagT> const &op);
+    template<typename OpT>
+    typename arg_type<OpT>::const_reference arg(OpT const &op);
 
-    template<typename ArgT, typename TagT, typename ParamT>
-    typename value_type<ArgT>::type const arg(op_proxy<unary_op<ArgT, TagT>, ParamT> const &op);
+    template<typename OpT>
+    typename left_type<OpT>::const_reference left(OpT const &op);
 
-    template<typename LeftT, typename RightT, typename TagT>
-    typename value_type<LeftT>::type const &left(binary_op<LeftT, RightT, TagT> const &op);
+    template<typename OpT>
+    typename right_type<OpT>::const_reference right(OpT const &op);
 
-    template<typename LeftT, typename RightT, typename TagT, typename ParamT>
-    typename value_type<LeftT>::type const left(op_proxy<binary_op<LeftT, RightT, TagT>, ParamT> const &op);
+    //template<typename ArgT, typename TagT>
+    //typename value_type<ArgT>::type const &arg(unary_op<ArgT, TagT> const &op);
 
-    template<typename LeftT, typename RightT, typename TagT>
-    typename value_type<RightT>::type const &right(binary_op<LeftT, RightT, TagT> const &op);
+    //template<typename ArgT, typename TagT, typename ParamT>
+    //typename value_type<ArgT>::type const arg(op_proxy<unary_op<ArgT, TagT>, ParamT> const &op);
 
-    template<typename LeftT, typename RightT, typename TagT, typename ParamT>
-    typename value_type<RightT>::type const right(op_proxy<binary_op<LeftT, RightT, TagT>, ParamT> const &op);
+    //template<typename LeftT, typename RightT, typename TagT>
+    //typename value_type<LeftT>::type const &left(binary_op<LeftT, RightT, TagT> const &op);
+
+    //template<typename LeftT, typename RightT, typename TagT, typename ParamT>
+    //typename value_type<LeftT>::type const left(op_proxy<binary_op<LeftT, RightT, TagT>, ParamT> const &op);
+
+    //template<typename LeftT, typename RightT, typename TagT>
+    //typename value_type<RightT>::type const &right(binary_op<LeftT, RightT, TagT> const &op);
+
+    //template<typename LeftT, typename RightT, typename TagT, typename ParamT>
+    //typename value_type<RightT>::type const right(op_proxy<binary_op<LeftT, RightT, TagT>, ParamT> const &op);
 
     template<typename OpT, typename StateT, typename VisitorT, typename DomainTagT>
     typename lazy_enable_if<

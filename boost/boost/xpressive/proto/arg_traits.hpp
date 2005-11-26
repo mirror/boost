@@ -35,12 +35,14 @@ namespace boost { namespace proto
     struct arg_type
     {
         typedef typename OpT::arg_type type;
+        typedef type const &const_reference;
     };
 
     template<typename OpT, typename ParamT>
     struct arg_type<op_proxy<OpT, ParamT> >
-      : arg_type<OpT>
     {
+        typedef typename OpT::arg_type type;
+        typedef type const const_reference;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -49,12 +51,14 @@ namespace boost { namespace proto
     struct left_type
     {
         typedef typename OpT::left_type type;
+        typedef type const &const_reference;
     };
 
     template<typename OpT, typename ParamT>
     struct left_type<op_proxy<OpT, ParamT> >
-      : left_type<OpT>
     {
+        typedef typename OpT::left_type type;
+        typedef type const const_reference;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -63,12 +67,14 @@ namespace boost { namespace proto
     struct right_type
     {
         typedef typename OpT::right_type type;
+        typedef type const &const_reference;
     };
 
     template<typename OpT, typename ParamT>
     struct right_type<op_proxy<OpT, ParamT> >
-      : right_type<OpT>
     {
+        typedef typename OpT::right_type type;
+        typedef type const const_reference;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -81,48 +87,30 @@ namespace boost { namespace proto
 
     template<typename OpT, typename ParamT>
     struct tag_type<op_proxy<OpT, ParamT> >
-      : tag_type<OpT>
     {
+        typedef typename OpT::tag_type type;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // arg
-    template<typename ArgT, typename TagT>
-    inline typename value_type<ArgT>::type const &arg(unary_op<ArgT, TagT> const &op)
-    {
-        return op.arg;
-    }
-
-    template<typename ArgT, typename TagT, typename ParamT>
-    inline typename value_type<ArgT>::type const arg(op_proxy<unary_op<ArgT, TagT>, ParamT> const &op)
+    template<typename OpT>
+    inline typename arg_type<OpT>::const_reference arg(OpT const &op)
     {
         return op.cast().arg;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // left
-    template<typename LeftT, typename RightT, typename TagT>
-    inline typename value_type<LeftT>::type const &left(binary_op<LeftT, RightT, TagT> const &op)
-    {
-        return op.left;
-    }
-
-    template<typename LeftT, typename RightT, typename TagT, typename ParamT>
-    inline typename value_type<LeftT>::type const left(op_proxy<binary_op<LeftT, RightT, TagT>, ParamT> const &op)
+    template<typename OpT>
+    inline typename left_type<OpT>::const_reference left(OpT const &op)
     {
         return op.cast().left;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // right
-    template<typename LeftT, typename RightT, typename TagT>
-    inline typename value_type<RightT>::type const &right(binary_op<LeftT, RightT, TagT> const &op)
-    {
-        return op.right;
-    }
-
-    template<typename LeftT, typename RightT, typename TagT, typename ParamT>
-    inline typename value_type<RightT>::type const right(op_proxy<binary_op<LeftT, RightT, TagT>, ParamT> const &op)
+    template<typename OpT>
+    inline typename right_type<OpT>::const_reference right(OpT const &op)
     {
         return op.cast().right;
     }

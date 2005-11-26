@@ -62,11 +62,7 @@ namespace boost { namespace proto
     {
         typedef typename OpT::type type;
 
-        static typename mpl::if_<
-            is_proxy<OpT>
-          , type const
-          , type const &
-        >::type make(OpT const &op)
+        static typename OpT::const_reference make(OpT const &op)
         {
             return op.cast();
         }
@@ -118,6 +114,7 @@ namespace boost { namespace proto
     struct op_base : op_root
     {
         typedef OpT type;
+        typedef type const &const_reference;
 
         OpT &cast()
         {
@@ -134,11 +131,11 @@ namespace boost { namespace proto
 
     ///////////////////////////////////////////////////////////////////////////////
     // unary_op
-    template<typename ArgT, typename OpT>
-    struct unary_op : op_base<unary_op<ArgT, OpT> >
+    template<typename ArgT, typename TagT>
+    struct unary_op : op_base<unary_op<ArgT, TagT> >
     {
         typedef typename value_type<ArgT>::type arg_type;
-        typedef OpT tag_type;
+        typedef TagT tag_type;
 
         arg_type arg;
 
@@ -146,21 +143,21 @@ namespace boost { namespace proto
           : arg()
         {}
 
-        explicit unary_op(typename boost::call_traits<ArgT>::param_type arg_)
+        explicit unary_op(typename call_traits<ArgT>::param_type arg_)
           : arg(arg_)
         {}
 
-        using op_base<unary_op<ArgT, OpT> >::operator =;
+        using op_base<unary_op<ArgT, TagT> >::operator =;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // binary_op
-    template<typename LeftT, typename RightT, typename OpT>
-    struct binary_op : op_base<binary_op<LeftT, RightT, OpT> >
+    template<typename LeftT, typename RightT, typename TagT>
+    struct binary_op : op_base<binary_op<LeftT, RightT, TagT> >
     {
         typedef typename value_type<LeftT>::type left_type;
         typedef typename value_type<RightT>::type right_type;
-        typedef OpT tag_type;
+        typedef TagT tag_type;
 
         left_type left;
         right_type right;
@@ -171,18 +168,17 @@ namespace boost { namespace proto
         {}
 
         binary_op(
-            typename boost::call_traits<LeftT>::param_type left_
-          , typename boost::call_traits<RightT>::param_type right_)
+            typename call_traits<LeftT>::param_type left_
+          , typename call_traits<RightT>::param_type right_)
           : left(left_)
           , right(right_)
         {}
 
-        using op_base<binary_op<LeftT, RightT, OpT> >::operator =;
+        using op_base<binary_op<LeftT, RightT, TagT> >::operator =;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // nary_op
-    //
     template<typename FunT, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename A)>
     struct nary_op
       : op_base<nary_op<FunT, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, A)> >
@@ -223,6 +219,7 @@ namespace boost { namespace proto
     struct op_proxy
     {
         typedef OpT type;
+        typedef type const const_reference;
         ParamT param_;
 
         OpT const cast() const
@@ -242,6 +239,7 @@ namespace boost { namespace proto
     struct op_proxy<OpT, void>
     {
         typedef OpT type;
+        typedef type const const_reference;
 
         OpT const cast() const
         {
