@@ -33,7 +33,6 @@
 #if defined(__GNUC__) && !defined(BOOST_HAS_INCLUDE_NEXT)
 #  define BOOST_HAS_INCLUDE_NEXT
 #endif
-#  include <boost/config.hpp>
 
 //
 // We may be in the middle of parsing boost/config.hpp
@@ -44,6 +43,10 @@
 //
 #ifdef BOOST_HAS_INCLUDE_NEXT
 #  include_next <utility>
+#  if (__GNUC__ < 3)
+#     include_next <algorithm>
+#     include_next <iterator>
+#  endif
 #else
 #  include BOOST_TR1_STD_HEADER(utility)
 #endif
@@ -100,6 +103,8 @@
 #  define BOOST_HAS_TR1_UNORDERED_SET
 
 #endif
+
+#include <boost/config.hpp>
 
 #endif
 
