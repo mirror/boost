@@ -30,43 +30,43 @@ namespace detail
 
     ///////////////////////////////////////////////////////////////////////////////
     // c_regex_traits_base
-    template<typename CharT, std::size_t SizeOfCharT = sizeof(CharT)>
+    template<typename Char, std::size_t SizeOfChar = sizeof(Char)>
     struct c_regex_traits_base
     {
     protected:
-        template<typename TraitsT>
-        void imbue(TraitsT const &tr)
+        template<typename Traits>
+        void imbue(Traits const &tr)
         {
         }
     };
 
-    template<typename CharT>
-    struct c_regex_traits_base<CharT, 1>
+    template<typename Char>
+    struct c_regex_traits_base<Char, 1>
     {
     protected:
-        template<typename TraitsT>
-        static void imbue(TraitsT const &)
+        template<typename Traits>
+        static void imbue(Traits const &)
         {
         }
     };
 
     #ifndef BOOST_XPRESSIVE_NO_WREGEX
-    template<std::size_t SizeOfCharT>
-    struct c_regex_traits_base<wchar_t, SizeOfCharT>
+    template<std::size_t SizeOfChar>
+    struct c_regex_traits_base<wchar_t, SizeOfChar>
     {
     protected:
-        template<typename TraitsT>
-        static void imbue(TraitsT const &)
+        template<typename Traits>
+        static void imbue(Traits const &)
         {
         }
     };
     #endif
 
-    template<typename CharT>
-    CharT c_tolower(CharT);
+    template<typename Char>
+    Char c_tolower(Char);
 
-    template<typename CharT>
-    CharT c_toupper(CharT);
+    template<typename Char>
+    Char c_toupper(Char);
 
     template<>
     inline char c_tolower(char ch)
@@ -110,16 +110,16 @@ struct regex_traits_version_1_tag;
 //
 /// \brief Encapsaulates the standard C locale functions for use by the 
 /// basic_regex\<\> class template.
-template<typename CharT>
+template<typename Char>
 struct c_regex_traits
-  : detail::c_regex_traits_base<CharT>
+  : detail::c_regex_traits_base<Char>
 {
-    typedef CharT char_type;
+    typedef Char char_type;
     typedef std::basic_string<char_type> string_type;
     typedef detail::empty_locale locale_type;
-    typedef typename detail::char_class_impl<CharT>::char_class_type char_class_type;
+    typedef typename detail::char_class_impl<Char>::char_class_type char_class_type;
     typedef regex_traits_version_1_tag version_tag;
-    typedef detail::c_regex_traits_base<CharT> base_type;
+    typedef detail::c_regex_traits_base<Char> base_type;
 
     /// Initialize a c_regex_traits object to use the global C locale.
     ///
@@ -145,19 +145,19 @@ struct c_regex_traits
         return false;
     }
 
-    /// Convert a char to a CharT
+    /// Convert a char to a Char
     ///
     /// \param ch The source character.
-    /// \return ch if CharT is char, std::btowc(ch) if CharT is wchar_t.
+    /// \return ch if Char is char, std::btowc(ch) if Char is wchar_t.
     static char_type widen(char ch);
 
-    /// Returns a hash value for a CharT in the range [0, UCHAR_MAX]
+    /// Returns a hash value for a Char in the range [0, UCHAR_MAX]
     ///
     /// \param ch The source character.
     /// \return a value between 0 and UCHAR_MAX, inclusive.
     static unsigned char hash(char_type ch)
     {
-        return static_cast<unsigned char>(std::char_traits<CharT>::to_int_type(ch));
+        return static_cast<unsigned char>(std::char_traits<Char>::to_int_type(ch));
     }
 
     /// No-op
@@ -172,7 +172,7 @@ struct c_regex_traits
     /// Converts a character to lower-case using the current global C locale.
     ///
     /// \param ch The source character.
-    /// \return std::tolower(ch) if CharT is char, std::towlower(ch) if CharT is wchar_t.
+    /// \return std::tolower(ch) if Char is char, std::towlower(ch) if Char is wchar_t.
     static char_type translate_nocase(char_type ch)
     {
         return detail::c_tolower(ch);
@@ -211,8 +211,8 @@ struct c_regex_traits
     /// then v.transform(G1, G2) < v.transform(H1, H2).
     ///
     /// \attention Not used in xpressive 1.0
-    template<typename FwdIterT>
-    static string_type transform(FwdIterT begin, FwdIterT end)
+    template<typename FwdIter>
+    static string_type transform(FwdIter begin, FwdIter end)
     {
         BOOST_ASSERT(false); // BUGBUG implement me
     }
@@ -223,8 +223,8 @@ struct c_regex_traits
     /// v.transform_primary(G1, G2) < v.transform_primary(H1, H2).
     /// 
     /// \attention Not used in xpressive 1.0
-    template<typename FwdIterT>
-    static string_type transform_primary(FwdIterT begin, FwdIterT end)
+    template<typename FwdIter>
+    static string_type transform_primary(FwdIter begin, FwdIter end)
     {
         BOOST_ASSERT(false); // BUGBUG implement me
     }
@@ -234,8 +234,8 @@ struct c_regex_traits
     /// Returns an empty string if the character sequence is not a valid collating element.
     ///
     /// \attention Not used in xpressive 1.0
-    template<typename FwdIterT>
-    static string_type lookup_collatename(FwdIterT begin, FwdIterT end)
+    template<typename FwdIter>
+    static string_type lookup_collatename(FwdIter begin, FwdIter end)
     {
         BOOST_ASSERT(false); // BUGBUG implement me
     }
@@ -249,8 +249,8 @@ struct c_regex_traits
     /// \param icase Specifies whether the returned bitmask should represent the case-insensitive
     ///     version of the character class.
     /// \return A bitmask representing the character class.
-    template<typename FwdIterT>
-    static char_class_type lookup_classname(FwdIterT begin, FwdIterT end, bool icase)
+    template<typename FwdIter>
+    static char_class_type lookup_classname(FwdIter begin, FwdIter end, bool icase)
     {
         return detail::char_class_impl<char_type>::lookup_classname(begin, end, icase);
     }

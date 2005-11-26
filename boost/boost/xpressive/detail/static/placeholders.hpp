@@ -24,14 +24,14 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // literal_placeholder
 //
-template<typename CharT, bool NotT>
+template<typename Char, bool Not>
 struct literal_placeholder
   : quant_style_fixed_width<1>
 {
-    typedef mpl::bool_<NotT> not_type;
-    CharT ch_;
+    typedef mpl::bool_<Not> not_type;
+    Char ch_;
 
-    literal_placeholder(CharT ch)
+    literal_placeholder(Char ch)
       : ch_(ch)
     {
     }
@@ -40,13 +40,13 @@ struct literal_placeholder
 ///////////////////////////////////////////////////////////////////////////////
 // string_placeholder
 //
-template<typename CharT>
+template<typename Char>
 struct string_placeholder
   : quant_style_fixed_unknown_width
 {
-    std::basic_string<CharT> str_;
+    std::basic_string<Char> str_;
 
-    string_placeholder(std::basic_string<CharT> const &str)
+    string_placeholder(std::basic_string<Char> const &str)
       : str_(str)
     {
     }
@@ -69,13 +69,13 @@ struct mark_placeholder
 ///////////////////////////////////////////////////////////////////////////////
 // regex_placeholder
 //
-template<typename BidiIterT, bool ByRefT>
+template<typename BidiIter, bool ByRef>
 struct regex_placeholder
   : quant_style<quant_variable_width, unknown_width, mpl::false_>
 {
-    shared_ptr<regex_impl<BidiIterT> > impl_;
+    shared_ptr<regex_impl<BidiIter> > impl_;
 
-    regex_placeholder(shared_ptr<regex_impl<BidiIterT> > const &impl)
+    regex_placeholder(shared_ptr<regex_impl<BidiIter> > const &impl)
       : impl_(impl)
     {
     }
@@ -100,7 +100,7 @@ struct posix_charset_placeholder
 ///////////////////////////////////////////////////////////////////////////////
 // assert_word_placeholder
 //
-template<typename CondT>
+template<typename Cond>
 struct assert_word_placeholder
   : quant_style_assertion
 {
@@ -109,15 +109,15 @@ struct assert_word_placeholder
 ///////////////////////////////////////////////////////////////////////////////
 // range_placeholder
 //
-template<typename CharT>
+template<typename Char>
 struct range_placeholder
   : quant_style_fixed_width<1>
 {
-    CharT ch_min_;
-    CharT ch_max_;
+    Char ch_min_;
+    Char ch_max_;
     bool not_;
 
-    range_placeholder(CharT ch_min, CharT ch_max)
+    range_placeholder(Char ch_min, Char ch_max)
       : ch_min_(ch_min)
       , ch_max_(ch_max)
       , not_(false)

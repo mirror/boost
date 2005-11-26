@@ -24,11 +24,11 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // repeat_end_matcher
     //
-    template<bool GreedyT>
+    template<bool Greedy>
     struct repeat_end_matcher
       : quant_style<quant_none, mpl::size_t<0>, mpl::false_>
     {
-        typedef mpl::bool_<GreedyT> greedy_type;
+        typedef mpl::bool_<Greedy> greedy_type;
         int mark_number_;
         unsigned int min_, max_;
         mutable xpression_base const *back_;
@@ -41,11 +41,11 @@ namespace boost { namespace xpressive { namespace detail
         {
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match(state_type<BidiIterT> &state, NextT const &next) const
+        template<typename BidiIter, typename Next>
+        bool match(state_type<BidiIter> &state, Next const &next) const
         {
             // prevent repeated zero-width sub-matches from causing infinite recursion
-            sub_match_impl<BidiIterT> &br = state.sub_match(this->mark_number_);
+            sub_match_impl<BidiIter> &br = state.sub_match(this->mark_number_);
 
             if(br.zero_width_ && br.begin_ == state.cur_)
             {
@@ -65,10 +65,10 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         // greedy, variable-width quantifier
-        template<typename BidiIterT, typename NextT>
-        bool match_(state_type<BidiIterT> &state, NextT const &next, mpl::true_) const
+        template<typename BidiIter, typename Next>
+        bool match_(state_type<BidiIter> &state, Next const &next, mpl::true_) const
         {
-            sub_match_impl<BidiIterT> &br = state.sub_match(this->mark_number_);
+            sub_match_impl<BidiIter> &br = state.sub_match(this->mark_number_);
 
             if(this->max_ > br.repeat_count_)
             {
@@ -89,10 +89,10 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         // non-greedy, variable-width quantifier
-        template<typename BidiIterT, typename NextT>
-        bool match_(state_type<BidiIterT> &state, NextT const &next, mpl::false_) const
+        template<typename BidiIter, typename Next>
+        bool match_(state_type<BidiIter> &state, Next const &next, mpl::false_) const
         {
-            sub_match_impl<BidiIterT> &br = state.sub_match(this->mark_number_);
+            sub_match_impl<BidiIter> &br = state.sub_match(this->mark_number_);
 
             if(this->min_ <= br.repeat_count_)
             {

@@ -34,10 +34,10 @@ struct regex_traits_version_1_tag;
 //
 /// \brief stub regex_traits for non-char data
 ///
-template<typename ElemT>
+template<typename Elem>
 struct null_regex_traits
 {
-    typedef ElemT char_type;
+    typedef Elem char_type;
     typedef std::vector<char_type> string_type;
     typedef detail::not_a_locale locale_type;
     typedef int char_class_type;
@@ -67,10 +67,10 @@ struct null_regex_traits
         return false;
     }
 
-    /// Convert a char to a ElemT
+    /// Convert a char to a Elem
     ///
     /// \param ch The source character.
-    /// \return ElemT(ch).
+    /// \return Elem(ch).
     char_type widen(char ch) const
     {
         //BOOST_MPL_ASSERT((detail::never_true<char_type>));
@@ -78,7 +78,7 @@ struct null_regex_traits
         return char_type(ch);
     }
 
-    /// Returns a hash value for a ElemT in the range [0, UCHAR_MAX]
+    /// Returns a hash value for a Elem in the range [0, UCHAR_MAX]
     ///
     /// \param ch The source character.
     /// \return a value between 0 and UCHAR_MAX, inclusive.
@@ -134,8 +134,8 @@ struct null_regex_traits
     /// then v.transform(G1, G2) < v.transform(H1, H2).
     ///
     /// \attention Not used in xpressive 1.0
-    template<typename FwdIterT>
-    static string_type transform(FwdIterT begin, FwdIterT end)
+    template<typename FwdIter>
+    static string_type transform(FwdIter begin, FwdIter end)
     {
         return string_type(begin, end);
     }
@@ -146,8 +146,8 @@ struct null_regex_traits
     /// v.transform_primary(G1, G2) < v.transform_primary(H1, H2).
     /// 
     /// \attention Not used in xpressive 1.0
-    template<typename FwdIterT>
-    static string_type transform_primary(FwdIterT begin, FwdIterT end)
+    template<typename FwdIter>
+    static string_type transform_primary(FwdIter begin, FwdIter end)
     {
         return string_type(begin, end);
     }
@@ -157,8 +157,8 @@ struct null_regex_traits
     /// Returns an empty string if the character sequence is not a valid collating element.
     ///
     /// \attention Not used in xpressive 1.0
-    template<typename FwdIterT>
-    static string_type lookup_collatename(FwdIterT begin, FwdIterT end)
+    template<typename FwdIter>
+    static string_type lookup_collatename(FwdIter begin, FwdIter end)
     {
         detail::ignore_unused(&begin);
         detail::ignore_unused(&end);
@@ -172,8 +172,8 @@ struct null_regex_traits
     /// \param end not used
     /// \param icase not used
     /// \return static_cast\<char_class_type\>(0)
-    template<typename FwdIterT>
-    static char_class_type lookup_classname(FwdIterT begin, FwdIterT end, bool icase)
+    template<typename FwdIter>
+    static char_class_type lookup_classname(FwdIter begin, FwdIter end, bool icase)
     {
         detail::ignore_unused(&begin);
         detail::ignore_unused(&end);

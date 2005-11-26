@@ -23,32 +23,32 @@ namespace boost { namespace xpressive { namespace detail
 //  basic_chset: basic character set implementation using range_run
 //
 ///////////////////////////////////////////////////////////////////////////
-template<typename CharT>
+template<typename Char>
 struct basic_chset
 {
     basic_chset();
     basic_chset(basic_chset const &arg);
 
     bool empty() const;
-    void set(CharT from, CharT to);
-    template<typename TraitsT>
-    void set(CharT from, CharT to, TraitsT const &traits);
-    void set(CharT c);
-    template<typename TraitsT>
-    void set(CharT c, TraitsT const &traits);
+    void set(Char from, Char to);
+    template<typename Traits>
+    void set(Char from, Char to, Traits const &traits);
+    void set(Char c);
+    template<typename Traits>
+    void set(Char c, Traits const &traits);
 
-    void clear(CharT from, CharT to);
-    template<typename TraitsT>
-    void clear(CharT from, CharT to, TraitsT const &traits);
-    void clear(CharT c);
-    template<typename TraitsT>
-    void clear(CharT c, TraitsT const &traits);
+    void clear(Char from, Char to);
+    template<typename Traits>
+    void clear(Char from, Char to, Traits const &traits);
+    void clear(Char c);
+    template<typename Traits>
+    void clear(Char c, Traits const &traits);
     void clear();
 
-    template<typename TraitsT>
-    bool test(CharT v, TraitsT const &traits, mpl::false_) const; // case-sensitive
-    template<typename TraitsT>
-    bool test(CharT v, TraitsT const &traits, mpl::true_) const; // case-insensitive
+    template<typename Traits>
+    bool test(Char v, Traits const &traits, mpl::false_) const; // case-sensitive
+    template<typename Traits>
+    bool test(Char v, Traits const &traits, mpl::true_) const; // case-insensitive
 
     void inverse();
     void swap(basic_chset& x);
@@ -59,7 +59,7 @@ struct basic_chset
     basic_chset &operator ^=(basic_chset const &x);
 
 private:
-    range_run<CharT> rr_;
+    range_run<Char> rr_;
 };
 
 #if(CHAR_BIT == 8)
@@ -69,7 +69,7 @@ private:
 //  basic_chset: specializations for 8 bit chars using std::bitset
 //
 ///////////////////////////////////////////////////////////////////////////
-template<typename CharT>
+template<typename Char>
 struct basic_chset_8bit
 {
     basic_chset_8bit();
@@ -77,25 +77,25 @@ struct basic_chset_8bit
 
     bool empty() const;
     
-    void set(CharT from, CharT to);
-    template<typename TraitsT>
-    void set(CharT from, CharT to, TraitsT const &traits);
-    void set(CharT c);
-    template<typename TraitsT>
-    void set(CharT c, TraitsT const &traits);
+    void set(Char from, Char to);
+    template<typename Traits>
+    void set(Char from, Char to, Traits const &traits);
+    void set(Char c);
+    template<typename Traits>
+    void set(Char c, Traits const &traits);
 
-    void clear(CharT from, CharT to);
-    template<typename TraitsT>
-    void clear(CharT from, CharT to, TraitsT const &traits);
-    void clear(CharT c);
-    template<typename TraitsT>
-    void clear(CharT c, TraitsT const &traits);
+    void clear(Char from, Char to);
+    template<typename Traits>
+    void clear(Char from, Char to, Traits const &traits);
+    void clear(Char c);
+    template<typename Traits>
+    void clear(Char c, Traits const &traits);
     void clear();
 
-    template<typename TraitsT>
-    bool test(CharT v, TraitsT const &traits, mpl::false_) const; // case-sensitive
-    template<typename TraitsT>
-    bool test(CharT v, TraitsT const &traits, mpl::true_) const; // case-insensitive
+    template<typename Traits>
+    bool test(Char v, Traits const &traits, mpl::false_) const; // case-sensitive
+    template<typename Traits>
+    bool test(Char v, Traits const &traits, mpl::true_) const; // case-insensitive
 
     void inverse();
     void swap(basic_chset_8bit& x);
@@ -136,14 +136,14 @@ struct basic_chset<unsigned char>
 
 ///////////////////////////////////////////////////////////////////////////////
 // helpers
-template<typename CharT, typename TraitsT>
-void set_char(basic_chset<CharT> &chset, CharT ch, TraitsT const &traits, bool icase);
+template<typename Char, typename Traits>
+void set_char(basic_chset<Char> &chset, Char ch, Traits const &traits, bool icase);
 
-template<typename CharT, typename TraitsT>
-void set_range(basic_chset<CharT> &chset, CharT from, CharT to, TraitsT const &traits, bool icase);
+template<typename Char, typename Traits>
+void set_range(basic_chset<Char> &chset, Char from, Char to, Traits const &traits, bool icase);
 
-template<typename CharT, typename TraitsT>
-void set_class(basic_chset<CharT> &chset, typename TraitsT::char_class_type char_class, bool no, TraitsT const &traits);
+template<typename Char, typename Traits>
+void set_class(basic_chset<Char> &chset, typename Traits::char_class_type char_class, bool no, Traits const &traits);
 
 }}} // namespace boost::xpressive::detail
 

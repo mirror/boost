@@ -51,16 +51,16 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // string_generator
     //
-    template<typename StringT>
+    template<typename String>
     struct string_placeholder_generator
     {
         typedef typename remove_cv
         <
             typename mpl::eval_if
             <
-                is_array<StringT>
-              , remove_bounds<StringT>
-              , remove_pointer<StringT>
+                is_array<String>
+              , remove_bounds<String>
+              , remove_pointer<String>
             >::type
         >::type char_type;
 
@@ -69,55 +69,55 @@ namespace boost { namespace xpressive { namespace detail
 
     ///////////////////////////////////////////////////////////////////////////////
     // as_matcher
-    template<typename MatcherT, bool IsXprT = is_xpr<MatcherT>::value>
+    template<typename Matcher, bool IsXpr = is_xpr<Matcher>::value>
     struct as_matcher_type
     {
-        typedef MatcherT type;
+        typedef Matcher type;
 
-        static type const &call(MatcherT const &matcher)
+        static type const &call(Matcher const &matcher)
         {
             return matcher;
         }
     };
 
-    template<typename LiteralT>
-    struct as_matcher_type<LiteralT, false>
+    template<typename Literal>
+    struct as_matcher_type<Literal, false>
     {
         typedef typename mpl::eval_if
         <
-            is_string_literal<LiteralT>
-          , string_placeholder_generator<LiteralT>
-          , mpl::identity<literal_placeholder<LiteralT, false> >
+            is_string_literal<Literal>
+          , string_placeholder_generator<Literal>
+          , mpl::identity<literal_placeholder<Literal, false> >
         >::type type;
 
-        static type call(LiteralT const &literal)
+        static type call(Literal const &literal)
         {
             return type(literal);
         }
     };
 
-    template<typename BidiIterT>
-    struct as_matcher_type<basic_regex<BidiIterT>, false>
+    template<typename BidiIter>
+    struct as_matcher_type<basic_regex<BidiIter>, false>
     {
-        typedef regex_placeholder<BidiIterT, false> type;
+        typedef regex_placeholder<BidiIter, false> type;
 
-        static type call(basic_regex<BidiIterT> const &rex)
+        static type call(basic_regex<BidiIter> const &rex)
         {
-            typedef core_access<BidiIterT> access;
-            shared_ptr<regex_impl<BidiIterT> > impl = access::get_regex_impl(rex);
+            typedef core_access<BidiIter> access;
+            shared_ptr<regex_impl<BidiIter> > impl = access::get_regex_impl(rex);
             return type(impl);
         }
     };
 
-    template<typename BidiIterT>
-    struct as_matcher_type<reference_wrapper<basic_regex<BidiIterT> const>, false>
+    template<typename BidiIter>
+    struct as_matcher_type<reference_wrapper<basic_regex<BidiIter> const>, false>
     {
-        typedef regex_placeholder<BidiIterT, false> type;
+        typedef regex_placeholder<BidiIter, false> type;
 
-        static type call(reference_wrapper<basic_regex<BidiIterT> const> const &rex)
+        static type call(reference_wrapper<basic_regex<BidiIter> const> const &rex)
         {
-            typedef core_access<BidiIterT> access;
-            shared_ptr<regex_impl<BidiIterT> > impl = access::get_regex_impl(rex.get());
+            typedef core_access<BidiIter> access;
+            shared_ptr<regex_impl<BidiIter> > impl = access::get_regex_impl(rex.get());
             return type(impl);
         }
     };
@@ -125,29 +125,29 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // as_xpr_type
     //
-    template<typename XprT>
-    struct as_xpr_type<XprT, true> // is_op == true
+    template<typename Xpr>
+    struct as_xpr_type<Xpr, true> // is_op == true
     {
-        typedef XprT type;
+        typedef Xpr type;
 
-        static XprT const &call(XprT const &xpr)
+        static Xpr const &call(Xpr const &xpr)
         {
             return xpr;
         }
     };
 
-    template<typename XprT>
-    struct as_xpr_type<XprT, false>
+    template<typename Xpr>
+    struct as_xpr_type<Xpr, false>
     {
         typedef proto::unary_op
         <
-            typename as_matcher_type<XprT>::type
+            typename as_matcher_type<Xpr>::type
           , proto::noop_tag
         > type;
 
-        static type const call(XprT const &xpr)
+        static type const call(Xpr const &xpr)
         {
-            return proto::noop(detail::as_matcher_type<XprT>::call(xpr));
+            return proto::noop(detail::as_matcher_type<Xpr>::call(xpr));
         }
     };
 
@@ -160,16 +160,16 @@ namespace boost { namespace xpressive
     ///////////////////////////////////////////////////////////////////////////////
     // as_xpr (from a literal to an xpression)
     //
-    template<typename XprT>
+    template<typename Xpr>
     inline typename mpl::if_
     <
-        proto::is_op<XprT>
-      , XprT const &
-      , typename detail::as_xpr_type<XprT>::type const
+        proto::is_op<Xpr>
+      , Xpr const &
+      , typename detail::as_xpr_type<Xpr>::type const
     >::type
-    as_xpr(XprT const &xpr)
+    as_xpr(Xpr const &xpr)
     {
-        return detail::as_xpr_type<XprT>::call(xpr);
+        return detail::as_xpr_type<Xpr>::call(xpr);
     }
 
 }} // namespace boost::xpressive

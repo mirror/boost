@@ -24,10 +24,10 @@ namespace boost { namespace xpressive { namespace detail
 {
     ///////////////////////////////////////////////////////////////////////////////
     //
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct xpression_visitor_base
     {
-        explicit xpression_visitor_base(shared_ptr<regex_impl<BidiIterT> > const &self)
+        explicit xpression_visitor_base(shared_ptr<regex_impl<BidiIter> > const &self)
           : impl_()
           , self_(self)
         {
@@ -53,26 +53,26 @@ namespace boost { namespace xpressive { namespace detail
             }
         }
 
-        shared_ptr<regex_impl<BidiIterT> > &self()
+        shared_ptr<regex_impl<BidiIter> > &self()
         {
             return this->self_;
         }
 
-        regex_impl<BidiIterT> &impl()
+        regex_impl<BidiIter> &impl()
         {
             return this->impl_;
         }
 
     protected:
 
-        template<typename MatcherT>
-        void visit_(MatcherT const &)
+        template<typename Matcher>
+        void visit_(Matcher const &)
         {
             // no-op
         }
 
-        template<bool ByRefT>
-        void visit_(regex_placeholder<BidiIterT, ByRefT> const &rex)
+        template<bool ByRef>
+        void visit_(regex_placeholder<BidiIter, ByRef> const &rex)
         {
             // when visiting an embedded regex, track the references
             this->impl_.track_reference(rex.impl_);
@@ -92,49 +92,49 @@ namespace boost { namespace xpressive { namespace detail
 
     private:
 
-        regex_impl<BidiIterT> impl_;
-        shared_ptr<regex_impl<BidiIterT> > self_;
+        regex_impl<BidiIter> impl_;
+        shared_ptr<regex_impl<BidiIter> > self_;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    template<typename BidiIterT, typename ICaseT, typename TraitsT>
+    template<typename BidiIter, typename ICase, typename Traits>
     struct xpression_visitor
-      : xpression_visitor_base<BidiIterT>
+      : xpression_visitor_base<BidiIter>
     {
-        typedef BidiIterT iterator_type;
-        typedef ICaseT icase_type;
-        typedef TraitsT traits_type;
-        typedef typename boost::iterator_value<BidiIterT>::type char_type;
+        typedef BidiIter iterator_type;
+        typedef ICase icase_type;
+        typedef Traits traits_type;
+        typedef typename boost::iterator_value<BidiIter>::type char_type;
 
-        explicit xpression_visitor(TraitsT const &tr, shared_ptr<regex_impl<BidiIterT> > const &self)
-          : xpression_visitor_base<BidiIterT>(self)
+        explicit xpression_visitor(Traits const &tr, shared_ptr<regex_impl<BidiIter> > const &self)
+          : xpression_visitor_base<BidiIter>(self)
           , traits_(tr)
         {
         }
 
-        template<typename MatcherT>
+        template<typename Matcher>
         struct apply
         {
-            typedef typename transmogrify<BidiIterT, ICaseT, TraitsT, MatcherT>::type type;
+            typedef typename transmogrify<BidiIter, ICase, Traits, Matcher>::type type;
         };
 
-        template<typename MatcherT>
-        typename apply<MatcherT>::type
-        call(MatcherT const &matcher)
+        template<typename Matcher>
+        typename apply<Matcher>::type
+        call(Matcher const &matcher)
         {
             this->visit_(matcher);
-            return transmogrify<BidiIterT, ICaseT, TraitsT, MatcherT>::call(matcher, *this);
+            return transmogrify<BidiIter, ICase, Traits, Matcher>::call(matcher, *this);
         }
 
-        TraitsT const &traits() const
+        Traits const &traits() const
         {
             return this->traits_;
         }
 
     private:
 
-        TraitsT traits_;
+        Traits traits_;
     };
 
 }}}

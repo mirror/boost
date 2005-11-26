@@ -31,14 +31,14 @@ struct is_static_xpression
 {
 };
 
-template<typename MatcherT, typename NextT>
-struct is_static_xpression<static_xpression<MatcherT, NextT> >
+template<typename Matcher, typename Next>
+struct is_static_xpression<static_xpression<Matcher, Next> >
   : mpl::true_
 {
 };
 
-template<typename TopT, typename NextT>
-struct is_static_xpression<stacked_xpression<TopT, NextT> >
+template<typename Top, typename Next>
+struct is_static_xpression<stacked_xpression<Top, Next> >
   : mpl::true_
 {
 };
@@ -46,20 +46,20 @@ struct is_static_xpression<stacked_xpression<TopT, NextT> >
 ///////////////////////////////////////////////////////////////////////////////
 // is_regex
 //
-template<typename XprT>
+template<typename Xpr>
 struct is_regex
   : mpl::false_
 {
 };
 
-template<typename BidiIterT>
-struct is_regex<basic_regex<BidiIterT> >
+template<typename BidiIter>
+struct is_regex<basic_regex<BidiIter> >
   : mpl::true_
 {
 };
 
-template<typename BidiIterT>
-struct is_regex<reference_wrapper<basic_regex<BidiIterT> > >
+template<typename BidiIter>
+struct is_regex<reference_wrapper<basic_regex<BidiIter> > >
   : mpl::true_
 {
 };
@@ -67,20 +67,20 @@ struct is_regex<reference_wrapper<basic_regex<BidiIterT> > >
 ///////////////////////////////////////////////////////////////////////////////
 // is_modifiable
 //
-template<typename XprT>
+template<typename Xpr>
 struct is_modifiable
-  : mpl::not_<is_regex<XprT> >
+  : mpl::not_<is_regex<Xpr> >
 {
 };
 
 //////////////////////////////////////////////////////////////////////////
 // is_random
 //
-template<typename BidiIterT>
+template<typename BidiIter>
 struct is_random
   : is_convertible
     <
-        typename iterator_category<BidiIterT>::type
+        typename iterator_category<BidiIter>::type
       , std::random_access_iterator_tag
     >
 {

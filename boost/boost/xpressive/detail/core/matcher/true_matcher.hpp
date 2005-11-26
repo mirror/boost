@@ -26,8 +26,8 @@ namespace boost { namespace xpressive { namespace detail
     struct true_matcher
       : quant_style_assertion
     {
-        template<typename BidiIterT, typename NextT>
-        static bool match(state_type<BidiIterT> &, NextT const &)
+        template<typename BidiIter, typename Next>
+        static bool match(state_type<BidiIter> &, Next const &)
         {
             return true;
         }

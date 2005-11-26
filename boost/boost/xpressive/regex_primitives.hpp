@@ -429,9 +429,9 @@ proto::op_proxy<detail::mark_tag, int> const s9 = {9};
 /// Use icase() to make a sub-expression case-insensitive. For instance,
 /// "foo" >> icase(set['b'] >> "ar") will match "foo" exactly followed by
 /// "bar" irrespective of case.
-template<typename XprT>
-inline proto::binary_op<detail::icase_modifier, typename as_xpr_type<XprT>::type, modifier_tag> const
-icase(XprT const &xpr)
+template<typename Xpr>
+inline proto::binary_op<detail::icase_modifier, typename as_xpr_type<Xpr>::type, modifier_tag> const
+icase(Xpr const &xpr)
 {
     detail::icase_modifier mod;
     return proto::make_op<modifier_tag>(mod, as_xpr(xpr));
@@ -442,13 +442,13 @@ icase(XprT const &xpr)
 /// \brief Embed a regex object by reference.
 ///
 /// \param rex The basic_regex object to embed by reference.
-template<typename BidiIterT>
-inline proto::unary_op<detail::regex_placeholder<BidiIterT, true>, proto::noop_tag> const
-by_ref(basic_regex<BidiIterT> const &rex)
+template<typename BidiIter>
+inline proto::unary_op<detail::regex_placeholder<BidiIter, true>, proto::noop_tag> const
+by_ref(basic_regex<BidiIter> const &rex)
 {
-    typedef detail::core_access<BidiIterT> access;
-    shared_ptr<detail::regex_impl<BidiIterT> > impl = access::get_regex_impl(rex);
-    return proto::noop(detail::regex_placeholder<BidiIterT, true>(impl));
+    typedef detail::core_access<BidiIter> access;
+    shared_ptr<detail::regex_impl<BidiIter> > impl = access::get_regex_impl(rex);
+    return proto::noop(detail::regex_placeholder<BidiIter, true>(impl));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -458,24 +458,24 @@ by_ref(basic_regex<BidiIterT> const &rex)
 ///
 /// \param ch_min The lower end of the range to match.
 /// \param ch_max The upper end of the range to match.
-template<typename CharT>
-inline proto::unary_op<detail::range_placeholder<CharT>, proto::noop_tag> const
-range(CharT ch_min, CharT ch_max)
+template<typename Char>
+inline proto::unary_op<detail::range_placeholder<Char>, proto::noop_tag> const
+range(Char ch_min, Char ch_max)
 {
-    return proto::noop(detail::range_placeholder<CharT>(ch_min, ch_max));
+    return proto::noop(detail::range_placeholder<Char>(ch_min, ch_max));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Make a sub-expression optional. Equivalent to !as_xpr(xpr).
 ///
 /// \param xpr The sub-expression to make optional.
-template<typename XprT>
+template<typename Xpr>
 inline proto::unary_op
 <
-    typename detail::as_xpr_type<XprT>::type
+    typename detail::as_xpr_type<Xpr>::type
   , proto::logical_not_tag
 > const
-optional(XprT const &xpr)
+optional(Xpr const &xpr)
 {
     return !as_xpr(xpr);
 }
@@ -491,27 +491,27 @@ optional(XprT const &xpr)
 /// non-greedy, apply the unary minus operator, as in -repeat\<M,N\>(xpr).
 ///
 /// \param xpr The sub-expression to repeat.
-template<unsigned int MinT, unsigned int MaxT, typename XprT>
+template<unsigned int Min, unsigned int Max, typename Xpr>
 inline proto::unary_op
 <
-    typename detail::as_xpr_type<XprT>::type
-  , detail::generic_quant_tag<MinT, MaxT>
+    typename detail::as_xpr_type<Xpr>::type
+  , detail::generic_quant_tag<Min, Max>
 > const
-repeat(XprT const &xpr)
+repeat(Xpr const &xpr)
 {
-    return proto::make_op<detail::generic_quant_tag<MinT, MaxT> >(as_xpr(xpr));
+    return proto::make_op<detail::generic_quant_tag<Min, Max> >(as_xpr(xpr));
 }
 
 /// \overload
-template<unsigned int CountT, typename Xpr2T>
+template<unsigned int Count, typename Xpr2>
 inline proto::unary_op
 <
-    typename detail::as_xpr_type<Xpr2T>::type
-  , detail::generic_quant_tag<CountT, CountT>
+    typename detail::as_xpr_type<Xpr2>::type
+  , detail::generic_quant_tag<Count, Count>
 > const
-repeat(Xpr2T const &xpr)
+repeat(Xpr2 const &xpr)
 {
-    return proto::make_op<detail::generic_quant_tag<CountT, CountT> >(as_xpr(xpr));
+    return proto::make_op<detail::generic_quant_tag<Count, Count> >(as_xpr(xpr));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -524,13 +524,13 @@ repeat(Xpr2T const &xpr)
 /// \attention keep(xpr) is equivalent to the perl (?>...) extension.
 ///
 /// \param xpr The sub-expression to modify.
-template<typename XprT>
+template<typename Xpr>
 inline proto::unary_op
 <
-    typename detail::as_xpr_type<XprT>::type
+    typename detail::as_xpr_type<Xpr>::type
   , detail::keeper_tag
 > const
-keep(XprT const &xpr)
+keep(Xpr const &xpr)
 {
     return proto::make_op<detail::keeper_tag>(as_xpr(xpr));
 }
@@ -548,13 +548,13 @@ keep(XprT const &xpr)
 /// perl (?!...) extension.
 ///
 /// \param xpr The sub-expression to put in the look-ahead assertion.
-template<typename XprT>
+template<typename Xpr>
 inline proto::unary_op
 <
-    typename detail::as_xpr_type<XprT>::type
+    typename detail::as_xpr_type<Xpr>::type
   , detail::lookahead_tag<true>
 > const
-before(XprT const &xpr)
+before(Xpr const &xpr)
 {
     return proto::make_op<detail::lookahead_tag<true> >(as_xpr(xpr));
 }
@@ -574,13 +574,13 @@ before(XprT const &xpr)
 /// \param xpr The sub-expression to put in the look-ahead assertion.
 ///
 /// \pre xpr cannot match a variable number of characters.
-template<typename XprT>
+template<typename Xpr>
 inline proto::unary_op
 <
-    typename detail::as_xpr_type<XprT>::type
+    typename detail::as_xpr_type<Xpr>::type
   , detail::lookbehind_tag<true>
 > const
-after(XprT const &xpr)
+after(Xpr const &xpr)
 {
     return proto::make_op<detail::lookbehind_tag<true> >(as_xpr(xpr));
 }
@@ -595,13 +595,13 @@ after(XprT const &xpr)
 ///   sregex rx = imbue(loc)(+digit);
 ///
 /// \param loc The std::locale or regex traits object.
-template<typename LocaleT>
-inline detail::modifier_op<detail::locale_modifier<LocaleT> > const
-imbue(LocaleT const &loc)
+template<typename Locale>
+inline detail::modifier_op<detail::locale_modifier<Locale> > const
+imbue(Locale const &loc)
 {
-    detail::modifier_op<detail::locale_modifier<LocaleT> > mod =
+    detail::modifier_op<detail::locale_modifier<Locale> > mod =
     {
-        detail::locale_modifier<LocaleT>(loc)
+        detail::locale_modifier<Locale>(loc)
       , regex_constants::ECMAScript
     };
     return mod;

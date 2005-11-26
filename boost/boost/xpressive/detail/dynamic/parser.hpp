@@ -47,40 +47,40 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // make_char_xpression
 //
-template<typename BidiIterT, typename CharT, typename TraitsT>
-inline sequence<BidiIterT> make_char_xpression
+template<typename BidiIter, typename Char, typename Traits>
+inline sequence<BidiIter> make_char_xpression
 (
-    CharT ch
+    Char ch
   , regex_constants::syntax_option_type flags
-  , TraitsT const &traits
+  , Traits const &traits
 )
 {
     if(0 != (regex_constants::icase_ & flags))
     {
-        literal_matcher<TraitsT, true, false> matcher(ch, traits);
-        return make_dynamic_xpression<BidiIterT>(matcher);
+        literal_matcher<Traits, true, false> matcher(ch, traits);
+        return make_dynamic_xpression<BidiIter>(matcher);
     }
     else
     {
-        literal_matcher<TraitsT, false, false> matcher(ch, traits);
-        return make_dynamic_xpression<BidiIterT>(matcher);
+        literal_matcher<Traits, false, false> matcher(ch, traits);
+        return make_dynamic_xpression<BidiIter>(matcher);
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // make_any_xpression
 //
-template<typename BidiIterT, typename TraitsT>
-inline sequence<BidiIterT> make_any_xpression
+template<typename BidiIter, typename Traits>
+inline sequence<BidiIter> make_any_xpression
 (
     regex_constants::syntax_option_type flags
-  , TraitsT const &traits
+  , Traits const &traits
 )
 {
     using namespace regex_constants;
-    typedef typename iterator_value<BidiIterT>::type char_type;
-    typedef set_matcher<TraitsT, 2> set_matcher;
-    typedef literal_matcher<TraitsT, false, true> literal_matcher;
+    typedef typename iterator_value<BidiIter>::type char_type;
+    typedef set_matcher<Traits, 2> set_matcher;
+    typedef literal_matcher<Traits, false, true> literal_matcher;
 
     char_type const newline = traits.widen('\n');
     set_matcher s(traits);
@@ -91,75 +91,75 @@ inline sequence<BidiIterT> make_any_xpression
     switch(((int)not_dot_newline | not_dot_null) & flags)
     {
     case not_dot_null:
-        return make_dynamic_xpression<BidiIterT>(literal_matcher(char_type(0), traits));
+        return make_dynamic_xpression<BidiIter>(literal_matcher(char_type(0), traits));
 
     case not_dot_newline:
-        return make_dynamic_xpression<BidiIterT>(literal_matcher(newline, traits));
+        return make_dynamic_xpression<BidiIter>(literal_matcher(newline, traits));
 
     case (int)not_dot_newline | not_dot_null:
-        return make_dynamic_xpression<BidiIterT>(s);
+        return make_dynamic_xpression<BidiIter>(s);
 
     default:
-        return make_dynamic_xpression<BidiIterT>(any_matcher());
+        return make_dynamic_xpression<BidiIter>(any_matcher());
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // make_literal_xpression
 //
-template<typename BidiIterT, typename CharT, typename TraitsT>
-inline sequence<BidiIterT> make_literal_xpression
+template<typename BidiIter, typename Char, typename Traits>
+inline sequence<BidiIter> make_literal_xpression
 (
-    std::basic_string<CharT> const &literal
+    std::basic_string<Char> const &literal
   , regex_constants::syntax_option_type flags
-  , TraitsT const &traits
+  , Traits const &traits
 )
 {
     BOOST_ASSERT(0 != literal.size());
     if(1 == literal.size())
     {
-        return make_char_xpression<BidiIterT>(literal[0], flags, traits);
+        return make_char_xpression<BidiIter>(literal[0], flags, traits);
     }
 
-    typedef typename iterator_value<BidiIterT>::type char_type;
-    BOOST_MPL_ASSERT((is_same<char_type, CharT>));
+    typedef typename iterator_value<BidiIter>::type char_type;
+    BOOST_MPL_ASSERT((is_same<char_type, Char>));
 
     if(0 != (regex_constants::icase_ & flags))
     {
-        string_matcher<TraitsT, true> matcher(literal, traits);
-        return make_dynamic_xpression<BidiIterT>(matcher);
+        string_matcher<Traits, true> matcher(literal, traits);
+        return make_dynamic_xpression<BidiIter>(matcher);
     }
     else
     {
-        string_matcher<TraitsT, false> matcher(literal, traits);
-        return make_dynamic_xpression<BidiIterT>(matcher);
+        string_matcher<Traits, false> matcher(literal, traits);
+        return make_dynamic_xpression<BidiIter>(matcher);
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // make_backref_xpression
 //
-template<typename BidiIterT, typename TraitsT>
-inline sequence<BidiIterT> make_backref_xpression
+template<typename BidiIter, typename Traits>
+inline sequence<BidiIter> make_backref_xpression
 (
     int mark_nbr
   , regex_constants::syntax_option_type flags
-  , TraitsT const &traits
+  , Traits const &traits
 )
 {
-    typedef typename iterator_value<BidiIterT>::type char_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
     if(0 != (regex_constants::icase_ & flags))
     {
-        return make_dynamic_xpression<BidiIterT>
+        return make_dynamic_xpression<BidiIter>
         (
-            mark_matcher<TraitsT, true>(mark_nbr, traits)
+            mark_matcher<Traits, true>(mark_nbr, traits)
         );
     }
     else
     {
-        return make_dynamic_xpression<BidiIterT>
+        return make_dynamic_xpression<BidiIter>
         (
-            mark_matcher<TraitsT, false>(mark_nbr, traits)
+            mark_matcher<Traits, false>(mark_nbr, traits)
         );
     }
 }
@@ -167,22 +167,22 @@ inline sequence<BidiIterT> make_backref_xpression
 ///////////////////////////////////////////////////////////////////////////////
 // merge_charset
 //
-template<typename CharT, typename TraitsT>
+template<typename Char, typename Traits>
 inline void merge_charset
 (
-    basic_chset<CharT> &basic
-  , compound_charset<TraitsT> const &compound
-  , TraitsT const &traits
+    basic_chset<Char> &basic
+  , compound_charset<Traits> const &compound
+  , Traits const &traits
 )
 {
     if(0 != compound.posix_yes())
     {
-        typename TraitsT::char_class_type mask = compound.posix_yes();
+        typename Traits::char_class_type mask = compound.posix_yes();
         for(int i = 0; i <= UCHAR_MAX; ++i)
         {
-            if(traits.isctype((CharT)i, mask))
+            if(traits.isctype((Char)i, mask))
             {
-                basic.set((CharT)i);
+                basic.set((Char)i);
             }
         }
     }
@@ -191,12 +191,12 @@ inline void merge_charset
     {
         for(std::size_t j = 0; j < compound.posix_no().size(); ++j)
         {
-            typename TraitsT::char_class_type mask = compound.posix_no()[j];
+            typename Traits::char_class_type mask = compound.posix_no()[j];
             for(int i = 0; i <= UCHAR_MAX; ++i)
             {
-                if(!traits.isctype((CharT)i, mask))
+                if(!traits.isctype((Char)i, mask))
                 {
-                    basic.set((CharT)i);
+                    basic.set((Char)i);
                 }
             }
         }
@@ -211,15 +211,15 @@ inline void merge_charset
 ///////////////////////////////////////////////////////////////////////////////
 // make_charset_xpression
 //
-template<typename BidiIterT, typename TraitsT>
-inline sequence<BidiIterT> make_charset_xpression
+template<typename BidiIter, typename Traits>
+inline sequence<BidiIter> make_charset_xpression
 (
-    compound_charset<TraitsT> &chset
-  , TraitsT const &traits
+    compound_charset<Traits> &chset
+  , Traits const &traits
   , regex_constants::syntax_option_type flags
 )
 {
-    typedef typename TraitsT::char_type char_type;
+    typedef typename Traits::char_type char_type;
     bool const icase = (0 != (regex_constants::icase_ & flags));
     bool const optimize = 1 == sizeof(char_type) && 0 != (regex_constants::optimize & flags);
 
@@ -230,15 +230,15 @@ inline sequence<BidiIterT> make_charset_xpression
         charset_type charset(chset.basic_chset());
         if(icase)
         {
-            charset_matcher<TraitsT, true, charset_type> matcher(charset);
+            charset_matcher<Traits, true, charset_type> matcher(charset);
             merge_charset(matcher.charset_, chset, traits);
-            return make_dynamic_xpression<BidiIterT>(matcher);
+            return make_dynamic_xpression<BidiIter>(matcher);
         }
         else
         {
-            charset_matcher<TraitsT, false, charset_type> matcher(charset);
+            charset_matcher<Traits, false, charset_type> matcher(charset);
             merge_charset(matcher.charset_, chset, traits);
-            return make_dynamic_xpression<BidiIterT>(matcher);
+            return make_dynamic_xpression<BidiIter>(matcher);
         }
     }
 
@@ -246,8 +246,8 @@ inline sequence<BidiIterT> make_charset_xpression
     else if(chset.basic_chset().empty() && chset.posix_no().empty())
     {
         BOOST_ASSERT(0 != chset.posix_yes());
-        posix_charset_matcher<TraitsT> matcher(chset.posix_yes(), chset.is_inverted());
-        return make_dynamic_xpression<BidiIterT>(matcher);
+        posix_charset_matcher<Traits> matcher(chset.posix_yes(), chset.is_inverted());
+        return make_dynamic_xpression<BidiIter>(matcher);
     }
 
     // default, slow
@@ -255,13 +255,13 @@ inline sequence<BidiIterT> make_charset_xpression
     {
         if(icase)
         {
-            charset_matcher<TraitsT, true> matcher(chset);
-            return make_dynamic_xpression<BidiIterT>(matcher);
+            charset_matcher<Traits, true> matcher(chset);
+            return make_dynamic_xpression<BidiIter>(matcher);
         }
         else
         {
-            charset_matcher<TraitsT, false> matcher(chset);
-            return make_dynamic_xpression<BidiIterT>(matcher);
+            charset_matcher<Traits, false> matcher(chset);
+            return make_dynamic_xpression<BidiIter>(matcher);
         }
     }
 }
@@ -269,71 +269,71 @@ inline sequence<BidiIterT> make_charset_xpression
 ///////////////////////////////////////////////////////////////////////////////
 // make_posix_charset_xpression
 //
-template<typename BidiIterT, typename TraitsT>
-inline sequence<BidiIterT> make_posix_charset_xpression
+template<typename BidiIter, typename Traits>
+inline sequence<BidiIter> make_posix_charset_xpression
 (
-    typename TraitsT::char_class_type m
+    typename Traits::char_class_type m
   , bool no
   , regex_constants::syntax_option_type //flags
-  , TraitsT const & //traits
+  , Traits const & //traits
 )
 {
-    posix_charset_matcher<TraitsT> charset(m, no);
-    return make_dynamic_xpression<BidiIterT>(charset);
+    posix_charset_matcher<Traits> charset(m, no);
+    return make_dynamic_xpression<BidiIter>(charset);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // make_assert_begin_line
 //
-template<typename BidiIterT, typename TraitsT>
-inline sequence<BidiIterT> make_assert_begin_line
+template<typename BidiIter, typename Traits>
+inline sequence<BidiIter> make_assert_begin_line
 (
     regex_constants::syntax_option_type flags
-  , TraitsT const &traits
+  , Traits const &traits
 )
 {
     if(0 != (regex_constants::single_line & flags))
     {
-        return detail::make_dynamic_xpression<BidiIterT>(detail::assert_bos_matcher());
+        return detail::make_dynamic_xpression<BidiIter>(detail::assert_bos_matcher());
     }
     else
     {
-        detail::assert_bol_matcher<TraitsT> matcher(traits);
-        return detail::make_dynamic_xpression<BidiIterT>(matcher);
+        detail::assert_bol_matcher<Traits> matcher(traits);
+        return detail::make_dynamic_xpression<BidiIter>(matcher);
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // make_assert_end_line
 //
-template<typename BidiIterT, typename TraitsT>
-inline sequence<BidiIterT> make_assert_end_line
+template<typename BidiIter, typename Traits>
+inline sequence<BidiIter> make_assert_end_line
 (
     regex_constants::syntax_option_type flags
-  , TraitsT const &traits
+  , Traits const &traits
 )
 {
     if(0 != (regex_constants::single_line & flags))
     {
-        return detail::make_dynamic_xpression<BidiIterT>(detail::assert_eos_matcher());
+        return detail::make_dynamic_xpression<BidiIter>(detail::assert_eos_matcher());
     }
     else
     {
-        detail::assert_eol_matcher<TraitsT> matcher(traits);
-        return detail::make_dynamic_xpression<BidiIterT>(matcher);
+        detail::assert_eol_matcher<Traits> matcher(traits);
+        return detail::make_dynamic_xpression<BidiIter>(matcher);
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // make_assert_word
 //
-template<typename BidiIterT, typename CondT, typename TraitsT>
-inline sequence<BidiIterT> make_assert_word(CondT, TraitsT const &traits)
+template<typename BidiIter, typename Cond, typename Traits>
+inline sequence<BidiIter> make_assert_word(Cond, Traits const &traits)
 {
-    typedef typename iterator_value<BidiIterT>::type char_type;
-    return detail::make_dynamic_xpression<BidiIterT>
+    typedef typename iterator_value<BidiIter>::type char_type;
+    return detail::make_dynamic_xpression<BidiIter>
     (
-        detail::assert_word_matcher<CondT, TraitsT>(traits)
+        detail::assert_word_matcher<Cond, Traits>(traits)
     );
 }
 

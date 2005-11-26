@@ -27,39 +27,39 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // char_cast
     //
-    template<typename ToCharT, typename FromCharT, typename TraitsT>
-    inline ToCharT
-    char_cast(FromCharT from, TraitsT const &, typename enable_if<is_same<ToCharT, FromCharT> >::type * = 0)
+    template<typename ToChar, typename FromChar, typename Traits>
+    inline ToChar
+    char_cast(FromChar from, Traits const &, typename enable_if<is_same<ToChar, FromChar> >::type * = 0)
     {
         return from;
     }
 
-    template<typename ToCharT, typename FromCharT, typename TraitsT>
-    inline ToCharT
-    char_cast(FromCharT from, TraitsT const &traits, typename disable_if<is_same<ToCharT, FromCharT> >::type * = 0)
+    template<typename ToChar, typename FromChar, typename Traits>
+    inline ToChar
+    char_cast(FromChar from, Traits const &traits, typename disable_if<is_same<ToChar, FromChar> >::type * = 0)
     {
-        BOOST_MPL_ASSERT((is_same<FromCharT, char>));
+        BOOST_MPL_ASSERT((is_same<FromChar, char>));
         return traits.widen(from);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // string_cast
     //
-    template<typename ToCharT, typename FromCharT, typename TraitsT>
-    inline std::basic_string<ToCharT> const &
-    string_cast(std::basic_string<FromCharT> const &from, TraitsT const &, typename enable_if<is_same<ToCharT, FromCharT> >::type * = 0)
+    template<typename ToChar, typename FromChar, typename Traits>
+    inline std::basic_string<ToChar> const &
+    string_cast(std::basic_string<FromChar> const &from, Traits const &, typename enable_if<is_same<ToChar, FromChar> >::type * = 0)
     {
         return from;
     }
 
-    template<typename ToCharT, typename FromCharT, typename TraitsT>
-    inline std::basic_string<ToCharT> const
-    string_cast(std::basic_string<FromCharT> const &from, TraitsT const &traits, typename disable_if<is_same<ToCharT, FromCharT> >::type * = 0)
+    template<typename ToChar, typename FromChar, typename Traits>
+    inline std::basic_string<ToChar> const
+    string_cast(std::basic_string<FromChar> const &from, Traits const &traits, typename disable_if<is_same<ToChar, FromChar> >::type * = 0)
     {
-        BOOST_MPL_ASSERT((is_same<FromCharT, char>));
-        std::basic_string<ToCharT> to;
+        BOOST_MPL_ASSERT((is_same<FromChar, char>));
+        std::basic_string<ToChar> to;
         to.reserve(from.size());
-        for(typename std::basic_string<FromCharT>::size_type i = 0; i < from.size(); ++i)
+        for(typename std::basic_string<FromChar>::size_type i = 0; i < from.size(); ++i)
         {
             to.push_back(traits.widen(from[i]));
         }
@@ -69,14 +69,14 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // translate
     //
-    template<typename CharT, typename TraitsT>
-    inline CharT translate(CharT ch, TraitsT const &traits, mpl::false_) // case-sensitive
+    template<typename Char, typename Traits>
+    inline Char translate(Char ch, Traits const &traits, mpl::false_) // case-sensitive
     {
         return traits.translate(ch);
     }
 
-    template<typename CharT, typename TraitsT>
-    inline CharT translate(CharT ch, TraitsT const &traits, mpl::true_) // case-insensitive
+    template<typename Char, typename Traits>
+    inline Char translate(Char ch, Traits const &traits, mpl::true_) // case-insensitive
     {
         return traits.translate_nocase(ch);
     }

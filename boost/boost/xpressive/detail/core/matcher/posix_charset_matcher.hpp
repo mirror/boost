@@ -26,12 +26,12 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // posix_charset_matcher
     //
-    template<typename TraitsT>
+    template<typename Traits>
     struct posix_charset_matcher
       : quant_style_fixed_width<1>
     {
-        typedef TraitsT traits_type;
-        typedef typename TraitsT::char_class_type char_class_type;
+        typedef Traits traits_type;
+        typedef typename Traits::char_class_type char_class_type;
 
         posix_charset_matcher(char_class_type m, bool no)
           : not_(no)
@@ -40,10 +40,10 @@ namespace boost { namespace xpressive { namespace detail
             BOOST_ASSERT(0 != this->mask_);
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match(state_type<BidiIterT> &state, NextT const &next) const
+        template<typename BidiIter, typename Next>
+        bool match(state_type<BidiIter> &state, Next const &next) const
         {
-            if(state.eos() || this->not_ == traits_cast<TraitsT>(state).isctype(
+            if(state.eos() || this->not_ == traits_cast<Traits>(state).isctype(
                 *state.cur_, this->mask_))
             {
                 return false;

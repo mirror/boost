@@ -26,9 +26,9 @@ namespace boost { namespace xpressive { namespace detail
     struct marker_assign_transform
       : proto::compose_transforms<proto::right_transform, marker_transform>
     {
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &state, VisitorT &visitor)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &state, Visitor &visitor)
         {
             return marker_transform::call(proto::right(op), state, visitor, proto::arg(proto::left(op)).mark_number_);
         }
@@ -38,9 +38,9 @@ namespace boost { namespace xpressive { namespace detail
     // is_marker_predicate
     struct is_marker_predicate
     {
-        template<typename OpT, typename, typename>
+        template<typename Op, typename, typename>
         struct apply
-          : is_same<typename proto::left_type<OpT>::type, mark_tag>
+          : is_same<typename proto::left_type<Op>::type, mark_tag>
         {
         };
     };

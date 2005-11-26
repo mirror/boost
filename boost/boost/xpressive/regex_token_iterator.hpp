@@ -28,18 +28,18 @@ namespace boost { namespace xpressive { namespace detail
 //////////////////////////////////////////////////////////////////////////
 // regex_token_iterator_impl
 //
-template<typename BidiIterT>
+template<typename BidiIter>
 struct regex_token_iterator_impl
   : private noncopyable
 {
-    typedef typename iterator_value<BidiIterT>::type  char_type;
+    typedef typename iterator_value<BidiIter>::type  char_type;
 
     regex_token_iterator_impl
     (
-        BidiIterT begin
-      , BidiIterT cur
-      , BidiIterT end
-      , basic_regex<BidiIterT> const *rex
+        BidiIter begin
+      , BidiIter cur
+      , BidiIter end
+      , basic_regex<BidiIter> const *rex
       , regex_constants::match_flag_type flags = regex_constants::match_default
       , std::vector<int> subs = std::vector<int>(1, 0)
       , int n = -2
@@ -57,7 +57,7 @@ struct regex_token_iterator_impl
     {
         if(-1 != this->n_)
         {
-            BidiIterT cur = this->iter_.state_.cur_;
+            BidiIter cur = this->iter_.state_.cur_;
             if(++this->n_ != static_cast<int>(this->subs_.size()))
             {
                 this->result_ = (-1 == this->subs_[ this->n_ ])
@@ -85,12 +85,12 @@ struct regex_token_iterator_impl
         return false;
     }
 
-    bool equal_to(regex_token_iterator_impl<BidiIterT> const &that) const
+    bool equal_to(regex_token_iterator_impl<BidiIter> const &that) const
     {
         return this->iter_.equal_to(that.iter_) && this->n_ == that.n_;
     }
 
-    regex_iterator_impl<BidiIterT> iter_;
+    regex_iterator_impl<BidiIter> iter_;
     std::basic_string<char_type> result_;
     int n_;
     std::vector<int> subs_;
@@ -106,30 +106,30 @@ inline std::vector<int> const &to_vector(std::vector<int> const &sub_matches)
     return sub_matches;
 }
 
-template<typename IntT, std::size_t SizeT>
-inline std::vector<int> to_vector(IntT const (&sub_matches)[ SizeT ])
+template<typename Int, std::size_t Size>
+inline std::vector<int> to_vector(Int const (&sub_matches)[ Size ])
 {
-    BOOST_MPL_ASSERT((is_convertible<IntT, int>));
-    typedef mpl::or_<is_same<char, IntT>, is_same<wchar_t, IntT> > is_char;
-    return std::vector<int>(sub_matches + 0, sub_matches + SizeT - is_char::value);
+    BOOST_MPL_ASSERT((is_convertible<Int, int>));
+    typedef mpl::or_<is_same<char, Int>, is_same<wchar_t, Int> > is_char;
+    return std::vector<int>(sub_matches + 0, sub_matches + Size - is_char::value);
 }
 
 // BUGBUG s1 et al. are not of type mark_tag. :(
-template<std::size_t SizeT>
-inline std::vector<int> to_vector(mark_tag const (&sub_matches)[ SizeT ])
+template<std::size_t Size>
+inline std::vector<int> to_vector(mark_tag const (&sub_matches)[ Size ])
 {
-    std::vector<int> vect(SizeT);
-    for(std::size_t i = 0; i < SizeT; ++i)
+    std::vector<int> vect(Size);
+    for(std::size_t i = 0; i < Size; ++i)
     {
         vect[i] = proto::arg(sub_matches[i]).mark_number_;
     }
     return vect;
 }
 
-template<typename IntT>
-inline std::vector<int> to_vector(std::vector<IntT> const &sub_matches)
+template<typename Int>
+inline std::vector<int> to_vector(std::vector<Int> const &sub_matches)
 {
-    BOOST_MPL_ASSERT((is_convertible<IntT, int>));
+    BOOST_MPL_ASSERT((is_convertible<Int, int>));
     return std::vector<int>(sub_matches.begin(), sub_matches.end());
 }
 
@@ -138,19 +138,19 @@ inline std::vector<int> to_vector(std::vector<IntT> const &sub_matches)
 //////////////////////////////////////////////////////////////////////////
 // regex_token_iterator
 //
-template<typename BidiIterT>
+template<typename BidiIter>
 struct regex_token_iterator
 {
-    typedef basic_regex<BidiIterT> regex_type;
-    typedef typename iterator_value<BidiIterT>::type char_type;
+    typedef basic_regex<BidiIter> regex_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
     typedef std::basic_string<char_type> value_type;
-    typedef typename iterator_difference<BidiIterT>::type difference_type;
+    typedef typename iterator_difference<BidiIter>::type difference_type;
     typedef value_type const *pointer;
     typedef value_type const &reference;
     typedef std::forward_iterator_tag iterator_category;
 
     /// INTERNAL ONLY
-    typedef detail::regex_token_iterator_impl<BidiIterT> impl_type_;
+    typedef detail::regex_token_iterator_impl<BidiIter> impl_type_;
 
     regex_token_iterator()
       : impl_()
@@ -159,22 +159,22 @@ struct regex_token_iterator
 
     regex_token_iterator
     (
-        BidiIterT begin
-      , BidiIterT end
-      , basic_regex<BidiIterT> const &rex
+        BidiIter begin
+      , BidiIter end
+      , basic_regex<BidiIter> const &rex
     )
       : impl_(new impl_type_(begin, begin, end, &rex))
     {
         this->next_();
     }
 
-    template<typename SubMatchesT>
+    template<typename SubMatches>
     regex_token_iterator
     (
-        BidiIterT begin
-      , BidiIterT end
-      , basic_regex<BidiIterT> const &rex
-      , SubMatchesT const &sub_matches
+        BidiIter begin
+      , BidiIter end
+      , basic_regex<BidiIter> const &rex
+      , SubMatches const &sub_matches
       , regex_constants::match_flag_type flags = regex_constants::match_default
     )
       : impl_(new impl_type_(begin, begin, end, &rex, flags, detail::to_vector(sub_matches)))
@@ -182,18 +182,18 @@ struct regex_token_iterator
         this->next_();
     }
 
-    regex_token_iterator(regex_token_iterator<BidiIterT> const &that)
+    regex_token_iterator(regex_token_iterator<BidiIter> const &that)
       : impl_(that.impl_) // COW
     {
     }
 
-    regex_token_iterator<BidiIterT> &operator =(regex_token_iterator<BidiIterT> const &that)
+    regex_token_iterator<BidiIter> &operator =(regex_token_iterator<BidiIter> const &that)
     {
         this->impl_ = that.impl_; // COW
         return *this;
     }
 
-    friend bool operator ==(regex_token_iterator<BidiIterT> const &left, regex_token_iterator<BidiIterT> const &right)
+    friend bool operator ==(regex_token_iterator<BidiIter> const &left, regex_token_iterator<BidiIter> const &right)
     {
         if(!left.impl_ || !right.impl_)
         {
@@ -203,7 +203,7 @@ struct regex_token_iterator
         return left.impl_->equal_to(*right.impl_);
     }
 
-    friend bool operator !=(regex_token_iterator<BidiIterT> const &left, regex_token_iterator<BidiIterT> const &right)
+    friend bool operator !=(regex_token_iterator<BidiIter> const &left, regex_token_iterator<BidiIter> const &right)
     {
         return !(left == right);
     }
@@ -234,16 +234,16 @@ struct regex_token_iterator
     /// match that was found. Then if last_end != end and subs[0] == -1 sets N equal to -1 and
     /// sets result equal to value_type(last_end, end). Otherwise sets *this equal to the end
     /// of sequence iterator.
-    regex_token_iterator<BidiIterT> &operator ++()
+    regex_token_iterator<BidiIter> &operator ++()
     {
         this->fork_(); // un-share the implementation
         this->next_();
         return *this;
     }
 
-    regex_token_iterator<BidiIterT> operator ++(int)
+    regex_token_iterator<BidiIter> operator ++(int)
     {
-        regex_token_iterator<BidiIterT> tmp(*this);
+        regex_token_iterator<BidiIter> tmp(*this);
         ++*this;
         return tmp;
     }

@@ -26,22 +26,22 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef no_next state_type;
 
-        template<typename, typename StateT, typename>
+        template<typename, typename State, typename>
         struct apply
         {
-            typedef StateT type;
+            typedef State type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static StateT const &call(OpT const &op, StateT const &state, VisitorT &)
+        template<typename Op, typename State, typename Visitor>
+        static State const &call(Op const &op, State const &state, Visitor &)
         {
             return state.set(set_branch::get_matcher(op)), state;
         }
 
     private:
 
-        template<typename MatcherT>
-        static MatcherT const &get_matcher(static_xpression<MatcherT, no_next> const &xpr)
+        template<typename Matcher>
+        static Matcher const &get_matcher(static_xpression<Matcher, no_next> const &xpr)
         {
             return xpr;
         }
@@ -53,15 +53,15 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef int state_type; // not used
 
-        template<typename OpT, typename StateT, typename>
+        template<typename Op, typename State, typename>
         struct apply
         {
-            typedef static_xpression<OpT, StateT> type;
+            typedef static_xpression<Op, State> type;
         };
 
-        template<typename OpT, typename StateT>
-        static static_xpression<OpT, StateT>
-        call(OpT const &op, StateT const &state, dont_care)
+        template<typename Op, typename State>
+        static static_xpression<Op, State>
+        call(Op const &op, State const &state, dont_care)
         {
             return make_static_xpression(op, state);
         }
@@ -71,17 +71,17 @@ namespace boost { namespace xpressive { namespace detail
     // list_noop_compiler
     struct list_noop_compiler
     {
-        template<typename, typename StateT, typename>
+        template<typename, typename State, typename>
         struct apply
         {
-            typedef typename StateT::next_type type;
+            typedef typename State::next_type type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename StateT::next_type
-        call(OpT const &op, StateT const &state, VisitorT &visitor)
+        template<typename Op, typename State, typename Visitor>
+        static typename State::next_type
+        call(Op const &op, State const &state, Visitor &visitor)
         {
-            typedef typename VisitorT::char_type char_type;
+            typedef typename Visitor::char_type char_type;
             char_type ch = char_cast<char_type>(proto::arg(op), visitor.traits());
             return state.push_back(ch, visitor.traits());
         }
@@ -91,20 +91,20 @@ namespace boost { namespace xpressive { namespace detail
     // list_assign_compiler
     struct list_assign_compiler
     {
-        template<typename OpT, typename, typename VisitorT>
+        template<typename Op, typename, typename Visitor>
         struct apply
         {
-            typedef typename VisitorT::traits_type traits_type;
+            typedef typename Visitor::traits_type traits_type;
             typedef set_matcher<traits_type, 1> type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &, VisitorT &visitor)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &, Visitor &visitor)
         {
-            typedef typename VisitorT::char_type char_type;
+            typedef typename Visitor::char_type char_type;
             char_type ch = char_cast<char_type>(proto::arg(proto::right(op)), visitor.traits());
-            return typename apply<OpT, StateT, VisitorT>::type(ch, visitor.traits());
+            return typename apply<Op, State, Visitor>::type(ch, visitor.traits());
         }
     };
 

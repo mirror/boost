@@ -24,20 +24,20 @@ namespace boost { namespace xpressive { namespace detail
 
     ///////////////////////////////////////////////////////////////////////////////
     // modifier
-    template<typename ModifierT>
+    template<typename Modifier>
     struct modifier_op
     {
         typedef regex_constants::syntax_option_type opt_type;
 
-        template<typename XprT>
+        template<typename Xpr>
         struct apply
         {
-            typedef proto::binary_op<ModifierT, typename as_xpr_type<XprT>::type, modifier_tag> type;
+            typedef proto::binary_op<Modifier, typename as_xpr_type<Xpr>::type, modifier_tag> type;
         };
 
-        template<typename XprT>
-        typename apply<XprT>::type    
-        operator ()(XprT const &xpr) const
+        template<typename Xpr>
+        typename apply<Xpr>::type    
+        operator ()(Xpr const &xpr) const
         {
             return proto::make_op<modifier_tag>(this->mod_, as_xpr(xpr));
         }
@@ -47,7 +47,7 @@ namespace boost { namespace xpressive { namespace detail
             return this->opt_;
         }
 
-        ModifierT mod_;
+        Modifier mod_;
         opt_type opt_;
     };
 

@@ -70,25 +70,25 @@ namespace boost { namespace proto
 
     ///////////////////////////////////////////////////////////////////////////////
     // is_unary
-    template<typename TagT>
+    template<typename Tag>
     struct is_unary
-      : boost::is_base_and_derived<unary_tag, TagT>
+      : boost::is_base_and_derived<unary_tag, Tag>
     {
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // is_binary
-    template<typename TagT>
+    template<typename Tag>
     struct is_binary
-      : boost::is_base_and_derived<binary_tag, TagT>
+      : boost::is_base_and_derived<binary_tag, Tag>
     {
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // is_nary
-    template<typename TagT>
+    template<typename Tag>
     struct is_nary
-      : boost::is_base_and_derived<nary_tag, TagT>
+      : boost::is_base_and_derived<nary_tag, Tag>
     {
     };
 

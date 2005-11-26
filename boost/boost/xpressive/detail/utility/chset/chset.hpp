@@ -24,14 +24,14 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // compound_charset
 //
-template<typename TraitsT>
+template<typename Traits>
 struct compound_charset
-  : private basic_chset<typename TraitsT::char_type>
+  : private basic_chset<typename Traits::char_type>
 {
-    typedef typename TraitsT::char_type char_type;
+    typedef typename Traits::char_type char_type;
     typedef basic_chset<char_type> base_type;
-    typedef TraitsT traits_type;
-    typedef typename TraitsT::char_class_type char_class_type;
+    typedef Traits traits_type;
+    typedef typename Traits::char_class_type char_class_type;
 
     compound_charset()
       : base_type()
@@ -73,12 +73,12 @@ struct compound_charset
 
     ///////////////////////////////////////////////////////////////////////////////
     // set
-    void set_char(char_type ch, TraitsT const &traits, bool icase)
+    void set_char(char_type ch, Traits const &traits, bool icase)
     {
         icase ? this->base_type::set(ch, traits) : this->base_type::set(ch);
     }
 
-    void set_range(char_type from, char_type to, TraitsT const &traits, bool icase)
+    void set_range(char_type from, char_type to, Traits const &traits, bool icase)
     {
         icase ? this->base_type::set(from, to, traits) : this->base_type::set(from, to);
     }
@@ -99,11 +99,11 @@ struct compound_charset
 
     ///////////////////////////////////////////////////////////////////////////////
     // test
-    template<typename ICaseT>
-    bool test(char_type ch, TraitsT const &traits, ICaseT) const
+    template<typename ICase>
+    bool test(char_type ch, Traits const &traits, ICase) const
     {
         return this->complement_ !=
-            (this->base_type::test(ch, traits, ICaseT()) ||
+            (this->base_type::test(ch, traits, ICase()) ||
             (this->has_posix_ && this->test_posix(ch, traits)));
     }
 
@@ -114,7 +114,7 @@ private:
     struct not_posix_pred
     {
         char_type ch_;
-        TraitsT const *traits_ptr_;
+        Traits const *traits_ptr_;
 
         bool operator ()(typename call_traits<char_class_type>::param_type m) const
         {
@@ -124,7 +124,7 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////////
     // test_posix
-    bool test_posix(char_type ch, TraitsT const &traits) const
+    bool test_posix(char_type ch, Traits const &traits) const
     {
         not_posix_pred const pred = {ch, &traits};
         return traits.isctype(ch, this->posix_yes_)
@@ -140,20 +140,20 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 // helpers
-template<typename CharT, typename TraitsT>
-inline void set_char(compound_charset<TraitsT> &chset, CharT ch, TraitsT const &traits, bool icase)
+template<typename Char, typename Traits>
+inline void set_char(compound_charset<Traits> &chset, Char ch, Traits const &traits, bool icase)
 {
     chset.set_char(ch, traits, icase);
 }
 
-template<typename CharT, typename TraitsT>
-inline void set_range(compound_charset<TraitsT> &chset, CharT from, CharT to, TraitsT const &traits, bool icase)
+template<typename Char, typename Traits>
+inline void set_range(compound_charset<Traits> &chset, Char from, Char to, Traits const &traits, bool icase)
 {
     chset.set_range(from, to, traits, icase);
 }
 
-template<typename TraitsT>
-inline void set_class(compound_charset<TraitsT> &chset, typename TraitsT::char_class_type char_class, bool no, TraitsT const &)
+template<typename Traits>
+inline void set_class(compound_charset<Traits> &chset, typename Traits::char_class_type char_class, bool no, Traits const &)
 {
     chset.set_class(char_class, no);
 }

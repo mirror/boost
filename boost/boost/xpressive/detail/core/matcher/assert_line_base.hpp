@@ -23,29 +23,29 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // assert_line_base
     //
-    template<typename TraitsT>
+    template<typename Traits>
     struct assert_line_base
         : quant_style_assertion
     {
-        typedef typename TraitsT::char_type char_type;
-        typedef typename TraitsT::char_class_type char_class_type;
+        typedef typename Traits::char_type char_type;
+        typedef typename Traits::char_class_type char_class_type;
 
     protected:
-        assert_line_base(TraitsT const &traits)
+        assert_line_base(Traits const &traits)
             : newline_(lookup_classname(traits, "newline"))
             , nl_(traits.widen('\n'))
             , cr_(traits.widen('\r'))
         {
         }
 
-        template<typename BidiIterT>
-            bool is_line_break(state_type<BidiIterT> &state) const
+        template<typename BidiIter>
+            bool is_line_break(state_type<BidiIter> &state) const
         {
             BOOST_ASSERT(!state.bos() || state.flags_.match_prev_avail_);
-            BidiIterT tmp = state.cur_;
+            BidiIter tmp = state.cur_;
             char_type ch = *--tmp;
 
-            if(traits_cast<TraitsT>(state).isctype(ch, this->newline_))
+            if(traits_cast<Traits>(state).isctype(ch, this->newline_))
             {
                 // there is no line-break between \r and \n
                 if(this->cr_ != ch || state.eos() || this->nl_ != *state.cur_)

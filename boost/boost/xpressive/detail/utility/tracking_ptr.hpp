@@ -30,26 +30,26 @@
 namespace boost { namespace xpressive { namespace detail
 {
 
-template<typename TypeT>
+template<typename Type>
 struct tracking_ptr;
 
-template<typename DerivedT>
+template<typename Derived>
 struct enable_reference_tracking;
 
 ///////////////////////////////////////////////////////////////////////////////
 // weak_iterator
 //  steps through a set of weak_ptr, converts to shared_ptrs on the fly and
 //  removes from the set the weak_ptrs that have expired.
-template<typename DerivedT>
+template<typename Derived>
 struct weak_iterator
   : boost::iterator_facade
     <
-        weak_iterator<DerivedT>
-      , boost::shared_ptr<DerivedT> const
+        weak_iterator<Derived>
+      , boost::shared_ptr<Derived> const
       , std::forward_iterator_tag
     >
 {
-    typedef std::set<boost::weak_ptr<DerivedT> > set_type;
+    typedef std::set<boost::weak_ptr<Derived> > set_type;
     typedef typename set_type::iterator base_iterator;
 
     weak_iterator()
@@ -70,7 +70,7 @@ struct weak_iterator
 private:
     friend class boost::iterator_core_access;
 
-    boost::shared_ptr<DerivedT> const &dereference() const
+    boost::shared_ptr<Derived> const &dereference() const
     {
         return this->cur_;
     }
@@ -99,7 +99,7 @@ private:
         this->cur_.reset();
     }
 
-    boost::shared_ptr<DerivedT> cur_;
+    boost::shared_ptr<Derived> cur_;
     base_iterator iter_;
     set_type *set_;
 };
@@ -107,12 +107,12 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 // reference_deleter
 //
-template<typename DerivedT>
+template<typename Derived>
 struct reference_deleter
 {
     void operator ()(void *pv) const
     {
-        typedef enable_reference_tracking<DerivedT> impl_type;
+        typedef enable_reference_tracking<Derived> impl_type;
         impl_type *pimpl = static_cast<impl_type *>(pv);
         pimpl->refs_.clear();
     }
@@ -121,22 +121,22 @@ struct reference_deleter
 ///////////////////////////////////////////////////////////////////////////////
 // filter_self
 //  for use with a filter_iterator to filter a node out of a list of dependencies
-template<typename DerivedT>
+template<typename Derived>
 struct filter_self
-  : std::unary_function<boost::shared_ptr<DerivedT>, bool>
+  : std::unary_function<boost::shared_ptr<Derived>, bool>
 {
-    filter_self(enable_reference_tracking<DerivedT> *self)
+    filter_self(enable_reference_tracking<Derived> *self)
       : self_(self)
     {
     }
 
-    bool operator ()(boost::shared_ptr<DerivedT> const &that) const
+    bool operator ()(boost::shared_ptr<Derived> const &that) const
     {
         return this->self_ != that.get();
     }
 
 private:
-    enable_reference_tracking<DerivedT> *self_;
+    enable_reference_tracking<Derived> *self_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -144,15 +144,15 @@ private:
 //   inherit from this type to enable reference tracking for a type. You can
 //   then use tracking_ptr (below) as a holder for derived objects.
 //
-template<typename DerivedT>
+template<typename Derived>
 struct enable_reference_tracking
-  : enable_shared_from_this<DerivedT>
+  : enable_shared_from_this<Derived>
 {
-    typedef enable_reference_tracking<DerivedT> this_type;
-    typedef std::set<shared_ptr<DerivedT> > references_type;
-    typedef std::set<weak_ptr<DerivedT> > dependents_type;
+    typedef enable_reference_tracking<Derived> this_type;
+    typedef std::set<shared_ptr<Derived> > references_type;
+    typedef std::set<weak_ptr<Derived> > dependents_type;
 
-    void tracking_copy(DerivedT const &that)
+    void tracking_copy(Derived const &that)
     {
         this->derived_() = that;
         this->tracking_update();
@@ -170,10 +170,10 @@ struct enable_reference_tracking
 
     void tracking_clear()
     {
-        this->derived_() = DerivedT();
+        this->derived_() = Derived();
     }
 
-    void track_reference(shared_ptr<DerivedT> const &that)
+    void track_reference(shared_ptr<Derived> const &that)
     {
         // avoid some unbounded memory growth in certain circumstances by
         // opportunistically removing stale dependencies from "that"
@@ -186,7 +186,7 @@ struct enable_reference_tracking
 
     //{{AFX_DEBUG
     #ifndef NDEBUG
-    friend std::ostream &operator <<(std::ostream &sout, enable_reference_tracking<DerivedT> const &that)
+    friend std::ostream &operator <<(std::ostream &sout, enable_reference_tracking<Derived> const &that)
     {
         that.dump_(sout);
         return sout;
@@ -202,14 +202,14 @@ protected:
     {
     }
 
-    enable_reference_tracking(enable_reference_tracking<DerivedT> const &that)
+    enable_reference_tracking(enable_reference_tracking<Derived> const &that)
       : refs_()
       , deps_()
     {
         this->operator =(that);
     }
 
-    enable_reference_tracking<DerivedT> &operator =(enable_reference_tracking<DerivedT> const &that)
+    enable_reference_tracking<Derived> &operator =(enable_reference_tracking<Derived> const &that)
     {
         // BUGBUG derived classes will need to do something special to make their
         // assignment operators exception-safe. Can we make this easier?
@@ -217,19 +217,19 @@ protected:
         return *this;
     }
 
-    void swap(enable_reference_tracking<DerivedT> &that)
+    void swap(enable_reference_tracking<Derived> &that)
     {
         this->refs_.swap(that.refs_);
     }
 
 private:
 
-    friend struct tracking_ptr<DerivedT>;
-    friend struct reference_deleter<DerivedT>;
+    friend struct tracking_ptr<Derived>;
+    friend struct reference_deleter<Derived>;
 
-    DerivedT &derived_()
+    Derived &derived_()
     {
-        return *static_cast<DerivedT *>(this);
+        return *static_cast<Derived *>(this);
     }
 
     bool has_deps_() const
@@ -239,7 +239,7 @@ private:
 
     shared_ptr<void> get_ref_deleter_()
     {
-        return shared_ptr<void>(static_cast<void*>(this), reference_deleter<DerivedT>());
+        return shared_ptr<void>(static_cast<void*>(this), reference_deleter<Derived>());
     }
 
     void update_references_()
@@ -263,8 +263,8 @@ private:
         // thereby spreading out the reference counting responsibility evenly.
         if(!this->refs_.empty())
         {
-            weak_iterator<DerivedT> cur(this->deps_.begin(), &this->deps_);
-            weak_iterator<DerivedT> end(this->deps_.end(), &this->deps_);
+            weak_iterator<Derived> cur(this->deps_.begin(), &this->deps_);
+            weak_iterator<Derived> end(this->deps_.end(), &this->deps_);
 
             for(; cur != end; ++cur)
             {
@@ -273,16 +273,16 @@ private:
         }
     }
 
-    void track_dependency_(shared_ptr<DerivedT> const &dep)
+    void track_dependency_(shared_ptr<Derived> const &dep)
     {
         if(this != dep.get()) // never add ourself as a dependency
         {
             // add dep as a dependency
             this->deps_.insert(dep);
 
-            filter_self<DerivedT> not_self(this);
-            weak_iterator<DerivedT> begin(dep->deps_.begin(), &dep->deps_);
-            weak_iterator<DerivedT> end(dep->deps_.end(), &dep->deps_);
+            filter_self<Derived> not_self(this);
+            weak_iterator<Derived> begin(dep->deps_.begin(), &dep->deps_);
+            weak_iterator<Derived> end(dep->deps_.end(), &dep->deps_);
 
             // also inherit dep's dependencies
             this->deps_.insert(
@@ -294,8 +294,8 @@ private:
 
     void purge_stale_deps_()
     {
-        weak_iterator<DerivedT> cur(this->deps_.begin(), &this->deps_);
-        weak_iterator<DerivedT> end(this->deps_.end(), &this->deps_);
+        weak_iterator<Derived> cur(this->deps_.begin(), &this->deps_);
+        weak_iterator<Derived> end(this->deps_.end(), &this->deps_);
 
         for(; cur != end; ++cur)
             ;
@@ -316,10 +316,10 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 // dump_
 //
-template<typename DerivedT>
-inline void enable_reference_tracking<DerivedT>::dump_(std::ostream &sout) const
+template<typename Derived>
+inline void enable_reference_tracking<Derived>::dump_(std::ostream &sout) const
 {
-    shared_ptr<DerivedT const> this_ = this->shared_from_this();
+    shared_ptr<Derived const> this_ = this->shared_from_this();
     sout << "0x" << (void*)this << " cnt=" << this_.use_count()-1 << " refs={";
     typename references_type::const_iterator cur1 = this->refs_.begin();
     typename references_type::const_iterator end1 = this->refs_.end();
@@ -332,7 +332,7 @@ inline void enable_reference_tracking<DerivedT>::dump_(std::ostream &sout) const
     typename dependents_type::const_iterator end2 = this->deps_.end();
     for(; cur2 != end2; ++cur2)
     {
-        if(shared_ptr<DerivedT> dep = cur2->lock())
+        if(shared_ptr<Derived> dep = cur2->lock())
         {
             sout << "0x" << (void*)&*dep << ',';
         }
@@ -347,12 +347,12 @@ inline void enable_reference_tracking<DerivedT>::dump_(std::ostream &sout) const
 //   holder for a reference-tracked type. Does cycle-breaking, lazy initialization
 //   and copy-on-write. TODO: implement move semantics.
 //
-template<typename TypeT>
+template<typename Type>
 struct tracking_ptr
 {
 private:
     struct dummy_ { int n_; };
-	BOOST_MPL_ASSERT((is_base_and_derived<enable_reference_tracking<TypeT>, TypeT>));
+	BOOST_MPL_ASSERT((is_base_and_derived<enable_reference_tracking<Type>, Type>));
 
 public:
 
@@ -362,17 +362,17 @@ public:
     {
     }
 
-    tracking_ptr(tracking_ptr<TypeT> const &that)
+    tracking_ptr(tracking_ptr<Type> const &that)
       : data_()
       , refs_()
     {
         this->operator =(that);
     }
 
-    tracking_ptr<TypeT> &operator =(tracking_ptr<TypeT> const &that)
+    tracking_ptr<Type> &operator =(tracking_ptr<Type> const &that)
     {
         // Note: the copy-and-swap idiom doesn't work here if has_deps_()==true
-        // because it invalidates references to the TypeT object.
+        // because it invalidates references to the Type object.
 
         if(that)
         {
@@ -395,7 +395,7 @@ public:
     }
 
     // NOTE: this does *not* do tracking. Can't provide a non-throwing swap that tracks references
-    void swap(tracking_ptr<TypeT> &that) // throw()
+    void swap(tracking_ptr<Type> &that) // throw()
     {
         this->data_.swap(that.data_);
         this->refs_.swap(that.refs_);
@@ -403,13 +403,13 @@ public:
 
     // deep copy, forces a fork and calls update() to update all the
     // dependents and references.
-    void tracking_copy(TypeT const &that)
+    void tracking_copy(Type const &that)
     {
         this->get_(false)->tracking_copy(that);
     }
 
     // calling this forces this->data_ to fork.
-    shared_ptr<TypeT> const &get() const
+    shared_ptr<Type> const &get() const
     {
         return this->get_(true); // copy == true
     }
@@ -426,13 +426,13 @@ public:
     }
 
     // Since this does not un-share the data, it returns a ptr-to-const
-    TypeT const *operator ->() const
+    Type const *operator ->() const
     {
         return this->data_.get();
     }
 
     // Since this does not un-share the data, it returns a ref-to-const
-    TypeT const &operator *() const
+    Type const &operator *() const
     {
         return *this->data_;
     }
@@ -441,17 +441,17 @@ private:
 
     // calling this forces data_ to fork. if 'copy' is true, then
     // the old data is copied into the fork.
-    shared_ptr<TypeT> const &get_(bool copy) const
+    shared_ptr<Type> const &get_(bool copy) const
     {
         if(!*this)
         {
-            this->data_.reset(new TypeT);
+            this->data_.reset(new Type);
             this->refs_ = this->data_->get_ref_deleter_();
         }
         else if(!this->unique_())
         {
             BOOST_ASSERT(!this->has_deps_());
-            shared_ptr<TypeT> new_data(new TypeT);
+            shared_ptr<Type> new_data(new Type);
             if(copy)
             {
                 new_data->tracking_copy(*this->data_);
@@ -476,7 +476,7 @@ private:
     }
 
     // mutable to allow lazy initialization
-    mutable shared_ptr<TypeT> data_;
+    mutable shared_ptr<Type> data_;
     mutable shared_ptr<void> refs_;
 };
 

@@ -34,21 +34,21 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // boyer_moore
 //
-template<typename BidiIterT, typename TraitsT>
+template<typename BidiIter, typename Traits>
 struct boyer_moore
   : noncopyable
 {
-    typedef typename iterator_value<BidiIterT>::type char_type;
-    typedef TraitsT traits_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
+    typedef Traits traits_type;
     typedef is_convertible<
-        typename TraitsT::version_tag *
+        typename Traits::version_tag *
       , regex_traits_version_1_case_fold_tag *
     > case_fold;
-    typedef typename TraitsT::string_type string_type;
+    typedef typename Traits::string_type string_type;
 
     // initialize the Boyer-Moore search data structure, using the
     // search sub-sequence to prime the pump.
-    boyer_moore(char_type const *begin, char_type const *end, TraitsT const &traits, bool icase)
+    boyer_moore(char_type const *begin, char_type const *end, Traits const &traits, bool icase)
       : begin_(begin)
       , last_(begin)
       , fold_()
@@ -67,14 +67,14 @@ struct boyer_moore
         icase ? this->init_(traits, case_fold()) : this->init_(traits, mpl::false_());
     }
 
-    BidiIterT find(BidiIterT begin, BidiIterT end, TraitsT const &traits) const
+    BidiIter find(BidiIter begin, BidiIter end, Traits const &traits) const
     {
         return (this->*this->find_fun_)(begin, end, traits);
     }
 
 private:
 
-    void init_(TraitsT const &traits, mpl::false_)
+    void init_(Traits const &traits, mpl::false_)
     {
         for(unsigned char offset = this->length_; offset; --offset, ++this->last_)
         {
@@ -82,7 +82,7 @@ private:
         }
     }
 
-    void init_(TraitsT const &traits, mpl::true_)
+    void init_(Traits const &traits, mpl::true_)
     {
         this->fold_.reserve(this->length_ + 1);
         for(unsigned char offset = this->length_; offset; --offset, ++this->last_)
@@ -98,9 +98,9 @@ private:
     }
 
     // case-sensitive Boyer-Moore search
-    BidiIterT find_(BidiIterT begin, BidiIterT end, TraitsT const &traits) const
+    BidiIter find_(BidiIter begin, BidiIter end, Traits const &traits) const
     {
-        typedef typename boost::iterator_difference<BidiIterT>::type diff_type;
+        typedef typename boost::iterator_difference<BidiIter>::type diff_type;
         diff_type const endpos = std::distance(begin, end);
         diff_type offset = static_cast<diff_type>(this->length_);
 
@@ -109,7 +109,7 @@ private:
             std::advance(begin, offset);
 
             char_type const *pat_tmp = this->last_;
-            BidiIterT str_tmp = begin;
+            BidiIter str_tmp = begin;
 
             for(; traits.translate(*str_tmp) == *pat_tmp; --pat_tmp, --str_tmp)
             {
@@ -126,9 +126,9 @@ private:
     }
 
     // case-insensitive Boyer-Moore search
-    BidiIterT find_nocase_(BidiIterT begin, BidiIterT end, TraitsT const &traits) const
+    BidiIter find_nocase_(BidiIter begin, BidiIter end, Traits const &traits) const
     {
-        typedef typename boost::iterator_difference<BidiIterT>::type diff_type;
+        typedef typename boost::iterator_difference<BidiIter>::type diff_type;
         diff_type const endpos = std::distance(begin, end);
         diff_type offset = static_cast<diff_type>(this->length_);
 
@@ -137,7 +137,7 @@ private:
             std::advance(begin, offset);
 
             char_type const *pat_tmp = this->last_;
-            BidiIterT str_tmp = begin;
+            BidiIter str_tmp = begin;
 
             for(; traits.translate_nocase(*str_tmp) == *pat_tmp; --pat_tmp, --str_tmp)
             {
@@ -154,9 +154,9 @@ private:
     }
 
     // case-insensitive Boyer-Moore search with case-folding
-    BidiIterT find_nocase_fold_(BidiIterT begin, BidiIterT end, TraitsT const &traits) const
+    BidiIter find_nocase_fold_(BidiIter begin, BidiIter end, Traits const &traits) const
     {
-        typedef typename boost::iterator_difference<BidiIterT>::type diff_type;
+        typedef typename boost::iterator_difference<BidiIter>::type diff_type;
         diff_type const endpos = std::distance(begin, end);
         diff_type offset = static_cast<diff_type>(this->length_);
 
@@ -165,7 +165,7 @@ private:
             std::advance(begin, offset);
 
             string_type const *pat_tmp = &this->fold_.back();
-            BidiIterT str_tmp = begin;
+            BidiIter str_tmp = begin;
 
             for(; pat_tmp->end() != std::find(pat_tmp->begin(), pat_tmp->end(), *str_tmp);
                 --pat_tmp, --str_tmp)
@@ -187,7 +187,7 @@ private:
     char_type const *begin_;
     char_type const *last_;
     std::vector<string_type> fold_;
-    BidiIterT (boyer_moore::*const find_fun_)(BidiIterT, BidiIterT, TraitsT const &) const;
+    BidiIter (boyer_moore::*const find_fun_)(BidiIter, BidiIter, Traits const &) const;
     unsigned char length_;
     unsigned char offsets_[UCHAR_MAX + 1];
 };

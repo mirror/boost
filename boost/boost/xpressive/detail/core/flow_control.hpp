@@ -24,16 +24,16 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // push_context_match
 //
-template<typename BidiIterT>
+template<typename BidiIter>
 inline bool push_context_match
 (
-    regex_impl<BidiIterT> const &impl
-  , state_type<BidiIterT> &state
-  , matchable<BidiIterT> const &next
+    regex_impl<BidiIter> const &impl
+  , state_type<BidiIter> &state
+  , matchable<BidiIter> const &next
 )
 {
     // save state
-    match_context<BidiIterT> context = state.push_context(impl, next, context);
+    match_context<BidiIter> context = state.push_context(impl, next, context);
     detail::ignore_unused(&context);
 
     // match the nested regex
@@ -47,12 +47,12 @@ inline bool push_context_match
 ///////////////////////////////////////////////////////////////////////////////
 // pop_context_match
 //
-template<typename BidiIterT>
-inline bool pop_context_match(state_type<BidiIterT> &state)
+template<typename BidiIter>
+inline bool pop_context_match(state_type<BidiIter> &state)
 {
     // save state
     // BUGBUG nested regex could have changed state.traits_
-    match_context<BidiIterT> &context(*state.context_.prev_context_);
+    match_context<BidiIter> &context(*state.context_.prev_context_);
     state.swap_context(context);
 
     // Finished matching the nested regex; now match the rest of the enclosing regex

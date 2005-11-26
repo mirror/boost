@@ -27,32 +27,32 @@ namespace boost { namespace xpressive { namespace detail
 
     ///////////////////////////////////////////////////////////////////////////////
     // lookahead_matcher
-    //   XprT can be either a static_xpression, or a shared_ptr<matchable>
+    //   Xpr can be either a static_xpression, or a shared_ptr<matchable>
     //
-    template<typename XprT>
+    template<typename Xpr>
     struct lookahead_matcher
-      : quant_style<quant_none, mpl::size_t<0>, is_pure<XprT> >
+      : quant_style<quant_none, mpl::size_t<0>, is_pure<Xpr> >
     {
-        lookahead_matcher(XprT const &xpr, bool no = false, bool do_save = !is_pure<XprT>::value)
+        lookahead_matcher(Xpr const &xpr, bool no = false, bool do_save = !is_pure<Xpr>::value)
           : xpr_(xpr)
           , not_(no)
           , do_save_(do_save)
         {
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match(state_type<BidiIterT> &state, NextT const &next) const
+        template<typename BidiIter, typename Next>
+        bool match(state_type<BidiIter> &state, Next const &next) const
         {
-            // Note that if is_pure<XprT>::value is true, the compiler can optimize this.
-            return is_pure<XprT>::value || !this->do_save_
+            // Note that if is_pure<Xpr>::value is true, the compiler can optimize this.
+            return is_pure<Xpr>::value || !this->do_save_
                 ? this->match_(state, next, mpl::true_())
                 : this->match_(state, next, mpl::false_());
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match_(state_type<BidiIterT> &state, NextT const &next, mpl::true_) const
+        template<typename BidiIter, typename Next>
+        bool match_(state_type<BidiIter> &state, Next const &next, mpl::true_) const
         {
-            BidiIterT const tmp = state.cur_;
+            BidiIter const tmp = state.cur_;
 
             if(this->not_)
             {
@@ -87,13 +87,13 @@ namespace boost { namespace xpressive { namespace detail
             return false;
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match_(state_type<BidiIterT> &state, NextT const &next, mpl::false_) const
+        template<typename BidiIter, typename Next>
+        bool match_(state_type<BidiIter> &state, Next const &next, mpl::false_) const
         {
-            BidiIterT const tmp = state.cur_;
+            BidiIter const tmp = state.cur_;
 
             // matching xpr could produce side-effects, save state
-            memento<BidiIterT> mem = save_sub_matches(state);
+            memento<BidiIter> mem = save_sub_matches(state);
 
             if(this->not_)
             {
@@ -134,7 +134,7 @@ namespace boost { namespace xpressive { namespace detail
             return false;
         }
 
-        XprT xpr_;
+        Xpr xpr_;
         bool not_;
         bool do_save_; // true if matching xpr_ could modify the sub-matches
     };

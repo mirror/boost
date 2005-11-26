@@ -23,40 +23,40 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // core_access
 //
-template<typename BidiIterT>
+template<typename BidiIter>
 struct core_access
 {
     // BUGBUG give basic_regex move semantics!
-    static basic_regex<BidiIterT> make_regex(regex_impl<BidiIterT> const &impl)
+    static basic_regex<BidiIter> make_regex(regex_impl<BidiIter> const &impl)
     {
-        return basic_regex<BidiIterT>(impl);
+        return basic_regex<BidiIter>(impl);
     }
 
-    static std::size_t get_hidden_mark_count(basic_regex<BidiIterT> const &rex)
+    static std::size_t get_hidden_mark_count(basic_regex<BidiIter> const &rex)
     {
         return rex.impl_->hidden_mark_count_;
     }
 
-    static bool invalid(basic_regex<BidiIterT> const &rex)
+    static bool invalid(basic_regex<BidiIter> const &rex)
     {
         return rex.invalid_();
     }
 
-    static bool match(basic_regex<BidiIterT> const &rex, state_type<BidiIterT> &state)
+    static bool match(basic_regex<BidiIter> const &rex, state_type<BidiIter> &state)
     {
         return rex.match_(state);
     }
 
-    static shared_ptr<detail::regex_impl<BidiIterT> > const &
-    get_regex_impl(basic_regex<BidiIterT> const &rex)
+    static shared_ptr<detail::regex_impl<BidiIter> > const &
+    get_regex_impl(basic_regex<BidiIter> const &rex)
     {
         return rex.impl_.get();
     }
 
     static void init_sub_match_vector
     (
-        sub_match_vector<BidiIterT> &subs_vect
-      , sub_match_impl<BidiIterT> *subs_ptr
+        sub_match_vector<BidiIter> &subs_vect
+      , sub_match_impl<BidiIter> *subs_ptr
       , std::size_t size
     )
     {
@@ -65,10 +65,10 @@ struct core_access
 
     static void init_sub_match_vector
     (
-        sub_match_vector<BidiIterT> &subs_vect
-      , sub_match_impl<BidiIterT> *subs_ptr
+        sub_match_vector<BidiIter> &subs_vect
+      , sub_match_impl<BidiIter> *subs_ptr
       , std::size_t size
-      , sub_match_vector<BidiIterT> const &that
+      , sub_match_vector<BidiIter> const &that
     )
     {
         subs_vect.init_(subs_ptr, size, that);
@@ -76,51 +76,51 @@ struct core_access
 
     static void init_match_results
     (
-        match_results<BidiIterT> &what
+        match_results<BidiIter> &what
       , regex_id_type regex_id
-      , sub_match_impl<BidiIterT> *sub_matches
+      , sub_match_impl<BidiIter> *sub_matches
       , std::size_t size
     )
     {
         what.init_(regex_id, sub_matches, size);
     }
 
-    static sub_match_vector<BidiIterT> &get_sub_match_vector(match_results<BidiIterT> &what)
+    static sub_match_vector<BidiIter> &get_sub_match_vector(match_results<BidiIter> &what)
     {
         return what.sub_matches_;
     }
 
-    static sub_match_impl<BidiIterT> *get_sub_matches(sub_match_vector<BidiIterT> &subs)
+    static sub_match_impl<BidiIter> *get_sub_matches(sub_match_vector<BidiIter> &subs)
     {
         return subs.sub_matches_;
     }
 
-    static results_extras<BidiIterT> &get_extras(match_results<BidiIterT> &what)
+    static results_extras<BidiIter> &get_extras(match_results<BidiIter> &what)
     {
         return what.get_extras_();
     }
 
-    static nested_results<BidiIterT> &get_nested_results(match_results<BidiIterT> &what)
+    static nested_results<BidiIter> &get_nested_results(match_results<BidiIter> &what)
     {
         return what.nested_results_;
     }
 
-    static action_state &get_action_state(match_results<BidiIterT> &what)
+    static action_state &get_action_state(match_results<BidiIter> &what)
     {
         return what.action_state_;
     }
 
-    static void set_prefix_suffix(match_results<BidiIterT> &what, BidiIterT begin, BidiIterT end)
+    static void set_prefix_suffix(match_results<BidiIter> &what, BidiIter begin, BidiIter end)
     {
         what.set_prefix_suffix_(begin, end);
     }
 
-    static void reset(match_results<BidiIterT> &what)
+    static void reset(match_results<BidiIter> &what)
     {
         what.reset_();
     }
 
-    static void set_base(match_results<BidiIterT> &what, BidiIterT base)
+    static void set_base(match_results<BidiIter> &what, BidiIter base)
     {
         what.set_base_(base);
     }

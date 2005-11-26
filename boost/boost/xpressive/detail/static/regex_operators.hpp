@@ -22,139 +22,139 @@ namespace boost { namespace xpressive
 
 ///////////////////////////////////////////////////////////////////////////////
 // operator +
-template<typename BidiIterT>
+template<typename BidiIter>
 inline proto::unary_op
 <
-    proto::unary_op<basic_regex<BidiIterT>, proto::noop_tag>
+    proto::unary_op<basic_regex<BidiIter>, proto::noop_tag>
   , proto::unary_plus_tag
 >
-operator +(basic_regex<BidiIterT> const &regex)
+operator +(basic_regex<BidiIter> const &regex)
 {
     return +proto::noop(regex);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // operator *
-template<typename BidiIterT>
+template<typename BidiIter>
 inline proto::unary_op
 <
-    proto::unary_op<basic_regex<BidiIterT>, proto::noop_tag>
+    proto::unary_op<basic_regex<BidiIter>, proto::noop_tag>
   , proto::unary_star_tag
 >
-operator *(basic_regex<BidiIterT> const &regex)
+operator *(basic_regex<BidiIter> const &regex)
 {
     return *proto::noop(regex);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // operator !
-template<typename BidiIterT>
+template<typename BidiIter>
 inline proto::unary_op
 <
-    proto::unary_op<basic_regex<BidiIterT>, proto::noop_tag>
+    proto::unary_op<basic_regex<BidiIter>, proto::noop_tag>
   , proto::logical_not_tag
 >
-operator !(basic_regex<BidiIterT> const &regex)
+operator !(basic_regex<BidiIter> const &regex)
 {
     return !proto::noop(regex);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // operator >>
-template<typename RightT, typename BidiIterT>
+template<typename Right, typename BidiIter>
 inline typename disable_if
 <
-    proto::is_op<RightT>
+    proto::is_op<Right>
   , proto::binary_op
     <
-        proto::unary_op<basic_regex<BidiIterT>, proto::noop_tag>
-      , proto::unary_op<RightT, proto::noop_tag>
+        proto::unary_op<basic_regex<BidiIter>, proto::noop_tag>
+      , proto::unary_op<Right, proto::noop_tag>
       , proto::right_shift_tag
     >
 >::type
-operator >>(basic_regex<BidiIterT> const &regex, RightT const &right)
+operator >>(basic_regex<BidiIter> const &regex, Right const &right)
 {
     return proto::noop(regex) >> proto::noop(right);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // operator >>
-template<typename BidiIterT, typename LeftT>
+template<typename BidiIter, typename Left>
 inline typename disable_if
 <
-    proto::is_op<LeftT>
+    proto::is_op<Left>
   , proto::binary_op
     <
-        proto::unary_op<LeftT, proto::noop_tag>
-      , proto::unary_op<basic_regex<BidiIterT>, proto::noop_tag>
+        proto::unary_op<Left, proto::noop_tag>
+      , proto::unary_op<basic_regex<BidiIter>, proto::noop_tag>
       , proto::right_shift_tag
     >
 >::type
-operator >>(LeftT const &left, basic_regex<BidiIterT> const &regex)
+operator >>(Left const &left, basic_regex<BidiIter> const &regex)
 {
     return proto::noop(left) >> proto::noop(regex);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // operator >>
-template<typename BidiIterT>
+template<typename BidiIter>
 inline proto::binary_op
 <
-    proto::unary_op<basic_regex<BidiIterT>, proto::noop_tag>
-  , proto::unary_op<basic_regex<BidiIterT>, proto::noop_tag>
+    proto::unary_op<basic_regex<BidiIter>, proto::noop_tag>
+  , proto::unary_op<basic_regex<BidiIter>, proto::noop_tag>
   , proto::right_shift_tag
 >
-operator >>(basic_regex<BidiIterT> const &left, basic_regex<BidiIterT> const &right)
+operator >>(basic_regex<BidiIter> const &left, basic_regex<BidiIter> const &right)
 {
     return proto::noop(left) >> proto::noop(right);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // operator |
-template<typename RightT, typename BidiIterT>
+template<typename Right, typename BidiIter>
 inline typename disable_if
 <
-    proto::is_op<RightT>
+    proto::is_op<Right>
   , proto::binary_op
     <
-        proto::unary_op<basic_regex<BidiIterT>, proto::noop_tag>
-      , proto::unary_op<RightT, proto::noop_tag>
+        proto::unary_op<basic_regex<BidiIter>, proto::noop_tag>
+      , proto::unary_op<Right, proto::noop_tag>
       , proto::bitor_tag
     >
 >::type
-operator |(basic_regex<BidiIterT> const &regex, RightT const &right)
+operator |(basic_regex<BidiIter> const &regex, Right const &right)
 {
     return proto::noop(regex) | proto::noop(right);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // operator |
-template<typename BidiIterT, typename LeftT>
+template<typename BidiIter, typename Left>
 inline typename disable_if
 <
-    proto::is_op<LeftT>
+    proto::is_op<Left>
   , proto::binary_op
     <
-        proto::unary_op<LeftT, proto::noop_tag>
-      , proto::unary_op<basic_regex<BidiIterT>, proto::noop_tag>
+        proto::unary_op<Left, proto::noop_tag>
+      , proto::unary_op<basic_regex<BidiIter>, proto::noop_tag>
       , proto::bitor_tag
     >
 >::type
-operator |(LeftT const &left, basic_regex<BidiIterT> const &regex)
+operator |(Left const &left, basic_regex<BidiIter> const &regex)
 {
     return proto::noop(left) | proto::noop(regex);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // operator |
-template<typename BidiIterT>
+template<typename BidiIter>
 inline proto::binary_op
 <
-    proto::unary_op<basic_regex<BidiIterT>, proto::noop_tag>
-  , proto::unary_op<basic_regex<BidiIterT>, proto::noop_tag>
+    proto::unary_op<basic_regex<BidiIter>, proto::noop_tag>
+  , proto::unary_op<basic_regex<BidiIter>, proto::noop_tag>
   , proto::bitor_tag
 >
-operator |(basic_regex<BidiIterT> const &left, basic_regex<BidiIterT> const &right)
+operator |(basic_regex<BidiIter> const &left, basic_regex<BidiIter> const &right)
 {
     return proto::noop(left) | proto::noop(right);
 }

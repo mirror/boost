@@ -29,18 +29,18 @@ namespace boost { namespace xpressive { namespace detail
 
     ///////////////////////////////////////////////////////////////////////////////
     // generic_quant_tag
-    template<uint_t MinT, uint_t MaxT>
+    template<uint_t Min, uint_t Max>
     struct generic_quant_tag
       : proto::unary_tag
     {
-        typedef mpl::integral_c<uint_t, MinT> min_type;
-        typedef mpl::integral_c<uint_t, MaxT> max_type;
+        typedef mpl::integral_c<uint_t, Min> min_type;
+        typedef mpl::integral_c<uint_t, Max> max_type;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // min_type / max_type
-    template<typename TagT>
-    struct min_type : TagT::min_type {};
+    template<typename Tag>
+    struct min_type : Tag::min_type {};
 
     template<>
     struct min_type<proto::unary_plus_tag> : mpl::integral_c<uint_t, 1> {};
@@ -51,8 +51,8 @@ namespace boost { namespace xpressive { namespace detail
     template<>
     struct min_type<proto::logical_not_tag> : mpl::integral_c<uint_t, 0> {};
 
-    template<typename TagT>
-    struct max_type : TagT::max_type {};
+    template<typename Tag>
+    struct max_type : Tag::max_type {};
 
     template<>
     struct max_type<proto::unary_plus_tag> : mpl::integral_c<uint_t, UINT_MAX-1> {};
@@ -65,34 +65,34 @@ namespace boost { namespace xpressive { namespace detail
 
     struct use_simple_repeat_predicate
     {
-        template<typename OpT, typename, typename>
+        template<typename Op, typename, typename>
         struct apply
         {
-            typedef typename use_simple_repeat<typename proto::arg_type<OpT>::type>::type type;
+            typedef typename use_simple_repeat<typename proto::arg_type<Op>::type>::type type;
         };
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // is_greedy_quant
-    template<typename XprT>
+    template<typename Xpr>
     struct is_greedy_quant
       : mpl::false_
     {
     };
 
-    template<typename OpT, typename TagT>
-    struct is_greedy_quant<proto::unary_op<OpT, TagT> >
+    template<typename Op, typename Tag>
+    struct is_greedy_quant<proto::unary_op<Op, Tag> >
       : mpl::or_
         <
-            is_same<TagT, proto::unary_plus_tag>
-          , is_same<TagT, proto::unary_star_tag>
-          , is_same<TagT, proto::logical_not_tag>
+            is_same<Tag, proto::unary_plus_tag>
+          , is_same<Tag, proto::unary_star_tag>
+          , is_same<Tag, proto::logical_not_tag>
         >
     {
     };
 
-    template<typename OpT, uint_t MinT, uint_t MaxT>
-    struct is_greedy_quant<proto::unary_op<OpT, generic_quant_tag<MinT, MaxT> > >
+    template<typename Op, uint_t Min, uint_t Max>
+    struct is_greedy_quant<proto::unary_op<Op, generic_quant_tag<Min, Max> > >
       : mpl::true_
     {
     };

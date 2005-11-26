@@ -37,44 +37,44 @@ namespace boost { namespace xpressive { namespace detail
 //
 struct icase_modifier
 {
-    template<typename VisitorT>
+    template<typename Visitor>
     struct apply;
 
-    template<typename BidiIterT, typename ICaseT, typename TraitsT>
-    struct apply<xpression_visitor<BidiIterT, ICaseT, TraitsT> >
+    template<typename BidiIter, typename ICase, typename Traits>
+    struct apply<xpression_visitor<BidiIter, ICase, Traits> >
     {
-        typedef xpression_visitor<BidiIterT, mpl::true_, TraitsT> type;
+        typedef xpression_visitor<BidiIter, mpl::true_, Traits> type;
     };
 
-    template<typename VisitorT>
-    static typename apply<VisitorT>::type
-    call(VisitorT &visitor)
+    template<typename Visitor>
+    static typename apply<Visitor>::type
+    call(Visitor &visitor)
     {
-        return typename apply<VisitorT>::type(visitor.traits(), visitor.self());
+        return typename apply<Visitor>::type(visitor.traits(), visitor.self());
     }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // regex_traits_type : wrap a locale in the appropriate regex_traits
 //
-template<typename LocaleT, typename BidiIterT>
+template<typename Locale, typename BidiIter>
 struct regex_traits_type
 {
 #ifndef BOOST_NO_STD_LOCALE
 
-    typedef typename iterator_value<BidiIterT>::type char_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
 
-    // if LocaleT is std::locale, wrap it in a cpp_regex_traits<CharT>
+    // if Locale is std::locale, wrap it in a cpp_regex_traits<Char>
     typedef typename mpl::if_
     <
-        is_same<LocaleT, std::locale>
+        is_same<Locale, std::locale>
       , cpp_regex_traits<char_type>
-      , LocaleT
+      , Locale
     >::type type;
 
 #else
 
-    typedef LocaleT type;
+    typedef Locale type;
 
 #endif
 };
@@ -84,58 +84,58 @@ struct regex_traits_type
 //
 //   wrapped by the modifier<> template and inserted into the xpression
 //   template with the imbue() helper function. Causes a sub-xpression to
-//   use the specified LocaleT
+//   use the specified Locale
 //
-template<typename LocaleT>
+template<typename Locale>
 struct locale_modifier
 {
-    locale_modifier(LocaleT const &loc)
+    locale_modifier(Locale const &loc)
       : loc_(loc)
     {
     }
 
-    template<typename VisitorT>
+    template<typename Visitor>
     struct apply;
 
-    template<typename BidiIterT, typename ICaseT, typename OtherTraitsT>
-    struct apply<xpression_visitor<BidiIterT, ICaseT, OtherTraitsT> >
+    template<typename BidiIter, typename ICase, typename OtherTraits>
+    struct apply<xpression_visitor<BidiIter, ICase, OtherTraits> >
     {
-        typedef typename regex_traits_type<LocaleT, BidiIterT>::type traits_type;
-        typedef xpression_visitor<BidiIterT, ICaseT, traits_type> type;
+        typedef typename regex_traits_type<Locale, BidiIter>::type traits_type;
+        typedef xpression_visitor<BidiIter, ICase, traits_type> type;
     };
 
-    template<typename VisitorT>
-    typename apply<VisitorT>::type
-    call(VisitorT &) const
+    template<typename Visitor>
+    typename apply<Visitor>::type
+    call(Visitor &) const
     {
-        return typename apply<VisitorT>::type(this->loc_);
+        return typename apply<Visitor>::type(this->loc_);
     }
 
-    LocaleT getloc() const
+    Locale getloc() const
     {
         return this->loc_;
     }
 
 private:
-    LocaleT loc_;
+    Locale loc_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // xpression_linker
 //
-template<typename CharT>
+template<typename Char>
 struct xpression_linker
 {
-    template<typename TraitsT>
-    explicit xpression_linker(TraitsT const &traits)
+    template<typename Traits>
+    explicit xpression_linker(Traits const &traits)
       : back_stack_()
       , traits_(&traits)
-      , traits_type_(&typeid(TraitsT))
+      , traits_type_(&typeid(Traits))
     {
     }
 
-    template<typename MatcherT>
-    void link(MatcherT const &, xpression_base const *)
+    template<typename Matcher>
+    void link(Matcher const &, xpression_base const *)
     {
         // no-op
     }
@@ -145,17 +145,17 @@ struct xpression_linker
         this->back_stack_.push(next);
     }
 
-    template<bool GreedyT>
-    void link(repeat_end_matcher<GreedyT> const &matcher, xpression_base const *)
+    template<bool Greedy>
+    void link(repeat_end_matcher<Greedy> const &matcher, xpression_base const *)
     {
         matcher.back_ = this->back_stack_.top();
         this->back_stack_.pop();
     }
 
-    template<typename AlternatesT, typename TraitsT>
-    void link(alternate_matcher<AlternatesT, TraitsT> const &matcher, xpression_base const *next)
+    template<typename Alternates, typename Traits>
+    void link(alternate_matcher<Alternates, Traits> const &matcher, xpression_base const *next)
     {
-        xpression_peeker<CharT> peeker(&matcher.bset_, this->get_traits<TraitsT>());
+        xpression_peeker<Char> peeker(&matcher.bset_, this->get_traits<Traits>());
         this->alt_link(matcher.alternates_, next, peeker);
     }
 
@@ -165,26 +165,26 @@ struct xpression_linker
         this->back_stack_.pop();
     }
 
-    template<typename XprT>
-    void link(keeper_matcher<XprT> const &matcher, xpression_base const *)
+    template<typename Xpr>
+    void link(keeper_matcher<Xpr> const &matcher, xpression_base const *)
     {
         get_pointer(matcher.xpr_)->link(*this);
     }
 
-    template<typename XprT>
-    void link(lookahead_matcher<XprT> const &matcher, xpression_base const *)
+    template<typename Xpr>
+    void link(lookahead_matcher<Xpr> const &matcher, xpression_base const *)
     {
         get_pointer(matcher.xpr_)->link(*this);
     }
 
-    template<typename XprT>
-    void link(lookbehind_matcher<XprT> const &matcher, xpression_base const *)
+    template<typename Xpr>
+    void link(lookbehind_matcher<Xpr> const &matcher, xpression_base const *)
     {
         get_pointer(matcher.xpr_)->link(*this);
     }
 
-    template<typename XprT, bool GreedyT>
-    void link(simple_repeat_matcher<XprT, GreedyT> const &matcher, xpression_base const *)
+    template<typename Xpr, bool Greedy>
+    void link(simple_repeat_matcher<Xpr, Greedy> const &matcher, xpression_base const *)
     {
         matcher.xpr_.link(*this);
     }
@@ -196,14 +196,14 @@ private:
     //
     struct alt_link_pred
     {
-        xpression_linker<CharT> &linker_;
-        xpression_peeker<CharT> &peeker_;
+        xpression_linker<Char> &linker_;
+        xpression_peeker<Char> &peeker_;
         xpression_base const *next_;
 
         alt_link_pred
         (
-            xpression_linker<CharT> &linker
-          , xpression_peeker<CharT> &peeker
+            xpression_linker<Char> &linker
+          , xpression_peeker<Char> &peeker
           , xpression_base const *next
         )
           : linker_(linker)
@@ -212,8 +212,8 @@ private:
         {
         }
 
-        template<typename XprT>
-        void operator ()(XprT const &xpr) const
+        template<typename Xpr>
+        void operator ()(Xpr const &xpr) const
         {
             this->linker_.back_stack_.push(this->next_);
             get_pointer(xpr)->link(this->linker_);
@@ -224,33 +224,33 @@ private:
         alt_link_pred &operator =(alt_link_pred const &);
     };
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     void alt_link
     (
-        std::vector<shared_ptr<matchable<BidiIterT> const> > const &alternates
+        std::vector<shared_ptr<matchable<BidiIter> const> > const &alternates
       , xpression_base const *next
-      , xpression_peeker<CharT> &peeker
+      , xpression_peeker<Char> &peeker
     )
     {
         std::for_each(alternates.begin(), alternates.end(), alt_link_pred(*this, peeker, next));
     }
 
-    template<typename AlternatesT>
+    template<typename Alternates>
     void alt_link
     (
-        fusion::sequence_base<AlternatesT> const &alternates
+        fusion::sequence_base<Alternates> const &alternates
       , xpression_base const *next
-      , xpression_peeker<CharT> &peeker
+      , xpression_peeker<Char> &peeker
     )
     {
         fusion::for_each(alternates.cast(), alt_link_pred(*this, peeker, next));
     }
 
-    template<typename TraitsT>
-    TraitsT const &get_traits() const
+    template<typename Traits>
+    Traits const &get_traits() const
     {
-        BOOST_ASSERT(*this->traits_type_ == typeid(TraitsT));
-        return *static_cast<TraitsT const *>(this->traits_);
+        BOOST_ASSERT(*this->traits_type_ == typeid(Traits));
+        return *static_cast<Traits const *>(this->traits_);
     }
 
     std::stack<xpression_base const *> back_stack_;

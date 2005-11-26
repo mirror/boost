@@ -24,49 +24,49 @@ namespace boost { namespace xpressive { namespace detail
 //  range class implementation
 //
 ///////////////////////////////////////////////////////////////////////
-template<typename CharT>
-inline range<CharT>::range(CharT first, CharT last)
+template<typename Char>
+inline range<Char>::range(Char first, Char last)
   : first_(first)
   , last_(last)
 {
 }
 
 //////////////////////////////////
-template<typename CharT>
-inline bool range<CharT>::is_valid() const
+template<typename Char>
+inline bool range<Char>::is_valid() const
 {
     return this->first_ <= this->last_;
 }
 
 //////////////////////////////////
-template<typename CharT>
-inline bool range<CharT>::includes(range<CharT> const &r) const
+template<typename Char>
+inline bool range<Char>::includes(range<Char> const &r) const
 {
     return (this->first_ <= r.first_) && (this->last_ >= r.last_);
 }
 
 //////////////////////////////////
-template<typename CharT>
-inline bool range<CharT>::includes(CharT v) const
+template<typename Char>
+inline bool range<Char>::includes(Char v) const
 {
     return (this->first_ <= v) && (this->last_ >= v);
 }
 
 //////////////////////////////////
-template<typename CharT>
-inline bool range<CharT>::overlaps(range<CharT> const &r) const
+template<typename Char>
+inline bool range<Char>::overlaps(range<Char> const &r) const
 {
-    CharT decr_first =
-        this->first_ == (std::numeric_limits<CharT>::min)() ? this->first_ : this->first_-1;
-    CharT incr_last =
-        this->last_ == (std::numeric_limits<CharT>::max)() ? this->last_ : this->last_+1;
+    Char decr_first =
+        this->first_ == (std::numeric_limits<Char>::min)() ? this->first_ : this->first_-1;
+    Char incr_last =
+        this->last_ == (std::numeric_limits<Char>::max)() ? this->last_ : this->last_+1;
 
     return (decr_first <= r.last_) && (incr_last >= r.first_);
 }
 
 //////////////////////////////////
-template<typename CharT>
-inline void range<CharT>::merge(range<CharT> const &r)
+template<typename Char>
+inline void range<Char>::merge(range<Char> const &r)
 {
     this->first_ = (std::min)(this->first_, r.first_);
     this->last_ = (std::max)(this->last_, r.last_);
@@ -77,14 +77,14 @@ inline void range<CharT>::merge(range<CharT> const &r)
 //  range_run class implementation
 //
 ///////////////////////////////////////////////////////////////////////
-template<typename CharT>
-inline bool range_run<CharT>::empty() const
+template<typename Char>
+inline bool range_run<Char>::empty() const
 {
     return this->run_.empty();
 }
 
-template<typename CharT>
-inline bool range_run<CharT>::test(CharT v) const
+template<typename Char>
+inline bool range_run<Char>::test(Char v) const
 {
     if(this->run_.empty())
     {
@@ -94,17 +94,17 @@ inline bool range_run<CharT>::test(CharT v) const
     const_iterator iter = std::lower_bound(
         this->run_.begin()
       , this->run_.end()
-      , range<CharT>(v, v)
-      , range_compare<CharT>()
+      , range<Char>(v, v)
+      , range_compare<Char>()
     );
 
     return (iter != this->run_.end() && iter->includes(v))
         || (iter != this->run_.begin() && (--iter)->includes(v));
 }
 
-template<typename CharT>
-template<typename TraitsT>
-inline bool range_run<CharT>::test(CharT v, TraitsT const &traits) const
+template<typename Char>
+template<typename Traits>
+inline bool range_run<Char>::test(Char v, Traits const &traits) const
 {
     const_iterator begin = this->run_.begin();
     const_iterator end = this->run_.end();
@@ -120,15 +120,15 @@ inline bool range_run<CharT>::test(CharT v, TraitsT const &traits) const
 }
 
 //////////////////////////////////
-template<typename CharT>
-inline void range_run<CharT>::swap(range_run<CharT> &rr)
+template<typename Char>
+inline void range_run<Char>::swap(range_run<Char> &rr)
 {
     this->run_.swap(rr.run_);
 }
 
 //////////////////////////////////
-template<typename CharT>
-void range_run<CharT>::merge(iterator iter, range<CharT> const &r)
+template<typename Char>
+void range_run<Char>::merge(iterator iter, range<Char> const &r)
 {
     BOOST_ASSERT(iter != this->run_.end());
     iter->merge(r);
@@ -143,13 +143,13 @@ void range_run<CharT>::merge(iterator iter, range<CharT> const &r)
 }
 
 //////////////////////////////////
-template<typename CharT>
-void range_run<CharT>::set(range<CharT> const &r)
+template<typename Char>
+void range_run<Char>::set(range<Char> const &r)
 {
     BOOST_ASSERT(r.is_valid());
     if(!this->run_.empty())
     {
-        iterator iter = std::lower_bound(this->run_.begin(), this->run_.end(), r, range_compare<CharT>());
+        iterator iter = std::lower_bound(this->run_.begin(), this->run_.end(), r, range_compare<Char>());
 
         if((iter != this->run_.end() && iter->includes(r)) ||
            (iter != this->run_.begin() && (iter - 1)->includes(r)))
@@ -176,13 +176,13 @@ void range_run<CharT>::set(range<CharT> const &r)
 }
 
 //////////////////////////////////
-template<typename CharT>
-void range_run<CharT>::clear(range<CharT> const &r)
+template<typename Char>
+void range_run<Char>::clear(range<Char> const &r)
 {
     BOOST_ASSERT(r.is_valid());
     if(!this->run_.empty())
     {
-        iterator iter = std::lower_bound(this->run_.begin(), this->run_.end(), r, range_compare<CharT>());
+        iterator iter = std::lower_bound(this->run_.begin(), this->run_.end(), r, range_compare<Char>());
         iterator left_iter;
 
         if((iter != this->run_.begin()) &&
@@ -190,9 +190,9 @@ void range_run<CharT>::clear(range<CharT> const &r)
         {
             if(left_iter->last_ > r.last_)
             {
-                CharT save_last = left_iter->last_;
+                Char save_last = left_iter->last_;
                 left_iter->last_ = r.first_-1;
-                this->run_.insert(iter, range<CharT>(r.last_+1, save_last));
+                this->run_.insert(iter, range<Char>(r.last_+1, save_last));
                 return;
             }
             else
@@ -212,22 +212,22 @@ void range_run<CharT>::clear(range<CharT> const &r)
 }
 
 //////////////////////////////////
-template<typename CharT>
-inline void range_run<CharT>::clear()
+template<typename Char>
+inline void range_run<Char>::clear()
 {
     this->run_.clear();
 }
 
 //////////////////////////////////
-template<typename CharT>
-inline typename range_run<CharT>::const_iterator range_run<CharT>::begin() const
+template<typename Char>
+inline typename range_run<Char>::const_iterator range_run<Char>::begin() const
 {
     return this->run_.begin();
 }
 
 //////////////////////////////////
-template<typename CharT>
-inline typename range_run<CharT>::const_iterator range_run<CharT>::end() const
+template<typename Char>
+inline typename range_run<Char>::const_iterator range_run<Char>::end() const
 {
     return this->run_.end();
 }

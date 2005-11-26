@@ -24,42 +24,42 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // scoped_swap
     //  for swapping state back after proto::compile returns
-    template<typename OldT, typename NewT>
+    template<typename Old, typename New>
     struct scoped_swap
     {
         ~scoped_swap() { this->old_->swap(*this->new_); }
-        OldT *old_;
-        NewT *new_;
+        Old *old_;
+        New *new_;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // modify_compiler
     struct modify_compiler
     {
-        template<typename OpT, typename StateT, typename VisitorT>
+        template<typename Op, typename State, typename Visitor>
         struct apply
         {
-            typedef typename proto::left_type<OpT>::type modifier_type;
-            typedef typename modifier_type::BOOST_NESTED_TEMPLATE apply<VisitorT>::type visitor_type;
-            typedef typename proto::right_type<OpT>::type op_type;
+            typedef typename proto::left_type<Op>::type modifier_type;
+            typedef typename modifier_type::BOOST_NESTED_TEMPLATE apply<Visitor>::type visitor_type;
+            typedef typename proto::right_type<Op>::type op_type;
 
             typedef typename proto::compiler<typename proto::tag_type<op_type>::type, seq_tag>::
                 BOOST_NESTED_TEMPLATE apply
             <
                 op_type
-              , StateT
+              , State
               , visitor_type
             >::type type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &state, VisitorT &visitor)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &state, Visitor &visitor)
         {
-            typedef typename apply<OpT, StateT, VisitorT>::visitor_type new_visitor_type;
+            typedef typename apply<Op, State, Visitor>::visitor_type new_visitor_type;
             new_visitor_type new_visitor(proto::left(op).call(visitor));
             new_visitor.swap(visitor);
-            scoped_swap<VisitorT, new_visitor_type> const undo = {&visitor, &new_visitor};
+            scoped_swap<Visitor, new_visitor_type> const undo = {&visitor, &new_visitor};
             detail::ignore_unused(&undo);
             return proto::compile(proto::right(op), state, new_visitor, seq_tag());
         }

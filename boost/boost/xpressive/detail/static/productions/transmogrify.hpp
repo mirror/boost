@@ -27,168 +27,168 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // transmogrify
     //
-    template<typename BidiIterT, typename ICaseT, typename TraitsT, typename MatcherT>
+    template<typename BidiIter, typename ICase, typename Traits, typename Matcher>
     struct transmogrify
     {
-        typedef MatcherT type;
+        typedef Matcher type;
 
-        static type const &call(MatcherT const &m, dont_care)
+        static type const &call(Matcher const &m, dont_care)
         {
             return m;
         }
     };
 
-    template<typename BidiIterT, typename ICaseT, typename TraitsT>
-    struct transmogrify<BidiIterT, ICaseT, TraitsT, assert_bol_placeholder>
+    template<typename BidiIter, typename ICase, typename Traits>
+    struct transmogrify<BidiIter, ICase, Traits, assert_bol_placeholder>
     {
-        typedef assert_bol_matcher<TraitsT> type;
+        typedef assert_bol_matcher<Traits> type;
 
-        template<typename VisitorT>
-        static type call(assert_bol_placeholder, VisitorT &visitor)
+        template<typename Visitor>
+        static type call(assert_bol_placeholder, Visitor &visitor)
         {
             return type(visitor.traits());
         }
     };
 
-    template<typename BidiIterT, typename ICaseT, typename TraitsT>
-    struct transmogrify<BidiIterT, ICaseT, TraitsT, assert_eol_placeholder>
+    template<typename BidiIter, typename ICase, typename Traits>
+    struct transmogrify<BidiIter, ICase, Traits, assert_eol_placeholder>
     {
-        typedef assert_eol_matcher<TraitsT> type;
+        typedef assert_eol_matcher<Traits> type;
 
-        template<typename VisitorT>
-        static type call(assert_eol_placeholder, VisitorT &visitor)
+        template<typename Visitor>
+        static type call(assert_eol_placeholder, Visitor &visitor)
         {
             return type(visitor.traits());
         }
     };
 
-    template<typename BidiIterT, typename ICaseT, typename TraitsT>
-    struct transmogrify<BidiIterT, ICaseT, TraitsT, logical_newline_placeholder>
+    template<typename BidiIter, typename ICase, typename Traits>
+    struct transmogrify<BidiIter, ICase, Traits, logical_newline_placeholder>
     {
-        typedef logical_newline_matcher<TraitsT> type;
+        typedef logical_newline_matcher<Traits> type;
 
-        template<typename VisitorT>
-        static type call(logical_newline_placeholder, VisitorT &visitor)
+        template<typename Visitor>
+        static type call(logical_newline_placeholder, Visitor &visitor)
         {
             return type(visitor.traits());
         }
     };
 
-    template<typename BidiIterT, typename ICaseT, typename TraitsT, typename CharT, bool NotT>
-    struct transmogrify<BidiIterT, ICaseT, TraitsT, literal_placeholder<CharT, NotT> >
+    template<typename BidiIter, typename ICase, typename Traits, typename Char, bool Not>
+    struct transmogrify<BidiIter, ICase, Traits, literal_placeholder<Char, Not> >
     {
-        typedef typename iterator_value<BidiIterT>::type char_type;
-        typedef literal_matcher<TraitsT, ICaseT::value, NotT> type;
+        typedef typename iterator_value<BidiIter>::type char_type;
+        typedef literal_matcher<Traits, ICase::value, Not> type;
 
-        template<typename VisitorT>
-        static type call(literal_placeholder<CharT, NotT> const &m, VisitorT &visitor)
+        template<typename Visitor>
+        static type call(literal_placeholder<Char, Not> const &m, Visitor &visitor)
         {
             char_type ch = char_cast<char_type>(m.ch_, visitor.traits());
             return type(ch, visitor.traits());
         }
     };
 
-    template<typename BidiIterT, typename ICaseT, typename TraitsT, typename CharT>
-    struct transmogrify<BidiIterT, ICaseT, TraitsT, range_placeholder<CharT> >
+    template<typename BidiIter, typename ICase, typename Traits, typename Char>
+    struct transmogrify<BidiIter, ICase, Traits, range_placeholder<Char> >
     {
         // By design, we don't widen character ranges.
-        typedef typename iterator_value<BidiIterT>::type char_type;
-        BOOST_MPL_ASSERT((is_same<CharT, char_type>));
-        typedef range_matcher<TraitsT, ICaseT::value> type;
+        typedef typename iterator_value<BidiIter>::type char_type;
+        BOOST_MPL_ASSERT((is_same<Char, char_type>));
+        typedef range_matcher<Traits, ICase::value> type;
 
-        template<typename VisitorT>
-        static type call(range_placeholder<CharT> const &m, VisitorT &visitor)
+        template<typename Visitor>
+        static type call(range_placeholder<Char> const &m, Visitor &visitor)
         {
             return type(m.ch_min_, m.ch_max_, m.not_, visitor.traits());
         }
     };
 
-    template<typename BidiIterT, typename ICaseT, typename TraitsT, typename CharT>
-    struct transmogrify<BidiIterT, ICaseT, TraitsT, string_placeholder<CharT> >
+    template<typename BidiIter, typename ICase, typename Traits, typename Char>
+    struct transmogrify<BidiIter, ICase, Traits, string_placeholder<Char> >
     {
-        typedef typename iterator_value<BidiIterT>::type char_type;
-        typedef string_matcher<TraitsT, ICaseT::value> type;
+        typedef typename iterator_value<BidiIter>::type char_type;
+        typedef string_matcher<Traits, ICase::value> type;
 
-        template<typename VisitorT>
-        static type call(string_placeholder<CharT> const &m, VisitorT &visitor)
+        template<typename Visitor>
+        static type call(string_placeholder<Char> const &m, Visitor &visitor)
         {
             return type(string_cast<char_type>(m.str_, visitor.traits()), visitor.traits());
         }
     };
 
-    template<typename BidiIterT, typename ICaseT, typename TraitsT>
-    struct transmogrify<BidiIterT, ICaseT, TraitsT, mark_placeholder>
+    template<typename BidiIter, typename ICase, typename Traits>
+    struct transmogrify<BidiIter, ICase, Traits, mark_placeholder>
     {
-        typedef mark_matcher<TraitsT, ICaseT::value> type;
+        typedef mark_matcher<Traits, ICase::value> type;
 
-        template<typename VisitorT>
-        static type call(mark_placeholder const &m, VisitorT &visitor)
+        template<typename Visitor>
+        static type call(mark_placeholder const &m, Visitor &visitor)
         {
             return type(m.mark_number_, visitor.traits());
         }
     };
 
-    template<typename BidiIterT, typename ICaseT, typename TraitsT>
-    struct transmogrify<BidiIterT, ICaseT, TraitsT, posix_charset_placeholder>
+    template<typename BidiIter, typename ICase, typename Traits>
+    struct transmogrify<BidiIter, ICase, Traits, posix_charset_placeholder>
     {
-        typedef posix_charset_matcher<TraitsT> type;
+        typedef posix_charset_matcher<Traits> type;
 
-        template<typename VisitorT>
-        static type call(posix_charset_placeholder const &m, VisitorT &visitor)
+        template<typename Visitor>
+        static type call(posix_charset_placeholder const &m, Visitor &visitor)
         {
             char const *name_end = m.name_ + std::strlen(m.name_);
-            return type(visitor.traits().lookup_classname(m.name_, name_end, ICaseT::value), m.not_);
+            return type(visitor.traits().lookup_classname(m.name_, name_end, ICase::value), m.not_);
         }
     };
 
-    template<typename BidiIterT, typename TraitsT, int SizeT>
-    struct transmogrify<BidiIterT, mpl::true_, TraitsT, set_matcher<TraitsT, SizeT> >
+    template<typename BidiIter, typename Traits, int Size>
+    struct transmogrify<BidiIter, mpl::true_, Traits, set_matcher<Traits, Size> >
     {
-        typedef set_matcher<TraitsT, SizeT> type;
+        typedef set_matcher<Traits, Size> type;
 
-        template<typename VisitorT>
-        static type call(set_matcher<TraitsT, SizeT> m, VisitorT &visitor)
+        template<typename Visitor>
+        static type call(set_matcher<Traits, Size> m, Visitor &visitor)
         {
             m.nocase(visitor.traits());
             return m;
         }
     };
 
-    template<typename BidiIterT, typename ICaseT, typename TraitsT, typename CondT>
-    struct transmogrify<BidiIterT, ICaseT, TraitsT, assert_word_placeholder<CondT> >
+    template<typename BidiIter, typename ICase, typename Traits, typename Cond>
+    struct transmogrify<BidiIter, ICase, Traits, assert_word_placeholder<Cond> >
     {
-        typedef assert_word_matcher<CondT, TraitsT> type;
+        typedef assert_word_matcher<Cond, Traits> type;
 
-        template<typename VisitorT>
-        static type call(dont_care, VisitorT &visitor)
+        template<typename Visitor>
+        static type call(dont_care, Visitor &visitor)
         {
             return type(visitor.traits());
         }
     };
 
-    template<typename BidiIterT, typename ICaseT, typename TraitsT, bool ByRefT>
-    struct transmogrify<BidiIterT, ICaseT, TraitsT, regex_placeholder<BidiIterT, ByRefT> >
+    template<typename BidiIter, typename ICase, typename Traits, bool ByRef>
+    struct transmogrify<BidiIter, ICase, Traits, regex_placeholder<BidiIter, ByRef> >
     {
         typedef typename mpl::if_c
         <
-            ByRefT
-          , regex_byref_matcher<BidiIterT>
-          , regex_matcher<BidiIterT>
+            ByRef
+          , regex_byref_matcher<BidiIter>
+          , regex_matcher<BidiIter>
         >::type type;
 
-        static type call(regex_placeholder<BidiIterT, ByRefT> const &m, dont_care)
+        static type call(regex_placeholder<BidiIter, ByRef> const &m, dont_care)
         {
             return type(m.impl_);
         }
     };
 
-    template<typename BidiIterT, typename ICaseT, typename TraitsT>
-    struct transmogrify<BidiIterT, ICaseT, TraitsT, self_placeholder>
+    template<typename BidiIter, typename ICase, typename Traits>
+    struct transmogrify<BidiIter, ICase, Traits, self_placeholder>
     {
-        typedef regex_byref_matcher<BidiIterT> type;
+        typedef regex_byref_matcher<BidiIter> type;
 
-        template<typename VisitorT>
-        static type call(self_placeholder, VisitorT &visitor)
+        template<typename Visitor>
+        static type call(self_placeholder, Visitor &visitor)
         {
             return type(visitor.self());
         }

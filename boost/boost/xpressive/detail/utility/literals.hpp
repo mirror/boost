@@ -21,7 +21,7 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // char_literal
 //
-template<typename CharT, char Ch, wchar_t Wch>
+template<typename Char, char Ch, wchar_t Wch>
 struct char_literal;
 
 template<char Ch, wchar_t Wch>
@@ -77,8 +77,8 @@ struct string_literal<wchar_t>
     }
 };
 
-#define BOOST_XPR_CHAR_(CharT, ch) boost::xpressive::detail::char_literal<CharT, ch, L##ch>::value
-#define BOOST_XPR_CSTR_(CharT, st) boost::xpressive::detail::string_literal<CharT>::pick(st, L##st)
+#define BOOST_XPR_CHAR_(Char, ch) boost::xpressive::detail::char_literal<Char, ch, L##ch>::value
+#define BOOST_XPR_CSTR_(Char, st) boost::xpressive::detail::string_literal<Char>::pick(st, L##st)
 
 }}} // namespace boost::xpressive::detail
 

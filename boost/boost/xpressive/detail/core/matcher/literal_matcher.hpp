@@ -24,25 +24,25 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // literal_matcher
     //
-    template<typename TraitsT, bool ICaseT, bool NotT>
+    template<typename Traits, bool ICase, bool Not>
     struct literal_matcher
       : quant_style_fixed_width<1>
     {
-        typedef typename TraitsT::char_type char_type;
-        typedef mpl::bool_<NotT> not_type;
-        typedef mpl::bool_<ICaseT> icase_type;
+        typedef typename Traits::char_type char_type;
+        typedef mpl::bool_<Not> not_type;
+        typedef mpl::bool_<ICase> icase_type;
         char_type ch_;
 
-        literal_matcher(char_type ch, TraitsT const &traits)
+        literal_matcher(char_type ch, Traits const &traits)
           : ch_(detail::translate(ch, traits, icase_type()))
         {
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match(state_type<BidiIterT> &state, NextT const &next) const
+        template<typename BidiIter, typename Next>
+        bool match(state_type<BidiIter> &state, Next const &next) const
         {
-            if(state.eos() || NotT ==
-                (detail::translate(*state.cur_, traits_cast<TraitsT>(state), icase_type()) == this->ch_))
+            if(state.eos() || Not ==
+                (detail::translate(*state.cur_, traits_cast<Traits>(state), icase_type()) == this->ch_))
             {
                 return false;
             }

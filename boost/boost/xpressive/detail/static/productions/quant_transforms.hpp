@@ -27,70 +27,70 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // plus_no_mark_transform
     //   Unary plus becomes a quantifier by wrapping arg in begin/end quantifiers
-    template<bool GreedyT = true, uint_t MinT = 1, uint_t MaxT = UINT_MAX-1>
+    template<bool Greedy = true, uint_t Min = 1, uint_t Max = UINT_MAX-1>
     struct plus_no_mark_transform
     {
-        template<typename OpT, typename, typename>
+        template<typename Op, typename, typename>
         struct apply
         {
-            BOOST_MPL_ASSERT((mpl::not_equal_to<mpl::size_t<0>, width_of<typename proto::arg_type<OpT>::type> >));
+            BOOST_MPL_ASSERT((mpl::not_equal_to<mpl::size_t<0>, width_of<typename proto::arg_type<Op>::type> >));
 
             typedef proto::binary_op
             <
                 proto::binary_op
                 <
                     proto::unary_op<repeat_begin_matcher, proto::noop_tag>
-                  , typename proto::arg_type<OpT>::type // skip the "plus" node
+                  , typename proto::arg_type<Op>::type // skip the "plus" node
                   , proto::right_shift_tag
                 >
-              , proto::unary_op<repeat_end_matcher<GreedyT>, proto::noop_tag>
+              , proto::unary_op<repeat_end_matcher<Greedy>, proto::noop_tag>
               , proto::right_shift_tag
             > type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &, VisitorT &, int mark_number = -1, uint_t min = MinT, uint_t max = MaxT)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &, Visitor &, int mark_number = -1, uint_t min = Min, uint_t max = Max)
         {
             return proto::noop(repeat_begin_matcher(mark_number))
                 >> proto::arg(op)
-                >> proto::noop(repeat_end_matcher<GreedyT>(mark_number, min, max));
+                >> proto::noop(repeat_end_matcher<Greedy>(mark_number, min, max));
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // plus_mark_transform
     //   compose the quant and mark transforms
-    template<bool GreedyT = true, uint_t MinT = 1, uint_t MaxT = UINT_MAX-1>
+    template<bool Greedy = true, uint_t Min = 1, uint_t Max = UINT_MAX-1>
     struct plus_mark_transform
     {
-        template<typename OpT, typename StateT, typename VisitorT>
+        template<typename Op, typename State, typename Visitor>
         struct apply
         {
-            BOOST_MPL_ASSERT((mpl::not_equal_to<mpl::size_t<0>, width_of<typename proto::arg_type<OpT>::type> >));
+            BOOST_MPL_ASSERT((mpl::not_equal_to<mpl::size_t<0>, width_of<typename proto::arg_type<Op>::type> >));
 
             typedef typename marker_transform::apply
             <
-                typename proto::arg_type<OpT>::type
-              , StateT
-              , VisitorT
+                typename proto::arg_type<Op>::type
+              , State
+              , Visitor
             >::type marker_type;
 
-            typedef typename plus_no_mark_transform<GreedyT, MinT, MaxT>::BOOST_NESTED_TEMPLATE apply
+            typedef typename plus_no_mark_transform<Greedy, Min, Max>::BOOST_NESTED_TEMPLATE apply
             <
-            proto::unary_op<marker_type, typename proto::tag_type<OpT>::type>
-              , StateT
-              , VisitorT
+            proto::unary_op<marker_type, typename proto::tag_type<Op>::type>
+              , State
+              , Visitor
             >::type type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &state, VisitorT &visitor, int mark_number = -1, uint_t min = MinT, uint_t max = MaxT)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &state, Visitor &visitor, int mark_number = -1, uint_t min = Min, uint_t max = Max)
         {
-            return plus_no_mark_transform<GreedyT, MinT, MaxT>::call
+            return plus_no_mark_transform<Greedy, Min, Max>::call
             (
-                proto::make_op<typename proto::tag_type<OpT>::type>
+                proto::make_op<typename proto::tag_type<Op>::type>
                 (
                     marker_transform::call(proto::arg(op), state, visitor, mark_number)
                 )
@@ -106,25 +106,25 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // optional_transform
     //   An optional expression gets the following transformation:
-    template<bool GreedyT>
+    template<bool Greedy>
     struct optional_transform
     {
-        template<typename OpT, typename, typename>
+        template<typename Op, typename, typename>
         struct apply
         {
-            BOOST_MPL_ASSERT((mpl::not_equal_to<mpl::size_t<0>, width_of<typename proto::arg_type<OpT>::type> >));
+            BOOST_MPL_ASSERT((mpl::not_equal_to<mpl::size_t<0>, width_of<typename proto::arg_type<Op>::type> >));
 
             typedef proto::binary_op
             <
-                typename proto::arg_type<OpT>::type
+                typename proto::arg_type<Op>::type
               , proto::unary_op<epsilon_matcher, proto::noop_tag>
               , proto::bitor_tag
             > type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &, VisitorT &)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &, Visitor &)
         {
             return proto::arg(op) | proto::noop(epsilon_matcher());
         }
@@ -135,22 +135,22 @@ namespace boost { namespace xpressive { namespace detail
     template<>
     struct optional_transform<false>
     {
-        template<typename OpT, typename, typename>
+        template<typename Op, typename, typename>
         struct apply
         {
-            BOOST_MPL_ASSERT((mpl::not_equal_to<mpl::size_t<0>, width_of<typename proto::arg_type<OpT>::type> >));
+            BOOST_MPL_ASSERT((mpl::not_equal_to<mpl::size_t<0>, width_of<typename proto::arg_type<Op>::type> >));
 
             typedef proto::binary_op
             <
                 proto::unary_op<epsilon_matcher, proto::noop_tag>
-              , typename proto::arg_type<OpT>::type
+              , typename proto::arg_type<Op>::type
               , proto::bitor_tag
             > type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &, VisitorT &)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &, Visitor &)
         {
             return proto::noop(epsilon_matcher()) | proto::arg(op);
         }
@@ -158,83 +158,83 @@ namespace boost { namespace xpressive { namespace detail
 
     ///////////////////////////////////////////////////////////////////////////////
     // simple_repeat_branch
-    template<bool GreedyT = true, uint_t MinT = 0, uint_t MaxT = UINT_MAX-1>
+    template<bool Greedy = true, uint_t Min = 0, uint_t Max = UINT_MAX-1>
     struct simple_repeat_branch
     {
         typedef true_xpression state_type;
 
-        template<typename OpT, typename StateT, typename>
+        template<typename Op, typename State, typename>
         struct apply
         {
-            BOOST_MPL_ASSERT((mpl::not_equal_to<mpl::size_t<0>, width_of<OpT> >));
-            typedef static_xpression<simple_repeat_matcher<OpT, GreedyT>, StateT> type;
+            BOOST_MPL_ASSERT((mpl::not_equal_to<mpl::size_t<0>, width_of<Op> >));
+            typedef static_xpression<simple_repeat_matcher<Op, Greedy>, State> type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &state, VisitorT &, uint_t min = MinT, uint_t max = MaxT)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &state, Visitor &, uint_t min = Min, uint_t max = Max)
         {
-            return make_static_xpression(simple_repeat_matcher<OpT, GreedyT>(op, min, max), state);
+            return make_static_xpression(simple_repeat_matcher<Op, Greedy>(op, min, max), state);
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // plus_transform
     //   Optimization: don't insert a hidden mark if we already have a visible one
-    template<bool GreedyT = true, uint_t MinT = 1, uint_t MaxT = UINT_MAX-1>
+    template<bool Greedy = true, uint_t Min = 1, uint_t Max = UINT_MAX-1>
     struct plus_transform
     {
-        template<typename OpT, typename StateT, typename VisitorT>
+        template<typename Op, typename State, typename Visitor>
         struct apply
         {
             typedef typename mpl::if_
             <
-                is_marker<typename proto::arg_type<OpT>::type>
-              , plus_no_mark_transform<GreedyT, MinT, MaxT>
-              , plus_mark_transform<GreedyT, MinT, MaxT>
+                is_marker<typename proto::arg_type<Op>::type>
+              , plus_no_mark_transform<Greedy, Min, Max>
+              , plus_mark_transform<Greedy, Min, Max>
             >::type transform;
 
-            typedef typename transform::BOOST_NESTED_TEMPLATE apply<OpT, StateT, VisitorT>::type type;
+            typedef typename transform::BOOST_NESTED_TEMPLATE apply<Op, State, Visitor>::type type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &state, VisitorT &visitor, uint_t min = MinT, uint_t max = MaxT)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &state, Visitor &visitor, uint_t min = Min, uint_t max = Max)
         {
-            return apply<OpT, StateT, VisitorT>::transform::call(op, state, visitor, mark_number(proto::arg(op), visitor), min, max);
+            return apply<Op, State, Visitor>::transform::call(op, state, visitor, mark_number(proto::arg(op), visitor), min, max);
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // star_transform
-    template<bool GreedyT = true, uint_t MaxT = UINT_MAX-1>
+    template<bool Greedy = true, uint_t Max = UINT_MAX-1>
     struct star_transform
     {
-        template<typename OpT, typename StateT, typename VisitorT>
+        template<typename Op, typename State, typename Visitor>
         struct apply
         {
-            typedef typename plus_transform<GreedyT, 1, MaxT>::BOOST_NESTED_TEMPLATE apply
+            typedef typename plus_transform<Greedy, 1, Max>::BOOST_NESTED_TEMPLATE apply
             <
-                OpT
-              , StateT
-              , VisitorT
+                Op
+              , State
+              , Visitor
             >::type plus_type;
 
-            typedef typename optional_transform<GreedyT>::BOOST_NESTED_TEMPLATE apply
+            typedef typename optional_transform<Greedy>::BOOST_NESTED_TEMPLATE apply
             <
                 proto::unary_op<plus_type, proto::unary_plus_tag>
-              , StateT
-              , VisitorT
+              , State
+              , Visitor
             >::type type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &state, VisitorT &visitor, uint_t max = MaxT)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &state, Visitor &visitor, uint_t max = Max)
         {
-            return optional_transform<GreedyT>::call
+            return optional_transform<Greedy>::call
             (
-                +plus_transform<GreedyT, 1, MaxT>::call(op, state, visitor, 1, max)
+                +plus_transform<Greedy, 1, Max>::call(op, state, visitor, 1, max)
               , state
               , visitor
             );

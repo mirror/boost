@@ -68,18 +68,18 @@ enum quant_enum
 ///////////////////////////////////////////////////////////////////////////////
 // quant_style
 //
-template<quant_enum QuantStyleT, typename WidthT = unknown_width, typename PureT = mpl::true_>
+template<quant_enum QuantStyle, typename Width = unknown_width, typename Pure = mpl::true_>
 struct quant_style
   : xpression_base
 {
-    typedef mpl::int_<QuantStyleT> quant;   // Which quantification strategy to use?
-    typedef WidthT width;                   // how many characters this matcher consumes
-    typedef PureT pure;                     // whether this matcher has observable side-effects
+    typedef mpl::int_<QuantStyle> quant;   // Which quantification strategy to use?
+    typedef Width width;                   // how many characters this matcher consumes
+    typedef Pure pure;                     // whether this matcher has observable side-effects
 
-    template<typename BidiIterT>
-    static std::size_t get_width(state_type<BidiIterT> *)
+    template<typename BidiIter>
+    static std::size_t get_width(state_type<BidiIter> *)
     {
-        return WidthT::value;
+        return Width::value;
     }
 };
 
@@ -103,9 +103,9 @@ typedef quant_style<quant_variable_width> quant_style_variable_width;
 ///////////////////////////////////////////////////////////////////////////////
 // quant_style_fixed_width
 //  for when the sub-expression has a fixed width that is known at compile time
-template<std::size_t WidthT>
+template<std::size_t Width>
 struct quant_style_fixed_width
-  : quant_style<quant_fixed_width, mpl::size_t<WidthT> >
+  : quant_style<quant_fixed_width, mpl::size_t<Width> >
 {
 };
 
@@ -120,31 +120,31 @@ struct quant_style_assertion
 ///////////////////////////////////////////////////////////////////////////////
 // quant_style_auto
 //  automatically pick the quantification style based on width and purity
-template<typename WidthT, typename PureT>
+template<typename Width, typename Pure>
 struct quant_style_auto
-  : quant_style<quant_auto, WidthT, PureT>
+  : quant_style<quant_auto, Width, Pure>
 {
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // quant_type
 //
-template<typename MatcherT, typename QuantStyleT = typename MatcherT::quant>
+template<typename Matcher, typename QuantStyle = typename Matcher::quant>
 struct quant_type
-  : QuantStyleT
+  : QuantStyle
 {
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // when the quant_type is auto, determine the quant type from the width and purity
-template<typename MatcherT>
-struct quant_type<MatcherT, mpl::int_<quant_auto> >
+template<typename Matcher>
+struct quant_type<Matcher, mpl::int_<quant_auto> >
   : mpl::if_
     <
         mpl::and_
         <
-            mpl::not_equal_to<typename MatcherT::width, unknown_width>
-          , typename MatcherT::pure
+            mpl::not_equal_to<typename Matcher::width, unknown_width>
+          , typename Matcher::pure
         >
       , mpl::int_<quant_fixed_width>
       , mpl::int_<quant_variable_width>

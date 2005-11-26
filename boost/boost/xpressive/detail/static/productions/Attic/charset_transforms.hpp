@@ -22,24 +22,24 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // charset_state
     //
-    template<typename CharSetT, typename TraitsT>
+    template<typename CharSet, typename Traits>
     struct charset_state
     {
-        typedef TraitsT traits_type;
-        typedef typename CharSetT::char_type char_type;
-        typedef typename CharSetT::icase_type icase_type;
+        typedef Traits traits_type;
+        typedef typename CharSet::char_type char_type;
+        typedef typename CharSet::icase_type icase_type;
       
-        explicit charset_state(CharSetT &charset, traits_type const &traits)
+        explicit charset_state(CharSet &charset, traits_type const &traits)
           : charset_(charset)
           , traits_(traits)
         {
         }
 
-        template<bool NotT>
-        void set(literal_matcher<traits_type, icase_type::value, NotT> const &ch) const
+        template<bool Not>
+        void set(literal_matcher<traits_type, icase_type::value, Not> const &ch) const
         {
             // BUGBUG fixme!
-            BOOST_MPL_ASSERT_NOT((mpl::bool_<NotT>));
+            BOOST_MPL_ASSERT_NOT((mpl::bool_<Not>));
             set_char(this->charset_.charset_, ch.ch_, this->traits_, icase_type());
         }
 
@@ -50,12 +50,12 @@ namespace boost { namespace xpressive { namespace detail
             set_range(this->charset_.charset_, rg.ch_min_, rg.ch_max_, this->traits_, icase_type());
         }
 
-        template<int SizeT>
-        void set(set_matcher<traits_type, SizeT> const &set_) const
+        template<int Size>
+        void set(set_matcher<traits_type, Size> const &set_) const
         {
             // BUGBUG fixme!
             BOOST_ASSERT(!set_.not_);
-            for(int i=0; i<SizeT; ++i)
+            for(int i=0; i<Size; ++i)
             {
                 set_char(this->charset_.charset_, set_.set_[i], this->traits_, icase_type::value);
             }
@@ -66,37 +66,37 @@ namespace boost { namespace xpressive { namespace detail
             set_class(this->charset_.charset_, posix.mask_, posix.not_, this->traits_);
         }
 
-        template<typename UnknownT>
-        void set(UnknownT const &) const
+        template<typename Unknown>
+        void set(Unknown const &) const
         {
             // If this assert fires, it means that you have put something in a set[] that doesn't
             // belong there. For instance, set["hello"]. Legal members of sets are characters, 
             // character ranges, list-initialized sets such as (set='a','b','c') and posix-style
             // character sets such as digit and ~alpha.
-            BOOST_MPL_ASSERT((never_true<UnknownT>));
+            BOOST_MPL_ASSERT((never_true<Unknown>));
         }
 
     private:
         charset_state &operator =(charset_state const &);
 
-        CharSetT &charset_;
+        CharSet &charset_;
         traits_type const &traits_;
     };
 
-    template<typename CharSetT, typename TraitsT>
-    charset_state<CharSetT, TraitsT> make_charset_state(CharSetT &charset, TraitsT const &traits)
+    template<typename CharSet, typename Traits>
+    charset_state<CharSet, Traits> make_charset_state(CharSet &charset, Traits const &traits)
     {
-        return charset_state<CharSetT, TraitsT>(charset, traits);
+        return charset_state<CharSet, Traits>(charset, traits);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     //
     struct charset_transform
     {
-        template<typename, typename, typename VisitorT>
+        template<typename, typename, typename Visitor>
         struct apply
         {
-            typedef typename VisitorT::char_type char_type;
+            typedef typename Visitor::char_type char_type;
 
             // if sizeof(char_type)==1, merge everything into a basic_chset
             // BUGBUG this is not optimal.
@@ -104,24 +104,24 @@ namespace boost { namespace xpressive { namespace detail
             <
                 mpl::equal_to<mpl::sizeof_<char_type>, mpl::size_t<1> >
               , basic_chset<char_type>
-              , compound_charset<typename VisitorT::traits_type>
+              , compound_charset<typename Visitor::traits_type>
             >::type charset_type;
 
             typedef charset_matcher
             <
-                typename VisitorT::traits_type
-              , VisitorT::icase_type::value
+                typename Visitor::traits_type
+              , Visitor::icase_type::value
               , charset_type
             > matcher_type;
 
             typedef proto::unary_op<matcher_type, proto::noop_tag> type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &, VisitorT &visitor, bool complement = false)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &, Visitor &visitor, bool complement = false)
         {
-            typedef typename apply<OpT, StateT, VisitorT>::matcher_type matcher_type;
+            typedef typename apply<Op, State, Visitor>::matcher_type matcher_type;
             matcher_type matcher;
             // Walks the tree and fills in the charset
             proto::compile(proto::right(op), make_charset_state(matcher, visitor.traits()), visitor, set_tag());

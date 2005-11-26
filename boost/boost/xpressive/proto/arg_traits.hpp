@@ -31,86 +31,86 @@ namespace boost { namespace proto
 
     ///////////////////////////////////////////////////////////////////////////////
     // argument type extractors
-    template<typename OpT>
+    template<typename Op>
     struct arg_type
     {
-        typedef typename OpT::arg_type type;
+        typedef typename Op::arg_type type;
         typedef type const &const_reference;
     };
 
-    template<typename OpT, typename ParamT>
-    struct arg_type<op_proxy<OpT, ParamT> >
+    template<typename Op, typename Param>
+    struct arg_type<op_proxy<Op, Param> >
     {
-        typedef typename OpT::arg_type type;
+        typedef typename Op::arg_type type;
         typedef type const const_reference;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // argument type extractors
-    template<typename OpT>
+    template<typename Op>
     struct left_type
     {
-        typedef typename OpT::left_type type;
+        typedef typename Op::left_type type;
         typedef type const &const_reference;
     };
 
-    template<typename OpT, typename ParamT>
-    struct left_type<op_proxy<OpT, ParamT> >
+    template<typename Op, typename Param>
+    struct left_type<op_proxy<Op, Param> >
     {
-        typedef typename OpT::left_type type;
+        typedef typename Op::left_type type;
         typedef type const const_reference;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // argument type extractors
-    template<typename OpT>
+    template<typename Op>
     struct right_type
     {
-        typedef typename OpT::right_type type;
+        typedef typename Op::right_type type;
         typedef type const &const_reference;
     };
 
-    template<typename OpT, typename ParamT>
-    struct right_type<op_proxy<OpT, ParamT> >
+    template<typename Op, typename Param>
+    struct right_type<op_proxy<Op, Param> >
     {
-        typedef typename OpT::right_type type;
+        typedef typename Op::right_type type;
         typedef type const const_reference;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // tag extractor
-    template<typename OpT>
+    template<typename Op>
     struct tag_type
     {
-        typedef typename OpT::tag_type type;
+        typedef typename Op::tag_type type;
     };
 
-    template<typename OpT, typename ParamT>
-    struct tag_type<op_proxy<OpT, ParamT> >
+    template<typename Op, typename Param>
+    struct tag_type<op_proxy<Op, Param> >
     {
-        typedef typename OpT::tag_type type;
+        typedef typename Op::tag_type type;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // arg
-    template<typename OpT>
-    inline typename arg_type<OpT>::const_reference arg(OpT const &op)
+    template<typename Op>
+    inline typename arg_type<Op>::const_reference arg(Op const &op)
     {
         return op.cast().arg;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // left
-    template<typename OpT>
-    inline typename left_type<OpT>::const_reference left(OpT const &op)
+    template<typename Op>
+    inline typename left_type<Op>::const_reference left(Op const &op)
     {
         return op.cast().left;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // right
-    template<typename OpT>
-    inline typename right_type<OpT>::const_reference right(OpT const &op)
+    template<typename Op>
+    inline typename right_type<Op>::const_reference right(Op const &op)
     {
         return op.cast().right;
     }

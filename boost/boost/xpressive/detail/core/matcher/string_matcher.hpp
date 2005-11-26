@@ -26,16 +26,16 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // string_matcher
     //
-    template<typename TraitsT, bool ICaseT>
+    template<typename Traits, bool ICase>
     struct string_matcher
       : quant_style_fixed_unknown_width
     {
-        typedef typename TraitsT::char_type char_type;
-        typedef mpl::bool_<ICaseT> icase_type;
+        typedef typename Traits::char_type char_type;
+        typedef mpl::bool_<ICase> icase_type;
         std::basic_string<char_type> str_;
         char_type const *end_;
 
-        string_matcher(std::basic_string<char_type> const &str, TraitsT const &traits)
+        string_matcher(std::basic_string<char_type> const &str, Traits const &traits)
           : str_(str)
           , end_(str_.data() + str_.size())
         {
@@ -45,21 +45,21 @@ namespace boost { namespace xpressive { namespace detail
             }
         }
 
-        string_matcher(string_matcher<TraitsT, ICaseT> const &that)
+        string_matcher(string_matcher<Traits, ICase> const &that)
           : str_(that.str_)
           , end_(str_.data() + str_.size())
         {
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match(state_type<BidiIterT> &state, NextT const &next) const
+        template<typename BidiIter, typename Next>
+        bool match(state_type<BidiIter> &state, Next const &next) const
         {
-            BidiIterT const tmp = state.cur_;
+            BidiIter const tmp = state.cur_;
             char_type const *begin = this->str_.data();
             for(; begin != this->end_; ++begin, ++state.cur_)
             {
                 if(state.eos() ||
-                    (detail::translate(*state.cur_, traits_cast<TraitsT>(state), icase_type()) != *begin))
+                    (detail::translate(*state.cur_, traits_cast<Traits>(state), icase_type()) != *begin))
                 {
                     state.cur_ = tmp;
                     return false;
@@ -75,8 +75,8 @@ namespace boost { namespace xpressive { namespace detail
             return false;
         }
 
-        template<typename BidiIterT>
-        std::size_t get_width(state_type<BidiIterT> *) const
+        template<typename BidiIter>
+        std::size_t get_width(state_type<BidiIter> *) const
         {
             return this->str_.size();
         }

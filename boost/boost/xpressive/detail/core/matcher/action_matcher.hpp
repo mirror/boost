@@ -24,11 +24,11 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // action_matcher
     //
-    template<typename ActionT>
+    template<typename Action>
     struct action_matcher
       : quant_style<quant_none, mpl::size_t<0>, mpl::false_>
     {
-        ActionT *action_ptr_;
+        Action *action_ptr_;
 
         action_matcher()
           : action_ptr_(&action_())
@@ -45,16 +45,16 @@ namespace boost { namespace xpressive { namespace detail
             return *this; // no-op
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match(state_type<BidiIterT> &state, NextT const &next) const
+        template<typename BidiIter, typename Next>
+        bool match(state_type<BidiIter> &state, Next const &next) const
         {
-            ActionT &action = *this->action_ptr_;
-            typename ActionT::saved_type saved(action.save());
+            Action &action = *this->action_ptr_;
+            typename Action::saved_type saved(action.save());
 
             // set the action state pointer, so that action_state_cast works correctly
-            core_access<BidiIterT>::get_action_state(*state.context_.results_ptr_) = state.action_state_;
+            core_access<BidiIter>::get_action_state(*state.context_.results_ptr_) = state.action_state_;
 
-            match_results<BidiIterT> const &what = *state.context_.results_ptr_;
+            match_results<BidiIter> const &what = *state.context_.results_ptr_;
             if(!action(what, state.cur_) || !next.match(state))
             {
                 action.restore(saved);
@@ -66,9 +66,9 @@ namespace boost { namespace xpressive { namespace detail
 
     protected:
 
-        ActionT &action_()
+        Action &action_()
         {
-            return *static_cast<ActionT *>(this);
+            return *static_cast<Action *>(this);
         }
     };
 

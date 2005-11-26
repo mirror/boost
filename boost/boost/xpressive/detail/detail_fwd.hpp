@@ -22,7 +22,7 @@ namespace boost { namespace xpressive { namespace detail
 {
     typedef unsigned int uint_t;
 
-    template<uint_t MinT, uint_t MaxT>
+    template<uint_t Min, uint_t Max>
     struct generic_quant_tag;
 
     struct modifier_tag;
@@ -32,23 +32,23 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // placeholders
     //
-    template<typename CharT, bool NotT = false>
+    template<typename Char, bool Not = false>
     struct literal_placeholder;
 
-    template<typename CharT>
+    template<typename Char>
     struct string_placeholder;
 
     struct mark_placeholder;
 
-    template<typename BidiIterT, bool ByRefT>
+    template<typename BidiIter, bool ByRef>
     struct regex_placeholder;
 
     struct posix_charset_placeholder;
 
-    template<typename CondT>
+    template<typename Cond>
     struct assert_word_placeholder;
 
-    template<typename CharT>
+    template<typename Char>
     struct range_placeholder;
 
     struct assert_bol_placeholder;
@@ -68,138 +68,138 @@ namespace boost { namespace xpressive { namespace detail
 
     struct assert_eos_matcher;
 
-    template<typename TraitsT>
+    template<typename Traits>
     struct assert_bol_matcher;
 
-    template<typename TraitsT>
+    template<typename Traits>
     struct assert_eol_matcher;
 
-    template<typename CondT, typename TraitsT>
+    template<typename Cond, typename Traits>
     struct assert_word_matcher;
 
     struct true_matcher;
 
-    template<typename AlternatesT, typename TraitsT>
+    template<typename Alternates, typename Traits>
     struct alternate_matcher;
 
     struct alternate_end_matcher;
 
-    template<typename TraitsT>
+    template<typename Traits>
     struct posix_charset_matcher;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct alternates_factory;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct sequence;
 
-    template<typename TraitsT, bool ICaseT>
+    template<typename Traits, bool ICase>
     struct mark_matcher;
 
     struct mark_begin_matcher;
 
     struct mark_end_matcher;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct regex_matcher;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct regex_byref_matcher;
 
-    template<typename TraitsT>
+    template<typename Traits>
     struct compound_charset;
 
-    template<typename TraitsT, bool ICaseT, typename CharSetT = compound_charset<TraitsT> >
+    template<typename Traits, bool ICase, typename CharSet = compound_charset<Traits> >
     struct charset_matcher;
 
-    template<typename TraitsT, bool ICaseT>
+    template<typename Traits, bool ICase>
     struct range_matcher;
 
-    template<typename TraitsT, int SizeT>
+    template<typename Traits, int Size>
     struct set_matcher;
 
-    template<typename XprT, bool GreedyT>
+    template<typename Xpr, bool Greedy>
     struct simple_repeat_matcher;
 
     struct repeat_begin_matcher;
 
-    template<bool GreedyT>
+    template<bool Greedy>
     struct repeat_end_matcher;
 
-    template<typename TraitsT, bool ICaseT, bool NotT>
+    template<typename Traits, bool ICase, bool Not>
     struct literal_matcher;
 
-    template<typename TraitsT, bool ICaseT>
+    template<typename Traits, bool ICase>
     struct string_matcher;
 
-    template<typename ActionT>
+    template<typename Action>
     struct action_matcher;
 
-    template<typename XprT, bool IsOpT = proto::is_op<XprT>::value>
+    template<typename Xpr, bool IsOp = proto::is_op<Xpr>::value>
     struct as_xpr_type;
 
-    template<typename XprT>
+    template<typename Xpr>
     struct is_modifiable;
 
-    template<typename AlternatesT>
+    template<typename Alternates>
     struct alternates_list;
 
-    template<typename ModifierT>
+    template<typename Modifier>
     struct modifier_op;
 
-    template<typename LeftT, typename RightT>
+    template<typename Left, typename Right>
     struct modifier_sequencer;
 
     struct icase_modifier;
 
-    template<typename BidiIterT, typename ICaseT, typename TraitsT>
+    template<typename BidiIter, typename ICase, typename Traits>
     struct xpression_visitor;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct regex_impl;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct regex_matcher;
 
     struct epsilon_matcher;
 
     typedef proto::unary_op<epsilon_matcher, proto::noop_tag> epsilon_type;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct nested_results;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct regex_id_filter_predicate;
 
-    template<typename XprT>
+    template<typename Xpr>
     struct keeper_matcher;
 
-    template<typename XprT>
+    template<typename Xpr>
     struct lookahead_matcher;
 
-    template<typename XprT>
+    template<typename Xpr>
     struct lookbehind_matcher;
 
-    template<typename CondT>
+    template<typename Cond>
     struct assert_word_placeholder;
 
-    template<bool IsBoundaryT>
+    template<bool IsBoundary>
     struct word_boundary;
 
-    template<typename BidiIterT, typename MatcherT>
-    sequence<BidiIterT> make_dynamic_xpression(MatcherT const &matcher);
+    template<typename BidiIter, typename Matcher>
+    sequence<BidiIter> make_dynamic_xpression(Matcher const &matcher);
 
-    template<typename CharT>
+    template<typename Char>
     struct xpression_linker;
 
-    template<typename CharT>
+    template<typename Char>
     struct xpression_peeker;
 
     typedef proto::unary_op<mark_placeholder, proto::noop_tag> mark_tag;
 
     struct any_matcher;
 
-    template<typename TraitsT>
+    template<typename Traits>
     struct logical_newline_matcher;
 
     typedef proto::unary_op<logical_newline_placeholder, proto::noop_tag> logical_newline_xpression;
@@ -210,40 +210,40 @@ namespace boost { namespace xpressive { namespace detail
 
     struct seq_tag;
 
-    template<bool PositiveT>
+    template<bool Positive>
     struct lookahead_tag;
 
-    template<bool PositiveT>
+    template<bool Positive>
     struct lookbehind_tag;
 
     struct keeper_tag;
 
-    template<typename LocaleT>
+    template<typename Locale>
     struct locale_modifier;
 
-    template<typename MatcherT>
+    template<typename Matcher>
     struct matcher_wrapper;
 
-    template<typename LocaleT, typename BidiIterT>
+    template<typename Locale, typename BidiIter>
     struct regex_traits_type;
 
     ///////////////////////////////////////////////////////////////////////////////
     // Misc.
     struct no_next;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct core_access;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct state_type;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct matchable;
 
-    template<typename MatcherT, typename BidiIterT>
+    template<typename Matcher, typename BidiIter>
     struct dynamic_xpression;
 
-    template<typename MatcherT, typename NextT>
+    template<typename Matcher, typename Next>
     struct static_xpression;
 
     typedef static_xpression<end_matcher, no_next> end_xpression;
@@ -252,61 +252,61 @@ namespace boost { namespace xpressive { namespace detail
 
     typedef static_xpression<true_matcher, no_next> true_xpression;
 
-    template<typename MatcherT, typename NextT = end_xpression>
+    template<typename Matcher, typename Next = end_xpression>
     struct static_xpression;
 
-    template<typename TopT, typename NextT>
+    template<typename Top, typename Next>
     struct stacked_xpression;
 
-    template<typename XprT>
+    template<typename Xpr>
     struct is_static_xpression;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct sub_match_impl;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct results_cache;
 
     template<typename T>
     struct sequence_stack;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct results_extras;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct match_context;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct sub_match_vector;
 
     struct action_state;
 
-    template<typename TraitsT, typename BidiIterT>
-    TraitsT const &traits_cast(state_type<BidiIterT> const &state);
+    template<typename Traits, typename BidiIter>
+    Traits const &traits_cast(state_type<BidiIter> const &state);
 
-    template<typename CharT>
+    template<typename Char>
     struct basic_chset;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct memento;
 
-    template<typename CharT, typename TraitsT>
-    void set_char(compound_charset<TraitsT> &chset, CharT ch, TraitsT const &traits, bool icase);
+    template<typename Char, typename Traits>
+    void set_char(compound_charset<Traits> &chset, Char ch, Traits const &traits, bool icase);
 
-    template<typename CharT, typename TraitsT>
-    void set_range(compound_charset<TraitsT> &chset, CharT from, CharT to, TraitsT const &traits, bool icase);
+    template<typename Char, typename Traits>
+    void set_range(compound_charset<Traits> &chset, Char from, Char to, Traits const &traits, bool icase);
 
-    template<typename TraitsT>
-    void set_class(compound_charset<TraitsT> &chset, typename TraitsT::char_class_type char_class, bool no, TraitsT const &traits);
+    template<typename Traits>
+    void set_class(compound_charset<Traits> &chset, typename Traits::char_class_type char_class, bool no, Traits const &traits);
 
-    template<typename CharT, typename TraitsT>
-    void set_char(basic_chset<CharT> &chset, CharT ch, TraitsT const &traits, bool icase);
+    template<typename Char, typename Traits>
+    void set_char(basic_chset<Char> &chset, Char ch, Traits const &traits, bool icase);
 
-    template<typename CharT, typename TraitsT>
-    void set_range(basic_chset<CharT> &chset, CharT from, CharT to, TraitsT const &traits, bool icase);
+    template<typename Char, typename Traits>
+    void set_range(basic_chset<Char> &chset, Char from, Char to, Traits const &traits, bool icase);
 
-    template<typename CharT, typename TraitsT>
-    void set_class(basic_chset<CharT> &chset, typename TraitsT::char_class_type char_class, bool no, TraitsT const &traits);
+    template<typename Char, typename Traits>
+    void set_class(basic_chset<Char> &chset, typename Traits::char_class_type char_class, bool no, Traits const &traits);
 
 }}} // namespace boost::xpressive::detail
 
@@ -315,9 +315,9 @@ namespace boost { namespace xpressive
 {
 
     /// INTERNAL ONLY
-    template<typename TraitsT, std::size_t N>
-    typename TraitsT::char_class_type
-    lookup_classname(TraitsT const &traits, char const (&cname)[N], bool icase = false);
+    template<typename Traits, std::size_t N>
+    typename Traits::char_class_type
+    lookup_classname(Traits const &traits, char const (&cname)[N], bool icase = false);
 
 }} // namespace boost::xpressive
 

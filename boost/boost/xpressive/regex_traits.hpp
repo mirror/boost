@@ -47,19 +47,19 @@ struct regex_traits_version_1_case_fold_tag
 /// Thin wrapper around the default regex_traits implementation, either
 /// cpp_regex_traits or c_regex_traits
 ///
-template<typename CharT, typename ImplT>
+template<typename Char, typename Impl>
 struct regex_traits
-  : ImplT
+  : Impl
 {
-    typedef typename ImplT::locale_type locale_type;
+    typedef typename Impl::locale_type locale_type;
 
     regex_traits()
-      : ImplT()
+      : Impl()
     {
     }
 
     explicit regex_traits(locale_type const &loc)
-      : ImplT(loc)
+      : Impl(loc)
     {
     }
 };
@@ -67,11 +67,11 @@ struct regex_traits
 ///////////////////////////////////////////////////////////////////////////////
 // lookup_classname
 /// INTERNAL ONLY
-template<typename TraitsT, std::size_t N>
-inline typename TraitsT::char_class_type
-lookup_classname(TraitsT const &traits, char const (&cname)[N], bool icase)
+template<typename Traits, std::size_t N>
+inline typename Traits::char_class_type
+lookup_classname(Traits const &traits, char const (&cname)[N], bool icase)
 {
-    typename TraitsT::char_type name[N] = {0};
+    typename Traits::char_type name[N] = {0};
     for(std::size_t j = 0; j < N-1; ++j)
     {
         name[j] = traits.widen(cname[j]);

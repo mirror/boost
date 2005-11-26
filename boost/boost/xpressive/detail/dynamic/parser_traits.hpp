@@ -31,18 +31,18 @@ namespace boost { namespace xpressive
 // compiler_traits
 //  this works for char and wchar_t. it must be specialized for anything else.
 //
-template<typename RegexTraitsT>
+template<typename RegexTraits>
 struct compiler_traits
 {
-    typedef typename RegexTraitsT::char_type char_type;
+    typedef typename RegexTraits::char_type char_type;
     typedef std::basic_string<char_type> string_type;
     typedef typename string_type::const_iterator iterator_type;
-    typedef RegexTraitsT regex_traits;
-    typedef typename RegexTraitsT::locale_type locale_type;
+    typedef RegexTraits regex_traits;
+    typedef typename RegexTraits::locale_type locale_type;
 
     ///////////////////////////////////////////////////////////////////////////////
     // constructor
-    explicit compiler_traits(RegexTraitsT const &traits = RegexTraitsT())
+    explicit compiler_traits(RegexTraits const &traits = RegexTraits())
       : traits_(traits)
       , flags_(regex_constants::ECMAScript)
       , space_(lookup_classname(traits_, "space"))

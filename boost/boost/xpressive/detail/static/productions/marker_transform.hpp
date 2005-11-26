@@ -17,18 +17,18 @@ namespace boost { namespace xpressive { namespace detail
 
     ///////////////////////////////////////////////////////////////////////////////
     // is_marker
-    template<typename OpT>
+    template<typename Op>
     struct is_marker
       : mpl::false_
     {};
 
-    template<typename OpT>
+    template<typename Op>
     struct is_marker
     <
         proto::binary_op
         <
             proto::unary_op<mark_begin_matcher, proto::noop_tag>
-          , OpT
+          , Op
           , proto::right_shift_tag
         >
     >
@@ -37,23 +37,23 @@ namespace boost { namespace xpressive { namespace detail
 
     ///////////////////////////////////////////////////////////////////////////////
     // mark_number
-    template<typename OpT, typename VisitorT>
+    template<typename Op, typename Visitor>
     int mark_number
     (
         proto::binary_op
         <
             proto::unary_op<mark_begin_matcher, proto::noop_tag>
-          , OpT
+          , Op
           , proto::right_shift_tag
         > const &op
-      , VisitorT &
+      , Visitor &
     )
     {
         return proto::arg(proto::left(op)).mark_number_;
     }
 
-    template<typename ArgT, typename VisitorT>
-    int mark_number(ArgT const &, VisitorT &visitor)
+    template<typename Arg, typename Visitor>
+    int mark_number(Arg const &, Visitor &visitor)
     {
         return visitor.get_hidden_mark();
     }
@@ -63,7 +63,7 @@ namespace boost { namespace xpressive { namespace detail
     //   Insert mark tags before and after the expression
     struct marker_transform
     {
-        template<typename OpT, typename, typename>
+        template<typename Op, typename, typename>
         struct apply
         {
             typedef proto::binary_op
@@ -71,7 +71,7 @@ namespace boost { namespace xpressive { namespace detail
                 proto::unary_op<mark_begin_matcher, proto::noop_tag>
               , proto::binary_op
                 <
-                    OpT
+                    Op
                   , proto::unary_op<mark_end_matcher, proto::noop_tag>
                   , proto::right_shift_tag
                 >
@@ -79,9 +79,9 @@ namespace boost { namespace xpressive { namespace detail
             > type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &, VisitorT &, int mark_nbr = -1)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &, Visitor &, int mark_nbr = -1)
         {
             return proto::noop(mark_begin_matcher(mark_nbr))
                 >> (op >> proto::noop(mark_end_matcher(mark_nbr)));

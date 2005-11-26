@@ -41,8 +41,8 @@ namespace boost { namespace proto
     {
     };
 
-    template<typename OpT, typename ParamT>
-    struct is_proxy<op_proxy<OpT, ParamT> >
+    template<typename Op, typename Param>
+    struct is_proxy<op_proxy<Op, Param> >
       : mpl::true_
     {
     };
@@ -57,12 +57,12 @@ namespace boost { namespace proto
 
     ///////////////////////////////////////////////////////////////////////////////
     // as_op
-    template<typename OpT>
-    struct as_op<OpT, true>
+    template<typename Op>
+    struct as_op<Op, true>
     {
-        typedef typename OpT::type type;
+        typedef typename Op::type type;
 
-        static typename OpT::const_reference make(OpT const &op)
+        static typename Op::const_reference make(Op const &op)
         {
             return op.cast();
         }
@@ -81,49 +81,49 @@ namespace boost { namespace proto
 
 // These operators must be members.
 #define BOOST_PROTO_DEFINE_MEMBER_OPS()                                                         \
-    template<typename ArgT>                                                                     \
-    binary_op<OpT, typename as_op<ArgT>::type, assign_tag> const                                \
-    operator =(ArgT const &arg) const                                                           \
+    template<typename Arg>                                                                     \
+    binary_op<Op, typename as_op<Arg>::type, assign_tag> const                                \
+    operator =(Arg const &arg) const                                                           \
     {                                                                                           \
-        return make_op<assign_tag>(this->cast(), as_op<ArgT>::make(arg));                       \
+        return make_op<assign_tag>(this->cast(), as_op<Arg>::make(arg));                       \
     }                                                                                           \
-    template<typename ArgT>                                                                     \
-    binary_op<OpT, typename as_op<ArgT>::type, subscript_tag> const                             \
-    operator [](ArgT const &arg) const                                                          \
+    template<typename Arg>                                                                     \
+    binary_op<Op, typename as_op<Arg>::type, subscript_tag> const                             \
+    operator [](Arg const &arg) const                                                          \
     {                                                                                           \
-        return make_op<subscript_tag>(this->cast(), as_op<ArgT>::make(arg));                    \
+        return make_op<subscript_tag>(this->cast(), as_op<Arg>::make(arg));                    \
     }                                                                                           \
-    nary_op<OpT> operator ()() const                                                            \
+    nary_op<Op> operator ()() const                                                            \
     {                                                                                           \
-        return nary_op<OpT>(this->cast());                                                      \
+        return nary_op<Op>(this->cast());                                                      \
     }                                                                                           \
     BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_INC(BOOST_PROTO_MAX_ARITY), BOOST_PROTO_FUN_OP, _)
 
 #define BOOST_PROTO_FUN_OP(z, n, _)                                                             \
     template<BOOST_PP_ENUM_PARAMS(n, typename A)>                                               \
-    nary_op<OpT BOOST_PP_ENUM_TRAILING_PARAMS(n, A)>                                            \
+    nary_op<Op BOOST_PP_ENUM_TRAILING_PARAMS(n, A)>                                            \
     operator ()(BOOST_PP_ENUM_BINARY_PARAMS(n, A, const &a)) const                              \
     {                                                                                           \
-        return nary_op<OpT BOOST_PP_ENUM_TRAILING_PARAMS(n, A)>                                 \
+        return nary_op<Op BOOST_PP_ENUM_TRAILING_PARAMS(n, A)>                                 \
             (this->cast() BOOST_PP_ENUM_TRAILING_PARAMS(n, a));                                 \
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // op_base
-    template<typename OpT>
+    template<typename Op>
     struct op_base : op_root
     {
-        typedef OpT type;
+        typedef Op type;
         typedef type const &const_reference;
 
-        OpT &cast()
+        Op &cast()
         {
-            return *static_cast<OpT *>(this);
+            return *static_cast<Op *>(this);
         }
 
-        OpT const &cast() const
+        Op const &cast() const
         {
-            return *static_cast<OpT const *>(this);
+            return *static_cast<Op const *>(this);
         }
 
         BOOST_PROTO_DEFINE_MEMBER_OPS()
@@ -131,11 +131,11 @@ namespace boost { namespace proto
 
     ///////////////////////////////////////////////////////////////////////////////
     // unary_op
-    template<typename ArgT, typename TagT>
-    struct unary_op : op_base<unary_op<ArgT, TagT> >
+    template<typename Arg, typename Tag>
+    struct unary_op : op_base<unary_op<Arg, Tag> >
     {
-        typedef typename value_type<ArgT>::type arg_type;
-        typedef TagT tag_type;
+        typedef typename value_type<Arg>::type arg_type;
+        typedef Tag tag_type;
 
         arg_type arg;
 
@@ -143,21 +143,21 @@ namespace boost { namespace proto
           : arg()
         {}
 
-        explicit unary_op(typename call_traits<ArgT>::param_type arg_)
+        explicit unary_op(typename call_traits<Arg>::param_type arg_)
           : arg(arg_)
         {}
 
-        using op_base<unary_op<ArgT, TagT> >::operator =;
+        using op_base<unary_op<Arg, Tag> >::operator =;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // binary_op
-    template<typename LeftT, typename RightT, typename TagT>
-    struct binary_op : op_base<binary_op<LeftT, RightT, TagT> >
+    template<typename Left, typename Right, typename Tag>
+    struct binary_op : op_base<binary_op<Left, Right, Tag> >
     {
-        typedef typename value_type<LeftT>::type left_type;
-        typedef typename value_type<RightT>::type right_type;
-        typedef TagT tag_type;
+        typedef typename value_type<Left>::type left_type;
+        typedef typename value_type<Right>::type right_type;
+        typedef Tag tag_type;
 
         left_type left;
         right_type right;
@@ -168,23 +168,23 @@ namespace boost { namespace proto
         {}
 
         binary_op(
-            typename call_traits<LeftT>::param_type left_
-          , typename call_traits<RightT>::param_type right_)
+            typename call_traits<Left>::param_type left_
+          , typename call_traits<Right>::param_type right_)
           : left(left_)
           , right(right_)
         {}
 
-        using op_base<binary_op<LeftT, RightT, TagT> >::operator =;
+        using op_base<binary_op<Left, Right, Tag> >::operator =;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // nary_op
-    template<typename FunT, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename A)>
+    template<typename Fun, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename A)>
     struct nary_op
-      : op_base<nary_op<FunT, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, A)> >
+      : op_base<nary_op<Fun, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, A)> >
     {
         typedef function_tag tag_type;
-        typedef FunT functor_type;
+        typedef Fun functor_type;
         typedef fusion::tuple<
             BOOST_PP_ENUM_BINARY_PARAMS(
                 BOOST_PROTO_MAX_ARITY, typename value_type<A, >::type BOOST_PP_INTERCEPT)
@@ -200,7 +200,7 @@ namespace boost { namespace proto
 
     #define BOOST_PROTO_NARY_OP_CTOR(z, n, _)                                                   \
         nary_op(                                                                                \
-            typename call_traits<FunT>::param_type fun                                          \
+            typename call_traits<Fun>::param_type fun                                          \
             BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(n, typename call_traits<A, >::param_type a))   \
           : functor(fun)                                                                        \
           , args(BOOST_PP_ENUM_PARAMS(n, a))                                                    \
@@ -210,24 +210,24 @@ namespace boost { namespace proto
 
     #undef BOOST_PROTO_NARY_OP_CTOR
 
-        using op_base<nary_op<FunT, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, A)> >::operator =;
+        using op_base<nary_op<Fun, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, A)> >::operator =;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // op_proxy
-    template<typename OpT, typename ParamT>
+    template<typename Op, typename Param>
     struct op_proxy
     {
-        typedef OpT type;
+        typedef Op type;
         typedef type const const_reference;
-        ParamT param_;
+        Param param_;
 
-        OpT const cast() const
+        Op const cast() const
         {
-            return OpT(this->param_);
+            return Op(this->param_);
         }
 
-        operator OpT const() const
+        operator Op const() const
         {
             return this->cast();
         }
@@ -235,18 +235,18 @@ namespace boost { namespace proto
         BOOST_PROTO_DEFINE_MEMBER_OPS()
     };
 
-    template<typename OpT>
-    struct op_proxy<OpT, void>
+    template<typename Op>
+    struct op_proxy<Op, void>
     {
-        typedef OpT type;
+        typedef Op type;
         typedef type const const_reference;
 
-        OpT const cast() const
+        Op const cast() const
         {
-            return OpT();
+            return Op();
         }
 
-        operator OpT const() const
+        operator Op const() const
         {
             return this->cast();
         }
@@ -256,20 +256,20 @@ namespace boost { namespace proto
 
     ///////////////////////////////////////////////////////////////////////////////
     // make_op
-    template<typename OpT, typename ArgT>
-    unary_op<ArgT, OpT> const
-    make_op(ArgT const &arg)
+    template<typename Op, typename Arg>
+    unary_op<Arg, Op> const
+    make_op(Arg const &arg)
     {
-        return unary_op<ArgT, OpT>(arg);
+        return unary_op<Arg, Op>(arg);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // make_op
-    template<typename OpT, typename LeftT, typename RightT>
-    binary_op<LeftT, RightT, OpT> const
-    make_op(LeftT const &left, RightT const &right)
+    template<typename Op, typename Left, typename Right>
+    binary_op<Left, Right, Op> const
+    make_op(Left const &left, Right const &right)
     {
-        return binary_op<LeftT, RightT, OpT>(left, right);
+        return binary_op<Left, Right, Op>(left, right);
     }
 
 }}

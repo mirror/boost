@@ -24,25 +24,25 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // finder
 //
-template<typename BidiIterT>
+template<typename BidiIter>
 struct finder
   : noncopyable
 {
     virtual ~finder() {}
-    virtual bool operator ()(state_type<BidiIterT> &state) const = 0;
+    virtual bool operator ()(state_type<BidiIter> &state) const = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // regex_impl
 //
-template<typename BidiIterT>
+template<typename BidiIter>
 struct regex_impl
-  : enable_reference_tracking<regex_impl<BidiIterT> >
+  : enable_reference_tracking<regex_impl<BidiIter> >
 {
-    typedef typename iterator_value<BidiIterT>::type char_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
 
     regex_impl()
-      : enable_reference_tracking<regex_impl<BidiIterT> >()
+      : enable_reference_tracking<regex_impl<BidiIter> >()
       , xpr_()
       , traits_()
       , finder_()
@@ -54,8 +54,8 @@ struct regex_impl
         #endif
     }
 
-    regex_impl(regex_impl<BidiIterT> const &that)
-      : enable_reference_tracking<regex_impl<BidiIterT> >(that)
+    regex_impl(regex_impl<BidiIter> const &that)
+      : enable_reference_tracking<regex_impl<BidiIter> >(that)
       , xpr_(that.xpr_)
       , traits_(that.traits_)
       , finder_(that.finder_)
@@ -74,9 +74,9 @@ struct regex_impl
         #endif
     }
 
-    void swap(regex_impl<BidiIterT> &that)
+    void swap(regex_impl<BidiIter> &that)
     {
-        enable_reference_tracking<regex_impl<BidiIterT> >::swap(that);
+        enable_reference_tracking<regex_impl<BidiIter> >::swap(that);
         this->xpr_.swap(that.xpr_);
         this->traits_.swap(that.traits_);
         this->finder_.swap(that.finder_);
@@ -84,9 +84,9 @@ struct regex_impl
         std::swap(this->hidden_mark_count_, that.hidden_mark_count_);
     }
 
-    shared_ptr<matchable<BidiIterT> const>  xpr_;
+    shared_ptr<matchable<BidiIter> const>  xpr_;
     shared_ptr<void const> traits_;
-    shared_ptr<finder<BidiIterT> > finder_;
+    shared_ptr<finder<BidiIter> > finder_;
     std::size_t mark_count_;
     std::size_t hidden_mark_count_;
 
@@ -96,8 +96,8 @@ struct regex_impl
 };
 
 #ifdef BOOST_XPRESSIVE_DEBUG_CYCLE_TEST
-template<typename BidiIterT>
-int regex_impl<BidiIterT>::instances = 0;
+template<typename BidiIter>
+int regex_impl<BidiIter>::instances = 0;
 #endif
 
 }}} // namespace boost::xpressive::detail

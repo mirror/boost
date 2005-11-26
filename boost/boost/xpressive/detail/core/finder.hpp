@@ -25,20 +25,20 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // boyer_moore_finder
 //
-template<typename BidiIterT, typename TraitsT>
+template<typename BidiIter, typename Traits>
 struct boyer_moore_finder
-  : finder<BidiIterT>
+  : finder<BidiIter>
 {
-    typedef typename iterator_value<BidiIterT>::type char_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
 
-    boyer_moore_finder(char_type const *begin, char_type const *end, TraitsT const &tr, bool icase)
+    boyer_moore_finder(char_type const *begin, char_type const *end, Traits const &tr, bool icase)
       : bm_(begin, end, tr, icase)
     {
     }
 
-    bool operator ()(state_type<BidiIterT> &state) const
+    bool operator ()(state_type<BidiIter> &state) const
     {
-        TraitsT const &traits = traits_cast<TraitsT>(state);
+        Traits const &traits = traits_cast<Traits>(state);
         state.cur_ = this->bm_.find(state.cur_, state.end_, traits);
         return state.cur_ != state.end_;
     }
@@ -47,26 +47,26 @@ private:
     boyer_moore_finder(boyer_moore_finder const &);
     boyer_moore_finder &operator =(boyer_moore_finder const &);
 
-    boyer_moore<BidiIterT, TraitsT> bm_;
+    boyer_moore<BidiIter, Traits> bm_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // hash_peek_finder
 //
-template<typename BidiIterT, typename TraitsT>
+template<typename BidiIter, typename Traits>
 struct hash_peek_finder
-  : finder<BidiIterT>
+  : finder<BidiIter>
 {
-    typedef typename iterator_value<BidiIterT>::type char_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
 
     hash_peek_finder(hash_peek_bitset<char_type> const &bset)
       : bset_(bset)
     {
     }
 
-    bool operator ()(state_type<BidiIterT> &state) const
+    bool operator ()(state_type<BidiIter> &state) const
     {
-        TraitsT const &traits = traits_cast<TraitsT>(state);
+        Traits const &traits = traits_cast<Traits>(state);
         state.cur_ = (this->bset_.icase() 
             ? this->find_(state.cur_, state.end_, traits, mpl::true_())
             : this->find_(state.cur_, state.end_, traits, mpl::false_()));
@@ -77,10 +77,10 @@ private:
     hash_peek_finder(hash_peek_finder const &);
     hash_peek_finder &operator =(hash_peek_finder const &);
 
-    template<typename ICaseT>
-    BidiIterT find_(BidiIterT begin, BidiIterT end, TraitsT const &traits, ICaseT) const
+    template<typename ICase>
+    BidiIter find_(BidiIter begin, BidiIter end, Traits const &traits, ICase) const
     {
-        for(; begin != end && !this->bset_.test(*begin, traits, ICaseT()); ++begin)
+        for(; begin != end && !this->bset_.test(*begin, traits, ICase()); ++begin)
             ;
         return begin;
     }
@@ -91,29 +91,29 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 // line_start_finder
 //
-template<typename BidiIterT, typename TraitsT, std::size_t SizeT = sizeof(typename iterator_value<BidiIterT>::type)>
+template<typename BidiIter, typename Traits, std::size_t Size = sizeof(typename iterator_value<BidiIter>::type)>
 struct line_start_finder
-  : finder<BidiIterT>
+  : finder<BidiIter>
 {
-    typedef typename iterator_value<BidiIterT>::type char_type;
-    typedef typename iterator_difference<BidiIterT>::type diff_type;
-    typedef typename TraitsT::char_class_type char_class_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
+    typedef typename iterator_difference<BidiIter>::type diff_type;
+    typedef typename Traits::char_class_type char_class_type;
 
-    line_start_finder(TraitsT const &traits)
+    line_start_finder(Traits const &traits)
       : newline_(lookup_classname(traits, "newline"))
     {
     }
 
-    bool operator ()(state_type<BidiIterT> &state) const
+    bool operator ()(state_type<BidiIter> &state) const
     {
         if(state.bos() && state.flags_.match_bol_)
         {
             return true;
         }
 
-        TraitsT const &traits = traits_cast<TraitsT>(state);
-        BidiIterT cur = state.cur_;
-        BidiIterT const end = state.end_;
+        Traits const &traits = traits_cast<Traits>(state);
+        BidiIter cur = state.cur_;
+        BidiIter const end = state.end_;
         std::advance(cur, static_cast<diff_type>(-!state.bos()));
 
         for(; cur != end; ++cur)
@@ -138,15 +138,15 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 // line_start_finder
 //
-template<typename BidiIterT, typename TraitsT>
-struct line_start_finder<BidiIterT, TraitsT, 1u>
-  : finder<BidiIterT>
+template<typename BidiIter, typename Traits>
+struct line_start_finder<BidiIter, Traits, 1u>
+  : finder<BidiIter>
 {
-    typedef typename iterator_value<BidiIterT>::type char_type;
-    typedef typename iterator_difference<BidiIterT>::type diff_type;
-    typedef typename TraitsT::char_class_type char_class_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
+    typedef typename iterator_difference<BidiIter>::type diff_type;
+    typedef typename Traits::char_class_type char_class_type;
 
-    line_start_finder(TraitsT const &traits)
+    line_start_finder(Traits const &traits)
     {
         char_class_type newline = lookup_classname(traits, "newline");
         for(int j = 0; j < 256; ++j)
@@ -155,15 +155,15 @@ struct line_start_finder<BidiIterT, TraitsT, 1u>
         }
     }
 
-    bool operator ()(state_type<BidiIterT> &state) const
+    bool operator ()(state_type<BidiIter> &state) const
     {
         if(state.bos() && state.flags_.match_bol_)
         {
             return true;
         }
 
-        BidiIterT cur = state.cur_;
-        BidiIterT const end = state.end_;
+        BidiIter cur = state.cur_;
+        BidiIter const end = state.end_;
         std::advance(cur, static_cast<diff_type>(-!state.bos()));
 
         for(; cur != end; ++cur)

@@ -34,10 +34,10 @@ namespace boost { namespace xpressive { namespace detail
     typedef static_xpression<any_matcher, true_xpression> any_sxpr;
     typedef matcher_wrapper<any_matcher> any_dxpr;
 
-    template<typename XprT, typename GreedyT, typename RandomT>
+    template<typename Xpr, typename Greedy, typename Random>
     struct simple_repeat_traits
     {
-        typedef typename mpl::if_<GreedyT, greedy_slow_tag, non_greedy_tag>::type tag_type;
+        typedef typename mpl::if_<Greedy, greedy_slow_tag, non_greedy_tag>::type tag_type;
     };
 
     template<>
@@ -55,17 +55,17 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // simple_repeat_matcher
     //
-    template<typename XprT, bool GreedyT>
+    template<typename Xpr, bool Greedy>
     struct simple_repeat_matcher
       : quant_style_variable_width
     {
-        typedef XprT xpr_type;
-        typedef mpl::bool_<GreedyT> greedy_type;
+        typedef Xpr xpr_type;
+        typedef mpl::bool_<Greedy> greedy_type;
 
-        XprT xpr_;
+        Xpr xpr_;
         unsigned int min_, max_;
 
-        simple_repeat_matcher(XprT const &xpr, unsigned int min, unsigned int max)
+        simple_repeat_matcher(Xpr const &xpr, unsigned int min, unsigned int max)
           : xpr_(xpr)
           , min_(min)
           , max_(max)
@@ -75,22 +75,22 @@ namespace boost { namespace xpressive { namespace detail
             BOOST_ASSERT(0 != max);
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match(state_type<BidiIterT> &state, NextT const &next) const
+        template<typename BidiIter, typename Next>
+        bool match(state_type<BidiIter> &state, Next const &next) const
         {
-            typedef mpl::bool_<is_random<BidiIterT>::value> is_rand;
-            typedef typename simple_repeat_traits<XprT, greedy_type, is_rand>::tag_type tag_type;
+            typedef mpl::bool_<is_random<BidiIter>::value> is_rand;
+            typedef typename simple_repeat_traits<Xpr, greedy_type, is_rand>::tag_type tag_type;
             return this->match_(state, next, tag_type());
         }
 
         // greedy, fixed-width quantifier
-        template<typename BidiIterT, typename NextT>
-        bool match_(state_type<BidiIterT> &state, NextT const &next, greedy_slow_tag) const
+        template<typename BidiIter, typename Next>
+        bool match_(state_type<BidiIter> &state, Next const &next, greedy_slow_tag) const
         {
             int const diff = -static_cast<int>(this->xpr_.get_width(&state));
             BOOST_ASSERT(diff != -static_cast<int>(unknown_width()));
             unsigned int matches = 0;
-            BidiIterT const tmp = state.cur_;
+            BidiIter const tmp = state.cur_;
 
             if(0 == diff)
             {
@@ -125,10 +125,10 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         // non-greedy fixed-width quantification
-        template<typename BidiIterT, typename NextT>
-        bool match_(state_type<BidiIterT> &state, NextT const &next, non_greedy_tag) const
+        template<typename BidiIter, typename Next>
+        bool match_(state_type<BidiIter> &state, Next const &next, non_greedy_tag) const
         {
-            BidiIterT const tmp = state.cur_;
+            BidiIter const tmp = state.cur_;
             unsigned int matches = 0;
 
             if(0 == this->xpr_.get_width(&state))
@@ -159,10 +159,10 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         // when greedily matching any character, skip to the end instead of iterating there.
-        template<typename BidiIterT, typename NextT>
-        bool match_(state_type<BidiIterT> &state, NextT const &next, greedy_fast_tag) const
+        template<typename BidiIter, typename Next>
+        bool match_(state_type<BidiIter> &state, Next const &next, greedy_fast_tag) const
         {
-            BidiIterT const tmp = state.cur_;
+            BidiIter const tmp = state.cur_;
             std::size_t const diff_to_end = static_cast<std::size_t>(state.end_ - tmp);
 
             // is there enough room?
@@ -171,7 +171,7 @@ namespace boost { namespace xpressive { namespace detail
                 return false;
             }
 
-            BidiIterT const min_iter = tmp + this->min_;
+            BidiIter const min_iter = tmp + this->min_;
             state.cur_ += (std::min)((std::size_t)this->max_, diff_to_end);
 
             for(;; --state.cur_)
@@ -188,8 +188,8 @@ namespace boost { namespace xpressive { namespace detail
             }
         }
 
-        template<typename BidiIterT>
-        std::size_t get_width(state_type<BidiIterT> *state) const
+        template<typename BidiIter>
+        std::size_t get_width(state_type<BidiIter> *state) const
         {
             if(this->min_ != this->max_)
             {

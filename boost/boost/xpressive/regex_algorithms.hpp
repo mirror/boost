@@ -32,8 +32,8 @@ namespace boost { namespace xpressive
 /// Determines whether there is an exact match between the regular expression re,
 /// and all of the sequence [begin, end).
 ///
-/// \pre Types BidiIterT and OtherBidiIterT meet the requirements of a Bidirectional Iterator (24.1.4).
-/// \pre OtherBidiIterT is convertible to BidiIterT.
+/// \pre Types BidiIter and OtherBidiIter meet the requirements of a Bidirectional Iterator (24.1.4).
+/// \pre OtherBidiIter is convertible to BidiIter.
 /// \pre [begin,end) denotes a valid iterator range.
 /// \param begin The beginning of the sequence.
 /// \param end The end of the sequence.
@@ -42,24 +42,24 @@ namespace boost { namespace xpressive
 /// \param flags Optional match flags, used to control how the expression is matched against the sequence. (See match_flag_type.)
 /// \return true if a match is found, false otherwise
 /// \throw regex_error on stack exhaustion
-template<typename OtherBidiIterT, typename BidiIterT>
+template<typename OtherBidiIter, typename BidiIter>
 inline bool regex_match
 (
-    OtherBidiIterT begin
-  , OtherBidiIterT end
-  , match_results<BidiIterT> &what
-  , basic_regex<BidiIterT> const &re
+    OtherBidiIter begin
+  , OtherBidiIter end
+  , match_results<BidiIter> &what
+  , basic_regex<BidiIter> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
-    typedef detail::core_access<BidiIterT> access;
+    typedef detail::core_access<BidiIter> access;
 
     // an invlid regex matches nothing
     if(!access::invalid(re))
     {
         // the state object holds matching state and
         // is passed by reference to all the matchers
-        detail::state_type<BidiIterT> state(begin, end, what, re, flags);
+        detail::state_type<BidiIter> state(begin, end, what, re, flags);
         state.flags_.match_all_ = true;
         state.sub_match(0).begin_ = begin;
 
@@ -81,42 +81,42 @@ inline bool regex_match
 }
 
 /// \overload
-template<typename OtherBidiIterT, typename BidiIterT>
+template<typename OtherBidiIter, typename BidiIter>
 inline bool regex_match
 (
-    OtherBidiIterT begin
-  , OtherBidiIterT end
-  , basic_regex<BidiIterT> const &re
+    OtherBidiIter begin
+  , OtherBidiIter end
+  , basic_regex<BidiIter> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
     // BUGBUG this is inefficient
-    match_results<BidiIterT> what;
+    match_results<BidiIter> what;
     return regex_match(begin, end, what, re, flags);
 }
 
 /// \overload
-template<typename CharT>
+template<typename Char>
 inline bool regex_match
 (
-    CharT const *begin
-  , match_results<CharT const*> &what
-  , basic_regex<CharT const*> const &re
+    Char const *begin
+  , match_results<Char const*> &what
+  , basic_regex<Char const*> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
     // BUGBUG this is inefficient
-    CharT const *end = begin + std::char_traits<CharT>::length(begin);
+    Char const *end = begin + std::char_traits<Char>::length(begin);
     return regex_match(begin, end, what, re, flags);
 }
 
 /// \overload
-template<typename CharT, typename TraitsT, typename AllocT>
+template<typename Char, typename Traits, typename Alloc>
 inline bool regex_match
 (
-    std::basic_string<CharT, TraitsT, AllocT> const &str
-  , match_results<typename std::basic_string<CharT, TraitsT, AllocT>::const_iterator> &what
-  , basic_regex<typename std::basic_string<CharT, TraitsT, AllocT>::const_iterator> const &re
+    std::basic_string<Char, Traits, Alloc> const &str
+  , match_results<typename std::basic_string<Char, Traits, Alloc>::const_iterator> &what
+  , basic_regex<typename std::basic_string<Char, Traits, Alloc>::const_iterator> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
@@ -124,30 +124,30 @@ inline bool regex_match
 }
 
 /// \overload
-template<typename CharT>
+template<typename Char>
 inline bool regex_match
 (
-    CharT const *begin
-  , basic_regex<CharT const *> const &re
+    Char const *begin
+  , basic_regex<Char const *> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
     // BUGBUG this is inefficient
-    match_results<CharT const *> what;
+    match_results<Char const *> what;
     return regex_match(begin, what, re, flags);
 }
 
 /// \overload
-template<typename CharT, typename TraitsT, typename AllocT>
+template<typename Char, typename Traits, typename Alloc>
 inline bool regex_match
 (
-    std::basic_string<CharT, TraitsT, AllocT> const &str
-  , basic_regex<typename std::basic_string<CharT, TraitsT, AllocT>::const_iterator> const &re
+    std::basic_string<Char, Traits, Alloc> const &str
+  , basic_regex<typename std::basic_string<Char, Traits, Alloc>::const_iterator> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
     // BUGBUG this is inefficient
-    match_results<typename std::basic_string<CharT, TraitsT, AllocT>::const_iterator> what;
+    match_results<typename std::basic_string<Char, Traits, Alloc>::const_iterator> what;
     return regex_match(str, what, re, flags);
 }
 
@@ -160,17 +160,17 @@ namespace detail
 {
 ///////////////////////////////////////////////////////////////////////////////
 // regex_search_impl
-template<typename BidiIterT>
+template<typename BidiIter>
 inline bool regex_search_impl
 (
-    state_type<BidiIterT> &state
-  , basic_regex<BidiIterT> const &re
+    state_type<BidiIter> &state
+  , basic_regex<BidiIter> const &re
   , bool not_initial_null = false
 )
 {
-    typedef core_access<BidiIterT> access;
-    typedef typename iterator_value<BidiIterT>::type char_type;
-    match_results<BidiIterT> &what = *state.context_.results_ptr_;
+    typedef core_access<BidiIter> access;
+    typedef typename iterator_value<BidiIter>::type char_type;
+    match_results<BidiIter> &what = *state.context_.results_ptr_;
 
     // an invlid regex matches nothing
     if(!access::invalid(re))
@@ -181,9 +181,9 @@ inline bool regex_search_impl
         restore null_restore = save(state.flags_.match_not_null_, not_null || not_initial_null);
         detail::ignore_unused(&null_restore);
 
-        regex_impl<BidiIterT> const &impl = *access::get_regex_impl(re);
-        BidiIterT const begin = state.cur_, end = state.end_;
-        BidiIterT &sub0begin = state.sub_match(0).begin_;
+        regex_impl<BidiIter> const &impl = *access::get_regex_impl(re);
+        BidiIter const begin = state.cur_, end = state.end_;
+        BidiIter &sub0begin = state.sub_match(0).begin_;
         sub0begin = state.cur_;
 
         // If match_continuous is set, we only need to check for a match at the current position
@@ -205,7 +205,7 @@ inline bool regex_search_impl
         // If we have a finder, use it to find where a potential match can start
         else if(impl.finder_)
         {
-            finder<BidiIterT> const &find = *impl.finder_;
+            finder<BidiIter> const &find = *impl.finder_;
             if(find(state))
             {
                 if(state.cur_ != begin)
@@ -274,8 +274,8 @@ inline bool regex_search_impl
 ///
 /// Determines whether there is some sub-sequence within [begin,end) that matches the regular expression re.
 ///
-/// \pre Types BidiIterT and OtherBidiIterT meet the requirements of a Bidirectional Iterator (24.1.4).
-/// \pre OtherBidiIterT is convertible to BidiIterT.
+/// \pre Types BidiIter and OtherBidiIter meet the requirements of a Bidirectional Iterator (24.1.4).
+/// \pre OtherBidiIter is convertible to BidiIter.
 /// \pre [begin,end) denotes a valid iterator range.
 /// \param begin The beginning of the sequence
 /// \param end The end of the sequence
@@ -284,24 +284,24 @@ inline bool regex_search_impl
 /// \param flags Optional match flags, used to control how the expression is matched against the sequence. (See match_flag_type.)
 /// \return true if a match is found, false otherwise
 /// \throw regex_error on stack exhaustion
-template<typename OtherBidiIterT, typename BidiIterT>
+template<typename OtherBidiIter, typename BidiIter>
 inline bool regex_search
 (
-    OtherBidiIterT begin
-  , OtherBidiIterT end
-  , match_results<BidiIterT> &what
-  , basic_regex<BidiIterT> const &re
+    OtherBidiIter begin
+  , OtherBidiIter end
+  , match_results<BidiIter> &what
+  , basic_regex<BidiIter> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
-    typedef detail::core_access<BidiIterT> access;
+    typedef detail::core_access<BidiIter> access;
 
     // an invlid regex matches nothing
     if(!access::invalid(re))
     {
         // the state object holds matching state and
         // is passed by reference to all the matchers
-        detail::state_type<BidiIterT> state(begin, end, what, re, flags);
+        detail::state_type<BidiIter> state(begin, end, what, re, flags);
         return detail::regex_search_impl(state, re);
     }
 
@@ -310,42 +310,42 @@ inline bool regex_search
 }
 
 /// \overload
-template<typename OtherBidiIterT, typename BidiIterT>
+template<typename OtherBidiIter, typename BidiIter>
 inline bool regex_search
 (
-    OtherBidiIterT begin
-  , OtherBidiIterT end
-  , basic_regex<BidiIterT> const &re
+    OtherBidiIter begin
+  , OtherBidiIter end
+  , basic_regex<BidiIter> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
     // BUGBUG this is inefficient
-    match_results<BidiIterT> what;
+    match_results<BidiIter> what;
     return regex_search(begin, end, what, re, flags);
 }
 
 /// \overload
-template<typename CharT>
+template<typename Char>
 inline bool regex_search
 (
-    CharT const *begin
-  , match_results<CharT const*> &what
-  , basic_regex<CharT const*> const &re
+    Char const *begin
+  , match_results<Char const*> &what
+  , basic_regex<Char const*> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
     // BUGBUG this is inefficient
-    CharT const *end = begin + std::char_traits<CharT>::length(begin);
+    Char const *end = begin + std::char_traits<Char>::length(begin);
     return regex_search(begin, end, what, re, flags);
 }
 
 /// \overload
-template<typename CharT, typename TraitsT, typename AllocT>
+template<typename Char, typename Traits, typename Alloc>
 inline bool regex_search
 (
-    std::basic_string<CharT, TraitsT, AllocT> const &str
-  , match_results<typename std::basic_string<CharT, TraitsT, AllocT>::const_iterator> &what
-  , basic_regex<typename std::basic_string<CharT, TraitsT, AllocT>::const_iterator> const &re
+    std::basic_string<Char, Traits, Alloc> const &str
+  , match_results<typename std::basic_string<Char, Traits, Alloc>::const_iterator> &what
+  , basic_regex<typename std::basic_string<Char, Traits, Alloc>::const_iterator> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
@@ -353,30 +353,30 @@ inline bool regex_search
 }
 
 /// \overload
-template<typename CharT>
+template<typename Char>
 inline bool regex_search
 (
-    CharT const *begin
-  , basic_regex<CharT const *> const &re
+    Char const *begin
+  , basic_regex<Char const *> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
     // BUGBUG this is inefficient
-    match_results<CharT const *> what;
+    match_results<Char const *> what;
     return regex_search(begin, what, re, flags);
 }
 
 /// \overload
-template<typename CharT, typename TraitsT, typename AllocT>
+template<typename Char, typename Traits, typename Alloc>
 inline bool regex_search
 (
-    std::basic_string<CharT, TraitsT, AllocT> const &str
-  , basic_regex<typename std::basic_string<CharT, TraitsT, AllocT>::const_iterator> const &re
+    std::basic_string<Char, Traits, Alloc> const &str
+  , basic_regex<typename std::basic_string<Char, Traits, Alloc>::const_iterator> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
     // BUGBUG this is inefficient
-    match_results<typename std::basic_string<CharT, TraitsT, AllocT>::const_iterator> what;
+    match_results<typename std::basic_string<Char, Traits, Alloc>::const_iterator> what;
     return regex_search(str, what, re, flags);
 }
 
@@ -388,8 +388,8 @@ inline bool regex_search
 
 /// \brief Build an output sequence given an input sequence, a regex, and a format string.
 ///
-/// Constructs a regex_iterator object: regex_iterator\< BidiIterT \> i(begin, end, re, flags),
-/// and uses i to enumerate through all of the matches m of type match_results\< BidiIterT \> that
+/// Constructs a regex_iterator object: regex_iterator\< BidiIter \> i(begin, end, re, flags),
+/// and uses i to enumerate through all of the matches m of type match_results\< BidiIter \> that
 /// occur within the sequence [begin, end). If no such matches are found and !(flags \& format_no_copy)
 /// then calls std::copy(begin, end, out). Otherwise, for each match found, if !(flags \& format_no_copy)
 /// calls std::copy(m.prefix().first, m.prefix().last, out), and then calls m.format(out, fmt, flags).
@@ -397,9 +397,9 @@ inline bool regex_search
 /// where last_m is a copy of the last match found. If flags \& format_first_only is non-zero then only
 /// the first match found is replaced.
 ///
-/// \pre Types BidiIterT and OtherBidiIterT meet the requirements of a Bidirectional Iterator (24.1.4).
-/// \pre Type OutIterT meets the requirements of an Output Iterator (24.1.2).
-/// \pre OtherBidiIterT is convertible to BidiIterT.
+/// \pre Types BidiIter and OtherBidiIter meet the requirements of a Bidirectional Iterator (24.1.4).
+/// \pre Type OutIter meets the requirements of an Output Iterator (24.1.2).
+/// \pre OtherBidiIter is convertible to BidiIter.
 /// \pre [begin,end) denotes a valid iterator range.
 ///
 /// \param out An output iterator into which the output sequence is written.
@@ -410,22 +410,22 @@ inline bool regex_search
 /// \param flags Optional match flags, used to control how the expression is matched against the sequence. (See match_flag_type.)
 /// \return The value of the output iterator after the output sequence has been written to it.
 /// \throw regex_error on stack exhaustion or invalid format string.
-template<typename OutIterT, typename OtherBidiIterT, typename BidiIterT>
-inline OutIterT regex_replace
+template<typename OutIter, typename OtherBidiIter, typename BidiIter>
+inline OutIter regex_replace
 (
-    OutIterT out
-  , OtherBidiIterT begin
-  , OtherBidiIterT end
-  , basic_regex<BidiIterT> const &re
-  , std::basic_string<typename iterator_value<BidiIterT>::type> const &fmt
+    OutIter out
+  , OtherBidiIter begin
+  , OtherBidiIter end
+  , basic_regex<BidiIter> const &re
+  , std::basic_string<typename iterator_value<BidiIter>::type> const &fmt
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
     using namespace regex_constants;
 
-    match_results<BidiIterT> what;
-    BidiIterT cur = begin;
-    detail::state_type<BidiIterT> state(begin, end, what, re, flags);
+    match_results<BidiIter> what;
+    BidiIter cur = begin;
+    detail::state_type<BidiIter> state(begin, end, what, re, flags);
     bool const yes_copy = (0 == (flags & format_no_copy));
 
     if(detail::regex_search_impl(state, re))
@@ -459,23 +459,23 @@ inline OutIterT regex_replace
 
     if(yes_copy)
     {
-        out = std::copy(cur, static_cast<BidiIterT>(end), out);
+        out = std::copy(cur, static_cast<BidiIter>(end), out);
     }
 
     return out;
 }
 
 /// \overload
-template<typename CharT>
-inline std::basic_string<CharT> regex_replace
+template<typename Char>
+inline std::basic_string<Char> regex_replace
 (
-    std::basic_string<CharT> const &str
-  , basic_regex<typename std::basic_string<CharT>::const_iterator> const &re
-  , std::basic_string<CharT> const &fmt
+    std::basic_string<Char> const &str
+  , basic_regex<typename std::basic_string<Char>::const_iterator> const &re
+  , std::basic_string<Char> const &fmt
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
-    std::basic_string<CharT> result;
+    std::basic_string<Char> result;
     result.reserve(fmt.length() * 2);
     regex_replace(std::back_inserter(result), str.begin(), str.end(), re, fmt, flags);
     return result;

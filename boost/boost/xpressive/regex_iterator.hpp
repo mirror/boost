@@ -26,16 +26,16 @@ namespace boost { namespace xpressive { namespace detail
 //////////////////////////////////////////////////////////////////////////
 // regex_iterator_impl
 //
-template<typename BidiIterT>
+template<typename BidiIter>
 struct regex_iterator_impl
   : private noncopyable
 {
     regex_iterator_impl
     (
-        BidiIterT begin
-      , BidiIterT cur
-      , BidiIterT end
-      , basic_regex<BidiIterT> const *rex
+        BidiIter begin
+      , BidiIter cur
+      , BidiIter end
+      , basic_regex<BidiIter> const *rex
       , regex_constants::match_flag_type flags
       , bool not_null = false
     )
@@ -57,7 +57,7 @@ struct regex_iterator_impl
         }
 
         // Report position() correctly by setting the base different from prefix().first
-        detail::core_access<BidiIterT>::set_base(this->what_, this->state_.begin_);
+        detail::core_access<BidiIter>::set_base(this->what_, this->state_.begin_);
 
         this->state_.cur_ = this->what_[0].second;
         this->not_null_ = (0 == this->what_.length());
@@ -65,7 +65,7 @@ struct regex_iterator_impl
         return true;
     }
 
-    bool equal_to(regex_iterator_impl<BidiIterT> const &that) const
+    bool equal_to(regex_iterator_impl<BidiIter> const &that) const
     {
         return this->rex_           == that.rex_
             && this->state_.begin_  == that.state_.begin_
@@ -75,9 +75,9 @@ struct regex_iterator_impl
             ;
     }
 
-    match_results<BidiIterT> what_;
-    state_type<BidiIterT> state_;
-    basic_regex<BidiIterT> const *const rex_;
+    match_results<BidiIter> what_;
+    state_type<BidiIter> state_;
+    basic_regex<BidiIter> const *const rex_;
     regex_constants::match_flag_type const flags_;
     bool not_null_;
 };
@@ -87,18 +87,18 @@ struct regex_iterator_impl
 //////////////////////////////////////////////////////////////////////////
 // regex_iterator
 //
-template<typename BidiIterT>
+template<typename BidiIter>
 struct regex_iterator
 {
-    typedef basic_regex<BidiIterT> regex_type;
-    typedef match_results<BidiIterT> value_type;
-    typedef typename iterator_difference<BidiIterT>::type difference_type;
+    typedef basic_regex<BidiIter> regex_type;
+    typedef match_results<BidiIter> value_type;
+    typedef typename iterator_difference<BidiIter>::type difference_type;
     typedef value_type const *pointer;
     typedef value_type const &reference;
     typedef std::forward_iterator_tag iterator_category;
 
     /// INTERNAL ONLY
-    typedef detail::regex_iterator_impl<BidiIterT> impl_type_;
+    typedef detail::regex_iterator_impl<BidiIter> impl_type_;
 
     regex_iterator()
       : impl_()
@@ -107,9 +107,9 @@ struct regex_iterator
 
     regex_iterator
     (
-        BidiIterT begin
-      , BidiIterT end
-      , basic_regex<BidiIterT> const &rex
+        BidiIter begin
+      , BidiIter end
+      , basic_regex<BidiIter> const &rex
       , regex_constants::match_flag_type flags = regex_constants::match_default
     )
       : impl_(new impl_type_(begin, begin, end, &rex, flags))
@@ -117,18 +117,18 @@ struct regex_iterator
         this->next_();
     }
 
-    regex_iterator(regex_iterator<BidiIterT> const &that)
+    regex_iterator(regex_iterator<BidiIter> const &that)
       : impl_(that.impl_) // COW
     {
     }
 
-    regex_iterator<BidiIterT> &operator =(regex_iterator<BidiIterT> const &that)
+    regex_iterator<BidiIter> &operator =(regex_iterator<BidiIter> const &that)
     {
         this->impl_ = that.impl_; // COW
         return *this;
     }
 
-    friend bool operator ==(regex_iterator<BidiIterT> const &left, regex_iterator<BidiIterT> const &right)
+    friend bool operator ==(regex_iterator<BidiIter> const &left, regex_iterator<BidiIter> const &right)
     {
         if(!left.impl_ || !right.impl_)
         {
@@ -138,7 +138,7 @@ struct regex_iterator
         return left.impl_->equal_to(*right.impl_);
     }
 
-    friend bool operator !=(regex_iterator<BidiIterT> const &left, regex_iterator<BidiIterT> const &right)
+    friend bool operator !=(regex_iterator<BidiIter> const &left, regex_iterator<BidiIter> const &right)
     {
         return !(left == right);
     }
@@ -175,16 +175,16 @@ struct regex_iterator
     /// \post (**this)[n].second == For all integers n \< (*this)-\>size(), the end of the sequence that matched sub-expression n. Alternatively, if sub-expression n did not participate in the match, then end.
     /// \post (**this)[n].matched == For all integers n \< (*this)-\>size(), true if sub-expression n participated in the match, false otherwise.
     /// \post (*this)-\>position() == The distance from the start of the original sequence being iterated, to the start of this match.
-    regex_iterator<BidiIterT> &operator ++()
+    regex_iterator<BidiIter> &operator ++()
     {
         this->fork_(); // un-share the implementation
         this->next_();
         return *this;
     }
 
-    regex_iterator<BidiIterT> operator ++(int)
+    regex_iterator<BidiIter> operator ++(int)
     {
-        regex_iterator<BidiIterT> tmp(*this);
+        regex_iterator<BidiIter> tmp(*this);
         ++*this;
         return tmp;
     }

@@ -29,11 +29,11 @@ namespace boost { namespace xpressive { namespace detail
     struct end_matcher
       : quant_style_assertion
     {
-        template<typename BidiIterT, typename NextT>
-        static bool match(state_type<BidiIterT> &state, NextT const &)
+        template<typename BidiIter, typename Next>
+        static bool match(state_type<BidiIter> &state, Next const &)
         {
-            BidiIterT const tmp = state.cur_;
-            sub_match_impl<BidiIterT> &s0 = state.sub_match(0);
+            BidiIter const tmp = state.cur_;
+            sub_match_impl<BidiIter> &s0 = state.sub_match(0);
             BOOST_ASSERT(!s0.matched);
 
             // SPECIAL: if there is a match context on the context stack, then

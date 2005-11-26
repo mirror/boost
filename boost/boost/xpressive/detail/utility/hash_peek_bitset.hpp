@@ -26,10 +26,10 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // hash_peek_bitset
 //
-template<typename CharT>
+template<typename Char>
 struct hash_peek_bitset
 {
-    typedef CharT char_type;
+    typedef Char char_type;
     typedef typename std::char_traits<char_type>::int_type int_type;
 
     hash_peek_bitset()
@@ -49,8 +49,8 @@ struct hash_peek_bitset
         this->bset_.set();
     }
 
-    template<typename TraitsT>
-    void set_char(char_type ch, bool icase, TraitsT const &traits)
+    template<typename Traits>
+    void set_char(char_type ch, bool icase, Traits const &traits)
     {
         if(this->test_icase_(icase))
         {
@@ -59,8 +59,8 @@ struct hash_peek_bitset
         }
     }
 
-    template<typename TraitsT>
-    void set_range(char_type from, char_type to, bool no, bool icase, TraitsT const &traits)
+    template<typename Traits>
+    void set_range(char_type from, char_type to, bool no, bool icase, Traits const &traits)
     {
         int_type ifrom = std::char_traits<char_type>::to_int_type(from);
         int_type ito = std::char_traits<char_type>::to_int_type(to);
@@ -81,8 +81,8 @@ struct hash_peek_bitset
         }
     }
 
-    template<typename TraitsT>
-    void set_class(typename TraitsT::char_class_type char_class, bool no, TraitsT const &traits)
+    template<typename Traits>
+    void set_class(typename Traits::char_class_type char_class, bool no, Traits const &traits)
     {
         if(1 != sizeof(char_type))
         {
@@ -102,12 +102,12 @@ struct hash_peek_bitset
         }
     }
 
-    void set_bitset(hash_peek_bitset<CharT> const &that)
+    void set_bitset(hash_peek_bitset<Char> const &that)
     {
         this->bset_ |= that.bset_;
     }
 
-    void set_charset(basic_chset_8bit<CharT> const &that, bool icase)
+    void set_charset(basic_chset_8bit<Char> const &that, bool icase)
     {
         if(this->test_icase_(icase))
         {
@@ -120,22 +120,22 @@ struct hash_peek_bitset
         return this->icase_;
     }
 
-    template<typename TraitsT>
-    bool test(char_type ch, TraitsT const &traits) const
+    template<typename Traits>
+    bool test(char_type ch, Traits const &traits) const
     {
         ch = this->icase_ ? traits.translate_nocase(ch) : traits.translate(ch);
         return this->bset_.test(traits.hash(ch));
     }
 
-    template<typename TraitsT>
-    bool test(char_type ch, TraitsT const &traits, mpl::false_) const
+    template<typename Traits>
+    bool test(char_type ch, Traits const &traits, mpl::false_) const
     {
         BOOST_ASSERT(!this->icase_);
         return this->bset_.test(traits.hash(traits.translate(ch)));
     }
 
-    template<typename TraitsT>
-    bool test(char_type ch, TraitsT const &traits, mpl::true_) const
+    template<typename Traits>
+    bool test(char_type ch, Traits const &traits, mpl::true_) const
     {
         BOOST_ASSERT(this->icase_);
         return this->bset_.test(traits.hash(traits.translate_nocase(ch)));

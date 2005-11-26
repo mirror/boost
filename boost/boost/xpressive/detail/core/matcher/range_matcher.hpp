@@ -26,38 +26,38 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // range_matcher
     //
-    template<typename TraitsT, bool ICaseT>
+    template<typename Traits, bool ICase>
     struct range_matcher
       : quant_style_fixed_width<1>
     {
-        typedef typename TraitsT::char_type char_type;
-        typedef mpl::bool_<ICaseT> icase_type;
+        typedef typename Traits::char_type char_type;
+        typedef mpl::bool_<ICase> icase_type;
         char_type ch_min_;
         char_type ch_max_;
         bool not_;
 
-        range_matcher(char_type ch_min, char_type ch_max, bool no, TraitsT const &)
+        range_matcher(char_type ch_min, char_type ch_max, bool no, Traits const &)
           : ch_min_(ch_min)
           , ch_max_(ch_max)
           , not_(no)
         {
         }
 
-        bool in_range(TraitsT const &traits, char_type ch, mpl::false_) const // case-sensitive
+        bool in_range(Traits const &traits, char_type ch, mpl::false_) const // case-sensitive
         {
             return traits.in_range(this->ch_min_, this->ch_max_, ch);
         }
 
-        bool in_range(TraitsT const &traits, char_type ch, mpl::true_) const // case-insensitive
+        bool in_range(Traits const &traits, char_type ch, mpl::true_) const // case-insensitive
         {
             return traits.in_range_nocase(this->ch_min_, this->ch_max_, ch);
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match(state_type<BidiIterT> &state, NextT const &next) const
+        template<typename BidiIter, typename Next>
+        bool match(state_type<BidiIter> &state, Next const &next) const
         {
             if(state.eos() || this->not_ ==
-                this->in_range(traits_cast<TraitsT>(state), *state.cur_, icase_type()))
+                this->in_range(traits_cast<Traits>(state), *state.cur_, icase_type()))
             {
                 return false;
             }

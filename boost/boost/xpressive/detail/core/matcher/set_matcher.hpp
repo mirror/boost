@@ -30,31 +30,31 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // set_matcher
 //
-template<typename TraitsT, int SizeT>
+template<typename Traits, int Size>
 struct set_matcher
   : quant_style_fixed_width<1>
 {
-    typedef typename TraitsT::char_type char_type;
-    char_type set_[ SizeT ? SizeT : 1 ];
+    typedef typename Traits::char_type char_type;
+    char_type set_[ Size ? Size : 1 ];
     bool not_;
     bool icase_;
 
-    typedef set_matcher<TraitsT, SizeT + 1> next_type;
-    friend struct set_matcher<TraitsT, SizeT - 1>;
+    typedef set_matcher<Traits, Size + 1> next_type;
+    friend struct set_matcher<Traits, Size - 1>;
 
-    set_matcher(TraitsT const &)
+    set_matcher(Traits const &)
       : set_()
       , not_(false)
       , icase_(false)
     {
     }
 
-    set_matcher(char_type ch, TraitsT const &traits)
+    set_matcher(char_type ch, Traits const &traits)
       : set_()
       , not_(false)
       , icase_(false)
     {
-        BOOST_MPL_ASSERT_RELATION(1, ==, SizeT);
+        BOOST_MPL_ASSERT_RELATION(1, ==, Size);
         this->set_[0] = traits.translate(ch);
     }
 
@@ -63,17 +63,17 @@ struct set_matcher
         this->not_ = !this->not_;
     }
 
-    void nocase(TraitsT const &traits)
+    void nocase(Traits const &traits)
     {
         this->icase_ = true;
 
-        for(int i = 0; i < SizeT; ++i)
+        for(int i = 0; i < Size; ++i)
         {
             this->set_[i] = traits.translate_nocase(this->set_[i]);
         }
     }
 
-    next_type push_back(char_type ch, TraitsT const &traits) const
+    next_type push_back(char_type ch, Traits const &traits) const
     {
         return next_type(*this, ch, traits);
     }
@@ -85,14 +85,14 @@ struct set_matcher
 
     char_type const *end() const
     {
-        return this->set_ + SizeT;
+        return this->set_ + Size;
     }
 
-    bool in_set(TraitsT const &traits, char_type ch) const
+    bool in_set(Traits const &traits, char_type ch) const
     {
         ch = this->icase_ ? traits.translate_nocase(ch) : traits.translate(ch);
 
-        if(1 == SizeT)
+        if(1 == Size)
         {
             return this->set_[0] == ch;
         }
@@ -102,10 +102,10 @@ struct set_matcher
         }
     }
 
-    template<typename BidiIterT, typename NextT>
-    bool match(state_type<BidiIterT> &state, NextT const &next) const
+    template<typename BidiIter, typename Next>
+    bool match(state_type<BidiIter> &state, Next const &next) const
     {
-        if(state.eos() || this->not_ == this->in_set(traits_cast<TraitsT>(state), *state.cur_))
+        if(state.eos() || this->not_ == this->in_set(traits_cast<Traits>(state), *state.cur_))
         {
             return false;
         }
@@ -120,13 +120,13 @@ struct set_matcher
 
 private:
 
-    set_matcher(set_matcher<TraitsT, SizeT - 1> const &that, char_type ch, TraitsT const &traits)
+    set_matcher(set_matcher<Traits, Size - 1> const &that, char_type ch, Traits const &traits)
       : set_()
       , not_(false)
       , icase_(that.icase_)
     {
         std::copy(that.begin(), that.end(), this->set_);
-        this->set_[ SizeT - 1 ] = traits.translate(ch);
+        this->set_[ Size - 1 ] = traits.translate(ch);
     }
 };
 

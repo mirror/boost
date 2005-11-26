@@ -19,59 +19,59 @@ namespace boost { namespace proto
     //   accepts a transformation as a lambda, applies the transformation to any
     //   parse tree passed in, and then compiles the result using the specified
     //   compiler
-    template<typename LambdaT, typename DomainTagT, typename CompilerT>
+    template<typename Lambda, typename DomainTag, typename Compiler>
     struct transform_compiler
     {
-        template<typename OpT, typename StateT, typename VisitorT>
+        template<typename Op, typename State, typename Visitor>
         struct apply
         {
-            typedef typename CompilerT::BOOST_NESTED_TEMPLATE apply
+            typedef typename Compiler::BOOST_NESTED_TEMPLATE apply
             <
-                typename LambdaT::BOOST_NESTED_TEMPLATE apply<OpT, StateT, VisitorT>::type
-              , StateT
-              , VisitorT
+                typename Lambda::BOOST_NESTED_TEMPLATE apply<Op, State, Visitor>::type
+              , State
+              , Visitor
             >::type type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &state, VisitorT &visitor)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &state, Visitor &visitor)
         {
-            return CompilerT::call(LambdaT::call(op, state, visitor), state, visitor);
+            return Compiler::call(Lambda::call(op, state, visitor), state, visitor);
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // if no compiler is specified, the transform_compiler forwards to the default
     // compiler
-    template<typename LambdaT, typename DomainTagT>
-    struct transform_compiler<LambdaT, DomainTagT, void>
+    template<typename Lambda, typename DomainTag>
+    struct transform_compiler<Lambda, DomainTag, void>
     {
-        template<typename OpT, typename StateT, typename VisitorT>
+        template<typename Op, typename State, typename Visitor>
         struct apply
         {
-            typedef typename LambdaT::BOOST_NESTED_TEMPLATE apply
+            typedef typename Lambda::BOOST_NESTED_TEMPLATE apply
             <
-                OpT
-              , StateT
-              , VisitorT
+                Op
+              , State
+              , Visitor
             >::type trans_type;
 
-            typedef proto::compiler<typename tag_type<trans_type>::type, DomainTagT> compiler_type;
+            typedef proto::compiler<typename tag_type<trans_type>::type, DomainTag> compiler_type;
 
             typedef typename compiler_type::BOOST_NESTED_TEMPLATE apply
             <
                 trans_type
-              , StateT
-              , VisitorT
+              , State
+              , Visitor
             >::type type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &state, VisitorT &visitor)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &state, Visitor &visitor)
         {
-            return proto::compile(LambdaT::call(op, state, visitor), state, visitor, DomainTagT());
+            return proto::compile(Lambda::call(op, state, visitor), state, visitor, DomainTag());
         }
     };
 
@@ -79,15 +79,15 @@ namespace boost { namespace proto
     // arg_transform
     struct arg_transform
     {
-        template<typename OpT, typename, typename>
+        template<typename Op, typename, typename>
         struct apply
         {
-            typedef typename arg_type<OpT>::type type;
+            typedef typename arg_type<Op>::type type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename arg_type<OpT>::const_reference
-        call(OpT const &op, StateT const &, VisitorT &)
+        template<typename Op, typename State, typename Visitor>
+        static typename arg_type<Op>::const_reference
+        call(Op const &op, State const &, Visitor &)
         {
             return proto::arg(op);
         }
@@ -97,15 +97,15 @@ namespace boost { namespace proto
     // left_transform
     struct left_transform
     {
-        template<typename OpT, typename, typename>
+        template<typename Op, typename, typename>
         struct apply
         {
-            typedef typename left_type<OpT>::type type;
+            typedef typename left_type<Op>::type type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename left_type<OpT>::const_reference
-        call(OpT const &op, StateT const &, VisitorT &)
+        template<typename Op, typename State, typename Visitor>
+        static typename left_type<Op>::const_reference
+        call(Op const &op, State const &, Visitor &)
         {
             return proto::left(op);
         }
@@ -115,15 +115,15 @@ namespace boost { namespace proto
     // right_transform
     struct right_transform
     {
-        template<typename OpT, typename, typename>
+        template<typename Op, typename, typename>
         struct apply
         {
-            typedef typename right_type<OpT>::type type;
+            typedef typename right_type<Op>::type type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename right_type<OpT>::const_reference
-        call(OpT const &op, StateT const &, VisitorT &)
+        template<typename Op, typename State, typename Visitor>
+        static typename right_type<Op>::const_reference
+        call(Op const &op, State const &, Visitor &)
         {
             return proto::right(op);
         }
@@ -132,25 +132,25 @@ namespace boost { namespace proto
     ///////////////////////////////////////////////////////////////////////////////
     // compose_transforms
     //   execute two transforms in succession
-    template<typename FirstT, typename SecondT>
+    template<typename First, typename Second>
     struct compose_transforms
     {
-        template<typename OpT, typename StateT, typename VisitorT>
+        template<typename Op, typename State, typename Visitor>
         struct apply
         {
-            typedef typename SecondT::BOOST_NESTED_TEMPLATE apply
+            typedef typename Second::BOOST_NESTED_TEMPLATE apply
             <
-                typename FirstT::BOOST_NESTED_TEMPLATE apply<OpT, StateT, VisitorT>::type
-              , StateT
-              , VisitorT
+                typename First::BOOST_NESTED_TEMPLATE apply<Op, State, Visitor>::type
+              , State
+              , Visitor
             >::type type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &state, VisitorT &visitor)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &state, Visitor &visitor)
         {
-            return SecondT::call(FirstT::call(op, state, visitor), state, visitor);
+            return Second::call(First::call(op, state, visitor), state, visitor);
         }
     };
 

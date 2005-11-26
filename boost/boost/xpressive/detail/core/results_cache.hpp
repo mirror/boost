@@ -27,13 +27,13 @@ namespace boost { namespace xpressive { namespace detail
 //   BUGBUG by using std::list, it makes construction of of an empty nested_results
 //   incur a dynamic allocation. As a result, construction an empty match_results is
 //   likewise not free. FIXME.
-template<typename BidiIterT>
+template<typename BidiIter>
 struct nested_results
-    : private std::list<match_results<BidiIterT> >
+    : private std::list<match_results<BidiIter> >
 {
-    friend struct results_cache<BidiIterT>;
-    friend struct match_results<BidiIterT>;
-    typedef std::list<match_results<BidiIterT> > base_type;
+    friend struct results_cache<BidiIter>;
+    friend struct match_results<BidiIter>;
+    typedef std::list<match_results<BidiIter> > base_type;
 
     using base_type::iterator;
     using base_type::const_iterator;
@@ -60,16 +60,16 @@ struct nested_results
 // results_cache
 //
 //   cache storage for reclaimed match_results structs
-template<typename BidiIterT>
+template<typename BidiIter>
 struct results_cache
 {
-    typedef core_access<BidiIterT> access;
+    typedef core_access<BidiIter> access;
 
-    match_results<BidiIterT> &append_new(nested_results<BidiIterT> &out)
+    match_results<BidiIter> &append_new(nested_results<BidiIter> &out)
     {
         if(this->cache_.empty())
         {
-            out.push_back(match_results<BidiIterT>());
+            out.push_back(match_results<BidiIter>());
         }
         else
         {
@@ -80,11 +80,11 @@ struct results_cache
     }
 
     // move the last match_results struct into the cache
-    void reclaim_last(nested_results<BidiIterT> &out)
+    void reclaim_last(nested_results<BidiIter> &out)
     {
         BOOST_ASSERT(!out.empty());
         // first, reclaim any nested results
-        nested_results<BidiIterT> &nested = access::get_nested_results(out.back());
+        nested_results<BidiIter> &nested = access::get_nested_results(out.back());
         if(!nested.empty())
         {
             this->reclaim_all(nested);
@@ -94,7 +94,7 @@ struct results_cache
     }
 
     // move the last n match_results structs into the cache
-    void reclaim_last_n(nested_results<BidiIterT> &out, std::size_t count)
+    void reclaim_last_n(nested_results<BidiIter> &out, std::size_t count)
     {
         for(; 0 != count; --count)
         {
@@ -102,14 +102,14 @@ struct results_cache
         }
     }
 
-    void reclaim_all(nested_results<BidiIterT> &out)
+    void reclaim_all(nested_results<BidiIter> &out)
     {
-        typedef typename nested_results<BidiIterT>::iterator iter_type;
+        typedef typename nested_results<BidiIter>::iterator iter_type;
 
         // first, recursively reclaim all the nested results
         for(iter_type begin = out.begin(); begin != out.end(); ++begin)
         {
-            nested_results<BidiIterT> &nested = access::get_nested_results(*begin);
+            nested_results<BidiIter> &nested = access::get_nested_results(*begin);
 
             if(!nested.empty())
             {
@@ -123,7 +123,7 @@ struct results_cache
 
 private:
 
-    nested_results<BidiIterT> cache_;
+    nested_results<BidiIter> cache_;
 };
 
 }}} // namespace boost::xpressive::detail

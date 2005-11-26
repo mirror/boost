@@ -37,10 +37,10 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // optimize_regex
 //
-template<typename BidiIterT, typename TraitsT>
-inline void optimize_regex(regex_impl<BidiIterT> &impl, TraitsT const &traits, mpl::true_)
+template<typename BidiIter, typename Traits>
+inline void optimize_regex(regex_impl<BidiIter> &impl, Traits const &traits, mpl::true_)
 {
-    typedef typename iterator_value<BidiIterT>::type char_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
 
     // optimization: get the peek chars OR the boyer-moore search string
     hash_peek_bitset<char_type> bset;
@@ -53,7 +53,7 @@ inline void optimize_regex(regex_impl<BidiIterT> &impl, TraitsT const &traits, m
     {
         impl.finder_.reset
         (
-            new boyer_moore_finder<BidiIterT, TraitsT>
+            new boyer_moore_finder<BidiIter, Traits>
             (
                 str.first->data()
               , str.first->data() + str.first->size()
@@ -66,14 +66,14 @@ inline void optimize_regex(regex_impl<BidiIterT> &impl, TraitsT const &traits, m
     {
         impl.finder_.reset
         (
-            new line_start_finder<BidiIterT, TraitsT>(traits)
+            new line_start_finder<BidiIter, Traits>(traits)
         );
     }
     else if(256 != bset.count())
     {
         impl.finder_.reset
         (
-            new hash_peek_finder<BidiIterT, TraitsT>(bset)
+            new hash_peek_finder<BidiIter, Traits>(bset)
         );
     }
 }
@@ -81,10 +81,10 @@ inline void optimize_regex(regex_impl<BidiIterT> &impl, TraitsT const &traits, m
 ///////////////////////////////////////////////////////////////////////////////
 // optimize_regex
 //
-template<typename BidiIterT, typename TraitsT>
-inline void optimize_regex(regex_impl<BidiIterT> &impl, TraitsT const &traits, mpl::false_)
+template<typename BidiIter, typename Traits>
+inline void optimize_regex(regex_impl<BidiIter> &impl, Traits const &traits, mpl::false_)
 {
-    typedef typename iterator_value<BidiIterT>::type char_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
 
     // optimization: get the peek chars OR the line start finder
     hash_peek_bitset<char_type> bset;
@@ -95,14 +95,14 @@ inline void optimize_regex(regex_impl<BidiIterT> &impl, TraitsT const &traits, m
     {
         impl.finder_.reset
         (
-            new line_start_finder<BidiIterT, TraitsT>(traits)
+            new line_start_finder<BidiIter, Traits>(traits)
         );
     }
     else if(256 != bset.count())
     {
         impl.finder_.reset
         (
-            new hash_peek_finder<BidiIterT, TraitsT>(bset)
+            new hash_peek_finder<BidiIter, Traits>(bset)
         );
     }
 }
@@ -113,11 +113,11 @@ inline void optimize_regex(regex_impl<BidiIterT> &impl, TraitsT const &traits, m
 // basic_regex
 //
 /// \brief Class template basic_regex\<\> is a class for holding a compiled regular expression.
-template<typename BidiIterT>
+template<typename BidiIter>
 struct basic_regex
 {
-    typedef BidiIterT iterator_type;
-    typedef typename iterator_value<BidiIterT>::type char_type;
+    typedef BidiIter iterator_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
     typedef std::basic_string<char_type> string_type;
     typedef regex_constants::syntax_option_type flag_type;
 
@@ -131,7 +131,7 @@ struct basic_regex
     /// \param that The basic_regex object to copy.
     /// \post regex_id()    == that.regex_id()
     /// \post mark_count()  == that.mark_count()
-    basic_regex(basic_regex<BidiIterT> const &that)
+    basic_regex(basic_regex<BidiIter> const &that)
       : impl_(that.impl_)
     {
     }
@@ -140,7 +140,7 @@ struct basic_regex
     /// \post regex_id()    == that.regex_id()
     /// \post mark_count()  == that.mark_count()
     /// \return *this
-    basic_regex<BidiIterT> &operator =(basic_regex<BidiIterT> const &that)
+    basic_regex<BidiIter> &operator =(basic_regex<BidiIter> const &that)
     {
         this->impl_ = that.impl_;
         return *this;
@@ -150,11 +150,11 @@ struct basic_regex
     /// Construct from a static regular expression.
     ///
     /// \param  xpr The static regular expression
-    /// \pre    XprT is the type of a static regular expression.
+    /// \pre    Xpr is the type of a static regular expression.
     /// \post   regex_id()   != 0
     /// \post   mark_count() \>= 0
-    template<typename XprT>
-    basic_regex(XprT const &xpr)
+    template<typename Xpr>
+    basic_regex(Xpr const &xpr)
       : impl_()
     {
         this->operator =(xpr);
@@ -163,13 +163,13 @@ struct basic_regex
     /// Construct from a static regular expression.
     ///
     /// \param  xpr The static regular expression.
-    /// \pre    XprT is the type of a static regular expression.
+    /// \pre    Xpr is the type of a static regular expression.
     /// \post   regex_id()   != 0
     /// \post   mark_count() \>= 0
     /// \throw  std::bad_alloc on out of memory
     /// \return *this
-    template<typename XprT>
-    basic_regex<BidiIterT> &operator =(XprT const &xpr)
+    template<typename Xpr>
+    basic_regex<BidiIter> &operator =(Xpr const &xpr)
     {
         // use default traits
         typedef regex_traits<char_type> traits_type;
@@ -178,14 +178,14 @@ struct basic_regex
     }
 
     /// INTERNAL ONLY
-    template<typename LocaleT, typename XprT>
-    basic_regex<BidiIterT> &operator =
+    template<typename Locale, typename Xpr>
+    basic_regex<BidiIter> &operator =
     (
-        proto::binary_op<detail::locale_modifier<LocaleT>, XprT, detail::modifier_tag> const &xpr
+        proto::binary_op<detail::locale_modifier<Locale>, Xpr, detail::modifier_tag> const &xpr
     )
     {
         // use specified traits
-        typedef typename detail::regex_traits_type<LocaleT, BidiIterT>::type traits_type;
+        typedef typename detail::regex_traits_type<Locale, BidiIter>::type traits_type;
         this->compile_(proto::right(xpr), traits_type(proto::left(xpr).getloc()));
         return *this;
     }
@@ -212,40 +212,40 @@ struct basic_regex
     /// contents with another basic_regex object, the change will not be visible to the enclosing
     /// regular expression. It is done this way to ensure that swap() cannot throw.
     /// \throw nothrow
-    void swap(basic_regex<BidiIterT> &that) // throw()
+    void swap(basic_regex<BidiIter> &that) // throw()
     {
         this->impl_.swap(that.impl_);
     }
 
     /// Factory method for building a regex object from a string.
-    /// Equivalent to regex_compiler\< BidiIterT \>().compile(str, flags);
+    /// Equivalent to regex_compiler\< BidiIter \>().compile(str, flags);
     ///
     /// \param str The std::basic_string containing the regular expression.
     /// \param flags Optional bitmask of type syntax_option_type to control how str is interpreted.
-    static basic_regex<BidiIterT> compile(string_type const &str, flag_type flags = regex_constants::ECMAScript)
+    static basic_regex<BidiIter> compile(string_type const &str, flag_type flags = regex_constants::ECMAScript)
     {
-        return regex_compiler<BidiIterT>().compile(str, flags);
+        return regex_compiler<BidiIter>().compile(str, flags);
     }
 
     // for binding actions to this regex when it is nested statically in another regex
     /// INTERNAL ONLY
-    template<typename ActionT>
+    template<typename Action>
     proto::binary_op
     <
-        proto::unary_op<basic_regex<BidiIterT>, proto::noop_tag>
-      , proto::unary_op<ActionT, proto::noop_tag>
+        proto::unary_op<basic_regex<BidiIter>, proto::noop_tag>
+      , proto::unary_op<Action, proto::noop_tag>
       , proto::right_shift_tag
     > const
-    operator [](detail::action_matcher<ActionT> const &action) const
+    operator [](detail::action_matcher<Action> const &action) const
     {
-        return proto::noop(*this) >> proto::noop(*static_cast<ActionT const *>(&action));
+        return proto::noop(*this) >> proto::noop(*static_cast<Action const *>(&action));
     }
 
     //{{AFX_DEBUG
     #ifndef NDEBUG
     // BUGBUG debug only
     /// INTERNAL ONLY
-    friend std::ostream &operator <<(std::ostream &sout, basic_regex<BidiIterT> const &rex)
+    friend std::ostream &operator <<(std::ostream &sout, basic_regex<BidiIter> const &rex)
     {
         rex.dump_(sout);
         return sout;
@@ -254,7 +254,7 @@ struct basic_regex
     //}}AFX_DEBUG
 
 private:
-    friend struct detail::core_access<BidiIterT>;
+    friend struct detail::core_access<BidiIter>;
 
     // Avoid a common programming mistake. Construction from a string is ambiguous. It could mean
     //   sregex rx = sregex::compile(str); // compile the string into a regex
@@ -268,35 +268,35 @@ private:
 
     // used from parser, via core_access
     /// INTERNAL ONLY
-    explicit basic_regex(detail::regex_impl<BidiIterT> const &that)
+    explicit basic_regex(detail::regex_impl<BidiIter> const &that)
       : impl_()
     {
         this->impl_.tracking_copy(that);
     }
 
     /// INTERNAL ONLY
-    template<typename XprT, typename TraitsT>
-    void compile_(XprT const &xpr, TraitsT const &traits)
+    template<typename Xpr, typename Traits>
+    void compile_(Xpr const &xpr, Traits const &traits)
     {
         // "compile" the regex and wrap it in an xpression_adaptor
-        detail::xpression_visitor<BidiIterT, mpl::false_, TraitsT> visitor(traits, this->impl_.get());
-        visitor.impl().traits_.reset(new TraitsT(visitor.traits()));
+        detail::xpression_visitor<BidiIter, mpl::false_, Traits> visitor(traits, this->impl_.get());
+        visitor.impl().traits_.reset(new Traits(visitor.traits()));
         visitor.impl().xpr_ = 
-            detail::make_adaptor<BidiIterT>(proto::compile(xpr, detail::end_xpression(), visitor, detail::seq_tag()));
+            detail::make_adaptor<BidiIter>(proto::compile(xpr, detail::end_xpression(), visitor, detail::seq_tag()));
 
         // "link" the regex
         detail::xpression_linker<char_type> linker(visitor.traits());
         visitor.impl().xpr_->link(linker);
 
         // optimization: get the peek chars OR the boyer-moore search string
-        detail::optimize_regex(visitor.impl(), visitor.traits(), detail::is_random<BidiIterT>());
+        detail::optimize_regex(visitor.impl(), visitor.traits(), detail::is_random<BidiIter>());
 
         // copy the implementation
         this->impl_.tracking_copy(visitor.impl());
     }
 
     /// INTERNAL ONLY
-    bool match_(detail::state_type<BidiIterT> &state) const
+    bool match_(detail::state_type<BidiIter> &state) const
     {
         return this->impl_->xpr_->match(state);
     }
@@ -313,7 +313,7 @@ private:
 
     // the tracking_ptr manages lazy-init, COW, cycle-breaking, and
     // reference/dependency tracking.
-    detail::tracking_ptr<detail::regex_impl<BidiIterT> > impl_;
+    detail::tracking_ptr<detail::regex_impl<BidiIter> > impl_;
 };
 
 //{{AFX_DEBUG
@@ -321,8 +321,8 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 // dump_
 /// INTERNAL ONLY
-template<typename BidiIterT>
-inline void basic_regex<BidiIterT>::dump_(std::ostream &sout) const
+template<typename BidiIter>
+inline void basic_regex<BidiIter>::dump_(std::ostream &sout) const
 {
     if(!this->impl_)
     {
@@ -347,8 +347,8 @@ inline void basic_regex<BidiIterT>::dump_(std::ostream &sout) const
 /// not be visible to the enclosing regular expression. It is done this way to
 /// ensure that swap() cannot throw.
 /// \throw nothrow
-template<typename BidiIterT>
-inline void swap(basic_regex<BidiIterT> &left, basic_regex<BidiIterT> &right) // throw()
+template<typename BidiIter>
+inline void swap(basic_regex<BidiIter> &left, basic_regex<BidiIter> &right) // throw()
 {
     left.swap(right);
 }

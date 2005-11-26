@@ -35,8 +35,8 @@ namespace boost { namespace xpressive { namespace detail
         {
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match(state_type<BidiIterT> &state, NextT const &next) const
+        template<typename BidiIter, typename Next>
+        bool match(state_type<BidiIter> &state, Next const &next) const
         {
             return next.pop_match(state, this->back_);
         }

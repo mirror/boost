@@ -27,25 +27,25 @@ namespace boost { namespace xpressive { namespace detail
 //
 //   wrap a static xpression in a matchable interface so it can be stored
 //   in and invoked from a basic_regex object.
-template<typename XprT, typename BidiIterT>
+template<typename Xpr, typename BidiIter>
 struct xpression_adaptor
-  : matchable<BidiIterT>
+  : matchable<BidiIter>
 {
-    typedef typename iterator_value<BidiIterT>::type char_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
 
-    XprT xpr_;
+    Xpr xpr_;
 
-    xpression_adaptor(typename call_traits<XprT>::param_type xpr)
+    xpression_adaptor(typename call_traits<Xpr>::param_type xpr)
       : xpr_(xpr)
     {
     }
 
-    bool match(state_type<BidiIterT> &state) const
+    bool match(state_type<BidiIter> &state) const
     {
         return this->xpr_.match(state);
     }
 
-    std::size_t get_width(state_type<BidiIterT> *state) const
+    std::size_t get_width(state_type<BidiIter> *state) const
     {
         return this->xpr_.get_width(state);
     }
@@ -67,10 +67,10 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 // make_adaptor
 //
-template<typename BidiIterT, typename XprT>
-inline shared_ptr<matchable<BidiIterT> const> make_adaptor(XprT const &xpr)
+template<typename BidiIter, typename Xpr>
+inline shared_ptr<matchable<BidiIter> const> make_adaptor(Xpr const &xpr)
 {
-    return shared_ptr<matchable<BidiIterT> const>(new xpression_adaptor<XprT, BidiIterT>(xpr));
+    return shared_ptr<matchable<BidiIter> const>(new xpression_adaptor<Xpr, BidiIter>(xpr));
 }
 
 }}} // namespace boost::xpressive::detail

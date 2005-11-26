@@ -53,10 +53,10 @@ namespace detail
     BOOST_MPL_ASSERT_RELATION(sizeof(umask_t), <=, sizeof(umaskex_t));
 
     // cast a ctype mask to a umaskex_t
-    template<std::ctype_base::mask MaskT>
+    template<std::ctype_base::mask Mask>
     struct mask_cast
     {
-        BOOST_STATIC_CONSTANT(umaskex_t, value = static_cast<umask_t>(MaskT));
+        BOOST_STATIC_CONSTANT(umaskex_t, value = static_cast<umask_t>(Mask));
     };
 
     #ifdef __CYGWIN__
@@ -70,8 +70,8 @@ namespace detail
     #endif
 
     #ifndef BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-    template<std::ctype_base::mask MaskT>
-    umaskex_t const mask_cast<MaskT>::value;
+    template<std::ctype_base::mask Mask>
+    umaskex_t const mask_cast<Mask>::value;
     #endif
 
     #ifndef BOOST_XPRESSIVE_BUGGY_CTYPE_FACET
@@ -181,7 +181,7 @@ namespace detail
     // cpp_regex_traits_base
     //   BUGBUG this should be replaced with a regex facet that lets you query for
     //   an array of underscore characters and an array of line separator characters.
-    template<typename CharT, std::size_t SizeOfCharT = sizeof(CharT)>
+    template<typename Char, std::size_t SizeOfChar = sizeof(Char)>
     struct cpp_regex_traits_base
     {
     protected:
@@ -189,7 +189,7 @@ namespace detail
         {
         }
 
-        static bool is(std::ctype<CharT> const &ct, CharT ch, umaskex_t mask)
+        static bool is(std::ctype<Char> const &ct, Char ch, umaskex_t mask)
         {
             #ifndef BOOST_XPRESSIVE_BUGGY_CTYPE_FACET
 
@@ -218,44 +218,44 @@ namespace detail
         }
 
     private:
-        static bool is_blank(CharT ch)
+        static bool is_blank(Char ch)
         {
             BOOST_MPL_ASSERT_RELATION('\t', ==, L'\t');
             return L'\t' == ch;
         }
 
-        static bool is_underscore(CharT ch)
+        static bool is_underscore(Char ch)
         {
             BOOST_MPL_ASSERT_RELATION('_', ==, L'_');
             return L'_' == ch;
         }
 
-        static bool is_newline(CharT ch)
+        static bool is_newline(Char ch)
         {
             BOOST_MPL_ASSERT_RELATION('\r', ==, L'\r');
             BOOST_MPL_ASSERT_RELATION('\n', ==, L'\n');
             BOOST_MPL_ASSERT_RELATION('\f', ==, L'\f');
             return L'\r' == ch || L'\n' == ch || L'\f' == ch
-                || (1 < SizeOfCharT && (0x2028u == ch || 0x2029u == ch || 0x85u == ch));
+                || (1 < SizeOfChar && (0x2028u == ch || 0x2029u == ch || 0x85u == ch));
         }
     };
 
     #ifndef BOOST_XPRESSIVE_BUGGY_CTYPE_FACET
 
-    template<typename CharT>
-    struct cpp_regex_traits_base<CharT, 1>
+    template<typename Char>
+    struct cpp_regex_traits_base<Char, 1>
     {
     protected:
         void imbue(std::locale const &loc)
         {
             int i = 0;
-            CharT allchars[UCHAR_MAX + 1];
+            Char allchars[UCHAR_MAX + 1];
             for(i = 0; i <= UCHAR_MAX; ++i)
             {
-                allchars[i] = static_cast<CharT>(i);
+                allchars[i] = static_cast<Char>(i);
             }
 
-            std::ctype<CharT> const &ct = BOOST_USE_FACET(std::ctype<CharT>, loc);
+            std::ctype<Char> const &ct = BOOST_USE_FACET(std::ctype<Char>, loc);
             std::ctype_base::mask tmp[UCHAR_MAX + 1];
             ct.is(allchars, allchars + UCHAR_MAX + 1, tmp);
             for(i = 0; i <= UCHAR_MAX; ++i)
@@ -272,7 +272,7 @@ namespace detail
             this->masks_[static_cast<unsigned char>('\f')] |= non_std_ctype_newline;
         }
  
-        bool is(std::ctype<CharT> const &, CharT ch, umaskex_t mask) const
+        bool is(std::ctype<Char> const &, Char ch, umaskex_t mask) const
         {
             return 0 != (this->masks_[static_cast<unsigned char>(ch)] & mask);
         }
@@ -283,7 +283,7 @@ namespace detail
 
     #endif
 
-    template<typename CharT>
+    template<typename Char>
     struct version_tag
     {
         typedef regex_traits_version_1_tag type;
@@ -302,16 +302,16 @@ namespace detail
 //
 /// \brief Encapsaulates a std::locale for use by the 
 /// basic_regex\<\> class template.
-template<typename CharT>
+template<typename Char>
 struct cpp_regex_traits
-  : detail::cpp_regex_traits_base<CharT>
+  : detail::cpp_regex_traits_base<Char>
 {
-    typedef CharT char_type;
+    typedef Char char_type;
     typedef std::basic_string<char_type> string_type;
     typedef std::locale locale_type;
     typedef detail::umaskex_t char_class_type;
-    typedef typename detail::version_tag<CharT>::type version_tag;
-    typedef detail::cpp_regex_traits_base<CharT> base_type;
+    typedef typename detail::version_tag<Char>::type version_tag;
+    typedef detail::cpp_regex_traits_base<Char> base_type;
 
     /// Initialize a cpp_regex_traits object to use the specified std::locale,
     /// or the global std::locale if none is specified.
@@ -339,7 +339,7 @@ struct cpp_regex_traits
         return this->loc_ != that.loc_;
     }
 
-    /// Convert a char to a CharT
+    /// Convert a char to a Char
     ///
     /// \param ch The source character.
     /// \return std::use_facet<std::ctype<char_type> >(this->getloc()).widen(ch).
@@ -348,13 +348,13 @@ struct cpp_regex_traits
         return this->ctype_->widen(ch);
     }
 
-    /// Returns a hash value for a CharT in the range [0, UCHAR_MAX]
+    /// Returns a hash value for a Char in the range [0, UCHAR_MAX]
     ///
     /// \param ch The source character.
     /// \return a value between 0 and UCHAR_MAX, inclusive.
     static unsigned char hash(char_type ch)
     {
-        return static_cast<unsigned char>(std::char_traits<CharT>::to_int_type(ch));
+        return static_cast<unsigned char>(std::char_traits<Char>::to_int_type(ch));
     }
 
     /// No-op
@@ -439,8 +439,8 @@ struct cpp_regex_traits
     /// then v.transform(G1, G2) < v.transform(H1, H2).
     ///
     /// \attention Not used in xpressive 1.0
-    template<typename FwdIterT>
-    string_type transform(FwdIterT begin, FwdIterT end) const
+    template<typename FwdIter>
+    string_type transform(FwdIter begin, FwdIter end) const
     {
         //string_type str(begin, end);
         //return this->transform(str.data(), str.data() + str.size());
@@ -455,8 +455,8 @@ struct cpp_regex_traits
     /// v.transform_primary(G1, G2) < v.transform_primary(H1, H2).
     /// 
     /// \attention Not used in xpressive 1.0
-    template<typename FwdIterT>
-    string_type transform_primary(FwdIterT begin, FwdIterT end) const
+    template<typename FwdIter>
+    string_type transform_primary(FwdIter begin, FwdIter end) const
     {
         BOOST_ASSERT(false); // TODO implement me
         return string_type();
@@ -467,8 +467,8 @@ struct cpp_regex_traits
     /// Returns an empty string if the character sequence is not a valid collating element.
     ///
     /// \attention Not used in xpressive 1.0
-    template<typename FwdIterT>
-    string_type lookup_collatename(FwdIterT begin, FwdIterT end) const
+    template<typename FwdIter>
+    string_type lookup_collatename(FwdIter begin, FwdIter end) const
     {
         BOOST_ASSERT(false); // TODO implement me
         return string_type();
@@ -483,8 +483,8 @@ struct cpp_regex_traits
     /// \param icase Specifies whether the returned bitmask should represent the case-insensitive
     ///     version of the character class.
     /// \return A bitmask representing the character class.
-    template<typename FwdIterT>
-    char_class_type lookup_classname(FwdIterT begin, FwdIterT end, bool icase) const
+    template<typename FwdIter>
+    char_class_type lookup_classname(FwdIter begin, FwdIter end, bool icase) const
     {
         static detail::umaskex_t const icase_masks =
             detail::std_ctype_lower | detail::std_ctype_upper;
@@ -606,11 +606,11 @@ private:
     ///////////////////////////////////////////////////////////////////////////////
     // lookup_classname_impl
     /// INTERNAL ONLY
-    template<typename FwdIterT>
-    static char_class_type lookup_classname_impl_(FwdIterT begin, FwdIterT end)
+    template<typename FwdIter>
+    static char_class_type lookup_classname_impl_(FwdIter begin, FwdIter end)
     {
         // find the classname
-        typedef cpp_regex_traits<CharT> this_t;
+        typedef cpp_regex_traits<Char> this_t;
         for(std::size_t j = 0; 0 != this_t::char_class(j).class_name_; ++j)
         {
             if(this_t::compare_(this_t::char_class(j).class_name_, begin, end))
@@ -622,8 +622,8 @@ private:
     }
 
     /// INTERNAL ONLY
-    template<typename FwdIterT>
-    static bool compare_(char_type const *name, FwdIterT begin, FwdIterT end)
+    template<typename FwdIter>
+    static bool compare_(char_type const *name, FwdIter begin, FwdIter end)
     {
         for(; *name && begin != end; ++name, ++begin)
         {

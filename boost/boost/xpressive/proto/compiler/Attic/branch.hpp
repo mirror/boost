@@ -15,38 +15,38 @@ namespace boost { namespace proto
 
     ///////////////////////////////////////////////////////////////////////////////
     // branch_compiler
-    template<typename LambdaT, typename DomainTagT>
+    template<typename Lambda, typename DomainTag>
     struct branch_compiler
     {
-        template<typename OpT, typename StateT, typename VisitorT>
+        template<typename Op, typename State, typename Visitor>
         struct apply
         {
-            typedef proto::compiler<typename tag_type<OpT>::type, DomainTagT> compiler_type;
+            typedef proto::compiler<typename tag_type<Op>::type, DomainTag> compiler_type;
 
             // Compile the branch
             typedef typename compiler_type::BOOST_NESTED_TEMPLATE apply
              <
-                OpT
-              , typename LambdaT::state_type
-              , VisitorT
+                Op
+              , typename Lambda::state_type
+              , Visitor
             >::type branch_type;
 
             // Pass the branch, state and visitor to the lambda
-            typedef typename LambdaT::BOOST_NESTED_TEMPLATE apply
+            typedef typename Lambda::BOOST_NESTED_TEMPLATE apply
             <
                 branch_type
-              , StateT
-              , VisitorT
+              , State
+              , Visitor
             >::type type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &state, VisitorT &visitor)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &state, Visitor &visitor)
         {
-            return LambdaT::call
+            return Lambda::call
             (
-                proto::compile(op, typename LambdaT::state_type(), visitor, DomainTagT())
+                proto::compile(op, typename Lambda::state_type(), visitor, DomainTag())
               , state
               , visitor
             );

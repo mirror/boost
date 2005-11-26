@@ -21,16 +21,16 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // sub_match_impl
 //
-template<typename BidiIterT>
+template<typename BidiIter>
 struct sub_match_impl
-  : sub_match<BidiIterT>
+  : sub_match<BidiIter>
 {
     unsigned int repeat_count_;
-    BidiIterT begin_;
+    BidiIter begin_;
     bool zero_width_;
 
     sub_match_impl()
-      : sub_match<BidiIterT>()
+      : sub_match<BidiIter>()
       , repeat_count_(0)
       , begin_()
       , zero_width_(false)

@@ -17,31 +17,31 @@ namespace boost { namespace proto
     ///////////////////////////////////////////////////////////////////////////////
     // switch_compiler
     //  applies a transform, then looks up the appropriate compiler in a map
-    template<typename LambdaT, typename MapT>
+    template<typename Lambda, typename Map>
     struct switch_compiler
     {
-        template<typename OpT, typename StateT, typename VisitorT>
+        template<typename Op, typename State, typename Visitor>
         struct apply
         {
             typedef typename boost::mpl::at
             <
-                MapT
-              , typename LambdaT::BOOST_NESTED_TEMPLATE apply<OpT, StateT, VisitorT>::type
+                Map
+              , typename Lambda::BOOST_NESTED_TEMPLATE apply<Op, State, Visitor>::type
             >::type compiler_type;
             
             typedef typename compiler_type::BOOST_NESTED_TEMPLATE apply
             <
-                OpT
-              , StateT
-              , VisitorT
+                Op
+              , State
+              , Visitor
             >::type type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &state, VisitorT &visitor)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &state, Visitor &visitor)
         {
-            typedef typename apply<OpT, StateT, VisitorT>::compiler_type compiler_type;
+            typedef typename apply<Op, State, Visitor>::compiler_type compiler_type;
             return compiler_type::call(op, state, visitor);
         }
     };

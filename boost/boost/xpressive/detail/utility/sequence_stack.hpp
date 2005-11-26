@@ -181,8 +181,8 @@ public:
         this->begin_ = this->curr_ = this->end_ = 0;
     }
 
-    template<bool FillT>
-    T *push_sequence(std::size_t count, mpl::bool_<FillT>)
+    template<bool Fill>
+    T *push_sequence(std::size_t count, mpl::bool_<Fill>)
     {
         // This is the ptr to return
         T *ptr = this->curr_;
@@ -200,7 +200,7 @@ public:
             return this->grow_(count);
         }
 
-        if(FillT)
+        if(Fill)
         {
             std::fill_n(ptr, count, T());
         }

@@ -29,26 +29,26 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // get_width
     //
-    template<typename XprT>
-    inline std::size_t get_width(XprT const &xpr)
+    template<typename Xpr>
+    inline std::size_t get_width(Xpr const &xpr)
     {
         return xpr.get_width(static_cast<state_type<char const *>*>(0));
     }
 
-    template<typename BidiIterT>
-    inline std::size_t get_width(shared_ptr<matchable<BidiIterT> const> const &xpr)
+    template<typename BidiIter>
+    inline std::size_t get_width(shared_ptr<matchable<BidiIter> const> const &xpr)
     {
         return xpr->get_width(0);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // lookbehind_matcher
-    //   XprT can be either a static_xpression, or a shared_ptr<matchable>
-    template<typename XprT>
+    //   Xpr can be either a static_xpression, or a shared_ptr<matchable>
+    template<typename Xpr>
     struct lookbehind_matcher
-      : quant_style<quant_none, mpl::size_t<0>, is_pure<XprT> >
+      : quant_style<quant_none, mpl::size_t<0>, is_pure<Xpr> >
     {
-        lookbehind_matcher(XprT const &xpr, bool no = false, bool do_save = !is_pure<XprT>::value)
+        lookbehind_matcher(Xpr const &xpr, bool no = false, bool do_save = !is_pure<Xpr>::value)
           : xpr_(xpr)
           , not_(no)
           , do_save_(do_save)
@@ -58,20 +58,20 @@ namespace boost { namespace xpressive { namespace detail
                 "Variable-width look-behind assertions are not supported");
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match(state_type<BidiIterT> &state, NextT const &next) const
+        template<typename BidiIter, typename Next>
+        bool match(state_type<BidiIter> &state, Next const &next) const
         {
-            // Note that if is_pure<XprT>::value is true, the compiler can optimize this.
-            return is_pure<XprT>::value || !this->do_save_
+            // Note that if is_pure<Xpr>::value is true, the compiler can optimize this.
+            return is_pure<Xpr>::value || !this->do_save_
                 ? this->match_(state, next, mpl::true_())
                 : this->match_(state, next, mpl::false_());
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match_(state_type<BidiIterT> &state, NextT const &next, mpl::true_) const
+        template<typename BidiIter, typename Next>
+        bool match_(state_type<BidiIter> &state, Next const &next, mpl::true_) const
         {
-            typedef typename iterator_difference<BidiIterT>::type difference_type;
-            BidiIterT const tmp = state.cur_;
+            typedef typename iterator_difference<BidiIter>::type difference_type;
+            BidiIter const tmp = state.cur_;
             if(!detail::advance_to(state.cur_, -static_cast<difference_type>(this->width_), state.begin_))
             {
                 state.cur_ = tmp;
@@ -109,11 +109,11 @@ namespace boost { namespace xpressive { namespace detail
             return false;
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match_(state_type<BidiIterT> &state, NextT const &next, mpl::false_) const
+        template<typename BidiIter, typename Next>
+        bool match_(state_type<BidiIter> &state, Next const &next, mpl::false_) const
         {
-            typedef typename iterator_difference<BidiIterT>::type difference_type;
-            BidiIterT const tmp = state.cur_;
+            typedef typename iterator_difference<BidiIter>::type difference_type;
+            BidiIter const tmp = state.cur_;
             if(!detail::advance_to(state.cur_, -static_cast<difference_type>(this->width_), state.begin_))
             {
                 state.cur_ = tmp;
@@ -121,7 +121,7 @@ namespace boost { namespace xpressive { namespace detail
             }
 
             // matching xpr could produce side-effects, save state
-            memento<BidiIterT> mem = save_sub_matches(state);
+            memento<BidiIter> mem = save_sub_matches(state);
 
             if(this->not_)
             {
@@ -164,7 +164,7 @@ namespace boost { namespace xpressive { namespace detail
             return false;
         }
 
-        XprT xpr_;
+        Xpr xpr_;
         bool not_;
         bool do_save_; // true if matching xpr_ could modify the sub-matches
         std::size_t width_;

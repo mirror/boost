@@ -38,25 +38,25 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // results_extras
 //
-template<typename BidiIterT>
+template<typename BidiIter>
 struct results_extras
 {
-    sequence_stack<sub_match_impl<BidiIterT> > sub_match_stack_;
-    results_cache<BidiIterT> results_cache_;
+    sequence_stack<sub_match_impl<BidiIter> > sub_match_stack_;
+    results_cache<BidiIter> results_cache_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // results_traits
 //
-template<typename CharT>
+template<typename Char>
 struct results_traits
 {
-    static int value(CharT ch, int radix = 10)
+    static int value(Char ch, int radix = 10)
     {
         BOOST_ASSERT(10 == radix);
-        if(ch >= BOOST_XPR_CHAR_(CharT, '0') && ch <= BOOST_XPR_CHAR_(CharT, '9'))
+        if(ch >= BOOST_XPR_CHAR_(Char, '0') && ch <= BOOST_XPR_CHAR_(Char, '9'))
         {
-            return ch - BOOST_XPR_CHAR_(CharT, '0');
+            return ch - BOOST_XPR_CHAR_(Char, '0');
         }
         return -1;
     }
@@ -76,7 +76,7 @@ struct results_traits
 /// The class template match_results\<\> conforms to the requirements of a Sequence, as specified
 /// in (lib.sequence.reqmts), except that only operations defined for const-qualified Sequences are
 /// supported.
-template<typename BidiIterT>
+template<typename BidiIter>
 struct match_results
 {
 private:
@@ -84,17 +84,17 @@ private:
     typedef int dummy::*bool_type;
 
 public:
-    typedef typename iterator_value<BidiIterT>::type char_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
     typedef std::basic_string<char_type> string_type;
     typedef std::size_t size_type;
-    typedef sub_match<BidiIterT> value_type;
-    typedef typename iterator_difference<BidiIterT>::type difference_type;
+    typedef sub_match<BidiIter> value_type;
+    typedef typename iterator_difference<BidiIter>::type difference_type;
     typedef value_type const &reference;
     typedef value_type const &const_reference;
 
-    typedef typename detail::sub_match_vector<BidiIterT>::iterator iterator;
-    typedef typename detail::sub_match_vector<BidiIterT>::const_iterator const_iterator;
-    typedef typename detail::nested_results<BidiIterT> nested_results_type;
+    typedef typename detail::sub_match_vector<BidiIter>::iterator iterator;
+    typedef typename detail::sub_match_vector<BidiIter>::const_iterator const_iterator;
+    typedef typename detail::nested_results<BidiIter> nested_results_type;
 
     /// \post regex_id() == 0
     /// \post size()     == 0
@@ -121,7 +121,7 @@ public:
     /// \post (*this)[n]  == that[n] for all positive integers n \< that.size().
     /// \post length(n)   == that.length(n) for all positive integers n \< that.size().
     /// \post position(n) == that.position(n) for all positive integers n \< that.size().
-    match_results(match_results<BidiIterT> const &that)
+    match_results(match_results<BidiIter> const &that)
       : regex_id_(that.regex_id_)
       , sub_matches_()
       , base_()
@@ -135,8 +135,8 @@ public:
         {
             extras_type &extras = this->get_extras_();
             std::size_t size = that.sub_matches_.size();
-            detail::sub_match_impl<BidiIterT> *sub_matches = extras.sub_match_stack_.push_sequence(size);
-            detail::core_access<BidiIterT>::init_sub_match_vector(this->sub_matches_, sub_matches, size, that.sub_matches_);
+            detail::sub_match_impl<BidiIter> *sub_matches = extras.sub_match_stack_.push_sequence(size);
+            detail::core_access<BidiIter>::init_sub_match_vector(this->sub_matches_, sub_matches, size, that.sub_matches_);
 
             // BUGBUG this doesn't share the extras::sequence_stack
             this->nested_results_ = that.nested_results_;
@@ -160,9 +160,9 @@ public:
     /// \post (*this)[n]  == that[n] for all positive integers n \< that.size().
     /// \post length(n)   == that.length(n) for all positive integers n \< that.size().
     /// \post position(n) == that.position(n) for all positive integers n \< that.size().
-    match_results<BidiIterT> &operator =(match_results<BidiIterT> const &that)
+    match_results<BidiIter> &operator =(match_results<BidiIter> const &that)
     {
-        match_results<BidiIterT>(that).swap(*this);
+        match_results<BidiIter>(that).swap(*this);
         return *this;
     }
 
@@ -277,15 +277,15 @@ public:
         return this->nested_results_;
     }
 
-    /// Copies the character sequence [fmt.begin(), fmt.end()) to OutputIteratorT out. For each format
+    /// Copies the character sequence [fmt.begin(), fmt.end()) to OutputIterator out. For each format
     /// specifier or escape sequence in fmt, replace that sequence with either the character(s) it
     /// represents, or the sequence within *this to which it refers. The bitmasks specified in flags
     /// determines what format specifiers or escape sequences are recognized, by default this is the
     /// format used by ECMA-262, ECMAScript Language Specification, Chapter 15 part 5.4.11 String.prototype.replace.
-    template<typename OutputIteratorT>
-    OutputIteratorT format
+    template<typename OutputIterator>
+    OutputIterator format
     (
-        OutputIteratorT out
+        OutputIterator out
       , const string_type &fmt
       , regex_constants::match_flag_type flags = regex_constants::format_default
     ) const
@@ -361,7 +361,7 @@ public:
     /// \post *this contains the sequence of matched sub-expressions that were in that,
     /// that contains the sequence of matched sub-expressions that were in *this.
     /// \throw nothrow
-    void swap(match_results<BidiIterT> &that) // throw()
+    void swap(match_results<BidiIter> &that) // throw()
     {
         std::swap(this->regex_id_, that.regex_id_);
         this->sub_matches_.swap(that.sub_matches_);
@@ -374,12 +374,12 @@ public:
     }
 
     /// INTERNAL ONLY
-    match_results<BidiIterT> const &operator ()(regex_id_type regex_id, size_type index = 0) const
+    match_results<BidiIter> const &operator ()(regex_id_type regex_id, size_type index = 0) const
     {
         // BUGBUG this is linear, make it O(1)
-        static match_results<BidiIterT> const s_null;
+        static match_results<BidiIter> const s_null;
 
-        regex_id_filter_predicate<BidiIterT> pred(regex_id);
+        regex_id_filter_predicate<BidiIter> pred(regex_id);
         typename nested_results_type::const_iterator
             begin = this->nested_results_.begin()
           , end = this->nested_results_.end()
@@ -389,41 +389,41 @@ public:
     }
 
     /// INTERNAL ONLY
-    match_results<BidiIterT> const &operator ()(basic_regex<BidiIterT> const &rex, std::size_t index = 0) const
+    match_results<BidiIter> const &operator ()(basic_regex<BidiIter> const &rex, std::size_t index = 0) const
     {
         return (*this)(rex.regex_id(), index);
     }
 
     // state:
     /// INTERNAL ONLY
-    template<typename StateT>
-    void set_action_state(StateT &state)
+    template<typename State>
+    void set_action_state(State &state)
     {
         this->action_state_.set(state);
     }
 
     /// INTERNAL ONLY
-    template<typename StateT>
-    StateT &get_action_state() const
+    template<typename State>
+    State &get_action_state() const
     {
-        return this->action_state_.BOOST_NESTED_TEMPLATE get<StateT>();
+        return this->action_state_.BOOST_NESTED_TEMPLATE get<State>();
     }
 
 private:
 
-    friend struct detail::core_access<BidiIterT>;
-    typedef detail::results_extras<BidiIterT> extras_type;
+    friend struct detail::core_access<BidiIter>;
+    typedef detail::results_extras<BidiIter> extras_type;
 
     /// INTERNAL ONLY
     void init_
     (
         regex_id_type regex_id
-      , detail::sub_match_impl<BidiIterT> *sub_matches
+      , detail::sub_match_impl<BidiIter> *sub_matches
       , size_type size
     )
     {
         this->regex_id_ = regex_id;
-        detail::core_access<BidiIterT>::init_sub_match_vector(this->sub_matches_, sub_matches, size);
+        detail::core_access<BidiIter>::init_sub_match_vector(this->sub_matches_, sub_matches, size);
     }
 
     /// INTERNAL ONLY
@@ -438,7 +438,7 @@ private:
     }
 
     /// INTERNAL ONLY
-    void set_prefix_suffix_(BidiIterT begin, BidiIterT end)
+    void set_prefix_suffix_(BidiIter begin, BidiIter end)
     {
         this->base_ = begin;
 
@@ -454,20 +454,20 @@ private:
     /// INTERNAL ONLY
     void reset_()
     {
-        detail::core_access<BidiIterT>::init_sub_match_vector(this->sub_matches_, 0, 0);
+        detail::core_access<BidiIter>::init_sub_match_vector(this->sub_matches_, 0, 0);
     }
 
     /// INTERNAL ONLY
-    void set_base_(BidiIterT base)
+    void set_base_(BidiIter base)
     {
         this->base_ = base;
     }
 
     regex_id_type regex_id_;
-    detail::sub_match_vector<BidiIterT> sub_matches_;
-    BidiIterT base_;
-    sub_match<BidiIterT> prefix_;
-    sub_match<BidiIterT> suffix_;
+    detail::sub_match_vector<BidiIter> sub_matches_;
+    BidiIter base_;
+    sub_match<BidiIter> prefix_;
+    sub_match<BidiIter> suffix_;
     nested_results_type nested_results_;
     detail::action_state action_state_;
     shared_ptr<extras_type> extras_ptr_;
@@ -476,25 +476,25 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 // action_state_cast
 /// INTERNAL ONLY
-template<typename StateT, typename BidiIterT>
-inline StateT &action_state_cast(match_results<BidiIterT> const &what)
+template<typename State, typename BidiIter>
+inline State &action_state_cast(match_results<BidiIter> const &what)
 {
-    return what.BOOST_NESTED_TEMPLATE get_action_state<StateT>();
+    return what.BOOST_NESTED_TEMPLATE get_action_state<State>();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // regex_id_filter_predicate
 //
-template<typename BidiIterT>
+template<typename BidiIter>
 struct regex_id_filter_predicate
-  : std::unary_function<match_results<BidiIterT>, bool>
+  : std::unary_function<match_results<BidiIter>, bool>
 {
     regex_id_filter_predicate(regex_id_type regex_id)
       : regex_id_(regex_id)
     {
     }
 
-    bool operator ()(match_results<BidiIterT> const &res) const
+    bool operator ()(match_results<BidiIter> const &res) const
     {
         return this->regex_id_ == res.regex_id();
     }

@@ -26,33 +26,33 @@ namespace boost { namespace xpressive
 ///////////////////////////////////////////////////////////////////////////////
 // action
 //
-template<typename ActionT, typename SavedT>
+template<typename Action, typename Saved>
 struct action
-  : detail::action_matcher<ActionT>
+  : detail::action_matcher<Action>
 {
-    typedef ActionT action_type;
-    typedef SavedT saved_type;
+    typedef Action action_type;
+    typedef Saved saved_type;
 
-    SavedT &save()
+    Saved &save()
     {
-        return *static_cast<SavedT *>(this);
+        return *static_cast<Saved *>(this);
     }
 
-    template<typename BidiIterT>
-    bool operator ()(match_results<BidiIterT> const &match, BidiIterT cur)
+    template<typename BidiIter>
+    bool operator ()(match_results<BidiIter> const &match, BidiIter cur)
     {
         return true;
     }
 
-    void restore(SavedT const &saved)
+    void restore(Saved const &saved)
     {
         this->action_() = saved;
     }
 };
 
-template<typename ActionT>
-struct action<ActionT, void>
-  : action<ActionT, int>
+template<typename Action>
+struct action<Action, void>
+  : action<Action, int>
 {
     int save()
     {

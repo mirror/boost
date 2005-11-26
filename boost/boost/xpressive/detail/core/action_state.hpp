@@ -43,24 +43,24 @@ namespace boost { namespace xpressive { namespace detail
         {
         }
 
-        template<typename StateT>
-        void set(StateT &state)
+        template<typename State>
+        void set(State &state)
         {
-            this->type_ptr_ = &type_info_ex<StateT>::type_info_ptr_;
+            this->type_ptr_ = &type_info_ex<State>::type_info_ptr_;
             this->ptr_ = &state;
         }
 
-        template<typename StateT>
-        StateT &get() const
+        template<typename State>
+        State &get() const
         {
-            if(&type_info_ex<StateT>::type_info_ptr_ != this->type_ptr_ &&
-                (0 == this->type_ptr_ || **this->type_ptr_ != typeid(StateT)))
+            if(&type_info_ex<State>::type_info_ptr_ != this->type_ptr_ &&
+                (0 == this->type_ptr_ || **this->type_ptr_ != typeid(State)))
             {
                 throw std::invalid_argument(std::string("bad action_state_cast"));
             }
 
             BOOST_ASSERT(0 != this->ptr_);
-            return *static_cast<StateT *>(this->ptr_);
+            return *static_cast<State *>(this->ptr_);
         }
 
         std::type_info const *const *type_ptr_;

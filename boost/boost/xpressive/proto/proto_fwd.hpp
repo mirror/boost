@@ -75,42 +75,42 @@ namespace boost { namespace proto
 
     struct function_tag;
 
-    template<typename TagT>
+    template<typename Tag>
     struct is_unary;
 
-    template<typename TagT>
+    template<typename Tag>
     struct is_binary;
 
-    template<typename TagT>
+    template<typename Tag>
     struct is_nary;
 
-    template<typename ArgT, typename OpT>
+    template<typename Arg, typename Op>
     struct unary_op;
 
-    template<typename LeftT, typename RightT, typename OpT>
+    template<typename Left, typename Right, typename Op>
     struct binary_op;
 
-    template<typename OpT, typename ParamT = void>
+    template<typename Op, typename Param = void>
     struct op_proxy;
 
     template
     <
-        typename FunT
+        typename Fun
       , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, fusion::void_t)
     >
     struct nary_op;
 
-    template<typename OpT, typename ArgT>
-    unary_op<ArgT, OpT> const
-    make_op(ArgT const &arg);
+    template<typename Op, typename Arg>
+    unary_op<Arg, Op> const
+    make_op(Arg const &arg);
 
-    template<typename OpT, typename LeftT, typename RightT>
-    binary_op<LeftT, RightT, OpT> const
-    make_op(LeftT const &left, RightT const &right);
+    template<typename Op, typename Left, typename Right>
+    binary_op<Left, Right, Op> const
+    make_op(Left const &left, Right const &right);
 
-    template<typename ArgT>
-    unary_op<ArgT, noop_tag> const
-    noop(ArgT const &arg);
+    template<typename Arg>
+    unary_op<Arg, noop_tag> const
+    noop(Arg const &arg);
 
     struct op_root;
 
@@ -120,43 +120,43 @@ namespace boost { namespace proto
     template<typename T>
     struct is_op;
 
-    template<typename T, bool IsOpT = is_op<T>::value>
+    template<typename T, bool IsOp = is_op<T>::value>
     struct as_op;
 
-    template<typename OpT>
+    template<typename Op>
     struct op_base;
 
     template<typename T>
     struct value_type;
 
-    template<typename OpT>
+    template<typename Op>
     struct arg_type;
 
-    template<typename OpT>
+    template<typename Op>
     struct left_type;
 
-    template<typename OpT>
+    template<typename Op>
     struct right_type;
 
-    template<typename OpT>
+    template<typename Op>
     struct tag_type;
 
-    template<typename OpTagT, typename DomainTagT, typename DummyT = void>
+    template<typename OpTag, typename DomainTag, typename Dummy = void>
     struct compiler;
 
-    template<typename OpTagT, typename DomainTagT, bool RightFirstT = true>
+    template<typename OpTag, typename DomainTag, bool RightFirst = true>
     struct fold_compiler;
 
-    template<typename LambdaT, typename DomainTagT, typename CompilerT = void>
+    template<typename Lambda, typename DomainTag, typename Compiler = void>
     struct transform_compiler;
 
-    template<typename LambdaT, typename DomainTagT>
+    template<typename Lambda, typename DomainTag>
     struct branch_compiler;
 
-    template<typename PredicateT, typename IfCompilerT, typename ElseCompilerT>
+    template<typename Predicate, typename IfCompiler, typename ElseCompiler>
     struct conditional_compiler;
 
-    template<typename LambdaT, typename MapT>
+    template<typename Lambda, typename Map>
     struct switch_compiler;
 
     struct error_compiler;
@@ -167,47 +167,29 @@ namespace boost { namespace proto
 
     struct right_transform;
 
-    template<typename FirstT, typename SecondT>
+    template<typename First, typename Second>
     struct compose_transforms;
 
-    template<typename OpT>
-    typename arg_type<OpT>::const_reference arg(OpT const &op);
+    template<typename Op>
+    typename arg_type<Op>::const_reference arg(Op const &op);
 
-    template<typename OpT>
-    typename left_type<OpT>::const_reference left(OpT const &op);
+    template<typename Op>
+    typename left_type<Op>::const_reference left(Op const &op);
 
-    template<typename OpT>
-    typename right_type<OpT>::const_reference right(OpT const &op);
+    template<typename Op>
+    typename right_type<Op>::const_reference right(Op const &op);
 
-    //template<typename ArgT, typename TagT>
-    //typename value_type<ArgT>::type const &arg(unary_op<ArgT, TagT> const &op);
-
-    //template<typename ArgT, typename TagT, typename ParamT>
-    //typename value_type<ArgT>::type const arg(op_proxy<unary_op<ArgT, TagT>, ParamT> const &op);
-
-    //template<typename LeftT, typename RightT, typename TagT>
-    //typename value_type<LeftT>::type const &left(binary_op<LeftT, RightT, TagT> const &op);
-
-    //template<typename LeftT, typename RightT, typename TagT, typename ParamT>
-    //typename value_type<LeftT>::type const left(op_proxy<binary_op<LeftT, RightT, TagT>, ParamT> const &op);
-
-    //template<typename LeftT, typename RightT, typename TagT>
-    //typename value_type<RightT>::type const &right(binary_op<LeftT, RightT, TagT> const &op);
-
-    //template<typename LeftT, typename RightT, typename TagT, typename ParamT>
-    //typename value_type<RightT>::type const right(op_proxy<binary_op<LeftT, RightT, TagT>, ParamT> const &op);
-
-    template<typename OpT, typename StateT, typename VisitorT, typename DomainTagT>
+    template<typename Op, typename State, typename Visitor, typename DomainTag>
     typename lazy_enable_if<
-        is_op<OpT>
-      , typename compiler<typename tag_type<OpT>::type, DomainTagT>::BOOST_NESTED_TEMPLATE apply
+        is_op<Op>
+      , typename compiler<typename tag_type<Op>::type, DomainTag>::BOOST_NESTED_TEMPLATE apply
         <
-            OpT
-          , StateT
-          , VisitorT
+            Op
+          , State
+          , Visitor
         >
     >::type const
-    compile(OpT const &op, StateT const &state, VisitorT &visitor, DomainTagT tag_type);
+    compile(Op const &op, State const &state, Visitor &visitor, DomainTag tag_type);
 
 }} // namespace boost::proto
 

@@ -23,132 +23,132 @@ namespace boost { namespace xpressive { namespace detail
 //  basic_chset: character set implementation
 //
 ///////////////////////////////////////////////////////////////////////////////
-template<typename CharT>
-inline basic_chset<CharT>::basic_chset()
+template<typename Char>
+inline basic_chset<Char>::basic_chset()
 {
 }
 
 //////////////////////////////////
-template<typename CharT>
-inline basic_chset<CharT>::basic_chset(basic_chset const &arg)
+template<typename Char>
+inline basic_chset<Char>::basic_chset(basic_chset const &arg)
   : rr_(arg.rr_)
 {
 }
 
 //////////////////////////////////
-template<typename CharT>
-inline bool basic_chset<CharT>::empty() const
+template<typename Char>
+inline bool basic_chset<Char>::empty() const
 {
     return this->rr_.empty();
 }
 
 //////////////////////////////////
-template<typename CharT>
-template<typename TraitsT>
-inline bool basic_chset<CharT>::test(CharT v, TraitsT const &, mpl::false_) const // case-sensitive
+template<typename Char>
+template<typename Traits>
+inline bool basic_chset<Char>::test(Char v, Traits const &, mpl::false_) const // case-sensitive
 {
     return this->rr_.test(v);
 }
 
 //////////////////////////////////
-template<typename CharT>
-template<typename TraitsT>
-inline bool basic_chset<CharT>::test(CharT v, TraitsT const &traits, mpl::true_) const // case-insensitive
+template<typename Char>
+template<typename Traits>
+inline bool basic_chset<Char>::test(Char v, Traits const &traits, mpl::true_) const // case-insensitive
 {
     return this->rr_.test(v, traits);
 }
 
 //////////////////////////////////
-template<typename CharT>
-inline void basic_chset<CharT>::set(CharT from, CharT to)
+template<typename Char>
+inline void basic_chset<Char>::set(Char from, Char to)
 {
-    this->rr_.set(range<CharT>(from, to));
+    this->rr_.set(range<Char>(from, to));
 }
 
 //////////////////////////////////
-template<typename CharT>
-template<typename TraitsT>
-inline void basic_chset<CharT>::set(CharT from, CharT to, TraitsT const &)
+template<typename Char>
+template<typename Traits>
+inline void basic_chset<Char>::set(Char from, Char to, Traits const &)
 {
-    this->rr_.set(range<CharT>(from, to));
+    this->rr_.set(range<Char>(from, to));
 }
 
 //////////////////////////////////
-template<typename CharT>
-inline void basic_chset<CharT>::set(CharT c)
+template<typename Char>
+inline void basic_chset<Char>::set(Char c)
 {
-    this->rr_.set(range<CharT>(c, c));
+    this->rr_.set(range<Char>(c, c));
 }
 
 //////////////////////////////////
-template<typename CharT>
-template<typename TraitsT>
-inline void basic_chset<CharT>::set(CharT c, TraitsT const &)
+template<typename Char>
+template<typename Traits>
+inline void basic_chset<Char>::set(Char c, Traits const &)
 {
-    this->rr_.set(range<CharT>(c, c));
+    this->rr_.set(range<Char>(c, c));
 }
 
 //////////////////////////////////
-template<typename CharT>
-inline void basic_chset<CharT>::clear(CharT c)
+template<typename Char>
+inline void basic_chset<Char>::clear(Char c)
 {
-    this->rr_.clear(range<CharT>(c, c));
+    this->rr_.clear(range<Char>(c, c));
 }
 
 //////////////////////////////////
-template<typename CharT>
-template<typename TraitsT>
-inline void basic_chset<CharT>::clear(CharT c, TraitsT const &)
+template<typename Char>
+template<typename Traits>
+inline void basic_chset<Char>::clear(Char c, Traits const &)
 {
-    this->rr_.clear(range<CharT>(c, c));
+    this->rr_.clear(range<Char>(c, c));
 }
 
 //////////////////////////////////
-template<typename CharT>
-inline void basic_chset<CharT>::clear(CharT from, CharT to)
+template<typename Char>
+inline void basic_chset<Char>::clear(Char from, Char to)
 {
-    this->rr_.clear(range<CharT>(from, to));
+    this->rr_.clear(range<Char>(from, to));
 }
 
 //////////////////////////////////
-template<typename CharT>
-template<typename TraitsT>
-inline void basic_chset<CharT>::clear(CharT from, CharT to, TraitsT const &)
+template<typename Char>
+template<typename Traits>
+inline void basic_chset<Char>::clear(Char from, Char to, Traits const &)
 {
-    this->rr_.clear(range<CharT>(from, to));
+    this->rr_.clear(range<Char>(from, to));
 }
 
 //////////////////////////////////
-template<typename CharT>
-inline void basic_chset<CharT>::clear()
+template<typename Char>
+inline void basic_chset<Char>::clear()
 {
     this->rr_.clear();
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline void basic_chset<CharT>::inverse()
+template<typename Char>
+inline void basic_chset<Char>::inverse()
 {
     // BUGBUG is this right? Does this handle icase correctly?
-    basic_chset<CharT> inv;
-    inv.set((std::numeric_limits<CharT>::min)(), (std::numeric_limits<CharT>::max)());
+    basic_chset<Char> inv;
+    inv.set((std::numeric_limits<Char>::min)(), (std::numeric_limits<Char>::max)());
     inv -= *this;
     this->swap(inv);
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline void basic_chset<CharT>::swap(basic_chset<CharT> &that)
+template<typename Char>
+inline void basic_chset<Char>::swap(basic_chset<Char> &that)
 {
     this->rr_.swap(that.rr_);
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline basic_chset<CharT> &
-basic_chset<CharT>::operator |=(basic_chset<CharT> const &that)
+template<typename Char>
+inline basic_chset<Char> &
+basic_chset<Char>::operator |=(basic_chset<Char> const &that)
 {
-    typedef typename range_run<CharT>::const_iterator const_iterator;
+    typedef typename range_run<Char>::const_iterator const_iterator;
     for(const_iterator iter = that.rr_.begin(); iter != that.rr_.end(); ++iter)
     {
         this->rr_.set(*iter);
@@ -157,23 +157,23 @@ basic_chset<CharT>::operator |=(basic_chset<CharT> const &that)
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline basic_chset<CharT> &
-basic_chset<CharT>::operator &=(basic_chset<CharT> const &that)
+template<typename Char>
+inline basic_chset<Char> &
+basic_chset<Char>::operator &=(basic_chset<Char> const &that)
 {
-    basic_chset<CharT> inv;
-    inv.set((std::numeric_limits<CharT>::min)(), (std::numeric_limits<CharT>::max)());
+    basic_chset<Char> inv;
+    inv.set((std::numeric_limits<Char>::min)(), (std::numeric_limits<Char>::max)());
     inv -= that;
     *this -= inv;
     return *this;
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline basic_chset<CharT> &
-basic_chset<CharT>::operator -=(basic_chset<CharT> const &that)
+template<typename Char>
+inline basic_chset<Char> &
+basic_chset<Char>::operator -=(basic_chset<Char> const &that)
 {
-    typedef typename range_run<CharT>::const_iterator const_iterator;
+    typedef typename range_run<Char>::const_iterator const_iterator;
     for(const_iterator iter = that.rr_.begin(); iter != that.rr_.end(); ++iter)
     {   
         this->rr_.clear(*iter);
@@ -182,9 +182,9 @@ basic_chset<CharT>::operator -=(basic_chset<CharT> const &that)
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline basic_chset<CharT> &
-basic_chset<CharT>::operator ^=(basic_chset<CharT> const &that)
+template<typename Char>
+inline basic_chset<Char> &
+basic_chset<Char>::operator ^=(basic_chset<Char> const &that)
 {
     basic_chset bma = that;
     bma -= *this;
@@ -200,44 +200,44 @@ basic_chset<CharT>::operator ^=(basic_chset<CharT> const &that)
 //  basic_chset: specializations for 8 bit chars using std::bitset
 //
 ///////////////////////////////////////////////////////////////////////////////
-template<typename CharT>
-inline basic_chset_8bit<CharT>::basic_chset_8bit()
+template<typename Char>
+inline basic_chset_8bit<Char>::basic_chset_8bit()
 {
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline basic_chset_8bit<CharT>::basic_chset_8bit(basic_chset_8bit<CharT> const &arg)
+template<typename Char>
+inline basic_chset_8bit<Char>::basic_chset_8bit(basic_chset_8bit<Char> const &arg)
   : bset_(arg.bset_)
 {
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline bool basic_chset_8bit<CharT>::empty() const
+template<typename Char>
+inline bool basic_chset_8bit<Char>::empty() const
 {
     return !this->bset_.any();
 }
 
 /////////////////////////////////
-template<typename CharT>
-template<typename TraitsT>
-inline bool basic_chset_8bit<CharT>::test(CharT v, TraitsT const &, mpl::false_) const // case-sensitive
+template<typename Char>
+template<typename Traits>
+inline bool basic_chset_8bit<Char>::test(Char v, Traits const &, mpl::false_) const // case-sensitive
 {
     return this->bset_.test((unsigned char)v);
 }
 
 /////////////////////////////////
-template<typename CharT>
-template<typename TraitsT>
-inline bool basic_chset_8bit<CharT>::test(CharT v, TraitsT const &traits, mpl::true_) const // case-insensitive
+template<typename Char>
+template<typename Traits>
+inline bool basic_chset_8bit<Char>::test(Char v, Traits const &traits, mpl::true_) const // case-insensitive
 {
     return this->bset_.test((unsigned char)traits.translate_nocase(v));
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline void basic_chset_8bit<CharT>::set(CharT from, CharT to)
+template<typename Char>
+inline void basic_chset_8bit<Char>::set(Char from, Char to)
 {
     for(int i = from; i <= to; ++i)
     {
@@ -246,34 +246,34 @@ inline void basic_chset_8bit<CharT>::set(CharT from, CharT to)
 }
 
 /////////////////////////////////
-template<typename CharT>
-template<typename TraitsT>
-inline void basic_chset_8bit<CharT>::set(CharT from, CharT to, TraitsT const &traits)
+template<typename Char>
+template<typename Traits>
+inline void basic_chset_8bit<Char>::set(Char from, Char to, Traits const &traits)
 {
     for(int i = from; i <= to; ++i)
     {
-        this->bset_.set((unsigned char)traits.translate_nocase((CharT)i));
+        this->bset_.set((unsigned char)traits.translate_nocase((Char)i));
     }
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline void basic_chset_8bit<CharT>::set(CharT c)
+template<typename Char>
+inline void basic_chset_8bit<Char>::set(Char c)
 {
     this->bset_.set((unsigned char)c);
 }
 
 /////////////////////////////////
-template<typename CharT>
-template<typename TraitsT>
-inline void basic_chset_8bit<CharT>::set(CharT c, TraitsT const &traits)
+template<typename Char>
+template<typename Traits>
+inline void basic_chset_8bit<Char>::set(Char c, Traits const &traits)
 {
     this->bset_.set((unsigned char)traits.translate_nocase(c));
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline void basic_chset_8bit<CharT>::clear(CharT from, CharT to)
+template<typename Char>
+inline void basic_chset_8bit<Char>::clear(Char from, Char to)
 {
     for(int i = from; i <= to; ++i)
     {
@@ -282,91 +282,91 @@ inline void basic_chset_8bit<CharT>::clear(CharT from, CharT to)
 }
 
 /////////////////////////////////
-template<typename CharT>
-template<typename TraitsT>
-inline void basic_chset_8bit<CharT>::clear(CharT from, CharT to, TraitsT const &traits)
+template<typename Char>
+template<typename Traits>
+inline void basic_chset_8bit<Char>::clear(Char from, Char to, Traits const &traits)
 {
     for(int i = from; i <= to; ++i)
     {
-        this->bset_.reset((unsigned char)traits.translate_nocase((CharT)i));
+        this->bset_.reset((unsigned char)traits.translate_nocase((Char)i));
     }
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline void basic_chset_8bit<CharT>::clear(CharT c)
+template<typename Char>
+inline void basic_chset_8bit<Char>::clear(Char c)
 {
     this->bset_.reset((unsigned char)c);
 }
 
 /////////////////////////////////
-template<typename CharT>
-template<typename TraitsT>
-inline void basic_chset_8bit<CharT>::clear(CharT c, TraitsT const &traits)
+template<typename Char>
+template<typename Traits>
+inline void basic_chset_8bit<Char>::clear(Char c, Traits const &traits)
 {
     this->bset_.reset((unsigned char)traits.tranlsate_nocase(c));
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline void basic_chset_8bit<CharT>::clear()
+template<typename Char>
+inline void basic_chset_8bit<Char>::clear()
 {
     this->bset_.reset();
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline void basic_chset_8bit<CharT>::inverse()
+template<typename Char>
+inline void basic_chset_8bit<Char>::inverse()
 {
     this->bset_.flip();
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline void basic_chset_8bit<CharT>::swap(basic_chset_8bit<CharT> &that)
+template<typename Char>
+inline void basic_chset_8bit<Char>::swap(basic_chset_8bit<Char> &that)
 {
     std::swap(this->bset_, that.bset_);
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline basic_chset_8bit<CharT> &
-basic_chset_8bit<CharT>::operator |=(basic_chset_8bit<CharT> const &that)
+template<typename Char>
+inline basic_chset_8bit<Char> &
+basic_chset_8bit<Char>::operator |=(basic_chset_8bit<Char> const &that)
 {
     this->bset_ |= that.bset_;
     return *this;
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline basic_chset_8bit<CharT> &
-basic_chset_8bit<CharT>::operator &=(basic_chset_8bit<CharT> const &that)
+template<typename Char>
+inline basic_chset_8bit<Char> &
+basic_chset_8bit<Char>::operator &=(basic_chset_8bit<Char> const &that)
 {
     this->bset_ &= that.bset_;
     return *this;
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline basic_chset_8bit<CharT> &
-basic_chset_8bit<CharT>::operator -=(basic_chset_8bit<CharT> const &that)
+template<typename Char>
+inline basic_chset_8bit<Char> &
+basic_chset_8bit<Char>::operator -=(basic_chset_8bit<Char> const &that)
 {
     this->bset_ &= ~that.bset_;
     return *this;
 }
 
 /////////////////////////////////
-template<typename CharT>
-inline basic_chset_8bit<CharT> &
-basic_chset_8bit<CharT>::operator ^=(basic_chset_8bit<CharT> const &that)
+template<typename Char>
+inline basic_chset_8bit<Char> &
+basic_chset_8bit<Char>::operator ^=(basic_chset_8bit<Char> const &that)
 {
     this->bset_ ^= that.bset_;
     return *this;
 }
 
-template<typename CharT>
+template<typename Char>
 inline std::bitset<256> const &
-basic_chset_8bit<CharT>::base() const
+basic_chset_8bit<Char>::base() const
 {
     return this->bset_;
 }
@@ -376,26 +376,26 @@ basic_chset_8bit<CharT>::base() const
 
 ///////////////////////////////////////////////////////////////////////////////
 // helpers
-template<typename CharT, typename TraitsT>
-inline void set_char(basic_chset<CharT> &chset, CharT ch, TraitsT const &traits, bool icase)
+template<typename Char, typename Traits>
+inline void set_char(basic_chset<Char> &chset, Char ch, Traits const &traits, bool icase)
 {
     icase ? chset.set(ch, traits) : chset.set(ch);
 }
 
-template<typename CharT, typename TraitsT>
-inline void set_range(basic_chset<CharT> &chset, CharT from, CharT to, TraitsT const &traits, bool icase)
+template<typename Char, typename Traits>
+inline void set_range(basic_chset<Char> &chset, Char from, Char to, Traits const &traits, bool icase)
 {
     icase ? chset.set(from, to, traits) : chset.set(from, to);
 }
 
-template<typename CharT, typename TraitsT>
-inline void set_class(basic_chset<CharT> &chset, typename TraitsT::char_class_type char_class, bool no, TraitsT const &traits)
+template<typename Char, typename Traits>
+inline void set_class(basic_chset<Char> &chset, typename Traits::char_class_type char_class, bool no, Traits const &traits)
 {
-    BOOST_MPL_ASSERT_RELATION(1, ==, sizeof(CharT));
+    BOOST_MPL_ASSERT_RELATION(1, ==, sizeof(Char));
     for(std::size_t i = 0; i <= UCHAR_MAX; ++i)
     {
-        typedef typename std::char_traits<CharT>::int_type int_type;
-        CharT ch = std::char_traits<CharT>::to_char_type(static_cast<int_type>(i));
+        typedef typename std::char_traits<Char>::int_type int_type;
+        Char ch = std::char_traits<Char>::to_char_type(static_cast<int_type>(i));
         if(no != traits.isctype(ch, char_class))
         {
             chset.set(ch);

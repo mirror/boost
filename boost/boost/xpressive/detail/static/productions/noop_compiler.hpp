@@ -21,19 +21,19 @@ namespace boost { namespace xpressive { namespace detail
     {
         ///////////////////////////////////////////////////////////////////////////////
         // transformation that happens to leaf nodes in the parse tree
-        template<typename OpT, typename StateT, typename VisitorT>
+        template<typename Op, typename State, typename Visitor>
         struct apply
         {
-            typedef typename as_matcher_type<typename proto::arg_type<OpT>::type>::type matcher1;
-            typedef typename VisitorT::BOOST_NESTED_TEMPLATE apply<matcher1>::type matcher2;
-            typedef static_xpression<matcher2, StateT> type;
+            typedef typename as_matcher_type<typename proto::arg_type<Op>::type>::type matcher1;
+            typedef typename Visitor::BOOST_NESTED_TEMPLATE apply<matcher1>::type matcher2;
+            typedef static_xpression<matcher2, State> type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &state, VisitorT &visitor)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &state, Visitor &visitor)
         {
-            typedef typename proto::arg_type<OpT>::type arg_type;
+            typedef typename proto::arg_type<Op>::type arg_type;
             return make_static_xpression(visitor.call(as_matcher_type<arg_type>::call(proto::arg(op))), state);
         }
     };

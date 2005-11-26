@@ -18,20 +18,20 @@ namespace boost { namespace proto
 {
     ///////////////////////////////////////////////////////////////////////////////
     // compile
-    template<typename OpT, typename StateT, typename VisitorT, typename DomainTagT>
+    template<typename Op, typename State, typename Visitor, typename DomainTag>
     typename lazy_enable_if<
-        is_op<OpT>
-      , typename compiler<typename tag_type<OpT>::type, DomainTagT>::BOOST_NESTED_TEMPLATE apply
+        is_op<Op>
+      , typename compiler<typename tag_type<Op>::type, DomainTag>::BOOST_NESTED_TEMPLATE apply
         <
-            OpT
-          , StateT
-          , VisitorT
+            Op
+          , State
+          , Visitor
         >
     >::type const
-    compile(OpT const &op, StateT const &state, VisitorT &visitor, DomainTagT)
+    compile(Op const &op, State const &state, Visitor &visitor, DomainTag)
     {
-        typedef compiler<typename tag_type<OpT>::type, DomainTagT> compiler;
-        return compiler::call(as_op<OpT>::make(op), state, visitor);
+        typedef compiler<typename tag_type<Op>::type, DomainTag> compiler;
+        return compiler::call(as_op<Op>::make(op), state, visitor);
     }
 
 }} // namespace boost::proto

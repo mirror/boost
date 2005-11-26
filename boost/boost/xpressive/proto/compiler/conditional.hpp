@@ -17,32 +17,32 @@ namespace boost { namespace proto
 
     ///////////////////////////////////////////////////////////////////////////////
     // conditional_compiler
-    template<typename PredicateT, typename IfCompilerT, typename ElseCompilerT>
+    template<typename Predicate, typename IfCompiler, typename ElseCompiler>
     struct conditional_compiler
     {
-        template<typename OpT, typename StateT, typename VisitorT>
+        template<typename Op, typename State, typename Visitor>
         struct apply
         {
             typedef typename boost::mpl::if_
             <
-                typename PredicateT::BOOST_NESTED_TEMPLATE apply<OpT, StateT, VisitorT>::type
-              , IfCompilerT
-              , ElseCompilerT
+                typename Predicate::BOOST_NESTED_TEMPLATE apply<Op, State, Visitor>::type
+              , IfCompiler
+              , ElseCompiler
             >::type compiler_type;
 
             typedef typename compiler_type::BOOST_NESTED_TEMPLATE apply
             <
-                OpT
-              , StateT
-              , VisitorT
+                Op
+              , State
+              , Visitor
             >::type type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &state, VisitorT &visitor)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &state, Visitor &visitor)
         {
-            typedef typename apply<OpT, StateT, VisitorT>::compiler_type compiler_type;
+            typedef typename apply<Op, State, Visitor>::compiler_type compiler_type;
             return compiler_type::call(op, state, visitor);
         }
     };

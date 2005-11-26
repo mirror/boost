@@ -32,9 +32,9 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // peek_next
 //   tell whether or not to keep looking for a peek optimization
-template<typename MatcherT>
+template<typename Matcher>
 struct peek_next 
-    : mpl::equal_to<typename MatcherT::width, mpl::size_t<0> >
+    : mpl::equal_to<typename Matcher::width, mpl::size_t<0> >
 {
 };
 
@@ -53,11 +53,11 @@ struct peek_next<repeat_begin_matcher>
 ///////////////////////////////////////////////////////////////////////////////
 // xpression_peeker
 //
-template<typename CharT>
+template<typename Char>
 struct xpression_peeker
 {
-    template<typename TraitsT>
-    explicit xpression_peeker(hash_peek_bitset<CharT> *bset, TraitsT const &traits)
+    template<typename Traits>
+    explicit xpression_peeker(hash_peek_bitset<Char> *bset, Traits const &traits)
       : bset_(bset)
       , str_(0)
       , str_icase_(false)
@@ -70,7 +70,7 @@ struct xpression_peeker
 
     ///////////////////////////////////////////////////////////////////////////////
     // accessors
-    std::pair<std::basic_string<CharT> const *, bool> get_string() const
+    std::pair<std::basic_string<Char> const *, bool> get_string() const
     {
         return std::make_pair(this->str_, this->str_icase_);
     }
@@ -90,86 +90,86 @@ struct xpression_peeker
         }
     }
 
-    template<typename XprT>
-    peek_next<XprT> peek(XprT const &)
+    template<typename Xpr>
+    peek_next<Xpr> peek(Xpr const &)
     {
-        this->fail(!peek_next<XprT>::value);
-        return peek_next<XprT>();
+        this->fail(!peek_next<Xpr>::value);
+        return peek_next<Xpr>();
     }
 
-    template<typename TraitsT>
-    mpl::true_ peek(assert_bol_matcher<TraitsT> const &)
+    template<typename Traits>
+    mpl::true_ peek(assert_bol_matcher<Traits> const &)
     {
         this->line_start_ = true;
         return mpl::true_();
     }
 
-    template<typename TraitsT, bool ICaseT>
-    mpl::false_ peek(literal_matcher<TraitsT, ICaseT, false> const &xpr)
+    template<typename Traits, bool ICase>
+    mpl::false_ peek(literal_matcher<Traits, ICase, false> const &xpr)
     {
-        this->bset_->set_char(xpr.ch_, ICaseT, this->get_traits_<TraitsT>());
+        this->bset_->set_char(xpr.ch_, ICase, this->get_traits_<Traits>());
         return mpl::false_();
     }
 
-    template<typename TraitsT, bool ICaseT>
-    mpl::false_ peek(string_matcher<TraitsT, ICaseT> const &xpr)
+    template<typename Traits, bool ICase>
+    mpl::false_ peek(string_matcher<Traits, ICase> const &xpr)
     {
-        this->bset_->set_char(xpr.str_[0], ICaseT, this->get_traits_<TraitsT>());
+        this->bset_->set_char(xpr.str_[0], ICase, this->get_traits_<Traits>());
         this->str_ = &xpr.str_;
-        this->str_icase_ = ICaseT;
+        this->str_icase_ = ICase;
         return mpl::false_();
     }
 
-    template<typename AlternatesT, typename TraitsT>
-    mpl::false_ peek(alternate_matcher<AlternatesT, TraitsT> const &xpr)
+    template<typename Alternates, typename Traits>
+    mpl::false_ peek(alternate_matcher<Alternates, Traits> const &xpr)
     {
         BOOST_ASSERT(0 != xpr.bset_.count());
         this->bset_->set_bitset(xpr.bset_);
         return mpl::false_();
     }
 
-    template<typename TraitsT>
-    mpl::false_ peek(posix_charset_matcher<TraitsT> const &xpr)
+    template<typename Traits>
+    mpl::false_ peek(posix_charset_matcher<Traits> const &xpr)
     {
-        this->bset_->set_class(xpr.mask_, xpr.not_, this->get_traits_<TraitsT>());
+        this->bset_->set_class(xpr.mask_, xpr.not_, this->get_traits_<Traits>());
         return mpl::false_();
     }
 
-    template<typename DummyT = void>
-    struct is_char_8bit : mpl::bool_<1 == sizeof(CharT)> {};
+    template<typename Dummy = void>
+    struct is_char_8bit : mpl::bool_<1 == sizeof(Char)> {};
 
-    template<bool ICaseT, typename TraitsT>
-    typename enable_if<is_char_8bit<TraitsT>, mpl::false_>::type
-    peek(charset_matcher<TraitsT, ICaseT, basic_chset<CharT> > const &xpr)
+    template<bool ICase, typename Traits>
+    typename enable_if<is_char_8bit<Traits>, mpl::false_>::type
+    peek(charset_matcher<Traits, ICase, basic_chset<Char> > const &xpr)
     {
         BOOST_ASSERT(0 != xpr.charset_.base().count());
-        this->bset_->set_charset(xpr.charset_, ICaseT);
+        this->bset_->set_charset(xpr.charset_, ICase);
         return mpl::false_();
     }
 
-    template<typename TraitsT, bool ICaseT>
-    mpl::false_ peek(range_matcher<TraitsT, ICaseT> const &xpr)
+    template<typename Traits, bool ICase>
+    mpl::false_ peek(range_matcher<Traits, ICase> const &xpr)
     {
-        this->bset_->set_range(xpr.ch_min_, xpr.ch_max_, xpr.not_, ICaseT, this->get_traits_<TraitsT>());
+        this->bset_->set_range(xpr.ch_min_, xpr.ch_max_, xpr.not_, ICase, this->get_traits_<Traits>());
         return mpl::false_();
     }
 
-    template<typename XprT, bool GreedyT>
-    mpl::false_ peek(simple_repeat_matcher<XprT, GreedyT> const &xpr)
+    template<typename Xpr, bool Greedy>
+    mpl::false_ peek(simple_repeat_matcher<Xpr, Greedy> const &xpr)
     {
         0 != xpr.min_ ? xpr.xpr_.peek(*this) : this->fail(); // could be a union of xpr and next
         return mpl::false_();
     }
 
-    template<typename TraitsT>
-    void set_traits(TraitsT const &traits)
+    template<typename Traits>
+    void set_traits(Traits const &traits)
     {
         if(0 == this->traits_)
         {
             this->traits_ = &traits;
-            this->traits_type_ = &typeid(TraitsT);
+            this->traits_type_ = &typeid(Traits);
         }
-        else if(*this->traits_type_ != typeid(TraitsT) || this->get_traits_<TraitsT>() != traits)
+        else if(*this->traits_type_ != typeid(Traits) || this->get_traits_<Traits>() != traits)
         {
             this->fail(); // traits mis-match! set all and bail
         }
@@ -177,15 +177,15 @@ struct xpression_peeker
 
 private:
 
-    template<typename TraitsT>
-    TraitsT const &get_traits_() const
+    template<typename Traits>
+    Traits const &get_traits_() const
     {
-        BOOST_ASSERT(!!(*this->traits_type_ == typeid(TraitsT)));
-        return *static_cast<TraitsT const *>(this->traits_);
+        BOOST_ASSERT(!!(*this->traits_type_ == typeid(Traits)));
+        return *static_cast<Traits const *>(this->traits_);
     }
 
-    hash_peek_bitset<CharT> *bset_;
-    std::basic_string<CharT> const *str_;
+    hash_peek_bitset<Char> *bset_;
+    std::basic_string<Char> const *str_;
     bool str_icase_;
     bool line_start_;
     void const *traits_;

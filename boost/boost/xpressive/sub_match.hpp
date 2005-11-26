@@ -51,22 +51,22 @@ namespace boost { namespace xpressive
 /// then member matched is always true, unless a partial match was obtained as a result of the flag
 /// match_partial being passed to a regular expression algorithm, in which case member matched is
 /// false, and members first and second represent the character range that formed the partial match.
-template<typename BidiIterT>
+template<typename BidiIter>
 struct sub_match
-  : std::pair<BidiIterT, BidiIterT>
+  : std::pair<BidiIter, BidiIter>
 {
 private:
     struct dummy { int i_; };
     typedef int dummy::*bool_type;
 
 public:
-    typedef typename iterator_value<BidiIterT>::type value_type;
-    typedef typename iterator_difference<BidiIterT>::type difference_type;
+    typedef typename iterator_value<BidiIter>::type value_type;
+    typedef typename iterator_difference<BidiIter>::type difference_type;
     typedef std::basic_string<value_type> string_type;
-    typedef BidiIterT iterator;
+    typedef BidiIter iterator;
 
-    explicit sub_match(BidiIterT first = BidiIterT(), BidiIterT second = BidiIterT(), bool matched_ = false)
-      : std::pair<BidiIterT, BidiIterT>(first, second)
+    explicit sub_match(BidiIter first = BidiIter(), BidiIter second = BidiIter(), bool matched_ = false)
+      : std::pair<BidiIter, BidiIter>(first, second)
       , matched(matched_)
     {
     }
@@ -125,17 +125,17 @@ public:
 /// \param sout output stream.
 /// \param sub sub_match object to be written to the stream.
 /// \return sout \<\< sub.str()
-template<typename BidiIterT, typename CharT, typename TraitsT>
-inline std::basic_ostream<CharT, TraitsT> &operator <<
+template<typename BidiIter, typename Char, typename Traits>
+inline std::basic_ostream<Char, Traits> &operator <<
 (
-    std::basic_ostream<CharT, TraitsT> &sout
-  , sub_match<BidiIterT> const &sub
+    std::basic_ostream<Char, Traits> &sout
+  , sub_match<BidiIter> const &sub
 )
 {
-    typedef typename iterator_value<BidiIterT>::type char_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
     if(sub.matched)
     {
-        std::ostream_iterator<char_type, CharT, TraitsT> iout(sout);
+        std::ostream_iterator<char_type, Char, Traits> iout(sout);
         std::copy(sub.first, sub.second, iout);
     }
     return sout;
@@ -144,182 +144,182 @@ inline std::basic_ostream<CharT, TraitsT> &operator <<
 
 // BUGBUG make these more efficient
 
-template<typename BidiIterT>
-bool operator == (sub_match<BidiIterT> const &lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator == (sub_match<BidiIter> const &lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs.compare(rhs) == 0;
 }
 
-template<typename BidiIterT>
-bool operator != (sub_match<BidiIterT> const &lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator != (sub_match<BidiIter> const &lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs.compare(rhs) != 0;
 }
 
-template<typename BidiIterT>
-bool operator < (sub_match<BidiIterT> const &lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator < (sub_match<BidiIter> const &lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs.compare(rhs) < 0;
 }
 
-template<typename BidiIterT>
-bool operator <= (sub_match<BidiIterT> const &lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator <= (sub_match<BidiIter> const &lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs.compare(rhs) <= 0;
 }
 
-template<typename BidiIterT>
-bool operator >= (sub_match<BidiIterT> const &lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator >= (sub_match<BidiIter> const &lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs.compare(rhs)>= 0;
 }
 
-template<typename BidiIterT>
-bool operator> (sub_match<BidiIterT> const &lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator> (sub_match<BidiIter> const &lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs.compare(rhs)> 0;
 }
 
-template<typename BidiIterT>
-bool operator == (typename iterator_value<BidiIterT>::type const *lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator == (typename iterator_value<BidiIter>::type const *lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs == rhs.str();
 }
 
-template<typename BidiIterT>
-bool operator != (typename iterator_value<BidiIterT>::type const *lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator != (typename iterator_value<BidiIter>::type const *lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs != rhs.str();
 }
 
-template<typename BidiIterT>
-bool operator < (typename iterator_value<BidiIterT>::type const *lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator < (typename iterator_value<BidiIter>::type const *lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs < rhs.str();
 }
 
-template<typename BidiIterT>
-bool operator> (typename iterator_value<BidiIterT>::type const *lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator> (typename iterator_value<BidiIter>::type const *lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs> rhs.str();
 }
 
-template<typename BidiIterT>
-bool operator >= (typename iterator_value<BidiIterT>::type const *lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator >= (typename iterator_value<BidiIter>::type const *lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs >= rhs.str();
 }
 
-template<typename BidiIterT>
-bool operator <= (typename iterator_value<BidiIterT>::type const *lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator <= (typename iterator_value<BidiIter>::type const *lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs <= rhs.str();
 }
 
-template<typename BidiIterT>
-bool operator == (sub_match<BidiIterT> const &lhs, typename iterator_value<BidiIterT>::type const *rhs)
+template<typename BidiIter>
+bool operator == (sub_match<BidiIter> const &lhs, typename iterator_value<BidiIter>::type const *rhs)
 {
     return lhs.str() == rhs;
 }
 
-template<typename BidiIterT>
-bool operator != (sub_match<BidiIterT> const &lhs, typename iterator_value<BidiIterT>::type const *rhs)
+template<typename BidiIter>
+bool operator != (sub_match<BidiIter> const &lhs, typename iterator_value<BidiIter>::type const *rhs)
 {
     return lhs.str() != rhs;
 }
 
-template<typename BidiIterT>
-bool operator < (sub_match<BidiIterT> const &lhs, typename iterator_value<BidiIterT>::type const *rhs)
+template<typename BidiIter>
+bool operator < (sub_match<BidiIter> const &lhs, typename iterator_value<BidiIter>::type const *rhs)
 {
     return lhs.str() < rhs;
 }
 
-template<typename BidiIterT>
-bool operator> (sub_match<BidiIterT> const &lhs, typename iterator_value<BidiIterT>::type const *rhs)
+template<typename BidiIter>
+bool operator> (sub_match<BidiIter> const &lhs, typename iterator_value<BidiIter>::type const *rhs)
 {
     return lhs.str()> rhs;
 }
 
-template<typename BidiIterT>
-bool operator >= (sub_match<BidiIterT> const &lhs, typename iterator_value<BidiIterT>::type const *rhs)
+template<typename BidiIter>
+bool operator >= (sub_match<BidiIter> const &lhs, typename iterator_value<BidiIter>::type const *rhs)
 {
     return lhs.str()>= rhs;
 }
 
-template<typename BidiIterT>
-bool operator <= (sub_match<BidiIterT> const &lhs, typename iterator_value<BidiIterT>::type const *rhs)
+template<typename BidiIter>
+bool operator <= (sub_match<BidiIter> const &lhs, typename iterator_value<BidiIter>::type const *rhs)
 {
     return lhs.str() <= rhs;
 }
 
-template<typename BidiIterT>
-bool operator == (typename iterator_value<BidiIterT>::type const &lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator == (typename iterator_value<BidiIter>::type const &lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs == rhs.str();
 }
 
-template<typename BidiIterT>
-bool operator != (typename iterator_value<BidiIterT>::type const &lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator != (typename iterator_value<BidiIter>::type const &lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs != rhs.str();
 }
 
-template<typename BidiIterT>
-bool operator < (typename iterator_value<BidiIterT>::type const &lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator < (typename iterator_value<BidiIter>::type const &lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs < rhs.str();
 }
 
-template<typename BidiIterT>
-bool operator> (typename iterator_value<BidiIterT>::type const &lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator> (typename iterator_value<BidiIter>::type const &lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs> rhs.str();
 }
 
-template<typename BidiIterT>
-bool operator >= (typename iterator_value<BidiIterT>::type const &lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator >= (typename iterator_value<BidiIter>::type const &lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs >= rhs.str();
 }
 
-template<typename BidiIterT>
-bool operator <= (typename iterator_value<BidiIterT>::type const &lhs, sub_match<BidiIterT> const &rhs)
+template<typename BidiIter>
+bool operator <= (typename iterator_value<BidiIter>::type const &lhs, sub_match<BidiIter> const &rhs)
 {
     return lhs <= rhs.str();
 }
 
-template<typename BidiIterT>
-bool operator == (sub_match<BidiIterT> const &lhs, typename iterator_value<BidiIterT>::type const &rhs)
+template<typename BidiIter>
+bool operator == (sub_match<BidiIter> const &lhs, typename iterator_value<BidiIter>::type const &rhs)
 {
     return lhs.str() == rhs;
 }
 
-template<typename BidiIterT>
-bool operator != (sub_match<BidiIterT> const &lhs, typename iterator_value<BidiIterT>::type const &rhs)
+template<typename BidiIter>
+bool operator != (sub_match<BidiIter> const &lhs, typename iterator_value<BidiIter>::type const &rhs)
 {
     return lhs.str() != rhs;
 }
 
-template<typename BidiIterT>
-bool operator < (sub_match<BidiIterT> const &lhs, typename iterator_value<BidiIterT>::type const &rhs)
+template<typename BidiIter>
+bool operator < (sub_match<BidiIter> const &lhs, typename iterator_value<BidiIter>::type const &rhs)
 {
     return lhs.str() < rhs;
 }
 
-template<typename BidiIterT>
-bool operator> (sub_match<BidiIterT> const &lhs, typename iterator_value<BidiIterT>::type const &rhs)
+template<typename BidiIter>
+bool operator> (sub_match<BidiIter> const &lhs, typename iterator_value<BidiIter>::type const &rhs)
 {
     return lhs.str()> rhs;
 }
 
-template<typename BidiIterT>
-bool operator >= (sub_match<BidiIterT> const &lhs, typename iterator_value<BidiIterT>::type const &rhs)
+template<typename BidiIter>
+bool operator >= (sub_match<BidiIter> const &lhs, typename iterator_value<BidiIter>::type const &rhs)
 {
     return lhs.str()>= rhs;
 }
 
-template<typename BidiIterT>
-bool operator <= (sub_match<BidiIterT> const &lhs, typename iterator_value<BidiIterT>::type const &rhs)
+template<typename BidiIter>
+bool operator <= (sub_match<BidiIter> const &lhs, typename iterator_value<BidiIter>::type const &rhs)
 {
     return lhs.str() <= rhs;
 }

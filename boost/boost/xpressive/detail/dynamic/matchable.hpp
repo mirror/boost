@@ -25,21 +25,21 @@
 namespace boost { namespace xpressive { namespace detail
 {
 
-template<typename BidiIterT>
+template<typename BidiIter>
 struct matchable;
 
 ///////////////////////////////////////////////////////////////////////////////
 // sequence
 //
-template<typename BidiIterT>
+template<typename BidiIter>
 struct sequence
   : std::pair
     <
-        shared_ptr<matchable<BidiIterT> const>
-      , shared_ptr<matchable<BidiIterT> const> *
+        shared_ptr<matchable<BidiIter> const>
+      , shared_ptr<matchable<BidiIter> const> *
     >
 {
-    typedef shared_ptr<matchable<BidiIterT> const> matchable_ptr_t;
+    typedef shared_ptr<matchable<BidiIter> const> matchable_ptr_t;
     typedef std::pair<matchable_ptr_t, matchable_ptr_t *> base_t;
 
     explicit sequence(matchable_ptr_t head = matchable_ptr_t(), matchable_ptr_t *tail_ptr = 0)
@@ -80,17 +80,17 @@ struct quant_spec
 ///////////////////////////////////////////////////////////////////////////////
 // matchable
 //
-template<typename BidiIterT>
+template<typename BidiIter>
 struct matchable
   : xpression_base
 {
-    typedef typename iterator_value<BidiIterT>::type char_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
 
     virtual ~matchable() {}
 
-    virtual bool match(state_type<BidiIterT> &state) const = 0;
+    virtual bool match(state_type<BidiIter> &state) const = 0;
 
-    virtual std::size_t get_width(state_type<BidiIterT> *state) const = 0;
+    virtual std::size_t get_width(state_type<BidiIter> *state) const = 0;
 
     virtual void link(xpression_linker<char_type> &) const {}
 
@@ -99,12 +99,12 @@ struct matchable
         peeker.fail();
     }
 
-    virtual sequence<BidiIterT> quantify
+    virtual sequence<BidiIter> quantify
     (
         quant_spec const & //spec
       , std::size_t & //hidden_mark_count
-      , sequence<BidiIterT> //seq
-      , alternates_factory<BidiIterT> const &//factory
+      , sequence<BidiIter> //seq
+      , alternates_factory<BidiIter> const &//factory
     ) const
     {
         throw regex_error(regex_constants::error_badrepeat, "expression cannot be quantified");
@@ -127,24 +127,24 @@ struct matchable
     // statically bound xpressions and one for dynamically bound xpressions.
     //
 
-    template<typename TopT>
-    bool push_match(state_type<BidiIterT> &state) const
+    template<typename Top>
+    bool push_match(state_type<BidiIter> &state) const
     {
-        BOOST_MPL_ASSERT((is_same<TopT, matchable<BidiIterT> >));
+        BOOST_MPL_ASSERT((is_same<Top, matchable<BidiIter> >));
         return this->match(state);
     }
 
-    static bool top_match(state_type<BidiIterT> &state, xpression_base const *top)
+    static bool top_match(state_type<BidiIter> &state, xpression_base const *top)
     {
-        return static_cast<matchable<BidiIterT> const *>(top)->match(state);
+        return static_cast<matchable<BidiIter> const *>(top)->match(state);
     }
 
-    static bool pop_match(state_type<BidiIterT> &state, xpression_base const *top)
+    static bool pop_match(state_type<BidiIter> &state, xpression_base const *top)
     {
-        return static_cast<matchable<BidiIterT> const *>(top)->match(state);
+        return static_cast<matchable<BidiIter> const *>(top)->match(state);
     }
 
-    bool skip_match(state_type<BidiIterT> &state) const
+    bool skip_match(state_type<BidiIter> &state) const
     {
         return this->match(state);
     }

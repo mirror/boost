@@ -33,12 +33,12 @@ namespace boost { namespace xpressive { namespace detail
         {
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match(state_type<BidiIterT> &state, NextT const &next) const
+        template<typename BidiIter, typename Next>
+        bool match(state_type<BidiIter> &state, Next const &next) const
         {
-            sub_match_impl<BidiIterT> &br = state.sub_match(this->mark_number_);
+            sub_match_impl<BidiIter> &br = state.sub_match(this->mark_number_);
 
-            BidiIterT old_begin = br.begin_;
+            BidiIter old_begin = br.begin_;
             br.begin_ = state.cur_;
 
             if(next.match(state))

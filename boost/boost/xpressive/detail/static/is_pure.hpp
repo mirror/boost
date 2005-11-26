@@ -32,13 +32,13 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // use_simple_repeat
     //
-    template<typename XprT>
+    template<typename Xpr>
     struct use_simple_repeat;
 
     ///////////////////////////////////////////////////////////////////////////////
     // is_pure
     //
-    template<typename XprT>
+    template<typename Xpr>
     struct is_pure;
 
     template<>
@@ -47,164 +47,164 @@ namespace boost { namespace xpressive { namespace detail
     {
     };
 
-    template<typename MatcherT>
-    struct is_pure<proto::unary_op<MatcherT, proto::noop_tag> >
-      : as_matcher_type<MatcherT>::type::pure
+    template<typename Matcher>
+    struct is_pure<proto::unary_op<Matcher, proto::noop_tag> >
+      : as_matcher_type<Matcher>::type::pure
     {
     };
 
-    template<typename LeftT, typename RightT>
-    struct is_pure<proto::binary_op<LeftT, RightT, proto::right_shift_tag> >
-      : mpl::and_<is_pure<LeftT>, is_pure<RightT> >
+    template<typename Left, typename Right>
+    struct is_pure<proto::binary_op<Left, Right, proto::right_shift_tag> >
+      : mpl::and_<is_pure<Left>, is_pure<Right> >
     {
     };
 
-    template<typename LeftT, typename RightT>
-    struct is_pure<proto::binary_op<LeftT, RightT, proto::bitor_tag> >
-      : mpl::and_<is_pure<LeftT>, is_pure<RightT> >
+    template<typename Left, typename Right>
+    struct is_pure<proto::binary_op<Left, Right, proto::bitor_tag> >
+      : mpl::and_<is_pure<Left>, is_pure<Right> >
     {
     };
 
-    template<typename RightT>
-    struct is_pure<proto::binary_op<mark_tag, RightT, proto::assign_tag> >
+    template<typename Right>
+    struct is_pure<proto::binary_op<mark_tag, Right, proto::assign_tag> >
       : mpl::false_
     {
     };
 
-    template<typename RightT>
-    struct is_pure<proto::binary_op<set_initializer_type, RightT, proto::assign_tag> >
+    template<typename Right>
+    struct is_pure<proto::binary_op<set_initializer_type, Right, proto::assign_tag> >
       : mpl::true_
     {
     };
 
-    template<typename ModifierT, typename XprT>
-    struct is_pure<proto::binary_op<ModifierT, XprT, modifier_tag> >
-      : is_pure<XprT>
+    template<typename Modifier, typename Xpr>
+    struct is_pure<proto::binary_op<Modifier, Xpr, modifier_tag> >
+      : is_pure<Xpr>
     {
     };
 
-    template<typename XprT, bool PositiveT>
-    struct is_pure<proto::unary_op<XprT, lookahead_tag<PositiveT> > >
-      : is_pure<XprT>
+    template<typename Xpr, bool Positive>
+    struct is_pure<proto::unary_op<Xpr, lookahead_tag<Positive> > >
+      : is_pure<Xpr>
     {
     };
 
-    template<typename XprT, bool PositiveT>
-    struct is_pure<proto::unary_op<XprT, lookbehind_tag<PositiveT> > >
-      : is_pure<XprT>
+    template<typename Xpr, bool Positive>
+    struct is_pure<proto::unary_op<Xpr, lookbehind_tag<Positive> > >
+      : is_pure<Xpr>
     {
     };
 
-    template<typename XprT>
-    struct is_pure<proto::unary_op<XprT, keeper_tag> >
-      : is_pure<XprT>
+    template<typename Xpr>
+    struct is_pure<proto::unary_op<Xpr, keeper_tag> >
+      : is_pure<Xpr>
     {
     };
 
-    template<typename MatcherT, typename NextT>
-    struct is_pure<static_xpression<MatcherT, NextT> >
-      : mpl::and_<typename MatcherT::pure, is_pure<NextT> >::type
+    template<typename Matcher, typename Next>
+    struct is_pure<static_xpression<Matcher, Next> >
+      : mpl::and_<typename Matcher::pure, is_pure<Next> >::type
     {
     };
 
-    template<typename BidiIterT>
-    struct is_pure<shared_ptr<matchable<BidiIterT> const> >
+    template<typename BidiIter>
+    struct is_pure<shared_ptr<matchable<BidiIter> const> >
       : mpl::false_
     {
     };
 
-    template<typename BidiIterT>
-    struct is_pure<std::vector<shared_ptr<matchable<BidiIterT> const> > >
+    template<typename BidiIter>
+    struct is_pure<std::vector<shared_ptr<matchable<BidiIter> const> > >
         : mpl::false_
     {
     };
 
-    //template<typename BidiIterT>
-    //struct is_pure<basic_regex<BidiIterT> >
+    //template<typename BidiIter>
+    //struct is_pure<basic_regex<BidiIter> >
     //    : mpl::false_
     //{
     //};
 
-    template<typename BidiIterT>
-    struct is_pure<proto::unary_op<basic_regex<BidiIterT>, proto::noop_tag> >
+    template<typename BidiIter>
+    struct is_pure<proto::unary_op<basic_regex<BidiIter>, proto::noop_tag> >
       : mpl::false_
     {
     };
 
-    template<typename BidiIterT>
-    struct is_pure<proto::unary_op<reference_wrapper<basic_regex<BidiIterT> const>, proto::noop_tag> >
+    template<typename BidiIter>
+    struct is_pure<proto::unary_op<reference_wrapper<basic_regex<BidiIter> const>, proto::noop_tag> >
       : mpl::false_
     {
     };
 
     // when complementing a set or an assertion, the purity is that of the set (true) or the assertion
-    template<typename OpT>
-    struct is_pure<proto::unary_op<OpT, proto::complement_tag> >
-      : is_pure<OpT>
+    template<typename Op>
+    struct is_pure<proto::unary_op<Op, proto::complement_tag> >
+      : is_pure<Op>
     {
     };
 
     // The comma is used in list-initialized sets, which are pure
-    template<typename LeftT, typename RightT>
-    struct is_pure<proto::binary_op<LeftT, RightT, proto::comma_tag> >
+    template<typename Left, typename Right>
+    struct is_pure<proto::binary_op<Left, Right, proto::comma_tag> >
       : mpl::true_
     {
     };
 
     // The subscript operator[] is used for sets, as in set['a' | range('b','h')]
     // It is also used for actions, which by definition have side-effects and thus are impure
-    template<typename LeftT, typename RightT>
-    struct is_pure<proto::binary_op<LeftT, RightT, proto::subscript_tag> >
-      : is_same<LeftT, set_initializer_type>
+    template<typename Left, typename Right>
+    struct is_pure<proto::binary_op<Left, Right, proto::subscript_tag> >
+      : is_same<Left, set_initializer_type>
     {
-        // If LeftT is "set" then make sure that RightT is pure
+        // If Left is "set" then make sure that Right is pure
         BOOST_MPL_ASSERT
         ((
             mpl::or_
             <
-                mpl::not_<is_same<LeftT, set_initializer_type> >
-              , is_pure<RightT>
+                mpl::not_<is_same<Left, set_initializer_type> >
+              , is_pure<Right>
             >
         ));
     };
 
     // Quantified expressions are pure IFF they use the simple_repeat_matcher
 
-    template<typename OpT>
-    struct is_pure<proto::unary_op<OpT, proto::unary_plus_tag> >
-      : use_simple_repeat<OpT>
+    template<typename Op>
+    struct is_pure<proto::unary_op<Op, proto::unary_plus_tag> >
+      : use_simple_repeat<Op>
     {
     };
 
-    template<typename OpT>
-    struct is_pure<proto::unary_op<OpT, proto::unary_star_tag> >
-      : use_simple_repeat<OpT>
+    template<typename Op>
+    struct is_pure<proto::unary_op<Op, proto::unary_star_tag> >
+      : use_simple_repeat<Op>
     {
     };
 
-    template<typename OpT>
-    struct is_pure<proto::unary_op<OpT, proto::logical_not_tag> >
-      : use_simple_repeat<OpT>
+    template<typename Op>
+    struct is_pure<proto::unary_op<Op, proto::logical_not_tag> >
+      : use_simple_repeat<Op>
     {
     };
 
-    template<typename OpT, uint_t MinT, uint_t MaxT>
-    struct is_pure<proto::unary_op<OpT, generic_quant_tag<MinT, MaxT> > >
-      : use_simple_repeat<OpT>
+    template<typename Op, uint_t Min, uint_t Max>
+    struct is_pure<proto::unary_op<Op, generic_quant_tag<Min, Max> > >
+      : use_simple_repeat<Op>
     {
     };
 
-    template<typename OpT>
-    struct is_pure<proto::unary_op<OpT, proto::unary_minus_tag> >
-      : is_pure<OpT>
+    template<typename Op>
+    struct is_pure<proto::unary_op<Op, proto::unary_minus_tag> >
+      : is_pure<Op>
     {
     };
 
-    template<typename AlternatesT>
-    struct is_pure<alternates_list<AlternatesT> >
+    template<typename Alternates>
+    struct is_pure<alternates_list<Alternates> >
       : mpl::fold
         <
-            mpl::transform_view<AlternatesT, is_pure<mpl::_1> >
+            mpl::transform_view<Alternates, is_pure<mpl::_1> >
           , mpl::true_
           , mpl::and_<mpl::_1, mpl::_2>
         >::type
@@ -215,32 +215,32 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // use_simple_repeat
     // BUGBUG this doesn't handle +(_ >> s1) correctly, right?
-    template<typename XprT>
+    template<typename Xpr>
     struct use_simple_repeat
-      : mpl::and_<mpl::not_equal_to<width_of<XprT>, unknown_width>, is_pure<XprT> >
+      : mpl::and_<mpl::not_equal_to<width_of<Xpr>, unknown_width>, is_pure<Xpr> >
     {
         // should never try to quantify something of 0-width
-        BOOST_MPL_ASSERT((mpl::not_equal_to<width_of<XprT>, mpl::size_t<0> >));
+        BOOST_MPL_ASSERT((mpl::not_equal_to<width_of<Xpr>, mpl::size_t<0> >));
     };
 
-    template<typename MatcherT>
-    struct use_simple_repeat<proto::unary_op<MatcherT, proto::noop_tag> >
+    template<typename Matcher>
+    struct use_simple_repeat<proto::unary_op<Matcher, proto::noop_tag> >
       : mpl::and_
         <
             mpl::equal_to
             <
-                quant_type<typename as_matcher_type<MatcherT>::type>
+                quant_type<typename as_matcher_type<Matcher>::type>
               , mpl::int_<quant_fixed_width>
             >
-          , typename as_matcher_type<MatcherT>::type::pure
+          , typename as_matcher_type<Matcher>::type::pure
         >
     {
-        BOOST_MPL_ASSERT_RELATION(0, !=, as_matcher_type<MatcherT>::type::width::value);
+        BOOST_MPL_ASSERT_RELATION(0, !=, as_matcher_type<Matcher>::type::width::value);
     };
 
-    template<typename OpT, typename ArgT>
-    struct is_pure<proto::op_proxy<OpT, ArgT> >
-      : is_pure<OpT>
+    template<typename Op, typename Arg>
+    struct is_pure<proto::op_proxy<Op, Arg> >
+      : is_pure<Op>
     {
     };
 

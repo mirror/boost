@@ -23,8 +23,8 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // any
 //
-template<typename InIterT, typename PredT>
-inline bool any(InIterT begin, InIterT end, PredT pred)
+template<typename InIter, typename Pred>
+inline bool any(InIter begin, InIter end, Pred pred)
 {
     return end != std::find_if(begin, end, pred);
 }
@@ -32,8 +32,8 @@ inline bool any(InIterT begin, InIterT end, PredT pred)
 ///////////////////////////////////////////////////////////////////////////////
 // find_nth_if
 //
-template<typename FwdIterT, typename DiffT, typename PredT>
-FwdIterT find_nth_if(FwdIterT begin, FwdIterT end, DiffT count, PredT pred)
+template<typename FwdIter, typename Diff, typename Pred>
+FwdIter find_nth_if(FwdIter begin, FwdIter end, Diff count, Pred pred)
 {
     for(; begin != end; ++begin)
     {
@@ -49,8 +49,8 @@ FwdIterT find_nth_if(FwdIterT begin, FwdIterT end, DiffT count, PredT pred)
 ///////////////////////////////////////////////////////////////////////////////
 // toi
 //
-template<typename InIterT, typename TraitsT>
-int toi(InIterT &begin, InIterT end, TraitsT const &traits, int radix = 10, int max = INT_MAX)
+template<typename InIter, typename Traits>
+int toi(InIter &begin, InIter end, Traits const &traits, int radix = 10, int max = INT_MAX)
 {
     int i = 0, c = 0;
     for(; begin != end && -1 != (c = traits.value(*begin, radix)); ++begin)
@@ -64,8 +64,8 @@ int toi(InIterT &begin, InIterT end, TraitsT const &traits, int radix = 10, int 
 ///////////////////////////////////////////////////////////////////////////////
 // advance_to
 //
-template<typename BidiIterT, typename DiffT>
-inline bool advance_to_impl(BidiIterT & iter, DiffT diff, BidiIterT end, std::bidirectional_iterator_tag)
+template<typename BidiIter, typename Diff>
+inline bool advance_to_impl(BidiIter & iter, Diff diff, BidiIter end, std::bidirectional_iterator_tag)
 {
     for(; 0 < diff && iter != end; --diff)
         ++iter;
@@ -74,8 +74,8 @@ inline bool advance_to_impl(BidiIterT & iter, DiffT diff, BidiIterT end, std::bi
     return 0 == diff;
 }
 
-template<typename RandIterT, typename DiffT>
-inline bool advance_to_impl(RandIterT & iter, DiffT diff, RandIterT end, std::random_access_iterator_tag)
+template<typename RandIter, typename Diff>
+inline bool advance_to_impl(RandIter & iter, Diff diff, RandIter end, std::random_access_iterator_tag)
 {
     if(0 < diff)
     {
@@ -91,10 +91,10 @@ inline bool advance_to_impl(RandIterT & iter, DiffT diff, RandIterT end, std::ra
     return true;
 }
 
-template<typename IterT, typename DiffT>
-inline bool advance_to(IterT & iter, DiffT diff, IterT end)
+template<typename Iter, typename Diff>
+inline bool advance_to(Iter & iter, Diff diff, Iter end)
 {
-    return detail::advance_to_impl(iter, diff, end, typename iterator_category<IterT>::type());
+    return detail::advance_to_impl(iter, diff, end, typename iterator_category<Iter>::type());
 }
 
 }}}

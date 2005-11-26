@@ -27,26 +27,26 @@ namespace boost { namespace xpressive { namespace detail
 //      { Not to be confused with spirit::range }
 //
 ///////////////////////////////////////////////////////////////////////////
-template<typename CharT>
+template<typename Char>
 struct range
 {
-    range(CharT first, CharT last);
+    range(Char first, Char last);
 
     bool is_valid() const;
-    bool includes(CharT v) const;
+    bool includes(Char v) const;
     bool includes(range const &r) const;
     bool overlaps(range const &r) const;
     void merge(range const &r);
 
-    CharT first_;
-    CharT last_;
+    Char first_;
+    Char last_;
 };
 
 //////////////////////////////////
-template<typename CharT>
+template<typename Char>
 struct range_compare
 {
-    bool operator()(range<CharT> const &x, range<CharT> const &y) const
+    bool operator()(range<Char> const &x, range<Char> const &y) const
     {
         return x.first_ < y.first_;
     }
@@ -70,19 +70,19 @@ struct range_compare
 //      { Low level implementation detail }
 //
 ///////////////////////////////////////////////////////////////////////////
-template<typename CharT>
+template<typename Char>
 struct range_run
 {
-    typedef range<CharT> range_type;
+    typedef range<Char> range_type;
     typedef std::vector<range_type> run_type;
     typedef typename run_type::iterator iterator;
     typedef typename run_type::const_iterator const_iterator;
 
     void swap(range_run& rr);
     bool empty() const;
-    bool test(CharT v) const;
-    template<typename TraitsT>
-    bool test(CharT v, TraitsT const &traits) const;
+    bool test(Char v) const;
+    template<typename Traits>
+    bool test(Char v, Traits const &traits) const;
     void set(range_type const &r);
     void clear(range_type const &r);
     void clear();

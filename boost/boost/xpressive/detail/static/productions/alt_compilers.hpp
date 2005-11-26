@@ -27,21 +27,21 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef boost::fusion::nil state_type;
 
-        template<typename OpT, typename StateT, typename VisitorT>
+        template<typename Op, typename State, typename Visitor>
         struct apply
         {
             typedef static_xpression
             <
-                alternate_matcher<alternates_list<OpT>, typename VisitorT::traits_type>
-              , StateT
+                alternate_matcher<alternates_list<Op>, typename Visitor::traits_type>
+              , State
             > type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &state, VisitorT &)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &state, Visitor &)
         {
-            typedef alternate_matcher<alternates_list<OpT>, typename VisitorT::traits_type> alt_matcher;
+            typedef alternate_matcher<alternates_list<Op>, typename Visitor::traits_type> alt_matcher;
             return make_static_xpression(alt_matcher(op), state);
         }
     };
@@ -52,15 +52,15 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef alternate_end_xpression state_type;
 
-        template<typename OpT, typename StateT, typename>
+        template<typename Op, typename State, typename>
         struct apply
         {
-            typedef boost::fusion::cons<OpT, StateT> type;
+            typedef boost::fusion::cons<Op, State> type;
         };
 
-        template<typename OpT, typename StateT>
-        static boost::fusion::cons<OpT, StateT>
-        call(OpT const &op, StateT const &state, dont_care)
+        template<typename Op, typename State>
+        static boost::fusion::cons<Op, State>
+        call(Op const &op, State const &state, dont_care)
         {
             return boost::fusion::make_cons(op, state);
         }
@@ -78,8 +78,8 @@ namespace boost { namespace proto
     };
 
     // handle alternates with the alt branch compiler
-    template<typename OpTagT>
-    struct compiler<OpTagT, xpressive::detail::alt_tag>
+    template<typename OpTag>
+    struct compiler<OpTag, xpressive::detail::alt_tag>
       : branch_compiler<xpressive::detail::alt_list_branch, xpressive::detail::seq_tag>
     {
     };

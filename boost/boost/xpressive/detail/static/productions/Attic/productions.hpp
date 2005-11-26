@@ -35,10 +35,10 @@ namespace boost { namespace xpressive { namespace detail
     //
     struct is_set_initializer_predicate
     {
-        template<typename OpT, typename, typename>
+        template<typename Op, typename, typename>
         struct apply
         {
-            typedef typename is_same<typename proto::left_type<OpT>::type, set_initializer_type>::type type;
+            typedef typename is_same<typename proto::left_type<Op>::type, set_initializer_type>::type type;
         };
     };
 
@@ -46,20 +46,20 @@ namespace boost { namespace xpressive { namespace detail
     //
     struct action_transform
     {
-        template<typename OpT, typename, typename>
+        template<typename Op, typename, typename>
         struct apply
         {
             typedef proto::binary_op
             <
-                typename proto::left_type<OpT>::type
-              , typename proto::right_type<OpT>::type
+                typename proto::left_type<Op>::type
+              , typename proto::right_type<Op>::type
               , proto::right_shift_tag
             > type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &, VisitorT &)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &, Visitor &)
         {
             return proto::left(op) >> proto::right(op);
         }
@@ -84,11 +84,11 @@ namespace boost { namespace xpressive { namespace detail
 // misc regex compiler productions
 namespace boost { namespace proto
 {
-    template<typename BidiIterT>
-    struct value_type<xpressive::basic_regex<BidiIterT> >
+    template<typename BidiIter>
+    struct value_type<xpressive::basic_regex<BidiIter> >
     {
         // store regex objects in the parse tree by reference
-        typedef reference_wrapper<xpressive::basic_regex<BidiIterT> const> type;
+        typedef reference_wrapper<xpressive::basic_regex<BidiIter> const> type;
     };
 
     // production for sequences in sequence

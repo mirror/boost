@@ -24,18 +24,18 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // word_boundary
     //
-    template<bool IsBoundaryT>
+    template<bool IsBoundary>
     struct word_boundary
     {
-        template<typename BidiIterT>
-        static bool eval(bool prevword, bool thisword, state_type<BidiIterT> &state)
+        template<typename BidiIter>
+        static bool eval(bool prevword, bool thisword, state_type<BidiIter> &state)
         {
             if((state.flags_.match_not_bow_ && state.bos()) || (state.flags_.match_not_eow_ && state.eos()))
             {
-                return !IsBoundaryT;
+                return !IsBoundary;
             }
 
-            return IsBoundaryT == (prevword != thisword);
+            return IsBoundary == (prevword != thisword);
         }
     };
 
@@ -44,8 +44,8 @@ namespace boost { namespace xpressive { namespace detail
     //
     struct word_begin
     {
-        template<typename BidiIterT>
-        static bool eval(bool prevword, bool thisword, state_type<BidiIterT> &state)
+        template<typename BidiIter>
+        static bool eval(bool prevword, bool thisword, state_type<BidiIter> &state)
         {
             if(state.flags_.match_not_bow_ && state.bos())
             {
@@ -61,8 +61,8 @@ namespace boost { namespace xpressive { namespace detail
     //
     struct word_end
     {
-        template<typename BidiIterT>
-        static bool eval(bool prevword, bool thisword, state_type<BidiIterT> &state)
+        template<typename BidiIter>
+        static bool eval(bool prevword, bool thisword, state_type<BidiIter> &state)
         {
             if(state.flags_.match_not_eow_ && state.eos())
             {
@@ -76,35 +76,35 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // assert_word_matcher
     //
-    template<typename CondT, typename TraitsT>
+    template<typename Cond, typename Traits>
     struct assert_word_matcher
       : quant_style_assertion
     {
-        typedef typename TraitsT::char_type char_type;
+        typedef typename Traits::char_type char_type;
 
-        assert_word_matcher(TraitsT const &traits)
+        assert_word_matcher(Traits const &traits)
           : word_(lookup_classname(traits, "w"))
         {
             BOOST_ASSERT(0 != this->word_);
         }
 
-        bool is_word(TraitsT const &traits, char_type ch) const
+        bool is_word(Traits const &traits, char_type ch) const
         {
             return traits.isctype(traits.translate(ch), this->word_);
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match(state_type<BidiIterT> &state, NextT const &next) const
+        template<typename BidiIter, typename Next>
+        bool match(state_type<BidiIter> &state, Next const &next) const
         {
-            BidiIterT cur = state.cur_;
-            bool const thisword = !state.eos() && this->is_word(traits_cast<TraitsT>(state), *cur);
+            BidiIter cur = state.cur_;
+            bool const thisword = !state.eos() && this->is_word(traits_cast<Traits>(state), *cur);
             bool const prevword = (!state.bos() || state.flags_.match_prev_avail_)
-                && this->is_word(traits_cast<TraitsT>(state), *--cur);
+                && this->is_word(traits_cast<Traits>(state), *--cur);
 
-            return CondT::eval(prevword, thisword, state) && next.match(state);
+            return Cond::eval(prevword, thisword, state) && next.match(state);
         }
 
-        typename TraitsT::char_class_type word_;
+        typename Traits::char_class_type word_;
     };
 
 }}}

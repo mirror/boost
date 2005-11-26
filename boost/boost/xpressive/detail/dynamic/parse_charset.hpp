@@ -35,12 +35,12 @@ enum escape_type
 ///////////////////////////////////////////////////////////////////////////////
 // escape_value
 //
-template<typename CharT, typename ClassT>
+template<typename Char, typename Class>
 struct escape_value
 {
-    CharT ch_;
+    Char ch_;
     int mark_nbr_;
-    ClassT class_;
+    Class class_;
     escape_type type_;
 };
 
@@ -62,13 +62,13 @@ struct char_overflow_handler
 ///////////////////////////////////////////////////////////////////////////////
 // parse_escape
 //
-template<typename FwdIterT, typename CompilerTraitsT>
-escape_value<typename iterator_value<FwdIterT>::type, typename CompilerTraitsT::regex_traits::char_class_type>
-parse_escape(FwdIterT &begin, FwdIterT end, CompilerTraitsT &traits)
+template<typename FwdIter, typename CompilerTraits>
+escape_value<typename iterator_value<FwdIter>::type, typename CompilerTraits::regex_traits::char_class_type>
+parse_escape(FwdIter &begin, FwdIter end, CompilerTraits &traits)
 {
     using namespace regex_constants;
-    typedef typename iterator_value<FwdIterT>::type char_type;
-    typedef typename CompilerTraitsT::regex_traits regex_traits;
+    typedef typename iterator_value<FwdIter>::type char_type;
+    typedef typename CompilerTraits::regex_traits regex_traits;
     typedef typename regex_traits::char_class_type char_class_type;
 
     // define an unsigned type the same size as char_type
@@ -81,7 +81,7 @@ parse_escape(FwdIterT &begin, FwdIterT end, CompilerTraitsT &traits)
     escape_value<char_type,char_class_type> esc = { 0, 0, 0, escape_char };
     bool const icase = (0 != (regex_constants::icase_ & traits.flags()));
     regex_traits const &rxtraits = traits.traits();
-    FwdIterT tmp;
+    FwdIter tmp;
 
     esc.class_ = rxtraits.lookup_classname(begin, begin + 1, icase);
     if(0 != esc.class_)
@@ -181,22 +181,22 @@ parse_escape(FwdIterT &begin, FwdIterT end, CompilerTraitsT &traits)
 //////////////////////////////////////////////////////////////////////////
 // parse_charset
 //
-template<typename FwdIterT, typename RegexTraitsT, typename CompilerTraitsT>
+template<typename FwdIter, typename RegexTraits, typename CompilerTraits>
 inline void parse_charset
 (
-    FwdIterT &begin
-  , FwdIterT end
-  , compound_charset<RegexTraitsT> &chset
-  , CompilerTraitsT &traits
+    FwdIter &begin
+  , FwdIter end
+  , compound_charset<RegexTraits> &chset
+  , CompilerTraits &traits
 )
 {
     using namespace regex_constants;
-    typedef typename RegexTraitsT::char_type char_type;
-    typedef typename RegexTraitsT::char_class_type char_class_type;
+    typedef typename RegexTraits::char_type char_type;
+    typedef typename RegexTraits::char_class_type char_class_type;
     BOOST_ASSERT(begin != end);
-    RegexTraitsT const &rxtraits = traits.traits();
+    RegexTraits const &rxtraits = traits.traits();
     bool const icase = (0 != (regex_constants::icase_ & traits.flags()));
-    FwdIterT iprev = FwdIterT();
+    FwdIter iprev = FwdIter();
     escape_value<char_type, char_class_type> esc = {0, 0, 0, escape_char};
     bool invert = false;
 
@@ -232,7 +232,7 @@ inline void parse_charset
         if(token_charset_hyphen == tok && have_prev)
         {
             // remember the current position
-            FwdIterT iprev2 = begin;
+            FwdIter iprev2 = begin;
             have_prev = false;
 
             // ch_prev is lower bound of a range
@@ -292,7 +292,7 @@ inline void parse_charset
 
         case token_posix_charset_begin:
             {
-                FwdIterT tmp = begin, start = begin;
+                FwdIter tmp = begin, start = begin;
                 bool invert = (token_charset_invert == traits.get_charset_token(tmp, end));
                 if(invert)
                 {

@@ -23,23 +23,23 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // charset_matcher
     //
-    template<typename TraitsT, bool ICaseT, typename CharSetT>
+    template<typename Traits, bool ICase, typename CharSet>
     struct charset_matcher
       : quant_style_fixed_width<1>
     {
-        typedef typename TraitsT::char_type char_type;
-        typedef TraitsT traits_type;
-        typedef mpl::bool_<ICaseT> icase_type;
+        typedef typename Traits::char_type char_type;
+        typedef Traits traits_type;
+        typedef mpl::bool_<ICase> icase_type;
 
-        charset_matcher(CharSetT const &charset = CharSetT())
+        charset_matcher(CharSet const &charset = CharSet())
           : charset_(charset)
         {
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match(state_type<BidiIterT> &state, NextT const &next) const
+        template<typename BidiIter, typename Next>
+        bool match(state_type<BidiIter> &state, Next const &next) const
         {
-            if(state.eos() || !this->charset_.test(*state.cur_, traits_cast<TraitsT>(state), icase_type()))
+            if(state.eos() || !this->charset_.test(*state.cur_, traits_cast<Traits>(state), icase_type()))
             {
                 return false;
             }
@@ -54,7 +54,7 @@ namespace boost { namespace xpressive { namespace detail
             return false;
         }
 
-        CharSetT charset_;
+        CharSet charset_;
     };
 
 }}}

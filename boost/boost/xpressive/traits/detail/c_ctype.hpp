@@ -57,8 +57,8 @@ inline bool iswnewline(wchar_t ch)
 ///////////////////////////////////////////////////////////////////////////////
 // classname_a
 //
-template<typename FwdIterT>
-inline std::string classname_a(FwdIterT begin, FwdIterT end)
+template<typename FwdIter>
+inline std::string classname_a(FwdIter begin, FwdIter end)
 {
 	std::string name(begin, end);
 	for(std::size_t i = 0; i < name.size(); ++i)
@@ -73,8 +73,8 @@ inline std::string classname_a(FwdIterT begin, FwdIterT end)
 ///////////////////////////////////////////////////////////////////////////////
 // classname_w
 //
-template<typename FwdIterT>
-inline std::wstring classname_w(FwdIterT begin, FwdIterT end)
+template<typename FwdIter>
+inline std::wstring classname_w(FwdIter begin, FwdIter end)
 {
 	std::wstring name(begin, end);
 	for(std::size_t i = 0; i < name.size(); ++i)
@@ -91,7 +91,7 @@ inline std::wstring classname_w(FwdIterT begin, FwdIterT end)
 ///////////////////////////////////////////////////////////////////////////////
 // char_class_impl
 //
-template<typename CharT>
+template<typename Char>
 struct char_class_impl;
 
 
@@ -108,8 +108,8 @@ struct char_class_impl<char>
     BOOST_STATIC_CONSTANT(int, char_class_underscore = 0x1000);
     BOOST_STATIC_CONSTANT(int, char_class_newline = 0x2000);
 
-    template<typename FwdIterT>
-    static char_class_type lookup_classname(FwdIterT begin, FwdIterT end, bool icase)
+    template<typename FwdIter>
+    static char_class_type lookup_classname(FwdIter begin, FwdIter end, bool icase)
     {
         using namespace std;
         string const name = classname_a(begin, end);
@@ -163,8 +163,8 @@ struct char_class_impl<wchar_t>
     BOOST_STATIC_CONSTANT(int, char_class_underscore = 0x1000);
     BOOST_STATIC_CONSTANT(int, char_class_newline = 0x2000);
 
-    template<typename FwdIterT>
-    static char_class_type lookup_classname(FwdIterT begin, FwdIterT end, bool icase)
+    template<typename FwdIter>
+    static char_class_type lookup_classname(FwdIter begin, FwdIter end, bool icase)
     {
         using namespace std;
         wstring const name = classname_w(begin, end);
@@ -224,8 +224,8 @@ struct char_class_impl<char>
     BOOST_STATIC_CONSTANT(int, char_class_underscore = 0400);
     BOOST_STATIC_CONSTANT(int, char_class_newline = 01000);
 
-    template<typename FwdIterT>
-    static char_class_type lookup_classname(FwdIterT begin, FwdIterT end, bool icase)
+    template<typename FwdIter>
+    static char_class_type lookup_classname(FwdIter begin, FwdIter end, bool icase)
     {
         using namespace std;
         string const name = classname_a(begin, end);
@@ -288,8 +288,8 @@ struct char_class_impl<wchar_t>
     BOOST_STATIC_CONSTANT(int, char_class_xdigit        = 0x1000);
     BOOST_STATIC_CONSTANT(int, char_class_newline       = 0x2000);
 
-    template<typename FwdIterT>
-    static char_class_type lookup_classname(FwdIterT begin, FwdIterT end, bool icase)
+    template<typename FwdIter>
+    static char_class_type lookup_classname(FwdIter begin, FwdIter end, bool icase)
     {
         using namespace std;
         wstring const name = classname_w(begin, end);
@@ -349,8 +349,8 @@ struct char_class_impl<char>
     BOOST_STATIC_CONSTANT(int, char_class_underscore = 0x00010000);
     BOOST_STATIC_CONSTANT(int, char_class_newline = 0x00020000);
 
-    template<typename FwdIterT>
-    static char_class_type lookup_classname(FwdIterT begin, FwdIterT end, bool icase)
+    template<typename FwdIter>
+    static char_class_type lookup_classname(FwdIter begin, FwdIter end, bool icase)
     {
         using namespace std;
         string const name = classname_a(begin, end);
@@ -414,8 +414,8 @@ struct char_class_impl<wchar_t>
     BOOST_STATIC_CONSTANT(int, char_class_xdigit        = 0x1000);
     BOOST_STATIC_CONSTANT(int, char_class_newline       = 0x2000);
 
-    template<typename FwdIterT>
-    static char_class_type lookup_classname(FwdIterT begin, FwdIterT end, bool icase)
+    template<typename FwdIter>
+    static char_class_type lookup_classname(FwdIter begin, FwdIter end, bool icase)
     {
         using namespace std;
         wstring const name = classname_w(begin, end);
@@ -474,8 +474,8 @@ struct char_class_impl<char>
     BOOST_STATIC_CONSTANT(int, char_class_underscore = 0x1000);
     BOOST_STATIC_CONSTANT(int, char_class_newline = 0x2000);
 
-    template<typename FwdIterT>
-    static char_class_type lookup_classname(FwdIterT begin, FwdIterT end, bool icase)
+    template<typename FwdIter>
+    static char_class_type lookup_classname(FwdIter begin, FwdIter end, bool icase)
     {
         using namespace std;
         string const name = classname_a(begin, end);
@@ -529,8 +529,8 @@ struct char_class_impl<wchar_t>
     BOOST_STATIC_CONSTANT(int, char_class_underscore = 0x1000);
     BOOST_STATIC_CONSTANT(int, char_class_newline = 0x2000);
 
-    template<typename FwdIterT>
-    static char_class_type lookup_classname(FwdIterT begin, FwdIterT end, bool icase)
+    template<typename FwdIter>
+    static char_class_type lookup_classname(FwdIter begin, FwdIter end, bool icase)
     {
         using namespace std;
         wstring const name = classname_w(begin, end);
@@ -603,8 +603,8 @@ struct char_class_impl<char>
     BOOST_STATIC_CONSTANT(int, char_class_xdigit        = 0x1000);
     BOOST_STATIC_CONSTANT(int, char_class_newline       = 0x2000);
 
-    template<typename FwdIterT>
-    static char_class_type lookup_classname(FwdIterT begin, FwdIterT end, bool icase)
+    template<typename FwdIter>
+    static char_class_type lookup_classname(FwdIter begin, FwdIter end, bool icase)
     {
         using namespace std;
         string const name = classname_a(begin, end);
@@ -668,8 +668,8 @@ struct char_class_impl<wchar_t>
     BOOST_STATIC_CONSTANT(int, char_class_xdigit        = 0x1000);
     BOOST_STATIC_CONSTANT(int, char_class_newline       = 0x2000);
 
-    template<typename FwdIterT>
-    static char_class_type lookup_classname(FwdIterT begin, FwdIterT end, bool icase)
+    template<typename FwdIter>
+    static char_class_type lookup_classname(FwdIter begin, FwdIter end, bool icase)
     {
         using namespace std;
         wstring const name = classname_w(begin, end);

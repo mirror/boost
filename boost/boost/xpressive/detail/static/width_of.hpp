@@ -84,7 +84,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // width_of
     //
-    template<typename XprT>
+    template<typename Xpr>
     struct width_of;
 
     template<>
@@ -93,172 +93,172 @@ namespace boost { namespace xpressive { namespace detail
     {
     };
 
-    template<typename MatcherT>
-    struct width_of<proto::unary_op<MatcherT, proto::noop_tag> >
-      : as_matcher_type<MatcherT>::type::width
+    template<typename Matcher>
+    struct width_of<proto::unary_op<Matcher, proto::noop_tag> >
+      : as_matcher_type<Matcher>::type::width
     {
     };
 
-    template<typename LeftT, typename RightT>
-    struct width_of<proto::binary_op<LeftT, RightT, proto::right_shift_tag> >
-      : add_width<width_of<LeftT>, width_of<RightT> >
+    template<typename Left, typename Right>
+    struct width_of<proto::binary_op<Left, Right, proto::right_shift_tag> >
+      : add_width<width_of<Left>, width_of<Right> >
     {
     };
 
-    template<typename LeftT, typename RightT>
-    struct width_of<proto::binary_op<LeftT, RightT, proto::bitor_tag> >
-      : equal_width<width_of<LeftT>, width_of<RightT> >
+    template<typename Left, typename Right>
+    struct width_of<proto::binary_op<Left, Right, proto::bitor_tag> >
+      : equal_width<width_of<Left>, width_of<Right> >
     {
     };
 
-    template<typename RightT>
-    struct width_of<proto::binary_op<mark_tag, RightT, proto::assign_tag> >
-      : width_of<RightT>
+    template<typename Right>
+    struct width_of<proto::binary_op<mark_tag, Right, proto::assign_tag> >
+      : width_of<Right>
     {
     };
 
-    template<typename RightT>
-    struct width_of<proto::binary_op<set_initializer_type, RightT, proto::assign_tag> >
+    template<typename Right>
+    struct width_of<proto::binary_op<set_initializer_type, Right, proto::assign_tag> >
       : mpl::size_t<1>
     {
     };
 
-    template<typename ModifierT, typename XprT>
-    struct width_of<proto::binary_op<ModifierT, XprT, modifier_tag> >
-      : width_of<XprT>
+    template<typename Modifier, typename Xpr>
+    struct width_of<proto::binary_op<Modifier, Xpr, modifier_tag> >
+      : width_of<Xpr>
     {
     };
 
-    template<typename XprT, bool PositiveT>
-    struct width_of<proto::unary_op<XprT, lookahead_tag<PositiveT> > >
+    template<typename Xpr, bool Positive>
+    struct width_of<proto::unary_op<Xpr, lookahead_tag<Positive> > >
       : mpl::size_t<0>
     {
     };
 
-    template<typename XprT, bool PositiveT>
-    struct width_of<proto::unary_op<XprT, lookbehind_tag<PositiveT> > >
+    template<typename Xpr, bool Positive>
+    struct width_of<proto::unary_op<Xpr, lookbehind_tag<Positive> > >
       : mpl::size_t<0>
     {
     };
 
-    template<typename XprT>
-    struct width_of<proto::unary_op<XprT, keeper_tag> >
-      : width_of<XprT>
+    template<typename Xpr>
+    struct width_of<proto::unary_op<Xpr, keeper_tag> >
+      : width_of<Xpr>
     {
     };
 
-    template<typename MatcherT, typename NextT>
-    struct width_of<static_xpression<MatcherT, NextT> >
-      : add_width<typename MatcherT::width, width_of<NextT> >
+    template<typename Matcher, typename Next>
+    struct width_of<static_xpression<Matcher, Next> >
+      : add_width<typename Matcher::width, width_of<Next> >
     {
     };
 
-    template<typename BidiIterT>
-    struct width_of<shared_ptr<matchable<BidiIterT> const> >
+    template<typename BidiIter>
+    struct width_of<shared_ptr<matchable<BidiIter> const> >
       : unknown_width
     {
     };
 
-    template<typename BidiIterT>
-    struct width_of<std::vector<shared_ptr<matchable<BidiIterT> const> > >
+    template<typename BidiIter>
+    struct width_of<std::vector<shared_ptr<matchable<BidiIter> const> > >
       : unknown_width
     {
     };
 
-    template<typename BidiIterT>
-    struct width_of<proto::unary_op<basic_regex<BidiIterT>, proto::noop_tag> >
+    template<typename BidiIter>
+    struct width_of<proto::unary_op<basic_regex<BidiIter>, proto::noop_tag> >
       : unknown_width
     {
     };
 
-    template<typename BidiIterT>
-    struct width_of<proto::unary_op<reference_wrapper<basic_regex<BidiIterT> const>, proto::noop_tag> >
+    template<typename BidiIter>
+    struct width_of<proto::unary_op<reference_wrapper<basic_regex<BidiIter> const>, proto::noop_tag> >
       : unknown_width
     {
     };
 
-    template<typename OpT>
-    struct width_of<proto::unary_op<OpT, proto::unary_plus_tag> >
+    template<typename Op>
+    struct width_of<proto::unary_op<Op, proto::unary_plus_tag> >
       : unknown_width
     {
     };
 
-    template<typename OpT>
-    struct width_of<proto::unary_op<OpT, proto::unary_star_tag> >
+    template<typename Op>
+    struct width_of<proto::unary_op<Op, proto::unary_star_tag> >
       : unknown_width
     {
     };
 
-    template<typename OpT>
-    struct width_of<proto::unary_op<OpT, proto::logical_not_tag> >
+    template<typename Op>
+    struct width_of<proto::unary_op<Op, proto::logical_not_tag> >
       : unknown_width
     {
     };
 
-    template<typename OpT, uint_t MinT, uint_t MaxT>
-    struct width_of<proto::unary_op<OpT, generic_quant_tag<MinT, MaxT> > >
-      : mpl::if_c<MinT==MaxT, mult_width<width_of<OpT>, mpl::size_t<MinT> >, unknown_width>::type
+    template<typename Op, uint_t Min, uint_t Max>
+    struct width_of<proto::unary_op<Op, generic_quant_tag<Min, Max> > >
+      : mpl::if_c<Min==Max, mult_width<width_of<Op>, mpl::size_t<Min> >, unknown_width>::type
     {
     };
 
-    template<typename OpT>
-    struct width_of<proto::unary_op<OpT, proto::unary_minus_tag> >
-      : width_of<OpT>
+    template<typename Op>
+    struct width_of<proto::unary_op<Op, proto::unary_minus_tag> >
+      : width_of<Op>
     {
     };
 
     // when complementing a set or an assertion, the width is that of the set (1) or the assertion (0)
-    template<typename OpT>
-    struct width_of<proto::unary_op<OpT, proto::complement_tag> >
-      : width_of<OpT>
+    template<typename Op>
+    struct width_of<proto::unary_op<Op, proto::complement_tag> >
+      : width_of<Op>
     {
     };
 
     // The comma is used in list-initialized sets, and the width of sets are 1
-    template<typename LeftT, typename RightT>
-    struct width_of<proto::binary_op<LeftT, RightT, proto::comma_tag> >
+    template<typename Left, typename Right>
+    struct width_of<proto::binary_op<Left, Right, proto::comma_tag> >
       : mpl::size_t<1>
     {
     };
 
     // The subscript operator[] is used for sets, as in set['a' | range('b','h')], 
     // or for actions as in (any >> expr)[ action ]
-    template<typename LeftT, typename RightT>
-    struct width_of<proto::binary_op<LeftT, RightT, proto::subscript_tag> >
-      : mpl::if_<is_same<LeftT, set_initializer_type>, mpl::size_t<1>, width_of<LeftT> >::type
+    template<typename Left, typename Right>
+    struct width_of<proto::binary_op<Left, Right, proto::subscript_tag> >
+      : mpl::if_<is_same<Left, set_initializer_type>, mpl::size_t<1>, width_of<Left> >::type
     {
-        // If LeftT is "set" then make sure that RightT has a width_of 1
+        // If Left is "set" then make sure that Right has a width_of 1
         BOOST_MPL_ASSERT
         ((
             mpl::or_
             <
-                mpl::not_<is_same<LeftT, set_initializer_type> >
-              , mpl::equal_to<width_of<RightT>, mpl::size_t<1> >
+                mpl::not_<is_same<Left, set_initializer_type> >
+              , mpl::equal_to<width_of<Right>, mpl::size_t<1> >
             >
         ));
     };
 
     // The width of a list of alternates is N if all the alternates have width N, otherwise unknown_width
-    template<typename WidthsT>
+    template<typename Widths>
     struct alt_width_of
       : mpl::fold
         <
-            WidthsT
-          , typename mpl::front<WidthsT>::type
+            Widths
+          , typename mpl::front<Widths>::type
           , equal_width<mpl::_1, mpl::_2>
         >::type
     {
     };
 
-    template<typename AlternatesT>
-    struct width_of<alternates_list<AlternatesT> >
-      : alt_width_of<mpl::transform_view<AlternatesT, width_of<mpl::_1> > >
+    template<typename Alternates>
+    struct width_of<alternates_list<Alternates> >
+      : alt_width_of<mpl::transform_view<Alternates, width_of<mpl::_1> > >
     {
     };
 
-    template<typename OpT, typename ArgT>
-    struct width_of<proto::op_proxy<OpT, ArgT> >
-      : width_of<OpT>
+    template<typename Op, typename Arg>
+    struct width_of<proto::op_proxy<Op, Arg> >
+      : width_of<Op>
     {
     };
 

@@ -26,8 +26,8 @@ namespace boost { namespace xpressive { namespace detail
     struct assert_eos_matcher
       : quant_style_assertion
     {
-        template<typename BidiIterT, typename NextT>
-        static bool match(state_type<BidiIterT> &state, NextT const &next)
+        template<typename BidiIter, typename Next>
+        static bool match(state_type<BidiIter> &state, Next const &next)
         {
             return state.eos() && next.match(state);
         }

@@ -36,27 +36,27 @@
 
 namespace boost { namespace xpressive
 {
-    template<typename CharT, typename ImplT>
+    template<typename Char, typename Impl>
     struct regex_traits;
 
-    template<typename CharT>
+    template<typename Char>
     struct cpp_regex_traits;
 
-    template<typename CharT>
+    template<typename Char>
     struct c_regex_traits;
 
-    template<typename ElemT>
+    template<typename Elem>
     struct null_regex_traits;
 
     namespace detail
     {
-        template<typename CharT>
+        template<typename Char>
         struct default_regex_traits
         {
             #ifdef BOOST_XPRESSIVE_USE_C_TRAITS
-            typedef c_regex_traits<CharT> type;
+            typedef c_regex_traits<Char> type;
             #else
-            typedef cpp_regex_traits<CharT> type;
+            typedef cpp_regex_traits<Char> type;
             #endif
         };
 
@@ -76,38 +76,38 @@ namespace boost { namespace xpressive
 
     struct regex_traits_version_1_case_fold_tag;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct basic_regex;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct match_results;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct regex_iterator;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct regex_token_iterator;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct regex_id_filter_predicate;
 
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct sub_match;
 
-    template<typename ActionT, typename SavedT = ActionT>
+    template<typename Action, typename Saved = Action>
     struct action;
 
-    template<typename RegexTraitsT>
+    template<typename RegexTraits>
     struct compiler_traits;
 
-    template<typename CharT, typename ImplT = typename detail::default_regex_traits<CharT>::type>
+    template<typename Char, typename Impl = typename detail::default_regex_traits<Char>::type>
     struct regex_traits;
 
     template
     <
-        typename BidiIterT
-      , typename RegexTraitsT = regex_traits<typename iterator_value<BidiIterT>::type>
-      , typename CompilerTraitsT = compiler_traits<RegexTraitsT>
+        typename BidiIter
+      , typename RegexTraits = regex_traits<typename iterator_value<BidiIter>::type>
+      , typename CompilerTraits = compiler_traits<RegexTraits>
     >
     struct regex_compiler;
 

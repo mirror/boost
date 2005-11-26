@@ -24,17 +24,17 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // assert_bol_matcher
     //
-    template<typename TraitsT>
+    template<typename Traits>
     struct assert_bol_matcher
-      : assert_line_base<TraitsT>
+      : assert_line_base<Traits>
     {
-        assert_bol_matcher(TraitsT const &traits)
-          : assert_line_base<TraitsT>(traits)
+        assert_bol_matcher(Traits const &traits)
+          : assert_line_base<Traits>(traits)
         {
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match(state_type<BidiIterT> &state, NextT const &next) const
+        template<typename BidiIter, typename Next>
+        bool match(state_type<BidiIter> &state, Next const &next) const
         {
             if(state.bos())
             {

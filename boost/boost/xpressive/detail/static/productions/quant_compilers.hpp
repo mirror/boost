@@ -23,62 +23,62 @@
 namespace boost { namespace xpressive { namespace detail
 {
 
-    template<bool GreedyT = true, uint_t MinT = 1, uint_t MaxT = UINT_MAX-1>
+    template<bool Greedy = true, uint_t Min = 1, uint_t Max = UINT_MAX-1>
     struct plus_compiler
       : proto::conditional_compiler
         <
             use_simple_repeat_predicate
-          , proto::branch_compiler<simple_repeat_branch<GreedyT, MinT, MaxT>, ind_tag>
-          , proto::transform_compiler<plus_transform<GreedyT, MinT, MaxT>, seq_tag>
+          , proto::branch_compiler<simple_repeat_branch<Greedy, Min, Max>, ind_tag>
+          , proto::transform_compiler<plus_transform<Greedy, Min, Max>, seq_tag>
         >
     {
     };
 
-    template<bool GreedyT = true, uint_t MaxT = UINT_MAX-1>
+    template<bool Greedy = true, uint_t Max = UINT_MAX-1>
     struct star_compiler
       : proto::conditional_compiler
         <
             use_simple_repeat_predicate
-          , proto::branch_compiler<simple_repeat_branch<GreedyT, 0, MaxT>, ind_tag>
-          , proto::transform_compiler<star_transform<GreedyT, MaxT>, seq_tag>
+          , proto::branch_compiler<simple_repeat_branch<Greedy, 0, Max>, ind_tag>
+          , proto::transform_compiler<star_transform<Greedy, Max>, seq_tag>
         >
     {
     };
 
-    template<bool GreedyT = true>
+    template<bool Greedy = true>
     struct optional_compiler
-      : proto::transform_compiler<optional_transform<GreedyT>, seq_tag>
+      : proto::transform_compiler<optional_transform<Greedy>, seq_tag>
     {
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // generic_quant_compiler
-    template<bool GreedyT, uint_t MinT, uint_t MaxT>
+    template<bool Greedy, uint_t Min, uint_t Max>
     struct generic_quant_compiler
-      : plus_compiler<GreedyT, MinT, MaxT>
+      : plus_compiler<Greedy, Min, Max>
     {
     };
 
-    template<bool GreedyT, uint_t MaxT>
-    struct generic_quant_compiler<GreedyT, 0, MaxT>
-      : star_compiler<GreedyT, MaxT>
+    template<bool Greedy, uint_t Max>
+    struct generic_quant_compiler<Greedy, 0, Max>
+      : star_compiler<Greedy, Max>
     {
     };
 
-    template<bool GreedyT>
-    struct generic_quant_compiler<GreedyT, 0, 1>
-      : optional_compiler<GreedyT>
+    template<bool Greedy>
+    struct generic_quant_compiler<Greedy, 0, 1>
+      : optional_compiler<Greedy>
     {
     };
 
-    template<bool GreedyT>
-    struct generic_quant_compiler<GreedyT, 1, 1>
+    template<bool Greedy>
+    struct generic_quant_compiler<Greedy, 1, 1>
       : proto::transform_compiler<proto::arg_transform, seq_tag>
     {
     };
 
-    template<bool GreedyT>
-    struct generic_quant_compiler<GreedyT, 0, 0>
+    template<bool Greedy>
+    struct generic_quant_compiler<Greedy, 0, 0>
       : proto::transform_compiler<epsilon_transform, seq_tag>
     {
     };
@@ -88,13 +88,13 @@ namespace boost { namespace xpressive { namespace detail
     //
     struct non_greedy_compiler
     {
-        template<typename OpT, typename StateT, typename VisitorT>
+        template<typename Op, typename State, typename Visitor>
         struct apply
         {
             // Did you apply operator- to something that wasn't a quantifier?
-            BOOST_MPL_ASSERT((is_greedy_quant<typename proto::arg_type<OpT>::type>));
+            BOOST_MPL_ASSERT((is_greedy_quant<typename proto::arg_type<Op>::type>));
 
-            typedef typename proto::tag_type<typename proto::arg_type<OpT>::type>::type tag_type;
+            typedef typename proto::tag_type<typename proto::arg_type<Op>::type>::type tag_type;
             typedef typename min_type<tag_type>::type min_type;
             typedef typename max_type<tag_type>::type max_type;
 
@@ -107,17 +107,17 @@ namespace boost { namespace xpressive { namespace detail
 
             typedef typename compiler_type::BOOST_NESTED_TEMPLATE apply
             <
-                typename proto::arg_type<OpT>::type
-              , StateT
-              , VisitorT
+                typename proto::arg_type<Op>::type
+              , State
+              , Visitor
             >::type type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static typename apply<OpT, StateT, VisitorT>::type
-        call(OpT const &op, StateT const &state, VisitorT &visitor)
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &state, Visitor &visitor)
         {
-            typedef typename apply<OpT, StateT, VisitorT>::compiler_type compiler_type;
+            typedef typename apply<Op, State, Visitor>::compiler_type compiler_type;
             return compiler_type::call(proto::arg(op), state, visitor);
         }
     };
@@ -150,9 +150,9 @@ namespace boost { namespace proto
     };
 
     // production for generic quantifiers
-    template<unsigned int MinT, unsigned int MaxT>
-    struct compiler<xpressive::detail::generic_quant_tag<MinT, MaxT>, xpressive::detail::seq_tag>
-      : xpressive::detail::generic_quant_compiler<true, MinT, MaxT>
+    template<unsigned int Min, unsigned int Max>
+    struct compiler<xpressive::detail::generic_quant_tag<Min, Max>, xpressive::detail::seq_tag>
+      : xpressive::detail::generic_quant_compiler<true, Min, Max>
     {
     };
 

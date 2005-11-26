@@ -28,13 +28,13 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // regex_matcher
     //
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct regex_matcher
       : quant_style<quant_variable_width, unknown_width, mpl::false_>
     {
-        regex_impl<BidiIterT> impl_;
+        regex_impl<BidiIter> impl_;
 
-        regex_matcher(shared_ptr<regex_impl<BidiIterT> > const &impl)
+        regex_matcher(shared_ptr<regex_impl<BidiIter> > const &impl)
           : impl_()
         {
             this->impl_.xpr_ = impl->xpr_;
@@ -45,15 +45,15 @@ namespace boost { namespace xpressive { namespace detail
             ensure(this->impl_.xpr_, regex_constants::error_badref, "bad regex reference");
         }
 
-        template<typename NextT>
-        bool match(state_type<BidiIterT> &state, NextT const &next) const
+        template<typename Next>
+        bool match(state_type<BidiIter> &state, Next const &next) const
         {
             // regex_matcher is used for embeding a dynamic regex in a static regex. As such,
-            // NextT will always point to a static regex.
-            BOOST_MPL_ASSERT((is_static_xpression<NextT>));
+            // Next will always point to a static regex.
+            BOOST_MPL_ASSERT((is_static_xpression<Next>));
 
             // wrap the static xpression in a matchable interface
-            xpression_adaptor<NextT const &, BidiIterT> adaptor(next);
+            xpression_adaptor<Next const &, BidiIter> adaptor(next);
             return push_context_match(this->impl_, state, adaptor);
         }
     };

@@ -16,53 +16,53 @@
 
 namespace boost { namespace xpressive { namespace detail
 {
-    template<bool PositiveT>
+    template<bool Positive>
     struct lookahead_tag : proto::unary_tag {};
 
-    template<bool PositiveT>
+    template<bool Positive>
     struct lookbehind_tag : proto::unary_tag {};
 
     struct keeper_tag : proto::unary_tag {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // lookahead_branch
-    template<bool PositiveT>
+    template<bool Positive>
     struct lookahead_branch
     {
         typedef true_xpression state_type;
 
-        template<typename OpT, typename StateT, typename>
+        template<typename Op, typename State, typename>
         struct apply
         {
-            typedef static_xpression<lookahead_matcher<OpT>, StateT> type;
+            typedef static_xpression<lookahead_matcher<Op>, State> type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static static_xpression<lookahead_matcher<OpT>, StateT>
-        call(OpT const &op, StateT const &state, VisitorT &)
+        template<typename Op, typename State, typename Visitor>
+        static static_xpression<lookahead_matcher<Op>, State>
+        call(Op const &op, State const &state, Visitor &)
         {
-            return make_static_xpression(lookahead_matcher<OpT>(op, !PositiveT), state);
+            return make_static_xpression(lookahead_matcher<Op>(op, !Positive), state);
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // lookbehind_branch
-    template<bool PositiveT>
+    template<bool Positive>
     struct lookbehind_branch
     {
         typedef true_xpression state_type;
 
-        template<typename OpT, typename StateT, typename>
+        template<typename Op, typename State, typename>
         struct apply
         {
-            typedef static_xpression<lookbehind_matcher<OpT>, StateT> type;
+            typedef static_xpression<lookbehind_matcher<Op>, State> type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static static_xpression<lookbehind_matcher<OpT>, StateT>
-        call(OpT const &op, StateT const &state, VisitorT &)
+        template<typename Op, typename State, typename Visitor>
+        static static_xpression<lookbehind_matcher<Op>, State>
+        call(Op const &op, State const &state, Visitor &)
         {
-            return make_static_xpression(lookbehind_matcher<OpT>(op, !PositiveT), state);
+            return make_static_xpression(lookbehind_matcher<Op>(op, !Positive), state);
         }
     };
 
@@ -72,17 +72,17 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef true_xpression state_type;
 
-        template<typename OpT, typename StateT, typename>
+        template<typename Op, typename State, typename>
         struct apply
         {
-            typedef static_xpression<keeper_matcher<OpT>, StateT> type;
+            typedef static_xpression<keeper_matcher<Op>, State> type;
         };
 
-        template<typename OpT, typename StateT, typename VisitorT>
-        static static_xpression<keeper_matcher<OpT>, StateT>
-        call(OpT const &op, StateT const &state, VisitorT &)
+        template<typename Op, typename State, typename Visitor>
+        static static_xpression<keeper_matcher<Op>, State>
+        call(Op const &op, State const &state, Visitor &)
         {
-            return make_static_xpression(keeper_matcher<OpT>(op), state);
+            return make_static_xpression(keeper_matcher<Op>(op), state);
         }
     };
 
@@ -91,15 +91,15 @@ namespace boost { namespace xpressive { namespace detail
 
 namespace boost { namespace proto {
 
-    template<bool PositiveT>
-    struct compiler<xpressive::detail::lookahead_tag<PositiveT>, xpressive::detail::seq_tag>
-      : branch_compiler<xpressive::detail::lookahead_branch<PositiveT>, xpressive::detail::ind_tag>
+    template<bool Positive>
+    struct compiler<xpressive::detail::lookahead_tag<Positive>, xpressive::detail::seq_tag>
+      : branch_compiler<xpressive::detail::lookahead_branch<Positive>, xpressive::detail::ind_tag>
     {
     };
 
-    template<bool PositiveT>
-    struct compiler<xpressive::detail::lookbehind_tag<PositiveT>, xpressive::detail::seq_tag>
-      : branch_compiler<xpressive::detail::lookbehind_branch<PositiveT>, xpressive::detail::ind_tag>
+    template<bool Positive>
+    struct compiler<xpressive::detail::lookbehind_tag<Positive>, xpressive::detail::seq_tag>
+      : branch_compiler<xpressive::detail::lookbehind_branch<Positive>, xpressive::detail::ind_tag>
     {
     };
 
@@ -109,8 +109,8 @@ namespace boost { namespace proto {
     {
     };
     
-    template<typename OpTagT>
-    struct compiler<OpTagT, xpressive::detail::ind_tag>
+    template<typename OpTag>
+    struct compiler<OpTag, xpressive::detail::ind_tag>
       : transform_compiler<arg_transform, xpressive::detail::seq_tag>
     {
     };

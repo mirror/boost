@@ -23,22 +23,22 @@ namespace boost { namespace xpressive { namespace detail
     //////////////////////////////////////////////////////////////////////////
     // logical_newline_matcher
     //
-    template<typename TraitsT>
+    template<typename Traits>
     struct logical_newline_matcher
       : quant_style_variable_width
     {
-        typedef typename TraitsT::char_type char_type;
-        typedef typename TraitsT::char_class_type char_class_type;
+        typedef typename Traits::char_type char_type;
+        typedef typename Traits::char_class_type char_class_type;
 
-        logical_newline_matcher(TraitsT const &traits)
+        logical_newline_matcher(Traits const &traits)
           : newline_(lookup_classname(traits, "newline"))
           , nl_(traits.widen('\n'))
           , cr_(traits.widen('\r'))
         {
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match(state_type<BidiIterT> &state, NextT const &next) const
+        template<typename BidiIter, typename Next>
+        bool match(state_type<BidiIter> &state, Next const &next) const
         {
             if(state.eos())
             {
@@ -46,7 +46,7 @@ namespace boost { namespace xpressive { namespace detail
             }
 
             char_type ch = *state.cur_;
-            if(traits_cast<TraitsT>(state).isctype(ch, this->newline_))
+            if(traits_cast<Traits>(state).isctype(ch, this->newline_))
             {
                 ++state.cur_;
                 if(this->cr_ == ch && !state.eos() && this->nl_ == *state.cur_)

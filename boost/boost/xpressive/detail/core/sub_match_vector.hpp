@@ -26,25 +26,25 @@ namespace boost { namespace xpressive { namespace detail
 //////////////////////////////////////////////////////////////////////////
 // sub_match_iterator
 //
-template<typename ValueT, typename MainIterT>
+template<typename Value, typename MainIter>
 struct sub_match_iterator
   : iterator_adaptor
     <
-        sub_match_iterator<ValueT, MainIterT>
-      , MainIterT
-      , ValueT
+        sub_match_iterator<Value, MainIter>
+      , MainIter
+      , Value
       , std::random_access_iterator_tag
     >
 {
     typedef iterator_adaptor
     <
-        sub_match_iterator<ValueT, MainIterT>
-      , MainIterT
-      , ValueT
+        sub_match_iterator<Value, MainIter>
+      , MainIter
+      , Value
       , std::random_access_iterator_tag
     > base_t;
 
-    sub_match_iterator(MainIterT baseiter)
+    sub_match_iterator(MainIter baseiter)
       : base_t(baseiter)
     {
     }
@@ -55,7 +55,7 @@ struct sub_match_iterator
 //////////////////////////////////////////////////////////////////////////
 // sub_match_vector
 //
-template<typename BidiIterT>
+template<typename BidiIter>
 struct sub_match_vector
   : private noncopyable
 {
@@ -64,12 +64,12 @@ private:
     typedef int dummy::*bool_type;
 
 public:
-    typedef sub_match<BidiIterT> value_type;
+    typedef sub_match<BidiIter> value_type;
     typedef std::size_t size_type;
     typedef value_type const &const_reference;
     typedef const_reference reference;
-    typedef typename iterator_difference<BidiIterT>::type difference_type;
-    typedef typename iterator_value<BidiIterT>::type char_type;
+    typedef typename iterator_difference<BidiIter>::type difference_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
     typedef std::basic_string<char_type> string_type;
 
 #if BOOST_ITERATOR_ADAPTORS_VERSION >= 0x0200
@@ -77,14 +77,14 @@ public:
     typedef sub_match_iterator
     <
         value_type const
-      , sub_match_impl<BidiIterT> const *
+      , sub_match_impl<BidiIter> const *
     > const_iterator;
 
 #else
 
     typedef iterator_adaptor
     <
-        sub_match_impl<BidiIterT> const *
+        sub_match_impl<BidiIter> const *
       , default_iterator_policies
       , value_type
       , value_type const &
@@ -139,22 +139,22 @@ public:
         return this->empty() || !(*this)[0].matched;
     }
 
-    void swap(sub_match_vector<BidiIterT> &that)
+    void swap(sub_match_vector<BidiIter> &that)
     {
         std::swap(this->size_, that.size_);
         std::swap(this->sub_matches_, that.sub_matches_);
     }
 
 private:
-    friend struct detail::core_access<BidiIterT>;
+    friend struct detail::core_access<BidiIter>;
 
-    void init_(sub_match_impl<BidiIterT> *sub_matches, size_type size)
+    void init_(sub_match_impl<BidiIter> *sub_matches, size_type size)
     {
         this->size_ = size;
         this->sub_matches_ = sub_matches;
     }
 
-    void init_(sub_match_impl<BidiIterT> *sub_matches, size_type size, sub_match_vector<BidiIterT> const &that)
+    void init_(sub_match_impl<BidiIter> *sub_matches, size_type size, sub_match_vector<BidiIter> const &that)
     {
         BOOST_ASSERT(size == that.size_);
         this->size_ = size;
@@ -163,7 +163,7 @@ private:
     }
 
     size_type size_;
-    sub_match_impl<BidiIterT> *sub_matches_;
+    sub_match_impl<BidiIter> *sub_matches_;
 };
 
 }}} // namespace boost::xpressive::detail

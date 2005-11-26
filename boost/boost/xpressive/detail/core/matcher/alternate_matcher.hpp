@@ -44,20 +44,20 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // alt_match_pred
     //
-    template<typename BidiIterT, typename NextT>
+    template<typename BidiIter, typename Next>
     struct alt_match_pred
     {
-        state_type<BidiIterT> &state_;
+        state_type<BidiIter> &state_;
 
-        alt_match_pred(state_type<BidiIterT> &state)
+        alt_match_pred(state_type<BidiIter> &state)
           : state_(state)
         {
         }
 
-        template<typename XprT>
-        bool operator ()(XprT const &xpr) const
+        template<typename Xpr>
+        bool operator ()(Xpr const &xpr) const
         {
-            return get_pointer(xpr)->BOOST_NESTED_TEMPLATE push_match<NextT>(this->state_);
+            return get_pointer(xpr)->BOOST_NESTED_TEMPLATE push_match<Next>(this->state_);
         }
 
     private:
@@ -67,55 +67,55 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // alt_match
     //
-    template<typename BidiIterT>
+    template<typename BidiIter>
     inline bool alt_match
     (
-        std::vector<shared_ptr<matchable<BidiIterT> const> > const &alternates
-      , state_type<BidiIterT> &state
-      , matchable<BidiIterT> const &
+        std::vector<shared_ptr<matchable<BidiIter> const> > const &alternates
+      , state_type<BidiIter> &state
+      , matchable<BidiIter> const &
     )
     {
-        typedef alt_match_pred<BidiIterT, matchable<BidiIterT> > alt_match_pred;
+        typedef alt_match_pred<BidiIter, matchable<BidiIter> > alt_match_pred;
         return detail::any(alternates.begin(), alternates.end(), alt_match_pred(state));
     }
 
-    template<typename BidiIterT, typename NextT, typename AlternatesT>
+    template<typename BidiIter, typename Next, typename Alternates>
     inline bool alt_match
     (
-        fusion::sequence_base<AlternatesT> const &alternates
-      , state_type<BidiIterT> &state
-      , NextT const &
+        fusion::sequence_base<Alternates> const &alternates
+      , state_type<BidiIter> &state
+      , Next const &
     )
     {
-        typedef alt_match_pred<BidiIterT, NextT> alt_match_pred;
+        typedef alt_match_pred<BidiIter, Next> alt_match_pred;
         return fusion::any(alternates.cast(), alt_match_pred(state));
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // make_range
-    template<typename BeginT, typename EndT>
-    inline fusion::range<BeginT, EndT> make_range(BeginT const &begin, EndT const &end)
+    template<typename Begin, typename End>
+    inline fusion::range<Begin, End> make_range(Begin const &begin, End const &end)
     {
-        return fusion::range<BeginT, EndT>(begin, end);
+        return fusion::range<Begin, End>(begin, end);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // alt_get_width_pred
     //
-    template<typename BidiIterT>
+    template<typename BidiIter>
     struct alt_get_width_pred
     {
-        state_type<BidiIterT> *state_;
+        state_type<BidiIter> *state_;
         std::size_t *width_;
 
-        alt_get_width_pred(state_type<BidiIterT> *state, std::size_t *width)
+        alt_get_width_pred(state_type<BidiIter> *state, std::size_t *width)
           : state_(state)
           , width_(width)
         {
         }
 
-        template<typename XprT>
-        void operator ()(XprT const &xpr) const
+        template<typename Xpr>
+        void operator ()(Xpr const &xpr) const
         {
             if(*this->width_ != unknown_width())
             {
@@ -131,27 +131,27 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // alt_get_width
     //
-    template<typename BidiIterT>
+    template<typename BidiIter>
     inline std::size_t alt_get_width
     (
-        std::vector<shared_ptr<matchable<BidiIterT> const> > const &alternates
-      , state_type<BidiIterT> *state
+        std::vector<shared_ptr<matchable<BidiIter> const> > const &alternates
+      , state_type<BidiIter> *state
     )
     {
-        typedef alt_get_width_pred<BidiIterT> alt_get_width_pred;
+        typedef alt_get_width_pred<BidiIter> alt_get_width_pred;
         std::size_t width = alternates.front()->get_width(state);
         std::for_each(alternates.begin() + 1, alternates.end(), alt_get_width_pred(state, &width));
         return width;
     }
 
-    template<typename BidiIterT, typename AlternatesT>
+    template<typename BidiIter, typename Alternates>
     inline std::size_t alt_get_width
     (
-        fusion::sequence_base<AlternatesT> const &alternates
-      , state_type<BidiIterT> *state
+        fusion::sequence_base<Alternates> const &alternates
+      , state_type<BidiIter> *state
     )
     {
-        typedef alt_get_width_pred<BidiIterT> alt_get_width_pred;
+        typedef alt_get_width_pred<BidiIter> alt_get_width_pred;
         std::size_t width = (*fusion::begin(alternates.cast())).get_width(state);
         fusion::for_each
         (
@@ -164,26 +164,26 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // alternate_matcher
     //
-    template<typename AlternatesT, typename TraitsT>
+    template<typename Alternates, typename Traits>
     struct alternate_matcher
-      : quant_style_auto<width_of<AlternatesT>, is_pure<AlternatesT> >
+      : quant_style_auto<width_of<Alternates>, is_pure<Alternates> >
     {
-        typedef AlternatesT alternates_type;
-        typedef typename TraitsT::char_type char_type;
+        typedef Alternates alternates_type;
+        typedef typename Traits::char_type char_type;
 
-        AlternatesT alternates_;
+        Alternates alternates_;
         mutable hash_peek_bitset<char_type> bset_;
 
-        explicit alternate_matcher(AlternatesT const &alternates = AlternatesT())
+        explicit alternate_matcher(Alternates const &alternates = Alternates())
           : alternates_(alternates)
           , bset_()
         {
         }
 
-        template<typename BidiIterT, typename NextT>
-        bool match(state_type<BidiIterT> &state, NextT const &next) const
+        template<typename BidiIter, typename Next>
+        bool match(state_type<BidiIter> &state, Next const &next) const
         {
-            if(!state.eos() && !this->can_match_(*state.cur_, traits_cast<TraitsT>(state)))
+            if(!state.eos() && !this->can_match_(*state.cur_, traits_cast<Traits>(state)))
             {
                 return false;
             }
@@ -191,8 +191,8 @@ namespace boost { namespace xpressive { namespace detail
             return detail::alt_match(this->alternates_, state, next);
         }
 
-        template<typename BidiIterT>
-        std::size_t get_width(state_type<BidiIterT> *state) const
+        template<typename BidiIter>
+        std::size_t get_width(state_type<BidiIter> *state) const
         {
             return detail::alt_get_width(this->alternates_, state);
         }
@@ -200,7 +200,7 @@ namespace boost { namespace xpressive { namespace detail
     private:
         alternate_matcher &operator =(alternate_matcher const &);
 
-        bool can_match_(char_type ch, TraitsT const &traits) const
+        bool can_match_(char_type ch, Traits const &traits) const
         {
             return this->bset_.test(ch, traits);
         }
