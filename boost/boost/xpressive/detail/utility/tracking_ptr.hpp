@@ -332,7 +332,9 @@ inline void enable_reference_tracking<Derived>::dump_(std::ostream &sout) const
     typename dependents_type::const_iterator end2 = this->deps_.end();
     for(; cur2 != end2; ++cur2)
     {
-        if(shared_ptr<Derived> dep = cur2->lock())
+        // ericne, 27/nov/05: CW9_4 doesn't like if(shared_ptr x = y)
+        shared_ptr<Derived> dep = cur2->lock();
+        if(dep.get())
         {
             sout << "0x" << (void*)&*dep << ',';
         }

@@ -89,17 +89,31 @@ namespace boost { namespace xpressive { namespace detail
 }}}
 
 
-namespace boost { namespace proto {
-
-    template<bool Positive>
-    struct compiler<xpressive::detail::lookahead_tag<Positive>, xpressive::detail::seq_tag>
-      : branch_compiler<xpressive::detail::lookahead_branch<Positive>, xpressive::detail::ind_tag>
+namespace boost { namespace proto
+{
+    // ericne, 28/nov/05: CW9_4 doesn't like partial specializations of the form:
+    //   template<bool F> struct foo<bar<F> >
+    template<>
+    struct compiler<xpressive::detail::lookahead_tag<true>, xpressive::detail::seq_tag>
+      : branch_compiler<xpressive::detail::lookahead_branch<true>, xpressive::detail::ind_tag>
     {
     };
 
-    template<bool Positive>
-    struct compiler<xpressive::detail::lookbehind_tag<Positive>, xpressive::detail::seq_tag>
-      : branch_compiler<xpressive::detail::lookbehind_branch<Positive>, xpressive::detail::ind_tag>
+    template<>
+    struct compiler<xpressive::detail::lookahead_tag<false>, xpressive::detail::seq_tag>
+      : branch_compiler<xpressive::detail::lookahead_branch<false>, xpressive::detail::ind_tag>
+    {
+    };
+
+    template<>
+    struct compiler<xpressive::detail::lookbehind_tag<true>, xpressive::detail::seq_tag>
+      : branch_compiler<xpressive::detail::lookbehind_branch<true>, xpressive::detail::ind_tag>
+    {
+    };
+
+    template<>
+    struct compiler<xpressive::detail::lookbehind_tag<false>, xpressive::detail::seq_tag>
+      : branch_compiler<xpressive::detail::lookbehind_branch<false>, xpressive::detail::ind_tag>
     {
     };
 
