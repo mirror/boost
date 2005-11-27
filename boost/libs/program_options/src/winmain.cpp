@@ -57,11 +57,11 @@ namespace boost { namespace program_options {
                         current.append(backslash_count, '\\');
                         backslash_count = 0;
                     }
-                    if (isspace((unsigned char*)*i) && !inside_quoted) {
+                    if (isspace((unsigned char)*i) && !inside_quoted) {
                         // Space outside quoted section terminate the current argument
                         result.push_back(current);
                         current.resize(0);
-                        for(;i != e && isspace((unsigned char*)*i); ++i)
+                        for(;i != e && isspace((unsigned char)*i); ++i)
                             ;
                         --i;
                     } else {                  
