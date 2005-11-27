@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file xpressive.hpp
-/// Includes all of xpressive including suppoert for both static and
+/// Includes all of xpressive including support for both static and
 /// dynamic regular expressions.
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost

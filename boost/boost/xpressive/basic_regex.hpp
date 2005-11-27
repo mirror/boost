@@ -259,7 +259,7 @@ private:
     // Avoid a common programming mistake. Construction from a string is ambiguous. It could mean
     //   sregex rx = sregex::compile(str); // compile the string into a regex
     // or
-    //   sregex rx = str >> epsilon;         // treat the string as a literal
+    //   sregex rx = str >> nil;         // treat the string as a literal
     // Since there is no easy way to disambiguate, disallow it and force users to say what they mean
     /// INTERNAL ONLY
     basic_regex(char_type const *);

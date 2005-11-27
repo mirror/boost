@@ -21,6 +21,5 @@
 #include <boost/xpressive/regex_iterator.hpp>
 #include <boost/xpressive/regex_token_iterator.hpp>
 #include <boost/xpressive/regex_compiler.hpp>
-#include <boost/xpressive/detail/dynamic/dynamic.hpp>
 
 #endif

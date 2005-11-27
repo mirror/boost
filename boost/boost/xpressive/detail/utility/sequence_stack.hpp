@@ -237,11 +237,8 @@ public:
     }
 };
 
-namespace
-{
-    typedef mpl::false_ no_fill_t;
-    no_fill_t const no_fill = {};
-}
+typedef mpl::false_ no_fill_t;
+no_fill_t const no_fill = {};
 
 }}} // namespace boost::xpressive::detail
 

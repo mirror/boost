@@ -163,8 +163,6 @@ namespace boost { namespace xpressive { namespace detail
 
     struct epsilon_matcher;
 
-    typedef proto::unary_op<epsilon_matcher, proto::noop_tag> epsilon_type;
-
     template<typename BidiIter>
     struct nested_results;
 

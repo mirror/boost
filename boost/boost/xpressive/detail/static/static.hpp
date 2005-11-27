@@ -19,23 +19,13 @@
 #include <boost/xpressive/detail/core/linker.hpp>
 #include <boost/xpressive/detail/core/peeker.hpp>
 
-//  Random thoughts:
-//  set[ a + b - c ]
-//  set[ a ] + set[ b ] - set[ c ]
-//  -set[ a + b + c ] (set negation)
-//  must support indirect repeat counts {$n,$m}
-//  must support logical newline and intelligent negation of logical newline
-//  add ws to eat whitespace (make *_ws illegal)
-//  a{n}      -> a[n]
-//  a{n,m}    -> a[n][m]
-//  a{n,m}?   -> -a[n][m] // yuk, breaks quantifier up.
-//  a{n,m}    -> repeat<n,m>(a)
-//  a{$n,$m}  -> repeat(n,m)(a)
-//  add nil to match nothing
-
-//
-// instead of s1, s2, etc., how about s[1], s[2], etc.? Needlessly verbose?
-//
+// Random thoughts:
+// - must support indirect repeat counts {$n,$m}
+// - add ws to eat whitespace (make *ws illegal)
+// - a{n,m}    -> repeat<n,m>(a)
+// - a{$n,$m}  -> repeat(n,m)(a)
+// - add nil to match nothing
+// - instead of s1, s2, etc., how about s[1], s[2], etc.? Needlessly verbose?
 
 namespace boost { namespace xpressive { namespace detail
 {

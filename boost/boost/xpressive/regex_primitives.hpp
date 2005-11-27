@@ -11,6 +11,7 @@
 
 #include <climits>
 #include <boost/mpl/assert.hpp>
+#include <boost/preprocessor/cat.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/icase.hpp>
@@ -28,13 +29,30 @@ typedef assert_word_placeholder<word_boundary<true> > assert_word_boundary;
 typedef assert_word_placeholder<word_begin> assert_word_begin;
 typedef assert_word_placeholder<word_end> assert_word_end;
 
-} // namespace detail
+///////////////////////////////////////////////////////////////////////////////
+// BOOST_XPRESSIVE_GLOBAL
+//  for defining globals that neither violate the One Definition Rule nor
+//  lead to undefined behavior due to global object initialization order.
+#define BOOST_XPRESSIVE_GLOBAL(type, name, init)                                        \
+    namespace detail                                                                    \
+    {                                                                                   \
+        template<int Dummy>                                                             \
+        struct BOOST_PP_CAT(global_pod_, name)                                          \
+        {                                                                               \
+            static type const value;                                                    \
+        private:                                                                        \
+            union type_must_be_pod                                                      \
+            {                                                                           \
+                type t;                                                                 \
+                char ch;                                                                \
+            } u;                                                                        \
+        };                                                                              \
+        template<int Dummy>                                                             \
+        type const BOOST_PP_CAT(global_pod_, name)<Dummy>::value = init;                \
+    }                                                                                   \
+    type const &name = detail::BOOST_PP_CAT(global_pod_, name)<0>::value
 
-#ifndef BOOST_XPRESSIVE_DOXYGEN_INVOKED
-// Put globals in an anonymous namespace to avoid global object
-// construction order dependencies.
-namespace {
-#endif
+} // namespace detail
 
 /// INTERNAL ONLY (for backwards compatibility)
 unsigned int const repeat_max = UINT_MAX-1;
@@ -47,14 +65,19 @@ unsigned int const repeat_max = UINT_MAX-1;
 /// The equivalent in perl is /a{17,}/.
 unsigned int const inf = UINT_MAX-1;
 
+/// INTERNAL ONLY (for backwards compatibility)
+proto::op_proxy<
+    proto::unary_op<detail::epsilon_matcher, proto::noop_tag>
+> const epsilon = {};
+
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Successfully matches nothing.
 ///
-/// Successfully matches a zero-width sequence. epsilon always succeeds and
+/// Successfully matches a zero-width sequence. nil always succeeds and
 /// never consumes any characters.
 proto::op_proxy<
-    detail::epsilon_type
-> const epsilon = {};
+    proto::unary_op<detail::epsilon_matcher, proto::noop_tag>
+> const nil = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Matches an alpha-numeric character.
@@ -364,7 +387,7 @@ proto::op_proxy<
 ///
 /// Useful when constructing recursive regular expression objects. The 'self'
 /// identifier is a short-hand for the current regex object. For instance,
-/// sregex rx = '(' >> (self | epsilon) >> ')'; will create a regex object that
+/// sregex rx = '(' >> (self | nil) >> ')'; will create a regex object that
 /// matches balanced parens such as "((()))".
 proto::op_proxy<
     proto::unary_op<detail::self_placeholder, proto::noop_tag>
@@ -391,7 +414,7 @@ proto::op_proxy<
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Sub-match placeholder, like $& in Perl
-proto::op_proxy<detail::mark_tag, int> const s0 = {0};
+proto::op_proxy<mark_tag, int> const s0 = {0};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Sub-match placeholder, like $1 in perl.
@@ -405,19 +428,15 @@ proto::op_proxy<detail::mark_tag, int> const s0 = {0};
 /// After a successful regex_match() or regex_search(), the sub-match placeholders
 /// can be used to index into the match_results\<\> object to retrieve the Nth
 /// sub-match.
-proto::op_proxy<detail::mark_tag, int> const s1 = {1};
-proto::op_proxy<detail::mark_tag, int> const s2 = {2};
-proto::op_proxy<detail::mark_tag, int> const s3 = {3};
-proto::op_proxy<detail::mark_tag, int> const s4 = {4};
-proto::op_proxy<detail::mark_tag, int> const s5 = {5};
-proto::op_proxy<detail::mark_tag, int> const s6 = {6};
-proto::op_proxy<detail::mark_tag, int> const s7 = {7};
-proto::op_proxy<detail::mark_tag, int> const s8 = {8};
-proto::op_proxy<detail::mark_tag, int> const s9 = {9};
-
-#ifndef BOOST_XPRESSIVE_DOXYGEN_INVOKED
-} // unnamed-namespace
-#endif
+proto::op_proxy<mark_tag, int> const s1 = {1};
+proto::op_proxy<mark_tag, int> const s2 = {2};
+proto::op_proxy<mark_tag, int> const s3 = {3};
+proto::op_proxy<mark_tag, int> const s4 = {4};
+proto::op_proxy<mark_tag, int> const s5 = {5};
+proto::op_proxy<mark_tag, int> const s6 = {6};
+proto::op_proxy<mark_tag, int> const s7 = {7};
+proto::op_proxy<mark_tag, int> const s8 = {8};
+proto::op_proxy<mark_tag, int> const s9 = {9};
 
 // NOTE: For the purpose of xpressive's documentation, make icase() look like an
 // ordinary function. In reality, it is a function object defined in detail/icase.hpp
