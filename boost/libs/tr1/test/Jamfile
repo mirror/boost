@@ -42,12 +42,12 @@ rule test_all
       <include>$(BOOST_ROOT) 
 		<define>TEST_STD_HEADERS=1 : std_$(fileb:B)  ] ;
    }
-   for local file2 in [ GLOB $(BOOST_ROOT)/libs/tr1/test/config : has_tr1*fail.cpp ]
+   for local file2 in [ GLOB $(BOOST_ROOT)/libs/tr1/test/config : tr1_has_tr1*fail.cpp ]
    {
       local test = [ compile-fail $(file2) : <include>$(BOOST_ROOT) ] ;
       all_rules += $(test) ;
    }
-   for local filec in [ GLOB $(BOOST_ROOT)/libs/tr1/test/config : has_tr1*pass.cpp ]
+   for local filec in [ GLOB $(BOOST_ROOT)/libs/tr1/test/config : tr1_has_tr1*pass.cpp ]
    {
       local test = [ compile $(filec) : <include>$(BOOST_ROOT) ] ;
       all_rules += $(test) ;
