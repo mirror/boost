@@ -211,6 +211,11 @@ import ../../../libs/serialization/build/serialization ;
    <lib>@boost/libs/serialization/build/boost_serialization
    : : : $(DATE_TIME_PROPERTIES)
    : testgreg_serialize ]
+ [ run gregorian/testgreg_serialize.cpp
+   <lib>../build/boost_date_time
+   <lib>@boost/libs/serialization/build/boost_serialization
+   : : : $(DATE_TIME_DYNAMIC_PROPERTIES)
+   : testgreg_serialize_dll ]
  [ run posix_time/testtime_serialize.cpp
    <lib>../build/boost_date_time
    <lib>@boost/libs/serialization/build/boost_serialization
