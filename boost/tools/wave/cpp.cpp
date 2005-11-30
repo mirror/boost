@@ -26,8 +26,9 @@
 #include <boost/wave/cpplexer/cpp_lex_iterator.hpp>   // lexer type
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Include the context trace policies to use
+//  Include the context policies to use
 #include "trace_macro_expansion.hpp"
+#include "optional_whitespace_eater.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
 //  include lexer specifics, import lexer names
@@ -68,13 +69,14 @@ using std::istreambuf_iterator;
 // print the current version
 int print_version()
 {
-    typedef boost::wave::cpplexer::lex_iterator<
-            boost::wave::cpplexer::lex_token<> >
+    typedef boost::wave::cpplexer::lex_token<> token_type;
+    typedef boost::wave::cpplexer::lex_iterator<token_type>
         lex_iterator_type;
     typedef boost::wave::context<
             std::string::iterator, lex_iterator_type,
             boost::wave::iteration_context_policies::load_file_to_string,
-            trace_macro_expansion> 
+            trace_macro_expansion,
+            optional_whitespace_eater<token_type> > 
         context_type;
         
     string version (context_type::get_version_string());
@@ -299,8 +301,8 @@ boost::wave::util::file_position_type current_position;
     //
     //  You may want to have a look at the other samples to see how this is
     //  possible to achieve.
-        typedef boost::wave::cpplexer::lex_iterator<
-                boost::wave::cpplexer::lex_token<> >
+        typedef boost::wave::cpplexer::lex_token<> token_type;
+        typedef boost::wave::cpplexer::lex_iterator<token_type>
             lex_iterator_type;
 
     // The C++ preprocessor iterators shouldn't be constructed directly. They 
@@ -310,7 +312,8 @@ boost::wave::util::file_position_type current_position;
         typedef boost::wave::context<
                 std::string::iterator, lex_iterator_type,
                 boost::wave::iteration_context_policies::load_file_to_string,
-                trace_macro_expansion> 
+                trace_macro_expansion,
+                optional_whitespace_eater<token_type> > 
             context_type;
 
     // The preprocessing of the input stream is done on the fly behind the 
@@ -363,11 +366,35 @@ boost::wave::util::file_position_type current_position;
                 rdbuf(cout.rdbuf());
         }
         
+    // enable preserving comments mode
+    bool preserve_comments = false;
+    bool preserve_whitespace = false;
+    
+        if (vm.count("preserve")) {
+        int preserve = vm["preserve"].as<int>();
+        
+            switch(preserve) {
+            case 0:   break;
+            case 2:
+                preserve_whitespace = true;
+                /* fall through */
+            case 1:
+                preserve_comments = true;
+                break;
+                
+            default:
+                cerr << "wave: bogus preserve whitespace option value: " 
+                     << preserve << ", should be 0, 1, or 2" << endl;
+                return -1;
+            }
+        }
+        
     // This this the central piece of the Wave library, it provides you with 
     // the iterators to get the preprocessed tokens and allows to configure
     // the preprocessing stage in advance.
     context_type ctx (instring.begin(), instring.end(), file_name.c_str(),
-        trace_macro_expansion(traceout, includelistout, enable_trace));
+        trace_macro_expansion(traceout, includelistout, enable_trace),
+        optional_whitespace_eater<token_type>(preserve_whitespace, preserve_comments));
 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
     // enable C99 mode, if appropriate (implies variadics)
@@ -387,7 +414,7 @@ boost::wave::util::file_position_type current_position;
          }
 
     // enable preserving comments mode
-        if (vm.count("preserve")) {
+        if (preserve_comments) {
             ctx.set_language(
                 boost::wave::enable_preserve_comments(ctx.get_language()));
         }
@@ -496,7 +523,7 @@ boost::wave::util::file_position_type current_position;
         }
 
     // analyze the input file
-    auto_stop_watch elapsed_time(vm.count("timer") > 0, cout);
+    auto_stop_watch elapsed_time(vm.count("timer") > 0, cerr);
     context_type::iterator_type first = ctx.begin();
     context_type::iterator_type last = ctx.end();
     
@@ -516,7 +543,7 @@ boost::wave::util::file_position_type current_position;
             }
         }
 
-    // >>>>>>>>>>>>> Here the actual preprocessing happens. <<<<<<<<<<<<<<<<<<<
+    // >>>>>>>>>>>>> Here happens the actual preprocessing. <<<<<<<<<<<<<<<<<<<
     // loop over all generated tokens outputting the generated text 
         while (first != last) {
         // store the last known good token position
@@ -529,21 +556,21 @@ boost::wave::util::file_position_type current_position;
             ++first;
         }
     }
-    catch (boost::wave::cpp_exception &e) {
+    catch (boost::wave::cpp_exception const &e) {
     // some preprocessing error
         cerr 
             << e.file_name() << "(" << e.line_no() << "): "
             << e.description() << endl;
         return 1;
     }
-    catch (boost::wave::cpplexer::lexing_exception &e) {
+    catch (boost::wave::cpplexer::lexing_exception const &e) {
     // some lexing error
         cerr 
             << e.file_name() << "(" << e.line_no() << "): "
             << e.description() << endl;
         return 2;
     }
-    catch (std::exception &e) {
+    catch (std::exception const &e) {
     // use last recognized token to retrieve the error position
         cerr 
             << current_position.get_file() 
@@ -617,7 +644,11 @@ main (int argc, char *argv[])
 #endif 
             ("listincludes,l", po::value<string>(), 
                 "list included file to a file [arg] or to stdout [-]")
-            ("preserve,p", "preserve comments")
+            ("preserve,p", po::value<int>()->default_value(0), 
+                "preserve whitespace\n"
+                            "0: no whitespace is preserved (default),\n"
+                            "1: comments are preserved,\n" 
+                            "2: all whitespace is preserved")
         ;
     
     // combine the options for the different usage schemes
@@ -703,7 +734,7 @@ main (int argc, char *argv[])
             return do_actual_work(file_name, instream, vm);
         }
     }
-    catch (std::exception &e) {
+    catch (std::exception const &e) {
         cout << "wave: exception caught: " << e.what() << endl;
         return 6;
     }

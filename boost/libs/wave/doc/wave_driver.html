@@ -55,8 +55,7 @@
     --variadics:                 enable variadics and placemarkers in C++ mode
     --c99:                       enable C99 mode (implies variadics and placemarkers)
     -l [ --listincludes ] arg:   list included file to a file [arg] or to stdout [-]
-    -p [ --preserve ]:           preserve comments
-
+    -p [ --preserve ] arg (=0):  preserve whitespace<br>                                 0: no whitespace is preserved (default),<br>                                 1: comments are preserved,<br>                                 2: all whitespace is preserved
 </pre>
 <P dir="ltr">The possible options are straightforward and self explanatory. The 
   following describes some of these options in more detail. Please note, that 
@@ -172,9 +171,10 @@
 <blockquote>
   <p dir="ltr">Enable the output of the names of all opened include files. The path specifies the filename to use for the output of the generated include log. If the filename given equals to <tt>'-'</tt> (without the quotes), the include log is put into the standard output stream (stdout).</p>
 </blockquote>
-<p dir="ltr">-p [--preserve] </p>
+<p dir="ltr">-p [--preserve] arg </p>
 <blockquote>
-  <p dir="ltr">Preserve the comments from the input stream not located inside of macro definitions. The comments located inside macro definitions are skipped even if this option is specified. If this option is not specified on the command line all comments are skipped. </p>
+  <p dir="ltr">Preserve the whitespace from the input stream not located inside of macro definitions. The argument defines the amount of whitespace to be preserved. A value of '0' (zero) skips all whitespace, a value of '1' preserves all the comments and a value of '2' will preserve all whitespace in the output.</p>
+  <p dir="ltr">The comments located inside macro definitions are skipped even if this option is specified with an argument not '0' (zero) . If this option is not specified on the command line onlz essential whitespace is preserved (equivalent to '0' as the argument value). </p>
 </blockquote>
 <p dir="ltr">@ [--config-file] option</p>
 <blockquote> 
@@ -231,7 +231,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Sunday, May 15, 2005  12:23<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Wednesday, November 30, 2005  15:25<!-- #EndDate -->
 </span></p>
 </body>
 </html>

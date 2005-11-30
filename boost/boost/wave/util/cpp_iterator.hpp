@@ -30,7 +30,6 @@
 #include <boost/wave/wave_config.hpp>
 
 #include <boost/wave/util/insert_whitespace_detection.hpp>
-#include <boost/wave/util/eat_whitespace.hpp>
 #include <boost/wave/util/macro_helpers.hpp>
 #include <boost/wave/util/cpp_macromap_utils.hpp>
 #include <boost/wave/util/interpret_pragma.hpp>
@@ -243,20 +242,21 @@ private:
 
 // type of a token sequence
     typedef typename ContextT::token_sequence_type      token_sequence_type;
-    
+
+// type of the whitespace handling policy
+    typedef typename ContextT::whitespace_policy_type   whitespace_policy_type;
+
 public:
     template <typename IteratorT>
     pp_iterator_functor(ContextT &ctx_, IteratorT const &first_, 
-            IteratorT const &last_, typename ContextT::position_type const &pos_,
-            boost::wave::language_support language)
+            IteratorT const &last_, typename ContextT::position_type const &pos_)
     :   ctx(ctx_), 
         iter_ctx(new base_iteration_context_type(
-                lexer_type(first_, last_, pos_, language), lexer_type(), 
+                lexer_type(first_, last_, pos_, ctx_.get_language()), lexer_type(), 
                 pos_.get_file().c_str()
             )), 
         seen_newline(true), must_emit_line_directive(false),
-        act_pos(ctx_.get_main_pos()), 
-        eater(need_preserve_comments(ctx_.get_language()))
+        act_pos(ctx_.get_main_pos())
     {
         act_pos.set_file(pos_.get_file());
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
@@ -313,7 +313,7 @@ protected:
     bool on_pragma(typename parse_tree_type::const_iterator const &begin,
         typename parse_tree_type::const_iterator const &end);
 
-    result_type const &emit_line_directive();
+    bool emit_line_directive();
     bool returned_from_include();
 
     bool interpret_pragma(token_sequence_type const &pragma_body,
@@ -335,9 +335,6 @@ private:
     // tokens, which otherwise would form a different token type, if 
     // retokenized
     boost::wave::util::insert_whitespace_detection whitespace; 
-    
-    // remove not needed whitespace from the output stream
-    boost::wave::util::eat_whitespace<result_type> eater;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -402,13 +399,41 @@ pp_iterator_functor<ContextT>::returned_from_include()
 //      throws a preprocess_exception, if appropriate
 //
 ///////////////////////////////////////////////////////////////////////////////
+namespace {
+
+    //  It may be necessary to emit a #line directive either 
+    //  - when comments need to be preserved: if the current token is a not a 
+    //    whitespace, except comments
+    //  - when comments are to be skipped: if the current token is not a 
+    //    whitespace token.
+    template <typename ContextT> 
+    bool consider_emitting_line_directive(ContextT const& ctx, token_id id)
+    {
+        if (need_preserve_comments(ctx.get_language())) {
+            if (IS_EXTCATEGORY(id, WhiteSpaceTokenType|AltTokenType) ||
+                  (!IS_CATEGORY(id, WhiteSpaceTokenType) &&
+                   !IS_CATEGORY(id, EOLTokenType) && 
+                   !IS_CATEGORY(id, EOFTokenType)))
+            {
+                return true;
+            }
+        }
+        if (!IS_CATEGORY(id, WhiteSpaceTokenType) && 
+            !IS_CATEGORY(id, EOLTokenType) && !IS_CATEGORY(id, EOFTokenType))
+        {
+          return true;
+        }
+        return false;
+    }
+}
+
 template <typename ContextT> 
 inline typename pp_iterator_functor<ContextT>::result_type const &
 pp_iterator_functor<ContextT>::operator()()
 {
     using namespace boost::wave;
 
-// loop over skipable whitespace until something significant is found
+// loop over skippable whitespace until something significant is found
 bool skipped_newline = false;
 bool was_seen_newline = seen_newline;
 token_id id = T_ANY;
@@ -422,23 +447,24 @@ token_id id = T_ANY;
     // if comments shouldn't be preserved replace them with newlines
         id = token_id(act_token);
         if (!need_preserve_comments(ctx.get_language()) &&
-            (T_CPPCOMMENT == id || util::ccomment_has_newline(act_token)))
+            (T_CPPCOMMENT == id || context_policies::util::ccomment_has_newline(act_token)))
         {
             act_token.set_token_id(id = T_NEWLINE);
             act_token.set_value("\n");
         }
         
-    } while (eater.may_skip(act_token, skipped_newline));
+    } while (ctx.get_whitespace_handler().may_skip(act_token, skipped_newline));
     
 // if there were skipped any newlines, we must emit a #line directive
     if ((must_emit_line_directive || (was_seen_newline && skipped_newline)) && 
-        !IS_CATEGORY(id, WhiteSpaceTokenType) && 
-        !IS_CATEGORY(id, EOLTokenType) && !IS_CATEGORY(id, EOFTokenType)) 
+        consider_emitting_line_directive(ctx, id)) 
     {
     // must emit a #line directive
-        emit_line_directive();
-        eater.may_skip(act_token, skipped_newline);     // feed ws eater FSM
-        id = token_id(act_token);
+        if (emit_line_directive()) {
+            skipped_newline = false;
+            ctx.get_whitespace_handler().may_skip(act_token, skipped_newline);     // feed ws eater FSM
+            id = token_id(act_token);
+        }
     }
     
 // cleanup of certain tokens required
@@ -446,6 +472,11 @@ token_id id = T_ANY;
     switch (static_cast<unsigned int>(id)) {
     case T_NONREPLACABLE_IDENTIFIER:
         act_token.set_token_id(T_IDENTIFIER);
+        break;
+
+    case T_GENERATEDNEWLINE:      // was generated by emit_line_directive()
+        act_token.set_token_id(T_NEWLINE);
+        ++iter_ctx->emitted_lines;
         break;
         
     case T_NEWLINE:
@@ -606,7 +637,7 @@ bool returned_from_include_file = returned_from_include();
 //
 ///////////////////////////////////////////////////////////////////////////////
 template <typename ContextT> 
-inline typename pp_iterator_functor<ContextT>::result_type const &
+inline bool
 pp_iterator_functor<ContextT>::emit_line_directive()
 {
     using namespace boost::wave;
@@ -658,7 +689,7 @@ typename ContextT::position_type pos = act_token.get_position();
             pos.set_line(pos.get_line() - 1);         // adjust line number
             
             pos.set_column(column);
-            pending_queue.push_front(result_type(T_NEWLINE, "\n", pos));
+            pending_queue.push_front(result_type(T_GENERATEDNEWLINE, "\n", pos));
             pos.set_column(column -= filenamelen);    // account for filename
             pending_queue.push_front(result_type(T_STRINGLIT, file.c_str(), pos));
             pos.set_column(--column);                 // account for ' '
@@ -673,11 +704,13 @@ typename ContextT::position_type pos = act_token.get_position();
             pos.set_column(1);
             act_token = result_type(T_PP_LINE, "#line", pos);
         }
+        
+        must_emit_line_directive = false;     // we are now in sync
+        return true;
     }
 
-// we are now in sync
-    must_emit_line_directive = false;
-    return act_token;
+    must_emit_line_directive = false;         // we are now in sync
+    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1789,9 +1822,8 @@ public:
     
     template <typename IteratorT>
     pp_iterator(ContextT &ctx, IteratorT const &first, IteratorT const &last,
-        typename ContextT::position_type const &pos, 
-        boost::wave::language_support language)
-    :   base_type(input_policy_type(ctx, first, last, pos, language))
+        typename ContextT::position_type const &pos)
+    :   base_type(input_policy_type(ctx, first, last, pos))
     {}
     
     void force_include(char const *path_, bool is_last)

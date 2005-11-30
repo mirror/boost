@@ -52,7 +52,8 @@
     
     <span class="keyword">template</span> &lt;
         <span class="keyword">typename</span> Iterator, <span class="keyword">typename</span> LexIterator, 
-        <span class="keyword">typename</span> InputPolicy, <span class="keyword">typename</span> TracePolicy 
+        <span class="keyword">typename</span> InputPolicy, <span class="keyword">typename</span> TracePolicy,
+        <span class="keyword">typename</span> WhitespacePolicy 
     &gt; 
     <span class="keyword">class</span> context <span class="special">:</span> <span class="keyword">public</span> InputPolicy 
     {
@@ -66,7 +67,8 @@
         <a href="class_reference_context.html#constructor">context</a>(Iterator<span class="keyword"> const</span> &amp;first_, 
             Iterator <span class="keyword">const</span> &amp;last_, 
             <span class="keyword">char const</span> *fname = <span class="string">"&lt;Unknown&gt;"</span>,
-            TracePolicy &amp;trace = TracePolicy())
+            TracePolicy <span class="keyword">const</span>&amp; trace = TracePolicy(),
+            WhitespacePolicy <span class="keyword">const</span>&amp; ws = WhitespacePolicy())
 
     <span class="comment">// iterator interface</span>
         iterator_type <a href="class_reference_context.html#iterator_interface_begin">begin</a>() <span class="keyword">const</span>;
@@ -127,18 +129,25 @@
   <tr>
     <td class="table_cells"><code>TracePolicy</code></td>
     <td class="table_cells"><p>The type of the trace policy class, which allows 
-        to customize the trace output generated while expanding macros. </p></td>
+        to customize the trace output generated while expanding macros. The requirements for this policy are described <a href="class_reference_ctxpolicy.html">here</a>.</p></td>
+  </tr>
+  <tr>
+    <td class="table_cells"><code>WhitespacePolicy</code></td>
+    <td class="table_cells"><p>The type of the whitespcae policy class, which allows to to customize the whitespace handling done by the context iterators. The requirements for this policy are described <a href="class_reference_ctxws_policy.html">here</a>.</p></td>
   </tr>
 </table>
 <p>For further information about the lexer type to use, please refer to the <a href="class_reference_lexer.html">The 
   Lexer Interface </a>.</p>
-<p>If the template parameter <tt>InputPolicy</tt> is omitted, the template <tt>wave::iteration_context_policies::load_file_to_string</tt> 
+<p>If the template parameter <tt>InputPolicy</tt> is omitted, the template <tt>boost::wave::iteration_context_policies::load_file_to_string</tt> 
   is used. For further information about the input policy, please refer to the 
   topic <a href="class_reference_inptpolcy.html">The Input Policy</a>.</p>
-<p>If the template parameter TracePolicyT is omitted, the <tt>wave::macro_trace_policies::no_tracing</tt> 
+<p>If the template parameter TracePolicyT is omitted, the <tt>boost::wave::macro_trace_policies::no_tracing</tt> 
   policy type is used, i.e. by default there is no tracing performed. For further 
-  information about the tracing policy, please refer to the topic <a href="class_reference_ctxpolicy.html">The 
-  Tracing Policy</a>. </p>
+  information about the hooking policy, please refer to the topic <a href="class_reference_ctxpolicy.html">The 
+  Context Policy</a>. </p>
+<p>If the template parameter WhitespacePolicy is omitted, the <tt>boost::wave::util::eat_whitespace</tt> template is used, i.e. by default all whitespace except comments (depends on the settings of the language parameter to the context constructor) is skipped. For further 
+  information about the tracing policy, please refer to the topic <a href="class_reference_ctxws_policy.html">The 
+  Whitespace handling Policy</a>. </p>
 <h2><a name="public_typedefs"></a>Public Typedefs</h2>
 <p>The <tt>boost::wave::context</tt> template defines the following public typedefs, which may be useful while using this class:</p>
 <table width="90%" border="0" align="center">
@@ -166,6 +175,10 @@
     <td class="table_cells"><p>The <tt>TracePolicy</tt> template parameter provided, while the <tt>context</tt> class was instantiated. </p></td>
   </tr>
   <tr>
+    <td class="table_cells"><code>whitespace_policy_type</code></td>
+    <td class="table_cells"><p>The <tt>WhitespacePolicy</tt> template parameter provided, while the <tt>context</tt> class was instantiated. </p></td>
+  </tr>
+  <tr>
     <td class="table_cells"><code>position_type</code></td>
     <td class="table_cells"><p>The type of the position information contained in every returned token, which describes the point, at which the given token was recognised. </p></td>
   </tr>
@@ -174,7 +187,7 @@
 <p><b><a name="constructor" id="constructor"></a>Constructor</b></p>
 <pre>    context(Iterator <span class="keyword">const</span> &amp;first, 
         Iterator <span class="keyword">const</span> &amp;last, <span class="keyword">char</span> <span class="keyword">const</span> *filename, 
-        TracePolicy &amp;trace);</pre> 
+        TracePolicy <span class="keyword">const</span>&amp; trace, WhitespacePolicy <span class="keyword">const</span>&amp; ws);</pre> 
     <p>Constructs a context object on top of the input stream given by the pair 
     of auxilliary iterators <tt>[first,&nbsp;last)</tt>. The iterators should 
     be at least <tt>forward_iterator</tt> type iterators. The filename parameter 
@@ -442,7 +455,7 @@
   <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Sunday, May 15, 2005  12:23<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Wednesday, November 30, 2005  13:57<!-- #EndDate -->
   </span>
 </p>
 <p>&nbsp;</p>

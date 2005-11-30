@@ -10,8 +10,8 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-#if !defined(EAT_WHITESPACE_HPP_4CE9AD17_F82D_4AB2_A117_555DF0DCC801_INCLUDED)
-#define EAT_WHITESPACE_HPP_4CE9AD17_F82D_4AB2_A117_555DF0DCC801_INCLUDED
+#if !defined(WHITESPACE_HANDLING_HPP_INCLUDED)
+#define WHITESPACE_HANDLING_HPP_INCLUDED
 
 #include <boost/wave/wave_config.hpp>   
 #include <boost/wave/token_ids.hpp>   
@@ -24,22 +24,24 @@
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
 namespace wave {
+namespace context_policies {
+
 namespace util {
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename TokenT>
+    bool ccomment_has_newline(TokenT const& token)
+    {
+        using namespace boost::wave;
 
-///////////////////////////////////////////////////////////////////////////////
-template <typename TokenT>
-bool ccomment_has_newline(TokenT const& token)
-{
-    using namespace boost::wave;
-
-    if (T_CCOMMENT == token_id(token)) {
-        if (TokenT::string_type::npos != 
-            token.get_value().find_first_of("\n"))
-        {
-            return true;
+        if (T_CCOMMENT == token_id(token)) {
+            if (TokenT::string_type::npos != 
+                token.get_value().find_first_of("\n"))
+            {
+                return true;
+            }
         }
+        return false;
     }
-    return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -47,7 +49,7 @@ template <typename TokenT>
 class eat_whitespace {
 
 public:
-    eat_whitespace(bool preserve_comments);
+    eat_whitespace(bool preserve_comments = false);
     
     bool may_skip (TokenT &token, bool &skipped_newline);
 
@@ -91,7 +93,7 @@ eat_whitespace<TokenT>::general(TokenT &token, bool &skipped_newline)
     else if (T_SPACE == id || T_SPACE2 == id || T_CCOMMENT == id) {
         state = &eat_whitespace::whitespace;
 
-        if (ccomment_has_newline(token)) 
+        if (util::ccomment_has_newline(token)) 
             skipped_newline = true;
 
         if ((!preserve_comments || T_CCOMMENT != id) && 
@@ -123,7 +125,7 @@ eat_whitespace<TokenT>::newline(TokenT &token, bool &skipped_newline)
     }
 
     if (T_CCOMMENT == id) {
-        if (ccomment_has_newline(token))
+        if (util::ccomment_has_newline(token))
             skipped_newline = true;
 
         if (preserve_comments) {
@@ -145,7 +147,7 @@ eat_whitespace<TokenT>::newline_2nd(TokenT &token, bool &skipped_newline)
     if (T_SPACE == id || T_SPACE2 == id)
         return true;
     if (T_CCOMMENT == id) {
-        if (ccomment_has_newline(token))
+        if (util::ccomment_has_newline(token))
             skipped_newline = true;
 
         if (preserve_comments) {
@@ -175,7 +177,7 @@ eat_whitespace<TokenT>::whitespace(TokenT &token, bool &skipped_newline)
     }
     
     if (T_CCOMMENT == id) {
-        if (ccomment_has_newline(token))
+        if (util::ccomment_has_newline(token))
             skipped_newline = true;
         return !preserve_comments;
     }
@@ -184,7 +186,7 @@ eat_whitespace<TokenT>::whitespace(TokenT &token, bool &skipped_newline)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-}   // namespace util
+}   // namespace context_policies
 }   // namespace wave
 }   // namespace boost
 
@@ -193,5 +195,5 @@ eat_whitespace<TokenT>::whitespace(TokenT &token, bool &skipped_newline)
 #include BOOST_ABI_SUFFIX
 #endif
 
-#endif // !defined(EAT_WHITESPACE_HPP_4CE9AD17_F82D_4AB2_A117_555DF0DCC801_INCLUDED)
+#endif // !defined(WHITESPACE_HANDLING_HPP_INCLUDED)
 

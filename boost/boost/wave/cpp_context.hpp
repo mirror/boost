@@ -29,6 +29,7 @@
 #include <boost/wave/util/cpp_macromap.hpp>
 
 #include <boost/wave/preprocessing_hooks.hpp>
+#include <boost/wave/whitespace_handling.hpp>
 #include <boost/wave/cpp_iteration_context.hpp>
 #include <boost/wave/language_support.hpp>
 
@@ -56,9 +57,16 @@ namespace wave {
 //                      to be included. This template parameter is optional and 
 //                      defaults to the 
 //                          iteration_context_policies::load_file_to_string
-//                      type
+//                      type.
 //      HooksT          The hooks policy to use for different notification 
-//                      callbacks.
+//                      callbacks. This template parameter is optional and
+//                      defaults to the
+//                          context_policies::default_preprocessing_hooks
+//                      type.
+//      WhitespaceT     The is the whitespace handling policy. This template 
+//                      parameter is optional and defaults to the
+//                          context_policies::eat_whitespace<token_type>
+//                      type.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -66,7 +74,8 @@ template <
     typename IteratorT,
     typename LexIteratorT, 
     typename InputPolicyT = iteration_context_policies::load_file_to_string,
-    typename HooksT = context_policies::default_preprocessing_hooks
+    typename HooksT = context_policies::default_preprocessing_hooks,
+    typename WhitespaceT = context_policies::eat_whitespace<typename LexIteratorT::token_type>
 >
 class context {
 
@@ -78,7 +87,7 @@ public:
     
 // public typedefs
     typedef typename LexIteratorT::token_type       token_type;
-    typedef context<IteratorT, LexIteratorT, InputPolicyT, HooksT> 
+    typedef context<IteratorT, LexIteratorT, InputPolicyT, HooksT, WhitespaceT> 
         self_type;
     
     typedef IteratorT                               target_iterator_type;
@@ -87,13 +96,15 @@ public:
 
     typedef InputPolicyT                            input_policy_type;
     typedef typename token_type::position_type      position_type;
-        
+
+    
 // type of a token sequence
     typedef std::list<token_type, boost::fast_pool_allocator<token_type> > 
         token_sequence_type;
 
 // types of the policies
     typedef HooksT                                  hook_policy_type;
+    typedef WhitespaceT                             whitespace_policy_type;
     
 private:
 // stack of shared_ptr's to the pending iteration contexts 
@@ -109,12 +120,15 @@ private:
     
 public:
     context(target_iterator_type const &first_, target_iterator_type const &last_, 
-            char const *fname = "<Unknown>", HooksT const &hooks_ = HooksT())
+            char const *fname = "<Unknown>", HooksT const &hooks_ = HooksT(),
+            WhitespaceT const& whitespace_ = WhitespaceT())
     :   first(first_), last(last_), filename(fname)
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
         , current_filename(fname)
 #endif 
-        , macros(*this), language(boost::wave::support_cpp), hooks(hooks_)
+        , macros(*this), language(boost::wave::support_cpp)
+        , hooks(hooks_)
+        , whitespace(whitespace_)
     {
         macros.init_predefined_macros(fname);
         includes.init_initial_path();
@@ -124,8 +138,7 @@ public:
     iterator_type begin() 
     { 
         includes.set_current_directory(filename.c_str());
-        return iterator_type(*this, first, last, position_type(filename.c_str()),
-            get_language()); 
+        return iterator_type(*this, first, last, position_type(filename.c_str())); 
     }
     iterator_type end() const 
         { return iterator_type(); }
@@ -186,10 +199,10 @@ public:
     iter_size_type get_max_include_nesting_depth() const
         { return iter_ctxs.get_max_include_nesting_depth(); }
 
-// access the hooks policy
-    hook_policy_type &get_hooks() 
-        { return hooks; }
-
+// access the policies
+    hook_policy_type &get_hooks() { return hooks; }
+    whitespace_policy_type &get_whitespace_handler() { return whitespace; }
+    
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
 protected:
     friend class boost::wave::pp_iterator<
@@ -294,7 +307,8 @@ private:
     iteration_context_stack_type iter_ctxs;       // iteration contexts
     boost::wave::util::macromap<self_type> macros;  // map of defined macros
     boost::wave::language_support language;       // supported language/extensions
-    hook_policy_type hooks;                      // hook policy instance
+    hook_policy_type hooks;                       // hook policy instance
+    whitespace_policy_type whitespace;            // whitespace handling policy
 };
 
 ///////////////////////////////////////////////////////////////////////////////
