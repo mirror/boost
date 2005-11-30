@@ -83,7 +83,7 @@ template <class Key, class Object>
 boost::shared_ptr<Object> object_cache<Key, Object>::do_get(const Key& k, size_type max_cache_size)
 {
    typedef typename object_cache<Key, Object>::data object_data;
-   typedef typename list_type::size_type list_size_type;
+   typedef typename map_type::size_type map_size_type;
    static object_data s_data;
 
    //
@@ -122,7 +122,7 @@ boost::shared_ptr<Object> object_cache<Key, Object>::do_get(const Key& k, size_t
    s_data.cont.push_back(value_type(result, 0));
    s_data.index.insert(std::make_pair(k, --(s_data.cont.end())));
    s_data.cont.back().second = &(s_data.index.find(k)->first);
-   list_size_type s = s_data.cont.size();
+   map_size_type s = s_data.index.size();
    BOOST_ASSERT(s_data.index[k]->first.get() == result.get());
    BOOST_ASSERT(&(s_data.index.find(k)->first) == s_data.cont.back().second);
    BOOST_ASSERT(s_data.index.find(k)->first == k);

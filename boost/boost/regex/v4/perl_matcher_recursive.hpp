@@ -494,6 +494,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_char_repeat()
 #ifdef BOOST_MSVC
 #pragma warning(push)
 #pragma warning(disable:4127)
+#pragma warning(disable:4267)
 #endif
 #ifdef __BORLANDC__
 #pragma option push -w-8008 -w-8066 -w-8004

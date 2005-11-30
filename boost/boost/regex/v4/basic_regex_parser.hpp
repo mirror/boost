@@ -889,7 +889,7 @@ bool basic_regex_parser<charT, traits>::parse_repeat_range(bool isbasic)
    //
    if(min > max)
    {
-      fail(regex_constants::error_range, this->m_position - this->m_base);
+      fail(regex_constants::error_badbrace, this->m_position - this->m_base);
       return false;
    }
    return parse_repeat(min, max);
