@@ -1,0 +1,10 @@
+subproject libs/parameter/test/python ;
+
+SEARCH on python.jam = $(BOOST_BUILD_PATH) ;
+include python.jam ;
+
+extension parameter
+  : simple.cpp
+    <dll>../../../python/build/boost_python
+  ;
+
