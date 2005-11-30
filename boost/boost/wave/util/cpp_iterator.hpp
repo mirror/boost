@@ -410,10 +410,7 @@ namespace {
     bool consider_emitting_line_directive(ContextT const& ctx, token_id id)
     {
         if (need_preserve_comments(ctx.get_language())) {
-            if (IS_EXTCATEGORY(id, WhiteSpaceTokenType|AltTokenType) ||
-                  (!IS_CATEGORY(id, WhiteSpaceTokenType) &&
-                   !IS_CATEGORY(id, EOLTokenType) && 
-                   !IS_CATEGORY(id, EOFTokenType)))
+            if (!IS_CATEGORY(id, EOLTokenType) && !IS_CATEGORY(id, EOFTokenType))
             {
                 return true;
             }
