@@ -42,23 +42,16 @@
 <span class="keyword">namespace</span> context_policies {
  
     <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Token&gt;
-    <span class="keyword">struct</span> eat_whitespace {
-        <span class="comment">// constructor</span>
-        <a href="class_reference_ctxws_policy.html#constructor">eat_whitespace</a>(<span class="keyword">bool</span> preserve_comments = false);<br>    
+    <span class="keyword">struct</span> eat_whitespace 
+    {
         <span class="comment">// test, whether a given token may be skipped</span><br>        <span class="keyword">bool</span> <a href="class_reference_ctxws_policy.html#may_skip">may_skip</a> (TokenT &amp;token, <span class="keyword">bool</span> &amp;skipped_newline);<br>    };
 
 }}}   <span class="comment">// namespace boost::wave::context_policies</span></pre>
   <h2><b><a name="template_parameters"></a>Template parameters</b></h2>
   <p>Every whitespace handling policy should expect to be instantiated with the token type as a template parameter.</p>
   <h2><a name="member_functions"></a>Member functions</h2>
-  <p><a name="constructor" id="constructor"></a><strong>constructor</strong></p>
-  <pre>    eat_whitespace(<s<!-- #BeginDate format:fcAm1m -->Wednesday, November 30, 2005  19:37<!-- #EndDate -->>);
-</pre>
-  <blockquote>
-    <p>The eat_whitespace <tt>constructor</tt> of this policy should take a single <tt>bool</tt> parameter specifying whether comments should be skipped or preserved by the component. Either this parameter should have a default value or you should additionally provide a default constructor.</p>
-</blockquote>
   <p><a name="may_skip" id="may_skip"></a><strong>may_skip</strong></p>
-  <pre>    <span class="keyword">bool</span> may_skip(TokenT &amp;token, <span class="keyword">bool</span>&amp; skipped_newline);
+<pre>    <span class="keyword">bool</span> may_skip(TokenT &amp;token, <span class="keyword">bool</span>&amp; skipped_newline);
 </pre>
 <blockquote>
   <p>The function <tt>may_skip</tt> will be called by the library, whenever a token is about to be returned to the calling application. </p>
@@ -69,11 +62,9 @@
   <p><a name="example"></a><strong>Example</strong></p>
   <p>The following code snippet shows a simple example how to implement a whitespace handling policy preserving all whitespace in the generated output:</p>
   <pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TokenT&gt;
-    <span class="keyword">struct</span> eat_whitespace {
-        <span class="comment">// constructor</span>
-        <a href="class_reference_ctxws_policy.html#constructor">eat_whitespace</a>(<span class="keyword">bool</span> preserve_comments = false)
-        {}<br>    
-        <span class="comment">// no of the given tokens may be skipped anytime</span><br>        <span class="keyword">bool</span> <a href="class_reference_ctxws_policy.html#may_skip">may_skip</a> (TokenT &amp;token, <span class="keyword">bool</span> &amp;skipped_newline)
+    <span class="keyword">struct</span> eat_whitespace 
+    {
+        <span class="comment">// not any of the given tokens may be skipped anytime</span><br>        <span class="keyword">bool</span> <a href="class_reference_ctxws_policy.html#may_skip">may_skip</a> (TokenT &amp;token, <span class="keyword">bool</span> &amp;skipped_newline)
         { return false; }<br>    };
 </pre>
   <p>&nbsp; </p>
@@ -91,7 +82,7 @@
   <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Wednesday, November 30, 2005  19:37<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Wednesday, November 30, 2005  19:42<!-- #EndDate -->
   </span>
 </p>
 <p>&nbsp;</p>
