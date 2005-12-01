@@ -206,9 +206,9 @@ public:
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
 protected:
     friend class boost::wave::pp_iterator<
-        boost::wave::context<IteratorT, lexer_type, InputPolicyT, HooksT> >;
+        boost::wave::context<IteratorT, lexer_type, InputPolicyT, HooksT, WhitespaceT> >;
     friend class boost::wave::impl::pp_iterator_functor<
-        boost::wave::context<IteratorT, lexer_type, InputPolicyT, HooksT> >;
+        boost::wave::context<IteratorT, lexer_type, InputPolicyT, HooksT, WhitespaceT> >;
 #endif
     
 // maintain include paths (helper functions)

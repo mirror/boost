@@ -42,6 +42,7 @@
 #include <boost/wave/grammars/cpp_predef_macros_gen.hpp>
 #endif
 
+#include <boost/wave/whitespace_handling.hpp>
 #include <boost/wave/cpp_iteration_context.hpp>
 #include <boost/wave/cpp_exceptions.hpp>
 #include <boost/wave/language_support.hpp>
