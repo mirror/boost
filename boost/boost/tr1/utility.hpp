@@ -17,6 +17,8 @@
 
 #else
 
+#if defined(BOOST_TR1_USE_OLD_TUPLE)
+
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
@@ -102,6 +104,12 @@ inline typename tuple_detail::const_tuple_get_result<I,T1,T2>::type get(const st
 }
 
 } } // namespaces
+
+#else
+
+#include <boost/tr1/tuple.hpp>
+
+#endif
 
 #endif
 

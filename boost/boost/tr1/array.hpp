@@ -27,6 +27,10 @@ using ::boost::array;
 using ::boost::swap;
 #endif
 
+#if !defined(BOOST_TR1_USE_OLD_TUPLE)
+}} namespace boost{ namespace fusion{
+#endif
+
 // [6.2.2.5] Tuple interface to class template array
 template <class T> struct tuple_size; // forward declaration
 template <int I, class T> struct tuple_element; // forward declaration
@@ -61,6 +65,16 @@ const T& get(const array<T, N>& a)
    BOOST_STATIC_ASSERT(I >= 0);
    return a[I];
 }
+
+#if !defined(BOOST_TR1_USE_OLD_TUPLE)
+}} namespace std{ namespace tr1{
+
+   using ::boost::fusion::tuple_size;
+   using ::boost::fusion::tuple_element;
+   using ::boost::fusion::get;
+
+#endif
+
 
 } } // namespaces
 
