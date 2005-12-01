@@ -169,7 +169,7 @@ public:
 //  
 template <
     typename IteratorT, 
-    typename InputPolicyT = context_policies::load_file_to_string 
+    typename InputPolicyT = iteration_context_policies::load_file_to_string 
 >
 struct iteration_context
 :   public base_iteration_context<IteratorT>,

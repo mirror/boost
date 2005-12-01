@@ -56,7 +56,7 @@ namespace wave {
 //      InputPolicyT    The input policy type to use for loading the files
 //                      to be included. This template parameter is optional and 
 //                      defaults to the 
-//                          context_policies::load_file_to_string
+//                          iteration_context_policies::load_file_to_string
 //                      type.
 //      HooksT          The hooks policy to use for different notification 
 //                      callbacks. This template parameter is optional and
