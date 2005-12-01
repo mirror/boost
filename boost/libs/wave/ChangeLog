@@ -48,9 +48,13 @@ CHANGELOG
   the built Wave library and dll.
 - Added the whitespace handling policy to the context object.
 - Change the --preserve option of the wave tool to take a single integer 
-  argument (0: no whitespace is preserved, 1: comments only are preserved, 
+  argument (0: no whitespace is preserved, 1: only comments are preserved, 
   2: all whitespace is preserved)
-
+- Edited the command line option descriptions of the wave driver.
+- Fixed broken tags in documentation (magically inserted by DreamWeaver).
+- Merged the new whitespace_handling policy with the existing preprocessing 
+  hooks. The name of the new preprocessing hook ist may_skip_whitespace().
+  
 Boost V1.33.1
 - Version 1.2.1
 - Fixed bug reported as Sourceforge bug 1274584.

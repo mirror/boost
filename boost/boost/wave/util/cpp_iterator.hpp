@@ -244,9 +244,6 @@ private:
 // type of a token sequence
     typedef typename ContextT::token_sequence_type      token_sequence_type;
 
-// type of the whitespace handling policy
-    typedef typename ContextT::whitespace_policy_type   whitespace_policy_type;
-
 public:
     template <typename IteratorT>
     pp_iterator_functor(ContextT &ctx_, IteratorT const &first_, 
@@ -451,7 +448,7 @@ token_id id = T_ANY;
             act_token.set_value("\n");
         }
         
-    } while (ctx.get_whitespace_handler().may_skip(act_token, skipped_newline));
+    } while (ctx.get_hooks().may_skip_whitespace(act_token, skipped_newline));
     
 // if there were skipped any newlines, we must emit a #line directive
     if ((must_emit_line_directive || (was_seen_newline && skipped_newline)) && 
@@ -460,7 +457,7 @@ token_id id = T_ANY;
     // must emit a #line directive
         if (emit_line_directive()) {
             skipped_newline = false;
-            ctx.get_whitespace_handler().may_skip(act_token, skipped_newline);     // feed ws eater FSM
+            ctx.get_hooks().may_skip_whitespace(act_token, skipped_newline);     // feed ws eater FSM
             id = token_id(act_token);
         }
     }

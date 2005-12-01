@@ -31,7 +31,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
 namespace wave {
-namespace iteration_context_policies {
+namespace context_policies {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -136,7 +136,7 @@ namespace iteration_context_policies {
         };
     };
     
-}   // namespace iterattion_context_policies
+}   // namespace context_policies
 
 ///////////////////////////////////////////////////////////////////////////////
 //  
@@ -169,8 +169,7 @@ public:
 //  
 template <
     typename IteratorT, 
-    typename InputPolicyT = 
-        iteration_context_policies::load_file_to_string 
+    typename InputPolicyT = context_policies::load_file_to_string 
 >
 struct iteration_context
 :   public base_iteration_context<IteratorT>,

@@ -21,7 +21,7 @@
     <td width="10"></td>
     <td width="30"><a href="../index.html"><img src="theme/u_arr.gif" border="0"></a></td>
     <td width="30"><a href="class_reference_inptpolcy.html"><img src="theme/l_arr.gif" width="20" height="19" border="0"></a></td>
-    <td width="30"><a href="class_reference_ctxws_policy.html"><img src="theme/r_arr.gif" border="0"></a></td>
+    <td width="30"><a href="class_reference_lexer.html"><img src="theme/r_arr.gif" border="0"></a></td>
   </tr>
 </table>
 <blockquote> 
@@ -34,6 +34,7 @@
 <p>The context policy is used to provide callback hooks, which are called from inside the library into the user code, whenever</p>
 <ul>
   <li>a preprocessor directive were recognized, </li>
+  <li>a token is about to be returned from the preprocessor, </li>
   <li>a macro get's defined or undefind, </li>
   <li>a macro is expanded or rescanned,</li>
   <li>an include file is opened or left, </li>
@@ -55,11 +56,13 @@
         <span class="comment">// general hook functions</span>
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TokenT&gt;
         <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#found_directive">found_directive</a>(TokenT <span class="keyword">const </span>&amp;directive);<br><span class="keyword">
+        <span class="comment">// test, whether a given token may be skipped</span><br>        bool <a href="class_reference_ctxpolicy.html#may_skip_whitespace">may_skip_whitespace</a> (TokenT &amp;token, bool &amp;skipped_newline);<br>
         </span><span class="comment">// Conditional compilation</span><span class="keyword">
         template</span> &lt;<span class="keyword">typename</span> ContainerT&gt;<br>        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#evaluated_conditional_expression">evaluated_conditional_expression</a>(ContainerT <span class="keyword">const</span>&amp; expression, <br>            <span class="keyword">bool</span> expression_value);<br>
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TokenT&gt;
-        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#skipped_token">skipped_token</a>(TokenT <span class="keyword">const</span>&amp; token);<br>
-        <span class="comment">// macro expansion tra<!-- #BeginDate format:fcAm1m -->Wednesday, November 30, 2005  15:15<!-- #EndDate -->pan> TokenT, <span class="keyword">typename</span> ContainerT&gt;
+        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#skipped_token">skipped_token</a>(TokenT <span class="keyword">const</span></span>&amp; token);<br>
+        <span class="comment">// macro expansion tracing</span><span class="keyword">
+        template</span> &lt;<span class="keyword">typename</span> TokenT, <span class="keyword">typename</span> ContainerT&gt;
         <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#expanding_function_like_macro">expanding_function_like_macro</a>(TokenT <span class="keyword">const</span> &amp;macrodef, 
             <span class="keyword">std::vector</span>&lt;TokenT&gt; <span class="keyword">const</span> &amp;formal_args, 
             ContainerT <span class="keyword">const</span> &amp;definition, TokenT <span class="keyword">const</span> &amp;macrocall, 
@@ -115,6 +118,15 @@
 <blockquote>
   <p>The function <tt>found_directive</tt> is called, whenever the preprocessor has detected one of the preprocessing directives (<span class="preprocessor">#define</span>, <span class="preprocessor">#undef</span>, <span class="preprocessor">#if</span>, <span class="preprocessor">#idef</span>, <span class="preprocessor">#ifndef</span>, <span class="preprocessor">#elif</span>, <span class="preprocessor">#endif</span>, <span class="preprocessor">#error</span>, <span class="preprocessor">#include</span>, <span class="preprocessor">#pragma</span> or <span class="preprocessor">#warning</span>) .</p>
   <p>The parameter <tt>directive</tt> refers to the token containing the detected preprocessing directive. </p>
+</blockquote>
+<p><a name="may_skip_whitespace" id="may_skip"></a><strong>may_skipwhitespace</strong></p>
+<pre>    <span class="keyword">bool</span> may_skip_whitespace(TokenT &amp;token, <span class="keyword">bool</span>&amp; skipped_newline);
+</pre>
+<blockquote>
+  <p>The function <tt>may_skipwhitespace</tt> will be called by the library, whenever a token is about to be returned to the calling application. </p>
+  <p>The <tt>token</tt> parameter holds a reference to the current token. The policy is free to change this token if needed.</p>
+  <p>The <tt>skipped_newline</tt> parameter holds a reference to a boolean value which should be set to true by the policy function whenever a newline is going to be skipped. </p>
+  <p>If the return value is <tt>true</tt>, the given token is skipped and the preprocessing continues to the next token. If the return value is <tt>false</tt>, the given token is returned to the calling application. Caution has to be used, because by returning <span class="keyword">true</span> the policy function is able to force skipping even significant tokens not only whitespace. </p>
 </blockquote>
 <h3>Conditional compilation hook functions </h3>
 <p><a name="evaluated_conditional_expression"></a><strong>evaluated_conditional_expression</strong></p>
@@ -308,16 +320,15 @@
     <td width="10"></td>
     <td width="30"><a href="../index.html"><img src="theme/u_arr.gif" border="0"></a></td>
     <td width="30"><a href="class_reference_inptpolcy.html"><img src="theme/l_arr.gif" width="20" height="19" border="0"></a></td>
-    <td width="30"><a href="class_reference_ctxws_policy.html"><img src="theme/r_arr.gif" border="0"></a></td>
+    <td width="30"><a href="class_reference_lexer.html"><img src="theme/r_arr.gif" border="0"></a></td>
   </tr>
 </table>
 <hr size="1">
 <p class="copyright">Copyright &copy; 2003-2005 Hartmut Kaiser<br>
   <br>
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
-<span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Wednesday, November 30, 2005  15:15<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Thursday, December 1, 2005  11:49<!-- #EndDate -->
 </span></p>
 </body>
 </html>

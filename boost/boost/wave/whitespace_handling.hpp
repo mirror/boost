@@ -15,6 +15,7 @@
 
 #include <boost/wave/wave_config.hpp>   
 #include <boost/wave/token_ids.hpp>   
+#include <boost/wave/preprocessing_hooks.hpp>
 
 // this must occur after all of the includes and before any code appears
 #ifdef BOOST_HAS_ABI_HEADERS
@@ -46,12 +47,13 @@ namespace util {
 
 ///////////////////////////////////////////////////////////////////////////////
 template <typename TokenT>
-class eat_whitespace {
-
+class eat_whitespace 
+:   public default_preprocessing_hooks
+{
 public:
     eat_whitespace(bool preserve_comments = false);
     
-    bool may_skip (TokenT &token, bool &skipped_newline);
+    bool may_skip_whitespace(TokenT &token, bool &skipped_newline);
 
 protected:
     bool skip_cppcomment(boost::wave::token_id id)
@@ -75,7 +77,7 @@ eat_whitespace<TokenT>::eat_whitespace(bool preserve_comments)
 
 template <typename TokenT>
 inline bool 
-eat_whitespace<TokenT>::may_skip(TokenT &token, bool &skipped_newline) 
+eat_whitespace<TokenT>::may_skip_whitespace(TokenT &token, bool &skipped_newline) 
 {
     return (this->*state)(token, skipped_newline);
 }

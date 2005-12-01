@@ -56,7 +56,7 @@ namespace wave {
 //      InputPolicyT    The input policy type to use for loading the files
 //                      to be included. This template parameter is optional and 
 //                      defaults to the 
-//                          iteration_context_policies::load_file_to_string
+//                          context_policies::load_file_to_string
 //                      type.
 //      HooksT          The hooks policy to use for different notification 
 //                      callbacks. This template parameter is optional and
@@ -73,9 +73,8 @@ namespace wave {
 template <
     typename IteratorT,
     typename LexIteratorT, 
-    typename InputPolicyT = iteration_context_policies::load_file_to_string,
-    typename HooksT = context_policies::default_preprocessing_hooks,
-    typename WhitespaceT = context_policies::eat_whitespace<typename LexIteratorT::token_type>
+    typename InputPolicyT = context_policies::load_file_to_string,
+    typename HooksT = context_policies::eat_whitespace<typename LexIteratorT::token_type>
 >
 class context {
 
@@ -87,7 +86,7 @@ public:
     
 // public typedefs
     typedef typename LexIteratorT::token_type       token_type;
-    typedef context<IteratorT, LexIteratorT, InputPolicyT, HooksT, WhitespaceT> 
+    typedef context<IteratorT, LexIteratorT, InputPolicyT, HooksT> 
         self_type;
     
     typedef IteratorT                               target_iterator_type;
@@ -104,7 +103,6 @@ public:
 
 // types of the policies
     typedef HooksT                                  hook_policy_type;
-    typedef WhitespaceT                             whitespace_policy_type;
     
 private:
 // stack of shared_ptr's to the pending iteration contexts 
@@ -120,15 +118,13 @@ private:
     
 public:
     context(target_iterator_type const &first_, target_iterator_type const &last_, 
-            char const *fname = "<Unknown>", HooksT const &hooks_ = HooksT(),
-            WhitespaceT const& whitespace_ = WhitespaceT())
+            char const *fname = "<Unknown>", HooksT const &hooks_ = HooksT())
     :   first(first_), last(last_), filename(fname)
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
         , current_filename(fname)
 #endif 
         , macros(*this), language(boost::wave::support_cpp)
         , hooks(hooks_)
-        , whitespace(whitespace_)
     {
         macros.init_predefined_macros(fname);
         includes.init_initial_path();
@@ -201,14 +197,13 @@ public:
 
 // access the policies
     hook_policy_type &get_hooks() { return hooks; }
-    whitespace_policy_type &get_whitespace_handler() { return whitespace; }
     
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
 protected:
     friend class boost::wave::pp_iterator<
-        boost::wave::context<IteratorT, lexer_type, InputPolicyT, HooksT, WhitespaceT> >;
+        boost::wave::context<IteratorT, lexer_type, InputPolicyT, HooksT> >;
     friend class boost::wave::impl::pp_iterator_functor<
-        boost::wave::context<IteratorT, lexer_type, InputPolicyT, HooksT, WhitespaceT> >;
+        boost::wave::context<IteratorT, lexer_type, InputPolicyT, HooksT> >;
 #endif
     
 // maintain include paths (helper functions)
@@ -308,7 +303,6 @@ private:
     boost::wave::util::macromap<self_type> macros;  // map of defined macros
     boost::wave::language_support language;       // supported language/extensions
     hook_policy_type hooks;                       // hook policy instance
-    whitespace_policy_type whitespace;            // whitespace handling policy
 };
 
 ///////////////////////////////////////////////////////////////////////////////

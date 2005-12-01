@@ -27,7 +27,6 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 //  Include the context policies to use
-#include "trace_macro_expansion.hpp"
 #include "optional_whitespace_eater.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -74,8 +73,7 @@ int print_version()
         lex_iterator_type;
     typedef boost::wave::context<
             std::string::iterator, lex_iterator_type,
-            boost::wave::iteration_context_policies::load_file_to_string,
-            trace_macro_expansion,
+            boost::wave::context_policies::load_file_to_string,
             optional_whitespace_eater<token_type> > 
         context_type;
         
@@ -311,8 +309,7 @@ boost::wave::util::file_position_type current_position;
     // define different parameters of the actual preprocessing.
         typedef boost::wave::context<
                 std::string::iterator, lex_iterator_type,
-                boost::wave::iteration_context_policies::load_file_to_string,
-                trace_macro_expansion,
+                boost::wave::context_policies::load_file_to_string,
                 optional_whitespace_eater<token_type> > 
             context_type;
 
@@ -393,8 +390,9 @@ boost::wave::util::file_position_type current_position;
     // the iterators to get the preprocessed tokens and allows to configure
     // the preprocessing stage in advance.
     context_type ctx (instring.begin(), instring.end(), file_name.c_str(),
-        trace_macro_expansion(traceout, includelistout, enable_trace),
-        optional_whitespace_eater<token_type>(preserve_whitespace, preserve_comments));
+        optional_whitespace_eater<token_type>(
+            preserve_whitespace, preserve_comments, 
+            traceout, includelistout, enable_trace));
 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
     // enable C99 mode, if appropriate (implies variadics)
@@ -635,7 +633,8 @@ main (int argc, char *argv[])
 
         desc_ext.add_options()
             ("traceto,t", po::value<string>(), 
-                "output trace info to a file [arg] or to stderr [-]")
+                "output macro expansion tracing information to a file [arg] "
+                "or to stderr [-]")
             ("timer", "output overall elapsed computing time to stderr")
             ("long_long", "enable long long support in C++ mode")
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
@@ -643,7 +642,7 @@ main (int argc, char *argv[])
             ("c99", "enable C99 mode (implies --variadics)")
 #endif 
             ("listincludes,l", po::value<string>(), 
-                "list included file to a file [arg] or to stdout [-]")
+                "list names of included files to a file [arg] or to stdout [-]")
             ("preserve,p", po::value<int>()->default_value(0), 
                 "preserve whitespace\n"
                             "0: no whitespace is preserved (default),\n"

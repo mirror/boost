@@ -20,6 +20,7 @@
 #include <boost/wave/token_ids.hpp>
 #include <boost/wave/util/macro_helpers.hpp>
 #include <boost/wave/preprocessing_hooks.hpp>
+#include <boost/wave/whitespace_handling.hpp>
 #include <boost/wave/language_support.hpp>
 
 #include "stop_watch.hpp"
@@ -59,13 +60,18 @@ enum trace_flags {
 //  object.
 //
 ///////////////////////////////////////////////////////////////////////////////
+template <typename TokenT>
 class trace_macro_expansion
-:   public boost::wave::context_policies::default_preprocessing_hooks
+:   public boost::wave::context_policies::eat_whitespace<TokenT>
 {
+    typedef boost::wave::context_policies::eat_whitespace<TokenT> 
+        whitespace_base_type;
+    
 public:
-    trace_macro_expansion(std::ostream &tracestrm_, std::ostream &includestrm_, 
-            trace_flags flags_)
-    :   tracestrm(tracestrm_), includestrm(includestrm_), level(0), 
+    trace_macro_expansion(bool preserve_comments, std::ostream &tracestrm_, 
+            std::ostream &includestrm_, trace_flags flags_)
+    :   whitespace_base_type(preserve_comments),
+        tracestrm(tracestrm_), includestrm(includestrm_), level(0), 
         flags(flags_), logging_flags(trace_nothing)
     {
     }
@@ -90,7 +96,7 @@ public:
     //  invocation of the macro
     //
     ///////////////////////////////////////////////////////////////////////////
-    template <typename TokenT, typename ContainerT>
+    template <typename ContainerT>
     void expanding_function_like_macro(
         TokenT const &macrodef, std::vector<TokenT> const &formal_args, 
         ContainerT const &definition,
@@ -184,7 +190,7 @@ public:
     //  The 'macrocall' parameter marks the position, where this macro invoked.
     //
     ///////////////////////////////////////////////////////////////////////////
-    template <typename TokenT, typename ContainerT>
+    template <typename ContainerT>
     void expanding_object_like_macro(TokenT const &macrodef, 
         ContainerT const &definition, TokenT const &macrocall)
     {
@@ -508,7 +514,6 @@ protected:
         return (flags & trace_includes); 
     }
     
-    template <typename TokenT>
     void timer(TokenT const &value)
     {
         if (value.get_value() == "0" || value.get_value() == "restart") {

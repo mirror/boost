@@ -278,6 +278,32 @@ struct default_preprocessing_hooks {
     skipped_token(TokenT const& token)
     {}
 
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //  The function 'may_skip_whitespace' is called, will be called by the 
+    //  library, whenever a token is about to be returned to the calling 
+    //  application. 
+    //
+    //  The token parameter holds a reference to the current token. The policy 
+    //  is free to change this token if needed.
+    //
+    //  The skipped_newline parameter holds a reference to a boolean value 
+    //  which should be set to true by the policy function whenever a newline 
+    //  is going to be skipped. 
+    //
+    //  If the return value is true, the given token is skipped and the 
+    //  preprocessing continues to the next token. If the return value is 
+    //  false, the given token is returned to the calling application. 
+    //
+    //  ATTENTION!
+    //  Caution has to be used, because by returning true the policy function 
+    //  is able to force skipping even significant tokens not only whitespace. 
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename TokenT>
+    bool
+    may_skip_whitespace(TokenT& token, bool& skipped_newline)
+    { return false; }
 };
 
 ///////////////////////////////////////////////////////////////////////////////

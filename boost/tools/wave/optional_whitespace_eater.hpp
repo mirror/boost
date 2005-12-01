@@ -11,6 +11,7 @@
 #define OPTIONAL_WHITESPACE_EATER_HPP_INCLUDED
 
 #include <boost/wave/whitespace_handling.hpp>
+#include "trace_macro_expansion.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
 //  
@@ -26,21 +27,22 @@
 ///////////////////////////////////////////////////////////////////////////////
 template <typename TokenT>
 class optional_whitespace_eater
-:   public boost::wave::context_policies::eat_whitespace<TokenT>
+:   public trace_macro_expansion<TokenT>
 {
-    typedef boost::wave::context_policies::eat_whitespace<TokenT> base_type;
+    typedef trace_macro_expansion<TokenT> base_type;
     
 public:
-    optional_whitespace_eater(bool preserve_whitespace, bool preserve_comments)
-    :   base_type(preserve_comments), 
+    optional_whitespace_eater(bool preserve_whitespace, bool preserve_comments,
+            std::ostream &tracestrm, std::ostream &includestrm, trace_flags flags)
+    :   base_type(preserve_comments, tracestrm, includestrm, flags),
         preserve_whitespace(preserve_whitespace)
     {}
 
-    bool may_skip (TokenT &token, bool &skipped_newline)
+    bool may_skip_whitespace(TokenT &token, bool &skipped_newline)
     {
         // if whitespace should be preserved return false always
         return !preserve_whitespace ? 
-            this->base_type::may_skip(token, skipped_newline) :
+            this->base_type::may_skip_whitespace(token, skipped_newline) :
             false;
     }
     
