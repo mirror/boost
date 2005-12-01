@@ -73,7 +73,7 @@ namespace wave {
 template <
     typename IteratorT,
     typename LexIteratorT, 
-    typename InputPolicyT = context_policies::load_file_to_string,
+    typename InputPolicyT = iteration_context_policies::load_file_to_string,
     typename HooksT = context_policies::eat_whitespace<typename LexIteratorT::token_type>
 >
 class context {

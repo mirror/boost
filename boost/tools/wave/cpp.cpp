@@ -73,7 +73,7 @@ int print_version()
         lex_iterator_type;
     typedef boost::wave::context<
             std::string::iterator, lex_iterator_type,
-            boost::wave::context_policies::load_file_to_string,
+            boost::wave::iteration_context_policies::load_file_to_string,
             optional_whitespace_eater<token_type> > 
         context_type;
         
@@ -309,7 +309,7 @@ boost::wave::util::file_position_type current_position;
     // define different parameters of the actual preprocessing.
         typedef boost::wave::context<
                 std::string::iterator, lex_iterator_type,
-                boost::wave::context_policies::load_file_to_string,
+                boost::wave::iteration_context_policies::load_file_to_string,
                 optional_whitespace_eater<token_type> > 
             context_type;
 
