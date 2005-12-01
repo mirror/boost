@@ -78,7 +78,6 @@ int main()
    // pair interface:
    BOOST_STATIC_ASSERT((::std::tr1::tuple_size<std::pair<int, long> >::value == 2));
    BOOST_STATIC_ASSERT((::std::tr1::tuple_size<std::pair<int, float> >::value == 2));
-
    BOOST_STATIC_ASSERT((::boost::is_same< ::std::tr1::tuple_element<0, std::pair<int, long> >::type, int>::value));
    BOOST_STATIC_ASSERT((::boost::is_same< ::std::tr1::tuple_element<1, std::pair<int, long> >::type, long>::value));
 

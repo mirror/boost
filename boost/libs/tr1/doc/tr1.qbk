@@ -728,9 +728,7 @@ the macro BOOST_HAS_TR1_TUPLE if your
 standard library implements this part of TR1.
 
 [*Standard Conformity:]
-Interoperability with std::pair is only partially supported: you can use the
-generic tuple interface to access the members of a std::pair, but you can not
-construct a tuple from a pair, or assign a pair to a tuple.
+No known issues for conforming compilers.
 
 [endsect]
 

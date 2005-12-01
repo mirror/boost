@@ -18,6 +18,27 @@
 
 #include "verify_return.hpp"
 
+struct strict_comparison1{};
+
+struct strict_comparison2
+{
+   strict_comparison2();
+   strict_comparison2(const strict_comparison1&);
+   strict_comparison2(const strict_comparison2&);
+
+   strict_comparison2& operator=(const strict_comparison2&);
+   strict_comparison2& operator=(const strict_comparison1&);
+};
+
+bool operator==(const strict_comparison1&, const strict_comparison1&);
+bool operator<(const strict_comparison1&, const strict_comparison1&);
+bool operator==(const strict_comparison2&, const strict_comparison2&);
+bool operator<(const strict_comparison2&, const strict_comparison2&);
+bool operator==(const strict_comparison1&, const strict_comparison2&);
+bool operator<(const strict_comparison1&, const strict_comparison2&);
+bool operator==(const strict_comparison2&, const strict_comparison1&);
+bool operator<(const strict_comparison2&, const strict_comparison1&);
+
 int main()
 {
    std::tr1::tuple<int> t1a;
@@ -74,6 +95,35 @@ int main()
    verify_return_type(cr2 > cr3, false);
    verify_return_type(cr2 <= cr3, false);
    verify_return_type(cr2 >= cr3, false);
+   // strict comparisons:
+   const std::tr1::tuple<strict_comparison1, strict_comparison2> comp1, comp2;
+   verify_return_type(comp1 == comp2, false);
+   verify_return_type(comp1 != comp2, false);
+   verify_return_type(comp1 < comp2, false);
+   verify_return_type(comp1 > comp2, false);
+   verify_return_type(comp1 <= comp2, false);
+   verify_return_type(comp1 >= comp2, false);
+   // test strict mixed comparisons
+   const std::tr1::tuple<strict_comparison2, strict_comparison1> comp3;
+   verify_return_type(comp1 == comp3, false);
+   verify_return_type(comp1 != comp3, false);
+   verify_return_type(comp1 < comp3, false);
+   verify_return_type(comp1 > comp3, false);
+   verify_return_type(comp1 <= comp3, false);
+   verify_return_type(comp1 >= comp3, false);
+   verify_return_type(comp3 == comp2, false);
+   verify_return_type(comp3 != comp2, false);
+   verify_return_type(comp3 < comp2, false);
+   verify_return_type(comp3 > comp2, false);
+   verify_return_type(comp3 <= comp2, false);
+   verify_return_type(comp3 >= comp2, false);
+   // test mixed construct and assign:
+   const std::tr1::tuple<strict_comparison1, double> cons1;
+   std::tr1::tuple<strict_comparison2, long double> cons2(cons1);
+   cons2 = cons1;
+   const std::pair<strict_comparison1, double> p1;
+   std::tr1::tuple<strict_comparison2, long double> cons3(p1);
+   cons3 = p1;
 
    // pair interface:
    BOOST_STATIC_ASSERT((::std::tr1::tuple_size<std::pair<int, long> >::value == 2));
@@ -82,12 +132,12 @@ int main()
    BOOST_STATIC_ASSERT((::boost::is_same< ::std::tr1::tuple_element<0, std::pair<int, long> >::type, int>::value));
    BOOST_STATIC_ASSERT((::boost::is_same< ::std::tr1::tuple_element<1, std::pair<int, long> >::type, long>::value));
 
-   std::pair<int, long> p1;
-   const std::pair<int, long>& p2 = p1;
-   verify_return_type(&std::tr1::get<0>(p1), static_cast<int*>(0));
-   verify_return_type(&std::tr1::get<1>(p1), static_cast<long*>(0));
-   verify_return_type(&std::tr1::get<0>(p2), static_cast<const int*>(0));
-   verify_return_type(&std::tr1::get<1>(p2), static_cast<const long*>(0));
+   std::pair<int, long> p2;
+   const std::pair<int, long>& p3 = p2;
+   verify_return_type(&std::tr1::get<0>(p2), static_cast<int*>(0));
+   verify_return_type(&std::tr1::get<1>(p2), static_cast<long*>(0));
+   verify_return_type(&std::tr1::get<0>(p3), static_cast<const int*>(0));
+   verify_return_type(&std::tr1::get<1>(p3), static_cast<const long*>(0));
 
    return 0;
 }
