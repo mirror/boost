@@ -558,6 +558,7 @@ testwave_app::extract_special_information(std::string const& filename,
                         
                         // include this text into the extracted information 
                         // only if the result is not zero
+                        using namespace std;    // some system have atoi in namespace std
                         if (0 != atoi(result.c_str())) {
                             std::string thiscontent(value.substr(p+1));
                             if (9 == debuglevel) {
@@ -602,6 +603,7 @@ testwave_app::extract_special_information(std::string const& filename,
                         
                         // include this text into the extracted information 
                         // only if the result is not zero
+                        using namespace std;    // some system have atoi in namespace std
                         if (0 != atoi(result.c_str())) {
                             std::string thiscontent(value.substr((' ' == value[p+1]) ? p+2 : p+1));
                             if (9 == debuglevel) {

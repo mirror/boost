@@ -54,7 +54,8 @@ CHANGELOG
 - Fixed broken tags in documentation (magically inserted by DreamWeaver).
 - Merged the new whitespace_handling policy with the existing preprocessing 
   hooks. The name of the new preprocessing hook ist may_skip_whitespace().
-  
+- Fixed compatibility issues for CW9.4 in the Wave test aplication.
+
 Boost V1.33.1
 - Version 1.2.1
 - Fixed bug reported as Sourceforge bug 1274584.
