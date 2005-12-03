@@ -62,6 +62,12 @@
 # include <boost/type_traits/remove_const.hpp>
 #endif
 
+// This must be at global scope, hence the uglified name
+enum boost_foreach_cheap_copy_argument_dependent_lookup_hack
+{
+    boost_foreach_cheap_copy_argument_dependent_lookup_hack_value
+};
+
 namespace boost
 {
 
@@ -73,7 +79,23 @@ class iterator_range;
 template<typename T>
 class sub_range;
 
-}
+namespace foreach
+{
+    ///////////////////////////////////////////////////////////////////////////////
+    // in_range
+    //
+    template<typename T>
+    inline std::pair<T, T> in_range(T begin, T end)
+    {
+        return std::make_pair(begin, end);
+    }
+
+    typedef boost_foreach_cheap_copy_argument_dependent_lookup_hack tag;
+    tag const adl = boost_foreach_cheap_copy_argument_dependent_lookup_hack_value;
+
+} // namespace foreach
+
+} // namespace boost
 
 ///////////////////////////////////////////////////////////////////////////////
 // boost_foreach_has_cheap_copy
@@ -82,36 +104,22 @@ class sub_range;
 inline boost::mpl::false_ *boost_foreach_has_cheap_copy(...) { return 0; }
 
 template<typename T>
-inline boost::mpl::true_ *boost_foreach_has_cheap_copy(std::pair<T, T> *) { return 0; }
+inline boost::mpl::true_ *boost_foreach_has_cheap_copy(std::pair<T, T> *, boost::foreach::tag) { return 0; }
 
 template<typename T>
-inline boost::mpl::true_ *boost_foreach_has_cheap_copy(boost::iterator_range<T> *) { return 0; }
+inline boost::mpl::true_ *boost_foreach_has_cheap_copy(boost::iterator_range<T> *, boost::foreach::tag) { return 0; }
 
 template<typename T>
-inline boost::mpl::true_ *boost_foreach_has_cheap_copy(boost::sub_range<T> *) { return 0; }
+inline boost::mpl::true_ *boost_foreach_has_cheap_copy(boost::sub_range<T> *, boost::foreach::tag) { return 0; }
 
 template<typename T>
-inline boost::mpl::true_ *boost_foreach_has_cheap_copy(T **) { return 0; }
+inline boost::mpl::true_ *boost_foreach_has_cheap_copy(T **, boost::foreach::tag) { return 0; }
 
 template<typename T, std::size_t N>
-inline boost::mpl::false_ *boost_foreach_has_cheap_copy(T (*)[N]) { return 0; }
+inline boost::mpl::false_ *boost_foreach_has_cheap_copy(T (*)[N], boost::foreach::tag) { return 0; }
 
 namespace boost
 {
-
-namespace foreach
-{
-
-///////////////////////////////////////////////////////////////////////////////
-// in_range
-//
-template<typename T>
-inline std::pair<T, T> in_range(T begin, T end)
-{
-    return std::make_pair(begin, end);
-}
-
-} // namespace foreach
 
 namespace foreach_detail_
 {
@@ -552,7 +560,7 @@ deref(auto_any_t cur, type2type<T, C> *)
     (&_foreach_rvalue)
 
 # define BOOST_FOREACH_CHEAP_COPY(COL)                                                          \
-    (true ? 0 : boost_foreach_has_cheap_copy(boost::foreach_detail_::to_ptr(COL)))
+    (true ? 0 : boost_foreach_has_cheap_copy(boost::foreach_detail_::to_ptr(COL), boost::foreach::adl))
 
 # define BOOST_FOREACH_NOOP(COL)                                                                \
     ((void)0)
@@ -580,7 +588,7 @@ deref(auto_any_t cur, type2type<T, C> *)
     (true ? 0 : boost::foreach_detail_::is_rvalue((COL), 0))
 
 # define BOOST_FOREACH_CHEAP_COPY(COL)                                                          \
-    (true ? 0 : boost_foreach_has_cheap_copy(boost::foreach_detail_::to_ptr(COL)))
+    (true ? 0 : boost_foreach_has_cheap_copy(boost::foreach_detail_::to_ptr(COL), boost::foreach::adl))
 
 # define BOOST_FOREACH_NOOP(COL)                                                                \
     ((void)0)
@@ -607,7 +615,7 @@ deref(auto_any_t cur, type2type<T, C> *)
     (static_cast<boost::mpl::false_ *>(0))
 
 # define BOOST_FOREACH_CHEAP_COPY(COL)                                                          \
-    (true ? 0 : boost_foreach_has_cheap_copy(boost::foreach_detail_::to_ptr(COL)))
+    (true ? 0 : boost_foreach_has_cheap_copy(boost::foreach_detail_::to_ptr(COL), boost::foreach::adl))
 
 // Attempt to make uses of BOOST_FOREACH with non-lvalues fail to compile
 // BUGBUG but cheap-to-copy containers *would* be handled correctly. Hrm.
