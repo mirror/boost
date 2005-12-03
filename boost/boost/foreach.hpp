@@ -73,6 +73,32 @@ class iterator_range;
 template<typename T>
 class sub_range;
 
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// boost_foreach_has_cheap_copy
+//   Overload this for user-defined collection types if they are inexpensive to copy.
+//   This tells BOOST_FOREACH it can avoid the r-value/l-value detection stuff.
+inline boost::mpl::false_ *boost_foreach_has_cheap_copy(...) { return 0; }
+
+template<typename T>
+inline boost::mpl::true_ *boost_foreach_has_cheap_copy(std::pair<T, T> *) { return 0; }
+
+template<typename T>
+inline boost::mpl::true_ *boost_foreach_has_cheap_copy(boost::iterator_range<T> *) { return 0; }
+
+template<typename T>
+inline boost::mpl::true_ *boost_foreach_has_cheap_copy(boost::sub_range<T> *) { return 0; }
+
+template<typename T>
+inline boost::mpl::true_ *boost_foreach_has_cheap_copy(T **) { return 0; }
+
+template<typename T, std::size_t N>
+inline boost::mpl::false_ *boost_foreach_has_cheap_copy(T (*)[N]) { return 0; }
+
+namespace boost
+{
+
 namespace foreach
 {
 
@@ -303,27 +329,6 @@ inline T (*to_ptr(T (&t)[N]))[N] { return 0; }
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-// cheap_copy
-//   Overload this for user-defined collection types if they are inexpensive to copy.
-//   This tells BOOST_FOREACH it can avoid the r-value/l-value detection stuff.
-inline boost::mpl::false_ *cheap_copy(...) { return 0; }
-
-template<typename T>
-inline boost::mpl::true_ *cheap_copy(std::pair<T, T> *) { return 0; }
-
-template<typename T>
-inline boost::mpl::true_ *cheap_copy(iterator_range<T> *) { return 0; }
-
-template<typename T>
-inline boost::mpl::true_ *cheap_copy(sub_range<T> *) { return 0; }
-
-template<typename T>
-inline boost::mpl::true_ *cheap_copy(T **) { return 0; }
-
-template<typename T,std::size_t N>
-inline boost::mpl::false_ *cheap_copy(T (*)[N]) { return 0; }
-
-///////////////////////////////////////////////////////////////////////////////
 // derefof
 //
 template<typename T>
@@ -547,7 +552,7 @@ deref(auto_any_t cur, type2type<T, C> *)
     (&_foreach_rvalue)
 
 # define BOOST_FOREACH_CHEAP_COPY(COL)                                                          \
-    (true ? 0 : boost::foreach_detail_::cheap_copy(boost::foreach_detail_::to_ptr(COL)))
+    (true ? 0 : boost_foreach_has_cheap_copy(boost::foreach_detail_::to_ptr(COL)))
 
 # define BOOST_FOREACH_NOOP(COL)                                                                \
     ((void)0)
@@ -575,7 +580,7 @@ deref(auto_any_t cur, type2type<T, C> *)
     (true ? 0 : boost::foreach_detail_::is_rvalue((COL), 0))
 
 # define BOOST_FOREACH_CHEAP_COPY(COL)                                                          \
-    (true ? 0 : boost::foreach_detail_::cheap_copy(boost::foreach_detail_::to_ptr(COL)))
+    (true ? 0 : boost_foreach_has_cheap_copy(boost::foreach_detail_::to_ptr(COL)))
 
 # define BOOST_FOREACH_NOOP(COL)                                                                \
     ((void)0)
@@ -602,7 +607,7 @@ deref(auto_any_t cur, type2type<T, C> *)
     (static_cast<boost::mpl::false_ *>(0))
 
 # define BOOST_FOREACH_CHEAP_COPY(COL)                                                          \
-    (true ? 0 : boost::foreach_detail_::cheap_copy(boost::foreach_detail_::to_ptr(COL)))
+    (true ? 0 : boost_foreach_has_cheap_copy(boost::foreach_detail_::to_ptr(COL)))
 
 // Attempt to make uses of BOOST_FOREACH with non-lvalues fail to compile
 // BUGBUG but cheap-to-copy containers *would* be handled correctly. Hrm.
