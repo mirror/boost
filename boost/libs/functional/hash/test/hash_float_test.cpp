@@ -23,8 +23,16 @@ template <class T>
 void float_tests(char const* name, T* = 0)
 {
     std::cout<<"\n"
-        "Testing " BOOST_STRINGIZE(HASH_NAMESPACE) "::hash<"<<name<<">\n"
-        "\n";
+        <<"Testing " BOOST_STRINGIZE(HASH_NAMESPACE) "::hash<"<<name<<">\n"
+        <<"\n"
+        <<"std::numeric_limits<T>::digits = "
+            <<std::numeric_limits<T>::digits<<"\n"
+        <<"std::numeric_limits<int>::digits = "
+            <<std::numeric_limits<int>::digits<<"\n"
+        <<"std::numeric_limits<std::size_t>::digits = "
+            <<std::numeric_limits<std::size_t>::digits<<"\n"
+        <<"\n"
+        ;
 
     HASH_NAMESPACE::hash<T> x1;
 
@@ -126,9 +134,16 @@ void float_tests(char const* name, T* = 0)
     BOOST_CHECK(x1(v1) == HASH_NAMESPACE::hash_value(v1));
     BOOST_CHECK(x1(v2) == HASH_NAMESPACE::hash_value(v2));
 
-    BOOST_CHECK(x1(std::numeric_limits<T>::epsilon()) != x1((T) 0));
     BOOST_CHECK(x1(std::numeric_limits<T>::epsilon()) ==
             HASH_NAMESPACE::hash_value(std::numeric_limits<T>::epsilon()));
+
+    BOOST_CHECK(x1(std::numeric_limits<T>::epsilon()) != x1((T) 0));
+    if(x1(std::numeric_limits<T>::epsilon()) == x1((T)0))
+        std::cout<<"x1(epsilon) == x1(0) == "<<x1(std::numeric_limits<T>::epsilon())<<"\n";
+
+    BOOST_CHECK(x1(std::numeric_limits<T>::epsilon()) != x1((T) 1));
+    if(x1(std::numeric_limits<T>::epsilon()) == x1((T)1))
+        std::cout<<"x1(epsilon) == x1(1) == "<<x1(std::numeric_limits<T>::epsilon())<<"\n";
 
     // As before.
     if(std::numeric_limits<T>::has_denorm) {
