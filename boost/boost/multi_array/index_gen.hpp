@@ -29,7 +29,7 @@ template <int NumRanges, int NumDims>
 struct index_gen {
 private:
   typedef ::boost::detail::multi_array::index Index;
-  typedef std::size_t SizeType;
+  typedef ::boost::detail::multi_array::size_type SizeType;
   typedef index_range<Index,SizeType> range;
 public:
   template <int Dims, int Ranges>
