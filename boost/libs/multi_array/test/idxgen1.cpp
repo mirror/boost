@@ -16,21 +16,20 @@
 
 #include "boost/multi_array/index_gen.hpp"
 #include "boost/multi_array/index_range.hpp"
-
+#include "boost/multi_array/types.hpp"
 #include "boost/test/minimal.hpp"
 
 #include "boost/array.hpp"
-#include <cstddef>
 
+typedef boost::detail::multi_array::index index_type;
+typedef boost::detail::multi_array::size_type size_type;
+typedef boost::detail::multi_array::index_range<index_type,size_type> range;
 
 template <int NumRanges, int NumDims>
 void check(const boost::detail::multi_array::
            index_gen<NumRanges,NumDims>&) { }
 
-bool operator==(const boost::detail::multi_array::
-                index_range<int,std::size_t>& lhs,
-                const boost::detail::multi_array::
-                index_range<int,std::size_t>& rhs) {
+bool operator==(const range& lhs,const range& rhs) {  
   return lhs.start_ == rhs.start_ &&
     lhs.finish_ == rhs.finish_ &&
     lhs.stride_ == rhs.stride_ &&
@@ -40,7 +39,6 @@ bool operator==(const boost::detail::multi_array::
 int
 test_main(int,char*[])
 {
-  typedef boost::detail::multi_array::index_range<int,std::size_t> range;
 
   boost::detail::multi_array::index_gen<0,0> indices;
 
