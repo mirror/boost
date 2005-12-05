@@ -90,8 +90,21 @@ namespace foreach
         return std::make_pair(begin, end);
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    // boost::foreach::tag
+    //
     typedef boost_foreach_cheap_copy_argument_dependent_lookup_hack tag;
     tag const adl = boost_foreach_cheap_copy_argument_dependent_lookup_hack_value;
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // boost::foreach::has_cheap_copy
+    //   Specialize this for user-defined collection types if they are inexpensive to copy.
+    //   This tells BOOST_FOREACH it can avoid the r-value/l-value detection stuff.
+    template<typename T>
+    struct has_cheap_copy
+        : boost::mpl::false_
+    {
+    };
 
 } // namespace foreach
 
@@ -99,24 +112,50 @@ namespace foreach
 
 ///////////////////////////////////////////////////////////////////////////////
 // boost_foreach_has_cheap_copy
-//   Overload this for user-defined collection types if they are inexpensive to copy.
-//   This tells BOOST_FOREACH it can avoid the r-value/l-value detection stuff.
-inline boost::mpl::false_ *boost_foreach_has_cheap_copy(...) { return 0; }
+//   Another customization point for the has_cheap_copy optimization,
+//   this one works on legacy compilers. Overload boost_foreach_has_cheap_copy
+//   at the global namespace for your type.
+template<typename T>
+inline boost::foreach::has_cheap_copy<T> *
+boost_foreach_has_cheap_copy(T *&, ...)
+{
+    return 0;
+}
 
 template<typename T>
-inline boost::mpl::true_ *boost_foreach_has_cheap_copy(std::pair<T, T> *, boost::foreach::tag) { return 0; }
+inline boost::mpl::true_ *
+boost_foreach_has_cheap_copy(std::pair<T, T> *&, boost::foreach::tag)
+{
+    return 0;
+}
 
 template<typename T>
-inline boost::mpl::true_ *boost_foreach_has_cheap_copy(boost::iterator_range<T> *, boost::foreach::tag) { return 0; }
+inline boost::mpl::true_ *
+boost_foreach_has_cheap_copy(boost::iterator_range<T> *&, boost::foreach::tag)
+{
+    return 0;
+}
 
 template<typename T>
-inline boost::mpl::true_ *boost_foreach_has_cheap_copy(boost::sub_range<T> *, boost::foreach::tag) { return 0; }
+inline boost::mpl::true_ *
+boost_foreach_has_cheap_copy(boost::sub_range<T> *&, boost::foreach::tag)
+{
+    return 0;
+}
 
 template<typename T>
-inline boost::mpl::true_ *boost_foreach_has_cheap_copy(T **, boost::foreach::tag) { return 0; }
+inline boost::mpl::true_ *
+boost_foreach_has_cheap_copy(T **&, boost::foreach::tag)
+{
+    return 0;
+}
 
 template<typename T, std::size_t N>
-inline boost::mpl::false_ *boost_foreach_has_cheap_copy(T (*)[N], boost::foreach::tag) { return 0; }
+inline boost::mpl::false_ *
+boost_foreach_has_cheap_copy(T (*)[N], boost::foreach::tag)
+{
+    return 0;
+}
 
 namespace boost
 {
@@ -328,12 +367,20 @@ inline bool set_false(bool &b)
 // to_ptr
 //
 template<typename T>
-inline T *to_ptr(T const &t) { return 0; }
+inline T *&to_ptr(T const &)
+{
+    static T *t = 0;
+    return t;
+}
 
 // Borland needs a little extra help with arrays
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 template<typename T,std::size_t N>
-inline T (*to_ptr(T (&t)[N]))[N] { return 0; }
+inline T (*to_ptr(T (&t)[N]))[N]
+{
+    static T (*t)[N] = 0;
+    return t;
+}
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
