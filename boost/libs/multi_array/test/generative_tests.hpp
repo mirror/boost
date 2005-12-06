@@ -238,7 +238,10 @@ struct null_modifier {
 
 struct set_index_base_modifier {
   template <typename Array>
-  void modify(Array& A) const { A.reindex(1); }
+  void modify(Array& A) const {
+    typedef boost::multi_array_types::index index;
+    A.reindex(static_cast<index>(1)); 
+  }
 };
 
 struct reindex_modifier {
