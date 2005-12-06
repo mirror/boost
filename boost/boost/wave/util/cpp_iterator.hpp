@@ -574,8 +574,8 @@ bool returned_from_include_file = returned_from_include();
 
             if (was_seen_newline && pp_directive()) {
             // a pp directive was found
-                seen_newline = true;
-                must_emit_line_directive = true;
+//                 seen_newline = true;
+//                 must_emit_line_directive = true;
 
             // loop to the next token to analyze
             // simply fall through, since the iterator was already adjusted 
@@ -864,7 +864,9 @@ boost::spirit::tree_parse_info<lexer_type> hit =
     // position the iterator past the matched sequence to allow 
     // resynchronization, if an error occurs
         iter_ctx->first = hit.stop;
-        
+        seen_newline = true;
+        must_emit_line_directive = true;
+
     // found a valid pp directive, dispatch to the correct function to handle 
     // the found pp directive
     bool result = dispatch_directive (hit, found_directive);

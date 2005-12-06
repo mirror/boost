@@ -46,7 +46,9 @@ CHANGELOG
 - Added dll support for the generated Wave libraries.
 - Added the const_iterator based exlicit instantiations for the Re2C lexer to 
   the built Wave library and dll.
-- Added the whitespace handling policy to the context object.
+- Added the whitespace handling policy to the context object. This actually is 
+  no separate policy, it's a new preprocessing hook allowing to decide, whether
+  a concrete token has to be skipped.
 - Change the --preserve option of the wave tool to take a single integer 
   argument (0: no whitespace is preserved, 1: only comments are preserved, 
   2: all whitespace is preserved)
@@ -62,7 +64,12 @@ CHANGELOG
   This is a temporary hack to overcome the current limitation of the library
   not allowing to do generic error recovery. It allows to recover from 75% of
   the generated errors types.
+- The --timer command line option for the wave driver now prints the elapsed 
+  time correctly even if a preprcessing error occured.
+- Fixed a error recovery problem which skipped one token after continuing in
+  case this was a pp directive.
   
+Mon Dec  5 22:05:22 CST 2005
 Boost V1.33.1
 - Version 1.2.1
 - Fixed bug reported as Sourceforge bug 1274584.
