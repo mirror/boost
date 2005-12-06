@@ -25,5 +25,7 @@ import testing ;
           [ compile-fail shared_ptr_assign_fail.cpp ]
           [ compile-fail shared_ptr_delete_fail.cpp ]
           [ run shared_ptr_alloc2_test.cpp ]
+          [ run pointer_cast_test.cpp ]
+          [ compile pointer_to_other_test.cpp ]
         ;
 }
