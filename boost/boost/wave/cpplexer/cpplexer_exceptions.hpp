@@ -134,7 +134,7 @@ public:
     lexing_exception(char const *what_, error_code code, int line_, 
         int column_, char const *filename_) throw() 
     :   cpplexer_exception(line_, column_, filename_), 
-        level(severity_level(code))
+        level(severity_level(code)), code(code)
     {
         unsigned int off = 0;
         while (off < sizeof(buffer) && *what_)
@@ -151,11 +151,15 @@ public:
     {
         return buffer;
     }
-    util::severity get_severity()
+    util::severity get_severity() const
     {
         return level;
     }
-
+    int get_errorcode() const
+    {
+        return code;
+    }
+    
     static char const *error_text(int code)
     {
     // error texts in this array must appear in the same order as the items in
@@ -193,6 +197,7 @@ public:
 private:
     char buffer[512];
     util::severity level;
+    error_code code;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

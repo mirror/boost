@@ -543,16 +543,34 @@ boost::wave::util::file_position_type current_position;
 
     // >>>>>>>>>>>>> Here happens the actual preprocessing. <<<<<<<<<<<<<<<<<<<
     // loop over all generated tokens outputting the generated text 
-        while (first != last) {
-        // store the last known good token position
-            current_position = (*first).get_position();
+    bool finished = false;
+    
+        do {
+            try {
+                while (first != last) {
+                // store the last known good token position
+                    current_position = (*first).get_position();
 
-        // print out the current token value
-            output << (*first).get_value();
+                // print out the current token value
+                    output << (*first).get_value();
 
-        // advance to the next token
-            ++first;
-        }
+                // advance to the next token
+                    ++first;
+                }
+                finished = true;
+            }
+            catch (boost::wave::cpp_exception const &e) {
+            // some preprocessing error
+                if (!boost::wave::is_recoverable(e)) {
+                    cerr 
+                        << e.file_name() << "(" << e.line_no() << "): "
+                        << e.description() << endl;
+                }
+                else {
+                    throw;      // re-throw for non-recoverable errors
+                }
+            }
+        } while (!finished);
     }
     catch (boost::wave::cpp_exception const &e) {
     // some preprocessing error

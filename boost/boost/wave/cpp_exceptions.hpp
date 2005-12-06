@@ -110,6 +110,7 @@ public:
     
     virtual char const *what() const throw() = 0;   // to be overloaded
     virtual char const *description() const throw() = 0;
+    virtual int get_errorcode() const = 0;
     
     int line_no() const throw() { return line; }
     int column_no() const throw() { return column; }
@@ -170,7 +171,8 @@ public:
 
     preprocess_exception(char const *what_, error_code code, int line_, 
         int column_, char const *filename_) throw() 
-    :   cpp_exception(line_, column_, filename_), level(severity_level(code))
+    :   cpp_exception(line_, column_, filename_), level(severity_level(code)),
+        code(code)
     {
         unsigned int off = 0;
         while (off < sizeof(buffer) && *what_)
@@ -187,11 +189,15 @@ public:
     {
         return buffer;
     }
-    util::severity get_severity()
+    util::severity get_severity() const
     {
         return level;
     }
-
+    int get_errorcode() const
+    {
+        return code;
+    }
+    
     static char const *error_text(int code)
     {
     // error texts in this array must appear in the same order as the items in
@@ -300,7 +306,64 @@ public:
 private:
     char buffer[512];
     util::severity level;
+    error_code code;
 };
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  The is_recoverable() function allows to decide, whether it is possible 
+//  simply to continue after a given exception was thrown by Wave.
+//
+//  This is kind of a hack to allow to recover from certain errors as long as 
+//  Wave doesn't provide better means of error recovery.
+//
+///////////////////////////////////////////////////////////////////////////////
+inline bool
+is_recoverable(cpp_exception const& e)
+{
+    switch (e.get_errorcode()) {
+    // these are the exceptions thrown during processing not supposed to 
+    // produce any tokens on the context::iterator level
+    case preprocess_exception::macro_redefinition:
+    case preprocess_exception::macro_insertion_error:
+    case preprocess_exception::bad_macro_definition:
+    case preprocess_exception::illegal_redefinition:
+    case preprocess_exception::duplicate_parameter_name:
+    case preprocess_exception::invalid_macroname:
+    case preprocess_exception::bad_include_file:
+    case preprocess_exception::bad_include_statement:
+    case preprocess_exception::ill_formed_directive:
+    case preprocess_exception::error_directive:
+    case preprocess_exception::warning_directive:
+    case preprocess_exception::ill_formed_expression:
+    case preprocess_exception::missing_matching_if:
+    case preprocess_exception::missing_matching_endif:
+    case preprocess_exception::unbalanced_if_endif:
+    case preprocess_exception::bad_define_statement:
+    case preprocess_exception::bad_line_statement:
+    case preprocess_exception::bad_undefine_statement:
+    case preprocess_exception::division_by_zero:
+    case preprocess_exception::integer_overflow:
+    case preprocess_exception::ill_formed_integer_literal:
+    case preprocess_exception::ill_formed_character_literal:
+    case preprocess_exception::character_literal_out_of_range:
+    case preprocess_exception::last_line_not_terminated:
+    case preprocess_exception::include_nesting_too_deep:
+    case preprocess_exception::illegal_operator_redefinition:
+        return true;
+        
+    case preprocess_exception::unexpected_error:
+    case preprocess_exception::ill_formed_operator:
+    case preprocess_exception::too_few_macroarguments:
+    case preprocess_exception::too_many_macroarguments:
+    case preprocess_exception::empty_macroarguments:
+    case preprocess_exception::improperly_terminated_macro:
+    case preprocess_exception::invalid_concat:
+    case preprocess_exception::ill_formed_pragma_option:
+        break;
+    }
+    return false;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace wave

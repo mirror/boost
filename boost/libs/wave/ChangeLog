@@ -55,7 +55,14 @@ CHANGELOG
 - Merged the new whitespace_handling policy with the existing preprocessing 
   hooks. The name of the new preprocessing hook ist may_skip_whitespace().
 - Fixed compatibility issues for CW9.4 in the Wave test aplication.
-
+- Added get_errorcode() member to the wave exception classes allowing to 
+  get back the reason for the exception.
+- Added boost::wave::is_recoverable(cpp_exception const&) alowing to decide,
+  whether it is possible to continue after a cpp_exception has been thrown.
+  This is a temporary hack to overcome the current limitation of the library
+  not allowing to do generic error recovery. It allows to recover from 75% of
+  the generated errors types.
+  
 Boost V1.33.1
 - Version 1.2.1
 - Fixed bug reported as Sourceforge bug 1274584.
