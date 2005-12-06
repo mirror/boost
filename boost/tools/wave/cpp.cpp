@@ -561,7 +561,7 @@ boost::wave::util::file_position_type current_position;
             }
             catch (boost::wave::cpp_exception const &e) {
             // some preprocessing error
-                if (!boost::wave::is_recoverable(e)) {
+                if (boost::wave::is_recoverable(e)) {
                     cerr 
                         << e.file_name() << "(" << e.line_no() << "): "
                         << e.description() << endl;
