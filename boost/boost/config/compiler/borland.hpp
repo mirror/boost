@@ -163,14 +163,16 @@
 #  error "Compiler not supported or configured - please reconfigure"
 #endif
 //
-// last known and checked version is 1536 (Builder X preview):
-#if (__BORLANDC__ > 1536)
+// last known and checked version is 1536 (Builder X preview)
+// Or 0x580 (Borland C++ Builder 6 2006 Preview):
+#if (__BORLANDC__ > 1536) || ((__BORLANDC__ < 0x600) && (__BORLANDC__ > 0x580))
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  else
 #     pragma message( "Unknown compiler version - please run the configure tests and report the results")
 #  endif
 #endif
+
 
 
 
