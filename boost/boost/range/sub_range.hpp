@@ -39,22 +39,18 @@ namespace boost
     public:
         sub_range() : base() 
         { }
-/*
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
-        typedef sub_range<ForwardRange> this_type;
-        
-        sub_range( this_type r ) :
-        : base( r )
-        { }
 
-        this_type& operator=( this_type r )
-        {
-            base::operator=( r );
-            return *this;
-        }
-#endif
-*/
-        template< class ForwardRange2 >
+/*		
+		template< class ForwardRange2 >
+		sub_range( sub_range<ForwardRange2> r ) :
+
+#if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 800 )
+            base( impl::adl_begin( r ), impl::adl_end( r ) )
+#else
+            base( r )
+#endif */
+
+		template< class ForwardRange2 >
         sub_range( ForwardRange2& r ) : 
             
 #if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION, <= 800 )
@@ -92,6 +88,16 @@ namespace boost
             base::operator=( r );
             return *this;
         }
+
+		sub_range& operator=( sub_range r )
+		{
+			//
+			// argument passed by value to avoid 
+			// const_iterator to iterator conversion
+			//
+			base::operator=( r );
+			return *this;			
+		}
         
     public:
         
