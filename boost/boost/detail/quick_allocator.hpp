@@ -173,7 +173,7 @@ template<unsigned size, unsigned align_> struct allocator_impl
 #ifdef BOOST_HAS_THREADS
 
 template<unsigned size, unsigned align_>
-  lightweight_mutex allocator_impl<size, align_>::mutex_init = &lightweight_mutex allocator_impl<size, align_>::mutex();
+  lightweight_mutex * allocator_impl<size, align_>::mutex_init = &allocator_impl<size, align_>::mutex();
 
 #endif
 
