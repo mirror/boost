@@ -39,6 +39,7 @@
  
   Options allowed additionally in a config file:
     -o [--output] path:          specify a file to use for output instead of stdout
+    -E [ --autooutput ]          output goes into a file named &lt;input_basename&gt;.i
     -I [--include] path:         specify an additional include directory
     -S [--sysinclude] syspath:   specify an additional system include directory
     -F [--forceinclude] file:    force inclusion of the given file
@@ -66,6 +67,10 @@
 <blockquote> 
   <p dir="ltr">Specify a filename to be used for the generated preprocessed output 
     stream. If this option is not given, then the standard output is used (stdout).</p>
+</blockquote>
+<P dir="ltr">-E [--autooutput]</P>
+<blockquote>
+  <p dir="ltr">The generated output will end up in a file named after the input file basename with the file extension <span class="literal">'.i'</span>, i.e. for an input file <span class="literal">'inputfile.cpp'</span> the output will be written to <span class="literal">'inputfile.i'</span>. This option will not have any effect if there is specified an output file name with a --output option.</p>
 </blockquote>
 <P dir="ltr">-I [--include] option</P>
 <blockquote> 
@@ -231,7 +236,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Wednesday, November 30, 2005  15:25<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Wednesday, December 7, 2005  14:34<!-- #EndDate -->
 </span></p>
 </body>
 </html>

@@ -64,10 +64,13 @@ CHANGELOG
   This is a temporary hack to overcome the current limitation of the library
   not allowing to do generic error recovery. It allows to recover from 75% of
   the generated errors types.
-- The --timer command line option for the wave driver now prints the elapsed 
+- The --timer command line option for the Wave driver now prints the elapsed 
   time correctly even if a preprcessing error occured.
 - Fixed a error recovery problem which skipped one token after continuing in
   case this was a pp directive.
+- Added the --autooutput (-E) option to the Wave driver applet which redirects 
+  the generated output to a file named after the input file changing the file 
+  extension to '.i'.
   
 Mon Dec  5 22:05:22 CST 2005
 Boost V1.33.1

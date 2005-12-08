@@ -247,8 +247,8 @@ namespace {
   class auto_stop_watch : public stop_watch
   {
   public:
-      auto_stop_watch(bool print_time_, std::ostream &outstrm_)
-      :   print_time(print_time_), outstrm(outstrm_)
+      auto_stop_watch(std::ostream &outstrm_)
+      :   print_time(false), outstrm(outstrm_)
       {
       }
       
@@ -261,6 +261,11 @@ namespace {
           }
       }
   
+      void set_print_time(bool print_time_)
+      {
+          print_time = print_time_;
+      }
+      
   private:
       bool print_time;
       std::ostream &outstrm;
@@ -277,6 +282,7 @@ do_actual_work (std::string file_name, std::istream &instream,
 {
 // current file position is saved for exception handling
 boost::wave::util::file_position_type current_position;
+auto_stop_watch elapsed_time(cerr);
 
     try {
     // process the given file
@@ -513,6 +519,22 @@ boost::wave::util::file_position_type current_position;
                 return -1;
             }
         }
+        else if (vm.count("autooutput")) {
+        // generate output in the file <input_base_name>.i
+        fs::path out_file (file_name, fs::native);
+        std::string basename (out_file.leaf());
+        std::string::size_type pos = basename.find_last_of(".");
+        
+            if (std::string::npos != pos)
+                basename = basename.substr(0, pos);
+            out_file = out_file.branch_path() / (basename + ".i");
+            output.open(out_file.string().c_str());
+            if (!output.is_open()) {
+                cerr << "wave: could not open output file: " 
+                     << out_file.string() << endl;
+                return -1;
+            }
+        }
         else {
         // output the preprocessed result to std::cout
             output.copyfmt(cout);
@@ -521,7 +543,6 @@ boost::wave::util::file_position_type current_position;
         }
 
     // analyze the input file
-    auto_stop_watch elapsed_time(vm.count("timer") > 0, cerr);
     context_type::iterator_type first = ctx.begin();
     context_type::iterator_type last = ctx.end();
     
@@ -545,6 +566,7 @@ boost::wave::util::file_position_type current_position;
     // loop over all generated tokens outputting the generated text 
     bool finished = false;
     
+        elapsed_time.set_print_time(vm.count("timer") > 0);
         do {
             try {
                 while (first != last) {
@@ -631,6 +653,8 @@ main (int argc, char *argv[])
         desc_generic.add_options()
             ("output,o", po::value<string>(), 
                 "specify a file to use for output instead of stdout")
+            ("autooutput,E", 
+                "output goes into a file named <input_basename>.i")
             ("include,I", po::value<cmd_line_util::include_paths>()->composing(), 
                 "specify an additional include directory")
             ("sysinclude,S", po::value<vector<string> >()->composing(), 
