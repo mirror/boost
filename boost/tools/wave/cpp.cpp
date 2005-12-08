@@ -278,7 +278,7 @@ namespace {
 //  do the actual preprocessing
 int 
 do_actual_work (std::string file_name, std::istream &instream, 
-    po::variables_map const &vm)
+    po::variables_map const &vm, bool input_is_stdin)
 {
 // current file position is saved for exception handling
 boost::wave::util::file_position_type current_position;
@@ -519,7 +519,7 @@ auto_stop_watch elapsed_time(cerr);
                 return -1;
             }
         }
-        else if (vm.count("autooutput")) {
+        else if (input_is_stdin && vm.count("autooutput")) {
         // generate output in the file <input_base_name>.i
         fs::path out_file (file_name, fs::native);
         std::string basename (out_file.leaf());
@@ -761,7 +761,7 @@ main (int argc, char *argv[])
             arguments[0].value[0] == "-") 
         {
         // preprocess the given input from stdin
-            return do_actual_work("stdin", std::cin, vm);
+            return do_actual_work("stdin", std::cin, vm, true);
         }
         else {
         std::string file_name(arguments[0].value[0]);
@@ -772,7 +772,7 @@ main (int argc, char *argv[])
                 cerr << "wave: could not open input file: " << file_name << endl;
                 return -1;
             }
-            return do_actual_work(file_name, instream, vm);
+            return do_actual_work(file_name, instream, vm, false);
         }
     }
     catch (std::exception const &e) {
