@@ -180,6 +180,7 @@ lexer<IteratorT, PositionT>::report_error(scanner_t const *s, char const* msg, .
     
     BOOST_WAVE_LEXER_THROW(boost::wave::cpplexer::lexing_exception, 
         generic_lexing_error, buffer, s->line, -1, s->file_name);
+    return 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

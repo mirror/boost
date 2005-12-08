@@ -40,6 +40,8 @@
 #define BOOST_SPIRIT_LEXER_HPP
 
 ///////////////////////////////////////////////////////////////////////////////
+#include <boost/throw_exception.hpp>
+
 #include <boost/spirit/core.hpp>
 #include <boost/spirit/symbols/symbols.hpp>
 #include <boost/spirit/utility/chset.hpp>
@@ -1720,7 +1722,7 @@ public:
         // empty string not allowed
         if (*scan.first == '"')
         {
-            throw bad_regex();
+            boost::throw_exception(bad_regex());
         }
 
         const escape_char_parser<lex_escapes, char_t> lex_escape_ch =
@@ -1784,7 +1786,7 @@ public:
         unsigned int count;
         uint_p[assign(count)].parse(scan);
         if (count == 0)
-            throw bad_regex();
+            boost::throw_exception(bad_regex());
 
         node* top_node = m_stack.top();
         m_stack.pop();
@@ -1820,7 +1822,7 @@ public:
         unsigned int count;
         uint_p[assign(count)].parse(scan);
         if (count == 0)
-            throw bad_regex();
+            boost::throw_exception(bad_regex());
 
         node* top_node = m_stack.top();
         m_stack.pop();
@@ -1858,13 +1860,13 @@ public:
         unsigned int count1, count2;
         uint_p[assign(count1)].parse(scan);
         if (count1 == 0)
-            throw bad_regex();
+            boost::throw_exception(bad_regex());
 
         ++scan.first; // skip over ','
 
         uint_p[assign(count2)].parse(scan);
         if (count2 <= count1)
-            throw bad_regex();
+            boost::throw_exception(bad_regex());
 
         node* top_node = m_stack.top();
         m_stack.pop();
@@ -2409,19 +2411,19 @@ parse_regexes(const RegexListT& regex_list, GrammarT& g)
 {
     // parse the expressions into a tree
     if (regex_list.begin() == regex_list.end())
-        throw bad_regex();
+        boost::throw_exception(bad_regex());
 
     typename RegexListT::const_iterator ri = regex_list.begin();
     std::auto_ptr<node> tree(lexerimpl::parse(g, (*ri).str));
     if (tree.get() == 0)
-        throw bad_regex();
+        boost::throw_exception(bad_regex());
 
     ++ri;
     for (/**/; ri != regex_list.end(); ++ri)
     {
         std::auto_ptr<node> next_tree(lexerimpl::parse(g, (*ri).str));
         if (next_tree.get() == 0)
-            throw bad_regex();
+            boost::throw_exception(bad_regex());
         std::auto_ptr<node> newnode(new or_node(tree.release(), next_tree.release()));
         tree = newnode;
     }

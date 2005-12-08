@@ -71,6 +71,7 @@ CHANGELOG
 - Added the --autooutput (-E) option to the Wave driver applet which redirects 
   the generated output to a file named after the input file changing the file 
   extension to '.i'.
+- Changed all throw's to boost::throw_exception.
   
 Mon Dec  5 22:05:22 CST 2005
 Boost V1.33.1

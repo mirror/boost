@@ -14,6 +14,7 @@
 
 // include boost
 #include <boost/config.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/detail/workaround.hpp>
@@ -714,7 +715,7 @@ namespace {
 // CW 8.3 has problems with the v.as<T>() below
         T const* r = boost::any_cast<T>(&v.value());
         if (!r)
-            throw boost::bad_any_cast();
+            boost::throw_exception(boost::bad_any_cast());
         return *r;
 #else
         return v.as<T>();

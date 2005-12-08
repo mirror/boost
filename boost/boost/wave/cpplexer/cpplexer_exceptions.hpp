@@ -16,6 +16,8 @@
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
+#include <boost/throw_exception.hpp>
+
 #include <boost/wave/wave_config.hpp>
 
 // this must occur after all of the includes and before any code appears
@@ -34,10 +36,11 @@
     std::strstream stream;                                                    \
         stream << cls::severity_text(cls::code) << ": "                       \
         << cls::error_text(cls::code);                                        \
-    if (msg[0] != 0) stream << ": " << msg;                                   \
+    if ((msg)[0] != 0) stream << ": " << (msg);                               \
     stream << std::ends;                                                      \
     std::string throwmsg = stream.str(); stream.freeze(false);                \
-    throw cls(throwmsg.c_str(), cls::code, line, column, name);               \
+    boost::throw_exception(cls(throwmsg.c_str(), cls::code, line, column,     \
+        name));                                                               \
     }                                                                         \
     /**/
 #else
@@ -48,9 +51,10 @@
     std::stringstream stream;                                                 \
         stream << cls::severity_text(cls::code) << ": "                       \
         << cls::error_text(cls::code);                                        \
-    if (msg[0] != 0) stream << ": " << msg;                                   \
+    if ((msg)[0] != 0) stream << ": " << (msg);                               \
     stream << std::ends;                                                      \
-    throw cls(stream.str().c_str(), cls::code, line, column, name);           \
+    boost::throw_exception(cls(stream.str().c_str(), cls::code, line, column, \
+        name));                                                               \
     }                                                                         \
     /**/
 #endif // BOOST_NO_STRINGSTREAM

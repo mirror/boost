@@ -16,6 +16,7 @@
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
+#include <boost/throw_exception.hpp>
 
 #include <boost/wave/wave_config.hpp>
 
@@ -38,8 +39,9 @@
     if ((msg)[0] != 0) stream << ": " << (msg);                               \
     stream << std::ends;                                                      \
     std::string throwmsg = stream.str(); stream.freeze(false);                \
-    throw cls(throwmsg.c_str(), cls::code, (act_pos).get_line(),              \
-        (act_pos).get_column(), (act_pos).get_file().c_str());                \
+    boost::throw_exception(cls(throwmsg.c_str(), cls::code,                   \
+        (act_pos).get_line(), (act_pos).get_column(),                         \
+        (act_pos).get_file().c_str()));                                       \
     }                                                                         \
     /**/
 #else
@@ -52,8 +54,9 @@
         << cls::error_text(cls::code);                                        \
     if ((msg)[0] != 0) stream << ": " << (msg);                               \
     stream << std::ends;                                                      \
-    throw cls(stream.str().c_str(), cls::code, (act_pos).get_line(),          \
-        (act_pos).get_column(), (act_pos).get_file().c_str());                \
+    boost::throw_exception(cls(stream.str().c_str(), cls::code,               \
+        (act_pos).get_line(), (act_pos).get_column(),                         \
+        (act_pos).get_file().c_str()));                                       \
     }                                                                         \
     /**/
 #endif // BOOST_NO_STRINGSTREAM

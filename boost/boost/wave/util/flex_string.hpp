@@ -73,6 +73,8 @@ class StoragePolicy
 
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
+#include <boost/throw_exception.hpp>
+
 #include <boost/iterator/reverse_iterator.hpp>
 
 #include <memory>
@@ -197,7 +199,7 @@ public:
     {
         using namespace std;
         void* p = malloc(n * sizeof(T));
-        if (!p) throw bad_alloc();
+        if (!p) boost::throw_exception(std::bad_alloc());
         return static_cast<pointer>(p);
     }
 
@@ -312,7 +314,7 @@ private:
             //     has one one character in there
             pData_ = static_cast<Data*>(
                 malloc(sizeof(Data) + capacity * sizeof(E)));
-            if (!pData_) throw std::bad_alloc();
+            if (!pData_) boost::throw_exception(std::bad_alloc());
             pData_->pEnd_ = pData_->buffer_ + size;
             pData_->pEndOfMem_ = pData_->buffer_ + capacity;
         }
@@ -411,7 +413,7 @@ public:
 
             void* p = realloc(pData_, 
                 sizeof(Data) + res_arg * sizeof(E));
-            if (!p) throw std::bad_alloc();
+            if (!p) boost::throw_exception(std::bad_alloc());
         
             if (p != pData_)
             {
@@ -1387,7 +1389,7 @@ class flex_string : private Storage
 #if defined(THROW_ON_ENFORCE)
     template <typename Exception>
     static void Enforce(bool condition, Exception*, const char* msg)
-    { if (!condition) throw Exception(msg); }
+    { if (!condition) boost::throw_exception(Exception(msg)); }
 #else
     template <typename Exception>
     static inline void Enforce(bool condition, Exception*, const char* msg)

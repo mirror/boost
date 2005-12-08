@@ -280,7 +280,8 @@ lexer<IteratorT, PositionT>::report_error(Scanner const *s, char const *msg, ...
     
     BOOST_WAVE_LEXER_THROW(lexing_exception, generic_lexing_error, buffer, 
         s->line, s->column, s->file_name);
-    BOOST_UNREACHABLE_RETURN(0);
+//    BOOST_UNREACHABLE_RETURN(0);
+    return 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

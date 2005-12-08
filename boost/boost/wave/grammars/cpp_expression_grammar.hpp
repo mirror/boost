@@ -666,7 +666,7 @@ expression_grammar_gen<TokenT>::evaluate(
     catch (wave::preprocess_exception const& e) {
     // expression is illformed
         if (if_block_status) {
-            throw e;
+            boost::throw_exception(e);
         }
         else {
         //  as the if_block_status is false no errors will be reported
