@@ -240,7 +240,7 @@ struct set_index_base_modifier {
   template <typename Array>
   void modify(Array& A) const {
     typedef boost::multi_array_types::index index;
-    A.reindex(static_cast<index>(1)); 
+    A.reindex(1); 
   }
 };
 
