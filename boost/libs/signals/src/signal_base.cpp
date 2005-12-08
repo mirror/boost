@@ -60,7 +60,7 @@ namespace boost {
       connection
       signal_base_impl::
         connect_slot(const any& slot_,
-                     const any& name,
+                     const stored_group& name,
                      shared_ptr<slot_base::data_t> data,
                      connect_position at)
       {
@@ -75,7 +75,7 @@ namespace boost {
         std::auto_ptr<iterator> saved_iter(new iterator);
 
         // Add the slot to the list.
-        iterator pos = 
+        iterator pos =
           slots_.insert(name, data->watch_bound_objects, slot_, at);
 
         // The assignment operation here absolutely must not throw, which
@@ -87,9 +87,9 @@ namespace boost {
         // Fill out the connection object appropriately. None of these
         // operations can throw
         data->watch_bound_objects.get_connection()->signal = this;
-        data->watch_bound_objects.get_connection()->signal_data = 
+        data->watch_bound_objects.get_connection()->signal_data =
           saved_iter.release();
-        data->watch_bound_objects.get_connection()->signal_disconnect = 
+        data->watch_bound_objects.get_connection()->signal_disconnect =
           &signal_base_impl::slot_disconnected;
 
         // Make the copy of the connection in the list disconnect when it is
@@ -125,7 +125,7 @@ namespace boost {
         return count;
       }
 
-      void signal_base_impl::disconnect(const any& group)
+      void signal_base_impl::disconnect(const stored_group& group)
       { slots_.disconnect(group); }
 
       void signal_base_impl::slot_disconnected(void* obj, void* data)

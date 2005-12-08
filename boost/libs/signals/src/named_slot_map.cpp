@@ -19,7 +19,7 @@ namespace boost { namespace BOOST_SIGNALS_NAMESPACE { namespace detail {
 
 typedef std::list<connection_slot_pair> group_list;
 typedef group_list::iterator slot_pair_iterator;
-typedef std::map<any, group_list, compare_type> slot_container_type;
+typedef std::map<stored_group, group_list, compare_type> slot_container_type;
 typedef slot_container_type::iterator group_iterator;
 typedef slot_container_type::const_iterator const_group_iterator;
 
@@ -27,13 +27,13 @@ named_slot_map_iterator::named_slot_map_iterator() : slot_assigned(false) {}
 
 named_slot_map_iterator::
 named_slot_map_iterator(const named_slot_map_iterator& other)
-  : group(other.group), last_group(other.last_group), 
+  : group(other.group), last_group(other.last_group),
     slot_assigned(other.slot_assigned)
 {
   if (slot_assigned) slot_ = other.slot_;
 }
 
-named_slot_map_iterator& 
+named_slot_map_iterator&
 named_slot_map_iterator::operator=(const named_slot_map_iterator& other)
 {
   slot_assigned = other.slot_assigned;
@@ -56,7 +56,7 @@ void named_slot_map_iterator::increment()
   }
 }
 
-bool 
+bool
 named_slot_map_iterator::equal(const named_slot_map_iterator& other) const
 {
   return (group == other.group
@@ -64,7 +64,7 @@ named_slot_map_iterator::equal(const named_slot_map_iterator& other) const
               || slot_ == other.slot_));
 }
 
-#if BOOST_WORKAROUND(_MSC_VER, <= 0x1701)
+#if BOOST_WORKAROUND(_MSC_VER, <= 1400)
 void named_slot_map_iterator::decrement() { assert(false); }
 void named_slot_map_iterator::advance(difference_type) { assert(false); }
 #endif
@@ -74,11 +74,11 @@ named_slot_map::named_slot_map(const compare_type& compare) : groups(compare)
   clear();
 }
 
-void named_slot_map::clear() 
-{ 
+void named_slot_map::clear()
+{
   groups.clear();
-  groups[front_type()];
-  groups[back_type()];
+  groups[stored_group(stored_group::sk_front)];
+  groups[stored_group(stored_group::sk_back)];
   back = groups.end();
   --back;
 }
@@ -94,8 +94,8 @@ named_slot_map::iterator named_slot_map::end()
 }
 
 named_slot_map::iterator
-named_slot_map::insert(const any& name, const connection& con, const any& slot,
-                       connect_position at)
+named_slot_map::insert(const stored_group& name, const connection& con,
+                       const any& slot, connect_position at)
 {
   group_iterator group;
   if (name.empty()) {
@@ -131,7 +131,7 @@ named_slot_map::insert(const any& name, const connection& con, const any& slot,
   return it;
 }
 
-void named_slot_map::disconnect(const any& name)
+void named_slot_map::disconnect(const stored_group& name)
 {
   group_iterator group = groups.find(name);
   if (group != groups.end()) {

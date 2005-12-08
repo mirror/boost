@@ -206,7 +206,7 @@
             
             As we can see, input of the <functionname>find_last()</functionname> algorithm can be also 
             char[] because this type is supported by 
-            <ulink linkend="../../libs/range/doc/index.html">Boost.Range</ulink>.
+            <ulink url="../../libs/range/index.html">Boost.Range</ulink>.
 
             The following lines transform the result. Notice that 
             <ulink url="../../libs/range/doc/utility_class.html"><code>boost::iterator_range</code></ulink> has familiar 

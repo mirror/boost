@@ -60,11 +60,19 @@ struct complement
         // indirection through complement_traits_aux necessary to keep MSVC happy
         typedef complement_traits_aux<Number, size - 1> prev;
      public:
+#if defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ == 0 && __GNUC_PATCHLEVEL__ == 2
+      // GCC 4.0.2 ICEs on these C-style casts
+        BOOST_STATIC_CONSTANT(Number, max =
+                            Number((prev::max) << CHAR_BIT)
+                            + Number(UCHAR_MAX));
+        BOOST_STATIC_CONSTANT(Number, min = Number((prev::min) << CHAR_BIT));
+#else
         BOOST_STATIC_CONSTANT(Number, max =
                             Number(Number(prev::max) << CHAR_BIT)
                             + Number(UCHAR_MAX));
-        
         BOOST_STATIC_CONSTANT(Number, min = Number(Number(prev::min) << CHAR_BIT));
+#endif
+   
     };
 };
 
@@ -221,10 +229,16 @@ void test_aux(unsigned_tag, Number*)
         (sizeof(Number) < sizeof(boost::intmax_t))
         | (boost::is_same<difference_type, boost::intmax_t>::value));
 
+#if defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ == 0 && __GNUC_PATCHLEVEL__ == 2
+    // GCC 4.0.2 ICEs on this C-style cases
+    BOOST_STATIC_ASSERT((complement_traits<Number>::max) > Number(0));
+    BOOST_STATIC_ASSERT((complement_traits<Number>::min) == Number(0));
+#else
     // Force casting to Number here to work around the fact that it's an enum on MSVC
     BOOST_STATIC_ASSERT(Number(complement_traits<Number>::max) > Number(0));
     BOOST_STATIC_ASSERT(Number(complement_traits<Number>::min) == Number(0));
-    
+#endif
+
     const Number max = complement_traits<Number>::max;
     const Number min = complement_traits<Number>::min;
     
@@ -308,10 +322,15 @@ void test_aux(signed_tag, Number*)
         (sizeof(Number) < sizeof(boost::intmax_t))
         | (boost::is_same<difference_type, Number>::value));
 
+#if defined(__GNUC__) && __GNUC__ == 4 && __GNUC_MINOR__ == 0 && __GNUC_PATCHLEVEL__ == 2
+    // GCC 4.0.2 ICEs on this cast
+    BOOST_STATIC_ASSERT((complement_traits<Number>::max) > Number(0));
+    BOOST_STATIC_ASSERT((complement_traits<Number>::min) < Number(0));
+#else
     // Force casting to Number here to work around the fact that it's an enum on MSVC
     BOOST_STATIC_ASSERT(Number(complement_traits<Number>::max) > Number(0));
     BOOST_STATIC_ASSERT(Number(complement_traits<Number>::min) < Number(0));
-    
+#endif    
     const Number max = complement_traits<Number>::max;
     const Number min = complement_traits<Number>::min;
     

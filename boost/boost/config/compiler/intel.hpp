@@ -1,13 +1,13 @@
-//  (C) Copyright John Maddock 2001. 
-//  (C) Copyright Peter Dimov 2001. 
-//  (C) Copyright Jens Maurer 2001. 
-//  (C) Copyright David Abrahams 2002 - 2003. 
-//  (C) Copyright Aleksey Gurtovoy 2002 - 2003. 
-//  (C) Copyright Guillaume Melquiond 2002 - 2003. 
-//  (C) Copyright Beman Dawes 2003. 
-//  (C) Copyright Martin Wille 2003. 
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  (C) Copyright John Maddock 2001.
+//  (C) Copyright Peter Dimov 2001.
+//  (C) Copyright Jens Maurer 2001.
+//  (C) Copyright David Abrahams 2002 - 2003.
+//  (C) Copyright Aleksey Gurtovoy 2002 - 2003.
+//  (C) Copyright Guillaume Melquiond 2002 - 2003.
+//  (C) Copyright Beman Dawes 2003.
+//  (C) Copyright Martin Wille 2003.
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
@@ -79,9 +79,9 @@
 // supports wchar_t natively. *BUT* there is a problem here: the standard
 // headers define this macro if they typedef wchar_t. Anyway, we're lucky
 // because they define it without a value, while Intel C++ defines it
-// to 1. So we can check its value to see if the macro was defined natively 
-// or not. 
-// Under UNIX, the situation is exactly the same, but the macro _WCHAR_T 
+// to 1. So we can check its value to see if the macro was defined natively
+// or not.
+// Under UNIX, the situation is exactly the same, but the macro _WCHAR_T
 // is used instead.
 #  if ((_WCHAR_T_DEFINED + 0) == 0) && ((_WCHAR_T + 0) == 0)
 #    define BOOST_NO_INTRINSIC_WCHAR_T

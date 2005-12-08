@@ -34,7 +34,7 @@
         might at first seem &quot;obvious,&quot; it is in fact not even
         straightforward how to implement it in general (i.e., without
         unreasonably restrictive additional requirements on
-        <link linkref="variant.concepts.bounded-type">bounded types</link>).</para>
+        <link linkend="variant.concepts.bounded-type">bounded types</link>).</para>
 
       <para>The central difficulty emerges in the details of
         <code>variant</code> assignment. Given two instances <code>v1</code>

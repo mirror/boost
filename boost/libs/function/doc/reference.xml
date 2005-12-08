@@ -297,7 +297,7 @@
         <parameter name="aN"><paramtype>argN_type</paramtype></parameter>
         <effects><simpara><code>f(a1, a2, ..., aN)</code>, where <code>f</code> is the target of <code>*this</code>.</simpara></effects>
         <returns><simpara>if <code>R</code> is <code>void</code>, nothing is returned; otherwise, the return value of the call to <code>f</code> is returned.</simpara></returns>
-        <throws><simpara><code><classname>bad_function_call</classname></code> if <code>!this-&gt;<methodname>empty</methodname>()</code>. Otherwise, may through any exception thrown by the target function <code>f</code>.</simpara></throws>
+        <throws><simpara><code><classname>bad_function_call</classname></code> if <code>this-&gt;<methodname>empty</methodname>()</code>. Otherwise, may through any exception thrown by the target function <code>f</code>.</simpara></throws>
       </method>
     </method-group>
 
@@ -719,7 +719,7 @@
         <parameter name="aN"><paramtype>argN_type</paramtype></parameter>
         <effects><simpara><code>f(a1, a2, ..., aN)</code>, where <code>f</code> is the target of <code>*this</code>.</simpara></effects>
         <returns><simpara>if <code>R</code> is <code>void</code>, nothing is returned; otherwise, the return value of the call to <code>f</code> is returned.</simpara></returns>
-        <throws><simpara><code><classname>bad_function_call</classname></code> if <code>!this-&gt;<methodname>empty</methodname>()</code>. Otherwise, may through any exception thrown by the target function <code>f</code>.</simpara></throws>
+        <throws><simpara><code><classname>bad_function_call</classname></code> if <code>this-&gt;<methodname>empty</methodname>()</code>. Otherwise, may through any exception thrown by the target function <code>f</code>.</simpara></throws>
       </method>
     </method-group>
 

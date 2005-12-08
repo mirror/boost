@@ -11,8 +11,8 @@
 // $Date$
 // $Revision$
 
-// Necessary to overcome a strange name lookup bug in GCC 3.3 for Mac OS X
-#if defined(__APPLE_CC__) && defined(__GNUC__) && (__GNUC__ == 3) && (__GNUC_MINOR__ <= 3)
+// Necessary to overcome a strange name lookup bug in GCC 3.3 and 4.0 for Mac OS X
+#if defined(__APPLE_CC__) && defined(__GNUC__) && (__GNUC__ <= 4)
 #  include <cassert>
 #endif
 
