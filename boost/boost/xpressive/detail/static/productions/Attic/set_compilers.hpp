@@ -116,25 +116,25 @@ namespace boost { namespace proto
     ///////////////////////////////////////////////////////////////////////////////
     // compilers for sets such as set['a' | range('a','z')]
     template<>
-    struct compiler<bitor_tag, xpressive::detail::set_tag>
+    struct compiler<bitor_tag, xpressive::detail::set_tag, void>
       : fold_compiler<bitor_tag, xpressive::detail::set_tag>
     {
     };
 
     template<>
-    struct compiler<noop_tag, xpressive::detail::set_tag>
+    struct compiler<noop_tag, xpressive::detail::set_tag, void>
       : branch_compiler<xpressive::detail::set_branch, xpressive::detail::seq_tag>
     {
     };
 
     template<>
-    struct compiler<complement_tag, xpressive::detail::set_tag>
+    struct compiler<complement_tag, xpressive::detail::set_tag, void>
       : branch_compiler<xpressive::detail::set_branch, xpressive::detail::seq_tag>
     {
     };
 
     template<>
-    struct compiler<comma_tag, xpressive::detail::set_tag>
+    struct compiler<comma_tag, xpressive::detail::set_tag, void>
       : branch_compiler<xpressive::detail::set_branch, xpressive::detail::seq_tag>
     {
     };
@@ -143,25 +143,25 @@ namespace boost { namespace proto
     ///////////////////////////////////////////////////////////////////////////////
     // compilers for list-initialized sets such as (set='a','b','c')
     template<>
-    struct compiler<comma_tag, xpressive::detail::seq_tag>
+    struct compiler<comma_tag, xpressive::detail::seq_tag, void>
       : branch_compiler<xpressive::detail::list_branch, xpressive::detail::lst_tag>
     {
     };
 
     template<>
-    struct compiler<comma_tag, xpressive::detail::lst_tag>
+    struct compiler<comma_tag, xpressive::detail::lst_tag, void>
       : fold_compiler<comma_tag, xpressive::detail::lst_tag, false>
     {
     };
 
     template<>
-    struct compiler<noop_tag, xpressive::detail::lst_tag>
+    struct compiler<noop_tag, xpressive::detail::lst_tag, void>
       : xpressive::detail::list_noop_compiler
     {
     };
 
     template<>
-    struct compiler<assign_tag, xpressive::detail::lst_tag>
+    struct compiler<assign_tag, xpressive::detail::lst_tag, void>
       : xpressive::detail::list_assign_compiler
     {
     };

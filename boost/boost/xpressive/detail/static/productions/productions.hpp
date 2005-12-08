@@ -93,13 +93,13 @@ namespace boost { namespace proto
 
     // production for sequences in sequence
     template<>
-    struct compiler<right_shift_tag, xpressive::detail::seq_tag>
+    struct compiler<right_shift_tag, xpressive::detail::seq_tag, void>
       : fold_compiler<right_shift_tag, xpressive::detail::seq_tag>
     {
     };
 
     template<>
-    struct compiler<subscript_tag, xpressive::detail::seq_tag>
+    struct compiler<subscript_tag, xpressive::detail::seq_tag, void>
       : xpressive::detail::subscript_compiler
     {
     };

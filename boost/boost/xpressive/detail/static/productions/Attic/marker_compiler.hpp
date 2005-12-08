@@ -60,10 +60,11 @@ namespace boost { namespace xpressive { namespace detail
 
 }}}
 
-namespace boost { namespace proto {
+namespace boost { namespace proto
+{
 
     template<>
-    struct compiler<assign_tag, xpressive::detail::seq_tag>
+    struct compiler<assign_tag, xpressive::detail::seq_tag, void>
       : xpressive::detail::assign_compiler
     {
     };

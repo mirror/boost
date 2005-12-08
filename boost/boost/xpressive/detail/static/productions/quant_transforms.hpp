@@ -78,7 +78,7 @@ namespace boost { namespace xpressive { namespace detail
 
             typedef typename plus_no_mark_transform<Greedy, Min, Max>::BOOST_NESTED_TEMPLATE apply
             <
-            proto::unary_op<marker_type, typename proto::tag_type<Op>::type>
+                proto::unary_op<marker_type, typename proto::tag_type<Op>::type>
               , State
               , Visitor
             >::type type;
@@ -201,7 +201,8 @@ namespace boost { namespace xpressive { namespace detail
         static typename apply<Op, State, Visitor>::type
         call(Op const &op, State const &state, Visitor &visitor, uint_t min = Min, uint_t max = Max)
         {
-            return apply<Op, State, Visitor>::transform::call(op, state, visitor, mark_number(proto::arg(op), visitor), min, max);
+            int mark_nbr = mark_number(proto::arg(op), visitor);
+            return apply<Op, State, Visitor>::transform::call(op, state, visitor, mark_nbr, min, max);
         }
     };
 

@@ -94,37 +94,37 @@ namespace boost { namespace proto
     // ericne, 28/nov/05: CW9_4 doesn't like partial specializations of the form:
     //   template<bool F> struct foo<bar<F> >
     template<>
-    struct compiler<xpressive::detail::lookahead_tag<true>, xpressive::detail::seq_tag>
+    struct compiler<xpressive::detail::lookahead_tag<true>, xpressive::detail::seq_tag, void>
       : branch_compiler<xpressive::detail::lookahead_branch<true>, xpressive::detail::ind_tag>
     {
     };
 
     template<>
-    struct compiler<xpressive::detail::lookahead_tag<false>, xpressive::detail::seq_tag>
+    struct compiler<xpressive::detail::lookahead_tag<false>, xpressive::detail::seq_tag, void>
       : branch_compiler<xpressive::detail::lookahead_branch<false>, xpressive::detail::ind_tag>
     {
     };
 
     template<>
-    struct compiler<xpressive::detail::lookbehind_tag<true>, xpressive::detail::seq_tag>
+    struct compiler<xpressive::detail::lookbehind_tag<true>, xpressive::detail::seq_tag, void>
       : branch_compiler<xpressive::detail::lookbehind_branch<true>, xpressive::detail::ind_tag>
     {
     };
 
     template<>
-    struct compiler<xpressive::detail::lookbehind_tag<false>, xpressive::detail::seq_tag>
+    struct compiler<xpressive::detail::lookbehind_tag<false>, xpressive::detail::seq_tag, void>
       : branch_compiler<xpressive::detail::lookbehind_branch<false>, xpressive::detail::ind_tag>
     {
     };
 
     template<>
-    struct compiler<xpressive::detail::keeper_tag, xpressive::detail::seq_tag>
+    struct compiler<xpressive::detail::keeper_tag, xpressive::detail::seq_tag, void>
       : branch_compiler<xpressive::detail::keeper_branch, xpressive::detail::ind_tag>
     {
     };
     
     template<typename OpTag>
-    struct compiler<OpTag, xpressive::detail::ind_tag>
+    struct compiler<OpTag, xpressive::detail::ind_tag, void>
       : transform_compiler<arg_transform, xpressive::detail::seq_tag>
     {
     };

@@ -91,23 +91,22 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Op, typename State, typename Visitor>
         struct apply
         {
+            typedef typename proto::arg_type<Op>::type arg_type;
+
             // Did you apply operator- to something that wasn't a quantifier?
-            BOOST_MPL_ASSERT((is_greedy_quant<typename proto::arg_type<Op>::type>));
+            BOOST_MPL_ASSERT((is_greedy_quant<arg_type>));
 
-            typedef typename proto::tag_type<typename proto::arg_type<Op>::type>::type tag_type;
-            typedef typename min_type<tag_type>::type min_type;
-            typedef typename max_type<tag_type>::type max_type;
-
+            typedef typename proto::tag_type<arg_type>::type tag_type;
             typedef generic_quant_compiler
             <
                 false
-              , min_type::value
-              , max_type::value
+              , min_type<tag_type>::type::value
+              , max_type<tag_type>::type::value
             > compiler_type;
 
             typedef typename compiler_type::BOOST_NESTED_TEMPLATE apply
             <
-                typename proto::arg_type<Op>::type
+                arg_type
               , State
               , Visitor
             >::type type;
@@ -130,35 +129,35 @@ namespace boost { namespace proto
 
     // production for one or more quant
     template<>
-    struct compiler<unary_plus_tag, xpressive::detail::seq_tag>
+    struct compiler<unary_plus_tag, xpressive::detail::seq_tag, void>
       : xpressive::detail::plus_compiler<>
     {
     };
 
     // production for zero or more quant
     template<>
-    struct compiler<unary_star_tag, xpressive::detail::seq_tag>
+    struct compiler<unary_star_tag, xpressive::detail::seq_tag, void>
       : xpressive::detail::star_compiler<>
     {
     };
 
     // production for optional
     template<>
-    struct compiler<logical_not_tag, xpressive::detail::seq_tag>
+    struct compiler<logical_not_tag, xpressive::detail::seq_tag, void>
       : xpressive::detail::optional_compiler<>
     {
     };
 
     // production for generic quantifiers
     template<unsigned int Min, unsigned int Max>
-    struct compiler<xpressive::detail::generic_quant_tag<Min, Max>, xpressive::detail::seq_tag>
+    struct compiler<xpressive::detail::generic_quant_tag<Min, Max>, xpressive::detail::seq_tag, void>
       : xpressive::detail::generic_quant_compiler<true, Min, Max>
     {
     };
 
     // production for non-greedy quantifiers
     template<>
-    struct compiler<unary_minus_tag, xpressive::detail::seq_tag>
+    struct compiler<unary_minus_tag, xpressive::detail::seq_tag, void>
       : xpressive::detail::non_greedy_compiler
     {
     };

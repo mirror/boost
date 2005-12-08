@@ -241,7 +241,7 @@ namespace boost { namespace proto
 {
 
     template<>
-    struct compiler<complement_tag, xpressive::detail::seq_tag>
+    struct compiler<complement_tag, xpressive::detail::seq_tag, void>
       : transform_compiler<xpressive::detail::complement_transform, xpressive::detail::seq_tag>
     {
     };

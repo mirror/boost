@@ -72,21 +72,21 @@ namespace boost { namespace proto
 {
     // production for alternates in sequence
     template<>
-    struct compiler<bitor_tag, xpressive::detail::seq_tag>
+    struct compiler<bitor_tag, xpressive::detail::seq_tag, void>
       : branch_compiler<xpressive::detail::alt_branch, xpressive::detail::alt_tag>
     {
     };
 
     // handle alternates with the alt branch compiler
     template<typename OpTag>
-    struct compiler<OpTag, xpressive::detail::alt_tag>
+    struct compiler<OpTag, xpressive::detail::alt_tag, void>
       : branch_compiler<xpressive::detail::alt_list_branch, xpressive::detail::seq_tag>
     {
     };
 
     // production for alternates in alternate
     template<>
-    struct compiler<bitor_tag, xpressive::detail::alt_tag>
+    struct compiler<bitor_tag, xpressive::detail::alt_tag, void>
       : fold_compiler<bitor_tag, xpressive::detail::alt_tag>
     {
     };

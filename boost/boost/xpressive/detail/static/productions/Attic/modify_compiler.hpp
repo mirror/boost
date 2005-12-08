@@ -72,7 +72,7 @@ namespace boost { namespace proto
 
     // production for modifiers
     template<>
-    struct compiler<xpressive::detail::modifier_tag, xpressive::detail::seq_tag>
+    struct compiler<xpressive::detail::modifier_tag, xpressive::detail::seq_tag, void>
       : xpressive::detail::modify_compiler
     {
     };

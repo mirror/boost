@@ -130,6 +130,26 @@ namespace boost { namespace proto
     };
 
     ///////////////////////////////////////////////////////////////////////////////
+    // unary_op_transform
+    //   insert a unary operation
+    template<typename Tag>
+    struct unary_op_transform
+    {
+        template<typename Op, typename, typename>
+        struct apply
+        {
+            typedef unary_op<Op, Tag> type;
+        };
+
+        template<typename Op, typename State, typename Visitor>
+        static unary_op<Op, Tag>
+        call(Op const &op, State const &, Visitor &)
+        {
+            return proto::make_op<Tag>(op);
+        }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
     // compose_transforms
     //   execute two transforms in succession
     template<typename First, typename Second>

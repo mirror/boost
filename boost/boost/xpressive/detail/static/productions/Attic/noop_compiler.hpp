@@ -45,7 +45,7 @@ namespace boost { namespace proto
 
     // production for terminals in sequence
     template<>
-    struct compiler<noop_tag, xpressive::detail::seq_tag>
+    struct compiler<noop_tag, xpressive::detail::seq_tag, void>
       : xpressive::detail::noop_compiler
     {
     };
