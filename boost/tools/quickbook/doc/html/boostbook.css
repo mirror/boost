@@ -339,6 +339,14 @@
             border: 1pt solid #707070;
         }
     
+    /* Admonitions */
+        div.note, div.tip, div.important, div.warning, div.caution
+        {
+            background-color: #FFFFF0;
+            border: 1pt solid #707070;
+        }
+    
+
     /* Table of contents */
         .toc
         {

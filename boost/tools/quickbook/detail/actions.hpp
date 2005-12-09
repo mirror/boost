@@ -86,6 +86,16 @@ namespace quickbook
         const char* blockquote_post     = "</para></blockquote>";
         const char* preformatted_pre    = "<programlisting>";
         const char* preformatted_post   = "</programlisting>";
+        const char* warning_pre         = "<warning><para>";
+        const char* warning_post        = "</para></warning>";
+        const char* caution_pre         = "<caution><para>";
+        const char* caution_post        = "</para></caution>";
+        const char* important_pre     = "<important><para>";
+        const char* important_post    = "</para></important>";
+        const char* note_pre            = "<note><para>";
+        const char* note_post           = "</para></note>";
+        const char* tip_pre             = "<tip><para>";
+        const char* tip_post            = "</para></tip>";
         const char* list_item_pre       = "<listitem>\n";
         const char* list_item_post      = "\n</listitem>";
         const char* bold_pre_           = "<emphasis role=\"bold\">";
@@ -743,6 +753,7 @@ namespace quickbook
         anchored_phrase_action  h1, h2, h3, h4, h5, h6;
         markup_action           hr;
         phrase_action           blurb, blockquote, preformatted;
+        phrase_action           warning, caution, important, note, tip;
         plain_char_action       plain_char;
         raw_char_action         raw_char;
         image_action            image;
