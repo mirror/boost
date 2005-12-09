@@ -11,39 +11,61 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/ptr_container/ptr_deque.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
-#include <boost/serialization/vector.hpp>
 #include <boost/serialization/export.hpp>
+#include <boost/serialization/base_object.hpp>
+#include <boost/serialization/utility.hpp>
 #include <fstream>
 
 
 struct Base
 {
+	friend class boost::serialization::access;
+
 	int i;
 
+	/*
 	template< class Archive >
-	void serialize( Archive& ar, unsigned int version )
+	void serialize( Archive& ar, const unsigned int version )
 	{
 		ar & i;
+	}*/
+
+    template< class Archive >
+    void save( Archive & ar, const unsigned int version) const
+    {
+		ar & i;
 	}
+
+	template< class Archive >
+    void load(Archive & ar, const unsigned int version)
+    {
+		ar & i;
+	}
+
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 	Base() : i(42)
 	{ }
 	
-	explicit Base( int i ) : i(i)
+	Base( int i ) : i(i)
 	{ }
 	
 	virtual ~Base()
 	{ }
 };
 
+
+BOOST_IS_ABSTRACT(Base)
+
 struct Derived : Base
 {
 	int i2;
 
 	template< class Archive >
-	void serialize( Archive& ar, unsigned int version )
+	void serialize( Archive& ar, const unsigned int version )
 	{
 		ar & boost::serialization::base_object<Base>( *this );
 		ar & i2;
@@ -56,9 +78,9 @@ struct Derived : Base
 	{ }
 };
 
-BOOST_CLASS_EXPORT_GUID( Derived, "Derived")
+BOOST_CLASS_EXPORT_GUID( Derived, "Derived" )
 
-
+/*
 namespace boost
 {
 	
@@ -85,13 +107,13 @@ namespace boost
 		boost::serialization::split_free( ar, t, version );
 	}
 	
-}
+}*/
 
 
-
-void test_serialization()
+template< class Cont >
+void test_serialization_helper()
 {
-	boost::ptr_vector<Base> vec;
+	Cont vec;
 	vec.push_back( new Base( 2 ) );
 	vec.push_back( new Derived( 1 ) );
 
@@ -102,13 +124,37 @@ void test_serialization()
 
 	std::ifstream ifs("filename", std::ios::binary);
     boost::archive::text_iarchive ia(ifs);
-	boost::ptr_vector<Base> vec2;
+	Cont vec2;
 	ia >> vec2;
 	ifs.close();
 
 	BOOST_CHECK_EQUAL( vec.size(), vec2.size() );
 }
 
+void test_hierarchy()
+{
+	Base p; // = new Derived();
+	//int p = 1;
+	std::ofstream ofs("filename");
+    boost::archive::text_oarchive oa(ofs);
+	oa << p;
+	ofs.close();
+
+	Base d; // = 0;
+	//int d;
+	std::ifstream ifs("filename", std::ios::binary);
+    boost::archive::text_iarchive ia(ifs);
+	ia >> d;
+	ifs.close();
+	//BOOST_CHECK_EQUAL( p->i, d->i );
+	//BOOST_CHECK( dynamic_cast<Derived*>( d ) );
+}
+
+void test_serialization()
+{
+	test_hierarchy();
+	//test_serialization_helper< boost::ptr_deque<Base> >();
+}
 
 
 using boost::unit_test::test_suite;

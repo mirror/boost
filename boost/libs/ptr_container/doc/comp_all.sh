@@ -6,9 +6,9 @@ sh comp_guidelines.sh
 sh comp_headers.sh
 sh comp_examples.sh
 sh comp_conventions.sh
-sh comp_reversible_ptr_container.sh
+sh comp_rever_ptr_container.sh
 sh comp_ptr_sequence_adapter.sh
-sh comp_associative_ptr_container.sh
+sh comp_assoc_ptr_container.sh
 sh comp_ptr_set_adapter.sh
 sh comp_ptr_multiset_adapter.sh
 sh comp_ptr_map_adapter.sh

@@ -3,13 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.9: http://docutils.sourceforge.net/" />
 <title>Boost Pointer Container Library</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
 <div class="document" id="boost-pointer-container-library">
-<h1 class="title"><img alt="Boost" src="cboost.gif" /> Pointer Container Library</h1>
+<h1 class="title"><img alt="Boost" src="boost.png" /> Pointer Container Library</h1>
 <h2 class="subtitle" id="examples">Examples</h2>
 <p>Some examples are given here and in the accompanying test files:</p>
 <div class="contents topic" id="contents">
@@ -22,19 +22,17 @@
 <li><a class="reference" href="#transferring-ownership-of-a-single-element" id="id6" name="id6">6. Transferring ownership of a single element</a></li>
 <li><a class="reference" href="#transferring-ownership-of-pointers-between-different-pointer-containers" id="id7" name="id7">7. Transferring ownership of pointers between different pointer containers</a></li>
 <li><a class="reference" href="#selected-test-files" id="id8" name="id8">8. Selected test files</a></li>
-<li><a class="reference" href="#a-large-example" id="id9" name="id9">9. A large example</a></li>
-<li><a class="reference" href="#changing-the-clone-allocator" id="id10" name="id10">10. Changing the Clone Allocator</a></li>
 </ul>
 </div>
-<a class="target" id="example-1" name="example-1"></a><div class="section" id="null-pointers-cannot-be-stored-in-the-containers">
+<span id="example-1"></span><div class="section" id="null-pointers-cannot-be-stored-in-the-containers">
 <h1><a class="toc-backref" href="#id1" name="null-pointers-cannot-be-stored-in-the-containers">1. Null pointers cannot be stored in the containers</a></h1>
 <pre class="literal-block">
 my_container.push_back( 0 );            // throws bad_ptr 
 my_container.replace( an_iterator, 0 ); // throws bad_ptr
 my_container.insert( an_iterator, 0 );  // throws bad_ptr                                                                 
 </pre>
-<a class="target" id="example-2" name="example-2"></a></div>
-<div class="section" id="iterators-and-other-operations-return-indirected-values">
+</div>
+<span id="example-2"></span><div class="section" id="iterators-and-other-operations-return-indirected-values">
 <h1><a class="toc-backref" href="#id2" name="iterators-and-other-operations-return-indirected-values">2. Iterators and other operations return indirected values</a></h1>
 <pre class="literal-block">
 ptr_vector&lt;X&gt; pvec; 
@@ -46,8 +44,8 @@ pvec.begin()-&gt;foo();     // no indirection needed
 *vec.front()  = X();     // overwrite first element
 pvec.front()  = X();     // no indirection needed
 </pre>
-<a class="target" id="example-3" name="example-3"></a></div>
-<div class="section" id="copy-semantics-of-pointer-containers">
+</div>
+<span id="example-3"></span><div class="section" id="copy-semantics-of-pointer-containers">
 <h1><a class="toc-backref" href="#id3" name="copy-semantics-of-pointer-containers">3. Copy-semantics of pointer containers</a></h1>
 <pre class="literal-block">
 ptr_vector&lt;T&gt; vec1; 
@@ -58,15 +56,15 @@ vec2.release();                     // give up ownership; the objects will be de
 vec1 = vec2;                        // compile time error: 'operator=()' not defined 
 ptr_vector&lt;T&gt; vec3( vec1 );         // compile time error: copy-constructor not defined 
 </pre>
-<a class="target" id="example-4" name="example-4"></a></div>
-<div class="section" id="making-a-non-copyable-type-clonable">
+</div>
+<span id="example-4"></span><div class="section" id="making-a-non-copyable-type-clonable">
 <h1><a class="toc-backref" href="#id4" name="making-a-non-copyable-type-clonable">4. Making a non-copyable type Clonable</a></h1>
 <pre class="literal-block">
  // a class that has no normal copy semantics
 class X : boost::noncopyable { public: X* clone() const; ... };
                                                                    
 // this will be found by the library by argument dependent lookup                                                                   
-X* allocate_clone( const X&amp; x ) 
+X* new_clone( const X&amp; x ) 
 { return x.clone(); }
                                                                    
 // we can now use the interface that requires clonability
@@ -75,20 +73,20 @@ ptr_vector&lt;X&gt; vec1, vec2;
 vec2 = vec1.clone();                                 // 'clone()' requires cloning &lt;g&gt; 
 vec2.insert( vec2.end(), vec1.begin(), vec1.end() ); // inserting always means inserting clones 
 </pre>
-<a class="target" id="example-5" name="example-5"></a></div>
-<div class="section" id="objects-are-cloned-before-insertion-inserted-pointers-are-owned-by-the-container">
+</div>
+<span id="example-5"></span><div class="section" id="objects-are-cloned-before-insertion-inserted-pointers-are-owned-by-the-container">
 <h1><a class="toc-backref" href="#id5" name="objects-are-cloned-before-insertion-inserted-pointers-are-owned-by-the-container">5. Objects are cloned before insertion, inserted pointers are owned by the container</a></h1>
 <pre class="literal-block">
 class X { ... };                     // assume 'X' is Clonable 
 X x;                                 // and 'X' can be stack-allocated 
 ptr_list&lt;X&gt; list; 
 list.push_back( x );                 // clone 'x' and then insert the resulting pointer 
-list.push_back( allocate_clone( x ); // do it manually
+list.push_back( new_clone( x );      // do it manually
 list.push_back( new X );             // always give the pointer directly to the container to avoid leaks
 list.push_back( &amp;x );                // don't do this!!! 
 </pre>
-<a class="target" id="example-6" name="example-6"></a></div>
-<div class="section" id="transferring-ownership-of-a-single-element">
+</div>
+<span id="example-6"></span><div class="section" id="transferring-ownership-of-a-single-element">
 <h1><a class="toc-backref" href="#id6" name="transferring-ownership-of-a-single-element">6. Transferring ownership of a single element</a></h1>
 <pre class="literal-block">
 ptr_deque&lt;T&gt;                    deq; 
@@ -100,8 +98,8 @@ auto_type ptr  = deq.release_back();             // remove back element from con
 auto_type ptr2 = deq.release( deq.begin() + 2 ); // use an iterator to determine the element to release
 ptr            = deq.release_front();            // supported for 'ptr_list' and 'ptr_deque'
 </pre>
-<a class="target" id="example-7" name="example-7"></a></div>
-<div class="section" id="transferring-ownership-of-pointers-between-different-pointer-containers">
+</div>
+<span id="example-7"></span><div class="section" id="transferring-ownership-of-pointers-between-different-pointer-containers">
 <h1><a class="toc-backref" href="#id7" name="transferring-ownership-of-pointers-between-different-pointer-containers">7. Transferring ownership of pointers between different pointer containers</a></h1>
 <pre class="literal-block">
 ptr_list&lt;X&gt; list; ptr_vector&lt;X&gt; vec;
@@ -112,8 +110,8 @@ ptr_list&lt;X&gt; list; ptr_vector&lt;X&gt; vec;
 list.transfer( list.begin(), vec.begin(), vec );           // make the first element of 'vec' the first element of 'list'
 vec.transfer( vec.end(), list.begin(), list.end(), list ); // put all the lists element into the vector                                 
 </pre>
-<a class="target" id="example-8" name="example-8"></a></div>
-<div class="section" id="selected-test-files">
+</div>
+<span id="example-8"></span><div class="section" id="selected-test-files">
 <h1><a class="toc-backref" href="#id8" name="selected-test-files">8. Selected test files</a></h1>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -135,546 +133,24 @@ container of pointer pointers</td>
 </tr>
 </tbody>
 </table>
-</div>
-<div class="section" id="a-large-example">
-<h1><a class="toc-backref" href="#id9" name="a-large-example">9. A large example</a></h1>
-<p>This examples shows many of the most common
-features at work.</p>
-<?xml version="1.0" encoding="utf-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.2: http://docutils.sourceforge.net/" />
-<title></title>
-<link rel="stylesheet" href="default.css" type="text/css" />
-</head>
-<body>
-<pre>
-<span class=comment>//
-// This example is intended to get you started.
-// Notice how the smart container
-//
-// 1. takes ownership of objects
-// 2. transfers ownership
-// 3. applies indirection to iterators 
-// 4. clones objects from other smart containers
-// 
+<!-- 9. A large example
+++++++++++++++++++
 
-//
-// First we select which container to use.
-//</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>ptr_container</span><span class=special>/</span><span class=identifier>ptr_deque</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;
-</span>
-<span class=comment>//
-// we need these later in the example
-//</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assert</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>string</span><span class=special>&gt;</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>exception</span><span class=special>&gt;
+This examples shows many of the most common
+features at work.
 
-</span>
-<span class=comment>//
-// Then we define a small polymorphic class
-// hierarchy.
-// 
-</span>
-<span class=keyword>class </span><span class=identifier>animal </span><span class=special>: </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>noncopyable</span>
-<span class=special>{
-    </span><span class=keyword>virtual </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string </span><span class=identifier>do_speak</span><span class=special>() </span><span class=keyword>const </span><span class=special>= </span><span class=number>0</span><span class=special>;
-    </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string </span><span class=identifier>name_</span><span class=special>;
-</span>
-<span class=keyword>protected</span><span class=special>:
-    </span><span class=comment>//
-    // Animals cannot be copied...
-    //
-    </span><span class=identifier>animal</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>animal</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>) </span><span class=special>: </span><span class=identifier>name_</span><span class=special>( </span><span class=identifier>r</span><span class=special>.</span><span class=identifier>name_ </span><span class=special>)           </span><span class=special>{ </span><span class=special>}
-    </span><span class=keyword>void </span><span class=keyword>operator</span><span class=special>=( </span><span class=keyword>const </span><span class=identifier>animal</span><span class=special>&amp; </span><span class=special>);
-</span>
-<span class=keyword>private</span><span class=special>:
-    </span><span class=comment>//
-    // ...but due to advances in genetics, we can clone them!
-    //
+.. raw:: html
+        :file: tut1.html
 
-    </span><span class=keyword>virtual </span><span class=identifier>animal</span><span class=special>* </span><span class=identifier>do_clone</span><span class=special>() </span><span class=keyword>const </span><span class=special>= </span><span class=number>0</span><span class=special>;
-        </span>
-<span class=keyword>public</span><span class=special>:
-    </span><span class=identifier>animal</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>&amp; </span><span class=identifier>name </span><span class=special>) </span><span class=special>: </span><span class=identifier>name_</span><span class=special>(</span><span class=identifier>name</span><span class=special>)        </span><span class=special>{ </span><span class=special>}
-    </span><span class=keyword>virtual </span><span class=special>~</span><span class=identifier>animal</span><span class=special>() </span><span class=keyword>throw</span><span class=special>()                              </span><span class=special>{ </span><span class=special>}
-    
-    </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string </span><span class=identifier>speak</span><span class=special>() </span><span class=keyword>const
-    </span><span class=special>{
-        </span><span class=keyword>return </span><span class=identifier>do_speak</span><span class=special>();
-    </span><span class=special>}
+10. Changing the Clone Allocator
+++++++++++++++++++++++++++++++++
 
-    </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string </span><span class=identifier>name</span><span class=special>() </span><span class=keyword>const
-    </span><span class=special>{
-        </span><span class=keyword>return </span><span class=identifier>name_</span><span class=special>;
-    </span><span class=special>}
-
-    </span><span class=identifier>animal</span><span class=special>* </span><span class=identifier>clone</span><span class=special>() </span><span class=keyword>const
-    </span><span class=special>{
-        </span><span class=keyword>return </span><span class=identifier>do_clone</span><span class=special>();
-    </span><span class=special>}</span>
-<span class=special>};
-</span>
-<span class=comment>//
-// An animal is still not Clonable. We need this last hook.
-//
-// Notice that we pass the animal by const reference
-// and return by pointer.
-//
-</span>
-<span class=identifier>animal</span><span class=special>* </span><span class=identifier>new_clone</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>animal</span><span class=special>&amp; </span><span class=identifier>a </span><span class=special>)</span>
-<span class=special>{
-    </span><span class=keyword>return </span><span class=identifier>a</span><span class=special>.</span><span class=identifier>clone</span><span class=special>();</span>
-<span class=special>}
-</span>
-<span class=comment>//
-// We do not need to define 'delete_clone()' since
-// since the default is to call the default 'operator delete()'.
-//
-</span>
-<span class=keyword>const </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string </span><span class=identifier>muuuh </span><span class=special>= </span><span class=string>&quot;Muuuh!&quot;</span><span class=special>;</span>
-<span class=keyword>const </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string </span><span class=identifier>oiink </span><span class=special>= </span><span class=string>&quot;Oiiink&quot;</span><span class=special>;
-</span>
-<span class=keyword>class </span><span class=identifier>cow </span><span class=special>: </span><span class=keyword>public </span><span class=identifier>animal</span>
-<span class=special>{
-    </span><span class=keyword>virtual </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string </span><span class=identifier>do_speak</span><span class=special>() </span><span class=keyword>const
-    </span><span class=special>{
-        </span><span class=keyword>return </span><span class=identifier>muuuh</span><span class=special>;
-    </span><span class=special>}
-
-    </span><span class=keyword>virtual </span><span class=identifier>animal</span><span class=special>* </span><span class=identifier>do_clone</span><span class=special>() </span><span class=keyword>const
-    </span><span class=special>{
-        </span><span class=keyword>return </span><span class=keyword>new </span><span class=identifier>cow</span><span class=special>( </span><span class=special>*</span><span class=keyword>this </span><span class=special>);
-    </span><span class=special>}
-</span>
-<span class=keyword>public</span><span class=special>:
-    </span><span class=identifier>cow</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>&amp; </span><span class=identifier>name </span><span class=special>) </span><span class=special>: </span><span class=identifier>animal</span><span class=special>(</span><span class=identifier>name</span><span class=special>)          </span><span class=special>{ </span><span class=special>}</span>
-<span class=special>};
-</span>
-<span class=keyword>class </span><span class=identifier>pig </span><span class=special>: </span><span class=keyword>public </span><span class=identifier>animal</span>
-<span class=special>{
-    </span><span class=keyword>virtual </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string </span><span class=identifier>do_speak</span><span class=special>() </span><span class=keyword>const
-    </span><span class=special>{
-        </span><span class=keyword>return </span><span class=identifier>oiink</span><span class=special>;
-    </span><span class=special>}
-
-    </span><span class=keyword>virtual </span><span class=identifier>animal</span><span class=special>* </span><span class=identifier>do_clone</span><span class=special>() </span><span class=keyword>const
-    </span><span class=special>{
-        </span><span class=keyword>return </span><span class=keyword>new </span><span class=identifier>pig</span><span class=special>( </span><span class=special>*</span><span class=keyword>this </span><span class=special>);
-    </span><span class=special>}
-    </span>
-<span class=keyword>public</span><span class=special>:
-    </span><span class=identifier>pig</span><span class=special>( </span><span class=keyword>const </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>string</span><span class=special>&amp; </span><span class=identifier>name </span><span class=special>) </span><span class=special>: </span><span class=identifier>animal</span><span class=special>(</span><span class=identifier>name</span><span class=special>)          </span><span class=special>{ </span><span class=special>}</span>
-<span class=special>};
-</span>
-<span class=comment>//
-// Then we, of course, need a place to put all
-// those animals.
-//
-</span>
-<span class=keyword>class </span><span class=identifier>farm</span>
-<span class=special>{
-    </span><span class=comment>//
-    // This is where the smart containers are handy
-    //
-    </span><span class=keyword>typedef </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>ptr_deque</span><span class=special>&lt;</span><span class=identifier>animal</span><span class=special>&gt; </span><span class=identifier>barn_type</span><span class=special>;
-    </span><span class=identifier>barn_type                        </span><span class=identifier>barn</span><span class=special>;
-
-    </span><span class=comment>//
-    // An error type
-    //
-    </span><span class=keyword>struct </span><span class=identifier>farm_trouble </span><span class=special>: </span><span class=keyword>public </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>exception           </span><span class=special>{ </span><span class=special>};
-</span>
-<span class=keyword>public</span><span class=special>:
-    </span><span class=comment>// 
-    // We would like to make it possible to
-    // iterate over the animals in the farm
-    //
-    </span><span class=keyword>typedef </span><span class=identifier>barn_type</span><span class=special>::</span><span class=identifier>iterator  </span><span class=identifier>animal_iterator</span><span class=special>;
-
-    </span><span class=comment>//
-    // We also need to count the farm's size...
-    //
-    </span><span class=keyword>typedef </span><span class=identifier>barn_type</span><span class=special>::</span><span class=identifier>size_type </span><span class=identifier>size_type</span><span class=special>;
-    
-    </span><span class=comment>//
-    // And we also want to transfer an animal
-    // safely around. The easiest way to think
-    // about '::auto_type' is to imagine a simplified
-    // 'std::auto_ptr&lt;T&gt;' ... this means you can expect
-    // 
-    //   T* operator-&gt;()
-    //   T* release()
-    //   deleting destructor
-    //
-    // but not more.
-    //
-    </span><span class=keyword>typedef </span><span class=identifier>barn_type</span><span class=special>::</span><span class=identifier>auto_type  </span><span class=identifier>animal_transport</span><span class=special>;
-
-    </span><span class=comment>// 
-    // Create an empty farm.
-    //
-    </span><span class=identifier>farm</span><span class=special>()                                                 </span><span class=special>{ </span><span class=special>}
-    
-    </span><span class=comment>//
-    // We need a constructor that can make a new
-    // farm by cloning a range of animals.
-    //
-    </span><span class=identifier>farm</span><span class=special>( </span><span class=identifier>animal_iterator </span><span class=identifier>begin</span><span class=special>, </span><span class=identifier>animal_iterator </span><span class=identifier>end </span><span class=special>)
-     </span><span class=special>: 
-        </span><span class=comment>//
-        // Objects are always cloned before insertion
-        // unless we explicitly add a pointer or 
-        // use 'release()'. Therefore we actually
-        // clone all animals in the range
-        //
-        </span><span class=identifier>barn</span><span class=special>( </span><span class=identifier>begin</span><span class=special>, </span><span class=identifier>end </span><span class=special>)                               </span><span class=special>{ </span><span class=special>}
-    
-    </span><span class=comment>//
-    // ... so we need some other function too
-    //
-
-    </span><span class=identifier>animal_iterator </span><span class=identifier>begin</span><span class=special>()
-    </span><span class=special>{
-        </span><span class=keyword>return </span><span class=identifier>barn</span><span class=special>.</span><span class=identifier>begin</span><span class=special>();
-    </span><span class=special>}
-
-    </span><span class=identifier>animal_iterator </span><span class=identifier>end</span><span class=special>()
-    </span><span class=special>{
-        </span><span class=keyword>return </span><span class=identifier>barn</span><span class=special>.</span><span class=identifier>end</span><span class=special>();
-    </span><span class=special>}
-    
-    </span><span class=comment>//
-    // Here it is quite ok to have an 'animal*' argument.
-    // The smart container will handle all ownership
-    // issues.
-    //
-    </span><span class=keyword>void </span><span class=identifier>buy_animal</span><span class=special>( </span><span class=identifier>animal</span><span class=special>* </span><span class=identifier>a </span><span class=special>)
-    </span><span class=special>{
-        </span><span class=identifier>barn</span><span class=special>.</span><span class=identifier>push_back</span><span class=special>( </span><span class=identifier>a </span><span class=special>);
-    </span><span class=special>}
-
-    </span><span class=comment>//
-    // The farm can also be in economical trouble and
-    // therefore be in the need to sell animals.
-    //
-    </span><span class=identifier>animal_transport </span><span class=identifier>sell_animal</span><span class=special>( </span><span class=identifier>animal_iterator </span><span class=identifier>to_sell </span><span class=special>)
-    </span><span class=special>{
-        </span><span class=keyword>if</span><span class=special>( </span><span class=identifier>to_sell </span><span class=special>== </span><span class=identifier>end</span><span class=special>() </span><span class=special>)
-            </span><span class=keyword>throw </span><span class=identifier>farm_trouble</span><span class=special>();
-
-        </span><span class=comment>//
-        // Here we remove the animal from the barn,
-        // but the animal is not deleted yet...it's
-        // up to the buyer to decide what
-        // to do with it.
-        //
-        </span><span class=keyword>return </span><span class=identifier>barn</span><span class=special>.</span><span class=identifier>release</span><span class=special>( </span><span class=identifier>to_sell </span><span class=special>);
-    </span><span class=special>}
-
-    </span><span class=comment>//
-    // How big a farm do we have?
-    //
-    </span><span class=identifier>size_type </span><span class=identifier>size</span><span class=special>() </span><span class=keyword>const
-    </span><span class=special>{
-        </span><span class=keyword>return </span><span class=identifier>barn</span><span class=special>.</span><span class=identifier>size</span><span class=special>();
-    </span><span class=special>}
-
-    </span><span class=comment>//
-    // If things are bad, we might choose to sell all animals :-(
-    //
-    </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>auto_ptr</span><span class=special>&lt;</span><span class=identifier>barn_type</span><span class=special>&gt; </span><span class=identifier>sell_farm</span><span class=special>()
-    </span><span class=special>{
-        </span><span class=keyword>return </span><span class=identifier>barn</span><span class=special>.</span><span class=identifier>release</span><span class=special>();
-    </span><span class=special>}
-
-    </span><span class=comment>//
-    // However, if things are good, we might buy somebody
-    // else's farm :-)
-    //
-
-    </span><span class=keyword>void </span><span class=identifier>buy_farm</span><span class=special>( </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>auto_ptr</span><span class=special>&lt;</span><span class=identifier>barn_type</span><span class=special>&gt; </span><span class=identifier>other </span><span class=special>)
-    </span><span class=special>{
-        </span><span class=comment>//
-        // This line inserts all the animals from 'other'
-        // and is guaranteed either to succeed or to have no
-        // effect
-        //
-        </span><span class=identifier>barn</span><span class=special>.</span><span class=identifier>transfer</span><span class=special>( </span><span class=identifier>barn</span><span class=special>.</span><span class=identifier>end</span><span class=special>(), </span><span class=comment>// insert new animals at the end
-                         </span><span class=special>*</span><span class=identifier>other </span><span class=special>);     </span><span class=comment>// we want to transfer all animals,
-                                       // so we use the whole container as argument
-        //
-        // You might think you would have to do
-        //
-        // other.release();
-        //
-        // but '*other' is empty and can go out of scope as it wants
-        //
-        </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>other</span><span class=special>-&gt;</span><span class=identifier>empty</span><span class=special>() </span><span class=special>);
-    </span><span class=special>}
-    </span>
-<span class=special>}; </span><span class=comment>// class 'farm'.
-</span>
-<span class=keyword>int </span><span class=identifier>main</span><span class=special>()</span>
-<span class=special>{
-    </span><span class=comment>//
-    // First we make a farm
-    //
-    </span><span class=identifier>farm </span><span class=identifier>animal_farm</span><span class=special>;
-    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>animal_farm</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>0u </span><span class=special>);
-    
-    </span><span class=identifier>animal_farm</span><span class=special>.</span><span class=identifier>buy_animal</span><span class=special>( </span><span class=keyword>new </span><span class=identifier>pig</span><span class=special>(</span><span class=string>&quot;Betty&quot;</span><span class=special>) </span><span class=special>);
-    </span><span class=identifier>animal_farm</span><span class=special>.</span><span class=identifier>buy_animal</span><span class=special>( </span><span class=keyword>new </span><span class=identifier>pig</span><span class=special>(</span><span class=string>&quot;Benny&quot;</span><span class=special>) </span><span class=special>);
-    </span><span class=identifier>animal_farm</span><span class=special>.</span><span class=identifier>buy_animal</span><span class=special>( </span><span class=keyword>new </span><span class=identifier>pig</span><span class=special>(</span><span class=string>&quot;Jeltzin&quot;</span><span class=special>) </span><span class=special>);
-    </span><span class=identifier>animal_farm</span><span class=special>.</span><span class=identifier>buy_animal</span><span class=special>( </span><span class=keyword>new </span><span class=identifier>cow</span><span class=special>(</span><span class=string>&quot;Hanz&quot;</span><span class=special>) </span><span class=special>);
-    </span><span class=identifier>animal_farm</span><span class=special>.</span><span class=identifier>buy_animal</span><span class=special>( </span><span class=keyword>new </span><span class=identifier>cow</span><span class=special>(</span><span class=string>&quot;Mary&quot;</span><span class=special>) </span><span class=special>);
-    </span><span class=identifier>animal_farm</span><span class=special>.</span><span class=identifier>buy_animal</span><span class=special>( </span><span class=keyword>new </span><span class=identifier>cow</span><span class=special>(</span><span class=string>&quot;Frederik&quot;</span><span class=special>) </span><span class=special>);
-    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>animal_farm</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>6u </span><span class=special>);
-
-    </span><span class=comment>//
-    // Then we make another farm...it will actually contain
-    // a clone of the other farm.
-    //
-    </span><span class=identifier>farm </span><span class=identifier>new_farm</span><span class=special>( </span><span class=identifier>animal_farm</span><span class=special>.</span><span class=identifier>begin</span><span class=special>(), </span><span class=identifier>animal_farm</span><span class=special>.</span><span class=identifier>end</span><span class=special>() </span><span class=special>);
-    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>new_farm</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>6u </span><span class=special>);
-
-    </span><span class=comment>//
-    // Is it really clones in the new farm?
-    //
-    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>new_farm</span><span class=special>.</span><span class=identifier>begin</span><span class=special>()-&gt;</span><span class=identifier>name</span><span class=special>() </span><span class=special>== </span><span class=string>&quot;Betty&quot; </span><span class=special>);
-    
-    </span><span class=comment>//
-    // Then we search for an animal, Mary (the Crown Princess of Denmark),
-    // because we would like to buy her ...
-    //
-    </span><span class=keyword>typedef </span><span class=identifier>farm</span><span class=special>::</span><span class=identifier>animal_iterator </span><span class=identifier>iterator</span><span class=special>;
-    </span><span class=identifier>iterator </span><span class=identifier>to_sell</span><span class=special>;
-    </span><span class=keyword>for</span><span class=special>( </span><span class=identifier>iterator </span><span class=identifier>i   </span><span class=special>= </span><span class=identifier>animal_farm</span><span class=special>.</span><span class=identifier>begin</span><span class=special>(),
-                  </span><span class=identifier>end </span><span class=special>= </span><span class=identifier>animal_farm</span><span class=special>.</span><span class=identifier>end</span><span class=special>();
-         </span><span class=identifier>i </span><span class=special>!= </span><span class=identifier>end</span><span class=special>; </span><span class=special>++</span><span class=identifier>i </span><span class=special>)
-    </span><span class=special>{
-        </span><span class=keyword>if</span><span class=special>( </span><span class=identifier>i</span><span class=special>-&gt;</span><span class=identifier>name</span><span class=special>() </span><span class=special>== </span><span class=string>&quot;Mary&quot; </span><span class=special>)
-        </span><span class=special>{
-            </span><span class=identifier>to_sell </span><span class=special>= </span><span class=identifier>i</span><span class=special>;
-            </span><span class=keyword>break</span><span class=special>;
-        </span><span class=special>}
-    </span><span class=special>}
-
-    </span><span class=identifier>farm</span><span class=special>::</span><span class=identifier>animal_transport </span><span class=identifier>mary </span><span class=special>= </span><span class=identifier>animal_farm</span><span class=special>.</span><span class=identifier>sell_animal</span><span class=special>( </span><span class=identifier>to_sell </span><span class=special>);
-
-
-    </span><span class=keyword>if</span><span class=special>( </span><span class=identifier>mary</span><span class=special>-&gt;</span><span class=identifier>speak</span><span class=special>() </span><span class=special>== </span><span class=identifier>muuuh </span><span class=special>)
-        </span><span class=comment>//
-        // Great, Mary is a cow, and she may live longer
-        //
-        </span><span class=identifier>new_farm</span><span class=special>.</span><span class=identifier>buy_animal</span><span class=special>( </span><span class=identifier>mary</span><span class=special>.</span><span class=identifier>release</span><span class=special>() </span><span class=special>);
-    </span><span class=keyword>else
-        </span><span class=comment>//
-        // Then the animal would be destroyed (!)
-        // when we go out of scope.
-        //
-        </span><span class=special>;
-
-    </span><span class=comment>//
-    // Now we can observe some changes to the two farms...
-    //
-    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>animal_farm</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>5u </span><span class=special>);
-    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>new_farm</span><span class=special>.</span><span class=identifier>size</span><span class=special>()    </span><span class=special>== </span><span class=number>7u </span><span class=special>);
-
-    </span><span class=comment>//
-    // The new farm has however underestimated how much
-    // it cost to feed Mary and its owner is forced to sell the farm...
-    //
-    </span><span class=identifier>animal_farm</span><span class=special>.</span><span class=identifier>buy_farm</span><span class=special>( </span><span class=identifier>new_farm</span><span class=special>.</span><span class=identifier>sell_farm</span><span class=special>() </span><span class=special>);
-
-    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>new_farm</span><span class=special>.</span><span class=identifier>size</span><span class=special>()    </span><span class=special>== </span><span class=number>0u </span><span class=special>);
-    </span><span class=identifier>BOOST_ASSERT</span><span class=special>( </span><span class=identifier>animal_farm</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>12u </span><span class=special>);     </span>
-<span class=special>}</span>
-</pre>
-</body>
-</html>
-
-</div>
-<div class="section" id="changing-the-clone-allocator">
-<h1><a class="toc-backref" href="#id10" name="changing-the-clone-allocator">10. Changing the Clone Allocator</a></h1>
-<p>This example shows how we can change 
+This example shows how we can change 
 the Clone Allocator to use the pointer containers
-as view into other containers:</p>
-<?xml version="1.0" encoding="utf-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.2: http://docutils.sourceforge.net/" />
-<title></title>
-<link rel="stylesheet" href="default.css" type="text/css" />
-</head>
-<body>
-<pre>
-<span class=comment>//
-// This example is intended to show you how to
-// use the 'view_clone_manager'. The idea
-// is that we have a container of non-polymorphic
-// objects and want to keep then sorted by different
-// criteria at the same time. 
-//
+as view into other containers:
 
-//
-// We'll go for 'ptr_vector' here. Using a node-based 
-// container would be a waste of space here.
-// All container headers will also include
-// the Clone Managers.
-// </span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>ptr_container</span><span class=special>/</span><span class=identifier>ptr_vector</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>ptr_container</span><span class=special>/</span><span class=identifier>indirect_fun</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;
-</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>functional</span><span class=special>&gt; </span><span class=comment>// For 'binary_fnuction'</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>cstdlib</span><span class=special>&gt;    </span><span class=comment>// For 'rand()'</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>algorithm</span><span class=special>&gt;  </span><span class=comment>// For 'std::sort()'</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>iostream</span><span class=special>&gt;   </span><span class=comment>// For 'std::cout'
-</span>
-<span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>std</span><span class=special>;
-</span>
-<span class=comment>//
-// This is our simple example data-structure. It can
-// be ordered in three ways.
-//</span>
-<span class=keyword>struct </span><span class=identifier>photon</span>
-<span class=special>{
-    </span><span class=identifier>photon</span><span class=special>() </span><span class=special>: </span><span class=identifier>color</span><span class=special>( </span><span class=identifier>rand</span><span class=special>() </span><span class=special>), 
-               </span><span class=identifier>direction</span><span class=special>( </span><span class=identifier>rand</span><span class=special>() </span><span class=special>),
-               </span><span class=identifier>power</span><span class=special>( </span><span class=identifier>rand</span><span class=special>() </span><span class=special>)
-    </span><span class=special>{ </span><span class=special>}
-    
-    </span><span class=keyword>int </span><span class=identifier>color</span><span class=special>;
-    </span><span class=keyword>int </span><span class=identifier>direction</span><span class=special>;
-    </span><span class=keyword>int </span><span class=identifier>power</span><span class=special>;</span>
-<span class=special>};
-</span>
-<span class=comment>//
-// Our big container is a standard vector
-//</span>
-<span class=keyword>typedef </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>vector</span><span class=special>&lt;</span><span class=identifier>photon</span><span class=special>&gt;                                 </span><span class=identifier>vector_type</span><span class=special>;
-</span>
-<span class=comment>//
-// Now we define our view type by adding a second template argument.
-// The 'view_clone_manager' will implements Cloning by taking address
-// of objects.
-//
-// Notice the first template argument is 'photon' and not
-// 'const photon' to allow the view container write access.
-//</span>
-<span class=keyword>typedef </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>ptr_vector</span><span class=special>&lt;</span><span class=identifier>photon</span><span class=special>,</span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>view_clone_allocator</span><span class=special>&gt; </span><span class=identifier>view_type</span><span class=special>;
-</span>
-<span class=comment>//
-// Our first sort criterium
-//</span>
-<span class=keyword>struct </span><span class=identifier>sort_by_color </span><span class=special>: </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>binary_function</span><span class=special>&lt;</span><span class=identifier>photon</span><span class=special>,</span><span class=identifier>photon</span><span class=special>,</span><span class=keyword>bool</span><span class=special>&gt;</span>
-<span class=special>{
-    </span><span class=keyword>bool </span><span class=keyword>operator</span><span class=special>()( </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>l</span><span class=special>, </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>) </span><span class=keyword>const
-    </span><span class=special>{
-        </span><span class=keyword>return </span><span class=identifier>l</span><span class=special>.</span><span class=identifier>color </span><span class=special>&lt; </span><span class=identifier>r</span><span class=special>.</span><span class=identifier>color</span><span class=special>;
-    </span><span class=special>}</span>
-<span class=special>};
-</span>
-<span class=comment>//
-// Our second sort criterium
-//</span>
-<span class=keyword>struct </span><span class=identifier>sort_by_direction </span><span class=special>: </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>binary_function</span><span class=special>&lt;</span><span class=identifier>photon</span><span class=special>,</span><span class=identifier>photon</span><span class=special>,</span><span class=keyword>bool</span><span class=special>&gt;</span>
-<span class=special>{
-    </span><span class=keyword>bool </span><span class=keyword>operator</span><span class=special>()( </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>l</span><span class=special>, </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>) </span><span class=keyword>const
-    </span><span class=special>{
-        </span><span class=keyword>return </span><span class=identifier>l</span><span class=special>.</span><span class=identifier>direction </span><span class=special>&lt; </span><span class=identifier>r</span><span class=special>.</span><span class=identifier>direction</span><span class=special>;
-    </span><span class=special>}</span>
-<span class=special>};
-
-</span>
-<span class=comment>//
-// Our third sort criterium
-//</span>
-<span class=keyword>struct </span><span class=identifier>sort_by_power </span><span class=special>: </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>binary_function</span><span class=special>&lt;</span><span class=identifier>photon</span><span class=special>,</span><span class=identifier>photon</span><span class=special>,</span><span class=keyword>bool</span><span class=special>&gt;</span>
-<span class=special>{
-    </span><span class=keyword>bool </span><span class=keyword>operator</span><span class=special>()( </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>l</span><span class=special>, </span><span class=keyword>const </span><span class=identifier>photon</span><span class=special>&amp; </span><span class=identifier>r </span><span class=special>) </span><span class=keyword>const
-    </span><span class=special>{
-        </span><span class=keyword>return </span><span class=identifier>l</span><span class=special>.</span><span class=identifier>power </span><span class=special>&lt; </span><span class=identifier>r</span><span class=special>.</span><span class=identifier>power</span><span class=special>;
-    </span><span class=special>}</span>
-<span class=special>};
-</span>
-<span class=comment>//
-// This function inserts &quot;Clones&quot; into the
-// the view. 
-//
-// We need to pass the first argument
-// as a non-const reference to be able to store
-// 'T*' instead of 'const T*' objects. Alternatively,
-// we might change the declaration of the 'view_type'
-// to 
-//     typedef boost::ptr_vector&lt;const photon,boost::view_clone_manager&gt; 
-//               view_type;     ^^^^^^
-//</span>
-<span class=keyword>void </span><span class=identifier>insert</span><span class=special>( </span><span class=identifier>vector_type</span><span class=special>&amp; </span><span class=identifier>from</span><span class=special>, </span><span class=identifier>view_type</span><span class=special>&amp; </span><span class=identifier>to </span><span class=special>)</span>
-<span class=special>{
-        </span><span class=identifier>to</span><span class=special>.</span><span class=identifier>insert</span><span class=special>( </span><span class=identifier>to</span><span class=special>.</span><span class=identifier>end</span><span class=special>(), 
-                   </span><span class=identifier>from</span><span class=special>.</span><span class=identifier>begin</span><span class=special>(),
-                   </span><span class=identifier>from</span><span class=special>.</span><span class=identifier>end</span><span class=special>() </span><span class=special>);</span>
-<span class=special>}
-</span>
-<span class=keyword>int </span><span class=identifier>main</span><span class=special>()</span>
-<span class=special>{
-    </span><span class=keyword>enum </span><span class=special>{ </span><span class=identifier>sz </span><span class=special>= </span><span class=number>10</span><span class=special>, </span><span class=identifier>count </span><span class=special>= </span><span class=number>500 </span><span class=special>};
-
-    </span><span class=comment>//
-    // First we create the main container and two views
-    //
-    </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>vector</span><span class=special>&lt;</span><span class=identifier>vector_type</span><span class=special>&gt;  </span><span class=identifier>photons</span><span class=special>;
-    </span><span class=identifier>view_type                 </span><span class=identifier>color_view</span><span class=special>;
-    </span><span class=identifier>view_type                 </span><span class=identifier>direction_view</span><span class=special>;
-
-    </span><span class=comment>//
-    // Then we fill the main container with some random data
-    //
-    </span><span class=keyword>for</span><span class=special>( </span><span class=keyword>int </span><span class=identifier>i </span><span class=special>= </span><span class=number>0</span><span class=special>; </span><span class=identifier>i </span><span class=special>!= </span><span class=identifier>sz</span><span class=special>; </span><span class=special>++</span><span class=identifier>i </span><span class=special>)
-    </span><span class=special>{
-        </span><span class=identifier>photons</span><span class=special>.</span><span class=identifier>push_back</span><span class=special>( </span><span class=identifier>vector_type</span><span class=special>() </span><span class=special>); 
-
-        </span><span class=keyword>for</span><span class=special>( </span><span class=keyword>int </span><span class=identifier>j </span><span class=special>= </span><span class=number>0</span><span class=special>; </span><span class=identifier>j </span><span class=special>!= </span><span class=identifier>count</span><span class=special>; </span><span class=special>++</span><span class=identifier>j </span><span class=special>)
-            </span><span class=identifier>photons</span><span class=special>[</span><span class=identifier>i</span><span class=special>].</span><span class=identifier>push_back</span><span class=special>( </span><span class=identifier>photon</span><span class=special>() </span><span class=special>);
-    </span><span class=special>}
-
-    </span><span class=comment>//
-    // Then we create the two views.
-    //
-    </span><span class=keyword>for</span><span class=special>( </span><span class=keyword>int </span><span class=identifier>i </span><span class=special>= </span><span class=number>0</span><span class=special>; </span><span class=identifier>i </span><span class=special>!= </span><span class=identifier>sz</span><span class=special>; </span><span class=special>++</span><span class=identifier>i </span><span class=special>)
-    </span><span class=special>{
-        </span><span class=identifier>insert</span><span class=special>( </span><span class=identifier>photons</span><span class=special>[</span><span class=identifier>i</span><span class=special>], </span><span class=identifier>color_view </span><span class=special>);
-        </span><span class=identifier>insert</span><span class=special>( </span><span class=identifier>photons</span><span class=special>[</span><span class=identifier>i</span><span class=special>], </span><span class=identifier>direction_view </span><span class=special>);
-    </span><span class=special>}
-
-    </span><span class=comment>//
-    // First we sort the original photons, using one of
-    // the view classes. This may sound trivial, but consider that
-    // the objects are scatered all around 'sz' different vectors;
-    // the view makes them act as one big vector.
-    //
-    </span><span class=identifier>std</span><span class=special>::</span><span class=identifier>sort</span><span class=special>( </span><span class=identifier>color_view</span><span class=special>.</span><span class=identifier>begin</span><span class=special>(), </span><span class=identifier>color_view</span><span class=special>.</span><span class=identifier>end</span><span class=special>(), </span><span class=identifier>sort_by_power</span><span class=special>() </span><span class=special>);
-    
-    </span><span class=comment>//
-    // And now we can sort the views themselves. Notice how
-    // we switch to different iterators and different predicates:
-    //
-    </span><span class=identifier>color_view</span><span class=special>.</span><span class=identifier>sort</span><span class=special>( </span><span class=identifier>sort_by_color</span><span class=special>() </span><span class=special>);
-
-    </span><span class=identifier>direction_view</span><span class=special>.</span><span class=identifier>sort</span><span class=special>( </span><span class=identifier>sort_by_direction</span><span class=special>() </span><span class=special>);
-
-    </span><span class=keyword>return </span><span class=number>0</span><span class=special>;</span>
-<span class=special>}</span>
-</pre>
-</body>
-</html>
-
+.. raw:: html
+        :file: tut2.html -->
 <p><strong>Navigate:</strong></p>
 <ul class="simple">
 <li><a class="reference" href="ptr_container.html">home</a></li>

@@ -3,13 +3,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.9: http://docutils.sourceforge.net/" />
 <title>Boost Pointer Container Library</title>
 <link rel="stylesheet" href="default.css" type="text/css" />
 </head>
 <body>
 <div class="document" id="boost-pointer-container-library">
-<h1 class="title"><img alt="Boost" src="cboost.gif" /> Pointer Container Library</h1>
+<h1 class="title"><img alt="Boost" src="boost.png" /> Pointer Container Library</h1>
 <h2 class="subtitle" id="reference">Reference</h2>
 <p>The documentation is divided into a an explanation for 
 each container. All the common interface is explained only once,
@@ -50,7 +50,7 @@ the <a class="reference" href="reference.html#the-clone-allocator-concept">Clone
 <li><a class="reference" href="#class-nullable">Class nullable</a></li>
 <li><a class="reference" href="#exception-classes">Exception classes</a></li>
 </ul>
-<div class="section" id="the-clonable-concept_">
+<div class="section" id="the-clonable-concept">
 <h1><a name="the-clonable-concept">The Clonable concept</a></h1>
 <p><strong>Refinement of</strong></p>
 <ul class="simple">
@@ -200,7 +200,7 @@ users to apply custom allocators/deallocators for the cloned objects.</p>
 <p>The library comes with two predefined clone allocators.</p>
 </div>
 <div class="section" id="class-heap-clone-allocator">
-<h2><a class="toc-backref" href="#id15" name="class-heap-clone-allocator">Class <tt class="docutils literal"><span class="pre">heap_clone_allocator</span></tt></a></h2>
+<h2><a class="toc-backref" href="#id15" name="class-heap-clone-allocator">Class <tt class="docutils literal docutils literal"><span class="pre">heap_clone_allocator</span></tt></a></h2>
 <p>This is the default clone allocator used by all pointer containers. For most
 purposes you will never have to change this default.</p>
 <p><strong>Definition</strong></p>
@@ -227,7 +227,7 @@ namespace boost
 schemes by relying on <tt class="docutils literal"><span class="pre">new_clone()</span></tt> and <tt class="docutils literal"><span class="pre">delete_clone()</span></tt>.</p>
 </div>
 <div class="section" id="class-view-clone-allocator">
-<h2><a class="toc-backref" href="#id16" name="class-view-clone-allocator">Class <tt class="docutils literal"><span class="pre">view_clone_allocator</span></tt></a></h2>
+<h2><a class="toc-backref" href="#id16" name="class-view-clone-allocator">Class <tt class="docutils literal docutils literal"><span class="pre">view_clone_allocator</span></tt></a></h2>
 <p>This class provides a way to remove ownership properties of the
 pointer containers. As its name implies, this means that you can
 instead use the pointer containers as a view into an existing

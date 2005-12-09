@@ -47,10 +47,15 @@ void test_iterator()
     ptr_map<int,int>::iterator map_mutable_i     = map.begin();
     ptr_map<int,int>::const_iterator map_const_i = map.begin();
 
+#if !BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(70190006))
+    // This only works for library implementations which conform to the
+    // proposed resolution of the C++ Standard Library DR#179. See
+    // http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#179.
     BOOST_CHECK( map_mutable_i == map_const_i );
     BOOST_CHECK( ! ( map_mutable_i != map_const_i ) );
     BOOST_CHECK( map_const_i == map_mutable_i );
     BOOST_CHECK( ! ( map_const_i != map_mutable_i ) );
+#endif
 
     const ptr_map<int,int>& rmap = map;
     map_const_i = rmap.begin();

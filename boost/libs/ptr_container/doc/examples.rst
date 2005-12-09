@@ -2,7 +2,7 @@
  |Boost| Pointer Container Library
 ++++++++++++++++++++++++++++++++++
  
-.. |Boost| image:: cboost.gif
+.. |Boost| image:: boost.png
 
 ========
 Examples
@@ -68,7 +68,7 @@ Some examples are given here and in the accompanying test files:
         class X : boost::noncopyable { public: X* clone() const; ... };
                                                                            
         // this will be found by the library by argument dependent lookup                                                                   
-        X* allocate_clone( const X& x ) 
+        X* new_clone( const X& x ) 
         { return x.clone(); }
                                                                            
         // we can now use the interface that requires clonability
@@ -89,7 +89,7 @@ Some examples are given here and in the accompanying test files:
         X x;                                 // and 'X' can be stack-allocated 
         ptr_list<X> list; 
         list.push_back( x );                 // clone 'x' and then insert the resulting pointer 
-        list.push_back( allocate_clone( x ); // do it manually
+        list.push_back( new_clone( x );      // do it manually
         list.push_back( new X );             // always give the pointer directly to the container to avoid leaks
         list.push_back( &x );                // don't do this!!! 
 
@@ -150,24 +150,25 @@ Some examples are given here and in the accompanying test files:
 .. _array_test.cpp : ../test/ptr_array.cpp
 
 
-9. A large example
-++++++++++++++++++
+..
+		9. A large example
+		++++++++++++++++++
 
-This examples shows many of the most common
-features at work.
+		This examples shows many of the most common
+		features at work.
 
-.. raw:: html
-    :file: tut1.html
+		.. raw:: html
+			:file: tut1.html
 
-10. Changing the Clone Allocator
-++++++++++++++++++++++++++++++++
+		10. Changing the Clone Allocator
+		++++++++++++++++++++++++++++++++
 
-This example shows how we can change 
-the Clone Allocator to use the pointer containers
-as view into other containers:
+		This example shows how we can change 
+		the Clone Allocator to use the pointer containers
+		as view into other containers:
 
-.. raw:: html
-    :file: tut2.html
+		.. raw:: html
+			:file: tut2.html
 
 **Navigate:**
 

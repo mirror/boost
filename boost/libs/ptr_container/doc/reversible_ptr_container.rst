@@ -2,7 +2,7 @@
  |Boost| Pointer Container Library
 ++++++++++++++++++++++++++++++++++
  
-.. |Boost| image:: cboost.gif
+.. |Boost| image:: boost.png
 
 Class ``reversible_ptr_container``
 ------------------------------------

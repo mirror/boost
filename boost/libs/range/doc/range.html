@@ -386,7 +386,7 @@ VAlign="top"><code>boost::range_const_reverse_iterator&ltX>::type</code></TD>
         </TR>
         <TR>
             <TD VAlign="top">Beginning of range</TD>
-            <TD VAlign="top"><code>rboost::begin(a)</code></TD>
+            <TD VAlign="top"><code>boost::rbegin(a)</code></TD>
             <TD VAlign="top"><code>boost::range_reverse_iterator&lt;X>::type</code> if
 <code>a</code> is mutable, <code>boost::range_const_reverse_iterator&lt;X>::type</code>
 otherwise.</TD>
@@ -394,7 +394,7 @@ otherwise.</TD>
 <code>boost::range_reverse_iterator&lt;X>::type(boost::end(a))</code>.</TD> </TR>
         <TR>
             <TD VAlign="top">End of range</TD>
-            <TD VAlign="top"><code>rboost::end(a)</code></TD>
+            <TD VAlign="top"><code>boost::rend(a)</code></TD>
             <TD VAlign="top"><code>boost::range_reverse_iterator&lt;X>::type</code> if
 <code>a</code> is mutable, <code>boost::range_const_reverse_iterator&lt;X>::type</code>
 otherwise.</TD>
@@ -405,7 +405,7 @@ otherwise.</TD>
 
     <h3>Complexity guarantees</h3>
 
-    <code>rboost::begin(a)</code> has the same complexity as <code>boost::end(a)</code> and <code>rboost::end(a)</code> 
+    <code>boost::rbegin(a)</code> has the same complexity as <code>boost::end(a)</code> and <code>boost::rend(a)</code> 
     has the same complexity as <code>boost::begin(a)</code> from <a
          href="#forward_range">Forward Range</a>.
 
@@ -414,13 +414,13 @@ otherwise.</TD>
     <Table border="1" cellpadding="5">
         <TR>
             <TD VAlign="top">Valid reverse range</TD>
-            <TD VAlign="top">For any Bidirectional Range <code>a</code>, <code>[rboost::begin(a),rboost::end(a))</code> 
-            is a valid range, that is, <code>rboost::end(a)</code> is reachable from <code>rboost::begin(a)</code> 
+            <TD VAlign="top">For any Bidirectional Range <code>a</code>, <code>[boost::rbegin(a),boost::rend(a))</code> 
+            is a valid range, that is, <code>boost::rend(a)</code> is reachable from <code>boost::rbegin(a)</code> 
             in a finite number of increments.</TD>
         </TR>
         <TR>
             <TD VAlign="top">Completeness</TD>
-            <TD VAlign="top">An algorithm that iterates through the range <code>[rboost::begin(a),rboost::end(a))</code>
+            <TD VAlign="top">An algorithm that iterates through the range <code>[boost::rbegin(a),boost::rend(a))</code>
             will pass through every element of <code>a</code>.</TD>
         </tr>
     </table>

@@ -2,7 +2,7 @@
  |Boost| Pointer Container Library
 ++++++++++++++++++++++++++++++++++
 
-.. |Boost| image:: cboost.gif
+.. |Boost| image:: boost.png
 
 ===============
 Library headers
@@ -30,7 +30,7 @@ Library headers
 
 ``<boost/ptr_container/ptr_sequence_adapter.hpp>``       class `ptr_sequence_adapter <ptr_sequence_adapter.html>`_
 
-``<boost/ptr_container/ptr_set_adapter.hpp>``            classes `ptr_set_adapter <ptr_set_adapter.html>`_ and `ptr_multiset_adapter <ptr_multiset_sdapter.html>`_
+``<boost/ptr_container/ptr_set_adapter.hpp>``            classes `ptr_set_adapter <ptr_set_adapter.html>`_ and `ptr_multiset_adapter <ptr_multiset_adapter.html>`_
 
 ``<boost/ptr_container/ptr_map_adapter.hpp>``            classes `ptr_map_adapter <ptr_map_adapter.html>`_ and `ptr_multimap_adapter <ptr_multimap_adapter.html>`_
 

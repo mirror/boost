@@ -2,10 +2,10 @@
  |Boost| Pointer Container Library
 ++++++++++++++++++++++++++++++++++
  
-.. |Boost| image:: cboost.gif
+.. |Boost| image:: boost.png
 
-Class ``ptr_vector``
---------------------
+Class ``ptr_list``
+------------------
 
 A ``ptr_list<T>`` is a pointer container that uses an underlying ``std:list<void*>``
 to store the pointers. 
