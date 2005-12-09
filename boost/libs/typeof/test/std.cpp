@@ -22,6 +22,11 @@
 
 using namespace std;
 
+// This is temporary -- to check cw (remove later)
+
+typedef std::binary_negate< int > type1; 
+typedef std::binder1st< int > type2; 
+
 // STL containers
 
 BOOST_STATIC_ASSERT(boost::type_of::test<string>::value);
