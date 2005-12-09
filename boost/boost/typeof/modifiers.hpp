@@ -35,7 +35,7 @@
 #define BOOST_TYPEOF_pointer_fun(T) T*
 #define BOOST_TYPEOF_reference_fun(T) T&
 
-namespace boost{namespace type_of{namespace{
+namespace boost { namespace type_of { namespace {
 
     BOOST_TYPEOF_modifier_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_TYPEOF_const_fun);
     BOOST_TYPEOF_modifier_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_TYPEOF_volatile_fun);
@@ -77,7 +77,7 @@ namespace boost{namespace type_of{namespace{
         typedef typename d::iter iter;\
     }
 
-namespace boost{namespace type_of{namespace{
+namespace boost { namespace type_of { namespace {
 
     BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_EMPTY());
     BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), const);

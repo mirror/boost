@@ -17,7 +17,7 @@
     };
 
 #define BOOST_TYPEOF_REGISTER_TYPE(Type)                                \
-    namespace boost{namespace type_of{namespace{                        \
+    namespace boost { namespace type_of { namespace {                   \
         BOOST_TYPEOF_REGISTER_TYPE_IMPL(Type, BOOST_TYPEOF_UNIQUE_ID()) \
     }}}
 

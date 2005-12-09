@@ -8,7 +8,7 @@
 #include <boost/mpl/deref.hpp>
 #include <boost/mpl/next.hpp>
 
-namespace boost{namespace type_of{namespace{
+namespace boost { namespace type_of { namespace {
 
     template<class V, class Type_Not_Registered_With_Typeof_System> 
     struct encode_type_impl;

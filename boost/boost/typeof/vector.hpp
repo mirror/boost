@@ -28,7 +28,7 @@
         typedef v_iter<V, mpl::int_<n + 1> > next;\
     };
 
-namespace boost{ namespace type_of{
+namespace boost { namespace type_of {
 
     template<class V, class Pos> struct v_iter; // not defined
     BOOST_PP_REPEAT(BOOST_TYPEOF_LIMIT_SIZE, BOOST_TYPEOF_spec_iter, ~)
@@ -53,7 +53,7 @@ namespace boost{ namespace type_of{
         BOOST_PP_REPEAT_FROM_TO(n, BOOST_TYPEOF_LIMIT_SIZE, BOOST_TYPEOF_typedef_fake_item, ~)\
     };
 
-namespace boost{ namespace type_of{
+namespace boost { namespace type_of {
 
     BOOST_PP_REPEAT(BOOST_PP_INC(BOOST_TYPEOF_LIMIT_SIZE), BOOST_TYPEOF_define_vector, ~)
 }}
@@ -73,7 +73,7 @@ namespace boost{ namespace type_of{
         > type;\
     };
 
-namespace boost{ namespace type_of{
+namespace boost { namespace type_of {
 
     template<class V, class T> struct push_back; // not defined
     BOOST_PP_REPEAT(BOOST_TYPEOF_LIMIT_SIZE, BOOST_TYPEOF_spec_push_back, ~)

@@ -125,7 +125,7 @@
         BOOST_TYPEOF_TYPEDEF_DECODED_TEMPLATE_TYPE)(Name,Params)
 
 #define BOOST_TYPEOF_REGISTER_TEMPLATE_IMPL(Name, Params, Size, ID)\
-    namespace boost{namespace type_of{namespace{\
+    namespace boost { namespace type_of { namespace {\
     BOOST_TYPEOF_REGISTER_TEMPLATE_TEMPLATE_IMPL(Name, Params, ID)\
     template<class V\
         BOOST_TYPEOF_SEQ_ENUM_TRAILING(Params, BOOST_TYPEOF_REGISTER_TEMPLATE_PARAM_PAIR)\

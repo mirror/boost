@@ -8,7 +8,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/size_t.hpp>
 
-namespace boost{namespace type_of{
+namespace boost { namespace type_of {
 
     template<class T> struct get_unsigned
     {
