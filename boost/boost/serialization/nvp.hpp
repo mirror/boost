@@ -123,7 +123,7 @@ struct tracking_level<nvp<T> >
 
 #endif
 
-} // seralization
+} // serialization
 } // boost
 
 #include <boost/preprocessor/stringize.hpp>
