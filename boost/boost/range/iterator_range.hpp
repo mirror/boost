@@ -325,7 +325,17 @@ namespace boost
                BOOST_ASSERT( sz < size() );
                return m_Begin[sz];
            }
-            
+
+		   void advance_begin( difference_type n )
+		   {
+			   std::advance( m_Begin, n );
+		   }
+		   
+		   void advance_end( difference_type n )
+		   {
+			   std::advance( m_End, n );
+		   }
+		   
         private:
             // begin and end iterators
             IteratorT m_Begin;
