@@ -26,6 +26,7 @@
 #include <boost/xpressive/detail/core/finder.hpp>
 #include <boost/xpressive/detail/core/adaptor.hpp>
 #include <boost/xpressive/detail/core/regex_impl.hpp>
+#include <boost/xpressive/detail/core/matcher/end_matcher.hpp>
 #include <boost/xpressive/detail/static/type_traits.hpp>
 #include <boost/xpressive/detail/static/productions/visitor.hpp>
 #include <boost/xpressive/detail/static/productions/domain_tags.hpp>
@@ -278,18 +279,19 @@ private:
     template<typename Xpr, typename Traits>
     void compile_(Xpr const &xpr, Traits const &traits)
     {
+        using namespace detail;
         // "compile" the regex and wrap it in an xpression_adaptor
-        detail::xpression_visitor<BidiIter, mpl::false_, Traits> visitor(traits, this->impl_.get());
+        xpression_visitor<BidiIter, mpl::false_, Traits> visitor(traits, this->impl_.get());
         visitor.impl().traits_.reset(new Traits(visitor.traits()));
-        visitor.impl().xpr_ = 
-            detail::make_adaptor<BidiIter>(proto::compile(xpr, detail::end_xpression(), visitor, detail::seq_tag()));
+        visitor.impl().xpr_ = make_adaptor<BidiIter>(
+            proto::compile(xpr, make_static_xpression(end_matcher()), visitor, seq_tag()));
 
         // "link" the regex
-        detail::xpression_linker<char_type> linker(visitor.traits());
+        xpression_linker<char_type> linker(visitor.traits());
         visitor.impl().xpr_->link(linker);
 
         // optimization: get the peek chars OR the boyer-moore search string
-        detail::optimize_regex(visitor.impl(), visitor.traits(), detail::is_random<BidiIter>());
+        optimize_regex(visitor.impl(), visitor.traits(), is_random<BidiIter>());
 
         // copy the implementation
         this->impl_.tracking_copy(visitor.impl());

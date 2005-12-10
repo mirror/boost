@@ -306,6 +306,14 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Char, typename Traits>
     void set_class(basic_chset<Char> &chset, typename Traits::char_class_type char_class, bool no, Traits const &traits);
 
+    template<typename Matcher>
+    static_xpression<Matcher> const
+    make_static_xpression(Matcher const &matcher);
+
+    template<typename Matcher, typename Next>
+    static_xpression<Matcher, Next> const
+    make_static_xpression(Matcher const &matcher, Next const &next);
+
 }}} // namespace boost::xpressive::detail
 
 /// INTERNAL ONLY
