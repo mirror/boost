@@ -57,4 +57,7 @@ test-suite "typeof"
 
 	[ run odr1.cpp odr2.cpp : : : <define>BOOST_TYPEOF_NATIVE : odr_native ]
 	[ run odr1.cpp odr2.cpp : : : <define>BOOST_TYPEOF_COMPLIANT : odr_emulation ]
+
+	[ compile function_ptr_from_tpl.cpp : <define>BOOST_TYPEOF_NATIVE : function_ptr_from_tpl_native ]
+	[ compile function_ptr_from_tpl.cpp : <define>BOOST_TYPEOF_COMPLIANT : function_ptr_from_tpl_emulation ]
 	;
