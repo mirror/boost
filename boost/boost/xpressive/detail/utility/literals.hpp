@@ -50,8 +50,7 @@ struct string_literal;
 template<>
 struct string_literal<char>
 {
-    template<std::size_t N>
-    static char const (& pick(char const (&cstr)[N], wchar_t const (&)[N]))[ N ]
+    static char const *pick(char const *cstr, wchar_t const *)
     {
         return cstr;
     }
@@ -65,8 +64,7 @@ struct string_literal<char>
 template<>
 struct string_literal<wchar_t>
 {
-    template<std::size_t N>
-    static wchar_t const (& pick(char const (&)[N], wchar_t const (&cstr)[N]))[ N ]
+    static wchar_t const *pick(char const *, wchar_t const *cstr)
     {
         return cstr;
     }
