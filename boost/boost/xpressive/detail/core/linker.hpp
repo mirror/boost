@@ -189,6 +189,15 @@ struct xpression_linker
         matcher.xpr_.link(*this);
     }
 
+    // for use by alt_link_pred below
+    template<typename Xpr>
+    void alt_branch_link(Xpr const &xpr, xpression_base const *next, xpression_peeker<Char> &peeker)
+    {
+        this->back_stack_.push(next);
+        get_pointer(xpr)->link(*this);
+        get_pointer(xpr)->peek(peeker);
+    }
+
 private:
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -215,9 +224,7 @@ private:
         template<typename Xpr>
         void operator ()(Xpr const &xpr) const
         {
-            this->linker_.back_stack_.push(this->next_);
-            get_pointer(xpr)->link(this->linker_);
-            get_pointer(xpr)->peek(this->peeker_);
+            this->linker_.alt_branch_link(xpr, this->next_, this->peeker_);
         }
 
     private:

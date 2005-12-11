@@ -14,6 +14,7 @@
 #endif
 
 #include <boost/config.hpp> // for BOOST_STATIC_CONSTANT
+#include <boost/detail/workaround.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -75,8 +76,17 @@ struct string_literal<wchar_t>
     }
 };
 
-#define BOOST_XPR_CHAR_(Char, ch) boost::xpressive::detail::char_literal<Char, ch, L##ch>::value
-#define BOOST_XPR_CSTR_(Char, st) boost::xpressive::detail::string_literal<Char>::pick(st, L##st)
+#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206))
+
+# define BOOST_XPR_CHAR_(Char, ch) ch
+# define BOOST_XPR_CSTR_(Char, st) boost::xpressive::detail::string_literal<Char>::pick(st, L##st)
+
+#else
+
+# define BOOST_XPR_CHAR_(Char, ch) boost::xpressive::detail::char_literal<Char, ch, L##ch>::value
+# define BOOST_XPR_CSTR_(Char, st) boost::xpressive::detail::string_literal<Char>::pick(st, L##st)
+
+#endif
 
 }}} // namespace boost::xpressive::detail
 
