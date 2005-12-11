@@ -44,11 +44,29 @@ namespace {
 
 unsigned int wmagic_value = 28631;
 
-const wchar_t* wnames[] = {L"REG_NOERROR", L"REG_NOMATCH", L"REG_BADPAT", L"REG_ECOLLATE",
-                        L"REG_ECTYPE", L"REG_EESCAPE", L"REG_ESUBREG", L"REG_EBRACK",
-                        L"REG_EPAREN", L"REG_EBRACE", L"REG_BADBR", L"REG_ERANGE",
-                        L"REG_ESPACE", L"REG_BADRPT", L"REG_EMPTY", L"REG_E_UNKNOWN"};
-
+const wchar_t* wnames[] = {
+      L"REG_NOERROR",
+      L"REG_NOMATCH",
+      L"REG_BADPAT",
+      L"REG_ECOLLATE",
+      L"REG_ECTYPE",
+      L"REG_EESCAPE",
+      L"REG_ESUBREG",
+      L"REG_EBRACK",
+      L"REG_EPAREN",
+      L"REG_EBRACE",
+      L"REG_BADBR",
+      L"REG_ERANGE",
+      L"REG_ESPACE",
+      L"REG_BADRPT",
+      L"REG_EEND",
+      L"REG_ESIZE",
+      L"REG_ERPAREN",
+      L"REG_EMPTY",
+      L"REG_ECOMPLEXITY",
+      L"REG_ESTACK",
+      L"REG_E_UNKNOWN",
+};
 }
 
 BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompW(regex_tW* expression, const wchar_t* ptr, int f)

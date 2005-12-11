@@ -37,10 +37,29 @@ namespace{
 
 unsigned int magic_value = 25631;
 
-const char* names[] = {"REG_NOERROR", "REG_NOMATCH", "REG_BADPAT", "REG_ECOLLATE",
-                        "REG_ECTYPE", "REG_EESCAPE", "REG_ESUBREG", "REG_EBRACK",
-                        "REG_EPAREN", "REG_EBRACE", "REG_BADBR", "REG_ERANGE",
-                        "REG_ESPACE", "REG_BADRPT", "REG_EMPTY", "REG_E_UNKNOWN"};
+const char* names[] = {
+      "REG_NOERROR",
+      "REG_NOMATCH",
+      "REG_BADPAT",
+      "REG_ECOLLATE",
+      "REG_ECTYPE",
+      "REG_EESCAPE",
+      "REG_ESUBREG",
+      "REG_EBRACK",
+      "REG_EPAREN",
+      "REG_EBRACE",
+      "REG_BADBR",
+      "REG_ERANGE",
+      "REG_ESPACE",
+      "REG_BADRPT",
+      "REG_EEND",
+      "REG_ESIZE",
+      "REG_ERPAREN",
+      "REG_EMPTY",
+      "REG_ECOMPLEXITY",
+      "REG_ESTACK",
+      "REG_E_UNKNOWN",
+};
 } // namespace
 
 BOOST_REGEX_DECL int BOOST_REGEX_CCALL regcompA(regex_tA* expression, const char* ptr, int f)

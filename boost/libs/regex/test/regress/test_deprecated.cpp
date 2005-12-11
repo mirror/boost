@@ -23,6 +23,13 @@
 #pragma warning(disable:4267)
 #endif
 
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std{
+   using ::atoi;
+   using ::wcstol;
+}
+#endif
+
 int get_posix_compile_options(boost::regex_constants::syntax_option_type opts)
 {
    using namespace boost;
@@ -93,19 +100,23 @@ void test_deprecated(const char&, const test_regex_search_tag&)
       return;
    }
    // try and find the first occurance:
-   boost::regmatch_t matches[50];
-   if(boost::regexecA(&re, search_text.c_str(), 50, matches, posix_match_options) == 0)
+   static const unsigned max_subs = 100;
+   boost::regmatch_t matches[max_subs];
+   if(boost::regexecA(&re, search_text.c_str(), max_subs, matches, posix_match_options) == 0)
    {
       int i = 0;
       while(results[2*i] != -2)
       {
-         if(results[2*i] != matches[i].rm_so)
+         if(max_subs > i)
          {
-            BOOST_REGEX_TEST_ERROR("Mismatch in start of subexpression " << i << " found with the POSIX C API.", char);
-         }
-         if(results[2*i+1] != matches[i].rm_eo)
-         {
-            BOOST_REGEX_TEST_ERROR("Mismatch in end of subexpression " << i << " found with the POSIX C API.", char);
+            if(results[2*i] != matches[i].rm_so)
+            {
+               BOOST_REGEX_TEST_ERROR("Mismatch in start of subexpression " << i << " found with the POSIX C API.", char);
+            }
+            if(results[2*i+1] != matches[i].rm_eo)
+            {
+               BOOST_REGEX_TEST_ERROR("Mismatch in end of subexpression " << i << " found with the POSIX C API.", char);
+            }
          }
          ++i;
       }
@@ -213,19 +224,23 @@ void test_deprecated(const wchar_t&, const test_regex_search_tag&)
       return;
    }
    // try and find the first occurance:
-   boost::regmatch_t matches[50];
-   if(boost::regexecW(&re, search_text.c_str(), 50, matches, posix_match_options) == 0)
+   static const unsigned max_subs = 100;
+   boost::regmatch_t matches[max_subs];
+   if(boost::regexecW(&re, search_text.c_str(), max_subs, matches, posix_match_options) == 0)
    {
       int i = 0;
       while(results[2*i] != -2)
       {
-         if(results[2*i] != matches[i].rm_so)
+         if(max_subs > i)
          {
-            BOOST_REGEX_TEST_ERROR("Mismatch in start of subexpression " << i << " found with the POSIX C API.", wchar_t);
-         }
-         if(results[2*i+1] != matches[i].rm_eo)
-         {
-            BOOST_REGEX_TEST_ERROR("Mismatch in end of subexpression " << i << " found with the POSIX C API.", wchar_t);
+            if(results[2*i] != matches[i].rm_so)
+            {
+               BOOST_REGEX_TEST_ERROR("Mismatch in start of subexpression " << i << " found with the POSIX C API.", wchar_t);
+            }
+            if(results[2*i+1] != matches[i].rm_eo)
+            {
+               BOOST_REGEX_TEST_ERROR("Mismatch in end of subexpression " << i << " found with the POSIX C API.", wchar_t);
+            }
          }
          ++i;
       }
@@ -253,10 +268,33 @@ void test_deprecated(const char&, const test_invalid_regex_tag&)
 
    // OK try and compile the expression:
    boost::regex_tA re;
-   if(boost::regcompA(&re, expression.c_str(), posix_options) == 0)
+   int code = boost::regcompA(&re, expression.c_str(), posix_options);
+   if(code == 0)
    {
       boost::regfreeA(&re);
       BOOST_REGEX_TEST_ERROR("Expression : \"" << expression.c_str() << "\" unexpectedly compiled with the POSIX C API.", char);
+   }
+   else
+   {
+      char buf[100];
+      int s = boost::regerrorA(code, &re, 0, 0);
+      if(s < 100)
+         s = boost::regerrorA(code, &re, buf, 100);
+      s = boost::regerrorA(code | boost::REG_ITOA, &re, 0, 0);
+      if(s < 100)
+      {
+         s = boost::regerrorA(code | boost::REG_ITOA, &re, buf, 100);
+         re.re_endp = buf;
+         s = boost::regerrorA(code | boost::REG_ATOI, &re, buf, 100);
+         if(s)
+         {
+            int code2 = std::atoi(buf);
+            if(code2 != code)
+            {
+               BOOST_REGEX_TEST_ERROR("Got a bad error code from regerrA with REG_ATOI set: ", char);
+            }
+         }
+      }
    }
    //
    // now try the RegEx class:
@@ -307,10 +345,33 @@ void test_deprecated(const wchar_t&, const test_invalid_regex_tag&)
 
    // OK try and compile the expression:
    boost::regex_tW re;
-   if(boost::regcompW(&re, expression.c_str(), posix_options) == 0)
+   int code = boost::regcompW(&re, expression.c_str(), posix_options);
+   if(code == 0)
    {
       boost::regfreeW(&re);
       BOOST_REGEX_TEST_ERROR("Expression : \"" << expression.c_str() << "\" unexpectedly compiled with the POSIX C API.", wchar_t);
+   }
+   else
+   {
+      wchar_t buf[100];
+      int s = boost::regerrorW(code, &re, 0, 0);
+      if(s < 100)
+         s = boost::regerrorW(code, &re, buf, 100);
+      s = boost::regerrorW(code | boost::REG_ITOA, &re, 0, 0);
+      if(s < 100)
+      {
+         s = boost::regerrorW(code | boost::REG_ITOA, &re, buf, 100);
+         re.re_endp = buf;
+         s = boost::regerrorW(code | boost::REG_ATOI, &re, buf, 100);
+         if(s)
+         {
+            long code2 = std::wcstol(buf, 0, 10);
+            if(code2 != code)
+            {
+               BOOST_REGEX_TEST_ERROR("Got a bad error code from regerrW with REG_ATOI set: ", char);
+            }
+         }
+      }
    }
 #endif
 }
