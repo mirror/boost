@@ -23,6 +23,10 @@
 #include <cstring>
 #include <boost/type_traits/alignment_of.hpp>
 
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std{ using ::strcmp; }
+#endif
+
 static unsigned int indent = 4;
 static unsigned int width = 40;
 
@@ -30,7 +34,7 @@ void print_macro(const char* name, const char* value)
 {
    // if name == value+1 then then macro is not defined,
    // in which case we don't print anything:
-   if(0 != strcmp(name, value+1))
+   if(0 != std::strcmp(name, value+1))
    {
       for(unsigned i = 0; i < indent; ++i) std::cout.put(' ');
       std::cout << std::setw(width);
