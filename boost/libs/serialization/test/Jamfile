@@ -5,7 +5,6 @@
 #  Boost Software License, Version 1.0. (See accompanying file 
 #  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #
-#  See http://www.boost.org/libs/test for the library home page.
 
 subproject libs/serialization/test ;
 
@@ -46,11 +45,8 @@ rule run-template ( test-name : sources * : requirements * ) {
         : # requirements
             std::locale-support
             toolset::require-boost-spirit-support
-            <borland*><*><cxxflags>"-w-8080 -w-8071 -w-8057 -w-8062 -w-8008 -w-0018 -w-8066"
-            <como*><*><runtime-link>static
-            # msvc stlport 4.5.3 only works with static lib
-            <msvc-stlport><*><runtime-link>static
-            <vc-6_5-stlport><*><runtime-link>static
+            toolset::suppress-warnings
+            toolset::optimizations
             $(requirements)
         : # test name
             $(test-name)
@@ -70,6 +66,9 @@ rule run-invoke ( test-name : sources * : defns * )
             $(sources)
             <lib>../build/boost_serialization
         : # requirements
+            # msvc stlport 4.5.3 only works with static lib
+            <msvc-stlport><*><runtime-link>static
+            <vc-6_5-stlport><*><runtime-link>static
             <define>$(defns)
             <define>BOOST_LIB_DIAGNOSTIC=1
     ] ;
@@ -104,6 +103,9 @@ rule run-winvoke ( test-name : sources * : defns * )
             toolset::require-wide-char-io-support
             <define>$(defns)
             <define>BOOST_LIB_DIAGNOSTIC=1
+            # msvc stlport 4.5.3 only works with static lib
+            <msvc-stlport><*><runtime-link>static
+            <vc-6_5-stlport><*><runtime-link>static
             # both stlport and msvc6 define iswspace
             <msvc-stlport><*><linkflags>"-force:multiple"
             <vc-6_5-stlport><*><linkflags>"-force:multiple"
@@ -136,6 +138,8 @@ rule test-bsl-run-no-lib  ( test-name : sources * )
         : # sources
             $(test-name).cpp $(sources).cpp
         : # requirements
+            <msvc-stlport><*><runtime-link>static
+            <vc-6_5-stlport><*><runtime-link>static
     ] ;
 }
 
@@ -240,19 +244,6 @@ test-suite "serialization" :
      [ test-bsl-run_polymorphic_archive test_polymorphic : test_polymorphic_A ]
 ;
 
-# This last DEPENDS makes the directory for the part 2 depend on the 
-# completion of part 1. You may ask why the directory and not the test 
-# itself? Strangely it's because to properly chain the tests you need to 
-# make the earliest step of the second test depend on the latest part of 
-# the next test. And directories are the only sure thing that you can know 
-# a test needs first.
-
-DEPENDS test_class_info_load_text_archive.run : test_class_info_save_text_archive.run ;
-DEPENDS test_class_info_load_text_warchive.run : test_class_info_save_text_warchive.run ;
-DEPENDS test_class_info_load_xml_archive.run : test_class_info_save_xml_archive.run ;
-DEPENDS test_class_info_load_xml_archive.run : test_class_info_save_xml_warchive.run ;
-DEPENDS test_class_info_load_binary_archive.run : test_class_info_save_binary_archive.run ;
-
 if $(BOOST_SERIALIZATION_TEST) {
     test-suite "serialization" : 
         [ test-bsl-run-no-lib test_iterators ]
@@ -302,7 +293,21 @@ if $(BOOST_SERIALIZATION_TEST) {
         [ compile test_const_pass.cpp : std::locale-support ]
     ;
     
-    DEPENDS test_demo_xml_load.run : test_demo_xml_save.run ;
+}
+
+saving-tests = [ test-bsl-run_files test_class_info_save ]
+               [ test-bsl-run test_demo_xml_save ] ;
+loading-tests = [ test-bsl-run_files test_class_info_load ]
+                [ test-bsl-run test_demo_xml_load ] ;
+
+## This makes each individual load test depend on the run of the
+## corresponding save test. It is important to do this one at a
+## time because $(saving-tests) and $(loading-tests) can contain
+## the targets for multiple toolsets.
+for local save-test-i in $(saving-tests)
+{
+    DEPENDS $(loading-tests[1]:S=.run) : $(save-test-i:S=.run) ;
+    loading-tests = $(loading-tests[2-]) ;
 }
 
 }

@@ -19,13 +19,14 @@ namespace std{
 #endif
 #include <boost/type_traits/broken_compiler_spec.hpp>
 
+#include <boost/serialization/shared_ptr.hpp>
+#include <boost/serialization/weak_ptr.hpp>
+#include <boost/serialization/nvp.hpp>
+
 #include "test_tools.hpp"
 #include <boost/preprocessor/stringize.hpp>
 #include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
-#include <boost/serialization/shared_ptr.hpp>
-#include <boost/serialization/weak_ptr.hpp>
-#include <boost/serialization/nvp.hpp>
 #include <boost/serialization/export.hpp>
 
 // This is a simple class.  It contains a counter of the number
@@ -48,7 +49,7 @@ public:
     virtual ~A(){--count;}   // default destructor
 };
 
-BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(A)
+//BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(A)
 BOOST_SERIALIZATION_SHARED_PTR(A)
 
 // B is a subclass of A

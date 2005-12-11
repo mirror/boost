@@ -26,7 +26,7 @@ BOOST_SERIALIZATION_DECL(bool)
 extended_type_info_no_rtti_0::less_than(
     const boost::serialization::extended_type_info &rhs) const 
 {
-    return std::strcmp(key, rhs.get_key()) < 0;
+    return std::strcmp(m_key, rhs.get_key()) < 0;
 }
 
 BOOST_SERIALIZATION_DECL(BOOST_PP_EMPTY())  

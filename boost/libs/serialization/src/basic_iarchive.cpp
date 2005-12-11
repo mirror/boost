@@ -80,8 +80,9 @@ class basic_iarchive_impl :
     // list of objects which might be moved. We use a vector for implemenation
     // in the hope the the truncation operation will be faster than either
     // with a list or stack adaptor
-    std::vector<std::size_t> moveable_object_stack;
-    std::size_t moveable_object_position;
+    object_id_type moveable_objects_start;
+    object_id_type moveable_objects_end;
+    object_id_type moveable_objects_recent;
 
     void reset_object_address(
         const void * new_address, 
@@ -95,7 +96,7 @@ class basic_iarchive_impl :
         const basic_iserializer * bis;
         const class_id_type class_id;
         cobject_type(
-            std::size_t class_id_,
+            class_id_type class_id_,
             const basic_iserializer & bis_
         ) : 
             bis(& bis_),
@@ -196,7 +197,8 @@ class basic_iarchive_impl :
     basic_iarchive_impl(unsigned int flags) :
         m_archive_library_version(ARCHIVE_VERSION()),
         m_flags(flags),
-        moveable_object_position(0),
+        moveable_objects_start(0),
+        moveable_objects_end(0),
         pending_object(NULL),
         pending_bis(NULL),
         pending_version(0)
@@ -254,24 +256,44 @@ basic_iarchive_impl::reset_object_address(
     const void * new_address, 
     const void *old_address
 ){
-    // if the this object wasn't tracked
-    std::size_t i = moveable_object_position;
-    if(i >= moveable_object_stack.size())
-        return;
-    if(old_address != object_id_vector[i].address)
-        // skip to any lower level ones
-        ++i;
-    while(i < moveable_object_stack.size()){
+    object_id_type i;
+    // this code handles a couple of situations.
+    // a) where reset_object_address is applied to an untracked object.
+    //    In such a case the call is really superfluous and its really an
+    //    an error.  But we don't have access to the types here so we can't
+    //    know that.  However, this code will effectively turn this situation
+    //    into a no-op and every thing will work fine - albeat with a small
+    //    execution time penalty.
+    // b) where the call to reset_object_address doesn't immediatly follow
+    //    the << operator to which it corresponds.  This would be a bad idea
+    //    but the code may work anyway.  Naturally, a bad practice on the part
+    //    of the programmer but we can't detect it - as above.  So maybe we
+    //    can save a few more people from themselves as above.
+    for(i = moveable_objects_recent; i < moveable_objects_end; ++i){
+        if(old_address == object_id_vector[i].address)
+            break;
+    }
+    for(; i < moveable_objects_end; ++i){
+
         // calculate displacement from this level
-        assert(object_id_vector[i].address >= old_address);
         // warning - pointer arithmetic on void * is in herently non-portable
         // but expected to work on all platforms in current usage
-        std::size_t member_displacement
-            = reinterpret_cast<std::size_t>(object_id_vector[i].address) 
-            - reinterpret_cast<std::size_t>(old_address);
-        object_id_vector[i].address = reinterpret_cast<void *>(
-            reinterpret_cast<std::size_t>(new_address) + member_displacement
-        );
+        if(object_id_vector[i].address > old_address){
+            std::size_t member_displacement
+                = reinterpret_cast<std::size_t>(object_id_vector[i].address) 
+                - reinterpret_cast<std::size_t>(old_address);
+            object_id_vector[i].address = reinterpret_cast<void *>(
+                reinterpret_cast<std::size_t>(new_address) + member_displacement
+            );
+        }
+        else{
+            std::size_t member_displacement
+                = reinterpret_cast<std::size_t>(old_address)
+                - reinterpret_cast<std::size_t>(object_id_vector[i].address); 
+            object_id_vector[i].address = reinterpret_cast<void *>(
+                reinterpret_cast<std::size_t>(new_address) - member_displacement
+            );
+       }
         ++i;
     }
 }
@@ -297,7 +319,8 @@ inline class_id_type
 basic_iarchive_impl::register_type(
     const basic_iserializer & bis
 ){
-    cobject_type co(cobject_info_set.size(), bis);
+    class_id_type id(static_cast<int>(cobject_info_set.size()));
+    cobject_type co(id, bis);
     std::pair<cobject_info_set_type::const_iterator, bool>
         result = cobject_info_set.insert(co);
 
@@ -305,10 +328,12 @@ basic_iarchive_impl::register_type(
         cobject_id_vector.push_back(cobject_id(bis));
         assert(cobject_info_set.size() == cobject_id_vector.size());
     }
-    const int id = result.first->class_id;
-    cobject_id & coid = cobject_id_vector[id];
+    id = result.first->class_id;
+    // borland complains without this minor hack
+    const int tid = id;
+    cobject_id & coid = cobject_id_vector[tid];
     coid.bpis_ptr = bis.get_bpis_ptr();
-    return result.first->class_id;
+    return id;
 }
 
 void
@@ -370,34 +395,31 @@ basic_iarchive_impl::load_object(
     cobject_id & co = cobject_id_vector[id];
 
     load_preamble(ar, co);
+
+    // save the current move stack position in case we want to truncate it
+    boost::state_saver<object_id_type> w(moveable_objects_start);
+
     // note: extra line used to evade borland issue
     const bool tracking = co.tracking_level;
-    // if we didn't track this object when the archive was saved
-    if(! tracking){ 
-        // all we need to do is read the data
-        (bis.load_object_data)(ar, t, co.file_version);
-        return;
+
+    object_id_type this_id;
+    moveable_objects_start =
+    this_id = object_id_vector.size();
+
+    // if we tracked this object when the archive was saved
+    if(tracking){ 
+        // if it was already read
+        if(!track(ar, t))
+            // we're done
+            return;
+        // add a new enty into the tracking list
+        object_id_vector.push_back(aobject(t, cid));
+        // and add an entry for this object
+        moveable_objects_end = object_id_vector.size();
     }
-
-    // we're tracking the object
-    // if it was already read
-    if(! track(ar, t))
-        // we're done
-        return;
-
-    std::size_t tracking_list_position = object_id_vector.size();
-    // add a new enty into the tracking list
-    object_id_vector.push_back(aobject(t, cid));
-    // save the current move stack position in case we want to truncate it
-    std::size_t next_moveable_object_position = moveable_object_stack.size();
-    // and add an entry for this object
-    moveable_object_stack.push_back(tracking_list_position);
-
     // read data
     (bis.load_object_data)(ar, t, co.file_version);
-
-    // last object created
-    moveable_object_position = next_moveable_object_position;
+    moveable_objects_recent = this_id;
 }
 
 inline const basic_pointer_iserializer *
@@ -457,8 +479,7 @@ basic_iarchive_impl::load_pointer(
         return bpis_ptr;
 
     // save state
-    std::size_t original_moveable_stack_size(moveable_object_stack.size());
-    state_saver<std::size_t> w(moveable_object_position);
+    state_saver<object_id_type> w(moveable_objects_start);
 
     if(! tracking){
         bpis_ptr->load_object_ptr(ar, t, co.file_version);
@@ -474,11 +495,14 @@ basic_iarchive_impl::load_pointer(
         // predict next object id to be created
         const unsigned int ui = object_id_vector.size();
 
+        state_saver<object_id_type> w(moveable_objects_end);
+
         // because the following operation could move the items
         // don't use co after this
         // add to list of serialized objects so that we can properly handle
         // cyclic strucures
         object_id_vector.push_back(aobject(t, cid));
+
         bpis_ptr->load_object_ptr(
             ar, 
             object_id_vector[ui].address, 
@@ -490,9 +514,6 @@ basic_iarchive_impl::load_pointer(
         // and add to list of created pointers
         created_pointers.push_back(created_pointer_type(cid, t));
     }
-    // anything pointed to is never moved 
-    // so truncate the stack of moveable objects
-    moveable_object_stack.resize(original_moveable_stack_size);
 
     return bpis_ptr;
 }

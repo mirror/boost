@@ -111,6 +111,8 @@ void_caster_registry * void_caster_registry::m_self = NULL;
 
 void 
 void_caster_registry::purge(const extended_type_info * eti){
+    if(NULL == m_self)
+        return;
     if(! empty()){
         iterator i = m_self->m_set.begin();
         while(i != m_self->m_set.end()){

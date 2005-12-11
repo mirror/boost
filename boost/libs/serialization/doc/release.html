@@ -90,11 +90,14 @@ at the front of the list of include paths.
     and <code style="white-space: normal">std::wstring</code> contain characters such as
     '\0' which cannot be rendered in XML without an escape mechanism.  Currently there is 
     no such escape mechanism implemented.
+    <li>A subtle error in the implementation of serialiaton of <code style="white-space: normal">std::map</code>
+    is fixed in this version.  Unfortunately, the fix breaks serialization of
+    <code style="white-space: normal">std::map</code> for those compilers which do not support
+    partial template specialization.
 </ul>
 <p>
 Aside from the above, there are a number of issus related to specific platforms.  
 These are listed in <a href="implementation.html#othercompilerissues">Specific Compiler/Library Issues</a>.
-
 
 
 <hr>

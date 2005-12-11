@@ -1,4 +1,4 @@
-<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!--
 (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
@@ -77,8 +77,7 @@ if and only if one of the following is true:
     <a target="detail" href="traits.html#Traits">serialization traits</a>,
     any user type can also be designated as "primitive"
     so that it is handled in this way.
-  <li>it is a class type one of the following is true for all archive classes:
-    it is a class type and for all <strong>Archive</strong> classes, one of the following
+  <li>It is a class type and for all <strong>Archive</strong> classes, one of the following
     has been declared:
     <ul>
     <li>a class member function <code style="white-space: normal">serialize</code>
@@ -194,6 +193,12 @@ templates can be in any of the following namespaces:
 <li>namespace of the archive class
 <li>namespace of the type being serialized
 </ul>
+<p>
+Note that, at first glance, this suggestion may seem to be wrong for compilers which implement
+two phase lookup.  In fact, the serialization library used a perhaps overly clever 
+method to support this rule even for such compilers.  Those with an interest in studying
+this furter will find more information in 
+<a target=serialization_hpp href="../../../boost/serialization/serialization.hpp">serialization.hpp</a>
 
 <h3><a name="classmembers">Serialization of Class Members</a></h3>
 Regardless of which of the above methods is used,  the body of the serialize function must
@@ -206,7 +211,6 @@ specify the data to be saved/loaded by sequential application of the archive
     ar &amp; member2;
 }
 </code></pre>
-
 
 <h4><a name="base">Base Classes</a></h4>
 The header file 
@@ -584,19 +588,28 @@ class derived_two : public base {
 main(){
     ...
     base *b;
+    ...
     ar &amp; b; 
 }
 </code></pre>
+When saving <code style="white-space: normal">b</code> what kind of object should be saved? 
 When loading <code style="white-space: normal">b</code> what kind of object should be created? 
-An object of class <code style="white-space: normal">derived_one</code>,
+Should it be an object of class <code style="white-space: normal">derived_one</code>,
 <code style="white-space: normal">derived_two</code>, or maybe <code style="white-space: normal">base</code>?
 <p>
-If this situation is not addressed by one of the methods described below,
-an <a target="detail" href="exceptions.html#unregistered_class">
-<code style="white-space: normal">unregistered_class</code></a> exception will be thrown when serialization is
-invoked.
-<p>Many times this situation is resolved automatically by the serialization
-library.
+It turns out that the kind of object serialized depends upon whether the base class
+(<code style="white-space: normal">base</code> in this case) is polymophic or not.
+If <code style="white-space: normal">base</code> is not polymorphic, that is if it has no
+virtual functions, then an object of the type <code style="white-space: normal">base</code>
+will be serialized. Information in any derived classes will be lost. If this is what is desired
+(it usually isn't) then no other effort is required.
+<p>
+
+If the base class is polymorphic, an object of the most derived type
+(<code style="white-space: normal">derived_one</code>
+or <code style="white-space: normal">derived_two</code>
+in this case) will be serialized.  The question of which type of object is to be
+serialized is (almost) automatically handled by the library.
 <p>
 The system "registers" each class in an archive the first time an object of that
 class it is serialized and assigns a sequential number to it.  Next time an
@@ -607,31 +620,36 @@ the class being read.  Note that this implies that "registration" has to occur
 during both save and load so that the class-integer table built on load
 is identical to the class-integer table built on save. In fact, the key to
 whole serialization system is that things are always saved and loaded in
-the same sequence.  This includes "registration"
+the same sequence.  This includes "registration".
 <p>
-In many situations the problem never comes up. Consider:
+Expanding our previous example:
 <pre><code>
 main(){
     derived_one d1;
     derived_two d2:
     ...
-    ar &gt;&gt; d1;
-    ar &gt;&gt; d2;
+    ar &amp; d1;
+    ar &amp; d2;
     // A side effect of serialization of objects d1 and d2 is that
     // the classes derived_one and derived_two become known to the archive.
     // So subsequent serialization of those classes by base pointer works
     // without any special considerations.
     base *b;
+    ...
     ar &amp; b; 
 }
 </code></pre>
-Here, the problem doesn't present itself. When <code style="white-space: normal">b</code> is read it is
+When <code style="white-space: normal">b</code> is read it is
 preceded by a unique (to the archive) class identifier which
 has previously been related to class <code style="white-space: normal">derived_one</code> or
 <code style="white-space: normal">derived_two</code>.
 <p>
-If a derived class hasn't been automatically "registered" as described
-above, we have the option of registering it explicitly.  All archives are
+If a derived class has NOT been automatically "registered" as described
+above, an <a target="detail" href="exceptions.html#unregistered_class">
+<code style="white-space: normal">unregistered_class</code></a> exception 
+will be thrown when serialization is invoked.
+<p>
+This can be addressed by registering the derived class explicitly.  All archives are
 derived from a base class which implements the following template:
 <pre><code>
 template&lt;class T&gt;
@@ -644,6 +662,7 @@ main(){
     ar.template register_type&lt;derived_one&gt;();
     ar.template register_type&lt;derived_two&gt;();
     base *b;
+    ...
     ar &amp; b; 
 }
 </code></pre>
@@ -667,6 +686,7 @@ BOOST_CLASS_EXPORT_GUID(derived_two, "derived_two")
 main(){
     ...
     base *b;
+    ...
     ar &amp; b; 
 }
 </code></pre>

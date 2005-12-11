@@ -186,19 +186,19 @@ test_main( int /* argc */, char* /* argv */[] )
     {
         test_ostream ofs(testfile);    
         test_oarchive oa(ofs);
-        oa << boost::serialization::make_nvp("bp", bp);
+        oa << BOOST_SERIALIZATION_NVP(bp);
     }
 
     base* bp2;
     {
         test_istream ifs(testfile);
         test_iarchive ia(ifs);
-        ia >> boost::serialization::make_nvp("bp2", bp2);
+        ia >> BOOST_SERIALIZATION_NVP(bp2);
     }
 
-    BOOST_ASSERT(1 == save_count);
-    BOOST_ASSERT(1 == load_count);
-    BOOST_ASSERT(*bp2 == *bp);
+    BOOST_CHECK(1 == save_count);
+    BOOST_CHECK(1 == load_count);
+    BOOST_CHECK(*bp2 == *bp);
     std::remove(testfile);
 
     return EXIT_SUCCESS;

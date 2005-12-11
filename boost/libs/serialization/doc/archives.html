@@ -14,273 +14,194 @@
     </td>
     <td valign="top"> 
       <h1 align="center">Serialization</h1>
-      <h2 align="center">Archive Concept</h2>
+      <h2 align="center">Archive Concepts</h2>
     </td>
   </tr>
 </table>
 <hr>
 <dl class="page-index">
-  <dt><a href="#saving_interface">Saving</a>
-  <dt><a href="#loading_interface">Loading</a>
+  <dt><a href="#saving_interface">Saving Archive Concept</a>
+  <dt><a href="#loading_interface">Loading Archive Concept</a>
   <dt><a href="#archive_models">Models</a>
   <dt><a href="#exceptions">Exceptions</a>
   <dt><a href="#charactersets">Character Sets</a>
 </dl>
-
-An <strong>Archive</strong> contains a sequence of bytes created from 
-an arbitrary nested set of C++ data structures.  
-
-<h4><a name="saving_interface">Saving</a></h4>
-An object that saves data to an archive implements the following interface.
-<pre><code>
-class oarchive : ...
-{
-    ...
-public:
-    // called to save objects
-    template&lt;class T&gt;
-    oarchive & operator&lt;&lt;(const T & t);
-
-    template&lt;class T&gt;
-    oarchive & operator&(T & t){
-        return *this &lt;&lt; t;
-    }
-
-    void save_binary(const void *address, std::size_t count);
-
-    template&lt;class T&gt;
-    register_type(T * t = NULL);
-
-    unsigned int library_version() const;
-
-    struct is_saving {
-        typedef mpl::bool_&lt;true&gt; type;
-        BOOST_STATIC_CONSTANT(bool, value=true);
-    };
-
-    struct is_loading {
-        typedef mpl::bool_&lt;false&gt; type;
-        BOOST_STATIC_CONSTANT(bool, value=false);
-    };
-    ...
-};
-</code></pre>
-
-The template parameter <code>T</code> must correspond to a type which
-models the <a href="serialization.html"><strong>Serializable</strong></a> concept.
-
-<dl>
-
-<dt><h4><code>
-template&lt;class T&gt;
-oarchive & operator&lt;&lt;(const T & t);
-
-template&lt;class T&gt;
-oarchive & operator&(T & t);
-</code></h4></dt>
-<dd>
-<p>
-Appends an object of type T to the archive.  The object may be
+<h4>Notation</h4>
+In the following descriptions
 <ul>
-    <li>A primitive data type such as int, char, float, etc.
-    <li>A class or struct for which a <code style="white-space: normal">serialize</code>
-        function has been defined.
-    <li>A pointer to a serializable object.
+  <li><code>SA</code> is an type modeling the <a href="#loading_interface">Saving Archive Concept</a>
+  <li><code>sa</code> is an instance of type SA.
+  <li><code>LA</code> is an type modeling the <a href="#loading_interface">Loading Archive Concept</a>
+  <li><code>la</code> is an instance of type LA.
+  <li><code>T</code> is an <a href="serialization.html"><strong>Serializable</strong></a> Type
+  <li><code>x</code> is an instance of type T Type</li>.
+  <li><code>u,v</code> is a pointer to a an instance of type T
+  <li><code>count</code> is an instance of a type that can be converted to <code>std::size_t</code>.
 </ul>
-</dd>
-
-<dt><h4><code>
-void save_binary(const void *address, std::size_t count);
-</code></h4></dt>
-<dd>
-Appends to the archive <code style="white-space: normal">count</code> bytes found at 
-<code style="white-space: normal">address</code>.
-</dd>
-<dt><h4><code>
-template&lt;class T&gt;
-register_type(T * t = NULL);
-</code></h4></dt>
-<dd>
-Appends a sequential integer to the archive. This integer becomes the "key" used
-to look up the class type when the archive is later loaded.  This process is
-referred to as "class registration".  It is only necessary to invoke this function for 
-objects of derived classes which are serialized through a base class pointer. This
-is explained in detail in
-<a href="serialization.html#derivedpointers">Special Considerations - Derived Pointers</a>.
-</dd>
-
-<dt><h4><code>
-unsigned int library_version() const;
-</code></h4></dt>
-<dd>
-Returns the version number of the serialization library that created the archive.
-This number will be incremented each time the library is altered in such a way
-that serialization could be altered for some type.  For example, suppose the type
-used for a count of collection members is changed.  The code that loads collections
-might be conditioned on the library version to make sure that libraries created by
-previous versions of the library can still be read.
-</dd>
-
-<dt><h4><code>
-is_saving::type = mpl::bool&lt;true&gt;;
-is_saving::value= true;
-is_loading::type = mpl::bool&lt;false&gt;;
-is_loading::value= false;
-</code></h4></dt>
-<dd>
-These integral constants permit archive attributes to be queried at compiler
-or execution time.  They can used to generate code with boost 
-<a href="../../mpl/doc/index.html">mpl</a>
-. For and example
-showing how these can beused, see the implementation of
-<a target="splithpp" href="../../../boost/serialization/split_free.hpp">split_free.hpp</a>.
-</dd>
-
+<h4><a name="saving_interface">Saving Archive Concept</a></h4>
+<h4>Associated Types</h4>
+Intuitively, a type modeling this concept will generate a sequence of bytes
+correpsonding to an arbitrary set of C++ data structures.  Each type modeling the
+Saving Archive concept (SA) may be associated with another type modeling the
+<a href="#loading_interface">Loading Archive Concept</a>(LA).  
+This associated type will perform the inverse operation.  
+That is, given a sequence of bytes generated by SA, it will generate a set of 
+C++ data structures the is equivalent to the original.  
+The notion of equivalence is defined by the implementations of the pair of archives and the
+way the data is are rendered <a href="serialization.html">serializable</a>.
+<p>
+<h4>Valid Expressions</h4>
+<dl>
+  <dt><h4><code>
+    SA::is_saving
+  </code></h4></dt>
+  <dd>
+    Returns the Boost MPL Integral Constant type boost::mpl::bool_&lt;true&gt;
+  </dd>   
+  <dt><h4><code>
+    SA::is_loading
+  </code></h4></dt>
+  <dd>
+    Returns the Boost MPL Integral Constant type boost::mpl::bool_&lt;false&gt;
+  </dd>   
+  <dt><h4><code>
+    sa &lt;&lt; x
+    <br>
+    sa &amp; x
+  </code></h4></dt>
+  <dd>
+    These expressions must perform exactly the same function.  They append the
+    value of <code style="white-space: normal">x</code> along with other information to <code>sa</code>.
+    This other information is defined by the implementation of the archive.
+    Typically this information is that which is required by a corresponding
+    Loading Archive type to properly restore the value of <code>x</code>.
+    <p>
+    Returns a reference to <code>sa</code>. 
+  </dd>
+  <dt><h4><code>
+    sa.save_binary(u, count)
+  </code></h4></dt>
+  <dd>
+    Appends to the archive <code style="white-space: normal">size_t(count)</code> bytes found at 
+    <code style="white-space: normal">u</code>.
+  </dd>
+  <dt><h4><code>
+    sa.register_type&lt;T&gt;()
+    <br>
+    sa.register_type(u)
+  </code></h4></dt>
+  <dd>
+    Appends information about class T to the archive.  This information is used to
+    construct the correct class when a derived pointer is loaded by a corresponding
+    Loading Archive type.  
+    Invocation of this member function is referred to as "class registration".  
+    This is explained in detail in
+    <a href="special.html#derivedpointers">Special Considerations - Derived Pointers</a>.
+    The second syntax is included to permit this function to be called on non-conforming
+    compilers when <code style="white-space: normal">sa</code> is a template argument.
+    For more information, see <a target="detail" href="implementation.html#tempatesyntax">Template Invocation syntax</a>
+  </dd>
+  <dt><h4><code>
+    sa.library_version()
+  </code></h4></dt>
+  <dd>
+    Returns an unsigned integer containing the current version number of the serialization
+    library. This number will be incremented each time the library is altered in such a 
+    way that serialization could be altered for some type.  For example, suppose the type
+    used for a count of collection members is changed. The code that loads collections 
+    might be conditioned on the library version to make sure that libraries created by 
+    previous versions of the library can still be read.
+  </dd>
 </dl>
 
-<h4><a name="loading_interface">Loading</a></h4>
-An object that saves data to an archive implements the following interface.
-
-<pre><code>
-class iarchive : ...
-{
-    ...
-public:
-    // called to load objects
-    template&lt;class T&gt;
-    iarchive & operator&gt;&gt;(T & t);
-
-    template&lt;class T&gt;
-    iarchive & operator&(T & t){
-        return *this &gt;&gt; t;
-    }
-
-    void delete_created_pointers();
-
-    void load_binary(void *address, std::size_t count);
-
-    template&lt;class T&gt;
-    register_type(T * t = NULL);
-
-    reset_object_address(void * old_address, void * new_address);
-
-    unsigned int library_version() const;
-
-    struct is_saving {
-        typedef mpl::bool_&lt;false&gt; type;
-        BOOST_STATIC_CONSTANT(bool, value=false);
-    };
-
-    struct is_loading {
-        typedef mpl::bool_&lt;true&gt; type;
-        BOOST_STATIC_CONSTANT(bool, value=true);
-    };
-    ...
-};
-
-} //namespace archive
-) //namespace boost
-
-</code></pre>
-
+<h4><a name="loading_interface">Loading Archive Concept</a></h4>
+<h4>Associated Types</h4>
+Each model of this concept presumes the
+existence of a corresponding type modeling the 
+<a href="#saving_interface">Saving Archive Concept</a>.
+The purpose of an instance of this concept is to convert a sequence of bytes
+generated by this corresponding type to a set of C++ data structures 
+equivalent to the original.  
+<h4>Valid Expressions</h4>
 <dl>
-
-The template parameter <code>T</code> must correspond to a type which
-models the <a href="serialization.html"><strong>Serializable</strong></a> concept.
-
-<dt><h4><code>
-template&lt;class T&gt;
-iarchive & operator&gt;&gt;(T & t);
-
-template&lt;class T&gt;
-iarchive & operator&(T & t);
-</code></h4></dt>
-<dd>
-<p>
-Retrieves an object of type T from the archive.  The object may be
-<ul>
-    <li>A primitive data type such as int, char, float, etc.
-    <li>A class or struct for which a <code style="white-space: normal">serialize</code>
-        function has been defined.
-    <li>A pointer to a serializable object.
-</ul>
-</dd>
-
-<dt><h4><code>
-void load_binary(void *address, std::size_t count);
-</code></h4></dt>
-<dd>
-Retrieves from the archive <code style="white-space: normal">count</code> bytes and stores
-them in memory starting at <code style="white-space: normal">address</code>.
-</dd>
-
-<dt><h4><code>
-void delete_created_pointers();
-</code></h4></dt>
-<dd>
-Deletes all objects created by the loading of pointers.  This can be used to
-avoid memory leaks that might otherwise occur if pointers are being loaded
-and the archive load encounters an exception.
-</dd>
-
-<dt><h4><code>
-template&lt;class T&gt;
-register_type(T * t = NULL);
-</code></h4></dt>
-<dd>
-Retrieves the next integer from the archive and adds an entry to a table which
-relates the integer to the type T.  When pointers are loaded, this integer is
-used to indicate which object type should be created. This process is
-referred to as "class registration".  It is only necessary to invoke this function for 
-objects of derived classes which are serialized through a base class pointer. If this
-function is called during the saving of data to the archive, it should be called during the
-loading of the data from the archive at the same point in the serialization process.
-This is explained in detail in
-<a href="serialization.html#derivedpointers">Special Considerations - Derived Pointers</a>
-</dd>
-
-<dt><h4><code>
-void reset_object_address(void * new_address, void * old_address);
-</code></h4></dt>
-<dd>
-In order to facilitate loading of objects through a pointer 
-and to elminate redundant loading of objects, this system implements object address tracking. 
-Normally this is done automatically with no action required on the part of the user.  However,
-there are cases when an object must be de-serialized to a temporary location then 
-moved to its final destination.  This is common in loading collections.  
-<p>
-In such cases, reset_object_address should be invoked to communicate the final address
-of the last item loaded.  This permits the internal tables to be correctly maintained
-in these special case.
-</dd>
-
-<dt><h4><code>
-unsigned int library_version() const;
-</code></h4></dt>
-<dd>
-Returns the version number of the serialization library that created the archive.
-This number will be incremented each time the library is altered in such a way
-that serialization could be altered for some type.  For example, suppose the type
-used for a count of collection members is changed.  The code that loads collections
-might be conditioned on the library version to make sure that libraries created by
-previous versions of the library can still be read.
-</dd>
-
-<dt><h4><code>
-is_saving::type = mpl::bool&lt;false&gt;;
-is_saving::value= false;
-is_loading::type = mpl::bool&lt;true&gt;;
-is_loading::value= true;
-</code></h4></dt>
-<dd>
-These integral constants permit archive attributes to be queried at compiler
-or execution time.  They can used to generate code with boost 
-<a href="../../mpl/doc/index.html">mpl</a>
-. For and example
-showing how these can beused, see the implementation of
-<a target="splithpp" href="../../../boost/serialization/split_free.hpp">split_free.hpp</a>.
-</dd>
-
+  <dt><h4><code>
+    LA::is_saving
+  </code></h4></dt>
+  <dd>
+    Returns the Boost MPL Integral Constant type boost::mpl::bool_&lt;false&gt;
+  </dd>   
+  <dt><h4><code>
+    LA::is_loading
+  </code></h4></dt>
+  <dd>
+    Returns the Boost MPL Integral Constant type boost::mpl::bool_&lt;true&gt;
+  </dd>   
+  <dt><h4><code>
+    la &gt;&gt; x
+    <br>
+    la &amp; x
+  </code></h4></dt>
+  <dd>
+    These expressions must perform exactly the same function.  
+    Sets <code>x</code> to a value retrieved from <code>la</code>.
+    <p>
+    Returns a reference to <code>la</code>. 
+  </dd>
+  <dt><h4><code>
+    la.load_binary(u, count)
+  </code></h4></dt>
+  <dd>
+    Retrieves from <code style="white-space: normal">la</code> <code style="white-space: normal">size_t(count)</code> bytes and stores
+    them in memory starting at <code style="white-space: normal">u</code>.
+  </dd>
+  <dt>
+  <dt><h4><code>
+    la.register_type&lt;T&gt;()
+    <br>
+    la.register_type(u)
+  </code></h4></dt>
+  <dd>
+    Retrieves information about class T from the archive.  This information is used to
+    construct the correct class when loading a pointer to a derived class not
+    otherwise referred to in the program by name.
+    Invocation of this member function is referred to as "class registration".  
+    This is explained in detail in
+    <a href="special.html#derivedpointers">Special Considerations - Derived Pointers</a>.
+    The second syntax is included to permit this function to be called on non-conforming
+    compilers when <code style="white-space: normal">la</code> is a template argument.
+    For more information, see <a target="detail" href="implementation.html#tempatesyntax">Template Invocation syntax</a>
+  </dd>
+  <dt><h4><code>
+    la.library_version()
+  </code></h4></dt>
+  <dd>
+    Returns an unsigned integer containing the version number of the serialization
+    library that created the archive. This number will be incremented each time the 
+    library is altered in such a way that serialization could be altered for some type.  
+    For example, suppose the type used for a count of collection members is changed.  
+    The code that loads collections might be conditioned on the library version to make 
+    sure that libraries created by previous versions of the library can still be read.
+  </dd>
+  <dt><h4><code>
+    la.reset_object_address(v, u)
+  </code></h4></dt>
+  <dd>
+    Communicates to the archive that the object originally at address u has been
+    moved to address v.
+    <p>
+    When an object is loaded to a temporary variable and later moved to another location,
+    This function must be called in order communicate this fact.  This is permits the
+    the archive to properly implement object tracking.  Object tracking is required in order
+    to correctly implement serialization of pointers to instances of derived classes.
+  </dd>  
+  <dt><h4><code>
+    la.delete_created_pointers()
+  </code></h4></dt>
+  <dd>
+    Deletes all objects created by the loading of pointers.  This can be used to
+    avoid memory leaks that might otherwise occur if pointers are being loaded
+    and the archive load encounters an exception.
+  </dd>
 </dl>
 
 There are archives based on text, binary and XML file
@@ -308,7 +229,6 @@ This library includes a various implementation of the Archive concept.
 An archive is defined by two complementary classes.  One is for saving data while
 the other is for loading it.
 
-
 This library includes a number of archive implementations that are "ready to go" for the
 most common requirements.  These classes implement the archive concept for differing data formats.
 They can be used "as is" or as a basis for developing one's own particular type of archive. 
@@ -319,28 +239,28 @@ these archives, one or more of the following header files must be
 included in the code module containing the serialization code.
 <pre><code>
 // a portable text archive</a>
-<a href="../../../boost/archive/text_oarchive.hpp" target="text_oarchive_cpp">boost::archive::text_oarchive(ostream &s)</a> // saving
-<a href="../../../boost/archive/text_iarchive.hpp" target="text_iarchive_cpp">boost::archive::text_iarchive(istream &s)</a> // loading
+<a href="../../../boost/archive/text_oarchive.hpp" target="text_oarchive_cpp">boost::archive::text_oarchive</a> // saving
+<a href="../../../boost/archive/text_iarchive.hpp" target="text_iarchive_cpp">boost::archive::text_iarchive</a> // loading
 
 // a portable text archive using a wide character stream</a>
-<a href="../../../boost/archive/text_woarchive.hpp">boost::archive::text_woarchive(wostream &s)</a> // saving
-<a href="../../../boost/archive/text_wiarchive.hpp">boost::archive::text_wiarchive(wistream &s)</a> // loading
+<a href="../../../boost/archive/text_woarchive.hpp">boost::archive::text_woarchive</a> // saving
+<a href="../../../boost/archive/text_wiarchive.hpp">boost::archive::text_wiarchive</a> // loading
 
 // a non-portable native binary archive</a>
-<a href="../../../boost/archive/binary_oarchive.hpp" target="binary_oarchive_cpp">boost::archive::binary_oarchive(ostream &s)</a> // saving
-<a href="../../../boost/archive/binary_iarchive.hpp" target="binary_iarchive_cpp">boost::archive::binary_iarchive(istream &s)</a> // loading
+<a href="../../../boost/archive/binary_oarchive.hpp" target="binary_oarchive_cpp">boost::archive::binary_oarchive</a> // saving
+<a href="../../../boost/archive/binary_iarchive.hpp" target="binary_iarchive_cpp">boost::archive::binary_iarchive</a> // loading
 <!--
 // a non-portable native binary archive which use wide character streams
-<a href="../../../boost/archive/binary_woarchive.hpp">boost::archive::binary_woarchive(wostream &s)</a> // saving
-<a href="../../../boost/archive/binary_wiarchive.hpp">boost::archive::binary_wiarchive(wistream &s)</a> // loading
+<a href="../../../boost/archive/binary_woarchive.hpp">boost::archive::binary_woarchive</a> // saving
+<a href="../../../boost/archive/binary_wiarchive.hpp">boost::archive::binary_wiarchive</a> // loading
 -->
 // a portable XML archive</a>
-<a href="../../../boost/archive/xml_oarchive.hpp" target="xml_oarchive_cpp">boost::archive::xml_oarchive(ostream &s)</a> // saving
-<a href="../../../boost/archive/xml_iarchive.hpp" target="xml_iarchive_cpp">boost::archive::xml_iarchive(istream &s)</a> // loading
+<a href="../../../boost/archive/xml_oarchive.hpp" target="xml_oarchive_cpp">boost::archive::xml_oarchive</a> // saving
+<a href="../../../boost/archive/xml_iarchive.hpp" target="xml_iarchive_cpp">boost::archive::xml_iarchive</a> // loading
 
 // a portable XML archive which uses wide characters - use for utf-8 output</a>
-<a href="../../../boost/archive/xml_woarchive.hpp" target="xml_woarchive_cpp">boost::archive::xml_woarchive(wostream &s)</a> // saving
-<a href="../../../boost/archive/xml_wiarchive.hpp" target="xml_wiarchive_cpp">boost::archive::xml_wiarchive(wistream &s)</a> // loading
+<a href="../../../boost/archive/xml_woarchive.hpp" target="xml_woarchive_cpp">boost::archive::xml_woarchive</a> // saving
+<a href="../../../boost/archive/xml_wiarchive.hpp" target="xml_wiarchive_cpp">boost::archive::xml_wiarchive</a> // loading
 </code></pre>
 
 All of these archives implement the same inteface. Hence, it should suffice to describe only one

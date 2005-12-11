@@ -21,11 +21,13 @@ namespace std{
 
 #include <boost/test/test_tools.hpp>
 
-#include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
+#include <boost/archive/text_iarchive.hpp>
+#include <boost/archive/polymorphic_text_oarchive.hpp>
+#include <boost/archive/polymorphic_text_iarchive.hpp>
 
+#include <boost/serialization/list.hpp>
 #include <boost/serialization/access.hpp>
-
 
 // Someday, maybe all tests will be converted to the unit test framework.
 // but for now use the text execution monitor to be consistent with all
@@ -33,6 +35,8 @@ namespace std{
 
 // simple test of untracked value
 #include "A.hpp"
+
+BOOST_TEST_DONT_PRINT_LOG_VALUE( A )
 
 void test1(){
     std::stringstream ss;
@@ -161,7 +165,7 @@ public:
 };
 BOOST_TEST_DONT_PRINT_LOG_VALUE( E )
 
-// check that moves don't move stuff pointed too
+// check that moves don't move stuff pointed to
 class F {
     friend class boost::serialization::access;
     E * m_eptr;
@@ -208,11 +212,201 @@ void test4(){
     BOOST_CHECK_EQUAL(f, f1);
 }
 
+// check that multiple moves keep track of the correct target
+class G {
+    friend class boost::serialization::access;
+    A m_a1;
+    A m_a2;
+    A *m_pa2;
+    template<class Archive>
+    void save(Archive &ar, const unsigned int file_version) const {
+        ar << m_a1;
+        ar << m_a2;
+        ar << m_pa2;
+    }
+    template<class Archive>
+    void load(Archive &ar, const unsigned int file_version){
+        A a; // temporary A
+        ar >> a;
+        m_a1 = a;
+        ar.reset_object_address(& m_a1, & a);
+        ar >> a;
+        m_a2 = a;
+        ar.reset_object_address(& m_a2, & a);
+        ar & m_pa2;
+    }
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
+public:
+    bool operator==(const G &rhs) const {
+        return 
+            m_a1 == rhs.m_a1 
+            && m_a2 == rhs.m_a2
+            && *m_pa2 == *rhs.m_pa2;
+    }
+    G & operator=(const G & rhs) {
+        m_a1 = rhs.m_a1;
+        m_a2 = rhs.m_a2;
+        m_pa2 = & m_a2;
+        return *this;
+    }
+    G(){
+        m_pa2 = & m_a2;
+    }
+    G(const G & rhs){
+        *this = rhs;
+    }
+    ~G(){}
+};
+
+BOOST_TEST_DONT_PRINT_LOG_VALUE( G )
+
+void test5(){
+    std::stringstream ss;
+    const G g;
+    {
+        boost::archive::text_oarchive oa(ss);
+        oa << g;
+    }
+    G g1;
+    {
+        boost::archive::text_iarchive ia(ss);
+        ia >> g1;
+    }
+    BOOST_CHECK_EQUAL(g, g1);
+}
+
+// joaquin's test - this tests the case where rest_object_address
+// is applied to an item which in fact is not tracked so that 
+// the call is in fact superfluous.
+struct foo
+{
+  int x;
+
+private:
+  friend class boost::serialization::access;
+
+  template<class Archive>
+  void serialize(Archive &,const unsigned int)
+  {
+  }
+};
+
+struct bar
+{
+  foo  f[2];
+  foo* pf[2];
+
+private:
+  friend class boost::serialization::access;
+  BOOST_SERIALIZATION_SPLIT_MEMBER()
+
+  template<class Archive>
+  void save(Archive& ar,const unsigned int)const
+  {
+    for(int i=0;i<2;++i){
+      ar<<f[i].x;
+      ar<<f[i];
+    }
+    for(int j=0;j<2;++j){
+      ar<<pf[j];
+    }
+  }
+
+  template<class Archive>
+  void load(Archive& ar,const unsigned int)
+  {
+    for(int i=0;i<2;++i){
+      int x;
+      ar>>x;
+      f[i].x=x;
+      ar.reset_object_address(&f[i].x,&x);
+      ar>>f[i];
+    }
+    for(int j=0;j<2;++j){
+      ar>>pf[j];
+    }
+  }
+};
+
+int test6()
+{
+  bar b;
+  b.f[0].x=0;
+  b.f[1].x=1;
+  b.pf[0]=&b.f[0];
+  b.pf[1]=&b.f[1];
+
+  std::ostringstream oss;
+  {
+    boost::archive::text_oarchive oa(oss);
+    oa<<const_cast<const bar&>(b);
+  }
+
+  bar b1;
+  b1.pf[0]=0;
+  b1.pf[1]=0;
+
+  std::istringstream iss(oss.str());
+  boost::archive::text_iarchive ia(iss);
+  ia>>b1;
+  BOOST_CHECK(b1.pf[0]==&b1.f[0]&&b1.pf[1]==&b1.f[1]);
+
+  return 0;
+}
+
+// test one of the collections
+void test7(){
+    std::stringstream ss;
+    B const b;
+    B const * const b_ptr = & b;
+    BOOST_CHECK_EQUAL(& b, b_ptr);
+    {
+        std::list<const B *> l;
+        l.push_back(b_ptr);
+        boost::archive::text_oarchive oa(ss);
+        oa << const_cast<const std::list<const B *> &>(l);
+    }
+    B b1;
+    {
+        std::list<B *> l;
+        boost::archive::text_iarchive ia(ss);
+        ia >> l;
+        delete l.front(); // prevent memory leak
+    }
+}
+
+// test one of the collections with polymorphic archive
+void test8(){
+    std::stringstream ss;
+    B const b;
+    B const * const b_ptr = & b;
+    BOOST_CHECK_EQUAL(& b, b_ptr);
+    {
+        std::list<const B *> l;
+        l.push_back(b_ptr);
+        boost::archive::polymorphic_text_oarchive oa(ss);
+        boost::archive::polymorphic_oarchive & poa(oa);
+        poa << const_cast<const std::list<const B *> &>(l);
+    }
+    B b1;
+    {
+        std::list<B *> l;
+        boost::archive::polymorphic_text_iarchive ia(ss);
+        boost::archive::polymorphic_iarchive & pia(ia);
+        pia >> l;
+        delete l.front(); // prevent memory leak
+    }
+}
+
 int test_main(int /* argc */, char * /* argv */[])
 {
     test1();
     test2();
     test3();
     test4();
+    test5();
+    test6();
+    test7();
+    test8();
     return EXIT_SUCCESS;
 }

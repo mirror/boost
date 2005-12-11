@@ -1,4 +1,4 @@
-<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!--
 (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
@@ -111,12 +111,12 @@ function initialize() {
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="tutorial.html#examples">List of Examples</a>
     </dl></div></dd>
 
-    <dt><img style="display:none" src="plus.gif" id="reference"><a target="detail" href="archives.html">Reference</a></dt>
+    <dt><img style="display:none" src="plus.gif" id="reference"><a target="detail" href="reference.html">Reference</a></dt>
     <dd><div id="reference_detail"><dl class="page-index"> 
-      <dt><img style="display:none" src="plus.gif" id="archive_concept"><a target="detail" href="archives.html">Archive Concept</a>
+      <dt><img style="display:none" src="plus.gif" id="archive_concept"><a target="detail" href="archives.html">Archive Concepts</a>
       <dd><div id="archive_concept_detail"><dl class="page-index">
-        <dt><img style="display:none" src="dot.gif"><a target="detail" href="archives.html#saving_interface">Saving</a>
-        <dt><img style="display:none" src="dot.gif"><a target="detail" href="archives.html#loading_interface">Loading</a>
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="archives.html#saving_interface">Saving Archive Concept</a>
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="archives.html#loading_interface">Loading Archive Concept</a>
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="archives.html#archive_models">Archive Models</a>
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="archives.html#exceptions">Exceptions</a>
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="archives.html#charactersets">Character Sets</a>
@@ -173,8 +173,8 @@ function initialize() {
       </dl></div></dd>
       <dt><img style="display:none" src="plus.gif" id="special"><a target="detail" href="special.html">Special Considerations</a>
       <dd><div id="special_detail"><dl class="page-index">
-        <dt><img style="display:none" src="dot.gif"><a target="detail" href="special.html#headersequence">Header Inclusion Sequence</a>
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="special.html#objecttracking">Object Tracking</a>
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="special.html#export">Exporting Class Serialization</a>
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="special.html#classinfo">Class Information</a>
         <dt><img style="display:none" src="plus.gif" id="portability"><a target="detail" href="special.html#portability">Archive Portability</a>
         <dd><div id="portability_detail"><dl class="page-index">
@@ -199,14 +199,14 @@ function initialize() {
           <dt><img style="display:none" src="dot.gif"><a target="detail" href="exceptions.html#xml_archive_tag_name_error"><code>xml_archive_tag_name_error</code></a>
         </dl></div></dd>
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="exception_safety.html">Exception Safety</a>
-        </dl></div></dd>
-        <dt><img style="display:none" src="plus.gif" id="archive_reference"><a target="detail" href="archive_reference.html">Archive Class Reference</a>
-        <dd><div id="archive_reference_detail"><dl class="page-index">
-          <dt><img style="display:none" src="dot.gif"><a target="detail" href="archive_reference.html#implementation">Implementation</a>
-          <dt><img style="display:none" src="dot.gif"><a target="detail" href="archive_reference.html#usage">Usage</a>
-          <dt><img style="display:none" src="dot.gif"><a target="detail" href="archive_reference.html#testing">Testing</a>
-          <dt><img style="display:none" src="dot.gif"><a target="detail" href="archive_reference.html#polymorphic">Polymorphic Archives</a>
-        </dl></div></dd>
+      </dl></div></dd>
+      <dt><img style="display:none" src="plus.gif" id="archive_reference"><a target="detail" href="archive_reference.html">Archive Class Reference</a>
+      <dd><div id="archive_reference_detail"><dl class="page-index">
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="archive_reference.html#implementation">Implementation</a>
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="archive_reference.html#usage">Usage</a>
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="archive_reference.html#testing">Testing</a>
+        <dt><img style="display:none" src="dot.gif"><a target="detail" href="archive_reference.html#polymorphic">Polymorphic Archives</a>
+      </dl></div></dd>
       <dt><img style="display:none" src="plus.gif" id="implementation"><a target="detail" href="implementation.html">Implementation Notes</a>
       <dd><div id="implementation_detail"><dl class="page-index">
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="implementation.html#functiontemplateordering">Partial Function Template Ordering</a>
@@ -215,9 +215,10 @@ function initialize() {
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="implementation.html#partialtemplatespecialization">Partial Template Specialization</a>
         <dt><img style="display:none" src="plus.gif" id="othercompilerissues"><a target="detail" href="implementation.html#othercompilerissues">Specific Compiler/Library Issues</a>
         <div id="othercompilerissues_detail"><dl class="page-index">
-          <dt><img style="display:none" src="dot.gif"><a target="detail" href="implementation.html#gcc3x">GCC 3.x</a>
+          <dt><img style="display:none" src="dot.gif"><a target="detail" href="implementation.html#gcc3x">GCC 3.X,4.X</a>
           <dt><img style="display:none" src="dot.gif"><a target="detail" href="implementation.html#gcc295">GCC 2.95</a>
           <dt><img style="display:none" src="dot.gif"><a target="detail" href="implementation.html#intel80">Intel 8.0</a>
+          <dt><img style="display:none" src="dot.gif"><a target="detail" href="implementation.html#vc80">Visual C++ 8.0</a>
           <dt><img style="display:none" src="dot.gif"><a target="detail" href="implementation.html#vc71">Visual C++ 7.1</a>
           <dt><img style="display:none" src="dot.gif"><a target="detail" href="implementation.html#vc70">Visual C++ 7.0</a>
           <dt><img style="display:none" src="dot.gif"><a target="detail" href="implementation.html#vc6">Visual C++ 6.0</a>
@@ -261,7 +262,7 @@ function initialize() {
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="extended_type_info.html#runtime">Runtime Interface</a>
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="extended_type_info.html#requirements">Requirements</a>
         <dt><img style="display:none" src="dot.gif"><a target="detail" href="extended_type_info.html#models">Models</a>
-      </dl>
+      </dl></div></dd>
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="void_cast.html"><code>void_cast</code></a>
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="codecvt.html">utf-8 code_cvt</a>
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="strong_typedef.html"><code>BOOST_STRONG_TYPEDEF</code></a>
@@ -269,7 +270,7 @@ function initialize() {
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="dataflow.html">Dataflow Iterators</a>
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="smart_cast.html"><code>smart_cast</code></a>
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="static_warning.html"><code>BOOST_STATIC_WARNING</code></a>
-  </dl></div></dd>
+    </dl></div></dd>
     <!--
     <dt><img style="display:none" src="dot.gif"><a target="detail" href="configuration.html">Configuration Information</a></dt>
     -->
@@ -279,7 +280,7 @@ function initialize() {
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="rationale.html#archives">Archives are not streams</a></dt>
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="rationale.html#typeid"><code style="white-space: normal">typeid</code> information is not included in archives</a></dt>
       <dt><img style="display:none" src="dot.gif"><a target="detail" href="rationale.html#trap">Compile time trap when saving a non-const value</a></dt>
-    </dl>
+    </dl></div></dd>
     <dt><img style="display:none" src="dot.gif"><a target="detail" href="history.html">History</a>
     <!--
     <dt><img style="display:none" src="dot.gif"><a target="detail" href="definitions.html">Definitions</a></dt>
@@ -287,7 +288,6 @@ function initialize() {
     -->
     <dt><img style="display:none" src="dot.gif"><a target="detail" href="bibliography.html">Bibliography</a></dt>
     <dt><img style="display:none" src="dot.gif"><a target="detail" href="acknowledgments.html">Acknowledgments</a></dt>
-
   </dl></div>
 </small>
 </body>

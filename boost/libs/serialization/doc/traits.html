@@ -336,10 +336,11 @@ convenience macros, use the original definitions
 template&lt;class T&gt;
 struct implementation_level&lt;nvp&lt;T&gt; &gt;
 {
-    typedef mpl::int_&lt;object_serializable&gt; type;                             \
+    typedef mpl::integral_c_tag tag;
+    typedef mpl::int_&lt;object_serializable&gt; type;
     BOOST_STATIC_CONSTANT(
-        enum level_type,
-        value = static_cast&lt;enum level_type&gt;(type::value)
+        int,
+        value = implementation_level::type::value
     );
 };
 
@@ -347,10 +348,11 @@ struct implementation_level&lt;nvp&lt;T&gt; &gt;
 template&lt;class T&gt;
 struct tracking_level&lt;nvp&lt;T&gt; &gt;
 {
+    typedef mpl::integral_c_tag tag;
     typedef mpl::int_&lt;track_never&gt; type;
     BOOST_STATIC_CONSTANT(
-        enum tracking_type, 
-        value = static_cast&lt;enum tracking_type&gt;(type::value)
+        int, 
+        value = tracking_level::type::value
     );
 };
 </code></pre>

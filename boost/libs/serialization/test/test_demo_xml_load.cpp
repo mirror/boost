@@ -10,4 +10,4 @@
 
 #define main test_main
 
-#include "../example/demo.cpp"
+#include "../example/demo_xml_load.cpp"

@@ -91,4 +91,14 @@ namespace archive {
 
 #include <boost/test/test_tools.hpp>
 
+// the following is to ensure that when one of the libraries changes
+// BJAM rebuilds and relinks the test.
+/*
+#include "text_archive.hpp"
+#include "text_warchive.hpp"
+#include "binary_archive.hpp"
+#include "xml_archive.hpp"
+#include "xml_warchive.hpp"
+*/
+
 #endif // BOOST_SERIALIZATION_TEST_TOOLS_HPP

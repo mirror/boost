@@ -26,8 +26,8 @@ http://www.boost.org/LICENSE_1_0.txt)
 </table>
 <hr>
 <dl class="page-index">
-  <dt><a href="#headersequence">Header Inclusion Sequence</a>
   <dt><a href="#objecttracking">Object Tracking</a>
+  <dt><a href="#export">Exporting Class Serialization</a>
   <dt><a href="#classinfo">Class Information</a>
   <dt><a href="#portability">Archive Portability</a>
   <dl class="page-index">
@@ -39,17 +39,6 @@ http://www.boost.org/LICENSE_1_0.txt)
   <dt><a href="exceptions.html">Archive Exceptions</a>
   <dt><a href="exception_safety.html">Exception Safety</a>
 </dl>
-
-<h3><a name="headersequence">Header Inclusion Sequence</a></h3>
-This library is includes a large number of headers that can be included
-in user code modules.  The section
-<a href="headers.html">Code Structure</a>
-contains a summary of these headers.
-<strong>
-This library requires that all headers that implement archives be included
-before any headers that implement class serialization.
-</strong>
-Violations of this rule will result in cryptic compile time errors.
 
 <h3><a name="objecttracking">Object Tracking</a></h3>
 Depending on how the class is used and other factors, serialized objects
@@ -152,8 +141,6 @@ The alternative of changing the implementation level of a <code style="white-spa
 would affect all <code style="white-space: normal">long</code>s serialized in the whole
 program - probably not what one would intend.
 <p>
-
-
 It is possible that we may want to track addresses even though
 the object is never serialized through a pointer.  For example,
 a virtual base class need be saved/loaded only once.  By setting
@@ -162,6 +149,106 @@ redundant save/load operations.
 <pre><code>
 BOOST_CLASS_TRACKING(my_virtual_base_class, boost::serialization::track_always)
 </code></pre>
+
+<h3><a name="export">Exporting Class Serialization</a></h3>
+<a target="detail" href="traits.html#export">Elsewhere</a> in this manual, we have described 
+<code style="white-space: normal">BOOST_CLASS_EXPORT</code>. This is used to make the serialization library aware
+that code should be instantiated for serialization of a given class even though the
+class hasn't been otherwise referred to by the program.  
+<p>
+There are several ways <code style="white-space: normal">BOOST_CLASS_EXPORT</code> could have been
+implemented.
+<p>
+One approach would be to instantiate serialization code  for all archive classes included in the library.
+This would add to each executable a large amount of code that is most likely never called.
+Also it would needlessly slow down compilations of any program that uses the library.  Finally,
+the list of archives would be "built-in" to the library which would compilicate the addition of
+new or custom archive classes.
+<p>
+Another approach would be for the library user to somehow explicitly instantiate which archive classes 
+code should be instantiated for each class to be serialized. Users would have to include
+header files corresponding the archive classes to be instantiated.
+The list of instantiated archive classes would have to be manually kept in sync with the
+archive class headers actually included.  This was considered burdensome and error prone.
+<p>
+This implementation of <code style="white-space: normal">BOOST_CLASS_EXPORT</code> works in the 
+following way:
+<ul>
+  <li>All header modules of the form &lt;boost/archive/*archive.hpp&gt; are required to precede 
+  the header module <a href="../../../boost/serialization/export.hpp" target="export_hpp">export.hpp</a>.
+  <li>The header <a href="../../../boost/serialization/export.hpp" target="export_hpp">export.hpp</a>
+  builds a list of archive classes whose header modules have been previously included.  
+  It does this by checking to see which inclusion guard constants have been defined.
+  <li><code style="white-space: normal">BOOST_CLASS_EXPORT(my_class)</code> explicitly instantiates
+  serialization code for <code style="white-space: normal">my_class</code> for each archive in the list.
+</ul>
+Serialization code will be instantiated for a given archive class 
+if and only if the module that defines that archive class has been included in the program. 
+Given this, our program will contain all necessary code instantiations and no other.
+<p>
+For many styles of code organization this header sequencing requirement presents little problem. 
+ 
+Serialization code organized by class headers that are designed to be independent of archive
+implementations will look something like the following:
+<code><pre>
+// A.hpp
+// Note:to preserve independence from any particular archive implementation,
+// no headers from &lt;boost/archive/...&gt; are included.
+// Headers can be included in any order.
+#include &lt;boost/serialization/...&gt;
+#include &lt;boost/serialization/export.hpp&gt;
+... // include other headers that A depends upon
+
+class A {
+	...
+};
+
+BOOST_CLASS_EXPORT(A) // note: the export name of this class
+</pre></code>
+This style:
+<ul>
+  <li>permits the header to include all aspects of the serialization implementation.
+  <li>permits the header to be included anywhere else as part of some other class declaration.
+  <li>reflects the concept of headers as a "library of types" which
+  can be used independently in other programs or other parts of the same program.
+  <li>reflects a fundamental principle of the serialization library design in that the 
+  specification of serialization of any class is independent of any archive implementation.
+</ul>
+However, it might not always be possible or convenient to conform to the above style. Something
+like the following might be required or preferred:
+<code><pre>
+// A.hpp
+// headers can be included in any order
+#include &lt;boost/archive/text_oarchive.hpp&gt;
+#include &lt;boost/archive/text_iarchive.hpp&gt;
+...
+#include &lt;boost/serialization/...&gt;
+...
+// can't do the following because then A.hpp couldn't be included somewhere else
+// #include &lt;boost/serialization/export.hpp&gt;
+
+class A {
+	...
+};
+// can't do the following because export.hpp is not included !!
+//BOOST_CLASS_EXPORT(A) // note: the export name of this class
+</pre></code>
+As noted in the comments, this would work.  But 
+<code style="white-space: normal">#include &lt;.../export.hpp&gt;</code> can't be used
+without conflicting with other modules which use 
+<code style="white-space: normal">#include &lt;.../*archive.hpp&gt;</code>.  In this
+case we can move the export to an implementation file:
+<code><pre>
+// A.cpp
+#include "A.hpp"
+...
+// export.hpp header should be last;
+#include &lt;boost/serialization/export.hpp&gt;
+...
+BOOST_CLASS_EXPORT(A)
+...
+</pre></code>
+
 <h3><a name="classinfo">Class Information</a></h3>
 By default, for each class serialized, class information is written to the archive.
 This information includes version number, implementation level and tracking

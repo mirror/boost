@@ -32,9 +32,10 @@ http://www.boost.org/LICENSE_1_0.txt)
   <dt><a href="#partialtemplatespecialization">Partial Template Specialization</a>
   <dt><a href="#othercompilerissues">Specific Compiler/Library Issues</a>
   <dl class="page-index">
-    <dt><a href="#gcc3x">GCC 3.X, 4.x</a>
+    <dt><a href="#gcc3x">GCC 3.X, 4.X</a>
     <dt><a href="#gcc295">GCC 2.95</a>
     <dt><a href="#intel80">Intel 8.0</a>
+    <dt><a href="#vc80">Visual C++ 8.0</a>
     <dt><a href="#vc71">Visual C++ 7.1</a>
     <dt><a href="#vc70">Visual C++ 7.0</a>
     <dt><a href="#vc6">Visual C++ 6.0</a>
@@ -199,11 +200,26 @@ the syntax described above.
 </ul>
 <h3><a name="othercompilerissues">Specific Compiler/Library Issues</a></h3>
 
-<h4><a name="gcc3x">GCC 3.X, 4.x</a></h4>
-GCC versions for Cygwin and MinGW fail to support wide character I/O.  
-So all tests using wide char I/O fail.  Note that if wide character I/O support
-is added with STLPort, all tests complete successfully.
-
+<h4><a name="gcc3x">GCC 3.X, 4.X</a></h4>
+<ul>
+    <li>GCC versions for Cygwin and MinGW fail to support wide character I/O.  
+    So all tests using wide char I/O fail.  Note that if wide character I/O support
+    is added with STLPort, all tests complete successfully.
+    <li>This compiler generates long warning messages related to the usage of
+    non virtual destructors in polymorphic classes.  These warnings have been
+    carfully considered and the code that generates these warning has been 
+    unchanged.  In this case the warning should should be ignored as in certain
+    usages of the library, making the destructors virtual could lead to problems.
+    As an alternative, base class destructors have been make "protected" to
+    address the concerns that motivate these warning messages.  When building
+    the serialization library and tests with bjam, these warnings are suppressed. 
+    When building one's own applications, these warnings can be suppressed by
+    adding the following to the compiler command line:
+    <pre><code>
+    -Wno-non-virtual-dtor
+    -Wno-ctor-dtor-privacy
+    </code></pre>
+</ul>
 <h4><a name="gcc295">GCC 2.95</a></h4>
 All of the above plus:<br>
 <ul>
@@ -216,6 +232,16 @@ All of the above plus:<br>
 </ul>
 <h4><a name="Intel80">Intel C++ 8.0</a></h4>
 No known issues. All tests compile and run in debug and release modes.
+
+<h4><a name="vc80">Visual C++ 8.0</a></h4>
+This compiler emits warnings for calls to functions from the standard
+library which are deemed security risks.  The serialization depends upon
+making some of these calls so programs which use the serialization library
+will get warning messages.  These messages can be suppressed from the command 
+line by including the following switch:
+    <pre><code>
+    /wd4996
+    </code></pre>
 
 <h4><a name="vc71">Visual C++ 7.1</a></h4>
 Derivation from an archive class defined in a DLL as described in ... will not work.
@@ -287,8 +313,12 @@ decided to use these configurations.
     feature. In order to serialize <code style="white-space: normal">shared_ptr&lt;A&gt;</code>,
     invoke the macro <code style="white-space: normal">BOOST_SERIALIZATION_SHARED_PTR(A)</code>
     in the header code.
+    <li>Lack of support for partial template specialization also creates problems for
+    serialization of <code style="white-space: normal">std::map</code>.  In order to serialize
+    instances of this type include the invocation of BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION
+    for the key type of the map.
 </ul>
-<h4><a name="vc6">Visual C++ 6.0</a></h4>
+<h4><a name="vc6">Visual C++ 6.5</a></h4>
 all the above issues for Visual C++ 7.0 plus:
 <ul>
     <li>Out of line template definitions are not recognized and fail with a confusing
@@ -326,7 +356,6 @@ all the above issues for Visual C++ 7.0 plus:
     <li>Code modules exceeding some undetermined size that use the library will fail with
     <i>fatal error C1204: compiler limit : internal structure overflow</i>.  This can be addressed
     by dividing the module into smaller ones.
-    <li>The library cannot be built as a DLL with this compiler.
 </ul>
 <h4><a name="borland">Borland 5.64 and 5.51</a></h4>
 <ul>
@@ -375,8 +404,8 @@ These platforms have several issues:
     <li>The dinkumware library shipped with this compiler does not change the locale facet
     of an i/o stream unless the <code style="white-space: normal">imbue</code> function is called before the the
     stream is opened.  In order to use this library with this environment to generate UTF-8
-    files, one cannot depend on the "automatic" setting of local that archives implement. The
-    stream local must be set explicitly on the stream before an archive is opened on it.  The
+    files, one cannot depend on the "automatic" setting of locale that archives implement. The
+    stream locale must be set explicitly on the stream before an archive is opened on it.  The
     archive should be opened with the <code style="white-space: normal">no_codecvt</code> flag.  Note this problem will
     occur on all compilers shipped with this library.
     <li>Other issues have been worked around in the file.
