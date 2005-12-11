@@ -59,22 +59,29 @@ void check_val(const T& val)
    real_type rval = static_cast<real_type>(val);
    complex_type cval = rval;
 
+   std::cout << "    Testing std::arg.\n";
    check(std::arg(cval), std::arg(rval));
    check(std::arg(cval), std::arg(val));
+   std::cout << "    Testing std::norm.\n";
    check(std::norm(cval), std::norm(rval));
    check(std::norm(cval), std::norm(val));
+   std::cout << "    Testing std::conj.\n";
    check(std::conj(cval), std::conj(rval));
    check(std::conj(cval), std::conj(val));
+   std::cout << "    Testing std::polar.\n";
    check(std::polar(val), std::polar(rval));
    check(std::polar(val, 0), std::polar(rval, 0));
    check(std::polar(val, val), std::polar(rval, rval));
    check(std::polar(val, rval), std::polar(rval, val));
+   std::cout << "    Testing std::real.\n";
    check(std::real(cval), std::real(rval));
    check(std::real(cval), std::real(val));
+   std::cout << "    Testing std::imaj.\n";
    check(std::imag(cval), std::imag(rval));
    check(std::imag(cval), std::imag(val));
    if(val)
    {
+      std::cout << "    Testing std::pow.\n";
       check(std::pow(cval, cval), std::pow(cval, val));
       check(std::pow(cval, cval), std::pow(cval, rval));
       check(std::pow(cval, cval), std::pow(val, cval));
@@ -84,27 +91,43 @@ void check_val(const T& val)
 
 void check(double i)
 {
+   std::cout << "Checking type double with value " << i << std::endl;
    check_val(i);
+   std::cout << "Checking type float with value " << i << std::endl;
    check_val(static_cast<float>(i));
+   std::cout << "Checking type long double with value " << i << std::endl;
    check_val(static_cast<long double>(i));
 }
 
 void check(int i)
 {
+   std::cout << "Checking type char with value " << i << std::endl;
    check_val(static_cast<char>(i));
+   std::cout << "Checking type unsigned char with value " << i << std::endl;
    check_val(static_cast<unsigned char>(i));
+   std::cout << "Checking type signed char with value " << i << std::endl;
    check_val(static_cast<signed char>(i));
+   std::cout << "Checking type short with value " << i << std::endl;
    check_val(static_cast<short>(i));
+   std::cout << "Checking type unsigned short with value " << i << std::endl;
    check_val(static_cast<unsigned short>(i));
+   std::cout << "Checking type int with value " << i << std::endl;
    check_val(static_cast<int>(i));
+   std::cout << "Checking type unsigned int with value " << i << std::endl;
    check_val(static_cast<unsigned int>(i));
+   std::cout << "Checking type long with value " << i << std::endl;
    check_val(static_cast<long>(i));
+   std::cout << "Checking type unsigned long with value " << i << std::endl;
    check_val(static_cast<unsigned long>(i));
 #ifdef BOOST_HAS_LONG_LONG
+   std::cout << "Checking type long long with value " << i << std::endl;
    check_val(static_cast<long long>(i));
+   std::cout << "Checking type unsigned long long with value " << i << std::endl;
    check_val(static_cast<unsigned long long>(i));
 #elif defined(BOOST_HAS_MS_INT64)
+   std::cout << "Checking type __int64 with value " << i << std::endl;
    check_val(static_cast<__int64>(i));
+   std::cout << "Checking type unsigned __int64 with value " << i << std::endl;
    check_val(static_cast<unsigned __int64>(i));
 #endif
    check(static_cast<double>(i));
