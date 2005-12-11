@@ -572,9 +572,10 @@ re_syntax_base* basic_regex_creator<charT, traits>::append_set(
             // Oops error:
             return 0;
          }
+		 BOOST_ASSERT(c3[1] == 0);
          for(unsigned i = 0; i < (1u << CHAR_BIT); ++i)
          {
-            charT c3[2] = { static_cast<charT>(i), charT(0), };
+            c3[0] = static_cast<charT>(i);
             string_type s3 = this->m_traits.transform(c3, c3 +1);
             if((s1 <= s3) && (s3 <= s2))
                result->_map[i] = true;
@@ -796,6 +797,7 @@ void basic_regex_creator<charT, traits>::create_startmaps(re_syntax_base* state)
       v.pop_back();
 
       // Build maps:
+      m_bad_repeats = 0;
       create_startmap(state->next.p, static_cast<re_alt*>(state)->_map, &static_cast<re_alt*>(state)->can_be_null, mask_take);
       m_bad_repeats = 0;
       create_startmap(static_cast<re_alt*>(state)->alt.p, static_cast<re_alt*>(state)->_map, &static_cast<re_alt*>(state)->can_be_null, mask_skip);
@@ -1181,7 +1183,8 @@ bool basic_regex_creator<charT, traits>::is_bad_repeat(re_syntax_base* pt)
          unsigned id = static_cast<re_repeat*>(pt)->id;
          if(id > sizeof(m_bad_repeats) * CHAR_BIT)
             return true;  // run out of bits, assume we can't traverse this one.
-         return m_bad_repeats & static_cast<boost::uintmax_t>(1uL << id);
+		   static const boost::uintmax_t one = 1uL;
+         return m_bad_repeats & (one << id);
       }
    default:
       return false;
@@ -1200,8 +1203,9 @@ void basic_regex_creator<charT, traits>::set_bad_repeat(re_syntax_base* pt)
    case syntax_element_long_set_rep:
       {
          unsigned id = static_cast<re_repeat*>(pt)->id;
+		   static const boost::uintmax_t one = 1uL;
          if(id <= sizeof(m_bad_repeats) * CHAR_BIT)
-            m_bad_repeats |= static_cast<boost::uintmax_t>(1uL << id);
+            m_bad_repeats |= (one << id);
       }
    default:
       break;
