@@ -284,8 +284,7 @@ public:
     bool interpret_pragma(ContainerT &pending, token_type const &option, 
         ContainerT const &values, token_type const &act_token)
     {
-        return hooks.interpret_pragma(*this, pending, option, values, 
-            act_token);
+        return hooks.interpret_pragma(*this, pending, option, values, act_token);
     }
     
 private:

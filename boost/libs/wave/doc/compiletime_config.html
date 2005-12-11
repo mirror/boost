@@ -105,6 +105,12 @@
       strict C99/C++ basic source character set. If it is not defined or defined 
     to zero, the lexers recognize the <span class="string">'$'</span> character as part of identifiers.</p></td>
   </tr>
+  <tr>
+    <td class="table_cells"><code>BOOST_WAVE_PRAGMA_KEYWORD</code></td>
+    <td class="table_cells"><p>If this is defined to a string literal it will be used as the pragma keyword recogniyed by the library as specific Wave pragma's. This constant defaults to <span class="literal">&quot;wave&quot;</span>, i.e. the library recognizes all      <span class="preprocessor">#pragma wave option [(argument)]</span>  directives and dispatches the handling to the interpret_pragma() preprocessing hook function (see: <a href="class_reference_ctxpolicy.html">Preprocessing Hooks</a>). The arguments part of the  pragma is optional.<br>
+      </p>
+    </td>
+  </tr>
 </table>
 <P dir="ltr"><b><a name="using_custom_lexer"></a>Using a different token type or lexer type in conjunction with Wave </b></P>
 <P dir="ltr">It is possible to use the <tt>Wave</tt> library while using your own token and/or lexer types. This may be achieved by providing your lexer type as the second template parameter while instantiating the <tt>boost::wave::context&lt;&gt;</tt> object. The token type used by the library is derived from the <tt>token_type</tt> typedef to be provided by the lexer type. If you want to provide your own token type only, you may use the <tt>boost::wave::lex_iterator&lt;&gt;</tt> type contained with the library. This type needs to be parametrized with the token type to use. </P>
@@ -203,7 +209,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Saturday, November 19, 2005  11:17<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Saturday, December 10, 2005  14:59<!-- #EndDate -->
 </span></p>
 </body>
 </html>

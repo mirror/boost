@@ -32,31 +32,31 @@
 #include <strstream>
 #define BOOST_WAVE_THROW(cls, code, msg, act_pos)                             \
     {                                                                         \
-    using namespace boost::wave;                                              \
-    std::strstream stream;                                                    \
-        stream << cls::severity_text(cls::code) << ": "                       \
-        << cls::error_text(cls::code);                                        \
-    if ((msg)[0] != 0) stream << ": " << (msg);                               \
-    stream << std::ends;                                                      \
-    std::string throwmsg = stream.str(); stream.freeze(false);                \
-    boost::throw_exception(cls(throwmsg.c_str(), cls::code,                   \
-        (act_pos).get_line(), (act_pos).get_column(),                         \
-        (act_pos).get_file().c_str()));                                       \
+        using namespace boost::wave;                                          \
+        std::strstream stream;                                                \
+            stream << cls::severity_text(cls::code) << ": "                   \
+            << cls::error_text(cls::code);                                    \
+        if ((msg)[0] != 0) stream << ": " << (msg);                           \
+        stream << std::ends;                                                  \
+        std::string throwmsg = stream.str(); stream.freeze(false);            \
+        boost::throw_exception(cls(throwmsg.c_str(), cls::code,               \
+            (act_pos).get_line(), (act_pos).get_column(),                     \
+            (act_pos).get_file().c_str()));                                   \
     }                                                                         \
     /**/
 #else
 #include <sstream>
 #define BOOST_WAVE_THROW(cls, code, msg, act_pos)                             \
     {                                                                         \
-    using namespace boost::wave;                                              \
-    std::stringstream stream;                                                 \
-        stream << cls::severity_text(cls::code) << ": "                       \
-        << cls::error_text(cls::code);                                        \
-    if ((msg)[0] != 0) stream << ": " << (msg);                               \
-    stream << std::ends;                                                      \
-    boost::throw_exception(cls(stream.str().c_str(), cls::code,               \
-        (act_pos).get_line(), (act_pos).get_column(),                         \
-        (act_pos).get_file().c_str()));                                       \
+        using namespace boost::wave;                                          \
+        std::stringstream stream;                                             \
+            stream << cls::severity_text(cls::code) << ": "                   \
+            << cls::error_text(cls::code);                                    \
+        if ((msg)[0] != 0) stream << ": " << (msg);                           \
+        stream << std::ends;                                                  \
+        boost::throw_exception(cls(stream.str().c_str(), cls::code,           \
+            (act_pos).get_line(), (act_pos).get_column(),                     \
+            (act_pos).get_file().c_str()));                                   \
     }                                                                         \
     /**/
 #endif // BOOST_NO_STRINGSTREAM

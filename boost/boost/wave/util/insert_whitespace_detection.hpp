@@ -209,7 +209,7 @@ public:
     bool must_insert(boost::wave::token_id current, StringT const &value)
     {
         using namespace boost::wave;
-        switch (current) {
+        switch (static_cast<unsigned int>(current)) {
         case T_NONREPLACABLE_IDENTIFIER:
         case T_IDENTIFIER: 
             return impl::handle_identifier(prev, beforeprev, value); 

@@ -24,7 +24,7 @@
     <td width="30"><a href="macro_expansion_process.html"><img src="theme/r_arr.gif" border="0"></a></td>
   </tr>
 </table>
-<p>The Wave preprocessor library supports a couple of specific <tt>#pragma</tt> 
+<p>The Wave preprocessor library supports specific <tt>#pragma</tt> 
   directives, which may be used to control some of the library features. All directives 
   described here are usable as conventional <tt>#pragma</tt> directives and as 
   <tt>operator&nbsp;_Pragma</tt> (if variadics are enabled). So for instance the 
@@ -33,10 +33,10 @@
 <p>and </p>
 <pre>    _Pragma(&quot;wave trace(enable)&quot;)</pre>
 <p>All <tt>Wave</tt> specific pragma's must have the general form <tt>'wave option[(value)]'</tt>, 
-  where <tt>'wave'</tt> is the specific keyword, <tt>'option'</tt> is the concrete 
+  where <tt>'wave'</tt> is the specific keyword (which may be configured through the <tt>BOOST_WAVE_PRAGMA_KEYWORD</tt> compile time constant, see <a href="compiletime_config.html">here</a> for more information), <tt>'option'</tt> is the concrete 
   pragma functionality to trigger and <tt>'value'</tt> is an optional value to 
   be supplied to the <tt>'option'</tt> functionality. The following table lists 
-  all possible pragma functions supported by the <tt>Wave</tt> library. For all recognised pragmas of this general form the interpret_pragma hook function from inside the context_policies are call, so that the user of the library is responsible for </p>
+  all possible pragma functions supported by the <tt>Wave</tt> library. For all recognised pragmas of this general form the interpret_pragma hook function from inside the <a href="class_reference_ctxpolicy.html">preprocessing_hooks</a> policy are called, so that the user of the library is responsible for the correct interpretation of these pragma's. </p>
 <table width="77%" border="0" align="center">
   <tr> 
     <td colspan="4"> <p class="table_title">Supported pragma's</p></td>
@@ -92,20 +92,20 @@
     <td class="table_cells"><p>Wave driver</p></td>
   </tr>
 </table>
-<p>All pragma's not listed here but flagged as <tt>'wave'</tt> are reported as 
+<p>All pragma's not listed here but flagged as <tt>'wave'</tt> are currently reported as 
   errors. The handling of all remaining pragma's depends on the compilation constant 
-  <code><tt>WAVE_RETURN_PRAGMA_DIRECTIVES</tt></code>, which allows to specify, 
+  <code><tt>BOOST_WAVE_RETURN_PRAGMA_DIRECTIVES</tt></code>, which allows to specify, 
   if those pragmas are left unchanged in the output stream or not. Please note, 
   that the operator _Pragma variant is always subject to full preprocessing, before 
   the pragma itself is evaluated. The #pragma variant is subject to preprocessing 
-  only, if the <code><tt>WAVE_PREPROCESS_PRAGMA_BODY</tt></code> compilation constant 
+  only, if the <code><tt>BOOST_WAVE_PREPROCESS_PRAGMA_BODY</tt></code> compilation constant 
   was specified during compilation. For more information about the possible compilation 
   constants look <a href="compiletime_config.html">here</a>.</p>
 <p>Additionally the Wave preprocessor supports the <tt>#pragma once</tt> directive, 
   which specifies that the file, in which the pragma resides, will be included 
   (opened) only once by the compiler in a build. This may be used to optimize 
-  the preprocessing of larger compilation units, which include a lot of files. Note though, that the #pragma once directive is supported only, if the compile time constant <tt>WAVE_SUPPORT_PRAGMA_ONCE</tt> was given during compilation of the library</span>.</p>
-<p>It is fairly easy to implement your own <tt>#pragma wave ... </tt> directives. All you have to do is to implement your own <tt>interpret_pragma</tt> function (see <a href="class_reference_ctxpolicy.html#interpret_pragma">here</a>) which should the handle additional directives. For an example of how to do it, you may have a look at the Wave driver application, which implements the <tt>#pragma wave timer()</tt> directive with the help of a supplied <tt>interpret_pragma</tt> function. </p>
+  the preprocessing of larger compilation units, which include a lot of files. Note though, that the #pragma once directive is supported only, if the compile time constant <tt>BOOST_WAVE_SUPPORT_PRAGMA_ONCE</tt> was given during compilation of the library</span>.</p>
+<p>It is fairly easy to implement your own <tt>#pragma wave ... </tt> directives. All you have to do is to implement your own <tt>interpret_pragma</tt> function (see <a href="class_reference_ctxpolicy.html#interpret_pragma">here</a>) which should handle the additional directives. For an example of how to do it, you may have a look at the Wave driver application, which implements all of the pragma's listed above (for instance the the <tt>#pragma wave timer()</tt> directive) with the help of a supplied <tt>interpret_pragma</tt> function. </p>
 <table border="0">
   <tr> 
     <td width="10"></td>
@@ -120,7 +120,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Sunday, May 15, 2005  12:23<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Saturday, December 10, 2005  15:04<!-- #EndDate -->
   </span>
 </p>
 <p>&nbsp;</p>

@@ -72,6 +72,12 @@ CHANGELOG
   the generated output to a file named after the input file changing the file 
   extension to '.i'.
 - Changed all throw's to boost::throw_exception.
+- Added the possibility to config the command keyword for the wave specific 
+  #pragma directives. It is now possible to define a string literal via
+  BOOST_WAVE_PRAGMA_COMMAND, which will be recognized and all corresponding
+  #pragma's are fdispatched to the interpret_pragma() preprocessing hook.
+  The default value for BOOST_WAVE_PRAGMA_COMMAND is "wave" to ensure complete
+  backward compatibility.
   
 Mon Dec  5 22:05:22 CST 2005
 Boost V1.33.1

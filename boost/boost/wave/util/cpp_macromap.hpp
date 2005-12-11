@@ -1488,7 +1488,7 @@ macromap<ContextT>::concat_tokensequence(ContainerT &expanded)
         // Here we have to work around a conflict between the Standards 
         // requirement, that the preprocessor has to act upon so called 
         // pp-tokens and the fact, that Wave acts upon C++ tokens. So we have 
-        // eventually to combine the current token with the next tokens
+        // sometimes to combine the current token with the next tokens
         // if these are of type T_IDENTIFIER or T_INTLIT following without any 
         // interventing whitespace.
         // Please note though, that this hack unfortunately doesn't fix all

@@ -34,7 +34,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  Decide, whether to support variadics and placemarkers
 //
-//  To implement support variadics and placemarkers uncomment the following
+//  To implement support variadics and placemarkers define the following to 
+//  something != 0.
 //
 #if !defined(BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS)
 #define BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS 1
@@ -44,7 +45,7 @@
 //  Decide, whether to implement a #warning directive as an extension to the 
 //  C++ Standard (same as #error, but emits a warning, not an error)
 //
-//  To implement #warning directives, uncomment the following
+//  To implement #warning directives, define the following to something != 0.
 //
 #if !defined(BOOST_WAVE_SUPPORT_WARNING_DIRECTIVE)
 #define BOOST_WAVE_SUPPORT_WARNING_DIRECTIVE 1
@@ -53,7 +54,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  Decide, whether to implement #pragma once 
 //
-//  To implement #pragma once, uncomment the following
+//  To implement #pragma once, define the following to something != 0.
 //
 #if !defined(BOOST_WAVE_SUPPORT_PRAGMA_ONCE)
 #define BOOST_WAVE_SUPPORT_PRAGMA_ONCE 1
@@ -63,17 +64,18 @@
 //  Decide, whether to implement #include_next
 //  Please note, that this is an extension to the C++ Standard.
 //
-//  To implement #include_next, uncomment the following
+//  To implement #include_next, define the following to something != 0.
 //
 #if !defined(BOOST_WAVE_SUPPORT_INCLUDE_NEXT)
 #define BOOST_WAVE_SUPPORT_INCLUDE_NEXT 1
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Undefine the following, to enable some MS specific language extensions:
-//  __int8, __int16, __int32, __int64, __based, __declspec, __cdecl, 
-//  __fastcall, __stdcall, __try, __except, __finally, __leave, __inline,
-//  __asm, #region, #endregion
+//  Define the following to something != 0 to enable some MS specific language 
+//  extensions:
+//      __int8, __int16, __int32, __int64, __based, __declspec, __cdecl, 
+//      __fastcall, __stdcall, __try, __except, __finally, __leave, __inline,
+//      __asm, #region, #endregion
 //
 //  Note: By default this is enabled for Windows based systems, otherwise it's 
 //        disabled.
@@ -89,8 +91,8 @@
 //  Allow the message body of the #error and #warning directives to be 
 //  preprocessed before the diagnostic is issued.
 //
-//  Uncommenting the following will preprocess the message bodies of #error and
-//  #warning messages before the error (warning) is issued
+//  Defining the following to something != 0 will preprocess the message bodies 
+//  of #error and #warning messages before the error (warning) is issued
 //
 #if !defined(BOOST_WAVE_PREPROCESS_ERROR_MESSAGE_BODY)
 #define BOOST_WAVE_PREPROCESS_ERROR_MESSAGE_BODY 1
@@ -100,8 +102,8 @@
 //  Allow the #pragma directives to be returned to the caller (optionally after 
 //  preprocessing the body) 
 //
-//  Uncommenting the following will skip #pragma directives, so that the caller
-//  will not see them.
+//  Defining the following to something != 0 will emit all #pragma directives, 
+//  so that the caller will see them as they appeared in the input stream.
 //
 #if !defined(BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES)
 #define BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES 1
@@ -111,7 +113,8 @@
 //  Allow the body of a #pragma directive to be preprocessed before the 
 //  directive is returned to the caller.
 //
-//  Uncommenting the following will preprocess the bodies of #pragma directives
+//  Defining the following to something != 0 will preprocess the bodies of 
+//  #pragma directives
 //
 #if !defined(BOOST_WAVE_PREPROCESS_PRAGMA_BODY)
 #define BOOST_WAVE_PREPROCESS_PRAGMA_BODY 1
@@ -120,12 +123,28 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  Allow to define macros with the command line syntax (-DMACRO(x)=definition)
 //
-//  Uncommenting the following will enable the possibility to define macros
-//  based on the command line syntax
+//  Defining the following to something != 0 will enable the possibility to 
+//  define macros based on the command line syntax
 //
 #if !defined(BOOST_WAVE_ENABLE_COMMANDLINE_MACROS)
 #define BOOST_WAVE_ENABLE_COMMANDLINE_MACROS 1
 #endif
+
+///////////////////////////////////////////////////////////////////////////////
+//  Define the pragma keyword to be used by the library to recognize its own
+//  pragma's. If nothing else is defined, then 'wave' will be used as the 
+//  default keyword, i.e. the library recognizes all 
+//
+//      #pragma wave option [(argument)]
+//
+//  and dispatches the handling to the interpret_pragma() preprocessing hook 
+//  function (see file: preprocessing_hooks.hpp). The arguments part of the
+//  pragma is optional.
+//  The BOOST_WAVE_PRAGMA_KEYWORD constant needs to be defined to
+//  resolve as a string literal value.
+#if !defined(BOOST_WAVE_PRAGMA_KEYWORD)
+#define BOOST_WAVE_PRAGMA_KEYWORD "wave"
+#endif 
 
 ///////////////////////////////////////////////////////////////////////////////
 //  Define the string type to be used to store the token values and the file 
@@ -210,7 +229,7 @@
 //  formatted as xml are printed. The formatted parse trees are streamed to the 
 //  std::ostream defined by the WAVE_DUMP_PARSE_TREE_OUT constant.
 //
-//  Uncomment the following, if you want to see these parse trees. 
+//  Define the following to something != 0 if you want to see these parse trees. 
 //
 #if !defined(BOOST_WAVE_DUMP_PARSE_TREE)
 #define BOOST_WAVE_DUMP_PARSE_TREE 0
@@ -225,7 +244,8 @@
 //  These expressions are streamed to the std::ostream defined by the 
 //  BOOST_WAVE_DUMP_CONDITIONAL_EXPRESSIONS_OUT constant.
 //
-//  Uncomment the following, if you want to see the preprocessed expressions
+//  Define the following to something != 0 if you want to see the preprocessed 
+//  expressions
 //
 #if !defined(BOOST_WAVE_DUMP_CONDITIONAL_EXPRESSIONS)
 #define BOOST_WAVE_DUMP_CONDITIONAL_EXPRESSIONS 0
@@ -239,9 +259,9 @@
 //  Decide, whether to use the separate compilation model for the instantiation 
 //  of the C++ lexer objects.
 //
-//  If this is defined, you should explicitly instantiate the C++ lexer
-//  template with the correct parameters in a separate compilation unit of
-//  your program (see the file instantiate_re2c_lexer.cpp). 
+//  If this is defined to something != 0, you should explicitly instantiate the 
+//  C++ lexer template with the correct parameters in a separate compilation 
+//  unit of your program (see the file instantiate_re2c_lexer.cpp). 
 //
 //  To use the lexer inclusion model, uncomment the following 
 //
@@ -253,9 +273,9 @@
 //  Decide, whether to use the separate compilation model for the instantiation 
 //  of the grammar objects.
 //
-//  If this is defined, you should explicitly instantiate the grammar
-//  templates with the correct parameters in a separate compilation unit of
-//  your program (see the files instantiate_cpp_grammar.cpp et.al.). 
+//  If this is defined to something != 0, you should explicitly instantiate 
+//  the grammar templates with the correct parameters in a separate compilation 
+//  unit of your program (see the files instantiate_cpp_grammar.cpp et.al.). 
 //
 //  To use the grammar inclusion model, uncomment the following 
 //

@@ -154,15 +154,17 @@ struct default_preprocessing_hooks {
 
     ///////////////////////////////////////////////////////////////////////////
     //  
-    //  The function 'interpret_pragma' is called, whenever a #pragma wave 
-    //  directive is found, which isn't known to the core Wave library. 
+    //  The function 'interpret_pragma' is called, whenever a #pragma command 
+    //  directive is found which isn't known to the core Wave library, where
+    //  command is the value defined as the BOOST_WAVE_PRAGMA_KEYWORD constant
+    //  which defaults to "wave".
     //
     //  The parameter 'ctx' is a reference to the context object used for 
     //  instantiating the preprocessing iterators by the user.
     //
     //  The parameter 'pending' may be used to push tokens back into the input 
     //  stream, which are to be used as the replacement text for the whole 
-    //  #pragma wave() directive.
+    //  #pragma directive.
     //
     //  The parameter 'option' contains the name of the interpreted pragma.
     //
@@ -186,7 +188,7 @@ struct default_preprocessing_hooks {
     {
         return false;
     }
-    
+
     ///////////////////////////////////////////////////////////////////////////
     //
     //  The function 'defined_macro' is called, whenever a macro was defined
