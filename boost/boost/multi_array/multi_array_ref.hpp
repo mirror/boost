@@ -143,8 +143,8 @@ public:
   reindex(const BaseList& values) {
     boost::function_requires<
       detail::multi_array::CollectionConcept<BaseList> >();
-    boost::detail::multi_array::copy_n(
-      values.begin(),num_dimensions(),index_base_list_.begin());
+    boost::detail::multi_array::
+      copy_n(values.begin(),num_dimensions(),index_base_list_.begin());
     origin_offset_ =
       this->calculate_origin_offset(stride_list_,extent_list_,
                               storage_,index_base_list_);

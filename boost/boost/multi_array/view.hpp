@@ -23,6 +23,7 @@
 #include "boost/multi_array/storage_order.hpp"
 #include "boost/multi_array/subarray.hpp"
 #include "boost/multi_array/algorithm.hpp"
+#include "boost/type_traits/is_integral.hpp"
 #include "boost/array.hpp"
 #include "boost/limits.hpp"
 #include <algorithm>
@@ -72,7 +73,11 @@ public:
 
 
   template <class BaseList>
-  void reindex(const BaseList& values) {
+  typename
+  disable_if<typename boost::is_integral<BaseList>::type,void >::type
+  reindex(const BaseList& values) {
+    boost::function_requires<
+      detail::multi_array::CollectionConcept<BaseList> >();
     boost::detail::multi_array::
       copy_n(values.begin(),num_dimensions(),index_base_list_.begin());
     origin_offset_ =
