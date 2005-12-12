@@ -26,6 +26,8 @@
 #     endif
 #  elif defined(__HP_aCC)
 #     define BOOST_TR1_STD_HEADER(name) <../include_std/name>
+#  elif defined(__DECCXX)
+#     define BOOST_TR1_STD_HEADER(name) <../cxx/name>
 #  else
 #     define BOOST_TR1_STD_HEADER(name) <../include/name>
 #  endif
@@ -80,6 +82,17 @@
 #  define BOOST_HAS_TR1_UNORDERED_MAP
 #  define BOOST_HAS_TR1_UNORDERED_SET
 
+#endif
+
+#if defined(__MWERKS__) && (__MWERKS__ >= 0x3205)
+//
+// Very preliminary MWCW support, may not be right:
+//
+#  define BOOST_HAS_TR1_SHARED_PTR
+#  define BOOST_HAS_TR1_REFERENCE_WRAPPER
+#  define BOOST_HAS_TR1_FUNCTION
+#  define BOOST_HAS_TR1_TUPLE
+#  define BOOST_HAS_TR1_RESULT_OF
 #endif
 
 #ifdef BOOST_HAS_GCC_TR1
