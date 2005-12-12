@@ -1065,6 +1065,8 @@ void basic_regex_creator<charT, traits>::create_startmap(re_syntax_base* state, 
                if(is_bad_repeat(state))
                {
                   set_all_masks(l_map, mask);
+                  if(pnull)
+                     *pnull |= mask;
                   return;
                }
                set_bad_repeat(state);
