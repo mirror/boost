@@ -24,8 +24,13 @@ using namespace std;
 
 // This is temporary -- to check cw (remove later)
 
-typedef std::binary_negate< int > type1; 
-typedef std::binder1st< int > type2; 
+#if defined(_MSL_EXTENDED_BINDERS)
+    typedef std::binder1st< int, int > type1; 
+    typedef std::binder2nd< int, int > type2; 
+#else
+    typedef std::binder1st< int > type1; 
+    typedef std::binder2nd< int > type2; 
+#endif
 
 // STL containers
 
