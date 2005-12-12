@@ -63,7 +63,9 @@
 
 #endif
 
-#if _MSC_VER < 1310 // 1310 == VC++ 7.1
+#if _MSC_VER < 1400 
+// although a conforming signature for swprint exists in VC7.1
+// it appears not to actually work:
 #  define BOOST_NO_SWPRINTF
 #endif
 
@@ -82,7 +84,7 @@
 
 //   
 // check for exception handling support:   
-#ifndef _CPPUNWIND   
+#ifndef _CPPUNWIND 
 #  define BOOST_NO_EXCEPTIONS   
 #endif 
 
@@ -94,6 +96,9 @@
 #endif
 #if (_MSC_VER >= 1310) && defined(_MSC_EXTENSIONS)
 #   define BOOST_HAS_LONG_LONG
+#endif
+#if (_MSC_VER >= 1400) && !defined(_DEBUG)
+#   define BOOST_HAS_NRVO
 #endif
 //
 // disable Win32 API's if compiler extentions are
