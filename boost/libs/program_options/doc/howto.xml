@@ -284,7 +284,7 @@ void validate(boost::any& v,
     using namespace boost::program_options;
 
     // Make sure no previous assignment to 'a' was made.
-    validators::check_first_occurence(v);
+    validators::check_first_occurrence(v);
     // Extract the first string from 'values'. If there is more than
     // one string, it's an error, and exception will be thrown.
     const string& s = validators::get_single_string(values);
