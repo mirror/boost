@@ -25,7 +25,10 @@ rule test_all
       all_rules += [ compile $(file) 
          : #<sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 
            <include>$(BOOST_ROOT)/boost/tr1/tr1 
-           <include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+           # Borland's broken include mechanism needs these extra headers:
+           <borland-5_6_4><*><include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+           <borland-5_5_1><*><include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+           <borland><*><include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
            <include>$(BOOST_ROOT) 
            <define>TEST_STD_HEADERS=1 : std_$(file:B) ] ;
    }
@@ -38,7 +41,10 @@ rule test_all
       :  # requirements
 		#<sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 
 		<include>$(BOOST_ROOT)/boost/tr1/tr1 
-		<include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+      # Borland's broken include mechanism needs these extra headers:
+      <borland-5_6_4><*><include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+      <borland-5_5_1><*><include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+      <borland><*><include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
       <include>$(BOOST_ROOT) 
 		<define>TEST_STD_HEADERS=1 : std_$(fileb:B)  ] ;
    }
@@ -59,22 +65,26 @@ rule test_all
       :  # additional args
       :  # test-files
       :  # requirements
-        <include>$(BOOST_ROOT)/boost/tr1/tr1  
-        #<sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 
-        <include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
-        <include>$(BOOST_ROOT)/libs/type_traits/test 
-        <include>$(BOOST_ROOT) 
-        <define>TEST_STD=1 ] ;
+      <include>$(BOOST_ROOT)/libs/type_traits/test 
+      <include>$(BOOST_ROOT)/boost/tr1/tr1  
+      # Borland's broken include mechanism needs these extra headers:
+      <borland-5_6_4><*><include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+      <borland-5_5_1><*><include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+      <borland><*><include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+      <include>$(BOOST_ROOT) 
+      <define>TEST_STD=1 ] ;
    }
    for local file5 in [ GLOB $(BOOST_ROOT)/libs/tr1/test/std_headers : *.cpp ]
    {
       all_rules += [ compile $(file5) 
       :   
-        <include>$(BOOST_ROOT)/boost/tr1/tr1 
-        #<sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 
-        <include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
-        <include>$(BOOST_ROOT) 
-        <define>TEST_STD=1 ] ;
+         <include>$(BOOST_ROOT)/boost/tr1/tr1 
+         # Borland's broken include mechanism needs these extra headers:
+         <borland-5_6_4><*><include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+         <borland-5_5_1><*><include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+         <borland><*><include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+         <include>$(BOOST_ROOT) 
+         <define>TEST_STD=1 ] ;
    }
    #ECHO $(all_rules) ;
    return $(all_rules) ;

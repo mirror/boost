@@ -79,8 +79,15 @@ void check_val(const T& val)
    std::cout << "    Testing std::imaj.\n";
    check(std::imag(cval), std::imag(rval));
    check(std::imag(cval), std::imag(val));
-   if(val)
+   if(val && boost::is_floating_point<T>::value)
    {
+      //
+      // Note that these tests are not run for floating point
+      // types as that would only test the std lib vendor's
+      // implementation of pow, not our additional overloads.
+      // Note that some std lib's do fail these tests, gcc on
+      // Darwin is a particularly bad example !
+      //
       std::cout << "    Testing std::pow.\n";
       check(std::pow(cval, cval), std::pow(cval, val));
       check(std::pow(cval, cval), std::pow(cval, rval));
