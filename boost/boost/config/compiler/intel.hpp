@@ -144,7 +144,7 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #endif
 //
 // last known and checked version:
-#if (BOOST_INTEL_CXX_VERSION > 900)
+#if (BOOST_INTEL_CXX_VERSION > 910)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  elif defined(_MSC_VER)
