@@ -34,7 +34,7 @@ along with suitable workarounds when available.
 <ul>
   <li><a href="#bcb_64">Borland C++ Builder 6.4</a></li>
   <li><a href="#comeau_433_win_vc7_71">Comeau C/C++ 4.3.3 for Windows (VC++ 7.0/7.1 backend)</a></li>
-  <li><a href="#compaq_65">Compaq C++ 6.5-042 for Tru64 UNIX</a></li>
+  <li><a href="#compaq_65">Compaq C++ 6.5-042 for Tru64 UNIX and later</a></li>
   <li>
     <a href="#gcc_32">GNU GCC 3.2 and later</a>
     <ul>
@@ -44,16 +44,17 @@ along with suitable workarounds when available.
   </li>
   <li><a href="#acc_60">HP aC++ A.06.00 for HP-UX</a></li>
   <li><a href="#va_60">IBM VisualAge C++ V6.0 for AIX</a></li>
-  <li><a href="#intel_71_8x_lin">Intel C++ Compiler for Linux 7.1/8.0/8.1</a></li>
+  <li><a href="#intel_71_lin">Intel C++ Compiler for Linux 7.1 and later</a></li>
   <li><a href="#intel_em64t_81_lin">Intel C++ Compiler Extended Memory 64 Technology 8.1 for Linux</a></li>
   <li><a href="#intel_7x_win">Intel C++ Compiler for Windows 32-bit 7.0/7.1</a></li>
   <li><a href="#intel_71_win_stlport_453">Intel C++ Compiler for Windows 32-bit 7.1 + STLport 4.5.3</a></li>
-  <li><a href="#intel_8x_9x_win">Intel C++ Compiler for Windows 32-bit 8.0/8.1/9.0</a></li>
-  <li><a href="#cw_83_9x">Metrowerks CodeWarrior 8.3 and later</a></li>
+  <li><a href="#intel_80_win">Intel C++ Compiler for Windows 32-bit 8.0 and later</a></li>
+  <li><a href="#cw_83">Metrowerks CodeWarrior 8.3 and later</a></li>
   <li><a href="#msvc_60">Microsoft Visual C++ 6.0 Service Pack 5</a></li>
   <li><a href="#msvc_60_stlport_453">Microsoft Visual C++ 6.0 Service Pack 5 + STLport 4.5.3</a></li>
   <li><a href="#msvc_70">Microsoft Visual C++ 7.0</a></li>
   <li><a href="#msvc_71">Microsoft Visual C++ 7.1</a></li>
+  <li><a href="#msvc_71_stlport_462">Microsoft Visual C++ 7.1 + STLport 4.6.2</a></li>
   <li><a href="#msvc_80">Microsoft Visual C++ 8.0</a></li>
   <li><a href="#portability">Portability techniques</a>
     <ul>
@@ -88,10 +89,11 @@ No problems have been detected with this compiler. The library fails to compile,
 however, when Microsoft Visual C++ 6.0 is used as the backend.
 </p>
 
-<h2><a name="compaq_65">Compaq C++ 6.5-042 for Tru64 UNIX</a></h2>
+<h2><a name="compaq_65">Compaq C++ 6.5-042 for Tru64 UNIX and later</a></h2>
 
 <p>
-No problems have been detected with this compiler.
+No problems have been detected with this compiler. Versions 6.5-042,
+7.1-005 and 7.1-006 have been tested.
 </p>
 
 <h2><a name="gcc_32">GNU GCC 3.2 and later</a></h2>
@@ -109,12 +111,13 @@ starting from 3.2. The following versions have been explicitly tested:
   <li>GCC 3.3.6 under Linux and Tru64 (see <a href="#gcc_tru64">below</a>),</li>
   <li>GCC 3.4.2 (mingw-special) under Win32,</li>
   <li>GCC 3.4.3 under Linux, Solaris and Tru64 (see <a href="#gcc_tru64">below</a>),</li>
-  <li>GCC 3.4.4 (cygming special) under Cygwin, under Linux,
+  <li>GCC 3.4.4 (cygming special) under Cygwin, under Gentoo Linux PPC64, under Linux,
     under Tru64 (see <a href="#gcc_tru64">below</a>), (mingw special) under Win32,</li>
   <li>GCC 4.0.0 20041026 (Apple build 4061) under Mac OS 
     (see <a href="#gcc_4_darwin">below</a>),</li>
   <li>GCC 4.0.0 under Linux, (Apple build 5026) under Mac OS,</li>
-  <li>GCC 4.0.1 under Linux.</li>
+  <li>GCC 4.0.1 under Linux and Tru64 (see <a href="#gcc_tru64">below</a>),</li>
+  <li>GCC 4.0.2 under Linux.</li>
 </ul>
 Boost.MultiIndex does not work with versions 3.1 and prior of GCC.
 </p>
@@ -181,10 +184,10 @@ Serialization capabilities are not available as Boost.Serialization is not
 supported on this platform.
 </p>
 
-<h2><a name="intel_71_8x_lin">Intel C++ Compiler for Linux 7.1/8.0/8.1</a></h2>
+<h2><a name="intel_71_lin">Intel C++ Compiler for Linux 7.1 and later</a></h2>
 
 <p>
-No problems have been detected with these compilers.
+No problems have been detected with this compilers from version 7.1 up to 9.0.
 </p>
 
 <h2><a name="intel_em64t_81_lin">Intel C++ Compiler Extended Memory 64 Technology 8.1
@@ -221,7 +224,7 @@ in Intel C++ 7.1 with its original Dinkumware standard library. STLport 4.6.2 ha
 also been confirmed to work correctly.
 </p>
 
-<h2><a name="intel_8x_9x_win">Intel C++ Compiler for Windows 32-bit 8.0/8.1/9.0</a></h2>
+<h2><a name="intel_80_win">Intel C++ Compiler for Windows 32-bit 8.0 and later</a></h2>
 
 <p>
 When used on top of MSVC++ 7.0 or prior, argument dependent lookup is
@@ -229,10 +232,11 @@ disabled by default. This will cause problems with many Boost libraries,
 and in particular with the serialization part of Boost.MultiIndex.
 Argument dependent lookup is enabled by adding
 <code>/Qoption,c,--arg_dep_lookup</code> to the project options.
-Other than this, Boost.MultiIndex works without problems.
+Other than this, Boost.MultiIndex works without problems. Compiler versions
+from 8.0 to 9.0 have been tested.
 </p>
 
-<h2><a name="cw_83_9x">Metrowerks CodeWarrior 8.3 and later</a></h2>
+<h2><a name="cw_83">Metrowerks CodeWarrior 8.3 and later</a></h2>
 
 <p>
 Boost.MultiIndex works correctly with versions of this compiler from 8.3 to
@@ -499,6 +503,13 @@ internal defect of the compiler (see for instance
 this mention of a similar issue</a> in the Boost Users mailing list.)
 If <code>/Gm</code> is turned off, Boost.MultiIndex compiles and runs
 without further problems.
+</p>
+
+<h2><a name="msvc_71_stlport_462">Microsoft Visual C++ 7.1 + STLport 4.6.2</a></h2>
+
+<p>
+Boost.MultiIndex works for this configuration. The same issues apply as in
+MSVC++ 7.1 with its original Dinkumware standard library. 
 </p>
 
 <h2><a name="msvc_80">Microsoft Visual C++ 8.0</a></h2>
@@ -928,7 +939,7 @@ Performance
 
 <br>
 
-<p>Revised July 26th 2005</p>
+<p>Revised October 17th 2005</p>
 
 <p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 

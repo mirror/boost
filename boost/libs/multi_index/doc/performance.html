@@ -154,8 +154,8 @@ inefficient, though: while insertion into the data structure is simple enough:
 <span class=identifier>manual_t2</span> <span class=identifier>c2</span><span class=special>;</span>
 
 <span class=comment>// insert the element 5</span>
-<span class=identifier>manual_t1</span><span class=special>::</span><span class=identifier>iterator</span><span class=special>=</span><span class=identifier>c1</span><span class=special>.</span><span class=identifier>insert</span><span class=special>(</span><span class=number>5</span><span class=special>).</span><span class=identifier>first</span><span class=special>;</span>
-<span class=identifier>c2</span><span class=special>.</span><span class=identifier>insert</span><span class=special>(&amp;*</span><span class=identifier>t1</span><span class=special>);</span>
+<span class=identifier>manual_t1</span><span class=special>::</span><span class=identifier>iterator</span> <span class=identifier>it1</span><span class=special>=</span><span class=identifier>c1</span><span class=special>.</span><span class=identifier>insert</span><span class=special>(</span><span class=number>5</span><span class=special>).</span><span class=identifier>first</span><span class=special>;</span>
+<span class=identifier>c2</span><span class=special>.</span><span class=identifier>insert</span><span class=special>(&amp;*</span><span class=identifier>it1</span><span class=special>);</span>
 </pre></blockquote>
 
 deletion, on the other hand, necessitates a logarithmic search, whereas
@@ -164,8 +164,8 @@ deletion, on the other hand, necessitates a logarithmic search, whereas
 <blockquote><pre>
 <span class=comment>// remove the element pointed to by it2</span>
 <span class=identifier>manual_t2</span><span class=special>::</span><span class=identifier>iterator</span> <span class=identifier>it2</span><span class=special>=...;</span>
-<span class=identifier>c1</span><span class=special>.</span><span class=identifier>erase</span><span class=special>(*</span><span class=identifier>it2</span><span class=special>);</span> <span class=comment>// watch out! performs in logarithmic time</span>
-<span class=identifier>c2</span><span class=special>.</span><span class=identifier>erase</span><span class=special>(</span><span class=identifier>it1</span><span class=special>);</span> 
+<span class=identifier>c1</span><span class=special>.</span><span class=identifier>erase</span><span class=special>(**</span><span class=identifier>it2</span><span class=special>);</span> <span class=comment>// watch out! performs in logarithmic time</span>
+<span class=identifier>c2</span><span class=special>.</span><span class=identifier>erase</span><span class=special>(</span><span class=identifier>it2</span><span class=special>);</span> 
 </pre></blockquote>
 
 <p>
@@ -174,14 +174,14 @@ raw pointers, but with elements of type <code>manual_t1::iterator</code>:
 </p>
 
 <blockquote><pre>
-<span class=keyword>typedef</span> <span class=identifier>std</span><span class=special>::</span><span class=identifier>set</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt;</span>  <span class=identifier>manual_t1</span><span class=special>;</span> <span class=comment>// equivalent to indexed_t's index #0</span>
+<span class=keyword>typedef</span> <span class=identifier>std</span><span class=special>::</span><span class=identifier>set</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt;</span>    <span class=identifier>manual_t1</span><span class=special>;</span> <span class=comment>// equivalent to indexed_t's index #0</span>
 <span class=keyword>typedef</span> <span class=identifier>std</span><span class=special>::</span><span class=identifier>multiset</span><span class=special>&lt;</span>
   <span class=identifier>manual_t1</span><span class=special>::</span><span class=identifier>iterator</span><span class=special>,</span>
   <span class=identifier>it_compare</span><span class=special>&lt;</span>
     <span class=identifier>manual_t1</span><span class=special>::</span><span class=identifier>iterator</span><span class=special>,</span>
     <span class=identifier>std</span><span class=special>::</span><span class=identifier>greater</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>&gt;</span>
   <span class=special>&gt;</span>
-<span class=special>&gt;</span>                      <span class=identifier>manual_t2</span><span class=special>;</span> <span class=comment>// equivalent to indexed_t's index #1</span>
+<span class=special>&gt;</span>                        <span class=identifier>manual_t2</span><span class=special>;</span> <span class=comment>// equivalent to indexed_t's index #1</span>
 </pre></blockquote>    
 
 <p>
@@ -194,13 +194,13 @@ equivalent to those of <code>indexed_t</code>:
 <span class=identifier>manual_t2</span> <span class=identifier>c2</span><span class=special>;</span>
 
 <span class=comment>// insert the element 5</span>
-<span class=identifier>manual_t1</span><span class=special>::</span><span class=identifier>iterator</span><span class=special>=</span><span class=identifier>c1</span><span class=special>.</span><span class=identifier>insert</span><span class=special>(</span><span class=number>5</span><span class=special>).</span><span class=identifier>first</span><span class=special>;</span>
-<span class=identifier>c2</span><span class=special>.</span><span class=identifier>insert</span><span class=special>(</span><span class=identifier>t1</span><span class=special>);</span>
+<span class=identifier>manual_t1</span><span class=special>::</span><span class=identifier>iterator</span> <span class=identifier>it1</span><span class=special>=</span><span class=identifier>c1</span><span class=special>.</span><span class=identifier>insert</span><span class=special>(</span><span class=number>5</span><span class=special>).</span><span class=identifier>first</span><span class=special>;</span>
+<span class=identifier>c2</span><span class=special>.</span><span class=identifier>insert</span><span class=special>(</span><span class=identifier>it1</span><span class=special>);</span>
 
 <span class=comment>// remove the element pointed to by it2</span>
 <span class=identifier>manual_t2</span><span class=special>::</span><span class=identifier>iterator</span> <span class=identifier>it2</span><span class=special>=...;</span>
 <span class=identifier>c1</span><span class=special>.</span><span class=identifier>erase</span><span class=special>(*</span><span class=identifier>it2</span><span class=special>);</span> <span class=comment>// OK: constant time</span>
-<span class=identifier>c2</span><span class=special>.</span><span class=identifier>erase</span><span class=special>(</span><span class=identifier>it1</span><span class=special>);</span> 
+<span class=identifier>c2</span><span class=special>.</span><span class=identifier>erase</span><span class=special>(</span><span class=identifier>it2</span><span class=special>);</span> 
 </pre></blockquote>
 
 <p>
@@ -711,7 +711,7 @@ Examples
 
 <br>
 
-<p>Revised May 18th 2005</p>
+<p>Revised November 21st 2005</p>
 
 <p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
