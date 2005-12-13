@@ -119,7 +119,7 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
 // 
 
 template< class Container >
-void test_iter_range( Container& a_cont )
+int test_iter_range( Container& a_cont )
 {
     typedef BOOST_DEDUCED_TYPENAME range_result_iterator<Container>::type citer_type;
     typedef iterator_range<citer_type> riter_type;
@@ -127,6 +127,7 @@ void test_iter_range( Container& a_cont )
 	a_riter.front();
 	a_riter.back();
 	int i = a_riter[0];
+	return i;
 }
 
 
