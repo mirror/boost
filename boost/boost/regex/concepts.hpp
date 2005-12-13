@@ -205,6 +205,8 @@ struct RegexTraitsConcept
    const traits m_ctraits;
    const char_type* m_pointer;
    char_type m_char;
+private:
+   RegexTraitsConcept& operator=(RegexTraitsConcept&);
 };
 
 //
@@ -403,6 +405,8 @@ struct BaseRegexConcept
       match_results_type m3(m1);
       m1 = m2;
 
+      int ival = 0;
+
       mr_size_type mrs = m_cresults.size();
       ignore_unused_variable_warning(mrs);
       mrs = m_cresults.max_size();
@@ -411,14 +415,14 @@ struct BaseRegexConcept
       ignore_unused_variable_warning(b);
       mr_difference_type mrd = m_cresults.length();
       ignore_unused_variable_warning(mrd);
-      mrd = m_cresults.length(mrs);
+      mrd = m_cresults.length(ival);
       ignore_unused_variable_warning(mrd);
       mrd = m_cresults.position();
       ignore_unused_variable_warning(mrd);
       mrd = m_cresults.position(mrs);
       ignore_unused_variable_warning(mrd);
 
-      mr_const_reference mrcr = m_cresults[m_size];
+      mr_const_reference mrcr = m_cresults[ival];
       ignore_unused_variable_warning(mrcr);
       mr_const_reference mrcr2 = m_cresults.prefix();
       ignore_unused_variable_warning(mrcr2);
@@ -777,6 +781,8 @@ struct BoostRegexConcept
          | global_regex_namespace::regex_constants::format_perl
          | global_regex_namespace::regex_constants::format_no_copy
          | global_regex_namespace::regex_constants::format_first_only;
+
+      (void)mopts;
 
       function_requires<RegexConcept<Regex> >();
       const global_regex_namespace::regex_error except(global_regex_namespace::regex_constants::error_collate);

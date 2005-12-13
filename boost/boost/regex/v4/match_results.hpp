@@ -88,7 +88,7 @@ public:
          return m_subs[sub].length();
       return 0;
    }
-   difference_type position(unsigned int sub = 0) const
+   difference_type position(size_type sub = 0) const
    {
       sub += 2;
       if(sub < m_subs.size())

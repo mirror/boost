@@ -572,7 +572,7 @@ re_syntax_base* basic_regex_creator<charT, traits>::append_set(
             // Oops error:
             return 0;
          }
-		 BOOST_ASSERT(c3[1] == 0);
+         BOOST_ASSERT(c3[1] == charT(0));
          for(unsigned i = 0; i < (1u << CHAR_BIT); ++i)
          {
             c3[0] = static_cast<charT>(i);
