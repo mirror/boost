@@ -142,6 +142,14 @@ namespace boost
 
             //! This type
             typedef iterator_range<IteratorT> this_type;
+
+			//! Refence type
+			//
+			// Needed because value-type is the same for 
+			// const and non-const iterators
+			//
+			typedef BOOST_DEDUCED_TYPENAME
+				iterator_reference<IteratorT>::type reference;
             
             //! const_iterator type
             /*! 
@@ -306,20 +314,20 @@ namespace boost
 #endif            
 
         public: // convenience
-           value_type& front() const
+           reference front() const
            {
                BOOST_ASSERT( !empty() );
                return *m_Begin;
            }
     
-           value_type& back() const
+           reference back() const
            {
                BOOST_ASSERT( !empty() );
                IteratorT last( m_End );
                return *--last;
            }
     
-           value_type& operator[]( size_type sz ) const
+           reference operator[]( size_type sz ) const
            {
                //BOOST_STATIC_ASSERT( is_random_access );
                BOOST_ASSERT( sz < size() );

@@ -1,6 +1,6 @@
 // Boost.Range library
 //
-//  Copyright Thorsten Ottosen 2003-2004. Use, modification and
+//  Copyright Thorsten Ottosen & Larry Evans 2003-2005. Use, modification and
 //  distribution is subject to the Boost Software License, Version
 //  1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -26,6 +26,8 @@
 
 using namespace boost;
 using namespace std;
+	
+void check_reference_type();
 
 void check_iterator_range()
 {
@@ -91,6 +93,8 @@ void check_iterator_range()
     BOOST_CHECK( rrr == "ello worl" );
     rrr = make_iterator_range( rrr, -1, 1 );
     BOOST_CHECK( rrr == str );
+
+	check_reference_type();
 }
 
 
@@ -105,3 +109,33 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
     return test;
 }
 
+
+//
+//
+// Check that constness is propgated correct from
+// the iterator types.
+// 
+// Test contributed by Larry Evans.
+// 
+
+template< class Container >
+void test_iter_range( Container& a_cont )
+{
+    typedef BOOST_DEDUCED_TYPENAME range_result_iterator<Container>::type citer_type;
+    typedef iterator_range<citer_type> riter_type;
+    riter_type a_riter( make_iterator_range( a_cont ) );
+	a_riter.front();
+	a_riter.back();
+	int i = a_riter[0];
+}
+
+
+
+void check_reference_type()
+{
+    typedef vector<int> veci_type;
+    veci_type a_vec;
+    a_vec.push_back( 999 );
+    test_iter_range<veci_type>(a_vec);
+    test_iter_range<veci_type const>(a_vec);
+}
