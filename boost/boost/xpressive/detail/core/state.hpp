@@ -20,7 +20,7 @@
 #include <boost/xpressive/detail/core/action_state.hpp>
 #include <boost/xpressive/detail/core/sub_match_vector.hpp>
 #include <boost/xpressive/detail/utility/sequence_stack.hpp>
-#include <boost/xpressive/basic_regex.hpp>
+#include <boost/xpressive/detail/core/regex_impl.hpp>
 #include <boost/xpressive/regex_constants.hpp>
 
 namespace boost { namespace xpressive { namespace detail
@@ -86,7 +86,6 @@ struct state_type
     typedef results_extras<BidiIter> results_extras;
     typedef regex_impl<BidiIter> regex_impl;
     typedef matchable<BidiIter> matchable;
-    typedef basic_regex<BidiIter> basic_regex;
     typedef match_results<BidiIter> match_results;
     typedef sub_match_impl<BidiIter> sub_match_impl;
 
@@ -110,7 +109,7 @@ struct state_type
         BidiIter begin
       , BidiIter end
       , match_results &what
-      , basic_regex const &rex
+      , regex_impl const &impl
       , regex_constants::match_flag_type flags
     )
       : cur_(begin)
@@ -128,7 +127,7 @@ struct state_type
         this->extras_.sub_match_stack_.unwind();
 
         // initialize the context_ struct
-        this->init_(*access::get_regex_impl(rex), what);
+        this->init_(impl, what);
 
         // move all the nested match_results structs into the match_results cache
         this->extras_.results_cache_.reclaim_all(access::get_nested_results(what));
@@ -136,12 +135,13 @@ struct state_type
 
     ///////////////////////////////////////////////////////////////////////////////
     // reset
-    void reset(match_results &what, basic_regex const &rex)
+    //void reset(match_results &what, basic_regex const &rex)
+    void reset(match_results &what, regex_impl const &impl)
     {
         this->context_.prev_context_ = 0;
         this->found_partial_match_ = false;
         this->extras_.sub_match_stack_.unwind();
-        this->init_(*access::get_regex_impl(rex), what);
+        this->init_(impl, what);
         this->extras_.results_cache_.reclaim_all(access::get_nested_results(what));
     }
 

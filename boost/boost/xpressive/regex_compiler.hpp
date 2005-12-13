@@ -15,6 +15,7 @@
 # pragma once
 #endif
 
+#include <boost/xpressive/basic_regex.hpp>
 #include <boost/xpressive/detail/dynamic/parser.hpp>
 #include <boost/xpressive/detail/dynamic/parse_charset.hpp>
 #include <boost/xpressive/detail/dynamic/parser_enum.hpp>

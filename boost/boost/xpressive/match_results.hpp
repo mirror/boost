@@ -214,7 +214,7 @@ public:
     /// \overload
     const_reference operator [](detail::mark_tag const &mark) const
     {
-        return this->sub_matches_[ proto::arg(mark).mark_number_ ];
+        return this->sub_matches_[ detail::get_mark_number(mark) ];
     }
 
     /// Returns a reference to the sub_match object representing the character sequence from

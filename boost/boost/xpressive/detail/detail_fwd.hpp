@@ -314,6 +314,8 @@ namespace boost { namespace xpressive { namespace detail
     static_xpression<Matcher, Next> const
     make_static_xpression(Matcher const &matcher, Next const &next);
 
+    int get_mark_number(mark_tag const &);
+
 }}} // namespace boost::xpressive::detail
 
 /// INTERNAL ONLY

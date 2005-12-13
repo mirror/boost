@@ -50,14 +50,15 @@ struct regex_iterator_impl
 
     bool next()
     {
-        this->state_.reset(this->what_, *this->rex_);
+        typedef detail::core_access<BidiIter> access;
+        this->state_.reset(this->what_, *access::get_regex_impl(*this->rex_));
         if(!regex_search_impl(this->state_, *this->rex_, this->not_null_))
         {
             return false;
         }
 
         // Report position() correctly by setting the base different from prefix().first
-        detail::core_access<BidiIter>::set_base(this->what_, this->state_.begin_);
+        access::set_base(this->what_, this->state_.begin_);
 
         this->state_.cur_ = this->what_[0].second;
         this->not_null_ = (0 == this->what_.length());

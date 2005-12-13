@@ -279,6 +279,15 @@ private:
     alternates_list &operator =(alternates_list const &);
 };
 
+///////////////////////////////////////////////////////////////////////////////
+// get_mark_number
+//
+inline int get_mark_number(mark_tag const &mark)
+{
+    return proto::arg(mark).mark_number_;
+}
+
+
 }}} // namespace boost::xpressive::detail
 
 #endif

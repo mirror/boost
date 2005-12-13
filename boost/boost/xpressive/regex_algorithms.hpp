@@ -59,7 +59,7 @@ inline bool regex_match
     {
         // the state object holds matching state and
         // is passed by reference to all the matchers
-        detail::state_type<BidiIter> state(begin, end, what, re, flags);
+        detail::state_type<BidiIter> state(begin, end, what, *access::get_regex_impl(re), flags);
         state.flags_.match_all_ = true;
         state.sub_match(0).begin_ = begin;
 
@@ -301,7 +301,7 @@ inline bool regex_search
     {
         // the state object holds matching state and
         // is passed by reference to all the matchers
-        detail::state_type<BidiIter> state(begin, end, what, re, flags);
+        detail::state_type<BidiIter> state(begin, end, what, *access::get_regex_impl(re), flags);
         return detail::regex_search_impl(state, re);
     }
 
@@ -422,10 +422,11 @@ inline OutIter regex_replace
 )
 {
     using namespace regex_constants;
+    typedef detail::core_access<BidiIter> access;
 
     match_results<BidiIter> what;
     BidiIter cur = begin;
-    detail::state_type<BidiIter> state(begin, end, what, re, flags);
+    detail::state_type<BidiIter> state(begin, end, what, *access::get_regex_impl(re), flags);
     bool const yes_copy = (0 == (flags & format_no_copy));
 
     if(detail::regex_search_impl(state, re))
@@ -441,7 +442,7 @@ inline OutIter regex_replace
         if(0 == (flags & format_first_only))
         {
             bool not_null = (0 == what.length());
-            state.reset(what, re);
+            state.reset(what, *access::get_regex_impl(re));
             while(detail::regex_search_impl(state, re, not_null))
             {
                 if(yes_copy)
@@ -452,7 +453,7 @@ inline OutIter regex_replace
                 out = what.format(out, fmt, flags);
                 cur = state.cur_ = what[0].second;
                 not_null = (0 == what.length());
-                state.reset(what, re);
+                state.reset(what, *access::get_regex_impl(re));
             }
         }
     }
