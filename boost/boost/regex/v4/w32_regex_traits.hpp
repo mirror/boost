@@ -533,8 +533,9 @@ typename w32_regex_traits_implementation<charT>::char_class_type
          return pos->second;
    }
    std::size_t id = 1 + re_detail::get_default_class_id(p1, p2);
-   BOOST_ASSERT(id < sizeof(masks) / sizeof(masks[0]));
-   return masks[id];
+   if(id < sizeof(masks) / sizeof(masks[0]))
+      return masks[id];
+   return masks[0];
 }
 
 
