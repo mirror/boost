@@ -94,6 +94,7 @@ namespace quickbook
                         |   headings
                         |   blurb
                         |   blockquote
+                        |   admonition
                         |   preformatted
                         |   def_macro
                         |   table
@@ -140,6 +141,23 @@ namespace quickbook
                     phrase                              [actions.blockquote]
                     ;
 
+                admonition =
+                    "warning" >> blank >>
+                    phrase                              [self.actions.warning]
+                    |
+                    "caution" >> blank >>
+                    phrase                              [self.actions.caution]
+                    |
+                    "important" >> blank >>
+                    phrase                              [self.actions.important]
+                    |
+                    "note" >> blank >>
+                    phrase                              [self.actions.note]
+                    |
+                    "tip" >> blank >>
+                    phrase                              [self.actions.tip]
+                    ;
+
                 preformatted =
                     "pre" >> hard_space                 [assign_a(is_not_preformatted, false)]
                     >> !eol >> phrase                   [actions.preformatted]
@@ -153,7 +171,8 @@ namespace quickbook
                     ;
 
                 variablelist =
-                    "variablelist" >> hard_space
+                    "variablelist"
+                    >>  (eps_p(*blank_p >> eol_p) | hard_space)
                     >>  (*(anychar_p - eol))            [assign_a(actions.table_title)]
                     >>  +eol
                     >>  *varlistentry
@@ -329,12 +348,12 @@ namespace quickbook
             
             rule<Scanner>   start_, blocks, block_markup, code, code_line, 
                             paragraph, space, blank, comment, headings, h1, h2, 
-                            h3, h4, h5, h6, hr, blurb, blockquote, phrase, list, 
-                            close_bracket, ordered_list, def_macro, identifier, 
-                            table, table_row, variablelist, varlistentry, 
-                            varlistterm, varlistitem, table_cell, preformatted, 
-                            list_item, begin_section, end_section, xinclude, 
-                            include, hard_space, eol, paragraph_end;
+                            h3, h4, h5, h6, hr, blurb, blockquote, admonition,
+                            phrase, list, close_bracket, ordered_list, def_macro,
+                            identifier, table, table_row, variablelist,
+                            varlistentry, varlistterm, varlistitem, table_cell,
+                            preformatted, list_item, begin_section, end_section,
+                            xinclude, include, hard_space, eol, paragraph_end;
             symbols<>       paragraph_end_markups;
             
             phrase_grammar<Actions> common;
@@ -348,4 +367,5 @@ namespace quickbook
 }
 
 #endif // BOOST_SPIRIT_QUICKBOOK_BLOCK_HPP
+
 
