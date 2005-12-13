@@ -79,7 +79,7 @@ void check_val(const T& val)
    std::cout << "    Testing std::imaj.\n";
    check(std::imag(cval), std::imag(rval));
    check(std::imag(cval), std::imag(val));
-   if(val && boost::is_floating_point<T>::value)
+   if(val && !boost::is_floating_point<T>::value)
    {
       //
       // Note that these tests are not run for floating point
