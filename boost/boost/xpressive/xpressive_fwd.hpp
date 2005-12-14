@@ -64,6 +64,9 @@ namespace boost { namespace xpressive
 
         typedef proto::unary_op<detail::mark_placeholder, proto::noop_tag> mark_tag;
 
+        template<typename Xpr, bool IsOp = proto::is_op<Xpr>::value>
+        struct as_xpr_type;
+
     } // namespace detail
 
     using detail::mark_tag;
@@ -110,6 +113,10 @@ namespace boost { namespace xpressive
       , typename CompilerTraits = compiler_traits<RegexTraits>
     >
     struct regex_compiler;
+
+    template<typename Xpr>
+    typename detail::as_xpr_type<Xpr>::const_reference
+    as_xpr(Xpr const &xpr);
 
     ///////////////////////////////////////////////////////////////////////////////
     // Common typedefs

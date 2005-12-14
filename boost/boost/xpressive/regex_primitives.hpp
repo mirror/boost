@@ -17,6 +17,7 @@
 #include <boost/xpressive/detail/core/icase.hpp>
 #include <boost/xpressive/detail/core/action.hpp>
 #include <boost/xpressive/detail/core/matchers.hpp>
+#include <boost/xpressive/detail/static/as_xpr.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/detail/static/modifier.hpp>
 #include <boost/xpressive/detail/static/regex_operators.hpp>
@@ -441,7 +442,22 @@ proto::op_proxy<mark_tag, int> const s9 = {9};
 // NOTE: For the purpose of xpressive's documentation, make icase() look like an
 // ordinary function. In reality, it is a function object defined in detail/icase.hpp
 // so that it can serve double-duty as regex_constants::icase, the syntax_option_type.
+// Do the same for as_xpr(), which is actually defined in detail/static/as_xpr.hpp
 #ifdef BOOST_XPRESSIVE_DOXYGEN_INVOKED
+///////////////////////////////////////////////////////////////////////////////
+/// \brief Makes a literal into a regular expression.
+///
+/// Use as_xpr() to turn a literal into a regular expression. For instance,
+/// "foo" >> "bar" will not compile because both operands to the right-shift
+/// operator are const char*, and no such operator exists. Use as_xpr("foo") >> "bar"
+/// instead.
+template<typename Xpr>
+inline typename detail::as_xpr_type<Xpr>::const_reference
+as_xpr(Xpr const &xpr)
+{
+    return detail::as_xpr_type<Xpr>::call(xpr);
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Makes a sub-expression case-insensitive.
 ///
@@ -449,7 +465,7 @@ proto::op_proxy<mark_tag, int> const s9 = {9};
 /// "foo" >> icase(set['b'] >> "ar") will match "foo" exactly followed by
 /// "bar" irrespective of case.
 template<typename Xpr>
-inline proto::binary_op<detail::icase_modifier, typename as_xpr_type<Xpr>::type, modifier_tag> const
+inline proto::binary_op<detail::icase_modifier, typename detail::as_xpr_type<Xpr>::type, modifier_tag> const
 icase(Xpr const &xpr)
 {
     detail::icase_modifier mod;
