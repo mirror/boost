@@ -49,7 +49,7 @@ namespace boost
 #  endif
 #endif
 
-#define BOOST_AUTO_TEST_MAIN
+#define BOOST_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
 
 #ifdef TEST_EXTENSIONS
@@ -58,7 +58,7 @@ namespace boost
 #include <string>
 #include <cctype>
 
-BOOST_AUTO_UNIT_TEST(custom_tests)
+BOOST_AUTO_TEST_CASE(custom_tests)
 {
     HASH_NAMESPACE::hash<test::custom> custom_hasher;
     BOOST_CHECK(custom_hasher(10) == 100u);

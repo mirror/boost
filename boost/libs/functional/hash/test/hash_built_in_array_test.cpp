@@ -14,12 +14,12 @@
 #  endif
 #endif
 
-#define BOOST_AUTO_TEST_MAIN
+#define BOOST_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
 
 #ifdef TEST_EXTENSIONS
 
-BOOST_AUTO_UNIT_TEST(array_int_test)
+BOOST_AUTO_TEST_CASE(array_int_test)
 {
     const int length1 = 25;
     int array1[25] = {
@@ -47,7 +47,7 @@ BOOST_AUTO_UNIT_TEST(array_int_test)
             == HASH_NAMESPACE::hash_range(array3, array3 + length3));
 }
 
-BOOST_AUTO_UNIT_TEST(two_dimensional_array_test)
+BOOST_AUTO_TEST_CASE(two_dimensional_array_test)
 {
     int array[3][2] = {{-5, 6}, {7, -3}, {26, 1}};
     HASH_NAMESPACE::hash<int[3][2]> hasher;

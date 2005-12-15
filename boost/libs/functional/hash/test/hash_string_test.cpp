@@ -11,7 +11,7 @@
 #  include <boost/functional/hash/hash.hpp>
 #endif
 
-#define BOOST_AUTO_TEST_MAIN
+#define BOOST_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
 
 #include <boost/limits.hpp>
@@ -20,7 +20,7 @@
 
 #include "./compile_time.hpp"
 
-BOOST_AUTO_UNIT_TEST(string_tests)
+BOOST_AUTO_TEST_CASE(string_tests)
 {
     compile_time_tests((std::string*) 0);
 
@@ -44,7 +44,7 @@ BOOST_AUTO_UNIT_TEST(string_tests)
 }
 
 #if !defined(BOOST_NO_STD_WSTRING)
-BOOST_AUTO_UNIT_TEST(wstring_tests)
+BOOST_AUTO_TEST_CASE(wstring_tests)
 {
     compile_time_tests((std::wstring*) 0);
 

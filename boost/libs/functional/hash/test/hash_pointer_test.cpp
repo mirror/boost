@@ -12,7 +12,7 @@
 #  include <boost/functional/hash/hash.hpp>
 #endif
 
-#define BOOST_AUTO_TEST_MAIN
+#define BOOST_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
 
 #include <boost/limits.hpp>
@@ -21,7 +21,7 @@
 
 #include "./compile_time.hpp"
 
-BOOST_AUTO_UNIT_TEST(pointer_tests)
+BOOST_AUTO_TEST_CASE(pointer_tests)
 {
     compile_time_tests((int**) 0);
     compile_time_tests((void**) 0);

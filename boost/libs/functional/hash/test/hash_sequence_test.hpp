@@ -55,7 +55,7 @@ namespace BOOST_PP_CAT(CONTAINER_TYPE, _tests)
         }
     }
 
-    BOOST_AUTO_UNIT_TEST(BOOST_PP_CAT(CONTAINER_TYPE, _hash_integer_tests))
+    BOOST_AUTO_TEST_CASE(BOOST_PP_CAT(CONTAINER_TYPE, _hash_integer_tests))
     {
         integer_tests((CONTAINER_TYPE<char>*) 0);
         integer_tests((CONTAINER_TYPE<int>*) 0);

@@ -13,7 +13,7 @@
 #  endif
 #endif
 
-#define BOOST_AUTO_TEST_MAIN
+#define BOOST_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
 
 #ifdef TEST_EXTENSIONS
@@ -22,7 +22,7 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 
-BOOST_AUTO_UNIT_TEST(hash_range_tests)
+BOOST_AUTO_TEST_CASE(hash_range_tests)
 {
     std::vector<int> empty, values1, values2, values3, values4, values5;
     values1.push_back(0);

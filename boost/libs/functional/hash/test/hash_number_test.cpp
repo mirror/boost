@@ -11,7 +11,7 @@
 #  include <boost/functional/hash/hash.hpp>
 #endif
 
-#define BOOST_AUTO_TEST_MAIN
+#define BOOST_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
 
 #include <boost/preprocessor/cat.hpp>
@@ -106,7 +106,7 @@ void poor_quality_tests(T*)
 }
 
 #define NUMERIC_TEST(type, name) \
-    BOOST_AUTO_UNIT_TEST(BOOST_PP_CAT(test_, name)) { \
+    BOOST_AUTO_TEST_CASE(BOOST_PP_CAT(test_, name)) { \
         numeric_test((type*) 0); \
         limits_test((type*) 0); \
         poor_quality_tests((type*) 0); \

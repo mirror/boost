@@ -12,7 +12,7 @@
 #  include <boost/functional/hash/hash.hpp>
 #endif
 
-#define BOOST_AUTO_TEST_MAIN
+#define BOOST_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
 
 #include <boost/limits.hpp>
@@ -26,7 +26,7 @@ void void_func2() { static int x = 2; --x; }
 int int_func1(int) { return 0; }
 int int_func2(int) { return 1; }
 
-BOOST_AUTO_UNIT_TEST(function_pointer_tests)
+BOOST_AUTO_TEST_CASE(function_pointer_tests)
 {
     compile_time_tests((void(**)()) 0);
     compile_time_tests((int(**)(int)) 0);

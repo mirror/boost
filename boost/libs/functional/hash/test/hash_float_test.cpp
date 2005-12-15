@@ -11,7 +11,7 @@
 #  include <boost/functional/hash/hash.hpp>
 #endif
 
-#define BOOST_AUTO_TEST_MAIN
+#define BOOST_TEST_MAIN
 #include <boost/test/auto_unit_test.hpp>
 
 #include <cmath>
@@ -193,7 +193,7 @@ void float_tests(char const* name, T* = 0)
 #endif
 }
 
-BOOST_AUTO_UNIT_TEST(hash_float_tests)
+BOOST_AUTO_TEST_CASE(hash_float_tests)
 {
     std::cout<<"Compiler: "<<BOOST_COMPILER<<"\n";
     std::cout<<"Platform: "<<BOOST_PLATFORM<<"\n";
@@ -202,12 +202,12 @@ BOOST_AUTO_UNIT_TEST(hash_float_tests)
     float_tests("float", (float*) 0);
 }
 
-BOOST_AUTO_UNIT_TEST(hash_double_tests)
+BOOST_AUTO_TEST_CASE(hash_double_tests)
 {
     float_tests("double", (double*) 0);
 }
 
-BOOST_AUTO_UNIT_TEST(hash_long_double_tests)
+BOOST_AUTO_TEST_CASE(hash_long_double_tests)
 {
     float_tests("long double", (long double*) 0);
 }
