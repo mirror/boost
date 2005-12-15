@@ -605,12 +605,12 @@ public:
         case is_uint:   cmp = lhs.value.ui == (unsigned long)(rhs); break;
         case is_bool:   cmp = lhs.value.b == bool(rhs); break;
         }
-        return closure_value(cmp, (value_error)(lhs.valid & rhs.valid));
+        return closure_value(cmp, (value_error)(lhs.valid | rhs.valid));
     }
     friend closure_value 
     operator!= (closure_value const &lhs, closure_value const &rhs)
     {
-        return closure_value(!bool(lhs == rhs), (value_error)(lhs.valid & rhs.valid));
+        return closure_value(!bool(lhs == rhs), (value_error)(lhs.valid | rhs.valid));
     }
     friend closure_value 
     operator> (closure_value const &lhs, closure_value const &rhs)
@@ -628,7 +628,7 @@ public:
         case is_uint:   cmp = lhs.value.ui > (unsigned long)(rhs); break;
         case is_bool:   cmp = lhs.value.b > bool(rhs); break;
         }
-        return closure_value(cmp, (value_error)(lhs.valid & rhs.valid));
+        return closure_value(cmp, (value_error)(lhs.valid | rhs.valid));
     }
     friend closure_value 
     operator< (closure_value const &lhs, closure_value const &rhs)
@@ -646,17 +646,17 @@ public:
         case is_uint:   cmp = lhs.value.ui < (unsigned long)(rhs); break;
         case is_bool:   cmp = bool(lhs) < bool(rhs); break;
         }
-        return closure_value(cmp, (value_error)(lhs.valid & rhs.valid));
+        return closure_value(cmp, (value_error)(lhs.valid | rhs.valid));
     }
     friend closure_value 
     operator<= (closure_value const &lhs, closure_value const &rhs)
     {
-        return closure_value(!bool(lhs > rhs), (value_error)(lhs.valid & rhs.valid));
+        return closure_value(!bool(lhs > rhs), (value_error)(lhs.valid | rhs.valid));
     }
     friend closure_value 
     operator>= (closure_value const &lhs, closure_value const &rhs)
     {
-        return closure_value(!bool(lhs < rhs), (value_error)(lhs.valid & rhs.valid));
+        return closure_value(!bool(lhs < rhs), (value_error)(lhs.valid | rhs.valid));
     }
 
     closure_value &
@@ -794,14 +794,14 @@ public:
     operator|| (closure_value const &lhs, closure_value const &rhs)
     {
         bool result = bool(lhs) || bool(rhs);
-        return closure_value(result, (value_error)(lhs.valid & rhs.valid));
+        return closure_value(result, (value_error)(lhs.valid | rhs.valid));
     }
     
     friend closure_value 
     operator&& (closure_value const &lhs, closure_value const &rhs)
     {
         bool result = bool(lhs) && bool(rhs);
-        return closure_value(result, (value_error)(lhs.valid & rhs.valid));
+        return closure_value(result, (value_error)(lhs.valid | rhs.valid));
     }
 
     // handle the ?: operator
