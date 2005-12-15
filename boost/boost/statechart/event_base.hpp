@@ -53,17 +53,7 @@ class event_base : public detail::rtti_policy::rtti_base_type<
     detail::counted_base<> > base_type;
   public:
     //////////////////////////////////////////////////////////////////////////
-    intrusive_ptr< const event_base > intrusive_from_this() const
-    {
-      if ( base_type::ref_counted() )
-      {
-        return intrusive_ptr< const event_base >( this );
-      }
-      else
-      {
-        return clone();
-      }
-    }
+    intrusive_ptr< const event_base > intrusive_from_this() const;
 
   protected:
     //////////////////////////////////////////////////////////////////////////
@@ -107,6 +97,29 @@ inline void intrusive_ptr_release( const ::boost::statechart::event_base * pBase
 #ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 } // namespace statechart
 #endif
+namespace statechart
+{
+
+
+
+// We're implementing this here so that GCC3.4.2 can find
+// intrusive_ptr_add_ref, which is indirectly called from the intrusive_ptr
+// ctor.
+inline intrusive_ptr< const event_base > event_base::intrusive_from_this() const
+{
+  if ( base_type::ref_counted() )
+  {
+    return intrusive_ptr< const event_base >( this );
+  }
+  else
+  {
+    return clone();
+  }
+}
+
+
+
+} // namespace statechart
 } // namespace boost
 
 
