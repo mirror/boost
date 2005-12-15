@@ -123,7 +123,8 @@ public:
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
         , current_filename(fname)
 #endif 
-        , macros(*this), language(boost::wave::support_cpp)
+        , macros(*this)
+        , language(language_support(support_cpp|support_option_convert_trigraphs))
         , hooks(hooks_)
     {
         macros.init_predefined_macros(fname);

@@ -78,6 +78,7 @@ CHANGELOG
   #pragma's are fdispatched to the interpret_pragma() preprocessing hook.
   The default value for BOOST_WAVE_PRAGMA_COMMAND is "wave" to ensure complete
   backward compatibility.
+- Added missing #pragma warning(pop) directives.
   
 Mon Dec  5 22:05:22 CST 2005
 Boost V1.33.1

@@ -25,12 +25,6 @@
 #include BOOST_ABI_PREFIX
 #endif
 
-// suppress warnings about dependent classes not being exported from the dll
-#ifdef BOOST_MSVC
-#pragma warning(push)
-#pragma warning(disable : 4251 4231 4660)
-#endif
-
 ///////////////////////////////////////////////////////////////////////////////
 //  
 //  Explicit instantiation of the expression_grammar_gen template with the 

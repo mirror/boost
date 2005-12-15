@@ -90,6 +90,10 @@ struct lex_input_interface
 }   // namespace wave
 }   // namespace boost 
 
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+
 // the suffix header occurs after all of the code
 #ifdef BOOST_HAS_ABI_HEADERS
 #include BOOST_ABI_SUFFIX
