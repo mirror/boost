@@ -141,9 +141,25 @@ void float_tests(char const* name, T* = 0)
     if(x1(std::numeric_limits<T>::epsilon()) == x1((T) 0))
         std::cout<<"x1(epsilon) == x1(0) == "<<x1((T) 0)<<"\n";
 
-    BOOST_CHECK(std::numeric_limits<T>::epsilon() + (T) 1 != (T) 1);
-    if(x1(std::numeric_limits<T>::epsilon() + (T) 1) == x1((T) 1))
-        std::cout<<"x1(epsilon + 1) == x1(1) == "<<x1((T) 1)<<"\n";
+    BOOST_CHECK(-std::numeric_limits<T>::epsilon() != (T) 0);
+    if(x1(-std::numeric_limits<T>::epsilon()) == x1((T) 0))
+        std::cout<<"x1(-epsilon) == x1(0) == "<<x1((T) 0)<<"\n";
+
+    BOOST_CHECK((T) 1 + std::numeric_limits<T>::epsilon() != (T) 1);
+    if(x1((T) 1 + std::numeric_limits<T>::epsilon()) == x1((T) 1))
+        std::cout<<"x1(1 + epsilon) == x1(1) == "<<x1((T) 1)<<"\n";
+
+    BOOST_CHECK((T) 1 - std::numeric_limits<T>::epsilon() != (T) 1);
+    if(x1((T) 1 - std::numeric_limits<T>::epsilon()) == x1((T) 1))
+        std::cout<<"x1(1 - epsilon) == x1(1) == "<<x1((T) 1)<<"\n";
+
+    BOOST_CHECK((T) -1 + std::numeric_limits<T>::epsilon() != (T) -1);
+    if(x1((T) -1 + std::numeric_limits<T>::epsilon()) == x1((T) -1))
+        std::cout<<"x1(-1 + epsilon) == x1(-1) == "<<x1((T) -1)<<"\n";
+
+    BOOST_CHECK((T) -1 - std::numeric_limits<T>::epsilon() != (T) -1);
+    if(x1((T) -1 - std::numeric_limits<T>::epsilon()) == x1((T) -1))
+        std::cout<<"x1(-1 - epsilon) == x1(-1) == "<<x1((T) -1)<<"\n";
 
     // As before.
     if(std::numeric_limits<T>::has_denorm) {
