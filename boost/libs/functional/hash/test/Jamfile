@@ -45,8 +45,8 @@ rule hash-test-output ( name + )
             [ hash-test hash_deque_test ]
             [ hash-test hash_set_test ]
             [ hash-test hash_map_test ]
-            [ hash-test link_test link_test_2 ]
-            [ hash-test container_fwd_test ]
+            [ run link_test.cpp link_test_2.cpp : : : <include>$(BOOST_ROOT) ]
+            [ run container_fwd_test.cpp : : : <include>$(BOOST_ROOT) ]
         ;
 }
 
