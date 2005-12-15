@@ -18,7 +18,7 @@
 #include <boost/xpressive/detail/core/action.hpp>
 #include <boost/xpressive/detail/core/matchers.hpp>
 #include <boost/xpressive/detail/static/as_xpr.hpp>
-#include <boost/xpressive/detail/static/static.hpp>
+#include <boost/xpressive/detail/static/compile.hpp>
 #include <boost/xpressive/detail/static/modifier.hpp>
 #include <boost/xpressive/detail/static/regex_operators.hpp>
 #include <boost/xpressive/detail/static/productions/productions.hpp>

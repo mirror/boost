@@ -18,6 +18,7 @@
 
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/regex_constants.hpp>
+#include <boost/xpressive/detail/static/as_xpr.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {

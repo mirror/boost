@@ -276,6 +276,9 @@ namespace boost { namespace xpressive { namespace detail
 
     struct action_state;
 
+    template<typename Xpr, bool IsOp = proto::is_op<Xpr>::value>
+    struct as_xpr_type;
+
     template<typename Traits, typename BidiIter>
     Traits const &traits_cast(state_type<BidiIter> const &state);
 
@@ -312,6 +315,9 @@ namespace boost { namespace xpressive { namespace detail
     make_static_xpression(Matcher const &matcher, Next const &next);
 
     int get_mark_number(mark_tag const &);
+
+    template<typename Xpr, typename BidiIter>
+    void static_compile(Xpr const &xpr, regex_impl<BidiIter> &impl);
 
 }}} // namespace boost::xpressive::detail
 

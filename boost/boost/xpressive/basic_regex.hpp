@@ -20,95 +20,12 @@
 #endif
 #include <boost/mpl/bool.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
-#include <boost/xpressive/regex_traits.hpp>
 #include <boost/xpressive/regex_constants.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
-#include <boost/xpressive/detail/core/finder.hpp>
-#include <boost/xpressive/detail/core/adaptor.hpp>
 #include <boost/xpressive/detail/core/regex_impl.hpp>
-#include <boost/xpressive/detail/core/matcher/end_matcher.hpp>
-#include <boost/xpressive/detail/static/type_traits.hpp>
-#include <boost/xpressive/detail/static/productions/visitor.hpp>
-#include <boost/xpressive/detail/static/productions/domain_tags.hpp>
-#include <boost/xpressive/detail/utility/hash_peek_bitset.hpp>
 
-namespace boost { namespace xpressive { namespace detail
+namespace boost { namespace xpressive
 {
-
-///////////////////////////////////////////////////////////////////////////////
-// optimize_regex
-//
-template<typename BidiIter, typename Traits>
-inline void optimize_regex(regex_impl<BidiIter> &impl, Traits const &traits, mpl::true_)
-{
-    typedef typename iterator_value<BidiIter>::type char_type;
-
-    // optimization: get the peek chars OR the boyer-moore search string
-    hash_peek_bitset<char_type> bset;
-    xpression_peeker<char_type> peeker(&bset, traits);
-    impl.xpr_->peek(peeker);
-
-    // if we have a leading string literal, initialize a boyer-moore struct with it
-    std::pair<std::basic_string<char_type> const *, bool> str = peeker.get_string();
-    if(0 != str.first)
-    {
-        impl.finder_.reset
-        (
-            new boyer_moore_finder<BidiIter, Traits>
-            (
-                str.first->data()
-              , str.first->data() + str.first->size()
-              , traits
-              , str.second
-            )
-        );
-    }
-    else if(peeker.line_start())
-    {
-        impl.finder_.reset
-        (
-            new line_start_finder<BidiIter, Traits>(traits)
-        );
-    }
-    else if(256 != bset.count())
-    {
-        impl.finder_.reset
-        (
-            new hash_peek_finder<BidiIter, Traits>(bset)
-        );
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// optimize_regex
-//
-template<typename BidiIter, typename Traits>
-inline void optimize_regex(regex_impl<BidiIter> &impl, Traits const &traits, mpl::false_)
-{
-    typedef typename iterator_value<BidiIter>::type char_type;
-
-    // optimization: get the peek chars OR the line start finder
-    hash_peek_bitset<char_type> bset;
-    xpression_peeker<char_type> peeker(&bset, traits);
-    impl.xpr_->peek(peeker);
-
-    if(peeker.line_start())
-    {
-        impl.finder_.reset
-        (
-            new line_start_finder<BidiIter, Traits>(traits)
-        );
-    }
-    else if(256 != bset.count())
-    {
-        impl.finder_.reset
-        (
-            new hash_peek_finder<BidiIter, Traits>(bset)
-        );
-    }
-}
-
-} // namespace detail
 
 ///////////////////////////////////////////////////////////////////////////////
 // basic_regex
@@ -147,7 +64,6 @@ struct basic_regex
         return *this;
     }
 
-
     /// Construct from a static regular expression.
     ///
     /// \param  xpr The static regular expression
@@ -172,22 +88,7 @@ struct basic_regex
     template<typename Xpr>
     basic_regex<BidiIter> &operator =(Xpr const &xpr)
     {
-        // use default traits
-        typedef regex_traits<char_type> traits_type;
-        this->compile_(xpr, traits_type());
-        return *this;
-    }
-
-    /// INTERNAL ONLY
-    template<typename Locale, typename Xpr>
-    basic_regex<BidiIter> &operator =
-    (
-        proto::binary_op<detail::locale_modifier<Locale>, Xpr, detail::modifier_tag> const &xpr
-    )
-    {
-        // use specified traits
-        typedef typename detail::regex_traits_type<Locale, BidiIter>::type traits_type;
-        this->compile_(proto::right(xpr), traits_type(proto::left(xpr).getloc()));
+        detail::static_compile(xpr, *this->impl_.get());
         return *this;
     }
 
@@ -273,28 +174,6 @@ private:
       : impl_()
     {
         this->impl_.tracking_copy(that);
-    }
-
-    /// INTERNAL ONLY
-    template<typename Xpr, typename Traits>
-    void compile_(Xpr const &xpr, Traits const &traits)
-    {
-        using namespace detail;
-        // "compile" the regex and wrap it in an xpression_adaptor
-        xpression_visitor<BidiIter, mpl::false_, Traits> visitor(traits, this->impl_.get());
-        visitor.impl().traits_.reset(new Traits(visitor.traits()));
-        visitor.impl().xpr_ = make_adaptor<BidiIter>(
-            proto::compile(xpr, make_static_xpression(end_matcher()), visitor, seq_tag()));
-
-        // "link" the regex
-        xpression_linker<char_type> linker(visitor.traits());
-        visitor.impl().xpr_->link(linker);
-
-        // optimization: get the peek chars OR the boyer-moore search string
-        optimize_regex(visitor.impl(), visitor.traits(), is_random<BidiIter>());
-
-        // copy the implementation
-        this->impl_.tracking_copy(visitor.impl());
     }
 
     /// INTERNAL ONLY

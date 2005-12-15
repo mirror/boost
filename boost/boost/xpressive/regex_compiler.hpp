@@ -21,6 +21,7 @@
 #include <boost/xpressive/detail/dynamic/parser_enum.hpp>
 #include <boost/xpressive/detail/dynamic/parser_traits.hpp>
 #include <boost/xpressive/detail/core/linker.hpp>
+#include <boost/xpressive/detail/core/optimize.hpp>
 
 namespace boost { namespace xpressive
 {
