@@ -33,7 +33,6 @@
 namespace std
 {
     template <class T> class allocator;
-
     template <class charT, class traits, class Allocator> class basic_string;
 
 #if BOOST_WORKAROUND(__GNUC__, < 3) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
@@ -41,7 +40,16 @@ namespace std
 #else
     template <class charT> class char_traits;
 #endif
+    template <class T> class complex;
+}
 
+// gcc 3.4 and greater
+#if defined(__GLIBCXX__) && defined(_GLIBCXX_DEBUG)
+namespace __gnu_debug_def
+#else
+namespace std
+#endif
+{
 #if !defined(BOOST_CONTAINER_FWD_BAD_DEQUE)
     template <class T, class Allocator> class deque;
 #endif
@@ -57,8 +65,6 @@ namespace std
 #if !defined(BOOST_CONTAINER_FWD_BAD_BITSET)
     template <size_t N> class bitset;
 #endif
-
-    template <class T> class complex;
 }
 
 #endif
