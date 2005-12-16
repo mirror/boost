@@ -22,16 +22,6 @@
 
 using namespace std;
 
-// This is temporary -- to check cw (remove later)
-
-#if defined(_MSL_EXTENDED_BINDERS)
-    typedef std::binder1st< int, int > type1; 
-    typedef std::binder2nd< int, int > type2; 
-#else
-    typedef std::binder1st< int > type1; 
-    typedef std::binder2nd< int > type2; 
-#endif
-
 // STL containers
 
 BOOST_STATIC_ASSERT(boost::type_of::test<string>::value);
