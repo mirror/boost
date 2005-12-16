@@ -26,23 +26,23 @@ int test_main( int, char*[] )
         {
             sregex a,b,c;
             a = 'a' >> !by_ref(b);
-            std::cout << a << std::endl;
-            std::cout << b << std::endl;
-            std::cout << c << std::endl;
+            //std::cout << a << std::endl;
+            //std::cout << b << std::endl;
+            //std::cout << c << std::endl;
 
             // just for giggles
             c = a;
             c = epsilon >> 'a';
 
             b = epsilon >> by_ref(c);
-            std::cout << a << std::endl;
-            std::cout << b << std::endl;
-            std::cout << c << std::endl;
+            //std::cout << a << std::endl;
+            //std::cout << b << std::endl;
+            //std::cout << c << std::endl;
 
             c = epsilon >> by_ref(a);
-            std::cout << a << std::endl;
-            std::cout << b << std::endl;
-            std::cout << c << std::endl;
+            //std::cout << a << std::endl;
+            //std::cout << b << std::endl;
+            //std::cout << c << std::endl;
 
             v = a;
         }
@@ -67,9 +67,9 @@ int test_main( int, char*[] )
             a = 'a' >> !by_ref(b);
             c = epsilon >> by_ref(a);
 
-            std::cout << a << std::endl;
-            std::cout << b << std::endl;
-            std::cout << c << std::endl;
+            //std::cout << a << std::endl;
+            //std::cout << b << std::endl;
+            //std::cout << c << std::endl;
 
             v = a;
         }
@@ -95,9 +95,9 @@ int test_main( int, char*[] )
             c = epsilon >> by_ref(a);
             a = 'a' >> !by_ref(b);
 
-            std::cout << a << std::endl;
-            std::cout << b << std::endl;
-            std::cout << c << std::endl;
+            //std::cout << a << std::endl;
+            //std::cout << b << std::endl;
+            //std::cout << c << std::endl;
 
             v = a;
         }
@@ -122,9 +122,9 @@ int test_main( int, char*[] )
             b = epsilon >> by_ref(c);
             a = 'a' >> !by_ref(b);
 
-            std::cout << a << std::endl;
-            std::cout << b << std::endl;
-            std::cout << c << std::endl;
+            //std::cout << a << std::endl;
+            //std::cout << b << std::endl;
+            //std::cout << c << std::endl;
 
             v = a;
         }
@@ -155,22 +155,22 @@ int test_main( int, char*[] )
 
             c = d;
 
-            std::cout << a << std::endl;
-            std::cout << b << std::endl;
-            std::cout << c << std::endl;
-            std::cout << e << std::endl;
+            //std::cout << a << std::endl;
+            //std::cout << b << std::endl;
+            //std::cout << c << std::endl;
+            //std::cout << e << std::endl;
 
             e = 'a' >> by_ref(c);
 
-            std::cout << "-new loop!\n";
-            std::cout << a << std::endl;
-            std::cout << b << std::endl;
-            std::cout << c << std::endl;
-            std::cout << e << std::endl;
+            //std::cout << "-new loop!\n";
+            //std::cout << a << std::endl;
+            //std::cout << b << std::endl;
+            //std::cout << c << std::endl;
+            //std::cout << e << std::endl;
 
             v = a;
 
-            std::cout << v << std::endl;
+            //std::cout << v << std::endl;
 
         }
         std::string const s("aaa");
