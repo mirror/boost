@@ -34,6 +34,11 @@ template<typename BidiIter>
 struct invalid_xpression
   : matchable<BidiIter>
 {
+    invalid_xpression()
+      : matchable<BidiIter>()
+    {
+    }
+    
     bool match(state_type<BidiIter> &) const
     {
         BOOST_ASSERT(false);
