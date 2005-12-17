@@ -22,7 +22,7 @@
     <p align="center">(formerly known as boost::fsm)</p>
     <h2 align="center">Overview</h2>
     <p align="center"><font size="2">Version:
-    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/09/01<!--webbot bot="Timestamp" endspan i-checksum="12860" --></font></td>
+    <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2005/12/17<!--webbot bot="Timestamp" endspan i-checksum="12457" --></font></td>
   </tr>
 </table>
 <hr>
@@ -242,7 +242,7 @@ review):</p>
 </ol>
 <h2><a name="Change_history">Change history</a></h2>
 <p>(<font color="#FF0000">red</font> = points raised during formal review)</p>
-<p>XX September, 2005</p>
+<p>17 December, 2005</p>
 <ul>
  <li>Added detailed performance data to the performance document</li>
  <li>Added the Performance &quot;example&quot; and the associated 
@@ -256,9 +256,13 @@ review):</p>
     Rob Steward and Dave Gomboc. The more detailed performance measurements 
  have shown that the time spent for event dispatch is almost always small compared to 
  the time spent for 
- state-entry and state-exit. See
- <a href="Speed%20versus%20scalability%20tradeoffs">Speed versus scalability 
+ state-entry and state-exit. See 
+ <a href="performance.html#Speed versus scalability tradeoffs">Speed versus scalability 
  tradeoffs</a> in the performance document for more information</font></li>
+ <li>Fixed an order of declaration bug which caused a compile-time error in 
+ event_base.hpp when compiled with GCC3.4.2 on HP-UX (the error neither showed 
+ up on GCC3.4.2 on MinGW nor on MSVC7.1)</li>
+ <li>Tested with 1.33.1 version of the boost distribution</li>
 </ul>
 <p>14 August, 2005</p>
 <ul>
@@ -575,7 +579,7 @@ review):</p>
 </ul>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->01 September, 2005<!--webbot bot="Timestamp" endspan i-checksum="39337" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->17 December, 2005<!--webbot bot="Timestamp" endspan i-checksum="38520" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 

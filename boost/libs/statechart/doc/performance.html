@@ -139,11 +139,9 @@ from these measurements:</p>
  due to the fact that in the 100% case it is known at compile-time that the 
  current state will never change</li>
  <li>The data points with 100% in-state reaction ratio and speed optimized 
- RTTI show that modern compilers seem to inline the computationally 
- complex-looking dispatch code so aggressively that dispatch is reduced to 
+ RTTI show that modern compilers seem to inline the complex-looking dispatch code so aggressively that dispatch is reduced to 
  little more than it actually is, one virtual function call followed by a 
- linear search for a suitable reaction. For instance, in the case of the 1-bit 
- Bitmachine, Intel9.0 seems to produce dispatch code that is equally efficient 
+ linear search for a suitable reaction. For instance, in the case of the 1-bit Bitmachine, Intel9.0 seems to produce dispatch code that is equally efficient 
  like the two virtual function calls in the Handcrafted machine</li>
  <li>On all compilers and in all variants the time spent in event dispatch is 
  dwarfed by the time spent to exit the current state and enter the target 
@@ -233,7 +231,7 @@ management can be customized as follows:</p>
 	<code>asynchronous_state_machine&lt;&gt;</code>, <code>fifo_scheduler&lt;&gt;</code>,
 	<code>fifo_worker&lt;&gt;</code>). This redirects all allocations to the passed 
 	custom allocator and should satisfy the needs of just about any project</li>
-  <li>Additionally, it is possible to separately customize <b>state</b> memory 
+  <li>Additionally, it is possible to <b>separately</b> customize <b>state</b> memory 
 	management by overloading <code>operator 
   new()</code> and <code>operator delete()</code> for all state classes but 
   this is probably only useful under rare circumstances</li>
@@ -317,7 +315,7 @@ consume how many cycles:</p>
 </ol>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->05 September, 2005<!--webbot bot="Timestamp" endspan i-checksum="39345" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->17 December, 2005<!--webbot bot="Timestamp" endspan i-checksum="38520" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
 2003-2005. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
