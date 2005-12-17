@@ -105,14 +105,10 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
 
 #else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-#include <boost/test/unit_test.hpp>
-using boost::unit_test::test_suite;
-
-test_suite* init_unit_test_suite( int, char** )
+int main()
 {
-    test_suite* test = BOOST_TEST_SUITE( "Range Test Suite" );
-    
-    return test;
+    // always succeed
+    return 0;
 }
 
 #endif
