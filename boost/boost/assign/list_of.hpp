@@ -157,7 +157,12 @@ namespace assign_detail
         Array convert( const Array*, array_type_tag ) const
         {
             typedef BOOST_DEDUCED_TYPENAME Array::value_type value_type;
+
+#if BOOST_WORKAROUND(BOOST_INTEL, <= 900 )
+            BOOST_DEDUCED_TYPENAME remove_const<Array>::type ar;
+#else
             Array ar;
+#endif			
             const std::size_t sz = ar.size();
             if( sz < static_cast<const DerivedTAssign*>(this)->size() )
                 throw assign::assignment_exception( "array initialized with too many elements" );
