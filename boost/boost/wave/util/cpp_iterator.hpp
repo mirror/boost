@@ -431,7 +431,7 @@ pp_iterator_functor<ContextT>::operator()()
 // loop over skippable whitespace until something significant is found
 bool skipped_newline = false;
 bool was_seen_newline = seen_newline;
-token_id id = T_ANY;
+token_id id = T_UNKNOWN;
     
     do {
     // get_next_token assigns result to act_token member
@@ -763,7 +763,7 @@ namespace {
     {
         using namespace boost::wave;
         
-        token_id id = T_ANY;
+        token_id id = T_UNKNOWN;
         for (/**/; it != end; ++it) {
             id = token_id(*it);
             if (!IS_CATEGORY(id, WhiteSpaceTokenType))
@@ -771,7 +771,7 @@ namespace {
             if (IS_CATEGORY(id, EOLTokenType))
                 break;          // do not enter a new line
         }
-        BOOST_ASSERT(it == end || id != T_ANY);
+        BOOST_ASSERT(it == end || id != T_UNKNOWN);
         return it != end && IS_CATEGORY(id, PPTokenType);
     }
     

@@ -78,6 +78,7 @@ enum token_category {
 ///////////////////////////////////////////////////////////////////////////////
 //  the token_id assigns unique numbers to the different C++ lexemes
 enum token_id {
+    T_UNKNOWN      = 0,
     T_FIRST_TOKEN  = 256,
     T_AND          = TOKEN_FROM_ID(T_FIRST_TOKEN, OperatorTokenType),
     T_AND_ALT      = TOKEN_FROM_ID(T_FIRST_TOKEN, OperatorTokenType|AltExtTokenType),

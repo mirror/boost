@@ -79,6 +79,9 @@ CHANGELOG
   The default value for BOOST_WAVE_PRAGMA_COMMAND is "wave" to ensure complete
   backward compatibility.
 - Added missing #pragma warning(pop) directives.
+- Fixed a bug wrt error propagation in the expression parser.
+- Fixed an assertion fired when cpp_token is used to process the quick_start 
+  sample.
   
 Mon Dec  5 22:05:22 CST 2005
 Boost V1.33.1
