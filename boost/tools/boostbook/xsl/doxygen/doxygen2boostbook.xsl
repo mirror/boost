@@ -803,7 +803,8 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
 
     <xsl:variable name="firstpara" 
       select="normalize-space(detaileddescription/para[1])"/>
-    <xsl:if test="contains(string(location/attribute::file), $in-file)
+    <xsl:if test="contains(string(location/attribute::file), 
+                           concat('/', $in-file))
                   and 
                   not($firstpara=normalize-space($boost.doxygen.overload))">
 
