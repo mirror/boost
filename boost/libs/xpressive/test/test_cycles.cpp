@@ -9,6 +9,10 @@
 // leaks portably.
 #define BOOST_XPRESSIVE_DEBUG_CYCLE_TEST
 
+#ifdef _MSC_VER
+# include <crtdbg.h>
+#endif
+
 #include <iostream>
 #include <boost/test/minimal.hpp>
 #include <boost/xpressive/xpressive.hpp>
