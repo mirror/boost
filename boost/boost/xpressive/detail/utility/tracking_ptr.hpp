@@ -358,23 +358,25 @@ private:
 
 public:
 
+    typedef Type element_type;
+
     tracking_ptr()
       : data_()
       , refs_()
     {
     }
 
-    tracking_ptr(tracking_ptr<Type> const &that)
+    tracking_ptr(tracking_ptr<element_type> const &that)
       : data_()
       , refs_()
     {
         this->operator =(that);
     }
 
-    tracking_ptr<Type> &operator =(tracking_ptr<Type> const &that)
+    tracking_ptr<element_type> &operator =(tracking_ptr<element_type> const &that)
     {
         // Note: the copy-and-swap idiom doesn't work here if has_deps_()==true
-        // because it invalidates references to the Type object.
+        // because it invalidates references to the element_type object.
 
         if(that)
         {
@@ -397,7 +399,7 @@ public:
     }
 
     // NOTE: this does *not* do tracking. Can't provide a non-throwing swap that tracks references
-    void swap(tracking_ptr<Type> &that) // throw()
+    void swap(tracking_ptr<element_type> &that) // throw()
     {
         this->data_.swap(that.data_);
         this->refs_.swap(that.refs_);
@@ -405,13 +407,13 @@ public:
 
     // deep copy, forces a fork and calls update() to update all the
     // dependents and references.
-    void tracking_copy(Type const &that)
+    void tracking_copy(element_type const &that)
     {
         this->get_(false)->tracking_copy(that);
     }
 
     // calling this forces this->data_ to fork.
-    shared_ptr<Type> const &get() const
+    shared_ptr<element_type> const &get() const
     {
         return this->get_(true); // copy == true
     }
@@ -428,13 +430,13 @@ public:
     }
 
     // Since this does not un-share the data, it returns a ptr-to-const
-    Type const *operator ->() const
+    element_type const *operator ->() const
     {
         return this->data_.get();
     }
 
     // Since this does not un-share the data, it returns a ref-to-const
-    Type const &operator *() const
+    element_type const &operator *() const
     {
         return *this->data_;
     }
@@ -443,17 +445,17 @@ private:
 
     // calling this forces data_ to fork. if 'copy' is true, then
     // the old data is copied into the fork.
-    shared_ptr<Type> const &get_(bool copy) const
+    shared_ptr<element_type> const &get_(bool copy) const
     {
         if(!*this)
         {
-            this->data_.reset(new Type);
+            this->data_.reset(new element_type);
             this->refs_ = this->data_->get_ref_deleter_();
         }
         else if(!this->unique_())
         {
             BOOST_ASSERT(!this->has_deps_());
-            shared_ptr<Type> new_data(new Type);
+            shared_ptr<element_type> new_data(new element_type);
             if(copy)
             {
                 new_data->tracking_copy(*this->data_);
@@ -478,7 +480,7 @@ private:
     }
 
     // mutable to allow lazy initialization
-    mutable shared_ptr<Type> data_;
+    mutable shared_ptr<element_type> data_;
     mutable shared_ptr<void> refs_;
 };
 
