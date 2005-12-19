@@ -1581,8 +1581,10 @@ string_type file_name;
     BOOST_ASSERT(unput_queue.empty());
     BOOST_ASSERT(pending_queue.empty());
 
-    if (!file_name.empty())     // reuse current file name 
-        act_pos.set_file(file_name.c_str());
+    if (!file_name.empty()) {    // reuse current file name 
+        using boost::wave::util::impl::unescape_lit;
+        act_pos.set_file(unescape_lit(file_name).c_str());
+    }
     act_pos.set_line(line);
     
 //typename result_type::position_type nextline_pos = act_pos;

@@ -16,6 +16,7 @@
 #include <string>
 #include <ostream>
 
+#include <boost/assert.hpp>
 #include <boost/spirit/version.hpp>
 #include <boost/spirit/iterator/position_iterator.hpp>
 #include <boost/wave/wave_config.hpp>
@@ -29,6 +30,38 @@
 namespace boost {
 namespace wave {
 namespace util {
+
+///////////////////////////////////////////////////////////////////////////////
+namespace debug {
+
+    //  Used only when BOOST_ASSERT expands to something
+    //  make sure the string literal does not contain any escapes ('\\' just 
+    //  before '\\', '\"' or '?')
+    template <typename StringT>
+    inline bool
+    is_escaped_lit(StringT const &value)
+    {
+        StringT result;
+        typename StringT::size_type pos = 0;
+        typename StringT::size_type pos1 = value.find_first_of ("\\", 0);
+        if (StringT::npos != pos1) {
+            do {
+                if ('\\' == value[pos1+1] || '\"' == value[pos1+1] || 
+                    '?' == value[pos1+1])
+                {
+                    return true;
+                }
+                else {
+                    pos1 = value.find_first_of ("\\", pos = pos1+1);
+                }
+                
+            } while (pos1 != StringT::npos);
+        }
+        return false;
+    }
+
+///////////////////////////////////////////////////////////////////////////////
+}   // namespace debug
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -51,14 +84,20 @@ public:
     explicit file_position(string_type const& file_, int line_ = 1, 
             int column_ = 1)
     :   file(file_), line(line_), column(column_)
-    {}
+    {
+        BOOST_ASSERT(!debug::is_escaped_lit(file));
+    }
 
 // accessors
     string_type const &get_file() const { return file; }
     unsigned int get_line() const { return line; }
     unsigned int get_column() const { return column; }
     
-    void set_file(string_type const &file_) { file = file_; }
+    void set_file(string_type const &file_) 
+    { 
+        file = file_; 
+        BOOST_ASSERT(!debug::is_escaped_lit(file));
+    }
     void set_line(unsigned int line_) { line = line_; }
     void set_column(unsigned int column_) { column = column_; }
     
