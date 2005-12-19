@@ -419,6 +419,21 @@ BOOST_DYNAMIC_BITSET_PRIVATE:
 
 };
 
+#if BOOST_WORKAROUND( __IBMCPP__, <=600 )
+
+// Workaround for IBM's AIX platform.
+// See http://comments.gmane.org/gmane.comp.lib.boost.user/15331
+
+template<typename Block, typename Allocator>
+dynamic_bitset<Block, Allocator>::block_width_type const
+dynamic_bitset<Block, Allocator>::bits_per_block;
+
+template<typename Block, typename Allocator>
+dynamic_bitset<Block, Allocator>::block_width_type const
+dynamic_bitset<Block, Allocator>::ulong_width;
+
+#endif
+
 // Global Functions:
 
 // comparison
