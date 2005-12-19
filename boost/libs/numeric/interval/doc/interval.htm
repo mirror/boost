@@ -432,9 +432,12 @@ constructors if the bounds are not ordered. There is no assign function that
 directly takes an interval or only one number as a parameter; just use the
 assignment operators in such a case.</p>
 
-<p>The static functions <code>empty</code> and <code>whole</code> produce the
-corresponding intervals. They are static member functions rather than global
-functions because they cannot guess their return types. Likewise for
+<p>The type of the bounds and the policies of the interval type define the
+set of values the intervals contain. E.g. with the default policies, intervals
+are subsets of the set of real numbers. The static functions <code>empty</code>
+and <code>whole</code> produce the intervals/subsets that are repectively the
+empty subset and the whole set. They are static member functions rather than
+global functions because they cannot guess their return types. Likewise for
 <code>hull</code>. <code>empty</code> and <code>whole</code> involve the
 checking policy in order to get the bounds of the resulting intervals.</p>
 
@@ -901,9 +904,9 @@ author(s) and do not necessarily reflect the views of the National Science
 Foundation (NSF).</p>
 <hr>
 
-<p>Revised: 2004-03-11<br>
+<p>Revised: 2005-12-19<br>
 Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.
 Polytechnic University.<br>
-Copyright (c) Guillaume Melquiond, 2003-2004. ENS Lyon.</p>
+Copyright (c) Guillaume Melquiond, 2003-2005. ENS Lyon.</p>
 </body>
 </html>
