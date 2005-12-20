@@ -7,7 +7,7 @@ import testing ;
 
 local rule special-requirements ( toolset variant : properties * )
 {
-    # Tru64/CXX6.5 hangs when compiling the ODR tests, so just turn them off.
+    # Tru64/CXX6.5 hangs on most tests, so just turn it off completely.
 
     if $(UNIX) && $(OS) = OSF
     {
@@ -23,57 +23,57 @@ local rule special-requirements ( toolset variant : properties * )
 
 test-suite "typeof" 
 	:  
-	[ compile type.cpp : <define>BOOST_TYPEOF_NATIVE : type_native ]
-	[ compile type.cpp : <define>BOOST_TYPEOF_COMPLIANT : type_emulation ]
+	[ compile type.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : type_native ]
+	[ compile type.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : type_emulation ]
 
-	[ compile template_type.cpp : <define>BOOST_TYPEOF_NATIVE : template_type_native ]
-	[ compile template_type.cpp : <define>BOOST_TYPEOF_COMPLIANT : template_type_emulation ]
+	[ compile template_type.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : template_type_native ]
+	[ compile template_type.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : template_type_emulation ]
 
-	[ compile template_int.cpp : <define>BOOST_TYPEOF_NATIVE : template_int_native ]
-	[ compile template_int.cpp : <define>BOOST_TYPEOF_COMPLIANT : template_int_emulation ]
+	[ compile template_int.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : template_int_native ]
+	[ compile template_int.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : template_int_emulation ]
 
-	[ compile template_tpl.cpp : <define>BOOST_TYPEOF_NATIVE : template_tpl_native ]
-	[ compile template_tpl.cpp : <define>BOOST_TYPEOF_COMPLIANT : template_tpl_emulation ]
+	[ compile template_tpl.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : template_tpl_native ]
+	[ compile template_tpl.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : template_tpl_emulation ]
 
-	[ compile template_enum.cpp : <define>BOOST_TYPEOF_NATIVE : template_enum_native ]
-	[ compile template_enum.cpp : <define>BOOST_TYPEOF_COMPLIANT : template_enum_emulation ]
+	[ compile template_enum.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : template_enum_native ]
+	[ compile template_enum.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : template_enum_emulation ]
 
-	[ compile template_dependent.cpp : <define>BOOST_TYPEOF_NATIVE : template_dependent_native ]
-	[ compile template_dependent.cpp : <define>BOOST_TYPEOF_COMPLIANT : template_dependent_emulation ]
+	[ compile template_dependent.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : template_dependent_native ]
+	[ compile template_dependent.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : template_dependent_emulation ]
 
-	[ compile template_multiword.cpp : <define>BOOST_TYPEOF_NATIVE : template_multiword_native ]
-	[ compile template_multiword.cpp : <define>BOOST_TYPEOF_COMPLIANT : template_multiword_emulation ]
+	[ compile template_multiword.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : template_multiword_native ]
+	[ compile template_multiword.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : template_multiword_emulation ]
 
-	[ compile modifiers.cpp : <define>BOOST_TYPEOF_NATIVE : modifiers_native ]
-	[ compile modifiers.cpp : <define>BOOST_TYPEOF_COMPLIANT : modifiers_emulation ]
+	[ compile modifiers.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : modifiers_native ]
+	[ compile modifiers.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : modifiers_emulation ]
 
-	[ compile function.cpp : <define>BOOST_TYPEOF_NATIVE : function_native ]
-	[ compile function.cpp : <define>BOOST_TYPEOF_COMPLIANT : function_emulation ]
+	[ compile function.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : function_native ]
+	[ compile function.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : function_emulation ]
 
-	[ compile function_ptr.cpp : <define>BOOST_TYPEOF_NATIVE : function_ptr_native ]
-	[ compile function_ptr.cpp : <define>BOOST_TYPEOF_COMPLIANT : function_ptr_emulation ]
+	[ compile function_ptr.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : function_ptr_native ]
+	[ compile function_ptr.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : function_ptr_emulation ]
 
-	[ compile function_ref.cpp : <define>BOOST_TYPEOF_NATIVE : function_ref_native ]
-	[ compile function_ref.cpp : <define>BOOST_TYPEOF_COMPLIANT : function_ref_emulation ]
+	[ compile function_ref.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : function_ref_native ]
+	[ compile function_ref.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : function_ref_emulation ]
 
-	[ compile member_function.cpp : <define>BOOST_TYPEOF_NATIVE : member_function_native ]
-	[ compile member_function.cpp : <define>BOOST_TYPEOF_COMPLIANT : member_function_emulation ]
+	[ compile member_function.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : member_function_native ]
+	[ compile member_function.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : member_function_emulation ]
 
-	[ compile data_member.cpp : <define>BOOST_TYPEOF_NATIVE : data_member_native ]
-	[ compile data_member.cpp : <define>BOOST_TYPEOF_COMPLIANT : data_member_emulation ]
+	[ compile data_member.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : data_member_native ]
+	[ compile data_member.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : data_member_emulation ]
 
-	[ compile lvalue.cpp : <define>BOOST_TYPEOF_NATIVE : lvalue_native ]
-	[ compile lvalue.cpp : <define>BOOST_TYPEOF_COMPLIANT : lvalue_emulation ]
+	[ compile lvalue.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : lvalue_native ]
+	[ compile lvalue.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : lvalue_emulation ]
 
-	[ compile noncopyable.cpp : <define>BOOST_TYPEOF_NATIVE : noncopyable_native ]
-	[ compile noncopyable.cpp : <define>BOOST_TYPEOF_COMPLIANT : noncopyable_emulation ]
+	[ compile noncopyable.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : noncopyable_native ]
+	[ compile noncopyable.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : noncopyable_emulation ]
 
-	[ compile std.cpp : <define>BOOST_TYPEOF_NATIVE : std_native ]
-	[ compile std.cpp : <define>BOOST_TYPEOF_COMPLIANT : std_emulation ]
+	[ compile std.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : std_native ]
+	[ compile std.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : std_emulation ]
 
 	[ run odr1.cpp odr2.cpp : : : <define>BOOST_TYPEOF_NATIVE special-requirements : odr_native ]
 	[ run odr1.cpp odr2.cpp : : : <define>BOOST_TYPEOF_COMPLIANT special-requirements : odr_emulation ]
 
-	[ compile function_ptr_from_tpl.cpp : <define>BOOST_TYPEOF_NATIVE : function_ptr_from_tpl_native ]
-	[ compile function_ptr_from_tpl.cpp : <define>BOOST_TYPEOF_COMPLIANT : function_ptr_from_tpl_emulation ]
+	[ compile function_ptr_from_tpl.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : function_ptr_from_tpl_native ]
+	[ compile function_ptr_from_tpl.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : function_ptr_from_tpl_emulation ]
 	;
