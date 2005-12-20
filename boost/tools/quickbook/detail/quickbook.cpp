@@ -182,14 +182,6 @@ main(int argc, char* argv[])
         // First thing, the filesystem should record the current working directory.
         boost::filesystem::initial_path();
 
-        if(!boost::filesystem::path::default_name_check_writable())
-        {
-            throw std::runtime_error("filesystem::default_name_check_writable");
-        }
-
-        // By default, don't do path validation
-        boost::filesystem::path::default_name_check(boost::filesystem::no_check);
-
         options_description desc("Allowed options");
         desc.add_options()
             ("help", "produce help message")
