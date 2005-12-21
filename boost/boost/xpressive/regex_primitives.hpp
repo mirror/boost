@@ -30,28 +30,31 @@ typedef assert_word_placeholder<word_boundary<true> > assert_word_boundary;
 typedef assert_word_placeholder<word_begin> assert_word_begin;
 typedef assert_word_placeholder<word_end> assert_word_end;
 
+/*
 ///////////////////////////////////////////////////////////////////////////////
+/// INTERNAL ONLY
 // BOOST_XPRESSIVE_GLOBAL
 //  for defining globals that neither violate the One Definition Rule nor
 //  lead to undefined behavior due to global object initialization order.
-#define BOOST_XPRESSIVE_GLOBAL(type, name, init)                                        \
-    namespace detail                                                                    \
-    {                                                                                   \
-        template<int Dummy>                                                             \
-        struct BOOST_PP_CAT(global_pod_, name)                                          \
-        {                                                                               \
-            static type const value;                                                    \
-        private:                                                                        \
-            union type_must_be_pod                                                      \
-            {                                                                           \
-                type t;                                                                 \
-                char ch;                                                                \
-            } u;                                                                        \
-        };                                                                              \
-        template<int Dummy>                                                             \
-        type const BOOST_PP_CAT(global_pod_, name)<Dummy>::value = init;                \
-    }                                                                                   \
-    type const &name = detail::BOOST_PP_CAT(global_pod_, name)<0>::value
+//#define BOOST_XPRESSIVE_GLOBAL(type, name, init)                                        \
+//    namespace detail                                                                    \
+//    {                                                                                   \
+//        template<int Dummy>                                                             \
+//        struct BOOST_PP_CAT(global_pod_, name)                                          \
+//        {                                                                               \
+//            static type const value;                                                    \
+//        private:                                                                        \
+//            union type_must_be_pod                                                      \
+//            {                                                                           \
+//                type t;                                                                 \
+//                char ch;                                                                \
+//            } u;                                                                        \
+//        };                                                                              \
+//        template<int Dummy>                                                             \
+//        type const BOOST_PP_CAT(global_pod_, name)<Dummy>::value = init;                \
+//    }                                                                                   \
+//    type const &name = detail::BOOST_PP_CAT(global_pod_, name)<0>::value
+*/
 
 } // namespace detail
 
@@ -415,7 +418,7 @@ proto::op_proxy<
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Sub-match placeholder, like $& in Perl
-proto::op_proxy<mark_tag, int> const s0 = {0};
+proto::op_proxy<detail::mark_tag, int> const s0 = {0};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Sub-match placeholder, like $1 in perl.
@@ -429,15 +432,15 @@ proto::op_proxy<mark_tag, int> const s0 = {0};
 /// After a successful regex_match() or regex_search(), the sub-match placeholders
 /// can be used to index into the match_results\<\> object to retrieve the Nth
 /// sub-match.
-proto::op_proxy<mark_tag, int> const s1 = {1};
-proto::op_proxy<mark_tag, int> const s2 = {2};
-proto::op_proxy<mark_tag, int> const s3 = {3};
-proto::op_proxy<mark_tag, int> const s4 = {4};
-proto::op_proxy<mark_tag, int> const s5 = {5};
-proto::op_proxy<mark_tag, int> const s6 = {6};
-proto::op_proxy<mark_tag, int> const s7 = {7};
-proto::op_proxy<mark_tag, int> const s8 = {8};
-proto::op_proxy<mark_tag, int> const s9 = {9};
+proto::op_proxy<detail::mark_tag, int> const s1 = {1};
+proto::op_proxy<detail::mark_tag, int> const s2 = {2};
+proto::op_proxy<detail::mark_tag, int> const s3 = {3};
+proto::op_proxy<detail::mark_tag, int> const s4 = {4};
+proto::op_proxy<detail::mark_tag, int> const s5 = {5};
+proto::op_proxy<detail::mark_tag, int> const s6 = {6};
+proto::op_proxy<detail::mark_tag, int> const s7 = {7};
+proto::op_proxy<detail::mark_tag, int> const s8 = {8};
+proto::op_proxy<detail::mark_tag, int> const s9 = {9};
 
 // NOTE: For the purpose of xpressive's documentation, make icase() look like an
 // ordinary function. In reality, it is a function object defined in detail/icase.hpp
@@ -451,11 +454,11 @@ proto::op_proxy<mark_tag, int> const s9 = {9};
 /// "foo" >> "bar" will not compile because both operands to the right-shift
 /// operator are const char*, and no such operator exists. Use as_xpr("foo") >> "bar"
 /// instead.
-template<typename Xpr>
-inline typename detail::as_xpr_type<Xpr>::const_reference
-as_xpr(Xpr const &xpr)
+template<typename Literal>
+inline typename detail::as_xpr_type<Literal>::const_reference
+as_xpr(Literal const &literal)
 {
-    return detail::as_xpr_type<Xpr>::call(xpr);
+    return detail::as_xpr_type<Literal>::call(xpr);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
