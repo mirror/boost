@@ -24,7 +24,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
     // "^(\\+|-)?([0-9]+\\.?[0-9]*|\\.[0-9]+)([eE](\\+|-)?[0-9]+)?$"
     static regex_type const test23 = bos >> test21 >> eos;
 
-    static char_type const *nil = 0;
+    static char_type const *nilbr = 0;
     static test_case const test_cases[] =
     {
         test_case // test21
@@ -33,7 +33,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("(\\+|-)?([0-9]+\\.?[0-9]*|\\.[0-9]+)([eE](\\+|-)?[0-9]+)?")
           , test21
           , L("")
-          , backrefs(L("-1234.56789"), L("-"), L("1234.56789"), L(""), L(""), nil)
+          , backrefs(L("-1234.56789"), L("-"), L("1234.56789"), L(""), L(""), nilbr)
         )
       , test_case // test22
         (
@@ -41,7 +41,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("(\\+|-)?([0-9]+\\.?[0-9]*|\\.[0-9]+)([eE](\\+|-)?[0-9]+)?")
           , test21
           , L("")
-          , backrefs(L("-1234.56789e-123123123"), L("-"), L("1234.56789"), L("e-123123123"), L("-"), nil)
+          , backrefs(L("-1234.56789e-123123123"), L("-"), L("1234.56789"), L("e-123123123"), L("-"), nilbr)
         )
       , test_case // test23
         (
@@ -73,7 +73,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("[a-zA-Z]*")
           , regex_type(*set[range(L('a'),L('z')) | range(L('A'),L('Z'))])
           , L("")
-          , backrefs(L("ThIs"), nil)
+          , backrefs(L("ThIs"), nilbr)
         )
       , test_case // test27
         (
@@ -89,7 +89,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("a\\^b")
           , as_xpr(L("a^b"))
           , L("")
-          , backrefs(L("a^b"), nil)
+          , backrefs(L("a^b"), nilbr)
         )
       , test_case // test29
         (
@@ -97,7 +97,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("a[^ ]b")
           , regex_type(L('a') >> ~set[L(' ')] >> L('b'))
           , L("")
-          , backrefs(L("a^b"), nil)
+          , backrefs(L("a^b"), nilbr)
         )
       , test_case // test30
         (
@@ -121,7 +121,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("a[\\^]b")
           , regex_type(L('a') >> set[L('^')] >> L('b'))
           , L("")
-          , backrefs(L("a^b"), nil)
+          , backrefs(L("a^b"), nilbr)
         )
       , test_case // test32
         (
@@ -129,7 +129,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("foo(?=bar)")
           , regex_type(icase(L("foo") >> before(L("bar"))))
           , L("i")
-          , backrefs(L("FOO"), nil)
+          , backrefs(L("FOO"), nilbr)
         )
       , test_case // test33
         (
@@ -137,7 +137,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("foo(?!bar)")
           , regex_type(icase(L("foo") >> ~before(L("bar"))))
           , L("i")
-          , backrefs(L("FOO"), nil)
+          , backrefs(L("FOO"), nilbr)
         )
       , test_case // test34
         (
@@ -145,7 +145,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("foo(?!bar)")
           , regex_type(icase(L("foo") >> ~before(L("bar"))))
           , L("i")
-          , backrefs(L("FOO"), nil)
+          , backrefs(L("FOO"), nilbr)
         )
       , test_case // test35
         (
@@ -153,7 +153,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("((?>(foo))bar)+")
           , regex_type(icase(+(s1= keep(s2= L("foo")) >> L("bar"))))
           , L("i")
-          , backrefs(L("foobarFOObar"), L("FOObar"), L("FOO"), nil)
+          , backrefs(L("foobarFOObar"), L("FOObar"), L("FOO"), nilbr)
         )
       , test_case // test37
         (
@@ -161,7 +161,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("(bar|(foo))+")
           , regex_type(+(s1= L("bar") | (s2= L("foo"))))
           , L("")
-          , backrefs(L("foobar"), L("bar"), L("foo"), nil)
+          , backrefs(L("foobar"), L("bar"), L("foo"), nilbr)
         )
       , test_case // test38
         (
@@ -169,7 +169,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("((bar)|foo)+")
           , regex_type(+(s1= (s2= L("bar")) | L("foo")))
           , L("")
-          , backrefs(L("foobar"), L("bar"), L("bar"), nil)
+          , backrefs(L("foobar"), L("bar"), L("bar"), nilbr)
         )
       , test_case // test39
         (
@@ -177,7 +177,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("(foo|(bar))+")
           , regex_type(+(s1= L("foo") | (s2= L("bar"))))
           , L("")
-          , backrefs(L("foobar"), L("bar"), L("bar"), nil)
+          , backrefs(L("foobar"), L("bar"), L("bar"), nilbr)
         )
       , test_case // test40
         (
@@ -185,7 +185,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("((foo)|bar)+")
           , regex_type(+(s1= (s2= L("foo")) | L("bar")))
           , L("")
-          , backrefs(L("foobar"), L("bar"), L("foo"), nil)
+          , backrefs(L("foobar"), L("bar"), L("foo"), nilbr)
         )
     };
 

@@ -17,7 +17,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
     typedef test_case<BidiIterT> test_case;
     typedef basic_regex<BidiIterT> regex_type;
 
-    static char_type const *nil = 0;
+    static char_type const *nilbr = 0;
     static test_case const test_cases[] =
     {
         test_case // test127
@@ -26,7 +26,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("foo(?#This is a comment[)bar")
           , regex_type(as_xpr(L("foo")) >> /*This is a comment[*/ L("bar"))
           , L("")
-          , backrefs(L("foobar"), nil)
+          , backrefs(L("foobar"), nilbr)
         )
       , test_case // test128
         (
@@ -34,7 +34,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("^ f oo b ar $")
           , regex_type(bos >> L("foobar") >> eos)
           , L("x")
-          , backrefs(L("foobar"), nil)
+          , backrefs(L("foobar"), nilbr)
         )
       , test_case // test129
         (
@@ -42,7 +42,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("^ f o *")
           , regex_type(bos >> L('f') >> *as_xpr(L('o')))
           , L("x")
-          , backrefs(L("foo"), nil)
+          , backrefs(L("foo"), nilbr)
         )
       , test_case // test129a
         (
@@ -50,7 +50,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("^ f \\157 *")
           , regex_type(bos >> L('f') >> *as_xpr(L('\157')))
           , L("x")
-          , backrefs(L("foo"), nil)
+          , backrefs(L("foo"), nilbr)
         )
       , test_case // test130
         (
@@ -58,7 +58,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("^ f oo\\  b ar $")
           , regex_type(bos >> L("foo bar") >> eos)
           , L("x")
-          , backrefs(L("foo bar"), nil)
+          , backrefs(L("foo bar"), nilbr)
         )
       , test_case // test131
         (
@@ -66,7 +66,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("^ f oo [ ] b ar $")
           , regex_type(bos >> L("foo") >> set[L(' ')] >> L("bar") >> eos)
           , L("x")
-          , backrefs(L("foo bar"), nil)
+          , backrefs(L("foo bar"), nilbr)
         )
       , test_case // test132
         (
@@ -74,7 +74,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("^ ( ? : f oo [ ] b ar ) $ # This is a comment")
           , regex_type(bos >> (L("foo") >> set[L(' ')] >> L("bar")) >> eos /*This is a comment*/)
           , L("x")
-          , backrefs(L("foo bar"), nil)
+          , backrefs(L("foo bar"), nilbr)
         )
       , test_case // test133
         (
@@ -82,7 +82,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("^ f oo [ ] b ar # This is a comment")
           , regex_type(bos >> L("foo") >> set[L(' ')] >> L("bar") /*This is a comment*/)
           , L("x")
-          , backrefs(L("foo bar"), nil)
+          , backrefs(L("foo bar"), nilbr)
         )
       , test_case // test134
         (
@@ -90,7 +90,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("^ f oo [ ] b ar \\# This is not a comment")
           , regex_type(bos >> L("foo") >> set[L(' ')] >> L("bar#Thisisnotacomment"))
           , L("x")
-          , backrefs(L("foo bar#Thisisnotacomment"), nil)
+          , backrefs(L("foo bar#Thisisnotacomment"), nilbr)
         )
       , test_case // test135
         (
@@ -98,7 +98,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("^f o(?x)     o     (?-x) b ar")
           , regex_type(bos >> L("f oo b ar"))
           , L("")
-          , backrefs(L("f oo b ar"), nil)
+          , backrefs(L("f oo b ar"), nilbr)
         )
       , test_case // test137
         (
@@ -122,7 +122,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("^(b?){2}bc$")
           , regex_type(bos >> repeat<2>(s1= optional(L('b'))) >> L("bc") >> eos)
           , L("")
-          , backrefs(L("bc"), L(""), nil)
+          , backrefs(L("bc"), L(""), nilbr)
         )
       , test_case // test140
         (
@@ -130,7 +130,7 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("^(b?){2}bc$")
           , regex_type(bos >> repeat<2>(s1= optional(L('b'))) >> L("bc") >> eos)
           , L("")
-          , backrefs(L("bbc"), L(""), nil)
+          , backrefs(L("bbc"), L(""), nilbr)
         )
     };
 

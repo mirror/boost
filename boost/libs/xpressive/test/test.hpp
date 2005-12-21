@@ -31,18 +31,18 @@ using namespace boost::xpressive;
 ///////////////////////////////////////////////////////////////////////////////
 // backrefs
 //
-template<typename CharT>
-inline std::vector<std::basic_string<CharT> > backrefs(CharT const *br0, ...)
+template<typename Char>
+inline std::vector<std::basic_string<Char> > backrefs(Char const *br0, ...)
 {
     using namespace std;
-    std::vector<std::basic_string<CharT> > backrefs;
+    std::vector<std::basic_string<Char> > backrefs;
     if(0 != br0)
     {
         backrefs.push_back(br0);
         va_list va;
         va_start(va, br0);
-        CharT const *brN;
-        while(0 != (brN = va_arg(va, CharT const *)))
+        Char const *brN;
+        while(0 != (brN = va_arg(va, Char const *)))
         {
             backrefs.push_back(brN);
         }
@@ -54,18 +54,15 @@ inline std::vector<std::basic_string<CharT> > backrefs(CharT const *br0, ...)
 ///////////////////////////////////////////////////////////////////////////////
 //
 struct no_match_t {};
-namespace
-{
-    no_match_t const no_match = {};
-}
+no_match_t const no_match = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 // test_case
 //
-template<typename BidiIterT>
+template<typename BidiIter>
 struct test_case
 {
-    typedef BidiIterT iterator_type;
+    typedef BidiIter iterator_type;
     typedef typename boost::iterator_value<iterator_type>::type char_type;
     typedef basic_regex<iterator_type> regex_type;
     typedef std::basic_string<char_type> string_type;
@@ -141,8 +138,8 @@ private:
 
 ///////////////////////////////////////////////////////////////////////////////
 // format_msg
-template<typename BidiIterT>
-inline std::string format_msg(test_case<BidiIterT> const &test, char const *msg)
+template<typename BidiIter>
+inline std::string format_msg(test_case<BidiIter> const &test, char const *msg)
 {
     std::string pat(test.pat_.begin(), test.pat_.end());
     return /*section +*/ " /" + pat + "/ : " + msg;
@@ -150,11 +147,11 @@ inline std::string format_msg(test_case<BidiIterT> const &test, char const *msg)
 
 ///////////////////////////////////////////////////////////////////////////////
 /// INTERNAL ONLY
-template<typename BidiIterT>
-inline void run_impl(basic_regex<BidiIterT> const &rx, test_case<BidiIterT> const &test)
+template<typename BidiIter>
+inline void run_impl(basic_regex<BidiIter> const &rx, test_case<BidiIter> const &test)
 {
-    typedef typename boost::iterator_value<BidiIterT>::type char_type;
-    match_results<BidiIterT> what;
+    typedef typename boost::iterator_value<BidiIter>::type char_type;
+    match_results<BidiIter> what;
     if(regex_search(test.str_, what, rx))
     {
         // match succeeded: was it expected to succeed?
@@ -174,8 +171,8 @@ inline void run_impl(basic_regex<BidiIterT> const &rx, test_case<BidiIterT> cons
 
 ///////////////////////////////////////////////////////////////////////////////
 // run_test
-template<typename BidiIterT>
-void run_test(test_case<BidiIterT> const &test)
+template<typename BidiIter>
+void run_test(test_case<BidiIter> const &test)
 {
     run_impl(test.dynamicrx_, test);
     run_impl(test.staticrx_, test);
@@ -229,12 +226,12 @@ inline void display_type(T const &)
 ///////////////////////////////////////////////////////////////////////////////
 // test_compile
 //  try to compile a given static regular expression
-template<typename BidiIterT, typename XprT>
-inline void test_compile(XprT const &xpr)
+template<typename BidiIter, typename Xpr>
+inline void test_compile(Xpr const &xpr)
 {
-    typedef typename boost::iterator_value<BidiIterT>::type char_type;
+    typedef typename boost::iterator_value<BidiIter>::type char_type;
     typedef boost::xpressive::regex_traits<char_type> traits_type;
-    boost::xpressive::detail::xpression_visitor<BidiIterT, boost::mpl::false_, traits_type> visitor;
+    boost::xpressive::detail::xpression_visitor<BidiIter, boost::mpl::false_, traits_type> visitor;
 
     display_type(boost::proto::compile(
         xpr
