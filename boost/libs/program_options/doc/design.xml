@@ -52,8 +52,7 @@
               <listitem>
                 <para>ascii input passed to a Unicode value, and Unicode input
                   passed to an ascii value will be converted using a codecvt
-                  facet (which may be specified by the user(which can be
-                  specified by the user)
+                  facet (which may be specified by the user).
                 </para>
               </listitem>                 
             </itemizedlist>
@@ -83,7 +82,7 @@
     </para>
 
     <para>The Unicode support outlined above is not complete. For example, we
-      don't plan allow Unicode in option names. Unicode support is hard and
+      don't support Unicode option names. Unicode support is hard and
       requires a Boost-wide solution. Even comparing two arbitrary Unicode
       strings is non-trivial. Finally, using Unicode in option names is
       related to internationalization, which has it's own
