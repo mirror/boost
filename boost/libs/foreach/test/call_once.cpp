@@ -10,7 +10,7 @@
 
 #include <vector>
 #include <boost/test/minimal.hpp>
-#include "../../../boost/foreach.hpp"
+#include <boost/foreach.hpp>
 
 // counter
 int counter = 0;

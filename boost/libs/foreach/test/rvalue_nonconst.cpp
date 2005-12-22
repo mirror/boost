@@ -10,7 +10,7 @@
 
 #include <vector>
 #include <boost/test/minimal.hpp>
-#include "../../../boost/foreach.hpp"
+#include <boost/foreach.hpp>
 
 #ifdef BOOST_FOREACH_NO_RVALUE_DETECTION
 # error Expected failure : rvalues disallowed

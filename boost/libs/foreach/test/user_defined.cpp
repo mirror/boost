@@ -26,7 +26,7 @@ namespace boost
     char const * boost_range_end(mine::dummy const&) {return 0;}
 }
 
-#include "../../../boost/foreach.hpp"
+#include <boost/foreach.hpp>
 
 namespace boost
 {

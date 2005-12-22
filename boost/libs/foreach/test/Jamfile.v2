@@ -19,4 +19,5 @@ test-suite "foreach"
       [ run rvalue_const.cpp ]
       [ run rvalue_nonconst.cpp ]
       [ run dependent_type.cpp ]
+      [ compile noncopyable.cpp ]
     ;

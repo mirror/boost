@@ -10,7 +10,7 @@
 
 #include <vector>
 #include <boost/test/minimal.hpp>
-#include "../../../boost/foreach.hpp"
+#include <boost/foreach.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
 // use FOREACH to iterate over a sequence with a dependent type

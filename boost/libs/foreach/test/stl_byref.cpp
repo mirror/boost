@@ -10,7 +10,7 @@
 
 #include <list>
 #include <boost/test/minimal.hpp>
-#include "../../../boost/foreach.hpp"
+#include <boost/foreach.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
 // define the container types, used by utility.hpp to generate the helper functions

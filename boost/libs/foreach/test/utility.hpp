@@ -11,7 +11,7 @@
 #define BOOST_FOREACH_TEST_UTILITY_HPP
 
 #include <boost/config.hpp>
-#include "../../../boost/foreach.hpp"
+#include <boost/foreach.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
 // sequence_equal_byval_n
