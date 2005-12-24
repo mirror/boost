@@ -71,6 +71,7 @@ inline std::istream& operator>>(std::istream& is, MyInt& i) { is >> i.val; retur
 inline std::ostream& operator<<(std::ostream& os, const MyInt& i) { os << i.val; return os; }
 inline MyInt abs(MyInt rhs) { if (rhs < MyInt()) rhs = -rhs; return rhs; }
 
+// This fixture replaces the check of rational's packing at the start of main.
 class rational_size_check
 {
     typedef INT_TYPE                          int_type;
@@ -104,12 +105,17 @@ public:
     }
 };
 
-// The basic test suite
-BOOST_AUTO_TEST_CASE( rational_test )
+// This fixture groups all the common settings.
+class my_configuration
 {
-    typedef INT_TYPE IntType;
-    typedef boost::rational<IntType> rat;
+public:
+    typedef INT_TYPE                    IntType;
+    typedef ::boost::rational<IntType>  rat;
+};
 
+// The basic test suite
+BOOST_FIXTURE_TEST_CASE( rational_test, my_configuration )
+{
     /* gcd tests */
     BOOST_CHECK_EQUAL( boost::gcd<IntType>(  1,  -1),  1 );
     BOOST_CHECK_EQUAL( boost::gcd<IntType>( -1,   1),  1 );
