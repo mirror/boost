@@ -21,8 +21,10 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <boost/preprocessor/stringize.hpp>
 #include "boost/rational.hpp"
 #include "boost/operators.hpp"
+
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
@@ -48,10 +50,6 @@ namespace {
 #ifndef INT_TYPE
 #define INT_TYPE long
 #endif
-
-// A temporary measure the minimize the changes used
-// in this step of modernizing this library's testing.
-void print_introduction();
 
 namespace {
 
@@ -87,37 +85,46 @@ inline std::istream& operator>>(std::istream& is, MyInt& i) { is >> i.val; retur
 inline std::ostream& operator<<(std::ostream& os, const MyInt& i) { os << i.val; return os; }
 inline MyInt abs(MyInt rhs) { if (rhs < MyInt()) rhs = -rhs; return rhs; }
 
-// Test statistics
-static unsigned int total_count;
-static unsigned int error_count;
+#define CHECK(x)  BOOST_CHECK( x )
 
-// Check a specific assertion
-void Check(bool ok, const char *s, int line)
+class rational_size_check
 {
-    ++total_count;
-    if (!ok)
-    {
-        std::cout << "Failed test " << s << " at line " << line << '\n';
-        ++error_count;
-    }
-#ifdef SHOW_SUCCESSES
-    std::cout << "Passed test " << s << '\n';
-#endif
-}
+    typedef INT_TYPE                          int_type;
+    typedef ::boost::rational<int_type>  rational_type;
 
-#define CHECK(x)  BOOST_CHECK( x )  //Check((x), #x, __LINE__)
+public:
+    rational_size_check()
+    {
+        using ::std::cout;
+
+        char const * const  int_name = BOOST_PP_STRINGIZE( INT_TYPE );
+
+        cout << "Running tests for boost::rational<" << int_name << ">\n\n";
+
+        cout << "Implementation issue: the minimal size for a rational\n"
+             << "is twice the size of the underlying integer type.\n\n";
+
+        cout << "Checking to see if space is being wasted.\n"
+             << "\tsizeof(" << int_name << ") == " << sizeof( int_type )
+             << "\n";
+        cout <<  "\tsizeof(boost::rational<" << int_name << ">) == "
+             << sizeof( rational_type ) << "\n\n";
+
+        cout << "Implementation has "
+             << ( 
+                  (sizeof( rational_type ) > 2u * sizeof( int_type ))
+                  ? "included padding bytes"
+                  : "minimal size"
+                )
+             << "\n\n";
+    }
+};
 
 // The basic test suite
 BOOST_AUTO_TEST_CASE( rational_test )
-//void run_tests()
 {
     typedef INT_TYPE IntType;
     typedef boost::rational<IntType> rat;
-
-    print_introduction();  // will move text here at next check-in
-
-    error_count = 0;
-    total_count = 0;
 
     /* gcd tests */
     CHECK(( boost::gcd<IntType>(1,-1) == 1     ));
@@ -397,41 +404,4 @@ using boost::abs;
 
 } // namespace
 
-// Macro hacking: STR(INT_TYPE) gives the integer type defined by the user *as
-// a string* for reporting below...
-#define STR(x) STR2(x)
-#define STR2(x) #x
-
-void print_introduction()
-//int main()
-{
-    std::cout << "Running tests for boost::rational<" STR(INT_TYPE) ">\n\n";
-
-    std::cout << "Implementation issue: the minimal size for a rational\n"
-              << "is twice the size of the underlying integer type.\n\n"
-              << "Checking to see if space is being wasted.\n";
-    std::cout << "    sizeof(" STR(INT_TYPE) ") == "
-              << sizeof(INT_TYPE) << "\n";
-    std::cout << "    sizeof(boost::rational<" STR(INT_TYPE) ">) == "
-              << sizeof(boost::rational<INT_TYPE>) << "\n\n";
-    if (sizeof(boost::rational<INT_TYPE>) > 2 * sizeof(INT_TYPE))
-        std::cout << "Implementation has included padding bytes\n\n";
-    else
-        std::cout << "Implementation has minimal size\n\n";
-
-/*    try
-    {
-        run_tests();
-    }
-    catch ( ... )
-    {
-        std::cout << "Unexpected exception!\n";
-        return EXIT_FAILURE;
-    }
-
-    unsigned int success_count = total_count - error_count;
-    unsigned int pct = 100 * success_count / total_count;
-    std::cout << success_count << "/" << total_count << " tests succeeded ("
-              << pct << "%). \n";
-    return error_count;*/
-}
+BOOST_GLOBAL_FIXTURE( rational_size_check );
