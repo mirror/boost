@@ -148,6 +148,12 @@ typedef ::boost::mpl::list<short, int, long, MyInt>  all_signed_test_types;
 
 // Should there be tests with unsigned integer types?
 
+} // namespace
+
+
+// Check if rational is the smallest size possible
+BOOST_GLOBAL_FIXTURE( rational_size_check );
+
 
 // The factoring function template suite
 BOOST_AUTO_TEST_SUITE( factoring_suite );
@@ -155,7 +161,7 @@ BOOST_AUTO_TEST_SUITE( factoring_suite );
 // GCD tests
 BOOST_AUTO_TEST_CASE_TEMPLATE( gcd_test, T, all_signed_test_types )
 {
-    using ::boost::gcd;
+    using boost::gcd;
 
     BOOST_CHECK_EQUAL( gcd<T>(  1,  -1), static_cast<T>( 1) );
     BOOST_CHECK_EQUAL( gcd<T>( -1,   1), static_cast<T>( 1) );
@@ -175,7 +181,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( gcd_test, T, all_signed_test_types )
 // LCM tests
 BOOST_AUTO_TEST_CASE_TEMPLATE( lcm_test, T, all_signed_test_types )
 {
-    using ::boost::lcm;
+    using boost::lcm;
 
     BOOST_CHECK_EQUAL( lcm<T>(  1,  -1), static_cast<T>( 1) );
     BOOST_CHECK_EQUAL( lcm<T>( -1,   1), static_cast<T>( 1) );
@@ -199,12 +205,13 @@ BOOST_AUTO_TEST_SUITE_END();
 BOOST_FIXTURE_TEST_SUITE( basic_rational_suite, my_configuration );
 
 // Initialization tests
-BOOST_AUTO_TEST_CASE_TEMPLATE( rational_initialization_test, T, all_signed_test_types )
+BOOST_AUTO_TEST_CASE_TEMPLATE( rational_initialization_test, T,
+ all_signed_test_types )
 {
     my_configuration::hook<T>  h;
-    ::boost::rational<T>  &r1 = h.r_[ 0 ], &r2 = h.r_[ 1 ], &r3 = h.r_[ 2 ],
-                          &r4 = h.r_[ 3 ], &r5 = h.r_[ 4 ], &r6 = h.r_[ 5 ],
-                          &r7 = h.r_[ 6 ], &r8 = h.r_[ 7 ], &r9 = h.r_[ 8 ];
+    boost::rational<T>  &r1 = h.r_[ 0 ], &r2 = h.r_[ 1 ], &r3 = h.r_[ 2 ],
+                        &r4 = h.r_[ 3 ], &r5 = h.r_[ 4 ], &r6 = h.r_[ 5 ],
+                        &r7 = h.r_[ 6 ], &r8 = h.r_[ 7 ], &r9 = h.r_[ 8 ];
 
     BOOST_CHECK_EQUAL( r1.numerator(), static_cast<T>( 0) );
     BOOST_CHECK_EQUAL( r2.numerator(), static_cast<T>( 0) );
@@ -231,7 +238,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_initialization_test, T, all_signed_test_
 BOOST_AUTO_TEST_CASE_TEMPLATE( rational_assign_test, T, all_signed_test_types )
 {
     my_configuration::hook<T>  h;
-    ::boost::rational<T> &     r = h.r_[ 0 ];
+    boost::rational<T> &       r = h.r_[ 0 ];
 
     r.assign( 6, 8 );
     BOOST_CHECK_EQUAL( r.numerator(),   static_cast<T>(3) );
@@ -243,12 +250,13 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_assign_test, T, all_signed_test_types )
 }
 
 // Comparison tests
-BOOST_AUTO_TEST_CASE_TEMPLATE( rational_comparison_test, T, all_signed_test_types )
+BOOST_AUTO_TEST_CASE_TEMPLATE( rational_comparison_test, T,
+ all_signed_test_types )
 {
     my_configuration::hook<T>  h;
-    ::boost::rational<T>  &r1 = h.r_[ 0 ], &r2 = h.r_[ 1 ], &r3 = h.r_[ 2 ],
-                          &r4 = h.r_[ 3 ], &r5 = h.r_[ 4 ], &r6 = h.r_[ 5 ],
-                          &r7 = h.r_[ 6 ], &r8 = h.r_[ 7 ], &r9 = h.r_[ 8 ];
+    boost::rational<T>  &r1 = h.r_[ 0 ], &r2 = h.r_[ 1 ], &r3 = h.r_[ 2 ],
+                        &r4 = h.r_[ 3 ], &r5 = h.r_[ 4 ], &r6 = h.r_[ 5 ],
+                        &r7 = h.r_[ 6 ], &r8 = h.r_[ 7 ], &r9 = h.r_[ 8 ];
 
     BOOST_CHECK( r1 == r2 );
     BOOST_CHECK( r2 != r3 );
@@ -287,8 +295,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_comparison_test, T, all_signed_test_type
 BOOST_AUTO_TEST_CASE_TEMPLATE( rational_1step_test, T, all_signed_test_types )
 {
     my_configuration::hook<T>  h;
-    ::boost::rational<T>  &r1 = h.r_[ 0 ], &r2 = h.r_[ 1 ], &r3 = h.r_[ 2 ],
-                          &r7 = h.r_[ 6 ], &r8 = h.r_[ 7 ];
+    boost::rational<T>  &r1 = h.r_[ 0 ], &r2 = h.r_[ 1 ], &r3 = h.r_[ 2 ],
+                        &r7 = h.r_[ 6 ], &r8 = h.r_[ 7 ];
 
     BOOST_CHECK(   r1++ == r2 );
     BOOST_CHECK(   r1   != r2 );
@@ -314,7 +322,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_abs_test, T, all_signed_test_types )
     // the compiler should look for a definition of abs in the namespace which
     // contains r's class (in this case boost)--among other places.
 
-    using ::boost::abs;
+    using boost::abs;
 #endif
 
     BOOST_CHECK_EQUAL( abs(r2), r2 );
@@ -326,7 +334,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_abs_test, T, all_signed_test_types )
 BOOST_AUTO_TEST_CASE_TEMPLATE( rational_unary_test, T, all_signed_test_types )
 {
     my_configuration::hook<T>  h;
-    ::boost::rational<T>       &r2 = h.r_[ 1 ], &r3 = h.r_[ 2 ],
+    boost::rational<T>         &r2 = h.r_[ 1 ], &r3 = h.r_[ 2 ],
                                &r4 = h.r_[ 3 ], &r5 = h.r_[ 4 ];
 
     BOOST_CHECK_EQUAL( +r5, r5 );
@@ -347,7 +355,7 @@ BOOST_AUTO_TEST_SUITE( rational_arithmetic_suite );
 BOOST_AUTO_TEST_CASE_TEMPLATE( rational_additive_test, T,
  all_signed_test_types )
 {
-    typedef ::boost::rational<T>  rational_type;
+    typedef boost::rational<T>  rational_type;
 
     BOOST_CHECK_EQUAL( rational_type( 1, 2) + rational_type(1, 2),
      static_cast<T>(1) );
@@ -390,7 +398,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_additive_test, T,
 BOOST_AUTO_TEST_CASE_TEMPLATE( rational_assignment_test, T,
  all_signed_test_types )
 {
-    typedef ::boost::rational<T>  rational_type;
+    typedef boost::rational<T>  rational_type;
 
     rational_type  r;
 
@@ -405,7 +413,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_assignment_test, T,
 BOOST_AUTO_TEST_CASE_TEMPLATE( rational_multiplication_test, T,
  all_signed_test_types )
 {
-    typedef ::boost::rational<T>  rational_type;
+    typedef boost::rational<T>  rational_type;
 
     BOOST_CHECK_EQUAL( rational_type(1, 3) * rational_type(-3, 4),
      rational_type(-1, 4) );
@@ -427,7 +435,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_multiplication_test, T,
 BOOST_AUTO_TEST_CASE_TEMPLATE( rational_division_test, T,
  all_signed_test_types )
 {
-    typedef ::boost::rational<T>  rational_type;
+    typedef boost::rational<T>  rational_type;
 
     BOOST_CHECK_EQUAL( rational_type(-1, 20) / rational_type(4, 5),
      rational_type(-1, 16) );
@@ -452,7 +460,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_division_test, T,
 BOOST_AUTO_TEST_CASE_TEMPLATE( rational_self_operations_test, T,
  all_signed_test_types )
 {
-    typedef ::boost::rational<T>  rational_type;
+    typedef boost::rational<T>  rational_type;
 
     rational_type  r = rational_type( 4, 3 );
 
@@ -478,9 +486,9 @@ BOOST_AUTO_TEST_SUITE( rational_extras_suite );
 // Output test
 BOOST_AUTO_TEST_CASE_TEMPLATE( rational_output_test, T, all_signed_test_types )
 {
-    ::std::ostringstream  oss;
+    std::ostringstream  oss;
     
-    oss << ::boost::rational<T>( 44, 14 );
+    oss << boost::rational<T>( 44, 14 );
     BOOST_CHECK_EQUAL( oss.str(), "22/7" );
 }
 
@@ -488,8 +496,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_output_test, T, all_signed_test_types )
 BOOST_AUTO_TEST_CASE_TEMPLATE( rational_input_failing_test, T,
  all_signed_test_types )
 {
-    ::std::istringstream  iss( "" );
-    ::boost::rational<T>  r;
+    std::istringstream  iss( "" );
+    boost::rational<T>  r;
 
     iss >> r;
     BOOST_CHECK( !iss );
@@ -529,11 +537,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_input_failing_test, T,
 BOOST_AUTO_TEST_CASE_TEMPLATE( rational_input_passing_test, T,
  all_signed_test_types )
 {
-    typedef ::boost::rational<T>  rational_type;
+    typedef boost::rational<T>  rational_type;
 
-    ::std::istringstream  iss( "1/2 12" );
-    rational_type         r;
-    int                   n = 0;
+    std::istringstream  iss( "1/2 12" );
+    rational_type       r;
+    int                 n = 0;
 
     BOOST_CHECK( iss >> r >> n );
     BOOST_CHECK_EQUAL( r, rational_type(1, 2) );
@@ -553,13 +561,13 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_input_passing_test, T,
 // Conversion test
 BOOST_AUTO_TEST_CASE( rational_cast_test )
 {
-    using ::boost::rational_cast;
+    using boost::rational_cast;
 
     // Note that these are not generic.  The problem is that rational_cast<T>
     // requires a conversion from IntType to T.  However, for a user-defined
     // IntType, it is not possible to define such a conversion except as an
     // "operator T()".  This causes problems with overloading resolution.
-    ::boost::rational<int> const  half( 1, 2 );
+    boost::rational<int> const  half( 1, 2 );
 
     BOOST_CHECK_CLOSE( rational_cast<double>(half), 0.5, 0.01 );
     BOOST_CHECK_EQUAL( rational_cast<int>(half), 0 );
@@ -569,7 +577,7 @@ BOOST_AUTO_TEST_CASE( rational_cast_test )
 // Dice tests (a non-main test)
 BOOST_AUTO_TEST_CASE_TEMPLATE( dice_roll_test, T, all_signed_test_types )
 {
-    typedef ::boost::rational<T>  rational_type;
+    typedef boost::rational<T>  rational_type;
 
     // Determine the mean number of times a fair six-sided die
     // must be thrown until each side has appeared at least once.
@@ -585,7 +593,3 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( dice_roll_test, T, all_signed_test_types )
 }
 
 BOOST_AUTO_TEST_SUITE_END();
-
-} // namespace
-
-BOOST_GLOBAL_FIXTURE( rational_size_check );
