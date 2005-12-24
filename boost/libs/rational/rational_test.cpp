@@ -29,21 +29,7 @@
 #include <iomanip>
 #include <iostream>
 #include <cstring>
-
-#ifndef BOOST_NO_STRINGSTREAM
-# include <sstream>
-#else
-# include <strstream>
-namespace {
-  class unfreezer {
-   public:
-      unfreezer(std::ostrstream& s) : m_stream(s) {}
-      ~unfreezer() { m_stream.freeze(false); }
-   private:
-      std::ostrstream& m_stream;
-  };
-}
-#endif
+#include <sstream>
 
 // We can override this on the compile, as -DINT_TYPE=short or whatever.
 // The default test is against rational<long>.
@@ -313,19 +299,11 @@ using boost::abs;
     CHECK(( r0 == rat(0,1) ));
 
     /* operator<< and operator>> tests */
-#ifndef BOOST_NO_STRINGSTREAM
     std::ostringstream oss;
     
     oss << rat(44,14);
     CHECK(( oss.str() == "22/7" ));
     typedef std::istringstream input_string_stream;
-#else
-    std::ostrstream oss;
-    oss << rat(44,14) << char();
-    auto unfreezer unfreeze(oss);
-    CHECK(( !std::strcmp(oss.str(), "22/7") ));
-    typedef std::istrstream input_string_stream;
-#endif
     {
         input_string_stream iss("");
         iss >> r0;
