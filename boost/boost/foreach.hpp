@@ -21,8 +21,9 @@
 #include <boost/detail/workaround.hpp>
 
 // Some compilers let us detect even const-qualified rvalues at compile-time
-#if defined(BOOST_MSVC) && (BOOST_MSVC >= 1310)                                                 \
- || defined(__GNUC__) && (__GNUC__ >= 3)
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1310)                                                       \
+ || BOOST_WORKAROUND(__GNUC__, >= 4)                                                            \
+ || (BOOST_WORKAROUND(__GNUC__, == 3) && (__GNUC_MINOR__ >= 4))
 # define BOOST_FOREACH_COMPILE_TIME_CONST_RVALUE_DETECTION
 #else
 // Some compilers allow temporaries to be bound to non-const references.
