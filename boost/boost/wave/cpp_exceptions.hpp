@@ -3,7 +3,7 @@
 
     http://www.boost.org/
 
-    Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost
+    Copyright (c) 2001-2006 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -62,6 +62,41 @@
 #endif // BOOST_NO_STRINGSTREAM
 #endif // BOOST_WAVE_THROW
 
+#if !defined(BOOST_WAVE_THROW_NAME)
+#ifdef BOOST_NO_STRINGSTREAM
+#include <strstream>
+#define BOOST_WAVE_THROW_NAME(cls, code, msg, act_pos, name)                  \
+    {                                                                         \
+        using namespace boost::wave;                                          \
+        std::strstream stream;                                                \
+            stream << cls::severity_text(cls::code) << ": "                   \
+            << cls::error_text(cls::code);                                    \
+        if ((msg)[0] != 0) stream << ": " << (msg);                           \
+        stream << std::ends;                                                  \
+        std::string throwmsg = stream.str(); stream.freeze(false);            \
+        boost::throw_exception(cls(throwmsg.c_str(), cls::code,               \
+            (act_pos).get_line(), (act_pos).get_column(),                     \
+            (act_pos).get_file().c_str(), (name)));                           \
+    }                                                                         \
+    /**/
+#else
+#include <sstream>
+#define BOOST_WAVE_THROW_NAME(cls, code, msg, act_pos, name)                  \
+    {                                                                         \
+        using namespace boost::wave;                                          \
+        std::stringstream stream;                                             \
+            stream << cls::severity_text(cls::code) << ": "                   \
+            << cls::error_text(cls::code);                                    \
+        if ((msg)[0] != 0) stream << ": " << (msg);                           \
+        stream << std::ends;                                                  \
+        boost::throw_exception(cls(stream.str().c_str(), cls::code,           \
+            (act_pos).get_line(), (act_pos).get_column(),                     \
+            (act_pos).get_file().c_str(), (name)));                           \
+    }                                                                         \
+    /**/
+#endif // BOOST_NO_STRINGSTREAM
+#endif // BOOST_WAVE_THROW
+
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
 namespace wave {
@@ -79,7 +114,7 @@ namespace util {
     };
     
     inline char const *
-    get_severity(severity level) 
+    get_severity(int level) 
     {
         static char const *severity_text[] = 
         {
@@ -111,9 +146,11 @@ public:
     }
     ~cpp_exception() throw() {}
     
-    virtual char const *what() const throw() = 0;   // to be overloaded
+    virtual char const *what() const throw() = 0;           // to be overloaded
     virtual char const *description() const throw() = 0;
-    virtual int get_errorcode() const = 0;
+    virtual int get_errorcode() const throw() = 0;
+    virtual int get_severity() const throw() = 0;
+    virtual char const* get_related_name() const throw() = 0;
     
     int line_no() const throw() { return line; }
     int column_no() const throw() { return column; }
@@ -192,13 +229,17 @@ public:
     {
         return buffer;
     }
-    util::severity get_severity() const
+    virtual int get_severity() const throw()
     {
         return level;
     }
-    int get_errorcode() const
+    virtual int get_errorcode() const throw()
     {
         return code;
+    }
+    virtual char const* get_related_name() const throw()
+    {
+        return "<unknown>";
     }
     
     static char const *error_text(int code)
@@ -310,6 +351,32 @@ private:
     char buffer[512];
     util::severity level;
     error_code code;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+//  Error during macro handling, this exception contains the related macro name
+class macro_handling_exception :
+    public preprocess_exception
+{
+public:
+    macro_handling_exception(char const *what_, error_code code, int line_, 
+        int column_, char const *filename_, char const *macroname) throw() 
+    :   preprocess_exception(what_, code, line_, column_, filename_)
+    {
+        unsigned int off = 0;
+        while (off < sizeof(name) && *macroname)
+            name[off++] = *macroname++;
+        name[off] = 0;
+    }
+    ~macro_handling_exception() throw() {}
+    
+    char const* get_related_name() const 
+    {
+        return name;
+    }
+
+private:
+    char name[512];
 };
 
 ///////////////////////////////////////////////////////////////////////////////

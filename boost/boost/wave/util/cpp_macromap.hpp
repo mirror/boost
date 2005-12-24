@@ -5,7 +5,7 @@
     
     http://www.boost.org/
 
-    Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost
+    Copyright (c) 2001-2006 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -100,6 +100,11 @@ public:
     template <typename IteratorT>
     bool is_defined(IteratorT const &begin, IteratorT const &end);
 
+//  Get the macro definition for the given macro scope
+    bool get_macro(string_type const &name, bool &has_parameters, 
+        bool &is_predefined, position_type &pos, parameter_container_type &parameters, 
+        definition_container_type &definition, defined_macros_type *scope = 0);
+        
 //  Remove a macro name from the given macro scope
     bool remove_macro(token_type const &token, bool even_predefined = false);
     
@@ -216,13 +221,14 @@ macromap<ContextT>::add_macro(token_type const &name, bool has_parameters,
 {
     if (!is_predefined && impl::is_special_macroname (name.get_value())) {
     // exclude special macro names
-        BOOST_WAVE_THROW(preprocess_exception, illegal_redefinition, 
-            name.get_value().c_str(), main_pos);
+        BOOST_WAVE_THROW_NAME(macro_handling_exception, illegal_redefinition, 
+            name.get_value().c_str(), main_pos, name.get_value().c_str());
     }
     if (AltExtTokenType == (token_id(name) & ExtTokenOnlyMask)) {
     // exclude special operator names
-        BOOST_WAVE_THROW(preprocess_exception, illegal_operator_redefinition, 
-            name.get_value().c_str(), main_pos);
+        BOOST_WAVE_THROW_NAME(macro_handling_exception, 
+            illegal_operator_redefinition, name.get_value().c_str(), main_pos,
+            name.get_value().c_str());
     }
     
 // try to define the new macro
@@ -235,8 +241,8 @@ typename defined_macros_type::iterator it = current_scope->find(name.get_value()
             !impl::parameters_equal((*it).second->macroparameters, parameters) ||
             !impl::definition_equals((*it).second->macrodefinition, definition))
         {
-            BOOST_WAVE_THROW(preprocess_exception, macro_redefinition, 
-                name.get_value().c_str(), main_pos);
+            BOOST_WAVE_THROW_NAME(macro_handling_exception, macro_redefinition, 
+                name.get_value().c_str(), main_pos, name.get_value().c_str());
         }
         return false;
     }
@@ -257,8 +263,9 @@ typename defined_macros_type::iterator it = current_scope->find(name.get_value()
         
             if (pit != names.end()) {
             // duplicate parameter name
-                BOOST_WAVE_THROW(preprocess_exception, duplicate_parameter_name, 
-                    (*pit).c_str(), main_pos);
+                BOOST_WAVE_THROW_NAME(macro_handling_exception, 
+                    duplicate_parameter_name, (*pit).c_str(), main_pos, 
+                    name.get_value().c_str());
             }
             names.insert((*itp).get_value());
         }
@@ -276,8 +283,8 @@ typename defined_macros_type::iterator it = current_scope->find(name.get_value()
         );
 
     if (!p.second) {
-        BOOST_WAVE_THROW(preprocess_exception, macro_insertion_error, 
-            name.get_value().c_str(), main_pos);
+        BOOST_WAVE_THROW_NAME(macro_handling_exception, macro_insertion_error, 
+            name.get_value().c_str(), main_pos, name.get_value().c_str());
     }
 
 // add the parameters and the definition
@@ -343,6 +350,33 @@ typename defined_macros_type::iterator cit(current_macros -> find(name));
             impl::get_full_name(begin, end).c_str(), main_pos);
     }
     return cit != current_macros -> end();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// 
+//  Get the macro definition for the given macro scope
+//
+///////////////////////////////////////////////////////////////////////////////
+template <typename ContextT>
+inline bool 
+macromap<ContextT>::get_macro(string_type const &name, bool &has_parameters, 
+    bool &is_predefined, position_type &pos, 
+    parameter_container_type &parameters, 
+    definition_container_type &definition, 
+    defined_macros_type *scope)
+{
+    typename defined_macros_type::iterator it;
+    if (!is_defined(name, it, scope))
+        return false;
+        
+macro_definition_type &macro_def = *(*it).second.get();
+
+    has_parameters = macro_def.is_functionlike;
+    is_predefined = macro_def.is_predefined;
+    pos = macro_def.macroname.get_position();
+    parameters = macro_def.macroparameters;
+    definition = macro_def.macrodefinition;
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

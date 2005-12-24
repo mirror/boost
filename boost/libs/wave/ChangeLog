@@ -1,7 +1,7 @@
 Boost.Wave: A Standard compliant C++ preprocessor library
 http://www.boost.org/
 
-Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost
+Copyright (c) 2001-2006 Hartmut Kaiser. Distributed under the Boost
 Software License, Version 1.0. (See accompanying file
 LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 -------------------------------------------------------------------------------
@@ -22,13 +22,13 @@ TODO (known issues):
 
 CHANGELOG
 
+Sat Dec 24 13:33:53 CST 2005
 - Version 1.2.2
 - Added three new preprocessing hooks: 'found_directive', 'skipped_token' and 
   'evaluated_conditional_expression' (thanks to Andreas Sæbjørnsen for the 
   suggestions).
 - Removed hook forwarding functions in the context_type.
 - Added missing include_next case branches for get_directivename() function.
-- Switched to Re2C V0.9.10
 - Added new sample: advanced_hooks.
 - Fixed a possible buffer overflow in the cpplexer and cpp exception classes.
 - Made the cpp_grammar thread safe.
@@ -84,6 +84,14 @@ CHANGELOG
   sample.
 - Fixed a (Windows specific) bug which triggered a boost::file_system exception
   under certain conditions.
+- Switched to Re2C V0.9.11
+- Fixed a problem with the new '-E' (--autooutput) option.
+- Added better error reporting for duplicate macro definitions to the Wave 
+  tool. Added the macro_handling_exception type containing the corresponding 
+  macro name via the new (virtual) get_related_name() function.
+- Added the get_severity() function to the exceptions thrown by the Wave
+  library.
+- Extended the copyright notice to 2006.
 
 Mon Dec  5 22:05:22 CST 2005
 Boost V1.33.1

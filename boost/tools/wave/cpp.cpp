@@ -3,7 +3,7 @@
 
     http://www.boost.org/
 
-    Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost
+    Copyright (c) 2001-2006 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -94,7 +94,7 @@ int print_copyright()
         "Wave: A Standard conformant C++ preprocessor based on the Boost.Wave library",
         "http://www.boost.org/",
         "",
-        "Copyright (c) 2001-2005 Hartmut Kaiser, Distributed under the Boost",
+        "Copyright (c) 2001-2006 Hartmut Kaiser, Distributed under the Boost",
         "Software License, Version 1.0. (See accompanying file",
         "LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)",
         0
@@ -275,6 +275,59 @@ namespace {
 }   // anonymous namespace
 
 ///////////////////////////////////////////////////////////////////////////////
+//  Retrieve the position of a macro definition
+template <typename Context>
+bool
+get_macro_position(Context &ctx, 
+    typename Context::token_type::string_type const& name,
+    typename Context::position_type &pos)
+{
+    bool has_parameters = false;
+    bool is_predefined = false;
+    std::vector<typename Context::token_type> parameters;
+    typename Context::token_sequence_type definition;
+    
+    return ctx.get_macro_definition(name, has_parameters, is_predefined, pos, 
+        parameters, definition);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//  Generate some meaningful error messages
+template <typename Context>
+void generate_error_message(Context &ctx, boost::wave::cpp_exception const &e)
+{
+    // default error reporting
+    cerr 
+        << e.file_name() << "(" << e.line_no() << "): "
+        << e.description() << endl;
+
+    using boost::wave::preprocess_exception;
+    switch(e.get_errorcode()) {
+    case preprocess_exception::macro_redefinition:
+        {
+            // report the point of the initial macro definition
+            typename Context::position_type pos;
+            if (get_macro_position(ctx, e.get_related_name(), pos)) {
+                cerr 
+                    << pos.get_file() << "(" << pos.get_line() << "): " 
+                    << preprocess_exception::severity_text(e.get_severity())
+                    << ": this is the location of the previous definition." << endl;
+            }
+            else {
+                cerr 
+                    << e.file_name() << "(" << e.line_no() << "): " 
+                    << preprocess_exception::severity_text(e.get_severity())
+                    << ": not able to retrieve the location of the previous definition." << endl;
+            }
+        }
+        break;
+
+    default:
+        break;
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
 //  do the actual preprocessing
 int 
 do_actual_work (std::string file_name, std::istream &instream, 
@@ -447,7 +500,7 @@ auto_stop_watch elapsed_time(cerr);
                 ctx.add_include_path((*cit).c_str());
             }
 
-        // if on the command line was given -I- , this has to be propagated
+        // if -I- was goven on the command line, this has to be propagated
             if (ip.seen_separator) 
                 ctx.set_sysinclude_delimiter();
                  
@@ -519,7 +572,7 @@ auto_stop_watch elapsed_time(cerr);
                 return -1;
             }
         }
-        else if (input_is_stdin && vm.count("autooutput")) {
+        else if (!input_is_stdin && vm.count("autooutput")) {
         // generate output in the file <input_base_name>.i
         fs::path out_file (file_name, fs::native);
         std::string basename (out_file.leaf());
@@ -584,9 +637,7 @@ auto_stop_watch elapsed_time(cerr);
             catch (boost::wave::cpp_exception const &e) {
             // some preprocessing error
                 if (boost::wave::is_recoverable(e)) {
-                    cerr 
-                        << e.file_name() << "(" << e.line_no() << "): "
-                        << e.description() << endl;
+                    generate_error_message(ctx, e);
                 }
                 else {
                     throw;      // re-throw for non-recoverable errors

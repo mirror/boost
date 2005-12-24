@@ -4,7 +4,7 @@
     
     http://www.boost.org/
 
-    Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost
+    Copyright (c) 2001-2006 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -164,6 +164,13 @@ public:
     template <typename IteratorT2>
     bool is_defined_macro(IteratorT2 const &begin, IteratorT2 const &end) 
         { return macros.is_defined(begin, end); }
+    bool get_macro_definition(typename token_type::string_type const &name, 
+            bool &has_params, bool &is_predefined, position_type &pos,
+            std::vector<token_type> &parameters, token_sequence_type &definition)
+        { 
+            return macros.get_macro(name, has_params, is_predefined, pos,
+                parameters, definition); 
+        }
     bool remove_macro_definition(typename token_type::string_type const &name, 
             bool even_predefined = false)
         { 
