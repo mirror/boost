@@ -19,19 +19,19 @@
 
 #define BOOST_TEST_MAIN  "Boost::Rational unit tests"
 
+#include <boost/mpl/list.hpp>
+#include <boost/operators.hpp>
+#include <boost/preprocessor/stringize.hpp>
+
+#include <boost/rational.hpp>
+
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/test/test_case_template.hpp>
 
-#include <boost/mpl/list.hpp>
-#include <boost/preprocessor/stringize.hpp>
-#include "boost/rational.hpp"
-#include "boost/operators.hpp"
-
-#include <cstdlib>
-#include <iomanip>
 #include <iostream>
-#include <cstring>
+#include <istream>
+#include <ostream>
 #include <sstream>
 
 // We can override this on the compile, as -DINT_TYPE=short or whatever.
