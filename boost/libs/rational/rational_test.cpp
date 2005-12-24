@@ -20,6 +20,7 @@
 #define BOOST_TEST_MAIN  "Boost::Rational unit tests"
 
 #include <boost/test/unit_test.hpp>
+#include <boost/test/floating_point_comparison.hpp>
 
 #include <boost/preprocessor/stringize.hpp>
 #include "boost/rational.hpp"
@@ -435,14 +436,16 @@ BOOST_AUTO_TEST_CASE( rational_input_passing_test )
 // Conversion test
 BOOST_AUTO_TEST_CASE( rational_cast_test )
 {
+    using ::boost::rational_cast;
+
     // Note that these are not generic.  The problem is that rational_cast<T>
     // requires a conversion from IntType to T.  However, for a user-defined
     // IntType, it is not possible to define such a conversion except as an
     // "operator T()".  This causes problems with overloading resolution.
     ::boost::rational<int> const  half( 1, 2 );
 
-    BOOST_CHECK_EQUAL( ::boost::rational_cast<double>(half), 0.5 );
-    BOOST_CHECK_EQUAL( ::boost::rational_cast<int>(half), 0 );
+    BOOST_CHECK_CLOSE( rational_cast<double>(half), 0.5, 0.01 );
+    BOOST_CHECK_EQUAL( rational_cast<int>(half), 0 );
 }
 
 // Dice tests (a non-main test)
