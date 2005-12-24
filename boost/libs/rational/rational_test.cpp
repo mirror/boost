@@ -14,7 +14,12 @@
  */
 
 // Revision History
+// 23 Dec 05  Change code to use Boost.Test (Daryle Walker)
 // 04 Mar 01  Patches for Intel C++ and GCC (David Abrahams)
+
+#define BOOST_TEST_MAIN  "Boost::Rational unit tests"
+
+#include <boost/test/unit_test.hpp>
 
 #include "boost/rational.hpp"
 #include "boost/operators.hpp"
@@ -43,6 +48,10 @@ namespace {
 #ifndef INT_TYPE
 #define INT_TYPE long
 #endif
+
+// A temporary measure the minimize the changes used
+// in this step of modernizing this library's testing.
+void print_introduction();
 
 namespace {
 
@@ -96,13 +105,16 @@ void Check(bool ok, const char *s, int line)
 #endif
 }
 
-#define CHECK(x) Check((x), #x, __LINE__)
+#define CHECK(x)  BOOST_CHECK( x )  //Check((x), #x, __LINE__)
 
 // The basic test suite
-void run_tests()
+BOOST_AUTO_TEST_CASE( rational_test )
+//void run_tests()
 {
     typedef INT_TYPE IntType;
     typedef boost::rational<IntType> rat;
+
+    print_introduction();  // will move text here at next check-in
 
     error_count = 0;
     total_count = 0;
@@ -390,7 +402,8 @@ using boost::abs;
 #define STR(x) STR2(x)
 #define STR2(x) #x
 
-int main()
+void print_introduction()
+//int main()
 {
     std::cout << "Running tests for boost::rational<" STR(INT_TYPE) ">\n\n";
 
@@ -406,7 +419,7 @@ int main()
     else
         std::cout << "Implementation has minimal size\n\n";
 
-    try
+/*    try
     {
         run_tests();
     }
@@ -420,5 +433,5 @@ int main()
     unsigned int pct = 100 * success_count / total_count;
     std::cout << success_count << "/" << total_count << " tests succeeded ("
               << pct << "%). \n";
-    return error_count;
+    return error_count;*/
 }
