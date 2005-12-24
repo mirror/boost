@@ -112,8 +112,30 @@ public:
 class my_configuration
 {
 public:
-    typedef INT_TYPE                    IntType;
-    typedef ::boost::rational<IntType>  rat;
+    template < typename T >
+    class hook
+    {
+    public:
+        typedef ::boost::rational<T>  rational_type;
+
+        rational_type  r_[ 9 ];
+
+    private:
+        struct parts { rational_type parts_[ 9 ]; };
+
+        static  parts  generate_rationals()
+        {
+            rational_type  r1, r2( 0 ), r3( 1 ), r4( -3 ), r5( 7, 2 ),
+                           r6( 5, 15 ), r7( 14, -21 ), r8( -4, 6 ),
+                           r9( -14, -70 );
+            parts const    result = { {r1, r2, r3, r4, r5, r6, r7, r8, r9} };
+
+            return result;
+        }
+
+    public:
+        hook() : r_( generate_rationals().parts_ ) {}
+    };
 };
 
 // Instead of controlling the integer type needed with a #define, use a list of
@@ -174,39 +196,46 @@ BOOST_AUTO_TEST_SUITE_END();
 
 
 // The basic test suite
-BOOST_FIXTURE_TEST_CASE( rational_test, my_configuration )
+BOOST_FIXTURE_TEST_SUITE( basic_rational_suite, my_configuration );
+
+BOOST_AUTO_TEST_CASE_TEMPLATE( rational_test, T, all_signed_test_types )
 {
+    typedef my_configuration::hook<T>           hook_type;
+    typedef typename hook_type::rational_type   rational_type;
+
     /* initialization tests */
-    rat r1, r2(0), r3(1), r4(-3), r5(7,2), r6(5,15), r7(14,-21),
-        r8(-4,6), r9(-14,-70);
+    hook_type      h;
+    rational_type  &r1 = h.r_[ 0 ], &r2 = h.r_[ 1 ], &r3 = h.r_[ 2 ],
+                   &r4 = h.r_[ 3 ], &r5 = h.r_[ 4 ], &r6 = h.r_[ 5 ],
+                   &r7 = h.r_[ 6 ], &r8 = h.r_[ 7 ], &r9 = h.r_[ 8 ];
 
-    BOOST_CHECK_EQUAL( r1.numerator(),  0 );
-    BOOST_CHECK_EQUAL( r2.numerator(),  0 );
-    BOOST_CHECK_EQUAL( r3.numerator(),  1 );
-    BOOST_CHECK_EQUAL( r4.numerator(), -3 );
-    BOOST_CHECK_EQUAL( r5.numerator(),  7 );
-    BOOST_CHECK_EQUAL( r6.numerator(),  1 );
-    BOOST_CHECK_EQUAL( r7.numerator(), -2 );
-    BOOST_CHECK_EQUAL( r8.numerator(), -2 );
-    BOOST_CHECK_EQUAL( r9.numerator(),  1 );
+    BOOST_CHECK_EQUAL( r1.numerator(), static_cast<T>( 0) );
+    BOOST_CHECK_EQUAL( r2.numerator(), static_cast<T>( 0) );
+    BOOST_CHECK_EQUAL( r3.numerator(), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( r4.numerator(), static_cast<T>(-3) );
+    BOOST_CHECK_EQUAL( r5.numerator(), static_cast<T>( 7) );
+    BOOST_CHECK_EQUAL( r6.numerator(), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( r7.numerator(), static_cast<T>(-2) );
+    BOOST_CHECK_EQUAL( r8.numerator(), static_cast<T>(-2) );
+    BOOST_CHECK_EQUAL( r9.numerator(), static_cast<T>( 1) );
 
-    BOOST_CHECK_EQUAL( r1.denominator(), 1 );
-    BOOST_CHECK_EQUAL( r2.denominator(), 1 );
-    BOOST_CHECK_EQUAL( r3.denominator(), 1 );
-    BOOST_CHECK_EQUAL( r4.denominator(), 1 );
-    BOOST_CHECK_EQUAL( r5.denominator(), 2 );
-    BOOST_CHECK_EQUAL( r6.denominator(), 3 );
-    BOOST_CHECK_EQUAL( r7.denominator(), 3 );
-    BOOST_CHECK_EQUAL( r8.denominator(), 3 );
-    BOOST_CHECK_EQUAL( r9.denominator(), 5 );
+    BOOST_CHECK_EQUAL( r1.denominator(), static_cast<T>(1) );
+    BOOST_CHECK_EQUAL( r2.denominator(), static_cast<T>(1) );
+    BOOST_CHECK_EQUAL( r3.denominator(), static_cast<T>(1) );
+    BOOST_CHECK_EQUAL( r4.denominator(), static_cast<T>(1) );
+    BOOST_CHECK_EQUAL( r5.denominator(), static_cast<T>(2) );
+    BOOST_CHECK_EQUAL( r6.denominator(), static_cast<T>(3) );
+    BOOST_CHECK_EQUAL( r7.denominator(), static_cast<T>(3) );
+    BOOST_CHECK_EQUAL( r8.denominator(), static_cast<T>(3) );
+    BOOST_CHECK_EQUAL( r9.denominator(), static_cast<T>(5) );
 
     /* assign() tests */
     r1.assign(6,8);
-    BOOST_CHECK_EQUAL( r1.numerator(),   3 );
-    BOOST_CHECK_EQUAL( r1.denominator(), 4 );
+    BOOST_CHECK_EQUAL( r1.numerator(),   static_cast<T>(3) );
+    BOOST_CHECK_EQUAL( r1.denominator(), static_cast<T>(4) );
     r1.assign(0,-7);
-    BOOST_CHECK_EQUAL( r1.numerator(),   0 );
-    BOOST_CHECK_EQUAL( r1.denominator(), 1 );
+    BOOST_CHECK_EQUAL( r1.numerator(),   static_cast<T>(0) );
+    BOOST_CHECK_EQUAL( r1.denominator(), static_cast<T>(1) );
 
     /* comparison tests */
     BOOST_CHECK( r1 == r2 );
@@ -227,19 +256,19 @@ BOOST_FIXTURE_TEST_CASE( rational_test, my_configuration )
     BOOST_CHECK( !(r8 >  r2) );
     BOOST_CHECK( !(r4 >= r6) );
 
-    BOOST_CHECK( r1 ==  0 );
-    BOOST_CHECK( r2 != -1 );
-    BOOST_CHECK( r3 <   2 );
-    BOOST_CHECK( r4 <= -3 );
-    BOOST_CHECK( r5 >   3 );
-    BOOST_CHECK( r6 >=  0 );
+    BOOST_CHECK( r1 == static_cast<T>( 0) );
+    BOOST_CHECK( r2 != static_cast<T>(-1) );
+    BOOST_CHECK( r3 <  static_cast<T>( 2) );
+    BOOST_CHECK( r4 <= static_cast<T>(-3) );
+    BOOST_CHECK( r5 >  static_cast<T>( 3) );
+    BOOST_CHECK( r6 >= static_cast<T>( 0) );
 
-    BOOST_CHECK(  0 == r2 );
-    BOOST_CHECK(  0 != r7 );
-    BOOST_CHECK( -1 <  r8 );
-    BOOST_CHECK( -2 <= r9 );
-    BOOST_CHECK(  1 >  r1 );
-    BOOST_CHECK(  1 >= r3 );
+    BOOST_CHECK( static_cast<T>( 0) == r2 );
+    BOOST_CHECK( static_cast<T>( 0) != r7 );
+    BOOST_CHECK( static_cast<T>(-1) <  r8 );
+    BOOST_CHECK( static_cast<T>(-2) <= r9 );
+    BOOST_CHECK( static_cast<T>( 1) >  r1 );
+    BOOST_CHECK( static_cast<T>( 1) >= r3 );
 
     /* increment/decrement tests */
     BOOST_CHECK(   r1++ == r2 );
@@ -262,16 +291,18 @@ using boost::abs;
 
     BOOST_CHECK_EQUAL( abs(r2), r2       );
     BOOST_CHECK_EQUAL( abs(r5), r5       );
-    BOOST_CHECK_EQUAL( abs(r8), rat(2, 3) );
+    BOOST_CHECK_EQUAL( abs(r8), rational_type(2, 3) );
 
     /* unary operator tests */
     BOOST_CHECK_EQUAL( +r5, r5 );
     BOOST_CHECK( -r3 != r3 );
     BOOST_CHECK_EQUAL( -(-r3), r3 );
-    BOOST_CHECK_EQUAL( -r4, 3 );
+    BOOST_CHECK_EQUAL( -r4, static_cast<T>(3) );
     BOOST_CHECK( !r2 );
     BOOST_CHECK( !!r3 );
 }
+
+BOOST_AUTO_TEST_SUITE_END();
 
 
 // The rational arithmetic operations suite
