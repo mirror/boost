@@ -198,16 +198,13 @@ BOOST_AUTO_TEST_SUITE_END();
 // The basic test suite
 BOOST_FIXTURE_TEST_SUITE( basic_rational_suite, my_configuration );
 
-BOOST_AUTO_TEST_CASE_TEMPLATE( rational_test, T, all_signed_test_types )
+// Initialization tests
+BOOST_AUTO_TEST_CASE_TEMPLATE( rational_initialization_test, T, all_signed_test_types )
 {
-    typedef my_configuration::hook<T>           hook_type;
-    typedef typename hook_type::rational_type   rational_type;
-
-    /* initialization tests */
-    hook_type      h;
-    rational_type  &r1 = h.r_[ 0 ], &r2 = h.r_[ 1 ], &r3 = h.r_[ 2 ],
-                   &r4 = h.r_[ 3 ], &r5 = h.r_[ 4 ], &r6 = h.r_[ 5 ],
-                   &r7 = h.r_[ 6 ], &r8 = h.r_[ 7 ], &r9 = h.r_[ 8 ];
+    my_configuration::hook<T>  h;
+    ::boost::rational<T>  &r1 = h.r_[ 0 ], &r2 = h.r_[ 1 ], &r3 = h.r_[ 2 ],
+                          &r4 = h.r_[ 3 ], &r5 = h.r_[ 4 ], &r6 = h.r_[ 5 ],
+                          &r7 = h.r_[ 6 ], &r8 = h.r_[ 7 ], &r9 = h.r_[ 8 ];
 
     BOOST_CHECK_EQUAL( r1.numerator(), static_cast<T>( 0) );
     BOOST_CHECK_EQUAL( r2.numerator(), static_cast<T>( 0) );
@@ -228,16 +225,31 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_test, T, all_signed_test_types )
     BOOST_CHECK_EQUAL( r7.denominator(), static_cast<T>(3) );
     BOOST_CHECK_EQUAL( r8.denominator(), static_cast<T>(3) );
     BOOST_CHECK_EQUAL( r9.denominator(), static_cast<T>(5) );
+}
 
-    /* assign() tests */
-    r1.assign(6,8);
-    BOOST_CHECK_EQUAL( r1.numerator(),   static_cast<T>(3) );
-    BOOST_CHECK_EQUAL( r1.denominator(), static_cast<T>(4) );
-    r1.assign(0,-7);
-    BOOST_CHECK_EQUAL( r1.numerator(),   static_cast<T>(0) );
-    BOOST_CHECK_EQUAL( r1.denominator(), static_cast<T>(1) );
+// Assignment (non-operator) tests
+BOOST_AUTO_TEST_CASE_TEMPLATE( rational_assign_test, T, all_signed_test_types )
+{
+    my_configuration::hook<T>  h;
+    ::boost::rational<T> &     r = h.r_[ 0 ];
 
-    /* comparison tests */
+    r.assign( 6, 8 );
+    BOOST_CHECK_EQUAL( r.numerator(),   static_cast<T>(3) );
+    BOOST_CHECK_EQUAL( r.denominator(), static_cast<T>(4) );
+
+    r.assign( 0, -7 );
+    BOOST_CHECK_EQUAL( r.numerator(),   static_cast<T>(0) );
+    BOOST_CHECK_EQUAL( r.denominator(), static_cast<T>(1) );
+}
+
+// Comparison tests
+BOOST_AUTO_TEST_CASE_TEMPLATE( rational_comparison_test, T, all_signed_test_types )
+{
+    my_configuration::hook<T>  h;
+    ::boost::rational<T>  &r1 = h.r_[ 0 ], &r2 = h.r_[ 1 ], &r3 = h.r_[ 2 ],
+                          &r4 = h.r_[ 3 ], &r5 = h.r_[ 4 ], &r6 = h.r_[ 5 ],
+                          &r7 = h.r_[ 6 ], &r8 = h.r_[ 7 ], &r9 = h.r_[ 8 ];
+
     BOOST_CHECK( r1 == r2 );
     BOOST_CHECK( r2 != r3 );
     BOOST_CHECK( r4 <  r3 );
@@ -269,8 +281,15 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_test, T, all_signed_test_types )
     BOOST_CHECK( static_cast<T>(-2) <= r9 );
     BOOST_CHECK( static_cast<T>( 1) >  r1 );
     BOOST_CHECK( static_cast<T>( 1) >= r3 );
+}
 
-    /* increment/decrement tests */
+// Increment & decrement tests
+BOOST_AUTO_TEST_CASE_TEMPLATE( rational_1step_test, T, all_signed_test_types )
+{
+    my_configuration::hook<T>  h;
+    ::boost::rational<T>  &r1 = h.r_[ 0 ], &r2 = h.r_[ 1 ], &r3 = h.r_[ 2 ],
+                          &r7 = h.r_[ 6 ], &r8 = h.r_[ 7 ];
+
     BOOST_CHECK(   r1++ == r2 );
     BOOST_CHECK(   r1   != r2 );
     BOOST_CHECK(   r1   == r3 );
@@ -278,22 +297,38 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_test, T, all_signed_test_types )
     BOOST_CHECK(   r8-- == r7 );
     BOOST_CHECK(   r8   != r7 );
     BOOST_CHECK( ++r8   == r7 );
+}
 
-    /* abs tests */
+// Absolute value tests
+BOOST_AUTO_TEST_CASE_TEMPLATE( rational_abs_test, T, all_signed_test_types )
+{
+    typedef my_configuration::hook<T>           hook_type;
+    typedef typename hook_type::rational_type   rational_type;
+
+    hook_type      h;
+    rational_type  &r2 = h.r_[ 1 ], &r5 = h.r_[ 4 ], &r8 = h.r_[ 7 ];
+
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-// This is a nasty hack, required because some compilers do not implement
-// "Koenig Lookup". Basically, if I call abs(r), the C++ standard says that
-// the compiler should look for a definition of abs in the namespace which
-// contains r's class (in this case boost) - among other places.
+    // This is a nasty hack, required because some compilers do not implement
+    // "Koenig Lookup."  Basically, if I call abs(r), the C++ standard says that
+    // the compiler should look for a definition of abs in the namespace which
+    // contains r's class (in this case boost)--among other places.
 
-using boost::abs;
+    using ::boost::abs;
 #endif
 
-    BOOST_CHECK_EQUAL( abs(r2), r2       );
-    BOOST_CHECK_EQUAL( abs(r5), r5       );
+    BOOST_CHECK_EQUAL( abs(r2), r2 );
+    BOOST_CHECK_EQUAL( abs(r5), r5 );
     BOOST_CHECK_EQUAL( abs(r8), rational_type(2, 3) );
+}
 
-    /* unary operator tests */
+// Unary operator tests
+BOOST_AUTO_TEST_CASE_TEMPLATE( rational_unary_test, T, all_signed_test_types )
+{
+    my_configuration::hook<T>  h;
+    ::boost::rational<T>       &r2 = h.r_[ 1 ], &r3 = h.r_[ 2 ],
+                               &r4 = h.r_[ 3 ], &r5 = h.r_[ 4 ];
+
     BOOST_CHECK_EQUAL( +r5, r5 );
     BOOST_CHECK( -r3 != r3 );
     BOOST_CHECK_EQUAL( -(-r3), r3 );
