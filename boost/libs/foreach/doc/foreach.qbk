@@ -33,7 +33,8 @@
 [def _range_              [@../../libs/range/index.html Boost.Range]]
 [def _iterator_range_     [@../../libs/range/doc/utility_class.html#iter_range `boost::iterator_range<>`]]
 [def _sub_range_          [@../../libs/range/doc/utility_class.html#sub_range `boost::sub_range<>`]]
-[def _foreach_            `BOOST_FOREACH`]
+[def _noncopyable_        [@../../libs/utility/utility.htm#Class_noncopyable `boost::noncopyable`]]
+[def _foreach_            `BOOST_FOREACH`] 
 
 [section Introduction]
 
@@ -150,7 +151,7 @@ example, notice that braces around the loop body are not necessary:
         BOOST_FOREACH( int & i, row )
             ++i;
 
-Iterate over an expression that returns a sequence by value (i.e. an r-value):
+Iterate over an expression that returns a sequence by value (i.e. an rvalue):
 
     extern std::vector<float> get_vector_float();
     BOOST_FOREACH( float f, get_vector_float() )
@@ -158,7 +159,7 @@ Iterate over an expression that returns a sequence by value (i.e. an r-value):
         // Note: get_vector_float() will be called exactly once
     }    
 
-Iterating over r-values doesn't work on some older compilers. Check the 
+Iterating over rvalues doesn't work on some older compilers. Check the 
 [link foreach.portability Portability] section to see whether your
 compiler supports this.    
 
@@ -166,7 +167,7 @@ compiler supports this.
 
 People have complained about the name _foreach_. It's too long. `ALL CAPS` can
 get tiresome to look at. That may be true, but _foreach_ is merely following
-the [@http://www.boost.org/more/lib_guide.htm Boost Naming Convention]. That
+the [@../../../more/lib_guide.htm Boost Naming Convention]. That
 doesn't mean you're stuck with it, though. If you would like to use a different
 identifier (`foreach`, perhaps), you can simply do:
 
@@ -182,7 +183,7 @@ name conflicts in your code.
 
 [endsect]
 
-[section Extending BOOST_FOREACH]
+[section Extensibility]
 
 If you want to use _foreach_ to iterate over some new collection type, you must
 "teach" _foreach_ how to interact with your type. Since _foreach_ is built on top
@@ -231,6 +232,132 @@ can now use _foreach_ to iterate over your type.
 There are some portability issues you should be aware of when extending _foreach_. Be sure
 to check out the [link foreach.portability Portability] section.
 
+[h2 Making _foreach_ Work with Non-Copyable Sequence Types]
+
+If you define a sequence type that is non-copyable, you will need to tell _foreach_ to
+not try to copy it. If your type inherits from _noncopyable_, no further action is
+required. If not, you should specialize the `boost::foreach::is_noncopyable<>` template, as
+follows:
+
+    class my_noncopyable_vector
+    {
+        // ...
+    private:
+        my_noncopyable_vector( my_noncopyable_vector const & ); // non-copyable!
+    };
+    
+    namespace boost { namespace foreach
+    {
+        template<>
+        struct is_noncopyable< my_noncopyable_vector >
+          : mpl::true_
+        {
+        };
+    }}
+
+Another way to achieve the same effect is to override the global `boost_foreach_is_noncopyable()`
+function. Doing it this way has the advantage of being portable to older compilers.
+
+    inline boost::mpl::true_ *
+    boost_foreach_is_noncopyable( my_noncopyable_vector *&, boost::foreach::tag )
+    {
+        return 0;
+    }
+
+[h2 Optimizing _foreach_ for Cheap-to-Copy Sequence Types]
+
+On some compilers, _foreach_ must sometimes take a slightly slower code path to guarantee
+correct handling of sequences stored in temporary objects. It asks itself, "Should I make
+a copy of this object?" and later, "Did I make a copy or not?" For some types of sequences,
+this is overkill. Consider a sequence which is a simple pair of iterators. Jumping through
+hoops of fire to avoid copying it doesn't make sense because copying it is so cheap.
+
+For types that are cheap to copy, _foreach_ provides a hook that lets you tell it not to
+worry about the expense of making a copy. This can result in slightly faster loop execution.
+Simply specialize the `boost::foreach::has_cheap_copy<>` trait, as follows:
+
+    struct sub_string
+      : boost::iterator_range< std::string::iterator >
+    {
+        // ...
+    };
+    
+    namespace boost { namespace foreach
+    {
+        template<>
+        struct has_cheap_copy< sub_string >
+          : mpl::true_
+        {
+        };
+    }}
+
+Alternately, you could achieve the same effect by overriding the global `boost_foreach_has_cheap_copy()`
+function, as follows:
+
+
+    inline boost::mpl::true_ *
+    boost_foreach_has_cheap_copy( sub_string *&, boost::foreach::tag )
+    {
+        return 0;
+    }
+
+This method is portable to older compilers.
+
+[endsect]
+
+[section Portability]
+
+_foreach_ uses some fairly sophisticated techniques that not all compilers support. Depending
+on how compliant your compiler is, you may not be able to use _foreach_ in some scenarios. Since
+_foreach_ uses _range_, it inherits _range_'s portability issues. You can read about those
+issues in that library's [@../../libs/range/doc/portability.html Portability]
+section.
+
+In addition to the demands placed on the compiler by _range_, _foreach_ places additional demands
+in order to handle rvalue sequences properly. (Recall that an rvalue is an unnamed object, so
+an example of an rvalue sequence would be a function that returns a `std::vector<>` by value.) Compilers
+vary in their handling of rvalues and lvalues. To cope with the situation _foreach_ defines three
+levels of compliance, described below:
+
+[table BOOST_FOREACH Compliance Levels
+  [[Level]   [Meaning]]
+  [[*Level 0*] [['[_Highest level of compliance]]\n
+                _foreach_ works with lvalues, rvalues and const-qualified rvalues.]]
+  [[*Level 1*] [['[_Moderate level of compliance]]\n
+                _foreach_ works with lvalues and plain rvalues, but not const-qualified rvalues.\n
+                `BOOST_FOREACH_NO_CONST_RVALUE_DETECTION` is defined in this case.]]
+  [[*Level 2*] [['[_Lowest level of compliance]]\n
+                _foreach_ works with lvalues only, not rvalues.\n
+                `BOOST_FOREACH_NO_RVALUE_DETECTION` is defined in this case.]]
+]
+
+Below are the compilers _foreach_ has been tested with, and the compliance level you can expect
+from each.
+
+[table Compiler Compliance Level
+  [[Compiler]                [Compliance Level]]
+  [[Visual C++ 8.0]          [Level 0]]
+  [[Visual C++ 7.1]          [Level 0]]
+  [[Visual C++ 7.0]          [Level 2]]
+  [[Visual C++ 6.0]          [Level 2]]
+  [[gcc 4.0]                 [Level 0]]
+  [[gcc 3.4]                 [Level 0]]
+  [[gcc 3.3]                 [Level 0]]
+  [[mingw 3.4]               [Level 0]]
+  [[Intel for Linux 9.0]     [Level 0]]
+  [[Intel for Windows 9.0]   [Level 0]]
+  [[Intel for Windows 8.0]   [Level 1]]
+  [[Intel for Windows 7.0]   [Level 2]]
+  [[Comeau 4.3.3]            [Level 0]]
+  [[Borland 5.6.4]           [Level 2]]
+  [[Metrowerks 9.5]          [Level 1]]
+  [[Metrowerks 9.4]          [Level 1]]
+  [[SunPro 5.8]              [Level 2]]
+  [[qcc 3.3]                 [Level 0]]
+  [[tru64cxx 65]             [Level 2]]
+  [[tru64cxx 71]             [Level 2]]
+]
+
 [endsect]
 
 [section Pitfalls]
@@ -270,7 +397,7 @@ in a local variable. This is called ['hoisting], and it is an
 important optimization. It assumes, however, that the end iterator
 of the sequence is stable. It usually is, but if you modify the
 sequence by adding or removing elements while you are iterating
-over it, you may end up hoisting yourself on your on petard.
+over it, you may end up hoisting yourself on your own petard.
 
 Consider the following code:
 
@@ -302,53 +429,6 @@ so could cause iterators to become invalid, don't do it. Use a regular
 
 [endsect]
 
-[section Portability]
-
-_foreach_ uses some fairly sophisticated techniques that not all compilers support. Depending
-on how compliant your compiler is, you may not be able to use _foreach_ in some scenarios. Since
-_foreach_ uses _range_, it inherits _range_'s portability issues. You can read about those
-issues in that library's [@../../libs/range/doc/portability.html Portability]
-section.
-
-In addition to the demands placed on the compiler by _range_, _foreach_ places additional demands
-in order to handle r-value sequences properly. (Recall that an r-value is an unnamed object, so
-an example of an r-value sequence would be a function that returns a `std::vector<>` by value.) Compilers
-vary in their handling of r-values and l-values. To cope with the situation _foreach_ defines three
-levels of compliance, described below:
-
-[table BOOST_FOREACH Compliance Levels
-  [[Level]   [Meaning]]
-  [[*Level 0*] [['[_Highest level of compliance]]\n
-                _foreach_ works with l-values, r-values and const-qualified r-values.]]
-  [[*Level 1*] [['[_Moderate level of compliance]]\n
-                _foreach_ works with l-values and plain r-values, but not const-qualified r-values.\n
-                `BOOST_FOREACH_NO_CONST_RVALUE_DETECTION` is defined in this case.]]
-  [[*Level 2*] [['[_Lowest level of compliance]]\n
-                _foreach_ works with l-values only, not r-values.\n
-                `BOOST_FOREACH_NO_RVALUE_DETECTION` is defined in this case.]]
-]
-
-Below are the compilers _foreach_ has been tested with, and the compliance level you can expect
-from each.
-
-[table Compiler Compliance Level
-  [[Compiler]                [Compliance Level]]
-  [[Visual C++ 7.1]          [Level 1]]
-  [[Visual C++ Whidbey Beta] [Level 1]]
-  [[Visual C++ 7.0]          [Level 2]]
-  [[Visual C++ 6.0]          [Level 2]]
-  [[gcc 3.3.3]               [Level 0]]
-  [[Intel for Windows 8.0]   [Level 1]]
-  [[Intel for Windows 7.0]   [Level 2]]
-  [[Comeau 4.3.3]            [Level 0]]
-  [[Borland 5.6.4]           [Level 2]]
-]
-
-Also, if your compiler is one for which the Boost config system defines `BOOST_NO_FUNCTION_TEMPLATE_ORDERING`,
-then the compliance level for the _foreach_ macro is Level 2, the lowest.
-
-[endsect]
-
 [section History and Acknowledgements]
 
 [h2 History]
@@ -367,7 +447,7 @@ from scratch in standard C++, corrected some shortcomings of the CUJ version and
 BOOST_FOREACH. In October of 2003 I began a discussion about it on the Boost developers list, where
 it met with a luke-warm reception. I dropped the issue until December 2004, when I reimplemented
 BOOST_FOREACH yet again. The new version only evaluated its sequence expression once and correctly
-handled both l-value and r-value sequence expressions. It was built on top of the recently
+handled both lvalue and rvalue sequence expressions. It was built on top of the recently
 accepted _range_ library, which increased its portability. This was the version that, on Dec. 12 2004,
 I finally submitted to Boost for review. It was accepted into Boost on May 5, 2005.
 
