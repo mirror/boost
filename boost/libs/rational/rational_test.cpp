@@ -21,7 +21,9 @@
 
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/test_case_template.hpp>
 
+#include <boost/mpl/list.hpp>
 #include <boost/preprocessor/stringize.hpp>
 #include "boost/rational.hpp"
 #include "boost/operators.hpp"
@@ -114,44 +116,58 @@ public:
     typedef ::boost::rational<IntType>  rat;
 };
 
+// Instead of controlling the integer type needed with a #define, use a list of
+// all available types.  Since the headers #included don't change because of the
+// integer #define, only the built-in types and MyInt are available.  (Any other
+// arbitrary integer type introduced by the #define would get compiler errors
+// because its header can't be #included.)
+typedef ::boost::mpl::list<short, int, long>     builtin_signed_test_types;
+typedef ::boost::mpl::list<short, int, long, MyInt>  all_signed_test_types;
+
+// Should there be tests with unsigned integer types?
+
 
 // The factoring function template suite
-BOOST_FIXTURE_TEST_SUITE( factoring_suite, my_configuration );
+BOOST_AUTO_TEST_SUITE( factoring_suite );
 
 // GCD tests
-BOOST_AUTO_TEST_CASE( gcd_test )
+BOOST_AUTO_TEST_CASE_TEMPLATE( gcd_test, T, all_signed_test_types )
 {
-    BOOST_CHECK_EQUAL( boost::gcd<IntType>(  1,  -1),  1 );
-    BOOST_CHECK_EQUAL( boost::gcd<IntType>( -1,   1),  1 );
-    BOOST_CHECK_EQUAL( boost::gcd<IntType>(  1,   1),  1 );
-    BOOST_CHECK_EQUAL( boost::gcd<IntType>( -1,  -1),  1 );
-    BOOST_CHECK_EQUAL( boost::gcd<IntType>(  0,   0),  0 );
-    BOOST_CHECK_EQUAL( boost::gcd<IntType>(  7,   0),  7 );
-    BOOST_CHECK_EQUAL( boost::gcd<IntType>(  0,   9),  9 );
-    BOOST_CHECK_EQUAL( boost::gcd<IntType>( -7,   0),  7 );
-    BOOST_CHECK_EQUAL( boost::gcd<IntType>(  0,  -9),  9 );
-    BOOST_CHECK_EQUAL( boost::gcd<IntType>( 42,  30),  6 );
-    BOOST_CHECK_EQUAL( boost::gcd<IntType>(  6,  -9),  3 );
-    BOOST_CHECK_EQUAL( boost::gcd<IntType>(-10, -10), 10 );
-    BOOST_CHECK_EQUAL( boost::gcd<IntType>(-25, -10),  5 );
+    using ::boost::gcd;
+
+    BOOST_CHECK_EQUAL( gcd<T>(  1,  -1), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( gcd<T>( -1,   1), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( gcd<T>(  1,   1), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( gcd<T>( -1,  -1), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( gcd<T>(  0,   0), static_cast<T>( 0) );
+    BOOST_CHECK_EQUAL( gcd<T>(  7,   0), static_cast<T>( 7) );
+    BOOST_CHECK_EQUAL( gcd<T>(  0,   9), static_cast<T>( 9) );
+    BOOST_CHECK_EQUAL( gcd<T>( -7,   0), static_cast<T>( 7) );
+    BOOST_CHECK_EQUAL( gcd<T>(  0,  -9), static_cast<T>( 9) );
+    BOOST_CHECK_EQUAL( gcd<T>( 42,  30), static_cast<T>( 6) );
+    BOOST_CHECK_EQUAL( gcd<T>(  6,  -9), static_cast<T>( 3) );
+    BOOST_CHECK_EQUAL( gcd<T>(-10, -10), static_cast<T>(10) );
+    BOOST_CHECK_EQUAL( gcd<T>(-25, -10), static_cast<T>( 5) );
 }
 
 // LCM tests
-BOOST_AUTO_TEST_CASE( lcm_test )
+BOOST_AUTO_TEST_CASE_TEMPLATE( lcm_test, T, all_signed_test_types )
 {
-    BOOST_CHECK_EQUAL( boost::lcm<IntType>(  1,  -1),  1 );
-    BOOST_CHECK_EQUAL( boost::lcm<IntType>( -1,   1),  1 );
-    BOOST_CHECK_EQUAL( boost::lcm<IntType>(  1,   1),  1 );
-    BOOST_CHECK_EQUAL( boost::lcm<IntType>( -1,  -1),  1 );
-    BOOST_CHECK_EQUAL( boost::lcm<IntType>(  0,   0),  0 );
-    BOOST_CHECK_EQUAL( boost::lcm<IntType>(  6,   0),  0 );
-    BOOST_CHECK_EQUAL( boost::lcm<IntType>(  0,   7),  0 );
-    BOOST_CHECK_EQUAL( boost::lcm<IntType>( -5,   0),  0 );
-    BOOST_CHECK_EQUAL( boost::lcm<IntType>(  0,  -4),  0 );
-    BOOST_CHECK_EQUAL( boost::lcm<IntType>( 18,  30), 90 );
-    BOOST_CHECK_EQUAL( boost::lcm<IntType>( -6,   9), 18 );
-    BOOST_CHECK_EQUAL( boost::lcm<IntType>(-10, -10), 10 );
-    BOOST_CHECK_EQUAL( boost::lcm<IntType>( 25, -10), 50 );
+    using ::boost::lcm;
+
+    BOOST_CHECK_EQUAL( lcm<T>(  1,  -1), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( lcm<T>( -1,   1), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( lcm<T>(  1,   1), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( lcm<T>( -1,  -1), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( lcm<T>(  0,   0), static_cast<T>( 0) );
+    BOOST_CHECK_EQUAL( lcm<T>(  6,   0), static_cast<T>( 0) );
+    BOOST_CHECK_EQUAL( lcm<T>(  0,   7), static_cast<T>( 0) );
+    BOOST_CHECK_EQUAL( lcm<T>( -5,   0), static_cast<T>( 0) );
+    BOOST_CHECK_EQUAL( lcm<T>(  0,  -4), static_cast<T>( 0) );
+    BOOST_CHECK_EQUAL( lcm<T>( 18,  30), static_cast<T>(90) );
+    BOOST_CHECK_EQUAL( lcm<T>( -6,   9), static_cast<T>(18) );
+    BOOST_CHECK_EQUAL( lcm<T>(-10, -10), static_cast<T>(10) );
+    BOOST_CHECK_EQUAL( lcm<T>( 25, -10), static_cast<T>(50) );
 }
 
 BOOST_AUTO_TEST_SUITE_END();
@@ -259,123 +275,155 @@ using boost::abs;
 
 
 // The rational arithmetic operations suite
-BOOST_FIXTURE_TEST_SUITE( rational_arithmetic_suite, my_configuration );
+BOOST_AUTO_TEST_SUITE( rational_arithmetic_suite );
 
 // Addition & subtraction tests
-BOOST_AUTO_TEST_CASE( rational_additive_test )
+BOOST_AUTO_TEST_CASE_TEMPLATE( rational_additive_test, T,
+ all_signed_test_types )
 {
-    BOOST_CHECK_EQUAL( rat( 1, 2) + rat(1, 2), 1                        );
-    BOOST_CHECK_EQUAL( rat(11, 3) + rat(1, 2), rat( 25,  6)             );
-    BOOST_CHECK_EQUAL( rat(-8, 3) + rat(1, 5), rat(-37, 15)             );
-    BOOST_CHECK_EQUAL( rat(-7, 6) + rat(1, 7), rat(  1,  7) - rat(7, 6) );
-    BOOST_CHECK_EQUAL( rat(13, 5) - rat(1, 2), rat( 21, 10)             );
-    BOOST_CHECK_EQUAL( rat(22, 3) + 1,         rat( 25,  3)             );
-    BOOST_CHECK_EQUAL( rat(12, 7) - 2,         rat( -2,  7)             );
-    BOOST_CHECK_EQUAL(          3 + rat(4, 5), rat( 19,  5)             );
-    BOOST_CHECK_EQUAL(          4 - rat(9, 2), rat( -1,  2)             );
+    typedef ::boost::rational<T>  rational_type;
 
-    rat  r( 11 );
+    BOOST_CHECK_EQUAL( rational_type( 1, 2) + rational_type(1, 2),
+     static_cast<T>(1) );
+    BOOST_CHECK_EQUAL( rational_type(11, 3) + rational_type(1, 2),
+     rational_type( 25,  6) );
+    BOOST_CHECK_EQUAL( rational_type(-8, 3) + rational_type(1, 5),
+     rational_type(-37, 15) );
+    BOOST_CHECK_EQUAL( rational_type(-7, 6) + rational_type(1, 7),
+     rational_type(  1,  7) - rational_type(7, 6) );
+    BOOST_CHECK_EQUAL( rational_type(13, 5) - rational_type(1, 2),
+     rational_type( 21, 10) );
+    BOOST_CHECK_EQUAL( rational_type(22, 3) + static_cast<T>(1),
+     rational_type( 25,  3) );
+    BOOST_CHECK_EQUAL( rational_type(12, 7) - static_cast<T>(2),
+     rational_type( -2,  7) );
+    BOOST_CHECK_EQUAL(    static_cast<T>(3) + rational_type(4, 5),
+     rational_type( 19,  5) );
+    BOOST_CHECK_EQUAL(    static_cast<T>(4) - rational_type(9, 2),
+     rational_type( -1,  2) );
 
-    r -= rat( 20, 3 );
-    BOOST_CHECK_EQUAL( r, rat(13,  3) );
+    rational_type  r( 11 );
 
-    r += rat( 1, 2 );
-    BOOST_CHECK_EQUAL( r, rat(29,  6) );
+    r -= rational_type( 20, 3 );
+    BOOST_CHECK_EQUAL( r, rational_type(13,  3) );
 
-    r -= 5;
-    BOOST_CHECK_EQUAL( r, rat( 1, -6) );
+    r += rational_type( 1, 2 );
+    BOOST_CHECK_EQUAL( r, rational_type(29,  6) );
 
-    r += rat( 1, 5 );
-    BOOST_CHECK_EQUAL( r, rat( 1, 30) );
+    r -= static_cast<T>( 5 );
+    BOOST_CHECK_EQUAL( r, rational_type( 1, -6) );
 
-    r += 2;
-    BOOST_CHECK_EQUAL( r, rat(61, 30) );
+    r += rational_type( 1, 5 );
+    BOOST_CHECK_EQUAL( r, rational_type( 1, 30) );
+
+    r += static_cast<T>( 2 );
+    BOOST_CHECK_EQUAL( r, rational_type(61, 30) );
 }
 
 // Assignment tests
-BOOST_AUTO_TEST_CASE( rational_assignment_test )
+BOOST_AUTO_TEST_CASE_TEMPLATE( rational_assignment_test, T,
+ all_signed_test_types )
 {
-    rat  r;
+    typedef ::boost::rational<T>  rational_type;
 
-    r = rat( 1, 10 );
-    BOOST_CHECK_EQUAL( r, rat( 1, 10) );
+    rational_type  r;
 
-    r = -9;
-    BOOST_CHECK_EQUAL( r, rat(-9,  1) );
+    r = rational_type( 1, 10 );
+    BOOST_CHECK_EQUAL( r, rational_type( 1, 10) );
+
+    r = static_cast<T>( -9 );
+    BOOST_CHECK_EQUAL( r, rational_type(-9,  1) );
 }
 
 // Multiplication tests
-BOOST_AUTO_TEST_CASE( rational_multiplication_test )
+BOOST_AUTO_TEST_CASE_TEMPLATE( rational_multiplication_test, T,
+ all_signed_test_types )
 {
-    BOOST_CHECK_EQUAL( rat(1, 3) * rat(-3, 4), rat(-1, 4) );
-    BOOST_CHECK_EQUAL( rat(2, 5) * 7,          rat(14, 5) );
-    BOOST_CHECK_EQUAL(        -2 * rat(1, 6),  rat(-1, 3) );
+    typedef ::boost::rational<T>  rational_type;
 
-    rat  r = rat( 3, 7 );
+    BOOST_CHECK_EQUAL( rational_type(1, 3) * rational_type(-3, 4),
+     rational_type(-1, 4) );
+    BOOST_CHECK_EQUAL( rational_type(2, 5) * static_cast<T>(7),
+     rational_type(14, 5) );
+    BOOST_CHECK_EQUAL(  static_cast<T>(-2) * rational_type(1, 6),
+     rational_type(-1, 3) );
 
-    r *= 14;
-    BOOST_CHECK_EQUAL( r, 6 );
+    rational_type  r = rational_type( 3, 7 );
 
-    r *= rat( 3, 8 );
-    BOOST_CHECK_EQUAL( r, rat(9, 4) );
+    r *= static_cast<T>( 14 );
+    BOOST_CHECK_EQUAL( r, static_cast<T>(6) );
+
+    r *= rational_type( 3, 8 );
+    BOOST_CHECK_EQUAL( r, rational_type(9, 4) );
 }
 
 // Division tests
-BOOST_AUTO_TEST_CASE( rational_division_test )
+BOOST_AUTO_TEST_CASE_TEMPLATE( rational_division_test, T,
+ all_signed_test_types )
 {
-    BOOST_CHECK_EQUAL( rat(-1, 20) / rat(4, 5), rat(-1, 16) );
-    BOOST_CHECK_EQUAL( rat( 5,  6) / 7,         rat( 5, 42) );
-    BOOST_CHECK_EQUAL(           8 / rat(2, 7), 28          );
+    typedef ::boost::rational<T>  rational_type;
 
-    rat  r = rat( 4, 3 );
+    BOOST_CHECK_EQUAL( rational_type(-1, 20) / rational_type(4, 5),
+     rational_type(-1, 16) );
+    BOOST_CHECK_EQUAL( rational_type( 5,  6) / static_cast<T>(7),
+     rational_type( 5, 42) );
+    BOOST_CHECK_EQUAL(     static_cast<T>(8) / rational_type(2, 7),
+     static_cast<T>(28) );
 
-    r /= rat(5,4);
-    BOOST_CHECK_EQUAL( r, rat(16, 15) );
+    rational_type  r = rational_type( 4, 3 );
 
-    r /= 4;
-    BOOST_CHECK_EQUAL( r, rat( 4, 15) );
+    r /= rational_type( 5, 4 );
+    BOOST_CHECK_EQUAL( r, rational_type(16, 15) );
 
-    BOOST_CHECK_EQUAL( rat(-1) / rat(-3), rat(1, 3) );
+    r /= static_cast<T>( 4 );
+    BOOST_CHECK_EQUAL( r, rational_type( 4, 15) );
+
+    BOOST_CHECK_EQUAL( rational_type(-1) / rational_type(-3),
+     rational_type(1, 3) );
 }
 
 // Tests for operations on self
-BOOST_AUTO_TEST_CASE( rational_self_operations_test )
+BOOST_AUTO_TEST_CASE_TEMPLATE( rational_self_operations_test, T,
+ all_signed_test_types )
 {
-    rat  r = rat( 4, 3 );
+    typedef ::boost::rational<T>  rational_type;
+
+    rational_type  r = rational_type( 4, 3 );
 
     r += r;
-    BOOST_CHECK_EQUAL( r, rat( 8, 3) );
+    BOOST_CHECK_EQUAL( r, rational_type( 8, 3) );
 
     r *= r;
-    BOOST_CHECK_EQUAL( r, rat(64, 9) );
+    BOOST_CHECK_EQUAL( r, rational_type(64, 9) );
 
     r /= r;
-    BOOST_CHECK_EQUAL( r, rat( 1, 1) );
+    BOOST_CHECK_EQUAL( r, rational_type( 1, 1) );
 
     r -= r;
-    BOOST_CHECK_EQUAL( r, rat( 0, 1) );
+    BOOST_CHECK_EQUAL( r, rational_type( 0, 1) );
 }
 
 BOOST_AUTO_TEST_SUITE_END();
 
 
 // The non-basic rational operations suite
-BOOST_FIXTURE_TEST_SUITE( rational_extras_suite, my_configuration );
+BOOST_AUTO_TEST_SUITE( rational_extras_suite );
 
 // Output test
-BOOST_AUTO_TEST_CASE( rational_output_test )
+BOOST_AUTO_TEST_CASE_TEMPLATE( rational_output_test, T, all_signed_test_types )
 {
     ::std::ostringstream  oss;
     
-    oss << rat( 44, 14 );
+    oss << ::boost::rational<T>( 44, 14 );
     BOOST_CHECK_EQUAL( oss.str(), "22/7" );
 }
 
 // Input test, failing
-BOOST_AUTO_TEST_CASE( rational_input_failing_test )
+BOOST_AUTO_TEST_CASE_TEMPLATE( rational_input_failing_test, T,
+ all_signed_test_types )
 {
     ::std::istringstream  iss( "" );
-    rat                   r;
+    ::boost::rational<T>  r;
 
     iss >> r;
     BOOST_CHECK( !iss );
@@ -412,25 +460,28 @@ BOOST_AUTO_TEST_CASE( rational_input_failing_test )
 }
 
 // Input test, passing
-BOOST_AUTO_TEST_CASE( rational_input_passing_test )
+BOOST_AUTO_TEST_CASE_TEMPLATE( rational_input_passing_test, T,
+ all_signed_test_types )
 {
+    typedef ::boost::rational<T>  rational_type;
+
     ::std::istringstream  iss( "1/2 12" );
-    rat                   r;
+    rational_type         r;
     int                   n = 0;
 
     BOOST_CHECK( iss >> r >> n );
-    BOOST_CHECK_EQUAL( r, rat(1, 2) );
+    BOOST_CHECK_EQUAL( r, rational_type(1, 2) );
     BOOST_CHECK_EQUAL( n, 12 );
 
     iss.clear();
     iss.str( "34/67" );
     BOOST_CHECK( iss >> r );
-    BOOST_CHECK_EQUAL( r, rat(34, 67) );
+    BOOST_CHECK_EQUAL( r, rational_type(34, 67) );
 
     iss.clear();
     iss.str( "-3/-6" );
     BOOST_CHECK( iss >> r );
-    BOOST_CHECK_EQUAL( r, rat(1, 2) );
+    BOOST_CHECK_EQUAL( r, rational_type(1, 2) );
 }
 
 // Conversion test
@@ -446,22 +497,25 @@ BOOST_AUTO_TEST_CASE( rational_cast_test )
 
     BOOST_CHECK_CLOSE( rational_cast<double>(half), 0.5, 0.01 );
     BOOST_CHECK_EQUAL( rational_cast<int>(half), 0 );
+    BOOST_CHECK_EQUAL( rational_cast<MyInt>(half), MyInt() );
 }
 
 // Dice tests (a non-main test)
-BOOST_AUTO_TEST_CASE( dice_roll_test )
+BOOST_AUTO_TEST_CASE_TEMPLATE( dice_roll_test, T, all_signed_test_types )
 {
+    typedef ::boost::rational<T>  rational_type;
+
     // Determine the mean number of times a fair six-sided die
     // must be thrown until each side has appeared at least once.
-    rat  r = IntType( 0 );
+    rational_type  r = T( 0 );
 
     for ( int  i = 1 ; i <= 6 ; ++i )
     {
-        r += rat( 1, i );
+        r += rational_type( 1, i );
     }
-    r *= 6;
+    r *= static_cast<T>( 6 );
 
-    BOOST_CHECK_EQUAL( r, rat(147, 10) );
+    BOOST_CHECK_EQUAL( r, rational_type(147, 10) );
 }
 
 BOOST_AUTO_TEST_SUITE_END();
