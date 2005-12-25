@@ -69,6 +69,7 @@
 #ifdef BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION
 # include <new>
 # include <boost/aligned_storage.hpp>
+# include <boost/utility/enable_if.hpp>
 # include <boost/type_traits/remove_const.hpp>
 #endif
 
@@ -141,45 +142,27 @@ namespace foreach
 //   at the global namespace for your type.
 template<typename T>
 inline boost::foreach::has_cheap_copy<T> *
-boost_foreach_has_cheap_copy(T *&, ...)
-{
-    return 0;
-}
+boost_foreach_has_cheap_copy(T *&, ...) { return 0; }
 
 template<typename T>
 inline boost::mpl::true_ *
-boost_foreach_has_cheap_copy(std::pair<T, T> *&, boost::foreach::tag)
-{
-    return 0;
-}
+boost_foreach_has_cheap_copy(std::pair<T, T> *&, boost::foreach::tag) { return 0; }
 
 template<typename T>
 inline boost::mpl::true_ *
-boost_foreach_has_cheap_copy(boost::iterator_range<T> *&, boost::foreach::tag)
-{
-    return 0;
-}
+boost_foreach_has_cheap_copy(boost::iterator_range<T> *&, boost::foreach::tag) { return 0; }
 
 template<typename T>
 inline boost::mpl::true_ *
-boost_foreach_has_cheap_copy(boost::sub_range<T> *&, boost::foreach::tag)
-{
-    return 0;
-}
+boost_foreach_has_cheap_copy(boost::sub_range<T> *&, boost::foreach::tag) { return 0; }
 
 template<typename T>
 inline boost::mpl::true_ *
-boost_foreach_has_cheap_copy(T **, boost::foreach::tag)
-{
-    return 0;
-}
+boost_foreach_has_cheap_copy(T **, boost::foreach::tag) { return 0; }
 
 template<typename T, std::size_t N>
 inline boost::mpl::false_ *
-boost_foreach_has_cheap_copy(T (*)[N], boost::foreach::tag)
-{
-    return 0;
-}
+boost_foreach_has_cheap_copy(T (*)[N], boost::foreach::tag) { return 0; }
 
 ///////////////////////////////////////////////////////////////////////////////
 // boost_foreach_is_noncopyable
@@ -188,10 +171,7 @@ boost_foreach_has_cheap_copy(T (*)[N], boost::foreach::tag)
 //   at the global namespace for your type.
 template<typename T>
 inline boost::foreach::is_noncopyable<T> *
-boost_foreach_is_noncopyable(T *&, ...)
-{
-    return 0;
-}
+boost_foreach_is_noncopyable(T *&, ...) { return 0; }
 
 namespace boost
 {
@@ -211,41 +191,37 @@ no_type is_true(boost::mpl::false_ *);
 #define BOOST_FOREACH_PROTECT(expr)                                                             \
     (static_cast<boost::mpl::bool_<1 == sizeof(boost::foreach_detail_::is_true(expr))> *>(0))
 
-template<typename T>
-inline boost::mpl::false_ *is_rvalue(T &, int) 
-{
-    return 0;
-}
+template<typename Bool1, typename Bool2>
+inline boost::mpl::and_<Bool1, Bool2> *and_(Bool1 *, Bool2 *) { return 0; }
 
-template<typename T>
-inline boost::mpl::true_ *is_rvalue(T const &, ...)
-{
-    return 0;
-}
-
-template<typename T>
-inline boost::is_array<T> *is_array(T const &)
-{
-    return 0;
-}
+template<typename Bool1, typename Bool2, typename Bool3>
+inline boost::mpl::and_<Bool1, Bool2, Bool3> *and_(Bool1 *, Bool2 *, Bool3 *) { return 0; }
 
 template<typename Bool1, typename Bool2>
-inline boost::mpl::and_<Bool1, Bool2> *and_(Bool1 *, Bool2 *)
-{
-    return 0;
-}
+inline boost::mpl::or_<Bool1, Bool2> *or_(Bool1 *, Bool2 *) { return 0; }
 
-template<typename Bool1, typename Bool2>
-inline boost::mpl::or_<Bool1, Bool2> *or_(Bool1 *, Bool2 *)
-{
-    return 0;
-}
+template<typename Bool1, typename Bool2, typename Bool3>
+inline boost::mpl::or_<Bool1, Bool2, Bool3> *or_(Bool1 *, Bool2 *, Bool3 *) { return 0; }
 
 template<typename Bool>
-inline boost::mpl::not_<Bool> *not_(Bool *)
-{
-    return 0;
-}
+inline boost::mpl::not_<Bool> *not_(Bool *) { return 0; }
+
+template<typename T>
+inline boost::mpl::false_ *is_rvalue(T &, int) { return 0; }
+
+template<typename T>
+inline boost::mpl::true_ *is_rvalue(T const &, ...) { return 0; }
+
+template<typename T>
+inline boost::is_array<T> *is_array(T const &) { return 0; }
+
+template<typename T>
+inline boost::is_const<T> *is_const(T &) { return 0; }
+
+#ifndef BOOST_FOREACH_NO_RVALUE_DETECTION
+template<typename T>
+inline boost::mpl::true_ *is_const(T const &) { return 0; }
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // auto_any_t/auto_any
@@ -313,41 +289,15 @@ struct foreach_reference
 // encode_type
 //
 template<typename T>
-inline type2type<T> *encode_type(T &, boost::mpl::false_ *)
-{
-    return 0;
-}
+inline type2type<T> *encode_type(T &, boost::mpl::false_ *) { return 0; }
 
 template<typename T>
-inline type2type<T, const_> *encode_type(T const &, boost::mpl::true_ *)
-{
-    return 0;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-// encode_const
-//
-template<typename T>
-inline boost::is_const<T> *encode_const(T &)
-{
-    return 0;
-}
-
-#ifndef BOOST_FOREACH_NO_RVALUE_DETECTION
-template<typename T>
-inline boost::mpl::true_ *encode_const(T const &)
-{
-    return 0;
-}
-#endif
+inline type2type<T, const_> *encode_type(T const &, boost::mpl::true_ *) { return 0; }
 
 ///////////////////////////////////////////////////////////////////////////////
 // set_false
 //
-inline bool set_false(bool &b)
-{
-    return b = false;
-}
+inline bool set_false(bool &b) { return b = false; }
 
 ///////////////////////////////////////////////////////////////////////////////
 // to_ptr
@@ -362,11 +312,7 @@ inline T *&to_ptr(T const &)
 // Borland needs a little extra help with arrays
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 template<typename T,std::size_t N>
-inline T (*to_ptr(T (&t)[N]))[N]
-{
-    static T (*t)[N] = 0;
-    return t;
-}
+inline T (*to_ptr(T (&t)[N]))[N]  { return 0; }
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -386,8 +332,8 @@ inline T &derefof(T *t)
 
 #ifdef BOOST_FOREACH_COMPILE_TIME_CONST_RVALUE_DETECTION
 ///////////////////////////////////////////////////////////////////////////////
-// Detect at compile-time whether an expression yields an rvalue
-// or an lvalue. This is rather non-standard, but some popular compilers
+// Detect at compile-time whether an expression yields an rvalue or
+// an lvalue. This is rather non-standard, but some popular compilers
 // accept it.
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -397,9 +343,8 @@ inline T &derefof(T *t)
 template<typename T>
 struct rvalue_probe
 {
-    struct dummy {};
     // can't ever return an array by value
-    typedef typename boost::mpl::if_<boost::is_array<T>, dummy, T>::type rvalue;
+    typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<boost::is_array<T>, int, T>::type rvalue;
     operator rvalue();
     operator T &() const;
 };
@@ -407,16 +352,11 @@ struct rvalue_probe
 template<typename T>
 rvalue_probe<T> const make_probe(T const &t);
 
-# define BOOST_FOREACH_MAKE_RVALUE_PROBE(COL)                                                   \
-    (true ? boost::foreach_detail_::make_probe(COL) : (COL))
-
-# define BOOST_FOREACH_IS_RVALUE_IMPL(COL)                                                      \
-    (true ? 0 : boost::foreach_detail_::and_(                                                   \
+# define BOOST_FOREACH_IS_RVALUE(COL)                                                           \
+    boost::foreach_detail_::and_(                                                               \
         boost::foreach_detail_::not_(boost::foreach_detail_::is_array(COL))                     \
       , BOOST_FOREACH_PROTECT(boost::foreach_detail_::is_rvalue(                                \
-            BOOST_FOREACH_MAKE_RVALUE_PROBE(COL), 0                                             \
-        ))                                                                                      \
-    ))
+            (true ? boost::foreach_detail_::make_probe(COL) : (COL)), 0)))
 
 #elif defined(BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION)
 ///////////////////////////////////////////////////////////////////////////////
@@ -434,14 +374,14 @@ struct rvalue_probe
     template<typename T>
     rvalue_probe(T const &t, bool &b)
         : ptemp(const_cast<BOOST_DEDUCED_TYPENAME boost::remove_const<T>::type *>(&t))
-        , rvalue(b)
+        , is_rvalue(b)
     {
     }
 
     template<typename U>
     operator U()
     {
-        this->rvalue = true;
+        this->is_rvalue = true;
         return *static_cast<U *>(ptemp);
     }
 
@@ -453,7 +393,7 @@ struct rvalue_probe
 
 private:
     void *ptemp;
-    bool &rvalue;
+    bool &is_rvalue;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -463,21 +403,21 @@ template<typename T>
 struct simple_variant
 {
     simple_variant(T *t)
-        : rvalue(false)
+        : is_rvalue(false)
     {
         *static_cast<T **>(this->data.address()) = t;
     }
 
     simple_variant(T const &t)
-        : rvalue(true)
+        : is_rvalue(true)
     {
         ::new(this->data.address()) T(t);
     }
 
     simple_variant(simple_variant const &that)
-        : rvalue(that.rvalue)
+        : is_rvalue(that.is_rvalue)
     {
-        if(this->rvalue)
+        if(this->is_rvalue)
             ::new(this->data.address()) T(*that.get());
         else
             *static_cast<T **>(this->data.address()) = that.get();
@@ -485,13 +425,13 @@ struct simple_variant
 
     ~simple_variant()
     {
-        if(this->rvalue)
+        if(this->is_rvalue)
             this->get()->~T();
     }
 
     T *get() const
     {
-        if(this->rvalue)
+        if(this->is_rvalue)
             return static_cast<T *>(this->data.address());
         else
             return *static_cast<T **>(this->data.address());
@@ -500,19 +440,24 @@ struct simple_variant
 private:
     enum size_type { size = sizeof(T) > sizeof(T*) ? sizeof(T) : sizeof(T*) };
     simple_variant &operator =(simple_variant const &); 
-    bool const rvalue;
+    bool const is_rvalue;
     mutable aligned_storage<size> data;
 };
 
-// If the collection is an array or is noncopyable, it must be an lvalue
-inline boost::mpl::false_ *is_rvalue_impl(boost::mpl::true_ *, bool *)
+// If the collection is an array or is noncopyable, it must be an lvalue.
+// If the collection is cheap-to-copy, treat it as an rvalue
+template<typename LValue, typename IsCheap>
+inline BOOST_DEDUCED_TYPENAME boost::enable_if<boost::mpl::or_<LValue, IsCheap>, IsCheap *>::type
+should_copy_impl(LValue *, IsCheap *, bool *)
 {
     return 0;
 }
 
-inline bool *is_rvalue_impl(boost::mpl::false_ *, bool *rvalue)
+// Otherwise, we must determine at runtime whether it's an lvalue or rvalue
+inline bool *
+should_copy_impl(boost::mpl::false_ *, boost::mpl::false_ *, bool *is_rvalue)
 {
-    return rvalue;
+    return is_rvalue;
 }
 
 #endif
@@ -521,28 +466,13 @@ inline bool *is_rvalue_impl(boost::mpl::false_ *, bool *rvalue)
 // contain
 //
 template<typename T>
-inline auto_any<T> contain(T const &t, void *, boost::mpl::true_ *)
+inline auto_any<T> contain(T const &t, boost::mpl::true_ *) // rvalue
 {
     return t;
 }
 
-#ifdef BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION
 template<typename T>
-inline auto_any<T *> contain(T &t, bool *, boost::mpl::false_ *)
-{
-    return boost::addressof(t);
-}
-
-template<typename T>
-auto_any<simple_variant<T const> >
-contain(T const &t, bool *rvalue, boost::mpl::false_ *)
-{
-    return *rvalue ? simple_variant<T const>(t) : simple_variant<T const>(&t);
-}
-#endif
-
-template<typename T>
-inline auto_any<T *> contain(T &t, boost::mpl::false_ *, boost::mpl::false_ *) // lvalue
+inline auto_any<T *> contain(T &t, boost::mpl::false_ *) // lvalue
 {
     // Cannot seem to get sunpro to handle addressof() with array types.
     #if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x570))
@@ -552,106 +482,79 @@ inline auto_any<T *> contain(T &t, boost::mpl::false_ *, boost::mpl::false_ *) /
     #endif
 }
 
+#ifdef BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION
 template<typename T>
-inline auto_any<T> contain(T const &t, boost::mpl::true_ *, boost::mpl::false_ *) // rvalue
+auto_any<simple_variant<T const> >
+contain(T const &t, bool *rvalue)
 {
-    return t;
+    return *rvalue ? simple_variant<T const>(t) : simple_variant<T const>(&t);
 }
+#endif
 
 /////////////////////////////////////////////////////////////////////////////
 // begin
 //
 template<typename T, typename C>
 inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type>
-begin(auto_any_t col, type2type<T, C> *, void *, boost::mpl::true_ *)
+begin(auto_any_t col, type2type<T, C> *, boost::mpl::true_ *) // rvalue
 {
     return boost::begin(auto_any_cast<T, C>(col));
 }
 
-#ifdef BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION
 template<typename T, typename C>
 inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type>
-begin(auto_any_t col, type2type<T, C> *, bool *, boost::mpl::false_ *)
-{
-    typedef BOOST_DEDUCED_TYPENAME type2type<T, C>::type type;
-    return boost::begin(derefof(auto_any_cast<type *, boost::mpl::false_>(col)));
-}
-
-template<typename T>
-auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, boost::mpl::true_>::type>
-begin(auto_any_t col, type2type<T, const_> *, bool *, boost::mpl::false_ *)
-{
-    return boost::begin(*auto_any_cast<simple_variant<T const>, boost::mpl::false_>(col).get());
-}
-#endif
-
-template<typename T, typename C>
-inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type>
-begin(auto_any_t col, type2type<T, C> *, boost::mpl::false_ *, boost::mpl::false_ *) // lvalue
+begin(auto_any_t col, type2type<T, C> *, boost::mpl::false_ *) // lvalue
 {
     typedef BOOST_DEDUCED_TYPENAME type2type<T, C>::type type;
     typedef BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type iterator;
     return iterator(boost::begin(derefof(auto_any_cast<type *, boost::mpl::false_>(col))));
 }
 
+#ifdef BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION
 template<typename T>
-inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, boost::mpl::true_>::type>
-begin(auto_any_t col, type2type<T, const_> *, boost::mpl::true_ *, boost::mpl::false_ *) // rvalue
+auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, const_>::type>
+begin(auto_any_t col, type2type<T, const_> *, bool *)
 {
-    return boost::begin(auto_any_cast<T, boost::mpl::true_>(col));
+    return boost::begin(*auto_any_cast<simple_variant<T const>, boost::mpl::false_>(col).get());
 }
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // end
 //
 template<typename T, typename C>
 inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type>
-end(auto_any_t col, type2type<T, C> *, void *, boost::mpl::true_ *)
+end(auto_any_t col, type2type<T, C> *, boost::mpl::true_ *) // rvalue
 {
     return boost::end(auto_any_cast<T, C>(col));
 }
 
-#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-template<typename T, typename C>
-inline auto_any<int>
-end(auto_any_t col, type2type<T *, C> *, void *, boost::mpl::true_ *)
-{
-    return 0; // not used
-}
-#endif
-
-#ifdef BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION
 template<typename T, typename C>
 inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type>
-end(auto_any_t col, type2type<T, C> *, bool *, boost::mpl::false_ *)
-{
-    typedef BOOST_DEDUCED_TYPENAME type2type<T, C>::type type;
-    return boost::end(derefof(auto_any_cast<type *, boost::mpl::false_>(col)));
-}
-
-template<typename T>
-auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, boost::mpl::true_>::type>
-end(auto_any_t col, type2type<T, const_> *, bool *, boost::mpl::false_ *)
-{
-    return boost::end(*auto_any_cast<simple_variant<T const>, boost::mpl::false_>(col).get());
-}
-#endif
-
-template<typename T, typename C>
-inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type>
-end(auto_any_t col, type2type<T, C> *, boost::mpl::false_ *, boost::mpl::false_ *) // lvalue
+end(auto_any_t col, type2type<T, C> *, boost::mpl::false_ *) // lvalue
 {
     typedef BOOST_DEDUCED_TYPENAME type2type<T, C>::type type;
     typedef BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type iterator;
     return iterator(boost::end(derefof(auto_any_cast<type *, boost::mpl::false_>(col))));
 }
 
+#ifdef BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION
 template<typename T>
-inline auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, boost::mpl::true_>::type>
-end(auto_any_t col, type2type<T, const_> *, boost::mpl::true_ *, boost::mpl::false_ *) // rvalue
+auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, const_>::type>
+end(auto_any_t col, type2type<T, const_> *, bool *)
 {
-    return boost::end(auto_any_cast<T, boost::mpl::true_>(col));
+    return boost::end(*auto_any_cast<simple_variant<T const>, boost::mpl::false_>(col).get());
 }
+#endif
+
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+template<typename T, typename C>
+inline auto_any<int>
+end(auto_any_t col, type2type<T *, C> *, boost::mpl::true_ *) // null-terminated C-style strings
+{
+    return 0; // not used
+}
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // done
@@ -665,7 +568,7 @@ inline bool done(auto_any_t cur, auto_any_t end, type2type<T, C> *)
 
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 template<typename T, typename C>
-inline bool done(auto_any_t cur, auto_any_t, type2type<T *, C> *)
+inline bool done(auto_any_t cur, auto_any_t, type2type<T *, C> *) // null-terminated C-style strings
 {
     return ! *auto_any_cast<T *, boost::mpl::false_>(cur);
 }
@@ -702,24 +605,22 @@ deref(auto_any_t cur, type2type<T, C> *)
 
 // A sneaky way to get the type of the collection without evaluating the expression
 # define BOOST_FOREACH_TYPEOF(COL)                                                              \
-    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::encode_const(COL)))
+    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::is_const(COL)))
 
 // Evaluate the collection expression
-# define BOOST_FOREACH_EVAL(COL)                                                                \
+# define BOOST_FOREACH_EVALUATE(COL)                                                            \
     (COL)
 
 // No variable is needed to track the rvalue-ness of the collection expression
-# define BOOST_FOREACH_DEFINE_RVALUE()                                                          \
+# define BOOST_FOREACH_HEADER()                                                                 \
     /**/
 
-# define BOOST_FOREACH_IS_RVALUE(COL)                                                           \
-    BOOST_FOREACH_IS_RVALUE_IMPL(COL)
-
-# define BOOST_FOREACH_HAS_CHEAP_COPY(COL)                                                      \
-    (true ? 0 : boost_foreach_has_cheap_copy(boost::foreach_detail_::to_ptr(COL), boost::foreach::adl))
-
-# define BOOST_FOREACH_NOOP(COL)                                                                \
-    ((void)0)
+# define BOOST_FOREACH_SHOULD_COPY(COL)                                                         \
+    (true ? 0 : boost::foreach_detail_::or_(                                                    \
+        BOOST_FOREACH_IS_RVALUE(COL)                                                            \
+      , boost_foreach_has_cheap_copy(                                                           \
+            boost::foreach_detail_::to_ptr(COL)                                                 \
+          , boost::foreach::adl)))
 
 #elif defined(BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION)
 ///////////////////////////////////////////////////////////////////////////////
@@ -728,33 +629,30 @@ deref(auto_any_t cur, type2type<T, C> *)
 
 // A sneaky way to get the type of the collection without evaluating the expression
 # define BOOST_FOREACH_TYPEOF(COL)                                                              \
-    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::encode_const(COL)))
+    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::is_const(COL)))
 
 // Evaluate the collection expression, and detect if it is an lvalue or and rvalue
-# define BOOST_FOREACH_EVAL(COL)                                                                \
-    (true ? boost::foreach_detail_::rvalue_probe((COL), _foreach_rvalue) : (COL))
+# define BOOST_FOREACH_EVALUATE(COL)                                                            \
+    (true ? boost::foreach_detail_::rvalue_probe((COL), _foreach_is_rvalue) : (COL))
 
 // Declare a variable to track the rvalue-ness of the collection expression
-# define BOOST_FOREACH_DEFINE_RVALUE()                                                          \
-    if (bool _foreach_rvalue = false) {} else
+# define BOOST_FOREACH_HEADER()                                                                 \
+    if (bool _foreach_is_rvalue = false) {} else
 
 // The rvalue/lvalue-ness of the collection expression is determined dynamically, unless
-// type type is an array or is noncopyable, in which case we know it's an lvalue
-# define BOOST_FOREACH_IS_RVALUE(COL)                                                           \
-    (boost::foreach_detail_::is_rvalue_impl(true ? 0 :                                          \
-        boost::foreach_detail_::or_(                                                            \
+// type type is an array or is noncopyable or is non-const, in which case we know it's an lvalue
+# define BOOST_FOREACH_SHOULD_COPY(COL)                                                         \
+    (boost::foreach_detail_::should_copy_impl(                                                  \
+        true ? 0 : boost::foreach_detail_::or_(                                                 \
             boost::foreach_detail_::is_array(COL)                                               \
           , boost_foreach_is_noncopyable(                                                       \
                 boost::foreach_detail_::to_ptr(COL)                                             \
-              , boost::foreach::adl))                                                           \
-      , &_foreach_rvalue                                                                        \
-    ))
-
-# define BOOST_FOREACH_HAS_CHEAP_COPY(COL)                                                      \
-    (true ? 0 : boost_foreach_has_cheap_copy(boost::foreach_detail_::to_ptr(COL), boost::foreach::adl))
-
-# define BOOST_FOREACH_NOOP(COL)                                                                \
-    ((void)0)
+              , boost::foreach::adl)                                                            \
+          , boost::foreach_detail_::not_(boost::foreach_detail_::is_const(COL)))                \
+      , true ? 0 : boost_foreach_has_cheap_copy(                                                \
+            boost::foreach_detail_::to_ptr(COL)                                                 \
+          , boost::foreach::adl)                                                                \
+      , &_foreach_is_rvalue))
 
 #elif !defined(BOOST_FOREACH_NO_RVALUE_DETECTION)
 ///////////////////////////////////////////////////////////////////////////////
@@ -763,26 +661,24 @@ deref(auto_any_t cur, type2type<T, C> *)
 
 // A sneaky way to get the type of the collection without evaluating the expression
 # define BOOST_FOREACH_TYPEOF(COL)                                                              \
-    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::encode_const(COL)))
+    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::is_const(COL)))
 
 // Evaluate the collection expression
-# define BOOST_FOREACH_EVAL(COL)                                                                \
+# define BOOST_FOREACH_EVALUATE(COL)                                                            \
     (COL)
 
 // No variable is needed to track the rvalue-ness of the collection expression
-# define BOOST_FOREACH_DEFINE_RVALUE()                                                          \
+# define BOOST_FOREACH_HEADER()                                                                 \
     /**/
 
 // Determine whether the collection expression is an lvalue or an rvalue.
-// NOTE: this gets the answer wrong for const R-values.
-# define BOOST_FOREACH_IS_RVALUE(COL)                                                           \
-    (true ? 0 : boost::foreach_detail_::is_rvalue((COL), 0))
-
-# define BOOST_FOREACH_HAS_CHEAP_COPY(COL)                                                      \
-    (true ? 0 : boost_foreach_has_cheap_copy(boost::foreach_detail_::to_ptr(COL), boost::foreach::adl))
-
-# define BOOST_FOREACH_NOOP(COL)                                                                \
-    ((void)0)
+// NOTE: this gets the answer wrong for const rvalues.
+# define BOOST_FOREACH_SHOULD_COPY(COL)                                                         \
+    (true ? 0 : boost::foreach_detail_::or_(                                                    \
+        boost::foreach_detail_::is_rvalue((COL), 0)                                             \
+      , boost_foreach_has_cheap_copy(                                                           \
+            boost::foreach_detail_::to_ptr(COL)                                                 \
+          , boost::foreach::adl)))
 
 #else
 ///////////////////////////////////////////////////////////////////////////////
@@ -791,50 +687,41 @@ deref(auto_any_t cur, type2type<T, C> *)
 
 // A sneaky way to get the type of the collection without evaluating the expression
 # define BOOST_FOREACH_TYPEOF(COL)                                                              \
-    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::encode_const(COL)))
+    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::is_const(COL)))
 
 // Evaluate the collection expression
-# define BOOST_FOREACH_EVAL(COL)                                                                \
+# define BOOST_FOREACH_EVALUATE(COL)                                                            \
     (COL)
 
 // No variable is needed to track the rvalue-ness of the collection expression
-# define BOOST_FOREACH_DEFINE_RVALUE()                                                          \
+# define BOOST_FOREACH_HEADER()                                                                 \
     /**/
 
-// Can't use R-values with BOOST_FOREACH
-# define BOOST_FOREACH_IS_RVALUE(COL)                                                           \
-    (static_cast<boost::mpl::false_ *>(0))
-
-# define BOOST_FOREACH_HAS_CHEAP_COPY(COL)                                                      \
-    (true ? 0 : boost_foreach_has_cheap_copy(boost::foreach_detail_::to_ptr(COL), boost::foreach::adl))
-
-// Attempt to make uses of BOOST_FOREACH with non-lvalues fail to compile
-// BUGBUG but cheap-to-copy containers *would* be handled correctly. Hrm.
-# define BOOST_FOREACH_NOOP(COL)                                                                \
-    ((void)&(COL))
+// Can't use rvalues with BOOST_FOREACH (unless they have been flagged as cheap-to-copy)
+# define BOOST_FOREACH_SHOULD_COPY(COL)                                                         \
+    (true ? 0 : boost_foreach_has_cheap_copy(                                                   \
+        boost::foreach_detail_::to_ptr(COL)                                                     \
+      , boost::foreach::adl))
 
 #endif
 
 
 #define BOOST_FOREACH_CONTAIN(COL)                                                              \
     boost::foreach_detail_::contain(                                                            \
-        BOOST_FOREACH_EVAL(COL)                                                                 \
-      , BOOST_FOREACH_IS_RVALUE(COL)                                                            \
-      , BOOST_FOREACH_HAS_CHEAP_COPY(COL))
+        BOOST_FOREACH_EVALUATE(COL)                                                             \
+      , BOOST_FOREACH_SHOULD_COPY(COL))
 
 #define BOOST_FOREACH_BEGIN(COL)                                                                \
     boost::foreach_detail_::begin(                                                              \
         _foreach_col                                                                            \
       , BOOST_FOREACH_TYPEOF(COL)                                                               \
-      , BOOST_FOREACH_IS_RVALUE(COL)                                                            \
-      , BOOST_FOREACH_HAS_CHEAP_COPY(COL))
+      , BOOST_FOREACH_SHOULD_COPY(COL))
 
 #define BOOST_FOREACH_END(COL)                                                                  \
     boost::foreach_detail_::end(                                                                \
         _foreach_col                                                                            \
       , BOOST_FOREACH_TYPEOF(COL)                                                               \
-      , BOOST_FOREACH_IS_RVALUE(COL)                                                            \
-      , BOOST_FOREACH_HAS_CHEAP_COPY(COL))
+      , BOOST_FOREACH_SHOULD_COPY(COL))
 
 #define BOOST_FOREACH_DONE(COL)                                                                 \
     boost::foreach_detail_::done(                                                               \
@@ -879,13 +766,13 @@ deref(auto_any_t cur, type2type<T, C> *)
 //       { ... }
 //
 #define BOOST_FOREACH(VAR, COL)                                                                 \
-    BOOST_FOREACH_DEFINE_RVALUE()                                                               \
+    BOOST_FOREACH_HEADER()                                                                      \
     if (boost::foreach_detail_::auto_any_t _foreach_col = BOOST_FOREACH_CONTAIN(COL)) {} else   \
     if (boost::foreach_detail_::auto_any_t _foreach_cur = BOOST_FOREACH_BEGIN(COL)) {} else     \
     if (boost::foreach_detail_::auto_any_t _foreach_end = BOOST_FOREACH_END(COL)) {} else       \
     for (bool _foreach_continue = true;                                                         \
               _foreach_continue && !BOOST_FOREACH_DONE(COL);                                    \
-              _foreach_continue ? BOOST_FOREACH_NEXT(COL) : BOOST_FOREACH_NOOP(COL))            \
+              _foreach_continue ? BOOST_FOREACH_NEXT(COL) : (void)0)                            \
         if  (boost::foreach_detail_::set_false(_foreach_continue)) {} else                      \
         for (VAR = BOOST_FOREACH_DEREF(COL); !_foreach_continue; _foreach_continue = true)
 
