@@ -17,7 +17,7 @@ int test_main( int, char*[] )
 #ifndef BOOST_XPRESSIVE_NO_WREGEX
     typedef std::wstring::const_iterator iterator_type;
     boost::iterator_range<test_case<iterator_type> const *> rng = get_test_cases<iterator_type>();
-    std::for_each(rng.begin(), rng.end(), &run_test<iterator_type>);
+    std::for_each(rng.begin(), rng.end(), test_runner<iterator_type>());
 #endif
 
     return 0;

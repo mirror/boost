@@ -17,6 +17,7 @@
 #include <vector>
 #include <cstdio>
 #include <cstdarg>
+#include <functional>
 #include <boost/range/iterator_range.hpp>
 #include <boost/xpressive/xpressive.hpp>
 using namespace boost::xpressive;
@@ -172,12 +173,15 @@ inline void run_impl(basic_regex<BidiIter> const &rx, test_case<BidiIter> const 
 ///////////////////////////////////////////////////////////////////////////////
 // run_test
 template<typename BidiIter>
-void run_test(test_case<BidiIter> const &test)
+struct test_runner
+  : std::unary_function<test_case<BidiIter>, void>
 {
-    run_impl(test.dynamicrx_, test);
-    run_impl(test.staticrx_, test);
-}
-
+    void operator ()(test_case<BidiIter> const &test) const
+    {
+        run_impl(test.dynamicrx_, test);
+        run_impl(test.staticrx_, test);
+    }
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 // helpful debug routines
