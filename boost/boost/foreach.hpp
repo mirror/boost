@@ -74,9 +74,9 @@
 #endif
 
 // This must be at global scope, hence the uglified name
-enum boost_foreach_cheap_copy_argument_dependent_lookup_hack
+enum boost_foreach_argument_dependent_lookup_hack
 {
-    boost_foreach_cheap_copy_argument_dependent_lookup_hack_value
+    boost_foreach_argument_dependent_lookup_hack_value
 };
 
 namespace boost
@@ -104,16 +104,16 @@ namespace foreach
     ///////////////////////////////////////////////////////////////////////////////
     // boost::foreach::tag
     //
-    typedef boost_foreach_cheap_copy_argument_dependent_lookup_hack tag;
-    tag const adl = boost_foreach_cheap_copy_argument_dependent_lookup_hack_value;
+    typedef boost_foreach_argument_dependent_lookup_hack tag;
+    tag const adl = boost_foreach_argument_dependent_lookup_hack_value;
 
     ///////////////////////////////////////////////////////////////////////////////
-    // boost::foreach::has_cheap_copy
+    // boost::foreach::is_lightweight_proxy
     //   Specialize this for user-defined collection types if they are inexpensive to copy.
     //   This tells BOOST_FOREACH it can avoid the rvalue/lvalue detection stuff.
     template<typename T>
-    struct has_cheap_copy
-        : boost::mpl::false_
+    struct is_lightweight_proxy
+      : boost::mpl::false_
     {
     };
 
@@ -124,9 +124,9 @@ namespace foreach
     template<typename T>
     struct is_noncopyable
     #ifndef BOOST_BROKEN_IS_BASE_AND_DERIVED
-        : boost::is_base_and_derived<boost::noncopyable, T>
+      : boost::is_base_and_derived<boost::noncopyable, T>
     #else
-        : boost::mpl::false_
+      : boost::mpl::false_
     #endif
     {
     };
@@ -136,33 +136,33 @@ namespace foreach
 } // namespace boost
 
 ///////////////////////////////////////////////////////////////////////////////
-// boost_foreach_has_cheap_copy
-//   Another customization point for the has_cheap_copy optimization,
-//   this one works on legacy compilers. Overload boost_foreach_has_cheap_copy
+// boost_foreach_is_lightweight_proxy
+//   Another customization point for the is_lightweight_proxy optimization,
+//   this one works on legacy compilers. Overload boost_foreach_is_lightweight_proxy
 //   at the global namespace for your type.
 template<typename T>
-inline boost::foreach::has_cheap_copy<T> *
-boost_foreach_has_cheap_copy(T *&, ...) { return 0; }
+inline boost::foreach::is_lightweight_proxy<T> *
+boost_foreach_is_lightweight_proxy(T *&, ...) { return 0; }
 
 template<typename T>
 inline boost::mpl::true_ *
-boost_foreach_has_cheap_copy(std::pair<T, T> *&, boost::foreach::tag) { return 0; }
+boost_foreach_is_lightweight_proxy(std::pair<T, T> *&, boost::foreach::tag) { return 0; }
 
 template<typename T>
 inline boost::mpl::true_ *
-boost_foreach_has_cheap_copy(boost::iterator_range<T> *&, boost::foreach::tag) { return 0; }
+boost_foreach_is_lightweight_proxy(boost::iterator_range<T> *&, boost::foreach::tag) { return 0; }
 
 template<typename T>
 inline boost::mpl::true_ *
-boost_foreach_has_cheap_copy(boost::sub_range<T> *&, boost::foreach::tag) { return 0; }
+boost_foreach_is_lightweight_proxy(boost::sub_range<T> *&, boost::foreach::tag) { return 0; }
 
 template<typename T>
 inline boost::mpl::true_ *
-boost_foreach_has_cheap_copy(T **, boost::foreach::tag) { return 0; }
+boost_foreach_is_lightweight_proxy(T **, boost::foreach::tag) { return 0; }
 
 template<typename T, std::size_t N>
 inline boost::mpl::false_ *
-boost_foreach_has_cheap_copy(T (*)[N], boost::foreach::tag) { return 0; }
+boost_foreach_is_lightweight_proxy(T (*)[N], boost::foreach::tag) { return 0; }
 
 ///////////////////////////////////////////////////////////////////////////////
 // boost_foreach_is_noncopyable
@@ -240,7 +240,7 @@ template<typename T>
 struct auto_any : auto_any_base
 {
     auto_any(T const &t)
-        : item(t)
+      : item(t)
     {
     }
 
@@ -265,7 +265,7 @@ typedef boost::mpl::true_ const_;
 //
 template<typename T, typename C = boost::mpl::false_>
 struct type2type
-    : boost::mpl::if_<C, T const, T>
+  : boost::mpl::if_<C, T const, T>
 {
 };
 
@@ -281,7 +281,7 @@ struct foreach_iterator
 
 template<typename T, typename C = boost::mpl::false_>
 struct foreach_reference
-    : iterator_reference<BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type>
+  : iterator_reference<BOOST_DEDUCED_TYPENAME foreach_iterator<T, C>::type>
 {
 };
 
@@ -344,8 +344,8 @@ template<typename T>
 struct rvalue_probe
 {
     // can't ever return an array by value
-    typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<boost::is_array<T>, int, T>::type rvalue;
-    operator rvalue();
+    typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<boost::is_array<T>, int, T>::type value_type;
+    operator value_type();
     operator T &() const;
 };
 
@@ -369,58 +369,64 @@ rvalue_probe<T> const make_probe(T const &t);
 ///////////////////////////////////////////////////////////////////////////////
 // rvalue_probe
 //
+template<typename T>
 struct rvalue_probe
 {
-    template<typename T>
-    rvalue_probe(T const &t, bool &b)
-        : ptemp(const_cast<BOOST_DEDUCED_TYPENAME boost::remove_const<T>::type *>(&t))
-        , is_rvalue(b)
+    rvalue_probe(T &t, bool &b)
+      : value(t)
+      , is_rvalue(b)
     {
     }
 
-    template<typename U>
-    operator U()
+    // can't ever return an array by value
+    typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<boost::is_array<T>, int, T>::type value_type;
+    operator value_type()
     {
         this->is_rvalue = true;
-        return *static_cast<U *>(ptemp);
+        return this->value;
     }
 
-    template<typename V>
-    operator V &() const
+    operator T &() const
     {
-        return *static_cast<V *>(ptemp);
+        return this->value;
     }
 
 private:
-    void *ptemp;
+    T &value;
     bool &is_rvalue;
 };
 
+template<typename T>
+rvalue_probe<T> make_probe(T &t, bool &b) { return rvalue_probe<T>(t, b); }
+
+template<typename T>
+rvalue_probe<T const> make_probe(T const &t, bool &b)  { return rvalue_probe<T const>(t, b); }
+
 ///////////////////////////////////////////////////////////////////////////////
 // simple_variant
-//  holds either a T or a T*
+//  holds either a T or a T const*
 template<typename T>
 struct simple_variant
 {
-    simple_variant(T *t)
-        : is_rvalue(false)
+    simple_variant(T const *t)
+      : is_rvalue(false)
     {
-        *static_cast<T **>(this->data.address()) = t;
+        *static_cast<T const **>(this->data.address()) = t;
     }
 
     simple_variant(T const &t)
-        : is_rvalue(true)
+      : is_rvalue(true)
     {
         ::new(this->data.address()) T(t);
     }
 
     simple_variant(simple_variant const &that)
-        : is_rvalue(that.is_rvalue)
+      : is_rvalue(that.is_rvalue)
     {
         if(this->is_rvalue)
             ::new(this->data.address()) T(*that.get());
         else
-            *static_cast<T **>(this->data.address()) = that.get();
+            *static_cast<T const **>(this->data.address()) = that.get();
     }
 
     ~simple_variant()
@@ -429,26 +435,27 @@ struct simple_variant
             this->get()->~T();
     }
 
-    T *get() const
+    T const *get() const
     {
         if(this->is_rvalue)
-            return static_cast<T *>(this->data.address());
+            return static_cast<T const *>(this->data.address());
         else
-            return *static_cast<T **>(this->data.address());
+            return *static_cast<T const * const *>(this->data.address());
     }
 
 private:
     enum size_type { size = sizeof(T) > sizeof(T*) ? sizeof(T) : sizeof(T*) };
     simple_variant &operator =(simple_variant const &); 
     bool const is_rvalue;
-    mutable aligned_storage<size> data;
+    aligned_storage<size> data;
 };
 
 // If the collection is an array or is noncopyable, it must be an lvalue.
-// If the collection is cheap-to-copy, treat it as an rvalue
-template<typename LValue, typename IsCheap>
-inline BOOST_DEDUCED_TYPENAME boost::enable_if<boost::mpl::or_<LValue, IsCheap>, IsCheap *>::type
-should_copy_impl(LValue *, IsCheap *, bool *)
+// If the collection is a lightweight proxy, treat it as an rvalue
+// BUGBUG what about a noncopyable proxy?
+template<typename LValue, typename IsProxy>
+inline BOOST_DEDUCED_TYPENAME boost::enable_if<boost::mpl::or_<LValue, IsProxy>, IsProxy>::type *
+should_copy_impl(LValue *, IsProxy *, bool *)
 {
     return 0;
 }
@@ -484,10 +491,10 @@ inline auto_any<T *> contain(T &t, boost::mpl::false_ *) // lvalue
 
 #ifdef BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION
 template<typename T>
-auto_any<simple_variant<T const> >
+auto_any<simple_variant<T> >
 contain(T const &t, bool *rvalue)
 {
-    return *rvalue ? simple_variant<T const>(t) : simple_variant<T const>(&t);
+    return *rvalue ? simple_variant<T>(t) : simple_variant<T>(&t);
 }
 #endif
 
@@ -515,7 +522,7 @@ template<typename T>
 auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, const_>::type>
 begin(auto_any_t col, type2type<T, const_> *, bool *)
 {
-    return boost::begin(*auto_any_cast<simple_variant<T const>, boost::mpl::false_>(col).get());
+    return boost::begin(*auto_any_cast<simple_variant<T>, boost::mpl::false_>(col).get());
 }
 #endif
 
@@ -543,7 +550,7 @@ template<typename T>
 auto_any<BOOST_DEDUCED_TYPENAME foreach_iterator<T, const_>::type>
 end(auto_any_t col, type2type<T, const_> *, bool *)
 {
-    return boost::end(*auto_any_cast<simple_variant<T const>, boost::mpl::false_>(col).get());
+    return boost::end(*auto_any_cast<simple_variant<T>, boost::mpl::false_>(col).get());
 }
 #endif
 
@@ -598,60 +605,63 @@ deref(auto_any_t cur, type2type<T, C> *)
 } // namespace foreach_detail_
 } // namespace boost
 
+// A sneaky way to get the type of the collection without evaluating the expression
+#define BOOST_FOREACH_TYPEOF(COL)                                                               \
+    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::is_const(COL)))
+
+// returns true_* if the type is noncopyable
+#define BOOST_FOREACH_IS_NONCOPYABLE(COL)                                                       \
+    boost_foreach_is_noncopyable(boost::foreach_detail_::to_ptr(COL), boost::foreach::adl)
+
+// returns true_* if the type is a lightweight proxy (and is not noncopyable)
+#define BOOST_FOREACH_IS_LIGHTWEIGHT_PROXY(COL)                                                 \
+    boost::foreach_detail_::and_(                                                               \
+        boost::foreach_detail_::not_(BOOST_FOREACH_IS_NONCOPYABLE(COL))                         \
+      , boost_foreach_is_lightweight_proxy(                                                     \
+            boost::foreach_detail_::to_ptr(COL)                                                 \
+          , boost::foreach::adl))
+
 #ifdef BOOST_FOREACH_COMPILE_TIME_CONST_RVALUE_DETECTION
 ///////////////////////////////////////////////////////////////////////////////
 // R-values and const R-values supported here with zero runtime overhead
 ///////////////////////////////////////////////////////////////////////////////
 
-// A sneaky way to get the type of the collection without evaluating the expression
-# define BOOST_FOREACH_TYPEOF(COL)                                                              \
-    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::is_const(COL)))
+// No variable is needed to track the rvalue-ness of the collection expression
+# define BOOST_FOREACH_PREAMBLE()                                                               \
+    /**/
 
 // Evaluate the collection expression
 # define BOOST_FOREACH_EVALUATE(COL)                                                            \
     (COL)
 
-// No variable is needed to track the rvalue-ness of the collection expression
-# define BOOST_FOREACH_HEADER()                                                                 \
-    /**/
-
 # define BOOST_FOREACH_SHOULD_COPY(COL)                                                         \
     (true ? 0 : boost::foreach_detail_::or_(                                                    \
         BOOST_FOREACH_IS_RVALUE(COL)                                                            \
-      , boost_foreach_has_cheap_copy(                                                           \
-            boost::foreach_detail_::to_ptr(COL)                                                 \
-          , boost::foreach::adl)))
+      , BOOST_FOREACH_IS_LIGHTWEIGHT_PROXY(COL)))
 
 #elif defined(BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION)
 ///////////////////////////////////////////////////////////////////////////////
 // R-values and const R-values supported here
 ///////////////////////////////////////////////////////////////////////////////
 
-// A sneaky way to get the type of the collection without evaluating the expression
-# define BOOST_FOREACH_TYPEOF(COL)                                                              \
-    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::is_const(COL)))
+// Declare a variable to track the rvalue-ness of the collection expression
+# define BOOST_FOREACH_PREAMBLE()                                                               \
+    if (bool _foreach_is_rvalue = false) {} else
 
 // Evaluate the collection expression, and detect if it is an lvalue or and rvalue
 # define BOOST_FOREACH_EVALUATE(COL)                                                            \
-    (true ? boost::foreach_detail_::rvalue_probe((COL), _foreach_is_rvalue) : (COL))
-
-// Declare a variable to track the rvalue-ness of the collection expression
-# define BOOST_FOREACH_HEADER()                                                                 \
-    if (bool _foreach_is_rvalue = false) {} else
+    (true ? boost::foreach_detail_::make_probe((COL), _foreach_is_rvalue) : (COL))
 
 // The rvalue/lvalue-ness of the collection expression is determined dynamically, unless
-// type type is an array or is noncopyable or is non-const, in which case we know it's an lvalue
+// type type is an array or is noncopyable or is non-const, in which case we know it's an lvalue.
+// If the type happens to be a lightweight proxy, always make a copy.
 # define BOOST_FOREACH_SHOULD_COPY(COL)                                                         \
     (boost::foreach_detail_::should_copy_impl(                                                  \
         true ? 0 : boost::foreach_detail_::or_(                                                 \
             boost::foreach_detail_::is_array(COL)                                               \
-          , boost_foreach_is_noncopyable(                                                       \
-                boost::foreach_detail_::to_ptr(COL)                                             \
-              , boost::foreach::adl)                                                            \
+          , BOOST_FOREACH_IS_NONCOPYABLE(COL)                                                   \
           , boost::foreach_detail_::not_(boost::foreach_detail_::is_const(COL)))                \
-      , true ? 0 : boost_foreach_has_cheap_copy(                                                \
-            boost::foreach_detail_::to_ptr(COL)                                                 \
-          , boost::foreach::adl)                                                                \
+      , true ? 0 : BOOST_FOREACH_IS_LIGHTWEIGHT_PROXY(COL)                                      \
       , &_foreach_is_rvalue))
 
 #elif !defined(BOOST_FOREACH_NO_RVALUE_DETECTION)
@@ -659,52 +669,39 @@ deref(auto_any_t cur, type2type<T, C> *)
 // R-values supported here, const R-values NOT supported here
 ///////////////////////////////////////////////////////////////////////////////
 
-// A sneaky way to get the type of the collection without evaluating the expression
-# define BOOST_FOREACH_TYPEOF(COL)                                                              \
-    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::is_const(COL)))
+// No variable is needed to track the rvalue-ness of the collection expression
+# define BOOST_FOREACH_PREAMBLE()                                                               \
+    /**/
 
 // Evaluate the collection expression
 # define BOOST_FOREACH_EVALUATE(COL)                                                            \
     (COL)
-
-// No variable is needed to track the rvalue-ness of the collection expression
-# define BOOST_FOREACH_HEADER()                                                                 \
-    /**/
 
 // Determine whether the collection expression is an lvalue or an rvalue.
 // NOTE: this gets the answer wrong for const rvalues.
 # define BOOST_FOREACH_SHOULD_COPY(COL)                                                         \
     (true ? 0 : boost::foreach_detail_::or_(                                                    \
         boost::foreach_detail_::is_rvalue((COL), 0)                                             \
-      , boost_foreach_has_cheap_copy(                                                           \
-            boost::foreach_detail_::to_ptr(COL)                                                 \
-          , boost::foreach::adl)))
+      , BOOST_FOREACH_IS_LIGHTWEIGHT_PROXY(COL)))
 
 #else
 ///////////////////////////////////////////////////////////////////////////////
 // R-values NOT supported here
 ///////////////////////////////////////////////////////////////////////////////
 
-// A sneaky way to get the type of the collection without evaluating the expression
-# define BOOST_FOREACH_TYPEOF(COL)                                                              \
-    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::is_const(COL)))
+// No variable is needed to track the rvalue-ness of the collection expression
+# define BOOST_FOREACH_PREAMBLE()                                                               \
+    /**/
 
 // Evaluate the collection expression
 # define BOOST_FOREACH_EVALUATE(COL)                                                            \
     (COL)
 
-// No variable is needed to track the rvalue-ness of the collection expression
-# define BOOST_FOREACH_HEADER()                                                                 \
-    /**/
-
-// Can't use rvalues with BOOST_FOREACH (unless they have been flagged as cheap-to-copy)
+// Can't use rvalues with BOOST_FOREACH (unless they are lightweight proxies)
 # define BOOST_FOREACH_SHOULD_COPY(COL)                                                         \
-    (true ? 0 : boost_foreach_has_cheap_copy(                                                   \
-        boost::foreach_detail_::to_ptr(COL)                                                     \
-      , boost::foreach::adl))
+    (true ? 0 : BOOST_FOREACH_IS_LIGHTWEIGHT_PROXY(COL))
 
 #endif
-
 
 #define BOOST_FOREACH_CONTAIN(COL)                                                              \
     boost::foreach_detail_::contain(                                                            \
@@ -766,7 +763,7 @@ deref(auto_any_t cur, type2type<T, C> *)
 //       { ... }
 //
 #define BOOST_FOREACH(VAR, COL)                                                                 \
-    BOOST_FOREACH_HEADER()                                                                      \
+    BOOST_FOREACH_PREAMBLE()                                                                    \
     if (boost::foreach_detail_::auto_any_t _foreach_col = BOOST_FOREACH_CONTAIN(COL)) {} else   \
     if (boost::foreach_detail_::auto_any_t _foreach_cur = BOOST_FOREACH_BEGIN(COL)) {} else     \
     if (boost::foreach_detail_::auto_any_t _foreach_end = BOOST_FOREACH_END(COL)) {} else       \

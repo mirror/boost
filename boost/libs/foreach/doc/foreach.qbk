@@ -57,8 +57,7 @@ makes no virtual function calls or calls through function pointers, and makes no
 that are not transparent to the compiler's optimizer. This results in near-optimal code
 generation; the performance of _foreach_ is usually within a few percent of the
 equivalent hand-coded loop. And although _foreach_ is a macro, it is a remarkably
-well-behaved one. On modern compilers, it evaluates its arguments exactly once, leading
-to no nasty surprises.
+well-behaved one. It evaluates its arguments exactly once, leading to no nasty surprises.
 
 [h2 Hello, world!]
 
@@ -99,7 +98,7 @@ an STL container counts. If it has nested `iterator` and `const_iterator` types 
 and `end()` member functions, _foreach_ will automatically know how to iterate over
 it. It is in this way that _iterator_range_ and _sub_range_ work with _foreach_.]
 
-See the section on [link foreach.extending_boost_foreach Extending _foreach_] to find
+See the section on [link foreach.extensibility Extensibility] to find
 out how to make _foreach_ work with other types.
 
 [h2 Examples]
@@ -239,17 +238,17 @@ not try to copy it. If your type inherits from _noncopyable_, no further action 
 required. If not, you should specialize the `boost::foreach::is_noncopyable<>` template, as
 follows:
 
-    class my_noncopyable_vector
+    class noncopy_vector
     {
         // ...
     private:
-        my_noncopyable_vector( my_noncopyable_vector const & ); // non-copyable!
+        noncopy_vector( noncopy_vector const & ); // non-copyable!
     };
     
     namespace boost { namespace foreach
     {
         template<>
-        struct is_noncopyable< my_noncopyable_vector >
+        struct is_noncopyable< noncopy_vector >
           : mpl::true_
         {
         };
@@ -258,23 +257,33 @@ follows:
 Another way to achieve the same effect is to override the global `boost_foreach_is_noncopyable()`
 function. Doing it this way has the advantage of being portable to older compilers.
 
+    // At global scope...
     inline boost::mpl::true_ *
-    boost_foreach_is_noncopyable( my_noncopyable_vector *&, boost::foreach::tag )
+    boost_foreach_is_noncopyable( noncopy_vector *&, boost::foreach::tag )
     {
         return 0;
     }
 
-[h2 Optimizing _foreach_ for Cheap-to-Copy Sequence Types]
+[blurb _tip_ Even though you have to tell _foreach_ that your type is non-copyable, that
+doesn't mean that _foreach_ always makes a copy of your sequence type. Obviously, doing so
+would be expensive and even wrong in some cases. _foreach_ is quite smart about when to
+make a copy and when not to. The `is_noncopyable<>` trait is needed to elide the copy, which
+is on a branch that might never get taken.]
 
-On some compilers, _foreach_ must sometimes take a slightly slower code path to guarantee
+[h2 Optimizing _foreach_ for Lightweight Proxy Sequence Types]
+
+On some compilers, _foreach_ must occasionally take a slightly slower code path to guarantee
 correct handling of sequences stored in temporary objects. It asks itself, "Should I make
 a copy of this object?" and later, "Did I make a copy or not?" For some types of sequences,
 this is overkill. Consider a sequence which is a simple pair of iterators. Jumping through
 hoops of fire to avoid copying it doesn't make sense because copying it is so cheap.
 
-For types that are cheap to copy, _foreach_ provides a hook that lets you tell it not to
-worry about the expense of making a copy. This can result in slightly faster loop execution.
-Simply specialize the `boost::foreach::has_cheap_copy<>` trait, as follows:
+A pair of iterators is an example of a lightweight proxy. It does not store the values of
+the sequence; rather, it stores iterators to them. This means that iterating over a copy of
+the proxy object will give the same results as using the object itself. For such types,
+_foreach_ provides a hook that lets you tell it not to worry about the expense of making a
+copy. This can result in slightly faster loop execution. Simply specialize the
+`boost::foreach::is_lightweight_proxy<>` trait, as follows:
 
     struct sub_string
       : boost::iterator_range< std::string::iterator >
@@ -285,18 +294,18 @@ Simply specialize the `boost::foreach::has_cheap_copy<>` trait, as follows:
     namespace boost { namespace foreach
     {
         template<>
-        struct has_cheap_copy< sub_string >
+        struct is_lightweight_proxy< sub_string >
           : mpl::true_
         {
         };
     }}
 
-Alternately, you could achieve the same effect by overriding the global `boost_foreach_has_cheap_copy()`
-function, as follows:
+Alternately, you could achieve the same effect by overriding the global
+`boost_foreach_is_lightweight_proxy()` function, as follows:
 
-
+    // At global scope...
     inline boost::mpl::true_ *
-    boost_foreach_has_cheap_copy( sub_string *&, boost::foreach::tag )
+    boost_foreach_is_lightweight_proxy( sub_string *&, boost::foreach::tag )
     {
         return 0;
     }
