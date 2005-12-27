@@ -776,7 +776,6 @@ void print_platform_macros()
    PRINT_MACRO(__GLIBC_MINOR__);
    PRINT_MACRO(__GNU_LIBRARY__);
    PRINT_MACRO(_BSD_SOURCE);
-   PRINT_MACRO(_FILE_OFFSET_BITS);
    PRINT_MACRO(_GNU_SOURCE);
    PRINT_MACRO(_ISOC99_SOURCE);
    PRINT_MACRO(_ISOC9X_SOURCE);
@@ -870,6 +869,9 @@ void print_platform_macros()
    PRINT_MACRO(_XOPEN_STREAMS);
    PRINT_MACRO(_XOPEN_UNIX);
    PRINT_MACRO(_XOPEN_VERSION);
+   // Misc:
+   PRINT_MACRO(__USE_BSD);
+   PRINT_MACRO(_FILE_OFFSET_BITS);
 }
 
 void print_boost_macros()
