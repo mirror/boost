@@ -484,20 +484,10 @@ namespace quickbook
             out << "\n<section id=\"" << library_id 
                 << "." << qualified_section_id << "\">\n";
         }
-        if (qbk_version_n < 103) // version 1.2 and below
-        {
-            out << "<title>";
-            while (first != last)
-                detail::print_char(*first++, out);
-            out << "</title>\n";
-        }
-        else
-        {
-            std::string str;
-            str = phrase.str();
-            phrase.str(std::string());
-            out << "<title>" << str << "</title>\n";
-        }
+        std::string str;
+        str = phrase.str();
+        phrase.str(std::string());
+        out << "<title>" << str << "</title>\n";
     }
 
     void end_section_action::operator()(iterator const& first, iterator const& last) const
