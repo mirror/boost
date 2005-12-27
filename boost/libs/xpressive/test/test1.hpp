@@ -140,49 +140,6 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , L("")
           , no_match
         )
-      , test_case // test16
-        (
-            L("foobarboo")
-          , L("b.+ar$")
-          , regex_type(L('b') >> +_ >> L("ar") >> eos)
-          , L("")
-          , no_match
-        )
-      , test_case // test17
-        (
-            L("foobarboo")
-          , L("b.+o$")
-          , regex_type(L('b') >> +_ >> L('o') >> eos)
-          , L("")
-          , backrefs(L("barboo"), nilbr)
-        )
-      , test_case // test18
-        (
-            L("foobarboo")
-          , L("b.+oo$")
-          , regex_type(L('b') >> +_ >> L("oo") >> eos)
-          , L("")
-          , backrefs(L("barboo"), nilbr)
-        )
-      , test_case // test19
-        (
-            L("+1234.56789F")
-          , L("^([-+]?[0-9]+(\\.[0-9]*)?)([CF])$")
-          , regex_type(bos >> (s1= !(set=L('-'),L('+')) >> +range(L('0'),L('9'))
-                           >> !(s2= L('.') >> *range(L('0'),L('9'))))
-                           >> (s3= (set=L('C'),L('F'))) >> eos)
-          , L("")
-          , backrefs(L("+1234.56789F"), L("+1234.56789"), L(".56789"), L("F"), nilbr)
-        )
-      , test_case // test20
-        (
-            L("+1234.56789")
-          , L("(\\+|-)?([0-9]+\\.?[0-9]*|\\.[0-9]+)([eE](\\+|-)?[0-9]+)?")
-          , regex_type( !(s1= as_xpr(L('+'))|L('-')) >> (s2= +range(L('0'),L('9')) >> !as_xpr(L('.')) >> *range(L('0'),L('9')) |
-                        L('.') >> +range(L('0'),L('9'))) >> !(s3= (set=L('e'),L('E')) >> !(s4= as_xpr(L('+'))|L('-')) >> +range(L('0'),L('9'))))
-          , L("")
-          , backrefs(L("+1234.56789"), L("+"), L("1234.56789"), L(""), L(""), nilbr)
-        )
     };
 
     return boost::make_iterator_range(test_cases);

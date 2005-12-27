@@ -171,7 +171,7 @@ inline void run_impl(basic_regex<BidiIter> const &rx, test_case<BidiIter> const 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// run_test
+// test_runner
 template<typename BidiIter>
 struct test_runner
   : std::unary_function<test_case<BidiIter>, void>
