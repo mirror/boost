@@ -17,6 +17,7 @@
 //    Nickolay Mladenov, for the implementation of operator+=
 
 //  Revision History
+//  27 Dec 05  Add Boolean conversion operator (Daryle Walker)
 //  28 Sep 02  Use _left versions of operators from operators.hpp
 //  05 Jul 01  Recode gcd(), avoiding std::swap (Helmut Zeisel)
 //  03 Mar 01  Workarounds for Intel C++ 5.0 (David Abrahams)
@@ -129,6 +130,10 @@ class rational :
     > > > > > > > > > > > > > > > >
 {
     typedef typename boost::call_traits<IntType>::param_type param_type;
+
+    struct helper { IntType parts[2]; };
+    typedef IntType (helper::* bool_type)[2];
+
 public:
     typedef IntType int_type;
     rational() : num(0), den(1) {}
@@ -164,6 +169,9 @@ public:
 
     // Operator not
     bool operator!() const { return !num; }
+
+    // Boolean conversion
+    operator bool_type() const { return operator !() ? 0 : &helper::parts; }
 
     // Comparison operators
     bool operator< (const rational& r) const;

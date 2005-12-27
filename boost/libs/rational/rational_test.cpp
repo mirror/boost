@@ -14,6 +14,7 @@
  */
 
 // Revision History
+// 27 Dec 05  Add testing for Boolean conversion operator (Daryle Walker)
 // 24 Dec 05  Change code to use Boost.Test (Daryle Walker)
 // 04 Mar 01  Patches for Intel C++ and GCC (David Abrahams)
 
@@ -338,11 +339,16 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_unary_test, T, all_signed_test_types )
                                &r4 = h.r_[ 3 ], &r5 = h.r_[ 4 ];
 
     BOOST_CHECK_EQUAL( +r5, r5 );
+
     BOOST_CHECK( -r3 != r3 );
     BOOST_CHECK_EQUAL( -(-r3), r3 );
     BOOST_CHECK_EQUAL( -r4, static_cast<T>(3) );
+
     BOOST_CHECK( !r2 );
     BOOST_CHECK( !!r3 );
+
+    BOOST_CHECK( ! static_cast<bool>(r2) );
+    BOOST_CHECK( r3 );
 }
 
 BOOST_AUTO_TEST_SUITE_END();

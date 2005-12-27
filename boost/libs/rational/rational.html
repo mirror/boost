@@ -51,6 +51,9 @@ template &lt;typename I&gt; I lcm(I n, I m);
 class bad_rational;
 
 template&lt;typename I&gt; class rational {
+    typedef <em>implementation-defined</em> bool_type;
+
+public:
     typedef I int_type;
 
     // Constructors
@@ -92,6 +95,9 @@ template&lt;typename I&gt; class rational {
     // Operator not
     bool operator!() const;
 
+    // Boolean conversion
+    operator bool_type() const;
+
     // Comparison operators
     bool operator&lt; (const rational&amp; r) const;
     bool operator== (const rational&amp; r) const;
@@ -100,7 +106,7 @@ template&lt;typename I&gt; class rational {
     bool operator&lt; (I i) const;
     bool operator&gt; (I i) const;
     bool operator== (I i) const;
-}
+};
 
 // Unary operators
 template &lt;typename I&gt; rational&lt;I&gt; operator+ (const rational&lt;I&gt;&amp; r);
@@ -207,6 +213,7 @@ expressions must be valid for any two values n and m of type I, with the
 <li>n % m (n%m must be positive if n and m are positive)
 <li>Assignment versions of the above
 <li>+n, -n
+<li>!n (must be True iff n is zero)
 </ul>
 </tt>
 
@@ -308,7 +315,19 @@ based on machine integer types, it could offer a saving for rationals based on
 unlimited-precision integers, for example.
 
 <h3><a name="Conversions">Conversions</h3>
-There are <em>no</em> implicit conversions from rationals to any other
+<p>There is a conversion operator to an unspecified Boolean type (most likely a
+member pointer).  This operator converts a rational to <code>false</code> if it
+represents zero, and <code>true</code> otherwise.  This conversion allows a
+rational for use as the first argument of operator <code>?:</code>; as either
+argument of operators <code>&amp;&amp;</code> or <code>||</code> without
+forfeiting short-circuit evaluation; as a condition for a <code>do</code>,
+<code>if</code>, <code>while</code>, or <code>for</code> statement; and as a
+conditional declaration for <code>if</code>, <code>while</code>, or
+<code>for</code> statements.  The nature of the type used, and that any names
+for that nature are kept private, should prevent any inappropriate non-Boolean
+use like numeric or pointer operations or as a <code>switch</code> condition.
+
+<p>There are <em>no other</em> implicit conversions from a rational
 type. However, there is an explicit type-conversion function,
 <tt>rational_cast&lt;T&gt;(r)</tt>. This can be used as follows:
 
@@ -317,12 +336,12 @@ type. However, there is an explicit type-conversion function,
     double nearly_pi = boost::rational_cast&lt;double&gt;(r);
 </pre>
 
-The <tt>rational_cast&lt;T&gt;</tt> function's behaviour is undefined if the
+<p>The <tt>rational_cast&lt;T&gt;</tt> function's behaviour is undefined if the
 source rational's numerator or denominator cannot be safely cast to the
 appropriate floating point type, or if the division of the numerator and
 denominator (in the target floating point type) does not evaluate correctly.
 
-In essence, all required conversions should be value-preserving, and all
+<p>In essence, all required conversions should be value-preserving, and all
 operations should behave "sensibly". If these constraints cannot be met, a
 separate user-defined conversion will be more appropriate.
 
@@ -627,15 +646,19 @@ with a user-defined integer type.
 <p>Nickolay Mladenov provided the current implementation of operator+= and
 operator-=.
 
-<p>Discussion of the issues surrounding Koenig lookup and std::swap took place on the boost list in
-January 2001. 
+<p>Discussion of the issues surrounding Koenig lookup and std::swap took place
+on the boost list in January 2001.
 
-<p>Revised&nbsp; February 5, 2001</p>
+<p>Daryle Walker provided a Boolean conversion operator, so that a rational can
+be used in the same Boolean contexts as the built-in numeric types, in December
+2005.
 
-<p>© Copyright Paul Moore 1999-2001. Permission to copy, use, modify, sell
-and distribute this document is granted provided this copyright notice
-appears in all copies. This document is provided &quot;as is&quot; without
-express or implied warranty, and with no claim as to its suitability for
-any purpose.</p>
+<p>Revised December 27, 2005</p>
+
+<p>© Copyright Paul Moore 1999-2001; &copy; Daryle Walker 2005. Permission to
+copy, use, modify, sell and distribute this document is granted provided this
+copyright notice appears in all copies. This document is provided &quot;as
+is&quot; without express or implied warranty, and with no claim as to its
+suitability for any purpose.</p>
 </body>
 </html>
