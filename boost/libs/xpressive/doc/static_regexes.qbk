@@ -96,7 +96,7 @@ In static xpressive, this would be:
 Notice how you capture a back-reference by assigning to `s1`, and then you
 use `s1` later in the pattern to find the matching end tag.
 
-[blurb __tip__ [*Grouping without capturing a back-reference] \n\n In
+[tip [*Grouping without capturing a back-reference] \n\n In
 xpressive, if you just want grouping without capturing a back-reference, you
 can just use `()` without `s1`. That is the equivalent of Perl's `(?:)`
 non-capturing grouping construct.]

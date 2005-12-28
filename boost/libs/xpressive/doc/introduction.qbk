@@ -62,7 +62,7 @@ world
 The first thing you'll notice about the code is that all the types in xpressive live in
 the `boost::xpressive` namespace.
 
-[blurb __note__ Most of the rest of the examples in this document will leave off the
+[note Most of the rest of the examples in this document will leave off the
 `using namespace boost::xpressive;` directive. Just pretend it's there.]
 
 Next, you'll notice the type of the regular expression object is `sregex`. If you are familiar

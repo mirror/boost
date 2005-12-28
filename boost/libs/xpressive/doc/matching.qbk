@@ -10,7 +10,7 @@ how _regex_match_ and _regex_search_ in the _regexpp_ library work, xpressive's 
 
 The _regex_match_ algorithm checks to see if a regex matches a given input.
 
-[blurb __alert__ The _regex_match_ algorithm will only report success if the regex matches the ['whole input],
+[warning The _regex_match_ algorithm will only report success if the regex matches the ['whole input],
 from beginning to end. If the regex matches only a part of the input, _regex_match_ will return false. If you
 want to search through the string looking for sub-strings that the regex matches, use the _regex_search_
 algorithm.]

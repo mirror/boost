@@ -45,7 +45,7 @@ This line creates a new regex that embeds the old regex by value. Then, the new 
 the original regex. Since a copy of the old regex was made on the right-hand side, this works as you might
 expect: the new regex has the behavior of the old regex wrapped in begin- and end-word assertions.
 
-[blurb __note__ Note that `re = bow >> re >> eow` does ['not] define a recursive regular expression, since regex
+[note Note that `re = bow >> re >> eow` does ['not] define a recursive regular expression, since regex
 objects embed by value by default. The next section shows how to define a recursive regular expression by
 embedding a regex by reference.]
 
@@ -55,7 +55,7 @@ If you want to be able to build recursive regular expressions and context-free g
 by value is not enough. You need to be able to make your regular expressions self-referential. Most regular
 expression engines don't give you that power, but xpressive does.
 
-[blurb __detail__ The theoretical computer scientists out there will correctly point out that a self-referential
+[tip The theoretical computer scientists out there will correctly point out that a self-referential
 regular expression is not "regular", so in the strict sense, xpressive isn't really a ['regular] expression engine
 at all. But as Larry Wall once said, "the term '''[regular expression]''' has grown with the capabilities of our
 pattern matching engines, so I'm not going to try to fight linguistic necessity here."]
@@ -100,7 +100,7 @@ match `"9*(10+3)"`. It only matches well-formed mathematical expressions, where 
 balanced and the infix operators have two arguments each. Don't try this with just any regular expression
 engine!
 
-[blurb __detail__ There is no way for a dynamic regex to refer to other regexes, so they can only
+[note There is no way for a dynamic regex to refer to other regexes, so they can only
 be used as terminals in a grammar. Use static regexes for non-terminal grammar rules.]
 
 Let's take a closer look at this regular expression grammar. Notice that it is cyclic: `expression` is
@@ -112,7 +112,7 @@ a regex object that has not yet been initialized: the definition of `group`. In 
 `by_ref()` to embed `expression` by reference. In all other places, it is sufficient to embed the other
 regex objects by value, since they have already been initialized and their values will not change.
 
-[blurb __tip__ [*Embed by value if possible]
+[tip [*Embed by value if possible]
 \n\n
 In general, prefer embedding regular expressions by value rather than by reference. It
 involves one less indirection, making your patterns match a little faster. Besides, value semantics
@@ -197,7 +197,7 @@ This program displays the following:
 Here you can see how the results are nested and that they are stored in the order in which they
 are found.
 
-[blurb __tip__ See the definition of [link boost_xpressive.user_s_guide.examples.display_a_tree_of_nested_results output_nested_results] in the
+[tip See the definition of [link boost_xpressive.user_s_guide.examples.display_a_tree_of_nested_results output_nested_results] in the
 [link boost_xpressive.user_s_guide.examples Examples] section.]
 
 [h2 Filtering Nested Results]
