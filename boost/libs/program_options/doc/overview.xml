@@ -488,7 +488,7 @@ notify(vm);
       <filename>autoexec.bat</filename> file or (on recent versions) the
       <filename>Control Panel/System/Advanced/Environment Variables</filename>
       dialog, and on Unix &#x2014;, the <filename>/etc/profile</filename>,
-      <filename>~/profile</filename> and <filename>~/bash_profile</filename>
+      <filename>~/.profile</filename> and <filename>~/.bash_profile</filename>
       files. Because environment variables can be set for the entire system,
       they are particularly suitable for options which apply to all programs.
       </para>
