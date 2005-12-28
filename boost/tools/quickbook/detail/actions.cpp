@@ -1,6 +1,7 @@
 /*=============================================================================
     Copyright (c) 2002 2004 Joel de Guzman
     Copyright (c) 2004 Eric Niebler
+    Copyright (c) 2005 Thomas Guest
     http://spirit.sourceforge.net/
 
     Use, modification and distribution is subject to the Boost Software
@@ -10,6 +11,7 @@
 #include <numeric>
 #include <functional>
 #include <boost/bind.hpp>
+#include <boost/filesystem/convenience.hpp>
 #include "./actions.hpp"
 
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
@@ -331,10 +333,22 @@ namespace quickbook
 
     void image_action::operator()(iterator first, iterator const& last) const
     {
-        phrase << "<inlinemediaobject><imageobject><imagedata fileref=\"";
+        fs::path const img_path(std::string(first, last));
+
+        phrase << "<inlinemediaobject>";
+
+        phrase << "<imageobject><imagedata fileref=\"";
         while (first != last)
             detail::print_char(*first++, phrase);
-        phrase << "\"></imagedata></imageobject></inlinemediaobject>";
+        phrase << "\"></imagedata></imageobject>";
+
+        // Also add a textobject -- use the basename of the image file.
+        // This will mean we get "alt" attributes of the HTML img.
+        phrase << "<textobject><phrase>";
+        detail::print_string(fs::basename(img_path), phrase);
+        phrase << "</phrase></textobject>";
+
+        phrase << "</inlinemediaobject>";
     }
 
     void indentifier_action::operator()(iterator const& first, iterator const& last) const
