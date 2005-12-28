@@ -32,7 +32,6 @@ exe xprperf
         $(BOOST_ROOT)/libs/regex/src/$(BOOST_REGEX_SOURCES).cpp
     :
         <include>$(BOOST_ROOT)
-        <include>$(BOOST_ROOT)/../boost-sandbox
         <define>BOOST_REGEX_NO_LIB=1
         <define>BOOST_REGEX_RECURSIVE
         <define>BOOST_REGEX_USE_CPP_LOCALE
