@@ -27,7 +27,7 @@ DEPENDS all : test ;
       : [ run implicit_cast.cpp ]
         [ compile-fail implicit_cast_fail.cpp ]
         [ run ../cast_test.cpp ]
-        [ run ../lexical_cast_test.cpp ]
+        [ run ../lexical_cast_test.cpp <lib>../../test/build/boost_unit_test_framework ]
       ;
 }
       
