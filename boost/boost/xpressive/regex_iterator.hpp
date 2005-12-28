@@ -30,6 +30,8 @@ template<typename BidiIter>
 struct regex_iterator_impl
   : private noncopyable
 {
+    typedef detail::core_access<BidiIter> access;
+
     regex_iterator_impl
     (
         BidiIter begin
@@ -40,7 +42,7 @@ struct regex_iterator_impl
       , bool not_null = false
     )
       : what_()
-      , state_(begin, end, what_, *rex, flags)
+      , state_(begin, end, what_, *access::get_regex_impl(*rex), flags)
       , rex_(rex)
       , flags_(flags)
       , not_null_(not_null)
@@ -50,7 +52,6 @@ struct regex_iterator_impl
 
     bool next()
     {
-        typedef detail::core_access<BidiIter> access;
         this->state_.reset(this->what_, *access::get_regex_impl(*this->rex_));
         if(!regex_search_impl(this->state_, *this->rex_, this->not_null_))
         {
