@@ -183,6 +183,8 @@ import ../../../libs/serialization/build/serialization ;
 
  local DATE_TIME_PROPERTIES =  <define>BOOST_DATE_TIME_STATIC_LINK <define>BOOST_ALL_NO_LIB  <define>USE_DATE_TIME_PRE_1_33_FACET_IO
     std::locale-support toolset::require-boost-spirit-support ;
+ local DATE_TIME_DYNAMIC_PROPERTIES = <define>BOOST_ALL_DYN_LINK <runtime-link>dynamic <define>USE_DATE_TIME_PRE_1_33_FACET_IO <define>BOOST_ALL_NO_LIB 
+    std::locale-support toolset::require-boost-spirit-support ;
 
  test-suite date_time_serialization
    :
