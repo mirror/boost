@@ -1,6 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file sub_match.hpp
-/// Contains the definition of the class template sub_match and associated helper functions
+/// Contains the definition of the class template sub_match\<\>
+/// and associated helper functions
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file

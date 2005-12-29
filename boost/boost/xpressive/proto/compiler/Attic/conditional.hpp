@@ -1,5 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
-// conditional.hpp
+/// \file conditional.hpp
+/// A special-purpose proto compiler for compiling an expression either one
+/// way or another depending on the properties of the expression.
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file

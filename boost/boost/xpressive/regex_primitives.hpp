@@ -454,6 +454,11 @@ proto::op_proxy<detail::mark_tag, int> const s9 = {9};
 /// "foo" >> "bar" will not compile because both operands to the right-shift
 /// operator are const char*, and no such operator exists. Use as_xpr("foo") >> "bar"
 /// instead.
+///
+/// You can use as_xpr() with character literals in addition to string literals.
+/// For instance, as_xpr('a') will match an 'a'. You can also complement a
+/// character literal, as with ~as_xpr('a'). This will match any one character
+/// that is not an 'a'.
 template<typename Literal>
 inline typename detail::as_xpr_type<Literal>::const_reference
 as_xpr(Literal const &literal)

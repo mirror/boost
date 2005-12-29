@@ -1,5 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
-// branch.hpp
+/// \file branch.hpp
+/// A special-purpose proto compiler for compiling one branch of the expression
+/// tree separately from the rest. Given an expression and a proto lambda, it
+/// compiles the expression using an initial state determined by the lambda.
+/// It then passes the result along with the current state and the visitor
+/// to the lambda for further processing.
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file

@@ -1,5 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file cpp_regex_traits.hpp
+/// Contains the definition of the cpp_regex_traits\<\> template, which is a 
+/// wrapper for std::locale that can be used to customize the behavior of
+/// static and dynamic regexes.
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file

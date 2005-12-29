@@ -1,5 +1,12 @@
 ///////////////////////////////////////////////////////////////////////////////
-// transform.hpp
+/// \file transform.hpp
+/// A special-purpose proto compiler for applying a transformation to an
+/// expression. The transformation is a proto lambda. The result of the
+/// transformation is forwarded to the specified compiler, or to the
+/// default compiler for the resulting expression is no compiler is
+/// specified. Also included are some basic transforms, such as one that
+/// extracts the operand of a unary op, the left and right operands of
+/// a binary op, and a way to compose multiple transforms into one.
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file

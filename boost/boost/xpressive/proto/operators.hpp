@@ -1,5 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
-// operators.hpp
+/// \file operators.hpp
+/// Contains all the overloaded operators that make it possible to build
+/// expression templates using proto components
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
@@ -50,22 +52,22 @@ namespace boost { namespace proto
     }
 
 #define BOOST_PROTO_UNARY_OP(op, tag)                                                           \
-    template<typename Arg>                                                                     \
-    inline typename lazy_enable_if<is_op<Arg>, unary_op_generator<Arg, tag> >::type const     \
-    operator op(Arg const &arg)                                                                \
+    template<typename Arg>                                                                      \
+    inline typename lazy_enable_if<is_op<Arg>, unary_op_generator<Arg, tag> >::type const       \
+    operator op(Arg const &arg)                                                                 \
     {                                                                                           \
-        return make_op<tag>(as_op<Arg>::make(arg));                                            \
+        return make_op<tag>(as_op<Arg>::make(arg));                                             \
     }
 
 #define BOOST_PROTO_BINARY_OP(op, tag)                                                          \
-    template<typename Left, typename Right>                                                   \
+    template<typename Left, typename Right>                                                     \
     inline typename lazy_enable_if<                                                             \
-        mpl::or_<is_op<Left>, is_op<Right> >                                                  \
-      , binary_op_generator<Left, Right, tag>                                                 \
+        mpl::or_<is_op<Left>, is_op<Right> >                                                    \
+      , binary_op_generator<Left, Right, tag>                                                   \
     >::type const                                                                               \
-    operator op(Left const &left, Right const &right)                                         \
+    operator op(Left const &left, Right const &right)                                           \
     {                                                                                           \
-        return make_op<tag>(as_op<Left>::make(left), as_op<Right>::make(right));              \
+        return make_op<tag>(as_op<Left>::make(left), as_op<Right>::make(right));                \
     }
 
     BOOST_PROTO_UNARY_OP(+, unary_plus_tag)

@@ -1,5 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
-// proto_typeof.hpp
+/// \file proto_typeof.hpp
+/// Type registrations so that proto expression templates can be used together
+/// with the Boost.Typeof library.
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file

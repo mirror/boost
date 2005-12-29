@@ -1,5 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
-// switch.hpp
+/// \file switch.hpp
+/// A generalization of the conditional_compiler. Given N different compilers
+/// in a MPL-style map and a lambda that generates a key from an expression,
+/// find the compiler in the map corresponding to the key and use that compiler
+/// to compile the expression.
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file

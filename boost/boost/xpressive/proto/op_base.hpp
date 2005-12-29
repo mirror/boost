@@ -1,5 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
-// op_base.hpp
+/// \file op_base.hpp
+/// Contains definitions of unary_op\<\>, binary_op\<\> and nary_op\<\>,
+/// as well as the is_op\<\> and the make_op() helper function.
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
@@ -81,30 +83,30 @@ namespace boost { namespace proto
 
 // These operators must be members.
 #define BOOST_PROTO_DEFINE_MEMBER_OPS()                                                         \
-    template<typename Arg>                                                                     \
-    binary_op<Op, typename as_op<Arg>::type, assign_tag> const                                \
-    operator =(Arg const &arg) const                                                           \
+    template<typename Arg>                                                                      \
+    binary_op<Op, typename as_op<Arg>::type, assign_tag> const                                  \
+    operator =(Arg const &arg) const                                                            \
     {                                                                                           \
-        return make_op<assign_tag>(this->cast(), as_op<Arg>::make(arg));                       \
+        return make_op<assign_tag>(this->cast(), as_op<Arg>::make(arg));                        \
     }                                                                                           \
-    template<typename Arg>                                                                     \
-    binary_op<Op, typename as_op<Arg>::type, subscript_tag> const                             \
-    operator [](Arg const &arg) const                                                          \
+    template<typename Arg>                                                                      \
+    binary_op<Op, typename as_op<Arg>::type, subscript_tag> const                               \
+    operator [](Arg const &arg) const                                                           \
     {                                                                                           \
-        return make_op<subscript_tag>(this->cast(), as_op<Arg>::make(arg));                    \
+        return make_op<subscript_tag>(this->cast(), as_op<Arg>::make(arg));                     \
     }                                                                                           \
-    nary_op<Op> operator ()() const                                                            \
+    nary_op<Op> operator ()() const                                                             \
     {                                                                                           \
-        return nary_op<Op>(this->cast());                                                      \
+        return nary_op<Op>(this->cast());                                                       \
     }                                                                                           \
     BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_INC(BOOST_PROTO_MAX_ARITY), BOOST_PROTO_FUN_OP, _)
 
 #define BOOST_PROTO_FUN_OP(z, n, _)                                                             \
     template<BOOST_PP_ENUM_PARAMS(n, typename A)>                                               \
-    nary_op<Op BOOST_PP_ENUM_TRAILING_PARAMS(n, A)>                                            \
+    nary_op<Op BOOST_PP_ENUM_TRAILING_PARAMS(n, A)>                                             \
     operator ()(BOOST_PP_ENUM_BINARY_PARAMS(n, A, const &a)) const                              \
     {                                                                                           \
-        return nary_op<Op BOOST_PP_ENUM_TRAILING_PARAMS(n, A)>                                 \
+        return nary_op<Op BOOST_PP_ENUM_TRAILING_PARAMS(n, A)>                                  \
             (this->cast() BOOST_PP_ENUM_TRAILING_PARAMS(n, a));                                 \
     }
 
@@ -200,7 +202,7 @@ namespace boost { namespace proto
 
     #define BOOST_PROTO_NARY_OP_CTOR(z, n, _)                                                   \
         nary_op(                                                                                \
-            typename call_traits<Fun>::param_type fun                                          \
+            typename call_traits<Fun>::param_type fun                                           \
             BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(n, typename call_traits<A, >::param_type a))   \
           : functor(fun)                                                                        \
           , args(BOOST_PP_ENUM_PARAMS(n, a))                                                    \

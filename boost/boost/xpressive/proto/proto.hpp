@@ -1,5 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
-// proto.hpp
+/// \file proto.hpp
+/// The proto expression template compiler and supporting utilities.
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file

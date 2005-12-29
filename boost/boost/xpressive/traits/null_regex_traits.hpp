@@ -1,5 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file null_regex_traits.hpp
+/// Contains the definition of the null_regex_traits\<\> template, which is a 
+/// stub regex traits implementation that can be used by static and dynamic
+/// regexes for searching non-character data.
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file

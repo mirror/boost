@@ -1,5 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
-// error.hpp
+/// \file error.hpp
+/// A special-purpose proto compiler that simply generates an error. Useful for
+/// flagging certain constructs as illegal.
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file

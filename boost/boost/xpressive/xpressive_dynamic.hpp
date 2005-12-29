@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file xpressive_dynamic.hpp
-/// Inclides everything you need to write and use dynamic regular expressions.
+/// Includes everything you need to write and use dynamic regular expressions.
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file

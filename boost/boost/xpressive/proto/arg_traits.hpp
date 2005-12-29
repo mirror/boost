@@ -1,5 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
-// arg_traits.hpp
+/// \file arg_traits.hpp
+/// Contains definitions for value_type\<\>, arg_type\<\>, left_type\<\>,
+/// right_type\<\>, tag_type\<\>, and the helper functions arg(), left(),
+/// and right().
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file

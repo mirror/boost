@@ -32,12 +32,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // static_compile_impl2
     template<typename Xpr, typename BidiIter, typename Traits>
-    void static_compile_impl2
-    (
-        Xpr const &xpr
-      , regex_impl<BidiIter> &impl
-      , Traits const &traits
-    )
+    void static_compile_impl2(Xpr const &xpr, regex_impl<BidiIter> &impl, Traits const &traits)
     {
         typedef typename iterator_value<BidiIter>::type char_type;
         // "compile" the regex and wrap it in an xpression_adaptor
@@ -73,12 +68,12 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Locale, typename Xpr, typename BidiIter>
     void static_compile_impl1
     (
-        proto::binary_op<detail::locale_modifier<Locale>, Xpr, detail::modifier_tag> const &xpr
+        proto::binary_op<locale_modifier<Locale>, Xpr, modifier_tag> const &xpr
       , regex_impl<BidiIter> &impl
     )
     {
         // use specified traits
-        typedef typename detail::regex_traits_type<Locale, BidiIter>::type traits_type;
+        typedef typename regex_traits_type<Locale, BidiIter>::type traits_type;
         static_compile_impl2(proto::right(xpr), impl, traits_type(proto::left(xpr).getloc()));
     }
 

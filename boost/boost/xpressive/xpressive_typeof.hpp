@@ -1,5 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
-// xpressive_typeof.hpp
+/// \file xpressive_typeof.hpp
+/// Type registrations so that xpressive can be used with the Boost.Typeof library.
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
