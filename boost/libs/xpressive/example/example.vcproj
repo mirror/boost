@@ -216,6 +216,9 @@
 						RelativePath="..\..\..\boost\xpressive\detail\core\matchers.hpp">
 					</File>
 					<File
+						RelativePath="..\..\..\boost\xpressive\detail\core\optimize.hpp">
+					</File>
+					<File
 						RelativePath="..\..\..\boost\xpressive\detail\core\peeker.hpp">
 					</File>
 					<File
@@ -339,6 +342,9 @@
 					Filter="">
 					<File
 						RelativePath="..\..\..\boost\xpressive\detail\static\as_xpr.hpp">
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\detail\static\compile.hpp">
 					</File>
 					<File
 						RelativePath="..\..\..\boost\xpressive\detail\static\is_pure.hpp">
