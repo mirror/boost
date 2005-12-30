@@ -386,6 +386,16 @@ namespace boost {
           else return true;
         }
 #endif // BOOST_NO_SFINAE
+
+      /**
+       * Stores the "manager" portion of the vtable for a
+       * boost::function object.
+       */
+      struct vtable_base
+      {
+        vtable_base() : manager(0) { }
+        any_pointer (*manager)(any_pointer, functor_manager_operation_type);
+      };
     } // end namespace function
   } // end namespace detail
 
@@ -398,22 +408,22 @@ namespace boost {
 class function_base
 {
 public:
-  function_base() : manager(0)
+  function_base() : vtable(0)
   {
     functor.obj_ptr = 0;
   }
 
   // Is this function empty?
-  bool empty() const { return !manager; }
+  bool empty() const { return !vtable; }
 
   template<typename Functor>
     Functor* target()
     {
-      if (!manager) return 0;
+      if (!vtable) return 0;
 
       detail::function::any_pointer result =
-        manager(detail::function::make_any_pointer(&typeid(Functor)),
-                detail::function::check_functor_type_tag);
+        vtable->manager(detail::function::make_any_pointer(&typeid(Functor)),
+                        detail::function::check_functor_type_tag);
       if (!result.obj_ptr) return 0;
       else {
         typedef typename detail::function::get_function_tag<Functor>::type tag;
@@ -422,18 +432,17 @@ public:
     }
 
   template<typename Functor>
-
 #if defined(BOOST_MSVC) && BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     const Functor* target( Functor * = 0 ) const
 #else
     const Functor* target() const
 #endif
     {
-      if (!manager) return 0;
+      if (!vtable) return 0;
 
       detail::function::any_pointer result =
-        manager(detail::function::make_any_pointer(&typeid(Functor)),
-                detail::function::check_functor_type_tag);
+        vtable->manager(detail::function::make_any_pointer(&typeid(Functor)),
+                        detail::function::check_functor_type_tag);
       if (!result.obj_ptr) return 0;
       else {
         typedef typename detail::function::get_function_tag<Functor>::type tag;
@@ -450,10 +459,11 @@ public:
     bool contains(const F& f) const
     {
 #if defined(BOOST_MSVC) && BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-      if (const F* fp = this->target( (F*)0 )) {
+      if (const F* fp = this->target( (F*)0 ))
 #else
-      if (const F* fp = this->template target<F>()) {
+      if (const F* fp = this->template target<F>())
 #endif
+      {
         return function_equal(*fp, f);
       } else {
         return false;
@@ -484,9 +494,7 @@ public:
 #endif
 
 public: // should be protected, but GCC 2.95.3 will fail to allow access
-  detail::function::any_pointer (*manager)(
-    detail::function::any_pointer,
-    detail::function::functor_manager_operation_type);
+  detail::function::vtable_base* vtable;
   detail::function::any_pointer functor;
 
 private:
