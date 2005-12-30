@@ -105,7 +105,6 @@ namespace foreach
     // boost::foreach::tag
     //
     typedef boost_foreach_argument_dependent_lookup_hack tag;
-    tag const adl = boost_foreach_argument_dependent_lookup_hack_value;
 
     ///////////////////////////////////////////////////////////////////////////////
     // boost::foreach::is_lightweight_proxy
@@ -611,7 +610,9 @@ deref(auto_any_t cur, type2type<T, C> *)
 
 // returns true_* if the type is noncopyable
 #define BOOST_FOREACH_IS_NONCOPYABLE(COL)                                                       \
-    boost_foreach_is_noncopyable(boost::foreach_detail_::to_ptr(COL), boost::foreach::adl)
+    boost_foreach_is_noncopyable(                                                               \
+        boost::foreach_detail_::to_ptr(COL)                                                     \
+      , boost_foreach_argument_dependent_lookup_hack_value)
 
 // returns true_* if the type is a lightweight proxy (and is not noncopyable)
 #define BOOST_FOREACH_IS_LIGHTWEIGHT_PROXY(COL)                                                 \
@@ -619,7 +620,7 @@ deref(auto_any_t cur, type2type<T, C> *)
         boost::foreach_detail_::not_(BOOST_FOREACH_IS_NONCOPYABLE(COL))                         \
       , boost_foreach_is_lightweight_proxy(                                                     \
             boost::foreach_detail_::to_ptr(COL)                                                 \
-          , boost::foreach::adl))
+          , boost_foreach_argument_dependent_lookup_hack_value))
 
 #ifdef BOOST_FOREACH_COMPILE_TIME_CONST_RVALUE_DETECTION
 ///////////////////////////////////////////////////////////////////////////////
