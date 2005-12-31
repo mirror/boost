@@ -6,7 +6,8 @@
 import testing ;
 
 test-suite "xpressive"
-       : [ run test1.cpp ]
+       : [ run regress.cpp ]
+         [ run test1.cpp ]
          [ run test2.cpp ]
          [ run test3.cpp ]
          [ run test4.cpp ]

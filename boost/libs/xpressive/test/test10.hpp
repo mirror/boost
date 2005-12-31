@@ -20,95 +20,84 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
     static char_type const *nilbr = 0;
     static test_case const test_cases[] =
     {
-        test_case // test16
+        test_case
         (
-            L("foobarboo")
-          , L("b.+ar$")
+            "test16"
+          , L("foobarboo")
           , regex_type(L('b') >> +_ >> L("ar") >> eos)
-          , L("")
           , no_match
         )
-      , test_case // test17
+      , test_case
         (
-            L("foobarboo")
-          , L("b.+o$")
+            "test17"
+          , L("foobarboo")
           , regex_type(L('b') >> +_ >> L('o') >> eos)
-          , L("")
           , backrefs(L("barboo"), nilbr)
         )
-      , test_case // test18
+      , test_case
         (
-            L("foobarboo")
-          , L("b.+oo$")
+            "test18"
+          , L("foobarboo")
           , regex_type(L('b') >> +_ >> L("oo") >> eos)
-          , L("")
           , backrefs(L("barboo"), nilbr)
         )
-      , test_case // test19
+      , test_case
         (
-            L("+1234.56789F")
-          , L("^([-+]?[0-9]+(\\.[0-9]*)?)([CF])$")
+            "test19"
+          , L("+1234.56789F")
           , regex_type(bos >> (s1= !(set=L('-'),L('+')) >> +range(L('0'),L('9'))
                            >> !(s2= L('.') >> *range(L('0'),L('9'))))
                            >> (s3= (set=L('C'),L('F'))) >> eos)
-          , L("")
           , backrefs(L("+1234.56789F"), L("+1234.56789"), L(".56789"), L("F"), nilbr)
         )
-      , test_case // test20
+      , test_case
         (
-            L("+1234.56789")
-          , L("(\\+|-)?([0-9]+\\.?[0-9]*|\\.[0-9]+)([eE](\\+|-)?[0-9]+)?")
+            "test20"
+          , L("+1234.56789")
           , regex_type( !(s1= as_xpr(L('+'))|L('-')) >> (s2= +range(L('0'),L('9')) >> !as_xpr(L('.')) >> *range(L('0'),L('9')) |
                         L('.') >> +range(L('0'),L('9'))) >> !(s3= (set=L('e'),L('E')) >> !(s4= as_xpr(L('+'))|L('-')) >> +range(L('0'),L('9'))))
-          , L("")
           , backrefs(L("+1234.56789"), L("+"), L("1234.56789"), L(""), L(""), nilbr)
         )
-      , test_case // test166
+      , test_case
         (
-            L("G")
-          , L("f|(?i)g")
+            "test166"
+          , L("G")
           , regex_type(L('f') | icase(L('g')))
-          , L("")
           , backrefs(L("G"), nilbr)
         )
-      , test_case // test167
+      , test_case
         (
-            L("aBBa")
-          , L("[[:lower:]]+")
+            "test167"
+          , L("aBBa")
           , regex_type(icase(+lower))
-          , L("i")
           , backrefs(L("aBBa"), nilbr)
         )
-      , test_case // test168
+      , test_case
         (
-            L("aA")
-          , L("\\x61+")
+            "test168"
+          , L("aA")
           , regex_type(icase(+as_xpr(L('\x61'))))
-          , L("i")
           , backrefs(L("aA"), nilbr)
         )
-      , test_case // test169
+      , test_case
         (
-            L("aA")
-          , L("[\\x61]+")
+            "test169"
+          , L("aA")
           , regex_type(icase(+set[L('\x61')]))
-          , L("i")
           , backrefs(L("aA"), nilbr)
         )
-      , test_case // test170
+      , test_case
         (
-            L("aA")
-          , L("\\u0061+")
+            "test170"
+          , L("aA")
           , regex_type(icase(+as_xpr(L('\x0061'))))
-          , L("i")
           , backrefs(L("aA"), nilbr)
         )
-      , test_case // test171
+      , test_case
         (
-            L("aA")
-          , L("[\\u0061]+")
+            "test171"
+          , L("aA")
           , regex_type(icase(+set[L('\x0061')]))
-          , L("i")
           , backrefs(L("aA"), nilbr)
         )
 

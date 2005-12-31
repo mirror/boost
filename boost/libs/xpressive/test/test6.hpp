@@ -20,117 +20,102 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
     static char_type const *nilbr = 0;
     static test_case const test_cases[] =
     {
-        test_case // test103
+        test_case
         (
-            L("a\nxb\n")
-          , L("(?!^)x")
+            "test103"
+          , L("a\nxb\n")
           , regex_type(~before(bol) >> L('x'))
-          , L("m")
           , no_match
         )
-      , test_case // test104
+      , test_case
         (
-            L("a\nxb\n")
-          , L("(?!^)x")
+            "test104"
+          , L("a\nxb\n")
           , regex_type(~before(bos) >> L('x'))
-          , L("")
           , backrefs(L("x"), nilbr)
         )
-      , test_case // test105
+      , test_case
         (
-            L("a\nxb\n")
-          , L("(?!\\A)x")
+            "test105"
+          , L("a\nxb\n")
           , regex_type(~before(bos) >> L('x'))
-          , L("m")
           , backrefs(L("x"), nilbr)
         )
-      , test_case // test106
+      , test_case
         (
-            L("(this)")
-          , L("^(?:\\(()|())\\w+(?:\\)\\1|\\2)$")
+            "test106"
+          , L("(this)")
           , regex_type(bos >> (L('(') >> (s1= nil) | (s2= nil)) >> +_w >> (L(')') >> s1 | s2) >> eos)
-         
-          , L("")
           , backrefs(L("(this)"), L(""), L(""), nilbr)
         )
-      , test_case // test107
+      , test_case
         (
-            L("this")
-          , L("^(?:\\(()|())\\w+(?:\\)\\1|\\2)$")
+            "test107"
+          , L("this")
           , regex_type(bos >> (L('(') >> (s1= nil) | (s2= nil)) >> +_w >> (L(')') >> s1 | s2) >> eos)
-          , L("")
           , backrefs(L("this"), L(""), L(""), nilbr)
         )
-      , test_case // test108
+      , test_case
         (
-            L("this)")
-          , L("^(?:\\(()|())\\w+(?:\\)\\1|\\2)$")
+            "test108"
+          , L("this)")
           , regex_type(bos >> (L('(') >> (s1= nil) | (s2= nil)) >> +_w >> (L(')') >> s1 | s2) >> eos)
-          , L("")
           , no_match
         )
-      , test_case // test109
+      , test_case
         (
-            L("(this")
-          , L("^(?:\\(()|())\\w+(?:\\)\\1|\\2)$")
+            "test109"
+          , L("(this")
           , regex_type(bos >> (L('(') >> (s1= nil) | (s2= nil)) >> +_w >> (L(')') >> s1 | s2) >> eos)
-          , L("")
           , no_match
         )
-      , test_case // test110
+      , test_case
         (
-            L("abba123abba")
-          , L("[[:^alpha:]]+")
+            "test110"
+          , L("abba123abba")
           , regex_type(+~alpha)
-          , L("")
           , backrefs(L("123"), nilbr)
         )
-      , test_case // test111
+      , test_case
         (
-            L("abba123abba")
-          , L("[[:^alpha:][:alpha:]]+")
+            "test111"
+          , L("abba123abba")
           , regex_type(+set[alpha | ~alpha])
-          , L("")
           , backrefs(L("abba123abba"), nilbr)
         )
-      , test_case // test112
+      , test_case
         (
-            L("123abba123")
-          , L("[^[:^alpha:]]+")
+            "test112"
+          , L("123abba123")
           , regex_type(+~set[~alpha])
-          , L("")
           , backrefs(L("abba"), nilbr)
         )
-      //, test_case // test113
+      //, test_case
       //  (
-      //      L("123abba123")
-      //    , L("[[:alpha:]\\y]+")
-      //    , as_xpr(L("[[:alpha:]\\y]+"))
-      //    , L("")
+      //      "test113"
+      //    , L("123abba123")
+      //    , regex_type(as_xpr(L("[[:alpha:]\\y]+")))
       //    , backrefs(L("123abba123"), nilbr)
       //  )
-      , test_case // test114
+      , test_case
         (
-            L("abba123abba")
-          , L("[^[:^alnum:][:^digit:]]+")
+            "test114"
+          , L("abba123abba")
           , regex_type(+~set[~alnum | ~digit])
-          , L("")
           , backrefs(L("123"), nilbr)
         )
-      , test_case // test115
+      , test_case
         (
-            L("aaaaA")
-          , L("^(a\\1?){4}$")
+            "test115"
+          , L("aaaaA")
           , regex_type(icase(bos >> repeat<4>(s1= L('a') >> !s1) >> eos))
-          , L("i")
           , backrefs(L("aaaaA"), L("A"), nilbr)
         )
-      , test_case // test116
+      , test_case
         (
-            L("aaaaAa")
-          , L("^(a\\1?){4}$")
+            "test116"
+          , L("aaaaAa")
           , regex_type(icase(bos >> repeat<4>(s1= L('a') >> !s1) >> eos))
-          , L("i")
           , backrefs(L("aaaaAa"), L("Aa"), nilbr)
         )
     };

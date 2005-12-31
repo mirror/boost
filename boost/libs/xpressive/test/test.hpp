@@ -19,13 +19,13 @@
 #include <cstdarg>
 #include <functional>
 #include <boost/range/iterator_range.hpp>
-#include <boost/xpressive/xpressive.hpp>
+#include <boost/xpressive/xpressive_static.hpp>
 using namespace boost::xpressive;
 
 #define L(x) BOOST_XPR_CSTR_(char_type, x)
 
-#define BOOST_XPR_CHECK(test, pred) \
-    if( pred ) {} else { BOOST_ERROR( format_msg(test, #pred).c_str() ); }
+#define BOOST_XPR_CHECK(pred)                                                   \
+    if( pred ) {} else { BOOST_ERROR( this->format_msg(#pred).c_str() ); }
 
 using namespace boost::xpressive;
 
@@ -57,6 +57,12 @@ inline std::vector<std::basic_string<Char> > backrefs(Char const *br0, ...)
 struct no_match_t {};
 no_match_t const no_match = {};
 
+template<typename BidiIter>
+struct test_case;
+
+template<typename BidiIter>
+std::string format_msg(test_case<BidiIter> const &test, char const *msg);
+
 ///////////////////////////////////////////////////////////////////////////////
 // test_case
 //
@@ -67,108 +73,56 @@ struct test_case
     typedef typename boost::iterator_value<iterator_type>::type char_type;
     typedef basic_regex<iterator_type> regex_type;
     typedef std::basic_string<char_type> string_type;
+    typedef std::vector<string_type> backrefs_type;
 
-    string_type str_;
-    string_type pat_;
-    regex_constants::syntax_option_type flags_;
-    regex_type  dynamicrx_;
-    regex_type  staticrx_;
-   
-    std::vector<string_type> backrefs_;
-
-    test_case
-    (
-        string_type str
-      , string_type dynamicrx
-      , regex_type staticrx
-      , string_type flags
-      , std::vector<string_type> backrefs
-    )
-      : str_(str)
-      , pat_(dynamicrx)
-      , flags_(parse_flags(flags))
-      , dynamicrx_(regex_type::compile(dynamicrx, flags_))
-      , staticrx_(staticrx)
-      , backrefs_(backrefs)
+    test_case(std::string section, string_type str, regex_type rex, backrefs_type brs)
+      : section_(section)
+      , str_(str)
+      , rex_(rex)
+      , brs_(brs)
     {
     }
 
-    test_case
-    (
-        string_type str
-      , string_type dynamicrx
-      , regex_type staticrx
-      , string_type flags
-      , no_match_t
-    )
-      : str_(str)
-      , pat_(dynamicrx)
-      , flags_(parse_flags(flags))
-      , dynamicrx_(regex_type::compile(dynamicrx, flags_))
-      , staticrx_(staticrx)
-      , backrefs_()
+    test_case(std::string section, string_type str, regex_type rex, no_match_t)
+      : section_(section)
+      , str_(str)
+      , rex_(rex)
+      , brs_()
     {
+    }
+
+    void run() const
+    {
+        match_results<BidiIter> what;
+        if(regex_search(this->str_, what, this->rex_))
+        {
+            // match succeeded: was it expected to succeed?
+            BOOST_XPR_CHECK(what.size() == this->brs_.size());
+
+            for(std::size_t i = 0; i < what.size() && i < this->brs_.size(); ++i)
+            {
+                BOOST_XPR_CHECK(this->brs_[i] == what[i].str());
+            }
+        }
+        else
+        {
+            // match failed: was it expected to fail?
+            BOOST_XPR_CHECK(0 == this->brs_.size());
+        }
     }
 
 private:
 
-    static regex_constants::syntax_option_type parse_flags(string_type const &flg)
+    std::string format_msg(char const *msg) const
     {
-        regex_constants::syntax_option_type flags = regex_constants::ECMAScript;
-
-        if( string_type::npos != flg.find(L('i')) )
-        {
-            flags = flags | regex_constants::icase;
-        }
-        if( string_type::npos == flg.find(L('m')) )
-        {
-            flags = flags | regex_constants::single_line;
-        }
-        if( string_type::npos == flg.find(L('s')) )
-        {
-            flags = flags | regex_constants::not_dot_newline;
-        }
-        if( string_type::npos != flg.find(L('x')) )
-        {
-            flags = flags | regex_constants::ignore_white_space;
-        }
-
-        return flags;
+        return this->section_ + " : " + msg;
     }
+
+    std::string section_;
+    string_type str_;
+    regex_type rex_;
+    std::vector<string_type> brs_;
 };
-
-///////////////////////////////////////////////////////////////////////////////
-// format_msg
-template<typename BidiIter>
-inline std::string format_msg(test_case<BidiIter> const &test, char const *msg)
-{
-    std::string pat(test.pat_.begin(), test.pat_.end());
-    return /*section +*/ " /" + pat + "/ : " + msg;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// INTERNAL ONLY
-template<typename BidiIter>
-inline void run_impl(basic_regex<BidiIter> const &rx, test_case<BidiIter> const &test)
-{
-    typedef typename boost::iterator_value<BidiIter>::type char_type;
-    match_results<BidiIter> what;
-    if(regex_search(test.str_, what, rx))
-    {
-        // match succeeded: was it expected to succeed?
-        BOOST_XPR_CHECK(test, what.size() == test.backrefs_.size());
-
-        for(std::size_t i = 0; i < what.size() && i < test.backrefs_.size(); ++i)
-        {
-            BOOST_XPR_CHECK(test, test.backrefs_[i] == what[i].str());
-        }
-    }
-    else
-    {
-        // match failed: was it expected to fail?
-        BOOST_XPR_CHECK(test, 0 == test.backrefs_.size());
-    }
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 // test_runner
@@ -178,8 +132,7 @@ struct test_runner
 {
     void operator ()(test_case<BidiIter> const &test) const
     {
-        run_impl(test.dynamicrx_, test);
-        run_impl(test.staticrx_, test);
+        test.run();
     }
 };
 

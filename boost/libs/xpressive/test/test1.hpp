@@ -20,124 +20,109 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
     static char_type const *nilbr = 0;
     static test_case const test_cases[] =
     {
-        test_case // test1
+        test_case
         (
-            L("foobarboo")
-          , L("foo")
+            "test1"
+          , L("foobarboo")
           , regex_type(as_xpr(L("foo")))
-          , L("")
           , backrefs(L("foo"), nilbr)
         )
-      , test_case // test2
+      , test_case
         (
-            L("foobarboo")
-          , L("bar")
+            "test2"
+          , L("foobarboo")
           , regex_type(as_xpr(L("bar")))
-          , L("")
           , backrefs(L("bar"), nilbr)
         )
-      , test_case // test3
+      , test_case
         (
-            L("foobarboo")
-          , L("bat")
+            "test3"
+          , L("foobarboo")
           , regex_type(as_xpr(L("bat")))
-          , L("")
           , no_match
         )
-      , test_case // test4
+      , test_case
         (
-            L("foobarboo")
-          , L("b.*ar")
+            "test4"
+          , L("foobarboo")
           , regex_type(L('b') >> *_ >> L("ar"))
-          , L("")
           , backrefs(L("bar"), nilbr)
         )
-      , test_case // test5
+      , test_case
         (
-            L("foobarboo")
-          , L("b.*r")
+            "test5"
+          , L("foobarboo")
           , regex_type(L('b') >> *_ >> L('r'))
-          , L("")
           , backrefs(L("bar"), nilbr)
         )
-      , test_case // test6
+      , test_case
         (
-            L("foobarboo")
-          , L("b.*b")
+            "test6"
+          , L("foobarboo")
           , regex_type(L('b') >> *_ >> L('b'))
-          , L("")
           , backrefs(L("barb"), nilbr)
         )
-      , test_case // test7
+      , test_case
         (
-            L("foobarboo")
-          , L("b.*o")
+            "test7"
+          , L("foobarboo")
           , regex_type(L('b') >> *_ >> L('o'))
-          , L("")
           , backrefs(L("barboo"), nilbr)
         )
-      , test_case // test8
+      , test_case
         (
-            L("foobarboo")
-          , L("b.*oo")
+            "test8"
+          , L("foobarboo")
           , regex_type(L('b') >> *_ >> L("oo"))
-          , L("")
           , backrefs(L("barboo"), nilbr)
         )
-      , test_case // test9
+      , test_case
         (
-            L("foobarboo")
-          , L("b.+ar")
+            "test9"
+          , L("foobarboo")
           , regex_type(L('b') >> +_ >> L("ar"))
-          , L("")
           , no_match
         )
-      , test_case // test10
+      , test_case
         (
-            L("foobarboo")
-          , L("b.+r")
+            "test10"
+          , L("foobarboo")
           , regex_type(L('b') >> +_ >> L('r'))
-          , L("")
           , backrefs(L("bar"), nilbr)
         )
-      , test_case // test11
+      , test_case
         (
-            L("foobarboo")
-          , L("b.+b")
+            "test11"
+          , L("foobarboo")
           , regex_type(L('b') >> +_ >> L('b'))
-          , L("")
           , backrefs(L("barb"), nilbr)
         )
-      , test_case // test12
+      , test_case
         (
-            L("foobarboo")
-          , L("b.+o")
+            "test12"
+          , L("foobarboo")
           , regex_type(L('b') >> +_ >> L('o'))
-          , L("")
           , backrefs(L("barboo"), nilbr)
         )
-      , test_case // test13
+      , test_case
         (
-            L("foobarboo")
-          , L("b.+oo")
+            "test13"
+          , L("foobarboo")
           , regex_type(L('b') >> +_ >> L("oo"))
-          , L("")
           , backrefs(L("barboo"), nilbr)
         )
-      , test_case // test14
+      , test_case
         (
-            L("foobarboo")
-          , L("^foo")
+            "test14"
+          , L("foobarboo")
           , regex_type(bos >> L("foo"))
-          , L("")
           , backrefs(L("foo"), nilbr)
         )
-      , test_case // test15
+      , test_case
         (
-            L("foobarboo")
-          , L("^b.*ar")
+            "test15"
+          , L("foobarboo")
           , regex_type(bos >> L('b') >> *_ >> L("ar"))
-          , L("")
           , no_match
         )
     };

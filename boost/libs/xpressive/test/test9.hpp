@@ -20,100 +20,88 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
     static char_type const *nilbr = 0;
     static test_case const test_cases[] =
     {
-        test_case // test151
+        test_case
         (
-            L("bbbc")
-          , L("^(b?\?){2}bc$")
+            "test151"
+          , L("bbbc")
           , regex_type(bos >> repeat<2>(s1= -optional(L('b'))) >> L("bc") >> eos)
-          , L("")
           , backrefs(L("bbbc"), L("b"), nilbr)
         )
-      , test_case // test152
+      , test_case
         (
-            L("bbbbc")
-          , L("^(b?\?){2}bc$")
+            "test152"
+          , L("bbbbc")
           , regex_type(bos >> repeat<2>(s1= -optional(L('b'))) >> L("bc") >> eos)
-          , L("")
           , no_match
         )
-      , test_case // test153
+      , test_case
         (
-            L("bbbbc")
-          , L("^(b?\?)*d$")
+            "test153"
+          , L("bbbbc")
           , regex_type(bos >> *(s1= -optional(L('b'))) >> L('d') >> eos)
-          , L("")
           , no_match
         )
-      , test_case // test154
+      , test_case
         (
-            L("bc")
-          , L("^(b?\?){2}?bc$")
+            "test154"
+          , L("bc")
           , regex_type(bos >> -repeat<2>(s1= -optional(L('b'))) >> L("bc") >> eos)
-          , L("")
           , backrefs(L("bc"), L(""), nilbr)
         )
-      , test_case // test155
+      , test_case
         (
-            L("bbc")
-          , L("^(b?\?){2}?bc$")
+            "test155"
+          , L("bbc")
           , regex_type(bos >> -repeat<2>(s1= -optional(L('b'))) >> L("bc") >> eos)
-          , L("")
           , backrefs(L("bbc"), L("b"), nilbr)
         )
-      , test_case // test156
+      , test_case
         (
-            L("bbbc")
-          , L("^(b?\?){2}?bc$")
+            "test156"
+          , L("bbbc")
           , regex_type(bos >> -repeat<2>(s1= -optional(L('b'))) >> L("bc") >> eos)
-          , L("")
           , backrefs(L("bbbc"), L("b"), nilbr)
         )
-      , test_case // test157
+      , test_case
         (
-            L("bbbbc")
-          , L("^(b?\?){2}?bc$")
+            "test157"
+          , L("bbbbc")
           , regex_type(bos >> -repeat<2>(s1= -optional(L('b'))) >> L("bc") >> eos)
-          , L("")
           , no_match
         )
-      , test_case // test158
+      , test_case
         (
-            L("bbbbc")
-          , L("^(b?\?)*?d$")
+            "test158"
+          , L("bbbbc")
           , regex_type(bos >> -*(s1= -optional(L('b'))) >> L('d') >> eos)
-          , L("")
           , no_match
         )
-      , test_case // test159
+      , test_case
         (
-            L("bbc")
-          , L("^(|||b)*bc$")
+            "test159"
+          , L("bbc")
           , regex_type(bos >> *(s1= nil | nil | nil | L('b')) >> L("bc") >> eos)
-          , L("")
           , backrefs(L("bbc"), L(""), nilbr)
         )
-      , test_case // test160
+      , test_case
         (
-            L("bbc")
-          , L("^(|||b)*?bc$")
+            "test160"
+          , L("bbc")
           , regex_type(bos >> -*(s1= nil | nil | nil | L('b')) >> L("bc") >> eos)
-          , L("")
           , backrefs(L("bbc"), L("b"), nilbr)
         )
-      , test_case // test164
+      , test_case
         (
-            L("1yzZ^aAc2")
-          , L("[Z-a]+")
+            "test164"
+          , L("1yzZ^aAc2")
           , regex_type(icase(+range(L('Z'),L('a'))))
-          , L("i")
           , backrefs(L("zZ^aA"), nilbr)
         )
-      , test_case // test165
+      , test_case
         (
-            L("1yzZ^aAc2")
-          , L("[Z-a]+")
+            "test165"
+          , L("1yzZ^aAc2")
           , regex_type(+range(L('Z'),L('a')))
-          , L("")
           , backrefs(L("Z^a"), nilbr)
         )
     };

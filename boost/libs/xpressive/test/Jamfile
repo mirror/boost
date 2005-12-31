@@ -38,7 +38,8 @@ DEPENDS all : test ;
     ;
 
     test-suite "xpressive"
-        : [ run test1.cpp : : : xpressive-requirements ]
+        : [ run regress.cpp : : : xpressive-requirements ]
+          [ run test1.cpp : : : xpressive-requirements ]
           [ run test2.cpp : : : xpressive-requirements ]
           [ run test3.cpp : : : xpressive-requirements ]
           [ run test4.cpp : : : xpressive-requirements ]

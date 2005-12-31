@@ -26,92 +26,81 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
     static char_type const *nilbr = 0;
     static test_case const test_cases[] =
     {
-        test_case // test61
+        test_case
         (
-            L("this is sublist(now(is(the(time),for(all),good(men))to(come)))ok?")
-          , L("\\bsublist\\((?>[^()]*)(?>(?:\\((?>[^()]*)(?>(?:\\((?>[^()]*)(?>(?:\\((?>[^()]*)(?>(?:\\((?>[^()]*)\\)[^()]*)*)\\)[^()]*)*)\\)[^()]*)*)\\)[^()]*)*)\\)")
+            "test61"
+          , L("this is sublist(now(is(the(time),for(all),good(men))to(come)))ok?")
           , regex_type(_b >> L("sublist") >> parens)
-          , L("")
           , backrefs(L("sublist(now(is(the(time),for(all),good(men))to(come)))"), nilbr)
         )
-      , test_case // test62
+      , test_case
         (
-            L("this is sublist(now(is(the(time),for(all),good(men))to(come))ok?")
-          , L("\\bsublist\\((?>[^()]*)(?>(?:\\((?>[^()]*)(?>(?:\\((?>[^()]*)(?>(?:\\((?>[^()]*)(?>(?:\\((?>[^()]*)\\)[^()]*)*)\\)[^()]*)*)\\)[^()]*)*)\\)[^()]*)*)\\)")
+            "test62"
+          , L("this is sublist(now(is(the(time),for(all),good(men))to(come))ok?")
           , regex_type(_b >> L("sublist") >> parens)
-          , L("")
           , no_match
         )
-      , test_case // test63
+      , test_case
         (
-            L("foobar")
-          , L("^baz|bar")
+            "test63"
+          , L("foobar")
           , regex_type(bos >> L("baz") | L("bar"))
-          , L("")
           , backrefs(L("bar"), nilbr)
         )
-      , test_case // test69
+      , test_case
         (
-            L("FooBarfoobar")
-          , L(".*foo")
+            "test69"
+          , L("FooBarfoobar")
           , regex_type(icase(*_ >> L("foo")))
-          , L("i")
           , backrefs(L("FooBarfoo"), nilbr)
         )
-      , test_case // test70
+      , test_case
         (
-            L("FooBarfoobar")
-          , L(".*boo")
+            "test70"
+          , L("FooBarfoobar")
           , regex_type(icase(*_ >> L("boo")))
-          , L("i")
           , no_match
         )
-      , test_case // test71
+      , test_case
         (
-            L("FooBarfoobar")
-          , L(".*boo|bar")
+            "test71"
+          , L("FooBarfoobar")
           , regex_type(icase(*_ >> L("boo") | L("bar")))
-          , L("i")
           , backrefs(L("Bar"), nilbr)
         )
-      , test_case // test72
+      , test_case
         (
-            L("FooBarfoobar")
-          , L("bar")
+            "test72"
+          , L("FooBarfoobar")
           , regex_type(icase(L("bar")))
-          , L("i")
           , backrefs(L("Bar"), nilbr)
         )
-      , test_case // test75
+      , test_case
         (
-            L("fooooo")
-          , L("fo{1,}")
+            "test75"
+          , L("fooooo")
           , regex_type(L('f') >> repeat<1,repeat_max>(L('o')))
-          , L("")
           , backrefs(L("fooooo"), nilbr)
         )
-      , test_case // test78
+      , test_case
         (
-            L("This (has) parens")
-          , L("This (\\Q(has)\\E) (parens)")
+            "test78"
+          , L("This (has) parens")
           , regex_type(L("This ") >> (s1= L("(has)")) >> L(' ') >> (s2= L("parens")))
-          , L("")
           , backrefs(L("This (has) parens"), L("(has)"), L("parens"), nilbr)
         )
-      , test_case // test79
+      , test_case
         (
-            L("This (has) parens")
-          , L("This \\Q(has) parens\\E")
+            "test79"
+          , L("This (has) parens")
           , regex_type(as_xpr(L("This (has) parens")))
-          , L("")
           , backrefs(L("This (has) parens"), nilbr)
         )
-      , test_case // test80
+      , test_case
         (
-            L("This (has) parens")
-          , L("This \\Q(has) parens")
+            "test80"
+          , L("This (has) parens")
           , regex_type(as_xpr(L("This (has) parens")))
-          , L("")
           , backrefs(L("This (has) parens"), nilbr)
         )
     };

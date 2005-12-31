@@ -20,198 +20,174 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
     static char_type const *nilbr = 0;
     static test_case const test_cases[] =
     {
-        test_case // test41
+        test_case
         (
-            L("foobarFOObarfoo")
-          , L("((?i)FOO)(.*?)\\1")
+            "test41"
+          , L("foobarFOObarfoo")
           , regex_type((s1= icase(L("FOO"))) >> (s2= -*_) >> s1)
-          , L("")
           , backrefs(L("foobarFOObarfoo"), L("foo"), L("barFOObar"), nilbr)
         )
-      , test_case // test42
+      , test_case
         (
-            L("foobarFOObarfoo")
-          , L("((?i)FOO)(.*?)(?i:\\1)")
+            "test42"
+          , L("foobarFOObarfoo")
           , regex_type((s1= icase(L("FOO"))) >> (s2= -*_) >> icase(s1))
-          , L("")
           , backrefs(L("foobarFOO"), L("foo"), L("bar"), nilbr)
         )
-      , test_case // test42.1
+      , test_case
         (
-            L("fooFOOOFOOOOObar")
-          , L("(foo|(?i:\\1O))+")
+            "test42.1"
+          , L("fooFOOOFOOOOObar")
           , regex_type(+(s1= L("foo") | icase(s1 >> L('O'))))
-          , L("")
           , backrefs(L("fooFOOOFOOOO"), L("FOOOO"), nilbr)
         )
-      , test_case // test43
+      , test_case
         (
-            L("zoo")
-          , L("^[A-Za-m]")
+            "test43"
+          , L("zoo")
           , regex_type(bos >> set[range(L('A'),L('Z')) | range(L('a'),L('m'))])
-          , L("")
           , no_match
         )
-      , test_case // test44
+      , test_case
         (
-            L("Here is a URL: http://www.cnn.com. OK?")
-          , L("(https?:/|www\\.)[\\w\\./,?@#%!_=~&-]+\\w")
+            "test44"
+          , L("Here is a URL: http://www.cnn.com. OK?")
           , regex_type((s1= L("http") >> !as_xpr(L('s')) >> L(":/") | L("www."))
                         >> +set[_w | (set=L('.'),L('/'),L(','),L('?'),L('@'),L('#'),L('%'),L('!'),L('_'),L('='),L('~'),L('&'),L('-'))]
                         >> _w)
-          , L("")
           , backrefs(L("http://www.cnn.com"), L("http:/"), nilbr)
         )
-      , test_case // test45
+      , test_case
         (
-            L("fooooooooo")
-          , L("fo{2,5}")
+            "test45"
+          , L("fooooooooo")
           , regex_type(L('f') >> repeat<2,5>(L('o')))
-          , L("")
           , backrefs(L("fooooo"), nilbr)
         )
-      , test_case // test46
+      , test_case
         (
-            L("fooooooooo")
-          , L("fo{2,5}?")
+            "test46"
+          , L("fooooooooo")
           , regex_type(L('f') >> -repeat<2,5>(L('o')))
-          , L("")
           , backrefs(L("foo"), nilbr)
         )
-      , test_case // test45.1
+      , test_case
         (
-            L("fooooooooo")
-          , L("fo{2,5}o")
+            "test45.1"
+          , L("fooooooooo")
           , regex_type(L('f') >> repeat<2,5>(L('o')) >> L('o'))
-          , L("")
           , backrefs(L("foooooo"), nilbr)
         )
-      , test_case // test46.1
+      , test_case
         (
-            L("fooooooooo")
-          , L("fo{2,5}?o")
+            "test46.1"
+          , L("fooooooooo")
           , regex_type(L('f') >> -repeat<2,5>(L('o')) >> L('o'))
-          , L("")
           , backrefs(L("fooo"), nilbr)
         )
-      , test_case // test47
+      , test_case
         (
-            L("{match this}")
-          , L("^{.*}$")
+            "test47"
+          , L("{match this}")
           , regex_type(bos >> L('{') >> *_ >> L('}') >> eos)
-          , L("")
           , backrefs(L("{match this}"), nilbr)
         )
-      , test_case // test48
+      , test_case
         (
-            L("+-+-")
-          , L("[+-]+")
+            "test48"
+          , L("+-+-")
           , regex_type(+(set=L('+'),L('-')))
-          , L("")
           , backrefs(L("+-+-"), nilbr)
         )
-      , test_case // test49
+      , test_case
         (
-            L("+-+-")
-          , L("[-+]+")
+            "test49"
+          , L("+-+-")
           , regex_type(+(set=L('-'),L('+')))
-          , L("")
           , backrefs(L("+-+-"), nilbr)
         )
-      , test_case // test50
+      , test_case
         (
-            L("\\05g-9e")
-          , L("[\\d-g]+")
+            "test50"
+          , L("\\05g-9e")
           , regex_type(+set[_d | L('-') | L('g')])
-          , L("")
           , backrefs(L("05g-9"), nilbr)
         )
-      , test_case // test51
+      , test_case
         (
-            L("\\05g-9e")
-          , L("[\\d-\\g]+")
+            "test51"
+          , L("\\05g-9e")
           , regex_type(+set[_d | L('-') | L('g')])
-          , L("")
           , backrefs(L("05g-9"), nilbr)
         )
-      , test_case // test52
+      , test_case
         (
-            L("\\05g-9e")
-          , L("[g-\\d]+")
+            "test52"
+          , L("\\05g-9e")
           , regex_type(+set[L('g') | as_xpr(L('-')) | _d])
-          , L("")
           , backrefs(L("05g-9"), nilbr)
         )
-      , test_case // test53
+      , test_case
         (
-            L("\\05g-9e")
-          , L("[\\g-\\d]+")
+            "test53"
+          , L("\\05g-9e")
           , regex_type(+set[L('g') | as_xpr(L('-')) | _d])
-          , L("")
           , backrefs(L("05g-9"), nilbr)
         )
-      , test_case // test54
+      , test_case
         (
-            L("aBcdefg\\")
-          , L("[a-\\g]+")
+            "test54"
+          , L("aBcdefg\\")
           , regex_type(icase(+range(L('a'),L('g'))))
-          , L("i")
           , backrefs(L("aBcdefg"), nilbr)
         )
-      , test_case // test55
+      , test_case
         (
-            L("ab/.-ba")
-          , L("[--/]+")
+            "test55"
+          , L("ab/.-ba")
           , regex_type(+range(L('-'),L('/')))
-          , L("")
           , backrefs(L("/.-"), nilbr)
         )
-      , test_case // test56
+      , test_case
         (
-            L("ab+,-ba")
-          , L("[+--]+")
+            "test56"
+          , L("ab+,-ba")
           , regex_type(+range(L('+'),L('-')))
-          , L("")
           , backrefs(L("+,-"), nilbr)
         )
-      , test_case // test56.1
+      , test_case
         (
-            L("aaabbbb----")
-          , L("[b-b]+")
+            "test56.1"
+          , L("aaabbbb----")
           , regex_type(+range(L('b'),L('b')))
-          , L("")
           , backrefs(L("bbbb"), nilbr)
         )
-      , test_case // test57
+      , test_case
         (
-            L("foobarFOO5")
-          , L("(foo).*\\15")
+            "test57"
+          , L("foobarFOO5")
           , regex_type(icase((s1= L("foo")) >> *_ >> L('\15')))
-          , L("i")
           , no_match
         )
-      , test_case // test58
+      , test_case
         (
-            L("Her number is 804-867-5309.")
-          , L("(?:\\d{3}-){2}\\d{4}")
+            "test58"
+          , L("Her number is 804-867-5309.")
           , regex_type(repeat<2>(repeat<3>(_d) >> L('-')) >> repeat<4>(_d))
-          , L("")
           , backrefs(L("804-867-5309"), nilbr)
         )
-      , test_case // test59
+      , test_case
         (
-            L("foo")
-          , L("fo+")
+            "test59"
+          , L("foo")
           , regex_type(L('f') >> +as_xpr(L('o')))
-          , L("")
           , backrefs(L("foo"), nilbr)
         )
-      , test_case // test60
+      , test_case
         (
-            L("fooFOObar")
-          , L("(foo)+foobar")
+            "test60"
+          , L("fooFOObar")
           , regex_type(icase(+(s1= L("foo")) >> L("foobar")))
-          , L("i")
           , backrefs(L("fooFOObar"), L("foo"), nilbr)
         )
     };

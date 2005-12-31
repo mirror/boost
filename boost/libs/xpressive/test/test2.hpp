@@ -27,164 +27,144 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
     static char_type const *nilbr = 0;
     static test_case const test_cases[] =
     {
-        test_case // test21
+        test_case
         (
-            L("-1234.56789")
-          , L("(\\+|-)?([0-9]+\\.?[0-9]*|\\.[0-9]+)([eE](\\+|-)?[0-9]+)?")
+            "test21"
+          , L("-1234.56789")
           , test21
-          , L("")
           , backrefs(L("-1234.56789"), L("-"), L("1234.56789"), L(""), L(""), nilbr)
         )
-      , test_case // test22
+      , test_case
         (
-            L("-1234.56789e-123123123")
-          , L("(\\+|-)?([0-9]+\\.?[0-9]*|\\.[0-9]+)([eE](\\+|-)?[0-9]+)?")
+            "test22"
+          , L("-1234.56789e-123123123")
           , test21
-          , L("")
           , backrefs(L("-1234.56789e-123123123"), L("-"), L("1234.56789"), L("e-123123123"), L("-"), nilbr)
         )
-      , test_case // test23
+      , test_case
         (
-            L("-.1234.56789")
-          , L("^(\\+|-)?([0-9]+\\.?[0-9]*|\\.[0-9]+)([eE](\\+|-)?[0-9]+)?$")
+            "test23"
+          , L("-.1234.56789")
           , test23
-          , L("")
           , no_match
         )
-      , test_case // test24
+      , test_case
         (
-            L("-1234.56789e-12312e123")
-          , L("^(\\+|-)?([0-9]+\\.?[0-9]*|\\.[0-9]+)([eE](\\+|-)?[0-9]+)?$")
+            "test24"
+          , L("-1234.56789e-12312e123")
           , test23
-          , L("")
           , no_match
         )
-      , test_case // test25
+      , test_case
         (
-            L("aaaaaaaaac")
-          , L("a*a*a*a*a*b")
+            "test25"
+          , L("aaaaaaaaac")
           , regex_type(*as_xpr(L('a')) >> *as_xpr(L('a')) >> *as_xpr(L('a')) >> *as_xpr(L('a')) >> *as_xpr(L('a')) >> L('b'))
-          , L("")
           , no_match
         )
-      , test_case // test26
+      , test_case
         (
-            L("ThIs iS a TeSt")
-          , L("[a-zA-Z]*")
+            "test26"
+          , L("ThIs iS a TeSt")
           , regex_type(*set[range(L('a'),L('z')) | range(L('A'),L('Z'))])
-          , L("")
           , backrefs(L("ThIs"), nilbr)
         )
-      , test_case // test27
+      , test_case
         (
-            L("a^b")
+            "test27"
           , L("a^b")
-          , L('a') >> bos >> L('b')
-          , L("")
+          , regex_type(L('a') >> bos >> L('b'))
           , no_match
         )
-      , test_case // test28
+      , test_case
         (
-            L("a^b")
-          , L("a\\^b")
-          , as_xpr(L("a^b"))
-          , L("")
+            "test28"
+          , L("a^b")
+          , regex_type(as_xpr(L("a^b")))
           , backrefs(L("a^b"), nilbr)
         )
-      , test_case // test29
+      , test_case
         (
-            L("a^b")
-          , L("a[^ ]b")
+            "test29"
+          , L("a^b")
           , regex_type(L('a') >> ~set[L(' ')] >> L('b'))
-          , L("")
           , backrefs(L("a^b"), nilbr)
         )
-      , test_case // test30
+      , test_case
         (
-            L("a^b")
-          , L("a[^^]b")
+            "test30"
+          , L("a^b")
           , regex_type(L('a') >> ~set[L('^')] >> L('b'))
-          , L("")
           , no_match
         )
-      , test_case // test31
+      , test_case
         (
-            L("a^b")
-          , L("a[^\\^]b")
+            "test31"
+          , L("a^b")
           , regex_type(L('a') >> ~set[L('^')] >> L('b'))
-          , L("")
           , no_match
         )
-      , test_case // test31.1
+      , test_case
         (
-            L("a^b")
-          , L("a[\\^]b")
+            "test31.1"
+          , L("a^b")
           , regex_type(L('a') >> set[L('^')] >> L('b'))
-          , L("")
           , backrefs(L("a^b"), nilbr)
         )
-      , test_case // test32
+      , test_case
         (
-            L("foobazFOObar")
-          , L("foo(?=bar)")
+            "test32"
+          , L("foobazFOObar")
           , regex_type(icase(L("foo") >> before(L("bar"))))
-          , L("i")
           , backrefs(L("FOO"), nilbr)
         )
-      , test_case // test33
+      , test_case
         (
-            L("foobarFOObaz")
-          , L("foo(?!bar)")
+            "test33"
+          , L("foobarFOObaz")
           , regex_type(icase(L("foo") >> ~before(L("bar"))))
-          , L("i")
           , backrefs(L("FOO"), nilbr)
         )
-      , test_case // test34
+      , test_case
         (
-            L("foobarFOO")
-          , L("foo(?!bar)")
+            "test34"
+          , L("foobarFOO")
           , regex_type(icase(L("foo") >> ~before(L("bar"))))
-          , L("i")
           , backrefs(L("FOO"), nilbr)
         )
-      , test_case // test35
+      , test_case
         (
-            L("foobarFOObarfoo")
-          , L("((?>(foo))bar)+")
+            "test35"
+          , L("foobarFOObarfoo")
           , regex_type(icase(+(s1= keep(s2= L("foo")) >> L("bar"))))
-          , L("i")
           , backrefs(L("foobarFOObar"), L("FOObar"), L("FOO"), nilbr)
         )
-      , test_case // test37
+      , test_case
         (
-            L("foobar")
-          , L("(bar|(foo))+")
+            "test37"
+          , L("foobar")
           , regex_type(+(s1= L("bar") | (s2= L("foo"))))
-          , L("")
           , backrefs(L("foobar"), L("bar"), L("foo"), nilbr)
         )
-      , test_case // test38
+      , test_case
         (
-            L("foobar")
-          , L("((bar)|foo)+")
+            "test38"
+          , L("foobar")
           , regex_type(+(s1= (s2= L("bar")) | L("foo")))
-          , L("")
           , backrefs(L("foobar"), L("bar"), L("bar"), nilbr)
         )
-      , test_case // test39
+      , test_case
         (
-            L("foobar")
-          , L("(foo|(bar))+")
+            "test39"
+          , L("foobar")
           , regex_type(+(s1= L("foo") | (s2= L("bar"))))
-          , L("")
           , backrefs(L("foobar"), L("bar"), L("bar"), nilbr)
         )
-      , test_case // test40
+      , test_case
         (
-            L("foobar")
-          , L("((foo)|bar)+")
+            "test40"
+          , L("foobar")
           , regex_type(+(s1= (s2= L("foo")) | L("bar")))
-          , L("")
           , backrefs(L("foobar"), L("bar"), L("foo"), nilbr)
         )
     };

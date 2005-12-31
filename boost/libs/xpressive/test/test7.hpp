@@ -20,116 +20,102 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
     static char_type const *nilbr = 0;
     static test_case const test_cases[] =
     {
-        test_case // test127
+        test_case
         (
-            L("foobar")
-          , L("foo(?#This is a comment[)bar")
+            "test127"
+          , L("foobar")
           , regex_type(as_xpr(L("foo")) >> /*This is a comment[*/ L("bar"))
-          , L("")
           , backrefs(L("foobar"), nilbr)
         )
-      , test_case // test128
+      , test_case
         (
-            L("foobar")
-          , L("^ f oo b ar $")
+            "test128"
+          , L("foobar")
           , regex_type(bos >> L("foobar") >> eos)
-          , L("x")
           , backrefs(L("foobar"), nilbr)
         )
-      , test_case // test129
+      , test_case
         (
-            L("foobar")
-          , L("^ f o *")
+            "test129"
+          , L("foobar")
           , regex_type(bos >> L('f') >> *as_xpr(L('o')))
-          , L("x")
           , backrefs(L("foo"), nilbr)
         )
-      , test_case // test129a
+      , test_case
         (
-            L("foobar")
-          , L("^ f \\157 *")
+            "test129.1"
+          , L("foobar")
           , regex_type(bos >> L('f') >> *as_xpr(L('\157')))
-          , L("x")
           , backrefs(L("foo"), nilbr)
         )
-      , test_case // test130
+      , test_case
         (
-            L("foo bar")
-          , L("^ f oo\\  b ar $")
+            "test130"
+          , L("foo bar")
           , regex_type(bos >> L("foo bar") >> eos)
-          , L("x")
           , backrefs(L("foo bar"), nilbr)
         )
-      , test_case // test131
+      , test_case
         (
-            L("foo bar")
-          , L("^ f oo [ ] b ar $")
+            "test131"
+          , L("foo bar")
           , regex_type(bos >> L("foo") >> set[L(' ')] >> L("bar") >> eos)
-          , L("x")
           , backrefs(L("foo bar"), nilbr)
         )
-      , test_case // test132
+      , test_case
         (
-            L("foo bar")
-          , L("^ ( ? : f oo [ ] b ar ) $ # This is a comment")
+            "test132"
+          , L("foo bar")
           , regex_type(bos >> (L("foo") >> set[L(' ')] >> L("bar")) >> eos /*This is a comment*/)
-          , L("x")
           , backrefs(L("foo bar"), nilbr)
         )
-      , test_case // test133
+      , test_case
         (
-            L("foo bar")
-          , L("^ f oo [ ] b ar # This is a comment")
+            "test133"
+          , L("foo bar")
           , regex_type(bos >> L("foo") >> set[L(' ')] >> L("bar") /*This is a comment*/)
-          , L("x")
           , backrefs(L("foo bar"), nilbr)
         )
-      , test_case // test134
+      , test_case
         (
-            L("foo bar#Thisisnotacomment")
-          , L("^ f oo [ ] b ar \\# This is not a comment")
+            "test134"
+          , L("foo bar#Thisisnotacomment")
           , regex_type(bos >> L("foo") >> set[L(' ')] >> L("bar#Thisisnotacomment"))
-          , L("x")
           , backrefs(L("foo bar#Thisisnotacomment"), nilbr)
         )
-      , test_case // test135
+      , test_case
         (
-            L("f oo b ar")
-          , L("^f o(?x)     o     (?-x) b ar")
+            "test135"
+          , L("f oo b ar")
           , regex_type(bos >> L("f oo b ar"))
-          , L("")
           , backrefs(L("f oo b ar"), nilbr)
         )
-      , test_case // test137
+      , test_case
         (
-            L("a--")
-          , L("^(a?)*$")
+            "test137"
+          , L("a--")
           , regex_type(bos >> *(s1= optional(L('a'))) >> eos)
-          , L("")
           , no_match
         )
-      , test_case // test138
+      , test_case
         (
-            L("a--")
-          , L("^(a?)*?$")
+            "test138"
+          , L("a--")
           , regex_type(bos >> -*(s1= optional(L('a'))) >> eos)
-          , L("")
           , no_match
         )
-      , test_case // test139
+      , test_case
         (
-            L("bc")
-          , L("^(b?){2}bc$")
+            "test139"
+          , L("bc")
           , regex_type(bos >> repeat<2>(s1= optional(L('b'))) >> L("bc") >> eos)
-          , L("")
           , backrefs(L("bc"), L(""), nilbr)
         )
-      , test_case // test140
+      , test_case
         (
-            L("bbc")
-          , L("^(b?){2}bc$")
+            "test140"
+          , L("bbc")
           , regex_type(bos >> repeat<2>(s1= optional(L('b'))) >> L("bc") >> eos)
-          , L("")
           , backrefs(L("bbc"), L(""), nilbr)
         )
     };
