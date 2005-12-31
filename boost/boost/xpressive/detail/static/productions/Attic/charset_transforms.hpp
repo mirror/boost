@@ -15,6 +15,7 @@
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/detail/utility/never_true.hpp>
+#include <boost/xpressive/detail/utility/chset/chset.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {

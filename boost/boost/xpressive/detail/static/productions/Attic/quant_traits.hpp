@@ -9,15 +9,11 @@
 #define BOOST_XPRESSIVE_DETAIL_STATIC_PRODUCTIONS_QUANT_TRAITS_HPP_EAN_10_04_2005
 
 #include <boost/mpl/or.hpp>
-#include <boost/mpl/assert.hpp>
-#include <boost/mpl/size_t.hpp>
+#include <boost/mpl/bool.hpp>
 #include <boost/mpl/integral_c.hpp>
-#include <boost/mpl/not_equal_to.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
-#include <boost/xpressive/proto/proto_fwd.hpp>
-#include <boost/xpressive/detail/static/width_of.hpp>
-#include <boost/xpressive/detail/static/is_pure.hpp>
 
 #ifdef BOOST_MSVC
 # pragma warning(push)

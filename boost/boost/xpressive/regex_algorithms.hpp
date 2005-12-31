@@ -424,8 +424,8 @@ inline OutIter regex_replace
     using namespace regex_constants;
     typedef detail::core_access<BidiIter> access;
 
-    match_results<BidiIter> what;
     BidiIter cur = begin;
+    match_results<BidiIter> what;
     detail::state_type<BidiIter> state(begin, end, what, *access::get_regex_impl(re), flags);
     bool const yes_copy = (0 == (flags & format_no_copy));
 
@@ -450,6 +450,7 @@ inline OutIter regex_replace
                     out = std::copy(cur, what[0].first, out);
                 }
 
+                access::set_prefix_suffix(what, begin, end);
                 out = what.format(out, fmt, flags);
                 cur = state.cur_ = what[0].second;
                 not_null = (0 == what.length());
@@ -481,7 +482,6 @@ inline std::basic_string<Char> regex_replace
     regex_replace(std::back_inserter(result), str.begin(), str.end(), re, fmt, flags);
     return result;
 }
-
 
 }} // namespace boost::xpressive
 
