@@ -18,6 +18,7 @@
 #include <locale>
 #include <vector>
 #include <fstream>
+#include <sstream>
 #include <boost/test/minimal.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/xpressive/xpressive.hpp>
@@ -62,7 +63,7 @@ struct test_case
 
 //////////////////////////////////////////////////////////////////////////////
 // globals
-char const file[] = "regress.txt";
+std::string file("regress.txt");
 
 std::ifstream in;
 unsigned int test_count = 0;
@@ -307,9 +308,19 @@ void run_test()
 ///////////////////////////////////////////////////////////////////////////////
 // test_main
 //   read the tests from the input file and execute them
-int test_main(int, char*[])
+int test_main(int argc, char* argv[])
 {
-    in.open(file);
+    cmatch what;
+    cregex rx = bos >> +(".." >> (s1=(set='\\','/')));
+    if(regex_search(argv[0], what, rx))
+    {
+        char delim = *what[s1].first;
+        std::stringstream sout;
+        sout << what[0].str() << "libs" << delim << "xpressive" << delim << "test" << delim << file;
+        file = sout.str();
+    }
+
+    in.open(file.c_str());
 
     if(!in.good())
     {
