@@ -370,7 +370,7 @@ public:
     }
     ~macro_handling_exception() throw() {}
     
-    char const* get_related_name() const 
+    char const* get_related_name() const throw()
     {
         return name;
     }
