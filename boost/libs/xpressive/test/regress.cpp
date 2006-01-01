@@ -17,16 +17,19 @@
 
 #include <locale>
 #include <vector>
-#include <fstream>
 #include <sstream>
 #include <boost/test/minimal.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/xpressive/xpressive.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/fstream.hpp>
 
 #define BOOST_XPR_CHECK(pred)                                                   \
     if(pred) {} else { BOOST_ERROR(format_msg(#pred).c_str()); }
 
 using namespace boost::xpressive;
+namespace fs = boost::filesystem;
 
 //////////////////////////////////////////////////////////////////////////////
 // test_case
@@ -65,7 +68,7 @@ struct test_case
 // globals
 std::string file("regress.txt");
 
-std::ifstream in;
+fs::ifstream in;
 unsigned int test_count = 0;
 
 // The global object that contains the current test case
@@ -310,17 +313,12 @@ void run_test()
 //   read the tests from the input file and execute them
 int test_main(int argc, char* argv[])
 {
-    cmatch what;
-    cregex rx = bos >> +(".." >> (s1=(set='\\','/')));
-    if(regex_search(argv[0], what, rx))
-    {
-        char delim = *what[s1].first;
-        std::stringstream sout;
-        sout << what[0].str() << "libs" << delim << "xpressive" << delim << "test" << delim << file;
-        file = sout.str();
-    }
+    // get the path to the text file containing the test cases:
+    fs::path p(__FILE__);
+    p = p.branch_path() / file;
+    std::cout << "Info: Boost.Xpressive test file set as: " << p.file_string() << std::endl;
 
-    in.open(file.c_str());
+    in.open(p);
 
     if(!in.good())
     {

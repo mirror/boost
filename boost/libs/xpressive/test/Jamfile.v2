@@ -6,7 +6,7 @@
 import testing ;
 
 test-suite "xpressive"
-       : [ run regress.cpp ]
+       : [ run regress.cpp : : : <library>/boost/filesystem//boost_filesystem ]
          [ run test1.cpp ]
          [ run test2.cpp ]
          [ run test3.cpp ]
