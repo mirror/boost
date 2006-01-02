@@ -160,6 +160,8 @@ namespace boost { namespace xpressive { namespace detail
 
     struct epsilon_matcher;
 
+    struct epsilon_mark_matcher;
+
     template<typename BidiIter>
     struct nested_results;
 

@@ -394,11 +394,11 @@ inline sequence<BidiIter> dynamic_xpression<Matcher, BidiIter>::quantify_
 ) const
 {
     BOOST_ASSERT(spec.max_); // we should never get here if max is 0
+    int mark_number = this->mark_number_;
 
     // only bother creating a quantifier if max is greater than one
     if(1 < spec.max_)
     {
-        int mark_number = this->mark_number_;
         unsigned int min = spec.min_ ? spec.min_ : 1U;
         detail::sequence<BidiIter> seq_quant;
         // TODO: statically bind the repeat_begin_matcher to the mark_begin for better perf
@@ -421,8 +421,12 @@ inline sequence<BidiIter> dynamic_xpression<Matcher, BidiIter>::quantify_
     // if min is 0, the quant must be made alternate with an empty matcher.
     if(0 == spec.min_)
     {
-        std::list<sequence<BidiIter> > alts(2);
-        (spec.greedy_ ? alts.front() : alts.back()) = seq;
+        epsilon_mark_matcher mark(mark_number);
+        std::list<sequence<BidiIter> > alts;
+        alts.push_back(make_dynamic_xpression<BidiIter>(mark));
+        alts.push_back(seq);
+        if(spec.greedy_)
+            alts.reverse();
         seq = alternates_to_matchable(alts, factory);
     }
 

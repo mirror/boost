@@ -17,6 +17,7 @@
 #endif
 
 #include <vector>
+#include <boost/assert.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/utility/never_true.hpp>
