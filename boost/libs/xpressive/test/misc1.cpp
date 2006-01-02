@@ -6,9 +6,9 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <iostream>
-#include <boost/test/minimal.hpp>
 #include <boost/xpressive/xpressive.hpp>
 #include <boost/xpressive/traits/cpp_regex_traits.hpp>
+#include "./test_minimal.hpp"
 
 using namespace boost::xpressive;
 

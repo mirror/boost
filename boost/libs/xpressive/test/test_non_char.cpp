@@ -6,9 +6,9 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <algorithm>
-#include <boost/test/minimal.hpp>
-#include "./test.hpp"
 #include <boost/xpressive/traits/null_regex_traits.hpp>
+#include "./test.hpp"
+#include "./test_minimal.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
 // test_main

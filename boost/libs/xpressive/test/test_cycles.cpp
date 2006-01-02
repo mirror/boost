@@ -14,8 +14,8 @@
 #endif
 
 #include <iostream>
-#include <boost/test/minimal.hpp>
 #include <boost/xpressive/xpressive.hpp>
+#include "./test_minimal.hpp"
 
 using namespace boost::xpressive;
 

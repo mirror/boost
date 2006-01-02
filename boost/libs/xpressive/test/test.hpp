@@ -5,8 +5,8 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_XPRESSIVE_TEST_REGRESS_HPP_EAN_10_04_2005
-#define BOOST_XPRESSIVE_TEST_REGRESS_HPP_EAN_10_04_2005
+#ifndef BOOST_XPRESSIVE_TEST_TEST_HPP_EAN_10_04_2005
+#define BOOST_XPRESSIVE_TEST_TEST_HPP_EAN_10_04_2005
 
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
@@ -93,6 +93,7 @@ struct test_case
 
     void run() const
     {
+        char_type const empty[] = {0};
         match_results<BidiIter> what;
         if(regex_search(this->str_, what, this->rex_))
         {
@@ -101,7 +102,7 @@ struct test_case
 
             for(std::size_t i = 0; i < what.size() && i < this->brs_.size(); ++i)
             {
-                BOOST_XPR_CHECK(this->brs_[i] == what[i].str());
+                BOOST_XPR_CHECK(!what[i].matched && this->brs_[i] == empty || this->brs_[i] == what[i].str());
             }
         }
         else

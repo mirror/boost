@@ -100,7 +100,21 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
           , regex_type(icase(+set[L('\x0061')]))
           , backrefs(L("aA"), nilbr)
         )
-
+      // BUGBUG TODO FIXME
+      //, test_case
+      //  (
+      //      "test172"
+      //    , L("abcd")
+      //    , regex_type(L('a') >> +(s1= L('b') | (s2= *(s3= L('c')))) >> L('d'))
+      //    , backrefs(L("abcd"), L(""), L(""), L(""), nilbr)
+      //  )
+      //, test_case
+      //  (
+      //      "test173"
+      //    , L("abcd")
+      //    , regex_type(L('a') >> +(s1= L('b') | (s2= !(s3= L('c')))) >> L('d'))
+      //    , backrefs(L("abcd"), L(""), L(""), L(""), nilbr)
+      //  )
     };
 
     return boost::make_iterator_range(test_cases);

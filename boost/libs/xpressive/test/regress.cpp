@@ -11,19 +11,18 @@
    7 March 2004 : Initial version.
 */
 
-#if defined(BOOST_MSVC) && defined(_DEBUG)
+#if defined(_MSC_VER) && defined(_DEBUG)
 # include <crtdbg.h>
 #endif
 
 #include <locale>
 #include <vector>
-#include <sstream>
-#include <boost/test/minimal.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/xpressive/xpressive.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/fstream.hpp>
+#include "./test_minimal.hpp"
 
 #define BOOST_XPR_CHECK(pred)                                                   \
     if(pred) {} else { BOOST_ERROR(format_msg(#pred).c_str()); }
@@ -74,7 +73,6 @@ unsigned int test_count = 0;
 // The global object that contains the current test case
 test_case<char> test;
 
-sregex const rx_newline = as_xpr("\\n");
 sregex const rx_sec = '[' >> (s1= +_) >> ']';
 sregex const rx_str = "str=" >> (s1= *_);
 sregex const rx_pat = "pat=" >> (s1= *_);
@@ -128,6 +126,23 @@ test_case<wchar_t> widen(test_case<char> const &test)
 }
 #endif // BOOST_XPRESSIVE_NO_WREGEX
 
+std::string escape(std::string str)
+{
+    for(std::string::size_type pos = 0; std::string::npos != (pos = str.find('\\', pos)); ++pos)
+    {
+        if(pos + 1 == str.size())
+            break;
+
+        switch(str[pos + 1])
+        {
+        case '\\': str.replace(pos, 2, "\\"); break;
+        case 'n': str.replace(pos, 2, "\n"); break;
+        case 'r': str.replace(pos, 2, "\r"); break;
+        }
+    }
+    return str;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // get_test
 //   read the next section out of the input file, and fill out
@@ -159,8 +174,7 @@ bool get_test()
         }
         else if(regex_match(line, what, rx_str))
         {
-            // replace newline escape sequence
-            test.str = regex_replace(what[1].str(), rx_newline, std::string("\n"));
+            test.str = escape(what[1].str());
         }
         else if(regex_match(line, what, rx_pat))
         {
@@ -172,7 +186,7 @@ bool get_test()
         }
         else if(regex_match(line, what, rx_res))
         {
-            test.res = what[1].str();
+            test.res = escape(what[1].str());
         }
         else if(regex_match(line, what, rx_flg))
         {
@@ -208,7 +222,7 @@ bool get_test()
                 test.br.resize(nbr + 1);
             }
 
-            test.br[nbr] = what[2].str();
+            test.br[nbr] = escape(what[2].str());
         }
         else if(!line.empty() && ';' != line[0])
         {
@@ -227,6 +241,7 @@ void run_test_impl(test_case<Char> const &test)
 {
     try
     {
+        Char const empty[] = {0};
         typedef typename std::basic_string<Char>::const_iterator iterator;
         basic_regex<iterator> rx = basic_regex<iterator>::compile(test.pat, test.syntax_flags);
 
@@ -253,7 +268,7 @@ void run_test_impl(test_case<Char> const &test)
 
             for(std::size_t i = 0; i < br.size() && i < test.br.size(); ++i)
             {
-                BOOST_XPR_CHECK(test.br[i] == br[i].str());
+                BOOST_XPR_CHECK(!br[i].matched && test.br[i] == empty || test.br[i] == br[i].str());
             }
         }
         else
@@ -267,7 +282,7 @@ void run_test_impl(test_case<Char> const &test)
 
                 for(std::size_t i = 0; i < what.size() && i < test.br.size(); ++i)
                 {
-                    BOOST_XPR_CHECK(test.br[i] == what[i].str());
+                    BOOST_XPR_CHECK(!what[i].matched && test.br[i] == empty || test.br[i] == what[i].str());
                 }
             }
             else
@@ -343,7 +358,7 @@ static const struct debug_init
 {
     debug_init()
     {
-    #if defined(BOOST_MSVC) && defined(_DEBUG)
+    #if defined(_MSC_VER) && defined(_DEBUG)
         // Send warnings, errors and asserts to STDERR
         _CrtSetReportMode(_CRT_WARN,   _CRTDBG_MODE_FILE | _CRTDBG_MODE_DEBUG);
         _CrtSetReportFile(_CRT_WARN,   _CRTDBG_FILE_STDERR);

@@ -6,7 +6,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <algorithm>
-#include <boost/test/minimal.hpp>
+#include "./test_minimal.hpp"
 #include "./test2.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////

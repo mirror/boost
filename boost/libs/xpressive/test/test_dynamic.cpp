@@ -5,8 +5,8 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/test/minimal.hpp>
 #include <boost/xpressive/xpressive_dynamic.hpp>
+#include "./test_minimal.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
 // test_main
