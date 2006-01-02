@@ -2,6 +2,7 @@
 subproject libs/ptr_container/test ;
 
 import testing ;
+import ../../serialization/build/serialization ;
 
 rule sc-test ( name : requirements * )
 {
@@ -11,6 +12,7 @@ rule sc-test ( name : requirements * )
       <lib>../../serialization/build/boost_serialization
       : : :
       $(requirements)
+      toolset::require-boost-spirit-support
            ]
     ;
 }
@@ -22,6 +24,7 @@ rule sc-example ( name : requirements * )
       <lib>../../serialization/build/boost_serialization
       : : :
       $(requirements)
+      toolset::require-boost-spirit-support
            ]
     ;
 }
