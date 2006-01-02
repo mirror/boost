@@ -21,7 +21,7 @@ rule bzip2_config
     if $(NT) && ! $(BZIP2_SOURCE) && ! $(BZIP2_INCLUDE)
     {
          ECHO ****************************************************** ;
-         ECHO Building Boost.Iostreams with bzip2 support disabled. 
+         ECHO Building Boost.Iostreams with bzip2 support disabled. ;
          ECHO To enable bzip2, consult the Boost.Iostreams documentation ;
          ECHO ****************************************************** ;   
          NO_BZIP2 = 1 ;
