@@ -14,6 +14,7 @@
 # pragma once
 #endif
 
+#include <string>
 #include <stdexcept>
 #include <boost/xpressive/regex_constants.hpp>
 
