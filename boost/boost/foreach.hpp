@@ -6,6 +6,10 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 //
+// Credits:
+//  Anson Tsao        - for the initial inspiration and several good suggestions.
+//  Thorsten Ottosen  - for Boost.Range, and for suggesting a way to detect
+//                      const-qualified rvalues at compile time on VC7.1+
 
 #ifndef BOOST_FOREACH
 
@@ -206,20 +210,20 @@ template<typename Bool>
 inline boost::mpl::not_<Bool> *not_(Bool *) { return 0; }
 
 template<typename T>
-inline boost::mpl::false_ *is_rvalue(T &, int) { return 0; }
+inline boost::mpl::false_ *is_rvalue_(T &, int) { return 0; }
 
 template<typename T>
-inline boost::mpl::true_ *is_rvalue(T const &, ...) { return 0; }
+inline boost::mpl::true_ *is_rvalue_(T const &, ...) { return 0; }
 
 template<typename T>
-inline boost::is_array<T> *is_array(T const &) { return 0; }
+inline boost::is_array<T> *is_array_(T const &) { return 0; }
 
 template<typename T>
-inline boost::is_const<T> *is_const(T &) { return 0; }
+inline boost::is_const<T> *is_const_(T &) { return 0; }
 
 #ifndef BOOST_FOREACH_NO_RVALUE_DETECTION
 template<typename T>
-inline boost::mpl::true_ *is_const(T const &) { return 0; }
+inline boost::mpl::true_ *is_const_(T const &) { return 0; }
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -353,8 +357,8 @@ rvalue_probe<T> const make_probe(T const &t);
 
 # define BOOST_FOREACH_IS_RVALUE(COL)                                                           \
     boost::foreach_detail_::and_(                                                               \
-        boost::foreach_detail_::not_(boost::foreach_detail_::is_array(COL))                     \
-      , BOOST_FOREACH_PROTECT(boost::foreach_detail_::is_rvalue(                                \
+        boost::foreach_detail_::not_(boost::foreach_detail_::is_array_(COL))                    \
+      , BOOST_FOREACH_PROTECT(boost::foreach_detail_::is_rvalue_(                               \
             (true ? boost::foreach_detail_::make_probe(COL) : (COL)), 0)))
 
 #elif defined(BOOST_FOREACH_RUN_TIME_CONST_RVALUE_DETECTION)
@@ -606,7 +610,7 @@ deref(auto_any_t cur, type2type<T, C> *)
 
 // A sneaky way to get the type of the collection without evaluating the expression
 #define BOOST_FOREACH_TYPEOF(COL)                                                               \
-    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::is_const(COL)))
+    (true ? 0 : boost::foreach_detail_::encode_type(COL, boost::foreach_detail_::is_const_(COL)))
 
 // returns true_* if the type is noncopyable
 #define BOOST_FOREACH_IS_NONCOPYABLE(COL)                                                       \
@@ -659,9 +663,9 @@ deref(auto_any_t cur, type2type<T, C> *)
 # define BOOST_FOREACH_SHOULD_COPY(COL)                                                         \
     (boost::foreach_detail_::should_copy_impl(                                                  \
         true ? 0 : boost::foreach_detail_::or_(                                                 \
-            boost::foreach_detail_::is_array(COL)                                               \
+            boost::foreach_detail_::is_array_(COL)                                              \
           , BOOST_FOREACH_IS_NONCOPYABLE(COL)                                                   \
-          , boost::foreach_detail_::not_(boost::foreach_detail_::is_const(COL)))                \
+          , boost::foreach_detail_::not_(boost::foreach_detail_::is_const_(COL)))               \
       , true ? 0 : BOOST_FOREACH_IS_LIGHTWEIGHT_PROXY(COL)                                      \
       , &_foreach_is_rvalue))
 
@@ -682,7 +686,7 @@ deref(auto_any_t cur, type2type<T, C> *)
 // NOTE: this gets the answer wrong for const rvalues.
 # define BOOST_FOREACH_SHOULD_COPY(COL)                                                         \
     (true ? 0 : boost::foreach_detail_::or_(                                                    \
-        boost::foreach_detail_::is_rvalue((COL), 0)                                             \
+        boost::foreach_detail_::is_rvalue_((COL), 0)                                            \
       , BOOST_FOREACH_IS_LIGHTWEIGHT_PROXY(COL)))
 
 #else
