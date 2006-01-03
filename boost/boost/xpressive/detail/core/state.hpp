@@ -254,11 +254,9 @@ private:
         access::init_match_results(what, id, this->sub_matches_, this->mark_count_);
     }
 
-    void uninit_(regex_impl const &impl, match_results &what)
+    void uninit_(regex_impl const &impl, match_results &)
     {
-        extras_.sub_match_stack_.unwind_to(
-            access::get_sub_matches(access::get_sub_match_vector(what)) + impl.hidden_mark_count_
-        );
+        extras_.sub_match_stack_.unwind_to(this->sub_matches_ - impl.hidden_mark_count_);
     }
 
     bool found_partial_match()
