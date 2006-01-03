@@ -24,6 +24,7 @@ CHANGELOG
 
 - Added a missing throw() specification to the function 
   cpp_exception::get_related_name().
+- Fix Boost bug ([ boost-Bugs-1395857 ] wave redefines BSIZE).
 
 Sat Dec 24 13:33:53 CST 2005
 - Version 1.2.2

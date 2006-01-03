@@ -49,7 +49,7 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-#define BSIZE     196608
+#define BOOST_WAVE_BSIZE     196608
 
 #define YYCTYPE   uchar
 #define YYCURSOR  cursor
@@ -57,8 +57,8 @@
 #define YYMARKER  marker
 #define YYFILL(n) {cursor = uchar_wrapper(fill(s, cursor), cursor.column);}
 
-//#define RET(i)    {s->cur = cursor; return (i);}
-#define RET(i)                                                                \
+//#define BOOST_WAVE_RET(i)    {s->cur = cursor; return (i);}
+#define BOOST_WAVE_RET(i)                                                     \
     {                                                                         \
         s->line += count_backslash_newlines(s, cursor);                       \
         s->curr_column = cursor.column;                                       \
@@ -199,9 +199,9 @@ uchar *fill(Scanner *s, uchar *cursor)
             adjust_eol_offsets(s, cnt);
         }
 
-        if((s->top - s->lim) < BSIZE)
+        if((s->top - s->lim) < BOOST_WAVE_BSIZE)
         {
-            uchar *buf = (uchar*) malloc(((s->lim - s->bot) + BSIZE)*sizeof(uchar));
+            uchar *buf = (uchar*) malloc(((s->lim - s->bot) + BOOST_WAVE_BSIZE)*sizeof(uchar));
             if (buf == 0)
             {
                 using namespace std;      // some systems have printf in std
@@ -220,24 +220,24 @@ uchar *fill(Scanner *s, uchar *cursor)
             s->ptr = &buf[s->ptr - s->bot];
             cursor = &buf[cursor - s->bot];
             s->lim = &buf[s->lim - s->bot];
-            s->top = &s->lim[BSIZE];
+            s->top = &s->lim[BOOST_WAVE_BSIZE];
             free(s->bot);
             s->bot = buf;
         }
 
         if (s->fd != -1) {
-            if((cnt = read(s->fd, (char*) s->lim, BSIZE)) != BSIZE)
+            if((cnt = read(s->fd, (char*) s->lim, BOOST_WAVE_BSIZE)) != BOOST_WAVE_BSIZE)
             {
                 s->eof = &s->lim[cnt]; *(s->eof)++ = '\0';
             }
         }
         else if (s->act != 0) {
             cnt = s->last - s->act;
-            if (cnt > BSIZE)
-                cnt = BSIZE;
+            if (cnt > BOOST_WAVE_BSIZE)
+                cnt = BOOST_WAVE_BSIZE;
             memcpy(s->lim, s->act, cnt);
             s->act += cnt;
-            if (cnt != BSIZE) 
+            if (cnt != BOOST_WAVE_BSIZE) 
             {
                 s->eof = &s->lim[cnt]; *(s->eof)++ = '\0';
             }
@@ -416,8 +416,8 @@ boost::wave::token_id scan(Scanner *s)
 }   // namespace wave
 }   // namespace boost
 
-#undef RET
-#undef BSIZE 
+#undef BOOST_WAVE_RET
+#undef BOOST_WAVE_BSIZE 
 #undef YYCTYPE
 #undef YYCURSOR
 #undef YYLIMIT

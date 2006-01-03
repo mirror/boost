@@ -41,7 +41,7 @@
 #pragma warning (disable: 4102)     // 'foo' : unreferenced label
 #endif
 
-#define BSIZE     196608
+#define BOOST_WAVE_BSIZE     196608
 
 #define YYCTYPE   uchar
 #define YYCURSOR  cursor
@@ -49,8 +49,8 @@
 #define YYMARKER  s->ptr
 #define YYFILL(n) {cursor = fill(s, cursor);}
 
-//#define RET(i)    {s->cur = cursor; return (i);}
-#define RET(i)    \
+//#define BOOST_WAVE_RET(i)    {s->cur = cursor; return (i);}
+#define BOOST_WAVE_RET(i)    \
     { \
         s->line += count_backslash_newlines(s, cursor); \
         s->cur = cursor; \
@@ -202,9 +202,9 @@ fill(boost::wave::cpplexer::re2clex::Scanner *s,
             adjust_eol_offsets(s, cnt);
         }
 
-        if((s->top - s->lim) < BSIZE)
+        if((s->top - s->lim) < BOOST_WAVE_BSIZE)
         {
-            uchar *buf = (uchar*) malloc(((s->lim - s->bot) + BSIZE)*sizeof(uchar));
+            uchar *buf = (uchar*) malloc(((s->lim - s->bot) + BOOST_WAVE_BSIZE)*sizeof(uchar));
             if (buf == 0)
             {
                 using namespace std;      // some systems have printf in std
@@ -223,24 +223,24 @@ fill(boost::wave::cpplexer::re2clex::Scanner *s,
             s->ptr = &buf[s->ptr - s->bot];
             cursor = &buf[cursor - s->bot];
             s->lim = &buf[s->lim - s->bot];
-            s->top = &s->lim[BSIZE];
+            s->top = &s->lim[BOOST_WAVE_BSIZE];
             free(s->bot);
             s->bot = buf;
         }
 
         if (s->fd != -1) {
-            if((cnt = read(s->fd, (char*) s->lim, BSIZE)) != BSIZE)
+            if((cnt = read(s->fd, (char*) s->lim, BOOST_WAVE_BSIZE)) != BOOST_WAVE_BSIZE)
             {
                 s->eof = &s->lim[cnt]; *(s->eof)++ = '\0';
             }
         }
         else if (s->act != 0) {
             cnt = s->last - s->act;
-            if (cnt > BSIZE)
-                cnt = BSIZE;
+            if (cnt > BOOST_WAVE_BSIZE)
+                cnt = BOOST_WAVE_BSIZE;
             memcpy(s->lim, s->act, cnt);
             s->act += cnt;
-            if (cnt != BSIZE) 
+            if (cnt != BOOST_WAVE_BSIZE) 
             {
                 s->eof = &s->lim[cnt]; *(s->eof)++ = '\0';
             }
@@ -390,95 +390,95 @@ Pound              = "#" | "??=" | "%:";
     "/*"            { goto ccomment; }
     "//"            { goto cppcomment; }
     
-    "TRUE"          { RET(T_TRUE); }
-    "FALSE"         { RET(T_FALSE); }
+    "TRUE"          { BOOST_WAVE_RET(T_TRUE); }
+    "FALSE"         { BOOST_WAVE_RET(T_FALSE); }
     
-    "{"             { RET(T_LEFTBRACE); }
-    "}"             { RET(T_RIGHTBRACE); }
-    "["             { RET(T_LEFTBRACKET); }
-    "]"             { RET(T_RIGHTBRACKET); }
-    "#"             { RET(T_POUND); }
-    "##"            { RET(T_POUND_POUND); }
-    "("             { RET(T_LEFTPAREN); }
-    ")"             { RET(T_RIGHTPAREN); }
-    ";"             { RET(T_SEMICOLON); }
-    ":"             { RET(T_COLON); }
-    "?"             { RET(T_QUESTION_MARK); }
-    "."             { RET(T_DOT); }
-    "+"             { RET(T_PLUS); }
-    "-"             { RET(T_MINUS); }
-    "*"             { RET(T_STAR); }
-    "/"             { RET(T_DIVIDE); }
-    "%"             { RET(T_PERCENT); }
-    "^"             { RET(T_XOR); }
-    "&"             { RET(T_AND); }
-    "|"             { RET(T_OR); }
-    "~"             { RET(T_COMPL); }
-    "!"             { RET(T_NOT); }
-    "="             { RET(T_ASSIGN); }
-    "<"             { RET(T_LESS); }
-    ">"             { RET(T_GREATER); }
-    "<<"            { RET(T_SHIFTLEFT); }
-    ">>"            { RET(T_SHIFTRIGHT); }
-    "=="            { RET(T_EQUAL); }
-    "!="            { RET(T_NOTEQUAL); }
-    "<="            { RET(T_LESSEQUAL); }
-    ">="            { RET(T_GREATEREQUAL); }
-    "&&"            { RET(T_ANDAND); }
-    "||"            { RET(T_OROR); }
-    "++"            { RET(T_PLUSPLUS); }
-    "--"            { RET(T_MINUSMINUS); }
-    ","             { RET(T_COMMA); }
+    "{"             { BOOST_WAVE_RET(T_LEFTBRACE); }
+    "}"             { BOOST_WAVE_RET(T_RIGHTBRACE); }
+    "["             { BOOST_WAVE_RET(T_LEFTBRACKET); }
+    "]"             { BOOST_WAVE_RET(T_RIGHTBRACKET); }
+    "#"             { BOOST_WAVE_RET(T_POUND); }
+    "##"            { BOOST_WAVE_RET(T_POUND_POUND); }
+    "("             { BOOST_WAVE_RET(T_LEFTPAREN); }
+    ")"             { BOOST_WAVE_RET(T_RIGHTPAREN); }
+    ";"             { BOOST_WAVE_RET(T_SEMICOLON); }
+    ":"             { BOOST_WAVE_RET(T_COLON); }
+    "?"             { BOOST_WAVE_RET(T_QUESTION_MARK); }
+    "."             { BOOST_WAVE_RET(T_DOT); }
+    "+"             { BOOST_WAVE_RET(T_PLUS); }
+    "-"             { BOOST_WAVE_RET(T_MINUS); }
+    "*"             { BOOST_WAVE_RET(T_STAR); }
+    "/"             { BOOST_WAVE_RET(T_DIVIDE); }
+    "%"             { BOOST_WAVE_RET(T_PERCENT); }
+    "^"             { BOOST_WAVE_RET(T_XOR); }
+    "&"             { BOOST_WAVE_RET(T_AND); }
+    "|"             { BOOST_WAVE_RET(T_OR); }
+    "~"             { BOOST_WAVE_RET(T_COMPL); }
+    "!"             { BOOST_WAVE_RET(T_NOT); }
+    "="             { BOOST_WAVE_RET(T_ASSIGN); }
+    "<"             { BOOST_WAVE_RET(T_LESS); }
+    ">"             { BOOST_WAVE_RET(T_GREATER); }
+    "<<"            { BOOST_WAVE_RET(T_SHIFTLEFT); }
+    ">>"            { BOOST_WAVE_RET(T_SHIFTRIGHT); }
+    "=="            { BOOST_WAVE_RET(T_EQUAL); }
+    "!="            { BOOST_WAVE_RET(T_NOTEQUAL); }
+    "<="            { BOOST_WAVE_RET(T_LESSEQUAL); }
+    ">="            { BOOST_WAVE_RET(T_GREATEREQUAL); }
+    "&&"            { BOOST_WAVE_RET(T_ANDAND); }
+    "||"            { BOOST_WAVE_RET(T_OROR); }
+    "++"            { BOOST_WAVE_RET(T_PLUSPLUS); }
+    "--"            { BOOST_WAVE_RET(T_MINUSMINUS); }
+    ","             { BOOST_WAVE_RET(T_COMMA); }
 
     ([a-zA-Z_] | UniversalChar) ([a-zA-Z_0-9] | UniversalChar)*        
-        { RET(T_IDENTIFIER); }
+        { BOOST_WAVE_RET(T_IDENTIFIER); }
     
     (("0" [xX] HexDigit+) | ("0" OctalDigit*) | ([1-9] Digit*)) IntegerSuffix?
-        { RET(T_INTLIT); }
+        { BOOST_WAVE_RET(T_INTLIT); }
 
     ((FractionalConstant ExponentPart?) | (Digit+ ExponentPart)) FloatingSuffix?
-        { RET(T_FLOATLIT); }
+        { BOOST_WAVE_RET(T_FLOATLIT); }
 
     (FractionalConstant | Digit+) FixedPointSuffix
-        { RET(T_FIXEDPOINTLIT); }
+        { BOOST_WAVE_RET(T_FIXEDPOINTLIT); }
         
     "L"? (['] (EscapeSequence|any\[\n\r\\']|UniversalChar)+ ['])
-        { RET(T_CHARLIT); }
+        { BOOST_WAVE_RET(T_CHARLIT); }
     
     "L"? (["] (EscapeSequence|any\[\n\r\\"]|UniversalChar)* ["])
-        { RET(T_STRINGLIT); }
+        { BOOST_WAVE_RET(T_STRINGLIT); }
     
 
     Pound PPSpace "include" PPSpace "<" (any\[\n\r>])+ ">" 
-        { RET(T_PP_HHEADER); }
+        { BOOST_WAVE_RET(T_PP_HHEADER); }
 
     Pound PPSpace "include" PPSpace "\"" (any\[\n\r"])+ "\"" 
-        { RET(T_PP_QHEADER); } 
+        { BOOST_WAVE_RET(T_PP_QHEADER); } 
 
     Pound PPSpace "include" PPSpace
-        { RET(T_PP_INCLUDE); } 
+        { BOOST_WAVE_RET(T_PP_INCLUDE); } 
 
-    Pound PPSpace "if"        { RET(T_PP_IF); }
-    Pound PPSpace "ifdef"     { RET(T_PP_IFDEF); }
-    Pound PPSpace "ifndef"    { RET(T_PP_IFNDEF); }
-    Pound PPSpace "else"      { RET(T_PP_ELSE); }
-    Pound PPSpace "elif"      { RET(T_PP_ELIF); }
-    Pound PPSpace "endif"     { RET(T_PP_ENDIF); }
-    Pound PPSpace "define"    { RET(T_PP_DEFINE); }
-    Pound PPSpace "undef"     { RET(T_PP_UNDEF); }
-    Pound PPSpace "line"      { RET(T_PP_LINE); }
-    Pound PPSpace "error"     { RET(T_PP_ERROR); }
-    Pound PPSpace "pragma"    { RET(T_PP_PRAGMA); }
+    Pound PPSpace "if"        { BOOST_WAVE_RET(T_PP_IF); }
+    Pound PPSpace "ifdef"     { BOOST_WAVE_RET(T_PP_IFDEF); }
+    Pound PPSpace "ifndef"    { BOOST_WAVE_RET(T_PP_IFNDEF); }
+    Pound PPSpace "else"      { BOOST_WAVE_RET(T_PP_ELSE); }
+    Pound PPSpace "elif"      { BOOST_WAVE_RET(T_PP_ELIF); }
+    Pound PPSpace "endif"     { BOOST_WAVE_RET(T_PP_ENDIF); }
+    Pound PPSpace "define"    { BOOST_WAVE_RET(T_PP_DEFINE); }
+    Pound PPSpace "undef"     { BOOST_WAVE_RET(T_PP_UNDEF); }
+    Pound PPSpace "line"      { BOOST_WAVE_RET(T_PP_LINE); }
+    Pound PPSpace "error"     { BOOST_WAVE_RET(T_PP_ERROR); }
+    Pound PPSpace "pragma"    { BOOST_WAVE_RET(T_PP_PRAGMA); }
 
-    Pound PPSpace "warning"   { RET(T_PP_WARNING); }
+    Pound PPSpace "warning"   { BOOST_WAVE_RET(T_PP_WARNING); }
     
     [ \t\v\f]+
-        { RET(T_SPACE); }
+        { BOOST_WAVE_RET(T_SPACE); }
 
     Newline
     {
         s->line++;
-        RET(T_NEWLINE);
+        BOOST_WAVE_RET(T_NEWLINE);
     }
 
     "\000"
@@ -491,7 +491,7 @@ Pound              = "#" | "??=" | "%:";
             else
                 printf("Error: 0 in file\n");
         }
-        RET(T_EOF);
+        BOOST_WAVE_RET(T_EOF);
     }
 
     any
@@ -501,16 +501,16 @@ Pound              = "#" | "??=" | "%:";
         else
             printf("unexpected character: '%c'\n", *s->tok);
         */
-        RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType));
+        BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType));
     }
 */
 
 ccomment:
 /*!re2c
-    "*/"            { RET(T_CCOMMENT); }
+    "*/"            { BOOST_WAVE_RET(T_CCOMMENT); }
     Newline
     {
-        /*if(cursor == s->eof) RET(T_EOF);*/
+        /*if(cursor == s->eof) BOOST_WAVE_RET(T_EOF);*/
         /*s->tok = cursor; */
         s->line += count_backslash_newlines(s, cursor) +1;
         goto ccomment;
@@ -538,7 +538,7 @@ ccomment:
         /* adjust cursor such next call returns T_EOF */
         --YYCURSOR;
         /* the comment is unterminated, but nevertheless its a comment */
-        RET(T_CCOMMENT);
+        BOOST_WAVE_RET(T_CCOMMENT);
     }
 
 */
@@ -547,10 +547,10 @@ cppcomment:
 /*!re2c
     Newline
     {
-        /*if(cursor == s->eof) RET(T_EOF); */
+        /*if(cursor == s->eof) BOOST_WAVE_RET(T_EOF); */
         /*s->tok = cursor; */
         s->line++;
-        RET(T_CPPCOMMENT);
+        BOOST_WAVE_RET(T_CPPCOMMENT);
     }
 
     any            { goto cppcomment; }
@@ -568,7 +568,7 @@ cppcomment:
         /* adjust cursor such next call returns T_EOF */
         --YYCURSOR;
         /* the comment is unterminated, but nevertheless its a comment */
-        RET(T_CPPCOMMENT);
+        BOOST_WAVE_RET(T_CPPCOMMENT);
     }
 */
 
