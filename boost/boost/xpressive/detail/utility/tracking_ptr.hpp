@@ -13,8 +13,8 @@
 # pragma once
 #endif
 
-#ifndef NDEBUG
-# include <iosfwd>
+#ifdef BOOST_XPRESSIVE_DEBUG_TRACKING_POINTER
+# include <iostream>
 #endif
 #include <set>
 #include <functional>
@@ -81,7 +81,7 @@ private:
         this->satisfy_();
     }
 
-    bool equal(weak_iterator const &that) const
+    bool equal(weak_iterator<Derived> const &that) const
     {
         return this->iter_ == that.iter_;
     }
@@ -185,7 +185,7 @@ struct enable_reference_tracking
     }
 
     //{{AFX_DEBUG
-    #ifndef NDEBUG
+    #ifdef BOOST_XPRESSIVE_DEBUG_TRACKING_POINTER
     friend std::ostream &operator <<(std::ostream &sout, enable_reference_tracking<Derived> const &that)
     {
         that.dump_(sout);
@@ -302,7 +302,7 @@ private:
     }
 
     //{{AFX_DEBUG
-    #ifndef NDEBUG
+    #ifdef BOOST_XPRESSIVE_DEBUG_TRACKING_POINTER
     void dump_(std::ostream &sout) const;
     #endif
     //}}AFX_DEBUG
@@ -312,7 +312,7 @@ private:
 };
 
 //{{AFX_DEBUG
-#ifndef NDEBUG
+#ifdef BOOST_XPRESSIVE_DEBUG_TRACKING_POINTER
 ///////////////////////////////////////////////////////////////////////////////
 // dump_
 //

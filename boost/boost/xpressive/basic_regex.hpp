@@ -15,8 +15,8 @@
 # pragma once
 #endif
 
-#ifndef NDEBUG
-# include <iosfwd>
+#ifdef BOOST_XPRESSIVE_DEBUG_TRACKING_POINTER
+# include <iostream>
 #endif
 #include <boost/mpl/bool.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
@@ -144,7 +144,7 @@ struct basic_regex
     }
 
     //{{AFX_DEBUG
-    #ifndef NDEBUG
+    #ifdef BOOST_XPRESSIVE_DEBUG_TRACKING_POINTER
     // BUGBUG debug only
     /// INTERNAL ONLY
     friend std::ostream &operator <<(std::ostream &sout, basic_regex<BidiIter> const &rex)
@@ -161,7 +161,7 @@ private:
     // Avoid a common programming mistake. Construction from a string is ambiguous. It could mean
     //   sregex rx = sregex::compile(str); // compile the string into a regex
     // or
-    //   sregex rx = str >> nil;         // treat the string as a literal
+    //   sregex rx = as_xpr(str);          // treat the string as a literal
     // Since there is no easy way to disambiguate, disallow it and force users to say what they mean
     /// INTERNAL ONLY
     basic_regex(char_type const *);
@@ -198,7 +198,7 @@ private:
 };
 
 //{{AFX_DEBUG
-#ifndef NDEBUG
+#ifdef BOOST_XPRESSIVE_DEBUG_TRACKING_POINTER
 ///////////////////////////////////////////////////////////////////////////////
 // dump_
 /// INTERNAL ONLY
