@@ -13,8 +13,12 @@
 # pragma once
 #endif
 
+#ifndef BOOST_NO_STD_LOCALE
+# include <locale>
+#endif
 #include <stack>
 #include <limits>
+#include <typeinfo>
 #include <boost/shared_ptr.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/spirit/fusion/algorithm/for_each.hpp>

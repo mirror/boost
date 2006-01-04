@@ -27,9 +27,18 @@ namespace boost { namespace xpressive { namespace detail
 //   BUGBUG by using std::list, it makes construction of of an empty nested_results
 //   incur a dynamic allocation. As a result, construction an empty match_results is
 //   likewise not free. FIXME.
+#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206))
 template<typename BidiIter>
 struct nested_results
-    : private std::list<match_results<BidiIter> >
+  : std::list<match_results<BidiIter> >
+{
+    friend struct results_cache<BidiIter>;
+    friend struct match_results<BidiIter>;
+};
+#else
+template<typename BidiIter>
+struct nested_results
+  : private std::list<match_results<BidiIter> >
 {
     friend struct results_cache<BidiIter>;
     friend struct match_results<BidiIter>;
@@ -55,6 +64,7 @@ struct nested_results
     using base_type::front;
     using base_type::back;
 };
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // results_cache
