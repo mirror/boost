@@ -12,10 +12,7 @@
 
 using namespace boost::xpressive;
 
-///////////////////////////////////////////////////////////////////////////////
-// test_main
-//
-int test_main( int, char*[] )
+void test1()
 {
     // make sure the following compiles:
     sregex a = _;
@@ -25,8 +22,13 @@ int test_main( int, char*[] )
     c = !a;
     c = *a;
     c = +a;
+}
 
-    // test for basic_regex in a keep
+///////////////////////////////////////////////////////////////////////////////
+// test for basic_regex in a keep
+//
+void test2()
+{
     std::locale loc;
     std::string str("Its a mad Mad mAd maD world");
     sregex word = +_w;
@@ -42,7 +44,13 @@ int test_main( int, char*[] )
     BOOST_CHECK(what(word, 4)[0] == "mAd");
     BOOST_CHECK(what(word, 5)[0] == "maD");
     BOOST_CHECK(what(word, 6)[0] == "world");
+}
 
+///////////////////////////////////////////////////////////////////////////////
+// test for a simple non-recursive grammar
+//
+void test3()
+{
     // test for a simple regex grammar
     std::string buffer =
         "FROGGIE\r\n"
@@ -74,10 +82,12 @@ int test_main( int, char*[] )
 
     sregex re_ = +message_;
 
-    typedef smatch::nested_results_type::const_iterator nested_iterator;
-    nested_iterator msg, nvp;
+    smatch::nested_results_type::const_iterator msg, nvp;
+    smatch tmpwhat;
 
-    BOOST_REQUIRE(regex_search(buffer, what, re_));
+    BOOST_REQUIRE(regex_search(buffer, tmpwhat, re_));
+    // for giggles, make a deep-copy of the tree of results
+    smatch what = tmpwhat;
     BOOST_REQUIRE(3 == what.nested_results().size());
 
     msg = what.nested_results().begin();
@@ -135,6 +145,99 @@ int test_main( int, char*[] )
     BOOST_REQUIRE(3 == nvp->size());
     BOOST_CHECK("Channel" == (*nvp)[name]);
     BOOST_CHECK("10" == (*nvp)[value]);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// test for a self-recursive regex
+//
+void test4()
+{
+    sregex parentheses;
+    parentheses                          // A balanced set of parentheses ...
+        = '('                            // is an opening parenthesis ...
+            >>                           // followed by ...
+             *(                          // zero or more ...
+                keep( +~(set='(',')') )  // of a bunch of things that are not parentheses ...
+              |                          // or ...
+                by_ref(parentheses)      // a balanced set of parentheses
+              )                          //   (ooh, recursion!) ...
+            >>                           // followed by ...
+          ')'                            // a closing parenthesis
+        ;
+
+    smatch what;
+    smatch::nested_results_type::const_iterator pwhat, pwhat2;
+    std::string str( "blah blah( a(b)c (c(e)f (g)h )i (j)6 )blah" );
+
+    BOOST_REQUIRE(regex_search(str, what, parentheses));
+    BOOST_REQUIRE(1 == what.size());
+    BOOST_CHECK("( a(b)c (c(e)f (g)h )i (j)6 )" == what[0]);
+
+    BOOST_REQUIRE(3 == what.nested_results().size());
+    pwhat = what.nested_results().begin();
+    BOOST_REQUIRE(1 == pwhat->size());
+    BOOST_CHECK("(b)" == (*pwhat)[0]);
+
+    ++pwhat;
+    BOOST_REQUIRE(1 == pwhat->size());
+    BOOST_CHECK("(c(e)f (g)h )" == (*pwhat)[0]);
+
+    BOOST_REQUIRE(2 == pwhat->nested_results().size());
+    pwhat2 = pwhat->nested_results().begin();
+    BOOST_REQUIRE(1 == pwhat2->size());
+    BOOST_CHECK("(e)" == (*pwhat2)[0]);
+
+    ++pwhat2;
+    BOOST_REQUIRE(1 == pwhat2->size());
+    BOOST_CHECK("(g)" == (*pwhat2)[0]);
+
+    ++pwhat;
+    BOOST_REQUIRE(1 == pwhat->size());
+    BOOST_CHECK("(j)" == (*pwhat)[0]);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// test for a sub-match scoping
+//
+void test5()
+{
+    sregex inner = sregex::compile( "(.)\\1" );
+    sregex outer = (s1= _) >> inner >> s1;
+    std::string abba("ABBA");
+
+    BOOST_CHECK(regex_match(abba, outer));
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Ye olde calculator. Test recursive grammar.
+//
+void test6()
+{
+    sregex group, factor, term, expression;
+
+    group       = '(' >> by_ref(expression) >> ')';
+    factor      = +_d | group;
+    term        = factor >> *(('*' >> factor) | ('/' >> factor));
+    expression  = term >> *(('+' >> term) | ('-' >> term));
+
+    smatch what;
+    std::string str("foo 9*(10+3) bar");
+
+    BOOST_REQUIRE(regex_search(str, what, expression));
+    BOOST_CHECK("9*(10+3)" == what[0]);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// test_main
+//
+int test_main( int, char*[] )
+{
+    test1();
+    test2();
+    test3();
+    test4();
+    test5();
+    test6();
 
     return 0;
 }
