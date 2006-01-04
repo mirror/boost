@@ -276,7 +276,7 @@ which takes care of `typename` inside the `auto` expression.
 
 [h4 Sample Code]
 
-    void main() 
+    int main() 
     {
         length::meter a(5);
         force::newton b(6);
@@ -423,7 +423,7 @@ differ from the ones of real `decltype`:
     int& get_value(int& a);
     int get_value(const double& a);
 
-    void main()
+    int main()
     {
         int a=5;
         typedef BOOST_LVALUE_TYPEOF(get_value(a)) type;
