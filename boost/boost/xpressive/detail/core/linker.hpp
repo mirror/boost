@@ -13,6 +13,7 @@
 # pragma once
 #endif
 
+#include <boost/config.hpp>
 #ifndef BOOST_NO_STD_LOCALE
 # include <locale>
 #endif
