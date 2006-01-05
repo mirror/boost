@@ -19,6 +19,7 @@
 #include <string>
 #include <utility>
 #include <iterator>
+#include <algorithm>
 #include <boost/iterator/iterator_traits.hpp>
 
 //{{AFX_DOC_COMMENT
