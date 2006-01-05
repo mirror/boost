@@ -119,8 +119,6 @@ public:
     public:
         typedef ::boost::rational<T>  rational_type;
 
-        rational_type  r_[ 9 ];
-
     private:
         struct parts { rational_type parts_[ 9 ]; };
 
@@ -134,8 +132,12 @@ public:
             return result;
         }
 
+        parts  p_;  // Order Dependency
+
     public:
-        hook() : r_( generate_rationals().parts_ ) {}
+        rational_type  ( &r_ )[ 9 ];  // Order Dependency
+
+        hook() : p_( generate_rationals() ), r_( p_.parts_ ) {}
     };
 };
 
@@ -153,11 +155,11 @@ typedef ::boost::mpl::list<short, int, long, MyInt>  all_signed_test_types;
 
 
 // Check if rational is the smallest size possible
-BOOST_GLOBAL_FIXTURE( rational_size_check );
+BOOST_GLOBAL_FIXTURE( rational_size_check )
 
 
 // The factoring function template suite
-BOOST_AUTO_TEST_SUITE( factoring_suite );
+BOOST_AUTO_TEST_SUITE( factoring_suite )
 
 // GCD tests
 BOOST_AUTO_TEST_CASE_TEMPLATE( gcd_test, T, all_signed_test_types )
@@ -199,11 +201,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( lcm_test, T, all_signed_test_types )
     BOOST_CHECK_EQUAL( lcm<T>( 25, -10), static_cast<T>(50) );
 }
 
-BOOST_AUTO_TEST_SUITE_END();
+BOOST_AUTO_TEST_SUITE_END()
 
 
 // The basic test suite
-BOOST_FIXTURE_TEST_SUITE( basic_rational_suite, my_configuration );
+BOOST_FIXTURE_TEST_SUITE( basic_rational_suite, my_configuration )
 
 // Initialization tests
 BOOST_AUTO_TEST_CASE_TEMPLATE( rational_initialization_test, T,
@@ -351,11 +353,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_unary_test, T, all_signed_test_types )
     BOOST_CHECK( r3 );
 }
 
-BOOST_AUTO_TEST_SUITE_END();
+BOOST_AUTO_TEST_SUITE_END()
 
 
 // The rational arithmetic operations suite
-BOOST_AUTO_TEST_SUITE( rational_arithmetic_suite );
+BOOST_AUTO_TEST_SUITE( rational_arithmetic_suite )
 
 // Addition & subtraction tests
 BOOST_AUTO_TEST_CASE_TEMPLATE( rational_additive_test, T,
@@ -483,11 +485,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_self_operations_test, T,
     BOOST_CHECK_EQUAL( r, rational_type( 0, 1) );
 }
 
-BOOST_AUTO_TEST_SUITE_END();
+BOOST_AUTO_TEST_SUITE_END()
 
 
 // The non-basic rational operations suite
-BOOST_AUTO_TEST_SUITE( rational_extras_suite );
+BOOST_AUTO_TEST_SUITE( rational_extras_suite )
 
 // Output test
 BOOST_AUTO_TEST_CASE_TEMPLATE( rational_output_test, T, all_signed_test_types )
@@ -598,4 +600,4 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( dice_roll_test, T, all_signed_test_types )
     BOOST_CHECK_EQUAL( r, rational_type(147, 10) );
 }
 
-BOOST_AUTO_TEST_SUITE_END();
+BOOST_AUTO_TEST_SUITE_END()
