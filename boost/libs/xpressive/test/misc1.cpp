@@ -35,15 +35,17 @@ void test2()
     sregex sentence = imbue(loc)(*(keep(word) >> +_s) >> word);
     smatch what;
 
-    BOOST_CHECK(regex_match(str, what, sentence));
-    BOOST_CHECK(what.nested_results().size() == 7);
-    BOOST_CHECK(what(word, 0)[0] == "Its");
-    BOOST_CHECK(what(word, 1)[0] == "a");
-    BOOST_CHECK(what(word, 2)[0] == "mad");
-    BOOST_CHECK(what(word, 3)[0] == "Mad");
-    BOOST_CHECK(what(word, 4)[0] == "mAd");
-    BOOST_CHECK(what(word, 5)[0] == "maD");
-    BOOST_CHECK(what(word, 6)[0] == "world");
+    BOOST_REQUIRE(regex_match(str, what, sentence));
+    BOOST_REQUIRE(7 == what.nested_results().size());
+    smatch::nested_results_type::const_iterator pword = what.nested_results().begin();
+    BOOST_CHECK((*pword++)[0] == "Its");
+    BOOST_CHECK((*pword++)[0] == "a");
+    BOOST_CHECK((*pword++)[0] == "mad");
+    BOOST_CHECK((*pword++)[0] == "Mad");
+    BOOST_CHECK((*pword++)[0] == "mAd");
+    BOOST_CHECK((*pword++)[0] == "maD");
+    BOOST_CHECK((*pword++)[0] == "world");
+    BOOST_CHECK(pword == what.nested_results().end());
 }
 
 ///////////////////////////////////////////////////////////////////////////////
