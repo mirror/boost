@@ -110,25 +110,17 @@ private:
         return this->begin_;
     }
 
-    void pop_sequence_(std::size_t count)
+    void unwind_chunk_()
     {
-        // roll back the stack
-        this->curr_ -= count;
-        BOOST_ASSERT(!std::less<void*>()(this->curr_, this->begin_));
+        // write the cached value of curr_ into current_chunk_
+        this->current_chunk_->curr_ = this->begin_;
+        // make the previous chunk the current
+        this->current_chunk_ = this->current_chunk_->back_;
 
-        // If we've unwound this whole chunk, then make the
-        // previous chunk the current
-        if(this->curr_ == this->begin_)
-        {
-            // write the cached value of curr_ into current_chunk_
-            this->current_chunk_->curr_ = this->curr_;
-            this->current_chunk_ = this->current_chunk_->back_;
-
-            // update the cache
-            this->begin_ = this->current_chunk_->begin_;
-            this->curr_ = this->current_chunk_->curr_;
-            this->end_ = this->current_chunk_->end_;
-        }
+        // update the cache
+        this->begin_ = this->current_chunk_->begin_;
+        this->curr_ = this->current_chunk_->curr_;
+        this->end_ = this->current_chunk_->end_;
     }
 
     bool in_current_chunk(T *ptr) const
@@ -218,7 +210,7 @@ public:
         while(!this->in_current_chunk(ptr))
         {
             // completely unwind the current chunk, move to the previous chunk
-            this->pop_sequence_(this->curr_ - this->begin_);
+            this->unwind_chunk_();
         }
         this->current_chunk_->curr_ = this->curr_ = ptr;
     }
