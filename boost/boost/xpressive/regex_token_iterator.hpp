@@ -17,7 +17,6 @@
 
 #include <vector>
 #include <boost/mpl/assert.hpp>
-#include <boost/mpl/or.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/xpressive/regex_iterator.hpp>
@@ -114,8 +113,11 @@ inline std::vector<int> const &to_vector(std::vector<int> const &sub_matches)
 template<typename Int, std::size_t Size>
 inline std::vector<int> to_vector(Int const (&sub_matches)[ Size ])
 {
-    std::vector<int> vect(Size);
-    for(std::size_t i = 0; i < Size; ++i)
+    // so that people can specify sub-match indices inline with
+    // string literals, like "\1\2\3", leave off the trailing '\0'
+    std::size_t const size = Size - is_same<Int, char>::value;
+    std::vector<int> vect(size);
+    for(std::size_t i = 0; i < size; ++i)
     {
         vect[i] = get_mark_number(sub_matches[i]);
     }
