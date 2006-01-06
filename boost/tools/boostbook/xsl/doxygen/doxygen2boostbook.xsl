@@ -379,30 +379,38 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
     <xsl:param name="with-namespace-refs"/>
     <xsl:param name="in-file"/>
 
-    <xsl:if test="@kind='define'">
-      <macro>
-        <xsl:attribute name="name">
-          <xsl:value-of select="name/text()"/>
-        </xsl:attribute>
+    <xsl:choose>
+      <!-- If the string INTERNAL ONLY is in the description, don't
+           emit this entity. This hack is necessary because Doxygen doesn't
+           tell us what is \internal and what isn't. -->
+      <xsl:when test="contains(detaileddescription/para, 'INTERNAL ONLY')"/>
+      <xsl:when test="contains(briefdescription/para, 'INTERNAL ONLY')"/>
 
-        <xsl:if test="param">
-          <xsl:attribute name="kind">
-            <xsl:value-of select="'functionlike'"/>
+      <xsl:when test="@kind='define'">
+        <macro>
+          <xsl:attribute name="name">
+            <xsl:value-of select="name/text()"/>
           </xsl:attribute>
-        </xsl:if>
-        
-        <xsl:for-each select="param">
-          <macro-parameter>
-            <xsl:attribute name="name">
-              <xsl:value-of select="defname/text()"/>
-            </xsl:attribute>
-          </macro-parameter>
-        </xsl:for-each>
 
-        <xsl:apply-templates select="briefdescription" mode="passthrough"/>
-        <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
-      </macro>
-    </xsl:if>
+          <xsl:if test="param">
+            <xsl:attribute name="kind">
+              <xsl:value-of select="'functionlike'"/>
+            </xsl:attribute>
+          </xsl:if>
+
+          <xsl:for-each select="param">
+            <macro-parameter>
+              <xsl:attribute name="name">
+                <xsl:value-of select="defname/text()"/>
+              </xsl:attribute>
+            </macro-parameter>
+          </xsl:for-each>
+
+          <xsl:apply-templates select="briefdescription" mode="passthrough"/>
+          <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
+        </macro>
+      </xsl:when>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="innerclass" mode="toplevel">
@@ -686,7 +694,8 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
   <xsl:template name="typedef">
     <xsl:param name="in-file" select="''"/>
 
-    <xsl:if test="contains(string(location/attribute::file), $in-file)">
+    <xsl:if test="contains(string(location/attribute::file), 
+                           concat('/', $in-file))">
       <!-- TBD: Handle public/protected/private -->
       <typedef>
         <!-- Name of the type -->
@@ -969,7 +978,8 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
   <!-- Handle member variables -->
   <xsl:template name="variable">
     <xsl:param name="in-file"/>
-    <xsl:if test="contains(string(location/attribute::file), $in-file)">
+    <xsl:if test="contains(string(location/attribute::file), 
+                           concat('/', $in-file))">
     <data-member>
       <xsl:attribute name="name">
         <xsl:value-of select="name/text()"/>
