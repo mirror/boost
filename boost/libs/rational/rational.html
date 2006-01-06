@@ -209,8 +209,8 @@ expressions must be valid for any two values n and m of type I, with the
 <li>n + m
 <li>n - m
 <li>n * m
-<li>n / m (must truncate, and n/m must be positive if n and m are positive)
-<li>n % m (n%m must be positive if n and m are positive)
+<li>n / m (must truncate, and n/m must be nonnegative if n and m are positive)
+<li>n % m (n%m must be nonnegative if n and m are positive)
 <li>Assignment versions of the above
 <li>+n, -n
 <li>!n (must be True iff n is zero)
@@ -265,9 +265,13 @@ value accessible as I(0)
 boost utility library.
 
 <h3><a name="Constructors">Constructors</h3>
-Rationals can be constructed from a pair (numerator, denominator) of
-integers, or a single integer. There is also a default constructor, which
-initialises the rational to a value of zero.
+<p>Rationals can be constructed from zero, one, or two integer arguments;
+representing default construction as zero, conversion from an integer posing as
+the numerator with an implicit denominator of one, or a numerator and
+denominator pair in that order, respectively.  An integer argument should be of
+the rational's integer type, or implicitly convertible to that type.  (For the
+two-argument constructor, any needed conversions are evaluated independently,
+of course.)  The components are stored in normalized form.
 
 <p>This implies that the following statements are valid:
 
