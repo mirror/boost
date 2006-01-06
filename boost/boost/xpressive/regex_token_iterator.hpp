@@ -96,6 +96,11 @@ struct regex_token_iterator_impl
     std::vector<int> subs_;
 };
 
+inline int get_mark_number(int i)
+{
+    return i;
+}
+
 inline std::vector<int> to_vector(int sub_match)
 {
     return std::vector<int>(1, sub_match);
@@ -109,19 +114,10 @@ inline std::vector<int> const &to_vector(std::vector<int> const &sub_matches)
 template<typename Int, std::size_t Size>
 inline std::vector<int> to_vector(Int const (&sub_matches)[ Size ])
 {
-    BOOST_MPL_ASSERT((is_convertible<Int, int>));
-    typedef mpl::or_<is_same<char, Int>, is_same<wchar_t, Int> > is_char;
-    return std::vector<int>(sub_matches + 0, sub_matches + Size - is_char::value);
-}
-
-// BUGBUG s1 et al. are not of type mark_tag. :(
-template<std::size_t Size>
-inline std::vector<int> to_vector(mark_tag const (&sub_matches)[ Size ])
-{
     std::vector<int> vect(Size);
     for(std::size_t i = 0; i < Size; ++i)
     {
-        vect[i] = proto::arg(sub_matches[i]).mark_number_;
+        vect[i] = get_mark_number(sub_matches[i]);
     }
     return vect;
 }
