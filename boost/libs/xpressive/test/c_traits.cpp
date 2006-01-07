@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// regress.cpp
+// c_traits.cpp
 //
 //  (C) Copyright Eric Niebler 2004.
 //  Use, modification and distribution are subject to the
@@ -11,5 +11,7 @@
    6 January 2006 : Initial version.
 */
 
+#define BOOST_XPRESSIVE_USE_C_TRAITS
 char const g_current_file[] = __FILE__;
 #include "./regress.ipp"
+
