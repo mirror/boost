@@ -16,9 +16,12 @@
         typedef Iter iter;                                              \
     };
 
-#define BOOST_TYPEOF_REGISTER_TYPE(Type)                                \
+#define BOOST_TYPEOF_REGISTER_TYPE_EXPLICIT_ID(Type, Id)                \
     namespace boost { namespace type_of { namespace {                   \
-        BOOST_TYPEOF_REGISTER_TYPE_IMPL(Type, BOOST_TYPEOF_UNIQUE_ID()) \
+        BOOST_TYPEOF_REGISTER_TYPE_IMPL(Type, Id)                       \
     }}}
+
+#define BOOST_TYPEOF_REGISTER_TYPE(Type)                                \
+    BOOST_TYPEOF_REGISTER_TYPE_EXPLICIT_ID(Type, BOOST_TYPEOF_UNIQUE_ID())
 
 #endif//BOOST_TYPEOF_TYPE_ENCODING_HPP_INCLUDED

@@ -8,11 +8,7 @@
 #ifdef BOOST_TYPEOF_EMULATION
 #   undef BOOST_TYPEOF_REGISTRATION_GROUP
 
-#   ifndef _MSC_VER
-#       include <boost/preprocessor/slot/counter.hpp>
-#       include BOOST_PP_UPDATE_COUNTER()
-#       define BOOST_TYPEOF_REGISTRATION_GROUP BOOST_PP_COUNTER
-#   else
-#       define BOOST_TYPEOF_REGISTRATION_GROUP __COUNTER__
-#   endif
+#   include <boost/preprocessor/slot/counter.hpp>
+#   include BOOST_PP_UPDATE_COUNTER()
+#   define BOOST_TYPEOF_REGISTRATION_GROUP BOOST_PP_COUNTER
 #endif
