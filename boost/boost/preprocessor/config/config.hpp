@@ -24,6 +24,8 @@
 # define BOOST_PP_CONFIG_DMC() 0x0040
 #
 # ifndef BOOST_PP_CONFIG_FLAGS
+#    if defined(__GCCXML__)
+#        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_STRICT())
 #    if defined(__SPIRIT_PP__) || defined(__MWERKS__) && __MWERKS__ >= 0x3200
 #        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_STRICT())
 #    elif defined(__EDG__) || defined(__EDG_VERSION__)
