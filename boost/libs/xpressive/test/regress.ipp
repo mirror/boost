@@ -17,18 +17,15 @@
 
 #include <locale>
 #include <vector>
+#include <fstream>
 #include <boost/lexical_cast.hpp>
 #include <boost/xpressive/xpressive.hpp>
-#include <boost/filesystem/path.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/fstream.hpp>
 #include "./test_minimal.hpp"
 
 #define BOOST_XPR_CHECK(pred)                                                   \
     if(pred) {} else { BOOST_ERROR(format_msg(#pred).c_str()); }
 
 using namespace boost::xpressive;
-namespace fs = boost::filesystem;
 
 //////////////////////////////////////////////////////////////////////////////
 // test_case
@@ -65,9 +62,7 @@ struct test_case
 
 //////////////////////////////////////////////////////////////////////////////
 // globals
-std::string file("regress.txt");
-
-fs::ifstream in;
+std::ifstream in;
 unsigned int test_count = 0;
 
 // The global object that contains the current test case
@@ -317,6 +312,8 @@ void run_test_u()
     #endif
 }
 
+///////////////////////////////////////////////////////////////////////////////
+// run_test
 void run_test()
 {
     run_test_a();
@@ -324,20 +321,35 @@ void run_test()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+// open_test
+bool open_test()
+{
+    // This test-file is usually run from either $BOOST_ROOT/status, or
+    // $BOOST_ROOT/libs/xpressive/test. Therefore, the relative path
+    // to the data file this test depends on will be one of two
+    // possible paths.
+
+    // first assume we are being run from boost_root/status
+    in.open("../libs/xpressive/test/regress.txt");
+
+    if(!in.good())
+    {
+        // couldn't find the data file so try to find the data file from the test dir
+        in.clear();
+        in.open("./regress.txt");
+    }
+
+    return in.good();
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // test_main
 //   read the tests from the input file and execute them
 int test_main(int argc, char* argv[])
 {
-    // get the path to the text file containing the test cases:
-    fs::path p(::g_current_file);
-    p = p.branch_path() / file;
-    std::cout << "Info: Boost.Xpressive test file set as: " << p.file_string() << std::endl;
-
-    in.open(p);
-
-    if(!in.good())
+    if(!open_test())
     {
-        std::cout << "Error unable to open file: " << file << std::endl << std::endl;
+        std::cout << "Error: unable to open input file." << std::endl;
         return -1;
     }
 
@@ -347,7 +359,7 @@ int test_main(int argc, char* argv[])
         ++test_count;
     }
 
-    std::cout << test_count << " tests completed in file " << file << std::endl;
+    std::cout << test_count << " tests completed." << std::endl;
 
     return 0;
 }

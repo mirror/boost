@@ -11,5 +11,4 @@
    6 January 2006 : Initial version.
 */
 
-char const g_current_file[] = __FILE__;
 #include "./regress.ipp"

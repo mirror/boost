@@ -12,6 +12,5 @@
 */
 
 #define BOOST_XPRESSIVE_USE_C_TRAITS
-char const g_current_file[] = __FILE__;
 #include "./regress.ipp"
 

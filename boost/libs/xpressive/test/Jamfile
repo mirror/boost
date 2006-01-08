@@ -38,8 +38,8 @@ DEPENDS all : test ;
     ;
 
     test-suite "xpressive"
-        : [ run regress.cpp <lib>../../filesystem/build/boost_filesystem : : : xpressive-requirements ]
-          [ run c_traits.cpp <lib>../../filesystem/build/boost_filesystem : : : xpressive-requirements ]
+        : [ run regress.cpp : : : xpressive-requirements ]
+          [ run c_traits.cpp : : : xpressive-requirements ]
           [ run test1.cpp : : : xpressive-requirements ]
           [ run test2.cpp : : : xpressive-requirements ]
           [ run test3.cpp : : : xpressive-requirements ]
