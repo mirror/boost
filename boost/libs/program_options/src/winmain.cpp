@@ -88,7 +88,7 @@ namespace boost { namespace program_options {
     {
         vector<wstring> result;
         vector<string> aux = split_winmain(to_internal(cmdline));
-        for (unsigned i = 0, e = result.size(); i < e; ++i)
+        for (unsigned i = 0, e = aux.size(); i < e; ++i)
             result.push_back(from_utf8(aux[i]));
         return result;        
     }
