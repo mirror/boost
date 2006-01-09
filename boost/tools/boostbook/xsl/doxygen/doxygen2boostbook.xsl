@@ -503,15 +503,20 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
 
   <!-- Inheritance -->
   <xsl:template match="basecompoundref" mode="inherit">
-    <inherit>
-      <!-- Access specifier for inheritance -->
-      <xsl:attribute name="access">
-        <xsl:value-of select="@prot"/>
-      </xsl:attribute>
-      <!-- TBD: virtual vs. non-virtual inheritance -->
+    <xsl:choose>
+      <xsl:when test="contains(string(.), $boost.doxygen.detail)"/>
+      <xsl:otherwise>
+        <inherit>
+          <!-- Access specifier for inheritance -->
+          <xsl:attribute name="access">
+            <xsl:value-of select="@prot"/>
+          </xsl:attribute>
+          <!-- TBD: virtual vs. non-virtual inheritance -->
 
-      <xsl:apply-templates mode="passthrough"/>
-    </inherit>
+          <xsl:apply-templates mode="passthrough"/>
+        </inherit>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="basecompoundref"/>
