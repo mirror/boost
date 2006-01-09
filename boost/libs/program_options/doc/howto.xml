@@ -184,7 +184,7 @@ store(command_line_parser(args).options(desc).run(), vm);
 options_description general("General options");
 general.add_options()
     ("help", "produce a help message")
-    ("help-module", value<string>()->implicit(),
+    ("help-module", value<string>(),
         "produce a help for a given module")
     ("version", "output the version number")
     ;
