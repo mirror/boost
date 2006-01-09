@@ -43,6 +43,14 @@ namespace boost { namespace program_options {
             if (name.empty())
                 continue;
 
+            // Ignore unregistered option. The 'unregistered'
+            // field can be true only if user has explicitly asked
+            // to allow unregistered options. We can't store them
+            // to variables map (lacking any information about paring), 
+            // so just ignore them.
+            if (options.options[i].unregistered)
+                continue;
+
             // If option has final value, skip this assignment
             if (xm.m_final.count(name))
                 continue;
