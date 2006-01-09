@@ -40,11 +40,20 @@ void test_approximation()
 {
     options_description desc;
     desc.add_options()
-    ("foo", new untyped_value())
-    ("fee", new untyped_value())
-    ("baz", new untyped_value());
+        ("foo", new untyped_value())
+        ("fee", new untyped_value())
+        ("baz", new untyped_value())
+        ("all", new untyped_value())
+        ("all-chroots", new untyped_value())
+        ("all-sessions", new untyped_value())
+        ;
 
     BOOST_CHECK_EQUAL(desc.find("fo", true).long_name(), "foo");
+
+    BOOST_CHECK_EQUAL(desc.find("all", true).long_name(), "all");
+    BOOST_CHECK_EQUAL(desc.find("all-ch", true).long_name(), "all-chroots");
+
+
 //    BOOST_CHECK(desc.count_approx("foo") == 1);
 //    set<string> a = desc.approximations("f");
 //    BOOST_CHECK(a.size() == 2);

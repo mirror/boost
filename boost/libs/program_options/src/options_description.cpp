@@ -53,10 +53,10 @@ namespace boost { namespace program_options {
     {
     }
 
-    bool 
+    option_description::match_result
     option_description::match(const std::string& option, bool approx) const
     {
-        bool result = false;
+        match_result result = no_match;
         if (!m_long_name.empty()) {
 
             if (*m_long_name.rbegin() == '*')
@@ -65,23 +65,26 @@ namespace boost { namespace program_options {
                 // prefix is OK.
                 if (option.find(m_long_name.substr(0, m_long_name.length()-1))
                     == 0)
-                    result = true;
+                    result = approximate_match;
             }
 
             if (approx)
             {
                 if (m_long_name.find(option) == 0)
-                    result = true;
+                    if (m_long_name == option)
+                        result = full_match;
+                    else
+                        result = approximate_match;
             }
             else
             {
                 if (m_long_name == option)
-                    result = true;
+                    result = full_match;
             }
         }
          
         if (m_short_name == option)
-            result = true;
+            result = full_match;
 
         return result;        
     }
@@ -258,21 +261,38 @@ namespace boost { namespace program_options {
         // case sensitivity and trailing '*' and so we can't use simple map.
         for(unsigned i = 0; i < m_options.size(); ++i)
         {
-            if (m_options[i]->match(name, approx))
+            option_description::match_result r = 
+                m_options[i]->match(name, approx);
+
+            if (r == option_description::no_match)
+                continue;
+
+            // If we have a full patch, and an approximate match,
+            // ignore approximate match instead of reporting error.
+            // Say, if we have options "all" and "all-chroots", then
+            // "--all" on the command line should select the first one,
+            // without ambiguity.
+            //
+            // For now, we don't check the situation when there are 
+            // two full matches. 
+                            
+            if (r == option_description::full_match)
             {
-                if (found != -1)
-                {
-                    vector<string> alts;
-                    // FIXME: the use of 'key' here might not
-                    // be the best approach.
-                    alts.push_back(m_options[found]->key(name));
-                    alts.push_back(m_options[i]->key(name));
-                    boost::throw_exception(ambiguous_option(name, alts));
-                }
-                else
-                {
-                    found = i;
-                }
+                return m_options[i].get();                
+            }
+
+            if (found != -1)
+            {
+                vector<string> alts;
+                // FIXME: the use of 'key' here might not
+                // be the best approach.
+                alts.push_back(m_options[found]->key(name));
+                alts.push_back(m_options[i]->key(name));
+                boost::throw_exception(ambiguous_option(name, alts));
+            }
+            else
+            {
+                found = i;
             }
         }
         if (found != -1) {
