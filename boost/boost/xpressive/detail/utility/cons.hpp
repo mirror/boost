@@ -276,8 +276,8 @@ namespace boost { namespace mpl
 
 #endif
 
-// Before Boost v1.34, Fusion cons lists were not valid MPL sequences.
-#if BOOST_VERSION < 103400
+// Before Boost v1.33.1, Fusion cons lists were not valid MPL sequences.
+#if BOOST_VERSION < 103301
 namespace boost { namespace mpl
 {
     template<typename Iterator>
