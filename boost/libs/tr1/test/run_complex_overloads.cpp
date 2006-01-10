@@ -59,9 +59,12 @@ void check_val(const T& val)
    real_type rval = static_cast<real_type>(val);
    complex_type cval = rval;
 
-   std::cout << "    Testing std::arg.\n";
-   check(std::arg(cval), std::arg(rval));
-   check(std::arg(cval), std::arg(val));
+   if(val)
+   {
+      std::cout << "    Testing std::arg.\n";
+      check(std::arg(cval), std::arg(rval));
+      check(std::arg(cval), std::arg(val));
+   }
    std::cout << "    Testing std::norm.\n";
    check(std::norm(cval), std::norm(rval));
    check(std::norm(cval), std::norm(val));
