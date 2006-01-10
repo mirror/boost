@@ -565,7 +565,12 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_buffer_end()
 template <class BidiIterator, class Allocator, class traits>
 bool perl_matcher<BidiIterator, Allocator, traits>::match_backref()
 {
-   // compare with what we previously matched:
+   //
+   // Compare with what we previously matched.
+   // Note that this succeeds if the backref did not partisipate
+   // in the match, this is in line with ECMAScript, but not Perl
+   // or PCRE.
+   //
    BidiIterator i = (*m_presult)[static_cast<const re_brace*>(pstate)->index].first;
    BidiIterator j = (*m_presult)[static_cast<const re_brace*>(pstate)->index].second;
    while(i != j)
