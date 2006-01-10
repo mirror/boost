@@ -7,8 +7,8 @@
 //  including a TR1 extention header; we must suppress this otherwise
 //  we can end up with cyclic dependencies with some std lib implementations.
 //
-#ifndef BOOST_TR1_stdexcept_INCLUDED
-#  define BOOST_TR1_stdexcept_INCLUDED
+//#ifndef BOOST_TR1_stdexcept_INCLUDED
+//#  define BOOST_TR1_stdexcept_INCLUDED
 #  ifndef BOOST_TR1_NO_RECURSION
 #     define BOOST_TR1_NO_RECURSION
 #     define BOOST_TR1_NO_stdexcept_RECURSION
@@ -23,5 +23,5 @@
 #     undef BOOST_TR1_NO_stdexcept_RECURSION
 #     undef BOOST_TR1_NO_RECURSION
 #  endif
-#endif
+//#endif
 

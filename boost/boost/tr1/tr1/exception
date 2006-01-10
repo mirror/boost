@@ -11,8 +11,8 @@
 // The Borland version of <exception> has some peculiar circular dependencies
 // that requires multiple inclusion.  Likewise for gcc (gcc-2.95.3 fix).
 //
-#if !defined(BOOST_TR1_exception_INCLUDED) || defined(__BORLANDC__) || defined(__GNUC__)
-#  define BOOST_TR1_exception_INCLUDED
+//#if !defined(BOOST_TR1_exception_INCLUDED) || defined(__BORLANDC__) || defined(__GNUC__)
+//#  define BOOST_TR1_exception_INCLUDED
 #  ifndef BOOST_TR1_NO_RECURSION
 #     define BOOST_TR1_NO_RECURSION
 #     define BOOST_TR1_NO_exception_RECURSION
@@ -27,5 +27,5 @@
 #     undef BOOST_TR1_NO_exception_RECURSION
 #     undef BOOST_TR1_NO_RECURSION
 #  endif
-#endif
+//#endif
 
