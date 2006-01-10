@@ -5,6 +5,13 @@
   <title>History &amp; Compatibility Notes</title>
 
 <itemizedlist spacing="compact">
+
+  <listitem><para><bold>Version 1.34.0</bold>: </para> 
+    <itemizedlist spacing="compact">
+      <listitem><para>Boost.Function now implements a small buffer optimization, which can drastically improve the performance when copying or construction Boost.Function objects storing small function objects. For instance, <code>bind(&amp;X:foo, &amp;x, _1, _2)</code> requires no heap allocation when placed into a Boost.Function object. Note that some exception-safety guarantees have changed: assignment provides the basic exception guarantee and <code>swap()</code> may throw.</para></listitem>
+    </itemizedlist>
+  </listitem>
+
   <listitem><para><bold>Version 1.30.0</bold>: </para> 
     <itemizedlist spacing="compact">
       <listitem><para>All features deprecated in version 1.29.0 have

@@ -118,6 +118,12 @@
         <returns><simpara><code>true</code> if <code>this-&gt;<methodname>target</methodname>&lt;Functor&gt;()</code> is non-NULL and <code><functionname>function_equal</functionname>(*(this-&gt;target&lt;Functor&gt;()), f)</code></simpara></returns>
  
       </method>
+
+      <method name="target_type" cv="const">
+        <type>const std::type_info&amp;</type>
+        <returns><simpara><code>typeid</code> of the target function object, or <code>typeid(void)</code> if <code>this-&gt;<methodname>empty</methodname>()</code>.</simpara></returns>
+        <throws><simpara>Will not throw.</simpara></throws>
+      </method>
     </method-group>
   </class>
 
@@ -182,7 +188,7 @@
     </struct>
 
     <constructor>
-      <postconditions><simpara><code>this-><methodname>empty</methodname>()</code></simpara></postconditions>
+      <postconditions><simpara><code>this-&gt;<methodname>empty</methodname>()</code></simpara></postconditions>
       <throws><simpara>Will not throw.</simpara></throws>
     </constructor>
 
@@ -201,11 +207,10 @@
       <parameter name="f"><paramtype>F</paramtype></parameter>
       <requires><simpara>F is a function object Callable from <code>this</code>.</simpara></requires>
       <postconditions><simpara><code>*this</code> targets a copy of <code>f</code> if <code>f</code> is nonempty, or <code>this-&gt;<methodname>empty</methodname>()</code> if <code>f</code> is empty.</simpara></postconditions>
-      <throws><simpara>Will not throw when <code>f</code> is a stateless function object.</simpara></throws>
     </constructor>
 
     <destructor>
-      <effects><simpara>If <code>!this-><methodname>empty</methodname>()</code>, destroys the target of this.</simpara></effects>
+      <effects><simpara>If <code>!this-&gt;<methodname>empty</methodname>()</code>, destroys the target of this.</simpara></effects>
 
     </destructor>
 
@@ -213,8 +218,7 @@
       <parameter name="f">
         <paramtype>const <classname>functionN</classname>&amp;</paramtype>
       </parameter>
-      <postconditions><simpara><code>*this</code> targets a copy of <code>f</code>'s target, if it has one, or is empty if <code>f.<methodname>empty</methodname>()</code>.</simpara></postconditions>
-      <throws><simpara>Will not throw when the target of <code>f</code> is a stateless function object or a reference to the function object.</simpara></throws>
+      <postconditions><simpara>If copy construction does not throw, <code>*this</code> targets a copy of <code>f</code>'s target, if it has one, or is empty if <code>f.<methodname>empty</methodname>()</code>. If copy construction does throw, <code>this-&gt;<methodname>empty</methodname>()</code>.</simpara></postconditions>
     </copy-assignment>
 
     <method-group name="modifiers">
@@ -222,13 +226,11 @@
         <type>void</type>
         <parameter name="f"><paramtype>const <classname>functionN</classname>&amp;</paramtype></parameter>
         <effects><simpara>Interchanges the targets of <code>*this</code> and <code>f</code>.</simpara></effects>
-        <throws><simpara>Will not throw.</simpara></throws>
       </method>
 
       <method name="clear">
         <type>void</type>
         <postconditions><simpara>this-&gt;<methodname>empty</methodname>()</simpara></postconditions>
-        <throws><simpara>Will not throw.</simpara></throws>
       </method>
     </method-group>
 
@@ -286,6 +288,13 @@
         <returns><simpara><code>true</code> if <code>this-&gt;<methodname>target</methodname>&lt;Functor&gt;()</code> is non-NULL and <code><functionname>function_equal</functionname>(*(this-&gt;target&lt;Functor&gt;()), f)</code></simpara></returns>
  
       </method>
+
+      <method name="target_type" cv="const">
+        <type>const std::type_info&amp;</type>
+        <returns><simpara><code>typeid</code> of the target function object, or <code>typeid(void)</code> if <code>this-&gt;<methodname>empty</methodname>()</code>.</simpara></returns>
+        <throws><simpara>Will not throw.</simpara></throws>
+      </method>
+
     </method-group>
 
     <method-group name="invocation">
@@ -314,7 +323,6 @@
         <parameter name="f1"><paramtype><classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
         <parameter name="f2"><paramtype><classname>functionN</classname>&lt;T1, T2, ..., TN, Allocator&gt;&amp;</paramtype></parameter>
         <effects><simpara><code>f1.<methodname>swap</methodname>(f2)</code></simpara></effects>
-        <throws><simpara>Will not throw.</simpara></throws>
       </function>
     </free-function-group>
 
@@ -589,7 +597,7 @@
     </struct>
 
     <constructor>
-      <postconditions><simpara><code>this-><methodname>empty</methodname>()</code></simpara></postconditions>
+      <postconditions><simpara><code>this-&gt;<methodname>empty</methodname>()</code></simpara></postconditions>
       <throws><simpara>Will not throw.</simpara></throws>
     </constructor>
 
@@ -616,28 +624,26 @@
       <parameter name="f"><paramtype>F</paramtype></parameter>
       <requires><simpara>F is a function object Callable from <code>this</code>.</simpara></requires>
       <postconditions><simpara><code>*this</code> targets a copy of <code>f</code> if <code>f</code> is nonempty, or <code>this-&gt;<methodname>empty</methodname>()</code> if <code>f</code> is empty.</simpara></postconditions>
-      <throws><simpara>Will not throw when <code>f</code> is a stateless function object.</simpara></throws>
     </constructor>
 
     <destructor>
-      <effects><simpara>If <code>!this-><methodname>empty</methodname>()</code>, destroys the target of <code>this</code>.</simpara></effects>
+      <effects><simpara>If <code>!this-&gt;<methodname>empty</methodname>()</code>, destroys the target of <code>this</code>.</simpara></effects>
 
     </destructor>
 
     <copy-assignment>
       <parameter name="f">
-        <paramtype>const <classname>functionN</classname>&amp;</paramtype>
+        <paramtype>const <classname>function</classname>&amp;</paramtype>
       </parameter>
-      <postconditions><simpara><code>*this</code> targets a copy of <code>f</code>'s target, if it has one, or is empty if <code>f.<methodname>empty</methodname>()</code></simpara></postconditions>
-      <throws><simpara>Will not throw when the target of <code>f</code> is a stateless function object or a reference to the function object.</simpara></throws>
+      <postconditions><simpara>If copy construction does not throw, <code>*this</code> targets a copy of <code>f</code>'s target, if it has one, or is empty if <code>f.<methodname>empty</methodname>()</code>. If copy construction does throw, <code>this-&gt;<methodname>empty</methodname>()</code>.</simpara></postconditions>
     </copy-assignment>
 
     <copy-assignment>
       <parameter name="f">
         <paramtype>const <classname>function</classname>&amp;</paramtype>
       </parameter>
-      <postconditions><simpara><code>*this</code> targets a copy of <code>f</code>'s target, if it has one, or is empty if <code>f.<methodname>empty</methodname>()</code></simpara></postconditions>
-      <throws><simpara>Will not throw when the target of <code>f</code> is a stateless function object or a reference to the function object.</simpara></throws>
+      <postconditions><simpara>If copy construction of the target of <code>f</code> does not throw, <code>*this</code> targets a copy of <code>f</code>'s target, if it has one, or is empty if <code>f.<methodname>empty</methodname>()</code>. </simpara></postconditions>
+      <throws><simpara>Will not throw when the target of <code>f</code> is a stateless function object or a reference to the function object. If copy construction does throw, <code>this-&gt;<methodname>empty</methodname>()</code>.</simpara></throws>
     </copy-assignment>
 
     <method-group name="modifiers">
@@ -645,7 +651,6 @@
         <type>void</type>
         <parameter name="f"><paramtype>const <classname>function</classname>&amp;</paramtype></parameter>
         <effects><simpara>Interchanges the targets of <code>*this</code> and <code>f</code>.</simpara></effects>
-        <throws><simpara>Will not throw.</simpara></throws>
       </method>
 
       <method name="clear">
@@ -708,6 +713,12 @@
         <returns><simpara><code>true</code> if <code>this-&gt;<methodname>target</methodname>&lt;Functor&gt;()</code> is non-NULL and <code><functionname>function_equal</functionname>(*(this-&gt;target&lt;Functor&gt;()), f)</code></simpara></returns>
  
       </method>
+
+      <method name="target_type" cv="const">
+        <type>const std::type_info&amp;</type>
+        <returns><simpara><code>typeid</code> of the target function object, or <code>typeid(void)</code> if <code>this-&gt;<methodname>empty</methodname>()</code>.</simpara></returns>
+        <throws><simpara>Will not throw.</simpara></throws>
+      </method>
     </method-group>
 
     <method-group name="invocation">
@@ -733,7 +744,6 @@
         <parameter name="f1"><paramtype><classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
         <parameter name="f2"><paramtype><classname>function</classname>&lt;Signature, Allocator&gt;&amp;</paramtype></parameter>
         <effects><simpara><code>f1.<methodname>swap</methodname>(f2)</code></simpara></effects>
-        <throws><simpara>Will not throw.</simpara></throws>
       </function>
     </free-function-group>
 

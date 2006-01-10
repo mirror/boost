@@ -45,7 +45,7 @@ struct plus_int
 {
   int operator()(int x, int y) const { return x + y; }
 
-  int unused_state_data;
+  int unused_state_data[32];
 };
 
 static int do_minus(int x, int y) { return x-y; }
@@ -54,7 +54,7 @@ struct DoNothing
 {
   void operator()() const {}
 
-  int unused_state_data;
+  int unused_state_data[32];
 };
 
 static void do_nothing() {}
