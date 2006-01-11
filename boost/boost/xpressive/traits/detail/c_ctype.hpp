@@ -457,7 +457,7 @@ struct char_class_impl<char>
 {
     typedef int char_class_type;
     BOOST_MPL_ASSERT_RELATION(0xffff, ==, (_ISalnum|_ISalpha|_ISblank|_IScntrl|_ISdigit|_ISgraph|
-                                           _ISlower|_ISprint|_ISpunct|_ISspace|_ISupper|_ISxdigit|0x0ff0));
+                                           _ISlower|_ISprint|_ISpunct|_ISspace|_ISupper|_ISxdigit|0xffff));
     BOOST_STATIC_CONSTANT(int, char_class_underscore = 0x00010000);
     BOOST_STATIC_CONSTANT(int, char_class_newline = 0x00020000);
 
