@@ -102,10 +102,10 @@ struct char_class_impl;
 template<>
 struct char_class_impl<char>
 {
-    typedef int char_class_type;
+    typedef short char_class_type;
     BOOST_MPL_ASSERT_RELATION(0x07FF, ==, (_XB|_XA|_XS|_BB|_CN|_DI|_LO|_PU|_SP|_UP|_XD));
-    BOOST_STATIC_CONSTANT(int, char_class_underscore = 0x1000);
-    BOOST_STATIC_CONSTANT(int, char_class_newline = 0x2000);
+    BOOST_STATIC_CONSTANT(short, char_class_underscore = 0x1000);
+    BOOST_STATIC_CONSTANT(short, char_class_newline = 0x2000);
 
     template<typename FwdIter>
     static char_class_type lookup_classname(FwdIter begin, FwdIter end, bool icase)
@@ -156,10 +156,10 @@ struct char_class_impl<char>
 template<>
 struct char_class_impl<wchar_t>
 {
-    typedef wctype_t char_class_type;
+    typedef short char_class_type;
     BOOST_MPL_ASSERT_RELATION(0x07FF, ==, (_XB|_XA|_XS|_BB|_CN|_DI|_LO|_PU|_SP|_UP|_XD));
-    BOOST_STATIC_CONSTANT(wctype_t, char_class_underscore = 0x1000);
-    BOOST_STATIC_CONSTANT(wctype_t, char_class_newline = 0x2000);
+    BOOST_STATIC_CONSTANT(short, char_class_underscore = 0x1000);
+    BOOST_STATIC_CONSTANT(short, char_class_newline = 0x2000);
 
     template<typename FwdIter>
     static char_class_type lookup_classname(FwdIter begin, FwdIter end, bool icase)
