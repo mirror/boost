@@ -24,6 +24,11 @@
 #include <boost/config.hpp>
 #include <boost/bind/arg.hpp>
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable: 4512) // assignment operator could not be generated
+#endif
+
 namespace boost
 {
 
@@ -276,5 +281,10 @@ template<class A1, class A2, class A3, class A4, class A5, class A6, class A7, c
 } // namespace _bi
 
 } // namespace boost
+
+#ifdef BOOST_MSVC
+# pragma warning(default: 4512) // assignment operator could not be generated
+# pragma warning(pop)
+#endif
 
 #endif // #ifndef BOOST_BIND_STORAGE_HPP_INCLUDED
