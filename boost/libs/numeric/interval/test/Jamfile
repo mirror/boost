@@ -11,6 +11,33 @@ subproject libs/numeric/interval/test ;
 # bring in rules for testing
 import testing ;
 
+# Local rule to modify requirements on the fly.
+local rule special-requirements ( toolset variant : properties * )
+{
+    # For this library to work correctly on Alpha hardware, dynamic rounding
+    # mode must be enabled with a compiler flag.
+
+    if $(UNIX) && $(OS) = OSF
+    {
+        switch $(toolset)
+        {
+            case gcc* : properties += <cflags>-mfp-rounding-mode=d ;
+            case tru64cxx* : properties += <cflags>-fprm <cflags>d ;
+        }
+    }
+    
+    return $(properties) ;
+}
+    
+# Local run rule which automatically includes the local requirements.
+local rule local-run ( sources + : args * : input-files * : requirements *
+    : name ? : default-build * : args2 * )
+{
+    return [ run $(sources) : $(args) : $(input-files)
+        : $(requirements) special-requirements
+        : $(name) : $(default-build) : $(args2) ] ;
+}
+
 # Make tests run by default.
 DEPENDS all : test ;
 
@@ -21,27 +48,27 @@ DEPENDS all : test ;
   test-suite numeric/interval :
     [ compile libs/numeric/interval/test/integer.cpp ]
 
-    [ run libs/numeric/interval/test/add.cpp      ]
-    [ run libs/numeric/interval/test/det.cpp      ]
-    [ run libs/numeric/interval/test/fmod.cpp     ]
-    [ run libs/numeric/interval/test/mul.cpp      ]
-    [ run libs/numeric/interval/test/overflow.cpp ]
-    [ run libs/numeric/interval/test/pi.cpp       ]
-    [ run libs/numeric/interval/test/pow.cpp      ]
+    [ local-run libs/numeric/interval/test/add.cpp      ]
+    [ local-run libs/numeric/interval/test/det.cpp      ]
+    [ local-run libs/numeric/interval/test/fmod.cpp     ]
+    [ local-run libs/numeric/interval/test/mul.cpp      ]
+    [ local-run libs/numeric/interval/test/overflow.cpp ]
+    [ local-run libs/numeric/interval/test/pi.cpp       ]
+    [ local-run libs/numeric/interval/test/pow.cpp      ]
 
-    [ run libs/numeric/interval/test/cmp.cpp
+    [ local-run libs/numeric/interval/test/cmp.cpp
         <lib>../../../test/build/boost_test_exec_monitor ]
-    [ run libs/numeric/interval/test/cmp_exn.cpp
+    [ local-run libs/numeric/interval/test/cmp_exn.cpp
         <lib>../../../test/build/boost_test_exec_monitor ]
-    [ run libs/numeric/interval/test/cmp_exp.cpp
+    [ local-run libs/numeric/interval/test/cmp_exp.cpp
         <lib>../../../test/build/boost_test_exec_monitor ]
-    [ run libs/numeric/interval/test/cmp_lex.cpp
+    [ local-run libs/numeric/interval/test/cmp_lex.cpp
         <lib>../../../test/build/boost_test_exec_monitor ]
-    [ run libs/numeric/interval/test/cmp_set.cpp
+    [ local-run libs/numeric/interval/test/cmp_set.cpp
         <lib>../../../test/build/boost_test_exec_monitor ]
-    [ run libs/numeric/interval/test/cmp_tribool.cpp
+    [ local-run libs/numeric/interval/test/cmp_tribool.cpp
         <lib>../../../test/build/boost_test_exec_monitor ]
-    [ run libs/numeric/interval/test/test_float.cpp
+    [ local-run libs/numeric/interval/test/test_float.cpp
         <lib>../../../test/build/boost_test_exec_monitor ]
   ;
 }
