@@ -45,7 +45,7 @@ void test_conversion_to_wstring();
 void test_bad_lexical_cast();
 void test_no_whitespace_stripping();
 
-unit_test_framework::test_suite *init_unit_test_suite(int, char **)
+unit_test::test_suite *init_unit_test_suite(int, char *[])
 {
     unit_test_framework::test_suite *suite =
         BOOST_TEST_SUITE("lexical_cast unit test");
