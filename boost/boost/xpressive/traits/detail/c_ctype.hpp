@@ -134,7 +134,7 @@ struct char_class_impl<char>
     static bool isctype(char ch, char_class_type mask)
     {
         using namespace std;
-        if(0 != (_Getchrtype(static_cast<int>(ch)) & mask))
+        if(0 != (_Getchrtype((unsigned char)ch) & mask))
         {
             return true;
         }
