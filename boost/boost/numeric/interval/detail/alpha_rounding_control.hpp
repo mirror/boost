@@ -14,7 +14,7 @@
 #error This header only works on Alpha CPUs.
 #endif
 
-#if defined(__GNUC__) || defined(__digital__) || defined(__DECCXX__)
+#if defined(__GNUC__) || defined(__digital__) || defined(__DECCXX)
 
 namespace boost {
 namespace numeric {
@@ -49,7 +49,12 @@ namespace detail {
     static void to_nearest()  { set_rounding_mode(mode_to_nearest.dmode);  }
     static void toward_zero() { set_rounding_mode(mode_toward_zero.dmode); }
     };
-#elif defined(__digital__) || defined(__DECCXX__)
+#elif defined(__digital__) || defined(__DECCXX)
+
+#if defined(__DECCXX) && !(defined(__FLT_ROUNDS) && __FLT_ROUNDS == -1)
+#error Dynamic rounding mode not enabled. See cxx man page for details.
+#endif
+
 #   include <float.h> // write_rnd() and read_rnd()
 
     struct alpha_rounding_control
