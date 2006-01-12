@@ -381,7 +381,8 @@ namespace boost {
             return;
 
           default:
-            return manager(in_buffer, out_buffer, op, tag_type());
+            manager(in_buffer, out_buffer, op, tag_type());
+            return;
           }
         }
       };
