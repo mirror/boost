@@ -315,8 +315,10 @@ namespace boost {
 #  endif // BOOST_NO_STD_ALLOCATOR
 
           if (op == clone_functor_tag) {
+            // GCC 2.95.3 gets the CV qualifiers wrong here, so we
+            // can't do the static_cast that we should do.
             const functor_type* f =
-              static_cast<const functor_type*>(in_buffer.obj_ptr);
+              (const functor_type*)(in_buffer.obj_ptr);
 
             // Clone the functor
 #  ifndef BOOST_NO_STD_ALLOCATOR
