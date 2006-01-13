@@ -133,6 +133,8 @@
       // Note: these are so far off, they are not really supported
 #   elif _MSC_VER < 1300 // eVC++ 4 comes with 1200-1202
 #     define BOOST_COMPILER_VERSION evc4.0
+#   elif _MSC_VER == 1400
+#     define BOOST_COMPILER_VERSION evc8
 #   else
 #      if defined(BOOST_ASSERT_CONFIG)
 #         error "Unknown EVC++ compiler version - please run the configure tests and report the results"
