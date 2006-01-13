@@ -1,5 +1,6 @@
 
 [library Boost.Foreach
+    [quickbook 1.3]
     [authors [Niebler, Eric]]
     [copyright 2004 Eric Niebler]
     [category algorithms]
@@ -12,13 +13,9 @@
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
-        <ulink url="http://www.boost.org/LICENSE_1_0.txt">
-            http://www.boost.org/LICENSE_1_0.txt
-        </ulink>)
+        [@http://www.boost.org/LICENSE_1_0.txt])
     ]
 ]
-
-[/ QuickBook Document version 1.0 ]
 
 [/  Images   ]
 
@@ -34,12 +31,11 @@
 [def _iterator_range_     [@../../libs/range/doc/utility_class.html#iter_range `boost::iterator_range<>`]]
 [def _sub_range_          [@../../libs/range/doc/utility_class.html#sub_range `boost::sub_range<>`]]
 [def _noncopyable_        [@../../libs/utility/utility.htm#Class_noncopyable `boost::noncopyable`]]
-[def _foreach_            `BOOST_FOREACH`] 
+[def _foreach_            [^BOOST_FOREACH]] 
 
 [section Introduction]
 
-[:"Make simple things easy."]
-[:[*['-- Larry Wall]]]
+[:["Make simple things easy.]\n[*['-- Larry Wall]]]
 
 [h2 What is _foreach_?]
 
@@ -93,7 +89,7 @@ _range_ recognizes as sequences. In particular, you can use _foreach_ with:
 * Null-terminated strings (`char` and `wchar_t`)
 * std::pair of iterators
 
-[blurb _note_ The support for STL containers is very general; anything that looks like
+[note The support for STL containers is very general; anything that looks like
 an STL container counts. If it has nested `iterator` and `const_iterator` types and `begin()`
 and `end()` member functions, _foreach_ will automatically know how to iterate over
 it. It is in this way that _iterator_range_ and _sub_range_ work with _foreach_.]
@@ -175,7 +171,7 @@ identifier (`foreach`, perhaps), you can simply do:
 Only do this if you are sure that the identifier you choose will not cause
 name conflicts in your code.
 
-[blurb _note_ Do not use `#define foreach(x,y) BOOST_FOREACH(x,y)`.
+[note Do not use `#define foreach(x,y) BOOST_FOREACH(x,y)`.
  This can be problematic if the arguments are macros themselves. This would
  result in an additional expansion of these macros. Instead, use the 
  form shown above.]
@@ -264,7 +260,7 @@ function. Doing it this way has the advantage of being portable to older compile
         return 0;
     }
 
-[blurb _tip_ Even though you have to tell _foreach_ that your type is non-copyable, that
+[tip Even though you have to tell _foreach_ that your type is non-copyable, that
 doesn't mean that _foreach_ always makes a copy of your sequence type. Obviously, doing so
 would be expensive and even wrong in some cases. _foreach_ is quite smart about when to
 make a copy and when not to. The `is_noncopyable<>` trait is needed to elide the copy, which
@@ -329,7 +325,7 @@ vary in their handling of rvalues and lvalues. To cope with the situation _forea
 levels of compliance, described below:
 
 [table BOOST_FOREACH Compliance Levels
-  [[Level]   [Meaning]]
+  [[Level]     [Meaning]]
   [[*Level 0*] [['[_Highest level of compliance]]\n
                 _foreach_ works with lvalues, rvalues and const-qualified rvalues.]]
   [[*Level 1*] [['[_Moderate level of compliance]]\n
@@ -453,9 +449,9 @@ refine the idea and eventually published an article about it in the November 200
 
 After leaving Microsoft, I revisited the idea of a looping construct. I reimplemented the macro
 from scratch in standard C++, corrected some shortcomings of the CUJ version and rechristened it
-BOOST_FOREACH. In October of 2003 I began a discussion about it on the Boost developers list, where
+_foreach_. In October of 2003 I began a discussion about it on the Boost developers list, where
 it met with a luke-warm reception. I dropped the issue until December 2004, when I reimplemented
-BOOST_FOREACH yet again. The new version only evaluated its sequence expression once and correctly
+_foreach_ yet again. The new version only evaluated its sequence expression once and correctly
 handled both lvalue and rvalue sequence expressions. It was built on top of the recently
 accepted _range_ library, which increased its portability. This was the version that, on Dec. 12 2004,
 I finally submitted to Boost for review. It was accepted into Boost on May 5, 2005.
@@ -469,7 +465,7 @@ the _range_ library, on which the current version of _foreach_ is built.
 [h2 Further Reading]
 
 If you would like more information about how _foreach_ works, you can read the article
-[@http://www.artima.com/cppsource/foreach.html "Conditional Love"] at
+[@http://www.artima.com/cppsource/foreach.html ["Conditional Love]] at
 [@http://www.artima.com/cppsource/ The C++ Source].
 
 [endsect]
