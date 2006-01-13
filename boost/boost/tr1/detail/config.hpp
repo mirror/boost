@@ -44,10 +44,18 @@
 // Find our actual std lib:
 //
 #ifdef BOOST_HAS_INCLUDE_NEXT
+#  ifndef BOOST_TR1_NO_RECURSION
+#     define BOOST_TR1_NO_RECURSION
+#     define BOOST_TR1_NO_CONFIG_RECURSION
+#  endif
 #  include_next <utility>
 #  if (__GNUC__ < 3)
 #     include_next <algorithm>
 #     include_next <iterator>
+#  endif
+#  ifdef BOOST_TR1_NO_CONFIG_RECURSION
+#     undef BOOST_TR1_NO_CONFIG_RECURSION
+#     undef BOOST_TR1_NO_RECURSION
 #  endif
 #else
 #  include BOOST_TR1_STD_HEADER(utility)
