@@ -758,8 +758,8 @@ token_id id = token_id(*iter_ctx->first);
 ///////////////////////////////////////////////////////////////////////////////
 namespace {
 
-    template <typename IteratorT>
-    bool next_token_is_pp_directive(IteratorT &it, IteratorT const &end)
+    template <typename ContexT, typename IteratorT>
+    bool next_token_is_pp_directive(ContexT &ctx, IteratorT &it, IteratorT const &end)
     {
         using namespace boost::wave;
         
@@ -770,41 +770,52 @@ namespace {
                 break;          // skip leading whitespace
             if (IS_CATEGORY(id, EOLTokenType))
                 break;          // do not enter a new line
+                
+            ctx.get_hooks().skipped_token(*it);   // this token get's skipped
         }
         BOOST_ASSERT(it == end || id != T_UNKNOWN);
         return it != end && IS_CATEGORY(id, PPTokenType);
     }
     
-    template <typename IteratorT>
-    bool is_pp_null(IteratorT &it, IteratorT const &end)
+    template <typename ContexT, typename IteratorT>
+    bool is_pp_null(ContexT &ctx, IteratorT &it, IteratorT const &end)
     {
         using namespace boost::wave;
         
         BOOST_ASSERT(T_POUND == BASE_TOKEN(token_id(*it)));
-        for (++it; it != end; ++it) {
-        token_id id = token_id(*it);
+        ctx.get_hooks().skipped_token(*it);     // this token get's skipped
         
-            if (T_CPPCOMMENT == id || T_NEWLINE == id) {
-                ++it;           // skip eol/C++ comment
+        for (++it; it != end; ++it) {
+            token_id id = token_id(*it);
+            if (T_CPPCOMMENT == id || T_NEWLINE == id ||
+                context_policies::util::ccomment_has_newline(*it)) 
+            {
+                ctx.get_hooks().skipped_token(*it);
+                ++it;           // skip eol/C/C++ comment
                 return true;    // found pp_null
             }
 
             if (!IS_CATEGORY(id, WhiteSpaceTokenType))
                 break;
+
+            ctx.get_hooks().skipped_token(*it);   // this token get's skipped
         }
         return false;
     }
 
-    template <typename IteratorT>
-    bool skip_to_eol(IteratorT &it, IteratorT const &end)
+    template <typename ContexT, typename IteratorT>
+    bool skip_to_eol(ContexT &ctx, IteratorT &it, IteratorT const &end)
     {
         using namespace boost::wave;
         
         for (/**/; it != end; ++it) {
         token_id id = token_id(*it);
         
-            if (T_CPPCOMMENT == id || T_NEWLINE == id) {
-                ++it;           // skip eol/C++ comment
+            ctx.get_hooks().skipped_token(*it);
+            if (T_CPPCOMMENT == id || T_NEWLINE == id ||
+                context_policies::util::ccomment_has_newline(*it)) 
+            {
+                ++it;           // skip eol/C/C++ comment
                 return true;    // found pp_null
             }
         }
@@ -821,10 +832,10 @@ pp_iterator_functor<ContextT>::pp_directive()
 // test, if the next non-whitespace token is a pp directive
 lexer_type it = iter_ctx->first;
 
-    if (!next_token_is_pp_directive(it, iter_ctx->last)) {
+    if (!next_token_is_pp_directive(ctx, it, iter_ctx->last)) {
     // eventually skip null pp directive (no need to do it via the parser)
         if (it != iter_ctx->last && T_POUND == BASE_TOKEN(token_id(*it))) {
-            if (is_pp_null(it, iter_ctx->last)) {
+            if (is_pp_null(ctx, it, iter_ctx->last)) {
                 seen_newline = true;
                 iter_ctx->first = it;   // start over with the next line
                 return true;
@@ -847,7 +858,7 @@ lexer_type it = iter_ctx->first;
         !IS_EXTCATEGORY(*it, PPConditionalTokenType))
     {
         seen_newline = true;
-        skip_to_eol(it, iter_ctx->last);
+        skip_to_eol(ctx, it, iter_ctx->last);
         iter_ctx->first = it;       // start over with the next line
         return true;
     }

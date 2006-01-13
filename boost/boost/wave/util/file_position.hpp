@@ -41,21 +41,19 @@ namespace debug {
     inline bool
     is_escaped_lit(StringT const &value)
     {
-        StringT result;
-        typename StringT::size_type pos = 0;
-        typename StringT::size_type pos1 = value.find_first_of ("\\", 0);
-        if (StringT::npos != pos1) {
+        typename StringT::size_type pos = value.find_first_of ("\\", 0);
+        if (StringT::npos != pos) {
             do {
-                if ('\\' == value[pos1+1] || '\"' == value[pos1+1] || 
-                    '?' == value[pos1+1])
+                if ('\\' == value[pos+1] || 
+                    '\"' == value[pos+1] || 
+                    '?' == value[pos+1])
                 {
                     return true;
                 }
                 else {
-                    pos1 = value.find_first_of ("\\", pos = pos1+1);
+                    pos = value.find_first_of ("\\", pos+1);
                 }
-                
-            } while (pos1 != StringT::npos);
+            } while (pos != StringT::npos);
         }
         return false;
     }

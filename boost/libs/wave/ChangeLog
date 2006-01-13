@@ -25,7 +25,9 @@ CHANGELOG
 - Added a missing throw() specification to the function 
   cpp_exception::get_related_name().
 - Fix Boost bug ([ boost-Bugs-1395857 ] wave redefines BSIZE).
-
+- Added missing calls to the skipped_token() preprocessing hook which wasn't
+  called for pp directives inside disabled #if blocks.
+  
 Sat Dec 24 13:33:53 CST 2005
 - Version 1.2.2
 - Added three new preprocessing hooks: 'found_directive', 'skipped_token' and 
@@ -95,7 +97,7 @@ Sat Dec 24 13:33:53 CST 2005
   macro name via the new (virtual) get_related_name() function.
 - Added the get_severity() function to the exceptions thrown by the Wave
   library.
-- Extended the copyright notice to 2006.
+- Extended the copyright notice to include the year 2006.
 
 Mon Dec  5 22:05:22 CST 2005
 Boost V1.33.1
