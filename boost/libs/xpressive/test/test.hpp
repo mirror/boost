@@ -20,6 +20,7 @@
 #include <functional>
 #include <boost/range/iterator_range.hpp>
 #include <boost/xpressive/xpressive_static.hpp>
+#include "./test_minimal.hpp"
 using namespace boost::xpressive;
 
 #define L(x) BOOST_XPR_CSTR_(char_type, x)

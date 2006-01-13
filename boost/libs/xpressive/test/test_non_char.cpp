@@ -8,7 +8,6 @@
 #include <algorithm>
 #include <boost/xpressive/traits/null_regex_traits.hpp>
 #include "./test.hpp"
-#include "./test_minimal.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
 // test_main
