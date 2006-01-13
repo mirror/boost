@@ -515,7 +515,9 @@ public:
       type_result.const_obj_ptr = &typeid(Functor);
       vtable->manager(functor, type_result, 
                       detail::function::check_functor_type_tag);
-      return static_cast<const Functor*>(type_result.obj_ptr);
+      // GCC 2.95.3 gets the CV qualifiers wrong here, so we
+      // can't do the static_cast that we should do.
+      return (const Functor*)(type_result.obj_ptr);
     }
 
   template<typename F>
