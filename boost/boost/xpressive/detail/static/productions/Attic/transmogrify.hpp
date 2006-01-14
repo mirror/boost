@@ -13,6 +13,7 @@
 # pragma once
 #endif
 
+#include <cstring> // for std::strlen
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/assert.hpp>
