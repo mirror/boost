@@ -5,7 +5,7 @@
 //  shared_ptr.hpp
 //
 //  (C) Copyright Greg Colvin and Beman Dawes 1998, 1999.
-//  Copyright (c) 2001, 2002, 2003 Peter Dimov
+//  Copyright (c) 2001-2006 Peter Dimov
 //
 //  Distributed under the Boost Software License, Version 1.0. (See
 //  accompanying file LICENSE_1_0.txt or copy at
@@ -99,6 +99,21 @@ inline void sp_enable_shared_from_this( shared_count const & /*pn*/, ... )
 
 #ifdef sgi
 # pragma reset woff 3506
+#endif
+
+#if !defined( BOOST_NO_SFINAE ) && !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION ) && !defined( BOOST_NO_AUTO_PTR )
+
+// rvalue auto_ptr support based on a technique by Dave Abrahams
+
+template< class T, class R > struct sp_enable_if_auto_ptr
+{
+};
+
+template< class T, class R > struct sp_enable_if_auto_ptr< std::auto_ptr< T >, R >
+{
+    typedef R type;
+}; 
+
 #endif
 
 } // namespace detail
@@ -218,7 +233,20 @@ public:
         boost::detail::sp_enable_shared_from_this( pn, tmp, tmp );
     }
 
-#endif
+#if !defined( BOOST_NO_SFINAE ) && !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+
+    template<class Ap>
+    explicit shared_ptr( Ap r, typename detail::sp_enable_if_auto_ptr<Ap, int>::type = 0 ): px( r.get() ), pn()
+    {
+        typename Ap::element_type * tmp = r.get();
+        pn = boost::detail::shared_count( r );
+        boost::detail::sp_enable_shared_from_this( pn, tmp, tmp );
+    }
+
+
+#endif // BOOST_NO_SFINAE, BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+#endif // BOOST_NO_AUTO_PTR
 
 #if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
 
@@ -235,13 +263,25 @@ public:
 #ifndef BOOST_NO_AUTO_PTR
 
     template<class Y>
-    shared_ptr & operator=(std::auto_ptr<Y> & r)
+    shared_ptr & operator=( std::auto_ptr<Y> & r )
     {
         this_type(r).swap(*this);
         return *this;
     }
 
-#endif
+#if !defined( BOOST_NO_SFINAE ) && !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+
+    template<class Ap>
+    typename detail::sp_enable_if_auto_ptr< Ap, shared_ptr & >::type operator=( Ap r )
+    {
+        this_type( r ).swap( *this );
+        return *this;
+    }
+
+
+#endif // BOOST_NO_SFINAE, BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+#endif // BOOST_NO_AUTO_PTR
 
     void reset() // never throws in 1.30+
     {
