@@ -71,7 +71,7 @@
 #           ifndef BOOST_TYPEOF_NATIVE
 #               define BOOST_TYPEOF_NATIVE
 #           endif
-#       	include <boost/typeof/msvc/typeof_impl.hpp>
+#           include <boost/typeof/msvc/typeof_impl.hpp>
 #           define MSVC_TYPEOF_HACK
 #       else
 #           error typeof emulation is not supported
@@ -81,7 +81,7 @@
 #           ifndef BOOST_TYPEOF_NATIVE
 #               define BOOST_TYPEOF_NATIVE
 #           endif
-#       	include <boost/typeof/msvc/typeof_impl.hpp>
+#           include <boost/typeof/msvc/typeof_impl.hpp>
 #           define MSVC_TYPEOF_HACK
 #       endif
 #   else // 8.0
@@ -116,11 +116,11 @@
 #ifdef BOOST_TYPEOF_EMULATION
 #   define BOOST_TYPEOF_TEXT "using typeof emulation"
 #   include <boost/typeof/typeof_impl.hpp>
-#	include <boost/typeof/type_encoding.hpp>
-#	include <boost/typeof/template_encoding.hpp>
-#	include <boost/typeof/modifiers.hpp>
-#	include <boost/typeof/pointers_data_members.hpp>
-#	include <boost/typeof/register_functions.hpp>
+#   include <boost/typeof/type_encoding.hpp>
+#   include <boost/typeof/template_encoding.hpp>
+#   include <boost/typeof/modifiers.hpp>
+#   include <boost/typeof/pointers_data_members.hpp>
+#   include <boost/typeof/register_functions.hpp>
 #   include <boost/typeof/register_fundamental.hpp>
 
 #elif defined(BOOST_TYPEOF_NATIVE)
@@ -132,10 +132,10 @@
         }}
 
 #       define BOOST_TYPEOF(expr) BOOST_TYPEOF_KEYWORD(boost::type_of::ensure_obj(expr))
-#	    define BOOST_TYPEOF_TPL BOOST_TYPEOF
+#       define BOOST_TYPEOF_TPL BOOST_TYPEOF
 #   endif
-#	define BOOST_TYPEOF_REGISTER_TYPE(x)
-#	define BOOST_TYPEOF_REGISTER_TEMPLATE(x, params)
+#   define BOOST_TYPEOF_REGISTER_TYPE(x)
+#   define BOOST_TYPEOF_REGISTER_TEMPLATE(x, params)
 #else
 #   error typeof configuration error
 #endif
