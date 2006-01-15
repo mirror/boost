@@ -19,19 +19,22 @@
 
 [/  Images   ]
 
-[def _note_               [$images/note.png]]
-[def _alert_              [$images/caution.png]]
-[def _detail_             [$images/note.png]]
-[def _tip_                [$images/tip.png]]
+[def _note_                         [$images/note.png]]
+[def _alert_                        [$images/caution.png]]
+[def _detail_                       [$images/note.png]]
+[def _tip_                          [$images/tip.png]]
 
 [/  Links   ]
 
-[def _iterator_           [@../../libs/iterator/doc/index.html Boost.Iterator]]
-[def _range_              [@../../libs/range/index.html Boost.Range]]
-[def _iterator_range_     [@../../libs/range/doc/utility_class.html#iter_range `boost::iterator_range<>`]]
-[def _sub_range_          [@../../libs/range/doc/utility_class.html#sub_range `boost::sub_range<>`]]
-[def _noncopyable_        [@../../libs/utility/utility.htm#Class_noncopyable `boost::noncopyable`]]
-[def _foreach_            [^BOOST_FOREACH]] 
+[def _foreach_                      [^BOOST_FOREACH]] 
+[def _range_                        [@../../libs/range/index.html Boost.Range]]
+[def _iterator_range_               [@../../libs/range/doc/utility_class.html#iter_range `boost::iterator_range<>`]]
+[def _sub_range_                    [@../../libs/range/doc/utility_class.html#sub_range `boost::sub_range<>`]]
+[def _extending_range_              [@../../libs/range/doc/boost_range.html#minimal_interface Extending Boost.Range]]
+[def _single_pass_range_concept_    [@../../libs/range/doc/range.html#single_pass_range Single Pass Range Concept]]
+[def _range_portability_            [@../../libs/range/doc/portability.html Boost.Range Portability]]
+[def _noncopyable_                  [@../../libs/utility/utility.htm#Class_noncopyable `boost::noncopyable`]]
+[def _iterator_                     [@../../libs/iterator/doc/index.html Boost.Iterator]]
 
 [section Introduction]
 
@@ -39,13 +42,13 @@
 
 [h2 What is _foreach_?]
 
-In C++, writing a loop that iterates over a sequence is tedious. You can either
-use iterators, which requires a considerable amount of boiler-plate, or you can
-use the `std::for_each()` algorithm and move your loop body into a predicate, which
-requires no less boiler-plate and forces you to move your logic far from where
+In C++, writing a loop that iterates over a sequence is tedious. We can either
+use iterators, which requires a considerable amount of boiler-plate, or we can
+use the `std::for_each()` algorithm and move our loop body into a predicate, which
+requires no less boiler-plate and forces us to move our logic far from where
 it will be used. In contrast, some other languages, like Perl, provide a dedicated
 "foreach" construct that automates this process. _foreach_ is just such a construct
-for C++. It iterates over sequences for you, freeing you from having to deal directly
+for C++. It iterates over sequences for us, freeing us from having to deal directly
 with iterators or write predicates.
 
 _foreach_ is designed for ease-of-use and efficiency. It does no dynamic allocations,
@@ -82,7 +85,8 @@ Hello, world!
 
 _foreach_ iterates over sequences. But what qualifies as a sequence, exactly? Since
 _foreach_ is built on top of _range_, it automatically supports those types which
-_range_ recognizes as sequences. In particular, you can use _foreach_ with:
+_range_ recognizes as sequences. Specifically, _foreach_ works with types that satisfy
+the _single_pass_range_concept_. For example, we can use _foreach_ with:
 
 * STL containers
 * arrays
@@ -99,7 +103,7 @@ out how to make _foreach_ work with other types.
 
 [h2 Examples]
 
-Below are some examples that demonstrate all the different ways you can use _foreach_.
+Below are some examples that demonstrate all the different ways we can use _foreach_.
 
 Iterate over an STL container:
 
@@ -156,7 +160,7 @@ Iterate over an expression that returns a sequence by value (i.e. an rvalue):
 
 Iterating over rvalues doesn't work on some older compilers. Check the 
 [link foreach.portability Portability] section to see whether your
-compiler supports this.    
+compiler supports this.
 
 [h2 Making _foreach_ Prettier]
 
@@ -180,58 +184,88 @@ name conflicts in your code.
 
 [section Extensibility]
 
-If you want to use _foreach_ to iterate over some new collection type, you must
-"teach" _foreach_ how to interact with your type. Since _foreach_ is built on top
-of _range_, you must extend _range_ in order to extend _foreach_.
+If we want to use _foreach_ to iterate over some new collection type, we must
+"teach" _foreach_ how to interact with our type. Since _foreach_ is built on top
+of _range_, we must extend _range_ in order to extend _foreach_. The section
+_extending_range_ explores this topic in detail.
 
-Below is an example for extending _foreach_ to iterate over a type which wraps a
-`std::string`.
+Below is an example for extending _foreach_ to iterate over a sub-string type,
+which contains two iterators into a `std::string`.
 
-    struct StringWrapper
+    namespace my
     {
-        std::string str;
-    };
+        // sub_string: part of a string, as delimited by a pair
+        // of iterators
+        struct sub_string
+        {
+            std::string::iterator begin;
+            std::string::iterator end;
+            
+            /* ... implementation ... */
+        };
+
+        // Add overloads of boost_range_begin() and boost_range_end() in the
+        // same namespace as sub_string, to be found by Argument-Dependent Lookup.
+
+        inline std::string::iterator boost_range_begin( sub_string & x )
+        {
+            return x.begin;
+        }
+
+        inline std::string::iterator boost_range_end( sub_string & x )
+        {
+            return x.end;
+        }
+
+        // Also add overloads for const sub_strings. Note we use the conversion
+        // from string::iterator to string::const_iterator here.
+
+        inline std::string::const_iterator boost_range_begin( sub_string const & x )
+        {
+            return x.begin;
+        }
+
+        inline std::string::const_iterator boost_range_end( sub_string const & x )
+        {
+            return x.end;
+        }
+    }
 
     namespace boost
     {
-        // specialize rannge_iterator and range_const_iterator
+        // specialize rannge_iterator and range_const_iterator in namespace boost
         template<>
-        struct range_iterator<StringWrapper>
+        struct range_iterator< my::sub_string >
         {
             typedef std::string::iterator type;
         };
 
         template<>
-        struct range_const_iterator<StringWrapper>
+        struct range_const_iterator< my::sub_string >
         {
             typedef std::string::const_iterator type;
         };
-
-        // Overload begin() and end(), both const and non-const versions
-        std::string::iterator begin(StringWrapper & w) { return w.str.begin(); }
-        std::string::iterator end(StringWrapper & w) { return w.str.end(); }
-
-        std::string::const_iterator begin(StringWrapper const & w) { return w.str.begin(); }
-        std::string::const_iterator end(StringWrapper const & w) { return w.str.end(); }
     }
 
-Now that you have taught _range_ (and hence _foreach_) about your type, you
-can now use _foreach_ to iterate over your type.
+Now that we have taught _range_ (and hence _foreach_) about our type, we
+can now use _foreach_ to iterate over our sub_string type.
 
-    StringWrapper my_string_wrapper;
-    BOOST_FOREACH( char ch, my_string_wrapper )
+    my::sub_string substr;
+    BOOST_FOREACH( char ch, substr )
     {
         // Woo-hoo!
     }
 
-There are some portability issues you should be aware of when extending _foreach_. Be sure
-to check out the [link foreach.portability Portability] section.
+There are some portability issues we should be aware of when extending _foreach_. Be sure
+to check out the [link foreach.portability Portability] section. In particular, if your
+compiler does not support Argument-Dependent Lookup, the _range_portability_ section
+offers some suggested work-arounds.
 
 [h2 Making _foreach_ Work with Non-Copyable Sequence Types]
 
-If you define a sequence type that is non-copyable, you will need to tell _foreach_ to
-not try to copy it. If your type inherits from _noncopyable_, no further action is
-required. If not, you should specialize the `boost::foreach::is_noncopyable<>` template, as
+For sequence types that are non-copyable, we will need to tell _foreach_ to
+not try to make copies. If our type inherits from _noncopyable_, no further action is
+required. If not, we must specialize the `boost::foreach::is_noncopyable<>` template, as
 follows:
 
     class noncopy_vector
@@ -260,8 +294,8 @@ function. Doing it this way has the advantage of being portable to older compile
         return 0;
     }
 
-[tip Even though you have to tell _foreach_ that your type is non-copyable, that
-doesn't mean that _foreach_ always makes a copy of your sequence type. Obviously, doing so
+[tip Even though we have to tell _foreach_ that our type is non-copyable, that
+doesn't mean that _foreach_ always makes a copy of our sequence type. Obviously, doing so
 would be expensive and even wrong in some cases. _foreach_ is quite smart about when to
 make a copy and when not to. The `is_noncopyable<>` trait is needed to elide the copy, which
 is on a branch that might never get taken.]
@@ -277,7 +311,7 @@ hoops of fire to avoid copying it doesn't make sense because copying it is so ch
 A pair of iterators is an example of a lightweight proxy. It does not store the values of
 the sequence; rather, it stores iterators to them. This means that iterating over a copy of
 the proxy object will give the same results as using the object itself. For such types,
-_foreach_ provides a hook that lets you tell it not to worry about the expense of making a
+_foreach_ provides a hook that lets us tell it not to worry about the expense of making a
 copy. This can result in slightly faster loop execution. Simply specialize the
 `boost::foreach::is_lightweight_proxy<>` trait, as follows:
 
@@ -296,7 +330,7 @@ copy. This can result in slightly faster loop execution. Simply specialize the
         };
     }}
 
-Alternately, you could achieve the same effect by overriding the global
+Alternately, we could achieve the same effect by overriding the global
 `boost_foreach_is_lightweight_proxy()` function, as follows:
 
     // At global scope...
@@ -315,8 +349,7 @@ This method is portable to older compilers.
 _foreach_ uses some fairly sophisticated techniques that not all compilers support. Depending
 on how compliant your compiler is, you may not be able to use _foreach_ in some scenarios. Since
 _foreach_ uses _range_, it inherits _range_'s portability issues. You can read about those
-issues in that library's [@../../libs/range/doc/portability.html Portability]
-section.
+issues in the _range_portability_ section.
 
 In addition to the demands placed on the compiler by _range_, _foreach_ places additional demands
 in order to handle rvalue sequences properly. (Recall that an rvalue is an unnamed object, so
@@ -336,8 +369,8 @@ levels of compliance, described below:
                 `BOOST_FOREACH_NO_RVALUE_DETECTION` is defined in this case.]]
 ]
 
-Below are the compilers _foreach_ has been tested with, and the compliance level you can expect
-from each.
+Below are the compilers with which _foreach_ has been tested, and the compliance level _foreach_
+provides for them.
 
 [table Compiler Compliance Level
   [[Compiler]                [Compliance Level]]
@@ -400,9 +433,9 @@ Under the covers, _foreach_ uses iterators to traverse the element
 sequence. Before the loop is executed, the end iterator is cached
 in a local variable. This is called ['hoisting], and it is an
 important optimization. It assumes, however, that the end iterator
-of the sequence is stable. It usually is, but if you modify the
-sequence by adding or removing elements while you are iterating
-over it, you may end up hoisting yourself on your own petard.
+of the sequence is stable. It usually is, but if we modify the
+sequence by adding or removing elements while we are iterating
+over it, we may end up hoisting ourselves on our own petard.
 
 Consider the following code:
 
@@ -416,16 +449,16 @@ This code will compile, but it has undefined behavior. That is because
 it is logically equivalent to the following:
 
     std::vector<int> vect(4, 4);
-    for(std::vector<int>::iterator i1 = vect.begin(), i2 = vect.end();
-        i1 != i2; ++i1)
+    for(std::vector<int>::iterator it1 = vect.begin(), it2 = vect.end();
+        it1 != it2; ++it1)
     {
-        int i = *i1;
-        vect.push_back(i + 1);
+        int i = *it1;
+        vect.push_back(i + 1); // Oops! This invalidates it1 and it2!
     }
 
 The call to `vect.push_back()` will cause all iterators into `vect` to
-become invalid, including `i1` and `i2`. The next iteration through
-the loop will cause the invalid iterators to be used -- Blam-o! Bad news.
+become invalid, including `it1` and `it2`. The next iteration through
+the loop will cause the invalid iterators to be used. That's bad news.
 
 The moral of the story is to think twice before adding and removing
 elements from the sequence over which you are iterating. If doing
@@ -464,7 +497,7 @@ the _range_ library, on which the current version of _foreach_ is built.
 
 [h2 Further Reading]
 
-If you would like more information about how _foreach_ works, you can read the article
+For more information about how _foreach_ works, you may refer to the article
 [@http://www.artima.com/cppsource/foreach.html ["Conditional Love]] at
 [@http://www.artima.com/cppsource/ The C++ Source].
 
