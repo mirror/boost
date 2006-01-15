@@ -27,5 +27,6 @@ import testing ;
           [ run shared_ptr_alloc2_test.cpp ]
           [ run pointer_cast_test.cpp ]
           [ compile pointer_to_other_test.cpp ]
+          [ run auto_ptr_rv_test.cpp ]
         ;
 }
