@@ -46,7 +46,7 @@ DEPENDS all : test ;
   local SEARCH_SOURCE = $(BOOST_ROOT) $(SEARCH_SOURCE) ;
 
   test-suite numeric/interval :
-    [ compile libs/numeric/interval/test/integer.cpp ]
+    [ compile libs/numeric/interval/test/integer.cpp : special-requirements ]
 
     [ local-run libs/numeric/interval/test/add.cpp      ]
     [ local-run libs/numeric/interval/test/det.cpp      ]
