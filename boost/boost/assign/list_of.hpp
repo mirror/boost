@@ -158,7 +158,7 @@ namespace assign_detail
         {
             typedef BOOST_DEDUCED_TYPENAME Array::value_type value_type;
 
-#if BOOST_WORKAROUND(BOOST_INTEL, <= 900 )
+#if BOOST_WORKAROUND(BOOST_INTEL, <= 910 )
             BOOST_DEDUCED_TYPENAME remove_const<Array>::type ar;
 #else
             Array ar;
