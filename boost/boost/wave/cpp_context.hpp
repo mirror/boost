@@ -17,6 +17,7 @@
 #include <stack>
 
 #include <boost/concept_check.hpp>
+#include <boost/noncopyable.hpp>
 
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/token_ids.hpp>
@@ -76,8 +77,8 @@ template <
     typename InputPolicyT = iteration_context_policies::load_file_to_string,
     typename HooksT = context_policies::eat_whitespace<typename LexIteratorT::token_type>
 >
-class context {
-
+class context : private boost::noncopyable
+{
 public:
 
 // concept checks
