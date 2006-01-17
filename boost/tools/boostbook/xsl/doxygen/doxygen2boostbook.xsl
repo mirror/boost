@@ -31,6 +31,10 @@
        If left blank, BoostBook will assign a default title. -->
   <xsl:param name="boost.doxygen.reftitle" select="''"/>
   
+  <!-- The id used for the library-reference. By default, it is the normalized
+       form of the reftitle. -->
+  <xsl:param name="boost.doxygen.refid" select="''"/>
+
   <xsl:output method="xml" indent="yes" standalone="yes"/>
 
   <xsl:key name="compounds-by-kind" match="compounddef" use="@kind"/>
@@ -39,15 +43,39 @@
 
   <xsl:strip-space elements="briefdescription detaileddescription"/>
 
+  <!-- translate-name: given a string, return a string suitable for use as a refid -->
+  <xsl:template name="translate-name">
+    <xsl:param name="name"/>
+    <xsl:value-of select="translate($name,
+                                    'ABCDEFGHIJKLMNOPQRSTUVWXYZ ~!%^&amp;*()[].,&lt;&gt;|/ +-=',
+                                    'abcdefghijklmnopqrstuvwxyz_____________________')"/>
+  </xsl:template>
+
   <xsl:template match="/">
     <xsl:apply-templates select="doxygen"/>
   </xsl:template>
 
   <xsl:template match="doxygen">
     <library-reference>
-          <xsl:if test="string($boost.doxygen.reftitle) != ''">
-            <title><xsl:copy-of select="$boost.doxygen.reftitle"/></title>
-          </xsl:if>
+      <xsl:if test="string($boost.doxygen.reftitle) != ''">
+        <!-- when a reference section has a reftitle, also give it a refid. The id
+             is determined by the boost.doxygen.refid param, which defaults to a 
+             normalized form of the boost.doxygen.reftitle -->
+        <xsl:attribute name="id">
+          <xsl:choose>
+            <xsl:when test="string($boost.doxygen.refid) != ''">
+              <xsl:value-of select="$boost.doxygen.refid"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:call-template name="translate-name">
+                <xsl:with-param name="name" select="$boost.doxygen.reftitle"/>
+              </xsl:call-template>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:attribute>
+
+        <title><xsl:copy-of select="$boost.doxygen.reftitle"/></title>
+      </xsl:if>
       <xsl:apply-templates select="key('compounds-by-kind', 'file')"/>
     </library-reference>
   </xsl:template>
