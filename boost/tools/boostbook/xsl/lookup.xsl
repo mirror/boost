@@ -31,7 +31,7 @@
   <xsl:template name="strip-qualifiers">
     <xsl:param name="name"/>
     <xsl:choose>
-      <xsl:when test="contains($name, '::')">
+      <xsl:when test="contains($name, '::') and not(contains(substring-before($name, '::'), '&lt;'))">
         <xsl:call-template name="strip-qualifiers">
           <xsl:with-param name="name" select="substring-after($name, '::')"/>
         </xsl:call-template>
