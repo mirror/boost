@@ -27,6 +27,11 @@ local DATE_TIME_PROPERTIES = <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <defi
        <define>USE_DATE_TIME_PRE_1_33_FACET_IO
    ]
    [ run gregorian/testformatters.cpp date_time ]
+
+   [ run gregorian/testdate_facet_new.cpp date_time ]
+   [ run gregorian/testdate_input_facet.cpp date_time ]
+
+
    [ run gregorian/testgenerators.cpp date_time ]
    [ run gregorian/testgreg_cal.cpp date_time ]
    [ run gregorian/testgreg_day.cpp date_time ]     
@@ -43,6 +48,11 @@ local DATE_TIME_PROPERTIES = <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <defi
    [ run gregorian/testdate_iterator.cpp date_time_dll : : : <runtime-link>shared : testdate_iterator_dll ]
    [ run gregorian/testfacet.cpp date_time_dll : : : <runtime-link>shared : testfacet_dll ]
    [ run gregorian/testformatters.cpp date_time_dll : : : <runtime-link>shared : testformatters_dll ]
+
+   [ run gregorian/testdate_facet_new.cpp date_time_dll   : : : <runtime-link>shared : testdate_facet_new_dll ]
+   [ run gregorian/testdate_input_facet.cpp date_time_dll : : : <runtime-link>shared : testdate_input_facet_dll ]
+
+
    [ run gregorian/testgenerators.cpp date_time_dll : : : <runtime-link>shared : testgenerators_dll ]
    [ run gregorian/testgreg_cal.cpp date_time_dll : : : <runtime-link>shared : testgreg_cal_dll ]
    [ run gregorian/testgreg_day.cpp date_time_dll : : : <runtime-link>shared : testgreg_day_dll ]     
