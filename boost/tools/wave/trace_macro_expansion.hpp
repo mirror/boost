@@ -49,6 +49,58 @@ enum trace_flags {
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+//
+//  Special error thrown whenever the #pragma wave system() directive is 
+//  disabled
+//
+///////////////////////////////////////////////////////////////////////////////
+class no_pragma_system_exception :
+    public boost::wave::preprocess_exception
+{
+public:
+    enum error_code {
+        pragma_system_not_enabled = boost::wave::preprocess_exception::last_error_number + 1
+    };
+    
+    no_pragma_system_exception(char const *what_, error_code code, int line_, 
+        int column_, char const *filename_) throw() 
+    :   boost::wave::preprocess_exception(what_, 
+            (boost::wave::preprocess_exception::error_code)code, line_, 
+            column_, filename_)
+    {
+    }
+    ~no_pragma_system_exception() throw() {}
+    
+    
+    virtual char const *what() const throw()
+    {
+        return "boost::wave::no_pragma_system_exception";
+    }
+    virtual bool is_recoverable() const throw()
+    {
+        return true;
+    }
+    virtual int get_severity() const throw()
+    {
+        return boost::wave::util::severity_remark;
+    }
+    
+    static char const *error_text(int code)
+    {
+        return "the directive '#pragma wave system()' was not enabled, use the "
+               "-x command line argument to enable the execution of";
+    }
+    static boost::wave::util::severity severity_level(int code)
+    {
+        return boost::wave::util::severity_remark;
+    }
+    static char const *severity_text(int code)
+    {
+        return boost::wave::util::get_severity(boost::wave::util::severity_remark);
+    }
+};
+
+///////////////////////////////////////////////////////////////////////////////
 //  
 //  The trace_macro_expansion policy is used to trace the macro expansion of
 //  macros whenever it is requested from inside the input stream to preprocess
@@ -317,7 +369,16 @@ public:
         // enable/disable tracing option
             return interpret_pragma_trace(ctx, values, act_token);
         }
-        else if (option.get_value() == "system" && enable_system_command) {
+        else if (option.get_value() == "system") {
+            if (!enable_system_command) {
+            // if the #pragma wave system() directive is not enabled, throw
+            // a corresponding error (actually its a remark),
+                BOOST_WAVE_THROW(no_pragma_system_exception, 
+                    pragma_system_not_enabled,
+                    boost::wave::util::impl::as_string(values).c_str(), 
+                    act_token.get_position());
+            }
+            
         // try to spawn the given argument as a system command and return the
         // std::cout of this process as the replacement of this _Pragma
             return interpret_pragma_system(ctx, pending, values, act_token);

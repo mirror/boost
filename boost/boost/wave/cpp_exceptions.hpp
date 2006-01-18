@@ -110,7 +110,8 @@ namespace util {
         severity_warning,
         severity_error,
         severity_fatal,
-        severity_commandline_error
+        severity_commandline_error,
+        last_severity_code = severity_commandline_error
     };
     
     inline char const *
@@ -125,7 +126,7 @@ namespace util {
             "command line error"    // severity_commandline_error
         };
         BOOST_ASSERT(severity_remark <= level && 
-            level <= severity_commandline_error);
+            level <= last_severity_code);
         return severity_text[level];
     }
 }
@@ -151,6 +152,7 @@ public:
     virtual int get_errorcode() const throw() = 0;
     virtual int get_severity() const throw() = 0;
     virtual char const* get_related_name() const throw() = 0;
+    virtual bool is_recoverable() const throw() = 0;
     
     int line_no() const throw() { return line; }
     int column_no() const throw() { return column; }
@@ -206,12 +208,13 @@ public:
         ill_formed_integer_literal,
         ill_formed_character_literal,
         unbalanced_if_endif,
-        character_literal_out_of_range
+        character_literal_out_of_range,
+        last_error_number = character_literal_out_of_range
     };
 
     preprocess_exception(char const *what_, error_code code, int line_, 
         int column_, char const *filename_) throw() 
-    :   cpp_exception(line_, column_, filename_), level(severity_level(code)),
+    :   cpp_exception(line_, column_, filename_), 
         code(code)
     {
         unsigned int off = 0;
@@ -231,7 +234,7 @@ public:
     }
     virtual int get_severity() const throw()
     {
-        return level;
+        return severity_level(code);
     }
     virtual int get_errorcode() const throw()
     {
@@ -240,6 +243,51 @@ public:
     virtual char const* get_related_name() const throw()
     {
         return "<unknown>";
+    }
+    virtual bool is_recoverable() const throw()
+    {
+        switch (get_errorcode()) {
+        // these are the exceptions thrown during processing not supposed to 
+        // produce any tokens on the context::iterator level
+        case preprocess_exception::macro_redefinition:
+        case preprocess_exception::macro_insertion_error:
+        case preprocess_exception::bad_macro_definition:
+        case preprocess_exception::illegal_redefinition:
+        case preprocess_exception::duplicate_parameter_name:
+        case preprocess_exception::invalid_macroname:
+        case preprocess_exception::bad_include_file:
+        case preprocess_exception::bad_include_statement:
+        case preprocess_exception::ill_formed_directive:
+        case preprocess_exception::error_directive:
+        case preprocess_exception::warning_directive:
+        case preprocess_exception::ill_formed_expression:
+        case preprocess_exception::missing_matching_if:
+        case preprocess_exception::missing_matching_endif:
+        case preprocess_exception::unbalanced_if_endif:
+        case preprocess_exception::bad_define_statement:
+        case preprocess_exception::bad_line_statement:
+        case preprocess_exception::bad_undefine_statement:
+        case preprocess_exception::division_by_zero:
+        case preprocess_exception::integer_overflow:
+        case preprocess_exception::ill_formed_integer_literal:
+        case preprocess_exception::ill_formed_character_literal:
+        case preprocess_exception::character_literal_out_of_range:
+        case preprocess_exception::last_line_not_terminated:
+        case preprocess_exception::include_nesting_too_deep:
+        case preprocess_exception::illegal_operator_redefinition:
+            return true;
+            
+        case preprocess_exception::unexpected_error:
+        case preprocess_exception::ill_formed_operator:
+        case preprocess_exception::too_few_macroarguments:
+        case preprocess_exception::too_many_macroarguments:
+        case preprocess_exception::empty_macroarguments:
+        case preprocess_exception::improperly_terminated_macro:
+        case preprocess_exception::invalid_concat:
+        case preprocess_exception::ill_formed_pragma_option:
+            break;
+        }
+        return false;
     }
     
     static char const *error_text(int code)
@@ -292,7 +340,7 @@ public:
             "character literal out of range"            // character_literal_out_of_range
         };
         BOOST_ASSERT(unexpected_error <= code && 
-            code <= character_literal_out_of_range);
+            code <= last_error_number);
         return preprocess_exception_errors[code];
     }
 
@@ -339,7 +387,7 @@ public:
             util::severity_warning             // character_literal_out_of_range
         };
         BOOST_ASSERT(unexpected_error <= code && 
-            code <= character_literal_out_of_range);
+            code <= last_error_number);
         return preprocess_exception_severity[code];
     }
     static char const *severity_text(int code)
@@ -349,7 +397,6 @@ public:
 
 private:
     char buffer[512];
-    util::severity level;
     error_code code;
 };
 
@@ -370,6 +417,10 @@ public:
     }
     ~macro_handling_exception() throw() {}
     
+    virtual char const *what() const throw()
+    {
+        return "boost::wave::macro_handling_exception";
+    }
     char const* get_related_name() const throw()
     {
         return name;
@@ -391,48 +442,7 @@ private:
 inline bool
 is_recoverable(cpp_exception const& e)
 {
-    switch (e.get_errorcode()) {
-    // these are the exceptions thrown during processing not supposed to 
-    // produce any tokens on the context::iterator level
-    case preprocess_exception::macro_redefinition:
-    case preprocess_exception::macro_insertion_error:
-    case preprocess_exception::bad_macro_definition:
-    case preprocess_exception::illegal_redefinition:
-    case preprocess_exception::duplicate_parameter_name:
-    case preprocess_exception::invalid_macroname:
-    case preprocess_exception::bad_include_file:
-    case preprocess_exception::bad_include_statement:
-    case preprocess_exception::ill_formed_directive:
-    case preprocess_exception::error_directive:
-    case preprocess_exception::warning_directive:
-    case preprocess_exception::ill_formed_expression:
-    case preprocess_exception::missing_matching_if:
-    case preprocess_exception::missing_matching_endif:
-    case preprocess_exception::unbalanced_if_endif:
-    case preprocess_exception::bad_define_statement:
-    case preprocess_exception::bad_line_statement:
-    case preprocess_exception::bad_undefine_statement:
-    case preprocess_exception::division_by_zero:
-    case preprocess_exception::integer_overflow:
-    case preprocess_exception::ill_formed_integer_literal:
-    case preprocess_exception::ill_formed_character_literal:
-    case preprocess_exception::character_literal_out_of_range:
-    case preprocess_exception::last_line_not_terminated:
-    case preprocess_exception::include_nesting_too_deep:
-    case preprocess_exception::illegal_operator_redefinition:
-        return true;
-        
-    case preprocess_exception::unexpected_error:
-    case preprocess_exception::ill_formed_operator:
-    case preprocess_exception::too_few_macroarguments:
-    case preprocess_exception::too_many_macroarguments:
-    case preprocess_exception::empty_macroarguments:
-    case preprocess_exception::improperly_terminated_macro:
-    case preprocess_exception::invalid_concat:
-    case preprocess_exception::ill_formed_pragma_option:
-        break;
-    }
-    return false;
+    return e.is_recoverable();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
