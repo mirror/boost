@@ -6,5 +6,6 @@
      [ run converter_test.cpp ]
      [ run udt_support_test.cpp ]
      [ run numeric_cast_test.cpp ]
+     [ run udt_example_0.cpp ]
   ;
 

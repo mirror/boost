@@ -6,6 +6,8 @@ test-suite "parameter"
      [ run macros.cpp ]
      [ run unnamed.cpp ]
      [ run tutorial.cpp ]
-     [ run efficiency.cpp : : : <variant>release ]
+     [ run singular.cpp ]
+     [ run efficiency.cpp : : : : : <variant>release ]
      [ compile unwrap_cv_reference.cpp ]
+     [ compile-fail duplicates.cpp ]
   ;
