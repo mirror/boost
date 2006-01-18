@@ -444,14 +444,21 @@ auto_stop_watch elapsed_time(cerr);
                 return -1;
             }
         }
-        
+
+    // Since the #pragma wave system() directive may cause a potential security 
+    // threat, it has to be enabled explicitly by --extended or -x
+    bool enable_system_command = false;
+    
+        if (vm.count("extended")) 
+            enable_system_command = true;
+            
     // This this the central piece of the Wave library, it provides you with 
     // the iterators to get the preprocessed tokens and allows to configure
     // the preprocessing stage in advance.
     context_type ctx (instring.begin(), instring.end(), file_name.c_str(),
         optional_whitespace_eater<token_type>(
             preserve_whitespace, preserve_comments, 
-            traceout, includelistout, enable_trace));
+            traceout, includelistout, enable_trace, enable_system_command));
 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
     // enable C99 mode, if appropriate (implies variadics)
@@ -741,6 +748,8 @@ main (int argc, char *argv[])
                             "0: no whitespace is preserved (default),\n"
                             "1: comments are preserved,\n" 
                             "2: all whitespace is preserved")
+            ("extended,x", 
+                "enable the #pragma wave system() directive")
         ;
     
     // combine the options for the different usage schemes

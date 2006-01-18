@@ -57,6 +57,7 @@
     --c99:                       enable C99 mode (implies variadics and placemarkers)
     -l [ --listincludes ] arg:   list included file to a file [arg] or to stdout [-]
     -p [ --preserve ] arg (=0):  preserve whitespace<br>                                 0: no whitespace is preserved (default),<br>                                 1: comments are preserved,<br>                                 2: all whitespace is preserved
+    -x [ --extended ]            enable the #pragma wave system() directive
 </pre>
 <P dir="ltr">The possible options are straightforward and self explanatory. The 
   following describes some of these options in more detail. Please note, that 
@@ -181,6 +182,11 @@
   <p dir="ltr">Preserve the whitespace from the input stream not located inside of macro definitions. The argument defines the amount of whitespace to be preserved. A value of '0' (zero) skips all whitespace, a value of '1' preserves all the comments and a value of '2' will preserve all whitespace in the output.</p>
   <p dir="ltr">The comments located inside macro definitions are skipped even if this option is specified with an argument not '0' (zero) . If this option is not specified on the command line onlz essential whitespace is preserved (equivalent to '0' as the argument value). </p>
 </blockquote>
+<p dir="ltr">-x [--extended]</p>
+<blockquote>
+  <p dir="ltr">Enable the <tt>#pragma wave system() </tt>directive. This directive 
+is now disabled by default because it may cause a potential security threat. </p>
+</blockquote>
 <p dir="ltr">@ [--config-file] option</p>
 <blockquote> 
   <p dir="ltr">Some of the possible command line options may be specified inside 
@@ -236,7 +242,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Wednesday, December 7, 2005  14:34<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Tuesday, January 17, 2006  17:57<!-- #EndDate -->
 </span></p>
 </body>
 </html>

@@ -33,8 +33,9 @@ class optional_whitespace_eater
     
 public:
     optional_whitespace_eater(bool preserve_whitespace, bool preserve_comments,
-            std::ostream &tracestrm, std::ostream &includestrm, trace_flags flags)
-    :   base_type(preserve_comments, tracestrm, includestrm, flags),
+            std::ostream &tracestrm, std::ostream &includestrm, trace_flags flags,
+            bool enable_system_command)
+    :   base_type(preserve_comments, tracestrm, includestrm, flags, enable_system_command),
         preserve_whitespace(preserve_whitespace)
     {}
 

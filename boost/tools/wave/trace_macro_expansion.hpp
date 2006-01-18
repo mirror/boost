@@ -69,10 +69,12 @@ class trace_macro_expansion
     
 public:
     trace_macro_expansion(bool preserve_comments, std::ostream &tracestrm_, 
-            std::ostream &includestrm_, trace_flags flags_)
+            std::ostream &includestrm_, trace_flags flags_,
+            bool enable_system_command_)
     :   whitespace_base_type(preserve_comments),
         tracestrm(tracestrm_), includestrm(includestrm_), level(0), 
-        flags(flags_), logging_flags(trace_nothing)
+        flags(flags_), logging_flags(trace_nothing), 
+        enable_system_command(enable_system_command_)
     {
     }
     ~trace_macro_expansion()
@@ -315,7 +317,7 @@ public:
         // enable/disable tracing option
             return interpret_pragma_trace(ctx, values, act_token);
         }
-        else if (option.get_value() == "system") {
+        else if (option.get_value() == "system" && enable_system_command) {
         // try to spawn the given argument as a system command and return the
         // std::cout of this process as the replacement of this _Pragma
             return interpret_pragma_system(ctx, pending, values, act_token);
@@ -543,7 +545,8 @@ private:
     int level;                      // indentation level
     trace_flags flags;              // enabled globally
     trace_flags logging_flags;      // enabled by a #pragma
-    
+    bool enable_system_command;     // enable #pragma wave system() command
+        
     stop_watch elapsed_time;        // trace timings
 };
 

@@ -28,7 +28,10 @@ CHANGELOG
 - Added missing calls to the skipped_token() preprocessing hook which wasn't
   called for pp directives inside disabled #if blocks.
 - Made the context<> type noncopyable.
-
+- Introduced the --extended/-x command line option to the wave driver 
+  executable, which enables the #pragma wave system() directive. This directive
+  is now disabled by default because it may cause a potential security threat.
+  
 Sat Dec 24 13:33:53 CST 2005
 - Version 1.2.2
 - Added three new preprocessing hooks: 'found_directive', 'skipped_token' and 
