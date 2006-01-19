@@ -299,7 +299,7 @@ changes:
 
   class const_node_iterator
     : public boost::iterator_facade<
-          node_iterator
+          const_node_iterator
         , node_base **const**
         , boost::forward_traversal_tag
       >
