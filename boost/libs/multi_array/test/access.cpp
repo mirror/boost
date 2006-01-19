@@ -47,9 +47,9 @@ void access(Array& A, const const_array_tag&) {
       }
 
   // operator()
-  for (index i2 = 0; i2 != 2; ++i2)
-    for (index j2 = 0; j2 != 3; ++j2)
-      for (index k2 = 0; k2 != 4; ++k2) {
+  for (index i2 = idx0; i2 != idx0+2; ++i2)
+    for (index j2 = idx1; j2 != idx1+3; ++j2)
+      for (index k2 = idx2; k2 != idx2+4; ++k2) {
         boost::array<index,ndims> indices;
         indices[0] = i2; indices[1] = j2; indices[2] = k2;
         BOOST_CHECK(A(indices) == A[i2][j2][k2]);
