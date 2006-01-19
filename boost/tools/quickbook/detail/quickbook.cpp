@@ -144,17 +144,27 @@ namespace quickbook
         char const* filein_
       , char const* fileout_
       , int indent
-      , int linewidth)
+      , int linewidth
+      , bool pretty_print)
     {
-        std::stringstream buffer;
+        int result = 0;
+        std::ofstream fileout(fileout_);
         fs::path outdir = fs::path(fileout_, fs::native).branch_path();
         if (outdir.empty())
             outdir = ".";
-        int result = parse(filein_, outdir, buffer);
-        if (result == 0)
+        if (pretty_print)
         {
-            std::ofstream fileout(fileout_);
-            post_process(buffer.str(), fileout, indent, linewidth);
+            std::stringstream buffer;
+            result = parse(filein_, outdir, buffer);
+            if (result == 0)
+            {
+                std::ofstream fileout(fileout_);
+                post_process(buffer.str(), fileout, indent, linewidth);
+            }
+        }
+        else
+        {
+            result = parse(filein_, outdir, fileout);
         }
         return result;
     }
@@ -186,6 +196,7 @@ main(int argc, char* argv[])
         desc.add_options()
             ("help", "produce help message")
             ("version", "print version string")
+            ("no-pretty-print", "disable XML pretty printing")
             ("indent", value<int>(), "indent spaces")
             ("linewidth", value<int>(), "line width")
             ("input-file", value<std::string>(), "input file")
@@ -199,6 +210,7 @@ main(int argc, char* argv[])
         variables_map vm;
         int indent = -1;
         int linewidth = -1;
+        bool pretty_print = true;
         store(command_line_parser(argc, argv).options(desc).positional(p).run(), vm);
         notify(vm);    
     
@@ -213,6 +225,9 @@ main(int argc, char* argv[])
             std::cout << QUICKBOOK_VERSION << std::endl;
             return 0;
         }
+
+        if (vm.count("no-pretty-print"))
+            pretty_print = false;
 
         if (vm.count("indent"))
             indent = vm["indent"].as<int>();
@@ -264,7 +279,7 @@ main(int argc, char* argv[])
                 << fileout
                 << std::endl;
     
-            return quickbook::parse(filein.c_str(), fileout.c_str(), indent, linewidth);
+            return quickbook::parse(filein.c_str(), fileout.c_str(), indent, linewidth, pretty_print);
         }
         else
         {
