@@ -8,6 +8,8 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 #include "./utils.hpp"
+#include <cctype>
+#include <boost/spirit/core.hpp>
 
 namespace quickbook { namespace detail
 {
@@ -41,13 +43,39 @@ namespace quickbook { namespace detail
     {
         out << ch;
     }
+    
+    namespace
+    {
+        bool 
+        find_empty_content_pattern(
+            std::basic_string<char> const& str
+          , std::string::size_type& pos
+          , std::string::size_type& len)
+        {
+            using namespace boost::spirit;
+            typedef std::basic_string<char>::const_iterator iter;
+            for (iter i = str.begin(); i!=str.end(); ++i)
+            {
+                parse_info<iter> r = parse(i, str.end(), '>' >> +blank_p >> '<');
+                if (r.hit)
+                {
+                    pos = i-str.begin();
+                    len = r.length;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
 
     void
     convert_nbsp(std::basic_string<char>& str)
     {
         std::string::size_type pos;
-        while (std::string::npos != (pos = str.find("> <")))
-            str.replace(pos, 3, ">&nbsp;<");
+        std::string::size_type len;
+        while (find_empty_content_pattern(str, pos, len))
+            str.replace(pos, len, ">&nbsp;<");
     }
 
     char

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-<article id="quickbook" name="quickbook" dirname="quickbook" last-revision="$Date$"
+<article id="quickbook" name="quickbook" dirname="quickbook" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
  xmlns:xi="http://www.w3.org/2001/XInclude">
   <articleinfo>
     <author>
@@ -205,8 +205,8 @@
           <emphasis role="bold"><emphasis>bold-italic</emphasis></emphasis>
         </para>
       </section>
-      <section id="quickbook.syntax.phrase.quotes">
-        <title>Quotes</title> 
+      <section id="quickbook.syntax.phrase.quotations">
+        <title>Quotations</title> 
 <programlisting>["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
 </programlisting>
         <para>
@@ -218,11 +218,11 @@
         </para>
         <para>
           Note the proper left and right quote marks. Also, while you can simply
-          use ordinary quotes like &quot;quoted&quot;, our quote, above, will generate
-          correct DocBook quotes (e.g. &lt;quote&gt;quoted&lt;/quote&gt;).
+          use ordinary quote marks like &quot;quoted&quot;, our quotation, above,
+          will generate correct DocBook quotations (e.g. &lt;quote&gt;quoted&lt;/quote&gt;).
         </para>
         <para>
-          Like all phrase elements, quotes may be nested. Example:
+          Like all phrase elements, quotations may be nested. Example:
         </para>
         
 <programlisting>["Here's the rule for bargains: ["Do other men, for they would do you.] That's
@@ -354,8 +354,11 @@ the true business precept.]
           <tgroup cols="1">
             <tbody>
               <row>
-                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject></inlinemediaobject>
-                Thanks to David Barrett, author of <ulink url="http://quinthar.com/qwikiwiki/index.php?page=Home">Qwiki</ulink>,
+                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject>
+                <textobject>
+                  <phrase>note</phrase>
+                </textobject>
+                </inlinemediaobject> Thanks to David Barrett, author of <ulink url="http://quinthar.com/qwikiwiki/index.php?page=Home">Qwiki</ulink>,
                 for sharing these samples and teaching me these obscure formatting
                 rules. I wasn't sure at all if <ulink url="http://spirit.sourceforge.net">Spirit</ulink>,
                 being more or less a formal EBNF parser, can handle the context sensitivity
@@ -389,11 +392,15 @@ the true business precept.]
           <tgroup cols="1">
             <tbody>
               <row>
-                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject></inlinemediaobject>
-                Note that we simply enclose the code with the tick: <literal>"`"</literal>,
-                not the single quote: <code><phrase role="string">&quot;'&quot;</phrase></code>.
-                Note too that <literal>`some code`</literal> is prefered over <literal>[^some
-                code]</literal>. </entry>
+                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject>
+                <textobject>
+                  <phrase>note</phrase>
+                </textobject>
+                </inlinemediaobject> Note that we simply enclose the code with the
+                tick: <literal>"`"</literal>, not the single quote: <code><phrase
+                role="string">&quot;'&quot;</phrase></code>. Note too that <literal>`some
+                code`</literal> is prefered over <literal>[^some code]</literal>.
+                </entry>
               </row>
             </tbody>
           </tgroup>
@@ -495,8 +502,11 @@ C++ comment `// looks like this` whereas a Python comment [python]
           <tgroup cols="1">
             <tbody>
               <row>
-                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject></inlinemediaobject>
-                The source mode strings are lowercase.</entry>
+                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject>
+                <textobject>
+                  <phrase>note</phrase>
+                </textobject>
+                </inlinemediaobject> The source mode strings are lowercase.</entry>
               </row>
             </tbody>
           </tgroup>
@@ -511,10 +521,14 @@ C++ comment `// looks like this` whereas a Python comment [python]
           <tgroup cols="1">
             <tbody>
               <row>
-                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject></inlinemediaobject>
-                Note that <code><phrase role="special">\</phrase><phrase role="identifier">n</phrase></code>
-                is now preferred over <code><phrase role="special">[</phrase><phrase
-                role="identifier">br</phrase><phrase role="special">]</phrase></code>.</entry>
+                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject>
+                <textobject>
+                  <phrase>note</phrase>
+                </textobject>
+                </inlinemediaobject> Note that <code><phrase role="special">\</phrase><phrase
+                role="identifier">n</phrase></code> is now preferred over <code><phrase
+                role="special">[</phrase><phrase role="identifier">br</phrase><phrase
+                role="special">]</phrase></code>.</entry>
               </row>
             </tbody>
           </tgroup>
@@ -650,9 +664,12 @@ escape (no processing/formatting)
           <tgroup cols="1">
             <tbody>
               <row>
-                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/alert.png"></imagedata></imageobject></inlinemediaobject>
-                Be careful when using the escape. The text must conform to <ulink
-                url="http://www.boost.org/doc/html/boostbook.html">BoostBook</ulink>/<ulink
+                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/alert.png"></imagedata></imageobject>
+                <textobject>
+                  <phrase>alert</phrase>
+                </textobject>
+                </inlinemediaobject> Be careful when using the escape. The text must
+                conform to <ulink url="http://www.boost.org/doc/html/boostbook.html">BoostBook</ulink>/<ulink
                 url="http://www.docbook.org/">DocBook</ulink> syntax.</entry>
               </row>
             </tbody>
@@ -1200,6 +1217,48 @@ escape (no processing/formatting)
           </para>
         </blockquote>
       </section>
+      <section id="quickbook.syntax.block.admonitions">
+        <title>Admonitions</title> 
+<programlisting>[note This is a note]
+[tip This is a tip]
+[important This is important]
+[caution This is a caution]
+[warning This is a warning]
+</programlisting>
+        <para>
+          generates <ulink url="http://www.docbook.org/">DocBook</ulink> admonitions:
+        </para>
+        <note>
+          <para>
+            This is a note
+          </para>
+        </note>
+        <tip>
+          <para>
+            This is a tip
+          </para>
+        </tip>
+        <important>
+          <para>
+            This is important
+          </para>
+        </important>
+        <caution>
+          <para>
+            This is a caution
+          </para>
+        </caution>
+        <warning>
+          <para>
+            This is a warning
+          </para>
+        </warning>
+        <para>
+          These are the only admonitions supported by <ulink url="http://www.docbook.org/">DocBook</ulink>.
+          So, for example <literal>[information This is some information]</literal>
+          is unlikely to produce the desired effect.
+        </para>
+      </section>
       <section id="quickbook.syntax.block.headings">
         <title>Headings</title> 
 <programlisting>[h1 Heading 1]
@@ -1269,18 +1328,25 @@ sf_logo
           Now everywhere the sf_logo is placed, the picture will be inlined.
         </para>
         <para>
-          <inlinemediaobject><imageobject><imagedata fileref="http://sourceforge.net/sflogo.php?group_id=28447&amp;type=1"></imagedata></imageobject></inlinemediaobject>
+          <inlinemediaobject><imageobject><imagedata fileref="http://sourceforge.net/sflogo.php?group_id=28447&amp;type=1"></imagedata></imageobject>
+          <textobject>
+            <phrase>sflogo</phrase>
+          </textobject>
+          </inlinemediaobject>
         </para>
         <informaltable frame="all">
           <?dbhtml table-width="74%" ?>
           <tgroup cols="1">
             <tbody>
               <row>
-                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/tip.png"></imagedata></imageobject></inlinemediaobject>
-                It's a good idea to use macro identifiers that are distinguishable.
-                For instance, in this document, macro identifiers have two leading
-                and trailing underscores (e.g. <literal>__spirit__</literal>). The
-                reason is to avoid unwanted macro replacement.</entry>
+                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/tip.png"></imagedata></imageobject>
+                <textobject>
+                  <phrase>tip</phrase>
+                </textobject>
+                </inlinemediaobject> It's a good idea to use macro identifiers that
+                are distinguishable. For instance, in this document, macro identifiers
+                have two leading and trailing underscores (e.g. <literal>__spirit__</literal>).
+                The reason is to avoid unwanted macro replacement.</entry>
               </row>
             </tbody>
           </tgroup>
@@ -1314,7 +1380,11 @@ sf_logo
         </para>
         <para>
           Hi <ulink url="http://spirit.sourceforge.net">Spirit</ulink>&nbsp;<inlinemediaobject><imageobject><imagedata
-          fileref="images/smiley.png"></imagedata></imageobject></inlinemediaobject>
+          fileref="images/smiley.png"></imagedata></imageobject>
+          <textobject>
+            <phrase>smiley</phrase>
+          </textobject>
+          </inlinemediaobject>
         </para>
       </section>
       <section id="quickbook.syntax.block.predefined_macros">
@@ -1334,14 +1404,14 @@ sf_logo
             </thead>
             <tbody>
               <row>
-                <entry>__DATE__</entry><entry>Today's date</entry><entry>2005-Nov-02</entry>
+                <entry>__DATE__</entry><entry>Today's date</entry><entry>2000-Dec-20</entry>
               </row>
               <row>
-                <entry>__TIME__</entry><entry>The current time</entry><entry>09:08:09
+                <entry>__TIME__</entry><entry>The current time</entry><entry>12:00:00
                 PM</entry>
               </row>
               <row>
-                <entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>C:\boost\cvs\boost\tools\quickbook\doc\quickbook.qbk</entry>
+                <entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>NO_FILENAME_MACRO_GENERATED_IN_DEBUG_MODE</entry>
               </row>
             </tbody>
           </tgroup>
@@ -1364,9 +1434,12 @@ sf_logo
           <tgroup cols="1">
             <tbody>
               <row>
-                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/smiley.png"></imagedata></imageobject></inlinemediaobject>&nbsp;<emphasis
-                role="bold">An eye catching advertisement or note...</emphasis><sbr/>
-                <sbr/> <ulink url="http://spirit.sourceforge.net">Spirit</ulink>
+                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/smiley.png"></imagedata></imageobject>
+                <textobject>
+                  <phrase>smiley</phrase>
+                </textobject>
+                </inlinemediaobject>&nbsp;<emphasis role="bold">An eye catching advertisement
+                or note...</emphasis><sbr/> <sbr/> <ulink url="http://spirit.sourceforge.net">Spirit</ulink>
                 is an object-oriented recursive-descent parser generator framework
                 implemented using template meta-programming techniques. Expression
                 templates allow us to approximate the syntax of Extended Backus-Normal
@@ -1771,6 +1844,10 @@ sf_logo
           <row>
             <entry>blurb</entry><entry><literal>[blurb advertisement or note...]</literal></entry><entry><link
             linkend="quickbook.syntax.block.blurbs">Blurbs</link></entry>
+          </row>
+          <row>
+            <entry>admonition</entry><entry><literal>[warning Warning text...]</literal></entry><entry><link
+            linkend="quickbook.syntax.block.admonitions">Admonitions</link></entry>
           </row>
           <row>
             <entry>table</entry><entry><literal>[table Title<sbr/> [[a][b][c]]<sbr/>

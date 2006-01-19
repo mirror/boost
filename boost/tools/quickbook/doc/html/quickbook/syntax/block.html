@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title> Block Level Elements</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.69.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../index.html" title="quickbook 1.3">
 <link rel="up" href="../syntax.html" title=" Syntax Summary">
 <link rel="prev" href="phrase.html" title=" Phrase Level Elements">
@@ -106,15 +106,15 @@
           quickbook 1.3 declares the version of quickbook the document is written
           for. In its absence, version 1.1 is assumed.
         </p>
-<p><code class="literal">version</code>, <code class="literal">id</code>, <code class="literal">dirname</code>,
-          <code class="literal">copyright</code>, <code class="literal">purpose</code>, <code class="literal">category</code>,
-          <code class="literal">authors</code>, <code class="literal">license</code>, <code class="literal">last-revision</code>
-          and <code class="literal">source-mode</code> are optional information.
+<p><tt class="literal">version</tt>, <tt class="literal">id</tt>, <tt class="literal">dirname</tt>,
+          <tt class="literal">copyright</tt>, <tt class="literal">purpose</tt>, <tt class="literal">category</tt>,
+          <tt class="literal">authors</tt>, <tt class="literal">license</tt>, <tt class="literal">last-revision</tt>
+          and <tt class="literal">source-mode</tt> are optional information.
         </p>
-<p><code class="literal">source-type</code> is a lowercase string setting the initial
+<p><tt class="literal">source-type</tt> is a lowercase string setting the initial
           <a href="phrase.html#quickbook.syntax.phrase.source_mode" title="Source Mode">Source Mode</a>.
-          If the <code class="literal">source-mode</code> field is omitted, a default value
-          of <code class="literal">c++</code> will be used.
+          If the <tt class="literal">source-mode</tt> field is omitted, a default value
+          of <tt class="literal">c++</tt> will be used.
         </p>
 </div>
 <div class="section" lang="en">
@@ -128,8 +128,8 @@
 <p>
           where <span class="emphasis"><em>id</em></span> is optional. id will be the filename of the
           generated section. If it is not present, "The Section Title"
-          will be normalized and become the id. Valid characters are <code class="literal">a-Z</code>,
-          <code class="literal">A-Z</code>, <code class="literal">0-9</code> and <code class="literal">_</code>.
+          will be normalized and become the id. Valid characters are <tt class="literal">a-Z</tt>,
+          <tt class="literal">A-Z</tt>, <tt class="literal">0-9</tt> and <tt class="literal">_</tt>.
           All non-valid characters are converted to underscore and all upper-case
           are converted to lower case. Thus: "The Section Title" will be
           normalized to "the_section_title".
@@ -498,7 +498,7 @@
 <a name="quickbook.syntax.block.preformatted"></a>Preformatted</h4></div></div></div>
 <p>
           Sometimes, you don't want some preformatted text to be parsed as C++. In
-          such cases, use the <code class="literal">[pre ... ]</code> markup block.
+          such cases, use the <tt class="literal">[pre ... ]</tt> markup block.
         </p>
 <pre class="programlisting">[pre
 
@@ -515,16 +515,16 @@
           level markup, pre (and Code) are the only ones that allow multiple newlines.
           The markup above will generate:
         </p>
-<pre class="programlisting">Some <span class="bold"><strong>preformatted</strong></span> text                    Some <span class="bold"><strong>preformatted</strong></span> text
+<pre class="programlisting">Some <span class="bold"><b>preformatted</b></span> text                    Some <span class="bold"><b>preformatted</b></span> text
 
-    Some <span class="bold"><strong>preformatted</strong></span> text            Some <span class="bold"><strong>preformatted</strong></span> text
+    Some <span class="bold"><b>preformatted</b></span> text            Some <span class="bold"><b>preformatted</b></span> text
 
-        Some <span class="bold"><strong>preformatted</strong></span> text    Some <span class="bold"><strong>preformatted</strong></span> text
+        Some <span class="bold"><b>preformatted</b></span> text    Some <span class="bold"><b>preformatted</b></span> text
 
 </pre>
 <p>
           Notice that unlike Code, phrase markup such as font style is still permitted
-          inside <code class="literal">pre</code> blocks.
+          inside <tt class="literal">pre</tt> blocks.
         </p>
 </div>
 <div class="section" lang="en">
@@ -553,7 +553,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td align="left" valign="top"><p>
+<tr><td colspan="2" align="left" valign="top"><p>
             This is a note
           </p></td></tr>
 </table></div>
@@ -562,7 +562,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../images/tip.png"></td>
 <th align="left">Tip</th>
 </tr>
-<tr><td align="left" valign="top"><p>
+<tr><td colspan="2" align="left" valign="top"><p>
             This is a tip
           </p></td></tr>
 </table></div>
@@ -571,7 +571,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../../images/important.png"></td>
 <th align="left">Important</th>
 </tr>
-<tr><td align="left" valign="top"><p>
+<tr><td colspan="2" align="left" valign="top"><p>
             This is important
           </p></td></tr>
 </table></div>
@@ -580,7 +580,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../images/caution.png"></td>
 <th align="left">Caution</th>
 </tr>
-<tr><td align="left" valign="top"><p>
+<tr><td colspan="2" align="left" valign="top"><p>
             This is a caution
           </p></td></tr>
 </table></div>
@@ -589,13 +589,13 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../images/warning.png"></td>
 <th align="left">Warning</th>
 </tr>
-<tr><td align="left" valign="top"><p>
+<tr><td colspan="2" align="left" valign="top"><p>
             This is a warning
           </p></td></tr>
 </table></div>
 <p>
           These are the only admonitions supported by <a href="http://www.docbook.org/" target="_top">DocBook</a>.
-          So, for example <code class="literal">[information This is some information]</code>
+          So, for example <tt class="literal">[information This is some information]</tt>
           is unlikely to produce the desired effect.
         </p>
 </div>
@@ -610,27 +610,27 @@
 [h6 Heading 6]
 </pre>
 <a name="quickbook.syntax.block.headings.heading_1"></a><h1>
-<a name="id444313"></a>
+<a name="id444414"></a>
           Heading 1
         </h1>
 <a name="quickbook.syntax.block.headings.heading_2"></a><h2>
-<a name="id444324"></a>
+<a name="id444425"></a>
           Heading 2
         </h2>
 <a name="quickbook.syntax.block.headings.heading_3"></a><h3>
-<a name="id444336"></a>
+<a name="id444437"></a>
           Heading 3
         </h3>
 <a name="quickbook.syntax.block.headings.heading_4"></a><h4>
-<a name="id444347"></a>
+<a name="id444448"></a>
           Heading 4
         </h4>
 <a name="quickbook.syntax.block.headings.heading_5"></a><h5>
-<a name="id444359"></a>
+<a name="id444460"></a>
           Heading 5
         </h5>
 <a name="quickbook.syntax.block.headings.heading_6"></a><h5>
-<a name="id444371"></a>
+<a name="id444472"></a>
           Heading 6
         </h5>
 <p>
@@ -667,22 +667,21 @@ sf_logo
 <p>
           Now everywhere the sf_logo is placed, the picture will be inlined.
         </p>
-<p><span class="inlinemediaobject"><img src="http://sourceforge.net/sflogo.php?group_id=28447&amp;type=1"></span></p>
+<p><span class="inlinemediaobject"></span></p>
 <div class="informaltable"><table class="table">
 <colgroup><col></colgroup>
 <tbody><tr><td class="blurb">
-<span class="inlinemediaobject"><img src="../../images/tip.png"></span>
-                It's a good idea to use macro identifiers that are distinguishable.
-                For instance, in this document, macro identifiers have two leading
-                and trailing underscores (e.g. <code class="literal">__spirit__</code>). The
-                reason is to avoid unwanted macro replacement.</td></tr></tbody>
+<span class="inlinemediaobject"><img src="../../images/tip.png" alt="tip"></span> It's a good idea to use macro identifiers that
+                are distinguishable. For instance, in this document, macro identifiers
+                have two leading and trailing underscores (e.g. <tt class="literal">__spirit__</tt>).
+                The reason is to avoid unwanted macro replacement.</td></tr></tbody>
 </table></div>
 <p>
-          Links (URLS) and images are good candidates for macros. <span class="bold"><strong>1</strong></span>)
+          Links (URLS) and images are good candidates for macros. <span class="bold"><b>1</b></span>)
           They tend to change a lot. It is a good idea to place all links and images
-          in one place near the top to make it easy to make changes. <span class="bold"><strong>2</strong></span>)
-          The syntax is not pretty. It's easier to read and write, e.g. <code class="literal">__spirit__</code>
-          than <code class="literal">[@http://spirit.sourceforge.net Spirit]</code>.
+          in one place near the top to make it easy to make changes. <span class="bold"><b>2</b></span>)
+          The syntax is not pretty. It's easier to read and write, e.g. <tt class="literal">__spirit__</tt>
+          than <tt class="literal">[@http://spirit.sourceforge.net Spirit]</tt>.
         </p>
 <p>
           Some more examples:
@@ -703,7 +702,7 @@ sf_logo
           will generate this:
         </p>
 <p>
-          Hi <a href="http://spirit.sourceforge.net" target="_top">Spirit</a><span class="inlinemediaobject"><img src="../../images/smiley.png"></span></p>
+          Hi <a href="http://spirit.sourceforge.net" target="_top">Spirit</a> <span class="inlinemediaobject"><img src="../../images/smiley.png" alt="smiley"></span></p>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
@@ -713,7 +712,7 @@ sf_logo
         </p>
 <div class="informaltable">
 <h4>
-<a name="id444631"></a><span class="table-title">Predefined Macros</span>
+<a name="id444730"></a><span class="table-title">Predefined Macros</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -730,12 +729,12 @@ sf_logo
 <tr>
 <td>__DATE__</td>
 <td>Today's date</td>
-<td>2005-Nov-15</td>
+<td>2006-Jan-19</td>
 </tr>
 <tr>
 <td>__TIME__</td>
 <td>The current time</td>
-<td>11:13:23
+<td>02:10:01
                 PM</td>
 </tr>
 <tr>
@@ -763,7 +762,8 @@ sf_logo
 <div class="informaltable"><table class="table">
 <colgroup><col></colgroup>
 <tbody><tr><td class="blurb">
-<span class="inlinemediaobject"><img src="../../images/smiley.png"></span><span class="bold"><strong>An eye catching advertisement or note...</strong></span><br><br><a href="http://spirit.sourceforge.net" target="_top">Spirit</a>
+<span class="inlinemediaobject"><img src="../../images/smiley.png" alt="smiley"></span> <span class="bold"><b>An eye catching advertisement
+                or note...</b></span><br><br><a href="http://spirit.sourceforge.net" target="_top">Spirit</a>
                 is an object-oriented recursive-descent parser generator framework
                 implemented using template meta-programming techniques. Expression
                 templates allow us to approximate the syntax of Extended Backus-Normal
@@ -785,7 +785,7 @@ sf_logo
         </p>
 <div class="informaltable">
 <h4>
-<a name="id444754"></a><span class="table-title">A Simple Table</span>
+<a name="id444858"></a><span class="table-title">A Simple Table</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -819,7 +819,7 @@ sf_logo
 </div>
 <p>
           The table title is optional. The first row of the table is automatically
-          treated as the table header; that is, it is wrapped in <code class="literal">&lt;thead&gt;...&lt;/thead&gt;</code>
+          treated as the table header; that is, it is wrapped in <tt class="literal">&lt;thead&gt;...&lt;/thead&gt;</tt>
           XML tags. Note that unlike the original QuickDoc, the columns are nested
           in [ cells... ]. The syntax is free-format and allows big cells to be formatted
           nicely. Example:
@@ -846,7 +846,7 @@ sf_logo
         </p>
 <div class="informaltable">
 <h4>
-<a name="id444840"></a><span class="table-title">Table with fat cells</span>
+<a name="id444943"></a><span class="table-title">Table with fat cells</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -894,7 +894,7 @@ sf_logo
 </pre>
 <div class="informaltable">
 <h4>
-<a name="id444895"></a><span class="table-title">Table with code</span>
+<a name="id445004"></a><span class="table-title">Table with code</span>
 </h4>
 <table class="table">
 <colgroup>
@@ -910,10 +910,10 @@ sf_logo
 <td><pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting">
 <span class="comment">#include &lt;iostream&gt;
 </span>
-<span class="identifier">int</span><span class="identifier">main</span><span class="special">()</span>
+<span class="identifier">int</span> <span class="identifier">main</span><span class="special">()</span>
 <span class="special">{</span>
-    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">&lt;&lt;</span><span class="string">"Hello, World!"</span><span class="special">&lt;&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-    <span class="keyword">return</span><span class="number">0</span><span class="special">;</span>
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="string">"Hello, World!"</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
 <span class="special">}</span>
 </pre></td>
 </tr></tbody>
@@ -982,7 +982,7 @@ sf_logo
           of two sections having the same name. Since QuickBook generates an anchor
           for each section based on the section name, it is possible to end up with
           two identically named anchors, leading to link ambiguities. To resolve
-          these ambiguities, the <code class="literal">[include]</code> directive lets you
+          these ambiguities, the <tt class="literal">[include]</tt> directive lets you
           specify a document id to use for the included file. You can use it like
           this:
         </p>
@@ -992,11 +992,11 @@ sf_logo
           When using this form, all auto-generated anchors will use "someid"
           as a unique prefix. So for instance, if there is a section in someother.qbk
           named "Intro", the named anchor for that section will be "someid.intro",
-          and you can link to it with <code class="literal">[link someid.intro The Intro]</code>.
+          and you can link to it with <tt class="literal">[link someid.intro The Intro]</tt>.
         </p>
 </div>
 </div>
-<table width="100%"><tr>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
 <td align="right"><small>Copyright © 2002, 2004 Joel de Guzman, Eric Niebler</small></td>
 </tr></table>
