@@ -158,7 +158,6 @@ namespace quickbook
             result = parse(filein_, outdir, buffer);
             if (result == 0)
             {
-                std::ofstream fileout(fileout_);
                 post_process(buffer.str(), fileout, indent, linewidth);
             }
         }
