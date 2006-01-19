@@ -7,21 +7,29 @@
 //  including a TR1 extention header; we must suppress this otherwise
 //  we can end up with cyclic dependencies with some std lib implementations.
 //
-//#ifndef BOOST_TR1_new_INCLUDED
-//#  define BOOST_TR1_new_INCLUDED
-#  ifndef BOOST_TR1_NO_RECURSION
+#ifdef BOOST_TR1_NO_new_RECURSION2
+#  define BOOST_TR1_NO_new_RECURSION3
+#elif defined(BOOST_TR1_NO_new_RECURSION)
+#  define BOOST_TR1_NO_new_RECURSION2
+#elif !defined(BOOST_TR1_NO_RECURSION)
 #     define BOOST_TR1_NO_RECURSION
 #     define BOOST_TR1_NO_new_RECURSION
-#  endif
+#endif
+
 #  include <boost/tr1/detail/config.hpp>
 #  ifdef BOOST_HAS_INCLUDE_NEXT
 #     include_next <new>
 #  else
 #     include BOOST_TR1_STD_HEADER(new)
 #  endif
-#  ifdef BOOST_TR1_NO_new_RECURSION
+
+#ifdef BOOST_TR1_NO_new_RECURSION3
+#  undef BOOST_TR1_NO_new_RECURSION2
+#elif defined(BOOST_TR1_NO_new_RECURSION2)
+#  undef BOOST_TR1_NO_new_RECURSION2
+#elif defined(BOOST_TR1_NO_new_RECURSION)
 #     undef BOOST_TR1_NO_new_RECURSION
 #     undef BOOST_TR1_NO_RECURSION
-#  endif
-//#endif
+#endif
+
 
