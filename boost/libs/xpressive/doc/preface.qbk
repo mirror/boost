@@ -42,5 +42,7 @@ _regexpp_ library and his _proposal_
 to add regular expressions to the Standard Library. I also drew a great deal of
 inspiration from Joel de Guzman's _spirit_fx_, which served as the model
 for static xpressive. Other sources of inspiration are the _perl6_ redesign and _greta_.
+(You can read a summary of the changes Perl 6 will bring to regex culture
+[@http://dev.perl.org/perl6/doc/design/syn/S05.html here].)
 
 [endsect]

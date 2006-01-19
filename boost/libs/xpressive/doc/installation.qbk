@@ -26,15 +26,16 @@ libraries from [@http://boost.org]. xpressive requires Boost version 1.32 or hig
 
 [h2 Supported Compilers]
 
-Currently, xpressive is known to work on the following compilers:
+Currently, Boost.Xpressive is known to work on the following compilers:
 
 * Visual C++ 7.1 and higher
-* GNU C++ 3.3 and higher
-* Intel for Linux 9.0 and higher
+* GNU C++ 3.2 and higher
+* Intel for Linux 8.1 and higher
 * Intel for Windows 8.1 and higher
 * tru64cxx 65 and higher
 * QNX qcc 3.3 and higher
 * MinGW 3.4 and higher
+* Metrowerks CodeWarrior for Windows 9.4
 
 Check the latest tests results at Boost's
 [@http://engineering.meta-comm.com/boost-regression/CVS-HEAD/developer/xpressive.html Regression Results Page].

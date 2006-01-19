@@ -98,13 +98,13 @@ use `s1` later in the pattern to find the matching end tag.
 
 [tip [*Grouping without capturing a back-reference] \n\n In
 xpressive, if you just want grouping without capturing a back-reference, you
-can just use `()` without `s1`. That is the equivalent of Perl's `(?:)`
+can just use `()` without `s1`. That is the equivalent of Perl's [^(?:)]
 non-capturing grouping construct.]
 
 [h2 Case-Insensitivity and Internationalization]
 
 Perl lets you make part of your regular expression case-insensitive by using
-the `(?i:)` pattern modifier. xpressive also has a case-insensitivity
+the [^(?i:)] pattern modifier. xpressive also has a case-insensitivity
 pattern modifier, called `icase`. You can use it as follows:
 
     sregex re = "this" >> icase( "that" );
@@ -125,7 +125,9 @@ follows:
     sregex re = imbue( my_locale )( +alpha >> +digit );
 
 This regular expression will evaluate `alpha` and `digit` according to
-`my_locale`.
+`my_locale`. See the section on [link boost_xpressive.user_s_guide.localization_and_regex_traits
+Localization and Regex Traits] for more information about how to customize
+the behavior of your regexes.
 
 [h2 Static xpressive Syntax Cheat Sheet]
 
