@@ -346,7 +346,7 @@ namespace boost {
 
         // Function objects
         template<typename FunctionObj>
-        void init(FunctionObj f, function_obj_tag)
+        void init(FunctionObj /*f*/, function_obj_tag)
         {
           typedef typename BOOST_FUNCTION_GET_FUNCTION_OBJ_INVOKER<
                              FunctionObj,
@@ -404,7 +404,7 @@ namespace boost {
         // Reference to a function object
         template<typename FunctionObj>
         void 
-        init(const reference_wrapper<FunctionObj>& f, function_obj_ref_tag)
+        init(const reference_wrapper<FunctionObj>& /*f*/, function_obj_ref_tag)
         {
           typedef typename BOOST_FUNCTION_GET_FUNCTION_REF_INVOKER<
                              FunctionObj,
