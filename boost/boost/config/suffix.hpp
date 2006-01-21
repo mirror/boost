@@ -30,11 +30,12 @@
 // remember that since these just declare a bunch of macros, there should be
 // no namespace issues from this.
 //
-#include <limits.h>
-# if !defined(BOOST_HAS_LONG_LONG)                                              \
-   && !defined(BOOST_MSVC) && !defined(__BORLANDC__)     \
-   && (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX))
-#  define BOOST_HAS_LONG_LONG
+#if !defined(BOOST_HAS_LONG_LONG)                                               \
+   && !defined(BOOST_MSVC) && !defined(__BORLANDC__)
+# include <limits.h>
+# if (defined(ULLONG_MAX) || defined(ULONG_LONG_MAX) || defined(ULONGLONG_MAX))
+#   define BOOST_HAS_LONG_LONG
+# endif
 #endif
 
 // GCC 3.x will clean up all of those nasty macro definitions that
