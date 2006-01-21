@@ -26,7 +26,9 @@
 # ifndef BOOST_PP_CONFIG_FLAGS
 #    if defined(__GCCXML__)
 #        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_STRICT())
-#    elif defined(__SPIRIT_PP__) || defined(__MWERKS__) && __MWERKS__ >= 0x3200
+#    elif defined(__WAVE__)
+#        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_STRICT())
+#    elif defined(__MWERKS__) && __MWERKS__ >= 0x3200
 #        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_STRICT())
 #    elif defined(__EDG__) || defined(__EDG_VERSION__)
 #        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_EDG() | BOOST_PP_CONFIG_STRICT())
