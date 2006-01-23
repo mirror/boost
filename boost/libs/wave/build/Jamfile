@@ -17,6 +17,7 @@ SOURCES = instantiate_cpp_exprgrammar
           instantiate_predef_macros 
           instantiate_re2c_lexer
           instantiate_re2c_lexer_str
+          token_ids.cpp
           cpplexer/re2clex/aq 
           cpplexer/re2clex/cpp_re
     ;
