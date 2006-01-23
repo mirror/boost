@@ -62,7 +62,7 @@ main(int argc, char *argv[])
 
             if (data->id != boost::wave::token_id(*it)) {
                 BOOST_TEST(data->id == boost::wave::token_id(*it));
-                std::cerr << "Expected: " 
+                std::cerr << data->token << ": expected: " 
                     << boost::wave::get_token_name(data->id);
                 std::cerr << ", found: " 
                     << boost::wave::get_token_name(boost::wave::token_id(*it)) 

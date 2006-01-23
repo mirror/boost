@@ -33,10 +33,14 @@ CHANGELOG
   is now disabled by default because it may cause a potential security threat.
 - Change the what() function of the macro_handling_exception class, which now
   correctly returns the name of the exception type itself.
-- Added a message to the wave driver executable, which is issued whenever a 
-  #pragma wave system() directive is found, but the -x (--extended) command 
-  line argument was not given.
-  
+- Added a diagnostic message to the wave driver executable, which is issued 
+  whenever a #pragma wave system() directive is found, but the -x (--extended) 
+  command line argument was not given.
+- Fixed long integer suffix to be allowed to be mixed case (1Ll or 2lL).
+- Fixed the BOOST_PP_CAT(1e, -1) pp-token bug. Wave now correctly recognizes
+  pp-number tokens, which are converted to C++ tokens right before they are 
+  returned from the library.
+
 Sat Dec 24 13:33:53 CST 2005
 - Version 1.2.2
 - Added three new preprocessing hooks: 'found_directive', 'skipped_token' and 

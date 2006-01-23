@@ -54,6 +54,7 @@ typedef struct Scanner {
     aq_queue eol_offsets;
     int enable_ms_extensions;   /* enable MS extensions */
     int act_in_c99_mode;        /* lexer works in C99 mode */
+    int detect_pp_numbers;      /* lexer should prefer to detect pp-numbers */
 } Scanner;
 
 ///////////////////////////////////////////////////////////////////////////////

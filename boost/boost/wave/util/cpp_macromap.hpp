@@ -194,7 +194,7 @@ protected:
     template <typename ContainerT>
     bool is_valid_concat(string_type new_value, 
         position_type const &pos, ContainerT &rescanned);
-
+    
 private:
     defined_macros_type *current_macros;                   // current symbol table
     boost::shared_ptr<defined_macros_type> defined_macros; // global symbol table
@@ -1354,7 +1354,7 @@ macromap<ContextT>::resolve_operator_pragma(IteratorT &first,
     argument_iterator_type end_it = arguments[0].end();
     expand_whole_tokensequence(expanded, begin_it, end_it, false);
 
-// unescape the parameter of the operator _Pragma
+// un-escape the parameter of the operator _Pragma
     typedef typename token_type::string_type string_type;
     
     string_type pragma_cmd;
@@ -1398,7 +1398,7 @@ macromap<ContextT>::resolve_operator_pragma(IteratorT &first,
     for (/**/; it != end; ++it) 
         pragma.push_back(*it);
 
-// analyze the preprocessed tokensequence and eventually dispatch to the 
+// analyze the preprocessed token sequence and eventually dispatch to the 
 // associated action
     if (interpret_pragma(ctx, pragma_token, pragma.begin(), pragma.end(), 
         pending))
@@ -1420,7 +1420,7 @@ macromap<ContextT>::resolve_operator_pragma(IteratorT &first,
 //
 //  Test, whether the result of a concat operator is well formed or not. 
 //
-//  This is done by re-scanning (re-tokenising) the resulting token sequence, 
+//  This is done by re-scanning (re-tokenizing) the resulting token sequence, 
 //  which should give back exactly one token.
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -1430,12 +1430,12 @@ inline bool
 macromap<ContextT>::is_valid_concat(string_type new_value, 
     position_type const &pos, ContainerT &rescanned)
 {
-// retokenise the newly generated string
+// re-tokenize the newly generated string
     typedef typename ContextT::lexer_type lexer_type;
     
     std::string value_to_test(new_value.c_str());
     lexer_type it = lexer_type(value_to_test.begin(), value_to_test.end(), pos, 
-        ctx.get_language());
+        boost::wave::enable_prefer_pp_numbers(ctx.get_language()));
     lexer_type end = lexer_type();
     for (/**/; it != end && T_EOF != token_id(*it); ++it) 
         rescanned.push_back(*it);
@@ -1453,7 +1453,7 @@ macromap<ContextT>::is_valid_concat(string_type new_value,
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  Handle all occurences of the concatenation operator '##' inside the given
+//  Handle all occurrences of the concatenation operator '##' inside the given
 //  token sequence.
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -1519,29 +1519,6 @@ macromap<ContextT>::concat_tokensequence(ContainerT &expanded)
 
             concat_result = ((*prev).get_value() + (*next).get_value());
 
-        // Here we have to work around a conflict between the Standards 
-        // requirement, that the preprocessor has to act upon so called 
-        // pp-tokens and the fact, that Wave acts upon C++ tokens. So we have 
-        // sometimes to combine the current token with the next tokens
-        // if these are of type T_IDENTIFIER or T_INTLIT following without any 
-        // interventing whitespace.
-        // Please note though, that this hack unfortunately doesn't fix all
-        // problems related with pp-numbers as specified by the Standard.
-        iterator_type save = next;
-        
-            if (IS_CATEGORY(*prev, IdentifierTokenType) && 
-                T_INTLIT == token_id(*save)) 
-            {
-            token_id id = impl::next_token<iterator_type>::peek(next, end, false);
-            
-                if (IS_CATEGORY(id, IdentifierTokenType) || 
-                    IS_CATEGORY(id, KeywordTokenType) ||
-                    IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType))
-                {
-                    concat_result += (*++next).get_value();
-                }
-            }
-
         // analyze the validity of the concatenation result
             if (!is_valid_concat(concat_result, (*prev).get_position(), 
                     rescanned) &&
@@ -1552,7 +1529,7 @@ macromap<ContextT>::concat_tokensequence(ContainerT &expanded)
             
                 error_string += (*prev).get_value();
                 error_string += "\" and \"";
-                error_string += (*save).get_value();
+                error_string += (*next).get_value();
                 error_string += "\"";
                 BOOST_WAVE_THROW(preprocess_exception, invalid_concat,
                     error_string.c_str(), main_pos);
@@ -1564,12 +1541,12 @@ macromap<ContextT>::concat_tokensequence(ContainerT &expanded)
                 expanded.erase(prev, ++next);       // remove not needed tokens   
                 
             // some stl implementations clear() the container if we erased all
-            // the elements, which orphans all iterators. we re-initialise these 
+            // the elements, which orphans all iterators. we re-initialize these 
             // here
                 if (expanded.empty()) 
                     end = next = expanded.end();
                     
-            // replace the old token (pointed to by *prev) with the retokenized
+            // replace the old token (pointed to by *prev) with the re-tokenized
             // sequence
                 expanded.splice(next, rescanned);
 

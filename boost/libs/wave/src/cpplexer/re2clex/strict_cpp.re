@@ -21,6 +21,7 @@ OctalDigit         = [0-7];
 Digit              = [0-9];
 HexDigit           = [a-fA-F0-9];
 Integer            = (("0" [xX] HexDigit+) | ("0" OctalDigit*) | ([1-9] Digit*));
+ExponentStart      = [Ee] [+-];
 ExponentPart       = [Ee] [+-]? Digit+;
 FractionalConstant = (Digit* "." Digit+) | (Digit+ ".");
 FloatingSuffix     = [fF] [lL]? | [lL] [fF]?;
@@ -33,11 +34,13 @@ UniversalChar      = Backslash ("u" HexQuad | "U" HexQuad HexQuad);
 Newline            = "\r\n" | "\n" | "\r";
 PPSpace            = ([ \t]|("/*"(any\[*]|Newline|("*"+(any\[*/]|Newline)))*"*"+"/"))*;
 Pound              = "#" | "??=" | "%:";
+NonDigit           = [a-zA-Z_] | UniversalChar;
 */
 
 /*!re2c
     "/*"            { goto ccomment; }
     "//"            { goto cppcomment; }
+    "."? Digit      { goto pp_number; }
     
     "asm"           { BOOST_WAVE_RET(T_ASM); }
     "auto"          { BOOST_WAVE_RET(T_AUTO); }
@@ -236,15 +239,6 @@ Pound              = "#" | "??=" | "%:";
     ([a-zA-Z_] | UniversalChar) ([a-zA-Z_0-9] | UniversalChar)*
         { BOOST_WAVE_RET(T_IDENTIFIER); }
 
-    Integer LongIntegerSuffix
-        { BOOST_WAVE_RET(T_LONGINTLIT); }
-
-    Integer IntegerSuffix?
-        { BOOST_WAVE_RET(T_INTLIT); }
-
-    ((FractionalConstant ExponentPart?) | (Digit+ ExponentPart)) FloatingSuffix?
-        { BOOST_WAVE_RET(T_FLOATLIT); }
-    
     "L"? (['] (EscapeSequence|any\[\n\r\\']|UniversalChar)+ ['])
         { BOOST_WAVE_RET(T_CHARLIT); }
     
@@ -381,3 +375,29 @@ cppcomment:
         BOOST_WAVE_RET(T_CPPCOMMENT);
     }
 */
+
+pp_number:
+{
+    cursor = uchar_wrapper(s->tok = s->cur, s->column = s->curr_column);
+    marker = uchar_wrapper(s->ptr);
+    limit = uchar_wrapper(s->lim);
+
+    if (s->detect_pp_numbers) {
+    /*!re2c
+        "."? Digit (Digit | NonDigit | ExponentStart | ".")*
+            { BOOST_WAVE_RET(T_PP_NUMBER); }
+    */
+    }
+    else {
+    /*!re2c
+        ((FractionalConstant ExponentPart?) | (Digit+ ExponentPart)) FloatingSuffix?
+            { BOOST_WAVE_RET(T_FLOATLIT); }
+            
+        Integer LongIntegerSuffix
+            { BOOST_WAVE_RET(T_LONGINTLIT); }
+
+        Integer IntegerSuffix?
+            { BOOST_WAVE_RET(T_INTLIT); }
+    */
+    }
+}

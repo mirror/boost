@@ -250,7 +250,9 @@ public:
             IteratorT const &last_, typename ContextT::position_type const &pos_)
     :   ctx(ctx_), 
         iter_ctx(new base_iteration_context_type(
-                lexer_type(first_, last_, pos_, ctx_.get_language()), lexer_type(), 
+                lexer_type(first_, last_, pos_, 
+                    boost::wave::enable_prefer_pp_numbers(ctx.get_language())), 
+                lexer_type(), 
                 pos_.get_file().c_str()
             )), 
         seen_newline(true), must_emit_line_directive(false),
@@ -428,7 +430,7 @@ pp_iterator_functor<ContextT>::operator()()
 {
     using namespace boost::wave;
 
-// loop over skippable whitespace until something significant is found
+// loop over skip able whitespace until something significant is found
 bool skipped_newline = false;
 bool was_seen_newline = seen_newline;
 token_id id = T_UNKNOWN;
@@ -480,6 +482,26 @@ token_id id = T_UNKNOWN;
         ++iter_ctx->emitted_lines;
         break;
 
+    case T_PP_NUMBER:
+        {
+        // re-tokenize the pp-number
+            token_sequence_type rescanned;
+            
+            std::string value_to_test(act_token.get_value().c_str());
+            lexer_type it = lexer_type(value_to_test.begin(), 
+                value_to_test.end(), act_token.get_position(), 
+                ctx.get_language());
+            lexer_type end = lexer_type();
+            for (/**/; it != end && T_EOF != token_id(*it); ++it) 
+                rescanned.push_back(*it);
+                
+            pending_queue.splice(pending_queue.begin(), rescanned);
+            act_token = pending_queue.front();
+            id = token_id(act_token);
+            pending_queue.pop_front();
+        }
+        break;
+        
     case T_EOF:
         seen_newline = true;
         break;
@@ -1516,7 +1538,7 @@ namespace {
         int &line, StringT &file)
     {
         using namespace boost::wave;
-        if (T_INTLIT == token_id(*first)) {
+        if (T_PP_NUMBER == token_id(*first)) {
         // extract line number
             using namespace std;    // some systems have atoi in namespace std
             line = atoi((*first).get_value().c_str());

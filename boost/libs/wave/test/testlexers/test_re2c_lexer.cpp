@@ -57,14 +57,19 @@ main(int argc, char *argv[])
 
             if (data->id != boost::wave::token_id(*it)) {
                 BOOST_TEST(data->id == boost::wave::token_id(*it));
-                std::cerr << "Expected: " 
+                std::cerr << data->token << ": expected: " 
                     << boost::wave::get_token_name(data->id);
                 std::cerr << ", found: " 
                     << boost::wave::get_token_name(boost::wave::token_id(*it)) 
                     << std::endl;
             }
             BOOST_TEST(++it != end);
-            BOOST_TEST(boost::wave::T_EOF == boost::wave::token_id(*it));
+            if (boost::wave::T_EOF != boost::wave::token_id(*it)) {
+                BOOST_TEST(boost::wave::T_EOF == boost::wave::token_id(*it));
+                std::cerr << data->token << ": not fully matched, " 
+                    << "first non-matched token was: " << (*it).get_value()
+                    << std::endl;
+            }
         }
 
 #if defined(TESTLEXERS_TIMING)

@@ -123,6 +123,8 @@ lexer<IteratorT, PositionT>::lexer(IteratorT const &first,
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
     scanner.act_in_c99_mode = boost::wave::need_c99(language);
 #endif
+
+    scanner.detect_pp_numbers = boost::wave::need_prefer_pp_numbers(language);
 }
 
 template <typename IteratorT, typename PositionT>
@@ -204,6 +206,7 @@ lexer<IteratorT, PositionT>::get()
     case T_SPACE:
     case T_SPACE2:
     case T_ANY:
+    case T_PP_NUMBER:
         value = string_type((char const *)scanner.tok, 
             scanner.cur-scanner.tok);
         break;
@@ -258,6 +261,8 @@ lexer<IteratorT, PositionT>::get()
         break;
     }
     
+//     std::cerr << boost::wave::get_token_name(id) << ": " << value << std::endl;
+
     // the re2c lexer reports the new line number for newline tokens
     return lex_token<PositionT>(id, value, 
         PositionT(filename, actline, scanner.column));

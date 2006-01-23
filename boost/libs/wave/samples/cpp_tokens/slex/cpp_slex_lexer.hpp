@@ -47,12 +47,12 @@ namespace lexer {
 //  The following numbers are the arraysizes of the token regex's which we
 //  need to specify to make the CW compiler happy (at least up to V9.5).
 #if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
-#define INIT_DATA_SIZE        176
-#define INIT_DATA_CPP_SIZE    15
+#define INIT_DATA_SIZE              176
 #else
-#define INIT_DATA_SIZE        159
-#define INIT_DATA_CPP_SIZE    15
+#define INIT_DATA_SIZE              159
 #endif
+#define INIT_DATA_CPP_SIZE          15
+#define INIT_DATA_PP_NUMBER_SIZE    2
 
 ///////////////////////////////////////////////////////////////////////////////
 // 
@@ -107,6 +107,7 @@ private:
 
     static typename base_type::lexer_data const init_data[INIT_DATA_SIZE];          // common patterns
     static typename base_type::lexer_data const init_data_cpp[INIT_DATA_CPP_SIZE];  // C++ only patterns
+    static typename base_type::lexer_data const init_data_pp_number[INIT_DATA_PP_NUMBER_SIZE];  // pp-number only patterns
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -125,15 +126,17 @@ private:
 #define OCTALDIGIT          "[0-7]"
 #define DIGIT               "[0-9]"
 #define HEXDIGIT            "[0-9a-fA-F]"
-#define SIGN                "[-+]?"
-#define EXPONENT            "(" "[eE]" SIGN "[0-9]+" ")"
+#define OPTSIGN             "[-+]?"
+#define EXPSTART            "[eE]" "[-+]"
+#define EXPONENT            "(" "[eE]" OPTSIGN "[0-9]+" ")"
+#define NONDIGIT            "[a-zA-Z_]"
 
 #define INTEGER             \
     "(" "(0x|0X)" HEXDIGIT "+" OR "0" OCTALDIGIT "*" OR "[1-9]" DIGIT "*" ")"
             
 #define INTEGER_SUFFIX      "(" "[uU][lL]?|[lL][uU]?" ")"
-#define LONGINTEGER_SUFFIX  "(" "[uU]" "(" "ll" OR "LL" ")" OR \
-                            "(" "ll" OR "LL" ")" "[uU]" "?" ")"
+#define LONGINTEGER_SUFFIX  "(" "[uU]" "(" "[lL][lL]" ")" OR \
+                            "(" "[lL][lL]" ")" "[uU]" "?" ")"
 #define FLOAT_SUFFIX        "(" "[fF][lL]?|[lL][fF]?" ")"
 #define CHAR_SPEC           "L?"
 
@@ -159,8 +162,10 @@ private:
 #define INCLUDEDEF          "include"
 #endif
 
+#define PP_NUMBERDEF        Q(".") "?" DIGIT "(" DIGIT OR NONDIGIT OR EXPSTART OR Q(".") ")*"
+
 ///////////////////////////////////////////////////////////////////////////////
-//  sexer state constants
+//  lexer state constants
 #define LEXER_STATE_NORMAL  0
 #define LEXER_STATE_PP      1
 
@@ -401,6 +406,16 @@ lexer<IteratorT, PositionT>::init_data_cpp[INIT_DATA_CPP_SIZE] =
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+// C++ only token definitions
+template <typename IteratorT, typename PositionT>
+typename lexer_base<IteratorT, PositionT>::lexer_data const 
+lexer<IteratorT, PositionT>::init_data_pp_number[INIT_DATA_PP_NUMBER_SIZE] = 
+{
+    TOKEN_DATA(PP_NUMBER, PP_NUMBERDEF),
+    { token_id(0) }       // this should be the last entry
+};
+
+///////////////////////////////////////////////////////////////////////////////
 //  undefine macros, required for regular expression definitions
 #undef INCLUDEDEF
 #undef POUNDDEF
@@ -409,7 +424,9 @@ lexer<IteratorT, PositionT>::init_data_cpp[INIT_DATA_CPP_SIZE] =
 #undef DIGIT
 #undef OCTALDIGIT
 #undef HEXDIGIT
-#undef SIGN
+#undef NONDIGIT
+#undef OPTSIGN
+#undef EXPSTART
 #undef EXPONENT
 #undef LONGINTEGER_SUFFIX
 #undef INTEGER_SUFFIX
@@ -420,6 +437,7 @@ lexer<IteratorT, PositionT>::init_data_cpp[INIT_DATA_CPP_SIZE] =
 #undef ESCAPESEQ    
 #undef HEXQUAD      
 #undef UNIVERSALCHAR
+#undef PP_NUMBERDEF
 
 #undef Q
 #undef TRI
@@ -443,6 +461,15 @@ lexer<IteratorT, PositionT>::init_dfa(boost::wave::language_support lang)
 {
     if (this->has_compiled_dfa())
         return;
+
+// if pp-numbers should be preferred, insert the corresponding rule first
+    if (boost::wave::need_prefer_pp_numbers(lang)) {
+        for (int j = 0; 0 != init_data_pp_number[j].tokenid; ++j) {
+            this->register_regex(init_data_pp_number[j].tokenregex, 
+                init_data_pp_number[j].tokenid, init_data_pp_number[j].tokencb, 
+                init_data_pp_number[j].lexerstate);
+        }
+    }
         
 // if in C99 mode, some of the keywords are not valid    
     if (!boost::wave::need_c99(lang)) {

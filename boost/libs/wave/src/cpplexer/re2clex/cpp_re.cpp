@@ -56,6 +56,9 @@
 #define YYLIMIT   limit
 #define YYMARKER  marker
 #define YYFILL(n) {cursor = uchar_wrapper(fill(s, cursor), cursor.column);}
+#define YYDEBUG(state, c)  std::cerr << "state: " << state << ", current char: " << char(c) << std::endl;
+
+#include <iostream>
 
 //#define BOOST_WAVE_RET(i)    {s->cur = cursor; return (i);}
 #define BOOST_WAVE_RET(i)                                                     \
@@ -192,7 +195,7 @@ uchar *fill(Scanner *s, uchar *cursor)
             if (NULL == s->lim)
                 s->lim = s->top;
             memcpy(s->bot, s->tok, s->lim - s->tok);
-            s->tok = s->bot;
+            s->tok = s->cur = s->bot;
             s->ptr -= cnt;
             cursor -= cnt;
             s->lim -= cnt;
@@ -216,7 +219,7 @@ uchar *fill(Scanner *s, uchar *cursor)
             }
 
             memcpy(buf, s->tok, s->lim - s->tok);
-            s->tok = buf;
+            s->tok = s->cur = buf;
             s->ptr = &buf[s->ptr - s->bot];
             cursor = &buf[cursor - s->bot];
             s->lim = &buf[s->lim - s->bot];

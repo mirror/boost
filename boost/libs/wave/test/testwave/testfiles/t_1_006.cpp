@@ -19,5 +19,7 @@ CONCAT(1, PRIMITIVE_CONCAT(2, 3))
 //R #line 21 "t_1_006.cpp"
 //R 123
 CONCAT(1, CONCAT(2, 3))
-//E t_1_006.cpp(23): error: pasting the following two tokens does not give a valid preprocessing token: "1" and "CONCAT"
+// E t_1_006.cpp(23): error: pasting the following two tokens does not give a valid preprocessing token: "1" and "CONCAT"
+//R #line 25 "t_1_006.cpp"
+//R 1 CONCAT(2, 3)
 PRIMITIVE_CONCAT(1, CONCAT(2, 3))

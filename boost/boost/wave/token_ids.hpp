@@ -284,6 +284,8 @@ enum token_id {
     T_MSEXT_PP_REGION    = TOKEN_FROM_ID(419, PPTokenType),
     T_MSEXT_PP_ENDREGION = TOKEN_FROM_ID(420, PPTokenType),
     
+    T_PP_NUMBER = TOKEN_FROM_ID(421, InternalTokenType),
+    
     T_LAST_TOKEN_ID,
     T_LAST_TOKEN = ID_FROM_TOKEN(T_LAST_TOKEN_ID),
     
@@ -497,6 +499,7 @@ static char const *tok_names[] = {
     /* 418 */   "MSEXT_ASM",
     /* 419 */   "MSEXT_REGION",
     /* 420 */   "MSEXT_ENDREGION",
+    /* 421 */   "PP_NUMBER"
     };   
      
     unsigned int id = BASEID_FROM_TOKEN(tokid)-T_FIRST_TOKEN;
@@ -680,6 +683,8 @@ static char const *tok_names[] = {
     /* 418 */   "__asm",
     /* 419 */   "#region",
     /* 420 */   "#endregion",
+
+    /* 421 */   ""
     };   
      
     unsigned int id = BASEID_FROM_TOKEN(tokid)-T_FIRST_TOKEN;

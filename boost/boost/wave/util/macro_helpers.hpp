@@ -196,7 +196,7 @@ namespace impl {
     // return the string representation of a token sequence
     template <typename StringT, typename IteratorT>
     inline StringT
-    as_string(IteratorT it, IteratorT end)
+    as_string(IteratorT it, IteratorT const& end)
     {
         StringT result;
         for (/**/; it != end; ++it) 

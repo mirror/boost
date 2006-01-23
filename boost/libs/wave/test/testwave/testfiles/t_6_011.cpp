@@ -16,7 +16,7 @@
 // Tests error reporting: illegal #if expressions.
 
 // 14.6: Macro expanding to 0 token in #if expression.
-//E t_6_011.cpp(21): error: ill formed preprocessor expression: empty expression
+//E t_6_011.cpp(21): error: ill formed preprocessor expression: <empty expression>
 #define ZERO_TOKEN
 #if ZERO_TOKEN 
 #endif

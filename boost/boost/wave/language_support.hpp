@@ -39,7 +39,8 @@ enum language_support {
     support_option_preserve_comments = 0x0100,
     support_option_no_character_validation = 0x0200,
     support_option_convert_trigraphs = 0x0400,
-    support_option_single_line = 0x0800
+    support_option_single_line = 0x0800,
+    support_option_prefer_pp_numbers = 0x1000
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -181,6 +182,34 @@ enable_preserve_comments(language_support language, bool enable = true)
 
 ///////////////////////////////////////////////////////////////////////////////
 //  
+//  need_prefer_pp_numbers
+//
+//      Extract, if pp-numbers have to be generated 
+//
+///////////////////////////////////////////////////////////////////////////////
+inline bool 
+need_prefer_pp_numbers(language_support language) 
+{
+    return (language & support_option_prefer_pp_numbers) ? true : false;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//  
+//  enable_prefer_pp_numbers
+//
+//      Set, whether pp-numbers have to be generated 
+//
+///////////////////////////////////////////////////////////////////////////////
+inline language_support
+enable_prefer_pp_numbers(language_support language, bool enable = true)
+{
+    if (enable)
+        return static_cast<language_support>(language | support_option_prefer_pp_numbers);
+    return static_cast<language_support>(language & ~support_option_prefer_pp_numbers);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//  
 //  get_support_options
 //
 //      Set preserve comments support in the language to support
@@ -196,7 +225,7 @@ get_support_options(language_support language)
 //  
 //  set_support_options
 //
-//      Set language option (for fine tuning of lexer bahaviour)
+//      Set language option (for fine tuning of lexer behaviour)
 //
 ///////////////////////////////////////////////////////////////////////////////
 inline language_support
