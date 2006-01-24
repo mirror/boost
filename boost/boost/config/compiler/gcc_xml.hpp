@@ -7,10 +7,9 @@
 
 //  GCC-XML C++ compiler setup:
 
-#  if __GCCXML__ < 30400
+#  if !defined(__GCCXML_GNUC__) || ((__GCCXML_GNUC__ <= 3) && (__GCCXML_GNUC_MINOR__ <= 3))
 #     define BOOST_NO_IS_ABSTRACT
 #  endif
-#endif
 
 //
 // Threading support: Turn this on unconditionally here (except for
