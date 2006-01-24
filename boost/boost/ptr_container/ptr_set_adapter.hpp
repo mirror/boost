@@ -58,14 +58,6 @@ namespace ptr_container_detail
                         BOOST_DEDUCED_TYPENAME VoidPtrSet::const_iterator, const Key >
                     const_iterator;
 
-       typedef void_ptr_iterator<
-                       BOOST_DEDUCED_TYPENAME VoidPtrSet::reverse_iterator, Key >
-                   reverse_iterator;
-        
-       typedef void_ptr_iterator<
-                       BOOST_DEDUCED_TYPENAME VoidPtrSet::const_reverse_iterator, const Key >
-                   const_reverse_iterator;
-
        typedef Key object_type;
 
        template< class Iter >

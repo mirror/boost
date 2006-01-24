@@ -20,8 +20,6 @@
 #include <boost/ptr_container/detail/reversible_ptr_container.hpp>
 #include <boost/ptr_container/indirect_fun.hpp>
 #include <boost/ptr_container/detail/void_ptr_iterator.hpp>
-#include <boost/range/reverse_iterator.hpp>
-#include <boost/range/const_reverse_iterator.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_pointer.hpp>
@@ -58,17 +56,9 @@ namespace ptr_container_detail
         typedef void_ptr_iterator<
                         BOOST_DEDUCED_TYPENAME VoidPtrSeq::const_iterator, const U >
                     const_iterator;
-        
-        typedef void_ptr_iterator<
-                       BOOST_DEDUCED_TYPENAME VoidPtrSeq::reverse_iterator, U >
-                   reverse_iterator;
-        
-        typedef void_ptr_iterator<
-                       BOOST_DEDUCED_TYPENAME VoidPtrSeq::const_reverse_iterator, const U >
-                   const_reverse_iterator;
-        
+
         typedef value_type 
-                   object_type;
+                    object_type;
 
 #ifdef BOOST_NO_SFINAE
 

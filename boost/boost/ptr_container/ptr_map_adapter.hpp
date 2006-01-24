@@ -64,19 +64,6 @@ namespace ptr_container_detail
                        const value_type>
                      const_iterator;
 
-        typedef
-            ptr_map_iterator<
-                       BOOST_DEDUCED_TYPENAME VoidPtrMap::reverse_iterator,
-                       BOOST_DEDUCED_TYPENAME VoidPtrMap::key_type, value_type>
-                     reverse_iterator;
-
-        typedef
-            ptr_map_iterator<
-                       BOOST_DEDUCED_TYPENAME VoidPtrMap::const_reverse_iterator,
-                       BOOST_DEDUCED_TYPENAME VoidPtrMap::key_type, 
-                       const value_type>
-                     const_reverse_iterator;
-
         typedef std::pair<const key_type, void*>
                      object_type;
 
