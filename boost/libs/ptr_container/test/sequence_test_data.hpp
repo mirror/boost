@@ -53,6 +53,12 @@ void reversible_container_test()
     BOOST_DEDUCED_TYPENAME C::const_reverse_iterator cri  = c2.rbegin();
     BOOST_DEDUCED_TYPENAME C::reverse_iterator rv2        = c.rend();
     BOOST_DEDUCED_TYPENAME C::const_reverse_iterator cvr2 = c2.rend();
+	i  = c.rbegin().base();
+	ci = c2.rbegin().base();
+	i  = c.rend().base();
+	ci = c2.rend().base();
+	BOOST_CHECK_EQUAL( std::distance( c.rbegin(), c.rend() ),
+					   std::distance( c.begin(), c.end() ) );
                          
     BOOST_MESSAGE( "finished iterator test" ); 
     
@@ -130,8 +136,7 @@ void reversible_container_test()
     c3.transfer( c3.begin(), c );
     BOOST_CHECK( !c3.empty() );
     BOOST_CHECK( c.empty() );
-    BOOST_MESSAGE( "finished transfer test" ); 
-
+    BOOST_MESSAGE( "finished transfer test" );  
 }
 
 
