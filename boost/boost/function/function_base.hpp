@@ -286,7 +286,11 @@ namespace boost {
           } else if (op == destroy_functor_tag) {
             functor_type* out_functor = 
               reinterpret_cast<functor_type*>(&out_buffer.data);
+#if BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x581) )
+            out_functor->~Functor();
+#else
             out_functor->~functor_type();
+#endif
           } else /* op == check_functor_type_tag */ {
             const std::type_info& check_type = 
               *static_cast<const std::type_info*>(out_buffer.const_obj_ptr);
