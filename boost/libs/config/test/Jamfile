@@ -13,7 +13,7 @@ subproject libs/config/test ;
 import testing ./options ;
 
 run config_info.cpp <template>config_options ;
-run math_info.cpp <template>config_options ;
+run math_info.cpp <template>config_options : : : <borland><*><runtime-link>static ;
 run config_test.cpp <template>config_options ;
 run limits_test.cpp <template>config_test_options ;
 run abi/abi_test.cpp abi/main.cpp <template>config_options ;
@@ -324,5 +324,6 @@ test-suite "BOOST_NO_VOID_RETURNS" :
 test-suite "BOOST_NO_INTRINSIC_WCHAR_T" : 
 [ run no_wchar_t_pass.cpp <template>config_options ]
 [ compile-fail no_wchar_t_fail.cpp <template>config_options ] ;
+
 
 
