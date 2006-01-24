@@ -1,4 +1,6 @@
 #include "test.hpp"
+#include <climits>
+
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 
 struct x;
