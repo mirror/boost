@@ -14,7 +14,10 @@
 #define NO_INHERT_TEST
 #include "verify_functor.hpp"
 
-struct expected_result{};
+struct expected_result
+{
+   expected_result(){}
+};
 
 struct test
 {
