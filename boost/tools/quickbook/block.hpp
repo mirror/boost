@@ -158,11 +158,16 @@ namespace quickbook
                     phrase                              [self.actions.tip]
                     ;
 
-                preformatted =
-                    "pre" >> hard_space                 [assign_a(is_not_preformatted, false)]
-                    >> !eol >> phrase                   [actions.preformatted]
-                    >> eps_p                            [assign_a(is_not_preformatted, true)]
-                    ;
+                {
+                    static const bool true_ = true;
+                    static const bool false_ = false;
+                    
+                    preformatted =
+                        "pre" >> hard_space             [assign_a(is_not_preformatted, false_)]
+                        >> !eol >> phrase               [actions.preformatted]
+                        >> eps_p                        [assign_a(is_not_preformatted, true_)]
+                        ;
+                }
 
                 def_macro =
                     "def" >> hard_space
