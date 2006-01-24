@@ -73,8 +73,12 @@ public:
 
 
   template <class BaseList>
+#ifdef BOOST_NO_SFINAE
+  void
+#else
   typename
   disable_if<typename boost::is_integral<BaseList>::type,void >::type
+#endif
   reindex(const BaseList& values) {
     boost::function_requires<
       detail::multi_array::CollectionConcept<BaseList> >();
