@@ -368,7 +368,7 @@ static char const *tok_names[] = {
     /* 401 */   "#include",
     /* 402 */   "",   // eof
     /* 403 */   "",   // eoi
-    /* 404 */   ""    // pp-number
+    /* 404 */   "",   // pp-number
 
               // MS extensions
     /* 405 */   "__int8",
