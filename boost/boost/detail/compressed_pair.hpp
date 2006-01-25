@@ -155,8 +155,8 @@ namespace details
       compressed_pair_imp(second_param_type y)
          : second_(y) {}
 
-      first_reference       first()       {return *this;}
-      first_const_reference first() const {return *this;}
+      first_reference       first()       {return static_cast<first_reference>(*this);}
+      first_const_reference first() const {return static_cast<first_const_reference>(*this);}
 
       second_reference       second()       {return second_;}
       second_const_reference second() const {return second_;}
@@ -200,8 +200,8 @@ namespace details
       first_reference       first()       {return first_;}
       first_const_reference first() const {return first_;}
 
-      second_reference       second()       {return *this;}
-      second_const_reference second() const {return *this;}
+      second_reference       second()       {return static_cast<second_reference>(*this);}
+      second_const_reference second() const {return static_cast<second_const_reference>(*this);}
 
       void swap(::boost::compressed_pair<T1,T2>& y)
       {
@@ -241,11 +241,11 @@ namespace details
       compressed_pair_imp(second_param_type y)
          : second_type(y) {}
 
-      first_reference       first()       {return *this;}
-      first_const_reference first() const {return *this;}
+      first_reference       first()       {return static_cast<first_reference>(*this);}
+      first_const_reference first() const {return static_cast<first_const_reference>(*this);}
 
-      second_reference       second()       {return *this;}
-      second_const_reference second() const {return *this;}
+      second_reference       second()       {return static_cast<second_reference>(*this);}
+      second_const_reference second() const {return static_cast<second_const_reference>(*this);}
       //
       // no need to swap empty bases:
       void swap(::boost::compressed_pair<T1,T2>&) {}
@@ -253,8 +253,11 @@ namespace details
 
    // JM
    // 4    T1 == T2, T1 and T2 both empty
-   //      Note does not actually store an instance of T2 at all -
-   //      but reuses T1 base class for both first() and second().
+   //      Originally this did not store an instance of T2 at all
+   //      but that led to problems beause it meant &x.first() == &x.second()
+   //      which is not true for any other kind of pair, so now we store an instance
+   //      of T2 just in case the user is relying on first() and second() returning
+   //      different objects (albeit both empty).
    template <class T1, class T2>
    class compressed_pair_imp<T1, T2, 4>
       : private ::boost::remove_cv<T1>::type
@@ -277,8 +280,8 @@ namespace details
       compressed_pair_imp(first_param_type x)
          : first_type(x), m_second(x) {}
 
-      first_reference       first()       {return *this;}
-      first_const_reference first() const {return *this;}
+      first_reference       first()       {return static_cast<first_reference>(*this);}
+      first_const_reference first() const {return static_cast<first_const_reference>(*this);}
 
       second_reference       second()       {return m_second;}
       second_const_reference second() const {return m_second;}
