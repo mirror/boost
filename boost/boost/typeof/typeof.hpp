@@ -64,6 +64,10 @@
 #       endif
 #       define BOOST_TYPEOF_KEYWORD __typeof__
 #   endif
+#   if(__MWERKS__ <= 0x3003)  // 8.x
+#       define BOOST_TYPEOF_NO_FUNCTION_TYPES
+#   endif
+
 
 #elif defined(_MSC_VER)
 #   if (_MSC_VER <= 1300)  // 6.5, 7.0

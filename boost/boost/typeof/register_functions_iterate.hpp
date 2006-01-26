@@ -26,6 +26,8 @@ namespace
         typedef BOOST_PP_CAT(iter, BOOST_PP_INC(n)) iter;
     };
 
+#ifndef BOOST_TYPEOF_NO_FUNCTION_TYPES
+
     // function references
 
     template<class V, class R BOOST_PP_ENUM_TRAILING_PARAMS(n, class P)> 
@@ -61,6 +63,8 @@ namespace
         typedef BOOST_PP_CAT(p, n)(type)(BOOST_PP_ENUM_PARAMS(n, p));
         typedef BOOST_PP_CAT(iter, BOOST_PP_INC(n)) iter;
     };
+
+#endif//BOOST_TYPEOF_NO_FUNCTION_TYPES
 
     // member functions
 
