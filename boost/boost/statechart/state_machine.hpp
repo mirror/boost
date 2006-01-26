@@ -794,11 +794,12 @@ class state_machine : noncopyable
         }
 
         template< class ExceptionEvent >
-        detail::reaction_result operator()(
+        result operator()(
           const ExceptionEvent & exceptionEvent )
         {
-          return machine_.handle_exception_event(
-            exceptionEvent, pCurrentState_ );
+          return detail::result_utility::make_result(
+            machine_.handle_exception_event(
+              exceptionEvent, pCurrentState_ ) );
         }
 
       private:
