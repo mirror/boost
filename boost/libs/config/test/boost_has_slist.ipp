@@ -9,7 +9,12 @@
 //  TITLE:         <slist>
 //  DESCRIPTION:   The C++ implementation provides the (SGI) slist class.
 
+#if defined(__GLIBCXX__) || (defined(__GLIBCPP__) && __GLIBCPP__>=20020514) // GCC >= 3.1.0
+#  define BOOST_STD_EXTENSION_NAMESPACE __gnu_cxx
+#include <ext/slist>
+#else
 #include <slist>
+#endif
 
 #ifndef BOOST_STD_EXTENSION_NAMESPACE
 #define BOOST_STD_EXTENSION_NAMESPACE std

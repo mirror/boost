@@ -10,8 +10,14 @@
 //  DESCRIPTION:   The C++ implementation provides the (SGI) hash_set
 //                 or hash_map classes.
 
+#if defined(__GLIBCXX__) || (defined(__GLIBCPP__) && __GLIBCPP__>=20020514) // GCC >= 3.1.0
+#  define BOOST_STD_EXTENSION_NAMESPACE __gnu_cxx
+#include <ext/hash_set>
+#include <ext/hash_map>
+#else
 #include <hash_set>
 #include <hash_map>
+#endif
 
 #ifndef BOOST_STD_EXTENSION_NAMESPACE
 #define BOOST_STD_EXTENSION_NAMESPACE std
