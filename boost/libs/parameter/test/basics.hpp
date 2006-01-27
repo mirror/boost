@@ -8,12 +8,10 @@
 
 #include <boost/parameter/keyword.hpp>
 #include <boost/parameter/parameters.hpp>
-
 #include <boost/type_traits/is_same.hpp>
-
 #include <boost/assert.hpp>
-
 #include <boost/mpl/assert.hpp>
+#include <cstring>
 
 namespace test {
 
@@ -46,12 +44,14 @@ inline bool equal(T const& x, T const& y)
 
 inline bool equal(char const* s1, char const* s2)
 {
+    using namespace std;
     return !strcmp(s1,s2);
 }
 
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 inline bool equal(char* s1, char* s2)
 {
+    using namespace std;
     return !strcmp(s1,s2);
 }
 #endif 

@@ -16,6 +16,9 @@
 
 namespace boost { namespace parameter { namespace aux {
 
+struct empty_arg_list;
+struct arg_list_tag;
+
 // Holds a reference to an argument of type Arg associated with
 // keyword Keyword
     
@@ -150,7 +153,12 @@ struct tagged_argument
     // warning suppression
  private:
     void operator=(tagged_argument const&);
-#endif 
+ public:    
+#endif
+    // MPL sequence support
+    typedef tagged_argument type;            // Convenience for users
+    typedef empty_arg_list tail_type;        // For the benefit of iterators
+    typedef arg_list_tag tag; // For dispatching to sequence intrinsics
 };
 
 // Defines a metafunction, is_tagged_argument, that identifies

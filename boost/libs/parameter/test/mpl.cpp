@@ -65,7 +65,6 @@ namespace test
       f_impl<Expected>(f_parameters()(t, name_));
   }
 
-
   void run()
   {
       typedef test::tag::tester tester_;
@@ -77,6 +76,7 @@ namespace test
       f<mpl::list3<tester_,name_,index_> >(1, 2, index = 3);
       f<mpl::list3<tester_,name_,index_> >(1, index = 2, name = 3);
       f<mpl::list2<name_,value_> >(name = 3, value = 4);
+      f_impl<mpl::list1<value_> >(value = 4);
   }
 }
 
