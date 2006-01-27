@@ -32,16 +32,16 @@ namespace boost
     // An almost optimal version of std::make_pair()
     //
     template< class F, class S >
-    inline std::pair< BOOST_DEDUCED_TYPENAME ::tt::decay<const F>::type, 
-                      BOOST_DEDUCED_TYPENAME ::tt::decay<const S>::type >
+    inline std::pair< BOOST_DEDUCED_TYPENAME tt::decay<const F>::type, 
+                      BOOST_DEDUCED_TYPENAME tt::decay<const S>::type >
     make_pair( const F& f, const S& s )
     {
-        return std::pair< BOOST_DEDUCED_TYPENAME ::tt::decay<const F>::type, 
-                          BOOST_DEDUCED_TYPENAME ::tt::decay<const S>::type >( f, s ); 
+        return std::pair< BOOST_DEDUCED_TYPENAME tt::decay<const F>::type, 
+                          BOOST_DEDUCED_TYPENAME tt::decay<const S>::type >( f, s ); 
     }
 
     /*
-    This overload will f*** up vc7.1
+    This overload will mess up vc7.1
 
     template< class F, class S >
     inline std::pair< BOOST_DEDUCED_TYPENAME ::tt::decay<F>::type, 
@@ -74,11 +74,15 @@ TT_TEST_BEGIN(is_class)
    BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_same< 
           ::tt::decay<const wchar_t[2]>::type,const wchar_t*>::value),
                                   true );
+
+   typedef int f1_type(void);
+   typedef int f2_type(int);
+
    BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_same< 
-          ::tt::decay<int (void)>::type,int (*)(void)>::value),
+          ::tt::decay<f1_type>::type,int (*)(void)>::value),
                                   true );
    BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_same< 
-          ::tt::decay<int (int)>::type,int (*)(int)>::value),
+          ::tt::decay<f2_type>::type,int (*)(int)>::value),
                                   true );
 
    std::pair<std::string,std::string> p  = boost::make_pair( "foo", "bar" );
