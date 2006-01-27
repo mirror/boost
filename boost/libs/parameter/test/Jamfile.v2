@@ -1,5 +1,9 @@
 # Boost Parameter Library test Jamfile
 
+project boost/parameter
+  : default-build <warnings>off
+  ;
+  
 test-suite "parameter"
   :  [ run basics.cpp ]
      [ run sfinae.cpp ]
@@ -8,6 +12,8 @@ test-suite "parameter"
      [ run tutorial.cpp ]
      [ run singular.cpp ]
      [ run efficiency.cpp : : : : : <variant>release ]
+     [ run earwicker.cpp ]
+     [ run mpl.cpp ]
      [ compile unwrap_cv_reference.cpp ]
      [ compile-fail duplicates.cpp ]
   ;
