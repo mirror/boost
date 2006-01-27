@@ -19,7 +19,7 @@
 
   <!-- A space-separated list of xml elements in the input file for which
        whitespace should be preserved -->
-  <xsl:preserve-space elements="programlisting"/>
+  <xsl:preserve-space elements="*"/>
 
   <xsl:template match="library-reference">
     <xsl:choose>
