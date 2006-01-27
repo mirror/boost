@@ -12,6 +12,7 @@
 
   <!-- The root of the Boost directory -->
   <xsl:param name="boost.root" select="'../..'"/>
+  <xsl:param name="boost.header.root" select="$boost.root"/>
 
   <!-- A space-separated list of libraries to include in the
        output. If this list is empty, all libraries will be included. -->
@@ -90,7 +91,7 @@
           <xsl:text>Header &lt;</xsl:text>
           <ulink>
             <xsl:attribute name="url">
-              <xsl:value-of select="$boost.root"/>
+              <xsl:value-of select="$boost.header.root"/>
               <xsl:text>/</xsl:text>
               <xsl:value-of select="@name"/>
             </xsl:attribute>
