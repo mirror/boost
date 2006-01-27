@@ -39,6 +39,7 @@ __ ../../../../index.htm
     :class: function
 
 .. |ArgumentPack| replace:: :concept:`ArgumentPack`
+.. |ForwardSequence| replace:: :concept:`Forward Sequence`
 .. |ParameterSpec| replace:: :concept:`ParameterSpec`
 
 .. role:: vellipsis
@@ -179,7 +180,11 @@ This section describes the generic type concepts_ used by the Parameter library.
 --------------
 
 An |ArgumentPack| is a collection of |tagged reference|\ s to the
-actual arguments passed to a function.
+actual arguments passed to a function.  Every |ArgumentPack| is
+also a valid MPL |ForwardSequence|__ consisting of the |keyword tag
+type|\ s in its |tagged reference|\ s.
+
+__ ../../../mpl/doc/refmanual/forward-sequence.html
 
 Requirements
 ............

@@ -15,6 +15,9 @@
 
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/mpl/begin.hpp>
+#include <boost/mpl/end.hpp>
+#include <boost/mpl/iterator_tags.hpp>
 
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -40,6 +43,9 @@ namespace aux {
 // match against keywords.
 //
   
+// MPL sequence support
+struct arg_list_tag;
+
 // Terminates arg_list<> and represents an empty list.  Since this
 // is just the terminating case you might want to look at arg_list
 // first, to get a feel for what's really happening here.
@@ -134,6 +140,10 @@ struct empty_arg_list
     template <class ParameterRequirements>
     static typename ParameterRequirements::has_default
     satisfies(ParameterRequirements*);
+
+    // MPL sequence support
+    typedef empty_arg_list type;   // convenience
+    typedef arg_list_tag tag; // For dispatching to sequence intrinsics
 };
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
@@ -196,24 +206,26 @@ struct arg_list : Next
         };
     };
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) && !BOOST_WORKAROUND(__GNUC__, == 2)
+# if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
     friend yes_tag operator*(arg_list, key_type*);
-# define BOOST_PARAMETER_CALL_HAS_KEY(next, key) (*(next*)0 * (key*)0)
-#else
+#  define BOOST_PARAMETER_CALL_HAS_KEY(next, key) (*(next*)0 * (key*)0)
+# else
     // Overload for key_type, so the assert below will fire if the
     // same keyword is used again
     static yes_tag has_key(key_type*);
     using Next::has_key;
-# define BOOST_PARAMETER_CALL_HAS_KEY(next, key) next::has_key((key*)0)  
-#endif
+    
+#  define BOOST_PARAMETER_CALL_HAS_KEY(next, key) next::has_key((key*)0)  
+# endif
 
     BOOST_MPL_ASSERT_MSG(
         sizeof(BOOST_PARAMETER_CALL_HAS_KEY(Next,key_type)) == sizeof(no_tag)
       , duplicate_keyword, (key_type)
     );
 
-#undef BOOST_PARAMETER_CALL_HAS_KEY
-    
+# undef BOOST_PARAMETER_CALL_HAS_KEY
+#endif
     //
     // Begin implementation of indexing operators for looking up
     // specific arguments by name
@@ -346,13 +358,60 @@ struct arg_list : Next
     {
         return arg_list<tagged_argument<KW,T2>, self>(x, *this);
     }
+
+    // MPL sequence support
+    typedef self type;             // Convenience for users
+    typedef Next tail_type;        // For the benefit of iterators
+    typedef arg_list_tag tag; // For dispatching to sequence intrinsics
 };
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)  // ETI workaround
 template <> struct arg_list<int,int> {};
 #endif 
 
-}}} // namespace boost::parameter::aux
+// MPL sequence support
+template <class ArgumentPack>
+struct arg_list_iterator
+{
+    typedef mpl::forward_iterator_tag category;
+
+    // The incremented iterator
+    typedef arg_list_iterator<typename ArgumentPack::tail_type> next;
+    
+    // dereferencing yields the key type
+    typedef typename ArgumentPack::key_type type;
+};
+
+template <>
+struct arg_list_iterator<empty_arg_list> {};
+
+}} // namespace parameter::aux
+
+// MPL sequence support
+namespace mpl
+{
+  template <>
+  struct begin_impl<parameter::aux::arg_list_tag>
+  {
+      template <class S>
+      struct apply
+      {
+          typedef parameter::aux::arg_list_iterator<S> type;
+      };
+  };
+
+  template <>
+  struct end_impl<parameter::aux::arg_list_tag>
+  {
+      template <class>
+      struct apply
+      {
+          typedef parameter::aux::arg_list_iterator<parameter::aux::empty_arg_list> type;
+      };
+  };
+}
+
+} // namespace boost
 
 #endif // ARG_LIST_050329_HPP
 

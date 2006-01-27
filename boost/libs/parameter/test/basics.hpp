@@ -6,8 +6,14 @@
 #ifndef BASICS_050424_HPP
 #define BASICS_050424_HPP
 
-#include <boost/static_assert.hpp>
 #include <boost/parameter/keyword.hpp>
+#include <boost/parameter/parameters.hpp>
+
+#include <boost/type_traits/is_same.hpp>
+
+#include <boost/assert.hpp>
+
+#include <boost/mpl/assert.hpp>
 
 namespace test {
 
@@ -69,13 +75,13 @@ struct values_t
             || BOOST_WORKAROUND(BOOST_MSVC, < 1310))                    \
             || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 # else 
-        BOOST_STATIC_ASSERT((boost::is_same<Index,Index_>::value));
-        BOOST_STATIC_ASSERT((boost::is_same<Value,Value_>::value));
-        BOOST_STATIC_ASSERT((boost::is_same<Name,Name_>::value));
+        BOOST_MPL_ASSERT((boost::is_same<Index,Index_>));
+        BOOST_MPL_ASSERT((boost::is_same<Value,Value_>));
+        BOOST_MPL_ASSERT((boost::is_same<Name,Name_>));
 #endif
-        assert(equal(n, n_));
-        assert(equal(v, v_));
-        assert(equal(i, i_));
+        BOOST_ASSERT(equal(n, n_));
+        BOOST_ASSERT(equal(v, v_));
+        BOOST_ASSERT(equal(i, i_));
     }
 
     Name const& n;
