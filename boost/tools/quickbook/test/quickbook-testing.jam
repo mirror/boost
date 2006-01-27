@@ -23,7 +23,7 @@ type.register QUICKBOOK_OUTPUT ;
 generators.register-standard quickbook-testing.process-quickbook : QUICKBOOK_INPUT : QUICKBOOK_OUTPUT ;
 
 ################################################################################
-exe line-compare-tool : text_diff.cpp ;
+exe line-compare-tool : src/text_diff.cpp ;
 
 #
 #   quickbook-test - generates a test for quickbook itself. A quickbook-test is
