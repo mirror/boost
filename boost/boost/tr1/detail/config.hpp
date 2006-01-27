@@ -36,6 +36,11 @@
 #  define BOOST_HAS_INCLUDE_NEXT
 #endif
 
+// Can't use BOOST_WORKAROUND here, it leads to recursive includes:
+#if defined(__BORLANDC__) && (__BORLANDC__ <= 0x600)
+#  define BOOST_TR1_USE_OLD_TUPLE
+#endif
+
 //
 // We may be in the middle of parsing boost/config.hpp
 // when this header is included, so don't rely on config
