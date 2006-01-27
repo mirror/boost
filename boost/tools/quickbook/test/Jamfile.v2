@@ -11,5 +11,10 @@ project test ;
 import quickbook-testing : quickbook-test ;
 
 test-suite quickbook.test :
-    [ quickbook-test test1 ]
+    [ quickbook-test quickbook-manual ]
+    [ quickbook-test code-block-1 ]
+    [ quickbook-test code-block-2 ]
+    [ quickbook-test code-snippet ]
+    [ quickbook-test preformatted ]
+    [ quickbook-test link-side-by-side ]
     ;
