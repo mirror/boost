@@ -28,7 +28,12 @@ namespace quickbook
         simple =
             mark >>
             (
-                (   graph_p >>                  // graph_p must follow mark
+                (
+                    graph_p                     // A single char. e.g. *c*
+                    >> eps_p(mark
+                        >> (space_p | punct_p))
+                )
+            |   (   graph_p >>                  // graph_p must follow mark
                     *(anychar_p -
                         (   eol                 // Make sure that we don't go
                         |   (graph_p >> mark)   // past a single line
@@ -37,11 +42,6 @@ namespace quickbook
                     >> eps_p(mark
                         >> (space_p | punct_p)) // space_p or punct_p must
                 )                               // follow mark
-            |   (
-                    graph_p                     // A single char. e.g. *c*
-                    >> eps_p(mark
-                        >> (space_p | punct_p))
-                )
             )                                   [action]
             >> mark
             ;
