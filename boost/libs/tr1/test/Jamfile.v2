@@ -1,14 +1,18 @@
 # Copyright John Maddock 2005
 
-# bring in the rules for testing
-import testing ;
+project :
+    : requirements
+      <include>$(BOOST_ROOT)/boost/tr1/tr1 
+      # Borland's broken include mechanism needs these extra headers:
+      <toolset>borland:<include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+    ; 
 
 #
 # define the sources which need testing, mostly this is just
 # all the files *_test.cpp, but any badly named examples can 
 # be added to this list :-)
 #
-            
+
 # this rule enumerates through all the sources and invokes
 # the run rule for each source, the result is a list of all
 # the run rules, which we can pass on to the test_suite rule:
@@ -16,61 +20,56 @@ rule test_all
 {
    #ECHO executing test_all rule ;
    local all_rules = ;
-   for local file in [ GLOB $(BOOST_ROOT)/libs/tr1/test : test*.cpp ]
+   for local file in [ glob test*.cpp ]
    {
       all_rules += [ compile $(file) ] ;
       all_rules += [ compile $(file) 
-         :  
-           <include>$(BOOST_ROOT)/boost/tr1/tr1 
-           <include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
-           <define>TEST_STD_HEADERS=1 : std_$(file:B) ] ;
+         : <define>TEST_STD_HEADERS=1 : std_$(file:B) ] ;
    }
-   for local fileb in [ GLOB $(BOOST_ROOT)/libs/tr1/test : run*.cpp ]
+   for local fileb in [ glob run*.cpp ]
    {
       all_rules += [ run $(fileb) ] ;
       all_rules += [ run $(fileb) 
       :  # additional args
       :  # test-files
       :  # requirements
-		<include>$(BOOST_ROOT)/boost/tr1/tr1 
-		<include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
 		<define>TEST_STD_HEADERS=1 : std_$(fileb:B)  ] ;
    }
-   for local file2 in [ GLOB $(BOOST_ROOT)/libs/tr1/test/config : has_tr1*fail.cpp ]
+   for local file2 in [ glob config/tr1_has_tr1*fail.cpp ]
    {
       local test = [ compile-fail $(file2) ] ;
       all_rules += $(test) ;
    }
-   for local filec in [ GLOB $(BOOST_ROOT)/libs/tr1/test/config : has_tr1*pass.cpp ]
+   for local filec in [ glob config/tr1_has_tr1*pass.cpp ]
    {
       local test = [ compile $(filec) ] ;
       all_rules += $(test) ;
    }
    
-   for local file3 in [ GLOB $(BOOST_ROOT)/libs/tr1/test/type_traits : *.cpp ]
+   for local file3 in [ glob type_traits/*.cpp ]
    {
       all_rules += [ run $(file3) 
       :  # additional args
       :  # test-files
       :  # requirements
-        <include>$(BOOST_ROOT)/boost/tr1/tr1  
-        <include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
-        <include>$(BOOST_ROOT)/libs/type_traits/test 
-        <define>TEST_STD=1 ] ;
+      <include>$(BOOST_ROOT)/libs/type_traits/test 
+      <define>TEST_STD=1 ] ;
    }
-   for local file5 in [ GLOB $(BOOST_ROOT)/libs/tr1/test/std_headers : *.cpp ]
-   {
-      all_rules += [ compile $(file5) 
-      :   
-        <include>$(BOOST_ROOT)/boost/tr1/tr1 
-        <include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
-        <define>TEST_STD=1 ] ;
-   }
+# Commented due to conflict between test_complex in this dir
+# and in std_headers.
+#   for local file5 in [ glob std_headers/*.cpp ]
+#   {
+#      all_rules += [ compile $(file5) 
+#      :   <define>TEST_STD=1 ] ;
+#   }
    #ECHO $(all_rules) ;
    return $(all_rules) ;
 }
 
 test-suite tr1 : [ test_all r ] ; 
+
+
+
 
 
 
