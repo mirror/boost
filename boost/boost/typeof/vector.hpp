@@ -69,7 +69,8 @@
 #     include <boost/preprocessor/dec.hpp>
 #     include <boost/preprocessor/comma_if.hpp>
 #     include <boost/preprocessor/iteration/local.hpp>
-#     include <boost/preprocessor/control/if.hpp>
+#     include <boost/preprocessor/control/expr_iif.hpp>
+#     include <boost/preprocessor/logical/not.hpp>
 
 // iterator
 
@@ -103,7 +104,7 @@ namespace boost { namespace type_of {
         typedef mpl::int_<1> item ## n;
 
 #     define BOOST_TYPEOF_define_vector(n)\
-        template<BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_IF(n, BOOST_PP_EMPTY(), class T = void)>\
+        template<BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IIF(BOOST_PP_NOT(n), class T = void)>\
         struct vector ## n\
         {\
             typedef v_iter<vector ## n, boost::mpl::int_<0> > begin;\

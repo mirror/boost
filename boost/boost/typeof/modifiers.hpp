@@ -6,6 +6,7 @@
 #define BOOST_TYPEOF_MODIFIERS_HPP_INCLUDED
 
 #include <boost/typeof/encode_decode.hpp>
+#include <boost/preprocessor/facilities/identity.hpp>
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 
@@ -56,7 +57,7 @@ namespace boost { namespace type_of { namespace {
 
 #define BOOST_TYPEOF_array_support(ID, Qualifier)\
     template<class V, class T, int N>\
-    struct encode_type_impl<V, Qualifier T[N]>\
+    struct encode_type_impl<V, Qualifier() T[N]>\
     {\
         typedef\
             typename encode_type<\
@@ -73,16 +74,16 @@ namespace boost { namespace type_of { namespace {
     {\
         enum{n = Iter::type::value};\
         typedef decode_type<typename Iter::next> d;\
-        typedef typename d::type Qualifier type[n];\
+        typedef typename d::type Qualifier() type[n];\
         typedef typename d::iter iter;\
     }
 
 namespace boost { namespace type_of { namespace {
 
-    BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_EMPTY());
-    BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), const);
-    BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), volatile);
-    BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), volatile const);
+    BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_EMPTY);
+    BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_IDENTITY(const));
+    BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_IDENTITY(volatile));
+    BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_IDENTITY(volatile const));
 
 }}}
 
