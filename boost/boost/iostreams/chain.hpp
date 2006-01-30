@@ -21,8 +21,8 @@
 #include <typeinfo>
 #include <stdexcept>                            // logic_error, out_of_range.
 #include <boost/checked_delete.hpp>
-#include <boost/config.hpp>                     // BOOST_MSVC, template friends.
-#include <boost/detail/workaround.hpp>
+#include <boost/config.hpp>                     // BOOST_MSVC, template friends,
+#include <boost/detail/workaround.hpp>          // BOOST_NESTED_TEMPLATE 
 #include <boost/iostreams/constants.hpp>
 #include <boost/iostreams/detail/access_control.hpp>
 #include <boost/iostreams/detail/char_traits.hpp>
@@ -160,13 +160,13 @@ public:
 
     std::streamsize read(char_type* s, std::streamsize n);
     std::streamsize write(const char_type* s, std::streamsize n);
-    stream_offset seek(stream_offset off, BOOST_IOS::seekdir way);
+    std::streampos seek(stream_offset off, BOOST_IOS::seekdir way);
 
     //----------Direct component access---------------------------------------//
 
     const std::type_info& component_type(int n) const
     {
-        if (n >= size())
+        if (static_cast<size_type>(n) >= size())
             throw std::out_of_range("bad chain offset");
         return (*boost::next(list().begin(), n))->component_type();
     }
@@ -190,7 +190,7 @@ public:
     template<typename T>
     T* component(int n, boost::type<T>) const
     {
-        if (n >= size())
+        if (static_cast<size_type>(n) >= size())
             throw std::out_of_range("bad chain offset");
         streambuf_type* link = *boost::next(list().begin(), n);
         if (BOOST_IOSTREAMS_COMPARE_TYPE_ID(link->component_type(), typeid(T)))
@@ -209,6 +209,8 @@ public:
     bool empty() const { return list().empty(); }
     size_type size() const { return list().size(); }
     void reset();
+
+    //----------Additional i/o functions--------------------------------------//
 
     // Returns true if this chain is non-empty and its final link
     // is a source or sink, i.e., if it is ready to perform i/o.
@@ -423,16 +425,16 @@ public:
     // Deprecated.
     template<int N>
     const std::type_info& component_type() const
-    { return chain_->component_type<N>(); }
+    { return chain_->BOOST_NESTED_TEMPLATE component_type<N>(); }
 
     template<typename T>
     T* component(int n) const
-    { return chain_->component<T>(n); }
+    { return chain_->BOOST_NESTED_TEMPLATE component<T>(n); }
 
     // Deprecated.
     template<int N, typename T>
     T* component() const
-    { return chain_->component<N, T>(); }
+    { return chain_->BOOST_NESTED_TEMPLATE component<N, T>(); }
 #else
     template<typename T>
     T* component(int n, boost::type<T> t) const
@@ -489,7 +491,7 @@ inline std::streamsize chain_base<Self, Ch, Tr, Alloc, Mode>::write
 { return iostreams::write(*list().front(), s, n); }
 
 template<typename Self, typename Ch, typename Tr, typename Alloc, typename Mode>
-inline stream_offset chain_base<Self, Ch, Tr, Alloc, Mode>::seek
+inline std::streampos chain_base<Self, Ch, Tr, Alloc, Mode>::seek
     (stream_offset off, BOOST_IOS::seekdir way)
 { return iostreams::seek(*list().front(), off, way); }
 
@@ -545,7 +547,7 @@ void chain_base<Self, Ch, Tr, Alloc, Mode>::pop()
         pimpl_->close();
     streambuf_type* buf = 0;
     std::swap(buf, list().back());
-    buf->set_auto_close(auto_close());
+    buf->set_auto_close(false);
     buf->set_next(0);
     delete buf;
     list().pop_back();
