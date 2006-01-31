@@ -47,7 +47,11 @@
 #include <list>
 #include <cassert>
 #ifndef BOOST_NO_SLIST
+# ifdef BOOST_SLIST_HEADER
+#   include BOOST_SLIST_HEADER
+# else
 # include <slist>
+# endif
 #endif
 
 
