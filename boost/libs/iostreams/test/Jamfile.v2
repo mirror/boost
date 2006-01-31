@@ -45,7 +45,13 @@ rule test-iostreams ( sources * : requirements * ) {
                 file_descriptor_test.cpp 
                 ../src/file_descriptor.cpp ]
           [ test-iostreams filtering_stream_test.cpp ]
-          #[ test-iostreams finite_state_filter_test.cpp ]
+          [ test-iostreams 
+                finite_state_filter_test.cpp 
+              : # build requirements 
+                # FIXME: yet to implement
+                #std::locale-support 
+          ]
+
           [ test-iostreams flush_test.cpp ]
           [ test-iostreams invert_test.cpp ]
           [ test-iostreams line_filter_test.cpp ]
