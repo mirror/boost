@@ -136,17 +136,27 @@ void replace_nth_test()
 {
     // replace nth
     TEST_ALGO( replace_nth, "1abc3abc2", string("abc") C_ 0 C_ string("YYY"), string("1YYY3abc2") );
+	TEST_ALGO( replace_nth, "1abc3abc2", string("abc") C_ -1 C_ string("YYY"), string("1abc3YYY2") );
     TEST_ALGO( ireplace_nth, "1AbC3abc2", "aBc" C_ 0 C_ "YYY", string("1YYY3abc2") );
+	TEST_ALGO( ireplace_nth, "1AbC3abc2", "aBc" C_ -1 C_ "YYY", string("1AbC3YYY2") );
     TEST_ALGO( replace_nth, "1abc3abc2", string("abc") C_ 0 C_ string("Z"), string("1Z3abc2") );
     TEST_ALGO( replace_nth, "1abc3abc2", string("abc") C_ 0 C_ string("XXXX"), string("1XXXX3abc2") );
     TEST_ALGO( replace_nth, "1abc3abc2", "abc" C_ 0 C_ "XXXX", string("1XXXX3abc2") );
+	TEST_ALGO( replace_nth, "1abc3abc2", "abc" C_ 3 C_ "XXXX", string("1abc3abc2") );
+	TEST_ALGO( replace_nth, "1abc3abc2", "abc" C_ -3 C_ "XXXX", string("1abc3abc2") );
     TEST_ALGO( replace_nth, "1abc3abc2", string("") C_ 0 C_ string("XXXX"), string("1abc3abc2") );
     TEST_ALGO( replace_nth, "", string("") C_ 0 C_ string("XXXX"), string("") );
+	TEST_ALGO( replace_nth, "", string("") C_ -1 C_ string("XXXX"), string("") );
     TEST_ALGO( erase_nth, "1abc3abc2", string("abc") C_ 0, string("13abc2") );
+	TEST_ALGO( erase_nth, "1abc3abc2", string("abc") C_ -1, string("1abc32") );
+	TEST_ALGO( erase_nth, "1abc3abc2", string("abc") C_ -3, string("1abc3abc2") );
     TEST_ALGO( ierase_nth, "1aBc3aBc2", "ABC" C_ 0, string("13aBc2") );
+	TEST_ALGO( ierase_nth, "1aBc3aBc2", "ABC" C_ -1, string("1aBc32") );
+	TEST_ALGO( ierase_nth, "1aBc3aBc2", "ABC" C_ -3, string("1aBc3aBc2") );
     TEST_ALGO( erase_nth, "1abc3abc2", "abc" C_ 0, string("13abc2") );
     TEST_ALGO( erase_nth, "1abc3abc2", string("") C_ 0, string("1abc3abc2") );
     TEST_ALGO( erase_nth, "", string("abc") C_ 0, string("") );
+	TEST_ALGO( erase_nth, "", string("abc") C_ -1, string("") );
     TEST_ALGO( replace_nth, "1abc3abc2", string("abc") C_ 1 C_ string("YYY"), string("1abc3YYY2") );
     TEST_ALGO( replace_nth, "1abc3abc2", string("abc") C_ 2 C_ string("YYY"), string("1abc3abc2") );
 }
@@ -155,28 +165,37 @@ void replace_head_test()
 {
     // replace head
     TEST_ALGO( replace_head, "abc3abc2", 3 C_ string("YYY"), string("YYY3abc2") );
+	TEST_ALGO( replace_head, "abc3abc2", -3 C_ string("YYY"), string("YYYbc2") );
     TEST_ALGO( replace_head, "abc3abc2", 3 C_ "YYY", string("YYY3abc2") );
     TEST_ALGO( replace_head, "abc", 3 C_ string("Z"), string("Z") );
     TEST_ALGO( replace_head, "abc", 6 C_ string("XXXX"), string("XXXX") );
+	TEST_ALGO( replace_head, "abc", -6 C_ string("XXXX"), string("abc") );
     TEST_ALGO( replace_head, "abc3abc2", 0 C_ string("XXXX"), string("abc3abc2") );
     TEST_ALGO( replace_head, "", 4 C_ string("XXXX"), string("") );
+	TEST_ALGO( replace_head, "", -4 C_ string("XXXX"), string("") );
     TEST_ALGO( erase_head, "abc3abc2", 3, string("3abc2") );
+	TEST_ALGO( erase_head, "abc3abc2", -3, string("bc2") );
     TEST_ALGO( erase_head, "abc3abc2", 0, string("abc3abc2") );
     TEST_ALGO( erase_head, "", 4, string("") );
+	TEST_ALGO( erase_head, "", -4, string("") );
 }
 
 void replace_tail_test()
 {
     // replace tail
     TEST_ALGO( replace_tail, "abc3abc", 3 C_ string("YYY"), string("abc3YYY") );
-    TEST_ALGO( replace_tail, "abc3abc", 3 C_ "YYY", string("abc3YYY") );
+    TEST_ALGO( replace_tail, "abc3abc", -3 C_ "YYY", string("abcYYY") );
     TEST_ALGO( replace_tail, "abc", 3 C_ string("Z"), string("Z") );
     TEST_ALGO( replace_tail, "abc", 6 C_ string("XXXX"), string("XXXX") );
+	TEST_ALGO( replace_tail, "abc", -6 C_ string("XXXX"), string("abc") );
     TEST_ALGO( replace_tail, "abc3abc", 0 C_ string("XXXX"), string("abc3abc") );
     TEST_ALGO( replace_tail, "", 4 C_ string("XXXX"), string("") );
+	TEST_ALGO( replace_tail, "", -4 C_ string("XXXX"), string("") );
     TEST_ALGO( erase_tail, "abc3abc", 3, string("abc3") );
+	TEST_ALGO( erase_tail, "abc3abc", -3, string("abc") );
     TEST_ALGO( erase_tail, "abc3abc", 0, string("abc3abc") );
     TEST_ALGO( erase_tail, "", 4, string("") );
+	TEST_ALGO( erase_tail, "", -4, string("") );
 }
 
 void replace_range_test()
