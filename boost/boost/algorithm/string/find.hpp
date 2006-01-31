@@ -188,7 +188,7 @@ namespace boost {
         find_nth( 
             Range1T& Input, 
             const Range2T& Search,
-            unsigned int Nth)
+            int Nth)
         {
             return nth_finder(Search,Nth)(
                 begin(Input),end(Input));
@@ -218,7 +218,7 @@ namespace boost {
         ifind_nth( 
             Range1T& Input, 
             const Range2T& Search,
-            unsigned int Nth,
+            int Nth,
             const std::locale& Loc=std::locale())
         {
             return nth_finder(Search,Nth,is_iequal(Loc))(
@@ -248,7 +248,7 @@ namespace boost {
             BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>
         find_head( 
             RangeT& Input, 
-            unsigned int N)
+            int N)
         {
             return head_finder(N)(
                 begin(Input),end(Input));      
@@ -278,7 +278,7 @@ namespace boost {
             BOOST_STRING_TYPENAME range_result_iterator<RangeT>::type>
         find_tail( 
             RangeT& Input, 
-            unsigned int N)
+            int N)
         {
             return tail_finder(N)(
                 begin(Input),end(Input));      

@@ -400,7 +400,7 @@ namespace boost {
             OutputIteratorT Output,
             const Range1T& Input,
             const Range2T& Search,
-            unsigned int Nth )
+            int Nth )
         {
             return find_format_copy(
                 Output,
@@ -417,7 +417,7 @@ namespace boost {
         inline SequenceT erase_nth_copy( 
             const SequenceT& Input,
             const RangeT& Search,
-            unsigned int Nth )
+            int Nth )
         {
             return find_format_copy( 
                 Input, 
@@ -438,7 +438,7 @@ namespace boost {
         inline void erase_nth( 
             SequenceT& Input,
             const RangeT& Search,
-            unsigned int Nth )
+            int Nth )
         {
             find_format( 
                 Input, 
@@ -473,7 +473,7 @@ namespace boost {
             OutputIteratorT Output,
             const Range1T& Input,
             const Range2T& Search,
-            unsigned int Nth,
+            int Nth,
             const std::locale& Loc=std::locale() )
         {
             return find_format_copy(
@@ -491,7 +491,7 @@ namespace boost {
         inline SequenceT ierase_nth_copy( 
             const SequenceT& Input,
             const RangeT& Search,
-            unsigned int Nth,
+            int Nth,
             const std::locale& Loc=std::locale() )
         {
             return find_format_copy( 
@@ -514,7 +514,7 @@ namespace boost {
         inline void ierase_nth( 
             SequenceT& Input,
             const RangeT& Search,
-            unsigned int Nth,
+            int Nth,
             const std::locale& Loc=std::locale() )
         {
             find_format( 
@@ -687,7 +687,7 @@ namespace boost {
         inline OutputIteratorT erase_head_copy(
             OutputIteratorT Output,
             const RangeT& Input,
-            unsigned int N )
+            int N )
         {
             return find_format_copy(
                 Output,
@@ -703,7 +703,7 @@ namespace boost {
         template<typename SequenceT>
         inline SequenceT erase_head_copy( 
             const SequenceT& Input,
-            unsigned int N )
+            int N )
         {
             return find_format_copy( 
                 Input,
@@ -723,7 +723,7 @@ namespace boost {
         template<typename SequenceT>
         inline void erase_head( 
             SequenceT& Input,
-            unsigned int N )
+            int N )
         {
             find_format( 
                 Input, 
@@ -755,7 +755,7 @@ namespace boost {
         inline OutputIteratorT erase_tail_copy(
             OutputIteratorT Output,
             const RangeT& Input,
-            unsigned int N )
+            int N )
         {
             return find_format_copy(
                 Output,
@@ -771,7 +771,7 @@ namespace boost {
         template<typename SequenceT>
         inline SequenceT erase_tail_copy( 
             const SequenceT& Input,
-            unsigned int N )
+            int N )
         {
             return find_format_copy( 
                 Input,
@@ -791,7 +791,7 @@ namespace boost {
         template<typename SequenceT>
         inline void erase_tail( 
             SequenceT& Input,
-            unsigned int N )
+            int N )
         {
             find_format( 
                 Input, 

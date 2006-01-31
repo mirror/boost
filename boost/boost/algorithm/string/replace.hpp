@@ -443,7 +443,7 @@ namespace boost {
             OutputIteratorT Output,
             const Range1T& Input,
             const Range2T& Search,
-            unsigned int Nth,
+            int Nth,
             const Range3T& Format )
         {
             return find_format_copy(
@@ -461,7 +461,7 @@ namespace boost {
         inline SequenceT replace_nth_copy( 
             const SequenceT& Input,
             const Range1T& Search,
-            unsigned int Nth,
+            int Nth,
             const Range2T& Format )
         {
             return find_format_copy( 
@@ -484,7 +484,7 @@ namespace boost {
         inline void replace_nth( 
             SequenceT& Input,
             const Range1T& Search,
-            unsigned int Nth,
+            int Nth,
             const Range2T& Format )
         {
             find_format( 
@@ -523,7 +523,7 @@ namespace boost {
             OutputIteratorT Output,
             const Range1T& Input,
             const Range2T& Search,
-            unsigned int Nth,
+            int Nth,
             const Range3T& Format,
             const std::locale& Loc=std::locale() )
         {
@@ -542,7 +542,7 @@ namespace boost {
         inline SequenceT ireplace_nth_copy( 
             const SequenceT& Input,
             const Range1T& Search,
-            unsigned int Nth,
+            int Nth,
             const Range2T& Format,
             const std::locale& Loc=std::locale() )
         {
@@ -568,7 +568,7 @@ namespace boost {
         inline void ireplace_nth( 
             SequenceT& Input,
             const Range1T& Search,
-            unsigned int Nth,
+            int Nth,
             const Range2T& Format,
             const std::locale& Loc=std::locale() )
         {
@@ -759,7 +759,7 @@ namespace boost {
         inline OutputIteratorT replace_head_copy(
             OutputIteratorT Output,
             const Range1T& Input,
-            unsigned int N,
+            int N,
             const Range2T& Format )
         {
             return find_format_copy(
@@ -776,7 +776,7 @@ namespace boost {
         template<typename SequenceT, typename RangeT>
         inline SequenceT replace_head_copy( 
             const SequenceT& Input,
-            unsigned int N,
+            int N,
             const RangeT& Format )
         {
             return find_format_copy( 
@@ -799,7 +799,7 @@ namespace boost {
         template<typename SequenceT, typename RangeT>
         inline void replace_head( 
             SequenceT& Input,
-            unsigned int N,
+            int N,
             const RangeT& Format )
         {
             find_format( 
@@ -835,7 +835,7 @@ namespace boost {
         inline OutputIteratorT replace_tail_copy(
             OutputIteratorT Output,
             const Range1T& Input,
-            unsigned int N,
+            int N,
             const Range2T& Format )
         {
             return find_format_copy(
@@ -852,7 +852,7 @@ namespace boost {
         template<typename SequenceT, typename RangeT>
         inline SequenceT replace_tail_copy( 
             const SequenceT& Input,
-            unsigned int N,
+            int N,
             const RangeT& Format )
         {
             return find_format_copy( 
@@ -875,7 +875,7 @@ namespace boost {
         template<typename SequenceT, typename RangeT>
         inline void replace_tail( 
             SequenceT& Input,
-            unsigned int N,
+            int N,
             const RangeT& Format )
         {
             find_format( 

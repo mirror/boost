@@ -132,7 +132,7 @@ namespace boost {
             is_equal>
         nth_finder( 
             const ContainerT& Search, 
-            unsigned int Nth)
+            int Nth)
         {
             return 
                 detail::nth_finderF<
@@ -150,7 +150,7 @@ namespace boost {
             PredicateT>
         nth_finder( 
             const ContainerT& Search, 
-            unsigned int Nth, 
+            int Nth, 
             PredicateT Comp )
         {
             return 
@@ -172,7 +172,7 @@ namespace boost {
             \return An instance of the \c head_finder object
         */
         inline detail::head_finderF
-        head_finder( unsigned int N )
+        head_finder( int N )
         {
             return detail::head_finderF(N);
         }
@@ -189,7 +189,7 @@ namespace boost {
             \return An instance of the \c tail_finder object
         */
         inline detail::tail_finderF
-        tail_finder( unsigned int N )
+        tail_finder( int N )
         {
             return detail::tail_finderF(N);
         }
