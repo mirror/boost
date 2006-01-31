@@ -1,0 +1,43 @@
+# Boost Typeof Library test Jamfile
+
+
+# The special requirement is not ported yet.
+#
+#local rule special-requirements ( toolset variant : properties * )
+#{
+#    # Tru64/CXX6.5 hangs on most tests, so just turn it off completely.
+#
+#    if $(UNIX) && $(OS) = OSF
+#    {
+#        switch $(toolset)
+#        {
+#            case tru64cxx65* : properties =
+#                [ replace-properties $(properties) : <build>no ] ;
+#        }
+#    }
+#    
+#    return $(properties) ;
+#}
+
+rule typeof-test ( source )
+{
+   return [ compile $(source) : <define>BOOST_TYPEOF_NATIVE :
+                $(source:B)_native ]
+          [ compile $(source) : <define>BOOST_TYPEOF_COMPLIANT :
+                $(source:B)_emulation ] 
+          ;        
+}
+
+rule all-tests ( )
+{
+    local all ;
+    for local t in [ glob *.cpp ] 
+    {
+        all += [ typeof-test $(t) ] ;
+    }
+    return $(all) ;    
+}
+
+test-suite "typeof" 
+	:  [ all-tests ]
+    ;
