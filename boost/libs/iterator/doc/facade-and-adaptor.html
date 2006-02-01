@@ -26,7 +26,7 @@
 Lab</a>, <a class="last reference" href="http://www.styleadvisor.com">Zephyr Associates, Inc.</a></td></tr>
 <tr><th class="docinfo-name">Date:</th>
 <td>2004-11-01</td></tr>
-<tr class="field"><th class="docinfo-name">Number:</th><td class="field-body">This is a revised version of <a class="reference" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2003/n1530.html">N1530</a>=03-0113, which was
+<tr class="field"><th class="docinfo-name">Number:</th><td class="field-body">This is a revised version of <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1530.html">N1530</a>=03-0113, which was
 accepted for Technical Report 1 by the C++ standard
 committee's library working group.</td>
 </tr>
@@ -128,9 +128,10 @@ by adapting other iterators.</td>
 </li>
 <li><a class="reference" href="#function-output-iterator" id="id68" name="id68">Function output iterator</a><ul>
 <li><a class="reference" href="#class-template-function-output-iterator" id="id69" name="id69">Class template <tt class="docutils literal"><span class="pre">function_output_iterator</span></tt></a></li>
-<li><a class="reference" href="#function-output-iterator-requirements" id="id70" name="id70"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#function-output-iterator-models" id="id71" name="id71"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> models</a></li>
-<li><a class="reference" href="#function-output-iterator-operations" id="id72" name="id72"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#header" id="id70" name="id70">Header</a></li>
+<li><a class="reference" href="#function-output-iterator-requirements" id="id71" name="id71"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> requirements</a></li>
+<li><a class="reference" href="#function-output-iterator-models" id="id72" name="id72"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> models</a></li>
+<li><a class="reference" href="#function-output-iterator-operations" id="id73" name="id73"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> operations</a></li>
 </ul>
 </li>
 </ul>
@@ -235,12 +236,12 @@ Iterator Concepts.</p>
 <div class="section" id="iterator-concepts">
 <h2><a class="toc-backref" href="#id18" name="iterator-concepts">Iterator Concepts</a></h2>
 <p>This proposal is formulated in terms of the new <tt class="docutils literal"><span class="pre">iterator</span> <span class="pre">concepts</span></tt>
-as proposed in <a class="reference" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2003/n1550.htm">n1550</a>, since user-defined and especially adapted
+as proposed in <a class="reference" href="http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/papers/2003/n1550.html">n1550</a>, since user-defined and especially adapted
 iterators suffer from the well known categorization problems that are
 inherent to the current iterator categories.</p>
-<p>This proposal does not strictly depend on proposal <a class="reference" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2003/n1550.htm">n1550</a>, as there
+<p>This proposal does not strictly depend on proposal <a class="reference" href="http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/papers/2003/n1550.html">n1550</a>, as there
 is a direct mapping between new and old categories. This proposal
-could be reformulated using this mapping if <a class="reference" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2003/n1550.htm">n1550</a> was not accepted.</p>
+could be reformulated using this mapping if <a class="reference" href="http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/papers/2003/n1550.html">n1550</a> was not accepted.</p>
 </div>
 <div class="section" id="interoperability">
 <h2><a class="toc-backref" href="#id19" name="interoperability">Interoperability</a></h2>
@@ -416,7 +417,7 @@ into the temporary iterator <tt class="docutils literal"><span class="pre">p+n</
 <tt class="docutils literal"><span class="pre">operator[]</span></tt> returns.</p>
 <p>Writable iterators built with <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> implement the
 semantics required by the preferred resolution to <a class="reference" href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-active.html#299">issue 299</a> and
-adopted by proposal <a class="reference" href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2003/n1550.htm">n1550</a>: the result of <tt class="docutils literal"><span class="pre">p[n]</span></tt> is an object
+adopted by proposal <a class="reference" href="http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/papers/2003/n1550.html">n1550</a>: the result of <tt class="docutils literal"><span class="pre">p[n]</span></tt> is an object
 convertible to the iterator's <tt class="docutils literal"><span class="pre">value_type</span></tt>, and <tt class="docutils literal"><span class="pre">p[n]</span> <span class="pre">=</span> <span class="pre">x</span></tt> is
 equivalent to <tt class="docutils literal"><span class="pre">*(p</span> <span class="pre">+</span> <span class="pre">n)</span> <span class="pre">=</span> <span class="pre">x</span></tt> (Note: This result object may be
 implemented as a proxy containing a copy of <tt class="docutils literal"><span class="pre">p+n</span></tt>).  This approach
@@ -426,9 +427,9 @@ the implementation of her iterator is free to implement an
 <tt class="docutils literal"><span class="pre">operator[]</span></tt> that returns an lvalue in the derived iterator
 class; it will hide the one supplied by <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> from
 clients of her iterator.</p>
-<a class="target" id="operator-arrow" name="operator-arrow"></a></div>
+</div>
 <div class="section" id="id6">
-<h3><a class="toc-backref" href="#id24" name="id6"><tt class="docutils literal"><span class="pre">operator-&gt;</span></tt></a></h3>
+<h3><a class="toc-backref" href="#id24" name="id6"><span class="target" id="operator-arrow"></span><tt class="docutils literal"><span class="pre">operator-&gt;</span></tt></a></h3>
 <p>The <tt class="docutils literal"><span class="pre">reference</span></tt> type of a readable iterator (and today's input
 iterator) need not in fact be a reference, so long as it is
 convertible to the iterator's <tt class="docutils literal"><span class="pre">value_type</span></tt>.  When the <tt class="docutils literal"><span class="pre">value_type</span></tt>
@@ -506,7 +507,7 @@ to the underlying values when dereferenced.</li>
 <li><tt class="docutils literal"><span class="pre">filter_iterator</span></tt>, which provides a view of an iterator range in
 which some elements of the underlying range are skipped.</li>
 </ul>
-<a class="target" id="counting" name="counting"></a><ul class="simple">
+<span class="target" id="counting"></span><ul class="simple">
 <li><tt class="docutils literal"><span class="pre">counting_iterator</span></tt>, which adapts any incrementable type
 (e.g. integers, iterators) so that incrementing/decrementing the
 adapted iterator and dereferencing it produces successive values of
@@ -685,12 +686,12 @@ template &lt;class Dr, class V, class TC, class R, class D&gt;
 Derived operator+ (typename Derived::difference_type n,
                    iterator_facade&lt;Dr,V,TC,R,D&gt; const&amp;);
 </pre>
-<a class="target" id="iterator-category" name="iterator-category"></a><p>The <tt class="docutils literal"><span class="pre">iterator_category</span></tt> member of <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> is</p>
+<span class="target" id="iterator-category"></span><p>The <tt class="docutils literal"><span class="pre">iterator_category</span></tt> member of <tt class="docutils literal"><span class="pre">iterator_facade</span></tt> is</p>
 <pre class="literal-block">
 <em>iterator-category</em>(CategoryOrTraversal, value_type, reference)
 </pre>
 <p>where <em>iterator-category</em> is defined as follows:</p>
-<a class="target" id="id12" name="id12"></a><pre class="literal-block">
+<span class="target" id="id12"></span><pre class="literal-block">
 <em>iterator-category</em>(C,R,V) :=
    if (C is convertible to std::input_iterator_tag
        || C is convertible to std::output_iterator_tag
@@ -773,7 +774,7 @@ object of type <tt class="docutils literal"><span class="pre">X</span></tt>, <tt
 object of a single pass iterator type interoperable with <tt class="docutils literal"><span class="pre">X</span></tt>, and <tt class="docutils literal"><span class="pre">z</span></tt>
 is a constant object of a random access traversal iterator type
 interoperable with <tt class="docutils literal"><span class="pre">X</span></tt>.</p>
-<a class="target" id="core-operations" name="core-operations"></a><div class="topic">
+<span class="target" id="core-operations"></span><div class="topic">
 <p class="topic-title first"><tt class="docutils literal"><span class="pre">iterator_facade</span></tt> Core Operations</p>
 <table border="1" class="docutils">
 <colgroup>
@@ -865,7 +866,7 @@ of type <tt class="docutils literal"><span class="pre">pointer</span></tt> equal
 </tr>
 </tbody>
 </table>
-<a class="target" id="brackets" name="brackets"></a><p><em>unspecified</em> <tt class="docutils literal"><span class="pre">operator[](difference_type</span> <span class="pre">n)</span> <span class="pre">const;</span></tt></p>
+<span class="target" id="brackets"></span><p><em>unspecified</em> <tt class="docutils literal"><span class="pre">operator[](difference_type</span> <span class="pre">n)</span> <span class="pre">const;</span></tt></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1125,7 +1126,7 @@ operator &gt;=(iterator_facade&lt;Dr1,V1,TC1,R1,D1&gt; const&amp; lhs,
 </tr>
 </tbody>
 </table>
-<a class="target" id="minus" name="minus"></a><pre class="literal-block">
+<span class="target" id="minus"></span><pre class="literal-block">
 template &lt;class Dr1, class V1, class TC1, class R1, class D1,
           class Dr2, class V2, class TC2, class R2, class D2&gt;
 typename enable_if_interoperable&lt;Dr1,Dr2,difference&gt;::type
@@ -1225,14 +1226,14 @@ class iterator_adaptor
     Base m_iterator; // exposition only
 };
 </pre>
-<a class="target" id="requirements" name="requirements"></a></div>
+</div>
 <div class="section" id="iterator-adaptor-requirements">
-<h3><a class="toc-backref" href="#id35" name="iterator-adaptor-requirements"><tt class="docutils literal"><span class="pre">iterator_adaptor</span></tt> requirements</a></h3>
+<h3><a class="toc-backref" href="#id35" name="iterator-adaptor-requirements"><span class="target" id="requirements"></span><tt class="docutils literal"><span class="pre">iterator_adaptor</span></tt> requirements</a></h3>
 <p><tt class="docutils literal"><span class="pre">static_cast&lt;Derived*&gt;(iterator_adaptor*)</span></tt> shall be well-formed.
 The <tt class="docutils literal"><span class="pre">Base</span></tt> argument shall be Assignable and Copy Constructible.</p>
-<a class="target" id="base-parameters" name="base-parameters"></a></div>
+</div>
 <div class="section" id="iterator-adaptor-base-class-parameters">
-<h3><a class="toc-backref" href="#id36" name="iterator-adaptor-base-class-parameters"><tt class="docutils literal"><span class="pre">iterator_adaptor</span></tt> base class parameters</a></h3>
+<h3><a class="toc-backref" href="#id36" name="iterator-adaptor-base-class-parameters"><span class="target" id="base-parameters"></span><tt class="docutils literal"><span class="pre">iterator_adaptor</span></tt> base class parameters</a></h3>
 <p>The <em>V'</em>, <em>C'</em>, <em>R'</em>, and <em>D'</em> parameters of the <tt class="docutils literal"><span class="pre">iterator_facade</span></tt>
 used as a base class in the summary of <tt class="docutils literal"><span class="pre">iterator_adaptor</span></tt>
 above are defined as follows:</p>
@@ -2547,6 +2548,12 @@ particularly because the proper implementation usually requires a
 proxy object.</p>
 <div class="section" id="class-template-function-output-iterator">
 <h4><a class="toc-backref" href="#id69" name="class-template-function-output-iterator">Class template <tt class="docutils literal"><span class="pre">function_output_iterator</span></tt></a></h4>
+</div>
+<div class="section" id="header">
+<h4><a class="toc-backref" href="#id70" name="header">Header</a></h4>
+<pre class="literal-block">
+#include &lt;boost/function_output_iterator.hpp&gt;
+</pre>
 <pre class="literal-block">
 template &lt;class UnaryFunction&gt;
 class function_output_iterator {
@@ -2570,16 +2577,16 @@ private:
 </pre>
 </div>
 <div class="section" id="function-output-iterator-requirements">
-<h4><a class="toc-backref" href="#id70" name="function-output-iterator-requirements"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> requirements</a></h4>
+<h4><a class="toc-backref" href="#id71" name="function-output-iterator-requirements"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> requirements</a></h4>
 <p><tt class="docutils literal"><span class="pre">UnaryFunction</span></tt> must be Assignable and Copy Constructible.</p>
 </div>
 <div class="section" id="function-output-iterator-models">
-<h4><a class="toc-backref" href="#id71" name="function-output-iterator-models"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> models</a></h4>
+<h4><a class="toc-backref" href="#id72" name="function-output-iterator-models"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> models</a></h4>
 <p><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> is a model of the Writable and
 Incrementable Iterator concepts.</p>
 </div>
 <div class="section" id="function-output-iterator-operations">
-<h4><a class="toc-backref" href="#id72" name="function-output-iterator-operations"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> operations</a></h4>
+<h4><a class="toc-backref" href="#id73" name="function-output-iterator-operations"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> operations</a></h4>
 <p><tt class="docutils literal"><span class="pre">explicit</span> <span class="pre">function_output_iterator(const</span> <span class="pre">UnaryFunction&amp;</span> <span class="pre">f</span> <span class="pre">=</span> <span class="pre">UnaryFunction());</span></tt></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />

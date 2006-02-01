@@ -1,3 +1,10 @@
+Header
+......
+
+::
+  
+  #include <boost/function_output_iterator.hpp>
+
 ::
 
   template <class UnaryFunction>

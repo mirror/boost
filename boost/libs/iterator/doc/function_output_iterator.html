@@ -49,12 +49,18 @@ proxy object.</td>
 <div class="contents topic" id="table-of-contents">
 <p class="topic-title first"><a name="table-of-contents">Table of Contents</a></p>
 <ul class="simple">
-<li><a class="reference" href="#function-output-iterator-requirements" id="id1" name="id1"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> requirements</a></li>
-<li><a class="reference" href="#function-output-iterator-models" id="id2" name="id2"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> models</a></li>
-<li><a class="reference" href="#function-output-iterator-operations" id="id3" name="id3"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> operations</a></li>
-<li><a class="reference" href="#example" id="id4" name="id4">Example</a></li>
+<li><a class="reference" href="#header" id="id1" name="id1">Header</a></li>
+<li><a class="reference" href="#function-output-iterator-requirements" id="id2" name="id2"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> requirements</a></li>
+<li><a class="reference" href="#function-output-iterator-models" id="id3" name="id3"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> models</a></li>
+<li><a class="reference" href="#function-output-iterator-operations" id="id4" name="id4"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> operations</a></li>
+<li><a class="reference" href="#example" id="id5" name="id5">Example</a></li>
 </ul>
 </div>
+<div class="section" id="header">
+<h1><a class="toc-backref" href="#id1" name="header">Header</a></h1>
+<pre class="literal-block">
+#include &lt;boost/function_output_iterator.hpp&gt;
+</pre>
 <pre class="literal-block">
 template &lt;class UnaryFunction&gt;
 class function_output_iterator {
@@ -76,17 +82,18 @@ private:
   UnaryFunction m_f;     // exposition only
 };
 </pre>
+</div>
 <div class="section" id="function-output-iterator-requirements">
-<h1><a class="toc-backref" href="#id1" name="function-output-iterator-requirements"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> requirements</a></h1>
+<h1><a class="toc-backref" href="#id2" name="function-output-iterator-requirements"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> requirements</a></h1>
 <p><tt class="docutils literal"><span class="pre">UnaryFunction</span></tt> must be Assignable and Copy Constructible.</p>
 </div>
 <div class="section" id="function-output-iterator-models">
-<h1><a class="toc-backref" href="#id2" name="function-output-iterator-models"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> models</a></h1>
+<h1><a class="toc-backref" href="#id3" name="function-output-iterator-models"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> models</a></h1>
 <p><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> is a model of the Writable and
 Incrementable Iterator concepts.</p>
 </div>
 <div class="section" id="function-output-iterator-operations">
-<h1><a class="toc-backref" href="#id3" name="function-output-iterator-operations"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> operations</a></h1>
+<h1><a class="toc-backref" href="#id4" name="function-output-iterator-operations"><tt class="docutils literal"><span class="pre">function_output_iterator</span></tt> operations</a></h1>
 <p><tt class="docutils literal"><span class="pre">explicit</span> <span class="pre">function_output_iterator(const</span> <span class="pre">UnaryFunction&amp;</span> <span class="pre">f</span> <span class="pre">=</span> <span class="pre">UnaryFunction());</span></tt></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -127,7 +134,7 @@ is equivalent to <tt class="docutils literal"><span class="pre">m_f(t)</span></t
 </table>
 </div>
 <div class="section" id="example">
-<h1><a class="toc-backref" href="#id4" name="example">Example</a></h1>
+<h1><a class="toc-backref" href="#id5" name="example">Example</a></h1>
 <pre class="literal-block">
 struct string_appender
 {
