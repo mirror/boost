@@ -1,5 +1,6 @@
 # Boost Typeof Library test Jamfile
 
+import set ;
 
 # The special requirement is not ported yet.
 #
@@ -31,10 +32,14 @@ rule typeof-test ( source )
 rule all-tests ( )
 {
     local all ;
-    for local t in [ glob *.cpp ] 
+    for local t in [ set.difference [ glob *.cpp ] : odr1.cpp odr2.cpp ]
     {
         all += [ typeof-test $(t) ] ;
     }
+    all += [ run odr1.cpp odr2.cpp : : : <define>BOOST_TYPEOF_NATIVE :
+                odr_native ] ;
+    all += [ run odr1.cpp odr2.cpp : : : <define>BOOST_TYPEOF_COMPIANT :
+                odr_emulation ] ;		
     return $(all) ;    
 }
 
