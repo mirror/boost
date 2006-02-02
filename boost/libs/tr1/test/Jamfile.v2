@@ -2,10 +2,14 @@
 
 project :
     : requirements
-      <include>$(BOOST_ROOT)/boost/tr1/tr1 
-      # Borland's broken include mechanism needs these extra headers:
-      <toolset>borland:<include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
     ; 
+    
+local TR1_PROPERTIES = 
+    <include>$(BOOST_ROOT)/boost/tr1/tr1 
+    # Borland's broken include mechanism needs these extra headers:
+    <toolset>borland:<include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
+    ;
+
 
 #
 # define the sources which need testing, mostly this is just
@@ -24,7 +28,7 @@ rule test_all
    {
       all_rules += [ compile $(file) ] ;
       all_rules += [ compile $(file) 
-         : <define>TEST_STD_HEADERS=1 : std_$(file:B) ] ;
+         : <define>TEST_STD_HEADERS=1 $(TR1_PROPERTIES) : std_$(file:B) ] ;
    }
    for local fileb in [ glob run*.cpp ]
    {
@@ -33,7 +37,7 @@ rule test_all
       :  # additional args
       :  # test-files
       :  # requirements
-		<define>TEST_STD_HEADERS=1 : std_$(fileb:B)  ] ;
+		<define>TEST_STD_HEADERS=1 $(TR1_PROPERTIES) : std_$(fileb:B)  ] ;
    }
    for local file2 in [ glob config/tr1_has_tr1*fail.cpp ]
    {
@@ -53,15 +57,17 @@ rule test_all
       :  # test-files
       :  # requirements
       <include>$(BOOST_ROOT)/libs/type_traits/test 
-      <define>TEST_STD=1 ] ;
+      <define>TEST_STD=1 $(TR1_PROPERTIES) ] ;
    }
 # Commented due to conflict between test_complex in this dir
 # and in std_headers.
-#   for local file5 in [ glob std_headers/*.cpp ]
-#   {
-#      all_rules += [ compile $(file5) 
-#      :   <define>TEST_STD=1 ] ;
-#   }
+   for local file5 in [ glob std_headers/*.cpp ]
+   {
+      all_rules += [ compile $(file5) 
+      :   <define>TEST_STD=1 $(TR1_PROPERTIES) 
+      :   $(file5:B)_std_header
+      ] ;
+   }
    #ECHO $(all_rules) ;
    return $(all_rules) ;
 }
