@@ -101,7 +101,7 @@ void test_all_unaries() {
 new_binary_bunch(add, +, true);
 new_binary_bunch(sub, -, true);
 new_binary_bunch(mul, *, true);
-new_binary_bunch(div, /, !in_zero(b));
+new_binary_bunch(div, /, !zero_in(b));
 
 template<class T>
 void test_all_binaries() {

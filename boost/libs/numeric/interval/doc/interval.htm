@@ -199,7 +199,7 @@ interval-specific functions (<code>min</code>, <code>max</code>, which have a
 different meaning than <code>std::min</code> and <code>std::max</code>;
 <code>lower</code>, <code>upper</code>, <code>width</code>,
 <code>median</code>, <code>empty</code>, <code>singleton</code>,
-<code>equal</code>, <code>in</code>, <code>in_zero</code>,
+<code>equal</code>, <code>in</code>, <code>zero_in</code>,
 <code>subset</code>, <code>proper_subset</code>, <code>overlap</code>,
 <code>intersection</code>, <code>hull</code>, <code>bisect</code>).</p>
 
@@ -313,7 +313,7 @@ template &lt;class T, class Policies&gt;  bool empty(const interval&lt;T, Polici
 template &lt;class T, class Policies&gt;  bool singleton(const interval&lt;T, Policies&gt;&amp; x);
 template &lt;class T, class Policies&gt;  bool equal(const interval&lt;T, Policies&gt;&amp; x, const interval&lt;T, Policies&gt;&amp; y);
 template &lt;class T, class Policies&gt;  bool in(const T&amp; r, const interval&lt;T, Policies&gt;&amp; b);
-template &lt;class T, class Policies&gt;  bool in_zero(const interval&lt;T, Policies&gt;&amp; b);
+template &lt;class T, class Policies&gt;  bool zero_in(const interval&lt;T, Policies&gt;&amp; b);
 template &lt;class T, class Policies&gt;  bool subset(const interval&lt;T, Policies&gt;&amp; a, const interval&lt;T, Policies&gt;&amp; b);
 template &lt;class T, class Policies&gt;  bool proper_subset(const interval&lt;T, Policies&gt;&amp; a, const interval&lt;T, Policies&gt;&amp; b);
 template &lt;class T, class Policies&gt;  bool overlap(const interval&lt;T, Policies&gt;&amp; x, const interval&lt;T, Policies&gt;&amp; y);
@@ -526,7 +526,7 @@ its value is assumed to be true and the behavior of the function is then
 undetermined if the division does not produce a second interval.</p>
 
 <h4><code>intersect</code> <code>hull</code> <code>overlap</code>
-<code>in</code> <code>in_zero</code> <code>subset</code>
+<code>in</code> <code>zero_in</code> <code>subset</code>
 <code>proper_subset</code> <code>empty</code> <code>singleton</code>
 <code>equal</code></h4>
 
@@ -543,7 +543,7 @@ function computes the union.</p>
 
 <p>The function <code>overlap</code> tests if two intervals have some common
 subset. <code>in</code> tests if a number is in an interval;
-<code>in_zero</code> is a variant which tests if zero is in the interval.
+<code>zero_in</code> is a variant which tests if zero is in the interval.
 <code>subset</code> tests if the first interval is a subset of the second;
 and <code>proper_subset</code> tests if it is a proper subset.
 <code>empty</code> and <code>singleton</code> test if an interval is empty or

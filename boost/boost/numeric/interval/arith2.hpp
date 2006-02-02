@@ -73,7 +73,7 @@ interval<T, Policies> division_part1(const interval<T, Policies>& x,
   b = false;
   if (detail::test_input(x, y))
     return I::empty();
-  if (in_zero(y))
+  if (zero_in(y))
     if (!user::is_zero(y.lower()))
       if (!user::is_zero(y.upper()))
         return detail::div_zero_part1(x, y, b);
@@ -104,7 +104,7 @@ interval<T, Policies> multiplicative_inverse(const interval<T, Policies>& x)
     return I::empty();
   T one = static_cast<T>(1);
   typename Policies::rounding rnd;
-  if (in_zero(x)) {
+  if (zero_in(x)) {
     typedef typename Policies::checking checking;
     if (!user::is_zero(x.lower()))
       if (!user::is_zero(x.upper()))

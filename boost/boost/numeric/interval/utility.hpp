@@ -101,11 +101,17 @@ bool empty(const interval<T, Policies>& x)
 }
 
 template<class T, class Policies> inline
-bool in_zero(const interval<T, Policies>& x)
+bool zero_in(const interval<T, Policies>& x)
 {
   if (interval_lib::detail::test_input(x)) return false;
   return (!interval_lib::user::is_pos(x.lower())) &&
          (!interval_lib::user::is_neg(x.upper()));
+}
+
+template<class T, class Policies> inline
+bool in_zero(const interval<T, Policies>& x) // DEPRECATED
+{
+  return zero_in<T, Policies>(x);
 }
 
 template<class T, class Policies> inline

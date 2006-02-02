@@ -47,7 +47,7 @@ void det(I (&mat)[size][size]) {
       for(int k = i; k < size; k++)
         mat[j][k] -= f * mat[i][k];
     }
-    if (in_zero(c)) return;
+    if (zero_in(c)) return;
   }
 }
 

@@ -77,7 +77,7 @@ std::basic_ostream<CharType, CharTraits> &operator<<
   } else if (singleton(value)) {
     boost::io::ios_precision_saver state(stream, std::numeric_limits<T>::digits10);
     return stream << lower(value);
-  } else if (in_zero(value)) {
+  } else if (zero_in(value)) {
     return stream << "0~";
   } else {
     const T rel = width(value) / norm(value);
@@ -101,7 +101,7 @@ std::basic_ostream<CharType, CharTraits> &operator<<
   } else if (singleton(value)) {
     boost::io::ios_precision_saver state(stream, std::numeric_limits<T>::digits10);
     return stream << lower(value);
-  } else if (in_zero(value)) {
+  } else if (zero_in(value)) {
     return stream << "0~";
   } else {
     std::streamsize p = stream.precision();

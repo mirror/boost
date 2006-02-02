@@ -74,7 +74,7 @@ int det_sign_algo1(const matrix<double> &a) {
       double max = 0;
       for(int j = i; j < dim; j++) {
         const I &v = u[p[j]][i];
-        if (in_zero(v)) continue;
+        if (zero_in(v)) continue;
         double m = norm(v);
         if (m > max) { max = m; pivot = j; }
       }

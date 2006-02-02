@@ -43,7 +43,7 @@ std::vector<I1> newton_raphson(const I1& xs) {
     double xx = median(x);
     vf = f<I1>(xx);
     vd = f_diff<I1>(x);
-    if (in_zero(vf) && in_zero(vd)) {
+    if (zero_in(vf) && zero_in(vd)) {
       x1 = I1::whole();
       x2_used = false;
     } else {
@@ -57,17 +57,17 @@ std::vector<I1> newton_raphson(const I1& xs) {
       if (overlap(x2, x)) x2 = intersect(x, x2);
       else x2_used = false;
     if (x2_used && width(x2) > width(x1)) std::swap(x1, x2);
-    if (!in_zero(f(x1)))
+    if (!zero_in(f(x1)))
       if (x2_used) { x1 = x2; x2_used = false; }
       else continue;
     if (width(x1) < max_width) res.push_back(x1);
     else if (width(x1) > alpha * width(x)) {
       std::pair<I1, I1> p = bisect(x);
-      if (in_zero(f(p.first))) l.push_back(p.first);
+      if (zero_in(f(p.first))) l.push_back(p.first);
       x2 = p.second;
       x2_used = true;
     } else l.push_back(x1);
-    if (x2_used && in_zero(f(x2)))
+    if (x2_used && zero_in(f(x2)))
       if (width(x2) < max_width) res.push_back(x2);
       else l.push_back(x2);
   }
@@ -89,7 +89,7 @@ std::vector<I2> newton_raphson(const I2& xs) {
     double xx = median(x);
     vf = f<I2>(xx);
     vd = f_diff<I2>(x);
-    if (in_zero(vf) && in_zero(vd)) {
+    if (zero_in(vf) && zero_in(vd)) {
       x1 = x;
       x2 = I2::empty();
     } else {
@@ -98,16 +98,16 @@ std::vector<I2> newton_raphson(const I2& xs) {
       x2 = intersect(x, xx - division_part2(vf, vd, x2_used));
     }
     if (width(x2) > width(x1)) std::swap(x1, x2);
-    if (empty(x1) || !in_zero(f(x1)))
+    if (empty(x1) || !zero_in(f(x1)))
       if (!empty(x2)) { x1 = x2; x2 = I2::empty(); }
       else continue;
     if (width(x1) < max_width) res.push_back(x1);
     else if (width(x1) > alpha * width(x)) {
       std::pair<I2, I2> p = bisect(x);
-      if (in_zero(f(p.first))) l.push_back(p.first);
+      if (zero_in(f(p.first))) l.push_back(p.first);
       x2 = p.second;
     } else l.push_back(x1);
-    if (!empty(x2) && in_zero(f(x2)))
+    if (!empty(x2) && zero_in(f(x2)))
       if (width(x2) < max_width) res.push_back(x2);
       else l.push_back(x2);
   }

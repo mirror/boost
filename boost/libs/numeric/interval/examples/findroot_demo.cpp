@@ -85,7 +85,7 @@ void find_zeros(std::ostream & os, Function f, I searchrange)
     I range = l.front();
     l.pop_front();
     I val = f(range);
-    if (in_zero(val)) {
+    if (zero_in(val)) {
       if(width(range) < 1e-6) {
         os << range << '\n';
         continue;
@@ -125,7 +125,7 @@ void find_zeros(std::ostream & os, Function f, I rx, I ry)
     rectangle rect = l.front();
     l.pop_front();
     I val = f(rect.first, rect.second);
-    if (in_zero(val)) {
+    if (zero_in(val)) {
       if(width(rect.first) < epsilon && width(rect.second) < epsilon) {
         os << median(rect.first) << " " << median(rect.second) << " "
            << lower(rect.first) << " " << upper(rect.first) << " "
