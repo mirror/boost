@@ -55,9 +55,7 @@ namespace boost { namespace numeric { namespace ublas {
         explicit BOOST_UBLAS_INLINE
         unbounded_array (const ALLOC &a = ALLOC()):
             alloc_ (a), size_ (0) {
-#ifndef NDEBUG
-            data_ = 0;    // simplify debugging by giving data_ a definate value
-#endif
+            data_ = 0;
         }
         explicit BOOST_UBLAS_INLINE
         unbounded_array (size_type size, const ALLOC &a = ALLOC()):
@@ -73,10 +71,8 @@ namespace boost { namespace numeric { namespace ublas {
                     new (d) value_type;
 #endif
             }
-#ifndef NDEBUG            
             else
-                data_ = 0;    // simplify debugging by giving data_ a definate value
-#endif
+                data_ = 0;
         }
         // No value initialised, but still be default constructed
         BOOST_UBLAS_INLINE
@@ -86,10 +82,8 @@ namespace boost { namespace numeric { namespace ublas {
                 data_ = alloc_.allocate (size_);
                 std::uninitialized_fill (begin(), end(), init);
             }
-#ifndef NDEBUG            
             else
-                data_ = 0;    // simplify debugging by giving data_ a definate value
-#endif
+                data_ = 0;
         }
         BOOST_UBLAS_INLINE
         unbounded_array (const unbounded_array &c):
@@ -99,10 +93,8 @@ namespace boost { namespace numeric { namespace ublas {
                 data_ = alloc_.allocate (size_);
                 std::uninitialized_copy (c.begin(), c.end(), begin());
             }
-#ifndef NDEBUG            
             else
-                data_ = 0;    // simplify debugging by giving data_ a definate value
-#endif
+                data_ = 0;
         }
         BOOST_UBLAS_INLINE
         ~unbounded_array () {
@@ -160,10 +152,8 @@ namespace boost { namespace numeric { namespace ublas {
                     alloc_.deallocate (p_data, size_);
                 }
 
-#ifndef NDEBUG            
                 if (!size)
-                    data_ = 0;    // simplify debugging by giving data_ a definate value
-#endif
+                    data_ = 0;
                 size_ = size;
             }
         }
