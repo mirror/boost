@@ -69,6 +69,13 @@ namespace quickbook { namespace detail
     remove_extension(std::string const& filename);
     
     std::string escape_uri(std::string uri);
+    
+    // Preformats an error/warning message so that it can be parsed by
+    // common IDEs. Uses the ms_errors global to determine if VS format
+    // or GCC format. Returns the stream to continue ouput of the verbose
+    // error message.
+    std::ostream & outerr(const std::string & file, int line);
+    std::ostream & outwarn(const std::string & file, int line);
 }}
 
 #endif // BOOST_SPIRIT_QUICKBOOK_UTILS_HPP

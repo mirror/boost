@@ -13,6 +13,7 @@
 #include <boost/bind.hpp>
 #include <boost/filesystem/convenience.hpp>
 #include "./actions.hpp"
+#include "./utils.hpp"
 
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
 #pragma warning(disable:4355)
@@ -23,10 +24,8 @@ namespace quickbook
     void error_action::operator()(iterator const& first, iterator const& /*last*/) const
     {
         boost::spirit::file_position const pos = first.get_position();
-        std::cerr
-            << "Syntax Error at \"" << pos.file
-            << "\" line " << pos.line
-            << ", column " << pos.column << ".\n";
+        detail::outerr(pos.file,pos.line)
+            << "Syntax Error near column " << pos.column << ".\n";
     }
 
     void phrase_action::operator()(iterator const& first, iterator const& last) const
@@ -160,11 +159,10 @@ namespace quickbook
         if (mark != list_marks.top().first) // new_indent == indent
         {
             boost::spirit::file_position const pos = first.get_position();
-            std::cerr
-                << "Illegal change of list style at \"" << pos.file
-                << "\" line " << pos.line
-                << ", column " << pos.column << ".\n";
-            std::cerr << "Ignoring change of list style" << std::endl;
+            detail::outerr(pos.file,pos.line)
+                << "Illegal change of list style near column " << pos.column << ".\n";
+            detail::outwarn(pos.file,pos.line)
+                << "Ignoring change of list style" << std::endl;
         }
     }
 
@@ -512,10 +510,8 @@ namespace quickbook
         if (level < 0)
         {
             boost::spirit::file_position const pos = first.get_position();
-            std::cerr
-                << "Mismatched [endsect] at: \"" << pos.file
-                << "\" line " << pos.line
-                << ", column " << pos.column << ".\n";
+            detail::outerr(pos.file,pos.line)
+                << "Mismatched [endsect] near column " << pos.column << ".\n";
         }
         if (level == 0)
         {
@@ -663,7 +659,8 @@ namespace quickbook
             qbk_major_version = 1;
             qbk_minor_version = 1;
             qbk_version_n = 101;
-            std::cerr << "Warning: Quickbook version undefined. "
+            detail::outwarn(actions.filename.native_file_string(),1)
+                << "Warning: Quickbook version undefined. "
                 "Version 1.1 is assumed" << std::endl;
         }
         else

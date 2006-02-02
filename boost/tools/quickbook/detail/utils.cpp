@@ -11,6 +11,10 @@
 #include <cctype>
 #include <boost/spirit/core.hpp>
 
+namespace quickbook {
+    extern bool ms_errors;
+}
+
 namespace quickbook { namespace detail
 {
     void
@@ -139,6 +143,22 @@ namespace quickbook { namespace detail
             }
         }
         return uri;
+    }
+    
+    std::ostream & outerr(const std::string & file, int line)
+    {
+        if (ms_errors)
+            return std::clog << file << "(" << line << "): error: ";
+        else
+            return std::clog << file << ":" << line << ": error: ";
+    }
+    
+    std::ostream & outwarn(const std::string & file, int line)
+    {
+        if (ms_errors)
+            return std::clog << file << "(" << line << "): warning: ";
+        else
+            return std::clog << file << ":" << line << ": warning: ";
     }
 }}
 

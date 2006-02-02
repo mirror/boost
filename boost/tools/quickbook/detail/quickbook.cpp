@@ -39,6 +39,7 @@ namespace quickbook
     unsigned qbk_major_version = 0;
     unsigned qbk_minor_version = 0;
     unsigned qbk_version_n = 0; // qbk_major_version * 100 + qbk_minor_version
+    bool ms_errors = false; // output errors/warnings as if for VS
 
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -58,7 +59,8 @@ namespace quickbook
 
         if (!in)
         {
-            cerr << "Could not open input file: " << filename << endl;
+            detail::outerr(filename,1)
+                << "Could not open input file." << endl;
             return 1;
         }
 
@@ -116,10 +118,8 @@ namespace quickbook
         if (!info.full)
         {
             file_position const pos = info.stop.get_position();
-            cerr
-                << "Syntax error at \"" << pos.file
-                << "\" line " << pos.line
-                << ", column " << pos.column << ".\n";
+            detail::outerr(pos.file,pos.line)
+                << "Syntax Error near column " << pos.column << ".\n";
             return 1;
         }
 
@@ -132,9 +132,8 @@ namespace quickbook
         actions actor(filein_, outdir, out);
         bool r = parse(filein_, actor);
         if (actor.level != 0)
-            std::cerr 
-                << "Warning missing [endsect] detected at end of file: " 
-                << filein_
+            detail::outwarn(filein_,1)
+                << "Warning missing [endsect] detected at end of file."
                 << std::endl;
         return r;
     }
@@ -201,6 +200,7 @@ main(int argc, char* argv[])
             ("input-file", value<std::string>(), "input file")
             ("output-file", value<std::string>(), "output file")
             ("debug", "debug mode (for developers)")
+            ("ms-errors", "use Microsoft Visual Studio style error & warn message format")
         ;
         
         positional_options_description p;
@@ -224,6 +224,9 @@ main(int argc, char* argv[])
             std::cout << QUICKBOOK_VERSION << std::endl;
             return 0;
         }
+    
+        if (vm.count("ms-errors"))
+            quickbook::ms_errors = true;
 
         if (vm.count("no-pretty-print"))
             pretty_print = false;
@@ -282,19 +285,19 @@ main(int argc, char* argv[])
         }
         else
         {
-            std::cerr << "Error: No filename given" << std::endl;
+            quickbook::detail::outerr("",0) << "Error: No filename given" << std::endl;
         }
     }
     
     catch(std::exception& e) 
     {
-        std::cerr << "Error: " << e.what() << "\n";
+        quickbook::detail::outerr("",0) << "Error: " << e.what() << "\n";
         return 1;
     }
 
     catch(...) 
     {
-        std::cerr << "Error: Exception of unknown type caught\n";
+        quickbook::detail::outerr("",0) << "Error: Exception of unknown type caught\n";
     }
 
     return 0;
