@@ -54,6 +54,28 @@ policy class that controls the various behaviours of the interval class;
 <code>interval&lt;T&gt;</code> just happens to pick the default policies for
 the type <code>T</code>.</p>
 
+<p><span style="color: #FF0000; font-weight: bold">Warning!</span> Guaranteed interval arithmetic
+for native floating-point format is not supported on every combination of
+processor, operating system, and compiler. This is a list of systems known to
+work correctly when using <code>interval&lt;float&gt;</code> and
+<code>interval&lt;double&gt;</code> with basic arithmetic operators.</p>
+
+<ul>
+<li>x86-like hardware is supported by the library with GCC, Visual C++ &ge;
+7.1, Intel compiler (&ge; 8 on Windows), CodeWarrior (&ge; 9), as long as the
+traditional x87 floating-point unit is used for floating-point computations
+(no <code>-mfpmath=sse2</code> support).</li>
+<li>Sparc hardware is supported with GCC and Sun compiler.</li>
+<li>PowerPC hardware is supported with GCC and CodeWarrior, when floating-point
+computations are not done with the Altivec unit.</li>
+<li>Alpha hardware is supported with GCC, except maybe for the square root. The
+options <code>-mfp-rounding-mode=d -mieee</code> have to be used.</li>
+</ul>
+
+<p>The previous list is not exhaustive. And even if a system does not provide
+guaranteed computations for hardware floating-point types, the interval library
+is still usable with user-defined types and for doing box arithmetic.</p>
+
 <h3>Interval Arithmetic</h3>
 
 <p>An interval is a pair of numbers which represents all the numbers between
@@ -904,9 +926,9 @@ author(s) and do not necessarily reflect the views of the National Science
 Foundation (NSF).</p>
 <hr>
 
-<p>Revised: 2005-12-19<br>
+<p>Revised: 2006-02-02<br>
 Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.
 Polytechnic University.<br>
-Copyright (c) Guillaume Melquiond, 2003-2005. ENS Lyon.</p>
+Copyright (c) Guillaume Melquiond, 2003-2006. ENS Lyon.</p>
 </body>
 </html>

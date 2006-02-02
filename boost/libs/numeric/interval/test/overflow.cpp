@@ -36,7 +36,7 @@ void test() {
 int test_main(int, char *[]) {
   test<boost::numeric::interval<float> >();
   test<boost::numeric::interval<double> >();
-  test<boost::numeric::interval<long double> >();
+  //test<boost::numeric::interval<long double> >();
 # ifdef __BORLANDC__
   ::detail::ignore_warnings();
 # endif
