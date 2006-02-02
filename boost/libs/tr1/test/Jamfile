@@ -84,13 +84,15 @@ rule test_all
          <borland-5_5_1><*><include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
          <borland><*><include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
          <include>$(BOOST_ROOT) 
-         <define>TEST_STD=1 ] ;
+         <define>TEST_STD=1 : $(file5:B)_std_header   ] ;
    }
    #ECHO $(all_rules) ;
    return $(all_rules) ;
 }
 
 test-suite tr1 : [ test_all r ] ; 
+
+
 
 
 
