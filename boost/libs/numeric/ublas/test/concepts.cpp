@@ -14,17 +14,6 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifdef BOOST_MSVC
-
-#pragma warning (disable: 4355)
-#pragma warning (disable: 4503)
-#pragma warning (disable: 4786)
-
-#endif
-
-#include <cassert>
-#include <iostream>
-
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/vector_proxy.hpp>
 #include <boost/numeric/ublas/vector_sparse.hpp>
@@ -36,15 +25,12 @@
 #include <boost/numeric/ublas/hermitian.hpp>
 #include <boost/numeric/ublas/matrix_sparse.hpp>
 #include <boost/numeric/ublas/vector_of_vector.hpp>
-#include <boost/numeric/ublas/io.hpp>
-
 #include <boost/numeric/ublas/detail/concepts.hpp>
 
 namespace ublas = boost::numeric::ublas;
 
+
 int main () {
     void (* check) (void) = ublas::concept_checks;
     boost::ignore_unused_variable_warning (check);
-    return 0;
 }
-
