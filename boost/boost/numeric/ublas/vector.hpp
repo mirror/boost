@@ -299,7 +299,7 @@ namespace boost { namespace numeric { namespace ublas {
             const_iterator (const self_type &v, const const_subiterator_type &it):
                 container_const_reference<self_type> (v), it_ (it) {}
             BOOST_UBLAS_INLINE
-            const_iterator (const iterator &it):
+            const_iterator (const typename vector::iterator &it):  // ISSUE vector:: stops VC8 using std::iteraot here
                 container_const_reference<self_type> (it ()), it_ (it.it_) {}
 
             // Arithmetic
@@ -686,26 +686,26 @@ namespace boost { namespace numeric { namespace ublas {
             // Arithmetic
             BOOST_UBLAS_INLINE
             const_iterator &operator ++ () {
-                BOOST_UBLAS_CHECK (false, bad_index ());
+                BOOST_UBLAS_CHECK_FALSE (bad_index ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             const_iterator &operator -- () {
-                BOOST_UBLAS_CHECK (false, bad_index ());
+                BOOST_UBLAS_CHECK_FALSE (bad_index ());
                 return *this;
             }
 
             // Dereference
             BOOST_UBLAS_INLINE
             const_reference operator * () const {
-                BOOST_UBLAS_CHECK (false, bad_index ());
+                BOOST_UBLAS_CHECK_FALSE (bad_index ());
                 return zero_;   // arbitary return value
             }
 
             // Index
             BOOST_UBLAS_INLINE
             size_type index () const {
-                BOOST_UBLAS_CHECK (false, bad_index ());
+                BOOST_UBLAS_CHECK_FALSE (bad_index ());
                 return 0;   // arbitary return value
             }
 
@@ -1465,7 +1465,7 @@ namespace boost { namespace numeric { namespace ublas {
             const_iterator (const self_type &v, const const_subiterator_type &it):
                 container_const_reference<self_type> (v), it_ (it) {}
             BOOST_UBLAS_INLINE
-            const_iterator (const iterator &it):
+            const_iterator (const typename self_type::iterator &it):  // ISSUE self_type:: stops VC8 using std::iteraot here
                 container_const_reference<self_type> (it ()), it_ (it.it_) {}
 
             // Arithmetic
