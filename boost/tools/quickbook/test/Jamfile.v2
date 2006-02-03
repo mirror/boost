@@ -17,4 +17,5 @@ test-suite quickbook.test :
     [ quickbook-test code-snippet ]
     [ quickbook-test preformatted ]
     [ quickbook-test link-side-by-side ]
+    [ quickbook-test escape ]
     ;

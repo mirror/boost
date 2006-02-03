@@ -124,7 +124,6 @@ namespace quickbook
                     |   simple_italic
                     |   simple_underline
                     |   simple_teletype
-                    //|   simple_strikethrough
                     ;
 
                 simple_markup(simple_bold, 
@@ -135,8 +134,6 @@ namespace quickbook
                     '_', actions.simple_underline, eol);
                 simple_markup(simple_teletype, 
                     '=', actions.simple_teletype, eol);
-                //simple_markup(simple_strikethrough, 
-                //    '-', actions.simple_strikethrough, eol);
 
                 phrase =
                    *(   common
@@ -164,6 +161,7 @@ namespace quickbook
                         |   teletype
                         |   strikethrough
                         |   quote
+                        |   replaceable
                         |   footnote
                         |   str_p("br")                 [actions.break_]
                         )
@@ -174,9 +172,9 @@ namespace quickbook
                         str_p("\\n")                    [actions.break_]
                     |   '\\' >> punct_p                 [actions.raw_char]
                     |   (
-                            "'''" >> !eol
+                            ("'''" >> !eol)             [actions.escape_pre]
                         >>  *(anychar_p - "'''")        [actions.raw_char]
-                        >>  "'''"
+                        >>  str_p("'''")                [actions.escape_post]
                         )
                     ;
 
@@ -287,6 +285,11 @@ namespace quickbook
                     >>  blank >> phrase                 [actions.quote_post]
                     ;
 
+                replaceable =
+                        ch_p('~')                       [actions.replaceable_pre]
+                    >>  blank >> phrase                 [actions.replaceable_post]
+                    ;
+
                 source_mode =
                     (
                         str_p("c++")
@@ -306,8 +309,8 @@ namespace quickbook
                             classref, memberref, enumref, headerref, anchor, 
                             link, hard_space, eol, inline_code, simple_format, 
                             simple_bold, simple_italic, simple_underline, 
-                            simple_teletype, source_mode, //simple_strikethrough,
-                            quote, code_block, footnote;
+                            simple_teletype, source_mode, 
+                            quote, code_block, footnote, replaceable;
 
             rule<Scanner> const&
             start() const { return common; }

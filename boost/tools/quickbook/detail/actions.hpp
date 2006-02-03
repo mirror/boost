@@ -139,6 +139,10 @@ namespace quickbook
         const char* headerref_post_     = "</headername>";
         const char* footnote_pre_       = "<footnote><para>";
         const char* footnote_post_      = "</para></footnote>";
+        const char* escape_pre_         = "<!--quickbook-escape-prefix-->";
+        const char* escape_post_        = "<!--quickbook-escape-postfix-->";
+        const char* replaceable_pre_    = "<replaceable>";
+        const char* replaceable_post_   = "</replaceable>";
     }
     
     struct error_action
@@ -789,6 +793,8 @@ namespace quickbook
         markup_action           strikethrough_post;
         markup_action           quote_pre;
         markup_action           quote_post;
+        markup_action           replaceable_pre;
+        markup_action           replaceable_post;
         markup_action           footnote_pre;
         markup_action           footnote_post;
 
@@ -825,7 +831,10 @@ namespace quickbook
         end_section_action      end_section;
         xinclude_action         xinclude;
         include_action          include;
-        
+
+        markup_action           escape_pre;
+        markup_action           escape_post;
+
         int                     level;
         std::string             qualified_section_id;
     };

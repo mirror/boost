@@ -245,6 +245,11 @@ namespace quickbook
                 // It is there to preserve the space after the tag that is
                 // otherwise consumed by the space_p skipper.
                 
+                escape = str_p("<!--quickbook-escape-prefix-->") >> 
+                    *(anychar_p - str_p("<!--quickbook-escape-postfix-->"))
+                     >> str_p("<!--quickbook-escape-postfix-->")
+                    ;
+                
                 start_tag = '<' >> tag >> *(anychar_p - '>') >> lexeme_d['>' >> *space_p];
                 start_end_tag = 
                         '<' >> tag >> *(anychar_p - ('/' | ch_p('>'))) >> lexeme_d["/>" >> *space_p]
@@ -256,7 +261,8 @@ namespace quickbook
                 end_tag = "</" >> +(anychar_p - '>') >> lexeme_d['>' >> *space_p];
 
                 markup = 
-                        code            [bind(&tidy_grammar::do_code, &self, _1, _2)]
+                        escape          [bind(&tidy_grammar::do_escape, &self, _1, _2)]
+                    |   code            [bind(&tidy_grammar::do_code, &self, _1, _2)]
                     |   start_end_tag   [bind(&tidy_grammar::do_start_end_tag, &self, _1, _2)]
                     |   start_tag       [bind(&tidy_grammar::do_start_tag, &self, _1, _2)]
                     |   end_tag         [bind(&tidy_grammar::do_end_tag, &self, _1, _2)]
@@ -270,8 +276,19 @@ namespace quickbook
             start() { return tidy; }
 
             rule<Scanner>   tidy, tag, start_tag, start_end_tag,
-                            content, end_tag, markup, code;
+                            content, end_tag, markup, code, escape;
         };
+
+        void do_escape(iter_type f, iter_type l) const
+        {
+            state.out += '\n';
+            while (f != l && std::isspace(*f))
+                ++f;
+            for (iter_type i = f; i != l; ++i)
+                state.out += *i;
+            state.out += '\n';
+            state.printer_.indent();
+        }
 
         void do_code(iter_type f, iter_type l) const
         {
