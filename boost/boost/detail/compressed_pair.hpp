@@ -132,7 +132,7 @@ namespace details
 
    template <class T1, class T2>
    class compressed_pair_imp<T1, T2, 1>
-      : private ::boost::remove_cv<T1>::type
+      : protected ::boost::remove_cv<T1>::type
    {
    public:
       typedef T1                                                 first_type;
@@ -155,8 +155,8 @@ namespace details
       compressed_pair_imp(second_param_type y)
          : second_(y) {}
 
-      first_reference       first()       {return static_cast<first_reference>(*this);}
-      first_const_reference first() const {return static_cast<first_const_reference>(*this);}
+      first_reference       first()       {return *this;}
+      first_const_reference first() const {return *this;}
 
       second_reference       second()       {return second_;}
       second_const_reference second() const {return second_;}
@@ -174,7 +174,7 @@ namespace details
 
    template <class T1, class T2>
    class compressed_pair_imp<T1, T2, 2>
-      : private ::boost::remove_cv<T2>::type
+      : protected ::boost::remove_cv<T2>::type
    {
    public:
       typedef T1                                                 first_type;
@@ -200,8 +200,8 @@ namespace details
       first_reference       first()       {return first_;}
       first_const_reference first() const {return first_;}
 
-      second_reference       second()       {return static_cast<second_reference>(*this);}
-      second_const_reference second() const {return static_cast<second_const_reference>(*this);}
+      second_reference       second()       {return *this;}
+      second_const_reference second() const {return *this;}
 
       void swap(::boost::compressed_pair<T1,T2>& y)
       {
@@ -217,8 +217,8 @@ namespace details
 
    template <class T1, class T2>
    class compressed_pair_imp<T1, T2, 3>
-      : private ::boost::remove_cv<T1>::type,
-        private ::boost::remove_cv<T2>::type
+      : protected ::boost::remove_cv<T1>::type,
+        protected ::boost::remove_cv<T2>::type
    {
    public:
       typedef T1                                                 first_type;
@@ -241,11 +241,11 @@ namespace details
       compressed_pair_imp(second_param_type y)
          : second_type(y) {}
 
-      first_reference       first()       {return static_cast<first_reference>(*this);}
-      first_const_reference first() const {return static_cast<first_const_reference>(*this);}
+      first_reference       first()       {return *this;}
+      first_const_reference first() const {return *this;}
 
-      second_reference       second()       {return static_cast<second_reference>(*this);}
-      second_const_reference second() const {return static_cast<second_const_reference>(*this);}
+      second_reference       second()       {return *this;}
+      second_const_reference second() const {return *this;}
       //
       // no need to swap empty bases:
       void swap(::boost::compressed_pair<T1,T2>&) {}
@@ -260,7 +260,7 @@ namespace details
    //      different objects (albeit both empty).
    template <class T1, class T2>
    class compressed_pair_imp<T1, T2, 4>
-      : private ::boost::remove_cv<T1>::type
+      : protected ::boost::remove_cv<T1>::type
    {
    public:
       typedef T1                                                 first_type;
@@ -280,8 +280,8 @@ namespace details
       compressed_pair_imp(first_param_type x)
          : first_type(x), m_second(x) {}
 
-      first_reference       first()       {return static_cast<first_reference>(*this);}
-      first_const_reference first() const {return static_cast<first_const_reference>(*this);}
+      first_reference       first()       {return *this;}
+      first_const_reference first() const {return *this;}
 
       second_reference       second()       {return m_second;}
       second_const_reference second() const {return m_second;}
