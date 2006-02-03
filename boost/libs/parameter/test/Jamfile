@@ -15,6 +15,7 @@ test-suite "parameter"
      [ run singular.cpp ]
      [ run mpl.cpp ]
      [ run efficiency.cpp : : : : : release ]
+     [ compile ntp.cpp ]
      [ compile unwrap_cv_reference.cpp ]
      [ compile-fail duplicates.cpp ]
   ;

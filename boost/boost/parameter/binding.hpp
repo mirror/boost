@@ -27,12 +27,22 @@ struct binding
     >
 {};
 # else
-template <class Parameters, class Keyword, class Default = aux::void_>
-struct binding
+template <class Parameters, class Keyword, class Default>
+struct binding_eti
 {
     typedef typename mpl::apply_wrap2<
         typename Parameters::binding,Keyword,
-        typename mpl::if_<is_same<Default,aux::void_>,void,Default>::type
+        typename mpl::if_<is_same<Default,void_>,void,Default>::type
+    >::type type;
+};
+
+template <class Parameters, class Keyword, class Default = void_>
+struct binding
+{
+    typedef typename mpl::eval_if<
+        is_same<Parameters, int>
+      , mpl::identity<int>
+      , binding_eti<Parameters, Keyword, Default>
     >::type type;
 };
 # endif

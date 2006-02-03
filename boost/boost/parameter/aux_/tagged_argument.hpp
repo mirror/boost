@@ -9,7 +9,6 @@
 #include <boost/parameter/aux_/void.hpp>
 #include <boost/parameter/aux_/arg_list.hpp>
 #include <boost/parameter/aux_/result_of0.hpp>
-#include <boost/detail/is_xxx.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/apply_wrap.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -161,9 +160,23 @@ struct tagged_argument
     typedef arg_list_tag tag; // For dispatching to sequence intrinsics
 };
 
+template <class K, class T>
+char is_tagged_argument_check(tagged_argument<K,T> const*);
+char(&is_tagged_argument_check(...))[2];
+
 // Defines a metafunction, is_tagged_argument, that identifies
 // tagged_argument specializations.
-BOOST_DETAIL_IS_XXX_DEF(tagged_argument,tagged_argument,2)
+// MAINTAINER NOTE: Not using BOOST_DETAIL_IS_XXX_DEF here because
+// we need to return true for tagged_argument<K,T> const.
+template <class T>
+struct is_tagged_argument
+{
+    BOOST_STATIC_CONSTANT(bool, value =
+        sizeof(is_tagged_argument_check((T*)0)) == 1
+    );
+
+    typedef mpl::bool_<value> type;
+};
 
 }}} // namespace boost::parameter::aux
 

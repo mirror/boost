@@ -171,12 +171,12 @@ struct arg_list : Next
     template< // class A0, class A1, ...
         BOOST_PP_ENUM_PARAMS(BOOST_PARAMETER_MAX_ARITY, class A)
     >
-    arg_list( // A0 const& a0, A1 const& a1, ...
-        BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PARAMETER_MAX_ARITY, A, const & a)
+    arg_list( // A0& a0, A1& a1, ...
+        BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PARAMETER_MAX_ARITY, A, & a)
     )
       : Next( // a1, a2, ...
             BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PARAMETER_MAX_ARITY, a)
-          , void_()
+          , void_reference()
         )
       , arg(a0)
     {}

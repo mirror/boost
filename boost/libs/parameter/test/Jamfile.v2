@@ -14,6 +14,7 @@ test-suite "parameter"
      [ run efficiency.cpp : : : : : <variant>release ]
      [ run earwicker.cpp ]
      [ run mpl.cpp ]
+     [ compile ntp.cpp ]
      [ compile unwrap_cv_reference.cpp ]
      [ compile-fail duplicates.cpp ]
   ;
