@@ -115,12 +115,8 @@ void test_basics( T const* )
   // Assignment
   // T::operator= ( T const& x ) is used to copy new value.
   set_pending_assign( ARG(T) ) ;
-  set_pending_copy  ( ARG(T) ) ;
-  set_pending_dtor  ( ARG(T) ) ;
   oa = ob ;
   check_is_not_pending_assign( ARG(T) ) ;
-  check_is_pending_copy      ( ARG(T) ) ;
-  check_is_pending_dtor      ( ARG(T) ) ;
   check_initialized(oa);
   check_value(oa,b,z);
 
