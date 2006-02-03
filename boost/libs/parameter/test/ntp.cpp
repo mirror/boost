@@ -25,6 +25,11 @@ struct a2_is
   : parameter::template_keyword<a2_is<>, T>
 {};
 
+template <class T = int>
+struct a3_is
+  : parameter::template_keyword<a2_is<>, T>
+{};
+
 struct X {};
 struct Y : X {};
 
@@ -39,7 +44,7 @@ struct with_ntp
     typedef typename parameter::parameters<
         a0_is<>, a1_is<>, a2_is<>
       , parameter::unnamed<
-            X, boost::is_base_and_derived<X, mpl::_>
+            a3_is<>, boost::is_base_and_derived<X, mpl::_>
         >
     >::bind<A0,A1,A2,A3>::type args;
 
@@ -56,7 +61,7 @@ struct with_ntp
     >::type a2;
 
     typedef typename parameter::binding<
-        args, X, void*
+        args, a3_is<>, void*
     >::type a3;
 
     typedef void(*type)(a0,a1,a2,a3);
@@ -75,11 +80,11 @@ BOOST_MPL_ASSERT((boost::is_same<
 >));
 
 BOOST_MPL_ASSERT((boost::is_same<
-    with_ntp<a2_is<int>, a1_is<float> >::type, void(*)(void*,float,int,void*)
+    with_ntp<a2_is<int const>, a1_is<float> >::type, void(*)(void*,float,int const,void*)
 >));
 
 BOOST_MPL_ASSERT((boost::is_same<
-    with_ntp<int>::type, void(*)(int, void*, void*,void*)
+    with_ntp<int const>::type, void(*)(int const, void*, void*,void*)
 >));
 
 BOOST_MPL_ASSERT((boost::is_same<
