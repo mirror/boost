@@ -21,7 +21,6 @@
 
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/remove_reference.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
 
 #include <boost/preprocessor/repetition/enum.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
@@ -42,6 +41,7 @@
 #include <boost/parameter/aux_/unwrap_cv_reference.hpp>
 #include <boost/parameter/aux_/tagged_argument.hpp>
 #include <boost/parameter/aux_/tag.hpp>
+#include <boost/parameter/aux_/template_keyword.hpp>
 #include <boost/parameter/config.hpp>
 
 namespace boost {
@@ -89,25 +89,6 @@ struct unnamed
 {
     typedef Tag key_type;
     typedef Predicate predicate;
-};
-
-namespace aux 
-{ 
-  struct template_keyword_tag {}; 
-
-  template <class T>
-  struct is_template_keyword
-    : is_base_and_derived<template_keyword_tag, T>
-  {};
-}
-
-template <class Tag, class T>
-struct template_keyword
-  : aux::template_keyword_tag
-{
-    typedef Tag key_type;
-    typedef T value_type;
-    typedef value_type reference;
 };
 
 namespace aux
