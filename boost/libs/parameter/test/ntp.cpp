@@ -100,6 +100,6 @@ BOOST_MPL_ASSERT((boost::is_same<
 >));
 
 BOOST_MPL_ASSERT((boost::is_same<
-    with_ntp<Y, a2_is<char> >::type, void(*)(void*,void*,char, Y)
+    with_ntp<int&, Y, a2_is<char> >::type, void(*)(int&,void*,char, Y)
 >));
 
