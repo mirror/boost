@@ -5,7 +5,10 @@
 #ifndef BOOST_PARAMETER_TEMPLATE_KEYWORD_060203_HPP
 # define BOOST_PARAMETER_TEMPLATE_KEYWORD_060203_HPP
 
+# include <boost/mpl/and.hpp>
+# include <boost/mpl/not.hpp>
 # include <boost/type_traits/is_convertible.hpp>
+# include <boost/type_traits/is_reference.hpp>
 
 namespace boost { namespace parameter { 
 
@@ -14,9 +17,17 @@ namespace aux
 
   struct template_keyword_tag {}; 
 
+  template <class T, class U>
+  struct is_pointer_convertible
+    : is_convertible<T*, U*>
+  {};
+
   template <class T>
   struct is_template_keyword
-    : is_convertible<T*, template_keyword_tag*>
+    : mpl::and_<
+          mpl::not_<is_reference<T> >
+        , is_pointer_convertible<T, template_keyword_tag>
+      >
   {};
 
 } // namespace aux

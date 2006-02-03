@@ -3,15 +3,18 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef TAGGED_ARGUMENT_050328_HPP
-#define TAGGED_ARGUMENT_050328_HPP
+#ifndef BOOST_PARAMETER_TAGGED_ARGUMENT_050328_HPP
+# define BOOST_PARAMETER_TAGGED_ARGUMENT_050328_HPP
 
-#include <boost/parameter/aux_/void.hpp>
-#include <boost/parameter/aux_/arg_list.hpp>
-#include <boost/parameter/aux_/result_of0.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/apply_wrap.hpp>
-#include <boost/type_traits/is_same.hpp>
+# include <boost/parameter/aux_/void.hpp>
+# include <boost/parameter/aux_/arg_list.hpp>
+# include <boost/parameter/aux_/result_of0.hpp>
+# include <boost/mpl/if.hpp>
+# include <boost/mpl/apply_wrap.hpp>
+# include <boost/mpl/and.hpp>
+# include <boost/mpl/not.hpp>
+# include <boost/type_traits/is_same.hpp>
+# include <boost/type_traits/is_reference.hpp>
 
 namespace boost { namespace parameter { namespace aux {
 
@@ -69,7 +72,7 @@ struct tagged_argument
         return value;
     }
 
-#ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+# ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     template <class KW, class Default>
     Default& get_with_default(default_<KW,Default> const& x, int) const
     {
@@ -111,7 +114,7 @@ struct tagged_argument
     {
         return get_with_lazy_default(x, 0L);
     }
-#else
+# else
     template <class Default>
     reference operator[](default_<key_type,Default> const& x) const
     {
@@ -145,15 +148,15 @@ struct tagged_argument
     satisfies(
         parameter_requirements<key_type,Predicate,HasDefault>*
     );
-#endif
+# endif
 
     reference value;
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1310))
+# if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1310))
     // warning suppression
  private:
     void operator=(tagged_argument const&);
  public:    
-#endif
+# endif
     // MPL sequence support
     typedef tagged_argument type;            // Convenience for users
     typedef empty_arg_list tail_type;        // For the benefit of iterators
@@ -169,7 +172,7 @@ char(&is_tagged_argument_check(...))[2];
 // MAINTAINER NOTE: Not using BOOST_DETAIL_IS_XXX_DEF here because
 // we need to return true for tagged_argument<K,T> const.
 template <class T>
-struct is_tagged_argument
+struct is_tagged_argument_aux
 {
     BOOST_STATIC_CONSTANT(bool, value =
         sizeof(is_tagged_argument_check((T*)0)) == 1
@@ -178,7 +181,15 @@ struct is_tagged_argument
     typedef mpl::bool_<value> type;
 };
 
+template <class T>
+struct is_tagged_argument
+  : mpl::and_<
+        mpl::not_<is_reference<T> >
+      , is_tagged_argument_aux<T>
+    >
+{};
+
 }}} // namespace boost::parameter::aux
 
-#endif // TAGGED_ARGUMENT_050328_HPP
+#endif // BOOST_PARAMETER_TAGGED_ARGUMENT_050328_HPP
 
