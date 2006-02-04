@@ -18,11 +18,7 @@
 
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_SLIST
-
-#ifdef BOOST_SLIST_HEADER
-# include BOOST_SLIST_HEADER
-#else
-# include <slist>
+#include BOOST_SLIST_HEADER
 #endif
 
 #include <boost/serialization/collections_save_imp.hpp>
@@ -68,7 +64,10 @@ inline void load(
     boost::serialization::detail::stack_construct<Archive, U> u(ar);
     ar >> boost::serialization::make_nvp("item", u.reference());
     t.push_front(u.reference());
-    BOOST_DEDUCED_TYPENAME BOOST_STD_EXTENSION_NAMESPACE::slist<U, Allocator>::iterator last;
+    BOOST_DEDUCED_TYPENAME BOOST_STD_EXTENSION_NAMESPACE::slist<
+        U, 
+        Allocator
+    >::iterator last;
     last = t.begin();
     while(--count > 0){
         boost::serialization::detail::stack_construct<Archive, U> u(ar);
