@@ -28,13 +28,8 @@ struct basic_traits;
 } // namespace serialization
 } // namespace boost
 
-
-#ifdef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
-    #define BOOST_SERIALIZATION_EXTENDED_TYPE_INFO_STUB(T)        \
-        BOOST_SERIALIZATION_DEFAULT_TYPE_INFO(T)
-#else
-    #define BOOST_SERIALIZATION_EXTENDED_TYPE_INFO_STUB(T)        \
-        extended_type_info_null< T >
+#ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
+    #include <boost/serialization/extended_type_info_typeid.hpp>
 #endif
 
 #include <boost/static_assert.hpp>
@@ -60,7 +55,8 @@ struct type_info_implementation {
             traits_class_typeinfo_implementation<T>,
         //else
             mpl::identity<
-                BOOST_SERIALIZATION_EXTENDED_TYPE_INFO_STUB(T)
+//                BOOST_SERIALIZATION_EXTENDED_TYPE_INFO_STUB(T)
+                BOOST_DEDUCED_TYPENAME extended_type_info_impl<T>::type
             >
         >::type type;
 };

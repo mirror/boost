@@ -31,10 +31,12 @@
 #include <boost/mpl/integral_c_tag.hpp>
 
 #include <boost/serialization/level_enum.hpp>
-#include <boost/serialization/traits.hpp>
+//#include <boost/serialization/traits.hpp>
 
 namespace boost {
 namespace serialization {
+
+struct basic_traits;
 
 // default serialization implementation level
 template<class T>
