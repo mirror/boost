@@ -301,7 +301,7 @@ basic_iarchive_impl::reset_object_address(
 inline void 
 basic_iarchive_impl::delete_created_pointers()
 {
-    while(created_pointers.size() > 0){
+    while(! created_pointers.empty()){
         const created_pointer_type & cp = created_pointers.front();
 
         // figure out the class of the object to be deleted
@@ -479,7 +479,7 @@ basic_iarchive_impl::load_pointer(
         return bpis_ptr;
 
     // save state
-    state_saver<object_id_type> w(moveable_objects_start);
+    state_saver<object_id_type> w_start(moveable_objects_start);
 
     if(! tracking){
         bpis_ptr->load_object_ptr(ar, t, co.file_version);
@@ -495,7 +495,7 @@ basic_iarchive_impl::load_pointer(
         // predict next object id to be created
         const unsigned int ui = object_id_vector.size();
 
-        state_saver<object_id_type> w(moveable_objects_end);
+        state_saver<object_id_type> w_end(moveable_objects_end);
 
         // because the following operation could move the items
         // don't use co after this
