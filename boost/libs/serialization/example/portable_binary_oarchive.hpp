@@ -28,14 +28,28 @@
 
 class portable_binary_oarchive :
     // don't derive from binary_oarchive !!!
-    public boost::archive::binary_oarchive_impl<portable_binary_oarchive>
+    public boost::archive::binary_oarchive_impl<
+        portable_binary_oarchive, 
+        std::ostream::char_type, 
+        std::ostream::traits_type
+    >
 {
-    typedef portable_binary_oarchive derived_t;
+    typedef boost::archive::binary_oarchive_impl<
+        portable_binary_oarchive, 
+        std::ostream::char_type, 
+        std::ostream::traits_type
+    > archive_base_t;
+    typedef boost::archive::basic_binary_oprimitive<
+        portable_binary_oarchive, 
+        std::ostream::char_type, 
+        std::ostream::traits_type
+    > primitive_base_t;
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
-    friend class boost::archive::basic_binary_oarchive<derived_t>;
-    friend class boost::archive::basic_binary_oprimitive<derived_t, std::ostream>;
+    friend archive_base_t;
+    friend primitive_base_t; // since with override save below
+    friend class boost::archive::basic_binary_oarchive;
     friend class boost::archive::save_access;
 #endif
     void save_impl(long l){
@@ -46,7 +60,7 @@ public:
             ++size;
         }while(ll != -1 && ll != 0);
 
-        os.put(size);
+        this->archive_base_t::save(size);
 
         // we choose to use litle endian
         #ifdef BOOST_BIG_ENDIAN
@@ -63,12 +77,12 @@ public:
     // add base class to the places considered when matching
     // save function to a specific set of arguments.  Note, this didn't
     // work on my MSVC 7.0 system so we use the sure-fire method below
-    // using binary_oarchive_impl<derived_t>::save;
+    // using archive_base_t::save;
 
     // default fall through for any types not specified here
     template<class T>
     void save(const T & t){
-        boost::archive::binary_oarchive_impl<derived_t>::save(t);
+        this->primitive_base_t::save(t);
     }
     void save(const unsigned int t){
         save_impl(t);
@@ -84,14 +98,14 @@ public:
     }
 public:
     portable_binary_oarchive(std::ostream & os, unsigned flags = 0) :
-        boost::archive::binary_oarchive_impl<derived_t>(
+        archive_base_t(
             os, 
             flags | boost::archive::no_header // skip default header checking 
         )
     {
         // use our own header checking
         if(0 != (flags & boost::archive::no_header)){
-            this->boost::archive::basic_binary_oarchive<derived_t>::init();
+            this->archive_base_t::init(flags);
             // skip the following for "portable" binary archives
             // boost::archive::basic_binary_iprimitive<derived_t, std::ostream>::init();
         }
@@ -106,9 +120,7 @@ namespace boost {
 namespace archive {
 
 // explicitly instantiate for this type of binary stream
-template class basic_binary_oarchive<portable_binary_oarchive> ;
-template class basic_binary_oprimitive<portable_binary_oarchive, std::ostream> ;
-template class binary_oarchive_impl<portable_binary_oarchive> ;
+template portable_binary_oarchive::archive_base_t;
 template class detail::archive_pointer_oserializer<portable_binary_oarchive> ;
 
 } // namespace archive

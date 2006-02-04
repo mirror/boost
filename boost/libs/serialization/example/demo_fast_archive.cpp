@@ -13,9 +13,8 @@
 #include <boost/type_traits/is_array.hpp>
 #include <boost/pfto.hpp>
 
-#define BOOST_ARCHIVE_SOURCE
-#include <boost/archive/binary_oarchive.hpp>
-#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/binary_oarchive_impl.hpp>
+#include <boost/archive/binary_iarchive_impl.hpp>
 
 // include template definitions for base classes used.  Otherwise
 // you'll get link failure with undefined symbols
@@ -33,25 +32,38 @@ using namespace boost::archive;
 // "Fast" output binary archive.  This is a variation of the native binary 
 class fast_binary_oarchive :
     // don't derive from binary_oarchive !!!
-    public binary_oarchive_impl<fast_binary_oarchive>
+    public binary_oarchive_impl<
+        fast_binary_oarchive, 
+        std::ostream::char_type, 
+        std::ostream::traits_type
+    >
 {
     typedef fast_binary_oarchive derived_t;
+    typedef binary_oarchive_impl<
+        fast_binary_oarchive, 
+        std::ostream::char_type, 
+        std::ostream::traits_type
+    > base_t;
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
     friend class boost::archive::detail::interface_oarchive<derived_t>;
     friend class basic_binary_oarchive<derived_t>;
-    friend class basic_binary_oprimitive<derived_t, std::ostream>;
+    friend class basic_binary_oprimitive<
+        derived_t, 
+        std::ostream::char_type, 
+        std::ostream::traits_type
+    >;
     friend class boost::archive::save_access;
 #endif
     // add base class to the places considered when matching
     // save function to a specific set of arguments.  Note, this didn't
-    // work on my MSVC 7.0 system 
-//        using binary_oarchive_impl<derived_t>::load_override;
+    // work on my MSVC 7.0 system using 
+    // binary_oarchive_impl<derived_t>::load_override;
     // so we use the sure-fire method below.  This failed to work as well
     template<class T>
     void save_override(T & t, BOOST_PFTO int){
-        binary_oarchive_impl<fast_binary_oarchive>::save_override(t, 0);
+        base_t::save_override(t, 0);
         // verify that this program is in fact working by making sure
         // that arrays are getting passed here
         BOOST_STATIC_ASSERT(! (boost::is_array<T>::value) );
@@ -74,7 +86,10 @@ public:
     }
 public:
     fast_binary_oarchive(std::ostream & os, unsigned flags = 0) :
-        binary_oarchive_impl<derived_t>(os, flags)
+       base_t(os, flags)
+    {}
+    fast_binary_oarchive(std::streambuf & bsb, unsigned int flags = 0) :
+        base_t(bsb, flags)
     {}
 };
 
@@ -82,25 +97,38 @@ public:
 // "Fast" input binary archive.  This is a variation of the native binary 
 class fast_binary_iarchive :
     // don't derive from binary_oarchive !!!
-    public binary_iarchive_impl<fast_binary_iarchive>
+    public binary_iarchive_impl<
+        fast_binary_iarchive, 
+        std::istream::char_type, 
+        std::istream::traits_type
+    >
 {
     typedef fast_binary_iarchive derived_t;
+    typedef binary_iarchive_impl<
+        fast_binary_iarchive, 
+        std::istream::char_type, 
+        std::istream::traits_type
+    > base_t;
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
     friend class boost::archive::detail::interface_iarchive<derived_t>;
     friend class basic_binary_iarchive<derived_t>;
-    friend class basic_binary_iprimitive<derived_t, std::istream>;
+    friend class basic_binary_iprimitive<
+        derived_t, 
+        std::ostream::char_type, 
+        std::ostream::traits_type
+    >;
     friend class boost::archive::load_access;
 #endif
     // add base class to the places considered when matching
     // save function to a specific set of arguments.  Note, this didn't
-    // work on my MSVC 7.0 system 
-//        using binary_oarchive_impl<derived_t>::load_override;
+    // work on my MSVC 7.0 system using 
+    // binary_oarchive_impl<derived_t>::load_override;
     // so we use the sure-fire method below.  This failed to work as well
     template<class T>
     void load_override(T & t, BOOST_PFTO int){
-        binary_iarchive_impl<derived_t>::load_override(t, 0);
+        base_t::load_override(t, 0);
         BOOST_STATIC_ASSERT(! (boost::is_array<T>::value) );
     }
     template<int N>
@@ -120,8 +148,11 @@ public:
         load_binary(t, sizeof(t));
     }
 public:
-    fast_binary_iarchive(std::istream & is, unsigned flags = 0) :
-        binary_iarchive_impl<derived_t>(is,flags)
+    fast_binary_iarchive(std::istream & is, unsigned int flags = 0) :
+        base_t(is, flags)
+    {}
+    fast_binary_iarchive(std::streambuf & bsb, unsigned int flags = 0) :
+        base_t(bsb, flags)
     {}
 };
 

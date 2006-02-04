@@ -50,20 +50,34 @@ public:
 // archive. it addresses integer size and endienness so that binary archives can
 // be passed across systems. Note:floating point types not addressed here
 class portable_binary_iarchive :
-    // don't derive from binary_oarchive !!!
-    public boost::archive::binary_iarchive_impl<portable_binary_iarchive>
+    // don't derive from binary_iarchive !!!
+    public boost::archive::binary_iarchive_impl<
+        portable_binary_iarchive, 
+        std::istream::char_type, 
+        std::istream::traits_type
+    >
 {
-    typedef portable_binary_iarchive derived_t;
+    typedef boost::archive::binary_iarchive_impl<
+        portable_binary_iarchive, 
+        std::istream::char_type, 
+        std::istream::traits_type
+    > archive_base_t;
+    typedef boost::archive::basic_binary_iprimitive<
+        portable_binary_iarchive, 
+        std::ostream::char_type, 
+        std::ostream::traits_type
+    > primitive_base_t;
 #ifndef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 public:
 #else
-    friend class boost::archive::basic_binary_iarchive<derived_t>;
-    friend class boost::archive::basic_binary_iprimitive<derived_t, std::istream>;
+    friend archive_base_t;
+    friend primitive_base_t; // since with override load below
+    friend class boost::archive::basic_binary_iarchive;
     friend class boost::archive::load_access;
 #endif
     void load_impl(long & l, char maxsize){
         char size;
-        size = is.get();
+        this->archive_base_t::load(size);
         if(size > maxsize)
             throw portable_binary_archive_exception() ;
         l = 0;
@@ -82,7 +96,7 @@ public:
     // default fall through for any types not specified here
     template<class T>
     void load(T & t){
-        boost::archive::binary_iarchive_impl<derived_t>::load(t);
+        this->primitive_base_t::load(t);
     }
     void load(unsigned int & t){
         long l;
@@ -106,14 +120,14 @@ public:
     }
 public:
     portable_binary_iarchive(std::istream & is, unsigned flags = 0) :
-        boost::archive::binary_iarchive_impl<derived_t>(
+        archive_base_t(
             is, 
             flags | boost::archive::no_header // skip default header checking 
         )
     {
         // use our own header checking
         if(0 != (flags & boost::archive::no_header)){
-            this->boost::archive::basic_binary_iarchive<derived_t>::init();
+            this->archive_base_t::init(flags);
             // skip the following for "portable" binary archives
             // boost::archive::basic_binary_oprimitive<derived_t, std::ostream>::init();
         }
@@ -128,9 +142,7 @@ public:
 namespace boost {
 namespace archive {
 
-template class basic_binary_iarchive<portable_binary_iarchive> ;
-template class basic_binary_iprimitive<portable_binary_iarchive, std::istream> ;
-template class binary_iarchive_impl<portable_binary_iarchive> ;
+template portable_binary_iarchive::archive_base_t ;
 template class detail::archive_pointer_iserializer<portable_binary_iarchive> ;
 
 } // namespace archive

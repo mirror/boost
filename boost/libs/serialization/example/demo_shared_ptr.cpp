@@ -45,6 +45,8 @@ public:
     virtual A::~A(){--count;}   // default destructor
 };
 
+BOOST_SERIALIZATION_SHARED_PTR(A)
+
 /////////////////
 // ADDITION BY DT
 class B : public A
@@ -61,6 +63,8 @@ public:
     B::B() : A() {};
     virtual B::~B() {};
 };
+
+BOOST_SERIALIZATION_SHARED_PTR(B)
 
 /////////////////
 
@@ -129,6 +133,13 @@ int main(int argc, char *argv[])
         std::ofstream ofs(filename.c_str());
         boost::archive::text_oarchive oa(ofs);
         oa.register_type(static_cast<B *>(NULL));
+        oa.register_type(
+            static_cast<
+                boost::detail::sp_counted_base_impl<
+                    B *, boost::checked_deleter<B> 
+                > *
+            >(NULL)
+        );
         oa << spa;
         oa << spa1;
     }
@@ -146,6 +157,13 @@ int main(int argc, char *argv[])
 
         // restore the schedule from the archive
         ia.register_type(static_cast<B *>(NULL));
+        ia.register_type(
+            static_cast<
+                boost::detail::sp_counted_base_impl<
+                    B *, boost::checked_deleter<B> 
+                > *
+            >(NULL)
+        );
         ia >> spa;
         ia >> spa1;
     }
