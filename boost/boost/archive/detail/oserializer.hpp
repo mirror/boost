@@ -50,10 +50,6 @@
 #include <boost/mpl/empty.hpp>
 #include <boost/mpl/not.hpp>
 
-#ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
-    #include <boost/serialization/extended_type_info_typeid.hpp>
-#endif
-
 // the following is need only for dynamic cast of polymorphic pointers
 #include <boost/archive/detail/basic_oarchive.hpp>
 #include <boost/archive/detail/basic_oserializer.hpp>

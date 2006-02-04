@@ -42,7 +42,6 @@ namespace std{
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_fundamental.hpp>
 #include <boost/type_traits/is_enum.hpp>
-#include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/serialization/is_abstract.hpp>
@@ -58,10 +57,6 @@ namespace std{
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/empty.hpp>
 #include <boost/mpl/not.hpp>
-
-#ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
-    #include <boost/serialization/extended_type_info_typeid.hpp>
-#endif
 
 // the following is need only for dynamic cast of polymorphic pointers
 #include <boost/archive/detail/basic_iarchive.hpp>
