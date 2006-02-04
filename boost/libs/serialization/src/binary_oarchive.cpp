@@ -21,9 +21,17 @@ namespace boost {
 namespace archive {
 
 // explicitly instantiate for this type of binary stream
-template class basic_binary_oprimitive<binary_oarchive, std::ostream> ;
+template class basic_binary_oprimitive<
+    binary_oarchive, 
+    char, 
+    std::char_traits<char> 
+>;
 template class basic_binary_oarchive<binary_oarchive> ;
-template class binary_oarchive_impl<binary_oarchive> ;
+template class binary_oarchive_impl<
+    binary_oarchive, 
+    char, 
+    std::char_traits<char> 
+>;
 template class detail::archive_pointer_oserializer<binary_oarchive> ;
 
 } // namespace archive

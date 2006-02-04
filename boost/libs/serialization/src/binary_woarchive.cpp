@@ -25,8 +25,17 @@ namespace boost {
 namespace archive {
 
 // explicitly instantiate for this type of text stream
-template class basic_binary_oprimitive<binary_woarchive, std::wostream> ;
-template class binary_woarchive_impl<binary_woarchive> ;
+template class basic_binary_oprimitive<
+    binary_woarchive, 
+    wchar_t, 
+    std::char_traits<wchar_t> 
+>;
+template class basic_binary_oarchive<binary_woarchive> ;
+template class binary_oarchive_impl<
+    binary_woarchive, 
+    wchar_t, 
+    std::char_traits<wchar_t> 
+>;
 template class detail::archive_pointer_oserializer<binary_woarchive> ;
 
 } // namespace archive
