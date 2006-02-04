@@ -299,7 +299,7 @@ namespace boost { namespace numeric { namespace ublas {
             const_iterator (const self_type &v, const const_subiterator_type &it):
                 container_const_reference<self_type> (v), it_ (it) {}
             BOOST_UBLAS_INLINE
-            const_iterator (const typename vector::iterator &it):  // ISSUE vector:: stops VC8 using std::iteraot here
+            const_iterator (const typename vector::iterator &it):  // ISSUE vector:: stops VC8 using std::iterator here
                 container_const_reference<self_type> (it ()), it_ (it.it_) {}
 
             // Arithmetic
@@ -1465,7 +1465,7 @@ namespace boost { namespace numeric { namespace ublas {
             const_iterator (const self_type &v, const const_subiterator_type &it):
                 container_const_reference<self_type> (v), it_ (it) {}
             BOOST_UBLAS_INLINE
-            const_iterator (const typename self_type::iterator &it):  // ISSUE self_type:: stops VC8 using std::iteraot here
+            const_iterator (const typename self_type::iterator &it):  // ISSUE self_type:: stops VC8 using std::iterator here
                 container_const_reference<self_type> (it ()), it_ (it.it_) {}
 
             // Arithmetic
