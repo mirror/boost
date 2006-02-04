@@ -21,18 +21,18 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 // supress noise
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
 # pragma warning (disable : 4786) // too long name, harmless warning
 #endif
 
 #include <boost/mpl/integral_c.hpp>
 #include <boost/mpl/integral_c_tag.hpp>
 
-//#include <boost/serialization/traits.hpp>
 #include <boost/serialization/level.hpp>
 #include <boost/serialization/tracking.hpp>
 #include <boost/serialization/split_member.hpp>
 #include <boost/serialization/base_object.hpp>
+#include <boost/serialization/traits.hpp>
 
 namespace boost {
 namespace serialization {
@@ -123,7 +123,7 @@ struct tracking_level<nvp<T> >
 
 #endif
 
-} // serialization
+} // seralization
 } // boost
 
 #include <boost/preprocessor/stringize.hpp>
