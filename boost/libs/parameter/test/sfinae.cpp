@@ -54,8 +54,6 @@ namespace test
       f_impl(f_parameters()());
   }
 
-  using boost::parameter::aux::void_;
-  
   template<class A0>
   void f(
       A0 const& a0
