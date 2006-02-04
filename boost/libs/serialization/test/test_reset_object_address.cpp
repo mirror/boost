@@ -36,8 +36,6 @@ namespace std{
 // simple test of untracked value
 #include "A.hpp"
 
-BOOST_TEST_DONT_PRINT_LOG_VALUE( A )
-
 void test1(){
     std::stringstream ss;
     const A a;
