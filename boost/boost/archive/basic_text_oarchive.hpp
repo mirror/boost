@@ -29,10 +29,7 @@
 #include <boost/pfto.hpp>
 #include <boost/detail/workaround.hpp>
 
-#include <boost/archive/detail/oserializer.hpp>
-#include <boost/archive/detail/interface_oarchive.hpp>
 #include <boost/archive/detail/common_oarchive.hpp>
-
 #include <boost/serialization/string.hpp>
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
@@ -46,6 +43,7 @@ template<class Archive>
 class basic_text_oarchive : 
     public detail::common_oarchive<Archive>
 {
+protected:
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
 || BOOST_WORKAROUND(__BORLANDC__,BOOST_TESTED_AT(0x560))
 public:
@@ -53,10 +51,8 @@ public:
     // for some inexplicable reason insertion of "class" generates compile erro
     // on msvc 7.1
     friend detail::interface_oarchive<Archive>;
-protected:
 #else
     friend class detail::interface_oarchive<Archive>;
-protected:
 #endif
     enum {
         none,
@@ -64,18 +60,19 @@ protected:
         space
     } delimiter;
 
+    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
+    newtoken();
+
     void newline(){
         delimiter = eol;
     }
 
-    BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
-    newtoken();
-
-    // default processing - invoke serialization library
+    // default processing - kick back to base class.  Note the
+    // extra stuff to get it passed borland compilers
+    typedef detail::common_oarchive<Archive> detail_common_oarchive;
     template<class T>
-    void save_override(T & t, BOOST_PFTO int)
-    {
-        archive::save(* this->This(), t);
+    void save_override(T & t, BOOST_PFTO int){
+        this->detail_common_oarchive::save_override(t, 0);
     }
 
     // start new objects on a new line
@@ -106,7 +103,6 @@ protected:
         detail::common_oarchive<Archive>(flags),
         delimiter(none)
     {}
-
     ~basic_text_oarchive(){}
 };
 
