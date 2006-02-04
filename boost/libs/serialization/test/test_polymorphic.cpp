@@ -23,6 +23,17 @@ namespace std{
 #endif
 
 #include "test_tools.hpp"
+
+// the following is to ensure that when one of the libraries changes
+// BJAM rebuilds and relinks the test.
+/*
+#include "polymorphic_text_archive.hpp"
+#include "polymorphic_text_warchive.hpp"
+#include "polymorphic_binary_archive.hpp"
+#include "polymorphic_xml_archive.hpp"
+#include "polymorphic_xml_warchive.hpp"
+*/
+
 #include <boost/preprocessor/stringize.hpp>
 #include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
