@@ -138,7 +138,20 @@ public:
             retval += *tptr++;
         return retval;
     }
+    friend std::ostream & operator<<(std::ostream & os, A const & a);
+    friend std::istream & operator>>(std::istream & is, A & a);
+    #if defined(BOOST_MSVC)
+        // for some inexplicable reason insertion of "class" generates compile erro
+        // on msvc 7.1
+        //friend std::ostream;
+        //friend std::istream;
+    #else
+        //friend class std::ostream;
+        //friend class std::istream;
+    #endif
 };
+
+BOOST_TEST_DONT_PRINT_LOG_VALUE(A)
 
 template<class S>
 void randomize(S &x)
@@ -172,8 +185,8 @@ inline A::A() :
     t(std::rand()),
     u(std::rand()),
     v(std::rand()),
-    w((float)std::rand() / std::rand()),
-    x((double)std::rand() / std::rand())
+    w((float)std::rand()),
+    x((double)std::rand())
 {
     randomize(y);
     #ifndef BOOST_NO_STD_WSTRING
@@ -183,32 +196,6 @@ inline A::A() :
 
 inline bool A::operator==(const A &rhs) const
 {
-    BOOST_CHECK(b == b);
-    BOOST_CHECK(l == l);
-    #ifndef BOOST_NO_INT64_T
-    BOOST_CHECK(f == f);
-    BOOST_CHECK(g == g);
-    #endif
-    BOOST_CHECK(m == m);
-    BOOST_CHECK(n == n);
-    BOOST_CHECK(o == o);
-    BOOST_CHECK(p == p);
-    BOOST_CHECK(q == q);
-    #ifndef BOOST_NO_CWCHAR
-    BOOST_CHECK(r == r);
-    #endif
-    BOOST_CHECK(c == c);
-    BOOST_CHECK(s == s);
-    BOOST_CHECK(t == t);
-    BOOST_CHECK(u == u);
-    BOOST_CHECK(v == v);
-    BOOST_CHECK(std::fabs(w - w) < std::numeric_limits<float>::round_error());
-    BOOST_CHECK(std::fabs(x - x) < std::numeric_limits<float>::round_error());
-    BOOST_CHECK(0 == y.compare(y));
-    #ifndef BOOST_NO_STD_WSTRING
-    BOOST_CHECK(0 == z.compare(z));
-    #endif
-
     if(b != rhs.b)
         return false;
     if(l != rhs.l)
@@ -243,9 +230,13 @@ inline bool A::operator==(const A &rhs) const
         return false; 
     if(v != rhs.v)
         return false; 
-    if(std::fabs(w - rhs.w) > std::numeric_limits<float>::round_error())
+    if(w == 0 && std::fabs(rhs.w) > std::numeric_limits<float>::epsilon())
         return false;
-    if(std::fabs(x - rhs.x) > std::numeric_limits<float>::round_error())
+    if(std::fabs(rhs.w/w - 1.0) > std::numeric_limits<float>::epsilon())
+        return false;
+    if(x == 0 && std::fabs(rhs.x - x) > std::numeric_limits<float>::epsilon())
+        return false;
+    if(std::fabs(rhs.x/x - 1.0) > std::numeric_limits<float>::epsilon())
         return false;
     if(0 != y.compare(rhs.y))
         return false;
