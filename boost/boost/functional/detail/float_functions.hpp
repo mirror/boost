@@ -6,6 +6,8 @@
 #if !defined(BOOST_FUNCTIONAL_DETAIL_FLOAT_FUNCTIONS_HPP)
 #define BOOST_FUNCTIONAL_DETAIL_FLOAT_FUNCTIONS_HPP
 
+#include <cmath>
+
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma once
 #endif

@@ -16,11 +16,10 @@
 #endif
 
 #include <boost/functional/hash_fwd.hpp>
-#include <cmath>
 #include <functional>
 #include <errno.h>
 #include <boost/limits.hpp>
-#include <boost/functional/detail/float_functions.hpp>
+#include <boost/functional/detail/hash_float.hpp>
 #include <boost/functional/detail/container_fwd.hpp>
 
 #if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
@@ -242,37 +241,6 @@ namespace boost
 #endif
     {
         return hash_range(v.begin(), v.end());
-    }
-
-    namespace hash_detail
-    {
-        template <class T>
-        inline std::size_t float_hash_value(T v)
-        {
-            int exp = 0;
-            errno = 0;
-            v = boost::hash_detail::call_frexp(v, &exp);
-            if(errno) return 0;
-
-            std::size_t seed = 0;
-
-            std::size_t const length
-                = (std::numeric_limits<T>::digits +
-                        std::numeric_limits<int>::digits - 1)
-                / std::numeric_limits<int>::digits;
-
-            for(std::size_t i = 0; i < length; ++i)
-            {
-                v = boost::hash_detail::call_ldexp(v, std::numeric_limits<int>::digits);
-                int const part = static_cast<int>(v);
-                v -= part;
-                boost::hash_combine(seed, part);
-            }
-
-            boost::hash_combine(seed, exp);
-
-            return seed;
-        }
     }
 
     inline std::size_t hash_value(float v)
