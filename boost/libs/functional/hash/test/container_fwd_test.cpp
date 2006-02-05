@@ -2,58 +2,58 @@
 
 #if BOOST_WORKAROUND(__GNUC__, < 3) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
 template <class charT, class Allocator>
-void test(std::basic_string<charT, std::string_char_traits<charT>, Allocator> const&)
+static void test(std::basic_string<charT, std::string_char_traits<charT>, Allocator> const&)
 {
 }
 #else
 template <class charT, class Allocator>
-void test(std::basic_string<charT, std::char_traits<charT>, Allocator> const&)
+static void test(std::basic_string<charT, std::char_traits<charT>, Allocator> const&)
 {
 }
 #endif
     
 template <class T, class Allocator>
-void test(std::deque<T, Allocator> const&)
+static void test(std::deque<T, Allocator> const&)
 {
 }
 
 template <class T, class Allocator>
-void test(std::list<T, Allocator> const&)
+static void test(std::list<T, Allocator> const&)
 {
 }
 
 template <class T, class Allocator>
-void test(std::vector<T, Allocator> const&)
+static void test(std::vector<T, Allocator> const&)
 {
 }
 
 template <class Key, class T, class Compare, class Allocator>
-void test(std::map<Key, T, Compare, Allocator> const&)
+static void test(std::map<Key, T, Compare, Allocator> const&)
 {
 }
 
 template <class Key, class T, class Compare, class Allocator>
-void test(std::multimap<Key, T, Compare, Allocator> const&)
+static void test(std::multimap<Key, T, Compare, Allocator> const&)
 {
 }
 
 template <class Key, class Compare, class Allocator>
-void test(std::set<Key, Compare, Allocator> const&)
+static void test(std::set<Key, Compare, Allocator> const&)
 {
 }
 
 template <class Key, class Compare, class Allocator>
-void test(std::multiset<Key, Compare, Allocator> const&)
+static void test(std::multiset<Key, Compare, Allocator> const&)
 {
 }
 
 template <std::size_t N>
-void test(std::bitset<N> const&)
+static void test(std::bitset<N> const&)
 {
 }
 
 template <class T>
-void test(std::complex<T> const&)
+static void test(std::complex<T> const&)
 {
 }
 
