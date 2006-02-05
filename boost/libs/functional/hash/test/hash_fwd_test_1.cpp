@@ -57,8 +57,11 @@ BOOST_AUTO_TEST_CASE(fwd_test3)
     values1.push_back(3);
 
     std::vector<std::string> values2;
+    values2.push_back("Chico");
     values2.push_back("Groucho");
     values2.push_back("Harpo");
+    values2.push_back("Gummo");
+    values2.push_back("Zeppo");
 
     test_type3<int> x(values1.begin(), values1.end());
     test_type3<std::string> y(values2.begin(), values2.end());
