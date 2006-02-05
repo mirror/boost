@@ -10,21 +10,12 @@ import testing ;
 
 DEPENDS all : test ;
 
-rule hash-test ( name + )
-{
+rule hash-test ( names + : extras * )
     return [
-        run $(name).cpp
+        run $(names).cpp
         <lib>../../../test/build/boost_unit_test_framework
-        : : : <include>$(BOOST_ROOT)
-        ] ;
-}
-
-rule hash-test-output ( name + )
-{
-    return [
-        run $(name).cpp
-        <lib>../../../test/build/boost_unit_test_framework
-        : : : <include>$(BOOST_ROOT) <test-info>always_show_run_output
+        : : : <include>$(BOOST_ROOT) $(extras)
+        : $(names[1])
         ] ;
 }
 
@@ -34,7 +25,7 @@ rule hash-test-output ( name + )
             [ hash-test hash_number_test ]
             [ hash-test hash_pointer_test ]
             [ hash-test hash_function_pointer_test ]
-            [ hash-test-output hash_float_test ]
+            [ hash-test hash_float_test : <test-info>always_show_run_output ]
             [ hash-test hash_string_test ]
             [ hash-test hash_range_test ]
             [ hash-test hash_custom_test ]
@@ -45,10 +36,9 @@ rule hash-test-output ( name + )
             [ hash-test hash_deque_test ]
             [ hash-test hash_set_test ]
             [ hash-test hash_map_test ]
-            [ run link_test.cpp link_test_2.cpp : : : <include>$(BOOST_ROOT) ]
+            [ hash-test link_test link_test_2 ]
             [ run container_fwd_test.cpp : : : <include>$(BOOST_ROOT) ]
         ;
 }
 
 subinclude libs/functional/hash/examples ;
-
