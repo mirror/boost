@@ -62,6 +62,11 @@ static void test(std::complex<T> const&)
 {
 }
 
+template <class X, class Y>
+static void test(std::pair<X, Y> const&)
+{
+}
+
 #include <deque>
 #include <list>
 #include <vector>
@@ -70,6 +75,7 @@ static void test(std::complex<T> const&)
 #include <bitset>
 #include <string>
 #include <complex>
+#include <utility>
 
 int main()
 {
@@ -84,6 +90,7 @@ int main()
     std::bitset<10> x9;
     std::string x10;
     std::complex<double> x11;
+    std::pair<std::list<int>, char***> x12;
 
     test(x1);
     test(x2);
@@ -96,6 +103,7 @@ int main()
     test(x9);
     test(x10);
     test(x11);
+    test(x12);
 
     return 0;
 }
