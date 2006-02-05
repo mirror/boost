@@ -849,12 +849,11 @@ Now we add a special defaulted argument to each of our
   }
 
 
-These additional parameters are not intended to be used directly
-by callers; they merely trigger SFINAE by becoming illegal types
-when the ``name`` argument is not convertible to ``const
-char*``. The ``BOOST_PARAMETER_FUN`` macro described earlier
-adds these extra function parameters for you (Borland users see
-this note__).
+These additional parameters are not intended to be used directly by
+callers; they merely trigger SFINAE by becoming illegal types when
+the ``root_vertex`` argument is not convertible to ``int``. The
+``BOOST_PARAMETER_FUN`` macro described earlier adds these extra
+function parameters for you (Borland users see this note__).
 
 .. _BOOST_PARAMETER_MATCH:
 
