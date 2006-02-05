@@ -11,6 +11,7 @@ import testing ;
 DEPENDS all : test ;
 
 rule hash-test ( names + : extras * )
+{
     return [
         run $(names).cpp
         <lib>../../../test/build/boost_unit_test_framework
@@ -22,6 +23,8 @@ rule hash-test ( names + : extras * )
 {
     test-suite functional/hash
         :
+            [ hash-test hash_fwd_test_1 ]
+            [ hash-test hash_fwd_test_2 ]
             [ hash-test hash_number_test ]
             [ hash-test hash_pointer_test ]
             [ hash-test hash_function_pointer_test ]
