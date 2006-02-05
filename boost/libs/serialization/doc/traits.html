@@ -205,7 +205,7 @@ included with the library.
 When serializing a derived class through a base class pointer, it
 may be convenient to define an external name by which the
 derived class can be identified.  
-<i>(<a target="detail" href="serialization.html#derivedpointers">Elsewhere</a>
+<i>(<a target="detail" href="special.html#derivedpointers">Elsewhere</a>
 in this manual, the
 serialization of derived classes is addressed in detail.)</i>
 Standard C++ does implement <code style="white-space: normal">typeid()</code> which can be
@@ -296,8 +296,8 @@ target="extended_type_info_rtti_hpp">extended_type_info_no_rtti.hpp</a>.
 By invoking the macro:
 <pre><code>
 BOOST_CLASS_TYPE_INFO(
-    derived_class, 
-    extended_type_info_no_rtti&lt;base_class&gt;
+    my_class, 
+    extended_type_info_no_rtti&lt;my_class&gt;
 )
 </code></pre>
 we can assign the type information implementation to each class on a case by

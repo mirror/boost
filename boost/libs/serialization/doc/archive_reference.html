@@ -142,7 +142,7 @@ by XML archive to inject "&lt;/name&gt;" after data.
 <dt><h4><code>void end_preamble()</code></h4></dt>
 <dd>
 <strong>Default</strong>:Does nothing.<br>
-<strong>Purpose</strong>:Called <strong>each time</strong> user data data is saved. 
+<strong>Purpose</strong>:Called <strong>each time</strong> user data is saved. 
 Its not called when archive book keeping data is saved.  This is used by XML archives 
 to determine  when to inject a "&gt;" character at end of XML header. XML output archives 
 keep their own internal flag indicating that data being written is header data. This
@@ -180,7 +180,9 @@ This data includes things like object ids, version numbers, class names etc.  Ea
 of these objects is included in a wrapper so that the archive class can override the
 implementation of <code style="white-space: normal">void load_override(T & t, int);</code>.
 For example, in the XML archive, the override for this type renders an object_id equal to 23 as
-"object_id=_23".  The following table lists the types used by the serialization library:
+"object_id=_23".  The following table lists the types defined in the 
+<code style="white-space: normal">boost::archive namespace</code>
+used internally by the serialization library:
 <p>
 <table border>
 <tr><th align=left>type</th><th align=left><code style="white-space: normal">default<br>serialed as</code></th>
@@ -203,7 +205,7 @@ These are defined in
 All of these types have been assigned an 
 <a target="detail" href="traits.html#level">implementation level</a> of
 <code style="white-space: normal">primitive</code> and are convertible to types such as int, unsigned int, etc. 
-So that they have default implementations.  This is illustrated by
+so that they have default implementations.  This is illustrated by
 <a href="../../../boost/archive/basic_text_iarchive.hpp" target="basic_text_iarchive_hpp"><code style="white-space: normal">basic_text_iarchive.hpp</code></a>.
 which relies upon the default.  However, in some cases, overrides will have to be
 explicitly provided for these types. For an example see
@@ -323,7 +325,7 @@ However:
 <ul>
 <li>Much inline code may be replicated.
 <li>If there are several archive classes, code will be regenerated for each archive class.
-<li>If seriaiization code is placed in a library, that library must be rebuilt 
+<li>If serialization code is placed in a library, that library must be rebuilt 
 each time a new archive class is created.
 <li>If serialization code is placed in a DLL,
   <ul>

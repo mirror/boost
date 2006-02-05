@@ -1,4 +1,4 @@
-﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -29,7 +29,7 @@
 <h4>Notation</h4>
 In the following descriptions
 <ul>
-  <li><code>SA</code> is an type modeling the <a href="#loading_interface">Saving Archive Concept</a>
+  <li><code>SA</code> is an type modeling the <a href="#saving_interface">Saving Archive Concept</a>
   <li><code>sa</code> is an instance of type SA.
   <li><code>LA</code> is an type modeling the <a href="#loading_interface">Loading Archive Concept</a>
   <li><code>la</code> is an instance of type LA.
@@ -246,14 +246,6 @@ included in the code module containing the serialization code.
 <a href="../../../boost/archive/text_woarchive.hpp">boost::archive::text_woarchive</a> // saving
 <a href="../../../boost/archive/text_wiarchive.hpp">boost::archive::text_wiarchive</a> // loading
 
-// a non-portable native binary archive</a>
-<a href="../../../boost/archive/binary_oarchive.hpp" target="binary_oarchive_cpp">boost::archive::binary_oarchive</a> // saving
-<a href="../../../boost/archive/binary_iarchive.hpp" target="binary_iarchive_cpp">boost::archive::binary_iarchive</a> // loading
-<!--
-// a non-portable native binary archive which use wide character streams
-<a href="../../../boost/archive/binary_woarchive.hpp">boost::archive::binary_woarchive</a> // saving
-<a href="../../../boost/archive/binary_wiarchive.hpp">boost::archive::binary_wiarchive</a> // loading
--->
 // a portable XML archive</a>
 <a href="../../../boost/archive/xml_oarchive.hpp" target="xml_oarchive_cpp">boost::archive::xml_oarchive</a> // saving
 <a href="../../../boost/archive/xml_iarchive.hpp" target="xml_iarchive_cpp">boost::archive::xml_iarchive</a> // loading
@@ -261,6 +253,17 @@ included in the code module containing the serialization code.
 // a portable XML archive which uses wide characters - use for utf-8 output</a>
 <a href="../../../boost/archive/xml_woarchive.hpp" target="xml_woarchive_cpp">boost::archive::xml_woarchive</a> // saving
 <a href="../../../boost/archive/xml_wiarchive.hpp" target="xml_wiarchive_cpp">boost::archive::xml_wiarchive</a> // loading
+
+// a non-portable native binary archive</a>
+<a href="../../../boost/archive/binary_oarchive.hpp" target="binary_oarchive_cpp">boost::archive::binary_oarchive</a> // saving
+<a href="../../../boost/archive/binary_iarchive.hpp" target="binary_iarchive_cpp">boost::archive::binary_iarchive</a> // loading
+
+<!--
+// a non-portable native binary archive which use wide character streams
+<a href="../../../boost/archive/binary_woarchive.hpp">boost::archive::binary_woarchive</a> // saving
+<a href="../../../boost/archive/binary_wiarchive.hpp">boost::archive::binary_wiarchive</a> // loading
+-->
+
 </code></pre>
 
 All of these archives implement the same inteface. Hence, it should suffice to describe only one
@@ -285,14 +288,13 @@ enum archive_flags {
 namespace boost {
 namespace archive {
 
-template&lt;class OStream&gt;
 class text_oarchive : ...
 {
     ...
 public:
-    ... // implementation of <strong>Archive</strong> concept
-    oarchive(OStream & os, unsigned int flags = 0);
-    ~oarchive();
+    ... // implementation of the <strong>Saving Archive</strong> concept
+    text_oarchive(std::ostream & os, unsigned int flags = 0);
+    ~text_oarchive();
 };
 
 } // archive
@@ -301,16 +303,8 @@ public:
 
 <dl>
 
-<dt><h4>
-Template parameter <code>OStream</code>
-</h4></dt>
-<dd>
-An class derived from <code style="white-space: normal">basic_istream&lt;char&gt;
-</code>
-</dd>
-
 <dt><h4><code>
-oarchive(OStream & os, unsigned int flags = 0);
+text_oarchive(std::ostream & os, unsigned int flags = 0);
 </code></h4></dt>
 <dd>
 Contructs an archive given an open <code style="white-space: normal">stream</code> as 
@@ -340,7 +334,7 @@ tags, use <code style="white-space: normal">no_xml_tag_checking</code> flag.
 </dd>
 
 <dt><h4><code>
-~oarchive();
+~text_oarchive();
 </code></h4></dt>
 <dd>
 Destructor for an archive.  This should be called before the stream is
@@ -354,14 +348,13 @@ the archive was opened.
 namespace boost {
 namespace archive {
 
-template&lt;class IStream&gt;
 class text_iarchive : ...
 {
     ...
 public:
-    ... // implementation of <strong>Archive</strong> concept
-    iarchive(IStream & is, unsigned int flags = 0);
-    ~iarchive();
+    ... // implementation of the <strong>Loading Archive</strong> concept
+    text_iarchive(std::istream & is, unsigned int flags = 0);
+    ~text_iarchive();
 };
 
 } //namespace archive
@@ -371,16 +364,8 @@ public:
 
 <dl>
 
-<dt><h4>
-Template parameter <code>IStream</code>
-</h4></dt>
-<dd>
-An class derived from <code style="white-space: normal">basic_ostream&lt;char&gt;
-</code>
-</dd>
-
 <dt><h4><code>
-iarchive(IStream & is, unsigned int flags = 0);
+text_iarchive(std::istream & is, unsigned int flags = 0);
 </code></h4></dt>
 <dd>
 Contructs an archive given an open <code style="white-space: normal">stream</code> as 
@@ -390,14 +375,29 @@ above.
 </dd>
 
 <dt><h4><code>
-~iarchive();
+~text_iarchive();
 </code></h4></dt>
 <dd>
 Destructor for an archive.  This should be called before the stream is
 closed.  It restores any altered stream facets to thier state before the
 the archive was opened.
 </dd>
-
+</dl>
+<p>
+The <code style="white-space: normal">binary_oarchive</code> and
+<code style="white-space: normal">binary_iarchive</code> classes are
+implemented in terms of the more basic 
+<code style="white-space: normal">std::streambuf</code>.  So, in addition
+to the common class interface described above, they include the following
+constructors:
+<dl>
+<dt><h4><code>
+binary_oarchive(std::streambuf & bsb, unsigned int flags = 0);
+</code></h4></dt>
+and
+<dt><h4><code>
+binary_iarchive(std::streambuf & bsb, unsigned int flags = 0);
+</code></h4></dt>
 </dl>
 
 <h3><a name="exceptions">Exceptions</h3>

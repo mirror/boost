@@ -162,7 +162,11 @@ This should only occur when the size of an array in code is reduced after an
 archive has already been created.
 
 <h3><a name="stream_error"><code style="white-space: normal">stream_error</code></a></h3>
-An error has occured durring stream input or ouput.  This includes
+An error has occured during stream input or ouput.  Aside from the common 
+situations such as a corrupted or truncated input file, there are 
+several less obvious ones that sometimes occur.
+<p>
+This includes
 an attempt to read past the end of the file. Text files need a terminating
 new line character at the end of the file which is appended when the
 archive destructor is invoked.  Be sure that an output archive on a stream
@@ -189,6 +193,13 @@ std::vector&lt;V&gt; v;
     ia &gt;&gt; v;
 }
 </code></pre>
+<p>
+Another one is the passing of uninitialized data.  In general, the behavior
+of the serialization library when passed uninitialized data is undefined.
+If it can be detected, it will invoke an assertion in debug builds.
+Otherwise, depending on the type of archive, it may pass through without
+incident or it may result in an archive with unexpected data in it.
+This, in turn, can result in the throwing of this exception.
 
 <h3><a name="invalid_class_name"><code style="white-space: normal">invalid_class_name</code></a></h3>
 Class name length greater than the maximum permitted. Most likely cause is a corrupted 

@@ -73,7 +73,11 @@ the base classes.
     typedef portable_binary_oarchive derived_t;
     friend class detail::common_oarchive&lt;derived_t&gt;;
     friend class basic_binary_oarchive&lt;derived_t&gt;;
-    friend class basic_binary_oprimitive&lt;derived_t, std::ostream&gt;;
+    friend class basic_binary_oprimitive&lt;
+        derived_t, 
+        std::ostream::char_type, 
+        std::ostream::traits_type
+    &gt;;
     friend class boost::serialization::save_access;
 </code></pre>
     <li><i>Base class functions will usually need to be explicitly invoked</i>

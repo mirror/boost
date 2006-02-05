@@ -1,4 +1,4 @@
-<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+﻿<!doctype HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <!--
 (C) Copyright 2002-4 Robert Ramey - http://www.rrsd.com . 
@@ -79,7 +79,17 @@ Our solution is to wrap class members to be serialized in a
 <strong>name-value-pair</strong>. This structure is defined in
 <a href="../../../boost/serialization/nvp.hpp" target="nvp_hpp">nvp.hpp</a>.
 It is just a reference to the data member coupled with a pointer to
-to a <code style="white-space: normal">const char *</code> which corresponds to the XML name.
+to a <code style="white-space: normal">const char *</code> which 
+corresponds to the XML name.  It implements the default
+serialization functions for a name-value pair.  This default
+action is to just ignore the item name and serialize the
+data value in the normal manner.  For archive classes that
+don't make any special provision for name-value pairs, this
+is the action which will be invoked when the name-value pair
+is serialized.  Hence, wrapping a data value into a name-value
+pair will have no effect when used with archives which
+make no special provision for this wrapper.
+<p>
 The xml archive classes contain code similar to:
 <pre><code>
 // special treatment for name-value pairs.
@@ -96,24 +106,6 @@ xml_oarchive & operator&(const boost::serialization::nvp<T> & t)
     end_tag(t.name());
 }
 </code></pre>
-Archive classes which don't use the name of the data item include
-code similar to the following:
-<pre><code>
-// special treatment for name-value pairs.  In a simple
-// text archive, just output the value in the normal way.
-// the name is not used
-template&lt;class IStream, class T&gt;
-text_oarchive & operator&(const boost::serialization::nvp<T> & t)
-{
-    *this & t.value();
-}
-</code></pre>
-That is, the name part is ignored and and the value part is serialized
-as usual.
-<p>
-Hence, adding the name of the data item does not in any way affect the usage
-of archives which don't use it.  
-<p>
 The most obvious and convient name to assign to as the XML data item name
 is - surpise! - the name of the C++ class data member.  So our serialization
 code will look like:
