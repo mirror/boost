@@ -29,7 +29,7 @@
 
 namespace boost
 {
-#if defined(__BORLANDC__)
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
     // Borland complains about an ambiguous function overload
     // when compiling boost::hash<bool>.
     std::size_t hash_value(bool);
@@ -64,7 +64,7 @@ namespace boost
 
     // Implementation
 
-#if defined(__BORLANDC__)
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
     inline std::size_t hash_value(bool v)
     {
         return static_cast<std::size_t>(v);
@@ -138,7 +138,7 @@ namespace boost
             template <class Array>
             struct inner
             {
-#if defined(BOOST_MSVC) && BOOST_MSVC < 1300
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
                 static std::size_t call(Array& v)
 #else
                 static std::size_t call(Array const& v)
@@ -159,7 +159,7 @@ namespace boost
 #endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     }
 
-#if defined(BOOST_MSVC) && BOOST_MSVC < 1300
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     template <class T>
     inline void hash_combine(std::size_t& seed, T& v)
 #else
@@ -193,7 +193,7 @@ namespace boost
         }
     }
 
-#if defined(__BORLANDC__)
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
     template <class T>
     inline std::size_t hash_range(T* first, T* last)
     {
@@ -300,7 +300,7 @@ namespace boost
             return hash_detail::call_hash<T>::call(val);
         }
 
-#if defined(BOOST_MSVC) && BOOST_MSVC < 1300
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
         std::size_t operator()(T& val) const
         {
             return hash_detail::call_hash<T>::call(val);
