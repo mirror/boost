@@ -16,7 +16,6 @@
 #endif
 
 #include <boost/config.hpp>
-#include <vector>
 #include <boost/functional/hash/hash.hpp>
 
 namespace boost

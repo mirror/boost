@@ -15,7 +15,6 @@
 #endif
 
 #include <boost/config.hpp>
-#include <deque>
 #include <boost/functional/hash/hash.hpp>
 
 namespace boost

@@ -18,11 +18,11 @@
 #include <boost/config.hpp>
 #include <cstddef>
 #include <cmath>
-#include <string>
 #include <functional>
 #include <errno.h>
 #include <boost/limits.hpp>
 #include <boost/functional/detail/float_functions.hpp>
+#include <boost/functional/detail/container_fwd.hpp>
 #include <boost/detail/workaround.hpp>
 
 #if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
