@@ -23,7 +23,7 @@
 #include <limits.h>
 // we need wchar.h for WCHAR_MAX/MIN but not all platforms provide it,
 // and some may have <wchar.h> but not <cwchar> ...
-#if !defined(BOOST_NO_INTRINSIC_WCHAR_T) && (!defined(BOOST_NO_CWCHAR) || defined(sun) || defined(__sun))
+#if !defined(BOOST_NO_INTRINSIC_WCHAR_T) && (!defined(BOOST_NO_CWCHAR) || defined(sun) || defined(__sun) || defined(__QNX__))
 #include <wchar.h>
 #endif
 
