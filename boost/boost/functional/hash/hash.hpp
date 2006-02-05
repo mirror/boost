@@ -15,15 +15,13 @@
 # pragma once
 #endif
 
-#include <boost/config.hpp>
-#include <cstddef>
+#include <boost/functional/hash_fwd.hpp>
 #include <cmath>
 #include <functional>
 #include <errno.h>
 #include <boost/limits.hpp>
 #include <boost/functional/detail/float_functions.hpp>
 #include <boost/functional/detail/container_fwd.hpp>
-#include <boost/detail/workaround.hpp>
 
 #if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #include <boost/type_traits/is_array.hpp>
@@ -62,19 +60,6 @@ namespace boost
 #else
     template <class Ch, class A>
     std::size_t hash_value(std::basic_string<Ch, std::char_traits<Ch>, A> const&);
-#endif
-
-    template <class It> std::size_t hash_range(It first, It last);
-    template <class It> void hash_range(std::size_t&, It first, It last);
-#if defined(__BORLANDC__)
-    template <class T> inline std::size_t hash_range(T*, T*);
-    template <class T> inline void hash_range(std::size_t&, T*, T*);
-#endif
-
-#if defined(BOOST_MSVC) && BOOST_MSVC < 1300
-    template <class T> void hash_combine(std::size_t& seed, T& v);
-#else
-    template <class T> void hash_combine(std::size_t& seed, T const& v);
 #endif
 
     // Implementation
