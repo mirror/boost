@@ -270,7 +270,7 @@
     <xsl:param name="display-name"/>
 
     <!-- The name we are looking for (unqualified)-->
-    <xsl:param name="unqualified name"/> 
+    <xsl:param name="unqualified-name"/> 
 
     <!-- The list of nodes that match the lookup node in both name and type -->
     <xsl:param name="nodes"/>
