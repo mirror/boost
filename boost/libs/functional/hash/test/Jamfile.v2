@@ -10,6 +10,8 @@ alias framework : /boost/test//boost_unit_test_framework ;
 
 test-suite functional/hash
     :
+        [ run hash_fwd_test_1.cpp framework ]
+        [ run hash_fwd_test_2.cpp framework ]
         [ run hash_number_test.cpp framework ]
         [ run hash_pointer_test.cpp framework ]
         [ run hash_function_pointer_test.cpp framework ]
