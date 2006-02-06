@@ -5,6 +5,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Boost.MultiIndex Documentation - Future work</title>
 <link rel="stylesheet" href="style.css" type="text/css">
+<link rel="start" href="index.html">
+<link rel="prev" href="tests.html">
+<link rel="up" href="index.html">
+<link rel="next" href="release_notes.html">
 </head>
 
 <body>
@@ -34,7 +38,6 @@ principle driving the current internal design of <code>multi_index_container</co
 
 <ul>
   <li><a href="#ranked_indices">Ranked indices</a></li>
-  <li><a href="#random_access_indices">Random access indices</a></li>
   <li><a href="#notifying">Notifying indices</a></li>
   <li><a href="#constraints">Constraints</a></li>
   <li><a href="#user_defined_indices">User-defined indices</a></li>
@@ -54,24 +57,6 @@ trees</i></a>, allowing for logarithmic search of the <i>n</i>-th element. It
 has been proposed that order-statistics trees be used to devise a new type of
 <i>ranked indices</i> that support <code>operator[]</code> while retaining
 the functionality of ordered indices.
-</p>
-
-<h2><a name="random_access_indices">Random access indices</a></h2>
-
-<p>
-These indices provide random access iterators and location of elements
-by their position ordinal. Although they seem at first glance to model
-the semantics of <code>std::vector</code>, random access indices present
-important differences:
-<ul>
-  <li>Iterator and reference validity is preserved on insertion and deletion,</li>
-  <li>memory contiguity is not provided,</li>
-  <li>standard mutating algorithms (vg. <code>std::sort</code>) will in general
-    not work with random access indices, as elements of a
-    <code>multi_index_container</code> cannot be directly moved or swapped;</li>
-</ul>
-so it might be more accurate to regard this type of indices  as a variation of
-sequenced indices with random access semantics.
 </p>
 
 <h2><a name="notifying">Notifying indices</a></h2>
@@ -255,9 +240,9 @@ Release notes
 
 <br>
 
-<p>Revised July 5th 2005</p>
+<p>Revised February 6th 2006</p>
 
-<p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
