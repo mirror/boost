@@ -5,14 +5,18 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Boost.MultiIndex Documentation - Reference</title>
 <link rel="stylesheet" href="../style.css" type="text/css">
+<link rel="start" href="../index.html">
+<link rel="prev" href="../tutorial/techniques.html">
+<link rel="up" href="../index.html">
+<link rel="next" href="multi_index_container.html">
 </head>
 
 <body>
 <h1><img src="../../../../boost.png" alt="boost.png (6897 bytes)" align=
 "middle" width="277" height="86">Boost.MultiIndex Reference</h1>
 
-<div class="prev_link"><a href="../advanced_topics.html"><img src="../prev.gif" alt="advanced topics" border="0"><br>
-Advanced topics
+<div class="prev_link"><a href="../tutorial/techniques.html"><img src="../prev.gif" alt="techniques" border="0"><br>
+Tecnhiques
 </a></div>
 <div class="up_link"><a href="../index.html"><img src="../up.gif" alt="index" border="0"><br>
 Index
@@ -32,6 +36,7 @@ Index
   <li><a href="ord_indices.html">Ordered indices</a></li>
   <li><a href="hash_indices.html">Hashed indices</a></li>
   <li><a href="seq_indices.html">Sequenced indices</a></li>
+  <li><a href="rnd_indices.html">Random access indices</a></li>
   <li><a href="key_extraction.html">Key Extraction</a></li>
 </ul>
 
@@ -63,6 +68,13 @@ The following dependencies among headers of Boost.MultiIndex hold:
   </li>
   <li><a href="seq_indices.html#synopsis">
     <code>"boost/multi_index/sequenced_index.hpp"</code></a> includes
+    <ul>
+      <li><a href="indices.html#tag_synopsis">
+        <code>"boost/multi_index/tag.hpp"</code></a>.</li>
+    </ul>
+  </li>
+  <li><a href="rnd_indices.html#synopsis">
+    <code>"boost/multi_index/random_access_index.hpp"</code></a> includes
     <ul>
       <li><a href="indices.html#tag_synopsis">
         <code>"boost/multi_index/tag.hpp"</code></a>.</li>
@@ -101,8 +113,8 @@ object modules.
 
 <hr>
 
-<div class="prev_link"><a href="../advanced_topics.html"><img src="../prev.gif" alt="advanced topics" border="0"><br>
-Advanced topics
+<div class="prev_link"><a href="../tutorial/techniques.html"><img src="../prev.gif" alt="techniques" border="0"><br>
+Tecnhiques
 </a></div>
 <div class="up_link"><a href="../index.html"><img src="../up.gif" alt="index" border="0"><br>
 Index
@@ -113,9 +125,9 @@ Index
 
 <br>
 
-<p>Revised May 30th 2005</p>
+<p>Revised February 6th 2005</p>
 
-<p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
