@@ -106,6 +106,11 @@ private:
     typename super::node_type,
     multi_index_container>                        bfm_header;
 
+#if BOOST_WORKAROUND(BOOST_MSVC,<1300)
+  /* see definition of index_type_list below */
+  typedef typename super::index_type_list         super_index_type_list;
+#endif
+
 public:
   /* All types are inherited from super, a few are explicitly
    * brought forward here to save us some typename's.
@@ -120,7 +125,29 @@ public:
 #endif
 
   typedef IndexSpecifierList                       index_specifier_type_list;
+ 
+#if BOOST_WORKAROUND(BOOST_MSVC,<1300)
+  /* MSVC++ 6.0 chokes on moderately long index lists (around 6 indices
+   * or more), with errors ranging from corrupt exes to duplicate
+   * comdats. The following type hiding hack alleviates this condition;
+   * best results combined with type hiding of the indexed_by construct
+   * itself, as explained in the "Compiler specifics" section of
+   * the documentation.
+   */
+
+  struct index_type_list:super_index_type_list
+  {
+    typedef index_type_list                      type;
+    typedef typename super_index_type_list::back back;
+    typedef mpl::v_iter<type,0>                  begin;
+    typedef mpl::v_iter<
+      type,
+      mpl::size<super_index_type_list>::value>   end;
+  };
+#else
   typedef typename super::index_type_list          index_type_list;
+#endif
+
   typedef typename super::iterator_type_list       iterator_type_list;
   typedef typename super::const_iterator_type_list const_iterator_type_list;
   typedef typename super::value_type               value_type;
@@ -512,7 +539,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
   template<typename Modifier>
   bool modify_(Modifier mod,node_type* x)
   {
-    mod(const_cast<value_type&>(x->value));
+    mod(const_cast<value_type&>(x->value()));
 
     BOOST_TRY{
       if(!super::modify_(x)){
@@ -574,7 +601,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
       if(!p.second)throw_exception(
         archive::archive_exception(
           archive::archive_exception::other_exception));
-      ar.reset_object_address(&p.first->value,&value.get());
+      ar.reset_object_address(&p.first->value(),&value.get());
       lm.add(p.first,ar,version);
     }
     lm.add_track(header(),ar,version);
