@@ -19,7 +19,6 @@
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_SLIST
 #include BOOST_SLIST_HEADER
-#endif
 
 #include <boost/serialization/collections_save_imp.hpp>
 #include <boost/serialization/collections_load_imp.hpp>
