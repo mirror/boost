@@ -5,6 +5,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Boost.MultiIndex Documentation - Tests</title>
 <link rel="stylesheet" href="style.css" type="text/css">
+<link rel="start" href="index.html">
+<link rel="prev" href="examples.html">
+<link rel="up" href="index.html">
+<link rel="next" href="future_work.html">
 </head>
 
 <body>
@@ -45,8 +49,9 @@ with some of the least common features offered by Boost.MultiIndex.
 </tr>
 <tr class="odd_tr">
   <td><a href="../test/test_capacity.cpp"><code>test_capacity.cpp</code></a></td>
-  <td><code>empty</code>, <code>size</code> and (sequenced indices only)
-  <code>resize</code>.</td>
+  <td><code>empty</code>, <code>size</code>, <code>resize</code>
+  (non key-based indices) and <code>reserve</code>/<code>capacity</code>
+  (random access indices only).</td>
 </tr>
 <tr>
   <td><a href="../test/test_comparison.cpp"><code>test_comparison.cpp</code></a></td>
@@ -63,7 +68,7 @@ with some of the least common features offered by Boost.MultiIndex.
 <tr class="odd_tr">
   <td><a href="../test/test_copy_assignment.cpp"><code>test_copy_assignment.cpp</code></a></td>
   <td>Various forms of assignment: copy, <code>operator =</code>, insertion,
-  (sequenced indices only) <code>assign</code> .
+  (non key-based indices only) <code>assign</code> .
 </tr>
 <tr>
   <td><a href="../test/test_hash_ops.cpp"><code>test_hash_ops.cpp</code></a></td>
@@ -79,7 +84,7 @@ with some of the least common features offered by Boost.MultiIndex.
 </tr>
 <tr class="odd_tr">
   <td><a href="../test/test_list_ops.cpp"><code>test_list_ops.cpp</code></a></td>
-  <td>List-like operations particular to sequenced indices.</td>
+  <td>List-like operations particular to sequenced and random access indices.</td>
 </tr>
 <tr>
   <td><a href="../test/test_modifiers.cpp"><code>test_modifiers.cpp</code></a></td>
@@ -102,21 +107,20 @@ with some of the least common features offered by Boost.MultiIndex.
   <td>Exercises the <code>range</code> facility (ordered indices only).</td>
 </tr>
 <tr class="odd_tr">
+  <td><a href="../test/test_rearrange.cpp"><code>test_rearrange.cpp</code></a></td>
+  <td>Rearrange functions of sequenced and random access indices.</td>
+</tr>
+<tr>
   <td><a href="../test/test_safe_mode.cpp"><code>test_safe_mode.cpp</code></a></td>
   <td>Comprehensive coverage of all conditions checked in safe mode.</td> 
 </tr>
-<tr>
+<tr class="odd_tr">
   <td><a href="../test/test_serialization.cpp"><code>test_serialization.cpp</code></a></td>
   <td>Serialization support.</td> 
 </tr>
-<tr class="odd_tr">
+<tr>
   <td><a href="../test/test_set_ops.cpp"><code>test_set_ops.cpp</code></a></td>
   <td>Set-like operations particular to ordered indices.</td>
-</tr>
-<tr>
-  <td><a href="../test/test_special_list_ops.cpp"><code>test_special_list_ops.cpp</code></a></td>
-  <td>Convenience functions of sequenced indices not present in
-  <code>std::list</code>.</td>
 </tr>
 <tr class="odd_tr">
   <td><a href="../test/test_special_set_ops.cpp"><code>test_special_set_ops.cpp</code></a></td>
@@ -144,9 +148,9 @@ Future work
 <br>
 
 
-<p>Revised July 27th 2005</p>
+<p>Revised February 6th 2006</p>
 
-<p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
