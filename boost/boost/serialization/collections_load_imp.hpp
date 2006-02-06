@@ -47,7 +47,10 @@ struct archive_input_seq
 {
     inline void operator()(Archive &ar, Container &s)
     {
-        detail::stack_construct<Archive, BOOST_DEDUCED_TYPENAME Container::value_type> t(ar);
+        detail::stack_construct<
+            Archive, 
+            BOOST_DEDUCED_TYPENAME Container::value_type
+        > t(ar);
         // borland fails silently w/o full namespace
         ar >> boost::serialization::make_nvp("item", t.reference());
         s.push_back(t.reference());

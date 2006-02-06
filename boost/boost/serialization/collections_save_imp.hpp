@@ -18,6 +18,7 @@
 
 // helper function templates for serialization of collections
 
+#include <boost/config.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/serialization.hpp>
 
@@ -38,8 +39,14 @@ inline void save_collection(Archive & ar, const Container &s)
     BOOST_DEDUCED_TYPENAME Container::const_iterator it = s.begin();
     while(count-- > 0){
         //if(0 == (ar.get_flags() & boost::archive::no_object_creation))
-                // note borland emits a no-op without the explicit namespace
-                boost::serialization::save_construct_data_adl(ar, &(*it), 0U);
+            // note borland emits a no-op without the explicit namespace
+            boost::serialization::save_construct_data_adl(
+                ar, 
+                &(*it), 
+                boost::serialization::version<
+                    BOOST_DEDUCED_TYPENAME Container::value_type
+                >::value
+            );
         ar << boost::serialization::make_nvp("item", *it++);
     }
 }
