@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for capacity memfuns.
  *
- * Copyright 2003-2005 Joaquín M López Muñoz.
+ * Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -52,4 +52,29 @@ void test_capacity()
 
   ss.resize(5);
   BOOST_CHECK(ss.size()==5);
+
+  multi_index_container<int,indexed_by<random_access<> > > rs;
+
+  rs.resize(10);
+  BOOST_CHECK(rs.size()==10);
+  BOOST_CHECK(rs.size()<=rs.max_size());
+  BOOST_CHECK(rs.size()<=rs.capacity());
+
+  rs.resize(20);
+  BOOST_CHECK(rs.size()==20);
+  BOOST_CHECK(rs.size()<=rs.capacity());
+
+  unsigned int c=rs.capacity();
+  rs.resize(5);
+  BOOST_CHECK(rs.size()==5);
+  BOOST_CHECK(rs.capacity()==c);
+
+  rs.reserve(100);
+  BOOST_CHECK(rs.size()==5);
+  BOOST_CHECK(rs.capacity()>=100);
+
+  c=rs.capacity();
+  rs.reserve(99);
+  BOOST_CHECK(rs.size()==5);
+  BOOST_CHECK(rs.capacity()==c);
 }

@@ -1,7 +1,7 @@
 /* Boost.MultiIndex test for interconvertibilty between const and
  * non-const iterators.
  *
- * Copyright 2003-2005 Joaquín M López Muñoz.
+ * Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -58,6 +58,16 @@ void test_conv_iterators()
     employee_set_as_inserted::iterator        it=i3.begin();
     employee_set_as_inserted::const_iterator it1=i3.begin();
     employee_set_as_inserted::const_iterator it2=ci3.begin();
+
+    BOOST_CHECK(it==it1&&it1==it2&&it2==it);
+    BOOST_CHECK(*it==*it1&&*it1==*it2&&*it2==*it);
+  }
+  {
+    employee_set_randomly&        i5=get<5>(es);
+    const employee_set_randomly& ci5=get<5>(es);
+    employee_set_randomly::iterator        it=i5.begin();
+    employee_set_randomly::const_iterator it1=i5.begin();
+    employee_set_randomly::const_iterator it2=ci5.begin();
 
     BOOST_CHECK(it==it1&&it1==it2&&it2==it);
     BOOST_CHECK(*it==*it1&&*it1==*it2&&*it2==*it);

@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for serialization.
  *
- * Copyright 2003-2005 Joaquín M López Muñoz.
+ * Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -18,6 +18,7 @@
 #include <boost/multi_index/hashed_index.hpp>
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/sequenced_index.hpp>
+#include <boost/multi_index/random_access_index.hpp>
 #include <boost/multi_index/key_extractors.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/test/test_tools.hpp>
@@ -199,7 +200,8 @@ void test_serialization()
       int,
       indexed_by<
         sequenced<>,
-        sequenced<>
+        sequenced<>,
+        random_access<>
       >
     > multi_index_t;
 
@@ -218,6 +220,7 @@ void test_serialization()
     typedef multi_index_container<
       int,
       indexed_by<
+        random_access<>,
         sequenced<>,
         ordered_non_unique<identity<int> >
       >
@@ -242,6 +245,7 @@ void test_serialization()
         ordered_non_unique<
           BOOST_MULTI_INDEX_MEMBER(pair_of_ints,int,second)
         >,
+        random_access<>,
         sequenced<>
       >
     > multi_index_t;

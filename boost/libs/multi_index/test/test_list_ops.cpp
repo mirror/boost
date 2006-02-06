@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for standard list operations.
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -18,6 +18,7 @@
 #include <boost/multi_index/identity.hpp>
 #include <boost/multi_index/ordered_index.hpp>
 #include <boost/multi_index/sequenced_index.hpp>
+#include <boost/multi_index/random_access_index.hpp>
 #include <boost/test/test_tools.hpp>
 
 using namespace boost::multi_index;
@@ -64,19 +65,13 @@ bool is_sorted(
   }
 }
 
-void test_list_ops()
+template<typename Sequence>
+static void test_list_ops_unique_seq(BOOST_EXPLICIT_TEMPLATE_TYPE(Sequence))
 {
-  typedef multi_index_container<
-    int,
-    indexed_by<
-      ordered_unique<identity<int> >,
-      sequenced<>
-    >
-  > sequenced_set;
-  typedef nth_index<sequenced_set,1>::type sequenced_index;
+  typedef typename nth_index<Sequence,1>::type sequenced_index;
 
-  sequenced_set     ss,ss2;
-  sequenced_index  &si=get<1>(ss),&si2=get<1>(ss2);
+  Sequence         ss,ss2;
+  sequenced_index &si=get<1>(ss),&si2=get<1>(ss2);
 
   si.push_front(0);                       /* 0        */
   si.push_front(4);                       /* 40       */
@@ -130,8 +125,8 @@ void test_list_ops()
   BOOST_CHECK(si2.empty());
 
   {
-    sequenced_set     ss3(ss);
-    sequenced_index  &si3=get<1>(ss3);
+    Sequence         ss3(ss);
+    sequenced_index &si3=get<1>(ss3);
 
     si3.sort(std::greater<int>());
     si.reverse();
@@ -144,6 +139,74 @@ void test_list_ops()
   si.merge(si2,std::greater<int>());
   BOOST_CHECK(is_sorted(si,std::greater<int>()));
   BOOST_CHECK(si2.empty());
+}
+
+template<typename Sequence>
+static void test_list_ops_non_unique_seq(
+  BOOST_EXPLICIT_TEMPLATE_TYPE(Sequence))
+{
+  typedef typename Sequence::iterator iterator;
+
+  Sequence ss;
+  for(int i=0;i<10;++i){
+    ss.push_back(i);
+    ss.push_back(i);
+    ss.push_front(i);
+    ss.push_front(i);
+  } /* 9988776655443322110000112233445566778899 */
+
+  ss.unique();
+  CHECK_EQUAL(
+    ss,
+    {9 _ 8 _ 7 _ 6 _ 5 _ 4 _ 3 _ 2 _ 1 _ 0 _
+     1 _ 2 _ 3 _ 4 _ 5 _ 6 _ 7 _ 8 _ 9});
+
+  iterator it=ss.begin();
+  for(int j=0;j<9;++j,++it){} /* it points to o */
+
+  Sequence ss2;
+  ss2.splice(ss2.end(),ss,ss.begin(),it);
+  ss2.reverse();
+  ss.merge(ss2);
+  CHECK_EQUAL(
+    ss,
+    {0 _ 1 _ 1 _ 2 _ 2 _ 3 _ 3 _ 4 _ 4 _ 5 _ 5 _
+     6 _ 6 _ 7 _ 7 _ 8 _ 8 _ 9 _ 9});
+
+  ss.unique(same_integral_div<3>());
+  CHECK_EQUAL(ss,{0 _ 3 _ 6 _ 9});
+
+  ss.unique(same_integral_div<1>());
+  CHECK_EQUAL(ss,{0 _ 3 _ 6 _ 9});
+}
+
+void test_list_ops()
+{
+  typedef multi_index_container<
+    int,
+    indexed_by<
+      ordered_unique<identity<int> >,
+      sequenced<>
+    >
+  > sequenced_set;
+  
+  /* MSVC++ 6.0 chokes on test_list_ops_unique_seq without this
+   * explicit instantiation
+   */
+  sequenced_set ss;
+  test_list_ops_unique_seq<sequenced_set>();
+
+
+  typedef multi_index_container<
+    int,
+    indexed_by<
+      ordered_unique<identity<int> >,
+      random_access<>
+    >
+  > random_access_set;
+  
+  random_access_set rs;
+  test_list_ops_unique_seq<random_access_set>();
 
   typedef multi_index_container<
     int,
@@ -151,34 +214,13 @@ void test_list_ops()
   > int_list;
 
   int_list il;
-  for(int i=0;i<10;++i){
-    il.push_back(i);
-    il.push_back(i);
-    il.push_front(i);
-    il.push_front(i);
-  } /* 9988776655443322110000112233445566778899 */
+  test_list_ops_non_unique_seq<int_list>();
 
-  il.unique();
-  CHECK_EQUAL(
-    il,
-    {9 _ 8 _ 7 _ 6 _ 5 _ 4 _ 3 _ 2 _ 1 _ 0 _
-     1 _ 2 _ 3 _ 4 _ 5 _ 6 _ 7 _ 8 _ 9});
+  typedef multi_index_container<
+    int,
+    indexed_by<random_access<> >
+  > int_vector;
 
-  int_list::iterator it=il.begin();
-  for(int j=0;j<9;++j,++it){} /* it points to o */
-
-  int_list il2;
-  il2.splice(il2.end(),il,il.begin(),it);
-  il2.reverse();
-  il.merge(il2);
-  CHECK_EQUAL(
-    il,
-    {0 _ 1 _ 1 _ 2 _ 2 _ 3 _ 3 _ 4 _ 4 _ 5 _ 5 _
-     6 _ 6 _ 7 _ 7 _ 8 _ 8 _ 9 _ 9});
-
-  il.unique(same_integral_div<3>());
-  CHECK_EQUAL(il,{0 _ 3 _ 6 _ 9});
-
-  il.unique(same_integral_div<1>());
-  CHECK_EQUAL(il,{0 _ 3 _ 6 _ 9});
+  int_vector iv;
+  test_list_ops_non_unique_seq<int_vector>();
 }

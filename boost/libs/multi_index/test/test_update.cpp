@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for replace(), modify() and modify_key().
  *
- * Copyright 2003-2005 Joaquín M López Muñoz.
+ * Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -23,6 +23,7 @@ void test_update()
 {
   employee_set              es;
   employee_set_as_inserted& i=get<as_inserted>(es);
+  employee_set_randomly&    r=get<randomly>(es);
 
   es.insert(employee(0,"Joe",31,1123));
   es.insert(employee(1,"Robert",27,5601));
@@ -33,12 +34,15 @@ void test_update()
   employee_set::iterator             it=es.find(employee(0,"Joe",31,1123));
   employee_set_as_inserted::iterator it1=
     project<as_inserted>(es,get<name>(es).find("Olbert"));
+  employee_set_randomly::iterator    it2=
+    project<randomly>(es,get<age>(es).find(57));
 
   BOOST_CHECK(es.replace(it,*it));
   BOOST_CHECK(!es.replace(it,employee(3,"Joe",31,1123))&&it->id==0);
   BOOST_CHECK(es.replace(it,employee(0,"Joe",32,1123))&&it->age==32);
   BOOST_CHECK(i.replace(it1,employee(3,"Albert",20,9012))&&it1->name==
                 "Albert");
+  BOOST_CHECK(!r.replace(it2,employee(4,"John",57,5601)));
 
   {
     typedef multi_index_container<
@@ -106,7 +110,7 @@ void test_update()
       pair_of_ints,
       indexed_by<
         hashed_unique<BOOST_MULTI_INDEX_MEMBER(pair_of_ints,int,first)>,
-        sequenced<>,
+        random_access<>,
         ordered_unique<BOOST_MULTI_INDEX_MEMBER(pair_of_ints,int,second)> > >
     int_int_set;
 

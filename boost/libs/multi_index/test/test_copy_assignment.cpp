@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for copying and assignment.
  *
- * Copyright 2003-2005 Joaquín M López Muñoz.
+ * Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -21,6 +21,29 @@
 
 using namespace boost::multi_index;
 
+template<typename Sequence>
+static void test_assign(BOOST_EXPLICIT_TEMPLATE_TYPE(Sequence))
+{
+  Sequence s;
+
+  int a[]={0,1,2,3,4,5};
+  std::size_t sa=sizeof(a)/sizeof(a[0]);
+
+  s.assign(&a[0],&a[sa]);
+
+  BOOST_CHECK(s.size()==sa&&std::equal(s.begin(),s.end(),&a[0]));
+
+  s.assign(&a[0],&a[sa]);
+
+  BOOST_CHECK(s.size()==sa&&std::equal(s.begin(),s.end(),&a[0]));
+
+  s.assign((std::size_t)18,37);
+  BOOST_CHECK(s.size()==18&&std::accumulate(s.begin(),s.end(),0)==666);
+
+  s.assign((std::size_t)12,167);
+  BOOST_CHECK(s.size()==12&&std::accumulate(s.begin(),s.end(),0)==2004);
+}
+
 void test_copy_assignment()
 {
   employee_set es;
@@ -31,6 +54,7 @@ void test_copy_assignment()
   al=get<2>(es).get_allocator();
   al=get<3>(es).get_allocator();
   al=get<4>(es).get_allocator();
+  al=get<5>(es).get_allocator();
 
   BOOST_CHECK(es2.empty());
 
@@ -47,6 +71,7 @@ void test_copy_assignment()
   BOOST_CHECK(es2==es3);
   BOOST_CHECK(get<2>(es2)==get<2>(es3));
   BOOST_CHECK(get<3>(es2)==get<3>(es3));
+  BOOST_CHECK(get<5>(es2)==get<5>(es3));
 
   employee_set es4;
   employee_set_by_name& i1=get<name>(es4);
@@ -66,39 +91,33 @@ void test_copy_assignment()
 
   BOOST_CHECK(i3==get<3>(es2));
 
+  employee_set es7;
+  employee_set_randomly& i5=get<randomly>(es7);
+  i5=get<5>(es2);
+
+  BOOST_CHECK(i5==get<5>(es2));
+
   std::list<employee> l;
   l.push_back(employee(3,"Anna",31,5388));
   l.push_back(employee(1,"Rachel",27,9012));
   l.push_back(employee(2,"Agatha",40,1520));
 
 #if BOOST_WORKAROUND(BOOST_MSVC,<1300)
-  employee_set es7;
-  es7.insert(l.begin(),l.end());
+  employee_set es8;
+  es8.insert(l.begin(),l.end());
 #else
-  employee_set es7(l.begin(),l.end());
+  employee_set es8(l.begin(),l.end());
 #endif
 
   l.sort();
 
-  BOOST_CHECK(es7.size()==l.size()&&
-              std::equal(es7.begin(),es7.end(),l.begin()));
+  BOOST_CHECK(es8.size()==l.size()&&
+              std::equal(es8.begin(),es8.end(),l.begin()));
 
-  multi_index_container<int,indexed_by<sequenced<> > > ss;
+  /* MSVC++ 6.0 chokes on test_assign without this explicit instantiation */
+  multi_index_container<int,indexed_by<sequenced<> > > s1;
+  test_assign<multi_index_container<int,indexed_by<sequenced<> > > >();
 
-  int a[]={0,1,2,3,4,5};
-  std::size_t sa=sizeof(a)/sizeof(a[0]);
-
-  ss.assign(&a[0],&a[sa]);
-
-  BOOST_CHECK(ss.size()==sa&&std::equal(ss.begin(),ss.end(),&a[0]));
-
-  ss.assign(&a[0],&a[sa]);
-
-  BOOST_CHECK(ss.size()==sa&&std::equal(ss.begin(),ss.end(),&a[0]));
-
-  ss.assign((std::size_t)18,37);
-  BOOST_CHECK(ss.size()==18&&std::accumulate(ss.begin(),ss.end(),0)==666);
-
-  ss.assign((std::size_t)12,167);
-  BOOST_CHECK(ss.size()==12&&std::accumulate(ss.begin(),ss.end(),0)==2004);
+  multi_index_container<int,indexed_by<random_access<> > > s2;
+  test_assign<multi_index_container<int,indexed_by<random_access<> > > >();
 }

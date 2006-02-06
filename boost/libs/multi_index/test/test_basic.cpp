@@ -1,6 +1,6 @@
 /* Boost.MultiIndex basic test.
  *
- * Copyright 2003-2005 Joaquín M López Muñoz.
+ * Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -41,14 +41,15 @@ void test_basic()
   const employee_set_by_age& i2=get<2>(es);
   employee_set_as_inserted&  i3=get<3>(es);
   employee_set_by_ssn&       i4=get<ssn>(es);
+  employee_set_randomly&     i5=get<randomly>(es);
 
   es.insert(employee(0,"Joe",31,1123));
-  es.insert(employee(5,"Anna",41,1123));   /* clash*/
+  es.insert(employee(5,"Anna",41,1123));      /* clash*/
   i1.insert(employee(1,"Robert",27,5601));
   es.insert(employee(2,"John",40,7889));
   i3.push_back(employee(3,"Albert",20,9012));
   i4.insert(employee(4,"John",57,1002));
-  i4.insert(employee(0,"Andrew",60,2302)); /* clash */
+  i5.push_back(employee(0,"Andrew",60,2302)); /* clash */
 
   v.push_back(employee(0,"Joe",31,1123));
   v.push_back(employee(1,"Robert",27,5601));
@@ -60,6 +61,7 @@ void test_basic()
     /* by insertion order */
 
     BOOST_CHECK(std::equal(i3.begin(),i3.end(),v.begin()));
+    BOOST_CHECK(std::equal(i5.begin(),i5.end(),v.begin()));
   }
 
   {

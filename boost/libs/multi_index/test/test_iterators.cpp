@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for iterators.
  *
- * Copyright 2003-2005 Joaquín M López Muñoz.
+ * Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -95,7 +95,7 @@ void test_non_const_hashed_iterators(Index& i,int target)
 }
 
 template<typename Index>
-void test_const_hashed_iterators(Index& i,int target)
+void test_const_hashed_iterators(const Index& i,int target)
 {
   typedef typename Index::const_iterator       const_iterator;
   typedef typename Index::const_local_iterator const_local_iterator;
@@ -113,6 +113,90 @@ void test_const_hashed_iterators(Index& i,int target)
   }
 
   BOOST_CHECK(n==target&&n==m);
+}
+
+template<typename Index>
+void test_non_const_rnd_iterators(Index& i,int target)
+{
+  typedef typename Index::iterator         iterator;
+  typedef typename Index::reverse_iterator reverse_iterator;
+  typedef typename Index::difference_type  difference_type;
+
+  iterator         middle=i.begin()+(i.end()-i.begin())/2;
+  difference_type  off=middle-i.begin();
+  reverse_iterator rmiddle=i.rbegin()+off;
+  bool             odd=((i.end()-i.begin())%2)!=0;
+
+  int n=0;
+  for(iterator it=i.begin();it!=middle;++it){
+    n+=it->id;
+    n+=it[off].id;
+  }
+  if(odd)n+=(--i.end())->id;
+  int m=0;
+  for(reverse_iterator rit=i.rbegin();rit!=rmiddle;++rit){
+    m+=rit->id;
+    m+=(rit+off)->id;
+  }
+  if(odd)m+=(--i.rend())->id;
+  int p=0;
+  for(iterator it2=i.end();it2!=middle;){
+    --it2;
+    p+=it2->id;
+    p+=(it2-off)->id;
+  }
+  if(odd)p-=middle->id;
+  int q=0;
+  for(reverse_iterator rit2=i.rend();rit2!=rmiddle;){
+    --rit2;
+    q+=rit2->id;
+    q+=(rit2-off)->id;
+  }
+  if(odd)q-=rmiddle->id;
+
+  BOOST_CHECK(n==target&&n==m&&n==p&&n==q);
+}
+
+template<typename Index>
+void test_const_rnd_iterators(const Index& i,int target)
+{
+  typedef typename Index::const_iterator         const_iterator;
+  typedef typename Index::const_reverse_iterator const_reverse_iterator;
+  typedef typename Index::difference_type        difference_type;
+
+  const_iterator         middle=i.begin()+(i.end()-i.begin())/2;
+  difference_type        off=middle-i.begin();
+  const_reverse_iterator rmiddle=i.rbegin()+off;
+  bool                   odd=((i.end()-i.begin())%2)!=0;
+
+  int n=0;
+  for(const_iterator it=i.begin();it!=middle;++it){
+    n+=it->id;
+    n+=it[off].id;
+  }
+  if(odd)n+=(--i.end())->id;
+  int m=0;
+  for(const_reverse_iterator rit=i.rbegin();rit!=rmiddle;++rit){
+    m+=rit->id;
+    m+=(rit+off)->id;
+  }
+  if(odd)m+=(--i.rend())->id;
+  int p=0;
+  for(const_iterator it2=i.end();it2!=middle;){
+    --it2;
+    p+=it2->id;
+    p+=(it2-off)->id;
+  }
+  if(odd)p-=middle->id;
+  int q=0;
+  for(const_reverse_iterator rit2=i.rend();rit2!=rmiddle;){
+    --rit2;
+    q+=rit2->id;
+    q+=(rit2-off)->id;
+  }
+  if(odd)q-=rmiddle->id;
+
+  BOOST_CHECK(n==target&&n==m&&n==p&&n==q);
 }
 
 void test_iterators()
@@ -137,4 +221,6 @@ void test_iterators()
   test_const_iterators           (get<3>(es),target);
   test_non_const_hashed_iterators(get<4>(es),target);
   test_const_hashed_iterators    (get<4>(es),target);
+  test_non_const_rnd_iterators   (get<5>(es),target);
+  test_const_rnd_iterators       (get<5>(es),target);
 }
