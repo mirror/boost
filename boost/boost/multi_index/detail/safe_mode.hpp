@@ -1,4 +1,4 @@
-/* Copyright 2003-2005 Joaquín M López Muñoz.
+/* Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -13,26 +13,11 @@
 #pragma once
 #endif
 
-#if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
-#include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
-#include <algorithm>
-#include <boost/multi_index/detail/access_specifier.hpp>
-#include <boost/multi_index/safe_mode_errors.hpp>
-#include <boost/noncopyable.hpp>
-
-#if defined(BOOST_HAS_THREADS)
-#include <boost/detail/lightweight_mutex.hpp>
-#endif
-
-namespace boost{
-
-namespace multi_index{
-
 /* Safe mode machinery, in the spirit of Cay Hortmann's "Safe STL"
  * (http://www.horstmann.com/safestl.html).
  * In this mode, containers of type Container are derived from
  * safe_container<Container>, and their corresponding iterators
- * are derived from safe_iterator<Container>. These classes provide
+ * are wrapped with safe_iterator. These classes provide
  * an internal record of which iterators are at a given moment associated
  * to a given container, and properly mark the iterators as invalid
  * when the container gets destroyed.
@@ -40,6 +25,11 @@ namespace multi_index{
  * kept by the container. More elaborate data structures would yield better
  * performance, but I decided to keep complexity to a minimum since
  * speed is not an issue here.
+ * Safe mode iterators automatically check that only proper operations
+ * are performed on them: for instance, an invalid iterator cannot be
+ * dereferenced. Additionally, a set of utilty macros and functions are
+ * provided that serve to implement preconditions and cooperate with
+ * the framework within the container.
  * Iterators can also be unchecked, i.e. they do not have info about
  * which container they belong in. This situation arises when the iterator
  * is restored from a serialization archive: only information on the node
@@ -51,11 +41,196 @@ namespace multi_index{
  * for use within the limits of Boost.MultiIndex.
  */
 
+/* Assertion macros. These resolve to no-ops if
+ * !defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE).
+ */
+
+#if !defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
+#undef BOOST_MULTI_INDEX_SAFE_MODE_ASSERT
+#define BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(expr,error_code) ((void)0)
+#else
+#if !defined(BOOST_MULTI_INDEX_SAFE_MODE_ASSERT)
+#include <boost/assert.hpp>
+#define BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(expr,error_code) BOOST_ASSERT(expr)
+#endif
+#endif
+
+#define BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(it)                           \
+  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
+    safe_mode::check_valid_iterator(it),                                     \
+    safe_mode::invalid_iterator);
+
+#define BOOST_MULTI_INDEX_CHECK_DEREFERENCEABLE_ITERATOR(it)                 \
+  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
+    safe_mode::check_dereferenceable_iterator(it),                           \
+    safe_mode::not_dereferenceable_iterator);
+
+#define BOOST_MULTI_INDEX_CHECK_INCREMENTABLE_ITERATOR(it)                   \
+  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
+    safe_mode::check_incrementable_iterator(it),                             \
+    safe_mode::not_incrementable_iterator);
+
+#define BOOST_MULTI_INDEX_CHECK_DECREMENTABLE_ITERATOR(it)                   \
+  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
+    safe_mode::check_decrementable_iterator(it),                             \
+    safe_mode::not_decrementable_iterator);
+
+#define BOOST_MULTI_INDEX_CHECK_IS_OWNER(it,cont)                            \
+  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
+    safe_mode::check_is_owner(it,cont),                                      \
+    safe_mode::not_owner);
+
+#define BOOST_MULTI_INDEX_CHECK_SAME_OWNER(it0,it1)                          \
+  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
+    safe_mode::check_same_owner(it0,it1),                                    \
+    safe_mode::not_same_owner);
+
+#define BOOST_MULTI_INDEX_CHECK_VALID_RANGE(it0,it1)                         \
+  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
+    safe_mode::check_valid_range(it0,it1),                                   \
+    safe_mode::invalid_range);
+
+#define BOOST_MULTI_INDEX_CHECK_OUTSIDE_RANGE(it,it0,it1)                    \
+  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
+    safe_mode::check_outside_range(it,it0,it1),                              \
+    safe_mode::inside_range);
+
+#define BOOST_MULTI_INDEX_CHECK_IN_BOUNDS(it,n)                              \
+  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
+    safe_mode::check_in_bounds(it,n),                                        \
+    safe_mode::out_of_bounds);
+
+#define BOOST_MULTI_INDEX_CHECK_DIFFERENT_CONTAINER(cont0,cont1)             \
+  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
+    safe_mode::check_different_container(cont0,cont1),                       \
+    safe_mode::same_container);
+
+#if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
+#include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
+#include <algorithm>
+#include <boost/detail/iterator.hpp>
+#include <boost/multi_index/detail/access_specifier.hpp>
+#include <boost/multi_index/detail/iter_adaptor.hpp>
+#include <boost/multi_index/safe_mode_errors.hpp>
+#include <boost/noncopyable.hpp>
+
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+#include <boost/serialization/split_member.hpp>
+#endif
+
+#if defined(BOOST_HAS_THREADS)
+#include <boost/detail/lightweight_mutex.hpp>
+#endif
+
+namespace boost{
+
+namespace multi_index{
+
 namespace safe_mode{
 
-/* Invalidates all iterators equivalent to that given. Defined before
- * safe_iterator_base and safe_container_base as these contain friendship
- * declarations to this function.
+/* Checking routines. Assume the best for unchecked iterators
+ * (i.e. they pass the checking when there is not enough info
+ * to know.)
+ */
+
+template<typename Iterator>
+inline bool check_valid_iterator(const Iterator& it)
+{
+  return it.valid()||it.unchecked();
+}
+
+template<typename Iterator>
+inline bool check_dereferenceable_iterator(const Iterator& it)
+{
+  return it.valid()&&it!=it.owner()->end()||it.unchecked();
+}
+
+template<typename Iterator>
+inline bool check_incrementable_iterator(const Iterator& it)
+{
+  return it.valid()&&it!=it.owner()->end()||it.unchecked();
+}
+
+template<typename Iterator>
+inline bool check_decrementable_iterator(const Iterator& it)
+{
+  return it.valid()&&it!=it.owner()->begin()||it.unchecked();
+}
+
+template<typename Iterator>
+inline bool check_is_owner(
+  const Iterator& it,const typename Iterator::container_type& cont)
+{
+  return it.valid()&&it.owner()==&cont||it.unchecked();
+}
+
+template<typename Iterator>
+inline bool check_same_owner(const Iterator& it0,const Iterator& it1)
+{
+  return it0.valid()&&it1.valid()&&it0.owner()==it1.owner()||
+         it0.unchecked()||it1.unchecked();
+}
+
+template<typename Iterator>
+inline bool check_valid_range(const Iterator& it0,const Iterator& it1)
+{
+  if(!check_same_owner(it0,it1))return false;
+
+  if(it0.valid()){
+    Iterator last=it0.owner()->end();
+    if(it1==last)return true;
+
+    for(Iterator first=it0;first!=last;++first){
+      if(first==it1)return true;
+    }
+    return false;
+  }
+  return true;
+}
+
+template<typename Iterator>
+inline bool check_outside_range(
+  const Iterator& it,const Iterator& it0,const Iterator& it1)
+{
+  if(!check_same_owner(it0,it1))return false;
+
+  if(it0.valid()){
+    Iterator last=it0.owner()->end();
+    bool found=false;
+
+    Iterator first=it0;
+    for(;first!=last;++first){
+      if(first==it1)break;
+    
+      /* crucial that this check goes after previous break */
+    
+      if(first==it)found=true;
+    }
+    if(first!=it1)return false;
+    return !found;
+  }
+  return true;
+}
+
+template<typename Iterator,typename Difference>
+inline bool check_in_bounds(const Iterator& it,Difference n)
+{
+  if(it.unchecked())return true;
+  if(!it.valid())   return false;
+  if(n>0)           return it.owner()->end()-it>=n;
+  else              return it.owner()->begin()-it<=n;
+}
+
+template<typename Container>
+inline bool check_different_container(
+  const Container& cont0,const Container& cont1)
+{
+  return &cont0!=&cont1;
+}
+
+/* Invalidates all iterators equivalent to that given. Safe containers
+ * must call this when deleting elements: the safe mode framework cannot
+ * perform this operation automatically without outside help.
  */
 
 template<typename Iterator>
@@ -80,7 +255,7 @@ inline void detach_equivalent_iterators(Iterator& it)
 
 namespace detail{
 
-class safe_container_base;
+class safe_container_base;                 /* fwd decl. */
 
 class safe_iterator_base
 {
@@ -209,129 +384,158 @@ void safe_iterator_base::detach()
   }
 }
 
+} /* namespace multi_index::detail */
+
+namespace safe_mode{
+
+/* In order to enable safe mode on a container:
+ *   - The container must derive from safe_container<container_type>,
+ *   - iterators must be generated via safe_iterator, which adapts a
+ *     preexistent unsafe iterator class.
+ */
+ 
 template<typename Container>
 class safe_container;
 
-template<typename Container>
-class safe_iterator:public safe_iterator_base
+template<typename Iterator,typename Container>
+class safe_iterator:
+  public detail::iter_adaptor<safe_iterator<Iterator,Container>,Iterator>,
+  public detail::safe_iterator_base
 {
-public:
-  typedef Container container_type;
+  typedef detail::iter_adaptor<safe_iterator,Iterator> super;
+  typedef detail::safe_iterator_base                   safe_super;
 
-  safe_iterator():safe_iterator_base(){}
+public:
+  typedef Container                                    container_type;
+  typedef typename Iterator::reference                 reference;
+  typedef typename Iterator::difference_type           difference_type;
+
+  safe_iterator(){}
   explicit safe_iterator(safe_container<container_type>* cont_):
-    safe_iterator_base(cont_){}
+    safe_super(cont_){}
+  template<typename T0>
+  safe_iterator(const T0& t0,safe_container<container_type>* cont_):
+    super(Iterator(t0)),safe_super(cont_){}
+  template<typename T0,typename T1>
+  safe_iterator(
+    const T0& t0,const T1& t1,safe_container<container_type>* cont_):
+    super(Iterator(t0,t1)),safe_super(cont_){}
+
+  safe_iterator& operator=(const safe_iterator& x)
+  {
+    BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(x);
+    this->base_reference()=x.base_reference();
+    safe_super::operator=(x);
+    return *this;
+  }
 
   const container_type* owner()const
   {
     return
       static_cast<const container_type*>(
         static_cast<const safe_container<container_type>*>(
-          safe_iterator_base::owner()));
+          safe_super::owner()));
   }
+
+  /* get_node is not to be used by the user */
+
+  typedef typename Iterator::node_type node_type;
+
+  node_type* get_node()const{return this->base_reference().get_node();}
+
+private:
+  friend class boost::multi_index::detail::iter_adaptor_access;
+
+  reference dereference()const
+  {
+    BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(*this);
+    BOOST_MULTI_INDEX_CHECK_DEREFERENCEABLE_ITERATOR(*this);
+    return *(this->base_reference());
+  }
+
+  bool equal(const safe_iterator& x)const
+  {
+    BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(*this);
+    BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(x);
+    BOOST_MULTI_INDEX_CHECK_SAME_OWNER(*this,x);
+    return this->base_reference()==x.base_reference();
+  }
+
+  void increment()
+  {
+    BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(*this);
+    BOOST_MULTI_INDEX_CHECK_INCREMENTABLE_ITERATOR(*this);
+    ++(this->base_reference());
+  }
+
+  void decrement()
+  {
+    BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(*this);
+    BOOST_MULTI_INDEX_CHECK_DECREMENTABLE_ITERATOR(*this);
+    --(this->base_reference());
+  }
+
+  void advance(difference_type n)
+  {
+    BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(*this);
+    BOOST_MULTI_INDEX_CHECK_IN_BOUNDS(*this,n);
+    this->base_reference()+=n;
+  }
+
+  difference_type distance_to(const safe_iterator& x)const
+  {
+    BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(*this);
+    BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(x);
+    BOOST_MULTI_INDEX_CHECK_SAME_OWNER(*this,x);
+    return x.base_reference()-this->base_reference();
+  }
+
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+  /* Serialization. Note that Iterator::save and Iterator:load
+   * are assumed to be defined and public: at first sight it seems
+   * like we could have resorted to the public serialization interface
+   * for doing the forwarding to the adapted iterator class:
+   *   ar<<base_reference();
+   *   ar>>base_reference();
+   * but this would cause incompatibilities if a saving
+   * program is in safe mode and the loading program is not, or
+   * viceversa --in safe mode, the archived iterator data is one layer
+   * deeper, this is especially relevant with XML archives.
+   * It'd be nice if Boost.Serialization provided some forwarding
+   * facility for use by adaptor classes.
+   */ 
+
+  friend class boost::serialization::access;
+
+  BOOST_SERIALIZATION_SPLIT_MEMBER()
+
+  template<class Archive>
+  void save(Archive& ar,const unsigned int version)const
+  {
+    BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(*this);
+    this->base_reference().save(ar,version);
+  }
+
+  template<class Archive>
+  void load(Archive& ar,const unsigned int version)
+  {
+    this->base_reference().load(ar,version);
+    safe_super::uncheck();
+  }
+#endif
 };
 
 template<typename Container>
-class safe_container:public safe_container_base
+class safe_container:public detail::safe_container_base
 {
+  typedef detail::safe_container_base super;
+
 public:
-  void swap(safe_container<Container>& x){safe_container_base::swap(x);}
+  void swap(safe_container<Container>& x)
+  {
+    super::swap(x);
+  }
 };
-
-} /* namespace multi_index::detail */
-
-namespace safe_mode{
-
-/* Checking routines. Assume the best for unchecked iterators
- * (i.e. they pass the checking when there is not enough info
- * to know.)
- */
-
-template<typename Iterator>
-inline bool check_valid_iterator(const Iterator& it)
-{
-  return it.valid()||it.unchecked();
-}
-
-template<typename Iterator>
-inline bool check_dereferenceable_iterator(const Iterator& it)
-{
-  return it.valid()&&it!=it.owner()->end()||it.unchecked();
-}
-
-template<typename Iterator>
-inline bool check_incrementable_iterator(const Iterator& it)
-{
-  return it.valid()&&it!=it.owner()->end()||it.unchecked();
-}
-
-template<typename Iterator>
-inline bool check_decrementable_iterator(const Iterator& it)
-{
-  return it.valid()&&it!=it.owner()->begin()||it.unchecked();
-}
-
-template<typename Iterator>
-inline bool check_is_owner(
-  const Iterator& it,const typename Iterator::container_type& cont)
-{
-  return it.valid()&&it.owner()==&cont||it.unchecked();
-}
-
-template<typename Iterator>
-inline bool check_same_owner(const Iterator& it0,const Iterator& it1)
-{
-  return it0.valid()&&it1.valid()&&it0.owner()==it1.owner()||
-         it0.unchecked()||it1.unchecked();
-}
-
-template<typename Iterator>
-inline bool check_valid_range(const Iterator& it0,const Iterator& it1)
-{
-  if(!check_same_owner(it0,it1))return false;
-
-  if(it0.valid()){
-    Iterator last=it0.owner()->end();
-    if(it1==last)return true;
-
-    for(Iterator first=it0;first!=last;++first){
-      if(first==it1)return true;
-    }
-    return false;
-  }
-  return true;
-}
-
-template<typename Iterator>
-inline bool check_outside_range(
-  const Iterator& it,const Iterator& it0,const Iterator& it1)
-{
-  if(!check_same_owner(it0,it1))return false;
-
-  if(it0.valid()){
-    Iterator last=it0.owner()->end();
-    bool found=false;
-
-    Iterator first=it0;
-    for(;first!=last;++first){
-      if(first==it1)break;
-    
-      /* crucial that this check goes after previous break */
-    
-      if(first==it)found=true;
-    }
-    if(first!=it1)return false;
-    return !found;
-  }
-  return true;
-}
-
-template<typename Container>
-inline bool check_different_container(
-  const Container& cont0,const Container& cont1)
-{
-  return &cont0!=&cont1;
-}
 
 } /* namespace multi_index::safe_mode */
 
@@ -340,62 +544,5 @@ inline bool check_different_container(
 } /* namespace boost */
 
 #endif /* BOOST_MULTI_INDEX_ENABLE_SAFE_MODE */
-
-/* assertion macros */
-
-#if !defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
-#undef BOOST_MULTI_INDEX_SAFE_MODE_ASSERT
-#define BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(expr,error_code) ((void)0)
-#else
-#if !defined(BOOST_MULTI_INDEX_SAFE_MODE_ASSERT)
-#include <boost/assert.hpp>
-#define BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(expr,error_code) BOOST_ASSERT(expr)
-#endif
-#endif
-
-#define BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(it)                           \
-  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
-    safe_mode::check_valid_iterator(it),                                     \
-    safe_mode::invalid_iterator);
-
-#define BOOST_MULTI_INDEX_CHECK_DEREFERENCEABLE_ITERATOR(it)                 \
-  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
-    safe_mode::check_dereferenceable_iterator(it),                           \
-    safe_mode::not_dereferenceable_iterator);
-
-#define BOOST_MULTI_INDEX_CHECK_INCREMENTABLE_ITERATOR(it)                   \
-  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
-    safe_mode::check_incrementable_iterator(it),                             \
-    safe_mode::not_incrementable_iterator);
-
-#define BOOST_MULTI_INDEX_CHECK_DECREMENTABLE_ITERATOR(it)                   \
-  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(\
-    safe_mode::check_decrementable_iterator(it),                             \
-    safe_mode::not_decrementable_iterator);
-
-#define BOOST_MULTI_INDEX_CHECK_IS_OWNER(it,cont)                            \
-  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
-    safe_mode::check_is_owner(it,cont),                                      \
-    safe_mode::not_owner);
-
-#define BOOST_MULTI_INDEX_CHECK_SAME_OWNER(it0,it1)                          \
-  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(\
-    safe_mode::check_same_owner(it0,it1),                                    \
-    safe_mode::not_same_owner);
-
-#define BOOST_MULTI_INDEX_CHECK_VALID_RANGE(it0,it1)                         \
-  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
-    safe_mode::check_valid_range(it0,it1),                                   \
-    safe_mode::invalid_range);
-
-#define BOOST_MULTI_INDEX_CHECK_OUTSIDE_RANGE(it,it0,it1)                    \
-  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(\
-    safe_mode::check_outside_range(it,it0,it1),                              \
-    safe_mode::inside_range);
-
-#define BOOST_MULTI_INDEX_CHECK_DIFFERENT_CONTAINER(cont0,cont1)             \
-  BOOST_MULTI_INDEX_SAFE_MODE_ASSERT(                                        \
-    safe_mode::check_different_container(cont0,cont1),                       \
-    safe_mode::same_container);
 
 #endif
