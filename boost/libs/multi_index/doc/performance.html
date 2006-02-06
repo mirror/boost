@@ -5,6 +5,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Boost.MultiIndex Documentation - Performance</title>
 <link rel="stylesheet" href="style.css" type="text/css">
+<link rel="start" href="index.html">
+<link rel="prev" href="compiler_specifics.html">
+<link rel="up" href="index.html">
+<link rel="next" href="examples.html">
 </head>
 
 <body>
@@ -91,7 +95,7 @@ STL containers.
 <h2><a name="simulation">Manual simulation of a <code>multi_index_container</code></a></h2>
 
 <p>
-The section on <a href="advanced_topics.html#emulate_std_containers">emulation
+The section on <a href="tutorial/techniques.html#emulate_std_containers">emulation
 of standard containers with <code>multi_index_container</code></a> shows the equivalence
 between single-index <code>multi_index_container</code>s and some STL containers. Let us now
 concentrate on the problem of simulating a <code>multi_index_container</code> with two
@@ -237,7 +241,7 @@ On the other hand, the manual simulation allocates <i>N</i> nodes per
 element, the first holding the elements themselves and the rest
 storing iterators to the "base" container. In practice, an iterator
 merely holds a raw pointer to the node it is associated to, so its size
-is independent of the type of the elements. Suming all contributions,
+is independent of the type of the elements. Summing all contributions,
 the space allocated per element in a manual simulation is
 </p>
 
@@ -263,7 +267,25 @@ then as:
 
 <p>
 The formula shows that <code>multi_index_container</code> is more efficient
-with regard to memory consumption as the number of indices grow.
+with regard to memory consumption as the number of indices grow. An implicit
+assumption has been made that headers of <code>multi_index_container</code>
+index nodes are the same size that their analogues in STL containers; but there
+is a particular case in which this is often not the case: ordered indices use a
+<a href="tutorial/indices.html#ordered_node_compression">spatial optimization
+technique</a> which is not present in many implementations of
+<code>std::set</code>, giving an additional advantage to
+<code>multi_index_container</code>s of one system word per ordered index. 
+Taking this fact into account, the former formula can be adjusted to:
+</p>
+
+<blockquote>
+<i>S<sub>I</sub></i>&nbsp;/&nbsp;<i>S<sub>M</sub></i> =
+<i>S<sub>I</sub></i>&nbsp;/&nbsp;(<i>S<sub>I</sub></i> + (<i>N</i>-1)<i>p</i> + <i>Ow</i>),
+</blockquote>
+
+<p>
+where <i>O</i> is the number of ordered indices of the container, and <i>w</i>
+is the system word size (typically 4 bytes on 32-bit architectures.)
 </p>
 
 <p>
@@ -289,9 +311,9 @@ will see later, the reduction can be very significative for
 </p>
 
 <p>In the special case of <code>multi_index_container</code>s with only one index,
-the best we can hope for is equal performance: the tests show that the
-performance degradation in this particular situation ranges from negligible
-to small, depending on the compiler used.
+resulting performance will roughly match that of the STL equivalent containers:
+tests show that there is at most a negligible degradation with respect to STL,
+and even in some cases a small improvement.
 </p>
 
 <h2><a name="tests">Performance tests</a></h2>
@@ -314,15 +336,33 @@ has been measured for different instantiations of <code>multi_index_container</c
 at values of <i>n</i> 1,000, 10,000 and 100,000,
 and its execution time compared with that of the equivalent algorithm
 for the corresponding manual simulation of the data structure based on
-STL containers. The following compilers have been used:
-<ul>
-  <li>GNU GCC 3.3.1 for Cygwin 1.5.7,</li>
-  <li>Intel C++ Compiler for Windows 32-bit 7.1,</li>
-  <li>Microsoft Visual C++ 6.0 Service Pack 5,</li>
-</ul>
-with their default release settings. All tests were performed on a Wintel
-box equipped with a P4 1.5GHz processor and 256 MB RAM, running
-Microsoft Windows 2000 Professional SP2.
+STL containers. The table below describes the test environments used.
+</p>
+
+<p align="center">
+<table cellspacing="0" cellpadding="5">
+  <caption><b>Tests environments.</b></caption>
+<tr>
+  <th>Compiler</th>
+  <th>Settings</th>
+  <th>OS and CPU</th>
+</tr>
+<tr>
+  <td>GCC 3.4.5 (mingw special)</td>
+  <td><code>-O3</code></td>
+  <td>Windows 2000 Pro on P4 1.5 GHz, 256 MB RAM</td>
+</tr>
+<tr class="odd_tr">
+  <td>Intel C++ 7.1</td>
+  <td>default release settings</td>
+  <td>Windows 2000 Pro on P4 1.5 GHz, 256 MB RAM</td>
+</tr>
+<tr>
+  <td>Microsoft Visual C++ 8.0</td>
+  <td>default release settings, <code>_SECURE_SCL=0</code></td>
+  <td>Windows XP on P4 Xeon 3.2 GHz, 1 GB RAM</td>
+</tr>
+</table>
 </p>
 
 <p>
@@ -362,9 +402,9 @@ which is functionally equivalent to <code>std::set&lt;int></code>.
   <th width="33%">MSVC 6.5</th>
 </tr>
 <tr>
-  <td align="center">100%</td>
-  <td align="center">100%</td>
-  <td align="center">100%</td>
+  <td align="center">80%</td>
+  <td align="center">80%</td>
+  <td align="center">80%</td>
 </tr>
 </table>
 <b>Table 1: Relative memory consumption of <code>multi_index_container</code> with 1
@@ -372,8 +412,8 @@ ordered index.</b>
 </p>
 
 <p>
-The figures confirm that in this case <code>multi_index_container</code> nodes are the
-same size than those of its <code>std::set</code> counterpart.
+The reduction in memory usage is accounted for by the optimization technique implemented
+in Boost.MultiIndex ordered indices, as <a href="#spatial_efficiency">explained above</a>.
 </p>
 
 <h4><a name="time_1r">Execution time</a></h4>
@@ -385,11 +425,12 @@ width="556" height="372"><br>
 </p>
 
 <p>
-As expected, <code>multi_index_container</code> does perform in this case somewhat
-worse than <code>std::set</code>. The degradation is within 10% for ICC and
-MSVC compilers, while in GCC peaks to 20%, which can be significative
-in certain applications. This latter result is presumably accounted for by
-a lower quality of the optimizing stage carried out by GCC.
+Somewhat surprisingly, <code>multi_index_container</code> performs slightly
+better than <code>std::set</code>. A very likely explanation for this behavior
+is that the lower memory consumption of <code>multi_index_container</code>
+results in a higher processor cache hit rate.
+The improvement is smallest for GCC, presumably because the worse quality of
+this compiler's optimizer masks the cache-related benefits.
 </p>
 
 <h3><a name="test_1s">Results for 1 sequenced index</a></h3>
@@ -444,9 +485,10 @@ width="556" height="372"><br>
 </p>
 
 <p>
-As in the former case, <code>multi_index_container</code> does not attain the performance
-of its STL counterpart. Again, worst results are those of GCC, with a 
-degradation of up to 20% , while ICC and MSVC do not exceed a mere 5%.
+<code>multi_index_container</code> does not attain the performance
+of its STL counterpart, although the figures are close. Again, the worst results
+are those of GCC, with a degradation of up to 7%, while ICC and MSVC do not
+exceed a mere 5%.
 </p>
 
 <h3><a name="test_2r">Results for 2 ordered indices</a></h3>
@@ -475,9 +517,9 @@ The following instantiation of <code>multi_index_container</code> was tested:
   <th width="33%">MSVC 6.5</th>
 </tr>
 <tr>
-  <td align="center">90%</td>
-  <td align="center">90%</td>
-  <td align="center">90%</td>
+  <td align="center">70%</td>
+  <td align="center">70%</td>
+  <td align="center">70%</td>
 </tr>
 </table>
 <b>Table 3: Relative memory consumption of <code>multi_index_container</code> with 2
@@ -486,7 +528,7 @@ ordered indices.</b>
 
 <p>
 These results concinde with the theoretical formula for
-<i>S<sub>I</sub></i>=36 and <i>p</i>=4.
+<i>S<sub>I</sub></i> = 28, <i>N</i> = <i>O</i> = 2 and <i>p</i> = <i>w</i> = 4.
 </p>
 
 <h4><a name="time_2r">Execution time</a></h4>
@@ -500,7 +542,9 @@ width="556" height="372"><br>
 <p>
 The experimental results confirm our hypothesis that <code>multi_index_container</code>
 provides an improvement on execution time by an approximately constant factor,
-which in this case ranges from 65% to 75% depending on the compiler.
+which in this case lies around 60%. There is no obvious explanation for the
+increased advantage of <code>multi_index_container</code> in MSVC for
+<i>n</i>=10<sup>5</sup>.
 </p>
 
 <h3><a name="test_1r1s">Results for 1 ordered index + 1 sequenced index</a></h3>
@@ -529,9 +573,9 @@ The following instantiation of <code>multi_index_container</code> was tested:
   <th width="33%">MSVC 6.5</th>
 </tr>
 <tr>
-  <td align="center">87.5%</td>
-  <td align="center">87.5%</td>
-  <td align="center">87.5%</td>
+  <td align="center">75%</td>
+  <td align="center">75%</td>
+  <td align="center">75%</td>
 </tr>
 </table>
 <b>Table 4: Relative memory consumption of <code>multi_index_container</code> with 1
@@ -540,7 +584,7 @@ ordered index + 1 sequenced index.</b>
 
 <p>
 These results concinde with the theoretical formula for
-<i>S<sub>I</sub></i>=28 and <i>p</i>=4.
+<i>S<sub>I</sub></i> = 24, <i>N</i> = 2, <i>O</i> = 1 and <i>p</i> = <i>w</i> = 4.
 </p>
 
 <h4><a name="time_1r1s">Execution time</a></h4>
@@ -556,17 +600,13 @@ width="556" height="372"><br>
 <p>
 For <i>n</i>=10<sup>3</sup> and <i>n</i>=10<sup>4</sup>, the results
 are in agreement with our theoretical analysis, showing a constant factor
-improvement of 60-75% with respect to the STL-based manual simulation.
+improvement of 50-65% with respect to the STL-based manual simulation.
 Curiously enough, this speedup gets even higher when
-<i>n</i>=10<sup>5</sup> for two of the compilers (35% for ICC,
-25% for MSVC.) In order to rule out spurious results, the tests
-have been run many times, yielding similar outcoumes. A tentative
-explanation of this unexpected behavior may point to a degradation in
-the execution time of the manual simulation, attributable to poor
-performance of the standard STL allocator in ICC and MSVC when dealing
-with many objects of diverse sizes (the manual simulation is comprised of
-an <code>std::set</code> and a <code>std::list</code>, which demand
-differently sized nodes.)
+<i>n</i>=10<sup>5</sup> for two of the compilers, namely GCC and ICC.
+In order to rule out spurious results, the tests
+have been run many times, yielding similar outcoumes. Both test environments
+are deployed on the same machine, which points to some OS-related reason for
+this phenomenon.
 </p>
 
 <h3><a name="test_3r">Results for 3 ordered indices</a></h3>
@@ -596,9 +636,9 @@ The following instantiation of <code>multi_index_container</code> was tested:
   <th width="33%">MSVC 6.5</th>
 </tr>
 <tr>
-  <td align="center">86.7%</td>
-  <td align="center">86.7%</td>
-  <td align="center">86.7%</td>
+  <td align="center">66.7%</td>
+  <td align="center">66.7%</td>
+  <td align="center">66.7%</td>
 </tr>
 </table>
 <b>Table 5: Relative memory consumption of <code>multi_index_container</code> with 3
@@ -607,8 +647,7 @@ ordered indices.</b>
 
 <p>
 These results concinde with the theoretical formula for
-<i>S<sub>I</sub></i>=52 and <i>p</i>=4.
-
+<i>S<sub>I</sub></i> = 40, <i>N</i> = <i>O</i> = 3 and <i>p</i> = <i>w</i> = 4.
 </p>
 
 <h4><a name="time_3r">Execution time</a></h4>
@@ -620,7 +659,7 @@ width="556" height="372"><br>
 </p>
 
 <p>
-Execution time for this case is between 55% and 65% lower than achieved with
+Execution time for this case is between 45% and 55% lower than achieved with
 an STL-based manual simulation of the same data structure.
 </p>
 
@@ -651,9 +690,9 @@ The following instantiation of <code>multi_index_container</code> was tested:
   <th width="33%">MSVC 6.5</th>
 </tr>
 <tr>
-  <td align="center">84.6%</td>
-  <td align="center">84.6%</td>
-  <td align="center">84.6%</td>
+  <td align="center">69.2%</td>
+  <td align="center">69.2%</td>
+  <td align="center">69.2%</td>
 </tr>
 </table>
 <b>Table 6: Relative memory consumption of <code>multi_index_container</code> with 2
@@ -662,7 +701,7 @@ ordered indices + 1 sequenced index.</b>
 
 <p>
 These results concinde with the theoretical formula for
-<i>S<sub>I</sub></i>=44 and <i>p</i>=4.
+<i>S<sub>I</sub></i> = 36, <i>N</i> = 3, <i>O</i> = 2 and <i>p</i> = <i>w</i> = 4.
 </p>
 
 <h4><a name="time_2r1s">Execution time</a></h4>
@@ -691,10 +730,9 @@ of indices increase.
 
 <p>
 In the special case of replacing standard containers with single-indexed
-<code>multi_index_container</code>s, the programmer should balance the benefits brought on
-by Boost.MultiIndex (subobject searching, in-place updating, etc.) against the
-resulting degradation in execution time. Depending on the compiler, this degradation
-can reach up to 20% of the original time.
+<code>multi_index_container</code>s, the performance of Boost.MultiIndex
+is comparable with that of the tested STL implementations, and can even yield
+some improvements both in space consumption and execution time.
 </p>
 
 <hr>
@@ -711,9 +749,9 @@ Examples
 
 <br>
 
-<p>Revised November 21st 2005</p>
+<p>Revised February 6th 2006</p>
 
-<p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
