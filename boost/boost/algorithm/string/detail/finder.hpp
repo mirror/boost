@@ -212,9 +212,9 @@ namespace boost {
                 typedef first_finderF<
                     search_iterator_type,
                     PredicateT> first_finder_type;
-				typedef last_finderF<
-					search_iterator_type,
-					PredicateT> last_finder_type;
+                typedef last_finderF<
+                    search_iterator_type,
+                    PredicateT> last_finder_type;
 
                 // Construction
                 template< typename SearchT >
@@ -241,25 +241,25 @@ namespace boost {
                     ForwardIteratorT Begin,
                     ForwardIteratorT End ) const
                 {
-					if(m_Nth>=0)
-					{
-						return find_forward(Begin, End, m_Nth);
-					}
-					else
-					{
-						return find_backward(Begin, End, -m_Nth);
-					}
+                    if(m_Nth>=0)
+                    {
+                        return find_forward(Begin, End, m_Nth);
+                    }
+                    else
+                    {
+                        return find_backward(Begin, End, -m_Nth);
+                    }
 
                 }
 
-			private:
-				// Implementation helpers
+            private:
+                // Implementation helpers
                 template< typename ForwardIteratorT >
                 iterator_range<ForwardIteratorT>
                 find_forward(
                     ForwardIteratorT Begin,
                     ForwardIteratorT End,
-					unsigned int N) const
+                    unsigned int N) const
                 {
                     typedef ForwardIteratorT input_iterator_type;
                     typedef iterator_range<ForwardIteratorT> result_type;
@@ -294,7 +294,7 @@ namespace boost {
                 find_backward(
                     ForwardIteratorT Begin,
                     ForwardIteratorT End,
-					unsigned int N) const
+                    unsigned int N) const
                 {
                     typedef ForwardIteratorT input_iterator_type;
                     typedef iterator_range<ForwardIteratorT> result_type;
@@ -333,55 +333,55 @@ namespace boost {
 
 //  find head functor -----------------------------------------------//
 
-			// Find head implementation
-			template<typename ForwardIteratorT>
-				iterator_range<ForwardIteratorT>
-			find_head_impl(
-				ForwardIteratorT Begin,
-				ForwardIteratorT End,
-				unsigned int N )
-			{
-				typedef BOOST_STRING_TYPENAME boost::detail::
-					iterator_traits<ForwardIteratorT>::iterator_category category;
+            template<typename ForwardIteratorT>
+                iterator_range<ForwardIteratorT>
+            find_head_impl(
+                ForwardIteratorT Begin,
+                ForwardIteratorT End,
+                unsigned int N,
+                std::forward_iterator_tag )
+            {
+                typedef ForwardIteratorT input_iterator_type;
+                typedef iterator_range<ForwardIteratorT> result_type;
 
-				return find_head_impl( Begin, End, N, category() );
-			}
+                input_iterator_type It=Begin;
+                for(
+                    unsigned int Index=0;
+                    Index<N && It!=End; ++Index,++It ) {};
 
-			template<typename ForwardIteratorT>
-				iterator_range<ForwardIteratorT>
-			find_head_impl(
-				ForwardIteratorT Begin,
-				ForwardIteratorT End,
-				unsigned int N,
-				std::forward_iterator_tag )
-			{
-				typedef ForwardIteratorT input_iterator_type;
-				typedef iterator_range<ForwardIteratorT> result_type;
+                return result_type( Begin, It );
+            }
 
-				input_iterator_type It=Begin;
-				for(
-					unsigned int Index=0;
-					Index<N && It!=End; ++Index,++It ) {};
+            template< typename ForwardIteratorT >
+                iterator_range<ForwardIteratorT>
+            find_head_impl(
+                ForwardIteratorT Begin,
+                ForwardIteratorT End,
+                unsigned int N,
+                std::random_access_iterator_tag )
+            {
+                typedef ForwardIteratorT input_iterator_type;
+                typedef iterator_range<ForwardIteratorT> result_type;
 
-				return result_type( Begin, It );
-			}
+                if ( (End<=Begin) || ( static_cast<unsigned int>(End-Begin) < N ) )
+                    return result_type( Begin, End );
 
-			template< typename ForwardIteratorT >
-				iterator_range<ForwardIteratorT>
-			find_head_impl(
-				ForwardIteratorT Begin,
-				ForwardIteratorT End,
-				unsigned int N,
-				std::random_access_iterator_tag )
-			{
-				typedef ForwardIteratorT input_iterator_type;
-				typedef iterator_range<ForwardIteratorT> result_type;
+                return result_type(Begin,Begin+N);
+            }
 
-				if ( (End<=Begin) || ( static_cast<unsigned int>(End-Begin) < N ) )
-					return result_type( Begin, End );
+            // Find head implementation
+            template<typename ForwardIteratorT>
+                iterator_range<ForwardIteratorT>
+            find_head_impl(
+                ForwardIteratorT Begin,
+                ForwardIteratorT End,
+                unsigned int N )
+            {
+                typedef BOOST_STRING_TYPENAME boost::detail::
+                    iterator_traits<ForwardIteratorT>::iterator_category category;
 
-				return result_type(Begin,Begin+N);
-			}
+                return find_head_impl( Begin, End, N, category() );
+            }
 
 
             // find a head in the sequence ( functor )
@@ -402,17 +402,17 @@ namespace boost {
                     ForwardIteratorT Begin,
                     ForwardIteratorT End ) const
                 {
-					if(m_N>=0)
-					{
-						return find_head_impl( Begin, End, m_N );
-					}
-					else
-					{
-						iterator_range<ForwardIteratorT> Res=
-							find_tail_impl( Begin, End, -m_N );
+                    if(m_N>=0)
+                    {
+                        return find_head_impl( Begin, End, m_N );
+                    }
+                    else
+                    {
+                        iterator_range<ForwardIteratorT> Res=
+                            find_tail_impl( Begin, End, -m_N );
 
-						return make_iterator_range(Begin, Res.begin());
-					}
+                        return make_iterator_range(Begin, Res.begin());
+                    }
                 }
 
             private:
@@ -421,26 +421,13 @@ namespace boost {
 
 //  find tail functor -----------------------------------------------//
 
-            // Operation
-            template< typename ForwardIteratorT >
-            iterator_range<ForwardIteratorT>
-            find_tail_impl(
-                ForwardIteratorT Begin,
-                ForwardIteratorT End,
-				unsigned int N )
-            {
-                typedef BOOST_STRING_TYPENAME boost::detail::
-                    iterator_traits<ForwardIteratorT>::iterator_category category;
-
-                return find_tail_impl( Begin, End, N, category() );
-            }
 
             template< typename ForwardIteratorT >
                 iterator_range<ForwardIteratorT>
             find_tail_impl(
                 ForwardIteratorT Begin,
                 ForwardIteratorT End,
-				unsigned int N,
+        	unsigned int N,
                 std::forward_iterator_tag )
             {
                 typedef ForwardIteratorT input_iterator_type;
@@ -464,7 +451,7 @@ namespace boost {
             find_tail_impl(
                 ForwardIteratorT Begin,
                 ForwardIteratorT End,
-				unsigned int N,
+        	unsigned int N,
                 std::bidirectional_iterator_tag )
             {
                 typedef ForwardIteratorT input_iterator_type;
@@ -483,7 +470,7 @@ namespace boost {
             find_tail_impl(
                 ForwardIteratorT Begin,
                 ForwardIteratorT End,
-				unsigned int N,
+        	unsigned int N,
                 std::random_access_iterator_tag )
             {
                 typedef ForwardIteratorT input_iterator_type;
@@ -494,6 +481,21 @@ namespace boost {
 
                 return result_type( End-N, End );
             }
+
+                        // Operation
+            template< typename ForwardIteratorT >
+            iterator_range<ForwardIteratorT>
+            find_tail_impl(
+                ForwardIteratorT Begin,
+                ForwardIteratorT End,
+        unsigned int N )
+            {
+                typedef BOOST_STRING_TYPENAME boost::detail::
+                    iterator_traits<ForwardIteratorT>::iterator_category category;
+
+                return find_tail_impl( Begin, End, N, category() );
+            }
+
 
             // find a tail in the sequence ( functor )
             /*
@@ -513,17 +515,17 @@ namespace boost {
                     ForwardIteratorT Begin,
                     ForwardIteratorT End ) const
                 {
-					if(m_N>=0)
-					{
-						return find_tail_impl( Begin, End, m_N );
-					}
-					else
-					{
-						iterator_range<ForwardIteratorT> Res=
-							find_head_impl( Begin, End, -m_N );
+                    if(m_N>=0)
+                    {
+                        return find_tail_impl( Begin, End, m_N );
+                    }
+                    else
+                    {
+                        iterator_range<ForwardIteratorT> Res=
+                            find_head_impl( Begin, End, -m_N );
 
-						return make_iterator_range(Res.end(), End);
-					}
+                        return make_iterator_range(Res.end(), End);
+                    }
                 }
 
             private:

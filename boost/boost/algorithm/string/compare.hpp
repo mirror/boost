@@ -75,25 +75,25 @@ namespace boost {
             std::locale m_Loc;
         };
 
-		//  is_less functor  -----------------------------------------------//
+        //  is_less functor  -----------------------------------------------//
 
-		//! is_less functor
-		/*!
-			Convenient version of standard std::less. Operation is templated, therefore it is 
-			not required to specify the exact types upon the construction
-		 */
-		struct is_less
-		{
-			//! Functor operation
-			/*!
-				Compare two operands using > operator
-			 */
-			template< typename T1, typename T2 >
-				bool operator()( const T1& Arg1, const T2& Arg2 ) const
-			{
-				return Arg1<Arg2;
-			}
-		};
+        //! is_less functor
+        /*!
+            Convenient version of standard std::less. Operation is templated, therefore it is 
+            not required to specify the exact types upon the construction
+         */
+        struct is_less
+        {
+            //! Functor operation
+            /*!
+                Compare two operands using > operator
+             */
+            template< typename T1, typename T2 >
+                bool operator()( const T1& Arg1, const T2& Arg2 ) const
+            {
+                return Arg1<Arg2;
+            }
+        };
 
 
         //! case insensitive version of is_less
@@ -128,25 +128,25 @@ namespace boost {
             std::locale m_Loc;
         };
 
-		//  is_not_greater functor  -----------------------------------------------//
+        //  is_not_greater functor  -----------------------------------------------//
 
-		//! is_not_greater functor
-		/*!
-			Convenient version of standard std::not_greater_to. Operation is templated, therefore it is 
-			not required to specify the exact types upon the construction
-		 */
-		struct is_not_greater
-		{
-			//! Functor operation
-			/*!
-				Compare two operands using > operator
-			 */
-			template< typename T1, typename T2 >
-				bool operator()( const T1& Arg1, const T2& Arg2 ) const
-			{
-				return Arg1>=Arg2;
-			}
-		};
+        //! is_not_greater functor
+        /*!
+            Convenient version of standard std::not_greater_to. Operation is templated, therefore it is 
+            not required to specify the exact types upon the construction
+         */
+        struct is_not_greater
+        {
+            //! Functor operation
+            /*!
+                Compare two operands using > operator
+             */
+            template< typename T1, typename T2 >
+                bool operator()( const T1& Arg1, const T2& Arg2 ) const
+            {
+                return Arg1>=Arg2;
+            }
+        };
 
 
         //! case insensitive version of is_not_greater
@@ -187,10 +187,10 @@ namespace boost {
     // pull names to the boost namespace
     using algorithm::is_equal;
     using algorithm::is_iequal;
-	using algorithm::is_less;
-	using algorithm::is_iless;
-	using algorithm::is_not_greater;
-	using algorithm::is_not_igreater;
+    using algorithm::is_less;
+    using algorithm::is_iless;
+    using algorithm::is_not_greater;
+    using algorithm::is_not_igreater;
 
 } // namespace boost
 
