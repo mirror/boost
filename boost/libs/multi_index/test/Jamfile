@@ -65,6 +65,7 @@ import ../../../libs/serialization/build/serialization ;
         : [ local-run test_observers.cpp        test_observers_main.cpp        ]
         : [ local-run test_projection.cpp       test_projection_main.cpp       ]
         : [ local-run test_range.cpp            test_range_main.cpp            ]
+        : [ local-run test_rearrange.cpp        test_rearrange_main.cpp        ]
         : [ local-run test_safe_mode.cpp        test_safe_mode_main.cpp        ]
         : [ local-run test_serialization.cpp    test_serialization_main.cpp
                 <lib>../../serialization/build/boost_serialization           
@@ -72,7 +73,6 @@ import ../../../libs/serialization/build/serialization ;
             : # input files
             : std::locale-support toolset::require-boost-spirit-support        ]
         : [ local-run test_set_ops.cpp          test_set_ops_main.cpp          ]
-        : [ local-run test_special_list_ops.cpp test_special_list_ops_main.cpp ]
         : [ local-run test_special_set_ops.cpp  test_special_set_ops_main.cpp  ]
         : [ local-run test_update.cpp           test_update_main.cpp           ]
         ;
