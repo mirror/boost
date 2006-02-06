@@ -5,6 +5,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Boost.MultiIndex Documentation - Index reference</title>
 <link rel="stylesheet" href="../style.css" type="text/css">
+<link rel="start" href="../index.html">
+<link rel="prev" href="multi_index_container.html">
+<link rel="up" href="index.html">
+<link rel="next" href="ord_indices.html">
 </head>
 
 <body>
@@ -48,6 +52,7 @@ Ordered indices
       <li><a href="#other_indices">Other types</a></li>
     </ul>
   </li>
+  <li><a href="#views">Index views</a></li>
 </ul>
 
 <h2><a name="index_concepts">Index concepts</a></h2>
@@ -77,7 +82,7 @@ these operations, however, do have an impact on all other indices as
 well: for instance, insertion through a given index may fail because
 there exists another index which bans the operation in order to preserve
 its invariant (like uniqueness of elements.) This circumstance, rather
-than an obstacle, yields much of the power of Boost.MultiIndex:
+than being an obstacle, yields much of the power of Boost.MultiIndex:
 equivalent constructions based on manual composition of standard
 containers would have to add a fair amount of code in order to
 globally preserve the invariants of each container while guaranteeing
@@ -113,7 +118,7 @@ by <code>std::list</code>.
 These global operations are not directly exposed to the user, but rather
 they are wrapped as appropriate by each index (for instance, ordered indices
 provide a set-like suite of insertion member functions, whereas sequenced
-indices do have <code>push_back</code> and <code>push_front</code>
+and random access indices have <code>push_back</code> and <code>push_front</code>
 operations.) Boost.MultiIndex poses no particular conditions on
 the interface of indices, save that they must model
 <a href="http://www.sgi.com/tech/stl/Container.html">
@@ -188,8 +193,10 @@ index specifiers
   <li><a href="hash_indices.html#unique_non_unique"><code>hashed_unique</code> and
     <code>hashed_non_unique</code></a> for
     <a href="hash_indices.html">hashed indices</a>,</li>
-  <li>and <a href="seq_indices.html#sequenced"><code>sequenced</code></a> for
-    <a href="seq_indices.html">sequenced indices</a>.</li>
+  <li><a href="seq_indices.html#sequenced"><code>sequenced</code></a> for
+    <a href="seq_indices.html">sequenced indices</a></li>
+  <li>and <a href="rnd_indices.html#random_access"><code>random_access</code></a> for
+    <a href="rnd_indices.html">random access indices</a>.</li>
 </ul>
 </p>
 
@@ -304,7 +311,51 @@ reference</a>.
 <p>
 <ul>
   <li><a href="seq_indices.html">Sequenced indices</a> allow to arrange
-    elements as in a bidirectional list.  </li>
+    elements as in a bidirectional list.</li>
+  <li><a href="rnd_indices.html">Random access indices</a> provide
+    constant time positional access and free ordering of elements.</li>
+</ul>
+</p>
+
+<h2><a name="views">Index views</a></h2>
+
+<p>
+The following concept is used by the rearrange facilities of non key-based
+indices. Given an index <code>i</code> of type <code>Index</code>, a <i>view
+of <code>i</code></i> is any range [<code>first</code>,<code>last</code>)
+where <code>first</code> and <code>last</code> are objects of a type
+<code>Iterator</code> modelling
+<a href="http://www.sgi.com/tech/stl/InputIterator.html">
+<code>Input Iterator</code></a> such that
+<ol>
+  <li>the associated value type of <code>Iterator</code> is convertible
+    to <code>const Index::value_type&amp;</code>
+  </li>
+  <li>and each of the elements of <code>i</code> appears exactly once in
+    [<code>first</code>,<code>last</code>).
+  </li>
+</ol>
+Note that the view refers to the actual elements of <code>i</code>, not to
+copies of them. Additionally, a view is said to be <i>free</i> if its traversal
+order is not affected by changes in the traversal order of <code>i</code>.
+Examples of free views are:
+<ul>
+  <li>[<code>c.begin()</code>,<code>c.end()</code>), where <code>c</code> is
+    any container of reference wrappers (from
+    <a href="../../../../doc/html/ref.html">Boost.Ref</a>) to the elements
+    of <code>i</code> containing exactly one reference to every element.
+  </li>
+  <li>[<code>i'.begin()</code>,<code>i'.end()</code>), where <code>i'</code> is
+    any index belonging to the same <code>multi_index_container</code>
+    as <code>i</code>, except <code>i</code> itself.
+  </li>
+  <li>
+    Any range which is a permutation of the ones described above, as for
+    instance [<code>c.rbegin()</code>,<code>c.rend()</code>), or
+    ranges obtained from the former with the aid of
+    <a href="../../../../libs/iterator/doc/permutation_iterator.html">
+    <code>permutation_iterator</code></a> from Boost.Iterator.
+  </li>
 </ul>
 </p>
 
@@ -322,9 +373,9 @@ Ordered indices
 
 <br>
 
-<p>Revised May 30th 2005</p>
+<p>Revised February 6th 2006</p>
 
-<p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
