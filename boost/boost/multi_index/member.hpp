@@ -16,7 +16,12 @@
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/is_const.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <cstddef>
+
+#if !defined(BOOST_NO_SFINAE)
+#include <boost/type_traits/is_convertible.hpp>
+#endif
 
 namespace boost{
 
@@ -52,7 +57,15 @@ struct const_member_base
   typedef Type result_type;
 
   template<typename ChainedPtr>
-  Type& operator()(const ChainedPtr& x)const
+
+#if !defined(BOOST_NO_SFINAE)
+  typename disable_if<
+    is_convertible<const ChainedPtr,const Class>,Type&>::type
+#else
+  Type&
+#endif
+  
+  operator()(const ChainedPtr& x)const
   {
     return operator()(*x);
   }
@@ -79,7 +92,15 @@ struct non_const_member_base
   typedef Type result_type;
 
   template<typename ChainedPtr>
-  Type& operator()(const ChainedPtr& x)const
+
+#if !defined(BOOST_NO_SFINAE)
+  typename disable_if<
+    is_convertible<const ChainedPtr,const Class>,Type&>::type
+#else
+  Type&
+#endif
+
+  operator()(const ChainedPtr& x)const
   {
     return operator()(*x);
   }
@@ -139,7 +160,15 @@ struct const_member_offset_base
   typedef Type result_type;
 
   template<typename ChainedPtr>
-  Type& operator()(const ChainedPtr& x)const
+
+#if !defined(BOOST_NO_SFINAE)
+  typename disable_if<
+    is_convertible<const ChainedPtr,const Class>,Type&>::type
+#else
+  Type&
+#endif 
+    
+  operator()(const ChainedPtr& x)const
   {
     return operator()(*x);
   }
@@ -169,7 +198,15 @@ struct non_const_member_offset_base
   typedef Type result_type;
 
   template<typename ChainedPtr>
-  Type& operator()(const ChainedPtr& x)const
+
+#if !defined(BOOST_NO_SFINAE)
+  typename disable_if<
+    is_convertible<const ChainedPtr,const Class>,Type&>::type
+#else
+  Type&
+#endif 
+  
+  operator()(const ChainedPtr& x)const
   {
     return operator()(*x);
   }
