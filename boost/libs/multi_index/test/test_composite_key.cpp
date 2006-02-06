@@ -388,6 +388,13 @@ void test_composite_key()
       mc1.lower_bound(make_tuple(0,0)),
       mc1.upper_bound(make_tuple(1,0)))==6);
 
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+  BOOST_CHECK(
+    std::distance(
+      mc1.lower_bound(1),
+      mc1.upper_bound(1))==4);
+#endif
+
   ckey_t1 ck1;
   ckey_t1 ck2(ck1);
   ckey_t1 ck3(
@@ -430,6 +437,13 @@ void test_composite_key()
   BOOST_CHECK(is_equiv  (ck1(xyz(0,0,0)),make_tuple(0),cp1));
   BOOST_CHECK(is_less   (ck1(xyz(0,0,0)),make_tuple(1),cp1));
   BOOST_CHECK(is_greater(ck1(xyz(0,0,0)),make_tuple(-1),cp1));
+
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+  BOOST_CHECK(is_equiv  (ck1(xyz(0,0,0)),0,cp1));
+  BOOST_CHECK(is_less   (ck1(xyz(0,0,0)),1,cp1));
+  BOOST_CHECK(is_greater(ck1(xyz(0,0,0)),-1,cp1));
+#endif
+
   BOOST_CHECK(is_equiv  (ck1(xyz(0,0,0)),make_tuple(0,0),cp1));
   BOOST_CHECK(is_less   (ck1(xyz(0,0,0)),make_tuple(0,1),cp1));
   BOOST_CHECK(is_greater(ck1(xyz(0,0,0)),make_tuple(0,-1),cp1));
