@@ -1,6 +1,6 @@
 /* Boost.MultiIndex performance test.
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -79,7 +79,9 @@ void measure_aux(F f, vector<double>& mv)
     // Do 2*factor measurements
     for (int i = 2*factor; i; --i) {
         unsigned long count = 0, limit = 1, tcount = 0;
-        const clock_t clocklimit = start + CLOCKS_PER_SEC/100;
+
+        // Original code used CLOCKS_PER_SEC/100
+        const clock_t clocklimit = start + CLOCKS_PER_SEC/10;
         clock_t t;
 
         do {
@@ -191,7 +193,7 @@ size_t node_size(const Container&)
   return sizeof(*Container().begin()._Mynode());
 }
 
-#elif defined(__GLIBCPP__)
+#elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
 
 template<typename Container>
 size_t node_size(const Container&)
