@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for key extractors.
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2005 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -52,6 +52,12 @@ struct test_class
   }
 };
 
+struct test_derived_class:test_class
+{
+  test_derived_class(int i=0):test_class(i){}
+  test_derived_class(int i,int j):test_class(i,j){}
+};
+
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(test_class)
 
 typedef identity<test_class>                                       idn;
@@ -92,11 +98,17 @@ void test_key_extractors()
   ccompkey   ccmpk;
   ccompw_key ccmpk_w;
 
-  test_class                                 t;
-  const test_class&                          ctr=t;
+  test_derived_class                         td(-1,0);
+  const test_derived_class&                  ctdr=td;
 
-  test_class*                                tp=&t;
-  const test_class*                          ctp=&t;
+  test_class&                                tr=td;
+  const test_class&                          ctr=tr;
+
+  test_derived_class*                        tdp=&td;
+  const test_derived_class*                  ctdp=&ctdr;
+
+  test_class*                                tp=&tr;
+  const test_class*                          ctp=&tr;
 
   test_class**                               tpp=&tp;
   const test_class**                         ctpp=&ctp;
@@ -104,16 +116,16 @@ void test_key_extractors()
   std::auto_ptr<test_class*>                 tap(new test_class*(tp));
   std::auto_ptr<const test_class*>           ctap(new const test_class*(ctp));
 
-  boost::reference_wrapper<test_class>       tw(t);
-  boost::reference_wrapper<const test_class> ctw(t);
+  boost::reference_wrapper<test_class>       tw(tr);
+  boost::reference_wrapper<const test_class> ctw(tr);
 
-  id(t).int_member=0;
-  BOOST_CHECK(id(t).int_member==0);
-  BOOST_CHECK(cid(t).int_member==0);
-  BOOST_CHECK(k_m(t)==0);
-  BOOST_CHECK(ck_m(t)==0);
-  BOOST_CHECK(cmpk(t)==make_tuple(test_class(0,0),0,0,true));
-  BOOST_CHECK(ccmpk(t)==make_tuple(test_class(0,0),0));
+  id(tr).int_member=0;
+  BOOST_CHECK(id(tr).int_member==0);
+  BOOST_CHECK(cid(tr).int_member==0);
+  BOOST_CHECK(k_m(tr)==0);
+  BOOST_CHECK(ck_m(tr)==0);
+  BOOST_CHECK(cmpk(tr)==make_tuple(test_class(0,0),0,0,true));
+  BOOST_CHECK(ccmpk(tr)==make_tuple(test_class(0,0),0));
   BOOST_CHECK(id(ctr).int_member==0);
   BOOST_CHECK(cid(ctr).int_member==0);
   BOOST_CHECK(k_m(ctr)==0);
@@ -121,7 +133,22 @@ void test_key_extractors()
   BOOST_CHECK(cmpk(ctr)==make_tuple(test_class(0,0),0,0,true));
   BOOST_CHECK(ccmpk(ctr)==make_tuple(test_class(0,0),0));
 
-  k_m(t)=1;
+#if !defined(BOOST_NO_SFINAE)
+  BOOST_CHECK(id(td).int_member==0);
+  BOOST_CHECK(cid(td).int_member==0);
+  BOOST_CHECK(k_m(td)==0);
+  BOOST_CHECK(ck_m(td)==0);
+  BOOST_CHECK(cmpk(td)==make_tuple(test_class(0,0),0,0,true));
+  BOOST_CHECK(ccmpk(td)==make_tuple(test_class(0,0),0));
+  BOOST_CHECK(id(ctdr).int_member==0);
+  BOOST_CHECK(cid(ctdr).int_member==0);
+  BOOST_CHECK(k_m(ctdr)==0);
+  BOOST_CHECK(ck_m(ctdr)==0);
+  BOOST_CHECK(cmpk(ctdr)==make_tuple(test_class(0,0),0,0,true));
+  BOOST_CHECK(ccmpk(ctdr)==make_tuple(test_class(0,0),0));
+#endif
+
+  k_m(tr)=1;
   BOOST_CHECK(id(tp).int_member==1);
   BOOST_CHECK(cid(tp).int_member==1);
   BOOST_CHECK(k_m(tp)==1);
@@ -132,6 +159,19 @@ void test_key_extractors()
   BOOST_CHECK(ck_m(ctp)==1);
   BOOST_CHECK(cmpk(ctp)==make_tuple(test_class(1,0),1,0,true));
   BOOST_CHECK(ccmpk(ctp)==make_tuple(test_class(1,0),1));
+
+#if !defined(BOOST_NO_SFINAE)
+  BOOST_CHECK(id(tdp).int_member==1);
+  BOOST_CHECK(cid(tdp).int_member==1);
+  BOOST_CHECK(k_m(tdp)==1);
+  BOOST_CHECK(ck_m(tdp)==1);
+  BOOST_CHECK(cmpk(tdp)==make_tuple(test_class(1,0),1,0,true));
+  BOOST_CHECK(ccmpk(tdp)==make_tuple(test_class(1,0),1));
+  BOOST_CHECK(cid(ctdp).int_member==1);
+  BOOST_CHECK(ck_m(ctdp)==1);
+  BOOST_CHECK(cmpk(ctdp)==make_tuple(test_class(1,0),1,0,true));
+  BOOST_CHECK(ccmpk(ctdp)==make_tuple(test_class(1,0),1));
+#endif
 
   k_m(tp)=2;
   BOOST_CHECK(id(tpp).int_member==2);
@@ -173,10 +213,22 @@ void test_key_extractors()
   BOOST_CHECK(cmpk(ctw)==make_tuple(test_class(5,0),5,0,true));
   BOOST_CHECK(ccmpk(ctw)==make_tuple(test_class(5,0),5));
 
-  BOOST_CHECK(k_cm(t)==0);
+  BOOST_CHECK(k_cm(tr)==0);
+  BOOST_CHECK(k_cm(ctr)==0);
+
+#if !defined(BOOST_NO_SFINAE)
+  BOOST_CHECK(k_cm(td)==0);
+  BOOST_CHECK(k_cm(ctdr)==0);
+#endif
 
   BOOST_CHECK(k_cm(tp)==0);
   BOOST_CHECK(k_cm(ctp)==0);
+
+#if !defined(BOOST_NO_SFINAE)
+  BOOST_CHECK(k_cm(tdp)==0);
+  BOOST_CHECK(k_cm(ctdp)==0);
+#endif
+  
   BOOST_CHECK(k_cm(tpp)==0);
   BOOST_CHECK(k_cm(ctpp)==0);
   BOOST_CHECK(k_cm(tap)==0);
@@ -185,10 +237,22 @@ void test_key_extractors()
   BOOST_CHECK(k_cm(tw)==0);
   BOOST_CHECK(k_cm(ctw)==0);
 
-  BOOST_CHECK(k_cmf(t));
+  BOOST_CHECK(k_cmf(tr));
+  BOOST_CHECK(k_cmf(ctr));
+
+#if !defined(BOOST_NO_SFINAE)
+  BOOST_CHECK(k_cmf(td));
+  BOOST_CHECK(k_cmf(ctdr));
+#endif
 
   BOOST_CHECK(k_cmf(tp));
   BOOST_CHECK(k_cmf(ctp));
+
+#if !defined(BOOST_NO_SFINAE)
+  BOOST_CHECK(k_cmf(tdp));
+  BOOST_CHECK(k_cmf(ctdp));
+#endif
+
   BOOST_CHECK(k_cmf(tpp));
   BOOST_CHECK(k_cmf(ctpp));
   BOOST_CHECK(k_cmf(tap));
@@ -197,9 +261,18 @@ void test_key_extractors()
   BOOST_CHECK(k_cmf(tw));
   BOOST_CHECK(k_cmf(ctw));
 
-  BOOST_CHECK(!k_mf(t));
+  BOOST_CHECK(!k_mf(tr));
+
+#if !defined(BOOST_NO_SFINAE)
+  BOOST_CHECK(!k_mf(td));
+#endif
 
   BOOST_CHECK(!k_mf(tp));
+
+#if !defined(BOOST_NO_SFINAE)
+  BOOST_CHECK(!k_mf(tdp));
+#endif
+
   BOOST_CHECK(!k_mf(tpp));
   BOOST_CHECK(!k_mf(tap));
   BOOST_CHECK(!k_mf(tw));
