@@ -26,15 +26,8 @@ namespace detail{
 
 struct hashed_index_node_impl
 {
-  hashed_index_node_impl*&       next(){return next_;}
-  hashed_index_node_impl*const & next()const{return next_;}
-
-  /* interoperability with hashed_index_proxy */
-
-  static hashed_index_node_impl* end(hashed_index_node_impl* header)
-  {
-    return header;
-  }
+  hashed_index_node_impl*& next(){return next_;}
+  hashed_index_node_impl*  next()const{return next_;}
 
   /* algorithmic stuff */
 
@@ -98,8 +91,7 @@ struct hashed_index_node:Super,hashed_index_node_trampoline<Super>
 
   static hashed_index_node* from_impl(hashed_index_node_impl *x)
     {return static_cast<hashed_index_node*>(static_cast<impl_type*>(x));}
-  static const hashed_index_node* from_impl(
-    const hashed_index_node_impl* x)
+  static const hashed_index_node* from_impl(const hashed_index_node_impl* x)
   {
     return static_cast<const hashed_index_node*>(
       static_cast<const impl_type*>(x));
@@ -112,13 +104,6 @@ struct hashed_index_node:Super,hashed_index_node_trampoline<Super>
     hashed_index_node_impl* xi=x->impl();
     impl_type::increment(xi,bbegin,bend);
     x=from_impl(xi);
-  }
-
-  /* interoperability with hashed_index_proxy */
-
-  static hashed_index_node* end(hashed_index_node* header)
-  {
-    return from_impl(impl_type::end(header->impl()));
   }
 
 private:
