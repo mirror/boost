@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for safe_mode.
  *
- * Copyright 2003-2005 Joaquín M López Muñoz.
+ * Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -29,325 +29,422 @@ try{
     "safe mode violation not expected");\
 }
 
-struct change_id
+template<typename Policy>
+static void local_test_safe_mode(
+  std::forward_iterator_tag
+  BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Policy))
 {
-  change_id(int new_id_):new_id(new_id_){}
-  void operator()(employee& e){e.id=new_id;}
+  typedef typename Policy::container      container;
+  typedef typename Policy::index_type     index_type;
+  typedef typename index_type::value_type value_type;
+  typedef typename index_type::iterator   iterator;
 
-private:
-  int new_id;
-};
-
-struct change_ssn
-{
-  change_ssn(int new_ssn_):new_ssn(new_ssn_){}
-  void operator()(employee& e){e.ssn=new_ssn;}
-
-private:
-  int new_ssn;
-};
-
-typedef multi_index_container<
-  pair_of_ints,
-  indexed_by<
-    ordered_unique<BOOST_MULTI_INDEX_MEMBER(pair_of_ints,int,first)>,
-    ordered_unique<BOOST_MULTI_INDEX_MEMBER(pair_of_ints,int,second)> > >
-int_int_set;
-
-void test_safe_mode()
-{
-  employee_set es,es2;
-  employee_set_by_name& i1=get<name>(es);
-  employee_set_by_name& i2=get<name>(es2);
-  employee_set_as_inserted& ii=get<as_inserted>(es);
-  es.insert(employee(0,"Joe",31,1123));
+  container   c,c2;
+  index_type& i=Policy::index_from_container(c);
+  index_type& i2=Policy::index_from_container(c2);
+  Policy::insert(i,Policy::some_value());
 
   TRY_SAFE_MODE
-    employee_set::iterator it;
-    employee_set::iterator it2=es.begin();
+    iterator it;
+    iterator it2=i.begin();
     it2=it;
   CATCH_SAFE_MODE(safe_mode::invalid_iterator)
 
   TRY_SAFE_MODE
-    employee_set_by_name::iterator it;
-    employee_set_by_name::iterator it2=i1.begin();
-    it2=it;
-  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
-
-  TRY_SAFE_MODE
-    employee_set::iterator it;
-    employee e=*it;
+    iterator it;
+    value_type e=*it;
   CATCH_SAFE_MODE(safe_mode::invalid_iterator)
   
   TRY_SAFE_MODE
-    employee_set_by_name::iterator it;
-    employee e=*it;
-  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
-
-  TRY_SAFE_MODE
-    employee_set::iterator it=es.end();
-    employee e=*it;
+    iterator it=i.end();
+    value_type e=*it;
   CATCH_SAFE_MODE(safe_mode::not_dereferenceable_iterator)
 
   TRY_SAFE_MODE
-    employee_set_by_name::iterator it=i1.end();
-    employee e=*it;
-  CATCH_SAFE_MODE(safe_mode::not_dereferenceable_iterator)
-
-  TRY_SAFE_MODE
-    employee_set::iterator it=es.end();
+    iterator it=i.end();
     ++it;
   CATCH_SAFE_MODE(safe_mode::not_incrementable_iterator)
 
   TRY_SAFE_MODE
-    employee_set_by_name::iterator it=i1.end();
-    ++it;
-  CATCH_SAFE_MODE(safe_mode::not_incrementable_iterator)
-
-  TRY_SAFE_MODE
-    employee_set::iterator it=es.begin();
-    --it;
-  CATCH_SAFE_MODE(safe_mode::not_decrementable_iterator)
-
-  TRY_SAFE_MODE
-    employee_set::iterator it;
-    employee_set::iterator it2;
+    iterator it;
+    iterator it2;
     bool b=(it==it2);
     b=true; /* avoid warning about unused var */
   CATCH_SAFE_MODE(safe_mode::invalid_iterator)
 
   TRY_SAFE_MODE
-    employee_set_by_name::iterator it;
-    employee_set_by_name::iterator it2;
+    iterator it=i.begin();
+    iterator it2;
     bool b=(it==it2);
     b=true; /* avoid warning about unused var */
   CATCH_SAFE_MODE(safe_mode::invalid_iterator)
 
   TRY_SAFE_MODE
-    employee_set::iterator it=es.begin();
-    employee_set::iterator it2;
-    bool b=(it==it2);
-    b=true; /* avoid warning about unused var */
-  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
-
-  TRY_SAFE_MODE
-    employee_set_by_name::iterator it=i1.begin();
-    employee_set_by_name::iterator it2;
-    bool b=(it==it2);
-    b=true; /* avoid warning about unused var */
-  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
-
-  TRY_SAFE_MODE
-    employee_set::iterator it=es.begin();
-    employee_set::iterator it2=es2.begin();
+    iterator it=i.begin();
+    iterator it2=i2.begin();
     bool b=(it==it2);
     b=true; /* avoid warning about unused var */
   CATCH_SAFE_MODE(safe_mode::not_same_owner)
 
   TRY_SAFE_MODE
-    employee_set_by_name::iterator it=i1.begin();
-    employee_set_by_name::iterator it2=i2.begin();
-    bool b=(it==it2);
-    b=true; /* avoid warning about unused var */
-  CATCH_SAFE_MODE(safe_mode::not_same_owner)
-
-  TRY_SAFE_MODE
-    es.erase(es.end(),es.begin());
+    i.erase(i.end(),i.begin());
   CATCH_SAFE_MODE(safe_mode::invalid_range)
 
   TRY_SAFE_MODE
-    i1.erase(i1.end(),i1.begin());
-  CATCH_SAFE_MODE(safe_mode::invalid_range)
-
-  TRY_SAFE_MODE
-    employee_set::iterator it;
-    es.insert(it,employee(0,"Joe",31,1123));
+    iterator it;
+    Policy::insert(i,it,Policy::some_value());
   CATCH_SAFE_MODE(safe_mode::invalid_iterator)
 
   TRY_SAFE_MODE
-    employee_set_by_name::iterator it;
-    i1.insert(it,employee(0,"Joe",31,1123));
-  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
-
-  TRY_SAFE_MODE
-    es.erase(es.end());
+    i.erase(i.end());
   CATCH_SAFE_MODE(safe_mode::not_dereferenceable_iterator)
 
   TRY_SAFE_MODE
-    i1.erase(i1.end());
-  CATCH_SAFE_MODE(safe_mode::not_dereferenceable_iterator)
-
-  TRY_SAFE_MODE
-    employee_set::iterator it=es.begin();
-    es2.insert(it,employee(0,"Joe",31,1123));
+    iterator it=i.begin();
+    Policy::insert(i2,it,Policy::some_value());
   CATCH_SAFE_MODE(safe_mode::not_owner)
 
   TRY_SAFE_MODE
-    employee_set_by_name::iterator it=i1.begin();
-    i2.insert(it,employee(0,"Joe",31,1123));
-  CATCH_SAFE_MODE(safe_mode::not_owner)
-
-  TRY_SAFE_MODE
-    employee_set::iterator it=es.begin();
-    employee_set::iterator it2=es2.end();
-    es2.erase(it,it2);
-  CATCH_SAFE_MODE(safe_mode::not_owner)
-
-  TRY_SAFE_MODE
-    employee_set_by_name::iterator it=i1.begin();
-    employee_set_by_name::iterator it2=i2.end();
+    iterator it=i.begin();
+    iterator it2=i2.end();
     i2.erase(it,it2);
   CATCH_SAFE_MODE(safe_mode::not_owner)
 
   TRY_SAFE_MODE
-    employee_set::iterator it=es.insert(employee(1,"Robert",27,5601)).first;
-    es.erase(it);
-    es.erase(it);
+    iterator it=Policy::insert(i,Policy::another_value());
+    i.erase(it);
+    i.erase(it);
   CATCH_SAFE_MODE(safe_mode::invalid_iterator)
 
   TRY_SAFE_MODE
-    employee_set_by_name::iterator it=
-      i1.insert(employee(1,"Robert",27,5601)).first;
-    i1.erase(it);
-    i1.erase(it);
+    container   c3(c);
+    index_type& i3=Policy::index_from_container(c3);
+    iterator it=Policy::insert(i3,Policy::another_value());
+    i3.clear();
+    i3.erase(it);
   CATCH_SAFE_MODE(safe_mode::invalid_iterator)
 
   TRY_SAFE_MODE
-    employee_set es3(es);
-    employee_set::iterator it=es3.insert(employee(1,"Robert",27,5601)).first;
-    es3.clear();
-    es3.erase(it);
-  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
-
-  TRY_SAFE_MODE
-    employee_set es3(es);
-    employee_set_by_name::iterator it=
-      get<name>(es3).insert(employee(1,"Robert",27,5601)).first;
-    get<name>(es3).clear();
-    get<name>(es3).erase(it);
-  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
-
-  TRY_SAFE_MODE
-    employee_set::iterator it;
+    iterator it;
     {
-      employee_set es3;
-      it=es3.insert(employee(0,"Joe",31,1123)).first;
+      container   c3;
+      index_type& i3=Policy::index_from_container(c3);
+      it=Policy::insert(i3,Policy::some_value());
     }
-    employee e=*it;
+    value_type e=*it;
   CATCH_SAFE_MODE(safe_mode::invalid_iterator)
 
   TRY_SAFE_MODE
-    employee_set_by_name::iterator it;
+    iterator it;
     {
-      employee_set es3;
-      it=get<name>(es3).insert(employee(0,"Joe",31,1123)).first;
+      container   c3;
+      index_type& i3=Policy::index_from_container(c3);
+      it=Policy::insert(i3,Policy::some_value());
     }
-    employee e=*it;
-  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
-
-  TRY_SAFE_MODE
-    employee_set::iterator it;
-    {
-      employee_set es3;
-      it=es3.insert(employee(0,"Joe",31,1123)).first;
-    }
-    employee_set::iterator it2;
+    iterator it2;
     it2=it;
   CATCH_SAFE_MODE(safe_mode::invalid_iterator)
 
   TRY_SAFE_MODE
-    employee_set_by_name::iterator it;
-    {
-      employee_set es3;
-      it=get<name>(es3).insert(employee(0,"Joe",31,1123)).first;
-    }
-    employee_set_by_name::iterator it2;
-    it2=it;
-  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
-
-  TRY_SAFE_MODE
-    employee_set es3(es);
-    employee_set es4;
-    employee_set::iterator it=es3.begin();
-    es3.swap(es4);
-    es3.erase(it);
+    container   c3(c);
+    container   c4;
+    index_type& i3=Policy::index_from_container(c3);
+    index_type& i4=Policy::index_from_container(c4);
+    iterator  it=i3.begin();
+    i3.swap(i4);
+    i3.erase(it);
   CATCH_SAFE_MODE(safe_mode::not_owner)
 
-  TRY_SAFE_MODE
-    employee_set es3(es);
-    employee_set es4;
-    employee_set_by_name::iterator it=get<name>(es3).begin();
-    es3.swap(es4);
-    get<name>(es3).erase(it);
-  CATCH_SAFE_MODE(safe_mode::not_owner)
-
-  /* these, unlike the previous case, are indeed correct, test safe mode
+  /* this, unlike the previous case, is indeed correct, test safe mode
    * gets it right
    */
   { 
-    employee_set es3(es);
-    employee_set es4;
-    employee_set::iterator it=es3.begin();
-    es3.swap(es4);
-    es4.erase(it);
-  }
-
-  { 
-    employee_set es3(es);
-    employee_set es4;
-    employee_set_by_name::iterator it=get<name>(es3).begin();
-    es3.swap(es4);
-    get<name>(es4).erase(it);
+    container   c3(c);
+    container   c4;
+    index_type& i3=Policy::index_from_container(c3);
+    index_type& i4=Policy::index_from_container(c4);
+    iterator  it=i3.begin();
+    i3.swap(i4);
+    i4.erase(it);
   }
 
   TRY_SAFE_MODE
-    employee_set::iterator it=es.insert(employee(1,"Robert",27,5601)).first;
-    employee_set_by_name::iterator it2=project<name>(es,it);
-    es.modify_key(it,change_id(0));
-    employee e=*it2;
-  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
-
-  TRY_SAFE_MODE
-    employee_set_by_name::iterator it=
-      i1.insert(employee(1,"Robert",27,5601)).first;
-    employee_set::iterator it2=project<0>(es,it);
-    i1.modify(it,change_ssn(1123));
-    employee e=*it2;
-  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
-
-  TRY_SAFE_MODE
-    int_int_set iis;
-    int_int_set::iterator it=iis.insert(pair_of_ints(0,0)).first;
-    iis.insert(pair_of_ints(1,1));
-    iis.modify(it,increment_first);
-    pair_of_ints p=*it;
-    p.first=0; /* avoid warning about unused var */
-  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
-
-  TRY_SAFE_MODE
-    int_int_set iis;
-    int_int_set::iterator it=iis.insert(pair_of_ints(0,0)).first;
-    iis.insert(pair_of_ints(1,1));
-    iis.modify(it,increment_second);
-    pair_of_ints p=*it;
-    p.first=0; /* avoid warning about unused var */
-  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
-
-  TRY_SAFE_MODE
-    employee_set::iterator it=es.end();
-    employee_set_by_name::iterator it2=project<name>(es2,it);
+    iterator it=i.end();
+    typename container::iterator it2=project<0>(c2,it);
   CATCH_SAFE_MODE(safe_mode::not_owner)
 
   TRY_SAFE_MODE
-    employee_set_by_name::iterator it=get<name>(es).end();
-    employee_set::iterator it2=project<0>(es2,it);
+    iterator it=Policy::insert(i,Policy::another_value());
+    typename container::iterator it2=project<0>(c,it);
+    i.erase(it);
+    value_type e=*it2;
+  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
+}
+
+template<typename Policy>
+static void local_test_safe_mode(
+  std::bidirectional_iterator_tag
+  BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Policy))
+{
+  local_test_safe_mode<Policy>(std::forward_iterator_tag());
+
+  typedef typename Policy::container      container;
+  typedef typename Policy::index_type     index_type;
+  typedef typename index_type::value_type value_type;
+  typedef typename index_type::iterator   iterator;
+
+  container   c;
+  index_type& i=Policy::index_from_container(c);
+  Policy::insert(i,Policy::some_value());
+
+  TRY_SAFE_MODE
+    iterator it=i.begin();
+    --it;
+  CATCH_SAFE_MODE(safe_mode::not_decrementable_iterator)
+}
+
+template<typename Policy>
+static void local_test_safe_mode(
+  std::random_access_iterator_tag
+  BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Policy))
+{
+  local_test_safe_mode<Policy>(std::bidirectional_iterator_tag());
+
+  typedef typename Policy::container      container;
+  typedef typename Policy::index_type     index_type;
+  typedef typename index_type::value_type value_type;
+  typedef typename index_type::iterator   iterator;
+
+  container   c;
+  index_type& i=Policy::index_from_container(c);
+  Policy::insert(i,Policy::some_value());
+
+  TRY_SAFE_MODE
+    iterator it=i.begin();
+    it+=2;
+  CATCH_SAFE_MODE(safe_mode::out_of_bounds)
+
+  TRY_SAFE_MODE
+    iterator it=i.begin();
+    it-=1;
+  CATCH_SAFE_MODE(safe_mode::out_of_bounds)
+}
+
+template<typename Policy>
+static void local_test_safe_mode(BOOST_EXPLICIT_TEMPLATE_TYPE(Policy))
+{
+  typedef typename Policy::index_type::iterator::iterator_category category;
+  local_test_safe_mode<Policy>(category());
+}
+
+template<typename Policy>
+static void local_test_safe_mode_with_rearrange(
+  BOOST_EXPLICIT_TEMPLATE_TYPE(Policy))
+{
+  local_test_safe_mode<Policy>();
+
+  typedef typename Policy::container      container;
+  typedef typename Policy::index_type     index_type;
+  typedef typename index_type::value_type value_type;
+  typedef typename index_type::iterator   iterator;
+
+  container   c;
+  index_type& i=Policy::index_from_container(c);
+  Policy::insert(i,Policy::some_value());
+
+  TRY_SAFE_MODE
+    iterator it;
+    i.splice(it,i,i.begin(),i.end());
+  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
+
+  TRY_SAFE_MODE
+    container   c2(c);
+    index_type& i2=Policy::index_from_container(c2);
+    iterator    it2=i2.begin();
+    iterator    it=i.begin();
+    i.splice(it2,i2,it);
   CATCH_SAFE_MODE(safe_mode::not_owner)
 
   TRY_SAFE_MODE
-    ii.splice(ii.begin(),ii,ii.begin(),ii.end());
+    i.splice(i.begin(),i,i.begin(),i.end());
   CATCH_SAFE_MODE(safe_mode::inside_range)
 
   TRY_SAFE_MODE
-    ii.splice(ii.begin(),ii);
+    i.splice(i.begin(),i,i.end(),i.begin());
+  CATCH_SAFE_MODE(safe_mode::invalid_range)
+
+  TRY_SAFE_MODE
+    i.splice(i.begin(),i);
   CATCH_SAFE_MODE(safe_mode::same_container)
+
+  TRY_SAFE_MODE
+    iterator it;
+    i.relocate(it,i.begin(),i.end());
+  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
+
+  TRY_SAFE_MODE
+    i.relocate(i.begin(),i.begin(),i.end());
+  CATCH_SAFE_MODE(safe_mode::inside_range)
+
+  TRY_SAFE_MODE
+    i.relocate(i.begin(),i.end(),i.begin());
+  CATCH_SAFE_MODE(safe_mode::invalid_range)
+}
+
+template<typename MultiIndexContainer,int N>
+struct index_policy_base
+{
+  typedef MultiIndexContainer                    container;
+  typedef typename 
+    boost::multi_index::detail::prevent_eti<
+      container,
+    typename nth_index<container,N>::type>::type index_type;
+
+  static index_type& index_from_container(container& c){return get<N>(c);}
+};
+
+template<typename MultiIndexContainer,int N>
+struct key_based_index_policy_base:
+  index_policy_base<MultiIndexContainer,N>
+{
+  typedef index_policy_base<MultiIndexContainer,N> super;
+
+  typedef typename super::container       container;
+  typedef typename super::index_type      index_type;
+  typedef typename index_type::value_type value_type;
+  typedef typename index_type::iterator   iterator;
+
+  static iterator insert(index_type& i,const value_type& v)
+  {
+    return i.insert(v).first;
+  }
+
+  static iterator insert(index_type& i,iterator it,const value_type& v)
+  {
+    return i.insert(it,v);
+  }
+};
+
+template<typename MultiIndexContainer,int N>
+struct non_key_based_index_policy_base:
+  index_policy_base<MultiIndexContainer,N>
+{
+  typedef index_policy_base<MultiIndexContainer,N> super;
+
+  typedef typename super::container       container;
+  typedef typename super::index_type      index_type;
+  typedef typename index_type::value_type value_type;
+  typedef typename index_type::iterator   iterator;
+
+  static iterator insert(index_type& i,const value_type& v)
+  {
+    return i.push_back(v).first;
+  }
+
+  static iterator insert(index_type& i,iterator it,const value_type& v)
+  {
+    return i.insert(it,v).first;
+  }
+};
+
+struct employee_set_policy_base
+{
+  static employee    some_value(){return employee(0,"Joe",31,1123);}
+  static employee    another_value(){return employee(1,"Robert",27,5601);}
+};
+
+struct employee_set_policy:
+  employee_set_policy_base,
+  key_based_index_policy_base<employee_set,0>
+{};
+
+struct employee_set_by_name_policy:
+  employee_set_policy_base,
+  key_based_index_policy_base<employee_set,1>
+{};
+
+struct employee_set_as_inserted_policy:
+  employee_set_policy_base,
+  non_key_based_index_policy_base<employee_set,3>
+{};
+
+struct employee_set_randomly_policy:
+  employee_set_policy_base,
+  non_key_based_index_policy_base<employee_set,5>
+{};
+
+template<typename IntegralBimap>
+static void test_integral_bimap(BOOST_EXPLICIT_TEMPLATE_TYPE(IntegralBimap))
+{
+  typedef typename IntegralBimap::value_type value_type;
+  typedef typename IntegralBimap::iterator   iterator;
+
+  TRY_SAFE_MODE
+    IntegralBimap bm;
+    iterator it=bm.insert(value_type(0,0)).first;
+    bm.insert(value_type(1,1));
+    bm.modify(it,increment_first);
+    value_type v=*it;
+    v.first=0; /* avoid warning about unused var */
+  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
+
+  TRY_SAFE_MODE
+    IntegralBimap bm;
+    iterator it=bm.insert(value_type(0,0)).first;
+    bm.insert(value_type(1,1));
+    bm.modify(it,increment_second);
+    pair_of_ints v=*it;
+    v.first=0; /* avoid warning about unused var */
+  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
+}
+
+void test_safe_mode()
+{
+  local_test_safe_mode<employee_set_policy>();
+  local_test_safe_mode<employee_set_by_name_policy>();
+  local_test_safe_mode_with_rearrange<employee_set_as_inserted_policy>();
+  local_test_safe_mode_with_rearrange<employee_set_randomly_policy>();
+
+  typedef multi_index_container<
+    pair_of_ints,
+    indexed_by<
+      ordered_unique<BOOST_MULTI_INDEX_MEMBER(pair_of_ints,int,first)>,
+      ordered_unique<BOOST_MULTI_INDEX_MEMBER(pair_of_ints,int,second)> >
+  > bimap0_type;
+
+  /* MSVC++ 6.0 chokes on test_integral_bimap without this
+   * explicit instantiation
+   */
+  bimap0_type bm0;
+  test_integral_bimap<bimap0_type>();
+
+  typedef multi_index_container<
+    pair_of_ints,
+    indexed_by<
+      ordered_unique<BOOST_MULTI_INDEX_MEMBER(pair_of_ints,int,first)>,
+      hashed_unique<BOOST_MULTI_INDEX_MEMBER(pair_of_ints,int,second)> >
+  > bimap1_type;
+
+  bimap1_type bm1;
+  test_integral_bimap<bimap1_type>();
+
+  typedef multi_index_container<
+    pair_of_ints,
+    indexed_by<
+      hashed_unique<BOOST_MULTI_INDEX_MEMBER(pair_of_ints,int,first)>,
+      ordered_unique<BOOST_MULTI_INDEX_MEMBER(pair_of_ints,int,second)> >
+  > bimap2_type;
+
+  bimap2_type bm2;
+  test_integral_bimap<bimap2_type>();
+
+  typedef multi_index_container<
+    pair_of_ints,
+    indexed_by<
+      hashed_unique<BOOST_MULTI_INDEX_MEMBER(pair_of_ints,int,first)>,
+      hashed_unique<BOOST_MULTI_INDEX_MEMBER(pair_of_ints,int,second)> >
+  > bimap3_type;
+
+  bimap3_type bm3;
+  test_integral_bimap<bimap3_type>();
 }
