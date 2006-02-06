@@ -14,10 +14,11 @@
 #endif
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
-#include <boost/aligned_storage.hpp>
 #include <boost/detail/no_exceptions_support.hpp>
 #include <boost/multi_index/detail/seq_index_node.hpp>
 #include <boost/limits.hpp>
+#include <boost/type_traits/aligned_storage.hpp>
+#include <boost/type_traits/alignment_of.hpp> 
 #include <cstddef>
 
 namespace boost{
@@ -84,7 +85,8 @@ void sequenced_index_collate(
   sequenced_index_node_impl* first1=y->next();
   sequenced_index_node_impl* last1=y;
   while(first0!=last0&&first1!=last1){
-    if(comp(Node::from_impl(first1)->value,Node::from_impl(first0)->value)){
+    if(comp(
+        Node::from_impl(first1)->value(),Node::from_impl(first0)->value())){
       sequenced_index_node_impl* tmp=first1->next();
       sequenced_index_node_impl::relink(first0,first1);
       first1=tmp;
@@ -93,6 +95,16 @@ void sequenced_index_collate(
   }
   sequenced_index_node_impl::relink(last0,first1,last1);
 }
+
+/* Some versions of CGG require a bogus typename in counter_spc
+ * inside sequenced_index_sort if the following is defined
+ * also inside sequenced_index_sort.
+ */
+
+BOOST_STATIC_CONSTANT(
+  std::size_t,
+  sequenced_index_sort_max_fill=
+    (std::size_t)std::numeric_limits<std::size_t>::digits+1);
 
 template<typename Node,typename Compare>
 void sequenced_index_sort(Node* header,Compare comp)
@@ -110,19 +122,24 @@ void sequenced_index_sort(Node* header,Compare comp)
   if(header->next()==header->impl()||
      header->next()->next()==header->impl())return;
 
-  BOOST_STATIC_CONSTANT(
-    std::size_t,
-    max_fill=(std::size_t)std::numeric_limits<std::size_t>::digits+1);
-
   aligned_storage<
-    sizeof(sequenced_index_node_impl)>      carry_spc;
+    sizeof(sequenced_index_node_impl),
+    alignment_of<
+    sequenced_index_node_impl>::value
+  >::type                                   carry_spc;
   sequenced_index_node_impl&                carry=
-    *static_cast<sequenced_index_node_impl*>(carry_spc.address());
+    *static_cast<sequenced_index_node_impl*>(static_cast<void*>(&carry_spc));
   aligned_storage<
     sizeof(
-      sequenced_index_node_impl[max_fill])> counter_spc;
+      sequenced_index_node_impl
+        [sequenced_index_sort_max_fill]),
+    alignment_of<
+      sequenced_index_node_impl
+        [sequenced_index_sort_max_fill]
+    >::value
+  >::type                                   counter_spc;
   sequenced_index_node_impl*                counter=
-    static_cast<sequenced_index_node_impl*>(counter_spc.address());
+    static_cast<sequenced_index_node_impl*>(static_cast<void*>(&counter_spc));
   std::size_t                               fill=0;
 
   carry.prior()=carry.next()=&carry;
