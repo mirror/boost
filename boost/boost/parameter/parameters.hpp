@@ -550,6 +550,19 @@ struct parameters
         ), unnamed_list>
     {};
 
+    // Metafunction that returns a ArgumentPack.
+    template <
+        BOOST_PP_ENUM_BINARY_PARAMS(
+            BOOST_PARAMETER_MAX_ARITY, class A, = void_ BOOST_PP_INTERCEPT
+        )
+    >
+    struct argument_pack
+      : mpl::apply_wrap1<BOOST_PARAMETER_build_arg_list(
+            BOOST_PARAMETER_MAX_ARITY, aux::make_partial_arg_list, PS, A
+          , aux::tag_keyword_arg
+        ), unnamed_list>
+    {};
+    
     //
     // The function call operator is used to build an arg_list that
     // labels the positional parameters and maintains whatever other
