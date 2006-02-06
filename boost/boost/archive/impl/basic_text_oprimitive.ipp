@@ -96,7 +96,7 @@ basic_text_oprimitive<OStream>::basic_text_oprimitive(
 template<class OStream>
 BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
 basic_text_oprimitive<OStream>::~basic_text_oprimitive(){
-    os.flush();
+    os << std::endl;
 }
 
 } //namespace boost 
