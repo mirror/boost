@@ -5,6 +5,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Boost.MultiIndex Documentation - Compiler specifics</title>
 <link rel="stylesheet" href="style.css" type="text/css">
+<link rel="start" href="index.html">
+<link rel="prev" href="reference/key_extraction.html">
+<link rel="up" href="index.html">
+<link rel="next" href="performance.html">
 </head>
 
 <body>
@@ -49,7 +53,8 @@ along with suitable workarounds when available.
   <li><a href="#intel_7x_win">Intel C++ Compiler for Windows 32-bit 7.0/7.1</a></li>
   <li><a href="#intel_71_win_stlport_453">Intel C++ Compiler for Windows 32-bit 7.1 + STLport 4.5.3</a></li>
   <li><a href="#intel_80_win">Intel C++ Compiler for Windows 32-bit 8.0 and later</a></li>
-  <li><a href="#cw_83">Metrowerks CodeWarrior 8.3 and later</a></li>
+  <li><a href="#cw_83">Metrowerks CodeWarrior 8.3</a></li>
+  <li><a href="#cw_9x">Metrowerks CodeWarrior 9 and later</a></li>
   <li><a href="#msvc_60">Microsoft Visual C++ 6.0 Service Pack 5</a></li>
   <li><a href="#msvc_60_stlport_453">Microsoft Visual C++ 6.0 Service Pack 5 + STLport 4.5.3</a></li>
   <li><a href="#msvc_70">Microsoft Visual C++ 7.0</a></li>
@@ -143,7 +148,7 @@ prior), corresponds to a prerelease version of GNU GCC 4.0.0 which introduces
 a <a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=17435">regression bug</a>
 related to binding of references to temporary objects. This bug precludes the
 usage of Boost.MultiIndex
-<a href="advanced_topics.html#invariant_check">invariant-checking mode</a>; other
+<a href="tutorial/debug.html#invariant_check">invariant-checking mode</a>; other
 than this, Boost.MultiIndex works correctly.
 The bug is corrected in GCC 4.0 Apple build 5026, which is in sync with the official
 release of GNU GCC 4.0.0, so the invariant-checking mode is available from this
@@ -236,10 +241,34 @@ Other than this, Boost.MultiIndex works without problems. Compiler versions
 from 8.0 to 9.0 have been tested.
 </p>
 
-<h2><a name="cw_83">Metrowerks CodeWarrior 8.3 and later</a></h2>
+<h2><a name="cw_83">Metrowerks CodeWarrior 8.3</a></h2>
 
 <p>
-Boost.MultiIndex works correctly with versions of this compiler from 8.3 to
+Predefined key extractors instantiated on a given type do not accept
+objects of derived types. For instance:
+</p>
+
+<blockquote><pre>
+<span class=keyword>struct</span> <span class=identifier>base</span><span class=special>{};</span>
+<span class=keyword>struct</span> <span class=identifier>derived</span><span class=special>:</span><span class=keyword>public</span> <span class=identifier>base</span><span class=special>{};</span>
+<span class=special>...</span>
+
+<span class=identifier>identity</span><span class=special>&lt;</span><span class=identifier>base</span><span class=special>&gt;</span> <span class=identifier>key_extractor</span><span class=special>;</span>
+<span class=identifier>derived</span>        <span class=identifier>x</span><span class=special>;</span>
+
+<span class=comment>// not accepted by this compiler: an explicit cast to base is required</span>
+<span class=identifier>key_extractor</span><span class=special>(</span><span class=identifier>x</span><span class=special>);</span>
+</pre></blockquote>
+
+<p>
+Other than this, Boost.MultiIndex works without problems under the
+two operating systems tested: Mac OS and Windows.
+</p>
+
+<h2><a name="cw_9x">Metrowerks CodeWarrior 9 and later</a></h2>
+
+<p>
+Boost.MultiIndex works correctly with versions of this compiler from 9.0 to
 9.5, under the two operating systems tested: Mac OS and Windows.
 </p>
 
@@ -314,6 +343,37 @@ can be remedied as explained in
 <a href="#composite_key_no_pts">"<code>composite_key</code>
 in compilers without partial template specialization"</a>.
 </p>
+
+<blockquote><hr></blockquote>
+
+<p>
+Due to problems with function template ordering support,
+<a href="reference/key_extraction.html#composite_key_compare"><code>composite_key_compare</code></a>
+and related classes do not accept the notational variations of
+<code>operator()</code> where one of the operands is treated as if
+included into a tuple of length 1. As a result, the user cannot ever
+omit tuple enclosing when specifying the arguments of lookup operations
+involving composite keys.
+</p>
+
+<blockquote><hr></blockquote>
+
+<p>
+Predefined key extractors instantiated on a given type do not accept
+objects of derived types. For instance:
+</p>
+
+<blockquote><pre>
+<span class=keyword>struct</span> <span class=identifier>base</span><span class=special>{};</span>
+<span class=keyword>struct</span> <span class=identifier>derived</span><span class=special>:</span><span class=keyword>public</span> <span class=identifier>base</span><span class=special>{};</span>
+<span class=special>...</span>
+
+<span class=identifier>identity</span><span class=special>&lt;</span><span class=identifier>base</span><span class=special>&gt;</span> <span class=identifier>key_extractor</span><span class=special>;</span>
+<span class=identifier>derived</span>        <span class=identifier>x</span><span class=special>;</span>
+
+<span class=comment>// not accepted by this compiler: an explicit cast to base is required</span>
+<span class=identifier>key_extractor</span><span class=special>(</span><span class=identifier>x</span><span class=special>);</span>
+</pre></blockquote>
 
 <blockquote><hr></blockquote>
 
@@ -492,6 +552,37 @@ can be remedied as explained in
 <a href="#composite_key_no_pts">"<code>composite_key</code>
 in compilers without partial template specialization"</a>.
 </p>
+
+<blockquote><hr></blockquote>
+
+<p>
+Due to problems with function template ordering support,
+<a href="reference/key_extraction.html#composite_key_compare"><code>composite_key_compare</code></a>
+and related classes do not accept the notational variations of
+<code>operator()</code> where one of the operands is treated as if
+included into a tuple of length 1. As a result, the user cannot ever
+omit tuple enclosing when specifying the arguments of lookup operations
+involving composite keys.
+</p>
+
+<blockquote><hr></blockquote>
+
+<p>
+Predefined key extractors instantiated on a given type do not accept
+objects of derived types. For instance:
+</p>
+
+<blockquote><pre>
+<span class=keyword>struct</span> <span class=identifier>base</span><span class=special>{};</span>
+<span class=keyword>struct</span> <span class=identifier>derived</span><span class=special>:</span><span class=keyword>public</span> <span class=identifier>base</span><span class=special>{};</span>
+<span class=special>...</span>
+
+<span class=identifier>identity</span><span class=special>&lt;</span><span class=identifier>base</span><span class=special>&gt;</span> <span class=identifier>key_extractor</span><span class=special>;</span>
+<span class=identifier>derived</span>        <span class=identifier>x</span><span class=special>;</span>
+
+<span class=comment>// not accepted by this compiler: an explicit cast to base is required</span>
+<span class=identifier>key_extractor</span><span class=special>(</span><span class=identifier>x</span><span class=special>);</span>
+</pre></blockquote>
 
 <h2><a name="msvc_71">Microsoft Visual C++ 7.1</a></h2>
 
@@ -939,9 +1030,9 @@ Performance
 
 <br>
 
-<p>Revised October 17th 2005</p>
+<p>Revised February 6th 2006</p>
 
-<p>&copy; Copyright 2003-2005 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
+<p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
 License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
 LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
