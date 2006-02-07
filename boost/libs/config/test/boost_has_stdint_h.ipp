@@ -30,10 +30,10 @@ int test()
    // QNX has these under non-standard names, our cstdint.hpp will find them however:
    int_fast8_t j = 0;
    int_least8_t k = 0;
-#endif
-   (void)i;
    (void)j;
    (void)k;
+#endif
+   (void)i;
 
    return 0;
 }
