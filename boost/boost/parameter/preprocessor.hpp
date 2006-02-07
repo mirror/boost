@@ -21,33 +21,104 @@
 # include <boost/preprocessor/seq/for_each_product.hpp>
 # include <boost/preprocessor/seq/for_each_i.hpp> 
 # include <boost/preprocessor/tuple/elem.hpp> 
-# include <boost/mpl/always.hpp>
 # include <boost/preprocessor/seq/fold_left.hpp>
 # include <boost/preprocessor/seq/size.hpp>
 
+# include <boost/mpl/always.hpp>
+# include <boost/mpl/apply_wrap.hpp>
+
 namespace boost { namespace parameter { namespace aux {
+
+# if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+
+template<typename ID>
+struct msvc_extract_type
+{
+    template<bool>
+    struct id2type_impl;
+
+    typedef id2type_impl<true> id2type;
+};
+
+template<typename T, typename ID>
+struct msvc_register_type : msvc_extract_type<ID>
+{
+    template<>
+    struct id2type_impl<true>  //VC7.0 specific bugfeature
+    {
+        typedef T type;
+    };
+};
+
+template <class T, unsigned Dummy>
+struct wrapped
+{};
+
+template <class T>
+msvc_register_type<
+    is_convertible<mpl::_, T>
+  , wrapped<void*(T),0> 
+> 
+unwrap_predicate_fn(wrapped<void*(T),0>);
+
+template <class T>
+msvc_register_type<T, wrapped<void**(T),0> > 
+unwrap_predicate_fn(wrapped<void**(T),0>);
+
+template <class T, class Dummy>
+struct unwrap_predicate
+{
+    BOOST_STATIC_CONSTANT(unsigned,
+        dummy = sizeof(unwrap_predicate_fn(wrapped<T,0>()))
+    );
+
+    typedef typename msvc_extract_type<wrapped<T,0> >::id2type::type type;
+};
+
+template <>
+struct unwrap_predicate<void**,int>
+{
+    typedef int type;
+};
+
+template <class T>
+msvc_register_type<T, wrapped<void(*)(T),1> > unwrap_type_fn(void(*)(T));
+
+template <class T>
+struct unwrap_type
+{
+    BOOST_STATIC_CONSTANT(unsigned,
+        dummy = sizeof(unwrap_type_fn((T)0))
+    );
+
+    typedef typename msvc_extract_type<wrapped<T,1> >::id2type::type type;
+};
+
+#  define BOOST_PARAMETER_FUNCTION_WRAP_TYPE(x) void(*) x
+
+# else
 
 template <class T, class Dummy>
 struct unwrap_predicate;
 
 // Wildcard case
 template <>
-struct unwrap_predicate<void*,int>
+struct unwrap_predicate<void**,int>
 {
     typedef mpl::always<mpl::true_> type;
 };
 
 // Convertible to
 template <class T>
-struct unwrap_predicate<void* (T),int>
+struct unwrap_predicate<void** (T),int>
 {
     typedef T type;
 };
 
 template <class T>
-struct unwrap_predicate<void (T),int>
+struct unwrap_predicate<void* (T),int>
 {
-    typedef boost::is_convertible<mpl::_, T> type;
+    typedef is_convertible<mpl::_, T> type;
 };
 
 template <class T>
@@ -58,6 +129,10 @@ struct unwrap_type<void (T)>
 {
     typedef T type;
 };
+
+#  define BOOST_PARAMETER_FUNCTION_WRAP_TYPE(x) void x
+
+# endif
 
 template <
     class Parameters
@@ -78,10 +153,11 @@ template <
     )
 >
 struct argument_pack
-  : Parameters::template argument_pack<
+{
+    typedef typename Parameters::template argument_pack<
         BOOST_PP_ENUM_PARAMS(BOOST_PARAMETER_MAX_ARITY, A)
-    >
-{};
+    >::type type;
+};
 
 }}} // namespace boost::parameter::aux
 
@@ -144,22 +220,15 @@ struct argument_pack
     template<BOOST_PP_ENUM_PARAMS_Z(z, n, class ParameterArgumentType)>
 /**/
 
-# if 0
-#  define BOOST_PARAMETER_FUNCTION_FWD_MATCH(name, parameters, n) \
-    , BOOST_PARAMETER_MATCH( \
-        BOOST_PARAMETER_FUNCTION_PARAMETERS_TYPE( \
-            parameters \
-        ) \
-      , BOOST_PP_REPEAT(n, BOOST_PARAMETER_FUNCTION_FWD_MATCH_ARG, ~) \
-      , boost_parameter_enabler_argument \
-    )
-# else
+# ifndef BOOST_NO_SFINAE
 #  define BOOST_PARAMETER_FUNCTION_FWD_MATCH_Z(z, name, parameters, n) \
     , typename boost::parameter::aux::match< \
           parameters, BOOST_PP_ENUM_PARAMS(n, ParameterArgumentType) \
       >::type boost_parameter_enabler_argument = parameters()
-/**/
+# else
+#  define BOOST_PARAMETER_FUNCTION_FWD_MATCH_Z(z, name, parameters, n)
 # endif
+/**/
 
 # define BOOST_PARAMETER_FUNCTION_PARAMETERS_NAME(base) \
     BOOST_PP_CAT(BOOST_PP_CAT(base, _parameters), __LINE__)
@@ -271,7 +340,7 @@ struct argument_pack
             BOOST_PARAMETER_FN_ARG_NAME(elem) \
         ) \
       , typename boost::parameter::aux::unwrap_predicate< \
-            void BOOST_PARAMETER_FN_ARG_PRED(elem) \
+            void* BOOST_PARAMETER_FN_ARG_PRED(elem) \
           , BoostParameterDummyTemplateArg \
         >::type \
     >
@@ -306,7 +375,9 @@ struct argument_pack
               : boost::parameter::binding<Args, K, Default> \
             {}; \
 \
-            typedef typename boost::parameter::aux::unwrap_type<void result>::type type; \
+            typedef boost::parameter::aux::unwrap_type< \
+                BOOST_PARAMETER_FUNCTION_WRAP_TYPE(result) \
+            >::type type; \
         }; \
     };
 /**/
@@ -410,7 +481,9 @@ struct argument_pack
           , n \
         ) \
     ) \
-      : boost::parameter::aux::unwrap_type<void BOOST_PP_TUPLE_ELEM(6,3,data)>::type( \
+      : boost::parameter::aux::unwrap_type< \
+            BOOST_PARAMETER_FUNCTION_WRAP_TYPE(BOOST_PP_TUPLE_ELEM(6,3,data)) \
+        >::type( \
             BOOST_PP_CAT(constructor_parameters, __LINE__)()( \
                 BOOST_PP_ENUM_PARAMS_Z(z, n, a) \
             ) \
