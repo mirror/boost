@@ -32,7 +32,7 @@
 #include "boost/iterator/reverse_iterator.hpp"
 #include "boost/static_assert.hpp"
 #include "boost/type.hpp"
-#include <cassert>
+#include "boost/assert.hpp"
 #include <cstddef>
 #include <memory>
 
@@ -129,11 +129,13 @@ protected:
   Reference access(boost::type<Reference>,index idx,TPtr base,
                    const size_type* extents,
                    const index* strides,
-                   const index* index_base) const {
+                   const index* index_bases) const {
 
+    BOOST_ASSERT(idx - index_bases[0] >= 0);
+    BOOST_ASSERT(idx - index_bases[0] < extents[0]);
     // return a sub_array<T,NDims-1> proxy object
     TPtr newbase = base + idx * strides[0];
-    return Reference(newbase,extents+1,strides+1,index_base+1);
+    return Reference(newbase,extents+1,strides+1,index_bases+1);
 
   }
 
@@ -165,9 +167,13 @@ protected:
   // used by array operator[] and iterators to get reference types.
   template <typename Reference, typename TPtr>
   Reference access(boost::type<Reference>,index idx,TPtr base,
-                   const size_type*,
+                   const size_type* extents,
                    const index* strides,
-                   const index*) const {
+                   const index* index_bases) const {
+    // in case BOOST_ASSERT is disabled, index_bases and extents are unused,
+    // which may cause a warning.
+    BOOST_ASSERT(idx - index_bases[0] >= 0);
+    BOOST_ASSERT(idx - index_bases[0] < extents[0]);
     return *(base + idx * strides[0]);
   }
 
@@ -433,7 +439,7 @@ protected:
         ++dim;
       }
     }
-    assert (dim == NDims);
+    BOOST_ASSERT(dim == NDims);
 
     return
       ArrayRef(base+offset,
