@@ -15,16 +15,16 @@ template <class T> void unused(T const&) {}
 
 BOOST_AUTO_TEST_CASE(fwd_test)
 {
-    test_type1<int> x1(3);
-    test_type1<std::string> y1("Black");
-    test_type2<int> x2(25, 16);
-    test_type2<std::string> y2("White", "Green");
+    test::test_type1<int> x1(3);
+    test::test_type1<std::string> y1("Black");
+    test::test_type2<int> x2(25, 16);
+    test::test_type2<std::string> y2("White", "Green");
 
     std::vector<int> empty;
     std::vector<std::string> empty2;
 
-    test_type3<int> x3(empty.begin(), empty.end());
-    test_type3<std::string> y3(empty2.begin(), empty2.end());
+    test::test_type3<int> x3(empty.begin(), empty.end());
+    test::test_type3<std::string> y3(empty2.begin(), empty2.end());
 
     // Prevent gcc warnings:
     unused(x1); unused(x2); unused(x3);
