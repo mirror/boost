@@ -90,6 +90,13 @@ void check_partial_workaround()
 
 }
 
+#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+void check_partial_workaround()
+{
+}
+
+#endif
 
 #include <boost/test/unit_test.hpp>
 using boost::unit_test::test_suite;
@@ -102,14 +109,3 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
 
     return test;
 }
-
-#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
-int main()
-{
-    // always succeed
-    return 0;
-}
-
-#endif
-
