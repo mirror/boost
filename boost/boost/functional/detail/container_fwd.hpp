@@ -11,6 +11,20 @@
 #include <boost/detail/workaround.hpp>
 #include <cstddef>
 
+#if (defined(__GLIBCXX__) && defined(_GLIBCXX_DEBUG)) || \
+    BOOST_WORKAROUND(__BORLANDC__, > 0x551)
+
+#include <deque>
+#include <list>
+#include <vector>
+#include <map>
+#include <set>
+#include <bitset>
+#include <string>
+#include <complex>
+
+#else
+
 #if !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION) && \
         defined(__STL_CONFIG_H)
 
@@ -36,26 +50,21 @@
 #define BOOST_HASH_CHAR_TRAITS char_traits
 #endif
 
+#if defined(BOOST_MSVC)
+#pragma warning(push)
+#pragma warning(disable:4099) // struct/class mismatch in fwd declarations
+#endif
+
 namespace std
 {
     template <class T> class allocator;
     template <class charT, class traits, class Allocator> class basic_string;
     template <class charT> struct BOOST_HASH_CHAR_TRAITS;
-
-#if BOOST_WORKAROUND(__GNUC__, < 3) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
-    template <class charT> class string_char_traits;
-#else
-    template <class charT> class char_traits;
-#endif
     template <class T> class complex;
 }
 
 // gcc 3.4 and greater
-#if defined(__GLIBCXX__) && defined(_GLIBCXX_DEBUG)
-namespace __gnu_debug_def
-#else
 namespace std
-#endif
 {
 #if !defined(BOOST_CONTAINER_FWD_BAD_DEQUE)
     template <class T, class Allocator> class deque;
@@ -74,5 +83,11 @@ namespace std
 #endif
     template <class T1, class T2> struct pair;
 }
+
+#if defined(BOOST_MSVC)
+#pragma warning(pop)
+#endif
+
+#endif
 
 #endif
