@@ -264,6 +264,13 @@
 #     define BOOST_NO_HASH
 #  endif
 
+//
+// Set BOOST_SLIST_HEADER if not set already:
+//
+#if defined(BOOST_HAS_SLIST) && !defined(BOOST_SLIST_HEADER)
+#  define BOOST_SLIST_HEADER <slist>
+#endif
+
 //  BOOST_HAS_ABI_HEADERS
 //  This macro gets set if we have headers that fix the ABI,
 //  and prevent ODR violations when linking to external libraries:
