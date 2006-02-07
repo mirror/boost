@@ -170,8 +170,9 @@ protected:
                    const size_type* extents,
                    const index* strides,
                    const index* index_bases) const {
-    // in case BOOST_ASSERT is disabled, index_bases and extents are unused,
-    // which may cause a warning.
+
+    ignore_unused_variable_warning(index_bases);
+    ignore_unused_variable_warning(extents);
     BOOST_ASSERT(idx - index_bases[0] >= 0);
     BOOST_ASSERT(idx - index_bases[0] < extents[0]);
     return *(base + idx * strides[0]);
@@ -313,9 +314,22 @@ protected:
 
   // Used by operator() in our array classes
   template <typename Reference, typename IndexList, typename TPtr>
-  Reference access_element(boost::type<Reference>, TPtr base,
+  Reference access_element(boost::type<Reference>,
                            const IndexList& indices,
-                           const index* strides) const {
+                           TPtr base,
+                           const size_type* extents,
+                           const index* strides,
+                           const index* index_bases) const {
+
+    ignore_unused_variable_warning(index_bases);
+    ignore_unused_variable_warning(extents);
+#if !defined(NDEBUG) && !defined(BOOST_DISABLE_ASSERTS)
+    for (size_type n = 0; n != NumDims; ++n) {
+      BOOST_ASSERT(indices[n] - index_bases[n] >= 0);
+      BOOST_ASSERT(indices[n] - index_bases[n] < extents[n]);
+    }
+#endif
+
     index offset = 0;
     for (size_type n = 0; n != NumDims; ++n) 
       offset += indices[n] * strides[n];
