@@ -19,6 +19,11 @@
 # include <boost/preprocessor/repetition/enum_trailing.hpp>
 # include <boost/preprocessor/seq/first_n.hpp>
 # include <boost/preprocessor/seq/for_each_product.hpp>
+# include <boost/preprocessor/seq/for_each_i.hpp> 
+# include <boost/preprocessor/tuple/elem.hpp> 
+# include <boost/mpl/always.hpp>
+# include <boost/preprocessor/seq/fold_left.hpp>
+# include <boost/preprocessor/seq/size.hpp>
 
 namespace boost { namespace parameter { namespace aux {
 
@@ -80,16 +85,7 @@ struct argument_pack
 
 }}} // namespace boost::parameter::aux
 
-# include <boost/parameter/python/aux_/flatten.hpp>
-
-# include <boost/preprocessor/seq/for_each_i.hpp> 
-# include <boost/preprocessor/tuple/elem.hpp> 
-
-# include <boost/mpl/always.hpp>
-
 // Calculates [begin, end) arity range.
-# include <boost/preprocessor/seq/fold_left.hpp>
-# include <boost/preprocessor/seq/size.hpp>
 
 # define BOOST_PARAMETER_ARITY_RANGE_M_optional(state) state
 # define BOOST_PARAMETER_ARITY_RANGE_M_required(state) BOOST_PP_INC(state)
