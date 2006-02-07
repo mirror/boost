@@ -25,6 +25,7 @@
 #include "boost/multi_array/storage_order.hpp"
 #include "boost/multi_array/types.hpp"
 #include "boost/config.hpp"
+#include "boost/multi_array/concept_checks.hpp" //for ignore_unused_...
 #include "boost/mpl/eval_if.hpp"
 #include "boost/mpl/if.hpp"
 #include "boost/mpl/size_t.hpp"
@@ -132,7 +133,7 @@ protected:
                    const index* index_bases) const {
 
     BOOST_ASSERT(idx - index_bases[0] >= 0);
-    BOOST_ASSERT(idx - index_bases[0] < extents[0]);
+    BOOST_ASSERT(size_type(idx - index_bases[0]) < extents[0]);
     // return a sub_array<T,NDims-1> proxy object
     TPtr newbase = base + idx * strides[0];
     return Reference(newbase,extents+1,strides+1,index_bases+1);
@@ -174,7 +175,7 @@ protected:
     ignore_unused_variable_warning(index_bases);
     ignore_unused_variable_warning(extents);
     BOOST_ASSERT(idx - index_bases[0] >= 0);
-    BOOST_ASSERT(idx - index_bases[0] < extents[0]);
+    BOOST_ASSERT(size_type(idx - index_bases[0]) < extents[0]);
     return *(base + idx * strides[0]);
   }
 
@@ -326,7 +327,7 @@ protected:
 #if !defined(NDEBUG) && !defined(BOOST_DISABLE_ASSERTS)
     for (size_type n = 0; n != NumDims; ++n) {
       BOOST_ASSERT(indices[n] - index_bases[n] >= 0);
-      BOOST_ASSERT(indices[n] - index_bases[n] < extents[n]);
+      BOOST_ASSERT(size_type(indices[n] - index_bases[n]) < extents[n]);
     }
 #endif
 
