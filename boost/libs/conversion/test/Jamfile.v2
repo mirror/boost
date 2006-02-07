@@ -20,7 +20,7 @@ test-suite conversion
     [ compile-fail implicit_cast_fail.cpp ]
     [ run ../cast_test.cpp ]
     [ run ../numeric_cast_test.cpp ]    
-    [ run ../lexical_cast_test.cpp ]
+    [ run ../lexical_cast_test.cpp ../../test/build//boost_unit_test_framework ]
   ;
 
       
