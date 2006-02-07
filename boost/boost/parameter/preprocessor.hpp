@@ -50,39 +50,8 @@ struct msvc_register_type : msvc_extract_type<ID>
     };
 };
 
-template <class T, unsigned Dummy>
-struct wrapped
-{};
-
 template <class T>
-msvc_register_type<
-    is_convertible<mpl::_, T>
-  , wrapped<void*(T),0> 
-> 
-unwrap_predicate_fn(wrapped<void*(T),0>);
-
-template <class T>
-msvc_register_type<T, wrapped<void**(T),0> > 
-unwrap_predicate_fn(wrapped<void**(T),0>);
-
-template <class T, class Dummy>
-struct unwrap_predicate
-{
-    BOOST_STATIC_CONSTANT(unsigned,
-        dummy = sizeof(unwrap_predicate_fn(wrapped<T,0>()))
-    );
-
-    typedef typename msvc_extract_type<wrapped<T,0> >::id2type::type type;
-};
-
-template <>
-struct unwrap_predicate<void**,int>
-{
-    typedef int type;
-};
-
-template <class T>
-msvc_register_type<T, wrapped<void(*)(T),1> > unwrap_type_fn(void(*)(T));
+msvc_register_type<T, void(*)(T)> unwrap_type_fn(void(*)(T));
 
 template <class T>
 struct unwrap_type
@@ -91,7 +60,7 @@ struct unwrap_type
         dummy = sizeof(unwrap_type_fn((T)0))
     );
 
-    typedef typename msvc_extract_type<wrapped<T,1> >::id2type::type type;
+    typedef typename msvc_extract_type<T>::id2type::type type;
 };
 
 #  define BOOST_PARAMETER_FUNCTION_WRAP_TYPE(x) void(*) x
@@ -103,20 +72,20 @@ struct unwrap_predicate;
 
 // Wildcard case
 template <>
-struct unwrap_predicate<void**,int>
+struct unwrap_predicate<void*,int>
 {
     typedef mpl::always<mpl::true_> type;
 };
 
 // Convertible to
 template <class T>
-struct unwrap_predicate<void** (T),int>
+struct unwrap_predicate<void* (T),int>
 {
     typedef T type;
 };
 
 template <class T>
-struct unwrap_predicate<void* (T),int>
+struct unwrap_predicate<void (T),int>
 {
     typedef is_convertible<mpl::_, T> type;
 };
@@ -333,17 +302,28 @@ struct argument_pack
 /**/
 
 // Builds boost::parameter::parameters<> specialization
-# define BOOST_PARAMETER_FUNCTION_PARAMETERS_M(r,tag_namespace,i,elem) \
+# if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#  define BOOST_PARAMETER_FUNCTION_PARAMETERS_M(r,tag_namespace,i,elem) \
     BOOST_PP_COMMA_IF(i) \
     boost::parameter::BOOST_PARAMETER_FN_ARG_QUALIFIER(elem)< \
         tag_namespace::BOOST_PARAMETER_FUNCTION_KEYWORD( \
             BOOST_PARAMETER_FN_ARG_NAME(elem) \
         ) \
       , typename boost::parameter::aux::unwrap_predicate< \
-            void* BOOST_PARAMETER_FN_ARG_PRED(elem) \
+            void BOOST_PARAMETER_FN_ARG_PRED(elem) \
           , BoostParameterDummyTemplateArg \
         >::type \
     >
+# else
+#  define BOOST_PARAMETER_FUNCTION_PARAMETERS_M(r,tag_namespace,i,elem) \
+    BOOST_PP_COMMA_IF(i) \
+    boost::parameter::BOOST_PARAMETER_FN_ARG_QUALIFIER(elem)< \
+        tag_namespace::BOOST_PARAMETER_FUNCTION_KEYWORD( \
+            BOOST_PARAMETER_FN_ARG_NAME(elem) \
+        ) \
+      , boost::mpl::always<boost::mpl::true_> \
+    >
+# endif
 /**/
 
 # define BOOST_PARAMETER_FUNCTION_PARAMETERS(tag_namespace, args) \
