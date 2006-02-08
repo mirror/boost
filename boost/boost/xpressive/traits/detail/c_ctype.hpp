@@ -156,52 +156,61 @@ struct char_class_impl<char>
 template<>
 struct char_class_impl<wchar_t>
 {
-    typedef short char_class_type;
-    BOOST_MPL_ASSERT_RELATION(0x07FF, ==, (_XB|_XA|_XS|_BB|_CN|_DI|_LO|_PU|_SP|_UP|_XD));
-    BOOST_STATIC_CONSTANT(short, char_class_underscore = 0x1000);
-    BOOST_STATIC_CONSTANT(short, char_class_newline = 0x2000);
+    typedef int char_class_type;
+    //BOOST_STATIC_CONSTANT(int, char_class_alnum         = 0x0001);
+    BOOST_STATIC_CONSTANT(int, char_class_alpha         = 0x0002);
+    BOOST_STATIC_CONSTANT(int, char_class_blank         = 0x0004);
+    BOOST_STATIC_CONSTANT(int, char_class_cntrl         = 0x0008);
+    BOOST_STATIC_CONSTANT(int, char_class_digit         = 0x0010);
+    //BOOST_STATIC_CONSTANT(int, char_class_graph         = 0x0020);
+    BOOST_STATIC_CONSTANT(int, char_class_lower         = 0x0040);
+    //BOOST_STATIC_CONSTANT(int, char_class_print         = 0x0080);
+    BOOST_STATIC_CONSTANT(int, char_class_punct         = 0x0100);
+    BOOST_STATIC_CONSTANT(int, char_class_space         = 0x0200);
+    BOOST_STATIC_CONSTANT(int, char_class_upper         = 0x0400);
+    BOOST_STATIC_CONSTANT(int, char_class_underscore    = 0x0800);
+    BOOST_STATIC_CONSTANT(int, char_class_xdigit        = 0x1000);
+    BOOST_STATIC_CONSTANT(int, char_class_newline       = 0x2000);
 
     template<typename FwdIter>
     static char_class_type lookup_classname(FwdIter begin, FwdIter end, bool icase)
     {
         using namespace std;
         wstring const name = classname_w(begin, end);
-        if(name == L"alnum")    return _DI|_LO|_UP|_XA;
-        if(name == L"alpha")    return _LO|_UP|_XA;
-        if(name == L"blank")    return _SP|_XB;
-        if(name == L"cntrl")    return _BB;
-        if(name == L"d")        return _DI;
-        if(name == L"digit")    return _DI;
-        if(name == L"graph")    return _DI|_LO|_PU|_UP|_XA;
-        if(name == L"lower")    return icase ? (_LO|_UP) : _LO;
+        if(name == L"alnum")    return char_class_alpha|char_class_digit;
+        if(name == L"alpha")    return char_class_alpha;
+        if(name == L"blank")    return char_class_blank;
+        if(name == L"cntrl")    return char_class_cntrl;
+        if(name == L"d")        return char_class_digit;
+        if(name == L"digit")    return char_class_digit;
+        if(name == L"graph")    return char_class_punct|char_class_alpha|char_class_digit;
+        if(name == L"lower")    return icase ? (char_class_lower|char_class_upper) : char_class_lower;
         if(name == L"newline")  return char_class_newline;
-        if(name == L"print")    return _DI|_LO|_PU|_SP|_UP|_XA;
-        if(name == L"punct")    return _PU;
-        if(name == L"s")        return _CN|_SP|_XS;
-        if(name == L"space")    return _CN|_SP|_XS;
-        if(name == L"upper")    return icase ? (_UP|_LO) : _UP;
-        if(name == L"w")        return _DI|_LO|_UP|_XA|char_class_underscore;
-        if(name == L"xdigit")   return _XD;
+        if(name == L"print")    return char_class_blank|char_class_punct|char_class_alpha|char_class_digit;
+        if(name == L"punct")    return char_class_punct;
+        if(name == L"s")        return char_class_space;
+        if(name == L"space")    return char_class_space;
+        if(name == L"upper")    return icase ? (char_class_upper|char_class_lower) : char_class_upper;
+        if(name == L"w")        return char_class_alpha|char_class_digit|char_class_underscore;
+        if(name == L"xdigit")   return char_class_xdigit;
         return 0;
     }
 
     static bool isctype(wchar_t ch, char_class_type mask)
     {
         using namespace std;
-        if(0 != iswctype(ch, mask))
-        {
-            return true;
-        }
-
-        switch(ch)
-        {
-        case L'_': return 0 != (mask & char_class_underscore);
-        case L'\n': case L'\r': case L'\f': case 0x2028u: case 0x2029u: case 0x85u:
-            return 0 != (mask & char_class_newline);
-        default:;
-        }
-
-        return false;
+        return ((char_class_alpha & mask) && iswalpha(ch))
+            || ((char_class_blank & mask) && (L' ' == ch || L'\t' == ch)) // BUGBUG
+            || ((char_class_cntrl & mask) && iswcntrl(ch))
+            || ((char_class_digit & mask) && iswdigit(ch))
+            || ((char_class_lower & mask) && iswlower(ch))
+            || ((char_class_newline & mask) && detail::iswnewline(ch))
+            || ((char_class_punct & mask) && iswpunct(ch))
+            || ((char_class_space & mask) && iswspace(ch))
+            || ((char_class_upper & mask) && iswupper(ch))
+            || ((char_class_underscore & mask) && L'_' == ch)
+            || ((char_class_xdigit & mask) && iswxdigit(ch))
+            ;
     }
 };
 #endif
