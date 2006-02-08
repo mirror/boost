@@ -23,11 +23,11 @@ test-suite "multi_index" :
     [ run test_observers.cpp        test_observers_main.cpp        ]    
     [ run test_projection.cpp       test_projection_main.cpp       ]
     [ run test_range.cpp            test_range_main.cpp            ]
+    [ run test_rearrange.cpp        test_rearrange_main.cpp        ]
     [ run test_safe_mode.cpp        test_safe_mode_main.cpp        ]
     [ run test_serialization.cpp    test_serialization_main.cpp
                 /boost/serialization//boost_serialization          ]
     [ run test_set_ops.cpp          test_set_ops_main.cpp          ]
-    [ run test_special_list_ops.cpp test_special_list_ops_main.cpp ]
     [ run test_special_set_ops.cpp  test_special_set_ops_main.cpp  ]
     [ run test_update.cpp           test_update_main.cpp           ]
     ;
