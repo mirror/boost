@@ -45,11 +45,27 @@ local regress-sources = regress/$(R_SOURCE) ;
 
 test-suite regex
       : 
-      [ run regress/$(R_SOURCE) ../build//boost_regex ]
-      #[ run c_compiler_checks/posix_api_check.c ../build//boost_regex ]
-      #[ compile c_compiler_checks/wide_posix_api_check.c  ]
-      [ run c_compiler_checks/posix_api_check.cpp ../build//boost_regex ]
-      [ run c_compiler_checks/wide_posix_api_check.cpp ../build//boost_regex ]
+      [ run regress/$(R_SOURCE) ../build//boost_regex/<link>static
+        : # command line
+        : # input files
+        : # requirements
+        : regex_regress ]
+
+      [ run regress/$(R_SOURCE) ../build//boost_regex
+        : # command line
+        : # input files
+        : # requirements
+        : regex_regress_dll ]
+
+      [ regex-test posix_api_check : c_compiler_checks/posix_api_check.c ]
+
+      [ compile c_compiler_checks/wide_posix_api_check.c 
+        : : wide_posix_api_check_c ]
+
+      [ regex-test posix_api_check_cpp : c_compiler_checks/posix_api_check.cpp ]
+
+      [ regex-test wide_posix_api_check_cpp 
+          : c_compiler_checks/wide_posix_api_check.cpp ]
 
       [ run pathology/bad_expression_test.cpp
             ../build//boost_regex
@@ -67,7 +83,9 @@ test-suite regex
       ]
       
       [ run config_info/regex_config_info.cpp ../build//boost_regex ]
-      [ run collate_info/collate_info.cpp ../build//boost_regex ]
+      [ run collate_info/collate_info.cpp ../build//boost_regex
+      : : : <test-info>always_show_run_output ]
+
 
       [ compile concepts/concept_check.cpp ../build//boost_regex
       ]
