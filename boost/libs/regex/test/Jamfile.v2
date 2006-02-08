@@ -82,7 +82,19 @@ test-suite regex
       [ run object_cache/object_cache_test.cpp ../build//boost_regex
       ]
       
-      [ run config_info/regex_config_info.cpp ../build//boost_regex ]
+      [ run config_info/regex_config_info.cpp 
+         ../build//boost_regex/<link>static 
+         : # command line
+         : # input files
+         : <test-info>always_show_run_output
+      ]
+      [ run config_info/regex_config_info.cpp ../build//boost_regex 
+        : # command line
+        : # input files
+        : <test-info>always_show_run_output
+        : regex_dll_config_info
+      ]    
+
       [ run collate_info/collate_info.cpp ../build//boost_regex
       : : : <test-info>always_show_run_output ]
 
