@@ -186,7 +186,7 @@ static void local_test_safe_mode(
   std::bidirectional_iterator_tag
   BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Policy))
 {
-  local_test_safe_mode<Policy>(std::forward_iterator_tag());
+  ::local_test_safe_mode<Policy>(std::forward_iterator_tag());
 
   typedef typename Policy::container      container;
   typedef typename Policy::index_type     index_type;
@@ -208,7 +208,7 @@ static void local_test_safe_mode(
   std::random_access_iterator_tag
   BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Policy))
 {
-  local_test_safe_mode<Policy>(std::bidirectional_iterator_tag());
+  ::local_test_safe_mode<Policy>(std::bidirectional_iterator_tag());
 
   typedef typename Policy::container      container;
   typedef typename Policy::index_type     index_type;
@@ -234,14 +234,14 @@ template<typename Policy>
 static void local_test_safe_mode(BOOST_EXPLICIT_TEMPLATE_TYPE(Policy))
 {
   typedef typename Policy::index_type::iterator::iterator_category category;
-  local_test_safe_mode<Policy>(category());
+  ::local_test_safe_mode<Policy>(category());
 }
 
 template<typename Policy>
 static void local_test_safe_mode_with_rearrange(
   BOOST_EXPLICIT_TEMPLATE_TYPE(Policy))
 {
-  local_test_safe_mode<Policy>();
+  ::local_test_safe_mode<Policy>();
 
   typedef typename Policy::container      container;
   typedef typename Policy::index_type     index_type;
