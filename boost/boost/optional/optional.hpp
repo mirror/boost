@@ -29,7 +29,9 @@
 #include "boost/none_t.hpp"
 #include "boost/utility/compare_pointees.hpp"
 
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+#include "boost/optional/optional_fwd.hpp"
+
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
 // VC6.0 has the following bug:
 //   When a templated assignment operator exist, an implicit conversion
 //   constructing an optional<T> is used when assigment of the form:
@@ -220,6 +222,23 @@ class optional_base : public optional_tag
       {
         if ( rhs.is_initialized() )
           construct(rhs.get_impl());
+      }
+    }
+
+    // Assigns from another _convertible_ optional<U> (deep-copies the rhs value)
+    template<class U>
+    void assign ( optional<U> const& rhs )
+    {
+      if (is_initialized())
+      {
+        if ( rhs.is_initialized() )
+             assign_value(static_cast<value_type>(rhs.get()), is_reference_predicate() );
+        else destroy();
+      }
+      else
+      {
+        if ( rhs.is_initialized() )
+          construct(static_cast<value_type>(rhs.get()));
       }
     }
 
@@ -481,6 +500,7 @@ class optional : public optional_detail::optional_base<T>
       }
 #endif
 
+
 #ifndef BOOST_OPTIONAL_NO_CONVERTING_ASSIGNMENT
     // Assigns from another convertible optional<U> (converts && deep-copies the rhs value)
     // Requires a valid conversion from U to T.
@@ -488,7 +508,7 @@ class optional : public optional_detail::optional_base<T>
     template<class U>
     optional& operator= ( optional<U> const& rhs )
       {
-        this->assign(rhs.get());
+        this->assign(rhs);
         return *this ;
       }
 #endif
@@ -741,6 +761,11 @@ void optional_swap ( optional<T>& x, optional<T>& y )
 template<class T> inline void swap ( optional<T>& x, optional<T>& y )
 {
   optional_detail::optional_swap(x,y);
+}
+
+template<class T> inline optional<T> make_optional ( T const& v )
+{
+  return optional<T>(v);
 }
 
 } // namespace boost
