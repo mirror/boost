@@ -10,6 +10,9 @@
 //  Anson Tsao        - for the initial inspiration and several good suggestions.
 //  Thorsten Ottosen  - for Boost.Range, and for suggesting a way to detect
 //                      const-qualified rvalues at compile time on VC7.1+
+//  Russell Hind      - For help porting to Borland
+//  Alisdair Meredith - For help porting to Borland
+//  Stefan Slapeta    - For help porting to Intel
 
 #ifndef BOOST_FOREACH
 
@@ -145,7 +148,7 @@ namespace foreach
 //   at the global namespace for your type.
 template<typename T>
 inline boost::foreach::is_lightweight_proxy<T> *
-boost_foreach_is_lightweight_proxy(T *&, ...) { return 0; }
+boost_foreach_is_lightweight_proxy(T *&, boost::foreach::tag) { return 0; }
 
 template<typename T>
 inline boost::mpl::true_ *
@@ -174,7 +177,7 @@ boost_foreach_is_lightweight_proxy(T (*)[N], boost::foreach::tag) { return 0; }
 //   at the global namespace for your type.
 template<typename T>
 inline boost::foreach::is_noncopyable<T> *
-boost_foreach_is_noncopyable(T *&, ...) { return 0; }
+boost_foreach_is_noncopyable(T *&, boost::foreach::tag) { return 0; }
 
 namespace boost
 {
