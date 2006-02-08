@@ -176,7 +176,7 @@ test-suite regex
       [ run config_info/regex_config_info.cpp <template>test 
       : : : <test-info>always_show_run_output ]
 
-      [ run config_info/regex_config_info.cpp <template>test 
+      [ run config_info/regex_config_info.cpp <template>test-dll 
       : : : <test-info>always_show_run_output
       : regex_dll_config_info ]
 
