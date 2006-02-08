@@ -493,7 +493,8 @@ I finally submitted to Boost for review. It was accepted into Boost on May 5, 20
 
 Thanks go out to Anson Tsao of Microsoft for coming up with the idea and demonstrating its feasibility.
 I would also like to thank [@http://boost.org/people/thorsten_ottosen.html Thorsten Ottosen] for
-the _range_ library, on which the current version of _foreach_ is built.
+the _range_ library, on which the current version of _foreach_ is built. Finally, I'd like to thank
+Russell Hind, Alisdair Meredith and Stefan Slapeta for their help porting to various compilers.
 
 [h2 Further Reading]
 
