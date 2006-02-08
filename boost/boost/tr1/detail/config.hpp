@@ -28,6 +28,8 @@
 #     define BOOST_TR1_STD_HEADER(name) <../include_std/name>
 #  elif defined(__DECCXX)
 #     define BOOST_TR1_STD_HEADER(name) <../cxx/name>
+#  elif defined(__BORLANDC__) && __BORLANDC__ >= 0x570
+#     define BOOST_TR1_STD_HEADER(name) <../include/dinkumware/name>
 #  else
 #     define BOOST_TR1_STD_HEADER(name) <../include/name>
 #  endif
