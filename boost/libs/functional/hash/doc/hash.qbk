@@ -285,11 +285,14 @@ Let's say we have a simple custom type:
 
     namespace foo
     {
-        struct custom_type
+        template <class T>
+        class custom_type
         {
-            int value;
+            T value;
+        public:
+            custom_type(T x) : value(x) {}
 
-            friend inline std::size_t hash_value(custom_type x)
+            friend std::size_t hash_value(custom_type x)
             {
                 __boost_hash<int> hasher;
                 return hasher(x.value);
@@ -300,34 +303,48 @@ Let's say we have a simple custom type:
 On a compliant compiler, when `hash_value` is called for this type,
 it will look at the namespace inside the type and find `hash_value`
 but on a compiler which doesn't support ADL `hash_value` won't be found.
+To make things worse, some compilers which do support ADL won't find
+a friend class defined inside the class.
 
-So on these compilers define a member function:
+So move the member function out of the class:
 
-    #ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-            friend inline std::size_t hash_value(custom_type x)
-            {
-                __boost_hash<int> hasher;
-                return hasher(x.value);
-            }
-    #else
-            std::size_t hash() const
-            {
-                __boost_hash<int> hasher;
-                return hasher(value);
-            }
-    #endif
+    namespace foo
+    {
+        template <class T>
+        class custom_type
+        {
+            T value;
+        public:
+            custom_type(T x) : value(x) {}
 
-which will be called from the `boost` namespace:
+            template <class T2>
+            friend std::size_t hash_value(custom_type<T2> x);
+        };
+
+        template <class T>
+        friend inline std::size_t hash_value(custom_type<T> x)
+        {
+            __boost_hash<T> hasher;
+            return hasher(x.value);
+        }
+    }
+
+Now compilers which can't find the friend inside the class will find it.
+On compilers which don't support ADL, define in the boost namespace:
 
     #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
     namespace boost
+    #else
+    namespace foo
+    #endif
     {
-        std::size_t hash_value(foo::custom_type x)
+        template <class T>
+        std::size_t hash_value(foo::custom_type<T> x)
         {
-            return x.hash();
+            boost::hash<T> hasher;
+            return hasher(x.value);
         }
     }
-    #endif
 
 Full code for this example is at
 [@../../libs/functional/hash/examples/portable.cpp /libs/functional/hash/examples/portable.cpp].

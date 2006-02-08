@@ -25,6 +25,7 @@ test-suite functional/hash
         [ run hash_range_test.cpp framework ]
         [ run hash_custom_test.cpp framework ]
         [ run hash_global_namespace_test.cpp framework ]
+        [ run hash_friend_test.cpp framework ]
         [ run hash_built_in_array_test.cpp framework ]
         [ run hash_value_array_test.cpp framework ]
         [ run hash_vector_test.cpp framework ]

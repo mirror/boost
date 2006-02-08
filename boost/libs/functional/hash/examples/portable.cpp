@@ -12,43 +12,37 @@
 
 namespace foo
 {
-    struct custom_type
+    template <class T>
+    class custom_type
     {
-        int value;
+        T value;
+    public:
+        custom_type(T x) : value(x) {}
 
-        custom_type(int x) : value(x) {}
-
-#ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-        friend inline std::size_t hash_value(custom_type x)
-        {
-            boost::hash<int> hasher;
-            return hasher(x.value);
-        }
-#else
-        std::size_t hash() const
-        {
-            boost::hash<int> hasher;
-            return hasher(value);
-        }
-#endif
+        template <class T2>
+        friend std::size_t hash_value(foo::custom_type<T2> x);
     };
 }
 
 #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
 namespace boost
+#else
+namespace foo
+#endif
 {
-    std::size_t hash_value(foo::custom_type x)
+    template <class T>
+    std::size_t hash_value(foo::custom_type<T> x)
     {
-        return x.hash();
+        boost::hash<T> hasher;
+        return hasher(x.value);
     }
 }
-#endif
 
 int main()
 {
-    foo::custom_type x(1), y(2), z(1);
+    foo::custom_type<int> x(1), y(2), z(1);
 
-    boost::hash<foo::custom_type> hasher;
+    boost::hash<foo::custom_type<int> > hasher;
 
     assert(hasher(x) == hasher(x));
     assert(hasher(x) != hasher(y));

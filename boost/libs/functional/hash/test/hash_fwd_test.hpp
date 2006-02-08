@@ -14,29 +14,32 @@
 
 namespace test {
 
-template <class T>
-struct test_type1
-{
-    T value;
-    test_type1(T const& x) : value(x) {}
+    template <class T>
+    struct test_type1
+    {
+        T value;
+        test_type1(T const& x) : value(x) {}
+    };
 
 #if !defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
-    friend std::size_t hash_value(test_type1<T> const& x)
+    template <class T>
+    std::size_t hash_value(test_type1<T> const& x)
     {
         HASH_NAMESPACE::hash<T> hasher;
         return hasher(x.value);
     }
 #endif
-};
 
-template <class T>
-struct test_type2
-{
-    T value1, value2;
-    test_type2(T const& x, T const& y) : value1(x), value2(y) {}
+    template <class T>
+    struct test_type2
+    {
+        T value1, value2;
+        test_type2(T const& x, T const& y) : value1(x), value2(y) {}
+    };
 
 #if !defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
-    friend std::size_t hash_value(test_type2<T> const& x)
+    template <class T>
+    std::size_t hash_value(test_type2<T> const& x)
     {
         std::size_t seed = 0;
         HASH_NAMESPACE::hash_combine(seed, x.value1);
@@ -44,28 +47,28 @@ struct test_type2
         return seed;
     }
 #endif
-};
 
-template <class T>
-struct test_type3
-{
-    std::vector<T> values;
-    test_type3(typename std::vector<T>::iterator x,
-            typename std::vector<T>::iterator y) : values(x, y) {}
+    template <class T>
+    struct test_type3
+    {
+        std::vector<T> values;
+        test_type3(typename std::vector<T>::iterator x,
+                typename std::vector<T>::iterator y) : values(x, y) {}
+    };
 
 #if !defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
-    friend std::size_t hash_value(test_type3<T> const& x)
+    template <class T>
+    std::size_t hash_value(test_type3<T> const& x)
     {
         std::size_t seed = HASH_NAMESPACE::hash_range(x.values.begin(), x.values.end());
         HASH_NAMESPACE::hash_range(seed, x.values.begin(), x.values.end());
         return seed;
     }
 #endif
-};
 
 }
 
-#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOPUP)
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
 
 namespace boost
 {

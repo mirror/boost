@@ -33,6 +33,7 @@ rule hash-test ( names + : extras * )
             [ hash-test hash_range_test ]
             [ hash-test hash_custom_test ]
             [ hash-test hash_global_namespace_test ]
+            [ hash-test hash_friend_test ]
             [ hash-test hash_built_in_array_test ]
             [ hash-test hash_value_array_test ]
             [ hash-test hash_vector_test ]
