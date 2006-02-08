@@ -164,11 +164,7 @@ boost_foreach_is_lightweight_proxy(boost::sub_range<T> *&, boost::foreach::tag) 
 
 template<typename T>
 inline boost::mpl::true_ *
-boost_foreach_is_lightweight_proxy(T **, boost::foreach::tag) { return 0; }
-
-template<typename T, std::size_t N>
-inline boost::mpl::false_ *
-boost_foreach_is_lightweight_proxy(T (*)[N], boost::foreach::tag) { return 0; }
+boost_foreach_is_lightweight_proxy(T **&, boost::foreach::tag) { return 0; }
 
 ///////////////////////////////////////////////////////////////////////////////
 // boost_foreach_is_noncopyable
@@ -318,7 +314,11 @@ inline T *&to_ptr(T const &)
 // Borland needs a little extra help with arrays
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 template<typename T,std::size_t N>
-inline T (*to_ptr(T (&t)[N]))[N]  { return 0; }
+inline T (*&to_ptr(T (&t)[N]))[N]
+{
+    static T (*t)[N] = 0;
+    return t;
+}
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
