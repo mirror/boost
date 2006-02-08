@@ -134,7 +134,7 @@ basic_binary_oprimitive<Archive, Elem, Tr>::save_binary(
         static_cast<const Elem *>(address), 
         count
     );
-    if(count != scount)
+    if(count != static_cast<std::size_t>(scount))
         boost::throw_exception(archive_exception(archive_exception::stream_error));
     //os.write(
     //    static_cast<const BOOST_DEDUCED_TYPENAME OStream::char_type *>(address), 

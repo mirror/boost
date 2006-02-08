@@ -21,6 +21,7 @@
 #include <boost/config.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/serialization.hpp>
+#include <boost/serialization/version.hpp>
 
 namespace boost{
 namespace serialization {
