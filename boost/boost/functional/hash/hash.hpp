@@ -113,25 +113,9 @@ namespace boost
         return x + (x >> 3);
     }
 
+#if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
     namespace hash_detail
     {
-#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-        // This allows boost::hash to be specialised for classes in the
-        // standard namespace. It appears that a strict two phase template
-        // implementation only finds overloads that are in the current
-        // namespace at the point of definition (at instantiation
-        // it only finds new overloads via. ADL on the dependant paramters or
-        // something like that).
-        template <class T>
-        struct call_hash
-        {
-            static std::size_t call(T const& v)
-            {
-                using namespace boost;
-                return hash_value(v);
-            }
-        };
-#else // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
         template <bool IsArray>
         struct call_hash_impl
         {
@@ -170,8 +154,8 @@ namespace boost
                 ::BOOST_NESTED_TEMPLATE inner<T>
         {
         };
-#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     }
+#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     template <class T>
@@ -181,8 +165,8 @@ namespace boost
     inline void hash_combine(std::size_t& seed, T const& v)
 #endif
     {
-        seed ^= hash_detail::call_hash<T>::call(v)
-            + 0x9e3779b9 + (seed<<6) + (seed>>2);
+        boost::hash<T> hasher;
+        seed ^= hasher(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
     }
 
     template <class It>
@@ -215,8 +199,8 @@ namespace boost
 
         for(; first != last; ++first)
         {
-            seed ^= hash_detail::call_hash<T>::call(*first)
-                + 0x9e3779b9 + (seed<<6) + (seed>>2);
+            boost::hash<T> hasher;
+            seed ^= hasher(*first) + 0x9e3779b9 + (seed<<6) + (seed>>2);
         }
 
         return seed;
@@ -227,8 +211,8 @@ namespace boost
     {
         for(; first != last; ++first)
         {
-            seed ^= hash_detail::call_hash<T>::call(*first)
-                + 0x9e3779b9 + (seed<<6) + (seed>>2);
+            boost::hash<T> hasher;
+            seed ^= hasher(*first) + 0x9e3779b9 + (seed<<6) + (seed>>2);
         }
     }
 #endif
@@ -329,6 +313,12 @@ namespace boost
     template <class T> struct hash
         : std::unary_function<T, std::size_t>
     {
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+        std::size_t operator()(T const& val) const
+        {
+            return hash_value(val);
+        }
+#else
         std::size_t operator()(T const& val) const
         {
             return hash_detail::call_hash<T>::call(val);
@@ -339,7 +329,8 @@ namespace boost
         {
             return hash_detail::call_hash<T>::call(val);
         }
-#endif        
+#endif
+#endif
     };
 }
 
