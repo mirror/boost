@@ -14,8 +14,7 @@
 #  endif
 #endif
 
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 #ifdef TEST_EXTENSIONS
 
@@ -26,3 +25,12 @@ using std::vector;
 #include "./hash_sequence_test.hpp"
 
 #endif // TEST_EXTENSIONS
+
+int main()
+{
+#ifdef TEST_EXTENSIONS
+    vector_tests::vector_hash_integer_tests();
+#endif
+
+    return boost::report_errors();
+}

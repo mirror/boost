@@ -17,12 +17,11 @@
 #  endif
 #endif
 
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 #ifdef TEST_EXTENSIONS
 
-BOOST_AUTO_TEST_CASE(array_int_test)
+void array_int_test()
 {
     const int array1[25] = {
         26, -43, 32, 65, 45,
@@ -39,17 +38,28 @@ BOOST_AUTO_TEST_CASE(array_int_test)
     int array3[2] = {2, 3};
     HASH_NAMESPACE::hash<int[2]> hasher3;
 
-    BOOST_CHECK(hasher1(array1) == HASH_NAMESPACE::hash_value(array1));
-    BOOST_CHECK(hasher2(array2) == HASH_NAMESPACE::hash_value(array2));
-    BOOST_CHECK(hasher3(array3) == HASH_NAMESPACE::hash_value(array3));
+    BOOST_TEST(hasher1(array1) == HASH_NAMESPACE::hash_value(array1));
+    BOOST_TEST(hasher2(array2) == HASH_NAMESPACE::hash_value(array2));
+    BOOST_TEST(hasher3(array3) == HASH_NAMESPACE::hash_value(array3));
 }
 
-BOOST_AUTO_TEST_CASE(two_dimensional_array_test)
+void two_dimensional_array_test()
 {
     int array[3][2] = {{-5, 6}, {7, -3}, {26, 1}};
     HASH_NAMESPACE::hash<int[3][2]> hasher;
 
-    BOOST_CHECK(hasher(array) == HASH_NAMESPACE::hash_value(array));
+    BOOST_TEST(hasher(array) == HASH_NAMESPACE::hash_value(array));
 }
 
 #endif
+
+int main()
+{
+#ifdef TEST_EXTENSIONS
+    array_int_test();
+    two_dimensional_array_test();
+#endif
+
+    return boost::report_errors();
+}
+

@@ -6,8 +6,6 @@
 
 import testing ;
 
-alias framework : /boost/test//boost_unit_test_framework ;
-
 project hash-tests
     : requirements
         <toolset>gcc:<define>_GLIBCXX_DEBUG
@@ -15,24 +13,24 @@ project hash-tests
 
 test-suite functional/hash
     :
-        [ run hash_fwd_test_1.cpp framework ]
-        [ run hash_fwd_test_2.cpp framework ]
-        [ run hash_number_test.cpp framework ]
-        [ run hash_pointer_test.cpp framework ]
-        [ run hash_function_pointer_test.cpp framework ]
-        [ run hash_float_test.cpp framework : : : <test-info>always_show_run_output ]
-        [ run hash_string_test.cpp framework ]
-        [ run hash_range_test.cpp framework ]
-        [ run hash_custom_test.cpp framework ]
-        [ run hash_global_namespace_test.cpp framework ]
-        [ run hash_friend_test.cpp framework ]
-        [ run hash_built_in_array_test.cpp framework ]
-        [ run hash_value_array_test.cpp framework ]
-        [ run hash_vector_test.cpp framework ]
-        [ run hash_list_test.cpp framework ]
-        [ run hash_deque_test.cpp framework ]
-        [ run hash_set_test.cpp framework ]
-        [ run hash_map_test.cpp framework ]
+        [ run hash_fwd_test_1.cpp ]
+        [ run hash_fwd_test_2.cpp ]
+        [ run hash_number_test.cpp ]
+        [ run hash_pointer_test.cpp ]
+        [ run hash_function_pointer_test.cpp ]
+        [ run hash_float_test.cpp : : : <test-info>always_show_run_output ]
+        [ run hash_string_test.cpp ]
+        [ run hash_range_test.cpp ]
+        [ run hash_custom_test.cpp ]
+        [ run hash_global_namespace_test.cpp ]
+        [ run hash_friend_test.cpp ]
+        [ run hash_built_in_array_test.cpp ]
+        [ run hash_value_array_test.cpp ]
+        [ run hash_vector_test.cpp ]
+        [ run hash_list_test.cpp ]
+        [ run hash_deque_test.cpp ]
+        [ run hash_set_test.cpp ]
+        [ run hash_map_test.cpp ]
         [ run link_test.cpp link_test_2.cpp ]
         [ run container_fwd_test.cpp ]
     ;

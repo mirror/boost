@@ -12,8 +12,7 @@
 #  include <boost/functional/hash/hash.hpp>
 #endif
 
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 #include <boost/limits.hpp>
 #include <boost/mpl/assert.hpp>
@@ -21,7 +20,7 @@
 
 #include "./compile_time.hpp"
 
-BOOST_AUTO_TEST_CASE(pointer_tests)
+void pointer_tests()
 {
     compile_time_tests((int**) 0);
     compile_time_tests((void**) 0);
@@ -32,14 +31,20 @@ BOOST_AUTO_TEST_CASE(pointer_tests)
     int int1;
     int int2;
 
-    BOOST_CHECK(x1(0) == x2(0));
-    BOOST_CHECK(x1(&int1) == x2(&int1));
-    BOOST_CHECK(x1(&int2) == x2(&int2));
+    BOOST_TEST(x1(0) == x2(0));
+    BOOST_TEST(x1(&int1) == x2(&int1));
+    BOOST_TEST(x1(&int2) == x2(&int2));
 #if defined(TEST_EXTENSIONS)
-    BOOST_CHECK(x1(&int1) == HASH_NAMESPACE::hash_value(&int1));
-    BOOST_CHECK(x1(&int2) == HASH_NAMESPACE::hash_value(&int2));
+    BOOST_TEST(x1(&int1) == HASH_NAMESPACE::hash_value(&int1));
+    BOOST_TEST(x1(&int2) == HASH_NAMESPACE::hash_value(&int2));
 
     // This isn't specified in Peter's proposal:
-    BOOST_CHECK(x1(0) == 0);
+    BOOST_TEST(x1(0) == 0);
 #endif
+}
+
+int main()
+{
+    pointer_tests();
+    return boost::report_errors();
 }

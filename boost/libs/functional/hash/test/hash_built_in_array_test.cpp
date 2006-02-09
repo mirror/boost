@@ -14,12 +14,11 @@
 #  endif
 #endif
 
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 #ifdef TEST_EXTENSIONS
 
-BOOST_AUTO_TEST_CASE(array_int_test)
+void array_int_test()
 {
     const int length1 = 25;
     int array1[25] = {
@@ -39,15 +38,15 @@ BOOST_AUTO_TEST_CASE(array_int_test)
     int array3[2] = {2, 3};
     HASH_NAMESPACE::hash<int[2]> hasher3;
 
-    BOOST_CHECK(hasher1(array1)
+    BOOST_TEST(hasher1(array1)
             == HASH_NAMESPACE::hash_range(array1, array1 + length1));
-    BOOST_CHECK(hasher2(array2)
+    BOOST_TEST(hasher2(array2)
             == HASH_NAMESPACE::hash_range(array2, array2 + length2));
-    BOOST_CHECK(hasher3(array3)
+    BOOST_TEST(hasher3(array3)
             == HASH_NAMESPACE::hash_range(array3, array3 + length3));
 }
 
-BOOST_AUTO_TEST_CASE(two_dimensional_array_test)
+void two_dimensional_array_test()
 {
     int array[3][2] = {{-5, 6}, {7, -3}, {26, 1}};
     HASH_NAMESPACE::hash<int[3][2]> hasher;
@@ -61,9 +60,17 @@ BOOST_AUTO_TEST_CASE(two_dimensional_array_test)
         HASH_NAMESPACE::hash_combine(seed1, seed2);
     }
 
-    BOOST_CHECK(hasher(array) == seed1);
-    BOOST_CHECK(hasher(array) == HASH_NAMESPACE::hash_range(array, array + 3));
+    BOOST_TEST(hasher(array) == seed1);
+    BOOST_TEST(hasher(array) == HASH_NAMESPACE::hash_range(array, array + 3));
 }
 
 #endif // TEST_EXTENSIONS
 
+int main()
+{
+#ifdef TEST_EXTENSIONS
+    array_int_test();
+    two_dimensional_array_test();
+#endif
+    return boost::report_errors();
+}

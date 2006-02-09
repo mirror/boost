@@ -8,12 +8,11 @@
 
 #include "./hash_fwd_test.hpp"
 
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 template <class T> void unused(T const&) {}
 
-BOOST_AUTO_TEST_CASE(fwd_test)
+void fwd_test()
 {
     test::test_type1<int> x1(3);
     test::test_type1<std::string> y1("Black");
@@ -30,3 +29,11 @@ BOOST_AUTO_TEST_CASE(fwd_test)
     unused(x1); unused(x2); unused(x3);
     unused(y1); unused(y2); unused(y3);
 }
+
+
+int main()
+{
+    fwd_test();
+    return boost::report_errors();
+}
+

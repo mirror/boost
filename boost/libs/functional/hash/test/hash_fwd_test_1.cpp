@@ -7,29 +7,28 @@
 
 #include "./hash_fwd_test.hpp"
 
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 #if defined(TEST_EXTENSIONS) && !defined(TEST_STD_INCLUDES)
 
 #include <boost/functional/hash/hash.hpp>
 #include <string>
 
-BOOST_AUTO_TEST_CASE(fwd_test1)
+void fwd_test1()
 {
     test::test_type1<int> x(5);
     test::test_type1<std::string> y("Test");
 
-    BOOST_CHECK_EQUAL(
-            HASH_NAMESPACE::hash<int>()(5),
+    BOOST_TEST(
+            HASH_NAMESPACE::hash<int>()(5) ==
             HASH_NAMESPACE::hash<test::test_type1<int> >()(x));
 
-    BOOST_CHECK_EQUAL(
-            HASH_NAMESPACE::hash<std::string>()("Test"),
+    BOOST_TEST(
+            HASH_NAMESPACE::hash<std::string>()("Test") ==
             HASH_NAMESPACE::hash<test::test_type1<std::string> >()(y));
 }
 
-BOOST_AUTO_TEST_CASE(fwd_test2)
+void fwd_test2()
 {
     test::test_type2<int> x(5, 10);
     test::test_type2<std::string> y("Test1", "Test2");
@@ -42,13 +41,13 @@ BOOST_AUTO_TEST_CASE(fwd_test2)
     HASH_NAMESPACE::hash_combine(seed2, std::string("Test1"));
     HASH_NAMESPACE::hash_combine(seed2, std::string("Test2"));
 
-    BOOST_CHECK_EQUAL(seed1,
+    BOOST_TEST(seed1 ==
             HASH_NAMESPACE::hash<test::test_type2<int> >()(x));
-    BOOST_CHECK_EQUAL(seed2,
+    BOOST_TEST(seed2 ==
             HASH_NAMESPACE::hash<test::test_type2<std::string> >()(y));
 }
 
-BOOST_AUTO_TEST_CASE(fwd_test3)
+void fwd_test3()
 {
     std::vector<int> values1;
     values1.push_back(10);
@@ -72,10 +71,21 @@ BOOST_AUTO_TEST_CASE(fwd_test3)
     std::size_t seed2 = HASH_NAMESPACE::hash_range(values2.begin(), values2.end());
     HASH_NAMESPACE::hash_range(seed2, values2.begin(), values2.end());
 
-    BOOST_CHECK_EQUAL(seed1,
+    BOOST_TEST(seed1 ==
             HASH_NAMESPACE::hash<test::test_type3<int> >()(x));
-    BOOST_CHECK_EQUAL(seed2,
+    BOOST_TEST(seed2 ==
             HASH_NAMESPACE::hash<test::test_type3<std::string> >()(y));
 }
 
 #endif
+
+int main()
+{
+#ifdef TEST_EXTENSIONS
+    fwd_test1();
+    fwd_test2();
+    fwd_test3();
+#endif
+    return boost::report_errors();
+}
+

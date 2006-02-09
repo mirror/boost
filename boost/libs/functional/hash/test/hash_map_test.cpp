@@ -14,8 +14,7 @@
 #  endif
 #endif
 
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 #include <map>
 
@@ -30,3 +29,13 @@ using std::multimap;
 #include "./hash_map_test.hpp"
 
 #endif // TEST_EXTENSTIONS
+
+int main()
+{
+#ifdef TEST_EXTENSIONS
+    map_tests::map_hash_integer_tests();
+    multimap_tests::multimap_hash_integer_tests();
+#endif
+
+    return boost::report_errors();
+}

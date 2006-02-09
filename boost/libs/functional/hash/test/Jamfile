@@ -14,7 +14,6 @@ rule hash-test ( names + : extras * )
 {
     return [
         run $(names).cpp
-        <lib>../../../test/build/boost_unit_test_framework
         : : : <include>$(BOOST_ROOT) $(extras)
         : $(names[1])
         ] ;

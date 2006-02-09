@@ -14,8 +14,7 @@
 #  endif
 #endif
 
-#define BOOST_TEST_MAIN
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 #ifdef TEST_EXTENSIONS
 
@@ -30,3 +29,13 @@ using std::multiset;
 #include "./hash_set_test.hpp"
 
 #endif
+
+int main()
+{
+#ifdef TEST_EXTENSIONS
+    set_tests::set_hash_integer_tests();
+    multiset_tests::multiset_hash_integer_tests();
+#endif
+
+    return boost::report_errors();
+}
