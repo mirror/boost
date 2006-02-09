@@ -16,8 +16,16 @@
 #endif
 
 #include <boost/functional/detail/float_functions.hpp>
-#include <errno.h>
 #include <boost/limits.hpp>
+#include <boost/assert.hpp>
+#include <errno.h>
+
+#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+#  define BOOST_HASH_USE_FPCLASS
+#elif (defined(__GLIBCPP__) || defined(__GLIBCXX__)) \
+    && (defined(__USE_ISOC99) || defined(_GLIBCXX_USE_C99_MATH))
+#  define BOOST_HASH_USE_FPCLASSIFY
+#endif
 
 namespace boost
 {
@@ -29,7 +37,7 @@ namespace boost
         }
 
         template <class T>
-        inline std::size_t float_hash_value(T v)
+        inline std::size_t float_hash_impl(T v)
         {
             int exp = 0;
             errno = 0;
@@ -54,6 +62,52 @@ namespace boost
             hash_float_combine(seed, exp);
 
             return seed;
+        }
+
+        template <class T>
+        inline std::size_t float_hash_value(T v)
+        {
+#if defined(BOOST_HASH_USE_FPCLASSIFY)
+            using namespace std;
+            switch (fpclassify(v)) {
+            case FP_ZERO:
+                return 0;
+            case FP_INFINITE:
+                return (std::size_t)(v > 0 ? -1 : -2);
+            case FP_NAN:
+                return (std::size_t)(-3);
+            case FP_NORMAL:
+            case FP_SUBNORMAL:
+                return float_hash_impl(v);
+            default:
+                BOOST_ASSERT(0);
+                return 0;
+            }
+#elif defined(BOOST_HASH_USE_FPCLASS)
+            switch(_fpclass(v)) {
+            case _FPCLASS_NZ:
+            case _FPCLASS_PZ:
+                return 0;
+            case _FPCLASS_PINF:
+                return (std::size_t)(-1);
+            case _FPCLASS_NINF:
+                return (std::size_t)(-2);
+            case _FPCLASS_SNAN:
+            case _FPCLASS_QNAN:
+                return (std::size_t)(-3);
+            case _FPCLASS_NN:
+            case _FPCLASS_ND:
+                return float_hash_impl(v);
+            case _FPCLASS_PD:
+            case _FPCLASS_PN:
+                return float_hash_impl(v);
+            default:
+                BOOST_ASSERT(0);
+                return 0;
+            }
+#else
+            return float_hash_impl(v);
+#endif
         }
     }
 }
