@@ -35,7 +35,7 @@
        form of the reftitle. -->
   <xsl:param name="boost.doxygen.refid" select="''"/>
 
-  <xsl:output method="xml" indent="yes" standalone="yes"/>
+  <xsl:output method="xml" indent="no" standalone="yes"/>
 
   <xsl:key name="compounds-by-kind" match="compounddef" use="@kind"/>
   <xsl:key name="compounds-by-id" match="compounddef" use="@id"/>
@@ -1000,8 +1000,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
       </xsl:if>
 
       <!-- Return type -->
-      <type>
-
+      <xsl:element name="type">
         <!-- Cheat on virtual and static by dropping them into the type -->
         <xsl:if test="@static='yes'">
           <xsl:text>static </xsl:text>
@@ -1012,7 +1011,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
         </xsl:if>
 
         <xsl:apply-templates select="type"/>
-      </type>
+      </xsl:element>
 
       <xsl:call-template name="function.children"/>
     </method>
