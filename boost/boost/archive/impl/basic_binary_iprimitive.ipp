@@ -161,7 +161,11 @@ template<class Elem, class Tr>
 class input_streambuf_access : public std::basic_streambuf<Elem, Tr> {
     public:
         virtual int sync(){
+#if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206))
+            return this->basic_streambuf::sync();
+#else
             return this->basic_streambuf<Elem, Tr>::sync();
+#endif
         }
 };
 } // detail
