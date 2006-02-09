@@ -23,6 +23,11 @@ namespace boost
 {
     namespace hash_detail
     {
+        inline void hash_float_combine(std::size_t& seed, std::size_t value)
+        {
+            seed ^= value + (seed<<6) + (seed>>2);
+        }
+
         template <class T>
         inline std::size_t float_hash_value(T v)
         {
@@ -43,10 +48,10 @@ namespace boost
                 v = boost::hash_detail::call_ldexp(v, std::numeric_limits<int>::digits);
                 int const part = static_cast<int>(v);
                 v -= part;
-                boost::hash_combine(seed, part);
+                hash_float_combine(seed, part);
             }
 
-            boost::hash_combine(seed, exp);
+            hash_float_combine(seed, exp);
 
             return seed;
         }
