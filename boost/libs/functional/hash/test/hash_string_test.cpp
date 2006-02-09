@@ -16,6 +16,7 @@
 #include <boost/limits.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
+#include <string>
 
 #include "./compile_time.hpp"
 
