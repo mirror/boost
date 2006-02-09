@@ -595,11 +595,19 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
         <xsl:apply-templates/>
       </xsl:when>
       <xsl:when test="@kind='private-func'">
-        <method-group name="private member functions">
-          <xsl:apply-templates>
-            <xsl:with-param name="in-section" select="true()"/>
-          </xsl:apply-templates>
-        </method-group>
+        <xsl:variable name="members" select="./memberdef"/>
+        <xsl:variable name="num-internal-only">
+          <xsl:value-of 
+            select="count($members[contains(detaileddescription/para,
+                                  'INTERNAL ONLY')])"/>
+        </xsl:variable>
+        <xsl:if test="$num-internal-only &lt; count($members)">
+          <method-group name="private member functions">
+            <xsl:apply-templates>
+              <xsl:with-param name="in-section" select="true()"/>
+            </xsl:apply-templates>
+          </method-group>
+        </xsl:if>
         <xsl:apply-templates/>
       </xsl:when>
       <xsl:when test="@kind='public-static-attrib' or @kind='public-attrib'">
