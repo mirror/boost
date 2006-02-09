@@ -984,8 +984,6 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
         <xsl:value-of select="name/text()"/>
       </xsl:attribute>
 
-      <!-- TBD: virtual and static functions -->
-
       <!-- CV Qualifiers -->
       <xsl:if test="not (@const='no' and @volatile='no')">
         <xsl:attribute name="cv">
@@ -1002,7 +1000,19 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
       </xsl:if>
 
       <!-- Return type -->
-      <type><xsl:apply-templates select="type"/></type>
+      <type>
+
+        <!-- Cheat on virtual and static by dropping them into the type -->
+        <xsl:if test="@static='yes'">
+          <xsl:text>static </xsl:text>
+        </xsl:if>
+
+        <xsl:if test="@virtual='yes'">
+          <xsl:text>virtual </xsl:text>
+        </xsl:if>
+
+        <xsl:apply-templates select="type"/>
+      </type>
 
       <xsl:call-template name="function.children"/>
     </method>
