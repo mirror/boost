@@ -24,6 +24,10 @@
 #include <boost/type_traits/is_array.hpp>
 #endif
 
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+#include <boost/type_traits/is_const.hpp>
+#endif
+
 namespace boost
 {
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
@@ -310,6 +314,7 @@ namespace boost
 
     // boost::hash
 
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     template <class T> struct hash
         : std::unary_function<T, std::size_t>
     {
@@ -323,15 +328,60 @@ namespace boost
         {
             return hash_detail::call_hash<T>::call(val);
         }
-
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-        std::size_t operator()(T& val) const
-        {
-            return hash_detail::call_hash<T>::call(val);
-        }
-#endif
 #endif
     };
+    
+#else // Visual C++ 6.5
+    // There's probably a more elegant way to Visual C++ 6.5 to work
+    // but I don't know what it is.
+
+    namespace hash_detail
+    {
+        template <class T>
+        struct hash_impl_base
+            : std::unary_function<T, std::size_t>
+        {
+            std::size_t operator()(T const& val) const
+            {
+                return hash_detail::call_hash<T>::call(val);
+            }
+        };
+
+        template <bool IsConst>
+        struct hash_impl;
+
+        template <>
+        struct hash_impl<true>
+        {
+            template <class T>
+            struct inner : public hash_impl_base<T> {};
+        };
+
+        template <>
+        struct hash_impl<false>
+        {
+            template <class T>
+            struct inner : public hash_impl_base<T>
+            {
+                std::size_t operator()(T const& val) const
+                {
+                    return hash_impl_base<T>::operator()(val);
+                }
+
+                std::size_t operator()(T& val) const
+                {
+                    return hash_impl_base<T>::operator()(val);
+                }
+            };
+        };
+    }
+    
+    template <class T> struct hash
+        : public hash_detail::hash_impl<boost::is_const<T>::value>
+            ::BOOST_NESTED_TEMPLATE inner<T>
+    {
+    };
+#endif
 }
 
 #endif
