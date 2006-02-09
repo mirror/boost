@@ -14,13 +14,15 @@
 #
 SOURCES = testwave testwave_app
     ;
+    
+path-constant TESTWAVE_DIR : ../testwave/testfiles ;    
 
 #
 # This are the arguments for the testwave executable
 #
 TESTWAVE_ARGUMENTS = 
         -d4                              # use -d4 for verbose results 
-        -S../testwave/testfiles 
+        -S$(TESTWAVE_DIR) 
         -S$(BOOST_ROOT) -I$(BOOST_ROOT)
     ;
 
@@ -56,7 +58,7 @@ test-suite wave
             :
             # arguments
                 $(TESTWAVE_ARGUMENTS) 
-                --config-file ../testwave/testfiles/$(TESTWAVE_FILES)
+                --config-file $(TESTWAVE_DIR)/$(TESTWAVE_FILES)
             :
             # input files
             :
@@ -77,7 +79,7 @@ test-suite wave
             :
             # arguments
                 $(TESTWAVE_ARGUMENTS) 
-                --config-file ../testwave/testfiles/$(TESTWAVE_FILES)
+                --config-file $(TESTWAVE_DIR)/$(TESTWAVE_FILES)
             :
             # input files
             :
