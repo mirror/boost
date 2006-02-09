@@ -17,8 +17,6 @@
 
 #include <boost/functional/hash_fwd.hpp>
 #include <functional>
-#include <errno.h>
-#include <boost/limits.hpp>
 #include <boost/functional/detail/hash_float.hpp>
 #include <boost/functional/detail/container_fwd.hpp>
 

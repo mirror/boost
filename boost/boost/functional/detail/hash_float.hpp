@@ -16,6 +16,8 @@
 #endif
 
 #include <boost/functional/detail/float_functions.hpp>
+#include <errno.h>
+#include <boost/limits.hpp>
 
 namespace boost
 {
