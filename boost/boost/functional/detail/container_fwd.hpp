@@ -9,10 +9,10 @@
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
-#include <cstddef>
 
-#if (defined(__GLIBCXX__) && defined(_GLIBCXX_DEBUG)) || \
-    BOOST_WORKAROUND(__BORLANDC__, > 0x551)
+#if (defined(__GLIBCXX__) && defined(_GLIBCXX_DEBUG)) \
+    || BOOST_WORKAROUND(__BORLANDC__, > 0x551) \
+    || BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x842))
 
 #include <deque>
 #include <list>
@@ -24,6 +24,8 @@
 #include <complex>
 
 #else
+
+#include <cstddef>
 
 #if !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION) && \
         defined(__STL_CONFIG_H)

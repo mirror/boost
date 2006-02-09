@@ -20,7 +20,7 @@
 #include <boost/assert.hpp>
 #include <errno.h>
 
-#if defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
+#if (defined(_WIN32) || defined(__WIN32__) || defined(WIN32)) && !defined(__DMC__)
 #  define BOOST_HASH_USE_FPCLASS
 #elif (defined(__GLIBCPP__) || defined(__GLIBCXX__)) \
     && (defined(__USE_ISOC99) || defined(_GLIBCXX_USE_C99_MATH))
