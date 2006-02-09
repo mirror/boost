@@ -306,7 +306,7 @@ but on a compiler which doesn't support ADL `hash_value` won't be found.
 To make things worse, some compilers which do support ADL won't find
 a friend class defined inside the class.
 
-So move the member function out of the class:
+So first move the member function out of the class:
 
     namespace foo
     {
@@ -317,20 +317,26 @@ So move the member function out of the class:
         public:
             custom_type(T x) : value(x) {}
 
-            template <class T2>
-            friend std::size_t hash_value(custom_type<T2> x);
+            std::size_t hash(custom_type x)
+            {
+                __boost_hash<T> hasher;
+                return hasher(value);
+            }
         };
 
         template <class T>
-        friend inline std::size_t hash_value(custom_type<T> x)
+        inline std::size_t hash_value(custom_type<T> x)
         {
-            __boost_hash<T> hasher;
-            return hasher(x.value);
+            return x.hash();
         }
     }
 
-Now compilers which can't find the friend inside the class will find it.
-On compilers which don't support ADL, define in the boost namespace:
+Unfortunately, I couldn't declare hash_value as a friend, as some compilers
+don't support template friends, so instead I declared a member function to
+calculate the hash, can called it from hash_value.
+
+For compilers which don't support ADL, hash_value needs to be defined in the
+boost namespace:
 
     #ifdef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
     namespace boost
@@ -341,8 +347,7 @@ On compilers which don't support ADL, define in the boost namespace:
         template <class T>
         std::size_t hash_value(foo::custom_type<T> x)
         {
-            boost::hash<T> hasher;
-            return hasher(x.value);
+            return x.hash();
         }
     }
 

@@ -19,8 +19,11 @@ namespace foo
     public:
         custom_type(T x) : value(x) {}
 
-        template <class T2>
-        friend std::size_t hash_value(foo::custom_type<T2> x);
+        std::size_t hash() const
+        {
+            boost::hash<T> hasher;
+            return hasher(value);
+        }
     };
 }
 
@@ -33,8 +36,7 @@ namespace foo
     template <class T>
     std::size_t hash_value(foo::custom_type<T> x)
     {
-        boost::hash<T> hasher;
-        return hasher(x.value);
+        return x.hash();
     }
 }
 
