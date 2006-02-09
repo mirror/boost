@@ -15,11 +15,5 @@
 #endif
 
 #include <boost/functional/hash/hash.hpp>
-#include <boost/functional/hash/pair.hpp>
-#include <boost/functional/hash/vector.hpp>
-#include <boost/functional/hash/list.hpp>
-#include <boost/functional/hash/deque.hpp>
-#include <boost/functional/hash/set.hpp>
-#include <boost/functional/hash/map.hpp>
 
 #endif

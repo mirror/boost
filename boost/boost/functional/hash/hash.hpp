@@ -59,6 +59,23 @@ namespace boost
     std::size_t hash_value(std::basic_string<Ch, std::char_traits<Ch>, A> const&);
 #endif
 
+    template <class A, class B>
+    std::size_t hash_value(std::pair<A, B> const&);
+    template <class T, class A>
+    std::size_t hash_value(std::vector<T, A> const&);
+    template <class T, class A>
+    std::size_t hash_value(std::list<T, A> const& v);
+    template <class T, class A>
+    std::size_t hash_value(std::deque<T, A> const& v);
+    template <class K, class C, class A>
+    std::size_t hash_value(std::set<K, C, A> const& v);
+    template <class K, class C, class A>
+    std::size_t hash_value(std::multiset<K, C, A> const& v);
+    template <class K, class T, class C, class A>
+    std::size_t hash_value(std::map<K, T, C, A> const& v);
+    template <class K, class T, class C, class A>
+    std::size_t hash_value(std::multimap<K, T, C, A> const& v);
+
     // Implementation
 
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
@@ -254,6 +271,57 @@ namespace boost
     inline std::size_t hash_value(long double v)
     {
         return boost::hash_detail::float_hash_value(v);
+    }
+
+    template <class A, class B>
+    std::size_t hash_value(std::pair<A, B> const& v)
+    {
+        std::size_t seed = 0;
+        hash_combine(seed, v.first);
+        hash_combine(seed, v.second);
+        return seed;
+    }
+
+    template <class T, class A>
+    std::size_t hash_value(std::vector<T, A> const& v)
+    {
+        return hash_range(v.begin(), v.end());
+    }
+
+    template <class T, class A>
+    std::size_t hash_value(std::list<T, A> const& v)
+    {
+        return hash_range(v.begin(), v.end());
+    }
+
+    template <class T, class A>
+    std::size_t hash_value(std::deque<T, A> const& v)
+    {
+        return hash_range(v.begin(), v.end());
+    }
+
+    template <class K, class C, class A>
+    std::size_t hash_value(std::set<K, C, A> const& v)
+    {
+        return hash_range(v.begin(), v.end());
+    }
+
+    template <class K, class C, class A>
+    std::size_t hash_value(std::multiset<K, C, A> const& v)
+    {
+        return hash_range(v.begin(), v.end());
+    }
+
+    template <class K, class T, class C, class A>
+    std::size_t hash_value(std::map<K, T, C, A> const& v)
+    {
+        return hash_range(v.begin(), v.end());
+    }
+
+    template <class K, class T, class C, class A>
+    std::size_t hash_value(std::multimap<K, T, C, A> const& v)
+    {
+        return hash_range(v.begin(), v.end());
     }
 
     // boost::hash

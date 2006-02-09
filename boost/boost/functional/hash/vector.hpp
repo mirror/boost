@@ -15,30 +15,7 @@
 # pragma once
 #endif
 
-#include <boost/config.hpp>
-#include <boost/functional/hash/hash.hpp>
-
-namespace boost
-{
-    template <class T, class A>
-    std::size_t hash_value(std::vector<T, A> const& v)
-    {
-        return hash_range(v.begin(), v.end());
-    }
-
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-    namespace hash_detail
-    {
-        template <class T, class A>
-        struct call_hash<std::vector<T, A> >
-        {
-            static std::size_t call(std::vector<T, A> const& val)
-            {
-                return boost::hash_value(val);
-            }
-        };
-    }
-#endif
-}
+#warning "boost/functional/hash/vector.hpp is deprecated, use boost/functional/hash.hpp instead."
+#include <boost/functional/hash.hpp>
 
 #endif
