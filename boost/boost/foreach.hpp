@@ -314,7 +314,7 @@ inline T *&to_ptr(T const &)
 // Borland needs a little extra help with arrays
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 template<typename T,std::size_t N>
-inline T (*&to_ptr(T (&t)[N]))[N]
+inline T (*&to_ptr(T (&)[N]))[N]
 {
     static T (*t)[N] = 0;
     return t;
