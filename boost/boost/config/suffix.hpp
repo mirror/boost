@@ -271,6 +271,20 @@
 #  define BOOST_SLIST_HEADER <slist>
 #endif
 
+//
+// Set BOOST_HASH_SET_HEADER if not set already:
+//
+#if defined(BOOST_HAS_HASH) && !defined(BOOST_HASH_SET_HEADER)
+#  define BOOST_HASH_SET_HEADER <hash_set>
+#endif
+
+//
+// Set BOOST_HASH_MAP_HEADER if not set already:
+//
+#if defined(BOOST_HAS_HASH) && !defined(BOOST_HASH_MAP_HEADER)
+#  define BOOST_HASH_MAP_HEADER <hash_map>
+#endif
+
 //  BOOST_HAS_ABI_HEADERS
 //  This macro gets set if we have headers that fix the ABI,
 //  and prevent ODR violations when linking to external libraries:

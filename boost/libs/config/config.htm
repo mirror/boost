@@ -863,8 +863,12 @@ void g() { return f(); }</pre>
          <tr>
             <td valign="top" width="48%">BOOST_HAS_HASH</td>
             <td valign="top" width="15%">Standard library</td>
-            <td valign="top" width="37%">The C++ implementation provides the (SGI) hash_set or 
-               hash_map classes.</td>
+            <td valign="top" width="37%">The C++ implementation provides the (SGI) hash_set and
+               hash_map classes. When defined,
+              BOOST_HASH_SET_HEADER and BOOST_HASH_LIST_HEADER will contain the names of the header
+              needed to access hash_set and hash_map; BOOST_STD_EXTENSION_NAMESPACE
+              will provide the namespace in which the two class templates
+              reside.</td>
          </tr>
          <TR>
             <TD vAlign="top" width="48%">BOOST_HAS_LOG1P</TD>
@@ -950,8 +954,12 @@ void g() { return f(); }</pre>
          <tr>
             <td valign="top" width="48%">BOOST_HAS_SLIST</td>
             <td valign="top" width="15%">Standard library</td>
-            <td valign="top" width="37%">The C++ implementation provides the (SGI) slist 
-               class.</td>
+            <td valign="top" width="37%">The C++ implementation
+              provides the (SGI) slist class. When defined,
+              BOOST_SLIST_HEADER will contain the name of the header
+              needed to access slist and BOOST_STD_EXTENSION_NAMESPACE
+              will provide the namespace in which slist
+              resides.</td>
          </tr>
          <tr>
             <td valign="top" width="48%">BOOST_HAS_STLP_USE_FACET</td>
@@ -1136,6 +1144,18 @@ void g() { return f(); }</pre>
                <p>with:</p>
                <pre>template &lt;class T&gt; void f(T, BOOST_DEDUCED_TYPENAME T::type);</pre>
             </td>
+         </tr>
+         <tr>
+           <td>BOOST_HASH_MAP_HEADER</td>
+           <td>The header to include to get the SGI hash_map class. This macro is only available if BOOST_HAS_HASH is defined.</td>
+         </tr>
+         <tr>
+           <td>BOOST_HASH_SET_HEADER</td>
+           <td>The header to include to get the SGI hash_set class. This macro is only available if BOOST_HAS_HASH is defined.</td>
+         </tr>
+         <tr>
+           <td>BOOST_SLIST_HEADER</td>
+           <td>The header to include to get the SGI slist class. This macro is only available if BOOST_HAS_SLIST is defined.</td>
          </tr>
          <tr>
             <td>BOOST_STD_EXTENSION_NAMESPACE</td>
