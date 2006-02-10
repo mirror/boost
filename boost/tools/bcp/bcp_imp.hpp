@@ -49,6 +49,7 @@ private:
    // the following are the overridden virtuals from the base class:
    //
    void enable_list_mode();
+   void enable_summary_list_mode();
    void enable_cvs_mode();
    void enable_unix_lines();
    void enable_scan_mode();
@@ -79,6 +80,7 @@ private:
 
    std::list<std::string> m_module_list; // the modules to process
    bool m_list_mode;                     // list files only
+   bool m_list_summary_mode;             // list file summary only
    bool m_license_mode;                  // generate license information for files listed
    bool m_cvs_mode;                      // check cvs for files
    bool m_unix_lines;                    // fix line endings

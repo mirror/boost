@@ -27,6 +27,7 @@ void show_usage()
    std::cout <<
       "Usage:\n"
       "   bcp --list [options] module-list\n"
+      "   bcp --list-short [options] module-list\n"
       "   bcp --report [options] module-list html-file\n"
       "   bcp [options] module-list output-path\n"
       "\n"
@@ -92,6 +93,11 @@ int cpp_main(int argc, char* argv[])
       {
          list_mode = true;
          papp->enable_list_mode();
+      }
+      else if(0 == std::strcmp("--list-short", argv[i]))
+      {
+         list_mode = true;
+         papp->enable_summary_list_mode();
       }
       else if(0 == std::strcmp("--report", argv[i]))
       {

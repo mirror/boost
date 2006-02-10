@@ -18,7 +18,7 @@
 #include <string>
 
 bcp_implementation::bcp_implementation()
-  : m_list_mode(false), m_license_mode(false), m_cvs_mode(false), m_unix_lines(false), m_scan_mode(false), m_bsl_convert_mode(false), m_bsl_summary_mode(false)
+  : m_list_mode(false), m_list_summary_mode(false), m_license_mode(false), m_cvs_mode(false), m_unix_lines(false), m_scan_mode(false), m_bsl_convert_mode(false), m_bsl_summary_mode(false)
 {
 }
 
@@ -33,6 +33,12 @@ bcp_application::~bcp_application()
 void bcp_implementation::enable_list_mode()
 {
    m_list_mode = true;
+}
+
+void bcp_implementation::enable_summary_list_mode()
+{
+   m_list_mode = true;
+   m_list_summary_mode = true;
 }
 
 void bcp_implementation::enable_cvs_mode()
@@ -86,6 +92,20 @@ void bcp_implementation::set_destination(const char* p)
 void bcp_implementation::add_module(const char* p)
 {
    m_module_list.push_back(p);
+}
+
+fs::path get_short_path(const fs::path& p)
+{
+   // truncate path no more than "x/y":
+   std::string s = p.string();
+   std::string::size_type n = s.find('/');
+   if(n != std::string::npos)
+   {
+      n = s.find('/', n+1);
+      if(n != std::string::npos)
+         s.erase(n);
+   }
+   return s;
 }
 
 int bcp_implementation::run()
@@ -184,13 +204,23 @@ int bcp_implementation::run()
    // now perform output:
    //
    std::set<fs::path, path_less>::iterator m, n;
+   std::set<fs::path, path_less> short_paths;
    m = m_copy_paths.begin();
    n = m_copy_paths.end();
    if(!m_license_mode)
    {
       while(m != n)
       {
-         if(m_list_mode)
+         if(m_list_summary_mode)
+         {
+            fs::path p = get_short_path(*m);
+            if(short_paths.find(p) == short_paths.end())
+            {
+               short_paths.insert(p);
+               std::cout << p.string() << "\n";
+            }
+         }
+         else if(m_list_mode)
             std::cout << m->string() << "\n";
          else
             copy_path(*m);
