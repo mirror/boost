@@ -20,6 +20,8 @@
 #include <map>
 #include <string>
 
+#include <cstddef> // size_t
+
 
 
 namespace sc = boost::statechart;
@@ -330,7 +332,7 @@ struct X1 : sc::simple_state< X1, CustomReactionEventBaseTest >
 {
   typedef sc::custom_reaction< sc::event_base > reactions;
 
-  sc::result react( const sc::event_base & evt )
+  sc::result react( const sc::event_base & )
   {
     outermost_context().IncrementReactionCount();
     return discard_event();
