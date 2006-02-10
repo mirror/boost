@@ -27,9 +27,9 @@ namespace detail
 
 
 //////////////////////////////////////////////////////////////////////////////
+template< class Event >
 struct no_context
 {
-  template< class Event >
   void no_function( const Event & );
 };
 
@@ -43,9 +43,9 @@ class event_base;
 
 //////////////////////////////////////////////////////////////////////////////
 template< class Event, class Destination,
-          class TransitionContext = detail::no_context,
+          class TransitionContext = detail::no_context< Event >,
           void ( TransitionContext::*pTransitionAction )( const Event & ) =
-            &detail::no_context::no_function< Event > >
+            &detail::no_context< Event >::no_function >
 class transition
 {
   private:
@@ -78,7 +78,7 @@ class transition
         State & stt, const EventBase & evt, const IdType & )
       {
         typedef typename mpl::if_<
-          is_same< TransitionContext, detail::no_context >,
+          is_same< TransitionContext, detail::no_context< Event > >,
           react_without_transition_action_impl,
           react_base_with_transition_action_impl
         >::type impl;
@@ -108,7 +108,7 @@ class transition
         if ( eventType == Event::static_type() )
         {
           typedef typename mpl::if_<
-            is_same< TransitionContext, detail::no_context >,
+            is_same< TransitionContext, detail::no_context< Event > >,
             react_without_transition_action_impl,
             react_derived_with_transition_action_impl
           >::type impl;
