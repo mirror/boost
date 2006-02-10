@@ -1,4 +1,5 @@
 [library Boost.Functional/Hash
+    [quickbook 1.3]
     [authors [James, Daniel]]
     [copyright 2005 Daniel James]
     [purpose A TR1 hash function object that can be extended to hash user
@@ -9,14 +10,9 @@
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
-        <ulink url="http://www.boost.org/LICENSE_1_0.txt">
-            http://www.boost.org/LICENSE_1_0.txt
-        </ulink>)
+        [@http://www.boost.org/LICENSE_1_0.txt]
     ]
 ]
-
-[/ QuickBook Document version 1.0 ]
-[/ Feb 8, 2005 ]
 
 [def __note__       [$images/note.png]]
 [def __alert__      [$images/alert.png]]
@@ -83,7 +79,7 @@ __boost_hash, just use an extra template parameter:
 
 To use __boost_hash directly, create an instance and call it as a function:
 
-    #include <boost/functional/hash/hash.hpp>
+    #include <boost/functional/hash.hpp>
 
     int main()
     {
@@ -91,21 +87,6 @@ To use __boost_hash directly, create an instance and call it as a function:
 
         std::size_t h = string_hash("Hash me");
     }
-
-If you wish to make use of the extensions, you will need to include the
-appropriate header (see the
-[link hash.reference.specification reference documentation] for the full list).
-
-    #include <boost/functional/hash/pair.hpp>
-
-    int main()
-    {
-        __boost_hash<std::pair<int, int> > pair_hash;
-
-        std::size_t h = pair_hash(std::make_pair(1, 2));
-    }
-
-Or alternatively, include `<boost/functional/hash.hpp>` for the full library.
 
 For an example of generic use, here is a function to generate a vector
 containing the hashes of the elements of a container:
@@ -362,7 +343,7 @@ support built in arrays so this shouldn't be a problem in most cases.
 
 On Visual C++ versions 6.5 and 7.0, function pointers aren't currently supported.
 
-`boost::hash_value(long double)` on GCC on Solaris appears to treat
+When using GCC on Solaris, `boost::hash_value(long double)` treats
 `long double`s as doubles - so the hash function doesn't take into account the
 full range of values.
 
@@ -383,13 +364,9 @@ but there you go. ]
     </para>
   </section>
   <header name="boost/functional/hash.hpp">
-    <para>Includes all the following headers.</para>
-  </header>
-  <header name="boost/functional/hash/hash.hpp">
     <para>
       Defines <code><classname>boost::hash</classname></code>,
-      the implementation for built in types and
-      <code>std::string</code> and customisation functions.
+      and helper functions.
     </para>
 
     <namespace name="boost">
@@ -724,14 +701,11 @@ for(; first != last; ++first)
 
         <returns><code>hash_range(val.begin(), val.end())</code></returns>
       </overloaded-function>
-    </namespace>
-  </header>
 
-  <header name="boost/functional/hash/pair.hpp">
-    <para>
-      Hash implementation for <code>std::pair</code>.
-    </para>
-    <namespace name="boost">
+      <!--
+        boost::hash_value - pairs
+        -->
+
       <overloaded-function name="hash_value">
         <signature>
           <template>
@@ -753,14 +727,11 @@ return seed;
         </throws>
         <notes><para>This is an extension to TR1</para></notes>
       </overloaded-function>
-    </namespace>
-  </header>
 
-  <header name="boost/functional/hash/vector.hpp">
-    <para>
-      Hash implementation for <code>std::vector</code>.
-    </para>
-    <namespace name="boost">
+      <!--
+        boost::hash_value - containers
+        -->
+
       <overloaded-function name="hash_value">
         <signature>
           <template>
@@ -770,23 +741,7 @@ return seed;
           <type>std::size_t</type>
           <parameter name="val"><paramtype>std::vector&lt;T, A&gt; const &amp;</paramtype></parameter>
         </signature>
-        <returns>
-          <code><functionname>hash_range</functionname>(val.begin(), val.end());</code>
-        </returns>
-        <throws>
-          Only throws if <code><functionname>hash_value</functionname>(T)</code> throws.
-        </throws>
-        <notes><para>This is an extension to TR1</para></notes>
-      </overloaded-function>      
-    </namespace>
-  </header>
 
-  <header name="boost/functional/hash/list.hpp">
-    <para>
-      Hash implementation for <code>std::list</code>.
-    </para>
-    <namespace name="boost">
-      <overloaded-function name="hash_value">
         <signature>
           <template>
             <template-type-parameter name="T"/>
@@ -795,23 +750,7 @@ return seed;
           <type>std::size_t</type>
           <parameter name="val"><paramtype>std::list&lt;T, A&gt; const &amp;</paramtype></parameter>
         </signature>
-        <returns>
-          <code><functionname>hash_range</functionname>(val.begin(), val.end());</code>
-        </returns>
-        <throws>
-          Only throws if <code><functionname>hash_value</functionname>(T)</code> throws.
-        </throws>
-        <notes><para>This is an extension to TR1</para></notes>
-      </overloaded-function>      
-    </namespace>
-  </header>
 
-  <header name="boost/functional/hash/deque.hpp">
-    <para>
-      Hash implementation for <code>std::deque</code>.
-    </para>
-    <namespace name="boost">
-      <overloaded-function name="hash_value">
         <signature>
           <template>
             <template-type-parameter name="T"/>
@@ -820,23 +759,7 @@ return seed;
           <type>std::size_t</type>
           <parameter name="val"><paramtype>std::deque&lt;T, A&gt; const &amp;</paramtype></parameter>
         </signature>
-        <returns>
-          <code><functionname>hash_range</functionname>(val.begin(), val.end());</code>
-        </returns>
-        <throws>
-          Only throws if <code><functionname>hash_value</functionname>(T)</code> throws.
-        </throws>
-        <notes><para>This is an extension to TR1</para></notes>
-      </overloaded-function>      
-    </namespace>
-  </header>
 
-  <header name="boost/functional/hash/set.hpp">
-    <para>
-      Hash implementation for <code>std::set</code> and <code>std::multiset</code>.
-    </para>
-    <namespace name="boost">
-      <overloaded-function name="hash_value">
         <signature>
           <template>
             <template-type-parameter name="K"/>
@@ -856,23 +779,7 @@ return seed;
           <type>std::size_t</type>
           <parameter name="val"><paramtype>std::multiset&lt;K, C, A&gt; const &amp;</paramtype></parameter>
         </signature>
-        <returns>
-          <code><functionname>hash_range</functionname>(val.begin(), val.end());</code>
-        </returns>
-        <throws>
-          Only throws if <code><functionname>hash_value</functionname>(T)</code> throws.
-        </throws>
-        <notes><para>This is an extension to TR1</para></notes>
-      </overloaded-function>      
-    </namespace>
-  </header>
 
-  <header name="boost/functional/hash/map.hpp">
-    <para>
-      Hash implementation for <code>std::map</code> and <code>std::multimap</code>.
-    </para>
-    <namespace name="boost">
-      <overloaded-function name="hash_value">
         <signature>
           <template>
             <template-type-parameter name="K"/>
@@ -894,13 +801,12 @@ return seed;
           <type>std::size_t</type>
           <parameter name="val"><paramtype>std::multimap&lt;K, T, C, A&gt; const &amp;</paramtype></parameter>
         </signature>
+
         <returns>
           <code><functionname>hash_range</functionname>(val.begin(), val.end());</code>
         </returns>
         <throws>
-          Only throws if
-          <code><functionname>hash_value</functionname>(std::pair&lt;K const, T&gt;)</code>
-          throws.
+          Only throws if <code><functionname>hash_value</functionname>(T)</code> throws.
         </throws>
         <notes><para>This is an extension to TR1</para></notes>
       </overloaded-function>      
