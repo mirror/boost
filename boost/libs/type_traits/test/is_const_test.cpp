@@ -26,6 +26,14 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<const int&>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<cr_type>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<incomplete_type>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<foo0_t>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<const int[2]>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<int[2]>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<volatile int[2]>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<const volatile int[2]>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<const volatile int[]>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<volatile int[]>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<const int[]>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_const<int[]>::value, false);
 
 TT_TEST_END
 
