@@ -68,6 +68,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <cstddef> // size_t
 
 #ifdef BOOST_INTEL
 #  pragma warning( disable: 304 ) // access control not specified
