@@ -23,6 +23,10 @@
 #include <boost/type_traits/is_abstract.hpp>
 #endif
 
+#if defined(__MWERKS__)
+#include <boost/type_traits/is_function.hpp>
+#include <boost/type_traits/remove_reference.hpp>
+#endif
 
 // should be always the last #include directive
 #include <boost/type_traits/detail/bool_trait_def.hpp>
@@ -183,6 +187,47 @@ struct is_convertible_basic_impl
         sizeof( _m_check(_m_from, 0, 0) ) == sizeof(::boost::type_traits::yes_type)
         };
 };
+
+#elif defined(__MWERKS__)
+
+template <typename From, typename To,bool FromIsFunctionRef>
+struct is_convertible_basic_impl_aux;
+
+struct any_conversion
+{
+    template <typename T> any_conversion(const volatile T&);
+};
+
+template <typename From, typename To>
+struct is_convertible_basic_impl_aux<From,To,false /*FromIsFunctionRef*/>
+{
+    static ::boost::type_traits::no_type BOOST_TT_DECL _m_check(any_conversion ...);
+    static ::boost::type_traits::yes_type BOOST_TT_DECL _m_check(To, int);
+    static From _m_from;
+
+    BOOST_STATIC_CONSTANT(bool, value =
+        sizeof( _m_check(_m_from, 0) ) == sizeof(::boost::type_traits::yes_type)
+        );
+};
+
+template <typename From, typename To>
+struct is_convertible_basic_impl_aux<From,To,true /*FromIsFunctionRef*/>
+{
+    static ::boost::type_traits::no_type BOOST_TT_DECL _m_check(...);
+    static ::boost::type_traits::yes_type BOOST_TT_DECL _m_check(To);
+    static From _m_from;
+    BOOST_STATIC_CONSTANT(bool, value =
+        sizeof( _m_check(_m_from) ) == sizeof(::boost::type_traits::yes_type)
+        );
+};
+
+template <typename From, typename To>
+struct is_convertible_basic_impl:
+  is_convertible_basic_impl_aux<
+    From,To,
+    ::boost::is_function<typename ::boost::remove_reference<From>::type>::value
+  >
+{};
 
 #else
 
