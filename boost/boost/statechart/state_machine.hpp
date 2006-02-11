@@ -1015,7 +1015,9 @@ class state_machine : noncopyable
       const state_base_type *, event_queue_type,
       std::less< const state_base_type * >,
       typename boost::detail::allocator::rebind_to<
-        allocator_type, const state_base_type * >::type
+        allocator_type,
+        std::pair< const state_base_type * const, event_queue_type >
+      >::type
     > deferred_map_type;
 
 
