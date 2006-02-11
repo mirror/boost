@@ -34,15 +34,15 @@ struct A : sc::simple_state< A, InStateReactionTest, B >
 {
   A() : eventCount_( 0 ) {}
 
-  template< class Event >
-  void IncrementCount( const Event & )
-  {
-    ++eventCount_;
-  }
+  // The following 3 functions could be implemented with one function
+  // template, but this causes problems with CW and Intel 9.1.
+  void IncrementCount( const sc::event_base & ) { ++eventCount_; }
+  void IncrementCount( const E & ) { ++eventCount_; }
+  void IncrementCount( const G & ) { ++eventCount_; }
 
   typedef mpl::list<
-    sc::in_state_reaction< E, A, &A::IncrementCount< E > >,
-    sc::in_state_reaction< sc::event_base, A, &A::IncrementCount< sc::event_base > >
+    sc::in_state_reaction< E, A, &A::IncrementCount >,
+    sc::in_state_reaction< sc::event_base, A, &A::IncrementCount >
   > reactions;
 
   unsigned int eventCount_;
@@ -59,7 +59,7 @@ struct A : sc::simple_state< A, InStateReactionTest, B >
 
     typedef mpl::list<
       sc::in_state_reaction< F, B, &B::IncrementCount >,
-      sc::in_state_reaction< G, A, &A::IncrementCount< G > >
+      sc::in_state_reaction< G, A, &A::IncrementCount >
     > reactions;
 
     unsigned int eventCount_;
