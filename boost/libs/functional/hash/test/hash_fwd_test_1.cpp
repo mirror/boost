@@ -19,13 +19,13 @@ void fwd_test1()
     test::test_type1<int> x(5);
     test::test_type1<std::string> y("Test");
 
-    BOOST_TEST(
-            HASH_NAMESPACE::hash<int>()(5) ==
-            HASH_NAMESPACE::hash<test::test_type1<int> >()(x));
+    HASH_NAMESPACE::hash<int> hasher_int;
+    HASH_NAMESPACE::hash<std::string> hasher_string;
+    HASH_NAMESPACE::hash<test::test_type1<int> > hasher_test_int;
+    HASH_NAMESPACE::hash<test::test_type1<std::string> > hasher_test_string;
 
-    BOOST_TEST(
-            HASH_NAMESPACE::hash<std::string>()("Test") ==
-            HASH_NAMESPACE::hash<test::test_type1<std::string> >()(y));
+    BOOST_TEST(hasher_int(5) == hasher_test_int(x));
+    BOOST_TEST(hasher_string("Test") == hasher_test_string(y));
 }
 
 void fwd_test2()
@@ -41,10 +41,11 @@ void fwd_test2()
     HASH_NAMESPACE::hash_combine(seed2, std::string("Test1"));
     HASH_NAMESPACE::hash_combine(seed2, std::string("Test2"));
 
-    BOOST_TEST(seed1 ==
-            HASH_NAMESPACE::hash<test::test_type2<int> >()(x));
-    BOOST_TEST(seed2 ==
-            HASH_NAMESPACE::hash<test::test_type2<std::string> >()(y));
+    HASH_NAMESPACE::hash<test::test_type2<int> > hasher_test_int;
+    HASH_NAMESPACE::hash<test::test_type2<std::string> > hasher_test_string;
+
+    BOOST_TEST(seed1 == hasher_test_int(x));
+    BOOST_TEST(seed2 == hasher_test_string(y));
 }
 
 void fwd_test3()
@@ -71,10 +72,11 @@ void fwd_test3()
     std::size_t seed2 = HASH_NAMESPACE::hash_range(values2.begin(), values2.end());
     HASH_NAMESPACE::hash_range(seed2, values2.begin(), values2.end());
 
-    BOOST_TEST(seed1 ==
-            HASH_NAMESPACE::hash<test::test_type3<int> >()(x));
-    BOOST_TEST(seed2 ==
-            HASH_NAMESPACE::hash<test::test_type3<std::string> >()(y));
+    HASH_NAMESPACE::hash<test::test_type3<int> > hasher_test_int;
+    HASH_NAMESPACE::hash<test::test_type3<std::string> > hasher_test_string;
+
+    BOOST_TEST(seed1 == hasher_test_int(x));
+    BOOST_TEST(seed2 == hasher_test_string(y));
 }
 
 #endif
