@@ -7,17 +7,7 @@
   <!-- Generate an ID for the entity referenced -->
   <xsl:template name="generate.id">
     <xsl:param name="node" select="."/>
-    <xsl:variable name="id">
-      <xsl:apply-templates select="$node" mode="generate.id"/>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="string-length($id) &gt; $boost.max.id.length">
-        <xsl:value-of select="generate-id($node)"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="string($id)"/>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:apply-templates select="$node" mode="generate.id"/>
   </xsl:template>
 
   <xsl:template match="*" mode="generate.id">
