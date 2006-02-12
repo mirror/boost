@@ -12,7 +12,6 @@
 // 03 Oct 2000:
 //    Enabled extra tests for VC6.
 
-#include <cassert>
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
@@ -21,40 +20,6 @@
 
 #include <libs/type_traits/test/test.hpp>
 #include <libs/type_traits/test/check_type.hpp>
-
-//
-// define tests here
-unsigned failures = 0;
-unsigned test_count = 0;
-//
-// This must get defined within the test file.
-// All compilers have bugs, set this to the number of
-// regressions *expected* from a given compiler,
-// if there are no workarounds for the bugs, *and*
-// the regressions have been investigated.
-//
-extern unsigned int expected_failures;
-//
-// proc check_result()
-// Checks that there were no regressions:
-//
-int check_result(int argc, char** argv)
-{
-   std::cout << test_count << " tests completed, "
-      << failures << " failures found, "
-      << expected_failures << " failures expected from this compiler." << std::endl;
-   if((argc == 2) 
-      && (argv[1][0] == '-')
-      && (argv[1][1] == 'a')
-      && (argv[1][2] == 0))
-   {
-      std::cout << "Press any key to continue...";
-      std::cin.get();
-   }
-   return (failures == expected_failures)
-       ? 0
-       : (failures != 0) ? static_cast<int>(failures) : -1;
-}
 
 // a way prevent warnings for unused variables
 template<class T> inline void unused_variable(const T&) {}
@@ -156,9 +121,9 @@ void call_traits_checker<T>::operator()(param_type p)
    T t(p);
    contained<T> c(t);
    cout << "checking contained<" << typeid(T).name() << ">..." << endl;
-   assert(t == c.value());
-   assert(t == c.get());
-   assert(t == c.const_get());
+   BOOST_CHECK(t == c.value());
+   BOOST_CHECK(t == c.get());
+   BOOST_CHECK(t == c.const_get());
 #ifndef __ICL
    //cout << "typeof contained<" << typeid(T).name() << ">::v_ is:           " << typeid(&contained<T>::v_).name() << endl;
    cout << "typeof contained<" << typeid(T).name() << ">::value() is:      " << typeid(&contained<T>::value).name() << endl;
@@ -180,11 +145,11 @@ struct call_traits_checker<T[N]>
       cout << "checking contained<" << typeid(T[N]).name() << ">..." << endl;
       unsigned int i = 0;
       for(i = 0; i < N; ++i)
-         assert(t[i] == c.value()[i]);
+         BOOST_CHECK(t[i] == c.value()[i]);
       for(i = 0; i < N; ++i)
-         assert(t[i] == c.get()[i]);
+         BOOST_CHECK(t[i] == c.get()[i]);
       for(i = 0; i < N; ++i)
-         assert(t[i] == c.const_get()[i]);
+         BOOST_CHECK(t[i] == c.const_get()[i]);
 
       cout << "typeof contained<" << typeid(T[N]).name() << ">::v_ is:         " << typeid(&contained<T[N]>::v_).name() << endl;
       cout << "typeof contained<" << typeid(T[N]).name() << ">::value is:      " << typeid(&contained<T[N]>::value).name() << endl;
@@ -202,7 +167,7 @@ template <class W, class U>
 void check_wrap(const W& w, const U& u)
 {
    cout << "checking " << typeid(W).name() << "..." << endl;
-   assert(w.value() == u);
+   BOOST_CHECK(w.value() == u);
 }
 
 //
@@ -213,8 +178,8 @@ template <class T, class U, class V>
 void check_make_pair(T c, U u, V v)
 {
    cout << "checking std::pair<" << typeid(c.first).name() << ", " << typeid(c.second).name() << ">..." << endl;
-   assert(c.first == u);
-   assert(c.second == v);
+   BOOST_CHECK(c.first == u);
+   BOOST_CHECK(c.second == v);
    cout << endl;
 }
 
@@ -290,8 +255,6 @@ int main(int argc, char *argv[ ])
    BOOST_CHECK_TYPE(int&, boost::call_traits<cr_type>::param_type);
 #else
    std::cout << "Your compiler cannot instantiate call_traits<int&const>, skipping four tests (4 errors)" << std::endl;
-   failures += 4;
-   test_count += 4;
 #endif
    BOOST_CHECK_TYPE(const int&, boost::call_traits<const int&>::value_type);
    BOOST_CHECK_TYPE(const int&, boost::call_traits<const int&>::reference);
@@ -313,13 +276,9 @@ int main(int argc, char *argv[ ])
    BOOST_CHECK_TYPE(const test_abc1&, boost::call_traits<test_abc1>::param_type);
 #else
    std::cout << "You're compiler does not support partial template specialiation, skipping 8 tests (8 errors)" << std::endl;
-   failures += 12;
-   test_count += 12;
 #endif
 #else
    std::cout << "You're compiler does not support partial template specialiation, skipping 20 tests (20 errors)" << std::endl;
-   failures += 24;
-   test_count += 24;
 #endif
    // test with an incomplete type:
    BOOST_CHECK_TYPE(incomplete_type, boost::call_traits<incomplete_type>::value_type);
@@ -327,12 +286,12 @@ int main(int argc, char *argv[ ])
    BOOST_CHECK_TYPE(const incomplete_type&, boost::call_traits<incomplete_type>::const_reference);
    BOOST_CHECK_TYPE(const incomplete_type&, boost::call_traits<incomplete_type>::param_type);
 
-   return check_result(argc, argv);
+   return 0;
 }
 
 //
 // define call_traits tests to check that the assertions in the docs do actually work
-// this is an instantiate only set of tests:
+// this is an compile-time only set of tests:
 //
 template <typename T, bool isarray = false>
 struct call_traits_test
@@ -442,25 +401,5 @@ template struct call_traits_test<const int&>;
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__SUNPRO_CC)
 template struct call_traits_test<int[2], true>;
 #endif
-#endif
-
-#if defined(BOOST_MSVC) && _MSC_VER <= 1300
-unsigned int expected_failures = 12;
-#elif defined(__SUNPRO_CC)
-#if(__SUNPRO_CC <= 0x520)
-unsigned int expected_failures = 18;
-#elif(__SUNPRO_CC < 0x530)
-unsigned int expected_failures = 17;
-#else
-unsigned int expected_failures = 6;
-#endif
-#elif defined(__BORLANDC__)
-unsigned int expected_failures = 2;
-#elif (defined(__GNUC__) && ((__GNUC__ < 3) || (__GNUC__ == 3) && (__GNUC_MINOR__ < 1)))
-unsigned int expected_failures = 4;
-#elif defined(__HP_aCC)
-unsigned int expected_failures = 24;
-#else
-unsigned int expected_failures = 0;
 #endif
 
