@@ -52,7 +52,7 @@ public:
     template<class T>
     const basic_pointer_iserializer * register_type(T * = NULL){
         const basic_pointer_iserializer & bpis =
-            archive::detail::instantiate_pointer_iserializer(
+            instantiate_pointer_iserializer(
                 static_cast<Archive *>(NULL),
                 static_cast<T *>(NULL)
             );
