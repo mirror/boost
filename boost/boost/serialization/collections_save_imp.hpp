@@ -36,17 +36,20 @@ inline void save_collection(Archive & ar, const Container &s)
 {
     // record number of elements
     unsigned int count = s.size();
-    ar << make_nvp("count", const_cast<const unsigned int &>(count));
+    ar <<  BOOST_SERIALIZATION_NVP(count);
+    // make sure the target type is registered so we can retrieve
+    // the version when we load
+    if(3 < ar.get_library_version()){
+        const unsigned int v = version<BOOST_DEDUCED_TYPENAME Container::value_type>::value;
+        ar << make_nvp("item_version", v);
+    }
     BOOST_DEDUCED_TYPENAME Container::const_iterator it = s.begin();
     while(count-- > 0){
-        //if(0 == (ar.get_flags() & boost::archive::no_object_creation))
             // note borland emits a no-op without the explicit namespace
             boost::serialization::save_construct_data_adl(
                 ar, 
                 &(*it), 
-                boost::serialization::version<
-                    BOOST_DEDUCED_TYPENAME Container::value_type
-                >::value
+            boost::serialization::version<BOOST_DEDUCED_TYPENAME Container::value_type>::value
             );
         ar << boost::serialization::make_nvp("item", *it++);
     }
