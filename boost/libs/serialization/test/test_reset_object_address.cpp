@@ -115,6 +115,7 @@ public:
     bool operator==(const D & rhs) const {
         return m_b == rhs.m_b;
     }
+    D(){}
 };
 
 BOOST_TEST_DONT_PRINT_LOG_VALUE( D )
