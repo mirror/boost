@@ -7,8 +7,9 @@
     [id xpressive]
     [dirname xpressive]
     [purpose 
-        Regular expressions that can be expressed as strings or as expression templates,
-        and that can refer to other regular expressions by value or by reference.
+        Regular expressions that can be written as strings or as expression templates,
+        and that can refer to each other and themselves recursively with the power of
+        context-free grammars
     ]
     [license
         Distributed under the Boost Software License, Version 1.0.
