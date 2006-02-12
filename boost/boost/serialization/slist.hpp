@@ -59,17 +59,18 @@ inline void load(
     ar >> BOOST_SERIALIZATION_NVP(count);
     if(0 == count)
         return;
-
-    boost::serialization::detail::stack_construct<Archive, U> u(ar);
+    unsigned int v;
+    if(3 < ar.get_library_version()){
+        ar >> make_nvp("item_version", v);
+    }
+    boost::serialization::detail::stack_construct<Archive, U> u(ar, v);
     ar >> boost::serialization::make_nvp("item", u.reference());
     t.push_front(u.reference());
-    BOOST_DEDUCED_TYPENAME BOOST_STD_EXTENSION_NAMESPACE::slist<
-        U, 
-        Allocator
-    >::iterator last;
+    BOOST_DEDUCED_TYPENAME BOOST_STD_EXTENSION_NAMESPACE::slist<U, Allocator>::iterator last;
     last = t.begin();
     while(--count > 0){
-        boost::serialization::detail::stack_construct<Archive, U> u(ar);
+        boost::serialization::detail::stack_construct<Archive, U> 
+            u(ar, file_version);
         ar >> boost::serialization::make_nvp("item", u.reference());
         last = t.insert_after(last, u.reference());
         ar.reset_object_address(& (*last), & u.reference());
