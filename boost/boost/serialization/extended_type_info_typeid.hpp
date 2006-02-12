@@ -130,7 +130,6 @@ class extended_type_info_typeid :
     } // namespace boost
 #endif
 
-
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif

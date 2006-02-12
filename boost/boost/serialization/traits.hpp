@@ -30,7 +30,6 @@
 #include <boost/mpl/int.hpp>
 #include <boost/serialization/level_enum.hpp>
 #include <boost/serialization/tracking_enum.hpp>
-//#include <boost/serialization/type_info_implementation.hpp>
 
 namespace boost {
 namespace serialization {

@@ -20,18 +20,6 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
-namespace boost {
-namespace serialization {
-template<class T>
-class extended_type_info_null;
-struct basic_traits;
-} // namespace serialization
-} // namespace boost
-
-#ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO
-    #include <boost/serialization/extended_type_info_typeid.hpp>
-#endif
-
 #include <boost/static_assert.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
@@ -40,6 +28,8 @@ struct basic_traits;
 
 namespace boost {
 namespace serialization {
+
+struct basic_traits;
 
 // note that T and const T are folded into const T so that
 // there is only one table entry per type
@@ -55,7 +45,6 @@ struct type_info_implementation {
             traits_class_typeinfo_implementation<T>,
         //else
             mpl::identity<
-//                BOOST_SERIALIZATION_EXTENDED_TYPE_INFO_STUB(T)
                 BOOST_DEDUCED_TYPENAME extended_type_info_impl<T>::type
             >
         >::type type;
