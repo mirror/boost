@@ -23,7 +23,7 @@ union must_be_pod
 };
 
 template <class T>
-void no_unused_warning(const volatile T&)
+inline void no_unused_warning(const volatile T&)
 {
 }
 

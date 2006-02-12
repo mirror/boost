@@ -18,7 +18,7 @@ namespace detail
 
 
 template< typename T >
-void avoid_unused_warning( const T & ) {}
+inline void avoid_unused_warning( const T & ) {}
 
 
 
