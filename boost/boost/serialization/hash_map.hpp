@@ -19,8 +19,8 @@
 
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_HASH
+#include BOOST_HASH_SET_HEADER
 
-#include BOOST_HASH_MAP_HEADER
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/collections_save_imp.hpp>
 #include <boost/serialization/collections_load_imp.hpp>
@@ -108,7 +108,7 @@ inline void load(
         boost::serialization::stl::no_reserve_imp<
             STD::hash_multimap<Key, Compare, Allocator> 
         >
-    >(ar, t);
+    >(ar, t, file_version);
 }
 
 // split non-intrusive serialization function member into separate

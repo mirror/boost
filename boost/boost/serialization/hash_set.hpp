@@ -64,7 +64,7 @@ inline void load(
         boost::serialization::stl::no_reserve_imp<
             STD::hash_set<Key, Compare, Allocator> 
         >
-    >(ar, t);
+    >(ar, t, file_version);
 }
 
 // split non-intrusive serialization function member into separate
@@ -110,7 +110,7 @@ inline void load(
         boost::serialization::stl::no_reserve_imp<
             STD::hash_multiset<Key, Compare, Allocator> 
         >
-    >(ar, t);
+    >(ar, t, file_version);
 }
 
 // split non-intrusive serialization function member into separate
