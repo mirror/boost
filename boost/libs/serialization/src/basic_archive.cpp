@@ -52,10 +52,11 @@ ARCHIVE_SIGNATURE(){
 // 1 - initial version
 // 2 - made address tracking optional
 // 3 - numerous changes - can't guarentee compatibility with previous versions
- 
+// 4 - Boost 1.34
+//     added register_version to properly support versioning for collections 
 BOOST_ARCHIVE_DECL(unsigned char)
 ARCHIVE_VERSION(){
-    return 3;
+    return 4;
 }
 
 } // namespace archive
