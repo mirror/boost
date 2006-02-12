@@ -4,7 +4,7 @@
 	<head>
 		<title>lexical_cast</title>
 		<meta name="author" content="Kevlin Henney, mailto:kevlin@curbralan.com">
-		<meta name="generator" content="Microsoft FrontPage 4.0">
+		<meta name="generator" content="Microsoft FrontPage 5.0">
 	</head>
 	<body bgcolor="#FFFFFF" text="#000000">
 		<h1><img src="../../boost.png" alt="boost.png (6897 bytes)" align="center" width="277" height="86">Header
@@ -89,8 +89,7 @@
 			<h2><a name="examples">Examples</a></h2>
 			The following example treats command line arguments as a sequence of numeric 
 			data: <blockquote>
-				<pre>
-int main(int argc, char * argv[])
+				<pre>int main(int argc, char * argv[])
 {
     using boost::lexical_cast;
     using boost::bad_lexical_cast;
@@ -112,8 +111,7 @@ int main(int argc, char * argv[])
 }
 </pre>
 			</blockquote>The following example uses numeric data in a string expression: <blockquote>
-				<pre>
-void log_message(const std::string &amp;);
+				<pre>void log_message(const std::string &amp;);
 
 void log_errno(int yoko)
 {
@@ -125,12 +123,11 @@ void log_errno(int yoko)
 			<h2><a name="synopsis">Synopsis</a></h2>
 			Library features defined in <a href="../../boost/lexical_cast.hpp"><code>&quot;boost/lexical_cast.hpp&quot;</code></a>:
 			<blockquote>
-				<pre>
-namespace boost
+				<pre>namespace boost
 {
     class <a href="#bad_lexical_cast">bad_lexical_cast</a>;
     template&lt;typename Target, typename Source&gt;
-      Target <a href="#lexical_cast">lexical_cast</a>(Source arg);
+      Target <a href="#lexical_cast">lexical_cast</a>(const Source&amp; arg);
 }
 </pre>
 			</blockquote>Unit test defined in <a href="lexical_cast_test.cpp"><code>&quot;lexical_cast_test.cpp&quot;</code></a>.
@@ -138,9 +135,8 @@ namespace boost
 			<hr>
 			<h2><a name="lexical_cast"><code>lexical_cast</code></a></h2>
 			<blockquote>
-				<pre>
-template&lt;typename Target, typename Source&gt;
-  Target lexical_cast(Source arg);
+				<pre>template&lt;typename Target, typename Source&gt;
+  Target lexical_cast(const Source&amp; arg);
 </pre>
 			</blockquote>Returns the result of streaming <code>arg</code> into a
 			standard library string-based stream and then out as a <code>Target</code> object.
@@ -186,8 +182,7 @@ template&lt;typename Target, typename Source&gt;
 			<hr>
 			<h2><a name="bad_lexical_cast"><code>bad_lexical_cast</code></a></h2>
 			<blockquote>
-				<pre>
-class bad_lexical_cast : public std::bad_cast
+				<pre>class bad_lexical_cast : public std::bad_cast
 {
 public:
     ... // <i>same member function interface as</i> std::exception
