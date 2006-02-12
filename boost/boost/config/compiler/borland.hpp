@@ -9,6 +9,14 @@
 
 //  Borland C++ compiler setup:
 
+//
+// versions check:
+// we don't support Borland prior to version 5.4:
+#if __BORLANDC__ < 0x540
+#  error "Compiler not supported or configured - please reconfigure"
+#endif
+
+//
 // Version 5.0 and below:
 #   if __BORLANDC__ <= 0x0550
 // Borland C++Builder 4 and 5:
@@ -36,8 +44,8 @@
 #endif
 #endif
 
-// Version 7.0 (Kylix) and below:
-#if (__BORLANDC__ <= 0x570)
+// Borland C++ Builder 2006 Update 1 and below:
+#if (__BORLANDC__ <= 0x581)
 #  define BOOST_NO_SFINAE
 #  define BOOST_NO_INTEGRAL_INT64_T
 #  define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
@@ -52,6 +60,7 @@
 #  define BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #  define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #  define BOOST_NO_IS_ABSTRACT
+
 #  ifdef NDEBUG
       // fix broken <cstring> so that Boost.test works:
 #     include <cstring>
@@ -65,7 +74,7 @@
 
 //
 // new bug in 5.61:
-#if (__BORLANDC__ >= 0x561) && (__BORLANDC__ <= 0x570)
+#if (__BORLANDC__ >= 0x561) //&& (__BORLANDC__ <= 0x570)
    // this seems to be needed by the command line compiler, but not the IDE:
 #  define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
 #endif
@@ -156,16 +165,9 @@
 
 #define BOOST_COMPILER "Borland C++ version " BOOST_STRINGIZE(__BORLANDC__)
 
-//
-// versions check:
-// we don't support Borland prior to version 5.4:
-#if __BORLANDC__ < 0x540
-#  error "Compiler not supported or configured - please reconfigure"
-#endif
-//
 // last known and checked version is 1536 (Builder X preview)
-// Or 0x580 (Borland C++ Builder 6 2006 Preview):
-#if (__BORLANDC__ > 1536) || ((__BORLANDC__ < 0x600) && (__BORLANDC__ > 0x580))
+// Or 0x581 (Borland C++ Builder 2006 Update 1):
+#if (__BORLANDC__ > 0x581) && (__BORLANDC__ != 0x600)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  else
