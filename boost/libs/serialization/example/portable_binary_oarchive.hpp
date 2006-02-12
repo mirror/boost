@@ -49,7 +49,7 @@ public:
 #else
     friend archive_base_t;
     friend primitive_base_t; // since with override save below
-    friend class boost::archive::basic_binary_oarchive;
+    friend class boost::archive::basic_binary_oarchive<portable_binary_oarchive>;
     friend class boost::archive::save_access;
 #endif
     void save_impl(long l){
@@ -120,7 +120,11 @@ namespace boost {
 namespace archive {
 
 // explicitly instantiate for this type of binary stream
-template portable_binary_oarchive::archive_base_t;
+template class binary_oarchive_impl<
+    portable_binary_oarchive, 
+    std::ostream::char_type, 
+    std::ostream::traits_type
+>;
 template class detail::archive_pointer_oserializer<portable_binary_oarchive> ;
 
 } // namespace archive

@@ -72,7 +72,7 @@ public:
 #else
     friend archive_base_t;
     friend primitive_base_t; // since with override load below
-    friend class boost::archive::basic_binary_iarchive;
+    friend class boost::archive::basic_binary_iarchive<portable_binary_iarchive>;
     friend class boost::archive::load_access;
 #endif
     void load_impl(long & l, char maxsize){
@@ -142,7 +142,11 @@ public:
 namespace boost {
 namespace archive {
 
-template portable_binary_iarchive::archive_base_t ;
+template class binary_iarchive_impl<
+    portable_binary_iarchive, 
+    std::istream::char_type, 
+    std::istream::traits_type
+>;
 template class detail::archive_pointer_iserializer<portable_binary_iarchive> ;
 
 } // namespace archive
