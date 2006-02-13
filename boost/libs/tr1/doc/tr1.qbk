@@ -115,6 +115,11 @@ documentation), but defining BOOST_HAS_TR1 will turn on native TR1 support
 for everything (if your standard library has it), which can act as a 
 convenient shortcut.
 
+[blurb [*Note for gcc users]\n\n
+Boost.TR1 does not currently enable gcc's native TR1 implementation
+as this is currently in an early stage of development.  However, you may
+choose to do so by defining BOOST_HAS_GCC_TR1.]
+
 [endsect]
 
 [section:subject_list TR1 By Subject]
@@ -1560,7 +1565,7 @@ is not completely standards-conforming, in particular it is not possible
 to add user-defined template specializations of TR1 components
 into `namespace std::tr1`.  There are also one or two Boost libraries that are not
 yet fully standards conforming, any such non-conformities are documented in 
-[link boost_tr1.subject_list].  Hopefully, occurrences of non-standard 
+[link boost_tr1.subject_list the TR1 by subject section].  Hopefully, occurrences of non-standard 
 behavior should be extremely rare in practice however.
 
 If you use the standard conforming header includes (in `boost/tr1/tr1`)
