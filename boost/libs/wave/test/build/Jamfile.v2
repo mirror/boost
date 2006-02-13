@@ -36,7 +36,7 @@ TESTWAVE_FILES = test.cfg
 project wave/test
     : requirements
         <toolset>msvc-7.1:<rtti>off
-        <os>NT:<link-runtime>static
+        <os>NT:<runtime-link>static
         <threading>single
         <variant>debug
         <define>BOOST_LIB_DIAGNOSTIC=1
