@@ -189,6 +189,12 @@ struct is_convertible_basic_impl
 };
 
 #elif defined(__MWERKS__)
+// 
+// CW works with the technique implemented above for EDG, except when From
+// is a function type (or a reference to such a type), in which case
+// any_conversion won't be accepted as a valid conversion. We detect this
+// exceptional situation and channel it through an alternative algorithm.
+//
 
 template <typename From, typename To,bool FromIsFunctionRef>
 struct is_convertible_basic_impl_aux;
