@@ -331,7 +331,7 @@ namespace boost {
                 PredicateT m_Comp;
             };
 
-//  find head functor -----------------------------------------------//
+//  find head/tail implementation helpers ---------------------------//
 
             template<typename ForwardIteratorT>
                 iterator_range<ForwardIteratorT>
@@ -383,6 +383,84 @@ namespace boost {
                 return find_head_impl( Begin, End, N, category() );
             }
 
+            template< typename ForwardIteratorT >
+                iterator_range<ForwardIteratorT>
+            find_tail_impl(
+                ForwardIteratorT Begin,
+                ForwardIteratorT End,
+                unsigned int N,
+                std::forward_iterator_tag )
+            {
+                typedef ForwardIteratorT input_iterator_type;
+                typedef iterator_range<ForwardIteratorT> result_type;
+
+                unsigned int Index=0;
+                input_iterator_type It=Begin;
+                input_iterator_type It2=Begin;
+
+                // Advance It2 by N increments
+                for( Index=0; Index<N && It2!=End; ++Index,++It2 ) {};
+
+                // Advance It, It2 to the end
+                for(; It2!=End; ++It,++It2 ) {};
+
+                return result_type( It, It2 );
+            }
+
+            template< typename ForwardIteratorT >
+                iterator_range<ForwardIteratorT>
+            find_tail_impl(
+                ForwardIteratorT Begin,
+                ForwardIteratorT End,
+                unsigned int N,
+                std::bidirectional_iterator_tag )
+            {
+                typedef ForwardIteratorT input_iterator_type;
+                typedef iterator_range<ForwardIteratorT> result_type;
+
+                input_iterator_type It=End;
+                for(
+                    unsigned int Index=0;
+                    Index<N && It!=Begin; ++Index,--It ) {};
+
+                return result_type( It, End );
+            }
+
+            template< typename ForwardIteratorT >
+                iterator_range<ForwardIteratorT>
+            find_tail_impl(
+                ForwardIteratorT Begin,
+                ForwardIteratorT End,
+                unsigned int N,
+                std::random_access_iterator_tag )
+            {
+                typedef ForwardIteratorT input_iterator_type;
+                typedef iterator_range<ForwardIteratorT> result_type;
+
+                if ( (End<=Begin) || ( static_cast<unsigned int>(End-Begin) < N ) )
+                    return result_type( Begin, End );
+
+                return result_type( End-N, End );
+            }
+
+                        // Operation
+            template< typename ForwardIteratorT >
+            iterator_range<ForwardIteratorT>
+            find_tail_impl(
+                ForwardIteratorT Begin,
+                ForwardIteratorT End,
+                unsigned int N )
+            {
+                typedef BOOST_STRING_TYPENAME boost::detail::
+                    iterator_traits<ForwardIteratorT>::iterator_category category;
+
+                return find_tail_impl( Begin, End, N, category() );
+            }
+
+
+
+//  find head functor -----------------------------------------------//
+
 
             // find a head in the sequence ( functor )
             /*
@@ -420,81 +498,6 @@ namespace boost {
             };
 
 //  find tail functor -----------------------------------------------//
-
-
-            template< typename ForwardIteratorT >
-                iterator_range<ForwardIteratorT>
-            find_tail_impl(
-                ForwardIteratorT Begin,
-                ForwardIteratorT End,
-        	unsigned int N,
-                std::forward_iterator_tag )
-            {
-                typedef ForwardIteratorT input_iterator_type;
-                typedef iterator_range<ForwardIteratorT> result_type;
-
-                unsigned int Index=0;
-                input_iterator_type It=Begin;
-                input_iterator_type It2=Begin;
-
-                // Advance It2 by N increments
-                for( Index=0; Index<N && It2!=End; ++Index,++It2 ) {};
-
-                // Advance It, It2 to the end
-                for(; It2!=End; ++It,++It2 ) {};
-
-                return result_type( It, It2 );
-            }
-
-            template< typename ForwardIteratorT >
-                iterator_range<ForwardIteratorT>
-            find_tail_impl(
-                ForwardIteratorT Begin,
-                ForwardIteratorT End,
-        	unsigned int N,
-                std::bidirectional_iterator_tag )
-            {
-                typedef ForwardIteratorT input_iterator_type;
-                typedef iterator_range<ForwardIteratorT> result_type;
-
-                input_iterator_type It=End;
-                for(
-                    unsigned int Index=0;
-                    Index<N && It!=Begin; ++Index,--It ) {};
-
-                return result_type( It, End );
-            }
-
-            template< typename ForwardIteratorT >
-                iterator_range<ForwardIteratorT>
-            find_tail_impl(
-                ForwardIteratorT Begin,
-                ForwardIteratorT End,
-        	unsigned int N,
-                std::random_access_iterator_tag )
-            {
-                typedef ForwardIteratorT input_iterator_type;
-                typedef iterator_range<ForwardIteratorT> result_type;
-
-                if ( (End<=Begin) || ( static_cast<unsigned int>(End-Begin) < N ) )
-                    return result_type( Begin, End );
-
-                return result_type( End-N, End );
-            }
-
-                        // Operation
-            template< typename ForwardIteratorT >
-            iterator_range<ForwardIteratorT>
-            find_tail_impl(
-                ForwardIteratorT Begin,
-                ForwardIteratorT End,
-        unsigned int N )
-            {
-                typedef BOOST_STRING_TYPENAME boost::detail::
-                    iterator_traits<ForwardIteratorT>::iterator_category category;
-
-                return find_tail_impl( Begin, End, N, category() );
-            }
 
 
             // find a tail in the sequence ( functor )
