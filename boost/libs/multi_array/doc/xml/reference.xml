@@ -780,6 +780,20 @@ order in which dimensions are stored.
 
 </sect3>
 </sect2>
+
+<sect2 id="range_checking">
+<title>Range Checking</title>
+<para>
+By default, the array access methods <literal>operator()</literal> and
+<literal>operator[]</literal> perform range
+checking.  If a supplied index is out of the range defined for an
+array, an assertion will abort the program.  To disable range
+checking (for performance reasons in production releases), define
+the <literal>BOOST_DISABLE_ASSERTS</literal> preprocessor macro prior to
+including multi_array.hpp in an application.
+</para>
+
+</sect2>
 </sect1>
 
 
