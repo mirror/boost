@@ -156,17 +156,14 @@ main () {
 <a name="sec_components"></a>
 <h2>MultiArray Components</h2>
 
-Boost.MultiArray provides three user-level class templates:
+Boost.MultiArray's implementation (boost/multi_array.hpp) provides three user-level class templates:
 
 <ol>
-      <li><a href="./reference.html#multi_array"><tt>multi_array</tt></a> -
-      defined in "boost/multi_array.hpp",
+      <li><a href="./reference.html#multi_array"><tt>multi_array</tt></a>, 
 
-      <li><a href="./reference.html#multi_array_ref"><tt>multi_array_ref</tt></a> -
-      defined in "boost/multi_array_ref.hpp", and
+      <li><a href="./reference.html#multi_array_ref"><tt>multi_array_ref</tt></a>, and 
 
-      <li><a href="./reference.html#const_multi_array_ref"><tt>const_multi_array_ref</tt></a>  -
-      defined in "boost/multi_array_ref.hpp"
+      <li><a href="./reference.html#const_multi_array_ref"><tt>const_multi_array_ref</tt></a>  
 </ol>
 
 <tt>multi_array</tt> is a container template.  When instantiated, it
@@ -303,6 +300,14 @@ from the Collection for the N dimensions of the container.
 </blockquote>
 This can be useful for writing dimension-independent code, and under
 some compilers may yield higher performance than <tt>operator[].</tt>
+
+<p>
+By default, both of the above element access methods perform range
+checking.  If a supplied index is out of the range defined for an
+array, an assertion will abort the program.  To disable range
+checking (for performance reasons in production releases), define
+the <tt>BOOST_DISABLE_ASSERTS</tt> preprocessor macro prior to
+including multi_array.hpp in your application.
 
 <a name="sec_views"></a>
 <h2>Creating Views</h2>
@@ -658,9 +663,7 @@ arrays, as <tt>boost::array</tt> does for C one-dimensional arrays.
 <a href="mailto:garcia@.cs.indiana.edu">Ronald Garcia</a>
 </address>
 <!-- Created: Fri Jun 29 10:53:07 EST 2001 -->
-<!-- hhmts start -->
-Last modified: Wed Nov 30 23:29:03 EST 2005
-<!-- hhmts end -->
+<!-- hhmts start -->Last modified: Tue Feb  7 17:15:50 EST 2006 <!-- hhmts end -->
 
 </body>
 </html>
