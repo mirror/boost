@@ -11,14 +11,15 @@
 #if !defined(BOOST_FUNCTIONAL_HASH_HASH_HPP)
 #define BOOST_FUNCTIONAL_HASH_HASH_HPP
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1020)
-# pragma once
-#endif
-
 #include <boost/functional/hash_fwd.hpp>
 #include <functional>
 #include <boost/functional/detail/hash_float.hpp>
 #include <boost/functional/detail/container_fwd.hpp>
+#include <string>
+
+#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#include <boost/type_traits/is_pointer.hpp>
+#endif
 
 #if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #include <boost/type_traits/is_array.hpp>
@@ -55,13 +56,8 @@ namespace boost
     std::size_t hash_value(double v);
     std::size_t hash_value(long double v);
 
-#if BOOST_WORKAROUND(__GNUC__, < 3) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
     template <class Ch, class A>
-    std::size_t hash_value(std::basic_string<Ch, std::string_char_traits<Ch>, A> const&);
-#else
-    template <class Ch, class A>
-    std::size_t hash_value(std::basic_string<Ch, std::char_traits<Ch>, A> const&);
-#endif
+    std::size_t hash_value(std::basic_string<Ch, std::BOOST_HASH_CHAR_TRAITS<Ch>, A> const&);
 
     template <class A, class B>
     std::size_t hash_value(std::pair<A, B> const&);
@@ -116,50 +112,6 @@ namespace boost
            reinterpret_cast<std::ptrdiff_t>(v));
         return x + (x >> 3);
     }
-
-#if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-    namespace hash_detail
-    {
-        template <bool IsArray>
-        struct call_hash_impl
-        {
-            template <class T>
-            struct inner
-            {
-                static std::size_t call(T const& v)
-                {
-                    using namespace boost;
-                    return hash_value(v);
-                }
-            };
-        };
-
-        template <>
-        struct call_hash_impl<true>
-        {
-            template <class Array>
-            struct inner
-            {
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-                static std::size_t call(Array& v)
-#else
-                static std::size_t call(Array const& v)
-#endif
-                {
-                    const int size = sizeof(v) / sizeof(*v);
-                    return boost::hash_range(v, v + size);
-                }
-            };
-        };
-
-        template <class T>
-        struct call_hash
-            : public call_hash_impl<boost::is_array<T>::value>
-                ::BOOST_NESTED_TEMPLATE inner<T>
-        {
-        };
-    }
-#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     template <class T>
@@ -235,13 +187,8 @@ namespace boost
     }
 #endif
 
-#if BOOST_WORKAROUND(__GNUC__, < 3) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
     template <class Ch, class A>
-    inline std::size_t hash_value(std::basic_string<Ch, std::string_char_traits<Ch>, A> const& v)
-#else
-    template <class Ch, class A>
-    inline std::size_t hash_value(std::basic_string<Ch, std::char_traits<Ch>, A> const& v)
-#endif
+    inline std::size_t hash_value(std::basic_string<Ch, std::BOOST_HASH_CHAR_TRAITS<Ch>, A> const& v)
     {
         return hash_range(v.begin(), v.end());
     }
@@ -312,9 +259,191 @@ namespace boost
         return hash_range(v.begin(), v.end());
     }
 
+    //
     // boost::hash
+    //
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+#define BOOST_HASH_SPECIALIZE(type) \
+    template <> struct hash<type> \
+         : public std::unary_function<type, std::size_t> \
+    { \
+        std::size_t operator()(type v) const \
+        { \
+            return boost::hash_value(v); \
+        } \
+    };
+
+#define BOOST_HASH_SPECIALIZE_REF(type) \
+    template <> struct hash<type> \
+         : public std::unary_function<type, std::size_t> \
+    { \
+        std::size_t operator()(type const& v) const \
+        { \
+            return boost::hash_value(v); \
+        } \
+    };
+#else
+#define BOOST_HASH_SPECIALIZE(type) \
+    template <> struct hash<type> \
+         : public std::unary_function<type, std::size_t> \
+    { \
+        std::size_t operator()(type v) const \
+        { \
+            return boost::hash_value(v); \
+        } \
+    }; \
+    \
+    template <> struct hash<const type> \
+         : public std::unary_function<const type, std::size_t> \
+    { \
+        std::size_t operator()(const type v) const \
+        { \
+            return boost::hash_value(v); \
+        } \
+    };
+
+#define BOOST_HASH_SPECIALIZE_REF(type) \
+    template <> struct hash<type> \
+         : public std::unary_function<type, std::size_t> \
+    { \
+        std::size_t operator()(type const& v) const \
+        { \
+            return boost::hash_value(v); \
+        } \
+    }; \
+    \
+    template <> struct hash<const type> \
+         : public std::unary_function<const type, std::size_t> \
+    { \
+        std::size_t operator()(type const& v) const \
+        { \
+            return boost::hash_value(v); \
+        } \
+    };
+#endif
+
+    BOOST_HASH_SPECIALIZE(bool)
+    BOOST_HASH_SPECIALIZE(char)
+    BOOST_HASH_SPECIALIZE(signed char)
+    BOOST_HASH_SPECIALIZE(unsigned char)
+#if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
+    BOOST_HASH_SPECIALIZE(wchar_t)
+#endif
+    BOOST_HASH_SPECIALIZE(short)
+//TODO: Why did I disable this overload??
+//#if !(defined(BOOST_MSVC) && BOOST_MSVC < 1300)
+    BOOST_HASH_SPECIALIZE(unsigned short)
+//#endif
+    BOOST_HASH_SPECIALIZE(int)
+    BOOST_HASH_SPECIALIZE(unsigned int)
+    BOOST_HASH_SPECIALIZE(long)
+    BOOST_HASH_SPECIALIZE(unsigned long)
+
+    BOOST_HASH_SPECIALIZE(float)
+    BOOST_HASH_SPECIALIZE(double)
+    BOOST_HASH_SPECIALIZE(long double)
+
+    BOOST_HASH_SPECIALIZE_REF(std::string)
+#if !defined(BOOST_NO_STD_WSTRING)
+    BOOST_HASH_SPECIALIZE_REF(std::wstring)
+#endif
+
+#undef BOOST_HASH_SPECIALIZE
+#undef BOOST_HASH_SPECIALIZE_REF
+
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+    template <class T>
+    struct hash<T*>
+        : public std::unary_function<T*, std::size_t>
+    {
+        std::size_t operator()(T* v) const \
+        { \
+            return boost::hash_value(v); \
+        } \
+    };
+#else
+    namespace hash_detail
+    {
+        template <bool IsPointer>
+        struct hash_impl;
+
+        template <>
+        struct hash_impl<true>
+        {
+            template <class T>
+            struct inner
+                : public std::unary_function<T, std::size_t>
+            {
+                std::size_t operator()(T val) const
+                {
+                    return boost::hash_value(val);
+                }
+            };
+        };
+    }
+
+    template <class T> struct hash
+        : public hash_detail::hash_impl<boost::is_pointer<T>::value>
+            ::BOOST_NESTED_TEMPLATE inner<T>
+    {
+    };
+#endif
+}
+
+#endif // BOOST_FUNCTIONAL_HASH_HASH_HPP
+
+////////////////////////////////////////////////////////////////////////////////
+
+#if !defined(BOOST_HASH_NO_EXTENSIONS) \
+    && !defined(BOOST_FUNCTIONAL_HASH_EXTENSIONS_HPP)
+#define BOOST_FUNCTIONAL_HASH_EXTENSIONS_HPP
+
+namespace boost
+{
+
+#if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+    namespace hash_detail
+    {
+        template <bool IsArray>
+        struct call_hash_impl
+        {
+            template <class T>
+            struct inner
+            {
+                static std::size_t call(T const& v)
+                {
+                    using namespace boost;
+                    return hash_value(v);
+                }
+            };
+        };
+
+        template <>
+        struct call_hash_impl<true>
+        {
+            template <class Array>
+            struct inner
+            {
+                static std::size_t call(Array& v)
+                {
+                    const int size = sizeof(v) / sizeof(*v);
+                    return boost::hash_range(v, v + size);
+                }
+            };
+        };
+
+        template <class T>
+        struct call_hash
+            : public call_hash_impl<boost::is_array<T>::value>
+                ::BOOST_NESTED_TEMPLATE inner<T>
+        {
+        };
+    }
+#endif // BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+
     template <class T> struct hash
         : std::unary_function<T, std::size_t>
     {
@@ -330,57 +459,89 @@ namespace boost
         }
 #endif
     };
-    
+
+#elif !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+
+    // On compilers without partial specialization, boost::hash<T>
+    // has already been declared to deal with pointers, so just
+    // need to supply the non-pointer version.
+
+    namespace hash_detail
+    {
+        template <>
+        struct hash_impl<true>
+        {
+            template <class T>
+            struct inner
+                : std::unary_function<T, std::size_t>
+            {
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+                std::size_t operator()(T const& val) const
+                {
+                    return hash_value(val);
+                }
+#else
+                std::size_t operator()(T const& val) const
+                {
+                    return hash_detail::call_hash<T>::call(val);
+                }
+#endif
+            };
+        };
+    }
+
 #else // Visual C++ 6.5
+
     // There's probably a more elegant way to Visual C++ 6.5 to work
     // but I don't know what it is.
 
     namespace hash_detail
     {
-        template <class T>
-        struct hash_impl_base
-            : std::unary_function<T, std::size_t>
-        {
-            std::size_t operator()(T const& val) const
-            {
-                return hash_detail::call_hash<T>::call(val);
-            }
-        };
-
         template <bool IsConst>
-        struct hash_impl;
-
-        template <>
-        struct hash_impl<true>
+        struct hash_impl_msvc
         {
             template <class T>
-            struct inner : public hash_impl_base<T> {};
-        };
-
-        template <>
-        struct hash_impl<false>
-        {
-            template <class T>
-            struct inner : public hash_impl_base<T>
+            struct inner
+                : public std::unary_function<T, std::size_t>
             {
                 std::size_t operator()(T const& val) const
                 {
-                    return hash_impl_base<T>::operator()(val);
+                    return hash_detail::call_hash<T>::call(val);
                 }
 
                 std::size_t operator()(T& val) const
                 {
-                    return hash_impl_base<T>::operator()(val);
+                    return hash_detail::call_hash<T>::call(val);
                 }
             };
         };
+
+        template <>
+        struct hash_impl_msvc<true>
+        {
+            template <class T>
+            struct inner
+                : public std::unary_function<T, std::size_t>
+            {
+                std::size_t operator()(T const& val) const
+                {
+                    return hash_detail::call_hash<T>::call(val);
+                }
+            };
+        };
+        
+        template <class T>
+        struct hash_impl_msvc2
+            : public hash_impl_msvc<boost::is_const<T>::value>
+                    ::BOOST_NESTED_TEMPLATE inner<T> {};
+        
+        template <>
+        struct hash_impl<false>
+        {
+            template <class T>
+            struct inner : public hash_impl_msvc2<T> {};
+        };
     }
-    
-    template <class T> struct hash
-        : public hash_detail::hash_impl<boost::is_const<T>::value>
-            ::BOOST_NESTED_TEMPLATE inner<T>
-    {
-    };
 #endif
 }
 

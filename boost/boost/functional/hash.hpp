@@ -7,13 +7,4 @@
 //  http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1756.pdf
 //  issue 6.18. 
 
-#if !defined(BOOST_FUNCTIONAL_HASH_HPP)
-#define BOOST_FUNCTIONAL_HASH_HPP
-
-#if defined(_MSC_VER) && (_MSC_VER >= 1020)
-# pragma once
-#endif
-
 #include <boost/functional/hash/hash.hpp>
-
-#endif
