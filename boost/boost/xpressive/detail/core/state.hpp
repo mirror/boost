@@ -32,6 +32,14 @@ namespace boost { namespace xpressive { namespace detail
 template<typename BidiIter>
 struct match_context
 {
+    match_context()
+      : results_ptr_(0)
+      , prev_context_(0)
+      , next_ptr_(0)
+      , traits_(0)
+    {
+    }
+
     // pointer to the current match results, passed to actions as a parameter.
     match_results<BidiIter> *results_ptr_;
 
