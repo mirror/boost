@@ -13,7 +13,8 @@ rule po-test ( source )
 {
     return
         [ run $(source) ]
-	[ run $(source) : : : <link>shared : $(source:B)_dll ] 
+	[ run $(source) : : : <link>shared <define>BOOST_ALL_DYN_LINK=1
+	  : $(source:B)_dll ] 
     ;	
 }    
 
