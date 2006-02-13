@@ -263,15 +263,25 @@ struct S1;
 struct S211;
 struct S0 : Orthogonal0< S0, TransitionTest, S1 >
 {
-  typedef sc::transition< E, S211 > reactions;
+  public:
+    typedef sc::transition< E, S211 > reactions;
 
-  S0( my_context ctx ) : my_base( ctx ) {}
+    S0( my_context ctx ) : my_base( ctx ) {}
 
-  template< class Event >
-  void Transit( const Event & )
-  {
-    outermost_context().template ActualTransition< S0, Event >();
-  }
+    void Transit( const A & evt ) { TransitImpl( evt ); }
+    void Transit( const B & evt ) { TransitImpl( evt ); }
+    void Transit( const C & evt ) { TransitImpl( evt ); }
+    void Transit( const D & evt ) { TransitImpl( evt ); }
+    void Transit( const F & evt ) { TransitImpl( evt ); }
+    void Transit( const G & evt ) { TransitImpl( evt ); }
+    void Transit( const H & evt ) { TransitImpl( evt ); }
+
+  private:
+    template< class Event >
+    void TransitImpl( const Event & )
+    {
+      outermost_context().template ActualTransition< S0, Event >();
+    }
 };
 
   struct S11;
@@ -279,8 +289,8 @@ struct S0 : Orthogonal0< S0, TransitionTest, S1 >
   struct S2 : Orthogonal2< S2, S0, S21 >
   {
     typedef mpl::list<
-      sc::transition< C, S1, S0, &S0::Transit< C > >,
-      sc::transition< F, S11, S0, &S0::Transit< F > >
+      sc::transition< C, S1, S0, &S0::Transit >,
+      sc::transition< F, S11, S0, &S0::Transit >
     > reactions;
 
     S2( my_context ctx ) : my_base( ctx ) {}
@@ -289,8 +299,8 @@ struct S0 : Orthogonal0< S0, TransitionTest, S1 >
     struct S21 : Orthogonal1< S21, S2::orthogonal< 2 >, S211 >
     {
       typedef mpl::list<
-        sc::transition< H, S21, S0, &S0::Transit< H > >,
-        sc::transition< B, S211, S0, &S0::Transit< B > >
+        sc::transition< H, S21, S0, &S0::Transit >,
+        sc::transition< B, S211, S0, &S0::Transit >
       > reactions;
 
       S21( my_context ctx ) : my_base( ctx ) {}
@@ -299,7 +309,7 @@ struct S0 : Orthogonal0< S0, TransitionTest, S1 >
       struct S211 : InnermostDefault< S211, S21::orthogonal< 1 > >
       {
         typedef mpl::list<
-          sc::transition< D, S21, S0, &S0::Transit< D > >,
+          sc::transition< D, S21, S0, &S0::Transit >,
           sc::transition< G, S0 >
         > reactions;
 
@@ -309,11 +319,11 @@ struct S0 : Orthogonal0< S0, TransitionTest, S1 >
   struct S1 : Orthogonal1< S1, S0, S11 >
   {
     typedef mpl::list<
-      sc::transition< A, S1, S0, &S0::Transit< A > >,
-      sc::transition< B, S11, S0, &S0::Transit< B > >,
-      sc::transition< C, S2, S0, &S0::Transit< C > >,
+      sc::transition< A, S1, S0, &S0::Transit >,
+      sc::transition< B, S11, S0, &S0::Transit >,
+      sc::transition< C, S2, S0, &S0::Transit >,
       sc::transition< D, S0 >,
-      sc::transition< F, S211, S0, &S0::Transit< F > >
+      sc::transition< F, S211, S0, &S0::Transit >
     > reactions;
 
     S1( my_context ctx ) : my_base( ctx ) {}
@@ -322,7 +332,7 @@ struct S0 : Orthogonal0< S0, TransitionTest, S1 >
     struct S11 : InnermostDefault< S11, S1::orthogonal< 1 > >
     {
       typedef mpl::list<
-        sc::transition< G, S211, S0, &S0::Transit< G > >,
+        sc::transition< G, S211, S0, &S0::Transit >,
         sc::custom_reaction< H >
       > reactions;
 
