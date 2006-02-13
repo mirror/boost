@@ -54,7 +54,12 @@ WSOURCES =
 ;
 
 lib boost_serialization : $(SOURCES).cpp :
-        <toolset>msvc:<cxxflags>/Gy ;
+        <toolset>msvc:<cxxflags>/Gy 
+	<link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1
+	;
 
 lib boost_wserialization : $(WSOURCES).cpp :
-        <toolset>msvc:<cxxflags>/Gy ;
+        <toolset>msvc:<cxxflags>/Gy 
+        <link>shared:<define>BOOST_WSERIALIZATION_DYN_LINK=1
+        <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1	
+	;
