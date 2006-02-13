@@ -45,7 +45,7 @@ namespace boost
 #  ifdef TEST_STD_INCLUDES
 #    include <functional>
 #  else
-#    include <boost/functional/hash/hash.hpp>
+#    include <boost/functional/hash.hpp>
 #  endif
 #endif
 

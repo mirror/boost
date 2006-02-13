@@ -11,7 +11,7 @@
 
 #if defined(TEST_EXTENSIONS) && !defined(TEST_STD_INCLUDES)
 
-#include <boost/functional/hash/hash.hpp>
+#include <boost/functional/hash.hpp>
 #include <string>
 
 void fwd_test1()

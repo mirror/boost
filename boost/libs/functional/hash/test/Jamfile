@@ -41,7 +41,11 @@ rule hash-test ( names + : extras * )
             [ hash-test hash_set_test ]
             [ hash-test hash_map_test ]
             [ hash-test link_test link_test_2 ]
+            [ hash-test link_ext_test link_no_ext_test ]
             [ run container_fwd_test.cpp : : : <include>$(BOOST_ROOT) ]
+            [ compile-fail hash_no_ext_fail_test.cpp ]
+            [ run hash_no_ext_macro_1.cpp ]
+            [ run hash_no_ext_macro_2.cpp ]
         ;
 }
 

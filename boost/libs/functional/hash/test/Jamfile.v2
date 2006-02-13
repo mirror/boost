@@ -32,7 +32,11 @@ test-suite functional/hash
         [ run hash_set_test.cpp ]
         [ run hash_map_test.cpp ]
         [ run link_test.cpp link_test_2.cpp ]
+        [ run link_ext_test.cpp link_no_ext_test.cpp ]
         [ run container_fwd_test.cpp ]
+        [ compile-fail hash_no_ext_fail_test.cpp ]
+        [ run hash_no_ext_macro_1.cpp ]
+        [ run hash_no_ext_macro_2.cpp ]
     ;
 
 build-project ../examples ;

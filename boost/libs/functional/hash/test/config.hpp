@@ -9,5 +9,7 @@
 #  define HASH_NAMESPACE std::tr1
 #else
 #  define HASH_NAMESPACE boost
-#  define TEST_EXTENSIONS
+#  if !defined(BOOST_HASH_NO_EXTENSIONS)
+#    define TEST_EXTENSIONS
+#  endif
 #endif
