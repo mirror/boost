@@ -74,7 +74,7 @@ struct CustomReactionTest : sc::state_machine< CustomReactionTest, A >
 
     void AssertVisitedOne( const std::string & stateNames ) const
     {
-      size_t found = 0;
+      std::size_t found = 0;
 
       for ( std::string::const_iterator actualName = stateNames.begin();
         actualName != stateNames.end(); ++actualName )
