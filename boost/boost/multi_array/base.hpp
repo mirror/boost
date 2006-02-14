@@ -439,6 +439,12 @@ protected:
       index index_factor = current_range.stride();
       index len = (finish - start + (index_factor - 1)) / index_factor;
 
+      BOOST_ASSERT(index_bases[n] <= start &&
+                   start < index_bases[n]+index(extents[n]));
+      BOOST_ASSERT(index_bases[n] <= finish &&
+                   finish <= index_bases[n]+index(extents[n]));
+      BOOST_ASSERT(index_factor > 0);
+
       // the array data pointer is modified to account for non-zero
       // bases during slicing (see [Garcia] for the math involved)
       offset += start * strides[n];
