@@ -19,6 +19,48 @@
 #include <memory>
 #include <string>
 
+//
+// abstract base class definition
+// 
+struct abstract_base
+{
+	virtual ~abstract_base() {}
+	virtual void foo() = 0;
+	virtual abstract_base* clone() const = 0;
+};
+
+struct implementation : abstract_base
+{
+    implementation()
+    { }
+
+    implementation( const implementation& )
+    { }
+    
+    implementation( int, std::string, int, std::string )
+    { }
+
+	virtual void foo() {}
+	virtual abstract_base* clone() const
+	{
+		return new implementation( *this );
+	}
+};
+
+inline std::ostream& operator<<( std::ostream& out, const abstract_base& r )
+{
+    return out;	
+}
+
+inline abstract_base* new_clone( const abstract_base& r )
+{
+	return r.clone();
+}
+
+//
+// ptr_map test
+// 
+
 template< typename C, typename B, typename T >
 void ptr_map_test();
 
@@ -99,7 +141,7 @@ void ptr_map_test()
     a_key = get_next_key( a_key );
     c.insert( a_key, new T );
     a_key = get_next_key( a_key );
-    c.insert( a_key, std::auto_ptr<B>( new T ) );
+    c.insert( a_key, std::auto_ptr<T>( new T ) );
     typename C::auto_type ptr2  = c.release( c.begin() );
     std::auto_ptr<C> ap         = c.release();
     c                           = c2.clone();
@@ -129,7 +171,7 @@ void ptr_map_test()
 
     BOOST_CHECK( !c3.empty() );
     c3.replace( c3.begin(), new T );
-	c3.replace( c3.begin(), std::auto_ptr<B>( new T ) );
+	c3.replace( c3.begin(), std::auto_ptr<T>( new T ) );
     BOOST_MESSAGE( "finished set/map interface test" );
 
     // @todo: make macro with algorithms so that the right erase() is called.
@@ -179,6 +221,7 @@ void ptr_map_test()
     c.insert( a_key, new T );
     c.erase( a_key );
     c.erase( a_key );
+
 }
 
 
@@ -192,6 +235,7 @@ void test_map()
     ptr_map_test< ptr_map<int, Value>, Value, Value >();
     ptr_map_test< ptr_map<int, nullable<Base> >, Base, Derived_class >();
     ptr_map_test< ptr_map<int, nullable<Value> >, Value, Value >();
+	ptr_map_test< ptr_map<int, abstract_base>, abstract_base, implementation >();
 
     ptr_map_test< ptr_multimap<int,Base>, Base, Derived_class >();
     ptr_map_test< ptr_multimap<int,Value>, Value, Value >();    
@@ -225,6 +269,7 @@ void test_map()
         int&          ref2 = *i;
         ref2++;
     }
+
 }
 
 using boost::unit_test::test_suite;

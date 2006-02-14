@@ -162,7 +162,7 @@ namespace assign_detail
             BOOST_DEDUCED_TYPENAME remove_const<Array>::type ar;
 #else
             Array ar;
-#endif			
+#endif            
             const std::size_t sz = ar.size();
             if( sz < static_cast<const DerivedTAssign*>(this)->size() )
                 throw assign::assignment_exception( "array initialized with too many elements" );

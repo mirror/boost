@@ -101,7 +101,7 @@ void test_array_interface()
     c.replace( 0, new T );
     c.replace( 1, new B );
     c.replace( 9, new T );
-	c.replace( 0, std::auto_ptr<B>( new T ) );
+	c.replace( 0, std::auto_ptr<T>( new T ) );
     const C c2( c.clone() );
     
     BOOST_DEDUCED_TYPENAME C::iterator i                  = c.begin();
