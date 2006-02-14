@@ -142,7 +142,7 @@ namespace ptr_container_detail
         typedef  BOOST_DEDUCED_TYPENAME Config::const_iterator
                                    const_iterator;
         typedef  boost::reverse_iterator< iterator > 
-			                       reverse_iterator;  
+                                   reverse_iterator;  
         typedef  boost::reverse_iterator< const_iterator >     
                                    const_reverse_iterator;
         typedef  BOOST_DEDUCED_TYPENAME Cont::difference_type
@@ -378,22 +378,22 @@ namespace ptr_container_detail
  
     public: // container requirements
         iterator begin()            
-		    { return iterator( c_.begin() ); }
+            { return iterator( c_.begin() ); }
         const_iterator begin() const      
-			{ return const_iterator( c_.begin() ); }
+            { return const_iterator( c_.begin() ); }
         iterator end()              
-		    { return iterator( c_.end() ); }
+            { return iterator( c_.end() ); }
         const_iterator end() const        
-			{ return const_iterator( c_.end() ); }
-		
+            { return const_iterator( c_.end() ); }
+        
         reverse_iterator rbegin()           
-		    { return reverse_iterator( this->end() ); } 
+            { return reverse_iterator( this->end() ); } 
         const_reverse_iterator rbegin() const     
-			{ return const_reverse_iterator( this->end() ); } 
+            { return const_reverse_iterator( this->end() ); } 
         reverse_iterator rend()             
-		    { return reverse_iterator( this->begin() ); } 
+            { return reverse_iterator( this->begin() ); } 
         const_reverse_iterator rend() const       
-			{ return const_reverse_iterator( this->begin() ); } 
+            { return const_reverse_iterator( this->begin() ); } 
  
         void swap( reversible_ptr_container& r ) // nothrow
         { 
@@ -462,10 +462,11 @@ namespace ptr_container_detail
             return res;
         }
 
-		iterator insert( iterator before, std::auto_ptr<Ty_> x )
-		{
-			return insert( before, x.release() );
-		}
+        template< class U >
+        iterator insert( iterator before, std::auto_ptr<U> x )
+        {
+            return insert( before, x.release() );
+        }
 
         iterator erase( iterator x ) // nothrow
         {
@@ -530,10 +531,11 @@ namespace ptr_container_detail
             return boost::ptr_container_detail::move( old );
         }
 
-		auto_type replace( iterator where, std::auto_ptr<Ty_> x )
-		{
-			return replace( where, x.release() ); 
-		}
+        template< class U >
+        auto_type replace( iterator where, std::auto_ptr<U> x )
+        {
+            return replace( where, x.release() ); 
+        }
 
         auto_type replace( size_type idx, Ty_* x ) // strong
         {
@@ -549,10 +551,11 @@ namespace ptr_container_detail
             return boost::ptr_container_detail::move( old );
         } 
 
-		auto_type replace( size_type idx, std::auto_ptr<Ty_> x )
-		{
-			return replace( idx, x.release() );
-		}
+        template< class U >
+        auto_type replace( size_type idx, std::auto_ptr<U> x )
+        {
+            return replace( idx, x.release() );
+        }
         
     }; // 'reversible_ptr_container'
 

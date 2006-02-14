@@ -144,9 +144,7 @@ namespace ptr_container_detail
         typedef BOOST_DEDUCED_TYPENAME base_type::scoped_deleter scoped_deleter;
 
         typedef ptr_sequence_adapter<T,VoidPtrSeq,CloneAllocator>                         
-			this_type;
-		typedef typename ptr_container_detail::sequence_config<T,VoidPtrSeq>::value_type  
-			no_ptr_type;
+            this_type;
          
     public:
         typedef BOOST_DEDUCED_TYPENAME base_type::value_type  value_type; 
@@ -180,11 +178,12 @@ namespace ptr_container_detail
             ptr.release();                     // nothrow
         }
 
-		void push_back( std::auto_ptr<no_ptr_type> x )
-		{
-			push_back( x.release() );
-		}
-		
+        template< class U >
+        void push_back( std::auto_ptr<U> x )
+        {
+            push_back( x.release() );
+        }
+        
         void push_front( value_type x )                
         {
             this->enforce_null_policy( x, "Null pointer in 'push_front()'" );
@@ -194,10 +193,11 @@ namespace ptr_container_detail
             ptr.release();                     // nothrow
         }
 
-		void push_front( std::auto_ptr<no_ptr_type> x )
-		{
-			push_front( x.release() );
-		}
+        template< class U >
+        void push_front( std::auto_ptr<U> x )
+        {
+            push_front( x.release() );
+        }
 
         auto_type pop_back()
         {
@@ -597,48 +597,48 @@ namespace ptr_container_detail
         }
 
 
-	public: // serialization
+    public: // serialization
 
-		template< class Archieve >
-		void save( Archieve& ar, const unsigned ) const
-		{
-			ar & this->size();
+        template< class Archieve >
+        void save( Archieve& ar, const unsigned ) const
+        {
+            ar & this->size();
 
-			typename base_type::const_iterator i = this->begin(), 
-				                               e = this->end();
-			for( ; i != e; ++i )
-				ar & static_cast<value_type>( *i.base() );
-		}
+            typename base_type::const_iterator i = this->begin(), 
+                                               e = this->end();
+            for( ; i != e; ++i )
+                ar & static_cast<value_type>( *i.base() );
+        }
 
-	protected:
-		
-		template< class Archieve >
-		void load_helper( Archieve& ar, const unsigned, size_type n )
-		{   
-			//
-			// Called after an appropriate reserve
-			//
-			
-			value_type ptr;
-			for( size_type i = 0u; i != n; ++i )
-			{
-				ar & ptr;
-				this->push_back( ptr );
-			}
-		}
+    protected:
+        
+        template< class Archieve >
+        void load_helper( Archieve& ar, const unsigned, size_type n )
+        {   
+            //
+            // Called after an appropriate reserve
+            //
+            
+            value_type ptr;
+            for( size_type i = 0u; i != n; ++i )
+            {
+                ar & ptr;
+                this->push_back( ptr );
+            }
+        }
 
-	public:
+    public:
 
-		template< class Archieve >
-		void load( Archieve& ar, const unsigned )
-		{
-			size_type n;
-			ar & n;
-			load_helper( ar, 0u, n ); 
-		}
+        template< class Archieve >
+        void load( Archieve& ar, const unsigned )
+        {
+            size_type n;
+            ar & n;
+            load_helper( ar, 0u, n ); 
+        }
 
 
-	   // BOOST_SERIALIZATION_SPLIT_MEMBER()
+       // BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     };
 

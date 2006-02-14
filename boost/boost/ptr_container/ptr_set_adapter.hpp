@@ -18,8 +18,6 @@
 
 #include <boost/ptr_container/detail/associative_ptr_container.hpp>
 #include <boost/ptr_container/detail/void_ptr_iterator.hpp>
-#include <boost/range/reverse_iterator.hpp>
-#include <boost/range/const_reverse_iterator.hpp>
 #include <boost/range/iterator_range.hpp>
 
 namespace boost
@@ -276,10 +274,11 @@ namespace ptr_container_detail
             return std::make_pair( iterator( res.first ), res.second );     
         }
 
-		std::pair<iterator,bool> insert( std::auto_ptr<key_type> x )
-		{
-			return insert( x.release() );
-		}
+        template< class U >
+        std::pair<iterator,bool> insert( std::auto_ptr<U> x )
+        {
+            return insert( x.release() );
+        }
 
         
         iterator insert( iterator where, key_type* x ) // strong
@@ -294,10 +293,11 @@ namespace ptr_container_detail
             return iterator( res);
         }
 
-		iterator insert( iterator where, std::auto_ptr<key_type> x )
-		{
-			return insert( where, x.release() );
-		}
+        template< class U >
+        iterator insert( iterator where, std::auto_ptr<U> x )
+        {
+            return insert( where, x.release() );
+        }
         
         template< typename InputIterator >
         void insert( InputIterator first, InputIterator last ) // basic
@@ -426,10 +426,11 @@ namespace ptr_container_detail
             return base_type::insert( before, x ); 
         } 
 
-		iterator insert( iterator before, std::auto_ptr<key_type> x )
-		{
-			return insert( before, x.release() );
-		}
+        template< class U >
+        iterator insert( iterator before, std::auto_ptr<U> x )
+        {
+            return insert( before, x.release() );
+        }
     
         iterator insert( key_type* x ) // strong                                      
         {   
@@ -442,10 +443,11 @@ namespace ptr_container_detail
             return iterator( res );                                             
         }
 
-		iterator insert( std::auto_ptr<key_type> x )
-		{
-			return insert( x.release() );
-		}
+        template< class U >
+        iterator insert( std::auto_ptr<U> x )
+        {
+            return insert( x.release() );
+        }
     
         template< typename InputIterator >
         void insert( InputIterator first, InputIterator last ) // basic

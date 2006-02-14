@@ -135,11 +135,11 @@ namespace boost
             return move(res);                                                // nothrow
         }
 
-		template< size_t idx >
-		auto_type replace( std::auto_ptr<U> r )
-		{
-			return replace<idx>( r.release() );
-		}
+        template< size_t idx, class V >
+        auto_type replace( std::auto_ptr<V> r )
+        {
+            return replace<idx>( r.release() );
+        }
 
         auto_type replace( size_t idx, U* r ) // strong
         {
@@ -155,10 +155,11 @@ namespace boost
             return move(res);                                                // nothrow
         }
 
-		auto_type replace( size_t idx, std::auto_ptr<U> r )
-		{
-			return replace( idx, r.release() );
-		}
+        template< class V >
+        auto_type replace( size_t idx, std::auto_ptr<V> r )
+        {
+            return replace( idx, r.release() );
+        }
 
         using base_class::at;
 

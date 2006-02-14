@@ -53,20 +53,20 @@ namespace boost
             this->c_private().reserve( n );
         }
 
-	public: // serialization
+    public: // serialization
 
-		template< class Archieve >
-		void load( Archieve& ar, unsigned )
-		{
-			size_type n;
-			ar & n;
-			
-			this->reserve( n );
-			this->load_helper( ar, 0u, n );
-		}
+        template< class Archieve >
+        void load( Archieve& ar, unsigned )
+        {
+            size_type n;
+            ar & n;
+            
+            this->reserve( n );
+            this->load_helper( ar, 0u, n );
+        }
   
-		BOOST_SERIALIZATION_SPLIT_MEMBER()
-		
+        BOOST_SERIALIZATION_SPLIT_MEMBER()
+        
     };
 
     //////////////////////////////////////////////////////////////////////////////

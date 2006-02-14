@@ -99,7 +99,6 @@ namespace ptr_container_detail
             base_type;
 
         typedef ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator>  this_type;
-		typedef typename map_config<T,VoidPtrMap>::value_type      no_ptr_type;
         
     public:
 
@@ -267,10 +266,11 @@ namespace ptr_container_detail
             return move( old );
         }
 
-		auto_type replace( iterator where, std::auto_ptr<no_ptr_type> x )
-		{
-			return replace( where, x.release() );
-		}
+        template< class U >
+        auto_type replace( iterator where, std::auto_ptr<U> x )
+        {
+            return replace( where, x.release() );
+        }
                                                                                      
     };
     
@@ -291,8 +291,6 @@ namespace ptr_container_detail
     {
         typedef ptr_container_detail::ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator> 
             base_type;
-		typedef typename ptr_container_detail::map_config<T,VoidPtrMap>::value_type 
-			no_ptr_type;
     
     public:    
         typedef BOOST_DEDUCED_TYPENAME base_type::iterator 
@@ -383,22 +381,31 @@ namespace ptr_container_detail
             insert( this->adl_begin(r), this->adl_end(r) );
         }
 
-        std::pair<iterator,bool> insert( key_type& key, value_type x ) // strong
+    private:
+        std::pair<iterator,bool> insert_impl( const key_type& key, value_type x ) // strong
         {
             this->enforce_null_policy( x, "Null pointer in ptr_map_adapter::insert()" );
-            auto_type ptr( x );                                                 // nothrow
-    
+            auto_type ptr( x );                                              // nothrow
+
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool>
-                 res = this->c_private().insert( std::make_pair( key, x ) );       // strong, commit      
-            if( res.second )                                                                               // nothrow     
-                ptr.release();                                                                             // nothrow
-            return std::make_pair( iterator( res.first ), res.second );  // nothrow   
+                 res = this->c_private().insert( std::make_pair( key, x ) ); // strong, commit      
+            if( res.second )                                             // nothrow     
+                ptr.release();                                           // nothrow
+            return std::make_pair( iterator( res.first ), res.second );  // nothrow        
+        }
+        
+    public:
+        
+        std::pair<iterator,bool> insert( key_type& key, value_type x )
+        {
+            return insert_impl( key, x );
         }
 
-		std::pair<iterator,bool> insert( key_type& key, std::auto_ptr<no_ptr_type> x )
-		{
-			return insert( key, x.release() );
-		}
+        template< class U >
+        std::pair<iterator,bool> insert( const key_type& key, std::auto_ptr<U> x )
+        {
+            return insert_impl( key, x.release() );
+        }
 
         bool transfer( iterator object, 
                        ptr_map_adapter& from ) // strong
@@ -450,9 +457,6 @@ namespace ptr_container_detail
         typedef ptr_container_detail::ptr_map_adapter_base<T,VoidPtrMultiMap,CloneAllocator>
              base_type;
 
-		typedef typename ptr_container_detail::map_config<T,VoidPtrMultiMap>::value_type
-			no_ptr_type;
-        
     public: // typedefs
         typedef BOOST_DEDUCED_TYPENAME base_type::iterator           
                        iterator;                 
@@ -549,10 +553,11 @@ namespace ptr_container_detail
             return iterator( res );           
         }
 
-		iterator insert( key_type& key, std::auto_ptr<no_ptr_type> x )
-		{
-			return insert( key, x.release() );
-		}
+        template< class U >
+        iterator insert( key_type& key, std::auto_ptr<U> x )
+        {
+            return insert( key, x.release() );
+        }
 
         
         void transfer( iterator object, 
