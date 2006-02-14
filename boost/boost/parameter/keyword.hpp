@@ -112,14 +112,32 @@ struct keyword : noncopyable
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 
 # define BOOST_PARAMETER_KEYWORD(tag_namespace,name)                \
-    namespace tag_namespace { struct name; }                        \
+    namespace tag_namespace                                         \
+    {                                                               \
+      struct name                                                   \
+      {                                                             \
+          static char const* keyword_name()                         \
+          {                                                         \
+              return #name;                                         \
+          }                                                         \
+      };                                                            \
+    }                                                               \
     static ::boost::parameter::keyword<tag_namespace::name>& name   \
        = ::boost::parameter::keyword<tag_namespace::name>::get();
 
 #else
 
 #define BOOST_PARAMETER_KEYWORD(tag_namespace,name)                 \
-    namespace tag_namespace { struct name; }                        \
+    namespace tag_namespace                                         \
+    {                                                               \
+      struct name                                                   \
+      {                                                             \
+          static char const* keyword_name()                         \
+          {                                                         \
+              return #name;                                         \
+          }                                                         \
+      };                                                            \
+    }                                                               \
     namespace                                                       \
     {                                                               \
        ::boost::parameter::keyword<tag_namespace::name>& name       \

@@ -65,6 +65,39 @@ struct unwrap_type
 
 #  define BOOST_PARAMETER_FUNCTION_WRAP_TYPE(x) void(*) x
 
+# elif BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+
+template<typename ID>
+struct msvc_extract_type
+{
+    struct id2type;
+};
+
+template<typename T, typename ID>
+struct msvc_register_type : msvc_extract_type<ID>
+{
+    typedef msvc_extract_type<ID> base_type;
+    struct base_type::id2type // This uses nice VC6.5 and VC7.1 bugfeature
+    {
+        typedef T type;
+    };
+};
+
+template <class T>
+msvc_register_type<T, void(*)(T)> unwrap_type_fn(void(*)(T));
+
+template <class T>
+struct unwrap_type
+{
+    BOOST_STATIC_CONSTANT(unsigned,
+        dummy = sizeof(unwrap_type_fn((T)0))
+    );
+
+    typedef typename msvc_extract_type<T>::id2type::type type;
+};
+
+#  define BOOST_PARAMETER_FUNCTION_WRAP_TYPE(x) void(*) x
+
 # else
 
 template <class T, class Dummy>
@@ -216,7 +249,10 @@ struct argument_pack
       , BOOST_PP_EXPR_IF(n, typename) \
         boost::parameter::aux::argument_pack< \
             BOOST_PARAMETER_FUNCTION_PARAMETERS_NAME(BOOST_PP_TUPLE_ELEM(7,3,data)) \
-            BOOST_PP_ENUM_TRAILING_PARAMS_Z(z, n, const ParameterArgumentType) \
+            BOOST_PP_COMMA_IF(n) \
+            BOOST_PP_IF( \
+                n, BOOST_PP_SEQ_ENUM, BOOST_PP_TUPLE_EAT(1) \
+            )(elem) \
         >::type \
     >::type \
     BOOST_PP_TUPLE_ELEM(7,3,data)( \
@@ -434,7 +470,7 @@ struct argument_pack
 // Defines a Boost.Parameter enabled constructor.
 
 # define BOOST_PARAMETER_FUNCTION_ARGUMENT(r, _, i, elem) \
-    BOOST_PP_COMMA_IF(i) elem BOOST_PP_CAT(a, i)
+    BOOST_PP_COMMA_IF(i) elem& BOOST_PP_CAT(a, i)
 /**/
 
 # define BOOST_PARAMETER_FUNCTION_FWD_CONSTRUCTOR00(z, n, r, data, elem) \
@@ -545,14 +581,19 @@ struct argument_pack
     )
 /**/
 
-# define BOOST_PARAMETER_FUNCTION_FWD_COMBINATION(r, _, i, elem) \
+# if 1 //ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+#  define BOOST_PARAMETER_FUNCTION_FWD_COMBINATION(r, _, i, elem) \
     (BOOST_PP_IF( \
         BOOST_PARAMETER_FUNCTION_IS_KEYWORD_QUALIFIER( \
             BOOST_PP_TUPLE_ELEM(3,1,elem) \
         ) \
-      , (const ParameterArgumentType ## i&)(ParameterArgumentType ## i&) \
-      , (const ParameterArgumentType ## i&) \
+      , (const ParameterArgumentType ## i)(ParameterArgumentType ## i) \
+      , (const ParameterArgumentType ## i) \
     ))
+# else
+#  define BOOST_PARAMETER_FUNCTION_FWD_COMBINATION(r, _, i, elem) \
+    ((ParameterArgumentType ## i))
+# endif
 
 # define BOOST_PARAMETER_FUNCTION_FWD_COMBINATIONS(args) \
     BOOST_PP_SEQ_FOR_EACH_I(BOOST_PARAMETER_FUNCTION_FWD_COMBINATION, ~, args)

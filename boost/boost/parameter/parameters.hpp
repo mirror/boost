@@ -198,12 +198,12 @@ namespace aux
   // already a tagged_argument. If an unnamed spec that matches
   // Arg exists in UnnamedList, labels Arg with that spec's
   // keyword tag.
-  template <class DefaultTag, class Arg, class UnnamedList, class TagFn>
+  template <class Positional, class Arg, class UnnamedList, class TagFn>
   struct as_tagged_argument
     : mpl::eval_if<
           is_named_argument<Arg>
         , mpl::identity<mpl::pair<Arg, UnnamedList> >
-        , mpl::apply_wrap3<UnnamedList, Arg, DefaultTag, TagFn>
+        , mpl::apply_wrap3<UnnamedList, Arg, Positional, TagFn>
       >
   {};
   
@@ -272,7 +272,7 @@ namespace aux
       struct apply
       {
           typedef typename as_tagged_argument<
-              typename key_type<ParameterSpec>::type,ArgumentType,UnnamedList,TagFn
+              ParameterSpec,ArgumentType,UnnamedList,TagFn
           >::type tagged_result;
 
           typedef arg_list<
@@ -335,16 +335,20 @@ namespace aux
   // Terminates an unnamed_list (below).
   struct empty_unnamed_list
   {
-      template <class Arg, class DefaultTag, class TagFn>
+      template <class Arg, class Positional, class TagFn>
       struct apply
       {
           // No unnamed predicate matched Arg, so we tag Arg with
           // the DefaultTag.
 
-          // TODO: If we come here we should assert that the current
-          // ParameterSpec isn't an unnamed<> spec.
+          BOOST_MPL_ASSERT_NOT((is_unnamed<Positional>));
+
           typedef mpl::pair<
-              typename mpl::apply_wrap2<TagFn, DefaultTag, Arg>::type
+              typename mpl::apply_wrap2<
+                  TagFn
+                , typename key_type<Positional>::type
+                , Arg
+              >::type
             , empty_unnamed_list
           > type;
       };
@@ -365,11 +369,11 @@ namespace aux
       //  * the tagged argument
       //  * the unnamed_list that is left after the tagging. Possibly
       //    with one element removed.
-      template <class Arg, class DefaultTag, class TagFn>
+      template <class Arg, class Positional, class TagFn>
       struct eval_tail
       {
           typedef typename mpl::apply_wrap3<
-              Tail, Arg, DefaultTag, TagFn
+              Tail, Arg, Positional, TagFn
           >::type result;
 
           typedef mpl::pair<
@@ -381,7 +385,7 @@ namespace aux
       // If this keyword's predicate returns true for
       // the given argument type, tag the argument with
       // ParameterSpec::key_type. Otherwise try the tail.
-      template <class Arg, class DefaultTag, class TagFn>
+      template <class Arg, class Positional, class TagFn>
       struct apply
       {
           typedef typename mpl::eval_if<
@@ -396,7 +400,7 @@ namespace aux
 #if BOOST_WORKAROUND(__GNUC__, < 3)
               typename unnamed_list<ParameterSpec, Tail>::template
 #endif
-              eval_tail<Arg, DefaultTag, TagFn>
+              eval_tail<Arg, Positional, TagFn>
           >::type type;
       };
   };

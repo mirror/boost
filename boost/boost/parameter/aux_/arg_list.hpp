@@ -21,7 +21,7 @@
 
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/type_traits/is_same.hpp>
-
+#include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/facilities/intercept.hpp>
 
@@ -155,15 +155,42 @@ no_tag operator*(empty_arg_list, KW*);
 template <class KW, class T>
 struct tagged_argument;
 
+// Forward declaration for arg_list::operator[], with
+// IS_XXX helper
+struct maybe_base;
+
+template <class T>
+struct is_maybe
+  : is_base_and_derived<maybe_base, T>
+{};
+
+template <class T>
+struct get_reference
+{
+    typedef typename T::reference type;
+};
+
 // A tuple of tagged arguments, terminated with empty_arg_list.
 // Every TaggedArg is an instance of tagged_argument<>.
 template <class TaggedArg, class Next = empty_arg_list>
 struct arg_list : Next
 {
     typedef arg_list<TaggedArg,Next> self;
-    typedef typename TaggedArg::key_type key_type;
-    typedef typename TaggedArg::value_type value_type;
-    typedef typename TaggedArg::reference reference;
+    typedef typename TaggedArg::key_type key_type;   
+
+    typedef typename is_maybe<typename TaggedArg::value_type>::type holds_maybe;
+
+    typedef typename mpl::eval_if<
+        holds_maybe
+      , get_reference<typename TaggedArg::value_type>
+      , get_reference<TaggedArg>
+    >::type reference;
+
+    typedef typename mpl::if_<
+        holds_maybe
+      , reference
+      , typename TaggedArg::value_type
+    >::type value_type;
 
     TaggedArg arg;      // Stores the argument
 
@@ -188,7 +215,6 @@ struct arg_list : Next
       : Next(tail)
       , arg(arg)
     {}
-
 
     // A metafunction class that, given a keyword and a default
     // type, returns the appropriate result type for a keyword
@@ -230,6 +256,20 @@ struct arg_list : Next
     // Begin implementation of indexing operators for looking up
     // specific arguments by name
     //
+
+    // Helpers that handle the case when TaggedArg is 
+    // empty<T>.
+    template <class D>
+    reference get_default(D const&, mpl::false_) const
+    {
+        return arg.value;
+    }
+
+    template <class D>
+    reference get_default(D const& d, mpl::true_) const
+    {
+        return arg.value ? arg.value.get() : arg.value.construct(d.value);
+    }
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
     || BOOST_WORKAROUND(__GNUC__, < 3) \
@@ -289,13 +329,14 @@ struct arg_list : Next
     // passed, compilation fails.
     reference get(keyword<key_type> const&) const
     {
+        BOOST_MPL_ASSERT_NOT((holds_maybe));
         return arg.value;
     }
 
     template <class Default>
-    reference get(default_<key_type,Default>) const
+    reference get(default_<key_type,Default> const& d) const
     {
-        return arg.value;
+        return get_default(d, holds_maybe());        
     }
 
     template <class Default>
@@ -308,13 +349,14 @@ struct arg_list : Next
 
     reference operator[](keyword<key_type> const&) const
     {
+        BOOST_MPL_ASSERT_NOT((holds_maybe));
         return arg.value;
     }
 
     template <class Default>
-    reference operator[](default_<key_type, Default>) const
+    reference operator[](default_<key_type, Default> const& d) const
     {
-        return arg.value;
+        return get_default(d, holds_maybe());
     }
 
     template <class Default>
