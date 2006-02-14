@@ -7,6 +7,7 @@ during the early states of xpressive's development. I am thankful for
 to add regular expressions to the standard library. I'd also like to thank
 [@http://moderncppdesign.com/ Andrei Alexandrescu] for his input regarding the behavior
 of nested regex objects, and [@http://boost.org/people/dave_abrahams.htm Dave Abrahams]
-for his suggestions regarding the regex domain-specific embedded language.
+for his suggestions regarding the regex domain-specific embedded language. Noel Belcourt
+helped porting xpressive to the Metrowerks CodeWarrior compiler.
 
 [endsect]
