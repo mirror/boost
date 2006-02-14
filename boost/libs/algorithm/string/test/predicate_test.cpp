@@ -56,14 +56,14 @@ void predicate_test()
     BOOST_CHECK( iequals( "AbC", "abc" ) );
     BOOST_CHECK( !iequals( "aBc", "yyy" ) );
 
-	BOOST_CHECK( lexicographical_compare("abc", "abd") );
-	BOOST_CHECK( !lexicographical_compare("abc", "abc") );
-	BOOST_CHECK( lexicographical_compare("abc", "abd", is_not_greater()) );
-	BOOST_CHECK( lexicographical_compare("abc", "abc", is_not_greater()) );
+    BOOST_CHECK( lexicographical_compare("abc", "abd") );
+    BOOST_CHECK( !lexicographical_compare("abc", "abc") );
+    BOOST_CHECK( lexicographical_compare("abc", "abd", is_not_greater()) );
+    BOOST_CHECK( lexicographical_compare("abc", "abc", is_not_greater()) );
 
-	BOOST_CHECK( !ilexicographical_compare("aBD", "AbC") );
-	BOOST_CHECK( ilexicographical_compare("aBc", "AbD") );
-	BOOST_CHECK( lexicographical_compare("abC", "aBc", is_not_igreater()) );
+    BOOST_CHECK( !ilexicographical_compare("aBD", "AbC") );
+    BOOST_CHECK( ilexicographical_compare("aBc", "AbD") );
+    BOOST_CHECK( lexicographical_compare("abC", "aBc", is_not_igreater()) );
 
     // multi-type comparison test
     BOOST_CHECK( starts_with( vec1, string("123") ) );

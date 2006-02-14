@@ -40,6 +40,12 @@ test-suite algorithm/string
             :
             : split
         ]
+      [ run
+            join_test.cpp
+          : :
+            :
+            : join
+        ]
       [ run 
             replace_test.cpp
           : :

@@ -57,6 +57,14 @@ DEPENDS all : test ;
                 std::facet-support
                 : split
             ]
+          [ run
+                join_test.cpp
+              : :
+                :
+                std::locale-support
+                std::facet-support
+                : join
+            ]
           [ run 
                 replace_test.cpp
               : :

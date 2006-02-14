@@ -93,10 +93,10 @@ void find_test()
         ( (nc_result.begin()-str1.begin()) == 9) &&
         ( (nc_result.end()-str1.begin()) == 12) );
 
-	nc_result=find_nth( str1, string("abc"), -1 );
-	BOOST_CHECK( 
-		( (nc_result.begin()-str1.begin()) == 15) &&
-		( (nc_result.end()-str1.begin()) == 18) );
+    nc_result=find_nth( str1, string("abc"), -1 );
+    BOOST_CHECK( 
+        ( (nc_result.begin()-str1.begin()) == 15) &&
+        ( (nc_result.end()-str1.begin()) == 18) );
 
 
     cv_result=find_nth( const_cast<const string&>(str1), str2, 1 );
@@ -104,20 +104,20 @@ void find_test()
         ( (cv_result.begin()-str1.begin()) == 9) &&
         ( (cv_result.end()-str1.begin()) == 12) );
 
-	cv_result=find_nth( const_cast<const string&>(str1), str2, -1 );
-	BOOST_CHECK( 
-		( (cv_result.begin()-str1.begin()) == 15) &&
-		( (cv_result.end()-str1.begin()) == 18) );
+    cv_result=find_nth( const_cast<const string&>(str1), str2, -1 );
+    BOOST_CHECK( 
+        ( (cv_result.begin()-str1.begin()) == 15) &&
+        ( (cv_result.end()-str1.begin()) == 18) );
         
     cv_result=ifind_nth( const_cast<const string&>(str1), "xxx", 1 );
     BOOST_CHECK( 
         ( (cv_result.begin()-str1.begin()) == 12) &&
         ( (cv_result.end()-str1.begin()) == 15) );
 
-	cv_result=ifind_nth( const_cast<const string&>(str1), "xxx", 1 );
-	BOOST_CHECK( 
-		( (cv_result.begin()-str1.begin()) == 12) &&
-		( (cv_result.end()-str1.begin()) == 15) );
+    cv_result=ifind_nth( const_cast<const string&>(str1), "xxx", 1 );
+    BOOST_CHECK( 
+        ( (cv_result.begin()-str1.begin()) == 12) &&
+        ( (cv_result.end()-str1.begin()) == 15) );
 
 
     ch_result=find_nth( pch1, "abc", 1 );
@@ -131,10 +131,10 @@ void find_test()
         ( (nc_result.begin()-str1.begin()) == 0) &&
         ( (nc_result.end()-str1.begin()) == 6) );
 
-	nc_result=find_head( str1, -6 );
-	BOOST_CHECK( 
-		( (nc_result.begin()-str1.begin()) == 0) &&
-		( (str1.end()-nc_result.end()) == 6 ) );
+    nc_result=find_head( str1, -6 );
+    BOOST_CHECK( 
+        ( (nc_result.begin()-str1.begin()) == 0) &&
+        ( (str1.end()-nc_result.end()) == 6 ) );
 
     cv_result=find_head( const_cast<const string&>(str1), 6 );
     BOOST_CHECK( 
@@ -152,10 +152,10 @@ void find_test()
         ( (nc_result.begin()-str1.begin()) == 15) &&
         ( (nc_result.end()-str1.begin()) == 21) );
 
-	nc_result=find_tail( str1, -6 );
-	BOOST_CHECK( 
-		( (nc_result.begin()-str1.begin()) == 6) &&
-		( (nc_result.end()-str1.begin()) == 21) );
+    nc_result=find_tail( str1, -6 );
+    BOOST_CHECK( 
+        ( (nc_result.begin()-str1.begin()) == 6) &&
+        ( (nc_result.end()-str1.begin()) == 21) );
 
 
     cv_result=find_tail( const_cast<const string&>(str1), 6 );
