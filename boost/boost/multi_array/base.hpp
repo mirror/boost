@@ -440,7 +440,7 @@ protected:
       index len = (finish - start + (index_factor - 1)) / index_factor;
 
       BOOST_ASSERT(index_bases[n] <= start &&
-                   start < index_bases[n]+index(extents[n]));
+                   start <= index_bases[n]+index(extents[n]));
       BOOST_ASSERT(index_bases[n] <= finish &&
                    finish <= index_bases[n]+index(extents[n]));
       BOOST_ASSERT(index_factor > 0);
