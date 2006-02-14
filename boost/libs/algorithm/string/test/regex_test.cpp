@@ -8,7 +8,11 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 #include <boost/algorithm/string/regex.hpp>
+#include <boost/algorithm/string/join.hpp>
 #include <boost/algorithm/string/sequence_traits.hpp>
+// equals predicate is used for result comparison
+#include <boost/algorithm/string/predicate.hpp>
+
 
 // Include unit test framework
 #include <boost/test/included/test_exec_monitor.hpp>
@@ -83,6 +87,18 @@ static void find_test()
 
 }
 
+static void join_test()
+{
+    // Prepare inputs
+    vector<string> tokens1;
+    tokens1.push_back("xx");
+    tokens1.push_back("abc");
+    tokens1.push_back("xx");
+
+    BOOST_CHECK( equals(join_if(tokens1, "-", regex("x+")), "xx-xx") );
+    BOOST_CHECK( equals(join_if(tokens1, "-", regex("[abc]+")), "abc") );
+}
+
 static void replace_test()
 {
     string str1("123a1cxxxa23cXXXa456c321");
@@ -131,6 +147,7 @@ static void replace_test()
 int test_main( int, char*[] )
 {
     find_test();
+    join_test();
     replace_test();
 
     return 0;
