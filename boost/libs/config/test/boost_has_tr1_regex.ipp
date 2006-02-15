@@ -5,15 +5,15 @@
 
 //  See http://www.boost.org/libs/config for most recent version.
 
-//  MACRO:         BOOST_HAS_TR1_ARRAY
-//  TITLE:         std::tr1::array
-//  DESCRIPTION:   The std lib has a tr1-conforming array library.
+//  MACRO:         BOOST_HAS_TR1_REGEX
+//  TITLE:         std::tr1::regex
+//  DESCRIPTION:   The std lib has a tr1-conforming regex library.
 
-#include <array>
+#include <regex>
 
-namespace boost_has_tr1_array{
+namespace boost_has_tr1_regex{
 
-using std::tr1::array;
+using std::tr1::regex;
 
 int test()
 {
@@ -21,3 +21,4 @@ int test()
 }
 
 }
+
