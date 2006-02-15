@@ -1,0 +1,9 @@
+# copyright John Maddock 2003
+
+project
+    : requirements 
+     # threading tests require thread support turned on:
+     <threading>multi
+   ;
+   
+local test-requirements = <library>../../test/build//boost_test_exec_monitor  ;
