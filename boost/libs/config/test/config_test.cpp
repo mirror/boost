@@ -1,4 +1,4 @@
-//  This file was automatically generated on Wed Feb 15 14:04:19 2006
+//  This file was automatically generated on Wed Feb 15 14:14:06 2006
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -470,10 +470,10 @@ namespace boost_has_tr1_random = empty_boost;
 #else
 namespace boost_has_tr1_reference_wrapper = empty_boost;
 #endif
-#ifdef BOOST_HAS_TR1_ARRAY
+#ifdef BOOST_HAS_TR1_REGEX
 #include "boost_has_tr1_regex.ipp"
 #else
-namespace boost_has_tr1_array = empty_boost;
+namespace boost_has_tr1_regex = empty_boost;
 #endif
 #ifdef BOOST_HAS_TR1_RESULT_OF
 #include "boost_has_tr1_result_of.ipp"
@@ -708,9 +708,9 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_HAS_TR1_REFERENCE_WRAPPER at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_has_tr1_array::test())
+   if(0 != boost_has_tr1_regex::test())
    {
-      std::cerr << "Failed test for BOOST_HAS_TR1_ARRAY at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      std::cerr << "Failed test for BOOST_HAS_TR1_REGEX at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_has_tr1_result_of::test())
