@@ -183,7 +183,7 @@ namespace ptr_container_detail
             return make_iterator_range( const_iterator( p.first ), 
                                         const_iterator( p.second ) );    
         }                                                                            
-                                                                                     
+
     };
 
 } // ptr_container_detail
@@ -313,7 +313,7 @@ namespace ptr_container_detail
         boost::disable_if< ptr_container_detail::is_pointer_or_integral<Range> >::type
         insert( const Range& r )
         {
-            insert( this->adl_begin(r), this->adl_end(r) );
+            insert( boost::begin(r), boost::end(r) );
         }
 
 #endif        
@@ -340,7 +340,7 @@ namespace ptr_container_detail
                                                             size_type >::type
         transfer( const Range& r, ptr_set_adapter& from ) // basic
         {
-            return transfer( this->adl_begin(r), this->adl_end(r), from );
+            return transfer( boost::begin(r), boost::end(r), from );
         }
 
 #endif
@@ -463,7 +463,7 @@ namespace ptr_container_detail
         boost::disable_if< ptr_container_detail::is_pointer_or_integral<Range> >::type
         insert( const Range& r )
         {
-            insert( this->adl_begin(r), this->adl_end(r) );
+            insert( boost::begin(r), boost::end(r) );
         }
 
 #endif
@@ -489,7 +489,7 @@ namespace ptr_container_detail
                                            iterator >, size_type >::type
         transfer(  const Range& r, ptr_multiset_adapter& from ) // basic
         {
-            return transfer( this->adl_begin(r), this->adl_end(r), from );
+            return transfer( boost::begin(r), boost::end(r), from );
         }
 
 #endif        

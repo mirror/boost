@@ -31,10 +31,11 @@
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/iterator/reverse_iterator.hpp>
-#include <boost/range/result_iterator.hpp>
+#include <boost/range/iterator.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_integral.hpp>
+#include <boost/serialization/split_member.hpp>
 #include <algorithm>
 #include <exception>
 #include <memory>
@@ -44,6 +45,12 @@ namespace boost
     
 namespace ptr_container_detail
 {
+
+    template< class T >
+    inline T const& serialize_as_const( T const& r )
+    {
+        return r;
+    }
 
     template< class CloneAllocator >
     struct clone_deleter
@@ -239,30 +246,6 @@ namespace ptr_container_detail
                 remove( first );
         }
 
-        template< class Range >
-        BOOST_DEDUCED_TYPENAME range_result_iterator<Range>::type
-        adl_begin( Range& r )
-        {
-            #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
-            return begin( r );
-            #else
-            using boost::begin;
-            return begin( r );
-            #endif
-        }
-
-        template< class Range >
-        BOOST_DEDUCED_TYPENAME range_result_iterator<Range>::type
-        adl_end( Range& r )
-        {
-            #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))  
-            return end( r );
-            #else
-            using boost::end;
-            return end( r );
-            #endif
-        }
-        
         static void enforce_null_policy( Ty_* x, const char* msg )
         {
             if( !allow_null )
@@ -488,7 +471,7 @@ namespace ptr_container_detail
         template< class Range >
         iterator erase( const Range& r )
         {
-            return erase( adl_begin(r), adl_end(r) );
+            return erase( boost::begin(r), boost::end(r) );
         }
 
         void clear()
@@ -556,7 +539,60 @@ namespace ptr_container_detail
         {
             return replace( idx, x.release() );
         }
-        
+
+    //
+    // serialization
+    //
+    
+    protected:
+
+        template< class Archive >
+        void save_helper( Archive& ar ) const
+        {
+            const_iterator i = this->begin(), e = this->end();
+            for( ; i != e; ++i )
+                ar & ptr_container_detail::serialize_as_const( 
+                                 static_cast<value_type>( *i.base() ) );
+        }
+
+    public: 
+
+        template< class Archive >
+        void save( Archive& ar, const unsigned ) const
+        {
+            ar & ptr_container_detail::serialize_as_const( this->size() );
+            this->save_helper( ar );
+        }
+
+    protected:
+
+        template< class Archive >
+        void load_helper( Archive& ar, const unsigned, size_type n )
+        {   
+            //
+            // Called after an appropriate reserve
+            //
+
+            value_type ptr;
+            for( size_type i = 0u; i != n; ++i )
+            {
+                ar & ptr;
+                this->insert( this->end(), ptr );
+            }
+        }
+
+    public:
+
+        template< class Archive >
+        void load( Archive& ar, const unsigned )
+        {
+            size_type n;
+            ar & n;
+            this->load_helper( ar, 0u, n ); 
+        }
+
+        BOOST_SERIALIZATION_SPLIT_MEMBER()
+            
     }; // 'reversible_ptr_container'
 
 

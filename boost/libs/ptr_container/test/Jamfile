@@ -46,6 +46,6 @@ test-suite ptr_container :
     [ sc-test iterator_test ]
     [ sc-example tut1 ]   
     [ sc-test indirect_fun ]
-#    [ sc-test serialization ]
+    [ sc-test serialization ]
 #    [ sc-test test_derived_class_ptr ]
     ;

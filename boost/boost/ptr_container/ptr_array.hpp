@@ -74,12 +74,13 @@ namespace boost
         void operator=( const this_type& );
 
     public:
-        typedef U*        value_type;
-        typedef U*        pointer;
-        typedef U&        reference;
-        typedef const U&  const_reference;
+        typedef std::size_t size_type;
+        typedef U*          value_type;
+        typedef U*          pointer;
+        typedef U&          reference;
+        typedef const U&    const_reference;
         typedef BOOST_DEDUCED_TYPENAME base_class::auto_type
-                          auto_type;
+                            auto_type;
 
     public: // constructors
         ptr_array() : base_class()
@@ -131,8 +132,8 @@ namespace boost
             this->enforce_null_policy( r, "Null pointer in 'ptr_array::replace()'" );
 
             auto_type res( static_cast<U*>( this->c_private()[idx] ) ); // nothrow
-            this->c_private()[idx] = r;                                      // nothrow
-            return move(res);                                                // nothrow
+            this->c_private()[idx] = r;                                 // nothrow
+            return move(res);                                           // nothrow
         }
 
         template< size_t idx, class V >
@@ -151,8 +152,8 @@ namespace boost
                 throw bad_index( "'replace()' aout of bounds" );
 
             auto_type res( static_cast<U*>( this->c_private()[idx] ) ); // nothrow
-            this->c_private()[idx] = ptr.release();                          // nothrow
-            return move(res);                                                // nothrow
+            this->c_private()[idx] = ptr.release();                     // nothrow
+            return move(res);                                           // nothrow
         }
 
         template< class V >
@@ -188,6 +189,27 @@ namespace boost
             BOOST_STATIC_ASSERT( idx < N );
             return this->c_private()[idx] == 0;
         }
+        
+    public: // serialization
+
+        template< class Archive >
+        void save( Archive& ar, const unsigned ) const
+        {
+            this->save_helper( ar );
+        }
+
+        template< class Archive >
+        void load( Archive& ar, const unsigned )
+        {
+            for( size_type i = 0u; i != N; ++i )
+            {
+                T* p;
+                ar & p;
+                this->replace( i, p );
+            }
+        }
+
+        BOOST_SERIALIZATION_SPLIT_MEMBER()
 
     };
 

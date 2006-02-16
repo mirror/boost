@@ -55,8 +55,8 @@ namespace boost
 
     public: // serialization
 
-        template< class Archieve >
-        void load( Archieve& ar, unsigned )
+        template< class Archive >
+        void load( Archive& ar, unsigned )
         {
             size_type n;
             ar & n;

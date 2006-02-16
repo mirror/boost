@@ -10,42 +10,45 @@
 //
 
 #include <boost/test/unit_test.hpp>
-#include <boost/ptr_container/ptr_vector.hpp>
-#include <boost/ptr_container/ptr_deque.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/ptr_container/ptr_deque.hpp>
+#include <boost/ptr_container/ptr_list.hpp>
+#include <boost/ptr_container/ptr_array.hpp>
+#include <boost/ptr_container/ptr_set.hpp>
+#include <boost/ptr_container/ptr_map.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/utility.hpp>
+#include <boost/serialization/string.hpp>
 #include <fstream>
+#include <string>
 
+//
+// serizalization helper: we can't save a non-const object
+// 
+template< class T >
+inline T const& as_const( T const& r )
+{
+    return r;
+}
 
+//
+// class hierarchy
+// 
 struct Base
 {
 	friend class boost::serialization::access;
 
 	int i;
 
-	/*
+	
 	template< class Archive >
 	void serialize( Archive& ar, const unsigned int version )
 	{
 		ar & i;
-	}*/
-
-    template< class Archive >
-    void save( Archive & ar, const unsigned int version) const
-    {
-		ar & i;
 	}
-
-	template< class Archive >
-    void load(Archive & ar, const unsigned int version)
-    {
-		ar & i;
-	}
-
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
 
 	Base() : i(42)
 	{ }
@@ -57,8 +60,10 @@ struct Base
 	{ }
 };
 
-
-BOOST_IS_ABSTRACT(Base)
+inline bool operator<( const Base& l, const Base& r )
+{
+    return l.i < r.i;
+}
 
 struct Derived : Base
 {
@@ -80,48 +85,37 @@ struct Derived : Base
 
 BOOST_CLASS_EXPORT_GUID( Derived, "Derived" )
 
-/*
-namespace boost
+//
+// test of containers
+// 
+// 
+
+template< class C, class T >
+void add( C& c, T* r, unsigned n )
 {
-	
-	template< class Archive, class T, class CA, class A >
-	inline void save( Archive& ar, ptr_vector<T,CA,A>& t, unsigned int )
-	{
-		boost::serialization::stl::save_collection< Archive, ptr_vector<T,CA,A> >( ar, t );
-	}
-	
-	template< class Archive, class T, class CA, class A >
-	inline void load( Archive& ar, ptr_vector<T,CA,A>& t, unsigned int )
-	{
-		namespace ser = boost::serialization::stl; 
-		ser::load_collection< Archive, 
-			                  ptr_vector<T,CA,A>,
-			                  ser::archive_input_seq<Archive, ptr_vector<T,CA,A> >,
-			                  ser::reserve_imp< ptr_vector<T,CA,A> > >( ar, t );
-	}
-	
+    c.insert( c.end(), r ); 
+}
 
-	template< class Archive, class T, class CA, class A >
-	inline void serialize( Archive& ar, ptr_vector<T,CA,A>& t, unsigned int version )
-	{
-		boost::serialization::split_free( ar, t, version );
-	}
-	
-}*/
-
+template< class U, class T >
+void add( boost::ptr_array<U,2>& c, T* r, unsigned n )
+{
+    c.replace( n, r );
+}
 
 template< class Cont >
 void test_serialization_helper()
 {
 	Cont vec;
-	vec.push_back( new Base( 2 ) );
-	vec.push_back( new Derived( 1 ) );
+	add( vec, new Base( -1 ), 0u );
+	add( vec, new Derived( 1 ), 1u );
 
     std::ofstream ofs("filename");
     boost::archive::text_oarchive oa(ofs);
-	oa << vec;
+	oa << as_const(vec);
 	ofs.close();
 
+    
+    
 	std::ifstream ifs("filename", std::ios::binary);
     boost::archive::text_iarchive ia(ifs);
 	Cont vec2;
@@ -129,31 +123,90 @@ void test_serialization_helper()
 	ifs.close();
 
 	BOOST_CHECK_EQUAL( vec.size(), vec2.size() );
+    BOOST_CHECK_EQUAL( (*vec2.begin()).i, -1 );
+    BOOST_CHECK_EQUAL( (*--vec2.end()).i, 0 );
+    BOOST_CHECK_EQUAL( dynamic_cast<Derived&>(*--vec2.end()).i2, 1 );
 }
 
+template< class Map >
+void test_serialization_map_helper()
+{
+    Map m;
+    std::string key1("key1"), key2("key2");
+    m.insert( key1, new Base( -1 ) );
+    m.insert( key2, new Derived( 1 ) );
+    BOOST_CHECK_EQUAL( m.size(), 2u );
+
+    std::ofstream ofs("filename");
+    boost::archive::text_oarchive oa(ofs);
+    oa << as_const(m);
+    ofs.close();
+
+
+    
+    std::ifstream ifs("filename", std::ios::binary);
+    boost::archive::text_iarchive ia(ifs);
+    Map m2;
+    ia >> m2;
+    ifs.close();
+
+    BOOST_CHECK_EQUAL( m.size(), m2.size() );
+    BOOST_CHECK_EQUAL( m2.find(key1)->i, -1 );
+    BOOST_CHECK_EQUAL( m2.find(key2)->i, 0 );
+    BOOST_CHECK_EQUAL( dynamic_cast<Derived&>( *m2.find(key2) ).i2, 1 );
+    
+}
+
+//
+// basic test of hierarchy
+// 
 void test_hierarchy()
 {
-	Base p; // = new Derived();
-	//int p = 1;
+	Base* p = new Derived();
 	std::ofstream ofs("filename");
     boost::archive::text_oarchive oa(ofs);
-	oa << p;
+	oa << as_const(p);
 	ofs.close();
 
-	Base d; // = 0;
-	//int d;
+    
+	Base* d = 0; 
 	std::ifstream ifs("filename", std::ios::binary);
     boost::archive::text_iarchive ia(ifs);
 	ia >> d;
 	ifs.close();
-	//BOOST_CHECK_EQUAL( p->i, d->i );
-	//BOOST_CHECK( dynamic_cast<Derived*>( d ) );
-}
+    
+	BOOST_CHECK_EQUAL( p->i, d->i );
+    BOOST_CHECK( p != d );
+	BOOST_CHECK( dynamic_cast<Derived*>( d ) );
+    delete p;
+    delete d;
+} 
 
+//
+// test initializer
+// 
 void test_serialization()
 {
 	test_hierarchy();
-	//test_serialization_helper< boost::ptr_deque<Base> >();
+    test_serialization_helper< boost::ptr_deque<Base> >();
+    test_serialization_helper< boost::ptr_list<Base> >();
+    test_serialization_helper< boost::ptr_vector<Base> >();
+    test_serialization_helper< boost::ptr_array<Base,2> >();
+  
+    test_serialization_helper< boost::ptr_set<Base> >();
+    test_serialization_helper< boost::ptr_multiset<Base> >();
+
+    test_serialization_map_helper< boost::ptr_map<std::string,Base> >();
+
+//
+// GCC hangs when calling find() on a multimap!
+//      
+#if !BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, BOOST_TESTED_AT(0x0300))
+
+    test_serialization_map_helper< boost::ptr_multimap<std::string,Base> >();
+    
+#endif
+
 }
 
 

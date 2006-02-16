@@ -45,33 +45,6 @@ namespace boost
       BOOST_PTR_CONTAINER_DEFINE_NON_INHERITED_MEMBERS( ptr_deque,
                                                         base_class,
                                                         this_type );
-
-    public: // serialization
-
-        template< class Archieve >
-        void save( Archieve& ar, const unsigned ) const
-        {
-            ar & this->size();
-
-            typename base_class::const_iterator i = this->begin(), 
-                                                e = this->end();
-            typedef typename base_class::value_type value_type;
-            
-            for( ; i != e; ++i )
-                ar & static_cast<value_type>( *i.base() );
-        }
-
-        template< class Archieve >
-        void load( Archieve& ar, unsigned )
-        {
-            size_type n;
-            ar & n;
-            
-            //this->reserve( n );
-            this->load_helper( ar, 0u, n );
-        }
-                
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
     };
 
     //////////////////////////////////////////////////////////////////////////////

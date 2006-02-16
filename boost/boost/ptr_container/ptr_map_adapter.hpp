@@ -232,7 +232,8 @@ namespace ptr_container_detail
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator,
                       BOOST_DEDUCED_TYPENAME base_type::ptr_const_iterator> 
                 p = this->c_private().equal_range( x ); 
-            return make_iterator_range( const_iterator( p.first ), const_iterator( p.second ) );    
+            return make_iterator_range( const_iterator( p.first ), 
+                                        const_iterator( p.second ) );    
         }                                                                            
                                                                                      
         reference at( const key_type& key )                                              
@@ -245,8 +246,8 @@ namespace ptr_container_detail
             return lookup( key );
         }
 
-        reference operator[]( const key_type& key )                                              
-        {                          
+        reference operator[]( const key_type& key )
+        {
             return insert_lookup( key );
         }              
 
@@ -271,7 +272,22 @@ namespace ptr_container_detail
         {
             return replace( where, x.release() );
         }
-                                                                                     
+
+    public: // serialization
+
+        template< class Archive >
+        void save( Archive& ar, const unsigned ) const
+        {
+            ar & ptr_container_detail::serialize_as_const( this->size() );
+
+            const_iterator i = this->begin(), e = this->end();
+            for( ; i != e; ++i )
+            {
+                ar & i.base()->first;
+                ar & ptr_container_detail::serialize_as_const(  
+                                   static_cast<T*>( i.base()->second ) );
+            }
+        }
     };
     
 } // ptr_container_detail
@@ -378,7 +394,7 @@ namespace ptr_container_detail
         template< class Range >
         void insert( const Range& r )
         {
-            insert( this->adl_begin(r), this->adl_end(r) );
+            insert( boost::begin(r), boost::end(r) );
         }
 
     private:
@@ -429,7 +445,7 @@ namespace ptr_container_detail
                                                             size_type >::type
         transfer( const Range& r, ptr_map_adapter& from ) // basic
         {
-            return transfer( this->adl_begin(r), this->adl_end(r), from );
+            return transfer( boost::begin(r), boost::end(r), from );
         }
         
 #endif
@@ -438,6 +454,26 @@ namespace ptr_container_detail
         {
             return transfer( from.begin(), from.end(), from );
         }
+
+    public: // serialization
+
+        template< class Archive >
+        void load( Archive& ar, const unsigned )
+        {
+            size_type n;
+            ar & n;
+
+            for( size_type i = 0u; i != n; ++i )
+            {
+                key_type  key;
+                T*        value;
+                ar & key;
+                ar & value;
+                this->insert( key, value );
+            }
+        }
+
+        BOOST_SERIALIZATION_SPLIT_MEMBER()
         
   };
   
@@ -538,7 +574,7 @@ namespace ptr_container_detail
         template< class Range >
         void insert( const Range& r )
         {
-            insert( this->adl_begin(r), this->adl_end(r) );
+            insert( boost::begin(r), boost::end(r) );
         }
 
         iterator insert( key_type& key, value_type x ) // strong
@@ -582,7 +618,7 @@ namespace ptr_container_detail
                                                             size_type >::type
         transfer(  const Range& r, ptr_multimap_adapter& from ) // basic
         {
-            return transfer( this->adl_begin(r), this->adl_end(r), from );
+            return transfer( boost::begin(r), boost::end(r), from );
         }
 
 #endif        
@@ -592,6 +628,27 @@ namespace ptr_container_detail
             transfer( from.begin(), from.end(), from );
             BOOST_ASSERT( from.empty() );
         }
+
+    public: // serialization
+
+        template< class Archive >
+        void load( Archive& ar, const unsigned )
+        {
+            size_type n;
+            ar & n;
+
+            key_type  key;
+            T*        value;
+            for( size_type i = 0u; i != n; ++i )
+            {
+                ar & key;
+                ar & value;
+                this->insert( key, value );
+            }
+        }
+
+        BOOST_SERIALIZATION_SPLIT_MEMBER()
+
     };
 
     template< class I, class K, class V >

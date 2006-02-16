@@ -25,13 +25,16 @@
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/iterator/iterator_categories.hpp>
-#include <boost/serialization/split_member.hpp>
+
 
 namespace boost
 {   
 namespace ptr_container_detail
 {
-        
+
+
+    
+    
     template
     < 
         class T, 
@@ -320,7 +323,7 @@ namespace ptr_container_detail
         template< class Range >
         void assign( const Range& r )
         {
-            assign( this->adl_begin(r), this->adl_end(r ) );
+            assign( boost::begin(r), boost::end(r ) );
         }
 
     private:
@@ -358,7 +361,7 @@ namespace ptr_container_detail
         boost::disable_if< ptr_container_detail::is_pointer_or_integral<Range> >::type
         insert( iterator before, const Range& r )// ptr_container_detail::is_range_tag )
         {
-            insert( before, this->adl_begin(r), this->adl_end(r) );
+            insert( before, boost::begin(r), boost::end(r) );
         }
 
 #endif
@@ -399,7 +402,7 @@ namespace ptr_container_detail
                                                                   iterator > >::type
         transfer( iterator before, const Range& r, ptr_sequence_adapter& from ) // strong
         {
-            transfer( before, this->adl_begin(r), this->adl_end(r), from );
+            transfer( before, boost::begin(r), boost::end(r), from );
         }
 
 #endif
@@ -595,51 +598,6 @@ namespace ptr_container_detail
             merge( r.begin(), r.end(), r, pred );
             BOOST_ASSERT( r.empty() );    
         }
-
-
-    public: // serialization
-
-        template< class Archieve >
-        void save( Archieve& ar, const unsigned ) const
-        {
-            ar & this->size();
-
-            typename base_type::const_iterator i = this->begin(), 
-                                               e = this->end();
-            for( ; i != e; ++i )
-                ar & static_cast<value_type>( *i.base() );
-        }
-
-    protected:
-        
-        template< class Archieve >
-        void load_helper( Archieve& ar, const unsigned, size_type n )
-        {   
-            //
-            // Called after an appropriate reserve
-            //
-            
-            value_type ptr;
-            for( size_type i = 0u; i != n; ++i )
-            {
-                ar & ptr;
-                this->push_back( ptr );
-            }
-        }
-
-    public:
-
-        template< class Archieve >
-        void load( Archieve& ar, const unsigned )
-        {
-            size_type n;
-            ar & n;
-            load_helper( ar, 0u, n ); 
-        }
-
-
-       // BOOST_SERIALIZATION_SPLIT_MEMBER()
-
     };
 
 
