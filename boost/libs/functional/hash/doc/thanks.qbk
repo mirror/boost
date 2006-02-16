@@ -1,0 +1,18 @@
+[section:acknowledgements Acknowledgements]
+
+This library is based on the design by Peter Dimov. During the inital development
+Joaquín M López Muñoz made many useful suggestions and contributed fixes.
+
+The review was managed by Thorsten Ottosen, and the library reviewed by:
+David Abrahams, Alberto Barbati, Topher Cooper, Caleb Epstein, Dave Harris,
+Chris Jefferson, Bronek Kozicki, John Maddock, Tobias Swinger,Jaap Suter
+and Rob Stewart.
+
+The implementation of the hash function for pointers is based on suggestions
+made by Alberto Barbati and Dave Harris. Dave Harris also suggested an
+important improvement to [funcref boost::hash_combine] that was taken up.
+
+The original implementation came from Jeremy B. Maitin-Shepard's hash table
+library, although this is a complete rewrite.
+
+[endsect]

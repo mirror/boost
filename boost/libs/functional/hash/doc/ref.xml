@@ -1,0 +1,459 @@
+<library-reference>
+  <section id="hash.reference.specification">
+    <para>For the full specification, see section 6.3 of the
+        <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1745.pdf">C++ Standard Library Technical Report</ulink>
+        and issue 6.18 of the
+        <ulink url="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1756.pdf">Library Extension Technical Report Issues List</ulink>.
+    </para>
+  </section>
+  <header name="boost/functional/hash.hpp">
+    <para>
+      Defines <code><classname>boost::hash</classname></code>,
+      and helper functions.
+    </para>
+
+    <namespace name="boost">
+
+      <!--
+        boost::hash
+        -->
+
+      <struct name="hash">
+        <template>
+          <template-type-parameter name="T"/>
+        </template>
+
+        <inherit access="public">
+          <classname>std::unary_function&lt;T, std::size_t&gt;</classname>
+        </inherit>
+
+        <purpose>An STL compliant hash function object.</purpose>
+
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>T const&amp;</paramtype>
+          </parameter>
+          <returns><para>
+            <programlisting><functionname>hash_value</functionname>(val)</programlisting>
+          </para></returns>
+          <notes><para>
+            The call to <code><functionname>hash_value</functionname></code>
+            is unqualified, so that custom overloads can be
+            found via argument dependent lookup.
+          </para></notes>
+          <throws><para>
+            Only throws if
+            <code><functionname>hash_value</functionname>(T)</code> throws.
+          </para></throws>
+        </method>
+      </struct>
+
+      <!--
+        boost::hash_combine
+        -->
+
+      <function name="hash_combine">
+        <template>
+          <template-type-parameter name="T"/>
+        </template>
+        <type>void</type>
+        <parameter name="seed"><paramtype>size_t &amp;</paramtype></parameter>
+        <parameter name="v"><paramtype>T const &amp;</paramtype></parameter>
+        <purpose>
+            Called repeatedly to incrementally create a hash value from
+            several variables.
+        </purpose>
+        <effects><programlisting>seed ^= <functionname>hash_value</functionname>(v) + 0x9e3779b9 + (seed &lt;&lt; 6) + (seed &gt;&gt; 2);</programlisting></effects>
+        <notes>
+          <para><functionname>hash_value</functionname> is called without
+          qualification, so that overloads can be found via ADL.</para>
+          <para>This is an extension to TR1</para>
+        </notes>
+        <throws>
+          Only throws if <functionname>hash_value</functionname>(T) throws.
+          Strong exception safety, as long as <functionname>hash_value</functionname>(T)
+          also has strong exception safety.
+        </throws>
+      </function>
+
+      <!--
+        boost::hash_range
+        -->
+
+      <overloaded-function name="hash_range">
+        <signature>
+          <template>
+            <template-type-parameter name="It"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="first"><paramtype>It</paramtype></parameter>
+          <parameter name="last"><paramtype>It</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <template>
+            <template-type-parameter name="It"/>
+          </template>
+          <type>void</type>
+          <parameter name="seed"><paramtype>std::size_t&amp;</paramtype></parameter>
+          <parameter name="first"><paramtype>It</paramtype></parameter>
+          <parameter name="last"><paramtype>It</paramtype></parameter>
+        </signature>
+
+        <purpose>
+            Calculate the combined hash value of the elements of an iterator
+            range.
+        </purpose>
+        <effects>
+          <para>For the two argument overload:
+<programlisting>
+size_t seed = 0;
+
+for(; first != last; ++first)
+{
+    <functionname>hash_combine</functionname>(seed, *first);
+}
+
+return seed;
+</programlisting>
+          </para>For the three arguments overload:
+<programlisting>
+for(; first != last; ++first)
+{
+    <functionname>hash_combine</functionname>(seed, *first);
+}
+</programlisting>
+          <para>
+          </para>
+        </effects>
+        <notes>
+          <para>
+            <code>hash_range</code> is sensitive to the order of the elements
+            so it wouldn't be appropriate to use this with an unordered
+            container.
+          </para>
+          <para>This is an extension to TR1</para>
+        </notes>
+        <throws><para>
+          Only throws if <code><functionname>hash_value</functionname>(std::iterator_traits&lt;It&gt;::value_type)</code>
+          throws. <code>hash_range(std::size_t&amp;, It, It)</code> has basic exception safety as long as
+          <code><functionname>hash_value</functionname>(std::iterator_traits&lt;It&gt;::value_type)</code>
+          has basic exception safety.
+        </para></throws>
+      </overloaded-function>
+
+      <!--
+        boost::hash_value - integers
+        -->
+
+      <overloaded-function name="hash_value">
+        <purpose>
+            Implementation of a hash function for integers.
+        </purpose>
+
+        <description><para>
+          Generally shouldn't be called directly by users, instead they should use
+          <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
+          or <functionname>boost::hash_combine</functionname> which
+          call hash_value without namespace qualification so that overloads
+          for custom types are found via ADL.
+        </para></description>
+        <notes>
+          <para>Overloads for other types supplied in other headers.</para>
+          <para>This is an extension to TR1</para>
+        </notes>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>int</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>unsigned int</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>long</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>unsigned long</paramtype></parameter>
+        </signature>
+
+        <returns>
+          <code>val</code>
+        </returns>
+      </overloaded-function>
+
+      <!--
+        boost::hash_value - floating point
+        -->
+
+      <overloaded-function name="hash_value">
+        <purpose>
+            Implementation of a hash function for floating point values.
+        </purpose>
+
+        <description><para>
+          Generally shouldn't be called directly by users, instead they should use
+          <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
+          or <functionname>boost::hash_combine</functionname> which
+          call hash_value without namespace qualification so that overloads
+          for custom types are found via ADL.
+        </para></description>
+        <notes>
+          <para>Overloads for other types supplied in other headers.</para>
+          <para>This is an extension to TR1</para>
+        </notes>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>float</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>double</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>long double</paramtype></parameter>
+        </signature>
+
+        <returns>
+          <para>
+            An unspecified value, except that equal arguments shall yield the same
+            result
+          </para>
+        </returns>
+      </overloaded-function>
+
+      <!--
+        boost::hash_value - pointers
+        -->
+
+      <overloaded-function name="hash_value">
+        <purpose>
+            Implementation of a hash function for pointers.
+        </purpose>
+
+        <description><para>
+          Generally shouldn't be called directly by users, instead they should use
+          <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
+          or <functionname>boost::hash_combine</functionname> which
+          call hash_value without namespace qualification so that overloads
+          for custom types are found via ADL.
+        </para></description>
+        <notes>
+          <para>Overloads for other types supplied in other headers.</para>
+          <para>This is an extension to TR1</para>
+        </notes>
+
+        <signature>
+          <template><template-type-parameter name="T"/></template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>T* const&amp;</paramtype></parameter>
+        </signature>
+
+        <returns>
+          <para>
+            An unspecified value, except that equal arguments shall yield the same
+            result
+          </para>
+        </returns>
+      </overloaded-function>
+
+      <!--
+        boost::hash_value - arrays
+        -->
+
+      <overloaded-function name="hash_value">
+        <purpose>
+            Implementation of a hash function for built in arrays.
+        </purpose>
+
+        <description><para>
+          Generally shouldn't be called directly by users, instead they should use
+          <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
+          or <functionname>boost::hash_combine</functionname> which
+          call hash_value without namespace qualification so that overloads
+          for custom types are found via ADL.
+        </para></description>
+        <notes>
+          <para>Overloads for other types supplied in other headers.</para>
+          <para>This is an extension to TR1</para>
+        </notes>
+        
+        <signature>
+          <template>
+            <template-type-parameter name="T"/>
+            <template-nontype-parameter name="N"><type>unsigned</type></template-nontype-parameter>
+          </template>
+          <type>std::size_t</type>
+          <parameter><paramtype>T (&amp;val)[N]</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <template>
+            <template-type-parameter name="T"/>
+            <template-nontype-parameter name="N"><type>unsigned</type></template-nontype-parameter>
+          </template>
+          <type>std::size_t</type>
+          <parameter><paramtype>const T (&amp;val)[N]</paramtype></parameter>
+        </signature>
+
+        <returns><code>hash_range(val, val+N)</code></returns>
+      </overloaded-function>
+
+      <!--
+        boost::hash_value - string
+        -->
+
+      <overloaded-function name="hash_value">
+        <purpose>
+            Implementation of a hash function for <code>std::basic_string</code>.
+        </purpose>
+
+        <description><para>
+          Generally shouldn't be called directly by users, instead they should use
+          <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
+          or <functionname>boost::hash_combine</functionname> which
+          call hash_value without namespace qualification so that overloads
+          for custom types are found via ADL.
+        </para></description>
+        <notes>
+          <para>Overloads for other types supplied in other headers.</para>
+          <para>This is an extension to TR1</para>
+        </notes>
+
+        <signature>
+          <template>
+            <template-type-parameter name="Ch"/>
+            <template-type-parameter name="A"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val">
+              <paramtype>std::basic_string&lt;Ch, std::char_traits&lt;Ch&gt;, A&gt; const&amp;</paramtype>
+          </parameter>
+        </signature>
+
+        <returns><code>hash_range(val.begin(), val.end())</code></returns>
+      </overloaded-function>
+
+      <!--
+        boost::hash_value - pairs
+        -->
+
+      <overloaded-function name="hash_value">
+        <signature>
+          <template>
+            <template-type-parameter name="A"/>
+            <template-type-parameter name="B"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::pair&lt;A, B&gt; const &amp;</paramtype></parameter>
+        </signature>
+        <effects><programlisting>
+size_t seed = 0;
+<functionname>hash_combine</functionname>(seed, val.first);
+<functionname>hash_combine</functionname>(seed, val.second);
+return seed;
+        </programlisting></effects>
+        <throws>
+          Only throws if <code><functionname>hash_value</functionname>(A)</code>
+          or <code><functionname>hash_value</functionname>(B)</code> throws.
+        </throws>
+        <notes><para>This is an extension to TR1</para></notes>
+      </overloaded-function>
+
+      <!--
+        boost::hash_value - containers
+        -->
+
+      <overloaded-function name="hash_value">
+        <signature>
+          <template>
+            <template-type-parameter name="T"/>
+            <template-type-parameter name="A"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::vector&lt;T, A&gt; const &amp;</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <template>
+            <template-type-parameter name="T"/>
+            <template-type-parameter name="A"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::list&lt;T, A&gt; const &amp;</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <template>
+            <template-type-parameter name="T"/>
+            <template-type-parameter name="A"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::deque&lt;T, A&gt; const &amp;</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <template>
+            <template-type-parameter name="K"/>
+            <template-type-parameter name="C"/>
+            <template-type-parameter name="A"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::set&lt;K, C, A&gt; const &amp;</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <template>
+            <template-type-parameter name="K"/>
+            <template-type-parameter name="C"/>
+            <template-type-parameter name="A"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::multiset&lt;K, C, A&gt; const &amp;</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <template>
+            <template-type-parameter name="K"/>
+            <template-type-parameter name="T"/>
+            <template-type-parameter name="C"/>
+            <template-type-parameter name="A"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::map&lt;K, T, C, A&gt; const &amp;</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <template>
+            <template-type-parameter name="K"/>
+            <template-type-parameter name="T"/>
+            <template-type-parameter name="C"/>
+            <template-type-parameter name="A"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::multimap&lt;K, T, C, A&gt; const &amp;</paramtype></parameter>
+        </signature>
+
+        <returns>
+          <code><functionname>hash_range</functionname>(val.begin(), val.end());</code>
+        </returns>
+        <throws>
+          Only throws if <code><functionname>hash_value</functionname>(T)</code> throws.
+        </throws>
+        <notes><para>This is an extension to TR1</para></notes>
+      </overloaded-function>      
+    </namespace>
+  </header>
+</library-reference>
+

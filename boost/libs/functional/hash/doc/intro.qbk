@@ -1,0 +1,36 @@
+[section:intro Introduction]
+
+[def __tr1__ [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1745.pdf
+    C++ Standard Library Technical Report]]
+[def __tr1-short__ [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1745.pdf
+    Technical Report]]
+[def __multi-index__ [@../../libs/multi_index/doc/index.html
+    Boost Multi-Index Containers Library]]
+[def __multi-index-short__ [@../../libs/multi_index/doc/index.html
+    Boost.MultiIndex]]
+[def __issues__ [@http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1756.pdf
+    Library Extension Technical Report Issues List]]
+[def __hash-function__ [@http://en.wikipedia.org/wiki/Hash_function hash function]]
+[def __hash-table__ [@http://en.wikipedia.org/wiki/Hash_table hash table]]
+
+[classref boost::hash] is an implementation of the __hash-function__ object
+specified by the __tr1-short__. It is intended for use as the default hash function
+for unordered associative containers, and the __multi-index__'s hash indexes.
+
+As it is compliant with the __tr1-short__, it will work with:
+
+* integers
+* floats
+* pointers
+* strings
+
+It also implements the extension proposed by Peter Dimov in issue 6.18 of the
+__issues__, this adds support for:
+
+* arrays
+* `std::pair`
+* the standard containers.
+* extending [classref boost::hash] for custom types.
+
+[endsect]
+
