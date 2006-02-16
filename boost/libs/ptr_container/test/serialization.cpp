@@ -26,7 +26,7 @@
 #include <string>
 
 //
-// serizalization helper: we can't save a non-const object
+// serialization helper: we can't save a non-const object
 // 
 template< class T >
 inline T const& as_const( T const& r )
@@ -201,11 +201,11 @@ void test_serialization()
 //
 // GCC hangs when calling find() on a multimap!
 //      
-#if !BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, BOOST_TESTED_AT(0x0300))
+//#if !BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, BOOST_TESTED_AT(0x0300))
 
     test_serialization_map_helper< boost::ptr_multimap<std::string,Base> >();
     
-#endif
+//#endif
 
 }
 

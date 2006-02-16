@@ -24,10 +24,15 @@ void test_ptr_vector()
     reversible_container_test< ptr_vector< nullable<Base> >, Base, Derived_class >();
     reversible_container_test< ptr_vector< nullable<Value> >, Value, Value >();
 #endif    
+
     random_access_algorithms_test< ptr_vector<int> >();
+
 
     ptr_vector<int> vec( 100u );
     BOOST_CHECK( vec.capacity() >= 100u );
+
+#ifdef BOOST_PTR_CONTAINER_NO_EXCEPTIONS    
+#else
 
     BOOST_CHECK_THROW( vec.push_back(0), bad_ptr_container_operation );
     BOOST_CHECK_THROW( (vec.insert( vec.begin(), 0 )), bad_ptr_container_operation );
@@ -37,6 +42,9 @@ void test_ptr_vector()
     BOOST_CHECK_THROW( (vec.replace(0u, 0)), bad_ptr_container_operation ); 
     BOOST_CHECK_THROW( (vec.replace(vec.begin(), 0 )), bad_ptr_container_operation );
 
+#endif
+
+    vec.clear();
     assign::push_back( vec )( new int(2) )
                             ( new int(4) )
                             ( new int(6) )
@@ -47,13 +55,14 @@ void test_ptr_vector()
                         ( new int(3) )
                         ( new int(5) )
                         ( new int(7) );
-    BOOST_CHECK( vec < vec2 );
+    BOOST_CHECK_EQUAL( vec.size(), vec2.size() );
+    BOOST_CHECK( vec > vec2 );
     BOOST_CHECK( vec != vec2 );
-    BOOST_CHECK( !(vec == vec2 ) );
-    BOOST_CHECK( vec2 > vec );
-    BOOST_CHECK( vec <= vec2 );
-    BOOST_CHECK( vec2 >= vec );
-
+    BOOST_CHECK( !(vec == vec2) );
+    BOOST_CHECK( vec2 < vec );
+    BOOST_CHECK( vec2 <= vec );
+    BOOST_CHECK( vec >= vec2 );
+    
 }
 
 using boost::unit_test::test_suite;

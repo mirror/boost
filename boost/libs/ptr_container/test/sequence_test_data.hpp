@@ -30,13 +30,13 @@ void reversible_container_test()
     BOOST_CHECK( c.size() == 0 );
     c.push_back( new T );
     BOOST_CHECK( c.size() == 1 );
-    
+
     const C c2( c.clone() );
     BOOST_CHECK( c2.size() == c.size() );
     
     C  c3( c.begin(), c.end() );
     BOOST_CHECK( c.size() == c3.size() );
-    
+
     c.assign( c3.begin(), c3.end() );
     BOOST_CHECK( c.size() == c3.size() );
         
@@ -61,7 +61,7 @@ void reversible_container_test()
 					   std::distance( c.begin(), c.end() ) );
                          
     BOOST_MESSAGE( "finished iterator test" ); 
-    
+
     BOOST_DEDUCED_TYPENAME C::size_type s                 = c.size();
     hide_warning(s);
     BOOST_DEDUCED_TYPENAME C::size_type s2                = c.max_size();
@@ -137,6 +137,7 @@ void reversible_container_test()
     BOOST_CHECK( !c3.empty() );
     BOOST_CHECK( c.empty() );
     BOOST_MESSAGE( "finished transfer test" );  
+
 }
 
 

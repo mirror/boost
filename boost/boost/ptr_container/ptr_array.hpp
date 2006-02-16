@@ -148,8 +148,8 @@ namespace boost
 
             auto_type ptr( r );
 
-            if( idx >= N )
-                throw bad_index( "'replace()' aout of bounds" );
+            BOOST_PTR_CONTAINER_THROW_EXCEPTION( idx >= N, bad_index,
+                                                 "'replace()' aout of bounds" );
 
             auto_type res( static_cast<U*>( this->c_private()[idx] ) ); // nothrow
             this->c_private()[idx] = ptr.release();                     // nothrow
@@ -199,10 +199,14 @@ namespace boost
         }
 
         template< class Archive >
-        void load( Archive& ar, const unsigned )
+        void load( Archive& ar, const unsigned ) // basic
         {
             for( size_type i = 0u; i != N; ++i )
             {
+                //
+                // Remark: pointers are not tracked,
+                // so we need not call ar.reset_object_address(v, u)
+                //
                 T* p;
                 ar & p;
                 this->replace( i, p );

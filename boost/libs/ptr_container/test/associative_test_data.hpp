@@ -83,20 +83,21 @@ void ptr_set_test()
     c3.insert( make_iterator_range( c ) );
 //    BOOST_CHECK_EQUAL( c3.size(), 4u );
 #endif    
-    c.transfer( c3.begin(), c3 );
+    c. BOOST_NESTED_TEMPLATE transfer( c3.begin(), c3 );
     BOOST_CHECK( c3.empty() == false );
-    c.transfer( c3.begin(), c3.end(), c3 );
+    c. BOOST_NESTED_TEMPLATE transfer( c3.begin(), c3.end(), c3 );
     BOOST_CHECK( c3.empty() );
     BOOST_CHECK( !c.empty() );
-    c3.transfer( c );
+    c3. BOOST_NESTED_TEMPLATE transfer( c );
     BOOST_CHECK( !c3.empty() );
     BOOST_CHECK( c.empty() );
 #ifdef BOOST_NO_SFINAE
 #else        
-    c.transfer( make_iterator_range( c3 ), c3 );
+    c.  BOOST_NESTED_TEMPLATE transfer( make_iterator_range( c3 ), c3 );
     BOOST_CHECK( !c.empty() );
     BOOST_CHECK( c3.empty() );
 #endif    
+
     BOOST_MESSAGE( "finished transfer test" );         
   
     C c4;

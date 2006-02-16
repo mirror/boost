@@ -204,54 +204,58 @@ namespace ptr_container_detail
 
         auto_type pop_back()
         {
-            if( this->empty() ) 
-                throw bad_ptr_container_operation( "'pop_back()' "
-                                                     " on empty container" );
+            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(), 
+                                                 bad_ptr_container_operation,
+                                          "'pop_back()' on empty container" );
             auto_type ptr( static_cast<value_type>( 
                          this->c_private().back() ) ); // nothrow
             this->c_private().pop_back();              // nothrow
-            return ptr_container_detail::move( ptr );                        // nothrow
+            return ptr_container_detail::move( ptr );  // nothrow
         }
 
         auto_type pop_front()
         {
-            if( this->empty() ) 
-                throw bad_ptr_container_operation( "'pop_front()' on" 
-                                                     " empty container" ); 
+            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(),
+                                                 bad_ptr_container_operation,
+                                         "'pop_front()' on empty container" ); 
             auto_type ptr( static_cast<value_type>(
                         this->c_private().front() ) ); // nothrow 
-            this->c_private().pop_front();              // nothrow
+            this->c_private().pop_front();             // nothrow
             return ptr_container_detail::move( ptr ); 
         }
         
         reference front()        
         { 
-            if( this->empty() )
-                throw bad_ptr_container_operation( "accessing 'front()' on empty container" );
+            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(), 
+                                                 bad_ptr_container_operation,
+                                    "accessing 'front()' on empty container" );
             BOOST_ASSERT( !::boost::is_null( this->begin() ) );
             return *this->begin(); 
         }
 
         const_reference front() const  
         {
-            if( this->empty() )
-                throw bad_ptr_container_operation( "accessing 'front()' on empty container" );
+            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(), 
+                                                 bad_ptr_container_operation, 
+                                   "accessing 'front()' on empty container" );
             BOOST_ASSERT( !::boost::is_null( this->begin() ) );
             return *this->begin(); 
         }
 
         reference back()
         {
-            if( this->empty() )
-                throw bad_ptr_container_operation( "accessing 'back()' on empty container" );
+            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(),
+                                                 bad_ptr_container_operation,
+                                    "accessing 'back()' on empty container" );
             BOOST_ASSERT( !::boost::is_null( --this->end() ) );
             return *--this->end(); 
         }
 
         const_reference back() const
         {
-            if( this->empty() )
-                throw bad_ptr_container_operation( "accessing 'back()' on empty container" );
+            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(),
+                                                 bad_ptr_container_operation,
+                                    "accessing 'back()' on empty container" );
             BOOST_ASSERT( !::boost::is_null( --this->end() ) );
             return *--this->end(); 
         }
@@ -274,16 +278,16 @@ namespace ptr_container_detail
         
         reference at( size_type n )
         {
-            if( n >= this->size() )
-                throw bad_index( "'at()' out of bounds" );
+            BOOST_PTR_CONTAINER_THROW_EXCEPTION( n >= this->size(), bad_index, 
+                                                 "'at()' out of bounds" );
             BOOST_ASSERT( !this->is_null( n ) );
             return (*this)[n];
         }
         
         const_reference at( size_type n ) const
         {
-            if( n >= this->size() )
-                throw bad_index( "'at()' out of bounds" );
+            BOOST_PTR_CONTAINER_THROW_EXCEPTION( n >= this->size(), bad_index, 
+                                                 "'at()' out of bounds" );
             BOOST_ASSERT( !this->is_null( n ) );
             return (*this)[n]; 
         }
@@ -415,7 +419,7 @@ namespace ptr_container_detail
             this->c_private().
                 insert( before.base(),
                         from.begin().base(), from.end().base() ); // strong
-            from.c_private().clear();                       // nothrow
+            from.c_private().clear();                             // nothrow
         }
 
     public: // null functions
@@ -598,6 +602,7 @@ namespace ptr_container_detail
             merge( r.begin(), r.end(), r, pred );
             BOOST_ASSERT( r.empty() );    
         }
+
     };
 
 

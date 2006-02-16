@@ -103,7 +103,6 @@ namespace ptr_container_detail
 
         size_type erase( const key_type& x ) // nothrow
         {
-            //BOOST_ASSERT( !this->empty() );
             iterator i( this->c_private().find( x ) );  // nothrow
             if( i == this->end() )                      // nothrow
                 return 0u;                              // nothrow
@@ -114,8 +113,6 @@ namespace ptr_container_detail
         iterator erase( iterator first,
                         iterator last ) // nothrow
         {
-            //BOOST_ASSERT( !this->empty() );
-
             iterator res( last );                                // nothrow
             if( res != this->end() )
                 ++res;                                           // nothrow
@@ -127,21 +124,23 @@ namespace ptr_container_detail
 
     protected:
 
-        void multi_transfer( iterator object,
-                             associative_ptr_container& from ) // strong
+        template< class AssociatePtrCont >
+        void multi_transfer( BOOST_DEDUCED_TYPENAME AssociatePtrCont::iterator object,
+                             AssociatePtrCont& from ) // strong
         {
-            BOOST_ASSERT( &from != this );
+            BOOST_ASSERT( (void*)&from != (void*)this );
             BOOST_ASSERT( !from.empty() && "Cannot transfer from empty container" );
 
             this->c_private().insert( *object.base() );     // strong
             from.c_private().erase( object.base() );        // nothrow
         }
 
-        size_type multi_transfer( iterator first,
-                                  iterator last,
-                                  associative_ptr_container& from ) // basic
+        template< class AssociatePtrCont >
+        size_type multi_transfer( BOOST_DEDUCED_TYPENAME AssociatePtrCont::iterator first,
+                                  BOOST_DEDUCED_TYPENAME AssociatePtrCont::iterator last,
+                                  AssociatePtrCont& from ) // basic
         {
-            BOOST_ASSERT( &from != this );
+            BOOST_ASSERT( (void*)&from != (void*)this );
             BOOST_ASSERT( !from.empty() && "Cannot transfer from empty container" );
 
             size_type res = 0;
@@ -158,10 +157,11 @@ namespace ptr_container_detail
             return res;
         }
 
-        bool single_transfer( iterator object,
-                              associative_ptr_container& from ) // strong
+        template< class AssociatePtrCont >
+        bool single_transfer( BOOST_DEDUCED_TYPENAME AssociatePtrCont::iterator object,
+                              AssociatePtrCont& from ) // strong
         {
-            BOOST_ASSERT( &from != this );
+            BOOST_ASSERT( (void*)&from != (void*)this );
             BOOST_ASSERT( !from.empty() && "Cannot transfer from empty container" );
 
             std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool> p =
@@ -172,11 +172,12 @@ namespace ptr_container_detail
             return p.second;
         }
 
-        size_type single_transfer( iterator first,
-                                   iterator last,
-                                   associative_ptr_container& from ) // basic
+        template< class AssociatePtrCont >
+        size_type single_transfer( BOOST_DEDUCED_TYPENAME AssociatePtrCont::iterator first,
+                                   BOOST_DEDUCED_TYPENAME AssociatePtrCont::iterator last,
+                                   AssociatePtrCont& from ) // basic
         {
-            BOOST_ASSERT( &from != this );
+            BOOST_ASSERT( (void*)&from != (void*)this );
             BOOST_ASSERT( !from.empty() && "Cannot transfer from empty container" );
 
             size_type res = 0;

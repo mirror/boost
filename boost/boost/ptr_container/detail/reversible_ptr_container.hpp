@@ -17,6 +17,7 @@
 # pragma once
 #endif
 
+#include <boost/ptr_container/detail/throw_exception.hpp>
 #include <boost/ptr_container/detail/scoped_deleter.hpp>
 #include <boost/ptr_container/detail/static_move_ptr.hpp>
 #include <boost/ptr_container/exception.hpp>
@@ -28,7 +29,6 @@
 #include <boost/range/functions.hpp>
 #endif
 
-#include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/iterator/reverse_iterator.hpp>
 #include <boost/range/iterator.hpp>
@@ -138,7 +138,7 @@ namespace ptr_container_detail
 
         Cont      c_;
 
-    protected:
+    public:
         Cont& c_private()                { return c_; }
         const Cont& c_private() const    { return c_; }
 
@@ -256,8 +256,8 @@ namespace ptr_container_detail
         {
             if( !allow_null )
             {
-                if( 0 == x )
-                    throw bad_pointer( msg );
+                BOOST_PTR_CONTAINER_THROW_EXCEPTION( 0 == x && "null not allowed", 
+                                                     bad_pointer, msg );
             }
         }
 
@@ -491,8 +491,9 @@ namespace ptr_container_detail
         auto_type release( iterator where )
         { 
             BOOST_ASSERT( where != end() );
-            if( empty() )
-                throw bad_ptr_container_operation( "'release()' on empty container" ); 
+            
+            BOOST_PTR_CONTAINER_THROW_EXCEPTION( empty(), bad_ptr_container_operation,
+                                                 "'release()' on empty container" ); 
             
             auto_type ptr( Config::get_pointer( where ) );  // nothrow
             c_.erase( where.base() );                       // nothrow
@@ -507,8 +508,8 @@ namespace ptr_container_detail
             
             auto_type ptr( x );
             
-            if( empty() )
-                throw bad_ptr_container_operation( "'replace()' on empty container" );
+            BOOST_PTR_CONTAINER_THROW_EXCEPTION( empty(), bad_ptr_container_operation,
+                                                 "'replace()' on empty container" );
 
             auto_type old( Config::get_pointer( where ) );  // nothrow
             
@@ -532,8 +533,8 @@ namespace ptr_container_detail
             
             auto_type ptr( x ); 
             
-            if( idx >= size() ) 
-                throw bad_index( "'replace()' out of bounds" );
+            BOOST_PTR_CONTAINER_THROW_EXCEPTION( idx >= size(), bad_index, 
+                                                 "'replace()' out of bounds" );
             
             auto_type old( static_cast<Ty_*>( c_[idx] ) ); // nothrow
             c_[idx] = ptr.release();                       // nothrow, commit
@@ -572,33 +573,40 @@ namespace ptr_container_detail
 
     protected:
 
-        template< class Archive >
-        void load_helper( Archive& ar, const unsigned, size_type n )
+        template< class Archive, class Cont >
+        void load_helper( Archive& ar, Cont& c, size_type n )
         {   
             //
-            // Called after an appropriate reserve
+            // Called after an appropriate reserve on c.
             //
 
-            value_type ptr;
             for( size_type i = 0u; i != n; ++i )
             {
+                //
+                // Remark: pointers are not tracked,
+                // so we need not call ar.reset_object_address(v, u)
+                //
+                value_type ptr;
                 ar & ptr;
-                this->insert( this->end(), ptr );
+                c.insert( c.end(), ptr );
             }
+
+            c.swap( *this ); // commit
         }
 
     public:
-
+        
         template< class Archive >
-        void load( Archive& ar, const unsigned )
+        void load( Archive& ar, const unsigned ) // strong
         {
+            reversible_ptr_container<Config,CloneAllocator> to_load;
             size_type n;
             ar & n;
-            this->load_helper( ar, 0u, n ); 
+            this->load_helper( ar, to_load, n ); 
         }
-
+        
         BOOST_SERIALIZATION_SPLIT_MEMBER()
-            
+        
     }; // 'reversible_ptr_container'
 
 

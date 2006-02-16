@@ -243,3 +243,15 @@ template< class T >
 inline void hide_warning( T& r )
 { }
 
+//
+//  transfer() test
+// 
+
+template< class Cont1, class Cont2 >
+void transfer_test( Cont1& from, Cont2& to )
+{
+    BOOST_CHECK( !from.empty() );
+    to.transfer( from );
+    BOOST_CHECK( !to.empty() );
+}
+

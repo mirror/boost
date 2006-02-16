@@ -29,6 +29,12 @@ void test_set()
 	set.insert( std::auto_ptr<int>( new int(1) ) );
     BOOST_CHECK_THROW( (set.replace(set.begin(), 0 )), bad_ptr_container_operation );
 	BOOST_CHECK_THROW( (set.replace(set.begin(), std::auto_ptr<int>(0) )), bad_ptr_container_operation );
+
+    ptr_set<Base> to;
+    ptr_set<Derived_class> from;
+    from.insert( new Derived_class );
+    from.insert( new Derived_class );
+    transfer_test( from, to );
 }
 
 using boost::unit_test::test_suite;

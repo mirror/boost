@@ -121,7 +121,8 @@ namespace ptr_container_detail
            if( i != const_cast<ptr_map_adapter_base*>(this)->end() )
                return *i;
            else                                           
-               throw bad_ptr_container_operation( "'ptr_map/multimap::at()' could"
+               BOOST_PTR_CONTAINER_THROW_EXCEPTION( true, bad_ptr_container_operation,
+                                                    "'ptr_map/multimap::at()' could"
                                                     " not find key" );
         }
 
@@ -259,8 +260,9 @@ namespace ptr_container_detail
 
             auto_type ptr( x );
 
-            if( this->empty() )
-                throw bad_ptr_container_operation( "'replace()' on empty container" );
+            BOOST_PTR_CONTAINER_THROW_EXCEPTION( this->empty(),
+                                                 bad_ptr_container_operation,
+                                                 "'replace()' on empty container" );
 
             auto_type old( &*where );               // nothrow
             where.base()->second = ptr.release();   // nothrow, commit
@@ -458,8 +460,9 @@ namespace ptr_container_detail
     public: // serialization
 
         template< class Archive >
-        void load( Archive& ar, const unsigned )
+        void load( Archive& ar, const unsigned ) // strong
         {
+            ptr_map_adapter<T,VoidPtrMap,CloneAllocator> m;
             size_type n;
             ar & n;
 
@@ -469,8 +472,11 @@ namespace ptr_container_detail
                 T*        value;
                 ar & key;
                 ar & value;
-                this->insert( key, value );
+                std::pair<iterator,bool> p = m.insert( key, value );
+                ar.reset_object_address( &p.first.key(), &key ); 
             }
+
+            m.swap( *this );
         }
 
         BOOST_SERIALIZATION_SPLIT_MEMBER()
@@ -632,19 +638,23 @@ namespace ptr_container_detail
     public: // serialization
 
         template< class Archive >
-        void load( Archive& ar, const unsigned )
+        void load( Archive& ar, const unsigned ) // strong
         {
+            ptr_multimap_adapter<T,VoidPtrMultiMap,CloneAllocator> m;
             size_type n;
             ar & n;
 
-            key_type  key;
-            T*        value;
             for( size_type i = 0u; i != n; ++i )
             {
+                key_type  key;
+                T*        value;
                 ar & key;
                 ar & value;
-                this->insert( key, value );
+                iterator p = m.insert( key, value );
+                ar.reset_object_address( &p.key(), &key );
             }
+
+            m.swap( *this );
         }
 
         BOOST_SERIALIZATION_SPLIT_MEMBER()
