@@ -289,7 +289,7 @@ void cleanup_and_throw(detail::mapped_file_impl& impl, const char* msg)
     if (impl.handle_ != 0)
         ::close(impl.handle_);
     impl.clear(true);
-    throw_system_failure("failed getting file size");
+    throw_system_failure( msg );
 }
 
 } // End namespace detail.
