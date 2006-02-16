@@ -45,10 +45,11 @@ local regress-sources = regress/$(R_SOURCE) ;
 
 test-suite regex
       : 
-      [ run regress/$(R_SOURCE) ../build//boost_regex/<link>static
+      [ run regress/$(R_SOURCE) ../build//boost_regex      
         : # command line
         : # input files
         : # requirements
+	  <link>static
         : regex_regress ]
 
       [ run regress/$(R_SOURCE) ../build//boost_regex
