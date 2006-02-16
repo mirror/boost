@@ -41,6 +41,8 @@ project wave/test
         <variant>debug
         <define>BOOST_LIB_DIAGNOSTIC=1
 	<define>BOOST_ALL_NO_LIB=1
+	<link>shared:<define>BOOST_ALL_DYN_LINK=1
+
     ;
 
 #
@@ -83,9 +85,10 @@ test-suite wave
                 --config-file $(TESTWAVE_DIR)/$(TESTWAVE_FILES)
             :
             # input files
-            :
+            : 
             # requirements
-            :
+	    <link>static     # Linking to DLL tested by testwave_dll
+            : 
             # name
                 testwave
         ]
