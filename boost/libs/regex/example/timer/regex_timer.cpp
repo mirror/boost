@@ -373,8 +373,9 @@ int main(int argc, char**argv)
 }
 
 #if defined(_WIN32) && defined(BOOST_REGEX_USE_WIN32_LOCALE)
-#pragma message(lib, "user32.lib")
+#pragma comment(lib, "user32.lib")
 #endif
+
 
 
 
