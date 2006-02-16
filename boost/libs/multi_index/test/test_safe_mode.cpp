@@ -179,6 +179,17 @@ static void local_test_safe_mode(
     i.erase(it);
     value_type e=*it2;
   CATCH_SAFE_MODE(safe_mode::invalid_iterator)
+
+  /* testcase for bug reported at
+   * http://lists.boost.org/boost-users/2006/02/17230.php
+   */
+  {
+    container c3(c);
+    index_type& i3=Policy::index_from_container(c3);
+    iterator it=i3.end();
+    i3.clear();
+    it=i3.end();
+  }
 }
 
 template<typename Policy>

@@ -332,6 +332,7 @@ public:
   void detach_all_iterators()
   {
     for(safe_iterator_base* it=header.next;it;it=it->next)it->cont=0;
+    header.next=0;
   }
 
   void swap(safe_container_base& x)
