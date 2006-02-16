@@ -39,6 +39,7 @@
 #include <algorithm>
 #include <exception>
 #include <memory>
+#include <typeinfo>
 
 namespace boost
 {
@@ -106,7 +107,12 @@ namespace ptr_container_detail
                     BOOST_ASSERT( x != 0 && "Cannot insert clone of null!" );
                 }
 
-                return CloneAllocator::allocate_clone( *x );
+                Ty_* res = CloneAllocator::allocate_clone( *x );
+                BOOST_ASSERT( typeid(*res) == typeid(*x) &&
+                              "CloneAllocator::allocate_clone() does not clone the "
+                              "object properly. Check that new_clone() is implemented"
+                              " correctly" );
+                return res;
             }
             
             static void deallocate_clone( const Ty_* x )
