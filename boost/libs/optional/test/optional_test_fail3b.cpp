@@ -13,14 +13,16 @@
 
 #include "boost/optional.hpp"
 
+struct A {} ;
+struct B {} ;
 //
 // THIS TEST SHOULD FAIL TO COMPILE
 //
 void test_no_unsupported_conversion()
 {
-  boost::optional<int> opt1(1) ;
-  boost::optional< std::string > opt2 ;
-  opt2 = opt1 ; // Cannot convert from "int" to "std::string"
+  boost::optional<A> opt1;
+  boost::optional<B> opt2;
+  opt2 = opt1 ; // Cannot convert from "A" to "B"
 }
 
 
