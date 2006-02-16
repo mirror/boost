@@ -146,7 +146,7 @@ class ConcreteComposite2 : public Composite
         cout << "composite 2" << "\n";
     }
   
-    virtual Composite* clone() const
+    virtual Composite* do_clone() const
     {
         return new ConcreteComposite2();
     }
