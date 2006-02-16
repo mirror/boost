@@ -29,27 +29,39 @@ namespace boost { namespace xpressive { namespace detail
     struct restore_impl
       : restore_base
     {
-        T &ref;
+        mutable T *ref;
         T const val;
 
         explicit restore_impl(T &t)
-          : ref(t), val(t)
+          : ref(&t)
+          , val(t)
         {
         }
-        
+
         restore_impl(T &t, T const &n)
-          : ref(t), val(t)
+          : ref(&t)
+          , val(t)
         {
-            this->ref = n;
+            *this->ref = n;
         }
-        
+
+        restore_impl(restore_impl<T> const &that)
+          : ref(that.ref)
+          , val(that.val)
+        {
+            that.ref = 0;
+        }
+
         ~restore_impl()
         {
-            this->ref = this->val;
+            if(0 != this->ref)
+            {
+                *this->ref = this->val;
+            }
         }
 
     private:
-        restore_impl &operator =(restore_impl const &);
+        restore_impl &operator =(restore_impl<T> const &);
     };
 
     template<typename T>
