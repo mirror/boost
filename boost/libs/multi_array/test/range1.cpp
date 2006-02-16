@@ -50,7 +50,7 @@ test_main(int,char*[])
     // degenerate creation
     range r3(5);
     BOOST_CHECK(r3.start() == 5);
-    BOOST_CHECK(r3.finish() == 5);
+    BOOST_CHECK(r3.finish() == 6);
     BOOST_CHECK(r3.stride() == 1);
     BOOST_CHECK(r3.is_degenerate());
   }
