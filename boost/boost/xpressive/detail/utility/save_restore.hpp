@@ -13,68 +13,42 @@
 # pragma once
 #endif
 
+#include <boost/noncopyable.hpp>
+
 namespace boost { namespace xpressive { namespace detail
 {
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // save-and-restore implementation
-    //   a simple variant of ScopeGuard for saving an restoring a variable's value
-    struct restore_base
-    {
-    };
-
-    typedef restore_base const &restore;
-
     template<typename T>
-    struct restore_impl
-      : restore_base
+    struct save_restore
+      : private noncopyable
     {
-        mutable T *ref;
-        T const val;
-
-        explicit restore_impl(T &t)
-          : ref(&t)
+        explicit save_restore(T &t)
+          : ref(t)
           , val(t)
         {
         }
 
-        restore_impl(T &t, T const &n)
-          : ref(&t)
+        save_restore(T &t, T const &n)
+          : ref(t)
           , val(t)
         {
-            *this->ref = n;
+            this->ref = n;
         }
 
-        restore_impl(restore_impl<T> const &that)
-          : ref(that.ref)
-          , val(that.val)
+        ~save_restore()
         {
-            that.ref = 0;
+            this->ref = this->val;
         }
 
-        ~restore_impl()
+        void restore()
         {
-            if(0 != this->ref)
-            {
-                *this->ref = this->val;
-            }
+            this->ref = this->val;
         }
 
     private:
-        restore_impl &operator =(restore_impl<T> const &);
+        T &ref;
+        T const val;
     };
-
-    template<typename T>
-    inline restore_impl<T> save(T &t)
-    {
-        return restore_impl<T>(t);
-    }
-
-    template<typename T>
-    inline restore_impl<T> save(T &t, T const &n)
-    {
-        return restore_impl<T>(t, n);
-    }
 
 }}}
 

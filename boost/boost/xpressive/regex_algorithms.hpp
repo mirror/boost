@@ -18,7 +18,6 @@
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/detail/utility/save_restore.hpp>
-#include <boost/xpressive/detail/utility/ignore_unused.hpp>
 
 namespace boost { namespace xpressive
 {
@@ -176,10 +175,8 @@ inline bool regex_search_impl
     if(!access::invalid(re))
     {
         bool const partial_ok = state.flags_.match_partial_;
-        bool const not_null = state.flags_.match_not_null_;
+        save_restore<bool> not_null(state.flags_.match_not_null_, state.flags_.match_not_null_ || not_initial_null);
         state.flags_.match_prev_avail_ = state.flags_.match_prev_avail_ || !state.bos();
-        restore null_restore = save(state.flags_.match_not_null_, not_null || not_initial_null);
-        detail::ignore_unused(&null_restore);
 
         regex_impl<BidiIter> const &impl = *access::get_regex_impl(re);
         BidiIter const begin = state.cur_, end = state.end_;
@@ -198,7 +195,8 @@ inline bool regex_search_impl
             // handle partial matches
             else if(partial_ok && state.found_partial_match_)
             {
-                return state.set_partial_match(), true;
+                state.set_partial_match();
+                return true;
             }
         }
 
@@ -210,7 +208,7 @@ inline bool regex_search_impl
             {
                 if(state.cur_ != begin)
                 {
-                    state.flags_.match_not_null_ = not_null;
+                    not_null.restore();
                 }
 
                 do
@@ -225,11 +223,12 @@ inline bool regex_search_impl
                     // handle partial matches
                     else if(partial_ok && state.found_partial_match_)
                     {
-                        return state.set_partial_match(), true;
+                        state.set_partial_match();
+                        return true;
                     }
 
                     BOOST_ASSERT(state.cur_ == sub0begin);
-                    state.flags_.match_not_null_ = not_null;
+                    not_null.restore();
                 }
                 while(state.cur_ != state.end_ && (++state.cur_, find(state)));
             }
@@ -249,7 +248,8 @@ inline bool regex_search_impl
                 // handle partial matches
                 else if(partial_ok && state.found_partial_match_)
                 {
-                    return state.set_partial_match(), true;
+                    state.set_partial_match();
+                    return true;
                 }
 
                 else if(end == sub0begin)
@@ -259,7 +259,7 @@ inline bool regex_search_impl
 
                 BOOST_ASSERT(state.cur_ == sub0begin);
                 state.cur_ = ++sub0begin;
-                state.flags_.match_not_null_ = not_null;
+                not_null.restore();
             }
         }
     }
