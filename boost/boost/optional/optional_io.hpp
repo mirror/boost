@@ -12,17 +12,17 @@
 #ifndef BOOST_OPTIONAL_OPTIONAL_IO_FLC_19NOV2002_HPP
 #define BOOST_OPTIONAL_OPTIONAL_IO_FLC_19NOV2002_HPP
 
-# if defined __GNUC__
-#   if (__GNUC__ == 2 && __GNUC_MINOR__ <= 97) 
-#define BOOST_OPTIONAL_NO_TEMPLATED_STREAMS
-#endif
+#if defined __GNUC__
+#  if (__GNUC__ == 2 && __GNUC_MINOR__ <= 97) 
+#    define BOOST_OPTIONAL_NO_TEMPLATED_STREAMS
+#  endif
 #endif // __GNUC__
 
 #if defined BOOST_OPTIONAL_NO_TEMPLATED_STREAMS
-#include <iostream>
+#  include <iostream>
 #else 
-#include <istream>
-#include <ostream>
+#  include <istream>
+#  include <ostream>
 #endif  
 
 
@@ -60,7 +60,7 @@ template<class CharType, class CharTrait, class T>
 inline
 std::basic_istream<CharType, CharTrait>&
 operator>>(std::basic_istream<CharType, CharTrait>& in, optional<T>& v)
-#else
+#endif
 {
   if ( in.good() )
   {
