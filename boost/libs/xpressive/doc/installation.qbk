@@ -35,7 +35,7 @@ Currently, Boost.Xpressive is known to work on the following compilers:
 * tru64cxx 65 and higher
 * QNX qcc 3.3 and higher
 * MinGW 3.4 and higher
-* Metrowerks CodeWarrior for Windows 9.4
+* Metrowerks CodeWarrior 9.4 and higher
 
 Check the latest tests results at Boost's
 [@http://engineering.meta-comm.com/boost-regression/CVS-HEAD/developer/xpressive.html Regression Results Page].
