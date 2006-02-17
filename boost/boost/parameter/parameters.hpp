@@ -298,15 +298,16 @@ namespace aux
   {
       template <class UnnamedList>
       struct apply
-        : mpl::eval_if<
+      {
+        typedef typename mpl::eval_if<
               is_same<ArgumentType, void_>
             , mpl::identity<empty_arg_list>
             , mpl::apply_wrap1<
                   make_arg_list<ParameterSpec, ArgumentType, TagFn, TailFn>
                 , UnnamedList
               >
-          >
-      {};
+        >::type type;
+      };
   };
 
   // Generates:
@@ -541,31 +542,48 @@ struct parameters
     };
 # endif
 
-    // Metafunction that returns a ArgumentPack.
+    // Metafunction that returns an ArgumentPack.
+    
     template <
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+        // Borland simply can't handle default arguments in member
+        // class templates.  People wishing to write portable code can
+        // explicitly specify BOOST_PARAMETER_MAX_ARITY arguments
+        BOOST_PP_ENUM_PARAMS(BOOST_PARAMETER_MAX_ARITY, class A)
+#else 
         BOOST_PP_ENUM_BINARY_PARAMS(
             BOOST_PARAMETER_MAX_ARITY, class A, = void_ BOOST_PP_INTERCEPT
         )
+#endif            
     >
     struct bind
-      : mpl::apply_wrap1<BOOST_PARAMETER_build_arg_list(
+    {
+      typedef typename mpl::apply_wrap1<BOOST_PARAMETER_build_arg_list(
             BOOST_PARAMETER_MAX_ARITY, aux::make_partial_arg_list, PS, A
           , aux::tag_template_keyword_arg
-        ), unnamed_list>
-    {};
+        ), unnamed_list>::type type;
+    };
 
-    // Metafunction that returns a ArgumentPack.
+    // Metafunction that returns an ArgumentPack.
     template <
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+        // Borland simply can't handle default arguments in member
+        // class templates.  People wishing to write portable code can
+        // explicitly specify BOOST_PARAMETER_MAX_ARITY arguments
+        BOOST_PP_ENUM_PARAMS(BOOST_PARAMETER_MAX_ARITY, class A)
+#else 
         BOOST_PP_ENUM_BINARY_PARAMS(
             BOOST_PARAMETER_MAX_ARITY, class A, = void_ BOOST_PP_INTERCEPT
         )
+#endif            
     >
     struct argument_pack
-      : mpl::apply_wrap1<BOOST_PARAMETER_build_arg_list(
+    {
+      typedef typename mpl::apply_wrap1<BOOST_PARAMETER_build_arg_list(
             BOOST_PARAMETER_MAX_ARITY, aux::make_partial_arg_list, PS, A
           , aux::tag_keyword_arg
-        ), unnamed_list>
-    {};
+        ), unnamed_list>::type type;
+    };
     
     //
     // The function call operator is used to build an arg_list that

@@ -46,7 +46,11 @@ struct with_ntp
       , parameter::unnamed<
             a3_is<>, boost::is_base_and_derived<X, mpl::_>
         >
-    >::bind<A0,A1,A2,A3>::type args;
+    >::bind<A0,A1,A2,A3
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+          , parameter::void_
+#endif 
+            >::type args;
 
     typedef typename parameter::binding<
         args, a0_is<>, void*

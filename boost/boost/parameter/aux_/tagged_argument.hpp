@@ -174,9 +174,9 @@ char(&is_tagged_argument_check(...))[2];
 template <class T>
 struct is_tagged_argument_aux
 {
-    BOOST_STATIC_CONSTANT(bool, value =
+    enum { value =
         sizeof(is_tagged_argument_check((T*)0)) == 1
-    );
+    };
 
     typedef mpl::bool_<value> type;
 };
