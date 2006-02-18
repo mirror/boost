@@ -24,9 +24,9 @@
 // 
 struct abstract_base
 {
-	virtual ~abstract_base() {}
-	virtual void foo() = 0;
-	virtual abstract_base* clone() const = 0;
+    virtual ~abstract_base() {}
+    virtual void foo() = 0;
+    virtual abstract_base* clone() const = 0;
 };
 
 struct implementation : abstract_base
@@ -40,21 +40,21 @@ struct implementation : abstract_base
     implementation( int, std::string, int, std::string )
     { }
 
-	virtual void foo() {}
-	virtual abstract_base* clone() const
-	{
-		return new implementation( *this );
-	}
+    virtual void foo() {}
+    virtual abstract_base* clone() const
+    {
+        return new implementation( *this );
+    }
 };
 
 inline std::ostream& operator<<( std::ostream& out, const abstract_base& r )
 {
-    return out;	
+    return out;    
 }
 
 inline abstract_base* new_clone( const abstract_base& r )
 {
-	return r.clone();
+    return r.clone();
 }
 
 //
@@ -171,7 +171,7 @@ void ptr_map_test()
 
     BOOST_CHECK( !c3.empty() );
     c3.replace( c3.begin(), new T );
-	c3.replace( c3.begin(), std::auto_ptr<T>( new T ) );
+    c3.replace( c3.begin(), std::auto_ptr<T>( new T ) );
     BOOST_MESSAGE( "finished set/map interface test" );
 
     // @todo: make macro with algorithms so that the right erase() is called.
@@ -270,7 +270,7 @@ void test_map()
     ptr_map_test< ptr_map<int, Value>, Value, Value >();
     ptr_map_test< ptr_map<int, nullable<Base> >, Base, Derived_class >();
     ptr_map_test< ptr_map<int, nullable<Value> >, Value, Value >();
-	ptr_map_test< ptr_map<int, abstract_base>, abstract_base, implementation >();
+    ptr_map_test< ptr_map<int, abstract_base>, abstract_base, implementation >();
 
     ptr_map_test< ptr_multimap<int,Base>, Base, Derived_class >();
     ptr_map_test< ptr_multimap<int,Value>, Value, Value >();    

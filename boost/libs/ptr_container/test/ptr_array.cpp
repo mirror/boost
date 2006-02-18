@@ -89,7 +89,7 @@ void test_array()
     ptr_array<int,10> vec;
     BOOST_CHECK_THROW( vec.at(10), bad_ptr_container_operation );
     BOOST_CHECK_THROW( (vec.replace(10u, new int(0))), bad_ptr_container_operation );
-	BOOST_CHECK_THROW( (vec.replace(10u, std::auto_ptr<int>(new int(0)))), bad_ptr_container_operation ); 
+    BOOST_CHECK_THROW( (vec.replace(10u, std::auto_ptr<int>(new int(0)))), bad_ptr_container_operation ); 
     BOOST_CHECK_THROW( (vec.replace(0u, 0)), bad_ptr_container_operation ); 
     
 }
@@ -101,7 +101,7 @@ void test_array_interface()
     c.replace( 0, new T );
     c.replace( 1, new B );
     c.replace( 9, new T );
-	c.replace( 0, std::auto_ptr<T>( new T ) );
+    c.replace( 0, std::auto_ptr<T>( new T ) );
     const C c2( c.clone() );
     
     BOOST_DEDUCED_TYPENAME C::iterator i                  = c.begin();

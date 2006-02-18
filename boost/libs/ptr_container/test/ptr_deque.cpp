@@ -24,11 +24,11 @@ void test_ptr_deque()
 
     
     random_access_algorithms_test< ptr_deque<int> >();
-	ptr_deque<int> di;
-	di.push_front( new int(0) );
-	BOOST_CHECK_EQUAL( di.size(), 1u );
-	di.push_front( std::auto_ptr<int>( new int(1) ) );
-	BOOST_CHECK_EQUAL( di.size(), 2u ); 
+    ptr_deque<int> di;
+    di.push_front( new int(0) );
+    BOOST_CHECK_EQUAL( di.size(), 1u );
+    di.push_front( std::auto_ptr<int>( new int(1) ) );
+    BOOST_CHECK_EQUAL( di.size(), 2u ); 
 }
 
 using boost::unit_test::test_suite;
