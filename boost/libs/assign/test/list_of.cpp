@@ -57,6 +57,21 @@ void test_sequence_list_of_string()
     BOOST_CHECK_EQUAL( c.size(), 2u );
 }
 
+struct parameter_list
+{
+    int val;
+    
+    template< class T >
+    parameter_list( T )
+    : val(0)
+    { }
+    
+    template< class T >
+    parameter_list( const T&, int )
+    : val(1)
+    { }
+};
+
 template< class C >
 void test_sequence_list_of_int()
 {
@@ -95,6 +110,9 @@ void test_sequence_list_of_int()
 #endif
 
 #endif
+
+    parameter_list p( ba::list_of(1)(2), 3u );
+    BOOST_CHECK_EQUAL( p.val, 1 );
 
 }
 
