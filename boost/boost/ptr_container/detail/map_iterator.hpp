@@ -21,14 +21,13 @@
 #include <utility>
 
 namespace boost
-{
-    //namespace ptr_container_detail
-    //{
+{ 
         template
         < 
-            typename I, // original iterator 
-            typename K, // key type
-            typename V  // return value type of operator*()
+            class I,    // original iterator 
+            class K,    // key type
+            class V,    // mapped type
+            class B = I // base-type 
         > 
         class ptr_map_iterator
         {
@@ -41,13 +40,22 @@ namespace boost
             typedef V*             pointer;
             typedef V&             reference;
             typedef                std::bidirectional_iterator_tag  iterator_category;        
-            
+
         public:
             ptr_map_iterator()                                  {}
             ptr_map_iterator( const I& i ) : iter_( i )         {}
             
-            template< class MutableIterator, class K2, class V2 >
-            ptr_map_iterator( const ptr_map_iterator<MutableIterator,K2,V2>& r ) 
+            template< class MutableIterator, class K2, class V2, class B2 >
+            ptr_map_iterator( const ptr_map_iterator<MutableIterator,K2,V2,B2>& r ) 
+             : iter_(r.base())
+            { }
+
+            //
+            // This one is needed when constructing an iterator
+            // from a reverse_iterator in base().
+            //
+            template< class ReverseIter >
+            ptr_map_iterator( const ReverseIter& r )
              : iter_(r.base())
             { }
             
@@ -88,32 +96,38 @@ namespace boost
 
             }
 
-            I base() const
+            B base() const
             {
-                return iter_;
+                return B(iter_);
             }
 
-            key_type key() const
+            const key_type& key() const
             {
                 return iter_->first;
+            }
+
+            V& value() const
+            {
+                BOOST_ASSERT( iter_->second && "indirecting null pointer in map iterator" );
+                return *static_cast<V*>( iter_->second );                                
             }
 
        }; // class 'ptr_map_iterator'
 
 
        
-       template< class I, class K, class V, class I2, class K2, class V2 >
-       inline bool operator==( const ptr_map_iterator<I,K,V>& l, 
-                               const ptr_map_iterator<I2,K2,V2>& r )
+       template< class I, class K, class V, class B, class I2, class K2, class V2, class B2 >
+       inline bool operator==( const ptr_map_iterator<I,K,V,B>& l, 
+                               const ptr_map_iterator<I2,K2,V2,B2>& r )
        {
            return l.base() == r.base();
        }
 
 
-       
-       template< class I, class K, class V, class I2, class K2, class V2 >
-       inline bool operator!=( const ptr_map_iterator<I,K,V>& l, 
-                               const ptr_map_iterator<I2,K2,V2>& r )
+      
+       template< class I, class K, class V, class B, class I2, class K2, class V2, class B2 >
+       inline bool operator!=( const ptr_map_iterator<I,K,V,B>& l, 
+                               const ptr_map_iterator<I2,K2,V2,B2>& r )
        {
            return l.base() != r.base();
        }

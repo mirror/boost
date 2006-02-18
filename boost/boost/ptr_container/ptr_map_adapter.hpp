@@ -113,6 +113,22 @@ namespace ptr_container_detail
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type
                     auto_type;
 
+        typedef ptr_map_iterator< 
+                       BOOST_DEDUCED_TYPENAME VoidPtrMap::reverse_iterator,
+                       BOOST_DEDUCED_TYPENAME VoidPtrMap::key_type, 
+                       BOOST_DEDUCED_TYPENAME remove_nullable<T>::type,
+                       BOOST_DEDUCED_TYPENAME base_type::iterator
+                                 >
+                     reverse_iterator;
+
+        typedef ptr_map_iterator< 
+                       BOOST_DEDUCED_TYPENAME VoidPtrMap::const_reverse_iterator,
+                       BOOST_DEDUCED_TYPENAME VoidPtrMap::key_type, 
+                       const BOOST_DEDUCED_TYPENAME remove_nullable<T>::type,
+                       const_iterator
+                                 >
+                     const_reverse_iterator;
+
     private:
         reference lookup( const key_type& key ) const
         {
@@ -167,6 +183,15 @@ namespace ptr_container_detail
 
         BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_map_adapter_base, 
                                                  base_type )
+
+        reverse_iterator rbegin()           
+            { return reverse_iterator( this->end() ); } 
+        const_reverse_iterator rbegin() const     
+            { return const_reverse_iterator( this->end() ); } 
+        reverse_iterator rend()             
+            { return reverse_iterator( this->begin() ); } 
+        const_reverse_iterator rend() const       
+            { return const_reverse_iterator( this->begin() ); } 
 
         template< class Compare, class Allocator >
         explicit ptr_map_adapter_base( const Compare& comp,
