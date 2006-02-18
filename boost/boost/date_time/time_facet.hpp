@@ -281,7 +281,7 @@ namespace date_time {
 
           // if zone_name() returns an empty string, we want to
           // erase zone_name_format & one preceeding space
-          std::basic_stringstream<char_type> ss;
+          std::basic_ostringstream<char_type> ss;
           ss << ' ' << zone_name_format;
           boost::algorithm::replace_all(format,
                                         ss.str(),
@@ -301,7 +301,7 @@ namespace date_time {
 
           // if zone_abbrev() returns an empty string, we want to
           // erase zone_abbrev_format & one preceeding space
-          std::basic_stringstream<char_type> ss;
+          std::basic_ostringstream<char_type> ss;
           ss << ' ' << zone_abbrev_format;
           boost::algorithm::replace_all(format,
                                         ss.str(),

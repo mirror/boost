@@ -37,7 +37,7 @@ gather_month_strings(const std::locale& locale, bool short_strings=true)
   typedef std::vector<string_type> collection_type;
   typedef std::basic_ostringstream<charT> ostream_type;
   typedef std::ostreambuf_iterator<charT> ostream_iter_type;
-  typedef std::basic_stringstream<charT> stringstream_type;
+  typedef std::basic_ostringstream<charT> stringstream_type;
   typedef std::time_put<charT>           time_put_facet_type;
   charT short_fmt[3] = { '%', 'b' };
   charT long_fmt[3]  = { '%', 'B' };
@@ -86,7 +86,7 @@ gather_weekday_strings(const std::locale& locale, bool short_strings=true)
   typedef std::vector<string_type> collection_type;
   typedef std::basic_ostringstream<charT> ostream_type;
   typedef std::ostreambuf_iterator<charT> ostream_iter_type;
-  typedef std::basic_stringstream<charT> stringstream_type;
+  typedef std::basic_ostringstream<charT> stringstream_type;
   typedef std::time_put<charT>           time_put_facet_type;
   charT short_fmt[3] = { '%', 'a' };
   charT long_fmt[3]  = { '%', 'A' };

@@ -139,7 +139,7 @@ class format_date_parser
 {
  public:
   typedef std::basic_string<charT>        string_type;
-  typedef std::basic_stringstream<charT>  stringstream_type;
+  typedef std::basic_ostringstream<charT>  stringstream_type;
   typedef std::istreambuf_iterator<charT> stream_itr_type;
   typedef typename string_type::const_iterator const_itr;
   typedef typename date_type::year_type  year_type;

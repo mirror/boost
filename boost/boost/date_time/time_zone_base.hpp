@@ -34,7 +34,7 @@ namespace date_time {
   public:
     typedef CharT char_type;
     typedef std::basic_string<CharT> string_type;
-    typedef std::basic_stringstream<CharT> stringstream_type;
+    typedef std::basic_ostringstream<CharT> stringstream_type;
     typedef typename time_type::date_type::year_type year_type;
     typedef typename time_type::time_duration_type time_duration_type;
 
