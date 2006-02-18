@@ -62,9 +62,6 @@ test-suite "typeof"
 	[ compile data_member.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : data_member_native ]
 	[ compile data_member.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : data_member_emulation ]
 
-	[ compile lvalue.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : lvalue_native ]
-	[ compile lvalue.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : lvalue_emulation ]
-
 	[ compile noncopyable.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : noncopyable_native ]
 	[ compile noncopyable.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : noncopyable_emulation ]
 
