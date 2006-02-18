@@ -573,13 +573,14 @@ namespace ptr_container_detail
 
     protected:
 
-        template< class Archive, class Cont >
-        void load_helper( Archive& ar, Cont& c, size_type n )
+        template< class Archive >
+        void load_helper( Archive& ar, size_type n )
         {   
             //
             // Called after an appropriate reserve on c.
             //
 
+            this->clear();            
             for( size_type i = 0u; i != n; ++i )
             {
                 //
@@ -588,10 +589,8 @@ namespace ptr_container_detail
                 //
                 value_type ptr;
                 ar & ptr;
-                c.insert( c.end(), ptr );
+                this->insert( this->end(), ptr );
             }
-
-            c.swap( *this ); // commit
         }
 
     public:
@@ -599,10 +598,9 @@ namespace ptr_container_detail
         template< class Archive >
         void load( Archive& ar, const unsigned ) // strong
         {
-            reversible_ptr_container<Config,CloneAllocator> to_load;
             size_type n;
             ar & n;
-            this->load_helper( ar, to_load, n ); 
+            this->load_helper( ar, n ); 
         }
         
         BOOST_SERIALIZATION_SPLIT_MEMBER()

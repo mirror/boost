@@ -370,12 +370,13 @@ namespace ptr_container_detail
 
 #endif
 
+        template< class PtrSeqAdapter >
         void transfer( iterator before, 
-                       iterator first, 
-                       iterator last, 
-                       ptr_sequence_adapter& from ) // strong
+                       BOOST_DEDUCED_TYPENAME PtrSeqAdapter::iterator first, 
+                       BOOST_DEDUCED_TYPENAME PtrSeqAdapter::iterator last, 
+                       PtrSeqAdapter& from ) // strong
         {
-            BOOST_ASSERT( &from != this );
+            BOOST_ASSERT( (void*)&from != (void*)this );
             if( from.empty() )
                 return;
             this->c_private().
@@ -385,11 +386,12 @@ namespace ptr_container_detail
                                     last.base() );   // nothrow
         }
 
+        template< class PtrSeqAdapter >
         void transfer( iterator before, 
-                       iterator object, 
-                       ptr_sequence_adapter& from ) // strong
+                       BOOST_DEDUCED_TYPENAME PtrSeqAdapter::iterator object, 
+                       PtrSeqAdapter& from ) // strong
         {
-            BOOST_ASSERT( &from != this );
+            BOOST_ASSERT( (void*)&from != (void*)this );
             if( from.empty() )
                 return;
             this->c_private().
@@ -401,19 +403,19 @@ namespace ptr_container_detail
 #ifdef BOOST_NO_SFINAE
 #else
         
-        template< class Range >
+        template< class PtrSeqAdapter, class Range >
         BOOST_DEDUCED_TYPENAME boost::disable_if< boost::is_same< Range,
-                                                                  iterator > >::type
-        transfer( iterator before, const Range& r, ptr_sequence_adapter& from ) // strong
+                      BOOST_DEDUCED_TYPENAME PtrSeqAdapter::iterator > >::type
+        transfer( iterator before, const Range& r, PtrSeqAdapter& from ) // strong
         {
             transfer( before, boost::begin(r), boost::end(r), from );
         }
 
 #endif
-        
-        void transfer( iterator before, ptr_sequence_adapter& from ) // strong
+        template< class PtrSeqAdapter >
+        void transfer( iterator before, PtrSeqAdapter& from ) // strong
         {
-            BOOST_ASSERT( &from != this );
+            BOOST_ASSERT( (void*)&from != (void*)this );
             if( from.empty() )
                 return;
             this->c_private().
@@ -602,7 +604,7 @@ namespace ptr_container_detail
             merge( r.begin(), r.end(), r, pred );
             BOOST_ASSERT( r.empty() );    
         }
-
+        
     };
 
 

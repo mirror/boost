@@ -58,12 +58,11 @@ namespace boost
         template< class Archive >
         void load( Archive& ar, unsigned )
         {
-            this_type to_load;
             size_type n;
             ar & n;
             
-            to_load.reserve( n );
-            this->load_helper( ar, to_load, n );
+            this->reserve( n );
+            this->load_helper( ar, n );
         }
   
         BOOST_SERIALIZATION_SPLIT_MEMBER()

@@ -148,7 +148,8 @@ namespace ptr_container_detail
             {
                 BOOST_ASSERT( first != from.end() );
                 this->c_private().insert( *first.base() );     // strong
-                iterator to_delete( first );
+                BOOST_DEDUCED_TYPENAME AssociatePtrCont::iterator 
+                    to_delete( first );
                 ++first;
                 from.c_private().erase( to_delete.base() );    // nothrow
                 ++res;
@@ -186,7 +187,8 @@ namespace ptr_container_detail
                 BOOST_ASSERT( first != from.end() );
                 std::pair<BOOST_DEDUCED_TYPENAME base_type::ptr_iterator,bool> p =
                     this->c_private().insert( *first.base() );     // strong
-                iterator to_delete( first );
+                BOOST_DEDUCED_TYPENAME AssociatePtrCont::iterator 
+                    to_delete( first );
                 ++first;
                 if( p.second )
                 {

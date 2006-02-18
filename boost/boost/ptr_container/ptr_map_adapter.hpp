@@ -425,15 +425,17 @@ namespace ptr_container_detail
             return insert_impl( key, x.release() );
         }
 
-        bool transfer( iterator object, 
-                       ptr_map_adapter& from ) // strong
+        template< class PtrMapAdapter >
+        bool transfer( BOOST_DEDUCED_TYPENAME PtrMapAdapter::iterator object, 
+                       PtrMapAdapter& from ) // strong
         {
             return this->single_transfer( object, from );
         }
 
-        size_type transfer( iterator first, 
-                            iterator last, 
-                            ptr_map_adapter& from ) // basic
+        template< class PtrMapAdapter >
+        size_type transfer( BOOST_DEDUCED_TYPENAME PtrMapAdapter::iterator first, 
+                            BOOST_DEDUCED_TYPENAME PtrMapAdapter::iterator last, 
+                            PtrMapAdapter& from ) // basic
         {
             return this->single_transfer( first, last, from );
         }
@@ -441,18 +443,19 @@ namespace ptr_container_detail
 #ifdef BOOST_NO_SFINAE
 #else    
 
-        template< class Range >
+        template< class PtrMapAdapter, class Range >
         BOOST_DEDUCED_TYPENAME boost::disable_if< boost::is_same< Range,
-                                                                  iterator >,
+                            BOOST_DEDUCED_TYPENAME PtrMapAdapter::iterator >,
                                                             size_type >::type
-        transfer( const Range& r, ptr_map_adapter& from ) // basic
+        transfer( const Range& r, PtrMapAdapter& from ) // basic
         {
             return transfer( boost::begin(r), boost::end(r), from );
         }
         
 #endif
 
-        size_type transfer( ptr_map_adapter& from ) // basic
+        template< class PtrMapAdapter >
+        size_type transfer( PtrMapAdapter& from ) // basic
         {
             return transfer( from.begin(), from.end(), from );
         }
@@ -462,7 +465,7 @@ namespace ptr_container_detail
         template< class Archive >
         void load( Archive& ar, const unsigned ) // strong
         {
-            ptr_map_adapter<T,VoidPtrMap,CloneAllocator> m;
+            this->clear();
             size_type n;
             ar & n;
 
@@ -472,11 +475,9 @@ namespace ptr_container_detail
                 T*        value;
                 ar & key;
                 ar & value;
-                std::pair<iterator,bool> p = m.insert( key, value );
+                std::pair<iterator,bool> p = this->insert( key, value );
                 ar.reset_object_address( &p.first.key(), &key ); 
             }
-
-            m.swap( *this );
         }
 
         BOOST_SERIALIZATION_SPLIT_MEMBER()
@@ -585,7 +586,8 @@ namespace ptr_container_detail
 
         iterator insert( key_type& key, value_type x ) // strong
         {
-            this->enforce_null_policy( x, "Null pointer in 'ptr_multimap_adapter::insert()'" );
+            this->enforce_null_policy( x, 
+                  "Null pointer in 'ptr_multimap_adapter::insert()'" );
 
             auto_type ptr( x );         // nothrow
             BOOST_DEDUCED_TYPENAME base_type::ptr_iterator
@@ -601,16 +603,17 @@ namespace ptr_container_detail
             return insert( key, x.release() );
         }
 
-        
-        void transfer( iterator object, 
-                       ptr_multimap_adapter& from ) // strong
+        template< class PtrMapAdapter >
+        void transfer( BOOST_DEDUCED_TYPENAME PtrMapAdapter::iterator object, 
+                       PtrMapAdapter& from ) // strong
         {
             this->multi_transfer( object, from );
         }
 
-        size_type transfer( iterator first, 
-                            iterator last, 
-                            ptr_multimap_adapter& from ) // basic
+        template< class PtrMapAdapter >
+        size_type transfer( BOOST_DEDUCED_TYPENAME PtrMapAdapter::iterator first, 
+                            BOOST_DEDUCED_TYPENAME PtrMapAdapter::iterator last, 
+                            PtrMapAdapter& from ) // basic
         {
             return this->multi_transfer( first, last, from );
         }
@@ -618,18 +621,18 @@ namespace ptr_container_detail
 #ifdef BOOST_NO_SFINAE
 #else    
 
-        template< class Range >
+        template<  class PtrMapAdapter, class Range >
         BOOST_DEDUCED_TYPENAME boost::disable_if< boost::is_same< Range,
-                                                                  iterator >,
+                            BOOST_DEDUCED_TYPENAME PtrMapAdapter::iterator >,
                                                             size_type >::type
-        transfer(  const Range& r, ptr_multimap_adapter& from ) // basic
+        transfer( const Range& r, PtrMapAdapter& from ) // basic
         {
             return transfer( boost::begin(r), boost::end(r), from );
         }
 
 #endif        
-
-        void transfer( ptr_multimap_adapter& from ) // basic
+        template< class PtrMapAdapter >
+        void transfer( PtrMapAdapter& from ) // basic
         {
             transfer( from.begin(), from.end(), from );
             BOOST_ASSERT( from.empty() );
@@ -640,7 +643,7 @@ namespace ptr_container_detail
         template< class Archive >
         void load( Archive& ar, const unsigned ) // strong
         {
-            ptr_multimap_adapter<T,VoidPtrMultiMap,CloneAllocator> m;
+            this->clear();
             size_type n;
             ar & n;
 
@@ -650,11 +653,9 @@ namespace ptr_container_detail
                 T*        value;
                 ar & key;
                 ar & value;
-                iterator p = m.insert( key, value );
+                iterator p = this->insert( key, value );
                 ar.reset_object_address( &p.key(), &key );
             }
-
-            m.swap( *this );
         }
 
         BOOST_SERIALIZATION_SPLIT_MEMBER()

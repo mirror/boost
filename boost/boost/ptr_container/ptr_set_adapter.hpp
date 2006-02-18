@@ -191,19 +191,6 @@ namespace ptr_container_detail
                                         const_iterator( p.second ) );    
         }                                                                            
 
-    public: // serialization
-
-        template< class Archive >
-        void load( Archive& ar, const unsigned ) // strong
-        {
-            ptr_set_adapter_base<Key,VoidPtrSet,CloneAllocator> to_load;
-            size_type n;
-            ar & n;
-            this->load_helper( ar, to_load, n ); 
-        }
-
-        BOOST_SERIALIZATION_SPLIT_MEMBER()
-
     };
 
 } // ptr_container_detail
@@ -357,7 +344,7 @@ namespace ptr_container_detail
 #ifdef BOOST_NO_SFINAE
 #else    
 
-        template< class Range, class PtrSetAdapter >
+        template< class PtrSetAdapter, class Range >
         BOOST_DEDUCED_TYPENAME boost::disable_if< boost::is_same< Range,
                             BOOST_DEDUCED_TYPENAME PtrSetAdapter::iterator >,
                                                             size_type >::type
@@ -409,9 +396,6 @@ namespace ptr_container_detail
         template< typename II >                                               
         void set_basic_clone_and_insert( II first, II last ) // basic                 
         {               
-            //BOOST_ASSERT( first != this->begin() );
-            //BOOST_ASSERT( last != this->end() );
-                                                                  
             while( first != last )                                            
             {           
                 insert( CloneAllocator::allocate_clone( *first ) ); // strong, commit                              
@@ -510,7 +494,7 @@ namespace ptr_container_detail
 #ifdef BOOST_NO_SFINAE
 #else    
         
-        template< class Range, class PtrSetAdapter >
+        template< class PtrSetAdapter, class Range >
         BOOST_DEDUCED_TYPENAME boost::disable_if< boost::is_same< Range,
                        BOOST_DEDUCED_TYPENAME PtrSetAdapter::iterator >, size_type >::type
         transfer(  const Range& r, PtrSetAdapter& from ) // basic
@@ -526,6 +510,7 @@ namespace ptr_container_detail
             transfer( from.begin(), from.end(), from );
             BOOST_ASSERT( from.empty() );
         }
+        
     };
 
 } // namespace 'boost'  
