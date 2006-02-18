@@ -431,14 +431,14 @@ namespace boost
 
   // Macros which describe the declarations of binary operators
 # ifdef BOOST_NO_STRICT_ITERATOR_INTEROPERABILITY
-#  define BOOST_ITERATOR_FACADE_INTEROP_HEAD(prefix, op, result_type)   \
-    template <                                                          \
-        class Derived1, class V1, class TC1, class R1, class D1         \
-      , class Derived2, class V2, class TC2, class R2, class D2         \
-    >                                                                   \
-    prefix typename mpl::apply2<result_type,Derived1,Derived2>::type    \
-    operator op(                                                        \
-        iterator_facade<Derived1, V1, TC1, R1, D1> const& lhs           \
+#  define BOOST_ITERATOR_FACADE_INTEROP_HEAD(prefix, op, result_type)       \
+    template <                                                              \
+        class Derived1, class V1, class TC1, class R1, class D1             \
+      , class Derived2, class V2, class TC2, class R2, class D2             \
+    >                                                                       \
+    prefix inline typename mpl::apply2<result_type,Derived1,Derived2>::type \
+    operator op(                                                            \
+        iterator_facade<Derived1, V1, TC1, R1, D1> const& lhs               \
       , iterator_facade<Derived2, V2, TC2, R2, D2> const& rhs)
 # else 
 #  define BOOST_ITERATOR_FACADE_INTEROP_HEAD(prefix, op, result_type)   \
@@ -446,7 +446,7 @@ namespace boost
         class Derived1, class V1, class TC1, class R1, class D1         \
       , class Derived2, class V2, class TC2, class R2, class D2         \
     >                                                                   \
-    prefix typename detail::enable_if_interoperable<                    \
+    prefix inline typename detail::enable_if_interoperable<             \
         Derived1, Derived2                                              \
       , typename mpl::apply2<result_type,Derived1,Derived2>::type       \
     >::type                                                             \
@@ -457,7 +457,7 @@ namespace boost
 
 #  define BOOST_ITERATOR_FACADE_PLUS_HEAD(prefix,args)              \
     template <class Derived, class V, class TC, class R, class D>   \
-    prefix Derived operator+ args
+    prefix inline Derived operator+ args
 
   //
   // Helper class for granting access to the iterator core interface.
@@ -723,7 +723,7 @@ namespace boost
 
 # if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
   template <class I, class V, class TC, class R, class D>
-  typename detail::postfix_increment_result<I,V,R,TC>::type
+  inline typename detail::postfix_increment_result<I,V,R,TC>::type
   operator++(
       iterator_facade<I,V,TC,R,D>& i
     , int
