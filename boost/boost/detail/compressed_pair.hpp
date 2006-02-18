@@ -27,6 +27,10 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/call_traits.hpp>
 
+#ifdef BOOST_MSVC
+# pragma warning(push)
+# pragma warning(disable:4512)
+#endif 
 namespace boost
 {
 
@@ -430,6 +434,10 @@ swap(compressed_pair<T1, T2>& x, compressed_pair<T1, T2>& y)
 }
 
 } // boost
+
+#ifdef BOOST_MSVC
+# pragma warning(pop)
+#endif 
 
 #endif // BOOST_DETAIL_COMPRESSED_PAIR_HPP
 
