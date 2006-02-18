@@ -103,7 +103,7 @@ int Base::objects = 0;
 
 
 
-ostream& operator<<( ostream& out, Base& b )
+ostream& operator<<( ostream& out, const Base& b )
 {
     b.print( out );
     return out;

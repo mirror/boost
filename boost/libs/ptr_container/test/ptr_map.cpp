@@ -212,9 +212,28 @@ void ptr_map_test()
     typename C::iterator it = c.begin(), e = c.end();
     for( ; it != e; ++it )
     {
-        std::cout << "\n mapped value = " << *it << " key = " << i.key();
+        std::cout << "\n mapped value = " << *it << " key = " << it.key();
+        std::cout << "\n mapped value = " << it.value() << " key = " << it.key();
     }
-
+    
+    typename C::reverse_iterator rit = c.rbegin(), re = c.rend();
+    for( ; rit != re; ++rit )
+    {
+        std::cout << "\n mapped value = " << *rit << " key = " << rit.key();
+        std::cout << "\n mapped value = " << rit.value() << " key = " << rit.key();    
+        std::cout << "\n mapped value (base) = " 
+                  << rit.base().value() << " key = " << rit.base().key();   
+    }
+    
+    typename C::const_reverse_iterator crit = c2.rbegin(), cre = c2.rend();
+    for( ; crit != cre; ++crit )
+    {
+        std::cout << "\n mapped value = " << *crit << " key = " << crit.key();
+        std::cout << "\n mapped value = " << crit.value() << " key = " << crit.key();    
+        std::cout << "\n mapped value (base) = " 
+                  << crit.base().value() << " key = " << crit.base().key();   
+    }
+    
     BOOST_MESSAGE( "finished iterator test" );
 
     a_key = get_next_key( a_key );
