@@ -141,7 +141,7 @@ public:
         pn.swap(other.pn);
     }
 
-    void _internal_assign(T * px2, detail::shared_count const & pn2)
+    void _internal_assign(T * px2, boost::detail::shared_count const & pn2)
     {
         px = px2;
         pn = pn2;
@@ -164,8 +164,8 @@ private:
 
 #endif
 
-    T * px;                     // contained pointer
-    detail::weak_count pn;      // reference counter
+    T * px;                       // contained pointer
+    boost::detail::weak_count pn; // reference counter
 
 };  // weak_ptr
 

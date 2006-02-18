@@ -236,7 +236,7 @@ public:
 #if !defined( BOOST_NO_SFINAE ) && !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
 
     template<class Ap>
-    explicit shared_ptr( Ap r, typename detail::sp_enable_if_auto_ptr<Ap, int>::type = 0 ): px( r.get() ), pn()
+    explicit shared_ptr( Ap r, typename boost::detail::sp_enable_if_auto_ptr<Ap, int>::type = 0 ): px( r.get() ), pn()
     {
         typename Ap::element_type * tmp = r.get();
         pn = boost::detail::shared_count( r );
@@ -272,7 +272,7 @@ public:
 #if !defined( BOOST_NO_SFINAE ) && !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
 
     template<class Ap>
-    typename detail::sp_enable_if_auto_ptr< Ap, shared_ptr & >::type operator=( Ap r )
+    typename boost::detail::sp_enable_if_auto_ptr< Ap, shared_ptr & >::type operator=( Ap r )
     {
         this_type( r ).swap( *this );
         return *this;
