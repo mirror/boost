@@ -266,12 +266,18 @@ namespace assign_detail
         void push_back( value_type r ) { values_.push_back( r ); }
         
     public:
+        generic_list& operator,( const Ty& u )
+        {
+            this->push_back( u ); 
+            return *this;
+        }
+
         generic_list& operator()()
         {
             this->push_back( Ty() );
             return *this;
         }
-        
+
         generic_list& operator()( const Ty& u )
         {
             this->push_back( u );
@@ -493,7 +499,7 @@ namespace assign
     inline assign_detail::generic_list<T>
     list_of()
     {
-        return assign_detail::generic_list<T>(T());
+        return assign_detail::generic_list<T>()( T() );
     }
     
     template< class T >
