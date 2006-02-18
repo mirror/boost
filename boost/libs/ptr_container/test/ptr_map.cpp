@@ -153,19 +153,19 @@ void ptr_map_test()
     a_key = get_next_key( a_key );
     c3.insert( a_key, new T );
 
-    c.transfer( c3.begin(), c3 );
-    c.transfer( c3.begin(), c3.end(), c3 );
+    c. BOOST_NESTED_TEMPLATE transfer<C>( c3.begin(), c3 );
+    c. BOOST_NESTED_TEMPLATE transfer<C>( c3.begin(), c3.end(), c3 );
     BOOST_CHECK( c3.empty() );
     BOOST_CHECK( !c.empty() );
-    c3.transfer( c );
+    c3. BOOST_NESTED_TEMPLATE transfer<C>( c );
     BOOST_CHECK( !c3.empty() );
     BOOST_CHECK( c.empty() );
 #ifdef BOOST_NO_SFINAE
 #else
-    c.transfer( make_iterator_range(c3), c3 );
+    c. BOOST_NESTED_TEMPLATE transfer<C>( make_iterator_range(c3), c3 );
     BOOST_CHECK( !c.empty() );
     BOOST_CHECK( c3.empty() );
-    c3.transfer(c);
+    c3. BOOST_NESTED_TEMPLATE transfer<C>(c);
 #endif
     BOOST_MESSAGE( "finished transfer test" );
 
@@ -225,6 +225,22 @@ void ptr_map_test()
 }
 
 
+
+template< class CDerived, class CBase, class T >
+void test_transfer()
+{
+    CDerived from;
+    CBase    to;
+
+    int key = get_next_key( key );
+    from.insert( key, new T );
+    key = get_next_key( key );
+    from.insert( key, new T );
+    transfer_test( to, from );
+}
+
+
+
 #include <boost/ptr_container/ptr_map.hpp>
 
 using namespace std;
@@ -241,6 +257,9 @@ void test_map()
     ptr_map_test< ptr_multimap<int,Value>, Value, Value >();    
     ptr_map_test< ptr_multimap<int, nullable<Base> >, Base, Derived_class >();
     ptr_map_test< ptr_multimap<int, nullable<Value> >, Value, Value >();
+
+    test_transfer< ptr_map<int,Derived_class>, ptr_map<int,Base>, Derived_class >();
+    test_transfer< ptr_multimap<int,Derived_class>, ptr_multimap<int,Base>, Derived_class >();
     
     string joe   = "joe";
     string brian = "brian";

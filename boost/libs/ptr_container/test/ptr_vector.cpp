@@ -25,6 +25,7 @@ void test_ptr_vector()
     reversible_container_test< ptr_vector< nullable<Value> >, Value, Value >();
 #endif    
 
+    test_transfer< ptr_vector<Derived_class>, ptr_vector<Base>, Derived_class>();
     random_access_algorithms_test< ptr_vector<int> >();
 
 

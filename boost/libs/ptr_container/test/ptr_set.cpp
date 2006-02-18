@@ -13,6 +13,16 @@
 #include "associative_test_data.hpp"
 #include <boost/ptr_container/ptr_set.hpp>
 
+template< class SetDerived, class SetBase, class T >
+void test_transfer()
+{
+    SetBase to;
+    SetDerived from;
+    from.insert( new T );
+    from.insert( new T );
+    transfer_test( from, to );
+}
+
 void test_set()
 {    
 
@@ -22,6 +32,9 @@ void test_set()
     ptr_set_test< ptr_multiset<Base>, Base, Derived_class >();
     ptr_set_test< ptr_multiset<Value>, Value, Value >();
 
+    test_transfer< ptr_set<Derived_class>, ptr_set<Base>, Derived_class>();
+    test_transfer< ptr_multiset<Derived_class>, ptr_multiset<Base>, Derived_class>();
+    
     ptr_set<int> set;
 
     BOOST_CHECK_THROW( set.insert( 0 ), bad_ptr_container_operation );
@@ -30,11 +43,7 @@ void test_set()
     BOOST_CHECK_THROW( (set.replace(set.begin(), 0 )), bad_ptr_container_operation );
 	BOOST_CHECK_THROW( (set.replace(set.begin(), std::auto_ptr<int>(0) )), bad_ptr_container_operation );
 
-    ptr_set<Base> to;
-    ptr_set<Derived_class> from;
-    from.insert( new Derived_class );
-    from.insert( new Derived_class );
-    transfer_test( from, to );
+
 }
 
 using boost::unit_test::test_suite;

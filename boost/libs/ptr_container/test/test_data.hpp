@@ -251,7 +251,7 @@ template< class Cont1, class Cont2 >
 void transfer_test( Cont1& from, Cont2& to )
 {
     BOOST_CHECK( !from.empty() );
-    to.transfer( from );
+    to. BOOST_NESTED_TEMPLATE transfer<Cont1>( from );
     BOOST_CHECK( !to.empty() );
 }
 

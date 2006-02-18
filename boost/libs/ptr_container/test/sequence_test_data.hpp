@@ -125,20 +125,34 @@ void reversible_container_test()
     c3.push_back( new T );
     c3.push_back( new T );
     c3.push_back( new T );
-    c.transfer( c.begin(), c3.begin(), c3 );
-    c.transfer( c.end(), c3.begin(), c3.end(), c3 );
+    c. BOOST_NESTED_TEMPLATE transfer<C>( c.begin(), c3.begin(), c3 );
+    c. BOOST_NESTED_TEMPLATE transfer<C>( c.end(), c3.begin(), c3.end(), c3 );
 #ifdef BOOST_NO_SFINAE
 #else    
-    c.transfer( c.end(), boost::make_iterator_range( c3 ), c3 );    
+    c. BOOST_NESTED_TEMPLATE transfer<C>( c.end(), boost::make_iterator_range( c3 ), c3 );    
     BOOST_CHECK( c3.empty() );
     BOOST_CHECK( !c.empty() );
 #endif    
-    c3.transfer( c3.begin(), c );
+    c3. BOOST_NESTED_TEMPLATE transfer<C>( c3.begin(), c );
     BOOST_CHECK( !c3.empty() );
     BOOST_CHECK( c.empty() );
-    BOOST_MESSAGE( "finished transfer test" );  
 
+    BOOST_MESSAGE( "finished transfer test" );  
 }
+
+
+
+template< class CDerived, class CBase, class T >
+void test_transfer()
+{
+    CDerived from;
+    CBase    to;
+
+    from.push_back( new T );
+    from.push_back( new T );
+    to. BOOST_NESTED_TEMPLATE transfer<CDerived>( to.end(), from );
+}
+
 
 
 #include <boost/assign/list_inserter.hpp>
