@@ -151,9 +151,9 @@ void test_serialization_map_helper()
     ifs.close();
 
     BOOST_CHECK_EQUAL( m.size(), m2.size() );
-    BOOST_CHECK_EQUAL( m2.find(key1)->i, -1 );
-    BOOST_CHECK_EQUAL( m2.find(key2)->i, 0 );
-    BOOST_CHECK_EQUAL( dynamic_cast<Derived&>( *m2.find(key2) ).i2, 1 );
+    BOOST_CHECK_EQUAL( m2.find(key1)->second->i, -1 );
+    BOOST_CHECK_EQUAL( m2.find(key2).value().i, 0 );
+    BOOST_CHECK_EQUAL( dynamic_cast<Derived&>( m2.find(key2).value() ).i2, 1 );
     
 }
 

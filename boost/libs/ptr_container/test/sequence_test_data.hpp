@@ -88,7 +88,7 @@ void reversible_container_test()
     c.insert( c.end(), new T );
     c.insert( c.end(), std::auto_ptr<T>( new T ) );
 
-#ifdef BOOST_NO_SFINAE
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else
     c.insert( c.end(), c3 );
 #endif    

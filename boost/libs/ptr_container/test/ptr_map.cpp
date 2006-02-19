@@ -212,14 +212,14 @@ void ptr_map_test()
     typename C::iterator it = c.begin(), e = c.end();
     for( ; it != e; ++it )
     {
-        std::cout << "\n mapped value = " << *it << " key = " << it.key();
+        std::cout << "\n mapped value = " << *it->second << " key = " << it->first;
         std::cout << "\n mapped value = " << it.value() << " key = " << it.key();
     }
     
     typename C::reverse_iterator rit = c.rbegin(), re = c.rend();
     for( ; rit != re; ++rit )
     {
-        std::cout << "\n mapped value = " << *rit << " key = " << rit.key();
+        std::cout << "\n mapped value = " << *rit->second << " key = " << rit->first;
         std::cout << "\n mapped value = " << rit.value() << " key = " << rit.key();    
         std::cout << "\n mapped value (base) = " 
                   << rit.base().value() << " key = " << rit.base().key();   
@@ -228,7 +228,7 @@ void ptr_map_test()
     typename C::const_reverse_iterator crit = c2.rbegin(), cre = c2.rend();
     for( ; crit != cre; ++crit )
     {
-        std::cout << "\n mapped value = " << *crit << " key = " << crit.key();
+        std::cout << "\n mapped value = " << *(*crit).second << " key = " << (*crit).first;
         std::cout << "\n mapped value = " << crit.value() << " key = " << crit.key();    
         std::cout << "\n mapped value (base) = " 
                   << crit.base().value() << " key = " << crit.base().key();   
@@ -255,7 +255,7 @@ void test_transfer()
     from.insert( key, new T );
     key = get_next_key( key );
     from.insert( key, new T );
-    transfer_test( to, from );
+    transfer_test( from, to );
 }
 
 
@@ -304,7 +304,7 @@ void test_map()
             BOOST_CHECK( false );
         const string& ref  = i.key();
         hide_warning(ref);
-        int&          ref2 = *i;
+        int&          ref2 = *(*i).second;
         ref2++;
     }
 

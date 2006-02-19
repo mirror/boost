@@ -78,7 +78,7 @@ void ptr_set_test()
     c3.insert( new T );
     c3.insert( new T );
     BOOST_CHECK_EQUAL( c3.size(), 2u );
-#ifdef BOOST_NO_SFINAE
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else            
     c3.insert( make_iterator_range( c ) );
 //    BOOST_CHECK_EQUAL( c3.size(), 4u );
