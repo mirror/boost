@@ -183,7 +183,7 @@ void test_speed()
             cout << copy1[i] << endl;
     }   
 
-    assert( pvec.size() == size );
+    BOOST_REQUIRE( pvec.size() == size );
     cout << endl;
 }
 
