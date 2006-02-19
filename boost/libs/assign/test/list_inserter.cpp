@@ -94,17 +94,17 @@ void check_list_inserter()
 
     BOOST_CHECK_EQUAL( v.size(), 29u );
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-    push_back( v ) = 1,repeat( 10, 2 ),3;
-#else
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200) || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580 )
     push_back( v )(1).repeat( 10, 2 )(3);
+#else
+    push_back( v ) = 1,repeat( 10, 2 ),3;
 #endif
     BOOST_CHECK_EQUAL( v.size(), 41u );
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-    push_back( v ) = 1,repeat_fun( 10, &rand ),2;
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200) || BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580 )
+    push_back( v )(1).repeat_fun( 10, &rand )(2);  
 #else
-    push_back( v )(1).repeat_fun( 10, &rand )(2);
+    push_back( v ) = 1,repeat_fun( 10, &rand ),2;
 #endif
 
     BOOST_CHECK_EQUAL( v.size(), 53u );
