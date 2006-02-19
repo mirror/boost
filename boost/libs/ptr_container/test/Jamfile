@@ -19,10 +19,18 @@ rule sc-test ( name : requirements * )
     return [ 
       run $(name).cpp 
       <lib>../../test/build/boost_unit_test_framework
+      : : :
+           ]
+    ;
+}
+
+rule sc-serialization-test ( name : requirements * )
+{
+    return [ 
+      run $(name).cpp 
+      <lib>../../test/build/boost_unit_test_framework
       <lib>../../serialization/build/boost_serialization
       : : :
-      $(requirements)
-      toolset::require-boost-spirit-support
            ]
     ;
 }
@@ -43,6 +51,6 @@ test-suite ptr_container :
     [ sc-test iterator_test ]
     [ sc-test tut1 ]   
     [ sc-test indirect_fun ]
-    [ sc-test serialization ]
+    [ sc-serialization-test serialization ]
     [ sc-test no_exceptions ]
     ;
