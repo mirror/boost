@@ -11,6 +11,7 @@ Synopsis
     template<
           typename Sequence
         , typename Pred
+        , typename NewType
         , typename In = |unspecified|
         >
     struct replace_if
