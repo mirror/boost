@@ -312,7 +312,7 @@ namespace ptr_container_detail
             set_basic_clone_and_insert( first, last );
         }
 
-#ifdef BOOST_NO_SFINAE
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else    
         
         template< class Range >

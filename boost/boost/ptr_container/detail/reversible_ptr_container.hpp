@@ -596,7 +596,7 @@ namespace ptr_container_detail
     public:
         
         template< class Archive >
-        void load( Archive& ar, const unsigned ) // strong
+        void load( Archive& ar, const unsigned ) 
         {
             size_type n;
             ar & n;

@@ -135,7 +135,7 @@ namespace ptr_container_detail
            iterator i = const_cast<ptr_map_adapter_base*>(this)
                                           ->find( key );
            if( i != const_cast<ptr_map_adapter_base*>(this)->end() )
-               return *i;
+               return i.value();
            else                                           
                BOOST_PTR_CONTAINER_THROW_EXCEPTION( true, bad_ptr_container_operation,
                                                     "'ptr_map/multimap::at()' could"
@@ -289,7 +289,7 @@ namespace ptr_container_detail
                                                  bad_ptr_container_operation,
                                                  "'replace()' on empty container" );
 
-            auto_type old( &*where );               // nothrow
+            auto_type old( where.value_ptr() );     // nothrow
             where.base()->second = ptr.release();   // nothrow, commit
             return move( old );
         }
@@ -666,7 +666,7 @@ namespace ptr_container_detail
     public: // serialization
 
         template< class Archive >
-        void load( Archive& ar, const unsigned ) // strong
+        void load( Archive& ar, const unsigned ) // basic
         {
             this->clear();
             size_type n;
@@ -687,8 +687,8 @@ namespace ptr_container_detail
 
     };
 
-    template< class I, class K, class V >
-    inline bool is_null( ptr_map_iterator<I,K,V> i )
+    template< class I, class K, class V, class B >
+    inline bool is_null( ptr_map_iterator<I,K,V,B> i )
     {
         return i.base()->second == 0;
     }

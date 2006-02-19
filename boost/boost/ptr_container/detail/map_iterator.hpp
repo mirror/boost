@@ -33,12 +33,42 @@ namespace boost
         {
             I iter_;
             typedef K              key_type;
+
+            struct pair_ref
+            {
+                const key_type&  first;
+                V* const         second;
+
+                pair_ref( const key_type& k, V* v )
+                : first(k), second(v)
+                { }
+                
+                pair_ref( const pair_ref& p )
+                : first(p.first), second(p.second)
+                { }
+
+                //
+                // Allow pointer p = &*iter;
+                //
+                pair_ref( const pair_ref* p )
+                : first(p->first), second(p->second)
+                { }
+
+                //
+                // Trick ptr_map_iterator::operator->()
+                // into accepting this class as return value.
+                //
+                const pair_ref* operator->() const
+                {
+                    return this;
+                }
+            };
             
         public:
             typedef std::ptrdiff_t difference_type;
-            typedef V              value_type;
-            typedef V*             pointer;
-            typedef V&             reference;
+            typedef pair_ref       value_type;
+            typedef pair_ref       pointer;
+            typedef pair_ref       reference;
             typedef                std::bidirectional_iterator_tag  iterator_category;        
 
         public:
@@ -59,14 +89,14 @@ namespace boost
              : iter_(r.base())
             { }
             
-            V& operator*() const
+            reference operator*() const
             {
-                return *static_cast<V*>( iter_->second );
+                return reference( iter_->first, this->value_ptr() );
             }
 
-            V* operator->() const
+            pointer operator->() const
             {
-                return static_cast<V*>( iter_->second );
+                return this->operator*();
             }
             
             ptr_map_iterator& operator++()
@@ -98,7 +128,7 @@ namespace boost
 
             B base() const
             {
-                return B(iter_);
+                return iter_;
             }
 
             const key_type& key() const
@@ -109,7 +139,12 @@ namespace boost
             V& value() const
             {
                 BOOST_ASSERT( iter_->second && "indirecting null pointer in map iterator" );
-                return *static_cast<V*>( iter_->second );                                
+                return *this->value_ptr();                                
+            }
+
+            V* value_ptr() const
+            {
+                return static_cast<V*>( iter_->second );
             }
 
        }; // class 'ptr_map_iterator'

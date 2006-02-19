@@ -358,12 +358,12 @@ namespace ptr_container_detail
                          iterator_category<InputIterator>::type() );
         } 
 
-#ifdef BOOST_NO_SFINAE
+#if defined(BOOST_NO_SFINAE) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 #else
         template< class Range >
         BOOST_DEDUCED_TYPENAME
         boost::disable_if< ptr_container_detail::is_pointer_or_integral<Range> >::type
-        insert( iterator before, const Range& r )// ptr_container_detail::is_range_tag )
+        insert( iterator before, const Range& r )
         {
             insert( before, boost::begin(r), boost::end(r) );
         }
