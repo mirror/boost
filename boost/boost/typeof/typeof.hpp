@@ -150,7 +150,4 @@
 #define BOOST_AUTO(Var, Expr) BOOST_TYPEOF(Expr) Var = Expr
 #define BOOST_AUTO_TPL(Var, Expr) BOOST_TYPEOF_TPL(Expr) Var = Expr
 
-// lvalue typeof
-#include <boost/typeof/lvalue_typeof.hpp>
-
 #endif//BOOST_TYPEOF_TYPEOF_HPP_INCLUDED
