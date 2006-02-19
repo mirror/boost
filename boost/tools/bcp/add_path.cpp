@@ -208,7 +208,7 @@ void bcp_implementation::add_dependent_lib(const std::string& libname, const fs:
 void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
 {
    static const boost::regex e(
-      "^[[:blank:]]*#[[:blank:]]*include[[:blank:]]*[\"<]([^\">]+)[\">]"
+      "^[[:blank:]]*(?://@bcp[[:blank:]]+([^\\n]*)\n)?#[[:blank:]]*include[[:blank:]]*[\"<]([^\">]+)[\">]"
       );
 
    if(!m_dependencies.count(p)) 
@@ -221,7 +221,8 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
       view.open(m_boost_path / p);
    if(m_license_mode && !scanfile)
       scan_license(p, view);
-   boost::regex_token_iterator<const char*> i(view.begin(), view.end(), e, 1);
+   const int subs[] = { 1, 2 };
+   boost::regex_token_iterator<const char*> i(view.begin(), view.end(), e, subs);
    boost::regex_token_iterator<const char*> j;
    while(i != j)
    {
@@ -233,6 +234,16 @@ void bcp_implementation::add_file_dependencies(const fs::path& p, bool scanfile)
       //
       fs::path include_file;
       try{
+         std::string discart_message = *i;
+         ++i;
+         if(discart_message.size())
+         {
+            // The include is optional and should be discarded:
+            std::cout << "Optional functionality won't be copied: " << discart_message << std::endl;
+            std::cout << "Add the file " << *i << " to the list of dependencies to extract to copy this functionality." << std::endl;
+            ++i;
+            continue;
+         }
          include_file = i->str();
       }
       catch(const fs::filesystem_error& e)
