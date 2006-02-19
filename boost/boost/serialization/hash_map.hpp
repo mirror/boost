@@ -19,7 +19,7 @@
 
 #include <boost/config.hpp>
 #ifdef BOOST_HAS_HASH
-#include BOOST_HASH_SET_HEADER
+#include BOOST_HASH_MAP_HEADER
 
 #include <boost/serialization/utility.hpp>
 #include <boost/serialization/collections_save_imp.hpp>
