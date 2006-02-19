@@ -1,5 +1,5 @@
 ##############################################################################
-# (c) Copyright Andreas Huber Doenni 2004-2005
+# (c) Copyright Andreas Huber Doenni 2004-2006
 # Distributed under the Boost Software License, Version 1.0. (See accompany-
 # ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ##############################################################################
@@ -71,15 +71,15 @@ rule statechart-st-run-variants ( cpp-source )
   local result ;
 
   result += [ statechart-st-run $(cpp-source)Normal
-                : $(cpp-source).cpp : $(requirements) $(normal) ] ;
+                : $(cpp-source).cpp : $(normal) ] ;
   result += [ statechart-st-run $(cpp-source)Native
-                : $(cpp-source).cpp : $(requirements) $(native) ] ;
+                : $(cpp-source).cpp : $(native) ] ;
   result += [ statechart-st-run $(cpp-source)Relaxed
-                : $(cpp-source).cpp : $(requirements) $(relaxed) ] ;
+                : $(cpp-source).cpp : $(relaxed) ] ;
   result += [ statechart-st-run $(cpp-source)Both
-                : $(cpp-source).cpp : $(requirements) $(both) ] ;
+                : $(cpp-source).cpp : $(both) ] ;
 
-  return result ;
+  return $(result) ;
 }
 
 rule statechart-compile-fail ( name : cpp-sources + : requirements * )
@@ -93,16 +93,16 @@ rule statechart-compile-fail-variants ( cpp-source )
 {
   local result ;
 
-  result +=
-    [ statechart-compile-fail $(cpp-source)Normal : $(cpp-source) : $(normal) ] ;
-  result +=
-    [ statechart-compile-fail $(cpp-source)Native : $(cpp-source) : $(native) ] ;
-  result +=
-    [ statechart-compile-fail $(cpp-source)Relaxed : $(cpp-source) : $(relaxed) ] ;
-  result +=
-    [ statechart-compile-fail $(cpp-source)Both : $(cpp-source) : $(both) ] ;
+  result += [ statechart-compile-fail $(cpp-source)Normal
+                : $(cpp-source) : $(normal) ] ;
+  result += [ statechart-compile-fail $(cpp-source)Native
+                : $(cpp-source) : $(native) ] ;
+  result += [ statechart-compile-fail $(cpp-source)Relaxed
+                : $(cpp-source) : $(relaxed) ] ;
+  result += [ statechart-compile-fail $(cpp-source)Both
+                : $(cpp-source) : $(both) ] ;
 
-  return result ;
+  return $(result) ;
 }
 
 rule statechart-st-lib-run (
@@ -123,6 +123,13 @@ rule statechart-st-dll-run (
                [ statechart-st-dll $(name)Dll
                    : $(dll-cpp-sources) : $(requirements) ]
              : $(dll) $(requirements) ] ;
+}
+
+rule statechart-st-compile-example ( name : directory : cpp-sources + )
+{
+  return [ link ../example/$(directory)/$(cpp-sources).cpp
+               <template>statechart-common-options
+             : $(st-requirements) : $(name)Example ] ;
 }
 
 test-suite statechart
@@ -159,4 +166,13 @@ test-suite statechart
     [ statechart-st-lib-run LibTestNormal : TuTestMain : TuTest : $(normal) ]
     [ statechart-st-lib-run LibTestNative : TuTestMain : TuTest : $(native) ]
     [ statechart-st-dll-run DllTestNormal : TuTestMain : TuTest : $(normal) ]
-    [ statechart-st-dll-run DllTestNative : TuTestMain : TuTest : $(native) ] ;
+    [ statechart-st-dll-run DllTestNative : TuTestMain : TuTest : $(native) ]
+    [ statechart-st-compile-example BitMachine : BitMachine : BitMachine ]
+    [ statechart-st-compile-example Camera
+        : Camera : Camera Configuring Main Shooting ]
+    [ statechart-st-compile-example Handcrafted : Handcrafted : Handcrafted ]
+    [ statechart-st-compile-example Keyboard : Keyboard : Keyboard : ]
+    [ statechart-st-compile-example Performance : Performance : Performance ]
+    [ statechart-st-compile-example PingPong : PingPong : PingPong ]
+    [ statechart-st-compile-example StopWatch : StopWatch : StopWatch ]
+    [ statechart-st-compile-example StopWatch2 : StopWatch : StopWatch2 ] ;

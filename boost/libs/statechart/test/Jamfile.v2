@@ -1,11 +1,12 @@
 ##############################################################################
-# (c) Copyright Andreas Huber Doenni 2005
+# (c) Copyright Andreas Huber Doenni 2005-2006
 # Distributed under the Boost Software License, Version 1.0. (See accompany-
 # ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ##############################################################################
 
 project libs/statechart/test ;
 
+local test_monitor = ../../../libs/test/build//boost_test_exec_monitor ;
 # Some platforms have either problems with the automatic detection of the
 # threading mode (e.g. vc-7_1 & gcc >= 3.4.0) or don't support single-
 # threaded mode (e.g. vc-8_0). We therefore manually turn MT off here
@@ -45,7 +46,7 @@ rule statechart-st-lib ( name : cpp-sources + : requirements * )
 
 rule statechart-run ( name : sources + : requirements * )
 {
-  return [ run $(sources) ../../../libs/test/build//boost_test_exec_monitor : :
+  return [ run $(sources) $(test_monitor) : :
              : <threading>single:$(st-requirements) $(requirements)
              : $(name) ] ;
 }
@@ -103,6 +104,12 @@ rule statechart-st-lib-run (
              : <link>shared:$(dll) $(requirements) ] ;
 }
 
+rule statechart-st-compile-example ( name : directory : cpp-sources + )
+{
+  return [ link ../example/$(directory)/$(cpp-sources).cpp
+             : <threading>single $(st-requirements) : $(name)Example ] ;
+}
+
 test-suite statechart
   : [ statechart-compile-fail-variants InvalidChartTest1 ]
     [ statechart-compile-fail-variants InvalidChartTest2 ]
@@ -141,4 +148,13 @@ test-suite statechart
     [ statechart-st-lib-run DllTestNormal
         : TuTestMain : TuTest : <link>shared $(normal) ]
     [ statechart-st-lib-run DllTestNative
-        : TuTestMain : TuTest : <link>shared $(native) ] ;
+        : TuTestMain : TuTest : <link>shared $(native) ]
+    [ statechart-st-compile-example BitMachine : BitMachine : BitMachine ]
+    [ statechart-st-compile-example Camera
+        : Camera : Camera Configuring Main Shooting ]
+    [ statechart-st-compile-example Handcrafted : Handcrafted : Handcrafted ]
+    [ statechart-st-compile-example Keyboard : Keyboard : Keyboard : ]
+    [ statechart-st-compile-example Performance : Performance : Performance ]
+    [ statechart-st-compile-example PingPong : PingPong : PingPong ]
+    [ statechart-st-compile-example StopWatch : StopWatch : StopWatch ]
+    [ statechart-st-compile-example StopWatch2 : StopWatch : StopWatch2 ] ;
