@@ -1103,50 +1103,54 @@
 
   <!-- Group member functions together under a category name (synopsis)-->
   <xsl:template match="method-group" mode="synopsis">
-    <xsl:param name="indentation"/>
-    <xsl:text>&#10;</xsl:text>
-    <xsl:text>&#10;</xsl:text>
-    <xsl:call-template name="indent">
-      <xsl:with-param name="indentation" select="$indentation"/>
-    </xsl:call-template>
-    <emphasis>
-      <xsl:text>// </xsl:text>
-      <xsl:call-template name="internal-link">
-        <xsl:with-param name="to">
-          <xsl:call-template name="generate.id"/>
-        </xsl:with-param>
-        <xsl:with-param name="text" select="string(@name)"/>
+    <xsl:if test="count(child::*) &gt; 0">
+      <xsl:param name="indentation"/>
+      <xsl:text>&#10;</xsl:text>
+      <xsl:text>&#10;</xsl:text>
+      <xsl:call-template name="indent">
+        <xsl:with-param name="indentation" select="$indentation"/>
       </xsl:call-template>
-    </emphasis>
-    <xsl:apply-templates select="method|overloaded-method" 
-      mode="synopsis">
-      <xsl:with-param name="indentation" select="$indentation"/>
-    </xsl:apply-templates>
+      <emphasis>
+        <xsl:text>// </xsl:text>
+        <xsl:call-template name="internal-link">
+          <xsl:with-param name="to">
+            <xsl:call-template name="generate.id"/>
+          </xsl:with-param>
+          <xsl:with-param name="text" select="string(@name)"/>
+        </xsl:call-template>
+      </emphasis>
+      <xsl:apply-templates select="method|overloaded-method" 
+        mode="synopsis">
+        <xsl:with-param name="indentation" select="$indentation"/>
+      </xsl:apply-templates>
+    </xsl:if>
   </xsl:template>
 
   <!-- Group member functions together under a category name (reference)-->
   <xsl:template match="method-group" mode="reference">
-    <xsl:call-template name="member-documentation">
-      <xsl:with-param name="name">
-        <xsl:call-template name="anchor">
-          <xsl:with-param name="to">
-            <xsl:call-template name="generate.id"/>
-          </xsl:with-param>
-          <xsl:with-param name="text" select="''"/>
-        </xsl:call-template>
-        <xsl:call-template name="monospaced">
-          <xsl:with-param name="text" select="../@name"/>
-        </xsl:call-template>
-        <xsl:text> </xsl:text>
-        <xsl:value-of select="@name"/>
-      </xsl:with-param>
-      <xsl:with-param name="text">
-        <orderedlist>
-          <xsl:apply-templates select="method|overloaded-method"
-            mode="reference"/>
-        </orderedlist>
-      </xsl:with-param>
-    </xsl:call-template>
+    <xsl:if test="count(child::*) &gt; 0">
+      <xsl:call-template name="member-documentation">
+        <xsl:with-param name="name">
+          <xsl:call-template name="anchor">
+            <xsl:with-param name="to">
+              <xsl:call-template name="generate.id"/>
+            </xsl:with-param>
+            <xsl:with-param name="text" select="''"/>
+          </xsl:call-template>
+          <xsl:call-template name="monospaced">
+            <xsl:with-param name="text" select="../@name"/>
+          </xsl:call-template>
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="@name"/>
+        </xsl:with-param>
+        <xsl:with-param name="text">
+          <orderedlist>
+            <xsl:apply-templates select="method|overloaded-method"
+              mode="reference"/>
+          </orderedlist>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:if>
   </xsl:template> 
 
   <!-- Group free functions together under a category name (synopsis)-->

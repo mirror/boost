@@ -61,6 +61,9 @@
     <xsl:text>;</xsl:text>
   </xsl:template>
   <xsl:template match="data-member" mode="generate.id">
-    <xsl:value-of select="@name" />
+    <xsl:call-template name="fully-qualified-name">
+      <xsl:with-param name="node" select="."/>
+      <xsl:with-param name="separator" select="'.'"/>
+    </xsl:call-template>
   </xsl:template>
 </xsl:stylesheet>
