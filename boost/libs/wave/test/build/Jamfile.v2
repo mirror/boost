@@ -35,7 +35,7 @@ TESTWAVE_FILES = test.cfg
 
 project wave/test
     : requirements
-        <toolset>msvc-7.1:<rtti>off
+        <toolset>msvc:<rtti>off
         <os>NT:<runtime-link>static
         <threading>single
         <variant>debug
