@@ -325,9 +325,9 @@ protected:
     ignore_unused_variable_warning(index_bases);
     ignore_unused_variable_warning(extents);
 #if !defined(NDEBUG) && !defined(BOOST_DISABLE_ASSERTS)
-    for (size_type n = 0; n != NumDims; ++n) {
-      BOOST_ASSERT(indices[n] - index_bases[n] >= 0);
-      BOOST_ASSERT(size_type(indices[n] - index_bases[n]) < extents[n]);
+    for (size_type i = 0; i != NumDims; ++i) {
+      BOOST_ASSERT(indices[i] - index_bases[i] >= 0);
+      BOOST_ASSERT(size_type(indices[i] - index_bases[i]) < extents[i]);
     }
 #endif
 
