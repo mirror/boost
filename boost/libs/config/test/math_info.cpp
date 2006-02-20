@@ -24,7 +24,7 @@
 #include <boost/type_traits/alignment_of.hpp>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
-namespace std{ using ::strcmp; }
+namespace std{ using ::strcmp; using ::pow; using ::fabs; using ::sqrt; using ::sin; using ::atan2; }
 #endif
 
 static unsigned int indent = 4;
@@ -158,12 +158,18 @@ void print_limits(T, const char* name)
    std::cout << 
       "    alignment_of<" << name << "> = " << boost::alignment_of<T>::value << std::endl << std::endl;
 }
-
+/*
 template <class T>
 bool is_same_type(T, T)
 {
    return true;
-}
+}*/
+bool is_same_type(float, float)
+{ return true; }
+bool is_same_type(double, double)
+{ return true; }
+bool is_same_type(long double, long double)
+{ return true; }
 template <class T, class U>
 bool is_same_type(T, U)
 {
@@ -175,13 +181,13 @@ bool is_same_type(T, U)
 // the floating point types or not:
 //
 namespace std{
-
+#if !BOOST_WORKAROUND(BOOST_MSVC, == 1300)
 template <class T>
 char abs(T)
 {
    return ' ';
 }
-
+#endif
 }
 
 
