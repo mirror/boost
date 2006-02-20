@@ -57,15 +57,13 @@ namespace boost
             template< class ForwardRange >
             static IteratorT adl_begin( ForwardRange& r )
             {
-                using boost::begin;
-                return IteratorT( begin( r ) );
+                return IteratorT( boost::begin( r ) );
             }
             
             template< class ForwardRange >
             static IteratorT adl_end( ForwardRange& r )
             {
-                using boost::end;
-                return IteratorT( end( r ) );
+                return IteratorT( boost::end( r ) );
             }
         };
  
@@ -74,23 +72,23 @@ namespace boost
         {
             typedef BOOST_DEDUCED_TYPENAME boost::range_size<Left>::type sz_type;
 
-            sz_type l_size = size( l ),
-                    r_size = size( r );
+            sz_type l_size = boost::size( l ),
+                    r_size = boost::size( r );
 
             if( l_size != r_size )
                 return false;
 
-            return std::equal( begin(l), end(l), 
-                               begin(r) );                
+            return std::equal( boost::begin(l), boost::end(l), 
+                               boost::begin(r) );                
         }
 
         template< class Left, class Right >
         inline bool less_than( const Left& l, const Right& r )
         {                
-            return std::lexicographical_compare( begin(l), 
-                                                 end(l), 
-                                                 begin(r), 
-                                                 end(r) );                
+            return std::lexicographical_compare( boost::begin(l), 
+                                                 boost::end(l), 
+                                                 boost::begin(r), 
+                                                 boost::end(r) );                
         }
            
         struct range_tag { };
@@ -143,13 +141,13 @@ namespace boost
             //! This type
             typedef iterator_range<IteratorT> this_type;
 
-			//! Refence type
-			//
-			// Needed because value-type is the same for 
-			// const and non-const iterators
-			//
-			typedef BOOST_DEDUCED_TYPENAME
-				iterator_reference<IteratorT>::type reference;
+            //! Refence type
+            //
+            // Needed because value-type is the same for 
+            // const and non-const iterators
+            //
+            typedef BOOST_DEDUCED_TYPENAME
+                iterator_reference<IteratorT>::type reference;
             
             //! const_iterator type
             /*! 
@@ -334,16 +332,18 @@ namespace boost
                return m_Begin[sz];
            }
 
-		   void advance_begin( difference_type n )
-		   {
-			   std::advance( m_Begin, n );
-		   }
-		   
-		   void advance_end( difference_type n )
-		   {
-			   std::advance( m_End, n );
-		   }
-		   
+           iterator_range& advance_begin( difference_type n )
+           {
+               std::advance( m_Begin, n );
+               return *this;
+           }
+           
+           iterator_range& advance_end( difference_type n )
+           {
+               std::advance( m_End, n );
+               return *this;
+           }
+           
         private:
             // begin and end iterators
             IteratorT m_Begin;
@@ -378,7 +378,10 @@ namespace boost
                     std::basic_ostream<Elem, Traits>& Os,
                     const iterator_range<IteratorT>& r )
         {
-            std::copy( r.begin(), r.end(), std::ostream_iterator<Elem>(Os));
+            std::copy( r.begin(), r.end(), 
+                       std::ostream_iterator< BOOST_DEDUCED_TYPENAME 
+                                            iterator_value<IteratorT>::type, 
+                                              Elem, Traits>(Os) );
             return Os;
         }
 
@@ -497,7 +500,7 @@ namespace boost
         make_iterator_range( Range& r ) 
         {   
             return iterator_range< BOOST_DEDUCED_TYPENAME range_result_iterator<Range>::type >
-                ( begin( r ), end( r ) );
+                ( boost::begin( r ), boost::end( r ) );
         }
         
 #else
@@ -536,8 +539,8 @@ namespace boost
                     return make_iterator_range( r );
 
                 BOOST_DEDUCED_TYPENAME range_result_iterator<Range>::type 
-                    new_begin = begin( r ),
-                    new_end   = end( r );
+                    new_begin = boost::begin( r ),
+                    new_end   = boost::end( r );
                 std::advance( new_begin, advance_begin );
                 std::advance( new_end, advance_end );
                 return make_iterator_range( new_begin, new_end );
@@ -591,7 +594,7 @@ namespace boost
         template< typename SeqT, typename Range >
         inline SeqT copy_range( const Range& r )
         {
-            return SeqT( begin( r ), end( r ) );
+            return SeqT( boost::begin( r ), boost::end( r ) );
         }
 
 } // namespace 'boost'
