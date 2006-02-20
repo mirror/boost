@@ -76,6 +76,7 @@ namespace std{ namespace tr1{
    //using ::boost::is_placeholder;
    using ::boost::bind;
    namespace placeholders {
+#ifndef BOOST_BIND_NO_PLACEHOLDERS
       using ::_1;
       using ::_2;
       using ::_3;
@@ -85,6 +86,7 @@ namespace std{ namespace tr1{
       using ::_7;
       using ::_8;
       using ::_9;
+#endif
    } // placeholders
 
 } }
