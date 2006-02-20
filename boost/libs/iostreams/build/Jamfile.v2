@@ -20,6 +20,13 @@ import modules ;
 import os ;
 local debug = [ MATCH (--debug-configuration) : [ modules.peek : ARGV ] ] ;
 
+for local v in NO_COMPRESSION 
+               NO_ZLIB ZLIB_SOURCE ZLIB_INCLUDE ZLIB_BINARY ZLIB_LIBPATH
+               NO_BZIP2 BZIP2_SOURCE BZIP2_INCLUDE BZIP2_BINARY BZIP2_LIBPATH
+{
+    $(v) = [ os.environ $(v) ] ;
+}
+
 
 # Given a name of library, either 'zlib', or 'bzip2', creates the necessary
 # main target and returns it. If compression is disabled, returns nothing.
@@ -31,6 +38,15 @@ rule create-library ( library-name : windows-name unix-name : sources + )
     if ! $(library-name) in zlib bzip2
     {
         EXIT "Wrong library name passed to 'create-library' in libs/iostream/build/Jamfile.v2" ;
+    }
+
+    if [ os.name ] = NT && ! $($(LIB)_SOURCE) && $($(LIB)_INCLUDE)
+    {
+        if $(debug)
+        {
+            ECHO "notice: iostreams: not using $(library-name) compression " ;
+        }        
+        NO_$(LIB) = 1 ;
     }
     
     if $(NO_COMPRESSION) || $(NO_$(LIB))
