@@ -145,6 +145,7 @@
 #endif
 
 #include <boost/typeof/message.hpp>
+#include <boost/typeof/binding_workaround.hpp>
 
 // auto
 #define BOOST_AUTO(Var, Expr) BOOST_TYPEOF(Expr) Var = Expr
