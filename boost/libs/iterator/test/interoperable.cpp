@@ -4,6 +4,7 @@
 
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/pending/iterator_tests.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <cassert>
 
 struct mutable_it : boost::iterator_adaptor<mutable_it,int*>
@@ -39,21 +40,21 @@ int main()
     
     mutable_it i(data);
     constant_it j(data + 1);
-    assert(i < j);
-    assert(j > i);
-    assert(i <= j);
-    assert(j >= i);
-    assert(j - i == 1);
-    assert(i - j == -1);
+    BOOST_TEST(i < j);
+    BOOST_TEST(j > i);
+    BOOST_TEST(i <= j);
+    BOOST_TEST(j >= i);
+    BOOST_TEST(j - i == 1);
+    BOOST_TEST(i - j == -1);
     
     constant_it k = i;
 
-    assert(!(i < k));
-    assert(!(k > i));
-    assert(i <= k);
-    assert(k >= i);
-    assert(k - i == 0);
-    assert(i - k == 0);
+    BOOST_TEST(!(i < k));
+    BOOST_TEST(!(k > i));
+    BOOST_TEST(i <= k);
+    BOOST_TEST(k >= i);
+    BOOST_TEST(k - i == 0);
+    BOOST_TEST(i - k == 0);
     
-    return 0;
+    return boost::report_errors();
 }

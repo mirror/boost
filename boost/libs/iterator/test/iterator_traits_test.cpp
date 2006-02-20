@@ -27,7 +27,7 @@
 #include <iterator>
 #include <vector>
 #include <list>
-#include <cassert>
+#include <boost/detail/lightweight_test.hpp>
 #include <iostream>
 
 // A UDT for which we can specialize std::iterator_traits<element*> on
@@ -204,15 +204,15 @@ int main()
     for (int length = 3; length < 100; length += length / 3)
     {
         std::list<int> l(length);
-        assert(boost::detail::distance(l.begin(), l.end()) == length);
+        BOOST_TEST(boost::detail::distance(l.begin(), l.end()) == length);
         
         std::vector<int> v(length);
-        assert(boost::detail::distance(v.begin(), v.end()) == length);
+        BOOST_TEST(boost::detail::distance(v.begin(), v.end()) == length);
 
-        assert(boost::detail::distance(&ints[0], ints + length) == length);
-        assert(boost::detail::distance(my_iterator1(chars), my_iterator1(chars + length)) == length);
-        assert(boost::detail::distance(my_iterator2(chars), my_iterator2(chars + length)) == length);
-        assert(boost::detail::distance(my_iterator3(chars), my_iterator3(chars + length)) == length);
+        BOOST_TEST(boost::detail::distance(&ints[0], ints + length) == length);
+        BOOST_TEST(boost::detail::distance(my_iterator1(chars), my_iterator1(chars + length)) == length);
+        BOOST_TEST(boost::detail::distance(my_iterator2(chars), my_iterator2(chars + length)) == length);
+        BOOST_TEST(boost::detail::distance(my_iterator3(chars), my_iterator3(chars + length)) == length);
     }
-    return 0;
+    return boost::report_errors();
 }

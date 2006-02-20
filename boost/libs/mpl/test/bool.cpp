@@ -21,7 +21,7 @@
     { MPL_ASSERT(( is_same< bool_<c>, c##_ > )); } \
     { MPL_ASSERT(( is_same< bool_<c>::type, bool_<c> > )); } \
     { MPL_ASSERT_RELATION( bool_<c>::value, ==, c ); } \
-    assert( bool_<c>() == c ); \
+    BOOST_TEST( bool_<c>() == c ); \
 /**/
 
 MPL_TEST_CASE()

@@ -45,7 +45,7 @@
 #endif 
 #include <vector>
 #include <list>
-#include <cassert>
+#include <boost/detail/lightweight_test.hpp>
 #ifndef BOOST_NO_SLIST
 # ifdef BOOST_SLIST_HEADER
 #   include BOOST_SLIST_HEADER
@@ -59,7 +59,7 @@
 template <class T>
 struct signed_assert_nonnegative
 {
-    static void test(T x) { assert(x >= 0); }
+    static void test(T x) { BOOST_TEST(x >= 0); }
 };
 
 template <class T>
@@ -96,7 +96,7 @@ void category_test(
     difference_type offset = (unsigned)rand() % distance;
     
 #ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-    assert(offset >= 0);
+    BOOST_TEST(offset >= 0);
 #else 
     assert_nonnegative<difference_type>::test(offset);
 #endif
@@ -105,17 +105,17 @@ void category_test(
     std::advance(internal, offset);
 
     // Try some binary searches on the range to show that it's ordered
-    assert(std::binary_search(start, finish, *internal));
+    BOOST_TEST(std::binary_search(start, finish, *internal));
 
     // #including tuple crashed borland, so I had to give up on tie().
     std::pair<CountingIterator,CountingIterator> xy(
         std::equal_range(start, finish, *internal));
     CountingIterator x = xy.first, y = xy.second;
     
-    assert(boost::detail::distance(x, y) == 1);
+    BOOST_TEST(boost::detail::distance(x, y) == 1);
 
     // Show that values outside the range can't be found
-    assert(!std::binary_search(start, boost::prior(finish), *finish));
+    BOOST_TEST(!std::binary_search(start, boost::prior(finish), *finish));
 
     // Do the generic random_access_iterator_test
     typedef typename CountingIterator::value_type value_type;
@@ -163,7 +163,7 @@ void test_aux(CountingIterator start, CountingIterator finish, Value v1)
              ; p != finish && boost::next(p) != finish
              ; ++p)
     {
-        assert(boost::next(*p) == *boost::next(p));
+        BOOST_TEST(boost::next(*p) == *boost::next(p));
     }
 
     // prove that a reference can be formed to these values
@@ -296,5 +296,5 @@ int main()
     int array[2000];
     test(boost::make_counting_iterator(array), boost::make_counting_iterator(array+2000-1));
 
-    return 0;
+    return boost::report_errors();
 }

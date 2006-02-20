@@ -21,6 +21,8 @@
 
 # include <boost/type_traits/broken_compiler_spec.hpp>
 
+# include <boost/detail/lightweight_test.hpp>
+
 #include <stdlib.h>
 #include <vector>
 #include <deque>
@@ -303,7 +305,7 @@ main()
     adaptor_type i(forward_iter);
     int zero = 0;
     if (zero) // don't do this, just make sure it compiles
-      assert((*i).m_x == i->foo());      
+      BOOST_TEST((*i).m_x == i->foo());      
   }
   
   // check operator-> with an input iterator
@@ -313,7 +315,7 @@ main()
     adaptor_type i(input_iter);
     int zero = 0;
     if (zero) // don't do this, just make sure it compiles
-      assert((*i).m_x == i->foo());      
+      BOOST_TEST((*i).m_x == i->foo());      
   }
 
   // check that base_type is correct
@@ -331,5 +333,5 @@ main()
 
   std::cout << "test successful " << std::endl;
   (void)test;
-  return 0;
+  return boost::report_errors();
 }

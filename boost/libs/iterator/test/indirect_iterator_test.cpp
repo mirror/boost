@@ -28,6 +28,9 @@
 #include <boost/mpl/has_xxx.hpp>
 
 #include <boost/type_traits/broken_compiler_spec.hpp>
+
+#include <boost/detail/lightweight_test.hpp>
+
 #include <vector>
 #include <stdlib.h>
 #include <set>
@@ -85,32 +88,32 @@ void more_indirect_iterator_tests()
 
     indirect_ra_container::iterator db(ptr_ra_container.begin());
     indirect_ra_container::iterator de(ptr_ra_container.end());
-    assert(static_cast<std::size_t>(de - db) == store.size());
-    assert(db + store.size() == de);
+    BOOST_TEST(static_cast<std::size_t>(de - db) == store.size());
+    BOOST_TEST(db + store.size() == de);
     indirect_ra_container::const_iterator dci = db;
     
-    assert(dci == db);
+    BOOST_TEST(dci == db);
     
 #ifndef NO_MUTABLE_CONST_RA_ITERATOR_INTEROPERABILITY
-    assert(db == dci);
+    BOOST_TEST(db == dci);
 #endif
     
-    assert(dci != de);
-    assert(dci < de);
-    assert(dci <= de);
+    BOOST_TEST(dci != de);
+    BOOST_TEST(dci < de);
+    BOOST_TEST(dci <= de);
     
 #ifndef NO_MUTABLE_CONST_RA_ITERATOR_INTEROPERABILITY
-    assert(de >= dci);
-    assert(de > dci);
+    BOOST_TEST(de >= dci);
+    BOOST_TEST(de > dci);
 #endif
     
     dci = de;
-    assert(dci == de);
+    BOOST_TEST(dci == de);
 
     boost::random_access_iterator_test(db + 1, store.size() - 1, boost::next(store.begin()));
     
     *db = 999;
-    assert(store.front() == 999);
+    BOOST_TEST(store.front() == 999);
 
     // Borland C++ is getting very confused about the typedefs here
     typedef boost::indirect_iterator<iterator_set::iterator> indirect_set_iterator;
@@ -122,22 +125,22 @@ void more_indirect_iterator_tests()
     indirect_set_iterator sb(iter_set.begin());
     indirect_set_iterator se(iter_set.end());
     const_indirect_set_iterator sci(iter_set.begin());
-    assert(sci == sb);
+    BOOST_TEST(sci == sb);
     
 # ifndef NO_MUTABLE_CONST_STD_SET_ITERATOR_INTEROPERABILITY
-    assert(se != sci);
+    BOOST_TEST(se != sci);
 # endif
     
-    assert(sci != se);
+    BOOST_TEST(sci != se);
     sci = se;
-    assert(sci == se);
+    BOOST_TEST(sci == se);
     
     *boost::prior(se) = 888;
-    assert(store.back() == 888);
-    assert(std::equal(sb, se, store.begin()));
+    BOOST_TEST(store.back() == 888);
+    BOOST_TEST(std::equal(sb, se, store.begin()));
 
     boost::bidirectional_iterator_test(boost::next(sb), store[1], store[2]);
-    assert(std::equal(db, de, store.begin()));
+    BOOST_TEST(std::equal(db, de, store.begin()));
 }
 
 // element_type detector; defaults to true so the test passes when
@@ -214,6 +217,5 @@ main()
 
       more_indirect_iterator_tests();
   }
-  std::cout << "test successful " << std::endl;
-  return 0;
+  return boost::report_errors();
 }
