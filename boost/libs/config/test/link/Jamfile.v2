@@ -5,6 +5,8 @@ lib link_test : link_test.cpp
       # This is needed to make the test work, I'm unsure if this
       # should be set globally.
       <define>BOOST_DYN_LINK=1
+      # Override <threading>multi inherited from parent.
+      <threading>single
     : 
         debug release
     ;
