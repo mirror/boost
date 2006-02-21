@@ -40,7 +40,7 @@ rule create-library ( library-name : windows-name unix-name : sources + )
         EXIT "Wrong library name passed to 'create-library' in libs/iostream/build/Jamfile.v2" ;
     }
 
-    if [ os.name ] = NT && ! $($(LIB)_SOURCE) && $($(LIB)_INCLUDE)
+    if [ os.name ] = NT && ! $($(LIB)_SOURCE) && ! $($(LIB)_INCLUDE)
     {
         if $(debug)
         {
