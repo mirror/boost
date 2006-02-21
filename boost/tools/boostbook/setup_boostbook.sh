@@ -168,10 +168,6 @@ awk -f setup_boostbook.awk $JAM_CONFIG_IN > $JAM_CONFIG_OUT
 rm -f setup_boostbook.awk
 echo "done."
 
-if test x"$JAM_CONFIG_IN_TEMP" = "xyes"; then
-  rm -f $JAM_CONFIG_IN
-fi
-
 echo "Done! Execute \"bjam --v2\" in a documentation directory to generate"
 echo "documentation with BoostBook. If you have not already, you will need"
 echo "to compile Boost.Jam."
