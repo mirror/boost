@@ -8,11 +8,12 @@ MSVC 7.1-, from inside a template,
 can't bind a function pointer to const T& 
 */
 
+#include <boost/detail/workaround.hpp>
+
 #if BOOST_WORKAROUND(BOOST_MSVC,==1310) && defined(BOOST_TYPEOF_EMULATION)
 
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_function.hpp>
-#include <boost/detail/workaround.hpp>
 
 namespace boost { namespace type_of {
 
@@ -26,7 +27,6 @@ namespace boost { namespace type_of {
 
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_function.hpp>
-#include <boost/detail/workaround.hpp>
 
 namespace boost { namespace type_of {
 
