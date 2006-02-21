@@ -38,7 +38,7 @@ rule all-tests ( )
     }
     all += [ run odr1.cpp odr2.cpp : : : <define>BOOST_TYPEOF_NATIVE :
                 odr_native ] ;
-    all += [ run odr1.cpp odr2.cpp : : : <define>BOOST_TYPEOF_COMPIANT :
+    all += [ run odr1.cpp odr2.cpp : : : <define>BOOST_TYPEOF_COMPLIANT :
                 odr_emulation ] ;		
     return $(all) ;    
 }
