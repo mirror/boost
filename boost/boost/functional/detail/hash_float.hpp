@@ -20,11 +20,19 @@
 #include <boost/assert.hpp>
 #include <errno.h>
 
-#if defined(BOOST_MSVC)
-#  define BOOST_HASH_USE_FPCLASS
-#elif (defined(__GLIBCPP__) || defined(__GLIBCXX__)) \
-    && (defined(__USE_ISOC99) || defined(_GLIBCXX_USE_C99_MATH))
-#  define BOOST_HASH_USE_FPCLASSIFY
+// Don't use fpclassify or _fpclass for stlport.
+#if !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
+#  if defined(__GLIBCPP__) || defined(__GLIBCXX__)
+// GNU libstdc++ 3
+#    if defined(__USE_ISOC99) || defined(_GLIBCXX_USE_C99_MATH)
+#      define BOOST_HASH_USE_FPCLASSIFY
+#    endif
+#  elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
+// Dinkumware Library, on Visual C++ 
+#    if defined(BOOST_MSVC)
+#      define BOOST_HASH_USE_FPCLASS
+#    endif
+#  endif
 #endif
 
 namespace boost
