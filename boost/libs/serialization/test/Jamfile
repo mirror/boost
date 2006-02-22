@@ -248,6 +248,7 @@ if $(BOOST_SERIALIZATION_TEST) {
     test-suite "serialization" : 
         [ test-bsl-run-no-lib test_iterators ]
         [ test-bsl-run-no-lib test_iterators_base64 ]
+        [ test-bsl-run-no-lib test_inclusion ]
         [ test-bsl-run test_private_ctor ]
         [ test-bsl-run test_reset_object_address ]
         [ test-bsl-run-no-lib test_smart_cast ]
@@ -288,7 +289,6 @@ if $(BOOST_SERIALIZATION_TEST) {
         [ compile-fail test_const_load_fail3_nvp.cpp : std::locale-support ]
 
         # should compile
-        [ compile test_inclusion.cpp ]
         [ compile test_traits_pass.cpp : std::locale-support ]
         [ compile test_const_pass.cpp : std::locale-support ]
     ;
