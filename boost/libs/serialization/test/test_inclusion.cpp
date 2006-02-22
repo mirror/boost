@@ -6,8 +6,7 @@
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-// compile only
-
+// compile and link only
 #include <boost/serialization/access.hpp>
 #include <boost/serialization/base_object.hpp>
 #include <boost/serialization/export.hpp>
@@ -21,3 +20,7 @@
 #include <boost/serialization/traits.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/version.hpp>
+
+int
+main(int argc, char * argv[]){
+}
