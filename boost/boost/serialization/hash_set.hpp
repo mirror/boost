@@ -36,89 +36,150 @@
 namespace boost { 
 namespace serialization {
 
-template<class Archive, class Key, class Compare, class Allocator >
+template<
+    class Archive, 
+    class Key, 
+    class HashFcn, 
+    class EqualKey,
+    class Allocator
+>
 inline void save(
     Archive & ar,
-    const STD::hash_set<Key, Compare, Allocator> &t,
+    const STD::hash_set<
+        Key, HashFcn, EqualKey, Allocator
+    > &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::save_collection<
         Archive, 
-        STD::hash_set<Key, Compare, Allocator> 
+        STD::hash_set<
+            Key, HashFcn, EqualKey, Allocator
+        > 
     >(ar, t);
 }
 
-template<class Archive, class Key, class Compare, class Allocator >
+template<
+    class Archive, 
+    class Key, 
+    class HashFcn, 
+    class EqualKey,
+    class Allocator
+>
 inline void load(
     Archive & ar,
-    STD::hash_set<Key, Compare, Allocator> &t,
+    STD::hash_set<
+        Key, HashFcn, EqualKey, Allocator
+    > &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::load_collection<
         Archive,
-        BOOST_STD_EXTENSION_NAMESPACE::hash_set<Key, Compare, Allocator>,
+        STD::hash_set<
+            Key, HashFcn, EqualKey, Allocator
+        >,
         boost::serialization::stl::archive_input_set<
             Archive, 
-            STD::hash_set<Key, Compare, Allocator> 
+            STD::hash_set<
+                Key, HashFcn, EqualKey, Allocator
+            >
         >,
         boost::serialization::stl::no_reserve_imp<
-            STD::hash_set<Key, Compare, Allocator> 
+            STD::hash_set<
+                Key, HashFcn, EqualKey, Allocator
+            >
         >
-    >(ar, t, file_version);
+    >(ar, t);
 }
 
 // split non-intrusive serialization function member into separate
 // non intrusive save/load member functions
-template<class Archive, class Key, class Compare, class Allocator >
+template<
+    class Archive, 
+    class Key, 
+    class HashFcn, 
+    class EqualKey,
+    class Allocator
+>
 inline void serialize(
     Archive & ar,
-    STD::hash_set<Key, Compare, Allocator> & t,
+    STD::hash_set<
+        Key, HashFcn, EqualKey, Allocator
+    > &t,
     const unsigned int file_version
 ){
     boost::serialization::split_free(ar, t, file_version);
 }
 
 // hash_multiset
-template<class Archive, class Key, class Compare, class Allocator >
+template<
+    class Archive, 
+    class Key, 
+    class HashFcn, 
+    class EqualKey,
+    class Allocator
+>
 inline void save(
     Archive & ar,
-    const STD::hash_multiset<Key, Compare, Allocator> &t,
+    const STD::hash_multiset<
+        Key, HashFcn, EqualKey, Allocator
+    > &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::save_collection<
         Archive, 
-        STD::hash_multiset<Key, Compare, Allocator> 
+        STD::hash_multiset<
+            Key, HashFcn, EqualKey, Allocator
+        > 
     >(ar, t);
 }
 
-template<class Archive, class Key, class Compare, class Allocator >
+template<
+    class Archive, 
+    class Key, 
+    class HashFcn, 
+    class EqualKey,
+    class Allocator
+>
 inline void load(
     Archive & ar,
-    STD::hash_multiset<Key, Compare, Allocator> &t,
+    STD::hash_multiset<
+        Key, HashFcn, EqualKey, Allocator
+    > &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::load_collection<
         Archive,
-        BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<Key, Compare, Allocator>,
+        STD::hash_multiset<
+            Key, HashFcn, EqualKey, Allocator
+        >,
         boost::serialization::stl::archive_input_multiset<
-            Archive, STD::hash_multiset<
-                Key, 
-                Compare, 
-                Allocator
+            Archive,
+            STD::hash_multiset<
+                Key, HashFcn, EqualKey, Allocator
             > 
         >,
         boost::serialization::stl::no_reserve_imp<
-            STD::hash_multiset<Key, Compare, Allocator> 
+            STD::hash_multiset<
+                Key, HashFcn, EqualKey, Allocator
+            > 
         >
-    >(ar, t, file_version);
+    >(ar, t);
 }
 
 // split non-intrusive serialization function member into separate
 // non intrusive save/load member functions
-template<class Archive, class Key, class Compare, class Allocator >
+template<
+    class Archive, 
+    class Key, 
+    class HashFcn, 
+    class EqualKey,
+    class Allocator
+>
 inline void serialize(
     Archive & ar,
-    STD::hash_multiset<Key, Compare, Allocator> & t,
+    STD::hash_multiset<
+        Key, HashFcn, EqualKey, Allocator
+    > & t,
     const unsigned int file_version
 ){
     boost::serialization::split_free(ar, t, file_version);

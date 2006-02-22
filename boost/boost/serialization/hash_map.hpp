@@ -37,86 +37,150 @@
 namespace boost { 
 namespace serialization {
 
-template<class Archive, class Key, class Compare, class Allocator >
+template<
+    class Archive, 
+    class Key, 
+    class HashFcn, 
+    class EqualKey,
+    class Allocator
+>
 inline void save(
     Archive & ar,
-    const STD::hash_map<Key, Compare, Allocator> &t,
+    const STD::hash_map<
+        Key, HashFcn, EqualKey, Allocator
+    > &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::save_collection<
         Archive, 
-        STD::hash_map<Key, Compare, Allocator> 
+        STD::hash_map<
+            Key, HashFcn, EqualKey, Allocator
+        >
     >(ar, t);
 }
 
-template<class Archive, class Key, class Compare, class Allocator >
+template<
+    class Archive, 
+    class Key, 
+    class HashFcn, 
+    class EqualKey,
+    class Allocator
+>
 inline void load(
     Archive & ar,
-    STD::hash_map<Key, Compare, Allocator> &t,
+    STD::hash_map<
+        Key, HashFcn, EqualKey, Allocator
+    > &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::load_collection<
         Archive,
-        STD::hash_map<Key, Compare, Allocator>,
+        STD::hash_map<
+            Key, HashFcn, EqualKey, Allocator
+        >,
         boost::serialization::stl::archive_input_map<
             Archive, 
-            STD::hash_map<Key, Compare, Allocator> 
+            STD::hash_map<
+                Key, HashFcn, EqualKey, Allocator
+            >
         >,
         boost::serialization::stl::no_reserve_imp<
-            STD::hash_map<Key, Compare, Allocator> 
+            STD::hash_map<
+                Key, HashFcn, EqualKey, Allocator
+            >
         >
     >(ar, t);
 }
 
 // split non-intrusive serialization function member into separate
 // non intrusive save/load member functions
-template<class Archive, class Key, class Compare, class Allocator >
+template<
+    class Archive, 
+    class Key, 
+    class HashFcn, 
+    class EqualKey,
+    class Allocator
+>
 inline void serialize(
     Archive & ar,
-    STD::hash_map<Key, Compare, Allocator> &t,
+    STD::hash_map<
+        Key, HashFcn, EqualKey, Allocator
+    > &t,
     const unsigned int file_version
 ){
     boost::serialization::split_free(ar, t, file_version);
 }
 
 // hash_multimap
-template<class Archive, class Key, class Compare, class Allocator >
+template<
+    class Archive, 
+    class Key, 
+    class HashFcn, 
+    class EqualKey,
+    class Allocator
+>
 inline void save(
     Archive & ar,
-    const STD::hash_multimap<Key, Compare, Allocator> &t,
+    const STD::hash_multimap<
+        Key, HashFcn, EqualKey, Allocator
+    > &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::save_collection<
         Archive, 
-        STD::hash_multimap<Key, Compare, Allocator> 
+        STD::hash_multimap<
+            Key, HashFcn, EqualKey, Allocator
+        >
     >(ar, t);
 }
 
-template<class Archive, class Key, class Compare, class Allocator >
+template<
+    class Archive, 
+    class Key, 
+    class HashFcn, 
+    class EqualKey,
+    class Allocator
+>
 inline void load(
     Archive & ar,
-    STD::hash_multimap<Key, Compare, Allocator> &t,
+    STD::hash_multimap<
+        Key, HashFcn, EqualKey, Allocator
+    > &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::load_collection<
         Archive,
-        STD::hash_multimap<Key, Compare, Allocator>,
+        STD::hash_multimap<
+            Key, HashFcn, EqualKey, Allocator
+        >,
         boost::serialization::stl::archive_input_multimap<
             Archive, 
-            STD::hash_multimap<Key, Compare, Allocator> 
+            STD::hash_multimap<
+                Key, HashFcn, EqualKey, Allocator
+            >
         >,
         boost::serialization::stl::no_reserve_imp<
-            STD::hash_multimap<Key, Compare, Allocator> 
+            STD::hash_multimap<
+                Key, HashFcn, EqualKey, Allocator
+            >
         >
-    >(ar, t, file_version);
+    >(ar, t);
 }
 
 // split non-intrusive serialization function member into separate
 // non intrusive save/load member functions
-template<class Archive, class Key, class Compare, class Allocator >
+template<
+    class Archive, 
+    class Key, 
+    class HashFcn, 
+    class EqualKey,
+    class Allocator
+>
 inline void serialize(
     Archive & ar,
-    STD::hash_multimap<Key, Compare, Allocator> &t,
+    STD::hash_multimap<
+        Key, HashFcn, EqualKey, Allocator
+    > &t,
     const unsigned int file_version
 ){
     boost::serialization::split_free(ar, t, file_version);
