@@ -15,10 +15,6 @@
 #include <cstdio> // remove
 #include <boost/config.hpp>
 
-#if defined (__LIBCOMO__)
-#error - this test fails on comeau with disatrous results
-#endif
-
 #include <boost/detail/workaround.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
@@ -33,12 +29,8 @@ namespace std{
 #include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
 
 #include <boost/serialization/set.hpp>
-#ifdef BOOST_HAS_HASH
-#include <boost/serialization/hash_set.hpp>
-#endif
-#include "A.hpp"
 
-#if defined(__LIBCOMO__) || (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
+#include "A.hpp"
 
 namespace std {
     template<>
@@ -55,7 +47,16 @@ namespace std {
     };
 }   // namespace std
 
-namespace BOOST_STD_EXTENSION_NAMESPACE {
+#ifdef BOOST_HAS_HASH
+#include <boost/serialization/hash_set.hpp>
+
+#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+#define STD _STLP_STD
+#else
+#define STD BOOST_STD_EXTENSION_NAMESPACE
+#endif
+
+namespace STD {
     template<>
     struct hash<A> {
         std::size_t operator()(const A& a) const {
@@ -104,26 +105,19 @@ int test_main( int /* argc */, char* /* argv */[] )
     }
     BOOST_CHECK(amultiset == amultiset1);
     
-    #if defined(BOOST_HAS_HASH)
-    #if defined(_STLPORT_VERSION) \
-    && _STLPORT_VERSION \
-    && (__SGI_STL_PORT <= 0x453)
-        BOOST_FAIL( 
-            "Hash sets known to fail in a catastrophic way with STLPort 4.5.3,\n"
-            "test skipped" 
-        );
-    #else
+    #ifdef BOOST_HAS_HASH
 
     // test array of objects
-    BOOST_STD_EXTENSION_NAMESPACE::hash_set<A> ahash_set;
-    ahash_set.insert(A());
-    ahash_set.insert(A());
+    STD::hash_set<A> ahash_set;
+    A a, a1;
+    ahash_set.insert(a);
+    ahash_set.insert(a1);
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         test_oarchive oa(os);
         oa << boost::serialization::make_nvp("ahash_set", ahash_set);
     }
-    BOOST_STD_EXTENSION_NAMESPACE::hash_set<A> ahash_set1;
+    STD::hash_set<A> ahash_set1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is);
@@ -141,7 +135,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     std::sort(tvec1.begin(), tvec1.end());
     BOOST_CHECK(tvec == tvec1);
     
-    BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<A> ahash_multiset;
+    STD::hash_multiset<A> ahash_multiset;
     ahash_multiset.insert(A());
     ahash_multiset.insert(A());
     {   
@@ -149,7 +143,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         test_oarchive oa(os);
         oa << boost::serialization::make_nvp("ahash_multiset", ahash_multiset);
     }
-    BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<A> ahash_multiset1;
+    STD::hash_multiset<A> ahash_multiset1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is);
@@ -167,7 +161,6 @@ int test_main( int /* argc */, char* /* argv */[] )
     std::copy(ahash_multiset1.begin(), ahash_multiset1.end(), std::back_inserter(tvec1));
     std::sort(tvec1.begin(), tvec1.end());
     BOOST_CHECK(tvec == tvec1);
-    #endif // STLPort 4.5.3
     #endif
 
     std::remove(testfile);

@@ -30,9 +30,6 @@ namespace std{
 
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/map.hpp>
-#ifdef BOOST_HAS_HASH
-#include <boost/serialization/hash_map.hpp>
-#endif
 
 #include "A.hpp"
 
@@ -63,7 +60,8 @@ struct random_key {
 
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(random_key)
 
-#if defined(__LIBCOMO__) || (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
+#ifdef BOOST_HAS_HASH
+#include <boost/serialization/hash_map.hpp>
 
 namespace std {
     template<>
@@ -74,7 +72,13 @@ namespace std {
     };
 } // namespace std
 
-namespace BOOST_STD_EXTENSION_NAMESPACE {
+#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+#define STD _STLP_STD
+#else
+#define STD BOOST_STD_EXTENSION_NAMESPACE
+#endif
+
+namespace STD {
     template<>
     struct hash<random_key> {
         std::size_t operator()(const random_key& r) const {
@@ -174,7 +178,7 @@ test_hash_map(){
 
     BOOST_CHECKPOINT("hash_map");
     // test hash_map of objects
-    BOOST_STD_EXTENSION_NAMESPACE::hash_map<random_key, A> ahash_map;
+    STD::hash_map<random_key, A> ahash_map;
     ahash_map.insert(std::make_pair(random_key(), A()));
     ahash_map.insert(std::make_pair(random_key(), A()));
     {   
@@ -182,7 +186,7 @@ test_hash_map(){
         test_oarchive oa(os);
         oa << boost::serialization::make_nvp("ahashmap",ahash_map);
     }
-    BOOST_STD_EXTENSION_NAMESPACE::hash_map<random_key, A> ahash_map1;
+    STD::hash_map<random_key, A> ahash_map1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is);
@@ -209,7 +213,7 @@ test_hash_multimap(){
     BOOST_REQUIRE(NULL != testfile);
 
     BOOST_CHECKPOINT("hash_multimap");
-    BOOST_STD_EXTENSION_NAMESPACE::hash_multimap<random_key, A> ahash_multimap;
+    STD::hash_multimap<random_key, A> ahash_multimap;
     ahash_multimap.insert(std::make_pair(random_key(), A()));
     ahash_multimap.insert(std::make_pair(random_key(), A()));
     {   
@@ -217,7 +221,7 @@ test_hash_multimap(){
         test_oarchive oa(os);
         oa << boost::serialization::make_nvp("ahash_multimap", ahash_multimap);
     }
-    BOOST_STD_EXTENSION_NAMESPACE::hash_multimap<random_key, A> ahash_multimap1;
+    STD::hash_multimap<random_key, A> ahash_multimap1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is);
