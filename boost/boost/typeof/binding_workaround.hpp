@@ -31,8 +31,7 @@ namespace boost { namespace type_of {
 namespace boost { namespace type_of {
 
     template<typename T>
-        char (*encode_start(T*, 
-        typename enable_if<typename is_function<T>::type>::type* = 0))[encode_type<T*>::value];
+        char (*encode_start(T*))[encode_type<T*>::value];
 
 }}
 
