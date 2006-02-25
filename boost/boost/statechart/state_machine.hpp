@@ -427,6 +427,22 @@ class state_machine : noncopyable
 
   public:
     //////////////////////////////////////////////////////////////////////////
+    // The following declarations should be protected.
+    // They are only public because many compilers lack template friends.
+    //////////////////////////////////////////////////////////////////////////
+    void post_event( const event_base_ptr_type & pEvent )
+    {
+      BOOST_ASSERT( get_pointer( pEvent ) != 0 );
+      eventQueue_.push_back( pEvent );
+    }
+
+    void post_event( const event_base & evt )
+    {
+      post_event( evt.intrusive_from_this() );
+    }
+
+  public:
+    //////////////////////////////////////////////////////////////////////////
     // The following declarations should be private.
     // They are only public because many compilers lack template friends.
     //////////////////////////////////////////////////////////////////////////
@@ -524,12 +540,6 @@ class state_machine : noncopyable
     {
       terminate_impl( *pOutermostState_, performFullExit_ );
       isInnermostCommonOuter_ = true;
-    }
-
-    void post_event( const event_base_ptr_type & pEvent )
-    {
-      BOOST_ASSERT( get_pointer( pEvent ) != 0 );
-      eventQueue_.push_back( pEvent );
     }
 
 

@@ -510,6 +510,10 @@ namespace statechart
     protected:
       <a href="#state_machine">state_machine</a>();
       <a href="#~state_machine">~state_machine</a>();
+
+      void <a href="#post_event2">post_event</a>(
+        const intrusive_ptr&lt; const <a href="#Class event_base">event_base</a> &gt; &amp; );
+      void <a href="#post_event3">post_event</a>( const <a href="#Class event_base">event_base</a> &amp; );
   };
 }
 }</pre>
@@ -751,6 +755,14 @@ library itself but only in code supplied through template parameters:</p>
   <li> <code>
 MostDerived::unconsumed_event()</code></li>
 </ul>
+<pre>void <a name="post_event2">post_event</a>(
+  const intrusive_ptr&lt; const <a href="#Class event_base">event_base</a> &gt; &amp; );</pre>
+<p><b>Effects</b>: Pushes the passed event into the posted events 
+queue<br>
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code></p>
+<pre>void <a name="post_event3">post_event</a>( const <a href="#Class event_base">event_base</a> &amp; evt );</pre>
+<p><b>Effects</b>: <code>post_event( evt.intrusive_from_this() );</code><br>
+<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code></p>
 <h3>Class template <code>state_machine</code> observer functions</h3>
 <pre>bool <a name="terminated">terminated</a>() const;</pre>
 <p><b>Returns</b>: <code>true</code>, if the machine is terminated. Returns
@@ -1081,7 +1093,7 @@ of <code>Processor</code>, passing an appropriate <code>processor_context</code>
 object as the only argument<br>
 <b>Returns</b>: A <code>processor_handle</code> object that henceforth 
 identifies the created event processor object<br>
-<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code><br>
+<b>Throws</b>: Any exceptions propagated from <code>FifoWorker::work_item()</code> and <code>FifoWorker::queue_work_item()</code><br>
 <b>Caution</b>: The current implementation of this function makes an 
 (indirect) call to global <code>operator new()</code>. Unless global <code>
 operator new()</code> is replaced, care must be taken when to call this 
@@ -1098,7 +1110,7 @@ of <code>Processor</code>, passing an appropriate <code>processor_context</code>
 object and <code>param1</code> as arguments<br>
 <b>Returns</b>: A <code>processor_handle</code> object that henceforth 
 identifies the created event processor object<br>
-<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code><b><br>
+<b>Throws</b>: Any exceptions propagated from <code>FifoWorker::work_item()</code> and <code>FifoWorker::queue_work_item()</code><b><br>
 Note</b>: <code>boost::ref()</code> and <code>boost::cref()</code> can be used 
 to pass arguments by reference rather than by copy. <code>fifo_scheduler&lt;&gt;</code> 
 has 5 additional <code>create_processor&lt;&gt;</code> overloads, allowing to pass 
@@ -1116,7 +1128,7 @@ an object of type <code>FifoWorker::work_item</code> that, when later executed
 in <code>FifoWorker::operator()()</code>, leads to a call to the destructor of 
 the event processor object associated with <code>processor</code>. The object 
 is silently discarded if the event processor object has been destructed before<br>
-<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code><br>
+<b>Throws</b>: Any exceptions propagated from <code>FifoWorker::work_item()</code> and <code>FifoWorker::queue_work_item()</code><br>
 <b>Caution</b>: The current implementation of this function leads to an 
 (indirect) call to global <code>operator delete()</code> (the call is made 
 when the last <code>processor_handle</code> object associated with the event 
@@ -1133,7 +1145,7 @@ in <code>FifoWorker::operator()()</code>, leads to a call to <code>
 <a href="#event_processor::initiate">initiate</a>()</code> on the event 
 processor object associated with <code>processor</code>. The object is 
 silently discarded if the event processor object has been destructed before<br>
-<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code></p>
+<b>Throws</b>: Any exceptions propagated from <code>FifoWorker::work_item()</code> and <code>FifoWorker::queue_work_item()</code></p>
 <pre>void <a name="terminate_processor">terminate_processor</a>( processor_handle processor );</pre>
 <p><b>Requires</b>: <code>processor</code> was obtained from a call to one of 
 the <code>create_processor&lt;&gt;()</code> overloads on the same <code>
@@ -1144,7 +1156,7 @@ in <code>FifoWorker::operator()()</code>, leads to a call to <code>
 <a href="#event_processor::terminate">terminate</a>()</code> on the event 
 processor object associated with <code>processor</code>. The object is 
 silently discarded if the event processor object has been destructed before<br>
-<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code></p>
+<b>Throws</b>: Any exceptions propagated from <code>FifoWorker::work_item()</code> and <code>FifoWorker::queue_work_item()</code></p>
 <pre>void <a name="queue_event">queue_event</a>(
   const processor_handle &amp; processor,
   const event_ptr_type &amp; pEvent );</pre>
@@ -1158,20 +1170,18 @@ in <code>FifoWorker::operator()()</code>, leads to a call to <code>
 on the event processor object associated with <code>processor</code>. The 
 object is silently discarded if the event processor object has been destructed 
 before<br>
-<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code></p>
+<b>Throws</b>: Any exceptions propagated from <code>FifoWorker::work_item()</code> and <code>FifoWorker::queue_work_item()</code></p>
 <pre>void <a name="queue_work_item">queue_work_item</a>( const work_item &amp; item );</pre>
-<p><b>Effects</b>: Calls <code>FifoWorker::queue_work_item( item );</code><br>
-<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code></p>
+<p><b>Effects</b>: <code>FifoWorker::queue_work_item( item );</code><br>
+<b>Throws</b>: Any exceptions propagated from the above call</p>
 <pre>void <a name="fifo_scheduler::terminate">terminate</a>();</pre>
-<p><b>Effects</b>: Calls <code>FifoWorker::terminate()</code><br>
-<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code></p>
+<p><b>Effects</b>: <code>FifoWorker::terminate()</code><br>
+<b>Throws</b>: Any exceptions propagated from the above call</p>
 <pre>unsigned long <a name="operator()">operator()</a>( unsigned long maxEventCount = 0 );</pre>
 <p><b>Requires</b>: Must only be called from exactly one thread<b><br>
-Effects</b>: Calls <code>FifoWorker::operator()( maxEventCount )</code><br>
+Effects</b>: <code>FifoWorker::operator()( maxEventCount )</code><br>
 <b>Returns</b>: The return value of the above call<br>
-<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code> 
-and <code>operator()()</code> of the queued <code>FifoWorker::work_item</code> 
-objects</p>
+<b>Throws</b>: Any exceptions propagated from the above call</p>
 <h3>Class template <code>fifo_scheduler</code> observer functions</h3>
 <pre>bool <a name="fifo_scheduler::terminated">terminated</a>() const;</pre>
 <p><b>Requires</b>: Must only be called from the thread that also calls <code>
@@ -1466,26 +1476,22 @@ outermost_context_type</code>)</p>
 into the posted events queue</p>
 <h3>Class template <code>simple_state</code> modifier functions</h3>
 <pre>void <a name="post_event0">post_event</a>(
-  const intrusive_ptr&lt; const <a href="#Class event_base">event_base</a> &gt; &amp; );</pre>
+  const intrusive_ptr&lt; const <a href="#Class event_base">event_base</a> &gt; &amp; pEvt );</pre>
 <p><b>Requires</b>: If called from a constructor of a direct or indirect 
 subtype then the most-derived type must directly or indirectly derive 
 from the <code>state</code> class template<b>. </b>All direct and indirect 
 callers must be exception-neutral<b><br>
-Effects</b>: Pushes the passed event into the state machine's posted events 
-queue<br>
-<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code> 
-(the template parameter passed to the base class of <code>
-outermost_context_type</code>)</p>
+Effects</b>: <a href="#outermost_context"><code>outermost_context</code></a><code>().<a href="#post_event2">post_event</a>( 
+pEvt );</code><br>
+<b>Throws</b>: Whatever the above call throws</p>
 <pre>void <a name="post_event1">post_event</a>( const <a href="#Class event_base">event_base</a> &amp; evt );</pre>
 <p><b>Requires</b>: If called from a constructor of a direct or indirect 
 subtype then the most-derived type must directly or indirectly derive 
 from the <code>state</code> class template<b>. </b>All direct and indirect 
 callers must be exception-neutral<b><br>
-Effects</b>: <code>post_event( evt.<a href="#intrusive_from_this">intrusive_from_this</a>() 
-);</code><br>
-<b>Throws</b>: Any exceptions propagated from <code>Allocator::allocate()</code> 
-(the template parameter passed to the base class of <code>
-outermost_context_type</code>)</p>
+Effects</b>: <a href="#outermost_context"><code>outermost_context</code></a><code>().<a href="#post_event3">post_event</a>( 
+evt );</code><br>
+<b>Throws</b>: Whatever the above call throws</p>
 <pre><a href="#Class result">result</a> <a name="discard_event">discard_event</a>();</pre>
 <p><b>Requires</b>: Must only be called from within <code>react</code> member 
 functions, which are called by <code>
@@ -2367,9 +2373,9 @@ copy semantics</p>
 <b>Effects</b>: Destructs the result object</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->24 July, 2005<!--webbot bot="Timestamp" endspan i-checksum="21134" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->25 February, 2006<!--webbot bot="Timestamp" endspan i-checksum="40411" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
-2003-2005. <font color="#FF0000"><b>The link refers to a
+2003-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2006<!--webbot bot="Timestamp" endspan i-checksum="770" -->. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
 to obtain my real address.</b></font></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
