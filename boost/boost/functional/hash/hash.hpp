@@ -425,7 +425,7 @@ namespace boost
             template <class Array>
             struct inner
             {
-                static std::size_t call(Array& v)
+                static std::size_t call(Array const& v)
                 {
                     const int size = sizeof(v) / sizeof(*v);
                     return boost::hash_range(v, v + size);
@@ -469,7 +469,7 @@ namespace boost
     namespace hash_detail
     {
         template <>
-        struct hash_impl<true>
+        struct hash_impl<false>
         {
             template <class T>
             struct inner
