@@ -20,11 +20,11 @@
   <tr> 
     <td width="10"></td>
     <td width="30"><a href="../index.html"><img src="theme/u_arr.gif" border="0"></a></td>
-    <td width="30"><a href="predefined_macros.html"><img src="theme/l_arr.gif" border="0"></a></td>
-    <td width="30"><a href="macro_expansion_process.html"><img src="theme/r_arr.gif" border="0"></a></td>
+    <td width="30"><a href="tracing_facility.html"><img src="theme/l_arr.gif" border="0"></a></td>
+    <td width="30"><a href="acknowledgements.html"><img src="theme/r_arr.gif" border="0"></a></td>
   </tr>
 </table>
-<p>The Wave preprocessor library supports specific <tt>#pragma</tt> 
+<p>The Wave preprocessor tool supports specific <tt>#pragma</tt> 
   directives, which may be used to control some of the library features. All directives 
   described here are usable as conventional <tt>#pragma</tt> directives and as 
   <tt>operator&nbsp;_Pragma</tt> (if variadics are enabled). So for instance the 
@@ -39,13 +39,12 @@
   all possible pragma functions supported by the <tt>Wave</tt> library. For all recognised pragmas of this general form the interpret_pragma hook function from inside the <a href="class_reference_ctxpolicy.html">preprocessing_hooks</a> policy are called, so that the user of the library is responsible for the correct interpretation of these pragma's. </p>
 <table width="77%" border="0" align="center">
   <tr> 
-    <td colspan="4"> <p class="table_title">Supported pragma's</p></td>
+    <td colspan="3"> <p class="table_title">Supported pragma's</p></td>
   </tr>
   <tr> 
     <td> <p class="toc_title" width="36%">pragma option</p></td>
     <td> <p class="toc_title" width="28%">pragma value</p></td>
     <td> <p class="toc_title" width="36%">description</p></td>
-    <td> <p class="toc_title" width="36%">supported by</p></td>
   </tr>
   <tr> 
     <td class="table_cells" width="19%"> <p>trace</p></td>
@@ -55,14 +54,12 @@
         macro expansion process. This is needed, even if there is given the --trace 
         command line option, because the trace output is generated only, if there 
         is at least one trace(enable) pragma found.</p></td>
-    <td class="table_cells" width="20%"><p>Wave driver</p></td>
   </tr>
   <tr> 
     <td class="table_cells"><p>stop</p></td>
     <td class="table_cells"><p>message</p></td>
     <td class="table_cells"><p>Stop the execution of <tt>Wave</tt> and print out 
         the given message. This is very helpful for direct debugging purposes.</p></td>
-    <td class="table_cells"><p>Wave driver</p></td>
   </tr>
   
   <tr> 
@@ -75,7 +72,6 @@
         to be successful, if/when the return value is zero, otherwise an error 
         is reported. <br>
       </p></td>
-    <td class="table_cells"><p>Wave driver</p></td>
   </tr>
   <tr> 
     <td class="table_cells"><p>timer</p></td>
@@ -89,7 +85,6 @@
         stream.<br>
         The values <tt>suspend</tt> and <tt>resume</tt> allow to temporarily stop 
         the timing.</p></td>
-    <td class="table_cells"><p>Wave driver</p></td>
   </tr>
 </table>
 <p>All pragma's not listed here but flagged as <tt>'wave'</tt> are currently reported as 
@@ -101,17 +96,17 @@
   only, if the <code><tt>BOOST_WAVE_PREPROCESS_PRAGMA_BODY</tt></code> compilation constant 
   was specified during compilation. For more information about the possible compilation 
   constants look <a href="compiletime_config.html">here</a>.</p>
-<p>Additionally the Wave preprocessor supports the <tt>#pragma once</tt> directive, 
+<p>Additionally the Wave preprocessor library supports the <tt>#pragma once</tt> directive, 
   which specifies that the file, in which the pragma resides, will be included 
   (opened) only once by the compiler in a build. This may be used to optimize 
   the preprocessing of larger compilation units, which include a lot of files. Note though, that the #pragma once directive is supported only, if the compile time constant <tt>BOOST_WAVE_SUPPORT_PRAGMA_ONCE</tt> was given during compilation of the library</span>.</p>
-<p>It is fairly easy to implement your own <tt>#pragma wave ... </tt> directives. All you have to do is to implement your own <tt>interpret_pragma</tt> function (see <a href="class_reference_ctxpolicy.html#interpret_pragma">here</a>) which should handle the additional directives. For an example of how to do it, you may have a look at the Wave driver application, which implements all of the pragma's listed above (for instance the the <tt>#pragma wave timer()</tt> directive) with the help of a supplied <tt>interpret_pragma</tt> function. </p>
+<p>It is fairly easy to implement your own <tt>#pragma wave ... </tt> directives. All you have to do is to implement your own <tt>interpret_pragma</tt> preprocessing hook function (see <a href="class_reference_ctxpolicy.html#interpret_pragma">here</a>) which should handle the additional directives. For an example of how to do it, you may have a look at the Wave driver application, which implements all of the pragma's listed above  with the help of a supplied <tt>interpret_pragma</tt> function (for instance the  <tt>#pragma wave timer()</tt> directive). </p>
 <table border="0">
   <tr> 
     <td width="10"></td>
     <td width="30"><a href="../index.html"><img src="theme/u_arr.gif" border="0"></a></td>
-    <td width="30"><a href="predefined_macros.html"><img src="theme/l_arr.gif" border="0"></a></td>
-    <td width="30"><a href="macro_expansion_process.html"><img src="theme/r_arr.gif" border="0"></a></td>
+    <td width="30"><a href="tracing_facility.html"><img src="theme/l_arr.gif" border="0"></a></td>
+    <td width="30"><a href="acknowledgements.html"><img src="theme/r_arr.gif" border="0"></a></td>
   </tr>
 </table>
 <hr size="1">
@@ -120,7 +115,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Saturday, December 10, 2005  15:04<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Saturday, February 25, 2006  15:49<!-- #EndDate -->
   </span>
 </p>
 <p>&nbsp;</p>
