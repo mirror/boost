@@ -58,16 +58,23 @@
 #   endif
 
 #elif defined(__MWERKS__)
-#   ifndef BOOST_TYPEOF_EMULATION
-#       ifndef BOOST_TYPEOF_NATIVE
-#           define BOOST_TYPEOF_NATIVE
-#       endif
-#       define BOOST_TYPEOF_KEYWORD __typeof__
-#   endif
 #   if(__MWERKS__ <= 0x3003)  // 8.x
-#       define BOOST_TYPEOF_NO_FUNCTION_TYPES
+#       ifndef BOOST_TYPEOF_EMULATION
+#           ifndef BOOST_TYPEOF_NATIVE
+#               define BOOST_TYPEOF_NATIVE
+#           endif
+#           define BOOST_TYPEOF_KEYWORD __typeof__
+#       else
+#           error typeof emulation is not supported
+#       endif
+#   else // 9.x
+#       ifndef BOOST_TYPEOF_EMULATION
+#           ifndef BOOST_TYPEOF_NATIVE
+#               define BOOST_TYPEOF_NATIVE
+#           endif
+#           define BOOST_TYPEOF_KEYWORD __typeof__
+#       endif
 #   endif
-
 
 #elif defined(_MSC_VER)
 #   if (_MSC_VER <= 1300)  // 6.5, 7.0
