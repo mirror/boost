@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2004-2005
+// (c) Copyright Andreas Huber Doenni 2004-2006
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -10,6 +10,8 @@
 #include "InnermostDefault.hpp"
 
 #include <boost/statechart/state_machine.hpp>
+#include <boost/statechart/null_exception_translator.hpp>
+#include <boost/statechart/exception_translator.hpp>
 #include <boost/statechart/event.hpp>
 #include <boost/statechart/transition.hpp>
 #include <boost/statechart/custom_reaction.hpp>
@@ -140,8 +142,11 @@ struct G : sc::event< G > {};
 struct H : sc::event< H > {};
 
 
-struct S0;
-struct TransitionTest : sc::state_machine< TransitionTest, S0 >
+template< class M > struct S0;
+template< class Translator >
+struct TransitionTest : sc::state_machine<
+  TransitionTest< Translator >, S0< TransitionTest< Translator > >,
+  std::allocator< void >, Translator >
 {
   public:
     //////////////////////////////////////////////////////////////////////////
@@ -152,7 +157,7 @@ struct TransitionTest : sc::state_machine< TransitionTest, S0 >
       // Since state destructors access the state machine object, we need to
       // make sure that all states are destructed before this subtype
       // portion is destructed.
-      terminate();
+      this->terminate();
     }
 
     void CompareToExpectedActionSequence( ActionArray & actions )
@@ -259,14 +264,16 @@ struct TransitionTest : sc::state_machine< TransitionTest, S0 >
     unsigned int unconsumedEventCount_;
 };
 
-struct S1;
-struct S211;
-struct S0 : Orthogonal0< S0, TransitionTest, S1 >
+template< class M > struct S1;
+template< class M > struct S211;
+template< class M >
+struct S0 : Orthogonal0< S0< M >, M, S1< M > >
 {
+  typedef Orthogonal0< S0< M >, M, S1< M > > my_base;
   public:
-    typedef sc::transition< E, S211 > reactions;
+    typedef sc::transition< E, S211< M > > reactions;
 
-    S0( my_context ctx ) : my_base( ctx ) {}
+    S0( typename my_base::my_context ctx ) : my_base( ctx ) {}
 
     void Transit( const A & evt ) { TransitImpl( evt ); }
     void Transit( const B & evt ) { TransitImpl( evt ); }
@@ -280,74 +287,92 @@ struct S0 : Orthogonal0< S0, TransitionTest, S1 >
     template< class Event >
     void TransitImpl( const Event & )
     {
-      outermost_context().template ActualTransition< S0, Event >();
+      this->outermost_context().template ActualTransition< S0< M >, Event >();
     }
 };
 
-  struct S11;
-  struct S21;
-  struct S2 : Orthogonal2< S2, S0, S21 >
+  template< class M > struct S11;
+  template< class M > struct S21;
+  template< class M >
+  struct S2 : Orthogonal2< S2< M >, S0< M >, S21< M > >
   {
+    typedef Orthogonal2< S2< M >, S0< M >, S21< M > > my_base;
     typedef mpl::list<
-      sc::transition< C, S1, S0, &S0::Transit >,
-      sc::transition< F, S11, S0, &S0::Transit >
+      sc::transition< C, S1< M >, S0< M >, &S0< M >::Transit >,
+      sc::transition< F, S11< M >, S0< M >, &S0< M >::Transit >
     > reactions;
 
-    S2( my_context ctx ) : my_base( ctx ) {}
+    S2( typename my_base::my_context ctx ) : my_base( ctx ) {}
   };
 
-    struct S21 : Orthogonal1< S21, S2::orthogonal< 2 >, S211 >
+    template< class M >
+    struct S21 : Orthogonal1<
+      S21< M >, typename S2< M >::template orthogonal< 2 >, S211< M > >
     {
+      typedef Orthogonal1<
+        S21< M >, typename S2< M >::template orthogonal< 2 >, S211< M >
+      > my_base;
       typedef mpl::list<
-        sc::transition< H, S21, S0, &S0::Transit >,
-        sc::transition< B, S211, S0, &S0::Transit >
+        sc::transition< H, S21< M >, S0< M >, &S0< M >::Transit >,
+        sc::transition< B, S211< M >, S0< M >, &S0< M >::Transit >
       > reactions;
 
-      S21( my_context ctx ) : my_base( ctx ) {}
+      S21( typename my_base::my_context ctx ) : my_base( ctx ) {}
     };
 
-      struct S211 : InnermostDefault< S211, S21::orthogonal< 1 > >
+      template< class M >
+      struct S211 : InnermostDefault<
+        S211< M >, typename S21< M >::template orthogonal< 1 > >
       {
+        typedef InnermostDefault<
+          S211< M >, typename S21< M >::template orthogonal< 1 > > my_base;
         typedef mpl::list<
-          sc::transition< D, S21, S0, &S0::Transit >,
-          sc::transition< G, S0 >
+          sc::transition< D, S21< M >, S0< M >, &S0< M >::Transit >,
+          sc::transition< G, S0< M > >
         > reactions;
 
-        S211( my_context ctx ) : my_base( ctx ) {}
+        S211( typename my_base::my_context ctx ) : my_base( ctx ) {}
       };
 
-  struct S1 : Orthogonal1< S1, S0, S11 >
+  template< class M >
+  struct S1 : Orthogonal1< S1< M >, S0< M >, S11< M > >
   {
+    typedef Orthogonal1< S1< M >, S0< M >, S11< M > > my_base;
     typedef mpl::list<
-      sc::transition< A, S1, S0, &S0::Transit >,
-      sc::transition< B, S11, S0, &S0::Transit >,
-      sc::transition< C, S2, S0, &S0::Transit >,
-      sc::transition< D, S0 >,
-      sc::transition< F, S211, S0, &S0::Transit >
+      sc::transition< A, S1< M >, S0< M >, &S0< M >::Transit >,
+      sc::transition< B, S11< M >, S0< M >, &S0< M >::Transit >,
+      sc::transition< C, S2< M >, S0< M >, &S0< M >::Transit >,
+      sc::transition< D, S0< M > >,
+      sc::transition< F, S211< M >, S0< M >, &S0< M >::Transit >
     > reactions;
 
-    S1( my_context ctx ) : my_base( ctx ) {}
+    S1( typename my_base::my_context ctx ) : my_base( ctx ) {}
   };
 
-    struct S11 : InnermostDefault< S11, S1::orthogonal< 1 > >
+    template< class M >
+    struct S11 : InnermostDefault<
+      S11< M >, typename S1< M >::template orthogonal< 1 > >
     {
+      typedef InnermostDefault<
+        S11< M >, typename S1< M >::template orthogonal< 1 > > my_base;
       typedef mpl::list<
-        sc::transition< G, S211, S0, &S0::Transit >,
+        sc::transition< G, S211< M >, S0< M >, &S0< M >::Transit >,
         sc::custom_reaction< H >
       > reactions;
 
-      S11( my_context ctx ) : my_base( ctx ) {}
+      S11( typename my_base::my_context ctx ) : my_base( ctx ) {}
 
       sc::result react( const H & )
       {
-        outermost_context().ActualTransition< S11, H >();
-        return discard_event();
+        this->outermost_context().template ActualTransition< S11< M >, H >();
+        return this->discard_event();
       }
     };
 
 
 struct X1;
-struct TransitionEventBaseTest : sc::state_machine< TransitionEventBaseTest, X1 >
+struct TransitionEventBaseTest :
+  sc::state_machine< TransitionEventBaseTest, X1 >
 {
   public:
     TransitionEventBaseTest() : actionCallCounter_( 0 ) {}
@@ -380,161 +405,159 @@ struct X1 : sc::simple_state< X1, TransitionEventBaseTest >
   typedef sc::transition< sc::event_base, X2 > reactions;
 };
 
-
-int test_main( int, char* [] )
+template< class M >
+void TestTransitions( M & machine )
 {
-  TransitionTest machine;
-
   machine.initiate();
   ActionArray init = 
   {
-    Entry< S0 >,
-    Entry< S1 >,
-    Entry< Default0< S1 > >,
-    Entry< S11 >,
-    Entry< Default2< S1 > >,
-    Entry< Default1< S0 > >,
-    Entry< Default2< S0 > >
+    Entry< S0< M > >,
+    Entry< S1< M > >,
+    Entry< Default0< S1< M > > >,
+    Entry< S11< M > >,
+    Entry< Default2< S1< M > > >,
+    Entry< Default1< S0< M > > >,
+    Entry< Default2< S0< M > > >
   };
   machine.CompareToExpectedActionSequence( init );
 
   machine.process_event( A() );
   ActionArray a1 =
   {
-    Exit< Default2< S1 > >,
-    Exit< S11 >,
-    Exit< Default0< S1 > >,
-    Exit< S1 >,
-    Trans< S0, A >,
-    Entry< S1 >,
-    Entry< Default0< S1 > >,
-    Entry< S11 >,
-    Entry< Default2< S1 > >
+    Exit< Default2< S1< M > > >,
+    Exit< S11< M > >,
+    Exit< Default0< S1< M > > >,
+    Exit< S1< M > >,
+    Trans< S0< M >, A >,
+    Entry< S1< M > >,
+    Entry< Default0< S1< M > > >,
+    Entry< S11< M > >,
+    Entry< Default2< S1< M > > >
   };
   machine.CompareToExpectedActionSequence( a1 );
 
   machine.process_event( B() );
   ActionArray b1 =
   {
-    Exit< Default2< S1 > >,
-    Exit< S11 >,
-    Exit< Default0< S1 > >,
-    Exit< S1 >,
-    Trans< S0, B >,
-    Entry< S1 >,
-    Entry< Default0< S1 > >,
-    Entry< S11 >,
-    Entry< Default2< S1 > >
+    Exit< Default2< S1< M > > >,
+    Exit< S11< M > >,
+    Exit< Default0< S1< M > > >,
+    Exit< S1< M > >,
+    Trans< S0< M >, B >,
+    Entry< S1< M > >,
+    Entry< Default0< S1< M > > >,
+    Entry< S11< M > >,
+    Entry< Default2< S1< M > > >
   };
   machine.CompareToExpectedActionSequence( b1 );
 
   machine.process_event( C() );
   ActionArray c1 =
   {
-    Exit< Default2< S1 > >,
-    Exit< S11 >,
-    Exit< Default0< S1 > >,
-    Exit< S1 >,
-    Trans< S0, C >,
-    Entry< S2 >,
-    Entry< Default0< S2 > >,
-    Entry< Default1< S2 > >,
-    Entry< S21 >,
-    Entry< Default0< S21 > >,
-    Entry< S211 >,
-    Entry< Default2< S21 > >
+    Exit< Default2< S1< M > > >,
+    Exit< S11< M > >,
+    Exit< Default0< S1< M > > >,
+    Exit< S1< M > >,
+    Trans< S0< M >, C >,
+    Entry< S2< M > >,
+    Entry< Default0< S2< M > > >,
+    Entry< Default1< S2< M > > >,
+    Entry< S21< M > >,
+    Entry< Default0< S21< M > > >,
+    Entry< S211< M > >,
+    Entry< Default2< S21< M > > >
   };
   machine.CompareToExpectedActionSequence( c1 );
 
   machine.process_event( D() );
   ActionArray d2 =
   {
-    Exit< Default2< S21 > >,
-    Exit< S211 >,
-    Exit< Default0< S21 > >,
-    Exit< S21 >,
-    Trans< S0, D >,
-    Entry< S21 >,
-    Entry< Default0< S21 > >,
-    Entry< S211 >,
-    Entry< Default2< S21 > >
+    Exit< Default2< S21< M > > >,
+    Exit< S211< M > >,
+    Exit< Default0< S21< M > > >,
+    Exit< S21< M > >,
+    Trans< S0< M >, D >,
+    Entry< S21< M > >,
+    Entry< Default0< S21< M > > >,
+    Entry< S211< M > >,
+    Entry< Default2< S21< M > > >
   };
   machine.CompareToExpectedActionSequence( d2 );
 
   machine.process_event( E() );
   ActionArray e2 =
   {
-    Exit< Default2< S0 > >,
-    Exit< Default1< S0 > >,
-    Exit< Default2< S21 > >,
-    Exit< S211 >,
-    Exit< Default0< S21 > >,
-    Exit< S21 >,
-    Exit< Default1< S2 > >,
-    Exit< Default0< S2 > >,
-    Exit< S2 >,
-    Exit< S0 >,
-    Entry< S0 >,
-    Entry< S2 >,
-    Entry< Default0< S2 > >,
-    Entry< Default1< S2 > >,
-    Entry< S21 >,
-    Entry< Default0< S21 > >,
-    Entry< S211 >,
-    Entry< Default2< S21 > >,
-    Entry< Default1< S0 > >,
-    Entry< Default2< S0 > >
+    Exit< Default2< S0< M > > >,
+    Exit< Default1< S0< M > > >,
+    Exit< Default2< S21< M > > >,
+    Exit< S211< M > >,
+    Exit< Default0< S21< M > > >,
+    Exit< S21< M > >,
+    Exit< Default1< S2< M > > >,
+    Exit< Default0< S2< M > > >,
+    Exit< S2< M > >,
+    Exit< S0< M > >,
+    Entry< S0< M > >,
+    Entry< S2< M > >,
+    Entry< Default0< S2< M > > >,
+    Entry< Default1< S2< M > > >,
+    Entry< S21< M > >,
+    Entry< Default0< S21< M > > >,
+    Entry< S211< M > >,
+    Entry< Default2< S21< M > > >,
+    Entry< Default1< S0< M > > >,
+    Entry< Default2< S0< M > > >
   };
   machine.CompareToExpectedActionSequence( e2 );
 
   machine.process_event( F() );
   ActionArray f2 =
   {
-    Exit< Default2< S21 > >,
-    Exit< S211 >,
-    Exit< Default0< S21 > >,
-    Exit< S21 >,
-    Exit< Default1< S2 > >,
-    Exit< Default0< S2 > >,
-    Exit< S2 >,
-    Trans< S0, F >,
-    Entry< S1 >,
-    Entry< Default0< S1 > >,
-    Entry< S11 >,
-    Entry< Default2< S1 > >
+    Exit< Default2< S21< M > > >,
+    Exit< S211< M > >,
+    Exit< Default0< S21< M > > >,
+    Exit< S21< M > >,
+    Exit< Default1< S2< M > > >,
+    Exit< Default0< S2< M > > >,
+    Exit< S2< M > >,
+    Trans< S0< M >, F >,
+    Entry< S1< M > >,
+    Entry< Default0< S1< M > > >,
+    Entry< S11< M > >,
+    Entry< Default2< S1< M > > >
   };
   machine.CompareToExpectedActionSequence( f2 );
 
   machine.process_event( G() );
   ActionArray g1 =
   {
-    Exit< Default2< S1 > >,
-    Exit< S11 >,
-    Exit< Default0< S1 > >,
-    Exit< S1 >,
-    Trans< S0, G >,
-    Entry< S2 >,
-    Entry< Default0< S2 > >,
-    Entry< Default1< S2 > >,
-    Entry< S21 >,
-    Entry< Default0< S21 > >,
-    Entry< S211 >,
-    Entry< Default2< S21 > >
+    Exit< Default2< S1< M > > >,
+    Exit< S11< M > >,
+    Exit< Default0< S1< M > > >,
+    Exit< S1< M > >,
+    Trans< S0< M >, G >,
+    Entry< S2< M > >,
+    Entry< Default0< S2< M > > >,
+    Entry< Default1< S2< M > > >,
+    Entry< S21< M > >,
+    Entry< Default0< S21< M > > >,
+    Entry< S211< M > >,
+    Entry< Default2< S21< M > > >
   };
   machine.CompareToExpectedActionSequence( g1 );
 
   machine.process_event( H() );
   ActionArray h2 =
   {
-    Exit< Default2< S21 > >,
-    Exit< S211 >,
-    Exit< Default0< S21 > >,
-    Exit< S21 >,
-    Trans< S0, H >,
-    Entry< S21 >,
-    Entry< Default0< S21 > >,
-    Entry< S211 >,
-    Entry< Default2< S21 > >
+    Exit< Default2< S21< M > > >,
+    Exit< S211< M > >,
+    Exit< Default0< S21< M > > >,
+    Exit< S21< M > >,
+    Trans< S0< M >, H >,
+    Entry< S21< M > >,
+    Entry< Default0< S21< M > > >,
+    Entry< S211< M > >,
+    Entry< Default2< S21< M > > >
   };
   machine.CompareToExpectedActionSequence( h2 );
 
@@ -549,257 +572,265 @@ int test_main( int, char* [] )
   machine.process_event( B() );
   ActionArray b2 =
   {
-    Exit< Default2< S21 > >,
-    Exit< S211 >,
-    Exit< Default0< S21 > >,
-    Exit< S21 >,
-    Trans< S0, B >,
-    Entry< S21 >,
-    Entry< Default0< S21 > >,
-    Entry< S211 >,
-    Entry< Default2< S21 > >
+    Exit< Default2< S21< M > > >,
+    Exit< S211< M > >,
+    Exit< Default0< S21< M > > >,
+    Exit< S21< M > >,
+    Trans< S0< M >, B >,
+    Entry< S21< M > >,
+    Entry< Default0< S21< M > > >,
+    Entry< S211< M > >,
+    Entry< Default2< S21< M > > >
   };
   machine.CompareToExpectedActionSequence( b2 );
 
   machine.process_event( C() );
   ActionArray c2 =
   {
-    Exit< Default2< S21 > >,
-    Exit< S211 >,
-    Exit< Default0< S21 > >,
-    Exit< S21 >,
-    Exit< Default1< S2 > >,
-    Exit< Default0< S2 > >,
-    Exit< S2 >,
-    Trans< S0, C >,
-    Entry< S1 >,
-    Entry< Default0< S1 > >,
-    Entry< S11 >,
-    Entry< Default2< S1 > >
+    Exit< Default2< S21< M > > >,
+    Exit< S211< M > >,
+    Exit< Default0< S21< M > > >,
+    Exit< S21< M > >,
+    Exit< Default1< S2< M > > >,
+    Exit< Default0< S2< M > > >,
+    Exit< S2< M > >,
+    Trans< S0< M >, C >,
+    Entry< S1< M > >,
+    Entry< Default0< S1< M > > >,
+    Entry< S11< M > >,
+    Entry< Default2< S1< M > > >
   };
   machine.CompareToExpectedActionSequence( c2 );
 
   machine.process_event( D() );
   ActionArray d1 = 
   {
-    Exit< Default2< S0 > >,
-    Exit< Default1< S0 > >,
-    Exit< Default2< S1 > >,
-    Exit< S11 >,
-    Exit< Default0< S1 > >,
-    Exit< S1 >,
-    Exit< S0 >,
-    Entry< S0 >,
-    Entry< S1 >,
-    Entry< Default0< S1 > >,
-    Entry< S11 >,
-    Entry< Default2< S1 > >,
-    Entry< Default1< S0 > >,
-    Entry< Default2< S0 > >
+    Exit< Default2< S0< M > > >,
+    Exit< Default1< S0< M > > >,
+    Exit< Default2< S1< M > > >,
+    Exit< S11< M > >,
+    Exit< Default0< S1< M > > >,
+    Exit< S1< M > >,
+    Exit< S0< M > >,
+    Entry< S0< M > >,
+    Entry< S1< M > >,
+    Entry< Default0< S1< M > > >,
+    Entry< S11< M > >,
+    Entry< Default2< S1< M > > >,
+    Entry< Default1< S0< M > > >,
+    Entry< Default2< S0< M > > >
   };
   machine.CompareToExpectedActionSequence( d1 );
 
   machine.process_event( F() );
   ActionArray f1 =
   {
-    Exit< Default2< S1 > >,
-    Exit< S11 >,
-    Exit< Default0< S1 > >,
-    Exit< S1 >,
-    Trans< S0, F >,
-    Entry< S2 >,
-    Entry< Default0< S2 > >,
-    Entry< Default1< S2 > >,
-    Entry< S21 >,
-    Entry< Default0< S21 > >,
-    Entry< S211 >,
-    Entry< Default2< S21 > >
+    Exit< Default2< S1< M > > >,
+    Exit< S11< M > >,
+    Exit< Default0< S1< M > > >,
+    Exit< S1< M > >,
+    Trans< S0< M >, F >,
+    Entry< S2< M > >,
+    Entry< Default0< S2< M > > >,
+    Entry< Default1< S2< M > > >,
+    Entry< S21< M > >,
+    Entry< Default0< S21< M > > >,
+    Entry< S211< M > >,
+    Entry< Default2< S21< M > > >
   };
   machine.CompareToExpectedActionSequence( f1 );
 
   machine.process_event( G() );
   ActionArray g2 =
   {
-    Exit< Default2< S0 > >,
-    Exit< Default1< S0 > >,
-    Exit< Default2< S21 > >,
-    Exit< S211 >,
-    Exit< Default0< S21 > >,
-    Exit< S21 >,
-    Exit< Default1< S2 > >,
-    Exit< Default0< S2 > >,
-    Exit< S2 >,
-    Exit< S0 >,
-    Entry< S0 >,
-    Entry< S1 >,
-    Entry< Default0< S1 > >,
-    Entry< S11 >,
-    Entry< Default2< S1 > >,
-    Entry< Default1< S0 > >,
-    Entry< Default2< S0 > >
+    Exit< Default2< S0< M > > >,
+    Exit< Default1< S0< M > > >,
+    Exit< Default2< S21< M > > >,
+    Exit< S211< M > >,
+    Exit< Default0< S21< M > > >,
+    Exit< S21< M > >,
+    Exit< Default1< S2< M > > >,
+    Exit< Default0< S2< M > > >,
+    Exit< S2< M > >,
+    Exit< S0< M > >,
+    Entry< S0< M > >,
+    Entry< S1< M > >,
+    Entry< Default0< S1< M > > >,
+    Entry< S11< M > >,
+    Entry< Default2< S1< M > > >,
+    Entry< Default1< S0< M > > >,
+    Entry< Default2< S0< M > > >
   };
   machine.CompareToExpectedActionSequence( g2 );
 
   machine.process_event( H() );
   ActionArray h1 =
   {
-    Trans< S11, H >
+    Trans< S11< M >, H >
   };
   machine.CompareToExpectedActionSequence( h1 );
 
   machine.process_event( E() );
   ActionArray e1 =
   {
-    Exit< Default2< S0 > >,
-    Exit< Default1< S0 > >,
-    Exit< Default2< S1 > >,
-    Exit< S11 >,
-    Exit< Default0< S1 > >,
-    Exit< S1 >,
-    Exit< S0 >,
-    Entry< S0 >,
-    Entry< S2 >,
-    Entry< Default0< S2 > >,
-    Entry< Default1< S2 > >,
-    Entry< S21 >,
-    Entry< Default0< S21 > >,
-    Entry< S211 >,
-    Entry< Default2< S21 > >,
-    Entry< Default1< S0 > >,
-    Entry< Default2< S0 > >
+    Exit< Default2< S0< M > > >,
+    Exit< Default1< S0< M > > >,
+    Exit< Default2< S1< M > > >,
+    Exit< S11< M > >,
+    Exit< Default0< S1< M > > >,
+    Exit< S1< M > >,
+    Exit< S0< M > >,
+    Entry< S0< M > >,
+    Entry< S2< M > >,
+    Entry< Default0< S2< M > > >,
+    Entry< Default1< S2< M > > >,
+    Entry< S21< M > >,
+    Entry< Default0< S21< M > > >,
+    Entry< S211< M > >,
+    Entry< Default2< S21< M > > >,
+    Entry< Default1< S0< M > > >,
+    Entry< Default2< S0< M > > >
   };
   machine.CompareToExpectedActionSequence( e1 );
 
   machine.terminate();
   ActionArray term =
   {
-    Exit< Default2< S0 > >,
-    Exit< Default1< S0 > >,
-    Exit< Default2< S21 > >,
-    Exit< S211 >,
-    Exit< Default0< S21 > >,
-    Exit< S21 >,
-    Exit< Default1< S2 > >,
-    Exit< Default0< S2 > >,
-    Exit< S2 >,
-    Exit< S0 >
+    Exit< Default2< S0< M > > >,
+    Exit< Default1< S0< M > > >,
+    Exit< Default2< S21< M > > >,
+    Exit< S211< M > >,
+    Exit< Default0< S21< M > > >,
+    Exit< S21< M > >,
+    Exit< Default1< S2< M > > >,
+    Exit< Default0< S2< M > > >,
+    Exit< S2< M > >,
+    Exit< S0< M > >
   };
   machine.CompareToExpectedActionSequence( term );
 
-  machine.ThrowAction( Entry< Default0< S1 > > );
+  machine.ThrowAction( Entry< Default0< S1< M > > > );
   // TODO: Replace with BOOST_REQUIRE_THROW, as soon as available
   BOOST_CHECK_THROW( machine.initiate(), TransitionTestException );
   ActionArray initThrow1 = 
   {
-    Entry< S0 >,
-    Entry< S1 >,
-    Throw< Entry< Default0< S1 > > >,
-    Dtor< S1 >,
-    Dtor< S0 >
+    Entry< S0< M > >,
+    Entry< S1< M > >,
+    Throw< Entry< Default0< S1< M > > > >,
+    Dtor< S1< M > >,
+    Dtor< S0< M > >
   };
   machine.CompareToExpectedActionSequence( initThrow1 );
   BOOST_REQUIRE( machine.terminated() );
 
-  machine.ThrowAction( Entry< S11 > );
+  machine.ThrowAction( Entry< S11< M > > );
   // TODO: Replace with BOOST_REQUIRE_THROW, as soon as available
   BOOST_CHECK_THROW( machine.initiate(), TransitionTestException );
   ActionArray initThrow2 = 
   {
-    Entry< S0 >,
-    Entry< S1 >,
-    Entry< Default0< S1 > >,
-    Throw< Entry< S11 > >,
-    Dtor< Default0< S1 > >,
-    Dtor< S1 >,
-    Dtor< S0 >
+    Entry< S0< M > >,
+    Entry< S1< M > >,
+    Entry< Default0< S1< M > > >,
+    Throw< Entry< S11< M > > >,
+    Dtor< Default0< S1< M > > >,
+    Dtor< S1< M > >,
+    Dtor< S0< M > >
   };
   machine.CompareToExpectedActionSequence( initThrow2 );
   BOOST_REQUIRE( machine.terminated() );
 
-  machine.ThrowAction( Trans< S0, A > );
+  machine.ThrowAction( Trans< S0< M >, A > );
   machine.initiate();
   BOOST_CHECK_THROW( machine.process_event( A() ), TransitionTestException );
   ActionArray a1Throw1 =
   {
-    Entry< S0 >,
-    Entry< S1 >,
-    Entry< Default0< S1 > >,
-    Entry< S11 >,
-    Entry< Default2< S1 > >,
-    Entry< Default1< S0 > >,
-    Entry< Default2< S0 > >,
-    Exit< Default2< S1 > >,
-    Exit< S11 >,
-    Exit< Default0< S1 > >,
-    Exit< S1 >,
-    Throw< Trans< S0, A > >,
-    Dtor< Default2< S0 > >,
-    Dtor< Default1< S0 > >,
-    Dtor< S0 >
+    Entry< S0< M > >,
+    Entry< S1< M > >,
+    Entry< Default0< S1< M > > >,
+    Entry< S11< M > >,
+    Entry< Default2< S1< M > > >,
+    Entry< Default1< S0< M > > >,
+    Entry< Default2< S0< M > > >,
+    Exit< Default2< S1< M > > >,
+    Exit< S11< M > >,
+    Exit< Default0< S1< M > > >,
+    Exit< S1< M > >,
+    Throw< Trans< S0< M >, A > >,
+    Dtor< Default2< S0< M > > >,
+    Dtor< Default1< S0< M > > >,
+    Dtor< S0< M > >
   };
   machine.CompareToExpectedActionSequence( a1Throw1 );
   BOOST_REQUIRE( machine.terminated() );
 
-  machine.ThrowAction( Entry< S211 > );
+  machine.ThrowAction( Entry< S211< M > > );
   machine.initiate();
   BOOST_CHECK_THROW( machine.process_event( C() ), TransitionTestException );
   ActionArray c1Throw1 =
   {
-    Entry< S0 >,
-    Entry< S1 >,
-    Entry< Default0< S1 > >,
-    Entry< S11 >,
-    Entry< Default2< S1 > >,
-    Entry< Default1< S0 > >,
-    Entry< Default2< S0 > >,
-    Exit< Default2< S1 > >,
-    Exit< S11 >,
-    Exit< Default0< S1 > >,
-    Exit< S1 >,
-    Trans< S0, C >,
-    Entry< S2 >,
-    Entry< Default0< S2 > >,
-    Entry< Default1< S2 > >,
-    Entry< S21 >,
-    Entry< Default0< S21 > >,
-    Throw< Entry< S211 > >,
-    Dtor< Default2< S0 > >,
-    Dtor< Default1< S0 > >,
-    Dtor< Default0< S21 > >,
-    Dtor< S21 >,
-    Dtor< Default1< S2 > >,
-    Dtor< Default0< S2 > >,
-    Dtor< S2 >,
-    Dtor< S0 >
+    Entry< S0< M > >,
+    Entry< S1< M > >,
+    Entry< Default0< S1< M > > >,
+    Entry< S11< M > >,
+    Entry< Default2< S1< M > > >,
+    Entry< Default1< S0< M > > >,
+    Entry< Default2< S0< M > > >,
+    Exit< Default2< S1< M > > >,
+    Exit< S11< M > >,
+    Exit< Default0< S1< M > > >,
+    Exit< S1< M > >,
+    Trans< S0< M >, C >,
+    Entry< S2< M > >,
+    Entry< Default0< S2< M > > >,
+    Entry< Default1< S2< M > > >,
+    Entry< S21< M > >,
+    Entry< Default0< S21< M > > >,
+    Throw< Entry< S211< M > > >,
+    Dtor< Default2< S0< M > > >,
+    Dtor< Default1< S0< M > > >,
+    Dtor< Default0< S21< M > > >,
+    Dtor< S21< M > >,
+    Dtor< Default1< S2< M > > >,
+    Dtor< Default0< S2< M > > >,
+    Dtor< S2< M > >,
+    Dtor< S0< M > >
   };
   machine.CompareToExpectedActionSequence( c1Throw1 );
   BOOST_REQUIRE( machine.terminated() );
 
-  machine.ThrowAction( ExitFn< S11 > );
+  machine.ThrowAction( ExitFn< S11< M > > );
   machine.initiate();
   BOOST_CHECK_THROW( machine.process_event( C() ), TransitionTestException );
   ActionArray c1Throw2 =
   {
-    Entry< S0 >,
-    Entry< S1 >,
-    Entry< Default0< S1 > >,
-    Entry< S11 >,
-    Entry< Default2< S1 > >,
-    Entry< Default1< S0 > >,
-    Entry< Default2< S0 > >,
-    Exit< Default2< S1 > >,
-    Throw< ExitFn< S11 > >,
-    Dtor< S11 >,
-    Dtor< Default2< S0 > >,
-    Dtor< Default1< S0 > >,
-    Dtor< Default0< S1 > >,
-    Dtor< S1 >,
-    Dtor< S0 >
+    Entry< S0< M > >,
+    Entry< S1< M > >,
+    Entry< Default0< S1< M > > >,
+    Entry< S11< M > >,
+    Entry< Default2< S1< M > > >,
+    Entry< Default1< S0< M > > >,
+    Entry< Default2< S0< M > > >,
+    Exit< Default2< S1< M > > >,
+    Throw< ExitFn< S11< M > > >,
+    Dtor< S11< M > >,
+    Dtor< Default2< S0< M > > >,
+    Dtor< Default1< S0< M > > >,
+    Dtor< Default0< S1< M > > >,
+    Dtor< S1< M > >,
+    Dtor< S0< M > >
   };
   machine.CompareToExpectedActionSequence( c1Throw2 );
   BOOST_REQUIRE( machine.terminated() );
   BOOST_REQUIRE( machine.GetUnconsumedEventCount() == 1 );
+}
 
+
+int test_main( int, char* [] )
+{
+  TransitionTest< sc::null_exception_translator > null_machine;
+  TestTransitions( null_machine );
+  TransitionTest< sc::exception_translator<> > machine;
+  TestTransitions( machine );
 
   TransitionEventBaseTest eventBaseMachine;
   eventBaseMachine.initiate();
