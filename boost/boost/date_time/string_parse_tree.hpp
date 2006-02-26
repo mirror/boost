@@ -83,7 +83,11 @@ operator<<(std::basic_ostream<charT>& os, parse_match_result<charT>& mr)
 template<typename charT>
 struct string_parse_tree
 {
-  typedef std::multimap<charT, string_parse_tree> ptree_coll;
+#if BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x581) )
+  typedef std::multimap<charT, string_parse_tree< charT> > ptree_coll;
+#else
+  typedef std::multimap<charT, string_parse_tree > ptree_coll;
+#endif
   typedef typename ptree_coll::value_type value_type;
   typedef typename ptree_coll::iterator iterator;
   typedef typename ptree_coll::const_iterator const_iterator;

@@ -19,9 +19,12 @@
 #include "boost/config.hpp" //sets BOOST_NO_STD_LOCALE
 
 //This file basically becomes a noop if locales are not properly supported
-#if (defined(BOOST_NO_STD_LOCALE) || (defined(BOOST_MSVC) && (_MSC_VER < 1300)) || (defined(__BORLANDC__) && (__BORLANDC__ < 0x564 )))
+#if (defined(BOOST_NO_STD_LOCALE) \
+ || (BOOST_WORKAROUND( BOOST_MSVC, < 1300)) \
+ || (BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x581 )) ) )
 #define BOOST_DATE_TIME_NO_LOCALE
 #endif
 
 
 #endif
+
