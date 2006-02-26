@@ -331,10 +331,7 @@ namespace boost
     BOOST_HASH_SPECIALIZE(wchar_t)
 #endif
     BOOST_HASH_SPECIALIZE(short)
-//TODO: Why did I disable this overload??
-//#if !(defined(BOOST_MSVC) && BOOST_MSVC < 1300)
     BOOST_HASH_SPECIALIZE(unsigned short)
-//#endif
     BOOST_HASH_SPECIALIZE(int)
     BOOST_HASH_SPECIALIZE(unsigned int)
     BOOST_HASH_SPECIALIZE(long)
