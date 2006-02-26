@@ -36,7 +36,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libboost_test_exec_monitor.lib"
+				AdditionalDependencies="libboost_test_exec_monitor-vc71-mt-gd-1_34.lib"
 				OutputFile="$(OutDir)/CustomReactionTest.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\..\bin\boost\libs\test\build\libboost_test_exec_monitor.lib\vc-7_1\debug\threading-multi"
@@ -88,7 +88,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="libboost_test_exec_monitor.lib"
+				AdditionalDependencies="libboost_test_exec_monitor-vc71-mt-1_34.lib"
 				OutputFile="$(OutDir)/CustomReactionTest.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\..\bin\boost\libs\test\build\libboost_test_exec_monitor.lib\vc-7_1\release\threading-multi"
