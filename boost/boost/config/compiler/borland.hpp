@@ -14,7 +14,30 @@
 // we don't support Borland prior to version 5.4:
 #if __BORLANDC__ < 0x540
 #  error "Compiler not supported or configured - please reconfigure"
+#elif __BORLANDC__ < 0x581
+#  pragma message( "Support for Borland compilers older than BCB2006 is deprecated in Boost 1.34" )
 #endif
+
+// last known and checked version is 0x600 (Builder X preview)
+// Or 0x582 (Borland C++ Builder 2006 Update 1):
+#if (__BORLANDC__ > 0x581) && (__BORLANDC__ != 0x600)
+#  if defined(BOOST_ASSERT_CONFIG)
+#     error "Unknown compiler version - please run the configure tests and report the results"
+#  else
+#     pragma message( "Unknown compiler version - please run the configure tests and report the results")
+#  endif
+#endif
+
+//
+// Support macros to help with standard library detection
+#if (__BORLANDC__ < 0x560) || defined(_USE_OLD_RW_STL)
+#  define BOOST_BCB_WITH_ROGUE_WAVE
+#elif __BORLANDC__ < 0x570
+#  define BOOST_BCB_WITH_STLPORT
+#else
+#  define BOOST_BCB_WITH_DINKUMWARE
+#endif
+
 
 //
 // Version 5.0 and below:
@@ -74,7 +97,7 @@
 
 //
 // new bug in 5.61:
-#if (__BORLANDC__ >= 0x561) //&& (__BORLANDC__ <= 0x570)
+#if (__BORLANDC__ >= 0x561) && (__BORLANDC__ <= 0x580)
    // this seems to be needed by the command line compiler, but not the IDE:
 #  define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
 #endif
@@ -105,7 +128,7 @@
 // Borland C++Builder 6 defaults to using STLPort.  If _USE_OLD_RW_STL is
 // defined, then we have 0x560 or greater with the Rogue Wave implementation
 // which presumably has the std::DBL_MAX bug.
-#if ((__BORLANDC__ >= 0x550) && (__BORLANDC__ < 0x560)) || defined(_USE_OLD_RW_STL)
+#if defined( BOOST_BCB_WITH_ROGUE_WAVE )
 // <climits> is partly broken, some macros define symbols that are really in
 // namespace std, so you end up having to use illegal constructs like
 // std::DBL_MAX, as a fix we'll just include float.h and have done with:
@@ -164,22 +187,4 @@
 #endif
 
 #define BOOST_COMPILER "Borland C++ version " BOOST_STRINGIZE(__BORLANDC__)
-
-// last known and checked version is 1536 (Builder X preview)
-// Or 0x581 (Borland C++ Builder 2006 Update 1):
-#if (__BORLANDC__ > 0x581) && (__BORLANDC__ != 0x600)
-#  if defined(BOOST_ASSERT_CONFIG)
-#     error "Unknown compiler version - please run the configure tests and report the results"
-#  else
-#     pragma message( "Unknown compiler version - please run the configure tests and report the results")
-#  endif
-#endif
-
-
-
-
-
-
-
-
 
