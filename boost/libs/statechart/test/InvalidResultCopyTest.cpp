@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2005
+// (c) Copyright Andreas Huber Doenni 2005-2006
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -53,9 +53,9 @@ int test_main( int, char* [] )
   machine.initiate();
 
   #ifdef NDEBUG
-    BOOST_CHECK_NO_THROW( machine.process_event( E() ) );
+    BOOST_REQUIRE_NO_THROW( machine.process_event( E() ) );
   #else
-    BOOST_CHECK_THROW( machine.process_event( E() ), std::logic_error );
+    BOOST_REQUIRE_THROW( machine.process_event( E() ), std::logic_error );
   #endif
 
   return 0;

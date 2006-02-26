@@ -710,8 +710,7 @@ void TestTransitions( M & machine )
   machine.CompareToExpectedActionSequence( term );
 
   machine.ThrowAction( Entry< Default0< S1< M > > > );
-  // TODO: Replace with BOOST_REQUIRE_THROW, as soon as available
-  BOOST_CHECK_THROW( machine.initiate(), TransitionTestException );
+  BOOST_REQUIRE_THROW( machine.initiate(), TransitionTestException );
   ActionArray initThrow1 = 
   {
     Entry< S0< M > >,
@@ -724,8 +723,7 @@ void TestTransitions( M & machine )
   BOOST_REQUIRE( machine.terminated() );
 
   machine.ThrowAction( Entry< S11< M > > );
-  // TODO: Replace with BOOST_REQUIRE_THROW, as soon as available
-  BOOST_CHECK_THROW( machine.initiate(), TransitionTestException );
+  BOOST_REQUIRE_THROW( machine.initiate(), TransitionTestException );
   ActionArray initThrow2 = 
   {
     Entry< S0< M > >,
@@ -741,7 +739,7 @@ void TestTransitions( M & machine )
 
   machine.ThrowAction( Trans< S0< M >, A > );
   machine.initiate();
-  BOOST_CHECK_THROW( machine.process_event( A() ), TransitionTestException );
+  BOOST_REQUIRE_THROW( machine.process_event( A() ), TransitionTestException );
   ActionArray a1Throw1 =
   {
     Entry< S0< M > >,
@@ -765,7 +763,7 @@ void TestTransitions( M & machine )
 
   machine.ThrowAction( Entry< S211< M > > );
   machine.initiate();
-  BOOST_CHECK_THROW( machine.process_event( C() ), TransitionTestException );
+  BOOST_REQUIRE_THROW( machine.process_event( C() ), TransitionTestException );
   ActionArray c1Throw1 =
   {
     Entry< S0< M > >,
@@ -800,7 +798,7 @@ void TestTransitions( M & machine )
 
   machine.ThrowAction( ExitFn< S11< M > > );
   machine.initiate();
-  BOOST_CHECK_THROW( machine.process_event( C() ), TransitionTestException );
+  BOOST_REQUIRE_THROW( machine.process_event( C() ), TransitionTestException );
   ActionArray c1Throw2 =
   {
     Entry< S0< M > >,
@@ -834,18 +832,18 @@ int test_main( int, char* [] )
 
   TransitionEventBaseTest eventBaseMachine;
   eventBaseMachine.initiate();
-  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
+  BOOST_REQUIRE_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
   eventBaseMachine.process_event( A() );
-  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X2 & >() );
+  BOOST_REQUIRE_NO_THROW( eventBaseMachine.state_cast< const X2 & >() );
   BOOST_REQUIRE( eventBaseMachine.GetActionCallCounter() == 0 );
   eventBaseMachine.process_event( B() );
-  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
+  BOOST_REQUIRE_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
   BOOST_REQUIRE( eventBaseMachine.GetActionCallCounter() == 1 );
   eventBaseMachine.process_event( C() );
-  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X2 & >() );
+  BOOST_REQUIRE_NO_THROW( eventBaseMachine.state_cast< const X2 & >() );
   BOOST_REQUIRE( eventBaseMachine.GetActionCallCounter() == 1 );
   eventBaseMachine.process_event( D() );
-  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
+  BOOST_REQUIRE_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
   BOOST_REQUIRE( eventBaseMachine.GetActionCallCounter() == 2 );
 
   return 0;

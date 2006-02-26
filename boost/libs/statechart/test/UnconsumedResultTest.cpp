@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2005
+// (c) Copyright Andreas Huber Doenni 2005-2006
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -34,9 +34,9 @@ void make_unconsumed_result()
 int test_main( int, char* [] )
 {
   #ifdef NDEBUG
-    BOOST_CHECK_NO_THROW( make_unconsumed_result() );
+    BOOST_REQUIRE_NO_THROW( make_unconsumed_result() );
   #else
-    BOOST_CHECK_THROW( make_unconsumed_result(), std::logic_error );
+    BOOST_REQUIRE_THROW( make_unconsumed_result(), std::logic_error );
   #endif
 
   return 0;

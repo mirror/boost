@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2005
+// (c) Copyright Andreas Huber Doenni 2005-2006
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -106,202 +106,200 @@ int test_main( int, char* [] )
     boost::shared_ptr< HistoryTest >( new HistoryTest() );
 
   // state_downcast sanity check
-  // TODO: Use BOOST_REQUIRE_THROW as soon as it's available
-  BOOST_CHECK_THROW( pM->state_downcast< const B & >(), std::bad_cast );
+  BOOST_REQUIRE_THROW( pM->state_downcast< const B & >(), std::bad_cast );
   pM->initiate();
-  BOOST_CHECK_THROW( pM->state_downcast< const D & >(), std::bad_cast );
+  BOOST_REQUIRE_THROW( pM->state_downcast< const D & >(), std::bad_cast );
 
-  // TODO: Use BOOST_REQUIRE_NO_THROW as soon as it's available
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const B & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const B & >() );
 
   // No history has been saved yet -> default state
   pM->process_event( EvToDShallow() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const D & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const D & >() );
   pM->process_event( EvToDShallow() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const D & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const D & >() );
 
   pM->process_event( EvToI() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const I & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const I & >() );
   // Direct inner is E when history is saved -> F
   pM->process_event( EvToDShallow() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const F & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
 
   pM->process_event( EvToH() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const H & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const H & >() );
   // Direct inner is E when history is saved -> F
   pM->process_event( EvToDShallow() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const F & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
 
   pM->process_event( EvToF() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const F & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
   pM->process_event( EvToB() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const B & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const B & >() );
   // Direct inner was E when history was saved -> F
   pM->process_event( EvToDShallow() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const F & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
 
   pM->initiate();
   // History was cleared in termination -> default state
   pM->process_event( EvToDShallow() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const D & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const D & >() );
 
   pM->process_event( EvToI() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const I & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const I & >() );
   pM->process_event( EvToB() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const B & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const B & >() );
   pM->clear_shallow_history< C, 0 >();
   // History was cleared -> default state
   pM->process_event( EvToDShallow() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const D & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const D & >() );
 
   pM = boost::shared_ptr< HistoryTest >( new HistoryTest() );
   pM->initiate();
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const B & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const B & >() );
 
   // No history has been saved yet -> default state
   pM->process_event( EvToDDeep() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const D & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const D & >() );
   pM->process_event( EvToDDeep() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const D & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const D & >() );
 
   pM->process_event( EvToI() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const I & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const I & >() );
   pM->process_event( EvToB() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const B & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const B & >() );
   pM->process_event( EvToDDeep() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const I & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const I & >() );
 
   pM->process_event( EvToH() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const H & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const H & >() );
   pM->process_event( EvToB() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const B & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const B & >() );
   pM->process_event( EvToDDeep() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const H & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const H & >() );
 
   pM->process_event( EvToF() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const F & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
   pM->process_event( EvToB() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const B & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const B & >() );
   pM->process_event( EvToDDeep() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const F & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
 
   pM->initiate();
   // History was cleared in termination -> default state
   pM->process_event( EvToDDeep() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const D & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const D & >() );
 
   pM->process_event( EvToI() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const I & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const I & >() );
   pM->process_event( EvToB() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const B & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const B & >() );
   pM->clear_deep_history< C, 0 >();
   // History was cleared -> default state
   pM->process_event( EvToDDeep() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const D & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const D & >() );
 
 
   pM = boost::shared_ptr< HistoryTest >( new HistoryTest() );
   pM->initiate();
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const B & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const B & >() );
 
   // No history has been saved yet -> default state
   pM->process_event( EvToFShallow() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const F & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
   pM->process_event( EvToFShallow() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const F & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
 
   pM->process_event( EvToI() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const I & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const I & >() );
   // Direct inner is G when history is saved -> H
   pM->process_event( EvToFShallow() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const H & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const H & >() );
 
   pM->process_event( EvToH() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const H & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const H & >() );
   pM->process_event( EvToB() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const B & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const B & >() );
   // Direct inner was G when history was saved -> H
   pM->process_event( EvToFShallow() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const H & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const H & >() );
 
   pM->process_event( EvToI() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const I & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const I & >() );
   pM->initiate();
   // History was cleared in termination -> default state
   pM->process_event( EvToFShallow() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const F & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
 
   pM->process_event( EvToI() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const I & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const I & >() );
   pM->process_event( EvToB() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const B & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const B & >() );
   pM->clear_shallow_history< E, 0 >();
   // History was cleared -> default state
   pM->process_event( EvToFShallow() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const F & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
 
   pM = boost::shared_ptr< HistoryTest >( new HistoryTest() );
   pM->initiate();
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const B & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const B & >() );
 
   // No history has been saved yet -> default state
   pM->process_event( EvToFDeep() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const F & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
   pM->process_event( EvToFDeep() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const F & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
 
   pM->process_event( EvToI() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const I & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const I & >() );
   pM->process_event( EvToB() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const B & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const B & >() );
   pM->process_event( EvToFDeep() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const I & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const I & >() );
 
   pM->process_event( EvToH() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const H & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const H & >() );
   pM->process_event( EvToB() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const B & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const B & >() );
   pM->process_event( EvToFDeep() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const H & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const H & >() );
 
   pM->process_event( EvToF() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const F & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
   pM->process_event( EvToB() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const B & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const B & >() );
   pM->process_event( EvToFDeep() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const F & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
 
   pM->initiate();
   // History was cleared in termination -> default state
   pM->process_event( EvToFDeep() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const F & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
 
   pM->process_event( EvToI() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const I & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const I & >() );
   pM->process_event( EvToB() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const B & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const B & >() );
   pM->clear_deep_history< E, 0 >();
   // History was cleared -> default state
   pM->process_event( EvToFDeep() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const F & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
 
   // Given that history transitions and history initial states are implemented
   // with the same code we just make a few sanity checks and trust that the
   // rest will work just like we tested above.
   pM->process_event( EvToB() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const J & >() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const N & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const J & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const N & >() );
   pM->process_event( EvToM() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const M & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const M & >() );
   // Direct inner is K when history is saved -> L
   pM->process_event( EvToB() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const L & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const L & >() );
 
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const N & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const N & >() );
   pM->process_event( EvToQ() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const Q & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const Q & >() );
   pM->process_event( EvToB() );
-  BOOST_CHECK_NO_THROW( pM->state_downcast< const Q & >() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const Q & >() );
 
   return 0;
 }

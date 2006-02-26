@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2004-2005
+// (c) Copyright Andreas Huber Doenni 2004-2006
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -155,18 +155,18 @@ int test_main( int, char* [] )
 
   DeferralEventBaseTest eventBaseMachine;
   // state_cast sanity check
-  BOOST_CHECK_THROW( eventBaseMachine.state_cast< const X1 & >(), std::bad_cast );
+  BOOST_REQUIRE_THROW( eventBaseMachine.state_cast< const X1 & >(), std::bad_cast );
   eventBaseMachine.initiate();
-  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
+  BOOST_REQUIRE_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
   // Deferral must work with heap-allocated and stack-allocated events
   eventBaseMachine.process_event( EvToX3() );
-  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
+  BOOST_REQUIRE_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
   eventBaseMachine.process_event( EvToX2() );
-  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X3 & >() );
+  BOOST_REQUIRE_NO_THROW( eventBaseMachine.state_cast< const X3 & >() );
   eventBaseMachine.initiate();
-  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
+  BOOST_REQUIRE_NO_THROW( eventBaseMachine.state_cast< const X1 & >() );
   eventBaseMachine.process_event( EvToX2() );
-  BOOST_CHECK_NO_THROW( eventBaseMachine.state_cast< const X2 & >() );
+  BOOST_REQUIRE_NO_THROW( eventBaseMachine.state_cast< const X2 & >() );
 
   return 0;
 }

@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2005
+// (c) Copyright Andreas Huber Doenni 2005-2006
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -36,20 +36,18 @@ struct StateCastTest : sc::state_machine< StateCastTest, A >
   void AssertInState()
   {
     BOOST_REQUIRE( state_downcast< const State * >() != 0 );
-    // TODO: Use BOOST_REQUIRE_NO_THROW as soon as it's available
-    BOOST_CHECK_NO_THROW( state_downcast< const State & >() );
+    BOOST_REQUIRE_NO_THROW( state_downcast< const State & >() );
     BOOST_REQUIRE( state_cast< const State * >() != 0 );
-    BOOST_CHECK_NO_THROW( state_cast< const State & >() );
+    BOOST_REQUIRE_NO_THROW( state_cast< const State & >() );
   }
 
   template< class State >
   void AssertNotInState()
   {
     BOOST_REQUIRE( state_downcast< const State * >() == 0 );
-    // TODO: Use BOOST_REQUIRE_THROW as soon as it's available
-    BOOST_CHECK_THROW( state_downcast< const State & >(), std::bad_cast );
+    BOOST_REQUIRE_THROW( state_downcast< const State & >(), std::bad_cast );
     BOOST_REQUIRE( state_cast< const State * >() == 0 );
-    BOOST_CHECK_THROW( state_cast< const State & >(), std::bad_cast );
+    BOOST_REQUIRE_THROW( state_cast< const State & >(), std::bad_cast );
   }
 };
 
@@ -57,20 +55,18 @@ template< class State, class FromState >
 void AssertInState( const FromState & theState )
 {
   BOOST_REQUIRE( theState.template state_downcast< const State * >() != 0 );
-  // TODO: Use BOOST_REQUIRE_NO_THROW as soon as it's available
-  BOOST_CHECK_NO_THROW( theState.template state_downcast< const State & >() );
+  BOOST_REQUIRE_NO_THROW( theState.template state_downcast< const State & >() );
   BOOST_REQUIRE( theState.template state_cast< const State * >() != 0 );
-  BOOST_CHECK_NO_THROW( theState.template state_cast< const State & >() );
+  BOOST_REQUIRE_NO_THROW( theState.template state_cast< const State & >() );
 }
 
 template< class State, class FromState >
 void AssertNotInState( const FromState & theState )
 {
   BOOST_REQUIRE( theState.template state_downcast< const State * >() == 0 );
-  // TODO: Use BOOST_REQUIRE_THROW as soon as it's available
-  BOOST_CHECK_THROW( theState.template state_downcast< const State & >(), std::bad_cast );
+  BOOST_REQUIRE_THROW( theState.template state_downcast< const State & >(), std::bad_cast );
   BOOST_REQUIRE( theState.template state_cast< const State * >() == 0 );
-  BOOST_CHECK_THROW( theState.template state_cast< const State & >(), std::bad_cast );
+  BOOST_REQUIRE_THROW( theState.template state_cast< const State & >(), std::bad_cast );
 }
 
 struct B;
