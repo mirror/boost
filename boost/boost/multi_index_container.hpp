@@ -1,6 +1,6 @@
 /* Multiply indexed container.
  *
- * Copyright 2003-2005 Joaquín M López Muñoz.
+ * Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -786,7 +786,7 @@ project(
     Value,IndexSpecifierList,Allocator>                multi_index_type;
   typedef typename nth_index<multi_index_type,N>::type index;
 
-#if !defined(BOOST_MSVC)||!(BOOST_MSVC<1300) /* this ain't work in MSVC++ 6.0 */
+#if !defined(BOOST_MSVC)||!(BOOST_MSVC<1310) /* ain't work in MSVC++ 6.0/7.0 */
   BOOST_STATIC_ASSERT((
     mpl::contains<
       BOOST_DEDUCED_TYPENAME multi_index_type::iterator_type_list,
@@ -820,7 +820,7 @@ project(
     Value,IndexSpecifierList,Allocator>                multi_index_type;
   typedef typename nth_index<multi_index_type,N>::type index;
 
-#if !defined(BOOST_MSVC)||!(BOOST_MSVC<1300) /* this ain't work in MSVC++ 6.0 */
+#if !defined(BOOST_MSVC)||!(BOOST_MSVC<1310) /* ain't work in MSVC++ 6.0/7.0 */
   BOOST_STATIC_ASSERT((
     mpl::contains<
       BOOST_DEDUCED_TYPENAME multi_index_type::iterator_type_list,
@@ -874,7 +874,7 @@ project(
   typedef typename ::boost::multi_index::index<
     multi_index_type,Tag>::type                 index;
 
-#if !defined(BOOST_MSVC)||!(BOOST_MSVC<1300) /* this ain't work in MSVC++ 6.0 */
+#if !defined(BOOST_MSVC)||!(BOOST_MSVC<1310) /* ain't work in MSVC++ 6.0/7.0 */
   BOOST_STATIC_ASSERT((
     mpl::contains<
       BOOST_DEDUCED_TYPENAME multi_index_type::iterator_type_list,
@@ -909,7 +909,7 @@ project(
   typedef typename ::boost::multi_index::index<
     multi_index_type,Tag>::type                 index;
 
-#if !defined(BOOST_MSVC)||!(BOOST_MSVC<1300) /* this ain't work in MSVC++ 6.0 */
+#if !defined(BOOST_MSVC)||!(BOOST_MSVC<1310) /* ain't work in MSVC++ 6.0/7.0 */
   BOOST_STATIC_ASSERT((
     mpl::contains<
       BOOST_DEDUCED_TYPENAME multi_index_type::iterator_type_list,
