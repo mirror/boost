@@ -6,9 +6,11 @@ void f()
 {}
 
 template<class T> 
-class x
+struct tpl
 {
-    BOOST_STATIC_ASSERT((
-        boost::is_same<BOOST_TYPEOF_TPL(&f), void(*)()>::value
-        ));
+    typedef BOOST_TYPEOF_TPL(&f) type;
 };
+
+typedef void(*fun_type)();
+ 
+BOOST_STATIC_ASSERT((boost::is_same<tpl<void>::type, fun_type>::value));
