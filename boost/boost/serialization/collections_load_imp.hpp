@@ -58,9 +58,9 @@ struct archive_input_seq
     }
 };
 
-// map input
+// map and set input
 template<class Archive, class Container>
-struct archive_input_map
+struct archive_input_unique
 {
     inline void operator()(
         Archive &ar, 
@@ -73,59 +73,20 @@ struct archive_input_map
         ar >> boost::serialization::make_nvp("item", t.reference());
         std::pair<BOOST_DEDUCED_TYPENAME Container::const_iterator, bool> result = 
             s.insert(t.reference());
-        assert(result.second); // make sure we inserted a new element
-        ar.reset_object_address(& (* result.first), & t.reference());
+        if(result.second)
+            ar.reset_object_address(& (* result.first), & t.reference());
     }
 };
 
-// set input
+// multiset and multimap input
 template<class Archive, class Container>
-struct archive_input_set
-{
-    inline void operator()(
-        Archive &ar, 
-        Container &s, 
-        const unsigned int v
-    ){   
-        typedef BOOST_DEDUCED_TYPENAME Container::value_type type;
-        detail::stack_construct<Archive, type> t(ar, v);
-        // borland fails silently w/o full namespace
-        ar >> boost::serialization::make_nvp("item", t.reference());
-        std::pair<BOOST_DEDUCED_TYPENAME Container::const_iterator, bool> result = 
-            s.insert(t.reference());
-        assert(result.second); // make sure we inserted a new element
-        ar.reset_object_address(& (* result.first), & t.reference());
-    }
-};
-
-// multimap input
-template<class Archive, class Container>
-struct archive_input_multimap
+struct archive_input_multi
 {
     inline void operator()(
         Archive &ar, 
         Container &s, 
         const unsigned int v
     ){
-        typedef BOOST_DEDUCED_TYPENAME Container::value_type type;
-        detail::stack_construct<Archive, type> t(ar, v);
-        // borland fails silently w/o full namespace
-        ar >> boost::serialization::make_nvp("item", t.reference());
-        BOOST_DEDUCED_TYPENAME Container::const_iterator result 
-            = s.insert(t.reference());
-        ar.reset_object_address(& (* result), & t.reference());
-    }
-};
-
-// multiset input
-template<class Archive, class Container>
-struct archive_input_multiset
-{
-    inline void operator()(
-        Archive &ar, 
-        Container &s, 
-        const unsigned int v
-    ){   
         typedef BOOST_DEDUCED_TYPENAME Container::value_type type;
         detail::stack_construct<Archive, type> t(ar, v);
         // borland fails silently w/o full namespace
@@ -158,16 +119,16 @@ inline void load_collection(Archive & ar, Container &s)
     s.clear();
     // retrieve number of elements
     unsigned int count;
-    unsigned int v;
+    unsigned int item_version;
     ar >> BOOST_SERIALIZATION_NVP(count);
     if(3 < ar.get_library_version()){
-        ar >> make_nvp("item_version", v);
+        ar >> BOOST_SERIALIZATION_NVP(item_version);
     }
     R rx;
     rx(s, count);
     InputFunction ifunc;
     while(count-- > 0){
-        ifunc(ar, s, v);
+        ifunc(ar, s, item_version);
     }
 }
 
