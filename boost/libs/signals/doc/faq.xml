@@ -37,10 +37,38 @@
         <para>When building with Qt, the Moc keywords
         <code>signals</code> and <code>slots</code> are defined using
         preprocessor macros, causing programs using Boost.Signals and
-        Qt together to fail to compile. Although this is a problem
-        with Qt and not Boost.Signals, a user can use the two systems
-        together with a little extra effort. There are two ways to do
-        this:</para>
+        Qt together to fail to compile.</para>
+
+        <para><emphasis>For Qt 4.1 and later</emphasis>, This behavior
+        can be turned off in Qt on a per-project or per-file basis
+        with the <code>no_keywords</code> option.  This works with
+        out-of-the-box builds of Boost and Qt. You do not need to
+        re-configure, re-build, or duplicate existing libraries. For a
+        project where you want to use both Boost.Signals and Qt
+        Signals and Slots, the relevant part of your .pro file might
+        look like this:</para>
+
+        <programlisting>
+CONFIG      += no_keywords # so Qt won't #define any non-all-caps `keywords'
+INCLUDEPATH += . /usr/local/include/boost-1_33_1/
+macx:LIBS   += /usr/local/lib/libboost_signals-1_33_1.a  # ...your exact paths may vary
+</programlisting>
+
+        <para>Now you can mix Boost.Signals and Qt Signals and Slots
+        in the same files, and even within the same class or function.
+        You will have to use the upper-case versions of Qt macros in
+        your own code.  See the article <ulink
+        url="http://scottcollins.net/articles/a-deeper-look-at-signals-and-slots.html">A
+        Deeper Look at Signals and Slots</ulink> [off-site] for more
+        complete examples and a survey of the strengths of the two
+        systems.</para>
+
+        <para><emphasis>Older versions of Qt</emphasis> did not
+        provide a reliable mechanism for avoiding these unfriendly,
+        all lower-case `keyword'-like macros.  Although this is a
+        problem with Qt and not Boost.Signals, a user can use the two
+        systems together with a little extra effort. There are two
+        ways to do this:</para>
 
         <para>The first way involves defining
         the <code>BOOST_SIGNALS_NAMESPACE</code> 
