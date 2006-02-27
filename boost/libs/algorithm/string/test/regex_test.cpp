@@ -95,8 +95,13 @@ static void join_test()
     tokens1.push_back("abc");
     tokens1.push_back("xx");
 
+#ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
     BOOST_CHECK( equals(join_if(tokens1, "-", regex("x+")), "xx-xx") );
     BOOST_CHECK( equals(join_if(tokens1, "-", regex("[abc]+")), "abc") );
+#else 
+    BOOST_CHECK( equals(join_if_regex(tokens1, "-", regex("x+")), "xx-xx") );
+    BOOST_CHECK( equals(join_if_regex(tokens1, "-", regex("[abc]+")), "abc") );
+#endif 
 }
 
 static void replace_test()
