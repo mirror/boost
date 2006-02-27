@@ -52,7 +52,7 @@ operator<<(basic_ostream<CharType> & os, boost::uint64_t t){
     unsigned int i = 0;
     do{
         unsigned int j = t % radix;
-        d[i++] = j + ((j < 10) ? '0' : 'a');
+        d[i++] = j + ((j < 10) ? '0' : ('a' - 10));
         t /= radix;
     }
     while(t > 0);
