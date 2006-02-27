@@ -172,12 +172,18 @@ bool include_paths::find_include_file (std::string &s, std::string &dir,
 #endif
 
     for (/**/; it != include_paths_end; ++it) {
-        fs::path currpath ((*it).first.string(), fs::native);
-        currpath /= fs::path(s, fs::native);      // append filename
-
+        fs::path currpath (s, fs::native);
+        if (!currpath.has_root_directory()) {
+            currpath = fs::path((*it).first.string(), fs::native);
+            currpath /= fs::path(s, fs::native);      // append filename
+        }
+        
         if (fs::exists(currpath)) {
-            fs::path dirpath ((*it).second, fs::native);
-            dirpath /= fs::path(s, fs::native);
+            fs::path dirpath (s, fs::native);
+            if (!dirpath.has_root_name()) {
+                dirpath = fs::path((*it).second, fs::native);
+                dirpath /= fs::path(s, fs::native);
+            }
             
             dir = dirpath.string();
             s = currpath.normalize().string();    // found the required file
@@ -200,15 +206,21 @@ include_paths::find_include_file (std::string &s, std::string &dir,
     if (!is_system) {
         if (!was_sys_include_path) {  // set_sys_include_delimiter() not called
         // first have a look at the current directory
-            fs::path currpath (current_dir.string(), fs::native);
-            currpath /= fs::path(s, fs::native);
+            fs::path currpath (s, fs::native);
+            if (!currpath.has_root_directory()) {
+                currpath = fs::path(current_dir.string(), fs::native);
+                currpath /= fs::path(s, fs::native);
+            }
             
             if (fs::exists(currpath) && 0 == current_file) {
             // if 0 != current_path (#include_next handling) it can't be
             // the file in the current directory
-                fs::path dirpath (current_rel_dir.string(), fs::native);
-                dirpath /= fs::path(s, fs::native);
-
+                fs::path dirpath (s, fs::native);
+                if (!dirpath.has_root_name()) {
+                    dirpath = fs::path(current_rel_dir.string(), fs::native);
+                    dirpath /= fs::path(s, fs::native);
+                }
+                
                 dir = dirpath.string();
                 s = currpath.normalize().string();    // found in local directory
                 return true;

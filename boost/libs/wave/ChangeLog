@@ -44,7 +44,11 @@ Boost V1.34.0
   returned from the library.
 - Moved the implementation of the token_id query functions (get_token_name(), 
   get_token_value()) to a separate source file.
-  
+- Fixed a bug, which prevented to prefer pp-numbers in files preprocessed as
+  a result of #include directives.
+- Fixed a bug, which prevented to open #include'd files specified by an 
+  absolute path.
+
 Sat Dec 24 13:33:53 CST 2005
 - Version 1.2.2
 - Added three new preprocessing hooks: 'found_directive', 'skipped_token' and 

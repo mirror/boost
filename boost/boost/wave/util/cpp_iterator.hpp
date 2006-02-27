@@ -1089,6 +1089,7 @@ char const *current_name = 0;   // never try to match current file name
 // call the include policy trace function
     ctx.get_hooks().found_include_directive(f, include_next);
 
+    file_path = util::impl::unescape_lit(file_path);
     if (!ctx.find_include_file (file_path, dir_path, is_system, current_name)) {
         BOOST_WAVE_THROW(preprocess_exception, bad_include_file, 
             file_path.c_str(), act_pos);
@@ -1112,7 +1113,7 @@ fs::path native_path(file_path, fs::native);
     // preprocess the opened file
     boost::shared_ptr<base_iteration_context_type> new_iter_ctx (
         new iteration_context_type(native_path.native_file_string().c_str(), 
-            act_pos, ctx.get_language()));
+            act_pos, boost::wave::enable_prefer_pp_numbers(ctx.get_language())));
 
     // call the include policy trace function
         ctx.get_hooks().opened_include_file(dir_path, file_path,
