@@ -22,8 +22,8 @@
 #include BOOST_HASH_MAP_HEADER
 
 #include <boost/serialization/utility.hpp>
-#include <boost/serialization/collections_save_imp.hpp>
-#include <boost/serialization/collections_load_imp.hpp>
+#include <boost/serialization/hash_collections_save_imp.hpp>
+#include <boost/serialization/hash_collections_load_imp.hpp>
 #include <boost/serialization/split_free.hpp>
 
 // function specializations must be defined in the appropriate
@@ -51,7 +51,7 @@ inline void save(
     > &t,
     const unsigned int file_version
 ){
-    boost::serialization::stl::save_collection<
+    boost::serialization::stl::save_hash_collection<
         Archive, 
         STD::hash_map<
             Key, HashFcn, EqualKey, Allocator
@@ -73,18 +73,13 @@ inline void load(
     > &t,
     const unsigned int file_version
 ){
-    boost::serialization::stl::load_collection<
+    boost::serialization::stl::load_hash_collection<
         Archive,
         STD::hash_map<
             Key, HashFcn, EqualKey, Allocator
         >,
-        boost::serialization::stl::archive_input_map<
+        boost::serialization::stl::archive_input_unique<
             Archive, 
-            STD::hash_map<
-                Key, HashFcn, EqualKey, Allocator
-            >
-        >,
-        boost::serialization::stl::no_reserve_imp<
             STD::hash_map<
                 Key, HashFcn, EqualKey, Allocator
             >
@@ -126,7 +121,7 @@ inline void save(
     > &t,
     const unsigned int file_version
 ){
-    boost::serialization::stl::save_collection<
+    boost::serialization::stl::save_hash_collection<
         Archive, 
         STD::hash_multimap<
             Key, HashFcn, EqualKey, Allocator
@@ -148,18 +143,13 @@ inline void load(
     > &t,
     const unsigned int file_version
 ){
-    boost::serialization::stl::load_collection<
+    boost::serialization::stl::load_hash_collection<
         Archive,
         STD::hash_multimap<
             Key, HashFcn, EqualKey, Allocator
         >,
-        boost::serialization::stl::archive_input_multimap<
+        boost::serialization::stl::archive_input_multi<
             Archive, 
-            STD::hash_multimap<
-                Key, HashFcn, EqualKey, Allocator
-            >
-        >,
-        boost::serialization::stl::no_reserve_imp<
             STD::hash_multimap<
                 Key, HashFcn, EqualKey, Allocator
             >
