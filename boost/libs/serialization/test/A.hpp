@@ -128,27 +128,9 @@ public:
     bool operator!=(const A &rhs) const;
     bool operator<(const A &rhs) const; // used by less
     // hash function for class A
-    operator std::size_t () const {
-        std::size_t retval = 0;
-        //const char * tptr = static_cast<const A * const>(this);
-        const void * v = this;
-        const char * tptr = static_cast<const char *>(v);
-        const char * tend = tptr + sizeof(A);
-        while(tptr < tend)
-            retval += *tptr++;
-        return retval;
-    }
+    operator std::size_t () const;
     friend std::ostream & operator<<(std::ostream & os, A const & a);
     friend std::istream & operator>>(std::istream & is, A & a);
-    #if defined(BOOST_MSVC)
-        // for some inexplicable reason insertion of "class" generates compile erro
-        // on msvc 7.1
-        //friend std::ostream;
-        //friend std::istream;
-    #else
-        //friend class std::ostream;
-        //friend class std::istream;
-    #endif
 };
 
 BOOST_TEST_DONT_PRINT_LOG_VALUE(A)
@@ -163,6 +145,39 @@ void randomize(S &x)
             break;
         x += static_cast<typename S::value_type>('a' - 1 + i);
     }
+}
+
+template<class T>
+void accumulate(std::size_t & s, const T & t){
+    const char * tptr = (const char *)(& t);
+    unsigned int count = sizeof(t);
+    while(count-- > 0){
+        s += *tptr++;
+    }
+}
+
+A::operator std::size_t () const {
+    std::size_t retval = 0;
+    accumulate(retval, b);
+    #ifndef BOOST_NO_INT64_T
+    accumulate(retval, f);
+    accumulate(retval, g);
+    #endif
+    accumulate(retval, l);
+    accumulate(retval, m);
+    accumulate(retval, n);
+    accumulate(retval, o);
+    accumulate(retval, p);
+    accumulate(retval, q);
+    #ifndef BOOST_NO_CWCHAR
+    accumulate(retval, r);
+    #endif
+    accumulate(retval, c);
+    accumulate(retval, s);
+    accumulate(retval, t);
+    accumulate(retval, u);
+    accumulate(retval, v);
+    return retval;
 }
 
 inline A::A() :

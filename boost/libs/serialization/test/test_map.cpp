@@ -60,35 +60,6 @@ struct random_key {
 
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(random_key)
 
-#ifdef BOOST_HAS_HASH
-#include <boost/serialization/hash_map.hpp>
-
-namespace std {
-    template<>
-    struct equal_to<random_key> {
-        bool operator()(const random_key& lhs, const random_key& rhs) const {
-            return lhs.operator==(rhs);
-        }
-    };
-} // namespace std
-
-#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-#define STD _STLP_STD
-#else
-#define STD BOOST_STD_EXTENSION_NAMESPACE
-#endif
-
-namespace STD {
-    template<>
-    struct hash<random_key> {
-        std::size_t operator()(const random_key& r) const {
-            return (std::size_t)r;
-        }
-    };
-} // namespace BOOST_STD_EXTENSION_NAMESPACE 
-
-#endif
-
 void
 test_map(){
     const char * testfile = boost::archive::tmpnam(NULL);
@@ -170,9 +141,26 @@ test_multimap(){
     std::remove(testfile);
 }
 
+#ifdef BOOST_HAS_HASH
+#include <boost/serialization/hash_map.hpp>
+
+#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+#define STD _STLP_STD
+#else
+#define STD BOOST_STD_EXTENSION_NAMESPACE
+#endif
+
+namespace STD {
+    template<>
+    struct hash<random_key>{
+        std::size_t operator()(const random_key& r) const {
+            return (std::size_t)r;
+        }
+    };
+} // namespace STD 
+
 void
 test_hash_map(){
-    #ifdef BOOST_HAS_HASH
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
@@ -192,23 +180,12 @@ test_hash_map(){
         test_iarchive ia(is);
         ia >> boost::serialization::make_nvp("ahashmap",ahash_map1);
     }
-    // at least one library - MSL notes: it doesn't make much sense
-    // to implement the == operator for hash collections - but goes ahead
-    // does it anyway even though it doesn't seem to work.  So sort into
-    // vectors and then compare.
-    std::vector< std::pair<random_key, A> > tvec, tvec1;
-    std::copy(ahash_map.begin(), ahash_map.end(), std::back_inserter(tvec));
-    std::sort(tvec.begin(), tvec.end());
-    std::copy(ahash_map1.begin(), ahash_map1.end(), std::back_inserter(tvec1));
-    std::sort(tvec1.begin(), tvec1.end());
-    BOOST_CHECK(tvec == tvec1);
+    BOOST_CHECK(ahash_map == ahash_map1);
     std::remove(testfile);
-    #endif
 }
 
 void
 test_hash_multimap(){
-    #ifdef BOOST_HAS_HASH
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
@@ -227,28 +204,19 @@ test_hash_multimap(){
         test_iarchive ia(is);
         ia >> boost::serialization::make_nvp("ahash_multimap", ahash_multimap1);
     }
-    // at least one library - MSL notes: it doesn't make much sense
-    // to implement the == operator for hash collections - but goes ahead
-    // does it anyway even though it doesn't seem to work.  So sort into
-    // vectors and then compare.
-    std::vector< std::pair<random_key, A> > tvec, tvec1;
-    tvec.clear();
-    tvec1.clear();
-    std::copy(ahash_multimap.begin(), ahash_multimap.end(), std::back_inserter(tvec));
-    std::sort(tvec.begin(), tvec.end());
-    std::copy(ahash_multimap1.begin(), ahash_multimap1.end(), std::back_inserter(tvec1));
-    std::sort(tvec1.begin(), tvec1.end());
-    BOOST_CHECK(tvec == tvec1);
+    BOOST_CHECK(ahash_multimap == ahash_multimap1);
     std::remove(testfile);
-    #endif
 }
+#endif
 
 int test_main( int /* argc */, char* /* argv */[] )
 {
     test_map();
     test_map_2();
     test_multimap();
+    #ifdef BOOST_HAS_HASH
     test_hash_map();
     test_hash_multimap();
+    #endif
     return EXIT_SUCCESS;
 }
