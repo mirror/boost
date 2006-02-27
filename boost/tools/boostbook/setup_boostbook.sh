@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # User configuration
-DOCBOOK_XSL_VERSION=1.67.2
+DOCBOOK_XSL_VERSION=1.68.1
 DOCBOOK_DTD_VERSION=4.2
 FOP_VERSION=0.20.5
 FOP_MIRROR=http://mirrors.ibiblio.org/pub/mirrors/apache/xml/fop/
