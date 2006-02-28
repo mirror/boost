@@ -422,7 +422,11 @@ namespace boost
             template <class Array>
             struct inner
             {
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
                 static std::size_t call(Array const& v)
+#else
+                static std::size_t call(Array& v)
+#endif
                 {
                     const int size = sizeof(v) / sizeof(*v);
                     return boost::hash_range(v, v + size);
@@ -503,7 +507,7 @@ namespace boost
             {
                 std::size_t operator()(T const& val) const
                 {
-                    return hash_detail::call_hash<T>::call(val);
+                    return hash_detail::call_hash<T const>::call(val);
                 }
 
                 std::size_t operator()(T& val) const
@@ -520,7 +524,7 @@ namespace boost
             struct inner
                 : public std::unary_function<T, std::size_t>
             {
-                std::size_t operator()(T const& val) const
+                std::size_t operator()(T& val) const
                 {
                     return hash_detail::call_hash<T>::call(val);
                 }
