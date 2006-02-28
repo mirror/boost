@@ -635,7 +635,7 @@ public:
     {
         bool cmp = false;
         switch (lhs.type) {
-        case is_int:    cmp = long(lhs) < long(rhs); break;
+        case is_int:
             switch(rhs.type) {
             case is_bool:   cmp = lhs.value.i < long(rhs); break;
             case is_int:    cmp = lhs.value.i < rhs.value.i; break;

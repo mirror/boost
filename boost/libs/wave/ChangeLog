@@ -48,6 +48,7 @@ Boost V1.34.0
   a result of #include directives.
 - Fixed a bug, which prevented to open #include'd files specified by an 
   absolute path.
+- Fixed a problem in the expression parser value type.
 
 Sat Dec 24 13:33:53 CST 2005
 - Version 1.2.2
