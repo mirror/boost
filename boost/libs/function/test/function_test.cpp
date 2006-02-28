@@ -10,7 +10,6 @@
 #include <boost/test/minimal.hpp>
 #include <boost/function.hpp>
 #include <functional>
-#include <cassert>
 #include <string>
 #include <utility>
 
@@ -653,12 +652,12 @@ static void test_implicit()
 
 static void test_call_obj(boost::function<int (int, int)> f)
 {
-  assert(!f.empty());
+  BOOST_CHECK(!f.empty());
 }
 
 static void test_call_cref(const boost::function<int (int, int)>& f)
 {
-  assert(!f.empty());
+  BOOST_CHECK(!f.empty());
 }
 
 static void test_call()

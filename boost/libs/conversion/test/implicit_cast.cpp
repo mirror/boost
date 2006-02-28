@@ -4,9 +4,8 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/implicit_cast.hpp>
-#include <cassert>
+#include <boost/detail/lightweight_test.hpp>
 #include <boost/type.hpp>
-
 using boost::implicit_cast;
 using boost::type;
 
@@ -25,9 +24,9 @@ typedef type<foo> foo_type;
 int main()
 {
     type<long> x = check_return(boost::implicit_cast<long>(1));
-    assert(boost::implicit_cast<long>(1) == 1L);
+    BOOST_TEST(boost::implicit_cast<long>(1) == 1L);
 
     type<foo> f = check_return(boost::implicit_cast<foo>("hello"));
     type<long> z = check_return(boost::implicit_cast<long>(foo("hello")));
-    return 0;
+    return boost::report_errors();
 }

@@ -7,7 +7,6 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <cassert>
 #include <boost/progress.hpp>
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
@@ -94,7 +93,7 @@ void test_convert(const std::string& input,
                 facet);
     }
 
-    assert(output.size()*2 == expected_output.size());
+    BOOST_CHECK(output.size()*2 == expected_output.size());
 
     for(unsigned i = 0; i < output.size(); ++i) {
 
@@ -103,20 +102,20 @@ void test_convert(const std::string& input,
             low &= 0xFF;
             unsigned low2 = expected_output[2*i];
             low2 &= 0xFF;
-            assert(low == low2);
+            BOOST_CHECK(low == low2);
         }
         {        
             unsigned high = output[i];
             high >>= 8;
             high &= 0xFF;
             unsigned high2 = expected_output[2*i+1];            
-            assert(high == high2);
+            BOOST_CHECK(high == high2);
         }
     }
 
     string ref = boost::to_8_bit(output, facet);
 
-    assert(ref == input);
+    BOOST_CHECK(ref == input);
 }
 
 int test_main(int ac, char* av[])

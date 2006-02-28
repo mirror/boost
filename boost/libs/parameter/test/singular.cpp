@@ -3,7 +3,7 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/parameter/keyword.hpp>
-#include <cassert>
+#include <boost/detail/lightweight_test.hpp>
 
 BOOST_PARAMETER_KEYWORD(tag, x)
 BOOST_PARAMETER_KEYWORD(tag, y)
@@ -21,7 +21,7 @@ struct default_src
 template <class ArgumentPack, class K, class T>
 void check(ArgumentPack const& p, K const& kw, T const& value)
 {
-    assert(p[kw] == value);
+    BOOST_TEST(p[kw] == value);
 }
 
 int main()
@@ -37,6 +37,6 @@ int main()
     
     check(y = 20, x | 0, 0);
     check(y = 20, x || default_src(), 0);
-    return 0;
+    return boost::report_errors();
 }
 
