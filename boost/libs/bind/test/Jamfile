@@ -1,6 +1,6 @@
 #  Boost.Bind Library test Jamfile
 #
-#  Copyright (c) 2003-2005 Peter Dimov
+#  Copyright (c) 2003-2006 Peter Dimov
 #
 #  Permission to copy, use, modify, sell and distribute this software
 #  is granted provided this copyright notice appears in all copies.
@@ -31,6 +31,7 @@ DEPENDS all : bind ;
           [ run bind_rv_sp_test.cpp ]
           [ compile bind_unary_addr.cpp ]
           [ run bind_dm3_test.cpp ]
+          [ run bind_visit_test.cpp ]
           [ run mem_fn_test.cpp ]
           [ run mem_fn_void_test.cpp ]
           [ run mem_fn_derived_test.cpp ]
