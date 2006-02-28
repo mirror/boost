@@ -18,7 +18,8 @@
 
 #if (defined(__GLIBCXX__) && defined(_GLIBCXX_DEBUG)) \
     || BOOST_WORKAROUND(__BORLANDC__, > 0x551) \
-    || BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x842))
+    || BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x842)) \
+    || (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
 
 #include <deque>
 #include <list>
