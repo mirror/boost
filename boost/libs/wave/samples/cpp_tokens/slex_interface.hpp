@@ -39,7 +39,7 @@ template <
     typename IteratorT, 
     typename PositionT = boost::wave::util::file_position_type
 >
-struct new_lexer_gen
+struct BOOST_WAVE_NEW_LEXER_DECL new_lexer_gen
 {
 //  The NewLexer function allows the opaque generation of a new lexer object.
 //  It is coupled to the token type to allow to decouple the lexer/token 
