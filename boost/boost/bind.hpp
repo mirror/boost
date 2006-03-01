@@ -26,7 +26,6 @@
 #include <boost/mem_fn.hpp>
 #include <boost/type.hpp>
 #include <boost/bind/arg.hpp>
-#include <boost/bind/storage.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/visit_each.hpp>
 
@@ -37,6 +36,8 @@
 #else
 #  define BOOST_BIND_VISIT_EACH visit_each
 #endif
+
+#include <boost/bind/storage.hpp>
 
 #ifdef BOOST_MSVC
 # pragma warning(push)
@@ -237,7 +238,7 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        BOOST_BIND_VISIT_EACH(v, base_type::a1_, 0);
+        base_type::accept(v);
     }
 
     bool operator==(list1 const & rhs) const
@@ -294,8 +295,7 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        BOOST_BIND_VISIT_EACH(v, base_type::a1_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a2_, 0);
+        base_type::accept(v);
     }
 
     bool operator==(list2 const & rhs) const
@@ -354,9 +354,7 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        BOOST_BIND_VISIT_EACH(v, base_type::a1_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a2_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a3_, 0);
+        base_type::accept(v);
     }
 
     bool operator==(list3 const & rhs) const
@@ -421,10 +419,7 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        BOOST_BIND_VISIT_EACH(v, base_type::a1_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a2_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a3_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a4_, 0);
+        base_type::accept(v);
     }
 
     bool operator==(list4 const & rhs) const
@@ -492,11 +487,7 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        BOOST_BIND_VISIT_EACH(v, base_type::a1_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a2_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a3_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a4_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a5_, 0);
+        base_type::accept(v);
     }
 
     bool operator==(list5 const & rhs) const
@@ -567,12 +558,7 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        BOOST_BIND_VISIT_EACH(v, base_type::a1_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a2_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a3_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a4_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a5_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a6_, 0);
+        base_type::accept(v);
     }
 
     bool operator==(list6 const & rhs) const
@@ -646,13 +632,7 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        BOOST_BIND_VISIT_EACH(v, base_type::a1_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a2_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a3_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a4_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a5_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a6_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a7_, 0);
+        base_type::accept(v);
     }
 
     bool operator==(list7 const & rhs) const
@@ -729,14 +709,7 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        BOOST_BIND_VISIT_EACH(v, base_type::a1_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a2_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a3_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a4_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a5_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a6_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a7_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a8_, 0);
+        base_type::accept(v);
     }
 
     bool operator==(list8 const & rhs) const
@@ -816,15 +789,7 @@ public:
 
     template<class V> void accept(V & v) const
     {
-        BOOST_BIND_VISIT_EACH(v, base_type::a1_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a2_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a3_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a4_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a5_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a6_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a7_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a8_, 0);
-        BOOST_BIND_VISIT_EACH(v, base_type::a9_, 0);
+        base_type::accept(v);
     }
 
     bool operator==(list9 const & rhs) const
