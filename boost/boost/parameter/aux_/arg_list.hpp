@@ -396,7 +396,7 @@ struct arg_list : Next
     // Useful for argument lists with undetermined length.
     template <class KW, class T2>
     arg_list<tagged_argument<KW, T2>, self> 
-    operator,(tagged_argument<KW,T2> x)
+    operator,(tagged_argument<KW,T2> x) const
     {
         return arg_list<tagged_argument<KW,T2>, self>(x, *this);
     }

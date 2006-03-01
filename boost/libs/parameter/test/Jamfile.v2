@@ -18,4 +18,5 @@ test-suite "parameter"
      [ compile ntp.cpp ]
      [ compile unwrap_cv_reference.cpp ]
      [ compile-fail duplicates.cpp ]
+     [ compile compose.cpp ]
   ;
