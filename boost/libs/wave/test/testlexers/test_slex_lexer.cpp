@@ -13,6 +13,8 @@
 #include <limits>
 
 #include <boost/wave/wave_config.hpp>
+#undef BOOST_WAVE_SEPARATE_LEXER_INSTANTIATION
+
 #include <boost/detail/lightweight_test.hpp>
 #if defined(TESTLEXERS_TIMING)
 #include "high_resolution_timer.hpp"

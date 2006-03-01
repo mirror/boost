@@ -163,7 +163,7 @@ lexer<IteratorT, PositionT>::get()
         value = string_type((char const *)scanner.tok, 
             scanner.cur-scanner.tok);
         if (language & support_option_convert_trigraphs)
-            value = impl::convert_trigraphs(value, actline, scanner.column, filename); 
+            value = impl::convert_trigraphs(value); 
         if (!(language & support_option_no_character_validation))
             impl::validate_literal(value, actline, scanner.column, filename); 
         break;
@@ -239,8 +239,7 @@ lexer<IteratorT, PositionT>::get()
         if (language & support_option_convert_trigraphs) {
             value = impl::convert_trigraph(
                 string_type((char const *)scanner.tok, 
-                    scanner.cur-scanner.tok), 
-                actline, scanner.column, filename); 
+                    scanner.cur-scanner.tok)); 
         }
         else {
             value = string_type((char const *)scanner.tok, 

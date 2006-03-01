@@ -22,6 +22,12 @@ namespace wave {
 namespace cpplexer {
 namespace slex {
 
+#if BOOST_WAVE_SEPARATE_LEXER_INSTANTIATION != 0
+#define BOOST_WAVE_NEW_LEXER_DECL BOOST_WAVE_DECL
+#else
+#define BOOST_WAVE_NEW_LEXER_DECL
+#endif 
+
 ///////////////////////////////////////////////////////////////////////////////
 //  
 //  new_lexer_gen: generates a new instance of the required C++ lexer
@@ -42,6 +48,8 @@ struct new_lexer_gen
     new_lexer(IteratorT const &first, IteratorT const &last, 
         PositionT const &pos, boost::wave::language_support language);
 };
+
+#undef BOOST_WAVE_NEW_LEXER_DECL
 
 ///////////////////////////////////////////////////////////////////////////////
 //

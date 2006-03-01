@@ -33,6 +33,12 @@ namespace boost {
 namespace wave {
 namespace cpplexer {
 
+#if BOOST_WAVE_SEPARATE_LEXER_INSTANTIATION != 0
+#define BOOST_WAVE_NEW_LEXER_DECL BOOST_WAVE_DECL
+#else
+#define BOOST_WAVE_NEW_LEXER_DECL
+#endif 
+
 ///////////////////////////////////////////////////////////////////////////////
 //  
 //  new_lexer_gen: generates a new instance of the required C++ lexer
@@ -44,7 +50,7 @@ template <
     typename IteratorT, 
     typename PositionT = boost::wave::util::file_position_type
 >
-struct BOOST_WAVE_DECL new_lexer_gen
+struct BOOST_WAVE_NEW_LEXER_DECL new_lexer_gen
 {
 //  The NewLexer function allows the opaque generation of a new lexer object.
 //  It is coupled to the token type to allow to decouple the lexer/token 
@@ -53,6 +59,8 @@ struct BOOST_WAVE_DECL new_lexer_gen
     new_lexer(IteratorT const &first, IteratorT const &last, 
         PositionT const &pos, boost::wave::language_support language);
 };
+
+#undef BOOST_WAVE_NEW_LEXER_DECL
 
 ///////////////////////////////////////////////////////////////////////////////
 //

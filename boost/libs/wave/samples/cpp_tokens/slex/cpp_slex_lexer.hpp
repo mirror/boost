@@ -601,8 +601,7 @@ public:
                     // chars found)
                         if (language & support_option_convert_trigraphs) {
                             using boost::wave::cpplexer::impl::convert_trigraphs;
-                            token_val = convert_trigraphs(token_val, 
-                                pos.get_line(), pos.get_column(), pos.get_file()); 
+                            token_val = convert_trigraphs(token_val); 
                         }
                         if (!(language & support_option_no_character_validation)) {
                             using boost::wave::cpplexer::impl::validate_literal;
@@ -656,9 +655,7 @@ public:
                         if (language & support_option_convert_trigraphs)
                         {
                             using boost::wave::cpplexer::impl::convert_trigraph;
-                            token_val = convert_trigraph(
-                                token_val, pos.get_line(), pos.get_column(), 
-                                pos.get_file());
+                            token_val = convert_trigraph(token_val);
                         }
                         break;
                     }

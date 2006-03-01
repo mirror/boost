@@ -64,8 +64,7 @@ is_trigraph(StringT const& trigraph)
 ///////////////////////////////////////////////////////////////////////////////
 template <typename StringT>
 inline StringT
-convert_trigraph(StringT const &trigraph, int line, int column, 
-    StringT const &file_name)
+convert_trigraph(StringT const &trigraph)
 {
 StringT result (trigraph);
 
@@ -98,8 +97,7 @@ StringT result (trigraph);
 ///////////////////////////////////////////////////////////////////////////////
 template <typename StringT>
 inline StringT
-convert_trigraphs(StringT const &value, int line, int column, 
-    StringT const &file_name)
+convert_trigraphs(StringT const &value)
 {
     StringT result;
     typename StringT::size_type pos = 0;
@@ -109,7 +107,7 @@ convert_trigraphs(StringT const &value, int line, int column,
             result += value.substr(pos, pos1-pos);
             StringT trigraph (value.substr(pos1)); 
             if (is_trigraph(trigraph)) {
-                result += convert_trigraph(trigraph, line, column, file_name);
+                result += convert_trigraph(trigraph);
                 pos1 = value.find_first_of ("?", pos = pos1+3);
             }
             else {
