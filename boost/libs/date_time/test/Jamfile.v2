@@ -206,7 +206,7 @@ local DATE_TIME_PROPERTIES = <define>BOOST_DATE_TIME_POSIX_TIME_STD_CONFIG <defi
    : : : $(DATE_TIME_PROPERTIES)
    : testgreg_serialize ]
  [ run gregorian/testgreg_serialize.cpp
-   ../build//boost_date_time/<link>static
+   ../build//boost_date_time
    ../../serialization/build//boost_serialization
    : : : $(DATE_TIME_DYNAMIC_PROPERTIES)
    : testgreg_serialize_dll ]
