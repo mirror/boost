@@ -1,4 +1,4 @@
-/* Boost.MultiIndex test for serialization.
+/* Boost.MultiIndex test for serialization, part 2.
  *
  * Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
@@ -8,12 +8,4 @@
  * See http://www.boost.org/libs/multi_index for library home page.
  */
 
-#include "test_serialization.hpp"
-#include "test_serialization1.hpp"
-#include "test_serialization2.hpp"
-
-void test_serialization()
-{
-  test_serialization1();
-  test_serialization2();
-}
+void test_serialization2();
