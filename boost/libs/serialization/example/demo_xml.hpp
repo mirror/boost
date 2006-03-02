@@ -91,7 +91,7 @@ public:
     virtual ~bus_stop(){}
 };
 
-BOOST_IS_ABSTRACT(bus_stop);
+BOOST_IS_ABSTRACT(bus_stop)
 
 std::ostream & operator<<(std::ostream &os, const bus_stop &bs)
 {
@@ -265,8 +265,8 @@ public:
     bus_schedule(){}
 };
 
-BOOST_CLASS_VERSION(bus_schedule::trip_info, 3);
-BOOST_CLASS_VERSION(bus_schedule, 2);
+BOOST_CLASS_VERSION(bus_schedule::trip_info, 3)
+BOOST_CLASS_VERSION(bus_schedule, 2)
 
 std::ostream & operator<<(std::ostream &os, const bus_schedule::trip_info &ti)
 {
