@@ -10,6 +10,7 @@
 // should pass compilation and execution
 #include <sstream>
 
+#define BOOST_ARCHIVE_SOURCE
 #include "portable_binary_oarchive.hpp"
 #include "portable_binary_iarchive.hpp"
 

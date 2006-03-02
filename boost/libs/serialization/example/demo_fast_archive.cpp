@@ -13,6 +13,7 @@
 #include <boost/type_traits/is_array.hpp>
 #include <boost/pfto.hpp>
 
+#define BOOST_ARCHIVE_SOURCE
 #include <boost/archive/binary_oarchive_impl.hpp>
 #include <boost/archive/binary_iarchive_impl.hpp>
 
