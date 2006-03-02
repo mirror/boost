@@ -55,6 +55,9 @@ public:
     void erase(basic_serializer * bs);
     basic_serializer_map(bool & deleted);
     ~basic_serializer_map();
+private:
+    // cw 8.3 requires this
+    basic_serializer_map& operator=(basic_serializer_map const&);
 };
 
 } // namespace detail

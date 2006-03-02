@@ -124,6 +124,9 @@ public:
     // a particular eti *
     bool includes(const extended_type_info * eti) const;
     virtual ~void_caster();
+private:
+    // cw 8.3 requires this!!
+    void_caster& operator=(void_caster const&);
 };
 
 template <class Derived, class Base>
