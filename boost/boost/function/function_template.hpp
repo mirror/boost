@@ -290,7 +290,7 @@ namespace boost {
 
         // Function pointers
         template<typename FunctionPtr>
-        void init(FunctionPtr f, function_ptr_tag)
+        void init(FunctionPtr /*f*/, function_ptr_tag)
         {
           typedef typename BOOST_FUNCTION_GET_FUNCTION_INVOKER<
                              FunctionPtr,
