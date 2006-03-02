@@ -77,7 +77,7 @@ namespace multi_array {
       return start_; 
     }
 
-    index get_start(index low_index_range = from_start()) const
+    index get_start(index low_index_range = index_range::from_start()) const
     { 
       if (start_ == from_start())
         return low_index_range;
@@ -89,7 +89,7 @@ namespace multi_array {
       return finish_;
     }
 
-    index get_finish(index high_index_range = to_end()) const
+    index get_finish(index high_index_range = index_range::to_end()) const
     {
       if (finish_ == to_end())
         return high_index_range;
