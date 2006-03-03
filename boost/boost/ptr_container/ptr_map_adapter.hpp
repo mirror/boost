@@ -52,31 +52,25 @@ namespace ptr_container_detail
         
         typedef U    value_type;
 
-        typedef ptr_map_iterator< 
-                       BOOST_DEDUCED_TYPENAME VoidPtrMap::iterator,
-                       BOOST_DEDUCED_TYPENAME VoidPtrMap::key_type, value_type>
+        typedef ptr_map_iterator< BOOST_DEDUCED_TYPENAME VoidPtrMap::iterator >
                      iterator;
         
-        typedef
-            ptr_map_iterator<
-                       BOOST_DEDUCED_TYPENAME VoidPtrMap::const_iterator,
-                       BOOST_DEDUCED_TYPENAME VoidPtrMap::key_type, 
-                       const value_type>
+        typedef ptr_map_iterator< BOOST_DEDUCED_TYPENAME VoidPtrMap::const_iterator >
                      const_iterator;
-
-        typedef std::pair<const key_type, void*>
+  
+        typedef std::pair<const key_type, U*>
                      object_type;
 
         template< class Iter >
         static U* get_pointer( Iter i )
         {
-            return static_cast<U*>( i.base()->second );
+            return i->second;
         }
 
         template< class Iter >
         static const U* get_const_pointer( Iter i )
         {
-            return static_cast<const U*>( i.base()->second );
+            return i->second;
         }
 
         BOOST_STATIC_CONSTANT( bool, allow_null = boost::is_nullable<T>::value );
@@ -113,29 +107,13 @@ namespace ptr_container_detail
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type
                     auto_type;
 
-        typedef ptr_map_iterator< 
-                       BOOST_DEDUCED_TYPENAME VoidPtrMap::reverse_iterator,
-                       BOOST_DEDUCED_TYPENAME VoidPtrMap::key_type, 
-                       BOOST_DEDUCED_TYPENAME remove_nullable<T>::type,
-                       BOOST_DEDUCED_TYPENAME base_type::iterator
-                                 >
-                     reverse_iterator;
-
-        typedef ptr_map_iterator< 
-                       BOOST_DEDUCED_TYPENAME VoidPtrMap::const_reverse_iterator,
-                       BOOST_DEDUCED_TYPENAME VoidPtrMap::key_type, 
-                       const BOOST_DEDUCED_TYPENAME remove_nullable<T>::type,
-                       const_iterator
-                                 >
-                     const_reverse_iterator;
-
     private:
         reference lookup( const key_type& key ) const
         {
            iterator i = const_cast<ptr_map_adapter_base*>(this)
                                           ->find( key );
            if( i != const_cast<ptr_map_adapter_base*>(this)->end() )
-               return i.value();
+               return *i->second;
            else                                           
                BOOST_PTR_CONTAINER_THROW_EXCEPTION( true, bad_ptr_container_operation,
                                                     "'ptr_map/multimap::at()' could"
@@ -163,11 +141,10 @@ namespace ptr_container_detail
 
         reference insert_lookup( const key_type& key )
         {
-            void*& ref = this->c_private()[key];
+            value_type& ref = this->c_private()[key];
             if( ref )
             {
-                value_type v = static_cast<value_type>( ref );
-                return *v;
+                return *ref;
             }
             else
             {
@@ -184,6 +161,7 @@ namespace ptr_container_detail
         BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_map_adapter_base, 
                                                  base_type )
 
+        /*
         reverse_iterator rbegin()           
             { return reverse_iterator( this->end() ); } 
         const_reverse_iterator rbegin() const     
@@ -192,6 +170,7 @@ namespace ptr_container_detail
             { return reverse_iterator( this->begin() ); } 
         const_reverse_iterator rend() const       
             { return const_reverse_iterator( this->begin() ); } 
+            */
 
         template< class Compare, class Allocator >
         explicit ptr_map_adapter_base( const Compare& comp,
@@ -289,8 +268,8 @@ namespace ptr_container_detail
                                                  bad_ptr_container_operation,
                                                  "'replace()' on empty container" );
 
-            auto_type old( where.value_ptr() );     // nothrow
-            where.base()->second = ptr.release();   // nothrow, commit
+            auto_type old( where->second );  // nothrow
+            where->second = ptr.release();   // nothrow, commit
             return move( old );
         }
 
@@ -372,11 +351,10 @@ namespace ptr_container_detail
         {       
             while( first != last )                                            
             {                                            
-                if( this->find( first.key() ) == this->end() )
+                if( this->find( first->first ) == this->end() )
                 {
                     const object_type& p = *first.base();     // nothrow                    
-                    auto_type ptr( this->null_policy_allocate_clone(
-                                static_cast<value_type>(p.second) ) ); 
+                    auto_type ptr( this->null_policy_allocate_clone( p.second ) ); 
                                                               // strong 
                     this->safe_insert( p.first, ptr_container_detail::
                                                 move( ptr ) );// strong, commit
@@ -501,7 +479,7 @@ namespace ptr_container_detail
                 ar & key;
                 ar & value;
                 std::pair<iterator,bool> p = this->insert( key, value );
-                ar.reset_object_address( &p.first.key(), &key ); 
+                ar.reset_object_address( &p.first->first, &key ); 
             }
         }
 
@@ -561,8 +539,7 @@ namespace ptr_container_detail
             while( first != last )                                            
             {                                            
                 const object_type& pair = *first.base();  // nothrow                     
-                auto_type ptr( this->null_policy_allocate_clone(
-                                static_cast<value_type>( pair.second ) ) );    
+                auto_type ptr( this->null_policy_allocate_clone( pair.second ) );    
                                                           // strong
                 safe_insert( pair.first, ptr_container_detail::
                                          move( ptr ) );   // strong, commit
@@ -679,7 +656,7 @@ namespace ptr_container_detail
                 ar & key;
                 ar & value;
                 iterator p = this->insert( key, value );
-                ar.reset_object_address( &p.key(), &key );
+                ar.reset_object_address( &p->first, &key );
             }
         }
 
@@ -687,10 +664,10 @@ namespace ptr_container_detail
 
     };
 
-    template< class I, class K, class V, class B >
-    inline bool is_null( ptr_map_iterator<I,K,V,B> i )
+    template< class I >
+    inline bool is_null( const ptr_map_iterator<I>& i )
     {
-        return i.base()->second == 0;
+        return i->second == 0;
     }
     
 } // namespace 'boost'  
