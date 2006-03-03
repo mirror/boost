@@ -110,9 +110,8 @@ namespace ptr_container_detail
     private:
         reference lookup( const key_type& key ) const
         {
-           iterator i = const_cast<ptr_map_adapter_base*>(this)
-                                          ->find( key );
-           if( i != const_cast<ptr_map_adapter_base*>(this)->end() )
+           const_iterator i = this->find( key );
+           if( i != this->end() )
                return *i->second;
            else                                           
                BOOST_PTR_CONTAINER_THROW_EXCEPTION( true, bad_ptr_container_operation,
@@ -160,17 +159,6 @@ namespace ptr_container_detail
 
         BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_map_adapter_base, 
                                                  base_type )
-
-        /*
-        reverse_iterator rbegin()           
-            { return reverse_iterator( this->end() ); } 
-        const_reverse_iterator rbegin() const     
-            { return const_reverse_iterator( this->end() ); } 
-        reverse_iterator rend()             
-            { return reverse_iterator( this->begin() ); } 
-        const_reverse_iterator rend() const       
-            { return const_reverse_iterator( this->begin() ); } 
-            */
 
         template< class Compare, class Allocator >
         explicit ptr_map_adapter_base( const Compare& comp,
@@ -243,7 +231,7 @@ namespace ptr_container_detail
                                                                                      
         reference at( const key_type& key )                                              
         {                   
-            return lookup( key );                                                         
+            return const_cast<reference>( lookup( key ) );                                                         
         }                                                                            
                                                                                      
         const_reference at( const key_type& key ) const                                  
