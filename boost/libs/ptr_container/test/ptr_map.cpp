@@ -213,25 +213,25 @@ void ptr_map_test()
     for( ; it != e; ++it )
     {
         std::cout << "\n mapped value = " << *it->second << " key = " << it->first;
-        std::cout << "\n mapped value = " << it.value() << " key = " << it.key();
+        //std::cout << "\n mapped value = " << it.value() << " key = " << it.key();
     }
     
     typename C::reverse_iterator rit = c.rbegin(), re = c.rend();
     for( ; rit != re; ++rit )
     {
         std::cout << "\n mapped value = " << *rit->second << " key = " << rit->first;
-        std::cout << "\n mapped value = " << rit.value() << " key = " << rit.key();    
-        std::cout << "\n mapped value (base) = " 
-                  << rit.base().value() << " key = " << rit.base().key();   
+        //std::cout << "\n mapped value = " << rit.value() << " key = " << rit.key();    
+        //std::cout << "\n mapped value (base) = " 
+        //          << rit.base().value() << " key = " << rit.base().key();   
     }
     
     typename C::const_reverse_iterator crit = c2.rbegin(), cre = c2.rend();
     for( ; crit != cre; ++crit )
     {
         std::cout << "\n mapped value = " << *(*crit).second << " key = " << (*crit).first;
-        std::cout << "\n mapped value = " << crit.value() << " key = " << crit.key();    
-        std::cout << "\n mapped value (base) = " 
-                  << crit.base().value() << " key = " << crit.base().key();   
+        //std::cout << "\n mapped value = " << crit.value() << " key = " << crit.key();    
+        //std::cout << "\n mapped value (base) = " 
+        //          << crit.base().value() << " key = " << crit.base().key();   
     }
     
     BOOST_MESSAGE( "finished iterator test" );
@@ -302,7 +302,7 @@ void test_map()
     {
         if( is_null(i) )
             BOOST_CHECK( false );
-        const string& ref  = i.key();
+        const string& ref  = i->first;
         hide_warning(ref);
         int&          ref2 = *(*i).second;
         ref2++;
