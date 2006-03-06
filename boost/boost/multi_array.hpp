@@ -384,7 +384,7 @@ public:
 
 
     // build a multi_array with the specs given
-    multi_array new_array(ranges);
+    multi_array new_array(ranges,this->storage_order());
 
 
     // build a view of tmp with the minimum extents
