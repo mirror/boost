@@ -40,7 +40,9 @@ inline void save_collection(Archive & ar, const Container &s)
     // make sure the target type is registered so we can retrieve
     // the version when we load
     if(3 < ar.get_library_version()){
-        const unsigned int item_version = version<BOOST_DEDUCED_TYPENAME Container::value_type>::value;
+        const unsigned int item_version = version<
+            BOOST_DEDUCED_TYPENAME Container::value_type
+        >::value;
         ar << BOOST_SERIALIZATION_NVP(item_version);
     }
     BOOST_DEDUCED_TYPENAME Container::const_iterator it = s.begin();
@@ -49,7 +51,9 @@ inline void save_collection(Archive & ar, const Container &s)
             boost::serialization::save_construct_data_adl(
                 ar, 
                 &(*it), 
-            boost::serialization::version<BOOST_DEDUCED_TYPENAME Container::value_type>::value
+                boost::serialization::version<
+                    BOOST_DEDUCED_TYPENAME Container::value_type
+                >::value
             );
         ar << boost::serialization::make_nvp("item", *it++);
     }
