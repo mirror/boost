@@ -104,10 +104,10 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    // optional_transform
+    // optional_transform_impl
     //   An optional expression gets the following transformation:
-    template<bool Greedy>
-    struct optional_transform
+    template<bool Greedy, typename Epsilon>
+    struct optional_transform_impl
     {
         template<typename Op, typename, typename>
         struct apply
@@ -117,23 +117,23 @@ namespace boost { namespace xpressive { namespace detail
             typedef proto::binary_op
             <
                 typename proto::arg_type<Op>::type
-              , proto::unary_op<epsilon_matcher, proto::noop_tag>
+              , proto::unary_op<Epsilon, proto::noop_tag>
               , proto::bitor_tag
             > type;
         };
 
         template<typename Op, typename State, typename Visitor>
         static typename apply<Op, State, Visitor>::type
-        call(Op const &op, State const &, Visitor &)
+        call(Op const &op, State const &, Visitor &, Epsilon eps = Epsilon())
         {
-            return proto::arg(op) | proto::noop(epsilon_matcher());
+            return proto::arg(op) | proto::noop(eps);
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // non-greedy optional transform
-    template<>
-    struct optional_transform<false>
+    template<typename Epsilon>
+    struct optional_transform_impl<false, Epsilon>
     {
         template<typename Op, typename, typename>
         struct apply
@@ -142,7 +142,7 @@ namespace boost { namespace xpressive { namespace detail
 
             typedef proto::binary_op
             <
-                proto::unary_op<epsilon_matcher, proto::noop_tag>
+                proto::unary_op<Epsilon, proto::noop_tag>
               , typename proto::arg_type<Op>::type
               , proto::bitor_tag
             > type;
@@ -150,9 +150,54 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename Op, typename State, typename Visitor>
         static typename apply<Op, State, Visitor>::type
-        call(Op const &op, State const &, Visitor &)
+        call(Op const &op, State const &, Visitor &, Epsilon eps = Epsilon())
         {
-            return proto::noop(epsilon_matcher()) | proto::arg(op);
+            return proto::noop(eps) | proto::arg(op);
+        }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // optional_transform
+    //   An optional expression gets the following transformation:
+    template<bool Greedy>
+    struct optional_transform
+    {
+        template<typename Op, typename State, typename Visitor>
+        struct apply
+        {
+            // If Op is of the form !(s1= ...), then the epsilon matcher must
+            // zero out the s1 sub-match.
+            typedef typename mpl::if_
+            <
+                is_marker<typename proto::arg_type<Op>::type>
+              , epsilon_mark_matcher
+              , epsilon_matcher
+            >::type epsilon_type;
+
+            typedef optional_transform_impl<Greedy, epsilon_type> transform;
+            typedef typename transform::BOOST_NESTED_TEMPLATE apply<Op, State, Visitor>::type type;
+        };
+
+        template<typename Op, typename State, typename Visitor>
+        static typename apply<Op, State, Visitor>::type
+        call(Op const &op, State const &state, Visitor &visitor)
+        {
+            typedef typename apply<Op, State, Visitor>::epsilon_type epsilon_type;
+            typedef typename apply<Op, State, Visitor>::transform transform;
+            typedef is_marker<typename proto::arg_type<Op>::type> is_marker;
+            return transform::call(op, state, visitor, make_eps(proto::arg(op), is_marker()));
+        }
+
+    private:
+        template<typename Op>
+        static epsilon_mark_matcher make_eps(Op const &op, mpl::true_)
+        {
+            return epsilon_mark_matcher(proto::arg(proto::left(op)).mark_number_);
+        }
+
+        static epsilon_matcher make_eps(dont_care, mpl::false_)
+        {
+            return epsilon_matcher();
         }
     };
 
@@ -221,7 +266,8 @@ namespace boost { namespace xpressive { namespace detail
               , Visitor
             >::type plus_type;
 
-            typedef typename optional_transform<Greedy>::BOOST_NESTED_TEMPLATE apply
+            typedef optional_transform_impl<Greedy, epsilon_mark_matcher> optional_transform;
+            typedef typename optional_transform::BOOST_NESTED_TEMPLATE apply
             <
                 proto::unary_op<plus_type, proto::unary_plus_tag>
               , State
@@ -233,12 +279,11 @@ namespace boost { namespace xpressive { namespace detail
         static typename apply<Op, State, Visitor>::type
         call(Op const &op, State const &state, Visitor &visitor, uint_t max = Max)
         {
-            return optional_transform<Greedy>::call
-            (
-                +plus_transform<Greedy, 1, Max>::call(op, state, visitor, 1, max)
-              , state
-              , visitor
-            );
+            typedef typename apply<Op, State, Visitor>::plus_type plus_type;
+            typedef typename apply<Op, State, Visitor>::optional_transform optional_transform;
+            plus_type plus = plus_transform<Greedy, 1, Max>::call(op, state, visitor, 1, max);
+            int mark_nbr = proto::arg(proto::left(proto::left(plus))).mark_number_;
+            return optional_transform::call(+plus, state, visitor, epsilon_mark_matcher(mark_nbr));
         }
     };
 

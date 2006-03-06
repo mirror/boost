@@ -14,6 +14,7 @@
 
 namespace boost { namespace xpressive { namespace detail
 {
+    typedef proto::unary_op<mark_begin_matcher, proto::noop_tag> mark_begin;
 
     ///////////////////////////////////////////////////////////////////////////////
     // is_marker
@@ -22,32 +23,28 @@ namespace boost { namespace xpressive { namespace detail
       : mpl::false_
     {};
 
+    // (s1= ...) is a marker
     template<typename Op>
-    struct is_marker
-    <
-        proto::binary_op
-        <
-            proto::unary_op<mark_begin_matcher, proto::noop_tag>
-          , Op
-          , proto::right_shift_tag
-        >
-    >
+    struct is_marker<proto::binary_op<mark_tag, Op, proto::assign_tag> >
+      : mpl::true_
+    {};
+
+    // (mark_begin >> ... >> mark_end) is a marker as well, after a transformation
+    template<typename Op>
+    struct is_marker<proto::binary_op<mark_begin, Op, proto::right_shift_tag> >
       : mpl::true_
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // mark_number
     template<typename Op, typename Visitor>
-    int mark_number
-    (
-        proto::binary_op
-        <
-            proto::unary_op<mark_begin_matcher, proto::noop_tag>
-          , Op
-          , proto::right_shift_tag
-        > const &op
-      , Visitor &
-    )
+    int mark_number(proto::binary_op<mark_begin, Op, proto::right_shift_tag> const &op, Visitor &)
+    {
+        return proto::arg(proto::left(op)).mark_number_;
+    }
+
+    template<typename Op, typename Visitor>
+    int mark_number(proto::binary_op<mark_tag, Op, proto::assign_tag> const &op, Visitor &)
     {
         return proto::arg(proto::left(op)).mark_number_;
     }
