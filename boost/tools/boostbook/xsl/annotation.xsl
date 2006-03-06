@@ -341,8 +341,13 @@
     </emphasis>
   </xsl:template>
 
+  <xsl:template match="comment()" mode="annotation">
+    <xsl:copy/>
+  </xsl:template>
+
   <xsl:template match="node()" mode="annotation">
     <xsl:param name="highlight" select="false()"/>
+
     <xsl:element name="{name(.)}">
       <xsl:for-each select="./@*">
         <xsl:attribute name="{name(.)}">
