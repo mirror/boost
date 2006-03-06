@@ -1,4 +1,4 @@
-/* Copyright 2003-2005 Joaquín M López Muñoz.
+/* Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -256,10 +256,10 @@ struct member_offset:
 
 #if defined(BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS)
 #define BOOST_MULTI_INDEX_MEMBER(Class,Type,MemberName) \
-::boost::multi_index::member_offset<Class,Type,offsetof(Class,MemberName)>
+::boost::multi_index::member_offset< Class,Type,offsetof(Class,MemberName) >
 #else
 #define BOOST_MULTI_INDEX_MEMBER(Class,Type,MemberName) \
-::boost::multi_index::member<Class,Type,&Class::MemberName>
+::boost::multi_index::member< Class,Type,&Class::MemberName >
 #endif
 
 } /* namespace multi_index */
