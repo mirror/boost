@@ -58,9 +58,6 @@ namespace ptr_container_detail
         typedef ptr_map_iterator< BOOST_DEDUCED_TYPENAME VoidPtrMap::const_iterator >
                      const_iterator;
   
-        typedef std::pair<const key_type, U*>
-                     object_type;
-
         template< class Iter >
         static U* get_pointer( Iter i )
         {
@@ -96,19 +93,33 @@ namespace ptr_container_detail
         
     public:
 
+        typedef BOOST_DEDUCED_TYPENAME base_type::allocator_type
+                    allocator_type;
+        typedef BOOST_DEDUCED_TYPENAME base_type::iterator
+                    iterator;
         typedef BOOST_DEDUCED_TYPENAME base_type::const_iterator
                     const_iterator;
+        typedef BOOST_DEDUCED_TYPENAME base_type::size_type
+                    size_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::key_type
                     key_type;
-        typedef BOOST_DEDUCED_TYPENAME base_type::reference
-                    reference;
-        typedef BOOST_DEDUCED_TYPENAME base_type::value_type
-                    value_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type
                     auto_type;
+        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::mapped_type 
+                    mapped_type;
+        typedef BOOST_DEDUCED_TYPENAME base_type::reference
+                    mapped_reference;
+        typedef BOOST_DEDUCED_TYPENAME base_type::const_reference
+                    const_mapped_reference;
+        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::value_type
+                    value_type;
+        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::reference
+                    reference;
+        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::const_reference
+                    const_reference;
 
     private:
-        reference lookup( const key_type& key ) const
+        mapped_reference lookup( const key_type& key ) const
         {
            const_iterator i = this->find( key );
            if( i != this->end() )
@@ -138,9 +149,9 @@ namespace ptr_container_detail
             void release() { released_ = true; }
         };
 
-        reference insert_lookup( const key_type& key )
+        mapped_reference insert_lookup( const key_type& key )
         {
-            value_type& ref = this->c_private()[key];
+            mapped_type& ref = this->c_private()[key];
             if( ref )
             {
                 return *ref;
@@ -148,7 +159,7 @@ namespace ptr_container_detail
             else
             {
                 eraser e(&this->c_private(),key); // nothrow
-                value_type res = new T();         // strong 
+                mapped_type res = new T();        // strong 
                 ref = res;                        // nothrow
                 e.release();                      // nothrow
                 return *res;
@@ -157,9 +168,16 @@ namespace ptr_container_detail
         
     public:
 
-        BOOST_PTR_CONTAINER_DEFINE_CONSTRUCTORS( ptr_map_adapter_base, 
-                                                 base_type )
+        ptr_map_adapter_base( const allocator_type& a = allocator_type() )
+        : base_type(a)
+        { }
 
+        template< class InputIterator >
+        ptr_map_adapter_base( InputIterator first, InputIterator last,
+                              const allocator_type& a = allocator_type() )
+        : base_type( first, last, a )
+        { }
+ 
         template< class Compare, class Allocator >
         explicit ptr_map_adapter_base( const Compare& comp,
                                        const Allocator& a ) 
@@ -229,22 +247,22 @@ namespace ptr_container_detail
                                         const_iterator( p.second ) );    
         }                                                                            
                                                                                      
-        reference at( const key_type& key )                                              
-        {                   
-            return const_cast<reference>( lookup( key ) );                                                         
-        }                                                                            
+        mapped_reference at( const key_type& key )  
+        {   
+            return const_cast<mapped_reference>( lookup( key ) ); 
+        }
                                                                                      
-        const_reference at( const key_type& key ) const                                  
+        const_mapped_reference at( const key_type& key ) const
         {                                                                            
             return lookup( key );
         }
 
-        reference operator[]( const key_type& key )
+        mapped_reference operator[]( const key_type& key )
         {
             return insert_lookup( key );
         }              
 
-        auto_type replace( iterator where, value_type x ) // strong  
+        auto_type replace( iterator where, mapped_type x ) // strong  
         { 
             BOOST_ASSERT( where != this->end() );
 
@@ -277,9 +295,8 @@ namespace ptr_container_detail
             const_iterator i = this->begin(), e = this->end();
             for( ; i != e; ++i )
             {
-                ar & i.base()->first;
-                ar & ptr_container_detail::serialize_as_const(  
-                                   static_cast<T*>( i.base()->second ) );
+                ar & i->first;
+                ar & ptr_container_detail::serialize_as_const( i->second );
             }
         }
     };
@@ -307,8 +324,6 @@ namespace ptr_container_detail
                      iterator;       
         typedef BOOST_DEDUCED_TYPENAME base_type::const_iterator
                      const_iterator;
-        typedef BOOST_DEDUCED_TYPENAME base_type::object_type
-                    object_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::size_type
                     size_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::key_type
@@ -321,8 +336,8 @@ namespace ptr_container_detail
                     key_compare;
         typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::allocator_type 
                     allocator_type;
-        typedef BOOST_DEDUCED_TYPENAME base_type::value_type
-                    value_type;
+        typedef BOOST_DEDUCED_TYPENAME base_type::mapped_type
+                    mapped_type;
     private:
 
         void safe_insert( const key_type& key, auto_type ptr ) // strong
@@ -341,7 +356,7 @@ namespace ptr_container_detail
             {                                            
                 if( this->find( first->first ) == this->end() )
                 {
-                    const object_type& p = *first.base();     // nothrow                    
+                    const_reference p = *first.base();     // nothrow                    
                     auto_type ptr( this->null_policy_allocate_clone( p.second ) ); 
                                                               // strong 
                     this->safe_insert( p.first, ptr_container_detail::
@@ -391,7 +406,7 @@ namespace ptr_container_detail
         }
 
     private:
-        std::pair<iterator,bool> insert_impl( const key_type& key, value_type x ) // strong
+        std::pair<iterator,bool> insert_impl( const key_type& key, mapped_type x ) // strong
         {
             this->enforce_null_policy( x, "Null pointer in ptr_map_adapter::insert()" );
             auto_type ptr( x );                                              // nothrow
@@ -405,7 +420,7 @@ namespace ptr_container_detail
         
     public:
         
-        std::pair<iterator,bool> insert( key_type& key, value_type x )
+        std::pair<iterator,bool> insert( key_type& key, mapped_type x )
         {
             return insert_impl( key, x );
         }
@@ -496,16 +511,14 @@ namespace ptr_container_detail
                        iterator;                 
         typedef BOOST_DEDUCED_TYPENAME base_type::const_iterator     
                        const_iterator;           
-        typedef BOOST_DEDUCED_TYPENAME base_type::object_type
-                       object_type;         
         typedef BOOST_DEDUCED_TYPENAME base_type::size_type
                        size_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::key_type
                        key_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::const_reference
                        const_reference;
-        typedef BOOST_DEDUCED_TYPENAME base_type::value_type
-                    value_type;
+        typedef BOOST_DEDUCED_TYPENAME base_type::mapped_type
+                    mapped_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type
                     auto_type;            
         typedef BOOST_DEDUCED_TYPENAME VoidPtrMultiMap::key_compare 
@@ -526,7 +539,7 @@ namespace ptr_container_detail
         {                                                         
             while( first != last )                                            
             {                                            
-                const object_type& pair = *first.base();  // nothrow                     
+                const_reference pair = *first.base();     // nothrow                     
                 auto_type ptr( this->null_policy_allocate_clone( pair.second ) );    
                                                           // strong
                 safe_insert( pair.first, ptr_container_detail::
@@ -574,7 +587,7 @@ namespace ptr_container_detail
             insert( boost::begin(r), boost::end(r) );
         }
 
-        iterator insert( key_type& key, value_type x ) // strong
+        iterator insert( key_type& key, mapped_type x ) // strong
         {
             this->enforce_null_policy( x, 
                   "Null pointer in 'ptr_multimap_adapter::insert()'" );

@@ -56,8 +56,6 @@ namespace ptr_container_detail
                         BOOST_DEDUCED_TYPENAME VoidPtrSet::const_iterator, const Key >
                     const_iterator;
 
-       typedef Key object_type;
-
        template< class Iter >
        static Key* get_pointer( Iter i )
        {
@@ -93,8 +91,7 @@ namespace ptr_container_detail
                       iterator;
         typedef BOOST_DEDUCED_TYPENAME base_type::const_iterator 
                       const_iterator;
-        typedef BOOST_DEDUCED_TYPENAME base_type::object_type 
-                      key_type;
+        typedef Key   key_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::size_type
                       size_type;
 
@@ -219,8 +216,7 @@ namespace ptr_container_detail
                      const_iterator;                 
         typedef BOOST_DEDUCED_TYPENAME base_type::size_type
                      size_type;    
-        typedef BOOST_DEDUCED_TYPENAME base_type::object_type
-                     key_type;
+        typedef Key  key_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type
                      auto_type;
         typedef BOOST_DEDUCED_TYPENAME VoidPtrSet::key_compare
@@ -384,14 +380,13 @@ namespace ptr_container_detail
                        iterator;          
         typedef BOOST_DEDUCED_TYPENAME base_type::size_type
                        size_type;
-        typedef BOOST_DEDUCED_TYPENAME base_type::object_type
-                      key_type;
+        typedef Key    key_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type
-                      auto_type;
+                       auto_type;
         typedef BOOST_DEDUCED_TYPENAME VoidPtrMultiSet::key_compare
-                      key_compare;
+                       key_compare;
         typedef BOOST_DEDUCED_TYPENAME VoidPtrMultiSet::allocator_type
-                      allocator_type;        
+                       allocator_type;        
     private:
         template< typename II >                                               
         void set_basic_clone_and_insert( II first, II last ) // basic                 

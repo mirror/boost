@@ -143,8 +143,6 @@ namespace ptr_container_detail
         const Cont& c_private() const    { return c_; }
 
     public: // typedefs
-        typedef  BOOST_DEDUCED_TYPENAME Config::object_type  
-                               object_type;
         typedef  Ty_*          value_type;
         typedef  Ty_*          pointer;
         typedef  Ty_&          reference;

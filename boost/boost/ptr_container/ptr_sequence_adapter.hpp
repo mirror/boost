@@ -60,9 +60,6 @@ namespace ptr_container_detail
                         BOOST_DEDUCED_TYPENAME VoidPtrSeq::const_iterator, const U >
                     const_iterator;
 
-        typedef value_type 
-                    object_type;
-
 #ifdef BOOST_NO_SFINAE
 
         template< class Iter >
