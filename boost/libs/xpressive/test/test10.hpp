@@ -58,63 +58,6 @@ boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
                         L('.') >> +range(L('0'),L('9'))) >> !(s3= (set=L('e'),L('E')) >> !(s4= as_xpr(L('+'))|L('-')) >> +range(L('0'),L('9'))))
           , backrefs(L("+1234.56789"), L("+"), L("1234.56789"), L(""), L(""), nilbr)
         )
-      , test_case
-        (
-            "test166"
-          , L("G")
-          , regex_type(L('f') | icase(L('g')))
-          , backrefs(L("G"), nilbr)
-        )
-      , test_case
-        (
-            "test167"
-          , L("aBBa")
-          , regex_type(icase(+lower))
-          , backrefs(L("aBBa"), nilbr)
-        )
-      , test_case
-        (
-            "test168"
-          , L("aA")
-          , regex_type(icase(+as_xpr(L('\x61'))))
-          , backrefs(L("aA"), nilbr)
-        )
-      , test_case
-        (
-            "test169"
-          , L("aA")
-          , regex_type(icase(+set[L('\x61')]))
-          , backrefs(L("aA"), nilbr)
-        )
-      , test_case
-        (
-            "test170"
-          , L("aA")
-          , regex_type(icase(+as_xpr(L('\x0061'))))
-          , backrefs(L("aA"), nilbr)
-        )
-      , test_case
-        (
-            "test171"
-          , L("aA")
-          , regex_type(icase(+set[L('\x0061')]))
-          , backrefs(L("aA"), nilbr)
-        )
-      // BUGBUG TODO FIXME
-      //, test_case
-      //  (
-      //      "test172"
-      //    , L("abcd")
-      //    , regex_type(L('a') >> +(s1= L('b') | (s2= *(s3= L('c')))) >> L('d'))
-      //    , backrefs(L("abcd"), L(""), L(""), L(""), nilbr)
-      //  )
-      //, test_case
-      //  (
-      //      "test173"
-      //    , L("abcd")
-      //    , regex_type(L('a') >> +(s1= L('b') | (s2= !(s3= L('c')))) >> L('d'))
-      //    , backrefs(L("abcd"), L(""), L(""), L(""), nilbr)
-      //  )
     };
 
     return boost::make_iterator_range(test_cases);
