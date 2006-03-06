@@ -37,7 +37,7 @@ template<class T>
 struct type_info_implementation {
     template<class U>
     struct traits_class_typeinfo_implementation {
-        typedef BOOST_DEDUCED_TYPENAME U::type_info_implementation type;
+      typedef BOOST_DEDUCED_TYPENAME U::type_info_implementation::type type;
     };
     typedef 
         BOOST_DEDUCED_TYPENAME mpl::eval_if<

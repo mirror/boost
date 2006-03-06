@@ -53,7 +53,7 @@ struct traits : public basic_traits {
     typedef BOOST_DEDUCED_TYPENAME mpl::int_<Level> level;
     typedef BOOST_DEDUCED_TYPENAME mpl::int_<Tracking> tracking;
     typedef BOOST_DEDUCED_TYPENAME mpl::int_<Version> version;
-    typedef BOOST_DEDUCED_TYPENAME ETII::type type_info_implementation;
+    typedef ETII type_info_implementation;
 };
 
 } // namespace serialization
