@@ -16,12 +16,10 @@ test-suite ptr_container :
     [ sc-test ptr_array ]
     [ sc-test tree_test ]   
     [ sc-test incomplete_type_test ]
-    [ sc-test view_example ]
+    [ run view_example.cpp ]
     [ sc-test iterator_test ]
+    [ run tut1.cpp ]   
     [ sc-test indirect_fun ]  
     [ sc-test serialization : /boost/serialization//boost_serialization ]  
-    [ sc-test no_exceptions ] 
-    [ run tut1.cpp ]   
-    [ run view_example.cpp ]
-    
+    [ sc-test no_exceptions ]    
     ;
