@@ -22,10 +22,18 @@
 
 namespace boost
 { 
-        template< class I > 
-        class ptr_map_iterator : public boost::iterator_adaptor< ptr_map_iterator<I>, I >
+        template< class I, class Value > 
+        class ptr_map_iterator : 
+            public boost::iterator_adaptor< ptr_map_iterator<I,Value>, I, 
+                                            use_default, use_default, const Value&  >
         {
-            typedef boost::iterator_adaptor< ptr_map_iterator<I>, I > base_type;
+            typedef boost::iterator_adaptor< ptr_map_iterator<I,Value>, I, 
+                                             use_default, use_default, const Value& > 
+                base_type;
+            
+        public:
+            typedef Value value_type;
+            typedef const value_type& reference;
             
         public:
             ptr_map_iterator() : base_type()                                 
@@ -34,10 +42,26 @@ namespace boost
             explicit ptr_map_iterator( const I& i ) : base_type(i)
             { }
 
-            template< class I2 >
-            ptr_map_iterator( const ptr_map_iterator<I2>& r ) 
+            template< class I2, class V2 >
+                ptr_map_iterator( const ptr_map_iterator<I2,V2>& r ) 
              : base_type(r.base())
             { }
+
+            //
+            // Make sure the pointer cannot be
+            // overwritten.
+            //
+
+            
+            reference operator*() const
+            {
+                return *this->base_reference();
+            }
+            
+            const value_type* const operator->() const
+            {
+                return base_type::operator->();
+            }
             
 
        }; // class 'ptr_map_iterator'

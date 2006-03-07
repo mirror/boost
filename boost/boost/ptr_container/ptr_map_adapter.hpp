@@ -52,10 +52,12 @@ namespace ptr_container_detail
         
         typedef U    value_type;
 
-        typedef ptr_map_iterator< BOOST_DEDUCED_TYPENAME VoidPtrMap::iterator >
+        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::value_type V;
+
+        typedef ptr_map_iterator< BOOST_DEDUCED_TYPENAME VoidPtrMap::iterator, V >
                      iterator;
         
-        typedef ptr_map_iterator< BOOST_DEDUCED_TYPENAME VoidPtrMap::const_iterator >
+        typedef ptr_map_iterator< BOOST_DEDUCED_TYPENAME VoidPtrMap::const_iterator, V >
                      const_iterator;
   
         template< class Iter >
@@ -113,7 +115,7 @@ namespace ptr_container_detail
                     const_mapped_reference;
         typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::value_type
                     value_type;
-        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::reference
+        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::const_reference
                     reference;
         typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::const_reference
                     const_reference;
@@ -274,8 +276,8 @@ namespace ptr_container_detail
                                                  bad_ptr_container_operation,
                                                  "'replace()' on empty container" );
 
-            auto_type old( where->second );  // nothrow
-            where->second = ptr.release();   // nothrow, commit
+            auto_type old( where->second );       // nothrow
+            where.base()->second = ptr.release(); // nothrow, commit
             return move( old );
         }
 
@@ -665,8 +667,8 @@ namespace ptr_container_detail
 
     };
 
-    template< class I >
-    inline bool is_null( const ptr_map_iterator<I>& i )
+    template< class I, class V >
+    inline bool is_null( const ptr_map_iterator<I,V>& i )
     {
         return i->second == 0;
     }
