@@ -18,7 +18,7 @@
 //  See http://www.boost.org for updates, documentation, and revision history.
 
 // helper function templates for serialization of hashed collections
-
+#include <boost/config.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/collections_load_imp.hpp>
 
@@ -42,7 +42,9 @@ inline void load_hash_collection(Archive & ar, Container &s)
        ar >> BOOST_SERIALIZATION_NVP(bucket_count);
        ar >> BOOST_SERIALIZATION_NVP(item_version);
     }
+    #if ! defined(__MWERKS__)
     s.resize(bucket_count);
+    #endif
     InputFunction ifunc;
     while(count-- > 0){
         ifunc(ar, s, item_version);
