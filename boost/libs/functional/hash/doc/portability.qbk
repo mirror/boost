@@ -1,12 +1,14 @@
 [section:portability Portability]
 
-[classref boost::hash] is written to be as portable as possible, but unfortunately, several
+[def __boost_hash__ [classref boost::hash]]
+
+__boost_hash__ is written to be as portable as possible, but unfortunately, several
 older compilers don't support argument dependent lookup (ADL) - the mechanism
-used for customization.  On those compilers custom overloads for hash_value
+used for customisation.  On those compilers custom overloads for hash_value
 need to be declared in the boost namespace.
 
 On a strictly standards compliant compiler, an overload defined in the
-boost namespace won't be found when [classref boost::hash] is instantiated,
+boost namespace won't be found when __boost_hash__ is instantiated,
 so for these compilers the overload should only be declared in the same
 namespace as the class.
 
@@ -23,7 +25,7 @@ Let's say we have a simple custom type:
 
             friend std::size_t hash_value(custom_type x)
             {
-                [classref boost::hash]<int> hasher;
+                __boost_hash__<int> hasher;
                 return hasher(x.value);
             }
         };
@@ -48,7 +50,7 @@ So first move the member function out of the class:
 
             std::size_t hash(custom_type x)
             {
-                [classref boost::hash]<T> hasher;
+                __boost_hash__<T> hasher;
                 return hasher(value);
             }
         };
@@ -62,7 +64,7 @@ So first move the member function out of the class:
 
 Unfortunately, I couldn't declare hash_value as a friend, as some compilers
 don't support template friends, so instead I declared a member function to
-calculate the hash, can called it from hash_value.
+calculate the hash, and called it from hash_value.
 
 For compilers which don't support ADL, hash_value needs to be defined in the
 boost namespace:
@@ -86,13 +88,13 @@ Full code for this example is at
 [h2 Other Issues]
 
 On Visual C++ versions 6.5 and 7.0, `hash_value` isn't overloaded for built in
-arrays. [classref boost::hash], [funcref boost::hash_combine] and [funcref boost::hash_range] all use a workaround to
+arrays. __boost_hash__, [funcref boost::hash_combine] and [funcref boost::hash_range] all use a workaround to
 support built in arrays so this shouldn't be a problem in most cases.
 
 On Visual C++ versions 6.5 and 7.0, function pointers aren't currently supported.
 
 When using GCC on Solaris, `boost::hash_value(long double)` treats
-`long double`s as doubles - so the hash function doesn't take into account the
+`long double`s as `double`s - so the hash function doesn't take into account the
 full range of values.
 
 [endsect]
