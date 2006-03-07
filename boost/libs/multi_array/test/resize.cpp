@@ -35,13 +35,6 @@ int test_main(int,char*[]) {
     20,21,22,23
   };
 
-
-  marray A(boost::extents[2][3][4]);
-
-  A.assign(A_data,A_data+(2*3*4));
-
-  A.resize(boost::extents[4][3][2]);
-  
   int A_resize[] = {
     0,1,
     4,5,
@@ -60,9 +53,24 @@ int test_main(int,char*[]) {
     0,0
   };
 
-  BOOST_CHECK(std::equal(A_resize,A_resize+(4*3*2),A.data()));
+  // resize through the extent_gen interface
+  {
+    marray A(boost::extents[2][3][4]);
+    A.assign(A_data,A_data+(2*3*4));
+    A.resize(boost::extents[4][3][2]);
+    BOOST_CHECK(std::equal(A_resize,A_resize+(4*3*2),A.data()));
+  }  
 
+  // resize through the Collection
+  {
+    marray A(boost::extents[2][3][4]);
+    A.assign(A_data,A_data+(2*3*4));
+    boost::array<int,3> new_extents = {{4,3,2}};
+    A.resize(new_extents);
+    BOOST_CHECK(std::equal(A_resize,A_resize+(4*3*2),A.data()));
+  }  
 
+  // default construct all the new elements (in this case, all elements)
   {
     marray defaultA;
     defaultA.resize(boost::extents[2][3][4]);
