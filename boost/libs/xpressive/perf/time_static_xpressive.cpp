@@ -9,7 +9,7 @@
 *
 */
 
-#include "regex_comparison.hpp"
+#include "./regex_comparison.hpp"
 #include <map>
 #include <cassert>
 #include <boost/timer.hpp>

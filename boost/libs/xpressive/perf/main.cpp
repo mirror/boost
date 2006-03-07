@@ -14,7 +14,7 @@
 #include <iterator>
 #include <cassert>
 #include <boost/test/execution_monitor.hpp>
-#include "regex_comparison.hpp"
+#include "./regex_comparison.hpp"
 
 void test_match(const std::string& re, const std::string& text, const std::string& description)
 {
