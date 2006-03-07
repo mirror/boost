@@ -37,17 +37,312 @@
           <returns><para>
             <programlisting><functionname>hash_value</functionname>(val)</programlisting>
           </para></returns>
-          <notes><para>
-            The call to <code><functionname>hash_value</functionname></code>
-            is unqualified, so that custom overloads can be
-            found via argument dependent lookup.
-          </para></notes>
+          <notes>
+            <para>
+              The call to <code><functionname>hash_value</functionname></code>
+              is unqualified, so that custom overloads can be
+              found via argument dependent lookup.
+            </para>
+            <para>
+              This is not defined when the macro <code>BOOST_HASH_NO_EXTENSIONS</code>
+              is defined. The specializations are still defined, so only the specializations
+              required by TR1 are defined.
+            </para>
+          </notes>
           <throws><para>
             Only throws if
             <code><functionname>hash_value</functionname>(T)</code> throws.
           </para></throws>
         </method>
       </struct>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>bool</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>bool</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname alt="boost::hash_value(bool)">hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>char</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>char</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>signed char</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>signed char</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>unsigned char</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>unsigned char</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>wchar_t</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>wchar_t</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>short</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>short</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>unsigned short</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>unsigned short</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>int</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>int</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>unsigned int</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>unsigned int</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>long</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>long</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>unsigned long</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>unsigned long</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>float</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>float</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname alt="boost::hash_value(float)">hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>double</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>double</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>long double</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>long double</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>std::string</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>std::string const&amp;</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
+      <struct-specialization name="hash">
+        <template></template>
+        <specialization>
+          <template-arg>std::wstring</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>std::wstring const&amp;</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
 
       <!--
         boost::hash_combine
