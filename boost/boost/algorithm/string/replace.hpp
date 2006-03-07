@@ -428,6 +428,7 @@ namespace boost {
             \param Input An input string
             \param Search A substring to be searched for 
             \param Nth An index of the match to be replaced. The index is 0-based.
+                For negative N, matches are counted from the end of string.
             \param Format A substitute string
             \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input
@@ -478,6 +479,7 @@ namespace boost {
             \param Input An input string
             \param Search A substring to be searched for 
             \param Nth An index of the match to be replaced. The index is 0-based.
+                For negative N, matches are counted from the end of string.
             \param Format A substitute string
         */
         template<typename SequenceT, typename Range1T, typename Range2T>
@@ -507,6 +509,7 @@ namespace boost {
             \param Input An input string
             \param Search A substring to be searched for 
             \param Nth An index of the match to be replaced. The index is 0-based.
+                For negative N, matches are counted from the end of string.
             \param Format A substitute string
             \param Loc A locale used for case insensitive comparison
             \return An output iterator pointing just after the last inserted character or
@@ -561,6 +564,7 @@ namespace boost {
             \param Input An input string
             \param Search A substring to be searched for 
             \param Nth An index of the match to be replaced. The index is 0-based.
+                For negative N, matches are counted from the end of string.
             \param Format A substitute string
             \param Loc A locale used for case insensitive comparison
         */
@@ -745,7 +749,9 @@ namespace boost {
             
             \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param N Length of the head
+            \param N Length of the head.
+                For N>=0, at most N characters are extracted.
+                For N<0, size(Input)-|N| characters are extracted.
             \param Format A substitute string
             \return An output iterator pointing just after the last inserted character or
                 a modified copy of the input  
@@ -793,7 +799,9 @@ namespace boost {
             considered to be the head. The input sequence is modified in-place.
 
             \param Input An input string
-            \param N Length of the head
+            \param N Length of the head.
+                For N>=0, at most N characters are extracted.
+                For N<0, size(Input)-|N| characters are extracted.
             \param Format A substitute string
         */
         template<typename SequenceT, typename RangeT>
@@ -821,7 +829,9 @@ namespace boost {
 
             \param Output An output iterator to which the result will be copied
             \param Input An input string
-            \param N Length of the tail
+            \param N Length of the tail.
+                For N>=0, at most N characters are extracted.
+                For N<0, size(Input)-|N| characters are extracted.
             \param Format A substitute string
             \return An output iterator pointing just after the last inserted character or
                     a modified copy of the input   
@@ -869,7 +879,9 @@ namespace boost {
             considered to be the tail. The input sequence is modified in-place.
 
             \param Input An input string
-            \param N Length of the tail
+            \param N Length of the tail.
+                For N>=0, at most N characters are extracted.
+                For N<0, size(Input)-|N| characters are extracted.
             \param Format A substitute string
         */
         template<typename SequenceT, typename RangeT>

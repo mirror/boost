@@ -393,7 +393,6 @@ namespace boost {
 
              \param Arg1 First argument 
              \param Arg2 Second argument
-             \param Pred Comparison predicate
              \return The result of the test
 
              \note This function provides the strong exception-safety guarantee
