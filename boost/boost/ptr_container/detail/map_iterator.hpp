@@ -22,49 +22,65 @@
 
 namespace boost
 { 
-        template< class I, class Value > 
-        class ptr_map_iterator : 
-            public boost::iterator_adaptor< ptr_map_iterator<I,Value>, I, 
-                                            use_default, use_default, const Value&  >
+    namespace ptr_container_detail
+    {
+        template< class F, class S >
+        struct ref_pair
         {
-            typedef boost::iterator_adaptor< ptr_map_iterator<I,Value>, I, 
-                                             use_default, use_default, const Value& > 
-                base_type;
-            
-        public:
-            typedef Value value_type;
-            typedef const value_type& reference;
-            
-        public:
-            ptr_map_iterator() : base_type()                                 
-            { }
-            
-            explicit ptr_map_iterator( const I& i ) : base_type(i)
+            typedef F first_type;
+            typedef S second_type;
+
+            const F& first;
+            S        second;
+
+            template< class F2, class S2 >
+            ref_pair( const std::pair<F2,S2>& p )
+            : first(p.first), second(static_cast<S>(p.second))
             { }
 
-            template< class I2, class V2 >
-                ptr_map_iterator( const ptr_map_iterator<I2,V2>& r ) 
-             : base_type(r.base())
+            template< class RP >
+            ref_pair( const RP* rp )
+            : first(rp->first), second(rp->second)
             { }
-
-            //
-            // Make sure the pointer cannot be
-            // overwritten.
-            //
-
             
-            reference operator*() const
+            const ref_pair* const operator->() const
             {
-                return *this->base_reference();
+                return this;
             }
-            
-            const value_type* const operator->() const
-            {
-                return base_type::operator->();
-            }
-            
+        };
+    }
+    
+    template< 
+              class I, // base iterator 
+              class F, // first type, key type
+              class S  // second type, mapped type
+            > 
+    class ptr_map_iterator : 
+        public boost::iterator_adaptor< ptr_map_iterator<I,F,S>, I, 
+                                        ptr_container_detail::ref_pair<F,S>, 
+                                        use_default, 
+                                        ptr_container_detail::ref_pair<F,S> >
+    {
+        typedef boost::iterator_adaptor< ptr_map_iterator<I,F,S>, I, 
+                                         ptr_container_detail::ref_pair<F,S>,
+                                         use_default, 
+                                         ptr_container_detail::ref_pair<F,S> > 
+            base_type;
 
-       }; // class 'ptr_map_iterator'
+
+    public:
+        ptr_map_iterator() : base_type()                                 
+        { }
+        
+        explicit ptr_map_iterator( const I& i ) : base_type(i)
+        { }
+
+        template< class I2, class F2, class S2 >
+            ptr_map_iterator( const ptr_map_iterator<I2,F2,S2>& r ) 
+         : base_type(r.base())
+        { }
+        
+   }; // class 'ptr_map_iterator'
 
 }
 

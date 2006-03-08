@@ -28,16 +28,14 @@ namespace boost
         class T, 
         class Compare        = std::less<Key>,
         class CloneAllocator = heap_clone_allocator,
-        class Allocator      = std::allocator< std::pair<const Key,BOOST_DEDUCED_TYPENAME remove_nullable<T>::type*> >
+        class Allocator      = std::allocator< std::pair<const Key,void*> >
     >
     class ptr_map : 
-        public ptr_map_adapter<T,std::map<Key,
-                   BOOST_DEDUCED_TYPENAME remove_nullable<T>::type*,
-                   Compare,Allocator>,CloneAllocator>
+        public ptr_map_adapter<T,std::map<Key,void*,
+                               Compare,Allocator>,CloneAllocator>
     {
-        typedef ptr_map_adapter<T,std::map<Key,
-                    BOOST_DEDUCED_TYPENAME remove_nullable<T>::type*,
-                    Compare,Allocator>,CloneAllocator>
+        typedef ptr_map_adapter<T,std::map<Key,void*,
+                                Compare,Allocator>,CloneAllocator>
             base_type;
 
         typedef ptr_map<Key,T,Compare,CloneAllocator,Allocator> this_type;
@@ -67,16 +65,14 @@ namespace boost
         class T, 
         class Compare        = std::less<Key>, 
         class CloneAllocator = heap_clone_allocator,
-        class Allocator      = std::allocator< std::pair<const Key, BOOST_DEDUCED_TYPENAME remove_nullable<T>::type*> >
+        class Allocator      = std::allocator< std::pair<const Key,void*> >
     >
     class ptr_multimap : 
-        public ptr_multimap_adapter<T,std::multimap<Key,
-                   BOOST_DEDUCED_TYPENAME remove_nullable<T>::type*,
-                   Compare,Allocator>,CloneAllocator>
+        public ptr_multimap_adapter<T,std::multimap<Key,void*,
+                                    Compare,Allocator>,CloneAllocator>
     {
-        typedef ptr_multimap_adapter<T,std::multimap<Key,
-                    BOOST_DEDUCED_TYPENAME remove_nullable<T>::type*,
-                    Compare,Allocator>,CloneAllocator>
+        typedef ptr_multimap_adapter<T,std::multimap<Key,void*,
+                                     Compare,Allocator>,CloneAllocator>
              base_type;
 
         typedef ptr_multimap<Key,T,Compare,CloneAllocator,Allocator> this_type;

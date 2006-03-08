@@ -308,6 +308,35 @@ void test_map()
         ref2++;
     }
 
+    typedef ptr_map<string,Derived_class> map_type;
+    map_type m2;
+    m2.insert( joe, new Derived_class );
+    //
+    // This works fine since 'm2' is not const
+    //
+    m2.begin()->second->foo();
+
+    //
+    // These all return an implementation-defined proxy
+    // with two public members: 'first' and 'second'
+    //
+    map_type::value_type       a_value      = *m2.begin();
+    a_value.second->foo();
+    map_type::reference        a_reference  = *m2.begin();
+    a_reference.second->foo();
+    map_type::const_reference  a_creference = *const_begin(m2);
+    map_type::pointer          a_pointer    = &*m2.begin();
+    a_pointer->second->foo();
+    map_type::const_pointer    a_cpointer   = &*const_begin(m2);
+   
+    //
+    //
+    // These will fail as iterators propagate constness
+    // 
+    //a_creference.second->foo();
+    //a_cpointer->second->foo();
+    //const_begin(m2)->second->foo();
+
 }
 
 using boost::unit_test::test_suite;

@@ -52,12 +52,10 @@ namespace ptr_container_detail
         
         typedef U    value_type;
 
-        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::value_type V;
-
-        typedef ptr_map_iterator< BOOST_DEDUCED_TYPENAME VoidPtrMap::iterator, V >
+        typedef ptr_map_iterator< BOOST_DEDUCED_TYPENAME VoidPtrMap::iterator, key_type, U* const >
                      iterator;
         
-        typedef ptr_map_iterator< BOOST_DEDUCED_TYPENAME VoidPtrMap::const_iterator, V >
+        typedef ptr_map_iterator< BOOST_DEDUCED_TYPENAME VoidPtrMap::const_iterator, key_type, const U* const>
                      const_iterator;
   
         template< class Iter >
@@ -91,6 +89,8 @@ namespace ptr_container_detail
                                                      CloneAllocator > 
             base_type;
 
+        typedef map_config<T,VoidPtrMap>                           config;
+
         typedef ptr_map_adapter_base<T,VoidPtrMap,CloneAllocator>  this_type;
         
     public:
@@ -107,21 +107,25 @@ namespace ptr_container_detail
                     key_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::auto_type
                     auto_type;
-        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::mapped_type 
+        typedef BOOST_DEDUCED_TYPENAME base_type::value_type 
                     mapped_type;
         typedef BOOST_DEDUCED_TYPENAME base_type::reference
                     mapped_reference;
         typedef BOOST_DEDUCED_TYPENAME base_type::const_reference
                     const_mapped_reference;
-        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::value_type
+        typedef BOOST_DEDUCED_TYPENAME iterator_value<iterator>::type
                     value_type;
-        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::const_reference
+        typedef value_type
                     reference;
-        typedef BOOST_DEDUCED_TYPENAME VoidPtrMap::const_reference
+        typedef BOOST_DEDUCED_TYPENAME iterator_value<const_iterator>::type
                     const_reference;
+        typedef value_type 
+                    pointer;
+        typedef const_reference 
+                    const_pointer;
 
     private:
-        mapped_reference lookup( const key_type& key ) const
+        const_mapped_reference lookup( const key_type& key ) const
         {
            const_iterator i = this->find( key );
            if( i != this->end() )
@@ -153,10 +157,10 @@ namespace ptr_container_detail
 
         mapped_reference insert_lookup( const key_type& key )
         {
-            mapped_type& ref = this->c_private()[key];
+            void*& ref = this->c_private()[key];
             if( ref )
             {
-                return *ref;
+                return *static_cast<mapped_type>(ref);
             }
             else
             {
@@ -667,8 +671,8 @@ namespace ptr_container_detail
 
     };
 
-    template< class I, class V >
-    inline bool is_null( const ptr_map_iterator<I,V>& i )
+    template< class I, class F, class S >
+    inline bool is_null( const ptr_map_iterator<I,F,S>& i )
     {
         return i->second == 0;
     }
