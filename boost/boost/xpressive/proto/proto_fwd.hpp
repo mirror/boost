@@ -162,14 +162,22 @@ namespace boost { namespace proto
 
     struct error_compiler;
 
+    struct identity_transform;
+
     struct arg_transform;
 
     struct left_transform;
 
     struct right_transform;
 
+    template<typename Always>
+    struct always_transform;
+
     template<typename First, typename Second>
     struct compose_transforms;
+
+    template<typename Predicate, typename IfTransform, typename ElseTransform = identity_transform>
+    struct conditional_transform;
 
     template<typename Op>
     typename arg_type<Op>::const_reference arg(Op const &op);
