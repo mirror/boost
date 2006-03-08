@@ -16,8 +16,23 @@ test-suite "parameter"
      [ run mpl.cpp ]
      [ run preprocessor.cpp ]
      [ run efficiency.cpp : : : : : release ]
+     [ run maybe.cpp ]
      [ compile ntp.cpp ]
      [ compile unwrap_cv_reference.cpp ]
      [ compile-fail duplicates.cpp ]
+     [ compile-fail unnamed_fail.cpp ]
      [ compile compose.cpp ]
   ;
+
+import python ;
+
+extension python_parameter 
+  : python.cpp
+    <template>@boost/libs/python/build/extension
+  ;
+
+boost-python-runtest python-parameter-test
+  : python.py
+    <pyd>python_parameter
+  ;
+

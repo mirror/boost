@@ -16,7 +16,7 @@ int main()
 {
    using namespace test;
 
-   f((name = 1, value = 1, index = 1, tester = 1,
+   f((name = 1, value = 1, test::index = 1, tester = 1,
       value = 1 // repeated keyword: should not compile
    ));
    return 0;

@@ -27,7 +27,7 @@ struct a2_is
 
 template <class T = int>
 struct a3_is
-  : parameter::template_keyword<a2_is<>, T>
+  : parameter::template_keyword<a3_is<>, T>
 {};
 
 struct X {};
