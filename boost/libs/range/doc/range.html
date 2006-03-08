@@ -36,6 +36,8 @@
             <a href="#bidirectional_range">Bidirectional Range</a>
         <li>
             <a href="#random_access_range">Random Access Range</a>
+        <li>
+            <a href="#concept_checking">Concept Checking</a>
     </ul>
 
     <a name="overview"></a>
@@ -450,6 +452,59 @@ href="../../iterator/doc/new-iter-concepts.html#random-access-traversal-iterator
 
     <hr>
 
+    <a name=concept_checking><h2>Concept Checking</h2>
+
+    Each of the range concepts has a corresponding concept checking
+    class in the file boost/range/concepts.hpp. These classes may be
+    used in conjunction with the <a
+    href="../../concept_check/concept_check.htm">Boost Concept
+    Check</a> library to insure that the type of a template parameter
+    is compatible with a range concept. If not, a meaningful compile
+    time error is generated. Checks are provided for the range
+    concepts related to iterator traversal categories. For example,
+    the following line checks that the type <code>T</code> models the
+    <a href="#forward_range">ForwardRange</a> concept.
+
+    <pre>
+    function_requires&lt;ForwardRangeConcept&lt;T&gt; &gt;();
+    </pre>
+
+    An additional concept check is required for the value access
+    property of the range based on the range's iterator type. For
+    example to check for a ForwardReadableRange, the following code is
+    required.
+
+    <pre>
+    function_requires&lt;ForwardRangeConcept&lt;T&gt; &gt;();
+    function_requires&lt;
+        ReadableIteratorConcept&lt;
+            typename range_iterator&lt;T&gt;::type
+        &gt;
+    &gt;();
+    </pre>
+
+    The following range concept checking classes are provided.
+    <ul>
+        <li>
+            Class <code>SinglePassRangeConcept</code> checks for <a
+            href="#single_pass_range">Single Pass Range</a>
+        <li>
+            Class <code>ForwardRangeConcept</code> checks for <a
+            href="#forward_range">Forward Range</a>
+        <li>
+            Class <code>BidirectionalRangeConcept</code> checks for <a
+            href="#bidirectional_range">Bidirectional Range</a>
+        <li>
+            Class <code>RandomAccessRangeConcept</code> checks for <a
+            href="#random_access_range">Random Access Range</a>
+    </ul>
+
+    <h3>See also</h3> 
+    <p> <a href="style.html">Range Terminology and style guidelines</a></p>
+    <p> <a href="../../iterator/doc/iterator_concepts.html">Iterator Concepts</a></p>
+    <p> <a href="../../concept_check/concept_check.htm">Boost Concept Check library</a></p>
+
+    <hr>
 
     <!--
     <h3>Notes</h3>
