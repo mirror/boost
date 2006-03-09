@@ -1,3 +1,6 @@
+[def __multi-index-short__ [@../../libs/multi_index/doc/index.html
+    Boost.MultiIndex]]
+
 [section:tutorial Tutorial]
 
 When using a hash index with __multi-index-short__, you don't need to do
@@ -19,7 +22,7 @@ associative containers and you wish to use
 
 To use [classref boost::hash] directly, create an instance and call it as a function:
 
-    #include <boost/functional/hash.hpp>
+    #include <``[headerref boost/functional/hash.hpp]``>
 
     int main()
     {
@@ -45,7 +48,8 @@ containing the hashes of the elements of a container:
 
 [section:custom Extending boost::hash for a custom data type]
 
-[classref boost::hash] is implemented by calling the function [funcref boost::hash_value hash_value].
+[classref boost::hash] is implemented by calling the function
+[funcref boost::hash_value hash_value].
 The namespace isn't specified so that it can detect overloads via argument
 dependant lookup. So if there is a free function `hash_value` in the same
 namespace as a custom type, it will get called.
@@ -108,7 +112,7 @@ and
 [blurb
 When writing a hash function, first look at how the equality function works.
 Objects that are equal must generate the same hash value.
-When objects are not equal the should generate different hash values.
+When objects are not equal they should generate different hash values.
 In this object equality was based just on the id, if it was based
 on the objects name and author the hash function should take them into account
 (how to do this is discussed in the next section).
@@ -146,8 +150,8 @@ the hash values for `x` and `y`. The function
         friend std::size_t hash_value(point const& p)
         {
             std::size_t seed = 0;
-            [funcref boost::hash_combine](seed, p.x);
-            [funcref boost::hash_combine](seed, p.y);
+            ``[funcref boost::hash_combine]``(seed, p.x);
+            ``[funcref boost::hash_combine]``(seed, p.y);
 
             return seed;
         }
@@ -163,9 +167,9 @@ Full code for this example is at
 [@../../libs/functional/hash/examples/point.cpp /libs/functional/hash/examples/point.cpp].
 
 [blurb
-'''
 When using [funcref boost::hash_combine] the order of the
 calls matters.
+'''
 <programlisting>
     std::size_t seed = 0;
     boost::hash_combine(seed, 1);
@@ -177,16 +181,16 @@ results in a different seed to:
     boost::hash_combine(seed, 2);
     boost::hash_combine(seed, 1);
 </programlisting>
+'''
 If you are calculating a hash value for data where the order of the data
 doesn't matter in comparisons (e.g. a set) you will have to ensure that the
 data is always supplied in the same order.
-'''
 ]
 
 To calculate the hash of an iterator range you can use [funcref boost::hash_range]:
 
     std::vector<std::string> some_strings;
-    std::size_t hash = [funcref boost::hash_range](some_strings.begin(), some_strings.end());
+    std::size_t hash = ``[funcref boost::hash_range]``(some_strings.begin(), some_strings.end());
 
 [endsect]
 

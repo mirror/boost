@@ -13,8 +13,8 @@
 * Use declarations for standard classes, so that the library
   doesn't need to include all of their headers
 * Deprecated the `<boost/functional/hash/*.hpp>` headers. Now a single header,
-  `<boost/functional/hash.hpp>` is used.
-* Add support for the BOOST_HASH_NO_EXTENSIONS macro, which
+  <[headerref boost/functional/hash.hpp]> is used.
+* Add support for the `BOOST_HASH_NO_EXTENSIONS` macro, which
   disables the extensions to TR1
 * Minor improvements to the hash functions for floating point numbers.
 

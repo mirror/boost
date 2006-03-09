@@ -17,6 +17,7 @@
 [include:hash intro.qbk]
 [include:hash tutorial.qbk]
 [include:hash portability.qbk]
+[include:hash disable.qbk]
 [include:hash changes.qbk]
 [xinclude ref.xml]
 [include:hash links.qbk]
