@@ -18,7 +18,6 @@
 #include <boost/assign/list_inserter.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
-#include <memory>
 
 namespace boost
 {
@@ -32,6 +31,9 @@ namespace assign
                 remove_pointer< BOOST_DEDUCED_TYPENAME 
                        remove_reference<Obj>::type >::type
            obj_type;
+        typedef BOOST_DEDUCED_TYPENAME PtrMap::key_type
+           key_type;
+        
     public:
         
         ptr_map_inserter( PtrMap& m ) : m_( m )
@@ -40,8 +42,8 @@ namespace assign
         template< class Key >
         ptr_map_inserter& operator()( const Key& t )
         {
-            std::auto_ptr<obj_type> p( new obj_type() );
-            m_.insert( t, p );
+            key_type k(t);
+            m_.insert( k, new obj_type );
             return *this;
         }
 
@@ -58,8 +60,8 @@ namespace assign
     template< class T, BOOST_ASSIGN_PARAMS1(n) > \
     ptr_map_inserter& operator()( const T& t, BOOST_ASSIGN_PARAMS2(n) ) \
     { \
-        std::auto_ptr<obj_type> p( new obj_type( BOOST_ASSIGN_PARAMS3(n) ) ); \
-        m_.insert( t, p ); \
+        key_type k(t); \
+        m_.insert( k, new obj_type( BOOST_ASSIGN_PARAMS3(n) ) ); \
         return *this; \
     } \
     /**/
