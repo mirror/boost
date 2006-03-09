@@ -21,7 +21,7 @@
 namespace boost { namespace xpressive { namespace detail
 {
 
-    typedef proto::unary_op<detail::epsilon_matcher, proto::noop_tag> nil_op;
+    typedef proto::unary_op<epsilon_matcher, proto::noop_tag> nil_op;
 
     ///////////////////////////////////////////////////////////////////////////////
     // generic_quant_compiler

@@ -30,7 +30,6 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Op, typename State, typename>
         struct apply
         {
-            BOOST_MPL_ASSERT((mpl::not_equal_to<mpl::size_t<0>, width_of<Op> >));
             typedef static_xpression<simple_repeat_matcher<Op, Greedy>, State> type;
         };
 
@@ -50,7 +49,6 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Op, typename, typename>
         struct apply
         {
-            BOOST_MPL_ASSERT((mpl::not_equal_to<mpl::size_t<0>, width_of<Op> >));
             typedef proto::binary_op
             <
                 proto::unary_op<repeat_begin_matcher, proto::noop_tag>
