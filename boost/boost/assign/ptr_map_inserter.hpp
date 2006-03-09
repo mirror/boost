@@ -73,10 +73,10 @@ namespace assign
     };
     
     template< class PtrMap >
-    inline ptr_map_inserter< PtrMap, typename PtrMap::value_type >
+    inline ptr_map_inserter< PtrMap, typename PtrMap::mapped_reference >
     ptr_map_insert( PtrMap& m )
     {
-        return ptr_map_inserter< PtrMap, typename PtrMap::value_type >( m );
+        return ptr_map_inserter< PtrMap, typename PtrMap::mapped_reference >( m );
     }
 
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
