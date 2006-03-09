@@ -1355,7 +1355,8 @@ namespace boost { namespace numeric { namespace ublas {
                     } else /* if (end_ == 0 && it.end_ == 0) */ {
                         return (it2_ - it.it2_end_) + (it.it1_begin_ - it.it1_);
                     }
-                } else /* if (current_ == 1 && it.current_ == 1) */ {
+                }
+                /* current_ == 1 && it.current_ == 1 */ {
                     return it2_ - it.it2_;
                 }
             }
@@ -1801,7 +1802,8 @@ namespace boost { namespace numeric { namespace ublas {
                     } else /* if (end_ == 0 && it.end_ == 0) */ {
                         return (it2_ - it.it2_end_) + (it.it1_begin_ - it.it1_);
                     }
-                } else /* if (current_ == 1 && it.current_ == 1) */ {
+                }
+                /* current_ == 1 && it.current_ == 1 */ {
                     return it2_ - it.it2_;
                 }
             }
