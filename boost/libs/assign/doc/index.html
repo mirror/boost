@@ -19,7 +19,7 @@
   </table>
 
   <p>
-  Copyright © 2003-2004 Thorsten Ottosen
+  Copyright © 2003-2006 Thorsten Ottosen
   </p>
   <p>
   Use, modification and distribution is subject to the Boost Software License, Version 1.0
@@ -40,7 +40,8 @@
             <li>Functions <a href="#repeat"><code>repeat()</code> and <code>repeat_fun()</code> </a> 
             <li>Functions <a href="#ref_list_of"><code>ref_list_of()</code> and <code>cref_list_of()</code></a>    
             <li>A <a href="#complicated">"complicated"</a> example    
-            <li>Functions <a href="#ptr_push_back"><code>ptr_push_back(), ptr_push_front()</code> and <code>ptr_insert()</code></a>
+            <li>Functions <a href="#ptr_push_back"><code>ptr_push_back(), ptr_push_front()</code>, 
+                                                   <code>ptr_insert()</code> and <code>ptr_map_insert()</code></a>
             <li>Function <a href="#ptr_list_of"><code>ptr_list_of()</code></a>         
        </ul> <li>          
                 
@@ -120,7 +121,7 @@ components are explained in these sections:
         <li>Functions <a href="#repeat"><code>repeat()</code> and <code>repeat_fun()</code> </a> 
         <li>Functions <a href="#ref_list_of"><code>ref_list_of()</code> and <code>cref_list_of()</code></a>
         <li>A <a href="#complicated">"complicated"</a> example    
-        <li>Functions <a href="#ptr_push_back"><code>ptr_push_back(), ptr_push_front()</code> and <code>ptr_insert()</code></a>
+        <li>Functions <a href="#ptr_push_back"><code>ptr_push_back(), ptr_push_front()</code>, <code>ptr_insert()</code> and <code>ptr_map_insert()</code></a>
         <li>Function <a href="#ptr_list_of"><code>ptr_list_of()</code></a>         
             
    </ul>
@@ -508,7 +509,7 @@ conversion layer in <code>list_of()</code>.)
 </p>
 
 <h3>Functions <code>ptr_push_back(), 
-ptr_push_front()</code> and <code>ptr_insert()</code> <a name="ptr_push_back"></h3>
+ptr_push_front()</code>, <code>ptr_insert()</code> and <code>ptr_map_insert()</code> <a name="ptr_push_back"></h3>
 
 For use with <a href="../../ptr_container/index.html">Boost.Pointer Container</a>
 a few special exception-safe functions are provided. Using these function you
@@ -517,53 +518,86 @@ do not need to call <code>new</code> manually:
 
 <blockquote>
     <pre>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assign</span><span class=special>/</span><span class=identifier>ptr_list_inserter</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>ptr_container</span><span class=special>/</span><span class=identifier>ptr_deque</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
-<span class=preprocessor>#include </span><span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>ptr_container</span><span class=special>/</span><span class=identifier>ptr_set</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;
-</span>
+<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assign</span><span class=special>/</span><span class=identifier>ptr_list_inserter</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span> <span class=comment>// for 'ptr_push_back()', 'ptr_insert()' and 'ptr_push_front()'</span>
+<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>assign</span><span class=special>/</span><span class=identifier>ptr_map_inserter</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>  <span class=comment>// for 'ptr_map_insert()'</span>
+<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>ptr_container</span><span class=special>/</span><span class=identifier>ptr_deque</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>ptr_container</span><span class=special>/</span><span class=identifier>ptr_set</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+<span class=preprocessor>#include</span> <span class=special>&lt;</span><span class=identifier>boost</span><span class=special>/</span><span class=identifier>ptr_container</span><span class=special>/</span><span class=identifier>ptr_map</span><span class=special>.</span><span class=identifier>hpp</span><span class=special>&gt;</span>
+
 <span class=comment>//
 // Example class
 //</span>
-<span class=keyword>struct </span><span class=identifier>Foo</span>
-<span class=special>{
-    </span><span class=keyword>int </span><span class=identifier>i</span><span class=special>;
+<span class=keyword>struct</span> <span class=identifier>Foo</span>
+<span class=special>{</span>
+    <span class=keyword>int</span> <span class=identifier>i</span><span class=special>;</span>
     
-    </span><span class=identifier>Foo</span><span class=special>() </span><span class=special>: </span><span class=identifier>i</span><span class=special>(</span><span class=number>0</span><span class=special>)
-    </span><span class=special>{ </span><span class=special>}
-    </span><span class=identifier>Foo</span><span class=special>( </span><span class=keyword>int </span><span class=identifier>i </span><span class=special>) </span><span class=special>: </span><span class=identifier>i</span><span class=special>(</span><span class=identifier>i</span><span class=special>)
-    </span><span class=special>{ </span><span class=special>}
-    </span><span class=identifier>Foo</span><span class=special>( </span><span class=keyword>int </span><span class=identifier>i</span><span class=special>, </span><span class=keyword>int </span><span class=special>) </span><span class=special>: </span><span class=identifier>i</span><span class=special>(</span><span class=identifier>i</span><span class=special>)
-    </span><span class=special>{ </span><span class=special>}
-    </span><span class=identifier>Foo</span><span class=special>( </span><span class=keyword>const </span><span class=keyword>char</span><span class=special>*, </span><span class=keyword>int </span><span class=identifier>i</span><span class=special>, </span><span class=keyword>int </span><span class=special>) </span><span class=special>: </span><span class=identifier>i</span><span class=special>(</span><span class=identifier>i</span><span class=special>)
-    </span><span class=special>{ </span><span class=special>}</span>
-<span class=special>};
-</span>
+    <span class=identifier>Foo</span><span class=special>()</span> <span class=special>:</span> <span class=identifier>i</span><span class=special>(</span><span class=number>0</span><span class=special>)</span>
+    <span class=special>{</span> <span class=special>}</span>
+    <span class=identifier>Foo</span><span class=special>(</span> <span class=keyword>int</span> <span class=identifier>i</span> <span class=special>)</span> <span class=special>:</span> <span class=identifier>i</span><span class=special>(</span><span class=identifier>i</span><span class=special>)</span>
+    <span class=special>{</span> <span class=special>}</span>
+    <span class=identifier>Foo</span><span class=special>(</span> <span class=keyword>int</span> <span class=identifier>i</span><span class=special>,</span> <span class=keyword>int</span> <span class=special>)</span> <span class=special>:</span> <span class=identifier>i</span><span class=special>(</span><span class=identifier>i</span><span class=special>)</span>
+    <span class=special>{</span> <span class=special>}</span>
+    <span class=identifier>Foo</span><span class=special>(</span> <span class=keyword>const</span> <span class=keyword>char</span><span class=special>*,</span> <span class=keyword>int</span> <span class=identifier>i</span><span class=special>,</span> <span class=keyword>int</span> <span class=special>)</span> <span class=special>:</span> <span class=identifier>i</span><span class=special>(</span><span class=identifier>i</span><span class=special>)</span>
+    <span class=special>{</span> <span class=special>}</span>
+
+    <span class=keyword>virtual</span> <span class=special>~</span><span class=identifier>Foo</span><span class=special>()</span>
+    <span class=special>{}</span>
+<span class=special>};</span>
+
+<span class=keyword>struct</span> <span class=identifier>Bar</span> <span class=special>:</span> <span class=identifier>Foo</span>
+<span class=special>{</span>
+    <span class=identifier>Bar</span><span class=special>()</span>
+    <span class=special>{</span> <span class=special>}</span>
+    
+    <span class=identifier>Bar</span><span class=special>(</span> <span class=keyword>int</span> <span class=identifier>i</span> <span class=special>)</span> <span class=special>:</span> <span class=identifier>Foo</span><span class=special>(</span> <span class=number>42</span> <span class=special>)</span>
+    <span class=special>{</span> <span class=special>}</span>
+<span class=special>};</span>
+
 <span class=comment>//
 // Required by ptr_set&lt;Foo&gt;
 //</span>
-<span class=keyword>inline </span><span class=keyword>bool </span><span class=keyword>operator</span><span class=special>&lt;( </span><span class=identifier>Foo </span><span class=identifier>l</span><span class=special>, </span><span class=identifier>Foo </span><span class=identifier>r </span><span class=special>)</span>
-<span class=special>{
-    </span><span class=keyword>return </span><span class=identifier>l</span><span class=special>.</span><span class=identifier>i </span><span class=special>&lt; </span><span class=identifier>r</span><span class=special>.</span><span class=identifier>i</span><span class=special>;</span>
-<span class=special>}
-</span>
-<span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>;</span>
-<span class=keyword>using </span><span class=keyword>namespace </span><span class=identifier>boost</span><span class=special>::</span><span class=identifier>assign</span><span class=special>;
-</span>
-<span class=special>{
-    </span><span class=identifier>ptr_deque</span><span class=special>&lt;</span><span class=identifier>Foo</span><span class=special>&gt; </span><span class=identifier>deq</span><span class=special>;
-    </span><span class=identifier>ptr_push_back</span><span class=special>( </span><span class=identifier>deq </span><span class=special>)()();
-    </span><span class=identifier>BOOST_CHECK</span><span class=special>( </span><span class=identifier>deq</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>2u </span><span class=special>);
-    </span><span class=identifier>ptr_push_front</span><span class=special>( </span><span class=identifier>deq </span><span class=special>)( </span><span class=number>3 </span><span class=special>)( </span><span class=number>42</span><span class=special>, </span><span class=number>42 </span><span class=special>)( </span><span class=string>&quot;foo&quot;</span><span class=special>, </span><span class=number>42</span><span class=special>, </span><span class=number>42 </span><span class=special>);
-    </span><span class=identifier>BOOST_CHECK</span><span class=special>( </span><span class=identifier>deq</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>5 </span><span class=special>);
+<span class=keyword>inline</span> <span class=keyword>bool</span> <span class=keyword>operator</span><span class=special>&lt;(</span> <span class=identifier>Foo</span> <span class=identifier>l</span><span class=special>,</span> <span class=identifier>Foo</span> <span class=identifier>r</span> <span class=special>)</span>
+<span class=special>{</span>
+    <span class=keyword>return</span> <span class=identifier>l</span><span class=special>.</span><span class=identifier>i</span> <span class=special>&lt;</span> <span class=identifier>r</span><span class=special>.</span><span class=identifier>i</span><span class=special>;</span>
+<span class=special>}</span>
 
-    </span><span class=identifier>ptr_set</span><span class=special>&lt;</span><span class=identifier>Foo</span><span class=special>&gt; </span><span class=identifier>a_set</span><span class=special>;
-    </span><span class=identifier>ptr_insert</span><span class=special>( </span><span class=identifier>a_set </span><span class=special>)()( </span><span class=number>1 </span><span class=special>)( </span><span class=number>2</span><span class=special>, </span><span class=number>2 </span><span class=special>)( </span><span class=string>&quot;foo&quot;</span><span class=special>, </span><span class=number>3</span><span class=special>, </span><span class=number>3 </span><span class=special>);
-    </span><span class=identifier>BOOST_CHECK</span><span class=special>( </span><span class=identifier>a_set</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>4 </span><span class=special>);
-    </span><span class=identifier>ptr_insert</span><span class=special>( </span><span class=identifier>a_set </span><span class=special>)()()()();
-    </span><span class=identifier>BOOST_CHECK</span><span class=special>( </span><span class=identifier>a_set</span><span class=special>.</span><span class=identifier>size</span><span class=special>() </span><span class=special>== </span><span class=number>4 </span><span class=special>); </span><span class=comment>// duplicates not inserted</span>
+ 
+<span class=keyword>using</span> <span class=keyword>namespace</span> <span class=identifier>boost</span><span class=special>;</span>
+<span class=keyword>using</span> <span class=keyword>namespace</span> <span class=identifier>boost</span><span class=special>::</span><span class=identifier>assign</span><span class=special>;</span>
+
+<span class=keyword>int</span> <span class=identifier>main</span><span class=special>()</span>
+<span class=special>{</span>
+    <span class=identifier>ptr_deque</span><span class=special>&lt;</span><span class=identifier>Foo</span><span class=special>&gt;</span> <span class=identifier>deq</span><span class=special>;</span>
+    <span class=identifier>ptr_push_back</span><span class=special>(</span> <span class=identifier>deq</span> <span class=special>)()();</span>
+    <span class=identifier>BOOST_ASSERT</span><span class=special>(</span> <span class=identifier>deq</span><span class=special>.</span><span class=identifier>size</span><span class=special>()</span> <span class=special>==</span> <span class=number>2u</span> <span class=special>);</span>
+    <span class=identifier>ptr_push_back</span><span class=special>&lt;</span><span class=identifier>Bar</span><span class=special>&gt;(</span> <span class=identifier>deq</span> <span class=special>)()();</span> <span class=comment>// insert 'Bar' objects</span>
+    <span class=identifier>BOOST_ASSERT</span><span class=special>(</span> <span class=identifier>deq</span><span class=special>.</span><span class=identifier>size</span><span class=special>()</span> <span class=special>==</span> <span class=number>4u</span> <span class=special>);</span>
+    <span class=identifier>ptr_push_front</span><span class=special>(</span> <span class=identifier>deq</span> <span class=special>)(</span> <span class=number>3</span> <span class=special>)(</span> <span class=number>42</span><span class=special>,</span> <span class=number>42</span> <span class=special>)(</span> <span class=string>&quot;foo&quot;</span><span class=special>,</span> <span class=number>42</span><span class=special>,</span> <span class=number>42</span> <span class=special>);</span>
+    <span class=identifier>BOOST_ASSERT</span><span class=special>(</span> <span class=identifier>deq</span><span class=special>.</span><span class=identifier>size</span><span class=special>()</span> <span class=special>==</span> <span class=number>7u</span> <span class=special>);</span>
+
+    <span class=identifier>ptr_set</span><span class=special>&lt;</span><span class=identifier>Foo</span><span class=special>&gt;</span> <span class=identifier>a_set</span><span class=special>;</span>
+    <span class=identifier>ptr_insert</span><span class=special>(</span> <span class=identifier>a_set</span> <span class=special>)()(</span> <span class=number>1</span> <span class=special>)(</span> <span class=number>2</span><span class=special>,</span> <span class=number>2</span> <span class=special>)(</span> <span class=string>&quot;foo&quot;</span><span class=special>,</span> <span class=number>3</span><span class=special>,</span> <span class=number>3</span> <span class=special>);</span>
+    <span class=identifier>BOOST_ASSERT</span><span class=special>(</span> <span class=identifier>a_set</span><span class=special>.</span><span class=identifier>size</span><span class=special>()</span> <span class=special>==</span> <span class=number>4u</span> <span class=special>);</span>
+    <span class=identifier>ptr_insert</span><span class=special>(</span> <span class=identifier>a_set</span> <span class=special>)()()()();</span>
+    <span class=identifier>BOOST_ASSERT</span><span class=special>(</span> <span class=identifier>a_set</span><span class=special>.</span><span class=identifier>size</span><span class=special>()</span> <span class=special>==</span> <span class=number>4u</span> <span class=special>);</span> <span class=comment>// duplicates not inserted</span>
+    <span class=identifier>ptr_insert</span><span class=special>&lt;</span><span class=identifier>Bar</span><span class=special>&gt;(</span> <span class=identifier>a_set</span> <span class=special>)(</span> <span class=number>42</span> <span class=special>);</span> <span class=comment>// insert a 'Bar' object</span> 
+    <span class=identifier>BOOST_ASSERT</span><span class=special>(</span> <span class=identifier>a_set</span><span class=special>.</span><span class=identifier>size</span><span class=special>()</span> <span class=special>==</span> <span class=number>5u</span> <span class=special>);</span>
+
+    <span class=identifier>ptr_map</span><span class=special>&lt;</span><span class=keyword>int</span><span class=special>,</span><span class=identifier>Foo</span><span class=special>&gt;</span> <span class=identifier>a_map</span><span class=special>;</span>
+    <span class=identifier>ptr_map_insert</span><span class=special>(</span> <span class=identifier>a_map</span> <span class=special>)(</span> <span class=number>1</span> <span class=special>)(</span> <span class=number>2</span><span class=special>,</span> <span class=number>2</span> <span class=special>)(</span> <span class=number>3</span><span class=special>,</span> <span class=number>3</span><span class=special>,</span> <span class=number>3</span> <span class=special>)(</span> <span class=number>4</span><span class=special>,</span> <span class=string>&quot;foo&quot;</span><span class=special>,</span> <span class=number>4</span><span class=special>,</span> <span class=number>4</span> <span class=special>);</span>
+    <span class=identifier>ptr_map_insert</span><span class=special>&lt;</span><span class=identifier>Bar</span><span class=special>&gt;(</span> <span class=identifier>a_map</span> <span class=special>)(</span> <span class=number>42</span><span class=special>,</span> <span class=number>42</span> <span class=special>);</span> <span class=comment>// insert a  'Bar' object</span>
 <span class=special>}</span>
     </pre>
 </blockquote>
+
+Notice how you may provide a template argument to these functions. This argument determines the type to allocate with <code>new</code>.
+You have to specify this argument when the container is based on an abstract type (because one cannot create objects of such a type).
+
+<p>
+For <code>ptr_map_insert()</code> the first argument <code>arg1</code> in an argument tuple <code>(arg1,arg2,...,argN)</code> is used to
+construct a key; this means that the first argument need only be convertible to the <code>key_type</code> of the container.
+The rest of the arguments are used to construct the mapped object.
+</p>
                         
 <h3>Function <code>ptr_list_of()</code> <a name="ptr_list_of"></h3>         
 
@@ -730,8 +764,12 @@ be thrown by the proxy returned by <code>list_of()</code>
             <td>Functions <a href="#ptr_push_back"><code>ptr_push_back()</code></a>,
                 <code>ptr_push_front()</code> and <code>ptr_insert()</code>
                  
+            <tr>    
+            <td>  &lt;boost/assign/ptr_map_inserter.hpp> </td>
+            <td>Functions <a href="#ptr_push_back"><code>ptr_map_insert()</code></a>
+    
                             <tr>    
-            <td>  &lt;boost/assign/ptr_list_of.hpp> </td>
+            <td>  &lt;boost/assign/ptr_list_of.hpp> </td>             
             <td>Function <a href="#ptr_list_of"><code>ptr_list_of()</code></a>
 
     </table>
@@ -1309,7 +1347,7 @@ support better initialization (see <a href="#initializer">[4]</a>).
  </p>
   <hr>
   <p>
-    (C) Copyright Thorsten Ottosen 2003-2004
+    (C) Copyright Thorsten Ottosen 2003-2006
   </p>
 
   <br>
