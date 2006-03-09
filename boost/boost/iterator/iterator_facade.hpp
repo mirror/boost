@@ -620,7 +620,7 @@ namespace boost
 
    protected:
       // For use by derived classes
-      typedef iterator_facade<Derived,Value,Reference,Difference> iterator_facade_;
+      typedef iterator_facade<Derived,Value,CategoryOrTraversal,Reference,Difference> iterator_facade_;
       
    public:
 
