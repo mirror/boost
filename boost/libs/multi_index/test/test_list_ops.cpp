@@ -65,6 +65,15 @@ bool is_sorted(
   }
 }
 
+#if BOOST_WORKAROUND(__MWERKS__,<=0x3003)
+/* The "ISO C++ Template Parser" option makes CW8.3 incorrectly fail at
+ * expressions of the form sizeof(x) where x is an array local to a
+ * template function.
+ */
+
+#pragma parse_func_templ off
+#endif
+
 template<typename Sequence>
 static void test_list_ops_unique_seq(BOOST_EXPLICIT_TEMPLATE_TYPE(Sequence))
 {
@@ -179,6 +188,10 @@ static void test_list_ops_non_unique_seq(
   ss.unique(same_integral_div<1>());
   CHECK_EQUAL(ss,{0 _ 3 _ 6 _ 9});
 }
+
+#if BOOST_WORKAROUND(__MWERKS__,<=0x3003)
+#pragma parse_func_templ reset
+#endif
 
 void test_list_ops()
 {
