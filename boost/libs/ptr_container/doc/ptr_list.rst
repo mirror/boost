@@ -48,6 +48,8 @@ to store the pointers.
             
             public: // modifiers_
                 void                push_front( T* x );
+		template< class U >
+		void                push_front( std::auto_ptr<U> x );
                 auto_type           pop_front();
              
             public: // `list operations`_
@@ -76,6 +78,10 @@ Semantics: modifiers
 
     - Exception safety: Strong guarantee
 
+- ``template< class U > void push_front( std::auto_ptr<U> x );``
+
+    - Effects: ``push_front( x.release() );``
+    
 ..
     - ``void push_front( const T& x );``
     

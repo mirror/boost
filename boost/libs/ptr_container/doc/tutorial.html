@@ -3,9 +3,288 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Docutils 0.3.9: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.3.10: http://docutils.sourceforge.net/" />
 <title>Boost Pointer Container Library</title>
-<link rel="stylesheet" href="default.css" type="text/css" />
+<style type="text/css">
+
+/*
+:Author: David Goodger
+:Contact: goodger@users.sourceforge.net
+:Date: $Date$
+:Revision: $Revision$
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* "! important" is used here to override other ``margin-top`` and
+   ``margin-bottom`` styles that are later in the stylesheet or 
+   more specific.  See http://www.w3.org/TR/CSS1#the-cascade */
+.first {
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin-left: 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+img.borderless {
+  border: 0 }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.line-block {
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  background-color: #eeeeee }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid thin gray }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid thin black }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+tt.docutils {
+  background-color: #eeeeee }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
 </head>
 <body>
 <div class="document" id="boost-pointer-container-library">
@@ -26,8 +305,8 @@ that you read it all from top to bottom.</p>
 <li><a class="reference" href="#new-functions">New functions</a></li>
 <li><a class="reference" href="#algorithms">Algorithms</a></li>
 </ul>
-<div class="section" id="basic-usage">
-<h1><a name="basic-usage">Basic usage</a></h1>
+<div class="section">
+<h1><a id="basic-usage" name="basic-usage">Basic usage</a></h1>
 <p>The most important aspect of a pointer container is that it manages
 memory for you. This means that you in most cases do not need to worry
 about deleting memory.</p>
@@ -76,8 +355,8 @@ the_zoo.add_animal( new bird(&quot;dodo&quot;) );
 <p>Thus we heap-allocate all elements of the container
 and never rely on copy-semantics.</p>
 </div>
-<div class="section" id="indirected-interface">
-<h1><a name="indirected-interface">Indirected interface</a></h1>
+<div class="section">
+<h1><a id="indirected-interface" name="indirected-interface">Indirected interface</a></h1>
 <p>As particular feature of the pointer containers is that
 the query interface is indirected. For example,</p>
 <pre class="literal-block">
@@ -101,8 +380,8 @@ ptr_vec::iterator i = vec.begin();
 i-&gt;eat(); // no indirection needed
 </pre>
 </div>
-<div class="section" id="sequence-containers">
-<h1><a name="sequence-containers">Sequence containers</a></h1>
+<div class="section">
+<h1><a id="sequence-containers" name="sequence-containers">Sequence containers</a></h1>
 <p>The sequence containers used when you do not need to
 keep an ordering on your elements. You can basically
 expect all operations of the normal standard containers
@@ -129,8 +408,8 @@ boost::ptr_vector&lt;animal&gt; animals( 10u );
 </pre>
 <p>will reserve room for 10 animals.</p>
 </div>
-<div class="section" id="associative-containers">
-<h1><a name="associative-containers">Associative containers</a></h1>
+<div class="section">
+<h1><a id="associative-containers" name="associative-containers">Associative containers</a></h1>
 <p>To keep an ordering on our animals, we could use a <tt class="docutils literal"><span class="pre">ptr_set</span></tt>:</p>
 <pre class="literal-block">
 boost::ptr_set&lt;animal&gt; set;
@@ -176,8 +455,8 @@ animals[&quot;bobo&quot;].set_name(&quot;bobo&quot;);
 <p>This requires a default constructor for animals and
 a function to do the initialization, in this case <tt class="docutils literal"><span class="pre">set_name()</span></tt>;</p>
 </div>
-<div class="section" id="null-values">
-<h1><a name="null-values">Null values</a></h1>
+<div class="section">
+<h1><a id="null-values" name="null-values">Null values</a></h1>
 <p>By default, if you try to insert null into a container, an exception
 is thrown. If you want to allow nulls, then you must
 say so explicitly when declaring the container variable</p>
@@ -210,8 +489,8 @@ for( animals_type::size_type i = 0u;
 <p>Note that it is meaningless to insert
 null into <tt class="docutils literal"><span class="pre">ptr_set</span></tt> and <tt class="docutils literal"><span class="pre">ptr_multiset</span></tt>.</p>
 </div>
-<div class="section" id="clonability">
-<h1><a name="clonability">Clonability</a></h1>
+<div class="section">
+<h1><a id="clonability" name="clonability">Clonability</a></h1>
 <p>In OO programming it is typical to prohibit copying of objects; the 
 objects may sometimes be allowed to be clonable; for example,:</p>
 <pre class="literal-block">
@@ -249,8 +528,8 @@ another_zoo.insert( another_zoo.begin(), zoo.begin(), zoo.end() );
 zoo_type yet_another_zoo = zoo.clone();
 </pre>
 </div>
-<div class="section" id="new-functions">
-<h1><a name="new-functions">New functions</a></h1>
+<div class="section">
+<h1><a id="new-functions" name="new-functions">New functions</a></h1>
 <p>Given that we know we are working with pointers, a few new functions
 make sense. For example, say you want to remove an
 animal from the zoo</p>
@@ -321,8 +600,8 @@ catch( boost::bad_ptr_container_operation&amp; e )
 }        
 </pre>
 </div>
-<div class="section" id="algorithms">
-<h1><a name="algorithms">Algorithms</a></h1>
+<div class="section">
+<h1><a id="algorithms" name="algorithms">Algorithms</a></h1>
 <p>Unfortunately it is not possible to use pointer containers with
 mutating algorithms from the standard library. However,
 the most useful ones

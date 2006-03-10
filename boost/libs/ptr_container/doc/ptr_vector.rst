@@ -59,7 +59,9 @@ to store the pointers.
                 const T&  at( size_type n ) const;
 
             public: // `pointer container requirements`_
-               auto_type replace( size_type idx, T* x );    
+               auto_type replace( size_type idx, T* x );  
+	       template< class U >
+	       auto_type replace( size_type idx, std::auto_ptr<U> x );  
                bool      is_null( size_type idx ) const;
             };
            
@@ -122,7 +124,7 @@ Semantics: element access
 
     - Effects: Returns a reference to the ``n``'th element
 
-    - Throws: ``bad_index`` if ``n >=size()``
+    - Throws: ``bad_index`` if ``n >= size()``
 
 
 .. _`pointer container requirements`:
@@ -139,6 +141,10 @@ Semantics: pointer container requirements
     - Throws: ``bad_index`` if ``idx >= size()`` and ``bad_pointer`` if ``x == 0``.
 
     - Exception safety: Strong guarantee
+
+- ``template< class U > auto_type replace( size_type idx, std::auto_ptr<U> x );``
+
+    - Effects: ``return replace( idx, x.release() );``  
 
 - ``bool is_null( size_type idx ) const;``
 

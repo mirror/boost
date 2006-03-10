@@ -72,7 +72,9 @@ Its purpose is to present the general interface of all the pointer containers.
             
             public: // `pointer container requirements`_
             
-                auto_type                                replace( iterator position, T* x );    
+                auto_type                                replace( iterator position, T* x );
+		template< class U >
+		auto_type                                replace( iterator position, std::auto_ptr<U> x );    
                 std::auto_ptr<reversible_ptr_container>  clone() const;    
                 std::auto_ptr<reversible_ptr_container>  release();
                 auto_type                                release( iterator position );
@@ -319,6 +321,10 @@ Semantics: pointer container requirements
     - Throws: ``bad_ptr_container_operation`` if the container is empty and ``bad_pointer`` if ``x == 0``.
 
     - Exception safety: Strong guarantee
+    
+- ``template< class U > auto_type replace( iterator position, std::auto_ptr<U> x );``
+
+    - Effects: ``return replace( position, x.release() );``     
 
 - ``std::auto_ptr< reversible_ptr_container > clone() const;``
 

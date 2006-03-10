@@ -72,7 +72,11 @@ of dynamic expansion and when absolute no overhead is tolerable.
  
                 template< size_t idx >
                 auto_type replace( T* r );
+		template< size_t idx, class U >
+		auto_type replace( std::auto_ptr<U> r );
                 auto_type replace( size_t idx, T* r );
+		template< class U >
+		auto_type replace( size_t idx, std::auto_ptr<U> r );
 
             public: // `pointer container requirements`_
                 std::auto_ptr<ptr_array>  clone() const;    
@@ -186,6 +190,10 @@ Semantics: modifiers
     - Throws: ``bad_pointer`` if ``x == 0``.
 
     - Exception safety: Strong guarantee
+    
+- ``template< size_t idx, class U > auto_type replace( std::auto_ptr<U> r );``
+
+    - Effects: ``return replace<idx>( r.release() );``
 
 - ``auto_type replace( size_t idx, T* r );``
         
@@ -197,7 +205,10 @@ Semantics: modifiers
 
     - Exception safety: Strong guarantee
 
+- ``template< class U > auto_type replace( size_t idx, std::auto_ptr<U> r );``
 
+    - Effects: ``return replace( idx, r.release() );``
+    
 .. _`pointer container requirements`:
 
 Semantics: pointer container requirements

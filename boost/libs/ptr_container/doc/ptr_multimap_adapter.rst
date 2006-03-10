@@ -45,7 +45,9 @@ __ ptr_container.html#map-iterator-operations
             {
                 
             public: // `modifiers`_         
-                iterator  insert( key_type& k, T* x );                         
+                iterator  insert( key_type& k, T* x ); 
+		template< class U >
+		iterator  insert( const key_type&, std::auto_ptr<U> x );                        
 
             public: // `pointer container requirements`_
                 void      transfer( iterator object, ptr_multimap_adapter& from );
@@ -77,6 +79,9 @@ Semantics: modifiers
 
     - Exception safety: Strong guarantee
 
+- ``template< class U > iterator insert( const key_type& k, std::auto_ptr<U> x );``                         
+
+   - Equivalent to (but without the ``const_cast``): ``return insert( const_cast<key_type&>(k), x.release() );``
 
 .. 
         - ``iterator insert( key_type& k, const_reference x );``

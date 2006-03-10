@@ -1,40 +1,34 @@
-Hi,
 
--------------------
+2. add new ptr_map typedefs
 
-10) Specify difference between assignment from an input_iterator (basic exception safety guarantee)
-    and any other iterator (strong exception safety guarantee). Provide a iterator wrapper
-    which implement the input_iterator concept to achieve that particular performance characteristic:
-    vector.assign( fast_copy_iterator( other.begin() ), other.end() );
+3. remove ptr_map iterators description
 
-20) Add two sources and a discussion on defaults: http://www.gotw.ca/gotw/054.htm, http://www.codeproject.com/vcpp/stl/vector_vs_deque.asp
+4. ptr_map definition
 
-45) update all functions with correct exception specs
+5. small usage exmaple with each class
 
-46) add description to erase() which returns end in some circumstances
+7. update concept for clonable: typeid(x) == typeid(clone)
 
-47) Consider if list implemetation of multi-insert can benefit
-    from strong exception-safety.
-    
-74) consider simple static assert by nesting a typedef a la
-T::boost_indirect_container
+8. use static class hierarchy to ease navigation
 
-74.5) a new function in map: auto_type replace( key&, T* );? 
+9. guidelines on good OO programming:
 
-75) toturial:
+   1. base classes abstract
+  
+   2. make virtuals private
 
-ptr_map:
+   3. derive from boost::copyable
 
-add default constructor
+   4. don't allow nulls if you can avoid it, Null Object
 
-map[ "foo" ].set_data( "Bla bla", 6 );
+10. update tutorial to show boost::assign link
 
-boost.assign -support:
+11. should find_key() be added to ptr_map?
 
-ptr_insert( ptr_map )( "foo", "bla bla", 3 )
-                     ( "bar", "foo", 3 );
-                     
-        
+12. serialization
 
-76) use boost::get_pointer() to retrieve
-    the pointer withint dereferenceing.
+13. no exceptions
+
+
+
+ 

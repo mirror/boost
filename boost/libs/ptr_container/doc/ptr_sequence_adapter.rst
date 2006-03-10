@@ -63,8 +63,12 @@ __ reversible_ptr_container.html
 
             public: // `modifiers`_
                 void      push_back( T* x );
+		template< class U >
+		void      push_back( std::auto_ptr<U> x );
                 auto_type pop_back();
                 iterator  insert( iterator position, T* x );
+		template< class U >
+		iterator  insert( iterator position, std::auto_ptr<U> x );
                 template< class InputIterator >
                 void      insert( iterator position, InputIterator first, InputIterator last );
                 template< class InputRange >
@@ -230,6 +234,10 @@ Semantics: modifiers
 
     - Exception safety: Strong guarantee
 
+- ``template< class U > void push_back( std::auto_ptr<U> x );``
+
+    - Effects: ``push_back( x.release() );``
+    
 ..
         - ``void push_back( const T& x );``
 
@@ -260,6 +268,10 @@ Semantics: modifiers
     - Throws: ``bad_pointer`` if ``x == 0``
 
     - Exception safety: Strong guarantee
+    
+- ``template< class U > iterator insert( iterator position, std::auto_ptr<U> x );``
+
+    - Effects: ``return insert( position, x.release() );``
 
 ..
         - ``iterator insert( iterator position, const T& x );``
