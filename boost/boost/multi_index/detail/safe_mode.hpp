@@ -435,7 +435,7 @@ public:
     return
       static_cast<const container_type*>(
         static_cast<const safe_container<container_type>*>(
-          safe_super::owner()));
+          this->safe_super::owner()));
   }
 
   /* get_node is not to be used by the user */
