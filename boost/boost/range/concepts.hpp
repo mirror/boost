@@ -68,15 +68,15 @@ namespace boost {
                     range_iterator
                 >
             >();
-            i = begin(a);
-            i = end(a);
-            b = empty(a);
+            i = boost::begin(a);
+            i = boost::end(a);
+            b = boost::empty(a);
             const_constraints(a);
         }
         void const_constraints(const T& a)
         {
-            ci = begin(a);
-            ci = end(a);
+            ci = boost::begin(a);
+            ci = boost::end(a);
         }
         T a;
         range_iterator i;
@@ -99,7 +99,7 @@ namespace boost {
                     typename range_iterator<T>::type
                 >
             >();
-            s = size(a);
+            s = boost::size(a);
         }
         T a;
         range_size s;
@@ -120,14 +120,14 @@ namespace boost {
                     typename range_iterator<T>::type
                 >
             >();
-            i = rbegin(a);
-            i = rend(a);
+            i = boost::rbegin(a);
+            i = boost::rend(a);
             const_constraints(a);
             }
         void const_constraints(const T& a)
         {
-            ci = rbegin(a);
-            ci = rend(a);
+            ci = boost::rbegin(a);
+            ci = boost::rend(a);
         }
         T a;
         range_reverse_iterator i;
