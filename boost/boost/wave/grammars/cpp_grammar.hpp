@@ -593,7 +593,7 @@ struct cpp_grammar :
             init_ruleid_name_map[] = {
                 { BOOST_WAVE_PP_STATEMENT_ID, "pp_statement" },
                 { BOOST_WAVE_INCLUDE_FILE_ID, "include_file" },
-                { BOOST_WAVE_SYSINCLUDE_FILE_ID "system_include_file" },
+                { BOOST_WAVE_SYSINCLUDE_FILE_ID, "system_include_file" },
                 { BOOST_WAVE_MACROINCLUDE_FILE_ID, "macro_include_file" },
                 { BOOST_WAVE_PLAIN_DEFINE_ID, "plain_define" },
                 { BOOST_WAVE_MACRO_PARAMETERS_ID, "macro_parameters" },
