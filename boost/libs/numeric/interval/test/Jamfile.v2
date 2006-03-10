@@ -7,8 +7,14 @@
 # copy at http://www.boost.org/LICENSE_1_0.txt)
 
 project
-    : source-location $(BOOST_ROOT)
-    ;
+  :
+  source-location $(BOOST_ROOT)
+  :
+  requirements
+    # Enable dynamic rounding on Tru64 (Alpha CPU).
+    <toolset>hp_cxx,<os>OSF:<cflags>"-fprm d"
+    <toolset>gcc,<os>OSF:<cflags>-mfp-rounding-mode=d
+  ;
 
 # bring in rules for testing
 import testing ;
