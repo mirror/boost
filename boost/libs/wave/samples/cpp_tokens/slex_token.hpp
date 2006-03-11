@@ -69,9 +69,9 @@ public:
 // debug support    
 #if BOOST_WAVE_DUMP_PARSE_TREE != 0
 // access functions for the tree_to_xml functionality
-    static int get_token_id(lex_token const &t) 
+    static int get_token_id(slex_token const &t) 
         { return ID_FROM_TOKEN(token_id(t)); }
-    static string_type get_token_value(lex_token const &t) 
+    static string_type get_token_value(slex_token const &t) 
         { return t.get_value(); }
 #endif 
     
