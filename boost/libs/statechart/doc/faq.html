@@ -25,34 +25,37 @@
 </table>
 <hr>
 <dl class="page-index">
-  <dt><a href="#Whats_so_cool_about_state-local_storage">
+  <dt><a href="#StateLocalStorage">
 	What's so cool about state-local storage?</a></dt>
   <dt>
-  <a href="#How_can_I_hide_the_inner_workings_of_a_state_machine_from_its_clients">
+  <a href="#HideInnerWorkings">
   How can I hide the inner workings of a state machine from its clients?</a></dt>
   <dt>
-  <a href="#Is_it_possible_to_inherit_from_a_given_state_machine_and_modify_its_layout_in_the_subclass">
+  <a href="#MachineInheritance">
   Is it possible to inherit from a given state machine and modify its layout 
   in the subclass?</a></dt>
-  <dt><a href="#Is_Boost.Statechart_suitable_for_embedded_applications">Is Boost.Statechart suitable for embedded applications?</a></dt>
+  <dt><a href="#EmbeddedApplications">Is Boost.Statechart suitable for embedded applications?</a></dt>
   <dt>
-	<a href="#Is_your_library_suitable_for_applications_with_hard_real-time_requirements">
+	<a href="#HardRealtime">
 	Is your library suitable for applications with hard real-time requirements?</a></dt>
   <dt>
-	<a href="#My_compiler_reports_an_error_in_the_library_code._Is_this_a_bug_in_Boost.Statechart">
+	<a href="#TemplatedStates">
+	With templated states I get an error that 'inner_context_type' is not defined. What's wrong?</a></dt>
+  <dt>
+	<a href="#CompilerError">
 	My compiler reports an error in the library code. Is this a bug in Boost.Statechart?</a></dt>
 	<dt>
-    <a href="#How_can_I_compile_a_state_machine_into_a_dynamic_link_library_(DLL)">
+    <a href="#Dll">
     How can I compile a state machine into a dynamic link library (DLL)?</a></dt>
-  <dt><a href="#Does_Boost.Statechart_support_polymorphic_events">Does Boost.Statechart 
+  <dt><a href="#PolymorphicEvents">Does Boost.Statechart 
   support polymorphic events?</a></dt>
   <dt>
-  <a href="#Why_are_exit-actions_called_in_the_wrong_order_when_I_use_multiple_inheritance">
+  <a href="#WrongExitActionOrder">
   Why are exit-actions called in the wrong order when I use multiple 
 	inheritance?</a></dt>
 </dl>
 <h2>
-<a name="Whats_so_cool_about_state-local_storage">What's so cool about state-local storage?</a></h2>
+<a name="StateLocalStorage">What's so cool about state-local storage?</a></h2>
 <p>
 This is best explained with an example:</p>
 <pre>
@@ -157,7 +160,7 @@ However, they quickly become a major problem for a big complex machine spread
 over multiple translation units, which are possibly even maintained by 
 different programmers.</p>
 <h2>
-<a name="How_can_I_hide_the_inner_workings_of_a_state_machine_from_its_clients">
+<a name="HideInnerWorkings">
 How can I hide the inner workings of a state machine from its clients?</a></h2>
 <p>To see why and how this is possible it is important to recall the following 
 facts:</p>
@@ -211,7 +214,7 @@ StopWatch::StopWatch()
   <b>initiate();</b>
 }</pre>
 <h2>
-<a name="Is_it_possible_to_inherit_from_a_given_state_machine_and_modify_its_layout_in_the_subclass">
+<a name="MachineInheritance">
 Is it possible to inherit from a given state machine and modify its layout in 
 the subclass?</a></h2>
 <p>Yes, but contrary to what some FSM code generators allow, Boost.Statechart 
@@ -255,7 +258,7 @@ struct MyPump : PumpBase
     <b>return idle.transit&lt; MyRunning &gt;();
 </b>  }
 };</pre>
-<h2><a name="Is_Boost.Statechart_suitable_for_embedded_applications">Is Boost.Statechart suitable for embedded applications?</a></h2>
+<h2><a name="EmbeddedApplications">Is Boost.Statechart suitable for embedded applications?</a></h2>
 <p>It depends. As explained under
 <a href="performance.html#Speed versus scalability tradeoffs">Speed versus 
 scalability tradeoffs</a> on the Performance page, the virtually limitless scalability 
@@ -289,7 +292,7 @@ executable. Here are some obviously <b>very rough</b> estimates:</p>
 the library on a desktop PC, so they should only be used to decide whether there 
 is a point in making your own performance tests on your target platform.</p>
 <h2>
-<a name="Is_your_library_suitable_for_applications_with_hard_real-time_requirements">
+<a name="HardRealtime">
 Is your library suitable for applications with hard real-time requirements?</a></h2>
 <p>Yes. Out of the box, the only operations taking potentially 
 non-deterministic time that the library performs are calls to <code>std::allocator&lt;&gt;</code> 
@@ -304,15 +307,51 @@ and
 <code>simple_state&lt;&gt;</code> and <code>state&lt;&gt;</code> but using the 
 deterministic variant <code>state_downcast&lt;&gt;</code> instead.</p>
 <h2>
-<a name="My_compiler_reports_an_error_in_the_library_code._Is_this_a_bug_in_Boost.Statechart">My compiler reports an error in the library code. Is this a bug in 
+<a name="TemplatedStates">
+With templated states I get an error that 'inner_context_type' is not defined. What's wrong?</a></h2>
+<p>The following code generates such an error:</p>
+<pre>#include &lt;boost/statechart/state_machine.hpp&gt;
+#include &lt;boost/statechart/simple_state.hpp&gt;
+
+namespace sc = boost::statechart;
+
+template&lt; typename X &gt; struct A;
+struct Machine : sc::state_machine&lt; Machine, A&lt; int &gt; &gt; {};
+
+template&lt; typename X &gt; struct B;
+template&lt; typename X &gt;
+struct A : sc::simple_state&lt; A&lt; X &gt;, Machine, B&lt; X &gt; &gt; {};
+
+  template&lt; typename X &gt;
+  struct B : sc::simple_state&lt; B&lt; X &gt;, A&lt; X &gt; &gt; {};
+
+int main()
+{
+  Machine machine;
+  machine.initiate();
+  return 0;
+}
+</pre>
+<p>If the templates <code>A</code> and <code>B</code> are replaced with normal types, the above code 
+compiles without errors. This is rooted in the fact 
+that C++ treats forward-declared templates differently than forward-declared 
+types. Namely, the compiler tries to access member typedefs of <code>B&lt; X &gt;</code> at a 
+point where the template has not yet been defined. Luckily, this can easily be 
+avoided by putting all inner initial state arguments in an <code>mpl::list&lt;&gt;</code>, as 
+follows:</p>
+<pre>struct A : sc::simple_state&lt;
+  A&lt; X &gt;, Machine, mpl::list&lt; B&lt; X &gt; &gt; &gt; {};</pre>
+<p>See <a href="http://article.gmane.org/gmane.comp.lib.boost.devel/128741">
+this post</a> for technical details.</p>
+<h2>
+<a name="CompilerError">My compiler reports an error in the library code. Is this a bug in 
 Boost.Statechart?</a></h2>
 <p>Probably not. There are several possible reasons for such compile-time 
 errors:</p>
 <ol>
-	<li>Your compiler is listed under
-	<a href="index.html#Incompatible_compilers">Incompatible compilers</a>. 
-	These compilers are known to be incompatible with this library due to 
-	compiler bugs. If you absolutely must use such a compiler for your project, 
+	<li>Your compiler is too buggy to compile the library, see
+    <a href="index.html#Supported_platforms">here</a> for information on the 
+    status of your compiler. If you absolutely must use such a compiler for your project, 
 	I'm afraid Boost.Statechart is not for you.</li>
 <li>The error is reported on a line similar to the following:
 <pre>BOOST_STATIC_ASSERT( ( mpl::less&lt;
@@ -384,7 +423,7 @@ culprit close to the bottom in file InconsistentHistoryTest1.cpp on line 29.</li
 	problem to the Boost.User or Boost.Developer lists. Thank you!</li>
 </ol>
 <h2>
-<a name="How_can_I_compile_a_state_machine_into_a_dynamic_link_library_(DLL)">How can I compile a state machine into a dynamic link library (DLL)?</a></h2>
+<a name="Dll">How can I compile a state machine into a dynamic link library (DLL)?</a></h2>
 <p>Invisible to the user, the library uses static data members to implement 
 its own speed-optimized RTTI-mechanism for <code>event&lt;&gt;</code> and <code>
 simple_state&lt;&gt;</code> subtypes. Whenever such a subtype is defined in a 
@@ -420,7 +459,7 @@ into more than one binary. Alternatively, of course <a href="configuration.html#
  BOOST_STATECHART_USE_NATIVE_RTTI</a> can also be used to save the work of 
 importing and exporting</li>
 </ul>
-<h2><a name="Does_Boost.Statechart_support_polymorphic_events">Does Boost.Statechart 
+<h2><a name="PolymorphicEvents">Does Boost.Statechart 
 support polymorphic events?</a></h2>
 <p>No. Although events can be derived from each other to write common code 
 only once, <a href="definitions.html#Reaction">reactions</a> can only be 
@@ -460,7 +499,7 @@ struct Off : sc::simple_state&lt; Off, Mp3Player &gt;
   }
 };</pre>
 <h2>
-<a name="Why_are_exit-actions_called_in_the_wrong_order_when_I_use_multiple_inheritance">
+<a name="WrongExitActionOrder">
 Why are exit-actions called in the wrong order when I use multiple inheritance?</a></h2>
 <p><b>Update</b>: The implementation has changed considerably in this area. It 
 is still possible to get this behavior under rare circumstances (when an action 
@@ -549,9 +588,9 @@ destructors of additional bases are called before recursion employed by state
 base destructors can alter the order of destruction.</p>
 <hr>
 <p>Revised 
-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->17 December, 2005<!--webbot bot="Timestamp" endspan i-checksum="38520" --></p>
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->11 March, 2006<!--webbot bot="Timestamp" endspan i-checksum="28927" --></p>
 <p><i>© Copyright <a href="mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber Dönni</a> 
-2003-2005. <font color="#FF0000"><b>The link refers to a
+2003-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2006<!--webbot bot="Timestamp" endspan i-checksum="770" -->. <font color="#FF0000"><b>The link refers to a
 <a href="http://en.wikipedia.org/wiki/Honeypot">spam honeypot</a>. Please remove the words spam and trap 
 to obtain my real address.</b></font></i></p>
 <p><i>Distributed under the Boost Software License, Version 1.0. (See 
