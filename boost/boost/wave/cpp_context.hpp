@@ -135,7 +135,8 @@ public:
 // iterator interface
     iterator_type begin() 
     { 
-        includes.set_current_directory(filename.c_str());
+        if (filename != "<Unknown>") 
+            includes.set_current_directory(filename.c_str());
         return iterator_type(*this, first, last, position_type(filename.c_str())); 
     }
     iterator_type end() const 
