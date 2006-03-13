@@ -38,6 +38,6 @@ private:
 };
 
 int
-main(int argc, char * argv[]){
+test_main(int argc, char * argv[]){
     return 0;
 }
