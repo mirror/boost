@@ -9,7 +9,6 @@
 #ifndef BOOST_PROTO_FWD_HPP_EAN_04_01_2005
 #define BOOST_PROTO_FWD_HPP_EAN_04_01_2005
 
-#include <boost/utility/enable_if.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/apply_fwd.hpp>
 #include <boost/spirit/fusion/sequence/tuple_forward.hpp>
@@ -189,15 +188,10 @@ namespace boost { namespace proto
     typename right_type<Op>::const_reference right(Op const &op);
 
     template<typename Op, typename State, typename Visitor, typename DomainTag>
-    typename lazy_enable_if<
-        is_op<Op>
-      , typename compiler<typename tag_type<Op>::type, DomainTag>::BOOST_NESTED_TEMPLATE apply
-        <
-            Op
-          , State
-          , Visitor
-        >
-    >::type const
+    struct compile_result;
+
+    template<typename Op, typename State, typename Visitor, typename DomainTag>
+    typename compile_result<Op, State, Visitor, DomainTag>::type const
     compile(Op const &op, State const &state, Visitor &visitor, DomainTag tag_type);
 
 }} // namespace boost::proto
