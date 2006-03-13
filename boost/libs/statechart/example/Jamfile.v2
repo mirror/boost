@@ -1,10 +1,11 @@
 ##############################################################################
-# (c) Copyright Andreas Huber Doenni 2005
+# (c) Copyright Andreas Huber Doenni 2005-2006
 # Distributed under the Boost Software License, Version 1.0. (See accompany-
 # ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ##############################################################################
 
-project libs/statechart/example ;
+project libs/statechart/example 
+  : requirements <link>shared:<hardcode-dll-paths>true ;
 
 local custom = <define>CUSTOMIZE_MEMORY_MANAGEMENT ;
 local native = <define>BOOST_STATECHART_USE_NATIVE_RTTI ;
