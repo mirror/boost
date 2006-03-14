@@ -109,12 +109,13 @@ The full example can be found in:
 and
 [@../../libs/functional/hash/examples/books.cpp /libs/functional/hash/examples/books.cpp].
 
-[blurb
+[tip
 When writing a hash function, first look at how the equality function works.
 Objects that are equal must generate the same hash value.
 When objects are not equal they should generate different hash values.
-In this object equality was based just on the id, if it was based
-on the objects name and author the hash function should take them into account
+In this object equality was based just on the id so the hash function
+only hash the id. If it was based on the objects name and author
+then the hash function should take them into account
 (how to do this is discussed in the next section).
 ]
 
@@ -166,7 +167,7 @@ of point, it can be repeatedly called for any number of elements. It calls
 Full code for this example is at
 [@../../libs/functional/hash/examples/point.cpp /libs/functional/hash/examples/point.cpp].
 
-[blurb
+[note
 When using [funcref boost::hash_combine] the order of the
 calls matters.
 '''
