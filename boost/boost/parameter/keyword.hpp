@@ -32,7 +32,7 @@ template <class Tag>
 struct keyword : noncopyable
 {
     template <class T>
-    typename aux::tag<Tag, T>::type
+    typename aux::tag<Tag, T>::type const
     operator=(T& x) const
     {
         typedef typename aux::tag<Tag, T>::type result;
@@ -55,7 +55,7 @@ struct keyword : noncopyable
 
 #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)  // avoid partial ordering bugs
     template <class T>
-    typename aux::tag<Tag, T const>::type
+    typename aux::tag<Tag, T const>::type const
     operator=(T const& x) const
     {
         typedef typename aux::tag<Tag, T const>::type result;
