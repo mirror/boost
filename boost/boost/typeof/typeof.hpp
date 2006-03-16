@@ -146,11 +146,11 @@
 #       define BOOST_TYPEOF_TPL BOOST_TYPEOF
 #       define BOOST_TYPEOF_NESTED_TYPEDEF_TPL(name,expr) \
         struct name {\
-            typedef BOOST_TYPEOF_TPL(expr) type;\        
+            typedef BOOST_TYPEOF_TPL(expr) type;\
         };
 #       define BOOST_TYPEOF_NESTED_TYPEDEF(name,expr) \
         struct name {\
-            typedef BOOST_TYPEOF(expr) type;\        
+            typedef BOOST_TYPEOF(expr) type;\
         };
 #   endif
 #   define BOOST_TYPEOF_REGISTER_TYPE(x)
