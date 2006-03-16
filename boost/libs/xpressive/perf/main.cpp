@@ -175,7 +175,7 @@ int main(int argc, char**const argv)
 
     if(test_long_twain)
     {
-        load_file(twain, "mtent12.txt");
+        load_file(twain, "3200.txt");
 
         test_find_all("Twain", twain);
         test_find_all("Huck[[:alpha:]]+", twain);
