@@ -10,6 +10,7 @@
 
 # include <boost/config.hpp>
 # include <boost/detail/workaround.hpp>
+# include <boost/mpl/int.hpp>
 
 namespace boost
 {
@@ -78,8 +79,8 @@ namespace boost
         //Typeof code
 
 # if BOOST_WORKAROUND(BOOST_MSVC,==1300)
-        template<int ID>
-        struct msvc_typeof_base
+        template<typename ID>
+        struct msvc_extract_type
         {
             template<bool>
             struct id2type_impl;
@@ -87,35 +88,36 @@ namespace boost
             typedef id2type_impl<true> id2type;
         };
 
-        template<typename T, int ID>
-        struct msvc_typeof : msvc_typeof_base<ID>
+        template<typename T, typename ID>
+        struct msvc_register_type : msvc_extract_type<ID>
         {
             template<>
-            struct id2type_impl<true> 
+            struct id2type_impl<true>  //VC7.0 specific bugfeature
             {
                 typedef T type;
             };
         };
 # else 
-        template<int ID>
-        struct msvc_typeof_base
+        template<typename ID>
+        struct msvc_extract_type
         {
-
             struct id2type;
         };
 
-        template<typename T, int ID>
-        struct msvc_typeof : msvc_typeof_base<ID>
+        template<typename T, typename ID>
+        struct msvc_register_type : msvc_extract_type<ID>
         {
-            struct msvc_typeof_base<ID>::id2type // This uses nice VC6-VC7 bugfeature
+            typedef msvc_extract_type<ID> base_type;
+            struct base_type::id2type // This uses nice VC6.5 and VC7.1 bugfeature
             {
                 typedef T type;
             };
         };
 # endif
+
         template<int ID>
         struct msvc_typeid_wrapper {
-            typedef typename msvc_typeof_base<ID>::id2type id2type;
+            typedef typename msvc_extract_type<mpl::int_<ID> >::id2type id2type;
             typedef typename id2type::type type;
         };
         //Workaround for ETI-bug for VC6 and VC7
@@ -136,7 +138,7 @@ namespace boost
             //Get the next available compile time constants index
             BOOST_STATIC_CONSTANT(unsigned,value=BOOST_TYPEOF_INDEX(T));
             //Instantiate the template
-            typedef typename msvc_typeof<T,value>::id2type type;
+            typedef typename msvc_register_type<T,mpl::int_<value> >::id2type type;
             //Set the next compile time constants index
             BOOST_STATIC_CONSTANT(unsigned,next=value+1);
             //Increment the compile time constant (only needed when extensions are not active
@@ -152,5 +154,23 @@ namespace boost
     boost::type_of::msvc_typeid_wrapper<sizeof(*boost::type_of::encode_start(expr))>::type
 
 # define BOOST_TYPEOF_TPL(expr) typename BOOST_TYPEOF(expr)
+
+# define BOOST_TYPEOF_NESTED_TYPEDEF_TPL(name,expr) \
+    struct name {\
+        template<typename T>\
+        static boost::type_of::msvc_register_type<T,name> _typeof_register_function(const T&);\
+        BOOST_STATIC_CONSTANT(int,_typeof_register_value=sizeof(_typeof_register_function(expr)));\
+        typedef typename boost::type_of::msvc_extract_type<name>::id2type id2type;\
+        typedef typename id2type::type type;\
+    };
+
+# define BOOST_TYPEOF_NESTED_TYPEDEF(name,expr) \
+    struct name {\
+        template<typename T>\
+        static boost::type_of::msvc_register_type<T,name> _typeof_register_function(const T&);\
+        BOOST_STATIC_CONSTANT(int,_typeof_register_value=sizeof(_typeof_register_function(expr)));\
+        typedef boost::type_of::msvc_extract_type<name>::id2type id2type;\
+        typedef id2type::type type;\
+    };
 
 #endif//BOOST_TYPEOF_MSVC_TYPEOF_IMPL_HPP_INCLUDED

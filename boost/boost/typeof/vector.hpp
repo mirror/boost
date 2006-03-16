@@ -84,7 +84,7 @@
 
 namespace boost { namespace type_of {
 
-    template<class V, class Pos> struct v_iter; // not defined
+    template<class V, class Increase_BOOST_TYPEOF_LIMIT_SIZE> struct v_iter; // not defined
 #     define  BOOST_PP_LOCAL_MACRO  BOOST_TYPEOF_spec_iter
 #     define  BOOST_PP_LOCAL_LIMITS \
         (BOOST_PP_DEC(BOOST_TYPEOF_PP_START_SIZE), \
@@ -138,7 +138,10 @@ namespace boost { namespace type_of {
 
 namespace boost { namespace type_of {
 
-    template<class V, class T> struct push_back; // not defined
+    template<class V, class T> struct push_back {
+        typedef V type;
+    }; //default behaviour is to let push_back ignore T, and return the input vector. 
+    //This is to let BOOST_TYPEOF_NESTED_TYPEDEF work properly with the default vector.
 #     define  BOOST_PP_LOCAL_MACRO  BOOST_TYPEOF_spec_push_back
 #     define  BOOST_PP_LOCAL_LIMITS \
         (BOOST_PP_DEC(BOOST_TYPEOF_PP_START_SIZE), \

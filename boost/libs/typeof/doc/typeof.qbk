@@ -578,7 +578,7 @@ but removes the top-level qualifiers, `const&`
     BOOST_TYPEOF_TPL(expr)
     
 [variablelist Arguments
-[[expr][a valid c++ expression that has a type]]
+[[expr][a valid c++ expression that can be converted to const T&]]
 ]
 
 [h4 Remarks]
@@ -592,6 +592,48 @@ which takes care of `typename` inside the `typeof` expression.
     struct result_of_conditional 
     {
         typedef BOOST_TYPEOF_TPL(true?A():B()) type;
+    };
+
+    template<typename A, typename B>
+    result_of_conditional<A, B>::type min(const A& a,const B& b) 
+    {
+        return a < b ? a : b;
+    }
+    
+[endsect]
+
+[section:typo TYPEOF_NESTED_TYPEDEF, TYPEOF_NESTED_TYPEDEF_TPL]
+
+The `TYPEOF_NESTED_TYPEDEF` macro works in much the same way as the 'TYPEOF' macro does, but
+workarounds several compiler deficiencies. 
+
+[h4 Usage]
+
+    BOOST_TYPEOF_NESTED_TYPEDEF(name,expr)
+    BOOST_TYPEOF_NESTED_TYPEDEF_TPL(name,expr)
+    
+[variablelist Arguments
+[[name][a valid identifier to nest the typeof operation inside]
+[expr][a valid c++ expression that can be converted to const T&]]
+]
+
+[h4 Remarks]
+
+'typeof_nested_typedef' nests the 'typeof' operation inside a struct. By doing this, the 'typeof' operation
+can be split into two steps, deconfusing several compilers (notably VC7.1 and VC8.0) on the way. 
+This also removes the limitation imposed by `BOOST_TYPEOF_LIMIT_SIZE` and allows you to use 'typeof' on much 
+larger expressions.
+
+If you want to use `typeof_nested_typedef` in a template-context, use `BOOST_TYPEOF_NESTED_TYPEDEF_TPL(name,expr)`, 
+which takes care of `typename` inside the `typeof` expression.
+
+[h4 Sample Code]
+
+    template<typename A, typename B>
+    struct result_of_conditional 
+    {
+	BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested,true?A():B());
+	typedef typename nested::type type;
     };
 
     template<typename A, typename B>

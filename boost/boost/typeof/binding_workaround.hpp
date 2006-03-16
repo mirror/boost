@@ -17,8 +17,8 @@ can't bind a function pointer to const T&
 
 namespace boost { namespace type_of {
 
-    template<class T> 
-        sizer<typename encode_type<BOOST_TYPEOF_VECTOR(0)<>, T*>::type> encode(T*, 
+    template<class V,class T> 
+        sizer<typename encode_type<V, T*>::type> encode(T*, 
         typename enable_if<typename is_function<T>::type>::type* = 0);
 
 }}

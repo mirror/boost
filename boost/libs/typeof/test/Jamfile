@@ -73,4 +73,7 @@ test-suite "typeof"
 
 	[ compile function_ptr_from_tpl.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : function_ptr_from_tpl_native ]
 	[ compile function_ptr_from_tpl.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : function_ptr_from_tpl_emulation ]
+
+	[ compile nested_typedef.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : nested_typedef_native ]
+	[ compile nested_typedef.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : nested_typedef_emulation ]
 	;
