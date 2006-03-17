@@ -47,11 +47,24 @@ rule run-template ( test-name : sources * : requirements * ) {
     ] ;
 }
 
+# Given a name of test, return the 'save' test that must be run
+# before the named test, or empty string if there's no such test.
+rule dependency-save-test ( test )
+{
+    local m = [ MATCH (.*)load(.*) : $(test) ] ;
+    if $(m)
+    {
+        return $(m[1])save$(m[2]) ;
+    }  
+}
+
 # each of the following tests is run with each type of archive
 rule run-invoke ( test-name : sources * : defns * )
 {
 #    FIXME
 #    if [ in-invocation-subdir ] { Echo $(test-name) ; }
+
+    local save-test = [ dependency-save-test $(test-name) ] ;
 
     local tests ;
     tests += [ 
@@ -65,6 +78,7 @@ rule run-invoke ( test-name : sources * : defns * )
             <toolset>msvc,<stdlib>stlport:<runtime-link>static
             <define>$(defns)
             <define>BOOST_LIB_DIAGNOSTIC=1
+            <dependency>$(save-test)
     ] ;
 #   FIXME
 #    if [ in-invocation-subdir ] { Echo $(test-name)_dll ; }
@@ -81,6 +95,7 @@ rule run-invoke ( test-name : sources * : defns * )
             <define>BOOST_LIB_DIAGNOSTIC=1
             <define>BOOST_ALL_DYN_LINK=1
             <runtime-link>shared
+            <dependency>$(save-test)_dll
     ] ;
     return $(tests) ;
 }
@@ -90,6 +105,9 @@ rule run-winvoke ( test-name : sources * : defns * )
 {
 # FIXME
 #    if [ in-invocation-subdir ] { Echo $(test-name) ; }
+
+    local save-test = [ dependency-save-test $(test-name) ] ;
+
     local tests ;
     tests += [ 
         run-template $(test-name)
@@ -107,6 +125,7 @@ rule run-winvoke ( test-name : sources * : defns * )
             <toolset>msvc,<stdlib>stlport:<runtime-link>static
             # both stlport and msvc6 define iswspace
             <toolset>msvc,<stdlib>stlport:<linkflags>"-force:multiple"
+            <dependency>$(save-test)
     ] ;
 # FIXME
 #    if [ in-invocation-subdir ] { Echo $(test-name)_dll ; }
@@ -124,6 +143,7 @@ rule run-winvoke ( test-name : sources * : defns * )
             <define>BOOST_LIB_DIAGNOSTIC=1
             <define>BOOST_ALL_DYN_LINK=1
             <runtime-link>shared
+            <dependency>$(save-test)_dll
     ] ;
     return $(tests) ;
 }
