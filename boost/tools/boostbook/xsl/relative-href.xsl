@@ -9,7 +9,7 @@
 <!-- Check if path is absolute
 
     Not attempting to fully parse or validate absolute vs. relative URI.
-    Assumes an absolute url when $target matches the regex '^[a-zA-Z+-.]*:'
+    Assumes an absolute url when $target matches the regex '^[a-zA-Z.+-]*:'
 
     According to RFC1808, however, the colon (':') may also appear in a relative
     URL. To workaround this limitation for relative links containing colons one
