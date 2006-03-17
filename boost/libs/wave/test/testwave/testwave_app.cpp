@@ -262,6 +262,9 @@ testwave_app::testwave_app(po::variables_map const& vm)
         ("variadics", "enable certain C99 extensions in C++ mode")
         ("c99", "enable C99 mode (implies --variadics)")
 #endif 
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+        ("noguard,G", "disable include guard detection")
+#endif
     ;
 }
 
@@ -523,7 +526,8 @@ testwave_app::extract_special_information(std::string const& filename,
     
     boost::wave::language_support const lang_opts = 
         (boost::wave::language_support)(
-            boost::wave::support_variadics | boost::wave::support_long_long |
+            boost::wave::support_option_variadics | 
+            boost::wave::support_option_long_long |
             boost::wave::support_option_no_character_validation |
             boost::wave::support_option_convert_trigraphs);
     
@@ -738,7 +742,14 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
         if (9 == debuglevel) {
             std::cerr << "initialise_options: option: c99" << std::endl;
         }
-        ctx.set_language(boost::wave::support_c99);
+        ctx.set_language(
+            boost::wave::language_support(
+                boost::wave::support_c99 
+              | boost::wave::support_option_emit_line_directives 
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+              | boost::wave::support_option_include_guard_detection
+#endif
+            ));
     }
     else if (vm.count("variadics")) {
     // enable variadics and placemarkers, if appropriate
@@ -764,6 +775,15 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
         }
         ctx.set_language(
             boost::wave::enable_preserve_comments(ctx.get_language()));
+    }
+    
+// disable automatic include guard detection
+    if (vm.count("noguard")) {
+        if (9 == debuglevel) {
+            std::cerr << "initialise_options: option: guard" << std::endl;
+        }
+        ctx.set_language(
+            boost::wave::enable_include_guard_detection(ctx.get_language(), false));
     }
     
 // enable trigraph conversion

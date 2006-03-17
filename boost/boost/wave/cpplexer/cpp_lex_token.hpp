@@ -14,6 +14,9 @@
 #define CPP_TOKEN_HPP_53A13BD2_FBAA_444B_9B8B_FCB225C2BBA8_INCLUDED
 
 #include <boost/wave/wave_config.hpp>
+#if BOOST_WAVE_SERIALIZATION != 0
+#include <boost/serialization/serialization.hpp>
+#endif
 #include <boost/wave/util/file_position.hpp>
 #include <boost/wave/token_ids.hpp>  
 #include <boost/wave/language_support.hpp>
@@ -97,6 +100,17 @@ public:
 #endif // defined(BOOST_SPIRIT_DEBUG)
 
 private:
+#if BOOST_WAVE_SERIALIZATION != 0
+    friend class boost::serialization::access;
+    template<typename Archive>
+    void serialize(Archive &ar, const unsigned int version)
+    {
+        ar & id;
+        ar & value;
+        ar & pos;
+    }
+#endif
+
     token_id id;                // the token id
     string_type value;          // the text, which was parsed into this token
     PositionT pos;              // the original file position

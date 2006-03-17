@@ -54,7 +54,7 @@ main(int argc, char *argv[])
         token_type::string_type instr(data->token);
 
         lexer_type it = lexer_type(instr.begin(), instr.end(), pos, 
-            boost::wave::support_long_long);
+            boost::wave::support_option_long_long);
         lexer_type end = lexer_type();
 
         // verify the correct outcome of the tokenisation
@@ -71,7 +71,12 @@ main(int argc, char *argv[])
                     << std::endl;
             }
             BOOST_TEST(++it != end);
-            BOOST_TEST(boost::wave::T_EOF == boost::wave::token_id(*it));
+            if (boost::wave::T_EOF != boost::wave::token_id(*it)) {
+                BOOST_TEST(boost::wave::T_EOF == boost::wave::token_id(*it));
+                std::cerr << data->token << ": not fully matched, " 
+                    << "first non-matched token was: " << (*it).get_value()
+                    << std::endl;
+            }
         }
 
 #if defined(TESTLEXERS_TIMING)

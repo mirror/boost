@@ -129,6 +129,10 @@ struct chlit_grammar :
             TRACE_CHLIT_GRAMMAR);
     }
     
+    // no need for copy constructor/assignment operator
+    chlit_grammar(chlit_grammar const&);
+    chlit_grammar& operator=(chlit_grammar const&);
+    
     template <typename ScannerT>
     struct definition
     {

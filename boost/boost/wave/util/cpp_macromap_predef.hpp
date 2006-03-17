@@ -17,6 +17,7 @@
 #include <boost/assert.hpp>
 
 #include <boost/wave/wave_config.hpp>
+#include <boost/wave/wave_config_constant.hpp>
 #include <boost/wave/token_ids.hpp>
 
 // this must occur after all of the includes and before any code appears
@@ -198,8 +199,10 @@ namespace predefined_macros {
     inline 
     char const *get_versionstr(bool /*reset*/)
     {
+        using namespace std;    // for some systems memset is in namespace std
+
     static std::string versionstr;
-    char buffer[sizeof("\"00.00.00.0000\"")+1];
+    char buffer[sizeof("\"00.00.00.0000 \"")+sizeof(BOOST_PLATFORM)+3];
 
     // for some systems sprintf, time_t etc. is in namespace std
         using namespace std;    
@@ -208,7 +211,6 @@ namespace predefined_macros {
     // (the day the Wave project was started)
     tm first_day;
 
-        using namespace std;    // for some systems memset is in namespace std
         memset (&first_day, 0, sizeof(tm));
         first_day.tm_mon = 11;           // Dec
         first_day.tm_mday = 13;          // 13
@@ -217,11 +219,28 @@ namespace predefined_macros {
     long seconds = long(difftime(compilation_time.get_time(), 
         mktime(&first_day)));
 
-        sprintf(buffer, "\"%d.%d.%d.%ld\"", BOOST_WAVE_VERSION_MAJOR,
+        sprintf(buffer, "\"%d.%d.%d.%ld [%s]\"", BOOST_WAVE_VERSION_MAJOR,
              BOOST_WAVE_VERSION_MINOR, BOOST_WAVE_VERSION_SUBMINOR, 
-             seconds/(3600*24));
+             seconds/(3600*24), BOOST_PLATFORM);
         versionstr = buffer;
         return versionstr.c_str();
+    }
+    
+// __WAVE_CONFIG__
+    inline 
+    char const *get_config(bool /*reset*/)
+    {
+        using namespace std;    // for some systems memset is in namespace std
+
+    static std::string configstr;
+    char buffer[sizeof("0x00000000")+1];
+
+    // for some systems sprintf is in namespace std
+        using namespace std;    
+
+        sprintf(buffer, "0x%08x", BOOST_WAVE_CONFIG);
+        configstr = buffer;
+        return configstr.c_str();
     }
     
     struct dynamic_macros {
@@ -242,6 +261,7 @@ namespace predefined_macros {
             { "__WAVE__", T_INTLIT, get_version },
             { "__WAVE_VERSION__", T_INTLIT, get_fullversion },
             { "__WAVE_VERSION_STR__", T_STRINGLIT, get_versionstr },
+            { "__WAVE_CONFIG__", T_INTLIT, get_config },
             { 0, T_EOF, 0 }
         };
         BOOST_ASSERT(i < sizeof(data)/sizeof(data[0]));

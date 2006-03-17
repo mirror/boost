@@ -56,7 +56,7 @@ public:
 
 private:
    bool status;             // Current block is true
-   bool some_part_status;   // One of the preceeding or current #if/#elif was true
+   bool some_part_status;   // One of the preceding or current #if/#elif was true
    bool enclosing_status;   // Enclosing #if block is true
    bool is_in_else;         // Inside the #else part
 };
@@ -121,27 +121,30 @@ public:
         return true;
     }
 
-// return, wether the top (innermost) condition is true or false
+// return, whether the top (innermost) condition is true or false
     bool get_status() const
     { 
         return 0 == this->size() || this->top().get_status(); 
+    }
+    bool get_some_part_status() const
+    { 
+        return 0 == this->size() || this->top().get_some_part_status(); 
+    }
+    bool get_enclosing_status() const
+    {
+        return 0 == this->size() || this->top().get_enclosing_status();
     }
 
     size_type get_if_block_depth() const { return this->size(); }
     
 protected:
-    bool get_enclosing_status() const
-    {
-       return 0 == this->size() || this->top().get_enclosing_status();
-    }
-
     bool is_inside_ifpart() const
     {
-       return 0 != this->size() && !this->top().get_in_else();
+        return 0 != this->size() && !this->top().get_in_else();
     }
     bool is_inside_elsepart() const
     {
-       return 0 != this->size() && this->top().get_in_else();
+        return 0 != this->size() && this->top().get_in_else();
     }
 };
 

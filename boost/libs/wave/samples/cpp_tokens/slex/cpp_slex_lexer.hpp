@@ -29,6 +29,9 @@
 #include <boost/wave/cpplexer/validate_universal_char.hpp>
 #include <boost/wave/cpplexer/convert_trigraphs.hpp>
 #include <boost/wave/cpplexer/cpplexer_exceptions.hpp>
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+#include <boost/wave/cpplexer/detect_include_guards.hpp>
+#endif
 
 #include "../slex_interface.hpp"
 #include "../slex_token.hpp"
@@ -116,7 +119,7 @@ private:
 #define Q(c)                "\\" c
 #define TRI(c)              Q("?") Q("?") c
 
-// definition of some subtoken regexps to simplify the regex definitions
+// definition of some sub-token regexps to simplify the regex definitions
 #define BLANK               "[ \\t]"
 #define CCOMMENT            \
     Q("/") Q("*") "[^*]*" Q("*") "+" "(" "[^/*][^*]*" Q("*") "+" ")*" Q("/")
@@ -135,8 +138,15 @@ private:
     "(" "(0x|0X)" HEXDIGIT "+" OR "0" OCTALDIGIT "*" OR "[1-9]" DIGIT "*" ")"
             
 #define INTEGER_SUFFIX      "(" "[uU][lL]?|[lL][uU]?" ")"
+#if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
+#define LONGINTEGER_SUFFIX  "(" "[uU]" "(" "[lL][lL]" ")" OR \
+                                "(" "[lL][lL]" ")" "[uU]" "?" OR \
+                                "i64" \
+                            ")" 
+#else
 #define LONGINTEGER_SUFFIX  "(" "[uU]" "(" "[lL][lL]" ")" OR \
                             "(" "[lL][lL]" ")" "[uU]" "?" ")"
+#endif
 #define FLOAT_SUFFIX        "(" "[fF][lL]?|[lL][fF]?" ")"
 #define CHAR_SPEC           "L?"
 
@@ -347,20 +357,20 @@ lexer<IteratorT, PositionT>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(MSEXT_PP_REGION, POUNDDEF PPSPACE "region"),
     TOKEN_DATA(MSEXT_PP_ENDREGION, POUNDDEF PPSPACE "endregion"),
 #endif // BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
+//  TOKEN_DATA(OCTALINT, "0" OCTALDIGIT "*" INTEGER_SUFFIX "?"),
+//  TOKEN_DATA(DECIMALINT, "[1-9]" DIGIT "*" INTEGER_SUFFIX "?"),
+//  TOKEN_DATA(HEXAINT, "(0x|0X)" HEXDIGIT "+" INTEGER_SUFFIX "?"),
+    TOKEN_DATA(LONGINTLIT, INTEGER LONGINTEGER_SUFFIX),
+    TOKEN_DATA(INTLIT, INTEGER INTEGER_SUFFIX "?"),
+    TOKEN_DATA(FLOATLIT, 
+        "(" DIGIT "*" Q(".") DIGIT "+" OR DIGIT "+" Q(".") ")" 
+        EXPONENT "?" FLOAT_SUFFIX "?" OR
+        DIGIT "+" EXPONENT FLOAT_SUFFIX "?"),
 #if BOOST_WAVE_USE_STRICT_LEXER != 0
     TOKEN_DATA(IDENTIFIER, "([a-zA-Z_]" OR UNIVERSALCHAR ")([a-zA-Z0-9_]" OR UNIVERSALCHAR ")*"),
 #else
     TOKEN_DATA(IDENTIFIER, "([a-zA-Z_$]" OR UNIVERSALCHAR ")([a-zA-Z0-9_$]" OR UNIVERSALCHAR ")*"),
 #endif
-//  TOKEN_DATA(OCTALINT, "0" OCTALDIGIT "*" INTEGER_SUFFIX "?"),
-//  TOKEN_DATA(DECIMALINT, "[1-9]" DIGIT "*" INTEGER_SUFFIX "?"),
-//  TOKEN_DATA(HEXAINT, "(0x|0X)" HEXDIGIT "+" INTEGER_SUFFIX "?"),
-    TOKEN_DATA(INTLIT, INTEGER INTEGER_SUFFIX "?"),
-    TOKEN_DATA(LONGINTLIT, INTEGER LONGINTEGER_SUFFIX),
-    TOKEN_DATA(FLOATLIT, 
-        "(" DIGIT "*" Q(".") DIGIT "+" OR DIGIT "+" Q(".") ")" 
-        EXPONENT "?" FLOAT_SUFFIX "?" OR
-        DIGIT "+" EXPONENT FLOAT_SUFFIX "?"),
     TOKEN_DATA(CCOMMENT, CCOMMENT),
     TOKEN_DATA(CPPCOMMENT, Q("/") Q("/[^\\n\\r]*") NEWLINEDEF ),
     TOKEN_DATA(CHARLIT, CHAR_SPEC "'" 
@@ -659,21 +669,32 @@ public:
                         }
                         break;
                     }
+                    
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+                    return guards.detect_guard(token_type(id, token_val, pos));
+#else
                     return token_type(id, token_val, pos);
+#endif
                 }
             
             // skip the T_CONTLINE token
             } while (true);
         }
-        return token;       // return T_EOI
+        return token;   // return T_EOI
     }
+    
     void set_position(PositionT const &pos) 
     { 
         // set position has to change the file name and line number only
         first.get_position().set_file(pos.get_file()); 
         first.get_position().set_line(pos.get_line()); 
     }
-    
+
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+    bool has_include_guards(std::string& guard_name) const 
+        { return guards.detected(guard_name); }
+#endif
+
 private:
     iterator_type first;
     iterator_type last;
@@ -681,6 +702,10 @@ private:
     static lexer::lexer<IteratorT, PositionT> lexer;   // needed only once
     
     bool at_eof;
+
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+    include_guards<token_type> guards;
+#endif
 };
 
 template <typename IteratorT, typename PositionT>

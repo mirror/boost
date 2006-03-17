@@ -11,6 +11,8 @@
 #if !defined(TOKEN_CACHE_HPP_4D2320B7_1D56_4113_A114_397E70FA438C_INCLUDED)
 #define TOKEN_CACHE_HPP_4D2320B7_1D56_4113_A114_397E70FA438C_INCLUDED
 
+#include <vector>
+
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/token_ids.hpp>
 

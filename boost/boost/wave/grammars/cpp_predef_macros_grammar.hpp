@@ -51,7 +51,7 @@ struct predefined_macros_grammar :
 
         rule_type plain_define, macro_definition, macro_parameters;
 
-        definition(predefined_macros_grammar const &self) 
+        definition(predefined_macros_grammar const &/*self*/) 
         {
         // import the spirit and cpplexer namespaces here
             using namespace boost::spirit;

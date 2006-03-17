@@ -77,6 +77,14 @@ class StoragePolicy
 
 #include <boost/iterator/reverse_iterator.hpp>
 
+#include <boost/wave/wave_config.hpp>
+#if BOOST_WAVE_SERIALIZATION != 0
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/collections_save_imp.hpp>
+#include <boost/serialization/collections_load_imp.hpp>
+#define BOOST_WAVE_FLEX_STRING_SERIALIZATION_HACK 1
+#endif
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -1534,7 +1542,14 @@ public:
     
     const_reverse_iterator rend() const
     { return const_reverse_iterator(begin()); }
-    
+
+#if BOOST_WAVE_FLEX_STRING_SERIALIZATION_HACK != 0
+    //  temporary hack to make it easier to serialize flex_string's using
+    //  the Boost.Serialization library 
+    value_type & back() { return *(begin()+size()-1); }
+    value_type const& back() const { return *(begin()+size()-1); }
+#endif
+
     // 21.3.3 capacity:
     size_type size() const
     { return Storage::size(); }
@@ -2208,57 +2223,57 @@ flex_string<E, T, A, S> operator+(const flex_string<E, T, A, S>& lhs,
 }
 
 template <typename E, class T, class A, class S>
-bool operator==(const flex_string<E, T, A, S>& lhs, 
+inline bool operator==(const flex_string<E, T, A, S>& lhs, 
     const flex_string<E, T, A, S>& rhs)
 { return lhs.compare(rhs) == 0; }
 
 template <typename E, class T, class A, class S>
-bool operator==(const typename flex_string<E, T, A, S>::value_type* lhs, 
+inline bool operator==(const typename flex_string<E, T, A, S>::value_type* lhs, 
     const flex_string<E, T, A, S>& rhs)
 { return rhs == lhs; }
 
 template <typename E, class T, class A, class S>
-bool operator==(const flex_string<E, T, A, S>& lhs, 
+inline bool operator==(const flex_string<E, T, A, S>& lhs, 
     const typename flex_string<E, T, A, S>::value_type* rhs)
 { return lhs.compare(rhs) == 0; }
 
 template <typename E, class T, class A, class S>
-bool operator!=(const flex_string<E, T, A, S>& lhs, 
+inline bool operator!=(const flex_string<E, T, A, S>& lhs, 
     const flex_string<E, T, A, S>& rhs)
 { return !(lhs == rhs); }
 
 template <typename E, class T, class A, class S>
-bool operator!=(const typename flex_string<E, T, A, S>::value_type* lhs, 
+inline bool operator!=(const typename flex_string<E, T, A, S>::value_type* lhs, 
     const flex_string<E, T, A, S>& rhs)
 { return !(lhs == rhs); }
 
 template <typename E, class T, class A, class S>
-bool operator!=(const flex_string<E, T, A, S>& lhs, 
+inline bool operator!=(const flex_string<E, T, A, S>& lhs, 
     const typename flex_string<E, T, A, S>::value_type* rhs)
 { return !(lhs == rhs); }
 
 template <typename E, class T, class A, class S>
-bool operator<(const flex_string<E, T, A, S>& lhs, 
+inline bool operator<(const flex_string<E, T, A, S>& lhs, 
     const flex_string<E, T, A, S>& rhs)
 { return lhs.compare(rhs) < 0; }
 
 template <typename E, class T, class A, class S>
-bool operator<(const flex_string<E, T, A, S>& lhs, 
+inline bool operator<(const flex_string<E, T, A, S>& lhs, 
     const typename flex_string<E, T, A, S>::value_type* rhs)
 { return lhs.compare(rhs) < 0; }
 
 template <typename E, class T, class A, class S>
-bool operator<(const typename flex_string<E, T, A, S>::value_type* lhs, 
+inline bool operator<(const typename flex_string<E, T, A, S>::value_type* lhs, 
     const flex_string<E, T, A, S>& rhs)
 { return rhs.compare(lhs) > 0; }
 
 template <typename E, class T, class A, class S>
-bool operator>(const flex_string<E, T, A, S>& lhs, 
+inline bool operator>(const flex_string<E, T, A, S>& lhs, 
     const flex_string<E, T, A, S>& rhs)
 { return rhs < lhs; }
 
 template <typename E, class T, class A, class S>
-bool operator>(const flex_string<E, T, A, S>& lhs, 
+inline bool operator>(const flex_string<E, T, A, S>& lhs, 
     const typename flex_string<E, T, A, S>::value_type* rhs)
 { return rhs < lhs; }
 
@@ -2268,12 +2283,12 @@ bool operator>(const typename flex_string<E, T, A, S>::value_type* lhs,
 { return rhs < lhs; }
 
 template <typename E, class T, class A, class S>
-bool operator<=(const flex_string<E, T, A, S>& lhs, 
+inline bool operator<=(const flex_string<E, T, A, S>& lhs, 
     const flex_string<E, T, A, S>& rhs)
 { return !(rhs < lhs); }
 
 template <typename E, class T, class A, class S>
-bool operator<=(const flex_string<E, T, A, S>& lhs, 
+inline bool operator<=(const flex_string<E, T, A, S>& lhs, 
     const typename flex_string<E, T, A, S>::value_type* rhs)
 { return !(rhs < lhs); }
 
@@ -2293,7 +2308,7 @@ bool operator>=(const flex_string<E, T, A, S>& lhs,
 { return !(lhs < rhs); }
 
 template <typename E, class T, class A, class S>
-bool operator>=(const typename flex_string<E, T, A, S>::value_type* lhs, 
+inline bool operator>=(const typename flex_string<E, T, A, S>::value_type* lhs, 
     const flex_string<E, T, A, S>& rhs)
 { return !(lhs < rhs); }
 
@@ -2301,7 +2316,7 @@ bool operator>=(const typename flex_string<E, T, A, S>::value_type* lhs,
 //void swap(flex_string<E, T, A, S>& lhs, flex_string<E, T, A, S>& rhs);    // to do
 
 template <typename E, class T, class A, class S>
-std::basic_istream<typename flex_string<E, T, A, S>::value_type, 
+inline std::basic_istream<typename flex_string<E, T, A, S>::value_type, 
     typename flex_string<E, T, A, S>::traits_type>&
 operator>>(
     std::basic_istream<typename flex_string<E, T, A, S>::value_type, 
@@ -2342,6 +2357,64 @@ flex_string<E1, T, A, S>::npos = (typename flex_string<E1, T, A, S>::size_type)(
 }   // namespace util
 }   // namespace wave
 }   // namespace boost
+
+#if BOOST_WAVE_SERIALIZATION != 0
+///////////////////////////////////////////////////////////////////////////////
+namespace boost { namespace serialization {
+
+#if !defined(BOOST_WAVE_FLEX_STRING_SERIALIZATION_HACK)
+
+// FIXME: This doesn't work because of the missing flex_string::operator>>()
+template <typename E, class T, class A, class S>
+struct implementation_level<boost::wave::util::flex_string<E, T, A, S> >
+{
+    typedef mpl::integral_c_tag tag;
+    typedef mpl::int_<boost::serialization::primitive_type> type;
+    BOOST_STATIC_CONSTANT(
+        int,
+        value = implementation_level::type::value
+    );
+};
+
+#else
+
+//  We serialize flex_strings as vectors of char's for now
+template<class Archive, typename E, class T, class A, class S>
+inline void save(Archive & ar, 
+    boost::wave::util::flex_string<E, T, A, S> const &t,
+    const unsigned int file_version)
+{
+    boost::serialization::stl::save_collection<
+        Archive, wave::util::flex_string<E, T, A, S> >(ar, t);
+}
+
+template<class Archive, typename E, class T, class A, class S>
+inline void load(Archive & ar, boost::wave::util::flex_string<E, T, A, S> &t,
+    const unsigned int file_version)
+{
+    boost::serialization::stl::load_collection<
+        Archive, boost::wave::util::flex_string<E, T, A, S>,
+        boost::serialization::stl::archive_input_seq<
+            Archive, boost::wave::util::flex_string<E, T, A, S> >,
+        boost::serialization::stl::reserve_imp<
+            boost::wave::util::flex_string<E, T, A, S> >
+    >(ar, t);
+}
+
+// split non-intrusive serialization function member into separate
+// non intrusive save/load member functions
+template<class Archive, typename E, class T, class A, class S>
+inline void serialize(Archive & ar, boost::wave::util::flex_string<E, T, A, S> &t,
+    const unsigned int file_version)
+{
+    boost::serialization::split_free(ar, t, file_version);
+}
+
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
+}} // boost::serialization
+#endif
 
 // the suffix header occurs after all of the code
 #ifdef BOOST_HAS_ABI_HEADERS

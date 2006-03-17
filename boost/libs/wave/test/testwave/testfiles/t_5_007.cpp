@@ -6,36 +6,37 @@
     Software License, Version 1.0. (See accompanying file
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-    The tests included in this file were initially taken from the mcpp V2.5
-    preprocessor validation suite and were modified to fit into the Boost.Wave 
-    unit test requirements.
+    Some of the tests included in this file were initially taken from the mcpp 
+    V2.5 preprocessor validation suite and were modified to fit into the 
+    Boost.Wave unit test requirements.
     The original files of the mcpp preprocessor are distributed under the 
     license reproduced at the end of this file.
 =============================================================================*/
 
-// Tests the #include directive.
+// Tests the #include directive (need to switch off include guard detection).
+//O --noguard
 
 // 6.1: Header-name quoted by " and " as well as by < and > can include
 //      standard headers.
-//R #line 22 "t_5_007.cpp"
+//R #line 23 "t_5_007.cpp"
 #include "boost/version.hpp"
 BOOST_LIB_VERSION           //R "$V" 
 
-//R #line 28 "t_5_007.cpp"
+//R #line 29 "t_5_007.cpp"
 #undef BOOST_VERSION_HPP
 #undef BOOST_LIB_VERSION
 #include <boost/version.hpp>
 BOOST_LIB_VERSION           //R "$V" 
 
 // 6.2: Macro is allowed in #include line.
-//R #line 35 "t_5_007.cpp"
+//R #line 36 "t_5_007.cpp"
 #undef MACRO_005_007
 #define HEADER  "t_5_007.hpp"
 #include HEADER
 MACRO_005_007               //R abc 
 
-// 6.3: With macro nonsence but legal.
-//R #line 42 "t_5_007.cpp"
+// 6.3: With macro nonsense but legal.
+//R #line 43 "t_5_007.cpp"
 #undef MACRO_005_007
 #define ZERO_TOKEN
 #include ZERO_TOKEN HEADER ZERO_TOKEN

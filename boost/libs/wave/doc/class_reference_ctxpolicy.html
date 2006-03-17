@@ -33,14 +33,14 @@
 <h2><b><a name="introduction"></a>Introduction</b></h2>
 <p>The context policy is used to provide callback hooks, which are called from inside the library into the user code, whenever</p>
 <ul>
-  <li>a preprocessor directive were recognized, </li>
+  <li>a preprocessor directive has been recognized, </li>
   <li>a token is about to be returned from the preprocessor, </li>
-  <li>a macro get's defined or undefind, </li>
-  <li>a macro is expanded or rescanned,</li>
-  <li>an include file is opened or left, </li>
+  <li>a macro get's defined or undefined, </li>
+  <li>a macro has been expanded or rescanned,</li>
+  <li>an include file has been opened or left, </li>
   <li>a conditional expression was evaluated,</li>
   <li>a token has to be skipped because it is contained in a non-evaluated conditional block, </li>
-  <li> a pragma of the form <tt>'wave option[(value)]'</tt> is recognised. </li>
+  <li> a pragma of the form <tt>'wave option[(value)]'</tt> has been recognised. </li>
 </ul>
 <p>This policy type is used as a template parameter to the <a href="class_reference_context.html"><tt>boost::wave::context&lt;&gt;</tt></a> 
   object, where the default policy provides empty hook functions only.</p>
@@ -55,8 +55,10 @@
 
         <span class="comment">// general hook functions</span>
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TokenT&gt;
-        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#found_directive">found_directive</a>(TokenT <span class="keyword">const </span>&amp;directive);<br><span class="keyword">
-        <span class="comment">// test, whether a given token may be skipped</span><br>        bool <a href="class_reference_ctxpolicy.html#may_skip_whitespace">may_skip_whitespace</a> (TokenT &amp;token, bool &amp;skipped_newline);<br>
+        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#found_directive">found_directive</a>(TokenT <span class="keyword">const </span>&amp;directive);<br>
+        <span class="comment">// test, whether a given token may be skipped</span><br>        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;
+        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#may_skip_whitespace">may_skip_whitespace</a> (ContextT <span class="keyword">const</span>&amp; ctx,
+            TokenT &amp;token, <span class="keyword">bool</span> &amp;skipped_newline);<br>
         </span><span class="comment">// Conditional compilation</span><span class="keyword">
         template</span> &lt;<span class="keyword">typename</span> ContainerT&gt;<br>        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#evaluated_conditional_expression">evaluated_conditional_expression</a>(ContainerT <span class="keyword">const</span>&amp; expression, <br>            <span class="keyword">bool</span> expression_value);<br>
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TokenT&gt;
@@ -120,10 +122,12 @@
   <p>The parameter <tt>directive</tt> refers to the token containing the detected preprocessing directive. </p>
 </blockquote>
 <p><a name="may_skip_whitespace" id="may_skip"></a><strong>may_skipwhitespace</strong></p>
-<pre>    <span class="keyword">bool</span> may_skip_whitespace(TokenT &amp;token, <span class="keyword">bool</span>&amp; skipped_newline);
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT&gt;
+    <span class="keyword">bool</span> may_skip_whitespace(ContextT <span class="keyword">const</span>&amp; ctx, TokenT &amp;token, <span class="keyword">bool</span>&amp; skipped_newline);
 </pre>
 <blockquote>
   <p>The function <tt>may_skipwhitespace</tt> will be called by the library, whenever a token is about to be returned to the calling application. </p>
+  <p>The <tt>ctx</tt> parameter provides a reference to the <tt>context_type</tt> used during instantiation of the preprocessing iterators by the user. Note, this parameter was added after the Boost V1.34.0 release. </p>
   <p>The <tt>token</tt> parameter holds a reference to the current token. The policy is free to change this token if needed.</p>
   <p>The <tt>skipped_newline</tt> parameter holds a reference to a boolean value which should be set to true by the policy function whenever a newline is going to be skipped. </p>
   <p>If the return value is <tt>true</tt>, the given token is skipped and the preprocessing continues to the next token. If the return value is <tt>false</tt>, the given token is returned to the calling application. Caution has to be used, because by returning <span class="keyword">true</span> the policy function is able to force skipping even significant tokens not only whitespace. </p>
@@ -258,7 +262,7 @@
 </blockquote>
 <h3>Interpretation of #pragma's</h3>
 <p><strong><a name="interpret_pragma"></a>interpret_pragma</strong></p>
-<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> Context, <span class="keyword">typename</span> ContainerT&gt;
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;
     bool <a href="class_reference_ctxpolicy.html#interpret_pragma">interpret_pragma</a>(ContextT <span class="keyword">const</span> &amp;ctx, ContainerT &amp;pending, 
         <span class="keyword">typename</span> ContextT::token_type <span class="keyword">const</span> &amp;option, 
         ContainerT <span class="keyword">const</span> &amp;values, 
@@ -328,7 +332,7 @@
   <br>
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Thursday, December 1, 2005  11:49<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Sunday, February 26, 2006  14:19<!-- #EndDate -->
 </span></p>
 </body>
 </html>

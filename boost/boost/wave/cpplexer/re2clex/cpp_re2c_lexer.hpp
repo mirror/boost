@@ -37,6 +37,9 @@
 #include <boost/wave/cpplexer/cpp_lex_interface.hpp>
 #include <boost/wave/cpplexer/re2clex/scanner.hpp>
 #include <boost/wave/cpplexer/re2clex/cpp_re.hpp>
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+#include <boost/wave/cpplexer/detect_include_guards.hpp>
+#endif
 
 // this must occur after all of the includes and before any code appears
 #ifdef BOOST_HAS_ABI_HEADERS
@@ -59,10 +62,7 @@ template <typename IteratorT, typename PositionT = boost::wave::util::file_posit
 class lexer 
 {
 public:
-
-    typedef char                        char_t;
-    typedef Scanner                     base_t;
-    typedef lex_token<PositionT>        token_type;
+    typedef lex_token<PositionT>              token_type;
     typedef typename token_type::string_type  string_type;
     
     lexer(IteratorT const &first, IteratorT const &last, 
@@ -78,7 +78,13 @@ public:
 //        scanner.column = scanner.curr_column = pos.get_column();
         scanner.file_name = filename.c_str();
     }
-
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+    bool has_include_guards(std::string& guard_name) const 
+    { 
+        return guards.detected(guard_name); 
+    }
+#endif
+    
 // error reporting from the re2c generated lexer
     static int report_error(Scanner const* s, char const *, ...);
 
@@ -90,7 +96,10 @@ private:
     string_type value;
     bool at_eof;
     boost::wave::language_support language;
-    
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+    include_guards<token_type> guards;
+#endif
+        
     static token_cache<string_type> const cache;
 };
 
@@ -238,8 +247,7 @@ lexer<IteratorT, PositionT>::get()
     case T_ANY_TRIGRAPH:
         if (language & support_option_convert_trigraphs) {
             value = impl::convert_trigraph(
-                string_type((char const *)scanner.tok, 
-                    scanner.cur-scanner.tok)); 
+                string_type((char const *)scanner.tok)); 
         }
         else {
             value = string_type((char const *)scanner.tok, 
@@ -263,8 +271,13 @@ lexer<IteratorT, PositionT>::get()
 //     std::cerr << boost::wave::get_token_name(id) << ": " << value << std::endl;
 
     // the re2c lexer reports the new line number for newline tokens
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+    return guards.detect_guard(lex_token<PositionT>(id, value, 
+        PositionT(filename, actline, scanner.column)));
+#else
     return lex_token<PositionT>(id, value, 
         PositionT(filename, actline, scanner.column));
+#endif
 }
 
 template <typename IteratorT, typename PositionT>
@@ -310,8 +323,11 @@ public:
     
 // get the next token from the input stream
     token_type get() { return lexer.get(); }
-    void set_position(PositionT const &pos) 
-    { lexer.set_position(pos); }
+    void set_position(PositionT const &pos) { lexer.set_position(pos); }
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+    bool has_include_guards(std::string& guard_name) const 
+        { return lexer.has_include_guards(guard_name); }
+#endif    
 
 private:
     lexer<IteratorT, PositionT> lexer;

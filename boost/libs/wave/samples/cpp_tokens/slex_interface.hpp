@@ -69,6 +69,10 @@ struct slex_input_interface
 
     virtual ~slex_input_interface() {}
     
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+    virtual bool has_include_guards(std::string& guard_name) const = 0;
+#endif    
+
 //  The new_lexer function allows the opaque generation of a new lexer object.
 //  It is coupled to the token type to allow to distinguish different 
 //  lexer/token configurations at compile time.

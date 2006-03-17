@@ -59,7 +59,7 @@ main(int argc, char *argv[])
             ("copyright,c", "print out the copyright statement")
             ("config-file", po::value<std::vector<std::string> >()->composing(), 
                 "specify a config file (alternatively: @arg)")
-            ("debug,d", po::value<int>(), "set the debug level (0...2)")
+            ("debug,d", po::value<int>(), "set the debug level (0...9)")
         ;
 
     // Hidden options, will be used in in config file analysis to allow to

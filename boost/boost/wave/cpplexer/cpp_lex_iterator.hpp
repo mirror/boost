@@ -80,6 +80,12 @@ public:
         BOOST_ASSERT(0 != functor_ptr.get());
         functor_ptr->set_position(pos);
     }
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+    bool has_include_guards(std::string& guard_name) const
+    {
+        return functor_ptr->has_include_guards(guard_name);
+    }
+#endif    
     
 private:
     boost::shared_ptr<lex_input_interface<TokenT> > functor_ptr;
@@ -166,6 +172,16 @@ public:
         }
         base_type::get_functor().set_position(currpos);
     }
+    
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+    // return, whether the current file has include guards
+    // this function returns meaningful results only if the file was scanned 
+    // completely
+    bool has_include_guards(std::string& guard_name) const
+    {
+        return base_type::get_functor().has_include_guards(guard_name);
+    }
+#endif    
 };
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -38,8 +38,9 @@
     --config-file filepath: specify a config file (alternatively: @filepath)
  
   Options allowed additionally in a config file:
-    -o [--output] path:          specify a file to use for output instead of stdout
-    -E [ --autooutput ]          output goes into a file named &lt;input_basename&gt;.i
+    -o [--output] path:          specify a file [path] to use for output instead of 
+                                 stdout or disable output [-]
+    -E [ --autooutput ]:         output goes into a file named &lt;input_basename&gt;.i
     -I [--include] path:         specify an additional include directory
     -S [--sysinclude] syspath:   specify an additional system include directory
     -F [--forceinclude] file:    force inclusion of the given file
@@ -51,13 +52,23 @@
 	
   Extended options (allowed everywhere)
     -t [--traceto] arg:          output trace info to a file [arg] or to stderr [-]
-    --timer                      output overall elapsed computing time
+    --timer:                     output overall elapsed computing time
     --long_long:                 enable long long support if C++ mode
     --variadics:                 enable variadics and placemarkers in C++ mode
     --c99:                       enable C99 mode (implies variadics and placemarkers)
     -l [ --listincludes ] arg:   list included file to a file [arg] or to stdout [-]
-    -p [ --preserve ] arg (=0):  preserve whitespace<br>                                 0: no whitespace is preserved (default),<br>                                 1: comments are preserved,<br>                                 2: all whitespace is preserved
-    -x [ --extended ]            enable the #pragma wave system() directive
+    -p [ --preserve ] arg (=0):  preserve whitespace
+                                 0: no whitespace is preserved (default),
+                                 1: comments are preserved,
+                                 2: all whitespace is preserved
+    -L [ --line ] arg (=1):      control the generation of #line directives
+                                 0: no #line directives are generated
+                                 1: #line directives will be emitted (default)
+    -x [ --extended ]:           enable the #pragma wave system() directive
+    -G [ --noguard ]:            disable include guard detection
+    -s [ --state ] arg:          load and save state information from/to the given
+                                 file [arg] or 'wave.state' [-] (interactive mode
+                                 only)
 </pre>
 <P dir="ltr">The possible options are straightforward and self explanatory. The 
   following describes some of these options in more detail. Please note, that 
@@ -67,7 +78,7 @@
 <P dir="ltr">-o [--output] path</P>
 <blockquote> 
   <p dir="ltr">Specify a filename to be used for the generated preprocessed output 
-    stream. If this option is not given, then the standard output is used (stdout).</p>
+    stream. If this option is not given, then the standard output is used (stdout). If the filename given equals to <tt>'-'</tt> (without the quotes), no output is generated initially. This is especially useful for syntax checks only or in conjunction with the <span class="preprocessor">#pragma&nbsp;wave&nbsp;option(output:&nbsp;...) </span>directive restricting the generated out to specific parts only.  </p>
 </blockquote>
 <P dir="ltr">-E [--autooutput]</P>
 <blockquote>
@@ -182,16 +193,29 @@
   <p dir="ltr">Preserve the whitespace from the input stream not located inside of macro definitions. The argument defines the amount of whitespace to be preserved. A value of '0' (zero) skips all whitespace, a value of '1' preserves all the comments and a value of '2' will preserve all whitespace in the output.</p>
   <p dir="ltr">The comments located inside macro definitions are skipped even if this option is specified with an argument not '0' (zero) . If this option is not specified on the command line only essential whitespace is preserved (equivalent to '0' as the argument value). </p>
 </blockquote>
+<p dir="ltr">-L [--line]</p>
+<blockquote>
+  <p dir="ltr">Controls whether the <tt>Wave</tt> tool generates <span class="preprocessor">#line</span> directives or not. If the argument is '1' these will be emitted, if the argument value is '0' no <span class="preprocessor">#line</span> directives will be generated. If this option is not specified, <tt>Wave</tt> always will generate <span class="preprocessor">#line</span> directives. </p>
+</blockquote>
 <p dir="ltr">-x [--extended]</p>
 <blockquote>
-  <p dir="ltr">Enable the <tt>#pragma wave system() </tt>directive. This directive 
-is now disabled by default because it may cause a potential security threat. The <tt>Wave</tt> driver will issue a remark if this command line argument is not specified and a <tt>#pragma wave system()</tt> directive is encountered.</p>
+  <p dir="ltr">Enable the <span class="preprocessor">#pragma&nbsp;wave&nbsp;system()</span> directive. This directive 
+is now disabled by default because it may cause a potential security threat. The <tt>Wave</tt> driver will issue a remark if this command line argument is not specified and a <span class="preprocessor">#pragma&nbsp;wave&nbsp;system()</span> directive is encountered.</p>
+</blockquote>
+<p dir="ltr">-G [--noguard] </p>
+<blockquote>
+  <p dir="ltr">This option disables the automatic include guard detection normally performed by the Wave library during the processing of included files. For more information about automatic include guard detection please refer to <a href="class_reference_context.html">The Context Object</a> class reference. </p>
+</blockquote>
+<p dir="ltr">-s [--state]</p>
+<blockquote>
+  <p dir="ltr">This option tries instructs the <tt>Wave</tt> tool to load the serialized information from the file given as the argument and to save back the internal state information at the end of the session to the same file. When using this option <tt>Wave</tt> loads and saves all defined macros (even the predefined ones) and the information about processed header files tagged with <span class="preprocessor">#pragma once</span> and/or identified to have include guards. </p>
+  <p dir="ltr">Note: This option has effect in interactive mode only. </p>
 </blockquote>
 <p dir="ltr">@ [--config-file] option</p>
 <blockquote> 
   <p dir="ltr">Some of the possible command line options may be specified inside 
     of special configuration files. This is very useful, as a shorthand for different 
-    global configurations. A config file may contain additional options (-I, -S, 
+    global configurations. A config file may contain additional options (i.e. -I, -S, 
     -F, -U, -D and -P options), one option per line. Empty lines and lines beginning 
     with a '#' character are ignored (are treated as a comment lines). Note that 
     the '#' character is treated as the beginning of a comment only, if it is 
@@ -222,9 +246,9 @@ is now disabled by default because it may cause a potential security threat. The
     if they were place instead of the configuration file option on the command 
     line.</p>
 </blockquote>
-<p dir="ltr">The <tt>Wave</tt> driver program looks at startup for a configuration 
-  file named 'wave.cfg' in the same directory, where it was started from (where 
-  is located the driver executable). If this file exists, it is treated as a normal 
+<p dir="ltr">The <tt>Wave</tt> driver program at startup looks for a configuration 
+  file named 'wave.cfg' in the same directory where it was started from (where the driver executable 
+  is located). If this file exists, it is treated as a normal 
   configuration file and the specified herein options are interpreted as if they 
   were given as the first options on the command line. This feature is very useful 
   for defining a global environment for the <tt>Wave</tt> preprocessor driver.</p>
@@ -242,7 +266,7 @@ is now disabled by default because it may cause a potential security threat. The
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Saturday, February 25, 2006  12:24<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Monday, March 13, 2006  19:18<!-- #EndDate -->
 </span></p>
 </body>
 </html>

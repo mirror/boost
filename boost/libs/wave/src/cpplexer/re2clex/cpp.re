@@ -41,7 +41,7 @@ NonDigit           = [a-zA-Z_$] | UniversalChar;
     "/*"            { goto ccomment; }
     "//"            { goto cppcomment; }
     "."? Digit      { goto pp_number; }
-        
+
     "asm"           { BOOST_WAVE_RET(T_ASM); }
     "auto"          { BOOST_WAVE_RET(T_AUTO); }
     "bool"          { BOOST_WAVE_RET(T_BOOL); }
@@ -238,13 +238,13 @@ NonDigit           = [a-zA-Z_$] | UniversalChar;
 
     ([a-zA-Z_$] | UniversalChar) ([a-zA-Z_0-9$] | UniversalChar)*
         { BOOST_WAVE_RET(T_IDENTIFIER); }
-    
+
     "L"? (['] (EscapeSequence|any\[\n\r\\']|UniversalChar)+ ['])
         { BOOST_WAVE_RET(T_CHARLIT); }
-    
+
     "L"? (["] (EscapeSequence|any\[\n\r\\"]|UniversalChar)* ["])
         { BOOST_WAVE_RET(T_STRINGLIT); }
-    
+
 
     Pound PPSpace ( "include" | "include_next") PPSpace "<" (any\[\n\r>])+ ">" 
         { BOOST_WAVE_RET(T_PP_HHEADER); }
@@ -376,6 +376,7 @@ cppcomment:
     }
 */
 
+/* this subscanner is called whenever a pp_number has been started */
 pp_number:
 {
     cursor = uchar_wrapper(s->tok = s->cur, s->column = s->curr_column);
@@ -393,10 +394,29 @@ pp_number:
         ((FractionalConstant ExponentPart?) | (Digit+ ExponentPart)) FloatingSuffix?
             { BOOST_WAVE_RET(T_FLOATLIT); }
             
-        Integer LongIntegerSuffix
+        Integer { goto integer_suffix; } 
+    */
+    }
+}
+
+/* this subscanner is called, whenever a Integer was recognized */
+integer_suffix:
+{
+    if (s->enable_ms_extensions) {
+    /*!re2c
+        LongIntegerSuffix | "i64"
             { BOOST_WAVE_RET(T_LONGINTLIT); }
 
-        Integer IntegerSuffix?
+        IntegerSuffix?
+            { BOOST_WAVE_RET(T_INTLIT); }
+    */
+    }
+    else {
+    /*!re2c
+        LongIntegerSuffix
+            { BOOST_WAVE_RET(T_LONGINTLIT); }
+
+        IntegerSuffix?
             { BOOST_WAVE_RET(T_INTLIT); }
     */
     }

@@ -23,6 +23,80 @@ TODO (known issues):
 CHANGELOG
 
 Boost V1.34.0
+- Wave Version 1.2.4
+- Added the possibility to explicitely enable/disable the generation of #line 
+  directives. Added a corresponding commandline argument to the Wave driver 
+  tool (--line/-L) which takes either 0 or 1 as its parameter.
+- Added support for #pragma wave option(command: value) directives, which 
+  supports the following commands:
+   . #pragma wave option(line: [0|1])  
+        Enable/disable generation of #line directives
+   . #pragma wave option(preserve: [0|1|2])  
+        Control whitespace preservation
+   . #pragma wave option(output: ["filename" | null | default])
+        Redirect output to the given file (or no output, if 'null' is specified,
+        or output to the file as given on the command line, if 'default' is 
+        specified).
+        The filename is resolved relative to the directory of the processed
+        file.
+  These new #pragma directives are implemented in the Wave driver tool only.
+  It is possible to combine several options in one #pragma directive, i.e.
+  #pragma wave option(line: 0, preserve: 2).
+- Changed the signature of the may_skip_whitespace() preprocessing hook to 
+  additionally take the preprocessing context as its first parameter.
+- Added the possibility to the Wave tool to disable initial output by 
+  specifying a '-' as the output file. This is useful for syntax checks only or
+  in conjunction with the #pragma wave option(output: ...) to restrict the
+  generated output.
+- Improved error reporting in the Wave tool on bad output file stream state.
+- Switched to Re2C V0.10.0
+- Fixed some of the VC7.1 /W4 warnings.
+- The Wave tool now creates the directory hierarchy of output files as needed.
+- Applied some optimization, which causes skipping of the parsing for almost 
+  all preprocessor directives when the if block status is false. This gains
+  upto 10-20% in speed for average applications.
+- Added error diagnostic for #elif without matching #if, which was missing 
+  under certain circumstances.
+- Avoided the evaluation of #elif expressions if one of the previous #if/#elif
+  blocks of the same level was true. This gains upto another 5% of speed for
+  average applications.
+- The MS specific integer suffix 'i64' is now correctly supported by the Re2C
+  and SLex lexer components (only when BOOST_WAVE_SUPPORT_MS_EXTENSIONS is 
+  defined during compilation).
+- Changed the Wave tool to print the column number of an error/warning along
+  with the line number. The new format is: 'filename:line:column: error text'.
+- It is now possible to recover from the unbalanced #if/#endif statement 
+  warning in a proper way.
+- The Wave library now automaticaly recognizes include guards in headers files
+  and uses this information to avoid opening these header files more than once.
+  This speeds up things by upto 10-20% depending on the concrete include files.
+- Fixed the failing test t_6_023.cpp. Error reporting for illformed #else 
+  directives was broken (because of some recent changes).
+- Fixed the failing test t_5_007.cpp. This was caused by the automatic include 
+  guard detection, which prevented the second inclusion of the specified
+  include file the test was relying on.
+- Added the possibility to switch off the automatic include guard detection.
+- Added a new command line option to the Wave tool: --noguard/-G, which
+  disables the automatic include guard detection.
+- Now a header with include guards will be included correctly for a second time
+  after its include guard symbol gets undefined.
+- Added the generating platform to Wave's full version string.
+- Made the Wave tool fully interactive when started with input from stdin and
+  and output to stdout. In this mode the Wave tool preprocesses the input 
+  line by line and not only after receiving the full input as normally.
+- Added serialization support for the wave::context object, which stores 
+  all information about defined macros and all #pragma once header information.
+- Added the command line option --state (-s) to the Wave tool, which tries to 
+  load the serialized information from the file given as the argument to 
+  --state and save the state information at the end to the same file. 
+  This option is available in interactive mode only. 
+- Added possibility to verify the compatibility of the configuration used 
+  during compilation of the Wave library with the config info used for the 
+  application. Added a corresponding test to the Wave tool.
+- Added a new predefined macro __WAVE_CONFIG__ which expands to an integer
+  literal containg the configuration information the library was compiled
+  with.
+  
 - Version 1.2.3
 - Added a missing throw() specification to the function 
   cpp_exception::get_related_name().

@@ -41,7 +41,7 @@ namespace util {
 
         template <typename T>
         bool test(T pattern_) const
-        { return (pattern_ & pattern_mask) == pattern; }
+        { return ((unsigned long)pattern_ & pattern_mask) == (unsigned long)pattern; }
 
         CharT         pattern;
         unsigned long pattern_mask;
@@ -49,9 +49,8 @@ namespace util {
 
     template <typename CharT>
     inline pattern_and<CharT>
-    pattern_p(CharT pattern, unsigned long pattern_mask = 0UL)
-    { return pattern_and<CharT>(pattern, pattern_mask); }
-
+    pattern_p(CharT pattern, long pattern_mask = 0L)
+    { return pattern_and<CharT>(pattern, (unsigned long)pattern_mask); }
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace util

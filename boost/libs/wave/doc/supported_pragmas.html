@@ -71,6 +71,7 @@
         for the whole pragma, the stderr output is ignored. The command is considered 
         to be successful, if/when the return value is zero, otherwise an error 
         is reported. <br>
+        This <span class="preprocessor">#pragma</span> is available only if the command line option -x is specified. The <tt>Wave</tt> driver will issue a remark if this command line argument is not specified and a <span class="preprocessor">#pragma&nbsp;wave&nbsp;system()</span> directive is encountered<br>
       </p></td>
   </tr>
   <tr> 
@@ -80,11 +81,22 @@
         suspend<br>
         resume </p></td>
     <td class="table_cells"><p>The value <tt>restart</tt> set the current elapsed 
-        time to 0 and restarts the timer.<br>
-        If no value is provided, the current elpsed time is printed to the std::cerr 
-        stream.<br>
-        The values <tt>suspend</tt> and <tt>resume</tt> allow to temporarily stop 
-        the timing.</p></td>
+        time to 0 and restarts the timer.</p>
+      <p> If no value is provided, the current elapsed time is printed to the std::cerr 
+        stream.        </p>
+      <p>The values <tt>suspend</tt> and <tt>resume</tt> allow to temporarily stop 
+        and resume the timing.</p></td>
+  </tr>
+  <tr>
+    <td class="table_cells"><p>option</p></td>
+    <td class="table_cells"><p>line: [0|1]<br> 
+      preserve: [0|1|2]<br>
+      output: [&quot;filename&quot; | null]
+</p>
+    </td>
+    <td class="table_cells"><p>The <tt>option(line: ...)</tt> directive allows to control, whether <span class="preprocessor">#line</span> directives will be generated in the output stream. Specify either '0' or '1' as the option parameter. All other values will be flaged as illegal. </p>
+      <p>The <tt>option(preserve: ...)</tt> directive allows to control the amount of whitespace generated in the output stream. The value '0' removes any not needed whitespace, the value '1' keeps comments only and the value '2' does not remove any whitespace.</p>
+    <p>The <tt>option(output: ...)</tt> directive allows to specify the name of the file, where the output is generated to.  Specify either a valid filename (which will be interpreted relative to directory of the processed file) or the value <tt>null</tt> (without quotes) to disable the output at all. </p></td>
   </tr>
 </table>
 <p>All pragma's not listed here but flagged as <tt>'wave'</tt> are currently reported as 
@@ -115,7 +127,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Saturday, February 25, 2006  15:49<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Friday, March 3, 2006  10:26<!-- #EndDate -->
   </span>
 </p>
 <p>&nbsp;</p>

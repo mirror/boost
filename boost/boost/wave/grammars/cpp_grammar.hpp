@@ -18,6 +18,7 @@
 #include <boost/spirit/utility/lists.hpp>
 
 #include <boost/wave/wave_config.hpp>
+#include <boost/pool/pool_alloc.hpp>
 
 #if BOOST_WAVE_DUMP_PARSE_TREE != 0
 #include <map>
@@ -56,7 +57,7 @@ namespace impl {
         store_found_eof(bool &found_eof_) : found_eof(found_eof_) {}
         
         template <typename TokenT>
-        void operator()(TokenT const &token) const
+        void operator()(TokenT const &/*token*/) const
         {
             found_eof = true;
         }
@@ -224,26 +225,26 @@ struct cpp_grammar :
         // new-line character that follows the first token in the sequence.
 
             pp_statement
-                =   (   include_file
+                =   (   plain_define
+                    |   include_file
                     |   system_include_file
-                    |   macro_include_file
-                    |   plain_define
-                    |   undefine
-                    |   ppifdef
-                    |   ppifndef
                     |   ppif
-                    |   ppelse
                     |   ppelif
-                    |   ppendif
+                    |   ppifndef
+                    |   ppifdef
+                    |   undefine
+                    |   ppelse
+                    |   macro_include_file
                     |   ppline
+                    |   pppragma
                     |   pperror
                     |   ppwarning
-                    |   pppragma
-                    |   illformed
+                    |   ppendif
 #if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
                     |   ppregion
                     |   ppendregion
 #endif
+                    |   illformed
                     )
                     >> eol_tokens
 //  In parser debug mode it is useful not to flush the underlying stream
@@ -253,7 +254,7 @@ struct cpp_grammar :
 #if !(defined(BOOST_SPIRIT_DEBUG) && \
       (BOOST_SPIRIT_DEBUG_FLAGS_CPP & BOOST_SPIRIT_DEBUG_FLAGS_CPP_GRAMMAR) \
      )
-                    >>  impl::flush_underlying_parser_p
+                   >>  impl::flush_underlying_parser_p
 #endif // !(defined(BOOST_SPIRIT_DEBUG) &&
                 ;
 
@@ -319,7 +320,7 @@ struct cpp_grammar :
             macro_parameters
                 =   confix_p(
                         no_node_d[ch_p(T_LEFTPAREN) >> *ppsp],
-                        !list_p(
+                       !list_p(
                             (   ch_p(T_IDENTIFIER) 
                             |   pattern_p(KeywordTokenType, TokenTypeMask)
                             |   pattern_p(OperatorTokenType|AltExtTokenType, 
@@ -527,12 +528,14 @@ struct cpp_grammar :
             eol_tokens 
                 =   no_node_d
                     [
-                        *ppsp 
-                        >>  (   ch_p(T_NEWLINE)
-                            |   ch_p(T_CPPCOMMENT)
-                            |   ch_p(T_EOF)
-                                [ store_found_eof_type(self.found_eof) ]
-                            )
+                       *(   ch_p(T_SPACE) 
+                        |   ch_p(T_CCOMMENT)
+                        )
+                    >>  (   ch_p(T_NEWLINE)
+                        |   ch_p(T_CPPCOMMENT)
+                        |   ch_p(T_EOF)
+                            [ store_found_eof_type(self.found_eof) ]
+                        )
                     ]
                 ;
 
@@ -635,6 +638,31 @@ struct cpp_grammar :
 #undef TRACE_CPP_GRAMMAR
 
 ///////////////////////////////////////////////////////////////////////////////
+//
+//  Special parse function generating a parse tree using a given node_factory.
+//
+///////////////////////////////////////////////////////////////////////////////
+template <typename NodeFactoryT, typename IteratorT, typename ParserT>
+inline boost::spirit::tree_parse_info<IteratorT, NodeFactoryT>
+parsetree_parse(IteratorT const& first_, IteratorT const& last,
+    boost::spirit::parser<ParserT> const& p)
+{
+    using namespace boost::spirit;
+    
+    typedef pt_match_policy<IteratorT, NodeFactoryT> pt_match_policy_type;
+    typedef scanner_policies<iteration_policy, pt_match_policy_type>
+        scanner_policies_type;
+    typedef scanner<IteratorT, scanner_policies_type> scanner_type;
+
+    scanner_policies_type policies;
+    IteratorT first = first_;
+    scanner_type scan(first, last, policies);
+    tree_match<IteratorT, NodeFactoryT> hit = p.derived().parse(scan);
+    return tree_parse_info<IteratorT, NodeFactoryT>(
+        first, hit, hit && (first == last), hit.length(), hit.trees);
+}
+
+///////////////////////////////////////////////////////////////////////////////
 //  
 //  The following parse function is defined here, to allow the separation of 
 //  the compilation of the cpp_grammar from the function using it.
@@ -649,7 +677,9 @@ struct cpp_grammar :
 
 template <typename LexIteratorT>
 BOOST_WAVE_GRAMMAR_GEN_INLINE 
-boost::spirit::tree_parse_info<LexIteratorT>
+boost::spirit::tree_parse_info<
+    LexIteratorT, typename cpp_grammar_gen<LexIteratorT>::node_factory_type
+>
 cpp_grammar_gen<LexIteratorT>::parse_cpp_grammar (
     LexIteratorT const &first, LexIteratorT const &last,
     position_type const &act_pos, bool &found_eof,
@@ -659,7 +689,8 @@ cpp_grammar_gen<LexIteratorT>::parse_cpp_grammar (
     using namespace boost::wave;
     
     cpp_grammar<token_type> g(found_eof, found_directive);
-    tree_parse_info<LexIteratorT> hit = pt_parse (first, last, g);
+    tree_parse_info<LexIteratorT, node_factory_type> hit = 
+        parsetree_parse<node_factory_type>(first, last, g);
     
 #if BOOST_WAVE_DUMP_PARSE_TREE != 0
     if (hit.match) {

@@ -25,9 +25,9 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/spirit/iterator/multi_pass.hpp>
 #include <boost/spirit/tree/parse_tree_utils.hpp>
-#include <boost/pool/pool_alloc.hpp>
 
 #include <boost/wave/wave_config.hpp>
+#include <boost/pool/pool_alloc.hpp>
 
 #include <boost/wave/util/insert_whitespace_detection.hpp>
 #include <boost/wave/util/macro_helpers.hpp>
@@ -231,15 +231,14 @@ private:
         iteration_context_type;
 
 // parse tree related types
-    typedef 
-        boost::spirit::node_val_data_factory<boost::spirit::nil_t> 
-        node_factory_t;
-    typedef 
-        boost::spirit::tree_match<lexer_type, node_factory_t> 
-        parse_tree_match_t;
-    typedef typename parse_tree_match_t::node_t         parse_node_type;       // tree_node<node_val_data<> >
-    typedef typename parse_tree_match_t::parse_node_t   parse_node_value_type; // node_val_data<>
-    typedef typename parse_tree_match_t::container_t    parse_tree_type;       // parse_node_type::children_t
+    typedef typename cpp_grammar_type::node_factory_type node_factory_type;
+    typedef boost::spirit::tree_parse_info<lexer_type, node_factory_type> 
+        tree_parse_info_type;
+    typedef boost::spirit::tree_match<lexer_type, node_factory_type> 
+        parse_tree_match_type;
+    typedef typename parse_tree_match_type::node_t       parse_node_type;       // tree_node<node_val_data<> >
+    typedef typename parse_tree_match_type::parse_node_t parse_node_value_type; // node_val_data<>
+    typedef typename parse_tree_match_type::container_t  parse_tree_type;       // parse_node_type::children_t
 
 // type of a token sequence
     typedef typename ContextT::token_sequence_type      token_sequence_type;
@@ -280,7 +279,7 @@ protected:
     result_type const &pp_token(bool consider_emitting_line_directive = false);
 
     bool pp_directive();
-    bool dispatch_directive(boost::spirit::tree_parse_info<lexer_type> const &hit,
+    bool dispatch_directive(tree_parse_info_type const &hit,
         result_type const& found_directive);
 
     void on_include(string_type const &s, bool is_system, bool include_next);
@@ -363,30 +362,39 @@ pp_iterator_functor<ContextT>::returned_from_include()
     // restore the previous iteration context after finishing the preprocessing 
     // of the included file
         BOOST_WAVE_STRINGTYPE oldfile = iter_ctx->real_filename;
+        position_type old_pos (act_pos);
         
+    // if this file has include guards handle it as if it had a #pragma once
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+        if (need_include_guard_detection(ctx.get_language())) {
+            std::string guard_name;
+            if (iter_ctx->first.has_include_guards(guard_name))
+                ctx.add_pragma_once_header(ctx.get_current_filename(), guard_name);
+        }
+#endif 
         iter_ctx = ctx.pop_iteration_context();
 
-    // ensure the integrity of the #if/#endif stack
-        if (iter_ctx->if_block_depth != ctx.get_if_block_depth()) {
-            using boost::wave::util::impl::escape_lit;
-            BOOST_WAVE_THROW(preprocess_exception, unbalanced_if_endif, 
-                escape_lit(oldfile).c_str(), act_pos);
-        }
-        
         must_emit_line_directive = true;
         seen_newline = true;
 
     // restore current file position
         act_pos.set_file(iter_ctx->filename);
-#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-        ctx.set_current_filename(iter_ctx->real_filename.c_str());
-#endif 
-
         act_pos.set_line(iter_ctx->line);
         act_pos.set_column(0);
         
-    // restore the actual current directory 
+    // restore the actual current file and directory 
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+        ctx.set_current_filename(iter_ctx->real_filename.c_str());
+#endif 
         ctx.set_current_directory(iter_ctx->real_filename.c_str());
+
+    // ensure the integrity of the #if/#endif stack
+    // report unbalanced #if/#endif now to make it possible to recover properly
+        if (iter_ctx->if_block_depth != ctx.get_if_block_depth()) {
+            using boost::wave::util::impl::escape_lit;
+            BOOST_WAVE_THROW(preprocess_exception, unbalanced_if_endif, 
+                escape_lit(oldfile).c_str(), old_pos);
+        }
         return true;
     }
     return false;
@@ -402,7 +410,7 @@ pp_iterator_functor<ContextT>::returned_from_include()
 namespace {
 
     //  It may be necessary to emit a #line directive either 
-    //  - when comments need to be preserved: if the current token is a not a 
+    //  - when comments need to be preserved: if the current token is not a 
     //    whitespace, except comments
     //  - when comments are to be skipped: if the current token is not a 
     //    whitespace token.
@@ -450,16 +458,17 @@ token_id id = T_UNKNOWN;
             act_token.set_value("\n");
         }
         
-    } while (ctx.get_hooks().may_skip_whitespace(act_token, skipped_newline));
+    } while (ctx.get_hooks().may_skip_whitespace(ctx, act_token, skipped_newline));
     
 // if there were skipped any newlines, we must emit a #line directive
     if ((must_emit_line_directive || (was_seen_newline && skipped_newline)) && 
         consider_emitting_line_directive(ctx, id)) 
     {
     // must emit a #line directive
-        if (emit_line_directive()) {
+        if (need_emit_line_directives(ctx.get_language()) && emit_line_directive()) 
+        {
             skipped_newline = false;
-            ctx.get_hooks().may_skip_whitespace(act_token, skipped_newline);     // feed ws eater FSM
+            ctx.get_hooks().may_skip_whitespace(ctx, act_token, skipped_newline);     // feed ws eater FSM
             id = token_id(act_token);
         }
     }
@@ -487,9 +496,9 @@ token_id id = T_UNKNOWN;
         // re-tokenize the pp-number
             token_sequence_type rescanned;
             
-            std::string value_to_test(act_token.get_value().c_str());
-            lexer_type it = lexer_type(value_to_test.begin(), 
-                value_to_test.end(), act_token.get_position(), 
+            std::string pp_number(act_token.get_value().c_str());
+            lexer_type it = lexer_type(pp_number.begin(), 
+                pp_number.end(), act_token.get_position(), 
                 ctx.get_language());
             lexer_type end = lexer_type();
             for (/**/; it != end && T_EOF != token_id(*it); ++it) 
@@ -532,7 +541,7 @@ pp_iterator_functor<ContextT>::get_next_token()
     
 // if there is something in the unput_queue, then return the next token from
 // there (all tokens in the queue are preprocessed already)
-    if (pending_queue.size() > 0 || unput_queue.size() > 0) 
+    if (!pending_queue.empty() || !unput_queue.empty()) 
         return pp_token();      // return next token
     
 // test for EOF, if there is a pending input context, pop it back and continue
@@ -565,6 +574,11 @@ bool returned_from_include_file = returned_from_include();
         token_id id = token_id(act_token);
         
             if (T_EOF == id) {
+            // returned from an include file, continue with the next token
+                whitespace.shift_tokens(T_EOF);
+                ++iter_ctx->first;
+
+            // now make sure this line has a newline
                 if (!seen_newline && 
                     !(support_option_single_line & get_support_options(ctx.get_language()))) 
                 {
@@ -572,10 +586,6 @@ bool returned_from_include_file = returned_from_include();
                     BOOST_WAVE_THROW(preprocess_exception, 
                         last_line_not_terminated, "", act_pos);
                 }
-                
-            // returned from an include file, continue with the next token
-                whitespace.shift_tokens(T_EOF);
-                ++iter_ctx->first;
                 continue;   // if this is the main file, the while loop breaks
             }
             else if (T_NEWLINE == id || T_CPPCOMMENT == id) {   
@@ -800,13 +810,12 @@ namespace {
     }
     
     template <typename ContexT, typename IteratorT>
-    bool is_pp_null(ContexT &ctx, IteratorT &it, IteratorT const &end)
+    bool pp_is_last_on_line(ContexT &ctx, IteratorT &it, IteratorT const &end)
     {
         using namespace boost::wave;
         
-        BOOST_ASSERT(T_POUND == BASE_TOKEN(token_id(*it)));
         ctx.get_hooks().skipped_token(*it);     // this token get's skipped
-        
+
         for (++it; it != end; ++it) {
             token_id id = token_id(*it);
             if (T_CPPCOMMENT == id || T_NEWLINE == id ||
@@ -814,7 +823,7 @@ namespace {
             {
                 ctx.get_hooks().skipped_token(*it);
                 ++it;           // skip eol/C/C++ comment
-                return true;    // found pp_null
+                return true;    // no more significant tokens on this line
             }
 
             if (!IS_CATEGORY(id, WhiteSpaceTokenType))
@@ -838,7 +847,7 @@ namespace {
                 context_policies::util::ccomment_has_newline(*it)) 
             {
                 ++it;           // skip eol/C/C++ comment
-                return true;    // found pp_null
+                return true;    // found eol
             }
         }
         return false;
@@ -857,7 +866,7 @@ lexer_type it = iter_ctx->first;
     if (!next_token_is_pp_directive(ctx, it, iter_ctx->last)) {
     // eventually skip null pp directive (no need to do it via the parser)
         if (it != iter_ctx->last && T_POUND == BASE_TOKEN(token_id(*it))) {
-            if (is_pp_null(ctx, it, iter_ctx->last)) {
+            if (pp_is_last_on_line(ctx, it, iter_ctx->last)) {
                 seen_newline = true;
                 iter_ctx->first = it;   // start over with the next line
                 return true;
@@ -876,22 +885,79 @@ lexer_type it = iter_ctx->first;
 
 // ignore all pp directives not related to conditional compilation while
 // if block status is false
-    if (!ctx.get_if_block_status() && 
-        !IS_EXTCATEGORY(*it, PPConditionalTokenType))
-    {
-        seen_newline = true;
-        skip_to_eol(ctx, it, iter_ctx->last);
-        iter_ctx->first = it;       // start over with the next line
-        return true;
-    }
+    if (!ctx.get_if_block_status()) {
+        bool can_exit = true;
+        if (IS_EXTCATEGORY(*it, PPConditionalTokenType)) {
+        // simulate the if block hierarchy
+            switch (static_cast<unsigned int>(token_id(*it))) {
+            case T_PP_IFDEF:        // #ifdef
+            case T_PP_IFNDEF:       // #ifndef
+            case T_PP_IF:           // #if
+                ctx.enter_if_block(false);
+                break;
 
+            case T_PP_ELIF:         // #elif
+                if (!ctx.get_enclosing_if_block_status()) {
+                    if (!ctx.enter_elif_block(false)) { 
+                    // #else without matching #if
+                        BOOST_WAVE_THROW(preprocess_exception, 
+                            missing_matching_if, "#elif", act_pos);
+                    }
+                }
+                else {
+                    can_exit = false;   // #elif is not always safe to skip
+                }
+                break;
+
+            case T_PP_ELSE:         // #else
+                {
+                // handle this directive
+                    on_else();
+
+                // make sure, there are no (non-whitespace) tokens left on this line                
+                    string_type value ((*it).get_value());
+                    if (!pp_is_last_on_line(ctx, it, iter_ctx->last)) {
+                    // enable error recovery (start over with the next line)
+                        seen_newline = true;
+                        skip_to_eol(ctx, it, iter_ctx->last);
+                        iter_ctx->first = it;
+                    
+                    // report an invalid #else directive
+                        BOOST_WAVE_THROW(preprocess_exception, ill_formed_directive, 
+                            value, act_pos);
+                    }
+
+                // we skipped to the end of this line already
+                    seen_newline = true;
+                    iter_ctx->first = it;
+                }
+                return true;
+                  
+            case T_PP_ENDIF:        // #endif
+                on_endif();
+                break;
+
+            default:                // #something else
+                on_illformed((*it).get_value());
+                break;
+            }
+        }
+
+    // start over with the next line, if only possible
+        if (can_exit) {
+            seen_newline = true;
+            skip_to_eol(ctx, it, iter_ctx->last);
+            iter_ctx->first = it;
+            return true;
+        }
+    }
+    
 // found a pp directive, so try to identify it, start with the pp_token
 bool found_eof = false;
 result_type found_directive;
 
-boost::spirit::tree_parse_info<lexer_type> hit = 
-    cpp_grammar_type::parse_cpp_grammar(it, iter_ctx->last, act_pos, found_eof, 
-        found_directive);
+tree_parse_info_type hit = cpp_grammar_type::parse_cpp_grammar(
+    it, iter_ctx->last, act_pos, found_eof, found_directive);
 
     if (hit.match) {
     // position the iterator past the matched sequence to allow 
@@ -924,8 +990,7 @@ boost::spirit::tree_parse_info<lexer_type> hit =
 template <typename ContextT> 
 inline bool
 pp_iterator_functor<ContextT>::dispatch_directive(
-    boost::spirit::tree_parse_info<lexer_type> const &hit,
-    result_type const& found_directive)
+    tree_parse_info_type const &hit, result_type const& found_directive)
 {
     using namespace cpplexer;
     using namespace boost::spirit;
@@ -1457,13 +1522,13 @@ pp_iterator_functor<ContextT>::on_elif(
     typename parse_tree_type::const_iterator const &begin,
     typename parse_tree_type::const_iterator const &end)
 {
-    if (ctx.get_if_block_status()) {
+    if (ctx.get_if_block_some_part_status()) {
         if (!ctx.enter_elif_block(false)) {
         // #else without matching #if
             BOOST_WAVE_THROW(preprocess_exception, missing_matching_if, "#elif", 
                 act_pos);
         }
-        return;     // #if/previous #elif was true, so don't enter this #elif 
+        return;     // one of previous #if/#elif was true, so don't enter this #elif 
     }
             
 // preprocess the given sequence into the provided list
@@ -1508,7 +1573,11 @@ bool if_status = grammars::expression_grammar_gen<result_type>::
                 ctx.get_if_block_status());
                 
     ctx.get_hooks().evaluated_conditional_expression(toexpand, if_status);
-    ctx.enter_elif_block(if_status);
+    if (!ctx.enter_elif_block(if_status)) { 
+    // #else without matching #if
+        BOOST_WAVE_THROW(preprocess_exception, missing_matching_if, "#elif", 
+            act_pos);
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

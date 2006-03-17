@@ -73,6 +73,7 @@ namespace impl {
 
         case T_FLOATLIT:
         case T_INTLIT:
+        case T_PP_NUMBER:
             return (value.size() > 1 || (value[0] != 'e' && value[0] != 'E'));
             
          // avoid constructing universal characters (\u1234)
@@ -92,6 +93,7 @@ namespace impl {
         case T_INTLIT:
         case T_FLOATLIT:
         case T_FIXEDPOINTLIT:
+        case T_PP_NUMBER:
             return true;
         }
         return false;
@@ -108,6 +110,7 @@ namespace impl {
         case T_INTLIT:
         case T_FLOATLIT:
         case T_FIXEDPOINTLIT:
+        case T_PP_NUMBER:
             return true;
         }
         return false;
@@ -150,6 +153,7 @@ namespace impl {
         case T_INTLIT:
         case T_FLOATLIT:
         case T_FIXEDPOINTLIT:
+        case T_PP_NUMBER:
             return true;
         }
         return false;
@@ -213,6 +217,7 @@ public:
         case T_NONREPLACABLE_IDENTIFIER:
         case T_IDENTIFIER: 
             return impl::handle_identifier(prev, beforeprev, value); 
+        case T_PP_NUMBER:
         case T_INTLIT:
             return impl::handle_intlit(prev, beforeprev); 
         case T_FLOATLIT:

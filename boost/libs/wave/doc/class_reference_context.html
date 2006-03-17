@@ -3,8 +3,7 @@
     <head>
         <title>The Context Object</title>
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-        <link rel="stylesheet" href="theme/style.css" type="text/css">
-    </head>
+        <link rel="stylesheet" href="theme/style.css" type="text/css"></head>
     <body text="#000000" background="theme/bkd.gif">
 <table width="100%" border="0" cellspacing="2" background="theme/bkd2.gif">
   <tr> 
@@ -380,13 +379,14 @@
     the release number, <span class="literal">'ss'</span> the subrelease number 
     and <span class="literal">'bbbb'</span> the build number. A possible return 
     value looks like <span class="literal">&quot;0.9.1.454&quot;</span>. The returned 
-    value is the same as is inserted in the preprocessed token stream, when the 
+    value is the same as it will be inserted in the preprocessed token stream, when the 
     predefined macro <tt>__WAVE_VERSION_STR__</tt> is expanded.</p>
 </blockquote>
 <h3>Control extended options</h3>
 <p><a name="language_support"></a>set_language<br>
   get_language</p>
-<pre><span class="keyword">    void</span> set_language(<span class="keyword">language_support</span> language);
+<pre><span class="keyword">    void</span> set_language(<span class="keyword">language_support</span> language, 
+        <span class="keyword">bool</span> reset_macros = <span class="keyword">true</span>);
     <span class="keyword">language_support</span> get_language() <span class="keyword">const</span>;</pre>
 <blockquote> 
   <p>This functions allows to specify the language mode, in which the <tt>Wave</tt> 
@@ -398,28 +398,57 @@
         support_cpp = support_normal,
     
     <span class="comment">// support flags for C99</span>
-        support_long_long = 0x02,
-        support_variadics = 0x04,
-        support_c99 = support_variadics | 
-                      support_long_long | 0x08,
+        support_option_long_long = 0x02,
+        support_option_variadics = 0x04,
+        support_c99 = support_option_variadics | 
+                      support_option_long_long | 
+                      0x08,
 
 <span class="comment">    // the mask for the main language settings</span>
         support_option_mask = 0xFF00,<br>
-<span class="comment">    // additional fine tuning of the general behaviour</span>
-        support_option_preserve_comments = 0x0100,<br>        support_option_no_character_validation = 0x0200,<br>        support_option_convert_trigraphs = 0x0400<br>    };</pre>
-  <p>When used with <tt>support_variadics</tt> the support for variadics, placemarkers 
-    and the <tt>operator _Pragma()</tt> is enabled in normal C++ mode. When used with the <tt>support_long_long</tt> the support for long long suffixes is enabled in C++ mode. </p>
-  <p>The <tt>support_c99</tt> switches to the C99 language support, which enables variadics, placemarkers, the <tt>operator _Pragma</tt> and long long suffixes by default. Additionally it disables the C++ specific tokens such as <tt>'-&gt;*'</tt>, <tt>'.*'</tt>, <tt>'::'</tt> etc. </p>
+<span class="comment">    // additional fine tuning of the general behavior</span>
+        support_option_preserve_comments = 0x0100,
+        support_option_no_character_validation = 0x0200,
+        support_option_convert_trigraphs = 0x0400,
+        support_option_single_line = 0x0800,
+        support_option_prefer_pp_numbers = 0x1000,
+        support_option_emit_line_directives = 0x2000,
+        support_option_include_guard_detection = 0x4000
+    };</pre>
+  <p>When used with <tt>support_option_variadics</tt> the support for variadics, placemarkers 
+    and the <tt>operator&nbsp;_Pragma()</tt> is enabled in normal C++ mode. When used with the <tt>support_option_long_long</tt> the support for long long suffixes is enabled in C++ mode. </p>
+  <p>The <tt>support_c99</tt> switches on the C99 language support, which enables variadics, placemarkers, the <tt>operator&nbsp;_Pragma</tt> and long long suffixes by default. Additionally it disables the C++ specific tokens such as <tt>'-&gt;*'</tt>, <tt>'.*'</tt>, <tt>'::'</tt> etc. </p>
   <p>The <tt>support_option_...</tt> values are to be used in conjunction with the main language settings (<tt>support_normal</tt> and <tt>support_c99</tt>) . </p>
   <ul>
-    <li>If the <tt>support_option_preserve_comments</tt> flag is set, the <tt>Wave</tt> library preserves almost all comments in the source code. The only comments not preserved are those contained inside macro definitions. By default all comments are replaced by a single space. </li>
-    <li>If the <tt>support_option_no_character_validation</tt> flag is set , the <tt>Wave</tt> library doesn't validate universal character literals (given in the form of <tt>'u1234'</tt> or <tt>'U12345678'</tt>) to be in the allowed value range. This flag is merely used for internal purposes by the testing framework and will be rarely used by a user of the library.</li>
+    <li>If the <tt>support_option_preserve_comments</tt> flag is set, the <tt>Wave</tt> library preserves almost all comments in the source code. The only comments not preserved are those contained inside macro definitions. If this flag is not set all comments are replaced by a single space. </li>
+    <li>If the <tt>support_option_no_character_validation</tt> flag is set , the <tt>Wave</tt> library does not validate universal character literals (given in the form of <tt>'u1234'</tt> or <tt>'U12345678'</tt>) to be in the allowed value range. This flag is merely used for internal purposes by the testing framework and will be rarely used by a user of the library.</li>
     <li>If the <tt>support_option_convert_trigraphs</tt> flag is set, the <tt>Wave</tt> library replaces all occurences of trigraph characters with their non-trigraph character sequence (i.e. <tt>'??='</tt> is replaced by <tt>'#'</tt> etc.) . By default no replacement is performed. </li>
+    <li>If the <tt>support_option_single_line</tt> flag is set, the <tt>Wave</tt> library will now reprot an error if the last line of the processed input is not terminated by a new line. This flag is merely used for internal purposes by the testing framework and will be rarely used by a user of the library.</li>
+    <li>If the <tt>support_option_prefer_pp_numbers</tt> flag is set, the <tt>Wave</tt> library is instructed to correctly identify pp-number's in the input stream. These get recognized into 'normal' number tokens before they get returned to the calling application. The flag is set by default and is used merely for internal purposes and will be rarely reset by a user of the library. </li>
+    <li>If the <span class="keyword">support_option_emit_line_directives</span> flag is set, the <tt>Wave</tt> library will emit <span class="preprocessor">#line</span> directives in the generated token stream, if appropriate. This flag is set by default, to prevent the library from generating <span class="preprocessor">#line</span> directives it must be reset explicitely. </li>
+    <li>If the <span class="keyword">support_option_include_guard_detection</span> flag is set, the <tt>Wave</tt> library will try to automatically identify include guards during the processing of a included file. Files which contained include guards are handled as if they contained a #pragma once, i.e. these files wonn#t be opened twice, even if specified in a second <span class="preprocessor">#include</span> statement. </li>
   </ul>
+  <blockquote>
+    <p>During this process the library will recognize two forms of include guards:</p>
+    <pre>    <span class="preprocessor">#ifndef</span> INCLUDE_GUARD_MACRO
+    <span class="preprocessor">#define</span> INCLUDE_GUARD_MACRO
+    ...
+    <span class="preprocessor">#endif</span>
+
+  or
+
+    <span class="preprocessor">#if</span> !defined(INCLUDE_GUARD_MACRO)
+    <span class="preprocessor">#define</span> INCLUDE_GUARD_MACRO
+    ...
+    <span class="preprocessor">#endif</span></pre>
+    <p> Note, that the parenthesis in the second form are optional (i.e. <tt>!defined INCLUDE_GUARD_MACRO</tt>      will work as well). The code allows for any whitespace, newline and single 
+      '#' tokens before the <span class="preprocessor">#if</span>/<span class="preprocessor">#ifndef</span> and after the final <span class="preprocessor">#endif</span> for the include guard to be recognized.</p>
+    <p>This flag is on by default, so if you do not want the library to automatically reconize include guards you will need to reset this explicitely. </p>
+  </blockquote>
+  <p><strong> </strong>If the parameter <tt>reset_macros</tt> is true the <tt>set_language</tt> function internally resets the list of defined macros, so please be careful not to call it after you have defined your own macros already. </p>
 </blockquote>
-<p><strong>Note:</strong> The set_language function internally resets the list of defined macros, so please be careful not to call it after you have defined your own macros already. </p>
 <p><a name="set_max_include_nesting_depth" id="set_max_include_nesting_depth"></a>set_max_include_nesting_depth<br>
-  g et_max_include_nesting_depth</p>
+  get_max_include_nesting_depth</p>
 <pre><span class="keyword">    void</span> set_max_include_nesting_depth(size_t new_depth); 
     size_t get_max_include_nesting_depth() <span class="keyword">const</span>;</pre>
 <blockquote> 
@@ -442,7 +471,7 @@
   <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Tuesday, March 7, 2006  13:20<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Tuesday, March 7, 2006  13:23<!-- #EndDate -->
   </span>
 </p>
 <p>&nbsp;</p>

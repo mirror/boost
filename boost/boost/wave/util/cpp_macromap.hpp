@@ -26,6 +26,10 @@
 
 #include <boost/assert.hpp>
 #include <boost/wave/wave_config.hpp>
+#if BOOST_WAVE_SERIALIZATION != 0
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/shared_ptr.hpp>
+#endif
 
 #include <boost/filesystem/path.hpp>
 
@@ -196,6 +200,17 @@ protected:
         position_type const &pos, ContainerT &rescanned);
     
 private:
+#if BOOST_WAVE_SERIALIZATION != 0
+    friend class boost::serialization::access;
+    template<typename Archive>
+    void serialize(Archive &ar, const unsigned int version)
+    {
+        ar & defined_macros;
+        if (Archive::is_loading::value)
+            current_macros = defined_macros.get();
+    }
+#endif
+
     defined_macros_type *current_macros;                   // current symbol table
     boost::shared_ptr<defined_macros_type> defined_macros; // global symbol table
 
@@ -637,7 +652,7 @@ token_type startof_argument_list = *next;
                     argument->push_back(*next);
                 else {
                 // found closing parenthesis
-//                    trim_argument(argument);
+//                    trim_sequence(argument);
                     if (parameter_count > 0) {
                         if (argument->empty() || 
                             impl::is_whitespace_only(*argument)) 
@@ -663,7 +678,7 @@ token_type startof_argument_list = *next;
         case T_COMMA:
             if (1 == nested_parenthesis_level) {
             // next parameter
-//                trim_argument(argument);
+//                trim_sequence(argument);
                 if (argument->empty() || 
                     impl::is_whitespace_only(*argument)) 
                 {
@@ -911,15 +926,15 @@ bool adjacent_stringize = false;
 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
                 if (is_ellipsis && boost::wave::need_variadics(ctx.get_language())) {
-                    impl::trim_argument_left(arguments[i]);
-                    impl::trim_argument_right(arguments.back());
+                    impl::trim_sequence_left(arguments[i]);
+                    impl::trim_sequence_right(arguments.back());
                     expanded.push_back(token_type(T_STRINGLIT, 
                         impl::as_stringlit(arguments, i, pos), pos));
                 }
                 else 
 #endif 
                 {
-                    impl::trim_argument(arguments[i]);
+                    impl::trim_sequence(arguments[i]);
                     expanded.push_back(token_type(T_STRINGLIT, 
                         impl::as_stringlit(arguments[i], pos), pos));
                 }
@@ -931,8 +946,8 @@ bool adjacent_stringize = false;
                 if (is_ellipsis) {
                 position_type const &pos = (*cit).get_position();
 
-                    impl::trim_argument_left(arguments[i]);
-                    impl::trim_argument_right(arguments.back());
+                    impl::trim_sequence_left(arguments[i]);
+                    impl::trim_sequence_right(arguments.back());
                     BOOST_ASSERT(boost::wave::need_variadics(ctx.get_language()));
                     impl::replace_ellipsis(arguments, i, expanded, pos);
                 }
@@ -941,7 +956,7 @@ bool adjacent_stringize = false;
                 {
                 ContainerT &arg = arguments[i];
                 
-                    impl::trim_argument(arg);
+                    impl::trim_sequence(arg);
                     std::copy(arg.begin(), arg.end(), 
                         std::inserter(expanded, expanded.end()));
                 }

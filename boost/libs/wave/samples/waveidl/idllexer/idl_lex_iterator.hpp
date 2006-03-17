@@ -148,6 +148,11 @@ public:
         // set the new position for future tokens as well
         base_type::get_functor().set_position(pos);
     }
+
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+    // this sample does no include guard detection
+    bool has_include_guards(std::string&) const { return false; }
+#endif    
 };
 
 ///////////////////////////////////////////////////////////////////////////////

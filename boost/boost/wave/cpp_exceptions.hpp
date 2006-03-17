@@ -209,7 +209,9 @@ public:
         ill_formed_character_literal,
         unbalanced_if_endif,
         character_literal_out_of_range,
-        last_error_number = character_literal_out_of_range
+        could_not_open_output_file,
+        incompatible_config,
+        last_error_number = incompatible_config
     };
 
     preprocess_exception(char const *what_, error_code code, int line_, 
@@ -275,6 +277,7 @@ public:
         case preprocess_exception::last_line_not_terminated:
         case preprocess_exception::include_nesting_too_deep:
         case preprocess_exception::illegal_operator_redefinition:
+        case preprocess_exception::incompatible_config:
             return true;
             
         case preprocess_exception::unexpected_error:
@@ -285,6 +288,7 @@ public:
         case preprocess_exception::improperly_terminated_macro:
         case preprocess_exception::invalid_concat:
         case preprocess_exception::ill_formed_pragma_option:
+        case preprocess_exception::could_not_open_output_file:
             break;
         }
         return false;
@@ -337,7 +341,9 @@ public:
             "ill formed integer literal or integer constant too large",   // ill_formed_integer_literal
             "ill formed character literal",             // ill_formed_character_literal
             "unbalanced #if/#endif in include file",    // unbalanced_if_endif
-            "character literal out of range"            // character_literal_out_of_range
+            "character literal out of range",           // character_literal_out_of_range
+            "could not open output file",               // could_not_open_output_file
+            "incompatible state information"            // incompatible_config
         };
         BOOST_ASSERT(unexpected_error <= code && 
             code <= last_error_number);
@@ -384,7 +390,9 @@ public:
             util::severity_error,              // ill_formed_integer_literal
             util::severity_error,              // ill_formed_character_literal
             util::severity_warning,            // unbalanced_if_endif
-            util::severity_warning             // character_literal_out_of_range
+            util::severity_warning,            // character_literal_out_of_range
+            util::severity_error,              // could_not_open_output_file
+            util::severity_remark              // incompatible_config
         };
         BOOST_ASSERT(unexpected_error <= code && 
             code <= last_error_number);

@@ -114,7 +114,7 @@ boost::wave::util::file_position_type current_position;
         position_type pos(argv[1]);
         lexer_type it = lexer_type(instr.begin(), instr.end(), pos, 
             boost::wave::language_support(
-                boost::wave::support_cpp|boost::wave::support_long_long));
+                boost::wave::support_cpp|boost::wave::support_option_long_long));
         lexer_type end = lexer_type();
 
         while (it != end) {

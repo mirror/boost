@@ -20,6 +20,10 @@
 #include <boost/noncopyable.hpp>
 
 #include <boost/wave/wave_config.hpp>
+#if BOOST_WAVE_SERIALIZATION != 0
+#include <boost/serialization/serialization.hpp>
+#include <boost/wave/wave_config_constant.hpp>
+#endif
 #include <boost/wave/token_ids.hpp>
 
 #include <boost/wave/util/unput_queue_iterator.hpp>
@@ -101,7 +105,6 @@ public:
 // type of a token sequence
     typedef std::list<token_type, boost::fast_pool_allocator<token_type> > 
         token_sequence_type;
-
 // types of the policies
     typedef HooksT                                  hook_policy_type;
     
@@ -113,9 +116,7 @@ private:
             iteration_context_stack_type;
     typedef typename iteration_context_stack_type::size_type iter_size_type;
 
-// the context object should not be copied around
-    context(context const& rhs);
-    context& operator= (context const& rhs);
+    context *this_() { return this; }           // avoid warning in constructor
     
 public:
     context(target_iterator_type const &first_, target_iterator_type const &last_, 
@@ -124,8 +125,15 @@ public:
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
         , current_filename(fname)
 #endif 
-        , macros(*this)
-        , language(language_support(support_cpp|support_option_convert_trigraphs))
+        , macros(*this_())
+        , language(language_support(
+                      support_cpp 
+                    | support_option_convert_trigraphs 
+                    | support_option_emit_line_directives 
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+                    | support_option_include_guard_detection
+#endif
+                   ))
         , hooks(hooks_)
     {
         macros.init_predefined_macros(fname);
@@ -133,11 +141,22 @@ public:
     }
 
 // iterator interface
-    iterator_type begin() 
+    iterator_type begin(
+        target_iterator_type const &first_ = target_iterator_type(), 
+        target_iterator_type const &last_ = target_iterator_type()) 
     { 
-        if (filename != "<Unknown>") 
-            includes.set_current_directory(filename.c_str());
-        return iterator_type(*this, first, last, position_type(filename.c_str())); 
+        std::string fname(filename);
+        if (filename != "<Unknown>" && filename != "<stdin>") {
+            using namespace boost::filesystem;
+            path fpath(complete(path(filename)));
+
+            fname = fpath.string();
+            includes.set_current_directory(fname.c_str());
+        }
+        if (first_ != target_iterator_type())
+            return iterator_type(*this, first_, last_, position_type(fname.c_str())); 
+            
+        return iterator_type(*this, first, last, position_type(fname.c_str())); 
     }
     iterator_type end() const 
         { return iterator_type(); }
@@ -176,13 +195,17 @@ public:
     bool remove_macro_definition(typename token_type::string_type const &name, 
             bool even_predefined = false)
         { 
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+            // ensure this gets remove from the list of include guards as well
+            includes.remove_pragma_once_header(std::string(name.c_str()));
+#endif
             return macros.remove_macro(
                 token_type(T_IDENTIFIER, name, macros.get_main_pos()), 
                 even_predefined); 
         }
-    bool remove_macro_definition(token_type const &token, 
-            bool even_predefined = false)
-        { return macros.remove_macro(token, even_predefined); }
+//     bool remove_macro_definition(token_type const &token, 
+//             bool even_predefined = false)
+//         { return macros.remove_macro(token, even_predefined); }
     void reset_macro_definitions() 
         { macros.reset_macromap(); macros.init_predefined_macros(); }
 
@@ -192,10 +215,12 @@ public:
     static std::string get_version_string()  
         { return boost::wave::util::predefined_macros::get_versionstr(false); }
 
-    void set_language(boost::wave::language_support language_) 
+    void set_language(boost::wave::language_support language_,
+                      bool reset_macros = true) 
     { 
         language = language_; 
-        reset_macro_definitions();
+        if (reset_macros)
+            reset_macro_definitions();
     }
     boost::wave::language_support get_language() const { return language; }
         
@@ -207,7 +232,11 @@ public:
 
 // access the policies
     hook_policy_type &get_hooks() { return hooks; }
-    
+
+// return the directory of the currently preprocessed file
+    boost::filesystem::path get_current_directory() const
+        { return includes.get_current_directory(); }
+        
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
 protected:
     friend class boost::wave::pp_iterator<
@@ -222,9 +251,13 @@ protected:
     { return includes.find_include_file(s, d, is_system, current_file); }
     void set_current_directory(char const *path_) 
         { includes.set_current_directory(path_); }
-    
+        
 // conditional compilation contexts
     bool get_if_block_status() const { return ifblocks.get_status(); }
+    bool get_if_block_some_part_status() const 
+        { return ifblocks.get_some_part_status(); } 
+    bool get_enclosing_if_block_status() const
+        { return ifblocks.get_enclosing_status(); }
     void enter_if_block(bool new_status) 
         { ifblocks.enter_if_block(new_status); }
     bool enter_elif_block(bool new_status) 
@@ -285,8 +318,9 @@ public:
 // maintain the list of known headers containing #pragma once 
     bool has_pragma_once(std::string const &filename)
         { return includes.has_pragma_once(filename); }
-    bool add_pragma_once_header(std::string const &filename)
-        { return includes.add_pragma_once_header(filename); }
+    bool add_pragma_once_header(std::string const &filename,
+            std::string const& guard_name = "__BOOST_WAVE_PRAGMA_ONCE__")
+        { return includes.add_pragma_once_header(filename, guard_name); }
 #endif 
 
 // forwarding functions for the context policy hooks    
@@ -298,6 +332,54 @@ public:
     }
     
 private:
+#if BOOST_WAVE_SERIALIZATION != 0
+    friend class boost::serialization::access;
+    template<class Archive>
+    void save(Archive & ar, const unsigned int version) const
+    {
+        typedef typename token_type::string_type string_type;
+        
+        ar & string_type(BOOST_PP_STRINGIZE(BOOST_WAVE_CONFIG));
+        ar & string_type(BOOST_WAVE_PRAGMA_KEYWORD);
+        ar & string_type(BOOST_PP_STRINGIZE((BOOST_WAVE_STRINGTYPE)));
+        
+        ar & language;
+        ar & macros;
+        ar & includes;
+    }
+    template<class Archive>
+    void load(Archive & ar, const unsigned int version)
+    {
+        // check compatibility of the stored information
+        typedef typename token_type::string_type string_type;
+        string_type config, pragma_keyword, string_type_str;
+        
+        ar & config;          // BOOST_WAVE_CONFIG
+        if (config != BOOST_PP_STRINGIZE(BOOST_WAVE_CONFIG)) {
+            BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
+                "BOOST_WAVE_CONFIG", get_main_pos());
+        }
+        
+        ar & pragma_keyword;  // BOOST_WAVE_PRAGMA_KEYWORD
+        if (pragma_keyword != BOOST_WAVE_PRAGMA_KEYWORD) {
+            BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
+                "BOOST_WAVE_PRAGMA_KEYWORD", get_main_pos());
+        }
+
+        ar & string_type_str; // BOOST_PP_STRINGIZE((BOOST_WAVE_STRINGTYPE))
+        if (string_type_str != BOOST_PP_STRINGIZE((BOOST_WAVE_STRINGTYPE))) {
+            BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
+                "BOOST_WAVE_STRINGTYPE", get_main_pos());
+        }
+        
+        // read in the useful bits
+        ar & language;
+        ar & macros;
+        ar & includes;
+    }
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
+#endif
+
 // the main input stream
     target_iterator_type first;         // underlying input stream
     target_iterator_type last;
@@ -317,6 +399,26 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace wave
 }   // namespace boost
+
+#if BOOST_WAVE_SERIALIZATION != 0
+namespace boost { namespace serialization {
+
+template<
+    typename Iterator, typename LexIterator, 
+    typename InputPolicy, typename Hooks
+>
+struct tracking_level<boost::wave::context<Iterator, LexIterator, InputPolicy, Hooks> >
+{
+    typedef mpl::integral_c_tag tag;
+    typedef mpl::int_<track_never> type;
+    BOOST_STATIC_CONSTANT(
+        int,
+        value = tracking_level::type::value
+    );
+};
+
+}}
+#endif
 
 // the suffix header occurs after all of the code
 #ifdef BOOST_HAS_ABI_HEADERS

@@ -11,6 +11,8 @@
 #if !defined(MACRO_HELPERS_HPP_931BBC99_EBFA_4692_8FBE_B555998C2C39_INCLUDED)
 #define MACRO_HELPERS_HPP_931BBC99_EBFA_4692_8FBE_B555998C2C39_INCLUDED
 
+#include <vector>
+
 #include <boost/assert.hpp>
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/token_ids.hpp>

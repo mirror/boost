@@ -51,9 +51,11 @@ class eat_whitespace
 :   public default_preprocessing_hooks
 {
 public:
-    eat_whitespace(bool preserve_comments = false);
+    eat_whitespace();
     
-    bool may_skip_whitespace(TokenT &token, bool &skipped_newline);
+    template <typename ContextT>
+    bool may_skip_whitespace(ContextT const& ctx, TokenT &token, 
+        bool &skipped_newline);
 
 protected:
     bool skip_cppcomment(boost::wave::token_id id)
@@ -70,15 +72,19 @@ private:
 
 template <typename TokenT>
 inline 
-eat_whitespace<TokenT>::eat_whitespace(bool preserve_comments)
-:   state(&eat_whitespace::newline), preserve_comments(preserve_comments)
+eat_whitespace<TokenT>::eat_whitespace()
+:   state(&eat_whitespace::newline), preserve_comments(false)
 {
 }
 
 template <typename TokenT>
+template <typename ContextT>
 inline bool 
-eat_whitespace<TokenT>::may_skip_whitespace(TokenT &token, bool &skipped_newline) 
+eat_whitespace<TokenT>::may_skip_whitespace(ContextT const& ctx, TokenT &token, 
+    bool &skipped_newline) 
 {
+    // re-initialize the preserve comments state
+    preserve_comments = boost::wave::need_preserve_comments(ctx.get_language());
     return (this->*state)(token, skipped_newline);
 }
 

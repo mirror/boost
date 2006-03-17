@@ -5,7 +5,7 @@
     
     http://www.boost.org/
 
-    Copyright (c) 2001-2006 Hartmut Kaiser. Distributed under the Boost
+    Copyright (c) 2001-2005 Hartmut Kaiser. Distributed under the Boost
     Software License, Version 1.0. (See accompanying file
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
@@ -15,7 +15,6 @@
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
-
 #include <boost/version.hpp>
 #include <boost/spirit/version.hpp>
 #include <boost/wave/wave_version.hpp>
@@ -24,8 +23,8 @@
 //  Define the maximal include nesting depth allowed. If this value isn't 
 //  defined it defaults to 1024
 //
-//  To define a new initial include nesting depth uncomment the following and 
-//  supply a new integer value.
+//  To define a new initial include nesting define the following constant 
+//  before including this file.
 //
 #if !defined(BOOST_WAVE_MAX_INCLUDE_LEVEL_DEPTH)
 #define BOOST_WAVE_MAX_INCLUDE_LEVEL_DEPTH 1024
@@ -35,7 +34,7 @@
 //  Decide, whether to support variadics and placemarkers
 //
 //  To implement support variadics and placemarkers define the following to 
-//  something != 0.
+//  something not equal to zero.
 //
 #if !defined(BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS)
 #define BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS 1
@@ -45,7 +44,8 @@
 //  Decide, whether to implement a #warning directive as an extension to the 
 //  C++ Standard (same as #error, but emits a warning, not an error)
 //
-//  To implement #warning directives, define the following to something != 0.
+//  To disable the implementation of #warning directives, define the following 
+//  constant as zero before including this file.
 //
 #if !defined(BOOST_WAVE_SUPPORT_WARNING_DIRECTIVE)
 #define BOOST_WAVE_SUPPORT_WARNING_DIRECTIVE 1
@@ -54,7 +54,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  Decide, whether to implement #pragma once 
 //
-//  To implement #pragma once, define the following to something != 0.
+//  To disable the implementation of #pragma once, define the following 
+//  constant as zero before including this file.
 //
 #if !defined(BOOST_WAVE_SUPPORT_PRAGMA_ONCE)
 #define BOOST_WAVE_SUPPORT_PRAGMA_ONCE 1
@@ -64,18 +65,18 @@
 //  Decide, whether to implement #include_next
 //  Please note, that this is an extension to the C++ Standard.
 //
-//  To implement #include_next, define the following to something != 0.
+//  To disable the implementation of #include_next, define the following 
+//  constant as zero before including this file.
 //
 #if !defined(BOOST_WAVE_SUPPORT_INCLUDE_NEXT)
 #define BOOST_WAVE_SUPPORT_INCLUDE_NEXT 1
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Define the following to something != 0 to enable some MS specific language 
-//  extensions:
-//      __int8, __int16, __int32, __int64, __based, __declspec, __cdecl, 
-//      __fastcall, __stdcall, __try, __except, __finally, __leave, __inline,
-//      __asm, #region, #endregion
+//  Undefine the following, to enable some MS specific language extensions:
+//  __int8, __int16, __int32, __int64, __based, __declspec, __cdecl, 
+//  __fastcall, __stdcall, __try, __except, __finally, __leave, __inline,
+//  __asm, #region, #endregion
 //
 //  Note: By default this is enabled for Windows based systems, otherwise it's 
 //        disabled.
@@ -91,8 +92,8 @@
 //  Allow the message body of the #error and #warning directives to be 
 //  preprocessed before the diagnostic is issued.
 //
-//  Defining the following to something != 0 will preprocess the message bodies 
-//  of #error and #warning messages before the error (warning) is issued
+//  To disable preprocessing of the body of #error and #warning directives, 
+//  define the following constant as zero before including this file.
 //
 #if !defined(BOOST_WAVE_PREPROCESS_ERROR_MESSAGE_BODY)
 #define BOOST_WAVE_PREPROCESS_ERROR_MESSAGE_BODY 1
@@ -102,8 +103,8 @@
 //  Allow the #pragma directives to be returned to the caller (optionally after 
 //  preprocessing the body) 
 //
-//  Defining the following to something != 0 will emit all #pragma directives, 
-//  so that the caller will see them as they appeared in the input stream.
+//  To disable the library to emit unknown #pragma directives, define the 
+//  following constant as zero before including this file.
 //
 #if !defined(BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES)
 #define BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES 1
@@ -113,8 +114,8 @@
 //  Allow the body of a #pragma directive to be preprocessed before the 
 //  directive is returned to the caller.
 //
-//  Defining the following to something != 0 will preprocess the bodies of 
-//  #pragma directives
+//  To disable the preprocessing of the body of #pragma directives, define the 
+//  following constant as zero before including this file.
 //
 #if !defined(BOOST_WAVE_PREPROCESS_PRAGMA_BODY)
 #define BOOST_WAVE_PREPROCESS_PRAGMA_BODY 1
@@ -123,8 +124,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  Allow to define macros with the command line syntax (-DMACRO(x)=definition)
 //
-//  Defining the following to something != 0 will enable the possibility to 
-//  define macros based on the command line syntax
+//  To disable the the possibility to define macros based on the command line 
+//  syntax, define the following constant as zero before including this file.
 //
 #if !defined(BOOST_WAVE_ENABLE_COMMANDLINE_MACROS)
 #define BOOST_WAVE_ENABLE_COMMANDLINE_MACROS 1
@@ -207,7 +208,7 @@
 //#define BOOST_SPIRIT_DEBUG
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Debug flags for the Wave library, possible flags specified below.
+//  Debug flags for the Wave library, possible flags spcified below.
 //
 //  Note: These flags take effect only if the BOOST_SPIRIT_DEBUG constant
 //        above is defined as well.
@@ -229,7 +230,8 @@
 //  formatted as xml are printed. The formatted parse trees are streamed to the 
 //  std::ostream defined by the WAVE_DUMP_PARSE_TREE_OUT constant.
 //
-//  Define the following to something != 0 if you want to see these parse trees. 
+//  To enable the output of these parse trees, define the following constant 
+//  as zero something not equal to zero before including this file. 
 //
 #if !defined(BOOST_WAVE_DUMP_PARSE_TREE)
 #define BOOST_WAVE_DUMP_PARSE_TREE 0
@@ -244,8 +246,8 @@
 //  These expressions are streamed to the std::ostream defined by the 
 //  BOOST_WAVE_DUMP_CONDITIONAL_EXPRESSIONS_OUT constant.
 //
-//  Define the following to something != 0 if you want to see the preprocessed 
-//  expressions
+//  To enable the output of the preprocessed expressions, define the following 
+//  constant as something not equal to zero before including this file.
 //
 #if !defined(BOOST_WAVE_DUMP_CONDITIONAL_EXPRESSIONS)
 #define BOOST_WAVE_DUMP_CONDITIONAL_EXPRESSIONS 0
@@ -259,11 +261,12 @@
 //  Decide, whether to use the separate compilation model for the instantiation 
 //  of the C++ lexer objects.
 //
-//  If this is defined to something != 0, you should explicitly instantiate the 
-//  C++ lexer template with the correct parameters in a separate compilation 
-//  unit of your program (see the file instantiate_re2c_lexer.cpp). 
+//  If this is defined, you should explicitly instantiate the C++ lexer
+//  template with the correct parameters in a separate compilation unit of
+//  your program (see the file instantiate_re2c_lexer.cpp). 
 //
-//  To use the lexer inclusion model, uncomment the following 
+//  To use the lexer inclusion model, define the following constant as 
+//  something not equal to zero before including this file.
 //
 #if !defined(BOOST_WAVE_SEPARATE_LEXER_INSTANTIATION)
 #define BOOST_WAVE_SEPARATE_LEXER_INSTANTIATION 1
@@ -273,11 +276,12 @@
 //  Decide, whether to use the separate compilation model for the instantiation 
 //  of the grammar objects.
 //
-//  If this is defined to something != 0, you should explicitly instantiate 
-//  the grammar templates with the correct parameters in a separate compilation 
-//  unit of your program (see the files instantiate_cpp_grammar.cpp et.al.). 
+//  If this is defined, you should explicitly instantiate the grammar
+//  templates with the correct parameters in a separate compilation unit of
+//  your program (see the files instantiate_cpp_grammar.cpp et.al.). 
 //
-//  To use the grammar inclusion model, uncomment the following 
+//  To use the grammar inclusion model, define the following constant as 
+//  something not equal to zero before including this file.
 //
 #if !defined(BOOST_WAVE_SEPARATE_GRAMMAR_INSTANTIATION)
 #define BOOST_WAVE_SEPARATE_GRAMMAR_INSTANTIATION 1
@@ -297,6 +301,21 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+//  Decide, whether the serialization of the wave::context class should be 
+//  supported
+//
+//  If this is defined to something not equal to zero the generated code will
+//  expose routines allowing to store and reload the internal state of the 
+//  wave::context object.
+//
+//  To enable the availability of the serialization functionality, define the 
+//  following constant as something not equal to zero before including this file.
+//
+#if !defined(BOOST_WAVE_SERIALIZATION)
+#define BOOST_WAVE_SERIALIZATION 0
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
 //  configure Boost.Pool thread support (for now: no thread support at all)
 #if !defined(BOOST_NO_MT)
 #define BOOST_NO_MT
@@ -310,8 +329,10 @@
 //  Wave needs at least 4 parameters for phoenix actors
 #if !defined(PHOENIX_LIMIT)
 #define PHOENIX_LIMIT 6
-#elif PHOENIX_LIMIT < 4
-#error "Wave needs PHOENIX_LIMIT to be set at least to 4!"
+#endif
+#if PHOENIX_LIMIT < 6
+#error "Boost.Wave: the constant PHOENIX_LIMIT must be at least defined to 4" \
+       " to compile the library."
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -345,10 +366,6 @@
 // tell the auto-link code to select a dll when required:
 #if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_WAVE_DYN_LINK)
 #define BOOST_DYN_LINK
-#endif
-
-#ifdef BOOST_WAVE_DIAG
-#define BOOST_LIB_DIAGNOSTIC
 #endif
 
 #include <boost/config/auto_link.hpp>

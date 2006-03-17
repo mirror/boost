@@ -20,6 +20,9 @@
 #include <boost/spirit/version.hpp>
 #include <boost/spirit/iterator/position_iterator.hpp>
 #include <boost/wave/wave_config.hpp>
+#if BOOST_WAVE_SERIALIZATION != 0
+#include <boost/serialization/serialization.hpp>
+#endif
 
 // this must occur after all of the includes and before any code appears
 #ifdef BOOST_HAS_ABI_HEADERS
@@ -100,6 +103,17 @@ public:
     void set_column(unsigned int column_) { column = column_; }
     
 private:
+#if BOOST_WAVE_SERIALIZATION != 0
+    friend class boost::serialization::access;
+    template<typename Archive>
+    void serialize(Archive &ar, const unsigned int version)
+    {
+        ar & file;
+        ar & line;
+        ar & column;
+    }
+#endif
+
     string_type file;
     unsigned int line;
     unsigned int column;

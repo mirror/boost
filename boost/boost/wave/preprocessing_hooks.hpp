@@ -286,10 +286,13 @@ struct default_preprocessing_hooks {
     //  library, whenever a token is about to be returned to the calling 
     //  application. 
     //
-    //  The token parameter holds a reference to the current token. The policy 
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
+    //  The 'token' parameter holds a reference to the current token. The policy 
     //  is free to change this token if needed.
     //
-    //  The skipped_newline parameter holds a reference to a boolean value 
+    //  The 'skipped_newline' parameter holds a reference to a boolean value 
     //  which should be set to true by the policy function whenever a newline 
     //  is going to be skipped. 
     //
@@ -299,12 +302,12 @@ struct default_preprocessing_hooks {
     //
     //  ATTENTION!
     //  Caution has to be used, because by returning true the policy function 
-    //  is able to force skipping even significant tokens not only whitespace. 
+    //  is able to force skipping even significant tokens, not only whitespace. 
     //
     ///////////////////////////////////////////////////////////////////////////
-    template <typename TokenT>
+    template <typename ContextT, typename TokenT>
     bool
-    may_skip_whitespace(TokenT& token, bool& skipped_newline)
+    may_skip_whitespace(ContextT const& ctx, TokenT& token, bool& skipped_newline)
     { return false; }
 };
 

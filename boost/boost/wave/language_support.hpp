@@ -27,12 +27,12 @@ enum language_support {
     support_normal = 0x01,
     support_cpp = support_normal,
     
-    support_long_long = 0x02,
+    support_option_long_long = 0x02,
 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
 //  support flags for C99
-    support_variadics = 0x04,
-    support_c99 = support_variadics | support_long_long | 0x08,
+    support_option_variadics = 0x04,
+    support_c99 = support_option_variadics | support_option_long_long | 0x08,
 #endif 
 
     support_option_mask = 0xFF00,
@@ -40,7 +40,9 @@ enum language_support {
     support_option_no_character_validation = 0x0200,
     support_option_convert_trigraphs = 0x0400,
     support_option_single_line = 0x0800,
-    support_option_prefer_pp_numbers = 0x1000
+    support_option_prefer_pp_numbers = 0x1000,
+    support_option_emit_line_directives = 0x2000,
+    support_option_include_guard_detection = 0x4000
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -56,64 +58,7 @@ need_cpp(language_support language)
     return (language & ~support_option_mask) == support_cpp;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//  
-//  need_long_long
-//
-//      Extract, if the language to support needs long long support
-//
-///////////////////////////////////////////////////////////////////////////////
-inline bool 
-need_long_long(language_support language) 
-{
-    return (language & support_long_long) ? true : false;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//  
-//  enable_long_long
-//
-//      Set long long support in the language to support
-//
-///////////////////////////////////////////////////////////////////////////////
-inline language_support
-enable_long_long(language_support language, bool enable = true)
-{
-    if (enable)
-        return static_cast<language_support>(language | support_long_long);
-    return static_cast<language_support>(language & ~support_long_long);
-}
-
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
-
-///////////////////////////////////////////////////////////////////////////////
-//  
-//  need_variadics
-//
-//      Extract, if the language to support needs variadics support
-//
-///////////////////////////////////////////////////////////////////////////////
-inline bool 
-need_variadics(language_support language) 
-{
-    return (language & support_variadics) ? true : false;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//  
-//  enable_variadics
-//
-//      Set variadics support in the language to support
-//
-///////////////////////////////////////////////////////////////////////////////
-inline language_support
-enable_variadics(language_support language, bool enable = true)
-{
-    if (enable)
-        return static_cast<language_support>(language | support_variadics);
-    return static_cast<language_support>(language & ~support_variadics);
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 //  
 //  need_c99
@@ -154,62 +99,6 @@ need_c99(language_support language)
 
 ///////////////////////////////////////////////////////////////////////////////
 //  
-//  need_preserve_comments
-//
-//      Extract, if the comments have to be preserved
-//
-///////////////////////////////////////////////////////////////////////////////
-inline bool 
-need_preserve_comments(language_support language) 
-{
-    return (language & support_option_preserve_comments) ? true : false;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//  
-//  enable_preserve_comments
-//
-//      Set preserve comments support in the language to support
-//
-///////////////////////////////////////////////////////////////////////////////
-inline language_support
-enable_preserve_comments(language_support language, bool enable = true)
-{
-    if (enable)
-        return static_cast<language_support>(language | support_option_preserve_comments);
-    return static_cast<language_support>(language & ~support_option_preserve_comments);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//  
-//  need_prefer_pp_numbers
-//
-//      Extract, if pp-numbers have to be generated 
-//
-///////////////////////////////////////////////////////////////////////////////
-inline bool 
-need_prefer_pp_numbers(language_support language) 
-{
-    return (language & support_option_prefer_pp_numbers) ? true : false;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//  
-//  enable_prefer_pp_numbers
-//
-//      Set, whether pp-numbers have to be generated 
-//
-///////////////////////////////////////////////////////////////////////////////
-inline language_support
-enable_prefer_pp_numbers(language_support language, bool enable = true)
-{
-    if (enable)
-        return static_cast<language_support>(language | support_option_prefer_pp_numbers);
-    return static_cast<language_support>(language & ~support_option_prefer_pp_numbers);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-//  
 //  get_support_options
 //
 //      Set preserve comments support in the language to support
@@ -225,7 +114,7 @@ get_support_options(language_support language)
 //  
 //  set_support_options
 //
-//      Set language option (for fine tuning of lexer behaviour)
+//      Set language option (for fine tuning of lexer behavior)
 //
 ///////////////////////////////////////////////////////////////////////////////
 inline language_support
@@ -234,6 +123,47 @@ set_support_options(language_support language, language_support option)
     return static_cast<language_support>(
         (language & ~support_option_mask) | (option & support_option_mask));
 }
+
+///////////////////////////////////////////////////////////////////////////////
+//  Get and set different language options
+#define BOOST_WAVE_NEED_OPTION(option)                                        \
+    inline bool need_ ## option(language_support language)                    \
+    {                                                                         \
+        return (language & support_option_ ## option) ? true : false;         \
+    }                                                                         \
+    /**/
+
+#define BOOST_WAVE_ENABLE_OPTION(option)                                      \
+    inline language_support                                                   \
+    enable_ ## option(language_support language, bool enable = true)          \
+    {                                                                         \
+        if (enable)                                                           \
+            return static_cast<language_support>(language | support_option_ ## option); \
+        return static_cast<language_support>(language & ~support_option_ ## option);    \
+    }                                                                         \
+    /**/
+
+#define BOOST_WAVE_OPTION(option)                                             \
+    BOOST_WAVE_NEED_OPTION(option)                                            \
+    BOOST_WAVE_ENABLE_OPTION(option)                                          \
+    /**/
+    
+///////////////////////////////////////////////////////////////////////////////
+BOOST_WAVE_OPTION(long_long)                // support_option_long_long
+BOOST_WAVE_OPTION(preserve_comments)        // support_option_preserve_comments
+BOOST_WAVE_OPTION(prefer_pp_numbers)        // support_option_prefer_pp_numbers
+BOOST_WAVE_OPTION(emit_line_directives)     // support_option_emit_line_directives
+BOOST_WAVE_OPTION(single_line)              // support_option_single_line
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+BOOST_WAVE_OPTION(include_guard_detection)  // support_option_include_guard_detection
+#endif
+#if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
+BOOST_WAVE_OPTION(variadics)                // support_option_variadics
+#endif 
+
+#undef BOOST_WAVE_NEED_OPTION
+#undef BOOST_WAVE_ENABLE_OPTION
+#undef BOOST_WAVE_OPTION
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace wave

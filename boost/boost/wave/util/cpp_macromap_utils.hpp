@@ -387,7 +387,7 @@ remove_placeholders (ContainerT &replacement_list)
 ///////////////////////////////////////////////////////////////////////////////
 template <typename ContainerT>
 inline void
-trim_argument_left (ContainerT &argument)
+trim_sequence_left (ContainerT &argument)
 {
     using namespace boost::wave;
     
@@ -406,7 +406,7 @@ trim_argument_left (ContainerT &argument)
 ///////////////////////////////////////////////////////////////////////////////
 template <typename ContainerT>
 inline void
-trim_argument_right (ContainerT &argument)
+trim_sequence_right (ContainerT &argument)
 {
     using namespace boost::wave;
     
@@ -420,16 +420,16 @@ trim_argument_right (ContainerT &argument)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  Remove all whitespace tokens on the keft and right sides of the given token 
+//  Remove all whitespace tokens on the left and right sides of the given token 
 //  sequence
 //
 ///////////////////////////////////////////////////////////////////////////////
 template <typename ContainerT>
 inline void
-trim_argument (ContainerT &argument)
+trim_sequence (ContainerT &argument)
 {
-    trim_argument_left(argument);
-    trim_argument_right(argument);
+    trim_sequence_left(argument);
+    trim_sequence_right(argument);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

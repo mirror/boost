@@ -210,6 +210,9 @@ public:
     token_type get() { return lexer.get(); }
     void set_position(PositionT const &pos) 
     { lexer.set_position(pos); }
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+    bool has_include_guards(std::string&) const { return false; }
+#endif    
 
 private:
     lexer<IteratorT, PositionT> lexer;

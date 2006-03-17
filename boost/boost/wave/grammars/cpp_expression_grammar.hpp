@@ -174,6 +174,10 @@ struct expression_grammar :
             TRACE_CPP_EXPR_GRAMMAR);
     }
     
+    // no need for copy constructor/assignment operator
+    expression_grammar(expression_grammar const&);
+    expression_grammar& operator= (expression_grammar const&);
+    
     template <typename ScannerT>
     struct definition
     {

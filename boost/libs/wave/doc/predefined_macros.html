@@ -136,6 +136,26 @@
         in the C99 mode</p></td>
     <td class="table_cells"><p>no</p></td>
   </tr>
+  <tr>
+    <td class="table_cells"><code>__WAVE_CONFIG__</code></td>
+    <td class="table_cells"><p>The configuration information used during the compilation of the Wave library. This is a hexadecimal constant, where each of the bits represents a certain configuration option enabled/disabled during the compilation. You can query this contant using the following macro constants available in the <tt>wave_config_constant.hpp</tt> file:</p>
+      <blockquote>
+              <p> <tt>BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS_CONFIG</tt> (value: <span class="literal">0x1</span>) <br>
+              Variadics and placemarkers are supported</p>
+        <p><tt>BOOST_WAVE_SUPPORT_PRAGMA_ONCE_CONFIG</tt> (value: <span class="literal">0x02</span>)<br>
+          <span class="preprocessor">#pragma once</span> (<span class="keyword">_Pragma(once))</span> is supported </p>
+          <p><tt>BOOST_WAVE_SUPPORT_MS_EXTENSIONS_CONFIG</tt> (value: <span class="literal">0x04</span>)<br>MS Extensions are supported </p>
+          <p><tt>BOOST_WAVE_PREPROCESS_PRAGMA_BODY_CONFIG</tt> (value: <span class="literal">0x08</span>)<br>
+          The bodies of <span class="preprocessor">#pragma</span> statements (operator <span class="keyword">_Pragma</span>) will be preprocessed
+          <p><tt>BOOST_WAVE_USE_STRICT_LEXER_CONFIG</tt> (value: <span class="literal">0x10</span>)<br>
+            The C/C++ lexers recognize the 
+      strict C99/C++ basic source character set. If it is not defined or defined 
+    to zero, the lexers recognize the <span class="string">'$'</span> character as part of identifiers.</p>
+      </blockquote>
+      <p><br>
+        </p></td>
+    <td class="table_cells"><p>yes</p></td>
+  </tr>
 </table>
 <br>
 <table border="0">
@@ -152,7 +172,7 @@
   <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Saturday, February 25, 2006  15:46<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Monday, March 13, 2006  13:47<!-- #EndDate -->
   </span></p>
 </body>
 </html>
