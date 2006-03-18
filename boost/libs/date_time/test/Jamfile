@@ -214,8 +214,8 @@ import ../../../libs/serialization/build/serialization ;
    : : : $(DATE_TIME_PROPERTIES)
    : testgreg_serialize ]
  [ run gregorian/testgreg_serialize.cpp
-   <lib>../build/boost_date_time
-   <lib>@boost/libs/serialization/build/boost_serialization
+   <dll>../build/boost_date_time
+   <dll>@boost/libs/serialization/build/boost_serialization
    : : : $(DATE_TIME_DYNAMIC_PROPERTIES)
    : testgreg_serialize_dll ]
  [ run posix_time/testtime_serialize.cpp
@@ -234,7 +234,7 @@ import ../../../libs/serialization/build/serialization ;
 
 }
 
-# Copyright (c) 2000-2005
+# Copyright (c) 2000-2006
 # CrystalClear Software, Inc.
 # Subject to the Boost Software License, Version 1.0. 
 # (See accompanying file LICENSE-1.0 or 
