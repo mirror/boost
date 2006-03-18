@@ -47,7 +47,7 @@ class include_guards
 {
 public:
     include_guards()
-    :   state(state_0), detected_guards(false), 
+    :   state(&include_guards::state_0), detected_guards(false), 
         current_state(true), if_depth(0)
     {}
 
@@ -90,9 +90,9 @@ include_guards<Token>::state_0(Token const& t)
 {
     token_id id = token_id(t);
     if (T_PP_IFNDEF == id)
-        state = state_1;
+        state = &include_guards::state_1;
     else if (T_PP_IF == id)
-        state = state_1a;
+        state = &include_guards::state_1a;
     else if (!is_skippable(id))
         current_state = false;
     return t;
@@ -107,7 +107,7 @@ include_guards<Token>::state_1(Token const& t)
     token_id id = token_id(t);
     if (T_IDENTIFIER == id) {
         guard_name = t.get_value();
-        state = state_2;
+        state = &include_guards::state_2;
     }
     else if (!is_skippable(id))
         current_state = false;
@@ -122,7 +122,7 @@ include_guards<Token>::state_1a(Token const& t)
 {
     token_id id = token_id(t);
     if (T_NOT == BASE_TOKEN(id)) 
-        state = state_1b;
+        state = &include_guards::state_1b;
     else if (!is_skippable(id))
         current_state = false;
     return t;
@@ -136,7 +136,7 @@ include_guards<Token>::state_1b(Token const& t)
 {
     token_id id = token_id(t);
     if (T_IDENTIFIER == id && t.get_value() == "defined") 
-        state = state_1c;
+        state = &include_guards::state_1c;
     else if (!is_skippable(id))
         current_state = false;
     return t;
@@ -150,10 +150,10 @@ include_guards<Token>::state_1c(Token const& t)
 {
     token_id id = token_id(t);
     if (T_LEFTPAREN == id) 
-        state = state_1d;
+        state = &include_guards::state_1d;
     else if (T_IDENTIFIER == id) {
         guard_name = t.get_value();
-        state = state_2;
+        state = &include_guards::state_2;
     }
     else if (!is_skippable(id))
         current_state = false;
@@ -169,7 +169,7 @@ include_guards<Token>::state_1d(Token const& t)
     token_id id = token_id(t);
     if (T_IDENTIFIER == id) {
         guard_name = t.get_value();
-        state = state_1e;
+        state = &include_guards::state_1e;
     }
     else if (!is_skippable(id))
         current_state = false;
@@ -184,7 +184,7 @@ include_guards<Token>::state_1e(Token const& t)
 {
     token_id id = token_id(t);
     if (T_RIGHTPAREN == id) 
-        state = state_2;
+        state = &include_guards::state_2;
     else if (!is_skippable(id))
         current_state = false;
     return t;
@@ -198,7 +198,7 @@ include_guards<Token>::state_2(Token const& t)
 {
     token_id id = token_id(t);
     if (T_PP_DEFINE == id) 
-        state = state_3;
+        state = &include_guards::state_3;
     else if (!is_skippable(id))
         current_state = false;
     return t;
@@ -212,7 +212,7 @@ include_guards<Token>::state_3(Token const& t)
 {
     token_id id = token_id(t);
     if (T_IDENTIFIER == id && t.get_value() == guard_name)
-        state = state_4;
+        state = &include_guards::state_4;
     else if (!is_skippable(id))
         current_state = false;
     return t;
@@ -231,7 +231,7 @@ include_guards<Token>::state_4(Token const& t)
         if (if_depth > 0)
             --if_depth;
         else
-            state = state_5;
+            state = &include_guards::state_5;
     }
     return t;
 }
