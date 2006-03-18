@@ -35,7 +35,7 @@ inline void atomic_increment( long * pw )
     // cheaper.
     __asm__ ("fetchadd8.rel %0=[%2],1" :
          "=r"(tmp), "=m"(*pw) :
-         "r"(pw));
+         "r"(pw), "m"( *pw ));
 }
 
 inline long atomic_decrement( long * pw )
@@ -48,7 +48,7 @@ inline long atomic_decrement( long * pw )
              "     cmp.eq        p7,p0=1,%0 ;; \n"
              "(p7) ld8.acq       %0=[%2]    " :
              "=&r"(rv), "=m"(*pw) :
-             "r"(pw) :
+             "r"(pw), "m"( *pw ) :
              "p7");
 
     return rv;
@@ -72,7 +72,7 @@ inline long atomic_conditional_increment( long * pw )
          "     mov          %0=%1             ;; \n"
          "1:" : 
          "=&r"(rv), "=&r"(tmp), "=&r"(tmp2), "=m"(*pw) :
-         "r"(pw) :
+         "r"(pw), "m"( *pw ) :
          "ar.ccv", "p7");
 
     return rv;
