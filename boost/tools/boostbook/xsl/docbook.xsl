@@ -113,11 +113,14 @@
         </xsl:if>
 
         <xsl:if test="descendant::class|descendant::struct|descendant::union
-                      |descendant::function|descendant::free-function-group">
+                      |descendant::function|descendant::free-function-group
+                      |descendant::overloaded-function|descendant::enum">
           <xsl:call-template name="synopsis">
             <xsl:with-param name="text">
               <xsl:apply-templates mode="synopsis" 
-                select="namespace|class|struct|union|function|free-function-group">
+                select="namespace|class|struct|union
+                         |function|free-function-group
+                         |overloaded-function|enum">
                 <xsl:with-param name="indentation" select="0"/>
               </xsl:apply-templates>
             </xsl:with-param>
