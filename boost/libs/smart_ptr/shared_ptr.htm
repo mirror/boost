@@ -106,6 +106,7 @@ void bad()
       <A href="#constructors" >shared_ptr</A>(); // never throws
       template&lt;class Y&gt; explicit <A href="#constructors" >shared_ptr</A>(Y * p);
       template&lt;class Y, class D&gt; <A href="#constructors" >shared_ptr</A>(Y * p, D d);
+      template&lt;class Y, class D, class A&gt; <A href="#allocator_constructor" >shared_ptr</A>(Y * p, D d, A a);
       <A href="#destructor" >~shared_ptr</A>(); // never throws
 
       <A href="#constructors" >shared_ptr</A>(shared_ptr const &amp; r); // never throws
@@ -120,6 +121,7 @@ void bad()
       void <A href="#reset" >reset</A>(); // never throws
       template&lt;class Y&gt; void <A href="#reset" >reset</A>(Y * p);
       template&lt;class Y, class D&gt; void <A href="#reset" >reset</A>(Y * p, D d);
+      template&lt;class Y, class D, class A&gt; void <A href="#reset" >reset</A>(Y * p, D d, A a);
 
       T &amp; <A href="#indirection" >operator*</A>() const; // never throws
       T * <A href="#indirection" >operator-&gt;</A>() const; // never throws
@@ -203,15 +205,20 @@ void bad()
 				The current implementation uses a different mechanism, <A href="enable_shared_from_this.html">
 					enable_shared_from_this</A>, to solve the "<STRONG>shared_ptr</STRONG> from <STRONG>
 					this</STRONG>" problem.</EM><EM>]</EM></P>
-		<pre>template&lt;class Y, class D&gt; shared_ptr(Y * p, D d);</pre>
+		<a name="allocator_constructor"></a>
+		<pre>template&lt;class Y, class D&gt; shared_ptr(Y * p, D d);
+template&lt;class Y, class D, class A&gt; shared_ptr(Y * p, D d, A a);</pre>
 		<blockquote>
 			<p><b>Requirements:</b> <B>p</B> must be convertible to <B>T *</B>. <STRONG>D</STRONG>
 				must be <STRONG>CopyConstructible</STRONG>. The copy constructor and destructor 
 				of <b>D</b> must not throw. The expression <code>d(p)</code> must be 
-				well-formed, must not invoke undefined behavior, and must not throw exceptions.
+				well-formed, must not invoke undefined behavior, and must not throw exceptions. <STRONG>
+					A</STRONG> must be an <EM>Allocator</EM>, as described in section 20.1.5 (<STRONG>Allocator 
+					requirements</STRONG>) of the C++ Standard.
 			</p>
 			<p><b>Effects:</b> Constructs a <b>shared_ptr</b> that <EM>owns</EM> the pointer <STRONG>
-					p</STRONG> and the deleter <b>d</b>.</p>
+					p</STRONG> and the deleter <b>d</b>. The second constructor allocates 
+				memory using a copy of <STRONG>a</STRONG>.</p>
 			<p><b>Postconditions:</b> <code>use_count() == 1 &amp;&amp; get() == p</code>.</p>
 			<p><b>Throws:</b> <STRONG>std::bad_alloc</STRONG>, or an implementation-defined 
 				exception when a resource other than memory could not be obtained.</p>
@@ -316,6 +323,10 @@ q = p;
 		<pre>template&lt;class Y, class D&gt; void reset(Y * p, D d);</pre>
 		<BLOCKQUOTE>
 			<P><B>Effects:</B> Equivalent to <code>shared_ptr(p, d).swap(*this)</code>.</P>
+		</BLOCKQUOTE>
+		<pre>template&lt;class Y, class D, class A&gt; void reset(Y * p, D d, A a);</pre>
+		<BLOCKQUOTE>
+			<P><B>Effects:</B> Equivalent to <code>shared_ptr(p, d, a).swap(*this)</code>.</P>
 		</BLOCKQUOTE>
 		<h3><a name="indirection">indirection</a></h3>
 		<pre>T &amp; operator*() const; // never throws</pre>
