@@ -82,7 +82,7 @@ namespace boost { namespace type_of {
         struct _typeof_encode_fraction {\
             BOOST_STATIC_CONSTANT(int,_typeof_encode_offset = (_Typeof_Iteration*BOOST_TYPEOF_LIMIT_SIZE));\
             typedef boost::type_of::offset_vector<BOOST_TYPEOF_VECTOR(0)<>,boost::mpl::size_t<_typeof_encode_offset> > _typeof_start_vector;\
-            BOOST_PP_REPEAT(BOOST_TYPEOF_LIMIT_SIZE,BOOST_TYPEOF_NESTED_TYPEITEM,expr);\
+            BOOST_PP_REPEAT(BOOST_TYPEOF_LIMIT_SIZE,BOOST_TYPEOF_NESTED_TYPEITEM,expr)\
         };\
         template<typename Pos>\
         struct _typeof_fraction_iter {\

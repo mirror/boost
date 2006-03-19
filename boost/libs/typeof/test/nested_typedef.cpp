@@ -1,4 +1,3 @@
-
 #include <boost/typeof/typeof.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/static_assert.hpp>
@@ -15,7 +14,7 @@ struct {
 
 template<typename T> struct wrap
 {
-    BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested,int_p[& do_int]);
+    BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested,int_p[& do_int])
     typedef typename nested::type type;
 };
 
@@ -25,7 +24,7 @@ template<typename T> struct parser
 {
     struct __rule {
         static T & a_placeholder;
-        BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested,int_p[a_placeholder]);
+        BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested,int_p[a_placeholder])
         typedef typename nested::type type;
     };
 };
