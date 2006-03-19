@@ -58,6 +58,11 @@ struct bidirectional_map
 {
     typedef std::pair<FromType, ToType> value_type;
 
+#if defined(BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS) ||\
+    defined(BOOST_MSVC)&&(BOOST_MSVC<1300) ||\
+    defined(BOOST_INTEL_CXX_VERSION)&&defined(_MSC_VER)&&\
+           (BOOST_INTEL_CXX_VERSION<=700)
+
     BOOST_STATIC_CONSTANT(unsigned, from_offset = offsetof(value_type, first));
     BOOST_STATIC_CONSTANT(unsigned, to_offset   = offsetof(value_type, second));
 
@@ -70,10 +75,28 @@ struct bidirectional_map
             >,
             boost::multi_index::ordered_non_unique<
                 boost::multi_index::tag<to>, 
-                boost::multi_index::member_offset<value_type,ToType,to_offset> 
+                boost::multi_index::member_offset<value_type, ToType, to_offset> 
             >
         >
     > type;
+
+#else
+
+  typedef boost::multi_index::multi_index_container<
+      value_type,
+      boost::multi_index::indexed_by<
+          boost::multi_index::ordered_unique<
+              boost::multi_index::tag<from>,
+              boost::multi_index::member<value_type, FromType, &value_type::first> 
+          >,
+          boost::multi_index::ordered_non_unique<
+              boost::multi_index::tag<to>,  
+              boost::multi_index::member<value_type, ToType, &value_type::second> 
+          >
+      >
+  > type;
+
+#endif
 };
 #endif // BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
 
