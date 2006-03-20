@@ -24,7 +24,9 @@
 #include <boost/regex/pattern_except.hpp>
 
 #define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
+#ifndef NOMINMAX
+#  define NOMINMAX
+#endif
 #define NOGDI
 #include <windows.h>
 

@@ -24,7 +24,9 @@
 #include <boost/regex/pending/static_mutex.hpp>
 
 #if defined(BOOST_HAS_WINTHREADS)
-#define NOMINMAX
+#ifndef NOMINMAX
+#  define NOMINMAX
+#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <boost/static_assert.hpp>
