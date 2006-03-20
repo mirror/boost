@@ -144,6 +144,16 @@
                         </entry>
                     </row>
                     <row>
+                        <entry><code>lexicographical_compare</code></entry>
+                        <entry>Check if a string is lexicographicaly less then another one</entry>
+                        <entry>
+                            <functionname>lexicographical_compare()</functionname>
+                            <sbr/>
+                            <functionname>ilexicographical_compare()</functionname>
+                        </entry>
+                    </row>
+
+                    <row>
                         <entry><code>all</code></entry>
                         <entry>Check if all elements of a string satisfy the given predicate</entry>
                         <entry>
@@ -425,6 +435,34 @@
                             <functionname>split()</functionname>
                             <sbr/>
                             <functionname>split_regex()</functionname>
+                        </entry>
+                   </row>
+                </tbody>
+            </tgroup>
+        </table>
+        <table>
+            <title>Join</title>
+            <tgroup cols="3" align="left">
+                <thead>
+                    <row>
+                        <entry>Algorithm name</entry>
+                        <entry>Description</entry>
+                        <entry>Functions</entry>
+                    </row>
+                </thead>
+                <tbody>
+                    <row>
+                        <entry>join</entry>
+                        <entry>Join all elements in a container into a single string</entry>
+                        <entry>
+                            <functionname>join</functionname>
+                        </entry>
+                    </row>
+                        <row>
+                        <entry>join_if</entry>
+                        <entry>Join all elements in a container that satisfies the condition into a single string</entry>
+                        <entry>
+                            <functionname>join_if()</functionname>
                         </entry>
                    </row>
                 </tbody>
