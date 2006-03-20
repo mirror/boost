@@ -331,8 +331,12 @@ public:
         return hooks.interpret_pragma(*this, pending, option, values, act_token);
     }
     
-private:
 #if BOOST_WAVE_SERIALIZATION != 0
+public:
+    BOOST_STATIC_CONSTANT(unsigned int, version = 0x100);
+    BOOST_STATIC_CONSTANT(unsigned int, version_mask = 0xff);
+
+private:
     friend class boost::serialization::access;
     template<class Archive>
     void save(Archive & ar, const unsigned int version) const
@@ -348,8 +352,13 @@ private:
         ar & includes;
     }
     template<class Archive>
-    void load(Archive & ar, const unsigned int version)
+    void load(Archive & ar, const unsigned int loaded_version)
     {
+//         if (version != (loaded_version & ~version_mask)) {
+//             BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
+//                 "cpp_context state version", get_main_pos());
+//         }
+        
         // check compatibility of the stored information
         typedef typename token_type::string_type string_type;
         string_type config, pragma_keyword, string_type_str;
@@ -380,6 +389,7 @@ private:
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 #endif
 
+private:
 // the main input stream
     target_iterator_type first;         // underlying input stream
     target_iterator_type last;
@@ -417,7 +427,20 @@ struct tracking_level<boost::wave::context<Iterator, LexIterator, InputPolicy, H
     );
 };
 
-}}
+template<
+    typename Iterator, typename LexIterator, 
+    typename InputPolicy, typename Hooks
+>
+struct version<boost::wave::context<Iterator, LexIterator, InputPolicy, Hooks> >
+{
+    typedef boost::wave::context<Iterator, LexIterator, InputPolicy, Hooks>
+        target_type;
+    typedef mpl::int_<target_type::version> type;
+    typedef mpl::integral_c_tag tag;
+    BOOST_STATIC_CONSTANT(unsigned int, value = version::type::value);
+};
+
+}}  // namespace boost::serialization
 #endif
 
 // the suffix header occurs after all of the code

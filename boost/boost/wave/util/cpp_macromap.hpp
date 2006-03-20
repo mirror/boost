@@ -52,16 +52,14 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost {
-namespace wave {
-namespace util {
+namespace boost { namespace wave { namespace util {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 //  macromap
 // 
 //      This class holds all currently defined macros and on demand expands 
-//      those macrodefinitions 
+//      those macro definitions 
 //
 ///////////////////////////////////////////////////////////////////////////////
 template <typename ContextT>
@@ -199,18 +197,32 @@ protected:
     bool is_valid_concat(string_type new_value, 
         position_type const &pos, ContainerT &rescanned);
     
-private:
 #if BOOST_WAVE_SERIALIZATION != 0
+public:
+    BOOST_STATIC_CONSTANT(unsigned int, version = 0x100);
+    BOOST_STATIC_CONSTANT(unsigned int, version_mask = 0xff);
+
+private:
     friend class boost::serialization::access;
     template<typename Archive>
-    void serialize(Archive &ar, const unsigned int version)
+    void save(Archive &ar, const unsigned int version) const
     {
         ar & defined_macros;
-        if (Archive::is_loading::value)
-            current_macros = defined_macros.get();
     }
+    template<typename Archive>
+    void load(Archive &ar, const unsigned int loaded_version)
+    {
+//         if (version != (loaded_version & ~version_mask)) {
+//             BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
+//                 "cpp_include_path state version", main_pos);
+//         }
+        ar & defined_macros;
+        current_macros = defined_macros.get();
+    }
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 #endif
 
+private:
     defined_macros_type *current_macros;                   // current symbol table
     boost::shared_ptr<defined_macros_type> defined_macros; // global symbol table
 
@@ -220,7 +232,6 @@ private:
     ContextT &ctx;              // context object associated with the macromap
     long macro_uid;
 };
-
 ///////////////////////////////////////////////////////////////////////////////
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1704,9 +1715,22 @@ macromap<ContextT>::reset_macromap()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-}   // namespace util
-}   // namespace wave
-}   // namespace boost
+}}}   // namespace boost::wave::util
+
+#if BOOST_WAVE_SERIALIZATION != 0
+namespace boost { namespace serialization {
+
+template<typename ContextT>
+struct version<boost::wave::util::macromap<ContextT> >
+{
+    typedef boost::wave::util::macromap<ContextT> target_type;
+    typedef mpl::int_<target_type::version> type;
+    typedef mpl::integral_c_tag tag;
+    BOOST_STATIC_CONSTANT(unsigned int, value = version::type::value);
+};
+
+}}    // namepsace boost::serialization
+#endif
 
 // the suffix header occurs after all of the code
 #ifdef BOOST_HAS_ABI_HEADERS

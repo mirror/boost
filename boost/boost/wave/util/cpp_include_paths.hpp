@@ -40,15 +40,13 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace boost {
-namespace wave {
-namespace util {
+namespace boost { namespace wave { namespace util {
 
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
 ///////////////////////////////////////////////////////////////////////////////
 //  Tags for accessing both sides of a bidirectional map
-struct from{};
-struct to{};
+struct from {};
+struct to {};
 
 ///////////////////////////////////////////////////////////////////////////////
 //  The class template bidirectional_map wraps the specification
@@ -99,6 +97,15 @@ struct bidirectional_map
 #endif
 };
 #endif // BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+
+#if BOOST_WAVE_SERIALIZATION != 0
+struct load_filepos
+{
+    static unsigned int get_line() { return 0; }
+    static unsigned int get_column() { return 0; }
+    static std::string get_file() { return "<loading-state>"; }
+};
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -199,21 +206,56 @@ public:
     }
 
 private:
-#if BOOST_WAVE_SERIALIZATION != 0
-    friend class boost::serialization::access;
-    template<typename Archive>
-    void serialize(Archive &ar, const unsigned int version)
-    {
-        ar & pragma_once_files;
-    }
+    pragma_once_set_type pragma_once_files;
 #endif
 
-    pragma_once_set_type pragma_once_files;
+#if BOOST_WAVE_SERIALIZATION != 0
+public:
+    BOOST_STATIC_CONSTANT(unsigned int, version = 0x100);
+    BOOST_STATIC_CONSTANT(unsigned int, version_mask = 0xff);
 
-#elif BOOST_WAVE_SERIALIZATION != 0
+private:
     friend class boost::serialization::access;
     template<typename Archive>
-    void serialize(Archive &ar, const unsigned int version) {}
+    void save(Archive & ar, const unsigned int version) const
+    {
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+        ar & pragma_once_files;
+#endif
+        ar & user_include_paths;
+        ar & system_include_paths;
+        ar & was_sys_include_path;
+    }
+    template<typename Archive>
+    void load(Archive & ar, const unsigned int loaded_version)
+    {
+//         if (version != (loaded_version & ~version_mask)) {
+//             BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
+//                 "cpp_include_path state version", load_filepos());
+//         }
+
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+        ar & pragma_once_files;
+#endif
+        // verify that the old include paths match the current ones
+        include_list_type user_paths, system_paths;
+        ar & user_paths;
+        ar & system_paths;
+
+        if (user_paths != user_include_paths)
+        {
+            BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
+                "user include paths", load_filepos());
+        }
+        if (system_paths != system_include_paths)
+        {
+            BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
+                "system include paths", load_filepos());
+        }
+
+        ar & was_sys_include_path;
+    }
+    BOOST_SERIALIZATION_SPLIT_MEMBER()
 #endif
 };
 
@@ -376,6 +418,35 @@ void include_paths::set_current_directory(char const *path_)
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost { namespace serialization {
 
+///////////////////////////////////////////////////////////////////////////////
+//  Serialization support for boost::filesystem::path
+template<class Archive>
+inline void save (Archive & ar, boost::filesystem::path const& p, 
+    const unsigned int /* file_version */)
+{
+    ar & p.native_file_string();
+}
+
+template<class Archive>
+inline void load (Archive & ar, boost::filesystem::path &p,
+    const unsigned int /* file_version */)
+{
+    std::string path_str;
+    ar & path_str;
+    p = boost::filesystem::path(path_str, boost::filesystem::native);
+}
+
+// split non-intrusive serialization function member into separate
+// non intrusive save/load member functions
+template<class Archive>
+inline void serialize (Archive & ar, boost::filesystem::path &p,
+    const unsigned int file_version)
+{
+    boost::serialization::split_free(ar, p, file_version);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//  Serialization support for the used multi_index
 template<class Archive>
 inline void save (Archive & ar,
     const typename boost::wave::util::bidirectional_map<
@@ -420,7 +491,11 @@ inline void serialize (Archive & ar,
 
 ///////////////////////////////////////////////////////////////////////////////
 }}  // namespace boost::serialization
-#endif
+
+BOOST_CLASS_VERSION(boost::wave::util::include_paths, 
+    boost::wave::util::include_paths::version);
+
+#endif  // BOOST_WAVE_SERIALIZATION != 0
 
 // the suffix header occurs after all of the code
 #ifdef BOOST_HAS_ABI_HEADERS

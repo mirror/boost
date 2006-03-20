@@ -8,7 +8,9 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-#define BOOST_WAVE_SERIALIZATION 1                    // enable serialization
+#define BOOST_WAVE_SERIALIZATION        1             // enable serialization
+#define BOOST_WAVE_BINARY_SERIALIZATION 1             // use binary archives
+
 #include "cpp.hpp"                                    // global configuration
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,7 +23,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  Include Wave itself
 #include <boost/wave.hpp>
-#include <boost/wave/wave_config_constant.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
 //  Include the lexer related stuff
@@ -29,10 +30,20 @@
 #include <boost/wave/cpplexer/cpp_lex_iterator.hpp>   // lexer type
 
 ///////////////////////////////////////////////////////////////////////////////
+//  Include serialization support, if requested
 #if BOOST_WAVE_SERIALIZATION != 0
 #include <boost/serialization/serialization.hpp>
+#if BOOST_WAVE_BINARY_SERIALIZATION != 0
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
+typedef boost::archive::binary_iarchive iarchive;
+typedef boost::archive::binary_oarchive oarchive;
+#else
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
+typedef boost::archive::text_iarchive iarchive;
+typedef boost::archive::text_oarchive oarchive;
+#endif
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -40,16 +51,14 @@
 #include "trace_macro_expansion.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
-//  include lexer specifics, import lexer names
-//
+//  Include lexer specifics, import lexer names
 #if BOOST_WAVE_SEPARATE_LEXER_INSTANTIATION == 0
 #include <boost/wave/cpplexer/re2clex/cpp_re2c_lexer.hpp>
 #endif 
 
 ///////////////////////////////////////////////////////////////////////////////
-//  include the grammar definitions, if these shouldn't be compiled separately
+//  Include the grammar definitions, if these shouldn't be compiled separately
 //  (ATTENTION: _very_ large compilation times!)
-//
 #if BOOST_WAVE_SEPARATE_GRAMMAR_INSTANTIATION == 0
 #include <boost/wave/grammars/cpp_intlit_grammar.hpp>
 #include <boost/wave/grammars/cpp_chlit_grammar.hpp>
@@ -60,7 +69,7 @@
 #endif 
 
 ///////////////////////////////////////////////////////////////////////////////
-//  import required names
+//  Import required names
 using namespace boost::spirit;
 
 using std::string;
@@ -97,14 +106,12 @@ using std::istreambuf_iterator;
 
 ///////////////////////////////////////////////////////////////////////////////
 // print the current version
-int print_version()
+string get_version()
 {
     string version (context_type::get_version_string());
-    cout 
-        << version.substr(1, version.size()-2)  // strip quotes
-        << " (" << CPP_VERSION_DATE << ")"      // add date
-        << endl;
-    return 0;                       // exit app
+    version = version.substr(1, version.size()-2);      // strip quotes
+    version += string(" (" CPP_VERSION_DATE_STR ")");   // add date
+    return version;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -112,8 +119,8 @@ int print_version()
 int print_interactive_version()
 {
     cout << "Wave: A Standard conformant C++ preprocessor based on the Boost.Wave library" << endl;
-    cout << "Version: ";
-    return print_version();
+    cout << "Version: " << get_version() << endl;
+    return 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -409,59 +416,81 @@ namespace {
     inline void 
     load_state(po::variables_map const &vm, Context &ctx)
     {
-    #if BOOST_WAVE_SERIALIZATION != 0
+#if BOOST_WAVE_SERIALIZATION != 0
         try {
             if (vm.count("state") > 0) {
                 fs::path state_file (vm["state"].as<string>(), fs::native);
                 if (state_file == "-") 
                     state_file = fs::path("wave.state", fs::native);
 
-                std::ifstream ifs (state_file.string().c_str());
+                using std::ios_base::openmode;
+                openmode mode = ios_base::in;
+
+#if BOOST_WAVE_BINARY_SERIALIZATION != 0
+                mode = (openmode)(mode | ios_base::binary);
+#endif
+                ifstream ifs (state_file.string().c_str(), mode);
                 if (ifs.is_open()) {
-                    boost::archive::text_iarchive ia(ifs);
-                    ia >> ctx;      // load the internal tables from disc
+                    iarchive ia(ifs);
+                    string version;
+                    
+                    ia >> version;      // load version
+                    if (version == CPP_VERSION_FULL_STR)
+                        ia >> ctx;      // load the internal tables from disc
+                    else {
+                        cerr << "wave: detected version mismatch while loading state, state was not loaded." << endl;
+                        cerr << "      loaded version:   " << version << endl;
+                        cerr << "      expected version: " << CPP_VERSION_FULL_STR << endl;
+                    }
                 }
             }
         }
         catch (boost::archive::archive_exception const& e) {
-            cerr << "wave: exception caught while loading state: " 
+            cerr << "wave: error while loading state: " 
                  << e.what() << endl;
         }
         catch (boost::wave::preprocess_exception const& e) {
-            cerr << "wave: exception caught while loading state: " 
-                 << e.what() << endl;
+            cerr << "wave: error while loading state: " 
+                 << e.description() << endl;
         }
-    #endif
+#endif
     }
 
     template <typename Context>
     inline void 
     save_state(po::variables_map const &vm, Context const &ctx)
     {
-    #if BOOST_WAVE_SERIALIZATION != 0
+#if BOOST_WAVE_SERIALIZATION != 0
         try {
             if (vm.count("state") > 0) {
                 fs::path state_file (vm["state"].as<string>(), fs::native);
                 if (state_file == "-") 
                     state_file = fs::path("wave.state", fs::native);
 
-                std::ofstream ofs(state_file.string().c_str());
+                using std::ios_base::openmode;
+                openmode mode = ios_base::out;
+
+#if BOOST_WAVE_BINARY_SERIALIZATION != 0
+                mode = (openmode)(mode | ios_base::binary);
+#endif
+                ofstream ofs(state_file.string().c_str(), mode);
                 if (!ofs.is_open()) {
                     cerr << "wave: could not open state file for writing: " 
                          << state_file.string() << endl;
                     // this is non-fatal
                 }
                 else {
-                    boost::archive::text_oarchive oa(ofs);
-                    oa << ctx;        // write the internal tables to disc
+                    oarchive oa(ofs);
+                    oa << string(CPP_VERSION_FULL_STR); // write version
+                    oa << ctx;                  // write the internal tables to disc
                 }
             }
         }
         catch (boost::archive::archive_exception const& e) {
-            cerr << "wave: exception caught while writing state: " 
+            cerr << "wave: error while writing state: " 
                  << e.what() << endl;
         }
-    #endif
+#endif
     }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1025,7 +1054,8 @@ main (int argc, char *argv[])
         }
         
         if (vm.count("version")) {
-            return print_version();
+            cout << get_version() << endl;
+            return 0;
         }
 
         if (vm.count("copyright")) {

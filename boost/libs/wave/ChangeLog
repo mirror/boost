@@ -96,7 +96,9 @@ Boost V1.34.0
 - Added a new predefined macro __WAVE_CONFIG__ which expands to an integer
   literal containg the configuration information the library was compiled
   with.
-  
+- Added proper versioning support to the serialization of state.
+
+Sat Feb 18 2005
 - Version 1.2.3
 - Added a missing throw() specification to the function 
   cpp_exception::get_related_name().
