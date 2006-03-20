@@ -51,11 +51,11 @@ namespace date_time {
     typedef typename rep_type::impl_type impl_type;
 
     time_duration() : ticks_(0) {} 
-    time_duration(hour_type hours, 
-                  min_type minutes, 
-                  sec_type seconds=0,
-                  fractional_seconds_type frac_sec = 0) :
-      ticks_(rep_type::to_tick_count(hours,minutes,seconds,frac_sec)) 
+    time_duration(hour_type hours_in, 
+                  min_type minutes_in, 
+                  sec_type seconds_in=0,
+                  fractional_seconds_type frac_sec_in = 0) :
+      ticks_(rep_type::to_tick_count(hours_in,minutes_in,seconds_in,frac_sec_in)) 
     {}
     // copy constructor required for dividable<>
     //! Construct from another time_duration (Copy constructor)

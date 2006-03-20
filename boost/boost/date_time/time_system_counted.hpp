@@ -31,15 +31,15 @@ namespace date_time {
     typedef typename config::time_duration_type time_duration_type;
     typedef typename config::resolution_traits   resolution_traits;
     
-    counted_time_rep(const date_type& d, const time_duration_type& tod) 
+    counted_time_rep(const date_type& d, const time_duration_type& time_of_day) 
       : time_count_(1)
     {
-      if(d.is_infinity() || d.is_not_a_date() || tod.is_special()) {
-        time_count_ = tod.get_rep() + d.day_count();
+      if(d.is_infinity() || d.is_not_a_date() || time_of_day.is_special()) {
+        time_count_ = time_of_day.get_rep() + d.day_count();
         //std::cout << time_count_ << std::endl;
       }
       else {    
-        time_count_ = (d.day_number() * frac_sec_per_day()) + tod.ticks();
+        time_count_ = (d.day_number() * frac_sec_per_day()) + time_of_day.ticks();
       }
     }
     explicit counted_time_rep(int_type count) :
