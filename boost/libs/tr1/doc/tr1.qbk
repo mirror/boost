@@ -596,7 +596,75 @@ For more information see the [@../../libs/random/index.html Boost.Random documen
    template<class UniformRandomNumberGenerator1, int s1,
    class UniformRandomNumberGenerator2, int s2>
    class xor_combine;
-
+   
+   // [5.1.5] Predefined generators
+   typedef linear_congruential<
+               implementation-defined , 
+               16807, 
+               0, 
+               2147483647> minstd_rand0;
+               
+   typedef linear_congruential<
+               implementation-defined , 
+               48271, 
+               0, 
+               2147483647> minstd_rand;
+               
+   typedef mersenne_twister<
+               implementation-defined ,
+               32, 624, 397, 31, 
+               0x9908b0df, 11, 7, 
+               0x9d2c5680, 15, 
+               0xefc60000, 18> mt19937;
+               
+   typedef subtract_with_carry_01<
+               float, 
+               24, 
+               10, 
+               24> ranlux_base_01;
+               
+   typedef subtract_with_carry_01<
+               double, 
+               48, 
+               10, 
+               24> ranlux64_base_01;
+               
+   typedef discard_block<
+               subtract_with_carry<
+                     implementation-defined , 
+                     (1<<24), 
+                     10, 
+                     24>, 
+               223, 
+               24> ranlux3;
+               
+   typedef discard_block<
+               subtract_with_carry<
+                     implementation-defined, 
+                     (1<<24), 
+                     10, 
+                     24>, 
+               389, 
+               24> ranlux4;
+               
+   typedef discard_block<
+               subtract_with_carry_01<
+                     float, 
+                     24, 
+                     10, 
+                     24>, 
+               223, 
+               24> ranlux3_01;
+               
+   typedef discard_block<
+               subtract_with_carry_01<
+                     float, 
+                     24, 
+                     10, 
+                     24>, 
+               389, 
+               24> ranlux4_01;
+   
    // [5.1.6] Class random_device
    class random_device;
 
