@@ -24,7 +24,7 @@ for local v in NO_COMPRESSION
                NO_ZLIB ZLIB_SOURCE ZLIB_INCLUDE ZLIB_BINARY ZLIB_LIBPATH
                NO_BZIP2 BZIP2_SOURCE BZIP2_INCLUDE BZIP2_BINARY BZIP2_LIBPATH
 {
-    $(v) = [ os.environ $(v) ] ;
+    $(v) = [ modules.peek : $(v) ] ;
 }
 
 
@@ -68,7 +68,8 @@ rule create-library ( library-name : windows-name unix-name : sources + )
         {
             return [ lib boost_$(library-name) 
               : $($(LIB)_SOURCE)/$(sources).c
-              : <include>$($(LIB)_INCLUDE)            
+              : <include>$($(LIB)_INCLUDE)
+	        <location-prefix>$(LIB:L)
               :
               : <include>$($(LIB)_INCLUDE)
               ] ;                        
