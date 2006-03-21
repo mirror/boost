@@ -199,8 +199,8 @@ protected:
     
 #if BOOST_WAVE_SERIALIZATION != 0
 public:
-    BOOST_STATIC_CONSTANT(unsigned int, version = 0x100);
-    BOOST_STATIC_CONSTANT(unsigned int, version_mask = 0xff);
+    BOOST_STATIC_CONSTANT(unsigned int, version = 0x10);
+    BOOST_STATIC_CONSTANT(unsigned int, version_mask = 0x0f);
 
 private:
     friend class boost::serialization::access;
@@ -212,10 +212,10 @@ private:
     template<typename Archive>
     void load(Archive &ar, const unsigned int loaded_version)
     {
-//         if (version != (loaded_version & ~version_mask)) {
-//             BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
-//                 "cpp_include_path state version", main_pos);
-//         }
+        if (version != (loaded_version & ~version_mask)) {
+            BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
+                "cpp_context state version", get_main_pos());
+        }
         ar & defined_macros;
         current_macros = defined_macros.get();
     }
