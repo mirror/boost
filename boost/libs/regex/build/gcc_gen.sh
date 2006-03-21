@@ -128,11 +128,11 @@ LINKER=g++ -shared
 #
 # compiler options for release build:
 #
-C1=-c -O2 -I../../../
+C1=-c -O2 -I../../..
 #
 # compiler options for debug build:
 #
-C2=-c -g -I../../../
+C2=-c -g -I../../..
 
 ifeq "\$(ICU_PATH)" ""
 \$(warning "Building Boost.Regex without ICU / Unicode support:")
@@ -208,11 +208,11 @@ LINKER=g++ -shared
 #
 # compiler options for release build:
 #
-C1=-c -O2 -I../../../ -fPIC
+C1=-c -O2 -I../../.. -fPIC
 #
 # compiler options for debug build:
 #
-C2=-c -g -I../../../ -fPIC
+C2=-c -g -I../../.. -fPIC
 
 ifeq "\$(ICU_PATH)" ""
 \$(warning "Building Boost.Regex without ICU / Unicode support:")
