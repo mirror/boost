@@ -194,10 +194,10 @@ public:
    {
       return static_cast<re_syntax_base*>(static_cast<void*>(static_cast<char*>(base) + off));
    }
-   void init(unsigned flags)
+   void init(unsigned l_flags)
    {
-      m_pdata->m_flags = flags;
-      m_icase = flags & regex_constants::icase;
+      m_pdata->m_flags = l_flags;
+      m_icase = l_flags & regex_constants::icase;
    }
    regbase::flag_type flags()
    {

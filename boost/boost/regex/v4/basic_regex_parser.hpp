@@ -94,10 +94,10 @@ basic_regex_parser<charT, traits>::basic_regex_parser(regex_data<charT, traits>*
 }
 
 template <class charT, class traits>
-void basic_regex_parser<charT, traits>::parse(const charT* p1, const charT* p2, unsigned flags)
+void basic_regex_parser<charT, traits>::parse(const charT* p1, const charT* p2, unsigned l_flags)
 {
-   // pass flags on to base class:
-   this->init(flags);
+   // pass l_flags on to base class:
+   this->init(l_flags);
    // set up pointers:
    m_position = m_base = p1;
    m_end = p2;
@@ -108,7 +108,7 @@ void basic_regex_parser<charT, traits>::parse(const charT* p1, const charT* p2, 
       return;
    }
    // select which parser to use:
-   switch(flags & regbase::main_option_type)
+   switch(l_flags & regbase::main_option_type)
    {
    case regbase::perl_syntax_group:
       m_parser_proc = &basic_regex_parser<charT, traits>::parse_extended;
@@ -127,8 +127,8 @@ void basic_regex_parser<charT, traits>::parse(const charT* p1, const charT* p2, 
    // Unwind our alternatives:
    //
    unwind_alts(-1);
-   // reset flags as a global scope (?imsx) may have altered them:
-   this->flags(flags);
+   // reset l_flags as a global scope (?imsx) may have altered them:
+   this->flags(l_flags);
    // if we haven't gobbled up all the characters then we must
    // have had an unexpected ')' :
    if(!result)
@@ -1244,7 +1244,6 @@ void basic_regex_parser<charT, traits>::parse_set_literal(basic_char_set<charT, 
 template <class charT, class traits>
 digraph<charT> basic_regex_parser<charT, traits>::get_next_set_literal(basic_char_set<charT, traits>& char_set)
 {
-   typedef typename traits::string_type string_type;
    digraph<charT> result;
    switch(this->m_traits.syntax_type(*m_position))
    {

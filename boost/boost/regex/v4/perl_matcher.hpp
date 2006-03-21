@@ -327,9 +327,9 @@ public:
       match_results<BidiIterator, Allocator>& what, 
       const basic_regex<char_type, traits>& e,
       match_flag_type f,
-      BidiIterator base)
+      BidiIterator l_base)
       :  m_result(what), base(first), last(end), 
-         position(first), backstop(base), re(e), traits_inst(e.get_traits()), 
+         position(first), backstop(l_base), re(e), traits_inst(e.get_traits()), 
          m_independent(false), next_count(&rep_obj), rep_obj(&next_count)
    {
       construct_init(e, f);
