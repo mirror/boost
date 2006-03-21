@@ -367,8 +367,7 @@ namespace {
                 typename Context::position_type pos;
                 if (get_macro_position(ctx, e.get_related_name(), pos)) {
                     cerr 
-                        << pos.get_file() << ":" << pos.get_line() << ":" 
-                        << pos.get_column() << ": " 
+                        << pos << ": " 
                         << preprocess_exception::severity_text(e.get_severity())
                         << ": this is the location of the previous definition." 
                         << endl;
@@ -899,9 +898,7 @@ auto_stop_watch elapsed_time(cerr);
     catch (std::exception const &e) {
     // use last recognized token to retrieve the error position
         cerr 
-            << current_position.get_file() 
-            << ":" << current_position.get_line() 
-            << ":" << current_position.get_column() << ": "
+            << current_position << ": "
             << "exception caught: " << e.what()
             << endl;
         return 3;
@@ -909,9 +906,7 @@ auto_stop_watch elapsed_time(cerr);
     catch (...) {
     // use last recognized token to retrieve the error position
         cerr 
-            << current_position.get_file() 
-            << ":" << current_position.get_line()
-            << ":" << current_position.get_column() << ": "
+            << current_position << ": "
             << "unexpected exception caught." << endl;
         return 4;
     }

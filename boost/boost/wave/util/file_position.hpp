@@ -131,7 +131,7 @@ template <typename StringT>
 inline std::ostream &
 operator<< (std::ostream &o, file_position<StringT> const &pos)
 {
-    o << pos.get_file() << "(" << pos.get_line() << ")";
+    o << pos.get_file() << ":" << pos.get_line() << ":"  << pos.get_column();
     return o;
 }
 

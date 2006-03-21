@@ -60,15 +60,15 @@
 <p>When preprocessed with <tt>'wave -t test.trace test.cpp'</tt> the <tt>Wave</tt> 
   driver generates a file <tt>test.trace</tt>, which contains (without the line 
   numbers in front of the lines):</p>
-<pre>  1: test.cpp(8): CONCAT(X(1), Y())
-  2:   test.cpp(5): see macro definition: CONCAT(x, y)
+<pre>  1: test.cpp:8:1: CONCAT(X(1), Y())
+  2:   test.cpp:5:9: see macro definition: CONCAT(x, y)
   3:   invoked with
   4:   [
   5:     x = X(1)
   6:     y = Y()
   7:   ]
   8:   [
-  9:     test.cpp(2): see macro definition: X(x)
+  9:     test.cpp:2:9: see macro definition: X(x)
  10:     invoked with
  11:     [
  12:       x = 1
@@ -80,7 +80,7 @@
  18:         1
  19:       ]
  20:     ]
- 21:     test.cpp(3): see macro definition: Y()
+ 21:     test.cpp:3:9: see macro definition: Y()
  22:     [
  23:       2
  24:       rescanning
@@ -91,7 +91,7 @@
  29:     CONCAT_(1, 2)
  30:     rescanning
  31:     [
- 32:       test.cpp(4): see macro definition: CONCAT_(x, y)
+ 32:       test.cpp:4:9: see macro definition: CONCAT_(x, y)
  33:       invoked with
  34:       [
  35:         x = 1
@@ -113,7 +113,7 @@
   contains the reference to the position, from where the macro expansion was initiated. 
   Additionally the following information is contained for every single macro expansion:</p>
 <ul>
-  <li>The reference to the position, where the macro to expand was defined first 
+  <li>The reference to the position (line and column numbers), where the macro to expand was defined first 
     (see lines 2, 9, 21 and 32).</li>
   <li>The real parameters supplied for this macro expansion (see lines 3, 10 and 
     33), this information is traced inside the <tt>invoked with</tt> block, where 
@@ -153,7 +153,7 @@
   <br>
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Thursday, December 1, 2005  11:53<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Tuesday, March 21, 2006  9:25<!-- #EndDate -->
   </span>
 </p>
 </body>
