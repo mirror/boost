@@ -7,6 +7,11 @@
 # See http://www.boost.org/libs/iostreams for documentation.
 
 import stlport ;
+import modules ;
+
+local NO_BZIP2 = [ modules.peek : NO_BZIP2 ] ;
+local NO_ZLIB = [ modules.peek : NO_ZLIB ] ;
+
 
 rule test-iostreams ( sources * : requirements * ) {
     return [
@@ -23,8 +28,9 @@ rule test-iostreams ( sources * : requirements * ) {
         ] ;
 }
 
-    test-suite "iostreams"
-        : [ test-iostreams array_test.cpp ]
+
+    local all-tests = 
+          [ test-iostreams array_test.cpp ]
           [ test-iostreams auto_close_test.cpp ]
           [ test-iostreams buffer_size_test.cpp ]
           [ test-iostreams 
@@ -71,11 +77,20 @@ rule test-iostreams ( sources * : requirements * ) {
           [ test-iostreams symmetric_filter_test.cpp ]
           [ test-iostreams tee_test.cpp ]
           [ test-iostreams wide_stream_test.cpp ]
-          [ test-iostreams 
-                bzip2_test.cpp ../build//boost_iostreams ]
-          [ test-iostreams 
-                gzip_test.cpp ../build//boost_iostreams ]
-          [ test-iostreams 
-                zlib_test.cpp ../build//boost_iostreams ]
-    ;                  
+          ;  
+
+      if ! $(NO_BZIP2)
+      {     
+          all-tests += [ test-iostreams 
+              bzip2_test.cpp ../build//boost_iostreams ] ;
+      }         
+      if ! $(NO_ZLIB)
+      {              
+          all-tests += [ test-iostreams 
+                         gzip_test.cpp ../build//boost_iostreams ]
+                       [ test-iostreams 
+                         zlib_test.cpp ../build//boost_iostreams ] ;
+      }          
+          
+    test-suite "iostreams" : $(all-tests) ;
     
