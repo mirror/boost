@@ -167,8 +167,6 @@ struct random_access_index_node_impl
   }
 
 private:
-  random_access_index_node_impl();
-
   random_access_index_node_impl** up_;
 };
 
