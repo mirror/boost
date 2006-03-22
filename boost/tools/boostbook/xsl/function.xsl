@@ -10,10 +10,6 @@
        description. -->
   <xsl:param name="boost.compact.function">1</xsl:param>
 
-  <!-- BoostBook documentation mode. Can be "compact" or
-       "standardese", for now -->
-  <xsl:param name="boost.generation.mode">compact</xsl:param>
-
   <!-- The longest type length that is considered "short" for the
        layout of function return types. When the length of the result type
        and any storage specifiers is greater than this length, they will be
@@ -709,29 +705,6 @@
   <!-- Templates for functions -->
   <xsl:template name="function.documentation">
     <xsl:param name="text"/>
-
-    <xsl:choose>
-      <xsl:when test="$boost.generation.mode='compact'">
-        <xsl:call-template name="function.documentation.compact">
-          <xsl:with-param name="text" select="$text"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:when test="$boost.generation.mode='standardese'">
-        <xsl:call-template name="function.documentation.standardese">
-          <xsl:with-param name="text" select="$text"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>Error: invalid value '</xsl:text>
-        <xsl:value-of select="$boost.generation.mode"/>
-        <xsl:text>' for stylesheet parameter boost.generation.mode.</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="function.documentation.compact">
-    <xsl:param name="text"/>
-    
     <xsl:choose>
       <xsl:when test="count(ancestor::free-function-group) &gt; 0
                       or count(ancestor::method-group) &gt; 0
@@ -746,21 +719,6 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template name="function.documentation.standardese">
-    <xsl:param name="text"/>
-    <!--
-    <formalpara>
-      <title>
-        <xsl:call-template name="fully-qualified-name">
-          <xsl:with-param name="node" select="."/>
-        </xsl:call-template>
-      </title>
-      <xsl:copy-of select="$text"/>
-    </formalpara>
--->
-    <listitem><xsl:copy-of select="$text"/></listitem>
-  </xsl:template>
-
   <!-- Semantic descriptions of functions -->
   <xsl:template name="function-requirements">
     <xsl:param name="namespace-reference" select="false()"/>
@@ -771,21 +729,50 @@
 
     <xsl:apply-templates select="description/*"/>
 
-    <!-- Document parameters -->
-    <xsl:if test="parameter/description|signature/parameter/description">
+    <xsl:if test="parameter/description|signature/parameter/description|
+                  requires|effects|postconditions|returns|throws|complexity|
+                  notes|rationale">
       <variablelist spacing="compact">
-        <title>Parameters</title>
-        <xsl:for-each select="parameter|signature/parameter">
-		  <xsl:sort select="attribute::name"/>
-          <xsl:if test="description">
-            <varlistentry>
-              <term><xsl:value-of select="@name"/></term>
-              <listitem>
-                <xsl:apply-templates select="description/*"/>
-              </listitem>
-            </varlistentry>
-          </xsl:if>
+        <xsl:processing-instruction name="dbhtml">
+          list-presentation="table"
+        </xsl:processing-instruction>
+
+        <!-- Document parameters -->
+        <xsl:if test="parameter/description|signature/parameter/description">
+          <varlistentry>
+            <term>Parameters:</term>
+            <listitem>
+              <variablelist spacing="compact">
+                <xsl:processing-instruction name="dbhtml">
+                  list-presentation="table"
+                </xsl:processing-instruction>
+                <xsl:for-each select="parameter|signature/parameter">
+		              <xsl:sort select="attribute::name"/>
+                  <xsl:if test="description">
+                    <varlistentry>
+                      <term><xsl:value-of select="@name"/></term>
+                      <listitem>
+                        <xsl:apply-templates select="description/*"/>
+                      </listitem>
+                    </varlistentry>
+                  </xsl:if>
+                </xsl:for-each>
+              </variablelist>
+            </listitem>
+          </varlistentry>
+        </xsl:if>
+
+        <!-- Document rest of function's contract -->
+        <xsl:for-each select="requires|effects|postconditions|returns|throws|complexity|
+                      notes|rationale">
+          <varlistentry>
+            <term><xsl:call-template name="function.requirement.name"/>:</term>
+            <listitem>
+              <xsl:apply-templates select="./*|./text()" mode="annotation"/>
+            </listitem>
+          </varlistentry>
         </xsl:for-each>
+
       </variablelist>
     </xsl:if>
 
@@ -798,22 +785,6 @@
       <xsl:apply-templates select="para"/>
     </xsl:if>
 
-    <xsl:if test="requires|effects|postconditions|returns|throws|complexity|
-                  notes|rationale">
-      <xsl:choose>
-        <xsl:when test="$boost.generation.mode='compact'">
-          <xsl:call-template name="function.requirements.compact"/>
-        </xsl:when>
-        <xsl:when test="$boost.generation.mode='standardese'">
-          <xsl:call-template name="function.requirements.standardese"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:text>Error: invalid value '</xsl:text>
-          <xsl:value-of select="$boost.generation.mode"/>
-          <xsl:text>' for stylesheet parameter boost.generation.mode.</xsl:text>
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:if>
   </xsl:template>
 
   <xsl:template name="function.requirement.name">
@@ -837,82 +808,6 @@
         </xsl:message>
       </xsl:otherwise>
     </xsl:choose>
-  </xsl:template>
-
-  <!-- The "compact" function requirements mode uses variable lists -->
-  <xsl:template name="function.requirements.compact">
-    <variablelist spacing="boost">
-      <xsl:apply-templates 
-        select="requires|effects|postconditions|returns|throws|complexity|
-                notes|rationale"
-        mode="function.requirements.compact"/>
-    </variablelist>
-  </xsl:template>
-
-  <xsl:template match="*" mode="function.requirements.compact">
-    <varlistentry>
-      <term><xsl:call-template name="function.requirement.name"/></term>
-      <listitem>
-        <xsl:apply-templates select="./*|./text()" mode="annotation"/>
-      </listitem>
-    </varlistentry>
-  </xsl:template>
-
-  <!-- The "standardese" function requirements mode uses ordered lists -->
-  <xsl:template name="function.requirements.standardese">
-    <orderedlist spacing="compact" numeration="arabic">
-      <xsl:apply-templates 
-        select="requires|effects|postconditions|returns|throws|complexity|
-                notes|rationale"
-        mode="function.requirements.standardese"/>
-    </orderedlist>
-  </xsl:template>
-
-  <xsl:template match="*" mode="function.requirements.standardese">
-    <listitem>
-      <xsl:apply-templates select="./*|./text()" 
-        mode="function.requirements.injection">
-        <xsl:with-param name="requirement">
-          <xsl:call-template name="function.requirement.name"/>
-        </xsl:with-param>
-      </xsl:apply-templates>
-    </listitem>
-  </xsl:template>
-
-  <!-- Handle paragraphs in function requirement clauses -->
-  <xsl:template match="para|simpara" mode="function.requirements.injection">
-    <xsl:param name="requirement"/>
-
-    <xsl:element name="{local-name(.)}">
-      <xsl:for-each select="./@*">
-        <xsl:attribute name="{name(.)}">
-          <xsl:value-of select="."/>
-        </xsl:attribute>
-      </xsl:for-each>
-
-      <xsl:if test="position()=1">
-        <emphasis role="bold">
-          <xsl:copy-of select="$requirement"/>
-          <xsl:text>:&#160;</xsl:text>
-        </emphasis>
-      </xsl:if>
-      <xsl:apply-templates/>
-    </xsl:element>
-  </xsl:template>
-
-  <xsl:template match="text()" mode="function.requirements.injection">
-    <xsl:param name="requirement"/>
-
-    <simpara>
-      <xsl:if test="position()=1">
-        <emphasis role="bold">
-          <xsl:copy-of select="$requirement"/>
-          <xsl:text>:&#160;</xsl:text>
-        </emphasis>
-      </xsl:if>
-      <xsl:copy-of select="."/>
-      <xsl:apply-templates/>
-    </simpara>
   </xsl:template>
 
   <!-- Function reference -->
