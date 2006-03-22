@@ -45,7 +45,8 @@ namespace detail {
             res.reserve(size + !!prefix_space);
             if(prefix_space) 
               res.append(1, prefix_space);
-            res.append(beg, size);
+            if (size)
+              res.append(beg, size);
         }
         else { 
             std::streamsize n=static_cast<std::streamsize>(w-size-!!prefix_space);
