@@ -31,7 +31,7 @@ rule sc-serialization-test ( name : requirements * )
       <lib>../../test/build/boost_unit_test_framework
       <lib>../../serialization/build/boost_serialization
       : : :
-           ]
+        toolset::require-boost-spirit-support   ]
     ;
 }
 
