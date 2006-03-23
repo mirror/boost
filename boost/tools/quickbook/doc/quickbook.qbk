@@ -137,6 +137,7 @@ Features include:
 * Footnotes, with the \[footnote This is the footnote\] syntax.
 * Post-processor bug fix for escaped XML code that it does not recognize.
 * Replaceable, with the \[~replacement\] syntax.
+* Generic Headers
 
 [endsect]
 
@@ -243,8 +244,12 @@ will generate:
 
 /italic/, *bold*, _underline_, =teletype=
 
-Unlike QuickBook's standard formatting scheme, the rules for simpler alternatives
-are much stricter.
+Unlike QuickBook's standard formatting scheme, the rules for simpler 
+alternatives are much stricter[footnote Thanks to David Barrett, author of 
+[@http://quinthar.com/qwikiwiki/index.php?page=Home Qwiki], for sharing 
+these samples and teaching me these obscure formatting rules. I wasn't sure 
+at all if __spirit__, being more or less a formal EBNF parser, can handle 
+the context sensitivity and ambiguity.].
 
 * Simple markups cannot nest. You can combine a simple markup with a nestable markup.
 * A non-space character must follow the leading markup
@@ -275,11 +280,6 @@ are much stricter.
     [[[^'''['*Bold-Italic*]''']]                        [['*Bold-Italic*]]]
 ]
 
-[blurb __note__ Thanks to David Barrett, author of
-[@http://quinthar.com/qwikiwiki/index.php?page=Home Qwiki], for sharing these samples
-and teaching me these obscure formatting rules. I wasn't sure at all if __spirit__,
-being more or less a formal EBNF parser, can handle the context sensitivity and ambiguity.]
-
 [endsect]
 [section Inline code]
 
@@ -295,11 +295,9 @@ will generate:
 This text has inlined code `int main() { return 0; }` in it. The code will be
 syntax highlighted.
 
-[blurb __note__
-Note that we simply enclose the code with the tick: [^'''"`"'''], not the
-single quote: `"'"`. Note too that [^'''`some code`'''] is prefered over
-[^'''[^some code]'''].
-]
+[note We simply enclose the code with the tick: [^'''"`"'''], not the 
+single quote: `"'"`. Note too that [^'''`some code`'''] is prefered over 
+[^'''[^some code]''']. ]
 
 [endsect]
 [section Code blocks]
@@ -367,7 +365,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
     [[Python]               [[^\[python\]]]]
 ]
 
-[blurb __note__ The source mode strings are lowercase.]
+[note The source mode strings are lowercase.]
 
 [endsect]
 [section line-break]
@@ -376,7 +374,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
 [br]
 ''']
 
-[blurb __note__ Note that `\n` is now preferred over `[br]`.]
+[note Note that `\n` is now preferred over `[br]`.]
 
 [endsect]
 [section Anchors]
@@ -493,7 +491,7 @@ Escaping allows us to pass XML markup to __boostbook__ or __docbook__. For examp
 <emphasis role="bold">This is direct XML markup</emphasis>
 '''
 
-[blurb __alert__ Be careful when using the escape. The text must conform to
+[important Be careful when using the escape. The text must conform to 
 __boostbook__/__docbook__ syntax.]
 
 [endsect]
@@ -929,6 +927,51 @@ and all upper-case are converted to lower-case. For example: Heading
 to link to them. See __anchor_links__ and __section__ for more info.
 
 [endsect]
+[section Generic Heading]
+
+In cases when you don't want to care about the heading level (1 to 6), you 
+can use the /Generic Heading/:
+
+[pre'''
+[heading Heading]
+''']
+
+The /Generic Heading/ assumes the level, plus one, of the innermost section
+where it is placed. For example, if it is placed in the outermost section,
+then, it assumes /h2/.
+
+Headings are often used as an alternative to sections. It is used 
+particularly if you do not want to start a new section. In many cases, 
+however, headings in a particular section is just flat. Example:
+
+[pre'''
+[section A]
+[h2 X]
+[h2 Y]
+[h2 Z]
+[endsect] 
+''']
+
+Here we use h2 assuming that section A is the outermost level. If it is 
+placed in an inner level, you'll have to use h3, h4, etc. depending on 
+where the section is. In general, it is the section level plus one. It is 
+rather tedious, however, to scan the section level everytime. If you
+rewrite the example above as shown below, this will be automatic:
+
+[pre'''
+[section A]
+[heading X]
+[heading Y]
+[heading Z]
+[endsect] 
+''']
+
+They work well regardless where you place them. You can rearrange sections 
+at will without any extra work to ensure correct heading levels. In fact, 
+with /section/ and /heading/, you have all you need. /h1/../h6/ becomes 
+redundant. /h1/../h6/ might be deprecated in the future.
+
+[endsect]
 [section Macros]
 
 [pre'''
@@ -950,9 +993,10 @@ Now everywhere the sf_logo is placed, the picture will be inlined.
 [def sf_logo [$http://sourceforge.net/sflogo.php?group_id=28447&type=1]]
 sf_logo
 
-[blurb __tip__ It's a good idea to use macro identifiers that are distinguishable.
-For instance, in this document, macro identifiers have two leading and trailing
-underscores (e.g. [^'''__spirit__''']). The reason is to avoid unwanted macro replacement.]
+[tip It's a good idea to use macro identifiers that are distinguishable. 
+For instance, in this document, macro identifiers have two leading and 
+trailing underscores (e.g. [^'''__spirit__''']). The reason is to avoid 
+unwanted macro replacement.]
 
 Links (URLS) and images are good candidates for macros. *1*) They tend to
 change a lot. It is a good idea to place all links and images in one place near the top
@@ -1010,6 +1054,9 @@ will generate this:
     templates allow us to approximate the syntax of Extended Backus-Normal Form
     (EBNF) completely in C++.
 ]
+
+[note Prefer [link quickbook.syntax.block.admonitions admonitions] wherever 
+appropriate.]
 
 [endsect]
 [section Tables]

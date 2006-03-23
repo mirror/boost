@@ -39,28 +39,65 @@ namespace quickbook
         }
     }
 
-    void anchored_phrase_action::operator()(iterator const& first, iterator const& last) const
+    void header_action::operator()(iterator const& first, iterator const& last) const
     {
         if (out)
         {
             std::string str = phrase.str();
             detail::convert_nbsp(str);
+            phrase.str(std::string());
+
             if (qbk_version_n < 103) // version 1.2 and below
             {
                 out << "<anchor id=\""
                     << section_id << '.'
                     << detail::make_identifier(str.begin(), str.end())
-                    << "\" />";
+                    << "\" />"
+                    << pre << str << post
+                    ;
             }
             else // version 1.3 and above
             {
-                out << "<anchor id=\""
-                    << library_id << '.' << qualified_section_id << '.'
-                    << detail::make_identifier(str.begin(), str.end())
-                    << "\" />";
+                std::string anchor = 
+                    library_id + '.' + qualified_section_id + '.' +
+                    detail::make_identifier(str.begin(), str.end());
+
+                out << "<anchor id=\"" << anchor << "\"/>"
+                    << pre 
+                    << "<link linkend=\"" << anchor << "\">"
+                    << str 
+                    << "</link>"
+                    << post
+                    ;
             }
+        }
+    }
+
+    void generic_header_action::operator()(iterator const& first, iterator const& last) const
+    {
+        if (out)
+        {
+            int level_ = level + 2; // level is zero-based. We need to use a 
+                                    // 0ne-based heading which is one greater
+                                    // than the current. Thus: level + 2.
+            if (level_ > 6)         // The max is h6, clip it if it goes 
+                level_ = 6;         // further than that
+            std::string str = phrase.str();
+            detail::convert_nbsp(str);
+
+            std::string anchor = 
+                library_id + '.' + qualified_section_id + '.' +
+                detail::make_identifier(str.begin(), str.end());
+
             phrase.str(std::string());
-            out << pre << str << post;
+            out 
+                << "<anchor id=\"" << anchor << "\"/>"
+                << "<bridgehead renderas=\"sect" << level_ << "\">"
+                << "<link linkend=\"" << anchor << "\">"
+                << str 
+                << "</link>"
+                << "</bridgehead>"
+                ;
         }
     }
 
@@ -499,7 +536,21 @@ namespace quickbook
         std::string str;
         str = phrase.str();
         phrase.str(std::string());
-        out << "<title>" << str << "</title>\n";
+
+        if (qbk_version_n < 103) // version 1.2 and below
+        {
+            out << "<title>" << str << "</title>\n";
+        }
+        else // version 1.3 and above
+        {
+            out << "<title>" 
+                << "<link linkend=\"" << library_id
+                    << "." << qualified_section_id << "\">"
+                << str 
+                << "</link>"
+                << "</title>\n"
+                ;
+        }
     }
 
     void end_section_action::operator()(iterator const& first, iterator const& last) const
@@ -780,6 +831,7 @@ namespace quickbook
         , code_block(phrase, phrase, temp, source_mode, macro, *this)
         , inline_code(phrase, temp, source_mode, macro, *this)
         , paragraph(out, phrase, paragraph_pre, paragraph_post)
+        , h(out, phrase, doc_id, section_id, qualified_section_id, level)
         , h1(out, phrase, doc_id, section_id, qualified_section_id, h1_pre, h1_post)
         , h2(out, phrase, doc_id, section_id, qualified_section_id, h2_pre, h2_post)
         , h3(out, phrase, doc_id, section_id, qualified_section_id, h3_pre, h3_post)

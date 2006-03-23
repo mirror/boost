@@ -44,44 +44,32 @@ namespace quickbook
     // forward declarations
     struct actions;
     int parse(char const* filein_, actions& actor, bool ignore_docinfo = false);
+    
+    class compiler
+    {
+    };
 
     namespace
     {
         // Some markups
     
-        const char* paragraph_pre   = "<para>\n";
-        const char* paragraph_post  = "</para>\n";
-        const char* h1_pre          = "<bridgehead renderas=\"sect1\">";
-        const char* h1_post         = "</bridgehead>";
-        const char* h2_pre          = "<bridgehead renderas=\"sect2\">";
-        const char* h2_post         = "</bridgehead>";
-        const char* h3_pre          = "<bridgehead renderas=\"sect3\">";
-        const char* h3_post         = "</bridgehead>";
-        const char* h4_pre          = "<bridgehead renderas=\"sect4\">";
-        const char* h4_post         = "</bridgehead>";
-        const char* h5_pre          = "<bridgehead renderas=\"sect5\">";
-        const char* h5_post         = "</bridgehead>";
-        const char* h6_pre          = "<bridgehead renderas=\"sect6\">";
-        const char* h6_post         = "</bridgehead>";
-        const char* hr_             = "<para/>";
-    
-        const char* blurb_pre =
-            "<informaltable frame=\"all\">\n"
-            "<?dbhtml table-width=\"74%\" ?>\n"
-            "<tgroup cols=\"1\">\n"
-            "<tbody>\n"
-            "<row>\n"
-            "<entry role=\"blurb\">\n"
-            ;
-    
-        const char* blurb_post =
-            "</entry>\n"
-            "</row>\n"
-            "</tbody>\n"
-            "</tgroup>\n"
-            "</informaltable>\n"
-            ;
-    
+        const char* paragraph_pre       = "<para>\n";
+        const char* paragraph_post      = "</para>\n";
+        const char* h1_pre              = "<bridgehead renderas=\"sect1\">";
+        const char* h1_post             = "</bridgehead>";
+        const char* h2_pre              = "<bridgehead renderas=\"sect2\">";
+        const char* h2_post             = "</bridgehead>";
+        const char* h3_pre              = "<bridgehead renderas=\"sect3\">";
+        const char* h3_post             = "</bridgehead>";
+        const char* h4_pre              = "<bridgehead renderas=\"sect4\">";
+        const char* h4_post             = "</bridgehead>";
+        const char* h5_pre              = "<bridgehead renderas=\"sect5\">";
+        const char* h5_post             = "</bridgehead>";
+        const char* h6_pre              = "<bridgehead renderas=\"sect6\">";
+        const char* h6_post             = "</bridgehead>";
+        const char* hr_                 = "<para/>";
+        const char* blurb_pre           = "<para role=\"blurb\">\n";
+        const char* blurb_post          = "</para>\n";
         const char* blockquote_pre      = "<blockquote><para>";
         const char* blockquote_post     = "</para></blockquote>";
         const char* preformatted_pre    = "<programlisting>";
@@ -90,8 +78,8 @@ namespace quickbook
         const char* warning_post        = "</para></warning>";
         const char* caution_pre         = "<caution><para>";
         const char* caution_post        = "</para></caution>";
-        const char* important_pre     = "<important><para>";
-        const char* important_post    = "</para></important>";
+        const char* important_pre       = "<important><para>";
+        const char* important_post      = "</para></important>";
         const char* note_pre            = "<note><para>";
         const char* note_post           = "</para></note>";
         const char* tip_pre             = "<tip><para>";
@@ -175,11 +163,11 @@ namespace quickbook
         std::string         post;
     };
 
-    struct anchored_phrase_action
+    struct header_action
     {
         //  Handles paragraph, h1, h2, h3, h4, h5, h6,
 
-        anchored_phrase_action(
+        header_action(
             std::ostream&       out,
             std::stringstream&  phrase,
             std::string const&  library_id,
@@ -204,6 +192,34 @@ namespace quickbook
         std::string const&  qualified_section_id;
         std::string         pre;
         std::string         post;
+    };
+
+    struct generic_header_action
+    {
+        //  Handles h
+
+        generic_header_action(
+            std::ostream&       out,
+            std::stringstream&  phrase,
+            std::string const&  library_id,
+            std::string const&  section_id,
+            std::string const&  qualified_section_id,
+            int const&          level)
+        : out(out)
+        , phrase(phrase)
+        , library_id(library_id)
+        , section_id(section_id)
+        , qualified_section_id(qualified_section_id)
+        , level(level) {}
+
+        void operator()(iterator const& first, iterator const& last) const;
+
+        std::ostream&       out;
+        std::stringstream&  phrase;
+        std::string const&  library_id;
+        std::string const&  section_id;
+        std::string const&  qualified_section_id;
+        int const& level;
     };
 
     struct simple_phrase_action
@@ -754,7 +770,8 @@ namespace quickbook
         code_action             code_block;
         inline_code_action      inline_code;
         phrase_action           paragraph;
-        anchored_phrase_action  h1, h2, h3, h4, h5, h6;
+        generic_header_action   h;
+        header_action           h1, h2, h3, h4, h5, h6;
         markup_action           hr;
         phrase_action           blurb, blockquote, preformatted;
         phrase_action           warning, caution, important, note, tip;

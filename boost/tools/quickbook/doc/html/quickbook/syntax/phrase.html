@@ -24,7 +24,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="quickbook.syntax.phrase"></a> Phrase Level Elements</h3></div></div></div>
+<a name="quickbook.syntax.phrase"></a><a href="phrase.html" title=" Phrase Level Elements"> Phrase Level Elements</a></h3></div></div></div>
 <div class="toc"><dl>
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.font_styles">Font Styles</a></span></dt>
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.replaceable">Replaceable</a></span></dt>
@@ -40,13 +40,14 @@
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.refentry_links">refentry links</a></span></dt>
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.code_links"> Code Links</a></span></dt>
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.escape">Escape</a></span></dt>
-<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.single_char_escape">Single char escape</a></span></dt>
+<dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.single_char_escape">Single
+        char escape</a></span></dt>
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.images">Images</a></span></dt>
 <dt><span class="section"><a href="phrase.html#quickbook.syntax.phrase.footnotes">Footnotes</a></span></dt>
 </dl></div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.font_styles"></a>Font Styles</h4></div></div></div>
+<a name="quickbook.syntax.phrase.font_styles"></a><a href="phrase.html#quickbook.syntax.phrase.font_styles" title="Font Styles">Font Styles</a></h4></div></div></div>
 <pre class="programlisting">['italic], [*bold], [_underline], [^teletype], [-strikethrough]
 </pre>
 <p>
@@ -69,7 +70,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.replaceable"></a>Replaceable</h4></div></div></div>
+<a name="quickbook.syntax.phrase.replaceable"></a><a href="phrase.html#quickbook.syntax.phrase.replaceable" title="Replaceable">Replaceable</a></h4></div></div></div>
 <p>
           When you want content that may or must be replaced by the user, use the
           syntax:
@@ -87,7 +88,7 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.quotations"></a>Quotations</h4></div></div></div>
+<a name="quickbook.syntax.phrase.quotations"></a><a href="phrase.html#quickbook.syntax.phrase.quotations" title="Quotations">Quotations</a></h4></div></div></div>
 <pre class="programlisting">["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
 </pre>
 <p>
@@ -118,7 +119,7 @@ the true business precept.]
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.simple_formatting"></a>Simple formatting</h4></div></div></div>
+<a name="quickbook.syntax.phrase.simple_formatting"></a><a href="phrase.html#quickbook.syntax.phrase.simple_formatting" title="Simple formatting">Simple formatting</a></h4></div></div></div>
 <p>
           Simple markup for formatting text, common in many applications, is now
           supported:
@@ -133,7 +134,9 @@ the true business precept.]
         </p>
 <p>
           Unlike QuickBook's standard formatting scheme, the rules for simpler alternatives
-          are much stricter.
+          are much stricter
+          <sup>[<a name="id374287" href="#ftn.id374287">1</a>]</sup>
+          .
         </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
@@ -158,13 +161,14 @@ the true business precept.]
           </li>
 <li>
             A line starting with the star will be interpreted as an unordered list.
-            See <a href="block.html#quickbook.syntax.block.lists.unordered_lists" title="Unordered lists">Unordered
+            See <a href="block.html#quickbook.syntax.block.lists.unordered_lists" title="Unordered
+          lists">Unordered
             lists</a>.
           </li>
 </ul></div>
 <div class="informaltable">
 <h4>
-<a name="id376878"></a>
+<a name="id374367"></a>
             <span class="table-title">More Formatting Samples</span>
           </h4>
 <table class="table">
@@ -268,18 +272,10 @@ This*Isn't*Bold (no bold)
 </tbody>
 </table>
 </div>
-<div class="informaltable"><table class="table">
-<colgroup><col></colgroup>
-<tbody><tr><td class="blurb"> <span class="inlinemediaobject"><img src="../../images/note.png" alt="note"></span> Thanks to David Barrett, author of <a href="http://quinthar.com/qwikiwiki/index.php?page=Home" target="_top">Qwiki</a>,
-                for sharing these samples and teaching me these obscure formatting
-                rules. I wasn't sure at all if <a href="http://spirit.sourceforge.net" target="_top">Spirit</a>,
-                being more or less a formal EBNF parser, can handle the context sensitivity
-                and ambiguity.</td></tr></tbody>
-</table></div>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.inline_code"></a>Inline code</h4></div></div></div>
+<a name="quickbook.syntax.phrase.inline_code"></a><a href="phrase.html#quickbook.syntax.phrase.inline_code" title="Inline code">Inline code</a></h4></div></div></div>
 <p>
           Inlining code in paragraphs is quite common when writing C++ documentation.
           We provide a very simple markup for this. For example, this:
@@ -292,27 +288,33 @@ This*Isn't*Bold (no bold)
 <p>
           This text has inlined code <tt class="computeroutput"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">()</span> <span class="special">{</span> <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span> <span class="special">}</span></tt> in it. The code will be syntax highlighted.
         </p>
-<div class="informaltable"><table class="table">
-<colgroup><col></colgroup>
-<tbody><tr><td class="blurb"> <span class="inlinemediaobject"><img src="../../images/note.png" alt="note"></span> Note that we simply enclose the code with the
-                tick: <tt class="literal">
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td colspan="2" align="left" valign="top"><p>
+            We simply enclose the code with the tick: <tt class="literal">
 "`"
-                </tt>, not the single quote: <tt class="computeroutput"><span class="string">"'"</span></tt>.
-                Note too that <tt class="literal">
+            </tt>, not the single quote: <tt class="computeroutput"><span class="string">"'"</span></tt>.
+            Note too that <tt class="literal">
 `some code`
-                </tt> is prefered over <tt class="literal">
+            </tt> is prefered over <tt class="literal">
 [^some code]
-                </tt>. </td></tr></tbody>
+            </tt>.
+          </p></td></tr>
 </table></div>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.code_blocks"></a>Code blocks</h4></div></div></div>
+<a name="quickbook.syntax.phrase.code_blocks"></a><a href="phrase.html#quickbook.syntax.phrase.code_blocks" title="Code blocks">Code blocks</a></h4></div></div></div>
 <p>
           Preformatted code simply starts with a space or a tab (See <a href="block.html#quickbook.syntax.block.code" title="Code">Code</a>).
           However, such a simple syntax cannot be used as phrase elements in lists
-          (See <a href="block.html#quickbook.syntax.block.lists.ordered_lists" title="Ordered lists">Ordered
-          lists</a> and <a href="block.html#quickbook.syntax.block.lists.unordered_lists" title="Unordered lists">Unordered
+          (See <a href="block.html#quickbook.syntax.block.lists.ordered_lists" title="Ordered
+          lists">Ordered
+          lists</a> and <a href="block.html#quickbook.syntax.block.lists.unordered_lists" title="Unordered
+          lists">Unordered
           lists</a>), tables (See <a href="block.html#quickbook.syntax.block.tables" title="Tables">Tables</a>),
           etc. Inline code (see above) can. The problem is, inline code does not
           allow formatting with newlines, spaces, and tabs. These are lost.
@@ -352,7 +354,7 @@ This*Isn't*Bold (no bold)
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.source_mode"></a>Source Mode</h4></div></div></div>
+<a name="quickbook.syntax.phrase.source_mode"></a><a href="phrase.html#quickbook.syntax.phrase.source_mode" title="Source Mode">Source Mode</a></h4></div></div></div>
 <p>
           If a document contains more than one type of source code then the source
           mode may be changed dynamically as the document is processed. All QuickBook
@@ -380,7 +382,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
         </p>
 <div class="informaltable">
 <h4>
-<a name="id447978"></a>
+<a name="id443412"></a>
             <span class="table-title">Supported Source Modes</span>
           </h4>
 <table class="table">
@@ -404,24 +406,35 @@ C++ comment `// looks like this` whereas a Python comment [python]
 </tbody>
 </table>
 </div>
-<div class="informaltable"><table class="table">
-<colgroup><col></colgroup>
-<tbody><tr><td class="blurb"> <span class="inlinemediaobject"><img src="../../images/note.png" alt="note"></span> The source mode strings are lowercase.</td></tr></tbody>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td colspan="2" align="left" valign="top"><p>
+            The source mode strings are lowercase.
+          </p></td></tr>
 </table></div>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.line_break"></a>line-break</h4></div></div></div>
+<a name="quickbook.syntax.phrase.line_break"></a><a href="phrase.html#quickbook.syntax.phrase.line_break" title="line-break">line-break</a></h4></div></div></div>
 <pre class="programlisting">[br]
 </pre>
-<div class="informaltable"><table class="table">
-<colgroup><col></colgroup>
-<tbody><tr><td class="blurb"> <span class="inlinemediaobject"><img src="../../images/note.png" alt="note"></span> Note that <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt> is now preferred over <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.</td></tr></tbody>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td colspan="2" align="left" valign="top"><p>
+            Note that <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt>
+            is now preferred over <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.
+          </p></td></tr>
 </table></div>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.anchors"></a>Anchors</h4></div></div></div>
+<a name="quickbook.syntax.phrase.anchors"></a><a href="phrase.html#quickbook.syntax.phrase.anchors" title="Anchors">Anchors</a></h4></div></div></div>
 <pre class="programlisting">[#named_anchor]
 </pre>
 <p>
@@ -436,7 +449,7 @@ Some link text]
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.links"></a>Links</h4></div></div></div>
+<a name="quickbook.syntax.phrase.links"></a><a href="phrase.html#quickbook.syntax.phrase.links" title="Links">Links</a></h4></div></div></div>
 <pre class="programlisting">[@http://www.boost.org this is [*boost's] website....]
 </pre>
 <p>
@@ -465,7 +478,7 @@ Some link text]
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.anchor_links"></a>Anchor links</h4></div></div></div>
+<a name="quickbook.syntax.phrase.anchor_links"></a><a href="phrase.html#quickbook.syntax.phrase.anchor_links" title="Anchor links">Anchor links</a></h4></div></div></div>
 <p>
           You can link within a document using:
         </p>
@@ -479,7 +492,7 @@ Some link text]
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.refentry_links"></a>refentry links</h4></div></div></div>
+<a name="quickbook.syntax.phrase.refentry_links"></a><a href="phrase.html#quickbook.syntax.phrase.refentry_links" title="refentry links">refentry links</a></h4></div></div></div>
 <p>
           In addition, you can link internally to an XML refentry like:
         </p>
@@ -501,7 +514,7 @@ Some link text]
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.code_links"></a> Code Links</h4></div></div></div>
+<a name="quickbook.syntax.phrase.code_links"></a><a href="phrase.html#quickbook.syntax.phrase.code_links" title=" Code Links"> Code Links</a></h4></div></div></div>
 <p>
           If you want to link to a function, class, member, enum or header in the
           reference section, you can use:
@@ -524,7 +537,7 @@ Some link text]
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.escape"></a>Escape</h4></div></div></div>
+<a name="quickbook.syntax.phrase.escape"></a><a href="phrase.html#quickbook.syntax.phrase.escape" title="Escape">Escape</a></h4></div></div></div>
 <p>
           The escape mark-up is used when we don't want to do any processing.
         </p>
@@ -545,15 +558,21 @@ escape (no processing/formatting)
 <span class="bold"><b>This is direct XML markup</b></span>
 
         </p>
-<div class="informaltable"><table class="table">
-<colgroup><col></colgroup>
-<tbody><tr><td class="blurb"> <span class="inlinemediaobject"><img src="../../images/alert.png" alt="alert"></span> Be careful when using the escape. The text must
-                conform to <a href="http://www.boost.org/doc/html/boostbook.html" target="_top">BoostBook</a>/<a href="http://www.docbook.org/" target="_top">DocBook</a> syntax.</td></tr></tbody>
+<div class="important"><table border="0" summary="Important">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../../images/important.png"></td>
+<th align="left">Important</th>
+</tr>
+<tr><td colspan="2" align="left" valign="top"><p>
+            Be careful when using the escape. The text must conform to <a href="http://www.boost.org/doc/html/boostbook.html" target="_top">BoostBook</a>/<a href="http://www.docbook.org/" target="_top">DocBook</a> syntax.
+          </p></td></tr>
 </table></div>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.single_char_escape"></a>Single char escape</h4></div></div></div>
+<a name="quickbook.syntax.phrase.single_char_escape"></a><a href="phrase.html#quickbook.syntax.phrase.single_char_escape" title="Single
+        char escape">Single
+        char escape</a></h4></div></div></div>
 <p>
           The backslash may be used to escape a single punctuation character. The
           punctuation immediately after the backslash is passed without any processing.
@@ -568,13 +587,13 @@ escape (no processing/formatting)
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.images"></a>Images</h4></div></div></div>
+<a name="quickbook.syntax.phrase.images"></a><a href="phrase.html#quickbook.syntax.phrase.images" title="Images">Images</a></h4></div></div></div>
 <pre class="programlisting">[$image.jpg]
 </pre>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
-<a name="quickbook.syntax.phrase.footnotes"></a>Footnotes</h4></div></div></div>
+<a name="quickbook.syntax.phrase.footnotes"></a><a href="phrase.html#quickbook.syntax.phrase.footnotes" title="Footnotes">Footnotes</a></h4></div></div></div>
 <p>
           As of version 1.3, QuickBook supports footnotes. Just put the text of the
           footnote in a <tt class="computeroutput"><span class="special">[</span><span class="identifier">footnote</span><span class="special">]</span></tt> block, and the text will be put at the
@@ -584,13 +603,20 @@ escape (no processing/formatting)
 </pre>
 <p>
           will generate this
-          <sup>[<a name="id448753" href="#ftn.id448753">1</a>]</sup>
+          <sup>[<a name="id444153" href="#ftn.id444153">2</a>]</sup>
           .
         </p>
 </div>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id448753" href="#id448753">1</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id374287" href="#id374287">1</a>] </sup>
+              Thanks to David Barrett, author of <a href="http://quinthar.com/qwikiwiki/index.php?page=Home" target="_top">Qwiki</a>,
+              for sharing these samples and teaching me these obscure formatting
+              rules. I wasn't sure at all if <a href="http://spirit.sourceforge.net" target="_top">Spirit</a>,
+              being more or less a formal EBNF parser, can handle the context sensitivity
+              and ambiguity.
+            </p></div>
+<div class="footnote"><p><sup>[<a name="ftn.id444153" href="#id444153">2</a>] </sup>
               A sample footnote
             </p></div>
 </div>

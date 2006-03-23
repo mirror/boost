@@ -121,9 +121,10 @@ namespace quickbook
                     ;
 
                 headings =
-                    h1 | h2 | h3 | h4 | h5 | h6
+                    h1 | h2 | h3 | h4 | h5 | h6 | h
                     ;
 
+                h = "heading" >> hard_space >> phrase   [actions.h];
                 h1 = "h1" >> hard_space >> phrase       [actions.h1];
                 h2 = "h2" >> hard_space >> phrase       [actions.h2];
                 h3 = "h3" >> hard_space >> phrase       [actions.h3];
@@ -352,7 +353,7 @@ namespace quickbook
             bool is_not_preformatted;
             
             rule<Scanner>   start_, blocks, block_markup, code, code_line, 
-                            paragraph, space, blank, comment, headings, h1, h2, 
+                            paragraph, space, blank, comment, headings, h, h1, h2, 
                             h3, h4, h5, h6, hr, blurb, blockquote, admonition,
                             phrase, list, close_bracket, ordered_list, def_macro,
                             identifier, table, table_row, variablelist,
