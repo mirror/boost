@@ -376,14 +376,12 @@
     /* Program listing */
         pre.synopsis
         {
-            background-color: #FAFAFA;
             border: 1px solid #DCDCDC;
         }
     
         .programlisting, 
         .screen
         {
-            background-color: #FAFAFA;
             border: 1px solid #DCDCDC;
         }
     
@@ -395,14 +393,12 @@
         div.warning,
         p.blurb
         {
-            background-color: #FFFFF0;
             border: 1px solid #DCDCDC;
         }
     
     /* Table of contents */
         .toc
         {
-            background-color: #FAFAFA;
             border: 1px solid #DCDCDC;
         }
     
@@ -410,7 +406,6 @@
         div.informaltable table tr td, 
         div.table table tr td
         {
-            background-color: #FAFAFA;
             border: 1px solid #DCDCDC;
         }
     
