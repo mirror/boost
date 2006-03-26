@@ -11,6 +11,11 @@
 
 #include <boost/type_traits/broken_compiler_spec.hpp>
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
+
+#if BOOST_WORKAROUND(BOOST_MSVC,<=1300)
+#include <boost/type_traits/msvc/remove_reference.hpp>
+#endif
 
 // should be the last #include
 #include <boost/type_traits/detail/type_trait_def.hpp>
@@ -32,7 +37,7 @@ BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(typename T,remove_reference,T& volatile,
 BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(typename T,remove_reference,T& const volatile,T)
 #endif
 
-#else
+#elif !BOOST_WORKAROUND(BOOST_MSVC,<=1300)
 
 BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_reference,T,typename detail::remove_reference_impl<T>::type)
 

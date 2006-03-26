@@ -11,9 +11,16 @@
 
 #include <boost/config.hpp>
 #include <cstddef>
+#include <boost/detail/workaround.hpp>
+
+#if BOOST_WORKAROUND(BOOST_MSVC,<=1300)
+#include <boost/type_traits/msvc/remove_all_extents.hpp>
+#endif
 
 // should be the last #include
 #include <boost/type_traits/detail/type_trait_def.hpp>
+
+#if !BOOST_WORKAROUND(BOOST_MSVC,<=1300)
 
 namespace boost {
 
@@ -33,6 +40,8 @@ BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(typename T,remove_all_extents,T const vo
 #endif
 
 } // namespace boost
+
+#endif
 
 #include <boost/type_traits/detail/type_trait_undef.hpp>
 
