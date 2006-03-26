@@ -279,6 +279,18 @@ dp1.shift(days(1));
 // 2002-Jan-02/2002-Jan-11</screen>
 	  </entry>
 	</row>
+
+        <row>
+	  <entry valign="top" morerows="1"><screen>date_period expand(days)</screen></entry>
+	  <entry>Subtract duration from begin and add duration to end.</entry>
+	</row>
+	<row>
+          <entry><screen>date_period dp1(date(2002,Jan,4),
+                date(2002,Jan,10));
+dp1.expand(days(2));
+// 2002-Jan-02/2002-Jan-12</screen>
+	  </entry>
+	</row>
       </tbody>
     </tgroup>
   </informaltable>

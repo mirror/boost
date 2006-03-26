@@ -237,12 +237,31 @@ tp2.intersects(tp1); // --> true</screen>
           </row>
           
           <row>
-	    <entry valign="top" morerows="1"><screen>time_period shift(days)</screen></entry>
+	    <entry valign="top" morerows="1"><screen>time_period shift(time_duration)</screen></entry>
 	    <entry>Add duration to both begin and end.</entry>
 	  </row>
 	  <row>
-	    <entry></entry>
+	    <entry>
+              <screen>
+time_period tp(ptime(date(2005,Jan,1),hours(1)), hours(2));
+tp.shift(minutes(5)); 
+// tp == 2005-Jan-01 01:05:00 to 2005-Jan-01 03:05:00
+             </screen>
+	    </entry>
 	  </row>
+
+          <row>
+	    <entry valign="top" morerows="1"><screen>time_period expand(days)</screen></entry>
+	    <entry>Add duration to both begin and end.</entry>
+	  </row>
+	  <row>
+              <screen>
+time_period tp(ptime(date(2005,Jan,1),hours(1)), hours(2));
+tp.expand(minutes(5)); 
+// tp == 2005-Jan-01 00:55:00 to 2005-Jan-01 03:05:00
+             </screen>
+	  </row>
+
 	</tbody>
       </tgroup>
     </informaltable>
