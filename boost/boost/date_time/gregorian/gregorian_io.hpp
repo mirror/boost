@@ -52,7 +52,6 @@ namespace gregorian {
       //if the user imbues at some later point.  With the default settings
       //for the facet the resulting format will be the same as the
       //std::time_facet settings.
-      std::ostreambuf_iterator<CharT> output_itr(os);
       custom_date_facet* f = new custom_date_facet();
       std::locale l = std::locale(os.getloc(), f);
       os.imbue(l);
@@ -113,7 +112,6 @@ namespace gregorian {
     if (std::has_facet<custom_date_facet>(os.getloc()))
       std::use_facet<custom_date_facet>(os.getloc()).put(output_itr, os, os.fill(), dd);
     else {
-      std::ostreambuf_iterator<CharT> output_itr(os);
       custom_date_facet* f = new custom_date_facet();
       std::locale l = std::locale(os.getloc(), f);
       os.imbue(l);
@@ -178,7 +176,6 @@ namespace gregorian {
       //if the user imbues at some later point.  With the default settings
       //for the facet the resulting format will be the same as the
       //std::time_facet settings.
-      std::ostreambuf_iterator<CharT> output_itr(os);
       custom_date_facet* f = new custom_date_facet();
       std::locale l = std::locale(os.getloc(), f);
       os.imbue(l);
@@ -238,7 +235,6 @@ namespace gregorian {
     if (std::has_facet<custom_date_facet>(os.getloc()))
       std::use_facet<custom_date_facet>(os.getloc()).put(output_itr, os, os.fill(), gm);
     else {
-      std::ostreambuf_iterator<CharT> output_itr(os);
       custom_date_facet* f = new custom_date_facet();//-> 10/1074199752/32 because year & day not initialized in put(...)
       //custom_date_facet* f = new custom_date_facet("%B");
       std::locale l = std::locale(os.getloc(), f);
@@ -297,7 +293,6 @@ namespace gregorian {
     if (std::has_facet<custom_date_facet>(os.getloc()))
       std::use_facet<custom_date_facet>(os.getloc()).put(output_itr, os, os.fill(), gw);
     else {
-      std::ostreambuf_iterator<CharT> output_itr(os);
       custom_date_facet* f = new custom_date_facet();
       std::locale l = std::locale(os.getloc(), f);
       os.imbue(l);
@@ -438,7 +433,6 @@ namespace gregorian {
     if (std::has_facet<custom_date_facet>(os.getloc()))
       std::use_facet<custom_date_facet>(os.getloc()).put(output_itr, os, os.fill(), pd);
     else {
-      std::ostreambuf_iterator<CharT> output_itr(os);
       custom_date_facet* f = new custom_date_facet();
       std::locale l = std::locale(os.getloc(), f);
       os.imbue(l);
@@ -495,7 +489,6 @@ namespace gregorian {
     if (std::has_facet<custom_date_facet>(os.getloc()))
       std::use_facet<custom_date_facet>(os.getloc()).put(output_itr, os, os.fill(), nkd);
     else {
-      std::ostreambuf_iterator<CharT> output_itr(os);
       custom_date_facet* f = new custom_date_facet();
       std::locale l = std::locale(os.getloc(), f);
       os.imbue(l);
@@ -554,7 +547,6 @@ namespace gregorian {
     if (std::has_facet<custom_date_facet>(os.getloc()))
       std::use_facet<custom_date_facet>(os.getloc()).put(output_itr, os, os.fill(), fkd);
     else {
-      std::ostreambuf_iterator<CharT> output_itr(os);
       custom_date_facet* f = new custom_date_facet();
       std::locale l = std::locale(os.getloc(), f);
       os.imbue(l);
@@ -613,7 +605,6 @@ namespace gregorian {
     if (std::has_facet<custom_date_facet>(os.getloc()))
       std::use_facet<custom_date_facet>(os.getloc()).put(output_itr, os, os.fill(), lkd);
     else {
-      std::ostreambuf_iterator<CharT> output_itr(os);
       custom_date_facet* f = new custom_date_facet();
       std::locale l = std::locale(os.getloc(), f);
       os.imbue(l);
@@ -673,7 +664,6 @@ namespace gregorian {
       std::use_facet<custom_date_facet>(os.getloc()).put(output_itr, os, os.fill(), fda);
     } 
     else {
-      std::ostreambuf_iterator<CharT> output_itr(os);
       custom_date_facet* f = new custom_date_facet();
       std::locale l = std::locale(os.getloc(), f);
       os.imbue(l);
@@ -733,7 +723,6 @@ namespace gregorian {
       std::use_facet<custom_date_facet>(os.getloc()).put(output_itr, os, os.fill(), fdb);
     }
     else {
-      std::ostreambuf_iterator<CharT> output_itr(os);
       custom_date_facet* f = new custom_date_facet();
       std::locale l = std::locale(os.getloc(), f);
       os.imbue(l);
