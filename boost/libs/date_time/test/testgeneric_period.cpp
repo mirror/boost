@@ -38,6 +38,13 @@ int_type operator+(int i, duration_type<int_type> dt){
   return i + dt.get_rep();
 }
 
+//! this operator is needed because period adds a duration_rep to a point_rep
+template<class int_type>
+inline
+int_type operator-(int i, duration_type<int_type> dt){
+  return i - dt.get_rep();
+}
+
 
 int main(){
   using namespace boost::date_time;
@@ -257,5 +264,18 @@ int main(){
     check("is_null p1 (not)", p1.is_null());
     check("is_null p2 (not)", !p2.is_null());
   }
+
+  {
+    a_period p1(1,2); // length should be 1
+    p1.shift(duration_type<int>(1));
+    a_period p2(2,3); // shifted result
+    check("shift", p1 == p2);
+  }
+  {
+    a_period p1(5,duration_type<int>(3)); 
+    a_period p2(3,10); // expanded result
+    p1.expand(duration_type<int>(2)); //from 2000-Jan-01--2000-Jan-04
+    check("expand", p1 == p2);
+  } 
   return printTestStats();
 }
