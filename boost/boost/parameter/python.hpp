@@ -440,6 +440,7 @@ void def(char const* name, Signature)
         typename M::keywords
       , arg_types
       , aux::make_arg_spec<mpl::_1, mpl::_2>
+      , mpl::back_inserter<mpl::vector0<> >
     >::type arg_specs;
 
     typedef typename mpl::count_if<
@@ -473,6 +474,7 @@ void def(Class& cl, char const* name, Signature)
         typename M::keywords
       , arg_types
       , aux::make_arg_spec<mpl::_1, mpl::_2>
+      , mpl::back_inserter<mpl::vector0<> >
     >::type arg_specs;
 
     typedef typename mpl::count_if<
@@ -554,6 +556,7 @@ struct init
             Keywords
           , Signature
           , aux::make_kw_spec<mpl::_1, mpl::_2>
+          , mpl::back_inserter<mpl::vector0<> >
         >::type arg_specs;
 
         typedef typename mpl::count_if<
@@ -591,6 +594,7 @@ struct call
             Keywords
           , arg_types
           , aux::make_kw_spec<mpl::_1, mpl::_2>
+          , mpl::back_inserter<mpl::vector0<> >
         >::type arg_specs;
 
         typedef typename mpl::count_if<
@@ -629,6 +633,7 @@ struct function
             Keywords
           , arg_types
           , aux::make_kw_spec<mpl::_1, mpl::_2>
+          , mpl::back_inserter<mpl::vector0<> >
         >::type arg_specs;
 
         typedef typename mpl::count_if<
