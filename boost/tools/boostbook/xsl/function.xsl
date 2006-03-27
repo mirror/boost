@@ -750,7 +750,11 @@
 		              <xsl:sort select="attribute::name"/>
                   <xsl:if test="description">
                     <varlistentry>
-                      <term><xsl:value-of select="@name"/></term>
+                      <term>
+                        <xsl:call-template name="monospaced">
+                          <xsl:with-param name="text" select="@name"/>
+                        </xsl:call-template>
+                      </term>
                       <listitem>
                         <xsl:apply-templates select="description/*"/>
                       </listitem>
