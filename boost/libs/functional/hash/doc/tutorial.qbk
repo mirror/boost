@@ -12,7 +12,7 @@ If your standard library supplies its own implementation of the unordered
 associative containers and you wish to use
 [classref boost::hash], just use an extra template parameter:
 
-    std::unordered_multiset<std::vector<int>, ``[classref boost::hash]``<int> >
+    std::unordered_multiset<int, ``[classref boost::hash]``<int> >
             set_of_ints;
 
     std::unordered_set<std::pair<int, int>, ``[classref boost::hash]``<std::pair<int, int> >
