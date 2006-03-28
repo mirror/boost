@@ -1258,7 +1258,7 @@ are overloaded
 for arguments of type `std::complex<T>`.  
 These algorithms are entirely
 classical, and behave as specified in the C99 standard section 7.3.5.
-See the [link boost_math_tr1_additions.inverse_complex Boost.Math documentation 
+See the [@boost_math/inverse_complex.html Boost.Math documentation 
 for more information].
    
    namespace std {
@@ -1681,4 +1681,6 @@ as the Boost-specific ones. This will allow these tests to be used against the s
 library's own TR1 implementation as well as the Boost one.
 
 [endsect]
+
+
 
