@@ -68,7 +68,7 @@
           </parameter>
           <returns>
             <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
-            <para><functionname alt="boost::hash_value(bool)">hash_value</functionname>(val) in Boost.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
           </returns>
           <throws><para>Doesn't throw</para></throws>
         </method>
@@ -266,7 +266,7 @@
           </parameter>
           <returns>
             <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
-            <para><functionname alt="boost::hash_value(float)">hash_value</functionname>(val) in Boost.</para>
+            <para><functionname>hash_value</functionname>(val) in Boost.</para>
           </returns>
           <throws><para>Doesn't throw</para></throws>
         </method>
@@ -354,7 +354,7 @@
         </template>
         <type>void</type>
         <parameter name="seed"><paramtype>size_t &amp;</paramtype></parameter>
-        <parameter name="v"><paramtype>T const &amp;</paramtype></parameter>
+        <parameter name="v"><paramtype>T const&amp;</paramtype></parameter>
         <purpose>
             Called repeatedly to incrementally create a hash value from
             several variables.
@@ -444,20 +444,8 @@ for(; first != last; ++first)
 
       <overloaded-function name="hash_value">
         <purpose>
-            Implementation of a hash function for integers.
+            Implementation of the hash function.
         </purpose>
-
-        <description><para>
-          Generally shouldn't be called directly by users, instead they should use
-          <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
-          or <functionname>boost::hash_combine</functionname> which
-          call hash_value without namespace qualification so that overloads
-          for custom types are found via ADL.
-        </para></description>
-        <notes>
-          <para>Overloads for other types supplied in other headers.</para>
-          <para>This is an extension to TR1</para>
-        </notes>
 
         <signature>
           <type>std::size_t</type>
@@ -479,32 +467,6 @@ for(; first != last; ++first)
           <parameter name="val"><paramtype>unsigned long</paramtype></parameter>
         </signature>
 
-        <returns>
-          <code>val</code>
-        </returns>
-      </overloaded-function>
-
-      <!--
-        boost::hash_value - floating point
-        -->
-
-      <overloaded-function name="hash_value">
-        <purpose>
-            Implementation of a hash function for floating point values.
-        </purpose>
-
-        <description><para>
-          Generally shouldn't be called directly by users, instead they should use
-          <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
-          or <functionname>boost::hash_combine</functionname> which
-          call hash_value without namespace qualification so that overloads
-          for custom types are found via ADL.
-        </para></description>
-        <notes>
-          <para>Overloads for other types supplied in other headers.</para>
-          <para>This is an extension to TR1</para>
-        </notes>
-
         <signature>
           <type>std::size_t</type>
           <parameter name="val"><paramtype>float</paramtype></parameter>
@@ -520,70 +482,12 @@ for(; first != last; ++first)
           <parameter name="val"><paramtype>long double</paramtype></parameter>
         </signature>
 
-        <returns>
-          <para>
-            An unspecified value, except that equal arguments shall yield the same
-            result
-          </para>
-        </returns>
-      </overloaded-function>
-
-      <!--
-        boost::hash_value - pointers
-        -->
-
-      <overloaded-function name="hash_value">
-        <purpose>
-            Implementation of a hash function for pointers.
-        </purpose>
-
-        <description><para>
-          Generally shouldn't be called directly by users, instead they should use
-          <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
-          or <functionname>boost::hash_combine</functionname> which
-          call hash_value without namespace qualification so that overloads
-          for custom types are found via ADL.
-        </para></description>
-        <notes>
-          <para>Overloads for other types supplied in other headers.</para>
-          <para>This is an extension to TR1</para>
-        </notes>
-
         <signature>
           <template><template-type-parameter name="T"/></template>
           <type>std::size_t</type>
           <parameter name="val"><paramtype>T* const&amp;</paramtype></parameter>
         </signature>
 
-        <returns>
-          <para>
-            An unspecified value, except that equal arguments shall yield the same
-            result
-          </para>
-        </returns>
-      </overloaded-function>
-
-      <!--
-        boost::hash_value - arrays
-        -->
-
-      <overloaded-function name="hash_value">
-        <purpose>
-            Implementation of a hash function for built in arrays.
-        </purpose>
-
-        <description><para>
-          Generally shouldn't be called directly by users, instead they should use
-          <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
-          or <functionname>boost::hash_combine</functionname> which
-          call hash_value without namespace qualification so that overloads
-          for custom types are found via ADL.
-        </para></description>
-        <notes>
-          <para>Overloads for other types supplied in other headers.</para>
-          <para>This is an extension to TR1</para>
-        </notes>
-        
         <signature>
           <template>
             <template-type-parameter name="T"/>
@@ -602,30 +506,6 @@ for(; first != last; ++first)
           <parameter><paramtype>const T (&amp;val)[N]</paramtype></parameter>
         </signature>
 
-        <returns><code>hash_range(val, val+N)</code></returns>
-      </overloaded-function>
-
-      <!--
-        boost::hash_value - string
-        -->
-
-      <overloaded-function name="hash_value">
-        <purpose>
-            Implementation of a hash function for <code>std::basic_string</code>.
-        </purpose>
-
-        <description><para>
-          Generally shouldn't be called directly by users, instead they should use
-          <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
-          or <functionname>boost::hash_combine</functionname> which
-          call hash_value without namespace qualification so that overloads
-          for custom types are found via ADL.
-        </para></description>
-        <notes>
-          <para>Overloads for other types supplied in other headers.</para>
-          <para>This is an extension to TR1</para>
-        </notes>
-
         <signature>
           <template>
             <template-type-parameter name="Ch"/>
@@ -636,118 +516,156 @@ for(; first != last; ++first)
               <paramtype>std::basic_string&lt;Ch, std::char_traits&lt;Ch&gt;, A&gt; const&amp;</paramtype>
           </parameter>
         </signature>
-
-        <returns><code>hash_range(val.begin(), val.end())</code></returns>
-      </overloaded-function>
-
-      <!--
-        boost::hash_value - pairs
-        -->
-
-      <overloaded-function name="hash_value">
-        <signature>
+              
+       <signature>
           <template>
             <template-type-parameter name="A"/>
             <template-type-parameter name="B"/>
           </template>
           <type>std::size_t</type>
-          <parameter name="val"><paramtype>std::pair&lt;A, B&gt; const &amp;</paramtype></parameter>
+          <parameter name="val"><paramtype>std::pair&lt;A, B&gt; const&amp;</paramtype></parameter>
         </signature>
-        <effects><programlisting>
-size_t seed = 0;
-<functionname>hash_combine</functionname>(seed, val.first);
-<functionname>hash_combine</functionname>(seed, val.second);
-return seed;
-        </programlisting></effects>
+
+        <signature>
+          <template>
+            <template-type-parameter name="T"/>
+            <template-type-parameter name="A"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::vector&lt;T, A&gt; const&amp;</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <template>
+            <template-type-parameter name="T"/>
+            <template-type-parameter name="A"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::list&lt;T, A&gt; const&amp;</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <template>
+            <template-type-parameter name="T"/>
+            <template-type-parameter name="A"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::deque&lt;T, A&gt; const&amp;</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <template>
+            <template-type-parameter name="K"/>
+            <template-type-parameter name="C"/>
+            <template-type-parameter name="A"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::set&lt;K, C, A&gt; const&amp;</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <template>
+            <template-type-parameter name="K"/>
+            <template-type-parameter name="C"/>
+            <template-type-parameter name="A"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::multiset&lt;K, C, A&gt; const&amp;</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <template>
+            <template-type-parameter name="K"/>
+            <template-type-parameter name="T"/>
+            <template-type-parameter name="C"/>
+            <template-type-parameter name="A"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::map&lt;K, T, C, A&gt; const&amp;</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <template>
+            <template-type-parameter name="K"/>
+            <template-type-parameter name="T"/>
+            <template-type-parameter name="C"/>
+            <template-type-parameter name="A"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::multimap&lt;K, T, C, A&gt; const&amp;</paramtype></parameter>
+        </signature>
+
+        <description><para>
+          Generally shouldn't be called directly by users, instead they should use
+          <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
+          or <functionname>boost::hash_combine</functionname> which
+          call <code>hash_value</code> without namespace qualification so that overloads
+          for custom types are found via ADL.
+        </para></description>
+
+        <notes>
+          <para>This is an extension to TR1</para>
+        </notes>
+
         <throws>
-          Only throws if <code><functionname>hash_value</functionname>(A)</code>
-          or <code><functionname>hash_value</functionname>(B)</code> throws.
+            Only throws if a user supplied version of
+            <code><functionname>hash_value</functionname></code>
+            throws for an element of a container, or
+            one of the types stored in a pair.
         </throws>
-        <notes><para>This is an extension to TR1</para></notes>
-      </overloaded-function>
-
-      <!--
-        boost::hash_value - containers
-        -->
-
-      <overloaded-function name="hash_value">
-        <signature>
-          <template>
-            <template-type-parameter name="T"/>
-            <template-type-parameter name="A"/>
-          </template>
-          <type>std::size_t</type>
-          <parameter name="val"><paramtype>std::vector&lt;T, A&gt; const &amp;</paramtype></parameter>
-        </signature>
-
-        <signature>
-          <template>
-            <template-type-parameter name="T"/>
-            <template-type-parameter name="A"/>
-          </template>
-          <type>std::size_t</type>
-          <parameter name="val"><paramtype>std::list&lt;T, A&gt; const &amp;</paramtype></parameter>
-        </signature>
-
-        <signature>
-          <template>
-            <template-type-parameter name="T"/>
-            <template-type-parameter name="A"/>
-          </template>
-          <type>std::size_t</type>
-          <parameter name="val"><paramtype>std::deque&lt;T, A&gt; const &amp;</paramtype></parameter>
-        </signature>
-
-        <signature>
-          <template>
-            <template-type-parameter name="K"/>
-            <template-type-parameter name="C"/>
-            <template-type-parameter name="A"/>
-          </template>
-          <type>std::size_t</type>
-          <parameter name="val"><paramtype>std::set&lt;K, C, A&gt; const &amp;</paramtype></parameter>
-        </signature>
-
-        <signature>
-          <template>
-            <template-type-parameter name="K"/>
-            <template-type-parameter name="C"/>
-            <template-type-parameter name="A"/>
-          </template>
-          <type>std::size_t</type>
-          <parameter name="val"><paramtype>std::multiset&lt;K, C, A&gt; const &amp;</paramtype></parameter>
-        </signature>
-
-        <signature>
-          <template>
-            <template-type-parameter name="K"/>
-            <template-type-parameter name="T"/>
-            <template-type-parameter name="C"/>
-            <template-type-parameter name="A"/>
-          </template>
-          <type>std::size_t</type>
-          <parameter name="val"><paramtype>std::map&lt;K, T, C, A&gt; const &amp;</paramtype></parameter>
-        </signature>
-
-        <signature>
-          <template>
-            <template-type-parameter name="K"/>
-            <template-type-parameter name="T"/>
-            <template-type-parameter name="C"/>
-            <template-type-parameter name="A"/>
-          </template>
-          <type>std::size_t</type>
-          <parameter name="val"><paramtype>std::multimap&lt;K, T, C, A&gt; const &amp;</paramtype></parameter>
-        </signature>
 
         <returns>
-          <code><functionname>hash_range</functionname>(val.begin(), val.end());</code>
+          <informaltable>
+            <tgroup cols="2">
+              <thead>
+                <row>
+                  <entry>Types</entry>
+                  <entry>Returns</entry>
+                </row>
+              </thead>
+              <tbody>
+                <row>
+                  <entry><code>int</code></entry>
+                  <entry morerows="3"><code>val</code></entry>
+                </row>
+                <row><entry><code>unsigned int</code></entry></row>
+                <row><entry><code>long</code></entry></row>
+                <row><entry><code>unsigned long</code></entry></row>
+                <row>
+                  <entry><code>float</code></entry>
+                  <entry morerows="3">An unspecified value, except that equal arguments shall yield the same result.</entry>
+                </row>
+                <row><entry><code>double</code></entry></row>
+                <row><entry><code>long double</code></entry></row>
+                <row><entry><code>T*</code></entry></row>
+                <row>
+                    <entry><code>T (&amp;val)[N]</code></entry>
+                    <entry morerows="1"><code>hash_range(val, val+N)</code></entry>
+                </row>
+                <row><entry><code>const T (&amp;val)[N]</code></entry></row>
+                <row>
+                  <entry><code>std:basic&lt;Ch, std::char_traits&lt;Ch&gt;, A&gt; const&amp;</code></entry>
+                  <entry morerows="7"><code>hash_range(val, val+N)</code></entry>
+                </row>
+                <row><entry><code>std::vector&lt;T, A&gt; const&amp;</code></entry></row>
+                <row><entry><code>std::list&lt;T, A&gt; const&amp;</code></entry></row>
+                <row><entry><code>std::deque&lt;T, A&gt; const&amp;</code></entry></row>
+                <row><entry><code>std::set&lt;K, C, A&gt; const&amp;</code></entry></row>
+                <row><entry><code>std::multiset&lt;K, C, A&gt; const&amp;</code></entry></row>
+                <row><entry><code>std::map&lt;K, T, C, A&gt; const&amp;</code></entry></row>
+                <row><entry><code>std::multimap&lt;K, T, C, A&gt; const&amp;</code></entry></row>
+                <row>
+                  <entry><code>std::pair&lt;A, B&gt; const&amp;</code></entry>
+                  <entry><programlisting>size_t seed = 0;
+<functionname>hash_combine</functionname>(seed, val.first);
+<functionname>hash_combine</functionname>(seed, val.second);
+return seed;</programlisting></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
         </returns>
-        <throws>
-          Only throws if <code><functionname>hash_value</functionname>(T)</code> throws.
-        </throws>
-        <notes><para>This is an extension to TR1</para></notes>
-      </overloaded-function>      
+      </overloaded-function>
     </namespace>
   </header>
 </library-reference>
