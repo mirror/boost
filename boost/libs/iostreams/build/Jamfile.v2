@@ -47,6 +47,11 @@ rule create-library ( library-name : windows-name unix-name : sources + )
             ECHO "notice: iostreams: not using $(library-name) compression " ;
         }        
         NO_$(LIB) = 1 ;
+	
+	# This is necessary to that test Jamfiles don't run compression
+	# tests when not needed. Dirty, but I don't have time to
+	# write full-blow project module for zlib and bzip2.
+	modules.poke : NO_$(LIB) : 1 ;
     }
     
     if $(NO_COMPRESSION) || $(NO_$(LIB))
