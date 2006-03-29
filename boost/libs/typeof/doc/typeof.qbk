@@ -590,7 +590,7 @@ which takes care of `typename` inside the `typeof` expression.
     template<typename A, typename B>
     struct result_of_conditional 
     {
-        BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested,true?A():B());
+        BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested,true?A():B())
         typedef typename nested::type type;
     };
 
