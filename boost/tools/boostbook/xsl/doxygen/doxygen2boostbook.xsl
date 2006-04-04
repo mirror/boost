@@ -272,6 +272,9 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
           <xsl:apply-templates select="initializer" mode="passthrough"/>
         </default>
       </xsl:if>
+
+      <xsl:apply-templates select="briefdescription" mode="passthrough"/>
+      <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
     </enumvalue>
   </xsl:template>
 
