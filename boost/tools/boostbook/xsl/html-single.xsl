@@ -6,9 +6,13 @@
   <!-- Import the HTML stylesheet -->
   <xsl:import 
     href="http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl"/>
+  <xsl:import href="admon.xsl"/>
 
+  <xsl:param name="admon.style"/>
+  <xsl:param name="admon.graphics">1</xsl:param>
   <xsl:param name="chapter.autolabel" select="0"/>
   <xsl:param name="refentry.generate.name" select="0"/>
   <xsl:param name="refentry.generate.title" select="1"/>
   <xsl:param name="make.year.ranges" select="1"/>
 
+</xsl:stylesheet>

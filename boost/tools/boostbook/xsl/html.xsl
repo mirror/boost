@@ -14,6 +14,8 @@
   <xsl:import href="xref.xsl"/>
   <xsl:import href="relative-href.xsl"/>
 
+  <xsl:param name="admon.style"/>
+  <xsl:param name="admon.graphics">1</xsl:param>
   <xsl:param name="html.stylesheet" select="'boostbook.css'"/>
   <xsl:param name="navig.graphics" select="1"/>
   <xsl:param name="navig.graphics.extension" select="'.png'"/>
