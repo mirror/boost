@@ -87,7 +87,6 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         unbounded_array (const unbounded_array &c):
-            storage_array<self_type> (),
             alloc_ (c.alloc_), size_ (c.size_) {
             if (size_) {
                 data_ = alloc_.allocate (size_);
@@ -316,7 +315,6 @@ namespace boost { namespace numeric { namespace ublas {
         }
         BOOST_UBLAS_INLINE
         bounded_array (const bounded_array &c):
-            storage_array<self_type> (),
             size_ (c.size_)  {
             // ISSUE elements should be copy constructed here, but we must copy instead as already default constructed
             std::copy (c.data_, c.data_ + c.size_, data_);
