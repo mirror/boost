@@ -50,13 +50,13 @@ brings the following declarations into scope:</para>
 <![CDATA[namespace boost {
   
   namespace multi_array_types {
-    typedef *implementation-defined* index;
-    typedef *implementation-defined* size_type;
-    typedef *implementation-defined* difference_type;
-    typedef *implementation-defined* index_range;
-    typedef *implementation-defined* extent_range;
-    typedef *implementation-defined* index_gen;
-    typedef *implementation-defined* extent_gen;
+    typedef *unspecified* index;
+    typedef *unspecified* size_type;
+    typedef *unspecified* difference_type;
+    typedef *unspecified* index_range;
+    typedef *unspecified* extent_range;
+    typedef *unspecified* index_gen;
+    typedef *unspecified* extent_gen;
   }
 
   template <typename ValueType, 
@@ -343,13 +343,13 @@ std::count_if(this->index_bases(),this->index_bases()+this->num_dimensions(),
 
 <programlisting>
 <![CDATA[namespace multi_array_types {
-  typedef *implementation-defined* index;
-  typedef *implementation-defined* size_type;
-  typedef *implementation-defined* difference_type;
-  typedef *implementation-defined* index_range;
-  typedef *implementation-defined* extent_range;
-  typedef *implementation-defined* index_gen;
-  typedef *implementation-defined* extent_gen;
+  typedef *unspecified* index;
+  typedef *unspecified* size_type;
+  typedef *unspecified* difference_type;
+  typedef *unspecified* index_range;
+  typedef *unspecified* extent_range;
+  typedef *unspecified* index_gen;
+  typedef *unspecified* extent_gen;
 }]]>
 </programlisting>
 
