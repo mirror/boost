@@ -251,6 +251,8 @@ inline void detach_equivalent_iterators(Iterator& it)
   }
 }
 
+template<typename Container> class safe_container; /* fwd decl. */
+
 } /* namespace multi_index::safe_mode */
 
 namespace detail{
@@ -308,6 +310,7 @@ BOOST_MULTI_INDEX_PRIVATE_IF_MEMBER_TEMPLATE_FRIENDS:
   friend class safe_container_base;
 
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
+  template<typename>          friend class safe_mode::safe_container;
   template<typename Iterator> friend
     void safe_mode::detach_equivalent_iterators(Iterator&);
 #endif
@@ -324,13 +327,20 @@ class safe_container_base:private noncopyable
 public:
   safe_container_base(){}
 
+BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
+  friend class safe_iterator_base;
+
+#if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
+  template<typename Iterator> friend
+    void safe_mode::detach_equivalent_iterators(Iterator&);
+#endif
+
   ~safe_container_base()
   {
-    detach_all_iterators();
-  }
+    /* Detaches all remaining iterators, which by now will
+     * be those pointing to the end of the container.
+     */
 
-  void detach_all_iterators()
-  {
     for(safe_iterator_base* it=header.next;it;it=it->next)it->cont=0;
     header.next=0;
   }
@@ -342,14 +352,6 @@ public:
     std::swap(header.cont,x.header.cont);
     std::swap(header.next,x.header.next);
   }
-
-BOOST_MULTI_INDEX_PRIVATE_IF_MEMBER_TEMPLATE_FRIENDS:
-  friend class safe_iterator_base;
-
-#if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
-  template<typename Iterator> friend
-    void safe_mode::detach_equivalent_iterators(Iterator&);
-#endif
 
   safe_iterator_base header;
 
@@ -532,6 +534,23 @@ class safe_container:public detail::safe_container_base
   typedef detail::safe_container_base super;
 
 public:
+  void detach_dereferenceable_iterators()
+  {
+    typedef typename Container::iterator iterator;
+
+    iterator end_=static_cast<Container*>(this)->end();
+    iterator *prev_,*next_;
+    for(
+      prev_=static_cast<iterator*>(&this->header);
+      (next_=static_cast<iterator*>(prev_->next))!=0;){
+      if(*next_!=end_){
+        prev_->next=next_->next;
+        next_->cont=0;
+      }
+      else prev_=next_;
+    }
+  }
+
   void swap(safe_container<Container>& x)
   {
     super::swap(x);

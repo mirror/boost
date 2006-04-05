@@ -129,6 +129,16 @@ static void local_test_safe_mode(
     {
       container   c3;
       index_type& i3=Policy::index_from_container(c3);
+      it=i3.end();
+    }
+    it=it;
+  CATCH_SAFE_MODE(safe_mode::invalid_iterator)
+
+  TRY_SAFE_MODE
+    iterator it;
+    {
+      container   c3;
+      index_type& i3=Policy::index_from_container(c3);
       it=Policy::insert(i3,Policy::some_value());
     }
     value_type e=*it;
@@ -189,6 +199,18 @@ static void local_test_safe_mode(
     iterator it=i3.end();
     i3.clear();
     it=i3.end();
+  }
+
+  /* testcase for doppelganger bug of that discovered for STLport at
+   * http://lists.boost.org/Archives/boost/2006/04/102740.php
+   */
+  {
+    container c3;
+    index_type& i3=Policy::index_from_container(c3);
+    iterator it=i3.end();
+    i3.clear();
+    it=it;
+    BOOST_CHECK(it==i3.end());
   }
 }
 

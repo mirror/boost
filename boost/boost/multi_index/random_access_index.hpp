@@ -675,7 +675,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
     ptrs.clear();
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
-    safe_super::detach_all_iterators();
+    safe_super::detach_dereferenceable_iterators();
 #endif
   }
 
