@@ -162,13 +162,15 @@ namespace std {
 #endif
 
 
-// Detect other compilers with serious defects
+// Detect other compilers with serious defects - override by defineing BOOST_UBLAS_UNSUPPORTED_COMPILER=0
+#ifndef BOOST_UBLAS_UNSUPPORTED_COMPILER
 #if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING) || defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || defined(BOOST_NO_SFINAE) || defined(BOOST_NO_STDC_NAMESPACE)
 #define BOOST_UBLAS_UNSUPPORTED_COMPILER
 #endif
+#endif
 
 // Cannot continue with an unsupported compiler
-#ifdef BOOST_UBLAS_UNSUPPORTED_COMPILER
+#if defined(BOOST_UBLAS_UNSUPPORTED_COMPILER) && (BOOST_UBLAS_UNSUPPORTED_COMPILER != 0)
 #error Your compiler is unsupported by this verions of uBLAS. Boost 1.32.0 includes uBLAS with support for many old compilers.
 #endif
 
