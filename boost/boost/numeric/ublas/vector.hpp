@@ -989,6 +989,7 @@ namespace boost { namespace numeric { namespace ublas {
         typedef const T &const_reference;
         typedef T &reference;
         typedef const vector_reference<const self_type> const_closure_type;
+        typedef vector_reference<self_type> closure_type;
         typedef dense_tag storage_category;
 
         // Construction and destruction
