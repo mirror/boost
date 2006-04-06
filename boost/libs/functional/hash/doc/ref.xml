@@ -625,37 +625,39 @@ for(; first != last; ++first)
               </thead>
               <tbody>
                 <row>
-                  <entry><code>int</code></entry>
-                  <entry morerows="3"><code>val</code></entry>
+                  <entry><code>int</code>, <code>unsigned int</code>, <code>long</code>, <code>unsigned long</code></entry>
+                  <entry><code>val</code></entry>
                 </row>
-                <row><entry><code>unsigned int</code></entry></row>
-                <row><entry><code>long</code></entry></row>
-                <row><entry><code>unsigned long</code></entry></row>
                 <row>
-                  <entry><code>float</code></entry>
-                  <entry morerows="3">An unspecified value, except that equal arguments shall yield the same result.</entry>
+                  <entry><code>float</code>, <code>double</code>, <code>long double</code></entry>
+                  <entry>An unspecified value, except that equal arguments shall yield the same result.</entry>
                 </row>
-                <row><entry><code>double</code></entry></row>
-                <row><entry><code>long double</code></entry></row>
-                <row><entry><code>T*</code></entry></row>
                 <row>
-                    <entry><code>T (&amp;val)[N]</code></entry>
-                    <entry morerows="1"><code>hash_range(val, val+N)</code></entry>
+                  <entry><code>T*</code></entry>
+                  <entry>An unspecified value, except that equal arguments shall yield the same result.</entry>
                 </row>
-                <row><entry><code>const T (&amp;val)[N]</code></entry></row>
                 <row>
-                  <entry><code>std:basic&lt;Ch, std::char_traits&lt;Ch&gt;, A&gt; const&amp;</code></entry>
-                  <entry morerows="7"><code>hash_range(val, val+N)</code></entry>
+                  <entry>
+                    <code>T&#160;val[N]</code>,
+                    <code>const&#160;T&#160;val[N]</code>
+                  </entry>
+                  <entry><code>hash_range(val, val+N)</code></entry>
                 </row>
-                <row><entry><code>std::vector&lt;T, A&gt; const&amp;</code></entry></row>
-                <row><entry><code>std::list&lt;T, A&gt; const&amp;</code></entry></row>
-                <row><entry><code>std::deque&lt;T, A&gt; const&amp;</code></entry></row>
-                <row><entry><code>std::set&lt;K, C, A&gt; const&amp;</code></entry></row>
-                <row><entry><code>std::multiset&lt;K, C, A&gt; const&amp;</code></entry></row>
-                <row><entry><code>std::map&lt;K, T, C, A&gt; const&amp;</code></entry></row>
-                <row><entry><code>std::multimap&lt;K, T, C, A&gt; const&amp;</code></entry></row>
                 <row>
-                  <entry><code>std::pair&lt;A, B&gt; const&amp;</code></entry>
+                  <entry>
+                    <code>std:basic_string&lt;Ch,&#160;std::char_traits&lt;Ch&gt;,&#160;A&gt;</code>,
+                    <code>std::vector&lt;T,&#160;A&gt;</code>,
+                    <code>std::list&lt;T,&#160;A&gt;</code>,
+                    <code>std::deque&lt;T,&#160;A&gt;</code>,
+                    <code>std::set&lt;K,&#160;C,&#160;A&gt;</code>,
+                    <code>std::multiset&lt;K,&#160;C,&#160;A&gt;</code>,
+                    <code>std::map&lt;K,&#160;T,&#160;C,&#160;A&gt;</code>,
+                    <code>std::multimap&lt;K,&#160;T,&#160;C,&#160;A&gt;</code>
+                  </entry>
+                  <entry><code>hash_range(val.begin(), val.end())</code></entry>
+                </row>
+                <row>
+                  <entry><code>std::pair&lt;A, B&gt;</code></entry>
                   <entry><programlisting>size_t seed = 0;
 <functionname>hash_combine</functionname>(seed, val.first);
 <functionname>hash_combine</functionname>(seed, val.second);
