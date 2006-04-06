@@ -26,7 +26,7 @@
 #   define BOOST_TT_DECL /**/
 #endif
 
-# if BOOST_WORKAROUND(__MWERKS__, < 0x3000)                         \
+# if (BOOST_WORKAROUND(__MWERKS__, < 0x3000)                         \
     || BOOST_WORKAROUND(BOOST_MSVC, <= 1301)                        \
     || !defined(__EDG_VERSION__) && BOOST_WORKAROUND(__GNUC__, < 3) \
     || BOOST_WORKAROUND(__IBMCPP__, < 600 )                         \
@@ -34,7 +34,8 @@
     || defined(__ghs)                                               \
     || BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(53800))           \
     || BOOST_WORKAROUND(MPW_CPLUS, BOOST_TESTED_AT(0x890))          \
-    || BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x580))
+    || BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x580)))       \
+    && defined(BOOST_NO_IS_ABSTRACT)
 
 #   define BOOST_TT_NO_CONFORMING_IS_CLASS_IMPLEMENTATION 1
 
