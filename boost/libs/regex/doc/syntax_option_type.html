@@ -171,6 +171,12 @@ static const syntax_option_type collate;
                   alternatives.</TD>
             </TR>
             <TR>
+               <TD>no_except</TD>
+               <TD>No</TD>
+               <TD>Prevents basic_regex from throwing an exception when an invalid expression is 
+                  encountered.</TD>
+            </TR>
+            <TR>
                <TD>no_mod_m</TD>
                <TD>No</TD>
                <TD>Normally Boost.Regex behaves as if the Perl m-modifier is on: so the 
@@ -326,6 +332,14 @@ static const syntax_option_type collate;
                      on by default</STRONG> for POSIX-Extended regular expressions, but can be 
                   unset to support for backreferences on.</TD>
             </TR>
+            <TR>
+               <TD>no_except</TD>
+               &nbsp;<TD>
+               <TD></TD>
+               <TD>No</TD>
+               <TD>Prevents basic_regex from throwing an exception when an invalid expression is 
+                  encountered.</TD>
+            </TR>
          </TABLE>
       </P>
       <H4><A name="basic"></A>Options for POSIX Basic Regular Expressions:</H4>
@@ -457,6 +471,14 @@ static const syntax_option_type collate;
                <TD>bk_vbar</TD>
                <TD>No</TD>
                <TD>When set then \| acts as the alternation operator.</TD>
+            </TR>
+            <TR>
+               <TD>no_except</TD>
+               <TD>
+               <TD></TD>
+               <TD>No</TD>
+               <TD>Prevents basic_regex from throwing an exception when an invalid expression is 
+                  encountered.</TD>
             </TR>
          </TABLE>
       </P>

@@ -95,6 +95,7 @@ class basic_regex {
    static const regex_constants::syntax_option_type optimize        = regex_constants::optimize;
    static const regex_constants::syntax_option_type collate         = regex_constants::collate;
    static const regex_constants::syntax_option_type newline_alt     = regex_constants::newline_alt;
+   static const regex_constants::syntax_option_type no_except       = regex_constants::newline_alt;
 
    // construct/copy/destroy:
    explicit <A href="#c1">basic_regex</A> ();
@@ -134,6 +135,7 @@ class basic_regex {
 
    // const operations:
    flag_type <A href="#m8">flags</A>() const;
+   int <A href="#m8b">status</A>()const;
    basic_string&lt;charT&gt; <A href="#m9">str</A>() const;
    int <A href="#m10">compare</A>(basic_regex&amp;) const;
    // locale:
@@ -264,7 +266,7 @@ static const regex_constants::syntax_option_type newline_alt      = regex_consta
 </pre>
       <P><b>Requires:</b> <i>p</i> shall not be a null pointer.</P>
       <p><b>Throws:</b> <code>bad_expression</code> if <i>p</i> is not a valid regular 
-         expression.</p>
+         expression, unless the flag no_except is set in <EM>f</EM>.</p>
       <p><b>Effects:</b> Constructs an object of class <code>basic_regex</code>; the 
          object's internal finite state machine is constructed from the regular 
          expression contained in the null-terminated string <i>p</i>, and interpreted 
@@ -332,7 +334,7 @@ static const regex_constants::syntax_option_type newline_alt      = regex_consta
       <PRE><A name=c3></A>basic_regex(const charT* p1, const charT* p2, flag_type f = regex_constants::normal);</PRE>
       <p><b>Requires:</b> <i>p1</i> and <i>p2</i> are not null pointers, <code>p1 &lt; p2</code>.</p>
       <p><b>Throws:</b> <code>bad_expression</code> if [p1,p2) is not a valid regular 
-         expression.</p>
+         expression, unless the flag no_except is set in <EM>f</EM>.</p>
       <p><b>Effects:</b> Constructs an object of class <code>basic_regex</code>; the 
          object's internal finite state machine is constructed from the regular 
          expression contained in the sequence of characters [p1,p2), and interpreted 
@@ -401,7 +403,7 @@ static const regex_constants::syntax_option_type newline_alt      = regex_consta
 </pre>
       <p><b>Requires:</b> <i>p</i> shall not be a null pointer, <code>len &lt; max_size()</code>.</p>
       <p><b>Throws:</b> <code>bad_expression</code> if <i>p</i> is not a valid regular 
-         expression.</p>
+         expression, unless the flag no_except is set in <EM>f</EM>.</p>
       <p><b>Effects:</b> Constructs an object of class <code>basic_regex</code>; the 
          object's internal finite state machine is constructed from the regular 
          expression contained in the sequence of characters [p, p+len), and interpreted 
@@ -529,7 +531,7 @@ template &lt;class ST, class SA&gt;
 <A name=c6></A>basic_regex(const basic_string&lt;charT, ST, SA&gt;&amp; s, flag_type f = regex_constants::normal);
 </pre>
       <p><b>Throws:</b> <code>bad_expression</code> if <i>s</i> is not a valid regular 
-         expression.</p>
+         expression, unless the flag no_except is set in <EM>f</EM>.</p>
       <p><b>Effects:</b> Constructs an object of class <code>basic_regex</code>; the 
          object's internal finite state machine is constructed from the regular 
          expression contained in the string <i>s</i>, and interpreted according to the <a href="syntax_option_type.html">
@@ -596,7 +598,7 @@ template &lt;class ForwardIterator&gt;
 <A name=c7></A>basic_regex(ForwardIterator first, ForwardIterator last, flag_type f = regex_constants::normal);
 </pre>
       <p><b>Throws:</b> <code>bad_expression</code> if the sequence <i>[first, last)</i> 
-         is not a valid regular expression.</p>
+         is not a valid regular expression, unless the flag no_except is set in <EM>f</EM>.</p>
       <p><b>Effects:</b> Constructs an object of class <code>basic_regex</code>; the 
          object's internal finite state machine is constructed from the regular 
          expression contained in the sequence of characters [first, last), and 
@@ -672,7 +674,6 @@ template &lt;class ST, class SA&gt;
 basic_regex&amp; operator=(const basic_string&lt;charT, ST, SA&gt;&amp; p);
 </pre>
       <p><b>Effects:</b> Returns the result of <code>assign(p)</code>.</p>
-      
       <h4>basic_regex iterators</h4>
       <pre><A name=m1>
 const_iterator begin() const;
@@ -720,7 +721,7 @@ basic_regex&amp; assign(const charT* ptr, flag_type f = regex_constants::normal)
                     flag_type f = regex_constants::normal);
 </PRE>
       <p><b>Throws:</b> <code>bad_expression</code> if <i>s</i> is not a valid regular 
-         expression.</p>
+         expression, unless the flag no_except is set in <EM>f</EM>.</p>
       <p><b>Returns:</b> <code>*this</code>.</p>
       <p><b>Effects:</b> Assigns the regular expression contained in the string <i>s</i>, 
          interpreted according the <a href="syntax_option_type.html">option flags</a> specified 
@@ -796,6 +797,13 @@ basic_regex&amp; assign(InputIterator first, InputIterator last,
 </pre>
       <p><b>Effects:</b> Returns a copy of the regular expression syntax flags that were 
          passed to the object's constructor, or the last call to <code>assign.</code></p>
+      <CODE>
+         <PRE><A name=m7></A><A name=m8></A><A name=m8b></A>int status() const;</PRE>
+      </CODE>
+      <P><STRONG>Effects</STRONG>: Returns zero if the expression contains a valid 
+         regular expression, otherwise an <A href="error_type.html">error code</A>.&nbsp; 
+         This member function is retained for use in environments that cannot use 
+         exception handling.</P>
       <pre><A name=m9></A>basic_string&lt;charT&gt; str() const;
 </pre>
       <p><b>Effects:</b> Returns a copy of the character sequence passed to the object's 
