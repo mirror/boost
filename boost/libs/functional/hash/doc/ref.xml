@@ -1,9 +1,9 @@
 <library-reference>
   <section id="hash.reference.specification">
     <para>For the full specification, see section 6.3 of the
-        <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1745.pdf">C++ Standard Library Technical Report</ulink>
+        <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf">C++ Standard Library Technical Report</ulink>
         and issue 6.18 of the
-        <ulink url="http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1756.pdf">Library Extension Technical Report Issues List</ulink>.
+        <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1837.pdf">Library Extension Technical Report Issues List</ulink> (page 63).
     </para>
   </section>
   <header name="boost/functional/hash.hpp">
@@ -27,7 +27,7 @@
           <classname>std::unary_function&lt;T, std::size_t&gt;</classname>
         </inherit>
 
-        <purpose>An STL compliant hash function object.</purpose>
+        <purpose>A <ulink url="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf">TR1</ulink> compliant hash function object.</purpose>
 
         <method name="operator()" cv="const">
           <type>std::size_t</type>
