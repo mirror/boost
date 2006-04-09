@@ -6,7 +6,7 @@ toolset.using doxygen ;
 
 boostbook date_time : date_time.xml ;
 
-boostbook date_time_doc : exclusive_date_time.xml ;
+# boostbook date_time_doc : exclusive_date_time.xml ;
 
 # file lists take the form of [ set.difference [ glob include/these ] : [ glob but/not/these ] ] 
 
@@ -33,21 +33,25 @@ local gregorian_files = [ set.difference
 doxygen date_time_autodoc : 
 	$(date_time_files) : 
         <doxygen:param>ENABLE_PREPROCESSING=NO 
+        <xsl:param>"boost.doxygen.reftitle=\"Date Time Reference\""
 	;
 
 doxygen gregorian_autodoc :
 	$(gregorian_files) : 
         <doxygen:param>ENABLE_PREPROCESSING=NO 
+        <xsl:param>"boost.doxygen.reftitle=\"Gregorian Reference\""
 	;
 
 doxygen posix_time_autodoc :
 	[ glob ../../../boost/date_time/posix_time/*.hpp ] : 
         <doxygen:param>ENABLE_PREPROCESSING=NO 
+        <xsl:param>"boost.doxygen.reftitle=\"Posix Time Reference\""
 	;
 
 doxygen local_time_autodoc :
         [ glob ../../../boost/date_time/local_time/*.hpp ] : 
         <doxygen:param>ENABLE_PREPROCESSING=NO 
+        <xsl:param>"boost.doxygen.reftitle=\"Local Time Reference\""
         ;
 
 
