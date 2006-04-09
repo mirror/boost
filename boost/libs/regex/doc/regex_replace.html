@@ -203,8 +203,8 @@ boost::regex e1, e2;
    <B>return</B> <FONT color=#000080>0</FONT>;
 }
 
-<B>extern</B> <B>const</B> <B>char</B>* pre_expression = <FONT color=#0000ff>"(&lt;)|(&gt;)|\\r"</FONT>;
-<B>extern</B> <B>const</B> <B>char</B>* pre_format = <FONT color=#0000ff>"(?1&lt;)(?2&gt;)"</FONT>;
+<B>extern</B> <B>const</B> <B>char</B>* pre_expression = <FONT color=#0000ff>"(&lt;)|(&gt;)|(&amp;)|\\r"</FONT>;
+<B>extern</B> <B>const</B> <B>char</B>* pre_format = <FONT color=#0000ff>"(?1&lt;)(?2&gt;)(?3&amp;amp;)"</FONT>;
 
 
 <B>const</B> <B>char</B>* expression_text = <FONT color=#000080><I>// preprocessor directives: index 1
