@@ -644,6 +644,10 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       static const typename OtherContext::inner_context_ptr_type &
       context_ptr_impl( const State & stt )
       {
+        // This assert fails when an attempt is made to access an outer 
+        // context from a constructor of a state that is *not* a subtype of
+        // state<>. To correct this, derive from state<> instead of
+        // simple_state<>.
         BOOST_ASSERT( get_pointer( stt.pContext_ ) != 0 );
         return stt.pContext_->template context_ptr< OtherContext >();
       }
@@ -656,6 +660,10 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       static const typename OtherContext::inner_context_ptr_type &
       context_ptr_impl( const State & stt )
       {
+        // This assert fails when an attempt is made to access an outer 
+        // context from a constructor of a state that is *not* a subtype of
+        // state<>. To correct this, derive from state<> instead of
+        // simple_state<>.
         BOOST_ASSERT( get_pointer( stt.pContext_ ) != 0 );
         return stt.pContext_;
       }
@@ -667,6 +675,10 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       template< class OtherContext, class State >
       static OtherContext & context_impl( State & stt )
       {
+        // This assert fails when an attempt is made to access an outer 
+        // context from a constructor of a state that is *not* a subtype of
+        // state<>. To correct this, derive from state<> instead of
+        // simple_state<>.
         BOOST_ASSERT( get_pointer( stt.pContext_ ) != 0 );
         return stt.pContext_->template context< OtherContext >();
       }
