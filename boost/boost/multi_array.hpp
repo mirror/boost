@@ -42,9 +42,10 @@ namespace boost {
 
       struct populate_index_ranges {
         multi_array_types::index_range
+        // RG: underscore on extent_ to stifle strange MSVC warning.
         operator()(multi_array_types::index base,
-                   multi_array_types::size_type extent) {
-          return multi_array_types::index_range(base,base+extent);
+                   multi_array_types::size_type extent_) {
+          return multi_array_types::index_range(base,base+extent_);
         }
       };
 
