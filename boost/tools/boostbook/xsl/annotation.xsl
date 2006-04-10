@@ -27,6 +27,7 @@
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="generate-id(.)"/>
+        <xsl:text>-bb</xsl:text>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
