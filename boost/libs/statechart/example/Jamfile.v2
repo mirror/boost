@@ -4,8 +4,7 @@
 # ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ##############################################################################
 
-project libs/statechart/example 
-  : requirements <link>shared:<hardcode-dll-paths>true ;
+project libs/statechart/example ;
 
 local custom = <define>CUSTOMIZE_MEMORY_MANAGEMENT ;
 local native = <define>BOOST_STATECHART_USE_NATIVE_RTTI ;
@@ -72,4 +71,5 @@ stage run
     [ statechart-st-example-build PerformanceCustom
         : Performance : Performance : $(custom) ]
     [ statechart-st-example-build PerformanceNative
-        : Performance : Performance : $(native) ] ;
+        : Performance : Performance : $(native) ]
+  : <install-dependencies>on <install-type>EXE <install-type>SHARED_LIB ;

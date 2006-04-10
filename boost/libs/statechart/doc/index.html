@@ -28,7 +28,7 @@
         <h2 align="center">Overview</h2>
 
         <p align="center"><font size="2">Version: 
-        <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2006/03/12<!--webbot bot="Timestamp" endspan i-checksum="12487" --></font></p>
+        <!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%Y/%m/%d" startspan -->2006/04/10<!--webbot bot="Timestamp" endspan i-checksum="12547" --></font></p>
       </td>
     </tr>
   </table>
@@ -125,8 +125,9 @@
 
   <p>Whether and how Boost.Statechart will work on your platform is best
   determined on the <a href=
-  "http://www.boost.org/regression-logs/user">status page</a>. If the cells
-  in your compilers column are all green on the statechart page, the library
+  "http://engineering.meta-comm.com/boost-regression/CVS-HEAD/developer/statechart.html">
+  status page</a>. 
+  If the cells in your compilers column are all green, the library
   should work as advertised. Cells of different color indicate possible
   problems; follow the links for details. Before employing the library I
   would also advise to run the tests (see <a href="#GettingStarted">Getting
@@ -141,29 +142,28 @@
   <h3><a name="GettingStarted" id="GettingStarted">Getting started</a></h3>
 
   <ol>
-    <li>Follow the steps 1-3 described at <a href=
-    "http://www.boost.org/more/getting_started.html">http://www.boost.org/more/getting_started.html</a>.
-    After doing so, somewhere on your harddrive you should have a directory
+    <li>Follow the steps 1-3 described on the <a href=
+    "../../../more/getting_started.html">Boost Getting Started Page</a>.
+    After doing so, somewhere on your hard drive you should have a directory
     containing the boost distribution (e.g. under
-    <code>D:\Data\boost_1_34_0</code>) and the bjam executable installed in
-    your <code>PATH</code></li>
+    <code>D:\Data\boost_1_34_0</code>), the bjam executable installed in
+    your <code>PATH</code> and your toolset configured in
+    <a href="../../../tools/build/v2/user-config.jam">user-config.jam</a>.
+    </li>
 
     <li>Open a command prompt and change the current directory to
     <code>D:\Data\boost_1_34_0\libs\statechart\examples</code></li>
 
-    <li>To compile the examples, invoke bjam with your toolset. For example,
-    for MSVC7.1, type <code>bjam "-sTOOLS=vc-7_1"</code>. This may take a few
-    minutes. After the build has finished you will find all executables in
+    <li>To compile the examples in debug mode, type <code>bjam</code> and hit 
+    CR. Please refer to the bjam command line documentation for other options.
+    After the build has finished you will find all executables in
     <code>D:\Data\boost_1_34_0\libs\statechart\examples\run</code>. In
     addition to the examples discussed in the tutorial, this script also
     builds the Performance executable in different variants, which show the
     effects of various choices on runtime performance, executable size, etc.
     Moreover, the Handcrafted executable is also built, which serves to
-    compare performance of a simple Boost.Statechart machine with its
-    handcrafted equivalent. Finally, the BitMachine example shows that
-    limitations of some compilers lead to a surprisingly low upper bound of
-    the number of states a state machine implemented in a single translation
-    unit can have</li>
+    compare performance of a simple Boost.Statechart machine with its 
+    handcrafted equivalent</li>
 
     <li>Optional: To run the tests, invoke bjam in the directory
     <code>D:\Data\boost_1_33_0\libs\statechart\test</code></li>
@@ -178,20 +178,23 @@
 
   <ul>
     <li><a href=
-    "http://www.objectmentor.com/resources/articles/umlfsm.pdf">http://www.objectmentor.com/resources/articles/umlfsm.pdf</a>
+    "http://www.objectmentor.com/resources/articles/umlfsm.pdf">
+    http://www.objectmentor.com/resources/articles/umlfsm.pdf</a>
     introduces state machines and UML statecharts</li>
 
     <li><a href=
-    "http://www.sts.tu-harburg.de/teaching/ws-99.00/OOA+D/StateDiagrams.pdf">http://www.sts.tu-harburg.de/teaching/ws-99.00/OOA+D/StateDiagrams.pdf</a>
+    "http://www.sts.tu-harburg.de/teaching/ws-99.00/OOA+D/StateDiagrams.pdf">
+    http://www.sts.tu-harburg.de/teaching/ws-99.00/OOA+D/StateDiagrams.pdf</a>
     explains most of the UML statechart elements and terminology</li>
 
     <li>The inventor of statecharts, David Harel, presents a thorough but
-    still very readable discussion in his original paper: <a href=
+    still very readable discussion in his original paper: : <a href=
     "http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf">
     http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf</a></li>
 
     <li>The UML specifications (formal) can be found here: <a href=
-    "http://www.omg.org/cgi-bin/doc?formal/03-03-01">http://www.omg.org/cgi-bin/doc?formal/03-03-01</a>
+    "http://www.omg.org/cgi-bin/doc?formal/03-03-01">
+    http://www.omg.org/cgi-bin/doc?formal/03-03-01</a>
     (see chapters 2.12 and 3.74)</li>
   </ul>
 
@@ -201,8 +204,7 @@
   <hr>
 
   <p>Revised 
-  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12
-  March, 2006<!--webbot bot="Timestamp" endspan i-checksum="28929" --></p>
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->10 April, 2006<!--webbot bot="Timestamp" endspan i-checksum="29965" --></p>
 
   <p><i>&copy; Copyright <a href=
   "mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber D&ouml;nni</a>
