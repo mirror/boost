@@ -11,16 +11,23 @@ __ ../../../../index.htm
 
 -------------------------------------
 
-:Abstract: Use this library to write functions that accept
-  arguments by name:
+:Abstract: Use this library to write functions and class templates
+  that can accept arguments by name:
 
   .. parsed-literal::
 
     new_window("alert", **width=10**, **titlebar=false**);
 
+    smart_ptr<
+       Foo 
+     , **deleter_is<Deallocate<Foo> >**
+     , **copy_policy_is<DeepCopy>**> p(new Foo);
+    
   Since named arguments can be passed in any order, they are
-  especially useful when a function has more than one parameter
-  with a useful default value.
+  especially useful when a function or template has more than one
+  parameter with a useful default value.  The library also supports
+  *unnamed* parameters; that is to say, parameters whose identity
+  can be deduced from their types.
 
 -------------------------------------
 
@@ -53,7 +60,7 @@ __ ../../../../index.htm
 -------------------------------------
 
 ==============
- Introduction
+ Motivation
 ==============
 
 In C++, arguments are normally given meaning by their positions
@@ -109,37 +116,44 @@ arguments by keyword, rather than by position:
 
   window* w = new_window("alert box", **movable=**\ false); // OK!
 
-.. I'm inclined to leave this part out.  In particular, the 2nd
-   point is kinda lame because even with the library, we need to
-   introduce overloads -- dwa:
+It's not uncommon for a function to have parameters that can be
+uniquely identified based on the types of arguments passed.  The
+``name`` parameter to ``new_window`` is one such example.  None of
+the other arguments, if valid, can reasonably be converted to a
+``char const*``, so in theory a user could pass the window name in
+*any* argument position without causing ambiguity.  The Parameter
+library's **unnamed parameter** facility can be employed to allow
+that usage:
 
-   C++ has two other limitations, with respect to default arguments,
-   that are unrelated to its positional interface:
+.. parsed-literal::
 
-   * Default values cannot depend on the values of other function
-     parameters:
+  window* w = new_window(movable=false, **"alert box"**); // OK!
 
-     .. parsed-literal::
+Appropriately used, an unnamed parameter interface can free the
+user of the burden of even remembering the formal parameter names.
 
-       // Can we make resize windows to a square shape by default?
-       void resize(
-         window* w,
-         int **width**, 
-         int height **= width** // nope, error!
-       );
+The reasoning we've given for named and unnamed parameter
+interfaces applies equally well to class templates as it does to
+functions.  The syntax for passing named template parameters is not
+quite as natural as it is for named function parameters:
 
-   * Default values in function templates are useless for any
-     argument whose type should be deduced when the argument is
-     supplied explicitly::
+.. parsed-literal::
 
-        template <class T> 
-        void f(T x = 0);
+  // *The ideal would be*
+  //    *smart_ptr<ownership=shared, value_type=Client> p;*
+  // 
+  // *but instead we must write something like:*
+  smart_ptr<**ownership<shared>**, **value_type<Client>** > p;
 
-        f(3.14) // ok: x supplied explicitly; T is double
-        f();    // error: can't deduce T from default argument 0!
+This small syntactic deficiency makes unnamed parameters an
+especially big win when used with class templates:
 
-   As a side effect of using the Boost Parameter library, you may find
-   that you circumvent both of these limitations quite naturally.
+.. parsed-literal::
+
+  // *p and q could be equivalent, given an unnamed*
+  // *parameter interface.*
+  smart_ptr<**shared**, **Client**> p;
+  smart_ptr<**Client**, **shared**> q;
 
 ==========
  Tutorial
@@ -147,14 +161,18 @@ arguments by keyword, rather than by position:
 
 In this section we'll show how the Parameter library can be used to
 build an expressive interface to the `Boost Graph library`__\ 's
-|dfs|_ algorithm. [#old_interface]_ After laying some groundwork
-and describing the algorithm's abstract interface, we'll show you
-how to build a basic implementation with keyword support.  Then
-we'll add support for default arguments and we'll gradually refine the
-implementation with syntax improvements.  Finally we'll show how to
-streamline the implementation of named parameter interfaces,
-improve their participation in overload resolution, and optimize
-their runtime efficiency.
+|dfs|_ algorithm. [#old_interface]_ 
+
+.. Revisit this
+
+  After laying some groundwork
+  and describing the algorithm's abstract interface, we'll show you
+  how to build a basic implementation with keyword support.  Then
+  we'll add support for default arguments and we'll gradually refine the
+  implementation with syntax improvements.  Finally we'll show how to
+  streamline the implementation of named parameter interfaces,
+  improve their participation in overload resolution, and optimize
+  their runtime efficiency.
 
 __ ../../../graph/index.html
 
@@ -244,7 +262,7 @@ arguments for which the default is appropriate:
 
 .. parsed-literal::
 
-  graphs::depth_first_search(g, **color_map = my_color_map**);
+  graphs::depth_first_search(g, **color_map=my_color_map**);
 
 To make that syntax legal, there needs to be an object called
 ``color_map`` with an assignment operator that can accept a
@@ -277,10 +295,17 @@ equivalent to::
 
   namespace graphs 
   {
-    namespace tag { struct visitor; }
-    namespace { 
+    namespace tag 
+    { 
+      // The tag type
+      struct visitor; 
+    }
+
+    namespace // unnamed
+    {
+      // A reference to the tag object
       boost::parameter::keyword<tag::visitor>& visitor
-      = boost::parameter::keyword<tag::visitor>::get();
+      = boost::parameter::keyword<tag::visitor>::instance;
     }
   }
 
@@ -290,36 +315,155 @@ is all done to avoid violating the One Definition Rule (ODR)
 templates that are instantiated in multiple translation
 units.
 
-Defining the Implementation Function
-====================================
+A Bare Bones Function Interface
+===============================
 
-Next we can write the skeleton of the function that implements
-the core of ``depth_first_search``::
+Next we can write the skeleton of our ``depth_first_search``
+function template.  To declare the function, we'll use the
+``BOOST_PARAMETER_FUNCTION`` macro::
 
-  namespace graphs { namespace core
+  #include <boost/parameter/preprocessor.hpp>
+
+  namespace graphs
   {
-    template <class ArgumentPack>
-    void depth_first_search(ArgumentPack const& args)
+    BOOST_PARAMETER_FUNCTION(
+        (void), 
+        depth_first_search, 
+
+        tag,
+        (required (graph,*) )
+        (optional (visitor,*) (root_vertex,*) 
+                  (index_map,*) (out(color_map),*) )
+    )
     {
-        // algorithm implementation goes here
+        // ... body of function goes here...
     }
-  }}
+  }
+
+The first argument to ``BOOST_PARAMETER_FUNCTION`` is the
+function's return type, in parentheses.  These parentheses are
+necessary because some types, such as ``std::pair<int,int>``,
+contain commas that would otherwise confuse the preprocessor.  The
+second argument is the name of the resulting function template.
+The third argument is the name of the namespace in which keyword
+types can be found, but most of the interesting information is in
+the fourth argument, which describes the function signature.
+
+The Signature
+-------------
+
+The fourth argument to ``BOOST_PARAMETER_FUNCTION`` is a
+`Boost.Preprocessor`_ sequence_ of two elements, describing the
+required and optional parameters to ``depth_first_search``,
+respectively (if the parameters were all required—or all
+optional—the sequence would have had only one element).  The first
+element specifies a single ``required`` parameter, ``graph``::
+
+   (required (graph,*) )
+
+The ``*`` simply indicates that we can pass anything at all to
+``depth_first_search`` as a ``graph``.  The second element of the
+outer sequence lists the ``optional`` arguments.
+Since there are multiple optional arguments, their entries are
+composed into another sequence_.  Note that since the ``color_map`` is an
+“out” parameter, its name has been enclosed in the ``out(…)``
+construct, which indicates to the library that it should be passed
+by non-const reference (for an “in/out” parameter we'd use
+``in_out(…)``).  If you refer back to the `parameter table`_ it
+should be clear that, default values aside, this function signature
+describes the same information.
+
+
+.. _`Boost.Preprocessor`: ../../preprocessor
+.. _sequence: ../../preprocessor/doc/data/sequences.html
+
+Exercising the Interface
+------------------------
+
+We've already gained the ability to call our function with a
+mixture of positional and named arguments::
+
+  int main()
+  {
+      // Make keyword names available without qualification
+      using namespace graphs;
+
+      graphs::depth_first_search(
+        'G', 'v',                               // Positional args
+        index_map = "hello, world",             // Named args in
+        root_vertex = 3.5, color_map = false);  // arbitrary order
+  }
+
+Signature Matching and Overloading
+----------------------------------
+
+We can also observe the effects of using ``required`` and
+``optional`` in the function signature.  Any invocation of
+``depth_first_search`` will compile, as long as it has a ``graph``
+parameter::
+
+  depth_first_search("some-graph");                        // OK
+  depth_first_search(index_map="hello, world", graph='G'); // OK
+
+however, if we leave out the graph argument, the compiler will
+complain that no ``depth_first_search`` matches the arguments::
+
+  depth_first_search(root_vertex=3.5);                     // ERROR
+
+It's important to note that the parameter library is not forcing a
+compilation error in this case.  If we add another overload of
+``depth_first_search`` that *does* match, the compiler will be
+happy again::
+
+  // New overload; matches anything
+  template <class T> void depth_first_search(T) {}
+
+  depth_first_search(root_vertex=3.5);                     // OK
+
+This capability depends on your compiler's support for SFINAE. [#sfinae]_
+
+Filling in the Body
+===================
 
 .. |ArgumentPack| replace:: :concept:`ArgumentPack`
 
-``core::depth_first_search`` has an |ArgumentPack|
-parameter: a bundle of references to the arguments that the caller
-passes to the algorithm, tagged with their keywords.  To extract
-each parameter, just pass its keyword object to the
-|ArgumentPack|\ 's subscript operator.  Just to get a feel for how
-things work, let's add some temporary code to print the arguments:
+Of course, the test above isn't very interesting unless we can see
+the values of the arguments.  Just to get a feel for how things
+work, let's add some temporary code to print the arguments.  The
+most natural approach would be to access the arguments directly, by
+name::
+
+  {
+      std::cout << "graph:\\t" << graph << std::endl;
+      std::cout << "visitor:\\t" << visitor << std::endl;
+      std::cout << "root_vertex:\\t" << root_vertex << std::endl;
+      std::cout << "index_map:\\t" << index_map << std::endl;
+      std::cout << "color_map:\\t" << color_map << std::endl;
+  }
+
+Unfortunately, that won't quite work, because the function whose
+body we'll be writing doesn't have parameters named ``graph``,
+``visitor``, etc.  It may not be obvious, since the declaration is
+generated by the ``BOOST_PARAMETER_FUNCTION`` macro, but there is
+actually only a single parameter, called ``args``.  ``args`` is what
+is known as an |ArgumentPack|: a bundle of references to the actual
+arguments, tagged with their keywords.  To extract each parameter,
+we just need to pass its keyword object to the |ArgumentPack|\ 's
+subscript operator, like this:
 
 .. parsed-literal::
 
-  namespace graphs { namespace core
+  namespace graphs
   {
-    template <class ArgumentPack>
-    void depth_first_search(ArgumentPack const& args)
+    BOOST_PARAMETER_FUNCTION(
+        (void), 
+        depth_first_search, 
+
+        tag,
+        (required (graph,\*) )
+        (optional (visitor,\*) (root_vertex,\*)
+                  (index_map,\*) (out(color_map),\*) )
+    )
     {
         std::cout << "graph:\\t" << **args[graph]** << std::endl;
         std::cout << "visitor:\\t" << **args[visitor]** << std::endl;
@@ -327,45 +471,9 @@ things work, let's add some temporary code to print the arguments:
         std::cout << "index_map:\\t" << **args[index_map]** << std::endl;
         std::cout << "color_map:\\t" << **args[color_map]** << std::endl;
     }
-  }} // graphs::core
-
-It's unlikely that many of the arguments the caller will eventually
-pass to ``depth_first_search`` can be printed, but for now the code
-above will give us something to experiment with.  To see the
-keywords in action, we can write a little test driver:
-
-.. parsed-literal::
-
-  int main()
-  {
-      using namespace graphs;
-
-      core::depth_first_search(**(**
-        graph = 'G', visitor = 2, root_vertex = 3.5, 
-        index_map = "hello, world", color_map = false\ **)**);
   }
 
-An overloaded comma operator (``operator,``) combines the results
-of assigning to each keyword object into a single |ArgumentPack|
-object that gets passed on to ``core::depth_first_search``.  The
-extra set of parentheses you see in the example above are required:
-without them, each assignment would be interpreted as a separate
-function argument and the comma operator wouldn't take effect.
-We'll show you how to get rid of the extra parentheses later in
-this tutorial.
-
-Of course, we can pass the arguments in any order::
-
-  int main()
-  {
-      using namespace graphs;
-
-      core::depth_first_search((
-        root_vertex = 3.5, graph = 'G', color_map = false, 
-        index_map = "hello, world", visitor = 2));
-  }
-
-either of the two programs above will print::
+Now our program will print::
 
   graph:       G
   visitor:     2
@@ -373,19 +481,32 @@ either of the two programs above will print::
   index_map:   hello, world
   color_map:   false
 
+Of course, we can pass the arguments in any order without changing
+the result::
+
+  int main()
+  {
+      using namespace graphs;
+
+      graphs::depth_first_search(
+        root_vertex = 3.5, graph = 'G', color_map = false, 
+        index_map = "hello, world", visitor = 2);
+  }
+
 Adding Defaults
 ===============
 
-Currently, all the arguments to ``depth_first_search`` are
-required.  If any parameter can't be found, there will be a
-compilation error where we try to extract it from the
-|ArgumentPack| using the subscript operator.  To make it
-legal to omit an argument we need to give it a default value.
+Despite the use of ``optional`` in the signature, all
+the arguments to ``depth_first_search`` are actually required.  If
+any parameter can't be found, there will be a compilation error
+where we try to extract it from the |ArgumentPack| using the
+subscript operator.  To make it legal to omit an argument we need
+to give it a default value.
 
 Syntax
 ------
 
-We can make any of the parameters optional by following its keyword
+To make an optional parameter *truly* optional, we can follow its keyword
 with the ``|`` operator and the parameter's default value within
 the square brackets.  In the following example, we've given
 ``root_vertex`` a default of ``42`` and ``color_map`` a default of
@@ -393,10 +514,18 @@ the square brackets.  In the following example, we've given
 
 .. parsed-literal::
 
-  namespace graphs { namespace core
+  namespace graphs 
   {
-    template <class ArgumentPack>
-    void depth_first_search(ArgumentPack const& args)
+  {
+    BOOST_PARAMETER_FUNCTION(
+        (void), 
+        depth_first_search, 
+
+        tag,
+        (required (graph,\*) )
+        (optional (visitor,\*) (root_vertex,\*) 
+                  (index_map,\*) (out(color_map),\*) )
+    )
     {
         std::cout << "graph:\\t" << args[graph] << std::endl;
         std::cout << "visitor:\\t" << args[visitor] << std::endl;
@@ -404,13 +533,13 @@ the square brackets.  In the following example, we've given
         std::cout << "index_map:\\t" << args[index_map] << std::endl;
         std::cout << "color_map:\\t" << args[color_map\ **|"hello, world"**\ ] << std::endl;
     }
-  }} // graphs::core
+  }
 
 Now we can invoke the function without supplying ``color_map`` or
 ``root_vertex``::
 
-  core::depth_first_search((
-    graph = 'G', index_map = "index", visitor = 6));
+  graphs::depth_first_search(
+    graph = 'G', index_map = "index", visitor = 6);
 
 The call above would print::
 
@@ -427,12 +556,12 @@ The call above would print::
    or, if no argument is passed explicitly, to the specified
    default value.
 
-Getting More Realistic
-----------------------
+Deducing Parameter Types
+========================
 
 Now it's time to put some more realistic defaults in place.  We'll
 have to give up our print statements—at least if we want to see the
-defaults work—since, the default values of these
+defaults work—since the default values of these
 parameters generally aren't printable.
 
 Instead, we'll connect local variables to the arguments and use
@@ -440,47 +569,105 @@ those in our algorithm:
 
 .. parsed-literal::
 
-  namespace graphs { namespace core
+  namespace graphs
   {
-    template <class ArgumentPack>
-    void depth_first_search(ArgumentPack const& args)
+    BOOST_PARAMETER_FUNCTION(
+        (void), 
+        depth_first_search, 
+
+        tag,
+        (required (graph,\*) )
+        (optional (visitor,\*) (root_vertex,\*)
+                  (index_map,\*) (out(color_map),\*) )
+    )
     {
         *Graph*   g = args[graph];
         *Visitor* v = args[visitor|\ *default-expression*\ :sub:`1`\ ];
         *Vertex*  s = args[root_vertex|\ *default-expression*\ :sub:`2`\ ];
         *Index*   i = args[index_map|\ *default-expression*\ :sub:`3`\ ];
-        *Color*   c = args[visitor|\ *default-expression*\ :sub:`4`\ ];
+        *Color*   c = args[color|\ *default-expression*\ :sub:`4`\ ];
 
         *…use g, v, s, i, and c to implement the algorithm…*
     }
-  }} // graphs::core
+  }
 
 We'll insert the `default expressions`_ in a moment, but first we
 need to come up with the types *Graph*, *Visitor*, *Vertex*,
 *Index*, and *Color*.
 
-The ``binding`` |Metafunction|_
--------------------------------
+Forwarding to an Implementation Function
+----------------------------------------
 
-To compute the type of a parameter we can use a |Metafunction|_
-called ``binding``:
+The easiest way to discover the parameter types is to forward them
+on to another function template and allow C++ to do the type
+deduction for us:
 
 .. parsed-literal::
 
-  binding<ArgumentPack, Keyword, Default = void>
+  namespace graphs
+  {
+    namespace detail
+    {
+      template <
+          class Graph, class Visitor
+        , class Vertex, class Index, class Color>
+      void depth_first_search_impl(
+        Graph const& g, Visitor const& v, 
+        Vertex const& s, Index const& i, Color& c)
+      {
+        *…use g, v, s, i, and c to implement the algorithm…*
+      }
+    }
+
+    BOOST_PARAMETER_FUNCTION(
+        (void), 
+        depth_first_search, 
+
+        tag,
+        (required (graph,\*) )
+        (optional (visitor,\*) (root_vertex,\*) 
+                  (index_map,\*) (out(color_map),\*) )
+    )
+    {
+        detail::depth_first_search_impl(
+          args[graph], args[visitor|\ *default-expression*\ :sub:`1`\ ],
+          args[root_vertex|\ *default-expression*\ :sub:`2`\ ],
+          args[index_map|\ *default-expression*\ :sub:`3`\ ],
+          args[color|\ *default-expression*\ :sub:`4`\ ]);
+    }
+  }
+
+The ``binding`` |Metafunction|_
+-------------------------------
+
+If for some reason forwarding isn't an option, or if writing a
+separate implementation function is too cumbersome, we can use a
+|Metafunction|_ called ``binding`` to compute parameter types
+directly:
+
+.. parsed-literal::
+
+  binding<ArgumentPack, Keyword, Default = parameter::void\ _>
   { typedef *see text* type; };
 
 where ``Default`` is the type of the default argument, if any.
 
-For example, to declare and initialize ``g`` above, we could write:
+To use ``binding`` we need one more piece of information that's
+hidden by the macro generating our declaration: the *type* of
+``args``, our ArgumentPack, is quite fittingly available as
+``Args``.  Now, to directly declare and initialize ``g``, we could
+write:
 
 .. parsed-literal::
 
   typedef typename parameter::binding<
-    ArgumentPack,\ **tag::graph**
+    Args,\ **tag::graph**
   >::type Graph;
 
   Graph g = args[graph];
+
+``binding`` With Defaults
+-------------------------
 
 As shown in the `parameter table`_, ``graph`` has no default, so
 the ``binding`` invocation for *Graph* takes only two arguments.
@@ -490,10 +677,16 @@ The default ``visitor`` is ``boost::dfs_visitor<>()``, so the
 .. parsed-literal::
 
   typedef typename parameter::binding<
-    ArgumentPack,\ **tag::visitor,boost::dfs_visitor<>**
+    Args,\ **tag::visitor,boost::dfs_visitor<>**
   >::type Visitor;
 
   Visitor v = args[visitor|\ **boost::dfs_visitor<>()**\ ];
+
+
+.. _dangling:
+
+``binding`` Safely
+------------------
 
 Note that the default ``visitor`` is supplied as a *temporary*
 instance of ``dfs_visitor``.  Because ``args[…]`` always yields
@@ -511,23 +704,22 @@ const&``, as the last argument to ``binding``.
 Sometimes there's no need to use ``binding`` at all.  The
 ``root_vertex`` argument is required to be of the graph's
 ``vertex_descriptor`` type, [#vertex_descriptor]_ so we can just
-use that knowledge to bypass ``binding`` altogether.
+declare it that way:
 
 .. parsed-literal::
 
   typename **boost::graph_traits<Graph>::vertex_descriptor**
     s = args[root_vertex|\ ***vertices(g).first**\ ];
 
-.. _dangling:
-
 .. |Metafunction| replace:: :concept:`Metafunction`
 
 .. _Metafunction: ../../../mpl/doc/refmanual/metafunction.html
 
-Beyond Ordinary Default Arguments
----------------------------------
 
-Here's how you might write the declaration for the ``index_map``
+Beyond Ordinary Default Arguments
+=================================
+
+Consider how one might bind a variable to the ``index_map``
 parameter:
 
 .. parsed-literal::
@@ -540,8 +732,8 @@ parameter:
 
   Index i = args[index_map|\ **get(boost::vertex_index,g)**\ ];
 
-Notice two capabilities we've gained over what
-plain C++ default arguments provide:
+We have gained two capabilities beyond what plain C++ default
+arguments provide:
 
 1. The default value of the ``index`` parameter depends on the
    value of the ``graph`` parameter.  That's illegal in plain C++:
@@ -562,348 +754,113 @@ plain C++ default arguments provide:
      int f(Index index **= 42**);  // OK
      int y = f();                // **error; can't deduce Index**
 
-Syntactic Refinement
-====================
+More Restrictive Signatures
+===========================
 
-In this section we'll describe how you can allow callers to invoke
-``depth_first_search`` with just one pair of parentheses, and to
-omit keywords where appropriate.
+Currently, our function will be considered for overload resolution
+whenever``depth_first_search`` is called with a ``graph`` argument
+and up to four others, of any type.  Compilation may fail inside
+our ``depth_first_search`` when it is instantiated if the compiler
+discovers that the argument types don't provide the required
+operations, but that may be too late:
+
+* By the time our ``depth_first_search`` is instantiated, it has
+  been selected as the best matching overload.  Some other
+  ``depth_first_search`` overload might've worked had it been
+  chosen instead.  By the time we see a compilation error, there's
+  no chance to change that decision.
+
+* Even if there are no overloads, error messages generated at
+  instantiation time usually expose users to confusing
+  implementation details.  For example, users might see references
+  to ``graphs::detail::depth_first_search_impl`` or worse (think
+  of the kinds of errors you get from your STL implementation when
+  you make a mistake).
+
+* The problems with exposing such permissive function template
+  signatures have been the subject of much discussion, especially
+  in the presence of `unqualified calls`__.  If all we want is to
+  avoid unintentional argument-dependent lookup (ADL), we can
+  isolate ``depth_first_search`` in a namespace containing no
+  types [#using]_, but suppose we *want* it to found via ADL?
 
 
-Describing the Positional Argument Order
-----------------------------------------
-
-.. _ParameterSpec:
-
-.. |ParameterSpec| replace:: :concept:`ParameterSpec`
-
-First, we'll need to build a type that describes the allowed
-parameters and their ordering when passed positionally.  This type
-is known as a |ParameterSpec| (MSVC6.x users see this note__)::
-
-  namespace graphs
-  {
-    typedef parameter::parameters<
-        tag::graph
-      , tag::visitor
-      , tag::root_vertex
-      , tag::index_map
-      , tag::color_map
-    > dfs_params;
-  }
-
-__ `Can't Declare ParameterSpec Via typedef`_
-
-The ``parameters`` template supplies a function-call
-operator that groups all its arguments into an |ArgumentPack|.  Any
-arguments passed to it without a keyword label will be associated
-with a parameter according to its position in the |ParameterSpec|.
-So for example, given an object ``p`` of type ``dfs_params``, ::
-
-  p('G', index_map=1)
-
-yields an |ArgumentPack| whose ``graph`` parameter has a value of
-``'G'``, and whose ``index_map`` parameter has a value of ``1``.
-
-Forwarding Functions
---------------------
-  
-Next we need a family of overloaded ``depth_first_search`` function
-templates that can be called with anywhere from one to five
-arguments.  These *forwarding functions* will invoke an instance of
-``dfs_params`` as a function object, passing their parameters
-to its ``operator()`` and forwarding the result on to
-``core::depth_first_search``:
-
-.. parsed-literal::
-
-  namespace graphs
-  {
-    template <class A0>
-    void depth_first_search(A0 const& a0)
-    {
-       core::depth_first_search(dfs_params()(a0));
-    }
-
-    template <class A0, class A1>
-    void depth_first_search(A0 const& a0, A1 const& a1)
-    {
-       core::depth_first_search(dfs_params()(a0,a1));
-    } :vellipsis:`\ 
-    .
-    .
-    .
-   `
-    template <class A0, class A1, …class A4>
-    void depth_first_search(A0 const& a0, A1 const& a1, …A4 const& a4)
-    {
-       core::depth_first_search(dfs_params()(a0,a1,a2,a3,a4));
-    }
-  }
-
-That's it!  We can now call ``graphs::depth_first_search`` with
-from one to five arguments passed positionally or via keyword.
-
-“Out” Parameters
-----------------
-
-Well, that's not *quite* it.  When passing arguments by keyword,
-the keyword object's assignment operator yields a temporary
-|ArgumentPack| object.  A conforming C++ compiler will refuse to
-bind a non-``const`` reference to a temporary, so to support a
-keyword interface for all arguments, the overload set above *must*
-take its arguments by ``const`` reference.  On the other hand—as
-you may recall from the `parameter table`_\ —\ ``color_map`` is an
-“out” parameter, so it really should be passed by *non-*\ ``const``
-reference.  
-
-A keyword object has a pair of ``operator=`` overloads that ensure
-we can pass anything—temporary or not, ``const`` or not—by name,
-while preserving the mutability of non-temporaries:
-
-.. parsed-literal::
-
-  template <class A>                  // handles non-const, 
-  |ArgumentPack| operator=(A&);       // non-temporary objects
-
-  template <class A>                  // handles const objects
-  |ArgumentPack| operator=(A const&); // and temporaries
-
-However, when an “out” parameter is passed positionally, there's no
-keyword object involved.  With our ``depth_first_search`` overload
-set above, the ``color_map`` will be passed by ``const`` reference,
-and compilation will fail when mutating operations are used on it.
-The simple solution is to add another overload that takes a
-non-``const`` reference in the position of the “out” parameter:
-
-.. parsed-literal::
-
-   template <class A0, class A1, …class A4>
-   void depth_first_search(A0 **const&** a0, A1 **const&** a1, …\ A4\ **&** a4)
-   {
-       core::depth_first_search(dfs_params()(a0,a1,a2,a3,a4));
-   }
-
-That approach works nicely because there is only one “out”
-parameter and it is in the last position.  If ``color_map`` had
-been the first parameter, we would have needed *ten* overloads.  In
-the worst case—where the function has five “out” parameters—2\
-:sup:`5` or 32 overloads would be required.  This “\ `forwarding
-problem`_\ ” is well-known to generic library authors, and the C++
-standard committee is working on a proposal__ to address it.  In
-the meantime, you might consider using `Boost.Preprocessor`_ to
-generate the overloads you need.
-
-.. _`forwarding problem`: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1385.htm
-
-__ http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1690.html
-
-.. _`Boost.Preprocessor`: ../../../preprocessor
-
-If it is impractical for you to generate or write the overloads
-that would be required for positional “out” arguments to be passed
-directly, you still have the option to ask users to pass them
-through |ref|_, which will ensure that the algorithm implementation
-sees a non-``const`` reference:
-
-.. parsed-literal::
-
-  depth_first_search(g, v, s, i, **boost::ref(c)**);
-
-.. |ref| replace:: ``boost::ref``
-
-.. _ref: http://www.boost.org/doc/html/reference_wrapper.html
-
-Generating Forwarding Functions with Macros
--------------------------------------------
-
-To remove some of the tedium of writing overloaded forwarding
-functions, the library supplies a macro, suitably located in
-``boost/parameter/macros.hpp``, that will generate free function
-overloads for you::
-
-  BOOST_PARAMETER_FUN(void, depth_first_search, 1, 5, dfs_params);
-
-will generate a family of five ``depth_first_search`` overloads, in
-the current scope, that pass their arguments through
-``dfs_params``.  Instead of ``core::depth_first_search``, these
-overloads will forward the |ArgumentPack| on to a function called
-``depth_first_search_with_named_params``, also in the current
-scope.  It's up to you to implement that function.  You could
-simply transplant the body of ``core::depth_first_search`` into
-``depth_first_search_with_named_params`` if you were going to use
-this approach.
-
-Note that ``BOOST_PARAMETER_FUN`` only takes arguments by ``const``
-reference, so you will have to add any additional overloads
-required to handle positional “out” parameters yourself.  We are
-looking into providing a more sophisticated set of macros to
-address this problem and others, for an upcoming release of Boost.
-
-Controlling Overload Resolution
-===============================
-
-The parameters of our templated forwarding functions are completely
-general; in fact, they're a perfect match for any argument type
-whatsoever.  The problems with exposing such general function
-templates have been the subject of much discussion, especially in
-the presence of `unqualified calls`__.  Probably the safest thing
-to do is to isolate the forwarding functions in a namespace
-containing no types [#using]_, but often we'd *like* our functions
-to play nicely with argument-dependent lookup and other function
-overloads.  In that case, it's neccessary to remove the functions
-from the overload set when the passed argument types aren't
-appropriate.
+It's usually a good idea to prevent functions from being considered
+for overload resolution when the passed argument types aren't
+appropriate.  We've already seen that the library does this when
+the required ``graph`` parameter is not supplied.
 
 __ http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-defects.html#225
 
-Updating the |ParameterSpec|
-----------------------------
+Checking for Convertibility to Specific Types
+---------------------------------------------
 
-This sort of overload control can be accomplished in C++ by taking
-advantage of the SFINAE (Substitution Failure Is Not An Error)
-rule. [#sfinae]_ You can take advantage of the Parameter library's
-built-in SFINAE support by using the following class templates in
-your |ParameterSpec|:
+The simplest way to make the signature more restrictive is to
+replace some of the ``*``\ s with types to which the corresponding
+arguments must be convertible, in parentheses.  For example, the
+following signature will only be matched when the
+``graph`` parameter is convertible to ``char const*`` and the
+``root_vertex`` parameter is convertible to ``int``:
 
 .. parsed-literal::
 
-     template< class KeywordTag, class Predicate = *unspecified* >
-     struct required;
+  namespace graphs
+  {
+    BOOST_PARAMETER_FUNCTION(
+        (void), 
+        depth_first_search, 
 
-     template< class KeywordTag, class Predicate = *unspecified* >
-     struct optional;
+        tag,
+        (required (graph,\ **(char const\*)**) )
+        (optional (visitor,\*) (root_vertex,\ **(int)**) 
+                  (index_map,\*) (out(color_map),\*) )
+    )
+    {
+        *…*
+    }
+  }
 
-Instead of using keyword tags directly, we can wrap them in
-``required`` and ``optional`` to indicate which function parameters
-are required, and optionally pass ``Predicate``\ s to describe the
-type requirements for each function parameter.  The ``Predicate``
-argument must be a unary `MPL lambda expression`_ that, when
-applied to the actual type of the argument, indicates whether that
-argument type meets the function's requirements for that parameter
-position.
+Signature Restriction Predicates
+--------------------------------
+
+Sometimes the appropriate restriction can't be expressed in terms
+of convertibility.  In that case, instead of replacing the ``*``,
+you can *follow* it with a parenthesized unary `MPL lambda
+expression`_ that, when applied to the actual type of the argument,
+indicates whether that argument type meets the function's
+requirements for that parameter position.
 
 .. _`MPL lambda expression`: ../../../mpl/doc/refmanual/lambda-expression.html
 
-For example, let's say we want to restrict ``depth_first_search()`` so that
-the ``graph`` parameter is required and the ``root_vertex``
-parameter is convertible to ``int``.  We might write:
-
-.. parsed-literal::
-
-  #include <boost/type_traits/is_convertible.hpp>
-  #include <boost/mpl/placeholders.hpp>
-  namespace graphs
-  {
-    using namespace boost::mpl::placeholders;
-
-    struct dfs_params
-      : parameter::parameters<
-            **parameter::required<tag::graph>**
-          , parameter::optional<tag::visitor>
-          , **parameter::optional<
-                tag::root_vertex, boost::is_convertible<_,int>
-            >**
-          , parameter::optional<tag::index_map>
-          , parameter::optional<tag::color_map>
-        >
-    {};
-  }
-
-Applying SFINAE to the Overload Set
------------------------------------
-
-Now we add a special defaulted argument to each of our
-``depth_first_search`` overloads:
+For example, if we want to require that the ``visitor`` parameter
+be derived from some class ``VBase``, we can write:
 
 .. parsed-literal::
 
   namespace graphs
   {
-    template <class A0>
-    void depth_first_search(
-        A0 const& a0
-      , typename dfs_params::match<A0>::type p = dfs_params())
-    {
-       core::depth_first_search(**p**\ (a0));
-    }
+    using namespace boost::mpl;
 
-    template <class A0, class A1>
-    void depth_first_search(
-        A0 const& a0, A1 const& a1
-      , typename dfs_params::match<A0,A1>::type p = dfs_params())
+    BOOST_PARAMETER_FUNCTION(
+        (void), 
+        depth_first_search, 
+
+        tag,
+        (required (graph,(char const\*)) )
+        (optional (visitor,\ ***\ (boost::is_base_and_derived<VBase,_>)**)
+                  (root_vertex,(int)) (index_map,\*) (out(color_map),\*) )
+    )
     {
-       core::depth_first_search(**p**\ (a0,a1));
-    } :vellipsis:`\ 
-    .
-    .
-    .
-   `
-    template <class A0, class A1, …class A4>
-    void depth_first_search(
-        A0 const& a0, A1 const& a1, …A4 const& A4
-      , typename dfs_params::match<A0,A1,A2,A3,A4>::type p = dfs_params())
-    {
-       core::depth_first_search(**p**\ (a0,a1,a2,a3,a4));
+        *…*
     }
   }
 
+.. Note::
 
-These additional parameters are not intended to be used directly by
-callers; they merely trigger SFINAE by becoming illegal types when
-the ``root_vertex`` argument is not convertible to ``int``. The
-``BOOST_PARAMETER_FUN`` macro described earlier adds these extra
-function parameters for you (Borland users see this note__).
-
-.. _BOOST_PARAMETER_MATCH:
-
-__ `Default Arguments Unsupported on Nested Templates`_
-
-Reducing Boilerplate With Macros
---------------------------------
-
-The library provides a macro you can use to eliminate some of the
-repetetiveness of the declaring the optional parameters.
-``BOOST_PARAMETER_MATCH`` takes three arguments: the
-|ParameterSpec|, a `Boost.Preprocessor sequence`__ of the function
-argument types, and a name for the defaulted function parameter
-(``p``, above), and it generates the appropriate defaulted
-argument.  So we could shorten the overload set definition as
-follows:
-
-__ http://boost-consulting.com/mplbook/preprocessor.html#sequences
-
-.. parsed-literal::
-
-  namespace graphs
-  {
-    template <class A0>
-    void depth_first_search(
-        A0 const& a0
-      , **BOOST_PARAMETER_MATCH(dfs_params, (A0), p)**)
-    {
-       core::depth_first_search(p(a0));
-    }
-
-    template <class A0, class A1>
-    void depth_first_search(
-        A0 const& a0, A1 const& a1
-      , **BOOST_PARAMETER_MATCH(dfs_params, (A0)(A1), p)**)
-    {
-       core::depth_first_search(p(a0,a1));
-    } :vellipsis:`\ 
-    .
-    .
-    .
-   `
-    template <class A0, class A1, …class A4>
-    void depth_first_search(
-        A0 const& a0, A1 const& a1, …A4 const& A4
-      , **BOOST_PARAMETER_MATCH(dfs_params, (A0)(A1)…(A4), p)**)
-    {
-       core::depth_first_search(p(a0,a1,a2,a3,a4));
-    }
-  }
+   The restrictions implemented in this section are not realistic
+   ones for use with the graph library, and further examples are
+   written under the assumption that no such restrictions are in
+   effect.
 
 Efficiency Issues
 =================
@@ -954,7 +911,18 @@ __ dangling_
 .. Hint:: 
 
    To avoid making needless copies, pass a *reference to the
-   default type* as the third argument to ``binding``.
+   default type* as the third argument to ``binding``, and store
+   the default value in a *named* variable.
+
+
+That said,
+
+.. Note::
+
+   The extra copy becomes a non-issue if we just use the
+   forwarding_ technique described earlier.
+
+.. _forwarding: `Forwarding to an Implementation Function`_
 
 Lazy Default Computation
 ------------------------
@@ -1001,42 +969,6 @@ Boost.Lambda_: [#bind]_
    Similarly, in ``color_map[param||f]``, ``f`` is only invoked if
    no ``color_map`` argument was supplied.
 
-Default Forwarding
-------------------
-
-Types that are expensive to construct yet cheap to copy aren't all
-that typical, and even copying the color map is more expensive than
-we might like.  It might be nice to avoid both needless
-construction *and* needless copying of the default color map.  The
-simplest way to achieve that is to avoid naming it altogether, at
-least not in ``core::depth_first_search``.  Instead, we'll
-introduce another function template to implement the actual
-algorithm:
-
-.. parsed-literal::
-
-  namespace graphs { namespace core
-  {
-    template <class G, class V, class S, class I, class C>
-    void **dfs_impl**\ (G& g, V& v, S& s, I& i, C& c)
-    {
-        *…actual algorithm implementation…*
-    }
-  }}
-
-Then, in ``core::depth_first_search``, we'll simply forward the
-result of indexing ``args`` to ``core::dfs_impl``::
-
-  core::dfs_impl( 
-      g,v,s,i
-    , args[
-        color_map
-        || boost::lambda::construct<default_color_map>(num_vertices(g),i)
-      ]);
-
-In real code, after going to the trouble to write ``dfs_impl``,
-we'd probably just forward all the arguments.
-
 Dispatching Based on the Presence of a Default
 ----------------------------------------------
 
@@ -1067,9 +999,9 @@ supplied.  By using `tag dispatching`_ on the presence of a
   #include <boost/type_traits/is_same.hpp>
   #include <boost/mpl/bool.hpp>
 
-  namespace graphs { namespace core {
-  
-    template <class ArgumentPack>
+  namespace graphs 
+  { 
+      template <class ArgumentPack>
     void dfs_dispatch(ArgumentPack& args, **mpl::true_**)
     {
         *…use the color map computed in the previous example…*
@@ -1081,16 +1013,24 @@ supplied.  By using `tag dispatching`_ on the presence of a
         *…use args[color]…*
     }
     
-    template <class ArgumentPack>
-    void depth_first_search(ArgumentPack& args)
+    BOOST_PARAMETER_FUNCTION(
+        (void), 
+        depth_first_search, 
+
+        tag,
+        (required (graph,*) )
+        (optional (visitor,*) (root_vertex,*) 
+                  (index_map,*) (out(color_map),*) )
+    )
     {
         typedef typename binding<args,tag::color>::type color\_;
-        core::dfs_dispatch(args, **boost::is_same<color\_,void>()**\ );
+        dfs_dispatch(
+          args, **boost::is_same<color\_,parameter::void_>()**\ );
     }
-  }}
+  }
 
 We've used the fact that the default for ``binding``\ 's third
-argument is ``void``: because specializations of ``is_same`` are
+argument is ``parameter::void``: because specializations of ``is_same`` are
 ``bool``-valued MPL |Integral Constant|_\ s derived either
 from ``mpl::true_`` or ``mpl::false_``, the appropriate
 ``dfs_dispatch`` implementation will be selected.
@@ -1115,8 +1055,8 @@ No SFINAE Support
 
 Some older compilers don't support SFINAE.  If your compiler meets
 that criterion, then Boost headers will ``#define`` the preprocessor
-symbol ``BOOST_NO_SFINAE``, and uses of ``parameters<…>::match`` and
-|BOOST_PARAMETER_MATCH| will be harmless, but will have no effect.
+symbol ``BOOST_NO_SFINAE``, and parameter-enabled functions won't be
+removed from the overload set based on their signatures.
 
 No Support for |result_of|_
 ===========================
@@ -1136,33 +1076,35 @@ function as a default generator on those compilers, you'll need to
 wrap it in a class that provides ``result_type`` as a ``typedef``
 and invokes the function via its ``operator()``.
 
-Can't Declare |ParameterSpec| via ``typedef``
-=============================================
+.. 
+  Can't Declare |ParameterSpec| via ``typedef``
+  =============================================
 
-In principle you can declare a |ParameterSpec| as a ``typedef``
-for a specialization of ``parameters<…>``, but Microsoft Visual C++
-6.x has been seen to choke on that usage.  The workaround is to use
-inheritance and declare your |ParameterSpec| as a class:
+  In principle you can declare a |ParameterSpec| as a ``typedef``
+  for a specialization of ``parameters<…>``, but Microsoft Visual C++
+  6.x has been seen to choke on that usage.  The workaround is to use
+  inheritance and declare your |ParameterSpec| as a class:
 
-.. parsed-literal::
+  .. parsed-literal::
 
-     **struct dfs_parameters
-       :** parameter::parameters<
-           tag::graph, tag::visitor, tag::root_vertex
-         , tag::index_map, tag::color_map
-     > **{};**
+       **struct dfs_parameters
+         :** parameter::parameters<
+             tag::graph, tag::visitor, tag::root_vertex
+           , tag::index_map, tag::color_map
+       > **{};**
 
-Default Arguments Unsupported on Nested Templates
-=================================================
 
-As of this writing, Borland compilers don't support the use of
-default template arguments on member class templates.  As a result,
-you have to supply ``BOOST_PARAMETER_MAX_ARITY`` arguments to every
-use of ``parameters<…>::match``.  Since the actual defaults used
-are unspecified, the workaround is to use
-|BOOST_PARAMETER_MATCH|_ to declare default arguments for SFINAE.
+  Default Arguments Unsupported on Nested Templates
+  =================================================
 
-.. |BOOST_PARAMETER_MATCH| replace:: ``BOOST_PARAMETER_MATCH``
+  As of this writing, Borland compilers don't support the use of
+  default template arguments on member class templates.  As a result,
+  you have to supply ``BOOST_PARAMETER_MAX_ARITY`` arguments to every
+  use of ``parameters<…>::match``.  Since the actual defaults used
+  are unspecified, the workaround is to use
+  |BOOST_PARAMETER_MATCH|_ to declare default arguments for SFINAE.
+
+  .. |BOOST_PARAMETER_MATCH| replace:: ``BOOST_PARAMETER_MATCH``
 
 Compiler Can't See References In Unnamed Namespace
 ==================================================
@@ -1254,17 +1196,24 @@ __ http://www.boost.org/regression/release/user/lambda.html
         void foo() { ... }
         ...
       }
-      using foo_overloads::foo;  
+      using foo_overloads::foo;
+
+    This technique for avoiding unintentional argument-dependent
+    lookup is due to Herb Sutter.
 
 
-.. [#sfinae] If type substitution during the instantiation of a
-   function template results in an invalid type, no compilation
-   error is emitted; instead the overload is removed from the
-   overload set. By producing an invalid type in the function
-   signature depending on the result of some condition, whether or
-   not an overload is considered during overload resolution can be
-   controlled.  The technique is formalized in the |enable_if|_
-   utility.  See
+.. [#sfinae] **SFINAE**: **S**\ ubstitution **F**\ ailure **I**\ s
+   **N**\ ot **A**\ n **E** rror.  If type substitution during the
+   instantiation of a function template results in an invalid type,
+   no compilation error is emitted; instead the overload is removed
+   from the overload set. By producing an invalid type in the
+   function signature depending on the result of some condition,
+   we can decide whether or not an overload is considered during overload
+   resolution.  The technique is formalized in
+   the |enable_if|_ utility.  Most recent compilers support SFINAE;
+   on compilers that don't support it, the Boost config library
+   will ``#define`` the symbol ``BOOST_NO_SFINAE``.
+   See
    http://www.semantics.org/once_weakly/w02_SFINAE.pdf for more
    information on SFINAE.
 

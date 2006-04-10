@@ -13,7 +13,7 @@ for local b in $(bases)
     html $(b) : $(b).rst : 
       
       # 
-      <docutils-html>"-gdt --traceback --trim-footnote-reference-space --footnote-references=superscript "$(stylesheet)
+      <docutils-html>"-gdt --link-stylesheet --traceback --trim-footnote-reference-space --footnote-references=superscript "$(stylesheet)
   ;
 }
 
