@@ -9,8 +9,8 @@
 
 __ ../../../../index.htm
 
-:Authors:       David Abrahams, Daniel Wallin
-:Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
+:Authors:       Daniel Wallin
+:Contact:       dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
 :date:          $Date$
 
@@ -67,6 +67,8 @@ For example, the **arity range** of ``mpl::vector2<x,y>`` is 2, the **arity rang
 class template ``init``
 -----------------------
 
+Defines a named parameter enabled constructor.
+
 .. parsed-literal::
 
     template <class Keywords, class Signature>
@@ -76,14 +78,55 @@ class template ``init``
         void def(Class& class\_);
     };
 
-:Requires: ``Keywords`` is an MPL sequence of |KeywordsSpec|'s. ``Signature`` is
-    an MPL sequence with the types of the keyword arguments, in the order dictated
-    by ``Keywords``.
+``init`` requirements 
+~~~~~~~~~~~~~~~~~~~~~
+
+* ``Keywords`` is a model of |KeywordsSpec|. 
+* ``Signature`` is an MPL sequence with the types of the keyword arguments, 
+  in the order dictated by ``Keywords``.
+* ``Class`` must support these expressions:
+
+  ======================================================= ==================== ==============================================
+  Expression                                              Return type          Requirements
+  ======================================================= ==================== ==============================================
+  ``Class(a0, ..., aN)``                                  -                    ``a0``..\ ``aN`` are tagged arguments.
+  ======================================================= ==================== ==============================================
+
+  For every ``N`` in ``[U,V]``, where ``[U,V]`` is the **arity range** of ``Keywords``.
+
+Example
+~~~~~~~
+
+.. parsed-literal::
+
+    struct base { /\* ... \*/ };
+
+    class X : base
+    {
+    public:
+        BOOST_PARAMETER_CONSTRUCTOR(X, (base),
+            (required (x, \*))
+            (optional (y, \*))
+        )
+    };
+
+    BOOST_PYTHON_MODULE(..)
+    {
+        class_<X>("X")
+            .def(
+                init<
+                  , mpl::vector2<tag::x, tag::y\*>
+                  , mpl::vector2<int, int>
+                >()
+            );
+    }
 
 ------------------------------------------------------------------------------
 
 class template ``call``
 -----------------------
+
+Defines a ``__call__`` operator, mapped to ``operator()`` in C++.
 
 .. parsed-literal::
 
@@ -157,6 +200,8 @@ Example
 
 class template ``function``
 ---------------------------
+
+Defines a named parameter enabled member function.
 
 .. parsed-literal::
 
@@ -233,5 +278,32 @@ of [2,2], so we only need one forwarding overload.
 function template ``def``
 -------------------------
 
-...
+Defines a named parameter enabled free function in the current Python scope.
+
+.. parsed-literal::
+
+    template <class Fwd, class Keywords, class Signature>
+    void def(char const* name);
+
+``def`` requirements 
+~~~~~~~~~~~~~~~~~~~~
+
+* ``Keywords`` is a model of |KeywordsSpec|. 
+* ``Signature`` is an MPL sequence with the types of the keyword arguments, 
+  in the order dictated by ``Keywords``, and the return type prepended.
+* An instance of ``Fwd`` must support this expression:
+
+  ======================================================= ==================== ==============================================
+  Expression                                              Return type          Requirements
+  ======================================================= ==================== ==============================================
+  ``fwd(boost::type<R>(), a0, ..., aN)``                  Convertible to ``R`` ``a0``..\ ``aN`` are tagged arguments.
+  ======================================================= ==================== ==============================================
+
+  For every ``N`` in ``[U,V]``, where ``[U,V]`` is the **arity range** of ``Keywords``.
+
+
+Portability
+-----------
+
+The Boost.Parameter Python binding library requires *partial template specialization*.
 
