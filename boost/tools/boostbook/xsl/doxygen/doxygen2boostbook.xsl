@@ -448,11 +448,20 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
     <xsl:param name="with-namespace-refs"/>
     <xsl:param name="in-file"/>
 
-    <xsl:apply-templates select="key('compounds-by-id', @refid)">
-      <xsl:with-param name="with-namespace-refs" 
-        select="$with-namespace-refs"/>
-      <xsl:with-param name="in-file" select="$in-file"/>
-    </xsl:apply-templates>
+    <xsl:variable name="name">
+      <xsl:call-template name="strip-qualifiers">
+        <xsl:with-param name="name" select="."/>
+      </xsl:call-template>
+    </xsl:variable>
+
+    <!-- Only process this if it is indeed global -->
+    <xsl:if test=".=$name">
+      <xsl:apply-templates select="key('compounds-by-id', @refid)">
+        <xsl:with-param name="with-namespace-refs" 
+          select="$with-namespace-refs"/>
+        <xsl:with-param name="in-file" select="$in-file"/>
+      </xsl:apply-templates>
+    </xsl:if>
   </xsl:template>
 
   <xsl:template match="innerclass">
@@ -795,7 +804,7 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
         <xsl:value-of select="normalize-space(declname/text())"/>
       </xsl:variable>
 
-      <xsl:apply-templates select="../detaileddescription/para/parameterlist[attribute::kind='param']/parameterdescription"
+      <xsl:apply-templates select="../detaileddescription//parameterlist[attribute::kind='param']/*"
         mode="parameter.description">
         <xsl:with-param name="name">
           <xsl:value-of select="$name"/>
@@ -804,10 +813,22 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
     </parameter>
   </xsl:template>
 
+  <xsl:template match="parameteritem" mode="parameter.description">
+    <!-- The parameter name we are looking for -->
+    <xsl:param name="name"/>
+    
+    <xsl:if test="string(parameternamelist/parametername) = $name">
+      <description>
+        <xsl:apply-templates select="parameterdescription/para" mode="passthrough"/>
+      </description>
+    </xsl:if>
+  </xsl:template>
+
+  <!-- For older versions of Doxygen, which didn't use parameteritem -->
   <xsl:template match="parameterdescription" mode="parameter.description">
     <!-- The parameter name we are looking for -->
     <xsl:param name="name"/>
-
+    
     <!-- The parametername node associated with this description -->
     <xsl:variable name="name-node" select="preceding-sibling::*[1]"/>
 
@@ -1148,12 +1169,12 @@ Cannot handle memberdef element with kind=<xsl:value-of select="@kind"/>
     <xsl:if test="@kind='exception'">
       <simpara>
         <xsl:choose>
-          <xsl:when test="normalize-space(parametername/text())='nothrow'">
+          <xsl:when test="normalize-space(.//parametername/text())='nothrow'">
             <xsl:text>Will not throw.</xsl:text>
           </xsl:when>
           <xsl:otherwise>
             <classname>
-              <xsl:value-of select="parametername/text()"/>
+              <xsl:value-of select=".//parametername/text()"/>
             </classname>
             <xsl:text> </xsl:text>
             <xsl:apply-templates 
