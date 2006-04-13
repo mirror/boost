@@ -21,6 +21,7 @@
 #include <boost/limits.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/type_traits/is_pointer.hpp>
+#include <boost/call_traits.hpp>
 
 #ifdef BOOST_NO_STRINGSTREAM
 #include <strstream>
@@ -209,19 +210,25 @@ namespace boost
         {
             typedef const T * type;
         };
+
+        template<typename Target, typename Source>
+        Target lexical_cast(
+            BOOST_DEDUCED_TYPENAME boost::call_traits<Source>::value_type arg)
+        {
+            detail::lexical_stream<Target, Source> interpreter;
+            Target result;
+
+            if(!(interpreter << arg && interpreter >> result))
+                throw_exception(bad_lexical_cast(typeid(Source), typeid(Target)));
+            return result;
+        }
     }
 
     template<typename Target, typename Source>
-    Target lexical_cast(const Source &arg)
+    inline Target lexical_cast(const Source &arg)
     {
         typedef typename detail::array_to_pointer_decay<Source>::type NewSource;
-
-        detail::lexical_stream<Target, NewSource> interpreter;
-        Target result;
-
-        if(!(interpreter << arg && interpreter >> result))
-            throw_exception(bad_lexical_cast(typeid(NewSource), typeid(Target)));
-        return result;
+        return detail::lexical_cast<Target, NewSource>(arg);
     }
 
     #else
