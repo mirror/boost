@@ -9,7 +9,6 @@
 #include <boost/parameter/aux_/unwrap_cv_reference.hpp>
 #include <boost/parameter/aux_/tag.hpp>
 #include <boost/parameter/aux_/default.hpp>
-#include <boost/noncopyable.hpp>
 
 namespace boost { namespace parameter {
 
