@@ -20,7 +20,7 @@
 
 // last known and checked version is 0x600 (Builder X preview)
 // Or 0x582 (Borland C++ Builder 2006 Update 1):
-#if (__BORLANDC__ > 0x581) && (__BORLANDC__ != 0x600)
+#if (__BORLANDC__ > 0x582) && (__BORLANDC__ != 0x600)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  else
@@ -67,8 +67,8 @@
 #endif
 #endif
 
-// Borland C++ Builder 2006 Update 1 and below:
-#if (__BORLANDC__ <= 0x581)
+// Borland C++ Builder 2006 Update 2 and below:
+#if (__BORLANDC__ <= 0x582)
 #  define BOOST_NO_SFINAE
 #  define BOOST_NO_INTEGRAL_INT64_T
 #  define BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
