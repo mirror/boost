@@ -60,7 +60,7 @@
 
     <!-- Determine the set of ancestor namespaces -->
     <xsl:variable name="ancestors" 
-      select="ancestor::namespace|ancestor::class"/>
+      select="ancestor::namespace|ancestor::class|ancestor::struct|ancestor::union"/>
 
     <xsl:choose>
       <xsl:when test="$depth &gt; count($ancestors)">
