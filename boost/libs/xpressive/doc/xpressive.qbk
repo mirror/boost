@@ -49,7 +49,7 @@
 [def _syntax_option_type_    [^[enumref boost::xpressive::regex_constants::syntax_option_type syntax_option_type]]]
 [def _match_flag_type_       [^[enumref boost::xpressive::regex_constants::match_flag_type match_flag_type]]]
 [def _error_type_            [^[enumref boost::xpressive::regex_constants::error_type error_type]]]
-[def _regex_compile_         [^[memberref boost::xpressive::compile basic_regex::compile()]]]
+[def _regex_compile_         [^[memberref boost::xpressive::basic_regex::compile basic_regex<>::compile()]]]
 
 [include preface.qbk]
 
