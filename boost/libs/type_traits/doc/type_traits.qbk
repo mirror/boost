@@ -1251,7 +1251,7 @@ __header ` #include <boost/type_traits/extent.hpp>` or ` #include <boost/type_tr
 
 __examples
 
-[:`extent<int[1]>` inherits from `__integral_constant<std::size_t, 0>`.]
+[:`extent<int[1]>` inherits from `__integral_constant<std::size_t, 1>`.]
 
 [:`extent<double[2][3][4], 1>::type` is the type `__integral_constant<std::size_t, 3>`.]
 
@@ -2852,4 +2852,5 @@ should be directed to boost@lists.boost.org
 www.boost.org/more/mailing_lists.htm#main] for subscription details).
 
 [endsect]
+
 
