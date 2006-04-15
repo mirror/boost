@@ -9,6 +9,7 @@
 # include <boost/parameter/binding.hpp>
 # include <boost/parameter/match.hpp>
 
+# include <boost/parameter/aux_/parenthesized_type.hpp>
 # include <boost/parameter/aux_/preprocessor/flatten.hpp>
 
 # include <boost/preprocessor/repetition/repeat_from_to.hpp>
@@ -23,119 +24,43 @@
 # include <boost/preprocessor/tuple/elem.hpp> 
 # include <boost/preprocessor/seq/fold_left.hpp>
 # include <boost/preprocessor/seq/size.hpp>
+# include <boost/preprocessor/seq/enum.hpp>
 
 # include <boost/mpl/always.hpp>
 # include <boost/mpl/apply_wrap.hpp>
 
 namespace boost { namespace parameter { namespace aux {
 
-# if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+#  ifndef BOOST_NO_SFINAE
 
-template<typename ID>
-struct msvc_extract_type
-{
-    template<bool>
-    struct id2type_impl;
-
-    typedef id2type_impl<true> id2type;
-};
-
-template<typename T, typename ID>
-struct msvc_register_type : msvc_extract_type<ID>
-{
-    template<>
-    struct id2type_impl<true>  //VC7.0 specific bugfeature
-    {
-        typedef T type;
-    };
-};
-
-template <class T>
-msvc_register_type<T, void(*)(T)> unwrap_type_fn(void(*)(T));
-
-template <class T>
-struct unwrap_type
-{
-    BOOST_STATIC_CONSTANT(unsigned,
-        dummy = sizeof(unwrap_type_fn((T)0))
-    );
-
-    typedef typename msvc_extract_type<T>::id2type::type type;
-};
-
-#  define BOOST_PARAMETER_FUNCTION_WRAP_TYPE(x) void(*) x
-
-# elif BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-
-template<typename ID>
-struct msvc_extract_type
-{
-    struct id2type;
-};
-
-template<typename T, typename ID>
-struct msvc_register_type : msvc_extract_type<ID>
-{
-    typedef msvc_extract_type<ID> base_type;
-    struct base_type::id2type // This uses nice VC6.5 and VC7.1 bugfeature
-    {
-        typedef T type;
-    };
-};
-
-template <class T>
-msvc_register_type<T, void(*)(T)> unwrap_type_fn(void(*)(T));
-
-template <class T>
-struct unwrap_type
-{
-    BOOST_STATIC_CONSTANT(unsigned,
-        dummy = sizeof(unwrap_type_fn((T)0))
-    );
-
-    typedef typename msvc_extract_type<T>::id2type::type type;
-};
-
-#  define BOOST_PARAMETER_FUNCTION_WRAP_TYPE(x) void(*) x
-
-# else
-
-template <class T, class Dummy>
+// Given Match, which is "void x" where x is an argument matching
+// criterion, extract a corresponding MPL predicate.
+template <class Match>
 struct unwrap_predicate;
 
-// Wildcard case
+// Match anything
 template <>
-struct unwrap_predicate<void*,int>
+struct unwrap_predicate<void*>
 {
     typedef mpl::always<mpl::true_> type;
 };
 
-// Convertible to
-template <class T>
-struct unwrap_predicate<void* (T),int>
+// A matching predicate is explicitly specified
+template <class Predicate>
+struct unwrap_predicate<void *(Predicate)>
 {
-    typedef T type;
+    typedef Predicate type;
 };
 
-template <class T>
-struct unwrap_predicate<void (T),int>
+// A type to which the argument is supposed to be convertible is
+// specified
+template <class Target>
+struct unwrap_predicate<void (Target)>
 {
     typedef is_convertible<mpl::_, T> type;
 };
 
-template <class T>
-struct unwrap_type;
-
-template <class T>
-struct unwrap_type<void (T)>
-{
-    typedef T type;
-};
-
-#  define BOOST_PARAMETER_FUNCTION_WRAP_TYPE(x) void x
-
-# endif
-
+// Recast the ParameterSpec's nested match metafunction as a free metafunction
 template <
     class Parameters
   , BOOST_PP_ENUM_BINARY_PARAMS(
@@ -147,6 +72,7 @@ struct match
         BOOST_PP_ENUM_PARAMS(BOOST_PARAMETER_MAX_ARITY, A)
     >
 {};
+# endif 
 
 template <
     class Parameters
@@ -156,9 +82,14 @@ template <
 >
 struct argument_pack
 {
-    typedef typename Parameters::template argument_pack<
-        BOOST_PP_ENUM_PARAMS(BOOST_PARAMETER_MAX_ARITY, A)
+    typedef typename mpl::apply_wrap1<
+        BOOST_PARAMETER_build_arg_list(
+            BOOST_PARAMETER_MAX_ARITY, aux::make_partial_arg_list, typename Parameters::parameter_spec, A
+          , aux::tag_keyword_arg
+        )
+      , typename Parameters::unnamed_list
     >::type type;
+    
 };
 
 }}} // namespace boost::parameter::aux
@@ -233,10 +164,16 @@ struct argument_pack
 /**/
 
 # define BOOST_PARAMETER_FUNCTION_PARAMETERS_NAME(base) \
-    BOOST_PP_CAT(BOOST_PP_CAT(base, _parameters), __LINE__)
+    BOOST_PP_CAT(boost_param_parameters_, BOOST_PP_CAT(__LINE__, base))
 
+// Produce a name for a result type metafunction for the function
+// named base
 # define BOOST_PARAMETER_FUNCTION_RESULT_NAME(base) \
-    BOOST_PP_CAT(BOOST_PP_CAT(base, _result), __LINE__)
+    BOOST_PP_CAT(boost_param_result_, BOOST_PP_CAT(__LINE__,base))
+
+// Can't do boost_param_impl_ ## basee because base might start with an underscore
+# define BOOST_PARAMETER_IMPL(base) \
+    BOOST_PP_CAT(boost_param_impl,base)
 
 # define BOOST_PARAMETER_FUNCTION_FWD_FUNCTION00(z, n, r, data, elem) \
     BOOST_PP_IF( \
@@ -244,9 +181,9 @@ struct argument_pack
       , BOOST_PARAMETER_FUNCTION_FWD_FUNCTION_TEMPLATE_Z, BOOST_PP_TUPLE_EAT(2) \
     )(z,n) \
     inline \
-    BOOST_PP_EXPR_IF(n, typename) boost::mpl::apply_wrap1< \
-        BOOST_PARAMETER_FUNCTION_RESULT_NAME(BOOST_PP_TUPLE_ELEM(7,3,data)) \
-      , BOOST_PP_EXPR_IF(n, typename) \
+    BOOST_PP_EXPR_IF(n, typename) \
+        BOOST_PARAMETER_FUNCTION_RESULT_NAME(BOOST_PP_TUPLE_ELEM(7,3,data))<   \
+        BOOST_PP_EXPR_IF(n, typename) \
         boost::parameter::aux::argument_pack< \
             BOOST_PARAMETER_FUNCTION_PARAMETERS_NAME(BOOST_PP_TUPLE_ELEM(7,3,data)) \
             BOOST_PP_COMMA_IF(n) \
@@ -274,7 +211,7 @@ struct argument_pack
         ) \
     ) BOOST_PP_EXPR_IF(BOOST_PP_TUPLE_ELEM(7,4,data), const) \
     { \
-        return BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(7,3,data), _impl)( \
+        return BOOST_PARAMETER_IMPL(BOOST_PP_TUPLE_ELEM(7,3,data))( \
             BOOST_PARAMETER_FUNCTION_PARAMETERS_NAME(BOOST_PP_TUPLE_ELEM(7,3,data))()( \
                 BOOST_PP_ENUM_PARAMS_Z(z, n, a) \
             ) \
@@ -338,7 +275,7 @@ struct argument_pack
 /**/
 
 // Builds boost::parameter::parameters<> specialization
-# if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+# if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 #  define BOOST_PARAMETER_FUNCTION_PARAMETERS_M(r,tag_namespace,i,elem) \
     BOOST_PP_COMMA_IF(i) \
     boost::parameter::BOOST_PARAMETER_FN_ARG_QUALIFIER(elem)< \
@@ -347,7 +284,6 @@ struct argument_pack
         ) \
       , typename boost::parameter::aux::unwrap_predicate< \
             void BOOST_PARAMETER_FN_ARG_PRED(elem) \
-          , BoostParameterDummyTemplateArg \
         >::type \
     >
 # else
@@ -362,93 +298,92 @@ struct argument_pack
 # endif
 /**/
 
-# define BOOST_PARAMETER_FUNCTION_PARAMETERS(tag_namespace, args) \
-    template <class BoostParameterDummyTemplateArg = int> \
-    struct BOOST_PP_CAT(boost_parameter_parameters_type, __LINE__) \
-      : boost::parameter::parameters< \
-            BOOST_PP_SEQ_FOR_EACH_I( \
-                BOOST_PARAMETER_FUNCTION_PARAMETERS_M, tag_namespace, args \
-            ) \
-        > \
-    {}; \
-\
-    typedef BOOST_PP_CAT(boost_parameter_parameters_type, __LINE__)<>
-/**/
+# define BOOST_PARAMETER_FUNCTION_PARAMETERS(tag_namespace, base, args)             \
+    template <class BoostParameterDummy>                                      \
+    struct BOOST_PP_CAT(BOOST_PP_CAT(boost_param_params_, __LINE__), base)          \
+      : boost::parameter::parameters<                                               \
+            BOOST_PP_SEQ_FOR_EACH_I(                                                \
+                BOOST_PARAMETER_FUNCTION_PARAMETERS_M, tag_namespace, args          \
+            )                                                                       \
+        >                                                                           \
+    {};                                                                             \
+                                                                                    \
+    typedef BOOST_PP_CAT(BOOST_PP_CAT(boost_param_params_, __LINE__), base)<int>
 
 // Defines result type metafunction
 # define BOOST_PARAMETER_FUNCTION_RESULT_ARG(z, _, i, x) \
     BOOST_PP_COMMA_IF(i) class BOOST_PP_TUPLE_ELEM(3,1,x)
 /**/
 
-# define BOOST_PARAMETER_FUNCTION_RESULT(result, name, args) \
-    struct BOOST_PARAMETER_FUNCTION_RESULT_NAME(name) \
-    { \
-        template <class Args> \
-        struct apply \
-        { \
-            template <class K, class Default = boost::parameter::void_> \
-            struct binding \
-              : boost::parameter::binding<Args, K, Default> \
-            {}; \
-\
-            typedef boost::parameter::aux::unwrap_type< \
-                BOOST_PARAMETER_FUNCTION_WRAP_TYPE(result) \
-            >::type type; \
-        }; \
+# define BOOST_PARAMETER_FUNCTION_RESULT_(result, name, args)                                   \
+    template <class Args>                                                                       \
+    struct BOOST_PARAMETER_FUNCTION_RESULT_NAME(name)                                           \
+    {                                                                                           \
+        typedef typename BOOST_PARAMETER_PARENTHESIZED_TYPE(result) type;                       \
     };
-/**/
+
+# if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+
+#  define BOOST_PARAMETER_FUNCTION_RESULT(result, name, args)  \
+    BOOST_PARAMETER_FUNCTION_RESULT_(result, name, args)        \
+    template <>                                                 \
+    struct BOOST_PARAMETER_FUNCTION_RESULT_NAME(name)<int>      \
+    { typedef int type; };
+
+# else
+
+#  define BOOST_PARAMETER_FUNCTION_RESULT(result, name, args)  \
+    BOOST_PARAMETER_FUNCTION_RESULT_(result, name, args)
+
+# endif
 
 // Defines implementation function
-# define BOOST_PARAMETER_FUNCTION_IMPL_HEAD(name) \
-    template <class Args> \
-    typename boost::mpl::apply_wrap1< \
-        BOOST_PARAMETER_FUNCTION_RESULT_NAME(name), Args \
-    >::type BOOST_PP_CAT(name, _impl)(Args const& args)
-/**/
+# define BOOST_PARAMETER_FUNCTION_IMPL_HEAD(name)           \
+    template <class Args>                                   \
+    typename BOOST_PARAMETER_FUNCTION_RESULT_NAME(name)<    \
+       Args                                                 \
+    >::type BOOST_PARAMETER_IMPL(name)(Args const& args)
 
 # define BOOST_PARAMETER_FUNCTION_IMPL_FWD(name) \
     BOOST_PARAMETER_FUNCTION_IMPL_HEAD(name);
 /**/
 
+# define BOOST_PARAMETER_FUNCTION_HEAD(result, name, tag_namespace, args)   \
+      BOOST_PARAMETER_FUNCTION_RESULT(result, name, args)                   \
+                                                                            \
+          BOOST_PARAMETER_FUNCTION_PARAMETERS(tag_namespace, name, args)    \
+          BOOST_PARAMETER_FUNCTION_PARAMETERS_NAME(name);                   \
+                                                                            
 // Defines a Boost.Parameter enabled function.
-# define BOOST_PARAMETER_FUNCTION_AUX(result, name, tag_namespace, args) \
-    namespace \
-    { \
-      BOOST_PARAMETER_FUNCTION_RESULT(result, name, args) \
-\
-      BOOST_PARAMETER_FUNCTION_PARAMETERS(tag_namespace, args) \
-          BOOST_PARAMETER_FUNCTION_PARAMETERS_NAME(name); \
-    } \
-\
-    BOOST_PARAMETER_FUNCTION_IMPL_FWD(name) \
-\
-    BOOST_PARAMETER_FUNCTION_FWD_FUNCTIONS( \
-        result, name, args, 0 \
-      , BOOST_PARAMETER_FUNCTION_FWD_COMBINATIONS(args) \
-    ) \
-\
+# define BOOST_PARAMETER_FUNCTION_AUX(result, name, tag_namespace, args)    \
+    BOOST_PARAMETER_FUNCTION_HEAD(result, name, tag_namespace, args)        \
+                                                                            \
+    BOOST_PARAMETER_FUNCTION_IMPL_FWD(name)                                 \
+                                                                            \
+    BOOST_PARAMETER_FUNCTION_FWD_FUNCTIONS(                                 \
+        result, name, args, 0                                               \
+      , BOOST_PARAMETER_FUNCTION_FWD_COMBINATIONS(args)                     \
+    )                                                                       \
+                                                                            \
     BOOST_PARAMETER_FUNCTION_IMPL_HEAD(name)
 
-# define BOOST_PARAMETER_FUNCTION(result, name, tag_namespace, args) \
-    BOOST_PARAMETER_FUNCTION_AUX( \
-        result, name, tag_namespace \
-      , BOOST_PARAMETER_FLATTEN(2, 2, args) \
-    )
+# define BOOST_PARAMETER_FUNCTION(result, name, tag_namespace, args)    \
+    BOOST_PARAMETER_FUNCTION_AUX(                                       \
+        result, name, tag_namespace                                     \
+      , BOOST_PARAMETER_FLATTEN(2, 2, args)                             \
+    )                                                                   \
 /**/
 
 // Defines a Boost.Parameter enabled member function.
 # define BOOST_PARAMETER_MEMBER_FUNCTION_AUX(result, name, tag_namespace, args, const_) \
-    BOOST_PARAMETER_FUNCTION_RESULT(result, name, args) \
-\
-    BOOST_PARAMETER_FUNCTION_PARAMETERS(tag_namespace, args) \
-        BOOST_PARAMETER_FUNCTION_PARAMETERS_NAME(name); \
-\
-    BOOST_PARAMETER_FUNCTION_FWD_FUNCTIONS( \
-        result, name, args, const_ \
-      , BOOST_PARAMETER_FUNCTION_FWD_COMBINATIONS(args) \
-    ) \
-\
-    BOOST_PARAMETER_FUNCTION_IMPL_HEAD(name) BOOST_PP_EXPR_IF(const_, const)
+    BOOST_PARAMETER_FUNCTION_HEAD(result, name, tag_namespace, args)                    \
+                                                                                        \
+    BOOST_PARAMETER_FUNCTION_FWD_FUNCTIONS(                                             \
+        result, name, args, const_                                                      \
+      , BOOST_PARAMETER_FUNCTION_FWD_COMBINATIONS(args)                                 \
+    )                                                                                   \
+                                                                                        \
+    BOOST_PARAMETER_FUNCTION_IMPL_HEAD(name) BOOST_PP_EXPR_IF(const_, const)            \
 /**/
 
 # define BOOST_PARAMETER_MEMBER_FUNCTION(result, name, tag_namespace, args) \
@@ -472,6 +407,18 @@ struct argument_pack
 # define BOOST_PARAMETER_FUNCTION_ARGUMENT(r, _, i, elem) \
     BOOST_PP_COMMA_IF(i) elem& BOOST_PP_CAT(a, i)
 /**/
+
+# if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+
+// Older MSVC can't do what's necessary to handle commas in base names; just
+// use a typedef instead if you have a base name that contains commas.
+#  define BOOST_PARAMETER_PARENTHESIZED_BASE(x) BOOST_PP_SEQ_HEAD(x)
+
+# else
+
+#  define BOOST_PARAMETER_PARENTHESIZED_BASE(x) BOOST_PARAMETER_PARENTHESIZED_TYPE(x)
+
+# endif
 
 # define BOOST_PARAMETER_FUNCTION_FWD_CONSTRUCTOR00(z, n, r, data, elem) \
     BOOST_PP_IF( \
@@ -497,9 +444,7 @@ struct argument_pack
           , n \
         ) \
     ) \
-      : boost::parameter::aux::unwrap_type< \
-            BOOST_PARAMETER_FUNCTION_WRAP_TYPE(BOOST_PP_TUPLE_ELEM(6,3,data)) \
-        >::type( \
+      : BOOST_PARAMETER_PARENTHESIZED_BASE(BOOST_PP_TUPLE_ELEM(6,3,data)) ( \
             BOOST_PP_CAT(constructor_parameters, __LINE__)()( \
                 BOOST_PP_ENUM_PARAMS_Z(z, n, a) \
             ) \
@@ -565,7 +510,7 @@ struct argument_pack
 /**/
 
 # define BOOST_PARAMETER_CONSTRUCTOR_AUX(class_, base, tag_namespace, args) \
-    BOOST_PARAMETER_FUNCTION_PARAMETERS(tag_namespace, args) \
+    BOOST_PARAMETER_FUNCTION_PARAMETERS(tag_namespace, ctor, args)          \
         BOOST_PP_CAT(constructor_parameters, __LINE__); \
 \
     BOOST_PARAMETER_FUNCTION_FWD_CONSTRUCTORS( \
@@ -581,7 +526,7 @@ struct argument_pack
     )
 /**/
 
-# if 1 //ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+# ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 #  define BOOST_PARAMETER_FUNCTION_FWD_COMBINATION(r, _, i, elem) \
     (BOOST_PP_IF( \
         BOOST_PARAMETER_FUNCTION_IS_KEYWORD_QUALIFIER( \
@@ -592,7 +537,13 @@ struct argument_pack
     ))
 # else
 #  define BOOST_PARAMETER_FUNCTION_FWD_COMBINATION(r, _, i, elem) \
-    ((ParameterArgumentType ## i))
+    (BOOST_PP_IF( \
+        BOOST_PARAMETER_FUNCTION_IS_KEYWORD_QUALIFIER( \
+            BOOST_PP_TUPLE_ELEM(3,1,elem) \
+        ) \
+      , (ParameterArgumentType ## i) \
+      , (const ParameterArgumentType ## i) \
+    ))
 # endif
 
 # define BOOST_PARAMETER_FUNCTION_FWD_COMBINATIONS(args) \

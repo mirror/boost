@@ -221,5 +221,6 @@ int main()
     assert(sfinae("foo") == 1);
     assert(sfinae(1) == 0);
 #endif
+    return 0;
 }
 
