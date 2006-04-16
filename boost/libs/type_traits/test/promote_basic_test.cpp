@@ -51,16 +51,29 @@ int main()
     test_cv< long,          long          >();
     test_cv< unsigned long, unsigned long >();
 
-#if defined(BOOST_NO_CWCHAR) || !defined(WCHAR_MAX) || !defined(WCHAR_MIN)
-// Skip wchar_t promotion
-#elif WCHAR_MAX <= INT_MAX
+    // wchar_t
+
+#if !defined(BOOST_NO_CWCHAR) && defined(WCHAR_MAX) && defined(WCHAR_MIN)
+
+// Version prior to VC8 didn't allow WCHAR_MAX in #if expressions
+#if defined(BOOST_MSVC) && BOOST_MSVC < 1400
+#define BOOST_TT_AUX_WCHAR_MAX 0 // force test_cv< wchar_t, int >
+#else
+#define BOOST_TT_AUX_WCHAR_MAX WCHAR_MAX
+#endif
+
+#if BOOST_TT_AUX_WCHAR_MAX <= INT_MAX
     test_cv< wchar_t, int >();
-#elif WCHAR_MIN == 0 && WCHAR_MAX <= UINT_MAX
+#elif WCHAR_MIN == 0 && BOOST_TT_AUX_WCHAR_MAX <= UINT_MAX
     test_cv< wchar_t, unsigned int >();
-#elif WCHAR_MAX <= LONG_MAX
+#elif BOOST_TT_AUX_WCHAR_MAX <= LONG_MAX
     test_cv< wchar_t, long >();
 #else
     test_cv< wchar_t, unsigned long >();
+#endif
+
+#undef BOOST_TT_AUX_WCHAR_MAX
+
 #endif
 
 
