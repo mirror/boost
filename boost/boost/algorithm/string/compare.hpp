@@ -67,7 +67,7 @@ namespace boost {
                 #if defined(__BORLANDC__) && (__BORLANDC__ >= 0x560) && (__BORLANDC__ <= 0x564) && !defined(_USE_OLD_RW_STL)
                     return std::toupper(Arg1)==std::toupper(Arg2);
                 #else
-                    return std::toupper(Arg1,m_Loc)==std::toupper(Arg2,m_Loc);
+                    return std::toupper<T1>(Arg1,m_Loc)==std::toupper<T2>(Arg2,m_Loc);
                 #endif
             }
 
@@ -120,7 +120,7 @@ namespace boost {
                 #if defined(__BORLANDC__) && (__BORLANDC__ >= 0x560) && (__BORLANDC__ <= 0x564) && !defined(_USE_OLD_RW_STL)
                     return std::toupper(Arg1)<std::toupper(Arg2);
                 #else
-                    return std::toupper(Arg1,m_Loc)<std::toupper(Arg2,m_Loc);
+                    return std::toupper<T1>(Arg1,m_Loc)<std::toupper<T2>(Arg2,m_Loc);
                 #endif
             }
 
@@ -173,7 +173,7 @@ namespace boost {
                 #if defined(__BORLANDC__) && (__BORLANDC__ >= 0x560) && (__BORLANDC__ <= 0x564) && !defined(_USE_OLD_RW_STL)
                     return std::toupper(Arg1)<=std::toupper(Arg2);
                 #else
-                    return std::toupper(Arg1,m_Loc)<=std::toupper(Arg2,m_Loc);
+                    return std::toupper<T1>(Arg1,m_Loc)<=std::toupper<T2>(Arg2,m_Loc);
                 #endif
             }
 
