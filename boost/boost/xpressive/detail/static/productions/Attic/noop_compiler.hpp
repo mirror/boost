@@ -24,7 +24,7 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Op, typename State, typename Visitor>
         struct apply
         {
-            typedef typename as_matcher_type<typename proto::arg_type<Op>::type>::type matcher1;
+            typedef typename as_matcher<typename proto::arg_type<Op>::type>::type matcher1;
             typedef typename Visitor::BOOST_NESTED_TEMPLATE apply<matcher1>::type matcher2;
             typedef static_xpression<matcher2, State> type;
         };
@@ -34,7 +34,7 @@ namespace boost { namespace xpressive { namespace detail
         call(Op const &op, State const &state, Visitor &visitor)
         {
             typedef typename proto::arg_type<Op>::type arg_type;
-            return make_static_xpression(visitor.call(as_matcher_type<arg_type>::call(proto::arg(op))), state);
+            return make_static(visitor.call(as_matcher<arg_type>::call(proto::arg(op))), state);
         }
     };
 

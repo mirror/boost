@@ -41,7 +41,7 @@ namespace boost { namespace xpressive { namespace detail
         static static_xpression<lookahead_matcher<Op>, State>
         call(Op const &op, State const &state, Visitor &)
         {
-            return make_static_xpression(lookahead_matcher<Op>(op, !Positive), state);
+            return make_static(lookahead_matcher<Op>(op, !Positive), state);
         }
     };
 
@@ -62,12 +62,11 @@ namespace boost { namespace xpressive { namespace detail
         static static_xpression<lookbehind_matcher<Op>, State>
         call(Op const &op, State const &state, Visitor &)
         {
-            return make_static_xpression(lookbehind_matcher<Op>(op, !Positive), state);
+            std::size_t width = op.get_width().value();
+            return make_static(lookbehind_matcher<Op>(op, width, !Positive), state);
         }
     };
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // keeper_branch
     struct keeper_branch
     {
         typedef true_xpression state_type;
@@ -82,7 +81,7 @@ namespace boost { namespace xpressive { namespace detail
         static static_xpression<keeper_matcher<Op>, State>
         call(Op const &op, State const &state, Visitor &)
         {
-            return make_static_xpression(keeper_matcher<Op>(op), state);
+            return make_static(keeper_matcher<Op>(op), state);
         }
     };
 
@@ -91,29 +90,16 @@ namespace boost { namespace xpressive { namespace detail
 
 namespace boost { namespace proto
 {
-    // ericne, 28/nov/05: CW9_4 doesn't like partial specializations of the form:
-    //   template<bool F> struct foo<bar<F> >
-    template<>
-    struct compiler<xpressive::detail::lookahead_tag<true>, xpressive::detail::seq_tag, void>
-      : branch_compiler<xpressive::detail::lookahead_branch<true>, xpressive::detail::ind_tag>
+
+    template<bool Positive>
+    struct compiler<xpressive::detail::lookahead_tag<Positive>, xpressive::detail::seq_tag, void>
+      : branch_compiler<xpressive::detail::lookahead_branch<Positive>, xpressive::detail::ind_tag>
     {
     };
 
-    template<>
-    struct compiler<xpressive::detail::lookahead_tag<false>, xpressive::detail::seq_tag, void>
-      : branch_compiler<xpressive::detail::lookahead_branch<false>, xpressive::detail::ind_tag>
-    {
-    };
-
-    template<>
-    struct compiler<xpressive::detail::lookbehind_tag<true>, xpressive::detail::seq_tag, void>
-      : branch_compiler<xpressive::detail::lookbehind_branch<true>, xpressive::detail::ind_tag>
-    {
-    };
-
-    template<>
-    struct compiler<xpressive::detail::lookbehind_tag<false>, xpressive::detail::seq_tag, void>
-      : branch_compiler<xpressive::detail::lookbehind_branch<false>, xpressive::detail::ind_tag>
+    template<bool Positive>
+    struct compiler<xpressive::detail::lookbehind_tag<Positive>, xpressive::detail::seq_tag, void>
+      : branch_compiler<xpressive::detail::lookbehind_branch<Positive>, xpressive::detail::ind_tag>
     {
     };
 
@@ -122,7 +108,7 @@ namespace boost { namespace proto
       : branch_compiler<xpressive::detail::keeper_branch, xpressive::detail::ind_tag>
     {
     };
-    
+
     template<typename OpTag>
     struct compiler<OpTag, xpressive::detail::ind_tag, void>
       : transform_compiler<arg_transform, xpressive::detail::seq_tag>

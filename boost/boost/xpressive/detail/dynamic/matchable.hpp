@@ -13,107 +13,63 @@
 # pragma once
 #endif
 
-#include <utility>
 #include <boost/assert.hpp>
-#include <boost/shared_ptr.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/intrusive_ptr.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/detail/core/quant_style.hpp>
+#include <boost/xpressive/detail/utility/counted_base.hpp>
+#include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/regex_error.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
 
-template<typename BidiIter>
-struct matchable;
-
-///////////////////////////////////////////////////////////////////////////////
-// sequence
-//
-template<typename BidiIter>
-struct sequence
-  : std::pair
-    <
-        shared_ptr<matchable<BidiIter> const>
-      , shared_ptr<matchable<BidiIter> const> *
-    >
-{
-    typedef shared_ptr<matchable<BidiIter> const> matchable_ptr_t;
-    typedef std::pair<matchable_ptr_t, matchable_ptr_t *> base_t;
-
-    explicit sequence(matchable_ptr_t head = matchable_ptr_t(), matchable_ptr_t *tail_ptr = 0)
-      : base_t(head, tail_ptr)
-    {
-    }
-
-    bool is_empty() const
-    {
-        return !this->first;
-    }
-
-    sequence &operator +=(sequence that)
-    {
-        if(is_empty())
-        {
-            *this = that;
-        }
-        else if(!that.is_empty())
-        {
-            *this->second = that.first;
-            this->second = that.second;
-        }
-        return *this;
-    }
-};
-
 //////////////////////////////////////////////////////////////////////////
 // quant_spec
-//
 struct quant_spec
 {
     unsigned int min_;
     unsigned int max_;
     bool greedy_;
+    std::size_t *hidden_mark_count_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // matchable
-//
 template<typename BidiIter>
 struct matchable
   : xpression_base
 {
-    typedef typename iterator_value<BidiIter>::type char_type;
-
+    typedef BidiIter iterator_type;
+    typedef typename iterator_value<iterator_type>::type char_type;
     virtual ~matchable() {}
-
     virtual bool match(state_type<BidiIter> &state) const = 0;
+};
 
-    virtual std::size_t get_width(state_type<BidiIter> *state) const = 0;
+///////////////////////////////////////////////////////////////////////////////
+// matchable_ex
+template<typename BidiIter>
+struct matchable_ex
+  : matchable<BidiIter>
+  , counted_base<matchable_ex<BidiIter> >
+{
+    typedef BidiIter iterator_type;
+    typedef typename iterator_value<iterator_type>::type char_type;
 
-    virtual void link(xpression_linker<char_type> &) const {}
+    virtual void link(xpression_linker<char_type> &) const
+    {
+    }
 
     virtual void peek(xpression_peeker<char_type> &peeker) const
     {
         peeker.fail();
     }
 
-    virtual sequence<BidiIter> quantify
-    (
-        quant_spec const & //spec
-      , std::size_t & //hidden_mark_count
-      , sequence<BidiIter> //seq
-      , alternates_factory<BidiIter> const &//factory
-    ) const
+    virtual void repeat(quant_spec const &, sequence<BidiIter> &) const
     {
         throw regex_error(regex_constants::error_badrepeat, "expression cannot be quantified");
-    }
-
-    virtual bool is_quantifiable() const
-    {
-        BOOST_ASSERT(false);
-        throw regex_error(regex_constants::error_internal, "internal error, sorry!");
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -130,24 +86,88 @@ struct matchable
     template<typename Top>
     bool push_match(state_type<BidiIter> &state) const
     {
-        BOOST_MPL_ASSERT((is_same<Top, matchable<BidiIter> >));
+        BOOST_MPL_ASSERT((is_same<Top, matchable_ex<BidiIter> >));
         return this->match(state);
     }
 
     static bool top_match(state_type<BidiIter> &state, xpression_base const *top)
     {
-        return static_cast<matchable<BidiIter> const *>(top)->match(state);
+        return static_cast<matchable_ex<BidiIter> const *>(top)->match(state);
     }
 
     static bool pop_match(state_type<BidiIter> &state, xpression_base const *top)
     {
-        return static_cast<matchable<BidiIter> const *>(top)->match(state);
+        return static_cast<matchable_ex<BidiIter> const *>(top)->match(state);
     }
 
     bool skip_match(state_type<BidiIter> &state) const
     {
         return this->match(state);
     }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// shared_matchable
+template<typename BidiIter>
+struct shared_matchable
+{
+    typedef BidiIter iterator_type;
+    typedef typename iterator_value<BidiIter>::type char_type;
+    typedef intrusive_ptr<matchable_ex<BidiIter> const> matchable_ptr;
+
+    BOOST_STATIC_CONSTANT(std::size_t, width = unknown_width::value);
+    BOOST_STATIC_CONSTANT(bool, pure = false);
+
+    shared_matchable(matchable_ptr const &xpr = matchable_ptr())
+      : xpr_(xpr)
+    {
+    }
+
+    bool operator !() const
+    {
+        return !this->xpr_;
+    }
+
+    friend bool operator ==(shared_matchable<BidiIter> const &left, shared_matchable<BidiIter> const &right)
+    {
+        return left.xpr_ == right.xpr_;
+    }
+
+    friend bool operator !=(shared_matchable<BidiIter> const &left, shared_matchable<BidiIter> const &right)
+    {
+        return left.xpr_ != right.xpr_;
+    }
+
+    matchable_ptr const &matchable() const
+    {
+        return this->xpr_;
+    }
+
+    bool match(state_type<BidiIter> &state) const
+    {
+        return this->xpr_->match(state);
+    }
+
+    void link(xpression_linker<char_type> &linker) const
+    {
+        this->xpr_->link(linker);
+    }
+
+    void peek(xpression_peeker<char_type> &peeker) const
+    {
+        this->xpr_->peek(peeker);
+    }
+
+    // BUGBUG yuk! 
+    template<typename Top>
+    bool push_match(state_type<BidiIter> &state) const
+    {
+        BOOST_MPL_ASSERT((is_same<Top, matchable_ex<BidiIter> >));
+        return this->match(state);
+    }
+
+private:
+    matchable_ptr xpr_;
 };
 
 }}} // namespace boost::xpressive::detail

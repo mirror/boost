@@ -140,6 +140,14 @@ private:
 };
 
 ///////////////////////////////////////////////////////////////////////////////
+// swap without bringing in std::swap -- must be found by ADL.
+template<typename T>
+void adl_swap(T &t1, T &t2)
+{
+    swap(t1, t2);
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // enable_reference_tracking
 //   inherit from this type to enable reference tracking for a type. You can
 //   then use tracking_ptr (below) as a holder for derived objects.
@@ -152,10 +160,20 @@ struct enable_reference_tracking
     typedef std::set<shared_ptr<Derived> > references_type;
     typedef std::set<weak_ptr<Derived> > dependents_type;
 
+    void clear_references()
+    {
+        this->refs_.clear();
+    }
+
     void tracking_copy(Derived const &that)
     {
-        this->derived_() = that;
+        this->raw_copy_(that);
         this->tracking_update();
+    }
+
+    void tracking_clear()
+    {
+        this->raw_copy_(Derived());
     }
 
     // called automatically as a result of a tracking_copy(). Must be called explicitly
@@ -166,11 +184,6 @@ struct enable_reference_tracking
         this->update_references_();
         // notify our dependencies that we have new references
         this->update_dependents_();
-    }
-
-    void tracking_clear()
-    {
-        this->derived_() = Derived();
     }
 
     void track_reference(shared_ptr<Derived> const &that)
@@ -211,8 +224,6 @@ protected:
 
     enable_reference_tracking<Derived> &operator =(enable_reference_tracking<Derived> const &that)
     {
-        // BUGBUG derived classes will need to do something special to make their
-        // assignment operators exception-safe. Can we make this easier?
         references_type(that.refs_).swap(this->refs_);
         return *this;
     }
@@ -230,6 +241,11 @@ private:
     Derived &derived_()
     {
         return *static_cast<Derived *>(this);
+    }
+
+    void raw_copy_(Derived that)
+    {
+        detail::adl_swap(this->derived_(), that);
     }
 
     bool has_deps_() const
@@ -481,7 +497,7 @@ private:
 
     // mutable to allow lazy initialization
     mutable shared_ptr<element_type> data_;
-    mutable shared_ptr<void> refs_;
+    mutable shared_ptr<void const> refs_;
 };
 
 }}} // namespace boost::xpressive::detail

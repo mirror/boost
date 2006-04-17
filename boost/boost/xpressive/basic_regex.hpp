@@ -88,7 +88,7 @@ struct basic_regex
     template<typename Xpr>
     basic_regex<BidiIter> &operator =(Xpr const &xpr)
     {
-        detail::static_compile(xpr, *this->impl_.get());
+        detail::static_compile(xpr, this->impl_.get());
         return *this;
     }
 
@@ -167,14 +167,6 @@ private:
     basic_regex(char_type const *);
     /// INTERNAL ONLY
     basic_regex(string_type const &);
-
-    // used from parser, via core_access
-    /// INTERNAL ONLY
-    explicit basic_regex(detail::regex_impl<BidiIter> const &that)
-      : impl_()
-    {
-        this->impl_.tracking_copy(that);
-    }
 
     /// INTERNAL ONLY
     bool match_(detail::state_type<BidiIter> &state) const

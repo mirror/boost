@@ -13,78 +13,48 @@
 # pragma once
 #endif
 
-#include <vector>
-#include <boost/ref.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/fold.hpp>
-#include <boost/mpl/plus.hpp>
-#include <boost/mpl/front.hpp>
-#include <boost/mpl/times.hpp>
 #include <boost/mpl/assert.hpp>
-#include <boost/mpl/lambda.hpp>
 #include <boost/mpl/size_t.hpp>
-#include <boost/mpl/logical.hpp>
-#include <boost/mpl/identity.hpp>
-#include <boost/mpl/equal_to.hpp>
-#include <boost/mpl/transform_view.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/as_xpr.hpp>
 
+///////////////////////////////////////////////////////////////////////////////
+// add widths
+#define BOOST_XPR_ADD_WIDTH_(X, Y)                                                                  \
+    mpl::size_t                                                                                     \
+    <                                                                                               \
+        X::value == unknown_width::value || Y::value == unknown_width::value                        \
+      ? unknown_width::value                                                                        \
+      : X::value + Y::value                                                                         \
+    >
+
+///////////////////////////////////////////////////////////////////////////////
+// multiply widths
+#define BOOST_XPR_MULT_WIDTH_(X, Y)                                                                 \
+    mpl::size_t                                                                                     \
+    <                                                                                               \
+        X::value == unknown_width::value || Y::value == unknown_width::value                        \
+      ? unknown_width::value                                                                        \
+      : X::value * Y::value                                                                         \
+    >
+
+///////////////////////////////////////////////////////////////////////////////
+// check widths for equality
+#define BOOST_XPR_EQUAL_WIDTH_(X, Y)                                                                \
+    mpl::size_t                                                                                     \
+    <                                                                                               \
+        X::value == Y::value                                                                        \
+      ? X::value                                                                                    \
+      : unknown_width::value                                                                        \
+    >
+
 namespace boost { namespace xpressive { namespace detail
 {
     ///////////////////////////////////////////////////////////////////////////////
-    // add_width
-    template<typename X, typename Y>
-    struct add_width
-      : mpl::eval_if
-        <
-            mpl::or_
-            <
-                mpl::equal_to<X, unknown_width>
-              , mpl::equal_to<Y, unknown_width>
-            >
-          , mpl::identity<unknown_width>
-          , mpl::plus<X, Y>
-        >::type
-    {
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // mult_width
-    template<typename X, typename Y>
-    struct mult_width
-      : mpl::eval_if
-        <
-            mpl::or_
-            <
-                mpl::equal_to<X, unknown_width>
-              , mpl::equal_to<Y, unknown_width>
-            >
-          , mpl::identity<unknown_width>
-          , mpl::times<X, Y>
-        >::type
-    {
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // equal_width
-    template<typename X, typename Y>
-    struct equal_width
-      : mpl::if_
-        <
-            mpl::equal_to<X, Y>
-          , X
-          , unknown_width
-        >::type
-    {
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
     // width_of
     //
-    template<typename Xpr>
+    template<typename Op>
     struct width_of;
 
     template<>
@@ -95,19 +65,19 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Matcher>
     struct width_of<proto::unary_op<Matcher, proto::noop_tag> >
-      : as_matcher_type<Matcher>::type::width
+      : mpl::size_t<as_matcher<Matcher>::type::width>
     {
     };
 
     template<typename Left, typename Right>
     struct width_of<proto::binary_op<Left, Right, proto::right_shift_tag> >
-      : add_width<width_of<Left>, width_of<Right> >
+      : BOOST_XPR_ADD_WIDTH_(width_of<Left>, width_of<Right>)
     {
     };
 
     template<typename Left, typename Right>
     struct width_of<proto::binary_op<Left, Right, proto::bitor_tag> >
-      : equal_width<width_of<Left>, width_of<Right> >
+      : BOOST_XPR_EQUAL_WIDTH_(width_of<Left>, width_of<Right>)
     {
     };
 
@@ -123,58 +93,34 @@ namespace boost { namespace xpressive { namespace detail
     {
     };
 
-    template<typename Modifier, typename Xpr>
-    struct width_of<proto::binary_op<Modifier, Xpr, modifier_tag> >
-      : width_of<Xpr>
+    template<typename Modifier, typename Op>
+    struct width_of<proto::binary_op<Modifier, Op, modifier_tag> >
+      : width_of<Op>
     {
     };
 
-    template<typename Xpr, bool Positive>
-    struct width_of<proto::unary_op<Xpr, lookahead_tag<Positive> > >
+    template<typename Op, bool Positive>
+    struct width_of<proto::unary_op<Op, lookahead_tag<Positive> > >
       : mpl::size_t<0>
     {
     };
 
-    template<typename Xpr, bool Positive>
-    struct width_of<proto::unary_op<Xpr, lookbehind_tag<Positive> > >
+    template<typename Op, bool Positive>
+    struct width_of<proto::unary_op<Op, lookbehind_tag<Positive> > >
       : mpl::size_t<0>
     {
     };
 
-    template<typename Xpr>
-    struct width_of<proto::unary_op<Xpr, keeper_tag> >
-      : width_of<Xpr>
-    {
-    };
-
-    template<typename Matcher, typename Next>
-    struct width_of<static_xpression<Matcher, Next> >
-      : add_width<typename Matcher::width, width_of<Next> >
-    {
-    };
-
-    template<typename BidiIter>
-    struct width_of<shared_ptr<matchable<BidiIter> const> >
+    // keep() is used to turn off backtracking, so they should only be used
+    // for things that are variable-width (eg. quantified)
+    template<typename Op>
+    struct width_of<proto::unary_op<Op, keeper_tag> >
       : unknown_width
     {
-    };
-
-    template<typename BidiIter>
-    struct width_of<std::vector<shared_ptr<matchable<BidiIter> const> > >
-      : unknown_width
-    {
-    };
-
-    template<typename BidiIter>
-    struct width_of<proto::unary_op<basic_regex<BidiIter>, proto::noop_tag> >
-      : unknown_width
-    {
-    };
-
-    template<typename BidiIter>
-    struct width_of<proto::unary_op<reference_wrapper<basic_regex<BidiIter> const>, proto::noop_tag> >
-      : unknown_width
-    {
+        // If this assert fires, you put something that doesn't require backtracking
+        // in a keep(). In that case, the keep() is not necessary and you should just
+        // remove it.
+        BOOST_MPL_ASSERT_RELATION(width_of<Op>::value, ==, unknown_width::value);
     };
 
     template<typename Op>
@@ -197,7 +143,13 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Op, uint_t Min, uint_t Max>
     struct width_of<proto::unary_op<Op, generic_quant_tag<Min, Max> > >
-      : mpl::if_c<Min==Max, mult_width<width_of<Op>, mpl::size_t<Min> >, unknown_width>::type
+      : unknown_width
+    {
+    };
+
+    template<typename Op, uint_t Count>
+    struct width_of<proto::unary_op<Op, generic_quant_tag<Count, Count> > >
+      : BOOST_XPR_MULT_WIDTH_(width_of<Op>, mpl::size_t<Count>)
     {
     };
 
@@ -225,35 +177,16 @@ namespace boost { namespace xpressive { namespace detail
     // or for actions as in (any >> expr)[ action ]
     template<typename Left, typename Right>
     struct width_of<proto::binary_op<Left, Right, proto::subscript_tag> >
-      : mpl::if_<is_same<Left, set_initializer_type>, mpl::size_t<1>, width_of<Left> >::type
+      : width_of<Left>
+    {
+    };
+
+    template<typename Right>
+    struct width_of<proto::binary_op<set_initializer_type, Right, proto::subscript_tag> >
+      : mpl::size_t<1>
     {
         // If Left is "set" then make sure that Right has a width_of 1
-        BOOST_MPL_ASSERT
-        ((
-            mpl::or_
-            <
-                mpl::not_<is_same<Left, set_initializer_type> >
-              , mpl::equal_to<width_of<Right>, mpl::size_t<1> >
-            >
-        ));
-    };
-
-    // The width of a list of alternates is N if all the alternates have width N, otherwise unknown_width
-    template<typename Widths>
-    struct alt_width_of
-      : mpl::fold
-        <
-            Widths
-          , typename mpl::front<Widths>::type
-          , equal_width<mpl::_1, mpl::_2>
-        >::type
-    {
-    };
-
-    template<typename Alternates>
-    struct width_of<alternates_list<Alternates> >
-      : alt_width_of<mpl::transform_view<Alternates, width_of<mpl::_1> > >
-    {
+        BOOST_MPL_ASSERT_RELATION(1, ==, width_of<Right>::value);
     };
 
     template<typename Op, typename Arg>

@@ -18,6 +18,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/not_equal_to.hpp>
+#include <boost/xpressive/detail/utility/width.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 
 #if defined(NDEBUG) & defined(BOOST_XPR_DEBUG_STACK)
@@ -48,9 +49,9 @@ struct xpression_base
 ///////////////////////////////////////////////////////////////////////////////
 // is_xpr
 //
-template<typename T>
+template<typename Xpr>
 struct is_xpr
-  : is_base_and_derived<xpression_base, T>
+  : is_base_and_derived<xpression_base, Xpr>
 {
 };
 
@@ -60,7 +61,6 @@ struct is_xpr
 enum quant_enum
 {
     quant_none,
-    quant_auto,
     quant_fixed_width,
     quant_variable_width
 };
@@ -68,18 +68,22 @@ enum quant_enum
 ///////////////////////////////////////////////////////////////////////////////
 // quant_style
 //
-template<quant_enum QuantStyle, typename Width = unknown_width, typename Pure = mpl::true_>
+template<quant_enum QuantStyle, std::size_t Width = unknown_width::value, bool Pure = true>
 struct quant_style
   : xpression_base
 {
-    typedef mpl::int_<QuantStyle> quant;   // Which quantification strategy to use?
-    typedef Width width;                   // how many characters this matcher consumes
-    typedef Pure pure;                     // whether this matcher has observable side-effects
+    // Which quantification strategy to use?
+    BOOST_STATIC_CONSTANT(quant_enum, quant = QuantStyle);
 
-    template<typename BidiIter>
-    static std::size_t get_width(state_type<BidiIter> *)
+    // how many characters this matcher consumes
+    BOOST_STATIC_CONSTANT(std::size_t, width = Width);
+
+    // whether this matcher has observable side-effects
+    BOOST_STATIC_CONSTANT(bool, pure = Pure);
+
+    static detail::width get_width()
     {
-        return Width::value;
+        return width;
     }
 };
 
@@ -105,7 +109,7 @@ typedef quant_style<quant_variable_width> quant_style_variable_width;
 //  for when the sub-expression has a fixed width that is known at compile time
 template<std::size_t Width>
 struct quant_style_fixed_width
-  : quant_style<quant_fixed_width, mpl::size_t<Width> >
+  : quant_style<quant_fixed_width, Width>
 {
 };
 
@@ -113,42 +117,16 @@ struct quant_style_fixed_width
 // quant_style_assertion
 //  a zero-width assertion.
 struct quant_style_assertion
-  : quant_style<quant_none, mpl::size_t<0> >
-{
-};
-
-///////////////////////////////////////////////////////////////////////////////
-// quant_style_auto
-//  automatically pick the quantification style based on width and purity
-template<typename Width, typename Pure>
-struct quant_style_auto
-  : quant_style<quant_auto, Width, Pure>
+  : quant_style<quant_none, 0>
 {
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // quant_type
 //
-template<typename Matcher, typename QuantStyle = typename Matcher::quant>
-struct quant_type
-  : QuantStyle
-{
-};
-
-///////////////////////////////////////////////////////////////////////////////
-// when the quant_type is auto, determine the quant type from the width and purity
 template<typename Matcher>
-struct quant_type<Matcher, mpl::int_<quant_auto> >
-  : mpl::if_
-    <
-        mpl::and_
-        <
-            mpl::not_equal_to<typename Matcher::width, unknown_width>
-          , typename Matcher::pure
-        >
-      , mpl::int_<quant_fixed_width>
-      , mpl::int_<quant_variable_width>
-    >::type
+struct quant_type
+  : mpl::int_<Matcher::quant>
 {
 };
 

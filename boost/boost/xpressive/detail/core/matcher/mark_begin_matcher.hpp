@@ -24,7 +24,7 @@ namespace boost { namespace xpressive { namespace detail
     // mark_begin_matcher
     //
     struct mark_begin_matcher
-      : quant_style<quant_fixed_width, mpl::size_t<0>, mpl::false_>
+      : quant_style<quant_fixed_width, 0, false>
     {
         int mark_number_; // signed because it could be negative
 

@@ -13,19 +13,16 @@
 # pragma once
 #endif
 
-#include <vector>
-#include <boost/ref.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/mpl/and.hpp>
 #include <boost/mpl/bool.hpp>
-#include <boost/mpl/fold.hpp>
-#include <boost/mpl/lambda.hpp>
 #include <boost/mpl/assert.hpp>
-#include <boost/mpl/not_equal_to.hpp>
-#include <boost/mpl/transform_view.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/as_xpr.hpp>
 #include <boost/xpressive/detail/static/width_of.hpp>
+
+///////////////////////////////////////////////////////////////////////////////
+// equivalent to mpl::and_<X, Y>
+#define BOOST_XPR_AND_PURE_(X, Y)                                                                   \
+    mpl::bool_<X::value && X::value>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -49,19 +46,19 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Matcher>
     struct is_pure<proto::unary_op<Matcher, proto::noop_tag> >
-      : as_matcher_type<Matcher>::type::pure
+      : mpl::bool_<as_matcher<Matcher>::type::pure>
     {
     };
 
     template<typename Left, typename Right>
     struct is_pure<proto::binary_op<Left, Right, proto::right_shift_tag> >
-      : mpl::and_<is_pure<Left>, is_pure<Right> >
+      : BOOST_XPR_AND_PURE_(is_pure<Left>, is_pure<Right>)
     {
     };
 
     template<typename Left, typename Right>
     struct is_pure<proto::binary_op<Left, Right, proto::bitor_tag> >
-      : mpl::and_<is_pure<Left>, is_pure<Right> >
+      : BOOST_XPR_AND_PURE_(is_pure<Left>, is_pure<Right>)
     {
     };
 
@@ -101,42 +98,6 @@ namespace boost { namespace xpressive { namespace detail
     {
     };
 
-    template<typename Matcher, typename Next>
-    struct is_pure<static_xpression<Matcher, Next> >
-      : mpl::and_<typename Matcher::pure, is_pure<Next> >::type
-    {
-    };
-
-    template<typename BidiIter>
-    struct is_pure<shared_ptr<matchable<BidiIter> const> >
-      : mpl::false_
-    {
-    };
-
-    template<typename BidiIter>
-    struct is_pure<std::vector<shared_ptr<matchable<BidiIter> const> > >
-        : mpl::false_
-    {
-    };
-
-    //template<typename BidiIter>
-    //struct is_pure<basic_regex<BidiIter> >
-    //    : mpl::false_
-    //{
-    //};
-
-    template<typename BidiIter>
-    struct is_pure<proto::unary_op<basic_regex<BidiIter>, proto::noop_tag> >
-      : mpl::false_
-    {
-    };
-
-    template<typename BidiIter>
-    struct is_pure<proto::unary_op<reference_wrapper<basic_regex<BidiIter> const>, proto::noop_tag> >
-      : mpl::false_
-    {
-    };
-
     // when complementing a set or an assertion, the purity is that of the set (true) or the assertion
     template<typename Op>
     struct is_pure<proto::unary_op<Op, proto::complement_tag> >
@@ -155,21 +116,19 @@ namespace boost { namespace xpressive { namespace detail
     // It is also used for actions, which by definition have side-effects and thus are impure
     template<typename Left, typename Right>
     struct is_pure<proto::binary_op<Left, Right, proto::subscript_tag> >
-      : is_same<Left, set_initializer_type>
+      : mpl::false_
+    {
+    };
+
+    template<typename Right>
+    struct is_pure<proto::binary_op<set_initializer_type, Right, proto::subscript_tag> >
+      : mpl::true_
     {
         // If Left is "set" then make sure that Right is pure
-        BOOST_MPL_ASSERT
-        ((
-            mpl::or_
-            <
-                mpl::not_<is_same<Left, set_initializer_type> >
-              , is_pure<Right>
-            >
-        ));
+        BOOST_MPL_ASSERT((is_pure<Right>));
     };
 
     // Quantified expressions are pure IFF they use the simple_repeat_matcher
-
     template<typename Op>
     struct is_pure<proto::unary_op<Op, proto::unary_plus_tag> >
       : use_simple_repeat<Op>
@@ -200,42 +159,25 @@ namespace boost { namespace xpressive { namespace detail
     {
     };
 
-    template<typename Alternates>
-    struct is_pure<alternates_list<Alternates> >
-      : mpl::fold
-        <
-            mpl::transform_view<Alternates, is_pure<mpl::_1> >
-          , mpl::true_
-          , mpl::and_<mpl::_1, mpl::_2>
-        >::type
-    {
-    };
-
-
     ///////////////////////////////////////////////////////////////////////////////
     // use_simple_repeat
-    // BUGBUG this doesn't handle +(_ >> s1) correctly, right?
+    //  TODO this doesn't optimize +(_ >> "hello")
     template<typename Xpr>
     struct use_simple_repeat
-      : mpl::and_<mpl::not_equal_to<width_of<Xpr>, unknown_width>, is_pure<Xpr> >
+      : mpl::bool_<width_of<Xpr>::value != unknown_width::value && is_pure<Xpr>::value>
     {
-        // should never try to quantify something of 0-width
-        BOOST_MPL_ASSERT((mpl::not_equal_to<width_of<Xpr>, mpl::size_t<0> >));
+        // should never try to repeat something of 0-width
+        BOOST_MPL_ASSERT_RELATION(0, !=, width_of<Xpr>::value);
     };
+
+    template<bool B, quant_enum Q> struct use_simple_repeat_helper : mpl::false_ {};
+    template<> struct use_simple_repeat_helper<true, quant_fixed_width> : mpl::true_ {};
 
     template<typename Matcher>
     struct use_simple_repeat<proto::unary_op<Matcher, proto::noop_tag> >
-      : mpl::and_
-        <
-            mpl::equal_to
-            <
-                quant_type<typename as_matcher_type<Matcher>::type>
-              , mpl::int_<quant_fixed_width>
-            >
-          , typename as_matcher_type<Matcher>::type::pure
-        >
+      : use_simple_repeat_helper<as_matcher<Matcher>::type::pure, as_matcher<Matcher>::type::quant>
     {
-        BOOST_MPL_ASSERT_RELATION(0, !=, as_matcher_type<Matcher>::type::width::value);
+        BOOST_MPL_ASSERT_RELATION(0, !=, as_matcher<Matcher>::type::width);
     };
 
     template<typename Op, typename Arg>

@@ -36,8 +36,6 @@
 
 namespace boost { namespace xpressive
 {
-    template<typename Char, typename Impl>
-    struct regex_traits;
 
     template<typename Char>
     struct cpp_regex_traits;

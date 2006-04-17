@@ -58,12 +58,12 @@ inline sequence<BidiIter> make_char_xpression
     if(0 != (regex_constants::icase_ & flags))
     {
         literal_matcher<Traits, true, false> matcher(ch, traits);
-        return make_dynamic_xpression<BidiIter>(matcher);
+        return make_dynamic<BidiIter>(matcher);
     }
     else
     {
         literal_matcher<Traits, false, false> matcher(ch, traits);
-        return make_dynamic_xpression<BidiIter>(matcher);
+        return make_dynamic<BidiIter>(matcher);
     }
 }
 
@@ -91,16 +91,16 @@ inline sequence<BidiIter> make_any_xpression
     switch(((int)not_dot_newline | not_dot_null) & flags)
     {
     case not_dot_null:
-        return make_dynamic_xpression<BidiIter>(literal_matcher(char_type(0), traits));
+        return make_dynamic<BidiIter>(literal_matcher(char_type(0), traits));
 
     case not_dot_newline:
-        return make_dynamic_xpression<BidiIter>(literal_matcher(newline, traits));
+        return make_dynamic<BidiIter>(literal_matcher(newline, traits));
 
     case (int)not_dot_newline | not_dot_null:
-        return make_dynamic_xpression<BidiIter>(s);
+        return make_dynamic<BidiIter>(s);
 
     default:
-        return make_dynamic_xpression<BidiIter>(any_matcher());
+        return make_dynamic<BidiIter>(any_matcher());
     }
 }
 
@@ -127,12 +127,12 @@ inline sequence<BidiIter> make_literal_xpression
     if(0 != (regex_constants::icase_ & flags))
     {
         string_matcher<Traits, true> matcher(literal, traits);
-        return make_dynamic_xpression<BidiIter>(matcher);
+        return make_dynamic<BidiIter>(matcher);
     }
     else
     {
         string_matcher<Traits, false> matcher(literal, traits);
-        return make_dynamic_xpression<BidiIter>(matcher);
+        return make_dynamic<BidiIter>(matcher);
     }
 }
 
@@ -150,14 +150,14 @@ inline sequence<BidiIter> make_backref_xpression
     typedef typename iterator_value<BidiIter>::type char_type;
     if(0 != (regex_constants::icase_ & flags))
     {
-        return make_dynamic_xpression<BidiIter>
+        return make_dynamic<BidiIter>
         (
             mark_matcher<Traits, true>(mark_nbr, traits)
         );
     }
     else
     {
-        return make_dynamic_xpression<BidiIter>
+        return make_dynamic<BidiIter>
         (
             mark_matcher<Traits, false>(mark_nbr, traits)
         );
@@ -232,13 +232,13 @@ inline sequence<BidiIter> make_charset_xpression
         {
             charset_matcher<Traits, true, charset_type> matcher(charset);
             merge_charset(matcher.charset_, chset, traits);
-            return make_dynamic_xpression<BidiIter>(matcher);
+            return make_dynamic<BidiIter>(matcher);
         }
         else
         {
             charset_matcher<Traits, false, charset_type> matcher(charset);
             merge_charset(matcher.charset_, chset, traits);
-            return make_dynamic_xpression<BidiIter>(matcher);
+            return make_dynamic<BidiIter>(matcher);
         }
     }
 
@@ -247,7 +247,7 @@ inline sequence<BidiIter> make_charset_xpression
     {
         BOOST_ASSERT(0 != chset.posix_yes());
         posix_charset_matcher<Traits> matcher(chset.posix_yes(), chset.is_inverted());
-        return make_dynamic_xpression<BidiIter>(matcher);
+        return make_dynamic<BidiIter>(matcher);
     }
 
     // default, slow
@@ -256,12 +256,12 @@ inline sequence<BidiIter> make_charset_xpression
         if(icase)
         {
             charset_matcher<Traits, true> matcher(chset);
-            return make_dynamic_xpression<BidiIter>(matcher);
+            return make_dynamic<BidiIter>(matcher);
         }
         else
         {
             charset_matcher<Traits, false> matcher(chset);
-            return make_dynamic_xpression<BidiIter>(matcher);
+            return make_dynamic<BidiIter>(matcher);
         }
     }
 }
@@ -279,7 +279,7 @@ inline sequence<BidiIter> make_posix_charset_xpression
 )
 {
     posix_charset_matcher<Traits> charset(m, no);
-    return make_dynamic_xpression<BidiIter>(charset);
+    return make_dynamic<BidiIter>(charset);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -294,12 +294,12 @@ inline sequence<BidiIter> make_assert_begin_line
 {
     if(0 != (regex_constants::single_line & flags))
     {
-        return detail::make_dynamic_xpression<BidiIter>(detail::assert_bos_matcher());
+        return detail::make_dynamic<BidiIter>(detail::assert_bos_matcher());
     }
     else
     {
         detail::assert_bol_matcher<Traits> matcher(traits);
-        return detail::make_dynamic_xpression<BidiIter>(matcher);
+        return detail::make_dynamic<BidiIter>(matcher);
     }
 }
 
@@ -315,12 +315,12 @@ inline sequence<BidiIter> make_assert_end_line
 {
     if(0 != (regex_constants::single_line & flags))
     {
-        return detail::make_dynamic_xpression<BidiIter>(detail::assert_eos_matcher());
+        return detail::make_dynamic<BidiIter>(detail::assert_eos_matcher());
     }
     else
     {
         detail::assert_eol_matcher<Traits> matcher(traits);
-        return detail::make_dynamic_xpression<BidiIter>(matcher);
+        return detail::make_dynamic<BidiIter>(matcher);
     }
 }
 
@@ -331,7 +331,7 @@ template<typename BidiIter, typename Cond, typename Traits>
 inline sequence<BidiIter> make_assert_word(Cond, Traits const &traits)
 {
     typedef typename iterator_value<BidiIter>::type char_type;
-    return detail::make_dynamic_xpression<BidiIter>
+    return detail::make_dynamic<BidiIter>
     (
         detail::assert_word_matcher<Cond, Traits>(traits)
     );

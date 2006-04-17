@@ -30,7 +30,7 @@ namespace boost { namespace xpressive { namespace detail
     // repeat_begin_matcher
     //
     struct repeat_begin_matcher
-      : quant_style<quant_variable_width, unknown_width, mpl::false_>
+      : quant_style<quant_variable_width, unknown_width::value, false>
     {
         int mark_number_;
 

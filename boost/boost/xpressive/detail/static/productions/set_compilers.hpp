@@ -63,7 +63,7 @@ namespace boost { namespace xpressive { namespace detail
         static static_xpression<Op, State>
         call(Op const &op, State const &state, dont_care)
         {
-            return make_static_xpression(op, state);
+            return make_static(op, state);
         }
     };
 

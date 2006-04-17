@@ -32,30 +32,27 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // static_compile_impl2
     template<typename Xpr, typename BidiIter, typename Traits>
-    void static_compile_impl2(Xpr const &xpr, regex_impl<BidiIter> &impl, Traits const &traits)
+    void static_compile_impl2(Xpr const &xpr, shared_ptr<regex_impl<BidiIter> > const &impl, Traits const &traits)
     {
-        typedef typename iterator_value<BidiIter>::type char_type;
-        // "compile" the regex and wrap it in an xpression_adaptor
-        xpression_visitor<BidiIter, mpl::false_, Traits> visitor(traits, impl.shared_from_this());
-        visitor.impl().traits_.reset(new Traits(visitor.traits()));
-        visitor.impl().xpr_ = make_adaptor<BidiIter>(
+        impl->tracking_clear();
+        impl->traits_.reset(new Traits(traits));
+
+        // "compile" the regex and wrap it in an xpression_adaptor.
+        xpression_visitor<BidiIter, mpl::false_, Traits> visitor(traits, impl);
+        intrusive_ptr<matchable_ex<BidiIter> const> adxpr = make_adaptor<matchable_ex<BidiIter> >(
             proto::compile(xpr, end_xpression(), visitor, seq_tag()));
 
-        // "link" the regex
-        xpression_linker<char_type> linker(visitor.traits());
-        visitor.impl().xpr_->link(linker);
+        // Link and optimize the regex
+        common_compile(adxpr, *impl, visitor.traits());
 
-        // optimization: get the peek chars OR the boyer-moore search string
-        optimize_regex(visitor.impl(), visitor.traits(), is_random<BidiIter>());
-
-        // copy the implementation
-        impl.tracking_copy(visitor.impl());
+        // References changed, update dependencies.
+        impl->tracking_update();
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // static_compile_impl1
     template<typename Xpr, typename BidiIter>
-    void static_compile_impl1(Xpr const &xpr, regex_impl<BidiIter> &impl)
+    void static_compile_impl1(Xpr const &xpr, shared_ptr<regex_impl<BidiIter> > const &impl)
     {
         // use default traits
         typedef typename iterator_value<BidiIter>::type char_type;
@@ -70,7 +67,7 @@ namespace boost { namespace xpressive { namespace detail
     void static_compile_impl1
     (
         proto::binary_op<locale_modifier<Locale>, Xpr, modifier_tag> const &xpr
-      , regex_impl<BidiIter> &impl
+      , shared_ptr<regex_impl<BidiIter> > const &impl
     )
     {
         // use specified traits
@@ -81,7 +78,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // static_compile
     template<typename Xpr, typename BidiIter>
-    void static_compile(Xpr const &xpr, regex_impl<BidiIter> &impl)
+    void static_compile(Xpr const &xpr, shared_ptr<regex_impl<BidiIter> > const &impl)
     {
         static_compile_impl1(xpr, impl);
     }

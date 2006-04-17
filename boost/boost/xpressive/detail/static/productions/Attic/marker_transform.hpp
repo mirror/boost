@@ -40,9 +40,9 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    // marker_transform
+    // marker_insert_transform
     //   Insert mark tags before and after the expression
-    struct marker_transform
+    struct marker_insert_transform
     {
         template<typename Op, typename, typename>
         struct apply
@@ -77,15 +77,15 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    // marker_assign_transform
-    struct marker_assign_transform
-      : proto::compose_transforms<proto::right_transform, marker_transform>
+    // marker_replace_transform
+    struct marker_replace_transform
+      : proto::compose_transforms<proto::right_transform, marker_insert_transform>
     {
         template<typename Op, typename State, typename Visitor>
         static typename apply<Op, State, Visitor>::type
         call(Op const &op, State const &state, Visitor &visitor)
         {
-            return marker_transform::call(proto::right(op), state, visitor, proto::arg(proto::left(op)).mark_number_);
+            return marker_insert_transform::call(proto::right(op), state, visitor, proto::arg(proto::left(op)).mark_number_);
         }
     };
 

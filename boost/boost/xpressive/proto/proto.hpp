@@ -23,9 +23,8 @@ namespace boost { namespace proto
     struct compile_result
     {
         typedef typename as_op<Op>::type op_type;
-        typedef typename tag_type<op_type>::type tag_type;
-        typedef compiler<tag_type, DomainTag> compiler_type;
-        typedef typename compiler_type::BOOST_NESTED_TEMPLATE apply<op_type, State, Visitor>::type type;
+        typedef compiler<typename tag_type<op_type>::type, DomainTag> compiler;
+        typedef typename compiler::BOOST_NESTED_TEMPLATE apply<op_type, State, Visitor>::type type;
     };
 
     ///////////////////////////////////////////////////////////////////////////////

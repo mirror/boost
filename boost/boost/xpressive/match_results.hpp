@@ -18,7 +18,7 @@
 
 #include <iterator>
 #include <boost/assert.hpp>
-#include <boost/shared_ptr.hpp>
+#include <boost/intrusive_ptr.hpp>
 #include <boost/iterator_adaptors.hpp>
 #if BOOST_ITERATOR_ADAPTORS_VERSION >= 0x0200
 # include <boost/iterator/filter_iterator.hpp>
@@ -31,6 +31,7 @@
 #include <boost/xpressive/detail/core/action_state.hpp>
 #include <boost/xpressive/detail/utility/literals.hpp>
 #include <boost/xpressive/detail/utility/algorithm.hpp>
+#include <boost/xpressive/detail/utility/counted_base.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -40,6 +41,7 @@ namespace boost { namespace xpressive { namespace detail
 //
 template<typename BidiIter>
 struct results_extras
+  : counted_base<results_extras<BidiIter> >
 {
     sequence_stack<sub_match_impl<BidiIter> > sub_match_stack_;
     results_cache<BidiIter> results_cache_;
@@ -212,6 +214,7 @@ public:
     }
 
     /// \overload
+    ///
     const_reference operator [](detail::mark_tag const &mark) const
     {
         return this->sub_matches_[ detail::get_mark_number(mark) ];
@@ -431,7 +434,7 @@ private:
     {
         if(!this->extras_ptr_)
         {
-            this->extras_ptr_.reset(new extras_type);
+            this->extras_ptr_ = new extras_type;
         }
 
         return *this->extras_ptr_;
@@ -470,7 +473,7 @@ private:
     sub_match<BidiIter> suffix_;
     nested_results_type nested_results_;
     detail::action_state action_state_;
-    shared_ptr<extras_type> extras_ptr_;
+    intrusive_ptr<extras_type> extras_ptr_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

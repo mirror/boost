@@ -28,28 +28,26 @@ namespace boost { namespace xpressive { namespace detail
     struct xpression_visitor_base
     {
         explicit xpression_visitor_base(shared_ptr<regex_impl<BidiIter> > const &self)
-          : impl_()
-          , self_(self)
+          : self_(self)
         {
         }
 
-        void swap(xpression_visitor_base &that)
+        void swap(xpression_visitor_base<BidiIter> &that)
         {
-            this->impl_.swap(that.impl_);
             this->self_.swap(that.self_);
         }
 
         int get_hidden_mark()
         {
-            return -(int)(++this->impl_.hidden_mark_count_);
+            return -(int)(++this->self_->hidden_mark_count_);
         }
 
         void mark_number(int mark_number)
         {
             if(0 < mark_number)
             {
-                this->impl_.mark_count_ =
-                    (std::max)(this->impl_.mark_count_, (std::size_t)mark_number);
+                this->self_->mark_count_ =
+                    (std::max)(this->self_->mark_count_, (std::size_t)mark_number);
             }
         }
 
@@ -58,24 +56,18 @@ namespace boost { namespace xpressive { namespace detail
             return this->self_;
         }
 
-        regex_impl<BidiIter> &impl()
-        {
-            return this->impl_;
-        }
-
     protected:
 
         template<typename Matcher>
         void visit_(Matcher const &)
         {
-            // no-op
         }
 
         template<bool ByRef>
         void visit_(regex_placeholder<BidiIter, ByRef> const &rex)
         {
             // when visiting an embedded regex, track the references
-            this->impl_.track_reference(rex.impl_);
+            this->self_->track_reference(rex.impl_);
         }
 
         void visit_(mark_placeholder const &backref)
@@ -91,8 +83,6 @@ namespace boost { namespace xpressive { namespace detail
         }
 
     private:
-
-        regex_impl<BidiIter> impl_;
         shared_ptr<regex_impl<BidiIter> > self_;
     };
 

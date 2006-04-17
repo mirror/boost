@@ -30,7 +30,7 @@ namespace boost { namespace proto
 
             // Compile the branch
             typedef typename compiler_type::BOOST_NESTED_TEMPLATE apply
-             <
+            <
                 Op
               , typename Lambda::state_type
               , Visitor

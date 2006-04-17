@@ -26,7 +26,7 @@ namespace boost { namespace xpressive { namespace detail
     //
     template<bool Greedy>
     struct repeat_end_matcher
-      : quant_style<quant_none, mpl::size_t<0>, mpl::false_>
+      : quant_style<quant_none, 0, false>
     {
         typedef mpl::bool_<Greedy> greedy_type;
         int mark_number_;

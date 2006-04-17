@@ -32,7 +32,7 @@ namespace boost { namespace xpressive { namespace detail
     //
     template<typename BidiIter>
     struct regex_byref_matcher
-      : quant_style<quant_variable_width, unknown_width, mpl::false_>
+      : quant_style<quant_variable_width, unknown_width::value, false>
     {
         // avoid cyclic references by holding a weak_ptr to the
         // regex_impl struct
@@ -59,7 +59,7 @@ namespace boost { namespace xpressive { namespace detail
             ensure(this->pimpl_->xpr_, regex_constants::error_badref, "bad regex reference");
 
             // wrap the static xpression in a matchable interface
-            xpression_adaptor<Next const &, BidiIter> adaptor(next);
+            xpression_adaptor<reference_wrapper<Next const>, matchable<BidiIter> > adaptor(boost::cref(next));
             return push_context_match(*this->pimpl_, state, adaptor);
         }
     };

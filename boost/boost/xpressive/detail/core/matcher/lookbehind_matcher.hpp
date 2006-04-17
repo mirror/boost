@@ -27,44 +27,28 @@ namespace boost { namespace xpressive { namespace detail
 {
 
     ///////////////////////////////////////////////////////////////////////////////
-    // get_width
-    //
-    template<typename Xpr>
-    inline std::size_t get_width(Xpr const &xpr)
-    {
-        return xpr.get_width(static_cast<state_type<char const *>*>(0));
-    }
-
-    template<typename BidiIter>
-    inline std::size_t get_width(shared_ptr<matchable<BidiIter> const> const &xpr)
-    {
-        return xpr->get_width(0);
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
     // lookbehind_matcher
-    //   Xpr can be either a static_xpression, or a shared_ptr<matchable>
+    //   Xpr can be either a static_xpression or a shared_matchable
     template<typename Xpr>
     struct lookbehind_matcher
-      : quant_style<quant_none, mpl::size_t<0>, is_pure<Xpr> >
+      : quant_style<quant_none, 0, Xpr::pure>
     {
-        lookbehind_matcher(Xpr const &xpr, bool no = false, bool do_save = !is_pure<Xpr>::value)
+        lookbehind_matcher(Xpr const &xpr, std::size_t width, bool no, bool pure = Xpr::pure)
           : xpr_(xpr)
           , not_(no)
-          , do_save_(do_save)
-          , width_(detail::get_width(xpr))
+          , pure_(pure)
+          , width_(width)
         {
-            detail::ensure(this->width_ != unknown_width(), regex_constants::error_badlookbehind,
+            detail::ensure(!is_unknown(this->width_), regex_constants::error_badlookbehind,
                 "Variable-width look-behind assertions are not supported");
         }
 
         template<typename BidiIter, typename Next>
         bool match(state_type<BidiIter> &state, Next const &next) const
         {
-            // Note that if is_pure<Xpr>::value is true, the compiler can optimize this.
-            return is_pure<Xpr>::value || !this->do_save_
-                ? this->match_(state, next, mpl::true_())
-                : this->match_(state, next, mpl::false_());
+            return Xpr::pure || this->pure_
+              ? this->match_(state, next, mpl::true_())
+              : this->match_(state, next, mpl::false_());
         }
 
         template<typename BidiIter, typename Next>
@@ -80,7 +64,7 @@ namespace boost { namespace xpressive { namespace detail
 
             if(this->not_)
             {
-                if(get_pointer(this->xpr_)->match(state))
+                if(this->xpr_.match(state))
                 {
                     BOOST_ASSERT(state.cur_ == tmp);
                     return false;
@@ -93,7 +77,7 @@ namespace boost { namespace xpressive { namespace detail
             }
             else
             {
-                if(!get_pointer(this->xpr_)->match(state))
+                if(!this->xpr_.match(state))
                 {
                     state.cur_ = tmp;
                     return false;
@@ -129,7 +113,7 @@ namespace boost { namespace xpressive { namespace detail
                 save_restore<bool> partial_match(state.found_partial_match_);
                 detail::ignore_unused(&partial_match);
 
-                if(get_pointer(this->xpr_)->match(state))
+                if(this->xpr_.match(state))
                 {
                     restore_sub_matches(mem, state);
                     BOOST_ASSERT(state.cur_ == tmp);
@@ -145,7 +129,7 @@ namespace boost { namespace xpressive { namespace detail
             }
             else
             {
-                if(!get_pointer(this->xpr_)->match(state))
+                if(!this->xpr_.match(state))
                 {
                     state.cur_ = tmp;
                     reclaim_sub_matches(mem, state);
@@ -166,7 +150,7 @@ namespace boost { namespace xpressive { namespace detail
 
         Xpr xpr_;
         bool not_;
-        bool do_save_; // true if matching xpr_ could modify the sub-matches
+        bool pure_; // false if matching xpr_ could modify the sub-matches
         std::size_t width_;
     };
 

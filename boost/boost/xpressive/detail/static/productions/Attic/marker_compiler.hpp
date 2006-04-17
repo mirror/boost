@@ -28,7 +28,7 @@ namespace boost { namespace xpressive { namespace detail
       : proto::conditional_compiler
         <
             is_marker_predicate
-          , proto::transform_compiler<marker_assign_transform, seq_tag>
+          , proto::transform_compiler<marker_replace_transform, seq_tag>
           , proto::branch_compiler<list_branch, lst_tag>
         >
     {

@@ -15,6 +15,8 @@
 #endif
 
 #include <iterator>
+#include <boost/range/end.hpp>
+#include <boost/range/begin.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/detail/utility/save_restore.hpp>
@@ -80,6 +82,7 @@ inline bool regex_match
 }
 
 /// \overload
+///
 template<typename OtherBidiIter, typename BidiIter>
 inline bool regex_match
 (
@@ -95,6 +98,7 @@ inline bool regex_match
 }
 
 /// \overload
+///
 template<typename Char>
 inline bool regex_match
 (
@@ -110,19 +114,41 @@ inline bool regex_match
 }
 
 /// \overload
-template<typename Char, typename Traits, typename Alloc>
+///
+template<typename BidiRange, typename BidiIter>
 inline bool regex_match
 (
-    std::basic_string<Char, Traits, Alloc> const &str
-  , match_results<typename std::basic_string<Char, Traits, Alloc>::const_iterator> &what
-  , basic_regex<typename std::basic_string<Char, Traits, Alloc>::const_iterator> const &re
+    BidiRange &rng
+  , match_results<BidiIter> &what
+  , basic_regex<BidiIter> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
-    return regex_match(str.begin(), str.end(), what, re, flags);
+    // Note that the result iterator of the range must be convertible
+    // to BidiIter here.
+    BidiIter begin = boost::begin(rng), end = boost::end(rng);
+    return regex_match(begin, end, what, re, flags);
 }
 
 /// \overload
+///
+template<typename BidiRange, typename BidiIter>
+inline bool regex_match
+(
+    BidiRange const &rng
+  , match_results<BidiIter> &what
+  , basic_regex<BidiIter> const &re
+  , regex_constants::match_flag_type flags = regex_constants::match_default
+)
+{
+    // Note that the result iterator of the range must be convertible
+    // to BidiIter here.
+    BidiIter begin = boost::begin(rng), end = boost::end(rng);
+    return regex_match(begin, end, what, re, flags);
+}
+
+/// \overload
+///
 template<typename Char>
 inline bool regex_match
 (
@@ -137,17 +163,33 @@ inline bool regex_match
 }
 
 /// \overload
-template<typename Char, typename Traits, typename Alloc>
+///
+template<typename BidiRange, typename BidiIter>
 inline bool regex_match
 (
-    std::basic_string<Char, Traits, Alloc> const &str
-  , basic_regex<typename std::basic_string<Char, Traits, Alloc>::const_iterator> const &re
+    BidiRange &rng
+  , basic_regex<BidiIter> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
     // BUGBUG this is inefficient
-    match_results<typename std::basic_string<Char, Traits, Alloc>::const_iterator> what;
-    return regex_match(str, what, re, flags);
+    match_results<BidiIter> what;
+    return regex_match(rng, what, re, flags);
+}
+
+/// \overload
+///
+template<typename BidiRange, typename BidiIter>
+inline bool regex_match
+(
+    BidiRange const &rng
+  , basic_regex<BidiIter> const &re
+  , regex_constants::match_flag_type flags = regex_constants::match_default
+)
+{
+    // BUGBUG this is inefficient
+    match_results<BidiIter> what;
+    return regex_match(rng, what, re, flags);
 }
 
 
@@ -310,6 +352,7 @@ inline bool regex_search
 }
 
 /// \overload
+///
 template<typename OtherBidiIter, typename BidiIter>
 inline bool regex_search
 (
@@ -325,6 +368,7 @@ inline bool regex_search
 }
 
 /// \overload
+///
 template<typename Char>
 inline bool regex_search
 (
@@ -340,19 +384,41 @@ inline bool regex_search
 }
 
 /// \overload
-template<typename Char, typename Traits, typename Alloc>
+///
+template<typename BidiRange, typename BidiIter>
 inline bool regex_search
 (
-    std::basic_string<Char, Traits, Alloc> const &str
-  , match_results<typename std::basic_string<Char, Traits, Alloc>::const_iterator> &what
-  , basic_regex<typename std::basic_string<Char, Traits, Alloc>::const_iterator> const &re
+    BidiRange &rng
+  , match_results<BidiIter> &what
+  , basic_regex<BidiIter> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
-    return regex_search(str.begin(), str.end(), what, re, flags);
+    // Note that the result iterator of the range must be convertible
+    // to BidiIter here.
+    BidiIter begin = boost::begin(rng), end = boost::end(rng);
+    return regex_search(begin, end, what, re, flags);
 }
 
 /// \overload
+///
+template<typename BidiRange, typename BidiIter>
+inline bool regex_search
+(
+    BidiRange const &rng
+  , match_results<BidiIter> &what
+  , basic_regex<BidiIter> const &re
+  , regex_constants::match_flag_type flags = regex_constants::match_default
+)
+{
+    // Note that the result iterator of the range must be convertible
+    // to BidiIter here.
+    BidiIter begin = boost::begin(rng), end = boost::end(rng);
+    return regex_search(begin, end, what, re, flags);
+}
+
+/// \overload
+///
 template<typename Char>
 inline bool regex_search
 (
@@ -367,17 +433,33 @@ inline bool regex_search
 }
 
 /// \overload
-template<typename Char, typename Traits, typename Alloc>
+///
+template<typename BidiRange, typename BidiIter>
 inline bool regex_search
 (
-    std::basic_string<Char, Traits, Alloc> const &str
-  , basic_regex<typename std::basic_string<Char, Traits, Alloc>::const_iterator> const &re
+    BidiRange &rng
+  , basic_regex<BidiIter> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
     // BUGBUG this is inefficient
-    match_results<typename std::basic_string<Char, Traits, Alloc>::const_iterator> what;
-    return regex_search(str, what, re, flags);
+    match_results<BidiIter> what;
+    return regex_search(rng, what, re, flags);
+}
+
+/// \overload
+///
+template<typename BidiRange, typename BidiIter>
+inline bool regex_search
+(
+    BidiRange const &rng
+  , basic_regex<BidiIter> const &re
+  , regex_constants::match_flag_type flags = regex_constants::match_default
+)
+{
+    // BUGBUG this is inefficient
+    match_results<BidiIter> what;
+    return regex_search(rng, what, re, flags);
 }
 
 
@@ -468,6 +550,7 @@ inline OutIter regex_replace
 }
 
 /// \overload
+///
 template<typename Char>
 inline std::basic_string<Char> regex_replace
 (
