@@ -176,9 +176,6 @@
 			<File
 				RelativePath="..\..\..\boost\xpressive\xpressive_static.hpp">
 			</File>
-			<File
-				RelativePath="..\..\..\boost\xpressive\xpressive_typeof.hpp">
-			</File>
 			<Filter
 				Name="detail"
 				Filter="">
@@ -304,6 +301,9 @@
 						</File>
 						<File
 							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\mark_matcher.hpp">
+						</File>
+						<File
+							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\optional_matcher.hpp">
 						</File>
 						<File
 							RelativePath="..\..\..\boost\xpressive\detail\core\matcher\posix_charset_matcher.hpp">
@@ -436,6 +436,9 @@
 						RelativePath="..\..\..\boost\xpressive\detail\utility\cons.hpp">
 					</File>
 					<File
+						RelativePath="..\..\..\boost\xpressive\detail\utility\counted_base.hpp">
+					</File>
+					<File
 						RelativePath="..\..\..\boost\xpressive\detail\utility\dont_care.hpp">
 					</File>
 					<File
@@ -461,6 +464,9 @@
 					</File>
 					<File
 						RelativePath="..\..\..\boost\xpressive\detail\utility\traits_utils.hpp">
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\detail\utility\width.hpp">
 					</File>
 					<Filter
 						Name="chset"
@@ -502,6 +508,9 @@
 					</File>
 					<File
 						RelativePath="..\..\..\boost\xpressive\detail\dynamic\parser_traits.hpp">
+					</File>
+					<File
+						RelativePath="..\..\..\boost\xpressive\detail\dynamic\sequence.hpp">
 					</File>
 				</Filter>
 			</Filter>

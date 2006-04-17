@@ -25,10 +25,6 @@ doxygen autodoc
 xml xpressive
     :
         xpressive.qbk
-#    : : :
-#        <xsl:param>toc.max.depth=3
-#        <xsl:param>toc.section.depth=3
-#        <xsl:param>chunk.section.depth=3
     ;
 
 boostbook standalone
