@@ -153,7 +153,7 @@ struct maybe_pointer_test
 input_iterator_test<std::istream_iterator<int>, int, std::ptrdiff_t, int*, int&, std::input_iterator_tag>
         istream_iterator_test;
 
-#if defined(__BORLANDC__) && !defined(__SGI_STL_PORT)
+#if BOOST_WORKAROUND(__BORLANDC__, <= 0x564) && !defined(__SGI_STL_PORT)
 typedef ::std::char_traits<char>::off_type distance;
 non_pointer_test<std::ostream_iterator<int>,int,
     distance,int*,int&,std::output_iterator_tag> ostream_iterator_test;
