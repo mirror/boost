@@ -1,4 +1,4 @@
-/* Copyright 2003-2005 Joaquín M López Muñoz.
+/* Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -60,7 +60,7 @@ struct const_identity_base
   template<typename ChainedPtr>
 
 #if !defined(BOOST_NO_SFINAE)
-  typename disable_if<is_convertible<const ChainedPtr,Type>,Type&>::type
+  typename disable_if<is_convertible<const ChainedPtr&,Type&>,Type&>::type
 #else
   Type&
 #endif 
@@ -97,7 +97,8 @@ struct non_const_identity_base
   template<typename ChainedPtr>
 
 #if !defined(BOOST_NO_SFINAE)
-  typename disable_if<is_convertible<const ChainedPtr,const Type>,Type&>::type
+  typename disable_if<
+    is_convertible<const ChainedPtr&,const Type&>,Type&>::type
 #else
   Type&
 #endif 

@@ -215,7 +215,7 @@ that acts as a do-nothing identity functor.
 <span class=special>{</span>
   <span class=keyword>typedef</span> <span class=identifier>Type</span> <span class=identifier>result_type</span><span class=special>;</span>
 
-  <span class=comment>// only provided if const ChainedPtr is not convertible to const Type</span>
+  <span class=comment>// only provided if const ChainedPtr& is not convertible to const Type&</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>ChainedPtr</span><span class=special>&gt;</span> <span class=identifier>Type</span><span class=special>&amp;</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>ChainedPtr</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
 
   <span class=keyword>const</span> <span class=identifier>Type</span><span class=special>&amp;</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>Type</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span> 
@@ -324,7 +324,7 @@ aimed at accessing a given member of a class.
 <span class=special>{</span>
   <span class=keyword>typedef</span> <span class=identifier>Type</span> <span class=identifier>result_type</span><span class=special>;</span>
 
-  <span class=comment>// only provided if const ChainedPtr is not convertible to const Class</span>
+  <span class=comment>// only provided if const ChainedPtr& is not convertible to const Class&</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>ChainedPtr</span><span class=special>&gt;</span> <span class=identifier>Type</span><span class=special>&amp;</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>ChainedPtr</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
 
   <span class=keyword>const</span> <span class=identifier>Type</span><span class=special>&amp;</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>Class</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
@@ -416,7 +416,7 @@ luckily enough, most compilers accept it nevertheless, so
 <span class=special>{</span>
   <span class=keyword>typedef</span> <span class=identifier>Type</span> <span class=identifier>result_type</span><span class=special>;</span>
 
-  <span class=comment>// only provided if const ChainedPtr is not convertible to const Class</span>
+  <span class=comment>// only provided if const ChainedPtr& is not convertible to const Class&</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>ChainedPtr</span><span class=special>&gt;</span> <span class=identifier>Type</span><span class=special>&amp;</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>ChainedPtr</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
 
   <span class=keyword>const</span> <span class=identifier>Type</span><span class=special>&amp;</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>Class</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span> 
@@ -521,7 +521,7 @@ returning as key the result of invoking a given constant member function of a cl
 <span class=special>{</span>
   <span class=keyword>typedef</span> <span class=keyword>typename</span> <span class=identifier>remove_reference</span><span class=special>&lt;</span><span class=identifier>Type</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>result_type</span><span class=special>;</span>
 
-  <span class=comment>// only provided if const ChainedPtr is not convertible to const Class</span>
+  <span class=comment>// only provided if const ChainedPtr& is not convertible to const Class&</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>ChainedPtr</span><span class=special>&gt;</span> <span class=identifier>Type</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>ChainedPtr</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
 
   <span class=identifier>Type</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>Class</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
@@ -593,7 +593,7 @@ returning as key the result of invoking a given member function of a class.
 <span class=special>{</span>
   <span class=keyword>typedef</span> <span class=keyword>typename</span> <span class=identifier>remove_reference</span><span class=special>&lt;</span><span class=identifier>Type</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>result_type</span><span class=special>;</span>
 
-  <span class=comment>// only provided if ChainedPtr is not convertible to Class</span>
+  <span class=comment>// only provided if ChainedPtr& is not convertible to Class&</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>ChainedPtr</span><span class=special>&gt;</span> <span class=identifier>Type</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>ChainedPtr</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
 
   <span class=identifier>Type</span> <span class=keyword>operator</span><span class=special>()(</span><span class=identifier>Class</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
@@ -656,7 +656,7 @@ these pointers as an additional template parameter.
 <span class=special>{</span>
   <span class=keyword>typedef</span> <span class=keyword>typename</span> <span class=identifier>remove_reference</span><span class=special>&lt;</span><span class=identifier>Type</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>result_type</span><span class=special>;</span>
 
-  <span class=comment>// only provided if const ChainedPtr is not convertible to const Class</span>
+  <span class=comment>// only provided if const ChainedPtr& is not convertible to const Class&</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>ChainedPtr</span><span class=special>&gt;</span> <span class=identifier>Type</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>ChainedPtr</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
 
   <span class=identifier>Type</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>Class</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
@@ -700,7 +700,7 @@ used for extraction.
 <span class=special>{</span>
   <span class=keyword>typedef</span> <span class=keyword>typename</span> <span class=identifier>remove_reference</span><span class=special>&lt;</span><span class=identifier>Type</span><span class=special>&gt;::</span><span class=identifier>type</span> <span class=identifier>result_type</span><span class=special>;</span>
 
-  <span class=comment>// only provided if ChainedPtr is not convertible to Class</span>
+  <span class=comment>// only provided if ChainedPtr& is not convertible to Class&</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>ChainedPtr</span><span class=special>&gt;</span> <span class=identifier>Type</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>ChainedPtr</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
 
   <span class=identifier>Type</span> <span class=keyword>operator</span><span class=special>()(</span><span class=identifier>Class</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
@@ -886,7 +886,7 @@ at compile time. The returned object is of type
   <span class=keyword>const</span> <span class=identifier>key_extractor_tuple</span><span class=special>&amp;</span> <span class=identifier>key_extractors</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
   <span class=identifier>key_extractor_tuple</span><span class=special>&amp;</span>       <span class=identifier>key_extractors</span><span class=special>()</span>
 
-  <span class=comment>// only provided if const ChainedPtr is not convertible to const value_type</span>
+  <span class=comment>// only provided if const ChainedPtr& is not convertible to const value_type&</span>
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>ChainedPtr</span><span class=special>&gt;</span>
   <span class=identifier>result_type</span> <span class=keyword>operator</span><span class=special>()(</span><span class=keyword>const</span> <span class=identifier>ChainedPtr</span><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
   
@@ -2101,7 +2101,7 @@ Compiler specifics
 
 <br>
 
-<p>Revised February 6th 2006</p>
+<p>Revised April 17th 2006</p>
 
 <p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 

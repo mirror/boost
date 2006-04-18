@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for key extractors.
  *
- * Copyright 2003-2005 Joaquín M López Muñoz.
+ * Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -59,6 +59,7 @@ struct test_derived_class:test_class
 };
 
 BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(test_class)
+BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(test_derived_class)
 
 typedef identity<test_class>                                       idn;
 typedef identity<const test_class>                                 cidn;
@@ -84,6 +85,58 @@ typedef composite_key<
           boost::reference_wrapper<test_class>,
           key_mf
           >                                                        ccompw_key;
+
+#if !defined(BOOST_NO_SFINAE)
+/* testcases for problems with non-copyable classes reported at
+ * http://lists.boost.org/Archives/boost/2006/04/103065.php
+ */
+
+struct test_nc_class
+{
+  int       int_member;
+  const int int_cmember;
+
+  bool bool_mem_fun_const()const{return true;}
+  bool bool_mem_fun(){return false;}
+
+  test_nc_class(int i=0):int_member(i),int_cmember(i){}
+  test_nc_class(int i,int j):int_member(i),int_cmember(j){}
+
+  bool operator==(const test_nc_class& x)const
+  {
+    return int_member==x.int_member&&int_cmember==x.int_cmember;
+  }
+
+private:
+  test_nc_class(const test_nc_class&);
+};
+
+struct test_nc_derived_class:test_nc_class
+{
+  test_nc_derived_class(int i=0):test_nc_class(i){}
+  test_nc_derived_class(int i,int j):test_nc_class(i,j){}
+};
+
+BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(test_nc_class)
+BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(test_nc_derived_class)
+
+typedef identity<test_nc_class>                                nc_idn;
+typedef identity<const test_nc_class>                          nc_cidn;
+typedef BOOST_MULTI_INDEX_MEMBER(test_nc_class,int,int_member) nc_key_m;
+typedef BOOST_MULTI_INDEX_MEMBER(
+          test_nc_class,const int,int_member)                  nc_ckey_m;
+typedef BOOST_MULTI_INDEX_CONST_MEM_FUN(
+          test_nc_class,bool,bool_mem_fun_const)               nc_key_cmf;
+typedef BOOST_MULTI_INDEX_MEM_FUN(
+          test_nc_class,bool,bool_mem_fun)                     nc_key_mf;
+typedef composite_key<
+          test_nc_class,
+          nc_idn,
+          nc_key_m,
+          nc_ckey_m,
+          nc_key_cmf
+        >                                                      nc_compkey;
+#endif
 
 void test_key_extractors()
 {
@@ -277,6 +330,35 @@ void test_key_extractors()
   BOOST_CHECK(!k_mf(tap));
   BOOST_CHECK(!k_mf(tw));
   BOOST_CHECK(ccmpk_w(tw)==make_tuple(false));
+
+#if !defined(BOOST_NO_SFINAE)
+/* testcases for problems with non-copyable classes reported at
+ * http://lists.boost.org/Archives/boost/2006/04/103065.php
+ */
+
+  nc_idn        nc_id;
+  nc_cidn       nc_cid;
+  nc_key_m      nc_k_m;
+  nc_ckey_m     nc_ck_m;
+  nc_key_cmf    nc_k_cmf;
+  nc_key_mf     nc_k_mf;
+  nc_compkey    nc_cmpk;
+
+  test_nc_derived_class nc_td(-1,0);
+
+  nc_id(nc_td).int_member=0;
+  BOOST_CHECK(nc_id(nc_td).int_member==0);
+  BOOST_CHECK(nc_cid(nc_td).int_member==0);
+
+  nc_k_m(&nc_td)=1;
+  BOOST_CHECK(nc_k_m(&nc_td)==1);
+  BOOST_CHECK(nc_ck_m(&nc_td)==1);
+
+  BOOST_CHECK(nc_k_cmf(nc_td));
+  BOOST_CHECK(!nc_k_mf(nc_td));
+  BOOST_CHECK(
+    nc_cmpk(nc_td)==make_tuple(boost::cref(test_nc_class(1,0)),1,1,true));
+#endif
   
   std::list<test_class> tl;
   for(int i=0;i<20;++i)tl.push_back(test_class(i));

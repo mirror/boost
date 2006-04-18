@@ -58,7 +58,7 @@ struct const_mem_fun
 
 #if !defined(BOOST_NO_SFINAE)
   typename disable_if<
-    is_convertible<const ChainedPtr,const Class>,Type>::type
+    is_convertible<const ChainedPtr&,const Class&>,Type>::type
 #else
   Type
 #endif
@@ -93,7 +93,7 @@ struct mem_fun
 
 #if !defined(BOOST_NO_SFINAE)
   typename disable_if<
-    is_convertible<ChainedPtr,Class>,Type>::type
+    is_convertible<ChainedPtr&,Class&>,Type>::type
 #else
   Type
 #endif
@@ -135,7 +135,7 @@ struct const_mem_fun_explicit
 
 #if !defined(BOOST_NO_SFINAE)
   typename disable_if<
-    is_convertible<const ChainedPtr,const Class>,Type>::type
+    is_convertible<const ChainedPtr&,const Class&>,Type>::type
 #else
   Type
 #endif
@@ -172,7 +172,7 @@ struct mem_fun_explicit
 
 #if !defined(BOOST_NO_SFINAE)
   typename disable_if<
-    is_convertible<ChainedPtr,Class>,Type>::type
+    is_convertible<ChainedPtr&,Class&>,Type>::type
 #else
   Type
 #endif
