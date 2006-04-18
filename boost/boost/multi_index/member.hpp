@@ -60,7 +60,7 @@ struct const_member_base
 
 #if !defined(BOOST_NO_SFINAE)
   typename disable_if<
-    is_convertible<const ChainedPtr,const Class>,Type&>::type
+    is_convertible<const ChainedPtr&,const Class&>,Type&>::type
 #else
   Type&
 #endif
@@ -80,7 +80,7 @@ struct const_member_base
     return operator()(x.get());
   }
 
-  Type& operator()(const reference_wrapper<Class> x,int=0)const
+  Type& operator()(const reference_wrapper<Class>& x,int=0)const
   { 
     return operator()(x.get());
   }
@@ -95,7 +95,7 @@ struct non_const_member_base
 
 #if !defined(BOOST_NO_SFINAE)
   typename disable_if<
-    is_convertible<const ChainedPtr,const Class>,Type&>::type
+    is_convertible<const ChainedPtr&,const Class&>,Type&>::type
 #else
   Type&
 #endif
@@ -163,7 +163,7 @@ struct const_member_offset_base
 
 #if !defined(BOOST_NO_SFINAE)
   typename disable_if<
-    is_convertible<const ChainedPtr,const Class>,Type&>::type
+    is_convertible<const ChainedPtr&,const Class&>,Type&>::type
 #else
   Type&
 #endif 
@@ -201,7 +201,7 @@ struct non_const_member_offset_base
 
 #if !defined(BOOST_NO_SFINAE)
   typename disable_if<
-    is_convertible<const ChainedPtr,const Class>,Type&>::type
+    is_convertible<const ChainedPtr&,const Class&>,Type&>::type
 #else
   Type&
 #endif 
