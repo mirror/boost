@@ -22,7 +22,7 @@ exe wave
     /boost/wave//boost_wave
     /boost/program_options//boost_program_options
     /boost/filesystem//boost_filesystem
-    /boost/filesystem//boost_serialization
+    /boost/serialization//boost_serialization
     :
     <toolset>msvc-7.1:<rtti>off     # workaround for compiler bug
     :
