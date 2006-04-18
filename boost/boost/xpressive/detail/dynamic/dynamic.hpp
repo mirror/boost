@@ -13,7 +13,7 @@
 # pragma once
 #endif
 
-#include <list>
+#include <vector>
 #include <utility>
 #include <algorithm>
 #include <boost/assert.hpp>

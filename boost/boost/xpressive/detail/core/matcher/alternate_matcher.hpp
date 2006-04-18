@@ -13,8 +13,6 @@
 # pragma once
 #endif
 
-#include <vector>
-
 #include <boost/version.hpp>
 #if BOOST_VERSION <= 103200
 // WORKAROUND for Fusion bug in Boost 1.32

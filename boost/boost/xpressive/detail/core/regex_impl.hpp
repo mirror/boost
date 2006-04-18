@@ -13,7 +13,6 @@
 # pragma once
 #endif
 
-#include <vector>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/dynamic/matchable.hpp>

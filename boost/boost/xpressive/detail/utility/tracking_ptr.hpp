@@ -20,14 +20,14 @@
 #include <functional>
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
+#include <boost/weak_ptr.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/intrusive_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
+#include <boost/detail/atomic_count.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/iterator/filter_iterator.hpp>
-#include <boost/detail/atomic_count.hpp>
+#include <boost/type_traits/is_base_and_derived.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -142,7 +142,6 @@ void adl_swap(T &t1, T &t2)
 //
 template<typename Derived>
 struct enable_reference_tracking
-  : enable_shared_from_this<Derived>
 {
     typedef enable_reference_tracking<Derived> this_type;
     typedef std::set<shared_ptr<Derived> > references_type;
@@ -201,6 +200,7 @@ struct enable_reference_tracking
         if(0 == --this->cnt_)
         {
             this->refs_.clear();
+            this->self_.reset();
         }
     }
 
@@ -260,22 +260,14 @@ private:
         return !this->deps_.empty();
     }
 
-    intrusive_ptr<Derived> get_ref_deleter_()
-    {
-        return intrusive_ptr<Derived>(&this->derived_());
-    }
-
     void update_references_()
     {
         typename references_type::iterator cur = this->refs_.begin();
         typename references_type::iterator end = this->refs_.end();
         for(; cur != end; ++cur)
         {
-            if(this != cur->get()) // not necessary, but avoids a call to shared_from_this()
-            {
-                // for each reference, add this as a dependency
-                (*cur)->track_dependency_(this->shared_from_this());
-            }
+            // for each reference, add this as a dependency
+            (*cur)->track_dependency_(this->self_);
         }
     }
 
@@ -291,7 +283,7 @@ private:
 
             for(; cur != end; ++cur)
             {
-                (*cur)->track_reference(this->shared_from_this());
+                (*cur)->track_reference(this->self_);
             }
         }
     }
@@ -332,6 +324,7 @@ private:
 
     references_type refs_;
     dependents_type deps_;
+    shared_ptr<Derived> self_;
     boost::detail::atomic_count cnt_;
 };
 
@@ -355,7 +348,7 @@ inline void intrusive_ptr_release(enable_reference_tracking<Derived> *p)
 template<typename Derived>
 inline void enable_reference_tracking<Derived>::dump_(std::ostream &sout) const
 {
-    shared_ptr<Derived const> this_ = this->shared_from_this();
+    shared_ptr<Derived const> this_ = this->self_;
     sout << "0x" << (void*)this << " cnt=" << this_.use_count()-1 << " refs={";
     typename references_type::const_iterator cur1 = this->refs_.begin();
     typename references_type::const_iterator end1 = this->refs_.end();
@@ -398,13 +391,11 @@ public:
 
     tracking_ptr()
       : data_()
-      , refs_()
     {
     }
 
     tracking_ptr(tracking_ptr<element_type> const &that)
       : data_()
-      , refs_()
     {
         this->operator =(that);
     }
@@ -422,8 +413,7 @@ public:
             }
             else
             {
-                this->refs_ = that.refs_; // shallow, copy-on-write
-                this->data_ = that.data_;
+                this->data_ = that.data_; // shallow, copy-on-write
             }
         }
         else if(*this)
@@ -438,7 +428,6 @@ public:
     void swap(tracking_ptr<element_type> &that) // throw()
     {
         this->data_.swap(that.data_);
-        this->refs_.swap(that.refs_);
     }
 
     // deep copy, forces a fork and calls update() to update all the
@@ -485,28 +474,26 @@ private:
     {
         if(!*this)
         {
-            this->data_.reset(new element_type);
-            this->refs_ = this->data_->get_ref_deleter_();
+            shared_ptr<element_type> tmp(new element_type);
+            tmp->self_ = tmp;
+            this->data_ = tmp.get();
         }
         else if(!this->unique_())
         {
             BOOST_ASSERT(!this->has_deps_());
-            shared_ptr<element_type> new_data(new element_type);
-            if(copy)
-            {
-                new_data->tracking_copy(*this->data_);
-            }
-            this->data_.swap(new_data);
-            this->refs_ = this->data_->get_ref_deleter_();
+            shared_ptr<element_type> tmp(new element_type);
+            tmp->self_ = tmp;
+            if(copy) tmp->tracking_copy(*this->data_);
+            this->data_ = tmp.get();
         }
 
-        return this->data_;
+        return this->data_->self_;
     }
 
     // are we the only holders of this data?
     bool unique_() const
     {
-        return 1 == this->refs_->use_count();
+        return 1 == this->data_->use_count();
     }
 
     // does anybody have a dependency on us?
@@ -516,8 +503,7 @@ private:
     }
 
     // mutable to allow lazy initialization
-    mutable shared_ptr<element_type> data_;
-    mutable intrusive_ptr<element_type> refs_;
+    mutable intrusive_ptr<element_type> data_;
 };
 
 }}} // namespace boost::xpressive::detail
