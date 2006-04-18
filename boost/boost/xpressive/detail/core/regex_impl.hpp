@@ -16,6 +16,7 @@
 #include <vector>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
+#include <boost/xpressive/detail/dynamic/matchable.hpp>
 #include <boost/xpressive/detail/utility/tracking_ptr.hpp>
 #include <boost/xpressive/detail/utility/counted_base.hpp>
 
@@ -24,13 +25,39 @@ namespace boost { namespace xpressive { namespace detail
 
 ///////////////////////////////////////////////////////////////////////////////
 // finder
-//
 template<typename BidiIter>
 struct finder
   : counted_base<finder<BidiIter> >
 {
     virtual ~finder() {}
     virtual bool operator ()(state_type<BidiIter> &state) const = 0;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// traits
+struct traits
+  : counted_base<traits>
+{
+    virtual ~traits() {}
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// traits_holder
+template<typename Traits>
+struct traits_holder
+  : traits
+{
+    explicit traits_holder(Traits const &traits)
+      : traits_(traits)
+    {
+    }
+
+    Traits const &traits() const
+    {
+        return this->traits_;
+    }
+private:
+    Traits traits_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -86,7 +113,7 @@ struct regex_impl
     }
 
     intrusive_ptr<matchable_ex<BidiIter> const> xpr_;
-    shared_ptr<void const> traits_;
+    intrusive_ptr<traits const> traits_;
     intrusive_ptr<finder<BidiIter> > finder_;
     std::size_t mark_count_;
     std::size_t hidden_mark_count_;

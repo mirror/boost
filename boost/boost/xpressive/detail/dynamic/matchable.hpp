@@ -17,7 +17,6 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/detail/core/quant_style.hpp>
 #include <boost/xpressive/detail/utility/counted_base.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>

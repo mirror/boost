@@ -35,7 +35,7 @@ namespace boost { namespace xpressive { namespace detail
     void static_compile_impl2(Xpr const &xpr, shared_ptr<regex_impl<BidiIter> > const &impl, Traits const &traits)
     {
         impl->tracking_clear();
-        impl->traits_.reset(new Traits(traits));
+        impl->traits_ = new traits_holder<Traits>(traits);
 
         // "compile" the regex and wrap it in an xpression_adaptor.
         xpression_visitor<BidiIter, mpl::false_, Traits> visitor(traits, impl);

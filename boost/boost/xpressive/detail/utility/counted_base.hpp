@@ -8,7 +8,6 @@
 #define BOOST_XPRESSIVE_DETAIL_UTILITY_COUNTED_BASE_HPP_EAN_04_16_2006
 
 #include <boost/assert.hpp>
-#include <boost/noncopyable.hpp>
 #include <boost/checked_delete.hpp>
 #include <boost/detail/atomic_count.hpp>
 
@@ -21,17 +20,26 @@ namespace boost { namespace xpressive { namespace detail
     // counted_base
     template<typename Derived>
     struct counted_base
-      : private noncopyable
     {
-        bool unique() const
+        long use_count() const
         {
-            return 1 == this->count_;
+            return this->count_;
         }
 
     protected:
         counted_base()
           : count_(0)
         {
+        }
+
+        counted_base(counted_base<Derived> const &)
+          : count_(0)
+        {
+        }
+
+        counted_base &operator =(counted_base<Derived> const &)
+        {
+            return *this;
         }
 
     private:

@@ -49,7 +49,7 @@ struct match_context
     matchable<BidiIter> const *next_ptr_;
 
     // A pointer to the current traits object
-    void const *traits_;
+    detail::traits const *traits_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -240,7 +240,7 @@ struct state_type
     template<typename Traits>
     Traits const &get_traits() const
     {
-        return *static_cast<Traits const *>(this->context_.traits_);
+        return static_cast<traits_holder<Traits> const *>(this->context_.traits_)->traits();
     }
 
 private:

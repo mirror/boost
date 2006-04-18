@@ -111,7 +111,7 @@ struct regex_compiler
         shared_ptr<detail::regex_impl<BidiIter> > const &impl = detail::core_access<BidiIter>::get_regex_impl(rex);
         detail::common_compile(seq.xpr().matchable(), *impl, this->rxtraits());
 
-        impl->traits_.reset(new RegexTraits(this->rxtraits()));
+        impl->traits_ = new detail::traits_holder<RegexTraits>(this->rxtraits());
         impl->mark_count_ = this->mark_count_;
         impl->hidden_mark_count_ = this->hidden_mark_count_;
 

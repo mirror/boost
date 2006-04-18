@@ -251,7 +251,7 @@ private:
     /// INTERNAL ONLY
     void fork_()
     {
-        if(!this->impl_->unique())
+        if(1 != this->impl_->use_count())
         {
             intrusive_ptr<impl_type_> clone = new impl_type_
             (
@@ -280,7 +280,7 @@ private:
     /// INTERNAL ONLY
     void next_()
     {
-        BOOST_ASSERT(this->impl_ && this->impl_->unique());
+        BOOST_ASSERT(this->impl_ && 1 == this->impl_->use_count());
         if(!this->impl_->next())
         {
             this->impl_ = 0;

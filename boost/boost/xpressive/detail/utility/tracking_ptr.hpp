@@ -22,10 +22,12 @@
 #include <boost/assert.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/intrusive_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/iterator/filter_iterator.hpp>
+#include <boost/detail/atomic_count.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -102,20 +104,6 @@ private:
     boost::shared_ptr<Derived> cur_;
     base_iterator iter_;
     set_type *set_;
-};
-
-///////////////////////////////////////////////////////////////////////////////
-// reference_deleter
-//
-template<typename Derived>
-struct reference_deleter
-{
-    void operator ()(void *pv) const
-    {
-        typedef enable_reference_tracking<Derived> impl_type;
-        impl_type *pimpl = static_cast<impl_type *>(pv);
-        pimpl->refs_.clear();
-    }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -197,6 +185,25 @@ struct enable_reference_tracking
         this->refs_.insert(that->refs_.begin(), that->refs_.end());
     }
 
+    long use_count() const
+    {
+        return this->cnt_;
+    }
+
+    void add_ref()
+    {
+        ++this->cnt_;
+    }
+
+    void release()
+    {
+        BOOST_ASSERT(0 < this->cnt_);
+        if(0 == --this->cnt_)
+        {
+            this->refs_.clear();
+        }
+    }
+
     //{{AFX_DEBUG
     #ifdef BOOST_XPRESSIVE_DEBUG_TRACKING_POINTER
     friend std::ostream &operator <<(std::ostream &sout, enable_reference_tracking<Derived> const &that)
@@ -212,12 +219,14 @@ protected:
     enable_reference_tracking()
       : refs_()
       , deps_()
+      , cnt_(0)
     {
     }
 
     enable_reference_tracking(enable_reference_tracking<Derived> const &that)
       : refs_()
       , deps_()
+      , cnt_(0)
     {
         this->operator =(that);
     }
@@ -234,9 +243,7 @@ protected:
     }
 
 private:
-
     friend struct tracking_ptr<Derived>;
-    friend struct reference_deleter<Derived>;
 
     Derived &derived_()
     {
@@ -253,9 +260,9 @@ private:
         return !this->deps_.empty();
     }
 
-    shared_ptr<void> get_ref_deleter_()
+    intrusive_ptr<Derived> get_ref_deleter_()
     {
-        return shared_ptr<void>(static_cast<void*>(this), reference_deleter<Derived>());
+        return intrusive_ptr<Derived>(&this->derived_());
     }
 
     void update_references_()
@@ -325,7 +332,20 @@ private:
 
     references_type refs_;
     dependents_type deps_;
+    boost::detail::atomic_count cnt_;
 };
+
+template<typename Derived>
+inline void intrusive_ptr_add_ref(enable_reference_tracking<Derived> *p)
+{
+    p->add_ref();
+}
+
+template<typename Derived>
+inline void intrusive_ptr_release(enable_reference_tracking<Derived> *p)
+{
+    p->release();
+}
 
 //{{AFX_DEBUG
 #ifdef BOOST_XPRESSIVE_DEBUG_TRACKING_POINTER
@@ -486,7 +506,7 @@ private:
     // are we the only holders of this data?
     bool unique_() const
     {
-        return this->refs_.unique();
+        return 1 == this->refs_->use_count();
     }
 
     // does anybody have a dependency on us?
@@ -497,7 +517,7 @@ private:
 
     // mutable to allow lazy initialization
     mutable shared_ptr<element_type> data_;
-    mutable shared_ptr<void const> refs_;
+    mutable intrusive_ptr<element_type> refs_;
 };
 
 }}} // namespace boost::xpressive::detail
