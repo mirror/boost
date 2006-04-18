@@ -57,12 +57,6 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Op>
     struct width_of;
 
-    template<>
-    struct width_of<no_next>
-      : mpl::size_t<0>
-    {
-    };
-
     template<typename Matcher>
     struct width_of<proto::unary_op<Matcher, proto::noop_tag> >
       : mpl::size_t<as_matcher<Matcher>::type::width>

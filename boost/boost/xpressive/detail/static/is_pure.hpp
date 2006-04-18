@@ -22,7 +22,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // equivalent to mpl::and_<X, Y>
 #define BOOST_XPR_AND_PURE_(X, Y)                                                                   \
-    mpl::bool_<X::value && X::value>
+    mpl::bool_<X::value && Y::value>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -37,12 +37,6 @@ namespace boost { namespace xpressive { namespace detail
     //
     template<typename Xpr>
     struct is_pure;
-
-    template<>
-    struct is_pure<no_next>
-      : mpl::true_
-    {
-    };
 
     template<typename Matcher>
     struct is_pure<proto::unary_op<Matcher, proto::noop_tag> >
