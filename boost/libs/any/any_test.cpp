@@ -199,7 +199,7 @@ namespace any_tests // test definitions
         int const volatile & ra_cv = any_cast<int const volatile&>(a);
 
         check_true(
-            &ra == &ra_c && &ra_c == &ra_v && &ra_v == &ra_cv,
+            &ra == &ra_c && &ra == &ra_v && &ra == &ra_cv,
             "cv references to same obj");
 
         int const &          rb_c  = any_cast<int const &>(b);
