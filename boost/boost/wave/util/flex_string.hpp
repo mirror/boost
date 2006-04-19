@@ -80,6 +80,7 @@ class StoragePolicy
 #include <boost/wave/wave_config.hpp>
 #if BOOST_WAVE_SERIALIZATION != 0
 #include <boost/serialization/serialization.hpp>
+#include <boost/serialization/split_free.hpp>
 #include <boost/serialization/collections_save_imp.hpp>
 #include <boost/serialization/collections_load_imp.hpp>
 #define BOOST_WAVE_FLEX_STRING_SERIALIZATION_HACK 1

@@ -424,7 +424,8 @@ template<class Archive>
 inline void save (Archive & ar, boost::filesystem::path const& p, 
     const unsigned int /* file_version */)
 {
-    ar & p.native_file_string();
+    std::string path_str(p.native_file_string());
+    ar & path_str;
 }
 
 template<class Archive>

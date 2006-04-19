@@ -600,6 +600,7 @@ protected:
         IteratorT end, typename ContextT::token_type const &act_token)
     {
         using namespace boost::wave;
+        namespace fs = boost::filesystem;
         
         typedef typename ContextT::token_type token_type;
         typedef typename token_type::string_type string_type;

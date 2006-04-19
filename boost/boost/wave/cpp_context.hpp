@@ -343,9 +343,12 @@ private:
     {
         typedef typename token_type::string_type string_type;
         
-        ar & string_type(BOOST_PP_STRINGIZE(BOOST_WAVE_CONFIG));
-        ar & string_type(BOOST_WAVE_PRAGMA_KEYWORD);
-        ar & string_type(BOOST_PP_STRINGIZE((BOOST_WAVE_STRINGTYPE)));
+        string_type cfg(BOOST_PP_STRINGIZE(BOOST_WAVE_CONFIG));
+        string_type kwd(BOOST_WAVE_PRAGMA_KEYWORD);
+        string_type strtype(BOOST_PP_STRINGIZE((BOOST_WAVE_STRINGTYPE)));
+        ar & cfg;
+        ar & kwd;
+        ar & strtype;
         
         ar & language;
         ar & macros;

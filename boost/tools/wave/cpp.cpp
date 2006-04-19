@@ -77,6 +77,7 @@ using std::pair;
 using std::vector;
 using std::getline;
 using std::ifstream;
+using std::ofstream;
 using std::cout;
 using std::cerr;
 using std::endl;
@@ -422,11 +423,10 @@ namespace {
                 if (state_file == "-") 
                     state_file = fs::path("wave.state", fs::native);
 
-                using std::ios_base::openmode;
-                openmode mode = ios_base::in;
+                std::ios::openmode mode = std::ios::in;
 
 #if BOOST_WAVE_BINARY_SERIALIZATION != 0
-                mode = (openmode)(mode | ios_base::binary);
+                mode = (std::ios::openmode)(mode | std::ios::binary);
 #endif
                 ifstream ifs (state_file.string().c_str(), mode);
                 if (ifs.is_open()) {
@@ -466,11 +466,10 @@ namespace {
                 if (state_file == "-") 
                     state_file = fs::path("wave.state", fs::native);
 
-                using std::ios_base::openmode;
-                openmode mode = ios_base::out;
+                std::ios::openmode mode = std::ios::out;
 
 #if BOOST_WAVE_BINARY_SERIALIZATION != 0
-                mode = (openmode)(mode | ios_base::binary);
+                mode = (std::ios::openmode)(mode | std::ios::binary);
 #endif
                 ofstream ofs(state_file.string().c_str(), mode);
                 if (!ofs.is_open()) {
@@ -480,7 +479,8 @@ namespace {
                 }
                 else {
                     oarchive oa(ofs);
-                    oa << string(CPP_VERSION_FULL_STR); // write version
+                    string version(CPP_VERSION_FULL_STR);
+                    oa << version; // write version
                     oa << ctx;                  // write the internal tables to disc
                 }
             }
@@ -848,7 +848,7 @@ auto_stop_watch elapsed_time(cerr);
 
                     // print out the current token value
                         if (allow_output) {
-                            if (output.rdstate() & (ios::badbit | ios::failbit | ios::eofbit))
+                            if (output.rdstate() & (std::ios::badbit | std::ios::failbit | std::ios::eofbit))
                             {
                                 cerr << "wave: problem writing to the current "
                                      << "output file" << endl;
