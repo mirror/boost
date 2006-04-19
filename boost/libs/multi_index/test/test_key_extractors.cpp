@@ -356,8 +356,9 @@ void test_key_extractors()
 
   BOOST_CHECK(nc_k_cmf(nc_td));
   BOOST_CHECK(!nc_k_mf(nc_td));
-  BOOST_CHECK(
-    nc_cmpk(nc_td)==make_tuple(boost::cref(test_nc_class(1,0)),1,1,true));
+
+  test_nc_class nc_t(1,0);
+  BOOST_CHECK(nc_cmpk(nc_td)==make_tuple(boost::cref(nc_t),1,1,true));
 #endif
   
   std::list<test_class> tl;
