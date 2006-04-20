@@ -26,6 +26,7 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
 #include <boost/preprocessor/arithmetic/sub.hpp>
+#include <boost/preprocessor/repetition/repeat.hpp>
 #include <boost/preprocessor/repetition/enum_shifted.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/enum_shifted_params.hpp>
@@ -461,6 +462,13 @@ namespace aux
 
 } // namespace aux
 
+#define BOOST_PARAMETER_FORWARD_TYPEDEF(z, i, names) \
+    typedef BOOST_PP_CAT(BOOST_PP_SEQ_ELEM(0,names),i) BOOST_PP_CAT(BOOST_PP_SEQ_ELEM(1,names),i);
+
+#define BOOST_PARAMETER_FORWARD_TYPEDEFS(n, src, dest) \
+    BOOST_PP_REPEAT(n, BOOST_PARAMETER_FORWARD_TYPEDEF, (src)(dest))
+
+
 #define BOOST_PARAMETER_TEMPLATE_ARGS(z, n, text) class BOOST_PP_CAT(PS, n) = void_
 
 template<
@@ -564,27 +572,8 @@ struct parameters
         ), unnamed_list>::type type;
     };
 
-    // Metafunction that returns an ArgumentPack.
-    template <
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-        // Borland simply can't handle default arguments in member
-        // class templates.  People wishing to write portable code can
-        // explicitly specify BOOST_PARAMETER_MAX_ARITY arguments
-        BOOST_PP_ENUM_PARAMS(BOOST_PARAMETER_MAX_ARITY, class A)
-#else 
-        BOOST_PP_ENUM_BINARY_PARAMS(
-            BOOST_PARAMETER_MAX_ARITY, class A, = void_ BOOST_PP_INTERCEPT
-        )
-#endif            
-    >
-    struct argument_pack
-    {
-      typedef typename mpl::apply_wrap1<BOOST_PARAMETER_build_arg_list(
-            BOOST_PARAMETER_MAX_ARITY, aux::make_partial_arg_list, PS, A
-          , aux::tag_keyword_arg
-        ), unnamed_list>::type type;
-    };
-    
+    BOOST_PARAMETER_FORWARD_TYPEDEFS(BOOST_PARAMETER_MAX_ARITY, PS, parameter_spec)
+
     //
     // The function call operator is used to build an arg_list that
     // labels the positional parameters and maintains whatever other
@@ -655,10 +644,6 @@ struct parameters
     ))
 #include BOOST_PP_ITERATE()
     
-#undef BOOST_PARAMETER_build_arg_list
-#undef BOOST_PARAMETER_make_arg_list
-#undef BOOST_PARAMETER_right_angle
-
 };
 
 } // namespace parameter
