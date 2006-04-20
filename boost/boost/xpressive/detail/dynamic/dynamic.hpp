@@ -279,6 +279,7 @@ make_repeat(quant_spec const &spec, sequence<BidiIter> &seq)
         seq = make_dynamic<BidiIter>(mark_begin_matcher(mark_nbr)) + seq
             + make_dynamic<BidiIter>(mark_end_matcher(mark_nbr));
         make_repeat(spec, seq, mark_nbr);
+        return;
     }
 
     // if min is 0, the repeat must be made optional
