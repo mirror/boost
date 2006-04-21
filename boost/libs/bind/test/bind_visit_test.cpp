@@ -22,6 +22,7 @@
 #endif
 
 #include <iostream>
+#include <typeinfo>
 
 #if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
 # pragma warning(pop)
@@ -37,12 +38,14 @@ struct visitor
     {
     }
 
-    template<typename T> void operator()( T const & /*t*/ )
+    template<typename T> void operator()( T const & t )
     {
+        std::cout << "visitor::operator()( T ): " << typeid( t ).name() << std::endl;
     }
 
     void operator()( int const & t )
     {
+        std::cout << "visitor::operator()( int ): " << t << std::endl;
         hash = hash * 10 + t;
     }
 };
