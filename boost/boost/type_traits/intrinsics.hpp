@@ -72,7 +72,7 @@
 
 #if defined(BOOST_MSVC) && defined(_MSC_FULL_VER) && (_MSC_FULL_VER >=140050215)
 #   define BOOST_IS_UNION(T) __is_union(T)
-#   define BOOST_IS_POD(T) __is_pod(T)
+#   define BOOST_IS_POD(T) (__is_pod(T) && __has_trivial_constructor(T))
 #   define BOOST_IS_EMPTY(T) __is_empty(T)
 #   define BOOST_HAS_TRIVIAL_CONSTRUCTOR(T) __has_trivial_constructor(T)
 #   define BOOST_HAS_TRIVIAL_COPY(T) __has_trivial_copy(T)
