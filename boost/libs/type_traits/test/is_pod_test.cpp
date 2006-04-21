@@ -158,6 +158,14 @@ BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::is_pod<POD_UDT>::value, true, false);
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::is_pod<POD_union_UDT>::value, true, false);
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::is_pod<empty_POD_union_UDT>::value, true, false);
 
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<trivial_except_copy>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<trivial_except_destroy>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<trivial_except_assign>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<trivial_except_construct>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<wrap<trivial_except_copy> >::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<wrap<trivial_except_assign> >::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<wrap<trivial_except_destroy> >::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<wrap<trivial_except_construct> >::value, false);
 
 TT_TEST_END
 

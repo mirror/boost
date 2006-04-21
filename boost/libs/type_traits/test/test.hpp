@@ -376,6 +376,37 @@ typedef void foo2_t(int&, double);
 typedef void foo3_t(int&, bool, int, int);
 typedef void foo4_t(int, bool, int*, int[], int, int, int, int, int);
 
+struct trivial_except_construct
+{
+   trivial_except_construct();
+   int i;
+};
+
+struct trivial_except_destroy
+{
+   ~trivial_except_destroy();
+   int i;
+};
+
+struct trivial_except_copy
+{
+   trivial_except_copy(trivial_except_copy const&);
+   int i;
+};
+
+struct trivial_except_assign
+{
+   trivial_except_assign& operator=(trivial_except_assign const&);
+   int i;
+};
+
+template <class T>
+struct wrap
+{
+   T t;
+   int j;
+};
+
 
 #endif
 

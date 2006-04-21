@@ -189,6 +189,15 @@ BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_copy<POD_UDT>::value, true,
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_copy<POD_union_UDT>::value, true, false);
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_copy<empty_POD_union_UDT>::value, true, false);
 
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_copy<trivial_except_copy>::value, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_copy<trivial_except_destroy>::value, true, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_copy<trivial_except_construct>::value, true, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_copy<trivial_except_assign>::value, true, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_copy<wrap<trivial_except_copy> >::value, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_copy<wrap<trivial_except_destroy> >::value, true, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_copy<wrap<trivial_except_construct> >::value, true, false);
+BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::has_trivial_copy<wrap<trivial_except_assign> >::value, true, false);
+
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_trivial_copy<test_abc1>::value, false);
 
 TT_TEST_END
