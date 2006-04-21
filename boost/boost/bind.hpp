@@ -1159,19 +1159,40 @@ BOOST_BIND_OPERATOR( >=, greater_equal )
 
 #endif
 
+// visit_each, ADL
+
+#if !defined( BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP ) && !defined( __BORLANDC__ )
+
+template<class V, class T> void visit_each( V & v, value<T> const & t, int )
+{
+    using boost::visit_each;
+    BOOST_BIND_VISIT_EACH( v, t.get(), 0 );
+}
+
+template<class V, class R, class F, class L> void visit_each( V & v, bind_t<R, F, L> const & t, int )
+{
+    t.accept( v );
+}
+
+#endif
+
 } // namespace _bi
 
-// visit_each
+// visit_each, no ADL
 
-template<class V, class T> void visit_each(V & v, _bi::value<T> const & t, int)
+#if defined( BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP ) || defined( __BORLANDC__ )
+
+template<class V, class T> void visit_each( V & v, _bi::value<T> const & t, int )
 {
-    BOOST_BIND_VISIT_EACH(v, t.get(), 0);
+    BOOST_BIND_VISIT_EACH( v, t.get(), 0 );
 }
 
-template<class V, class R, class F, class L> void visit_each(V & v, _bi::bind_t<R, F, L> const & t, int)
+template<class V, class R, class F, class L> void visit_each( V & v, _bi::bind_t<R, F, L> const & t, int )
 {
-    t.accept(v);
+    t.accept( v );
 }
+
+#endif
 
 // bind
 
