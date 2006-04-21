@@ -40,7 +40,7 @@ struct all_indices_equal_helper<0>
 {
   template<class MultiIndexContainer>
   static bool compare(
-    const MultiIndexContainer& m1,const MultiIndexContainer& m2)
+    const MultiIndexContainer&,const MultiIndexContainer&)
   {
     return true;
   }

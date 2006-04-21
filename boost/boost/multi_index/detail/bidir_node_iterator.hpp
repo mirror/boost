@@ -1,4 +1,4 @@
-/* Copyright 2003-2005 Joaquín M López Muñoz.
+/* Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -77,14 +77,14 @@ public:
   typedef typename Node::base_type node_base_type;
 
   template<class Archive>
-  void save(Archive& ar,const unsigned int version)const
+  void save(Archive& ar,const unsigned int)const
   {
     node_base_type* bnode=node;
     ar<<serialization::make_nvp("pointer",bnode);
   }
 
   template<class Archive>
-  void load(Archive& ar,const unsigned int version)
+  void load(Archive& ar,const unsigned int)
   {
     node_base_type* bnode;
     ar>>serialization::make_nvp("pointer",bnode);
