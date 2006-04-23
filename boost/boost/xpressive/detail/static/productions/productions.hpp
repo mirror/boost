@@ -94,7 +94,7 @@ namespace boost { namespace proto
     // production for sequences in sequence
     template<>
     struct compiler<right_shift_tag, xpressive::detail::seq_tag, void>
-      : fold_compiler<right_shift_tag, xpressive::detail::seq_tag>
+      : reverse_fold_compiler<xpressive::detail::seq_tag>
     {
     };
 

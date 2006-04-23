@@ -117,7 +117,7 @@ namespace boost { namespace proto
     // compilers for sets such as set['a' | range('a','z')]
     template<>
     struct compiler<bitor_tag, xpressive::detail::set_tag, void>
-      : fold_compiler<bitor_tag, xpressive::detail::set_tag>
+      : reverse_fold_compiler<xpressive::detail::set_tag>
     {
     };
 
@@ -150,7 +150,7 @@ namespace boost { namespace proto
 
     template<>
     struct compiler<comma_tag, xpressive::detail::lst_tag, void>
-      : fold_compiler<comma_tag, xpressive::detail::lst_tag, false>
+      : fold_compiler<xpressive::detail::lst_tag>
     {
     };
 

@@ -144,8 +144,11 @@ namespace boost { namespace proto
     template<typename OpTag, typename DomainTag, typename Dummy = void>
     struct compiler;
 
-    template<typename OpTag, typename DomainTag, bool RightFirst = true>
+    template<typename DomainTag>
     struct fold_compiler;
+
+    template<typename DomainTag>
+    struct reverse_fold_compiler;
 
     template<typename Lambda, typename DomainTag, typename Compiler = void>
     struct transform_compiler;

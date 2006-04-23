@@ -117,7 +117,7 @@ namespace boost { namespace proto
     // production for alternates in alternate
     template<>
     struct compiler<bitor_tag, xpressive::detail::alt_tag, void>
-      : fold_compiler<bitor_tag, xpressive::detail::alt_tag>
+      : reverse_fold_compiler<xpressive::detail::alt_tag>
     {
     };
 
