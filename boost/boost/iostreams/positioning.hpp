@@ -46,7 +46,7 @@ inline std::streampos offset_to_position(stream_offset off)
     return std::streampos(std::mbstate_t(), off);
 }
 
-inline stream_offset fpos_t_to_offset(fpos_t pos)
+inline stream_offset fpos_t_to_offset(std::fpos_t pos)
 { // Helper function.
 #if defined(_POSIX_) || (_INTEGRAL_MAX_BITS >= 64)
     return pos;
