@@ -8,6 +8,7 @@
             http://www.boost.org/LICENSE_1_0.txt
         </ulink>)
     ]
+    [id typeof]
     [last-revision $Date$]
 ]
 
@@ -446,12 +447,12 @@ and template template parameters:
  
 * A type template parameter is described by the `(class)` or `(typename)` sequence element
 * A template parameter of a well-known integral type can be described by 
-simply supplying its type, like (`unsigned int`).  
+simply supplying its type, like `(unsigned int)`.  
 The following well-known integral types are supported: 
-    * [`signed`/`unsigned`] `char`
-    * [`unsigned`] `short`
-    * [`unsigned`] `int`
-    * [`unsigned`] `long`
+    * `[signed/unsigned] char`
+    * `[unsigned] short`
+    * `[unsigned] int`
+    * `[unsigned] long`
     * `unsigned`
     * `bool`
     * `size_t`
