@@ -96,7 +96,7 @@ Compression level was set to 10.
   <para>An option value, surely, can have other types than <code>int</code>, and
   can have other interesting properties, which we'll discuss right now. The
   complete version of the code snipped below can be found in
-  "example/options_description.cpp".</para>
+  <filename>example/options_description.cpp</filename>.</para>
 
   <para>Imagine we're writing a compiler. It should take the optimization
     level, a number of include paths, and a number of input files, and perform some
@@ -115,20 +115,28 @@ desc.add_options()
 </programlisting>
   </para>
 
-  <para>The "--help" option should be familiar from the previous example. 
-    It's a good idea to have this option in all cases.</para>
+  <para>The <literal>"help"</literal> option should be familiar from 
+  the previous example. It's a good idea to have this option in all cases.
+  </para>
 
-  <para>The "optimization" option shows two new features. First, we specify
+  <para>The <literal>"optimization"</literal> option shows two new features. First, we specify
     the address of the variable(<code>&amp;opt</code>). After storing values, that
     variable will have the value of the option. Second, we specify a default
     value of 10, which will be used if no value is specified by the user.
   </para>
 
-  <para>The "include-path" option is an example of the only case where
-    the interface of the <code>options_description</code> class serves only one
+  <para>The <literal>"include-path"</literal> option is an example of the 
+  only case where the interface of the <code>options_description</code> 
+  class serves only one
     source -- the command line. Users typically like to use short option names
     for common options, and the "include-path,I" name specifies that short
     option name is "I". So, both "--include-path" and "-I" can be used.
+  </para>
+
+  <para>Note also that the type of the <literal>"include-path"</literal>
+  option is <type>std::vector</type>. The library provides special 
+  support for vectors -- it will be possible to specify the option several 
+  times, and all specified values will be collected in one vector.  
   </para>
     
   <para>The "input-file" option specifies the list of files to
@@ -337,7 +345,7 @@ Optimization level is 4
 
 <!--
      Local Variables:
-     mode: xml
+     mode: nxml
      sgml-indent-data: t     
      sgml-parent-document: ("program_options.xml" "section")
      sgml-set-face: t
