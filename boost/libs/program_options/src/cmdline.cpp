@@ -498,7 +498,8 @@ namespace boost { namespace program_options { namespace detail {
         if (!r.first.empty()) {
             option next;
             next.string_key = r.first;
-            next.value.push_back(r.second);
+            if (!r.second.empty())
+                next.value.push_back(r.second);
             result.push_back(next);
             args.erase(args.begin());
         }
