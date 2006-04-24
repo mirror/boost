@@ -91,7 +91,7 @@ struct null_regex_traits
         return static_cast<unsigned char>(ch);
     }
 
-    /// No-node
+    /// No-op
     ///
     /// \param ch The source character.
     /// \return ch
@@ -100,7 +100,7 @@ struct null_regex_traits
         return ch;
     }
 
-    /// No-node
+    /// No-op
     ///
     /// \param ch The source character.
     /// \return ch

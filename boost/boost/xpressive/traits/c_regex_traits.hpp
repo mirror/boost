@@ -163,7 +163,7 @@ struct c_regex_traits
         return static_cast<unsigned char>(std::char_traits<Char>::to_int_type(ch));
     }
 
-    /// No-node
+    /// No-op
     ///
     /// \param ch The source character.
     /// \return ch
@@ -281,7 +281,7 @@ struct c_regex_traits
     ///     std::wcstol is used.
     static int value(char_type ch, int radix);
 
-    /// No-node
+    /// No-op
     ///
     locale_type imbue(locale_type loc)
     {
@@ -289,7 +289,7 @@ struct c_regex_traits
         return loc;
     }
 
-    /// No-node
+    /// No-op
     ///
     static locale_type getloc()
     {
