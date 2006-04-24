@@ -390,13 +390,12 @@ namespace boost { namespace program_options {
                         }
                     }
 
-                    string::const_iterator line_end;
-
-                    line_end = line_begin + line_length;
-                    if (line_end > par_end)
-                    {
-                        line_end = par_end;
-                    }
+                    // Take care to never increment the iterator past
+                    // the end, since MSVC 8.0 (brokenly), assumes that
+                    // doing that, even if no access happens, is a bug.
+                    unsigned remaining = distance(line_begin, par_end);
+                    string::const_iterator line_end = line_begin + 
+                        ((remaining < line_length) ? remaining : line_length);
             
                     // prevent chopped words
                     // Is line_end between two non-space characters?

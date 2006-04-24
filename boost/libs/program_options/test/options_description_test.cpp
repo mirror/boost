@@ -15,6 +15,7 @@ using namespace boost;
 
 #include <utility>
 #include <string>
+#include <sstream>
 using namespace std;
 
 void test_type()
@@ -61,9 +62,25 @@ void test_approximation()
 //    BOOST_CHECK(*(++a.begin()) == "foo");
 }
 
+void test_formatting()
+{
+    // Long option descriptions used to crash on MSVC-8.0.
+    options_description desc;
+    desc.add_options()(
+        "test", new untyped_value(),
+        "foo foo foo foo foo foo foo foo foo foo foo foo foo foo"
+        "foo foo foo foo foo foo foo foo foo foo foo foo foo foo"
+        "foo foo foo foo foo foo foo foo foo foo foo foo foo foo"
+        "foo foo foo foo foo foo foo foo foo foo foo foo foo foo");
+
+    stringstream ss;
+    ss << desc;
+}
+
 int test_main(int, char* [])
 {
     test_type();
     test_approximation();
+    test_formatting();
     return 0;
 }
