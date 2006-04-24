@@ -4,6 +4,7 @@
 #ifndef BOOST_PARAMETER_AUX_PARENTHESIZED_TYPE_DWA2006414_HPP
 # define BOOST_PARAMETER_AUX_PARENTHESIZED_TYPE_DWA2006414_HPP
 
+# include <boost/config.hpp>
 # include <boost/detail/workaround.hpp>
 
 namespace boost { namespace parameter { namespace aux { 
