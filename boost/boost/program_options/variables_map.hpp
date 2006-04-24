@@ -104,7 +104,11 @@ namespace boost { namespace program_options {
         const abstract_variables_map* m_next;
     };
 
-    /** Concrete variables map which store variables in real map. */
+    /** Concrete variables map which store variables in real map. 
+        
+        This class is derived from std::map<std::string, variable_value>,
+        so you can use all map operators to examine its content.
+    */
     class BOOST_PROGRAM_OPTIONS_DECL variables_map : public abstract_variables_map,
                                public std::map<std::string, variable_value>
     {
