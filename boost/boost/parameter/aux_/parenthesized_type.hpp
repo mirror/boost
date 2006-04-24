@@ -81,7 +81,7 @@ struct msvc_store_type : msvc_type_memory<Address>
     template<>
     struct storage_impl<true>  
     {
-        typedef T type;
+        typedef Value type;
     };
 };
 
