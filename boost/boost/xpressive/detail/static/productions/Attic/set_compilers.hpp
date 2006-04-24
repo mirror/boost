@@ -32,10 +32,10 @@ namespace boost { namespace xpressive { namespace detail
             typedef State type;
         };
 
-        template<typename Op, typename State, typename Visitor>
-        static State const &call(Op const &op, State const &state, Visitor &)
+        template<typename Node, typename State, typename Visitor>
+        static State const &call(Node const &node, State const &state, Visitor &)
         {
-            return state.set(set_branch::get_matcher(op)), state;
+            return state.set(set_branch::get_matcher(node)), state;
         }
 
     private:
@@ -53,17 +53,17 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef int state_type; // not used
 
-        template<typename Op, typename State, typename>
+        template<typename Node, typename State, typename>
         struct apply
         {
-            typedef static_xpression<Op, State> type;
+            typedef static_xpression<Node, State> type;
         };
 
-        template<typename Op, typename State>
-        static static_xpression<Op, State>
-        call(Op const &op, State const &state, dont_care)
+        template<typename Node, typename State>
+        static static_xpression<Node, State>
+        call(Node const &node, State const &state, dont_care)
         {
-            return make_static(op, state);
+            return make_static(node, state);
         }
     };
 
@@ -77,12 +77,12 @@ namespace boost { namespace xpressive { namespace detail
             typedef typename State::next_type type;
         };
 
-        template<typename Op, typename State, typename Visitor>
+        template<typename Node, typename State, typename Visitor>
         static typename State::next_type
-        call(Op const &op, State const &state, Visitor &visitor)
+        call(Node const &node, State const &state, Visitor &visitor)
         {
             typedef typename Visitor::char_type char_type;
-            char_type ch = char_cast<char_type>(proto::arg(op), visitor.traits());
+            char_type ch = char_cast<char_type>(proto::arg(node), visitor.traits());
             return state.push_back(ch, visitor.traits());
         }
     };
@@ -91,20 +91,20 @@ namespace boost { namespace xpressive { namespace detail
     // list_assign_compiler
     struct list_assign_compiler
     {
-        template<typename Op, typename, typename Visitor>
+        template<typename Node, typename, typename Visitor>
         struct apply
         {
             typedef typename Visitor::traits_type traits_type;
             typedef set_matcher<traits_type, 1> type;
         };
 
-        template<typename Op, typename State, typename Visitor>
-        static typename apply<Op, State, Visitor>::type
-        call(Op const &op, State const &, Visitor &visitor)
+        template<typename Node, typename State, typename Visitor>
+        static typename apply<Node, State, Visitor>::type
+        call(Node const &node, State const &, Visitor &visitor)
         {
             typedef typename Visitor::char_type char_type;
-            char_type ch = char_cast<char_type>(proto::arg(proto::right(op)), visitor.traits());
-            return typename apply<Op, State, Visitor>::type(ch, visitor.traits());
+            char_type ch = char_cast<char_type>(proto::arg(proto::right(node)), visitor.traits());
+            return typename apply<Node, State, Visitor>::type(ch, visitor.traits());
         }
     };
 

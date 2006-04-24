@@ -43,8 +43,8 @@ namespace boost { namespace proto
     {
     };
 
-    template<typename Op, typename Param>
-    struct is_proxy<op_proxy<Op, Param> >
+    template<typename Node, typename Param>
+    struct is_proxy<op_proxy<Node, Param> >
       : mpl::true_
     {
     };
@@ -59,14 +59,14 @@ namespace boost { namespace proto
 
     ///////////////////////////////////////////////////////////////////////////////
     // as_op
-    template<typename Op>
-    struct as_op<Op, true>
+    template<typename Node>
+    struct as_op<Node, true>
     {
-        typedef typename Op::type type;
+        typedef typename Node::type type;
 
-        static typename Op::const_reference make(Op const &op)
+        static typename Node::const_reference make(Node const &node)
         {
-            return op.cast();
+            return node.cast();
         }
     };
 
@@ -84,48 +84,48 @@ namespace boost { namespace proto
 // These operators must be members.
 #define BOOST_PROTO_DEFINE_MEMBER_OPS()                                                         \
     template<typename Arg>                                                                      \
-    binary_op<Op, typename as_op<Arg>::type, assign_tag> const                                  \
+    binary_op<Node, typename as_op<Arg>::type, assign_tag> const                                  \
     operator =(Arg const &arg) const                                                            \
     {                                                                                           \
         return make_op<assign_tag>(this->cast(), as_op<Arg>::make(arg));                        \
     }                                                                                           \
     template<typename Arg>                                                                      \
-    binary_op<Op, typename as_op<Arg>::type, subscript_tag> const                               \
+    binary_op<Node, typename as_op<Arg>::type, subscript_tag> const                               \
     operator [](Arg const &arg) const                                                           \
     {                                                                                           \
         return make_op<subscript_tag>(this->cast(), as_op<Arg>::make(arg));                     \
     }                                                                                           \
-    nary_op<Op> operator ()() const                                                             \
+    nary_op<Node> operator ()() const                                                             \
     {                                                                                           \
-        return nary_op<Op>(this->cast());                                                       \
+        return nary_op<Node>(this->cast());                                                       \
     }                                                                                           \
     BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_INC(BOOST_PROTO_MAX_ARITY), BOOST_PROTO_FUN_OP, _)
 
 #define BOOST_PROTO_FUN_OP(z, n, _)                                                             \
     template<BOOST_PP_ENUM_PARAMS_Z(z, n, typename A)>                                          \
-    nary_op<Op BOOST_PP_ENUM_TRAILING_PARAMS_Z(z, n, A)>                                        \
+    nary_op<Node BOOST_PP_ENUM_TRAILING_PARAMS_Z(z, n, A)>                                        \
     operator ()(BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, A, const &a)) const                         \
     {                                                                                           \
-        return nary_op<Op BOOST_PP_ENUM_TRAILING_PARAMS_Z(z, n, A)>                             \
+        return nary_op<Node BOOST_PP_ENUM_TRAILING_PARAMS_Z(z, n, A)>                             \
             (this->cast() BOOST_PP_ENUM_TRAILING_PARAMS_Z(z, n, a));                            \
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // op_base
-    template<typename Op>
+    template<typename Node>
     struct op_base : op_root
     {
-        typedef Op type;
+        typedef Node type;
         typedef type const &const_reference;
 
-        Op &cast()
+        Node &cast()
         {
-            return *static_cast<Op *>(this);
+            return *static_cast<Node *>(this);
         }
 
-        Op const &cast() const
+        Node const &cast() const
         {
-            return *static_cast<Op const *>(this);
+            return *static_cast<Node const *>(this);
         }
 
         BOOST_PROTO_DEFINE_MEMBER_OPS()
@@ -217,19 +217,19 @@ namespace boost { namespace proto
 
     ///////////////////////////////////////////////////////////////////////////////
     // op_proxy
-    template<typename Op, typename Param>
+    template<typename Node, typename Param>
     struct op_proxy
     {
-        typedef Op type;
+        typedef Node type;
         typedef type const const_reference;
         Param param_;
 
-        Op const cast() const
+        Node const cast() const
         {
-            return Op(this->param_);
+            return Node(this->param_);
         }
 
-        operator Op const() const
+        operator Node const() const
         {
             return this->cast();
         }
@@ -237,18 +237,18 @@ namespace boost { namespace proto
         BOOST_PROTO_DEFINE_MEMBER_OPS()
     };
 
-    template<typename Op>
-    struct op_proxy<Op, void>
+    template<typename Node>
+    struct op_proxy<Node, void>
     {
-        typedef Op type;
+        typedef Node type;
         typedef type const const_reference;
 
-        Op const cast() const
+        Node const cast() const
         {
-            return Op();
+            return Node();
         }
 
-        operator Op const() const
+        operator Node const() const
         {
             return this->cast();
         }
@@ -258,20 +258,20 @@ namespace boost { namespace proto
 
     ///////////////////////////////////////////////////////////////////////////////
     // make_op
-    template<typename Op, typename Arg>
-    unary_op<Arg, Op> const
+    template<typename Node, typename Arg>
+    unary_op<Arg, Node> const
     make_op(Arg const &arg)
     {
-        return unary_op<Arg, Op>(arg);
+        return unary_op<Arg, Node>(arg);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // make_op
-    template<typename Op, typename Left, typename Right>
-    binary_op<Left, Right, Op> const
+    template<typename Node, typename Left, typename Right>
+    binary_op<Left, Right, Node> const
     make_op(Left const &left, Right const &right)
     {
-        return binary_op<Left, Right, Op>(left, right);
+        return binary_op<Left, Right, Node>(left, right);
     }
 
 }}

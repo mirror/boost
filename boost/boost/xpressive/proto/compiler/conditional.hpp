@@ -22,30 +22,30 @@ namespace boost { namespace proto
     template<typename Predicate, typename IfCompiler, typename ElseCompiler>
     struct conditional_compiler
     {
-        template<typename Op, typename State, typename Visitor>
+        template<typename Node, typename State, typename Visitor>
         struct apply
         {
             typedef typename boost::mpl::if_
             <
-                typename Predicate::BOOST_NESTED_TEMPLATE apply<Op, State, Visitor>::type
+                typename Predicate::BOOST_NESTED_TEMPLATE apply<Node, State, Visitor>::type
               , IfCompiler
               , ElseCompiler
             >::type compiler_type;
 
             typedef typename compiler_type::BOOST_NESTED_TEMPLATE apply
             <
-                Op
+                Node
               , State
               , Visitor
             >::type type;
         };
 
-        template<typename Op, typename State, typename Visitor>
-        static typename apply<Op, State, Visitor>::type
-        call(Op const &op, State const &state, Visitor &visitor)
+        template<typename Node, typename State, typename Visitor>
+        static typename apply<Node, State, Visitor>::type
+        call(Node const &node, State const &state, Visitor &visitor)
         {
-            typedef typename apply<Op, State, Visitor>::compiler_type compiler_type;
-            return compiler_type::call(op, state, visitor);
+            typedef typename apply<Node, State, Visitor>::compiler_type compiler_type;
+            return compiler_type::call(node, state, visitor);
         }
     };
 

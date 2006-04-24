@@ -93,9 +93,9 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     // when complementing a set or an assertion, the purity is that of the set (true) or the assertion
-    template<typename Op>
-    struct is_pure<proto::unary_op<Op, proto::complement_tag> >
-      : is_pure<Op>
+    template<typename Node>
+    struct is_pure<proto::unary_op<Node, proto::complement_tag> >
+      : is_pure<Node>
     {
     };
 
@@ -123,33 +123,33 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     // Quantified expressions are pure IFF they use the simple_repeat_matcher
-    template<typename Op>
-    struct is_pure<proto::unary_op<Op, proto::unary_plus_tag> >
-      : use_simple_repeat<Op>
+    template<typename Node>
+    struct is_pure<proto::unary_op<Node, proto::unary_plus_tag> >
+      : use_simple_repeat<Node>
     {
     };
 
-    template<typename Op>
-    struct is_pure<proto::unary_op<Op, proto::unary_star_tag> >
-      : use_simple_repeat<Op>
+    template<typename Node>
+    struct is_pure<proto::unary_op<Node, proto::unary_star_tag> >
+      : use_simple_repeat<Node>
     {
     };
 
-    template<typename Op>
-    struct is_pure<proto::unary_op<Op, proto::logical_not_tag> >
-      : use_simple_repeat<Op>
+    template<typename Node>
+    struct is_pure<proto::unary_op<Node, proto::logical_not_tag> >
+      : use_simple_repeat<Node>
     {
     };
 
-    template<typename Op, uint_t Min, uint_t Max>
-    struct is_pure<proto::unary_op<Op, generic_quant_tag<Min, Max> > >
-      : use_simple_repeat<Op>
+    template<typename Node, uint_t Min, uint_t Max>
+    struct is_pure<proto::unary_op<Node, generic_quant_tag<Min, Max> > >
+      : use_simple_repeat<Node>
     {
     };
 
-    template<typename Op>
-    struct is_pure<proto::unary_op<Op, proto::unary_minus_tag> >
-      : is_pure<Op>
+    template<typename Node>
+    struct is_pure<proto::unary_op<Node, proto::unary_minus_tag> >
+      : is_pure<Node>
     {
     };
 
@@ -174,9 +174,9 @@ namespace boost { namespace xpressive { namespace detail
         BOOST_MPL_ASSERT_RELATION(0, !=, as_matcher<Matcher>::type::width);
     };
 
-    template<typename Op, typename Arg>
-    struct is_pure<proto::op_proxy<Op, Arg> >
-      : is_pure<Op>
+    template<typename Node, typename Arg>
+    struct is_pure<proto::op_proxy<Node, Arg> >
+      : is_pure<Node>
     {
     };
 

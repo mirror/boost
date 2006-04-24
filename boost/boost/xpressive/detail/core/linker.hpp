@@ -142,7 +142,7 @@ struct xpression_linker
     template<typename Matcher>
     void accept(Matcher const &, xpression_base const *)
     {
-        // no-op
+        // no-node
     }
 
     void accept(repeat_begin_matcher const &, xpression_base const *next)

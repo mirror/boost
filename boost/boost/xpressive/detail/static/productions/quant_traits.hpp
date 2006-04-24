@@ -61,9 +61,9 @@ namespace boost { namespace xpressive { namespace detail
 
     struct use_simple_repeat_predicate
     {
-        template<typename Op, typename, typename>
+        template<typename Node, typename, typename>
         struct apply
-          : use_simple_repeat<typename proto::arg_type<Op>::type>
+          : use_simple_repeat<typename proto::arg_type<Node>::type>
         {
         };
     };
@@ -76,8 +76,8 @@ namespace boost { namespace xpressive { namespace detail
     {
     };
 
-    template<typename Op, typename Tag>
-    struct is_greedy_quant<proto::unary_op<Op, Tag> >
+    template<typename Node, typename Tag>
+    struct is_greedy_quant<proto::unary_op<Node, Tag> >
       : mpl::or_
         <
             is_same<Tag, proto::unary_plus_tag>
@@ -87,8 +87,8 @@ namespace boost { namespace xpressive { namespace detail
     {
     };
 
-    template<typename Op, uint_t Min, uint_t Max>
-    struct is_greedy_quant<proto::unary_op<Op, generic_quant_tag<Min, Max> > >
+    template<typename Node, uint_t Min, uint_t Max>
+    struct is_greedy_quant<proto::unary_op<Node, generic_quant_tag<Min, Max> > >
       : mpl::true_
     {
     };

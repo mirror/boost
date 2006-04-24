@@ -24,11 +24,11 @@ namespace boost { namespace proto
     struct fold_compiler
     {
         // sample compiler implementation for sequencing
-        template<typename Op, typename State, typename Visitor>
+        template<typename Node, typename State, typename Visitor>
         struct apply
         {
-            typedef typename right_type<Op>::type right_type;
-            typedef typename left_type<Op>::type left_type;
+            typedef typename right_type<Node>::type right_type;
+            typedef typename left_type<Node>::type left_type;
 
             // compile the right branch
             typedef typename compiler<typename tag_type<left_type>::type, DomainTag>::
@@ -49,13 +49,13 @@ namespace boost { namespace proto
             >::type type;
         };
 
-        template<typename Op, typename State, typename Visitor>
-        static typename apply<Op, State, Visitor>::type
-        call(Op const &op, State const &state, Visitor &visitor)
+        template<typename Node, typename State, typename Visitor>
+        static typename apply<Node, State, Visitor>::type
+        call(Node const &node, State const &state, Visitor &visitor)
         {
             return proto::compile(
-                proto::right(op)
-              , proto::compile(proto::left(op), state, visitor, DomainTag())
+                proto::right(node)
+              , proto::compile(proto::left(node), state, visitor, DomainTag())
               , visitor
               , DomainTag()
             );
@@ -70,11 +70,11 @@ namespace boost { namespace proto
     struct reverse_fold_compiler
     {
         // sample compiler implementation for sequencing
-        template<typename Op, typename State, typename Visitor>
+        template<typename Node, typename State, typename Visitor>
         struct apply
         {
-            typedef typename right_type<Op>::type right_type;
-            typedef typename left_type<Op>::type left_type;
+            typedef typename right_type<Node>::type right_type;
+            typedef typename left_type<Node>::type left_type;
 
             // compile the right branch
             typedef typename compiler<typename tag_type<right_type>::type, DomainTag>::
@@ -95,13 +95,13 @@ namespace boost { namespace proto
             >::type type;
         };
 
-        template<typename Op, typename State, typename Visitor>
-        static typename apply<Op, State, Visitor>::type
-        call(Op const &op, State const &state, Visitor &visitor)
+        template<typename Node, typename State, typename Visitor>
+        static typename apply<Node, State, Visitor>::type
+        call(Node const &node, State const &state, Visitor &visitor)
         {
             return proto::compile(
-                proto::left(op)
-              , proto::compile(proto::right(op), state, visitor, DomainTag())
+                proto::left(node)
+              , proto::compile(proto::right(node), state, visitor, DomainTag())
               , visitor
               , DomainTag()
             );

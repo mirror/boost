@@ -42,7 +42,7 @@ namespace boost { namespace xpressive { namespace detail
 
         action_matcher &operator =(action_matcher const &)
         {
-            return *this; // no-op
+            return *this; // no-node
         }
 
         template<typename BidiIter, typename Next>

@@ -84,13 +84,13 @@ namespace boost { namespace proto
     template<typename Tag>
     struct is_nary;
 
-    template<typename Arg, typename Op>
+    template<typename Arg, typename Node>
     struct unary_op;
 
-    template<typename Left, typename Right, typename Op>
+    template<typename Left, typename Right, typename Node>
     struct binary_op;
 
-    template<typename Op, typename Param = void>
+    template<typename Node, typename Param = void>
     struct op_proxy;
 
     template
@@ -100,12 +100,12 @@ namespace boost { namespace proto
     >
     struct nary_op;
 
-    template<typename Op, typename Arg>
-    unary_op<Arg, Op> const
+    template<typename Node, typename Arg>
+    unary_op<Arg, Node> const
     make_op(Arg const &arg);
 
-    template<typename Op, typename Left, typename Right>
-    binary_op<Left, Right, Op> const
+    template<typename Node, typename Left, typename Right>
+    binary_op<Left, Right, Node> const
     make_op(Left const &left, Right const &right);
 
     template<typename Arg>
@@ -123,22 +123,22 @@ namespace boost { namespace proto
     template<typename T, bool IsOp = is_op<T>::value>
     struct as_op;
 
-    template<typename Op>
+    template<typename Node>
     struct op_base;
 
     template<typename T>
     struct value_type;
 
-    template<typename Op>
+    template<typename Node>
     struct arg_type;
 
-    template<typename Op>
+    template<typename Node>
     struct left_type;
 
-    template<typename Op>
+    template<typename Node>
     struct right_type;
 
-    template<typename Op>
+    template<typename Node>
     struct tag_type;
 
     template<typename OpTag, typename DomainTag, typename Dummy = void>
@@ -162,6 +162,9 @@ namespace boost { namespace proto
     template<typename Lambda, typename Map>
     struct switch_compiler;
 
+    template<typename DomainTag>
+    struct pass_through_compiler;
+
     struct error_compiler;
 
     struct identity_transform;
@@ -181,21 +184,21 @@ namespace boost { namespace proto
     template<typename Predicate, typename IfTransform, typename ElseTransform = identity_transform>
     struct conditional_transform;
 
-    template<typename Op>
-    typename arg_type<Op>::const_reference arg(Op const &op);
+    template<typename Node>
+    typename arg_type<Node>::const_reference arg(Node const &node);
 
-    template<typename Op>
-    typename left_type<Op>::const_reference left(Op const &op);
+    template<typename Node>
+    typename left_type<Node>::const_reference left(Node const &node);
 
-    template<typename Op>
-    typename right_type<Op>::const_reference right(Op const &op);
+    template<typename Node>
+    typename right_type<Node>::const_reference right(Node const &node);
 
-    template<typename Op, typename State, typename Visitor, typename DomainTag>
+    template<typename Node, typename State, typename Visitor, typename DomainTag>
     struct compile_result;
 
-    template<typename Op, typename State, typename Visitor, typename DomainTag>
-    typename compile_result<Op, State, Visitor, DomainTag>::type const
-    compile(Op const &op, State const &state, Visitor &visitor, DomainTag tag_type);
+    template<typename Node, typename State, typename Visitor, typename DomainTag>
+    typename compile_result<Node, State, Visitor, DomainTag>::type const
+    compile(Node const &node, State const &state, Visitor &visitor, DomainTag tag_type);
 
 }} // namespace boost::proto
 

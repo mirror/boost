@@ -13,6 +13,7 @@
 
 #include <boost/call_traits.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
+#include <boost/xpressive/proto/op_tags.hpp>
 
 namespace boost { namespace proto
 {
@@ -34,88 +35,112 @@ namespace boost { namespace proto
 
     ///////////////////////////////////////////////////////////////////////////////
     // argument type extractors
-    template<typename Op>
+    template<typename Node>
     struct arg_type
     {
-        typedef typename Op::arg_type type;
+        typedef typename Node::arg_type type;
         typedef type const &const_reference;
     };
 
-    template<typename Op, typename Param>
-    struct arg_type<op_proxy<Op, Param> >
+    template<typename Node, typename Param>
+    struct arg_type<op_proxy<Node, Param> >
     {
-        typedef typename Op::arg_type type;
+        typedef typename Node::arg_type type;
         typedef type const const_reference;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // argument type extractors
-    template<typename Op>
+    template<typename Node>
     struct left_type
     {
-        typedef typename Op::left_type type;
+        typedef typename Node::left_type type;
         typedef type const &const_reference;
     };
 
-    template<typename Op, typename Param>
-    struct left_type<op_proxy<Op, Param> >
+    template<typename Node, typename Param>
+    struct left_type<op_proxy<Node, Param> >
     {
-        typedef typename Op::left_type type;
+        typedef typename Node::left_type type;
         typedef type const const_reference;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // argument type extractors
-    template<typename Op>
+    template<typename Node>
     struct right_type
     {
-        typedef typename Op::right_type type;
+        typedef typename Node::right_type type;
         typedef type const &const_reference;
     };
 
-    template<typename Op, typename Param>
-    struct right_type<op_proxy<Op, Param> >
+    template<typename Node, typename Param>
+    struct right_type<op_proxy<Node, Param> >
     {
-        typedef typename Op::right_type type;
+        typedef typename Node::right_type type;
         typedef type const const_reference;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // tag extractor
-    template<typename Op>
+    template<typename Node>
     struct tag_type
     {
-        typedef typename Op::tag_type type;
+        typedef typename Node::tag_type type;
     };
 
-    template<typename Op, typename Param>
-    struct tag_type<op_proxy<Op, Param> >
+    template<typename Node, typename Param>
+    struct tag_type<op_proxy<Node, Param> >
     {
-        typedef typename Op::tag_type type;
+        typedef typename Node::tag_type type;
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // is_unary
+    template<typename Node>
+    struct is_unary
+      : boost::is_base_and_derived<unary_tag, typename tag_type<Node>::type>
+    {
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // is_binary
+    template<typename Node>
+    struct is_binary
+      : boost::is_base_and_derived<binary_tag, typename tag_type<Node>::type>
+    {
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // is_nary
+    template<typename Node>
+    struct is_nary
+      : boost::is_base_and_derived<nary_tag, typename tag_type<Node>::type>
+    {
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // arg
-    template<typename Op>
-    inline typename arg_type<Op>::const_reference arg(Op const &op)
+    template<typename Node>
+    inline typename arg_type<Node>::const_reference arg(Node const &node)
     {
-        return op.cast().arg;
+        return node.cast().arg;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // left
-    template<typename Op>
-    inline typename left_type<Op>::const_reference left(Op const &op)
+    template<typename Node>
+    inline typename left_type<Node>::const_reference left(Node const &node)
     {
-        return op.cast().left;
+        return node.cast().left;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // right
-    template<typename Op>
-    inline typename right_type<Op>::const_reference right(Op const &op)
+    template<typename Node>
+    inline typename right_type<Node>::const_reference right(Node const &node)
     {
-        return op.cast().right;
+        return node.cast().right;
     }
 
 }}

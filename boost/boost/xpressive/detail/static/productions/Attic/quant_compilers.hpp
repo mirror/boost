@@ -74,10 +74,10 @@ namespace boost { namespace xpressive { namespace detail
     // min_repeater_compiler
     struct min_repeater_compiler
     {
-        template<typename Op, typename State, typename Visitor>
+        template<typename Node, typename State, typename Visitor>
         struct apply
         {
-            typedef typename proto::arg_type<Op>::type arg_type;
+            typedef typename proto::arg_type<Node>::type arg_type;
 
             // Did you apply operator- to something that wasn't a quantifier?
             BOOST_MPL_ASSERT((is_greedy_quant<arg_type>));
@@ -98,12 +98,12 @@ namespace boost { namespace xpressive { namespace detail
             >::type type;
         };
 
-        template<typename Op, typename State, typename Visitor>
-        static typename apply<Op, State, Visitor>::type
-        call(Op const &op, State const &state, Visitor &visitor)
+        template<typename Node, typename State, typename Visitor>
+        static typename apply<Node, State, Visitor>::type
+        call(Node const &node, State const &state, Visitor &visitor)
         {
-            typedef typename apply<Op, State, Visitor>::compiler_type compiler_type;
-            return compiler_type::call(proto::arg(op), state, visitor);
+            typedef typename apply<Node, State, Visitor>::compiler_type compiler_type;
+            return compiler_type::call(proto::arg(node), state, visitor);
         }
     };
 

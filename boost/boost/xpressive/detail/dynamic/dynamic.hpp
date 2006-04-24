@@ -106,7 +106,7 @@ private:
 
     void peek_next_(mpl::false_, xpression_peeker<char_type> &) const
     {
-        // no-op
+        // no-node
     }
 
     void repeat_(quant_spec const &, sequence<BidiIter> &, mpl::int_<quant_none>, mpl::false_) const

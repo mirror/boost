@@ -51,21 +51,21 @@ namespace boost { namespace proto
         return make_op<noop_tag>(arg);
     }
 
-#define BOOST_PROTO_UNARY_OP(op, tag)                                                           \
+#define BOOST_PROTO_UNARY_OP(node, tag)                                                           \
     template<typename Arg>                                                                      \
     inline typename lazy_enable_if<is_op<Arg>, unary_op_generator<Arg, tag> >::type const       \
-    operator op(Arg const &arg)                                                                 \
+    operator node(Arg const &arg)                                                                 \
     {                                                                                           \
         return make_op<tag>(as_op<Arg>::make(arg));                                             \
     }
 
-#define BOOST_PROTO_BINARY_OP(op, tag)                                                          \
+#define BOOST_PROTO_BINARY_OP(node, tag)                                                          \
     template<typename Left, typename Right>                                                     \
     inline typename lazy_enable_if<                                                             \
         mpl::or_<is_op<Left>, is_op<Right> >                                                    \
       , binary_op_generator<Left, Right, tag>                                                   \
     >::type const                                                                               \
-    operator op(Left const &left, Right const &right)                                           \
+    operator node(Left const &left, Right const &right)                                           \
     {                                                                                           \
         return make_op<tag>(as_op<Left>::make(left), as_op<Right>::make(right));                \
     }

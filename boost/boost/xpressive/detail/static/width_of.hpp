@@ -54,7 +54,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // width_of
     //
-    template<typename Op>
+    template<typename Node>
     struct width_of;
 
     template<typename Matcher>
@@ -87,76 +87,76 @@ namespace boost { namespace xpressive { namespace detail
     {
     };
 
-    template<typename Modifier, typename Op>
-    struct width_of<proto::binary_op<Modifier, Op, modifier_tag> >
-      : width_of<Op>
+    template<typename Modifier, typename Node>
+    struct width_of<proto::binary_op<Modifier, Node, modifier_tag> >
+      : width_of<Node>
     {
     };
 
-    template<typename Op, bool Positive>
-    struct width_of<proto::unary_op<Op, lookahead_tag<Positive> > >
+    template<typename Node, bool Positive>
+    struct width_of<proto::unary_op<Node, lookahead_tag<Positive> > >
       : mpl::size_t<0>
     {
     };
 
-    template<typename Op, bool Positive>
-    struct width_of<proto::unary_op<Op, lookbehind_tag<Positive> > >
+    template<typename Node, bool Positive>
+    struct width_of<proto::unary_op<Node, lookbehind_tag<Positive> > >
       : mpl::size_t<0>
     {
     };
 
     // keep() is used to turn off backtracking, so they should only be used
     // for things that are variable-width (eg. quantified)
-    template<typename Op>
-    struct width_of<proto::unary_op<Op, keeper_tag> >
+    template<typename Node>
+    struct width_of<proto::unary_op<Node, keeper_tag> >
       : unknown_width
     {
         // If this assert fires, you put something that doesn't require backtracking
         // in a keep(). In that case, the keep() is not necessary and you should just
         // remove it.
-        BOOST_MPL_ASSERT_RELATION(width_of<Op>::value, ==, unknown_width::value);
+        BOOST_MPL_ASSERT_RELATION(width_of<Node>::value, ==, unknown_width::value);
     };
 
-    template<typename Op>
-    struct width_of<proto::unary_op<Op, proto::unary_plus_tag> >
+    template<typename Node>
+    struct width_of<proto::unary_op<Node, proto::unary_plus_tag> >
       : unknown_width
     {
     };
 
-    template<typename Op>
-    struct width_of<proto::unary_op<Op, proto::unary_star_tag> >
+    template<typename Node>
+    struct width_of<proto::unary_op<Node, proto::unary_star_tag> >
       : unknown_width
     {
     };
 
-    template<typename Op>
-    struct width_of<proto::unary_op<Op, proto::logical_not_tag> >
+    template<typename Node>
+    struct width_of<proto::unary_op<Node, proto::logical_not_tag> >
       : unknown_width
     {
     };
 
-    template<typename Op, uint_t Min, uint_t Max>
-    struct width_of<proto::unary_op<Op, generic_quant_tag<Min, Max> > >
+    template<typename Node, uint_t Min, uint_t Max>
+    struct width_of<proto::unary_op<Node, generic_quant_tag<Min, Max> > >
       : unknown_width
     {
     };
 
-    template<typename Op, uint_t Count>
-    struct width_of<proto::unary_op<Op, generic_quant_tag<Count, Count> > >
-      : BOOST_XPR_MULT_WIDTH_(width_of<Op>, mpl::size_t<Count>)
+    template<typename Node, uint_t Count>
+    struct width_of<proto::unary_op<Node, generic_quant_tag<Count, Count> > >
+      : BOOST_XPR_MULT_WIDTH_(width_of<Node>, mpl::size_t<Count>)
     {
     };
 
-    template<typename Op>
-    struct width_of<proto::unary_op<Op, proto::unary_minus_tag> >
-      : width_of<Op>
+    template<typename Node>
+    struct width_of<proto::unary_op<Node, proto::unary_minus_tag> >
+      : width_of<Node>
     {
     };
 
     // when complementing a set or an assertion, the width is that of the set (1) or the assertion (0)
-    template<typename Op>
-    struct width_of<proto::unary_op<Op, proto::complement_tag> >
-      : width_of<Op>
+    template<typename Node>
+    struct width_of<proto::unary_op<Node, proto::complement_tag> >
+      : width_of<Node>
     {
     };
 
@@ -183,9 +183,9 @@ namespace boost { namespace xpressive { namespace detail
         BOOST_MPL_ASSERT_RELATION(1, ==, width_of<Right>::value);
     };
 
-    template<typename Op, typename Arg>
-    struct width_of<proto::op_proxy<Op, Arg> >
-      : width_of<Op>
+    template<typename Node, typename Arg>
+    struct width_of<proto::op_proxy<Node, Arg> >
+      : width_of<Node>
     {
     };
 

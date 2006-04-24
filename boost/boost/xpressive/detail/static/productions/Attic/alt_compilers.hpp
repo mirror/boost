@@ -57,22 +57,22 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef fusion::nil state_type;
 
-        template<typename Op, typename State, typename Visitor>
+        template<typename Node, typename State, typename Visitor>
         struct apply
         {
             typedef static_xpression
             <
-                alternate_matcher<Op, typename Visitor::traits_type>
+                alternate_matcher<Node, typename Visitor::traits_type>
               , State
             > type;
         };
 
-        template<typename Op, typename State, typename Visitor>
-        static typename apply<Op, State, Visitor>::type
-        call(Op const &op, State const &state, Visitor &)
+        template<typename Node, typename State, typename Visitor>
+        static typename apply<Node, State, Visitor>::type
+        call(Node const &node, State const &state, Visitor &)
         {
             typedef typename Visitor::traits_type traits_type;
-            return make_static(alternate_matcher<Op, traits_type>(op), state);
+            return make_static(alternate_matcher<Node, traits_type>(node), state);
         }
     };
 
@@ -82,17 +82,17 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef alternate_end_xpression state_type;
 
-        template<typename Op, typename State, typename>
+        template<typename Node, typename State, typename>
         struct apply
         {
-            typedef alternates_list<Op, State> type;
+            typedef alternates_list<Node, State> type;
         };
 
-        template<typename Op, typename State>
-        static alternates_list<Op, State>
-        call(Op const &op, State const &state, dont_care)
+        template<typename Node, typename State>
+        static alternates_list<Node, State>
+        call(Node const &node, State const &state, dont_care)
         {
-            return alternates_list<Op, State>(op, state);
+            return alternates_list<Node, State>(node, state);
         }
     };
 

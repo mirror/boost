@@ -71,30 +71,6 @@ namespace boost { namespace proto
 
     struct function_tag : nary_tag {};
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // is_unary
-    template<typename Tag>
-    struct is_unary
-      : boost::is_base_and_derived<unary_tag, Tag>
-    {
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // is_binary
-    template<typename Tag>
-    struct is_binary
-      : boost::is_base_and_derived<binary_tag, Tag>
-    {
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // is_nary
-    template<typename Tag>
-    struct is_nary
-      : boost::is_base_and_derived<nary_tag, Tag>
-    {
-    };
-
 }}
 
 #endif

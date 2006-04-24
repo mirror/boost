@@ -31,17 +31,17 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef true_xpression state_type;
 
-        template<typename Op, typename State, typename>
+        template<typename Node, typename State, typename>
         struct apply
         {
-            typedef static_xpression<lookahead_matcher<Op>, State> type;
+            typedef static_xpression<lookahead_matcher<Node>, State> type;
         };
 
-        template<typename Op, typename State, typename Visitor>
-        static static_xpression<lookahead_matcher<Op>, State>
-        call(Op const &op, State const &state, Visitor &)
+        template<typename Node, typename State, typename Visitor>
+        static static_xpression<lookahead_matcher<Node>, State>
+        call(Node const &node, State const &state, Visitor &)
         {
-            return make_static(lookahead_matcher<Op>(op, !Positive), state);
+            return make_static(lookahead_matcher<Node>(node, !Positive), state);
         }
     };
 
@@ -52,18 +52,18 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef true_xpression state_type;
 
-        template<typename Op, typename State, typename>
+        template<typename Node, typename State, typename>
         struct apply
         {
-            typedef static_xpression<lookbehind_matcher<Op>, State> type;
+            typedef static_xpression<lookbehind_matcher<Node>, State> type;
         };
 
-        template<typename Op, typename State, typename Visitor>
-        static static_xpression<lookbehind_matcher<Op>, State>
-        call(Op const &op, State const &state, Visitor &)
+        template<typename Node, typename State, typename Visitor>
+        static static_xpression<lookbehind_matcher<Node>, State>
+        call(Node const &node, State const &state, Visitor &)
         {
-            std::size_t width = op.get_width().value();
-            return make_static(lookbehind_matcher<Op>(op, width, !Positive), state);
+            std::size_t width = node.get_width().value();
+            return make_static(lookbehind_matcher<Node>(node, width, !Positive), state);
         }
     };
 
@@ -71,17 +71,17 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef true_xpression state_type;
 
-        template<typename Op, typename State, typename>
+        template<typename Node, typename State, typename>
         struct apply
         {
-            typedef static_xpression<keeper_matcher<Op>, State> type;
+            typedef static_xpression<keeper_matcher<Node>, State> type;
         };
 
-        template<typename Op, typename State, typename Visitor>
-        static static_xpression<keeper_matcher<Op>, State>
-        call(Op const &op, State const &state, Visitor &)
+        template<typename Node, typename State, typename Visitor>
+        static static_xpression<keeper_matcher<Node>, State>
+        call(Node const &node, State const &state, Visitor &)
         {
-            return make_static(keeper_matcher<Op>(op), state);
+            return make_static(keeper_matcher<Node>(node), state);
         }
     };
 

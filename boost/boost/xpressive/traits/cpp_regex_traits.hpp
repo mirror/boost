@@ -360,7 +360,7 @@ struct cpp_regex_traits
         return static_cast<unsigned char>(std::char_traits<Char>::to_int_type(ch));
     }
 
-    /// No-op
+    /// No-node
     ///
     /// \param ch The source character.
     /// \return ch
