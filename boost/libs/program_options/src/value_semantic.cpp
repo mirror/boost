@@ -170,9 +170,12 @@ namespace boost { namespace program_options {
     {
         check_first_occurrence(v);
         string s(get_single_string(xs));
-        if (*s.begin() == '\'' && *s.rbegin() == '\'' ||
-            *s.begin() == '"' && *s.rbegin() == '"')
+        if (!s.empty() && (
+                (*s.begin() == '\'' && *s.rbegin() == '\'' ||
+                 *s.begin() == '"' && *s.rbegin() == '"')))
+        {
             v = any(s.substr(1, s.size()-2));
+        }
         else
             v = any(s);
     }
