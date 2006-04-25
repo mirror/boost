@@ -1217,6 +1217,7 @@ private:
             Align align_;
         } temp;
 
+        --(*Data().begin()); // decrement the use count of the remaining object
         new(buf_) Storage(
             *new(temp.buf_) Storage(Data()), 
             flex_string_details::Shallow());
@@ -1265,7 +1266,8 @@ public:
     CowString& operator=(const CowString& rhs)
     {
 //        CowString(rhs).swap(*this);
-        if (--Refs() == 0) Data().~Storage();
+        if (--Refs() == 0) 
+            Data().~Storage();
         if (rhs.GetRefs() == (std::numeric_limits<RefCountType>::max)())
         {
             // must make a brand new copy
@@ -1284,7 +1286,8 @@ public:
     ~CowString()
     {
         BOOST_ASSERT(Data().size() > 0);
-        if (--Refs() == 0) Data().~Storage();
+        if (--Refs() == 0) 
+            Data().~Storage();
     }
 
     iterator begin()
