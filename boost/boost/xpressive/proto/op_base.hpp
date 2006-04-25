@@ -149,7 +149,7 @@ namespace boost { namespace proto
           : arg(arg_)
         {}
 
-        using op_base<unary_op<Arg, Tag> >::operator =;
+        using op_base<unary_op>::operator =;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -171,12 +171,13 @@ namespace boost { namespace proto
 
         binary_op(
             typename call_traits<Left>::param_type left_
-          , typename call_traits<Right>::param_type right_)
+          , typename call_traits<Right>::param_type right_
+        )
           : left(left_)
           , right(right_)
         {}
 
-        using op_base<binary_op<Left, Right, Tag> >::operator =;
+        using op_base<binary_op>::operator =;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -212,7 +213,7 @@ namespace boost { namespace proto
 
     #undef BOOST_PROTO_NARY_OP_CTOR
 
-        using op_base<nary_op<Fun, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, A)> >::operator =;
+        using op_base<nary_op>::operator =;
     };
 
     ///////////////////////////////////////////////////////////////////////////////

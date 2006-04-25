@@ -110,7 +110,7 @@ namespace boost { namespace proto
             typedef Node type;
             typedef Node const &const_reference;
 
-            static Node const &call(Node const &node, State const &, Visitor &)
+            static Node const &call(Node const &node, State const &, Visitor &, int)
             {
                 return node;
             }
