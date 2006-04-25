@@ -316,7 +316,7 @@ namespace boost {
       // No point in bringing in a bunch of #ifdefs here. This is
       // going to go away with the next tuple implementation anyway.
       //
-      bool tuple_equal(tuples::null_type, tuples::null_type)
+      inline bool tuple_equal(tuples::null_type, tuples::null_type)
       { return true; }
 
       template<typename Tuple1, typename Tuple2>
