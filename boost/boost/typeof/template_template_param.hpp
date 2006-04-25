@@ -23,12 +23,12 @@
 
 //Encode / decode this
 #define BOOST_TYPEOF_TEMPLATE_PARAM_ENCODE(This, n)\
-   typedef typename encode_template<BOOST_PP_CAT(V, n),\
+   typedef typename boost::type_of::encode_template<BOOST_PP_CAT(V, n),\
        BOOST_PP_CAT(P, n)<BOOST_TYPEOF_SEQ_ENUM(BOOST_TYPEOF_MAKE_OBJS(BOOST_TYPEOF_TEMPLATE_PARAM_GETPARAMS(This)),BOOST_TYPEOF_PLACEHOLDER) >\
    >::type BOOST_PP_CAT(V, BOOST_PP_INC(n));
 
 #define BOOST_TYPEOF_TEMPLATE_PARAM_DECODE(This, n)\
-   typedef decode_template< BOOST_PP_CAT(iter, n) > BOOST_PP_CAT(d, n);\
+   typedef boost::type_of::decode_template< BOOST_PP_CAT(iter, n) > BOOST_PP_CAT(d, n);\
    typedef typename BOOST_PP_CAT(d, n)::type BOOST_PP_CAT(P, n);\
    typedef typename BOOST_PP_CAT(d, n)::iter BOOST_PP_CAT(iter,BOOST_PP_INC(n));
 
@@ -51,22 +51,22 @@
 ////////////////////////////
 // move to encode_decode?
 
+namespace { namespace boost_typeof { 
+
+	template<class V, class Type_Not_Registered_With_Typeof_System> struct encode_template_impl;
+    template<class T, class Iter> struct decode_template_impl;
+
+}}
+
 namespace boost { namespace type_of { 
 
-    namespace 
-    {
-        template<class V, class Type_Not_Registered_With_Typeof_System> struct encode_template_impl;
-        template<class T, class Iter> struct decode_template_impl;
-    }
-
-    template<class V, class T> struct encode_template
-        : encode_template_impl<V, T>
+	template<class V, class T> struct encode_template
+		: boost_typeof::encode_template_impl<V, T>
     {};
 
     template<class Iter> struct decode_template 
-        :   decode_template_impl<typename Iter::type, typename Iter::next>
+        : boost_typeof::decode_template_impl<typename Iter::type, typename Iter::next>
     {};
-
 }}
 
 ////////////////////////////
@@ -81,10 +81,10 @@ namespace boost { namespace type_of {
         BOOST_PP_ENUM_PARAMS(\
         BOOST_PP_SEQ_SIZE(Params),\
         P)> >\
-    :   push_back<V, mpl::size_t<ID> >\
+		: boost::type_of::push_back<V, boost::mpl::size_t<ID> >\
     {\
     };\
-    template<class Iter> struct decode_template_impl<mpl::size_t<ID>, Iter>\
+	template<class Iter> struct decode_template_impl<boost::mpl::size_t<ID>, Iter>\
     {\
         BOOST_PP_REPEAT(BOOST_PP_SEQ_SIZE(Params),BOOST_TYPEOF_TYPEDEF_INT_PN,_)\
         typedef Name<BOOST_TYPEOF_SEQ_ENUM(Params,BOOST_TYPEOF_PLACEHOLDER) > type;\

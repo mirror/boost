@@ -16,16 +16,16 @@
     template<class V, class T> struct encode_type_impl<V, Fun(T)>\
     {\
         typedef\
-            typename encode_type<\
-            typename push_back<\
+			typename boost::type_of::encode_type<\
+            typename boost::type_of::push_back<\
             V\
-            , mpl::size_t<ID> >::type\
+			, boost::mpl::size_t<ID> >::type\
             , T>::type\
             type;\
     };\
-    template<class Iter> struct decode_type_impl<mpl::size_t<ID>, Iter>\
+	template<class Iter> struct decode_type_impl<boost::mpl::size_t<ID>, Iter>\
     {\
-        typedef decode_type<Iter> d1;\
+        typedef boost::type_of::decode_type<Iter> d1;\
         typedef Fun(typename d1::type) type;\
         typedef typename d1::iter iter;\
     }
@@ -36,7 +36,7 @@
 #define BOOST_TYPEOF_pointer_fun(T) T*
 #define BOOST_TYPEOF_reference_fun(T) T&
 
-namespace boost { namespace type_of { namespace {
+namespace { namespace boost_typeof {
 
     BOOST_TYPEOF_modifier_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_TYPEOF_const_fun);
     BOOST_TYPEOF_modifier_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_TYPEOF_volatile_fun);
@@ -44,7 +44,7 @@ namespace boost { namespace type_of { namespace {
     BOOST_TYPEOF_modifier_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_TYPEOF_pointer_fun);
     BOOST_TYPEOF_modifier_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_TYPEOF_reference_fun);
 
-}}}
+}}
 
 #undef BOOST_TYPEOF_modifier_support
 #undef BOOST_TYPEOF_const_fun
@@ -60,32 +60,32 @@ namespace boost { namespace type_of { namespace {
     struct encode_type_impl<V, Qualifier() T[N]>\
     {\
         typedef\
-            typename encode_type<\
-            typename push_back<\
-            typename push_back<\
+            typename boost::type_of::encode_type<\
+            typename boost::type_of::push_back<\
+            typename boost::type_of::push_back<\
             V\
-            , mpl::size_t<ID> >::type\
-            , mpl::size_t<N> >::type\
+			, boost::mpl::size_t<ID> >::type\
+			, boost::mpl::size_t<N> >::type\
             , T>::type\
         type;\
     };\
     template<class Iter>\
-    struct decode_type_impl<mpl::size_t<ID>, Iter>\
+	struct decode_type_impl<boost::mpl::size_t<ID>, Iter>\
     {\
         enum{n = Iter::type::value};\
-        typedef decode_type<typename Iter::next> d;\
+        typedef boost::type_of::decode_type<typename Iter::next> d;\
         typedef typename d::type Qualifier() type[n];\
         typedef typename d::iter iter;\
     }
 
-namespace boost { namespace type_of { namespace {
+namespace { namespace boost_typeof {
 
     BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_EMPTY);
     BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_IDENTITY(const));
     BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_IDENTITY(volatile));
     BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_IDENTITY(volatile const));
 
-}}}
+}}
 
 #undef BOOST_TYPEOF_array_support
 

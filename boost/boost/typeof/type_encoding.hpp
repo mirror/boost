@@ -8,18 +8,18 @@
 #define BOOST_TYPEOF_REGISTER_TYPE_IMPL(T, Id)                          \
                                                                         \
     template<class V> struct encode_type_impl<V, T >                    \
-        : push_back<V, mpl::size_t<Id> >                   \
+		: boost::type_of::push_back<V, boost::mpl::size_t<Id> >                   \
     {};                                                                 \
-    template<class Iter> struct decode_type_impl<mpl::size_t<Id>, Iter> \
+	template<class Iter> struct decode_type_impl<boost::mpl::size_t<Id>, Iter> \
     {                                                                   \
         typedef T type;                                                 \
         typedef Iter iter;                                              \
     };
 
 #define BOOST_TYPEOF_REGISTER_TYPE_EXPLICIT_ID(Type, Id)                \
-    namespace boost { namespace type_of { namespace {                   \
+	namespace { namespace boost_typeof {					\
         BOOST_TYPEOF_REGISTER_TYPE_IMPL(Type, Id)                       \
-    }}}
+    }}
 
 #define BOOST_TYPEOF_REGISTER_TYPE(Type)                                \
     BOOST_TYPEOF_REGISTER_TYPE_EXPLICIT_ID(Type, BOOST_TYPEOF_UNIQUE_ID())

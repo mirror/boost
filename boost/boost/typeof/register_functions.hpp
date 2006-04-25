@@ -32,7 +32,7 @@ enum
     VOLATILE_CONST_MEM_FUN_ID       = FUN_ID + 6 * BOOST_PP_INC(BOOST_TYPEOF_LIMIT_FUNCTION_ARITY)
 };
 
-namespace boost { namespace type_of {
+namespace { namespace boost_typeof {
 
     # define BOOST_PP_ITERATION_LIMITS (0, BOOST_TYPEOF_LIMIT_FUNCTION_ARITY)
     # define BOOST_PP_FILENAME_1 <boost/typeof/register_functions_iterate.hpp>

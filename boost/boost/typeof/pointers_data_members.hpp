@@ -10,35 +10,29 @@
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 
-namespace boost
-{
-    namespace type_of
+namespace { namespace boost_typeof {
+
+	enum {PTR_DATA_MEM_ID = BOOST_TYPEOF_UNIQUE_ID()};
+
+    template<class V, class P0, class P1> 
+    struct encode_type_impl<V, P0 P1::*>
     {
-        namespace
-        {
-            enum {PTR_DATA_MEM_ID = BOOST_TYPEOF_UNIQUE_ID()};
+        typedef BOOST_TYPEOF_ENCODE_PARAMS(2, PTR_DATA_MEM_ID) type;
+    };
 
-            template<class V, class P0, class P1> 
-            struct encode_type_impl<V, P0 P1::*>
-            {
-                typedef BOOST_TYPEOF_ENCODE_PARAMS(2, PTR_DATA_MEM_ID) type;
-            };
+    template<class Iter> 
+	struct decode_type_impl<boost::mpl::size_t<PTR_DATA_MEM_ID>, Iter>
+    {
+        typedef Iter iter0;
+        BOOST_TYPEOF_DECODE_PARAMS(2)
 
-            template<class Iter> 
-            struct decode_type_impl<mpl::size_t<PTR_DATA_MEM_ID>, Iter>
-            {
-                typedef Iter iter0;
-                BOOST_TYPEOF_DECODE_PARAMS(2)
+        template<class T> struct workaround{
+            typedef p0 T::* type;
+        };
 
-                template<class T> struct workaround{
-                    typedef p0 T::* type;
-                };
-
-                typedef typename workaround<p1>::type type;
-                typedef iter2 iter;
-            };
-        }
-    }
-}
+        typedef typename workaround<p1>::type type;
+        typedef iter2 iter;
+    };
+}}
 
 #endif//BOOST_TYPEOF_POINTERS_DATA_MEMBERS_HPP_INCLUDED

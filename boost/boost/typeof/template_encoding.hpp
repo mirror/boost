@@ -128,14 +128,14 @@
         BOOST_TYPEOF_TYPEDEF_DECODED_TEMPLATE_TYPE)(Name,Params)
 
 #define BOOST_TYPEOF_REGISTER_TEMPLATE_IMPL(Name, Params, Size, ID)\
-    namespace boost { namespace type_of { namespace {\
+    namespace { namespace boost_typeof {\
     BOOST_TYPEOF_REGISTER_TEMPLATE_TEMPLATE_IMPL(Name, Params, ID)\
     template<class V\
         BOOST_TYPEOF_SEQ_ENUM_TRAILING(Params, BOOST_TYPEOF_REGISTER_TEMPLATE_PARAM_PAIR)\
     >\
     struct encode_type_impl<V, Name<BOOST_PP_ENUM_PARAMS(Size, P)> >\
     {\
-        typedef typename push_back<V, boost::mpl::size_t<ID> >::type V0;\
+		typedef typename boost::type_of::push_back<V, boost::mpl::size_t<ID> >::type V0;\
         BOOST_PP_SEQ_FOR_EACH_I(BOOST_TYPEOF_REGISTER_TEMPLATE_ENCODE_PARAM, ~, Params)\
         typedef BOOST_PP_CAT(V, Size) type;\
     };\
@@ -147,6 +147,6 @@
         BOOST_TYPEOF_TYPEDEF_DECODED_TYPE(Name, Params)\
         typedef BOOST_PP_CAT(iter, Size) iter;\
     };\
-    }}}
+    }}
 
 #endif//BOOST_TYPEOF_TEMPLATE_ENCODING_HPP_INCLUDED
