@@ -100,6 +100,7 @@ Boost V1.34.0
 - Fixed the macro tracing information to contain the column numbers of the macro
   definitions as well (the format used is the same as for error messages).
 - Fixed a memory leak in the flex_string copy on write code.
+- Fixed a memory corruption bug in the Re2C scanner buffer management code.
 
 Sat Feb 18 2005
 - Version 1.2.3

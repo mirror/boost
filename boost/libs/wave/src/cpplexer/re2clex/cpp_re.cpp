@@ -194,7 +194,7 @@ uchar *fill(Scanner *s, uchar *cursor)
         {
             if (NULL == s->lim)
                 s->lim = s->top;
-            memcpy(s->bot, s->tok, s->lim - s->tok);
+            memmove(s->bot, s->tok, s->lim - s->tok);
             s->tok = s->cur = s->bot;
             s->ptr -= cnt;
             cursor -= cnt;
@@ -218,7 +218,7 @@ uchar *fill(Scanner *s, uchar *cursor)
                 return cursor;
             }
 
-            memcpy(buf, s->tok, s->lim - s->tok);
+            memmove(buf, s->tok, s->lim - s->tok);
             s->tok = s->cur = buf;
             s->ptr = &buf[s->ptr - s->bot];
             cursor = &buf[cursor - s->bot];
@@ -238,7 +238,7 @@ uchar *fill(Scanner *s, uchar *cursor)
             cnt = s->last - s->act;
             if (cnt > BOOST_WAVE_BSIZE)
                 cnt = BOOST_WAVE_BSIZE;
-            memcpy(s->lim, s->act, cnt);
+            memmove(s->lim, s->act, cnt);
             s->act += cnt;
             if (cnt != BOOST_WAVE_BSIZE) 
             {
