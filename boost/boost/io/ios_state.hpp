@@ -134,7 +134,11 @@ public:
     explicit  basic_ios_exception_saver( state_type &s )
         : s_save_( s ), a_save_( s.exceptions() )
         {}
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x582))
+    basic_ios_exception_saver( state_type &s, aspect_type a )
+#else
     basic_ios_exception_saver( state_type &s, aspect_type const &a )
+#endif
         : s_save_( s ), a_save_( s.exceptions() )
         { s.exceptions(a); }
     ~basic_ios_exception_saver()
