@@ -51,16 +51,72 @@ A |KeywordsSpec| is an MPL sequence where each element is either:
 
 * A *required* keyword tag, ``K``
 * **or**, an *optional* keyword tag, ``K*``
-* **or**, a *somethingsomething* keyword tag ``K**``
+* **or**, a *special* keyword tag ``K**``
 
 The **arity range** of a |KeywordsSpec| is determined by:
 
 .. parsed-literal::
 
-    [ mpl::size<S> - number of *somethingsomething* in ``S`` , mpl::size<S> ]
+    [ mpl::size<S> - number of *special* in ``S`` , mpl::size<S> ]
 
 For example, the **arity range** of ``mpl::vector2<x,y>`` is 2, the **arity range** of
 ``mpl::vector2<x,y*>`` is 2 and the **arity range** of ``mpl::vector2<x,y**>`` is 1.
+
+*special* keyword tags
+---------------------------------
+
+If the default type for an argument is not convertible to the argument type, as
+specified to the binding functions below, that argument must be specified as a
+*special* argument.
+
+In the example below the default type for argument ``y`` is ``char const[5]``, but
+the argument type is ``int``. Therefore ``y`` must be specified as a *special*
+argument in the |KeywordSpec|.
+
+Doing this will generate N^2 overloads, where N is the number of *special* arguments.
+In this case two overloads will be generated, one with ``y`` included and one without.
+Having many *special* keywords will result in lots of overloads, and stress the
+compiler.
+
+Note that this makes the *arity range* ``[1,2]``, so we'll need two forwarding overloads.
+
+.. parsed-literal::
+
+    BOOST_PARAMETER_FUNCTION((void), f, tag,
+        (required (x, \*))
+        (optional (y, \*))
+    )
+    {
+        std::cout << args[x] << args[y | "none"] << "\n";
+    }
+
+    struct f_fwd
+    {
+        template <class A0, class A1>
+        void operator()(boost::type<void>, A0 const& a0)
+        {
+            f(a0);
+        }
+
+        template <class A0, class A1>
+        void operator()(boost::type<void>, A0 const& a0, A1 const& a1)
+        {
+            f(a0, a1);
+        }
+    };
+
+    BOOST_PYTHON_MODULE(..)
+    {
+        class_<X>("X")
+            .def("f",
+                function<
+                    fwd
+                  , mpl::vector2<tag::x, **tag::y\*\*\ **>
+                  , mpl::vector3<void, int, int>
+                >()
+            );
+    }
+        
 
 ------------------------------------------------------------------------------
 
@@ -259,7 +315,7 @@ of [2,2], so we only need one forwarding overload.
         {
             self.f(a0, a1);
         }
-    }
+    };
 
     BOOST_PYTHON_MODULE(..)
     {
@@ -301,6 +357,41 @@ Defines a named parameter enabled free function in the current Python scope.
 
   For every ``N`` in ``[U,V]``, where ``[U,V]`` is the **arity range** of ``Keywords``.
 
+
+Example
+~~~~~~~
+
+This example exports a function ``f(int x, int y = ..)`` to Python.
+The |KeywordsSpec| ``mpl::vector2<tag::x, tag::y*>`` has an **arity range**
+of [2,2], so we only need one forwarding overload.
+
+.. parsed-literal::
+
+    BOOST_PARAMETER_FUNCTION((void), f, tag,
+        (required (x, \*))
+        (optional (y, \*))
+    )
+    {
+        /\* .. \*/
+    }
+
+    struct f_fwd
+    {
+        template <class A0, class A1>
+        void operator()(boost::type<void>, A0 const& a0, A1 const& a1)
+        {
+            f(a0, a1);
+        }
+    };
+
+    BOOST_PYTHON_MODULE(..)
+    {
+        def<
+            fwd
+          , mpl::vector2<tag::x, tag::y\*>
+          , mpl::vector3<void, int, int>
+        >("f");
+    }
 
 Portability
 -----------
