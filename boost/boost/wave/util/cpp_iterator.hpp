@@ -77,7 +77,7 @@ ParseNodeT const *name_node = 0;
 typename ParseNodeT::children_t const &children = name_node->children;
 
     if (0 == children.size() || 
-        children[0].value.begin() == children[0].value.end()) 
+        children.front().value.begin() == children.front().value.end()) 
     {
         // ill formed define statement (unexpected, should not happen)
         BOOST_WAVE_THROW(preprocess_exception, bad_define_statement, 
@@ -85,7 +85,7 @@ typename ParseNodeT::children_t const &children = name_node->children;
     }
 
 // retrieve the macro name
-    macroname = *children[0].value.begin();
+    macroname = *children.front().value.begin();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -279,6 +279,8 @@ protected:
     result_type const &pp_token(bool consider_emitting_line_directive = false);
 
     bool pp_directive();
+    template <typename IteratorT>
+    bool can_ignore_pp_directive(IteratorT &it);
     bool dispatch_directive(tree_parse_info_type const &hit,
         result_type const& found_directive);
 
@@ -761,10 +763,10 @@ token_id id = token_id(*iter_ctx->first);
             act_token = pending_queue.front();
             pending_queue.pop_front();
         }
-        else if (!unput_queue.empty() 
-            || T_IDENTIFIER == id 
-            || IS_CATEGORY(id, KeywordTokenType)
-            || IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType))
+        else if (!unput_queue.empty()
+              || T_IDENTIFIER == id 
+              || IS_CATEGORY(id, KeywordTokenType)
+              || IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType))
         {
         //  call the lexer, preprocess the required number of tokens, put them
         //  into the unput queue
@@ -854,6 +856,92 @@ namespace {
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//  can_ignore_pp_directive: handle certain pp_directives if if_block_status is 
+//                           false
+template <typename ContextT> 
+template <typename IteratorT>
+inline bool
+pp_iterator_functor<ContextT>::can_ignore_pp_directive(IteratorT &it)
+{
+    bool can_exit = true;
+    if (IS_EXTCATEGORY(*it, PPConditionalTokenType)) {
+    // simulate the if block hierarchy
+        switch (static_cast<unsigned int>(token_id(*it))) {
+        case T_PP_IFDEF:        // #ifdef
+        case T_PP_IFNDEF:       // #ifndef
+        case T_PP_IF:           // #if
+            ctx.enter_if_block(false);
+            break;
+
+        case T_PP_ELIF:         // #elif
+            if (!ctx.get_enclosing_if_block_status()) {
+                if (!ctx.enter_elif_block(false)) { 
+                // #else without matching #if
+                    BOOST_WAVE_THROW(preprocess_exception, 
+                        missing_matching_if, "#elif", act_pos);
+                }
+            }
+            else {
+                can_exit = false;   // #elif is not always safe to skip
+            }
+            break;
+
+        case T_PP_ELSE:         // #else
+            {
+            // handle this directive
+                on_else();
+
+            // make sure, there are no (non-whitespace) tokens left on this line                
+                string_type value ((*it).get_value());
+                if (!pp_is_last_on_line(ctx, it, iter_ctx->last)) {
+                // enable error recovery (start over with the next line)
+                    seen_newline = true;
+                    skip_to_eol(ctx, it, iter_ctx->last);
+                    iter_ctx->first = it;
+                
+                // report an invalid #else directive
+                    BOOST_WAVE_THROW(preprocess_exception, ill_formed_directive, 
+                        value, act_pos);
+                }
+
+            // we skipped to the end of this line already
+                seen_newline = true;
+                iter_ctx->first = it;
+            }
+            return true;
+              
+        case T_PP_ENDIF:        // #endif
+            on_endif();
+            break;
+
+        default:                // #something else
+            on_illformed((*it).get_value());
+            break;
+        }
+    }
+
+// start over with the next line, if only possible
+    if (can_exit) {
+        string_type value ((*it).get_value());
+        if (!skip_to_eol(ctx, it, iter_ctx->last)) {
+        // The line doesn't end with an eol but eof token.
+            seen_newline = true;    // allow to resume after warning
+            iter_ctx->first = it;
+            
+        // Trigger a warning, that the last line was not terminated with a 
+        // newline.
+            BOOST_WAVE_THROW(preprocess_exception, last_line_not_terminated, 
+                "", act_pos);
+        }
+        return true;    // may be safely ignored
+    }
+    
+    return false;   // do not ignore this pp directive
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//  pp_directive(): recognize a preprocessor directive
 template <typename ContextT> 
 inline bool
 pp_iterator_functor<ContextT>::pp_directive()
@@ -872,84 +960,25 @@ lexer_type it = iter_ctx->first;
                 return true;
             }
             else {
-                on_illformed((*it).get_value());
+                on_illformed((*it).get_value());  // report invalid pp directive
             }
         }
         
     // this line does not contain a pp directive, so simply return
         return false;
     }
-    
+
+// found eof
     if (it == iter_ctx->last)
         return false;
 
-// ignore all pp directives not related to conditional compilation while
+// ignore/handle all pp directives not related to conditional compilation while
 // if block status is false
-    if (!ctx.get_if_block_status()) {
-        bool can_exit = true;
-        if (IS_EXTCATEGORY(*it, PPConditionalTokenType)) {
-        // simulate the if block hierarchy
-            switch (static_cast<unsigned int>(token_id(*it))) {
-            case T_PP_IFDEF:        // #ifdef
-            case T_PP_IFNDEF:       // #ifndef
-            case T_PP_IF:           // #if
-                ctx.enter_if_block(false);
-                break;
-
-            case T_PP_ELIF:         // #elif
-                if (!ctx.get_enclosing_if_block_status()) {
-                    if (!ctx.enter_elif_block(false)) { 
-                    // #else without matching #if
-                        BOOST_WAVE_THROW(preprocess_exception, 
-                            missing_matching_if, "#elif", act_pos);
-                    }
-                }
-                else {
-                    can_exit = false;   // #elif is not always safe to skip
-                }
-                break;
-
-            case T_PP_ELSE:         // #else
-                {
-                // handle this directive
-                    on_else();
-
-                // make sure, there are no (non-whitespace) tokens left on this line                
-                    string_type value ((*it).get_value());
-                    if (!pp_is_last_on_line(ctx, it, iter_ctx->last)) {
-                    // enable error recovery (start over with the next line)
-                        seen_newline = true;
-                        skip_to_eol(ctx, it, iter_ctx->last);
-                        iter_ctx->first = it;
-                    
-                    // report an invalid #else directive
-                        BOOST_WAVE_THROW(preprocess_exception, ill_formed_directive, 
-                            value, act_pos);
-                    }
-
-                // we skipped to the end of this line already
-                    seen_newline = true;
-                    iter_ctx->first = it;
-                }
-                return true;
-                  
-            case T_PP_ENDIF:        // #endif
-                on_endif();
-                break;
-
-            default:                // #something else
-                on_illformed((*it).get_value());
-                break;
-            }
-        }
-
-    // start over with the next line, if only possible
-        if (can_exit) {
-            seen_newline = true;
-            skip_to_eol(ctx, it, iter_ctx->last);
-            iter_ctx->first = it;
-            return true;
-        }
+    if (!ctx.get_if_block_status() && can_ignore_pp_directive(it)) {
+    // we may skip pp directives only, if the current if block status is false
+        seen_newline = true;
+        iter_ctx->first = it;
+        return true;    //  the pp directive was handled/skipped
     }
     
 // found a pp directive, so try to identify it, start with the pp_token

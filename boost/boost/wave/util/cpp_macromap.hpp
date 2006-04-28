@@ -771,23 +771,13 @@ iterator_type first_it = gen_type::generate(first);
 iterator_type last_it = gen_type::generate(last);
 
 on_exit::assign<IteratorT, iterator_type> on_exit(first, first_it);
-// bool was_whitespace = false;
 ContainerT pending_queue;
     
     while (!pending_queue.empty() || first_it != last_it) {
-    token_type t = expand_tokensequence_worker(pending_queue, first_it, 
+        token_type t = expand_tokensequence_worker(pending_queue, first_it, 
                     last_it, expand_operator_defined);
-//     bool is_whitespace = IS_CATEGORY(t, WhiteSpaceTokenType) &&
-//         T_PLACEHOLDER != token_id(t);
-// 
-//         if (!was_whitespace || !is_whitespace) {
-//             if (is_whitespace && T_SPACE != token_id(t)) {
-//                 t.set_token_id(T_SPACE);
-//                 t.set_value(" ");
-//             }
-            expanded.push_back(t);
-//         }
-//         was_whitespace = is_whitespace;
+
+        expanded.push_back(t);
     }
 
 // should have returned all expanded tokens
@@ -933,7 +923,8 @@ bool adjacent_stringize = false;
             // stringize the current argument
                 BOOST_ASSERT(!arguments[i].empty());
                 
-            position_type const &pos = (*arguments[i].begin()).get_position();
+            // safe a copy of the first tokens position (not a reference!)
+            position_type pos ((*arguments[i].begin()).get_position());
 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
                 if (is_ellipsis && boost::wave::need_variadics(ctx.get_language())) {
@@ -1333,7 +1324,7 @@ on_exit::pop_front<definition_container_type> pop_front_token(pending);
 //
 //      This function returns true, if the pragma was correctly interpreted. 
 //      The iterator 'first' is positioned behind the closing ')'.
-//      This function returnes false, if the _Pragma was not known, the 
+//      This function returns false, if the _Pragma was not known, the 
 //      preprocessed token sequence is pushed back to the 'pending' sequence.
 //
 ///////////////////////////////////////////////////////////////////////////////
@@ -1701,7 +1692,7 @@ position_type pos;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  reset_macro_map(): initialise the internal macro symbol namespace
+//  reset_macromap(): initialize the internal macro symbol namespace
 //
 ///////////////////////////////////////////////////////////////////////////////
 template <typename ContextT>
@@ -1729,7 +1720,7 @@ struct version<boost::wave::util::macromap<ContextT> >
     BOOST_STATIC_CONSTANT(unsigned int, value = version::type::value);
 };
 
-}}    // namepsace boost::serialization
+}}    // namespace boost::serialization
 #endif
 
 // the suffix header occurs after all of the code

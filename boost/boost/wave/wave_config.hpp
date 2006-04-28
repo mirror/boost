@@ -202,13 +202,23 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+//  The following definition forces the Spirit tree code to use list's instead
+//  of vectors, which may be more efficient on some platforms
+// #define BOOST_SPIRIT_USE_LIST_FOR_TREES
+
+///////////////////////////////////////////////////////////////////////////////
+//  The following definition forces the Spirit tree code to use boost pool 
+//  allocators in stead of the std::allocator for the vector/list's.
+#define BOOST_SPIRIT_USE_BOOST_ALLOCATOR_FOR_TREES
+
+///////////////////////////////////////////////////////////////////////////////
 //  Uncomment the following, if you need debug output, the 
 //  BOOST_SPIRIT_DEBUG_FLAGS_CPP constants below help to fine control the 
 //  amount of the generated debug output.
 //#define BOOST_SPIRIT_DEBUG
 
 ///////////////////////////////////////////////////////////////////////////////
-//  Debug flags for the Wave library, possible flags spcified below.
+//  Debug flags for the Wave library, possible flags specified below.
 //
 //  Note: These flags take effect only if the BOOST_SPIRIT_DEBUG constant
 //        above is defined as well.
