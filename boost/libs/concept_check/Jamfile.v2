@@ -2,9 +2,15 @@
 import testing ;
 
 test-suite concept_check
-  : [ compile stl_concept_covering.cpp ]
-    [ compile concept_check_test.cpp  ]
-    [ compile class_concept_check_test.cpp ]
-    [ link-fail concept_check_fail_expected.cpp ]
-    [ link-fail class_concept_fail_expected.cpp ]
+  : [ run stl_concept_covering.cpp ]
+    [ run concept_check_test.cpp  ]
+    [ run class_concept_check_test.cpp ]
+    [ compile-fail concept_check_fail_expected.cpp ]
+    [ compile-fail class_concept_fail_expected.cpp ]
+      
+      # Backward compatibility tests
+    [ run old_concept_pass.cpp ]
+    [ compile-fail function_requires_fail.cpp ]
+    [ compile-fail old_concept_function_fail.cpp ]
+    [ compile-fail old_concept_class_fail.cpp ]
   ;
