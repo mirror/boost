@@ -26,11 +26,13 @@
 
 // function specializations must be defined in the appropriate
 // namespace - boost::serialization
+/*
 #if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-#define STD _STLP_STD
+#define std _STLP_std
 #else
-#define STD BOOST_STD_EXTENSION_NAMESPACE
+#define std BOOST_std_EXTENSION_NAMESPACE
 #endif
+*/
 
 namespace boost { 
 namespace serialization {
@@ -44,14 +46,14 @@ template<
 >
 inline void save(
     Archive & ar,
-    const STD::hash_set<
+    const BOOST_STD_EXTENSION_NAMESPACE::hash_set<
         Key, HashFcn, EqualKey, Allocator
     > &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::save_hash_collection<
         Archive, 
-        STD::hash_set<
+        BOOST_STD_EXTENSION_NAMESPACE::hash_set<
             Key, HashFcn, EqualKey, Allocator
         > 
     >(ar, t);
@@ -66,19 +68,19 @@ template<
 >
 inline void load(
     Archive & ar,
-    STD::hash_set<
+    BOOST_STD_EXTENSION_NAMESPACE::hash_set<
         Key, HashFcn, EqualKey, Allocator
     > &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::load_hash_collection<
         Archive,
-        STD::hash_set<
+        BOOST_STD_EXTENSION_NAMESPACE::hash_set<
             Key, HashFcn, EqualKey, Allocator
         >,
         boost::serialization::stl::archive_input_unique<
             Archive, 
-            STD::hash_set<
+            BOOST_STD_EXTENSION_NAMESPACE::hash_set<
                 Key, HashFcn, EqualKey, Allocator
             >
         >
@@ -96,7 +98,7 @@ template<
 >
 inline void serialize(
     Archive & ar,
-    STD::hash_set<
+    BOOST_STD_EXTENSION_NAMESPACE::hash_set<
         Key, HashFcn, EqualKey, Allocator
     > &t,
     const unsigned int file_version
@@ -114,14 +116,14 @@ template<
 >
 inline void save(
     Archive & ar,
-    const STD::hash_multiset<
+    const BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<
         Key, HashFcn, EqualKey, Allocator
     > &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::save_hash_collection<
         Archive, 
-        STD::hash_multiset<
+        BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<
             Key, HashFcn, EqualKey, Allocator
         > 
     >(ar, t);
@@ -136,19 +138,19 @@ template<
 >
 inline void load(
     Archive & ar,
-    STD::hash_multiset<
+    BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<
         Key, HashFcn, EqualKey, Allocator
     > &t,
     const unsigned int file_version
 ){
     boost::serialization::stl::load_hash_collection<
         Archive,
-        STD::hash_multiset<
+        BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<
             Key, HashFcn, EqualKey, Allocator
         >,
         boost::serialization::stl::archive_input_multi<
             Archive,
-            STD::hash_multiset<
+            BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<
                 Key, HashFcn, EqualKey, Allocator
             > 
         >
@@ -166,7 +168,7 @@ template<
 >
 inline void serialize(
     Archive & ar,
-    STD::hash_multiset<
+    BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<
         Key, HashFcn, EqualKey, Allocator
     > & t,
     const unsigned int file_version
@@ -179,10 +181,10 @@ inline void serialize(
 
 #include <boost/serialization/collection_traits.hpp>
 
-BOOST_SERIALIZATION_COLLECTION_TRAITS(STD::hash_set)
-BOOST_SERIALIZATION_COLLECTION_TRAITS(STD::hash_multiset)
+BOOST_SERIALIZATION_COLLECTION_TRAITS(BOOST_STD_EXTENSION_NAMESPACE::hash_set)
+BOOST_SERIALIZATION_COLLECTION_TRAITS(BOOST_STD_EXTENSION_NAMESPACE::hash_multiset)
 
-#undef STD
+//#undef STD
 
 #endif // BOOST_HAS_HASH
 #endif // BOOST_SERIALIZATION_HASH_SET_HPP

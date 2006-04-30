@@ -41,7 +41,7 @@ struct type_info_implementation {
     };
     typedef 
         BOOST_DEDUCED_TYPENAME mpl::eval_if<
-            boost::is_base_and_derived<basic_traits, T>,
+            is_base_and_derived<basic_traits, T>,
             traits_class_typeinfo_implementation<T>,
         //else
             mpl::identity<
