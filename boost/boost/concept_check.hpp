@@ -418,7 +418,7 @@ namespace boost
       
       ~AdaptableGeneratorConcept()
       {
-          BOOST_MPL_ASSERT((is_convertible<result_type, Return>));
+          BOOST_CONCEPT_ASSERT((ConvertibleConcept<result_type, Return>));
       }
   };
 
@@ -431,8 +431,8 @@ namespace boost
       
       ~AdaptableUnaryFunctionConcept()
       {
-          BOOST_MPL_ASSERT((is_convertible<result_type, Return>));
-          BOOST_MPL_ASSERT((is_convertible<Arg, argument_type>));
+          BOOST_CONCEPT_ASSERT((ConvertibleConcept<result_type, Return>));
+          BOOST_CONCEPT_ASSERT((ConvertibleConcept<Arg, argument_type>));
       }
   };
 
@@ -451,9 +451,9 @@ namespace boost
       
       ~AdaptableBinaryFunctionConcept()
       {
-          BOOST_MPL_ASSERT((is_convertible<result_type, Return>));
-          BOOST_MPL_ASSERT((is_convertible<First, first_argument_type>));
-          BOOST_MPL_ASSERT((is_convertible<Second, second_argument_type>));
+          BOOST_CONCEPT_ASSERT((ConvertibleConcept<result_type, Return>));
+          BOOST_CONCEPT_ASSERT((ConvertibleConcept<First, first_argument_type>));
+          BOOST_CONCEPT_ASSERT((ConvertibleConcept<Second, second_argument_type>));
       }
   };
 

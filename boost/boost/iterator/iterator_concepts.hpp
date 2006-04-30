@@ -20,7 +20,6 @@
 
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_integral.hpp>
-#include <boost/type_traits/is_convertible.hpp>
 
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/if.hpp>
@@ -118,11 +117,11 @@ namespace boost_concepts
 
       ~IncrementableIteratorConcept()
       {
-          BOOST_MPL_ASSERT((
-              boost::is_convertible<
-                 traversal_category
-               , boost::incrementable_traversal_tag
-              > ));
+          BOOST_CONCEPT_ASSERT((
+            boost::ConvertibleConcept<
+                traversal_category
+              , boost::incrementable_traversal_tag
+            >));
 
           ++i;
           (void)i++;
@@ -139,8 +138,8 @@ namespace boost_concepts
   {
       ~SinglePassIteratorConcept()
       {
-          BOOST_MPL_ASSERT((
-              boost::is_convertible<
+          BOOST_CONCEPT_ASSERT((
+              boost::ConvertibleConcept<
                  BOOST_DEDUCED_TYPENAME SinglePassIteratorConcept::traversal_category
                , boost::single_pass_traversal_tag
               > ));
@@ -159,8 +158,8 @@ namespace boost_concepts
           BOOST_MPL_ASSERT((boost::is_integral<difference_type>));
           BOOST_MPL_ASSERT_RELATION(std::numeric_limits<difference_type>::is_signed, ==, true);
           
-          BOOST_MPL_ASSERT((
-              boost::is_convertible<
+          BOOST_CONCEPT_ASSERT((
+              boost::ConvertibleConcept<
                  BOOST_DEDUCED_TYPENAME ForwardTraversalConcept::traversal_category
                , boost::forward_traversal_tag
               > ));
@@ -173,8 +172,8 @@ namespace boost_concepts
   {
       ~BidirectionalTraversalConcept()
       {
-          BOOST_MPL_ASSERT((
-              boost::is_convertible<
+          BOOST_CONCEPT_ASSERT((
+              boost::ConvertibleConcept<
                  BOOST_DEDUCED_TYPENAME BidirectionalTraversalConcept::traversal_category
                , boost::bidirectional_traversal_tag
               > ));
@@ -193,8 +192,8 @@ namespace boost_concepts
    public:
       ~RandomAccessTraversalConcept()
       {
-          BOOST_MPL_ASSERT((
-              boost::is_convertible<
+          BOOST_CONCEPT_ASSERT((
+              boost::ConvertibleConcept<
                  BOOST_DEDUCED_TYPENAME RandomAccessTraversalConcept::traversal_category
                , boost::random_access_traversal_tag
               > ));
