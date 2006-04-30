@@ -87,12 +87,14 @@ namespace boost
     T x;
   };
 
-  template <> struct IntegerConcept<short> { ~IntegerConcept() {} };
-  template <> struct IntegerConcept<unsigned short> { ~IntegerConcept() {} };
-  template <> struct IntegerConcept<int> { ~IntegerConcept() {} };
-  template <> struct IntegerConcept<unsigned int> { ~IntegerConcept() {} };
-  template <> struct IntegerConcept<long> { ~IntegerConcept() {} };
-  template <> struct IntegerConcept<unsigned long> { ~IntegerConcept() {} };
+  template <> struct IntegerConcept<signed char> {};
+  template <> struct IntegerConcept<unsigned char> {};
+  template <> struct IntegerConcept<short> {};
+  template <> struct IntegerConcept<unsigned short> {};
+  template <> struct IntegerConcept<int> {};
+  template <> struct IntegerConcept<unsigned int> {};
+  template <> struct IntegerConcept<long> {};
+  template <> struct IntegerConcept<unsigned long> {};
   // etc.
 
   template <class T>
@@ -103,11 +105,12 @@ namespace boost
    private:
     T x;
   };
-  template <> struct SignedIntegerConcept<short> { ~SignedIntegerConcept() {} };
-  template <> struct SignedIntegerConcept<int> { ~SignedIntegerConcept() {} };
-  template <> struct SignedIntegerConcept<long> { ~SignedIntegerConcept() {} };
+  template <> struct SignedIntegerConcept<signed char> { };
+  template <> struct SignedIntegerConcept<short> {};
+  template <> struct SignedIntegerConcept<int> {};
+  template <> struct SignedIntegerConcept<long> {};
 # if defined(BOOST_HAS_LONG_LONG)
-  template <> struct SignedIntegerConcept< ::boost::long_long_type> { ~SignedIntegerConcept() {} };
+  template <> struct SignedIntegerConcept< ::boost::long_long_type> {};
   // etc.
 #endif      
 
@@ -120,12 +123,15 @@ namespace boost
     T x;
   };
   
-  template <> struct UnsignedIntegerConcept<unsigned short>
-    { ~UnsignedIntegerConcept() {} };
-  template <> struct UnsignedIntegerConcept<unsigned int>
-    { ~UnsignedIntegerConcept() {} };
-  template <> struct UnsignedIntegerConcept<unsigned long>
-    { ~UnsignedIntegerConcept() {} };
+  template <> struct UnsignedIntegerConcept<unsigned char> {};
+  template <> struct UnsignedIntegerConcept<unsigned short> {};
+  template <> struct UnsignedIntegerConcept<unsigned int> {};
+  template <> struct UnsignedIntegerConcept<unsigned long> {};
+# if defined(BOOST_HAS_LONG_LONG)
+  template <> struct UnsignedIntegerConcept< ::boost::ulong_long_type> {};
+  // etc.
+#endif      
+
   // etc.
 
   //===========================================================================
@@ -428,7 +434,7 @@ namespace boost
   {
       typedef typename Func::argument_type argument_type;
       typedef typename Func::result_type result_type;
-      
+
       ~AdaptableUnaryFunctionConcept()
       {
           BOOST_CONCEPT_ASSERT((ConvertibleConcept<result_type, Return>));
