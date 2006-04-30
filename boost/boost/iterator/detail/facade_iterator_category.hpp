@@ -138,14 +138,6 @@ template <class Category, class Traversal>
 struct iterator_category_with_traversal
   : Category, Traversal
 {
-# if 0
-    // Because of limitations on multiple user-defined conversions,
-    // this should be a good test of whether convertibility is enough
-    // in the spec, or whether we need to specify inheritance.
-    operator Category() const { return Category(); }
-    operator Traversal() const { return Traversal(); }
-# endif
-    
 # if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
     // Make sure this isn't used to build any categories where
     // convertibility to Traversal is redundant.  Should just use the
