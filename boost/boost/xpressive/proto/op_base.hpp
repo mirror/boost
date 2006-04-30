@@ -25,13 +25,14 @@
 #include <boost/spirit/fusion/sequence/tuple.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/arg_traits.hpp>
+#include <boost/spirit/fusion/sequence/detail/sequence_base.hpp>
 
 namespace boost { namespace proto
 {
 
     ///////////////////////////////////////////////////////////////////////////////
     // op_root
-    struct op_root
+    struct op_root : fusion::sequence_root
     {
     };
 
