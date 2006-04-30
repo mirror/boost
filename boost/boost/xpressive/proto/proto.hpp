@@ -38,6 +38,30 @@ namespace boost { namespace proto
         return compiler::call(as_op<Node>::make(node), state, visitor);
     }
 
+    ///////////////////////////////////////////////////////////////////////////////
+    // literal, for storing and naming proto-ified constants.
+    template<typename T>
+    struct literal
+      : unary_op<T, proto::noop_tag>
+    {
+        literal(T const &t)
+          : unary_op<T, noop_tag>(t)
+        {}
+
+        template<typename U>
+        literal(literal<U> const &that)
+          : unary_op<T, noop_tag>(that.arg)
+        {}
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // lit(), for creating proto literals
+    template<typename T>
+    literal<T> lit(T const &t)
+    {
+        return t;
+    }
+
 }} // namespace boost::proto
 
 #endif
