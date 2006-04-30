@@ -59,7 +59,7 @@ namespace boost { namespace proto
     template<typename T>
     literal<T> lit(T const &t)
     {
-        return t;
+        return literal<T>(t);
     }
 
 }} // namespace boost::proto
