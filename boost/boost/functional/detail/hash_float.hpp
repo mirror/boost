@@ -23,7 +23,8 @@
 #if !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
 #  if defined(__GLIBCPP__) || defined(__GLIBCXX__)
 // GNU libstdc++ 3
-#    if defined(__USE_ISOC99) || defined(_GLIBCXX_USE_C99_MATH)
+#    if (defined(__USE_ISOC99) || defined(_GLIBCXX_USE_C99_MATH)) && \
+        !(defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__))
 #      define BOOST_HASH_USE_FPCLASSIFY
 #    endif
 #  elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
