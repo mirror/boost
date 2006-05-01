@@ -1,11 +1,11 @@
 // Copyright David Abrahams 2006. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-#ifndef BOOST_CONCEPT_CHECK_WHERE_DWA2006430_HPP
-# define BOOST_CONCEPT_CHECK_WHERE_DWA2006430_HPP
+#ifndef BOOST_CONCEPT_WHERE_DWA2006430_HPP
+# define BOOST_CONCEPT_WHERE_DWA2006430_HPP
 
 # include <boost/parameter/aux_/parenthesized_type.hpp>
-# include <boost/concept_check/assert.hpp>
+# include <boost/concept/assert.hpp>
 # include <boost/preprocessor/seq/for_each.hpp>
 
 namespace boost { 
@@ -47,4 +47,4 @@ struct where : More
 
 } // namespace boost::concept_check
 
-#endif // BOOST_CONCEPT_CHECK_WHERE_DWA2006430_HPP
+#endif // BOOST_CONCEPT_WHERE_DWA2006430_HPP

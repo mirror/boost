@@ -1,8 +1,8 @@
 // Copyright David Abrahams 2006. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-#ifndef BOOST_CONCEPT_CHECK_ASSERT_DWA2006430_HPP
-# define BOOST_CONCEPT_CHECK_ASSERT_DWA2006430_HPP
+#ifndef BOOST_CONCEPT_ASSERT_DWA2006430_HPP
+# define BOOST_CONCEPT_ASSERT_DWA2006430_HPP
 
 # include <boost/config.hpp>
 # include <boost/detail/workaround.hpp>
@@ -25,11 +25,11 @@
 # endif
 
 # ifdef BOOST_MSVC
-#  include <boost/concept_check/msvc.hpp>
+#  include <boost/concept/detail/msvc.hpp>
 # elif BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-#  include <boost/concept_check/borland.hpp>
+#  include <boost/concept/detail/borland.hpp>
 # else 
-#  include <boost/concept_check/general.hpp>
+#  include <boost/concept/detail/general.hpp>
 # endif
 
   // Usage, in class or function context:
@@ -39,4 +39,4 @@
 # define BOOST_CONCEPT_ASSERT(ModelInParens) \
     BOOST_CONCEPT_ASSERT_FN(void(*)ModelInParens)
 
-#endif // BOOST_CONCEPT_CHECK_ASSERT_DWA2006430_HPP
+#endif // BOOST_CONCEPT_ASSERT_DWA2006430_HPP

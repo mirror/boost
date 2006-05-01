@@ -15,7 +15,7 @@
 #ifndef BOOST_CONCEPT_CHECKS_HPP
 # define BOOST_CONCEPT_CHECKS_HPP
 
-# include <boost/concept_check/assert.hpp>
+# include <boost/concept/assert.hpp>
 
 # include <boost/iterator.hpp>
 # include <boost/type_traits/conversion_traits.hpp>
@@ -35,7 +35,7 @@ namespace boost
   //
   
   template <class Model>
-  inline void function_requires(BOOST_EXPLICIT_TEMPLATE_TYPE(Model))
+  inline void function_requires(Model* = 0)
   {
       BOOST_CONCEPT_ASSERT((Model));
   }    

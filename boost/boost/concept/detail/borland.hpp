@@ -1,18 +1,18 @@
 // Copyright David Abrahams 2006. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-#ifndef BOOST_CONCEPT_CHECK_BORLAND_DWA2006429_HPP
-# define BOOST_CONCEPT_CHECK_BORLAND_DWA2006429_HPP
+#ifndef BOOST_CONCEPT_DETAIL_BORLAND_DWA2006429_HPP
+# define BOOST_CONCEPT_DETAIL_BORLAND_DWA2006429_HPP
 
 # include <boost/preprocessor/cat.hpp>
 
-namespace boost {
+namespace boost { namespace concept {
 
 template <class ModelFnPtr>
-struct concept_check;
+struct require;
 
 template <class Model>
-struct concept_check<void(*)(Model)>
+struct require<void(*)(Model)>
 {
     enum { instantiate = sizeof((((Model*)0)->~Model()), 3) };
 };
@@ -21,9 +21,9 @@ struct concept_check<void(*)(Model)>
   enum                                                  \
   {                                                     \
       BOOST_PP_CAT(boost_concept_check,__LINE__) =      \
-         boost::concept_check<ModelFnPtr>::instantiate  \
+      boost::concept::require<ModelFnPtr>::instantiate  \
   }
 
-} // namespace boost::concept_checking
+}} // namespace boost::concept
 
-#endif // BOOST_CONCEPT_CHECK_BORLAND_DWA2006429_HPP
+#endif // BOOST_CONCEPT_DETAIL_BORLAND_DWA2006429_HPP
