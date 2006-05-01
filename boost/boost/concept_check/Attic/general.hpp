@@ -4,52 +4,38 @@
 #ifndef BOOST_CONCEPT_CHECK_MSVC_DWA2006429_HPP
 # define BOOST_CONCEPT_CHECK_MSVC_DWA2006429_HPP
 
+# include <boost/preprocessor/cat.hpp>
+# include <boost/parameter/aux_/parenthesized_type.hpp>
+
 # ifdef BOOST_OLD_CONCEPT_SUPPORT
 #  include <boost/concept_check/has_constraints.hpp>
 #  include <boost/mpl/if.hpp>
 # endif
 
-
-// This implementation works on GCC and Comeau, but has actually been
-// fairly carefully tuned to work on GCC versions starting with
-// gcc-2.95.x.  If you're trying to get an additional compiler to pass
-// the tests you might consider breaking out a separate gcc.hpp and
-// starting over on the general case.
+// This implementation works on Comeau and GCC, all the way back to
+// 2.95
 namespace boost
 {
-  namespace concept_checking
+  template <class ModelFnPtr>
+  struct concept_check_;
+  
+    namespace concept_checking
   {
     template <void(*)()> struct instantiate {};
   }
   
-  template <class ModelFn> struct concept_check_;
-
-  template <class Model>
-  void concept_check_failed()
-  {
-      ((Model*)0)->~Model();
-  }
-
   template <class Model>
   struct concept_check
   {
-      concept_checking::instantiate<concept_check_failed<Model> > x;
-      enum { instantiate = 1 };
+      static void failed() { ((Model*)0)->~Model(); }
   };
 
 # ifdef BOOST_OLD_CONCEPT_SUPPORT
-  
-  template <class Model>
-  void constraint_check_failed()
-  {
-      ((Model*)0)->constraints();
-  }
 
   template <class Model>
   struct constraint_check
   {
-      concept_checking::instantiate<constraint_check_failed<Model> > x;
-      enum { instantiate = 1 };
+      static void failed() { ((Model*)0)->constraints(); }
   };
   
   template <class Model>
@@ -69,14 +55,12 @@ namespace boost
   {};
   
 # endif
-  
-  // Usage, in class or function context:
-  //
-  //     BOOST_CONCEPT_ASSERT((UnaryFunctionConcept<F,bool,int>));
-#  define BOOST_CONCEPT_ASSERT( ModelInParens )                             \
-  enum { BOOST_PP_CAT(boost_concept_check,__LINE__) =                       \
-         ::boost::concept_check_<void(*) ModelInParens>::instantiate        \
-  }
+
+#  define BOOST_CONCEPT_ASSERT_FN( ModelFnPtr )     \
+  typedef boost::concept_checking::instantiate<     \
+      &boost::concept_check_<ModelFnPtr>::failed>   \
+      BOOST_PP_CAT(boost_concept_check,__LINE__)
+
 }
 
 #endif // BOOST_CONCEPT_CHECK_MSVC_DWA2006429_HPP

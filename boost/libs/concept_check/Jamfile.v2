@@ -8,6 +8,9 @@ test-suite concept_check
     [ compile-fail concept_check_fail_expected.cpp ]
     [ compile-fail class_concept_fail_expected.cpp ]
       
+    [ run where.cpp ]
+    [ compile-fail where_fail.cpp ]
+      
       # Backward compatibility tests
     [ run old_concept_pass.cpp ]
     [ compile-fail function_requires_fail.cpp ]

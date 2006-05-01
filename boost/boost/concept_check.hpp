@@ -15,38 +15,17 @@
 #ifndef BOOST_CONCEPT_CHECKS_HPP
 # define BOOST_CONCEPT_CHECKS_HPP
 
-# include <boost/config.hpp>
+# include <boost/concept_check/assert.hpp>
+
 # include <boost/iterator.hpp>
 # include <boost/type_traits/conversion_traits.hpp>
 # include <utility>
 # include <boost/type_traits/is_same.hpp>
 # include <boost/type_traits/is_void.hpp>
 # include <boost/mpl/assert.hpp>
-# include <boost/mpl/identity.hpp>
 # include <boost/detail/workaround.hpp>
-# include <new>
-# include <boost/parameter/aux_/parenthesized_type.hpp>
-# include <boost/preprocessor/cat.hpp>
 # include <boost/detail/iterator.hpp>
 
-// The old protocol used a constraints() member function in concept
-// checking classes.  If the compiler supports SFINAE, we can detect
-// that function and seamlessly support the old concept checking
-// classes.  In this release, backward compatibility with the old
-// concept checking classes is enabled by default, where available.
-// The old protocol is deprecated, though, and backward compatibility
-// will no longer be the default in the next release.
-# if !defined(BOOST_NO_SFINAE) && !defined(BOOST_NO_OLD_CONCEPT_SUPPORT)
-#  define BOOST_OLD_CONCEPT_SUPPORT
-# endif
-
-# ifdef BOOST_MSVC
-#  include <boost/concept_check/msvc.hpp>
-# elif BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-#  include <boost/concept_check/borland.hpp>
-# else 
-#  include <boost/concept_check/general.hpp>
-# endif
 
 namespace boost
 {

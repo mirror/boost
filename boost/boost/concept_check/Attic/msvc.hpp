@@ -4,6 +4,8 @@
 #ifndef BOOST_CONCEPT_CHECK_MSVC_DWA2006429_HPP
 # define BOOST_CONCEPT_CHECK_MSVC_DWA2006429_HPP
 
+# include <boost/preprocessor/cat.hpp>
+
 # ifdef BOOST_OLD_CONCEPT_SUPPORT
 #  include <boost/concept_check/has_constraints.hpp>
 #  include <boost/mpl/if.hpp>
@@ -17,6 +19,7 @@ namespace boost
     template <class Model>
     struct concept_check_
     {
+        ~concept_check_();
         virtual void failed(Model* x)
         {
             x->~Model();
@@ -52,7 +55,9 @@ namespace boost
   template <class Model>
   struct concept_check
     : concept_checking::concept_check_<Model>
-  {};
+  {
+      ~concept_check();
+  };
   
 # endif
 
@@ -68,9 +73,11 @@ namespace boost
     : concept_check<Model>
   { };
 
-# define BOOST_CONCEPT_ASSERT( ModelInParens )                          \
-  enum { BOOST_PP_CAT(boost_concept_check,__LINE__) =                   \
-         sizeof(::boost::concept_check<void(*) ModelInParens>)          \
+# define BOOST_CONCEPT_ASSERT_FN( ModelFnPtr )      \
+  enum                                              \
+  {                                                 \
+      BOOST_PP_CAT(boost_concept_check,__LINE__) =  \
+         sizeof(::boost::concept_check<ModelFnPtr>) \
   }
   
 # else
@@ -79,9 +86,11 @@ namespace boost
   concept_check<Model>
   concept_check_(void(*)(Model));
   
-# define BOOST_CONCEPT_ASSERT( ModelInParens )                          \
-  enum { BOOST_PP_CAT(boost_concept_check,__LINE__) =                   \
-         sizeof(::boost::concept_check_((void(*) ModelInParens)0))      \
+# define BOOST_CONCEPT_ASSERT_FN( ModelFnPtr )          \
+  enum                                                  \
+  {                                                     \
+      BOOST_PP_CAT(boost_concept_check,__LINE__) =      \
+         sizeof(::boost::concept_check_((ModelFnPtr)0)) \
   }
   
 # endif 

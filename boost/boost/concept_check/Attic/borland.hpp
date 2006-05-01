@@ -4,9 +4,11 @@
 #ifndef BOOST_CONCEPT_CHECK_BORLAND_DWA2006429_HPP
 # define BOOST_CONCEPT_CHECK_BORLAND_DWA2006429_HPP
 
+# include <boost/preprocessor/cat.hpp>
+
 namespace boost {
 
-template <class ModelFn>
+template <class ModelFnPtr>
 struct concept_check;
 
 template <class Model>
@@ -15,9 +17,11 @@ struct concept_check<void(*)(Model)>
     enum { instantiate = sizeof((((Model*)0)->~Model()), 3) };
 };
 
-#  define BOOST_CONCEPT_ASSERT( ModelInParens )                     \
-  enum { BOOST_PP_CAT(boost_concept_check,__LINE__) =               \
-         boost::concept_check<void(*)ModelInParens>::instantiate    \
+#  define BOOST_CONCEPT_ASSERT_FN( ModelFnPtr )         \
+  enum                                                  \
+  {                                                     \
+      BOOST_PP_CAT(boost_concept_check,__LINE__) =      \
+         boost::concept_check<ModelFnPtr>::instantiate  \
   }
 
 } // namespace boost::concept_checking
