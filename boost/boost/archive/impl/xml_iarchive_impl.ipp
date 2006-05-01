@@ -153,6 +153,7 @@ template<class Archive>
 BOOST_ARCHIVE_DECL(void)
 xml_iarchive_impl<Archive>::init(){
     gimpl->init(is);
+    this->set_library_version(gimpl->rv.version);
 }
 
 template<class Archive>

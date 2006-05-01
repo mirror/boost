@@ -66,6 +66,8 @@
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/void_cast.hpp>
+#include <boost/serialization/array.hpp>
+#include <boost/serialization/collection_size_type.hpp>
 
 #include <boost/archive/archive_exception.hpp>
 
@@ -477,23 +479,6 @@ struct save_enum_type
     }
 };
 
-template<class Archive, class T>
-struct save_array_type
-{
-    static void invoke(Archive &ar, const T &t){
-        save_access::end_preamble(ar);
-        // consider alignment
-        int count = sizeof(t) / (
-            static_cast<const char *>(static_cast<const void *>(&t[1])) 
-            - static_cast<const char *>(static_cast<const void *>(&t[0]))
-        );
-        ar << BOOST_SERIALIZATION_NVP(count);
-        int i;
-        for(i = 0; i < count; ++i)
-            ar << boost::serialization::make_nvp("item", t[i]);
-    }
-};
-
 // note bogus arguments to workaround msvc 6 silent runtime failure
 // declaration to satisfy gcc
 template<class Archive, class T>
@@ -525,11 +510,7 @@ inline void save(Archive & ar, const T &t){
         BOOST_DEDUCED_TYPENAME mpl::eval_if<is_enum<T>,
             mpl::identity<detail::save_enum_type<Archive, T> >,
         //else
-        BOOST_DEDUCED_TYPENAME mpl::eval_if<is_array<T>,
-            mpl::identity<detail::save_array_type<Archive, T> >,
-        //else
             mpl::identity<detail::save_non_pointer_type<Archive, T> >
-        >
         >
         >::type typex;
     typex::invoke(ar, t);

@@ -30,6 +30,7 @@
 
 #include <boost/archive/detail/common_iarchive.hpp>
 #include <boost/serialization/string.hpp>
+#include <boost/serialization/collection_size_type.hpp>
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
@@ -102,6 +103,11 @@ public:
         * this->This() >> x;
         t = (0 != x);
     }
+  void load_override(serialization::collection_size_type & t, int){
+       unsigned int x;
+       * this->This() >> x;
+       t = serialization::collection_size_type(x);
+   }
 
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     load_override(class_name_type & t, int);

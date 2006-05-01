@@ -26,7 +26,7 @@ namespace std{
         using ::mbstate_t;
     #elif defined(__QNXNTO__)
         using std::mbstate_t;
-    #elif defined(BOOST_DINKUMWARE_STDLIB)
+    #elif defined(BOOST_DINKUMWARE_STDLIB) && ! defined(__BORLANDC__) 
         using ::mbstate_t;
     #elif defined(__SGI_STL_PORT)
     #elif defined(BOOST_NO_STDC_NAMESPACE)

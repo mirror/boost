@@ -57,6 +57,7 @@ namespace std{
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/empty.hpp>
 #include <boost/mpl/not.hpp>
+#include <boost/mpl/bool.hpp>
 
  #ifndef BOOST_SERIALIZATION_DEFAULT_TYPE_INFO   
      #include <boost/serialization/extended_type_info_typeid.hpp>   
@@ -65,7 +66,6 @@ namespace std{
 #include <boost/archive/detail/basic_iarchive.hpp>
 #include <boost/archive/detail/basic_iserializer.hpp>
 #include <boost/archive/detail/archive_pointer_iserializer.hpp>
-#include <boost/archive/archive_exception.hpp>
 
 #include <boost/serialization/force_include.hpp>
 #include <boost/serialization/serialization.hpp>
@@ -76,7 +76,8 @@ namespace std{
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/binary_object.hpp>
 #include <boost/serialization/void_cast.hpp>
-
+#include <boost/serialization/array.hpp>
+#include <boost/serialization/collection_size_type.hpp>
 namespace boost {
 
 namespace serialization {
@@ -503,26 +504,6 @@ struct load_enum_type {
     }
 };
 
-template<class Archive, class T>
-struct load_array_type {
-    static void invoke(Archive &ar, T &t){
-        // convert integers to correct enum to load
-        int current_count = sizeof(t) / (
-            static_cast<char *>(static_cast<void *>(&t[1])) 
-            - static_cast<char *>(static_cast<void *>(&t[0]))
-        );
-        int count;
-        ar >> BOOST_SERIALIZATION_NVP(count);
-        if(count > current_count)
-            boost::throw_exception(archive::archive_exception(
-                boost::archive::archive_exception::array_size_too_short
-            ));
-        int i;
-        for(i = 0; i < count; ++i)
-            ar >> boost::serialization::make_nvp("item", t[i]);
-    }
-};
-
 // note bogus arguments to workaround msvc 6 silent runtime failure
 template<class Archive, class T>
 BOOST_DLLEXPORT 
@@ -557,14 +538,10 @@ inline void load(Archive &ar, T &t){
         BOOST_DEDUCED_TYPENAME mpl::eval_if<is_pointer<T>,
             mpl::identity<detail::load_pointer_type<Archive, T> >
         ,//else
-        BOOST_DEDUCED_TYPENAME mpl::eval_if<is_array<T>,
-            mpl::identity<detail::load_array_type<Archive, T> >
-        ,//else
         BOOST_DEDUCED_TYPENAME mpl::eval_if<is_enum<T>,
             mpl::identity<detail::load_enum_type<Archive, T> >
         ,//else
             mpl::identity<detail::load_non_pointer_type<Archive, T> >
-        >
         >
         >::type typex;
     typex::invoke(ar, t);
@@ -585,22 +562,18 @@ inline void load(Archive &ar, const T & t){
 }
 #endif
 
-// let wrappers through.  (Someday implement is_wrapper)
+// let wrappers through.
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 template<class Archive, class T>
-inline void load(Archive &ar, const serialization::nvp<T> &t){
-        boost::archive::load(ar, const_cast<serialization::nvp<T> &>(t));
-}
-template<class Archive>
-inline void load(Archive &ar, const serialization::binary_object &t){
-        boost::archive::load(ar, const_cast<serialization::binary_object &>(t));
+inline void load_wrapper(Archive &ar, const T&t, mpl::true_){
+  boost::archive::load(ar, const_cast<T&>(t));
 }
 
-//template<class Archive, class T>
-//inline void load(Archive &ar, const serialization::binary_object &t){
-//      load(ar, const_cast<binary_object &>(t));
-//}
+template<class Archive, class T>
+inline void load(Archive &ar, const T&t){
+  load_wrapper(ar,t,serialization::is_wrapper<T>());
 #endif
+}
 
 } // namespace archive
 } // namespace boost

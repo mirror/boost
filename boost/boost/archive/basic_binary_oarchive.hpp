@@ -29,6 +29,7 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/archive/detail/common_oarchive.hpp>
 #include <boost/serialization/string.hpp>
+#include <boost/serialization/collection_size_type.hpp>
 
 namespace boost {
 namespace archive {
@@ -103,6 +104,12 @@ public:
         const std::string s(t);
         * this->This() << s;
     }
+
+    void save_override(const serialization::collection_size_type & t, int){
+    // for backward compatibility, 64 bit integer or variable length integer would be preferred
+        unsigned int x = t.t;
+        * this->This() << x;
+   }
 
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     init();

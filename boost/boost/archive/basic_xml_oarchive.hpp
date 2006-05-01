@@ -24,7 +24,10 @@
 #include <boost/serialization/tracking.hpp>
 #include <boost/serialization/string.hpp>
 
+#include <boost/mpl/assert.hpp>
+
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
+
 
 namespace boost { 
 namespace archive {
@@ -80,7 +83,8 @@ public:
         // If your program fails to compile here, its most likely due to
         // not specifying an nvp wrapper around the variable to
         // be serialized.
-        BOOST_STATIC_ASSERT(0 == sizeof(T));
+        BOOST_MPL_ASSERT((serialization::is_wrapper<T>::value));
+        this->detail_common_oarchive::save_override(t, 0);
     }
 
    // special treatment for name-value pairs.
