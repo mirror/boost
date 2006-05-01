@@ -34,6 +34,8 @@
 
 #include <algorithm>
 
+#include <boost/concept/detail/concept_def.hpp>
+
 namespace boost_concepts
 {
   // Used a different namespace here (instead of "boost") so that the
@@ -43,16 +45,15 @@ namespace boost_concepts
   //===========================================================================
   // Iterator Access Concepts
 
-  template <typename Iterator>
-  struct ReadableIteratorConcept
-    : boost::AssignableConcept<Iterator>
-    , boost::CopyConstructibleConcept<Iterator>
+  BOOST_concept(ReadableIterator,(Iterator))
+    : boost::Assignable<Iterator>
+    , boost::CopyConstructible<Iterator>
 
   {
       typedef BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::value_type value_type;
       typedef BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::reference reference;
 
-      ~ReadableIteratorConcept()
+      ~ReadableIterator()
       {
 
           value_type v = *i;
@@ -66,10 +67,10 @@ namespace boost_concepts
       typename Iterator
     , typename ValueType = BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::value_type
   >
-  struct WritableIteratorConcept
-    : boost::CopyConstructibleConcept<Iterator>
+  WritableIterator
+    : boost::CopyConstructible<Iterator>
   {
-      ~WritableIteratorConcept()
+      ~WritableIterator()
       {
           *i = v;
       }
@@ -77,11 +78,16 @@ namespace boost_concepts
       ValueType v;
       Iterator i;
   };
+
+  template <
+      typename Iterator
+    , typename ValueType = BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::value_type
+  >
+  struct WritableIteratorConcept : WritableIterator<Iterator,ValueType> {};
   
-  template <typename Iterator>
-  struct SwappableIteratorConcept
+  BOOST_concept(SwappableIterator,(Iterator))
   {
-      ~SwappableIteratorConcept()
+      ~SwappableIterator()
       {
           std::iter_swap(i1, i2);
       }
@@ -90,12 +96,11 @@ namespace boost_concepts
       Iterator i2;
   };
 
-  template <typename Iterator>
-  struct LvalueIteratorConcept
+  BOOST_concept(LvalueIterator,(Iterator))
   {
       typedef typename boost::detail::iterator_traits<Iterator>::value_type value_type;
       
-      ~LvalueIteratorConcept()
+      ~LvalueIterator()
       {
         value_type& r = const_cast<value_type&>(*i);
         boost::ignore_unused_variable_warning(r);
@@ -108,17 +113,16 @@ namespace boost_concepts
   //===========================================================================
   // Iterator Traversal Concepts
 
-  template <typename Iterator>
-  struct IncrementableIteratorConcept
-    : boost::AssignableConcept<Iterator>
-    , boost::CopyConstructibleConcept<Iterator>
+  BOOST_concept(IncrementableIterator,(Iterator))
+    : boost::Assignable<Iterator>
+    , boost::CopyConstructible<Iterator>
   {
       typedef typename boost::iterator_traversal<Iterator>::type traversal_category;
 
-      ~IncrementableIteratorConcept()
+      ~IncrementableIterator()
       {
           BOOST_CONCEPT_ASSERT((
-            boost::ConvertibleConcept<
+            boost::Convertible<
                 traversal_category
               , boost::incrementable_traversal_tag
             >));
@@ -130,51 +134,48 @@ namespace boost_concepts
       Iterator i;
   };
 
-  template <typename Iterator>
-  struct SinglePassIteratorConcept
-    : IncrementableIteratorConcept<Iterator>
-    , boost::EqualityComparableConcept<Iterator>
+  BOOST_concept(SinglePassIterator,(Iterator))
+    : IncrementableIterator<Iterator>
+    , boost::EqualityComparable<Iterator>
 
   {
-      ~SinglePassIteratorConcept()
+      ~SinglePassIterator()
       {
           BOOST_CONCEPT_ASSERT((
-              boost::ConvertibleConcept<
-                 BOOST_DEDUCED_TYPENAME SinglePassIteratorConcept::traversal_category
+              boost::Convertible<
+                 BOOST_DEDUCED_TYPENAME SinglePassIterator::traversal_category
                , boost::single_pass_traversal_tag
               > ));
       }
   };
 
-  template <typename Iterator>
-  struct ForwardTraversalConcept
-    : SinglePassIteratorConcept<Iterator>
-    , boost::DefaultConstructibleConcept<Iterator>
+  BOOST_concept(ForwardTraversal,(Iterator))
+    : SinglePassIterator<Iterator>
+    , boost::DefaultConstructible<Iterator>
   {
       typedef typename boost::detail::iterator_traits<Iterator>::difference_type difference_type;
       
-      ~ForwardTraversalConcept()
+      ~ForwardTraversal()
       {
           BOOST_MPL_ASSERT((boost::is_integral<difference_type>));
           BOOST_MPL_ASSERT_RELATION(std::numeric_limits<difference_type>::is_signed, ==, true);
           
           BOOST_CONCEPT_ASSERT((
-              boost::ConvertibleConcept<
-                 BOOST_DEDUCED_TYPENAME ForwardTraversalConcept::traversal_category
+              boost::Convertible<
+                 BOOST_DEDUCED_TYPENAME ForwardTraversal::traversal_category
                , boost::forward_traversal_tag
               > ));
     }
   };
   
-  template <typename Iterator>
-  struct BidirectionalTraversalConcept
-    : ForwardTraversalConcept<Iterator>
+  BOOST_concept(BidirectionalTraversal,(Iterator))
+    : ForwardTraversal<Iterator>
   {
-      ~BidirectionalTraversalConcept()
+      ~BidirectionalTraversal()
       {
           BOOST_CONCEPT_ASSERT((
-              boost::ConvertibleConcept<
-                 BOOST_DEDUCED_TYPENAME BidirectionalTraversalConcept::traversal_category
+              boost::Convertible<
+                 BOOST_DEDUCED_TYPENAME BidirectionalTraversal::traversal_category
                , boost::bidirectional_traversal_tag
               > ));
           
@@ -185,16 +186,15 @@ namespace boost_concepts
       Iterator i;
   };
 
-  template <typename Iterator>
-  struct RandomAccessTraversalConcept
-    : BidirectionalTraversalConcept<Iterator>
+  BOOST_concept(RandomAccessTraversal,(Iterator))
+    : BidirectionalTraversal<Iterator>
   {
    public:
-      ~RandomAccessTraversalConcept()
+      ~RandomAccessTraversal()
       {
           BOOST_CONCEPT_ASSERT((
-              boost::ConvertibleConcept<
-                 BOOST_DEDUCED_TYPENAME RandomAccessTraversalConcept::traversal_category
+              boost::Convertible<
+                 BOOST_DEDUCED_TYPENAME RandomAccessTraversal::traversal_category
                , boost::random_access_traversal_tag
               > ));
           
@@ -207,12 +207,12 @@ namespace boost_concepts
       }
       
    private:
-      typename BidirectionalTraversalConcept<Iterator>::difference_type n;
+      typename BidirectionalTraversal<Iterator>::difference_type n;
       Iterator i, j;
   };
 
   //===========================================================================
-  // Iterator Interoperability Concept
+  // Iterator Interoperability 
 
   namespace detail
   {
@@ -258,8 +258,7 @@ namespace boost_concepts
 
   } // namespace detail
 
-  template <typename Iterator, typename ConstIterator>
-  struct InteroperableIteratorConcept
+  BOOST_concept(InteroperableIterator,(Iterator)(ConstIterator))
   {
    private:
       typedef typename boost::detail::pure_traversal_tag<
@@ -275,10 +274,10 @@ namespace boost_concepts
       >::type const_traversal_category;
       
   public:
-      ~InteroperableIteratorConcept()
+      ~InteroperableIterator()
       {
-          BOOST_CONCEPT_ASSERT((SinglePassIteratorConcept<Iterator>));
-          BOOST_CONCEPT_ASSERT((SinglePassIteratorConcept<ConstIterator>));
+          BOOST_CONCEPT_ASSERT((SinglePassIterator<Iterator>));
+          BOOST_CONCEPT_ASSERT((SinglePassIterator<ConstIterator>));
 
           detail::interop_single_pass_constraints(i, ci);
           detail::interop_rand_access_constraints(i, ci, traversal_category(), const_traversal_category());
@@ -293,5 +292,6 @@ namespace boost_concepts
 
 } // namespace boost_concepts
 
+#include <boost/concept/detail/concept_undef.hpp>
 
 #endif // BOOST_ITERATOR_CONCEPTS_HPP
