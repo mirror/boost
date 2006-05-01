@@ -20,7 +20,7 @@ struct foo { };
 template <class T>
 class class_requires_test
 {
-    BOOST_CONCEPT_ASSERT((boost::EqualityComparableConcept<foo>));
+    BOOST_CONCEPT_ASSERT((boost::EqualityComparable<foo>));
 };
 
 int

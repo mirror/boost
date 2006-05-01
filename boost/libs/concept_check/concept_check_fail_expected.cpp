@@ -21,6 +21,6 @@ struct foo { };
 int
 main()
 {
-    BOOST_CONCEPT_ASSERT((boost::EqualityComparableConcept<foo>));
+    BOOST_CONCEPT_ASSERT((boost::EqualityComparable<foo>));
     return 0;
 }

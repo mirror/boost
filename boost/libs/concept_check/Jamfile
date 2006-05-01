@@ -4,10 +4,14 @@ import testing ;
 
 test-suite concept_check
   : [ run stl_concept_covering.cpp ]
+    [ run stl_concept_check.cpp ]
     [ run concept_check_test.cpp  ]
     [ run class_concept_check_test.cpp ]
     [ compile-fail concept_check_fail_expected.cpp ]
     [ compile-fail class_concept_fail_expected.cpp ]
+      
+    [ run where.cpp ]
+    [ compile-fail where_fail.cpp ]
       
       # Backward compatibility tests
     [ run old_concept_pass.cpp ]

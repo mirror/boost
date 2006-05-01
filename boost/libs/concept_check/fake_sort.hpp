@@ -5,7 +5,7 @@
 # define BOOST_LIBS_CONCEPT_CHECK_FAKE_SORT_DWA2006430_HPP
 
 # include <boost/detail/iterator.hpp>
-# include <boost/concept_check/where.hpp>
+# include <boost/concept/where.hpp>
 # include <boost/concept_check.hpp>
 
 namespace fake
@@ -14,8 +14,8 @@ namespace fake
   
   template<typename RanIter>
   BOOST_CONCEPT_WHERE(
-      ((Mutable_RandomAccessIteratorConcept<RanIter>))
-      ((LessThanComparableConcept<typename Mutable_RandomAccessIteratorConcept<RanIter>::value_type>))
+      ((Mutable_RandomAccessIterator<RanIter>))
+      ((LessThanComparable<typename Mutable_RandomAccessIterator<RanIter>::value_type>))
     
     , (void))
       sort(RanIter,RanIter)

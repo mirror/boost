@@ -18,11 +18,11 @@ struct bar { bool operator()(int, char) { return true; } };
 
 class class_requires_test
 {
-    BOOST_CONCEPT_ASSERT((boost::EqualityComparableConcept<int>));
+    BOOST_CONCEPT_ASSERT((boost::EqualityComparable<int>));
     typedef int* int_ptr; typedef const int* const_int_ptr;
-    BOOST_CONCEPT_ASSERT((boost::EqualOpConcept<int_ptr,const_int_ptr>));
-    BOOST_CONCEPT_ASSERT((boost::UnaryFunctionConcept<foo,bool,int>));
-//    BOOST_CONCEPT_ASSERT((boost::BinaryFunctionConcept<bar,bool,int,char>));
+    BOOST_CONCEPT_ASSERT((boost::EqualOp<int_ptr,const_int_ptr>));
+    BOOST_CONCEPT_ASSERT((boost::UnaryFunction<foo,bool,int>));
+    BOOST_CONCEPT_ASSERT((boost::BinaryFunction<bar,bool,int,char>));
 };
 
 int

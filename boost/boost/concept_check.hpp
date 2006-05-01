@@ -26,6 +26,7 @@
 # include <boost/detail/workaround.hpp>
 # include <boost/detail/iterator.hpp>
 
+# include <boost/concept/detail/concept_def.hpp>
 
 namespace boost
 {
@@ -57,57 +58,56 @@ namespace boost
   //
   // Begin concept definitions
   //
-  template <class T>
-  struct IntegerConcept {
-    ~IntegerConcept() { 
-      x.error_type_must_be_an_integer_type();
-    }
+  BOOST_concept(Integer, (T))
+  {
+      ~Integer()
+        { 
+            x.error_type_must_be_an_integer_type();
+        }
    private:
-    T x;
+      T x;
   };
 
-  template <> struct IntegerConcept<signed char> {};
-  template <> struct IntegerConcept<unsigned char> {};
-  template <> struct IntegerConcept<short> {};
-  template <> struct IntegerConcept<unsigned short> {};
-  template <> struct IntegerConcept<int> {};
-  template <> struct IntegerConcept<unsigned int> {};
-  template <> struct IntegerConcept<long> {};
-  template <> struct IntegerConcept<unsigned long> {};
+  template <> struct Integer<signed char> {};
+  template <> struct Integer<unsigned char> {};
+  template <> struct Integer<short> {};
+  template <> struct Integer<unsigned short> {};
+  template <> struct Integer<int> {};
+  template <> struct Integer<unsigned int> {};
+  template <> struct Integer<long> {};
+  template <> struct Integer<unsigned long> {};
   // etc.
 
-  template <class T>
-  struct SignedIntegerConcept {
-    ~SignedIntegerConcept() { 
+  BOOST_concept(SignedInteger,(T)) {
+    ~SignedInteger() { 
       x.error_type_must_be_a_signed_integer_type();
     }
    private:
     T x;
   };
-  template <> struct SignedIntegerConcept<signed char> { };
-  template <> struct SignedIntegerConcept<short> {};
-  template <> struct SignedIntegerConcept<int> {};
-  template <> struct SignedIntegerConcept<long> {};
+  template <> struct SignedInteger<signed char> { };
+  template <> struct SignedInteger<short> {};
+  template <> struct SignedInteger<int> {};
+  template <> struct SignedInteger<long> {};
 # if defined(BOOST_HAS_LONG_LONG)
-  template <> struct SignedIntegerConcept< ::boost::long_long_type> {};
+  template <> struct SignedInteger< ::boost::long_long_type> {};
   // etc.
 #endif      
 
-  template <class T>
-  struct UnsignedIntegerConcept {
-    ~UnsignedIntegerConcept() { 
+  BOOST_concept(UnsignedInteger,(T)) {
+    ~UnsignedInteger() { 
       x.error_type_must_be_an_unsigned_integer_type();
     }
    private:
     T x;
   };
   
-  template <> struct UnsignedIntegerConcept<unsigned char> {};
-  template <> struct UnsignedIntegerConcept<unsigned short> {};
-  template <> struct UnsignedIntegerConcept<unsigned int> {};
-  template <> struct UnsignedIntegerConcept<unsigned long> {};
+  template <> struct UnsignedInteger<unsigned char> {};
+  template <> struct UnsignedInteger<unsigned short> {};
+  template <> struct UnsignedInteger<unsigned int> {};
+  template <> struct UnsignedInteger<unsigned long> {};
 # if defined(BOOST_HAS_LONG_LONG)
-  template <> struct UnsignedIntegerConcept< ::boost::ulong_long_type> {};
+  template <> struct UnsignedInteger< ::boost::ulong_long_type> {};
   // etc.
 #endif      
 
@@ -116,19 +116,17 @@ namespace boost
   //===========================================================================
   // Basic Concepts
 
-  template <class TT>
-  struct DefaultConstructibleConcept
+  BOOST_concept(DefaultConstructible,(TT))
   {
-    ~DefaultConstructibleConcept() {
+    ~DefaultConstructible() {
       TT a;               // require default constructor
       ignore_unused_variable_warning(a);
     }
   };
 
-  template <class TT>
-  struct AssignableConcept
+  BOOST_concept(Assignable,(TT))
   {
-    ~AssignableConcept() {
+    ~Assignable() {
 #if !defined(_ITERATOR_) // back_insert_iterator broken for VC++ STL
       a = a;              // require assignment operator
 #endif
@@ -144,10 +142,9 @@ namespace boost
     TT a;
   };
 
-  template <class TT>
-  struct CopyConstructibleConcept
+  BOOST_concept(CopyConstructible,(TT))
   {
-    ~CopyConstructibleConcept() {
+    ~CopyConstructible() {
       TT a(b);            // require copy constructor
       TT* ptr = &a;       // require address of operator
       const_constraints(a);
@@ -164,10 +161,9 @@ namespace boost
   };
 
   // The SGI STL version of Assignable requires copy constructor and operator=
-  template <class TT>
-  struct SGIAssignableConcept
+  BOOST_concept(SGIAssignable,(TT))
   {
-    ~SGIAssignableConcept() {
+    ~SGIAssignable() {
       TT b(a);
 #if !defined(_ITERATOR_) // back_insert_iterator broken for VC++ STL
       a = a;              // require assignment operator
@@ -186,10 +182,9 @@ namespace boost
     TT a;
   };
 
-  template <class X, class Y>
-  struct ConvertibleConcept
+  BOOST_concept(Convertible,(X)(Y))
   {
-    ~ConvertibleConcept() {
+    ~Convertible() {
       Y y = x;
       ignore_unused_variable_warning(y);
     }
@@ -212,10 +207,9 @@ namespace boost
     ignore_unused_variable_warning(x);
   }
 
-  template <class TT>
-  struct EqualityComparableConcept
+  BOOST_concept(EqualityComparable,(TT))
   {
-    ~EqualityComparableConcept() {
+    ~EqualityComparable() {
       require_boolean_expr(a == b);
       require_boolean_expr(a != b);
     }
@@ -223,10 +217,9 @@ namespace boost
     TT a, b;
   };
 
-  template <class TT>
-  struct LessThanComparableConcept
+  BOOST_concept(LessThanComparable,(TT))
   {
-    ~LessThanComparableConcept() {
+    ~LessThanComparable() {
       require_boolean_expr(a < b);
     }
    private:
@@ -234,10 +227,9 @@ namespace boost
   };
 
   // This is equivalent to SGI STL's LessThanComparable.
-  template <class TT>
-  struct ComparableConcept
+  BOOST_concept(Comparable,(TT))
   {
-    ~ComparableConcept() {
+    ~Comparable() {
       require_boolean_expr(a < b);
       require_boolean_expr(a > b);
       require_boolean_expr(a <= b);
@@ -248,49 +240,44 @@ namespace boost
   };
 
 #define BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(OP,NAME)    \
-    template <class First, class Second>                        \
-    struct NAME {                                               \
-        ~NAME() { (void)constraints_(); }                        \
+  BOOST_concept(NAME, (First)(Second))                          \
+  {                                                             \
+      ~NAME() { (void)constraints_(); }                         \
      private:                                                   \
-        bool constraints_() {                                   \
-            return  a OP b;                                     \
-        }                                                       \
-        First a;                                         \
-        Second b;                                        \
+        bool constraints_() { return a OP b; }                  \
+        First a;                                                \
+        Second b;                                               \
     }
 
 #define BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(OP,NAME)    \
-    template <class Ret, class First, class Second>         \
-    struct NAME {                                           \
-        ~NAME() { (void)constraints_(); }                    \
-     private:                                               \
-        Ret constraints_() {                                \
-            return a OP b;                                  \
-        }                                                   \
-        First a;                                     \
-        Second b;                                    \
+  BOOST_concept(NAME, (Ret)(First)(Second))                 \
+  {                                                         \
+      ~NAME() { (void)constraints_(); }                     \
+  private:                                                  \
+      Ret constraints_() { return a OP b; }                 \
+      First a;                                              \
+      Second b;                                             \
     }
 
-  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(==, EqualOpConcept);
-  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(!=, NotEqualOpConcept);
-  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(<, LessThanOpConcept);
-  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(<=, LessEqualOpConcept);
-  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(>, GreaterThanOpConcept);
-  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(>=, GreaterEqualOpConcept);
+  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(==, EqualOp);
+  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(!=, NotEqualOp);
+  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(<, LessThanOp);
+  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(<=, LessEqualOp);
+  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(>, GreaterThanOp);
+  BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(>=, GreaterEqualOp);
 
-  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(+, PlusOpConcept);
-  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(*, TimesOpConcept);
-  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(/, DivideOpConcept);
-  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(-, SubtractOpConcept);
-  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(%, ModOpConcept);
+  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(+, PlusOp);
+  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(*, TimesOp);
+  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(/, DivideOp);
+  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(-, SubtractOp);
+  BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(%, ModOp);
 
   //===========================================================================
   // Function Object Concepts
 
-  template <class Func, class Return>
-  struct GeneratorConcept
+  BOOST_concept(Generator,(Func)(Return))
   {
-      ~GeneratorConcept() { test(is_void<Return>()); }
+      ~Generator() { test(is_void<Return>()); }
       
    private:
       void test(boost::mpl::false_)
@@ -309,10 +296,9 @@ namespace boost
   };
 
 
-  template <class Func, class Return, class Arg>
-  struct UnaryFunctionConcept
+  BOOST_concept(UnaryFunction,(Func)(Return)(Arg))
   {
-      ~UnaryFunctionConcept() { test(is_void<Return>()); }
+      ~UnaryFunction() { test(is_void<Return>()); }
       
    private:
       void test(boost::mpl::false_)
@@ -331,10 +317,9 @@ namespace boost
       Arg arg;
   };
 
-  template <class Func, class Return, class First, class Second>
-  struct BinaryFunctionConcept
+  BOOST_concept(BinaryFunction,(Func)(Return)(First)(Second))
   {
-      ~BinaryFunctionConcept() { test(is_void<Return>()); }
+      ~BinaryFunction() { test(is_void<Return>()); }
    private:
       void test(boost::mpl::false_)
       {
@@ -354,10 +339,9 @@ namespace boost
       Return r;
   };
 
-  template <class Func, class Arg>
-  struct UnaryPredicateConcept
+  BOOST_concept(UnaryPredicate,(Func)(Arg))
   {
-    ~UnaryPredicateConcept() {
+    ~UnaryPredicate() {
       require_boolean_expr(f(arg)); // require operator() returning bool
     }
    private:
@@ -365,10 +349,9 @@ namespace boost
     Arg arg;
   };
 
-  template <class Func, class First, class Second>
-  struct BinaryPredicateConcept
+  BOOST_concept(BinaryPredicate,(Func)(First)(Second))
   {
-    ~BinaryPredicateConcept() {
+    ~BinaryPredicate() {
       require_boolean_expr(f(a, b)); // require operator() returning bool
     }
    private:
@@ -378,11 +361,10 @@ namespace boost
   };
 
   // use this when functor is used inside a container class like std::set
-  template <class Func, class First, class Second>
-  struct Const_BinaryPredicateConcept
-    : BinaryPredicateConcept<Func, First, Second>
+  BOOST_concept(Const_BinaryPredicate,(Func)(First)(Second))
+    : BinaryPredicate<Func, First, Second>
   {
-    ~Const_BinaryPredicateConcept() { 
+    ~Const_BinaryPredicate() { 
       const_constraints(f);
     }
    private:
@@ -395,35 +377,32 @@ namespace boost
     Second b;
   };
 
-  template <class Func, class Return>
-  struct AdaptableGeneratorConcept
-    : GeneratorConcept<Func, typename Func::result_type>
+  BOOST_concept(AdaptableGenerator,(Func)(Return))
+    : Generator<Func, typename Func::result_type>
   {
       typedef typename Func::result_type result_type;
       
-      ~AdaptableGeneratorConcept()
+      ~AdaptableGenerator()
       {
-          BOOST_CONCEPT_ASSERT((ConvertibleConcept<result_type, Return>));
+          BOOST_CONCEPT_ASSERT((Convertible<result_type, Return>));
       }
   };
 
-  template <class Func, class Return, class Arg>
-  struct AdaptableUnaryFunctionConcept
-    : UnaryFunctionConcept<Func, typename Func::result_type, typename Func::argument_type>
+  BOOST_concept(AdaptableUnaryFunction,(Func)(Return)(Arg))
+    : UnaryFunction<Func, typename Func::result_type, typename Func::argument_type>
   {
       typedef typename Func::argument_type argument_type;
       typedef typename Func::result_type result_type;
 
-      ~AdaptableUnaryFunctionConcept()
+      ~AdaptableUnaryFunction()
       {
-          BOOST_CONCEPT_ASSERT((ConvertibleConcept<result_type, Return>));
-          BOOST_CONCEPT_ASSERT((ConvertibleConcept<Arg, argument_type>));
+          BOOST_CONCEPT_ASSERT((Convertible<result_type, Return>));
+          BOOST_CONCEPT_ASSERT((Convertible<Arg, argument_type>));
       }
   };
 
-  template <class Func, class Return, class First, class Second>
-  struct AdaptableBinaryFunctionConcept
-    : BinaryFunctionConcept<
+  BOOST_concept(AdaptableBinaryFunction,(Func)(Return)(First)(Second))
+    : BinaryFunction<
           Func
         , typename Func::result_type
         , typename Func::first_argument_type
@@ -434,33 +413,30 @@ namespace boost
       typedef typename Func::second_argument_type second_argument_type;
       typedef typename Func::result_type result_type;
       
-      ~AdaptableBinaryFunctionConcept()
+      ~AdaptableBinaryFunction()
       {
-          BOOST_CONCEPT_ASSERT((ConvertibleConcept<result_type, Return>));
-          BOOST_CONCEPT_ASSERT((ConvertibleConcept<First, first_argument_type>));
-          BOOST_CONCEPT_ASSERT((ConvertibleConcept<Second, second_argument_type>));
+          BOOST_CONCEPT_ASSERT((Convertible<result_type, Return>));
+          BOOST_CONCEPT_ASSERT((Convertible<First, first_argument_type>));
+          BOOST_CONCEPT_ASSERT((Convertible<Second, second_argument_type>));
       }
   };
 
-  template <class Func, class Arg>
-  struct AdaptablePredicateConcept
-    : UnaryPredicateConcept<Func, Arg>
-    , AdaptableUnaryFunctionConcept<Func, bool, Arg>
+  BOOST_concept(AdaptablePredicate,(Func)(Arg))
+    : UnaryPredicate<Func, Arg>
+    , AdaptableUnaryFunction<Func, bool, Arg>
   {};
 
-  template <class Func, class First, class Second>
-  struct AdaptableBinaryPredicateConcept
-    : BinaryPredicateConcept<Func, First, Second>
-    , AdaptableBinaryFunctionConcept<Func, bool, First, Second>
+  BOOST_concept(AdaptableBinaryPredicate,(Func)(First)(Second))
+    : BinaryPredicate<Func, First, Second>
+    , AdaptableBinaryFunction<Func, bool, First, Second>
   {};
 
   //===========================================================================
   // Iterator Concepts
 
-  template <class TT>
-  struct InputIteratorConcept
-    : AssignableConcept<TT>
-    , EqualityComparableConcept<TT>
+  BOOST_concept(InputIterator,(TT))
+    : Assignable<TT>
+    , EqualityComparable<TT>
   {
       typedef typename boost::detail::iterator_traits<TT>::value_type value_type;
       typedef typename boost::detail::iterator_traits<TT>::difference_type difference_type;
@@ -468,10 +444,10 @@ namespace boost
       typedef typename boost::detail::iterator_traits<TT>::pointer pointer;
       typedef typename boost::detail::iterator_traits<TT>::iterator_category iterator_category;
 
-      ~InputIteratorConcept()
+      ~InputIterator()
       {
-        BOOST_CONCEPT_ASSERT((SignedIntegerConcept<difference_type>));
-        BOOST_CONCEPT_ASSERT((ConvertibleConcept<iterator_category, std::input_iterator_tag>));
+        BOOST_CONCEPT_ASSERT((SignedInteger<difference_type>));
+        BOOST_CONCEPT_ASSERT((Convertible<iterator_category, std::input_iterator_tag>));
         
         TT j(i);
         (void)*i;           // require dereference operator
@@ -482,11 +458,10 @@ namespace boost
     TT i;
   };
 
-  template <class TT, class ValueT>
-  struct OutputIteratorConcept
-    : AssignableConcept<TT>
+  BOOST_concept(OutputIterator,(TT)(ValueT))
+    : Assignable<TT>
   {
-    ~OutputIteratorConcept() {
+    ~OutputIterator() {
       
       ++i;                // require preincrement operator
       i++;                // require postincrement operator
@@ -497,18 +472,17 @@ namespace boost
     ValueT t;
   };
 
-  template <class TT>
-  struct ForwardIteratorConcept
-    : InputIteratorConcept<TT>
+  BOOST_concept(ForwardIterator,(TT))
+    : InputIterator<TT>
   {
-      ~ForwardIteratorConcept()
+      ~ForwardIterator()
       {
-          BOOST_CONCEPT_ASSERT((ConvertibleConcept<
-              BOOST_DEDUCED_TYPENAME ForwardIteratorConcept::iterator_category
+          BOOST_CONCEPT_ASSERT((Convertible<
+              BOOST_DEDUCED_TYPENAME ForwardIterator::iterator_category
             , std::forward_iterator_tag
           >));
           
-          typename InputIteratorConcept<TT>::reference r = *i;
+          typename InputIterator<TT>::reference r = *i;
           ignore_unused_variable_warning(r);
       }
       
@@ -516,25 +490,23 @@ namespace boost
       TT i;
   };
 
-  template <class TT>
-  struct Mutable_ForwardIteratorConcept
-    : ForwardIteratorConcept<TT>
+  BOOST_concept(Mutable_ForwardIterator,(TT))
+    : ForwardIterator<TT>
   {
-      ~Mutable_ForwardIteratorConcept() {
+      ~Mutable_ForwardIterator() {
         *i++ = *i;         // require postincrement and assignment
       }
    private:
       TT i;
   };
 
-  template <class TT>
-  struct BidirectionalIteratorConcept
-    : ForwardIteratorConcept<TT>
+  BOOST_concept(BidirectionalIterator,(TT))
+    : ForwardIterator<TT>
   {
-      ~BidirectionalIteratorConcept()
+      ~BidirectionalIterator()
       {
-          BOOST_CONCEPT_ASSERT((ConvertibleConcept<
-              BOOST_DEDUCED_TYPENAME BidirectionalIteratorConcept::iterator_category
+          BOOST_CONCEPT_ASSERT((Convertible<
+              BOOST_DEDUCED_TYPENAME BidirectionalIterator::iterator_category
             , std::bidirectional_iterator_tag
           >));
 
@@ -545,12 +517,11 @@ namespace boost
       TT i;
   };
 
-  template <class TT>
-  struct Mutable_BidirectionalIteratorConcept
-    : BidirectionalIteratorConcept<TT>
-    , Mutable_ForwardIteratorConcept<TT>
+  BOOST_concept(Mutable_BidirectionalIterator,(TT))
+    : BidirectionalIterator<TT>
+    , Mutable_ForwardIterator<TT>
   {
-      ~Mutable_BidirectionalIteratorConcept()
+      ~Mutable_BidirectionalIterator()
       {
           *i-- = *i;                  // require postdecrement and assignment
       }
@@ -559,15 +530,14 @@ namespace boost
   };
 
 
-  template <class TT>
-  struct RandomAccessIteratorConcept
-    : BidirectionalIteratorConcept<TT>
-    , ComparableConcept<TT>
+  BOOST_concept(RandomAccessIterator,(TT))
+    : BidirectionalIterator<TT>
+    , Comparable<TT>
   {
-      ~RandomAccessIteratorConcept()
+      ~RandomAccessIterator()
       {
-          BOOST_CONCEPT_ASSERT((ConvertibleConcept<
-              BOOST_DEDUCED_TYPENAME BidirectionalIteratorConcept<TT>::iterator_category
+          BOOST_CONCEPT_ASSERT((Convertible<
+              BOOST_DEDUCED_TYPENAME BidirectionalIterator<TT>::iterator_category
             , std::random_access_iterator_tag
           >));
 
@@ -585,12 +555,11 @@ namespace boost
       typename boost::detail::iterator_traits<TT>::difference_type n;
   };
 
-  template <class TT>
-  struct Mutable_RandomAccessIteratorConcept
-    : RandomAccessIteratorConcept<TT>
-    , Mutable_BidirectionalIteratorConcept<TT>
+  BOOST_concept(Mutable_RandomAccessIterator,(TT))
+    : RandomAccessIterator<TT>
+    , Mutable_BidirectionalIterator<TT>
   {
-      ~Mutable_RandomAccessIteratorConcept()
+      ~Mutable_RandomAccessIterator()
       {
           i[n] = *i;                  // require element access and assignment
       }
@@ -600,53 +569,51 @@ namespace boost
   };
 
   //===========================================================================
-  // Container Concepts
+  // Container s
 
-  template <class Container>
-  struct ContainerConcept
-    : AssignableConcept<Container>
+  BOOST_concept(Container,(C))
+    : Assignable<C>
   {
-    typedef typename Container::value_type value_type;
-    typedef typename Container::difference_type difference_type;
-    typedef typename Container::size_type size_type;
-    typedef typename Container::const_reference const_reference;
-    typedef typename Container::const_pointer const_pointer;
-    typedef typename Container::const_iterator const_iterator;
+    typedef typename C::value_type value_type;
+    typedef typename C::difference_type difference_type;
+    typedef typename C::size_type size_type;
+    typedef typename C::const_reference const_reference;
+    typedef typename C::const_pointer const_pointer;
+    typedef typename C::const_iterator const_iterator;
 
-      ~ContainerConcept()
+      ~Container()
       {
-          BOOST_CONCEPT_ASSERT((InputIteratorConcept<const_iterator>));
+          BOOST_CONCEPT_ASSERT((InputIterator<const_iterator>));
           const_constraints(c);
       }
       
    private:
-      void const_constraints(const Container& cc) {
+      void const_constraints(const C& cc) {
           i = cc.begin();
           i = cc.end();
           n = cc.size();
           n = cc.max_size();
           b = cc.empty();
       }
-      Container c;
+      C c;
       bool b;
       const_iterator i;
       size_type n;
   };
 
-  template <class Container>
-  struct Mutable_ContainerConcept
-    : ContainerConcept<Container>
+  BOOST_concept(Mutable_Container,(C))
+    : Container<C>
   {
-      typedef typename Container::reference reference;
-      typedef typename Container::iterator iterator;
-      typedef typename Container::pointer pointer;
+      typedef typename C::reference reference;
+      typedef typename C::iterator iterator;
+      typedef typename C::pointer pointer;
     
-      ~Mutable_ContainerConcept()
+      ~Mutable_Container()
       {
           BOOST_CONCEPT_ASSERT((
-               AssignableConcept<typename Mutable_ContainerConcept::value_type>));
+               Assignable<typename Mutable_Container::value_type>));
           
-          BOOST_CONCEPT_ASSERT((InputIteratorConcept<iterator>));
+          BOOST_CONCEPT_ASSERT((InputIterator<iterator>));
           
           i = c.begin();
           i = c.end();
@@ -655,143 +622,137 @@ namespace boost
       
    private:
       iterator i;
-      Container c, c2;
+      C c, c2;
   };
 
-  template <class ForwardContainer>
-  struct ForwardContainerConcept
-    : ContainerConcept<ForwardContainer>
+  BOOST_concept(ForwardContainer,(C))
+    : Container<C>
   {
-      ~ForwardContainerConcept()
+      ~ForwardContainer()
       {
           BOOST_CONCEPT_ASSERT((
-               ForwardIteratorConcept<
-                    typename ForwardContainerConcept::const_iterator
+               ForwardIterator<
+                    typename ForwardContainer::const_iterator
                >));
       }
   };  
 
-  template <class ForwardContainer>
-  struct Mutable_ForwardContainerConcept
-    : ForwardContainerConcept<ForwardContainer>
-    , Mutable_ContainerConcept<ForwardContainer>
+  BOOST_concept(Mutable_ForwardContainer,(C))
+    : ForwardContainer<C>
+    , Mutable_Container<C>
   {
-      ~Mutable_ForwardContainerConcept()
+      ~Mutable_ForwardContainer()
       {
           BOOST_CONCEPT_ASSERT((
-               Mutable_ForwardIteratorConcept<
-                   typename Mutable_ForwardContainerConcept::iterator
+               Mutable_ForwardIterator<
+                   typename Mutable_ForwardContainer::iterator
                >));
       }
   };  
 
-  template <class ReversibleContainer>
-  struct ReversibleContainerConcept
-    : ForwardContainerConcept<ReversibleContainer>
+  BOOST_concept(ReversibleContainer,(C))
+    : ForwardContainer<C>
   {
       typedef typename
-        ReversibleContainer::const_reverse_iterator
+        C::const_reverse_iterator
       const_reverse_iterator;
 
-      ~ReversibleContainerConcept()
+      ~ReversibleContainer()
       {
           BOOST_CONCEPT_ASSERT((
-              BidirectionalIteratorConcept<
-                  typename ReversibleContainerConcept::const_iterator>));
+              BidirectionalIterator<
+                  typename ReversibleContainer::const_iterator>));
           
-          BOOST_CONCEPT_ASSERT((BidirectionalIteratorConcept<const_reverse_iterator>));
+          BOOST_CONCEPT_ASSERT((BidirectionalIterator<const_reverse_iterator>));
           
           const_constraints(c);
       }
    private:
-      void const_constraints(const ReversibleContainer& cc)
+      void const_constraints(const C& cc)
       {
           const_reverse_iterator i = cc.rbegin();
           i = cc.rend();
       }
-      ReversibleContainer c;
+      C c;
   };
 
-  template <class ReversibleContainer>
-  struct Mutable_ReversibleContainerConcept
-    : Mutable_ForwardContainerConcept<ReversibleContainer>
-    , ReversibleContainerConcept<ReversibleContainer>
+  BOOST_concept(Mutable_ReversibleContainer,(C))
+    : Mutable_ForwardContainer<C>
+    , ReversibleContainer<C>
   {
-      typedef typename ReversibleContainer::iterator iterator;
-      typedef typename ReversibleContainer::reverse_iterator reverse_iterator;
-
-      ~Mutable_ReversibleContainerConcept()
+      typedef typename C::reverse_iterator reverse_iterator;
+      
+      ~Mutable_ReversibleContainer()
       {
-        BOOST_CONCEPT_ASSERT((Mutable_BidirectionalIteratorConcept<iterator>));
-        BOOST_CONCEPT_ASSERT((Mutable_BidirectionalIteratorConcept<reverse_iterator>));
-        reverse_iterator i = c.rbegin();
-        i = c.rend();
+          typedef typename Mutable_ForwardContainer<C>::iterator iterator;
+          BOOST_CONCEPT_ASSERT((Mutable_BidirectionalIterator<iterator>));
+          BOOST_CONCEPT_ASSERT((Mutable_BidirectionalIterator<reverse_iterator>));
+          
+          reverse_iterator i = c.rbegin();
+          i = c.rend();
       }
    private:  
-      ReversibleContainer c;
+      C c;
   };
 
-  template <class RandomAccessContainer>
-  struct RandomAccessContainerConcept
-    : ReversibleContainerConcept<RandomAccessContainer>
+  BOOST_concept(RandomAccessContainer,(C))
+    : ReversibleContainer<C>
   {
-      typedef typename RandomAccessContainer::size_type size_type;
-      typedef typename RandomAccessContainer::const_reference const_reference;
+      typedef typename C::size_type size_type;
+      typedef typename C::const_reference const_reference;
 
-      ~RandomAccessContainerConcept()
+      ~RandomAccessContainer()
       {
           BOOST_CONCEPT_ASSERT((
-              RandomAccessIteratorConcept<
-                  typename RandomAccessContainerConcept::const_iterator
+              RandomAccessIterator<
+                  typename RandomAccessContainer::const_iterator
               >));
           
           const_constraints(c);
       }
    private:
-      void const_constraints(const RandomAccessContainer& cc)
+      void const_constraints(const C& cc)
       {
           const_reference r = cc[n];
           ignore_unused_variable_warning(r);
       }
     
-      RandomAccessContainer c;
+      C c;
       size_type n;
   };
 
-  template <class RandomAccessContainer>
-  struct Mutable_RandomAccessContainerConcept
-    : Mutable_ReversibleContainerConcept<RandomAccessContainer>
-    , RandomAccessContainerConcept<RandomAccessContainer>
+  BOOST_concept(Mutable_RandomAccessContainer,(C))
+    : Mutable_ReversibleContainer<C>
+    , RandomAccessContainer<C>
   {
    private:
-      typedef Mutable_RandomAccessContainerConcept self;
+      typedef Mutable_RandomAccessContainer self;
    public:
-      ~Mutable_RandomAccessContainerConcept()
+      ~Mutable_RandomAccessContainer()
       {
-          BOOST_CONCEPT_ASSERT((Mutable_RandomAccessIteratorConcept<typename self::iterator>));
-          BOOST_CONCEPT_ASSERT((Mutable_RandomAccessIteratorConcept<typename self::reverse_iterator>));
+          BOOST_CONCEPT_ASSERT((Mutable_RandomAccessIterator<typename self::iterator>));
+          BOOST_CONCEPT_ASSERT((Mutable_RandomAccessIterator<typename self::reverse_iterator>));
           
           typename self::reference r = c[i];
           ignore_unused_variable_warning(r);
       }
       
    private:
-      typename Mutable_ReversibleContainerConcept<RandomAccessContainer>::size_type i;
-      RandomAccessContainer c;
+      typename Mutable_ReversibleContainer<C>::size_type i;
+      C c;
   };
 
   // A Sequence is inherently mutable
-  template <class Sequence>
-  struct SequenceConcept
-    : Mutable_ForwardContainerConcept<Sequence>
+  BOOST_concept(Sequence,(S))
+    : Mutable_ForwardContainer<S>
       // Matt Austern's book puts DefaultConstructible here, the C++
       // standard places it in Container --JGS
       // ... so why aren't we following the standard?  --DWA
-    , DefaultConstructibleConcept<Sequence>
+    , DefaultConstructible<S>
   {
-      ~SequenceConcept()
+      ~Sequence()
       {
-          Sequence 
+          S 
               c(n),
               c2(n, t),
               c3(first, last);
@@ -803,7 +764,7 @@ namespace boost
           c.erase(p);
           c.erase(p, q);
 
-          typename SequenceConcept::reference r = c.front();
+          typename Sequence::reference r = c.front();
 
           ignore_unused_variable_warning(c);
           ignore_unused_variable_warning(c2);
@@ -812,64 +773,61 @@ namespace boost
           const_constraints(c);
       }
    private:
-      void const_constraints(const Sequence& c) {
-          typename SequenceConcept::const_reference r = c.front();
+      void const_constraints(const S& c) {
+          typename Sequence::const_reference r = c.front();
           ignore_unused_variable_warning(r);
       }
     
-      typename Sequence::value_type t;
-      typename Sequence::size_type n;
-      typename Sequence::value_type* first, *last;
-      typename Sequence::iterator p, q;
+      typename S::value_type t;
+      typename S::size_type n;
+      typename S::value_type* first, *last;
+      typename S::iterator p, q;
   };
 
-  template <class FrontInsertionSequence>
-  struct FrontInsertionSequenceConcept
-    : SequenceConcept<FrontInsertionSequence>
+  BOOST_concept(FrontInsertionSequence,(S))
+    : Sequence<S>
   {
-      ~FrontInsertionSequenceConcept()
+      ~FrontInsertionSequence()
       {
           c.push_front(t);
           c.pop_front();
       }
    private:
-      FrontInsertionSequence c;
-      typename FrontInsertionSequence::value_type t;
+      S c;
+      typename S::value_type t;
   };
 
-  template <class BackInsertionSequence>
-  struct BackInsertionSequenceConcept
-    : SequenceConcept<BackInsertionSequence>
+  BOOST_concept(BackInsertionSequence,(S))
+    : Sequence<S>
   {
-      ~BackInsertionSequenceConcept()
+      ~BackInsertionSequence()
       {
           c.push_back(t);
           c.pop_back();
-          typename BackInsertionSequenceConcept::reference r = c.back();
+          typename BackInsertionSequence::reference r = c.back();
           ignore_unused_variable_warning(r);
           const_constraints(c);
       }
    private:
-      void const_constraints(const BackInsertionSequence& cc) {
-          typename BackInsertionSequenceConcept::const_reference
+      void const_constraints(const S& cc) {
+          typename BackInsertionSequence::const_reference
               r = cc.back();
           ignore_unused_variable_warning(r);
       };
-      BackInsertionSequence c;
-      typename BackInsertionSequence::value_type t;
+      S c;
+      typename S::value_type t;
   };
 
-  template <class AssociativeContainer>
-  struct AssociativeContainerConcept
-    : ForwardContainerConcept<AssociativeContainer>
-    , DefaultConstructibleConcept<AssociativeContainer>
+  BOOST_concept(AssociativeContainer,(C))
+    : ForwardContainer<C>
+    , DefaultConstructible<C>
   {
-      typedef typename AssociativeContainer::key_type key_type;
-      typedef typename AssociativeContainer::key_compare key_compare;
-      typedef typename AssociativeContainer::value_compare value_compare;
-      typedef typename AssociativeContainer::iterator iterator;
+      typedef typename C::key_type key_type;
+      typedef typename C::key_compare key_compare;
+      typedef typename C::value_compare value_compare;
+      typedef typename C::iterator iterator;
 
-      ~AssociativeContainerConcept()
+      ~AssociativeContainer()
       {
           i = c.find(k);
           r = c.equal_range(k);
@@ -877,38 +835,37 @@ namespace boost
           c.erase(i);
           c.erase(r.first, r.second);
           const_constraints(c);
-          BOOST_CONCEPT_ASSERT((BinaryPredicateConcept<key_compare,key_type,key_type>));
+          BOOST_CONCEPT_ASSERT((BinaryPredicate<key_compare,key_type,key_type>));
           
-          typedef typename AssociativeContainerConcept::value_type value_type_;
-          BOOST_CONCEPT_ASSERT((BinaryPredicateConcept<value_compare,value_type_,value_type_>));
+          typedef typename AssociativeContainer::value_type value_type_;
+          BOOST_CONCEPT_ASSERT((BinaryPredicate<value_compare,value_type_,value_type_>));
       }
       
       // Redundant with the base concept, but it helps below.
-      typedef typename AssociativeContainer::const_iterator const_iterator;
+      typedef typename C::const_iterator const_iterator;
    private:
-      void const_constraints(const AssociativeContainer& cc)
+      void const_constraints(const C& cc)
       {
           ci = cc.find(k);
           n = cc.count(k);
           cr = cc.equal_range(k);
       }
 
-      AssociativeContainer c;
+      C c;
       iterator i;
       std::pair<iterator,iterator> r;
       const_iterator ci;
       std::pair<const_iterator,const_iterator> cr;
-      typename AssociativeContainer::key_type k;
-      typename AssociativeContainer::size_type n;
+      typename C::key_type k;
+      typename C::size_type n;
   };
 
-  template <class UniqueAssociativeContainer>
-  struct UniqueAssociativeContainerConcept
-    : AssociativeContainerConcept<UniqueAssociativeContainer>
+  BOOST_concept(UniqueAssociativeContainer,(C))
+    : AssociativeContainer<C>
   {
-      ~UniqueAssociativeContainerConcept()
+      ~UniqueAssociativeContainer()
       {
-          UniqueAssociativeContainer c(first, last);
+          C c(first, last);
       
           pos_flag = c.insert(t);
           c.insert(first, last);
@@ -916,18 +873,17 @@ namespace boost
           ignore_unused_variable_warning(c);
       }
    private:
-      std::pair<typename UniqueAssociativeContainer::iterator, bool> pos_flag;
-      typename UniqueAssociativeContainer::value_type t;
-      typename UniqueAssociativeContainer::value_type* first, *last;
+      std::pair<typename C::iterator, bool> pos_flag;
+      typename C::value_type t;
+      typename C::value_type* first, *last;
   };
 
-  template <class MultipleAssociativeContainer>
-  struct MultipleAssociativeContainerConcept
-    : AssociativeContainerConcept<MultipleAssociativeContainer>
+  BOOST_concept(MultipleAssociativeContainer,(C))
+    : AssociativeContainer<C>
   {
-      ~MultipleAssociativeContainerConcept()
+      ~MultipleAssociativeContainer()
       {
-          MultipleAssociativeContainer c(first, last);
+          C c(first, last);
       
           pos = c.insert(t);
           c.insert(first, last);
@@ -936,45 +892,42 @@ namespace boost
           ignore_unused_variable_warning(pos);
       }
    private:
-      typename MultipleAssociativeContainer::iterator pos;
-      typename MultipleAssociativeContainer::value_type t;
-      typename MultipleAssociativeContainer::value_type* first, *last;
+      typename C::iterator pos;
+      typename C::value_type t;
+      typename C::value_type* first, *last;
   };
 
-  template <class SimpleAssociativeContainer>
-  struct SimpleAssociativeContainerConcept
-    : AssociativeContainerConcept<SimpleAssociativeContainer>
+  BOOST_concept(SimpleAssociativeContainer,(C))
+    : AssociativeContainer<C>
   {
-      ~SimpleAssociativeContainerConcept()
+      ~SimpleAssociativeContainer()
       {
-          typedef typename SimpleAssociativeContainer::key_type key_type;
-          typedef typename SimpleAssociativeContainer::value_type value_type;
+          typedef typename C::key_type key_type;
+          typedef typename C::value_type value_type;
           BOOST_MPL_ASSERT((boost::is_same<key_type,value_type>));
       }
   };
 
-  template <class SimpleAssociativeContainer>
-  struct PairAssociativeContainerConcept
-    : AssociativeContainerConcept<SimpleAssociativeContainer>
+  BOOST_concept(PairAssociativeContainer,(C))
+    : AssociativeContainer<C>
   {
-      ~PairAssociativeContainerConcept()
+      ~PairAssociativeContainer()
       {
-          typedef typename SimpleAssociativeContainer::key_type key_type;
-          typedef typename SimpleAssociativeContainer::value_type value_type;
-          typedef typename SimpleAssociativeContainer::mapped_type mapped_type;
+          typedef typename C::key_type key_type;
+          typedef typename C::value_type value_type;
+          typedef typename C::mapped_type mapped_type;
           typedef std::pair<const key_type, mapped_type> required_value_type;
           BOOST_MPL_ASSERT((boost::is_same<value_type,required_value_type>));
       }
   };
 
-  template <class SortedAssociativeContainer>
-  struct SortedAssociativeContainerConcept
-    : AssociativeContainerConcept<SortedAssociativeContainer>
-    , ReversibleContainerConcept<SortedAssociativeContainer>
+  BOOST_concept(SortedAssociativeContainer,(C))
+    : AssociativeContainer<C>
+    , ReversibleContainer<C>
   {
-      ~SortedAssociativeContainerConcept()
+      ~SortedAssociativeContainer()
       {
-          SortedAssociativeContainer 
+          C 
               c(kc),
               c2(first, last),
               c3(first, last, kc);
@@ -991,7 +944,7 @@ namespace boost
           const_constraints(c);
       }
       
-      void const_constraints(const SortedAssociativeContainer& c)
+      void const_constraints(const C& c)
       {
           kc = c.key_comp();
           vc = c.value_comp();
@@ -1002,24 +955,26 @@ namespace boost
       }
       
    private:
-      typename SortedAssociativeContainer::key_compare kc;
-      typename SortedAssociativeContainer::value_compare vc;
-      typename SortedAssociativeContainer::value_type t;
-      typename SortedAssociativeContainer::key_type k;
-      typedef typename SortedAssociativeContainer::iterator iterator;
-      typedef typename SortedAssociativeContainer::const_iterator const_iterator;
+      typename C::key_compare kc;
+      typename C::value_compare vc;
+      typename C::value_type t;
+      typename C::key_type k;
+      typedef typename C::iterator iterator;
+      typedef typename C::const_iterator const_iterator;
 
-      typedef SortedAssociativeContainerConcept self;
+      typedef SortedAssociativeContainer self;
       iterator p;
       const_iterator cp;
       std::pair<typename self::iterator,typename self::iterator> r;
       std::pair<typename self::const_iterator,typename self::const_iterator> cr;
-      typename SortedAssociativeContainer::value_type* first, *last;
+      typename C::value_type* first, *last;
   };
 
   // HashedAssociativeContainer
 
 } // namespace boost
+
+# include <boost/concept/detail/concept_undef.hpp>
 
 #endif // BOOST_CONCEPT_CHECKS_HPP
 

@@ -238,9 +238,9 @@ Library produces):
 
 <pre>
 boost/concept_check.hpp: In method `void LessThanComparableConcept
-  &lt;_List_iterator&lt;int,int &amp;,int *&gt; &gt;::constraints()':
+  &lt;_List_iterator&lt;int,int &amp;,int *&gt; &gt;::~LessThanComparableConcept()':
 boost/concept_check.hpp:334:   instantiated from `RandomAccessIteratorConcept
-  &lt;_List_iterator&lt;int,int &amp;,int *&gt; &gt;::constraints()'
+  &lt;_List_iterator&lt;int,int &amp;,int *&gt; &gt;::~RandomAccessIteratorConcept()'
 bad_error_eg.cpp:6:   instantiated from `stable_sort&lt;_List_iterator
   &lt;int,int &amp;,int *&gt; &gt;(_List_iterator&lt;int,int &amp;,int *&gt;, 
   _List_iterator&lt;int,int &amp;,int *&gt;)'
@@ -260,10 +260,9 @@ href="http://www.sgi.com/tech/stl/RandomAccessIterator.html">
 RandomAccessIterator</a>).
 <LI> The error message is now much shorter and does not reveal
   internal STL functions.
-<LI> The presence of <tt>concept_check.hpp</tt> and
-  <tt>constraints()</tt> in the error message alerts the user to the
-  fact that the error lies in the user code and not in the library
-  implementation.
+<LI> The presence of <tt>concept_check.hpp</tt> in the error message
+  alerts the user to the fact that the error lies in the user code and
+  not in the library implementation.
 </UL>
 
 <h2><a name="history">History</a></h2>
