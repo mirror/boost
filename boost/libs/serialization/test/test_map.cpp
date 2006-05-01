@@ -144,20 +144,21 @@ test_multimap(){
 #ifdef BOOST_HAS_HASH
 #include <boost/serialization/hash_map.hpp>
 
+/*
 #if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
 #define STD _STLP_STD
 #else
 #define STD BOOST_STD_EXTENSION_NAMESPACE
 #endif
-
-namespace STD {
+*/
+namespace BOOST_STD_EXTENSION_NAMESPACE {
     template<>
     struct hash<random_key>{
         std::size_t operator()(const random_key& r) const {
             return (std::size_t)r;
         }
     };
-} // namespace STD 
+} // namespace BOOST_STD_EXTENSION_NAMESPACE 
 
 void
 test_hash_map(){
@@ -166,7 +167,7 @@ test_hash_map(){
 
     BOOST_CHECKPOINT("hash_map");
     // test hash_map of objects
-    STD::hash_map<random_key, A> ahash_map;
+    BOOST_STD_EXTENSION_NAMESPACE::hash_map<random_key, A> ahash_map;
     ahash_map.insert(std::make_pair(random_key(), A()));
     ahash_map.insert(std::make_pair(random_key(), A()));
     {   
@@ -174,7 +175,7 @@ test_hash_map(){
         test_oarchive oa(os);
         oa << boost::serialization::make_nvp("ahashmap",ahash_map);
     }
-    STD::hash_map<random_key, A> ahash_map1;
+    BOOST_STD_EXTENSION_NAMESPACE::hash_map<random_key, A> ahash_map1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is);
@@ -190,7 +191,7 @@ test_hash_multimap(){
     BOOST_REQUIRE(NULL != testfile);
 
     BOOST_CHECKPOINT("hash_multimap");
-    STD::hash_multimap<random_key, A> ahash_multimap;
+    BOOST_STD_EXTENSION_NAMESPACE::hash_multimap<random_key, A> ahash_multimap;
     ahash_multimap.insert(std::make_pair(random_key(), A()));
     ahash_multimap.insert(std::make_pair(random_key(), A()));
     {   
@@ -198,7 +199,7 @@ test_hash_multimap(){
         test_oarchive oa(os);
         oa << boost::serialization::make_nvp("ahash_multimap", ahash_multimap);
     }
-    STD::hash_multimap<random_key, A> ahash_multimap1;
+    BOOST_STD_EXTENSION_NAMESPACE::hash_multimap<random_key, A> ahash_multimap1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is);

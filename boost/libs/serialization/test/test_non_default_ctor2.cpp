@@ -12,7 +12,7 @@
 // the case where a constructor serializes a pointer member.
 
 #include <fstream>
-#include <cstdlib> // for remove()
+#include <cstdio> // for remove()
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)

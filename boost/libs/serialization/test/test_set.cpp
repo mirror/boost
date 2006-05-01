@@ -35,13 +35,14 @@ namespace std{
 #ifdef BOOST_HAS_HASH
 #include <boost/serialization/hash_set.hpp>
 
+/*
 #if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
 #define STD _STLP_STD
 #else
 #define STD BOOST_STD_EXTENSION_NAMESPACE
 #endif
-
-namespace STD {
+*/
+namespace BOOST_STD_EXTENSION_NAMESPACE {
     template<>
     struct hash<A> {
         std::size_t operator()(const A& a) const {
@@ -93,7 +94,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     #ifdef BOOST_HAS_HASH
 
     // test array of objects
-    STD::hash_set<A> ahash_set;
+    BOOST_STD_EXTENSION_NAMESPACE::hash_set<A> ahash_set;
     A a, a1;
     ahash_set.insert(a);
     ahash_set.insert(a1);
@@ -102,7 +103,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         test_oarchive oa(os);
         oa << boost::serialization::make_nvp("ahash_set", ahash_set);
     }
-    STD::hash_set<A> ahash_set1;
+    BOOST_STD_EXTENSION_NAMESPACE::hash_set<A> ahash_set1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is);
@@ -110,7 +111,7 @@ int test_main( int /* argc */, char* /* argv */[] )
     }
     BOOST_CHECK(ahash_set == ahash_set1);
 
-    STD::hash_multiset<A> ahash_multiset;
+    BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<A> ahash_multiset;
     ahash_multiset.insert(A());
     ahash_multiset.insert(A());
     {   
@@ -118,7 +119,7 @@ int test_main( int /* argc */, char* /* argv */[] )
         test_oarchive oa(os);
         oa << boost::serialization::make_nvp("ahash_multiset", ahash_multiset);
     }
-    STD::hash_multiset<A> ahash_multiset1;
+    BOOST_STD_EXTENSION_NAMESPACE::hash_multiset<A> ahash_multiset1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is);

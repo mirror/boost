@@ -11,6 +11,7 @@
 #include <fstream>
 
 #include <cstdlib> // for rand()
+#include <cstdio> // remove
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 

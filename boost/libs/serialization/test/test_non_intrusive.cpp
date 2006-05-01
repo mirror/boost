@@ -13,8 +13,9 @@
 // b) usage of a non-default constructor
 
 #include <fstream>
-#include <cstdlib> // for rand(), remove
-#include <cmath> // for fabs()
+#include <cstdlib> // for rand()
+#include <cstdio>  // remove
+#include <cmath>   // for fabs()
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)

@@ -25,6 +25,7 @@ if ! $(BOOST_ARCHIVE_LIST) {
         "text_archive.hpp" 
         "text_warchive.hpp" 
         "binary_archive.hpp" 
+        "array_binary_archive.hpp" 
         "xml_archive.hpp" 
         "xml_warchive.hpp" 
     ;
@@ -69,6 +70,7 @@ rule run-invoke ( test-name : sources * : defns * )
             # msvc stlport 4.5.3 only works with static lib
             <msvc-stlport><*><runtime-link>static
             <vc-6_5-stlport><*><runtime-link>static
+            <vc-7_0-stlport><*><runtime-link>static
             <define>$(defns)
             <define>BOOST_LIB_DIAGNOSTIC=1
     ] ;
@@ -106,9 +108,11 @@ rule run-winvoke ( test-name : sources * : defns * )
             # msvc stlport 4.5.3 only works with static lib
             <msvc-stlport><*><runtime-link>static
             <vc-6_5-stlport><*><runtime-link>static
+            <vc-7_0-stlport><*><runtime-link>static
             # both stlport and msvc6 define iswspace
             <msvc-stlport><*><linkflags>"-force:multiple"
             <vc-6_5-stlport><*><linkflags>"-force:multiple"
+            <vc-7_0-stlport><*><linkflags>"-force:multiple"
     ] ;
     if [ in-invocation-subdir ] { Echo $(test-name)_dll ; }
     tests += [ 
@@ -140,6 +144,7 @@ rule test-bsl-run-no-lib  ( test-name : sources * )
         : # requirements
             <msvc-stlport><*><runtime-link>static
             <vc-6_5-stlport><*><runtime-link>static
+            <vc-7_0-stlport><*><runtime-link>static
     ] ;
 }
 
@@ -236,6 +241,7 @@ test-suite "serialization" :
      [ test-bsl-run_files test_split ]
      [ test-bsl-run_files test_tracking ]
      [ test-bsl-run_files test_unregistered ]
+     [ test-bsl-run_files test_valarray ]
      [ test-bsl-run_files test_variant ]
      [ test-bsl-run_files test_vector ]
      [ test-bsl-run_files test_optional ]
