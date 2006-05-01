@@ -76,10 +76,10 @@ rule toolset::require-shared-libraries-support ( toolset variant : subvariant-pa
     case "cw*" :
         local runtime-link = [ get-values <runtime-link> : $(properties) ] ;
         if static in $(runtime-link) {
-            echo **** locale support only exists with static runtime linking **** ;
             echo **** DLLS cannot be built with static runtime linking **** ;
             properties = [ impose-requirements $(properties) : <build>no ] ;
         }
+
     }
     return $(subvariant-path) $(properties) ;
 }
@@ -109,8 +109,16 @@ rule toolset::optimizations ( toolset variant : subvariant-path properties * )
     switch $(toolset) {
     case "vc*" :
         properties = [ impose-requirements $(properties) : <cxxflags>"-Gy" ] ;    
-    case "msvc" :
+    case "msvc*" :
         properties = [ impose-requirements $(properties) : <cxxflags>"-Gy" ] ;
+    case "gcc*" :
+        properties = [ impose-requirements $(properties) : <cxxflags>"-ftemplate-depth-255" ] ;
+    case "qcc*" :
+        properties = [ impose-requirements $(properties) : <cxxflags>"-ftemplate-depth-255" ] ;
+    case "QCC*" :
+        properties = [ impose-requirements $(properties) : <cxxflags>"-ftemplate-depth-255" ] ;
+    case "mingw*" :
+        properties = [ impose-requirements $(properties) : <cxxflags>"-ftemplate-depth-255" ] ;
     }
     return $(subvariant-path) $(properties) ;
 }

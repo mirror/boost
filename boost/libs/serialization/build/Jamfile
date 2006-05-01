@@ -13,6 +13,8 @@ import ./serialization ;
 {
 
 SOURCES = 
+    array_binary_iarchive
+    array_binary_oarchive
     basic_archive
     basic_archive_impl
     basic_iarchive
