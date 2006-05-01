@@ -8,6 +8,6 @@
 int main()
 {
   std::vector<int> v;
-  fake_sort(v.begin(), v.end());
+  fake::sort(v.begin(), v.end());
   return 0;
 }

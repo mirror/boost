@@ -462,9 +462,8 @@ namespace boost
     : AssignableConcept<TT>
     , EqualityComparableConcept<TT>
   {
-      // require iterator_traits typedef's
+      typedef typename boost::detail::iterator_traits<TT>::value_type value_type;
       typedef typename boost::detail::iterator_traits<TT>::difference_type difference_type;
-      // Hmm, the following is a bit fragile
       typedef typename boost::detail::iterator_traits<TT>::reference reference;
       typedef typename boost::detail::iterator_traits<TT>::pointer pointer;
       typedef typename boost::detail::iterator_traits<TT>::iterator_category iterator_category;
@@ -591,9 +590,10 @@ namespace boost
     : RandomAccessIteratorConcept<TT>
     , Mutable_BidirectionalIteratorConcept<TT>
   {
-    ~Mutable_RandomAccessIteratorConcept() {
-      i[n] = *i;                  // require element access and assignment
-    }
+      ~Mutable_RandomAccessIteratorConcept()
+      {
+          i[n] = *i;                  // require element access and assignment
+      }
    private:
     TT i;
     typename boost::detail::iterator_traits<TT>::difference_type n;
