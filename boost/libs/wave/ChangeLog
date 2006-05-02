@@ -114,6 +114,7 @@ Boost V1.34.0
 - Fixed Wave tools startup crash when compiled with VC8.
 - Added the name of the generating compiler (BOOST_COMPILER) to the full 
   Wave version info.
+- Fixed all Jamfile.v2 to correctly disable RTTI for VC7.1.
 
 Sat Feb 18 2005
 - Version 1.2.3

@@ -35,14 +35,13 @@ TESTWAVE_FILES = test.cfg
 
 project wave/test
     : requirements
-        <toolset>msvc:<rtti>off
+        <toolset-msvc:version>7.1:<rtti>off   # workaround for compiler bug
 #        <os>NT:<runtime-link>static
         <threading>single
         <variant>debug
         <define>BOOST_LIB_DIAGNOSTIC=1
 	<define>BOOST_ALL_NO_LIB=1
 	<link>shared:<define>BOOST_ALL_DYN_LINK=1
-
     ;
 
 #
@@ -57,7 +56,6 @@ test-suite wave
                 /boost/wave//boost_wave 
                 /boost/program_options//boost_program_options
                 /boost/filesystem//boost_filesystem    
-
             :
             # arguments
                 $(TESTWAVE_ARGUMENTS) 
@@ -78,7 +76,6 @@ test-suite wave
                 /boost/wave//boost_wave/<link>static
                 /boost/program_options//boost_program_options/<link>static
                 /boost/filesystem//boost_filesystem/<link>static
-
             :
             # arguments
                 $(TESTWAVE_ARGUMENTS) 

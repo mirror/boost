@@ -12,6 +12,6 @@ exe advanced_hooks
     :   ../advanced_hooks.cpp 
         ../../../build//boost_wave
     :
-        <toolset>msvc-7.1:<rtti>off      # workaround for compiler bug
+        <toolset-msvc:version>7.1:<rtti>off   # workaround for compiler bug
     ;  
 

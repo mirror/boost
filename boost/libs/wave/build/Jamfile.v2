@@ -33,7 +33,7 @@ lib boost_wave
     $(SOURCES).cpp
     /boost/filesystem//boost_filesystem
     :
-    <toolset>msvc-7.1:<rtti>off      # workaround for compiler bug
+    <toolset-msvc:version>7.1:<rtti>off   # workaround for compiler bug
     # Not supported by V2
     # <no-warn>cpp_re.cpp
     ;

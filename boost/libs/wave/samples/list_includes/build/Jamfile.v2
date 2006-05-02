@@ -14,6 +14,6 @@ exe list_includes
         $(BOOST_ROOT)/boost/program_options//boost_program_options     
         $(BOOST_ROOT)/boost/filesystem//boost_filesystem     
     :
-        <toolset>msvc-7.1:<rtti>off      # workaround for compiler bug
+        <toolset-msvc:version>7.1:<rtti>off   # workaround for compiler bug
     ;
 

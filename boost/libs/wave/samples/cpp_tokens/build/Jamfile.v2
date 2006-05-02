@@ -18,6 +18,6 @@ exe cpp_tokens
         ../../../build//boost_wave
         $(BOOST_ROOT)/boost/program_options//boost_program_options
     :
-        <toolset>msvc-7.1:<rtti>off      # workaround for compiler bug
+        <toolset-msvc:version>7.1:<rtti>off   # workaround for compiler bug
     ;
 
