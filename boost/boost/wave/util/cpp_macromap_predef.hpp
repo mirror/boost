@@ -202,7 +202,7 @@ namespace predefined_macros {
         using namespace std;    // for some systems memset is in namespace std
 
     static std::string versionstr;
-    char buffer[sizeof("\"00.00.00.0000 \"")+sizeof(BOOST_PLATFORM)+3];
+    char buffer[sizeof("\"00.00.00.0000 \"")+sizeof(BOOST_PLATFORM)+sizeof(BOOST_COMPILER)+4];
 
     // for some systems sprintf, time_t etc. is in namespace std
         using namespace std;    
@@ -219,9 +219,9 @@ namespace predefined_macros {
     long seconds = long(difftime(compilation_time.get_time(), 
         mktime(&first_day)));
 
-        sprintf(buffer, "\"%d.%d.%d.%ld [%s]\"", BOOST_WAVE_VERSION_MAJOR,
+        sprintf(buffer, "\"%d.%d.%d.%ld [%s/%s]\"", BOOST_WAVE_VERSION_MAJOR,
              BOOST_WAVE_VERSION_MINOR, BOOST_WAVE_VERSION_SUBMINOR, 
-             seconds/(3600*24), BOOST_PLATFORM);
+             seconds/(3600*24), BOOST_PLATFORM, BOOST_COMPILER);
         versionstr = buffer;
         return versionstr.c_str();
     }
