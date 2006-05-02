@@ -69,6 +69,7 @@
 #include <boost/range/result_iterator.hpp>
 #include <boost/type_traits/is_array.hpp>
 #include <boost/type_traits/is_const.hpp>
+#include <boost/type_traits/is_abstract.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <boost/utility/addressof.hpp>
@@ -129,8 +130,15 @@ namespace foreach
     //   This also tells BOOST_FOREACH to avoid the rvalue/lvalue detection stuff.
     template<typename T>
     struct is_noncopyable
-    #ifndef BOOST_BROKEN_IS_BASE_AND_DERIVED
+    #if !defined(BOOST_BROKEN_IS_BASE_AND_DERIVED) && !defined(BOOST_NO_IS_ABSTRACT)
+      : boost::mpl::or_<
+            boost::is_abstract<T>
+          , boost::is_base_and_derived<boost::noncopyable, T>
+        >
+    #elif !defined(BOOST_BROKEN_IS_BASE_AND_DERIVED)
       : boost::is_base_and_derived<boost::noncopyable, T>
+    #elif !defined(BOOST_NO_IS_ABSTRACT)
+      : boost::is_abstract<T>
     #else
       : boost::mpl::false_
     #endif
@@ -356,8 +364,11 @@ inline T &derefof(T *t)
 template<typename T>
 struct rvalue_probe
 {
+    struct private_type_ {};
     // can't ever return an array by value
-    typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<boost::is_array<T>, int, T>::type value_type;
+    typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<
+        boost::mpl::or_<boost::is_abstract<T>, boost::is_array<T> >, private_type_, T
+    >::type value_type;
     operator value_type();
     operator T &() const;
 };
