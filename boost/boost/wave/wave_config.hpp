@@ -62,6 +62,16 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+//  Decide, whether to implement #pragma message("") 
+//
+//  To disable the implementation of #pragma message(""), define the following 
+//  constant as zero before including this file.
+//
+#if !defined(BOOST_WAVE_SUPPORT_PRAGMA_MESSAGE)
+#define BOOST_WAVE_SUPPORT_PRAGMA_MESSAGE 1
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
 //  Decide, whether to implement #include_next
 //  Please note, that this is an extension to the C++ Standard.
 //

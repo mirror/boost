@@ -24,10 +24,20 @@
     <td width="30"><a href="acknowledgements.html"><img src="theme/r_arr.gif" border="0"></a></td>
   </tr>
 </table>
-<p>The Wave preprocessor tool supports specific <tt>#pragma</tt> 
-  directives, which may be used to control some of the library features. All directives 
-  described here are usable as conventional <tt>#pragma</tt> directives and as 
-  <tt>operator&nbsp;_Pragma</tt> (if variadics are enabled). So for instance the 
+<blockquote>
+  <p><a href="supported_pragmas.html#library_pragmas">Pragma directives supported by the Wave library</a><br>
+    <a href="supported_pragmas.html#tool_pragmas">Pragma directives supported by the Wave tool</a></p>
+</blockquote>
+<h2><a name="library_pragmas"></a>Pragma directives supported by the Wave library </h2>
+<p>The <tt>Wave</tt> preprocessor library natively supports the <span class="preprocessor">#pragma&nbsp;once</span> and <span class="preprocessor">#pragma&nbsp;message(&quot;...&quot;)</span> directives. </p>
+<p>The <span class="preprocessor">#pragma&nbsp;once</span> directive  specifies that the file in which the pragma resides will be included 
+  (opened)  only once. This may be used to optimize 
+  the preprocessing of larger compilation units, which include a lot of files. Note though, that the <span class="preprocessor">#pragma&nbsp;once</span> directive is supported only, if the compile time constant <tt>BOOST_WAVE_SUPPORT_PRAGMA_ONCE</tt> was given during compilation of the library.</p>
+<p>The <span class="preprocessor">#pragma&nbsp;message(...)</span> directive generates a remark containing the given message text. This may be useful to generate status messages directly from the preprocessed file. Note though, that the #pragma message(...) directive is supported only, if the compile time constant <tt>BOOST_WAVE_SUPPORT_PRAGMA_MESSAGE</tt> was given during the compilation of the library. Note additionally, that the body of the message is preprocessed whenever the <tt>BOOST_WAVE_PREPROCESS_PRAGMA_BODY</tt> compile time constant was defined during compilation of the library. </p>
+<h2><a name="tool_pragmas"></a>Pragma directives supported by the Wave tool</h2>
+<p>The Wave preprocessor tool additionally supports specific <span class="preprocessor">#pragma</span>  directives, which may be used to control some of the tools features. These <span class="preprocessor">#pragma</span> directives are implemented using the <tt>interpret_pragma()</tt> preprocessing hook (see <a href="class_reference_ctxpolicy.html#interpret_pragma">here</a>).</p>
+<p>All directives 
+  described here are usable as conventional <span class="preprocessor">#pragma</span> directives and as <span class="preprocessor">operator&nbsp;_Pragma</span> (if variadics are enabled). So for instance the 
   following directives are functionally identical:</p>
 <pre>    #pragma wave trace(enable)  </pre>
 <p>and </p>
@@ -108,11 +118,7 @@
   only, if the <code><tt>BOOST_WAVE_PREPROCESS_PRAGMA_BODY</tt></code> compilation constant 
   was specified during compilation. For more information about the possible compilation 
   constants look <a href="compiletime_config.html">here</a>.</p>
-<p>Additionally the Wave preprocessor library supports the <tt>#pragma once</tt> directive, 
-  which specifies that the file, in which the pragma resides, will be included 
-  (opened) only once by the compiler in a build. This may be used to optimize 
-  the preprocessing of larger compilation units, which include a lot of files. Note though, that the #pragma once directive is supported only, if the compile time constant <tt>BOOST_WAVE_SUPPORT_PRAGMA_ONCE</tt> was given during compilation of the library</span>.</p>
-<p>It is fairly easy to implement your own <tt>#pragma wave ... </tt> directives. All you have to do is to implement your own <tt>interpret_pragma</tt> preprocessing hook function (see <a href="class_reference_ctxpolicy.html#interpret_pragma">here</a>) which should handle the additional directives. For an example of how to do it, you may have a look at the Wave driver application, which implements all of the pragma's listed above  with the help of a supplied <tt>interpret_pragma</tt> function (for instance the  <tt>#pragma wave timer()</tt> directive). </p>
+<p>It is fairly easy to implement your own <span class="preprocessor">#pragma&nbsp;wave&nbsp;...</span> directives. All you have to do is to implement your own <tt>interpret_pragma</tt> preprocessing hook function (see <a href="class_reference_ctxpolicy.html#interpret_pragma">here</a>) which should handle the additional directives. For an example of how to do it, you may have a look at the Wave driver application, which implements all of the pragma's listed above  with the help of a supplied <tt>interpret_pragma</tt> function (for instance the  <span class="preprocessor">#pragma wave timer()</span> directive). </p>
 <table border="0">
   <tr> 
     <td width="10"></td>
@@ -127,7 +133,7 @@
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Friday, March 3, 2006  10:26<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Tuesday, May 2, 2006  17:28<!-- #EndDate -->
   </span>
 </p>
 <p>&nbsp;</p>

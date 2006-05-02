@@ -115,7 +115,10 @@ Boost V1.34.0
 - Added the name of the generating compiler (BOOST_COMPILER) to the full 
   Wave version info.
 - Fixed all Jamfile.v2 to correctly disable RTTI for VC7.1.
-
+- Added #pragma message("...") to be optionally supported by the Wave library.
+  This may be enabled by defining the BOOST_WAVE_SUPPORT_PRAGMA_MESSAGE pp
+  constant to some value different from zero.
+  
 Sat Feb 18 2005
 - Version 1.2.3
 - Added a missing throw() specification to the function 

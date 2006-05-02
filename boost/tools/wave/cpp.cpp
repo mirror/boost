@@ -352,7 +352,7 @@ namespace {
     ///////////////////////////////////////////////////////////////////////////
     //  Generate some meaningful error messages
     template <typename Context>
-    inline void 
+    inline int 
     report_error_message(Context &ctx, boost::wave::cpp_exception const &e)
     {
         // default error reporting
@@ -387,6 +387,10 @@ namespace {
         default:
             break;
         }
+        
+        // errors count as one
+        return (e.get_severity() == boost::wave::util::severity_error ||
+                e.get_severity() == boost::wave::util::severity_fatal) ? 1 : 0;
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -504,6 +508,7 @@ do_actual_work (std::string file_name, std::istream &instream,
 // current file position is saved for exception handling
 boost::wave::util::file_position_type current_position;
 auto_stop_watch elapsed_time(cerr);
+int error_count = 0;
 
     try {
     // process the given file
@@ -869,7 +874,7 @@ auto_stop_watch elapsed_time(cerr);
                 catch (boost::wave::cpp_exception const &e) {
                 // some preprocessing error
                     if (is_interactive || boost::wave::is_recoverable(e)) {
-                        report_error_message(ctx, e);
+                        error_count += report_error_message(ctx, e);
                     }
                     else {
                         throw;      // re-throw for non-recoverable errors
@@ -910,7 +915,7 @@ auto_stop_watch elapsed_time(cerr);
             << "unexpected exception caught." << endl;
         return 4;
     }
-    return 0;
+    return -error_count;  // returns the number of errors as a negative integer
 }
 
 ///////////////////////////////////////////////////////////////////////////////

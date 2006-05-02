@@ -211,7 +211,9 @@ public:
         character_literal_out_of_range,
         could_not_open_output_file,
         incompatible_config,
-        last_error_number = incompatible_config
+        ill_formed_pragma_message,
+        pragma_message_directive,
+        last_error_number = pragma_message_directive
     };
 
     preprocess_exception(char const *what_, error_code code, int line_, 
@@ -278,6 +280,9 @@ public:
         case preprocess_exception::include_nesting_too_deep:
         case preprocess_exception::illegal_operator_redefinition:
         case preprocess_exception::incompatible_config:
+        case preprocess_exception::ill_formed_pragma_option:
+        case preprocess_exception::ill_formed_pragma_message:
+        case preprocess_exception::pragma_message_directive:
             return true;
             
         case preprocess_exception::unexpected_error:
@@ -287,7 +292,6 @@ public:
         case preprocess_exception::empty_macroarguments:
         case preprocess_exception::improperly_terminated_macro:
         case preprocess_exception::invalid_concat:
-        case preprocess_exception::ill_formed_pragma_option:
         case preprocess_exception::could_not_open_output_file:
             break;
         }
@@ -343,7 +347,9 @@ public:
             "unbalanced #if/#endif in include file",    // unbalanced_if_endif
             "character literal out of range",           // character_literal_out_of_range
             "could not open output file",               // could_not_open_output_file
-            "incompatible state information"            // incompatible_config
+            "incompatible state information",           // incompatible_config
+            "illformed pragma message",                 // ill_formed_pragma_message
+            "encountered #pragma message directive"     // pragma_message_directive
         };
         BOOST_ASSERT(unexpected_error <= code && 
             code <= last_error_number);
@@ -392,7 +398,9 @@ public:
             util::severity_warning,            // unbalanced_if_endif
             util::severity_warning,            // character_literal_out_of_range
             util::severity_error,              // could_not_open_output_file
-            util::severity_remark              // incompatible_config
+            util::severity_remark,             // incompatible_config
+            util::severity_warning,            // ill_formed_pragma_message
+            util::severity_remark,             // pragma_message_directive
         };
         BOOST_ASSERT(unexpected_error <= code && 
             code <= last_error_number);
