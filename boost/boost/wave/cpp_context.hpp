@@ -18,6 +18,7 @@
 
 #include <boost/concept_check.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/filesystem/path.hpp>
 
 #include <boost/wave/wave_config.hpp>
 #if BOOST_WAVE_SERIALIZATION != 0
@@ -141,23 +142,30 @@ public:
     }
 
 // iterator interface
-    iterator_type begin(
-        target_iterator_type const &first_ = target_iterator_type(), 
-        target_iterator_type const &last_ = target_iterator_type()) 
+    iterator_type begin() 
     { 
         std::string fname(filename);
         if (filename != "<Unknown>" && filename != "<stdin>") {
             using namespace boost::filesystem;
             path fpath(complete(path(filename)));
-
             fname = fpath.string();
             includes.set_current_directory(fname.c_str());
         }
-        if (first_ != target_iterator_type())
-            return iterator_type(*this, first_, last_, position_type(fname.c_str())); 
-            
         return iterator_type(*this, first, last, position_type(fname.c_str())); 
     }
+	  iterator_type begin(
+		  target_iterator_type const &first_, 
+		  target_iterator_type const &last_) 
+	  { 
+		    std::string fname(filename);
+		    if (filename != "<Unknown>" && filename != "<stdin>") {
+			      using namespace boost::filesystem;
+			      path fpath(complete(path(filename)));
+			      fname = fpath.string();
+			      includes.set_current_directory(fname.c_str());
+		    }
+		    return iterator_type(*this, first_, last_, position_type(fname.c_str())); 
+	  }
     iterator_type end() const 
         { return iterator_type(); }
 

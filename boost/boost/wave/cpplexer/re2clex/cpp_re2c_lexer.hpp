@@ -116,8 +116,10 @@ lexer<IteratorT, PositionT>::lexer(IteratorT const &first,
     memset(&scanner, '\0', sizeof(Scanner));
     scanner.fd = -1;
     scanner.eol_offsets = aq_create();
-    scanner.first = scanner.act = (uchar *)&(*first);
-    scanner.last = scanner.first + std::distance(first, last);  
+    if (first != last) {
+        scanner.first = scanner.act = (uchar *)&(*first);
+        scanner.last = scanner.first + std::distance(first, last);  
+    }
     scanner.line = pos.get_line();
     scanner.column = scanner.curr_column = pos.get_column();
     scanner.error_proc = report_error;

@@ -111,6 +111,7 @@ Boost V1.34.0
   wave_config.hpp to allow to fine tune the generated Spirit tree code. VC7.1
   gives best results when both are defined.
 - Fixed a memory corruption bug triggered by a possible dangling reference.
+- Fixed Wave tools startup crash when compiled with VC8.
 
 Sat Feb 18 2005
 - Version 1.2.3
