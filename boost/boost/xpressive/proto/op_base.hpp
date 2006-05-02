@@ -22,10 +22,16 @@
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
-#include <boost/spirit/fusion/sequence/tuple.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/arg_traits.hpp>
-#include <boost/spirit/fusion/sequence/detail/sequence_base.hpp>
+
+#ifdef BOOST_PROTO_FUSION_V2
+# include <boost/fusion/tuple.hpp>
+# include <boost/fusion/support/sequence_base.hpp>
+#else
+# include <boost/spirit/fusion/sequence/detail/sequence_base.hpp>
+# include <boost/spirit/fusion/sequence/tuple.hpp>
+#endif
 
 namespace boost { namespace proto
 {
@@ -143,7 +149,8 @@ namespace boost { namespace proto
     {
         typedef typename value_type<Arg>::type arg_type;
         typedef Tag tag_type;
-        typedef tag<Tag> tag; // for Fusion-1 compatibility
+        typedef tag<Tag> ftag; // for Fusion-2 compatibility
+        typedef tag<Tag> tag;  // for Fusion-1 compatibility
 
         arg_type arg;
 
@@ -166,7 +173,8 @@ namespace boost { namespace proto
         typedef typename value_type<Left>::type left_type;
         typedef typename value_type<Right>::type right_type;
         typedef Tag tag_type;
-        typedef tag<Tag> tag; // for Fusion-1 compatibility
+        typedef tag<Tag> ftag; // for Fusion-2 compatibility
+        typedef tag<Tag> tag;  // for Fusion-1 compatibility
 
         left_type left;
         right_type right;
@@ -194,7 +202,8 @@ namespace boost { namespace proto
       : op_base<nary_op<Fun, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, A)> >
     {
         typedef function_tag tag_type;
-        typedef tag<function_tag> tag; // for Fusion-1 compatibility
+        typedef tag<function_tag> ftag; // for Fusion-2 compatibility
+        typedef tag<function_tag> tag;  // for Fusion-1 compatibility
         typedef Fun functor_type;
         typedef fusion::tuple<
             BOOST_PP_ENUM_BINARY_PARAMS(

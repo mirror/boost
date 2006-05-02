@@ -10,9 +10,17 @@
 #define BOOST_PROTO_FUSION_HPP_EAN_04_29_2006
 
 #include <boost/xpressive/proto/proto.hpp>
-#include <boost/spirit/fusion/sequence/cons.hpp>
 #include <boost/type_traits/remove_cv.hpp>
 #include <boost/type_traits/remove_reference.hpp>
+
+#ifdef BOOST_PROTO_FUSION_V2
+# include <boost/fusion/support/tags.hpp>
+# include <boost/fusion/support/is_view.hpp>
+# include <boost/fusion/support/category_of.hpp>
+# include <boost/fusion/sequence/container/list/cons.hpp>
+#else
+# include <boost/spirit/fusion/sequence/cons.hpp>
+#endif
 
 namespace boost { namespace proto
 {
@@ -45,14 +53,27 @@ namespace boost { namespace proto
     template<typename Cons>
     struct binary_tree_iterator
       : fusion::iterator_base<binary_tree_iterator<Cons> >
-      , Cons
     {
-        typedef binary_tree_iterator_tag tag;
+        typedef binary_tree_iterator_tag tag;   // for Fusion 1
+        typedef binary_tree_iterator_tag ftag;  // for Fusion 2
+        #ifdef BOOST_PROTO_FUSION_V2
+        typedef fusion::forward_traversal_tag category;
+        #else
         typedef mpl::forward_iterator_tag category;
+        #endif
 
-        explicit binary_tree_iterator(Cons const &cons)
-          : Cons(cons)
+        typedef typename Cons::car_type car_type;
+        typedef typename Cons::cdr_type cdr_type;
+
+        explicit binary_tree_iterator(Cons const &cons_)
+          : cons(cons_)
         {}
+
+        car_type car() const { return this->cons.car; };
+        cdr_type const &cdr() const { return this->cons.cdr; };
+
+    private:
+        Cons cons;
     };
 
     namespace binary_tree_detail
@@ -141,7 +162,7 @@ namespace boost { namespace proto
 
             static type call(Iterator const &it)
             {
-                return type(expand_left<tag_type>(proto::right(it.cdr.car), it.cdr.cdr));
+                return type(expand_left<tag_type>(proto::right(it.cdr().car), it.cdr().cdr));
             }
         };
 
@@ -157,7 +178,7 @@ namespace boost { namespace proto
 
             static type call(Iterator const &it)
             {
-                return it.car;
+                return it.car();
             }
         };
     } // namespace binary_tree_detail
@@ -173,6 +194,112 @@ namespace boost { namespace proto
     {};
 
 }}
+
+#ifdef BOOST_PROTO_FUSION_V2
+
+namespace boost { namespace fusion { namespace extension
+{
+    template<typename OpTag>
+    struct is_sequence_impl<proto::tag<OpTag> >
+    {
+        template<typename T>
+        struct apply : mpl::true_ {};
+    };
+
+    template<typename OpTag>
+    struct is_view_impl<proto::tag<OpTag> >
+    {
+        template<typename T>
+        struct apply : mpl::false_ {};
+    };
+
+    template<typename OpTag>
+    struct category_of_impl<proto::tag<OpTag> >
+    {
+        template<typename T>
+        struct apply
+        {
+            typedef forward_sequence_tag type;
+        };
+    };
+
+    template<typename OpTag>
+    struct begin_impl<proto::tag<OpTag> >
+    {
+        template<typename Sequence>
+        struct apply
+          : proto::binary_tree_detail::begin_impl<Sequence>
+        {};
+    };
+
+    template<typename OpTag>
+    struct end_impl<proto::tag<OpTag> >
+    {
+        template<typename Sequence>
+        struct apply
+          : proto::binary_tree_detail::end_impl
+        {};
+    };
+
+    template<>
+    struct value_of_impl<proto::binary_tree_iterator_tag>
+    {
+        template<typename Iterator>
+        struct apply
+          : proto::binary_tree_detail::value_impl<Iterator>
+        {};
+    };
+
+    template<>
+    struct deref_impl<proto::binary_tree_iterator_tag>
+    {
+        template<typename Iterator>
+        struct apply
+          : proto::binary_tree_detail::deref_impl<Iterator>
+        {};
+    };
+
+    template<>
+    struct next_impl<proto::binary_tree_iterator_tag>
+    {
+        template<typename Iterator>
+        struct apply
+          : proto::binary_tree_detail::next_impl<Iterator>
+        {};
+    };
+
+}}}
+
+namespace boost { namespace mpl
+{
+    template<typename OpTag>
+    struct begin_impl<proto::tag<OpTag> >
+      : fusion::extension::begin_impl<proto::tag<OpTag> >
+    {
+    };
+
+    template<typename OpTag>
+    struct end_impl<proto::tag<OpTag> >
+      : fusion::extension::end_impl<proto::tag<OpTag> >
+    {
+    };
+
+    template<typename Cons>
+    struct next<proto::binary_tree_iterator<Cons> >
+      : proto::binary_tree_detail::next_impl<proto::binary_tree_iterator<Cons> >
+    {
+    };
+
+    template<typename Cons>
+    struct deref<proto::binary_tree_iterator<Cons> >
+      : proto::binary_tree_detail::value_impl<proto::binary_tree_iterator<Cons> >
+    {
+    };
+
+}} // namespace boost::mpl
+
+
+#else
 
 namespace boost { namespace fusion { namespace meta
 {
@@ -250,5 +377,7 @@ namespace boost { namespace mpl
     };
 
 }} // namespace boost::mpl
+
+#endif
 
 #endif

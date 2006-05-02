@@ -28,9 +28,9 @@ namespace boost { namespace proto
     };
 
     template<>
-    struct value_type<fusion::void_t>
+    struct value_type<void_>
     {
-        typedef fusion::void_t type;
+        typedef void_ type;
     };
 
     ///////////////////////////////////////////////////////////////////////////////

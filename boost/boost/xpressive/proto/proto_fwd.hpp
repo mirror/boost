@@ -11,8 +11,14 @@
 
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/apply_fwd.hpp>
-#include <boost/spirit/fusion/sequence/tuple_forward.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
+
+#ifdef BOOST_PROTO_FUSION_V2
+# include <boost/fusion/tuple/tuple_fwd.hpp>
+# define FUSION_MAX_TUPLE_SIZE FUSION_MAX_VECTOR_SIZE
+#else
+# include <boost/spirit/fusion/sequence/tuple_forward.hpp>
+#endif
 
 #ifndef BOOST_PROTO_MAX_ARITY
 # define BOOST_PROTO_MAX_ARITY FUSION_MAX_TUPLE_SIZE
@@ -20,6 +26,11 @@
 
 namespace boost { namespace proto
 {
+    #ifdef BOOST_PROTO_FUSION_V2
+    typedef fusion::void_ void_;
+    #else
+    typedef fusion::void_t void_;
+    #endif
 
     ///////////////////////////////////////////////////////////////////////////////
     // Operator tags
@@ -96,7 +107,7 @@ namespace boost { namespace proto
     template
     <
         typename Fun
-      , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, fusion::void_t)
+      , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, void_)
     >
     struct nary_op;
 
