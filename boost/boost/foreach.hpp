@@ -402,8 +402,18 @@ struct rvalue_probe
     {
     }
 
-    // can't ever return an array by value
-    typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<boost::is_array<T>, int, T>::type value_type;
+    struct private_type_ {};
+    // can't ever return an array or an abstract type by value
+    #ifdef BOOST_NO_IS_ABSTRACT
+    typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<
+        boost::is_array<T>, private_type_, T
+    >::type value_type;
+    #else
+    typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<
+        boost::mpl::or_<boost::is_abstract<T>, boost::is_array<T> >, private_type_, T
+    >::type value_type;
+    #endif
+    
     operator value_type()
     {
         this->is_rvalue = true;
