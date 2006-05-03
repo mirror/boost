@@ -263,20 +263,28 @@ public:
     this->final_erase_(static_cast<final_node_type*>(position++.get_node()));
     return position;
   }
-  
-  size_type erase(key_param_type x)
+
+  size_type erase(key_param_type k)
   {
     BOOST_MULTI_INDEX_HASHED_INDEX_CHECK_INVARIANT;
 
-    size_type s=0;
-    iterator it=find(x); /* caveat: relies on find() returning */
-    if(it!=end()){       /* the first element                  */
-      do{
-        it=erase(it);
-        ++s;
-      }while(it!=end()&&eq(x,key(*it)));
+    size_type               s=0;
+    std::size_t             buc=buckets.position(hash(k));
+    hashed_index_node_impl* x=buckets.at(buc);
+    hashed_index_node_impl* y=x->next();
+    while(y!=x){
+      if(eq(k,key(node_type::from_impl(y)->value()))){
+        do{
+          hashed_index_node_impl* z=y->next();
+          this->final_erase_(
+            static_cast<final_node_type*>(node_type::from_impl(y)));
+          y=z;
+          ++s;
+        }while(y!=x&&eq(k,key(node_type::from_impl(y)->value())));
+        break;
+      }
+      y=y->next();
     }
-
     return s;
   }
 
