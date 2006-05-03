@@ -64,7 +64,7 @@ struct quote_impl
 // specialization of a template called 'type'.
 # if BOOST_WORKAROUND(__GNUC__, BOOST_TESTED_AT(4)) \
     && BOOST_WORKAROUND(__GNUC_MINOR__, BOOST_TESTED_AT(0)) \
-    && BOOST_WORKAROUND(__GNUC_PATCHLEVEL__ BOOST_TESTED_AT(2))
+    && BOOST_WORKAROUND(__GNUC_PATCHLEVEL__, BOOST_TESTED_AT(2))
 {
     typedef typename T::type type;
 };
