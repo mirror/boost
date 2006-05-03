@@ -219,7 +219,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  The following definition forces the Spirit tree code to use boost pool 
 //  allocators in stead of the std::allocator for the vector/list's.
-#define BOOST_SPIRIT_USE_BOOST_ALLOCATOR_FOR_TREES
+// #define BOOST_SPIRIT_USE_BOOST_ALLOCATOR_FOR_TREES
 
 ///////////////////////////////////////////////////////////////////////////////
 //  Uncomment the following, if you need debug output, the 
