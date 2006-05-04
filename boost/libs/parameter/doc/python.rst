@@ -71,7 +71,7 @@ specified to the binding functions below, that argument must be specified as a
 
 In the example below the default type for argument ``y`` is ``char const[5]``, but
 the argument type is ``int``. Therefore ``y`` must be specified as a *special*
-argument in the |KeywordSpec|.
+argument in the |KeywordsSpec|.
 
 Doing this will generate N^2 overloads, where N is the number of *special* arguments.
 In this case two overloads will be generated, one with ``y`` included and one without.
