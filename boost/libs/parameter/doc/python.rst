@@ -57,7 +57,7 @@ The **arity range** of a |KeywordsSpec| is determined by:
 
 .. parsed-literal::
 
-    [ mpl::size<S> - number of *special* in ``S`` , mpl::size<S> ]
+    [ mpl::size<S> - number of *special* keyword tags in ``S`` , mpl::size<S> ]
 
 For example, the **arity range** of ``mpl::vector2<x,y>`` is 2, the **arity range** of
 ``mpl::vector2<x,y*>`` is 2 and the **arity range** of ``mpl::vector2<x,y**>`` is 1.
