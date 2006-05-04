@@ -111,7 +111,7 @@ Note that this makes the *arity range* ``[1,2]``, so we'll need two forwarding o
             .def("f",
                 function<
                     fwd
-                  , mpl::vector2<tag::x, **tag::y\*\*\ **>
+                  , mpl::vector2<tag::x, **tag::y\*\***>
                   , mpl::vector3<void, int, int>
                 >()
             );
