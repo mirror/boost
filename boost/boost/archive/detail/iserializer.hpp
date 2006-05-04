@@ -572,8 +572,8 @@ inline void load_wrapper(Archive &ar, const T&t, mpl::true_){
 template<class Archive, class T>
 inline void load(Archive &ar, const T&t){
   load_wrapper(ar,t,serialization::is_wrapper<T>());
-#endif
 }
+#endif
 
 } // namespace archive
 } // namespace boost
