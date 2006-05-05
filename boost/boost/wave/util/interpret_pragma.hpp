@@ -171,8 +171,7 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
         
         // remove the falsely matched closing parenthesis/newline
             if (values.size() > 0) {
-                token_id last_token_id = values.back();
-                BOOST_ASSERT(T_RIGHTPAREN == last_token_id || T_NEWLINE == last_token_id);
+                BOOST_ASSERT(T_RIGHTPAREN == values.back() || T_NEWLINE == values.back());
                 typename ContainerT::reverse_iterator rit = values.rbegin();
                 values.erase((++rit).base());
             }
