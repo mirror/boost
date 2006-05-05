@@ -62,7 +62,7 @@ arbitrary types ``t1``, ``t2``,... ``tn``:
     ``t1``, ``t2``,... ``tn`` are non-``void``. 
 
 :Semantics:
-    Generates a compilation error if ``expr::value != true``, otherwise
+    Generates a compilation error if ``expr != true``, otherwise
     has no effect. 
     
     When possible within the compiler's diagnostic capabilities,
@@ -85,7 +85,7 @@ arbitrary types ``t1``, ``t2``,... ``tn``:
     None.
 
 :Semantics:
-    Generates a compilation error if ``expr::value != true``, otherwise
+    Generates a compilation error if ``expr != true``, otherwise
     has no effect. 
 
     When possible within the compiler's diagnostics capabilities,
