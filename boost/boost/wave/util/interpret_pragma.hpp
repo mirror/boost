@@ -145,26 +145,34 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
 #endif 
 #if BOOST_WAVE_SUPPORT_PRAGMA_MESSAGE != 0
         else if ((*it).get_value() == "message") {
-        // #pragma message("")
+        // #pragma message(...) or #pragma message ...
             using namespace boost::spirit;
             ContainerT values;
             
             if (!parse (++it, end, 
-                            ch_p(T_LEFTPAREN) 
-                            >>  lexeme_d[
-                                    *(anychar_p[spirit_append_actor(values)] - ch_p(T_RIGHTPAREN))
+                            (   (   ch_p(T_LEFTPAREN) 
+                                >>  lexeme_d[
+                                        *(anychar_p[spirit_append_actor(values)] - ch_p(T_RIGHTPAREN))
+                                    ]
+                                >>  ch_p(T_RIGHTPAREN)
+                                )
+                            |   lexeme_d[
+                                    *(anychar_p[spirit_append_actor(values)] - ch_p(T_NEWLINE))
                                 ]
-                            >>  ch_p(T_RIGHTPAREN),
-                    pattern_p(WhiteSpaceTokenType, TokenTypeMask)).hit)
+                            ),
+                            pattern_p(WhiteSpaceTokenType, TokenTypeMask)
+                       ).hit
+               )
             {
                 BOOST_WAVE_THROW(preprocess_exception, ill_formed_pragma_message,
                     impl::as_string<string_type>(it, end).c_str(), 
                     act_token.get_position());
             }
         
-        // remove the falsely matched closing parenthesis
+        // remove the falsely matched closing parenthesis/newline
             if (values.size() > 0) {
-                BOOST_ASSERT(T_RIGHTPAREN == values.back());
+                token_id last_token_id = values.back();
+                BOOST_ASSERT(T_RIGHTPAREN == last_token_id || T_NEWLINE == last_token_id);
                 typename ContainerT::reverse_iterator rit = values.rbegin();
                 values.erase((++rit).base());
             }
