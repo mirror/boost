@@ -40,18 +40,23 @@ Introduction
 ------------
 
 ``boost/parameter/python.hpp`` introduces a group of **def_visitors** that can
-be used to easily expose Boost.Parameter enabled member functions to Python via 
+be used to easily expose Boost.Parameter-enabled member functions to Python with 
 Boost.Python. It also provides a function template ``def()`` that can be used
-to expose Boost.Parameter enabled free functions.
+to expose Boost.Parameter-enabled free functions.
+
+.. Need a link from "def_visitors" to the place in Python docs
+.. where that's defined.
 
 concept |KeywordsSpec|
 ----------------------
 
 A |KeywordsSpec| is an MPL sequence where each element is either:
 
-* A *required* keyword tag, ``K``
-* **or**, an *optional* keyword tag, ``K*``
-* **or**, a *special* keyword tag ``K**``
+* A *required* keyword tag of the form ``K``
+* **or**, an *optional* keyword tag of the form ``K*``
+* **or**, a *special* keyword tag of the formn ``K**``
+
+.. here you have to say, "where K is..."
 
 The **arity range** of a |KeywordsSpec| is determined by:
 
@@ -62,6 +67,13 @@ The **arity range** of a |KeywordsSpec| is determined by:
 For example, the **arity range** of ``mpl::vector2<x,y>`` is 2, the **arity range** of
 ``mpl::vector2<x,y*>`` is 2 and the **arity range** of ``mpl::vector2<x,y**>`` is 1.
 
+.. It makes no sense to say that the "range" of something is x,
+.. where x is just a number.  A range goes from x to y.  I don't
+.. know what this is supposed to mean.  I also don't know what the
+.. comma in the definition means, or why I don't see it in the
+.. results above.  I'd have guessed that the arity range of
+.. vector2<x,y**> was [1,2] ... which makes some sense.
+
 *special* keyword tags
 ---------------------------------
 
@@ -69,14 +81,29 @@ If the default type for an argument is not convertible to the argument type, as
 specified to the binding functions below, that argument must be specified as a
 *special* argument.
 
+.. This whole thing comes out of order.  You need to explain that
+.. to bind pararameter-endabled functions to python you need to
+.. specify an parameter type (not an argument type), and that an
+.. optional argument has to have a default value _and_ type.
+.. I think.  If that's not the right explanation, you need to say
+.. something that sets up similar context.
+
 In the example below the default type for argument ``y`` is ``char const[5]``, but
 the argument type is ``int``. Therefore ``y`` must be specified as a *special*
 argument in the |KeywordsSpec|.
+
+.. The example below doesn't make any sense to me.  Where does char
+.. const[5] come from?   Why would I choose a different argument
+.. type from a default type.  What is the effect on the resulting
+.. Python interface?
 
 Doing this will generate N^2 overloads, where N is the number of *special* arguments.
 In this case two overloads will be generated, one with ``y`` included and one without.
 Having many *special* keywords will result in lots of overloads, and stress the
 compiler.
+
+.. using "this" without an antecedent above.  What are we "doing?"
+.. Don't you mean 2^N?
 
 Note that this makes the *arity range* ``[1,2]``, so we'll need two forwarding overloads.
 
@@ -117,6 +144,12 @@ Note that this makes the *arity range* ``[1,2]``, so we'll need two forwarding o
             );
     }
         
+
+.. You don't explain what those boost::type<void> things are all
+.. about.
+.. Weren't we going to generate the f_fwd struct ourselves?
+.. I don't think this code has been tested.  I see the identifier
+.. "fwd" above, which surely must be wrong.
 
 ------------------------------------------------------------------------------
 
