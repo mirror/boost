@@ -643,7 +643,7 @@ struct parameters
         3,BOOST_PARAMETER_MAX_ARITY,<boost/parameter/aux_/overloads.hpp> \
     ))
 #include BOOST_PP_ITERATE()
-    
+
 };
 
 } // namespace parameter

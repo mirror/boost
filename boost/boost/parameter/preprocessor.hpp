@@ -57,7 +57,7 @@ struct unwrap_predicate<void *(Predicate)>
 template <class Target>
 struct unwrap_predicate<void (Target)>
 {
-    typedef is_convertible<mpl::_, T> type;
+    typedef is_convertible<mpl::_, Target> type;
 };
 
 // Recast the ParameterSpec's nested match metafunction as a free metafunction
@@ -84,12 +84,11 @@ struct argument_pack
 {
     typedef typename mpl::apply_wrap1<
         BOOST_PARAMETER_build_arg_list(
-            BOOST_PARAMETER_MAX_ARITY, aux::make_partial_arg_list, typename Parameters::parameter_spec, A
-          , aux::tag_keyword_arg
+            BOOST_PARAMETER_MAX_ARITY, aux::make_partial_arg_list
+          , typename Parameters::parameter_spec, A, aux::tag_keyword_arg
         )
       , typename Parameters::unnamed_list
     >::type type;
-    
 };
 
 }}} // namespace boost::parameter::aux
@@ -113,20 +112,27 @@ struct argument_pack
     )
 /**/
 
+// Accessor macros for the argument specs tuple.
 # define BOOST_PARAMETER_FN_ARG_QUALIFIER(x) \
-    BOOST_PP_TUPLE_ELEM(3,0,x)
+    BOOST_PP_TUPLE_ELEM(4,0,x)
 /**/
 
 # define BOOST_PARAMETER_FN_ARG_NAME(x) \
-    BOOST_PP_TUPLE_ELEM(3,1,x)
+    BOOST_PP_TUPLE_ELEM(4,1,x)
 /**/
 
 # define BOOST_PARAMETER_FN_ARG_PRED(x) \
-    BOOST_PP_TUPLE_ELEM(3,2,x)
+    BOOST_PP_TUPLE_ELEM(4,2,x)
+/**/
+
+# define BOOST_PARAMETER_FN_ARG_DEFAULT(x) \
+    BOOST_PP_TUPLE_ELEM(4,3,x)
 /**/
 
 # define BOOST_PARAMETETER_FUNCTION_EAT_KEYWORD_QUALIFIER_out(x)
 # define BOOST_PARAMETETER_FUNCTION_EAT_KEYWORD_QUALIFIER_in_out(x)
+
+// Returns 1 if x is either "out(k)" or "in_out(k)".
 # define BOOST_PARAMETER_FUNCTION_IS_KEYWORD_QUALIFIER(x) \
     BOOST_PP_IS_EMPTY( \
         BOOST_PP_CAT(BOOST_PARAMETETER_FUNCTION_EAT_KEYWORD_QUALIFIER_, x) \
@@ -139,6 +145,13 @@ struct argument_pack
     BOOST_PP_CAT(BOOST_PARAMETETER_FUNCTION_GET_KEYWORD_QUALIFIER_, x)
 /**/
 
+// Returns the keyword of x, where x is either a keyword qualifier
+// or a keyword.
+//
+//   k => k
+//   out(k) => k
+//   in_out(k) => k
+//
 # define BOOST_PARAMETER_FUNCTION_KEYWORD(x) \
     BOOST_PP_IF( \
         BOOST_PARAMETER_FUNCTION_IS_KEYWORD_QUALIFIER(x) \
@@ -172,6 +185,8 @@ struct argument_pack
     BOOST_PP_CAT(boost_param_result_, BOOST_PP_CAT(__LINE__,base))
 
 // Can't do boost_param_impl_ ## basee because base might start with an underscore
+// daniel: what? how is that relevant? the reason for using CAT() is to make sure
+// base is expanded. i'm not sure we need to here, but it's more stable to do it.
 # define BOOST_PARAMETER_IMPL(base) \
     BOOST_PP_CAT(boost_param_impl,base)
 
@@ -348,12 +363,216 @@ struct argument_pack
     BOOST_PARAMETER_FUNCTION_IMPL_HEAD(name);
 /**/
 
+# define BOOST_PARAMETER_FUNCTION_SPLIT_ARG_required(state, arg) \
+    ( \
+        BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(4, 0, state)) \
+      , BOOST_PP_SEQ_PUSH_BACK(BOOST_PP_TUPLE_ELEM(4, 1, state), arg) \
+      , BOOST_PP_TUPLE_ELEM(4, 2, state) \
+      , BOOST_PP_TUPLE_ELEM(4, 3, state) \
+    )
+
+# define BOOST_PARAMETER_FUNCTION_SPLIT_ARG_optional(state, arg) \
+    ( \
+        BOOST_PP_TUPLE_ELEM(4, 0, state) \
+      , BOOST_PP_TUPLE_ELEM(4, 1, state) \
+      , BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(4, 2, state)) \
+      , BOOST_PP_SEQ_PUSH_BACK(BOOST_PP_TUPLE_ELEM(4, 3, state), arg) \
+    )
+
+# define BOOST_PARAMETER_FUNCTION_SPLIT_ARG(s, state, arg) \
+    BOOST_PP_CAT( \
+        BOOST_PARAMETER_FUNCTION_SPLIT_ARG_ \
+      , BOOST_PARAMETER_FN_ARG_QUALIFIER(arg) \
+    )(state, arg)
+
+// Returns (required_count, required, optional_count, optionals) tuple
+# define BOOST_PARAMETER_FUNCTION_SPLIT_ARGS(args) \
+    BOOST_PP_SEQ_FOLD_LEFT( \
+        BOOST_PARAMETER_FUNCTION_SPLIT_ARG \
+      , (0,BOOST_PP_SEQ_NIL, 0,BOOST_PP_SEQ_NIL) \
+      , args \
+    )
+
+// Helpers used as parameters to BOOST_PARAMETER_FUNCTION_DEFAULT_ARGUMENTS.
+# define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_TEMPLATE_ARG(r, _, arg) \
+    , class BOOST_PP_CAT(BOOST_PARAMETER_FN_ARG_NAME(arg), _type)
+
+# define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_ARG(r, _, arg) \
+    , BOOST_PP_CAT(BOOST_PARAMETER_FN_ARG_NAME(arg), _type)& BOOST_PARAMETER_FN_ARG_NAME(arg)
+
+# define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_PARAMETER(r, _, arg) \
+    , BOOST_PARAMETER_FN_ARG_NAME(arg)
+
+// Produces a name for the dispatch functions.
+# define BOOST_PARAMETER_FUNCTION_DEFAULT_NAME(name) \
+    BOOST_PP_CAT(boost_param_default_, BOOST_PP_CAT(__LINE__, name))
+
+// Helper macro used below to produce lists based on the keyword argument
+// names. macro is applied to every element. n is the number of
+// optional arguments that should be included.
+# define BOOST_PARAMETER_FUNCTION_DEFAULT_ARGUMENTS(macro, n, split_args) \
+    BOOST_PP_SEQ_FOR_EACH( \
+        macro \
+      , ~ \
+      , BOOST_PP_TUPLE_ELEM(4,1,split_args) \
+    ) \
+    BOOST_PP_SEQ_FOR_EACH( \
+        macro \
+      , ~ \
+      , BOOST_PP_SEQ_FIRST_N( \
+          BOOST_PP_SUB(BOOST_PP_TUPLE_ELEM(4,2,split_args), n) \
+        , BOOST_PP_TUPLE_ELEM(4,3,split_args) \
+        ) \
+    )
+
+// Generates a keyword | default expression.
+# define BOOST_PARAMETER_FUNCTION_DEFAULT_EVAL_DEFAULT(arg) \
+    BOOST_PARAMETER_FN_ARG_NAME(arg) | BOOST_PARAMETER_FN_ARG_DEFAULT(arg)
+
+# define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_BODY(name, n, split_args) \
+    { \
+        return BOOST_PARAMETER_FUNCTION_DEFAULT_NAME(name)( \
+            (ResultType(*)())0 \
+          , args \
+            BOOST_PARAMETER_FUNCTION_DEFAULT_ARGUMENTS( \
+                BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_PARAMETER \
+              , n \
+              , split_args \
+            ) \
+          , args[ \
+                BOOST_PARAMETER_FUNCTION_DEFAULT_EVAL_DEFAULT( \
+                    BOOST_PP_SEQ_ELEM( \
+                        BOOST_PP_SUB(BOOST_PP_TUPLE_ELEM(4,2,split_args), n) \
+                      , BOOST_PP_TUPLE_ELEM(4,3,split_args) \
+                    ) \
+                ) \
+            ] \
+        ); \
+    }
+
+// Produces a forwarding layer in the default evaluation machine.
+//
+// data is a tuple:
+//
+//   (name, split_args)
+//
+// Where name is the base name of the function, and split_args is a tuple:
+//
+//   (required_count, required_args, optional_count, required_args)
+//
+# define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION(z, n, data) \
+    template < \
+        class ResultType \
+      , class Args \
+        BOOST_PARAMETER_FUNCTION_DEFAULT_ARGUMENTS( \
+            BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_TEMPLATE_ARG \
+          , n \
+          , BOOST_PP_TUPLE_ELEM(2,1,data) \
+        ) \
+    > \
+    ResultType BOOST_PARAMETER_FUNCTION_DEFAULT_NAME(BOOST_PP_TUPLE_ELEM(2,0,data))( \
+        ResultType(*)() \
+      , Args const& args \
+        BOOST_PARAMETER_FUNCTION_DEFAULT_ARGUMENTS( \
+            BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_ARG \
+          , n \
+          , BOOST_PP_TUPLE_ELEM(2,1,data) \
+        ) \
+    ) \
+    BOOST_PP_IF( \
+        n \
+      , BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_BODY \
+      , ; BOOST_PP_TUPLE_EAT(3) \
+    )(BOOST_PP_TUPLE_ELEM(2,0,data), n, BOOST_PP_TUPLE_ELEM(2,1,data))
+
+# define BOOST_PARAMETER_FUNCTION_DEFAULT_GET_ARG(r, _, arg) \
+    , args[BOOST_PARAMETER_FN_ARG_NAME(arg)]
+
+// Generates the function template that recives a ArgumentPack, and then
+// goes on to call the layers of overloads generated by 
+// BOOST_PARAMETER_FUNCTION_DEFAULT_LAYER.
+# define BOOST_PARAMETER_FUNCTION_INITIAL_DISPATCH_FUNCTION(name, split_args) \
+    template <class Args> \
+    typename BOOST_PARAMETER_FUNCTION_RESULT_NAME(name)<Args>::type \
+    BOOST_PARAMETER_IMPL(name)(Args const& args) \
+    { \
+        return BOOST_PARAMETER_FUNCTION_DEFAULT_NAME(name)( \
+            (typename BOOST_PARAMETER_FUNCTION_RESULT_NAME(name)<Args>::type(*)())0 \
+          , args \
+ \
+            BOOST_PP_SEQ_FOR_EACH( \
+                BOOST_PARAMETER_FUNCTION_DEFAULT_GET_ARG \
+              , ~ \
+              , BOOST_PP_TUPLE_ELEM(4,1,split_args) \
+            ) \
+ \
+        ); \
+    }
+
+// Helper for BOOST_PARAMETER_FUNCTION_DEFAULT_LAYER below.
+# define BOOST_PARAMETER_FUNCTION_DEFAULT_LAYER_AUX(name, split_args) \
+    BOOST_PP_REPEAT( \
+        BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(4, 2, split_args)) \
+      , BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION \
+      , (name, split_args) \
+    ) \
+ \
+    BOOST_PARAMETER_FUNCTION_INITIAL_DISPATCH_FUNCTION(name, split_args) \
+\
+    template < \
+        class ResultType \
+      , class Args \
+        BOOST_PARAMETER_FUNCTION_DEFAULT_ARGUMENTS( \
+            BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_TEMPLATE_ARG \
+          , 0 \
+          , split_args \
+        ) \
+    > \
+    ResultType BOOST_PARAMETER_FUNCTION_DEFAULT_NAME(name)( \
+        ResultType(*)() \
+      , Args const& args \
+        BOOST_PARAMETER_FUNCTION_DEFAULT_ARGUMENTS( \
+            BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_ARG \
+          , 0 \
+          , split_args \
+        ) \
+    )
+
+// Generates a bunch of forwarding functions that each extract
+// one more argument.
+# define BOOST_PARAMETER_FUNCTION_DEFAULT_LAYER(name, args) \
+    BOOST_PARAMETER_FUNCTION_DEFAULT_LAYER_AUX( \
+        name, BOOST_PARAMETER_FUNCTION_SPLIT_ARGS(args) \
+    )
+/**/
+
+// Defines the result metafunction and the parameters specialization.
 # define BOOST_PARAMETER_FUNCTION_HEAD(result, name, tag_namespace, args)   \
       BOOST_PARAMETER_FUNCTION_RESULT(result, name, args)                   \
                                                                             \
           BOOST_PARAMETER_FUNCTION_PARAMETERS(tag_namespace, name, args)    \
           BOOST_PARAMETER_FUNCTION_PARAMETERS_NAME(name);                   \
-                                                                            
+
+// Helper for BOOST_PARAMETER_FUNCTION2 below.
+# define BOOST_PARAMETER_FUNCTION_AUX2(result, name, tag_namespace, args)    \
+    BOOST_PARAMETER_FUNCTION_HEAD(result, name, tag_namespace, args)         \
+    BOOST_PARAMETER_FUNCTION_IMPL_HEAD(name); \
+\
+    BOOST_PARAMETER_FUNCTION_FWD_FUNCTIONS(                                  \
+        result, name, args, 0                                                \
+      , BOOST_PARAMETER_FUNCTION_FWD_COMBINATIONS(args)                      \
+    )                                                                        \
+                                                                             \
+    BOOST_PARAMETER_FUNCTION_DEFAULT_LAYER(name, args)
+
+// Defines a Boost.Parameter enabled function with the new syntax.
+# define BOOST_PARAMETER_FUNCTION2(result, name, tag_namespace, args)    \
+    BOOST_PARAMETER_FUNCTION_AUX2(                                       \
+        result, name, tag_namespace                                      \
+      , BOOST_PARAMETER_FLATTEN(3, 2, 3, args)                           \
+    )                                                                    \
+/**/
+
 // Defines a Boost.Parameter enabled function.
 # define BOOST_PARAMETER_FUNCTION_AUX(result, name, tag_namespace, args)    \
     BOOST_PARAMETER_FUNCTION_HEAD(result, name, tag_namespace, args)        \
@@ -370,7 +589,7 @@ struct argument_pack
 # define BOOST_PARAMETER_FUNCTION(result, name, tag_namespace, args)    \
     BOOST_PARAMETER_FUNCTION_AUX(                                       \
         result, name, tag_namespace                                     \
-      , BOOST_PARAMETER_FLATTEN(2, 2, args)                             \
+      , BOOST_PARAMETER_FLATTEN(2, 2, 3, args)                          \
     )                                                                   \
 /**/
 
@@ -389,7 +608,7 @@ struct argument_pack
 # define BOOST_PARAMETER_MEMBER_FUNCTION(result, name, tag_namespace, args) \
     BOOST_PARAMETER_MEMBER_FUNCTION_AUX( \
         result, name, tag_namespace \
-      , BOOST_PARAMETER_FLATTEN(2, 2, args) \
+      , BOOST_PARAMETER_FLATTEN(2, 2, 3, args) \
       , 0 \
     )
 /**/
@@ -397,7 +616,7 @@ struct argument_pack
 # define BOOST_PARAMETER_CONST_MEMBER_FUNCTION(result, name, tag_namespace, args) \
     BOOST_PARAMETER_MEMBER_FUNCTION_AUX( \
         result, name, tag_namespace \
-      , BOOST_PARAMETER_FLATTEN(2, 2, args) \
+      , BOOST_PARAMETER_FLATTEN(2, 2, 3, args) \
       , 1 \
     )
 /**/
@@ -522,7 +741,7 @@ struct argument_pack
 # define BOOST_PARAMETER_CONSTRUCTOR(class_, base, tag_namespace, args) \
     BOOST_PARAMETER_CONSTRUCTOR_AUX( \
         class_, base, tag_namespace \
-      , BOOST_PARAMETER_FLATTEN(2, 2, args) \
+      , BOOST_PARAMETER_FLATTEN(2, 2, 3, args) \
     )
 /**/
 
@@ -530,7 +749,7 @@ struct argument_pack
 #  define BOOST_PARAMETER_FUNCTION_FWD_COMBINATION(r, _, i, elem) \
     (BOOST_PP_IF( \
         BOOST_PARAMETER_FUNCTION_IS_KEYWORD_QUALIFIER( \
-            BOOST_PP_TUPLE_ELEM(3,1,elem) \
+            BOOST_PARAMETER_FN_ARG_NAME(elem) \
         ) \
       , (const ParameterArgumentType ## i)(ParameterArgumentType ## i) \
       , (const ParameterArgumentType ## i) \
@@ -539,7 +758,7 @@ struct argument_pack
 #  define BOOST_PARAMETER_FUNCTION_FWD_COMBINATION(r, _, i, elem) \
     (BOOST_PP_IF( \
         BOOST_PARAMETER_FUNCTION_IS_KEYWORD_QUALIFIER( \
-            BOOST_PP_TUPLE_ELEM(3,1,elem) \
+            BOOST_PARAMETER_FN_ARG_NAME(elem) \
         ) \
       , (ParameterArgumentType ## i) \
       , (const ParameterArgumentType ## i) \

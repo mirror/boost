@@ -67,12 +67,12 @@
       , spec \
     )
 
-# define BOOST_PARAMETER_FLATTEN(optional_arity, required_arity, specs) \
+# define BOOST_PARAMETER_FLATTEN(optional_arity, required_arity, wanted_arity, specs) \
     BOOST_PP_SEQ_FOR_EACH( \
         BOOST_PARAMETER_FLATTEN_SPEC \
       , ( \
             optional_arity, required_arity \
-          , BOOST_PP_MAX(optional_arity, required_arity) \
+          , wanted_arity \
         ) \
       , specs \
     )

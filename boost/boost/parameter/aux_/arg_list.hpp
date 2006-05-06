@@ -176,7 +176,7 @@ template <class TaggedArg, class Next = empty_arg_list>
 struct arg_list : Next
 {
     typedef arg_list<TaggedArg,Next> self;
-    typedef typename TaggedArg::key_type key_type;   
+    typedef typename TaggedArg::key_type key_type;
 
     typedef typename is_maybe<typename TaggedArg::value_type>::type holds_maybe;
 
