@@ -88,6 +88,28 @@ BOOST_PARAMETER_FUNCTION2((int), h, tag,
     return 1;
 }
 
+BOOST_PARAMETER_FUNCTION2((int), h2, tag,
+    (required
+      (tester, *)
+      (name, *)
+    )
+    (optional
+      (value, *, 1.f)
+      (out(index), (int), (int)value * 2)
+    )
+)
+{
+    BOOST_MPL_ASSERT((boost::is_same<index_type, int const>));
+
+    tester(
+        name
+      , value
+      , index
+    );
+
+    return 1;
+}
+
 struct base
 {
     template <class Args>
@@ -217,6 +239,12 @@ int main()
       , name = S("foo")
       , 1.f
       , 2
+    );
+
+    h2(
+        tester = values(S("foo"), 1.f, 2)
+      , name = S("foo")
+      , 1.f
     );
     
     class_ x(
