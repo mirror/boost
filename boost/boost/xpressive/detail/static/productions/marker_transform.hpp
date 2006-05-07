@@ -24,8 +24,23 @@ namespace boost { namespace xpressive { namespace detail
 
     // (s1= ...) is a marker
     template<typename Node>
-    struct is_marker<proto::binary_op<mark_tag, Node, proto::assign_tag> >
+    struct is_marker<proto::binary_op<mark_tag const, Node, proto::assign_tag> >
       : mpl::true_
+    {};
+
+    template<typename Node>
+    struct is_marker<proto::binary_op<mark_tag const &, Node, proto::assign_tag> >
+      : mpl::true_
+    {};
+
+    template<typename Node>
+    struct is_marker<Node &>
+      : is_marker<Node>
+    {};
+
+    template<typename Node>
+    struct is_marker<Node const>
+      : is_marker<Node>
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -85,7 +100,13 @@ namespace boost { namespace xpressive { namespace detail
         static typename apply<Node, State, Visitor>::type
         call(Node const &node, State const &state, Visitor &visitor)
         {
-            return marker_insert_transform::call(proto::right(node), state, visitor, proto::arg(proto::left(node)).mark_number_);
+            return marker_insert_transform::call
+            (
+                proto::right(node)
+              , state
+              , visitor
+              , proto::arg(proto::left(node)).mark_number_
+            );
         }
     };
 

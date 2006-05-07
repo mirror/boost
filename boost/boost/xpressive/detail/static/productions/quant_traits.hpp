@@ -64,8 +64,7 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Node, typename, typename>
         struct apply
           : use_simple_repeat<typename proto::arg_type<Node>::type>
-        {
-        };
+        {};
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -73,8 +72,7 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Xpr>
     struct is_greedy_quant
       : mpl::false_
-    {
-    };
+    {};
 
     template<typename Node, typename Tag>
     struct is_greedy_quant<proto::unary_op<Node, Tag> >
@@ -84,14 +82,22 @@ namespace boost { namespace xpressive { namespace detail
           , is_same<Tag, proto::unary_star_tag>
           , is_same<Tag, proto::logical_not_tag>
         >
-    {
-    };
+    {};
 
     template<typename Node, uint_t Min, uint_t Max>
     struct is_greedy_quant<proto::unary_op<Node, generic_quant_tag<Min, Max> > >
       : mpl::true_
-    {
-    };
+    {};
+
+    template<typename Xpr>
+    struct is_greedy_quant<Xpr &>
+      : is_greedy_quant<Xpr>
+    {};
+
+    template<typename Xpr>
+    struct is_greedy_quant<Xpr const>
+      : is_greedy_quant<Xpr>
+    {};
 
 }}}
 

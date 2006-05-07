@@ -111,7 +111,7 @@ namespace boost { namespace proto
         };
 
         template<typename Node, typename State, typename Visitor>
-        static typename arg_type<Node>::const_reference
+        static typename arg_type<Node>::reference
         call(Node const &node, State const &, Visitor &)
         {
             return proto::arg(node);
@@ -129,7 +129,7 @@ namespace boost { namespace proto
         };
 
         template<typename Node, typename State, typename Visitor>
-        static typename left_type<Node>::const_reference
+        static typename left_type<Node>::reference
         call(Node const &node, State const &, Visitor &)
         {
             return proto::left(node);
@@ -147,7 +147,7 @@ namespace boost { namespace proto
         };
 
         template<typename Node, typename State, typename Visitor>
-        static typename right_type<Node>::const_reference
+        static typename right_type<Node>::reference
         call(Node const &node, State const &, Visitor &)
         {
             return proto::right(node);

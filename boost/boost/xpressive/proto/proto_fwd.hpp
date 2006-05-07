@@ -111,18 +111,6 @@ namespace boost { namespace proto
     >
     struct nary_op;
 
-    template<typename Node, typename Arg>
-    unary_op<Arg, Node> const
-    make_op(Arg const &arg);
-
-    template<typename Node, typename Left, typename Right>
-    binary_op<Left, Right, Node> const
-    make_op(Left const &left, Right const &right);
-
-    template<typename Arg>
-    unary_op<Arg, noop_tag> const
-    noop(Arg const &arg);
-
     struct op_root;
 
     template<typename T>
@@ -137,8 +125,18 @@ namespace boost { namespace proto
     template<typename Node>
     struct op_base;
 
-    template<typename T>
-    struct value_type;
+    template<typename Node, typename Arg>
+    unary_op<Arg, Node> const
+    make_op(Arg const &arg);
+
+    template<typename Node, typename Left, typename Right>
+    binary_op<Left, Right, Node> const
+    make_op(Left const &left, Right const &right);
+
+    template<typename Arg>
+    //unary_op<Arg, noop_tag> const
+    typename as_op<Arg>::type
+    noop(Arg const &arg);
 
     template<typename Node>
     struct arg_type;
@@ -149,7 +147,7 @@ namespace boost { namespace proto
     template<typename Node>
     struct right_type;
 
-    template<typename Node>
+    template<typename Node, bool IsOp = is_op<Node>::value>
     struct tag_type;
 
     template<typename OpTag, typename DomainTag, typename Dummy = void>

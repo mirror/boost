@@ -122,6 +122,27 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
+    template<typename Matcher>
+    struct as_matcher<Matcher &, true>
+      : as_matcher<Matcher, true>
+    {};
+
+    template<typename Matcher>
+    struct as_matcher<Matcher const, true>
+      : as_matcher<Matcher, true>
+    {};
+
+    template<typename Matcher>
+    struct as_matcher<Matcher &, false>
+      : as_matcher<Matcher, false>
+    {};
+
+    template<typename Matcher>
+    struct as_matcher<Matcher const, false>
+      : as_matcher<Matcher, false>
+    {};
+
+
     ///////////////////////////////////////////////////////////////////////////////
     // as_xpr_type
     //
@@ -129,7 +150,7 @@ namespace boost { namespace xpressive { namespace detail
     struct as_xpr_type<Xpr, true> // is_op == true
     {
         typedef Xpr type;
-        typedef Xpr const &const_reference;
+        typedef Xpr const &reference;
 
         static Xpr const &call(Xpr const &xpr)
         {
@@ -146,7 +167,7 @@ namespace boost { namespace xpressive { namespace detail
           , proto::noop_tag
         > type;
 
-        typedef type const const_reference;
+        typedef type const reference;
 
         static type const call(Xpr const &xpr)
         {
@@ -164,7 +185,7 @@ namespace boost { namespace xpressive
     // as_xpr (from a literal to an xpression)
     //
     template<typename Xpr>
-    inline typename detail::as_xpr_type<Xpr>::const_reference
+    inline typename detail::as_xpr_type<Xpr>::reference
     as_xpr(Xpr const &xpr)
     {
         return detail::as_xpr_type<Xpr>::call(xpr);

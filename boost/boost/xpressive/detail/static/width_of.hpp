@@ -57,53 +57,55 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Node>
     struct width_of;
 
+    template<typename Node>
+    struct width_of<Node &>
+      : width_of<Node>
+    {};
+
+    template<typename Node>
+    struct width_of<Node const>
+      : width_of<Node>
+    {};
+
     template<typename Matcher>
     struct width_of<proto::unary_op<Matcher, proto::noop_tag> >
       : mpl::size_t<as_matcher<Matcher>::type::width>
-    {
-    };
+    {};
 
     template<typename Left, typename Right>
     struct width_of<proto::binary_op<Left, Right, proto::right_shift_tag> >
       : BOOST_XPR_ADD_WIDTH_(width_of<Left>, width_of<Right>)
-    {
-    };
+    {};
 
     template<typename Left, typename Right>
     struct width_of<proto::binary_op<Left, Right, proto::bitor_tag> >
       : BOOST_XPR_EQUAL_WIDTH_(width_of<Left>, width_of<Right>)
-    {
-    };
+    {};
 
     template<typename Right>
-    struct width_of<proto::binary_op<mark_tag, Right, proto::assign_tag> >
+    struct width_of<proto::binary_op<mark_tag const, Right, proto::assign_tag> >
       : width_of<Right>
-    {
-    };
+    {};
 
     template<typename Right>
-    struct width_of<proto::binary_op<set_initializer_type, Right, proto::assign_tag> >
+    struct width_of<proto::binary_op<set_initializer_type const, Right, proto::assign_tag> >
       : mpl::size_t<1>
-    {
-    };
+    {};
 
     template<typename Modifier, typename Node>
     struct width_of<proto::binary_op<Modifier, Node, modifier_tag> >
       : width_of<Node>
-    {
-    };
+    {};
 
     template<typename Node, bool Positive>
     struct width_of<proto::unary_op<Node, lookahead_tag<Positive> > >
       : mpl::size_t<0>
-    {
-    };
+    {};
 
     template<typename Node, bool Positive>
     struct width_of<proto::unary_op<Node, lookbehind_tag<Positive> > >
       : mpl::size_t<0>
-    {
-    };
+    {};
 
     // keep() is used to turn off backtracking, so they should only be used
     // for things that are variable-width (eg. quantified)
@@ -120,63 +122,54 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Node>
     struct width_of<proto::unary_op<Node, proto::unary_plus_tag> >
       : unknown_width
-    {
-    };
+    {};
 
     template<typename Node>
     struct width_of<proto::unary_op<Node, proto::unary_star_tag> >
       : unknown_width
-    {
-    };
+    {};
 
     template<typename Node>
     struct width_of<proto::unary_op<Node, proto::logical_not_tag> >
       : unknown_width
-    {
-    };
+    {};
 
     template<typename Node, uint_t Min, uint_t Max>
     struct width_of<proto::unary_op<Node, generic_quant_tag<Min, Max> > >
       : unknown_width
-    {
-    };
+    {};
 
     template<typename Node, uint_t Count>
     struct width_of<proto::unary_op<Node, generic_quant_tag<Count, Count> > >
       : BOOST_XPR_MULT_WIDTH_(width_of<Node>, mpl::size_t<Count>)
-    {
-    };
+    {};
 
     template<typename Node>
     struct width_of<proto::unary_op<Node, proto::unary_minus_tag> >
       : width_of<Node>
-    {
-    };
+    {};
 
     // when complementing a set or an assertion, the width is that of the set (1) or the assertion (0)
     template<typename Node>
     struct width_of<proto::unary_op<Node, proto::complement_tag> >
       : width_of<Node>
-    {
-    };
+    {};
 
     // The comma is used in list-initialized sets, and the width of sets are 1
     template<typename Left, typename Right>
     struct width_of<proto::binary_op<Left, Right, proto::comma_tag> >
       : mpl::size_t<1>
-    {
-    };
+    {};
 
     // The subscript operator[] is used for sets, as in set['a' | range('b','h')], 
     // or for actions as in (any >> expr)[ action ]
     template<typename Left, typename Right>
     struct width_of<proto::binary_op<Left, Right, proto::subscript_tag> >
       : width_of<Left>
-    {
-    };
+    {};
 
     template<typename Right>
-    struct width_of<proto::binary_op<set_initializer_type, Right, proto::subscript_tag> >
+    struct width_of<proto::binary_op<set_initializer_type const, Right, proto::subscript_tag> >
       : mpl::size_t<1>
     {
         // If Left is "set" then make sure that Right has a width_of 1
@@ -186,8 +179,7 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Node, typename Arg>
     struct width_of<proto::op_proxy<Node, Arg> >
       : width_of<Node>
-    {
-    };
+    {};
 
 }}} // namespace boost::xpressive::detail
 

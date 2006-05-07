@@ -38,7 +38,7 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Node, typename, typename>
         struct apply
         {
-            typedef typename is_same<typename proto::left_type<Node>::type, set_initializer_type>::type type;
+            typedef typename is_same<typename proto::left_type<Node>::type, set_initializer_type const>::type type;
         };
     };
 
@@ -84,13 +84,6 @@ namespace boost { namespace xpressive { namespace detail
 // misc regex compiler productions
 namespace boost { namespace proto
 {
-    template<typename BidiIter>
-    struct value_type<xpressive::basic_regex<BidiIter> >
-    {
-        // store regex objects in the parse tree by reference
-        typedef reference_wrapper<xpressive::basic_regex<BidiIter> const> type;
-    };
-
     // production for sequences in sequence
     template<>
     struct compiler<right_shift_tag, xpressive::detail::seq_tag, void>

@@ -94,16 +94,16 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     //
     template<typename Node, typename Visitor>
-    struct complement<proto::binary_op<set_initializer_type, Node, proto::subscript_tag>, Visitor>
+    struct complement<proto::binary_op<set_initializer_type const, Node, proto::subscript_tag>, Visitor>
     {
         typedef typename charset_transform::BOOST_NESTED_TEMPLATE apply
         <
-            proto::binary_op<set_initializer_type, Node, proto::subscript_tag>
+            proto::binary_op<set_initializer_type const, Node, proto::subscript_tag>
           , dont_care
           , Visitor
         >::type type;
 
-        static type call(proto::binary_op<set_initializer_type, Node, proto::subscript_tag> const &node, Visitor &visitor)
+        static type call(proto::binary_op<set_initializer_type const, Node, proto::subscript_tag> const &node, Visitor &visitor)
         {
             return charset_transform::call(node, dont_care(), visitor, true);
         }
@@ -216,6 +216,16 @@ namespace boost { namespace xpressive { namespace detail
             return proto::noop(rng);
         }
     };
+
+    template<typename Node, typename Visitor>
+    struct complement<Node &, Visitor>
+      : complement<Node, Visitor>
+    {};
+
+    template<typename Node, typename Visitor>
+    struct complement<Node const, Visitor>
+      : complement<Node, Visitor>
+    {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // complement_transform

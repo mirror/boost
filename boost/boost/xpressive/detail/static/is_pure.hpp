@@ -29,93 +29,91 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // use_simple_repeat
     //
-    template<typename Xpr>
+    template<typename Node>
     struct use_simple_repeat;
 
     ///////////////////////////////////////////////////////////////////////////////
     // is_pure
     //
-    template<typename Xpr>
+    template<typename Node>
     struct is_pure;
+
+    template<typename Node>
+    struct is_pure<Node &>
+      : is_pure<Node>
+    {};
+
+    template<typename Node>
+    struct is_pure<Node const>
+      : is_pure<Node>
+    {};
 
     template<typename Matcher>
     struct is_pure<proto::unary_op<Matcher, proto::noop_tag> >
       : mpl::bool_<as_matcher<Matcher>::type::pure>
-    {
-    };
+    {};
 
     template<typename Left, typename Right>
     struct is_pure<proto::binary_op<Left, Right, proto::right_shift_tag> >
       : BOOST_XPR_AND_PURE_(is_pure<Left>, is_pure<Right>)
-    {
-    };
+    {};
 
     template<typename Left, typename Right>
     struct is_pure<proto::binary_op<Left, Right, proto::bitor_tag> >
       : BOOST_XPR_AND_PURE_(is_pure<Left>, is_pure<Right>)
-    {
-    };
+    {};
 
     template<typename Right>
-    struct is_pure<proto::binary_op<mark_tag, Right, proto::assign_tag> >
+    struct is_pure<proto::binary_op<mark_tag const, Right, proto::assign_tag> >
       : mpl::false_
-    {
-    };
+    {};
 
     template<typename Right>
-    struct is_pure<proto::binary_op<set_initializer_type, Right, proto::assign_tag> >
+    struct is_pure<proto::binary_op<set_initializer_type const, Right, proto::assign_tag> >
       : mpl::true_
-    {
-    };
+    {};
 
-    template<typename Modifier, typename Xpr>
-    struct is_pure<proto::binary_op<Modifier, Xpr, modifier_tag> >
-      : is_pure<Xpr>
-    {
-    };
+    template<typename Modifier, typename Node>
+    struct is_pure<proto::binary_op<Modifier, Node, modifier_tag> >
+      : is_pure<Node>
+    {};
 
-    template<typename Xpr, bool Positive>
-    struct is_pure<proto::unary_op<Xpr, lookahead_tag<Positive> > >
-      : is_pure<Xpr>
-    {
-    };
+    template<typename Node, bool Positive>
+    struct is_pure<proto::unary_op<Node, lookahead_tag<Positive> > >
+      : is_pure<Node>
+    {};
 
-    template<typename Xpr, bool Positive>
-    struct is_pure<proto::unary_op<Xpr, lookbehind_tag<Positive> > >
-      : is_pure<Xpr>
-    {
-    };
+    template<typename Node, bool Positive>
+    struct is_pure<proto::unary_op<Node, lookbehind_tag<Positive> > >
+      : is_pure<Node>
+    {};
 
-    template<typename Xpr>
-    struct is_pure<proto::unary_op<Xpr, keeper_tag> >
-      : is_pure<Xpr>
-    {
-    };
+    template<typename Node>
+    struct is_pure<proto::unary_op<Node, keeper_tag> >
+      : is_pure<Node>
+    {};
 
     // when complementing a set or an assertion, the purity is that of the set (true) or the assertion
     template<typename Node>
     struct is_pure<proto::unary_op<Node, proto::complement_tag> >
       : is_pure<Node>
-    {
-    };
+    {};
 
     // The comma is used in list-initialized sets, which are pure
     template<typename Left, typename Right>
     struct is_pure<proto::binary_op<Left, Right, proto::comma_tag> >
       : mpl::true_
-    {
-    };
+    {};
 
     // The subscript operator[] is used for sets, as in set['a' | range('b','h')]
     // It is also used for actions, which by definition have side-effects and thus are impure
     template<typename Left, typename Right>
     struct is_pure<proto::binary_op<Left, Right, proto::subscript_tag> >
       : mpl::false_
-    {
-    };
+    {};
 
     template<typename Right>
-    struct is_pure<proto::binary_op<set_initializer_type, Right, proto::subscript_tag> >
+    struct is_pure<proto::binary_op<set_initializer_type const, Right, proto::subscript_tag> >
       : mpl::true_
     {
         // If Left is "set" then make sure that Right is pure
@@ -126,42 +124,37 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Node>
     struct is_pure<proto::unary_op<Node, proto::unary_plus_tag> >
       : use_simple_repeat<Node>
-    {
-    };
+    {};
 
     template<typename Node>
     struct is_pure<proto::unary_op<Node, proto::unary_star_tag> >
       : use_simple_repeat<Node>
-    {
-    };
+    {};
 
     template<typename Node>
     struct is_pure<proto::unary_op<Node, proto::logical_not_tag> >
       : use_simple_repeat<Node>
-    {
-    };
+    {};
 
     template<typename Node, uint_t Min, uint_t Max>
     struct is_pure<proto::unary_op<Node, generic_quant_tag<Min, Max> > >
       : use_simple_repeat<Node>
-    {
-    };
+    {};
 
     template<typename Node>
     struct is_pure<proto::unary_op<Node, proto::unary_minus_tag> >
       : is_pure<Node>
-    {
-    };
+    {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // use_simple_repeat
     //  TODO this doesn't optimize +(_ >> "hello")
-    template<typename Xpr>
+    template<typename Node>
     struct use_simple_repeat
-      : mpl::bool_<width_of<Xpr>::value != unknown_width::value && is_pure<Xpr>::value>
+      : mpl::bool_<width_of<Node>::value != unknown_width::value && is_pure<Node>::value>
     {
         // should never try to repeat something of 0-width
-        BOOST_MPL_ASSERT_RELATION(0, !=, width_of<Xpr>::value);
+        BOOST_MPL_ASSERT_RELATION(0, !=, width_of<Node>::value);
     };
 
     template<bool B, quant_enum Q> struct use_simple_repeat_helper : mpl::false_ {};
@@ -174,11 +167,20 @@ namespace boost { namespace xpressive { namespace detail
         BOOST_MPL_ASSERT_RELATION(0, !=, as_matcher<Matcher>::type::width);
     };
 
+    template<typename Node>
+    struct use_simple_repeat<Node &>
+      : use_simple_repeat<Node>
+    {};
+
+    template<typename Node>
+    struct use_simple_repeat<Node const>
+      : use_simple_repeat<Node>
+    {};
+
     template<typename Node, typename Arg>
     struct is_pure<proto::op_proxy<Node, Arg> >
       : is_pure<Node>
-    {
-    };
+    {};
 
 }}} // namespace boost::xpressive::detail
 
