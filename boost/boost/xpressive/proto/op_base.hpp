@@ -200,6 +200,7 @@ namespace boost { namespace proto
       : fusion::sequence_base<binary_segmented_view<Node> >
     {
         typedef Node node_type;
+        typedef typename remove_reference<Node>::type::children_type const &children_type;
         typedef binary_segmented_view_tag tag;
         typedef binary_segmented_view_tag ftag;
 
@@ -210,6 +211,11 @@ namespace boost { namespace proto
         Node node() const
         {
             return this->val;
+        }
+
+        children_type children() const
+        {
+            return this->val.children;
         }
 
         Node val;
