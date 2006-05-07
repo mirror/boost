@@ -71,13 +71,14 @@ or copy at <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">http
 <p class="topic-title first"><a name="contents">Contents</a></p>
 <ul class="simple">
 <li><a class="reference" href="#introduction" id="id6" name="id6">Introduction</a></li>
-<li><a class="reference" href="#concept-keywordsspec" id="id7" name="id7">concept <span class="concept">KeywordsSpec</span></a></li>
-<li><a class="reference" href="#special-keyword-tags" id="id8" name="id8"><em>special</em> keyword tags</a></li>
-<li><a class="reference" href="#class-template-init" id="id9" name="id9">class template <tt class="docutils literal"><span class="pre">init</span></tt></a></li>
-<li><a class="reference" href="#class-template-call" id="id10" name="id10">class template <tt class="docutils literal"><span class="pre">call</span></tt></a></li>
-<li><a class="reference" href="#class-template-function" id="id11" name="id11">class template <tt class="docutils literal"><span class="pre">function</span></tt></a></li>
-<li><a class="reference" href="#function-template-def" id="id12" name="id12">function template <tt class="docutils literal"><span class="pre">def</span></tt></a></li>
-<li><a class="reference" href="#portability" id="id13" name="id13">Portability</a></li>
+<li><a class="reference" href="#tutorial" id="id7" name="id7">Tutorial</a></li>
+<li><a class="reference" href="#concept-keywordsspec" id="id8" name="id8">concept <span class="concept">KeywordsSpec</span></a></li>
+<li><a class="reference" href="#special-keyword-tags" id="id9" name="id9"><em>special</em> keyword tags</a></li>
+<li><a class="reference" href="#class-template-init" id="id10" name="id10">class template <tt class="docutils literal"><span class="pre">init</span></tt></a></li>
+<li><a class="reference" href="#class-template-call" id="id11" name="id11">class template <tt class="docutils literal"><span class="pre">call</span></tt></a></li>
+<li><a class="reference" href="#class-template-function" id="id12" name="id12">class template <tt class="docutils literal"><span class="pre">function</span></tt></a></li>
+<li><a class="reference" href="#function-template-def" id="id13" name="id13">function template <tt class="docutils literal"><span class="pre">def</span></tt></a></li>
+<li><a class="reference" href="#portability" id="id14" name="id14">Portability</a></li>
 </ul>
 </div>
 <div class="section" id="introduction">
@@ -96,8 +97,50 @@ and the signature as an MPL sequence of parameter types. Additional data may be
 needed in the signature sequence by specific binding utilities. For example,
 <tt class="docutils literal"><span class="pre">function</span></tt> requires the return type to be part of the signature sequence.</p>
 </div>
+<div class="section" id="tutorial">
+<h1><a class="toc-backref" href="#id7" name="tutorial">Tutorial</a></h1>
+<p>In this section we will outline the steps needed to bind a simple Boost.Parameter
+enabled member function to Python. Knowledge of the Boost.Parameter macros is
+required to understand this section.</p>
+<p>The class and member function we are interested in binding looks like this:</p>
+<pre class="literal-block">
+// First the keywords
+BOOST_PARAMETER_KEYWORD(tag, title)
+BOOST_PARAMETER_KEYWORD(tag, width)
+BOOST_PARAMETER_KEYWORD(tag, height)
+
+class window
+{
+public:
+    BOOST_PARAMETER_MEMBER_FUNCTION((void), open, tag,
+      (required (title, (std::string)))
+      (optional (width, (unsigned), 400)
+                (height, (unsigned), 400))
+    );
+};
+</pre>
+<p>It defines a member function <tt class="docutils literal"><span class="pre">open()</span></tt> with one required parameter and two
+optional ones. To bind this member function to Python we use the binding
+utility <tt class="docutils literal"><span class="pre">function</span></tt>. <tt class="docutils literal"><span class="pre">function</span></tt> is a <tt class="docutils literal"><span class="pre">def_visitor</span></tt> which we'll instantiate and
+pass to <tt class="docutils literal"><span class="pre">boost::python::class_::def()</span></tt>.</p>
+<pre class="literal-block">
+BOOST_PYTHON_MODULE(my_module)
+{
+    using namespace boost::python;
+    namespace py = boost::parameter::python;
+
+    class_&lt;window&gt;(&quot;window&quot;)
+      .def(&quot;open&quot;, 
+        py::function&lt;
+            mpl::vector3&lt;tag::title, tag::width*, tag::height*&gt;
+          , mpl::vector4&lt;void, std::string, unsigned, unsigned&gt;
+        &gt;()
+      );
+}
+</pre>
+</div>
 <div class="section" id="concept-keywordsspec">
-<h1><a class="toc-backref" href="#id7" name="concept-keywordsspec">concept <span class="concept">KeywordsSpec</span></a></h1>
+<h1><a class="toc-backref" href="#id8" name="concept-keywordsspec">concept <span class="concept">KeywordsSpec</span></a></h1>
 <p>A <span class="concept">KeywordsSpec</span> is an MPL sequence where each element is either:</p>
 <ul class="simple">
 <li>A <em>required</em> keyword of the form <tt class="docutils literal"><span class="pre">K</span></tt></li>
@@ -122,7 +165,7 @@ needed in the signature sequence by specific binding utilities. For example,
 <!-- # -->
 </div>
 <div class="section" id="special-keyword-tags">
-<h1><a class="toc-backref" href="#id8" name="special-keyword-tags"><em>special</em> keyword tags</a></h1>
+<h1><a class="toc-backref" href="#id9" name="special-keyword-tags"><em>special</em> keyword tags</a></h1>
 <p>Sometimes it is desirable to have a default value for a parameter that differ
 in type from the parameter. This technique is useful for doing simple tag-dispatching
 based on the presence of a parameter. An <a class="reference" href="index.html#dispatching-based-on-the-presence-of-a-default">example</a> of this is given in the Boost.Parameter
@@ -155,6 +198,7 @@ that it needs to generate two overloads, one with the <tt class="docutils litera
 present and one without. If we would have had two <em>special</em> keywords, four
 overloads would need to be generated. The number of generated overloads is
 equal to <tt class="docutils literal"><span class="pre">2^N</span></tt>, where <tt class="docutils literal"><span class="pre">N</span></tt> is the number of <em>special</em> keywords.</p>
+<!-- The entire section below was rewritten. -->
 <!-- If the default type for an argument is not convertible to the argument type, as
 specified to the binding functions below, that argument must be specified as a
 *special* argument.
@@ -231,7 +275,7 @@ Note that this makes the *arity range* ``[1,2]``, so we'll need two forwarding o
 </div>
 <hr class="docutils" />
 <div class="section" id="class-template-init">
-<h1><a class="toc-backref" href="#id9" name="class-template-init">class template <tt class="docutils literal docutils literal"><span class="pre">init</span></tt></a></h1>
+<h1><a class="toc-backref" href="#id10" name="class-template-init">class template <tt class="docutils literal docutils literal"><span class="pre">init</span></tt></a></h1>
 <p>Defines a named parameter enabled constructor.</p>
 <pre class="literal-block">
 template &lt;class Keywords, class Signature&gt;
@@ -308,7 +352,7 @@ BOOST_PYTHON_MODULE(..)
 </div>
 <hr class="docutils" />
 <div class="section" id="class-template-call">
-<h1><a class="toc-backref" href="#id10" name="class-template-call">class template <tt class="docutils literal docutils literal"><span class="pre">call</span></tt></a></h1>
+<h1><a class="toc-backref" href="#id11" name="class-template-call">class template <tt class="docutils literal docutils literal"><span class="pre">call</span></tt></a></h1>
 <p>Defines a <tt class="docutils literal"><span class="pre">__call__</span></tt> operator, mapped to <tt class="docutils literal"><span class="pre">operator()</span></tt> in C++.</p>
 <pre class="literal-block">
 template &lt;class Keywords, class Signature&gt;
@@ -401,7 +445,7 @@ BOOST_PYTHON_MODULE(..)
 </div>
 <hr class="docutils" />
 <div class="section" id="class-template-function">
-<h1><a class="toc-backref" href="#id11" name="class-template-function">class template <tt class="docutils literal docutils literal"><span class="pre">function</span></tt></a></h1>
+<h1><a class="toc-backref" href="#id12" name="class-template-function">class template <tt class="docutils literal docutils literal"><span class="pre">function</span></tt></a></h1>
 <p>Defines a named parameter enabled member function.</p>
 <pre class="literal-block">
 template &lt;class Fwd, class Keywords, class Signature&gt;
@@ -494,7 +538,7 @@ BOOST_PYTHON_MODULE(..)
 </div>
 <hr class="docutils" />
 <div class="section" id="function-template-def">
-<h1><a class="toc-backref" href="#id12" name="function-template-def">function template <tt class="docutils literal docutils literal"><span class="pre">def</span></tt></a></h1>
+<h1><a class="toc-backref" href="#id13" name="function-template-def">function template <tt class="docutils literal docutils literal"><span class="pre">def</span></tt></a></h1>
 <p>Defines a named parameter enabled free function in the current Python scope.</p>
 <pre class="literal-block">
 template &lt;class Fwd, class Keywords, class Signature&gt;
@@ -573,7 +617,7 @@ BOOST_PYTHON_MODULE(..)
 </div>
 </div>
 <div class="section" id="portability">
-<h1><a class="toc-backref" href="#id13" name="portability">Portability</a></h1>
+<h1><a class="toc-backref" href="#id14" name="portability">Portability</a></h1>
 <p>The Boost.Parameter Python binding library requires <em>partial template specialization</em>.</p>
 </div>
 </div>
