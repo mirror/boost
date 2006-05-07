@@ -71,7 +71,7 @@ inline typename disable_if
   , proto::binary_op
     <
         proto::unary_op<basic_regex<BidiIter> const &, proto::noop_tag>
-      , typename proto::as_op<Right>::type
+      , typename proto::as_op<Right>::reference
       , proto::right_shift_tag
     >
 >::type
@@ -88,7 +88,7 @@ inline typename disable_if
     proto::is_op<Left>
   , proto::binary_op
     <
-        typename proto::as_op<Left>::type
+        typename proto::as_op<Left>::reference
       , proto::unary_op<basic_regex<BidiIter> const &, proto::noop_tag>
       , proto::right_shift_tag
     >
@@ -121,7 +121,7 @@ inline typename disable_if
   , proto::binary_op
     <
         proto::unary_op<basic_regex<BidiIter> const &, proto::noop_tag>
-      , typename proto::as_op<Right>::type
+      , typename proto::as_op<Right>::reference
       , proto::bitor_tag
     >
 >::type
@@ -138,7 +138,7 @@ inline typename disable_if
     proto::is_op<Left>
   , proto::binary_op
     <
-        typename proto::as_op<Left>::type
+        typename proto::as_op<Left>::reference
       , proto::unary_op<basic_regex<BidiIter> const &, proto::noop_tag>
       , proto::bitor_tag
     >

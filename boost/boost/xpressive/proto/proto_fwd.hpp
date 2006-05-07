@@ -134,8 +134,7 @@ namespace boost { namespace proto
     make_op(Left const &left, Right const &right);
 
     template<typename Arg>
-    //unary_op<Arg, noop_tag> const
-    typename as_op<Arg>::type
+    typename as_op<Arg>::reference
     noop(Arg const &arg);
 
     template<typename Node>

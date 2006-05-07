@@ -25,7 +25,7 @@ namespace boost { namespace proto
     struct unary_op_generator
     {
         typedef unary_op<
-            typename as_op<Arg>::type
+            typename as_op<Arg>::reference
           , Tag
         > type;
     };
@@ -36,8 +36,8 @@ namespace boost { namespace proto
     struct binary_op_generator
     {
         typedef binary_op<
-            typename as_op<Left>::type
-          , typename as_op<Right>::type
+            typename as_op<Left>::reference
+          , typename as_op<Right>::reference
           , Tag
         > type;
     };
@@ -45,7 +45,7 @@ namespace boost { namespace proto
     ///////////////////////////////////////////////////////////////////////////////
     // unary operators
     template<typename Arg>
-    typename as_op<Arg>::type
+    typename as_op<Arg>::reference
     noop(Arg const &arg)
     {
         BOOST_MPL_ASSERT_NOT((is_op<Arg>));

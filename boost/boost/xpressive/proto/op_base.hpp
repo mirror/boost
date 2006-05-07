@@ -80,9 +80,10 @@ namespace boost { namespace proto
     template<typename Node>
     struct as_op<Node, true>
     {
-        typedef typename Node::reference type;
+        typedef typename Node::type type;
+        typedef typename Node::reference reference;
 
-        static type make(Node const &node)
+        static reference make(Node const &node)
         {
             return node.cast();
         }
@@ -91,9 +92,10 @@ namespace boost { namespace proto
     template<typename T>
     struct as_op<T, false>
     {
-        typedef unary_op<typename call_traits<T>::param_type, noop_tag> const type;
+        typedef unary_op<typename call_traits<T>::param_type, noop_tag> type;
+        typedef type const reference;
 
-        static type make(T const &t)
+        static reference make(T const &t)
         {
             return type(t);
         }
@@ -102,17 +104,17 @@ namespace boost { namespace proto
 // These operators must be members.
 #define BOOST_PROTO_DEFINE_MEMBER_OPS()                                                         \
     template<typename Arg>                                                                      \
-    binary_op<reference, typename as_op<Arg>::type, assign_tag> const                           \
+    binary_op<reference, typename as_op<Arg>::reference, assign_tag> const                      \
     operator =(Arg const &arg) const                                                            \
     {                                                                                           \
-        return binary_op<reference, typename as_op<Arg>::type, assign_tag>(                     \
+        return binary_op<reference, typename as_op<Arg>::reference, assign_tag>(                \
             this->cast(), as_op<Arg>::make(arg));                                               \
     }                                                                                           \
     template<typename Arg>                                                                      \
-    binary_op<reference, typename as_op<Arg>::type, subscript_tag> const                        \
+    binary_op<reference, typename as_op<Arg>::reference, subscript_tag> const                   \
     operator [](Arg const &arg) const                                                           \
     {                                                                                           \
-        return binary_op<reference, typename as_op<Arg>::type, subscript_tag>(                  \
+        return binary_op<reference, typename as_op<Arg>::reference, subscript_tag>(             \
             this->cast(), as_op<Arg>::make(arg));                                               \
     }                                                                                           \
     nary_op<reference> operator ()() const                                                      \
@@ -128,12 +130,12 @@ namespace boost { namespace proto
     template<BOOST_PP_ENUM_PARAMS_Z(z, n, typename A)>                                          \
     nary_op<reference                                                                           \
         BOOST_PP_ENUM_TRAILING_BINARY_PARAMS_Z(                                                 \
-            z, n, typename as_op<A, >::type BOOST_PP_INTERCEPT)>                                \
+            z, n, typename as_op<A, >::reference BOOST_PP_INTERCEPT)>                           \
     operator ()(BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, A, const &a)) const                         \
     {                                                                                           \
         return nary_op<reference                                                                \
             BOOST_PP_ENUM_TRAILING_BINARY_PARAMS_Z(                                             \
-                z, n, typename as_op<A, >::type BOOST_PP_INTERCEPT)>                            \
+                z, n, typename as_op<A, >::reference BOOST_PP_INTERCEPT)>                       \
             (this->cast() BOOST_PP_REPEAT_ ## z(n, BOOST_PROTO_AS_OP_FUN, _));                  \
     }
 
@@ -197,6 +199,7 @@ namespace boost { namespace proto
     struct binary_segmented_view
       : fusion::sequence_base<binary_segmented_view<Node> >
     {
+        typedef Node node_type;
         typedef binary_segmented_view_tag tag;
         typedef binary_segmented_view_tag ftag;
 
@@ -204,9 +207,19 @@ namespace boost { namespace proto
           : val(node)
         {}
 
-        typedef typename remove_reference<Node>::type node_type;
+        Node node() const
+        {
+            return this->val;
+        }
+
         Node val;
     };
+
+    template<typename Node>
+    binary_segmented_view<Node const &> make_segmented_view(Node const &node)
+    {
+        return binary_segmented_view<Node const &>(node);
+    }
 
     ///////////////////////////////////////////////////////////////////////////////
     // binary_op
