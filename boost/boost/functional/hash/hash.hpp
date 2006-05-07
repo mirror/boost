@@ -41,7 +41,11 @@ namespace boost
     std::size_t hash_value(long);
     std::size_t hash_value(unsigned long);
 
+#if !BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x847))
     template <class T> std::size_t hash_value(T* const&);
+#else
+    template <class T> std::size_t hash_value(T*);
+#endif
 
 #if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
     template< class T, unsigned N >
@@ -105,7 +109,11 @@ namespace boost
     }
 
     // Implementation by Alberto Barbati and Dave Harris.
+#if !BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x847))
     template <class T> std::size_t hash_value(T* const& v)
+#else
+    template <class T> std::size_t hash_value(T* v)
+#endif
     {
         std::size_t x = static_cast<std::size_t>(
            reinterpret_cast<std::ptrdiff_t>(v));
@@ -459,6 +467,17 @@ namespace boost
         }
 #endif
     };
+
+#if BOOST_WORKAROUND(__DMC__, BOOST_TESTED_AT(0x847))
+    template <class T, unsigned int n> struct hash<T[n]>
+        : std::unary_function<T[n], std::size_t>
+    {
+        std::size_t operator()(const T* val) const
+        {
+            return boost::hash_range(val, val+n);
+        }
+    };
+#endif
 
 #elif !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 
