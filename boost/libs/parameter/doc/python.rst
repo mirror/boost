@@ -44,29 +44,48 @@ be used to easily expose Boost.Parameter-enabled member functions to Python with
 Boost.Python. It also provides a function template ``def()`` that can be used
 to expose Boost.Parameter-enabled free functions.
 
-.. Need a link from "def_visitors" to the place in Python docs
-.. where that's defined.
-
+.. _def_visitor: def_visitors_
 .. _def_visitors: ../../../python/doc/v2/def_visitor.html
 
-To bind a Boost.Parameter enabled function the keyword tags must be specified.
-Additionally, because Boost.Parameter enabled functions are templates, the
-desired function signature must be specified.
+When binding a Boost.Parameter enabled function, the keyword tags
+must be specified.  Additionally, because Boost.Parameter enabled
+functions are templates, the desired function signature must be
+specified.
 
-The keyword tags are specified using the syntax described in |KeywordsSpec| below,
-and the signature as an MPL sequence of parameter types. Additional data may be
-needed in the signature sequence by specific binding utilities. For example,
-``function`` requires the return type to be part of the signature sequence.
+.. Always diff my edited version with the original to see what I
+.. changed, and think about why I changed it.  Ask if you don't
+.. understand.  "Boost.Parameter-enabled" needs that hyphen
+.. everywhere.  I'm leaving that change to you.
 
+.. Why must keyword tags be specified again?  Ah, because we didn't
+.. record their association with the wrapped function in the first
+.. place.  I think that should be possible, no?
+
+The keyword tags are specified as an `MPL Sequence`_, using the
+pointer qualifications described in |KeywordsSpec|_ below.  The
+signature is also specifid as an `MPL sequence`_ of parameter
+types. Additional data may be needed in the signature sequence by
+specific binding utilities. For example, ``function`` requires the
+return type to be part of the signature sequence.
+
+.. The last two sentences are terribly vague.  Which namespace is
+.. ``function`` in?  Isn't the return type always needed?  What
+.. else are we going to do other than pass these sequences to
+.. function?
+
+.. _`MPL Sequence`: ../../../mpl/doc/refmanual/sequences.html
 
 Tutorial
 --------
 
-In this section we will outline the steps needed to bind a simple Boost.Parameter
-enabled member function to Python. Knowledge of the Boost.Parameter macros are
-required to understand this section.
+In this section we will outline the steps needed to bind a simple
+Boost.Parameter enabled member function to Python. Knowledge of the
+Boost.Parameter macros are required to understand this section.
 
-The class and member function we are interested in binding looks like this::
+.. Link to the docs for Boost.Parameter macros
+
+The class and member function we are interested in binding looks
+like this::
 
   // First the keywords
   BOOST_PARAMETER_KEYWORD(tag, title)
@@ -75,18 +94,22 @@ The class and member function we are interested in binding looks like this::
 
   class window
   {
-  public:
-      BOOST_PARAMETER_MEMBER_FUNCTION((void), open, tag,
+   public:
+      BOOST_PARAMETER_MEMBER_FUNCTION(
+        (void), open, tag,
         (required (title, (std::string)))
         (optional (width, (unsigned), 400)
                   (height, (unsigned), 400))
       );
   };
 
-It defines a member function ``open()`` with one required parameter and two
-optional ones. To bind this member function to Python we use the binding
-utility ``function``. ``function`` is a ``def_visitor`` which we'll instantiate and
-pass to ``boost::python::class_::def()``.
+.. Don't use endline layout.
+
+It defines a set of overloaded member functions called ``open``
+with one required parameter and two optional ones. To bind this
+member function to Python we use the binding utility
+``function``. ``function`` is a def_visitor_ that we'll
+instantiate and pass to ``boost::python::class_::def()``.
 
 ::
 
@@ -96,32 +119,65 @@ pass to ``boost::python::class_::def()``.
       namespace py = boost::parameter::python;
 
       class_<window>("window")
-        .def("open", 
-          py::function<
-              mpl::vector3<tag::title, tag::width*, tag::height*>
-            , mpl::vector4<void, std::string, unsigned, unsigned>
-          >()
-        );
+          .def(
+              "open", py::function<
+                  mpl::vector<tag::title, tag::width*, tag::height*>,
+                  mpl::vector<void, std::string, unsigned, unsigned>
+              >()
+          );
   }
 
+.. you missed passing the first argument, open_fwd, I think?
+
+.. be consistent in indentation and comma placement.  Pick either
+.. leading or trailing commas.
+
+.. Sorry to say this at such a late date, but this syntax really
+.. strikes me as cumbersome.  Couldn't we do something like:
+
+      class_<window>("window")
+          .def(
+              "open", 
+              (void (*)( 
+                  tag::title(std::string), 
+                  tag::width*(unsigned), 
+                  tag::height*(unsigned)) 
+              )0
+          );
+
+   or at least:
+
+      class_<window>("window")
+          .def(
+              "open", 
+              mpl::vector<
+                  void, 
+                  tag::title(std::string), 
+                  tag::width*(unsigned), 
+                  tag::height*(unsigned)
+              >()
+          );
+
+   assuming, that is, that we will have to repeat the tags (yes,
+   users of broken compilers will have to give us function pointer
+   types instead).
 
 concept |KeywordsSpec|
 ----------------------
 
-A |KeywordsSpec| is an MPL sequence where each element is either:
+A |KeywordsSpec| is an `MPL sequence`_ where each element is either:
 
 * A *required* keyword of the form ``K``
 * **or**, an *optional* keyword of the form ``K*``
 * **or**, a *special* keyword of the form ``K**``
 
-where ``K`` is a `keyword tag type`_.
+where ``K`` is a specialization of ``boost::parameter::keyword``__.
+ 
 
-.. _keyword tag type: reference.html#terminology
+.. __ ../../../parameter/doc/html/reference.html#keyword
 
-.. here you have to say, "where K is..."
-.. #
-
-The **arity range** of a |KeywordsSpec| is defined as:
+The **arity range** of a |KeywordsSpec| is defined as the closed
+range:
 
 .. parsed-literal::
 
@@ -130,14 +186,7 @@ The **arity range** of a |KeywordsSpec| is defined as:
 For example, the **arity range** of ``mpl::vector2<x,y>`` is [2,2], the **arity range** of
 ``mpl::vector2<x,y*>`` is [2,2] and the **arity range** of ``mpl::vector2<x,y**>`` is [1,2].
 
-.. It makes no sense to say that the "range" of something is x,
-.. where x is just a number.  A range goes from x to y.  I don't
-.. know what this is supposed to mean.  I also don't know what the
-.. comma in the definition means, or why I don't see it in the
-.. results above.  I'd have guessed that the arity range of
-.. vector2<x,y**> was [1,2] ... which makes some sense.
-
-.. #
+.. Don't optional keywords affect the arity range?
 
 
 *special* keyword tags
@@ -165,10 +214,15 @@ docs. The example uses a different technique, but could also have been written l
   template <class ArgumentPack>
   void depth_first_search(ArgumentPack& args)
   {
-      core::dfs_dispatch(args, args[color | mpl::false_());
+      core::dfs_dispatch(args, args[color | mpl::false_()]);
   }
 
 .. _example: index.html#dispatching-based-on-the-presence-of-a-default
+
+.. there have been several mistakes in these code examples.  I
+.. built a literate programming system for ReST, which we used for
+.. the MPL book.  If you'd like I'll check it in and you can use it
+.. to check these.
 
 In the above example the type of the default for ``color`` is ``mpl::false_``, a
 type that is distinct from any color map that the user might supply.
@@ -177,84 +231,14 @@ When binding the case outlined above, the default type for ``color`` will not
 be convertible to the parameter type. Therefore we need to tag the ``color``
 keyword as a *special* keyword. By doing this we tell the binding functions
 that it needs to generate two overloads, one with the ``color`` parameter
-present and one without. If we would have had two *special* keywords, four
+present and one without. Had there been two *special* keywords, four
 overloads would need to be generated. The number of generated overloads is
 equal to ``2^N``, where ``N`` is the number of *special* keywords.
 
 .. The entire section below was rewritten.
-..  If the default type for an argument is not convertible to the argument type, as
-    specified to the binding functions below, that argument must be specified as a
-    *special* argument.
 
-    .. This whole thing comes out of order.  You need to explain that
-    .. to bind pararameter-endabled functions to python you need to
-    .. specify an parameter type (not an argument type), and that an
-    .. optional argument has to have a default value _and_ type.
-    .. I think.  If that's not the right explanation, you need to say
-    .. something that sets up similar context.
-
-    In the example below the default type for argument ``y`` is ``char const[5]``, but
-    the argument type is ``int``. Therefore ``y`` must be specified as a *special*
-    argument in the |KeywordsSpec|.
-
-    .. The example below doesn't make any sense to me.  Where does char
-    .. const[5] come from?   Why would I choose a different argument
-    .. type from a default type.  What is the effect on the resulting
-    .. Python interface?
-
-    Doing this will generate ``2^N`` overloads, where ``N`` is the number of *special* parameters.
-    In this case two overloads will be generated, one with ``y`` included and one without.
-    Having many *special* keywords will result in lots of overloads, and stress the
-    compiler.
-
-    .. using "this" without an antecedent above.  What are we "doing?"
-    .. Don't you mean 2^N?
-
-    Note that this makes the *arity range* ``[1,2]``, so we'll need two forwarding overloads.
-
-    .. parsed-literal::
-
-        BOOST_PARAMETER_FUNCTION((void), f, tag,
-            (required (x, \*))
-            (optional (y, \*))
-        )
-        {
-            std::cout << args[x] << args[y | "none"] << "\n";
-        }
-
-        struct f_fwd
-        {
-            template <class A0, class A1>
-            void operator()(boost::type<void>, A0 const& a0)
-            {
-                f(a0);
-            }
-
-            template <class A0, class A1>
-            void operator()(boost::type<void>, A0 const& a0, A1 const& a1)
-            {
-                f(a0, a1);
-            }
-        };
-
-        BOOST_PYTHON_MODULE(..)
-        {
-            class_<X>("X")
-                .def("f",
-                    function<
-                        fwd
-                      , mpl::vector2<tag::x, **tag::y\*\***>
-                      , mpl::vector3<void, int, int>
-                    >()
-                );
-        }
-            
-
-    .. You don't explain what those boost::type<void> things are all
-    .. about.
-    .. Weren't we going to generate the f_fwd struct ourselves?
-    .. I don't think this code has been tested.  I see the identifier
-    .. "fwd" above, which surely must be wrong.
+.. No need to leave commented out detritus in the document.  That's
+.. what source control is for.
 
 ------------------------------------------------------------------------------
 
@@ -276,9 +260,11 @@ Defines a named parameter enabled constructor.
 ~~~~~~~~~~~~~~~~~~~~~
 
 * ``Keywords`` is a model of |KeywordsSpec|. 
-* ``Signature`` is an MPL sequence with the types of the keyword , 
+* ``Signature`` is an MPL sequence of parameter types, 
   in the order dictated by ``Keywords``.
-* ``Class`` must support these expressions:
+* For every ``N`` in ``[U,V]``, where ``[U,V]`` is the **arity
+  range** of ``Keywords``, ``Class`` must support these
+  expressions: 
 
   ======================================================= ==================== ==============================================
   Expression                                              Return type          Requirements
@@ -286,7 +272,11 @@ Defines a named parameter enabled constructor.
   ``Class(a0, ..., aN)``                                  \-                   ``a0``..\ ``aN`` are tagged arguments.
   ======================================================= ==================== ==============================================
 
-  For every ``N`` in ``[U,V]``, where ``[U,V]`` is the **arity range** of ``Keywords``.
+.. Limit the width of these table cells.  Some rst backend
+.. processors actually produce different results depending on the
+.. distribution of width.
+
+  
 
 Example
 ~~~~~~~
@@ -467,6 +457,9 @@ of [2,2], so we only need one forwarding overload.
             );
     }
 
+.. This example is not consistent with your definition of arity
+.. range, above.  There are no special keywords in play here.
+
 ------------------------------------------------------------------------------
 
 function template ``def``
@@ -483,8 +476,9 @@ Defines a named parameter enabled free function in the current Python scope.
 ~~~~~~~~~~~~~~~~~~~~
 
 * ``Keywords`` is a model of |KeywordsSpec|. 
-* ``Signature`` is an MPL sequence with the types of the keyword parameters, 
-  in the order dictated by ``Keywords``, and the return type prepended.
+* ``Signature`` is an MPL sequence of parameters types, 
+  in the order dictated by ``Keywords``, with the return type
+  prepended. 
 * An instance of ``Fwd`` must support this expression:
 
   ======================================================= ==================== ==============================================
@@ -499,7 +493,7 @@ Defines a named parameter enabled free function in the current Python scope.
 Example
 ~~~~~~~
 
-This example exports a function ``f(int x, int y = ..)`` to Python.
+This example exports a function ``f(int x, int y = ...)`` to Python.
 The |KeywordsSpec| ``mpl::vector2<tag::x, tag::y*>`` has an **arity range**
 of [2,2], so we only need one forwarding overload.
 
@@ -531,8 +525,12 @@ of [2,2], so we only need one forwarding overload.
         >("f");
     }
 
+.. again, the undefined ``fwd`` identifier.
+
 Portability
 -----------
 
 The Boost.Parameter Python binding library requires *partial template specialization*.
 
+.. Oh.  In that case, we don't have to worry so much about
+.. compilers that can't parse function types.
