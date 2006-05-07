@@ -59,6 +59,52 @@ needed in the signature sequence by specific binding utilities. For example,
 ``function`` requires the return type to be part of the signature sequence.
 
 
+Tutorial
+--------
+
+In this section we will outline the steps needed to bind a simple Boost.Parameter
+enabled member function to Python. Knowledge of the Boost.Parameter macros are
+required to understand this section.
+
+The class and member function we are interested in binding looks like this::
+
+  // First the keywords
+  BOOST_PARAMETER_KEYWORD(tag, title)
+  BOOST_PARAMETER_KEYWORD(tag, width)
+  BOOST_PARAMETER_KEYWORD(tag, height)
+
+  class window
+  {
+  public:
+      BOOST_PARAMETER_MEMBER_FUNCTION((void), open, tag,
+        (required (title, (std::string)))
+        (optional (width, (unsigned), 400)
+                  (height, (unsigned), 400))
+      );
+  };
+
+It defines a member function ``open()`` with one required parameter and two
+optional ones. To bind this member function to Python we use the binding
+utility ``function``. ``function`` is a ``def_visitor`` which we'll instantiate and
+pass to ``boost::python::class_::def()``.
+
+::
+
+  BOOST_PYTHON_MODULE(my_module)
+  {
+      using namespace boost::python;
+      namespace py = boost::parameter::python;
+
+      class_<window>("window")
+        .def("open", 
+          py::function<
+              mpl::vector3<tag::title, tag::width*, tag::height*>
+            , mpl::vector4<void, std::string, unsigned, unsigned>
+          >()
+        );
+  }
+
+
 concept |KeywordsSpec|
 ----------------------
 
@@ -135,6 +181,7 @@ present and one without. If we would have had two *special* keywords, four
 overloads would need to be generated. The number of generated overloads is
 equal to ``2^N``, where ``N`` is the number of *special* keywords.
 
+.. The entire section below was rewritten.
 ..  If the default type for an argument is not convertible to the argument type, as
     specified to the binding functions below, that argument must be specified as a
     *special* argument.
