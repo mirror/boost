@@ -67,7 +67,7 @@ namespace boost_concepts
       typename Iterator
     , typename ValueType = BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::value_type
   >
-  WritableIterator
+  struct WritableIterator
     : boost::CopyConstructible<Iterator>
   {
       ~WritableIterator()
