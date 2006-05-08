@@ -27,11 +27,12 @@ struct check
   
 namespace detail
 {
-  // No need for a virtual function here, since evaluatiing
+  // No need for a virtual function here, since evaluating
   // not_satisfied below will have already instantiated the
   // constraints() member.
   struct constraint {};
 }
+
 template <class Model>
 struct require
   : mpl::if_c<
@@ -54,19 +55,22 @@ struct require
 
 //
 // The iterator library sees some really strange errors unless we
-// use partial specialization to extract the model type with
-// msvc-7.1
-// 
+// do things this way.
+//
 template <class Model>
 struct require<void(*)(Model)>
-  : require<Model>
-{};
+{
+    virtual void failed(Model*)
+    {
+        require<Model>();
+    }
+};
 
 # define BOOST_CONCEPT_ASSERT_FN( ModelFnPtr )      \
 enum                                                \
 {                                                   \
     BOOST_PP_CAT(boost_concept_check,__LINE__) =    \
-    sizeof(::boost::concept::require<ModelFnPtr>)   \
+    sizeof(::boost::concept::require<ModelFnPtr>)    \
 }
   
 # else // Not vc-7.1
