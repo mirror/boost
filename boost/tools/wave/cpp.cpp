@@ -155,7 +155,7 @@ namespace cmd_line_utils
 namespace boost { namespace program_options {
 
     void validate(boost::any &v, std::vector<std::string> const &s,
-        cmd_line_utils::include_paths *, int);
+        cmd_line_utils::include_paths *, long);
 
 }} // boost::program_options
 
@@ -166,7 +166,7 @@ namespace po = boost::program_options;
 namespace fs = boost::filesystem;
 
 ///////////////////////////////////////////////////////////////////////////////
-namespace cmd_line_util {
+namespace cmd_line_utils {
 
     // Additional command line parser which interprets '@something' as an 
     // option "config-file" with the value "something".
@@ -274,9 +274,9 @@ namespace cmd_line_util {
 namespace boost { namespace program_options {
 
     void validate(boost::any &v, std::vector<std::string> const &s,
-        cmd_line_util::include_paths *, int) 
+        cmd_line_utils::include_paths *, long) 
     {
-        cmd_line_util::include_paths::validate(v, s);
+        cmd_line_utils::include_paths::validate(v, s);
     }
 
 }}  // namespace boost::program_options
@@ -683,8 +683,8 @@ int error_count = 0;
         
     // add include directories to the include search paths
         if (vm.count("include")) {
-            cmd_line_util::include_paths const &ip = 
-                vm["include"].as<cmd_line_util::include_paths>();
+            cmd_line_utils::include_paths const &ip = 
+                vm["include"].as<cmd_line_utils::include_paths>();
             vector<string>::const_iterator end = ip.paths.end();
 
             for (vector<string>::const_iterator cit = ip.paths.begin(); 
@@ -953,7 +953,7 @@ main (int argc, char *argv[])
                 "disable output [-]")
             ("autooutput,E", 
                 "output goes into a file named <input_basename>.i")
-            ("include,I", po::value<cmd_line_util::include_paths>()->composing(), 
+            ("include,I", po::value<cmd_line_utils::include_paths>()->composing(), 
                 "specify an additional include directory")
             ("sysinclude,S", po::value<vector<string> >()->composing(), 
                 "specify an additional system include directory")
@@ -1014,7 +1014,7 @@ main (int argc, char *argv[])
         using namespace boost::program_options::command_line_style;
 
     po::parsed_options opts(po::parse_command_line(argc, argv, 
-            desc_overall_cmdline, unix_style, cmd_line_util::at_option_parser));
+            desc_overall_cmdline, unix_style, cmd_line_utils::at_option_parser));
     po::variables_map vm;
     
         po::store(opts, vm);
@@ -1025,7 +1025,7 @@ main (int argc, char *argv[])
     fs::path filename(argv[0], fs::native);
 
         filename = filename.branch_path() / "wave.cfg";
-        cmd_line_util::read_config_file_options(filename.string(), 
+        cmd_line_utils::read_config_file_options(filename.string(), 
             desc_overall_cfgfile, vm, true);
 
     // if there is specified at least one config file, parse it and add the 
@@ -1038,7 +1038,7 @@ main (int argc, char *argv[])
                  cit != end; ++cit)
             {
             // parse a single config file and store the results
-                cmd_line_util::read_config_file_options(*cit, 
+                cmd_line_utils::read_config_file_options(*cit, 
                     desc_overall_cfgfile, vm);
             }
         }
@@ -1066,7 +1066,7 @@ main (int argc, char *argv[])
     vector<po::option> arguments;
     
         std::remove_copy_if(opts.options.begin(), opts.options.end(), 
-            back_inserter(arguments), cmd_line_util::is_argument());
+            back_inserter(arguments), cmd_line_utils::is_argument());
             
     // if there is no input file given, then take input from stdin
         if (0 == arguments.size() || 0 == arguments[0].value.size() ||

@@ -60,7 +60,7 @@
         <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#may_skip_whitespace">may_skip_whitespace</a> (ContextT <span class="keyword">const</span>&amp; ctx,
             TokenT &amp;token, <span class="keyword">bool</span> &amp;skipped_newline);<br>
         </span><span class="comment">// Conditional compilation</span><span class="keyword">
-        template</span> &lt;<span class="keyword">typename</span> ContainerT&gt;<br>        <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#evaluated_conditional_expression">evaluated_conditional_expression</a>(ContainerT <span class="keyword">const</span>&amp; expression, <br>            <span class="keyword">bool</span> expression_value);<br>
+        template</span> &lt;<span class="keyword">typename</span> ContainerT&gt;<br>        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#evaluated_conditional_expression">evaluated_conditional_expression</a>(ContainerT <span class="keyword">const</span>&amp; expression, <br>            <span class="keyword">bool</span> expression_value);<br>
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TokenT&gt;
         <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#skipped_token">skipped_token</a>(TokenT <span class="keyword">const</span></span>&amp; token);<br>
         <span class="comment">// macro expansion tracing</span><span class="keyword">
@@ -127,21 +127,25 @@
 </pre>
 <blockquote>
   <p>The function <tt>may_skipwhitespace</tt> will be called by the library, whenever a token is about to be returned to the calling application. </p>
-  <p>The <tt>ctx</tt> parameter provides a reference to the <tt>context_type</tt> used during instantiation of the preprocessing iterators by the user. Note, this parameter was added after the Boost V1.34.0 release. </p>
+  <p>The <tt>ctx</tt> parameter provides a reference to the <tt>context_type</tt> used during instantiation of the preprocessing iterators by the user. Note, this parameter was added for the Wave V1.2.4 release. </p>
   <p>The <tt>token</tt> parameter holds a reference to the current token. The policy is free to change this token if needed.</p>
   <p>The <tt>skipped_newline</tt> parameter holds a reference to a boolean value which should be set to true by the policy function whenever a newline is going to be skipped. </p>
   <p>If the return value is <tt>true</tt>, the given token is skipped and the preprocessing continues to the next token. If the return value is <tt>false</tt>, the given token is returned to the calling application. Caution has to be used, because by returning <span class="keyword">true</span> the policy function is able to force skipping even significant tokens not only whitespace. </p>
 </blockquote>
 <h3>Conditional compilation hook functions </h3>
 <p><a name="evaluated_conditional_expression"></a><strong>evaluated_conditional_expression</strong></p>
-<pre><span class="keyword">    template</span> &lt;<span class="keyword">typename</span> ContainerT&gt;<br><span class="keyword">    void</span> evaluated_conditional_expression(ContainerT <span class="keyword">const</span>&amp; expression, <br><span class="keyword">        bool</span> expression_value);
+<pre><span class="keyword">    template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;<br><span class="keyword">    bool</span> evaluated_conditional_expression(ContextT <span class="keyword">const</span>&amp; ctx, 
+        ContainerT <span class="keyword">const</span>&amp; expression, <span class="keyword">bool</span> expression_value);
 </pre>
 <blockquote>
   <p>The function <tt>evaluated_conditional_expression</tt> is called, whenever the preprocessor has encountered a <span class="preprocessor">#if</span>, <span class="preprocessor">#elif</span>, <span class="preprocessor">#ifdef</span> or <span class="preprocessor">#ifndef</span> directive. This hook gets passed the non-expanded conditional expression (as it was given in the analysed source file) and the result of the evaluation of this expression in the current preprocessing context.</p>
+  <p>The <tt>ctx</tt> parameter provides a reference to the <tt>context_type</tt> used during instantiation of the preprocessing iterators by the user. Note, this parameter was added for the Wave V1.2.5 release. </p>
   <p>The parameter <tt>expression</tt> holds the non-expanded token sequence 
-  comprising the evaluated expression.</p>
+    comprising the evaluated expression.</p>
   <p>The parameter <tt>expression_value</tt> contains the result of the evaluation of 
     the expression in the current preprocessing context. </p>
+  <p>The return value defines, whether the given expression has to be evaluated again, allowing to decide which of the conditional branches should be expanded. You need to return '<span class="keyword">true</span>' from this hook function to force the expression to be re-evaluated. Note, this was changed from a '<span class="keyword">void</span>' for the Wave V1.2.5 release. <br>
+  </p>
 </blockquote>
 <p><a name="skipped_token"></a><strong>skipped_token</strong></p>
 <pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> TokenT&gt;
@@ -332,7 +336,7 @@
   <br>
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Sunday, February 26, 2006  14:19<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Friday, May 12, 2006  8:47<!-- #EndDate -->
 </span></p>
 </body>
 </html>

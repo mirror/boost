@@ -283,6 +283,7 @@ protected:
     bool can_ignore_pp_directive(IteratorT &it);
     bool dispatch_directive(tree_parse_info_type const &hit,
         result_type const& found_directive);
+    void replace_undefined_identifiers(token_sequence_type &expanded);
 
     void on_include(string_type const &s, bool is_system, bool include_next);
     void on_include(typename parse_tree_type::const_iterator const &begin,
@@ -1421,9 +1422,11 @@ token_sequence_type toexpand;
         make_ref_transform_iterator((*begin).children.end(), get_value),
         std::inserter(toexpand, toexpand.end()));
 
-bool is_defined = ctx.is_defined_macro(toexpand.begin(), toexpand.end());
+bool is_defined = false;
 
-    ctx.get_hooks().evaluated_conditional_expression(toexpand, is_defined);
+    do {
+        is_defined = ctx.is_defined_macro(toexpand.begin(), toexpand.end());
+    } while (ctx.get_hooks().evaluated_conditional_expression(ctx, toexpand, is_defined));
     ctx.enter_if_block(is_defined);
 }
 
@@ -1445,9 +1448,11 @@ token_sequence_type toexpand;
         make_ref_transform_iterator((*begin).children.end(), get_value),
         std::inserter(toexpand, toexpand.end()));
 
-bool is_defined = ctx.is_defined_macro(toexpand.begin(), toexpand.end());
+bool is_defined = false;
 
-    ctx.get_hooks().evaluated_conditional_expression(toexpand, is_defined);
+    do {
+        is_defined = ctx.is_defined_macro(toexpand.begin(), toexpand.end());
+    } while (ctx.get_hooks().evaluated_conditional_expression(ctx, toexpand, is_defined));
     ctx.enter_if_block(!is_defined);
 }
 
@@ -1484,29 +1489,12 @@ pp_iterator_functor<ContextT>::on_endif()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-//  
-//  on_if(): handle #if directives
-//
-///////////////////////////////////////////////////////////////////////////////
+//  replace all remaining (== undefined) identifiers with an integer literal '0'
 template <typename ContextT> 
 inline void  
-pp_iterator_functor<ContextT>::on_if(
-    typename parse_tree_type::const_iterator const &begin,
-    typename parse_tree_type::const_iterator const &end)
+pp_iterator_functor<ContextT>::replace_undefined_identifiers(
+    token_sequence_type &expanded)
 {
-// preprocess the given sequence into the provided list
-get_token_value<result_type, parse_node_type> get_value;
-token_sequence_type expanded;
-token_sequence_type toexpand;
-
-    std::copy(make_ref_transform_iterator(begin, get_value), 
-        make_ref_transform_iterator(end, get_value),
-        std::inserter(toexpand, toexpand.end()));
-
-    typename token_sequence_type::iterator begin2 = toexpand.begin();
-    ctx.expand_whole_tokensequence(begin2, toexpand.end(), expanded);
-
-// replace all remaining (== undefined) identifiers with an integer literal '0'
     typename token_sequence_type::iterator exp_end = expanded.end();
     for (typename token_sequence_type::iterator exp_it = expanded.begin();
          exp_it != exp_end; ++exp_it)
@@ -1521,22 +1509,53 @@ token_sequence_type toexpand;
             (*exp_it).set_value("0");
         }
     }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//  
+//  on_if(): handle #if directives
+//
+///////////////////////////////////////////////////////////////////////////////
+template <typename ContextT> 
+inline void  
+pp_iterator_functor<ContextT>::on_if(
+    typename parse_tree_type::const_iterator const &begin,
+    typename parse_tree_type::const_iterator const &end)
+{
+// preprocess the given sequence into the provided list
+get_token_value<result_type, parse_node_type> get_value;
+token_sequence_type toexpand;
+
+    std::copy(make_ref_transform_iterator(begin, get_value), 
+        make_ref_transform_iterator(end, get_value),
+        std::inserter(toexpand, toexpand.end()));
+
+bool if_status = false;
+
+    do {
+    token_sequence_type expanded;
+
+        typename token_sequence_type::iterator begin2 = toexpand.begin();
+        ctx.expand_whole_tokensequence(begin2, toexpand.end(), expanded);
+
+    // replace all remaining (== undefined) identifiers with an integer literal '0'
+        replace_undefined_identifiers(expanded);
     
 #if BOOST_WAVE_DUMP_CONDITIONAL_EXPRESSIONS != 0
-    {
-        string_type outstr(boost::wave::util::impl::as_string(toexpand));
-        outstr += "(" + boost::wave::util::impl::as_string(expanded) + ")";
-        BOOST_WAVE_DUMP_CONDITIONAL_EXPRESSIONS_OUT << "#if " << outstr 
-            << std::endl;
-    }
+        {
+            string_type outstr(boost::wave::util::impl::as_string(toexpand));
+            outstr += "(" + boost::wave::util::impl::as_string(expanded) + ")";
+            BOOST_WAVE_DUMP_CONDITIONAL_EXPRESSIONS_OUT << "#if " << outstr 
+                << std::endl;
+        }
 #endif
 
-// parse the expression and enter the #if block
-bool if_status = grammars::expression_grammar_gen<result_type>::
-            evaluate(expanded.begin(), expanded.end(), act_pos,
-                ctx.get_if_block_status());
+    // parse the expression and enter the #if block
+        if_status = grammars::expression_grammar_gen<result_type>::
+                evaluate(expanded.begin(), expanded.end(), act_pos,
+                    ctx.get_if_block_status());
                 
-    ctx.get_hooks().evaluated_conditional_expression(toexpand, if_status);
+    } while (ctx.get_hooks().evaluated_conditional_expression(ctx, toexpand, if_status));
     ctx.enter_if_block(if_status);
 }
 
@@ -1562,46 +1581,38 @@ pp_iterator_functor<ContextT>::on_elif(
             
 // preprocess the given sequence into the provided list
 get_token_value<result_type, parse_node_type> get_value;
-token_sequence_type expanded;
 token_sequence_type toexpand;
 
     std::copy(make_ref_transform_iterator(begin, get_value), 
         make_ref_transform_iterator(end, get_value),
         std::inserter(toexpand, toexpand.end()));
 
-    typename token_sequence_type::iterator begin2 = toexpand.begin();
-    ctx.expand_whole_tokensequence(begin2, toexpand.end(), expanded);
+bool if_status = false;
+
+    do {
+    token_sequence_type expanded;
+
+        typename token_sequence_type::iterator begin2 = toexpand.begin();
+        ctx.expand_whole_tokensequence(begin2, toexpand.end(), expanded);
     
-// replace all remaining (== undefined) identifiers with an integer literal '0'
-    typename token_sequence_type::iterator exp_end = expanded.end();
-    for (typename token_sequence_type::iterator exp_it = expanded.begin();
-         exp_it != exp_end; ++exp_it)
-    {
-        using namespace boost::wave;
-        
-        token_id id = token_id(*exp_it);
-        if (IS_CATEGORY(id, IdentifierTokenType) ||
-            IS_CATEGORY(id, KeywordTokenType))
-        {
-            (*exp_it).set_token_id(T_INTLIT);
-            (*exp_it).set_value("0");
-        }
-    }
+    // replace all remaining (== undefined) identifiers with an integer literal '0'
+        replace_undefined_identifiers(expanded);
 
 #if BOOST_WAVE_DUMP_CONDITIONAL_EXPRESSIONS != 0
-    {
-        string_type outstr(boost::wave::util::impl::as_string(toexpand));
-        outstr += "(" + boost::wave::util::impl::as_string(expanded) + ")";
-        BOOST_WAVE_DUMP_CONDITIONAL_EXPRESSIONS_OUT << "#elif " << outstr << std::endl;
-    }
+        {
+            string_type outstr(boost::wave::util::impl::as_string(toexpand));
+            outstr += "(" + boost::wave::util::impl::as_string(expanded) + ")";
+            BOOST_WAVE_DUMP_CONDITIONAL_EXPRESSIONS_OUT << "#elif " << outstr << std::endl;
+        }
 #endif
 
 // parse the expression and enter the #elif block
-bool if_status = grammars::expression_grammar_gen<result_type>::
+        if_status = grammars::expression_grammar_gen<result_type>::
             evaluate(expanded.begin(), expanded.end(), act_pos,
                 ctx.get_if_block_status());
                 
-    ctx.get_hooks().evaluated_conditional_expression(toexpand, if_status);
+    } while (ctx.get_hooks().evaluated_conditional_expression(ctx, toexpand, if_status));
+    
     if (!ctx.enter_elif_block(if_status)) { 
     // #else without matching #if
         BOOST_WAVE_THROW(preprocess_exception, missing_matching_if, "#elif", 

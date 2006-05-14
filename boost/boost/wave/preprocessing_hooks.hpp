@@ -182,7 +182,7 @@ struct default_preprocessing_hooks {
     ///////////////////////////////////////////////////////////////////////////
     template <typename ContextT, typename ContainerT>
     bool 
-    interpret_pragma(ContextT const &ctx, ContainerT &pending, 
+    interpret_pragma(ContextT const& ctx, ContainerT &pending, 
         typename ContextT::token_type const &option, ContainerT const &values, 
         typename ContextT::token_type const &act_token)
     {
@@ -250,7 +250,10 @@ struct default_preprocessing_hooks {
     //
     //  The function 'evaluated_conditional_expression' is called, whenever a 
     //  conditional preprocessing expression was evaluated (the expression
-    //  given to a #if, #ifdef or #ifndef directive)
+    //  given to a #if, #elif, #ifdef or #ifndef directive)
+    //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
     //
     //  The parameter 'expression' holds the non-expanded token sequence
     //  comprising the evaluated expression.
@@ -258,12 +261,17 @@ struct default_preprocessing_hooks {
     //  The parameter expression_value contains the result of the evaluation of
     //  the expression in the current preprocessing context.
     //
+    //  The return value defines, whether the given expression has to be 
+    //  evaluated again, allowing to decide which of the conditional branches
+    //  should be expanded. You need to return 'true' from this hook function 
+    //  to force the expression to be re-evaluated.
+    //
     ///////////////////////////////////////////////////////////////////////////
-    template <typename ContainerT>
-    void
-    evaluated_conditional_expression(ContainerT const& expression, 
-        bool expression_value)
-    {}
+    template <typename ContextT, typename ContainerT>
+    bool
+    evaluated_conditional_expression(ContextT const &ctx, 
+        ContainerT const& expression, bool expression_value)
+    { return false; }         // ok to continue, do not re-evaluate expression
     
     ///////////////////////////////////////////////////////////////////////////
     //
