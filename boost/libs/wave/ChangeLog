@@ -125,6 +125,7 @@ Boost V1.34.0
   constant to some value different from zero.
 - Fixed a couple of typos in the file cpp.cpp preventing it to compile on 
   gcc 4.1.0 (thanks to Richard Guenther for reporting these).
+- Richard Guenther fixed another buffer overrun problem in the Re2C scanner.
   
 Sat Feb 18 2005
 - Version 1.2.3

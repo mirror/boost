@@ -55,12 +55,15 @@
 #define YYCURSOR  cursor
 #define YYLIMIT   limit
 #define YYMARKER  marker
-#define YYFILL(n) {cursor = uchar_wrapper(fill(s, cursor), cursor.column);}
-#define YYDEBUG(state, c)  std::cerr << "state: " << state << ", current char: " << char(c) << std::endl;
+#define YYFILL(n)                                                             \
+    {                                                                         \
+        cursor = uchar_wrapper(fill(s, cursor), cursor.column);               \
+        limit = uchar_wrapper (s->lim);                                       \
+    }                                                                         \
+    /**/
 
 #include <iostream>
 
-//#define BOOST_WAVE_RET(i)    {s->cur = cursor; return (i);}
 #define BOOST_WAVE_RET(i)                                                     \
     {                                                                         \
         s->line += count_backslash_newlines(s, cursor);                       \
