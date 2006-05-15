@@ -10,8 +10,21 @@
 
 namespace boost { 
 
+// Template for use in handwritten assertions
+template <class Model, class More>
+struct where_ : More
+{
+# if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+    typedef typename More::type type;
+# endif 
+    BOOST_CONCEPT_ASSERT((Model));
+};
+
+// Template for use by macros, where models must be wrapped in parens.
+// This isn't in namespace detail to keep extra cruft out of resulting
+// error messages.
 template <class ModelFn, class More>
-struct where : More
+struct _where_ : More
 {
 # if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
     typedef typename More::type type;
@@ -19,7 +32,7 @@ struct where : More
     BOOST_CONCEPT_ASSERT_FN(ModelFn);
 };
 
-#define BOOST_CONCEPT_WHERE_OPEN(r,data,t) ::boost::where<void(*)t,
+#define BOOST_CONCEPT_WHERE_OPEN(r,data,t) ::boost::_where_<void(*)t,
 #define BOOST_CONCEPT_WHERE_CLOSE(r,data,t) >
 
 #if defined(NDEBUG) || BOOST_WORKAROUND(BOOST_MSVC, < 1300)

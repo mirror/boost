@@ -336,7 +336,6 @@ namespace boost
       Func f;
       First first;
       Second second;
-      Return r;
   };
 
   BOOST_concept(UnaryPredicate,(Func)(Arg))
