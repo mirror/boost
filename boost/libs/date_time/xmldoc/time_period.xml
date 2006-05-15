@@ -13,6 +13,7 @@
   <link linkend="time_period_intro">Introduction</link> --
   <link linkend="time_period_header">Header</link> --
   <link linkend="time_period_constr">Construction</link> --
+  <link linkend="time_period_mutators">Mutators</link> --
   <link linkend="time_period_accessors">Accessors</link> --
   <link linkend="time_period_to_string">Conversion To String</link> --
   <link linkend="time_period_operators">Operators</link>
@@ -84,6 +85,58 @@ time_period tp(t1, t2);</screen>
 	  <row>
 	    <entry><screen>time_period tp1(tp);</screen></entry>
 	  </row>
+	</tbody>
+      </tgroup>
+    </informaltable>
+  </para>
+
+
+  <anchor id="time_period_mutators" />
+  <bridgehead renderas="sect3">Mutators</bridgehead>
+  <para>
+    <informaltable frame="all">
+      <tgroup cols="2">
+	<thead>
+	  <row>
+	    <entry valign="top" morerows="1">Syntax</entry>
+	    <entry>Description</entry>
+	  </row>
+	  <row>
+	    <entry>Example</entry>
+	  </row>
+	</thead>
+	<tbody>
+          <row>
+	    <entry valign="top" morerows="1"><screen>ptime begin()</screen></entry>
+	    <entry>Return first time of period.</entry>
+	  </row>
+
+          <row>
+	    <entry valign="top" morerows="1"><screen>time_period shift(time_duration)</screen></entry>
+	    <entry>Add duration to both begin and end.</entry>
+	  </row>
+	  <row>
+	    <entry>
+              <screen>
+time_period tp(ptime(date(2005,Jan,1),hours(1)), hours(2));
+tp.shift(minutes(5)); 
+// tp == 2005-Jan-01 01:05:00 to 2005-Jan-01 03:05:00
+             </screen>
+	    </entry>
+	  </row>
+
+          <row>
+	    <entry valign="top" morerows="1"><screen>time_period expand(days)</screen></entry>
+	    <entry>Add duration to both begin and end.</entry>
+	  </row>
+	  <row>
+              <screen>
+time_period tp(ptime(date(2005,Jan,1),hours(1)), hours(2));
+tp.expand(minutes(5)); 
+// tp == 2005-Jan-01 00:55:00 to 2005-Jan-01 03:05:00
+             </screen>
+	  </row>
+
 	</tbody>
       </tgroup>
     </informaltable>
@@ -236,32 +289,6 @@ tp2.intersects(tp1); // --> true</screen>
 	    <entry></entry>
           </row>
           
-          <row>
-	    <entry valign="top" morerows="1"><screen>time_period shift(time_duration)</screen></entry>
-	    <entry>Add duration to both begin and end.</entry>
-	  </row>
-	  <row>
-	    <entry>
-              <screen>
-time_period tp(ptime(date(2005,Jan,1),hours(1)), hours(2));
-tp.shift(minutes(5)); 
-// tp == 2005-Jan-01 01:05:00 to 2005-Jan-01 03:05:00
-             </screen>
-	    </entry>
-	  </row>
-
-          <row>
-	    <entry valign="top" morerows="1"><screen>time_period expand(days)</screen></entry>
-	    <entry>Add duration to both begin and end.</entry>
-	  </row>
-	  <row>
-              <screen>
-time_period tp(ptime(date(2005,Jan,1),hours(1)), hours(2));
-tp.expand(minutes(5)); 
-// tp == 2005-Jan-01 00:55:00 to 2005-Jan-01 03:05:00
-             </screen>
-	  </row>
-
 	</tbody>
       </tgroup>
     </informaltable>
