@@ -15,8 +15,8 @@ exe cpp_tokens
         ../instantiate_cpp_literalgrs.cpp 
         ../instantiate_defined_grammar.cpp 
         ../instantiate_slex_lexer.cpp 
-        ../../../build//boost_wave
-        $(BOOST_ROOT)/boost/program_options//boost_program_options
+        /boost/wave//boost_wave
+        /boost/program_options//boost_program_options
     :
         <toolset-msvc:version>7.1:<rtti>off   # workaround for compiler bug
     ;

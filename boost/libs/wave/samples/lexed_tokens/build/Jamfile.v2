@@ -10,7 +10,7 @@
 
 exe lexed_tokens
     :   ../lexed_tokens.cpp 
-        ../../../build//boost_wave
+        /boost/wave//boost_wave
     :
         <toolset-msvc:version>7.1:<rtti>off   # workaround for compiler bug
     ;  

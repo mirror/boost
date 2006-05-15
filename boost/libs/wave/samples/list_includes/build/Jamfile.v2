@@ -10,9 +10,9 @@
 
 exe list_includes
     :   ../list_includes.cpp 
-        ../../../build//boost_wave
-        $(BOOST_ROOT)/boost/program_options//boost_program_options     
-        $(BOOST_ROOT)/boost/filesystem//boost_filesystem     
+        /boost/wave//boost_wave
+        /boost/program_options//boost_program_options     
+        /boost/filesystem//boost_filesystem     
     :
         <toolset-msvc:version>7.1:<rtti>off   # workaround for compiler bug
     ;
