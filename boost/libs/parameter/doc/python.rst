@@ -52,21 +52,13 @@ must be specified.  Additionally, because Boost.Parameter enabled
 functions are templates, the desired function signature must be
 specified.
 
-.. Always diff my edited version with the original to see what I
-.. changed, and think about why I changed it.  Ask if you don't
-.. understand.  "Boost.Parameter-enabled" needs that hyphen
-.. everywhere.  I'm leaving that change to you.
-
-.. Why must keyword tags be specified again?  Ah, because we didn't
-.. record their association with the wrapped function in the first
-.. place.  I think that should be possible, no?
-
 The keyword tags are specified as an `MPL Sequence`_, using the
 pointer qualifications described in |KeywordsSpec|_ below.  The
 signature is also specifid as an `MPL sequence`_ of parameter
-types. Additional data may be needed in the signature sequence by
-specific binding utilities. For example, ``function`` requires the
-return type to be part of the signature sequence.
+types. Additionally, ``boost::parameter::python::function`` and
+``boost::parameter::python::def`` requires a class with forwarding
+overloads. We will take a closer look at how this is done in the
+tutorial section below.
 
 .. The last two sentences are terribly vague.  Which namespace is
 .. ``function`` in?  Isn't the return type always needed?  What
@@ -74,18 +66,23 @@ return type to be part of the signature sequence.
 .. function?
 
 .. _`MPL Sequence`: ../../../mpl/doc/refmanual/sequences.html
+.. _keywordsspec: `concept KeywordsSpec`_
 
 Tutorial
 --------
 
 In this section we will outline the steps needed to bind a simple
-Boost.Parameter enabled member function to Python. Knowledge of the
-Boost.Parameter macros are required to understand this section.
+Boost.Parameter-enabled member function to Python. Knowledge of the
+Boost.Parameter macros_ are required to understand this section.
 
-.. Link to the docs for Boost.Parameter macros
+.. _macros: index.html
 
 The class and member function we are interested in binding looks
 like this::
+
+  #include <boost/parameter/keyword.hpp>
+  #include <boost/parameter/preprocessor.hpp>
+  #include <boost/parameter/python.hpp>
 
   // First the keywords
   BOOST_PARAMETER_KEYWORD(tag, title)
@@ -100,16 +97,51 @@ like this::
         (required (title, (std::string)))
         (optional (width, (unsigned), 400)
                   (height, (unsigned), 400))
-      );
+      )
+      {
+          …
+      }
   };
 
-.. Don't use endline layout.
+It defines a set of overloaded member functions called ``open`` with one
+required parameter and two optional ones. To bind this member function to
+Python we use the binding utility ``boost::parameter::python::function``.
+``boost::parameter::python::function`` is a def_visitor_ that we'll instantiate
+and pass to ``boost::python::class_::def()``.
 
-It defines a set of overloaded member functions called ``open``
-with one required parameter and two optional ones. To bind this
-member function to Python we use the binding utility
-``function``. ``function`` is a def_visitor_ that we'll
-instantiate and pass to ``boost::python::class_::def()``.
+To use ``boost::parameter::python::function`` we first need to define
+a class with forwarding overloads.
+
+::
+
+  struct open_fwd
+  {
+      template <class A0, class A1, class A2>
+      void operator()(
+          boost::type<void>, window& self, A0 const& a0, A1 const& a1, A2 const& a2
+      )
+      {
+          self.open(a0, a1, a2);
+      }
+  };
+
+The first parameter, ``boost::type<void>``, tells the forwarding overload
+what the return type should be. In this case we know that it's always void
+but in some cases, when we are exporting several specializations of a
+Boost.Parameter-enabled template, we need to use that parameter to
+deduce the return type.
+
+``window::open()`` takes a total of 3 parameters, so the forwarding function
+needs to take three parameters as well.
+
+.. Note::
+
+    We only need one overload in the forwarding class, despite the
+    fact that there are two optional parameters. There are special
+    circumstances when several overload are needed; see 
+    `special keywords`_.
+
+Next we'll define the module and export the class:
 
 ::
 
@@ -121,21 +153,51 @@ instantiate and pass to ``boost::python::class_::def()``.
       class_<window>("window")
           .def(
               "open", py::function<
-                  mpl::vector<tag::title, tag::width*, tag::height*>,
-                  mpl::vector<void, std::string, unsigned, unsigned>
+                  open_fwd
+                , mpl::vector<tag::title, tag::width*, tag::height*>
+                , mpl::vector<void, std::string, unsigned, unsigned>
               >()
           );
   }
 
-.. you missed passing the first argument, open_fwd, I think?
+.. @jam_prefix.append('import python ;')
+.. @jam_prefix.append('stage . : my_module /boost/python//boost_python ;')
+.. @my_module = build(
+        output = 'my_module'
+      , target_rule = 'python-extension'
+      , input = '/boost/python//boost_python'
+      , howmany = 'all'
+    )
 
-.. be consistent in indentation and comma placement.  Pick either
-.. leading or trailing commas.
+.. @del jam_prefix[-1:]
+
+``py::function`` is passed three parameters. The first one is the class
+with forwarding overloads that we defined earlier. The second one is
+an `MPL Sequence`_ with the keyword tag types for the function. The
+pointer syntax means that the parameter is optional, so in this case
+``width`` and ``height`` are optional parameters. The third parameter
+is an `MPL Sequence`_ with the desired function signature. The return type comes first, and
+then the parameter types:
+
+.. parsed-literal::
+
+    mpl::vector<void,        std::string, unsigned, unsigned>
+                *return type*  *title*        *width*     *height*
+
+.. @ignore()
+
+That's it! This class can now be used in Python with the expected syntax::
+
+    >>> w = my_module.window()
+    >>> w.open(title = "foo", height = 20)
+
+.. @example.prepend('import my_module')
+.. @run_python(module_path = my_module)
 
 .. Sorry to say this at such a late date, but this syntax really
 .. strikes me as cumbersome.  Couldn't we do something like:
 
-      class_<window>("window")
+    class_<window>("window")
           .def(
               "open", 
               (void (*)( 
@@ -162,6 +224,8 @@ instantiate and pass to ``boost::python::class_::def()``.
    users of broken compilers will have to give us function pointer
    types instead).
 
+------------------------------------------------------------------------------
+
 concept |KeywordsSpec|
 ----------------------
 
@@ -171,10 +235,10 @@ A |KeywordsSpec| is an `MPL sequence`_ where each element is either:
 * **or**, an *optional* keyword of the form ``K*``
 * **or**, a *special* keyword of the form ``K**``
 
-where ``K`` is a specialization of ``boost::parameter::keyword``__.
- 
+where ``K`` is a keyword tag type, as used in a specialization 
+of boost::parameter::keyword__.
 
-.. __ ../../../parameter/doc/html/reference.html#keyword
+__ ../../../parameter/doc/html/reference.html#keyword
 
 The **arity range** of a |KeywordsSpec| is defined as the closed
 range:
@@ -189,7 +253,7 @@ For example, the **arity range** of ``mpl::vector2<x,y>`` is [2,2], the **arity 
 .. Don't optional keywords affect the arity range?
 
 
-*special* keyword tags
+*special* keywords
 ---------------------------------
 
 Sometimes it is desirable to have a default value for a parameter that differ
@@ -219,11 +283,6 @@ docs. The example uses a different technique, but could also have been written l
 
 .. _example: index.html#dispatching-based-on-the-presence-of-a-default
 
-.. there have been several mistakes in these code examples.  I
-.. built a literate programming system for ReST, which we used for
-.. the MPL book.  If you'd like I'll check it in and you can use it
-.. to check these.
-
 In the above example the type of the default for ``color`` is ``mpl::false_``, a
 type that is distinct from any color map that the user might supply.
 
@@ -235,10 +294,6 @@ present and one without. Had there been two *special* keywords, four
 overloads would need to be generated. The number of generated overloads is
 equal to ``2^N``, where ``N`` is the number of *special* keywords.
 
-.. The entire section below was rewritten.
-
-.. No need to leave commented out detritus in the document.  That's
-.. what source control is for.
 
 ------------------------------------------------------------------------------
 
@@ -266,11 +321,11 @@ Defines a named parameter enabled constructor.
   range** of ``Keywords``, ``Class`` must support these
   expressions: 
 
-  ======================================================= ==================== ==============================================
-  Expression                                              Return type          Requirements
-  ======================================================= ==================== ==============================================
-  ``Class(a0, ..., aN)``                                  \-                   ``a0``..\ ``aN`` are tagged arguments.
-  ======================================================= ==================== ==============================================
+  ======================= ============= =========================================
+  Expression              Return type   Requirements
+  ======================= ============= =========================================
+  ``Class(a0, ..., aN)``  \-            ``a0``..\ ``aN`` are tagged arguments.
+  ======================= ============= =========================================
 
 .. Limit the width of these table cells.  Some rst backend
 .. processors actually produce different results depending on the
@@ -329,11 +384,11 @@ Defines a ``__call__`` operator, mapped to ``operator()`` in C++.
   in the order dictated by ``Keywords``, and the return type prepended.
 * ``Class`` must support these expressions, where ``c`` is an instance of ``Class``:
 
-  ======================================================= ==================== ==============================================
-  Expression                                              Return type          Requirements
-  ======================================================= ==================== ==============================================
-  ``c(a0, ..., aN)``                                      Convertible to ``R`` ``a0``..\ ``aN`` are tagged arguments.
-  ======================================================= ==================== ==============================================
+  =================== ==================== =======================================
+  Expression          Return type          Requirements
+  =================== ==================== =======================================
+  ``c(a0, ..., aN)``  Convertible to ``R`` ``a0``..\ ``aN`` are tagged arguments.
+  =================== ==================== =======================================
 
   For every ``N`` in ``[U,V]``, where ``[U,V]`` is the **arity range** of ``Keywords``.
 
@@ -404,13 +459,13 @@ Defines a named parameter enabled member function.
   in the order dictated by ``Keywords``, and the return type prepended.
 * An instance of ``Fwd`` must support this expression:
 
-  ======================================================= ==================== ==============================================
-  Expression                                              Return type          Requirements
-  ======================================================= ==================== ==============================================
-  ``fwd(boost::type<R>(), self, a0, ..., aN)``            Convertible to ``R`` ``self`` is a reference to the object on which
-                                                                               the function should be invoked. ``a0``..\ ``aN``
-                                                                               are tagged arguments.
-  ======================================================= ==================== ==============================================
+  ============================================ ==================== ==============================================
+  Expression                                   Return type          Requirements
+  ============================================ ==================== ==============================================
+  ``fwd(boost::type<R>(), self, a0, …, aN)``   Convertible to ``R`` ``self`` is a reference to the object on which
+                                                                    the function should be invoked. ``a0``…``aN``
+                                                                    are tagged arguments.
+  ============================================ ==================== ==============================================
 
   For every ``N`` in ``[U,V]``, where ``[U,V]`` is the **arity range** of ``Keywords``.
 
@@ -418,7 +473,7 @@ Defines a named parameter enabled member function.
 Example
 ~~~~~~~
 
-This example exports a member function ``f(int x, int y = ..)`` to Python.
+This example exports a member function ``f(int x, int y = …)`` to Python.
 The |KeywordsSpec| ``mpl::vector2<tag::x, tag::y*>`` has an **arity range**
 of [2,2], so we only need one forwarding overload.
 
@@ -432,7 +487,7 @@ of [2,2], so we only need one forwarding overload.
             (optional (y, \*))
         )
         {
-            /\* .. \*/
+            /\* … \*/
         }
     };
 
@@ -450,7 +505,7 @@ of [2,2], so we only need one forwarding overload.
         class_<X>("X")
             .def("f",
                 function<
-                    fwd
+                    f_fwd
                   , mpl::vector2<tag::x, tag::y\*>
                   , mpl::vector3<void, int, int>
                 >()
@@ -481,11 +536,11 @@ Defines a named parameter enabled free function in the current Python scope.
   prepended. 
 * An instance of ``Fwd`` must support this expression:
 
-  ======================================================= ==================== ==============================================
-  Expression                                              Return type          Requirements
-  ======================================================= ==================== ==============================================
-  ``fwd(boost::type<R>(), a0, ..., aN)``                  Convertible to ``R`` ``a0``..\ ``aN`` are tagged arguments.
-  ======================================================= ==================== ==============================================
+  ====================================== ==================== ======================================
+  Expression                             Return type          Requirements
+  ====================================== ==================== ======================================
+  ``fwd(boost::type<R>(), a0, …, aN)``   Convertible to ``R`` ``a0``…``aN`` are tagged arguments.
+  ====================================== ==================== ======================================
 
   For every ``N`` in ``[U,V]``, where ``[U,V]`` is the **arity range** of ``Keywords``.
 
@@ -493,7 +548,7 @@ Defines a named parameter enabled free function in the current Python scope.
 Example
 ~~~~~~~
 
-This example exports a function ``f(int x, int y = ...)`` to Python.
+This example exports a function ``f(int x, int y = …)`` to Python.
 The |KeywordsSpec| ``mpl::vector2<tag::x, tag::y*>`` has an **arity range**
 of [2,2], so we only need one forwarding overload.
 
@@ -504,7 +559,7 @@ of [2,2], so we only need one forwarding overload.
         (optional (y, \*))
     )
     {
-        /\* .. \*/
+        /\* … \*/
     }
 
     struct f_fwd
@@ -516,10 +571,10 @@ of [2,2], so we only need one forwarding overload.
         }
     };
 
-    BOOST_PYTHON_MODULE(..)
+    BOOST_PYTHON_MODULE(…)
     {
         def<
-            fwd
+            f_fwd
           , mpl::vector2<tag::x, tag::y\*>
           , mpl::vector3<void, int, int>
         >("f");
