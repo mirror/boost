@@ -39,9 +39,8 @@ struct get_result_of<F, FArgs, true>
 
 template<typename F, typename FArgs>
 struct get_result_of<F, FArgs, false>
-{
-  typedef typename F::template result<FArgs>::type type;
-};
+  : F::template result<FArgs>
+{};
 
 template<typename F>
 struct get_result_of<F, F(void), false>
@@ -50,7 +49,7 @@ struct get_result_of<F, F(void), false>
 };
 
 template<typename F, typename FArgs>
-struct result_of : get_result_of<F, FArgs, (has_result_type<F>::value)> {};
+struct result_of_impl : get_result_of<F, FArgs, (has_result_type<F>::value)> {};
 
 } // end namespace detail
 
