@@ -12,6 +12,7 @@
 // $Revision$
 
 #include <boost/mpl/is_sequence.hpp>
+#include <boost/mpl/int.hpp>
 #include <boost/mpl/list.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/mpl/range_c.hpp>
@@ -25,6 +26,7 @@ template< typename T > struct std_vector
 MPL_TEST_CASE()
 {
     MPL_ASSERT_NOT(( is_sequence< std_vector<int> > ));
+    MPL_ASSERT_NOT(( is_sequence< int_<0> > ));
     MPL_ASSERT_NOT(( is_sequence< int > ));
     MPL_ASSERT_NOT(( is_sequence< int& > ));
     MPL_ASSERT_NOT(( is_sequence< UDT > ));
