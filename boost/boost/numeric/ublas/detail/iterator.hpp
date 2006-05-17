@@ -203,7 +203,7 @@ namespace boost { namespace numeric { namespace ublas {
    * is LessThan Comparable.
    */
     template<class IC, class I, class T, class D = std::ptrdiff_t>
-    // ISSUE the default here seems rather dangerous as it can easlly be (silently) incorrect
+    // ISSUE the default for D seems rather dangerous as it can easily be (silently) incorrect
     struct random_access_iterator_base:
         public std::iterator<IC, T> {
         typedef I derived_iterator_type;
@@ -878,7 +878,7 @@ namespace boost { namespace numeric { namespace ublas {
         public random_access_iterator_base<IC,
                                            indexed_iterator1<C, IC>, 
                                            typename C::value_type,
-                                           typename C::reference> {
+                                           typename C::difference_type> {
     public:
         typedef C container_type;
         typedef IC iterator_category;
@@ -1024,7 +1024,7 @@ namespace boost { namespace numeric { namespace ublas {
         public random_access_iterator_base<IC,
                                            indexed_const_iterator1<C, IC>, 
                                            typename C::value_type,
-                                           typename C::const_reference> {
+                                           typename C::difference_type> {
     public:
         typedef C container_type;
         typedef IC iterator_category;
@@ -1169,7 +1169,7 @@ namespace boost { namespace numeric { namespace ublas {
         public random_access_iterator_base<IC,
                                            indexed_iterator2<C, IC>, 
                                            typename C::value_type,
-                                           typename C::reference> {
+                                           typename C::difference_type> {
     public:
         typedef C container_type;
         typedef IC iterator_category;
@@ -1312,7 +1312,7 @@ namespace boost { namespace numeric { namespace ublas {
         public random_access_iterator_base<IC,
                                            indexed_const_iterator2<C, IC>,
                                            typename C::value_type,
-                                           typename C::const_reference> {
+                                           typename C::difference_type> {
     public:
         typedef C container_type;
         typedef IC iterator_category;
