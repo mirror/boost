@@ -1750,7 +1750,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class L>
         static
         BOOST_UBLAS_INLINE
-        size_type packed_size (size_type size1, size_type size2) {
+        size_type packed_size (L, size_type size1, size_type size2) {
             return L::storage_size (size1, size2);
         }
 
