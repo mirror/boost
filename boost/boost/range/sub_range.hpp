@@ -14,7 +14,6 @@
 #include <boost/range/config.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/value_type.hpp>
-#include <boost/range/result_iterator.hpp>
 #include <boost/range/size_type.hpp>
 #include <boost/range/difference_type.hpp>
 #include <boost/assert.hpp>
@@ -23,20 +22,18 @@ namespace boost
 {
     
     template< class ForwardRange > 
-    class sub_range : public iterator_range< BOOST_DEDUCED_TYPENAME range_result_iterator<ForwardRange>::type > 
+    class sub_range : public iterator_range< BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type > 
     {
-        typedef BOOST_DEDUCED_TYPENAME range_result_iterator<ForwardRange>::type iterator_t;
+        typedef BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type iterator_t;
         typedef iterator_range< iterator_t  > base;
 
         typedef BOOST_DEDUCED_TYPENAME base::impl impl;
     public:
         typedef BOOST_DEDUCED_TYPENAME range_value<ForwardRange>::type            value_type;
-        typedef BOOST_DEDUCED_TYPENAME range_result_iterator<ForwardRange>::type  iterator;
-        typedef BOOST_DEDUCED_TYPENAME range_const_iterator<ForwardRange>::type   const_iterator;
+        typedef BOOST_DEDUCED_TYPENAME range_iterator<ForwardRange>::type         iterator;
+        typedef BOOST_DEDUCED_TYPENAME range_iterator<const ForwardRange>::type   const_iterator;
         typedef BOOST_DEDUCED_TYPENAME range_difference<ForwardRange>::type       difference_type;
         typedef BOOST_DEDUCED_TYPENAME range_size<ForwardRange>::type             size_type;
-        typedef BOOST_DEDUCED_TYPENAME base::reference                            reference;
-        typedef BOOST_DEDUCED_TYPENAME iterator_reference<const_iterator>::type   const_reference;
 
     public:
         sub_range() : base() 
@@ -111,32 +108,32 @@ namespace boost
 
         
     public: // convenience
-        reference front()
+        value_type& front()
         {
             return base::front();
         }
 
-        const_reference front() const
+        const value_type& front() const
         {
             return base::front();
         }
 
-        reference back()
+        value_type& back()
         {
             return base::back();
         }
 
-        const_reference back() const
+        const value_type& back() const
         {
             return base::back();
         }
 
-        reference operator[]( size_type sz )
+        value_type& operator[]( size_type sz )
         {
             return base::operator[](sz);
         }
 
-        const_reference operator[]( size_type sz ) const
+        const value_type& operator[]( size_type sz ) const
         {
             return base::operator[](sz);
         }
@@ -168,3 +165,4 @@ namespace boost
 } // namespace 'boost'
 
 #endif
+
