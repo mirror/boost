@@ -35,15 +35,13 @@ void check_std_container()
 
     BOOST_STATIC_ASSERT(( is_same< range_value<vec_t>::type, vec_t::value_type >::value ));
     BOOST_STATIC_ASSERT(( is_same< range_iterator<vec_t>::type, vec_t::iterator >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_const_iterator<vec_t>::type, vec_t::const_iterator >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_iterator<const vec_t>::type, vec_t::const_iterator >::value ));
     BOOST_STATIC_ASSERT(( is_same< range_difference<vec_t>::type, vec_t::difference_type >::value ));
     BOOST_STATIC_ASSERT(( is_same< range_size<vec_t>::type, vec_t::size_type >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_result_iterator<vec_t>::type, vec_t::iterator >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_result_iterator<const vec_t>::type, vec_t::const_iterator >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_iterator<vec_t>::type, vec_t::iterator >::value ));
+    BOOST_STATIC_ASSERT(( is_same< range_iterator<const vec_t>::type, vec_t::const_iterator >::value ));
     
     BOOST_STATIC_ASSERT(( is_same< range_value<const vec_t>::type, vec_t::value_type >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_iterator<const vec_t>::type, vec_t::iterator >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_const_iterator<const vec_t>::type, vec_t::const_iterator >::value ));
     BOOST_STATIC_ASSERT(( is_same< range_difference<const vec_t>::type, vec_t::difference_type >::value ));
     BOOST_STATIC_ASSERT(( is_same< range_size<const vec_t>::type, vec_t::size_type >::value ));
 

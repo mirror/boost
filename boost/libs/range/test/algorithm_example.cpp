@@ -17,6 +17,7 @@
 
 #include <boost/range/functions.hpp>
 #include <boost/range/metafunctions.hpp>
+#include <boost/range/as_literal.hpp>
 #include <boost/test/test_tools.hpp>
 #include <iostream>
 #include <algorithm>
@@ -70,12 +71,8 @@ void check_algorithm()
     typedef std::vector<int>::iterator iterator;
     std::pair<iterator,iterator>       my_view( boost::begin( my_vector ), 
                                                 boost::begin( my_vector ) + N );
-    char  str_val[] = "a string";
-    char* str       = str_val;
-    
     BOOST_CHECK_EQUAL( my_generic_replace( my_vector, 4, 2 ), 3u );
     BOOST_CHECK_EQUAL( my_generic_replace( my_view, 4, 2 ), N );
-    BOOST_CHECK_EQUAL( my_generic_replace( str, 'a', 'b' ), 0u );
 
 }
 
