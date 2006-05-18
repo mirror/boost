@@ -17,7 +17,7 @@ namespace boost { namespace program_options {
     positional_options_description::positional_options_description()
     {}
 
-    void
+    positional_options_description&
     positional_options_description::add(const char* name, int max_count)
     {
         assert(max_count != -1 || m_trailing.empty());
@@ -27,7 +27,7 @@ namespace boost { namespace program_options {
         else {
             m_names.resize(m_names.size() + max_count, name);
         }
-        
+        return *this;
     }
 
     unsigned

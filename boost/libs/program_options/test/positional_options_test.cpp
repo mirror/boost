@@ -49,28 +49,31 @@ void test_parsing()
         ("first", po::value<int>())
         ("second", po::value<int>())
         ("input-file", po::value< vector<string> >())
+        ("some-other", po::value<string>())
     ;
 
     positional_options_description p;
-    p.add("input-file", 2);
+    p.add("input-file", 2).add("some-other", 1);
 
     vector<string> args;
     args.push_back("--first=10");
     args.push_back("file1");
     args.push_back("--second=10");
     args.push_back("file2");
+    args.push_back("file3");
 
     // Check that positional options are handled.
     parsed_options parsed = 
         command_line_parser(args).options(desc).positional(p).run();
 
-    BOOST_REQUIRE(parsed.options.size() == 4);
+    BOOST_REQUIRE(parsed.options.size() == 5);
     BOOST_CHECK_EQUAL(parsed.options[1].string_key, "input-file");
     BOOST_CHECK_EQUAL(parsed.options[1].value[0], "file1");
     BOOST_CHECK_EQUAL(parsed.options[3].string_key, "input-file");
     BOOST_CHECK_EQUAL(parsed.options[3].value[0], "file2");
+    BOOST_CHECK_EQUAL(parsed.options[4].value[0], "file3");
 
-    args.push_back("file3");
+    args.push_back("file4");
 
     // Check that excessive number of positional options is detected.
     BOOST_CHECK_THROW(command_line_parser(args).options(desc).positional(p)

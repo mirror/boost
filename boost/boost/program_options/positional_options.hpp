@@ -37,7 +37,8 @@ namespace boost { namespace program_options {
             No calls to 'add' can be made after call with 'max_value' equal to 
             '-1'.            
         */
-        void add(const char* name, int max_count);
+        positional_options_description&
+        add(const char* name, int max_count);
 
         /** Returns the maximum number of positional options that can
             be present. Can return numeric_limits<unsigned>::max() to
