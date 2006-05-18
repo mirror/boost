@@ -16,103 +16,23 @@
 
 namespace boost
 {
-    template<>
-    struct range_iterator<char*>
+    template< class T >
+    struct range_mutable_iterator<T*>
     {
-        typedef char* type;
+        typedef T* type;
     };
 
-    template<>
-    struct range_iterator<char* const>
+    template< class T >
+    struct range_const_iterator<T*>
     {
-        typedef char* type;
-    };
-    
-    template<>
-    struct range_iterator<const char*>
-    {
-        typedef const char* type;
+        typedef const T* type;
     };
 
-    template<>
-    struct range_iterator<const char* const>
+    template< class T >
+    struct range_size<T*>
     {
-        typedef const char* type;
-    };
-
-    template<>
-    struct range_iterator<wchar_t*>
-    {
-        typedef wchar_t* type;
-    };
-
-    template<>
-    struct range_iterator<wchar_t* const>
-    {
-        typedef wchar_t* type;
-    };
-
-    template<>
-    struct range_iterator<const wchar_t*>
-    {
-        typedef const wchar_t* type;
-    };
-
-    template<>
-    struct range_iterator<const wchar_t* const>
-    {
-        typedef const wchar_t* type;
-    };
-
-    template<>
-    struct range_size<char*>
-    {
-        typedef std::size_t type;
-    };
-
-    template<>
-    struct range_size<char* const>
-    {
-        typedef std::size_t type;
-    };
-
-    template<>
-    struct range_size<const char*>
-    {
-        typedef std::size_t type;
-    };
-
-    template<>
-    struct range_size<const char* const>
-    {
-        typedef std::size_t type;
-    };
-
-    template<>
-    struct range_size<wchar_t*>
-    {
-        typedef std::size_t type;
-    };
-
-    template<>
-    struct range_size<wchar_t* const>
-    {
-        typedef std::size_t type;
-    };
-
-    template<>
-    struct range_size<const wchar_t*>
-    {
-        typedef std::size_t type;
-    };
-
-    template<>
-    struct range_size<const wchar_t* const>
-    {
-        typedef std::size_t type;
-    };
-
-
+       typedef std::size_t type;
+    };    
 }
 
 #endif
