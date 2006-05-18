@@ -41,15 +41,17 @@ namespace boost { namespace numeric { namespace ublas {
             // Common elements to preserve
             const size_type size1_min = (std::min) (size1, msize1);
             const size_type size2_min = (std::min) (size2, msize2);
-            // Order loop for i-major and j-minor sizes
-            const size_type i_size = layout_type::size1 (size1_min, size2_min);
-            const size_type j_size = layout_type::size2 (size1_min, size2_min);
-            for (size_type i = 0; i != i_size; ++i) {    // indexing copy over major
-                for (size_type j = 0; j != j_size; ++j) {
-                    const size_type element1 = layout_type::element1(i,i_size, j,j_size);
-                    const size_type element2 = layout_type::element2(i,i_size, j,j_size);
-                    temporary.data () [layout_type::element (element1, size1, element2, size2)] =
-                            m.data() [layout_type::element (element1, msize1, element2, msize2)];
+            // Order for major and minor sizes
+            const size_type major_size = layout_type::size_M (size1_min, size2_min);
+            const size_type minor_size = layout_type::size_m (size1_min, size2_min);
+            // Indexing copy over major
+            for (size_type major = 0; major != major_size; ++major) {
+                for (size_type minor = 0; minor != minor_size; ++minor) {
+			            // find indexes - use invertability of element_ functions
+                    const size_type i1 = layout_type::index_M(major, minor);
+                    const size_type i2 = layout_type::index_m(major, minor);
+                    temporary.data () [layout_type::element (i1, size1, i2, size2)] =
+                            m.data() [layout_type::element (i1, msize1, i2, msize2)];
                 }
             }
             m.assign_temporary (temporary);
@@ -355,28 +357,28 @@ namespace boost { namespace numeric { namespace ublas {
             // Arithmetic
             BOOST_UBLAS_INLINE
             const_iterator1 &operator ++ () {
-                layout_type::increment1 (it_, (*this) ().size1 (), (*this) ().size2 ());
+                layout_type::increment_i (it_, (*this) ().size1 (), (*this) ().size2 ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             const_iterator1 &operator -- () {
-                layout_type::decrement1 (it_, (*this) ().size1 (), (*this) ().size2 ());
+                layout_type::decrement_i (it_, (*this) ().size1 (), (*this) ().size2 ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             const_iterator1 &operator += (difference_type n) {
-                it_ += n * layout_type::one1 ((*this) ().size1 (), (*this) ().size2 ());
+                layout_type::increment_i (it_, n, (*this) ().size1 (), (*this) ().size2 ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             const_iterator1 &operator -= (difference_type n) {
-                it_ -= n * layout_type::one1 ((*this) ().size1 (), (*this) ().size2 ());
+                layout_type::decrement_i (it_, n, (*this) ().size1 (), (*this) ().size2 ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const const_iterator1 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return layout_type::distance1 (it_ - it.it_, (*this) ().size1 (), (*this) ().size2 ());
+                return layout_type::distance_i (it_ - it.it_, (*this) ().size1 (), (*this) ().size2 ());
             }
 
             // Dereference
@@ -428,12 +430,12 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             size_type index1 () const {
                 const self_type &m = (*this) ();
-                return layout_type::index1 (it_ - m.begin1 ().it_, m.size1 (), m.size2 ());
+                return layout_type::index_i (it_ - m.begin1 ().it_, m.size1 (), m.size2 ());
             }
             BOOST_UBLAS_INLINE
             size_type index2 () const {
                 const self_type &m = (*this) ();
-                return layout_type::index2 (it_ - m.begin1 ().it_, m.size1 (), m.size2 ());
+                return layout_type::index_j (it_ - m.begin1 ().it_, m.size1 (), m.size2 ());
             }
 
             // Assignment
@@ -497,28 +499,28 @@ namespace boost { namespace numeric { namespace ublas {
             // Arithmetic
             BOOST_UBLAS_INLINE
             iterator1 &operator ++ () {
-                layout_type::increment1 (it_, (*this) ().size1 (), (*this) ().size2 ());
+                layout_type::increment_i (it_, (*this) ().size1 (), (*this) ().size2 ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             iterator1 &operator -- () {
-                layout_type::decrement1 (it_, (*this) ().size1 (), (*this) ().size2 ());
+                layout_type::decrement_i (it_, (*this) ().size1 (), (*this) ().size2 ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             iterator1 &operator += (difference_type n) {
-                it_ += n * layout_type::one1 ((*this) ().size1 (), (*this) ().size2 ());
+                layout_type::increment_i (it_, n, (*this) ().size1 (), (*this) ().size2 ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             iterator1 &operator -= (difference_type n) {
-                it_ -= n * layout_type::one1 ((*this) ().size1 (), (*this) ().size2 ());
+                layout_type::decrement_i (it_, n, (*this) ().size1 (), (*this) ().size2 ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const iterator1 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return layout_type::distance1 (it_ - it.it_, (*this) ().size1 (), (*this) ().size2 ());
+                return layout_type::distance_i (it_ - it.it_, (*this) ().size1 (), (*this) ().size2 ());
             }
 
             // Dereference
@@ -570,12 +572,12 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             size_type index1 () const {
                 self_type &m = (*this) ();
-                return layout_type::index1 (it_ - m.begin1 ().it_, m.size1 (), m.size2 ());
+                return layout_type::index_i (it_ - m.begin1 ().it_, m.size1 (), m.size2 ());
             }
             BOOST_UBLAS_INLINE
             size_type index2 () const {
                 self_type &m = (*this) ();
-                return layout_type::index2 (it_ - m.begin1 ().it_, m.size1 (), m.size2 ());
+                return layout_type::index_j (it_ - m.begin1 ().it_, m.size1 (), m.size2 ());
             }
 
             // Assignment
@@ -642,28 +644,28 @@ namespace boost { namespace numeric { namespace ublas {
             // Arithmetic
             BOOST_UBLAS_INLINE
             const_iterator2 &operator ++ () {
-                layout_type::increment2 (it_, (*this) ().size1 (), (*this) ().size2 ());
+                layout_type::increment_j (it_, (*this) ().size1 (), (*this) ().size2 ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             const_iterator2 &operator -- () {
-                layout_type::decrement2 (it_, (*this) ().size1 (), (*this) ().size2 ());
+                layout_type::decrement_j (it_, (*this) ().size1 (), (*this) ().size2 ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             const_iterator2 &operator += (difference_type n) {
-                it_ += n * layout_type::one2 ((*this) ().size1 (), (*this) ().size2 ());
+                layout_type::increment_j (it_, n, (*this) ().size1 (), (*this) ().size2 ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             const_iterator2 &operator -= (difference_type n) {
-                it_ -= n * layout_type::one2 ((*this) ().size1 (), (*this) ().size2 ());
+                layout_type::decrement_j (it_, n, (*this) ().size1 (), (*this) ().size2 ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const const_iterator2 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return layout_type::distance2 (it_ - it.it_, (*this) ().size1 (), (*this) ().size2 ());
+                return layout_type::distance_j (it_ - it.it_, (*this) ().size1 (), (*this) ().size2 ());
             }
 
             // Dereference
@@ -715,12 +717,12 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             size_type index1 () const {
                 const self_type &m = (*this) ();
-                return layout_type::index1 (it_ - m.begin2 ().it_, m.size1 (), m.size2 ());
+                return layout_type::index_i (it_ - m.begin2 ().it_, m.size1 (), m.size2 ());
             }
             BOOST_UBLAS_INLINE
             size_type index2 () const {
                 const self_type &m = (*this) ();
-                return layout_type::index2 (it_ - m.begin2 ().it_, m.size1 (), m.size2 ());
+                return layout_type::index_j (it_ - m.begin2 ().it_, m.size1 (), m.size2 ());
             }
 
             // Assignment
@@ -784,28 +786,28 @@ namespace boost { namespace numeric { namespace ublas {
             // Arithmetic
             BOOST_UBLAS_INLINE
             iterator2 &operator ++ () {
-                layout_type::increment2 (it_, (*this) ().size1 (), (*this) ().size2 ());
+                layout_type::increment_j (it_, (*this) ().size1 (), (*this) ().size2 ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             iterator2 &operator -- () {
-                layout_type::decrement2 (it_, (*this) ().size1 (), (*this) ().size2 ());
+                layout_type::decrement_j (it_, (*this) ().size1 (), (*this) ().size2 ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             iterator2 &operator += (difference_type n) {
-                it_ += n * layout_type::one2 ((*this) ().size1 (), (*this) ().size2 ());
+                layout_type::increment_j (it_, n, (*this) ().size1 (), (*this) ().size2 ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             iterator2 &operator -= (difference_type n) {
-                it_ -= n * layout_type::one2 ((*this) ().size1 (), (*this) ().size2 ());
+                layout_type::decrement_j (it_, n, (*this) ().size1 (), (*this) ().size2 ());
                 return *this;
             }
             BOOST_UBLAS_INLINE
             difference_type operator - (const iterator2 &it) const {
                 BOOST_UBLAS_CHECK (&(*this) () == &it (), external_logic ());
-                return layout_type::distance2 (it_ - it.it_, (*this) ().size1 (), (*this) ().size2 ());
+                return layout_type::distance_j (it_ - it.it_, (*this) ().size1 (), (*this) ().size2 ());
             }
 
             // Dereference
@@ -857,12 +859,12 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_INLINE
             size_type index1 () const {
                 self_type &m = (*this) ();
-                return layout_type::index1 (it_ - m.begin2 ().it_, m.size1 (), m.size2 ());
+                return layout_type::index_i (it_ - m.begin2 ().it_, m.size1 (), m.size2 ());
             }
             BOOST_UBLAS_INLINE
             size_type index2 () const {
                 self_type &m = (*this) ();
-                return layout_type::index2 (it_ - m.begin2 ().it_, m.size1 (), m.size2 ());
+                return layout_type::index_j (it_ - m.begin2 ().it_, m.size1 (), m.size2 ());
             }
 
             // Assignment
@@ -1249,7 +1251,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator1 (*this, i, j);
 #else
-            return const_iterator1 (*this, i, j, data () [layout_type::address1 (i, size1_, j, size2_)].begin ()  + layout_type::address2 (i, size1_, j, size2_));
+            return const_iterator1 (*this, i, j, data () [layout_type::index_M (i, j)].begin ()  + layout_type::index_m (i, j));
 #endif
         }
         BOOST_UBLAS_INLINE
@@ -1257,7 +1259,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return iterator1 (*this, i, j);
 #else
-            return iterator1 (*this, i, j, data () [layout_type::address1 (i, size1_, j, size2_)].begin ()  + layout_type::address2 (i, size1_, j, size2_));
+            return iterator1 (*this, i, j, data () [layout_type::index_M (i, j)].begin ()  + layout_type::index_m (i, j));
 #endif
         }
         BOOST_UBLAS_INLINE
@@ -1265,7 +1267,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return const_iterator2 (*this, i, j);
 #else
-            return const_iterator2 (*this, i, j, data () [layout_type::address1 (i, size1_, j, size2_)].begin ()  + layout_type::address2 (i, size1_, j, size2_));
+            return const_iterator2 (*this, i, j, data () [layout_type::index_M (i, j)].begin ()  + layout_type::index_m (i, j));
 #endif
         }
         BOOST_UBLAS_INLINE
@@ -1273,7 +1275,7 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_USE_INDEXED_ITERATOR
             return iterator2 (*this, i, j);
 #else
-            return iterator2 (*this, i, j, data () [layout_type::address1 (i, size1_, j, size2_)].begin () + layout_type::address2 (i, size1_, j, size2_));
+            return iterator2 (*this, i, j, data () [layout_type::index_M (i, j)].begin () + layout_type::index_m (i, j));
 #endif
         }
 
@@ -1308,7 +1310,7 @@ namespace boost { namespace numeric { namespace ublas {
             const_iterator1 &operator ++ () {
                 ++ i_;
                 const self_type &m = (*this) ();
-                if (layout_type::fast1 ())
+                if (layout_type::fast_i ())
                     ++ it_;
                 else 
                     it_ = m.find1 (1, i_, j_).it_;
@@ -1318,7 +1320,7 @@ namespace boost { namespace numeric { namespace ublas {
             const_iterator1 &operator -- () {
                 -- i_;
                 const self_type &m = (*this) ();
-                if (layout_type::fast1 ())
+                if (layout_type::fast_i ())
                     -- it_;
                 else
                     it_ = m.find1 (1, i_, j_).it_;
@@ -1467,7 +1469,7 @@ namespace boost { namespace numeric { namespace ublas {
             iterator1 &operator ++ () {
                 ++ i_;
                 self_type &m = (*this) ();
-                if (layout_type::fast1 ())
+                if (layout_type::fast_i ())
                     ++ it_;
                 else
                     it_ = m.find1 (1, i_, j_).it_;
@@ -1477,7 +1479,7 @@ namespace boost { namespace numeric { namespace ublas {
             iterator1 &operator -- () {
                 -- i_;
                 self_type &m = (*this) ();
-                if (layout_type::fast1 ())
+                if (layout_type::fast_i ())
                     -- it_;
                 else
                     it_ = m.find1 (1, i_, j_).it_;
@@ -1629,7 +1631,7 @@ namespace boost { namespace numeric { namespace ublas {
             const_iterator2 &operator ++ () {
                 ++ j_;
                 const self_type &m = (*this) ();
-                if (layout_type::fast2 ())
+                if (layout_type::fast_j ())
                     ++ it_;
                 else
                     it_ = m.find2 (1, i_, j_).it_;
@@ -1639,7 +1641,7 @@ namespace boost { namespace numeric { namespace ublas {
             const_iterator2 &operator -- () {
                 -- j_;
                 const self_type &m = (*this) ();
-                if (layout_type::fast2 ())
+                if (layout_type::fast_j ())
                     -- it_;
                 else
                     it_ = m.find2 (1, i_, j_).it_;
@@ -1788,7 +1790,7 @@ namespace boost { namespace numeric { namespace ublas {
             iterator2 &operator ++ () {
                 ++ j_;
                 self_type &m = (*this) ();
-                if (layout_type::fast2 ())
+                if (layout_type::fast_j ())
                     ++ it_;
                 else
                     it_ = m.find2 (1, i_, j_).it_;
@@ -1798,7 +1800,7 @@ namespace boost { namespace numeric { namespace ublas {
             iterator2 &operator -- () {
                 -- j_;
                 self_type &m = (*this) ();
-                if (layout_type::fast2 ())
+                if (layout_type::fast_j ())
                     -- it_;
                 else
                     it_ = m.find2 (1, i_, j_).it_;
