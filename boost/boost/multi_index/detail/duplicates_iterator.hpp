@@ -37,14 +37,14 @@ public:
   typedef const typename Node::value_type& reference;
   typedef std::forward_iterator_tag        iterator_category;
 
-  duplicates_iterator(Node* node,Node* end,Predicate pred):
-    node(node),begin_chunk(0),end(end),pred(pred)
+  duplicates_iterator(Node* node_,Node* end_,Predicate pred_):
+    node(node_),begin_chunk(0),end(end_),pred(pred_)
   {
     advance();
   }
 
-  duplicates_iterator(Node* end,Predicate pred):
-    node(end),begin_chunk(end),end(end),pred(pred)
+  duplicates_iterator(Node* end_,Predicate pred_):
+    node(end_),begin_chunk(end_),end(end_),pred(pred_)
   {
   }
 

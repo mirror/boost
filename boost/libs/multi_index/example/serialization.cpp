@@ -1,6 +1,6 @@
 /* Boost.MultiIndex example of serialization of a MRU list.
  *
- * Copyright 2003-2005 Joaquín M López Muñoz.
+ * Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -50,7 +50,7 @@ public:
   typedef Item                         item_type;
   typedef typename item_list::iterator iterator;
 
-  mru_list(std::size_t max_num_items):max_num_items(max_num_items){}
+  mru_list(std::size_t max_num_items_):max_num_items(max_num_items_){}
 
   void insert(const item_type& item)
   {

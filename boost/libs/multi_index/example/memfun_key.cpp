@@ -1,6 +1,6 @@
 /* Boost.MultiIndex example of member functions used as key extractors.
  *
- * Copyright 2003-2005 Joaquín M López Muñoz.
+ * Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -29,8 +29,8 @@ using namespace boost::multi_index;
 
 struct name_record
 {
-  name_record(std::string given_name,std::string family_name):
-    given_name(given_name),family_name(family_name)
+  name_record(std::string given_name_,std::string family_name_):
+    given_name(given_name_),family_name(family_name_)
   {}
 
   std::string name()const
