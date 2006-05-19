@@ -90,17 +90,21 @@ void check_sub_range()
     s.empty();
     r.size();
     s.size();
-    
-    irange singular_irange;
-    BOOST_CHECK( singular_irange.empty() );
-    BOOST_CHECK( singular_irange.size() == 0 );
-    
-    srange singular_srange;
-    BOOST_CHECK( singular_srange.empty() );
-    BOOST_CHECK( singular_srange.size() == 0 );
 
-    BOOST_CHECK( empty( singular_irange ) );
-    BOOST_CHECK( empty( singular_srange ) );
+    //
+    // As of range v2 not legal anymore.
+    //
+    //irange singular_irange;
+    //BOOST_CHECK( singular_irange.empty() );
+    //BOOST_CHECK( singular_irange.size() == 0 );
+    //
+    //srange singular_srange;
+    //BOOST_CHECK( singular_srange.empty() );
+    //BOOST_CHECK( singular_srange.size() == 0 );
+    //
+    //BOOST_CHECK( empty( singular_irange ) );
+    //BOOST_CHECK( empty( singular_srange ) );
+    //
 
     srange rr = make_iterator_range( str );
     BOOST_CHECK( rr.equal( r ) );

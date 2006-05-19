@@ -52,7 +52,9 @@ void check_iterator_pair()
     BOOST_STATIC_ASSERT(( is_same< range_value<const_pair_tt>::type, 
                           detail::iterator_traits<const_pair_t::first_type>::value_type>::value ));
     BOOST_STATIC_ASSERT(( is_same< range_iterator<const_pair_tt>::type, const_pair_tt::first_type >::value ));
-    BOOST_STATIC_ASSERT(( is_same< range_const_iterator<const_pair_tt>::type, const_pair_tt::first_type >::value ));
+    //
+    // This behavior is not supported with v2.
+    //BOOST_STATIC_ASSERT(( is_same< range_const_iterator<const_pair_tt>::type, const_pair_tt::first_type >::value ));
     BOOST_STATIC_ASSERT(( is_same< range_difference<const_pair_tt>::type,                           
                           detail::iterator_traits<const_pair_tt::first_type>::difference_type >::value ));
     BOOST_STATIC_ASSERT(( is_same< range_size<const_pair_tt>::type, std::size_t >::value ));

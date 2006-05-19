@@ -53,10 +53,10 @@ void check_iterator()
     BOOST_CHECK( std::distance( begin( p ), end( p ) ) == std::distance( rbegin( rp ), rend( rp ) ) );
 
 
-    BOOST_CHECK_EQUAL( &*begin( a ), &*( rend( a ) ) );
-    BOOST_CHECK_EQUAL( &*( end( a ) ), &*rbegin( a ) );
-    BOOST_CHECK_EQUAL( &*begin( ca ), &*( rend( ca ) ) );
-    BOOST_CHECK_EQUAL( &*( end( ca ) ), &*rbegin( ca ) );
+    BOOST_CHECK_EQUAL( &*begin( a ), &*( rend( a ) - 1 ) );
+    BOOST_CHECK_EQUAL( &*( end( a ) - 1 ), &*rbegin( a ) );
+    BOOST_CHECK_EQUAL( &*begin( ca ), &*( rend( ca ) - 1 ) );
+    BOOST_CHECK_EQUAL( &*( end( ca ) - 1 ), &*rbegin( ca ) );
 }
 
 
