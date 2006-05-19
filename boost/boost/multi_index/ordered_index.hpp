@@ -1051,17 +1051,18 @@ private:
 
   void rearranger(node_type* position,node_type *x)
   {
-    if(!position)position=lower_bound(key(x->value())).get_node();
+    if(!position||comp(key(position->value()),key(x->value()))){
+      position=lower_bound(key(x->value())).get_node();
+    }
+    else if(comp(key(x->value()),key(position->value()))){
+      /* inconsistent rearrangement */
+      throw_exception(
+        archive::archive_exception(
+          archive::archive_exception::other_exception));
+    }
     else node_type::increment(position);
 
     if(position!=x){
-      /* check the rearrangement is consistent */
-      if(!in_place(x->value(),position,Category())){
-        throw_exception(
-          archive::archive_exception(
-            archive::archive_exception::other_exception));
-      }
-
       ordered_index_node_impl::rebalance_for_erase(
         x->impl(),header()->parent(),header()->left(),header()->right());
       ordered_index_node_impl::restore(

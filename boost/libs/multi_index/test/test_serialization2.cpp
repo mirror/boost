@@ -143,6 +143,18 @@ void test_serialization2()
     m.insert(pair_of_ints(11,1));
     m.insert(pair_of_ints(10,1));
     test_serialization(m);
+
+    /* testcase for bug reported at
+     * http://lists.boost.org/boost-users/2006/05/19362.php
+     */
+
+    m.clear();
+    m.insert(pair_of_ints(0,0));
+    m.insert(pair_of_ints(1,0));
+    m.insert(pair_of_ints(2,1));
+    m.insert(pair_of_ints(4,2));
+    m.insert(pair_of_ints(3,2));
+    test_serialization(m);
   }
   test_hashed_index_serialization();
 }
