@@ -421,5 +421,18 @@ void test_fast_repeats2()
    TEST_REGEX_SEARCH("ab[_[.ae.]]{2,5}?xy", perl, "ab______xy", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("ab[_[.ae.]]{2,5}xy", perl, "ab_xy", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("([5[.ae.]]*?).somesite", perl, "//555.somesite", match_default, make_array(2, 14, 2, 5, -2, -2));
+
+   TEST_REGEX_SEARCH("A[^B]*?B.*?C", perl, "AxBxxxx", match_default|match_partial, make_array(0, 7, -2, -2));
+   TEST_REGEX_SEARCH("A[^B]*?B.*?C", perl, "AxBx", match_default|match_partial, make_array(0, 4, -2, -2));
+   TEST_REGEX_SEARCH("A[^B]*?B.*?C", perl, "AxBxxxx", match_default|match_partial|match_not_dot_null, make_array(0, 7, -2, -2));
+   TEST_REGEX_SEARCH("A[^B]*?B.*?C", perl, "AxBx", match_default|match_partial|match_not_dot_null, make_array(0, 4, -2, -2));
+   TEST_REGEX_SEARCH("A[^B]*?Bx*?C", perl, "AxBxxxx", match_default|match_partial|match_not_dot_null, make_array(0, 7, -2, -2));
+   TEST_REGEX_SEARCH("A[^B]*?Bx*?C", perl, "AxBx", match_default|match_partial|match_not_dot_null, make_array(0, 4, -2, -2));
+   TEST_REGEX_SEARCH("A[^B]*?B[xac]*?C", perl, "AxBxxxx", match_default|match_partial|match_not_dot_null, make_array(0, 7, -2, -2));
+   TEST_REGEX_SEARCH("A[^B]*?B[xac]*?C", perl, "AxBx", match_default|match_partial|match_not_dot_null, make_array(0, 4, -2, -2));
+   TEST_REGEX_SEARCH("A[^B]*?B[xac[.ae.]]*?C", perl, "AxBxxxx", match_default|match_partial|match_not_dot_null, make_array(0, 7, -2, -2));
+   TEST_REGEX_SEARCH("A[^B]*?B[xac[.ae.]]*?C", perl, "AxBx", match_default|match_partial|match_not_dot_null, make_array(0, 4, -2, -2));
+
+
 }
 
