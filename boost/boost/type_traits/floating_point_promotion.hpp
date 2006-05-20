@@ -51,7 +51,7 @@ BOOST_TT_AUX_TYPE_TRAIT_DEF1(
       floating_point_promotion
     , T
     , BOOST_DEDUCED_TYPENAME
-        ::boost::type_traits::detail::floating_point_promotion<T>::type
+        boost::type_traits::detail::floating_point_promotion<T>::type
     )
 }
 

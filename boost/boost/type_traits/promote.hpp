@@ -30,7 +30,7 @@ struct promote_impl
 BOOST_TT_AUX_TYPE_TRAIT_DEF1(
       promote
     , T
-    , BOOST_DEDUCED_TYPENAME ::boost::detail::promote_impl<T>::type
+    , BOOST_DEDUCED_TYPENAME boost::detail::promote_impl<T>::type
     )
 }
 
