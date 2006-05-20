@@ -39,6 +39,8 @@
     <dt><a href="#MachineInheritance">Is it possible to inherit from a given
     state machine and modify its layout in the subclass?</a></dt>
 
+    <dt><a href="#Uml2">What about UML2.0 features?</a></dt>
+
     <dt><a href="#EmbeddedApplications">Is Boost.Statechart suitable for
     embedded applications?</a></dt>
 
@@ -287,6 +289,30 @@ struct MyPump : PumpBase
 </b>  }
 };
 </pre>
+
+  <h2><a name="Uml2" id="Uml2">What about UML 2.0 features?</a></h2>
+
+  <p>The library was designed before 2.0 came along. Therefore, if not 
+  explicitly noted otherwise, the library implements the 
+  behavior mandated by the UML1.5 standard. Here's an incomplete list of 
+  differences between the 2.0 semantics &amp; Boost.Statechart semantics:</p>
+<ul>
+ <li>All transitions are always external. Local transitions are not supported 
+ at all. Unfortunately, the UML2.0 specifications are not entirely clear how 
+ local transitions are supposed to work, see
+ <a href="http://thread.gmane.org/gmane.comp.lib.boost.user/18641">here</a> 
+ for more information</li>
+<li>The origin of a transition to history must not be a direct or indirect 
+inner state of the state containing the history pseudo state. UML2.0 
+explicitly allows this, the semantics of the library will be changed 
+accordingly for the 1.35 release, see
+<a href="http://thread.gmane.org/gmane.comp.lib.boost.user/18641">here</a> for 
+more information</li>
+ <li>There is no direct support for the UML2.0 elements entry point and exit 
+ point. However, both can easily be simulated, the former with a typedef and 
+ the latter with a state that is a template (with the transition destination 
+ as a template parameter)</li>
+</ul>
 
   <h2><a name="EmbeddedApplications" id="EmbeddedApplications">Is
   Boost.Statechart suitable for embedded applications?</a></h2>
@@ -687,8 +713,7 @@ Inner::~Inner()
   <hr>
 
   <p>Revised 
-  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12
-  March, 2006<!--webbot bot="Timestamp" endspan i-checksum="28929" --></p>
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->20 May, 2006<!--webbot bot="Timestamp" endspan i-checksum="13996" --></p>
 
   <p><i>&copy; Copyright <a href=
   "mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber D&ouml;nni</a>

@@ -744,7 +744,7 @@ namespace statechart
       template&lt; class Target &gt;
       Target <a href="#state_downcast">state_downcast</a>() const;
 
-      // a model of the StateBase concept
+      // a model of the <a href="#StateBase">StateBase</a> concept
       typedef <i>implementation-defined</i> state_base_type;
       // a model of the standard Forward Iterator concept
       typedef <i>implementation-defined</i> state_iterator;
@@ -752,8 +752,8 @@ namespace statechart
       state_iterator <a href="#state_begin">state_begin</a>() const;
       state_iterator <a href="#state_end">state_end</a>() const;
 
-      // see <a href="#process_event">process_event</a>() effects, point 10
-      void unconsumed_event( const event_base &amp; ) {}
+      void <a href="#unconsumed_event">unconsumed_event</a>( const <a href=
+"#Classevent_base">event_base</a> &amp; ) {}
 
     protected:
       <a href="#state_machine">state_machine</a>();
@@ -1134,6 +1134,19 @@ void <a name="post_event3" id="post_event3">post_event</a>( const <a href=
   );</code><br>
   <b>Throws</b>: Any exceptions propagated from
   <code>Allocator::allocate()</code></p>
+
+  <pre>
+void <a name="unconsumed_event" id="unconsumed_event">unconsumed_event</a>( const <a href=
+"#Classevent_base">event_base</a> &amp; evt );
+</pre>
+
+  <p><b>Effects</b>: None<br>
+  <b>Note</b>: This function (or, if present, the equally named derived class 
+  member function) is called by 
+  <a href="#process_event">process_event</a>() whenever a dispatched event did
+  not trigger a reaction, see  
+  <a href="#process_event">process_event</a>() effects, point 10 for more
+  information.</p>
 
   <h3>Class template <code>state_machine</code> observer functions</h3>
   <pre>
@@ -3466,8 +3479,7 @@ namespace statechart
   <hr>
 
   <p>Revised 
-  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->13
-  March, 2006<!--webbot bot="Timestamp" endspan i-checksum="28931" --></p>
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->18 May, 2006<!--webbot bot="Timestamp" endspan i-checksum="14011" --></p>
 
   <p><i>&copy; Copyright <a href=
   "mailto:ahd6974-spamgroupstrap@yahoo.com">Andreas Huber D&ouml;nni</a>
