@@ -1,7 +1,7 @@
 #ifndef BOOST_STATECHART_DETAIL_STATE_BASE_HPP_INCLUDED
 #define BOOST_STATECHART_DETAIL_STATE_BASE_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2005
+// (c) Copyright Andreas Huber Doenni 2002-2006
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -16,9 +16,9 @@
 #include <boost/intrusive_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/assert.hpp>
-// BOOST_MSVC
-#include <boost/config.hpp>
+#include <boost/config.hpp> // BOOST_MSVC
 
+#include <boost/detail/workaround.hpp>
 #include <boost/detail/allocator_utilities.hpp>
 
 #ifdef BOOST_MSVC
@@ -89,10 +89,20 @@ class state_base :
     {
     }
 
+    #if BOOST_WORKAROUND( __GNUC__, BOOST_TESTED_AT( 4 ) )
+    // We make the destructor virtual for GCC because with this compiler there
+    // is currently no way to disable the "has virtual functions but
+    // non-virtual destructor" warning on a class by class basis. Although it
+    // can be done on the compiler command line with -Wno-non-virtual-dtor,
+    // this is undesirable as this would also suppress legitimate warnings for
+    // types that are not states.
+    virtual ~state_base() {}
+    #else
     // This destructor is not virtual for performance reasons. The library
     // ensures that a state object is never deleted through a state_base
     // pointer but only through a pointer to the most-derived type.
     ~state_base() {}
+    #endif
 
   protected:
     //////////////////////////////////////////////////////////////////////////

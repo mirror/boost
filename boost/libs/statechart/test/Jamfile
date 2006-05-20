@@ -10,18 +10,7 @@ import testing ; # bring in rules for testing
 
 DEPENDS all : test ; # Make tests run by default.
 
-template statechart-common-options
-  :
-  : <include>$(BOOST_ROOT)
-    # The library ensures that all state destructors are only invoked on
-    # the most-derived type, therefore state destructors do not need to
-    # be virtual
-    <gcc><*><cxxflags>-Wno-non-virtual-dtor
-    <gcc-stlport><*><cxxflags>-Wno-non-virtual-dtor
-    <gcc-nocygwin><*><cxxflags>-Wno-non-virtual-dtor
-    <mingw><*><cxxflags>-Wno-non-virtual-dtor
-    <mingw-stlport><*><cxxflags>-Wno-non-virtual-dtor
-;
+template statechart-common-options : : <include>$(BOOST_ROOT) ;
 
 local test_monitor = <lib>../../../libs/test/build/boost_test_exec_monitor ;
 # Some platforms have either problems with the automatic detection of the

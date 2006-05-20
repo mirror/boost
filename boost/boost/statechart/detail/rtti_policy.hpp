@@ -1,7 +1,7 @@
 #ifndef BOOST_STATECHART_DETAIL_RTTI_POLICY_HPP_INCLUDED
 #define BOOST_STATECHART_DETAIL_RTTI_POLICY_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2005
+// (c) Copyright Andreas Huber Doenni 2002-2006
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -10,6 +10,7 @@
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp> // BOOST_MSVC
+#include <boost/detail/workaround.hpp>
 
 #include <typeinfo> // std::type_info
 
@@ -117,11 +118,21 @@ struct rtti_policy
       #endif
 
     protected:
-      ////////////////////////////////////////////////////////////////////////
-      ~rtti_base_type() {}
-
     #ifdef BOOST_STATECHART_USE_NATIVE_RTTI
       rtti_base_type( id_provider_type ) {}
+
+      ////////////////////////////////////////////////////////////////////////
+      #if BOOST_WORKAROUND( __GNUC__, BOOST_TESTED_AT( 4 ) )
+      // We make the destructor virtual for GCC because with this compiler
+      // there is currently no way to disable the "has virtual functions but
+      // non-virtual destructor" warning on a class by class basis. Although
+      // it can be done on the compiler command line with
+      // -Wno-non-virtual-dtor, this is undesirable as this would also
+      // suppress legitimate warnings for types that are not states.
+      virtual ~rtti_base_type() {}
+      #else
+      ~rtti_base_type() {}
+      #endif
 
     private:
       ////////////////////////////////////////////////////////////////////////
@@ -136,6 +147,8 @@ struct rtti_policy
         idProvider_( idProvider )
       {
       }
+
+      ~rtti_base_type() {}
 
     private:
       ////////////////////////////////////////////////////////////////////////
