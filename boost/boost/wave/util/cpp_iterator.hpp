@@ -956,12 +956,14 @@ lexer_type it = iter_ctx->first;
     // eventually skip null pp directive (no need to do it via the parser)
         if (it != iter_ctx->last && T_POUND == BASE_TOKEN(token_id(*it))) {
             if (pp_is_last_on_line(ctx, it, iter_ctx->last)) {
+            // start over with the next line
                 seen_newline = true;
-                iter_ctx->first = it;   // start over with the next line
+                iter_ctx->first = it;
                 return true;
             }
-            else {
-                on_illformed((*it).get_value());  // report invalid pp directive
+            else if (ctx.get_if_block_status()) {
+            // report invalid pp directive
+                on_illformed((*it).get_value());  
             }
         }
         

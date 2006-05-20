@@ -127,6 +127,9 @@ Boost V1.34.0
   gcc 4.1.0 (thanks to Richard Guenther for reporting these).
 - Richard Guenther fixed another buffer overrun problem in the Re2C scanner.
 - Fixed Jamfile.v2 files for all sample applications.
+- Fixed a bug which lead to reporting of an illegal preprocessing directive
+  inside not-evaluated conditional blocks under certain circumstances (thanks
+  to Tobias Schwinger for reporting).
 
 Sat Feb 18 2005
 - Version 1.2.3
