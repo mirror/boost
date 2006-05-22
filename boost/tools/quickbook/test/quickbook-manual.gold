@@ -24,7 +24,7 @@
   </articleinfo>
   <title>Quickbook 1.3</title>
   <section id="quickbook.intro">
-    <title> Introduction</title>
+    <title><link linkend="quickbook.intro"> Introduction</link></title>
     <blockquote>
       <para>
         <emphasis role="bold"><emphasis><quote>Why program by hand in five days what
@@ -86,9 +86,10 @@
     </itemizedlist>
   </section>
   <section id="quickbook.change_log">
-    <title> Change Log</title> <anchor id="quickbook.change_log.version_1_3" />
+    <title><link linkend="quickbook.change_log"> Change Log</link></title> <anchor
+    id="quickbook.change_log.version_1_3"/>
     <bridgehead renderas="sect3">
-      Version 1.3
+      <link linkend="quickbook.change_log.version_1_3">Version 1.3</link>
     </bridgehead>
     <itemizedlist>
       <listitem>
@@ -159,7 +160,7 @@
     </itemizedlist>
   </section>
   <section id="quickbook.syntax">
-    <title> Syntax Summary</title>
+    <title><link linkend="quickbook.syntax"> Syntax Summary</link></title>
     <para>
       A QuickBook document is composed of one or more blocks. An example of a block
       is the paragraph or a C++ code snippet. Some blocks have special mark-ups.
@@ -176,7 +177,7 @@
       past a single block.
     </para>
     <section id="quickbook.syntax.comments">
-      <title>Comments</title>
+      <title><link linkend="quickbook.syntax.comments">Comments</link></title>
       <para>
         Can be placed anywhere.
       </para>
@@ -185,9 +186,10 @@
 </programlisting>
     </section>
     <section id="quickbook.syntax.phrase">
-      <title> Phrase Level Elements</title>
+      <title><link linkend="quickbook.syntax.phrase"> Phrase Level Elements</link></title>
       <section id="quickbook.syntax.phrase.font_styles">
-        <title>Font Styles</title> 
+        <title><link linkend="quickbook.syntax.phrase.font_styles">Font Styles</link></title>
+        
 <programlisting><!--quickbook-escape-prefix-->['italic], [*bold], [_underline], [^teletype], [-strikethrough]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -212,7 +214,7 @@
         </para>
       </section>
       <section id="quickbook.syntax.phrase.replaceable">
-        <title>Replaceable</title>
+        <title><link linkend="quickbook.syntax.phrase.replaceable">Replaceable</link></title>
         <para>
           When you want content that may or must be replaced by the user, use the
           syntax:
@@ -230,7 +232,8 @@
         </para>
       </section>
       <section id="quickbook.syntax.phrase.quotations">
-        <title>Quotations</title> 
+        <title><link linkend="quickbook.syntax.phrase.quotations">Quotations</link></title>
+        
 <programlisting><!--quickbook-escape-prefix-->["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -261,7 +264,7 @@ the true business precept.]
         </para>
       </section>
       <section id="quickbook.syntax.phrase.simple_formatting">
-        <title>Simple formatting</title>
+        <title><link linkend="quickbook.syntax.phrase.simple_formatting">Simple formatting</link></title>
         <para>
           Simple markup for formatting text, common in many applications, is now
           supported:
@@ -391,27 +394,20 @@ the true business precept.]
             </tbody>
           </tgroup>
         </informaltable>
-        <informaltable frame="all">
-          <?dbhtml table-width="74%" ?>
-          <tgroup cols="1">
-            <tbody>
-              <row>
-                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject>
-                <textobject>
-                  <phrase>note</phrase>
-                </textobject>
-                </inlinemediaobject> Thanks to David Barrett, author of <ulink url="http://quinthar.com/qwikiwiki/index.php?page=Home">Qwiki</ulink>,
-                for sharing these samples and teaching me these obscure formatting
-                rules. I wasn't sure at all if <ulink url="http://spirit.sourceforge.net">Spirit</ulink>,
-                being more or less a formal EBNF parser, can handle the context sensitivity
-                and ambiguity.</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </informaltable>
+        <para role="blurb">
+          <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject>
+          <textobject>
+            <phrase>note</phrase>
+          </textobject>
+          </inlinemediaobject> Thanks to David Barrett, author of <ulink url="http://quinthar.com/qwikiwiki/index.php?page=Home">Qwiki</ulink>,
+          for sharing these samples and teaching me these obscure formatting rules.
+          I wasn't sure at all if <ulink url="http://spirit.sourceforge.net">Spirit</ulink>,
+          being more or less a formal EBNF parser, can handle the context sensitivity
+          and ambiguity.
+        </para>
       </section>
       <section id="quickbook.syntax.phrase.inline_code">
-        <title>Inline code</title>
+        <title><link linkend="quickbook.syntax.phrase.inline_code">Inline code</link></title>
         <para>
           Inlining code in paragraphs is quite common when writing C++ documentation.
           We provide a very simple markup for this. For example, this:
@@ -429,31 +425,24 @@ the true business precept.]
           role="number">0</phrase><phrase role="special">;</phrase>&nbsp;<phrase
           role="special">}</phrase></code> in it. The code will be syntax highlighted.
         </para>
-        <informaltable frame="all">
-          <?dbhtml table-width="74%" ?>
-          <tgroup cols="1">
-            <tbody>
-              <row>
-                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject>
-                <textobject>
-                  <phrase>note</phrase>
-                </textobject>
-                </inlinemediaobject> Note that we simply enclose the code with the
-                tick: <literal>
+        <para role="blurb">
+          <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject>
+          <textobject>
+            <phrase>note</phrase>
+          </textobject>
+          </inlinemediaobject> Note that we simply enclose the code with the tick:
+          <literal>
 <!--quickbook-escape-prefix-->"`"<!--quickbook-escape-postfix-->
-                </literal>, not the single quote: <code><phrase role="string">&quot;'&quot;</phrase></code>.
-                Note too that <literal>
+          </literal>, not the single quote: <code><phrase role="string">&quot;'&quot;</phrase></code>.
+          Note too that <literal>
 <!--quickbook-escape-prefix-->`some code`<!--quickbook-escape-postfix-->
-                </literal> is prefered over <literal>
+          </literal> is prefered over <literal>
 <!--quickbook-escape-prefix-->[^some code]<!--quickbook-escape-postfix-->
-                </literal>. </entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </informaltable>
+          </literal>.
+        </para>
       </section>
       <section id="quickbook.syntax.phrase.code_blocks">
-        <title>Code blocks</title>
+        <title><link linkend="quickbook.syntax.phrase.code_blocks">Code blocks</link></title>
         <para>
           Preformatted code simply starts with a space or a tab (See <link linkend="quickbook.syntax.block.code">Code</link>).
           However, such a simple syntax cannot be used as phrase elements in lists
@@ -496,7 +485,7 @@ the true business precept.]
         </para>
       </section>
       <section id="quickbook.syntax.phrase.source_mode">
-        <title>Source Mode</title>
+        <title><link linkend="quickbook.syntax.phrase.source_mode">Source Mode</link></title>
         <para>
           If a document contains more than one type of source code then the source
           mode may be changed dynamically as the document is processed. All QuickBook
@@ -543,45 +532,32 @@ C++ comment `// looks like this` whereas a Python comment [python]
             </tbody>
           </tgroup>
         </informaltable>
-        <informaltable frame="all">
-          <?dbhtml table-width="74%" ?>
-          <tgroup cols="1">
-            <tbody>
-              <row>
-                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject>
-                <textobject>
-                  <phrase>note</phrase>
-                </textobject>
-                </inlinemediaobject> The source mode strings are lowercase.</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </informaltable>
+        <para role="blurb">
+          <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject>
+          <textobject>
+            <phrase>note</phrase>
+          </textobject>
+          </inlinemediaobject> The source mode strings are lowercase.
+        </para>
       </section>
       <section id="quickbook.syntax.phrase.line_break">
-        <title>line-break</title> 
+        <title><link linkend="quickbook.syntax.phrase.line_break">line-break</link></title>
+        
 <programlisting><!--quickbook-escape-prefix-->[br]
 <!--quickbook-escape-postfix--></programlisting>
-        <informaltable frame="all">
-          <?dbhtml table-width="74%" ?>
-          <tgroup cols="1">
-            <tbody>
-              <row>
-                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject>
-                <textobject>
-                  <phrase>note</phrase>
-                </textobject>
-                </inlinemediaobject> Note that <code><phrase role="special">\</phrase><phrase
-                role="identifier">n</phrase></code> is now preferred over <code><phrase
-                role="special">[</phrase><phrase role="identifier">br</phrase><phrase
-                role="special">]</phrase></code>.</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </informaltable>
+        <para role="blurb">
+          <inlinemediaobject><imageobject><imagedata fileref="images/note.png"></imagedata></imageobject>
+          <textobject>
+            <phrase>note</phrase>
+          </textobject>
+          </inlinemediaobject> Note that <code><phrase role="special">\</phrase><phrase
+          role="identifier">n</phrase></code> is now preferred over <code><phrase
+          role="special">[</phrase><phrase role="identifier">br</phrase><phrase role="special">]</phrase></code>.
+        </para>
       </section>
       <section id="quickbook.syntax.phrase.anchors">
-        <title>Anchors</title> 
+        <title><link linkend="quickbook.syntax.phrase.anchors">Anchors</link></title>
+        
 <programlisting><!--quickbook-escape-prefix-->[#named_anchor]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -595,7 +571,8 @@ Some link text]<!--quickbook-escape-postfix-->
         </para>
       </section>
       <section id="quickbook.syntax.phrase.links">
-        <title>Links</title> 
+        <title><link linkend="quickbook.syntax.phrase.links">Links</link></title>
+        
 <programlisting><!--quickbook-escape-prefix-->[@http://www.boost.org this is [*boost's] website....]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -625,7 +602,7 @@ Some link text]<!--quickbook-escape-postfix-->
         </para>
       </section>
       <section id="quickbook.syntax.phrase.anchor_links">
-        <title>Anchor links</title>
+        <title><link linkend="quickbook.syntax.phrase.anchor_links">Anchor links</link></title>
         <para>
           You can link within a document using:
         </para>
@@ -639,7 +616,7 @@ Some link text]<!--quickbook-escape-postfix-->
         </para>
       </section>
       <section id="quickbook.syntax.phrase.refentry_links">
-        <title>refentry links</title>
+        <title><link linkend="quickbook.syntax.phrase.refentry_links">refentry links</link></title>
         <para>
           In addition, you can link internally to an XML refentry like:
         </para>
@@ -662,7 +639,7 @@ Some link text]<!--quickbook-escape-postfix-->
         </para>
       </section>
       <section id="quickbook.syntax.phrase.code_links">
-        <title> Code Links</title>
+        <title><link linkend="quickbook.syntax.phrase.code_links"> Code Links</link></title>
         <para>
           If you want to link to a function, class, member, enum or header in the
           reference section, you can use:
@@ -686,7 +663,7 @@ Some link text]<!--quickbook-escape-postfix-->
         </para>
       </section>
       <section id="quickbook.syntax.phrase.escape">
-        <title>Escape</title>
+        <title><link linkend="quickbook.syntax.phrase.escape">Escape</link></title>
         <para>
           The escape mark-up is used when we don't want to do any processing.
         </para>
@@ -709,25 +686,19 @@ escape (no processing/formatting)
 <!--quickbook-escape-prefix--><emphasis role="bold">This is direct XML markup</emphasis>
 <!--quickbook-escape-postfix-->
         </para>
-        <informaltable frame="all">
-          <?dbhtml table-width="74%" ?>
-          <tgroup cols="1">
-            <tbody>
-              <row>
-                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/alert.png"></imagedata></imageobject>
-                <textobject>
-                  <phrase>alert</phrase>
-                </textobject>
-                </inlinemediaobject> Be careful when using the escape. The text must
-                conform to <ulink url="http://www.boost.org/doc/html/boostbook.html">BoostBook</ulink>/<ulink
-                url="http://www.docbook.org/">DocBook</ulink> syntax.</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </informaltable>
+        <para role="blurb">
+          <inlinemediaobject><imageobject><imagedata fileref="images/alert.png"></imagedata></imageobject>
+          <textobject>
+            <phrase>alert</phrase>
+          </textobject>
+          </inlinemediaobject> Be careful when using the escape. The text must conform
+          to <ulink url="http://www.boost.org/doc/html/boostbook.html">BoostBook</ulink>/<ulink
+          url="http://www.docbook.org/">DocBook</ulink> syntax.
+        </para>
       </section>
       <section id="quickbook.syntax.phrase.single_char_escape">
-        <title>Single char escape</title>
+        <title><link linkend="quickbook.syntax.phrase.single_char_escape">Single
+        char escape</link></title>
         <para>
           The backslash may be used to escape a single punctuation character. The
           punctuation immediately after the backslash is passed without any processing.
@@ -744,12 +715,13 @@ escape (no processing/formatting)
         </para>
       </section>
       <section id="quickbook.syntax.phrase.images">
-        <title>Images</title> 
+        <title><link linkend="quickbook.syntax.phrase.images">Images</link></title>
+        
 <programlisting><!--quickbook-escape-prefix-->[$image.jpg]
 <!--quickbook-escape-postfix--></programlisting>
       </section>
       <section id="quickbook.syntax.phrase.footnotes">
-        <title>Footnotes</title>
+        <title><link linkend="quickbook.syntax.phrase.footnotes">Footnotes</link></title>
         <para>
           As of version 1.3, QuickBook supports footnotes. Just put the text of the
           footnote in a <code><phrase role="special">[</phrase><phrase role="identifier">footnote</phrase><phrase
@@ -771,9 +743,9 @@ escape (no processing/formatting)
       </section>
     </section>
     <section id="quickbook.syntax.block">
-      <title> Block Level Elements</title>
+      <title><link linkend="quickbook.syntax.block"> Block Level Elements</link></title>
       <section id="quickbook.syntax.block.document">
-        <title>Document</title>
+        <title><link linkend="quickbook.syntax.block.document">Document</link></title>
         <para>
           Every document must begin with a Document Info section, which should look
           like this:
@@ -848,7 +820,7 @@ escape (no processing/formatting)
         </para>
       </section>
       <section id="quickbook.syntax.block.section">
-        <title>Section</title>
+        <title><link linkend="quickbook.syntax.block.section">Section</link></title>
         <para>
           Starting a new section is accomplished with:
         </para>
@@ -875,7 +847,7 @@ escape (no processing/formatting)
         </para>
       </section>
       <section id="quickbook.syntax.block.xinclude">
-        <title>xinclude</title>
+        <title><link linkend="quickbook.syntax.block.xinclude">xinclude</link></title>
         <para>
           You can include another XML file with:
         </para>
@@ -888,7 +860,7 @@ escape (no processing/formatting)
         </para>
       </section>
       <section id="quickbook.syntax.block.paragraphs">
-        <title>Paragraphs</title>
+        <title><link linkend="quickbook.syntax.block.paragraphs">Paragraphs</link></title>
         <para>
           Paragraphs start left-flushed and are terminated by two or more newlines.
           No markup is needed for paragraphs. QuickBook automatically detects paragraphs
@@ -898,9 +870,10 @@ escape (no processing/formatting)
         </para>
       </section>
       <section id="quickbook.syntax.block.lists">
-        <title>Lists</title>
+        <title><link linkend="quickbook.syntax.block.lists">Lists</link></title>
         <section id="quickbook.syntax.block.lists.ordered_lists">
-          <title>Ordered lists</title> 
+          <title><link linkend="quickbook.syntax.block.lists.ordered_lists">Ordered
+          lists</link></title> 
 <programlisting># One
 # Two
 # Three
@@ -921,7 +894,8 @@ escape (no processing/formatting)
           </orderedlist>
         </section>
         <section id="quickbook.syntax.block.lists.list_hierarchies">
-          <title>List Hierarchies</title>
+          <title><link linkend="quickbook.syntax.block.lists.list_hierarchies">List
+          Hierarchies</link></title>
           <para>
             List hierarchies are supported. Example:
           </para>
@@ -984,7 +958,8 @@ escape (no processing/formatting)
           </orderedlist>
         </section>
         <section id="quickbook.syntax.block.lists.long_list_lines">
-          <title>Long List Lines</title>
+          <title><link linkend="quickbook.syntax.block.lists.long_list_lines">Long
+          List Lines</link></title>
           <para>
             Long lines will be wrapped appropriately. Example:
           </para>
@@ -1013,7 +988,8 @@ escape (no processing/formatting)
           </orderedlist>
         </section>
         <section id="quickbook.syntax.block.lists.unordered_lists">
-          <title>Unordered lists</title> 
+          <title><link linkend="quickbook.syntax.block.lists.unordered_lists">Unordered
+          lists</link></title> 
 <programlisting><!--quickbook-escape-prefix-->* First
 * Second
 * Third
@@ -1034,7 +1010,7 @@ escape (no processing/formatting)
           </itemizedlist>
         </section>
         <section id="quickbook.syntax.block.lists.mixed_lists">
-          <title>Mixed lists</title>
+          <title><link linkend="quickbook.syntax.block.lists.mixed_lists">Mixed lists</link></title>
           <para>
             Mixed lists (ordered and unordered) are supported. Example:
           </para>
@@ -1146,7 +1122,7 @@ escape (no processing/formatting)
         </section>
       </section>
       <section id="quickbook.syntax.block.code">
-        <title>Code</title>
+        <title><link linkend="quickbook.syntax.block.code">Code</link></title>
         <para>
           Preformatted code starts with a space or a tab. The code will be syntax
           highlighted according to the current <link linkend="quickbook.syntax.phrase.source_mode">Source
@@ -1194,7 +1170,8 @@ escape (no processing/formatting)
 </programlisting>
       </section>
       <section id="quickbook.syntax.block.escape_back">
-        <title> Escaping Back To QuickBook</title>
+        <title><link linkend="quickbook.syntax.block.escape_back"> Escaping Back
+        To QuickBook</link></title>
         <para>
           Inside code, code blocks and inline code, QuickBook does not allow any
           markup to avoid conflicts with the target syntax (e.g. c++). In case you
@@ -1223,7 +1200,7 @@ escape (no processing/formatting)
         </para>
       </section>
       <section id="quickbook.syntax.block.preformatted">
-        <title>Preformatted</title>
+        <title><link linkend="quickbook.syntax.block.preformatted">Preformatted</link></title>
         <para>
           Sometimes, you don't want some preformatted text to be parsed as C++. In
           such cases, use the <literal>[pre ... ]</literal> markup block.
@@ -1258,7 +1235,8 @@ escape (no processing/formatting)
         </para>
       </section>
       <section id="quickbook.syntax.block.blockquote">
-        <title>Blockquote</title> 
+        <title><link linkend="quickbook.syntax.block.blockquote">Blockquote</link></title>
+        
 <programlisting><!--quickbook-escape-prefix-->[:sometext...]<!--quickbook-escape-postfix-->
 </programlisting>
         <blockquote>
@@ -1268,7 +1246,8 @@ escape (no processing/formatting)
         </blockquote>
       </section>
       <section id="quickbook.syntax.block.admonitions">
-        <title>Admonitions</title> 
+        <title><link linkend="quickbook.syntax.block.admonitions">Admonitions</link></title>
+        
 <programlisting><!--quickbook-escape-prefix-->[note This is a note]
 [tip This is a tip]
 [important This is important]
@@ -1310,7 +1289,8 @@ escape (no processing/formatting)
         </para>
       </section>
       <section id="quickbook.syntax.block.headings">
-        <title>Headings</title> 
+        <title><link linkend="quickbook.syntax.block.headings">Headings</link></title>
+        
 <programlisting><!--quickbook-escape-prefix-->[h1 Heading 1]
 [h2 Heading 2]
 [h3 Heading 3]
@@ -1318,29 +1298,29 @@ escape (no processing/formatting)
 [h5 Heading 5]
 [h6 Heading 6]
 <!--quickbook-escape-postfix--></programlisting>
-        <anchor id="quickbook.syntax.block.headings.heading_1" />
+        <anchor id="quickbook.syntax.block.headings.heading_1"/>
         <bridgehead renderas="sect1">
-          Heading 1
+          <link linkend="quickbook.syntax.block.headings.heading_1">Heading 1</link>
         </bridgehead>
-        <anchor id="quickbook.syntax.block.headings.heading_2" />
+        <anchor id="quickbook.syntax.block.headings.heading_2"/>
         <bridgehead renderas="sect2">
-          Heading 2
+          <link linkend="quickbook.syntax.block.headings.heading_2">Heading 2</link>
         </bridgehead>
-        <anchor id="quickbook.syntax.block.headings.heading_3" />
+        <anchor id="quickbook.syntax.block.headings.heading_3"/>
         <bridgehead renderas="sect3">
-          Heading 3
+          <link linkend="quickbook.syntax.block.headings.heading_3">Heading 3</link>
         </bridgehead>
-        <anchor id="quickbook.syntax.block.headings.heading_4" />
+        <anchor id="quickbook.syntax.block.headings.heading_4"/>
         <bridgehead renderas="sect4">
-          Heading 4
+          <link linkend="quickbook.syntax.block.headings.heading_4">Heading 4</link>
         </bridgehead>
-        <anchor id="quickbook.syntax.block.headings.heading_5" />
+        <anchor id="quickbook.syntax.block.headings.heading_5"/>
         <bridgehead renderas="sect5">
-          Heading 5
+          <link linkend="quickbook.syntax.block.headings.heading_5">Heading 5</link>
         </bridgehead>
-        <anchor id="quickbook.syntax.block.headings.heading_6" />
+        <anchor id="quickbook.syntax.block.headings.heading_6"/>
         <bridgehead renderas="sect6">
-          Heading 6
+          <link linkend="quickbook.syntax.block.headings.heading_6">Heading 6</link>
         </bridgehead>
         <para>
           Headings 1-3 [h1 h2 and h3] will automatically have anchors with normalized
@@ -1361,7 +1341,8 @@ escape (no processing/formatting)
         </para>
       </section>
       <section id="quickbook.syntax.block.macros">
-        <title>Macros</title> 
+        <title><link linkend="quickbook.syntax.block.macros">Macros</link></title>
+        
 <programlisting><!--quickbook-escape-prefix-->[def macro_identifier some text]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
@@ -1384,24 +1365,17 @@ sf_logo
           </textobject>
           </inlinemediaobject>
         </para>
-        <informaltable frame="all">
-          <?dbhtml table-width="74%" ?>
-          <tgroup cols="1">
-            <tbody>
-              <row>
-                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/tip.png"></imagedata></imageobject>
-                <textobject>
-                  <phrase>tip</phrase>
-                </textobject>
-                </inlinemediaobject> It's a good idea to use macro identifiers that
-                are distinguishable. For instance, in this document, macro identifiers
-                have two leading and trailing underscores (e.g. <literal>
+        <para role="blurb">
+          <inlinemediaobject><imageobject><imagedata fileref="images/tip.png"></imagedata></imageobject>
+          <textobject>
+            <phrase>tip</phrase>
+          </textobject>
+          </inlinemediaobject> It's a good idea to use macro identifiers that are
+          distinguishable. For instance, in this document, macro identifiers have
+          two leading and trailing underscores (e.g. <literal>
 <!--quickbook-escape-prefix-->__spirit__<!--quickbook-escape-postfix-->
-                </literal>). The reason is to avoid unwanted macro replacement.</entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </informaltable>
+          </literal>). The reason is to avoid unwanted macro replacement.
+        </para>
         <para>
           Links (URLS) and images are good candidates for macros. <emphasis role="bold">1</emphasis>)
           They tend to change a lot. It is a good idea to place all links and images
@@ -1442,7 +1416,8 @@ sf_logo
         </para>
       </section>
       <section id="quickbook.syntax.block.predefined_macros">
-        <title>Predefined Macros</title>
+        <title><link linkend="quickbook.syntax.block.predefined_macros">Predefined
+        Macros</link></title>
         <para>
           Quickbook has some predefined macros that you can already use.
         </para>
@@ -1477,7 +1452,8 @@ sf_logo
         </informaltable>
       </section>
       <section id="quickbook.syntax.block.blurbs">
-        <title>Blurbs</title> 
+        <title><link linkend="quickbook.syntax.block.blurbs">Blurbs</link></title>
+        
 <programlisting><!--quickbook-escape-prefix-->[blurb :-) [*An eye catching advertisement or note...]\n\n
     __spirit__ is an object-oriented recursive-descent parser generator framework
     implemented using template meta-programming techniques. Expression templates
@@ -1488,28 +1464,22 @@ sf_logo
         <para>
           will generate this:
         </para>
-        <informaltable frame="all">
-          <?dbhtml table-width="74%" ?>
-          <tgroup cols="1">
-            <tbody>
-              <row>
-                <entry role="blurb"> <inlinemediaobject><imageobject><imagedata fileref="images/smiley.png"></imagedata></imageobject>
-                <textobject>
-                  <phrase>smiley</phrase>
-                </textobject>
-                </inlinemediaobject>&nbsp;<emphasis role="bold">An eye catching advertisement
-                or note...</emphasis><sbr/> <sbr/> <ulink url="http://spirit.sourceforge.net">Spirit</ulink>
-                is an object-oriented recursive-descent parser generator framework
-                implemented using template meta-programming techniques. Expression
-                templates allow us to approximate the syntax of Extended Backus-Normal
-                Form (EBNF) completely in C++. </entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </informaltable>
+        <para role="blurb">
+          <inlinemediaobject><imageobject><imagedata fileref="images/smiley.png"></imagedata></imageobject>
+          <textobject>
+            <phrase>smiley</phrase>
+          </textobject>
+          </inlinemediaobject>&nbsp;<emphasis role="bold">An eye catching advertisement
+          or note...</emphasis><sbr/> <sbr/> <ulink url="http://spirit.sourceforge.net">Spirit</ulink>
+          is an object-oriented recursive-descent parser generator framework implemented
+          using template meta-programming techniques. Expression templates allow
+          us to approximate the syntax of Extended Backus-Normal Form (EBNF) completely
+          in C++.
+        </para>
       </section>
       <section id="quickbook.syntax.block.tables">
-        <title>Tables</title> 
+        <title><link linkend="quickbook.syntax.block.tables">Tables</link></title>
+        
 <programlisting><!--quickbook-escape-prefix-->[table A Simple Table
     [[Heading 1] [Heading 2] [Heading 3]]
     [[R0-C0]     [R0-C1]     [R0-C2]]
@@ -1644,7 +1614,8 @@ sf_logo
         </informaltable>
       </section>
       <section id="quickbook.syntax.block.variable_lists">
-        <title>Variable Lists</title> 
+        <title><link linkend="quickbook.syntax.block.variable_lists">Variable Lists</link></title>
+        
 <programlisting><!--quickbook-escape-prefix-->[variablelist A Variable List
     [[term 1] [The definition of term 1]]
     [[term 2] [The definition of term 2]]
@@ -1677,7 +1648,7 @@ sf_logo
         </para>
       </section>
       <section id="quickbook.syntax.block.include">
-        <title>Include</title>
+        <title><link linkend="quickbook.syntax.block.include">Include</link></title>
         <para>
           You can include one QuickBook file from another. The syntax is simply:
         </para>
@@ -1720,7 +1691,7 @@ sf_logo
     </section>
   </section>
   <section id="quickbook.ref">
-    <title> Quick Reference</title>
+    <title><link linkend="quickbook.ref"> Quick Reference</link></title>
     <informaltable frame="all">
       <bridgehead renderas="sect4">
         <phrase role="table-title">Syntax Compendium</phrase>

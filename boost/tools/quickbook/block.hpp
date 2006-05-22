@@ -23,7 +23,7 @@ namespace quickbook
 {
     using namespace boost::spirit;
 
-    template <typename Actions>
+    template <typename Actions, bool skip_initial_spaces = false>
     struct block_grammar : grammar<block_grammar<Actions> >
     {
         block_grammar(Actions& actions_)
@@ -39,9 +39,18 @@ namespace quickbook
                 using detail::var;
                 Actions& actions = self.actions;
 
-                start_ =
-                    *(space_p | comment) >> blocks >> blank
-                    ;
+                if (skip_initial_spaces)
+                {
+                    start_ =
+                        *(space_p | comment) >> blocks >> blank
+                        ;
+                }
+                else
+                {
+                    start_ =
+                        blocks >> blank
+                        ;
+                }
 
                 blocks =
                    +(   block_markup
@@ -101,6 +110,7 @@ namespace quickbook
                         |   variablelist
                         |   xinclude
                         |   include
+                        |   template_
                         )
                     >>  (   (space >> ']' >> +eol)
                         |   eps_p                       [actions.error]
@@ -170,10 +180,36 @@ namespace quickbook
                         ;
                 }
 
+                macro_identifier =
+                    +(anychar_p - (space_p | ']'))
+                    ;
+
                 def_macro =
                     "def" >> hard_space
-                    >> identifier                       [actions.identifier]
-                    >> blank >> phrase                  [actions.macro_def]
+                    >> macro_identifier                 [actions.macro_identifier]
+                    >> blank >> phrase                  [actions.macro_definition]
+                    ;
+
+                identifier =
+                    (alpha_p | '_') >> *(alnum_p | '_')
+                    ;
+
+                template_ =
+                    "template"
+                    >> hard_space >> identifier         [push_back_a(actions.template_info)]
+                    >> space >> '('
+                    >> space >> identifier              [push_back_a(actions.template_info)]
+                    >> *(
+                            space >> ','
+                            >> space >> identifier      [push_back_a(actions.template_info)]
+                        )
+                    >> space >> ')'
+                    >> template_body                    [actions.template_body]
+                    ;
+                
+                template_body =
+                   *(('[' >> template_body >> ']') | (anychar_p - ']'))
+                    >> space >> eps_p(']')
                     ;
 
                 variablelist =
@@ -284,10 +320,6 @@ namespace quickbook
                     >> (*(anychar_p -
                             close_bracket))             [actions.include]
                     ;
-
-                identifier =
-                    +(anychar_p - (space_p | ']'))
-                    ;
                 
                 code =
                     (
@@ -356,10 +388,13 @@ namespace quickbook
                             paragraph, space, blank, comment, headings, h, h1, h2, 
                             h3, h4, h5, h6, hr, blurb, blockquote, admonition,
                             phrase, list, close_bracket, ordered_list, def_macro,
-                            identifier, table, table_row, variablelist,
+                            macro_identifier, table, table_row, variablelist,
                             varlistentry, varlistterm, varlistitem, table_cell,
                             preformatted, list_item, begin_section, end_section,
-                            xinclude, include, hard_space, eol, paragraph_end;
+                            xinclude, include, hard_space, eol, paragraph_end,
+                            template_, identifier, template_formal_arg,
+                            template_body;
+
             symbols<>       paragraph_end_markups;
             
             phrase_grammar<Actions> common;

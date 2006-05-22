@@ -7,11 +7,11 @@
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
+#include "./actions_class.hpp"
 #include "../block.hpp"
 #include "../doc_info.hpp"
 #include "./post_process.hpp"
-#include "utils.hpp"
-#include "actions.hpp"
+#include "./utils.hpp"
 #include <boost/spirit/iterator/position_iterator.hpp>
 #include <boost/program_options.hpp>
 #include <boost/filesystem/path.hpp>
@@ -127,11 +127,11 @@ namespace quickbook
     }
 
     static int
-        parse(char const* filein_, fs::path const& outdir, std::ostream& out, bool ignore_docinfo = false)
+    parse(char const* filein_, fs::path const& outdir, std::stringstream& out, bool ignore_docinfo = false)
     {
         actions actor(filein_, outdir, out);
         bool r = parse(filein_, actor);
-        if (actor.level != 0)
+        if (actor.section_level != 0)
             detail::outwarn(filein_,1)
                 << "Warning missing [endsect] detected at end of file."
                 << std::endl;
@@ -162,7 +162,9 @@ namespace quickbook
         }
         else
         {
-            result = parse(filein_, outdir, fileout);
+            std::stringstream buffer;
+            result = parse(filein_, outdir, buffer);
+            fileout << buffer.str();
         }
         return result;
     }

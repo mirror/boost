@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
+<article id="templates" name="Templates" dirname="templates" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
+ xmlns:xi="http://www.w3.org/2001/XInclude">
+  <articleinfo>
+  </articleinfo>
+  <title>Templates</title>
+  <section id="templates.templates">
+    <title><link linkend="templates.templates">Templates</link></title>
+    <para>
+      foo baz
+    </para>
+    <para>
+      <para>
+        foo baz
+      </para>
+    </para>
+    <para>
+      <para>
+        This is a complete paragraph. kalamazoo kalamazoo kalamazoo kalamazoo kalamazoo
+        kalamazoo kalamazoo kalamazoo kalamazoo.... blah blah blah......
+      </para>
+    </para>
+    <para>
+      <para>
+        This is a complete paragraph. madagascar madagascar madagascar madagascar
+        madagascar madagascar madagascar madagascar madagascar.... blah blah blah......
+      </para>
+    </para>
+    <para>
+      zoom peanut zoom
+    </para>
+    <para>
+      exactly xanadu
+    </para>
+    <para>
+      
+<programlisting>
+<phrase role="keyword">int</phrase>&nbsp;<phrase role="identifier">main</phrase><phrase role="special">()</phrase>
+<phrase role="special">{</phrase>
+    <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase>&nbsp;<phrase role="special">&lt;&lt;</phrase> &quot;Hello, World&quot; <phrase role="special">&lt;&lt;</phrase>&nbsp;<phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">endl</phrase><phrase role="special">;</phrase>
+<phrase role="special">}</phrase>
+</programlisting>
+    </para>
+  </section>
+</article>

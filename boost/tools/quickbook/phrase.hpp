@@ -31,17 +31,20 @@ namespace quickbook
                 (
                     graph_p                     // A single char. e.g. *c*
                     >> eps_p(mark
-                        >> (space_p | punct_p))
-                )
-            |   (   graph_p >>                  // graph_p must follow mark
+                        >> (space_p | punct_p | end_p)) 
+                                                // space_p, punct_p or end_p 
+                )                               // must follow mark
+            |   
+                (   graph_p >>                  // graph_p must follow mark
                     *(anychar_p -
                         (   eol                 // Make sure that we don't go
                         |   (graph_p >> mark)   // past a single line
                         )
                     ) >> graph_p                // graph_p must precede mark
                     >> eps_p(mark
-                        >> (space_p | punct_p)) // space_p or punct_p must
-                )                               // follow mark
+                        >> (space_p | punct_p | end_p)) 
+                                                // space_p, punct_p or end_p 
+                )                               // must follow mark
             )                                   [action]
             >> mark
             ;
@@ -89,13 +92,38 @@ namespace quickbook
                     ;
 
                 common =
-                        actions.macro                   [actions.do_macro]
+                        macro
+                    |   template_                       [actions.do_template]
                     |   phrase_markup
                     |   code_block
                     |   inline_code
                     |   simple_format
                     |   escape
                     |   comment
+                    ;
+                    
+                macro = 
+                    eps_p(actions.macro                 // must not be followed by
+                        >> (eps_p - (alpha_p | '_')))   // alpha or underscore
+                    >> actions.macro                    [actions.do_macro]
+                    ;
+                
+                template_ =
+                    (actions.templates >> eps_p)        [push_back_a(actions.template_info)]
+                    >> space >> '('
+                    >> template_arg                     [push_back_a(actions.template_info)]
+                    >> *(
+                            ',' >> template_arg         [push_back_a(actions.template_info)]
+                        )
+                    >> space >> ')'
+                    ;
+                
+                template_arg = 
+                    +("\\," | parens | (anychar_p - (ch_p(',') | ')')))
+                    ;
+                    
+                parens = 
+                    '(' >> +template_arg >> ')'
                     ;
 
                 inline_code =
@@ -309,14 +337,53 @@ namespace quickbook
                             classref, memberref, enumref, headerref, anchor, 
                             link, hard_space, eol, inline_code, simple_format, 
                             simple_bold, simple_italic, simple_underline, 
-                            simple_teletype, source_mode, 
-                            quote, code_block, footnote, replaceable;
+                            simple_teletype, source_mode, template_, template_arg,
+                            quote, code_block, footnote, replaceable, parens,
+                            macro;
 
             rule<Scanner> const&
             start() const { return common; }
         };
 
         bool& is_not_preformatted;
+        Actions& actions;
+    };
+
+    template <typename Actions>
+    struct simple_phrase_grammar
+    : public grammar<simple_phrase_grammar<Actions> >
+    {
+        simple_phrase_grammar(Actions& actions)
+            : actions(actions) {}
+
+        template <typename Scanner>
+        struct definition
+        {
+            definition(simple_phrase_grammar const& self)
+                : unused(false), common(self.actions, unused)
+            {
+                Actions& actions = self.actions;
+
+                phrase =
+                   *(   common
+                    |   comment
+                    |   (anychar_p - ']')           [actions.plain_char]
+                    )
+                    ;
+
+                comment =
+                    "[/" >> *(anychar_p - ']') >> ']'
+                    ;
+            }
+
+            bool unused;
+            rule<Scanner> phrase, comment;
+            phrase_grammar<Actions> common;
+
+            rule<Scanner> const&
+            start() const { return phrase; }
+        };
+
         Actions& actions;
     };
 }

@@ -978,9 +978,10 @@ redundant. /h1/../h6/ might be deprecated in the future.
 [def macro_identifier some text]
 ''']
 
-When a macro is defined, the identifier replaces the text anywhere in the file,
-in paragraphs, in markups, etc. macro_identifier is a string of non-white space
-characters except '\]' while the replacement text can be any phrase (even
+When a macro is defined, the identifier replaces the text anywhere in the 
+file, in paragraphs, in markups, etc. macro_identifier is a string of non-
+white space characters except '\]'. A macro may not follow an alphabetic 
+character or the underscore. The replacement text can be any phrase (even 
 marked up). Example:
 
 [pre'''
@@ -1033,6 +1034,82 @@ Quickbook has some predefined macros that you can already use.
     [['''__TIME__''']       [The current time]              [__TIME__]]
     [['''__FILENAME__''']   [Quickbook source filename]     [__FILENAME__]]
 ]
+
+[endsect]
+[section Templates]
+
+Templates provide a more versatile text substitution mechanism. Templates 
+come in handy when you need to create parameterizable, multi-line, 
+boilerplate text that you specify once and expand many times. Templates 
+accept one or more arguments. These arguments act like place-holders for 
+text replacement. Unlike simple macros, which are limited to phrase level 
+markup, templates can contain block level markup (e.g. paragraphs, code 
+blocks and tables).
+
+Example template:
+
+[pre'''
+[template person(name_, age_, id_)
+
+Hi, my name is name_. I am age_ years old. My id is id_.
+
+]
+''']
+
+[template person(name_, age_, id_)
+
+Hi, my name is *name_*. I am *age_* years old. My id is *id_*.
+
+]
+
+Template formal arguments are identifiers consisting of an initial 
+alphabetic character or the underscore, followed by zero or more 
+alphanumeric characters or the underscore. This is similar to your typical 
+C/C++ identifier. A template formal argument temporarily hides a macro of 
+the same name at the point where the template is invoked. At template 
+invocation, you supply the actual arguments. At that point, the template 
+will be expanded with your supplied arguments. Example:
+
+[pre'''
+person(James Bond, 39, 007)
+person(Santa Clause, 87, 12-25)
+''']
+
+Which will expand to:
+
+person(James Bond, 39, 007)
+person(Santa Clause, 87, 12-25)
+
+Each actual argument can be a word, a text fragment or just about any 
+[link quickbook.syntax.phrase QuickBook phrase]. Arguments are comma 
+separated and terminated by the close parenthesis. If your arguments have 
+embedded commas or close parentheses, you'll have to 
+[link quickbook.syntax.phrase.single_char_escape escape them].
+
+[caution Templates are recursive. A template can call another template or 
+even itself, directly or indirectly. There are no control structures in 
+QuickBook (yet) so this will always mean infinite recursion. QuickBook can 
+detect this situation and report an error if recursion exceeds a certain 
+limit.]
+
+Templates may be phrase or block level. Phrase templates are of the form:
+
+[pre'''
+[template sample(arg1, arg2,...argN) replacement text... ]
+''']
+
+Block templates are of the form:
+
+[pre'''
+[template sample(arg1, arg2,...argN) 
+replacement text... 
+]
+''']
+
+The basic rule is as follows: if a newline immediately follows the argument 
+list, then it is a block template, otherwise, it is a phrase template.
+Phrase templates are typically expanded as part of phrases. Like macros, 
+block level elements are not allowed in phrase templates. 
 
 [endsect]
 [section Blurbs]
