@@ -138,6 +138,9 @@ Features include:
 * Post-processor bug fix for escaped XML code that it does not recognize.
 * Replaceable, with the \[~replacement\] syntax.
 * Generic Headers
+* Code changes to allow full recursion (i.e. Collectors and push/pop functions)
+* Various code cleanup/maintenance
+* Templates!
 
 [endsect]
 
