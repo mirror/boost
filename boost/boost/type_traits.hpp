@@ -70,6 +70,9 @@
 #include "boost/type_traits/type_with_alignment.hpp"
 #include "boost/type_traits/function_traits.hpp"
 #include "boost/type_traits/aligned_storage.hpp"
+#include "boost/type_traits/floating_point_promotion.hpp"
+#include "boost/type_traits/integral_promotion.hpp"
+#include "boost/type_traits/promote.hpp"
 
 #include "boost/type_traits/ice.hpp"
 
