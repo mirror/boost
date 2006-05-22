@@ -86,7 +86,8 @@ inline void save(
 ){
     const collection_size_type count(t.size());
     ar << BOOST_SERIALIZATION_NVP(count);
-    ar << make_array(detail::get_data(t),t.size());
+    if (!t.empty())
+      ar << make_array(detail::get_data(t),t.size());
 }
 
 template<class Archive, class U, class Allocator>
@@ -99,7 +100,8 @@ inline void load(
     collection_size_type count(t.size());
     ar >> BOOST_SERIALIZATION_NVP(count);
     t.resize(count);
-    ar >> make_array(detail::get_data(t),t.size());
+    if (!t.empty())
+      ar >> make_array(detail::get_data(t),t.size());
   }
 
 // dispatch to either default or optimized versions
