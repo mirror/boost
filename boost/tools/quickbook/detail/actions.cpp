@@ -64,12 +64,10 @@ namespace quickbook
     {
         streams.push(new std::stringstream());
         top = boost::ref(*streams.top());
-        //~ std::cout << "collector::push" << int(&top.get()) << std::endl;
     }
     
     void collector::pop()
     {
-        //~ std::cout << "collector::pop" << int(&top.get()) << std::endl;
         BOOST_ASSERT(!streams.empty());
         delete streams.top();
         streams.pop();
@@ -461,15 +459,9 @@ namespace quickbook
         {
             detail::outerr(pos.file,pos.line)
                 << "Infinite loop detected" << std::endl;
+            --actions.template_depth;
             return;
         }
-        
-        //~ std::cout << actions.template_depth << "------------------------------------" << std::endl;
-        //~ BOOST_FOREACH(std::string const& s, actions.template_info)
-        //~ {
-            //~ std::cout << s << std::endl;
-        //~ }
-        //~ std::cout << "------------------------------------" << std::endl;
         
         std::string result;
         actions.push(); // scope the actions' states
@@ -485,14 +477,9 @@ namespace quickbook
             
             std::vector<std::string> template_ = boost::get<0>(*symbol);
             boost::spirit::file_position template_pos = boost::get<1>(*symbol);
-            
-            //~ detail::outerr(template_pos.file,template_pos.line) << "current template pos" << std::endl;
 
             std::vector<std::string> template_info;
             std::swap(template_info, actions.template_info);
-
-            //~ std::cout << "template_.size()=" << template_.size() << std::endl;
-            //~ std::cout << "template_info.size()=" << template_info.size() << std::endl;
             
             if (template_.size()-1 != template_info.size())
             {
@@ -504,6 +491,7 @@ namespace quickbook
                     << template_info.size()-1
                     << " argument(s) instead."
                     << std::endl;
+                --actions.template_depth;
                 return;
             }
 
@@ -519,9 +507,7 @@ namespace quickbook
                 first.set_position(pos);
                 iterator last(temp.end(), temp.end());
                 bool r = boost::spirit::parse(first, last, phrase_p).full;
-                
-                //~ std::cout << r << actions.phrase.str() << std::endl;
-                
+
                 if (!r)
                 {
                     boost::spirit::file_position const pos = first.get_position();
@@ -530,25 +516,19 @@ namespace quickbook
                 }
                 else
                 {
-                    //~ std::cout << "adding macro" << std::endl;
                     if (std::string* s = find(actions.macro, tpl->c_str()))
                     {
-                        //~ std::cout << "macro to be added: " << *s << std::endl;
                         *s = actions.phrase.str();
-                        //~ std::cout << "macro added: " << *s << std::endl;
                     }
                     else
                     {
-                        //~ std::cout << "macro to be added: " << *tpl << std::endl;
                         actions.macro.add(tpl->begin(), tpl->end(), actions.phrase.str());
-                        //~ std::cout << "macro added: " << *tpl << std::endl;
                     }
                 }
                 actions.phrase.str(std::string()); // clear the phrase
                 ++arg; ++tpl;
             }
             
-            //~ std::cout << "------------------------------------" << std::endl;
             // parse the template body:
             std::vector<char> temp;
             temp.assign(tpl->begin(), tpl->end());
@@ -565,7 +545,6 @@ namespace quickbook
             bool is_block = (iter != temp.end()) && ((*iter == '\r') || (*iter == '\n'));
             bool r = false;
 
-            //~ std::cout << (is_block?"block":"phrase") << std::endl;
             if (!is_block)
             {
                 //  do a phrase level parse
@@ -597,13 +576,11 @@ namespace quickbook
                 detail::outerr(pos.file,pos.line)
                     << "Expanding template" << std::endl;
             }
-
-            //~ std::cout << r << "||" << result << "||" << std::endl;
-            //~ std::cout << "------------------------------------" << std::endl;
         }
 
         actions.pop(); // restore the actions' states
         actions.phrase << result; // print it!!!
+        --actions.template_depth;
     }
 
     void link_action::operator()(iterator first, iterator const& last) const
