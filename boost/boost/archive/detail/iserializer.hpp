@@ -549,7 +549,7 @@ inline void load(Archive &ar, T &t){
 
 // BORLAND
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x560))
-// borland has a couple fo problems
+// borland has a couple of problems
 // a) if function is partiall specialized - see below
 // const paramters are transformed to non-const ones
 // b) implementation of base_object can't be made to work
@@ -569,10 +569,12 @@ inline void load_wrapper(Archive &ar, const T&t, mpl::true_){
   boost::archive::load(ar, const_cast<T&>(t));
 }
 
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x560))
 template<class Archive, class T>
 inline void load(Archive &ar, const T&t){
   load_wrapper(ar,t,serialization::is_wrapper<T>());
 }
+#endif 
 #endif
 
 } // namespace archive
