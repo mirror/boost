@@ -65,12 +65,15 @@ array<T> make_array( T* t, std::size_t s){
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // T[N]
 
+/*
+
 template<class Archive, class U, std::size_t N>
 void save( Archive & ar, U const (& t)[N], const unsigned int file_version )
 {
   const serialization::collection_size_type count(N);
   ar << BOOST_SERIALIZATION_NVP(count);
-  ar << serialization::make_array(&t[0],N);
+  if (N)
+    ar << serialization::make_array(&t[0],N);
 }
 
 template<class Archive, class U, std::size_t N>
@@ -82,7 +85,8 @@ void load( Archive & ar, U (& t)[N], const unsigned int file_version )
       boost::throw_exception(archive::archive_exception(
         boost::archive::archive_exception::array_size_too_short
       ));
-  ar >> serialization::make_array(&t[0],count);
+  if (N)
+    ar >> serialization::make_array(&t[0],count);
 }
 
 
@@ -93,6 +97,7 @@ inline void serialize( Archive & ar, U (& t)[N], const unsigned int file_version
 {
     boost::serialization::split_free(ar, t, file_version);
 }
+*/
 
 
 } } // end namespace boost::serialization

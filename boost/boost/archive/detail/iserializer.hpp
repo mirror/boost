@@ -44,6 +44,7 @@ namespace std{
 #include <boost/type_traits/is_enum.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/remove_const.hpp>
+#include <boost/type_traits/remove_all_extents.hpp>
 #include <boost/serialization/is_abstract.hpp>
 
 #include <boost/mpl/eval_if.hpp>
@@ -78,6 +79,7 @@ namespace std{
 #include <boost/serialization/void_cast.hpp>
 #include <boost/serialization/array.hpp>
 #include <boost/serialization/collection_size_type.hpp>
+
 namespace boost {
 
 namespace serialization {
@@ -504,6 +506,27 @@ struct load_enum_type {
     }
 };
 
+template<class Archive, class T>
+struct load_array_type {
+    static void invoke(Archive &ar, T &t){
+        typedef typename remove_all_extents<T>::type value_type;
+        
+        // convert integers to correct enum to load
+        int current_count = sizeof(t) / (
+            static_cast<char *>(static_cast<void *>(&t[1])) 
+            - static_cast<char *>(static_cast<void *>(&t[0]))
+        );
+        int count;
+        ar >> BOOST_SERIALIZATION_NVP(count);
+        if(count > current_count)
+            boost::throw_exception(archive::archive_exception(
+                boost::archive::archive_exception::array_size_too_short
+            ));
+        ar >> serialization::make_array(static_cast<value_type*>(&t[0]),count);
+    }
+};
+
+
 // note bogus arguments to workaround msvc 6 silent runtime failure
 template<class Archive, class T>
 BOOST_DLLEXPORT 
@@ -538,10 +561,14 @@ inline void load(Archive &ar, T &t){
         BOOST_DEDUCED_TYPENAME mpl::eval_if<is_pointer<T>,
             mpl::identity<detail::load_pointer_type<Archive, T> >
         ,//else
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<is_array<T>,
+            mpl::identity<detail::load_array_type<Archive, T> >
+        ,//else
         BOOST_DEDUCED_TYPENAME mpl::eval_if<is_enum<T>,
             mpl::identity<detail::load_enum_type<Archive, T> >
         ,//else
             mpl::identity<detail::load_non_pointer_type<Archive, T> >
+        >
         >
         >::type typex;
     typex::invoke(ar, t);

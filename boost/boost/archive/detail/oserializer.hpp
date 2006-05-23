@@ -37,6 +37,7 @@
 #include <boost/type_traits/is_volatile.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/remove_all_extents.hpp>
 #include <boost/serialization/is_abstract.hpp>
 
 #include <boost/mpl/eval_if.hpp>
@@ -479,6 +480,25 @@ struct save_enum_type
     }
 };
 
+template<class Archive, class T>
+struct save_array_type
+{
+    static void invoke(Archive &ar, const T &t){
+        typedef typename remove_all_extents<T>::type value_type;
+        
+        save_access::end_preamble(ar);
+        // consider alignment
+        int count = sizeof(t) / (
+            static_cast<const char *>(static_cast<const void *>(&t[1])) 
+            - static_cast<const char *>(static_cast<const void *>(&t[0]))
+        );
+        ar << BOOST_SERIALIZATION_NVP(count);
+        ar << serialization::make_array(static_cast<value_type const*>(&t[0]),count);
+    }
+};
+
+
+
 // note bogus arguments to workaround msvc 6 silent runtime failure
 // declaration to satisfy gcc
 template<class Archive, class T>
@@ -510,7 +530,11 @@ inline void save(Archive & ar, const T &t){
         BOOST_DEDUCED_TYPENAME mpl::eval_if<is_enum<T>,
             mpl::identity<detail::save_enum_type<Archive, T> >,
         //else
+        BOOST_DEDUCED_TYPENAME mpl::eval_if<is_array<T>,
+            mpl::identity<detail::save_array_type<Archive, T> >,
+        //else
             mpl::identity<detail::save_non_pointer_type<Archive, T> >
+        >
         >
         >::type typex;
     typex::invoke(ar, t);
