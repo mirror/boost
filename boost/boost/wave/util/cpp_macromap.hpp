@@ -318,9 +318,15 @@ typename defined_macros_type::iterator it = current_scope->find(name.get_value()
     std::swap((*p.first).second->macrodefinition, definition);
     
 // call the context supplied preprocessing hook
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     ctx.get_hooks().defined_macro(name, has_parameters, 
         (*p.first).second->macroparameters, 
         (*p.first).second->macrodefinition, is_predefined);
+#else
+    ctx.get_hooks().defined_macro(ctx, name, has_parameters, 
+        (*p.first).second->macroparameters, 
+        (*p.first).second->macrodefinition, is_predefined);
+#endif
     return true;
 }
 
@@ -428,7 +434,11 @@ macromap<ContextT>::remove_macro(token_type const &token,
         current_macros->erase(it);
         
     // call the context supplied preprocessing hook function
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
         ctx.get_hooks().undefined_macro(token);
+#else
+        ctx.get_hooks().undefined_macro(ctx, token);
+#endif
         return true;
     }
     else if (impl::is_special_macroname(name)) {
@@ -1111,6 +1121,10 @@ ContainerT replacement_list;
     // called as a function-like macro 
         impl::skip_to_token(first, last, T_LEFTPAREN);
         
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS == 0
+        IteratorT seqstart = first;
+#endif
+
         if (macro_def.is_functionlike) {
         // defined as a function-like macro
         
@@ -1152,18 +1166,30 @@ ContainerT replacement_list;
             }
                 
         // inject tracing support
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
             ctx.get_hooks().expanding_function_like_macro(
                 macro_def.macroname, macro_def.macroparameters, 
                 macro_def.macrodefinition, curr_token, arguments);
-        
+#else
+            ctx.get_hooks().expanding_function_like_macro(
+                ctx, macro_def.macroname, macro_def.macroparameters, 
+                macro_def.macrodefinition, curr_token, arguments,
+                seqstart, first);
+#endif
+
         // expand the replacement list of this macro
             expand_replacement_list(macro_def, arguments, expand_operator_defined,
                 replacement_list);
         }
         else {
         // defined as an object-like macro
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
             ctx.get_hooks().expanding_object_like_macro(
                 macro_def.macroname, macro_def.macrodefinition, curr_token);
+#else
+            ctx.get_hooks().expanding_object_like_macro(
+                ctx, macro_def.macroname, macro_def.macrodefinition, curr_token);
+#endif
 
         bool found = false;
         impl::find_concat_operator concat_tag(found);
@@ -1194,8 +1220,13 @@ ContainerT replacement_list;
         }
         else {
         // defined as an object-like macro (expand it)
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
             ctx.get_hooks().expanding_object_like_macro(
                 macro_def.macroname, macro_def.macrodefinition, curr_token);
+#else
+            ctx.get_hooks().expanding_object_like_macro(
+                ctx, macro_def.macroname, macro_def.macrodefinition, curr_token);
+#endif
 
         bool found = false;
         impl::find_concat_operator concat_tag(found);
@@ -1216,12 +1247,20 @@ ContainerT replacement_list;
 // rescan the replacement list
 ContainerT expanded_list;
 
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     ctx.get_hooks().expanded_macro(replacement_list);
+#else
+    ctx.get_hooks().expanded_macro(ctx, replacement_list);
+#endif
     
     rescan_replacement_list(curr_token, macro_def, replacement_list, 
         expanded_list, expand_operator_defined, first, last);
     
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     ctx.get_hooks().rescanned_macro(expanded_list);  
+#else
+    ctx.get_hooks().rescanned_macro(ctx, expanded_list);  
+#endif
     expanded.splice(expanded.end(), expanded_list);
     return true;        // rescan is required
 }

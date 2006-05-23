@@ -211,9 +211,6 @@ public:
                 token_type(T_IDENTIFIER, name, macros.get_main_pos()), 
                 even_predefined); 
         }
-//     bool remove_macro_definition(token_type const &token, 
-//             bool even_predefined = false)
-//         { return macros.remove_macro(token, even_predefined); }
     void reset_macro_definitions() 
         { macros.reset_macromap(); macros.init_predefined_macros(); }
 
@@ -331,14 +328,6 @@ public:
         { return includes.add_pragma_once_header(filename, guard_name); }
 #endif 
 
-// forwarding functions for the context policy hooks    
-    template <typename ContainerT>
-    bool interpret_pragma(ContainerT &pending, token_type const &option, 
-        ContainerT const &values, token_type const &act_token)
-    {
-        return hooks.interpret_pragma(*this, pending, option, values, act_token);
-    }
-    
 #if BOOST_WAVE_SERIALIZATION != 0
 public:
     BOOST_STATIC_CONSTANT(unsigned int, version = 0x10);

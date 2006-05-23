@@ -393,4 +393,26 @@
 #endif  // auto-linking disabled
 #endif  // BOOST_VERSION
 
+///////////////////////////////////////////////////////////////////////////////
+//  Compatibility macros 
+//  (ensure interface compatibility to older Wave versions)
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+//  The preprocessing hook signatures changed after the Boost V1.34.0 release
+//
+//  To use the preprocessing hook signatures as released with Boost V1.34.0 
+//  you need to define the BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS 
+//  constant to something not equal zero.
+//
+//  To force using the new interface define this constant to zero.
+//
+#if !defined(BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS)
+#if BOOST_VERSION < 103500  // before Boost V1.35.0
+#define BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS 1
+#else
+#define BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS 0
+#endif
+#endif
+
 #endif // !defined(WAVE_CONFIG_HPP_F143F90A_A63F_4B27_AC41_9CA4F14F538D_INCLUDED)

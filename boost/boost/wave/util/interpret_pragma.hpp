@@ -122,7 +122,9 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
             }
             
         // decode the option (call the context_policy hook)
-            if (!ctx.interpret_pragma(pending, option, values, act_token)) {
+            if (!ctx.get_hooks().interpret_pragma(
+                  ctx, pending, option, values, act_token)) 
+            {
             // unknown #pragma option 
             string_type option_str ((*it).get_value());
 

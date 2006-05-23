@@ -8,8 +8,8 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-#if !defined(PREPROCESSING_HOOKS_HPP_338DE478_A13C_4B63_9BA9_041C917793B8_INCLUDED)
-#define PREPROCESSING_HOOKS_HPP_338DE478_A13C_4B63_9BA9_041C917793B8_INCLUDED
+#if !defined(DEFAULT_PREPROCESSING_HOOKS_HPP_INCLUDED)
+#define DEFAULT_PREPROCESSING_HOOKS_HPP_INCLUDED
 
 #include <boost/wave/wave_config.hpp>
 #include <vector>
@@ -30,80 +30,139 @@ namespace context_policies {
 //  preprocessing hooks called from inside the preprocessing engine
 //
 ///////////////////////////////////////////////////////////////////////////////
-struct default_preprocessing_hooks {
-
+struct default_preprocessing_hooks 
+{
     ///////////////////////////////////////////////////////////////////////////
     //  
     //  The function 'expanding_function_like_macro' is called, whenever a 
     //  function-like macro is to be expanded.
     //
-    //  The macroname parameter marks the position, where the macro to expand 
+    //  The parameter 'macrodef' marks the position, where the macro to expand 
     //  is defined.
-    //  The formal_args parameter holds the formal arguments used during the
+    //
+    //  The parameter 'formal_args' holds the formal arguments used during the
     //  definition of the macro.
-    //  The definition parameter holds the macro definition for the macro to 
+    //
+    //  The parameter 'definition' holds the macro definition for the macro to 
     //  trace.
     //
-    //  The macro call parameter marks the position, where this macro invoked.
-    //  The arguments parameter holds the macro arguments used during the 
+    //  The parameter 'macro_call' marks the position, where this macro invoked.
+    //
+    //  The parameter 'arguments' holds the macro arguments used during the 
     //  invocation of the macro
     //
+    //  The parameters 'seqstart' and 'seqend' point into the input token 
+    //  stream allowing to access the whole token sequence comprising the macro
+    //  invocation (starting with the opening parenthesis and ending after the
+    //  closing one).
+    //
     ///////////////////////////////////////////////////////////////////////////
+
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+    // old signature
     template <typename TokenT, typename ContainerT>
     void expanding_function_like_macro(
-        TokenT const &macrodef, std::vector<TokenT> const &formal_args, 
-        ContainerT const &definition,
-        TokenT const &macrocall, std::vector<ContainerT> const &arguments) 
+        TokenT const& macrodef, std::vector<TokenT> const& formal_args, 
+        ContainerT const& definition,
+        TokenT const& macrocall, std::vector<ContainerT> const& arguments) 
     {}
+#else
+    // new signature
+    template <typename ContextT, typename TokenT, typename ContainerT, typename IteratorT>
+    void expanding_function_like_macro(ContextT const& ctx,
+        TokenT const& macrodef, std::vector<TokenT> const& formal_args, 
+        ContainerT const& definition,
+        TokenT const& macrocall, std::vector<ContainerT> const& arguments,
+        IteratorT const& seqstart, IteratorT const& seqend) 
+    {}
+#endif
 
     ///////////////////////////////////////////////////////////////////////////
     //  
     //  The function 'expanding_object_like_macro' is called, whenever a 
     //  object-like macro is to be expanded .
     //
-    //  The macroname parameter marks the position, where the macro to expand 
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
+    //  The parameter 'macro' marks the position, where the macro to expand 
     //  is defined.
-    //  The definition parameter holds the macro definition for the macro to 
+    //
+    //  The definition 'definition' holds the macro definition for the macro to 
     //  trace.
     //
-    //  The macro call parameter marks the position, where this macro invoked.
+    //  The parameter 'macrocall' marks the position, where this macro invoked.
     //
     ///////////////////////////////////////////////////////////////////////////
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+    // old signature
     template <typename TokenT, typename ContainerT>
-    void expanding_object_like_macro(TokenT const &macro, 
-        ContainerT const &definition, TokenT const &macrocall)
+    void expanding_object_like_macro(TokenT const& macro, 
+        ContainerT const& definition, TokenT const& macrocall)
     {}
+#else
+    // new signature
+    template <typename ContextT, typename TokenT, typename ContainerT>
+    void expanding_object_like_macro(ContextT const& ctx, TokenT const& macro, 
+        ContainerT const& definition, TokenT const& macrocall)
+    {}
+#endif
 
     ///////////////////////////////////////////////////////////////////////////
     //  
     //  The function 'expanded_macro' is called, whenever the expansion of a 
     //  macro is finished but before the rescanning process starts.
     //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
     //  The parameter 'result' contains the token sequence generated as the 
     //  result of the macro expansion.
     //
     ///////////////////////////////////////////////////////////////////////////
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+    // old signature
     template <typename ContainerT>
-    void expanded_macro(ContainerT const &result)
+    void expanded_macro(ContainerT const& result)
     {}
+#else
+    // new signature
+    template <typename ContextT, typename ContainerT>
+    void expanded_macro(ContextT const& ctx, ContainerT const& result)
+    {}
+#endif
 
     ///////////////////////////////////////////////////////////////////////////
     //  
     //  The function 'rescanned_macro' is called, whenever the rescanning of a 
     //  macro is finished.
     //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
     //  The parameter 'result' contains the token sequence generated as the 
     //  result of the rescanning.
     //
     ///////////////////////////////////////////////////////////////////////////
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+    // old signature
     template <typename ContainerT>
-    void rescanned_macro(ContainerT const &result)
+    void rescanned_macro(ContainerT const& result)
     {}
+#else
+    // new signature
+    template <typename ContextT, typename ContainerT>
+    void rescanned_macro(ContextT const& ctx, ContainerT const& result)
+    {}
+#endif
 
     ///////////////////////////////////////////////////////////////////////////
     //  
     //  The function 'found_include_directive' is called, whenever a #include
     //  directive was located.
+    //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
     //
     //  The parameter 'filename' contains the (expanded) file name found after 
     //  the #include directive. This has the format '<file>', '"file"' or 
@@ -117,14 +176,27 @@ struct default_preprocessing_hooks {
     //  preprocessing constant was defined to something != 0.
     //
     ///////////////////////////////////////////////////////////////////////////
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+    // old signature
     void 
-    found_include_directive(std::string const &filename, bool include_next) 
+    found_include_directive(std::string const& filename, bool include_next) 
     {}
+#else
+    // new signature
+    template <typename ContextT>
+    void 
+    found_include_directive(ContextT const& ctx, std::string const& filename, 
+        bool include_next) 
+    {}
+#endif
     
     ///////////////////////////////////////////////////////////////////////////
     //  
     //  The function 'opened_include_file' is called, whenever a file referred 
     //  by an #include directive was successfully located and opened.
+    //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
     //
     //  The parameter 'filename' contains the file system path of the 
     //  opened file (this is relative to the directory of the currently 
@@ -137,20 +209,42 @@ struct default_preprocessing_hooks {
     //  found as a result of a #include <...> directive.
     //  
     ///////////////////////////////////////////////////////////////////////////
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+    // old signature
     void 
-    opened_include_file(std::string const &relname, std::string const &absname, 
+    opened_include_file(std::string const& relname, std::string const& absname, 
         std::size_t include_depth, bool is_system_include) 
     {}
+#else
+    // new signature
+    template <typename ContextT>
+    void 
+    opened_include_file(ContextT const& ctx, std::string const& relname, 
+        std::string const& absname, bool is_system_include) 
+    {}
+#endif
     
     ///////////////////////////////////////////////////////////////////////////
     //  
     //  The function 'returning_from_include_file' is called, whenever an
     //  included file is about to be closed after it's processing is complete.
     //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
     ///////////////////////////////////////////////////////////////////////////
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+    // old signature
     void
     returning_from_include_file() 
     {}
+#else
+    // new signature
+    template <typename ContextT>
+    void
+    returning_from_include_file(ContextT const& ctx) 
+    {}
+#endif
 
     ///////////////////////////////////////////////////////////////////////////
     //  
@@ -183,8 +277,8 @@ struct default_preprocessing_hooks {
     template <typename ContextT, typename ContainerT>
     bool 
     interpret_pragma(ContextT const& ctx, ContainerT &pending, 
-        typename ContextT::token_type const &option, ContainerT const &values, 
-        typename ContextT::token_type const &act_token)
+        typename ContextT::token_type const& option, ContainerT const& values, 
+        typename ContextT::token_type const& act_token)
     {
         return false;
     }
@@ -193,6 +287,9 @@ struct default_preprocessing_hooks {
     //
     //  The function 'defined_macro' is called, whenever a macro was defined
     //  successfully.
+    //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
     //
     //  The parameter 'name' is a reference to the token holding the macro name.
     //
@@ -207,29 +304,55 @@ struct default_preprocessing_hooks {
     //  replacement sequence (definition part) of the newly defined macro.
     //
     //  The parameter 'is_predefined' is set to true for all macros predefined 
-    //  during the initialisation phase of the library.
+    //  during the initialization phase of the library.
     //
     ///////////////////////////////////////////////////////////////////////////
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
+    // old signature
     template <typename TokenT, typename ParametersT, typename DefinitionT>
     void
-    defined_macro(TokenT const &macro_name, bool is_functionlike, 
-        ParametersT const &parameters, DefinitionT const &definition, 
+    defined_macro(TokenT const& macro_name, bool is_functionlike, 
+        ParametersT const& parameters, DefinitionT const& definition, 
         bool is_predefined)
     {}
-    
+#else
+    // new signature
+    template <
+        typename ContextT, typename TokenT, typename ParametersT, 
+        typename DefinitionT
+    >
+    void
+    defined_macro(ContextT const& ctx, TokenT const& macro_name, 
+        bool is_functionlike, ParametersT const& parameters, 
+        DefinitionT const& definition, bool is_predefined)
+    {}
+#endif
+
     ///////////////////////////////////////////////////////////////////////////
     //
     //  The function 'undefined_macro' is called, whenever a macro definition
     //  was removed successfully.
     //  
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
     //  The parameter 'name' holds the name of the macro, which definition was 
     //  removed.
     //
     ///////////////////////////////////////////////////////////////////////////
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
+    // old signature
     template <typename TokenT>
     void
-    undefined_macro(TokenT const &macro_name)
+    undefined_macro(TokenT const& macro_name)
     {}
+#else
+    // new signature
+    template <typename ContextT, typename TokenT>
+    void
+    undefined_macro(ContextT const& ctx, TokenT const& macro_name)
+    {}
+#endif
     
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -237,14 +360,26 @@ struct default_preprocessing_hooks {
     //  directive was encountered, but before the corresponding action is 
     //  executed.
     //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
     //  The parameter 'directive' is a reference to the token holding the 
     //  preprocessing directive.
     //
     ///////////////////////////////////////////////////////////////////////////
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
+    // old signature
     template <typename TokenT>
     void
     found_directive(TokenT const& directive)
     {}
+#else
+    // new signature
+    template <typename ContextT, typename TokenT>
+    void
+    found_directive(ContextT const& ctx, TokenT const& directive)
+    {}
+#endif
 
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -254,6 +389,9 @@ struct default_preprocessing_hooks {
     //
     //  The parameter 'ctx' is a reference to the context object used for 
     //  instantiating the preprocessing iterators by the user.
+    //
+    //  The parameter 'directive' is a reference to the token holding the 
+    //  corresponding preprocessing directive.
     //
     //  The parameter 'expression' holds the non-expanded token sequence
     //  comprising the evaluated expression.
@@ -267,11 +405,22 @@ struct default_preprocessing_hooks {
     //  to force the expression to be re-evaluated.
     //
     ///////////////////////////////////////////////////////////////////////////
-    template <typename ContextT, typename ContainerT>
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
+    // old signature
+    template <typename ContainerT>
+    void
+    evaluated_conditional_expression(ContainerT const& expression, 
+        bool expression_value)
+    {}
+#else
+    // new signature
+    template <typename ContextT, typename TokenT, typename ContainerT>
     bool
-    evaluated_conditional_expression(ContextT const &ctx, 
-        ContainerT const& expression, bool expression_value)
+    evaluated_conditional_expression(ContextT const& ctx, 
+        TokenT const& directive, ContainerT const& expression, 
+        bool expression_value)
     { return false; }         // ok to continue, do not re-evaluate expression
+#endif
     
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -279,14 +428,25 @@ struct default_preprocessing_hooks {
     //  skipped due to a false preprocessor condition (code fragments to be
     //  skipped inside the not evaluated conditional #if/#else/#endif branches).
     //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
     //  The parameter 'token' refers to the token to be skipped.
-    //  
     //
     ///////////////////////////////////////////////////////////////////////////
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
+    // old signature
     template <typename TokenT>
     void
     skipped_token(TokenT const& token)
     {}
+#else
+    // new signature
+    template <typename ContextT, typename TokenT>
+    void
+    skipped_token(ContextT const& ctx, TokenT const& token)
+    {}
+#endif
 
     ///////////////////////////////////////////////////////////////////////////
     //
@@ -329,4 +489,4 @@ struct default_preprocessing_hooks {
 #include BOOST_ABI_SUFFIX
 #endif
 
-#endif // !defined(PREPROCESSING_HOOKS_HPP_338DE478_A13C_4B63_9BA9_041C917793B8_INCLUDED)
+#endif // !defined(DEFAULT_PREPROCESSING_HOOKS_HPP_INCLUDED)
