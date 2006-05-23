@@ -2,7 +2,7 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
-<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2006 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
@@ -13,6 +13,7 @@
   <link linkend="period_intro">Introduction</link> --
   <link linkend="period_header">Header</link> --
   <link linkend="period_construction">Construction</link> --
+  <link linkend="date_period_mutators">Mutators</link> --
   <link linkend="period_accessors">Accessors</link> --
   <link linkend="period_convert_to_string">Convert to String</link> --
   <link linkend="period_operators">Operators</link>
@@ -79,6 +80,53 @@ or
       </tbody>
     </tgroup>
   </informaltable>
+
+
+  <anchor id="date_period_mutators" />
+  <bridgehead renderas="sect3">Mutators</bridgehead>
+  <para>
+    <informaltable frame="all">
+      <tgroup cols="2">
+	<thead>
+	  <row>
+	    <entry valign="top" morerows="1">Syntax</entry>
+	    <entry>Description</entry>
+	  </row>
+	  <row>
+	    <entry>Example</entry>
+	  </row>
+	</thead>
+	<tbody>
+          <row>
+	    <entry valign="top" morerows="1"><screen>date_period shift(days)</screen></entry>
+	    <entry>Add duration to both begin and end.</entry>
+	  </row>
+	  <row>
+	    <entry>
+              <screen>
+date_period dp(date(2005,Jan,1), days(3));
+dp.shift(days(3)); 
+// dp == 2005-Jan-04 to 2005-Jan-07
+             </screen>
+	    </entry>
+	  </row>
+
+          <row>
+	    <entry valign="top" morerows="1"><screen>date_period expand(days)</screen></entry>
+	    <entry>Add duration to both begin and end.</entry>
+	  </row>
+	  <row>
+              <screen>
+date_period dp(date(2005,Jan,2), days(2));
+dp.expand(days(1)); 
+// dp == 2005-Jan-01 to 2005-Jan-04
+             </screen>
+	  </row>
+
+	</tbody>
+      </tgroup>
+    </informaltable>
+  </para>
 
 
   <anchor id="period_accessors" />

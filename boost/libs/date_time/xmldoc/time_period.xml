@@ -2,7 +2,7 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
-<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2006 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
@@ -106,10 +106,6 @@ time_period tp(t1, t2);</screen>
 	  </row>
 	</thead>
 	<tbody>
-          <row>
-	    <entry valign="top" morerows="1"><screen>ptime begin()</screen></entry>
-	    <entry>Return first time of period.</entry>
-	  </row>
 
           <row>
 	    <entry valign="top" morerows="1"><screen>time_period shift(time_duration)</screen></entry>
