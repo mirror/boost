@@ -136,7 +136,11 @@ Boost V1.34.0
 - Fixed a bug which lead to reporting of an illegal preprocessing directive
   inside not-evaluated conditional blocks under certain circumstances (thanks
   to Tobias Schwinger for reporting).
-  
+- Fixed '#define true ...', '#define false ...' and other constructs, i.e. the 
+  usage of the boolean keywords as identifiers during the preprocessing. Added
+  a corresponding test case (t_9_017.cpp). Thanks to Andreas Sæbjørnsen for
+  reporting.
+
 Sat Feb 18 2005
 - Version 1.2.3
 - Added a missing throw() specification to the function 

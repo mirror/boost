@@ -100,6 +100,10 @@ interpret_pragma(ContextT &ctx, typename ContextT::token_type const &act_token,
                                 [
                                     spirit_assign_actor(option)
                                 ] 
+                            |   pattern_p(BoolLiteralTokenType, TokenTypeMask)
+                                [
+                                    spirit_assign_actor(option)
+                                ] 
                             )
                         >> !(   ch_p(T_LEFTPAREN) 
                             >>  lexeme_d[

@@ -99,6 +99,10 @@ struct defined_grammar :
                     [
                         spirit_append_actor(self.result_seq)
                     ] 
+                |   pattern_p(BoolLiteralTokenType, TokenTypeMask)
+                    [
+                        spirit_append_actor(self.result_seq)
+                    ] 
                 ;
 
             BOOST_SPIRIT_DEBUG_TRACE_RULE(defined_op, TRACE_CPP_DEFINED_GRAMMAR);

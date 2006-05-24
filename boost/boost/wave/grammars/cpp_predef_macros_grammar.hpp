@@ -78,6 +78,7 @@ struct predefined_macros_grammar :
                     |   pattern_p(KeywordTokenType, TokenTypeMask)
                     |   pattern_p(OperatorTokenType|AltExtTokenType, 
                             ExtTokenTypeMask)   // and, bit_and etc.
+                    |   pattern_p(BoolLiteralTokenType, TokenTypeMask)  // true/false
                     )
                     >>  !macro_parameters
                     >>  !macro_definition
@@ -92,6 +93,7 @@ struct predefined_macros_grammar :
                             |   pattern_p(KeywordTokenType, TokenTypeMask)
                             |   pattern_p(OperatorTokenType|AltExtTokenType, 
                                     ExtTokenTypeMask)   // and, bit_and etc.
+                            |   pattern_p(BoolLiteralTokenType, TokenTypeMask)  // true/false
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
                             |   ch_p(T_ELLIPSIS)
 #endif

@@ -366,7 +366,8 @@ token_id id = token_id(*begin);
 
     if (T_IDENTIFIER != id && 
         !IS_CATEGORY(id, KeywordTokenType) &&
-        !IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType)) 
+        !IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType) &&
+        !IS_CATEGORY(id, BoolLiteralTokenType)) 
     {
         BOOST_WAVE_THROW(preprocess_exception, invalid_macroname, 
             impl::get_full_name(begin, end).c_str(), main_pos);
@@ -528,7 +529,8 @@ macromap<ContextT>::expand_tokensequence_worker(
         }
             
         if (T_IDENTIFIER == id || IS_CATEGORY(id, KeywordTokenType) ||
-            IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType)) 
+            IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType) ||
+            IS_CATEGORY(id, BoolLiteralTokenType)) 
         {
         // try to replace this identifier as a macro
             if (expand_operator_defined && (*first).get_value() == "defined") {
@@ -1073,7 +1075,8 @@ macromap<ContextT>::expand_macro(ContainerT &expanded,
     
     BOOST_ASSERT(T_IDENTIFIER == token_id(curr_token) ||
         IS_CATEGORY(token_id(curr_token), KeywordTokenType) ||
-        IS_EXTCATEGORY(token_id(curr_token), OperatorTokenType|AltExtTokenType));
+        IS_EXTCATEGORY(token_id(curr_token), OperatorTokenType|AltExtTokenType) ||
+        IS_CATEGORY(token_id(curr_token), BoolLiteralTokenType));
         
     if (it == scope->end()) {
         ++first;    // advance

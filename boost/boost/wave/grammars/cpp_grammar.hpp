@@ -304,6 +304,7 @@ struct cpp_grammar :
                         |   pattern_p(KeywordTokenType, TokenTypeMask)
                         |   pattern_p(OperatorTokenType|AltExtTokenType, 
                                 ExtTokenTypeMask)   // and, bit_and etc.
+                        |   pattern_p(BoolLiteralTokenType, TokenTypeMask)  // true/false
                         )
                     >>  (   (   no_node_d[eps_p(ch_p(T_LEFTPAREN))]
                                 >>  macro_parameters
@@ -325,6 +326,7 @@ struct cpp_grammar :
                             |   pattern_p(KeywordTokenType, TokenTypeMask)
                             |   pattern_p(OperatorTokenType|AltExtTokenType, 
                                     ExtTokenTypeMask)   // and, bit_and etc.
+                            |   pattern_p(BoolLiteralTokenType, TokenTypeMask)  // true/false
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
                             |   ch_p(T_ELLIPSIS)
 #endif
@@ -355,6 +357,7 @@ struct cpp_grammar :
                         |   pattern_p(KeywordTokenType, TokenTypeMask)
                         |   pattern_p(OperatorTokenType|AltExtTokenType, 
                                 ExtTokenTypeMask)   // and, bit_and etc.
+                        |   pattern_p(BoolLiteralTokenType, TokenTypeMask)  // true/false
                         )
                 ;
 
@@ -516,6 +519,7 @@ struct cpp_grammar :
                         |   pattern_p(KeywordTokenType, TokenTypeMask)
                         |   pattern_p(OperatorTokenType|AltExtTokenType, 
                                 ExtTokenTypeMask)   // and, bit_and etc.
+                        |   pattern_p(BoolLiteralTokenType, TokenTypeMask)  // true/false
                         ) 
                 ;
 

@@ -82,7 +82,8 @@ struct macro_definition {
             
                 if (T_IDENTIFIER == id || 
                     IS_CATEGORY(id, KeywordTokenType) ||
-                    IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType)) 
+                    IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType) ||
+                    IS_CATEGORY(id, OperatorTokenType)) 
                 {
                 // may be a parameter to replace
                     const_parameter_iterator_t cend = macroparameters.end();

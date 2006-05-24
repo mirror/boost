@@ -206,7 +206,8 @@ token_equals(TokenT const &left, TokenT const &right)
      
         return (T_IDENTIFIER == id || 
                 IS_CATEGORY(id, KeywordTokenType) ||
-                IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType)) && 
+                IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType) ||
+                IS_CATEGORY(id, BoolLiteralTokenType)) && 
             left.get_value() == right.get_value();
     }
 
