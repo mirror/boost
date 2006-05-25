@@ -17,6 +17,7 @@
 #endif
 
 #include <boost/assign/list_of.hpp>
+#include <boost/array.hpp>
 #include <boost/test/test_tools.hpp>
 #include <algorithm>
 #include <iostream>
@@ -73,6 +74,10 @@ void check_static_list_of()
     print( ref_list_of<8>(a)(b)(c)(d)(e)(f)(g)(h) );
     print( cref_list_of<8>(a)(b)(c)(d)(e)(f)(g)(h) );
 
+    boost::array<int,4> array = cref_list_of<4>(1)(2)(3)(4);
+
+    BOOST_CHECK_EQUAL( array[0], 1 );
+    BOOST_CHECK_EQUAL( array[3], 4 );
     //
     //print( cref_list_of<5>( "foo" )( "bar" )( "foobar" ) );
     //
