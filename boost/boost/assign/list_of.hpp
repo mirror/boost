@@ -467,6 +467,12 @@ namespace assign_detail
         }
 
         template< class ForwardRange >
+        static_generic_list& range( ForwardRange& r )
+        {
+            return range( boost::begin(r), boost::end(r) );
+        }
+
+        template< class ForwardRange >
         static_generic_list& range( const ForwardRange& r )
         {
             return range( boost::begin(r), boost::end(r) );
@@ -476,6 +482,13 @@ namespace assign_detail
         operator Container() const
         {
             return this-> BOOST_NESTED_TEMPLATE convert_to_container<Container>();
+        }
+
+        template< class U, std::size_t M >
+        operator array<U,M>() const
+        {
+            BOOST_STATIC_ASSERT( M == N );
+            return this-> BOOST_NESTED_TEMPLATE convert_to_container< array<U,M> >();
         }
 
     private:
