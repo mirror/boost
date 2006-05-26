@@ -27,6 +27,7 @@
 # include <boost/python/to_python_converter.hpp>
 # include <boost/parameter/aux_/maybe.hpp>
 # include <boost/parameter/aux_/python/invoker.hpp>
+# include <boost/parameter/aux_/python/function_types.hpp>
 
 namespace boost { namespace parameter { namespace python 
 {
@@ -505,8 +506,15 @@ namespace aux
 
   template <class K>
   struct keyword<K*>
-    : keyword<K>
-  {};
+  {
+      typedef K type;
+  };
+
+  template <class K>
+  struct keyword<K**>
+  {
+      typedef K type;
+  };
 
   template <class K>
   struct required
@@ -531,37 +539,39 @@ namespace aux
   {
       typedef mpl::false_ type;
   };
-  
+
+  template <class T>
+  struct make_kw_spec;
+
   template <class K, class T>
-  struct make_kw_spec
+  struct make_kw_spec<K(T)>
   {
       typedef arg_spec<
           typename keyword<K>::type
         , typename required<K>::type
         , typename optimized<K>::type
         , T
-      > type;    
+      > type;
   };
 
 } // namespace aux
 
-template <class Keywords, class Signature>
+template <class Signature>
 struct init 
-  : boost::python::def_visitor<init<Keywords, Signature> >
+  : boost::python::def_visitor<init<Signature> >
 {
     template <class Class>
     void visit(Class& cl) const
     {
         typedef typename mpl::transform<
-            Keywords
-          , Signature
-          , aux::make_kw_spec<mpl::_1, mpl::_2>
+            Signature
+          , aux::make_kw_spec<mpl::_>
           , mpl::back_inserter<mpl::vector0<> >
         >::type arg_specs;
 
         typedef typename mpl::count_if<
             arg_specs
-          , aux::is_optional<mpl::_1>
+          , aux::is_optional<mpl::_>
         >::type optional_arity;
 
         typedef typename mpl::shift_left<mpl::long_<1>, optional_arity>::type upper;
@@ -576,9 +586,9 @@ struct init
     }
 };
 
-template <class Keywords, class Signature>
+template <class Signature>
 struct call 
-  : boost::python::def_visitor<call<Keywords, Signature> >
+  : boost::python::def_visitor<call<Signature> >
 {
     template <class Class>
     void visit(Class& cl) const
@@ -590,19 +600,19 @@ struct call
           , typename mpl::end<Signature>::type
         > arg_types;
 
+        typedef typename mpl::front<Signature>::type result_type;
+
         typedef typename mpl::transform<
-            Keywords
-          , arg_types
-          , aux::make_kw_spec<mpl::_1, mpl::_2>
+            arg_types
+          , aux::make_kw_spec<mpl::_>
           , mpl::back_inserter<mpl::vector0<> >
         >::type arg_specs;
 
         typedef typename mpl::count_if<
             arg_specs
-          , aux::is_optional<mpl::_1>
+          , aux::is_optional<mpl::_>
         >::type optional_arity;
 
-        typedef typename mpl::front<Signature>::type result_type;
         typedef typename mpl::shift_left<mpl::long_<1>, optional_arity>::type upper;
 
         aux::def_combinations(
@@ -615,9 +625,9 @@ struct call
     }
 };
 
-template <class Fwd, class Keywords, class Signature>
+template <class Fwd, class Signature>
 struct function 
-  : boost::python::def_visitor<function<Fwd, Keywords, Signature> >
+  : boost::python::def_visitor<function<Fwd, Signature> >
 {
     template <class Class, class Options>
     void visit(Class& cl, char const* name, Options const& options) const
@@ -629,19 +639,19 @@ struct function
           , typename mpl::end<Signature>::type
         > arg_types;
 
+        typedef typename mpl::front<Signature>::type result_type;
+
         typedef typename mpl::transform<
-            Keywords
-          , arg_types
-          , aux::make_kw_spec<mpl::_1, mpl::_2>
+            arg_types
+          , aux::make_kw_spec<mpl::_>
           , mpl::back_inserter<mpl::vector0<> >
         >::type arg_specs;
 
         typedef typename mpl::count_if<
             arg_specs
-          , aux::is_optional<mpl::_1>
+          , aux::is_optional<mpl::_>
         >::type optional_arity;
 
-        typedef typename mpl::front<Signature>::type result_type;
         typedef typename mpl::shift_left<mpl::long_<1>, optional_arity>::type upper;
 
         aux::def_combinations(

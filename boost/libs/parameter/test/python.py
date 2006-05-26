@@ -1,6 +1,8 @@
 '''
 >>> from python_parameter import X
->>> x = X()
+>>> x = X(y = 'baz')
+>>> x.value
+'foobaz'
 >>> x.f(1,2)
 3
 >>> x.f(1,2,3)
