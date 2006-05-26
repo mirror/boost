@@ -10,34 +10,36 @@
 
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
+#include <boost/type_traits/integral_constant.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/is_enum.hpp>
 #include <boost/type_traits/is_volatile.hpp>
+#include <boost/type_traits/remove_cv.hpp>
 
 // Should be the last #include
 #include <boost/type_traits/detail/type_trait_def.hpp>
-#include <boost/type_traits/detail/bool_trait_def.hpp>
 
 namespace boost {
 
 namespace type_traits { namespace detail {
 
 // 4.5/2
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(need_promotion, T, boost::is_enum<T>::value)
+template <class T> struct need_promotion : boost::is_enum<T> {};
 
 // 4.5/1
-BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(need_promotion, char              , true)
-BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(need_promotion, signed char       , true)
-BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(need_promotion, unsigned char     , true)
-BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(need_promotion, signed short int  , true)
-BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(need_promotion, unsigned short int, true)
+template<> struct need_promotion<char              > : true_type {};
+template<> struct need_promotion<signed char       > : true_type {};
+template<> struct need_promotion<unsigned char     > : true_type {};
+template<> struct need_promotion<signed short int  > : true_type {};
+template<> struct need_promotion<unsigned short int> : true_type {};
 
 
 // Specializations for non-standard types.
 // Type is promoted if it's smaller then int.
 
 #define BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE(T) \
-    BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(need_promotion, T, (sizeof(T) < sizeof(int)))
+    template<> struct need_promotion<T>          \
+        : integral_constant<bool, (sizeof(T) < sizeof(int))> {};
 
 // Same set of integral types as in boost/type_traits/is_integral.hpp.
 // Please, keep in sync.
@@ -70,13 +72,13 @@ BOOST_TT_AUX_PROMOTE_NONSTANDARD_TYPE(         __int64)
 
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
 // 4.5/2
-BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(need_promotion, wchar_t, true)
+template<> struct need_promotion<wchar_t> : true_type {};
 #endif
 
 // 4.5/3 (integral bit-field) is not supported.
 
 // 4.5/4
-BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1(need_promotion, bool, true)
+template<> struct need_promotion<bool> : true_type {};
 
 
 // Get promoted type by index and cv qualifiers.
@@ -170,7 +172,7 @@ struct integral_promotion_impl
 template<class T>
 struct integral_promotion
   : boost::mpl::eval_if<
-        need_promotion<T>
+        need_promotion<BOOST_DEDUCED_TYPENAME remove_cv<T>::type>
       , integral_promotion_impl<T>
       , boost::mpl::identity<T>
       >
@@ -187,7 +189,6 @@ BOOST_TT_AUX_TYPE_TRAIT_DEF1(
     )
 }
 
-#include <boost/type_traits/detail/bool_trait_undef.hpp>
 #include <boost/type_traits/detail/type_trait_undef.hpp>
 
 #endif // #ifndef FILE_boost_type_traits_integral_promotion_hpp_INCLUDED
