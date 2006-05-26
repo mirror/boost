@@ -27,7 +27,6 @@
 # include <boost/python/to_python_converter.hpp>
 # include <boost/parameter/aux_/maybe.hpp>
 # include <boost/parameter/aux_/python/invoker.hpp>
-# include <boost/parameter/aux_/python/function_types.hpp>
 
 namespace boost { namespace parameter { namespace python 
 {
