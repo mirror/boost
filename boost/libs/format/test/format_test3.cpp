@@ -92,6 +92,13 @@ int test_main(int, char* [])
       cerr << s ;
       BOOST_ERROR("nesting did not work");
     }
-   
+
+    // testcase for bug reported at 
+    // http://lists.boost.org/boost-users/2006/05/19723.php
+    format f("%40t%1%");
+    int x = 0;
+    f.bind_arg(1, x);
+    f.clear();
+
     return 0;
 }
