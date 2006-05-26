@@ -124,8 +124,8 @@ to describe the MultiArray interface.</para>
 </entry>
 	    </row>
 	    <row>
-	      <entry><literal>a</literal></entry>
-	      <entry>An object of type <literal>A</literal></entry>
+	      <entry><literal>a,b</literal></entry>
+	      <entry>Objects of type <literal>A</literal></entry>
 	    </row>
 	    <row>
 	      <entry><literal>NumDims</literal></entry>
