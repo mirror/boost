@@ -32,7 +32,7 @@ typedef detail::polymorphic_iarchive_impl<
 
 // required by smart_cast for compilers not implementing 
 // partial template specialization
-BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(
     boost::archive::polymorphic_text_iarchive
 )
 

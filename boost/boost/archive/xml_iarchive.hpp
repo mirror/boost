@@ -104,7 +104,7 @@ public:
 
 // required by smart_cast for compilers not implementing 
 // partial template specialization
-BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(boost::archive::xml_iarchive)
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::xml_iarchive)
 
 #include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 

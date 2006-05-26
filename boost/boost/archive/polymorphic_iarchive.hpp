@@ -32,6 +32,7 @@ namespace std{
 #include <boost/archive/detail/iserializer.hpp>
 #include <boost/archive/detail/interface_iarchive.hpp>
 #include <boost/serialization/nvp.hpp>
+#include <boost/archive/detail/register_archive.hpp>
 
 // determine if its necessary to handle (u)int64_t specifically
 // i.e. that its not a synonym for (unsigned) long
@@ -159,6 +160,6 @@ public:
 
 // required by smart_cast for compilers not implementing
 // partial template specialization
-BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(boost::archive::polymorphic_iarchive)
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::polymorphic_iarchive)
 
 #endif // BOOST_ARCHIVE_POLYMORPHIC_IARCHIVE_HPP

@@ -86,6 +86,7 @@ public:
         load_binary(& t, sizeof(t));
         int i = t;
         assert(0 == i || 1 == i);
+        (void)i; // warning suppression for release builds.
     }
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     load(std::string &s);

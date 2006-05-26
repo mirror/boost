@@ -18,13 +18,13 @@ namespace std{
 }
 #endif
 
+#include <boost/serialization/base_object.hpp>
+#include <boost/serialization/export.hpp>
+
 #include <boost/archive/archive_exception.hpp>
 #include "test_tools.hpp"
 #include <boost/preprocessor/stringize.hpp>
 #include BOOST_PP_STRINGIZE(BOOST_ARCHIVE_TEST)
-
-#include <boost/serialization/base_object.hpp>
-#include <boost/serialization/export.hpp>
 
 class polymorphic_base
 {
@@ -51,6 +51,9 @@ public:
 
 BOOST_CLASS_EXPORT(polymorphic_derived1)
 
+// MWerks users can do this to make their code work
+BOOST_SERIALIZATION_MWERKS_BASE_AND_DERIVED(polymorphic_base, polymorphic_derived1)
+
 class polymorphic_derived2 : public polymorphic_base
 {
     friend class boost::serialization::access;
@@ -63,6 +66,9 @@ public:
 };
 
 BOOST_CLASS_EXPORT(polymorphic_derived2)
+
+// MWerks users can do this to make their code work
+BOOST_SERIALIZATION_MWERKS_BASE_AND_DERIVED(polymorphic_base, polymorphic_derived2)
 
 // save exported polymorphic class
 void save_exported(const char *testfile)

@@ -48,6 +48,6 @@ public:
 
 // required by smart_cast for compilers not implementing 
 // partial template specialization
-BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(boost::archive::binary_oarchive)
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::binary_oarchive)
 
 #endif // BOOST_ARCHIVE_BINARY_OARCHIVE_HPP

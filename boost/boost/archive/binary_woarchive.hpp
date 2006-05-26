@@ -53,7 +53,7 @@ public:
 
 // required by smart_cast for compilers not implementing 
 // partial template specialization
-BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(boost::archive::binary_woarchive)
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::binary_woarchive)
 
 #endif // BOOST_NO_STD_WSTREAMBUF
 #endif // BOOST_ARCHIVE_BINARY_WOARCHIVE_HPP

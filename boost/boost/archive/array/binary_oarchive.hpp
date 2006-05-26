@@ -43,12 +43,11 @@ public:
     }
 };
 
-
 } } }  // end namespace boost::archive::array
 
 // required by smart_cast for compilers not implementing 
 // partial template specialization
 
-BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(boost::archive::array::binary_oarchive)
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::array::binary_oarchive)
 
 #endif // BOOST_ARCHIVE_ARRAY_BINARY_OARCHIVE_HPP
