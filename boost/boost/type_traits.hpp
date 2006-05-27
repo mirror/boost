@@ -71,8 +71,10 @@
 #include "boost/type_traits/function_traits.hpp"
 #include "boost/type_traits/aligned_storage.hpp"
 #include "boost/type_traits/floating_point_promotion.hpp"
+#if !(defined(__sgi) && defined(__EDG_VERSION__) && (__EDG_VERSION__ == 238))
 #include "boost/type_traits/integral_promotion.hpp"
 #include "boost/type_traits/promote.hpp"
+#endif
 
 #include "boost/type_traits/ice.hpp"
 
