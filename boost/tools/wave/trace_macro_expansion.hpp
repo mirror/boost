@@ -174,14 +174,14 @@ public:
     ///////////////////////////////////////////////////////////////////////////
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
     // old signature
-    template <typename TokenT, typename ContainerT>
+    template <typename ContainerT>
     void expanding_function_like_macro(
         TokenT const &macrodef, std::vector<TokenT> const &formal_args, 
         ContainerT const &definition,
         TokenT const &macrocall, std::vector<ContainerT> const &arguments) 
 #else
     // new signature
-    template <typename ContextT, typename TokenT, typename ContainerT, typename IteratorT>
+    template <typename ContextT, typename ContainerT, typename IteratorT>
     void expanding_function_like_macro(ContextT const& ctx,
         TokenT const &macrodef, std::vector<TokenT> const &formal_args, 
         ContainerT const &definition,
@@ -283,12 +283,12 @@ public:
     ///////////////////////////////////////////////////////////////////////////
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
     // old signature
-    template <typename TokenT, typename ContainerT>
+    template <typename ContainerT>
     void expanding_object_like_macro(TokenT const &macrodef, 
         ContainerT const &definition, TokenT const &macrocall)
 #else
     // new signature
-    template <typename ContextT, typename TokenT, typename ContainerT>
+    template <typename ContextT, typename ContainerT>
     void expanding_object_like_macro(ContextT const& ctx,
         TokenT const &macrodef, ContainerT const &definition, 
         TokenT const &macrocall)
