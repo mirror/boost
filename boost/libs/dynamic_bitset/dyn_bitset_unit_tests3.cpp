@@ -58,6 +58,11 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
     Tests::to_ulong(b);
   }
   {
+    std::string str(ul_width - 1, '1');
+    boost::dynamic_bitset<Block> b(str);
+    Tests::to_ulong(b);
+  }
+  {
     std::string ul_str(ul_width, '1');
     boost::dynamic_bitset<Block> b(ul_str);
     Tests::to_ulong(b);
