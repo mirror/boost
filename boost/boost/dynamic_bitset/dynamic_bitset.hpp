@@ -419,10 +419,18 @@ BOOST_DYNAMIC_BITSET_PRIVATE:
 
 };
 
-#if BOOST_WORKAROUND( __IBMCPP__, <=600 )
+#if defined(__IBMCPP__) && BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600))
 
 // Workaround for IBM's AIX platform.
 // See http://comments.gmane.org/gmane.comp.lib.boost.user/15331
+//
+// Note:
+//  The compiler is actually right, until core issue 454 will be settled:
+//   http://www.open-std.org/JTC1/SC22/WG21/docs/cwg_active.html#454
+//
+//  Considering the direction taken by the committee, however, the
+//  BOOST_WORKAROUND macro seems ok for the future. (G. Prota)
+
 
 template<typename Block, typename Allocator>
 dynamic_bitset<Block, Allocator>::block_width_type const
