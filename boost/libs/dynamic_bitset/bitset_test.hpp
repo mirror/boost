@@ -645,19 +645,11 @@ struct bitset_test {
   // to_string()
   static void to_string(const Bitset& b)
   {
-    // Construct a string object of the appropriate type and initializes
-    // it to a string of length N characters. Each character is determined
-    // by the value of its corresponding bit position in b. Character
-    // position N - 1 corresponds to bit position zero. Sebsequent
-    // decreasing character positions correspond to increasing bit
-    // positions. Bit value zero becomes the charactet 0, bit value one
-    // becomes the character 1.
     std::string str;
     boost::to_string(b, str);
-    std::size_t N = b.size();
     BOOST_CHECK(str.size() == b.size());
-    for (std::size_t I = 0; I < b.size(); ++I)
-      BOOST_CHECK(b[I] == 0 ? (str[N - 1 - I] == '0') : (str[N - 1 - I] == '1'));
+    for (std::size_t i = 0; i < b.size(); ++i)
+      BOOST_CHECK(str[b.size() - 1 - i] ==(b.test(i)? '1':'0'));
   }
 
   static void count(const Bitset& b)
