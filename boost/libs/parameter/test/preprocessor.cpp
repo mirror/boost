@@ -14,7 +14,7 @@
 
 namespace test {
 
-BOOST_PARAMETER_FUNCTION((int), f, tag,
+BOOST_PARAMETER_BASIC_FUNCTION((int), f, tag,
     (required
       (tester, *)
       (name, *)
@@ -40,7 +40,7 @@ BOOST_PARAMETER_FUNCTION((int), f, tag,
     return 1;
 }
 
-BOOST_PARAMETER_FUNCTION((int), g, tag,
+BOOST_PARAMETER_BASIC_FUNCTION((int), g, tag,
     (required
       (tester, *)
       (name, *)
@@ -66,7 +66,7 @@ BOOST_PARAMETER_FUNCTION((int), g, tag,
     return 1;
 }
 
-BOOST_PARAMETER_FUNCTION2((int), h, tag,
+BOOST_PARAMETER_FUNCTION((int), h, tag,
     (required
       (tester, *)
       (name, *)
@@ -88,7 +88,7 @@ BOOST_PARAMETER_FUNCTION2((int), h, tag,
     return 1;
 }
 
-BOOST_PARAMETER_FUNCTION2((int), h2, tag,
+BOOST_PARAMETER_FUNCTION((int), h2, tag,
     (required
       (tester, *)
       (name, *)
@@ -136,7 +136,7 @@ struct class_ : base
         )
     )
 
-    BOOST_PARAMETER_MEMBER_FUNCTION((int), f, tag,
+    BOOST_PARAMETER_BASIC_MEMBER_FUNCTION((int), f, tag,
         (required
           (tester, *)
           (name, *)
@@ -156,7 +156,7 @@ struct class_ : base
         return 1;
     }
 
-    BOOST_PARAMETER_CONST_MEMBER_FUNCTION((int), f, tag,
+    BOOST_PARAMETER_BASIC_CONST_MEMBER_FUNCTION((int), f, tag,
         (required
           (tester, *)
           (name, *)
@@ -173,6 +173,36 @@ struct class_ : base
           , args[index | 2]
         );
 
+        return 1;
+    }
+
+    BOOST_PARAMETER_MEMBER_FUNCTION((int), f2, tag,
+        (required
+          (tester, *)
+          (name, *)
+        )
+        (optional
+          (value, *, 1.f)
+          (index, *, 2)
+        )
+    )
+    {
+        tester(name, value, index);
+        return 1;
+    }
+
+    BOOST_PARAMETER_CONST_MEMBER_FUNCTION((int), f2, tag,
+        (required
+          (tester, *)
+          (name, *)
+        )
+        (optional
+          (value, *, 1.f)
+          (index, *, 2)
+        )
+    )
+    {
+        tester(name, value, index);
         return 1;
     }
 };
@@ -262,6 +292,16 @@ int main()
       , name = S("foo")
     );
 
+    x.f2(
+        tester = values(S("foo"), 1.f, 2)
+      , S("foo")
+    );
+
+    x.f2(
+        tester = values(S("foo"), 1.f, 2)
+      , name = S("foo")
+    );
+
     class_ const& x_const = x;
 
     x_const.f(
@@ -273,7 +313,22 @@ int main()
         tester = values(S("foo"), 1.f, 2)
       , name = S("foo")
     );
-   
+
+    x_const.f2(
+        tester = values(S("foo"), 1.f, 2)
+      , S("foo")
+    );
+
+    x_const.f2(
+        tester = values(S("foo"), 1.f, 2)
+      , name = S("foo")
+    );
+
+    x_const.f2(
+        tester = values(S("foo"), 1.f, 2)
+      , name = S("foo")
+    );
+
 #ifndef BOOST_NO_SFINAE
     assert(sfinae("foo") == 1);
     assert(sfinae(1) == 0);
