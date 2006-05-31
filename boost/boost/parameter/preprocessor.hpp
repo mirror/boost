@@ -26,6 +26,8 @@
 # include <boost/preprocessor/seq/size.hpp>
 # include <boost/preprocessor/seq/enum.hpp>
 
+# include <boost/preprocessor/detail/is_nullary.hpp>
+
 # include <boost/mpl/always.hpp>
 # include <boost/mpl/apply_wrap.hpp>
 
@@ -107,6 +109,45 @@ T const& as_lvalue(T const& value, int)
 # endif
 
 }}} // namespace boost::parameter::aux
+
+# define BOOST_PARAMETER_MEMBER_FUNCTION_CHECK_STATIC_static ()
+# define BOOST_PARAMETER_MEMBER_FUNCTION_IS_STATIC(name) \
+    BOOST_PP_IS_NULLARY( \
+        BOOST_PP_CAT(BOOST_PARAMETER_MEMBER_FUNCTION_CHECK_STATIC_,name) \
+    )
+
+# if !defined(BOOST_MSVC)
+#  define BOOST_PARAMETER_MEMBER_FUNCTION_STRIP_STATIC_static
+#  define BOOST_PARAMETER_MEMBER_FUNCTION_STRIP_STATIC(name) \
+    BOOST_PP_CAT(BOOST_PARAMETER_MEMBER_FUNCTION_STRIP_STATIC_, name)
+# else
+// Workaround for MSVC preprocessor.
+//
+// When stripping static from "static f", msvc will produce
+// " f". The leading whitespace doesn't go away when pasting
+// the token with something else, so this thing is a hack to
+// strip the whitespace.
+#  define BOOST_PARAMETER_MEMBER_FUNCTION_STRIP_STATIC_static (
+#  define BOOST_PARAMETER_MEMBER_FUNCTION_STRIP_STATIC_AUX(name) \
+    BOOST_PP_CAT(BOOST_PARAMETER_MEMBER_FUNCTION_STRIP_STATIC_, name))
+#  define BOOST_PARAMETER_MEMBER_FUNCTION_STRIP_STATIC(name) \
+    BOOST_PP_SEQ_HEAD( \
+        BOOST_PARAMETER_MEMBER_FUNCTION_STRIP_STATIC_AUX(name) \
+    )
+# endif
+
+# define BOOST_PARAMETER_MEMBER_FUNCTION_STATIC(name) \
+    BOOST_PP_EXPR_IF( \
+        BOOST_PARAMETER_MEMBER_FUNCTION_IS_STATIC(name) \
+      , static \
+    )
+
+# define BOOST_PARAMETER_MEMBER_FUNCTION_NAME(name) \
+    BOOST_PP_IF( \
+        BOOST_PARAMETER_MEMBER_FUNCTION_IS_STATIC(name) \
+      , BOOST_PARAMETER_MEMBER_FUNCTION_STRIP_STATIC \
+      , name BOOST_PP_TUPLE_EAT(1) \
+    )(name)
 
 // Calculates [begin, end) arity range.
 
@@ -197,24 +238,31 @@ T const& as_lvalue(T const& value, int)
 /**/
 
 # define BOOST_PARAMETER_FUNCTION_PARAMETERS_NAME(base) \
-    BOOST_PP_CAT(boost_param_parameters_, BOOST_PP_CAT(__LINE__, base))
+    BOOST_PP_CAT( \
+        boost_param_parameters_ \
+      , BOOST_PP_CAT(__LINE__, BOOST_PARAMETER_MEMBER_FUNCTION_NAME(base)) \
+    )
 
 // Produce a name for a result type metafunction for the function
 // named base
 # define BOOST_PARAMETER_FUNCTION_RESULT_NAME(base) \
-    BOOST_PP_CAT(boost_param_result_, BOOST_PP_CAT(__LINE__,base))
+    BOOST_PP_CAT( \
+        boost_param_result_ \
+      , BOOST_PP_CAT(__LINE__,BOOST_PARAMETER_MEMBER_FUNCTION_NAME(base)) \
+    )
 
 // Can't do boost_param_impl_ ## basee because base might start with an underscore
 // daniel: what? how is that relevant? the reason for using CAT() is to make sure
 // base is expanded. i'm not sure we need to here, but it's more stable to do it.
 # define BOOST_PARAMETER_IMPL(base) \
-    BOOST_PP_CAT(boost_param_impl,base)
+    BOOST_PP_CAT(boost_param_impl,BOOST_PARAMETER_MEMBER_FUNCTION_NAME(base))
 
 # define BOOST_PARAMETER_FUNCTION_FWD_FUNCTION00(z, n, r, data, elem) \
     BOOST_PP_IF( \
         n \
       , BOOST_PARAMETER_FUNCTION_FWD_FUNCTION_TEMPLATE_Z, BOOST_PP_TUPLE_EAT(2) \
     )(z,n) \
+    BOOST_PARAMETER_MEMBER_FUNCTION_STATIC(BOOST_PP_TUPLE_ELEM(7,3,data)) \
     inline \
     BOOST_PP_EXPR_IF(n, typename) \
         BOOST_PARAMETER_FUNCTION_RESULT_NAME(BOOST_PP_TUPLE_ELEM(7,3,data))<   \
@@ -227,7 +275,7 @@ T const& as_lvalue(T const& value, int)
             )(elem) \
         >::type \
     >::type \
-    BOOST_PP_TUPLE_ELEM(7,3,data)( \
+    BOOST_PARAMETER_MEMBER_FUNCTION_NAME(BOOST_PP_TUPLE_ELEM(7,3,data))( \
         BOOST_PP_IF( \
             n \
           , BOOST_PP_SEQ_FOR_EACH_I_R \
@@ -335,15 +383,20 @@ T const& as_lvalue(T const& value, int)
 
 # define BOOST_PARAMETER_FUNCTION_PARAMETERS(tag_namespace, base, args)             \
     template <class BoostParameterDummy>                                      \
-    struct BOOST_PP_CAT(BOOST_PP_CAT(boost_param_params_, __LINE__), base)          \
-      : boost::parameter::parameters<                                               \
+    struct BOOST_PP_CAT( \
+            BOOST_PP_CAT(boost_param_params_, __LINE__) \
+          , BOOST_PARAMETER_MEMBER_FUNCTION_NAME(base) \
+    ) : boost::parameter::parameters<                                               \
             BOOST_PP_SEQ_FOR_EACH_I(                                                \
                 BOOST_PARAMETER_FUNCTION_PARAMETERS_M, tag_namespace, args          \
             )                                                                       \
         >                                                                           \
     {};                                                                             \
                                                                                     \
-    typedef BOOST_PP_CAT(BOOST_PP_CAT(boost_param_params_, __LINE__), base)<int>
+    typedef BOOST_PP_CAT( \
+            BOOST_PP_CAT(boost_param_params_, __LINE__) \
+          , BOOST_PARAMETER_MEMBER_FUNCTION_NAME(base) \
+    )<int>
 
 // Defines result type metafunction
 # define BOOST_PARAMETER_FUNCTION_RESULT_ARG(z, _, i, x) \
@@ -432,7 +485,10 @@ T const& as_lvalue(T const& value, int)
 
 // Produces a name for the dispatch functions.
 # define BOOST_PARAMETER_FUNCTION_DEFAULT_NAME(name) \
-    BOOST_PP_CAT(boost_param_default_, BOOST_PP_CAT(__LINE__, name))
+    BOOST_PP_CAT( \
+        boost_param_default_ \
+      , BOOST_PP_CAT(__LINE__, BOOST_PARAMETER_MEMBER_FUNCTION_NAME(name)) \
+    )
 
 // Helper macro used below to produce lists based on the keyword argument
 // names. macro is applied to every element. n is the number of
@@ -503,6 +559,7 @@ T const& as_lvalue(T const& value, int)
           , BOOST_PP_TUPLE_ELEM(3,1,data) \
         ) \
     > \
+    BOOST_PARAMETER_MEMBER_FUNCTION_STATIC(BOOST_PP_TUPLE_ELEM(3,0,data)) \
     ResultType BOOST_PARAMETER_FUNCTION_DEFAULT_NAME(BOOST_PP_TUPLE_ELEM(3,0,data))( \
         ResultType(*)() \
       , Args const& args \
@@ -527,6 +584,7 @@ T const& as_lvalue(T const& value, int)
 # define BOOST_PARAMETER_FUNCTION_INITIAL_DISPATCH_FUNCTION(name, split_args, const_) \
     template <class Args> \
     typename BOOST_PARAMETER_FUNCTION_RESULT_NAME(name)<Args>::type \
+    BOOST_PARAMETER_MEMBER_FUNCTION_STATIC(name) \
     BOOST_PARAMETER_IMPL(name)(Args const& args) BOOST_PP_EXPR_IF(const_, const) \
     { \
         return BOOST_PARAMETER_FUNCTION_DEFAULT_NAME(name)( \
@@ -562,6 +620,7 @@ T const& as_lvalue(T const& value, int)
           , split_args \
         ) \
     > \
+    BOOST_PARAMETER_MEMBER_FUNCTION_STATIC(name) \
     ResultType BOOST_PARAMETER_FUNCTION_DEFAULT_NAME(name)( \
         ResultType(*)() \
       , Args const& args \
