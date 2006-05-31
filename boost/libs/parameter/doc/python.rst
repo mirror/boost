@@ -78,11 +78,14 @@ Boost.Parameter macros_ are required to understand this section.
 .. _macros: index.html
 
 The class and member function we are interested in binding looks
-like this::
+like this:
+
+.. parsed-literal::
 
   #include <boost/parameter/keyword.hpp>
   #include <boost/parameter/preprocessor.hpp>
   #include <boost/parameter/python.hpp>
+  #include <boost/python.hpp>
 
   // First the keywords
   BOOST_PARAMETER_KEYWORD(tag, title)
@@ -91,7 +94,7 @@ like this::
 
   class window
   {
-   public:
+  public:
       BOOST_PARAMETER_MEMBER_FUNCTION(
         (void), open, tag,
         (required (title, (std::string)))
@@ -99,9 +102,16 @@ like this::
                   (height, (unsigned), 400))
       )
       {
-          …
+          *…*
       }
   };
+
+.. @example.prepend('#include <cassert>')
+.. @example.replace_emphasis('''
+   assert(title == "foo");
+   assert(height == 20);
+   assert(width == 400);
+   ''')
 
 It defines a set of overloaded member functions called ``open`` with one
 required parameter and two optional ones. To bind this member function to
@@ -149,13 +159,18 @@ Next we'll define the module and export the class:
   {
       using namespace boost::python;
       namespace py = boost::parameter::python;
+      namespace mpl = boost::mpl;
 
       class_<window>("window")
           .def(
               "open", py::function<
                   open_fwd
-                , mpl::vector<tag::title, tag::width*, tag::height*>
-                , mpl::vector<void, std::string, unsigned, unsigned>
+                , mpl::vector<
+                      void
+                    , tag::title(std::string)
+                    , tag::width*(unsigned)
+                    , tag::height*(unsigned)
+                  >
               >()
           );
   }
@@ -169,7 +184,7 @@ Next we'll define the module and export the class:
       , howmany = 'all'
     )
 
-.. @del jam_prefix[-1:]
+.. @del jam_prefix[:]
 
 ``py::function`` is passed three parameters. The first one is the class
 with forwarding overloads that we defined earlier. The second one is
@@ -247,6 +262,8 @@ range:
 
     [ mpl::size<S> - number of *special* keyword tags in ``S`` , mpl::size<S> ]
 
+.. @ignore()
+
 For example, the **arity range** of ``mpl::vector2<x,y>`` is [2,2], the **arity range** of
 ``mpl::vector2<x,y*>`` is [2,2] and the **arity range** of ``mpl::vector2<x,y**>`` is [1,2].
 
@@ -263,23 +280,56 @@ docs. The example uses a different technique, but could also have been written l
 
 .. parsed-literal::
 
-  template <class ArgumentPack>
-  void dfs_dispatch(ArgumentPack& args, mpl::false\_)
+  namespace core
   {
-      *…compute and use default color map…*
+    template <class ArgumentPack>
+    void dfs_dispatch(ArgumentPack const& args, mpl::false\_)
+    {
+        *…compute and use default color map…*
+    }
+
+    template <class ArgumentPack, class ColorMap>
+    void dfs_dispatch(ArgumentPack const& args, ColorMap colormap)
+    {
+        *…use colormap…*
+    }
   }
-  
-  template <class ArgumentPack, class ColorMap>
-  void dfs_dispatch(ArgumentPack& args, ColorMap colormap)
-  {
-      *…use colormap…*
-  }
-  
+
   template <class ArgumentPack>
-  void depth_first_search(ArgumentPack& args)
+  void depth_first_search(ArgumentPack const& args)
   {
       core::dfs_dispatch(args, args[color | mpl::false_()]);
   }
+
+.. @example.prepend('''
+   #include <boost/parameter/keyword.hpp>
+   #include <boost/parameter/parameters.hpp>
+   #include <boost/mpl/bool.hpp>
+   #include <cassert>
+
+   BOOST_PARAMETER_KEYWORD(tag, color);
+
+   typedef boost::parameter::parameters<tag::color> params;
+
+   namespace mpl = boost::mpl;
+   ''')
+
+.. @example.replace_emphasis('''
+   assert(args[color | 1] == 1);
+   ''')
+
+.. @example.replace_emphasis('''
+   assert(args[color | 1] == 0);
+   ''')
+
+.. @example.append('''
+   int main()
+   {
+       depth_first_search(params()());
+       depth_first_search(params()(color = 0));
+   }''')
+
+.. @build()
 
 .. _example: index.html#dispatching-based-on-the-presence-of-a-default
 
@@ -311,6 +361,8 @@ Defines a named parameter enabled constructor.
         void def(Class& class\_);
     };
 
+.. @ignore()
+
 ``init`` requirements 
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -338,27 +390,61 @@ Example
 
 .. parsed-literal::
 
-    struct base { /\* ... \*/ };
+    #include <boost/parameter/keyword.hpp>
+    #include <boost/parameter/preprocessor.hpp>
+    #include <boost/parameter/python.hpp>
+    #include <boost/python.hpp>
+    #include <boost/mpl/vector.hpp>
+
+    BOOST_PARAMETER_KEYWORD(tag, x)
+    BOOST_PARAMETER_KEYWORD(tag, y)
+
+    struct base 
+    { 
+        template <class ArgumentPack>
+        base(ArgumentPack const& args)
+        {
+            *…use args…*
+        }
+    };
 
     class X : base
     {
     public:
-        BOOST_PARAMETER_CONSTRUCTOR(X, (base),
+        BOOST_PARAMETER_CONSTRUCTOR(X, (base), tag,
             (required (x, \*))
             (optional (y, \*))
         )
     };
 
-    BOOST_PYTHON_MODULE(..)
+    BOOST_PYTHON_MODULE(*module name*)
     {
-        class_<X>("X")
+        using namespace boost::python;
+        namespace py = boost::parameter::python;
+        namespace mpl = boost::mpl;
+
+        class_<X>("X", no_init)
             .def(
-                init<
-                  , mpl::vector2<tag::x, tag::y\*>
-                  , mpl::vector2<int, int>
+                py::init<
+                    mpl::vector<tag::x(int), tag::y\*(int)>
                 >()
             );
     }
+
+.. @example.replace_emphasis('''
+   assert(args[x] == 0);
+   assert(args[y | 1] == 1);
+   ''')
+
+.. @example.replace_emphasis('my_module')
+
+.. @jam_prefix.append('import python ;')
+.. @jam_prefix.append('stage . : my_module /boost/python//boost_python ;')
+.. @my_module = build(
+        output = 'my_module'
+      , target_rule = 'python-extension'
+      , input = '/boost/python//boost_python'
+    )
 
 ------------------------------------------------------------------------------
 
@@ -375,6 +461,8 @@ Defines a ``__call__`` operator, mapped to ``operator()`` in C++.
         template <class Class> 
         void def(Class& class\_);
     };
+
+.. @ignore()
 
 ``call`` requirements 
 ~~~~~~~~~~~~~~~~~~~~~
@@ -397,6 +485,17 @@ Example
 
 .. parsed-literal::
 
+    #include <boost/parameter/keyword.hpp>
+    #include <boost/parameter/preprocessor.hpp>
+    #include <boost/parameter/python.hpp>
+    #include <boost/python.hpp>
+    #include <boost/mpl/vector.hpp>
+
+    BOOST_PARAMETER_KEYWORD(tag, x)
+    BOOST_PARAMETER_KEYWORD(tag, y)
+
+    namespace parameter = boost::parameter;
+
     typedef parameter::parameters<
         parameter::required<tag::x>
       , parameter::optional<tag::y>
@@ -405,10 +504,10 @@ Example
     class X
     {
     public:
-        template <class Args>
-        int call_impl(Args const& args)
+        template <class ArgumentPack>
+        int call_impl(ArgumentPack const& args)
         {
-            /\* ... \*/
+            *…use args…*
         }
 
         template <class A0>
@@ -424,16 +523,33 @@ Example
         }
     };
 
-    BOOST_PYTHON_MODULE(..)
+    BOOST_PYTHON_MODULE(*module name*)
     {
+        using namespace boost::python;
+        namespace py = parameter::python;
+        namespace mpl = boost::mpl;
+
         class_<X>("X")
-            .def("f",
-                call<
-                  , mpl::vector2<tag::x, tag::y\*>
-                  , mpl::vector3<int, int, int>
+            .def(
+                py::call<
+                    mpl::vector<int, tag::x(int), tag::y\*(int)>
                 >()
             );
     }    
+
+.. @example.replace_emphasis('''
+   assert(args[x] == 0);
+   assert(args[y | 1] == 1);
+   return 0;
+   ''')
+
+.. @example.replace_emphasis('my_module')
+
+.. @my_module = build(
+        output = 'my_module'
+      , target_rule = 'python-extension'
+      , input = '/boost/python//boost_python'
+    )
 
 ------------------------------------------------------------------------------
 
@@ -450,6 +566,8 @@ Defines a named parameter enabled member function.
         template <class Class, class Options> 
         void def(Class& class\_, char const* name, Options const& options);
     };
+
+.. @ignore()
 
 ``function`` requirements 
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -479,15 +597,24 @@ of [2,2], so we only need one forwarding overload.
 
 .. parsed-literal::
 
+    #include <boost/parameter/keyword.hpp>
+    #include <boost/parameter/preprocessor.hpp>
+    #include <boost/parameter/python.hpp>
+    #include <boost/python.hpp>
+    #include <boost/mpl/vector.hpp>
+
+    BOOST_PARAMETER_KEYWORD(tag, x)
+    BOOST_PARAMETER_KEYWORD(tag, y)
+
     class X
     {
     public:
         BOOST_PARAMETER_MEMBER_FUNCTION((void), f, tag,
             (required (x, \*))
-            (optional (y, \*))
+            (optional (y, \*, 1))
         )
         {
-            /\* … \*/
+            *…*
         }
     };
 
@@ -500,20 +627,33 @@ of [2,2], so we only need one forwarding overload.
         }
     };
 
-    BOOST_PYTHON_MODULE(..)
+    BOOST_PYTHON_MODULE(*module name*)
     {
+        using namespace boost::python;
+        namespace py = boost::parameter::python;
+        namespace mpl = boost::mpl;
+
         class_<X>("X")
             .def("f",
-                function<
+                py::function<
                     f_fwd
-                  , mpl::vector2<tag::x, tag::y\*>
-                  , mpl::vector3<void, int, int>
+                  , mpl::vector<void, tag::x(int), tag::y\*(int)>
                 >()
             );
     }
 
-.. This example is not consistent with your definition of arity
-.. range, above.  There are no special keywords in play here.
+.. @example.replace_emphasis('''
+   assert(x == 0);
+   assert(y == 1);
+   ''')
+
+.. @example.replace_emphasis('my_module')
+
+.. @my_module = build(
+        output = 'my_module'
+      , target_rule = 'python-extension'
+      , input = '/boost/python//boost_python'
+    )
 
 ------------------------------------------------------------------------------
 
@@ -526,6 +666,8 @@ Defines a named parameter enabled free function in the current Python scope.
 
     template <class Fwd, class Keywords, class Signature>
     void def(char const* name);
+
+.. @ignore()
 
 ``def`` requirements 
 ~~~~~~~~~~~~~~~~~~~~
@@ -556,10 +698,10 @@ of [2,2], so we only need one forwarding overload.
 
     BOOST_PARAMETER_FUNCTION((void), f, tag,
         (required (x, \*))
-        (optional (y, \*))
+        (optional (y, \*, 1))
     )
     {
-        /\* … \*/
+        *…*
     }
 
     struct f_fwd
@@ -575,10 +717,13 @@ of [2,2], so we only need one forwarding overload.
     {
         def<
             f_fwd
-          , mpl::vector2<tag::x, tag::y\*>
-          , mpl::vector3<void, int, int>
+          , mpl::vector<
+                void, tag::x(int), tag::y\*(int)
+            >
         >("f");
     }
+
+.. @ignore()
 
 .. again, the undefined ``fwd`` identifier.
 
@@ -587,5 +732,3 @@ Portability
 
 The Boost.Parameter Python binding library requires *partial template specialization*.
 
-.. Oh.  In that case, we don't have to worry so much about
-.. compilers that can't parse function types.
