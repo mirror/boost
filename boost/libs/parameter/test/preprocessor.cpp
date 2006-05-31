@@ -205,6 +205,22 @@ struct class_ : base
         tester(name, value, index);
         return 1;
     }
+
+
+    BOOST_PARAMETER_MEMBER_FUNCTION((int), static f_static, tag,
+        (required
+          (tester, *)
+          (name, *)
+        )
+        (optional
+          (value, *, 1.f)
+          (index, *, 2)
+        )
+    )
+    {
+        tester(name, value, index);
+        return 1;
+    }
 };
 
 BOOST_PARAMETER_FUNCTION(
@@ -325,6 +341,16 @@ int main()
     );
 
     x_const.f2(
+        tester = values(S("foo"), 1.f, 2)
+      , name = S("foo")
+    );
+
+    class_::f_static(
+        tester = values(S("foo"), 1.f, 2)
+      , S("foo")
+    );
+
+    class_::f_static(
         tester = values(S("foo"), 1.f, 2)
       , name = S("foo")
     );
