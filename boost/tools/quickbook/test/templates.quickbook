@@ -45,4 +45,11 @@ kinda_weird(exactly, xanadu)
 
 code("Hello\, World")
 
+[def __alpha '''&alpha;''']
+[template pow(a, b) a'''<superscript>'''b'''</superscript>''' ]
+
+pow(x, 2)
+
+pow(__alpha, 2)
+
 [endsect]
