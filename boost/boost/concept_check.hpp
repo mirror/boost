@@ -126,6 +126,10 @@ namespace boost
 
   BOOST_concept(Assignable,(TT))
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+    Assignable() { }
+#endif
+
     ~Assignable() {
 #if !defined(_ITERATOR_) // back_insert_iterator broken for VC++ STL
       a = a;              // require assignment operator
