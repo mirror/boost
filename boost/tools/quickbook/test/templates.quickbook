@@ -47,9 +47,12 @@ code("Hello\, World")
 
 [def __alpha '''&alpha;''']
 [template pow(a, b) a'''<superscript>'''b'''</superscript>''' ]
+[template super(text)'''<superscript>'''text'''</superscript>''' ]
 
 pow(x, 2)
 
 pow(__alpha, 2)
+
+x[/]super(2)
 
 [endsect]

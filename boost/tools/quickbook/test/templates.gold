@@ -48,5 +48,8 @@
     <para>
       <!--quickbook-escape-prefix-->&alpha;<!--quickbook-escape-postfix--><!--quickbook-escape-prefix--><superscript><!--quickbook-escape-postfix-->2<!--quickbook-escape-prefix--></superscript><!--quickbook-escape-postfix-->
     </para>
+    <para>
+      x<!--quickbook-escape-prefix--><superscript><!--quickbook-escape-postfix-->2<!--quickbook-escape-prefix--></superscript><!--quickbook-escape-postfix-->
+    </para>
   </section>
 </article>
