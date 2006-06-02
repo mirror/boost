@@ -2,8 +2,8 @@
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_TYPE_TRAITS_MSVC_REMOVE_EXTENT_HOLT_2004_0827
-#define BOOST_TYPE_TRAITS_MSVC_REMOVE_EXTENT_HOLT_2004_0827
+#ifndef BOOST_TYPE_TRAITS_MSVC_REMOVE_ALL_EXTENT_HOLT_2004_0827
+#define BOOST_TYPE_TRAITS_MSVC_REMOVE_ALL_EXTENT_HOLT_2004_0827
 
 #include <boost/type_traits/msvc/typeof.hpp>
 #include <boost/type_traits/is_array.hpp>
