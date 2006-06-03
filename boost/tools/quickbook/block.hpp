@@ -194,16 +194,21 @@ namespace quickbook
                     (alpha_p | '_') >> *(alnum_p | '_')
                     ;
 
+                template_id =
+                    identifier | (punct_p - (ch_p('[') | ']'))
+                    ;
+
                 template_ =
                     "template"
-                    >> hard_space >> identifier         [push_back_a(actions.template_info)]
-                    >> space >> '('
-                    >> space >> identifier              [push_back_a(actions.template_info)]
-                    >> *(
-                            space >> ','
-                            >> space >> identifier      [push_back_a(actions.template_info)]
-                        )
-                    >> space >> ')'
+                    >> hard_space >> template_id        [push_back_a(actions.template_info)]
+                    >> 
+                    !(
+                        space >> '['
+                        >> +(
+                                space >> template_id    [push_back_a(actions.template_info)]
+                            )
+                        >> space >> ']'
+                    )
                     >> template_body                    [actions.template_body]
                     ;
                 
@@ -392,8 +397,8 @@ namespace quickbook
                             varlistentry, varlistterm, varlistitem, table_cell,
                             preformatted, list_item, begin_section, end_section,
                             xinclude, include, hard_space, eol, paragraph_end,
-                            template_, identifier, template_formal_arg,
-                            template_body;
+                            template_, template_id, template_formal_arg,
+                            template_body, identifier;
 
             symbols<>       paragraph_end_markups;
             

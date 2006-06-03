@@ -1052,14 +1052,14 @@ blocks and tables).
 Example template:
 
 [pre'''
-[template person(name_, age_, id_)
+[template person[name_ age_ id_]
 
 Hi, my name is name_. I am age_ years old. My id is id_.
 
 ]
 ''']
 
-[template person(name_, age_, id_)
+[template person[name_ age_ id_]
 
 Hi, my name is *name_*. I am *age_* years old. My id is *id_*.
 
@@ -1068,26 +1068,24 @@ Hi, my name is *name_*. I am *age_* years old. My id is *id_*.
 Template formal arguments are identifiers consisting of an initial 
 alphabetic character or the underscore, followed by zero or more 
 alphanumeric characters or the underscore. This is similar to your typical 
-C/C++ identifier. A template formal argument temporarily hides a macro of 
-the same name at the point where the template is invoked. At template 
+C/C++ identifier. A template formal argument temporarily hides a template 
+of the same name at the point where the template is invoked. At template 
 invocation, you supply the actual arguments. At that point, the template 
 will be expanded with your supplied arguments. Example:
 
 [pre'''
-person(James Bond, 39, 007)
-person(Santa Clause, 87, 12-25)
+[person James Bond..39..007]
+[person Santa Clause..87..12-25]
 ''']
 
 Which will expand to:
 
-person(James Bond, 39, 007)
-person(Santa Clause, 87, 12-25)
+[person James Bond..39..007]
+[person Santa Clause..87..12-25]
 
 Each actual argument can be a word, a text fragment or just about any 
-[link quickbook.syntax.phrase QuickBook phrase]. Arguments are comma 
-separated and terminated by the close parenthesis. If your arguments have 
-embedded commas or close parentheses, you'll have to 
-[link quickbook.syntax.phrase.single_char_escape escape them].
+[link quickbook.syntax.phrase QuickBook phrase]. Arguments are separated by 
+the double dot ".." and terminated by the close parenthesis.
 
 [caution Templates are recursive. A template can call another template or 
 even itself, directly or indirectly. There are no control structures in 
@@ -1098,13 +1096,13 @@ limit.]
 Templates may be phrase or block level. Phrase templates are of the form:
 
 [pre'''
-[template sample(arg1, arg2,...argN) replacement text... ]
+[template sample[arg1 arg2...argN] replacement text... ]
 ''']
 
 Block templates are of the form:
 
 [pre'''
-[template sample(arg1, arg2,...argN) 
+[template sample[arg1 arg2...argN] 
 replacement text... 
 ]
 ''']

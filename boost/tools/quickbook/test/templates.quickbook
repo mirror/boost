@@ -4,55 +4,59 @@
 
 [section Templates]
 
-[template foo1(bar) foo bar]
+[template foo0 nullary_arg]
 
-foo1(baz)
+[foo0]
 
-[template foo2(bar) 
+[template foo1[bar] foo bar]
+
+[foo1 baz]
+
+[template foo2[bar]
 foo bar
 ]
 
-foo2(baz)
+[foo2 baz]
 
-[template foo3(bar)
+[template foo3[bar]
 This is a complete paragraph. bar bar bar bar bar
 bar bar bar bar.... blah blah blah......
 ]
 
-foo3(kalamazoo)
+[foo3 kalamazoo]
 
-[template foo4(bar)
-foo3(bar)
+[template foo4[bar]
+[foo3 bar]
 ]
 
-foo3(madagascar)
+[foo3 madagascar]
 
-[template foo4(x) zoom x]
-[template foo5(x) x zoom]
+[template foo4[x] zoom x]
+[template foo5[x] x zoom]
 
-foo5(foo4(peanut))
+[foo5[foo4 peanut]]
 
-[template kinda_weird(x, y) x y]
+[template kinda_weird[x y] x y]
 
-kinda_weird(exactly, xanadu)
+[kinda_weird exactly..xanadu]
 
-[template code(x)
+[template code[x]
     int main()
     {
         std::cout << x << std::endl;
     }
 ]
 
-code("Hello\, World")
+[code "Hello\, World"]
 
-[def __alpha '''&alpha;''']
-[template pow(a, b) a'''<superscript>'''b'''</superscript>''' ]
-[template super(text)'''<superscript>'''text'''</superscript>''' ]
+[template alpha '''&alpha;''']
+[template pow[a b] a'''<superscript>'''b'''</superscript>''' ]
+[template super[text]'''<superscript>'''text'''</superscript>''' ]
 
-pow(x, 2)
+[pow x 2]
 
-pow(__alpha, 2)
+[pow [alpha] 2]
 
-x[/]super(2)
+x[super 2]
 
 [endsect]

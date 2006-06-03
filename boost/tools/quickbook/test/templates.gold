@@ -8,6 +8,9 @@
   <section id="templates.templates">
     <title><link linkend="templates.templates">Templates</link></title>
     <para>
+      nullary_arg
+    </para>
+    <para>
       foo baz
     </para>
     <para>

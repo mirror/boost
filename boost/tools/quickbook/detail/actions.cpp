@@ -483,16 +483,40 @@ namespace quickbook
             
             if (template_.size()-1 != template_info.size())
             {
-                actions.pop(); // restore the actions' states
-                detail::outerr(pos.file,pos.line)
-                    << "Invalid number of arguments passed. Expecting: "
-                    << template_.size()-2
-                    << " argument(s), got: "
-                    << template_info.size()-1
-                    << " argument(s) instead."
-                    << std::endl;
-                --actions.template_depth;
-                return;
+                bool invalid_number_of_args = true;
+                if ((template_.size()-2 == 2) && (template_info.size()-1 == 1))
+                {
+                    // special case: if there is only one argument passed
+                    // and we are expecting 2, split the string at the first
+                    // space char.
+                    
+                    std::string::size_type pos = 
+                        template_info[1].find_first_of(" /t/r/n");
+                    if (pos != std::string::npos)
+                    {
+                        std::string first(template_info[1].begin(), template_info[1].begin()+pos);
+                        std::string::size_type pos2 = 
+                            template_info[1].find_first_not_of(" /t/r/n", pos);
+                        std::string second(template_info[1].begin()+pos2, template_info[1].end());
+                        template_info[1] = first;
+                        template_info.push_back(second);
+                        invalid_number_of_args = false;
+                    }
+                }
+                
+                if (invalid_number_of_args)
+                {
+                    actions.pop(); // restore the actions' states
+                    detail::outerr(pos.file,pos.line)
+                        << "Invalid number of arguments passed. Expecting: "
+                        << template_.size()-2
+                        << " argument(s), got: "
+                        << template_info.size()-1
+                        << " argument(s) instead."
+                        << std::endl;
+                    --actions.template_depth;
+                    return;
+                }
             }
 
             std::vector<std::string>::const_iterator arg = template_info.begin()+1; 

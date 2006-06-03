@@ -93,7 +93,6 @@ namespace quickbook
 
                 common =
                         macro
-                    |   template_                       [actions.do_template]
                     |   phrase_markup
                     |   code_block
                     |   inline_code
@@ -110,20 +109,21 @@ namespace quickbook
                 
                 template_ =
                     (actions.templates >> eps_p)        [push_back_a(actions.template_info)]
-                    >> space >> '('
-                    >> template_arg                     [push_back_a(actions.template_info)]
-                    >> *(
-                            ',' >> template_arg         [push_back_a(actions.template_info)]
+                    >> !(
+                            hard_space
+                        >>  template_arg                [push_back_a(actions.template_info)]
+                        >> *(
+                                ".." >> template_arg    [push_back_a(actions.template_info)]
+                            )
                         )
-                    >> space >> ')'
                     ;
-                
+
+                brackets = 
+                    '[' >> +template_arg >> ']'
+                    ;
+
                 template_arg = 
-                    +("\\," | parens | (anychar_p - (ch_p(',') | ')')))
-                    ;
-                    
-                parens = 
-                    '(' >> +template_arg >> ')'
+                    +(brackets | (anychar_p - (str_p("..") | ']')))
                     ;
 
                 inline_code =
@@ -191,6 +191,7 @@ namespace quickbook
                         |   quote
                         |   replaceable
                         |   footnote
+                        |   template_                   [actions.do_template]
                         |   str_p("br")                 [actions.break_]
                         )
                     >>  ']'
@@ -338,8 +339,8 @@ namespace quickbook
                             link, hard_space, eol, inline_code, simple_format, 
                             simple_bold, simple_italic, simple_underline, 
                             simple_teletype, source_mode, template_, template_arg,
-                            quote, code_block, footnote, replaceable, parens,
-                            macro;
+                            quote, code_block, footnote, replaceable, macro,
+                            brackets;
 
             rule<Scanner> const&
             start() const { return common; }

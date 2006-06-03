@@ -632,27 +632,27 @@
 [h6 Heading 6]
 </pre>
 <a name="quickbook.syntax.block.headings.heading_1"></a><h1>
-<a name="id445811"></a>
+<a name="id445801"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_1">Heading 1</a>
         </h1>
 <a name="quickbook.syntax.block.headings.heading_2"></a><h2>
-<a name="id445836"></a>
+<a name="id445825"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_2">Heading 2</a>
         </h2>
 <a name="quickbook.syntax.block.headings.heading_3"></a><h3>
-<a name="id445860"></a>
+<a name="id445850"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_3">Heading 3</a>
         </h3>
 <a name="quickbook.syntax.block.headings.heading_4"></a><h4>
-<a name="id445885"></a>
+<a name="id445874"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_4">Heading 4</a>
         </h4>
 <a name="quickbook.syntax.block.headings.heading_5"></a><h5>
-<a name="id445910"></a>
+<a name="id445900"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_5">Heading 5</a>
         </h5>
 <a name="quickbook.syntax.block.headings.heading_6"></a><h5>
-<a name="id445935"></a>
+<a name="id445925"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_6">Heading 6</a>
         </h5>
 <p>
@@ -748,20 +748,16 @@ sf_logo
 <tr><td colspan="2" align="left" valign="top"><p>
             It's a good idea to use macro identifiers that are distinguishable. For
             instance, in this document, macro identifiers have two leading and trailing
-            underscores (e.g. <tt class="literal">
-__spirit__
-            </tt>). The reason is to avoid unwanted macro replacement.
+            underscores (e.g. <tt class="literal">__spirit__</tt>). The reason is to avoid unwanted
+            macro replacement.
           </p></td></tr>
 </table></div>
 <p>
           Links (URLS) and images are good candidates for macros. <span class="bold"><b>1</b></span>)
           They tend to change a lot. It is a good idea to place all links and images
           in one place near the top to make it easy to make changes. <span class="bold"><b>2</b></span>)
-          The syntax is not pretty. It's easier to read and write, e.g. <tt class="literal">
-__spirit__
-          </tt> than <tt class="literal">
-[@http://spirit.sourceforge.net Spirit]
-          </tt>.
+          The syntax is not pretty. It's easier to read and write, e.g. <tt class="literal">__spirit__</tt>
+          than <tt class="literal">[@http://spirit.sourceforge.net Spirit]</tt>.
         </p>
 <p>
           Some more examples:
@@ -795,7 +791,7 @@ __spirit__
         </p>
 <div class="informaltable">
 <h4>
-<a name="id446370"></a>
+<a name="id446361"></a>
             <span class="table-title">Predefined Macros</span>
           </h4>
 <table class="table">
@@ -811,23 +807,17 @@ __spirit__
 </tr></thead>
 <tbody>
 <tr>
-<td>
-__DATE__
-                </td>
+<td>__DATE__</td>
 <td>Today's date</td>
-<td>2006-May-22</td>
+<td>2006-Jun-03</td>
 </tr>
 <tr>
-<td>
-__TIME__
-                </td>
+<td>__TIME__</td>
 <td>The current time</td>
-<td>05:05:58 PM</td>
+<td>12:09:28 PM</td>
 </tr>
 <tr>
-<td>
-__FILENAME__
-                </td>
+<td>__FILENAME__</td>
 <td>Quickbook source filename</td>
 <td>C:\dev\boost\tools\quickbook\doc\quickbook.qbk</td>
 </tr>
@@ -849,7 +839,7 @@ __FILENAME__
 <p>
           Example template:
         </p>
-<pre class="programlisting">[template person(name_, age_, id_)
+<pre class="programlisting">[template person[name_ age_ id_]
 
 Hi, my name is name_. I am age_ years old. My id is id_.
 
@@ -859,13 +849,13 @@ Hi, my name is name_. I am age_ years old. My id is id_.
           Template formal arguments are identifiers consisting of an initial alphabetic
           character or the underscore, followed by zero or more alphanumeric characters
           or the underscore. This is similar to your typical C/C++ identifier. A
-          template formal argument temporarily hides a macro of the same name at
-          the point where the template is invoked. At template invocation, you supply
-          the actual arguments. At that point, the template will be expanded with
-          your supplied arguments. Example:
+          template formal argument temporarily hides a template of the same name
+          at the point where the template is invoked. At template invocation, you
+          supply the actual arguments. At that point, the template will be expanded
+          with your supplied arguments. Example:
         </p>
-<pre class="programlisting">person(James Bond, 39, 007)
-person(Santa Clause, 87, 12-25)
+<pre class="programlisting">[person James Bond..39..007]
+[person Santa Clause..87..12-25]
 </pre>
 <p>
           Which will expand to:
@@ -873,24 +863,20 @@ person(Santa Clause, 87, 12-25)
 <p>
           </p>
 <p>
-            Hi, my name is <span class="bold"><b>James Bond</b></span>. I am <span class="bold"><b> 39</b></span> years old. My id is <span class="bold"><b>
-            007</b></span>.
+            Hi, my name is <span class="bold"><b>James Bond</b></span>. I am <span class="bold"><b>39</b></span> years old. My id is <span class="bold"><b>007</b></span>.
           </p>
 <p>
           </p>
 <p>
-            Hi, my name is <span class="bold"><b>Santa Clause</b></span>. I am <span class="bold"><b> 87</b></span> years old. My id is <span class="bold"><b>
-            12-25</b></span>.
+            Hi, my name is <span class="bold"><b>Santa Clause</b></span>. I am <span class="bold"><b>87</b></span> years old. My id is <span class="bold"><b>12-25</b></span>.
           </p>
 <p>
         </p>
 <p>
           Each actual argument can be a word, a text fragment or just about any
           <a href="phrase.html" title=" Phrase Level Elements">QuickBook phrase</a>. Arguments
-          are comma separated and terminated by the close parenthesis. If your arguments
-          have embedded commas or close parentheses, you'll have to <a href="phrase.html#quickbook.syntax.phrase.single_char_escape" title="Single
-        char escape">escape
-          them</a>.
+          are separated by the double dot ".." and terminated by the close
+          parenthesis.
         </p>
 <div class="caution"><table border="0" summary="Caution">
 <tr>
@@ -907,12 +893,12 @@ person(Santa Clause, 87, 12-25)
 <p>
           Templates may be phrase or block level. Phrase templates are of the form:
         </p>
-<pre class="programlisting">[template sample(arg1, arg2,...argN) replacement text... ]
+<pre class="programlisting">[template sample[arg1 arg2...argN] replacement text... ]
 </pre>
 <p>
           Block templates are of the form:
         </p>
-<pre class="programlisting">[template sample(arg1, arg2,...argN) 
+<pre class="programlisting">[template sample[arg1 arg2...argN] 
 replacement text... 
 ]
 </pre>
@@ -970,7 +956,7 @@ replacement text...
         </p>
 <div class="informaltable">
 <h4>
-<a name="id446766"></a>
+<a name="id446744"></a>
             <span class="table-title">A Simple Table</span>
           </h4>
 <table class="table">
@@ -1032,7 +1018,7 @@ replacement text...
         </p>
 <div class="informaltable">
 <h4>
-<a name="id446883"></a>
+<a name="id446861"></a>
             <span class="table-title">Table with fat cells</span>
           </h4>
 <table class="table">
@@ -1081,7 +1067,7 @@ replacement text...
 </pre>
 <div class="informaltable">
 <h4>
-<a name="id446972"></a>
+<a name="id446944"></a>
             <span class="table-title">Table with code</span>
           </h4>
 <table class="table">
@@ -1160,9 +1146,8 @@ replacement text...
         </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-            The 
-__FILENAME__
-            predefined macro will reflect the name of the file currently being processed.
+            The __FILENAME__predefined macro will reflect the name of the file currently being
+            processed.
           </li>
 <li>
             Any macros defined in the included file are scoped to that file.
