@@ -162,6 +162,7 @@ namespace boost {
 
     };
 
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
     template< class T >
     class array< T, 0 > {
 
@@ -273,8 +274,8 @@ namespace boost {
         static void failed_rangecheck () {
                 throw std::range_error("attempt to access element of an empty array");
             }
-
     };
+#endif
 
     // comparisons
     template<class T, std::size_t N>
