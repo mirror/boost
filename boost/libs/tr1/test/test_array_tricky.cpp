@@ -15,6 +15,24 @@
 
 #include "verify_return.hpp"
 
+template <class T, class U>
+void check_tuple_access(T& a, const U&)
+{
+   typedef typename T::value_type value_type;
+   
+   const T& ca = a;
+
+   BOOST_STATIC_ASSERT((::boost::is_same< typename std::tr1::tuple_element<0,T>::type, value_type>::value));
+   verify_return_type(&std::tr1::get<0>(a), static_cast<value_type*>(0));
+   verify_return_type(&std::tr1::get<0>(ca), static_cast<const value_type*>(0));
+}
+
+template <class T>
+void check_tuple_access(T& a, const boost::mpl::true_&)
+{
+   // nothing to check the array is empty
+}
+
 template <class T>
 void check_array(T& a)
 {
@@ -70,9 +88,8 @@ void check_array(T& a)
    verify_return_type(ca <= ca2, false);
    verify_return_type(ca >= ca2, false);
 
-   BOOST_STATIC_ASSERT((::boost::is_same< typename std::tr1::tuple_element<0,T>::type, value_type>::value));
-   verify_return_type(&std::tr1::get<0>(a), static_cast<value_type*>(0));
-   verify_return_type(&std::tr1::get<0>(ca), static_cast<const value_type*>(0));
+   typedef boost::mpl::bool_<std::tr1::tuple_size<T>::value == 0> emtyness;
+   check_tuple_access(a, emtyness());
 }
 
 int main()
