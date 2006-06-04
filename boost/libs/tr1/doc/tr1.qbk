@@ -889,8 +889,7 @@ the macro BOOST_HAS_TR1_ARRAY if your
 standard library implements this part of TR1.
 
 [*Standard Conformity:]
-The Boost implementation does not support zero-sized arrarys.
-There is no non-constant data() member function in the Boost implementation.
+No known issues as of Boost-1.34 onwards.
 
 [endsect]
 
