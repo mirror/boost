@@ -7,7 +7,7 @@ License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 http://www.boost.org/LICENSE_1_0.txt)
 -->
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" type="text/css" href="../../../boost.css">
 <link rel="stylesheet" type="text/css" href="style.css">
 <title>Serialization - Special Considerations</title>
@@ -36,6 +36,7 @@ http://www.boost.org/LICENSE_1_0.txt)
   </dl>
   <dt><a href="#binary_archives">Binary Archives</a>
   <dt><a href="#xml_archives">XML Archives</a>
+  <dt><a href="#optimizations">Optimizations</a>
   <dt><a href="exceptions.html">Archive Exceptions</a>
   <dt><a href="exception_safety.html">Exception Safety</a>
 </dl>
@@ -308,6 +309,16 @@ saved.  For example, the gcc compiler reserves 4 bytes to store a variable of ty
 So its possible that   a value could be written that couldn't be represented by the loading program.  This is a
 fairly obvious situation and easily handled by using the numeric types in
 <a target="cstding" href="../../../boost/cstdint.hpp">&lt;boost/cstdint.hpp&gt;</a>
+<P>
+A special integral type is <code>std::size_t</code> which is a typedef
+of an integral types guaranteed to be large enough
+to hold the size of any collection, but its actual size can differ depending
+on the platform. The 
+<a href="wrappers.html#collection_size_type"><code>collection_size_type</code></a>
+wrapper exists to enable a portable serialization of collection sizes by an archive.
+Recommended choices for a portable serialization of collection sizes are to 
+use either 64-bit or variable length integer representation.
+
 
 <h4><a name="traits">Traits</a></h4>
 Another potential problem is illustrated by the following example:
@@ -381,6 +392,26 @@ be trapped at compile time. The system is implemented in such a way that for oth
 just the value portion of the data is serialized. The name portion is discarded during compilation.
 So by always using <a target="detail" href="wrappers.html#nvp">name-value pairs</a>, it will
 be guarenteed that all data can be serialized to all archive classes with maximum efficiency.
+
+<h3><a name="optimizations">Optimizations</a></h3>
+In performance critical applications that serialize large sets of contiguous data of homogeneous
+types one wants to avoid the overhead of serializing each element individually, which is
+the motivation for the <a href="wrappers.html#arrays"><code>array</code></a>
+wrapper.
+
+Serialization functions for data types containing contiguous arrays of homogeneous
+types, such as for <code>std::vector</code>, <code>std::valarray</code> or  
+<code>boost::multiarray</code> should serialize them using an
+ <a href="wrappers.html#arrays"><code>array</code></a> wrapper to make use of 
+ these optimizations.
+
+Archive types that can provide optimized serialization for contiguous arrays of 
+homogeneous types should implement these by overloading the serialization of
+the  <a href="wrappers.html#arrays"><code>array</code></a> wrapper. As an example
+optimized versions of the binary archives are provided in
+<a href="headers.html#arraybinaryiarchive">archive/array/binary_iarchive.hpp</a>
+and <a href="headers.html#arraybinaryoarchive">archive/array/binary_oarchive.hpp</a>
+
 
 <h3><a href="exceptions.html">Archive Exceptions</a></h3>
 <h3><a href="exception_safety.html">Exception Safety</a></h3>
