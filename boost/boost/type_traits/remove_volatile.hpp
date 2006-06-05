@@ -57,7 +57,7 @@ struct remove_volatile_impl
 
 // * convert a type T to a non-volatile type - remove_volatile<T>
 
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_volatile,T,typename detail::remove_volatile_impl<T>::type)
+BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_volatile,T,typename boost::detail::remove_volatile_impl<T>::type)
 BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_1(typename T,remove_volatile,T&,T&)
 #if !defined(BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS)
 BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_volatile,T volatile[N],T type[N])
@@ -66,7 +66,7 @@ BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_volatile
 
 #elif !BOOST_WORKAROUND(BOOST_MSVC,<=1300)
 
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_volatile,T,typename detail::remove_volatile_impl<T>::type)
+BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_volatile,T,typename boost::detail::remove_volatile_impl<T>::type)
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 

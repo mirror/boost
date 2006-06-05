@@ -74,7 +74,7 @@ BOOST_TT_AUX_TYPE_TRAIT_IMPL_SPEC1(add_reference,void const volatile,void const 
 
 } // namespace detail
 
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(add_reference,T,typename detail::add_reference_impl<T>::type)
+BOOST_TT_AUX_TYPE_TRAIT_DEF1(add_reference,T,typename boost::detail::add_reference_impl<T>::type)
 
 // agurt, 07/mar/03: workaround Borland's ill-formed sensitivity to an additional
 // level of indirection, here
