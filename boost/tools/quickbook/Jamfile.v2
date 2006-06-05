@@ -12,6 +12,7 @@ exe quickbook
     :
     detail/quickbook.cpp
     detail/actions.cpp
+    detail/actions_class.cpp
     detail/utils.cpp
     detail/post_process.cpp
     /boost//program_options

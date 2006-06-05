@@ -107,15 +107,27 @@ namespace quickbook
                     >> actions.macro                    [actions.do_macro]
                     ;
                 
-                template_ =
-                    (actions.templates >> eps_p)        [push_back_a(actions.template_info)]
-                    >> !(
-                            hard_space
-                        >>  template_arg                [push_back_a(actions.template_info)]
-                        >> *(
-                                ".." >> template_arg    [push_back_a(actions.template_info)]
-                            )
+                template_args =
+                    template_arg                        [push_back_a(actions.template_info)]
+                    >> *(
+                            ".." >> template_arg        [push_back_a(actions.template_info)]
                         )
+                    ;
+
+                template_ =
+                    (
+                        (eps_p(punct_p) 
+                            >> actions.templates
+                        )                               [push_back_a(actions.template_info)]
+                        >> !template_args
+                    )
+                |   (
+                        (actions.templates 
+                            >> eps_p
+                        )                               [push_back_a(actions.template_info)]
+                        >> !(hard_space 
+                            >> template_args)
+                    )
                     ;
 
                 brackets = 
@@ -340,7 +352,7 @@ namespace quickbook
                             simple_bold, simple_italic, simple_underline, 
                             simple_teletype, source_mode, template_, template_arg,
                             quote, code_block, footnote, replaceable, macro,
-                            brackets;
+                            brackets, template_args;
 
             rule<Scanner> const&
             start() const { return common; }

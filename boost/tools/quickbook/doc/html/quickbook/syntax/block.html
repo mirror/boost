@@ -632,27 +632,27 @@
 [h6 Heading 6]
 </pre>
 <a name="quickbook.syntax.block.headings.heading_1"></a><h1>
-<a name="id445801"></a>
+<a name="id445884"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_1">Heading 1</a>
         </h1>
 <a name="quickbook.syntax.block.headings.heading_2"></a><h2>
-<a name="id445825"></a>
+<a name="id445909"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_2">Heading 2</a>
         </h2>
 <a name="quickbook.syntax.block.headings.heading_3"></a><h3>
-<a name="id445850"></a>
+<a name="id445933"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_3">Heading 3</a>
         </h3>
 <a name="quickbook.syntax.block.headings.heading_4"></a><h4>
-<a name="id445874"></a>
+<a name="id445958"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_4">Heading 4</a>
         </h4>
 <a name="quickbook.syntax.block.headings.heading_5"></a><h5>
-<a name="id445900"></a>
+<a name="id445983"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_5">Heading 5</a>
         </h5>
 <a name="quickbook.syntax.block.headings.heading_6"></a><h5>
-<a name="id445925"></a>
+<a name="id446008"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_6">Heading 6</a>
         </h5>
 <p>
@@ -791,7 +791,7 @@ sf_logo
         </p>
 <div class="informaltable">
 <h4>
-<a name="id446361"></a>
+<a name="id446447"></a>
             <span class="table-title">Predefined Macros</span>
           </h4>
 <table class="table">
@@ -809,12 +809,12 @@ sf_logo
 <tr>
 <td>__DATE__</td>
 <td>Today's date</td>
-<td>2006-Jun-03</td>
+<td>2006-Jun-05</td>
 </tr>
 <tr>
 <td>__TIME__</td>
 <td>The current time</td>
-<td>12:09:28 PM</td>
+<td>08:01:09 AM</td>
 </tr>
 <tr>
 <td>__FILENAME__</td>
@@ -839,59 +839,59 @@ sf_logo
 <p>
           Example template:
         </p>
-<pre class="programlisting">[template person[name_ age_ id_]
+<pre class="programlisting">[template person[name age id]
 
-Hi, my name is name_. I am age_ years old. My id is id_.
+Hi, my name is [name]. I am [age] years old. I am a [what].
 
 ]
 </pre>
+<a name="quickbook.syntax.block.templates.template_identifier"></a><h5>
+<a name="id446580"></a>
+          <a href="block.html#quickbook.syntax.block.templates.template_identifier">Template
+          Identifier</a>
+        </h5>
+<p>
+          Template identifiers can either consist of:
+        </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+            An initial alphabetic character or the underscore, followed by zero or
+            more alphanumeric characters or the underscore. This is similar to your
+            typical C/C++ identifier.
+          </li>
+<li>
+            A single character punctuation (a non-alphanumeric printable character)
+          </li>
+</ul></div>
+<a name="quickbook.syntax.block.templates.formal_template_arguments"></a><h5>
+<a name="id446627"></a>
+          <a href="block.html#quickbook.syntax.block.templates.formal_template_arguments">Formal
+          Template Arguments</a>
+        </h5>
 <p>
           Template formal arguments are identifiers consisting of an initial alphabetic
           character or the underscore, followed by zero or more alphanumeric characters
-          or the underscore. This is similar to your typical C/C++ identifier. A
-          template formal argument temporarily hides a template of the same name
-          at the point where the template is invoked. At template invocation, you
-          supply the actual arguments. At that point, the template will be expanded
-          with your supplied arguments. Example:
-        </p>
-<pre class="programlisting">[person James Bond..39..007]
-[person Santa Clause..87..12-25]
-</pre>
-<p>
-          Which will expand to:
+          or the underscore. This is similar to your typical C/C++ identifier.
         </p>
 <p>
-          </p>
-<p>
-            Hi, my name is <span class="bold"><b>James Bond</b></span>. I am <span class="bold"><b>39</b></span> years old. My id is <span class="bold"><b>007</b></span>.
-          </p>
-<p>
-          </p>
-<p>
-            Hi, my name is <span class="bold"><b>Santa Clause</b></span>. I am <span class="bold"><b>87</b></span> years old. My id is <span class="bold"><b>12-25</b></span>.
-          </p>
-<p>
+          A template formal argument temporarily hides a template of the same name
+          at the point where the <a href="block.html#quickbook.syntax.block.templates.template_expansion">template
+          is expanded</a>. Note that the body of the <tt class="literal">person</tt>
+          template above refers to <tt class="literal">name</tt> <tt class="literal">age</tt>
+          and <tt class="literal">what</tt> as <tt class="literal">[name]</tt> <tt class="literal">[age]</tt>
+          and <tt class="literal">[what]</tt>. <tt class="literal">name</tt> <tt class="literal">age</tt>
+          and <tt class="literal">what</tt> are actually templates that exist in the duration
+          of the template call.
         </p>
+<a name="quickbook.syntax.block.templates.template_body"></a><h5>
+<a name="id446748"></a>
+          <a href="block.html#quickbook.syntax.block.templates.template_body">Template
+          Body</a>
+        </h5>
 <p>
-          Each actual argument can be a word, a text fragment or just about any
-          <a href="phrase.html" title=" Phrase Level Elements">QuickBook phrase</a>. Arguments
-          are separated by the double dot ".." and terminated by the close
-          parenthesis.
-        </p>
-<div class="caution"><table border="0" summary="Caution">
-<tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../images/caution.png"></td>
-<th align="left">Caution</th>
-</tr>
-<tr><td colspan="2" align="left" valign="top"><p>
-            Templates are recursive. A template can call another template or even
-            itself, directly or indirectly. There are no control structures in QuickBook
-            (yet) so this will always mean infinite recursion. QuickBook can detect
-            this situation and report an error if recursion exceeds a certain limit.
-          </p></td></tr>
-</table></div>
-<p>
-          Templates may be phrase or block level. Phrase templates are of the form:
+          The template body can be just about any QuickBook block or phrase. There
+          are actually two forms. Templates may be phrase or block level. Phrase
+          templates are of the form:
         </p>
 <pre class="programlisting">[template sample[arg1 arg2...argN] replacement text... ]
 </pre>
@@ -908,6 +908,150 @@ replacement text...
           Phrase templates are typically expanded as part of phrases. Like macros,
           block level elements are not allowed in phrase templates.
         </p>
+<a name="quickbook.syntax.block.templates.template_expansion"></a><h5>
+<a name="id446803"></a>
+          <a href="block.html#quickbook.syntax.block.templates.template_expansion">Template
+          Expansion</a>
+        </h5>
+<p>
+          You expand a template this way:
+        </p>
+<pre class="programlisting">[template_identifier arg1..arg2..arg3]
+</pre>
+<p>
+          At template expansion, you supply the actual arguments. The template will
+          be expanded with your supplied arguments. Example:
+        </p>
+<pre class="programlisting">[person James Bond..39..Spy]
+[person Santa Clause..87..Big Red Fatso]
+</pre>
+<p>
+          Which will expand to:
+        </p>
+<p>
+          </p>
+<p>
+            Hi, my name is James Bond. I am 39 years old. I am a Spy.
+          </p>
+<p>
+          </p>
+<p>
+            Hi, my name is Santa Clause. I am 87 years old. I am a Big Red Fatso.
+          </p>
+<p>
+        </p>
+<div class="caution"><table border="0" summary="Caution">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../images/caution.png"></td>
+<th align="left">Caution</th>
+</tr>
+<tr><td colspan="2" align="left" valign="top"><p>
+            A word of caution: Templates are recursive. A template can call another
+            template or even itself, directly or indirectly. There are no control
+            structures in QuickBook (yet) so this will always mean infinite recursion.
+            QuickBook can detect this situation and report an error if recursion
+            exceeds a certain limit.
+          </p></td></tr>
+</table></div>
+<p>
+          Each actual argument can be a word, a text fragment or just about any
+          <a href="phrase.html" title=" Phrase Level Elements">QuickBook phrase</a>. Arguments
+          are separated by the double dot <tt class="literal">".."</tt> and terminated
+          by the close parenthesis.
+        </p>
+<a name="quickbook.syntax.block.templates.simple_arguments"></a><h5>
+<a name="id446907"></a>
+          <a href="block.html#quickbook.syntax.block.templates.simple_arguments">Simple
+          Arguments</a>
+        </h5>
+<p>
+          As mentioned, arguments are separated by the double dot <tt class="literal">".."</tt>.
+          If there are less arguments passed than expected, QuickBook attempts to
+          break the last argument into two or more arguments following this logic:
+        </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+            Break the last argument into two, at the first space found (<tt class="literal">'',
+            '\n', \t' or '\r'</tt>).
+          </li>
+<li>
+            Repeat until there are enough arguments or if there are no more spaces
+            found (in which case, an error is reported).
+          </li>
+</ul></div>
+<p>
+          For example:
+        </p>
+<pre class="programlisting">[template simple[a b c d] [a][b][c][d]]
+[simple w x y z]
+</pre>
+<p>
+          will produce:
+        </p>
+<p>
+          wxyz
+        </p>
+<p>
+          "w x y z" is initially treated as a single argument because we
+          didn't supply any <tt class="literal">".."</tt> separators. However,
+          since <tt class="literal">simple</tt> expects 4 arguments, "w x y z"
+          is broken down iteratively (applying the logic above) until we have "w",
+          "x", "y" and "z".
+        </p>
+<p>
+          QuickBook only tries to get the arguments it needs. For example:
+        </p>
+<pre class="programlisting">[simple w x y z trail]
+</pre>
+<p>
+          will produce:
+        </p>
+<p>
+          wxyz trail
+        </p>
+<p>
+          The arguments being: "w", "x", "y" and "z
+          trail".
+        </p>
+<p>
+          It should be obvious now that for simple arguments with no spaces, we can
+          get by without separating the arguments with <tt class="literal">".."</tt>
+          separators. It is possible to combine <tt class="literal">".."</tt>
+          separators with the argument passing simplification presented above. Example:
+        </p>
+<pre class="programlisting">[simple what do you think ..m a n?]
+</pre>
+<p>
+          will produce:
+        </p>
+<p>
+          what do you think man?
+        </p>
+<a name="quickbook.syntax.block.templates.punctuation_templates"></a><h5>
+<a name="id447074"></a>
+          <a href="block.html#quickbook.syntax.block.templates.punctuation_templates">Punctuation
+          Templates</a>
+        </h5>
+<p>
+          With templates, one of our objectives is to allow us to rewrite QuickBook
+          in QuickBook (as a qbk library). For that to happen, we need to accommodate
+          single character punctuation templates which are fairly common in QuickBook.
+          You might have noticed that single character punctuations are allowed as
+          <a href="block.html#quickbook.syntax.block.templates.template_identifier">template
+          identifiers</a>. Example:
+        </p>
+<pre class="programlisting">[template ![bar] &lt;hey&gt;[bar]&lt;/hey&gt;]
+</pre>
+<p>
+          Now, expanding this:
+        </p>
+<pre class="programlisting">[!baz]
+</pre>
+<p>
+          We will have:
+        </p>
+<pre class="programlisting">&lt;hey&gt;baz&lt;/hey&gt;
+</pre>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
@@ -956,7 +1100,7 @@ replacement text...
         </p>
 <div class="informaltable">
 <h4>
-<a name="id446744"></a>
+<a name="id447272"></a>
             <span class="table-title">A Simple Table</span>
           </h4>
 <table class="table">
@@ -1018,7 +1162,7 @@ replacement text...
         </p>
 <div class="informaltable">
 <h4>
-<a name="id446861"></a>
+<a name="id447389"></a>
             <span class="table-title">Table with fat cells</span>
           </h4>
 <table class="table">
@@ -1067,7 +1211,7 @@ replacement text...
 </pre>
 <div class="informaltable">
 <h4>
-<a name="id446944"></a>
+<a name="id447478"></a>
             <span class="table-title">Table with code</span>
           </h4>
 <table class="table">
@@ -1141,7 +1285,7 @@ replacement text...
 <pre class="programlisting">[include someother.qbk]
 </pre>
 <p>
-          The included file will be processed as if it had be cut and pasted into
+          The included file will be processed as if it had been cut and pasted into
           the current document, with the following exceptions:
         </p>
 <div class="itemizedlist"><ul type="disc">
@@ -1154,21 +1298,18 @@ replacement text...
           </li>
 </ul></div>
 <p>
-          As the number of included QuickBook files grows, so too does the likelihood
-          of two sections having the same name. Since QuickBook generates an anchor
-          for each section based on the section name, it is possible to end up with
-          two identically named anchors, leading to link ambiguities. To resolve
-          these ambiguities, the <tt class="literal">[include]</tt> directive lets you
-          specify a document id to use for the included file. You can use it like
-          this:
+          The <tt class="literal">[include]</tt> directive lets you specify a document
+          id to use for the included file. When this id is not explicitly specified,
+          the id defaults to the filename ("someother", in the example
+          above). You can specify the id like this:
         </p>
 <pre class="programlisting">[include:someid someother.qbk]
 </pre>
 <p>
-          When using this form, all auto-generated anchors will use "someid"
-          as a unique prefix. So for instance, if there is a section in someother.qbk
-          named "Intro", the named anchor for that section will be "someid.intro",
-          and you can link to it with <tt class="literal">[link someid.intro The Intro]</tt>.
+          All auto-generated anchors will use the document id as a unique prefix.
+          So for instance, if there is a top section in someother.qbk named "Intro",
+          the named anchor for that section will be "someid.intro", and
+          you can link to it with <tt class="literal">[link someid.intro The Intro]</tt>.
         </p>
 </div>
 </div>

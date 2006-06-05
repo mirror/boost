@@ -19,10 +19,6 @@
 #include "../block.hpp"
 #include "../phrase.hpp"
 
-#if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
-#pragma warning(disable:4355)
-#endif
-
 namespace quickbook
 {
     collector::collector()
@@ -483,28 +479,25 @@ namespace quickbook
             
             if (template_.size()-1 != template_info.size())
             {
-                bool invalid_number_of_args = true;
-                if ((template_.size()-2 == 2) && (template_info.size()-1 == 1))
+                while (template_.size()-1 != template_info.size())
                 {
-                    // special case: if there is only one argument passed
-                    // and we are expecting 2, split the string at the first
-                    // space char.
+                    // Try to break the last argument at the first space found
+                    // and push it into the back of template_info. Do this
+                    // recursively until we have all the expected number of
+                    // arguments, or if there is no more spaces left.
                     
-                    std::string::size_type pos = 
-                        template_info[1].find_first_of(" /t/r/n");
-                    if (pos != std::string::npos)
-                    {
-                        std::string first(template_info[1].begin(), template_info[1].begin()+pos);
-                        std::string::size_type pos2 = 
-                            template_info[1].find_first_not_of(" /t/r/n", pos);
-                        std::string second(template_info[1].begin()+pos2, template_info[1].end());
-                        template_info[1] = first;
-                        template_info.push_back(second);
-                        invalid_number_of_args = false;
-                    }
+                    std::string& str = template_info.back();
+                    std::string::size_type l_pos = str.find_first_of(" \t\r\n");
+                    if (l_pos == std::string::npos)
+                        break;
+                    std::string first(str.begin(), str.begin()+l_pos);
+                    std::string::size_type r_pos = str.find_first_not_of(" \t\r\n", l_pos);
+                    std::string second(str.begin()+r_pos, str.end());
+                    str = first;
+                    template_info.push_back(second);
                 }
                 
-                if (invalid_number_of_args)
+                if (template_.size()-1 != template_info.size())
                 {
                     actions.pop(); // restore the actions' states
                     detail::outerr(pos.file,pos.line)
@@ -513,7 +506,7 @@ namespace quickbook
                         << " argument(s), got: "
                         << template_info.size()-1
                         << " argument(s) instead."
-                        << std::endl;
+                        << std::endl;                    
                     --actions.template_depth;
                     return;
                 }
@@ -522,32 +515,21 @@ namespace quickbook
             std::vector<std::string>::const_iterator arg = template_info.begin()+1; 
             std::vector<std::string>::const_iterator tpl = template_.begin()+1; 
 
-            // Expand each of the argument passed in:
+            // Store each of the argument passed in as local templates:
             while (arg != template_info.end())
             {
-                std::vector<char> temp;
-                temp.assign(arg->begin(), arg->end());
-                iterator first(temp.begin(), temp.end(), actions.filename.native_file_string().c_str());
-                first.set_position(pos);
-                iterator last(temp.end(), temp.end());
-                bool r = boost::spirit::parse(first, last, phrase_p).full;
+                std::vector<std::string> tinfo;
+                tinfo.push_back(*tpl);
+                tinfo.push_back(*arg);
+                template_symbol template_(tinfo, pos);
 
-                if (!r)
+                if (template_symbol* p = find(actions.templates, tpl->c_str()))
                 {
-                    boost::spirit::file_position const pos = first.get_position();
-                    detail::outerr(pos.file,pos.line)
-                        << "Expanding template" << std::endl;
+                    *p = template_;
                 }
                 else
                 {
-                    if (std::string* s = find(actions.macro, tpl->c_str()))
-                    {
-                        *s = actions.phrase.str();
-                    }
-                    else
-                    {
-                        actions.macro.add(tpl->begin(), tpl->end(), actions.phrase.str());
-                    }
+                    actions.templates.add(tpl->begin(), tpl->end(), template_);
                 }
                 actions.phrase.str(std::string()); // clear the phrase
                 ++arg; ++tpl;
@@ -834,7 +816,7 @@ namespace quickbook
         // scope the templates
         template_symbols templates = actions.templates;
 
-        // if an id is specified in this include (in in [include:id foo.qbk]
+        // if an id is specified in this include (as in [include:id foo.qbk])
         // then use it as the doc_id.
         if (!actions.include_doc_id.empty())
         {
@@ -1020,159 +1002,5 @@ namespace quickbook
     {
         out = phrase.str();
         phrase.str(std::string());
-    }
-
-    actions::actions(char const* filein_, fs::path const& outdir_, std::stringstream& out_)
-        : filename(fs::complete(fs::path(filein_, fs::native)))
-        , outdir(outdir_)
-        , out(out_)
-        , extract_doc_license(doc_license, phrase)
-        , extract_doc_purpose(doc_purpose, phrase)
-        , table_span(0)
-        , table_header()
-        , source_mode("c++")
-        , code(out, phrase, temp, source_mode, macro, *this)
-        , code_block(phrase, phrase, temp, source_mode, macro, *this)
-        , inline_code(phrase, temp, source_mode, macro, *this)
-        , paragraph(out, phrase, paragraph_pre, paragraph_post)
-        , h(out, phrase, doc_id, section_id, qualified_section_id, section_level)
-        , h1(out, phrase, doc_id, section_id, qualified_section_id, h1_pre, h1_post)
-        , h2(out, phrase, doc_id, section_id, qualified_section_id, h2_pre, h2_post)
-        , h3(out, phrase, doc_id, section_id, qualified_section_id, h3_pre, h3_post)
-        , h4(out, phrase, doc_id, section_id, qualified_section_id, h4_pre, h4_post)
-        , h5(out, phrase, doc_id, section_id, qualified_section_id, h5_pre, h5_post)
-        , h6(out, phrase, doc_id, section_id, qualified_section_id, h6_pre, h6_post)
-        , hr(out, hr_)
-        , blurb(out, phrase, blurb_pre, blurb_post)
-        , blockquote(out, phrase, blockquote_pre, blockquote_post)
-        , preformatted(out, phrase, preformatted_pre, preformatted_post)
-        , warning(out, phrase, warning_pre, warning_post)
-        , caution(out, phrase, caution_pre, caution_post)
-        , important(out, phrase, important_pre, important_post)
-        , note(out, phrase, note_pre, note_post)
-        , tip(out, phrase, tip_pre, tip_post)
-        , plain_char(phrase)
-        , raw_char(phrase)
-        , image(phrase)
-        , list_marks()
-        , list_indent(-1)
-        , list(out, list_buffer, list_indent, list_marks)
-        , list_format(list_buffer, list_indent, list_marks)
-        , list_item(list_buffer, phrase, list_item_pre, list_item_post)
-        , funcref_pre(phrase, funcref_pre_)
-        , funcref_post(phrase, funcref_post_)
-        , classref_pre(phrase, classref_pre_)
-        , classref_post(phrase, classref_post_)
-        , memberref_pre(phrase, memberref_pre_)
-        , memberref_post(phrase, memberref_post_)
-        , enumref_pre(phrase, enumref_pre_)
-        , enumref_post(phrase, enumref_post_)
-        , headerref_pre(phrase, headerref_pre_)
-        , headerref_post(phrase, headerref_post_)
-        , bold_pre(phrase, bold_pre_)
-        , bold_post(phrase, bold_post_)
-        , italic_pre(phrase, italic_pre_)
-        , italic_post(phrase, italic_post_)
-        , underline_pre(phrase, underline_pre_)
-        , underline_post(phrase, underline_post_)
-        , teletype_pre(phrase, teletype_pre_)
-        , teletype_post(phrase, teletype_post_)
-        , strikethrough_pre(phrase, strikethrough_pre_)
-        , strikethrough_post(phrase, strikethrough_post_)
-        , quote_pre(phrase, quote_pre_)
-        , quote_post(phrase, quote_post_)
-        , replaceable_pre(phrase, replaceable_pre_)
-        , replaceable_post(phrase, replaceable_post_)
-        , footnote_pre(phrase, footnote_pre_)
-        , footnote_post(phrase, footnote_post_)
-        , simple_bold(phrase, bold_pre_, bold_post_, macro)
-        , simple_italic(phrase, italic_pre_, italic_post_, macro)
-        , simple_underline(phrase, underline_pre_, underline_post_, macro)
-        , simple_teletype(phrase, teletype_pre_, teletype_post_, macro)
-        , simple_strikethrough(phrase, strikethrough_pre_, strikethrough_post_, macro)
-        , variablelist(*this)
-        , start_varlistentry(phrase, start_varlistentry_)
-        , end_varlistentry(phrase, end_varlistentry_)
-        , start_varlistterm(phrase, start_varlistterm_)
-        , end_varlistterm(phrase, end_varlistterm_)
-        , start_varlistitem(phrase, start_varlistitem_)
-        , end_varlistitem(phrase, end_varlistitem_)
-        , break_(phrase, break_mark)
-        , macro_identifier(*this)
-        , macro_definition(*this)
-        , do_macro(phrase)
-        , template_body(*this)
-        , do_template(*this)
-        , url_pre(phrase, url_pre_)
-        , url_post(phrase, url_post_)
-        , link_pre(phrase, link_pre_)
-        , link_post(phrase, link_post_)
-        , table(*this)
-        , start_row(phrase, table_span, table_header)
-        , end_row(phrase, end_row_)
-        , start_cell(phrase, table_span)
-        , end_cell(phrase, end_cell_)
-        , anchor(out)
-        , begin_section(out, phrase, doc_id, section_id, section_level, qualified_section_id)
-        , end_section(out, section_level, qualified_section_id)
-        , xinclude(out, *this)
-        , include(*this)
-        , section_level(0)
-        , escape_pre(phrase, escape_pre_)
-        , escape_post(phrase, escape_post_)
-        , template_depth(0)
-    {
-        // turn off __FILENAME__ macro on debug mode = true
-        std::string filename_str = debug_mode ? 
-            std::string("NO_FILENAME_MACRO_GENERATED_IN_DEBUG_MODE") : 
-            filename.native_file_string();
-
-        // add the predefined macros
-        macro.add
-            ("__DATE__", std::string(quickbook_get_date))
-            ("__TIME__", std::string(quickbook_get_time))
-            ("__FILENAME__", filename_str)
-        ;
-    }
-
-    void actions::push()
-    {
-        state_stack.push(
-            boost::make_tuple(
-                filename
-              , outdir
-              , macro
-              , templates
-              , section_level
-              , section_id
-              , qualified_section_id
-              , source_mode
-            )
-        );
-        
-        out.push();
-        phrase.push();
-        temp.push();
-        list_buffer.push();
-    }   
-
-    void actions::pop()
-    {
-        boost::tie(
-            filename
-          , outdir
-          , macro
-          , templates
-          , section_level
-          , section_id
-          , qualified_section_id
-          , source_mode
-        ) = state_stack.top();
-        state_stack.pop();
-
-        out.pop();
-        phrase.pop();
-        temp.pop();
-        list_buffer.pop();
     }
 }

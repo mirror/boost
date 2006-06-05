@@ -61,6 +61,7 @@
 [def __blockquote__         [link quickbook.syntax.block.blockquote Blockquote]]
 [def __heading__            [link quickbook.syntax.block.headings Heading]]
 [def __macros__             [link quickbook.syntax.block.macros Macros]]
+[def __templates__          [link quickbook.syntax.block.templates Templates]]
 [def __predefined_macros__  [link quickbook.syntax.block.predefined_macros Predefined Macros]]
 [def __blurbs__             [link quickbook.syntax.block.blurbs Blurbs]]
 [def __admonitions__        [link quickbook.syntax.block.admonitions Admonitions]]
@@ -527,6 +528,26 @@ of the current page. For example, this:
 ''']
 
 will generate this[footnote A sample footnote].
+
+[section Macro Expansion]
+
+[pre'''
+__a_macro_identifier__
+''']
+
+See __macros__ for details.
+
+[endsect]
+
+[section Template Expansion]
+
+[pre'''
+[a_template_identifier]
+''']
+
+See __templates__ for details.
+
+[endsect]
 
 [endsect]
 [endsect]
@@ -1052,48 +1073,47 @@ blocks and tables).
 Example template:
 
 [pre'''
-[template person[name_ age_ id_]
+[template person[name age id]
 
-Hi, my name is name_. I am age_ years old. My id is id_.
+Hi, my name is [name]. I am [age] years old. I am a [what].
 
 ]
 ''']
 
-[template person[name_ age_ id_]
+[template person[name age what]
 
-Hi, my name is *name_*. I am *age_* years old. My id is *id_*.
+Hi, my name is [name]. I am [age] years old. I am a [what].
 
 ]
+
+[heading Template Identifier]
+
+Template identifiers can either consist of:
+
+* An initial alphabetic character or the underscore, followed by 
+  zero or more alphanumeric characters or the underscore. This is 
+  similar to your typical C/C++ identifier. 
+* A single character punctuation (a non-alphanumeric printable character)
+
+[heading Formal Template Arguments]
 
 Template formal arguments are identifiers consisting of an initial 
 alphabetic character or the underscore, followed by zero or more 
 alphanumeric characters or the underscore. This is similar to your typical 
-C/C++ identifier. A template formal argument temporarily hides a template 
-of the same name at the point where the template is invoked. At template 
-invocation, you supply the actual arguments. At that point, the template 
-will be expanded with your supplied arguments. Example:
+C/C++ identifier.
 
-[pre'''
-[person James Bond..39..007]
-[person Santa Clause..87..12-25]
-''']
+A template formal argument temporarily hides a template of the same name at 
+the point where the [link quickbook.syntax.block.templates.template_expansion 
+template is expanded]. Note that the body of the [^person] template above 
+refers to [^name] [^age] and [^what] as [^\[name\]] [^\[age\]] and 
+[^\[what\]]. [^name] [^age] and [^what] are actually templates that exist 
+in the duration of the template call.
 
-Which will expand to:
+[heading Template Body]
 
-[person James Bond..39..007]
-[person Santa Clause..87..12-25]
-
-Each actual argument can be a word, a text fragment or just about any 
-[link quickbook.syntax.phrase QuickBook phrase]. Arguments are separated by 
-the double dot ".." and terminated by the close parenthesis.
-
-[caution Templates are recursive. A template can call another template or 
-even itself, directly or indirectly. There are no control structures in 
-QuickBook (yet) so this will always mean infinite recursion. QuickBook can 
-detect this situation and report an error if recursion exceeds a certain 
-limit.]
-
-Templates may be phrase or block level. Phrase templates are of the form:
+The template body can be just about any QuickBook block or phrase. There 
+are actually two forms. Templates may be phrase or block level. Phrase 
+templates are of the form:
 
 [pre'''
 [template sample[arg1 arg2...argN] replacement text... ]
@@ -1111,6 +1131,115 @@ The basic rule is as follows: if a newline immediately follows the argument
 list, then it is a block template, otherwise, it is a phrase template.
 Phrase templates are typically expanded as part of phrases. Like macros, 
 block level elements are not allowed in phrase templates. 
+
+[heading Template Expansion]
+
+You expand a template this way:
+
+[pre'''
+[template_identifier arg1..arg2..arg3]
+''']
+
+At template expansion, you supply the actual arguments. The template will 
+be expanded with your supplied arguments. Example:
+
+[pre'''
+[person James Bond..39..Spy]
+[person Santa Clause..87..Big Red Fatso]
+''']
+
+Which will expand to:
+
+[person James Bond..39..Spy]
+[person Santa Clause..87..Big Red Fatso]
+
+[caution A word of caution: Templates are recursive. A template can call 
+another template or even itself, directly or indirectly. There are no 
+control structures in QuickBook (yet) so this will always mean infinite 
+recursion. QuickBook can detect this situation and report an error if 
+recursion exceeds a certain limit.]
+
+Each actual argument can be a word, a text fragment or just about any [link 
+quickbook.syntax.phrase QuickBook phrase]. Arguments are separated by the 
+double dot [^".."] and terminated by the close parenthesis.
+
+[heading Simple Arguments]
+
+As mentioned, arguments are separated by the double dot [^".."]. If there 
+are less arguments passed than expected, QuickBook attempts to break the 
+last argument into two or more arguments following this logic:
+
+* Break the last argument into two, at the first space found ([^'', '\\n', 
+  \\t' or '\\r']).
+* Repeat until there are enough arguments or if there are no more spaces 
+  found (in which case, an error is reported). 
+  
+For example:
+
+[pre'''
+[template simple[a b c d] [a][b][c][d]]
+[simple w x y z]
+''']
+
+will produce:
+
+[template simple[a b c d] [a][b][c][d]]
+[simple w x y z]
+
+"w x y z" is initially treated as a single argument because we didn't 
+supply any [^".."] separators. However, since [^simple] expects 4 
+arguments, "w x y z" is broken down iteratively (applying the logic above) 
+until we have "w", "x", "y" and "z".
+
+QuickBook only tries to get the arguments it needs. For example:
+
+[pre'''
+[simple w x y z trail]
+''']
+
+will produce:
+
+[simple w x y z trail]
+
+The arguments being: "w", "x", "y" and "z trail".
+
+It should be obvious now that for simple arguments with no spaces, we can 
+get by without separating the arguments with [^".."] separators. It is 
+possible to combine [^".."] separators with the argument passing 
+simplification presented above. Example:
+
+[pre'''
+[simple what do you think ..m a n?]
+''']
+
+will produce:
+
+[simple what do you think ..m a n?]
+
+[heading Punctuation Templates]
+
+With templates, one of our objectives is to allow us to rewrite QuickBook 
+in QuickBook (as a qbk library). For that to happen, we need to accommodate 
+single character punctuation templates which are fairly common in 
+QuickBook. You might have noticed that single character punctuations are 
+allowed as [link quickbook.syntax.block.templates.template_identifier 
+template identifiers]. Example:
+
+[pre'''
+[template ![bar] '''<hey>'''[bar]'''</hey>''']
+''']
+
+Now, expanding this:
+
+[pre'''
+[!baz]
+''']
+
+We will have:
+
+[pre
+<hey>baz</hey>
+]
 
 [endsect]
 [section Blurbs]
@@ -1270,29 +1399,26 @@ You can include one QuickBook file from another. The syntax is simply:
 [include someother.qbk]
 ''']
 
-The included file will be processed as if it had be cut and pasted
+The included file will be processed as if it had been cut and pasted
 into the current document, with the following exceptions:
 
 * The '''__FILENAME__''' predefined macro will reflect the name of the
   file currently being processed.
 * Any macros defined in the included file are scoped to that file.
 
-As the number of included QuickBook files grows, so too does the
-likelihood of two sections having the same name. Since QuickBook generates
-an anchor for each section based on the section name, it is possible to
-end up with two identically named anchors, leading to link ambiguities.
-To resolve these ambiguities, the [^\[include\]] directive lets you
-specify a document id to use for the included file. You can use it like
-this:
+The [^\[include\]] directive lets you specify a document id to use for the 
+included file. When this id is not explicitly specified, the id defaults to 
+the filename ("someother", in the example above). You can specify the id 
+like this:
 
 [pre'''
 [include:someid someother.qbk]
 ''']
 
-When using this form, all auto-generated anchors will use "someid" as
-a unique prefix. So for instance, if there is a section in someother.qbk
-named "Intro", the named anchor for that section will be "someid.intro",
-and you can link to it with [^\[link someid.intro The Intro\]].
+All auto-generated anchors will use the document id as a unique prefix. So 
+for instance, if there is a top section in someother.qbk named "Intro", the 
+named anchor for that section will be "someid.intro", and you can link to 
+it with [^\[link someid.intro The Intro\]].
 
 [endsect]
 [endsect]
@@ -1340,6 +1466,7 @@ and you can link to it with [^\[link someid.intro The Intro\]].
     [[heading 5]            [[^'''[h5 Heading 5]''']]                       [__heading__]]
     [[heading 6]            [[^'''[h6 Heading 6]''']]                       [__heading__]]
     [[macro]                [[^'''[def macro_identifier some text]''']]     [__macros__]]
+    [[template]             [[^'''[template[a b] [a] body [b]]''']]         [__templates__]]
     [[blurb]                [[^'''[blurb advertisement or note...]''']]     [__blurbs__]]
     [[admonition]           [[^'''[warning Warning text...]''']]            [__admonitions__]]
     [[table]                [[^[table Title\n \[\[a\]\[b\]\[c\]\]\n    \[\[a\]\[b\]\[c\]\]\n\]]]    [__tables__]]

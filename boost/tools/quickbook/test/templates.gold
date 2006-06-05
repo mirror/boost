@@ -25,6 +25,9 @@
       </para>
     </para>
     <para>
+      <!--quickbook-escape-prefix--><hey><!--quickbook-escape-postfix-->baz<!--quickbook-escape-prefix--></hey><!--quickbook-escape-postfix-->
+    </para>
+    <para>
       <para>
         This is a complete paragraph. madagascar madagascar madagascar madagascar
         madagascar madagascar madagascar madagascar madagascar.... blah blah blah......
@@ -35,6 +38,12 @@
     </para>
     <para>
       exactly xanadu
+    </para>
+    <para>
+      wx
+    </para>
+    <para>
+      wxyz wxyz trail
     </para>
     <para>
       
