@@ -814,7 +814,7 @@ sf_logo
 <tr>
 <td>__TIME__</td>
 <td>The current time</td>
-<td>08:01:09 AM</td>
+<td>11:25:59 AM</td>
 </tr>
 <tr>
 <td>__FILENAME__</td>
@@ -839,7 +839,7 @@ sf_logo
 <p>
           Example template:
         </p>
-<pre class="programlisting">[template person[name age id]
+<pre class="programlisting">[template person[name age what]
 
 Hi, my name is [name]. I am [age] years old. I am a [what].
 
@@ -864,7 +864,7 @@ Hi, my name is [name]. I am [age] years old. I am a [what].
           </li>
 </ul></div>
 <a name="quickbook.syntax.block.templates.formal_template_arguments"></a><h5>
-<a name="id446627"></a>
+<a name="id446628"></a>
           <a href="block.html#quickbook.syntax.block.templates.formal_template_arguments">Formal
           Template Arguments</a>
         </h5>
@@ -959,8 +959,67 @@ replacement text...
           are separated by the double dot <tt class="literal">".."</tt> and terminated
           by the close parenthesis.
         </p>
-<a name="quickbook.syntax.block.templates.simple_arguments"></a><h5>
+<a name="quickbook.syntax.block.templates.nullary_templates"></a><h5>
 <a name="id446907"></a>
+          <a href="block.html#quickbook.syntax.block.templates.nullary_templates">Nullary
+          Templates</a>
+        </h5>
+<p>
+          Nullary templates look and act like simple macros. Example:
+        </p>
+<pre class="programlisting">[template spirit[] [@http://spirit.sf.net Spirit]]
+</pre>
+<p>
+          Expanding:
+        </p>
+<pre class="programlisting">Please see [spirit]'s site.
+</pre>
+<p>
+          We have:
+        </p>
+<p>
+          Please see <a href="http://spirit.sf.net" target="_top">Spirit</a>'s site.
+        </p>
+<p>
+          The difference with macros are
+        </p>
+<div class="itemizedlist"><ul type="disc">
+<li>
+            The explicit <a href="block.html#quickbook.syntax.block.templates.template_expansion">template
+            expansion syntax</a>. This is an advantage because, now, we don't
+            have to use obscure naming conventions like double underscores (e.g.
+            __spirit__) to avoid unwanted macro replacement.
+          </li>
+<li>
+            The template is expanded at the point where it is invoked. A macro is
+            expanded immediately at its point of declaration. This is subtle and
+            can cause a slight difference in behavior especially if you refer to
+            other macros and templates in the body.
+          </li>
+</ul></div>
+<p>
+          The empty brackets after the template identifier (<tt class="literal">spirit[]</tt>)
+          indicates no arguments. If the template body does not look like a template
+          argument list (the example above does), we can elide the empty brackets.
+          Example:
+        </p>
+<pre class="programlisting">[template aristotle_quote Aristotle: [*['Education is the best provision 
+for the journey to old age.]]]
+</pre>
+<p>
+          Expanding:
+        </p>
+<pre class="programlisting">Here's a quote from [aristotle_quote].
+</pre>
+<p>
+          We have:
+        </p>
+<p>
+          Here's a quote from Aristotle: <span class="bold"><b><span class="emphasis"><em>Education
+          is the best provision for the journey to old age.</em></span></b></span>.
+        </p>
+<a name="quickbook.syntax.block.templates.simple_arguments"></a><h5>
+<a name="id447051"></a>
           <a href="block.html#quickbook.syntax.block.templates.simple_arguments">Simple
           Arguments</a>
         </h5>
@@ -1028,7 +1087,7 @@ replacement text...
           what do you think man?
         </p>
 <a name="quickbook.syntax.block.templates.punctuation_templates"></a><h5>
-<a name="id447074"></a>
+<a name="id447218"></a>
           <a href="block.html#quickbook.syntax.block.templates.punctuation_templates">Punctuation
           Templates</a>
         </h5>
@@ -1100,7 +1159,7 @@ replacement text...
         </p>
 <div class="informaltable">
 <h4>
-<a name="id447272"></a>
+<a name="id447417"></a>
             <span class="table-title">A Simple Table</span>
           </h4>
 <table class="table">
@@ -1162,7 +1221,7 @@ replacement text...
         </p>
 <div class="informaltable">
 <h4>
-<a name="id447389"></a>
+<a name="id447534"></a>
             <span class="table-title">Table with fat cells</span>
           </h4>
 <table class="table">
@@ -1211,7 +1270,7 @@ replacement text...
 </pre>
 <div class="informaltable">
 <h4>
-<a name="id447478"></a>
+<a name="id447623"></a>
             <span class="table-title">Table with code</span>
           </h4>
 <table class="table">

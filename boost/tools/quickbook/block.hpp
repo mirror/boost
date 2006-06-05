@@ -204,7 +204,7 @@ namespace quickbook
                     >> 
                     !(
                         space >> '['
-                        >> +(
+                        >> *(
                                 space >> template_id    [push_back_a(actions.template_info)]
                             )
                         >> space >> ']'

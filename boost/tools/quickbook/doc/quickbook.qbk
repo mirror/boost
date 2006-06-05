@@ -1073,7 +1073,7 @@ blocks and tables).
 Example template:
 
 [pre'''
-[template person[name age id]
+[template person[name age what]
 
 Hi, my name is [name]. I am [age] years old. I am a [what].
 
@@ -1163,6 +1163,60 @@ Each actual argument can be a word, a text fragment or just about any [link
 quickbook.syntax.phrase QuickBook phrase]. Arguments are separated by the 
 double dot [^".."] and terminated by the close parenthesis.
 
+[heading Nullary Templates]
+
+Nullary templates look and act like simple macros. Example:
+
+[pre'''
+[template spirit[] [@http://spirit.sf.net Spirit]]
+''']
+
+[template spirit[] [@http://spirit.sf.net Spirit]]
+
+Expanding:
+
+[pre'''
+Please see [spirit]'s site.
+''']
+
+We have:
+
+Please see [spirit]'s site.
+
+The difference with macros are 
+
+* The explicit [link quickbook.syntax.block.templates.template_expansion 
+  template expansion syntax]. This is an advantage because, now, we don't 
+  have to use obscure naming conventions like double underscores (e.g. 
+  \_\_spirit\_\_) to avoid unwanted 
+  macro replacement.
+* The template is expanded at the point where it is invoked. A macro is
+  expanded immediately at its point of declaration. This is subtle and
+  can cause a slight difference in behavior especially if you refer to
+  other macros and templates in the body.
+  
+The empty brackets after the template identifier ([^spirit\[\]]) indicates 
+no arguments. If the template body does not look like a template argument 
+list (the example above does), we can elide the empty brackets. Example:
+
+[pre'''
+[template aristotle_quote Aristotle: [*['Education is the best provision 
+for the journey to old age.]]]
+''']
+
+[template aristotle_quote Aristotle: [*['Education is the best provision 
+for the journey to old age.]]]
+
+Expanding:
+
+[pre'''
+Here's a quote from [aristotle_quote].
+''']
+
+We have:
+
+Here's a quote from [aristotle_quote].
+  
 [heading Simple Arguments]
 
 As mentioned, arguments are separated by the double dot [^".."]. If there 
