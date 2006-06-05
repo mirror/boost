@@ -11,6 +11,8 @@
 # include <boost/config.hpp>
 # include <boost/detail/workaround.hpp>
 # include <boost/mpl/int.hpp>
+# include <boost/type_traits/is_function.hpp>
+# include <boost/utility/enable_if.hpp>
 
 namespace boost
 {
@@ -145,8 +147,28 @@ namespace boost
             BOOST_TYPEOF_NEXT_INDEX(next);     
         };
 
+        template<class T>
+        struct sizer
+        {
+            typedef char(*type)[encode_type<T>::value];
+        };
+
+# if BOOST_WORKAROUND(BOOST_MSVC,>=1300)
+
+        template<typename T> typename disable_if<
+            typename is_function<T>::type, 
+            typename sizer<T>::type>::type encode_start(T const&);
+
+        template<typename T> typename enable_if<
+            typename is_function<T>::type, 
+            typename sizer<T>::type>::type encode_start(T&);
+
+# else
+
         template<typename T>
-        char (*encode_start(T const&))[encode_type<T>::value];
+            typename sizer<T>::type encode_start(T const&);
+
+# endif
     }
 }
 

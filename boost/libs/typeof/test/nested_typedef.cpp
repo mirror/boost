@@ -8,7 +8,7 @@ void do_int(int) {}
 
 struct {
     template<typename T>
-    T operator[](const T&) {}
+    T operator[](const T& n) {return n;}
 } int_p;
 
 

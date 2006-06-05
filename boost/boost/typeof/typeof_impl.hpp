@@ -10,6 +10,8 @@
 #include <boost/preprocessor/repetition/enum.hpp>
 #include <boost/typeof/encode_decode.hpp>
 #include <boost/typeof/vector.hpp>
+#include <boost/type_traits/is_function.hpp>
+#include <boost/utility/enable_if.hpp>
 
 #define BOOST_TYPEOF_VECTOR(n) BOOST_PP_CAT(boost::type_of::vector, n)
 
@@ -26,13 +28,25 @@ namespace boost { namespace type_of {
 
         BOOST_PP_REPEAT(BOOST_TYPEOF_LIMIT_SIZE, BOOST_TYPEOF_sizer_item, ~)
     };
-
-    template<class V,class T> 
-    sizer<typename encode_type<V, T>::type> encode(const T&);
 }}
 
 #undef BOOST_TYPEOF_sizer_item
 
+//
+namespace boost { namespace type_of {   
+
+	template<class V, class T> 
+	typename enable_if<
+		typename is_function<T>::type,
+		sizer<typename encode_type<V, T>::type> >::type encode(T&);
+
+	template<class V, class T> 
+	typename disable_if<
+		typename is_function<T>::type,
+		sizer<typename encode_type<V, T>::type> >::type encode(const T&);
+
+}}
+//
 namespace boost { namespace type_of {
 
     template<class V>

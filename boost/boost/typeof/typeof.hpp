@@ -136,31 +136,12 @@
 
 #elif defined(BOOST_TYPEOF_NATIVE)
 #   define BOOST_TYPEOF_TEXT "using native typeof"
-#   ifndef MSVC_TYPEOF_HACK
-
-        namespace boost { namespace type_of {
-            template<class T> T& ensure_obj(const T&);
-        }}
-
-#       define BOOST_TYPEOF(expr) BOOST_TYPEOF_KEYWORD(boost::type_of::ensure_obj(expr))
-#       define BOOST_TYPEOF_TPL BOOST_TYPEOF
-#       define BOOST_TYPEOF_NESTED_TYPEDEF_TPL(name,expr) \
-        struct name {\
-            typedef BOOST_TYPEOF_TPL(expr) type;\
-        };
-#       define BOOST_TYPEOF_NESTED_TYPEDEF(name,expr) \
-        struct name {\
-            typedef BOOST_TYPEOF(expr) type;\
-        };
-#   endif
-#   define BOOST_TYPEOF_REGISTER_TYPE(x)
-#   define BOOST_TYPEOF_REGISTER_TEMPLATE(x, params)
+#   include <boost/typeof/native.hpp>
 #else
 #   error typeof configuration error
 #endif
 
 #include <boost/typeof/message.hpp>
-#include <boost/typeof/binding_workaround.hpp>
 
 // auto
 #define BOOST_AUTO(Var, Expr) BOOST_TYPEOF(Expr) Var = Expr
