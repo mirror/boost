@@ -18,6 +18,8 @@
 
 #include <boost/test/test_tools.hpp>
 
+#include <stdexcept>
+
 
 namespace sc = boost::statechart;
 namespace mpl = boost::mpl;
@@ -29,6 +31,8 @@ struct EvToB : sc::event< EvToB > {};
 struct EvToD : sc::event< EvToD > {};
 struct EvToDShallow : sc::event< EvToDShallow > {};
 struct EvToDDeep : sc::event< EvToDDeep > {};
+struct EvToDShallowLocal : sc::event< EvToDShallowLocal > {};
+struct EvToDDeepLocal : sc::event< EvToDDeepLocal > {};
 
 struct EvToF : sc::event< EvToF > {};
 struct EvToFShallow : sc::event< EvToFShallow > {};
@@ -40,9 +44,16 @@ struct EvToI : sc::event< EvToI > {};
 struct EvToM : sc::event< EvToM > {};
 struct EvToQ : sc::event< EvToQ > {};
 
+struct EvWhatever : sc::event< EvWhatever > {};
 
 struct A;
-struct HistoryTest : sc::state_machine< HistoryTest, A > {};
+struct HistoryTest : sc::state_machine< HistoryTest, A >
+{
+  void unconsumed_event( const sc::event_base & )
+  {
+    throw std::runtime_error( "Event was not consumed!" );
+  }
+};
 
 struct B;
 struct D;
@@ -94,7 +105,13 @@ struct A : sc::simple_state< A, HistoryTest, B >
     struct E : sc::simple_state< E, C, F, sc::has_full_history > {};
 
       struct F : sc::simple_state< F, E > {};
-      struct G : sc::simple_state< G, E, H > {};
+      struct G : sc::simple_state< G, E, H >
+      {
+        typedef mpl::list<
+          sc::transition< EvToDShallowLocal, sc::shallow_history< D > >,
+          sc::transition< EvToDDeepLocal, sc::deep_history< D > >
+        > reactions;
+      };
 
         struct H : sc::simple_state< H, G > {};
         struct I : sc::simple_state< I, G > {};
@@ -282,6 +299,18 @@ int test_main( int, char* [] )
   // History was cleared -> default state
   pM->process_event( EvToFDeep() );
   BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
+
+  // Test local history (new with UML 2.0)
+  pM->initiate();
+  // unconsumed_event sanity check
+  BOOST_REQUIRE_THROW( pM->process_event( EvWhatever() ), std::runtime_error );
+  pM->process_event( EvToI() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const I & >() );
+  pM->process_event( EvToDShallowLocal() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const F & >() );
+  pM->process_event( EvToI() );
+  pM->process_event( EvToDDeepLocal() );
+  BOOST_REQUIRE_NO_THROW( pM->state_downcast< const I & >() );
 
   // Given that history transitions and history initial states are implemented
   // with the same code we just make a few sanity checks and trust that the

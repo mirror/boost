@@ -117,8 +117,6 @@ test-suite statechart
     [ statechart-st-run-variants TransitionTest ]
     [ statechart-compile-fail-variants InvalidTransitionTest1 ]
     [ statechart-compile-fail-variants InvalidTransitionTest2 ]
-    [ statechart-compile-fail-variants InvalidTransitionTest3 ]
-    [ statechart-compile-fail-variants InvalidTransitionTest4 ]
     [ statechart-st-run-variants InStateReactionTest ]
     [ statechart-st-run-variants TerminationTest ]
     [ statechart-st-run-variants DeferralTest ]

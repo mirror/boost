@@ -430,8 +430,6 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       inherited_deep_history,
       mpl::empty< inner_initial_list > >::type stores_deep_history;
 
-    typedef mpl::bool_< false > history_destination;
-
     void * operator new( std::size_t size )
     {
       return detail::allocate< MostDerived,
@@ -715,19 +713,6 @@ class simple_state : public detail::simple_state_base_type< MostDerived,
       typedef typename mpl::at<
         possible_transition_contexts,
         termination_state_position >::type termination_state_type;
-
-      // If you receive a
-      // "use of undefined type 'boost::STATIC_ASSERTION_FAILURE<x>'" or
-      // similar compiler error here then you tried to make a transition to
-      // history from a state residing on the same level as the history
-      // connector (or from a direct or indirect inner state). Since the
-      // outer state has never been left no history has ever been saved.
-      BOOST_STATIC_ASSERT( (
-        mpl::or_<
-          mpl::not_< typename DestinationState::history_destination >,
-          mpl::not_< is_same<
-            typename DestinationState::context_type,
-            common_context_type > > >::value ) );
 
       termination_state_type & terminationState(
         context< termination_state_type >() );

@@ -44,8 +44,6 @@ class deep_history
     typedef typename DefaultState::context_type_list context_type_list;
     typedef typename DefaultState::orthogonal_position orthogonal_position;
 
-    typedef mpl::bool_< true > history_destination;
-
     static void deep_construct(
       const context_ptr_type & pContext,
       outermost_context_base_type & outermostContextBase )
