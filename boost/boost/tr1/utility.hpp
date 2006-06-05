@@ -61,8 +61,14 @@ namespace tuple_detail{
    struct const_tuple_get_result
    {
       typedef typename boost::mpl::if_c<I==0, T1, T2>::type t1;
+# if BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x582))
+      // I have absolutely no idea why add_const is not working here for Borland!
+      // It passes all other free-standing tests, some strange interaction going on
+      typedef typename boost::add_reference< const t1 >::type type;
+# else
       typedef typename boost::add_const<t1>::type t2;
       typedef typename boost::add_reference<t2>::type type;
+# endif
    };
 
 template<int I, class T1, class T2> 

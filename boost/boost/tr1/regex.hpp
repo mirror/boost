@@ -77,7 +77,7 @@ using ::boost::regex;
 using ::boost::wregex;
 #endif
 
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570))
+#if !BOOST_WORKAROUND(__BORLANDC__, <= 0x570)
 // [7.8.6] basic_regex swap
 using ::boost::swap;
 #endif

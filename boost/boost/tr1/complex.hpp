@@ -89,7 +89,7 @@ inline std::complex<float> conj(const float& t)
    return ct;
 }
 
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570)) && !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
+#if !BOOST_WORKAROUND(__BORLANDC__, <=0x570) && !BOOST_WORKAROUND(BOOST_MSVC, < 1310)
 inline complex<double> polar(const char& rho, const char& theta = 0)
 { return ::std::polar(static_cast<double>(rho), static_cast<double>(theta)); }
 inline complex<double> polar(const unsigned char& rho, const unsigned char& theta = 0)
@@ -124,7 +124,7 @@ template<class T, class U>
 inline complex<typename ::boost::tr1_detail::promote_to_real<T, U>::type> 
    polar(const T& rho, const U& theta)
 {
-   typedef typename ::boost::tr1_detail::promote_to_real<T, U>::type real_type;
+   typedef typename boost::tr1_detail::promote_to_real<T, U>::type real_type;
    return std::polar(static_cast<real_type>(rho), static_cast<real_type>(theta));
 }
 #endif
@@ -187,7 +187,7 @@ inline complex<typename boost::tr1_detail::promote_to_real<T, U>::type>
    pow (const complex<T>& x, const U& y)
 {
    typedef typename boost::tr1_detail::promote_to_real<T, U>::type real_type;
-   typedef complex<typename ::boost::tr1_detail::promote_to_real<T, U>::type> result_type;
+   typedef complex<typename boost::tr1_detail::promote_to_real<T, U>::type> result_type;
    typedef typename boost::mpl::if_<boost::is_same<result_type, complex<T> >, result_type const&, result_type>::type cast1_type;
    real_type r = y;
    cast1_type x1(x);
@@ -200,7 +200,7 @@ inline complex<typename boost::tr1_detail::promote_to_real<T, U>::type>
    pow (const T& x, const complex<U>& y)
 {
    typedef typename boost::tr1_detail::promote_to_real<T, U>::type real_type;
-   typedef complex<typename ::boost::tr1_detail::promote_to_real<T, U>::type> result_type;
+   typedef complex<typename boost::tr1_detail::promote_to_real<T, U>::type> result_type;
    typedef typename boost::mpl::if_<boost::is_same<result_type, complex<U> >, result_type const&, result_type>::type cast_type;
    real_type r = x;
    std::complex<real_type> x1(r);
