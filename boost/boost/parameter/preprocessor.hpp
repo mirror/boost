@@ -467,7 +467,7 @@ T const& as_lvalue(T const& value, int)
     )
 
 # define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_ARG_NAME(keyword) \
-    BOOST_PP_CAT(keyword,_type)
+    BOOST_PP_CAT(BOOST_PP_CAT(keyword,_),type)
 
 // Helpers used as parameters to BOOST_PARAMETER_FUNCTION_DEFAULT_ARGUMENTS.
 # define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_TEMPLATE_ARG(r, _, arg) \
