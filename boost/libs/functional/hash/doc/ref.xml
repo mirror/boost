@@ -641,6 +641,14 @@ for(; first != last; ++first)
           <parameter name="val"><paramtype>std::multimap&lt;K, T, C, A&gt; const&amp;</paramtype></parameter>
         </signature>
 
+        <signature>
+          <template>
+            <template-type-parameter name="T"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::complex&lt;T&gt; const&amp;</paramtype></parameter>
+        </signature>
+
         <description><para>
           Generally shouldn't be called directly by users, instead they should use
           <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
@@ -712,6 +720,12 @@ for(; first != last; ++first)
 <functionname>hash_combine</functionname>(seed, val.first);
 <functionname>hash_combine</functionname>(seed, val.second);
 return seed;</programlisting></entry>
+                </row>
+                <row>
+                  <entry>
+                    <code>std::complex&lt;val[N]&gt;</code>
+                  </entry>
+                  <entry>For built in types when <code>val.imag() == 0</code>, <code>hash_value(val.real())</code></entry>
                 </row>
               </tbody>
             </tgroup>
