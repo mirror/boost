@@ -334,7 +334,7 @@ namespace boost
         return hash_range(v.begin(), v.end());
     }
 
-    template <class K, class T, class C, class A>
+    template <class T>
     std::size_t hash_value(std::complex<T> const& v)
     {
         boost::hash<T> hasher;
