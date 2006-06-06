@@ -48,7 +48,8 @@ void numeric_test(T*)
 
     if (limits::is_integer)
     {
-        BOOST_TEST(HASH_NAMESPACE::hash_value(T(-5)) == (std::size_t)T(-5));
+        BOOST_TEST(HASH_NAMESPACE::hash_value(T((std::size_t)-5))
+                == (std::size_t)T(-5));
         BOOST_TEST(HASH_NAMESPACE::hash_value(T(0)) == (std::size_t)T(0u));
         BOOST_TEST(HASH_NAMESPACE::hash_value(T(10)) == (std::size_t)T(10u));
         BOOST_TEST(HASH_NAMESPACE::hash_value(T(25)) == (std::size_t)T(25u));
@@ -111,6 +112,10 @@ void poor_quality_tests(T*)
     numeric_test((type*) 0); \
     limits_test((type*) 0); \
     poor_quality_tests((type*) 0);
+#define NUMERIC_TEST_NO_LIMITS(type, name) \
+    std::cerr<<"Testing: " BOOST_STRINGIZE(name) "\n"; \
+    numeric_test((type*) 0); \
+    poor_quality_tests((type*) 0);
 
 int main()
 {
@@ -129,8 +134,8 @@ int main()
     NUMERIC_TEST(unsigned long, ulong)
 
 #if defined(BOOST_HAS_LONG_LONG)
-    NUMERIC_TEST(long long, hash_longlong)
-    NUMERIC_TEST(unsigned long long, ulonglong)
+    NUMERIC_TEST_NO_LIMITS(long long, hash_longlong)
+    NUMERIC_TEST_NO_LIMITS(unsigned long long, ulonglong)
 #endif
 
     NUMERIC_TEST(float, float)
