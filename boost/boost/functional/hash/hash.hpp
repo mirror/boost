@@ -388,7 +388,7 @@ namespace boost
     }
 
     template <class T> struct hash
-        : public hash_detail::hash_impl<boost::is_pointer<T>::value>
+        : public boost::hash_detail::hash_impl<boost::is_pointer<T>::value>
             ::BOOST_NESTED_TEMPLATE inner<T>
     {
     };
@@ -479,7 +479,7 @@ namespace boost
     };
 #endif
 
-#elif !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
     // On compilers without partial specialization, boost::hash<T>
     // has already been declared to deal with pointers, so just
@@ -487,6 +487,11 @@ namespace boost
 
     namespace hash_detail
     {
+        template <bool IsPointer>
+        struct hash_impl;
+
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+
         template <>
         struct hash_impl<false>
         {
@@ -507,15 +512,12 @@ namespace boost
 #endif
             };
         };
-    }
 
 #else // Visual C++ 6.5
 
     // There's probably a more elegant way to Visual C++ 6.5 to work
     // but I don't know what it is.
 
-    namespace hash_detail
-    {
         template <bool IsConst>
         struct hash_impl_msvc
         {
@@ -560,8 +562,10 @@ namespace boost
             template <class T>
             struct inner : public hash_impl_msvc2<T> {};
         };
+
+#endif // Visual C++ 6.5
     }
-#endif
+#endif  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 }
 
 #endif
