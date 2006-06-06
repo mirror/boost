@@ -128,6 +128,11 @@ int main()
     NUMERIC_TEST(long, hash_long)
     NUMERIC_TEST(unsigned long, ulong)
 
+#if defined(BOOST_HAS_LONG_LONG)
+    NUMERIC_TEST(long long, hash_longlong)
+    NUMERIC_TEST(unsigned long long, ulonglong)
+#endif
+
     NUMERIC_TEST(float, float)
     NUMERIC_TEST(double, double)
     NUMERIC_TEST(long double, ldouble)
