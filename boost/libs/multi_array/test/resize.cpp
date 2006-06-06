@@ -104,9 +104,9 @@ int test_main(int,char*[]) {
     A.resize(boost::extents[3][4][2]);
 
     int check = 0;
-    for (int i = 0; i < 3; i++) { 
-      for (int j = 0; j < 4; j++) {
-        for (int k = 0; k < 2; k++) {
+    for (int x = 0; x < 3; x++) { 
+      for (int y = 0; y < 4; y++) {
+        for (int z = 0; z < 2; z++) {
           BOOST_CHECK(*(A.data() + check) == check);
           ++check;
         }
