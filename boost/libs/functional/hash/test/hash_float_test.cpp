@@ -66,7 +66,7 @@ void float_tests(char const* name, T* = 0)
 
         if(infinity == infinity2)
             BOOST_TEST(x1(infinity) == x1(infinity2));
-        if(infinity == infinity3);
+        if(infinity == infinity3)
             BOOST_TEST(x1(infinity) == x1(infinity3));
         if(infinity == infinity4)
             BOOST_TEST(x1(infinity) == x1(infinity4));
