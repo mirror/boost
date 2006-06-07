@@ -97,7 +97,7 @@ test-suite regex
       ]    
 
       [ run collate_info/collate_info.cpp ../build//boost_regex
-      : : : <test-info>always_show_run_output ]
+      : : : <test-info>always_show_run_output : test_collate_info ]
 
 
       [ compile concepts/concept_check.cpp ../build//boost_regex
