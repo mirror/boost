@@ -1,5 +1,5 @@
 /*=============================================================================
-    Copyright (c) 2002 2004 Joel de Guzman
+    Copyright (c) 2002 2004 2006 Joel de Guzman
     Copyright (c) 2004 Eric Niebler
     http://spirit.sourceforge.net/
 
@@ -19,11 +19,11 @@
 #include <sstream>
 #include <boost/spirit/iterator/position_iterator.hpp>
 #include <boost/filesystem/operations.hpp>
-#include <boost/noncopyable.hpp>
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
 #include "../syntax_highlight.hpp"
-#include "utils.hpp"
+#include "./collector.hpp"
+#include "./utils.hpp"
 
 #ifdef BOOST_MSVC
 // disable copy/assignment could not be generated, unreferenced formal params
@@ -65,34 +65,6 @@ namespace quickbook
     // forward declarations
     struct actions;
     int parse(char const* filein_, actions& actor, bool ignore_docinfo = false);
-    
-    struct collector : boost::noncopyable
-    {
-        collector();
-        collector(std::stringstream& out);
-        ~collector();
-        
-        std::ostream& get() const;
-        std::string str() const;
-        void str(std::string const& s);
-        void push();
-        void pop();
-
-    private:
-
-        std::stack<std::stringstream*> streams;
-        boost::reference_wrapper<std::stringstream> main;
-        boost::reference_wrapper<std::stringstream> top;
-        std::stringstream default_;
-    };
-    
-    template <typename T>
-    inline collector& 
-    operator<<(collector& out, T const& val)
-    {
-        out.get() << val;
-        return out;
-    }
     
     struct error_action
     {

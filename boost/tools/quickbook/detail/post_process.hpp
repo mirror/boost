@@ -1,5 +1,5 @@
 /*=============================================================================
-    Copyright (c) 2005 Joel de Guzman
+    Copyright (c) 2005 2006 Joel de Guzman
     http://spirit.sourceforge.net/
 
     Use, modification and distribution is subject to the Boost Software
