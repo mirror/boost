@@ -153,7 +153,12 @@ namespace boost
             typedef char(*type)[encode_type<T>::value];
         };
 
-# if BOOST_WORKAROUND(BOOST_MSVC,>=1300)
+# ifdef BOOST_NO_SFINAE
+
+        template<typename T>
+            typename sizer<T>::type encode_start(T const&);
+
+# else
 
         template<typename T> typename disable_if<
             typename is_function<T>::type, 
@@ -162,11 +167,6 @@ namespace boost
         template<typename T> typename enable_if<
             typename is_function<T>::type, 
             typename sizer<T>::type>::type encode_start(T&);
-
-# else
-
-        template<typename T>
-            typename sizer<T>::type encode_start(T const&);
 
 # endif
     }
