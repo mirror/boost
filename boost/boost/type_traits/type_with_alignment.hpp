@@ -192,11 +192,11 @@ struct is_pod< ::boost::detail::lower_alignment<Align> >
 template <std::size_t Align>
 class type_with_alignment
 {
-    typedef detail::lower_alignment<Align> t1;
+    typedef ::boost::detail::lower_alignment<Align> t1;
     typedef typename mpl::if_c<
           ::boost::detail::is_aligned< ::boost::alignment_of<t1>::value,Align >::value
         , t1
-        , detail::max_align
+        , ::boost::detail::max_align
         >::type align_t;
 
     BOOST_STATIC_CONSTANT(std::size_t, found = alignment_of<align_t>::value);

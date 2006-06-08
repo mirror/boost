@@ -133,7 +133,7 @@ class optional_base : public optional_tag
 {
   private :
 
-    typedef BOOST_DEDUCED_TYPENAME detail::make_reference_content<T>::type internal_type ;
+    typedef BOOST_DEDUCED_TYPENAME ::boost::detail::make_reference_content<T>::type internal_type ;
 
     typedef aligned_storage<internal_type> storage_type ;
 

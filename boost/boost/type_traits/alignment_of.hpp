@@ -51,7 +51,7 @@ struct alignment_of_impl
 {
     BOOST_STATIC_CONSTANT(std::size_t, value =
         (::boost::detail::alignment_logic<
-            sizeof(detail::alignment_of_hack<T>) - sizeof(T),
+            sizeof(::boost::detail::alignment_of_hack<T>) - sizeof(T),
             sizeof(T)
         >::value));
 };
