@@ -47,52 +47,52 @@ project
 
 
 test-suite numeric/uBLAS
-    : [ run test1/test1.cpp
-            test1/test11.cpp
-            test1/test12.cpp
-            test1/test13.cpp
+    : [ run test1.cpp
+            test11.cpp
+            test12.cpp
+            test13.cpp
         : # args
         : # input files
         : # requirements
             <define>$(UBLAS_TESTSET)
       ]
-      [ run test2/test2.cpp
-            test2/test21.cpp
-            test2/test22.cpp
-            test2/test23.cpp
+      [ run test2.cpp
+            test21.cpp
+            test22.cpp
+            test23.cpp
         : : :
             <define>$(UBLAS_TESTSET)
       ]
-      [ run test3/test3.cpp
-            test3/test31.cpp
-            test3/test32.cpp
-            test3/test33.cpp
+      [ run test3.cpp
+            test31.cpp
+            test32.cpp
+            test33.cpp
         : : :
             <define>$(UBLAS_TESTSET_SPARSE)
       ]
-      [ run test4/test4.cpp
-            test4/test42.cpp
-            test4/test43.cpp
+      [ run test4.cpp
+            test42.cpp
+            test43.cpp
         : : :
             <define>$(UBLAS_TESTSET)
       ]
-      [ run test5/test5.cpp
-            test5/test52.cpp
-            test5/test53.cpp
+      [ run test5.cpp
+            test52.cpp
+            test53.cpp
         : : :
             <define>$(UBLAS_TESTSET)
       ]
-      [ run test6/test6.cpp
-            test6/test62.cpp
-            test6/test63.cpp
+      [ run test6.cpp
+            test62.cpp
+            test63.cpp
         : : :
             <define>$(UBLAS_TESTSET)
       ]
 # Test commented out, just like in V1 Jamfile
-#      [ run test7/test7.cpp
-#            test7/test71.cpp
-#            test7/test72.cpp
-#            test7/test73.cpp
+#      [ run test7.cpp
+#            test71.cpp
+#            test72.cpp
+#            test73.cpp
 #        : : :
 #            <define>BOOST_UBLAS_USE_INTERVAL
 #            <define>$(UBLAS_TESTSET)

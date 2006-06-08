@@ -30,7 +30,7 @@
 
 namespace ublas = boost::numeric::ublas;
 
-#include "../common/init.hpp"
+#include "common/init.hpp"
 
 void test_vector ();
 void test_matrix_vector ();

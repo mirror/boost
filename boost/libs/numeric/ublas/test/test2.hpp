@@ -14,30 +14,42 @@
 //  GeNeSys mbH & Co. KG in producing this work.
 //
 
-#ifndef TEST4_H
-#define TEST4_H
+#ifndef TEST2_H
+#define TEST2_H
 
 #include <iostream>
 
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
-#include <boost/numeric/ublas/matrix_proxy.hpp>
-#include <boost/numeric/ublas/banded.hpp>
+#include <boost/numeric/ublas/triangular.hpp>
 #include <boost/numeric/ublas/io.hpp>
+#include <boost/numeric/ublas/blas.hpp>
 
 namespace ublas = boost::numeric::ublas;
 
-#include "../common/init.hpp"
+#include "common/init.hpp"
 
-//#define USE_BANDED
-#define USE_DIAGONAL
+template<class V, int N>
+struct test_blas_1 {
+    typedef typename V::value_type value_type;
+    typedef typename ublas::type_traits<value_type>::real_type real_type;
 
+    void test ();
+};
 
-void test_matrix_vector ();
-void test_matrix ();
+template<class V, class M, int N>
+struct test_blas_2 {
+    typedef typename V::value_type value_type;
 
+    void test ();
+};
 
-// FIXME slice are failing in assignment to zero elements
-#undef USE_SLICE
+template<class M, int N>
+struct test_blas_3 {
+    typedef typename M::value_type value_type;
+
+    void test ();
+};
+
 
 #endif
