@@ -21,26 +21,26 @@
 
 namespace quickbook
 {
-    void error_action::operator()(iterator const& first, iterator const& /*last*/) const
+    void error_action::operator()(iterator first, iterator /*last*/) const
     {
         boost::spirit::file_position const pos = first.get_position();
         detail::outerr(pos.file,pos.line)
             << "Syntax Error near column " << pos.column << ".\n";
     }
 
-    void phrase_action::operator()(iterator const& first, iterator const& last) const
+    void phrase_action::operator()(iterator first, iterator last) const
     {
-        std::string str = phrase.str();
+        std::string str;
+        phrase.swap(str);
         detail::convert_nbsp(str);
-        phrase.str(std::string());
         out << pre << str << post;
     }
 
-    void header_action::operator()(iterator const& first, iterator const& last) const
+    void header_action::operator()(iterator first, iterator last) const
     {
-        std::string str = phrase.str();
+        std::string str;
+        phrase.swap(str);
         detail::convert_nbsp(str);
-        phrase.str(std::string());
 
         if (qbk_version_n < 103) // version 1.2 and below
         {
@@ -67,21 +67,21 @@ namespace quickbook
         }
     }
 
-    void generic_header_action::operator()(iterator const& first, iterator const& last) const
+    void generic_header_action::operator()(iterator first, iterator last) const
     {
         int level_ = section_level + 2;     // section_level is zero-based. We need to use a 
                                             // 0ne-based heading which is one greater
                                             // than the current. Thus: section_level + 2.
         if (level_ > 6)                     // The max is h6, clip it if it goes 
             level_ = 6;                     // further than that
-        std::string str = phrase.str();
+        std::string str;
+        phrase.swap(str);
         detail::convert_nbsp(str);
 
         std::string anchor = 
             library_id + '.' + qualified_section_id + '.' +
             detail::make_identifier(str.begin(), str.end());
 
-        phrase.str(std::string());
         out 
             << "<anchor id=\"" << anchor << "\"/>"
             << "<bridgehead renderas=\"sect" << level_ << "\">"
@@ -92,7 +92,7 @@ namespace quickbook
             ;
     }
 
-    void simple_phrase_action::operator()(iterator first, iterator const& last) const
+    void simple_phrase_action::operator()(iterator first, iterator last) const
     {
         out << pre;
         std::string str(first, last);
@@ -108,12 +108,11 @@ namespace quickbook
         out << post;
     }
 
-    void list_action::operator()(iterator const& first, iterator const& last) const
+    void list_action::operator()(iterator first, iterator last) const
     {
         BOOST_ASSERT(!list_marks.empty()); // there must be at least one item in the stack
-        std::string  str = list_buffer.str();
-        list_buffer.str(std::string());
-        out << str;
+        out << list_buffer.str();
+        list_buffer.clear();
 
         while (!list_marks.empty())
         {
@@ -127,7 +126,7 @@ namespace quickbook
         list_indent = -1; // reset
     }
 
-    void list_format_action::operator()(iterator first, iterator const& last) const
+    void list_format_action::operator()(iterator first, iterator last) const
     {
         int new_indent = 0;
         while (first != last && (*first == ' ' || *first == '\t'))
@@ -164,11 +163,11 @@ namespace quickbook
                 // </listitem> to accomodate this sub-list. We'll close
                 // the listelem later.
 
-                std::string str = out.str();
+                std::string str;
+                out.swap(str);
                 std::string::size_type pos = str.rfind("\n</listitem>");
                 BOOST_ASSERT(pos <= str.size());
                 str.erase(str.begin()+pos, str.end());
-                out.str(std::string());
                 out << str;
             }
             out << std::string((mark == '#') ? "<orderedlist>\n" : "<itemizedlist>\n");
@@ -199,7 +198,7 @@ namespace quickbook
         }
     }
 
-    void span::operator()(iterator first, iterator const& last) const
+    void span::operator()(iterator first, iterator last) const
     {
         out << "<phrase role=\"" << name << "\">";
         while (first != last)
@@ -212,7 +211,7 @@ namespace quickbook
         out << '#'; // print out an unexpected character
     }
 
-    void anchor_action::operator()(iterator first, iterator const& last) const
+    void anchor_action::operator()(iterator first, iterator last) const
     {
         out << "<anchor id=\"";
         while (first != last)
@@ -246,39 +245,32 @@ namespace quickbook
         detail::print_space(ch, out.get());
     }
 
-    void space::operator()(iterator first, iterator const& last) const
+    void space::operator()(iterator first, iterator last) const
     {
         while (first != last)
             detail::print_space(*first++, out.get());
     }
 
-    void pre_escape_back::operator()(iterator const& first, iterator const& last) const
+    void pre_escape_back::operator()(iterator first, iterator last) const
     {
-        save = escape_actions.phrase.str(); // save the stream
+        escape_actions.phrase.push(); // save the stream
     }
 
-    void post_escape_back::operator()(iterator const& first, iterator const& last) const
+    void post_escape_back::operator()(iterator first, iterator last) const
     {
-        std::string str = escape_actions.phrase.str();
-        escape_actions.phrase.str(save); // restore the stream
-        out << str;
+        out << escape_actions.phrase.str();
+        escape_actions.phrase.pop(); // restore the stream
     }
 
-    void code_action::operator()(iterator const& first, iterator const& last) const
+    void code_action::operator()(iterator first, iterator last) const
     {
-        std::string save = phrase.str();
-        phrase.str(std::string());
+        std::string save;
+        phrase.swap(save);
 
         // preprocess the code section to remove the initial indentation
-        std::string program_(first, last);
-        detail::unindent(program_);
+        std::string program(first, last);
+        detail::unindent(program);
 
-        // $$$ fix me $$$ this is wasteful. we have to convert
-        // back to a vector<char> so we can use the same iterator type 
-        // used by the rest of the system, otherwise, it is wasteful 
-        // of function template instantiations
-
-        std::vector<char> program(program_.begin(), program_.end());
         iterator first_(program.begin(), program.end());
         iterator last_(program.end(), program.end());
         first_.set_position(first.get_position());
@@ -293,20 +285,19 @@ namespace quickbook
             parse(first_, last_, python_p);
         }
         
-        std::string str = temp.str();
-        temp.str(std::string());
-        phrase.str(std::string());
-        phrase << save;
+        std::string str;
+        temp.swap(str);
+        phrase.swap(save);
 
         out << "<programlisting>\n";
         out << str;
         out << "</programlisting>\n";
     }
 
-    void inline_code_action::operator()(iterator const& first, iterator const& last) const
+    void inline_code_action::operator()(iterator first, iterator last) const
     {
-        std::string save = out.str();
-        out.str(std::string());
+        std::string save;
+        out.swap(save);
  
         // print the code with syntax coloring
         if (source_mode == "c++")
@@ -317,11 +308,10 @@ namespace quickbook
         {
             parse(first, last, python_p);
         }
-        std::string str = temp.str();
-        temp.str(std::string());
-        out.str(std::string());
+        std::string str;
+        temp.swap(str);
+        out.swap(save);
 
-        out << save;
         out << "<code>";
         out << str;
         out << "</code>";
@@ -332,7 +322,7 @@ namespace quickbook
         phrase << ch;
     }
 
-    void raw_char_action::operator()(iterator const& first, iterator const& /*last*/) const
+    void raw_char_action::operator()(iterator first, iterator /*last*/) const
     {
         phrase << *first;
     }
@@ -342,12 +332,12 @@ namespace quickbook
         detail::print_char(ch, phrase.get());
     }
 
-    void plain_char_action::operator()(iterator const& first, iterator const& /*last*/) const
+    void plain_char_action::operator()(iterator first, iterator /*last*/) const
     {
         detail::print_char(*first, phrase.get());
     }
 
-    void image_action::operator()(iterator first, iterator const& last) const
+    void image_action::operator()(iterator first, iterator last) const
     {
         fs::path const img_path(std::string(first, last));
 
@@ -367,23 +357,22 @@ namespace quickbook
         phrase << "</inlinemediaobject>";
     }
 
-    void macro_identifier_action::operator()(iterator const& first, iterator const& last) const
+    void macro_identifier_action::operator()(iterator first, iterator last) const
     {
         actions.macro_id.assign(first, last);
-        actions.macro_phrase_save = actions.phrase.str();
-        actions.phrase.str(std::string());
+        actions.phrase.push(); // save the phrase
     }
 
-    void macro_definition_action::operator()(iterator const& first, iterator const& last) const
+    void macro_definition_action::operator()(iterator first, iterator last) const
     {
         actions.macro.add(
             actions.macro_id.begin()
           , actions.macro_id.end()
           , actions.phrase.str());
-        actions.phrase.str(actions.macro_phrase_save);
+        actions.phrase.pop(); // restore the phrase
     }
 
-    void template_body_action::operator()(iterator const& first, iterator const& last) const
+    void template_body_action::operator()(iterator first, iterator last) const
     {
         BOOST_ASSERT(actions.template_info.size());
         actions.template_info.push_back(std::string(first, last));
@@ -394,7 +383,7 @@ namespace quickbook
         actions.template_info.clear();
     }
 
-    void do_template_action::operator()(iterator const& first, iterator const&) const
+    void do_template_action::operator()(iterator first, iterator) const
     {
         boost::spirit::file_position const pos = first.get_position();
         ++actions.template_depth;
@@ -408,9 +397,7 @@ namespace quickbook
         
         std::string result;
         actions.push(); // scope the actions' states
-        {
-            actions.phrase.str(std::string()); // clear the phrase
-            
+        {            
             simple_phrase_grammar<quickbook::actions> phrase_p(actions);
             block_grammar<quickbook::actions, true> block_p(actions);
 
@@ -478,12 +465,11 @@ namespace quickbook
                 {
                     actions.templates.add(tpl->begin(), tpl->end(), template_);
                 }
-                actions.phrase.str(std::string()); // clear the phrase
                 ++arg; ++tpl;
             }
             
             // parse the template body:
-            std::vector<char> temp;
+            std::string temp;
             temp.assign(tpl->begin(), tpl->end());
             temp.reserve(temp.size()+2); // reserve 2 more
             
@@ -492,7 +478,7 @@ namespace quickbook
             // a newline, then we regard is as a block, otherwise, we parse
             // it as a phrase.
             
-            std::vector<char>::const_iterator iter = temp.begin();
+            std::string::const_iterator iter = temp.begin();
             while (iter != temp.end() && ((*iter == ' ') || (*iter == '\t')))
                 ++iter; // skip spaces and tabs
             bool is_block = (iter != temp.end()) && ((*iter == '\r') || (*iter == '\n'));
@@ -505,7 +491,7 @@ namespace quickbook
                 first.set_position(template_pos);
                 iterator last(temp.end(), temp.end());
                 r = boost::spirit::parse(first, last, phrase_p).full;
-                result = actions.phrase.str();
+                actions.phrase.swap(result);
             }
             else
             {
@@ -520,7 +506,7 @@ namespace quickbook
                 first.set_position(template_pos);
                 iterator last(temp.end(), temp.end());
                 r = boost::spirit::parse(first, last, block_p).full;
-                result = actions.out.str();
+                actions.out.swap(result);
             }
 
             if (!r)
@@ -536,7 +522,7 @@ namespace quickbook
         --actions.template_depth;
     }
 
-    void link_action::operator()(iterator first, iterator const& last) const
+    void link_action::operator()(iterator first, iterator last) const
     {
         iterator save = first;
         phrase << tag;
@@ -568,8 +554,8 @@ namespace quickbook
             detail::print_char(*first++, actions.out.get());
         actions.out << "</title>\n";
 
-        std::string str = actions.phrase.str();
-        actions.phrase.str(std::string());
+        std::string str;
+        actions.phrase.swap(str);
         actions.out << str;
 
         actions.out << "</variablelist>\n";
@@ -602,9 +588,9 @@ namespace quickbook
 
         actions.out << "<tbody>\n";
 
-        std::string str = actions.phrase.str();
+        std::string str;
+        actions.phrase.swap(str);
         detail::convert_nbsp(str);
-        actions.phrase.str(std::string());
         actions.out << str;
 
         actions.out << "</tbody>\n"
@@ -620,8 +606,7 @@ namespace quickbook
         // the first row is the header
         if (header.empty() && !phrase.str().empty())
         {
-            header = phrase.str();
-            phrase.str(std::string());
+            phrase.swap(header);
         }
 
         phrase << start_row_;
@@ -639,7 +624,7 @@ namespace quickbook
         ++span;
     }
 
-    void begin_section_action::operator()(iterator first, iterator const& last) const
+    void begin_section_action::operator()(iterator first, iterator last) const
     {
         if (section_id.empty())
             section_id = detail::make_identifier(first, last);
@@ -662,8 +647,7 @@ namespace quickbook
                 << "." << qualified_section_id << "\">\n";
         }
         std::string str;
-        str = phrase.str();
-        phrase.str(std::string());
+        phrase.swap(str);
 
         if (qbk_version_n < 103) // version 1.2 and below
         {
@@ -681,7 +665,7 @@ namespace quickbook
         }
     }
 
-    void end_section_action::operator()(iterator const& first, iterator const& last) const
+    void end_section_action::operator()(iterator first, iterator last) const
     {
         out << "</section>";
 
@@ -720,7 +704,7 @@ namespace quickbook
         return std::accumulate(xml, xmlfile.end(), xmltmp, concat);
     }
 
-    void xinclude_action::operator()(iterator const& first, iterator const& last) const
+    void xinclude_action::operator()(iterator first, iterator last) const
     {
         // Given an xml file to include and the current filename, calculate the
         // path to the XML file relative to the output directory.
@@ -737,7 +721,7 @@ namespace quickbook
         out << "\" />\n";
     }
 
-    void include_action::operator()(iterator const& first, iterator const& last) const
+    void include_action::operator()(iterator first, iterator last) const
     {
         fs::path filein(std::string(first, last), fs::native);
         std::string doc_type, doc_id, doc_dirname, doc_last_revision;
@@ -945,9 +929,8 @@ namespace quickbook
         out << "\n</" << actions.doc_type << ">\n\n";
     }
 
-    void phrase_to_string_action::operator()(iterator const& first, iterator const& last) const
+    void phrase_to_string_action::operator()(iterator first, iterator last) const
     {
-        out = phrase.str();
-        phrase.str(std::string());
+        phrase.swap(out);
     }
 }

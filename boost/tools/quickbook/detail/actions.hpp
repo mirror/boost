@@ -16,7 +16,6 @@
 #include <vector>
 #include <stack>
 #include <algorithm>
-#include <sstream>
 #include <boost/spirit/iterator/position_iterator.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/foreach.hpp>
@@ -33,9 +32,7 @@
 namespace quickbook
 {
     namespace fs = boost::filesystem;
-    typedef std::vector<char> file_storage;
-    typedef position_iterator<file_storage::const_iterator> iterator;
-    typedef std::string::const_iterator string_iterator;
+    typedef position_iterator<std::string::const_iterator> iterator;
     typedef symbols<std::string> string_symbols;
 
     //  template symbols are stored as follows:
@@ -70,7 +67,7 @@ namespace quickbook
     {
         // Prints an error message to std::cerr
 
-        void operator()(iterator const& first, iterator const& /*last*/) const;
+        void operator()(iterator first, iterator /*last*/) const;
     };
 
     struct phrase_action
@@ -88,7 +85,7 @@ namespace quickbook
         , pre(pre)
         , post(post) {}
 
-        void operator()(iterator const& first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         collector& out;
         collector& phrase;
@@ -116,7 +113,7 @@ namespace quickbook
         , pre(pre)
         , post(post) {}
 
-        void operator()(iterator const& first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         collector& out;
         collector& phrase;
@@ -145,7 +142,7 @@ namespace quickbook
         , qualified_section_id(qualified_section_id)
         , section_level(section_level) {}
 
-        void operator()(iterator const& first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         collector& out;
         collector& phrase;
@@ -169,7 +166,7 @@ namespace quickbook
         , post(post)
         , macro(macro) {}
 
-        void operator()(iterator first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         collector& out;
         std::string pre;
@@ -192,7 +189,7 @@ namespace quickbook
         , list_indent(list_indent)
         , list_marks(list_marks) {}
 
-        void operator()(iterator const& first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         collector& out;
         collector& list_buffer;
@@ -213,7 +210,7 @@ namespace quickbook
         , list_indent(list_indent)
         , list_marks(list_marks) {}
 
-        void operator()(iterator first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         collector& out;
         int& list_indent;
@@ -227,7 +224,7 @@ namespace quickbook
         span(char const* name, collector& out)
         : name(name), out(out) {}
 
-        void operator()(iterator first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         char const* name;
         collector& out;
@@ -252,7 +249,7 @@ namespace quickbook
         anchor_action(collector& out)
             : out(out) {}
 
-        void operator()(iterator first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         collector& out;
     };
@@ -281,7 +278,7 @@ namespace quickbook
         space(collector& out)
             : out(out) {}
 
-        void operator()(iterator first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
         void operator()(char ch) const;
 
         collector& out;
@@ -294,7 +291,7 @@ namespace quickbook
         pre_escape_back(actions& escape_actions, std::string& save)
             : escape_actions(escape_actions), save(save) {}
 
-        void operator()(iterator const& first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         actions& escape_actions;
         std::string& save;
@@ -307,7 +304,7 @@ namespace quickbook
         post_escape_back(collector& out, actions& escape_actions, std::string& save)
             : out(out), escape_actions(escape_actions), save(save) {}
 
-        void operator()(iterator const& first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         collector& out;
         actions& escape_actions;
@@ -358,7 +355,7 @@ namespace quickbook
         {
         }
 
-        void operator()(iterator const& first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         collector& out;
         collector& phrase;
@@ -386,7 +383,7 @@ namespace quickbook
         , python_p(temp, macro, do_macro_action(temp), escape_actions)
         {}
 
-        void operator()(iterator const& first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         collector& out;
         std::string const& source_mode;
@@ -405,7 +402,7 @@ namespace quickbook
         : phrase(phrase) {}
 
         void operator()(char ch) const;
-        void operator()(iterator const& first, iterator const& /*last*/) const;
+        void operator()(iterator first, iterator /*last*/) const;
 
         collector& phrase;
     };
@@ -419,7 +416,7 @@ namespace quickbook
         : phrase(phrase) {}
 
         void operator()(char ch) const;
-        void operator()(iterator const& first, iterator const& /*last*/) const;
+        void operator()(iterator first, iterator /*last*/) const;
 
         collector& phrase;
     };
@@ -431,7 +428,7 @@ namespace quickbook
         image_action(collector& phrase)
         : phrase(phrase) {}
 
-        void operator()(iterator first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         collector& phrase;
     };
@@ -466,7 +463,7 @@ namespace quickbook
         macro_identifier_action(quickbook::actions& actions)
         : actions(actions) {}
 
-        void operator()(iterator const& first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         quickbook::actions& actions;
     };
@@ -478,7 +475,7 @@ namespace quickbook
         macro_definition_action(quickbook::actions& actions)
         : actions(actions) {}
 
-        void operator()(iterator const& first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         quickbook::actions& actions;
     };
@@ -490,7 +487,7 @@ namespace quickbook
         template_body_action(quickbook::actions& actions)
         : actions(actions) {}
 
-        void operator()(iterator const& first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         quickbook::actions& actions;
     };
@@ -502,7 +499,7 @@ namespace quickbook
         do_template_action(quickbook::actions& actions)
         : actions(actions) {}
 
-        void operator()(iterator const& first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         quickbook::actions& actions;
     };
@@ -514,7 +511,7 @@ namespace quickbook
         link_action(collector& phrase, char const* tag)
         : phrase(phrase), tag(tag) {}
 
-        void operator()(iterator first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         collector& phrase;
         char const* tag;
@@ -590,7 +587,7 @@ namespace quickbook
         , section_level(section_level)
         , qualified_section_id(qualified_section_id) {}
 
-        void operator()(iterator first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         collector& out;
         collector& phrase;
@@ -610,7 +607,7 @@ namespace quickbook
         , section_level(section_level)
         , qualified_section_id(qualified_section_id) {}
 
-        void operator()(iterator const& first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         collector& out;
         int& section_level;
@@ -623,7 +620,7 @@ namespace quickbook
         xinclude_action(collector& out_, quickbook::actions& actions_)
             : out(out_), actions(actions_) {}
 
-        void operator()(iterator const& first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         collector& out;
         quickbook::actions& actions;
@@ -636,7 +633,7 @@ namespace quickbook
         include_action(quickbook::actions& actions_)
             : actions(actions_) {}
 
-        void operator()(iterator const& first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         quickbook::actions& actions;
     };
@@ -673,7 +670,7 @@ namespace quickbook
         phrase_to_string_action(std::string& out, collector& phrase)
             : out(out) , phrase(phrase) {}
 
-        void operator()(iterator const& first, iterator const& last) const;
+        void operator()(iterator first, iterator last) const;
 
         std::string& out;
         collector& phrase;

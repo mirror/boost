@@ -17,7 +17,7 @@
 
 namespace quickbook
 {
-    actions::actions(char const* filein_, fs::path const& outdir_, std::stringstream& out_)
+    actions::actions(char const* filein_, fs::path const& outdir_, string_stream& out_)
     // header info
         : doc_type()
         , doc_title()
@@ -58,7 +58,6 @@ namespace quickbook
         , table_span(0)
         , table_header()
         , macro_id()
-        , macro_phrase_save()
         , list_marks()
         , list_indent(-1)
         , template_info()

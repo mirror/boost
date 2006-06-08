@@ -20,7 +20,7 @@ namespace quickbook
 
     struct actions
     {
-        actions(char const* filein_, fs::path const& outdir, std::stringstream& out_);
+        actions(char const* filein_, fs::path const& outdir, string_stream& out_);
 
     ///////////////////////////////////////////////////////////////////////////
     // State
@@ -84,7 +84,6 @@ namespace quickbook
         unsigned                table_span;
         std::string             table_header;
         std::string             macro_id;
-        std::string             macro_phrase_save;
         std::stack<mark_type>   list_marks;
         int                     list_indent;
         string_list             template_info;

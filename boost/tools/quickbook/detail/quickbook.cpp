@@ -21,7 +21,6 @@
 #include <stdexcept>
 #include <fstream>
 #include <iostream>
-#include <sstream>
 
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
 #pragma warning(disable:4355)
@@ -47,7 +46,7 @@ namespace quickbook
     //
     ///////////////////////////////////////////////////////////////////////////
     static int
-    load(char const* filename, file_storage& storage)
+    load(char const* filename, std::string& storage)
     {
         using std::cerr;
         using std::endl;
@@ -91,12 +90,12 @@ namespace quickbook
         using std::vector;
         using std::string;
 
-        file_storage storage;
+        std::string storage;
         int err = quickbook::load(filein_, storage);
         if (err != 0)
             return err;
 
-        typedef position_iterator<file_storage::const_iterator> iterator_type;
+        typedef position_iterator<std::string::const_iterator> iterator_type;
         iterator_type first(storage.begin(), storage.end(), filein_);
         iterator_type last(storage.end(), storage.end());
 
@@ -127,7 +126,7 @@ namespace quickbook
     }
 
     static int
-    parse(char const* filein_, fs::path const& outdir, std::stringstream& out, bool ignore_docinfo = false)
+    parse(char const* filein_, fs::path const& outdir, string_stream& out, bool ignore_docinfo = false)
     {
         actions actor(filein_, outdir, out);
         bool r = parse(filein_, actor);
@@ -153,7 +152,7 @@ namespace quickbook
             outdir = ".";
         if (pretty_print)
         {
-            std::stringstream buffer;
+            string_stream buffer;
             result = parse(filein_, outdir, buffer);
             if (result == 0)
             {
@@ -162,7 +161,7 @@ namespace quickbook
         }
         else
         {
-            std::stringstream buffer;
+            string_stream buffer;
             result = parse(filein_, outdir, buffer);
             fileout << buffer.str();
         }

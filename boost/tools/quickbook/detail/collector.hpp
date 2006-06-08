@@ -11,30 +11,96 @@
 
 #include <string>
 #include <stack>
-#include <sstream>
 #include <boost/ref.hpp>
+#include <boost/shared_ptr.hpp>
 #include <boost/noncopyable.hpp>
+#include <boost/iostreams/device/back_inserter.hpp>
+#include <boost/iostreams/filtering_stream.hpp>
 
 namespace quickbook
 {
-    struct collector : boost::noncopyable
+    struct string_stream
     {
-        collector();
-        collector(std::stringstream& out);
-        ~collector();
-        
-        std::ostream& get() const;
-        std::string str() const;
-        void str(std::string const& s);
-        void push();
-        void pop();
+        typedef boost::iostreams::filtering_ostream ostream;
+
+        string_stream();
+        string_stream(string_stream const& other);
+        string_stream& operator=(string_stream const& other);
+
+        std::string const& str() const
+        {
+            stream_ptr->flush();
+            return *buffer_ptr.get();
+        }
+    
+        std::ostream& get() const
+        {
+            return *stream_ptr.get();
+        }
+    
+        void clear()
+        {
+            buffer_ptr->clear();
+        }
+
+        void swap(std::string& other)
+        {
+            stream_ptr->flush();
+            std::swap(other, *buffer_ptr.get());
+        }
+
+        void append(std::string const& other)
+        {
+            stream_ptr->flush();
+            *buffer_ptr.get() += other;
+        }
 
     private:
 
-        std::stack<std::stringstream*> streams;
-        boost::reference_wrapper<std::stringstream> main;
-        boost::reference_wrapper<std::stringstream> top;
-        std::stringstream default_;
+        boost::shared_ptr<std::string> buffer_ptr;
+        boost::shared_ptr<ostream> stream_ptr;
+    };
+
+    struct collector : boost::noncopyable
+    {
+        collector();
+        collector(string_stream& out);
+        ~collector();
+        
+        void push();
+        void pop();
+
+        std::ostream& get() const
+        {
+            return top.get().get();
+        }
+        
+        std::string const& str() const
+        {
+            return top.get().str();
+        }
+        
+        void clear()
+        {
+            top.get().clear();
+        }
+        
+        void swap(std::string& other)
+        {
+            top.get().swap(other);
+        }
+
+        void append(std::string const& other)
+        {
+            top.get().append(other);
+        }
+
+    private:
+
+        std::stack<string_stream> streams;
+        boost::reference_wrapper<string_stream> main;
+        boost::reference_wrapper<string_stream> top;
+        string_stream default_;
     };
     
     template <typename T>
@@ -42,6 +108,13 @@ namespace quickbook
     operator<<(collector& out, T const& val)
     {
         out.get() << val;
+        return out;
+    }
+
+    inline collector& 
+    operator<<(collector& out, std::string const& val)
+    {
+        out.append(val);
         return out;
     }
 }
