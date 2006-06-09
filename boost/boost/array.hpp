@@ -30,6 +30,7 @@
 
 // Handles broken standard libraries better than <iterator>
 #include <boost/detail/iterator.hpp>
+#include <boost/throw_exception.hpp>
 #include <algorithm>
 
 // FIXES for broken compilers
@@ -212,37 +213,43 @@ namespace boost {
         {
             BOOST_ASSERT( "out of range" );
             failed_rangecheck();
+            return null_item();
         }
 
         const_reference operator[](size_type i) const
         {
             BOOST_ASSERT( "out of range" );
             failed_rangecheck();
+            return null_item();
         }
 
         // at() with range check
-        reference at(size_type i)               {   failed_rangecheck();  }
-        const_reference at(size_type i) const   {   failed_rangecheck();  }
+        reference at(size_type i)               {   failed_rangecheck(); return null_item();  }
+        const_reference at(size_type i) const   {   failed_rangecheck(); return null_item();  }
 
         // front() and back()
         reference front()
         {
             failed_rangecheck();
+            return null_item();
         }
 
         const_reference front() const
         {
             failed_rangecheck();
+            return null_item();
         }
 
         reference back()
         {
             failed_rangecheck();
+            return null_item();
         }
 
         const_reference back() const
         {
             failed_rangecheck();
+            return null_item();
         }
 
         // size is constant
@@ -272,8 +279,19 @@ namespace boost {
 
         // check range (may be private because it is static)
         static void failed_rangecheck () {
-                throw std::range_error("attempt to access element of an empty array");
+                std::range_error e("attempt to access element of an empty array");
+                boost::throw_exception(e);
             }
+        static reference null_item()
+        {
+           //
+           // This function must exist to allow our various interfaces to
+           // actually compile, however it will never be called, because
+           // an exception will always be thrown before we get here.
+           //
+           static T placeholder;
+           return placeholder;
+        }
     };
 #endif
 
