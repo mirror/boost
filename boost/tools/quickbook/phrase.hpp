@@ -117,12 +117,12 @@ namespace quickbook
                 template_ =
                     (
                         (eps_p(punct_p) 
-                            >> actions.templates
+                            >> actions.templates.scope
                         )                               [push_back_a(actions.template_info)]
                         >> !template_args
                     )
                 |   (
-                        (actions.templates 
+                        (actions.templates.scope
                             >> eps_p
                         )                               [push_back_a(actions.template_info)]
                         >> !(hard_space 

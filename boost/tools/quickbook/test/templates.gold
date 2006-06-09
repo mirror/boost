@@ -63,5 +63,8 @@
     <para>
       x<!--quickbook-escape-prefix--><superscript><!--quickbook-escape-postfix-->2<!--quickbook-escape-prefix--></superscript><!--quickbook-escape-postfix-->
     </para>
+    <para>
+      got a banana?
+    </para>
   </section>
 </article>

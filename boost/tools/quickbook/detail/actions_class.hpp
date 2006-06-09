@@ -60,7 +60,6 @@ namespace quickbook
         fs::path                filename;
         fs::path                outdir;
         string_symbols          macro;
-        template_symbols        templates;
         int                     section_level;
         std::string             section_id;
         std::string             qualified_section_id;
@@ -70,7 +69,6 @@ namespace quickbook
             fs::path   
           , fs::path   
           , string_symbols
-          , template_symbols
           , int        
           , std::string
           , std::string
@@ -88,6 +86,7 @@ namespace quickbook
         int                     list_indent;
         string_list             template_info;
         int                     template_depth;
+        template_stack          templates;
 
     // push/pop the states and the streams
         void push();

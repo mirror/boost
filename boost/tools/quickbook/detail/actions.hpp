@@ -22,6 +22,7 @@
 #include <boost/tuple/tuple.hpp>
 #include "../syntax_highlight.hpp"
 #include "./collector.hpp"
+#include "./template_stack.hpp"
 #include "./utils.hpp"
 
 #ifdef BOOST_MSVC
@@ -34,22 +35,6 @@ namespace quickbook
     namespace fs = boost::filesystem;
     typedef position_iterator<std::string::const_iterator> iterator;
     typedef symbols<std::string> string_symbols;
-
-    //  template symbols are stored as follows:
-    //
-    //      template name
-    //      template param name[0]
-    //      template param name[1]
-    //      ... 
-    //      template param name[N]
-    //      template body
-
-    typedef boost::tuple<
-        std::vector<std::string>
-      , boost::spirit::file_position
-    > template_symbol;
-
-    typedef symbols<template_symbol> template_symbols;
 
     struct actions;
     extern tm* current_time; // the current time

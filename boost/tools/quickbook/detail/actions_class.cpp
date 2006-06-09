@@ -47,7 +47,6 @@ namespace quickbook
         , filename(fs::complete(fs::path(filein_, fs::native)))
         , outdir(outdir_)
         , macro()
-        , templates()
         , section_level(0)
         , section_id()
         , qualified_section_id()
@@ -62,6 +61,7 @@ namespace quickbook
         , list_indent(-1)
         , template_info()
         , template_depth(0)
+        , templates()
 
     // actions
         , error()
@@ -183,7 +183,6 @@ namespace quickbook
                 filename
               , outdir
               , macro
-              , templates
               , section_level
               , section_id
               , qualified_section_id
@@ -195,6 +194,7 @@ namespace quickbook
         phrase.push();
         temp.push();
         list_buffer.push();
+        templates.push();
     }   
 
     void actions::pop()
@@ -203,7 +203,6 @@ namespace quickbook
             filename
           , outdir
           , macro
-          , templates
           , section_level
           , section_id
           , qualified_section_id
@@ -215,5 +214,6 @@ namespace quickbook
         phrase.pop();
         temp.pop();
         list_buffer.pop();
+        templates.pop();
     }
 }

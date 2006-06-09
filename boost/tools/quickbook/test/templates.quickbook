@@ -45,10 +45,10 @@ This is a complete paragraph. [bar] [bar] [bar] [bar] [bar]
 
 [foo3 madagascar]
 
-[template foo4[x] zoom [x]]
-[template foo5[x] [x] zoom]
+[template foo5[x] zoom [x]]
+[template foo6[x] [x] zoom]
 
-[foo5[foo4 peanut]]
+[foo6[foo5 peanut]]
 
 [template kinda_weird[x y] [x] [y]]
 
@@ -85,5 +85,12 @@ This is a complete paragraph. [bar] [bar] [bar] [bar] [bar]
 [pow [alpha] 2]
 
 x[super 2]
+
+[/-------------------------------- Some more ]
+
+[template banana got a banana?]
+[template plantation[bananarama] [bananarama]]
+
+[plantation [banana]]
 
 [endsect]
