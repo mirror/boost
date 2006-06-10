@@ -185,7 +185,7 @@ public:
     // private constructor to inhibit any existence other than the 
     // static one.  Note GCC doesn't permit constructor to be private
     BOOST_DLLEXPORT pointer_iserializer() BOOST_USED;
-    friend class dynamically_initialized<pointer_iserializer<Archive,T> >;
+    friend struct dynamically_initialized<pointer_iserializer<Archive,T> >;
 public:
     // at least one compiler (CW) seems to require that serialize_adl
     // be explicitly instantiated. Still under investigation. 

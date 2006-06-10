@@ -174,7 +174,7 @@ public:
     // private constructor to inhibit any existence other than the 
     // static one.  Note GCC doesn't permit constructor to be private
     explicit BOOST_DLLEXPORT pointer_oserializer() BOOST_USED;
-    friend class dynamically_initialized<pointer_oserializer<Archive,T> >;
+    friend struct dynamically_initialized<pointer_oserializer<Archive,T> >;
 public:
     #if !defined(__BORLANDC__)
     // at least one compiler (CW) seems to require that serialize_adl
