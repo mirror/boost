@@ -15,6 +15,7 @@
 #endif
 
 #include <boost/functional/detail/float_functions.hpp>
+#include <boost/integer/static_log2.hpp>
 #include <boost/limits.hpp>
 #include <boost/assert.hpp>
 #include <errno.h>
@@ -55,7 +56,8 @@ namespace boost
             std::size_t seed = 0;
 
             std::size_t const length
-                = (std::numeric_limits<T>::digits +
+                = (std::numeric_limits<T>::digits *
+                        boost::static_log2<std::numeric_limits<T>::radix>::value +
                         std::numeric_limits<int>::digits - 1)
                 / std::numeric_limits<int>::digits;
 
