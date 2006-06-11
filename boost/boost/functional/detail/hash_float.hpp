@@ -18,7 +18,6 @@
 #include <boost/integer/static_log2.hpp>
 #include <boost/limits.hpp>
 #include <boost/assert.hpp>
-#include <errno.h>
 
 // Don't use fpclassify or _fpclass for stlport.
 #if !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
@@ -49,22 +48,34 @@ namespace boost
         inline std::size_t float_hash_impl(T v)
         {
             int exp = 0;
-            errno = 0;
-            v = boost::hash_detail::call_frexp(v, &exp);
-            if(errno) return 0;
 
-            std::size_t seed = 0;
+            // The result of frexp is always between 0.5 and 1, so its
+            // top bit will always be 1. Subtract by 0.5 to remove that.
+            if(v >= 0) {
+                v = boost::hash_detail::call_frexp(v, &exp) - 0.5;
+            }
+            else {
+                v = -boost::hash_detail::call_frexp(v, &exp) - 0.5;
+                exp = ~exp;
+            }
 
+            BOOST_ASSERT(0 <= v && v < 0.5);
+
+            v = boost::hash_detail::call_ldexp(v,
+                    std::numeric_limits<std::size_t>::digits + 1);
+            std::size_t seed = static_cast<std::size_t>(v);
+            v -= seed;
+
+            // ceiling(digits(T) * log2(radix(T))/ digits(size_t)) - 1;
             std::size_t const length
                 = (std::numeric_limits<T>::digits *
-                        boost::static_log2<std::numeric_limits<T>::radix>::value +
-                        std::numeric_limits<int>::digits - 1)
-                / std::numeric_limits<int>::digits;
+                        boost::static_log2<std::numeric_limits<T>::radix>::value - 1)
+                / std::numeric_limits<std::size_t>::digits;
 
             for(std::size_t i = 0; i < length; ++i)
             {
-                v = boost::hash_detail::call_ldexp(v, std::numeric_limits<int>::digits);
-                int const part = static_cast<int>(v);
+                v = boost::hash_detail::call_ldexp(v, std::numeric_limits<std::size_t>::digits);
+                std::size_t part = static_cast<std::size_t>(v);
                 v -= part;
                 hash_float_combine(seed, part);
             }
@@ -116,7 +127,7 @@ namespace boost
                 return 0;
             }
 #else
-            return float_hash_impl(v);
+            return v == 0 ? 0 : float_hash_impl(v);
 #endif
         }
     }
