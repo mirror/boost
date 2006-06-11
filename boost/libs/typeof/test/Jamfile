@@ -50,6 +50,9 @@ test-suite "typeof"
 	[ compile function.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : function_native ]
 	[ compile function.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : function_emulation ]
 
+	[ compile function_binding.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : function_binding_native ]
+	[ compile function_binding.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : function_binding_emulation ]
+
 	[ compile function_ptr.cpp : <define>BOOST_TYPEOF_NATIVE special-requirements : function_ptr_native ]
 	[ compile function_ptr.cpp : <define>BOOST_TYPEOF_COMPLIANT special-requirements : function_ptr_emulation ]
 
