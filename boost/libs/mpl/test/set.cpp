@@ -175,7 +175,7 @@ void test()
     BOOST_MPL_ASSERT_NOT(( is_same<BOOST_DEDUCED_TYPENAME find<S,long>::type,not_found> ));
     BOOST_MPL_ASSERT_NOT(( is_same<BOOST_DEDUCED_TYPENAME find<S,char>::type,not_found> ));
     BOOST_MPL_ASSERT(( is_same<BOOST_DEDUCED_TYPENAME find<S,char*>::type,not_found> ));
-};
+}
 
 MPL_TEST_CASE()
 {
