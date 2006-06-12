@@ -24,7 +24,11 @@ struct maybe : maybe_base
         is_reference<T>
       , T
       , typename add_reference<
+# if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+            T const
+# else 
             typename add_const<T>::type
+# endif 
         >::type
     >::type reference;
 
