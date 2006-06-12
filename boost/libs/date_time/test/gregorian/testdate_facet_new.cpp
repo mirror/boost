@@ -112,8 +112,11 @@ int main() {
     {
       date_facet* datefacet = new date_facet();
       datefacet->format(date_facet::standard_format_specifier);
+      std::cout.imbue(std::locale(std::locale::classic(), datefacet));
       teststreaming("default classic date", d, std::string("10/13/04"),
                     std::locale(std::locale::classic(), datefacet));
+      std::cout << "default classic date output: " << d << std::endl;
+
     }
     {
       date_facet* datefacet = new date_facet();
