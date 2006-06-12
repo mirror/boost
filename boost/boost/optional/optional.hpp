@@ -133,7 +133,11 @@ class optional_base : public optional_tag
 {
   private :
 
-    typedef BOOST_DEDUCED_TYPENAME ::boost::detail::make_reference_content<T>::type internal_type ;
+    typedef
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+    BOOST_DEDUCED_TYPENAME
+#endif 
+    ::boost::detail::make_reference_content<T>::type internal_type ;
 
     typedef aligned_storage<internal_type> storage_type ;
 
