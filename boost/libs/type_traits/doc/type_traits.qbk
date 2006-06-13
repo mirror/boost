@@ -1,7 +1,8 @@
 [library Boost.TypeTraits
-    [copyright 2000 2005 Adobe Systems Inc, David Abrahams, Steve Cleary, 
+    [copyright 2000 2006 Adobe Systems Inc, David Abrahams, Steve Cleary, 
     Beman Dawes, Aleksey Gurtovoy, Howard Hinnant, Jesse Jones, Mat Marcus, 
-    Itay Maman, John Maddock, Thorsten Ottosen, Robert Ramey and Jeremy Siek]
+    Itay Maman, John Maddock, Alexander Nasonov, Thorsten Ottosen,
+    Robert Ramey and Jeremy Siek]
     [purpose Meta-programming support library]
     [license
         Distributed under the Boost Software License, Version 1.0.
@@ -92,6 +93,10 @@
 [def __aligned_storage [link boost_typetraits.aligned_storage aligned_storage]]
 
 [def __function_traits [link boost_typetraits.function_traits function_traits]]
+
+[def __promote [link boost_typetraits.promote promote]]
+[def __integral_promotion [link boost_typetraits.integral_promotion integral_promotion]]
+[def __floating_point_promotion [link boost_typetraits.floating_point_promotion floating_point_promotion]]
 
 [section:intro Introduction]
 
@@ -618,6 +623,15 @@ result of applying the transformation to the template argument `T`.
    struct __add_volatile;
 
    template <class T>
+   struct __floating_point_promotion;
+
+   template <class T>
+   struct __integral_promotion;
+
+   template <class T>
+   struct __promote;
+
+   template <class T>
    struct __remove_all_extents;
 
    template <class T>
@@ -1017,6 +1031,21 @@ different types
 
 [endsect]
 
+[section:to_double Convert Numeric Types and Enums to double]
+
+Demonstrates a conversion of
+[@../../libs/numeric/conversion/doc/definitions.html#numtypes Numeric Types]
+and enum types to double:
+
+    template<class T>
+    inline double to_double(T const& value)
+    {
+        typedef typename boost::promote<T>::type promoted;
+        return boost::numeric::converter<double,promoted>::convert(value);
+    }
+
+[endsect]
+
 [endsect]
 
 [section:reference Alphabetical Reference]
@@ -1268,6 +1297,36 @@ expression that evaluates to /2/.]
 expression that evaluates to /0/.]
 
 [:`extent<T>::value_type` is the type `std::size_t`.]
+
+[endsect]
+
+[section:floating_point_promotion floating_point_promotion]
+
+   template <class T>
+   struct floating_point_promotion
+   {
+      typedef __below type;
+   };
+  
+__type If floating point promotion can be applied to an rvalue of type `T`,
+then applies floating point promotion to `T` and keeps cv-qualifiers of `T`,
+otherwise leaves `T` unchanged.
+
+__std_ref 4.6.
+
+__header ` #include <boost/type_traits/floating_point_promotion.hpp>` or ` #include <boost/type_traits.hpp>`
+
+[table Examples
+
+[ [Expression] [Result Type]]
+
+[[`floating_point_promotion<float const>::type`][`double const`]]
+
+[[`floating_point_promotion<float&>::type`][`float&`]]
+
+[[`floating_point_promotion<short>::type`][`short`]]
+
+]
 
 [endsect]
 
@@ -1579,6 +1638,36 @@ Class template `integral_constant` is the common base class for all the value-ba
 type traits.  The two typedef's `true_type` and `false_type` are provided for 
 convenience: most of the value traits are Boolean properties and so will inherit from
 one of these.
+
+[endsect]
+
+[section:integral_promotion integral_promotion]
+
+   template <class T>
+   struct integral_promotion
+   {
+      typedef __below type;
+   };
+  
+__type If integral promotion can be applied to an rvalue of type `T`, then
+applies integral promotion to `T` and keeps cv-qualifiers of `T`,
+otherwise leaves `T` unchanged.
+
+__std_ref 4.5 except 4.5/3 (integral bit-field).
+
+__header ` #include <boost/type_traits/integral_promotion.hpp>` or ` #include <boost/type_traits.hpp>`
+
+[table Examples
+
+[ [Expression] [Result Type]]
+
+[[`integral_promotion<short const>::type`][`int const`]]
+
+[[`integral_promotion<short&>::type`][`short&`]]
+
+[[`integral_promotion<enum std::float_round_style>::type`][`int`]]
+
+]
 
 [endsect]
 
@@ -2517,6 +2606,37 @@ expression that evaluates to /false/: the volatile qualifier is not
 at the top level in this case.]
 
 [:`is_volatile<T>::value_type` is the type `bool`.]
+
+[endsect]
+
+[section:promote promote]
+
+   template <class T>
+   struct promote
+   {
+      typedef __below type;
+   };
+  
+__type If integral or floating point promotion can be applied to an rvalue
+of type `T`, then applies integral and floating point promotions to `T` and
+keeps cv-qualifiers of `T`, otherwise leaves `T` unchanged. See also
+__integral_promotion and __floating_point_promotion.
+
+__std_ref 4.5 except 4.5/3 (integral bit-field) and 4.6.
+
+__header ` #include <boost/type_traits/promote.hpp>` or ` #include <boost/type_traits.hpp>`
+
+[table Examples
+
+[ [Expression] [Result Type]]
+
+[[`promote<short volatile>::type`][`int volatile`]]
+
+[[`promote<float const>::type`][`double const`]]
+
+[[`promote<short&>::type`][`short&`]]
+
+]
 
 [endsect]
 
