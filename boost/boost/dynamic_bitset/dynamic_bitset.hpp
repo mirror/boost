@@ -150,7 +150,7 @@ public:
     :m_bits(alloc),
      m_num_bits(0)
     {
-      init_from_string(s, pos, n, num_bits, alloc);
+      init_from_string(s, pos, n, num_bits /*gps, alloc*/);
     }
 
     template <typename CharT, typename Traits, typename Alloc>
@@ -162,7 +162,7 @@ public:
      m_num_bits(0)
     {
       init_from_string(s, pos, (std::basic_string<CharT, Traits, Alloc>::npos),
-                       npos, Allocator());
+                       npos/*, Allocator()*/);
     }
 
     // The first bit in *first is the least significant bit, and the
@@ -327,8 +327,8 @@ private:
     void init_from_string(const std::basic_string<CharT, Traits, Alloc>& s,
         typename std::basic_string<CharT, Traits, Alloc>::size_type pos,
         typename std::basic_string<CharT, Traits, Alloc>::size_type n,
-        size_type num_bits,
-        const Allocator& alloc)
+        size_type num_bits/*,
+        const Allocator& alloc gps */)
     {
         assert(pos <= s.size());
 
@@ -907,14 +907,14 @@ dynamic_bitset<Block, Allocator>&
 dynamic_bitset<Block, Allocator>::reset(size_type pos)
 {
     assert(pos < m_num_bits);
-    #if BOOST_WORKAROUND(__MWERKS__, <= 0x3003) // 8.x
+#if defined __MWERKS__ && BOOST_WORKAROUND(__MWERKS__, <= 0x3003) // 8.x
     // CodeWarrior 8 generates incorrect code when the &=~ is compiled,
     // use the |^ variation instead.. <grafik>
     m_bits[block_index(pos)] |= bit_mask(pos);
     m_bits[block_index(pos)] ^= bit_mask(pos);
-    #else
+#else
     m_bits[block_index(pos)] &= ~bit_mask(pos);
-    #endif
+#endif
     return *this;
 }
 
