@@ -20,14 +20,14 @@
 #endif
 
 #include "bitset_test.hpp"
-#include "boost/dynamic_bitset.hpp"
+#include "boost/dynamic_bitset/dynamic_bitset.hpp"
 #include "boost/detail/workaround.hpp"
 
 
 // Codewarrior 8.3 for Win fails without this.
 // Thanks Howard Hinnant ;)
-#if BOOST_WORKAROUND(__MWERKS__, <= 0x3003) // 8.x
-#pragma parse_func_templ off
+#if defined __MWERKS__ && BOOST_WORKAROUND(__MWERKS__, <= 0x3003) // 8.x
+# pragma parse_func_templ off
 #endif
 
 
@@ -42,9 +42,15 @@ std::wstring widen_string( const std::string & str,
   std::wstring result;
   const std::string::size_type len = str.length();
   if(len != 0) {
+
+    typedef std::ctype<wchar_t> ct_type;
+    typedef std::wstring::traits_type tr_type;
+    const ct_type & ct = BOOST_USE_FACET(ct_type, loc);
+
     result.resize(len);
-    BOOST_USE_FACET(std::ctype<wchar_t>, loc)
-                  .widen(&str[0], 1 + &str[len-1], &result[0]);
+    for (std::size_t i = 0; i < len; ++i)
+        tr_type::assign(result[i], ct.widen(str[i]));
+
   }
   return result;
 }
