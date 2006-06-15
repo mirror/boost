@@ -39,7 +39,7 @@ struct X : Xbase
         )
     )
 
-    BOOST_PARAMETER_MEMBER_FUNCTION((int), f, tag,
+    BOOST_PARAMETER_BASIC_MEMBER_FUNCTION((int), f, tag,
         (required
          (x, *)
          (y, *)
@@ -52,7 +52,7 @@ struct X : Xbase
         return args[x] + args[y] + args[z | 0];
     }
 
-    BOOST_PARAMETER_MEMBER_FUNCTION((std::string), g, tag,
+    BOOST_PARAMETER_BASIC_MEMBER_FUNCTION((std::string), g, tag,
         (optional
          (x, *)
          (y, *)
