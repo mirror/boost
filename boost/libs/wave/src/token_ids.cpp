@@ -204,6 +204,8 @@ static char const *tok_names[] = {
     /* 419 */   "MSEXT_ASM",
     /* 420 */   "MSEXT_REGION",
     /* 421 */   "MSEXT_ENDREGION",
+    
+    /* 422 */   "IMPORT",
     };   
      
     unsigned int id = BASEID_FROM_TOKEN(tokid)-T_FIRST_TOKEN;
@@ -388,6 +390,8 @@ static char const *tok_names[] = {
     /* 419 */   "__asm",
     /* 420 */   "#region",
     /* 421 */   "#endregion",
+
+    /* 422 */   "import",
     };   
      
     unsigned int id = BASEID_FROM_TOKEN(tokid)-T_FIRST_TOKEN;

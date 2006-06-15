@@ -135,6 +135,12 @@ lexer<IteratorT, PositionT>::lexer(IteratorT const &first,
     scanner.act_in_c99_mode = boost::wave::need_c99(language);
 #endif
 
+#if BOOST_WAVE_SUPPORT_IMPORT_KEYWORD != 0
+    scanner.enable_import_keyword = 1;
+#else
+    scanner.enable_import_keyword = 0;
+#endif
+
     scanner.detect_pp_numbers = boost::wave::need_prefer_pp_numbers(language);
 }
 

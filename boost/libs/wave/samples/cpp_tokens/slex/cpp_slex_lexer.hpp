@@ -285,6 +285,9 @@ lexer<IteratorT, PositionT>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(FRIEND, "friend"),
     TOKEN_DATA(GOTO, "goto"),
     TOKEN_DATA(IF, "if"),
+#if BOOST_WAVE_SUPPORT_IMPORT_KEYWORD != 0
+    TOKEN_DATA(IMPORT, "import"),
+#endif
     TOKEN_DATA(INLINE, "inline"),
     TOKEN_DATA(INT, "int"),
     TOKEN_DATA(LONG, "long"),

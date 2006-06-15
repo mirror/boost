@@ -55,6 +55,7 @@ typedef struct Scanner {
     int enable_ms_extensions;   /* enable MS extensions */
     int act_in_c99_mode;        /* lexer works in C99 mode */
     int detect_pp_numbers;      /* lexer should prefer to detect pp-numbers */
+    int enable_import_keyword;  /* recognize import as a keyword */
 } Scanner;
 
 ///////////////////////////////////////////////////////////////////////////////

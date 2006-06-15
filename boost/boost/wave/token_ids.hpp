@@ -283,7 +283,10 @@ enum token_id {
 
     T_MSEXT_PP_REGION    = TOKEN_FROM_ID(420, PPTokenType),
     T_MSEXT_PP_ENDREGION = TOKEN_FROM_ID(421, PPTokenType),
-    
+
+// import is needed to be a keyword for the C++ module Standards proposal
+    T_IMPORT       = TOKEN_FROM_ID(422, KeywordTokenType),
+
     T_LAST_TOKEN_ID,
     T_LAST_TOKEN = ID_FROM_TOKEN(T_LAST_TOKEN_ID),
     

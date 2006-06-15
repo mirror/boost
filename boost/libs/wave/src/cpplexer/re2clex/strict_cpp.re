@@ -69,6 +69,7 @@ NonDigit           = [a-zA-Z_] | UniversalChar;
     "friend"        { BOOST_WAVE_RET(T_FRIEND); }
     "goto"          { BOOST_WAVE_RET(T_GOTO); }
     "if"            { BOOST_WAVE_RET(T_IF); }
+    "import"        { BOOST_WAVE_RET(s->enable_import_keyword ? T_IMPORT : T_IDENTIFIER); }
     "inline"        { BOOST_WAVE_RET(T_INLINE); }
     "int"           { BOOST_WAVE_RET(T_INT); }
     "long"          { BOOST_WAVE_RET(T_LONG); }

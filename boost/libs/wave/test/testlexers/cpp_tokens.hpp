@@ -134,6 +134,9 @@ lexem const lexems[] =
     { "friend", boost::wave::T_FRIEND },
     { "goto", boost::wave::T_GOTO },
     { "if", boost::wave::T_IF },
+#if BOOST_WAVE_SUPPORT_IMPORT_KEYWORD != 0
+    { "import", boost::wave::T_IMPORT},
+#endif
     { "inline", boost::wave::T_INLINE },
     { "int", boost::wave::T_INT },
     { "long", boost::wave::T_LONG },

@@ -20,7 +20,7 @@ namespace boost { namespace wave {
     ///////////////////////////////////////////////////////////////////////////
     //  Call this function to test the configuration of the calling application
     //  against the configuration of the linked library.
-    bool 
+    BOOST_WAVE_DECL bool 
     test_configuration(unsigned int config, char const* pragma_keyword, 
         char const* string_type_str)
     {

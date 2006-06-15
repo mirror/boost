@@ -32,7 +32,11 @@ CHANGELOG
   compile time constant to something not equal to zero. By default this 
   constant will be defined to zero for Boost V1.35.0 and newer, switching to
   the new interface by default.
-
+- Added optional support for the import keyword (needed for the C++ module
+  proposal). The identifier import will be recognized as a keyword, if 
+  the compile time constant BOOST_WAVE_SUPPORT_IMPORT_KEYWORD is defined to 
+  something not equal zero.
+  
 Boost V1.34.0
 - Wave Version 1.2.4
 - Added the possibility to explicitely enable/disable the generation of #line 
@@ -140,6 +144,8 @@ Boost V1.34.0
   usage of the boolean keywords as identifiers during the preprocessing. Added
   a corresponding test case (t_9_017.cpp). Thanks to Andreas Sæbjørnsen for
   reporting.
+- Corrected the Jamfile[.v2] of the waveidl sample to refer to correct file 
+  names (thanks to Juergen Hunold for submitting a patch).
 
 Sat Feb 18 2005
 - Version 1.2.3

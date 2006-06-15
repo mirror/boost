@@ -43,13 +43,22 @@ public:
     //  directive was encountered, but before the corresponding action is 
     //  executed.
     //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
     //  The parameter 'directive' is a reference to the token holding the 
     //  preprocessing directive.
     //
     ///////////////////////////////////////////////////////////////////////////
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     template <typename TokenT>
     void
     found_directive(TokenT const& directive)
+#else
+    template <typename ContextT, typename TokenT>
+    void
+    found_directive(ContextT const& ctx, TokenT const& directive)
+#endif
     {
         // print the commented conditional directives
         using namespace boost::wave;
@@ -85,8 +94,8 @@ public:
     //  The parameter 'expression' holds the non-expanded token sequence
     //  comprising the evaluated expression.
     //
-    //  The parameter 'expression_value' contains the result of the evaluation 
-    //  of the expression in the current preprocessing context.
+    //  The parameter expression_value contains the result of the evaluation of
+    //  the expression in the current preprocessing context.
     //
     //  The return value defines, whether the given expression has to be 
     //  evaluated again, allowing to decide which of the conditional branches
@@ -94,10 +103,18 @@ public:
     //  to force the expression to be re-evaluated.
     //
     ///////////////////////////////////////////////////////////////////////////
-    template <typename ContextT, typename ContainerT>
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
+    template <typename ContainerT>
+    bool
+    evaluated_conditional_expression(
+        ContainerT const& expression, bool expression_value)
+#else
+    template <typename ContextT, typename TokenT, typename ContainerT>
     bool
     evaluated_conditional_expression(ContextT const &ctx, 
-        ContainerT const& expression, bool expression_value)
+        TokenT const& directive, ContainerT const& expression, 
+        bool expression_value)
+#endif
     {
         // print the conditional expressions
         std::cout << boost::wave::util::impl::as_string(expression) << std::endl;
@@ -111,12 +128,21 @@ public:
     //  skipped due to a false preprocessor condition (code fragments to be
     //  skipped inside the not evaluated conditional #if/#else/#endif branches).
     //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
     //  The parameter 'token' refers to the token to be skipped.
-    //  
+    //
     ///////////////////////////////////////////////////////////////////////////
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     template <typename TokenT>
     void
     skipped_token(TokenT const& token)
+#else
+    template <typename ContextT, typename TokenT>
+    void
+    skipped_token(ContextT const& ctx, TokenT const& token)
+#endif
     {
         // prepend a comment at the beginning of all skipped lines
         using namespace boost::wave;

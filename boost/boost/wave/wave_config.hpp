@@ -336,6 +336,16 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+//  Decide, whether the import keyword is recognized as such
+//
+//  If this is defined to something not equal to zero the Wave will recognize
+//  import as a keyword (T_IMPORT token id)
+//
+#if !defined(BOOST_WAVE_SUPPORT_IMPORT_KEYWORD)
+#define BOOST_WAVE_SUPPORT_IMPORT_KEYWORD  0
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
 //  configure Boost.Pool thread support (for now: no thread support at all)
 #if !defined(BOOST_NO_MT)
 #define BOOST_NO_MT
