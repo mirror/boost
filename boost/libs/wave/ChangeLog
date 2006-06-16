@@ -146,7 +146,9 @@ Boost V1.34.0
   reporting.
 - Corrected the Jamfile[.v2] of the waveidl sample to refer to correct file 
   names (thanks to Juergen Hunold for submitting a patch).
-
+- Fixed a bug which prevented the main iterator from returning a T_EOF token 
+  at the overall end of the input. 
+  
 Sat Feb 18 2005
 - Version 1.2.3
 - Added a missing throw() specification to the function 

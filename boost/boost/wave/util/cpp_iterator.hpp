@@ -654,6 +654,9 @@ bool returned_from_include_file = returned_from_include();
         } while ((iter_ctx->first != iter_ctx->last) || 
                  (returned_from_include_file = returned_from_include()));
     }
+    else {
+        act_token = eof;            // this is the last token
+    }
     
 //    if (returned_from_include_file) {
 //    // if there was an '#include' statement on the last line of the main file 
@@ -674,7 +677,7 @@ bool returned_from_include_file = returned_from_include();
     }
 
     whitespace.shift_tokens(T_EOF);     // whitespace controller
-    return act_token = eof;             // return eof token
+    return act_token;                   // return eof token
 }
 
 ///////////////////////////////////////////////////////////////////////////////
