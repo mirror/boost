@@ -107,9 +107,16 @@ struct trace_include_files
 {
     trace_include_files(set<string> &files_) : files(files_) {}
     
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     void 
     opened_include_file(string const &relname, string const &filename, 
         std::size_t include_depth, bool is_system_include) 
+#else
+    template <typename ContextT>
+    void 
+    opened_include_file(ContextT const& ctx, std::string const& relname, 
+        std::string const& absname, bool is_system_include) 
+#endif
     {
         set<string>::iterator it = files.find(filename);
         if (it == files.end()) {

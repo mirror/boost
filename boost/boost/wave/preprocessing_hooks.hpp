@@ -58,7 +58,7 @@ struct default_preprocessing_hooks
     //
     ///////////////////////////////////////////////////////////////////////////
 
-#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     // old signature
     template <typename TokenT, typename ContainerT>
     void expanding_function_like_macro(
@@ -94,7 +94,7 @@ struct default_preprocessing_hooks
     //  The parameter 'macrocall' marks the position, where this macro invoked.
     //
     ///////////////////////////////////////////////////////////////////////////
-#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     // old signature
     template <typename TokenT, typename ContainerT>
     void expanding_object_like_macro(TokenT const& macro, 
@@ -120,7 +120,7 @@ struct default_preprocessing_hooks
     //  result of the macro expansion.
     //
     ///////////////////////////////////////////////////////////////////////////
-#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     // old signature
     template <typename ContainerT>
     void expanded_macro(ContainerT const& result)
@@ -144,7 +144,7 @@ struct default_preprocessing_hooks
     //  result of the rescanning.
     //
     ///////////////////////////////////////////////////////////////////////////
-#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     // old signature
     template <typename ContainerT>
     void rescanned_macro(ContainerT const& result)
@@ -176,7 +176,7 @@ struct default_preprocessing_hooks
     //  preprocessing constant was defined to something != 0.
     //
     ///////////////////////////////////////////////////////////////////////////
-#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     // old signature
     void 
     found_include_directive(std::string const& filename, bool include_next) 
@@ -209,7 +209,7 @@ struct default_preprocessing_hooks
     //  found as a result of a #include <...> directive.
     //  
     ///////////////////////////////////////////////////////////////////////////
-#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     // old signature
     void 
     opened_include_file(std::string const& relname, std::string const& absname, 
@@ -233,7 +233,7 @@ struct default_preprocessing_hooks
     //  instantiating the preprocessing iterators by the user.
     //
     ///////////////////////////////////////////////////////////////////////////
-#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     // old signature
     void
     returning_from_include_file() 
@@ -450,7 +450,7 @@ struct default_preprocessing_hooks
 
     ///////////////////////////////////////////////////////////////////////////
     //
-    //  The function 'may_skip_whitespace' is called, will be called by the 
+    //  The function 'may_skip_whitespace' will be called by the 
     //  library, whenever a token is about to be returned to the calling 
     //  application. 
     //
@@ -476,6 +476,42 @@ struct default_preprocessing_hooks
     template <typename ContextT, typename TokenT>
     bool
     may_skip_whitespace(ContextT const& ctx, TokenT& token, bool& skipped_newline)
+    { return false; }
+
+#if BOOST_WAVE_SUPPORT_WARNING_DIRECTIVE != 0
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //  The function 'found_warning_directive' is called, will be called by the 
+    //  library, whenever a #warning directive is found.
+    //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
+    //  The parameter 'message' references the argument token sequence of the
+    //  encountered #warning directive.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename ContextT, typename ContainerT>
+    bool
+    found_warning_directive(ContextT const& ctx, ContainerT const& message)
+    { return false; }
+#endif
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //  The function 'found_error_directive' is called, will be called by the 
+    //  library, whenever a #error directive is found.
+    //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
+    //  The parameter 'message' references the argument token sequence of the
+    //  encountered #error directive.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename ContextT, typename ContainerT>
+    bool
+    found_error_directive(ContextT const& ctx, ContainerT const& message)
     { return false; }
 };
 

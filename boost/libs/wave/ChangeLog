@@ -36,6 +36,9 @@ CHANGELOG
   proposal). The identifier import will be recognized as a keyword, if 
   the compile time constant BOOST_WAVE_SUPPORT_IMPORT_KEYWORD is defined to 
   something not equal zero.
+- Added new preprocessing hook functions: found_error_directive() and 
+  found_warning_directive() to be called when #error/#warning directives are
+  encountered.
   
 Boost V1.34.0
 - Wave Version 1.2.4

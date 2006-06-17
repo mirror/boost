@@ -1860,16 +1860,19 @@ token_sequence_type toexpand;
     typename token_sequence_type::iterator begin2 = toexpand.begin();
     ctx.expand_whole_tokensequence(begin2, toexpand.end(), expanded, 
         false);
+    if (!ctx.get_hooks().found_error_directive(ctx, toexpand))
 #else
 // simply copy the body of this #error message to the issued diagnostic
 // message
     std::copy(first, make_ref_transform_iterator(end, get_value), 
         std::inserter(expanded, expanded.end()));
+    if (!ctx.get_hooks().found_error_directive(ctx, expanded))
 #endif 
-
-// report the corresponding error
-    BOOST_WAVE_THROW(preprocess_exception, error_directive, 
-        boost::wave::util::impl::as_string(expanded).c_str(), act_pos);
+    {
+    // report the corresponding error
+        BOOST_WAVE_THROW(preprocess_exception, error_directive, 
+            boost::wave::util::impl::as_string(expanded).c_str(), act_pos);
+    }
 }
 
 #if BOOST_WAVE_SUPPORT_WARNING_DIRECTIVE != 0
@@ -1905,16 +1908,19 @@ token_sequence_type toexpand;
     typename token_sequence_type::iterator begin2 = toexpand.begin();
     ctx.expand_whole_tokensequence(begin2, toexpand.end(), expanded, 
         false);
+    if (!ctx.get_hooks().found_warning_directive(ctx, toexpand))
 #else
 // simply copy the body of this #warning message to the issued diagnostic
 // message
     std::copy(first, make_ref_transform_iterator(end, get_value), 
         std::inserter(expanded, expanded.end()));
+    if (!ctx.get_hooks().found_warning_directive(ctx, expanded))
 #endif 
-
-// report the corresponding error
-    BOOST_WAVE_THROW(preprocess_exception, warning_directive, 
-        boost::wave::util::impl::as_string(expanded).c_str(), act_pos);
+    {
+    // report the corresponding error
+        BOOST_WAVE_THROW(preprocess_exception, warning_directive, 
+            boost::wave::util::impl::as_string(expanded).c_str(), act_pos);
+    }
 }
 #endif // BOOST_WAVE_SUPPORT_WARNING_DIRECTIVE != 0
 

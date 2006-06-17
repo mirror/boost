@@ -172,7 +172,7 @@ public:
     //  closing one).
     //
     ///////////////////////////////////////////////////////////////////////////
-#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     // old signature
     template <typename ContainerT>
     void expanding_function_like_macro(
@@ -281,7 +281,7 @@ public:
     //  The parameter 'macrocall' marks the position, where this macro invoked.
     //
     ///////////////////////////////////////////////////////////////////////////
-#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     // old signature
     template <typename ContainerT>
     void expanding_object_like_macro(TokenT const &macrodef, 
@@ -331,7 +331,7 @@ public:
     //  result of the macro expansion.
     //
     ///////////////////////////////////////////////////////////////////////////
-#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     // old signature
     template <typename ContainerT>
     void expanded_macro(ContainerT const &result)
@@ -362,7 +362,7 @@ public:
     //  result of the rescanning.
     //
     ///////////////////////////////////////////////////////////////////////////
-#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     // old signature
     template <typename ContainerT>
     void rescanned_macro(ContainerT const &result)
@@ -486,7 +486,7 @@ public:
     //  found as a result of a #include <...> directive.
     //  
     ///////////////////////////////////////////////////////////////////////////
-#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS
+#if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     // old signature
     void 
     opened_include_file(std::string const &relname, std::string const &absname, 
