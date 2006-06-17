@@ -52,10 +52,10 @@ namespace boost
             // The result of frexp is always between 0.5 and 1, so its
             // top bit will always be 1. Subtract by 0.5 to remove that.
             if(v >= 0) {
-                v = boost::hash_detail::call_frexp(v, &exp) - 0.5;
+                v = boost::hash_detail::call_frexp(v, &exp) - T(0.5);
             }
             else {
-                v = -boost::hash_detail::call_frexp(v, &exp) - 0.5;
+                v = -boost::hash_detail::call_frexp(v, &exp) - T(0.5);
                 exp = ~exp;
             }
 
