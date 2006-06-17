@@ -94,7 +94,7 @@ public:
       if(sub < m_subs.size())
       {
          const sub_match<BidiIterator>& s = m_subs[sub];
-         if(s.matched)
+         if(s.matched || (sub == 2))
          {
             return ::boost::re_detail::distance((BidiIterator)(m_base), (BidiIterator)(s.first));
          }

@@ -300,7 +300,9 @@ difference_type position(unsigned int sub = 0)const;
 </pre>
       <b></b>
       <p><b>Effects:</b> Returns the starting location of sub-expression <EM>sub</EM>, 
-         or -1 if <EM>sub</EM> was not matched <code>.</code></p>
+         or -1 if <EM>sub</EM> was not matched.&nbsp; Note that if this represents a <A href="partial_matches.html">
+            partial match</A> , then <code>position()</code> will return the location of 
+         the partial match even though <code>(*this)[0].matched</code> is <EM>false</EM>.</p>
       <pre><A name=m6></A>
 string_type str(int sub = 0)const;
 </pre>
