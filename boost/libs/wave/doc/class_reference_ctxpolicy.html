@@ -108,7 +108,7 @@
         <span class="comment">// interpretation of #pragma's of the form </span>
         <span class="comment">// 'wave option[(value)]'</span>
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;
-        bool <a href="class_reference_ctxpolicy.html#interpret_pragma">interpret_pragma</a>(ContextT <span class="keyword">const</span> &amp;ctx, ContainerT &amp;pending, 
+        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#interpret_pragma">interpret_pragma</a>(ContextT <span class="keyword">const</span> &amp;ctx, ContainerT &amp;pending, 
             <span class="keyword">typename</span> ContextT::token_type <span class="keyword">const</span> &amp;option, 
             ContainerT <span class="keyword">const</span> &amp;values, 
             <span class="keyword">typename</span> ContextT::token_type <span class="keyword">const</span> &amp;pragma_token);
@@ -125,6 +125,15 @@
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> TokenT&gt;
         <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#undefined_macro">undefined_macro</a>(ContextT <span class="keyword">const</span> &amp;ctx, 
             TokenT<span class="keyword"> const</span> &amp;name);
+
+        <span class="comment">// #error and #warning directive hooks</span>
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;
+        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#found_warning_directive">found_warning_directive</a>(ContextT <span class="keyword">const</span> &amp;ctx, 
+            ContainerT <span class="keyword">const</span> &amp;pending);
+
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;
+        <span class="keyword">bool</span> found_error_directive(ContextT <span class="keyword">const</span> &amp;ctx, 
+            ContainerT <span class="keyword">const</span> &amp;pending);
     };
 
 }}}   <span class="comment">// namespace boost::wave::context_policies</span></pre>
@@ -364,6 +373,28 @@
   <p>The parameter <tt>name</tt> holds the token of the macro which definition was removed.<br>
   </p>
 </blockquote>
+<p><strong><a name="found_warning_directive" id="found_warning_directive"></a>found_warning_drective</strong></p>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;
+    <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#found_warning_directive">found_warning_directive</a>(ContextT <span class="keyword">const</span>&amp; ctx, 
+        ContainerT <span class="keyword">const</span> &amp;message);
+</pre>
+<blockquote>
+  <p>The function <tt>found_warning_directive </tt> is called whenever a <span class="preprocessor">#warning </span>directive has been encountered. Note, this functions was added for the Boost V1.35.0 release. This function will be called only if the <tt>BOOST_WAVE_SUPPORT_WARNING_DIRECTIVE</tt> compile time constant was defined to something not equal to zero (see the <a href="compiletime_config.html">Compile Time Configuration</a> for more information). </p>
+  <p>The <tt>ctx</tt> parameter provides a reference to the <tt>context_type</tt> used during instantiation of the preprocessing iterators by the user. </p>
+  <p>The parameter <tt>message</tt> references the argument token sequence of the encountered <span class="preprocessor">#warning</span> directive.<br>
+  </p>
+</blockquote>
+<p><strong><a name="found_error_directive" id="found_error_directive"></a>found_error_drective</strong></p>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;
+    <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#found_error_directive">found_error_directive</a>(ContextT <span class="keyword">const</span>&amp; ctx, 
+        ContainerT <span class="keyword">const</span> &amp;message);
+</pre>
+<blockquote>
+  <p>The function <tt>found_error_directive </tt> is called whenever a <span class="preprocessor">#error </span>directive has been encountered. Note, this functions was added for the Boost V1.35.0 release. </p>
+  <p>The <tt>ctx</tt> parameter provides a reference to the <tt>context_type</tt> used during instantiation of the preprocessing iterators by the user. </p>
+  <p>The parameter <tt>message</tt> references the argument token sequence of the encountered <span class="preprocessor">#error</span> directive.<br>
+  </p>
+</blockquote>
 <table border="0">
   <tr> 
     <td width="10"></td>
@@ -377,7 +408,7 @@
   <br>
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Tuesday, May 23, 2006  12:50<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Saturday, June 17, 2006  11:24<!-- #EndDate -->
 </span></p>
 </body>
 </html>
