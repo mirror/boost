@@ -136,7 +136,7 @@ lexer<IteratorT, PositionT>::lexer(IteratorT const &first,
 #endif
 
 #if BOOST_WAVE_SUPPORT_IMPORT_KEYWORD != 0
-    scanner.enable_import_keyword = 1;
+    scanner.enable_import_keyword = boost::wave::need_c99(language) ? 0 : 1;
 #else
     scanner.enable_import_keyword = 0;
 #endif
@@ -148,7 +148,7 @@ template <typename IteratorT, typename PositionT>
 inline
 lexer<IteratorT, PositionT>::~lexer() 
 {
-    using namespace std;        // some systems have memset in std
+    using namespace std;        // some systems have free in std
     aq_terminate(scanner.eol_offsets);
     free(scanner.bot);
 }

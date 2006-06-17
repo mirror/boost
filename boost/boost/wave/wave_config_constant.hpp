@@ -51,12 +51,20 @@
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+#if BOOST_WAVE_SUPPORT_IMPORT_KEYWORD != 0
+#define BOOST_WAVE_SUPPORT_IMPORT_KEYWORD_CONFIG 0x00000020
+#else
+#define BOOST_WAVE_SUPPORT_IMPORT_KEYWORD_CONFIG 0x00000000
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
 #define BOOST_WAVE_CONFIG (                                                   \
         BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS_CONFIG |                    \
         BOOST_WAVE_SUPPORT_PRAGMA_ONCE_CONFIG |                               \
         BOOST_WAVE_SUPPORT_MS_EXTENSIONS_CONFIG |                             \
         BOOST_WAVE_PREPROCESS_PRAGMA_BODY_CONFIG |                            \
-        BOOST_WAVE_USE_STRICT_LEXER_CONFIG                                    \
+        BOOST_WAVE_USE_STRICT_LEXER_CONFIG |                                  \
+        BOOST_WAVE_SUPPORT_IMPORT_KEYWORD_CONFIG                              \
     )                                                                         \
     /**/
 

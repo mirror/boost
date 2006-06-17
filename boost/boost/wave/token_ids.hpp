@@ -310,17 +310,17 @@ enum token_id {
 #undef BASEID_FROM_TOKEN
 #define BASEID_FROM_TOKEN(tok)                                                \
     boost::wave::token_id(((tok) & ~boost::wave::ExtTokenTypeMask))           \
-  /**/
+    /**/
 #define BASE_TOKEN(tok)                                                       \
     boost::wave::token_id((tok) & boost::wave::MainTokenMask)                 \
-  /**/
+    /**/
 #define CATEGORY_FROM_TOKEN(tok) ((tok) & boost::wave::TokenTypeMask)
 #define EXTCATEGORY_FROM_TOKEN(tok) ((tok) & boost::wave::ExtTokenTypeMask)
-#define IS_CATEGORY(tok, cat)    \
-    ((CATEGORY_FROM_TOKEN(tok) == (cat)) ? true : false) \
+#define IS_CATEGORY(tok, cat)                                                 \
+    ((CATEGORY_FROM_TOKEN(tok) == (cat)) ? true : false)                      \
     /**/
-#define IS_EXTCATEGORY(tok, cat)    \
-    ((EXTCATEGORY_FROM_TOKEN(tok) == (cat)) ? true : false) \
+#define IS_EXTCATEGORY(tok, cat)                                              \
+    ((EXTCATEGORY_FROM_TOKEN(tok) == (cat)) ? true : false)                   \
     /**/
 
 ///////////////////////////////////////////////////////////////////////////////
