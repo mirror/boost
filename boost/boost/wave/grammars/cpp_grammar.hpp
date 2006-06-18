@@ -90,6 +90,31 @@ namespace impl {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+//  store_found_eoltokens
+//
+//      The store_found_eoltokens functor stores the token sequence of the 
+//      line ending for a particular pp directive
+//
+///////////////////////////////////////////////////////////////////////////////
+
+    template <typename ContainerT>
+    struct store_found_eoltokens {
+
+        store_found_eoltokens(ContainerT &found_eoltokens_) 
+        :   found_eoltokens(found_eoltokens_) {}
+        
+        template <typename IteratorT>
+        void operator()(IteratorT const &first, IteratorT const& last) const
+        {
+            std::copy(first, last, 
+                std::inserter(found_eoltokens, found_eoltokens.end()));
+        }
+        
+        ContainerT &found_eoltokens;
+    };
+
+///////////////////////////////////////////////////////////////////////////////
+//
 //  flush_underlying_parser
 //
 //      The flush_underlying_parser flushes the underlying
@@ -126,14 +151,15 @@ namespace impl {
 
 ///////////////////////////////////////////////////////////////////////////////
 // Encapsulation of the C++ preprocessor grammar.
-template <typename TokenT>
+template <typename TokenT, typename ContainerT>
 struct cpp_grammar : 
-    public boost::spirit::grammar<cpp_grammar<TokenT> >
+    public boost::spirit::grammar<cpp_grammar<TokenT, ContainerT> >
 {
     typedef typename TokenT::position_type  position_type;
-    typedef cpp_grammar<position_type>      grammar_type;
+    typedef cpp_grammar<TokenT, ContainerT> grammar_type;
     typedef impl::store_found_eof           store_found_eof_type;
-    typedef impl::store_found_directive<TokenT> store_found_directive_type;
+    typedef impl::store_found_directive<TokenT>     store_found_directive_type;
+    typedef impl::store_found_eoltokens<ContainerT> store_found_eoltokens_type;
     
     template <typename ScannerT>
     struct definition
@@ -247,6 +273,7 @@ struct cpp_grammar :
                     |   illformed
                     )
                     >> eol_tokens
+                       [ store_found_eoltokens_type(self.found_eoltokens) ]
 //  In parser debug mode it is useful not to flush the underlying stream
 //  to allow its investigation in the debugger and to see the correct
 //  output in the printed debug log..
@@ -576,9 +603,13 @@ struct cpp_grammar :
 
     bool &found_eof;
     TokenT &found_directive;
+    ContainerT &found_eoltokens;
     
-    cpp_grammar(bool &found_eof_, TokenT &found_directive_)
-    :   found_eof(found_eof_), found_directive(found_directive_)
+    cpp_grammar(bool &found_eof_, TokenT &found_directive_, 
+            ContainerT &found_eoltokens_)
+    :   found_eof(found_eof_), 
+        found_directive(found_directive_),
+        found_eoltokens(found_eoltokens_)
     { 
         BOOST_SPIRIT_DEBUG_TRACE_GRAMMAR_NAME(*this, "cpp_grammar", 
             TRACE_CPP_GRAMMAR); 
@@ -679,20 +710,21 @@ parsetree_parse(IteratorT const& first_, IteratorT const& last,
 #define BOOST_WAVE_GRAMMAR_GEN_INLINE inline
 #endif 
 
-template <typename LexIteratorT>
+template <typename LexIteratorT, typename TokenContainerT>
 BOOST_WAVE_GRAMMAR_GEN_INLINE 
 boost::spirit::tree_parse_info<
-    LexIteratorT, typename cpp_grammar_gen<LexIteratorT>::node_factory_type
+    LexIteratorT, 
+    typename cpp_grammar_gen<LexIteratorT, TokenContainerT>::node_factory_type
 >
-cpp_grammar_gen<LexIteratorT>::parse_cpp_grammar (
+cpp_grammar_gen<LexIteratorT, TokenContainerT>::parse_cpp_grammar (
     LexIteratorT const &first, LexIteratorT const &last,
     position_type const &act_pos, bool &found_eof,
-    token_type &found_directive)
+    token_type &found_directive, token_container_type &found_eoltokens)
 {
     using namespace boost::spirit;
     using namespace boost::wave;
     
-    cpp_grammar<token_type> g(found_eof, found_directive);
+    cpp_grammar<token_type, TokenContainerT> g(found_eof, found_directive, found_eoltokens);
     tree_parse_info<LexIteratorT, node_factory_type> hit = 
         parsetree_parse<node_factory_type>(first, last, g);
     

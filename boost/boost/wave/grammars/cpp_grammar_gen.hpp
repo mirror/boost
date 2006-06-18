@@ -74,11 +74,12 @@ namespace grammars {
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-template <typename LexIteratorT>
+template <typename LexIteratorT, typename TokenContainerT>
 struct BOOST_WAVE_DECL cpp_grammar_gen
 {
     typedef LexIteratorT                          iterator_type;
     typedef typename LexIteratorT::token_type     token_type;
+    typedef TokenContainerT                       token_container_type;
     typedef typename token_type::position_type    position_type;
     typedef boost::spirit::node_val_data_factory<
 //             boost::spirit::nil_t,
@@ -89,7 +90,7 @@ struct BOOST_WAVE_DECL cpp_grammar_gen
     static boost::spirit::tree_parse_info<iterator_type, node_factory_type> 
     parse_cpp_grammar (iterator_type const &first, iterator_type const &last,
         position_type const &act_pos, bool &found_eof, 
-        token_type &found_directive);
+        token_type &found_directive, token_container_type &found_eoltokens);
 };
 
 ///////////////////////////////////////////////////////////////////////////////

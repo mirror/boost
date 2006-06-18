@@ -217,10 +217,13 @@ public:
     static result_type const eof;
 
 private:
+// type of a token sequence
+    typedef typename ContextT::token_sequence_type      token_sequence_type;
+
     typedef typename ContextT::lexer_type               lexer_type;
     typedef typename result_type::string_type           string_type;
     typedef typename result_type::position_type         position_type;
-    typedef boost::wave::grammars::cpp_grammar_gen<lexer_type> 
+    typedef boost::wave::grammars::cpp_grammar_gen<lexer_type, token_sequence_type> 
         cpp_grammar_type;
 
 //  iteration context related types (an iteration context represents a current
@@ -239,9 +242,6 @@ private:
     typedef typename parse_tree_match_type::node_t       parse_node_type;       // tree_node<node_val_data<> >
     typedef typename parse_tree_match_type::parse_node_t parse_node_value_type; // node_val_data<>
     typedef typename parse_tree_match_type::container_t  parse_tree_type;       // parse_node_type::children_t
-
-// type of a token sequence
-    typedef typename ContextT::token_sequence_type      token_sequence_type;
 
 public:
     template <typename IteratorT>
@@ -282,7 +282,8 @@ protected:
     template <typename IteratorT>
     bool can_ignore_pp_directive(IteratorT &it);
     bool dispatch_directive(tree_parse_info_type const &hit,
-        result_type const& found_directive);
+        result_type const& found_directive,
+        token_sequence_type const& found_eoltokens);
     void replace_undefined_identifiers(token_sequence_type &expanded);
 
     void on_include(string_type const &s, bool is_system, bool include_next);
@@ -309,7 +310,8 @@ protected:
         typename parse_tree_type::const_iterator const &end);
     void on_elif(result_type const& found_directive,
         typename parse_tree_type::const_iterator const &begin,
-        typename parse_tree_type::const_iterator const &end);
+        typename parse_tree_type::const_iterator const &end,
+        token_sequence_type const& found_eoltokens);
     void on_error(typename parse_tree_type::const_iterator const &begin,
         typename parse_tree_type::const_iterator const &end);
 #if BOOST_WAVE_SUPPORT_WARNING_DIRECTIVE != 0
@@ -1029,9 +1031,10 @@ lexer_type it = iter_ctx->first;
 // found a pp directive, so try to identify it, start with the pp_token
 bool found_eof = false;
 result_type found_directive;
+token_sequence_type found_eoltokens;
 
 tree_parse_info_type hit = cpp_grammar_type::parse_cpp_grammar(
-    it, iter_ctx->last, act_pos, found_eof, found_directive);
+    it, iter_ctx->last, act_pos, found_eof, found_directive, found_eoltokens);
 
     if (hit.match) {
     // position the iterator past the matched sequence to allow 
@@ -1042,7 +1045,7 @@ tree_parse_info_type hit = cpp_grammar_type::parse_cpp_grammar(
 
     // found a valid pp directive, dispatch to the correct function to handle 
     // the found pp directive
-    bool result = dispatch_directive (hit, found_directive);
+    bool result = dispatch_directive (hit, found_directive, found_eoltokens);
     
         if (found_eof) {
         // The line was terminated with an end of file token.
@@ -1064,7 +1067,8 @@ tree_parse_info_type hit = cpp_grammar_type::parse_cpp_grammar(
 template <typename ContextT> 
 inline bool
 pp_iterator_functor<ContextT>::dispatch_directive(
-    tree_parse_info_type const &hit, result_type const& found_directive)
+    tree_parse_info_type const &hit, result_type const& found_directive,
+    token_sequence_type const& found_eoltokens)
 {
     using namespace cpplexer;
     using namespace boost::spirit;
@@ -1136,7 +1140,7 @@ token_id id = token_id(found_directive);
         break;
 
     case T_PP_ELIF:         // #elif
-        on_elif(found_directive, begin_child_it, end_child_it);
+        on_elif(found_directive, begin_child_it, end_child_it, found_eoltokens);
         break;
 
     case T_PP_ELSE:         // #else
@@ -1647,7 +1651,8 @@ inline void
 pp_iterator_functor<ContextT>::on_elif(
     result_type const& found_directive,
     typename parse_tree_type::const_iterator const &begin,
-    typename parse_tree_type::const_iterator const &end)
+    typename parse_tree_type::const_iterator const &end,
+    token_sequence_type const& found_eoltokens)
 {
 // preprocess the given sequence into the provided list
 get_token_value<result_type, parse_node_type> get_value;
@@ -1665,9 +1670,12 @@ token_sequence_type toexpand;
                 act_pos);
         }
 
+    // skip all the expression and the trailing whitespace
     typename token_sequence_type::iterator begin2 = toexpand.begin();
+    typename token_sequence_type::const_iterator begin3 = found_eoltokens.begin();
 
         skip_to_eol(ctx, begin2, toexpand.end());
+        skip_to_eol(ctx, begin3, found_eoltokens.end());
         return;     // one of previous #if/#elif was true, so don't enter this #elif 
     }
             

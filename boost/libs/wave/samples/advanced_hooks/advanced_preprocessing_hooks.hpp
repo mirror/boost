@@ -69,6 +69,7 @@ public:
         case T_PP_IF:
         case T_PP_ELIF:
             std::cout << "// " << directive.get_value() << " ";
+            need_comment = false;
             break;
             
         case T_PP_ELSE:

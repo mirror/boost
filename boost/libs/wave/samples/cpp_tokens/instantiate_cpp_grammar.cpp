@@ -16,6 +16,7 @@
 #if BOOST_WAVE_SEPARATE_GRAMMAR_INSTANTIATION != 0
 
 #include <string>
+#include <list>
 
 #include <boost/wave/token_ids.hpp>
 
@@ -33,10 +34,12 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-typedef boost::wave::cpplexer::slex::slex_iterator<
-        boost::wave::cpplexer::slex_token<> >
-    lexer_type;
-template struct boost::wave::grammars::cpp_grammar_gen<lexer_type>;
+typedef boost::wave::cpplexer::slex_token<> token_type;
+typedef boost::wave::cpplexer::slex::slex_iterator<token_type> lexer_type;
+typedef std::list<token_type, boost::fast_pool_allocator<token_type> > 
+    token_sequence_type;
+    
+template struct boost::wave::grammars::cpp_grammar_gen<lexer_type, token_sequence_type>;
 
 #endif // #if BOOST_WAVE_SEPARATE_GRAMMAR_INSTANTIATION != 0
 
