@@ -302,12 +302,6 @@ struct MyPump : PumpBase
  local transitions are supposed to work, see
  <a href="http://thread.gmane.org/gmane.comp.lib.boost.user/18641">here</a> 
  for more information</li>
-<li>The origin of a transition to history must not be a direct or indirect 
-inner state of the state containing the history pseudo state. UML2.0 
-explicitly allows this, the semantics of the library will be changed 
-accordingly for the 1.35 release, see
-<a href="http://thread.gmane.org/gmane.comp.lib.boost.user/18641">here</a> for 
-more information</li>
  <li>There is no direct support for the UML2.0 elements entry point and exit 
  point. However, both can easily be simulated, the former with a typedef and 
  the latter with a state that is a template (with the transition destination 

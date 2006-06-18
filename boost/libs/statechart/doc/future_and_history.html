@@ -45,8 +45,6 @@
   review):</p>
 
   <ol>
-    <li>Make transitions to history UML2.0 compliant, see
-    <a href="faq.html#Uml2">here</a> for more information</li>
     <li>Optimize state-entry and state-exit for speed and code-size</li>
 
     <li>Implement <code>simple_state::triggering_event()</code>, which
@@ -165,6 +163,8 @@
     <li>Declared <code>state_base::~state_base virtual</code> for GCC. This 
     makes state exit slightly slower but does away with loads of &quot;has 
     virtual functions but non-virtual destructor&quot; warnings</li>
+    <li>Made transitions to history UML2.0 compliant, see
+    <a href="faq.html#Uml2">here</a> for more information</li>
   </ul>
 
   <p>17 December, 2005</p>
