@@ -36,15 +36,15 @@
 #define BOOST_TYPEOF_pointer_fun(T) T*
 #define BOOST_TYPEOF_reference_fun(T) T&
 
-namespace { namespace boost_typeof {
+BOOST_TYPEOF_BEGIN_ENCODE_NS
 
-    BOOST_TYPEOF_modifier_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_TYPEOF_const_fun);
-    BOOST_TYPEOF_modifier_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_TYPEOF_volatile_fun);
-    BOOST_TYPEOF_modifier_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_TYPEOF_volatile_const_fun);
-    BOOST_TYPEOF_modifier_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_TYPEOF_pointer_fun);
-    BOOST_TYPEOF_modifier_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_TYPEOF_reference_fun);
+BOOST_TYPEOF_modifier_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_TYPEOF_const_fun);
+BOOST_TYPEOF_modifier_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_TYPEOF_volatile_fun);
+BOOST_TYPEOF_modifier_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_TYPEOF_volatile_const_fun);
+BOOST_TYPEOF_modifier_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_TYPEOF_pointer_fun);
+BOOST_TYPEOF_modifier_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_TYPEOF_reference_fun);
 
-}}
+BOOST_TYPEOF_END_ENCODE_NS
 
 #undef BOOST_TYPEOF_modifier_support
 #undef BOOST_TYPEOF_const_fun
@@ -78,14 +78,14 @@ namespace { namespace boost_typeof {
         typedef typename d::iter iter;\
     }
 
-namespace { namespace boost_typeof {
+BOOST_TYPEOF_BEGIN_ENCODE_NS
 
-    BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_EMPTY);
-    BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_IDENTITY(const));
-    BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_IDENTITY(volatile));
-    BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_IDENTITY(volatile const));
+BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_EMPTY);
+BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_IDENTITY(const));
+BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_IDENTITY(volatile));
+BOOST_TYPEOF_array_support(BOOST_TYPEOF_UNIQUE_ID(), BOOST_PP_IDENTITY(volatile const));
 
-}}
+BOOST_TYPEOF_END_ENCODE_NS
 
 #undef BOOST_TYPEOF_array_support
 

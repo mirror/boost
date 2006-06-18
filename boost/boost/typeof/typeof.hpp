@@ -126,6 +126,7 @@
 
 #ifdef BOOST_TYPEOF_EMULATION
 #   define BOOST_TYPEOF_TEXT "using typeof emulation"
+#	include <boost/typeof/message.hpp>
 #   include <boost/typeof/typeof_impl.hpp>
 #   include <boost/typeof/type_encoding.hpp>
 #   include <boost/typeof/template_encoding.hpp>
@@ -136,12 +137,11 @@
 
 #elif defined(BOOST_TYPEOF_NATIVE)
 #   define BOOST_TYPEOF_TEXT "using native typeof"
+#	include <boost/typeof/message.hpp>
 #   include <boost/typeof/native.hpp>
 #else
 #   error typeof configuration error
 #endif
-
-#include <boost/typeof/message.hpp>
 
 // auto
 #define BOOST_AUTO(Var, Expr) BOOST_TYPEOF(Expr) Var = Expr

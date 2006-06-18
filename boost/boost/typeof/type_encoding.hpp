@@ -17,9 +17,9 @@
     };
 
 #define BOOST_TYPEOF_REGISTER_TYPE_EXPLICIT_ID(Type, Id)                \
-	namespace { namespace boost_typeof {					\
-        BOOST_TYPEOF_REGISTER_TYPE_IMPL(Type, Id)                       \
-    }}
+	BOOST_TYPEOF_BEGIN_ENCODE_NS										\
+    BOOST_TYPEOF_REGISTER_TYPE_IMPL(Type, Id)							\
+	BOOST_TYPEOF_END_ENCODE_NS
 
 #define BOOST_TYPEOF_REGISTER_TYPE(Type)                                \
     BOOST_TYPEOF_REGISTER_TYPE_EXPLICIT_ID(Type, BOOST_TYPEOF_UNIQUE_ID())

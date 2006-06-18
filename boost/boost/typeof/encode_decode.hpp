@@ -8,26 +8,44 @@
 #include <boost/mpl/deref.hpp>
 #include <boost/mpl/next.hpp>
 
- namespace { namespace boost_typeof {
+#ifndef BOOST_TYPEOF_SUPPRESS_UNNAMED_NAMESPACE
 
-    template<class V, class Type_Not_Registered_With_Typeof_System> 
-    struct encode_type_impl;
-    
-    template<class T, class Iter> 
-    struct decode_type_impl
-    {
-        typedef int type;  // MSVC ETI workaround
-    };
-}}
+#	define BOOST_TYPEOF_BEGIN_ENCODE_NS namespace { namespace boost_typeof { 
+#	define BOOST_TYPEOF_END_ENCODE_NS }}
+#	define BOOST_TYPEOF_ENCODE_NS_QUALIFIER boost_typeof
+
+#else
+
+#	define BOOST_TYPEOF_BEGIN_ENCODE_NS namespace boost { namespace type_of { 
+#	define BOOST_TYPEOF_END_ENCODE_NS }} 
+#	define BOOST_TYPEOF_ENCODE_NS_QUALIFIER boost::type_of
+
+#   define BOOST_TYPEOF_TEXT "unnamed namespace is off"
+#	include <boost/typeof/message.hpp>
+
+#endif
+
+BOOST_TYPEOF_BEGIN_ENCODE_NS
+
+template<class V, class Type_Not_Registered_With_Typeof_System> 
+struct encode_type_impl;
+
+template<class T, class Iter> 
+struct decode_type_impl
+{
+    typedef int type;  // MSVC ETI workaround
+};
+
+BOOST_TYPEOF_END_ENCODE_NS
 
 namespace boost { namespace type_of {
 
 	template<class V, class T> 
-	struct encode_type : boost_typeof::encode_type_impl<V, T>
+	struct encode_type : BOOST_TYPEOF_ENCODE_NS_QUALIFIER::encode_type_impl<V, T>
     {};
 
     template<class Iter> 
-    struct decode_type : boost_typeof::decode_type_impl<
+    struct decode_type : BOOST_TYPEOF_ENCODE_NS_QUALIFIER::decode_type_impl<
         typename Iter::type,
         typename Iter::next
     >

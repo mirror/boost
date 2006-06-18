@@ -51,21 +51,21 @@
 ////////////////////////////
 // move to encode_decode?
 
-namespace { namespace boost_typeof { 
+BOOST_TYPEOF_BEGIN_ENCODE_NS
 
-	template<class V, class Type_Not_Registered_With_Typeof_System> struct encode_template_impl;
-    template<class T, class Iter> struct decode_template_impl;
+template<class V, class Type_Not_Registered_With_Typeof_System> struct encode_template_impl;
+template<class T, class Iter> struct decode_template_impl;
 
-}}
+BOOST_TYPEOF_END_ENCODE_NS
 
 namespace boost { namespace type_of { 
 
 	template<class V, class T> struct encode_template
-		: boost_typeof::encode_template_impl<V, T>
+		: BOOST_TYPEOF_ENCODE_NS_QUALIFIER::encode_template_impl<V, T>
     {};
 
     template<class Iter> struct decode_template 
-        : boost_typeof::decode_template_impl<typename Iter::type, typename Iter::next>
+        : BOOST_TYPEOF_ENCODE_NS_QUALIFIER::decode_template_impl<typename Iter::type, typename Iter::next>
     {};
 }}
 
