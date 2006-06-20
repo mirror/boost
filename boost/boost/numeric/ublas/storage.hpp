@@ -1582,8 +1582,13 @@ namespace boost { namespace numeric { namespace ublas {
         bool equal(const self_type& rhs) const {
             return (v1_ == rhs.v1_);
         }
+        BOOST_UBLAS_INLINE
         bool less(const self_type& rhs) const {
             return (v1_ < rhs.v1_);
+        }
+        BOOST_UBLAS_INLINE
+        bool greater(const self_type& rhs) const {
+            return (v1_ > rhs.v1_);
         }
         BOOST_UBLAS_INLINE
         friend bool operator == (const self_type& lhs, const self_type& rhs) {
@@ -1596,6 +1601,18 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         friend bool operator < (const self_type& lhs, const self_type& rhs) {
             return lhs.less(rhs);
+        }
+        BOOST_UBLAS_INLINE
+        friend bool operator >= (const self_type& lhs, const self_type& rhs) {
+            return !lhs.less(rhs);
+        }
+        BOOST_UBLAS_INLINE
+        friend bool operator > (const self_type& lhs, const self_type& rhs) {
+            return lhs.greater(rhs);
+        }
+        BOOST_UBLAS_INLINE
+        friend bool operator <= (const self_type& lhs, const self_type& rhs) {
+            return !lhs.greater(rhs);
         }
 
     private:
@@ -1747,6 +1764,11 @@ namespace boost { namespace numeric { namespace ublas {
                     (v1_ == rhs.v1_ && v2_ < rhs.v2_));
         }
         BOOST_UBLAS_INLINE
+        bool greater(const self_type& rhs) const {
+            return ((v1_ > rhs.v1_) ||
+                    (v1_ == rhs.v1_ && v2_ > rhs.v2_));
+        }
+        BOOST_UBLAS_INLINE
         friend bool operator == (const self_type& lhs, const self_type& rhs) {
             return lhs.equal(rhs);
         }
@@ -1757,6 +1779,18 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         friend bool operator < (const self_type& lhs, const self_type& rhs) {
             return lhs.less(rhs);
+        }
+        BOOST_UBLAS_INLINE
+        friend bool operator >= (const self_type& lhs, const self_type& rhs) {
+            return !lhs.less(rhs);
+        }
+        BOOST_UBLAS_INLINE
+        friend bool operator > (const self_type& lhs, const self_type& rhs) {
+            return lhs.greater(rhs);
+        }
+        BOOST_UBLAS_INLINE
+        friend bool operator <= (const self_type& lhs, const self_type& rhs) {
+            return !lhs.greater(rhs);
         }
 
     private:
