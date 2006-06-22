@@ -90,6 +90,10 @@ preprocessed tokens generated from a given input file. It is described in more d
       -P [ --predefine ] macro[=[value]] : specify a macro to predefine
       -U [ --undefine ] macro : specify a macro to undefine
 </pre>
+<h2>The hannibal sample </h2>
+<p>The <tt>hannibal</tt> sample shows how to base a spirit grammar on the <tt>Wave</tt> library. It was initially written and contributed to the <tt>Wave</tt> library by Danny Havenith (see his related web page <a href="http://havenith-verlinden.nl/hannibal/">here</a>). The grammar of this example uses <tt>Wave</tt> as its preprocessor. It implements around 120 of the approximately 250 grammar rules as they can be   found in <em>The C++ Programming Language, Third Edition</em>. The 120 rules allow   a C++ source file to be parsed for all type information and declarations. In   fact this grammar parses as good as anything, it parses C++ declarations, including class and template definitions, but skips function bodies. If so configured, the program will output an xml dump of the generated parse tree. </p>
+<p>It may be a good starting point for a grammar that can be used for things like   reverse engineering as some UML modelling tools do. Or whatever use you may find   for a grammar that gives you a list of all templates and classes in a file and their members. <br>
+</p>
 <table border="0">
   <tr>
     <td width="10"></td>
@@ -104,7 +108,7 @@ preprocessed tokens generated from a given input file. It is described in more d
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated:
-  <!-- #BeginDate format:fcAm1m -->Thursday, November 3, 2005  21:32<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Wednesday, June 21, 2006  22:12<!-- #EndDate -->
   </span></p>
 <p>&nbsp;</p>
 </body>
