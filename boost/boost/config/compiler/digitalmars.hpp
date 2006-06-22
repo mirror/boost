@@ -33,9 +33,7 @@
 #if (__DMC__ >= 0x840)
 #define BOOST_HAS_DIRENT_H
 #define BOOST_HAS_STDINT_H
-#if _MT
-#  define BOOST_HAS_WINTHREADS
-#endif
+#define BOOST_HAS_WINTHREADS
 #endif
 
 #if (__DMC__ >= 0x847)
@@ -62,4 +60,5 @@
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif
 #endif
+
 
