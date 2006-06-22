@@ -184,7 +184,7 @@ static char const *tok_names[] = {
     /* 401 */   "PP_HHEADER",
     /* 402 */   "EOF",
     /* 403 */   "EOI",
-    /* 404 */   "PP_NUMBER"
+    /* 404 */   "PP_NUMBER",
 
               // MS extensions
     /* 405 */   "MSEXT_INT8",
