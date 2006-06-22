@@ -18,10 +18,12 @@ namespace boost { namespace serialization {
 
 template<class T>
 class array
- : public wrapper_traits<array<T>, object_serializable, track_never>
+ : public wrapper_traits<array<T> >
 {
 public:    
-    explicit array(T* t, std::size_t s) :
+    typedef T value_type;
+    
+    array(value_type* t, std::size_t s) :
         m_t(t),
         m_element_count(s)
     {}
@@ -32,12 +34,12 @@ public:
     {
       // default implemention does the loop
       std::size_t c = count();
-      T * t = address();
+      value_type * t = address();
       while(0 < c--)
             ar & make_nvp("item", *t++);
     }
     
-    T* address() const
+    value_type* address() const
     {
       return m_t;
     }
@@ -49,7 +51,7 @@ public:
     
     
 private:
-    T* m_t;
+    value_type* m_t;
     std::size_t const m_element_count;
 };
 

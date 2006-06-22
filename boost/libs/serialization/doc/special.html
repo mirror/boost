@@ -407,10 +407,8 @@ types, such as for <code>std::vector</code>, <code>std::valarray</code> or
 
 Archive types that can provide optimized serialization for contiguous arrays of 
 homogeneous types should implement these by overloading the serialization of
-the  <a href="wrappers.html#arrays"><code>array</code></a> wrapper. As an example
-optimized versions of the binary archives are provided in
-<a href="headers.html#arraybinaryiarchive">archive/array/binary_iarchive.hpp</a>
-and <a href="headers.html#arraybinaryoarchive">archive/array/binary_oarchive.hpp</a>
+the  <a href="wrappers.html#arrays"><code>array</code></a> wrapper, as is done
+for the binary archives.
 
 
 <h3><a href="exceptions.html">Archive Exceptions</a></h3>

@@ -27,9 +27,10 @@
 #include <boost/pfto.hpp>
 
 #include <boost/detail/workaround.hpp>
-#include <boost/archive/detail/common_oarchive.hpp>
+#include <boost/archive/array/oarchive.hpp>
 #include <boost/serialization/string.hpp>
 #include <boost/serialization/collection_size_type.hpp>
+#include <boost/archive/array/oarchive.hpp>
 
 namespace boost {
 namespace archive {
@@ -47,7 +48,7 @@ namespace archive {
 // class basic_text_iarchive - read serialized objects from a input text stream
 template<class Archive>
 class basic_binary_oarchive : 
-    public detail::common_oarchive<Archive>
+    public array::oarchive<Archive>
 {
 protected:
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
@@ -60,10 +61,10 @@ public:
     friend class detail::interface_oarchive<Archive>;
 #endif
     // any datatype not specifed below will be handled by base class
-    typedef detail::common_oarchive<Archive> detail_common_oarchive;
+    typedef array::oarchive<Archive> array_oarchive;
     template<class T>
     void save_override(T & t, BOOST_PFTO int){
-        this->detail_common_oarchive::save_override(t, 0);
+        this->array_oarchive::save_override(t, 0);
     }
     // binary files don't include the optional information 
     void save_override(const class_id_optional_type & /* t */, int){}
@@ -115,7 +116,7 @@ public:
     init();
 
     basic_binary_oarchive(unsigned int flags) :
-        detail::common_oarchive<Archive>(flags)
+        array_oarchive(flags)
     {}
 };
 

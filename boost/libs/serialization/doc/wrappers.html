@@ -38,6 +38,9 @@ of some underlying data. This permits an archive class to define special
 handling of this type.  The library includes several such types for varying 
 purposes.
 <p>
+Wrappers need to be treated in a special way by some archives, and hence
+the <A href="traits.html#wrappers"><code>is_wrapper</code></a> trait for 
+these wrapper classes is set to true.
 
 <h3><a name="binaryobjects">Binary Objects</a></h3>
 A binary object is just an sequence of bytes stored as raw

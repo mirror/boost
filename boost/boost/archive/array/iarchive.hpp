@@ -9,7 +9,7 @@
 
 #include <boost/archive/basic_archive.hpp>
 #include <boost/archive/archive_exception.hpp>
-#include <boost/archive/array/detail/forward_constructor.hpp>
+#include <boost/archive/detail/common_iarchive.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/array.hpp>
 #include <boost/serialization/collection_size_type.hpp>
@@ -40,13 +40,16 @@ namespace boost { namespace archive { namespace array {
   //     with the load_array member function, and to mpl::false_ if
   //     the unoptimized procedure must be used. 
 
-template <class Derived, class Base>
+template <class Archive>
 class iarchive
- : public Base
+ : public archive::detail::common_iarchive<Archive>
 {
+  typedef archive::detail::common_iarchive<Archive> Base;
 public:
+  iarchive(unsigned int flags)
+   : archive::detail::common_iarchive<Archive>(flags)
+  {}
 
-  BOOST_ARCHIVE_FORWARD_CONSTRUCTOR(iarchive,Base)
 
   // save_override for std::vector and serialization::array dispatches to 
   // save_optimized with an additional argument.
@@ -79,7 +82,7 @@ public:
   void load_optimized(
     serialization::array<ValueType> &t, unsigned int version, mpl::true_)
   {
-    This()->load_array(t,version);
+    this->This()->load_array(t,version);
   }
 
 
@@ -91,7 +94,7 @@ public:
   void load_override(std::vector<ValueType,Allocator> &x, unsigned int version)
   {
     typedef typename mpl::apply1<
-        BOOST_DEDUCED_TYPENAME Derived::use_array_optimization
+        BOOST_DEDUCED_TYPENAME Archive::use_array_optimization
       , ValueType
     >::type use_optimized;
     load_optimized(x,version, use_optimized() );   
@@ -103,23 +106,17 @@ public:
   void load_override(serialization::array<ValueType> const& x, unsigned int version)
   {
     typedef typename mpl::apply1<
-        BOOST_DEDUCED_TYPENAME Derived::use_array_optimization
+        BOOST_DEDUCED_TYPENAME Archive::use_array_optimization
       , ValueType
     >::type use_optimized;
     load_optimized(const_cast<serialization::array<ValueType>&>(x),version,use_optimized());
   }
 
-  // Load everything else in the usual way, forwarding on to the
-  // Base class
+  // Load everything else in the usual way, forwarding on to the base class
   template<class T>
   void load_override(T & x, unsigned BOOST_PFTO int version)
   {
     Base::load_override(x, static_cast<unsigned int>(version));
-  }
-private:
-  Derived * This()
-  {
-    return static_cast<Derived*>(this);
   }
 };
 

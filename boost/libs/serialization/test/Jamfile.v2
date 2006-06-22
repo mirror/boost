@@ -15,7 +15,6 @@ if ! $(BOOST_ARCHIVE_LIST) {
         "text_archive.hpp" 
         "text_warchive.hpp" 
         "binary_archive.hpp" 
-        "array_binary_archive.hpp" 
         "xml_archive.hpp" 
         "xml_warchive.hpp" 
     ;

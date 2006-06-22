@@ -390,6 +390,12 @@
 				RelativePath="..\..\..\boost\serialization\deque.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\serialization\hash_collections_load_imp.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\serialization\hash_collections_save_imp.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\serialization\hash_map.hpp">
 			</File>
 			<File
@@ -833,7 +839,13 @@
 				RelativePath="..\..\..\boost\archive\binary_iarchive.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\archive\binary_iarchive_impl.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\archive\binary_oarchive.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\binary_oarchive_impl.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\polymorphic_binary_iarchive.hpp">

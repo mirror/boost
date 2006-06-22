@@ -48,6 +48,9 @@ namespace std{
 #include <boost/archive/basic_streambuf_locale_saver.hpp>
 #include <boost/archive/archive_exception.hpp>
 #include <boost/archive/detail/auto_link_archive.hpp>
+#include <boost/mpl/placeholders.hpp>
+#include <boost/type_traits/is_fundamental.hpp>
+#include <boost/serialization/array.hpp>
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
 namespace boost { 
@@ -109,6 +112,16 @@ public:
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
     ~basic_binary_iprimitive();
 public:
+    // we provide an optimized load for all fundamental types
+    typedef is_fundamental<mpl::_1> use_array_optimization;
+
+    // the optimized load_array dispatches to load_binary 
+    template <class ValueType>
+    void load_array(serialization::array<ValueType>& a, unsigned int)
+    {
+      load_binary(a.address(),a.count()*sizeof(ValueType));
+    }
+
     void
     load_binary(void *address, std::size_t count);
 };

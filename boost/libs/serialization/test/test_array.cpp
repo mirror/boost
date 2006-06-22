@@ -51,7 +51,8 @@ struct array_equal_to : public std::binary_function<T, T, bool>
     }
 };
 
-int test_main( int /* argc */, char* /* argv */[] )
+template <class T>
+int test_array(T)
 {
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
@@ -96,6 +97,16 @@ int test_main( int /* argc */, char* /* argv */[] )
     }
     std::remove(testfile);
     return EXIT_SUCCESS;
+}
+
+
+int test_main( int /* argc */, char* /* argv */[] )
+{
+   int res = test_array(A());
+    // test an int array for which optimized versions should be available
+   if (res == EXIT_SUCCESS)
+     res = test_array(0);  
+   return res;
 }
 
 // EOF

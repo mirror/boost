@@ -40,7 +40,7 @@ namespace serialization {
 
 template<class T>
 struct ephemeral_object : 
-    public wrapper_traits<ephemeral_object<T>, object_serializable, track_never>
+    public wrapper_traits<ephemeral_object<T> >
 {
     explicit ephemeral_object(T& t) :
         val(t)

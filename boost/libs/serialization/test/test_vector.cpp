@@ -26,7 +26,8 @@ namespace std{
 
 #include "A.hpp"
 
-int test_main( int /* argc */, char* /* argv */[] )
+template <class T>
+int test_vector(T)
 {
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
@@ -49,6 +50,15 @@ int test_main( int /* argc */, char* /* argv */[] )
     BOOST_CHECK(avector == avector1);
     std::remove(testfile);
     return EXIT_SUCCESS;
+}
+
+int test_main( int /* argc */, char* /* argv */[] )
+{
+   int res = test_vector(A());
+    // test an int array for which optimized versions should be available
+   if (res == EXIT_SUCCESS)
+     res = test_vector(0);  
+   return res;
 }
 
 // EOF

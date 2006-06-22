@@ -8,7 +8,7 @@
 
 
 #include <boost/archive/basic_archive.hpp>
-#include <boost/archive/array/detail/forward_constructor.hpp>
+#include <boost/archive/detail/common_oarchive.hpp>
 #include <boost/serialization/array.hpp>
 #include <boost/serialization/collection_size_type.hpp>
 #include <boost/serialization/nvp.hpp>
@@ -38,13 +38,16 @@ namespace boost { namespace archive { namespace array {
   //     with the load_array member function, and to mpl::false_ if
   //     the unoptimized procedure must be used. 
 
-template <class Derived, class Base>
+template <class Archive>
 class oarchive
- : public Base
+ : public archive::detail::common_oarchive<Archive>
 {
+  typedef archive::detail::common_oarchive<Archive> Base;
 public:
 
-  BOOST_ARCHIVE_FORWARD_CONSTRUCTOR(oarchive,Base)
+  oarchive(unsigned int flags)
+   : archive::detail::common_oarchive<Archive>(flags)
+  {}
   
   // save_override for std::vector and serialization::array dispatches to 
   // save_optimized with an additional argument.
@@ -75,7 +78,7 @@ public:
   void save_optimized(
     const serialization::array<ValueType> &t, unsigned int version, mpl::true_)
   {
-    This()->save_array(t,version);
+    this->This()->save_array(t,version);
   }
 
 
@@ -87,7 +90,7 @@ public:
   void save_override(std::vector<ValueType,Allocator> const &x, unsigned int version)
   {
     typedef typename mpl::apply1<
-        BOOST_DEDUCED_TYPENAME Derived::use_array_optimization
+        BOOST_DEDUCED_TYPENAME Archive::use_array_optimization
       , BOOST_DEDUCED_TYPENAME remove_const<ValueType>::type
     >::type use_optimized;
     save_optimized(x,version,use_optimized() );   
@@ -99,7 +102,7 @@ public:
   void save_override(serialization::array<ValueType> const& x, unsigned int version)
   {
     typedef typename mpl::apply1<
-        BOOST_DEDUCED_TYPENAME Derived::use_array_optimization
+        BOOST_DEDUCED_TYPENAME Archive::use_array_optimization
       , BOOST_DEDUCED_TYPENAME remove_const<ValueType>::type
     >::type use_optimized;
     save_optimized(x,version,use_optimized());
@@ -111,11 +114,6 @@ public:
   void save_override(T const& x, unsigned BOOST_PFTO int version)
   {
     Base::save_override(x, static_cast<unsigned int>(version));
-  }
-private:
-  Derived * This()
-  {
-    return static_cast<Derived*>(this);
   }
 };
 

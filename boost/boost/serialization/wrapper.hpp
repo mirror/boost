@@ -20,8 +20,8 @@ namespace boost { namespace serialization {
 
 template<
     class T, 
-    int Level, 
-    int Tracking,
+    int Level = object_serializable, 
+    int Tracking = track_never,
     unsigned int Version = 0,
     class ETII = extended_type_info_impl< T >
 >
@@ -50,5 +50,14 @@ struct is_wrapper
 {};
  
 } } // end namespace boost::serialization
+
+// A macro to define that a class is a wrapper
+#define BOOST_CLASS_IS_WRAPPER(T)            \
+namespace boost {                            \
+namespace serialization {                    \
+template<>                                   \
+struct is_wrapper< T > : mpl::true_ {};      \
+}}                                           
+
 
 #endif //BOOST_SERIALIZATION_WRAPPER_HPP
