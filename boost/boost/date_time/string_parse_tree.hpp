@@ -45,7 +45,8 @@ struct parse_match_result
   }
   //! Returns true if more characters were parsed than was necessary
   /*! Should be used in conjunction with last_char() 
-   * to get the remaining character. */
+   *  to get the remaining character. 
+   */
   bool has_remaining() const
   {
     return (cache.size() > match_depth);
@@ -55,10 +56,8 @@ struct parse_match_result
   string_type cache;
   unsigned short match_depth;
   short current_match;
-  static const short PARSE_ERROR;
+  enum PARSE_STATE { PARSE_ERROR= -1 };
 };
-template<typename charT>
-const short parse_match_result<charT>::PARSE_ERROR = -1;
 
   //for debug -- really only char streams...
 template<typename charT>
