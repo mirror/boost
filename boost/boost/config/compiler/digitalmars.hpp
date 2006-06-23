@@ -55,10 +55,15 @@
 #  define BOOST_NO_EXCEPTIONS
 #endif
 
-#if (__DMC__ < 0x840)
+#if __DMC__ < 0x800
+#error "Compiler not supported or configured - please reconfigure"
+#endif
+//
+// last known and checked version is ...:
+#if (__DMC__ > 0x848)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  endif
-#endif
+
 
 
