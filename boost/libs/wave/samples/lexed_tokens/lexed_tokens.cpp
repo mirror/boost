@@ -123,14 +123,14 @@ boost::wave::util::file_position_type current_position;
             ++it;
         }
     }
-    catch (boost::wave::cpplexer::lexing_exception &e) {
+    catch (boost::wave::cpplexer::lexing_exception const& e) {
     // some lexing error
         std::cerr 
             << e.file_name() << "(" << e.line_no() << "): "
             << e.description() << std::endl;
         return 2;
     }
-    catch (std::exception &e) {
+    catch (std::exception const& e) {
     // use last recognized token to retrieve the error position
         std::cerr 
             << current_position.get_file() 

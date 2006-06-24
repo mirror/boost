@@ -33,24 +33,26 @@
 #include "translation_unit_parser.h"
 #include "translation_unit_skipper.h"
 
+#if HANNIBAL_DUMP_PARSE_TREE != 0
 ///////////////////////////////////////////////////////////////////////////////
 namespace {
 
+    ///////////////////////////////////////////////////////////////////////////
+    //  helper routines needed to generate the parse tree XML dump
     typedef boost::wave::cpplexer::lex_token<> token_type;
     
-    inline int 
-    get_token_id(token_type const &t) 
+    int get_token_id(token_type const &t) 
     { 
         return boost::wave::token_id(t); 
     }
     
-    inline token_type::string_type
-    get_token_value(token_type const &t) 
+    token_type::string_type get_token_value(token_type const &t) 
     { 
         return t.get_value(); 
     }
 
 }
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // main entry point
@@ -76,7 +78,7 @@ boost::wave::util::file_position_type current_position;
         }
         instream.unsetf(std::ios::skipws);
         instring = std::string(std::istreambuf_iterator<char>(instream.rdbuf()),
-                                std::istreambuf_iterator<char>());
+                               std::istreambuf_iterator<char>());
             
     //  The template boost::wave::cpplexer::lex_token<> is the token type to be 
     //  used by the Wave library.
@@ -118,33 +120,39 @@ boost::wave::util::file_position_type current_position;
 
     // parse the input file
     result_type pi = boost::spirit::ast_parse(first, last, g, s);
-        
+
         if (pi.full) {
             std::cout << "Hannibal: parsed sucessfully: " << argv[1] 
                       << std::endl;
-                      
+
 #if HANNIBAL_DUMP_PARSE_TREE != 0
             // generate xml dump from parse tree, if requested
             boost::spirit::tree_to_xml(std::cerr, pi.trees, "", rule_map, 
                 &get_token_id, &get_token_value);
 #endif
         }
+        else {
+            std::cout << "Hannibal: parsing failed: " << argv[1] 
+                      << std::endl;
+            std::cout << "Hannibal: last recognized token was: " << *pi.stop
+                      << std::endl;
+        }
     }
-    catch (boost::wave::cpp_exception &e) {
+    catch (boost::wave::cpp_exception const& e) {
     // some preprocessing error
         std::cerr 
             << e.file_name() << ":" << e.line_no() << ":" << e.column_no() << ": "
             << e.description() << std::endl;
         return 2;
     }
-    catch (boost::wave::cpplexer::lexing_exception const &e) {
+    catch (boost::wave::cpplexer::lexing_exception const& e) {
     // some lexing error
         std::cerr 
             << e.file_name() << ":" << e.line_no() << ":" << e.column_no() << ": "
             << e.description() << std::endl;
         return 2;
     }
-    catch (std::exception &e) {
+    catch (std::exception const& e) {
     // use last recognized token to retrieve the error position
         std::cerr 
             << current_position.get_file() 

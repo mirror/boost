@@ -107,14 +107,14 @@ main(int argc, char *argv[])
             ++first;
         }
     }
-    catch (boost::wave::cpp_exception &e) {
+    catch (boost::wave::cpp_exception const& e) {
     // some preprocessing error
         cerr 
             << e.file_name() << "(" << e.line_no() << "): "
             << e.description() << endl;
         return 2;
     }
-    catch (std::exception &e) {
+    catch (std::exception const& e) {
     // use last recognized token to retrieve the error position
         cerr 
             << current_token.get_position().get_file() 

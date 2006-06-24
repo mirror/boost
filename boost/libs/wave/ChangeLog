@@ -159,6 +159,7 @@ Boost V1.34.0
 - Fixed a problem in the get_tokenname() function.
 - Added a missing #define BOOST_WAVE_SOURCE 1 to the wave_config_constant.cpp
   file.
+- Fixed exception specifications to catch all exceptions by const&.
 
 Sat Feb 18 2005
 - Version 1.2.3
