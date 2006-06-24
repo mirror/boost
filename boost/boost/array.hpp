@@ -211,45 +211,37 @@ namespace boost {
         // operator[]
         reference operator[](size_type i)
         {
-            BOOST_ASSERT( "out of range" );
-            failed_rangecheck();
-            return null_item();
+            return failed_rangecheck();
         }
 
         const_reference operator[](size_type i) const
         {
-            BOOST_ASSERT( "out of range" );
-            failed_rangecheck();
-            return null_item();
+            return failed_rangecheck();
         }
 
         // at() with range check
-        reference at(size_type i)               {   failed_rangecheck(); return null_item();  }
-        const_reference at(size_type i) const   {   failed_rangecheck(); return null_item();  }
+        reference at(size_type i)               {   return failed_rangecheck(); }
+        const_reference at(size_type i) const   {   return failed_rangecheck(); }
 
         // front() and back()
         reference front()
         {
-            failed_rangecheck();
-            return null_item();
+            return failed_rangecheck();
         }
 
         const_reference front() const
         {
-            failed_rangecheck();
-            return null_item();
+            return failed_rangecheck();
         }
 
         reference back()
         {
-            failed_rangecheck();
-            return null_item();
+            return failed_rangecheck();
         }
 
         const_reference back() const
         {
-            failed_rangecheck();
-            return null_item();
+            return failed_rangecheck();
         }
 
         // size is constant
@@ -278,20 +270,17 @@ namespace boost {
         void assign (const T& ) {   }
 
         // check range (may be private because it is static)
-        static void failed_rangecheck () {
+        static reference failed_rangecheck () {
                 std::range_error e("attempt to access element of an empty array");
                 boost::throw_exception(e);
+                //
+                // We need to return something here to keep
+                // some compilers happy: however we will never
+                // actually get here....
+                //
+                static T placeholder;
+                return placeholder;
             }
-        static reference null_item()
-        {
-           //
-           // This function must exist to allow our various interfaces to
-           // actually compile, however it will never be called, because
-           // an exception will always be thrown before we get here.
-           //
-           static T placeholder;
-           return placeholder;
-        }
     };
 #endif
 
