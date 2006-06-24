@@ -163,6 +163,8 @@ Boost V1.34.0
 - Fixed predefined macros to appear to be defined at a position referring to 
   a file named "<built-in>". Thanks to Andreas Sæbjørnsen for reporting.
 - Fixed the Re2C lexer not to segfault on empty files anymore.
+- Stripped leading and trailing whitespace for all lines in a config file (Wave
+  driver tool).
 
 Sat Feb 18 2005
 - Version 1.2.3

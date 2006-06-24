@@ -240,10 +240,14 @@ namespace cmd_line_utils {
             string::size_type pos = line.find_first_not_of(" \t");
             if (pos == string::npos) 
                 continue;
-
+            
         // skip comment lines
-            if ('#' != line[pos])
-                options.push_back(line);
+            if ('#' != line[pos]) {
+            // strip leading and trailing whitespace
+                string::size_type endpos = line.find_last_not_of(" \t");
+                BOOST_ASSERT(endpos != string::npos);
+                options.push_back(line.substr(pos, endpos-pos+1));
+            }
         }
 
         if (options.size() > 0) {
