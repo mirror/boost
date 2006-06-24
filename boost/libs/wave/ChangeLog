@@ -161,7 +161,7 @@ Boost V1.34.0
   file.
 - Fixed exception specifications to catch all exceptions by const&.
 - Fixed predefined macros to appear to be defined at a position referring to 
-  a file named "<built-in>".
+  a file named "<built-in>". Thanks to Andreas Sæbjørnsen for reporting.
 - Fixed the Re2C lexer not to segfault on empty files anymore.
 
 Sat Feb 18 2005
