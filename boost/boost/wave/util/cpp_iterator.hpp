@@ -155,7 +155,7 @@ std::string::iterator end = macrostring.end();
         ++begin;
         
 // parse the macro definition
-position_type act_pos("command line", 0);
+position_type act_pos("<command line>", 0);
 boost::spirit::tree_parse_info<lexer_type> hit = 
     predef_macros_type::parse_predefined_macro(
         lexer_type(begin, end, position_type(), language), lexer_type());

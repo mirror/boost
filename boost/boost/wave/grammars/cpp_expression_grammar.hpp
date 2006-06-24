@@ -444,11 +444,11 @@ struct expression_grammar :
                 ;
 
             constant
-                =   ch_p(T_INTLIT) 
+                =   ch_p(T_PP_NUMBER) 
                     [
                         constant.val = impl::as_intlit(arg1)
                     ]
-                |   ch_p(T_PP_NUMBER) 
+                |   ch_p(T_INTLIT) 
                     [
                         constant.val = impl::as_intlit(arg1)
                     ]
@@ -571,8 +571,8 @@ struct expression_grammar :
                 ;
 
             constant_nocalc
-                =   ch_p(T_INTLIT) 
-                |   ch_p(T_PP_NUMBER) 
+                =   ch_p(T_PP_NUMBER) 
+                |   ch_p(T_INTLIT) 
                 |   ch_p(T_CHARLIT) 
                 ;
 
@@ -706,7 +706,7 @@ expression_grammar_gen<TokenT>::evaluate(
                 if (if_block_status) {
                     string_type expression = as_string<string_type>(first, last);
                     if (0 == expression.size()) 
-                        expression = "empty expression";
+                        expression = "<empty expression>";
                     BOOST_WAVE_THROW(preprocess_exception, ill_formed_expression, 
                         expression.c_str(), act_pos);
                 }
@@ -720,10 +720,10 @@ expression_grammar_gen<TokenT>::evaluate(
     }
 
     if (closure_value::error_noerror != result.is_valid()) {
-    // division by zero occured
+    // division by zero occurred
         string_type expression = as_string<string_type>(first, last);
         if (0 == expression.size()) 
-            expression = "empty expression";
+            expression = "<empty expression>";
             
         if (closure_value::error_division_by_zero == result.is_valid()) {
             BOOST_WAVE_THROW(preprocess_exception, division_by_zero, 

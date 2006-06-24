@@ -71,6 +71,8 @@
         s->cur = cursor;                                                      \
         s->lim = limit;                                                       \
         s->ptr = marker;                                                      \
+        if (s->cur > s->lim)                                                  \
+            return T_EOF;     /* may happen for empty files */                \
         return (i);                                                           \
     }                                                                         \
     /**/

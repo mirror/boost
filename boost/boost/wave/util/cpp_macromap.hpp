@@ -1674,7 +1674,7 @@ macromap<ContextT>::init_predefined_macros(char const *fname,
 defined_macros_type *current_scope = scope ? scope : current_macros;
 
 // first, add the static macros
-position_type pos;
+position_type pos("<built-in>");
 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
     if (boost::wave::need_c99(ctx.get_language())) {
