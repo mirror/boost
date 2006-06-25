@@ -1,6 +1,6 @@
 // --------------------------------------------------------
 //        (C) Copyright Jeremy Siek   2001.
-//        (C) Copyright Gennaro Prota 2003 - 2004.
+//        (C) Copyright Gennaro Prota 2003 - 2006.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -9,8 +9,9 @@
 // -----------------------------------------------------------
 
 
+#include <assert.h>
 #include "bitset_test.hpp"
-#include "boost/dynamic_bitset.hpp"
+#include "boost/dynamic_bitset/dynamic_bitset.hpp"
 #include "boost/limits.hpp"
 #include "boost/config.hpp"
 
@@ -18,7 +19,7 @@
 template <typename Block>
 void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
 {
-  // a bunch of typedefs to have handy later on
+  // a bunch of typedefs which will be handy later on
   typedef boost::dynamic_bitset<Block> bitset_type;
   typedef bitset_test<bitset_type> Tests;
   // typedef typename bitset_type::size_type size_type; // unusable with Borland 5.5.1
@@ -52,9 +53,8 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
     Tests::to_ulong(b);
   }
   {
-    Block all_ones = ~Block(0);
     boost::dynamic_bitset<Block> b(bitset_type::bits_per_block,
-                                   static_cast<unsigned long>(all_ones));
+                                   static_cast<unsigned long>(-1));
     Tests::to_ulong(b);
   }
   {
@@ -93,6 +93,14 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
   }
   {
     boost::dynamic_bitset<Block> b(std::string("0"));
+    Tests::count(b);
+  }
+  {
+    boost::dynamic_bitset<Block> b(std::string("1"));
+    Tests::count(b);
+  }
+  {
+    boost::dynamic_bitset<Block> b(8, 255ul);
     Tests::count(b);
   }
   {
@@ -391,6 +399,10 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
   }
   {
     boost::dynamic_bitset<Block> a(std::string("1")), b(std::string("1"));
+    Tests::operator_less_than(a, b);
+  }
+  {
+    boost::dynamic_bitset<Block> a(std::string("10")), b(std::string("11"));
     Tests::operator_less_than(a, b);
   }
   {
