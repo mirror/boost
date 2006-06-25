@@ -21,7 +21,7 @@
   <anchor id="overview" />
   <bridgehead renderas="sect3">Overview</bridgehead>
   <para>
-    The library has several functions that require the creation of a library file. The Jamfile in the build directory will produce a "static" library (libboost_date_time) and a "dynamic/shared" library (boost_date_time) that contains these functions. 
+    The library has a few functions that require the creation of a library file (mostly to_string, from_string functions).  Most library users can make effective use of the library WITHOUT building the library, but simply including the required headers. If the library is needed, the Jamfile in the build directory will produce a "static" library (libboost_date_time) and a "dynamic/shared" library (boost_date_time) that contains these functions. 
   </para>
   
   <anchor id="compile_options" />
@@ -41,31 +41,64 @@
   <anchor id="portability" />
   <bridgehead renderas="sect3">Compiler/Portability Notes</bridgehead>
   <para>
-    The Boost Date-Time library has been built and tested with many compilers. However, some compilers and standard libraries have issues. While some of these issues can be worked around, others are difficult to work around. The following compilers fully support all aspects of the library:
+    The Boost Date-Time library has been built and tested with many compilers and platforms. However, some compilers and standard libraries have issues. While some of these issues can be worked around, others are difficult to work around. The following compilers are known to fully support all aspects of the library:
     <itemizedlist mark="bullet">
-      <listitem>GCC 3.2 - 3.4, 4.0 on Linux</listitem>
-      <listitem>GCC 3.3 on Darwin</listitem>
-      <listitem>GCC 3.3 on Solaris</listitem>
-      <listitem>GCC 3.2 (cygwin) *</listitem>
-      <listitem>MinGW 3.2 *</listitem>
-      <listitem>MSVC 7.1 </listitem>
-      <listitem>Intel 8.1 Linux and Windows</listitem>
+      <listitem>Codewarrior 9.4 Windows</listitem>
+      <listitem>GCC 3.2 - 3.4, 4.x on Linux</listitem>
+      <listitem>GCC 3.3, 4.x on Darwin</listitem>
+      <listitem>GCC 3.3 - 3.4, 4.x on Solaris</listitem>
+      <listitem>GCC 3.3, 4.x  on HP-UX</listitem>
+      <listitem>QCC 3.3.5 on QNX</listitem>
+      <listitem>MSVC 7.1 Windows </listitem>
+      <listitem>Intel 8.1-9.x Linux and Windows</listitem>
     </itemizedlist>
-    * These compilers do not support the <code>wstring/wstream</code> aspects of the <code>date_time</code> library.
   </para>
+
+  <para>
+     Unfortunately, the VC8 compiler has some issues with date-time code.  
+     The most serious issue is a memory leak which was introduced into the
+     VC8 standard library basic_stream code.  Date-time has code has been changed
+     to avoid this as much as possible, but if you are using the legacy IO option 
+     (NOT the default with VC8) then the issue can still arise.  See the
+
+     <ulink url="http://lists.boost.org/Archives/boost/2006/02/101122.php">mailing list archive</ulink> for more details.
+  </para>
+
+  <para>
+     In addition to the problem above, some versions of the VC8 library have limited 
+     the range of allowed 
+     values in the <code>std::tm</code> structure to positive values.  This was a new 
+     restriction added in the VC8.  The effect is that dates prior to the year
+     1900 will cause exceptions.  There is, unfortunately, no easy workaround for 
+     this issue.  Note that the new 64bit version of the VC8 compiler
+     does not appear to have this limitation.  
+  </para>
+
+  <para>
+    These compilers support all aspects of the library except <code>wstring/wstream</code> 
+    output.
+    <itemizedlist mark="bullet">
+      <listitem>MinGW 3.2, 3.4, 3.5 *</listitem>
+      <listitem>GCC 3.2 (cygwin) *</listitem>
+    </itemizedlist>
+  </para>
+
   <para>
     In particular, a lack of support for standard locales limits the ability of the library to support iostream based input output. For these compilers a set of more limited string based input-output is provided. Some compilers/standard libraries with this limitation include: 
     <itemizedlist mark="bullet">
-      <listitem>GCC 2.9x on Linux</listitem>
-      <listitem>Borland 5.1.1 and 5.6</listitem>
-      <listitem>MSVC 7.0</listitem>
-      <listitem>MSVC 6 SP5 </listitem>
+      <listitem>Borland 5.6</listitem>
     </itemizedlist>
   </para>
+
   <para>
-  Metrowerks Code Warrior 9.4 has some input I/O limitations, but is otherwise
-  fully supported.
+    Official support for some older compilers has now been dropped.  This includes:
+    <itemizedlist mark="bullet">
+      <listitem>GCC 2.9x</listitem>
+      <listitem>Borland 5.1.1</listitem>
+      <listitem>MSVC 7.0 and 6 SP5 </listitem>
+    </itemizedlist>
   </para>
+
   <bridgehead renderas="sect5">Visual Studio &amp; STLPort</bridgehead>
   <para>There is a known issue with Visual Studio (7.0 &amp; 7.1) and STLPort. The build errors typically make reference to a type issue or 'no acceptable conversion' and are attempting to instantiate a template with <code>wchar_t</code>. The default build of STLPort does not support <code>wchar_t</code>. There are two possible workarounds for this issue. The simplest is the user can build date_time with no wide stream/string etc. The other is to rebuild STLPort with wchar_t support.
   </para>
@@ -110,10 +143,11 @@
       <listitem><ulink url="../../libs/tokenizer/index.html">boost.tokenizer</ulink> </listitem>
       <listitem><ulink url="../../libs/integer/cstdint.htm">boost.integer(cstdint)</ulink> </listitem>
       <listitem><ulink url="../../libs/utility/operators.htm">boost.operators</ulink> </listitem>
-      <listitem><ulink url="../../libs/conversion/lexical_cast.htm">boost::lexical_cast </ulink> </listitem>
-      <listitem><ulink url="../../libs/smart_ptr/smart_ptr.htm">boost::smart_ptr </ulink> </listitem>
+      <listitem><ulink url="../../libs/conversion/lexical_cast.htm">boost.lexical_cast </ulink> </listitem>
+      <listitem><ulink url="../../libs/smart_ptr/smart_ptr.htm">boost.smart_ptr (local time only)</ulink> </listitem>
       <listitem><ulink url="../../libs/algorithm/string/">boost::string_algorithms </ulink> </listitem>
+      <listitem><ulink url="../../libs/algorithm/serialize/">boost::serialize (serialization code only) </ulink> </listitem>
     </itemizedlist>
-    so at least these libraries need to be installed. 
+    so these libraries need to be installed. 
   </para>
 </section>

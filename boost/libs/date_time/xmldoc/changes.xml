@@ -2,7 +2,7 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
-<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2006 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
@@ -11,6 +11,70 @@
   <title>Change History</title>
   
   <!-- if each new change tgroup has a "Bug Fix" as the first "Type", the columns will line up nicely -->
+
+  <bridgehead renderas="sect3">Changes from Boost 1.33 to 1.34 (date_time 1.04 to 1.05)</bridgehead>
+  <informaltable frame="all">
+    <tgroup cols="2">
+      <thead>
+	<row>
+	  <entry>Type</entry>
+	  <entry>Description</entry>
+	</row>
+      </thead>
+      <tbody>
+        <row>
+          <entry>Bug Fix</entry>
+          <entry>Fix a problem with potential linking error with multiple definitions due
+                 to I/O code.
+          </entry>
+        </row>
+
+        <row>
+          <entry>Bug Fix</entry>
+          <entry>Fix regression errors that showed up under FreeBSD with GCC and the 
+                 LANG environment set to russian -- changed parser to use classic 
+                 locale instead of blank locale.
+          </entry>
+        </row>
+
+        <row>
+          <entry>Bug Fix</entry>
+          <entry>Changes for tracker issue 1178092 -- change in convert_to_lower to make 
+                 local a const static and speed up parsing.
+          </entry>
+        </row>
+
+        <row>
+          <entry>Bug Fix</entry>
+          <entry>Patches from Ulrich Eckhardt to fix support for EVC++ 4.
+          </entry>
+        </row>
+
+        <row>
+          <entry>Feature</entry>
+          <entry>Reduce the usage of basic_stringstream as much a possible to work around 
+                 a bug in the VC8 standard library. See 
+                 <ulink url="http://lists.boost.org/Archives/boost/2006/02/101122.php">mailing list archive</ulink> 
+                 for more information.
+          </entry>
+        </row>
+
+        <row>
+          <entry>Bug Fix</entry>
+          <entry>
+          </entry>
+        </row>
+
+        <row>
+          <entry>Bug Fix</entry>
+          <entry>
+          </entry>
+        </row>
+
+      </tbody>
+    </tgroup>
+  </informaltable>
+
 
   <bridgehead renderas="sect3">Changes from Boost 1.32 to 1.33 (date_time 1.03 to 1.04)</bridgehead>
   <informaltable frame="all">
