@@ -1,6 +1,6 @@
 // --------------------------------------------------------
 //        (C) Copyright Jeremy Siek   2001.
-//        (C) Copyright Gennaro Prota 2003 - 2004.
+//        (C) Copyright Gennaro Prota 2003 - 2006.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -10,9 +10,9 @@
 
 #include <fstream>
 #include <string>
-#include <cstddef> // for std::size_t
+#include <cstddef>   // for std::size_t
 #include <stdexcept> // for std::logic_error
-#include <cassert>
+#include <assert.h>
 
 #include "boost/config.hpp"
 #if !defined (BOOST_NO_STRINGSTREAM)
