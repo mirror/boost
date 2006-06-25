@@ -38,10 +38,13 @@ CHANGELOG
   something not equal zero.
 - Added new preprocessing hook functions: found_error_directive() and 
   found_warning_directive() to be called when #error/#warning directives are
-  encountered.
+  encountered. This was suggested by Andreas Sæbjørnsen.
 - Added a new sample to Wave: hannibal, a partial C++ parser implementation
   initially written by Danny Havenith (http://havenith-verlinden.nl/hannibal/)
   who agreed to add this here. Thanks!
+- Added new preprocessing hook function: found_line_directive() to be called 
+  when a #line directive is encountered. This was suggested by Andreas
+  Sæbjørnsen.
   
 Boost V1.34.0
 - Wave Version 1.2.4

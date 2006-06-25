@@ -1744,13 +1744,14 @@ namespace {
 
     template <typename IteratorT, typename StringT>
     bool retrieve_line_info (IteratorT first, IteratorT const &last,
-        int &line, StringT &file)
+        unsigned int &line, StringT &file)
     {
         using namespace boost::wave;
-        if (T_PP_NUMBER == token_id(*first)) {
+        token_id id = token_id(*first);
+        if (T_PP_NUMBER == id || T_INTLIT == id) {
         // extract line number
             using namespace std;    // some systems have atoi in namespace std
-            line = atoi((*first).get_value().c_str());
+            line = (unsigned int)atoi((*first).get_value().c_str());
             
         // extract file name (if it is given)
             while (++first != last && IS_CATEGORY(*first, WhiteSpaceTokenType)) 
@@ -1797,15 +1798,13 @@ const_tree_iterator_t last = make_ref_transform_iterator(end, get_value);
     
 // try to interpret the #line body as a number followed by an optional
 // string literal
-int line = 0;
+unsigned int line = 0;
 string_type file_name;
+token_sequence_type toexpand;
 
+    std::copy(first, last, std::inserter(toexpand, toexpand.end()));
     if (!retrieve_line_info(first, last, line, file_name)) {
     // preprocess the body of this #line message
-    token_sequence_type toexpand;
-
-        std::copy(first, make_ref_transform_iterator(end, get_value),
-            std::inserter(toexpand, toexpand.end()));
 
         typename token_sequence_type::iterator begin2 = toexpand.begin();
         ctx.expand_whole_tokensequence(begin2, toexpand.end(), 
@@ -1817,6 +1816,15 @@ string_type file_name;
             BOOST_WAVE_THROW(preprocess_exception, bad_line_statement, 
                 boost::wave::util::impl::as_string(expanded).c_str(), act_pos)
         }
+
+    // call the corresponding pp hook function
+        ctx.get_hooks().found_line_directive(ctx, expanded, line, 
+            file_name.c_str());
+    }
+    else {
+    // call the corresponding pp hook function
+        ctx.get_hooks().found_line_directive(ctx, toexpand, line, 
+            file_name.c_str());
     }
     
 // the queues should be empty at this point

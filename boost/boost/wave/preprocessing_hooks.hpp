@@ -481,8 +481,8 @@ struct default_preprocessing_hooks
 #if BOOST_WAVE_SUPPORT_WARNING_DIRECTIVE != 0
     ///////////////////////////////////////////////////////////////////////////
     //
-    //  The function 'found_warning_directive' is called, will be called by the 
-    //  library, whenever a #warning directive is found.
+    //  The function 'found_warning_directive' will be called by the library
+    //  whenever a #warning directive is found.
     //
     //  The parameter 'ctx' is a reference to the context object used for 
     //  instantiating the preprocessing iterators by the user.
@@ -499,8 +499,8 @@ struct default_preprocessing_hooks
 
     ///////////////////////////////////////////////////////////////////////////
     //
-    //  The function 'found_error_directive' is called, will be called by the 
-    //  library, whenever a #error directive is found.
+    //  The function 'found_error_directive' will be called by the library
+    //  whenever a #error directive is found.
     //
     //  The parameter 'ctx' is a reference to the context object used for 
     //  instantiating the preprocessing iterators by the user.
@@ -513,6 +513,30 @@ struct default_preprocessing_hooks
     bool
     found_error_directive(ContextT const& ctx, ContainerT const& message)
     { return false; }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //  The function 'found_line_directive' will be called by the library
+    //  whenever a #line directive is found.
+    //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
+    //  The parameter 'arguments' references the argument token sequence of the
+    //  encountered #line directive.
+    //
+    //  The parameter 'line' contains the recognized line number from the #line
+    //  directive.
+    //
+    //  The parameter 'filename' references the recognized file name from the 
+    //  #line directive (if there was one given).
+    //
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename ContextT, typename ContainerT>
+    void
+    found_line_directive(ContextT const& ctx, ContainerT const& arguments,
+        unsigned int line, std::string const& filename)
+    {}
 };
 
 ///////////////////////////////////////////////////////////////////////////////

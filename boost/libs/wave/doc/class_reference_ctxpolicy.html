@@ -129,11 +129,17 @@
         <span class="comment">// #error and #warning directive hooks</span>
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;
         <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#found_warning_directive">found_warning_directive</a>(ContextT <span class="keyword">const</span> &amp;ctx, 
-            ContainerT <span class="keyword">const</span> &amp;pending);
+            ContainerT <span class="keyword">const</span> &amp;message);
 
         <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;
-        <span class="keyword">bool</span> found_error_directive(ContextT <span class="keyword">const</span> &amp;ctx, 
-            ContainerT <span class="keyword">const</span> &amp;pending);
+        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#found_error_directive">found_error_directive</a>(ContextT <span class="keyword">const</span> &amp;ctx, 
+            ContainerT <span class="keyword">const</span> &amp;message);
+
+        <span class="comment">// #line directive hook</span>
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;
+        <span class="keyword">bool</span> <a href="class_reference_ctxpolicy.html#found_line_directive">found_line_directive</a>(ContextT <span class="keyword">const</span> &amp;ctx, 
+            ContainerT <span class="keyword">const</span> &amp;arguments, <span class="keyword">unsigned int</span> line,
+            std::string <span class="keyword">const</span>&amp; filename);
     };
 
 }}}   <span class="comment">// namespace boost::wave::context_policies</span></pre>
@@ -395,6 +401,20 @@
   <p>The parameter <tt>message</tt> references the argument token sequence of the encountered <span class="preprocessor">#error</span> directive.<br>
   </p>
 </blockquote>
+<p><strong><a name="found_line_directive" id="found_line_directive"></a>found_line_drective</strong></p>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> ContextT, <span class="keyword">typename</span> ContainerT&gt;
+    <span class="keyword">void</span> <a href="class_reference_ctxpolicy.html#found_error_directive">found_error_directive</a>(ContextT <span class="keyword">const</span>&amp; ctx, 
+        ContainerT <span class="keyword">const</span> &amp;arguments, <span class="keyword">unsigned int</span> line,
+        std::string <span class="keyword">const</span>&amp; filename);
+</pre>
+<blockquote>
+  <p>The function <tt>found_line_directive </tt> is called whenever a <span class="preprocessor">#line </span>directive has been encountered. Note, this functions was added for the Boost V1.35.0 release. </p>
+  <p>The <tt>ctx</tt> parameter provides a reference to the <tt>context_type</tt> used during instantiation of the preprocessing iterators by the user. </p>
+  <p>The parameter <tt>arguments</tt> references the argument token sequence of the encountered <span class="preprocessor">#line</span> directive.</p>
+  <p>The parameter <tt>line</tt> contains the recognized line number from the <span class="preprocessor">#line</span>  directive.</p>
+  <p>The parameter <tt>filename</tt> references the recognized file name from the    <span class="preprocessor">#line</span> directive (if there was one given).<br>
+  </p>
+</blockquote>
 <table border="0">
   <tr> 
     <td width="10"></td>
@@ -408,7 +428,7 @@
   <br>
 <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Saturday, June 17, 2006  11:24<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Sunday, June 25, 2006  12:10<!-- #EndDate -->
 </span></p>
 </body>
 </html>
