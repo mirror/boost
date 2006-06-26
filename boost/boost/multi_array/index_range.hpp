@@ -31,6 +31,10 @@ namespace multi_array {
 
   template <typename Index,typename SizeType>
   class index_range {
+  public:
+    typedef Index index;
+    typedef SizeType size_type;
+
   private:
     static index from_start()
       { return (std::numeric_limits<index>::min)(); }
@@ -39,8 +43,6 @@ namespace multi_array {
       { return (std::numeric_limits<index>::max)(); }
 
   public:
-    typedef Index index;
-    typedef SizeType size_type;
 
     index_range()
     {
