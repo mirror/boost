@@ -241,11 +241,12 @@ HREF="converter_policies.html#f2i"><CODE>Float2IntRounder</CODE></A> policy clas
 <HR>
 <H2><A NAME="examples">Examples</A></H2>
 <BLOCKQUOTE>
-  <PRE>#include &lt;boost/numeric/conversion/converter.hpp&gt;
+  <PRE>  #include &lt;cassert&gt;
+  #include &lt;boost/numeric/conversion/converter.hpp&gt;
 
-int main() {
+  int main() {
 
-  typedef boost::numeric::converter&lt;int,doublegt; Double2Int ;
+  typedef boost::numeric::converter&lt;int,double&gt; Double2Int ;
 
   int x = Double2Int::convert(2.0);
   assert ( x == 2 );

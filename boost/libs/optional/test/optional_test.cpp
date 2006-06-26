@@ -15,7 +15,9 @@
 
 #define BOOST_ENABLE_ASSERT_HANDLER
 
-#include "boost/optional.hpp"
+#include "boost/bind/apply.hpp" // Included just to test proper interaction with boost::apply<> as reported by Daniel Wallin
+
+#include "boost/optional/optional.hpp"
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -151,6 +153,95 @@ void test_basics( T const* )
   ob.reset();
   check_is_pending_dtor( ARG(T) ) ;
   check_uninitialized(ob);
+  
+}
+
+template<class T>
+void test_conditional_ctor_and_get_valur_or ( T const* )
+{
+  TRACE( std::endl << BOOST_CURRENT_FUNCTION  );
+  
+  T a(321);
+  
+  T z(123);
+  
+  optional<T> const cdef0(false,a);
+  
+  optional<T> def0(false,a);
+  optional<T> def1 = boost::make_optional(false,a); //  T is not within boost so ADL won't find make_optional unqualified
+  check_uninitialized(def0);
+  check_uninitialized(def1);
+
+  optional<T> const co0(true,a);
+  
+  optional<T> o0(true,a);
+  optional<T> o1 = boost::make_optional(true,a); //  T is not within boost so ADL won't find make_optional unqualified
+
+  check_initialized(o0);
+  check_initialized(o1);
+  check_value(o0,a,z);
+  check_value(o1,a,z);
+  
+  T b = def0.get_value_or(z);
+  BOOST_CHECK( b == z ) ;
+  
+  b = get_optional_value_or(def0,z);
+  BOOST_CHECK( b == z ) ;
+  
+  b = o0.get_value_or(z);
+  BOOST_CHECK( b == a ) ;
+
+  b = get_optional_value_or(o0,z);
+  BOOST_CHECK( b == a ) ;
+  
+  
+  T const& crz = z ;
+  T&        rz = z ;
+  
+  T const& crzz = def0.get_value_or(crz);
+  BOOST_CHECK( crzz == crz ) ;
+  
+  T& rzz = def0.get_value_or(rz);
+  BOOST_CHECK( rzz == rz ) ;
+  
+  T const& crzzz = get_optional_value_or(cdef0,crz);
+  BOOST_CHECK( crzzz == crz ) ;
+  
+  T& rzzz = get_optional_value_or(def0,rz);
+  BOOST_CHECK( rzzz == rz ) ;
+  
+  T const& crb = o0.get_value_or(crz);
+  BOOST_CHECK( crb == a ) ;
+  
+  T& rb = o0.get_value_or(rz);
+  BOOST_CHECK( rb == b ) ;
+  
+  T const& crbb = get_optional_value_or(co0,crz);
+  BOOST_CHECK( crbb == b ) ;
+  
+  T const& crbbb = get_optional_value_or(o0,crz);
+  BOOST_CHECK( crbbb == b ) ;
+  
+  T& rbb = get_optional_value_or(o0,rz);
+  BOOST_CHECK( rbb == b ) ;
+  
+  T& ra = a ;
+  
+  optional<T&> defref(false,ra);
+  BOOST_CHECK(!defref);
+  
+  optional<T&> ref(true,ra);
+  BOOST_CHECK(!!ref);
+  
+  a = T(432);
+  
+  BOOST_CHECK( *ref == a ) ;
+  
+  T& r1 = defref.get_value_or(z);
+  BOOST_CHECK( r1 == z ) ;
+  
+  T& r2 = ref.get_value_or(z);
+  BOOST_CHECK( r2 == a ) ;
 }
 
 //
@@ -688,6 +779,7 @@ void test_with_builtin_types()
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
 
   test_basics( ARG(double) );
+  test_conditional_ctor_and_get_valur_or( ARG(double) );
   test_uninitialized_access( ARG(double) );
   test_no_throwing_swap( ARG(double) );
   test_relops( ARG(double) ) ;
@@ -699,6 +791,7 @@ void test_with_class_type()
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
 
   test_basics( ARG(X) );
+  test_conditional_ctor_and_get_valur_or( ARG(X) );
   test_direct_value_manip( ARG(X) );
   test_uninitialized_access( ARG(X) );
   test_throwing_direct_init( ARG(X) );

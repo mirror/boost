@@ -52,10 +52,10 @@
 	 <H2><A NAME="numeric_cast"><CODE>numeric_cast</CODE></A></H2>
 	 <BLOCKQUOTE>
 		<PRE>template&lt;typename Target, typename Source&gt; inline
-typename boost::numeric::converter&lt;Traget,Source&gt;::result_type
+typename boost::numeric::converter&lt;Target,Source&gt;::result_type
 numeric_cast ( Source arg )
 {
-   return boost::numeric::converter&lt;Traget,Source&gt;::convert(arg);
+   return boost::numeric::converter&lt;Target,Source&gt;::convert(arg);
 }
 </PRE> </BLOCKQUOTE>
 	 <P>numeric_cast returns the result of converting a value of type Source to a value of type
@@ -67,18 +67,21 @@ numeric_cast ( Source arg )
 	 <P>The following example performs some typical conversions between numeric
 		types: </P>
 	 <BLOCKQUOTE>
-		<PRE>#include &lt;boost/numeric_cast.hpp&gt;
+		<PRE>#include &lt;boost/numeric/conversion/cast.hpp&gt;
 #include &lt;iostream&gt;
 
 int main()
 {
    using boost::numeric_cast;
-   using boost::bad_numeric_cast;
-   using boost::positive_overflow;
-   using boost::negative_overflow;
-      try {
+   
+   using boost::numeric::bad_numeric_cast;
+   using boost::numeric::positive_overflow;
+   using boost::numeric::negative_overflow;
+   
+   try 
+   {
       int i=42;
-      short s=numeric_cast&lt;short&gt;(i);
+      short s=numeric_cast&lt;short&gt;(i); // This conversion succeeds (is in range)
    }
    catch(negative_overflow&amp; e) {
       std::cout &lt;&lt; e.what();
@@ -87,32 +90,40 @@ int main()
       std::cout &lt;&lt; e.what();
    }
 
-   try {
+   try 
+   {
       float f=-42.1234;
-      // This will cause a boost::negative_underflow exception to be thrown
+      
+      // This will cause a boost::numeric::negative_overflow exception to be thrown
       unsigned int i=numeric_cast&lt;unsigned int&gt;(f);
-
-      double d=f+numeric_cast&lt;double&gt;(i);
-
-      unsigned long l=std::numeric_limits&lt;unsigned long&gt;::max();
-      // This works, because unsigned integral types cannot cause overflow.
-      unsigned char c=numeric_cast&lt;unsigned char&gt;(l);
-
-      unsigned short us=std::numeric_limits&lt;unsigned short&gt;::max();
-      // This will cause an positive_overflow exception to be thrown
-      short s=numeric_cast&lt;short&gt;(us);
-
    }
    catch(bad_numeric_cast&amp; e) {
       std::cout &lt;&lt; e.what();
    }
+
+   double d= f + numeric_cast&lt;double&gt;(123); // int -> double
+
+   unsigned long l=std::numeric_limits&lt;unsigned long&gt;::max();
+      
+   try 
+   {
+     // This will cause a boost::numeric::positive_overflow exception to be thrown
+     // NOTE: *operations* on unsigned integral types cannot cause overflow
+     // but *conversions* to a signed type ARE range checked by numeric_cast.
+     
+     unsigned char c=numeric_cast&lt;unsigned char&gt;(l);
+   }
+   catch(positive_overflow&amp; e) {
+      std::cout &lt;&lt; e.what();
+   }
+
 
    return 0;
 }</PRE> </BLOCKQUOTE> <BR> <BR> <HR>
 <HR>
 <P>Back to <A HREF="index.html">Numeric Conversion library index</A></P>
 <HR>
-<P>Revised 23 June 2004</P>
+<P>Revised 20 May 2006</P>
 <p>© Copyright Boost 1999</p>
 <p>© Copyright Fernando Luis Cacciola Carballal, 1999,2004</p>
 <p> Use, modification, and distribution are subject to the Boost Software

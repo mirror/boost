@@ -297,9 +297,12 @@ const&amp;</CODE> <BR> It represents the return type of the
 
 <H2><A NAME="examples">Examples</A></H2>
 <BLOCKQUOTE>
-  <PRE>#include &lt;boost/numeric/conversion_traits.hpp&gt;
+  <PRE>#include &lt;cassert&gt;
+#include &lt;typeinfo&gt;
+#include &lt;boost/numeric/conversion/conversion_traits.hpp&gt;
 
-int main() {
+int main()
+{
 
   // A trivial conversion.
   typedef boost::numeric::conversion_traits&lt;short,short&gt; Short2Short_Traits ;
@@ -307,19 +310,19 @@ int main() {
 
   // A subranged conversion.
   typedef boost::numeric::conversion_traits&lt;double,unsigned int&gt; UInt2Double_Traits ;
-  assert (  UInt2Double_Traits::mixture::value == boost::numeric::integral_to_float ) ;
+  assert (  UInt2Double_Traits::int_float_mixture::value == boost::numeric::integral_to_float ) ;
   assert (  UInt2Double_Traits::sign_mixture::value == boost::numeric::unsigned_to_signed ) ;
   assert ( !UInt2Double_Traits::subranged::value ) ;
   assert ( typeid(UInt2Double_Traits::supertype) == typeid(double) ) ;
   assert ( typeid(UInt2Double_Traits::subtype) == typeid(unsigned int) ) ;
 
   // A doubly subranged conversion.
-  assert (    boost::numeric::conversion_traits&lt;short, unsigned short&gt;::subranged::value
-           &amp;&amp; boost::numeric::conversion_traits&lt;unsigned short, short&gt;::subranged::value
-         )
+  assert ( (boost::numeric::conversion_traits&lt;short, unsigned short&gt;::subranged::value) );
+  assert ( (boost::numeric::conversion_traits&lt;unsigned short, short&gt;::subranged::value) );
 
   return 0;
-}</PRE>
+}
+</PRE>
    </BLOCKQUOTE>
 <HR>
 <P>Back to <A HREF="index.html">Numeric Conversion library index</A></P>

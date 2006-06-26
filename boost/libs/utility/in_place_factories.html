@@ -3,9 +3,8 @@
 <HTML>
 
 <HEAD>
-<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
-<LINK REL="stylesheet" TYPE="text/css" HREF="../../boost.css">
-<TITLE>Header </TITLE>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<TITLE>In_place_factory Documentation</TITLE>
 </HEAD>
 
 <BODY BGCOLOR="#FFFFFF" TEXT="#000000" LINK="#0000FF" VLINK="#800080">
@@ -77,7 +76,7 @@ object is likely to be temporary and serve no purpose besides being the source</
 </pre>
 <p>A solution to this problem is to support direct construction of the contained
 object right in the container's storage.<br>
-In this shceme, the user supplies the arguments for the X constructor
+In this scheme, the user supplies the arguments for the X constructor
 directly to the container:</p>
 <pre>struct C
 {
@@ -138,7 +137,7 @@ The following simplified example shows the basic idea. A complete example follow
 
 void foo()
 {
-  C c( in_place(123,"hello" ) ;
+  C c( in_place(123,"hello") ) ;
 }
 </pre>
 

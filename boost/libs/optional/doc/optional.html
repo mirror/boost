@@ -3,7 +3,6 @@
 <HTML>
 
 <HEAD>
-<meta http-equiv="Content-Language" content="en-us">
 <meta name="GENERATOR" content="Microsoft FrontPage 5.0">
 <meta name="ProgId" content="FrontPage.Editor.Document">
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
@@ -324,6 +323,8 @@ class optional
 
     optional ( T const&amp; v ) ;
 
+    optional ( bool condition, T const&amp; v ) ;  <u><i>[new in 1.34]</u></i>
+    
     optional ( optional const&amp; rhs ) ;
 
     template&lt;class U&gt; explicit optional ( optional&lt;U&gt; const&amp; rhs ) ;
@@ -347,6 +348,8 @@ class optional
     T const& get() const ;
     T&       get() ;
 
+    T<span lang="es"> const&amp;</span> get_value_or( T const&amp; default ) const ;  <u><i>[new in 1.34]</u></i>
+    
     T const* operator -&gt;() const ;
     T*       operator -&gt;() ;
 
@@ -379,6 +382,12 @@ template&lt;class T&gt; inline bool operator >  ( optional&lt;T&gt; const& x, op
 template&lt;class T&gt; inline bool operator <= ( optional&lt;T&gt; const& x, optional&lt;T&gt; const& y ) ;
 
 template&lt;class T&gt; inline bool operator >= ( optional&lt;T&gt; const& x, optional&lt;T&gt; const& y ) ;
+
+template&lt;class T&gt; inline optional&lt;T&gt; make_optional ( T const& v ) ;  <u><i>[new in 1.34]</u></i>
+
+template&lt;class T&gt; inline optional&lt;T&gt; make_optional ( bool condition, T const& v ) ;  <u><i>[new in 1.34]</u></i>
+
+template&lt;class T&gt; inline T <span lang="es">const&amp; </span>get_<span lang="es">optional_</span>value_or ( optional&lt;T&gt; const& opt, T const& default ) ;  <u><i>[new in 1.34]</u></i>
 
 template&lt;class T&gt; inline T const& get ( optional&lt;T&gt; const& opt ) ;
 
@@ -436,7 +445,7 @@ assert ( !def ) ;</pre>
 
 <pre>optional&lt;T&gt;::optional( none_t );</pre>
 <blockquote>
-<p><b>Effect:</b> Constructs an <b>optional </b>uninitialized.</p>
+<p><b>Effect:</b> Constructs an <b>optional</b> uninitialized.</p>
 <p><b>Postconditions:</b> <b>*this</b> is <u>uninitialized</u>.</p>
 <p><b>Throws:</b> Nothing.</p>
 <p><b>Notes:</b></p>
@@ -459,7 +468,6 @@ assert ( !n ) ;</pre>
 <pre>optional&lt;T <i>(not a ref)</i>&gt;::optional( T const&amp; v )</pre>
 <blockquote>
 <p><b>Effect:</b> Directly-Constructs an <b>optional</b>.</p>
-<!-- TemplateName: general/sy_footer_inc.isml -->
 <p><b>Postconditions:</b> <b>*this</b> is <u>initialized</u> and its value is a <i>copy</i> of 'v'.</p>
 <p><b>Throws:</b> Whatever T::T( T const&amp; ) throws.</p>
 <p><b>Notes: </b> T::T( T const&amp; ) is called.</p>
@@ -491,6 +499,23 @@ assert ( *opt == v ) ;
 ++ v ; // mutate referee
 assert (*opt == v); </pre>
 </blockquote>
+</blockquote>
+
+<HR>
+
+<pre>optional&lt;T <i>(not a ref)</i>&gt;::optional( bool condition, T const&amp; v ) ;
+optional&lt;T&amp;&gt;    <span lang="es">       </span>::optional( bool condition, T&amp;     <span lang="es"> </span> v ) ;
+</pre>
+
+<blockquote>
+<p>If <i>condition</i> is <code>true</code>, same as:</p>
+<pre>optional&lt;T <i>(not a ref)</i>&gt;::optional( T const&amp; v )
+optional&lt;T&amp;&gt;<span lang="es">           </span>::optional( T&amp;<span lang="es">      </span> v )
+</pre>
+<p>otherwise, same as:</p>
+<pre>optional&lt;T <i>(not a ref)</i>&gt;::optional()
+optional&lt;T&amp;&gt;<span lang="es">           </span>::optional()
+</pre>
 </blockquote>
 
 <HR>
@@ -797,7 +822,6 @@ assert ( *opt1 == static_cast&lt;U&gt;(v) ) ;
 
 <HR>
 
-
 <pre>T const&amp; optional&lt;T <i>(not a ref)</i>&gt;::operator*() const ;
 T&amp;       optional&lt;T<i> (not a ref)</i>&gt;::operator*();</pre>
 
@@ -826,6 +850,32 @@ assert ( *opt == w ) ;
     <pre></pre>
 </blockquote>
 
+<HR>
+
+<pre>T const&amp; optional&lt;T <i>(not a ref)</i>&gt;::get_value_or( T const&amp; default) const ;
+T&amp;       optional&lt;T <i>(not a ref)</i>&gt;::get_value_or( T&amp;       default ) ;
+
+inline T const&amp; get_optional_value_or ( optional&lt;T<i> (not a ref)</i>&gt; const&amp; o, T const&amp; default ) ;
+inline T&amp;       get_optional_value_or ( optional&lt;T <i>(not a ref)</i>&gt;&amp;       o, T&amp;       default ) ;
+</pre>
+<blockquote>
+<p><b>Returns:</b> A reference to the contained value, if any, or <code>default</code></p>
+<p><b>Throws:</b> Nothing.</p>
+<p><b>Example:</b></p>
+<blockquote>
+    <pre>T v, z ;
+optional&lt;T&gt; def;
+T const&amp; y = def.get_value_or(z);
+assert ( y == z ) ;
+
+optional&lt;T&gt; opt ( v );
+T const&amp; u = get_optional_value_or(opt,z);
+assert ( u == v ) ;
+assert ( u != z ) ;
+</pre>
+  </blockquote>
+    <pre></pre>
+</blockquote>
 <HR>
 
 
@@ -965,18 +1015,47 @@ assert ( opt.is_initialized() );</pre>
 
 <HR>
 
+<pre>optional&lt;T <i>(not a ref)</i>&gt; make_optional( T const&amp; v )</pre>
+<blockquote>
+<p><b>Returns:</b> optional&lt;T&gt;(v) for the <i>deduced</i> type <code>T</code> of <code>v</code>.</p>
+<p><b>Example:</b></p>
+<blockquote>
+<pre>template&lt;class T&gt; void foo ( optional&lt;T&gt; const& opt ) ;
+
+foo ( make_optional(1+1) ) ; // Creates an optional&lt;int&gt;
+</blockquote>
+</blockquote>
+<HR>
+
+<pre>optional&lt;T <i>(not a ref)</i>&gt; make_optional( bool condition, T const&amp; v )</pre>
+<blockquote>
+<p><b>Returns:</b> optional&lt;T&gt;(condition,v) for the <i>deduced</i> type <code>T</code> of <code>v</code>.</p>
+<p><b>Example:</b></p>
+<blockquote>
+<pre>optional&lt;double&gt; calculate_foo()
+{
+  double val = compute_foo();
+  return make_optional(is_not_nan_and_finite(val),val);
+}
+
+optional&lt;double&gt; v = calculate_foo();
+if ( !v )
+  error("foo wasn't computed");
+</blockquote>
+</blockquote>
+
+<HR>
+
 
 <pre>bool operator == ( optional&lt;T&gt; const&amp x, optional&lt;T&gt const&amp y );</pre>
 <blockquote>
 <p><b>Returns:</b> If both <b>x</b> and <b>y</b> are initialied, <code>(*x == *y)</code>.
-If only x or y is initialized, <code>false</code>. If both are uninitialized, <code>true</code>.
-</p>
+If only x or y is initialized, <code>false</code>. If both are uninitialized, <code>true</code>. </p>
 <p><b>Throws:</b> Nothing.</p>
 <p><b>Notes:</b> Pointers have shallow relational operators while <b>optional</b> has
 deep relational operators. Do not use operator == directly in generic code
 which expect to be given either an optional&lt;T&gt; or a pointer;
-use <a href="../../utility/OptionalPointee.html#equal">equal_pointees()</a> instead
-</p>
+use <a href="../../utility/OptionalPointee.html#equal">equal_pointees()</a> instead </p>
 <p><b>Example:</b></p>
 <blockquote>
     <pre>T x(12);
@@ -1012,14 +1091,12 @@ assert ( optX != optZ ) ;
 <blockquote>
 <p><b>Returns:</b> If <b>y</b> is not initialized, <code>false</code>.
 If <b>y</b> is initialized and <b>x</b> is not initialized, <code>true</code>.
-If both <b>x</b> and <b>y</b> are initialized, <code>(*x &lt; *y)</code>.
-</p>
+If both <b>x</b> and <b>y</b> are initialized, <code>(*x &lt; *y)</code>. </p>
 <p><b>Throws:</b> Nothing.</p>
 <p><b>Notes:</b> Pointers have shallow relational operators while <b>optional</b> has
 deep relational operators. Do not use operator &lt; directly in generic code
 which expect to be given either an optional&lt;T&gt; or a pointer;
-use <a href="../../utility/OptionalPointee.html#less">less_pointees()</a> instead
-</p>
+use <a href="../../utility/OptionalPointee.html#less">less_pointees()</a> instead </p>
 <p><b>Example:</b></p>
 <blockquote>
     <pre>T x(12);
@@ -1082,23 +1159,17 @@ assert ( optX != optZ ) ;
 <pre>void swap ( optional&lt;T&gt;&amp x, optional&lt;T&gt&amp y );</pre>
 
 <blockquote>
-<p><b>Effect:</b> If both <b>x</b> and <b>y</b> are initialized, calls <code>swap(*x,*y)</code>
-using std::swap.<br>
+<p><b>Effect:</b> If both <b>x</b> and <b>y</b> are initialized, calls <code>swap(*x,*y)</code> using std::swap.<br>
 If only one is initialized, say x, calls: <code>y.reset(*x); x.reset();</code><br>
-If none is initialized, does nothing.
-</p>
+If none is initialized, does nothing. </p>
 <p><b>Postconditions:</b> The states of x and y interchanged.</p>
 <p><b>Throws:</b> If both are initialized, whatever swap(T&amp;,T&amp;) throws.
-If only one is initialized, whatever T::T ( T const&amp; ) throws.
-</p>
-<p><b>Notes:</b> If both are initialized, swap(T&amp;,T&amp;) is used <i>unqualified</i>
-but with std::swap introduced in scope.<br>
-If only one is initialized, T::~T() and T::T( T const& ) is called.
-</p>
+If only one is initialized, whatever T::T ( T const&amp; ) throws. </p>
+<p><b>Notes:</b> If both are initialized, swap(T&amp;,T&amp;) is used <i>unqualified</i> but with std::swap introduced in scope.<br>
+If only one is initialized, T::~T() and T::T( T const& ) is called. </p>
 <p><b>Exception Safety:</b> If both are initialized, this operation has the exception
 safety guarantees of swap(T&,T&).<br>
-If only one is initialized, it has the same <b>basic</b> guarantee as optional&lt;T&gt;::reset( T const& ).
-</p>
+If only one is initialized, it has the same <b>basic</b> guarantee as optional&lt;T&gt;::reset( T const& ). </p>
 <p><b>Example:</b></p>
 <blockquote>
       <pre>T x(12);
@@ -1254,8 +1325,7 @@ assert(a==b);
 b = 3 ;
 assert(ra!=b); // 'ra' is not rebound to 'b'
 </pre>
-<p>Now, if you assign to an <i>initialized</i> optional&lt;T&amp;&gt;, the effect is to <b>
-rebind</b> to the new object instead of assigning the referee. This is unlike 
+<p>Now, if you assign to an <i>initialized</i> optional&lt;T&amp;&gt;, the effect is to <b>rebind</b> to the new object instead of assigning the referee. This is unlike 
 bare C++ references.</p>
 <pre>int a = 1 ;
 int b = 2 ;
@@ -1358,8 +1428,7 @@ public:
 </pre>
 <p>A limitation of this method is that it doesn't scale well to wrapped objects with multiple
 constructors nor to generic code were the constructor overloads are unknown.</p>
-<p>The solution presented in this library is the family of <b>InPlaceFactories</b> and
-<b>TypedInPlaceFactories</b>.<br>
+<p>The solution presented in this library is the family of <b>InPlaceFactories</b> and <b>TypedInPlaceFactories</b>.<br>
 These factories are a family of classes which encapsulate an increasing number of arbitrary
 constructor parameters and supply a method to construct an object of a given type using those
 parameters at an address specified by the user via placement new.</p>
@@ -1427,10 +1496,7 @@ public:
   W ( in_place(123,"hello") ) ;
 }
 </pre>
-<p>The factories are implemented in the headers:
-<a href="../../../boost/utility/in_place_factory.hpp">in_place_factory.hpp</a> and
-<a href="../../../boost/utility/typed_in_place_factory.hpp">typed_in_place_factory.hpp</a>
-</p>
+<p>The factories are implemented in the headers: <a href="../../../boost/utility/in_place_factory.hpp">in_place_factory.hpp</a> and <a href="../../../boost/utility/typed_in_place_factory.hpp">typed_in_place_factory.hpp</a> </p>
 
 <HR>
 
@@ -1473,8 +1539,7 @@ of the assignment methods:</p>
   TypedInPlaceFactory const&amp; ) </code></li>
   <li> <code>optional&lt;T&gt;:::reset ( T const&amp;)</code></li>
 </ul>
-<p>Can only <i>guarantee</i> the <u>basic exception safety</u>: The lvalue optional is left <u>uninitialized</u>
-if an exception is thrown (any previous value is <i>first</i> destroyed using T::~T())</p>
+<p>Can only <i>guarantee</i> the <u>basic exception safety</u>: The lvalue optional is left <u>uninitialized</u> if an exception is thrown (any previous value is <i>first</i> destroyed using T::~T())</p>
 <p>On the other hand, the <i>uninitializing</i> methods:</p>
 <ul>
   <li><code>optional&lt;T&gt;::operator= ( detail::none_t ) </code></li>
@@ -1603,12 +1668,9 @@ T <u>is not</u> required to be <a href="http://www.sgi.com/tech/stl/DefaultConst
 <P>Revised April 21, 2005</P>
 <p>© Copyright Fernando Luis Cacciola Carballal, 2003,2004,2005</p>
 <p> Use, modification, and distribution are subject to the Boost Software
-License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">
-LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">
-www.boost.org/LICENSE_1_0.txt</a>)</p>
+License, Version 1.0. (See accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">www.boost.org/LICENSE_1_0.txt</a>)</p>
 <P>Developed by <A HREF="mailto:fernando_cacciola@hotmail.com">Fernando Cacciola</A>,
 the latest version of this file can be found at <A
-HREF="http://www.boost.org">www.boost.org</A>, and the boost
-<A HREF="http://www.boost.org/more/mailing_lists.htm#main">discussion lists</A></P>
-</BODY>
+HREF="http://www.boost.org">www.boost.org</A>, and the boost <A HREF="http://www.boost.org/more/mailing_lists.htm#main">discussion lists</A></P>
+</pre></BODY>
 </HTML>

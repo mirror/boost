@@ -185,6 +185,16 @@ class optional_base : public optional_tag
     {
       construct(val);
     }
+    
+    // Creates an optional<T> initialized with 'val' IFF cond is true, otherwise creates an uninitialzed optional<T>.
+    // Can throw if T::T(T const&) does
+    optional_base ( bool cond, argument_type val )
+      :
+      m_initialized(false)
+    {
+      if ( cond )
+        construct(val);
+    }
 
     // Creates a deep copy of another optional<T>
     // Can throw if T::T(T const&) does
@@ -455,6 +465,9 @@ class optional : public optional_detail::optional_base<T>
     // Can throw if T::T(T const&) does
     optional ( argument_type val ) : base(val) {}
 
+    // Creates an optional<T> initialized with 'val' IFF cond is true, otherwise creates an uninitialized optional.
+    // Can throw if T::T(T const&) does
+    optional ( bool cond, argument_type val ) : base(cond,val) {}
 
 #ifndef BOOST_OPTIONAL_NO_CONVERTING_COPY_CTOR
     // NOTE: MSVC needs templated versions first
@@ -549,6 +562,10 @@ class optional : public optional_detail::optional_base<T>
     reference_const_type get() const { BOOST_ASSERT(this->is_initialized()) ; return this->get_impl(); }
     reference_type       get()       { BOOST_ASSERT(this->is_initialized()) ; return this->get_impl(); }
 
+    // Returns a copy of the value if this is initialized, 'v' otherwise
+    reference_const_type get_value_or ( reference_const_type v ) const { return this->is_initialized() ? get() : v ; }
+    reference_type       get_value_or ( reference_type       v )       { return this->is_initialized() ? get() : v ; }
+    
     // Returns a pointer to the value if this is initialized, otherwise,
     // the behaviour is UNDEFINED
     // No-throw
@@ -569,6 +586,22 @@ class optional : public optional_detail::optional_base<T>
        // on some contexts.
        bool operator!() const { return !this->is_initialized() ; }
 } ;
+
+// Returns optional<T>(v)
+template<class T> 
+inline 
+optional<T> make_optional ( T const& v  )
+{
+  return optional<T>(v);
+}
+
+// Returns optional<T>(cond,v)
+template<class T> 
+inline 
+optional<T> make_optional ( bool cond, T const& v )
+{
+  return optional<T>(cond,v);
+}
 
 // Returns a reference to the value if this is initialized, otherwise, the behaviour is UNDEFINED.
 // No-throw
@@ -604,6 +637,24 @@ BOOST_DEDUCED_TYPENAME optional<T>::pointer_type
 get ( optional<T>* opt )
 {
   return opt->get_ptr() ;
+}
+
+// Returns a reference to the value if this is initialized, otherwise, the behaviour is UNDEFINED.
+// No-throw
+template<class T>
+inline
+BOOST_DEDUCED_TYPENAME optional<T>::reference_const_type
+get_optional_value_or ( optional<T> const& opt, BOOST_DEDUCED_TYPENAME optional<T>::reference_const_type v )
+{
+  return opt.get_value_or(v) ;
+}
+
+template<class T>
+inline
+BOOST_DEDUCED_TYPENAME optional<T>::reference_type
+get_optional_value_or ( optional<T>& opt, BOOST_DEDUCED_TYPENAME optional<T>::reference_type v )
+{
+  return opt.get_value_or(v) ;
 }
 
 // Returns a pointer to the value if this is initialized, otherwise, returns NULL.
@@ -767,10 +818,6 @@ template<class T> inline void swap ( optional<T>& x, optional<T>& y )
   optional_detail::optional_swap(x,y);
 }
 
-template<class T> inline optional<T> make_optional ( T const& v )
-{
-  return optional<T>(v);
-}
 
 } // namespace boost
 
