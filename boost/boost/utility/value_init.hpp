@@ -40,7 +40,7 @@ template<class T>
 struct select_base
 {
   typedef typename
-    detail::if_true< ::boost::is_const<T>::value >
+    ::boost::detail::if_true< ::boost::is_const<T>::value >
       ::template then< const_T_base<T>, non_const_T_base<T> >::type type ;
 } ;
 
