@@ -31,6 +31,13 @@ namespace multi_array {
 
   template <typename Index,typename SizeType>
   class index_range {
+  private:
+    static index from_start()
+      { return (std::numeric_limits<index>::min)(); }
+
+    static index to_end()
+      { return (std::numeric_limits<index>::max)(); }
+
   public:
     typedef Index index;
     typedef SizeType size_type;
@@ -132,12 +139,6 @@ namespace multi_array {
 
     // add conversion to std::slice?
 
-  private:
-    static index from_start()
-      { return (std::numeric_limits<index>::min)(); }
-
-    static index to_end()
-      { return (std::numeric_limits<index>::max)(); }
   public:
     index start_, finish_, stride_;
     bool degenerate_;
