@@ -389,7 +389,8 @@ public:
     gen_type ranges;
 
     for (int i=0; i != NumDims; ++i) {
-      ranges.ranges_[i] = typename gen_type::range(0,extents[i]);
+      typedef typename gen_type::range range_type;
+      ranges.ranges_[i] = range_type(0,extents[i]);
     }
     
     return this->resize(ranges);
