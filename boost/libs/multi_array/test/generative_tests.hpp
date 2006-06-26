@@ -49,6 +49,7 @@
 
 #include "boost/test/minimal.hpp"
 
+#include <boost/config.hpp> /* BOOST_NO_SFINAE */
 #include <algorithm>
 #include <iostream>
 #include <vector>
@@ -239,8 +240,12 @@ struct null_modifier {
 struct set_index_base_modifier {
   template <typename Array>
   void modify(Array& A) const {
+#ifdef BOOST_NO_SFINAE
     typedef boost::multi_array_types::index index;
-    A.reindex(1); 
+    A.reindex(index(1));
+#else
+    A.reindex(1);
+#endif 
   }
 };
 
