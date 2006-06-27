@@ -60,6 +60,9 @@ namespace boost
   //
   BOOST_concept(Integer, (T))
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      Integer();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~Integer()
         { 
             x.error_type_must_be_an_integer_type();
@@ -79,6 +82,9 @@ namespace boost
   // etc.
 
   BOOST_concept(SignedInteger,(T)) {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+    SignedInteger();   // at least 2.96 and 3.4.3 both need this :(
+#endif
     ~SignedInteger() { 
       x.error_type_must_be_a_signed_integer_type();
     }
@@ -95,6 +101,9 @@ namespace boost
 #endif      
 
   BOOST_concept(UnsignedInteger,(T)) {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+    UnsignedInteger();   // at least 2.96 and 3.4.3 both need this :(
+#endif
     ~UnsignedInteger() { 
       x.error_type_must_be_an_unsigned_integer_type();
     }
@@ -118,6 +127,9 @@ namespace boost
 
   BOOST_concept(DefaultConstructible,(TT))
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+    DefaultConstructible();   // at least 2.96 and 3.4.3 both need this :(
+#endif
     ~DefaultConstructible() {
       TT a;               // require default constructor
       ignore_unused_variable_warning(a);
@@ -127,7 +139,7 @@ namespace boost
   BOOST_concept(Assignable,(TT))
   {
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
-    Assignable() { }
+    Assignable();   // at least 2.96 and 3.4.3 both need this :(
 #endif
 
     ~Assignable() {
@@ -148,6 +160,10 @@ namespace boost
 
   BOOST_concept(CopyConstructible,(TT))
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+    CopyConstructible();   // at least 2.96 and 3.4.3 both need this :(
+#endif
+
     ~CopyConstructible() {
       TT a(b);            // require copy constructor
       TT* ptr = &a;       // require address of operator
@@ -167,6 +183,10 @@ namespace boost
   // The SGI STL version of Assignable requires copy constructor and operator=
   BOOST_concept(SGIAssignable,(TT))
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+    SGIAssignable();   // at least 2.96 and 3.4.3 both need this :(
+#endif
+
     ~SGIAssignable() {
       TT b(a);
 #if !defined(_ITERATOR_) // back_insert_iterator broken for VC++ STL
@@ -188,6 +208,9 @@ namespace boost
 
   BOOST_concept(Convertible,(X)(Y))
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+    Convertible();   // at least 2.96 and 3.4.3 both need this :(
+#endif
     ~Convertible() {
       Y y = x;
       ignore_unused_variable_warning(y);
@@ -213,6 +236,9 @@ namespace boost
 
   BOOST_concept(EqualityComparable,(TT))
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+    EqualityComparable();   // at least 2.96 and 3.4.3 both need this :(
+#endif
     ~EqualityComparable() {
       require_boolean_expr(a == b);
       require_boolean_expr(a != b);
@@ -223,6 +249,9 @@ namespace boost
 
   BOOST_concept(LessThanComparable,(TT))
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+    LessThanComparable();   // at least 2.96 and 3.4.3 both need this :(
+#endif
     ~LessThanComparable() {
       require_boolean_expr(a < b);
     }
@@ -233,6 +262,9 @@ namespace boost
   // This is equivalent to SGI STL's LessThanComparable.
   BOOST_concept(Comparable,(TT))
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+    Comparable();   // at least 2.96 and 3.4.3 both need this :(
+#endif
     ~Comparable() {
       require_boolean_expr(a < b);
       require_boolean_expr(a > b);
@@ -243,6 +275,18 @@ namespace boost
     TT a, b;
   };
 
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+#define BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(OP,NAME)    \
+  BOOST_concept(NAME, (First)(Second))                          \
+  {                                                             \
+      NAME();                                                   \
+      ~NAME() { (void)constraints_(); }                         \
+     private:                                                   \
+        bool constraints_() { return a OP b; }                  \
+        First a;                                                \
+        Second b;                                               \
+  }
+#else
 #define BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(OP,NAME)    \
   BOOST_concept(NAME, (First)(Second))                          \
   {                                                             \
@@ -251,8 +295,21 @@ namespace boost
         bool constraints_() { return a OP b; }                  \
         First a;                                                \
         Second b;                                               \
-    }
+  }
+#endif
 
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+#define BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(OP,NAME)    \
+  BOOST_concept(NAME, (Ret)(First)(Second))                 \
+  {                                                         \
+      NAME();                                               \
+      ~NAME() { (void)constraints_(); }                     \
+  private:                                                  \
+      Ret constraints_() { return a OP b; }                 \
+      First a;                                              \
+      Second b;                                             \
+  }
+#else
 #define BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(OP,NAME)    \
   BOOST_concept(NAME, (Ret)(First)(Second))                 \
   {                                                         \
@@ -261,7 +318,8 @@ namespace boost
       Ret constraints_() { return a OP b; }                 \
       First a;                                              \
       Second b;                                             \
-    }
+  }
+#endif
 
   BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(==, EqualOp);
   BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(!=, NotEqualOp);
@@ -281,6 +339,9 @@ namespace boost
 
   BOOST_concept(Generator,(Func)(Return))
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      Generator();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~Generator() { test(is_void<Return>()); }
       
    private:
@@ -299,9 +360,11 @@ namespace boost
       Func f;
   };
 
-
   BOOST_concept(UnaryFunction,(Func)(Return)(Arg))
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      UnaryFunction();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~UnaryFunction() { test(is_void<Return>()); }
       
    private:
@@ -323,6 +386,9 @@ namespace boost
 
   BOOST_concept(BinaryFunction,(Func)(Return)(First)(Second))
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      BinaryFunction();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~BinaryFunction() { test(is_void<Return>()); }
    private:
       void test(boost::mpl::false_)
@@ -344,6 +410,9 @@ namespace boost
 
   BOOST_concept(UnaryPredicate,(Func)(Arg))
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+    UnaryPredicate();   // at least 2.96 and 3.4.3 both need this :(
+#endif
     ~UnaryPredicate() {
       require_boolean_expr(f(arg)); // require operator() returning bool
     }
@@ -354,6 +423,9 @@ namespace boost
 
   BOOST_concept(BinaryPredicate,(Func)(First)(Second))
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+    BinaryPredicate();   // at least 2.96 and 3.4.3 both need this :(
+#endif
     ~BinaryPredicate() {
       require_boolean_expr(f(a, b)); // require operator() returning bool
     }
@@ -367,6 +439,9 @@ namespace boost
   BOOST_concept(Const_BinaryPredicate,(Func)(First)(Second))
     : BinaryPredicate<Func, First, Second>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+    Const_BinaryPredicate();   // at least 2.96 and 3.4.3 both need this :(
+#endif
     ~Const_BinaryPredicate() { 
       const_constraints(f);
     }
@@ -385,6 +460,9 @@ namespace boost
   {
       typedef typename Func::result_type result_type;
       
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      AdaptableGenerator();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~AdaptableGenerator()
       {
           BOOST_CONCEPT_ASSERT((Convertible<result_type, Return>));
@@ -397,6 +475,9 @@ namespace boost
       typedef typename Func::argument_type argument_type;
       typedef typename Func::result_type result_type;
 
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      AdaptableUnaryFunction();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~AdaptableUnaryFunction()
       {
           BOOST_CONCEPT_ASSERT((Convertible<result_type, Return>));
@@ -416,6 +497,9 @@ namespace boost
       typedef typename Func::second_argument_type second_argument_type;
       typedef typename Func::result_type result_type;
       
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      AdaptableBinaryFunction();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~AdaptableBinaryFunction()
       {
           BOOST_CONCEPT_ASSERT((Convertible<result_type, Return>));
@@ -427,12 +511,20 @@ namespace boost
   BOOST_concept(AdaptablePredicate,(Func)(Arg))
     : UnaryPredicate<Func, Arg>
     , AdaptableUnaryFunction<Func, bool, Arg>
-  {};
+  {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+    AdaptablePredicate();   // at least 2.96 and 3.4.3 both need this :(
+#endif
+  };
 
   BOOST_concept(AdaptableBinaryPredicate,(Func)(First)(Second))
     : BinaryPredicate<Func, First, Second>
     , AdaptableBinaryFunction<Func, bool, First, Second>
-  {};
+  {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+    AdaptableBinaryPredicate();   // at least 2.96 and 3.4.3 both need this :(
+#endif
+  };
 
   //===========================================================================
   // Iterator Concepts
@@ -447,6 +539,9 @@ namespace boost
       typedef typename boost::detail::iterator_traits<TT>::pointer pointer;
       typedef typename boost::detail::iterator_traits<TT>::iterator_category iterator_category;
 
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      InputIterator();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~InputIterator()
       {
         BOOST_CONCEPT_ASSERT((SignedInteger<difference_type>));
@@ -464,6 +559,9 @@ namespace boost
   BOOST_concept(OutputIterator,(TT)(ValueT))
     : Assignable<TT>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+    OutputIterator();   // at least 2.96 and 3.4.3 both need this :(
+#endif
     ~OutputIterator() {
       
       ++i;                // require preincrement operator
@@ -478,6 +576,9 @@ namespace boost
   BOOST_concept(ForwardIterator,(TT))
     : InputIterator<TT>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      ForwardIterator();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~ForwardIterator()
       {
           BOOST_CONCEPT_ASSERT((Convertible<
@@ -496,6 +597,9 @@ namespace boost
   BOOST_concept(Mutable_ForwardIterator,(TT))
     : ForwardIterator<TT>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      Mutable_ForwardIterator();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~Mutable_ForwardIterator() {
         *i++ = *i;         // require postincrement and assignment
       }
@@ -506,6 +610,9 @@ namespace boost
   BOOST_concept(BidirectionalIterator,(TT))
     : ForwardIterator<TT>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      BidirectionalIterator();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~BidirectionalIterator()
       {
           BOOST_CONCEPT_ASSERT((Convertible<
@@ -524,6 +631,9 @@ namespace boost
     : BidirectionalIterator<TT>
     , Mutable_ForwardIterator<TT>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      Mutable_BidirectionalIterator();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~Mutable_BidirectionalIterator()
       {
           *i-- = *i;                  // require postdecrement and assignment
@@ -532,11 +642,13 @@ namespace boost
       TT i;
   };
 
-
   BOOST_concept(RandomAccessIterator,(TT))
     : BidirectionalIterator<TT>
     , Comparable<TT>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      RandomAccessIterator();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~RandomAccessIterator()
       {
           BOOST_CONCEPT_ASSERT((Convertible<
@@ -562,6 +674,9 @@ namespace boost
     : RandomAccessIterator<TT>
     , Mutable_BidirectionalIterator<TT>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      Mutable_RandomAccessIterator();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~Mutable_RandomAccessIterator()
       {
           i[n] = *i;                  // require element access and assignment
@@ -584,6 +699,9 @@ namespace boost
     typedef typename C::const_pointer const_pointer;
     typedef typename C::const_iterator const_iterator;
 
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      Container();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~Container()
       {
           BOOST_CONCEPT_ASSERT((InputIterator<const_iterator>));
@@ -611,6 +729,9 @@ namespace boost
       typedef typename C::iterator iterator;
       typedef typename C::pointer pointer;
     
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      Mutable_Container();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~Mutable_Container()
       {
           BOOST_CONCEPT_ASSERT((
@@ -631,6 +752,9 @@ namespace boost
   BOOST_concept(ForwardContainer,(C))
     : Container<C>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      ForwardContainer();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~ForwardContainer()
       {
           BOOST_CONCEPT_ASSERT((
@@ -644,6 +768,9 @@ namespace boost
     : ForwardContainer<C>
     , Mutable_Container<C>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      Mutable_ForwardContainer();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~Mutable_ForwardContainer()
       {
           BOOST_CONCEPT_ASSERT((
@@ -660,6 +787,9 @@ namespace boost
         C::const_reverse_iterator
       const_reverse_iterator;
 
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      ReversibleContainer();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~ReversibleContainer()
       {
           BOOST_CONCEPT_ASSERT((
@@ -685,6 +815,9 @@ namespace boost
   {
       typedef typename C::reverse_iterator reverse_iterator;
       
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      Mutable_ReversibleContainer();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~Mutable_ReversibleContainer()
       {
           typedef typename Mutable_ForwardContainer<C>::iterator iterator;
@@ -704,6 +837,9 @@ namespace boost
       typedef typename C::size_type size_type;
       typedef typename C::const_reference const_reference;
 
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      RandomAccessContainer();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~RandomAccessContainer()
       {
           BOOST_CONCEPT_ASSERT((
@@ -731,6 +867,9 @@ namespace boost
    private:
       typedef Mutable_RandomAccessContainer self;
    public:
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      Mutable_RandomAccessContainer();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~Mutable_RandomAccessContainer()
       {
           BOOST_CONCEPT_ASSERT((Mutable_RandomAccessIterator<typename self::iterator>));
@@ -753,6 +892,9 @@ namespace boost
       // ... so why aren't we following the standard?  --DWA
     , DefaultConstructible<S>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      Sequence();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~Sequence()
       {
           S 
@@ -790,6 +932,9 @@ namespace boost
   BOOST_concept(FrontInsertionSequence,(S))
     : Sequence<S>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      FrontInsertionSequence();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~FrontInsertionSequence()
       {
           c.push_front(t);
@@ -803,6 +948,9 @@ namespace boost
   BOOST_concept(BackInsertionSequence,(S))
     : Sequence<S>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      BackInsertionSequence();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~BackInsertionSequence()
       {
           c.push_back(t);
@@ -830,6 +978,9 @@ namespace boost
       typedef typename C::value_compare value_compare;
       typedef typename C::iterator iterator;
 
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      AssociativeContainer();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~AssociativeContainer()
       {
           i = c.find(k);
@@ -866,6 +1017,9 @@ namespace boost
   BOOST_concept(UniqueAssociativeContainer,(C))
     : AssociativeContainer<C>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      UniqueAssociativeContainer();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~UniqueAssociativeContainer()
       {
           C c(first, last);
@@ -884,6 +1038,9 @@ namespace boost
   BOOST_concept(MultipleAssociativeContainer,(C))
     : AssociativeContainer<C>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      MultipleAssociativeContainer();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~MultipleAssociativeContainer()
       {
           C c(first, last);
@@ -903,6 +1060,9 @@ namespace boost
   BOOST_concept(SimpleAssociativeContainer,(C))
     : AssociativeContainer<C>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      SimpleAssociativeContainer();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~SimpleAssociativeContainer()
       {
           typedef typename C::key_type key_type;
@@ -914,6 +1074,9 @@ namespace boost
   BOOST_concept(PairAssociativeContainer,(C))
     : AssociativeContainer<C>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      PairAssociativeContainer();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~PairAssociativeContainer()
       {
           typedef typename C::key_type key_type;
@@ -928,6 +1091,9 @@ namespace boost
     : AssociativeContainer<C>
     , ReversibleContainer<C>
   {
+#if BOOST_WORKAROUND(__GNUC__, <= 3)
+      SortedAssociativeContainer();   // at least 2.96 and 3.4.3 both need this :(
+#endif
       ~SortedAssociativeContainer()
       {
           C 
