@@ -45,7 +45,7 @@ namespace boost { namespace proto
     ///////////////////////////////////////////////////////////////////////////////
     // unary operators
     template<typename Arg>
-    typename as_op<Arg>::reference
+    inline unary_op<typename call_traits<Arg>::param_type, noop_tag> const
     noop(Arg const &arg)
     {
         BOOST_MPL_ASSERT_NOT((is_op<Arg>));

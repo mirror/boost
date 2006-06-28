@@ -9,6 +9,7 @@
 #ifndef BOOST_PROTO_FWD_HPP_EAN_04_01_2005
 #define BOOST_PROTO_FWD_HPP_EAN_04_01_2005
 
+#include <boost/call_traits.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/apply_fwd.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
@@ -134,7 +135,7 @@ namespace boost { namespace proto
     make_op(Left const &left, Right const &right);
 
     template<typename Arg>
-    typename as_op<Arg>::reference
+    unary_op<typename call_traits<Arg>::param_type, noop_tag> const
     noop(Arg const &arg);
 
     template<typename Node>
