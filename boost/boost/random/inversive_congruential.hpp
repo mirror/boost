@@ -18,6 +18,7 @@
 
 #include <iostream>
 #include <cassert>
+#include <stdexcept>
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/random/detail/const_mod.hpp>
