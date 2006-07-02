@@ -11,7 +11,5 @@
 exe quick_start
     :   ../quick_start.cpp 
         /boost/wave//boost_wave
-    :
-        <toolset-msvc:version>7.1:<rtti>off   # workaround for compiler bug
     ;  
 

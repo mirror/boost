@@ -24,7 +24,6 @@ exe wave
     /boost/filesystem//boost_filesystem
     /boost/serialization//boost_serialization
     :
-    <toolset-msvc:version>7.1:<rtti>off   # workaround for compiler bug
 #   <debug-symbols>on
     :
     release

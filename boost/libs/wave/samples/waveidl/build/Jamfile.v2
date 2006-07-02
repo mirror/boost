@@ -8,17 +8,27 @@
 # Software License, Version 1.0. (See accompanying file 
 # LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+SOURCES = 
+        ../idl
+        ../instantiate_cpp_grammar
+        ../instantiate_defined_grammar
+        ../instantiate_predef_macros
+        ../instantiate_re2c_lexer
+        ../instantiate_re2c_lexer_str
+        ../idllexer/idl_re
+	;
+	
 exe waveidl
-    :   ../idl.cpp 
-        ../instantiate_cpp_grammar.cpp
-        ../instantiate_defined_grammar.cpp
-        ../instantiate_predef_macros.cpp
-        ../instantiate_re2c_lexer.cpp
-        ../instantiate_re2c_lexer_str.cpp
-        ../idllexer/idl_re.cpp
+    :
+		$(SOURCES)
         /boost/wave//boost_wave
         /boost/program_options//boost_program_options
-    :
-        <toolset-msvc:version>7.1:<rtti>off   # workaround for compiler bug
     ;
+
+for local source in $(SOURCES)
+{
+    local requirements ;
+    requirements += <toolset-msvc:version>7.1:<rtti>off ; # workaround for compiler bug
+    obj $(source) : $(source).cpp : $(requirements) ;
+}
 
