@@ -24,7 +24,9 @@
 namespace boost {
 namespace wave {
 namespace cpplexer {
+#if !BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
 namespace re2clex {
+#endif
 
 struct Scanner;
 typedef unsigned char uchar;
@@ -59,7 +61,9 @@ typedef struct Scanner {
 } Scanner;
 
 ///////////////////////////////////////////////////////////////////////////////
+#if !BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
 }   // namespace re2clex
+#endif
 }   // namespace cpplexer
 }   // namespace wave
 }   // namespace boost

@@ -285,9 +285,6 @@ lexer<IteratorT, PositionT>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(FRIEND, "friend"),
     TOKEN_DATA(GOTO, "goto"),
     TOKEN_DATA(IF, "if"),
-#if BOOST_WAVE_SUPPORT_IMPORT_KEYWORD != 0
-    TOKEN_DATA(IMPORT, "import"),
-#endif
     TOKEN_DATA(INLINE, "inline"),
     TOKEN_DATA(INT, "int"),
     TOKEN_DATA(LONG, "long"),
@@ -412,6 +409,9 @@ lexer<IteratorT, PositionT>::init_data_cpp[INIT_DATA_CPP_SIZE] =
     TOKEN_DATA(NOTEQUAL_ALT, "not_eq"),
     TOKEN_DATA(NOT_ALT, "not"),
     TOKEN_DATA(COMPL_ALT, "compl"),
+#if BOOST_WAVE_SUPPORT_IMPORT_KEYWORD != 0
+    TOKEN_DATA(IMPORT, "import"),
+#endif
     TOKEN_DATA(ARROWSTAR, Q("->") Q("*")),
     TOKEN_DATA(DOTSTAR, Q(".") Q("*")),
     TOKEN_DATA(COLON_COLON, "::"),

@@ -13,4 +13,5 @@ build-project lexed_tokens/build ;
 build-project list_includes/build ;
 build-project quick_start/build ;
 build-project waveidl/build ;
-build-project hannibal-build ;
+build-project hannibal/build ;
+

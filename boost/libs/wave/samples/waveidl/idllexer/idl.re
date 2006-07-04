@@ -368,6 +368,7 @@ scan(boost::wave::cpplexer::re2clex::Scanner *s)
     uchar *cursor = s->tok = s->cur;
 
 /*!re2c
+re2c:indent:string = "    "; 
 any                = [\t\v\f\r\n\040-\377];
 OctalDigit         = [0-7];
 Digit              = [0-9];

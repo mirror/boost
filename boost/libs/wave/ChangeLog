@@ -400,7 +400,7 @@ Version 1.1.16
   for this compiler.
 - Renamed files to comply with the Boost rules.
 - Added the first part of the MCPP validation suite to the Wave unit tests.
-- Added even more missing "using namespace std;" staements for functions from
+- Added even more missing "using namespace std;" statements for functions from
   the C runtime library. The Wave test suite now contains more than 100 unit
   tests.
 - Added the $P/$P(basename) replacement string to the testwave application 
