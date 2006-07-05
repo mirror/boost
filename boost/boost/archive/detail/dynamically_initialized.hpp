@@ -21,6 +21,13 @@ struct dynamically_initialized
     
  private:
     static BOOST_DLLEXPORT T& get_instance();
+
+#if defined(__GNUC__)
+  // Workaround "warning: all member functions in class `
+  // boost::archive::detail::dynamically_initialized<T>' are private"
+ public:
+  void work_around_gcc_warning();
+#endif
 };
 
 template <class T>
