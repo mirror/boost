@@ -207,6 +207,28 @@ public:
 } // namespace lambda
 } // namespace boost
 
+// is_placeholder
+
+#include <boost/is_placeholder.hpp>
+
+namespace boost
+{
+
+template<> struct is_placeholder< lambda::lambda_functor< lambda::placeholder<lambda::FIRST> > >
+{
+    enum _vt { value = 1 };
+};
+
+template<> struct is_placeholder< lambda::lambda_functor< lambda::placeholder<lambda::SECOND> > >
+{
+    enum _vt { value = 2 };
+};
+
+template<> struct is_placeholder< lambda::lambda_functor< lambda::placeholder<lambda::THIRD> > >
+{
+    enum _vt { value = 3 };
+};
+
+} // namespace boost
+
 #endif
-
-
