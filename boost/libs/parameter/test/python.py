@@ -19,6 +19,10 @@
 'bazbar'
 >>> x.g(y = "foo", x = "bar")
 'barfoo'
+>>> y = x.h(x = "bar", y = "foo")
+>>> assert x == y
+>>> y = x(0)
+>>> assert x == y
 '''
 
 def run(args = None):

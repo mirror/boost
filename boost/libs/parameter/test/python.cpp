@@ -61,6 +61,19 @@ struct X : Xbase
     {
         return std::string(args[x | "foo"]) + args[y | "bar"];
     }
+
+    BOOST_PARAMETER_MEMBER_FUNCTION((X&), h, tag,
+        (optional (x, *, "") (y, *, ""))
+    )
+    {
+        return *this;
+    }
+
+    template <class A0>
+    X& operator()(A0 const& a0)
+    {
+        return *this;
+    }
 };
 
 } // namespace test
@@ -80,6 +93,15 @@ struct g_fwd
     R operator()(boost::type<R>, T& self, A0 const& a0, A1 const& a1)
     {
         return self.g(a0,a1);
+    }
+};
+
+struct h_fwd
+{
+    template <class R, class T, class A0, class A1>
+    R operator()(boost::type<R>, T& self, A0 const& a0, A1 const& a1)
+    {
+        return self.h(a0,a1);
     }
 };
 
@@ -114,6 +136,23 @@ BOOST_PYTHON_MODULE(python_parameter)
                     std::string, tag::x*(std::string), tag::y*(std::string)
                 >
             >()
+        )
+        .def(
+            "h"
+          , boost::parameter::python::function<
+                h_fwd
+              , mpl::vector<
+                    X&, tag::x*(std::string), tag::y*(std::string)
+                >
+            >()
+          , return_arg<>()
+        )
+        .def(
+            boost::parameter::python::call<
+                mpl::vector<
+                    X&, tag::x(int)
+                >
+            >() [ return_arg<>() ]
         )
         .def_readonly("value", &X::value);
 }
