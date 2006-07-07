@@ -43,10 +43,15 @@ template< int I > struct custom_placeholder
 {
 };
 
-template< int I > struct boost::is_placeholder< custom_placeholder< I > >
+namespace boost
+{
+
+template< int I > struct is_placeholder< custom_placeholder< I > >
 {
     enum { value = I };
 };
+
+} // namespace boost
 
 int main()
 {
