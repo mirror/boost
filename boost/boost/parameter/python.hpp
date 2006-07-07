@@ -323,7 +323,29 @@ namespace aux
       Def, Specs*, End, End, Invoker*)
   {}
 
-  template <class Class, class Options = int>
+  struct not_specified {};
+
+  template <class CallPolicies>
+  struct call_policies_as_options
+  {
+      call_policies_as_options(CallPolicies const& call_policies)
+        : call_policies(call_policies)
+      {}
+
+      CallPolicies const& policies() const
+      {
+          return call_policies;
+      }
+
+      char const* doc() const
+      {
+          return 0;
+      }
+
+      CallPolicies call_policies;
+  };
+
+  template <class Class, class Options = not_specified>
   struct def_class
   {
       def_class(Class& cl, char const* name, Options options = Options())
@@ -351,7 +373,7 @@ namespace aux
       }
 
       template <class F, class Keywords>
-      void def(F f, Keywords const& keywords, int const*) const
+      void def(F f, Keywords const& keywords, not_specified const*) const
       {
           cl.def(name, f, keywords);
       }
@@ -373,11 +395,12 @@ namespace aux
       Options options;
   };
 
-  template <class Class>
+  template <class Class, class CallPolicies = boost::python::default_call_policies>
   struct def_init
   {
-      def_init(Class& cl)
+      def_init(Class& cl, CallPolicies call_policies = CallPolicies())
         : cl(cl)
+        , call_policies(call_policies)
       {}
 
       template <class F>
@@ -385,7 +408,7 @@ namespace aux
       {
           cl.def(
               "__init__"
-            , boost::python::make_constructor(f)
+            , boost::python::make_constructor(f, call_policies)
           );
       }
 
@@ -394,13 +417,12 @@ namespace aux
       {
           cl.def(
               "__init__"
-            , boost::python::make_constructor(
-                  f, boost::python::default_call_policies(), keywords
-              )
+            , boost::python::make_constructor(f, call_policies, keywords)
           );
       }
 
       Class& cl;
+      CallPolicies call_policies;
   };
 
   struct def_function
@@ -555,15 +577,26 @@ namespace aux
 
 } // namespace aux
 
-template <class Signature>
+template <class ParameterSpecs, class CallPolicies = boost::python::default_call_policies>
 struct init 
-  : boost::python::def_visitor<init<Signature> >
+  : boost::python::def_visitor<init<ParameterSpecs, CallPolicies> >
 {
+    init(CallPolicies call_policies = CallPolicies())
+      : call_policies(call_policies)
+    {}
+
+    template <class CallPolicies1>
+    init<ParameterSpecs, CallPolicies1> 
+    operator[](CallPolicies1 const& call_policies) const
+    {
+        return init<ParameterSpecs, CallPolicies1>(call_policies);
+    }
+
     template <class Class>
     void visit(Class& cl) const
     {
         typedef typename mpl::transform<
-            Signature
+            ParameterSpecs
           , aux::make_kw_spec<mpl::_>
           , mpl::back_inserter<mpl::vector0<> >
         >::type arg_specs;
@@ -576,30 +609,43 @@ struct init
         typedef typename mpl::shift_left<mpl::long_<1>, optional_arity>::type upper;
 
         aux::def_combinations(
-            aux::def_init<Class>(cl)
+            aux::def_init<Class, CallPolicies>(cl, call_policies)
           , (arg_specs*)0
           , mpl::long_<0>()
           , mpl::long_<upper::value>()
           , (aux::make_init_invoker<typename Class::wrapped_type>*)0
         );
     }
+
+    CallPolicies call_policies;
 };
 
-template <class Signature>
+template <class ParameterSpecs, class CallPolicies = boost::python::default_call_policies>
 struct call 
-  : boost::python::def_visitor<call<Signature> >
+  : boost::python::def_visitor<call<ParameterSpecs, CallPolicies> >
 {
+    call(CallPolicies const& call_policies = CallPolicies())
+      : call_policies(call_policies)
+    {}
+
+    template <class CallPolicies1>
+    call<ParameterSpecs, CallPolicies1>
+    operator[](CallPolicies1 const& call_policies) const
+    {
+        return call<ParameterSpecs, CallPolicies1>(call_policies);
+    }
+
     template <class Class>
     void visit(Class& cl) const
     {
         typedef mpl::iterator_range<
             typename mpl::next<
-                typename mpl::begin<Signature>::type
+                typename mpl::begin<ParameterSpecs>::type
             >::type
-          , typename mpl::end<Signature>::type
+          , typename mpl::end<ParameterSpecs>::type
         > arg_types;
 
-        typedef typename mpl::front<Signature>::type result_type;
+        typedef typename mpl::front<ParameterSpecs>::type result_type;
 
         typedef typename mpl::transform<
             arg_types
@@ -614,31 +660,35 @@ struct call
 
         typedef typename mpl::shift_left<mpl::long_<1>, optional_arity>::type upper;
 
+        typedef aux::call_policies_as_options<CallPolicies> options;
+
         aux::def_combinations(
-            aux::def_class<Class>(cl, "__call__")
+            aux::def_class<Class, options>(cl, "__call__", options(call_policies))
           , (arg_specs*)0
           , mpl::long_<0>()
           , mpl::long_<upper::value>()
           , (aux::make_call_invoker<typename Class::wrapped_type, result_type>*)0
         );
     }
+
+    CallPolicies call_policies;
 };
 
-template <class Fwd, class Signature>
+template <class Fwd, class ParameterSpecs>
 struct function 
-  : boost::python::def_visitor<function<Fwd, Signature> >
+  : boost::python::def_visitor<function<Fwd, ParameterSpecs> >
 {
     template <class Class, class Options>
     void visit(Class& cl, char const* name, Options const& options) const
     {
         typedef mpl::iterator_range<
             typename mpl::next<
-                typename mpl::begin<Signature>::type
+                typename mpl::begin<ParameterSpecs>::type
             >::type
-          , typename mpl::end<Signature>::type
+          , typename mpl::end<ParameterSpecs>::type
         > arg_types;
 
-        typedef typename mpl::front<Signature>::type result_type;
+        typedef typename mpl::front<ParameterSpecs>::type result_type;
 
         typedef typename mpl::transform<
             arg_types
