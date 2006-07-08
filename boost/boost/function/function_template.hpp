@@ -446,6 +446,17 @@ namespace boost {
     typename Allocator = BOOST_FUNCTION_DEFAULT_ALLOCATOR
   >
   class BOOST_FUNCTION_FUNCTION : public function_base
+
+#if BOOST_FUNCTION_NUM_ARGS == 1
+
+    , public std::unary_function<T0,R>
+
+#elif BOOST_FUNCTION_NUM_ARGS == 2
+
+    , public std::binary_function<T0,T1,R>
+
+#endif
+
   {
   public:
 #ifndef BOOST_NO_VOID_RETURNS
