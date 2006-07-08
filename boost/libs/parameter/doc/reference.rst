@@ -2,13 +2,6 @@
  The Boost Parameter Library Reference Documentation 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-|(logo)|__
-
-.. |(logo)| image:: ../../../../boost.png
-   :alt: Boost
-
-__ ../../../../index.htm
-
 :Authors:       David Abrahams, Daniel Wallin
 :Contact:       dave@boost-consulting.com, dalwan01@student.umu.se
 :organization:  `Boost Consulting`_
@@ -18,6 +11,13 @@ __ ../../../../index.htm
                 2005. Distributed under the Boost Software License,
                 Version 1.0. (See accompanying file LICENSE_1_0.txt
                 or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+|(logo)|__
+
+.. |(logo)| image:: ../../../../boost.png
+   :alt: Boost
+
+__ ../../../../index.htm
 
 .. _`Boost Consulting`: http://www.boost-consulting.com
 
@@ -554,6 +554,113 @@ Code Generation Macros
 Macros in this section can be used to ease the writing of code
 using the Parameter libray by eliminating repetitive boilerplate.
 
+``BOOST_PARAMETER_FUNCTION(result,name,tag_namespace,arguments)``
+-----------------------------------------------------------------
+
+:Defined in: `boost/parameter/preprocessor.hpp`__
+
+__ ../../../../boost/parameter/preprocessor.hpp
+
+:Requires: ``result`` is the parenthesized return type of the function.
+  ``name`` is the base name of the function, this is the name of the
+  generated forwarding functions. ``tag_namespace`` is the namespace in
+  which the keywords used by the function resides. ``arguments`` is
+  a list of *argument specifiers*, as defined below.
+
+
+:Argument specifiers syntax:
+  .. parsed-literal::
+
+    argument-specifiers ::= specifier-group {specifier-group}
+
+    specifier-group ::= ( '(' 'optional' optional-specifier {optional-specifier} ')' ) |
+                        ( '(' 'required' required-specifier {required-specifier} ')' )
+
+    optional-specifier ::= '(' name ',' restriction ',' default-value ')'
+    required-specifier ::= '(' name ',' restriction ')'
+
+    restriction ::= ('*' '(' lambda-expression ')' ) |
+                    ( '(' typename ')' ) |
+                    '*'
+
+  ``name`` is any valid C++ identifier. ``default-value`` is any valid
+  C++ expression. ``typename`` is the name of a type.
+  ``lambda-expression`` is an `MPL lambda expression`_.
+
+.. _`MPL lambda expression`: ../../../mpl/doc/refmanual/lambda-expression.html
+
+:Generated names in enclosing scope:
+  * ``boost_param_result_ ## __LINE__ ## name``
+  * ``boost_param_params_ ## __LINE__ ## name``
+  * ``boost_param_parameters_ ## __LINE__ ## name``
+  * ``boost_param_impl ## name``
+  * ``boost_param_default_ ## __LINE__ ## name``
+
+
+Approximate expansion:
+  **Where**:
+
+  * ``n`` denotes the *minimum* arity, as determined from ``arguments``.
+  * ``m`` denotes the *maximum* arity, as determined from ``arguments``.
+
+  .. parsed-literal::
+
+    template <class T>
+    struct boost_param_result\_ ## __LINE__ ## **name**
+    {
+        typedef **result** type;
+    };
+
+    struct boost_param_params\_ ## __LINE__ ## **name**
+      : boost::parameter::parameters<
+            *list of parameter specifications, based on arguments*
+        >
+    {};
+
+    typedef boost_param_params\_ ## __LINE__ ## **name** 
+      boost_param_parameters\_ ## __LINE__ ## **name**;
+
+    template <class A0, …, class A\ **n**>
+    *result type* **name**\ (
+        A0 *cv*\ & a0, …, A\ **n** *cv*\ & a\ **n**
+      , typename boost_param_parameters\_ ## __LINE__ ## **name**::match<
+          A0 *cv*, …, A\ **n** *cv*
+        >::type = boost_param_parameters\_ ## __LINE__ ## **name**\ ()
+    )
+    {
+        *… forward to implementation …*
+    }
+
+    :vellipsis:`\
+      .
+      .
+      .
+     `
+
+    template <class A0, …, class A\ **m**>
+    *result type* **name**\ (
+        A0 *cv*\ & a0, …, A\ **m** *cv*\ & a\ **m**
+      , typename boost_param_parameters\_ ## __LINE__ ## **name**::match<
+          A0 *cv*, …, A\ **m** *cv*
+        >::type = boost_param_parameters\_ ## __LINE__ ## **name**\ ()
+    )
+    {
+        *… forward to implementation …*
+    }
+
+    template <
+        class ResultType
+      , class *argument name*\ **0** ## _type
+        …
+      , class *argument name*\ **m** ## _type
+    >
+    ResultType boost_param_default\_ ## __LINE__ ## **name**\ (
+        (ResultType(*)())
+      , *argument name*\ **0** ## _type& *argument name*\ **0**
+        …
+      , *argument name*\ **m** ## _type& *argument name*\ **m**
+    )
+
 ``BOOST_PARAMETER_FUN(r,n,l,h,p)``
 ----------------------------------
 
@@ -692,3 +799,4 @@ __ index.html#tutorial
 
 .. |BOOST_NO_RESULT_OF| replace:: ``BOOST_NO_RESULT_OF``
 .. _BOOST_NO_RESULT_OF: ../../../utility/utility.htm#BOOST_NO_RESULT_OF
+
