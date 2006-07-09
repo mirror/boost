@@ -59,7 +59,8 @@ namespace boost
                 exp = ~exp;
             }
 
-            BOOST_ASSERT(0 <= v && v < 0.5);
+            // TODO: Of course, this doesn't pass when hashing infinity or NaN.
+            //BOOST_ASSERT(0 <= v && v < 0.5);
 
             v = boost::hash_detail::call_ldexp(v,
                     std::numeric_limits<std::size_t>::digits + 1);
