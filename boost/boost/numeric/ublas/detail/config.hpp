@@ -38,7 +38,7 @@
 
 // Version 6.0 and 7.0
 #if BOOST_MSVC <= 1300
-#define BOOST_UBLAS_UNSUPPORTED_COMPILER
+#define BOOST_UBLAS_UNSUPPORTED_COMPILER 1
 #endif
 
 // Version 7.1
@@ -63,7 +63,7 @@
 #endif
 
 #if __GNUC__ < 3
-#define BOOST_UBLAS_UNSUPPORTED_COMPILER
+#define BOOST_UBLAS_UNSUPPORTED_COMPILER 1
 #endif
 
 #endif
@@ -78,7 +78,7 @@
 #endif
 
 #if (BOOST_INTEL < 700)
-#define BOOST_UBLAS_UNSUPPORTED_COMPILER
+#define BOOST_UBLAS_UNSUPPORTED_COMPILER 1
 #endif
 
 // Define swap for index_pair and triple.
@@ -156,7 +156,7 @@ namespace std {
 
 // 8.x
 #if __MWERKS__ <= 0x3003
-#define BOOST_UBLAS_UNSUPPORTED_COMPILER
+#define BOOST_UBLAS_UNSUPPORTED_COMPILER 1
 #endif
 
 #endif
@@ -165,7 +165,7 @@ namespace std {
 // Detect other compilers with serious defects - override by defineing BOOST_UBLAS_UNSUPPORTED_COMPILER=0
 #ifndef BOOST_UBLAS_UNSUPPORTED_COMPILER
 #if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING) || defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || defined(BOOST_NO_SFINAE) || defined(BOOST_NO_STDC_NAMESPACE)
-#define BOOST_UBLAS_UNSUPPORTED_COMPILER
+#define BOOST_UBLAS_UNSUPPORTED_COMPILER 1
 #endif
 #endif
 
