@@ -1477,6 +1477,90 @@ it with [^\[link someid.intro The Intro\]].
 [endsect]
 [endsect]
 [endsect]
+
+[section Installation and configuration]
+
+This section provides some guidelines on how to install and configure
+BoostBook and Quickbook under several operating systems.
+
+Before continuing, it is very important that you keep this in mind: if you
+try to build some documents and the process breaks due to misconfiguration,
+be absolutely sure to delete any `bin` and `bin.v2` directories generated
+by the build before trying again.  Otherwise your configuration fixes will
+not take any effect.
+
+[section Windows 2000, XP, 2003, Vista]
+
+[blurb Section contributed by Julio M. Merino Vidal]
+
+The following instructions apply to any Windows system based on Windows
+2000, including Windows XP, Windows 2003 Server and Windows Vista.  The
+paths shown below are taken from a Windows Vista machine; you will need to
+adjust them to match your system in case you are running an older version.
+
+# First of all you need to have a copy of `xsltproc` for Windows.  There
+  are many ways to get this tool, but to keep things simple, use the
+  [@http://www.zlatkovic.com/pub/libxml/ binary packages] made by Igor
+  Zlatkovic.  At the very least, you need to download the following
+  packages: `iconv`, `zlib`, `libxml2` and `libxslt`.
+
+# Unpack all these packages in the same directory so that you get unique
+  `bin`, `include` and `lib` directories within the hierarchy.  These
+  instructions use `C:\Users\example\Documents\boost\xml` as the root for
+  all files.
+
+# From the command line, go to the `bin` directory and launch
+  `xsltproc.exe` to ensure it works.  You should get usage information on
+  screen.
+
+# Download [@http://www.docbook.org/xml/4.2/docbook-xml-4.2.zip Docbook XML
+  4.2] and unpack it in the same directory used above.  That is:
+  `C:\Users\example\Documents\boost\xml\docbook-xml`.
+
+# Download the latest
+  [@http://sourceforge.net/project/showfiles.php?group_id=21935&package_id=16608
+  Docbook XSL] version and unpack it, again in the same directory
+  used before.  To make things easier, rename the directory created
+  during the extraction to `docbook-xsl` (bypassing the version name):
+  `C:\Users\example\Documents\boost\xml\docbook-xsl`.
+
+# Add the following to your `user-config.jam` file, which should live in
+  your home directory (`%HOMEDRIVE%%HOMEPATH%`).  You must already have it
+  somewhere or otherwise you could not be building Boost (i.e. missing
+  tools configuration).
+
+ using xsltproc
+     : "C:/Users/example/Documents/boost/xml/bin/xsltproc.exe"
+     ;
+
+ using boostbook
+     : "C:/Users/example/Documents/boost/xml/docbook-xsl"
+     : "C:/Users/example/Documents/boost/xml/docbook-xml"
+     ;
+
+The above steps are enough to get a functional BoostBook setup.  Quickbook
+will be automatically built when needed.  If you want to avoid these
+rebuilds:
+
+# Go to Quickbook's source directory (`BOOST_ROOT\tools\quickbook`).
+
+# Build the utility by issuing `bjam --v2`.
+
+# Copy the resulting `quickbook.exe` binary (located under the
+  `BOOST_ROOT\bin.v2` hierarchy) to a safe place.  Following our previous
+  example, you can install it into:
+  `C:\Users\example\Documents\boost\xml\bin`.
+
+# Add the following to your `user-config.jam` file:
+
+ using quickbook
+     : "C:/Users/example/Documents/boost/xml/bin/quickbook.exe"
+     ;
+
+[endsect]
+
+[endsect]
+
 [section:ref Quick Reference]
 
 [table Syntax Compendium
