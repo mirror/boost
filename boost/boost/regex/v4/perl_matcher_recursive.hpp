@@ -478,7 +478,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_dot_repeat_fast()
          return true;
       if(count >= rep->max)
          return false;
-      if(position == last)
+      if(save_pos == last)
          return false;
       position = ++save_pos;
       ++count;
@@ -572,9 +572,9 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_char_repeat()
          return true;
       if(count >= rep->max)
          return false;
+      position = save_pos;
       if(position == last)
          return false;
-      position = save_pos;
       if(traits_inst.translate(*position, icase) == what)
       {
          ++position;
@@ -661,9 +661,9 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_set_repeat()
          return true;
       if(count >= rep->max)
          return false;
+      position = save_pos;
       if(position == last)
          return false;
-      position = save_pos;
       if(map[static_cast<unsigned char>(traits_inst.translate(*position, icase))])
       {
          ++position;
@@ -751,9 +751,9 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_long_set_repeat()
          return true;
       if(count >= rep->max)
          return false;
+      position = save_pos;
       if(position == last)
          return false;
-      position = save_pos;
       if(position != re_is_set_member(position, last, set, re.get_data(), icase))
       {
          ++position;
