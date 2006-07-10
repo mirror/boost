@@ -19,16 +19,16 @@
 #define BOOST_CXX_GCCXML    0
 #define BOOST_CXX_COMO      0
 #define BOOST_CXX_DMC       0
-#define BOOST_CXX_INTELC    0           /* ok? __INTEL_COMPILER, __ICL/__ICC/__ECC */
+#define BOOST_CXX_INTEL     0
 #define BOOST_CXX_GNUC      0
 #define BOOST_CXX_KCC       0
 #define BOOST_CXX_SGI       0
-#define BOOST_CXX_DEC       0
+#define BOOST_CXX_TRU64     0           /* ok? */
 #define BOOST_CXX_GHS       0
 #define BOOST_CXX_BORLANDC  0
-#define BOOST_CXX_CW        0           /* ok? __MWERKS__*/
+#define BOOST_CXX_CW        0           /* ok? __MWERKS__ */
 #define BOOST_CXX_SUNPRO    0
-#define BOOST_CXX_ACC       0           /* ok? __HP_aCC */
+#define BOOST_CXX_HPACC     0           /* ok? __HP_aCC */
 #define BOOST_CXX_MPW       0
 #define BOOST_CXX_IBMCPP    0           /* ok? */
 #define BOOST_CXX_MSVC      0
