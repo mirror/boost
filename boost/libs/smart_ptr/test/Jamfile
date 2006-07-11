@@ -1,6 +1,6 @@
 #  Boost.SmartPtr Library test Jamfile
 #
-#  Copyright (c) 2003-2005 Peter Dimov
+#  Copyright (c) 2003-2006 Peter Dimov
 #  Copyright (c) 2003 Dave Abrahams
 #
 #  Permission to copy, use, modify, sell and distribute this software
@@ -25,11 +25,11 @@ DEPENDS all : smart_ptr ;
           [ run shared_from_this_test.cpp : : : <gcc><*><cxxflags>-Wno-non-virtual-dtor ]
           [ run get_deleter_test.cpp ]
           [ run intrusive_ptr_test.cpp ]
-          [ run intrusive_ptr_test.cpp ]
           [ run atomic_count_test.cpp ]
           [ run lw_mutex_test.cpp ]
           [ compile-fail shared_ptr_assign_fail.cpp ]
           [ compile-fail shared_ptr_delete_fail.cpp ]
+          [ compile-fail shared_ptr_compare_fail.cpp ]
           [ run shared_ptr_alloc2_test.cpp ]
           [ run pointer_cast_test.cpp ]
           [ compile pointer_to_other_test.cpp ]
