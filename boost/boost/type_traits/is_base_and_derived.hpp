@@ -37,7 +37,7 @@ namespace detail {
 This version detects ambiguous base classes and private base classes
 correctly, and was devised by Rani Sharoni.
 
-Explanation by Terje Slettebø and Rani Sharoni.
+Explanation by Terje Slettebo and Rani Sharoni.
 
 Let's take the multiple base class below as an example, and the following
 will also show why there's not a problem with private or ambiguous base
