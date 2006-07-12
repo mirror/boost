@@ -17,6 +17,28 @@
 #include <boost/mpl/aux_/lambda_support.hpp>
 #include <boost/config.hpp>
 
+//
+// Unfortunately some libraries have started using this header without
+// cleaning up afterwards: so we'd better undef the macros just in case 
+// they've been defined already....
+//
+#ifdef BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL
+#undef BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL
+#undef BOOST_TT_AUX_BOOL_C_BASE
+#undef BOOST_TT_AUX_BOOL_TRAIT_DEF1
+#undef BOOST_TT_AUX_BOOL_TRAIT_DEF2
+#undef BOOST_TT_AUX_BOOL_TRAIT_SPEC1
+#undef BOOST_TT_AUX_BOOL_TRAIT_SPEC2
+#undef BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1
+#undef BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC2
+#undef BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1
+#undef BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_2
+#undef BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_1
+#undef BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC2_2
+#undef BOOST_TT_AUX_BOOL_TRAIT_IMPL_PARTIAL_SPEC2_1
+#undef BOOST_TT_AUX_BOOL_TRAIT_CV_SPEC1
+#endif
+
 #if defined(__SUNPRO_CC) && (__SUNPRO_CC < 0x570)
 #   define BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
     typedef ::boost::integral_constant<bool,C> type; \
