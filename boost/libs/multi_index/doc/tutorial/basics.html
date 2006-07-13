@@ -1034,10 +1034,10 @@ indices with respect to <code>std::list</code>s, namely that elements of an
 <span class=identifier>multi_index_container</span><span class=special>&lt;</span>
   <span class=keyword>int</span><span class=special>,</span>
   <span class=identifier>indexed_by</span><span class=special>&lt;</span><span class=identifier>sequenced</span><span class=special>&lt;&gt;</span> <span class=special>&gt;</span>
-<span class=special>&gt;</span> <span class=identifier>s</span><span class=special>;</span>             <span class=comment>// list-like container</span>
+<span class=special>&gt;</span> <span class=identifier>s</span><span class=special>;</span>            <span class=comment>// list-like container</span>
 
 <span class=identifier>s</span><span class=special>.</span><span class=identifier>push_front</span><span class=special>(</span><span class=number>0</span><span class=special>);</span>
-<span class=special>*(</span><span class=identifier>s</span><span class=special>.</span><span class=identifier>begin</span><span class=special>())==</span><span class=number>1</span><span class=special>;</span> <span class=comment>// ERROR: the element cannot be changed</span>
+<span class=special>*(</span><span class=identifier>s</span><span class=special>.</span><span class=identifier>begin</span><span class=special>())=</span><span class=number>1</span><span class=special>;</span> <span class=comment>// ERROR: the element cannot be changed</span>
 </pre></blockquote>
 
 <p>
@@ -1205,7 +1205,7 @@ Index types
 
 <br>
 
-<p>Revised February 21st 2006</p>
+<p>Revised July 13th 2006</p>
 
 <p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
