@@ -22,6 +22,7 @@
 # include <boost/mpl/next.hpp>
 # include <boost/mpl/begin_end.hpp>
 # include <boost/mpl/not.hpp>
+# include <boost/mpl/empty.hpp>
 # include <boost/python/def.hpp>
 # include <boost/python/make_constructor.hpp>
 # include <boost/python/to_python_converter.hpp>
@@ -355,7 +356,7 @@ namespace aux
       {}
 
       template <class F>
-      void def(F f, int const*) const
+      void def(F f, not_specified const*) const
       {
           cl.def(name, f);
       }
@@ -593,7 +594,13 @@ struct init
     }
 
     template <class Class>
-    void visit(Class& cl) const
+    void visit_aux(Class& cl, mpl::true_) const
+    {
+        cl.def(boost::python::init<>()[call_policies]);
+    }
+
+    template <class Class>
+    void visit_aux(Class& cl, mpl::false_) const
     {
         typedef typename mpl::transform<
             ParameterSpecs
@@ -615,6 +622,12 @@ struct init
           , mpl::long_<upper::value>()
           , (aux::make_init_invoker<typename Class::wrapped_type>*)0
         );
+    }
+
+    template <class Class>
+    void visit(Class& cl) const
+    {
+        visit_aux(cl, mpl::empty<ParameterSpecs>());
     }
 
     CallPolicies call_policies;
