@@ -78,13 +78,12 @@ namespace boost
 
     inline string relative_to( const path & src_arg, const path & base_arg )
     {
-      path src( src_arg );
-      src.normalize();
       path base( base_arg );
       base.normalize();
       string::size_type pos( base.string().size() );
-      return src.string().substr(
-        pos + ( pos < src.string().size() ? 1 : 0 ) );
+      path src( src_arg.string().substr(pos) );
+      src.normalize();
+      return src.string().substr(1);
     }
 
     string impute_library( const path & full_dir_path );
