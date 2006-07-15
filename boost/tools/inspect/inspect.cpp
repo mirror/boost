@@ -84,12 +84,23 @@ namespace
 
   bool visit_predicate( const path & pth )
   {
+    string local( boost::inspect::relative_to( pth, fs::initial_path() ) );
     string leaf( pth.leaf() );
     return
+      // so we can inspect a checkout
       leaf != "CVS"
+      // don't look at binaries
       && leaf != "bin"
-      && leaf != "jam_src" // this really out of our hands
-      && leaf != "status"  // too many issues with generated HTML files
+      && leaf != "bin.v2"
+      // this really out of our hands
+      && leaf != "jam_src" 
+      && local.find("tools/jam/src") != 0
+      // too many issues with generated HTML files
+      && leaf != "status"
+      // no point in checking doxygen xml output
+      && local.find("doc/xml") != 0
+      // ignore some web files
+      && leaf != ".htaccess"
       ;
   }
 
