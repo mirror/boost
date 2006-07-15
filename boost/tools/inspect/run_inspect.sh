@@ -25,20 +25,20 @@ LOCATE_TARGET=bin sh ./build.sh
 cd ${cvs_dir}
 ${cvs_co} -d boost_${cvs_branch} boost
 cd boost_${cvs_branch}/tools/inspect/build
-${cvs_dir}/boost_${cvs_branch}/tools/jam/src/bin/bjam --v2
+${cvs_dir}/boost_jam_src/bin/bjam --v2
 
 #~ Run the inspection.
 cd ${cvs_dir}
 cd boost_${cvs_branch}
-./dist/bin/inspect --cvs -license -copyright -crlf -link -long_name -tab -minmax > inspect-out.txt
+./dist/bin/inspect -text -license -copyright -crlf -link -long_name -tab -minmax > inspect-out.txt
 
 #~ Send email with results.
 mail_date=`date --iso-8601 --utc`
-cat <<EMAIL
+/usr/sbin/sendmail "${mail_to}" <<EMAIL
 From: Rene Rivera <grafikrobot@gmail.com>
-To: %{mail_to}
+To: ${mail_to}
 Reply-To: Boost <boost@lists.boost.org>
 Subject: Boost inspection notification (${mail_date}/${cvs_branch})
 
+`cat inspect-out.txt`
 EMAIL
-  inspect-out.txt | /usr/sbin/sendmail "${mail_to}"
