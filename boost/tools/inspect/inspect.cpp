@@ -1,7 +1,7 @@
 //  inspect program  ---------------------------------------------------------//
 
 //  Copyright Beman Dawes 2002.
-//  Copyright Rene Rivera 2004.
+//  Copyright Rene Rivera 2004-2006.
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -17,6 +17,7 @@
 #include <boost/filesystem/exception.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/fstream.hpp>
+#include <boost/format.hpp>
 
 #include <iostream>
 #include <cassert>
@@ -201,29 +202,54 @@ namespace
     }
   }
 
+//  display  -----------------------------------------------------------------//
+
+  enum display_format_type
+  {
+    display_html, display_text
+  }
+  display_format = display_html;
+
 //  display_summary_helper  --------------------------------------------------//
 
   void display_summary_helper( const string & current_library, int err_count )
   {
-    std::cout << "  <tr><td><a href=\"#" 
-              << current_library
-              << "\">" << current_library
-              << "</a></td><td align=\"center\">"
-              << err_count << "</td></tr>\n";
+    if (display_text == display_format)
+    {
+      std::cout << boost::format("  %1% (%2%)\n") % current_library % err_count;
+    }
+    else
+    {
+      std::cout
+        << "  <tr><td><a href=\"#" 
+        << current_library
+        << "\">" << current_library
+        << "</a></td><td align=\"center\">"
+        << err_count << "</td></tr>\n";
+    }
   }
   
 //  display_summary  ---------------------------------------------------------//
 
   void display_summary()
   {
-    std::cout << "</pre>\n"
-            "<h2>Summary</h2>\n"
-            "<table border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n"
-            "  <tr>\n"
-            "    <td><b>Library</b></td>\n"
-            "    <td><b>Problems</b></td>\n"
-            "  </tr>\n"
-            ;
+    if (display_text == display_format)
+    {
+      std::cout << "Summary:\n";
+    }
+    else
+    {
+      std::cout
+        << "</pre>\n"
+        "<h2>Summary</h2>\n"
+        "<table border=\"1\" cellpadding=\"5\" cellspacing=\"0\">\n"
+        "  <tr>\n"
+        "    <td><b>Library</b></td>\n"
+        "    <td><b>Problems</b></td>\n"
+        "  </tr>\n"
+        ;
+    }
+    
     string current_library( msgs.begin()->library ); 
     int err_count = 0;
     for ( error_msg_vector::iterator itr ( msgs.begin() );
@@ -239,7 +265,14 @@ namespace
     }
     display_summary_helper( current_library, err_count );
 
-    std::cout << "</table>\n";
+    if (display_text == display_format)
+    {
+      std::cout << "\n";
+    }
+    else
+    {
+      std::cout << "</table>\n";
+    }
   }
 
 
@@ -247,41 +280,81 @@ namespace
 
   void display_details()
   {
-    std::cout << "<h2>Details</h2>\n";
-
-    // display error messages with group indication
-    error_msg current;
-    string sep;
-    bool first = true;
-    for ( error_msg_vector::iterator itr ( msgs.begin() );
-      itr != msgs.end(); ++itr )
+    if (display_text == display_format)
     {
-      if ( current.library != itr->library )
+      std::cout << "Details:\n";
+
+      // display error messages with group indication
+      error_msg current;
+      string sep;
+      for ( error_msg_vector::iterator itr ( msgs.begin() );
+        itr != msgs.end(); ++itr )
       {
-        if ( !first ) std::cout << "</pre>\n";
-        std::cout << "\n<h3><a name=\"" << itr->library
-                  << "\">" << itr->library << "</a></h3>\n<pre>";
+        if ( current.library != itr->library )
+        {
+          std::cout << boost::format("\n|%1%|\n") % itr->library;
+        }
+        if ( current.library != itr->library
+          || current.rel_path != itr->rel_path )
+        {
+          std::cout << boost::format("  %1%:\n") % itr->rel_path;
+        }
+        if ( current.library != itr->library
+          || current.rel_path != itr->rel_path
+          || current.msg != itr->msg )
+        {
+          string m = itr->msg;
+          for (string::size_type i = m.find("&gt;"); i != string::npos;
+            i = m.find("&gt;",i) )
+          {
+            m.replace(i,4,">");
+          }
+          std::cout << boost::format("    %1%\n") % m;
+        }
+        current.library = itr->library;
+        current.rel_path = itr->rel_path;
+        current.msg = itr->msg;
       }
-      if ( current.library != itr->library
-        || current.rel_path != itr->rel_path )
+      std::cout << "\n";
+    }
+    else
+    {
+      std::cout << "<h2>Details</h2>\n";
+
+      // display error messages with group indication
+      error_msg current;
+      string sep;
+      bool first = true;
+      for ( error_msg_vector::iterator itr ( msgs.begin() );
+        itr != msgs.end(); ++itr )
       {
-        std::cout << "\n";
-        std::cout << itr->rel_path;
-        sep = ": ";
+        if ( current.library != itr->library )
+        {
+          if ( !first ) std::cout << "</pre>\n";
+          std::cout << "\n<h3><a name=\"" << itr->library
+                    << "\">" << itr->library << "</a></h3>\n<pre>";
+        }
+        if ( current.library != itr->library
+          || current.rel_path != itr->rel_path )
+        {
+          std::cout << "\n";
+          std::cout << itr->rel_path;
+          sep = ": ";
+        }
+        if ( current.library != itr->library
+          || current.rel_path != itr->rel_path
+          || current.msg != itr->msg )
+        {
+          std::cout << sep << itr->msg;
+          sep = ", ";
+        }
+        current.library = itr->library;
+        current.rel_path = itr->rel_path;
+        current.msg = itr->msg;
+        first = false;
       }
-      if ( current.library != itr->library
-        || current.rel_path != itr->rel_path
-        || current.msg != itr->msg )
-      {
-        std::cout << sep << itr->msg;
-        sep = ", ";
-      }
-      current.library = itr->library;
-      current.rel_path = itr->rel_path;
-      current.msg = itr->msg;
-      first = false;
-   }
-   std::cout << "</pre>\n";
+      std::cout << "</pre>\n";
+    }
   }
 
   const char * options()
@@ -417,7 +490,7 @@ int cpp_main( int argc, char * argv[] )
   if ( argc > 1 && (std::strcmp( argv[1], "-help" ) == 0
     || std::strcmp( argv[1], "--help" ) == 0 ) )
   {
-    std::clog << "Usage: inspect [-cvs] [options...]\n"
+    std::clog << "Usage: inspect [-cvs] [-text] [options...]\n"
       "options:\n"
       << options();
     return 1;
@@ -435,6 +508,12 @@ int cpp_main( int argc, char * argv[] )
   if ( argc > 1 && std::strcmp( argv[1], "-cvs" ) == 0 )
   {
     cvs = true;
+    --argc; ++argv;
+  }
+
+  if ( argc > 1 && std::strcmp( argv[1], "-text" ) == 0 )
+  {
+    display_format = display_text;
     --argc; ++argv;
   }
 
@@ -512,37 +591,72 @@ int cpp_main( int argc, char * argv[] )
   std::strftime( run_date, sizeof(run_date),
     "%X UTC, %A %d %B %Y", std::gmtime( &tod ) );
 
-  std::cout << "<html>\n"
-          "<head>\n"
-          "<title>Boost Inspection Report</title>\n"
-          "</head>\n"
-          "<body bgcolor=\"#ffffff\" text=\"#000000\">\n"
-          "<table border=\"0\">\n"
-          "<tr>\n"
-          "<td><img border=\"0\" src=\"../boost.png\" width=\"277\" "
-          "height=\"86\"></td>\n"
-          "<td align=\"center\">\n"
-          "<h1>Boost Inspection Report</h1>\n"
-          "<b>Run Date:</b> " << run_date  << "\n"
-          "</td>\n"
-          "</table>\n"
-          "<p>An <a href=\"http://www.boost.org/tools/inspect/index.html\">inspection\n" 
-          "program</a> checks each file in the current Boost CVS for various problems,\n" 
-          "generating this web page as output. Problems detected include tabs in files,\n" 
-          "missing copyrights, broken URL's, and similar misdemeanors.</p>\n"
-          ;
+  if (display_text == display_format)
+  {
+    std::cout
+      <<
+        "Boost Inspection Report\n"
+        "Run Date: " << run_date  << "\n"
+        "\n"
+        "An inspection program <http://www.boost.org/tools/inspect/index.html>\n"
+        "checks each file in the current Boost CVS for various problems,\n"
+        "generating this as output. Problems detected include tabs in files,\n"
+        "missing copyrights, broken URL's, and similar misdemeanors.\n"
+        "\n"
+      ;
 
-  std::cout << "<h2>Totals</h2>\n<pre>"
-            << file_count << " files scanned\n"
-            << directory_count << " directories scanned\n"
-            << error_count << " problems reported\n";
+    std::cout
+      << "Totals:\n"
+      << boost::format("  %1% files scanned\n") % file_count
+      << boost::format("  %1% directories scanned\n") % directory_count
+      << boost::format("  %1% problems reported\n") % error_count
+      << "\n"
+      ;
 
-  std::cout << "\nproblem counts:\n";
+    std::cout
+      << "Problem counts:\n";
+  }
+  else
+  {
+    std::cout
+      << "<html>\n"
+      "<head>\n"
+      "<title>Boost Inspection Report</title>\n"
+      "</head>\n"
+      "<body bgcolor=\"#ffffff\" text=\"#000000\">\n"
+      "<table border=\"0\">\n"
+      "<tr>\n"
+      "<td><img border=\"0\" src=\"../boost.png\" width=\"277\" "
+      "height=\"86\"></td>\n"
+      "<td align=\"center\">\n"
+      "<h1>Boost Inspection Report</h1>\n"
+      "<b>Run Date:</b> " << run_date  << "\n"
+      "</td>\n"
+      "</table>\n"
+      "<p>An <a href=\"http://www.boost.org/tools/inspect/index.html\">inspection\n" 
+      "program</a> checks each file in the current Boost CVS for various problems,\n" 
+      "generating this web page as output. Problems detected include tabs in files,\n" 
+      "missing copyrights, broken URL's, and similar misdemeanors.</p>\n"
+      ;
+
+    std::cout
+      << "<h2>Totals</h2>\n<pre>"
+      << file_count << " files scanned\n"
+      << directory_count << " directories scanned\n"
+      << error_count << " problems reported\n";
+
+    std::cout << "\nproblem counts:\n";
+  }
 
   for ( inspector_list::iterator itr = inspectors.begin();
         itr != inspectors.end(); ++itr )
   {
     itr->inspector.reset();
+  }
+
+  if (display_text == display_format)
+  {
+    std::cout << "\n" ;
   }
 
   std::sort( msgs.begin(), msgs.end() );
@@ -553,7 +667,15 @@ int cpp_main( int argc, char * argv[] )
     display_details();
   }
 
-  std::cout << "</body>\n"
-               "</html>\n";
+  if (display_text == display_format)
+  {
+    std::cout << "\n\n" ;
+  }
+  else
+  {
+    std::cout
+      << "</body>\n"
+      "</html>\n";
+  }
   return 0;
 }
