@@ -1,3 +1,7 @@
+# copyright John Maddock 2003
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying file LICENSE_1_0.txt or copy at 
+# http://www.boost.org/LICENSE_1_0.txt.
 
 # very basic makefile for regression tests
 # tests every library combination, static/dynamic/multimthread/singlethread/narrow/wide
@@ -94,6 +98,7 @@ clean:
 	rm -f *.o
 	rm -fr SunWS_cache
 	rm -fr r rm rs rms rw rmw rsw rmsw
+
 
 
 

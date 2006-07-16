@@ -1,3 +1,7 @@
+# copyright John Maddock 2003
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying file LICENSE_1_0.txt or copy at 
+# http://www.boost.org/LICENSE_1_0.txt.
 
 # very basic makefile for regress
 #
@@ -184,6 +188,7 @@ r5lv.exe : $(SOURCES)
 
 r6lv.exe : $(SOURCES)
 	$(BCC32) -tWM -tWR -tWV -tWC $(CFLAGS) -er6lv.exe -DBOOST_REGEX_DYN_LINK -DBOOST_RE_TEST_LOCALE_CPP -DTEST_UNICODE $(SOURCES) $(BPI)
+
 
 
 

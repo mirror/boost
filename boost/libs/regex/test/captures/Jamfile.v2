@@ -1,4 +1,7 @@
 # copyright John Maddock 2003
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying file LICENSE_1_0.txt or copy at 
+# http://www.boost.org/LICENSE_1_0.txt.
 
 project
     : source-location ../../src
@@ -29,6 +32,7 @@ lib boost_regex_extra : $(EX_SOURCES)
 	     <link>shared:<define>BOOST_REGEX_DYN_LINK=1
     : 
     ;
+
 
 
 

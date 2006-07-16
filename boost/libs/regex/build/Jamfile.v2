@@ -1,3 +1,7 @@
+# copyright John Maddock 2003
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying file LICENSE_1_0.txt or copy at 
+# http://www.boost.org/LICENSE_1_0.txt.
 
 project boost/regex
     : source-location ../src
@@ -130,3 +134,4 @@ lib boost_regex : ../src/$(SOURCES) $(ICU_EXTRA_SOURCE)
 	     <link>shared:<define>BOOST_REGEX_DYN_LINK=1
 	     $(BOOST_REGEX_ICU_OPTS)
     ;
+

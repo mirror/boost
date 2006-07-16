@@ -1,5 +1,10 @@
 #! /bin/bash
 
+# copyright John Maddock 2003
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying file LICENSE_1_0.txt or copy at 
+# http://www.boost.org/LICENSE_1_0.txt.
+
 libname=""
 src=""
 header=""
@@ -192,6 +197,10 @@ function bcb_gen()
 	bcb_gen_lib
 	
 	cat > $out << EOF
+# copyright John Maddock 2006
+# Distributed under the Boost Software License, Version 1.0. 
+# (See accompanying file LICENSE_1_0.txt or copy at 
+# http://www.boost.org/LICENSE_1_0.txt.
 #
 # auto generated makefile for C++ Builder
 #
@@ -254,6 +263,7 @@ out="bcb6.mak"
 subdir="bcb"
 has_stlport="yes"
 bcb_gen
+
 
 
 
