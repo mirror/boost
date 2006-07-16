@@ -34,7 +34,7 @@ struct test_my_vector {
     
     template<class VP>
     void test_expression_with (VP &v1, VP &v2, VP &v3) const {
-    	// Expression type tests
+        // Expression type tests
         value_type t;
         size_type i;
         real_type n;

@@ -22,7 +22,7 @@ public:
     }
     ~udt () {}      // required for GCC prior to 3.4 to generate cookie
 
-	static udt* base_pointer;
+    static udt* base_pointer;
 };
 
 udt* udt::base_pointer;
