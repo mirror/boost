@@ -277,8 +277,8 @@ inline u32regex do_make_u32regex(InputIterator i,
    conv_type a(i), b(j);
    while(a != b)
    {
-	   v.push_back(*a);
-	   ++a;
+      v.push_back(*a);
+      ++a;
    }
    if(v.size())
       return u32regex(&*v.begin(), v.size(), opt);
@@ -297,8 +297,8 @@ inline u32regex do_make_u32regex(InputIterator i,
    conv_type a(i), b(j);
    while(a != b)
    {
-	   v.push_back(*a);
-	   ++a;
+      v.push_back(*a);
+      ++a;
    }
    if(v.size())
       return u32regex(&*v.begin(), v.size(), opt);
@@ -315,8 +315,8 @@ inline u32regex do_make_u32regex(InputIterator i,
    vector_type v;
    while(i != j)
    {
-	   v.push_back((UCHAR32)(*i));
-	   ++a;
+      v.push_back((UCHAR32)(*i));
+      ++a;
    }
    if(v.size())
       return u32regex(&*v.begin(), v.size(), opt);
@@ -880,7 +880,7 @@ inline OutputIterator u32regex_replace(OutputIterator out,
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
    <OutputIterator>
 #endif
-	 (
+    (
       re_detail::do_regex_replace(
          re_detail::make_utf32_out(out, static_cast<mpl::int_<sizeof(*first)> const*>(0)),
          re_detail::make_utf32_seq(first, last, static_cast<mpl::int_<sizeof(*first)> const*>(0)),
@@ -902,7 +902,7 @@ inline OutputIterator u32regex_replace(OutputIterator out,
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
    <OutputIterator>
 #endif
-	 (
+    (
       re_detail::do_regex_replace(
          re_detail::make_utf32_out(out, static_cast<mpl::int_<sizeof(*first)> const*>(0)),
          re_detail::make_utf32_seq(first, last, static_cast<mpl::int_<sizeof(*first)> const*>(0)),
@@ -924,7 +924,7 @@ inline OutputIterator u32regex_replace(OutputIterator out,
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
    <OutputIterator>
 #endif
-	(
+   (
       re_detail::do_regex_replace(
          re_detail::make_utf32_out(out, static_cast<mpl::int_<sizeof(*first)> const*>(0)),
          re_detail::make_utf32_seq(first, last, static_cast<mpl::int_<sizeof(*first)> const*>(0)),
