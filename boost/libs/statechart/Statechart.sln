@@ -87,7 +87,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InconsistentHistoryTest8", 
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnsupportedDeepHistoryTest", "test\UnsupportedDeepHistoryTest.vcproj", "{D9103E3E-640D-4AB7-910C-ACA96709ED0A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnsuppDeepHistoryTest", "test\UnsuppDeepHistoryTest.vcproj", "{D9103E3E-640D-4AB7-910C-ACA96709ED0A}"
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject

@@ -134,7 +134,7 @@ test-suite statechart
     [ statechart-compile-fail-variants InconsistentHistoryTest6 ]
     [ statechart-compile-fail-variants InconsistentHistoryTest7 ]
     [ statechart-compile-fail-variants InconsistentHistoryTest8 ]
-    [ statechart-compile-fail-variants UnsupportedDeepHistoryTest ]
+    [ statechart-compile-fail-variants UnsuppDeepHistoryTest ]
     [ statechart-st-run-variants StateCastTest ]
     [ statechart-st-run-variants TypeInfoTest ]
     [ statechart-st-run-variants StateIterationTest ]
