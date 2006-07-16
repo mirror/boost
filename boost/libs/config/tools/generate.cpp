@@ -96,6 +96,9 @@ void write_jamfile()
       "# This file was automatically generated on " << std::ctime(&t);
    ofs << "#  by libs/config/tools/generate.cpp\n"
       "# Copyright John Maddock.\n"
+      "# Use, modification and distribution are subject to the \n"
+      "# Boost Software License, Version 1.0. (See accompanying file \n"
+      "# LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)\n"
       "#\n# If you need to alter build preferences then set them in\n"
       "# the template defined in options.jam.\n#\n"
       "subproject libs/config/test ;\n"
@@ -117,6 +120,9 @@ void write_jamfile_v2()
       "# This file was automatically generated on " << std::ctime(&t);
    ofs << "#  by libs/config/tools/generate.cpp\n"
       "# Copyright John Maddock.\n"
+      "# Use, modification and distribution are subject to the \n"
+      "# Boost Software License, Version 1.0. (See accompanying file \n"
+      "# LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)\n"
       "#\n# If you need to alter build preferences then set them in\n"
       "# the template defined in options_v2.jam.\n#\n"
       "path-constant DOT : . ;\n"
@@ -297,3 +303,4 @@ int cpp_main(int argc, char* argv[])
    write_config_info();
    return 0;
 }
+

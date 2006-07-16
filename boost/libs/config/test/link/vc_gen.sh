@@ -1,4 +1,8 @@
 #! /bin/bash
+# copyright John Maddock 2005
+# Use, modification and distribution are subject to the 
+# Boost Software License, Version 1.0. (See accompanying file 
+# LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 libname=""
 src=""
@@ -179,6 +183,10 @@ function vc6_gen()
 	vc6_gen_lib
 	
 	cat > $out << EOF
+# copyright John Maddock 2005
+# Use, modification and distribution are subject to the 
+# Boost Software License, Version 1.0. (See accompanying file 
+# LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #
 # auto generated makefile for VC6 compiler
 #
@@ -287,6 +295,10 @@ function vc6_stlp_gen()
 	vc6_gen_lib
 	
 	cat > $out << EOF
+# copyright John Maddock 2005
+# Use, modification and distribution are subject to the 
+# Boost Software License, Version 1.0. (See accompanying file 
+# LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #
 # auto generated makefile for VC6+STLPort
 #
@@ -399,6 +411,9 @@ vc6_stlp_gen
 #
 # remove tmep files;
 rm -f $tout $iout
+
+
+
 
 
 

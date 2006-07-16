@@ -81,9 +81,9 @@ void print_limits(T, const char* name)
    std::cout << 
       "    is_specialized       = " << std::numeric_limits<T>::is_specialized << std::endl;
    std::cout << 
-      "    min()                = " << std::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::min)() << std::endl;
+      "    min" "()                = " << std::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::min)() << std::endl;
    std::cout << 
-      "    max()                = " << std::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::max)() << std::endl;
+      "    max" "()                = " << std::setprecision(std::numeric_limits<T>::digits10 + 2) << (std::numeric_limits<T>::max)() << std::endl;
    std::cout << 
       "    digits               = " << std::numeric_limits<T>::digits << std::endl;
    std::cout << 
@@ -352,6 +352,7 @@ int main()
    test_overloads((long double)(0), "long double");
    return 0;
 }
+
 
 
 
