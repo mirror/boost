@@ -119,8 +119,8 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
         for (size_type i = 0; i < e1.nnz(); ++i) {
-            size_type row_index = layout_type::element1( e1.index1_data () [i], size1, e1.index2_data () [i], size2 );
-            size_type col_index = layout_type::element2( e1.index1_data () [i], size1, e1.index2_data () [i], size2 );
+            size_type row_index = layout_type::index_M( e1.index1_data () [i], e1.index2_data () [i] );
+            size_type col_index = layout_type::index_m( e1.index1_data () [i], e1.index2_data () [i] );
             v( row_index ) += e1.value_data () [i] * e2 () (col_index);
         }
         return v;

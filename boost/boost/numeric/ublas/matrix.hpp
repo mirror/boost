@@ -1100,11 +1100,11 @@ namespace boost { namespace numeric { namespace ublas {
         // Element access
         BOOST_UBLAS_INLINE
         const_reference operator () (size_type i, size_type j) const {
-            return data () [layout_type::element1 (i, size1_, j, size2_)] [layout_type::element2 (i, size1_, j, size2_)]; 
+            return data () [layout_type::index_M (i, j)] [layout_type::index_m (i, j)];
         }
         BOOST_UBLAS_INLINE
         reference at_element (size_type i, size_type j) {
-            return data () [layout_type::element1 (i, size1_, j, size2_)] [layout_type::element2 (i, size1_, j, size2_)]; 
+            return data () [layout_type::index_M (i, j)] [layout_type::index_m (i, j)];
         }
         BOOST_UBLAS_INLINE
         reference operator () (size_type i, size_type j) {
