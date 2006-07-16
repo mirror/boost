@@ -20,11 +20,13 @@ namespace boost
       const path & full_path,   // example: c:/foo/boost/filesystem/path.hpp
       const string & contents )     // contents of file to be inspected
     {
+      if (contents.find( "boostinspect:nocopyright" ) != string::npos) return;
+
       if ( contents.find( "Copyright" ) == string::npos
         && contents.find( "copyright" ) == string::npos )
       {
         ++m_files_with_errors;
-        error( library_name, full_path, desc() );
+        error( library_name, full_path, name() );
       }
     }
   } // namespace inspect

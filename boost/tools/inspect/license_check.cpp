@@ -29,10 +29,12 @@ namespace boost
       const path & full_path,   // example: c:/foo/boost/filesystem/path.hpp
       const string & contents )     // contents of file to be inspected
     {
+      if (contents.find( "boostinspect:nolicense" ) != string::npos) return;
+
       if ( !boost::regex_search( contents, license_regex ) )
       {
         ++m_files_with_errors;
-        error( library_name, full_path, desc() );
+        error( library_name, full_path, name() );
       }
     }
   } // namespace inspect

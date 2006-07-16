@@ -30,15 +30,33 @@ ${cvs_dir}/boost_jam_src/bin/bjam --v2
 #~ Run the inspection.
 cd ${cvs_dir}
 cd boost_${cvs_branch}
-./dist/bin/inspect -text -license -copyright -crlf -link -long_name -tab -minmax > inspect-out.txt
+opt=""
+opt="${opt} -crlf"
+opt="${opt} -link"
+opt="${opt} -long_name"
+opt="${opt} -tab"
+opt="${opt} -minmax"
+./dist/bin/inspect -text ${opt} > inspect-X.out
+opt=""
+opt="${opt} -license"
+opt="${opt} -copyright"
+./dist/bin/inspect -text ${opt} > inspect-LC.out
 
-#~ Send email with results.
+#~ Send email(s) with results.
 mail_date=`date --iso-8601 --utc`
 /usr/sbin/sendmail "${mail_to}" <<EMAIL
 From: ${mail_from}
 To: ${mail_to}
 Reply-To: ${mail_to}
-Subject: Boost inspection notification (${mail_date}/${cvs_branch})
+Subject: Boost inspection notification (${mail_date}/${cvs_branch}) *X*
 
-`cat inspect-out.txt`
+`cat inspect-X.out`
+EMAIL
+/usr/sbin/sendmail "${mail_to}" <<EMAIL
+From: ${mail_from}
+To: ${mail_to}
+Reply-To: ${mail_to}
+Subject: Boost inspection notification (${mail_date}/${cvs_branch}) *LC*
+
+`cat inspect-LC.out`
 EMAIL

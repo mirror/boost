@@ -36,7 +36,7 @@ namespace boost
     public:
 
       link_check();
-      virtual const char * name() const { return "link-check"; }
+      virtual const char * name() const { return "*A*"; }
       virtual const char * desc() const { return "invalid bookmarks, invalid urls, broken links, unlinked files"; }
 
       virtual void inspect(

@@ -23,7 +23,7 @@ namespace boost
     public:
 
       crlf_check();
-      virtual const char * name() const { return "crlf-check"; }
+      virtual const char * name() const { return "*R*"; }
       virtual const char * desc() const { return "invalid (cr only) line-ending"; }
 
       virtual void inspect(

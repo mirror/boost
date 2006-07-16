@@ -52,6 +52,8 @@ namespace boost
       const path & full_path,   // example: c:/foo/boost/filesystem/path.hpp
       const string & contents )     // contents of file to be inspected
     {
+      if (contents.find( "boostinspect:nolink" ) != string::npos) return;
+
       string::const_iterator start( contents.begin() );
       string::const_iterator end( contents.end() );
       boost::match_results< string::const_iterator > what; 
@@ -87,7 +89,7 @@ namespace boost
       if ( url.find( "file:" ) == 0 )
       {
         ++m_invalid_errors;
-        error( library_name, source_path, "invalid URL (hardwired file): " + url );
+        error( library_name, source_path, string(name()) + " invalid URL (hardwired file): " + url );
         return;
       }
 
@@ -95,7 +97,7 @@ namespace boost
       if ( url.find_first_of( " <>\"{}|\\^[]'" ) != string::npos )
       {
         ++m_invalid_errors;
-        error( library_name, source_path, "invalid character in URL: " + url );
+        error( library_name, source_path, string(name()) + " invalid character in URL: " + url );
       }
       
       // strip url of bookmarks
@@ -108,7 +110,7 @@ namespace boost
         if ( url.find( '#', pos+1 ) != string::npos )
         {
           ++m_bookmark_errors;
-          error( library_name, source_path, "invalid bookmark: " + url );
+          error( library_name, source_path, string(name()) + " invalid bookmark: " + url );
         }
       }
 
@@ -122,7 +124,7 @@ namespace boost
       catch ( const fs::filesystem_error & )
       {
         ++m_invalid_errors;
-        error( library_name, source_path, "invalid URL: " + url );
+        error( library_name, source_path, string(name()) + " invalid URL: " + url );
         return;
       }
 
@@ -143,7 +145,7 @@ namespace boost
       if ( (itr->second & m_present) == 0 )
       {
         ++m_broken_errors;
-        error( library_name, source_path, "broken link: " + url );
+        error( library_name, source_path, string(name()) + " broken link: " + url );
       }
     }
 
@@ -164,7 +166,7 @@ namespace boost
        {
          ++m_unlinked_errors;
          path full_path( fs::initial_path() / path(itr->first, fs::no_check) );
-         error( impute_library( full_path ), full_path, "unlinked file" );
+         error( impute_library( full_path ), full_path, string(name()) + " unlinked file" );
        }
      }
    }

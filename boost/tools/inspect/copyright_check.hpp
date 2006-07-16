@@ -21,7 +21,7 @@ namespace boost
     public:
 
       copyright_check();
-      virtual const char * name() const { return "copyright-check"; }
+      virtual const char * name() const { return "*C*"; }
       virtual const char * desc() const { return "missing copyright"; }
 
       virtual void inspect(

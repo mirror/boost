@@ -48,19 +48,19 @@ namespace boost
       if ( leaf.size() > 31 )
       {
         ++m_long_name_errors;
-        error( library_name, full_path, "filename &gt; 31 chars" );
+        error( library_name, full_path, string(name()) + " filename &gt; 31 chars" );
       }
 
       if ( std::count( leaf.begin(), leaf.end(), '.' ) > 1 )
       {
         ++m_long_name_errors;
-        error( library_name, full_path, "filename contains more than one dot character ('.')" );
+        error( library_name, full_path, string(name()) + " filename contains more than one dot character ('.')" );
       }
 
       if ( *leaf.rbegin() == '.' )
       {
         ++m_long_name_errors;
-        error( library_name, full_path, "filename ends with the dot character ('.')" );
+        error( library_name, full_path, string(name()) + " filename ends with the dot character ('.')" );
       }
       
       path const relative_path( relative_to( full_path, filesystem::initial_path() ), &filesystem::no_check );
@@ -69,26 +69,26 @@ namespace boost
             != relative_path.end() )
       {
         ++m_long_name_errors;
-        error( library_name, full_path, "leading character of one of the path compontents is not alphabetic" );
+        error( library_name, full_path, string(name()) + " leading character of one of the path compontents is not alphabetic" );
       }
 
       if ( std::find_if( relative_path.begin(), boost::prior( relative_path.end() )
             , boost::bind( &aux::contains_dot, _1 ) ) != boost::prior( relative_path.end() ) )
       {
         ++m_long_name_errors;
-        error( library_name, full_path, "directory name contains the dot character ('.')" );
+        error( library_name, full_path, string(name()) + " directory name contains the dot character ('.')" );
       }
 
       if ( std::distance( relative_path.begin(), boost::prior( relative_path.end() ) ) >= 8 )
       {
         ++m_long_name_errors;
-        error( library_name, full_path, "file's directory depth will exceed 8 levels if placed on a CD" );
+        error( library_name, full_path, string(name()) + " file's directory depth will exceed 8 levels if placed on a CD" );
       }
 
       if ( relative_path.string().size() > ( 100 - string( "boost_X_XX_X/" ).size() ) )
       {
         ++m_long_name_errors;
-        error( library_name, full_path, "file path will be > 100 chars if placed on a CD" );
+        error( library_name, full_path, string(name()) + " file path will be > 100 chars if placed on a CD" );
       }
 
       if (relative_path.leaf() != ".cvsignore")
@@ -100,7 +100,7 @@ namespace boost
         catch ( filesystem::filesystem_error const& )
         {
           ++m_long_name_errors;
-          error( library_name, full_path, "nonportable path" );
+          error( library_name, full_path, string(name()) + " nonportable path" );
         }
       }
     }

@@ -22,6 +22,8 @@ namespace boost
       const path & full_path,   // example: c:/foo/boost/filesystem/path.hpp
       const string & contents )     // contents of file to be inspected
     {
+      if (contents.find( "boostinspect:nocrlf" ) != string::npos) return;
+
       bool failed = false;
       // The understanding on line endings, as I remember it, was that
       // either "\n" or "\r\n" is OK, and they can be mixed, but "\r" alone
@@ -46,7 +48,7 @@ namespace boost
       if (failed && full_path.leaf() != "wrong_line_ends_test.cpp")
       {
         ++m_files_with_errors;
-        error( library_name, full_path, desc() );
+        error( library_name, full_path, name() );
       }
 
       if (!failed && full_path.leaf() == "wrong_line_ends_test.cpp")

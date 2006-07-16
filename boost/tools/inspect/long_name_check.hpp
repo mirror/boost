@@ -21,7 +21,7 @@ namespace boost
       long_name_check();
       virtual ~long_name_check();
 
-      virtual const char * name() const { return "long-name-check"; }
+      virtual const char * name() const { return "*N*"; }
       virtual const char * desc() const { return "file names too long"; }
 
       virtual void inspect(

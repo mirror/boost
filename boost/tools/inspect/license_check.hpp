@@ -21,7 +21,7 @@ namespace boost
     public:
 
       license_check();
-      virtual const char * name() const { return "license-check"; }
+      virtual const char * name() const { return "*L*"; }
       virtual const char * desc() const { return "missing Boost license info"; }
 
       virtual void inspect(

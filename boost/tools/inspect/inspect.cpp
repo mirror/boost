@@ -282,8 +282,6 @@ namespace
   {
     if (display_text == display_format)
     {
-      std::cout << "Details:\n";
-
       // display error messages with group indication
       error_msg current;
       string sep;
@@ -319,8 +317,6 @@ namespace
     }
     else
     {
-      std::cout << "<h2>Details</h2>\n";
-
       // display error messages with group indication
       error_msg current;
       string sep;
@@ -648,9 +644,24 @@ int cpp_main( int argc, char * argv[] )
     std::cout << "\nproblem counts:\n";
   }
 
+  string inspector_keys;
   for ( inspector_list::iterator itr = inspectors.begin();
         itr != inspectors.end(); ++itr )
   {
+    if (display_text == display_format)
+    {
+      inspector_keys += (
+        boost::format("  %1% %2%\n")
+          % itr->inspector->name() % itr->inspector->desc()
+        ).str();
+    }
+    else
+    {
+      inspector_keys += (
+        boost::format("  %1% %2%</br>\n")
+          % itr->inspector->name() % itr->inspector->desc()
+        ).str();
+    }
     itr->inspector.reset();
   }
 
@@ -664,6 +675,15 @@ int cpp_main( int argc, char * argv[] )
   if ( !msgs.empty() )
   {
     display_summary();
+    
+    if (display_text == display_format)
+    {
+      std::cout << "Details:\n" << inspector_keys;
+    }
+    else
+    {
+      std::cout << "<h2>Details</h2>\n" << inspector_keys;
+    }
     display_details();
   }
 
