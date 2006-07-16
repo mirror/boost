@@ -106,5 +106,5 @@ int main()
     key = GetKey();
   }
 
- 	return 0;
+  return 0;
 }
