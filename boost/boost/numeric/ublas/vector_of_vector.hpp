@@ -110,10 +110,17 @@ namespace boost { namespace numeric { namespace ublas {
             return size2_;
         }
         BOOST_UBLAS_INLINE
-        size_type non_zeros () const {
+        size_type nnz_capacity () const {
             size_type non_zeros = 0;
-            for (const_vectoriterator_type itv = data_ ().begin (); itv != data_ ().end (); ++ itv)
-                non_zeros += (*itv).size ();
+            for (const_vectoriterator_type itv = data_.begin (); itv != data_.end (); ++ itv)
+                non_zeros += (*itv).nnz_capacity ();
+            return non_zeros;
+        }
+        BOOST_UBLAS_INLINE
+        size_type nnz () const {
+            size_type non_zeros = 0;
+            for (const_vectoriterator_type itv = data_.begin (); itv != data_.end (); ++ itv)
+                non_zeros += (*itv).nnz ();
             return non_zeros;
         }
 
