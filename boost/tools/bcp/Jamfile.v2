@@ -1,3 +1,7 @@
+# (C) Copyright John Maddock 2006.
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or http://www.boost.org/LICENSE_1_0.txt)
+
 exe bcp
     :
     add_path.cpp bcp_imp.cpp copy_path.cpp file_types.cpp
@@ -31,3 +35,4 @@ install dist-lib
     :
     release
     ;
+
