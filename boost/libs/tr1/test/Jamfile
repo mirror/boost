@@ -1,4 +1,7 @@
-# Copyright John Maddock 2005
+# Copyright John Maddock 2005.
+# Use, modification and distribution are subject to the 
+# Boost Software License, Version 1.0. (See accompanying file 
+# LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 subproject libs/tr1/test ;
 
@@ -39,14 +42,14 @@ rule test_all
       :  # additional args
       :  # test-files
       :  # requirements
-		#<sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 
-		<include>$(BOOST_ROOT)/boost/tr1/tr1 
+      #<sysinclude>$(BOOST_ROOT)/boost/tr1/tr1 
+      <include>$(BOOST_ROOT)/boost/tr1/tr1 
       # Borland's broken include mechanism needs these extra headers:
       <borland-5_6_4><*><include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
       <borland-5_5_1><*><include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
       <borland><*><include>$(BOOST_ROOT)/boost/tr1/tr1/bcc32 
       <include>$(BOOST_ROOT) 
-		<define>TEST_STD_HEADERS=1 : std_$(fileb:B)  ] ;
+      <define>TEST_STD_HEADERS=1 : std_$(fileb:B)  ] ;
    }
    for local file2 in [ GLOB $(BOOST_ROOT)/libs/tr1/test/config : tr1_has_tr1*fail.cpp ]
    {
@@ -91,6 +94,7 @@ rule test_all
 }
 
 test-suite tr1 : [ test_all r ] ; 
+
 
 
 
