@@ -481,7 +481,7 @@ void xor_combine<UniformRandomNumberGenerator1, s1, UniformRandomNumberGenerator
    // calculation of maximum value:
    //
    if((((std::numeric_limits<result_type>::max)() >> s1) < (m_b1.max)())
-      || (((std::numeric_limits<result_type>::max()) >> s2) < (m_b2.max)()))
+      || ((((std::numeric_limits<result_type>::max)()) >> s2) < (m_b2.max)()))
    {
       m_max = (std::numeric_limits<result_type>::max)();
       return;
@@ -573,3 +573,4 @@ using ::boost::gamma_distribution;
 #endif
 
 #endif
+
