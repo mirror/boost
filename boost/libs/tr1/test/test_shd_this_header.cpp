@@ -7,5 +7,9 @@
 // by including these directly we probe for problems with cyclic
 // dependencies when the TR1 headers are in the include search path.
 
-#include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
+
+
+
+
 
