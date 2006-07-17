@@ -23,7 +23,7 @@
 #include <boost/wave/cpplexer/cpp_lex_token.hpp>    // token class
 #include <boost/wave/cpplexer/cpp_lex_iterator.hpp> // lexer class
 
-#include "advanced_preprocessing_hooks.hpp"
+#include "advanced_hooks.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
 //  Main entry point
