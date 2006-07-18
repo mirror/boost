@@ -5,12 +5,14 @@
 //  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
-#include <boost/regex.hpp>
+#include "boost/regex.hpp"
 #include "license_check.hpp"
 
 namespace
 {
   boost::regex license_regex(
+    "Distributed(\\s+|\\s+#\\s*|\\s+//\\s*)"
+    "under(\\s+|\\s+#\\s*|\\s+//\\s*)the(\\s+|\\s+#\\s*|\\s+//\\s*)"
     "boost(\\s+|\\s+#\\s*|\\s+//\\s*)software(\\s+|\\s+#\\s*|\\s+//\\s*)license",
     boost::regbase::normal | boost::regbase::icase);
 
@@ -23,7 +25,7 @@ namespace boost
    license_check::license_check() : m_files_with_errors(0)
    {
    }
-     
+
    void license_check::inspect(
       const string & library_name,
       const path & full_path,   // example: c:/foo/boost/filesystem/path.hpp

@@ -9,10 +9,10 @@
 #ifndef BOOST_LINK_CHECK_HPP
 #define BOOST_LINK_CHECK_HPP
 
-#include "inspector.hpp"
-
 #include <map>
 #include <utility> // for make_pair()
+
+#include "inspector.hpp"
 
 namespace boost
 {

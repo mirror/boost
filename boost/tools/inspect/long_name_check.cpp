@@ -38,7 +38,7 @@ namespace boost
   namespace inspect
   {
     long_name_check::long_name_check() : m_long_name_errors(0) {}
-     
+
     void long_name_check::inspect(
       const string & library_name,
       const path & full_path )
@@ -62,7 +62,7 @@ namespace boost
         ++m_long_name_errors;
         error( library_name, full_path, string(name()) + " filename ends with the dot character ('.')" );
       }
-      
+
       path const relative_path( relative_to( full_path, filesystem::initial_path() ), &filesystem::no_check );
 
       if ( std::find_if( relative_path.begin(), relative_path.end(), boost::bind( &aux::starts_with_nonalpha, _1 ) )

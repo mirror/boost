@@ -47,7 +47,7 @@ namespace boost
       const string & contents)     // contents of file to be inspected
     {
       if (contents.find( "boostinspect:nominmax" ) != string::npos) return;
-      
+
       boost::sregex_iterator cur(contents.begin(), contents.end(), minmax_regex), end;
 
       for( ; cur != end; ++cur, ++m_errors )

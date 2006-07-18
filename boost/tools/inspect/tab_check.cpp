@@ -23,7 +23,7 @@ namespace boost
      register_signature( "Jamfile" );
      register_signature( ".py" );
    }
-     
+
    void tab_check::inspect(
       const string & library_name,
       const path & full_path,   // example: c:/foo/boost/filesystem/path.hpp

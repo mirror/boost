@@ -14,7 +14,7 @@ namespace boost
    copyright_check::copyright_check() : m_files_with_errors(0)
    {
    }
-     
+
    void copyright_check::inspect(
       const string & library_name,
       const path & full_path,   // example: c:/foo/boost/filesystem/path.hpp

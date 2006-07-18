@@ -31,7 +31,7 @@ namespace boost
       // are commonly edited in both Windows and UNIX environments, and editors
       // in those environments generally accept either ending. Even Mac people
       // agreed with this policy. --Beman
-      
+
       // Joerg's original implementation is saved below,
       // in case we change our minds!
 

@@ -22,7 +22,7 @@ namespace boost
 
       license_check();
       virtual const char * name() const { return "*L*"; }
-      virtual const char * desc() const { return "missing Boost license info"; }
+      virtual const char * desc() const { return "missing Boost license info, or wrong reference text"; }
 
       virtual void inspect(
         const std::string & library_name,
@@ -31,7 +31,7 @@ namespace boost
 
       virtual ~license_check()
         { std::cout << "  "
-            << m_files_with_errors << " files missing Boost license info\n"; }
+            << m_files_with_errors << " files missing Boost license info or having wrong reference text\n"; }
     };
   }
 }

@@ -27,13 +27,13 @@ namespace boost
   {
 
 //  link_check constructor  --------------------------------------------------//
-    
+
    link_check::link_check()
      : m_broken_errors(0), m_unlinked_errors(0), m_invalid_errors(0),
        m_bookmark_errors(0)
    {
    }
-     
+
 //  inspect (all)  -----------------------------------------------------------//
 
    void link_check::inspect(
@@ -56,20 +56,20 @@ namespace boost
 
       string::const_iterator start( contents.begin() );
       string::const_iterator end( contents.end() );
-      boost::match_results< string::const_iterator > what; 
-      boost::match_flag_type flags = boost::match_default; 
+      boost::match_results< string::const_iterator > what;
+      boost::match_flag_type flags = boost::match_default;
 
-      while( boost::regex_search( start, end, what, url_regex, flags) ) 
-      { 
+      while( boost::regex_search( start, end, what, url_regex, flags) )
+      {
         // what[0] contains the whole string iterators.
-        // what[1] contains the URL iterators. 
+        // what[1] contains the URL iterators.
         do_url( string( what[1].first, what[1].second ),
           library_name, full_path );
 
         start = what[0].second; // update search position
         flags |= boost::match_prev_avail; // update flags
-        flags |= boost::match_not_bob; 
-      } 
+        flags |= boost::match_not_bob;
+      }
     }
 
 //  do_url  ------------------------------------------------------------------//
@@ -99,7 +99,7 @@ namespace boost
         ++m_invalid_errors;
         error( library_name, source_path, string(name()) + " invalid character in URL: " + url );
       }
-      
+
       // strip url of bookmarks
       string plain_url( url );
       string::size_type pos( plain_url.find( '#' ) );
@@ -118,7 +118,7 @@ namespace boost
       if ( plain_url[0]=='.' && plain_url[1]=='/' ) plain_url.erase( 0, 2 );
 
       // url is relative source_path.branch()
-      // convert to target_path, which is_complete() 
+      // convert to target_path, which is_complete()
       path target_path;
       try { target_path = source_path.branch_path() /= path( plain_url, fs::no_check ); }
       catch ( const fs::filesystem_error & )

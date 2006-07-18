@@ -10,9 +10,10 @@
 #define BOOST_INSPECTOR_HPP
 
 #include <string>
-#include <iostream>
 #include <set>
-#include <boost/filesystem/path.hpp>
+#include <iostream>
+#include <ostream>
+#include "boost/filesystem/path.hpp"
 
 using std::string;
 using boost::filesystem::path;
@@ -22,7 +23,7 @@ namespace boost
   namespace inspect
   {
     typedef std::set< string > string_set;
-        
+
     class inspector
     {
     public:
@@ -59,7 +60,7 @@ namespace boost
     private:
       string_set m_signatures;
     };
-    
+
     // for inspection of source code of one form or other
     class source_inspector : public inspector
     {
@@ -67,7 +68,7 @@ namespace boost
       // registers the basic set of known source signatures
       source_inspector();
     };
-    
+
     // for inspection of hypertext, specifically html
     class hypertext_inspector : public inspector
     {
@@ -87,7 +88,7 @@ namespace boost
     }
 
     string impute_library( const path & full_dir_path );
- 
+
   }
 }
 
