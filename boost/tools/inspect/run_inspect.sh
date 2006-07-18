@@ -48,6 +48,8 @@ mail_date=`date --iso-8601 --utc`
 From: ${mail_from}
 To: ${mail_to}
 Reply-To: ${mail_to}
+References: <44BD6089.3010709@gmail.com>
+In-Reply-To: <44BD6089.3010709@gmail.com>
 Subject: Boost inspection notification (${mail_date}/${cvs_branch}) *X*
 
 `cat inspect-X.out`
@@ -56,6 +58,8 @@ EMAIL
 From: ${mail_from}
 To: ${mail_to}
 Reply-To: ${mail_to}
+References: <44BD6089.3010709@gmail.com>
+In-Reply-To: <44BD6089.3010709@gmail.com>
 Subject: Boost inspection notification (${mail_date}/${cvs_branch}) *LC*
 
 `cat inspect-LC.out`
