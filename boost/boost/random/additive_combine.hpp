@@ -65,8 +65,8 @@ public:
   void seed(typename MLCG1::result_type seed1,
             typename MLCG2::result_type seed2)
   {
-    _mlcg1(seed1);
-    _mlcg2(seed2);
+    _mlcg1.seed(seed1);
+    _mlcg2.seed(seed2);
   }
 
   template<class It> void seed(It& first, It last)
