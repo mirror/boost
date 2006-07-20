@@ -43,14 +43,14 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename boost::mpl::if_<boost::is_const<E>,
                                           typename E::const_reference,
                                           typename E::reference>::type reference;
-        typedef E refered_type;
+        typedef E referred_type;
         typedef const self_type const_closure_type;
         typedef self_type closure_type;
         typedef typename E::storage_category storage_category;
 
         // Construction and destruction
         BOOST_UBLAS_INLINE
-        explicit vector_reference (refered_type &e):
+        explicit vector_reference (referred_type &e):
             e_ (e) {}
 
         // Accessors
@@ -62,11 +62,11 @@ namespace boost { namespace numeric { namespace ublas {
     public:
         // Expression accessors - const correct
         BOOST_UBLAS_INLINE
-        const refered_type &expression () const {
+        const referred_type &expression () const {
             return e_;
         }
         BOOST_UBLAS_INLINE
-        refered_type &expression () {
+        referred_type &expression () {
             return e_;
         }
 
@@ -227,7 +227,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
 
     private:
-        refered_type &e_;
+        referred_type &e_;
     };
 
 
