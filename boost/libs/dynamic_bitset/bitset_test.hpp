@@ -275,15 +275,17 @@ struct bitset_test {
   static void swap(const Bitset& lhs, const Bitset& rhs)
   {
     // bitsets must be swapped
-    Bitset b1(lhs);
-    Bitset b2(rhs);
-    b1.swap(b2);
+    Bitset copy1(lhs);
+    Bitset copy2(rhs);
+    copy1.swap(copy2);
 
-    BOOST_CHECK(b1 == rhs);
-    BOOST_CHECK(b2 == lhs);
+    BOOST_CHECK(copy1 == rhs);
+    BOOST_CHECK(copy2 == lhs);
 
     // references must be stable under a swap
-    for(typename Bitset::size_type i = 0; i < b1.size(); ++i) {
+    for(typename Bitset::size_type i = 0; i < lhs.size(); ++i) {
+      Bitset b1(lhs);
+      Bitset b2(rhs);
       typename Bitset::reference ref = b1[i];
       bool x = ref;
       if (i < b2.size())
@@ -291,7 +293,8 @@ struct bitset_test {
       b1.swap(b2);
       BOOST_CHECK(b2[i] == x); // now it must be equal..
       b2.flip(i);
-      BOOST_CHECK(ref == !x); // .. and ref must be into b2
+      BOOST_CHECK(ref == b2[i]); // .. and ref must be into b2
+      BOOST_CHECK(ref == !x);
     }
 
   }
