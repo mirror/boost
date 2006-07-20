@@ -300,7 +300,7 @@ This text has inlined code `int main() { return 0; }` in it. The code will be
 syntax highlighted.
 
 [note We simply enclose the code with the tick: [^'''"`"'''], not the 
-single quote: `"'"`. Note too that [^'''`some code`'''] is prefered over 
+single quote: `"'"`. Note too that [^'''`some code`'''] is preferred over 
 [^'''[^some code]''']. ]
 
 [endsect]

@@ -399,7 +399,7 @@ the true business precept.]
                 </inlinemediaobject> Note that we simply enclose the code with the
                 tick: <literal>"`"</literal>, not the single quote: <code><phrase
                 role="string">&quot;'&quot;</phrase></code>. Note too that <literal>`some
-                code`</literal> is prefered over <literal>[^some code]</literal>.
+                code`</literal> is preferred over <literal>[^some code]</literal>.
                 </entry>
               </row>
             </tbody>

@@ -136,7 +136,7 @@
       <rationale>
         <simpara>While visitation via
         <code><functionname>apply_visitor</functionname></code>
-        is generally prefered due to its greater safety, <code>get</code> may
+        is generally preferred due to its greater safety, <code>get</code> may
         may be more convenient in some cases due to its straightforward
         usage.</simpara>
       </rationale>

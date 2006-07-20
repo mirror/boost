@@ -21,7 +21,7 @@ using namespace boost::xpressive;
 
 ///////////////////////////////////////////////////////////////////////////////
 // test_main
-// regexes refered to by other regexes are kept alive via reference counting.
+// regexes referred to by other regexes are kept alive via reference counting.
 // but cycles are handled naturally. the following works as expected and doesn't leak.
 int test_main( int, char*[] )
 {
