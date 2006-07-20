@@ -297,7 +297,7 @@ syntax highlighted.
 
 [blurb __note__
 Note that we simply enclose the code with the tick: [^'''"`"'''], not the
-single quote: `"'"`. Note too that [^'''`some code`'''] is prefered over
+single quote: `"'"`. Note too that [^'''`some code`'''] is preferred over
 [^'''[^some code]'''].
 ]
 
