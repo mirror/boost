@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!-- Copyright (c) 2001-2006 CrystalClear Software, Inc.
+     Subject to the Boost Software License, Version 1.0. 
+     (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
+-->
+
 <section id="date_time.license">
   <title>Boost Date-Time Library License</title>
   <bridgehead renderas="sect2">Boost Date-Time Library License</bridgehead>
