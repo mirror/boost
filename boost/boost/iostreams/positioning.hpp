@@ -14,6 +14,7 @@
 # pragma once
 #endif
 
+#include <boost/config.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/integer_traits.hpp>
 #include <boost/iostreams/detail/config/codecvt.hpp> // mbstate_t.
@@ -21,6 +22,10 @@
 
 // Must come last.
 #include <boost/iostreams/detail/config/disable_warnings.hpp> 
+
+#ifdef BOOST_NO_STDC_NAMESPACE
+namespace std { using ::fpos_t; }
+#endif
 
 namespace boost { namespace iostreams {
 
