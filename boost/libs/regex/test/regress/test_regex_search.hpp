@@ -272,6 +272,75 @@ void test_regex_token_iterator(boost::basic_regex<charT, traits>& r)
       // we should have had a match but didn't:
       BOOST_REGEX_TEST_ERROR("Expected match was not found.", charT);
    }
+   //
+   // and now both field splitting and $0:
+   //
+   std::vector<int> subs;
+   subs.push_back(-1);
+   subs.push_back(0);
+   start2 = test_iterator(search_text.begin(), search_text.end(), r, subs, opts);
+   copy2 = start2;
+   last_end2 = 0;
+   answer_table = test_info<charT>::answer_table();
+   while(start2 != end2)
+   {
+      if(start2 != copy2)
+      {
+         BOOST_REGEX_TEST_ERROR("Failed iterator != comparison.", charT);
+      }
+      if(!(start2 == copy2))
+      {
+         BOOST_REGEX_TEST_ERROR("Failed iterator == comparison.", charT);
+      }
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4244)
+#endif
+      if(boost::re_detail::distance(search_text.begin(), start2->first) != last_end2)
+      {
+         BOOST_REGEX_TEST_ERROR(
+            "Error in location of start of field split, found: " 
+            << boost::re_detail::distance(search_text.begin(), start2->first)
+            << ", expected: "
+            << last_end2
+            << ".", charT);
+      }
+      int expected_end = static_cast<int>(answer_table[0] < 0 ? search_text.size() : answer_table[0]);
+      if(boost::re_detail::distance(search_text.begin(), start2->second) != expected_end)
+      {
+         BOOST_REGEX_TEST_ERROR(
+            "Error in location of end2 of field split, found: "
+            << boost::re_detail::distance(search_text.begin(), start2->second)
+            << ", expected: "
+            << expected_end
+            << ".", charT);
+      }
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+      last_end2 = answer_table[1];
+      ++start2;
+      ++copy2;
+      if((start2 == end2) && (answer_table[0] >= 0))
+      {
+         BOOST_REGEX_TEST_ERROR(
+            "Expected $0 match not found", charT);
+      }
+      if(start2 != end2)
+      {
+         test_sub_match(*start2, search_text.begin(), answer_table, 0);
+         ++start2;
+         ++copy2;
+      }
+      // move on the answer table to next set of answers;
+      if(*answer_table != -2)
+         while(*answer_table++ != -2){}
+   }
+   if(answer_table[0] >= 0)
+   {
+      // we should have had a match but didn't:
+      BOOST_REGEX_TEST_ERROR("Expected match was not found.", charT);
+   }
 }
 
 template <class charT, class traits>
