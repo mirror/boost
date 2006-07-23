@@ -107,6 +107,7 @@ public:
          result.first = first;
          result.second = end;
          result.matched = (first != end);
+         N = -1;
          return true;
       }
       return false;
