@@ -42,7 +42,7 @@ opt="${opt} -unnamed"
 opt=""
 opt="${opt} -license"
 opt="${opt} -copyright"
-./dist/bin/inspect -text ${opt} > inspect-LC.out
+./dist/bin/inspect -text -brief ${opt} > inspect-LC.out
 
 #~ Send email(s) with results.
 /usr/sbin/sendmail "${mail_to}" <<EMAIL
