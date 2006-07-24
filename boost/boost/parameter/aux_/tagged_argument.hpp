@@ -21,11 +21,13 @@ namespace boost { namespace parameter { namespace aux {
 struct empty_arg_list;
 struct arg_list_tag;
 
+struct tagged_argument_base {};
+
 // Holds a reference to an argument of type Arg associated with
 // keyword Keyword
     
 template <class Keyword, class Arg>
-struct tagged_argument
+struct tagged_argument : tagged_argument_base
 {
     typedef Keyword key_type;
     typedef Arg value_type;
@@ -163,23 +165,12 @@ struct tagged_argument
     typedef arg_list_tag tag; // For dispatching to sequence intrinsics
 };
 
-template <class K, class T>
-char is_tagged_argument_check(tagged_argument<K,T> const*);
-char(&is_tagged_argument_check(...))[2];
-
 // Defines a metafunction, is_tagged_argument, that identifies
-// tagged_argument specializations.
-// MAINTAINER NOTE: Not using BOOST_DETAIL_IS_XXX_DEF here because
-// we need to return true for tagged_argument<K,T> const.
+// tagged_argument specializations and their derived classes.
 template <class T>
 struct is_tagged_argument_aux
-{
-    enum { value =
-        sizeof(is_tagged_argument_check((T*)0)) == 1
-    };
-
-    typedef mpl::bool_<value> type;
-};
+  : is_convertible<T*,tagged_argument_base const*>
+{};
 
 template <class T>
 struct is_tagged_argument
