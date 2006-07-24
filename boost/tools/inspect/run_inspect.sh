@@ -10,6 +10,7 @@ set -e
 #~ Configuration options.
 mail_from="Rene Rivera <grafikrobot@gmail.com>"
 mail_to="Boost <boost@lists.boost.org>"
+mail_date=`date --iso-8601 --utc`
 cvs_branch="$1"
 cvs_user=":ext:${USER}"
 cvs_co="cvs -q -z9 -d${cvs_user}@boost.cvs.sourceforge.net:/cvsroot/boost co -P -r ${cvs_branch}"
@@ -36,6 +37,7 @@ opt="${opt} -link"
 opt="${opt} -long_name"
 opt="${opt} -tab"
 opt="${opt} -minmax"
+opt="${opt} -unnamed"
 ./dist/bin/inspect -text ${opt} > inspect-X.out
 opt=""
 opt="${opt} -license"
@@ -43,7 +45,6 @@ opt="${opt} -copyright"
 ./dist/bin/inspect -text ${opt} > inspect-LC.out
 
 #~ Send email(s) with results.
-mail_date=`date --iso-8601 --utc`
 /usr/sbin/sendmail "${mail_to}" <<EMAIL
 From: ${mail_from}
 To: ${mail_to}
