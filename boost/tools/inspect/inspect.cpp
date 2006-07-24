@@ -211,6 +211,11 @@ namespace
     display_html, display_text
   }
   display_format = display_html;
+  enum display_mode_type
+  {
+    display_full, display_brief
+  }
+  display_mode = display_full;
 
 //  display_summary_helper  --------------------------------------------------//
 
@@ -292,12 +297,27 @@ namespace
       {
         if ( current.library != itr->library )
         {
-          std::cout << boost::format("\n|%1%|\n") % itr->library;
+          std::cout << boost::format(
+            display_full == display_mode ? "\n|%1%|\n" : "\n\n|%1%|"
+            ) % itr->library;
         }
         if ( current.library != itr->library
           || current.rel_path != itr->rel_path )
         {
-          std::cout << boost::format("  %1%:\n") % itr->rel_path;
+          if (display_full == display_mode)
+          {
+            std::cout << boost::format("  %1%:\n") % itr->rel_path;
+          }
+          else
+          {
+            path current_rel_path(current.rel_path);
+            path this_rel_path(itr->rel_path);
+            if (current_rel_path.branch_path() != this_rel_path.branch_path())
+            {
+              std::cout << boost::format("\n  %1%/") % this_rel_path.branch_path().string();
+            }
+            std::cout << boost::format("\n    %1%:") % this_rel_path.leaf();
+          }
         }
         if ( current.library != itr->library
           || current.rel_path != itr->rel_path
@@ -309,7 +329,9 @@ namespace
           {
             m.replace(i,4,">");
           }
-          std::cout << boost::format("    %1%\n") % m;
+          std::cout << boost::format(
+            display_full == display_mode ? "    %1%\n" : " %1%"
+            ) % m;
         }
         current.library = itr->library;
         current.rel_path = itr->rel_path;
@@ -489,7 +511,7 @@ int cpp_main( int argc, char * argv[] )
   if ( argc > 1 && (std::strcmp( argv[1], "-help" ) == 0
     || std::strcmp( argv[1], "--help" ) == 0 ) )
   {
-    std::clog << "Usage: inspect [-cvs] [-text] [options...]\n"
+    std::clog << "Usage: inspect [-cvs] [-text] [-brief] [options...]\n"
       "options:\n"
       << options();
     return 1;
@@ -514,6 +536,12 @@ int cpp_main( int argc, char * argv[] )
   if ( argc > 1 && std::strcmp( argv[1], "-text" ) == 0 )
   {
     display_format = display_text;
+    --argc; ++argv;
+  }
+
+  if ( argc > 1 && std::strcmp( argv[1], "-brief" ) == 0 )
+  {
+    display_mode = display_brief;
     --argc; ++argv;
   }
 
