@@ -420,7 +420,7 @@ pp_iterator_functor<ContextT>::returned_from_include()
 //      throws a preprocess_exception, if appropriate
 //
 ///////////////////////////////////////////////////////////////////////////////
-namespace {
+namespace impl {
 
     //  It may be necessary to emit a #line directive either 
     //  - when comments need to be preserved: if the current token is not a 
@@ -475,7 +475,7 @@ token_id id = T_UNKNOWN;
     
 // if there were skipped any newlines, we must emit a #line directive
     if ((must_emit_line_directive || (was_seen_newline && skipped_newline)) && 
-        consider_emitting_line_directive(ctx, id)) 
+        impl::consider_emitting_line_directive(ctx, id)) 
     {
     // must emit a #line directive
         if (need_emit_line_directives(ctx.get_language()) && emit_line_directive()) 
@@ -813,7 +813,7 @@ token_id id = token_id(*iter_ctx->first);
 //  pp_directive(): recognize a preprocessor directive
 //
 ///////////////////////////////////////////////////////////////////////////////
-namespace {
+namespace impl {
 
     template <typename ContexT, typename IteratorT>
     bool next_token_is_pp_directive(ContexT &ctx, IteratorT &it, IteratorT const &end)
@@ -939,10 +939,10 @@ pp_iterator_functor<ContextT>::can_ignore_pp_directive(IteratorT &it)
 
             // make sure, there are no (non-whitespace) tokens left on this line                
                 string_type value ((*it).get_value());
-                if (!pp_is_last_on_line(ctx, it, iter_ctx->last)) {
+                if (!impl::pp_is_last_on_line(ctx, it, iter_ctx->last)) {
                 // enable error recovery (start over with the next line)
                     seen_newline = true;
-                    skip_to_eol(ctx, it, iter_ctx->last);
+                    impl::skip_to_eol(ctx, it, iter_ctx->last);
                     iter_ctx->first = it;
                 
                 // report an invalid #else directive
@@ -969,7 +969,7 @@ pp_iterator_functor<ContextT>::can_ignore_pp_directive(IteratorT &it)
 // start over with the next line, if only possible
     if (can_exit) {
         string_type value ((*it).get_value());
-        if (!skip_to_eol(ctx, it, iter_ctx->last)) {
+        if (!impl::skip_to_eol(ctx, it, iter_ctx->last)) {
         // The line doesn't end with an eol but eof token.
             seen_newline = true;    // allow to resume after warning
             iter_ctx->first = it;
@@ -996,10 +996,10 @@ pp_iterator_functor<ContextT>::pp_directive()
 // test, if the next non-whitespace token is a pp directive
 lexer_type it = iter_ctx->first;
 
-    if (!next_token_is_pp_directive(ctx, it, iter_ctx->last)) {
+    if (!impl::next_token_is_pp_directive(ctx, it, iter_ctx->last)) {
     // eventually skip null pp directive (no need to do it via the parser)
         if (it != iter_ctx->last && T_POUND == BASE_TOKEN(token_id(*it))) {
-            if (pp_is_last_on_line(ctx, it, iter_ctx->last)) {
+            if (impl::pp_is_last_on_line(ctx, it, iter_ctx->last)) {
             // start over with the next line
                 seen_newline = true;
                 iter_ctx->first = it;
@@ -1302,7 +1302,7 @@ fs::path native_path(file_path, fs::native);
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-namespace {
+namespace impl {
 
     // trim all whitespace from the beginning and the end of the given string
     template <typename StringT>
@@ -1341,7 +1341,7 @@ token_sequence_type toexpand;
         false);
 
 // now, include the file
-string_type s (trim_whitespace(boost::wave::util::impl::as_string(expanded)));
+string_type s (impl::trim_whitespace(boost::wave::util::impl::as_string(expanded)));
 bool is_system = '<' == s[0] && '>' == s[s.size()-1];
 
     if (!is_system && !('\"' == s[0] && '\"' == s[s.size()-1])) {
@@ -1674,8 +1674,8 @@ token_sequence_type toexpand;
     typename token_sequence_type::iterator begin2 = toexpand.begin();
     typename token_sequence_type::const_iterator begin3 = found_eoltokens.begin();
 
-        skip_to_eol(ctx, begin2, toexpand.end());
-        skip_to_eol(ctx, begin3, found_eoltokens.end());
+        impl::skip_to_eol(ctx, begin2, toexpand.end());
+        impl::skip_to_eol(ctx, begin3, found_eoltokens.end());
         return;     // one of previous #if/#elif was true, so don't enter this #elif 
     }
             
@@ -1740,7 +1740,7 @@ pp_iterator_functor<ContextT>::on_illformed(
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-namespace {
+namespace impl {
 
     template <typename IteratorT, typename StringT>
     bool retrieve_line_info (IteratorT first, IteratorT const &last,
@@ -1803,14 +1803,14 @@ string_type file_name;
 token_sequence_type toexpand;
 
     std::copy(first, last, std::inserter(toexpand, toexpand.end()));
-    if (!retrieve_line_info(first, last, line, file_name)) {
+    if (!impl::retrieve_line_info(first, last, line, file_name)) {
     // preprocess the body of this #line message
 
         typename token_sequence_type::iterator begin2 = toexpand.begin();
         ctx.expand_whole_tokensequence(begin2, toexpand.end(), 
             expanded, false);
             
-        if (!retrieve_line_info(expanded.begin(), expanded.end(), line, 
+        if (!impl::retrieve_line_info(expanded.begin(), expanded.end(), line, 
             file_name))
         {
             BOOST_WAVE_THROW(preprocess_exception, bad_line_statement, 

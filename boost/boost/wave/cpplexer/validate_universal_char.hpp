@@ -36,19 +36,16 @@ enum universal_char_type {
     universal_char_type_not_allowed_for_identifiers = 3
 };
 
-namespace {
-
-    ///////////////////////////////////////////////////////////////////////////
-    // 
-    //  is_range is a helper function for the classification by brute force 
-    //  below
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    inline bool 
-    in_range(unsigned long ch, unsigned long l, unsigned long u)
-    {
-        return (l <= ch && ch <= u);
-    }
+///////////////////////////////////////////////////////////////////////////
+// 
+//  is_range is a helper function for the classification by brute force 
+//  below
+//
+///////////////////////////////////////////////////////////////////////////
+inline bool 
+in_range(unsigned long ch, unsigned long l, unsigned long u)
+{
+    return (l <= ch && ch <= u);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
