@@ -272,6 +272,7 @@ void test_regex_token_iterator(boost::basic_regex<charT, traits>& r)
       // we should have had a match but didn't:
       BOOST_REGEX_TEST_ERROR("Expected match was not found.", charT);
    }
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
    //
    // and now both field splitting and $0:
    //
@@ -341,6 +342,7 @@ void test_regex_token_iterator(boost::basic_regex<charT, traits>& r)
       // we should have had a match but didn't:
       BOOST_REGEX_TEST_ERROR("Expected match was not found.", charT);
    }
+#endif
 }
 
 template <class charT, class traits>
