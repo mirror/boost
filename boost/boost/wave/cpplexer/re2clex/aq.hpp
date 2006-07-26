@@ -24,9 +24,7 @@
 namespace boost {
 namespace wave {
 namespace cpplexer {
-#if !BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
 namespace re2clex {
-#endif
 
 typedef std::size_t aq_stdelement;
 
@@ -53,9 +51,7 @@ BOOST_WAVE_DECL aq_queue aq_create(void);
 BOOST_WAVE_DECL void aq_terminate(aq_queue q);
 
 ///////////////////////////////////////////////////////////////////////////////
-#if !BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
 }   // namespace re2clex
-#endif
 }   // namespace cpplexer
 }   // namespace wave
 }   // namespace boost 

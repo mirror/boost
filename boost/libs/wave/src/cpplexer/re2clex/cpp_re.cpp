@@ -81,9 +81,7 @@
 namespace boost {
 namespace wave {
 namespace cpplexer {
-#if !BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
 namespace re2clex {
-#endif
 
 #define RE2C_ASSERT BOOST_ASSERT
 
@@ -421,9 +419,7 @@ boost::wave::token_id scan(Scanner *s)
 } /* end of scan */
 
 ///////////////////////////////////////////////////////////////////////////////
-#if !BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
 }   // namespace re2clex
-#endif
 }   // namespace cpplexer
 }   // namespace wave
 }   // namespace boost

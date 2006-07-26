@@ -31,18 +31,14 @@
 namespace boost {
 namespace wave {
 namespace cpplexer {
-#if !BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
 namespace re2clex {
-#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 //  The scanner function to call whenever a new token is requested
 BOOST_WAVE_DECL boost::wave::token_id scan(Scanner *s);
 
 ///////////////////////////////////////////////////////////////////////////////
-#if !BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
 }   // namespace re2clex
-#endif
 }   // namespace cpplexer
 }   // namespace wave
 }   // namespace boost

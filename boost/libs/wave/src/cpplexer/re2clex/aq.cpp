@@ -26,9 +26,7 @@
 namespace boost {
 namespace wave {
 namespace cpplexer {
-#if !BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
 namespace re2clex {
-#endif
 
 int aq_grow(aq_queue q)
 {
@@ -222,9 +220,7 @@ void aq_terminate(aq_queue q)
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-#if !BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
 }   // namespace re2clex
-#endif
 }   // namespace cpplexer
 }   // namespace wave
 }   // namespace boost

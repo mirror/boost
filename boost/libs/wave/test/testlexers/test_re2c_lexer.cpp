@@ -13,7 +13,9 @@
 #include <limits>
 
 #include <boost/wave/wave_config.hpp>
+#if !BOOST_WORKAROUND(__SUNPRO_CC, <= 0x580)
 #undef BOOST_WAVE_SEPARATE_LEXER_INSTANTIATION
+#endif
 
 #include <boost/detail/lightweight_test.hpp>
 #if defined(TESTLEXERS_TIMING)
