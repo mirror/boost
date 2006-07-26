@@ -110,9 +110,22 @@ T const& as_lvalue(T const& value, int)
 
 }}} // namespace boost::parameter::aux
 
+# if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+// From Paul Mensonides
+#  define BOOST_PARAMETER_IS_NULLARY(x) \
+    BOOST_PP_SPLIT(1, BOOST_PARAMETER_IS_NULLARY_C x BOOST_PP_COMMA() 0) \
+    /**/
+#  define BOOST_PARAMETER_IS_NULLARY_C() \
+    ~, 1 BOOST_PP_RPAREN() \
+    BOOST_PP_TUPLE_EAT(2) BOOST_PP_LPAREN() ~ \
+    /**/
+# else
+#  define BOOST_PARAMETER_IS_NULLARY(x) BOOST_PP_IS_NULLARY(x)
+# endif
+
 # define BOOST_PARAMETER_MEMBER_FUNCTION_CHECK_STATIC_static ()
 # define BOOST_PARAMETER_MEMBER_FUNCTION_IS_STATIC(name) \
-    BOOST_PP_IS_NULLARY( \
+    BOOST_PARAMETER_IS_NULLARY( \
         BOOST_PP_CAT(BOOST_PARAMETER_MEMBER_FUNCTION_CHECK_STATIC_,name) \
     )
 

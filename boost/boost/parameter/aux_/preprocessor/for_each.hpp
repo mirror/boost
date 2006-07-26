@@ -14,6 +14,7 @@
 # include <boost/preprocessor/repeat.hpp>
 # include <boost/preprocessor/punctuation/comma_if.hpp>
 # include <boost/preprocessor/for.hpp>
+# include <boost/preprocessor/repetition/deduce_r.hpp>
 
 # define BOOST_PARAMETER_FOR_EACH_head_aux2(x,y) (x,y), ~
 # define BOOST_PARAMETER_FOR_EACH_head_aux3(x,y,z) (x,y,z), ~
