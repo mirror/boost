@@ -1,6 +1,6 @@
 // Copyright (C) 2004 Arkadiy Vertleyb
-// Use, modification and distribution is subject to the Boost Software
-// License, Version 1.0. (http://www.boost.org/LICENSE_1_0.txt)
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_TYPEOF_TYPEOF_HPP_INCLUDED
 #define BOOST_TYPEOF_TYPEOF_HPP_INCLUDED
@@ -126,7 +126,7 @@
 
 #ifdef BOOST_TYPEOF_EMULATION
 #   define BOOST_TYPEOF_TEXT "using typeof emulation"
-#	include <boost/typeof/message.hpp>
+#   include <boost/typeof/message.hpp>
 #   include <boost/typeof/typeof_impl.hpp>
 #   include <boost/typeof/type_encoding.hpp>
 #   include <boost/typeof/template_encoding.hpp>
@@ -137,7 +137,7 @@
 
 #elif defined(BOOST_TYPEOF_NATIVE)
 #   define BOOST_TYPEOF_TEXT "using native typeof"
-#	include <boost/typeof/message.hpp>
+#   include <boost/typeof/message.hpp>
 #   include <boost/typeof/native.hpp>
 #else
 #   error typeof configuration error

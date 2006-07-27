@@ -1,7 +1,7 @@
 // Copyright (C) 2004 Arkadiy Vertleyb
 // Copyright (C) 2005 Peder Holt
-// Use, modification and distribution is subject to the Boost Software
-// License, Version 1.0. (http://www.boost.org/LICENSE_1_0.txt)
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_TYPEOF_TEMPLATE_ENCODING_HPP_INCLUDED
 #define BOOST_TYPEOF_TEMPLATE_ENCODING_HPP_INCLUDED
@@ -128,14 +128,14 @@
         BOOST_TYPEOF_TYPEDEF_DECODED_TEMPLATE_TYPE)(Name,Params)
 
 #define BOOST_TYPEOF_REGISTER_TEMPLATE_IMPL(Name, Params, Size, ID)\
-	BOOST_TYPEOF_BEGIN_ENCODE_NS\
+    BOOST_TYPEOF_BEGIN_ENCODE_NS\
     BOOST_TYPEOF_REGISTER_TEMPLATE_TEMPLATE_IMPL(Name, Params, ID)\
     template<class V\
         BOOST_TYPEOF_SEQ_ENUM_TRAILING(Params, BOOST_TYPEOF_REGISTER_TEMPLATE_PARAM_PAIR)\
     >\
     struct encode_type_impl<V, Name<BOOST_PP_ENUM_PARAMS(Size, P)> >\
     {\
-		typedef typename boost::type_of::push_back<V, boost::mpl::size_t<ID> >::type V0;\
+        typedef typename boost::type_of::push_back<V, boost::mpl::size_t<ID> >::type V0;\
         BOOST_PP_SEQ_FOR_EACH_I(BOOST_TYPEOF_REGISTER_TEMPLATE_ENCODE_PARAM, ~, Params)\
         typedef BOOST_PP_CAT(V, Size) type;\
     };\
@@ -147,6 +147,6 @@
         BOOST_TYPEOF_TYPEDEF_DECODED_TYPE(Name, Params)\
         typedef BOOST_PP_CAT(iter, Size) iter;\
     };\
-	BOOST_TYPEOF_END_ENCODE_NS
+    BOOST_TYPEOF_END_ENCODE_NS
 
 #endif//BOOST_TYPEOF_TEMPLATE_ENCODING_HPP_INCLUDED

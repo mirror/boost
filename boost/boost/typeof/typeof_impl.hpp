@@ -1,7 +1,7 @@
 // Copyright (C) 2004, 2005 Arkadiy Vertleyb
 // Copyright (C) 2005 Peder Holt
-// Use, modification and distribution is subject to the Boost Software
-// License, Version 1.0. (http://www.boost.org/LICENSE_1_0.txt)
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_TYPEOF_TYPEOF_IMPL_HPP_INCLUDED
 #define BOOST_TYPEOF_TYPEOF_IMPL_HPP_INCLUDED
@@ -35,15 +35,15 @@ namespace boost { namespace type_of {
 //
 namespace boost { namespace type_of {   
 
-	template<class V, class T> 
-	typename enable_if<
-		typename is_function<T>::type,
-		sizer<typename encode_type<V, T>::type> >::type encode(T&);
+    template<class V, class T> 
+    typename enable_if<
+        typename is_function<T>::type,
+        sizer<typename encode_type<V, T>::type> >::type encode(T&);
 
-	template<class V, class T> 
-	typename disable_if<
-		typename is_function<T>::type,
-		sizer<typename encode_type<V, T>::type> >::type encode(const T&);
+    template<class V, class T> 
+    typename disable_if<
+        typename is_function<T>::type,
+        sizer<typename encode_type<V, T>::type> >::type encode(const T&);
 
 }}
 //

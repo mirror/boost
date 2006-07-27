@@ -145,7 +145,7 @@ public:
     typedef Block <a href="#block_type">block_type</a>;
     typedef Allocator <a href="#allocator_type">allocator_type</a>;
     typedef <i>implementation-defined</i> <a href="#size_type">size_type</a>;
-        
+
     static const int <a href=
        "#bits_per_block">bits_per_block</a> = <i>implementation-defined</i>;
     static const size_type <a href=
@@ -1220,7 +1220,7 @@ storage is allocated and capacity becomes greater or equal to n.
 In any case, size() does not change.<br>
 <b>Throws:</b> An allocation error if <tt>n &gt; capacity()</tt>
 and memory is exhausted (<tt>std::bad_alloc</tt> if <tt>
-Allocator=std::allocator</tt>). 
+Allocator=std::allocator</tt>).
 
 <hr>
 <pre>
@@ -1576,12 +1576,12 @@ precise specification, given in terms of "as if" rule: first, for each
 valid position i into the bitset <tt>b</tt> let's put:
 
  <tt>character_of(b[i)]) = b[i]? os.widen('1') : os.widen('0');</tt>
- 
+
 Let also <tt>s</tt> be a <tt>std::basic_string&lt;Char, Traits&gt;</tt>
 object, having length <tt>b.size()</tt> and such as, for each <tt>i</tt>
 in <tt>[0, b.size())</tt>,
 
- <tt>s[i] is character_of(b[i])</tt> 
+ <tt>s[i] is character_of(b[i])</tt>
 
 Then, the output, the effects on <tt>os</tt> and the exception behavior
 is the same as outputting the object <tt>s</tt> to <tt>os</tt> (same
@@ -1625,7 +1625,7 @@ that is a <i>bitset digit</i> the <i>corresponding bit value</i> is
 appended to the less significant end of <tt>b</tt> (appending may throw - gps ).
 If <tt>is.width()</tt> is greater than zero and smaller than <tt>b.max_size()</tt>
 then the maximum number <tt>n</tt> of bits appended is <tt>is.width()</tt>;
-otherwise <tt>n</tt> = <tt>b.max_size()</tt>. 
+otherwise <tt>n</tt> = <tt>b.max_size()</tt>.
 
 Unless the extractor is exited via an exception, characters are extracted (and
 corresponding bits appended) until any of the following occurs:<br>
@@ -1714,7 +1714,7 @@ applied to their corresponding <tt>dynamic_bitset</tt>s.
 <i>General improvements</i>
 <br><br>
 Several optimizations to member and non-member functions and to the
-nested class <tt>reference</tt>. 
+nested class <tt>reference</tt>.
 
 <hr>
 <h3><a name="see-also">See also</a></h3>

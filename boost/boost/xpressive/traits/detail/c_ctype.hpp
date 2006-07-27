@@ -60,13 +60,13 @@ inline bool iswnewline(wchar_t ch)
 template<typename FwdIter>
 inline std::string classname_a(FwdIter begin, FwdIter end)
 {
-	std::string name(begin, end);
-	for(std::size_t i = 0; i < name.size(); ++i)
-	{
-		using namespace std;
-		name[i] = tolower(static_cast<unsigned char>(name[i]));
-	}
-	return name;
+    std::string name(begin, end);
+    for(std::size_t i = 0; i < name.size(); ++i)
+    {
+        using namespace std;
+        name[i] = tolower(static_cast<unsigned char>(name[i]));
+    }
+    return name;
 }
 
 #ifndef BOOST_XPRESSIVE_NO_WREGEX
@@ -76,13 +76,13 @@ inline std::string classname_a(FwdIter begin, FwdIter end)
 template<typename FwdIter>
 inline std::wstring classname_w(FwdIter begin, FwdIter end)
 {
-	std::wstring name(begin, end);
-	for(std::size_t i = 0; i < name.size(); ++i)
-	{
-		using namespace std;
-		name[i] = towlower(name[i]);
-	}
-	return name;
+    std::wstring name(begin, end);
+    for(std::size_t i = 0; i < name.size(); ++i)
+    {
+        using namespace std;
+        name[i] = towlower(name[i]);
+    }
+    return name;
 }
 #endif
 

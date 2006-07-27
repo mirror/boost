@@ -1490,7 +1490,7 @@ namespace boost { namespace numeric { namespace ublas {
             it -= n;
         }
 
-		// Triangular access
+        // Triangular access
         static
         BOOST_UBLAS_INLINE
         size_type triangular_size (size_type size_i, size_type size_j) {
@@ -1667,7 +1667,7 @@ namespace boost { namespace numeric { namespace ublas {
             it -= n* size_i;
         }
 
-		// Triangular access
+        // Triangular access
         static
         BOOST_UBLAS_INLINE
         size_type triangular_size (size_type size_i, size_type size_j) {

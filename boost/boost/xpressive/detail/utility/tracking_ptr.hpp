@@ -377,7 +377,7 @@ inline void enable_reference_tracking<Derived>::dump_(std::ostream &sout) const
 template<typename Type>
 struct tracking_ptr
 {
-	BOOST_MPL_ASSERT((is_base_and_derived<enable_reference_tracking<Type>, Type>));
+    BOOST_MPL_ASSERT((is_base_and_derived<enable_reference_tracking<Type>, Type>));
     typedef Type element_type;
 
     tracking_ptr()

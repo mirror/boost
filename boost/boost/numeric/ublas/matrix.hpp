@@ -47,7 +47,7 @@ namespace boost { namespace numeric { namespace ublas {
             // Indexing copy over major
             for (size_type major = 0; major != major_size; ++major) {
                 for (size_type minor = 0; minor != minor_size; ++minor) {
-			            // find indexes - use invertability of element_ functions
+                        // find indexes - use invertability of element_ functions
                     const size_type i1 = layout_type::index_M(major, minor);
                     const size_type i2 = layout_type::index_m(major, minor);
                     temporary.data () [layout_type::element (i1, size1, i2, size2)] =

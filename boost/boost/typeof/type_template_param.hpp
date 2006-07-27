@@ -1,6 +1,6 @@
 // Copyright (C) 2005 Arkadiy Vertleyb
-// Use, modification and distribution is subject to the Boost Software
-// License, Version 1.0. (http://www.boost.org/LICENSE_1_0.txt)
+// Distributed under the Boost Software License, Version 1.0. (See accompanying
+// file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_TYPEOF_TYPE_TEMPLATE_PARAM_HPP_INCLUDED
 #define BOOST_TYPEOF_TYPE_TEMPLATE_PARAM_HPP_INCLUDED
@@ -19,13 +19,13 @@
 // TYPE_PARAM "virtual functions" implementation
 
 #define BOOST_TYPEOF_TYPE_PARAM_ENCODE(This, n)\
-	typedef typename boost::type_of::encode_type<\
+    typedef typename boost::type_of::encode_type<\
         BOOST_PP_CAT(V, n),\
         BOOST_PP_CAT(P, n)\
     >::type BOOST_PP_CAT(V, BOOST_PP_INC(n)); 
 
 #define BOOST_TYPEOF_TYPE_PARAM_DECODE(This, n)\
-	typedef boost::type_of::decode_type< BOOST_PP_CAT(iter, n) > BOOST_PP_CAT(d, n);\
+    typedef boost::type_of::decode_type< BOOST_PP_CAT(iter, n) > BOOST_PP_CAT(d, n);\
     typedef typename BOOST_PP_CAT(d, n)::type BOOST_PP_CAT(P, n);\
     typedef typename BOOST_PP_CAT(d, n)::iter BOOST_PP_CAT(iter, BOOST_PP_INC(n));
 
