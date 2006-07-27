@@ -569,11 +569,11 @@ public:
     typedef typename lexer::lexer<IteratorT, PositionT>::token_type token_type;
 
     slex_functor(IteratorT const &first_, IteratorT const &last_, 
-            PositionT const &pos_, boost::wave::language_support language)
-    :   first(first_, last_, pos_), language(language), at_eof(false)
+            PositionT const &pos_, boost::wave::language_support language_)
+    :   first(first_, last_, pos_), language(language_), at_eof(false)
     {
         // initialize lexer dfa tables
-        init_lexer(lexer, language);  
+        init_lexer(lexer, language_);  
     }
     virtual ~slex_functor() {}
 

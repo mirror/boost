@@ -292,19 +292,19 @@ protected:
 //
 ///////////////////////////////////////////////////////////////////////////////
     template <typename IteratorT2>
-    token_type expand_tokensequence(IteratorT2 &first, IteratorT2 const &last, 
+    token_type expand_tokensequence(IteratorT2 &first_, IteratorT2 const &last_, 
         token_sequence_type &pending, token_sequence_type &expanded, 
         bool expand_undefined = false)
     {
-        return macros.expand_tokensequence(first, last, pending, expanded, 
+        return macros.expand_tokensequence(first_, last_, pending, expanded, 
             expand_undefined);
     }
 
     template <typename IteratorT2>
-    void expand_whole_tokensequence(IteratorT2 &first, IteratorT2 const &last, 
+    void expand_whole_tokensequence(IteratorT2 &first_, IteratorT2 const &last_, 
         token_sequence_type &expanded, bool expand_undefined = true)
     {
-        macros.expand_whole_tokensequence(expanded, first, last, 
+        macros.expand_whole_tokensequence(expanded, first_, last_, 
             expand_undefined);
 
     // remove any contained placeholder
@@ -321,11 +321,11 @@ public:
         { return current_filename; }
 
 // maintain the list of known headers containing #pragma once 
-    bool has_pragma_once(std::string const &filename)
-        { return includes.has_pragma_once(filename); }
-    bool add_pragma_once_header(std::string const &filename,
+    bool has_pragma_once(std::string const &filename_)
+        { return includes.has_pragma_once(filename_); }
+    bool add_pragma_once_header(std::string const &filename_,
             std::string const& guard_name = "__BOOST_WAVE_PRAGMA_ONCE__")
-        { return includes.add_pragma_once_header(filename, guard_name); }
+        { return includes.add_pragma_once_header(filename_, guard_name); }
 #endif 
 
 #if BOOST_WAVE_SERIALIZATION != 0
