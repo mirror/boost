@@ -6,7 +6,7 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-// See http://www.boost.org/libs/tokenizer for documentation.
+// See http://www.boost.org/libs/tokenizer/ for documentation.
 
 // Revision History:
 // 01 Oct 2004   Joaquín M López Muñoz
@@ -74,7 +74,7 @@ namespace boost{
   // character (backslash \), can be assigned to other characters.
 
   struct escaped_list_error : public std::runtime_error{
-    escaped_list_error(const std::string& what):std::runtime_error(what) { }
+    escaped_list_error(const std::string& what_arg):std::runtime_error(what_arg) { }
   };
   
 
