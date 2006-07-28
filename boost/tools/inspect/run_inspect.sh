@@ -11,6 +11,7 @@ set -e
 mail_from="Rene Rivera <grafikrobot@gmail.com>"
 mail_to="Boost <boost@lists.boost.org>"
 mail_date=`date --iso-8601 --utc`
+mail_in_reply_to="$2"
 cvs_branch="$1"
 cvs_user=":ext:${USER}"
 cvs_co="cvs -q -z9 -d${cvs_user}@boost.cvs.sourceforge.net:/cvsroot/boost co -P -r ${cvs_branch}"
@@ -49,8 +50,8 @@ opt="${opt} -copyright"
 From: ${mail_from}
 To: ${mail_to}
 Reply-To: ${mail_to}
-References: <44BD6089.3010709@gmail.com>
-In-Reply-To: <44BD6089.3010709@gmail.com>
+References: ${mail_in_reply_to}
+In-Reply-To: ${mail_in_reply_to}
 Subject: Boost inspection notification (${mail_date}/${cvs_branch}) *X*
 
 `cat inspect-X.out`
@@ -59,8 +60,8 @@ EMAIL
 From: ${mail_from}
 To: ${mail_to}
 Reply-To: ${mail_to}
-References: <44BD6089.3010709@gmail.com>
-In-Reply-To: <44BD6089.3010709@gmail.com>
+References: ${mail_in_reply_to}
+In-Reply-To: ${mail_in_reply_to}
 Subject: Boost inspection notification (${mail_date}/${cvs_branch}) *LC*
 
 `cat inspect-LC.out`
