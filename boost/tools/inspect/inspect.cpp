@@ -2,6 +2,8 @@
 
 //  Copyright Beman Dawes 2002.
 //  Copyright Rene Rivera 2004-2006.
+//  Copyright Gennaro Prota 2006.
+
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -11,10 +13,10 @@
 //  and the code that identifies library names assumes the Boost directory
 //  structure.
 
-//  See http://www.boost.org/tools/inspect for more information.
+//  See http://www.boost.org/tools/inspect/ for more information.
 
 
-#include <cassert>
+#include <assert.h>
 #include <vector>
 #include <list>
 #include <utility>
@@ -111,17 +113,25 @@ namespace
 
   string library_from_content( const string & content )
   {
-    string::size_type pos( content.find( "www.boost.org/libs/" ) );
+    const string unknown_library ( "unknown" );
+    const string lib_root ( "www.boost.org/libs/" );
+    string::size_type pos( content.find( lib_root ) );
 
-    if ( pos == string::npos ) return "unknown";
+    string lib = unknown_library;
 
-    string lib;
-    pos += 19;
-    while ( content[pos] != ' '
-      && content[pos] != '/'
-      && content[pos] != '\n'
-      && content[pos] != '\r'
-      && content[pos] != '\t' ) lib += content[pos++];
+    if ( pos != string::npos ) {
+
+        pos += lib_root.length();
+
+        const char delims[] = " " // space and...
+                              "/\n\r\t";
+
+        string::size_type n = content.find_first_of( string(delims), pos );
+        if (n != string::npos)
+            lib = string(content, pos, n - pos);
+        
+    }
+
     return lib;
   }
 
@@ -198,8 +208,9 @@ namespace
         ++file_count;
         string content;
         load_content( *itr, content );
-        check( lib == "unknown"
-          ? library_from_content( content ) : lib, *itr, content, insps );
+        check( lib.empty()
+                ? library_from_content( content ) : lib
+               , *itr, content, insps );
       }
     }
   }
@@ -229,7 +240,7 @@ namespace
     {
       std::cout
         << "  <tr><td><a href=\"#"
-        << current_library
+        << current_library          // what about malformed for URI refs? [gps]
         << "\">" << current_library
         << "</a></td><td align=\"center\">"
         << err_count << "</td></tr>\n";
@@ -388,7 +399,26 @@ namespace
          "  -tab\n"
          "  -minmax\n"
          "  -unnamed\n"
-         "default is all checks on; otherwise options specify desired checks\n";
+         " default is all checks on; otherwise options specify desired checks"
+         "\n";
+  }
+
+  const char * doctype_declaration()
+  {
+    return
+         "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n"
+         "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">"
+         ;
+  }
+
+  std::string validator_link(const std::string & text)
+  {
+    return
+        // with link to validation service
+        "<a href=\"http://validator.w3.org/check?uri=referer\">"
+        + text
+        + "</a>"
+        ;
   }
 
 } // unnamed namespace
@@ -480,6 +510,7 @@ namespace boost
 
 //  impute_library  ----------------------------------------------------------//
 
+    // may return an empty string [gps]
     string impute_library( const path & full_dir_path )
     {
       path relative( relative_to( full_dir_path, fs::initial_path() ),
@@ -491,7 +522,7 @@ namespace boost
           ? string() : *++relative.begin();
 
       if ( first == "boost" )
-        return second.empty() ? string( "unknown" ) : second;
+        return second;
 
       return (( first == "libs" || first == "tools" ) && !second.empty())
         ? second : first;
@@ -511,10 +542,10 @@ int cpp_main( int argc, char * argv[] )
   if ( argc > 1 && (std::strcmp( argv[1], "-help" ) == 0
     || std::strcmp( argv[1], "--help" ) == 0 ) )
   {
-    std::clog << "Usage: inspect [-cvs] [-text] [-brief] [options...]\n"
-      "options:\n"
-      << options();
-    return 1;
+    std::clog << "Usage: inspect [-cvs] [-text] [-brief] [options...]\n\n"
+      " Options:\n"
+      << options() << '\n';
+    return 0;
   }
 
   bool license_ck = true;
@@ -618,11 +649,16 @@ int cpp_main( int argc, char * argv[] )
     itr->inspector->close();
   }
 
-  char run_date[128];
+  const int s = 128;
+  char buffer[ s ];
   std::time_t tod;
   std::time( &tod );
-  std::strftime( run_date, sizeof(run_date),
-    "%X UTC, %A %d %B %Y", std::gmtime( &tod ) );
+
+  const bool time_retrieved = 0 !=
+    std::strftime( buffer, s,
+        "%X UTC, %A %d %B %Y", std::gmtime( &tod ) );
+
+  string run_date( time_retrieved? static_cast<const char*>( buffer ): "n/a");
 
   if (display_text == display_format)
   {
@@ -651,21 +687,29 @@ int cpp_main( int argc, char * argv[] )
   }
   else
   {
+    //
+    std::cout << doctype_declaration() << '\n';
+
     std::cout
       << "<html>\n"
       "<head>\n"
       "<title>Boost Inspection Report</title>\n"
       "</head>\n"
-      "<body bgcolor=\"#ffffff\" text=\"#000000\">\n"
-      "<table border=\"0\">\n"
+
+      "<body>\n"
+      // we should not use a table, of course [gps]
+      "<table>\n"
       "<tr>\n"
-      "<td><img border=\"0\" src=\"../boost.png\" width=\"277\" "
-      "height=\"86\"></td>\n"
-      "<td align=\"center\">\n"
+      "<td><img src=\"../boost.png\" alt=\"Boost logo\" />"
+      "</td>\n"
+      "<td>\n"
       "<h1>Boost Inspection Report</h1>\n"
       "<b>Run Date:</b> " << run_date  << "\n"
+      "&nbsp;&nbsp;/ " << validator_link( "validate me" ) << " /\n"
       "</td>\n"
+      "</tr>\n"
       "</table>\n"
+
       "<p>An <a href=\"http://www.boost.org/tools/inspect/index.html\">inspection\n"
       "program</a> checks each file in the current Boost CVS for various problems,\n"
       "generating this web page as output. Problems detected include tabs in files,\n"
@@ -695,7 +739,7 @@ int cpp_main( int argc, char * argv[] )
     else
     {
       inspector_keys += (
-        boost::format("  %1% %2%</br>\n")
+        boost::format("  %1% %2%<br />\n")
           % itr->inspector->name() % itr->inspector->desc()
         ).str();
     }
@@ -734,5 +778,6 @@ int cpp_main( int argc, char * argv[] )
       << "</body>\n"
       "</html>\n";
   }
+
   return 0;
 }
