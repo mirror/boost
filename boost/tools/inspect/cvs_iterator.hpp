@@ -9,7 +9,7 @@
 //  Library iterator requirements.
 
 #include <string>
-#include <cassert>
+#include <assert.h>
 
 #include "boost/filesystem/path.hpp"
 #include "boost/filesystem/exception.hpp"
