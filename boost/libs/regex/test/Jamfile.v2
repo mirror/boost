@@ -61,6 +61,14 @@ test-suite regex
         : # requirements
         : regex_regress_dll ]
 
+      [ run regress/$(R_SOURCE) ../build//boost_regex
+                                ../../thread/build//boost_thread
+        : # command line
+        : # input files
+        : # requirements
+        <define>TEST_THREADS
+        : regex_regress_threaded ]
+
       [ regex-test posix_api_check : c_compiler_checks/posix_api_check.c ]
 
       [ compile c_compiler_checks/wide_posix_api_check.c 
@@ -123,4 +131,6 @@ test-suite regex
  ]
 ;
       
+
+
 

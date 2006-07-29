@@ -20,9 +20,20 @@
 #include "test_locale.hpp"
 #include <stdarg.h>
 
+#ifdef TEST_THREADS
+#include <list>
+#include <boost/thread.hpp>
+#include <boost/thread/tss.hpp>
+#include <boost/shared_ptr.hpp>
+#include <boost/array.hpp>
+
+int* get_array_data();
+
+#endif
+
 int error_count = 0;
 
-int cpp_main(int /*argc*/, char * /*argv*/[])
+void run_tests()
 {
    basic_tests();
    test_simple_repeats();
@@ -47,13 +58,50 @@ int cpp_main(int /*argc*/, char * /*argv*/[])
    test_conditionals();
    test_options();
    test_options2();
+#ifndef TEST_THREADS
    test_en_locale();
+#endif
    test_emacs();
    test_operators();
    test_overloads();
    test_unicode();
+}
+
+int cpp_main(int /*argc*/, char * /*argv*/[])
+{
+#ifdef TEST_THREADS
+   get_array_data();  // initialises data.
+
+   std::list<boost::shared_ptr<boost::thread> > threads;
+   for(int i = 0; i < 10; ++i)
+   {
+      threads.push_back(boost::shared_ptr<boost::thread>(new boost::thread(&run_tests)));
+   }
+   std::list<boost::shared_ptr<boost::thread> >::const_iterator a(threads.begin()), b(threads.end());
+   while(a != b)
+   {
+      (*a)->join();
+      ++a;
+   }
+#else
+   run_tests();
+#endif
    return error_count;
 }
+
+#ifdef TEST_THREADS
+
+int* get_array_data()
+{
+   static boost::thread_specific_ptr<boost::array<int, 200> > tp;
+
+   if(tp.get() == 0)
+      tp.reset(new boost::array<int, 200>);
+
+   return tp.get()->data();
+}
+
+#endif
 
 const int* make_array(int first, ...)
 {
@@ -63,7 +111,11 @@ const int* make_array(int first, ...)
    // our testing macros (ideally we would use an array literal
    // but these can't apparently be used as macro arguments).
    //
+#ifdef TEST_THREADS
+   int* data = get_array_data();
+#else
    static int data[200];
+#endif
    va_list ap;
    va_start(ap, first);
    //

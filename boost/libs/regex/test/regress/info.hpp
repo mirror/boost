@@ -21,6 +21,11 @@
 #include <iostream>
 #include <string>
 #include <boost/regex.hpp>
+
+#ifdef TEST_THREADS
+#include <boost/thread/once.hpp>
+#include <boost/thread.hpp>
+#endif
 //
 // class test info, 
 // store information about the test we are about to conduct:
@@ -45,10 +50,29 @@ private:
       bool need_to_print;
       std::string expression_type_name;
    };
+#ifdef TEST_THREADS
+   static data_type& do_get_data()
+   {
+      static boost::thread_specific_ptr<data_type> pd;
+      if(pd.get() == 0)
+         pd.reset(new data_type());
+      return *(pd.get());
+   }
+   static void init_data()
+   {
+      do_get_data();
+   }
+#endif
    static data_type& data()
    {
+#ifdef TEST_THREADS
+      static boost::once_flag f = BOOST_ONCE_INIT;
+      boost::call_once(&init_data, f);
+      return do_get_data();
+#else
       static data_type d;
       return d;
+#endif
    }
 public:
    test_info_base(){};
