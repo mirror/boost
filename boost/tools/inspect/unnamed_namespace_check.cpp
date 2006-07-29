@@ -32,7 +32,7 @@ namespace boost
      register_signature( ".hh" ); // just in case
      register_signature( ".hpp" );
      register_signature( ".hxx" ); // just in case
-	 register_signature( ".inc" );
+     register_signature( ".inc" );
      register_signature( ".ipp" );
      register_signature( ".inl" );
    }
@@ -48,10 +48,11 @@ namespace boost
       boost::sregex_iterator cur(contents.begin(), contents.end(), unnamed_namespace_regex), end;
       for( ; cur != end; ++cur, ++m_errors )
       {
-        std::string linenbr = boost::lexical_cast<string>(
-          std::count( contents.begin(), (*cur)[0].first, '\n' ) + 1);
+        const string::size_type
+         ln = std::count( contents.begin(), (*cur)[0].first, '\n' ) + 1;
 
-        error( library_name, full_path, string(name()) + " unnamed namespace at line " + linenbr );
+        error( library_name, full_path, string(name()) + " unnamed namespace at line "
+            + lexical_cast<string>(ln) );
       }
 
 
