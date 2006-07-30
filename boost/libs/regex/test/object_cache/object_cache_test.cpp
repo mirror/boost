@@ -48,7 +48,7 @@ int test_main(int /*argc*/, char * /*argv*/[])
    int i;
    for(i = 0; i < 20; ++i)
    {
-      boost::shared_ptr<test_object> p = boost::object_cache<int, test_object>::get(i, max_cache_size);
+      boost::shared_ptr<const test_object> p = boost::object_cache<int, test_object>::get(i, max_cache_size);
       BOOST_CHECK(p->value() == i);
       p = boost::object_cache<int, test_object>::get(i, max_cache_size);
       BOOST_CHECK(p->value() == i);
@@ -63,7 +63,7 @@ int test_main(int /*argc*/, char * /*argv*/[])
    {
       for(i = 20 - max_cache_size; i < 20; ++i)
       {
-         boost::shared_ptr<test_object> p = boost::object_cache<int, test_object>::get(i, max_cache_size);
+         boost::shared_ptr<const test_object> p = boost::object_cache<int, test_object>::get(i, max_cache_size);
          BOOST_CHECK(p->value() == i);
          p = boost::object_cache<int, test_object>::get(i, max_cache_size);
          BOOST_CHECK(p->value() == i);
@@ -74,4 +74,5 @@ int test_main(int /*argc*/, char * /*argv*/[])
 }
 
 #include <boost/test/included/test_exec_monitor.hpp>
+
 
