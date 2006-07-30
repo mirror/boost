@@ -16,17 +16,17 @@ __ ../../../../index.htm
 
   .. parsed-literal::
 
-    new_window("alert", **width=10**, **titlebar=false**);
+    new_window("alert", **width_=10**, **titlebar_=false**);
 
     smart_ptr<
        Foo 
-     , **deleter_is<Deallocate<Foo> >**
-     , **copy_policy_is<DeepCopy>**> p(new Foo);
+     , **deleter<Deallocate<Foo> >**
+     , **copy_policy<DeepCopy>**> p(new Foo);
     
   Since named arguments can be passed in any order, they are
   especially useful when a function or template has more than one
   parameter with a useful default value.  The library also supports
-  *unnamed* parameters; that is to say, parameters whose identity
+  *deduced* parameters; that is to say, parameters whose identity
   can be deduced from their types.
 
 -------------------------------------
@@ -59,101 +59,125 @@ __ ../../../../index.htm
 
 -------------------------------------
 
-==============
+============
  Motivation
-==============
+============
 
-In C++, arguments are normally given meaning by their positions
-with respect to a parameter list.  That protocol is fine when there
-is at most one parameter with a default value, but when there are
-even a few useful defaults, the positional interface becomes
-burdensome:
+In C++, arguments_ are normally given meaning by their positions
+with respect to a parameter_ list: the first argument passed maps
+onto the first parameter in a function's definition, and so on.
+That protocol is fine when there is at most one parameter with a
+default value, but when there are even a few useful defaults, the
+positional interface becomes burdensome:
 
-* Since an argument's meaning is given by its position, we have to
-  choose an (often arbitrary) order for parameters with default
-  values, making some combinations of defaults unusable:
+* .. compound::
 
-  .. parsed-literal::
+    Since an argument's meaning is given by its position, we have to
+    choose an (often arbitrary) order for parameters with default
+    values, making some combinations of defaults unusable:
 
-    window* new_window(
-       char const* name, 
-       **int border_width = default_border_width,**
-       bool movable = true,
-       bool initially_visible = true
-       );
+    .. parsed-literal::
 
-    const bool movability = false;
-    window* w = new_window("alert box", movability);
+      window* new_window(
+         char const* name, 
+         **int border_width = default_border_width,**
+         bool movable = true,
+         bool initially_visible = true
+         );
 
-  In the example above we wanted to make an unmoveable window
-  with a default ``border_width``, but instead we got a moveable
-  window with a ``border_width`` of zero.  To get the desired
-  effect, we'd need to write:
+      const bool movability = false;
+      window* w = new_window("alert box", movability);
 
-  .. parsed-literal::
+    In the example above we wanted to make an unmoveable window
+    with a default ``border_width``, but instead we got a moveable
+    window with a ``border_width`` of zero.  To get the desired
+    effect, we'd need to write:
 
-    window* w = new_window(
-       "alert box", **default_border_width**, movability);
+    .. parsed-literal::
+
+       window* w = new_window(
+          "alert box", **default_border_width**, movability);
 
 
-* It can become difficult for readers to understand the meaning of
-  arguments at the call site::
+* .. compound::
 
-    window* w = new_window("alert", 1, true, false);
+    It can become difficult for readers to understand the meaning of
+    arguments at the call site::
 
-  Is this window moveable and initially invisible, or unmoveable
-  and initially visible?  The reader needs to remember the order
-  of arguments to be sure.  
+      window* w = new_window("alert", 1, true, false);
+
+    Is this window moveable and initially invisible, or unmoveable
+    and initially visible?  The reader needs to remember the order
+    of arguments to be sure.  
 
 * The author of the call may not remember the order of the
   arguments either, leading to hard-to-find bugs.
 
-This library addresses the problems outlined above by associating
-each parameter with a keyword object.  Now users can identify
-arguments by keyword, rather than by position:
 
-.. parsed-literal::
+Named Function Parameters
+=========================
 
-  window* w = new_window("alert box", **movable=**\ false); // OK!
+.. compound::
 
-It's not uncommon for a function to have parameters that can be
-uniquely identified based on the types of arguments passed.  The
-``name`` parameter to ``new_window`` is one such example.  None of
-the other arguments, if valid, can reasonably be converted to a
-``char const*``, so in theory a user could pass the window name in
-*any* argument position without causing ambiguity.  The Parameter
-library's **unnamed parameter** facility can be employed to allow
-that usage:
+  This library addresses the problems outlined above by associating
+  each parameter name with a keyword object.  Now users can identify
+  arguments by name, rather than by position:
 
-.. parsed-literal::
+  .. parsed-literal::
 
-  window* w = new_window(movable=false, **"alert box"**); // OK!
+    window* w = new_window("alert box", **movable_=**\ false); // OK!
 
-Appropriately used, an unnamed parameter interface can free the
-user of the burden of even remembering the formal parameter names.
 
-The reasoning we've given for named and unnamed parameter
-interfaces applies equally well to class templates as it does to
-functions.  The syntax for passing named template parameters is not
-quite as natural as it is for named function parameters:
+Deduced Function Parameters
+===========================
 
-.. parsed-literal::
+.. compound::
 
-  // *The ideal would be*
-  //    *smart_ptr<ownership=shared, value_type=Client> p;*
-  // 
-  // *but instead we must write something like:*
-  smart_ptr<**ownership<shared>**, **value_type<Client>** > p;
+  A **deduced parameter** can be passed in any position *without*
+  supplying an explicit parameter name.  It's not uncommon for a
+  function to have parameters that can be uniquely identified based
+  on the types of arguments passed.  The ``name`` parameter to
+  ``new_window`` is one such example.  None of the other arguments,
+  if valid, can reasonably be converted to a ``char const*``.  With
+  a deduced parameter interface, we could pass the window name in
+  *any* argument position without causing ambiguity:
 
-This small syntactic deficiency makes unnamed parameters an
-especially big win when used with class templates:
+  .. parsed-literal::
 
-.. parsed-literal::
+    window* w = new_window(movable_=false, **"alert box"**); // OK!
+    window* w = new_window(**"alert box"**, movable_=false); // OK!
 
-  // *p and q could be equivalent, given an unnamed*
-  // *parameter interface.*
-  smart_ptr<**shared**, **Client**> p;
-  smart_ptr<**Client**, **shared**> q;
+  Appropriately used, a deduced parameter interface can free the
+  user of the burden of even remembering the formal parameter
+  names.
+
+Class Template Parameter Support
+================================
+
+.. compound::
+
+  The reasoning we've given for named and deduced parameter
+  interfaces applies equally well to class templates as it does to
+  functions.  Using the Parameter library, we can create interfaces
+  that allow template arguments (in this case ``shared`` and
+  ``Client``) to be explicitly named, like this:
+
+  .. parsed-literal::
+
+    smart_ptr<**ownership<shared>**, **value_type<Client>** > p;
+
+  The syntax for passing named template arguments is not quite as
+  natural as it is for function arguments (ideally, we'd be able to
+  write ``smart_ptr<ownership=shared,…>``).  This small syntactic
+  deficiency makes deduced parameters an especially big win when
+  used with class templates:
+
+  .. parsed-literal::
+
+    // *p and q could be equivalent, given a deduced*
+    // *parameter interface.*
+    smart_ptr<**shared**, **Client**> p;
+    smart_ptr<**Client**, **shared**> q;
 
 ==========
  Tutorial
@@ -240,7 +264,7 @@ shown in the table below.
   +----------------+----------+----------------------------------+
   |``index_map``   | in       |``get(boost::vertex_index,graph)``|
   +----------------+----------+----------------------------------+
-  |``color_map``   | out      |an ``iterator_property_map``      |
+  |``color_map``   | in/out   |an ``iterator_property_map``      |
   |                |          |created from a ``std::vector`` of |
   |                |          |``default_color_type`` of size    |
   |                |          |``num_vertices(graph)`` and using |
@@ -257,168 +281,318 @@ Defining the Keywords
 =====================
 
 The point of this exercise is to make it possible to call
-``depth_first_search`` with keyword arguments, leaving out any
+``depth_first_search`` with named arguments, leaving out any
 arguments for which the default is appropriate:
 
 .. parsed-literal::
 
-  graphs::depth_first_search(g, **color_map=my_color_map**);
+  graphs::depth_first_search(g, **color_map_=my_color_map**);
 
 To make that syntax legal, there needs to be an object called
-``color_map`` with an assignment operator that can accept a
+“\ ``color_map_``\ ” whose assignment operator can accept a
 ``my_color_map`` argument.  In this step we'll create one such
 **keyword object** for each parameter.  Each keyword object will be
 identified by a unique **keyword tag type**.  
 
-We're going to define our interface in namespace ``graphs``.  Since
-users need access to the keyword objects, but not the tag types,
-we'll define the keyword objects so they're acceessible through
-``graphs``, and we'll hide the tag types away in a tested
-namespace, ``graphs::tag``.  The library provides a convenient
-macro for that purpose (MSVC6.x users see this note__)::
+.. Revisit this
 
-  #include <boost/parameter/keyword.hpp>
+  We're going to define our interface in namespace ``graphs``.  Since
+  users need access to the keyword objects, but not the tag types,
+  we'll define the keyword objects so they're accessible through
+  ``graphs``, and we'll hide the tag types away in a nested
+  namespace, ``graphs::tag``.  The library provides a convenient
+  macro for that purpose (MSVC6.x users see this note__)::
+
+We're going to define our interface in namespace ``graphs``.  The
+library provides a convenient macro for defining keyword objects::
+
+  #include <boost/parameter/name.hpp>
 
   namespace graphs
   {
-    BOOST_PARAMETER_KEYWORD(tag, graph)    // Note: no semicolon
-    BOOST_PARAMETER_KEYWORD(tag, visitor)
-    BOOST_PARAMETER_KEYWORD(tag, root_vertex)
-    BOOST_PARAMETER_KEYWORD(tag, index_map)
-    BOOST_PARAMETER_KEYWORD(tag, color_map)
+    BOOST_PARAMETER_NAME(graph)    // Note: no semicolon
+    BOOST_PARAMETER_NAME(visitor)
+    BOOST_PARAMETER_NAME(root_vertex)
+    BOOST_PARAMETER_NAME(index_map)
+    BOOST_PARAMETER_NAME(color_map)
   }
 
-__ `Compiler Can't See References In Unnamed Namespace`_
 
 The declaration of the ``visitor`` keyword you see here is
 equivalent to::
 
   namespace graphs 
   {
-    namespace tag 
-    { 
-      // The tag type
-      struct visitor; 
-    }
+    // The tag type
+    struct visitor; 
 
     namespace // unnamed
     {
       // A reference to the tag object
-      boost::parameter::keyword<tag::visitor>& visitor
-      = boost::parameter::keyword<tag::visitor>::instance;
+      boost::parameter::keyword<visitor>& visitor_
+      = boost::parameter::keyword<visitor>::instance;
     }
   }
+
+It defines a *keyword tag type* named ``visitor`` and a *keyword
+object* named ``visitor_``.  [`naming convention rationale`__]
 
 This “fancy dance” involving the unnamed namespace and references
 is all done to avoid violating the One Definition Rule (ODR)
 [#odr]_ when the named parameter interface is used by function
 templates that are instantiated in multiple translation
-units.
+units (MSVC6.x users see `this note`__).
 
-A Bare Bones Function Interface
-===============================
+__ `Best Practices`_
+__ `Compiler Can't See References In Unnamed Namespace`_
 
-Next we can write the skeleton of our ``depth_first_search``
-function template.  To declare the function, we'll use the
+Writing the Function
+====================
+
+Now that we have our keywords defined, the function template
+definition follows a simple pattern using the
 ``BOOST_PARAMETER_FUNCTION`` macro::
 
-  #include <boost/parameter/preprocessor.hpp>
+  #include <boost/parameter/function.hpp>
 
   namespace graphs
   {
     BOOST_PARAMETER_FUNCTION(
-        (void), 
-        depth_first_search, 
+        (void),                // 1. parenthesized return type
+        depth_first_search,    // 2. name of the function template
 
-        tag,
-        (required (graph,*) )
-        (optional (visitor,*) (root_vertex,*) 
-                  (index_map,*) (out(color_map),*) )
+        graphs,                // 3. namespace of tag types
+
+        (required (graph, *) ) // 4. one required parameter, and
+
+        (optional              //    four optional parameters, with defaults
+          (visitor,           *, boost::dfs_visitor<>()) 
+          (root_vertex,       *, *vertices(graph).first) 
+          (index_map,         *, get(boost::vertex_index,graph)) 
+          (in_out(color_map), *, 
+            default_color_map(num_vertices(graph), index_map) ) 
+        )
     )
     {
         // ... body of function goes here...
+        // use graph, visitor, index_map, and color_map
     }
   }
 
-The first argument to ``BOOST_PARAMETER_FUNCTION`` is the
-function's return type, in parentheses.  These parentheses are
-necessary because some types, such as ``std::pair<int,int>``,
-contain commas that would otherwise confuse the preprocessor.  The
-second argument is the name of the resulting function template.
-The third argument is the name of the namespace in which keyword
-types can be found, but most of the interesting information is in
-the fourth argument, which describes the function signature.
+The arguments to ``BOOST_PARAMETER_FUNCTION`` are:
 
-The Signature
--------------
+1. The return type of the resulting function template.  Parentheses
+   around the return type prevent any commas it might contain from
+   confusing the preprocessor, and are always required.
 
-The fourth argument to ``BOOST_PARAMETER_FUNCTION`` is a
-`Boost.Preprocessor`_ sequence_ of two elements, describing the
-required and optional parameters to ``depth_first_search``,
-respectively (if the parameters were all required—or all
-optional—the sequence would have had only one element).  The first
-element specifies a single ``required`` parameter, ``graph``::
+2. The name of the resulting function template.
 
-   (required (graph,*) )
+3. The name of a namespace where we can find tag types whose names
+   match the function's parameter names.
 
-The ``*`` simply indicates that we can pass anything at all to
-``depth_first_search`` as a ``graph``.  The second element of the
-outer sequence lists the ``optional`` arguments.
-Since there are multiple optional arguments, their entries are
-composed into another sequence_.  Note that since the ``color_map`` is an
-“out” parameter, its name has been enclosed in the ``out(…)``
-construct, which indicates to the library that it should be passed
-by non-const reference (for an “in/out” parameter we'd use
-``in_out(…)``).  If you refer back to the `parameter table`_ it
-should be clear that, default values aside, this function signature
-describes the same information.
+4. The function signature.  
 
+Function Signatures
+===================
 
-.. _`Boost.Preprocessor`: ../../preprocessor
-.. _sequence: ../../preprocessor/doc/data/sequences.html
+Function signatures are described as one or two adjacent
+parenthesized terms (a Boost.Preprocessor_ sequence_) describing
+the function's parameters in the order in which they'd be expected
+if passed positionally.  Any required parameters must come first,
+but the ``(required … )`` clause can be omitted when all the
+parameters are optional.
 
-Exercising the Interface
-------------------------
+.. _Boost.Preprocessor: ../../../preprocessor/index.html
 
-We've already gained the ability to call our function with a
-mixture of positional and named arguments::
+Required Parameters
+-------------------
 
-  int main()
-  {
-      // Make keyword names available without qualification
-      using namespace graphs;
+.. compound::
 
-      graphs::depth_first_search(
-        'G', 'v',                               // Positional args
-        index_map = "hello, world",             // Named args in
-        root_vertex = 3.5, color_map = false);  // arbitrary order
-  }
+  Required parameters are given first—nested in a ``(required … )``
+  clause—as a series of two-element tuples describing each parameter
+  name and any requirements on the argument type.  In this case there
+  is only a single required parameter, so there's just a single
+  tuple:
+
+  .. parsed-literal::
+
+     (required **(graph, \*)** )
+
+  Since ``depth_first_search`` doesn't require any particular type
+  for its ``graph`` parameter, we use an asterix to indicate that
+  any type is allowed.  Required parameters must always precede any
+  optional parameters in a signature, but if there are *no*
+  required parameters, the ``(required … )`` clause can be omitted
+  entirely.
+
+Optional Parameters
+-------------------
+
+.. compound::
+
+  Optional parameters—nested in an ``(optional … )`` clause—are given
+  as a series of adjacent *three*\ -element tuples describing the
+  parameter name, any requirements on the argument type, *and* and an
+  expression representing the parameter's default value:
+
+  .. parsed-literal::
+
+    (optional **⁣
+        (visitor,           \*, boost::dfs_visitor<>()) 
+        (root_vertex,       \*, \*vertices(graph).first) 
+        (index_map,         \*, get(boost::vertex_index,graph)) 
+        (in_out(color_map), \*, 
+          default_color_map(num_vertices(graph), index_map) )**
+    )
+
+“Out” (and “in/out”) Parameters
+-------------------------------
+
+.. compound::
+
+  Within the function body, a parameter name such as ``visitor`` is
+  a *C++ reference*, bound either to an actual argument passed by
+  the caller or to the result of evaluating a default expression.
+  In most cases, parameter types are of the form ``T const&`` for
+  some ``T``.  Parameters whose values are expected to be modified,
+  however, must be passed by reference to *non*\ -``const``.  To
+  indicate that ``color_map`` is both read and written, we wrap
+  its name in ``in_out(…)``:
+
+  .. parsed-literal::
+
+    (optional
+        (visitor,            \*, boost::dfs_visitor<>()) 
+        (root_vertex,        \*, \*vertices(graph).first) 
+        (index_map,          \*, get(boost::vertex_index,graph)) 
+        (**in_out(color_map)**, \*, 
+          default_color_map(num_vertices(graph), index_map) )
+    )
+
+If ``color_map`` were strictly going to be modified but not examined,
+we could have written ``out(color_map)``.  There is no functional
+difference between ``out`` and ``in_out``; the library provides
+both so you can make your interfaces more self-documenting.
+
+Positional Arguments
+--------------------
+
+When arguments are passed positionally (without the use of
+keywords), they will be mapped onto parameters in the order the
+parameters are given in the signature, so for example in this
+call ::
+
+  graphs::depth_first_search(x, y);
+
+``x`` will always be interpreted as a graph and ``y`` will always
+be interpreted as a visitor.
+
+.. _sequence: http://boost-consulting.com/mplbook/preprocessor.html#sequences
+
+Default Expression Evaluation
+-----------------------------
+
+.. compound::
+
+  Note that in our example, the value of the graph parameter is
+  used in the default expressions for ``root_vertex``,
+  ``index_map`` and ``color_map``.  
+
+  .. parsed-literal::
+
+        (required (**graph**, \*) )
+        (optional
+          (visitor,           \*, boost::dfs_visitor<>()) 
+          (root_vertex,       \*, \*vertices(**graph**).first) 
+          (index_map,         \*, get(boost::vertex_index,\ **graph**)) 
+          (in_out(color_map), \*, 
+            default_color_map(num_vertices(**graph**), index_map) ) 
+        )
+
+  A default expression is evaluated in the context of all preceding
+  parameters, so you can use any of their values by name.
+
+.. compound::
+
+  A default expression is never evaluated—or even instantiated—if
+  an actual argument is passed for that parameter.  We can actually
+  demonstrate that with our code so far by replacing the body of
+  ``depth_first_search`` with something that prints the arguments:
+
+  .. parsed-literal::
+
+    #include <boost/graph/depth_first_search.hpp> // for dfs_visitor
+
+    BOOST_PARAMETER_FUNCTION(
+        (void), depth_first_search, graphs
+        *…signature goes here…*
+    )
+    {
+       std::cout << "graph=" << graph << std::endl;
+       std::cout << "visitor=" << visitor << std::endl;
+       std::cout << "root_vertex=" << root_vertex << std::endl;
+       std::cout << "index_map=" << index_map << std::endl;
+       std::cout << "color_map=" << color_map << std::endl;
+    }
+
+    int main()
+    {
+        depth_first_search(1, 2, 3, 4, 5);
+
+        depth_first_search(
+            "1", '2', color_map = '5',
+            visitor = "4", root_vertex = "3");
+    }
+
+  Despite the fact that default expressions such as
+  ``vertices(graph).first`` are ill-formed for the given ``graph``
+  arguments, both calls will compile, and both will print exactly
+  the same thing.
 
 Signature Matching and Overloading
 ----------------------------------
 
-We can also observe the effects of using ``required`` and
-``optional`` in the function signature.  Any invocation of
-``depth_first_search`` will compile, as long as it has a ``graph``
-parameter::
+In fact, any call to ``depth_first_search`` with fewer than five
+arguments will match our function, provided we pass *something* for
+the required ``graph`` parameter.  That might not seem to be a
+problem, but consider what happens when we add this (admittedly
+contrived) overload::
 
-  depth_first_search("some-graph");                        // OK
-  depth_first_search(index_map="hello, world", graph='G'); // OK
+  template <class G>
+  void depth_first_search(G const&, int, std::string);
+  …
+  // ambiguous!
+  depth_first_search(boost::adjacency_list<>(), 2, "hello");
 
-however, if we leave out the graph argument, the compiler will
-complain that no ``depth_first_search`` matches the arguments::
+We really don't want the compiler to consider the original version
+of ``depth_first_search`` because ``"hello"`` isn't convertible to
+``G``'s ``vertex_descriptor`` type, which is required for the
+``root_vertex`` argument: it should just call our new overload.  To
+take the original ``depth_first_search`` out of the overload set,
+we need to tell the library about this requirement:
 
-  depth_first_search(root_vertex=3.5);                     // ERROR
+.. parsed-literal::
 
-It's important to note that the parameter library is not forcing a
-compilation error in this case.  If we add another overload of
-``depth_first_search`` that *does* match, the compiler will be
-happy again::
+  (root_vertex,       
+       **typename boost::graph_traits<graph_type>::vertex_descriptor**,
+       \*vertices(graph).first) 
 
-  // New overload; matches anything
-  template <class T> void depth_first_search(T) {}
+.. rewrite this:
+  however, if we leave out the graph argument, the compiler will
+  complain that no ``depth_first_search`` matches the arguments::
 
-  depth_first_search(root_vertex=3.5);                     // OK
+    depth_first_search(root_vertex=3.5);                     // ERROR
+
+  It's important to note that the parameter library is not forcing a
+  compilation error in this case.  If we add another overload of
+  ``depth_first_search`` that *does* match, the compiler will be
+  happy again::
+
+    // New overload; matches anything
+    template <class T> void depth_first_search(T) {}
+
+    depth_first_search(root_vertex=3.5);                     // OK
 
 This capability depends on your compiler's support for SFINAE. [#sfinae]_
 
@@ -1039,6 +1213,61 @@ from ``mpl::true_`` or ``mpl::false_``, the appropriate
 
 .. _`Integral Constant`: ../../../mpl/doc/refmanual/integral-constant.html
 
+================ 
+ Best Practices
+================
+
+:Trailing Underscores: The ``BOOST_PARAMETER_NAME`` macro defines a
+  *keyword object* whose name ends in a trailing underscore.  When
+  defining keyword objects without using ``BOOST_PARAMETER_NAME``, we
+  strongly recommend that you adopt a naming convention that keeps
+  your keyword objects distinct from the names of function arguments
+  and data members, to avoid the following usually-silent bug:
+
+  .. parsed-literal::
+
+    namespace keywords
+    {
+      // Tag types
+      struct index_tag; 
+      struct step_tag; 
+
+      namespace // unnamed
+      {
+        // A reference to the tag object
+        boost::parameter::keyword<index_tag>& **index**
+        = boost::parameter::keyword<index_tag>::instance;
+        boost::parameter::keyword<step_tag>& **step**
+        = boost::parameter::keyword<step_tag>::instance;
+      }
+    }
+
+    struct g_parameters
+      : parameter::parameters<keywords::step, keywords::index>
+    {};
+
+    BOOST_PARAMETER_FUN(int, g, 1, 2, g_parameters)
+    {
+        std::cout << p[keywords::index|42];
+    }
+
+    void f(int index)
+    {
+    :vellipsis:`\ 
+       .
+       .
+       .
+     ` 
+       g(**index** = 3); // whoops!
+    }
+
+  Although in the case above, the user was trying to pass the value
+  ``3`` as the ``index`` parameter to ``g``, what happened instead
+  was that ``f``\ 's ``index`` argument got reassigned the value 3,
+  and was then passed as a positional argument to ``g``.  Since
+  ``g``'s first positional parameter is ``step``, the default value
+  for ``index`` is used and g prints ``42``.
+
 ============================
  Portability Considerations
 ============================
@@ -1136,6 +1365,25 @@ Follow `this link`__ to the Boost.Parameter reference
 documentation.  
 
 __ reference.html
+
+==========
+ Glossary
+==========
+
+.. _arguments:
+
+:Argument (or “actual argument”): the value actually passed to a
+  function or class template
+
+.. _parameter:
+
+:Parameter (or “formal parameter”): the name used to refer to an
+  argument within a function or class template.  For example, the
+  value of ``f``'s *parameter* ``x`` is given by the *argument*
+  ``3``::
+
+    int f(int x) { return x + 1 }
+    int y = f(3);
 
 ==================
  Acknowledgements
