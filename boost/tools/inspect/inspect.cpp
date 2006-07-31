@@ -16,10 +16,8 @@
 //  See http://www.boost.org/tools/inspect/ for more information.
 
 
-#include <assert.h>
 #include <vector>
 #include <list>
-#include <utility>
 #include <algorithm>
 #include <cstring>
 
