@@ -29,7 +29,7 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/format.hpp>
 
-
+#include "../common/time_string.hpp"
 #include "inspector.hpp"
 
 #include "copyright_check.hpp"
@@ -649,16 +649,8 @@ int cpp_main( int argc, char * argv[] )
     itr->inspector->close();
   }
 
-  const int s = 128;
-  char buffer[ s ];
-  std::time_t tod;
-  std::time( &tod );
-
-  const bool time_retrieved = 0 !=
-    std::strftime( buffer, s,
-        "%X UTC, %A %d %B %Y", std::gmtime( &tod ) );
-
-  string run_date( time_retrieved? static_cast<const char*>( buffer ): "n/a");
+  string run_date ( "n/a" );
+  boost::time_string( run_date );
 
   if (display_text == display_format)
   {
