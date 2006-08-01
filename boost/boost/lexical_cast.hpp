@@ -136,10 +136,21 @@ namespace boost
             {
                 stream.unsetf(std::ios::skipws);
 
-                if(std::numeric_limits<Target>::is_specialized)
-                    stream.precision(std::numeric_limits<Target>::digits10 + 1);
-                else if(std::numeric_limits<Source>::is_specialized)
-                    stream.precision(std::numeric_limits<Source>::digits10 + 1);
+                // The odd style used below is to avoid spurious compiler
+                // warnings about using is_specialized as a (constant)
+                // conditional expression
+
+                typedef std::numeric_limits<Target> t;
+                typedef std::numeric_limits<Source> s;
+
+                bool setup_target = t::is_specialized;
+                if (setup_target)
+                    stream.precision(t::digits10 + 1);
+                else
+                    ((s::is_specialized) &&
+                        stream.precision(s::digits10 + 1));
+
+
             }
             ~lexical_stream()
             {
@@ -215,12 +226,26 @@ namespace boost
         Target lexical_cast(
             BOOST_DEDUCED_TYPENAME boost::call_traits<Source>::value_type arg)
         {
-            detail::lexical_stream<Target, Source> interpreter;
-            Target result;
 
-            if(!(interpreter << arg && interpreter >> result))
-                throw_exception(bad_lexical_cast(typeid(Source), typeid(Target)));
-            return result;
+            detail::lexical_stream<Target, Source> interpreter;
+
+            // The original form, reproduced below, is more elegant
+            // but yields a spurious C4701 warning ("possible use of
+            // "result" before initialization") with VC7.1 (/W4).
+//
+//            Target result;
+//
+//            if(!(interpreter << arg && interpreter >> result))
+//                throw_exception(bad_lexical_cast(typeid(Source), typeid(Target)));
+//            return result;
+
+            if(interpreter << arg) {
+                Target result;
+                if (interpreter >> result)
+                    return result;
+            }
+            throw_exception(bad_lexical_cast(typeid(Source), typeid(Target)));
+            return Target(); // never reached
         }
     }
 
