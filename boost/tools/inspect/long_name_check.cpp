@@ -11,6 +11,7 @@
 #include <boost/filesystem/exception.hpp>
 #include <boost/bind.hpp>
 #include <boost/next_prior.hpp>
+#include "boost/lexical_cast.hpp"
 
 #include <locale>
 #include <algorithm>
@@ -45,10 +46,13 @@ namespace boost
     {
       std::string const leaf( full_path.leaf() );
 
-      if ( leaf.size() > 31 )
+      if ( leaf.size() > max_filename_length )
       {
         ++m_long_name_errors;
-        error( library_name, full_path, string(name()) + " filename &gt; 31 chars" );
+        error( library_name, full_path, string(name())
+            + " filename &gt; "
+            + boost::lexical_cast<string>(max_filename_length)
+            + " characters" );
       }
 
       if ( std::count( leaf.begin(), leaf.end(), '.' ) > 1 )
@@ -72,12 +76,14 @@ namespace boost
         error( library_name, full_path, string(name()) + " leading character of one of the path compontents is not alphabetic" );
       }
 
-      if ( std::find_if( relative_path.begin(), boost::prior( relative_path.end() )
-            , boost::bind( &aux::contains_dot, _1 ) ) != boost::prior( relative_path.end() ) )
-      {
-        ++m_long_name_errors;
-        error( library_name, full_path, string(name()) + " directory name contains the dot character ('.')" );
-      }
+      // check directory name
+      if ( filesystem::is_directory(full_path) )
+          if ( std::find_if( relative_path.begin(), /*boost::prior*/( relative_path.end() )
+                , boost::bind( &aux::contains_dot, _1 ) ) != /*boost::prior*/( relative_path.end() ) )
+          {
+            ++m_long_name_errors;
+            error( library_name, full_path, string(name()) + " directory name contains the dot character ('.')" );
+          }
 
       if ( std::distance( relative_path.begin(), boost::prior( relative_path.end() ) ) >= 8 )
       {
