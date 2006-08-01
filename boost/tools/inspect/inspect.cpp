@@ -27,6 +27,8 @@
 #include <boost/filesystem/fstream.hpp>
 #include <boost/format.hpp>
 
+#include <boost/test/included/prg_exec_monitor.hpp>
+
 #include "../common/time_string.hpp"
 #include "inspector.hpp"
 
@@ -45,20 +47,21 @@ namespace fs = boost::filesystem;
 
 namespace
 {
-  typedef boost::shared_ptr< boost::inspect::inspector > inspector_ptr;
-
-  struct inspector_element
+  class inspector_element
   {
-    inspector_ptr  inspector;
+    typedef boost::shared_ptr< boost::inspect::inspector > inspector_ptr;
 
+  public:
+    inspector_ptr  inspector;
+    explicit
     inspector_element( boost::inspect::inspector * p ) : inspector(p) {}
   };
 
   typedef std::list< inspector_element > inspector_list;
 
-  long file_count;
-  long directory_count;
-  long error_count;
+  long file_count = 0;
+  long directory_count = 0;
+  long error_count = 0;
 
   boost::inspect::string_set content_signatures;
 
@@ -531,11 +534,13 @@ namespace boost
 
 //  cpp_main()  --------------------------------------------------------------//
 
-#include <boost/test/included/prg_exec_monitor.hpp>
-
-int cpp_main( int argc, char * argv[] )
+int cpp_main( int argc_param, char * argv_param[] )
 {
-  fs::initial_path();
+  // <hack> for the moment, let's be on the safe side
+  // and ensure we don't modify anything being pointed to;
+  // then we'll do some cleanup here
+  int argc = argc_param;
+  const char* const * argv = &argv_param[0];
 
   if ( argc > 1 && (std::strcmp( argv[1], "-help" ) == 0
     || std::strcmp( argv[1], "--help" ) == 0 ) )
@@ -613,6 +618,7 @@ int cpp_main( int argc, char * argv[] )
     }
   }
 
+  fs::initial_path();
   inspector_list inspectors;
 
   if ( license_ck )
@@ -733,7 +739,7 @@ int cpp_main( int argc, char * argv[] )
           % itr->inspector->name() % itr->inspector->desc()
         ).str();
     }
-    itr->inspector.reset();
+    // itr->inspector.reset(); // unneeded
   }
 
   if (display_text == display_format)
