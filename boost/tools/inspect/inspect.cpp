@@ -591,6 +591,7 @@ int cpp_main( int argc_param, char * argv_param[] )
     unnamed_ck = false;
   }
 
+  bool invalid_options = false;
   for(; argc > 1; --argc, ++argv )
   {
     if ( std::strcmp( argv[1], "-license" ) == 0 )
@@ -611,12 +612,17 @@ int cpp_main( int argc_param, char * argv_param[] )
         unnamed_ck = true;
     else
     {
-      std::cerr << "unknown option: " << argv[1]
-      << "\nvalid options are:\n"
-      << options();
-      return 1;
+      std::cerr << "unknown option: " << argv[1] << '\n';
+      invalid_options = true;
     }
   }
+  if ( invalid_options ) {
+      std::cerr << "\nvalid options are:\n"
+                << options();
+      return 1;
+  }
+
+
 
   fs::initial_path();
   inspector_list inspectors;
