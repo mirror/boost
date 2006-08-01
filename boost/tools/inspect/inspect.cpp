@@ -622,9 +622,14 @@ int cpp_main( int argc_param, char * argv_param[] )
       return 1;
   }
 
-
-
+  string inspector_keys;
   fs::initial_path();
+
+  {
+
+  // note how this is in its own block; reporting will happen
+  // automatically, from each registered inspector, when
+  // leaving, due to destruction of the inspector_list object
   inspector_list inspectors;
 
   if ( license_ck )
@@ -727,7 +732,6 @@ int cpp_main( int argc_param, char * argv_param[] )
     std::cout << "\nproblem counts:\n";
   }
 
-  string inspector_keys;
   for ( inspector_list::iterator itr = inspectors.begin();
         itr != inspectors.end(); ++itr )
   {
@@ -745,8 +749,9 @@ int cpp_main( int argc_param, char * argv_param[] )
           % itr->inspector->name() % itr->inspector->desc()
         ).str();
     }
-    // itr->inspector.reset(); // unneeded
   }
+
+  } // end of block: starts reporting
 
   if (display_text == display_format)
   {
