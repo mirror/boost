@@ -8,7 +8,7 @@
 //
 // what:  lexical_cast custom keyword cast
 // who:   contributed by Kevlin Henney,
-//        enhanced with contributions from Terje Slettebø,
+//        enhanced with contributions from Terje Slettebo,
 //        with additional fixes and suggestions from Gennaro Prota,
 //        Beman Dawes, Dave Abrahams, Daryle Walker, Peter Dimov,
 //        and other Boosters
