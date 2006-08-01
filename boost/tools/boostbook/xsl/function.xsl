@@ -357,7 +357,7 @@
       <!-- Information for this parameter -->
       <xsl:variable name="parameter" select="$parameters[position()=1]"/>
       <xsl:variable name="name">
-        <xsl:if test="$include-names">
+        <xsl:if test="$include-names and $parameter/@name != ''">
           <xsl:text> </xsl:text><xsl:value-of select="$parameter/@name"/>
         </xsl:if>
       </xsl:variable>
