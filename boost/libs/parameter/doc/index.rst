@@ -253,29 +253,38 @@ shown in the table below.
 
 .. table:: ``depth_first_search`` Parameters
 
-  +----------------+----------+----------------------------------+
-  | Parameter Name | Dataflow | Default Value (if any)           |
-  +================+==========+==================================+
-  |``graph``       | in       |none - this argument is required. |
-  +----------------+----------+----------------------------------+
-  |``visitor``     | in       |``boost::dfs_visitor<>()``        |
-  +----------------+----------+----------------------------------+
-  |``root_vertex`` | in       |``*vertices(graph).first``        |
-  +----------------+----------+----------------------------------+
-  |``index_map``   | in       |``get(boost::vertex_index,graph)``|
-  +----------------+----------+----------------------------------+
-  |``color_map``   | in/out   |an ``iterator_property_map``      |
-  |                |          |created from a ``std::vector`` of |
-  |                |          |``default_color_type`` of size    |
-  |                |          |``num_vertices(graph)`` and using |
-  |                |          |``index_map`` for the index map.  |
-  +----------------+----------+----------------------------------+
+  +----------------+----------+---------------------------------+----------------------------------+
+  | Parameter Name | Dataflow | Type                            | Default Value (if any)           |
+  +================+==========+=================================+==================================+
+  |``graph``       | in       |Model of `Incidence Graph`_ and  |none - this argument is required. |
+  |                |          |`Vertex List Graph`_             |                                  |
+  +----------------+----------+---------------------------------+----------------------------------+
+  |``visitor``     | in       |Model of `DFS Visitor`_          |``boost::dfs_visitor<>()``        |
+  +----------------+----------+---------------------------------+----------------------------------+
+  |``root_vertex`` | in       |Convertible to ``graph``'s vertex|``*vertices(graph).first``        |
+  |                |          |descriptor type.                 |                                  |
+  +----------------+----------+---------------------------------+----------------------------------+
+  |``index_map``   | in       |Model of `Readable Property Map`_|``get(boost::vertex_index,graph)``|
+  |                |          |with key type := ``graph``'s     |                                  |
+  |                |          |vertex descriptor and value type |                                  |
+  |                |          |an integer type.                 |                                  |
+  +----------------+----------+---------------------------------+----------------------------------+
+  |``color_map``   | in/out   |Model of `Read/Write Property    |an ``iterator_property_map``      |
+  |                |          |Map`_ with key type :=           |created from a ``std::vector`` of |
+  |                |          |``graph``'s vertex descriptor    |``default_color_type`` of size    |
+  |                |          |type.                            |``num_vertices(graph)`` and using |
+  |                |          |                                 |``index_map`` for the index map.  |
+  +----------------+----------+---------------------------------+----------------------------------+
 
-Don't be intimidated by the complex default values.  For the
-purposes of this exercise, you don't need to understand what they
-mean. Also, we'll show you how the default for ``color_map`` is
-computed later in the tutorial; trust us when we say that the
-complexity of its default will become valuable.
+.. _`Incidence Graph`: ../../../graph/doc/IncidenceGraph.html
+.. _`Vertex List Graph`: ../../../graph/doc/VertexListGraph.html
+.. _`DFS Visitor`: ../../../graph/doc/DFSVisitor.html
+.. _`Read/Write Property Map`: ../../../property_map/doc/ReadWritePropertyMap.html
+.. _`Readable Property Map`: ../../../property_map/doc/ReadablePropertyMap.html
+
+Don't be intimidated by the information in the 2nd and third
+column.  For the purposes of this exercise, you don't need to
+understand them in detail.
 
 Defining the Keywords
 =====================
@@ -301,7 +310,7 @@ identified by a unique **keyword tag type**.
   we'll define the keyword objects so they're accessible through
   ``graphs``, and we'll hide the tag types away in a nested
   namespace, ``graphs::tag``.  The library provides a convenient
-  macro for that purpose (MSVC6.x users see this note__)::
+  macro for that purpose (MSVC6.x users see this note__).
 
 We're going to define our interface in namespace ``graphs``.  The
 library provides a convenient macro for defining keyword objects::
@@ -446,8 +455,8 @@ Optional Parameters
           default_color_map(num_vertices(graph), index_map) )**
     )
 
-“Out” (and “in/out”) Parameters
--------------------------------
+Handling “Out” Parameters
+-------------------------
 
 .. compound::
 
@@ -547,36 +556,78 @@ Default Expression Evaluation
 
   Despite the fact that default expressions such as
   ``vertices(graph).first`` are ill-formed for the given ``graph``
-  arguments, both calls will compile, and both will print exactly
-  the same thing.
+  arguments, both calls will compile, and each one will print
+  exactly the same thing.
 
 Signature Matching and Overloading
 ----------------------------------
 
-In fact, any call to ``depth_first_search`` with fewer than five
-arguments will match our function, provided we pass *something* for
-the required ``graph`` parameter.  That might not seem to be a
-problem, but consider what happens when we add this (admittedly
-contrived) overload::
+In fact, the function signature is so general that any call to
+``depth_first_search`` with fewer than five arguments will match
+our function, provided we pass *something* for the required
+``graph`` parameter.  That might not seem to be a problem at first;
+after all, if the arguments don't match the requirements imposed by
+the implementation of ``depth_first_search``, a compilation error
+will occur later, when its body is instantiated.
 
+There are two problems with very general function signatures.  The
+first is that allowing incorrect arguments to be detected late
+causes large, inscrutable error messages.  It's usually much better
+for users to see a simple message saying that their arguments don't
+match the function signature.  [#ConceptC++] The second problem is
+that overloading doesn't work well.  Consider what happens when we
+add this (admittedly contrived) overload::
+
+  // new overload
   template <class G>
   void depth_first_search(G const&, int, std::string);
   …
   // ambiguous!
   depth_first_search(boost::adjacency_list<>(), 2, "hello");
 
+Convertibility Requirements
+...........................
+
 We really don't want the compiler to consider the original version
 of ``depth_first_search`` because ``"hello"`` isn't convertible to
-``G``'s ``vertex_descriptor`` type, which is required for the
-``root_vertex`` argument: it should just call our new overload.  To
-take the original ``depth_first_search`` out of the overload set,
-we need to tell the library about this requirement:
+the ``graph`` parameter's vertex descriptor type, which is
+required__ for the ``root_vertex`` argument.  Instead, this call
+should just invoke our new overload.  To take the original
+``depth_first_search`` function out of the overload set, we need to
+tell the library about this requirement:
 
 .. parsed-literal::
 
   (root_vertex,       
        **typename boost::graph_traits<graph_type>::vertex_descriptor**,
        \*vertices(graph).first) 
+
+Now the call will succeed. [#sfinae]  Note that the *type* of the ``graph``
+argument is available in the signature—and in the function body—as
+``graph_type``.
+
+.. Hint:: To access the type of any parameter *foo*, write *foo*\
+   ``_type``.
+
+Note also that, unlike in an ordinary function signature, inside
+the function body, the type of the ``root_vertex`` parameter will
+*not necessarily* be the same as the graph's vertex descriptor
+type.  Since the parameter is always a *reference* to the actual
+argument, it will have the same type as that of the argument.  For
+example, if the graph's vertex descriptor type is ``int``, the
+``root_vertex`` parameter could end up being of any type
+convertible to ``int``, e.g. ``long``.
+
+.. Hint:: The type of a Boost.Parameter-enabled function parameter
+   is always a (possibly-mutable) reference to the actual argument
+   type.
+
+
+Predicate Requirements
+......................
+
+The requirements on other arguments are a bit more interesting than
+those on ``root_vertex``...
 
 .. rewrite this:
   however, if we leave out the graph argument, the compiler will
@@ -594,7 +645,6 @@ we need to tell the library about this requirement:
 
     depth_first_search(root_vertex=3.5);                     // OK
 
-This capability depends on your compiler's support for SFINAE. [#sfinae]_
 
 Filling in the Body
 ===================
@@ -1414,6 +1464,10 @@ __ ../../../graph/doc/bgl_named_params.html
    ``int`` in the text, and your understanding of the Parameter
    library wouldn't suffer.
 
+.. [#ConceptC++] This is a major motivation behind ConceptC++__.
+
+__ http://www.generic-programming.org/software/ConceptGCC/
+
 .. [#bind] The Lambda library is known not to work on `some
    less-conformant compilers`__.  When using one of those you could
    define ::
@@ -1450,7 +1504,8 @@ __ http://www.boost.org/regression/release/user/lambda.html
     lookup is due to Herb Sutter.
 
 
-.. [#sfinae] **SFINAE**: **S**\ ubstitution **F**\ ailure **I**\ s
+.. [#sfinae] This capability depends on your compiler's support for SFINAE. 
+   **SFINAE**: **S**\ ubstitution **F**\ ailure **I**\ s
    **N**\ ot **A**\ n **E** rror.  If type substitution during the
    instantiation of a function template results in an invalid type,
    no compilation error is emitted; instead the overload is removed
