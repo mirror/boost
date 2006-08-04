@@ -261,8 +261,8 @@ shown in the table below.
   +----------------+----------+---------------------------------+----------------------------------+
   |``visitor``     | in       |Model of `DFS Visitor`_          |``boost::dfs_visitor<>()``        |
   +----------------+----------+---------------------------------+----------------------------------+
-  |``root_vertex`` | in       |Convertible to ``graph``'s vertex|``*vertices(graph).first``        |
-  |                |          |descriptor type.                 |                                  |
+  |``root_vertex`` | in       |``graph``'s vertex descriptor    |``*vertices(graph).first``        |
+  |                |          |type.                            |                                  |
   +----------------+----------+---------------------------------+----------------------------------+
   |``index_map``   | in       |Model of `Readable Property Map`_|``get(boost::vertex_index,graph)``|
   |                |          |with key type := ``graph``'s     |                                  |
@@ -282,9 +282,9 @@ shown in the table below.
 .. _`Read/Write Property Map`: ../../../property_map/doc/ReadWritePropertyMap.html
 .. _`Readable Property Map`: ../../../property_map/doc/ReadablePropertyMap.html
 
-Don't be intimidated by the information in the 2nd and third
-column.  For the purposes of this exercise, you don't need to
-understand them in detail.
+Don't be intimidated by the information in the second and third
+columns above.  For the purposes of this exercise, you don't need
+to understand them in detail.
 
 Defining the Keywords
 =====================
@@ -585,49 +585,94 @@ add this (admittedly contrived) overload::
   // ambiguous!
   depth_first_search(boost::adjacency_list<>(), 2, "hello");
 
-Convertibility Requirements
-...........................
+Adding Type Requirements
+........................
 
 We really don't want the compiler to consider the original version
-of ``depth_first_search`` because ``"hello"`` isn't convertible to
-the ``graph`` parameter's vertex descriptor type, which is
-required__ for the ``root_vertex`` argument.  Instead, this call
+of ``depth_first_search`` because the ``root_vertex`` argument,
+``"hello"``, doesn't meet the requirement__ that it match the
+``graph`` parameter's vertex descriptor type.  Instead, this call
 should just invoke our new overload.  To take the original
-``depth_first_search`` function out of the overload set, we need to
-tell the library about this requirement:
+``depth_first_search`` overload out of contention, we need to tell
+the library about this requirement by replacing the ``*`` element
+of the signature with the required type, in parentheses:
 
 .. parsed-literal::
 
   (root_vertex,       
-       **typename boost::graph_traits<graph_type>::vertex_descriptor**,
+       **(typename boost::graph_traits<graph_type>::vertex_descriptor)**,
        \*vertices(graph).first) 
 
-Now the call will succeed. [#sfinae]  Note that the *type* of the ``graph``
-argument is available in the signature—and in the function body—as
-``graph_type``.
+Now the original ``depth_first_search`` will only be called when
+the ``root_vertex`` argument can be converted to the graph's vertex
+descriptor type, and our example that *was* ambiguous will smoothly
+call the new overload.
 
-.. Hint:: To access the type of any parameter *foo*, write *foo*\
+.. Note:: The *type* of the ``graph`` argument is available in the
+   signature—and in the function body—as ``graph_type``.  In
+   general, to access the type of any parameter *foo*, write *foo*\
    ``_type``.
-
-Note also that, unlike in an ordinary function signature, inside
-the function body, the type of the ``root_vertex`` parameter will
-*not necessarily* be the same as the graph's vertex descriptor
-type.  Since the parameter is always a *reference* to the actual
-argument, it will have the same type as that of the argument.  For
-example, if the graph's vertex descriptor type is ``int``, the
-``root_vertex`` parameter could end up being of any type
-convertible to ``int``, e.g. ``long``.
-
-.. Hint:: The type of a Boost.Parameter-enabled function parameter
-   is always a (possibly-mutable) reference to the actual argument
-   type.
 
 
 Predicate Requirements
 ......................
 
 The requirements on other arguments are a bit more interesting than
-those on ``root_vertex``...
+those on ``root_vertex``; they can't be described in terms of simple
+type matching.  Instead, they must be described in terms of `MPL
+Metafunctions`__.  There's no space to give a complete description
+of metafunctions or of graph library details here, but we'll show
+you the complete signature with maximal checking, just to give you
+a feel for how it's done.  Each predicate metafunction is enclosed
+in parentheses *and preceded by an asterix*, as follows:
+
+.. parsed-literal::
+
+    BOOST_PARAMETER_FUNCTION(
+        (void), depth_first_search, graphs
+
+      , (required 
+          (graph 
+           , **\ \*(boost::mpl::and_<
+                   boost::is_convertible<
+                       boost::graph_traits<G>::traversal_category,
+                     , boost::incidence_graph_tag
+                   >
+                 , boost::is_convertible<
+                       boost::graph_traits<G>::traversal_category,
+                     , boost::vertex_list_graph_tag
+                   >
+               >)** ))
+
+        (optional
+          (visitor, \*, boost::dfs_visitor<>()) // not checkable
+
+          (root_vertex
+            , (typename boost::graph_traits<graph_type>::vertex_descriptor)
+            , \*vertices(graph).first)
+ 
+          (index_map
+            , **\ \*(boost::mpl::and_<
+                  boost::is_integral<
+                      boost::property_traits<index_map_type>::value_type
+                  >
+                , boost::is_same<
+                      typename boost::graph_traits<graph_type>::vertex_descriptor
+                    , boost::property_traits<index_map_type>::key_type
+                  >
+              >)**
+            , get(boost::vertex_index,graph))
+ 
+          (in_out(color_map)
+            , **\ \*(boost::is_same<
+                  typename boost::graph_traits<graph_type>::vertex_descriptor
+                , boost::property_traits<index_map_type>::key_type
+              >)**
+           , default_color_map(num_vertices(graph), index_map) ) 
+        )
+    )
+
+__ ../../../mpl/doc/refmanual/metafunction.html
 
 .. rewrite this:
   however, if we leave out the graph argument, the compiler will
