@@ -136,20 +136,21 @@ namespace boost
             {
                 stream.unsetf(std::ios::skipws);
 
-                // The odd style used below is to avoid spurious compiler
-                // warnings about using is_specialized as a (constant)
-                // conditional expression
+#if (defined _MSC_VER)
+# pragma warning( push )
+  // conditional expression is constant
+# pragma warning( disable : 4127 )
 
                 typedef std::numeric_limits<Target> t;
                 typedef std::numeric_limits<Source> s;
 
-                bool setup_target = t::is_specialized;
-                if (setup_target)
-                    stream.precision(t::digits10 + 1);
-                else
-                    ((s::is_specialized) &&
-                        stream.precision(s::digits10 + 1));
+                if(t::is_specialized)
+                    stream.precision(1 + t::digits10);
+                else if(s::is_specialized)
+                    stream.precision(1 + s::digits10);
 
+# pragma warning( pop )
+#endif
 
             }
             ~lexical_stream()
