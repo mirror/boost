@@ -327,23 +327,23 @@ library provides a convenient macro for defining keyword objects::
   }
 
 
-The declaration of the ``visitor`` keyword you see here is
+The declaration of the ``graph`` keyword you see here is
 equivalent to::
 
   namespace graphs 
   {
-    namespace tag { struct _visitor; } // keyword tag type
+    namespace tag { struct graph; } // keyword tag type
 
     namespace // unnamed
     {
       // A reference to the keyword object
-      boost::parameter::keyword<_visitor>& _visitor
-      = boost::parameter::keyword<_visitor>::instance;
+      boost::parameter::keyword<tag::graph>& _graph
+      = boost::parameter::keyword<tag::graph>::instance;
     }
   }
 
-It defines a *keyword tag type* named ``_visitor`` and a *keyword
-object* named ``_visitor``.  [`naming convention rationale`__]
+It defines a *keyword tag type* named ``tag::graph`` and a *keyword
+object* reference named ``_graph``.
 
 This “fancy dance” involving an unnamed namespace and references
 is all done to avoid violating the One Definition Rule (ODR)
@@ -351,7 +351,6 @@ is all done to avoid violating the One Definition Rule (ODR)
 templates that are instantiated in multiple translation
 units (MSVC6.x users see `this note`__).
 
-__ `Best Practices`_
 __ `Compiler Can't See References In Unnamed Namespace`_
 
 Writing the Function
@@ -679,19 +678,135 @@ We acknowledge that this signature is pretty hairy looking.
 Fortunately, it usually isn't necessary to so completely encode the
 type requirements on arguments to generic functions.  However, it
 is usally worth the effort to do so: your code will be more
-self-documenting and will provide a better user experience.  You'll
-also have an easier transition to an upcoming C++ standard with
-`language support for concepts`__.
+self-documenting and will often provide a better user experience.
+You'll also have an easier transition to an upcoming C++ standard
+with `language support for concepts`__.
 
 __ ConceptC++_
 
 Deduced Parameters
-==================
+------------------
 
-whatever
+To illustrate deduced parameter support we'll have to leave behind
+our example from the Graph library.  Instead, consider the example
+of the |def|_ function from Boost.Python_.  Its signature is
+roughly as follows::
 
-Advanced Topics
-===============
+  template <
+    class Function, Class KeywordExpression, class CallPolicies
+  >
+  void def(
+      // Required parameters
+      char const* name, Function func
+
+      // Optional, deduced parameters
+    , char const* docstring = ""
+    , KeywordExpression keywords = no_keywords()
+    , CallPolicies policies = default_call_policies()
+  );
+
+Try not to be too distracted by the use of the term “keywords” in
+this example: although it means something analogous in Boost.Python
+to what it means in the Parameter library, for the purposes of this
+exercise you can think of it as being completely different.
+
+When calling ``def``, only two arguments are required.  The
+association between any additional arguments and their parameters
+can be determined by the types of the arguments actually passed, so
+the caller is neither required to remember argument positions or
+explicitly specify parameter names for those arguments.  To
+generate this interface using ``BOOST_PARAMETER_FUNCTION``, we need
+only enclose the deduced parameters in a ``(deduced …)`` clause, as
+follows: [#is_keyword_expression]_
+
+.. parsed-literal::
+
+  namespace mpl = boost::mpl;
+
+  BOOST_PARAMETER_FUNCTION(
+      (void), def, tag
+      (required (name, (char const*)) (func, *))
+      **(deduced** 
+        (optional 
+          (docstring, (char const\*), "")
+          (keywords, *(is_keyword_expression<keywords_type>))
+          (policies, 
+             \*(mpl::not_<
+                    mpl::or_<
+                        boost::is_convertible<
+                          policies_type, char const\*
+                        >
+                      , is_keyword_expression<policies_type>
+                    >
+                >)))
+       **)**
+   )
+   {
+      *…*
+   }
+
+.. Admonition:: Syntax Note
+
+  A ``(deduced …)`` clause must follow any outer-level
+  (nondeduced) ``(required …)`` or ``(optional …)`` clauses, and will
+  itself contain a ``(required …)`` and/or an ``(optional …)``
+  subclause.
+
+With the declaration above, the following two calls are equivalent:
+
+.. parsed-literal::
+
+  def("f", f, **some_policies**, **"Documentation for f"**);
+  def("f", f, **"Documentation for f"**, **some_policies**);
+
+If the user wanted to pass a ``policies`` argument that was also,
+for some reason, convertible to ``char const*``, she could always
+specify the parameter name explicitly, as follows:
+
+.. parsed-literal::
+
+  def("myfunction", f, **_policies = some_policies**);
+
+.. _Boost.Python: ../../../python
+.. |def| replace:: ``def``
+.. _def: ../../../python/doc/v2/def.html
+
+ArgumentPacks
+=============
+
+  *write something here*
+
+Fine-Grained Name Control
+-------------------------
+
+If you don't like the leading-underscore naming convention used
+to refer to keyword objects, or you need the name ``tag`` for
+something other than the keyword type namespace, there's another
+way to use ``BOOST_PARAMETER_NAME``:
+
+.. parsed-literal::
+
+   BOOST_PARAMETER_NAME(\ **(**\ *object-name*\ **,** *tag-namespace*\ **)** *parameter-name*\ )
+
+Here is a usage example:
+
+.. parsed-literal::
+
+  BOOST_PARAMETER_NAME((**pass_foo**, **keywords**) **foo**)
+
+  BOOST_PARAMETER_FUNCTION(
+    (int), f, 
+    **keywords**, (required (**foo**, *)))
+  {
+      return **foo** + 1;
+  }
+
+  int x = f(**pass_foo** = 41);
+
+Before you use this more verbose form, however, please read the
+section on `best practices for keyword object naming`__.
+
+__ `Keyword Naming`_
 
 .. |ArgumentPack| replace:: :concept:`ArgumentPack`
 
@@ -1311,59 +1426,165 @@ from ``mpl::true_`` or ``mpl::false_``, the appropriate
  Best Practices
 ================
 
-:Keyword Naming: Notice that ``BOOST_PARAMETER_NAME`` prepends a leading underscore
-  to the names of all our keywords, to avoid the following
-  usually-silent bug:
+By now you should have a fairly good idea of how to use the
+Parameter library.  This section points out a few more-marginal
+issues that will help you use the library more effectively.
+
+Keyword Naming
+==============
+
+``BOOST_PARAMETER_NAME`` prepends a leading underscore to the names
+of all our keyword objects in order to avoid the following
+usually-silent bug:
+
+.. parsed-literal::
+
+  namespace people
+  {
+    namespace tag { struct name; struct age;  }
+
+    namespace // unnamed
+    {
+      boost::parameter::keyword<tag::name>& **name**
+      = boost::parameter::keyword<tag::name>::instance;
+      boost::parameter::keyword<tag::age>& **age**
+      = boost::parameter::keyword<tag::age>::instance;
+    }
+
+    BOOST_PARAMETER_FUNCTION(
+        (void), g, tag, (optional (name, \*, "bob")(age, \*, 42)))
+    {
+        std::cout << name << ":" << age;
+    }
+
+    void f(int age)
+    {
+    :vellipsis:`\ 
+       .
+       .
+       .
+     ` 
+       g(**age** = 3); // whoops!
+    }
+  }
+
+Although in the case above, the user was trying to pass the value
+``3`` as the ``age`` parameter to ``g``, what happened instead
+was that ``f``\ 's ``age`` argument got reassigned the value 3,
+and was then passed as a positional argument to ``g``.  Since
+``g``'s first positional parameter is ``name``, the default value
+for ``age`` is used, and g prints ``3:42``.  Our leading
+underscore naming convention that makes this problem less likely
+to occur.
+
+In this particular case, the problem could have been detected if
+f's ``age`` parameter had been made ``const``, which is always a
+good idea whenever possible.  Finally, we recommend that you use
+an enclosing namespace for all your code, but particularly for
+names with leading underscores.  If we were to leave out the
+``people`` namespace above, names in the global namespace
+beginning with leading underscores—which are reserved to your C++
+compiler—might become irretrievably ambiguous with those in our
+unnamed namespace.
+
+
+Namespaces
+==========
+
+In our examples we've always declared keyword objects in (an
+unnamed namespace within) the same namespace as the
+Boost.Parameter-enabled functions using those keywords:
+
+.. parsed-literal::
+
+  namespace lib
+  {
+    **BOOST_PARAMETER_KEYWORD(name)
+    BOOST_PARAMETER_KEYWORD(index)**
+
+    BOOST_PARAMETER_FUNCTION(
+      (int), f, tag, 
+      (optional (name,*,"bob")(index,(int),1))
+    )
+    {
+        std::cout << name << ":" << index << std::endl;
+        return index;
+    }
+  }
+
+Users of these functions have a few choices:
+
+1. Full qualification:
 
   .. parsed-literal::
 
-    namespace people
+    int x = **lib::**\ f(**lib::**\ _name = "jill", **lib::**\ _index = 1);
+
+  This approach is more verbose than many users would like.
+
+2. Make keyword objects available through
+   *using-declarations*:
+
+  .. parsed-literal::
+
+    **using lib::_name;
+    using lib::_index;**
+
+    int x = lib::f(_name = "jill", _index = 1);
+
+  This version is much better at the actual call site, but the
+  *using-declarations* themselves can be verbose and hard-to
+  manage.
+
+3. Bring in the entire namespace with a *using-directive*:
+
+  .. parsed-literal::
+
+    **using namespace lib;**
+    int x = **f**\ (_name = "jill", _index = 3);
+
+  This option is convenient, but it indiscriminately makes the
+  *entire* contents of ``lib`` available without qualification.
+
+If we add an additional namespace around keyword declarations,
+though, we can give users more control:
+
+.. parsed-literal::
+
+  namespace lib
+  {
+    **namespace keywords
+    {**
+       BOOST_PARAMETER_KEYWORD(name)
+       BOOST_PARAMETER_KEYWORD(index)
+    **}**
+
+    BOOST_PARAMETER_FUNCTION(
+      (int), f, **keywords::**\ tag, 
+      (optional (name,*,"bob")(index,(int),1))
+    )
     {
-      namespace tag { struct name; struct age;  }
-
-      namespace // unnamed
-      {
-        boost::parameter::keyword<tag::name>& **name**
-        = boost::parameter::keyword<tag::name>::instance;
-        boost::parameter::keyword<tag::age>& **age**
-        = boost::parameter::keyword<tag::age>::instance;
-      }
-
-      BOOST_PARAMETER_FUNCTION(
-          (void), g, tag, (optional (name, *, "bob")(age, *, 42)))
-      {
-          std::cout << name << ":" << age;
-      }
-
-      void f(int age)
-      {
-      :vellipsis:`\ 
-         .
-         .
-         .
-       ` 
-         g(**age** = 3); // whoops!
-      }
+        std::cout << name << ":" << index << std::endl;
+        return index;
     }
+  }
 
-  Although in the case above, the user was trying to pass the value
-  ``3`` as the ``age`` parameter to ``g``, what happened instead
-  was that ``f``\ 's ``age`` argument got reassigned the value 3,
-  and was then passed as a positional argument to ``g``.  Since
-  ``g``'s first positional parameter is ``name``, the default value
-  for ``age`` is used, and g prints ``3:42``.  Our leading
-  underscore naming convention that makes this problem less likely
-  to occur.
+Now users need only a single *using-directive* to bring in just the
+names of all keywords associated with ``lib``:
 
-  In this particular case, the problem could have been detected if
-  f's ``age`` parameter had been made ``const``, which is always a
-  good idea whenever possible.  Finally, we recommend that you use
-  an enclosing namespace for all your code, but particularly for
-  names with leading underscores.  If we were to leave out the
-  ``people`` namespace above, names in the global namespace
-  beginning with leading underscores—which are reserved to your C++
-  compiler—might become irretrievably ambiguous with those in our
-  unnamed namespace.
+.. parsed-literal::
+  
+  **using namespace lib::keywords;**
+  int y = lib::f(_name = "bob", _index = 2);
+
+Documentation
+=============
+
+The interface idioms enabled by Boost.Parameter are completely new
+(to C++), and as such are not served by pre-existing documentation
+conventions.  
+
+  *write something here!!*
 
 ============================
  Portability Considerations
@@ -1531,6 +1752,10 @@ __ ../../../graph/doc/bgl_named_params.html
     and use `Boost.Bind`_ to generate the function object::
 
       boost::bind(construct2<default_color_map>(),num_vertices(g),i)
+
+.. [#is_keyword_expression] Here we're assuming there's a predicate
+   metafunction ``is_keyword_expression`` that can be used to
+   identify models of Boost.Python's KeywordExpression concept.
 
 __ http://www.boost.org/regression/release/user/lambda.html
 .. _Boost.Bind: ../../../libs/bind/index.html
