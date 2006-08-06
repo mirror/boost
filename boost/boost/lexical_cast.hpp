@@ -3,7 +3,7 @@
 
 // Boost lexical_cast.hpp header  -------------------------------------------//
 //
-// See http://www.boost.org for most recent version including documentation.
+// See http://www.boost.org/ for most recent version including documentation.
 // See end of this header for rights and permissions.
 //
 // what:  lexical_cast custom keyword cast
@@ -140,6 +140,7 @@ namespace boost
 # pragma warning( push )
   // conditional expression is constant
 # pragma warning( disable : 4127 )
+#endif
 
                 typedef std::numeric_limits<Target> t;
                 typedef std::numeric_limits<Source> s;
@@ -149,6 +150,7 @@ namespace boost
                 else if(s::is_specialized)
                     stream.precision(1 + s::digits10);
 
+#if (defined _MSC_VER)
 # pragma warning( pop )
 #endif
 
@@ -246,7 +248,7 @@ namespace boost
                     return result;
             }
             throw_exception(bad_lexical_cast(typeid(Source), typeid(Target)));
-            return Target(); // never reached
+            return Target(); // normally never reached (throw_exception)
         }
     }
 
@@ -275,7 +277,7 @@ namespace boost
     #endif
 }
 
-// Copyright Kevlin Henney, 2000-2005. All rights reserved.
+// Copyright Kevlin Henney, 2000-2005.
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
