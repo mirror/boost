@@ -725,20 +725,23 @@ follows: [#is_keyword_expression]_
 
   BOOST_PARAMETER_FUNCTION(
       (void), def, tag
-      (required (name, (char const*)) (func, *))
+      (required (name,(char const\*)) (func,\*) )
       **(deduced** 
         (optional 
           (docstring, (char const\*), "")
-          (keywords, *(is_keyword_expression<keywords_type>))
-          (policies, 
-             \*(mpl::not_<
-                    mpl::or_<
-                        boost::is_convertible<
-                          policies_type, char const\*
-                        >
-                      , is_keyword_expression<policies_type>
-                    >
-                >)))
+          (keywords
+             , \*(is_keyword_expression<keywords_type>)
+             , no_keywords())
+          (policies
+             , \*(mpl::not_<
+                   mpl::or_<
+                       boost::is_convertible<policies_type, char const\*>
+                     , is_keyword_expression<policies_type>
+                   >
+               >)
+             , default_call_policies()
+           )
+         )
        **)**
    )
    {
@@ -747,10 +750,10 @@ follows: [#is_keyword_expression]_
 
 .. Admonition:: Syntax Note
 
-  A ``(deduced …)`` clause must follow any outer-level
-  (nondeduced) ``(required …)`` or ``(optional …)`` clauses, and will
-  itself contain a ``(required …)`` and/or an ``(optional …)``
-  subclause.
+  A ``(deduced …)`` clause always contains a ``(required …)``
+  and/or an ``(optional …)`` subclause, and must follow any
+  ``(required …)`` or ``(optional …)`` clauses indicating
+  nondeduced parameters at the outer level.
 
 With the declaration above, the following two calls are equivalent:
 
@@ -759,25 +762,22 @@ With the declaration above, the following two calls are equivalent:
   def("f", f, **some_policies**, **"Documentation for f"**);
   def("f", f, **"Documentation for f"**, **some_policies**);
 
-If the user wanted to pass a ``policies`` argument that was also,
-for some reason, convertible to ``char const*``, she could always
+If the user wants to pass a ``policies`` argument that was also,
+for some reason, convertible to ``char const*``, she can always
 specify the parameter name explicitly, as follows:
 
 .. parsed-literal::
 
-  def("myfunction", f, **_policies = some_policies**);
+  def(
+      "myfunction", f
+     , **_policies = some_policies**, "Documentation for f");
 
 .. _Boost.Python: ../../../python
 .. |def| replace:: ``def``
 .. _def: ../../../python/doc/v2/def.html
 
-ArgumentPacks
-=============
-
-  *write something here*
-
 Fine-Grained Name Control
--------------------------
+=========================
 
 If you don't like the leading-underscore naming convention used
 to refer to keyword objects, or you need the name ``tag`` for
@@ -807,6 +807,11 @@ Before you use this more verbose form, however, please read the
 section on `best practices for keyword object naming`__.
 
 __ `Keyword Naming`_
+
+ArgumentPacks
+=============
+
+  *write something here*
 
 .. |ArgumentPack| replace:: :concept:`ArgumentPack`
 

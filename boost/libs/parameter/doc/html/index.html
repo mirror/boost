@@ -85,31 +85,29 @@ or copy at <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">http
 <li><a class="reference" href="#deduced-parameters" id="id38" name="id38">2.5.7&nbsp;&nbsp;&nbsp;Deduced Parameters</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#argumentpacks" id="id39" name="id39">2.6&nbsp;&nbsp;&nbsp;ArgumentPacks</a><ul class="auto-toc">
-<li><a class="reference" href="#fine-grained-name-control" id="id40" name="id40">2.6.1&nbsp;&nbsp;&nbsp;Fine-Grained Name Control</a></li>
+<li><a class="reference" href="#fine-grained-name-control" id="id39" name="id39">2.6&nbsp;&nbsp;&nbsp;Fine-Grained Name Control</a></li>
+<li><a class="reference" href="#argumentpacks" id="id40" name="id40">2.7&nbsp;&nbsp;&nbsp;ArgumentPacks</a></li>
+<li><a class="reference" href="#adding-defaults" id="id41" name="id41">2.8&nbsp;&nbsp;&nbsp;Adding Defaults</a><ul class="auto-toc">
+<li><a class="reference" href="#syntax" id="id42" name="id42">2.8.1&nbsp;&nbsp;&nbsp;Syntax</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#adding-defaults" id="id41" name="id41">2.7&nbsp;&nbsp;&nbsp;Adding Defaults</a><ul class="auto-toc">
-<li><a class="reference" href="#syntax" id="id42" name="id42">2.7.1&nbsp;&nbsp;&nbsp;Syntax</a></li>
+<li><a class="reference" href="#deducing-parameter-types" id="id43" name="id43">2.9&nbsp;&nbsp;&nbsp;Deducing Parameter Types</a><ul class="auto-toc">
+<li><a class="reference" href="#forwarding-to-an-implementation-function" id="id44" name="id44">2.9.1&nbsp;&nbsp;&nbsp;Forwarding to an Implementation Function</a></li>
+<li><a class="reference" href="#the-binding-metafunction" id="id45" name="id45">2.9.2&nbsp;&nbsp;&nbsp;The <tt class="docutils literal"><span class="pre">binding</span></tt> <span class="concept">Metafunction</span></a></li>
+<li><a class="reference" href="#binding-with-defaults" id="id46" name="id46">2.9.3&nbsp;&nbsp;&nbsp;<tt class="docutils literal"><span class="pre">binding</span></tt> With Defaults</a></li>
+<li><a class="reference" href="#binding-safely" id="id47" name="id47">2.9.4&nbsp;&nbsp;&nbsp;<tt class="docutils literal"><span class="pre">binding</span></tt> Safely</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#deducing-parameter-types" id="id43" name="id43">2.8&nbsp;&nbsp;&nbsp;Deducing Parameter Types</a><ul class="auto-toc">
-<li><a class="reference" href="#forwarding-to-an-implementation-function" id="id44" name="id44">2.8.1&nbsp;&nbsp;&nbsp;Forwarding to an Implementation Function</a></li>
-<li><a class="reference" href="#the-binding-metafunction" id="id45" name="id45">2.8.2&nbsp;&nbsp;&nbsp;The <tt class="docutils literal"><span class="pre">binding</span></tt> <span class="concept">Metafunction</span></a></li>
-<li><a class="reference" href="#binding-with-defaults" id="id46" name="id46">2.8.3&nbsp;&nbsp;&nbsp;<tt class="docutils literal"><span class="pre">binding</span></tt> With Defaults</a></li>
-<li><a class="reference" href="#binding-safely" id="id47" name="id47">2.8.4&nbsp;&nbsp;&nbsp;<tt class="docutils literal"><span class="pre">binding</span></tt> Safely</a></li>
+<li><a class="reference" href="#beyond-ordinary-default-arguments" id="id48" name="id48">2.10&nbsp;&nbsp;&nbsp;Beyond Ordinary Default Arguments</a></li>
+<li><a class="reference" href="#more-restrictive-signatures" id="id49" name="id49">2.11&nbsp;&nbsp;&nbsp;More Restrictive Signatures</a><ul class="auto-toc">
+<li><a class="reference" href="#checking-for-convertibility-to-specific-types" id="id50" name="id50">2.11.1&nbsp;&nbsp;&nbsp;Checking for Convertibility to Specific Types</a></li>
+<li><a class="reference" href="#signature-restriction-predicates" id="id51" name="id51">2.11.2&nbsp;&nbsp;&nbsp;Signature Restriction Predicates</a></li>
 </ul>
 </li>
-<li><a class="reference" href="#beyond-ordinary-default-arguments" id="id48" name="id48">2.9&nbsp;&nbsp;&nbsp;Beyond Ordinary Default Arguments</a></li>
-<li><a class="reference" href="#more-restrictive-signatures" id="id49" name="id49">2.10&nbsp;&nbsp;&nbsp;More Restrictive Signatures</a><ul class="auto-toc">
-<li><a class="reference" href="#checking-for-convertibility-to-specific-types" id="id50" name="id50">2.10.1&nbsp;&nbsp;&nbsp;Checking for Convertibility to Specific Types</a></li>
-<li><a class="reference" href="#signature-restriction-predicates" id="id51" name="id51">2.10.2&nbsp;&nbsp;&nbsp;Signature Restriction Predicates</a></li>
-</ul>
-</li>
-<li><a class="reference" href="#efficiency-issues" id="id52" name="id52">2.11&nbsp;&nbsp;&nbsp;Efficiency Issues</a><ul class="auto-toc">
-<li><a class="reference" href="#eliminating-copies" id="id53" name="id53">2.11.1&nbsp;&nbsp;&nbsp;Eliminating Copies</a></li>
-<li><a class="reference" href="#lazy-default-computation" id="id54" name="id54">2.11.2&nbsp;&nbsp;&nbsp;Lazy Default Computation</a></li>
-<li><a class="reference" href="#dispatching-based-on-the-presence-of-a-default" id="id55" name="id55">2.11.3&nbsp;&nbsp;&nbsp;Dispatching Based on the Presence of a Default</a></li>
+<li><a class="reference" href="#efficiency-issues" id="id52" name="id52">2.12&nbsp;&nbsp;&nbsp;Efficiency Issues</a><ul class="auto-toc">
+<li><a class="reference" href="#eliminating-copies" id="id53" name="id53">2.12.1&nbsp;&nbsp;&nbsp;Eliminating Copies</a></li>
+<li><a class="reference" href="#lazy-default-computation" id="id54" name="id54">2.12.2&nbsp;&nbsp;&nbsp;Lazy Default Computation</a></li>
+<li><a class="reference" href="#dispatching-based-on-the-presence-of-a-default" id="id55" name="id55">2.12.3&nbsp;&nbsp;&nbsp;Dispatching Based on the Presence of a Default</a></li>
 </ul>
 </li>
 </ul>
@@ -738,21 +736,24 @@ namespace mpl = boost::mpl;
 
 BOOST_PARAMETER_FUNCTION(
     (void), def, tag
-    (required (name, (char const*)) (func, <em>))
-    **(deduced*</em>
+    (required (name,(char const*)) (func,*) )
+    <strong>(deduced</strong>
       (optional
         (docstring, (char const*), &quot;&quot;)
-        (keywords, <em>(is_keyword_expression&lt;keywords_type&gt;))
-        (policies,
-           *(mpl::not_&lt;
-                  mpl::or_&lt;
-                      boost::is_convertible&lt;
-                        policies_type, char const*
-                      &gt;
-                    , is_keyword_expression&lt;policies_type&gt;
-                  &gt;
-              &gt;)))
-     *</em>)**
+        (keywords
+           , *(is_keyword_expression&lt;keywords_type&gt;)
+           , no_keywords())
+        (policies
+           , *(mpl::not_&lt;
+                 mpl::or_&lt;
+                     boost::is_convertible&lt;policies_type, char const*&gt;
+                   , is_keyword_expression&lt;policies_type&gt;
+                 &gt;
+             &gt;)
+           , default_call_policies()
+         )
+       )
+     <strong>)</strong>
  )
  {
     <em>…</em>
@@ -760,30 +761,28 @@ BOOST_PARAMETER_FUNCTION(
 </pre>
 <div class="admonition-syntax-note admonition">
 <p class="first admonition-title">Syntax Note</p>
-<p class="last">A <tt class="docutils literal"><span class="pre">(deduced</span> <span class="pre">…)</span></tt> clause must follow any outer-level
-(nondeduced) <tt class="docutils literal"><span class="pre">(required</span> <span class="pre">…)</span></tt> or <tt class="docutils literal"><span class="pre">(optional</span> <span class="pre">…)</span></tt> clauses, and will
-itself contain a <tt class="docutils literal"><span class="pre">(required</span> <span class="pre">…)</span></tt> and/or an <tt class="docutils literal"><span class="pre">(optional</span> <span class="pre">…)</span></tt>
-subclause.</p>
+<p class="last">A <tt class="docutils literal"><span class="pre">(deduced</span> <span class="pre">…)</span></tt> clause always contains a <tt class="docutils literal"><span class="pre">(required</span> <span class="pre">…)</span></tt>
+and/or an <tt class="docutils literal"><span class="pre">(optional</span> <span class="pre">…)</span></tt> subclause, and must follow any
+<tt class="docutils literal"><span class="pre">(required</span> <span class="pre">…)</span></tt> or <tt class="docutils literal"><span class="pre">(optional</span> <span class="pre">…)</span></tt> clauses indicating
+nondeduced parameters at the outer level.</p>
 </div>
 <p>With the declaration above, the following two calls are equivalent:</p>
 <pre class="literal-block">
 def(&quot;f&quot;, f, <strong>some_policies</strong>, <strong>&quot;Documentation for f&quot;</strong>);
 def(&quot;f&quot;, f, <strong>&quot;Documentation for f&quot;</strong>, <strong>some_policies</strong>);
 </pre>
-<p>If the user wanted to pass a <tt class="docutils literal"><span class="pre">policies</span></tt> argument that was also,
-for some reason, convertible to <tt class="docutils literal"><span class="pre">char</span> <span class="pre">const*</span></tt>, she could always
+<p>If the user wants to pass a <tt class="docutils literal"><span class="pre">policies</span></tt> argument that was also,
+for some reason, convertible to <tt class="docutils literal"><span class="pre">char</span> <span class="pre">const*</span></tt>, she can always
 specify the parameter name explicitly, as follows:</p>
 <pre class="literal-block">
-def(&quot;myfunction&quot;, f, <strong>_policies = some_policies</strong>);
+def(
+    &quot;myfunction&quot;, f
+   , <strong>_policies = some_policies</strong>, &quot;Documentation for f&quot;);
 </pre>
 </div>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id39" id="argumentpacks" name="argumentpacks">2.6&nbsp;&nbsp;&nbsp;ArgumentPacks</a></h2>
-<blockquote>
-<em>write something here</em></blockquote>
-<div class="section">
-<h3><a class="toc-backref" href="#id40" id="fine-grained-name-control" name="fine-grained-name-control">2.6.1&nbsp;&nbsp;&nbsp;Fine-Grained Name Control</a></h3>
+<h2><a class="toc-backref" href="#id39" id="fine-grained-name-control" name="fine-grained-name-control">2.6&nbsp;&nbsp;&nbsp;Fine-Grained Name Control</a></h2>
 <p>If you don't like the leading-underscore naming convention used
 to refer to keyword objects, or you need the name <tt class="docutils literal"><span class="pre">tag</span></tt> for
 something other than the keyword type namespace, there's another
@@ -806,6 +805,11 @@ int x = f(<strong>pass_foo</strong> = 41);
 </pre>
 <p>Before you use this more verbose form, however, please read the
 section on <a class="reference" href="#keyword-naming">best practices for keyword object naming</a>.</p>
+</div>
+<div class="section">
+<h2><a class="toc-backref" href="#id40" id="argumentpacks" name="argumentpacks">2.7&nbsp;&nbsp;&nbsp;ArgumentPacks</a></h2>
+<blockquote>
+<em>write something here</em></blockquote>
 <p>Of course, the test above isn't very interesting unless we can see
 the values of the arguments.  Just to get a feel for how things
 work, let's add some temporary code to print the arguments.  The
@@ -871,9 +875,8 @@ int main()
 }
 </pre>
 </div>
-</div>
 <div class="section">
-<h2><a class="toc-backref" href="#id41" id="adding-defaults" name="adding-defaults">2.7&nbsp;&nbsp;&nbsp;Adding Defaults</a></h2>
+<h2><a class="toc-backref" href="#id41" id="adding-defaults" name="adding-defaults">2.8&nbsp;&nbsp;&nbsp;Adding Defaults</a></h2>
 <p>Despite the use of <tt class="docutils literal"><span class="pre">optional</span></tt> in the signature, all
 the arguments to <tt class="docutils literal"><span class="pre">depth_first_search</span></tt> are actually required.  If
 any parameter can't be found, there will be a compilation error
@@ -881,7 +884,7 @@ where we try to extract it from the <span class="concept">ArgumentPack</span> us
 subscript operator.  To make it legal to omit an argument we need
 to give it a default value.</p>
 <div class="section">
-<h3><a class="toc-backref" href="#id42" id="syntax" name="syntax">2.7.1&nbsp;&nbsp;&nbsp;Syntax</a></h3>
+<h3><a class="toc-backref" href="#id42" id="syntax" name="syntax">2.8.1&nbsp;&nbsp;&nbsp;Syntax</a></h3>
 <p>To make an optional parameter <em>truly</em> optional, we can follow its keyword
 with the <tt class="docutils literal"><span class="pre">|</span></tt> operator and the parameter's default value within
 the square brackets.  In the following example, we've given
@@ -933,7 +936,7 @@ default value.</p>
 </div>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id43" id="deducing-parameter-types" name="deducing-parameter-types">2.8&nbsp;&nbsp;&nbsp;Deducing Parameter Types</a></h2>
+<h2><a class="toc-backref" href="#id43" id="deducing-parameter-types" name="deducing-parameter-types">2.9&nbsp;&nbsp;&nbsp;Deducing Parameter Types</a></h2>
 <p>Now it's time to put some more realistic defaults in place.  We'll
 have to give up our print statements—at least if we want to see the
 defaults work—since the default values of these
@@ -967,7 +970,7 @@ namespace graphs
 need to come up with the types <em>Graph</em>, <em>Visitor</em>, <em>Vertex</em>,
 <em>Index</em>, and <em>Color</em>.</p>
 <div class="section">
-<h3><a class="toc-backref" href="#id44" id="forwarding-to-an-implementation-function" name="forwarding-to-an-implementation-function">2.8.1&nbsp;&nbsp;&nbsp;Forwarding to an Implementation Function</a></h3>
+<h3><a class="toc-backref" href="#id44" id="forwarding-to-an-implementation-function" name="forwarding-to-an-implementation-function">2.9.1&nbsp;&nbsp;&nbsp;Forwarding to an Implementation Function</a></h3>
 <p>The easiest way to discover the parameter types is to forward them
 on to another function template and allow C++ to do the type
 deduction for us:</p>
@@ -1007,7 +1010,7 @@ namespace graphs
 </pre>
 </div>
 <div class="section">
-<h3><a id="the-binding-metafunction" name="the-binding-metafunction">2.8.2&nbsp;&nbsp;&nbsp;The <tt class="docutils literal"><span class="pre">binding</span></tt> <a class="reference" href="../../../mpl/doc/refmanual/metafunction.html"><span class="concept">Metafunction</span></a></a></h3>
+<h3><a id="the-binding-metafunction" name="the-binding-metafunction">2.9.2&nbsp;&nbsp;&nbsp;The <tt class="docutils literal"><span class="pre">binding</span></tt> <a class="reference" href="../../../mpl/doc/refmanual/metafunction.html"><span class="concept">Metafunction</span></a></a></h3>
 <p>If for some reason forwarding isn't an option, or if writing a
 separate implementation function is too cumbersome, we can use a
 <a class="reference" href="../../../mpl/doc/refmanual/metafunction.html"><span class="concept">Metafunction</span></a> called <tt class="docutils literal"><span class="pre">binding</span></tt> to compute parameter types
@@ -1031,7 +1034,7 @@ Graph g = args[graph];
 </pre>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id46" id="binding-with-defaults" name="binding-with-defaults">2.8.3&nbsp;&nbsp;&nbsp;<tt class="docutils literal"><span class="pre">binding</span></tt> With Defaults</a></h3>
+<h3><a class="toc-backref" href="#id46" id="binding-with-defaults" name="binding-with-defaults">2.9.3&nbsp;&nbsp;&nbsp;<tt class="docutils literal"><span class="pre">binding</span></tt> With Defaults</a></h3>
 <p>As shown in the <a class="reference" href="#parameter-table">parameter table</a>, <tt class="docutils literal"><span class="pre">graph</span></tt> has no default, so
 the <tt class="docutils literal"><span class="pre">binding</span></tt> invocation for <em>Graph</em> takes only two arguments.
 The default <tt class="docutils literal"><span class="pre">visitor</span></tt> is <tt class="docutils literal"><span class="pre">boost::dfs_visitor&lt;&gt;()</span></tt>, so the
@@ -1045,7 +1048,7 @@ Visitor v = args[visitor|<strong>boost::dfs_visitor&lt;&gt;()</strong>];
 </pre>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id47" id="binding-safely" name="binding-safely"><span id="dangling"></span>2.8.4&nbsp;&nbsp;&nbsp;<tt class="docutils literal"><span class="pre">binding</span></tt> Safely</a></h3>
+<h3><a class="toc-backref" href="#id47" id="binding-safely" name="binding-safely"><span id="dangling"></span>2.9.4&nbsp;&nbsp;&nbsp;<tt class="docutils literal"><span class="pre">binding</span></tt> Safely</a></h3>
 <p>Note that the default <tt class="docutils literal"><span class="pre">visitor</span></tt> is supplied as a <em>temporary</em>
 instance of <tt class="docutils literal"><span class="pre">dfs_visitor</span></tt>.  Because <tt class="docutils literal"><span class="pre">args[…]</span></tt> always yields
 a reference, making <tt class="docutils literal"><span class="pre">v</span></tt> a reference would cause it to bind to
@@ -1069,7 +1072,7 @@ typename <strong>boost::graph_traits&lt;Graph&gt;::vertex_descriptor</strong>
 </div>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id48" id="beyond-ordinary-default-arguments" name="beyond-ordinary-default-arguments">2.9&nbsp;&nbsp;&nbsp;Beyond Ordinary Default Arguments</a></h2>
+<h2><a class="toc-backref" href="#id48" id="beyond-ordinary-default-arguments" name="beyond-ordinary-default-arguments">2.10&nbsp;&nbsp;&nbsp;Beyond Ordinary Default Arguments</a></h2>
 <p>Consider how one might bind a variable to the <tt class="docutils literal"><span class="pre">index_map</span></tt>
 parameter:</p>
 <pre class="literal-block">
@@ -1104,7 +1107,7 @@ int y = f();                // <strong>error; can't deduce Index</strong>
 </ol>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id49" id="more-restrictive-signatures" name="more-restrictive-signatures">2.10&nbsp;&nbsp;&nbsp;More Restrictive Signatures</a></h2>
+<h2><a class="toc-backref" href="#id49" id="more-restrictive-signatures" name="more-restrictive-signatures">2.11&nbsp;&nbsp;&nbsp;More Restrictive Signatures</a></h2>
 <p>Currently, our function will be considered for overload resolution
 whenever``depth_first_search`` is called with a <tt class="docutils literal"><span class="pre">graph</span></tt> argument
 and up to four others, of any type.  Compilation may fail inside
@@ -1135,7 +1138,7 @@ for overload resolution when the passed argument types aren't
 appropriate.  We've already seen that the library does this when
 the required <tt class="docutils literal"><span class="pre">graph</span></tt> parameter is not supplied.</p>
 <div class="section">
-<h3><a class="toc-backref" href="#id50" id="checking-for-convertibility-to-specific-types" name="checking-for-convertibility-to-specific-types">2.10.1&nbsp;&nbsp;&nbsp;Checking for Convertibility to Specific Types</a></h3>
+<h3><a class="toc-backref" href="#id50" id="checking-for-convertibility-to-specific-types" name="checking-for-convertibility-to-specific-types">2.11.1&nbsp;&nbsp;&nbsp;Checking for Convertibility to Specific Types</a></h3>
 <p>The simplest way to make the signature more restrictive is to
 replace some of the <tt class="docutils literal"><span class="pre">*</span></tt>s with types to which the corresponding
 arguments must be convertible, in parentheses.  For example, the
@@ -1161,7 +1164,7 @@ namespace graphs
 </pre>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id51" id="signature-restriction-predicates" name="signature-restriction-predicates">2.10.2&nbsp;&nbsp;&nbsp;Signature Restriction Predicates</a></h3>
+<h3><a class="toc-backref" href="#id51" id="signature-restriction-predicates" name="signature-restriction-predicates">2.11.2&nbsp;&nbsp;&nbsp;Signature Restriction Predicates</a></h3>
 <p>Sometimes the appropriate restriction can't be expressed in terms
 of convertibility.  In that case, instead of replacing the <tt class="docutils literal"><span class="pre">*</span></tt>,
 you can <em>follow</em> it with a parenthesized unary <a class="reference" href="../../../mpl/doc/refmanual/lambda-expression.html">MPL lambda
@@ -1199,7 +1202,7 @@ effect.</p>
 </div>
 </div>
 <div class="section">
-<h2><a class="toc-backref" href="#id52" id="efficiency-issues" name="efficiency-issues">2.11&nbsp;&nbsp;&nbsp;Efficiency Issues</a></h2>
+<h2><a class="toc-backref" href="#id52" id="efficiency-issues" name="efficiency-issues">2.12&nbsp;&nbsp;&nbsp;Efficiency Issues</a></h2>
 <p>The <tt class="docutils literal"><span class="pre">color_map</span></tt> parameter gives us a few efficiency issues to
 consider.  Here's a first cut at extraction and binding:</p>
 <pre class="literal-block">
@@ -1214,7 +1217,7 @@ typename parameter::binding&lt;
 &gt;::type color = args[color_map|<strong>default_color_map(num_vertices(g),i)</strong>];
 </pre>
 <div class="section">
-<h3><a class="toc-backref" href="#id53" id="eliminating-copies" name="eliminating-copies">2.11.1&nbsp;&nbsp;&nbsp;Eliminating Copies</a></h3>
+<h3><a class="toc-backref" href="#id53" id="eliminating-copies" name="eliminating-copies">2.12.1&nbsp;&nbsp;&nbsp;Eliminating Copies</a></h3>
 <p>The library has no way to know whether an explicitly-supplied
 argument is expensive to copy (or even if it is copyable at all),
 so <tt class="docutils literal"><span class="pre">binding&lt;…,k,…&gt;::type</span></tt> is always a reference type when the
@@ -1249,7 +1252,7 @@ the default value in a <em>named</em> variable.</p>
 </div>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id54" id="lazy-default-computation" name="lazy-default-computation">2.11.2&nbsp;&nbsp;&nbsp;Lazy Default Computation</a></h3>
+<h3><a class="toc-backref" href="#id54" id="lazy-default-computation" name="lazy-default-computation">2.12.2&nbsp;&nbsp;&nbsp;Lazy Default Computation</a></h3>
 <p>Of course it's nice to avoid copying <tt class="docutils literal"><span class="pre">default_color</span></tt>, but the
 more important cost is that of <em>constructing</em> it in the first
 place.  A <tt class="docutils literal"><span class="pre">vector_property_map</span></tt> is cheap to copy, since it holds
@@ -1285,7 +1288,7 @@ no <tt class="docutils literal"><span class="pre">color_map</span></tt> argument
 </div>
 </div>
 <div class="section">
-<h3><a class="toc-backref" href="#id55" id="dispatching-based-on-the-presence-of-a-default" name="dispatching-based-on-the-presence-of-a-default">2.11.3&nbsp;&nbsp;&nbsp;Dispatching Based on the Presence of a Default</a></h3>
+<h3><a class="toc-backref" href="#id55" id="dispatching-based-on-the-presence-of-a-default" name="dispatching-based-on-the-presence-of-a-default">2.12.3&nbsp;&nbsp;&nbsp;Dispatching Based on the Presence of a Default</a></h3>
 <p>In fact, the Graph library itself constructs a slightly different
 <tt class="docutils literal"><span class="pre">color_map</span></tt>, to avoid even the overhead of initializing a
 <a class="reference" href="../../../smart_ptr/shared_ptr.htm"><tt class="docutils literal"><span class="pre">shared_ptr</span></tt></a>:</p>
@@ -1719,7 +1722,7 @@ information on SFINAE.</td></tr>
 </div>
 <div class="footer">
 <hr class="footer" />
-Generated on: 2006-08-06 16:31 UTC.
+Generated on: 2006-08-06 16:49 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>
