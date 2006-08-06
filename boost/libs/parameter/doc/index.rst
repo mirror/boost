@@ -114,8 +114,9 @@ positional interface becomes burdensome:
   arguments either, leading to hard-to-find bugs.
 
 
+-------------------------
 Named Function Parameters
-=========================
+-------------------------
 
 .. compound::
 
@@ -127,9 +128,9 @@ Named Function Parameters
 
     window* w = new_window("alert box", **movable_=**\ false); // OK!
 
-
+---------------------------
 Deduced Function Parameters
-===========================
+---------------------------
 
 .. compound::
 
@@ -151,8 +152,9 @@ Deduced Function Parameters
   user of the burden of even remembering the formal parameter
   names.
 
+--------------------------------
 Class Template Parameter Support
-================================
+--------------------------------
 
 .. compound::
 
@@ -182,6 +184,14 @@ Class Template Parameter Support
 ==========
  Tutorial
 ==========
+
+This tutorial shows all the basics—how to build both named- and deduced-parameter
+interfaces to function templates and class templates—and several
+more advanced idioms as well.
+
+---------------------------
+Parameter-Enabled Functions
+---------------------------
 
 In this section we'll show how the Parameter library can be used to
 build an expressive interface to the `Boost Graph library`__\ 's
@@ -772,12 +782,159 @@ specify the parameter name explicitly, as follows:
       "myfunction", f
      , **_policies = some_policies**, "Documentation for f");
 
-.. _Boost.Python: ../../../python
+.. _Boost.Python: ../../../python/doc/index.html
 .. |def| replace:: ``def``
 .. _def: ../../../python/doc/v2/def.html
 
-Fine-Grained Name Control
+---------------------------------
+Parameter-Enabled Class Templates
+---------------------------------
+
+In this section we'll use Boost.Parameter to build Boost.Python_\
+'s `class_`_ template, whose “signature” is:
+
+.. parsed-literal::
+
+  template class<
+      ValueType, BaseList = bases<>
+    , HeldType = ValueType, Copyable = void
+  >
+  class class_;
+
+Only the first argument, ``ValueType``, is required.
+
+.. _class_: http://www.boost.org/libs/python/doc/v2/class.html#class_-spec
+
+Named Template Parameters
 =========================
+
+Our first step is to build an interface that allows users pass
+arguments positionally or by name:
+
+.. parsed-literal::
+
+  struct B { virtual ~B() = 0; };
+  struct D : B { ~D(); };
+
+  class_<**class_type<B>**, **copyable<boost::noncopyable>** > …;
+  class_<**D**, **held_type<std::auto_ptr<D> >**, **base_list<B>** > …;
+
+Template Keywords
+-----------------
+
+The first step is to define keywords for each template parameter:
+
+  BOOST_PARAMETER_TEMPLATE_KEYWORD(class_type);
+  BOOST_PARAMETER_TEMPLATE_KEYWORD(base_list);
+  BOOST_PARAMETER_TEMPLATE_KEYWORD(held_type);
+  BOOST_PARAMETER_TEMPLATE_KEYWORD(copyable);
+
+The declaration of the ``class_type`` keyword you see here is
+equivalent to::
+
+  namespace tag { struct class_type; } // keyword tag type
+  template <class T>
+  struct class_type
+    : parameter::template_keyword<tag::class_type,T>
+  {};
+
+It defines a keyword tag type named ``tag::class_type`` and a
+*parameter passing template* named ``class_type``.
+
+Class Template Skeleton
+-----------------------
+
+The next step is to define the skeleton of our class template,
+which has three optional parameters.  Because the user may pass
+arguments in any order, we don't know the actual identities of
+these parameters, so it would be premature to use descriptive names
+or write out the actual default values for any of them.  Instead,
+we'll give them generic names and use the special type
+``boost::parameter::void_`` as a default::
+
+  template <
+      class A0
+    , class A1 = parameter::void_
+    , class A2 = parameter::void_
+    , class A3 = parameter::void_
+  >
+  struct class_
+  {
+      …
+  };
+
+Class Template Signatures
+-------------------------
+
+Next, we need to build a type, known as a |ParameterSpec|_,
+describing the “signature” of ``boost::python::class_``.  A
+|ParameterSpec|_ enumerates the required and optional parameters in
+their positional order, along with any type requirements (note that
+it does *not* specify defaults -- those will be dealt with
+separately)::
+
+  using boost::mpl::_;
+
+  typedef parameter::parameters<
+      required<tag::class_type, boost::is_class<_> >
+    , optional<tag::base_list, boost::mpl::is_sequence<_> >
+    , optional<tag::held_type>
+    , optional<tag::copyable>
+  > class_signature;
+
+
+.. |ParameterSpec| replace:: :concept:`ParameterSpec`
+
+.. _ParameterSpec: reference.html#parameterspec
+
+
+--------------
+
+Next, within the body of ``class_`` , we use the |ParameterSpec|\
+'s nested ``::bind< … >`` template to bundle the actual arguments
+into an |ArgumentPack|_ type, and then use the library's ``binding<
+… >`` metafunction to extract “logical parameters”::
+
+  template <
+      class A0
+    , class A1 = parameter::void_
+    , class A2 = parameter::void_
+    , class A3 = parameter::void_
+  >
+  struct class_
+  {
+      // Create ArgumentPack
+      typedef typename 
+        class_signature::bind<A0,A1,A2,A3>::type 
+      args;
+
+      // Extract first logical parameter.
+      typedef typename parameter::binding<
+        args, tag::class_type>::type class_type;
+      
+      typedef typename parameter::binding<
+        args, tag::base_list, bases<> >::type base_list;
+      
+      typedef typename parameter::binding<
+        args, tag::held_type, class_type>::type held_type;
+      
+      typedef typename parameter::binding<
+        args, tag::copyable, void>::type copyable;
+  };
+
+.. |ArgumentPack| replace:: :concept:`ArgumentPack`
+.. _ArgumentPack: reference.html#argumentpack
+
+Note that defaults are specified by supplying an optional third
+argument to ``binding< … >``.
+
+===============
+Advanced Topics
+===============
+
+-------------------------
+Fine-Grained Name Control
+-------------------------
 
 If you don't like the leading-underscore naming convention used
 to refer to keyword objects, or you need the name ``tag`` for
@@ -808,8 +965,8 @@ section on `best practices for keyword object naming`__.
 
 __ `Keyword Naming`_
 
-ArgumentPacks
-=============
+Argument Packs
+==============
 
   *write something here*
 
@@ -1435,8 +1592,9 @@ By now you should have a fairly good idea of how to use the
 Parameter library.  This section points out a few more-marginal
 issues that will help you use the library more effectively.
 
+--------------
 Keyword Naming
-==============
+--------------
 
 ``BOOST_PARAMETER_NAME`` prepends a leading underscore to the names
 of all our keyword objects in order to avoid the following
@@ -1492,9 +1650,9 @@ beginning with leading underscores—which are reserved to your C++
 compiler—might become irretrievably ambiguous with those in our
 unnamed namespace.
 
-
+----------
 Namespaces
-==========
+----------
 
 In our examples we've always declared keyword objects in (an
 unnamed namespace within) the same namespace as the
@@ -1582,8 +1740,9 @@ names of all keywords associated with ``lib``:
   **using namespace lib::keywords;**
   int y = lib::f(_name = "bob", _index = 2);
 
+-------------
 Documentation
-=============
+-------------
 
 The interface idioms enabled by Boost.Parameter are completely new
 (to C++), and as such are not served by pre-existing documentation
@@ -1602,16 +1761,18 @@ issues and workarounds for particular compilers.
 
 .. _`regression test results`: http://www.boost.org/regression/release/user/parameter.html
 
+-----------------
 No SFINAE Support
-=================
+-----------------
 
 Some older compilers don't support SFINAE.  If your compiler meets
 that criterion, then Boost headers will ``#define`` the preprocessor
 symbol ``BOOST_NO_SFINAE``, and parameter-enabled functions won't be
 removed from the overload set based on their signatures.
 
+---------------------------
 No Support for |result_of|_
-===========================
+---------------------------
 
 .. |result_of| replace:: ``result_of``
 
@@ -1658,8 +1819,9 @@ and invokes the function via its ``operator()``.
 
   .. |BOOST_PARAMETER_MATCH| replace:: ``BOOST_PARAMETER_MATCH``
 
+--------------------------------------------------
 Compiler Can't See References In Unnamed Namespace
-==================================================
+--------------------------------------------------
 
 If you use Microsoft Visual C++ 6.x, you may find that the compiler
 has trouble finding your keyword objects.  This problem has been
