@@ -18,7 +18,6 @@ namespace boost
   {
     class long_name_check : public inspector
     {
-      enum { max_filename_length = 31 };
       long m_name_errors;
 
       // ISO 9660 Level 2, Pre-1999
@@ -39,7 +38,7 @@ namespace boost
       virtual ~long_name_check();
 
       virtual const char * name() const { return "*N*"; }
-      virtual const char * desc() const { return "file names too long"; }
+      virtual const char * desc() const { return "file/directory names issues"; }
 
       virtual void inspect(
         const string & library_name,
