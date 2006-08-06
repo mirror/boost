@@ -43,6 +43,7 @@
 
 #include "cvs_iterator.hpp"
 
+
 namespace fs = boost::filesystem;
 
 namespace
@@ -684,13 +685,10 @@ int cpp_main( int argc_param, char * argv_param[] )
     std::cout
       << "Totals:\n"
       << boost::format("  %1% files scanned\n") % file_count
-      << boost::format("  %1% directories scanned\n") % directory_count
+      << boost::format("  %1% directories scanned (including root)\n") % directory_count
       << boost::format("  %1% problems reported\n") % error_count
       << "\n"
       ;
-
-    std::cout
-      << "Problem counts:\n";
   }
   else
   {
@@ -726,10 +724,8 @@ int cpp_main( int argc_param, char * argv_param[] )
     std::cout
       << "<h2>Totals</h2>\n<pre>"
       << file_count << " files scanned\n"
-      << directory_count << " directories scanned\n"
+      << directory_count << " directories scanned (including root)\n"
       << error_count << " problems reported\n";
-
-    std::cout << "\nproblem counts:\n";
   }
 
   for ( inspector_list::iterator itr = inspectors.begin();
@@ -750,6 +746,10 @@ int cpp_main( int argc_param, char * argv_param[] )
         ).str();
     }
   }
+
+  
+  std::cout
+      << "\nProblem counts:\n";
 
   } // end of block: starts reporting
 

@@ -2,6 +2,8 @@
 
 //  Copyright Beman Dawes 2002.
 //  Copyright Rene Rivera 2004.
+//  Copyright Gennaro Prota 2006.
+//
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -26,6 +28,9 @@ namespace boost
 
     class inspector
     {
+    protected:
+        inspector() {}
+
     public:
       virtual ~inspector() {}
 
@@ -34,14 +39,16 @@ namespace boost
 
       // always called:
       virtual void inspect(
-        const string & library_name, // "filesystem"
-        const path & full_path ) {}  // "c:/foo/boost/filesystem/path.hpp"
+        const string & /*library_name*/, // "filesystem"
+        const path & /*full_path*/ ) {}  // "c:/foo/boost/filesystem/path.hpp"
 
       // called only for registered leaf() signatures:
       virtual void inspect(
         const string & library_name, // "filesystem"
         const path & full_path,      // "c:/foo/boost/filesystem/path.hpp"
-        const string & contents ) {} // contents of file
+        const string & contents )    // contents of file
+      = 0
+      ;
 
       // called after all paths visited, but still in time to call error():
       virtual void close() {}

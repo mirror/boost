@@ -37,7 +37,7 @@ namespace boost
 //  inspect (all)  -----------------------------------------------------------//
 
    void link_check::inspect(
-      const string & library_name,
+      const string & /*library_name*/,
       const path & full_path )
     {
       // keep track of paths already encountered to reduce disk activity

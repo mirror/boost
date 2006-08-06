@@ -1,6 +1,8 @@
 //  long_name_check implementation  ------------------------------------------//
 
 //  Copyright Beman Dawes 2002.
+//  Copyright Gennaro Prota 2006.
+//
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -8,9 +10,6 @@
 #include "long_name_check.hpp"
 
 #include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/exception.hpp>
-#include <boost/bind.hpp>
-#include <boost/next_prior.hpp>
 #include "boost/lexical_cast.hpp"
 
 #include <locale>
@@ -18,17 +17,26 @@
 
 namespace { namespace aux {
 
-bool starts_with_nonalpha( std::string const& x )
+bool starts_with_nonalpha( path const & p )
 {
-  return !std::isalpha( *x.begin(), std::locale::classic() )
-      && *x.begin() != '_'
+  const string & x = p.string();
+  const string::value_type first = x[0];
+
+  return !std::isalpha( first, std::locale::classic() )
+      && first != '_'
       && x != ".cvsignore"
       ;
 }
 
-bool contains_dot( std::string const& x )
+bool contains_dot( path const & p)
 {
-    return x.find( '.' ) != std::string::npos;
+    return p.string().find( '.' ) != std::string::npos;
+}
+
+// ISO 9660
+path::iterator::difference_type depth( path const & p)
+{
+    return std::distance( p.begin(), p.end() );
 }
 
 }}
@@ -38,7 +46,9 @@ namespace boost
 {
   namespace inspect
   {
-    long_name_check::long_name_check() : m_long_name_errors(0) {}
+    const char long_name_check::limits::name[] = "ISO 9660 Level 2";
+
+    long_name_check::long_name_check() : m_name_errors(0) {}
 
     void long_name_check::inspect(
       const string & library_name,
@@ -46,55 +56,88 @@ namespace boost
     {
       std::string const leaf( full_path.leaf() );
 
-      if ( leaf.size() > max_filename_length )
+      // checks on the filename ----------------------------------//
       {
-        ++m_long_name_errors;
-        error( library_name, full_path, string(name())
-            + " filename &gt; "
-            + boost::lexical_cast<string>(max_filename_length)
-            + " characters" );
+          const unsigned m = limits::max_filename_length;
+          if ( leaf.size() > m )
+          {
+              ++m_name_errors;
+              error( library_name, full_path, string(name())
+                  + " filename &gt; "
+                  + boost::lexical_cast<string>(m)
+                  + " characters" );
+          }
       }
 
       if ( std::count( leaf.begin(), leaf.end(), '.' ) > 1 )
       {
-        ++m_long_name_errors;
-        error( library_name, full_path, string(name()) + " filename contains more than one dot character ('.')" );
+        ++m_name_errors;
+        error( library_name, full_path, string(name())
+            + " filename contains more than one dot character ('.')" );
       }
 
       if ( *leaf.rbegin() == '.' )
       {
-        ++m_long_name_errors;
-        error( library_name, full_path, string(name()) + " filename ends with the dot character ('.')" );
+        ++m_name_errors;
+        error( library_name, full_path, string(name())
+            + " filename ends with the dot character ('.')" );
       }
 
-      path const relative_path( relative_to( full_path, filesystem::initial_path() ), &filesystem::no_check );
+      path const relative_path(
+          relative_to( full_path, filesystem::initial_path() )
+          , &filesystem::no_check );
 
-      if ( std::find_if( relative_path.begin(), relative_path.end(), boost::bind( &aux::starts_with_nonalpha, _1 ) )
-            != relative_path.end() )
+
+      // checks on the directory name --------------------------- //
+
+      // shouldn't we check this first component only? [gps]
+      // otherwise we'll get a message for each subdir; e.g.:
+      //
+      // @1: *N* leading character of one of the path compontents is not alphabetic
+      // @1/2: *N* leading character of one of the path compontents is not alphabetic
+      // @1/2/3: *N* leading character of one of the path compontents is not alphabetic
+      //
+      if( aux::starts_with_nonalpha(relative_path) )
       {
-        ++m_long_name_errors;
-        error( library_name, full_path, string(name()) + " leading character of one of the path compontents is not alphabetic" );
+        ++m_name_errors;
+        error( library_name, full_path, string(name())
+            + " leading character of one of the path compontents is not alphabetic" );
       }
 
-      // check directory name
-      if ( filesystem::is_directory(full_path) )
-          if ( std::find_if( relative_path.begin(), /*boost::prior*/( relative_path.end() )
-                , boost::bind( &aux::contains_dot, _1 ) ) != /*boost::prior*/( relative_path.end() ) )
+      if ( filesystem::is_directory( full_path )
+          && aux::contains_dot( relative_path ) )
+      {
+        ++m_name_errors;
+        error( library_name, full_path, string(name())
+            + " directory name contains the dot character ('.')" );
+      }
+
+      {
+          const int m = limits::max_directory_depth;
+          if ( filesystem::is_directory( full_path ) 
+              && aux::depth( relative_path) > m )
           {
-            ++m_long_name_errors;
-            error( library_name, full_path, string(name()) + " directory name contains the dot character ('.')" );
+              ++m_name_errors;
+              error( library_name, full_path, string(name())
+                  + " directory depth exceeds "
+                  + boost::lexical_cast<string>(m)
+                  + " (maximum for " + limits::name + " (CD-ROMs))" );
           }
-
-      if ( std::distance( relative_path.begin(), boost::prior( relative_path.end() ) ) >= 8 )
-      {
-        ++m_long_name_errors;
-        error( library_name, full_path, string(name()) + " file's directory depth will exceed 8 levels if placed on a CD" );
       }
 
-      if ( relative_path.string().size() > ( 100 - string( "boost_X_XX_X/" ).size() ) )
+      const unsigned max_relative_path = 100; // [gps] Explain this
+      const string generic_root( "boost_X_XX_X/" );
+      if ( relative_path.string().size() >
+          ( max_relative_path - generic_root.size() ) )
       {
-        ++m_long_name_errors;
-        error( library_name, full_path, string(name()) + " file path will be > 100 chars if placed on a CD" );
+        ++m_name_errors;
+        error( library_name, full_path,
+            string(name())
+            + " file path will exceed "
+            + boost::lexical_cast<string>(max_relative_path)
+            + " characters in a directory tree with a root of the form "
+            + generic_root )
+            ;
       }
 
       if (relative_path.leaf() != ".cvsignore")
@@ -105,7 +148,7 @@ namespace boost
         }
         catch ( filesystem::filesystem_error const& )
         {
-          ++m_long_name_errors;
+          ++m_name_errors;
           error( library_name, full_path, string(name()) + " nonportable path" );
         }
       }
@@ -113,7 +156,7 @@ namespace boost
 
     long_name_check::~long_name_check()
     {
-      std::cout << "  " << m_long_name_errors << " " << desc() << '\n';
+      std::cout << "  " << m_name_errors << " " << desc() << '\n';
     }
 
 
