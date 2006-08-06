@@ -1,13 +1,13 @@
 /*
-*
-* Copyright (c) 2002
-* Dr John Maddock
-*
-* All rights reserved.
-* May not be transfered or disclosed to a third party without
-* prior consent of the author.
-*
-*/
+ *
+ * Copyright (c) 2002
+ * John Maddock
+ *
+ * Use, modification and distribution are subject to the
+ * Boost Software License, Version 1.0. (See accompanying file
+ * LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ *
+ */
 
 #include <iostream>
 #include <fstream>
