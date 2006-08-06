@@ -310,7 +310,7 @@ identified by a unique **keyword tag type**.
   we'll define the keyword objects so they're accessible through
   ``graphs``, and we'll hide the tag types away in a nested
   namespace, ``graphs::tag``.  The library provides a convenient
-  macro for that purpose (MSVC6.x users see this note__).
+  macro for that purpose.
 
 We're going to define our interface in namespace ``graphs``.  The
 library provides a convenient macro for defining keyword objects::
@@ -332,21 +332,20 @@ equivalent to::
 
   namespace graphs 
   {
-    // The tag type
-    struct visitor; 
+    namespace tag { struct _visitor; } // keyword tag type
 
     namespace // unnamed
     {
-      // A reference to the tag object
-      boost::parameter::keyword<visitor>& visitor_
-      = boost::parameter::keyword<visitor>::instance;
+      // A reference to the keyword object
+      boost::parameter::keyword<_visitor>& _visitor
+      = boost::parameter::keyword<_visitor>::instance;
     }
   }
 
-It defines a *keyword tag type* named ``visitor`` and a *keyword
-object* named ``visitor_``.  [`naming convention rationale`__]
+It defines a *keyword tag type* named ``_visitor`` and a *keyword
+object* named ``_visitor``.  [`naming convention rationale`__]
 
-This “fancy dance” involving the unnamed namespace and references
+This “fancy dance” involving an unnamed namespace and references
 is all done to avoid violating the One Definition Rule (ODR)
 [#odr]_ when the named parameter interface is used by function
 templates that are instantiated in multiple translation
@@ -370,7 +369,7 @@ definition follows a simple pattern using the
         (void),                // 1. parenthesized return type
         depth_first_search,    // 2. name of the function template
 
-        graphs,                // 3. namespace of tag types
+        tag,                   // 3. namespace of tag types
 
         (required (graph, *) ) // 4. one required parameter, and
 
@@ -597,6 +596,8 @@ should just invoke our new overload.  To take the original
 the library about this requirement by replacing the ``*`` element
 of the signature with the required type, in parentheses:
 
+__ `parameter table`_
+
 .. parsed-literal::
 
   (root_vertex,       
@@ -674,25 +675,23 @@ in parentheses *and preceded by an asterix*, as follows:
 
 __ ../../../mpl/doc/refmanual/metafunction.html
 
-.. rewrite this:
-  however, if we leave out the graph argument, the compiler will
-  complain that no ``depth_first_search`` matches the arguments::
+We acknowledge that this signature is pretty hairy looking.
+Fortunately, it usually isn't necessary to so completely encode the
+type requirements on arguments to generic functions.  However, it
+is usally worth the effort to do so: your code will be more
+self-documenting and will provide a better user experience.  You'll
+also have an easier transition to an upcoming C++ standard with
+`language support for concepts`__.
 
-    depth_first_search(root_vertex=3.5);                     // ERROR
+__ ConceptC++_
 
-  It's important to note that the parameter library is not forcing a
-  compilation error in this case.  If we add another overload of
-  ``depth_first_search`` that *does* match, the compiler will be
-  happy again::
+Deduced Parameters
+==================
 
-    // New overload; matches anything
-    template <class T> void depth_first_search(T) {}
+whatever
 
-    depth_first_search(root_vertex=3.5);                     // OK
-
-
-Filling in the Body
-===================
+Advanced Topics
+===============
 
 .. |ArgumentPack| replace:: :concept:`ArgumentPack`
 
@@ -1312,56 +1311,59 @@ from ``mpl::true_`` or ``mpl::false_``, the appropriate
  Best Practices
 ================
 
-:Trailing Underscores: The ``BOOST_PARAMETER_NAME`` macro defines a
-  *keyword object* whose name ends in a trailing underscore.  When
-  defining keyword objects without using ``BOOST_PARAMETER_NAME``, we
-  strongly recommend that you adopt a naming convention that keeps
-  your keyword objects distinct from the names of function arguments
-  and data members, to avoid the following usually-silent bug:
+:Keyword Naming: Notice that ``BOOST_PARAMETER_NAME`` prepends a leading underscore
+  to the names of all our keywords, to avoid the following
+  usually-silent bug:
 
   .. parsed-literal::
 
-    namespace keywords
+    namespace people
     {
-      // Tag types
-      struct index_tag; 
-      struct step_tag; 
+      namespace tag { struct name; struct age;  }
 
       namespace // unnamed
       {
-        // A reference to the tag object
-        boost::parameter::keyword<index_tag>& **index**
-        = boost::parameter::keyword<index_tag>::instance;
-        boost::parameter::keyword<step_tag>& **step**
-        = boost::parameter::keyword<step_tag>::instance;
+        boost::parameter::keyword<tag::name>& **name**
+        = boost::parameter::keyword<tag::name>::instance;
+        boost::parameter::keyword<tag::age>& **age**
+        = boost::parameter::keyword<tag::age>::instance;
+      }
+
+      BOOST_PARAMETER_FUNCTION(
+          (void), g, tag, (optional (name, *, "bob")(age, *, 42)))
+      {
+          std::cout << name << ":" << age;
+      }
+
+      void f(int age)
+      {
+      :vellipsis:`\ 
+         .
+         .
+         .
+       ` 
+         g(**age** = 3); // whoops!
       }
     }
 
-    struct g_parameters
-      : parameter::parameters<keywords::step, keywords::index>
-    {};
-
-    BOOST_PARAMETER_FUN(int, g, 1, 2, g_parameters)
-    {
-        std::cout << p[keywords::index|42];
-    }
-
-    void f(int index)
-    {
-    :vellipsis:`\ 
-       .
-       .
-       .
-     ` 
-       g(**index** = 3); // whoops!
-    }
-
   Although in the case above, the user was trying to pass the value
-  ``3`` as the ``index`` parameter to ``g``, what happened instead
-  was that ``f``\ 's ``index`` argument got reassigned the value 3,
+  ``3`` as the ``age`` parameter to ``g``, what happened instead
+  was that ``f``\ 's ``age`` argument got reassigned the value 3,
   and was then passed as a positional argument to ``g``.  Since
-  ``g``'s first positional parameter is ``step``, the default value
-  for ``index`` is used and g prints ``42``.
+  ``g``'s first positional parameter is ``name``, the default value
+  for ``age`` is used, and g prints ``3:42``.  Our leading
+  underscore naming convention that makes this problem less likely
+  to occur.
+
+  In this particular case, the problem could have been detected if
+  f's ``age`` parameter had been made ``const``, which is always a
+  good idea whenever possible.  Finally, we recommend that you use
+  an enclosing namespace for all your code, but particularly for
+  names with leading underscores.  If we were to leave out the
+  ``people`` namespace above, names in the global namespace
+  beginning with leading underscores—which are reserved to your C++
+  compiler—might become irretrievably ambiguous with those in our
+  unnamed namespace.
 
 ============================
  Portability Considerations
@@ -1509,9 +1511,9 @@ __ ../../../graph/doc/bgl_named_params.html
    ``int`` in the text, and your understanding of the Parameter
    library wouldn't suffer.
 
-.. [#ConceptC++] This is a major motivation behind ConceptC++__.
+.. [#ConceptC++] This is a major motivation behind ConceptC++_.
 
-__ http://www.generic-programming.org/software/ConceptGCC/
+.. _ConceptC++: http://www.generic-programming.org/software/ConceptGCC/
 
 .. [#bind] The Lambda library is known not to work on `some
    less-conformant compilers`__.  When using one of those you could
