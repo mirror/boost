@@ -99,7 +99,9 @@ BOOST_PARAMETER_FUNCTION((int), h2, tag,
     )
 )
 {
+# if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
     BOOST_MPL_ASSERT((boost::is_same<index_type, int const>));
+# endif
 
     tester(
         name
@@ -248,6 +250,31 @@ sfinae(A0 const& a0)
 }
 #endif
 
+BOOST_PARAMETER_FUNCTION(
+    (int), sfinae1, tag,
+    (required
+       (name, *(boost::is_convertible<boost::mpl::_, std::string>))
+    )
+)
+{
+    return 1;
+}
+
+#ifndef BOOST_NO_SFINAE
+// On compilers that actually support SFINAE, add another overload
+// that is an equally good match and can only be in the overload set
+// when the others are not.  This tests that the SFINAE is actually
+// working.  On all other compilers we're just checking that
+// everything about SFINAE-enabled code will work, except of course
+// the SFINAE.
+template<class A0>
+typename boost::enable_if<boost::is_same<int,A0>, int>::type
+sfinae1(A0 const& a0)
+{
+    return 0;
+}
+#endif
+
 }
 
 int main()
@@ -358,6 +385,9 @@ int main()
 #ifndef BOOST_NO_SFINAE
     assert(sfinae("foo") == 1);
     assert(sfinae(1) == 0);
+
+    assert(sfinae1("foo") == 1);
+    assert(sfinae1(1) == 0);
 #endif
     return 0;
 }
