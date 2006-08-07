@@ -9,7 +9,7 @@
 
 #include "long_name_check.hpp"
 
-#include <boost/filesystem/operations.hpp>
+#include "boost/filesystem/operations.hpp"
 #include "boost/lexical_cast.hpp"
 
 #include <locale>
@@ -48,11 +48,11 @@ namespace boost
 {
   namespace inspect
   {
-    const char long_name_check::limits::name[] = "ISO 9660 Level 3";
+    const char file_name_check::limits::name[] = "ISO 9660 Level 3";
 
-    long_name_check::long_name_check() : m_name_errors(0) {}
+    file_name_check::file_name_check() : m_name_errors(0) {}
 
-    void long_name_check::inspect(
+    void file_name_check::inspect(
       const string & library_name,
       const path & full_path )
     {
@@ -154,7 +154,7 @@ namespace boost
       }
     }
 
-    long_name_check::~long_name_check()
+    file_name_check::~file_name_check()
     {
       std::cout << "  " << m_name_errors << " " << desc() << '\n';
     }

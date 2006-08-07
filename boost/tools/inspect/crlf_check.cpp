@@ -1,6 +1,7 @@
 //  crlf_check implementation  ------------------------------------------------//
 
 //  Copyright Beman Dawes 2002.
+//
 //  Distributed under the Boost Software License, Version 1.0.
 //  (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
@@ -24,6 +25,9 @@ namespace boost
     {
       if (contents.find( "boostinspect:" "nocrlf" ) != string::npos) return;
 
+      // this file deliberately contains errors
+      const char test_file_name[] = "wrong_line_ends_test.cpp";
+
       bool failed = false;
       // The understanding on line endings, as I remember it, was that
       // either "\n" or "\r\n" is OK, and they can be mixed, but "\r" alone
@@ -45,13 +49,13 @@ namespace boost
         }
       }
 
-      if (failed && full_path.leaf() != "wrong_line_ends_test.cpp")
+      if (failed && full_path.leaf() != test_file_name)
       {
         ++m_files_with_errors;
         error( library_name, full_path, name() );
       }
 
-      if (!failed && full_path.leaf() == "wrong_line_ends_test.cpp")
+      if (!failed && full_path.leaf() == test_file_name)
       {
         ++m_files_with_errors;
         error( library_name, full_path, "should have cr-only line endings" );

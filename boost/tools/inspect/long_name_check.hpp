@@ -1,4 +1,5 @@
 //  long_name_check header  --------------------------------------------------//
+//  (main class renamed to: file_name_check) - gps
 
 //  Copyright Beman Dawes 2002.
 //  Copyright Gennaro Prota 2006.
@@ -16,7 +17,7 @@ namespace boost
 {
   namespace inspect
   {
-    class long_name_check : public inspector
+    class file_name_check : public inspector
     {
       long m_name_errors;
 
@@ -35,8 +36,8 @@ namespace boost
 
       typedef iso_9660_limits limits;
 
-      long_name_check();
-      virtual ~long_name_check();
+      file_name_check();
+      virtual ~file_name_check();
 
       virtual const char * name() const { return "*N*"; }
       virtual const char * desc() const { return "file/directory names issues"; }

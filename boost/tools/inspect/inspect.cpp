@@ -21,15 +21,13 @@
 #include <algorithm>
 #include <cstring>
 
-#include <boost/shared_ptr.hpp>
-#include <boost/filesystem/exception.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/fstream.hpp>
-#include <boost/format.hpp>
-
-#include <boost/test/included/prg_exec_monitor.hpp>
+#include "boost/shared_ptr.hpp"
+#include "boost/filesystem/operations.hpp"
+#include "boost/filesystem/fstream.hpp"
+#include "boost/format.hpp"
 
 #include "../common/time_string.hpp"
+
 #include "inspector.hpp"
 
 #include "copyright_check.hpp"
@@ -43,6 +41,7 @@
 
 #include "cvs_iterator.hpp"
 
+#include "boost/test/included/prg_exec_monitor.hpp"
 
 namespace fs = boost::filesystem;
 
@@ -642,7 +641,7 @@ int cpp_main( int argc_param, char * argv_param[] )
   if ( link_ck )
     inspectors.push_back( inspector_element( new boost::inspect::link_check ) );
   if ( long_name_ck )
-    inspectors.push_back( inspector_element( new boost::inspect::long_name_check ) );
+    inspectors.push_back( inspector_element( new boost::inspect::file_name_check ) );
   if ( tab_ck )
       inspectors.push_back( inspector_element( new boost::inspect::tab_check ) );
   if ( minmax_ck )

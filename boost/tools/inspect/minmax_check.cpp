@@ -11,8 +11,8 @@
 #include <algorithm>
 
 #include "minmax_check.hpp"
-#include <boost/regex.hpp>
-#include <boost/lexical_cast.hpp>
+#include "boost/regex.hpp"
+#include "boost/lexical_cast.hpp"
 
 namespace
 {
