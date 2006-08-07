@@ -52,7 +52,7 @@ namespace boost
       const path & full_path,   // example: c:/foo/boost/filesystem/path.hpp
       const string & contents )     // contents of file to be inspected
     {
-      if (contents.find( "boostinspect:nolink" ) != string::npos) return;
+      if (contents.find( "boostinspect:" "nolink" ) != string::npos) return;
 
       string::const_iterator start( contents.begin() );
       string::const_iterator end( contents.end() );

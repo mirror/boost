@@ -22,7 +22,7 @@ namespace boost
       const path & full_path,   // example: c:/foo/boost/filesystem/path.hpp
       const string & contents )     // contents of file to be inspected
     {
-      if (contents.find( "boostinspect:nocrlf" ) != string::npos) return;
+      if (contents.find( "boostinspect:" "nocrlf" ) != string::npos) return;
 
       bool failed = false;
       // The understanding on line endings, as I remember it, was that

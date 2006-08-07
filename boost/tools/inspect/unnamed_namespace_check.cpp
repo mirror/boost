@@ -42,7 +42,7 @@ namespace boost
       const path & full_path,   // example: c:/foo/boost/filesystem/path.hpp
       const string & contents )     // contents of file to be inspected
     {
-      if (contents.find( "boostinspect:nounnamed" ) != string::npos) return;
+      if (contents.find( "boostinspect:" "nounnamed" ) != string::npos) return;
 
 
       boost::sregex_iterator cur(contents.begin(), contents.end(), unnamed_namespace_regex), end;
