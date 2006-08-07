@@ -582,7 +582,7 @@ There are two problems with very general function signatures.  The
 first is that allowing incorrect arguments to be detected late
 causes large, inscrutable error messages.  It's usually much better
 for users to see a simple message saying that their arguments don't
-match the function signature.  [#ConceptC++] The second problem is
+match the function signature.  [#ConceptCpp]_ The second problem is
 that overloading doesn't work well.  Consider what happens when we
 add this (admittedly contrived) overload::
 
@@ -692,7 +692,7 @@ self-documenting and will often provide a better user experience.
 You'll also have an easier transition to an upcoming C++ standard
 with `language support for concepts`__.
 
-__ ConceptC++_
+__ `ConceptC++`_
 
 Deduced Parameters
 ------------------
@@ -831,7 +831,7 @@ positionally or by name:
 Template Keywords
 -----------------
 
-The first step is to define keywords for each template parameter:
+The first step is to define keywords for each template parameter::
 
   namespace boost { namespace python {
 
@@ -1075,7 +1075,7 @@ Here is a usage example:
 
   BOOST_PARAMETER_FUNCTION(
     (int), f, 
-    **keywords**, (required (**foo**, *)))
+    **keywords**, (required (**foo**, \*)))
   {
       return **foo** + 1;
   }
@@ -2021,9 +2021,9 @@ __ ../../../graph/doc/bgl_named_params.html
    ``int`` in the text, and your understanding of the Parameter
    library wouldn't suffer.
 
-.. [#ConceptC++] This is a major motivation behind ConceptC++_.
+.. [#ConceptCpp] This is a major motivation behind `ConceptC++`_.
 
-.. _ConceptC++: http://www.generic-programming.org/software/ConceptGCC/
+.. _`ConceptC++`: http://www.generic-programming.org/software/ConceptGCC/
 
 .. [#bind] The Lambda library is known not to work on `some
    less-conformant compilers`__.  When using one of those you could
