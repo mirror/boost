@@ -10,7 +10,6 @@
 #define BOOST_LINK_CHECK_HPP
 
 #include <map>
-#include <utility> // for make_pair()
 
 #include "inspector.hpp"
 

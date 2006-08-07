@@ -20,12 +20,13 @@ namespace boost
     {
       long m_name_errors;
 
-      // ISO 9660 Level 2, Pre-1999
-      // (see http://www.cdrfaq.org/faq03.html for more info)
+      // ISO 9660 Level 3
+      //
       struct iso_9660_limits
       {
           enum { max_directory_depth = 8 };
-          enum { max_filename_length = 31 };
+          enum { max_dirname_length = 31 };
+          enum { max_filename_length = 31 }; // > level 2!
 
           static const char name[];
       };

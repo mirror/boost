@@ -25,8 +25,8 @@ namespace boost
 
       minmax_check();
       virtual const char * name() const { return "*M*"; }
-      virtual const char * desc() const { return "uses of min and max that"
-          " have not been protected from the min/max macros"
+      virtual const char * desc() const { return "uses of min or max that"
+          " have not been protected from the min/max macros,"
           " or unallowed #undef-s"; }
 
       virtual void inspect(

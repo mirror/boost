@@ -20,6 +20,8 @@ namespace { namespace aux {
 bool starts_with_nonalpha( path const & p )
 {
   const string & x = p.string();
+  assert(!x.empty());
+
   const string::value_type first = x[0];
 
   return !std::isalpha( first, std::locale::classic() )
@@ -46,7 +48,7 @@ namespace boost
 {
   namespace inspect
   {
-    const char long_name_check::limits::name[] = "ISO 9660 Level 2";
+    const char long_name_check::limits::name[] = "ISO 9660 Level 3";
 
     long_name_check::long_name_check() : m_name_errors(0) {}
 
@@ -56,14 +58,17 @@ namespace boost
     {
       std::string const leaf( full_path.leaf() );
 
-      // checks on the filename ----------------------------------//
+      // checks on the leaf name ----------------------------------//
       {
-          const unsigned m = limits::max_filename_length;
+          const unsigned m = filesystem::is_directory(full_path)
+              ? limits::max_dirname_length
+              : limits::max_filename_length;
+
           if ( leaf.size() > m )
           {
               ++m_name_errors;
               error( library_name, full_path, string(name())
-                  + " filename &gt; "
+                  + " file/dir name &gt; "
                   + boost::lexical_cast<string>(m)
                   + " characters" );
           }
@@ -73,7 +78,7 @@ namespace boost
       {
         ++m_name_errors;
         error( library_name, full_path, string(name())
-            + " filename contains more than one dot character ('.')" );
+            + " name contains more than one dot character ('.')" );
       }
 
       if ( *leaf.rbegin() == '.' )
@@ -90,18 +95,13 @@ namespace boost
 
       // checks on the directory name --------------------------- //
 
-      // shouldn't we check this first component only? [gps]
-      // otherwise we'll get a message for each subdir; e.g.:
-      //
-      // @1: *N* leading character of one of the path compontents is not alphabetic
-      // @1/2: *N* leading character of one of the path compontents is not alphabetic
-      // @1/2/3: *N* leading character of one of the path compontents is not alphabetic
-      //
-      if( aux::starts_with_nonalpha(relative_path) )
+      if( aux::starts_with_nonalpha( path(leaf)) )
       {
         ++m_name_errors;
         error( library_name, full_path, string(name())
-            + " leading character of one of the path compontents is not alphabetic" );
+            + " leading character of \""
+            + leaf + "\""
+            + " is not alphabetic" );
       }
 
       if ( filesystem::is_directory( full_path )
