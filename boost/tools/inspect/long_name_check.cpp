@@ -68,7 +68,7 @@ namespace boost
           {
               ++m_name_errors;
               error( library_name, full_path, string(name())
-                  + " file/dir name exceeds "
+                  + " name exceeds "
                   + boost::lexical_cast<string>(m)
                   + " characters" );
           }

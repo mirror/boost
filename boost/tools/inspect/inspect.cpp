@@ -24,7 +24,6 @@
 #include "boost/shared_ptr.hpp"
 #include "boost/filesystem/operations.hpp"
 #include "boost/filesystem/fstream.hpp"
-#include "boost/format.hpp"
 
 #include "../common/time_string.hpp"
 
@@ -223,6 +222,7 @@ namespace
     display_html, display_text
   }
   display_format = display_html;
+
   enum display_mode_type
   {
     display_full, display_brief
@@ -235,7 +235,7 @@ namespace
   {
     if (display_text == display_format)
     {
-      std::cout << boost::format("  %1% (%2%)\n") % current_library % err_count;
+        std::cout << "  " << current_library << " (" << err_count << ")\n";
     }
     else
     {
@@ -299,6 +299,8 @@ namespace
 
   void display_details()
   {
+    // gps - review this
+
     if (display_text == display_format)
     {
       // display error messages with group indication
@@ -309,16 +311,18 @@ namespace
       {
         if ( current.library != itr->library )
         {
-          std::cout << boost::format(
-            display_full == display_mode ? "\n|%1%|\n" : "\n\n|%1%|"
-            ) % itr->library;
+          if ( display_full == display_mode )
+              std::cout << "\n|" << itr->library << "|\n";
+          else
+              std::cout << "\n\n|" << itr->library << '|';
         }
+
         if ( current.library != itr->library
           || current.rel_path != itr->rel_path )
         {
-          if (display_full == display_mode)
+          if ( display_full == display_mode )
           {
-            std::cout << boost::format("  %1%:\n") % itr->rel_path;
+            std::cout << "  " << itr->rel_path << ":\n";
           }
           else
           {
@@ -326,24 +330,21 @@ namespace
             path this_rel_path(itr->rel_path);
             if (current_rel_path.branch_path() != this_rel_path.branch_path())
             {
-              std::cout << boost::format("\n  %1%/") % this_rel_path.branch_path().string();
+              std::cout << "\n  " << this_rel_path.branch_path().string() << '/';
             }
-            std::cout << boost::format("\n    %1%:") % this_rel_path.leaf();
+            std::cout << "\n    " << this_rel_path.leaf() << ':';
           }
         }
         if ( current.library != itr->library
           || current.rel_path != itr->rel_path
           || current.msg != itr->msg )
         {
-          string m = itr->msg;
-          for (string::size_type i = m.find("&gt;"); i != string::npos;
-            i = m.find("&gt;",i) )
-          {
-            m.replace(i,4,">");
-          }
-          std::cout << boost::format(
-            display_full == display_mode ? "    %1%\n" : " %1%"
-            ) % m;
+          const string m = itr->msg;
+
+          if ( display_full == display_mode )
+              std::cout << "    " << m << '\n';
+          else
+              std::cout << ' ' << m;
         }
         current.library = itr->library;
         current.rel_path = itr->rel_path;
@@ -683,10 +684,10 @@ int cpp_main( int argc_param, char * argv_param[] )
 
     std::cout
       << "Totals:\n"
-      << boost::format("  %1% files scanned\n") % file_count
-      << boost::format("  %1% directories scanned (including root)\n") % directory_count
-      << boost::format("  %1% problems reported\n") % error_count
-      << "\n"
+      << "  " << file_count << " files scanned\n"
+      << "  " << directory_count << " directories scanned (including root)\n"
+      << "  " << error_count << " problems reported\n"
+      << '\n'
       ;
   }
   else
@@ -730,20 +731,14 @@ int cpp_main( int argc_param, char * argv_param[] )
   for ( inspector_list::iterator itr = inspectors.begin();
         itr != inspectors.end(); ++itr )
   {
-    if (display_text == display_format)
-    {
-      inspector_keys += (
-        boost::format("  %1% %2%\n")
-          % itr->inspector->name() % itr->inspector->desc()
-        ).str();
-    }
-    else
-    {
-      inspector_keys += (
-        boost::format("  %1% %2%<br />\n")
-          % itr->inspector->name() % itr->inspector->desc()
-        ).str();
-    }
+    const string line_break (
+        display_text == display_format? "\n" : "<br />\n"); // gps
+
+    inspector_keys += static_cast<string>("  ")
+        + itr->inspector->name()
+        + ' ' + itr->inspector->desc()
+        + line_break
+        ;
   }
 
   
