@@ -727,7 +727,7 @@ the caller is neither required to remember argument positions or
 explicitly specify parameter names for those arguments.  To
 generate this interface using ``BOOST_PARAMETER_FUNCTION``, we need
 only enclose the deduced parameters in a ``(deduced …)`` clause, as
-follows: [#is_keyword_expression]_
+follows: 
 
 .. parsed-literal::
 
@@ -735,18 +735,22 @@ follows: [#is_keyword_expression]_
 
   BOOST_PARAMETER_FUNCTION(
       (void), def, tag
-      (required (name,(char const\*)) (func,\*) )
+
+      (required (name,(char const\*)) (func,\*) )   // nondeduced
+
       **(deduced** 
         (optional 
           (docstring, (char const\*), "")
+
           (keywords
-             , \*(is_keyword_expression<keywords_type>)
+             , \*(is_keyword_expression<keywords_type>) // see [#is_keyword_expression]_
              , no_keywords())
+
           (policies
              , \*(mpl::not_<
                    mpl::or_<
                        boost::is_convertible<policies_type, char const\*>
-                     , is_keyword_expression<policies_type>
+                     , is_keyword_expression<policies_type> // see [#is_keyword_expression]_
                    >
                >)
              , default_call_policies()
@@ -779,7 +783,7 @@ specify the parameter name explicitly, as follows:
 .. parsed-literal::
 
   def(
-      "myfunction", f
+      "f", f
      , **_policies = some_policies**, "Documentation for f");
 
 .. _Boost.Python: ../../../python/doc/index.html
@@ -799,7 +803,7 @@ In this section we'll use Boost.Parameter to build Boost.Python_\
       ValueType, BaseList = bases<>
     , HeldType = ValueType, Copyable = void
   >
-  class class_;
+  class class\_;
 
 Only the first argument, ``ValueType``, is required.
 
@@ -808,35 +812,48 @@ Only the first argument, ``ValueType``, is required.
 Named Template Parameters
 =========================
 
-Our first step is to build an interface that allows users pass
-arguments positionally or by name:
+First, we'll build an interface that allows users to pass arguments
+positionally or by name:
 
 .. parsed-literal::
 
   struct B { virtual ~B() = 0; };
   struct D : B { ~D(); };
 
-  class_<**class_type<B>**, **copyable<boost::noncopyable>** > …;
-  class_<**D**, **held_type<std::auto_ptr<D> >**, **base_list<B>** > …;
+  class_<
+       **class_type<B>**, **copyable<boost::noncopyable>** 
+  > …;
+
+  class_<
+      **D**, **held_type<std::auto_ptr<D> >**, **base_list<bases<B> >**
+  > …;
 
 Template Keywords
 -----------------
 
 The first step is to define keywords for each template parameter:
 
+  namespace boost { namespace python {
+
   BOOST_PARAMETER_TEMPLATE_KEYWORD(class_type);
   BOOST_PARAMETER_TEMPLATE_KEYWORD(base_list);
   BOOST_PARAMETER_TEMPLATE_KEYWORD(held_type);
   BOOST_PARAMETER_TEMPLATE_KEYWORD(copyable);
 
+  }}
+
 The declaration of the ``class_type`` keyword you see here is
 equivalent to::
+
+  namespace boost { namespace python {
 
   namespace tag { struct class_type; } // keyword tag type
   template <class T>
   struct class_type
     : parameter::template_keyword<tag::class_type,T>
   {};
+
+  }}
 
 It defines a keyword tag type named ``tag::class_type`` and a
 *parameter passing template* named ``class_type``.
@@ -850,18 +867,24 @@ arguments in any order, we don't know the actual identities of
 these parameters, so it would be premature to use descriptive names
 or write out the actual default values for any of them.  Instead,
 we'll give them generic names and use the special type
-``boost::parameter::void_`` as a default::
+``boost::parameter::void_`` as a default:
+
+.. parsed-literal::
+
+  namespace boost { namespace python {
 
   template <
       class A0
-    , class A1 = parameter::void_
-    , class A2 = parameter::void_
-    , class A3 = parameter::void_
+    , class A1 = parameter::void\_
+    , class A2 = parameter::void\_
+    , class A3 = parameter::void\_
   >
-  struct class_
+  struct class\_
   {
-      …
+      *…*
   };
+
+  }}
 
 Class Template Signatures
 -------------------------
@@ -873,27 +896,35 @@ their positional order, along with any type requirements (note that
 it does *not* specify defaults -- those will be dealt with
 separately)::
 
+  namespace boost { namespace python {
+
   using boost::mpl::_;
 
   typedef parameter::parameters<
-      required<tag::class_type, boost::is_class<_> >
-    , optional<tag::base_list, boost::mpl::is_sequence<_> >
+      required<tag::class_type, is_class<_> >
+    , optional<tag::base_list, mpl::is_sequence<_> >
     , optional<tag::held_type>
     , optional<tag::copyable>
   > class_signature;
 
+  }}
 
 .. |ParameterSpec| replace:: :concept:`ParameterSpec`
 
 .. _ParameterSpec: reference.html#parameterspec
 
 
---------------
+Argument Packs and Parameter Extraction
+---------------------------------------
 
 Next, within the body of ``class_`` , we use the |ParameterSpec|\
 's nested ``::bind< … >`` template to bundle the actual arguments
 into an |ArgumentPack|_ type, and then use the library's ``binding<
-… >`` metafunction to extract “logical parameters”::
+… >`` metafunction to extract “logical parameters”.  Note that
+defaults are specified by supplying an optional third argument to
+``binding< … >``::
+
+  namespace boost { namespace python {
 
   template <
       class A0
@@ -922,15 +953,106 @@ into an |ArgumentPack|_ type, and then use the library's ``binding<
         args, tag::copyable, void>::type copyable;
   };
 
+  }}
+
 .. |ArgumentPack| replace:: :concept:`ArgumentPack`
 .. _ArgumentPack: reference.html#argumentpack
 
-Note that defaults are specified by supplying an optional third
-argument to ``binding< … >``.
+Exercising the Code So Far
+==========================
+
+.. compound::
+
+  Revisiting our original examples, ::
+
+    typedef boost::python::class_<
+        class_type<B>, copyable<boost::noncopyable> 
+    > c1;
+
+    typedef boost::python::class_<
+        D, held_type<std::auto_ptr<D> >, base_list<bases<B> > 
+    > c2;
+
+  we can now examine the intended parameters::
+
+    BOOST_MPL_ASSERT((boost::is_same<c1::class_type, B>));
+    BOOST_MPL_ASSERT((boost::is_same<c1::base_list, bases<> >));
+    BOOST_MPL_ASSERT((boost::is_same<c1::held_type, B>));
+    BOOST_MPL_ASSERT((
+         boost::is_same<c1::copyable, boost::noncopyable>
+    ));
+
+    BOOST_MPL_ASSERT((boost::is_same<c2::class_type, D>));
+    BOOST_MPL_ASSERT((boost::is_same<c2::base_list, bases<B> >));
+    BOOST_MPL_ASSERT((
+        boost::is_same<c2::held_type, std::auto_ptr<D> >
+    ));
+    BOOST_MPL_ASSERT((boost::is_same<c2::copyable, void>));
+
+Deduced Template Parameters
+===========================
+
+To apply a deduced parameter interface here, we need only make the
+type requirements a bit tighter so the ``held_type`` and
+``copyable`` parameters can be crisply distinguished from the
+others.  Boost.Python does this by requiring that ``base_list`` be
+a specialization of its ``bases< … >`` template (as opposed to
+being any old MPL sequence) and by requiring that ``copyable``, if
+explicitly supplied, be ``boost::noncopyable``.  One easy way of
+identifying specializations of ``bases< … >`` is to derive them all
+from the same class, as an implementation detail:
+
+.. parsed-literal::
+
+  namespace boost { namespace python {
+
+  namespace detail { struct bases_base {}; }
+
+  template <class A0 = void, class A1 = void, class A2 = void *…* >
+  struct bases **: bases_base**
+  {};
+
+  }}  
+
+Now we can rewrite our signature to make all three optional
+parameters deducible::
+
+  typedef parameter::parameters<
+      required<tag::class_type, is_class<_> >
+
+    , optional<
+          deduced<tag::base_list>
+        , is_base_and_derived<bases_base,_>
+      >
+
+    , optional<
+          deduced<tag::held_type>
+        , mpl::not_<
+              mpl::or_<
+                  is_base_and_derived<bases_base,_>
+                , is_same<noncopyable,_>
+              >
+          >
+      >
+
+    , optional<deduced<tag::copyable>, is_same<noncopyable,_> >
+
+  > class_signature;
+
+It may seem like we've added a great deal of complexity, but the
+benefits to our users are greater.  Our original examples can now
+be written simply without explicit parameter names::
+
+  typedef boost::python::class_<B, boost::noncopyable> c1;
+
+  typedef boost::python::class_<D, std::auto_ptr<D>, bases<B> > c2;
 
 ===============
 Advanced Topics
 ===============
+
+At this point, you should have a good grasp of the basics.  In this
+section we'll cover a more esoteric uses of the library.
 
 -------------------------
 Fine-Grained Name Control
@@ -970,7 +1092,7 @@ Argument Packs
 
   *write something here*
 
-.. |ArgumentPack| replace:: :concept:`ArgumentPack`
+.. nothing .. |ArgumentPack| replace:: :concept:`ArgumentPack`
 
 Of course, the test above isn't very interesting unless we can see
 the values of the arguments.  Just to get a feel for how things
