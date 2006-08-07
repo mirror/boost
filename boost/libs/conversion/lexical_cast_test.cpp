@@ -3,6 +3,7 @@
 //  See http://www.boost.org for most recent version, including documentation.
 //
 //  Copyright Terje Slettebø and Kevlin Henney, 2005.
+//  Copyright Alexander Nasonov, 2006.
 //
 //  Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
@@ -29,6 +30,18 @@
 #define DISABLE_WIDE_CHAR_SUPPORT
 #endif
 
+#if (defined(BOOST_HAS_LONG_LONG) || defined(BOOST_HAS_MS_INT64)) \
+    && !(defined(BOOST_MSVC) && BOOST_MSVC < 1300)
+#define LCAST_TEST_LONGLONG
+#endif
+
+// Test all 65536 values if true:
+bool const lcast_test_small_integral_types_completely = false;
+
+// LCAST_INTEGRAL_TEST_COUNTER: use when testing all values of an integral
+// types is not possible. Max. portable value is 32767.
+#define LCAST_INTEGRAL_TEST_COUNTER 1000
+
 using namespace boost;
 
 void test_conversion_to_char();
@@ -44,6 +57,16 @@ void test_conversion_from_wstring();
 void test_conversion_to_wstring();
 void test_bad_lexical_cast();
 void test_no_whitespace_stripping();
+void test_conversion_from_short();
+void test_conversion_from_ushort();
+void test_conversion_from_int();
+void test_conversion_from_uint();
+void test_conversion_from_long();
+void test_conversion_from_ulong();
+#ifdef LCAST_TEST_LONGLONG
+void test_conversion_from_longlong();
+void test_conversion_from_ulonglong();
+#endif
 
 unit_test::test_suite *init_unit_test_suite(int, char *[])
 {
@@ -64,6 +87,17 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
     #endif
     suite->add(BOOST_TEST_CASE(test_bad_lexical_cast));
     suite->add(BOOST_TEST_CASE(test_no_whitespace_stripping));
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_short));
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_ushort));
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_int));
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_uint));
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_ulong));
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_long));
+    #ifdef LCAST_TEST_LONGLONG
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_longlong));
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_ulonglong));
+    #endif
+
     return suite;
 }
 
@@ -318,3 +352,224 @@ void test_no_whitespace_stripping()
     BOOST_CHECK_THROW(lexical_cast<int>(" 123"), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<int>("123 "), bad_lexical_cast);
 }
+
+template<class CharT, class T>
+std::basic_string<CharT> to_str(T t)
+{
+    std::basic_ostringstream<CharT> o;
+    o << t;
+    return o.str();
+}
+
+template<class T, class CharT>
+void test_conversion_from_integral_to_char(CharT zero)
+{
+    BOOST_CHECK(lexical_cast<char>(static_cast<T>(0)) == zero + 0);
+    BOOST_CHECK(lexical_cast<char>(static_cast<T>(1)) == zero + 1);
+    BOOST_CHECK(lexical_cast<char>(static_cast<T>(2)) == zero + 2);
+    BOOST_CHECK(lexical_cast<char>(static_cast<T>(3)) == zero + 3);
+    BOOST_CHECK(lexical_cast<char>(static_cast<T>(4)) == zero + 4);
+    BOOST_CHECK(lexical_cast<char>(static_cast<T>(5)) == zero + 5);
+    BOOST_CHECK(lexical_cast<char>(static_cast<T>(6)) == zero + 6);
+    BOOST_CHECK(lexical_cast<char>(static_cast<T>(7)) == zero + 7);
+    BOOST_CHECK(lexical_cast<char>(static_cast<T>(8)) == zero + 8);
+    BOOST_CHECK(lexical_cast<char>(static_cast<T>(9)) == zero + 9);
+
+    BOOST_CHECK_THROW(lexical_cast<char>(static_cast<T>(10)), bad_lexical_cast);
+
+    T t = std::numeric_limits<T>::max();
+    BOOST_CHECK_THROW(lexical_cast<char>(t), bad_lexical_cast);
+}
+
+template<class T>
+void test_conversion_from_integral_to_integral()
+{
+    T t = 0;
+    BOOST_CHECK(lexical_cast<T>(t) == t);
+
+    t = 32767;
+    BOOST_CHECK(lexical_cast<short>(t) == t);
+    BOOST_CHECK(lexical_cast<unsigned short>(t) == t);
+    BOOST_CHECK(lexical_cast<int>(t) == t);
+    BOOST_CHECK(lexical_cast<unsigned int>(t) == t);
+    BOOST_CHECK(lexical_cast<long>(t) == t);
+    BOOST_CHECK(lexical_cast<unsigned long>(t) == t);
+
+    t = std::numeric_limits<T>::max();
+    BOOST_CHECK(lexical_cast<T>(t) == t);
+
+    t = std::numeric_limits<T>::min();
+    BOOST_CHECK(lexical_cast<T>(t) == t);
+}
+
+template<class T, class CharT>
+void test_conversion_from_integral_to_string(CharT)
+{
+    typedef std::numeric_limits<T> limits;
+    typedef std::basic_string<CharT> string_type;
+
+    T t;
+
+    t = limits::min();
+    BOOST_CHECK(lexical_cast<string_type>(t) == to_str<CharT>(t));
+
+    t = limits::max();
+    BOOST_CHECK(lexical_cast<string_type>(t) == to_str<CharT>(t));
+
+    if(limits::digits <= 16 && lcast_test_small_integral_types_completely)
+        for(t = 1 + limits::min(); t != limits::max(); ++t)
+            BOOST_CHECK(lexical_cast<string_type>(t) == to_str<CharT>(t));
+    else
+    {
+        T const min_val = limits::min();
+        T const max_val = limits::max();
+        int const counter = LCAST_INTEGRAL_TEST_COUNTER < max_val / 2 ?
+            LCAST_INTEGRAL_TEST_COUNTER : max_val / 2;
+
+        int i;
+
+        // Test values around min:
+        t = min_val;
+        for(i = 0; i < counter; ++i, ++t)
+            BOOST_CHECK(lexical_cast<string_type>(t) == to_str<CharT>(t));
+
+        // Test values around max:
+        t = max_val;
+        for(i = 0; i < counter; ++i, --t)
+            BOOST_CHECK(lexical_cast<string_type>(t) == to_str<CharT>(t));
+
+        // Test values around zero:
+        if(limits::is_signed)
+            for(t = -counter; t < counter; ++t)
+                BOOST_CHECK(lexical_cast<string_type>(t) == to_str<CharT>(t));
+
+        // Test values around 100, 1000, 10000, ...
+        T ten_power = 100;
+        for(i = 2; i <= limits::digits10; ++i, ten_power *= 10)
+        {
+            // I believe that (ten_power + 100) never overflows
+            for(t = ten_power - 100; t != ten_power + 100; ++t)
+                BOOST_CHECK(lexical_cast<string_type>(t) == to_str<CharT>(t));
+        }
+    }
+}
+
+template<class T>
+void test_conversion_from_integral_for_locale()
+{
+    test_conversion_from_integral_to_integral<T>();
+    test_conversion_from_integral_to_string<T>('0');
+#ifndef DISABLE_WIDE_CHAR_SUPPORT
+    test_conversion_from_integral_to_string<T>(L'0');
+#endif
+}
+
+struct restore_oldloc
+{
+    std::locale oldloc;
+    ~restore_oldloc() { std::locale::global(oldloc); }
+};
+
+template<class T>
+void test_conversion_from_integral()
+{
+    char const zero = '0';
+    signed char const szero = '0';
+    unsigned char const uzero = '0';
+    test_conversion_from_integral_to_char<T>(zero);
+    test_conversion_from_integral_to_char<T>(szero);
+    test_conversion_from_integral_to_char<T>(uzero);
+#ifndef DISABLE_WIDE_CHAR_SUPPORT
+    wchar_t const wzero = L'0';
+    test_conversion_from_integral_to_char<T>(wzero);
+#endif
+
+    // test_conversion_from_integral_for_locale
+
+    typedef std::numpunct<char> numpunct;
+
+    restore_oldloc guard;
+    std::locale const& oldloc = guard.oldloc;
+
+    std::string grouping1 = BOOST_USE_FACET(numpunct, oldloc).grouping();
+    std::string grouping2(grouping1);
+
+    test_conversion_from_integral_for_locale<T>();
+
+    try
+    {
+        std::locale newloc("");
+        std::locale::global(newloc);
+
+        grouping2 = BOOST_USE_FACET(numpunct, newloc).grouping();
+    }
+    catch(std::exception const& ex)
+    {
+        std::string msg("Failed to set system locale: ");
+        msg += ex.what();
+        BOOST_TEST_MESSAGE(msg);
+    }
+
+    if(grouping1 != grouping2)
+        test_conversion_from_integral_for_locale<T>();
+
+    if(grouping1.empty() && grouping2.empty())
+        BOOST_TEST_MESSAGE("Formatting with thousands_sep has not been tested");
+}
+
+void test_conversion_from_short()
+{
+    test_conversion_from_integral<short>();
+}
+
+void test_conversion_from_ushort()
+{
+    test_conversion_from_integral<unsigned short>();
+}
+
+void test_conversion_from_int()
+{
+    test_conversion_from_integral<int>();
+}
+
+void test_conversion_from_uint()
+{
+    test_conversion_from_integral<unsigned int>();
+}
+
+void test_conversion_from_ulong()
+{
+    test_conversion_from_integral<unsigned long>();
+}
+
+void test_conversion_from_long()
+{
+    test_conversion_from_integral<long>();
+}
+
+#if defined(BOOST_HAS_LONG_LONG)
+
+void test_conversion_from_longlong()
+{
+    test_conversion_from_integral<boost::long_long_type>();
+}
+
+void test_conversion_from_ulonglong()
+{
+    test_conversion_from_integral<boost::ulong_long_type>();
+}
+
+#elif defined(LCAST_TEST_LONGLONG)
+
+void test_conversion_from_longlong()
+{
+    test_conversion_from_integral<__int64>();
+}
+
+void test_conversion_from_ulonglong()
+{
+    test_conversion_from_integral<unsigned __int64>();
+}
+
+#endif
+
