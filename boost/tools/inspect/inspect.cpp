@@ -29,6 +29,7 @@
 
 #include "inspector.hpp"
 
+// the inspectors
 #include "copyright_check.hpp"
 #include "crlf_check.hpp"
 #include "license_check.hpp"
