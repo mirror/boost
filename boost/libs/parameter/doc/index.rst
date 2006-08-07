@@ -790,6 +790,100 @@ specify the parameter name explicitly, as follows:
 .. |def| replace:: ``def``
 .. _def: ../../../python/doc/v2/def.html
 
+----------------------------------
+Parameter-Enabled Member Functions
+----------------------------------
+
+
+The ``BOOST_PARAMETER_MEMBER_FUNCTION`` and
+``BOOST_PARAMETER_CONST_MEMBER_FUNCTION`` macros accept exactly the
+same arguments as ``BOOST_PARAMETER_FUNCTION``, but are designed to
+be used within the body of a class::
+
+  BOOST_PARAMETER_NAME(arg1)
+  BOOST_PARAMETER_NAME(arg2)
+
+  struct callable2
+  {
+      BOOST_PARAMETER_CONST_MEMBER_FUNCTION(
+          (void), operator(), (required (arg1,(int))(arg2,(int))))
+      {
+          std::cout << arg1 << ", " << arg2 << std::endl;
+      }
+  };
+
+These macros don't directly allow a function's interface to be
+separated from its implementation, but you can always forward
+arguments on to a separate implementation function::
+
+  struct callable2
+  {
+      BOOST_PARAMETER_CONST_MEMBER_FUNCTION(
+          (void), operator(), (required (arg1,(int))(arg2,(int))))
+      {
+          call_impl(arg1,arg2);
+      }
+   private:
+      void call_impl(int, int); // implemented elsewhere.
+  };
+
+------------------------------
+Parameter-Enabled Constructors
+------------------------------
+
+The lack of a “delegating constructor”
+feature in C++
+(http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n1986.pdf)
+limits somewhat the quality of interface this library can provide
+for defining parameter-enabled constructors.  The usual workaround
+for a lack of constructor delegation applies: one must factor the
+common logic into a base class.  
+
+Let's build a parameter-enabled constructor that simply prints its
+arguments.  The first step is to write a base class whose
+constructor accepts a single argument known as an |ArgumentPack|_:
+a bundle of references to the actual arguments, tagged with their
+keywords.  The values of the actual arguments are extracted from
+the |ArgumentPack| by *indexing* it with keyword objects::
+
+  BOOST_PARAMETER_NAME(name)
+  BOOST_PARAMETER_NAME(index)
+
+  struct myclass_impl
+  {
+      template <class ArgumentPack>
+      myclass_impl(ArgumentPack const& args)
+      {
+          std::cout << "name = " << args[_name] 
+                    << "; index = " << args[_index | 42] 
+                    << std::endl;
+      }
+  };
+
+Note that the bitwise or (“\ ``|``\ ”) operator has a special
+meaning when applied to keyword objects that are passed to an
+|ArgumentPack|\ 's indexing operator: it is used to indicate a
+default value.  In this case if there is no ``index`` parameter in
+the |ArgumentPack|, ``42`` will be used instead.
+
+Now we are ready to write the parameter-enabled constructor
+interface::
+
+  struct myclass : myclass_impl
+  {
+      BOOST_PARAMETER_CONSTRUCTOR(
+          myclass, (myclass_impl), tag
+        , (required (name,*)) (optional (index,*))) // no semicolon
+  };
+
+Since we have supplied a default value for ``index`` but not for
+``name``, only ``name`` is required.  We can exercise our new
+interface as follows::
+
+  myclass x("bob", 3);                     // positional
+  myclass y(_index = 12, _name = "sally"); // named
+  myclass z("june");                       // positional/defaulted
+
 ---------------------------------
 Parameter-Enabled Class Templates
 ---------------------------------
@@ -1087,8 +1181,11 @@ section on `best practices for keyword object naming`__.
 
 __ `Keyword Naming`_
 
-Argument Packs
-==============
+-----------------------
+Function Argument Packs
+-----------------------
+
+Boost.Parameter actually uses a mechanism
 
   *write something here*
 
