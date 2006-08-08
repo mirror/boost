@@ -2,13 +2,13 @@
  * an STL container (as wrapper) for arrays of constant size.
  *
  * See
- *      http://www.josuttis.com/cppcode
- * for details and the latest version.
- * See
- *      http://www.boost.org/libs/array for Documentation.
+ *      http://www.boost.org/libs/array/
  * for documentation.
  *
+ * The original author site is at: http://www.josuttis.com/
+ *
  * (C) Copyright Nicolai M. Josuttis 2001.
+ *
  * Distributed under the Boost Software License, Version 1.0. (See
  * accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
