@@ -7,6 +7,7 @@
 
 #include <climits>
 #include <cwchar>
+#include <limits>
 #include <boost/static_assert.hpp>
 
 #if !defined(WCHAR_MIN)
@@ -16,7 +17,7 @@
 namespace boost{
 
 namespace my_conditions {
-BOOST_STATIC_ASSERT(sizeof(int) * CHAR_BIT >= 32);
+BOOST_STATIC_ASSERT(std::numeric_limits<int>::digits >= 32);
 BOOST_STATIC_ASSERT(WCHAR_MIN >= 0);
 
 } // namespace my_conditions
@@ -27,6 +28,7 @@ int main()
 {
    return 0;
 }
+
 
 
 

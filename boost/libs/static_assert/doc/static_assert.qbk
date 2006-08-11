@@ -49,11 +49,12 @@ be an unsigned type. We can verify this at compile time as follows:
 
    #include <climits>
    #include <cwchar>
+   #include <limits>
    #include <boost/static_assert.hpp>
 
    namespace my_conditions {
 
-      BOOST_STATIC_ASSERT(sizeof(int) * CHAR_BIT >= 32);
+      BOOST_STATIC_ASSERT(std::numeric_limits<int>::digits >= 32);
       BOOST_STATIC_ASSERT(WCHAR_MIN >= 0);
 
    } // namespace my_conditions
@@ -61,7 +62,7 @@ be an unsigned type. We can verify this at compile time as follows:
 The use of the namespace my_conditions here requires some comment. 
 The macro `BOOST_STATIC_ASSERT` works by generating an typedef declaration, 
 and since the typedef must have a name, the macro generates one automatically by 
-mangling a stub name with the value of __LINE__. When `BOOST_STATIC_ASSERT` is 
+mangling a stub name with the value of `__LINE__`. When `BOOST_STATIC_ASSERT` is 
 used at either class or function scope then each use of `BOOST_STATIC_ASSERT` 
 is guaranteed to produce a name unique to that scope (provided you only use 
 the macro once on each line). However when used in a header at namespace 
@@ -128,8 +129,8 @@ using something like this:
    class myclass
    {
    private:
-      BOOST_STATIC_ASSERT(sizeof(UnsignedInt) * CHAR_BIT >= 16);
-      BOOST_STATIC_ASSERT(std::numeric_limits<UnsignedInt>::is_specialized
+      BOOST_STATIC_ASSERT((std::numeric_limits<UnsignedInt>::digits >= 16)
+                           && std::numeric_limits<UnsignedInt>::is_specialized
                            && std::numeric_limits<UnsignedInt>::is_integer
                            && !std::numeric_limits<UnsignedInt>::is_signed);
    public:
@@ -216,3 +217,5 @@ working at namespace, function, and class scope outweighed the ugliness of a mac
 ]
 
 [endsect]
+
+

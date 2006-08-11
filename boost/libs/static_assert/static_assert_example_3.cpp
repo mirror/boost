@@ -13,8 +13,8 @@ template <class UnsignedInt>
 class myclass
 {
 private:
-   BOOST_STATIC_ASSERT(sizeof(UnsignedInt) * CHAR_BIT >= 16);
-   BOOST_STATIC_ASSERT(std::numeric_limits<UnsignedInt>::is_specialized
+   BOOST_STATIC_ASSERT((std::numeric_limits<UnsignedInt>::digits >= 16)
+                        && std::numeric_limits<UnsignedInt>::is_specialized
                         && std::numeric_limits<UnsignedInt>::is_integer
                         && !std::numeric_limits<UnsignedInt>::is_signed);
 public:
@@ -29,4 +29,5 @@ int main()
 {
    return 0;
 }
+
 
