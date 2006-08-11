@@ -60,8 +60,8 @@ public:
 
   // compiler-generated copy ctor and assignment operator are fine
 
-  RealType& mean() const { return _mean; }
-  RealType& sigma() const { return _sigma; }
+  RealType mean() const { return _mean; }
+  RealType sigma() const { return _sigma; }
   void reset() { _normal.reset(); }
 
   template<class Engine>
