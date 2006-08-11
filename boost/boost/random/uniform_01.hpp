@@ -55,7 +55,11 @@ public:
   void reset() { }
 
   result_type operator()() {
-    return result_type(_rng() - (_rng.min)()) * _factor;
+    for (;;) {
+      result_type result = result_type(_rng() - (_rng.min)()) * _factor;
+      if (result < result_type(1))
+	return result;
+    }
   }
 
 #if !defined(BOOST_NO_OPERATORS_IN_NAMESPACE) && !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
