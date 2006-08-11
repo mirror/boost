@@ -39,7 +39,7 @@
   </para>
 
   <para>
-    The construction of a date ensures validates all input such that it is not possible to
+    The construction of a date validates all input so that it is not possible to
     construct and 'invalid' date.  That is 2001-Feb-29 cannot be constructed as a date. 
     Various exceptions derived from std::out_of_range are thrown to indicate which aspect 
     of the date input is invalid.  Note that the
