@@ -254,7 +254,7 @@ T norm(const interval<T, Policies>& x)
     return checking::nan();
   }
   BOOST_USING_STD_MAX();
-  return max BOOST_PREVENT_MACRO_SUBSTITUTION(-x.lower(), x.upper());
+  return max BOOST_PREVENT_MACRO_SUBSTITUTION(static_cast<T>(-x.lower()), x.upper());
 }
 
 template<class T, class Policies> inline
@@ -266,7 +266,7 @@ interval<T, Policies> abs(const interval<T, Policies>& x)
   if (!interval_lib::user::is_neg(x.lower())) return x;
   if (!interval_lib::user::is_pos(x.upper())) return -x;
   BOOST_USING_STD_MAX();
-  return I(static_cast<T>(0), max BOOST_PREVENT_MACRO_SUBSTITUTION(-x.lower(), x.upper()), true);
+  return I(static_cast<T>(0), max BOOST_PREVENT_MACRO_SUBSTITUTION(static_cast<T>(-x.lower()), x.upper()), true);
 }
 
 template<class T, class Policies> inline
