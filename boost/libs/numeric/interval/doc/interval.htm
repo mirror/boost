@@ -284,11 +284,12 @@ template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; operator/(
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; operator/(const interval&lt;T, Policies&gt;&amp; x, const T&amp; y);
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; operator/(const T&amp; r, const interval&lt;T, Policies&gt;&amp; x);
 
-/* algebraic functions: sqrt, abs, square, pow */
+/* algebraic functions: sqrt, abs, square, pow, root */
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; abs(const interval&lt;T, Policies&gt;&amp; x);
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; sqrt(const interval&lt;T, Policies&gt;&amp; x);
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; square(const interval&lt;T, Policies&gt;&amp; x);
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; pow(const interval&lt;T, Policies&gt;&amp; x, int y);
+template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; root(const interval&lt;T, Policies&gt;&amp; x, int y);
 
 /* transcendental functions: exp, log */
 template &lt;class T, class Policies&gt;  interval&lt;T, Policies&gt; exp(const interval&lt;T, Policies&gt;&amp; x);
@@ -506,7 +507,7 @@ mathematical norm (hence the name) similar to the absolute value for real
 numbers.</p>
 
 <h4><code>min</code> <code>max</code> <code>abs</code> <code>square</code>
-<code>pow</code> <code>division_part?</code>
+<code>pow</code> <code>root</code> <code>division_part?</code>
 <code>multiplicative_inverse</code></h4>
 
 <p>The functions <code>min</code>, <code>max</code> and <code>abs</code> are
@@ -530,8 +531,11 @@ its better accuracy and a small performance improvement.</p>
 <p>As for <code>square</code>, <code>pow</code> provides an efficient and
 more accurate way to compute the integer power of an interval. Please note:
 when the power is 0 and the interval is not empty, the result is 1, even if
-the input interval contains 0. <code>multiplicative_inverse</code> computes
-1/x.</p>
+the input interval contains 0. <code>root</code> computes the integer root of
+an interval (<code>root(pow(x,k),k)</code> encloses <code>x</code> or
+<code>abs(x)</code> depending on whether <code>k</code> is odd or even). The
+behavior of <code>root</code> is not defined if the integer argument is not
+positive. <code>multiplicative_inverse</code> computes <code>1/x</code>.</p>
 
 <p>The functions <code>division_part1</code> and <code>division_part2</code>
 are useful when the user expects the division to return disjoint intervals if
@@ -926,7 +930,7 @@ author(s) and do not necessarily reflect the views of the National Science
 Foundation (NSF).</p>
 <hr>
 
-<p>Revised: 2006-02-02<br>
+<p>Revised: 2006-08-13<br>
 Copyright (c) Guillaume Melquiond, Sylvain Pion, Hervé Brönnimann, 2002.
 Polytechnic University.<br>
 Copyright (c) Guillaume Melquiond, 2003-2006. ENS Lyon.</p>
