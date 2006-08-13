@@ -28,7 +28,7 @@
 #define BOOST_DYNAMIC_BITSET_GNUC_VERSION  (  __GNUC__       * 100 * 100     \
                                             + __GNUC_MINOR__ * 100)
 
-// no-op function to workaround gcc bug c++/8419 - gps
+// no-op function to workaround gcc bug c++/8419
 //
 namespace boost { namespace detail {
     template <typename T> T make_non_const(T t) { return t; }

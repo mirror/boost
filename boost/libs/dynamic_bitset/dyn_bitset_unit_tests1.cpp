@@ -101,7 +101,7 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
     // one hand I should have better tests. On the other one
     // I don't want tests for dynamic_bitset to cope with locales,
     // ctype::widen, etc. (but that's what you deserve when you
-    // don't separate concerns at the library level) - gps
+    // don't separate concerns at the library level)
     //
     run_string_tests<Tests>(
         std::wstring(L"11111000000111111111010101010101010101010111111"));

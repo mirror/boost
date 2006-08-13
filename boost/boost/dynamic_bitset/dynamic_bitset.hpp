@@ -68,7 +68,7 @@ public:
     typedef Block block_type;
     typedef Allocator allocator_type;
     typedef std::size_t size_type;
-    typedef int block_width_type; // gps
+    typedef int block_width_type;
 
     BOOST_STATIC_CONSTANT(block_width_type, bits_per_block = (std::numeric_limits<Block>::digits));
     BOOST_STATIC_CONSTANT(size_type, npos = static_cast<size_type>(-1));
@@ -77,7 +77,6 @@ public:
 public:
 
     // A proxy class to simulate lvalues of bit type.
-    // Shouldn't it be private? [gps]
     //
     class reference
     {
@@ -264,10 +263,6 @@ public:
     size_type num_blocks() const;
     size_type max_size() const;
     bool empty() const;
-#if 0 // gps
-    void reserve(size_type n);
-    size_type capacity() const;
-#endif
 
     bool is_subset_of(const dynamic_bitset& a) const;
     bool is_proper_subset_of(const dynamic_bitset& a) const;
@@ -334,7 +329,7 @@ private:
         typedef typename std::basic_string<CharT, Traits, Alloc> StrT;
         typedef typename StrT::traits_type Tr;
 
-        const typename StrT::size_type rlen = (std::min)(n, s.size() - pos); // gps
+        const typename StrT::size_type rlen = (std::min)(n, s.size() - pos);
         const size_type sz = ( num_bits != npos? num_bits : rlen);
         m_bits.resize(calc_num_blocks(sz));
         m_num_bits = sz;
@@ -343,7 +338,7 @@ private:
         BOOST_DYNAMIC_BITSET_CTYPE_FACET(CharT, fac, std::locale());
         const CharT one = BOOST_DYNAMIC_BITSET_WIDEN_CHAR(fac, '1');
 
-        const size_type m = num_bits < rlen ? num_bits : rlen; // [gps]
+        const size_type m = num_bits < rlen ? num_bits : rlen;
         typename StrT::size_type i = 0;
         for( ; i < m; ++i) {
 
@@ -367,7 +362,7 @@ BOOST_DYNAMIC_BITSET_PRIVATE:
     Block&        m_highest_block();
     const Block&  m_highest_block() const;
 
-    buffer_type m_bits; // [gps] to be renamed
+    buffer_type m_bits;
     size_type   m_num_bits;
 
 
@@ -428,8 +423,7 @@ BOOST_DYNAMIC_BITSET_PRIVATE:
 //  The compiler is actually right, until core issue 454 will be settled:
 //   http://www.open-std.org/JTC1/SC22/WG21/docs/cwg_active.html#454
 //
-//  Considering the direction taken by the committee, however, it
-//  looks sensible to leave BOOST_WORKAROUND for the future (G. Prota)
+//  It's arguable whether we want to mark this with BOOST_WORKAROUND or not.
 
 
 template<typename Block, typename Allocator>
@@ -510,7 +504,7 @@ void swap(dynamic_bitset<Block, Allocator>& b1,
 
 template <typename Block, typename Allocator, typename stringT>
 void
-to_string(const dynamic_bitset<Block, Allocator>& b, stringT & s); // gps
+to_string(const dynamic_bitset<Block, Allocator>& b, stringT & s);
 
 template <typename Block, typename Allocator, typename BlockOutputIterator>
 void
@@ -518,15 +512,13 @@ to_block_range(const dynamic_bitset<Block, Allocator>& b,
                BlockOutputIterator result);
 
 
-// gps - check docs with Jeremy
-//
 template <typename BlockIterator, typename B, typename A>
 inline void
 from_block_range(BlockIterator first, BlockIterator last,
                  dynamic_bitset<B, A>& result)
 {
     // PRE: distance(first, last) <= numblocks()
-    std::copy (first, last, result.m_bits.begin()); //[gps]
+    std::copy (first, last, result.m_bits.begin());
 }
 
 //=============================================================================
@@ -574,7 +566,7 @@ dynamic_bitset(size_type num_bits, unsigned long value, const Allocator& alloc)
 template <typename Block, typename Allocator>
 inline dynamic_bitset<Block, Allocator>::
 dynamic_bitset(const dynamic_bitset& b)
-  : m_bits(b.m_bits), m_num_bits(b.m_num_bits)  // [gps]
+  : m_bits(b.m_bits), m_num_bits(b.m_num_bits)
 {
 
 }
@@ -598,15 +590,9 @@ template <typename Block, typename Allocator>
 dynamic_bitset<Block, Allocator>& dynamic_bitset<Block, Allocator>::
 operator=(const dynamic_bitset<Block, Allocator>& b)
 {
-#if 0 // gps
-    dynamic_bitset<Block, Allocator> tmp(b);
-    this->swap(tmp);
-    return *this;
-#else
     m_bits = b.m_bits;
     m_num_bits = b.m_num_bits;
     return *this;
-#endif
 }
 
 template <typename Block, typename Allocator>
@@ -630,7 +616,7 @@ resize(size_type num_bits, bool value) // strong guarantee
   const block_type v = value? ~Block(0) : Block(0);
 
   if (required_blocks != old_num_blocks) {
-    m_bits.resize(required_blocks, v); // s.g. (copy) [gps]
+    m_bits.resize(required_blocks, v); // s.g. (copy)
   }
 
 
@@ -646,12 +632,12 @@ resize(size_type num_bits, bool value) // strong guarantee
 
   if (value && (num_bits > m_num_bits)) {
 
-    const size_type extra_bits = count_extra_bits(); // gps
+    const size_type extra_bits = count_extra_bits();
     if (extra_bits) {
         assert(old_num_blocks >= 1 && old_num_blocks <= m_bits.size());
 
         // Set them.
-        m_bits[old_num_blocks - 1] |= (v << extra_bits); // gps
+        m_bits[old_num_blocks - 1] |= (v << extra_bits);
     }
 
   }
@@ -683,8 +669,6 @@ template <typename Block, typename Allocator>
 void dynamic_bitset<Block, Allocator>::
 append(Block value) // strong guarantee
 {
-    // G.P.S. to be reviewed...
-
     const block_width_type r = count_extra_bits();
 
     if (r == 0) {
@@ -871,13 +855,6 @@ template <typename Block, typename Allocator>
 dynamic_bitset<Block, Allocator>&
 dynamic_bitset<Block, Allocator>::set(size_type pos, bool val)
 {
-    // [gps]
-    //
-    // Below we have no set(size_type) function to call when
-    // value == true; instead of using a helper, I think
-    // overloading set (rather than giving it a default bool
-    // argument) would be more elegant.
-
     assert(pos < m_num_bits);
 
     if (val)
@@ -978,45 +955,6 @@ dynamic_bitset<Block, Allocator>::operator~() const
 }
 
 
-/*
-
-The following is the straightforward implementation of count(), which
-we leave here in a comment for documentation purposes.
-
-template <typename Block, typename Allocator>
-typename dynamic_bitset<Block, Allocator>::size_type
-dynamic_bitset<Block, Allocator>::count() const
-{
-    size_type sum = 0;
-    for (size_type i = 0; i != this->m_num_bits; ++i)
-        if (test(i))
-            ++sum;
-    return sum;
-}
-
-The actual algorithm uses a lookup table.
-
-
-  The basic idea of the method is to pick up X bits at a time
-  from the internal array of blocks and consider those bits as
-  the binary representation of a number N. Then, to use a table
-  of 1<<X elements where table[N] is the number of '1' digits
-  in the binary representation of N (i.e. in our X bits).
-
-
-  In this implementation X is 8 (but can be easily changed: you
-  just have to modify the definition of table_width and shrink/enlarge
-  the table accordingly - it could be useful, for instance, to expand
-  the table to 512 elements on an implementation with 9-bit bytes) and
-  the internal array of blocks is seen, if possible, as an array of bytes.
-  In practice the "reinterpretation" as array of bytes is possible if and
-  only if X >= CHAR_BIT and Block has no padding bits (that would be counted
-  together with the "real ones" if we saw the array as array of bytes).
-  Otherwise we simply 'extract' X bits at a time from each Block.
-
-*/
-
-
 template <typename Block, typename Allocator>
 typename dynamic_bitset<Block, Allocator>::size_type
 dynamic_bitset<Block, Allocator>::count() const
@@ -1073,7 +1011,7 @@ void to_string_helper(const dynamic_bitset<B, A> & b, stringT & s,
 // making me (Gennaro) realize this important separation of
 // concerns issue, as well as many things about i18n.
 //
-template <typename Block, typename Allocator, typename stringT> // G.P.S.
+template <typename Block, typename Allocator, typename stringT>
 inline void
 to_string(const dynamic_bitset<Block, Allocator>& b, stringT& s)
 {
@@ -1087,7 +1025,7 @@ to_string(const dynamic_bitset<Block, Allocator>& b, stringT& s)
 //
 template <typename B, typename A, typename stringT>
 inline void
-dump_to_string(const dynamic_bitset<B, A>& b, stringT& s) // G.P.S.
+dump_to_string(const dynamic_bitset<B, A>& b, stringT& s)
 {
     to_string_helper(b, s, true /* =dump_all*/);
 }
@@ -1099,7 +1037,7 @@ to_block_range(const dynamic_bitset<Block, Allocator>& b,
 {
     // note how this copies *all* bits, including the
     // unused ones in the last block (which are zero)
-    std::copy(b.m_bits.begin(), b.m_bits.end(), result); // [gps]
+    std::copy(b.m_bits.begin(), b.m_bits.end(), result);
 }
 
 template <typename Block, typename Allocator>
@@ -1133,7 +1071,7 @@ to_ulong() const
   result_type result = 0;
   for (size_type i = 0; i <= last_block; ++i) {
 
-    assert((size_type)bits_per_block * i < (size_type)ulong_width); // gps
+    assert((size_type)bits_per_block * i < (size_type)ulong_width);
 
     result |= (m_bits[i] << (bits_per_block * i));
   }
@@ -1182,31 +1120,6 @@ inline bool dynamic_bitset<Block, Allocator>::empty() const
 {
   return size() == 0;
 }
-
-#if 0 // gps
-template <typename Block, typename Allocator>
-inline void dynamic_bitset<Block, Allocator>::reserve(size_type n)
-{
-    assert(n <= max_size()); // PRE - G.P.S.
-    m_bits.reserve(calc_num_blocks(n));
-}
-
-template <typename Block, typename Allocator>
-typename dynamic_bitset<Block, Allocator>::size_type
-dynamic_bitset<Block, Allocator>::capacity() const
-{
-    // capacity is m_bits.capacity() * bits_per_block
-    // unless that one overflows
-    const size_type m = static_cast<size_type>(-1);
-    const size_type q = m / bits_per_block;
-
-    const size_type c = m_bits.capacity();
-
-    return c <= q ?
-        c * bits_per_block :
-        m;
-}
-#endif
 
 template <typename Block, typename Allocator>
 bool dynamic_bitset<Block, Allocator>::
@@ -1319,7 +1232,7 @@ bool operator==(const dynamic_bitset<Block, Allocator>& a,
                 const dynamic_bitset<Block, Allocator>& b)
 {
     return (a.m_num_bits == b.m_num_bits)
-           && (a.m_bits == b.m_bits); // [gps]
+           && (a.m_bits == b.m_bits);
 }
 
 template <typename Block, typename Allocator>
@@ -1391,7 +1304,7 @@ operator<<(std::ostream& os, const dynamic_bitset<Block, Alloc>& b)
     const ios::iostate ok = ios::goodbit;
     ios::iostate err = ok;
 
-    if (os.opfx()) { // gps
+    if (os.opfx()) {
 
         //try
         typedef typename dynamic_bitset<Block, Alloc>::size_type bitsetsize_type;
@@ -1399,7 +1312,7 @@ operator<<(std::ostream& os, const dynamic_bitset<Block, Alloc>& b)
         const bitsetsize_type sz = b.size();
         std::streambuf * buf = os.rdbuf();
         size_t npad = os.width() <= 0  // careful: os.width() is signed (and can be < 0)
-            || (bitsetsize_type) os.width() <= sz? 0 : os.width() - sz; //- gps
+            || (bitsetsize_type) os.width() <= sz? 0 : os.width() - sz;
 
         const char fill_char = os.fill();
         const ios::fmtflags adjustfield = os.flags() & ios::adjustfield;
@@ -1408,16 +1321,16 @@ operator<<(std::ostream& os, const dynamic_bitset<Block, Alloc>& b)
         if (adjustfield != ios::left) {
             for (; 0 < npad; --npad)
                 if (fill_char != buf->sputc(fill_char)) {
-                    err |= ios::failbit;   // gps
+                    err |= ios::failbit;
                     break;
                 }
         }
 
         if (err == ok) {
             // output the bitset
-            for (bitsetsize_type i = b.size(); 0 < i; --i) {// G.P.S.
+            for (bitsetsize_type i = b.size(); 0 < i; --i) {
                 const char dig = b.test(i-1)? '1' : '0';
-                if (EOF == buf->sputc(dig)) { // ok?? gps
+                if (EOF == buf->sputc(dig)) {
                     err |= ios::failbit;
                     break;
                 }
@@ -1440,7 +1353,7 @@ operator<<(std::ostream& os, const dynamic_bitset<Block, Alloc>& b)
     } // if opfx
 
     if(err != ok)
-        os.setstate(err); // assume this does NOT throw - gps
+        os.setstate(err); // assume this does NOT throw
     return os;
 
 }
@@ -1467,11 +1380,11 @@ operator<<(std::basic_ostream<Ch, Tr>& os,
         try {
 
             typedef typename dynamic_bitset<Block, Alloc>::size_type bitsetsize_type;
-            typedef basic_streambuf<Ch, Tr> buffer_type; // G.P.S.
+            typedef basic_streambuf<Ch, Tr> buffer_type;
 
             buffer_type * buf = os.rdbuf();
             size_t npad = os.width() <= 0  // careful: os.width() is signed (and can be < 0)
-                || (bitsetsize_type) os.width() <= b.size()? 0 : os.width() - b.size(); //- G.P.S.
+                || (bitsetsize_type) os.width() <= b.size()? 0 : os.width() - b.size();
 
             const Ch fill_char = os.fill();
             const ios_base::fmtflags adjustfield = os.flags() & ios_base::adjustfield;
@@ -1480,14 +1393,14 @@ operator<<(std::basic_ostream<Ch, Tr>& os,
             if (adjustfield != ios_base::left) {
                 for (; 0 < npad; --npad)
                     if (Tr::eq_int_type(Tr::eof(), buf->sputc(fill_char))) {
-                          err |= ios_base::failbit;   // G.P.S.
+                          err |= ios_base::failbit;
                           break;
                     }
             }
 
             if (err == ok) {
                 // output the bitset
-                for (bitsetsize_type i = b.size(); 0 < i; --i) {// G.P.S.
+                for (bitsetsize_type i = b.size(); 0 < i; --i) {
                     typename buffer_type::int_type
                         ret = buf->sputc(b.test(i-1)? one : zero);
                     if (Tr::eq_int_type(Tr::eof(), ret)) {
@@ -1529,8 +1442,8 @@ operator<<(std::basic_ostream<Ch, Tr>& os,
 
 #ifdef BOOST_OLD_IOSTREAMS
 
-    // gps - A sentry-like class that calls isfx in its
-    // destructor. Necessary because bit_appender::do_append may throw.
+    // A sentry-like class that calls isfx in its destructor.
+    // "Necessary" because bit_appender::do_append may throw.
     class pseudo_sentry {
         std::istream & m_r;
         const bool m_ok;
@@ -1554,21 +1467,21 @@ operator>>(std::istream& is, dynamic_bitset<Block, Alloc>& b)
     typedef dynamic_bitset<Block, Alloc> bitset_type;
     typedef typename bitset_type::size_type size_type;
 
-    std::ios::iostate err = std::ios::goodbit; // gps
+    std::ios::iostate err = std::ios::goodbit;
     pseudo_sentry cerberos(is); // skips whitespaces
     if(cerberos) {
 
         b.clear();
 
         const std::streamsize w = is.width();
-        const size_type limit = w > 0 && static_cast<size_type>(w) < b.max_size()// gps
+        const size_type limit = w > 0 && static_cast<size_type>(w) < b.max_size()
                                                          ? w : b.max_size();
         typename bitset_type::bit_appender appender(b);
         std::streambuf * buf = is.rdbuf();
         for(int c = buf->sgetc(); appender.get_count() < limit; c = buf->snextc() ) {
 
             if (c == EOF) {
-                err |= std::ios::eofbit; // G.P.S.
+                err |= std::ios::eofbit;
                 break;
             }
             else if (char(c) != '0' && char(c) != '1')
@@ -1576,7 +1489,6 @@ operator>>(std::istream& is, dynamic_bitset<Block, Alloc>& b)
 
             else {
                 try {
-                    //throw std::bad_alloc(); // gps
                     appender.do_append(char(c) == '1');
                 }
                 catch(...) {
@@ -1588,10 +1500,10 @@ operator>>(std::istream& is, dynamic_bitset<Block, Alloc>& b)
         } // for
     }
 
-    is.width(0); // gps
+    is.width(0);
     if (b.size() == 0)
         err |= std::ios::failbit;
-    if (err != std::ios::goodbit) // gps
+    if (err != std::ios::goodbit)
         is.setstate (err); // may throw
 
     return is;
@@ -1610,10 +1522,10 @@ operator>>(std::basic_istream<Ch, Tr>& is, dynamic_bitset<Block, Alloc>& b)
     typedef typename bitset_type::size_type size_type;
 
     const streamsize w = is.width();
-    const size_type limit = 0 < w && static_cast<size_type>(w) < b.max_size()? // gps
+    const size_type limit = 0 < w && static_cast<size_type>(w) < b.max_size()?
                                          w : b.max_size();
 
-    ios_base::iostate err = ios_base::goodbit; // gps
+    ios_base::iostate err = ios_base::goodbit;
     typename basic_istream<Ch, Tr>::sentry cerberos(is); // skips whitespaces
     if(cerberos) {
 
@@ -1626,11 +1538,11 @@ operator>>(std::basic_istream<Ch, Tr>& is, dynamic_bitset<Block, Alloc>& b)
         try {
             typename bitset_type::bit_appender appender(b);
             basic_streambuf <Ch, Tr> * buf = is.rdbuf();
-            typename Tr::int_type c = buf->sgetc(); // G.P.S.
+            typename Tr::int_type c = buf->sgetc();
             for( ; appender.get_count() < limit; c = buf->snextc() ) {
 
                 if (Tr::eq_int_type(Tr::eof(), c)) {
-                    err |= ios_base::eofbit; // G.P.S.
+                    err |= ios_base::eofbit;
                     break;
                 }
                 else {
@@ -1651,7 +1563,7 @@ operator>>(std::basic_istream<Ch, Tr>& is, dynamic_bitset<Block, Alloc>& b)
             //
             // bits_stored bits have been extracted and stored, and
             // either no further character is extractable or we can't
-            // append to the underlying vector (out of memory) gps
+            // append to the underlying vector (out of memory)
 
             bool rethrow = false;   // see std 27.6.1.1/4
             try { is.setstate(ios_base::badbit); }
@@ -1663,10 +1575,10 @@ operator>>(std::basic_istream<Ch, Tr>& is, dynamic_bitset<Block, Alloc>& b)
         }
     }
 
-    is.width(0); // gps
+    is.width(0);
     if (b.size() == 0 /*|| !cerberos*/)
         err |= ios_base::failbit;
-    if (err != ios_base::goodbit) // gps
+    if (err != ios_base::goodbit)
         is.setstate (err); // may throw
 
     return is;
@@ -1724,7 +1636,7 @@ inline void
 swap(dynamic_bitset<Block, Allocator>& left,
      dynamic_bitset<Block, Allocator>& right) // no throw
 {
-    left.swap(right); // gps
+    left.swap(right);
 }
 
 

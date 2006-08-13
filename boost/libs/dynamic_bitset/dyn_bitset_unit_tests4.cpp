@@ -134,7 +134,7 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
 
             }
             {
-              //NOTE: there are NO string stream tests - gps
+              //NOTE: there are NO string stream tests
             }
 #if !defined (BOOST_DYNAMIC_BITSET_NO_WCHAR_T_TESTS)
             {
@@ -169,7 +169,7 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
   // a good "real life" test. Some characters, such as '\v' and '\f', are not
   // used exactly because they are the ones which will most likely give problems
   // on some systems (for instance '\f' could actually be written as a sequence
-  // of new-lines, and we could never be able to read it back) [gps]
+  // of new-lines, and we could never be able to read it back)
   //
   // Note how the bitset object is not initially empty. That helps checking
   // that it isn't erroneously clear()ed by operator>>.

@@ -18,7 +18,6 @@
 #include <cstddef> // for std::size_t
 #include "boost/config.hpp"
 #include "boost/detail/workaround.hpp"
-//#include "boost/static_assert.hpp" // gps
 
 
 namespace boost {

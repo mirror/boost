@@ -18,7 +18,7 @@
 #endif
 
 #include <vector>
-#include <fstream> // used for operator<< :( - gps
+#include <fstream> // used for operator<<
 #include <string>    // for (basic_string and) getline()
 #include <algorithm> // for std::min
 #include <assert.h>  // <cassert> is sometimes macro-guarded :-(
@@ -79,7 +79,7 @@ bool is_white_space(const Stream & /*s*/, char c)
 }
 #else
 template <typename Stream, typename Ch>
-bool is_one_or_zero(const Stream& s, Ch c) // gps
+bool is_one_or_zero(const Stream& s, Ch c)
 {
   typedef typename Stream::traits_type Tr;
   const Ch zero = s.widen('0');
@@ -92,7 +92,7 @@ bool is_white_space(const Stream & s, Ch c)
 {
   // NOTE: the using directive is to satisfy Borland 5.6.4
   //       with its own library (STLport), which doesn't
-  //       like std::isspace(c, loc) - gps
+  //       like std::isspace(c, loc)
   using namespace std;
   return isspace(c, s.getloc());
 }
@@ -156,7 +156,7 @@ struct bitset_test {
                           std::size_t num_bits = (std::size_t)(-1))
   {
 
-      std::size_t rlen = (std::min)(max_char, str.size() - pos); // [gps]
+      std::size_t rlen = (std::min)(max_char, str.size() - pos);
 
       // The resulting size N of the bitset is num_bits, if
       // that is different from the default arg, rlen otherwise.
@@ -175,7 +175,7 @@ struct bitset_test {
       std::size_t m = (std::min)(num_bits, rlen);
       std::size_t j;
       for (j = 0; j < m; ++j)
-          BOOST_CHECK(b[j] == (str[pos + m - 1 - j] == '1')); // [gps]
+          BOOST_CHECK(b[j] == (str[pos + m - 1 - j] == '1'));
       // If M < N, remaining bit positions are zero
       for (; j < actual_size; ++j)
           BOOST_CHECK(b[j] == 0);
@@ -211,7 +211,7 @@ struct bitset_test {
     }
   }
 
-  // gps - TODO from_block_range (below) should be splitted
+  // TODO from_block_range (below) should be splitted
 
   // PRE: std::equal(first1, last1, first2) == true
   static void from_block_range(const std::vector<Block>& blocks)
@@ -239,7 +239,7 @@ struct bitset_test {
           BOOST_CHECK(bset[bit] == nth_bit(blocks[b], i));
         }
       }
-      BOOST_CHECK(n <= bset.num_blocks()); // gps - ok? ask on the list
+      BOOST_CHECK(n <= bset.num_blocks());
     }
   }
 
@@ -349,7 +349,7 @@ struct bitset_test {
   static void append_block(const Bitset& lhs)
   {
     Bitset b(lhs);
-    Block value(128); // gps
+    Block value(128);
     b.append(value);
     BOOST_CHECK(b.size() == lhs.size() + bits_per_block);
     for (typename Bitset::block_width_type i = 0; i < bits_per_block; ++i)
@@ -649,7 +649,7 @@ struct bitset_test {
         BOOST_CHECK(num == 0);
       else {
         for (std::size_t i = 0; i < sz; ++i)
-          BOOST_CHECK(lhs[i] == (i < n ? nth_bit(num, i) : 0)); //G.P.S. bugfix
+          BOOST_CHECK(lhs[i] == (i < n ? nth_bit(num, i) : 0));
       }
     }
   }
@@ -1020,14 +1020,14 @@ struct bitset_test {
     }
 #endif
 
-    BOOST_CHECK(did_throw || !stream_was_good || (s.width() == 0)); // gps
+    BOOST_CHECK(did_throw || !stream_was_good || (s.width() == 0));
 
-    if (!stream_was_good) { // gps
+    if (!stream_was_good) {
       BOOST_CHECK(s.good() == false);
 
       // this should actually be oldstate == s.rdstate()
       // but some implementations add badbit in the
-      // sentry constructor - gps
+      // sentry constructor
       //
       BOOST_CHECK((oldstate & s.rdstate()) == oldstate);
       BOOST_CHECK(s.width() == w);
@@ -1039,7 +1039,7 @@ struct bitset_test {
       // Of course dynamic_bitset's operator << doesn't require that.
 
       size_type total_len = w <= 0 || (size_type)(w) < b.size()? b.size() : w;
-      const string_type padding (total_len - b.size(), fill_char); // gps
+      const string_type padding (total_len - b.size(), fill_char);
       string_type expected;
       boost::to_string(b, expected);
       if ((s.flags() & std::ios::adjustfield) != std::ios::left)
@@ -1053,7 +1053,7 @@ struct bitset_test {
       s.close();
       corresponding_input_stream_type is(file_name);
       string_type contents;
-      std::getline(is, contents, char_type()); // gps
+      std::getline(is, contents, char_type());
       BOOST_CHECK(contents == expected);
     }
   }
@@ -1084,7 +1084,7 @@ struct bitset_test {
     }
     catch(const std::ios::failure &) {
       did_throw = true;
-    }// catch bad alloc?? - gps
+    }
 
     // postconditions
     BOOST_CHECK(except == is.exceptions()); // paranoid
@@ -1140,7 +1140,7 @@ struct bitset_test {
 
       // eofbit
       if((after_digits == len && max_digits > num_digits ))
-          BOOST_CHECK(has_flags(is, std::ios::eofbit)); // gps
+          BOOST_CHECK(has_flags(is, std::ios::eofbit));
       else
           BOOST_CHECK(!has_flags(is, std::ios::eofbit));
 
@@ -1183,16 +1183,16 @@ struct bitset_test {
         // bitset though there's nothing in the file to be extracted.
         // Note that the dynamic_bitset docs say a sentry object is
         // constructed and then converted to bool, thus we rely on
-        // what the underlying library does. - gps
+        // what the underlying library does.
         //
-#if !defined(BOOST_DINKUMWARE_STDLIB) || (BOOST_DINKUMWARE_STDLIB >= 306) // what about STLPORT? - gps
+#if !defined(BOOST_DINKUMWARE_STDLIB) || (BOOST_DINKUMWARE_STDLIB >= 306)
         BOOST_CHECK(b == a_copy);
 #else
         BOOST_CHECK(b.empty() == true);
 #endif
       }
       else {
-        String sub = str.substr(after_spaces, num_digits); // gps
+        String sub = str.substr(after_spaces, num_digits);
         BOOST_CHECK(b == Bitset(sub));
       }
 
@@ -1205,7 +1205,7 @@ struct bitset_test {
     // clear the stream to allow further reading then
     // retrieve any remaining chars with a single getline()
     is.exceptions(std::ios::goodbit);
-    is.clear(); // gps
+    is.clear();
     String remainder;
     std::getline(is, remainder, Ch());
     if(stream_was_good)

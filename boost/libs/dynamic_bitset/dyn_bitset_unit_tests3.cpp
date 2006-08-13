@@ -31,7 +31,7 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
   // Test b.empty()
   {
     bitset_type b;
-    Tests::empty(b); // gps
+    Tests::empty(b);
   }
   {
     bitset_type b(1, 1ul);
