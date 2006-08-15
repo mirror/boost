@@ -5,15 +5,23 @@ except:
     pass
 
 
+# try to import a litre_config.py file.
+try:
+    import litre_config as config
+except:
+    class config: pass
+    
 import sys
+try: # if the user has set up docutils_root in his config, add it to the PYTHONPATH.
+    sys.path += ['%s/docutils' % config.docutils_root
+                 , '%s/docutils/extras' % config.docutils_root]
+except: pass
+
 import docutils.writers
 import cplusplus
 import os
 
 from docutils.core import publish_cmdline, default_description
-
-class config:
-    pass
 
 description = ('Literate programming from ReStructuredText '
                'sources.  ' + default_description)

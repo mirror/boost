@@ -7,6 +7,7 @@
 import os
 import tempfile
 import litre
+import config
 import re
 import sys
 import traceback
@@ -674,7 +675,7 @@ use-project /boost : $(BOOST_ROOT) ;
     def astext(self):
         return '\n\n ---------------- Unhandled Fragment ------------ \n\n'.join(
             [''] # generates a leading announcement
-            + [ str(s) for s in self.stack]
+            + [ unicode(s) for s in self.stack]
             )
 
 class DumpTranslator(CPlusPlusTranslator):

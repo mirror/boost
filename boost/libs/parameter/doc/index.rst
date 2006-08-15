@@ -16,18 +16,53 @@ __ ../../../../index.htm
 
   .. parsed-literal::
 
-    new_window("alert", **width_=10**, **titlebar_=false**);
+    new_window("alert", **_width=10**, **_titlebar=false**);
 
     smart_ptr<
        Foo 
      , **deleter<Deallocate<Foo> >**
-     , **copy_policy<DeepCopy>**> p(new Foo);
+     , **copy_policy<DeepCopy>** > p(new Foo);
     
   Since named arguments can be passed in any order, they are
   especially useful when a function or template has more than one
   parameter with a useful default value.  The library also supports
   *deduced* parameters; that is to say, parameters whose identity
   can be deduced from their types.
+
+.. @jam_prefix.append('''
+        project test : requirements <include>. <source>/boost//headers ;''')
+
+.. @example.prepend('''
+   #include <boost/parameter/preprocessor.hpp>
+   
+   namespace test
+   {
+     BOOST_PARAMETER_NAME(width)
+     BOOST_PARAMETER_NAME(titlebar)
+   
+     BOOST_PARAMETER_FUNCTION(
+        (int), new_window, tag, (required (width,*)(titlebar,*)))
+     {
+        return 0;
+     }
+     
+     BOOST_PARAMETER_TEMPLATE_KEYWORD(deleter)
+     BOOST_PARAMETER_TEMPLATE_KEYWORD(copy_policy)
+
+     namespace parameter = boost::parameter;
+     
+     struct Foo {};
+     template <class A0, class A1>
+     struct smart_ptr
+     {
+         smart_ptr(Foo*);
+     };
+   }
+   using namespace test;
+   int x = ''');
+
+.. @build()
+
 
 -------------------------------------
 
@@ -266,31 +301,38 @@ shown in the table below.
   +----------------+----------+---------------------------------+----------------------------------+
   | Parameter Name | Dataflow | Type                            | Default Value (if any)           |
   +================+==========+=================================+==================================+
-  |``graph``       | in       |Model of `Incidence Graph`_ and  |none - this argument is required. |
-  |                |          |`Vertex List Graph`_             |                                  |
+  |``graph``       | in       |Model of |IncidenceGraph|_ and   |none - this argument is required. |
+  |                |          ||VertexListGraph|_               |                                  |
+  |                |          |                                 |                                  |
   +----------------+----------+---------------------------------+----------------------------------+
-  |``visitor``     | in       |Model of `DFS Visitor`_          |``boost::dfs_visitor<>()``        |
+  |``visitor``     | in       |Model of |DFSVisitor|_           |``boost::dfs_visitor<>()``        |
   +----------------+----------+---------------------------------+----------------------------------+
   |``root_vertex`` | in       |``graph``'s vertex descriptor    |``*vertices(graph).first``        |
   |                |          |type.                            |                                  |
   +----------------+----------+---------------------------------+----------------------------------+
-  |``index_map``   | in       |Model of `Readable Property Map`_|``get(boost::vertex_index,graph)``|
+  |``index_map``   | in       |Model of |ReadablePropertyMap|_  |``get(boost::vertex_index,graph)``|
   |                |          |with key type := ``graph``'s     |                                  |
   |                |          |vertex descriptor and value type |                                  |
   |                |          |an integer type.                 |                                  |
   +----------------+----------+---------------------------------+----------------------------------+
-  |``color_map``   | in/out   |Model of `Read/Write Property    |an ``iterator_property_map``      |
-  |                |          |Map`_ with key type :=           |created from a ``std::vector`` of |
-  |                |          |``graph``'s vertex descriptor    |``default_color_type`` of size    |
-  |                |          |type.                            |``num_vertices(graph)`` and using |
+  |``color_map``   | in/out   |Model of |ReadWritePropertyMap|_ |an ``iterator_property_map``      |
+  |                |          |with key type := ``graph``'s     |created from a ``std::vector`` of |
+  |                |          |vertex descriptor type.          |``default_color_type`` of size    |
+  |                |          |                                 |``num_vertices(graph)`` and using |
   |                |          |                                 |``index_map`` for the index map.  |
   +----------------+----------+---------------------------------+----------------------------------+
 
-.. _`Incidence Graph`: ../../../graph/doc/IncidenceGraph.html
-.. _`Vertex List Graph`: ../../../graph/doc/VertexListGraph.html
-.. _`DFS Visitor`: ../../../graph/doc/DFSVisitor.html
-.. _`Read/Write Property Map`: ../../../property_map/doc/ReadWritePropertyMap.html
-.. _`Readable Property Map`: ../../../property_map/doc/ReadablePropertyMap.html
+.. |IncidenceGraph| replace:: :concept:`Incidence Graph`
+.. |VertexListGraph| replace:: :concept:`Vertex List Graph`
+.. |DFSVisitor| replace:: :concept:`DFS Visitor`
+.. |ReadablePropertyMap| replace:: :concept:`Readable Property Map`
+.. |ReadWritePropertyMap| replace:: :concept:`Read/Write Property Map`
+
+.. _`IncidenceGraph`: ../../../graph/doc/IncidenceGraph.html
+.. _`VertexListGraph`: ../../../graph/doc/VertexListGraph.html
+.. _`DFSVisitor`: ../../../graph/doc/DFSVisitor.html
+.. _`ReadWritePropertyMap`: ../../../property_map/doc/ReadWritePropertyMap.html
+.. _`ReadablePropertyMap`: ../../../property_map/doc/ReadablePropertyMap.html
 
 Don't be intimidated by the information in the second and third
 columns above.  For the purposes of this exercise, you don't need
@@ -606,14 +648,23 @@ __ http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-defects.html#225
 
 It's usually a good idea to prevent functions from being considered
 for overload resolution when the passed argument types aren't
-appropriate.  The library already does this when
-the required ``graph`` parameter is not supplied, but consider
-what happens when we add this (admittedly contrived) overload::
+appropriate.  The library already does this when the required
+``graph`` parameter is not supplied, but we're not likely to see a
+depth first search that doesn't take a graph to operate on.
+Suppose, instead, that we found a different depth first search
+algorithm that could work on graphs that don't model
+|IncidenceGraph|_?  If we just added a simple overload,
+it would be ambiguous::
 
   // new overload
-  template <class G>
-  void depth_first_search(G const&, int, std::string);
+  BOOST_PARAMETER_FUNCTION(
+      (void), depth_first_search, (tag), (required (graph,*))( … ))
+  {
+      // new algorithm implementation
+  }
+
   …
+
   // ambiguous!
   depth_first_search(boost::adjacency_list<>(), 2, "hello");
 
@@ -956,10 +1007,10 @@ The first step is to define keywords for each template parameter::
 
   namespace boost { namespace python {
 
-  BOOST_PARAMETER_TEMPLATE_KEYWORD(class_type);
-  BOOST_PARAMETER_TEMPLATE_KEYWORD(base_list);
-  BOOST_PARAMETER_TEMPLATE_KEYWORD(held_type);
-  BOOST_PARAMETER_TEMPLATE_KEYWORD(copyable);
+  BOOST_PARAMETER_TEMPLATE_KEYWORD(class_type)
+  BOOST_PARAMETER_TEMPLATE_KEYWORD(base_list)
+  BOOST_PARAMETER_TEMPLATE_KEYWORD(held_type)
+  BOOST_PARAMETER_TEMPLATE_KEYWORD(copyable)
 
   }}
 
