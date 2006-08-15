@@ -33,7 +33,7 @@ __ ../../../../index.htm
         project test : requirements <include>. <source>/boost//headers ;''')
 
 .. @example.prepend('''
-   #include <boost/parameter/preprocessor.hpp>
+   #include <boost/parameter.hpp>
    
    namespace test
    {
