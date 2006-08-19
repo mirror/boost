@@ -12,7 +12,8 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 // ------------------------------------------------------
-
+//
+// $Id$
 
 
 #ifndef BOOST_INTEGER_LOG2_HPP_GP_20030301

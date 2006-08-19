@@ -10,7 +10,8 @@
 // -----------------------------------------------------------
 
 //  See http://www.boost.org/libs/dynamic_bitset/ for documentation.
-
+//
+//  $Revision$ $Date$ - $Name$
 
 #ifndef BOOST_DYNAMIC_BITSET_CONFIG_HPP_GP_20040424
 #define BOOST_DYNAMIC_BITSET_CONFIG_HPP_GP_20040424

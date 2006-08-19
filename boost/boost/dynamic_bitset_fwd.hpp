@@ -9,8 +9,9 @@
 //
 // -----------------------------------------------------------
 
-//  See http://www.boost.org/libs/dynamic_bitset for documentation.
-
+//  See http://www.boost.org/libs/dynamic_bitset/ for documentation.
+//
+//  $Revision$ $Date$ - $Name$
 
 #ifndef BOOST_DYNAMIC_BITSET_FWD_HPP
 #define BOOST_DYNAMIC_BITSET_FWD_HPP
