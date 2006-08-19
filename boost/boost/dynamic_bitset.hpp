@@ -11,7 +11,7 @@
 
 //  See http://www.boost.org/libs/dynamic_bitset/ for documentation.
 //
-//  $Revision$ $date$ - $name$
+//  $Revision$ $Date$ - $Name$
 
 #ifndef BOOST_DYNAMIC_BITSET_HPP
 #define BOOST_DYNAMIC_BITSET_HPP
