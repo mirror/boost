@@ -7,7 +7,8 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 // -----------------------------------------------------------
-
+//
+// $Id$
 
 #ifndef BOOST_BITSET_TEST_HPP_GP_20040319
 #define BOOST_BITSET_TEST_HPP_GP_20040319

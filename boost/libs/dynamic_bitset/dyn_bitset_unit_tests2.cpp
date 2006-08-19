@@ -7,7 +7,8 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 // -----------------------------------------------------------
-
+//
+// $Id$
 
 #include "bitset_test.hpp"
 #include "boost/dynamic_bitset/dynamic_bitset.hpp"

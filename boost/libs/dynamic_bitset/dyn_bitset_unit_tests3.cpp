@@ -7,7 +7,8 @@
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
 // -----------------------------------------------------------
-
+//
+// $Id$
 
 #include <assert.h>
 #include "bitset_test.hpp"
