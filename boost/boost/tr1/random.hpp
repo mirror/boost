@@ -12,8 +12,11 @@
 #  include BOOST_TR1_HEADER(random)
 #else
 // Boost.Random:
-#include <boost/random.hpp>
-#include <boost/nondet_random.hpp>
+#include <oost/random.hpp>
+#ifndef __SUNPRO_CC
+    // Sunpros linker complains if we so much as include this...
+#   include <boost/nondet_random.hpp>
+#endif
 #include <boost/tr1/detail/functor2iterator.hpp>
 #include <boost/type_traits/is_fundamental.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -517,7 +520,9 @@ typedef discard_block<subtract_with_carry< ::boost::int32_t, (1<<24), 10, 24>, 3
 typedef discard_block<subtract_with_carry_01<float, 24, 10, 24>, 223, 24> ranlux3_01;
 typedef discard_block<subtract_with_carry_01<float, 24, 10, 24>, 389, 24> ranlux4_01;
 
+#ifndef __SUNPRO_CC
 using ::boost::random_device;
+#endif
 using ::boost::uniform_int;
 
 class bernoulli_distribution
