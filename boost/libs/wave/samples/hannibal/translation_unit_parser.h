@@ -1,5 +1,5 @@
 //  Hannibal: partial C++ grammar to parse C++ type information
-//  Copyright (c) 2005 Danny Havenith
+//  Copyright (c) 2005-2006 Danny Havenith
 // 
 //  Boost.Wave: A Standard compliant C++ preprocessor
 //  Copyright (c) 2001-2006 Hartmut Kaiser
@@ -22,6 +22,49 @@
 #include <boost/wave/token_ids.hpp>
 #include <boost/wave/util/pattern_parser.hpp>
 
+//
+// If so required, trace every declaration and member-declaration. 
+// This can be a much faster alternative to BOOST_SPIRIT_DEBUG-type of
+// debugging.
+//
+#ifdef HANNIBAL_TRACE_DECLARATIONS
+struct trace_actor
+{
+    trace_actor( 
+        const char rule_type[],
+        std::ostream &strm
+        )
+        :rule_type_( rule_type),
+         strm_( strm)
+    {
+        // nop
+    }
+
+    template<typename PositionIterator>
+    void operator()(PositionIterator begin, PositionIterator end) const
+    {
+        typedef const boost::wave::cpplexer::lex_token<>::position_type 
+            position_type;
+        //typedef pos_iterator_type::token_type::position_type position_type;
+
+        position_type &begin_pos(begin->get_position());
+
+        strm_ << "Parsed " << rule_type_ << std::endl;
+        strm_ << " from: " << begin_pos.get_file() 
+              << "(" << begin_pos.get_line() << ")" 
+              << std::endl;
+    };
+
+private:
+    std::ostream &strm_;
+    char const* const rule_type_;
+};
+
+#define HANNIBAL_TRACE_ACTION( type) [trace_actor( (type), std::cout)]
+#else
+#define HANNIBAL_TRACE_ACTION( type) 
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 #define HANNIBAL_TRACE_TRANSLATION_UNIT_GRAMMAR                               \
     bool(BOOST_SPIRIT_DEBUG_FLAGS_CPP & BOOST_SPIRIT_DEBUG_FLAGS_CPP_EXPR_GRAMMAR) \
@@ -31,14 +74,28 @@
 //  Helper macro to register rules for debugging
 #if HANNIBAL_DUMP_PARSE_TREE != 0
 #define HANNIBAL_REGISTER_RULE(r)                                             \
-    BOOST_SPIRIT_DEBUG_TRACE_RULE(r, HANNIBAL_TRACE_TRANSLATION_UNIT_GRAMMAR);\
+    BOOST_SPIRIT_DEBUG_NODE(r);\
     self.declare_rule(r, #r)                                                  \
     /**/
 #else
 #define HANNIBAL_REGISTER_RULE(r)                                             \
-    BOOST_SPIRIT_DEBUG_TRACE_RULE(r, HANNIBAL_TRACE_TRANSLATION_UNIT_GRAMMAR) \
+    BOOST_SPIRIT_DEBUG_NODE(r) \
     /**/
 #endif
+
+///////////////////////////////////////////////////////////////////////////////
+struct dump_actor {
+    template<typename ForwardIterator>
+    void operator()(ForwardIterator begin, ForwardIterator end)
+    {
+        std::cerr << "*** COULD NOT PARSE THE FOLLOWING ***" << std::endl;
+        while (begin != end)
+        {
+            std::cerr << begin->get_value();
+            ++begin;
+        }
+    }
+} dump_a;
 
 ///////////////////////////////////////////////////////////////////////////////
 struct translation_unit_grammar 
@@ -54,11 +111,10 @@ struct translation_unit_grammar
 // call of the definition constructor...
 //
     typedef std::map<boost::spirit::parser_id, std::string> rule_map_type;
-#endif
-
     translation_unit_grammar(rule_map_type *rule_map_ptr_ = 0)
-#if HANNIBAL_DUMP_PARSE_TREE != 0
     :   rule_map_ptr(rule_map_ptr_)
+#else
+    translation_unit_grammar()
 #endif
     {
         BOOST_SPIRIT_DEBUG_TRACE_GRAMMAR_NAME(*this, 
@@ -155,132 +211,331 @@ struct translation_unit_grammar
         rule_type odd_language_extension, mem_initializer_id;
         rule_type mem_initializer, mem_initializer_list;
 
+
+        rule_type ta_expression_operator;
+        rule_type ta_logical_or_expression;
+        rule_type ta_expression;
+        rule_type ta_conditional_expression;
+        rule_type ta_throw_expression;
+        rule_type ta_assignment_expression;
+        rule_type postfix_expression_helper;
+        rule_type simple_postfix_expression;
+        rule_type pseudo_destructor_name;
+        rule_type direct_new_declarator;
+        rule_type new_declarator;
+        rule_type new_initializer;
+        rule_type new_type_id;
+        rule_type new_placement;
+        rule_type delete_expression;
+        rule_type new_expression;
+        rule_type unary_operator;
+        rule_type postfix_expression;
+        rule_type unary_expression;
+        rule_type expression_operator;
+        rule_type cast_expression;
+        rule_type throw_expression;
+        rule_type assignment_operator;
+        rule_type logical_or_expression;
+        rule_type conditional_expression;
+        rule_type boolean_literal;
+        rule_type string_literal;
+        rule_type floating_literal;
+        rule_type character_literal;
+        rule_type integer_literal;
+        rule_type expression;
+        rule_type literal;
+        rule_type primary_expression;
+
         // 
         // grammar definition. 
-        //
+
         definition(translation_unit_grammar const& self)
         {
             using namespace boost::spirit;
             using namespace boost::wave;
             using boost::wave::util::pattern_p;
+            
+            HANNIBAL_REGISTER_RULE( primary_expression);
+            primary_expression
+              =	    literal
+                |	ch_p(T_THIS)
+                |	ch_p(T_COLON_COLON) >> ch_p(T_IDENTIFIER)
+                |	ch_p(T_COLON_COLON) >> operator_function_id
+                |	ch_p(T_COLON_COLON) >> qualified_id
+                |	ch_p(T_LEFTPAREN) >> expression >> ch_p(T_RIGHTPAREN)
+                |	id_expression
+                ;
+            
+            HANNIBAL_REGISTER_RULE( literal);
+            literal
+              =	    integer_literal
+                |	character_literal
+                |	floating_literal
+                |	string_literal
+                |	boolean_literal
+                ;
+            
+            HANNIBAL_REGISTER_RULE( integer_literal);
+            integer_literal
+                =       pattern_p( IntegerLiteralTokenType, TokenTypeMask);
+            
+            HANNIBAL_REGISTER_RULE( character_literal);
+            character_literal
+                =       pattern_p( CharacterLiteralTokenType, TokenTypeMask);
+            
+            HANNIBAL_REGISTER_RULE( floating_literal);
+            floating_literal
+                =       pattern_p( FloatingLiteralTokenType, TokenTypeMask);
+            
+            HANNIBAL_REGISTER_RULE( string_literal);
+            string_literal
+                =       pattern_p( StringLiteralTokenType, TokenTypeMask);
+            
+            HANNIBAL_REGISTER_RULE( boolean_literal);
+            boolean_literal
+                =       pattern_p( BoolLiteralTokenType, TokenTypeMask);
 
-            // constant_expression was copied from Wave
+            //
+            // TODO: separate assignment expression into a grammar of it's own
+            //          
+            HANNIBAL_REGISTER_RULE( assignment_expression);
+            assignment_expression
+        =	    conditional_expression
+          |	logical_or_expression >> assignment_operator >> assignment_expression
+          |	throw_expression
+                ;
+
+            HANNIBAL_REGISTER_RULE( ta_assignment_expression);
+            ta_assignment_expression
+        =	    ta_conditional_expression
+          |	ta_logical_or_expression >> assignment_operator >> ta_assignment_expression
+          |	ta_throw_expression
+                ;
+                        
+            HANNIBAL_REGISTER_RULE( throw_expression);
+            throw_expression
+                =       ch_p(T_THROW) >> !assignment_expression
+                ;
+
+            HANNIBAL_REGISTER_RULE( ta_throw_expression);
+            ta_throw_expression
+                =       ch_p(T_THROW) >> !ta_assignment_expression
+                ;
+
+            HANNIBAL_REGISTER_RULE( conditional_expression);
+            conditional_expression
+        =	    logical_or_expression 
+                    >>  !(   
+                                ch_p(T_QUESTION_MARK) 
+                            >>  expression 
+                            >>  ch_p(T_COLON) 
+                            >>  assignment_expression
+                        )
+                ;
+
+            HANNIBAL_REGISTER_RULE( ta_conditional_expression);
+            ta_conditional_expression
+        =	    ta_logical_or_expression 
+                    >>  !(   
+                                ch_p(T_QUESTION_MARK) 
+                            >>  ta_expression 
+                            >>  ch_p(T_COLON) 
+                            >>  ta_assignment_expression
+                        )
+                ;
+            
+            HANNIBAL_REGISTER_RULE( expression);
+            expression
+                =       assignment_expression % ch_p(T_COMMA);
+                                
+            HANNIBAL_REGISTER_RULE( ta_expression);
+            ta_expression
+                =       ta_assignment_expression % ch_p(T_COMMA);
+
+            HANNIBAL_REGISTER_RULE( assignment_operator);
+            assignment_operator
+                =   pp(T_ASSIGN)         
+                |   pp(T_ANDASSIGN)
+                |   pp(T_ORASSIGN)         
+                |   pp(T_XORASSIGN) 
+                |   pp(T_DIVIDEASSIGN)     
+                |   pp(T_MINUSASSIGN) 
+                |   pp(T_PERCENTASSIGN)    
+                |   pp(T_PLUSASSIGN)
+                |   pp(T_SHIFTLEFTASSIGN)  
+                |   pp(T_SHIFTRIGHTASSIGN) 
+                |   pp(T_STARASSIGN)
+                ;
+
+
+            // we skip quite a few rules here, since we're not interested in operator precedence 
+            // just now.            
+            HANNIBAL_REGISTER_RULE( logical_or_expression);
+            logical_or_expression
+                =   cast_expression % expression_operator
+                ;
+
+            HANNIBAL_REGISTER_RULE( ta_logical_or_expression);
+            ta_logical_or_expression
+                =   cast_expression % ta_expression_operator
+                ;
+            
+            HANNIBAL_REGISTER_RULE( expression_operator );
+            expression_operator 
+                =   ta_expression_operator | pp(T_GREATER)
+                ;
+            
+            HANNIBAL_REGISTER_RULE( ta_expression_operator );
+            ta_expression_operator 
+                =   pp(T_OROR) 
+                |   pp(T_ANDAND) 
+                |   pp(T_OR) 
+                |   pp(T_XOR) 
+                |   pp(T_AND)
+                |   pp(T_NOTEQUAL) 
+                |   pp(T_EQUAL) 
+                |   pp(T_GREATEREQUAL) 
+                |   pp(T_LESSEQUAL)
+                |   pp(T_LESS) 
+                |   pp(T_SHIFTLEFT) 
+                |   pp(T_SHIFTRIGHT)
+                |   pp(T_PLUS) 
+                |   pp(T_MINUS) 
+                |   pp(T_PERCENT) 
+                |   pp(T_DIVIDE) 
+                |   pp(T_STAR)
+                |   pp(T_ARROWSTAR) 
+                |   pp(T_DOTSTAR) 
+                ;
+
+            HANNIBAL_REGISTER_RULE( cast_expression);
+            cast_expression
+                =	  ch_p(T_LEFTPAREN) >> type_id >> ch_p(T_RIGHTPAREN) 
+                    >>  cast_expression
+                |   unary_expression
+                ;
+            
+            HANNIBAL_REGISTER_RULE( unary_expression);
+            unary_expression
+                =	    postfix_expression
+                |	  ch_p(T_PLUSPLUS) >> cast_expression
+                |	  ch_p(T_MINUSMINUS) >> cast_expression
+                |	  unary_operator >> cast_expression
+                |	  ch_p(T_SIZEOF) >> unary_expression
+                |	  ch_p(T_SIZEOF) 
+                    >> ch_p(T_LEFTPAREN) >> type_id >> ch_p(T_RIGHTPAREN)
+                |	  new_expression
+                |	  delete_expression
+                ;
+            
+            HANNIBAL_REGISTER_RULE( unary_operator);
+            unary_operator 
+                =   ch_p(T_STAR) 
+                |   pp(T_AND) 
+                |   pp(T_PLUS) 
+                |   ch_p(T_MINUS) 
+                |   ch_p(T_NOT) 
+                |   pp(T_COMPL)
+                ;
+
+            HANNIBAL_REGISTER_RULE( new_expression);
+            new_expression
+                =	 !ch_p(T_COLON_COLON) >> ch_p(T_NEW) >> !new_placement
+                    >>  ( 
+                            new_type_id >> !new_initializer
+                        |   ch_p(T_LEFTPAREN) >> type_id >> ch_p(T_RIGHTPAREN) >> !new_initializer
+                        )
+                ;
+            
+            HANNIBAL_REGISTER_RULE( new_placement);
+            new_placement
+                =   ch_p(T_LEFTPAREN) >> expression_list >> ch_p(T_RIGHTPAREN)
+                ;
+            
+            HANNIBAL_REGISTER_RULE( new_type_id);
+            new_type_id
+                =	  type_specifier_seq >> !new_declarator
+                ;
+            
+            HANNIBAL_REGISTER_RULE( new_declarator);
+            new_declarator
+                =	  ptr_operator >> !new_declarator
+                |	  direct_new_declarator
+                ;
+            
+            HANNIBAL_REGISTER_RULE( direct_new_declarator);
+            direct_new_declarator
+                =  *(   pp(T_LEFTBRACKET) >> expression >> pp(T_RIGHTBRACKET) ) 
+                    >>  pp(T_LEFTBRACKET) >> constant_expression >> pp(T_RIGHTBRACKET)
+                ;
+            
+            HANNIBAL_REGISTER_RULE( new_initializer);
+            new_initializer
+                =   ch_p(T_LEFTPAREN) >> !expression_list >> ch_p(T_RIGHTPAREN)
+                ;
+            
+            HANNIBAL_REGISTER_RULE( delete_expression);
+            delete_expression
+                =	 !ch_p(T_COLON_COLON) >> ch_p(T_DELETE) >> cast_expression
+                |	 !ch_p(T_COLON_COLON) >> ch_p(T_DELETE) 
+                    >>  pp(T_LEFTBRACKET) >> pp(T_RIGHTBRACKET) 
+                    >>  cast_expression
+                ;
+            
+            HANNIBAL_REGISTER_RULE( postfix_expression);
+            postfix_expression
+                =   simple_postfix_expression >> *postfix_expression_helper
+                ;
+            
+            HANNIBAL_REGISTER_RULE( simple_postfix_expression);
+            simple_postfix_expression
+                =   primary_expression
+                |	  simple_type_specifier 
+                    >>  ch_p(T_LEFTPAREN) >> !expression_list >> ch_p(T_RIGHTPAREN)
+                |	  ch_p(T_DYNAMICCAST) 
+                    >>  ch_p(T_LESS) >> type_id >> ch_p(T_GREATER) 
+                    >>  ch_p(T_LEFTPAREN) >> expression >> ch_p(T_RIGHTPAREN)
+                |	  ch_p(T_STATICCAST) 
+                    >>  ch_p(T_LESS) >> type_id >> ch_p(T_GREATER) 
+                    >>  ch_p(T_LEFTPAREN) >> expression >> ch_p(T_RIGHTPAREN)
+                |	  ch_p(T_REINTERPRETCAST) 
+                    >>  ch_p(T_LESS) >> type_id >> ch_p(T_GREATER) 
+                    >>  ch_p(T_LEFTPAREN) >> expression >> ch_p(T_RIGHTPAREN)
+                |	  ch_p(T_CONSTCAST) 
+                    >>  ch_p(T_LESS) >> type_id >> ch_p(T_GREATER) 
+                    >>  ch_p(T_LEFTPAREN) >> expression >> ch_p(T_RIGHTPAREN)
+                |	  ch_p(T_TYPEID) 
+                    >>  ch_p(T_LEFTPAREN) >> expression >> ch_p(T_RIGHTPAREN)
+                |	  ch_p(T_TYPEID)
+                    >> ch_p(T_LEFTPAREN) >> type_id >> ch_p(T_RIGHTPAREN)
+                ;
+            
+            HANNIBAL_REGISTER_RULE( postfix_expression_helper );
+            postfix_expression_helper 
+                =   pp(T_LEFTBRACKET) >> expression >> pp(T_RIGHTBRACKET)
+                |	  ch_p(T_LEFTPAREN) >> !expression_list >> ch_p(T_RIGHTPAREN)
+                |	  ch_p(T_DOT) >> !ch_p(T_TEMPLATE) >> !ch_p(T_COLON_COLON) >> id_expression
+                |	  ch_p(T_ARROW) >> !ch_p(T_TEMPLATE) >> !ch_p(T_COLON_COLON) >> id_expression
+                |	  ch_p(T_DOT) >> pseudo_destructor_name
+                |	  ch_p(T_ARROW) >> pseudo_destructor_name
+                |	  ch_p(T_PLUSPLUS)
+                |	  ch_p(T_MINUSMINUS)
+                ;
+            
+            HANNIBAL_REGISTER_RULE( pseudo_destructor_name);
+            pseudo_destructor_name
+                =	 !ch_p(T_COLON_COLON) >> !nested_name_specifier 
+                    >>  (   
+                            type_name >> ch_p(T_COLON_COLON) >> ch_p(T_COMPL) >> type_name
+                        |   ch_p(T_COMPL) >> type_name
+                        )
+                ;
+
+
             HANNIBAL_REGISTER_RULE(constant_expression);
             constant_expression
-                =   logical_or_exp
-                >> !(const_exp_subrule =
-                        ch_p(T_QUESTION_MARK)
-                        >>  logical_or_exp >> ch_p(T_COLON) >> logical_or_exp
-                     )
+                =   conditional_expression
                 ;
-
-            HANNIBAL_REGISTER_RULE(logical_or_exp);
-            logical_or_exp 
-                =   logical_and_exp
-                >> *(   pattern_p(T_OROR, MainTokenMask) 
-                    >>  logical_and_exp 
-                    )
-                ;
-
-            HANNIBAL_REGISTER_RULE(logical_and_exp);
-            logical_and_exp
-                =   inclusive_or_exp
-                >> *(   pattern_p(T_ANDAND, MainTokenMask)
-                    >>  inclusive_or_exp
-                    )
-                ;
-
-            HANNIBAL_REGISTER_RULE(inclusive_or_exp);
-            inclusive_or_exp
-                =   exclusive_or_exp
-                >> *(   pattern_p(T_OR, MainTokenMask)
-                    >>  exclusive_or_exp
-                    )
-                ;
-
-            HANNIBAL_REGISTER_RULE(exclusive_or_exp);
-            exclusive_or_exp
-                =   and_exp
-                >> *(   pattern_p(T_XOR, MainTokenMask)
-                    >>  and_exp
-                    )
-                ;
-
-            HANNIBAL_REGISTER_RULE(and_exp);
-            and_exp
-                =   cmp_equality
-                >> *(   pattern_p(T_AND, MainTokenMask)
-                    >>  cmp_equality
-                    )
-                ;
-
-            HANNIBAL_REGISTER_RULE(cmp_equality);
-            cmp_equality
-                =   cmp_relational
-                >> *(   ch_p(T_EQUAL) >>  cmp_relational
-                    |   pattern_p(T_NOTEQUAL, MainTokenMask) >> cmp_relational
-                    )
-                ;
-
-            HANNIBAL_REGISTER_RULE(cmp_relational);
-            cmp_relational
-                =   shift_exp
-                >> *(   ch_p(T_LESSEQUAL) >> shift_exp 
-                    |   ch_p(T_GREATEREQUAL) >> shift_exp 
-                    |   ch_p(T_LESS) >> shift_exp 
-                    |   ch_p(T_GREATER) >> shift_exp
-                    )
-                ;
-
-            HANNIBAL_REGISTER_RULE(shift_exp);
-            shift_exp
-                =   add_exp
-                >> *(shift_exp_clos =
-                        ch_p(T_SHIFTLEFT) >> add_exp
-                    |   ch_p(T_SHIFTRIGHT) >> add_exp
-                    )
-                ;
-
-            HANNIBAL_REGISTER_RULE(add_exp);
-            add_exp
-                =   multiply_exp
-                >> *(   ch_p(T_PLUS) >> multiply_exp
-                    |   ch_p(T_MINUS) >> multiply_exp
-                    )
-                ;
-
-            HANNIBAL_REGISTER_RULE(multiply_exp);
-            multiply_exp
-                =   unary_exp
-                >> *(   ch_p(T_STAR) >> unary_exp
-                    |   ch_p(T_DIVIDE) >> unary_exp
-                    |   ch_p(T_PERCENT) >> unary_exp
-                    )
-                ;
-
-            HANNIBAL_REGISTER_RULE(unary_exp);
-            unary_exp
-                =   primary_exp
-                |   ch_p(T_PLUS) >> unary_exp
-                |   ch_p(T_MINUS) >> unary_exp
-                |   pattern_p(T_COMPL, MainTokenMask) >> unary_exp
-                |   pattern_p(T_NOT, MainTokenMask) >> unary_exp
-                ;
-
-            HANNIBAL_REGISTER_RULE(primary_exp);
-            primary_exp
-                =   constant
-                |   ch_p(T_LEFTPAREN) >> constant_expression 
-                    >>  ch_p(T_RIGHTPAREN)
-                ;
-
-            HANNIBAL_REGISTER_RULE(constant);
-            constant
-                =   ch_p(T_PP_NUMBER) 
-                |   ch_p(T_INTLIT) 
-                |   ch_p(T_CHARLIT) 
-                ;
-            // end of Wave rules
 
             HANNIBAL_REGISTER_RULE(ctor_initializer);
             ctor_initializer
@@ -295,7 +550,9 @@ struct translation_unit_grammar
             HANNIBAL_REGISTER_RULE(mem_initializer);
             mem_initializer
                 =	  mem_initializer_id 
-                >>  ch_p(T_LEFTPAREN) >> !expression_list >> ch_p(T_RIGHTPAREN)
+                >>  comment_nest_p(ch_p(T_LEFTPAREN), ch_p(T_RIGHTPAREN))
+                // TODO: restore after assignment expression has been implemented
+                //ch_p(T_LEFTPAREN) >> !expression_list >> ch_p(T_RIGHTPAREN)
                 ;
 
             HANNIBAL_REGISTER_RULE(mem_initializer_id);
@@ -304,9 +561,13 @@ struct translation_unit_grammar
                 |	  ch_p(T_IDENTIFIER)
                 ;
 
+            //
+            // the eps_p is added to allow skipping of trailing whitespace 
+            // (post-skip)
+            //
             HANNIBAL_REGISTER_RULE(translation_unit);
             translation_unit
-                =	 !declaration_seq
+                =	 !declaration_seq >> end_p; 
                 ;
 
             HANNIBAL_REGISTER_RULE(odd_language_extension);
@@ -317,7 +578,7 @@ struct translation_unit_grammar
 
             HANNIBAL_REGISTER_RULE(declaration_seq);
             declaration_seq
-                =	 +declaration
+                =	 +declaration HANNIBAL_TRACE_ACTION( "declaration")
                 ;
 
             HANNIBAL_REGISTER_RULE(declaration);
@@ -520,7 +781,8 @@ struct translation_unit_grammar
 
             HANNIBAL_REGISTER_RULE(function_definition_helper);
             function_definition_helper
-                =	 !decl_specifier_seq >> declarator
+                =	  decl_specifier_seq >> declarator
+                |  +no_type_decl_specifier >> declarator
                 |	  declarator
                 ;
 
@@ -562,7 +824,7 @@ struct translation_unit_grammar
             parameters_or_array_spec
                 =	  ch_p(T_LEFTPAREN) >> parameter_declaration_clause >> ch_p(T_RIGHTPAREN)
                     >> !cv_qualifier_seq >> !exception_specification
-                |	  ch_p(T_LEFTBRACKET) >> !constant_expression >> ch_p(T_RIGHTBRACKET)
+                |	  pp(T_LEFTBRACKET) >> !constant_expression >> pp(T_RIGHTBRACKET)
                 ;
 
             HANNIBAL_REGISTER_RULE(exception_specification);
@@ -590,7 +852,7 @@ struct translation_unit_grammar
             direct_abstract_declarator_helper
                 =	  ch_p(T_LEFTPAREN) >> parameter_declaration_clause >> ch_p(T_RIGHTPAREN)
                     >> !cv_qualifier_seq >> !exception_specification
-                |	  ch_p(T_LEFTBRACKET) >> !constant_expression >> ch_p(T_RIGHTBRACKET)
+                |	  pp(T_LEFTBRACKET) >> !constant_expression >> pp(T_RIGHTBRACKET)
                 ;
 
             HANNIBAL_REGISTER_RULE(parameter_declaration_clause);
@@ -613,12 +875,6 @@ struct translation_unit_grammar
                     >> !(ch_p(T_ASSIGN) >> assignment_expression)
                 ;
 
-            HANNIBAL_REGISTER_RULE(assignment_expression);
-            assignment_expression
-                =	  constant_expression     // TODO later assignment expressions
-                |	  ch_p(T_IDENTIFIER)
-                ;
-
             HANNIBAL_REGISTER_RULE(declarator_id);
             declarator_id
                 =	 !ch_p(T_COLON_COLON)
@@ -629,8 +885,8 @@ struct translation_unit_grammar
 
             HANNIBAL_REGISTER_RULE(id_expression);
             id_expression
-                =	  unqualified_id
-                |   qualified_id
+                =	  qualified_id
+                |   unqualified_id
                 ;
 
             HANNIBAL_REGISTER_RULE(qualified_id);
@@ -649,14 +905,14 @@ struct translation_unit_grammar
 
             HANNIBAL_REGISTER_RULE(operator_function_id);
             operator_function_id
-                =	  ch_p(T_OPERATOR) >> operator_sym    // this is called 'operator' in the std grammar
+                =	  ch_p(T_OPERATOR) >> operator_sym // this is called 'operator' in the std grammar
                 ;
                 
             HANNIBAL_REGISTER_RULE(operator_sym);
             operator_sym 
-                =	  ch_p(T_DELETE) >> ch_p(T_LEFTBRACKET) >> ch_p(T_RIGHTBRACKET)
-                |	  ch_p(T_NEW) >> ch_p(T_LEFTBRACKET) >> ch_p(T_RIGHTBRACKET)
-                |	  ch_p(T_LEFTBRACKET) >> ch_p(T_RIGHTBRACKET)
+                =	  ch_p(T_DELETE) >> !(pp(T_LEFTBRACKET) >> pp(T_RIGHTBRACKET))
+                |	  ch_p(T_NEW) >> !(pp(T_LEFTBRACKET) >> pp(T_RIGHTBRACKET))
+                |	  pp(T_LEFTBRACKET) >> pp(T_RIGHTBRACKET)
                 |	  ch_p(T_LEFTPAREN) >> ch_p(T_RIGHTPAREN)
                 |	  pattern_p(OperatorTokenType, TokenTypeMask)
                 ;
@@ -729,6 +985,7 @@ struct translation_unit_grammar
                 |	  class_specifier
                 |	  elaborated_type_specifier
                 |	  simple_type_specifier
+                |   cv_qualifier
                 ;
 
             HANNIBAL_REGISTER_RULE(cv_qualifier_seq);
@@ -782,11 +1039,13 @@ struct translation_unit_grammar
                 ;
 
             HANNIBAL_REGISTER_RULE(class_head);
-            class_head 
+            class_head // DH changed the order because otherwise it would always parse the (!IDENTIFIER) part.
                 =	 !access_specifier >> *odd_language_extension 
                     >>  class_key >> *odd_language_extension 
-                    >>  (  !ch_p(T_IDENTIFIER) 
-                        |   nested_name_specifier >> !ch_p(T_TEMPLATE) >> ch_p(T_IDENTIFIER)
+                    >>  (   
+                            !nested_name_specifier >> template_id
+                        |   nested_name_specifier >> ch_p(T_IDENTIFIER)
+                        |   !ch_p(T_IDENTIFIER)
                         )
                     >> !base_clause
                 ;
@@ -806,15 +1065,23 @@ struct translation_unit_grammar
 
             HANNIBAL_REGISTER_RULE(elaborated_type_specifier);
             elaborated_type_specifier
-                =	  class_key >> *odd_language_extension >> !ch_p(T_COLON_COLON) 
-                    >>  !nested_name_specifier >> ch_p(T_IDENTIFIER)
-                |	  ch_p(T_ENUM) >> !ch_p(T_COLON_COLON) 
-                    >> !nested_name_specifier >> ch_p(T_IDENTIFIER)
-                |	  ch_p(T_TYPENAME) >> !ch_p(T_COLON_COLON) 
-                    >>  nested_name_specifier >> ch_p(T_IDENTIFIER) 
-                    >> ch_p(T_LESS) >> template_argument_list >> ch_p(T_GREATER)
-                |	  ch_p(T_TYPENAME) >> !ch_p(T_COLON_COLON) 
-                    >> !nested_name_specifier >> ch_p(T_IDENTIFIER)
+                =   class_key >> *odd_language_extension 
+                    >>  !ch_p(T_COLON_COLON) 
+                    >>  !nested_name_specifier 
+                    >>  ( 
+                            !ch_p(T_TEMPLATE) >> template_id 
+                        |   ch_p(T_IDENTIFIER)
+                        )
+                |	  ch_p(T_ENUM) >> !ch_p(T_COLON_COLON)
+                    >> !nested_name_specifier 
+                    >>  ch_p(T_IDENTIFIER)
+                |	  ch_p(T_TYPENAME) 
+                    >> !ch_p(T_COLON_COLON) 
+                    >>  nested_name_specifier 
+                    >>  (
+                            !ch_p(T_TEMPLATE) >> template_id 
+                        |   ch_p(T_IDENTIFIER)
+                        )
                 ;
 
             HANNIBAL_REGISTER_RULE(template_argument_list);
@@ -827,7 +1094,7 @@ struct translation_unit_grammar
                 =	  longest_d
                     [
                         type_id
-                    |   assignment_expression
+                    |   ta_assignment_expression
                     |   template_name
                     ]
                 ;
@@ -887,7 +1154,7 @@ struct translation_unit_grammar
 
             //
             //  This is kind of a HACK. We want to prevent the decl_specifier_seq 
-            //  from eating the whole declaration, including the identifier. 
+            //  from eating the whole declaration, including the ch_p(T_IDENTIFIER). 
             //  Therefore in the sequence, we only allow one 'unknown' word 
             //  (the type_specifier), the rest of the decl_specifier sequence 
             //  must consist of known keywords or constructs (the 
@@ -937,7 +1204,7 @@ struct translation_unit_grammar
             HANNIBAL_REGISTER_RULE(member_specification);
             member_specification
                 =	 +(	  access_specifier >> ch_p(T_COLON)
-                    |	  member_declaration 
+                    |	  member_declaration HANNIBAL_TRACE_ACTION("member declaration")
                     )
                 ;
 
@@ -1014,6 +1281,7 @@ struct translation_unit_grammar
                 |   ch_p(T_MSEXT_INLINE)
                 ;
 
+            // DH added 'long long' and 'long double'
             HANNIBAL_REGISTER_RULE(simple_type_name);
             simple_type_name
                 =	  ch_p(T_CHAR)
@@ -1021,7 +1289,8 @@ struct translation_unit_grammar
                 |   ch_p(T_BOOL)
                 |   ch_p(T_SHORT)
                 |   ch_p(T_INT)
-                |   ch_p(T_LONG)
+                |   ch_p(T_LONG) 
+                    >> !( ch_p(T_DOUBLE) | ch_p(T_LONG) )  
                 |   ch_p(T_FLOAT)
                 |   ch_p(T_DOUBLE)
                 |   ch_p(T_VOID)
@@ -1033,6 +1302,14 @@ struct translation_unit_grammar
         }
 
         rule_type const& start() const { return translation_unit; }
+
+        //  Helper function wrapping pattern_p
+        static inline boost::wave::util::pattern_and< boost::wave::token_id>  
+        pp (boost::wave::token_id id)
+        {
+            using namespace boost::wave;
+            return util::pattern_p(id, MainTokenMask);
+        }
     };
   
 #if HANNIBAL_DUMP_PARSE_TREE != 0

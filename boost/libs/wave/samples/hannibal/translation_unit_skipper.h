@@ -1,5 +1,5 @@
 //  Hannibal: partial C++ grammar to parse C++ type information
-//  Copyright (c) 2005 Danny Havenith
+//  Copyright (c) 2005-2006 Danny Havenith
 // 
 //  Boost.Wave: A Standard compliant C++ preprocessor
 //  Copyright (c) 2001-2006 Hartmut Kaiser
