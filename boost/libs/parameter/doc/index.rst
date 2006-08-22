@@ -37,11 +37,12 @@ __ ../../../../index.htm
    
    namespace test
    {
+     BOOST_PARAMETER_NAME(title)
      BOOST_PARAMETER_NAME(width)
      BOOST_PARAMETER_NAME(titlebar)
    
      BOOST_PARAMETER_FUNCTION(
-        (int), new_window, tag, (required (width,*)(titlebar,*)))
+        (int), new_window, tag, (required (title,*)(width,*)(titlebar,*)))
      {
         return 0;
      }
@@ -55,7 +56,7 @@ __ ../../../../index.htm
      namespace parameter = boost::parameter;
      
      struct Foo {};
-     template <class A0, class A1>
+     template <class T, class A0, class A1>
      struct smart_ptr
      {
          smart_ptr(Foo*);
