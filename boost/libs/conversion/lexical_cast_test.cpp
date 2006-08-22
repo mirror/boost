@@ -38,9 +38,9 @@
 // Test all 65536 values if true:
 bool const lcast_test_small_integral_types_completely = false;
 
-// LCAST_INTEGRAL_TEST_COUNTER: use when testing all values of an integral
+// lcast_integral_test_counter: use when testing all values of an integral
 // types is not possible. Max. portable value is 32767.
-#define LCAST_INTEGRAL_TEST_COUNTER 1000
+int const lcast_integral_test_counter=1000;
 
 using namespace boost;
 
@@ -201,6 +201,9 @@ void test_conversion_to_bool()
 
 void test_conversion_to_string()
 {
+    char buf[] = "hello";
+    char* str = buf;
+    BOOST_CHECK_EQUAL(str, lexical_cast<std::string>(str));
     BOOST_CHECK_EQUAL("A", lexical_cast<std::string>('A'));
     BOOST_CHECK_EQUAL(" ", lexical_cast<std::string>(' '));
     BOOST_CHECK_EQUAL("123", lexical_cast<std::string>(123));
@@ -273,6 +276,8 @@ void test_conversion_to_wchar_t()
 #if !defined(DISABLE_WIDE_CHAR_SUPPORT) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
     BOOST_CHECK_EQUAL(L'1', lexical_cast<wchar_t>(1));
     BOOST_CHECK_EQUAL(L'0', lexical_cast<wchar_t>(0));
+    BOOST_CHECK_EQUAL(L'1', lexical_cast<wchar_t>('1'));
+    BOOST_CHECK_EQUAL(L'0', lexical_cast<wchar_t>('0'));
     BOOST_CHECK_THROW(lexical_cast<wchar_t>(123), bad_lexical_cast);
     BOOST_CHECK_EQUAL(L'1', lexical_cast<wchar_t>(1.0));
     BOOST_CHECK_EQUAL(L'0', lexical_cast<wchar_t>(0.0));
@@ -314,6 +319,9 @@ void test_conversion_from_wstring()
 void test_conversion_to_wstring()
 {
     #ifndef DISABLE_WIDE_CHAR_SUPPORT
+    wchar_t buf[] = L"hello";
+    wchar_t* str = buf;
+    BOOST_CHECK(str == lexical_cast<std::wstring>(str));
     BOOST_CHECK(L"123" == lexical_cast<std::wstring>(123));
     BOOST_CHECK(L"1.23" == lexical_cast<std::wstring>(1.23));
     BOOST_CHECK(L"1.111111111" == lexical_cast<std::wstring>(1.111111111));
@@ -322,6 +330,7 @@ void test_conversion_to_wstring()
 #if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
     BOOST_CHECK(L"A" == lexical_cast<std::wstring>(L'A'));
     BOOST_CHECK(L" " == lexical_cast<std::wstring>(L' '));
+    BOOST_CHECK(L"A" == lexical_cast<std::wstring>('A'));
 #endif
     BOOST_CHECK(L"Test" == lexical_cast<std::wstring>(L"Test"));
     BOOST_CHECK(L" " == lexical_cast<std::wstring>(L" "));
@@ -353,32 +362,56 @@ void test_no_whitespace_stripping()
     BOOST_CHECK_THROW(lexical_cast<int>("123 "), bad_lexical_cast);
 }
 
+// Replace "-,999" with "-999".
+template<class CharT>
+std::basic_string<CharT> to_str_gcc_workaround(std::basic_string<CharT> str)
+{
+    std::locale loc;
+    std::numpunct<CharT> const& np = BOOST_USE_FACET(std::numpunct<CharT>, loc);
+
+    if(np.grouping().empty())
+        return str;
+
+    CharT prefix[3] = {
+        boost::detail::lcast_char_constants<CharT>::minus,
+        np.thousands_sep(),
+        CharT()
+    };
+
+    if(str.find(prefix) != 0)
+        return str;
+
+    prefix[1] = CharT(); // "-," -> "-"
+    str.replace(0, 2, prefix);
+    return str;
+}
+
 template<class CharT, class T>
 std::basic_string<CharT> to_str(T t)
 {
     std::basic_ostringstream<CharT> o;
     o << t;
-    return o.str();
+    return to_str_gcc_workaround(o.str());
 }
 
 template<class T, class CharT>
 void test_conversion_from_integral_to_char(CharT zero)
 {
-    BOOST_CHECK(lexical_cast<char>(static_cast<T>(0)) == zero + 0);
-    BOOST_CHECK(lexical_cast<char>(static_cast<T>(1)) == zero + 1);
-    BOOST_CHECK(lexical_cast<char>(static_cast<T>(2)) == zero + 2);
-    BOOST_CHECK(lexical_cast<char>(static_cast<T>(3)) == zero + 3);
-    BOOST_CHECK(lexical_cast<char>(static_cast<T>(4)) == zero + 4);
-    BOOST_CHECK(lexical_cast<char>(static_cast<T>(5)) == zero + 5);
-    BOOST_CHECK(lexical_cast<char>(static_cast<T>(6)) == zero + 6);
-    BOOST_CHECK(lexical_cast<char>(static_cast<T>(7)) == zero + 7);
-    BOOST_CHECK(lexical_cast<char>(static_cast<T>(8)) == zero + 8);
-    BOOST_CHECK(lexical_cast<char>(static_cast<T>(9)) == zero + 9);
+    BOOST_CHECK(lexical_cast<CharT>(static_cast<T>(0)) == zero + 0);
+    BOOST_CHECK(lexical_cast<CharT>(static_cast<T>(1)) == zero + 1);
+    BOOST_CHECK(lexical_cast<CharT>(static_cast<T>(2)) == zero + 2);
+    BOOST_CHECK(lexical_cast<CharT>(static_cast<T>(3)) == zero + 3);
+    BOOST_CHECK(lexical_cast<CharT>(static_cast<T>(4)) == zero + 4);
+    BOOST_CHECK(lexical_cast<CharT>(static_cast<T>(5)) == zero + 5);
+    BOOST_CHECK(lexical_cast<CharT>(static_cast<T>(6)) == zero + 6);
+    BOOST_CHECK(lexical_cast<CharT>(static_cast<T>(7)) == zero + 7);
+    BOOST_CHECK(lexical_cast<CharT>(static_cast<T>(8)) == zero + 8);
+    BOOST_CHECK(lexical_cast<CharT>(static_cast<T>(9)) == zero + 9);
 
-    BOOST_CHECK_THROW(lexical_cast<char>(static_cast<T>(10)), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<CharT>(static_cast<T>(10)), bad_lexical_cast);
 
     T t = std::numeric_limits<T>::max();
-    BOOST_CHECK_THROW(lexical_cast<char>(t), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<CharT>(t), bad_lexical_cast);
 }
 
 template<class T>
@@ -423,8 +456,8 @@ void test_conversion_from_integral_to_string(CharT)
     {
         T const min_val = limits::min();
         T const max_val = limits::max();
-        int const counter = LCAST_INTEGRAL_TEST_COUNTER < max_val / 2 ?
-            LCAST_INTEGRAL_TEST_COUNTER : max_val / 2;
+        int const counter = lcast_integral_test_counter < max_val / 2 ?
+            lcast_integral_test_counter : max_val / 2;
 
         int i;
 
