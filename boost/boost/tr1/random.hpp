@@ -12,7 +12,7 @@
 #  include BOOST_TR1_HEADER(random)
 #else
 // Boost.Random:
-#include <oost/random.hpp>
+#include <boost/random.hpp>
 #ifndef __SUNPRO_CC
     // Sunpros linker complains if we so much as include this...
 #   include <boost/nondet_random.hpp>
