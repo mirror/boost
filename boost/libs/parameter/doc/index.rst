@@ -49,6 +49,9 @@ __ ../../../../index.htm
      BOOST_PARAMETER_TEMPLATE_KEYWORD(deleter)
      BOOST_PARAMETER_TEMPLATE_KEYWORD(copy_policy)
 
+     template <class T> struct Deallocate {};
+     struct DeepCopy {};
+
      namespace parameter = boost::parameter;
      
      struct Foo {};
