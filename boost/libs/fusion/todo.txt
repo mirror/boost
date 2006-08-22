@@ -1,0 +1,8 @@
+* Consider object equivalent of functions and algorithms (so you can do transform(iterators, deref()) with needing to put together a wrapper for deref).
+* Consider segmented sequence / algorithm support
+* Consider utility element_ref<Seq,Member>::type thats consts and refs as appropriate
+* Improved motivation section
+* Expand details of view concept
+* Examples, examples, examples
+* unpack_args documentation
+* look at lambda stuff

@@ -1,0 +1,126 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>is_sequence</title>
+<link rel="stylesheet" href="../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<link rel="start" href="../../index.html" title="Chapter 1. Fusion 2.0">
+<link rel="up" href="../support.html" title="Support">
+<link rel="prev" href="../support.html" title="Support">
+<link rel="next" href="is_view.html" title="is_view">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%">
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../more/index.htm">More</a></td>
+</table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../support.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../support.html"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="is_view.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="fusion.support.is_sequence"></a><a href="is_sequence.html" title="is_sequence">is_sequence</a></h3></div></div></div>
+<a name="fusion.support.is_sequence.description"></a><h4>
+<a name="id446159"></a>
+        <a href="is_sequence.html#fusion.support.is_sequence.description">Description</a>
+      </h4>
+<p>
+        Metafunction that evaluates to <tt class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></tt>
+        if a certain type <tt class="computeroutput"><span class="identifier">T</span></tt> is a
+        conforming Fusion <a href="../sequences.html" title="Sequences">Sequence</a>, <tt class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">false_</span></tt>
+        otherwise. This may be specialized to accomodate clients which provide Fusion
+        conforming sequences.
+      </p>
+<a name="fusion.support.is_sequence.synopsis"></a><h4>
+<a name="id446248"></a>
+        <a href="is_sequence.html#fusion.support.is_sequence.synopsis">Synopsis</a>
+      </h4>
+<pre class="programlisting">
+<span class="keyword">namespace</span> <span class="identifier">traits</span>
+<span class="special">{</span>
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+    <span class="keyword">struct</span> <span class="identifier">is_sequence</span> 
+    <span class="special">{</span>
+        <span class="keyword">typedef</span> <span class="emphasis"><em>unspecified</em></span> <span class="identifier">type</span><span class="special">;</span>
+    <span class="special">};</span>
+<span class="special">}</span>
+</pre>
+<a name="fusion.support.is_sequence.parameters"></a><h4>
+<a name="id446378"></a>
+        <a href="is_sequence.html#fusion.support.is_sequence.parameters">Parameters</a>
+      </h4>
+<div class="informaltable">
+<h4>
+<a name="id446399"></a>
+        </h4>
+<table class="table">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>Parameter</th>
+<th>Requirement</th>
+<th>Description</th>
+</tr></thead>
+<tbody><tr>
+<td><tt class="computeroutput"><span class="identifier">T</span></tt></td>
+<td>Any
+              type</td>
+<td>The type to query.</td>
+</tr></tbody>
+</table>
+</div>
+<a name="fusion.support.is_sequence.expression_semantics"></a><h4>
+<a name="id446462"></a>
+        <a href="is_sequence.html#fusion.support.is_sequence.expression_semantics">Expression
+        Semantics</a>
+      </h4>
+<pre class="programlisting">
+<span class="keyword">typedef</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">is_sequence</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">c</span><span class="special">;</span>
+</pre>
+<p>
+        <span class="bold"><b>Return type</b></span>: An MPL Boolean Constant.
+      </p>
+<p>
+        <span class="bold"><b>Semantics</b></span>: Metafunction that evaluates to
+        <tt class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></tt> if a certain type <tt class="computeroutput"><span class="identifier">T</span></tt>
+        is a conforming Fusion sequence, <tt class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">false_</span></tt>
+        otherwise.
+      </p>
+<a name="fusion.support.is_sequence.header"></a><h4>
+<a name="id446618"></a>
+        <a href="is_sequence.html#fusion.support.is_sequence.header">Header</a>
+      </h4>
+<pre class="programlisting">
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">is_sequence</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<a name="fusion.support.is_sequence.example"></a><h4>
+<a name="id446710"></a>
+        <a href="is_sequence.html#fusion.support.is_sequence.example">Example</a>
+      </h4>
+<pre class="programlisting">
+<span class="identifier">BOOST_MPL_ASSERT_NOT</span><span class="special">((</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">is_sequence</span><span class="special">&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">));</span>
+<span class="identifier">BOOST_MPL_ASSERT_NOT</span><span class="special">((</span> <span class="identifier">is_sequence</span><span class="special">&lt;</span> <span class="keyword">int</span> <span class="special">&gt;</span> <span class="special">));</span>
+<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">is_sequence</span><span class="special">&lt;</span><a href="../sequences/containers/list.html" title="list"><tt class="computeroutput"><span class="identifier">list</span></tt></a><span class="special">&lt;&gt;</span> <span class="special">&gt;</span> <span class="special">));</span>
+<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">is_sequence</span><span class="special">&lt;</span><a href="../sequences/containers/list.html" title="list"><tt class="computeroutput"><span class="identifier">list</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">));</span>
+<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">is_sequence</span><span class="special">&lt;</span><a href="../sequences/containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;&gt;</span> <span class="special">&gt;</span> <span class="special">));</span>
+<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">is_sequence</span><span class="special">&lt;</span><a href="../sequences/containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="special">));</span>
+</pre>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2001-2005 Joel de Guzman, Dan Marsden</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../support.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../support.html"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="is_view.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

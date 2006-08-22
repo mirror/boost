@@ -1,0 +1,176 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>zip_view</title>
+<link rel="stylesheet" href="../../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
+<link rel="up" href="../views.html" title="Views">
+<link rel="prev" href="joint_view.html" title="joint_view">
+<link rel="next" href="transform_view.html" title="transform_view">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%">
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
+</table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="joint_view.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../views.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="transform_view.html"><img src="../../../images/next.png" alt="Next"></a>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="fusion.sequences.views.zip_view"></a><a href="zip_view.html" title="zip_view">zip_view</a></h4></div></div></div>
+<a name="fusion.sequences.views.zip_view.description"></a><h5>
+<a name="id491078"></a>
+          <a href="zip_view.html#fusion.sequences.views.zip_view.description">Description</a>
+        </h5>
+<p>
+          <tt class="computeroutput"><span class="identifier">zip_view</span></tt> presents a view
+          which iterates over a collection of <span class="underline">_sequence</span>_s
+          in parallel. A <tt class="computeroutput"><span class="identifier">zip_view</span></tt>
+          is constructed from a <a href="../../sequences.html" title="Sequences">Sequence</a>
+          of references to the component <span class="underline">_sequence</span>_s.
+        </p>
+<a name="fusion.sequences.views.zip_view.header"></a><h5>
+<a name="id491151"></a>
+          <a href="zip_view.html#fusion.sequences.views.zip_view.header">Header</a>
+        </h5>
+<pre class="programlisting">
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">zip_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<a name="fusion.sequences.views.zip_view.synopsis"></a><h5>
+<a name="id491256"></a>
+          <a href="zip_view.html#fusion.sequences.views.zip_view.synopsis">Synopsis</a>
+        </h5>
+<pre class="programlisting">
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequences</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">zip_view</span><span class="special">;</span>
+</pre>
+<a name="fusion.sequences.views.zip_view.template_parameters"></a><h5>
+<a name="id491334"></a>
+          <a href="zip_view.html#fusion.sequences.views.zip_view.template_parameters">Template
+          parameters</a>
+        </h5>
+<div class="informaltable">
+<h4>
+<a name="id491357"></a>
+          </h4>
+<table class="table">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Default</th>
+</tr></thead>
+<tbody><tr>
+<td><tt class="computeroutput"><span class="identifier">Sequences</span></tt></td>
+<td>A
+                <a href="../concepts/forward_sequence.html" title="Forward
+        Sequence">Forward
+                Sequence</a> of references to other Fusion <span class="underline">_sequence</span>_s</td>
+<td> </td>
+</tr></tbody>
+</table>
+</div>
+<a name="fusion.sequences.views.zip_view.model_of"></a><h5>
+<a name="id491434"></a>
+          <a href="zip_view.html#fusion.sequences.views.zip_view.model_of">Model of</a>
+        </h5>
+<div class="itemizedlist"><ul type="disc"><li><a href="../concepts/forward_sequence.html" title="Forward
+        Sequence">Forward Sequence</a></li></ul></div>
+<div class="variablelist">
+<p class="title"><b>Notation</b></p>
+<dl>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">ZV</span></tt></span></dt>
+<dd>
+            A <tt class="computeroutput"><span class="identifier">joint_view</span></tt> type
+          </dd>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">s</span></tt></span></dt>
+<dd>
+            An instance of <tt class="computeroutput"><span class="identifier">Sequences</span></tt>
+</dd>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">zv1</span></tt>,
+          <tt class="computeroutput"><span class="identifier">zv2</span></tt></span></dt>
+<dd>
+            Instances of <tt class="computeroutput"><span class="identifier">ZV</span></tt>
+</dd>
+</dl>
+</div>
+<a name="fusion.sequences.views.zip_view.expression_semantics"></a><h5>
+<a name="id491577"></a>
+          <a href="zip_view.html#fusion.sequences.views.zip_view.expression_semantics">Expression
+          Semantics</a>
+        </h5>
+<p>
+          Semantics of an expression is defined only where it differs from, or is
+          not defined in <a href="../concepts/forward_sequence.html" title="Forward
+        Sequence">Forward
+          Sequence</a>.
+        </p>
+<div class="informaltable">
+<h4>
+<a name="id491614"></a>
+          </h4>
+<table class="table">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>Expression</th>
+<th>Semantics</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><tt class="computeroutput"><span class="identifier">ZV</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt></td>
+<td>Creates
+                a <tt class="computeroutput"><span class="identifier">zip_view</span></tt> given
+                a sequence of references to the component <span class="underline">_sequence</span>_s.</td>
+</tr>
+<tr>
+<td><tt class="computeroutput"><span class="identifier">ZV</span><span class="special">(</span><span class="identifier">zv1</span><span class="special">)</span></tt></td>
+<td>Copy
+                constructs a <tt class="computeroutput"><span class="identifier">zip_view</span></tt>
+                from another <tt class="computeroutput"><span class="identifier">zip_view</span></tt>,
+                <tt class="computeroutput"><span class="identifier">zv</span></tt>.</td>
+</tr>
+<tr>
+<td><tt class="computeroutput"><span class="identifier">zv1</span> <span class="special">=</span> <span class="identifier">zv2</span></tt></td>
+<td>Assigns
+                to a <tt class="computeroutput"><span class="identifier">zip_view</span></tt>, <tt class="computeroutput"><span class="identifier">zv</span></tt>, from another <tt class="computeroutput"><span class="identifier">zip_view</span></tt>, <tt class="computeroutput"><span class="identifier">zv2</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<a name="fusion.sequences.views.zip_view.example"></a><h5>
+<a name="id491837"></a>
+          <a href="zip_view.html#fusion.sequences.views.zip_view.example">Example</a>
+        </h5>
+<pre class="programlisting">
+<span class="keyword">typedef</span> <a href="../containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">vec1</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="../containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">char</span><span class="special">,</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">vec2</span><span class="special">;</span>
+<span class="identifier">vec1</span> <span class="identifier">v1</span><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">);</span>
+<span class="identifier">vec2</span> <span class="identifier">v2</span><span class="special">(</span><span class="char">'a'</span><span class="special">,</span><span class="char">'b'</span><span class="special">);</span>
+<span class="keyword">typedef</span> <a href="../containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="identifier">vec1</span><span class="special">&amp;,</span> <span class="identifier">vec2</span><span class="special">&amp;&gt;</span> <span class="identifier">sequences</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">zip_view</span><span class="special">&lt;</span><span class="identifier">sequences</span><span class="special">&gt;(</span><span class="identifier">sequences</span><span class="special">(</span><span class="identifier">v1</span><span class="special">,</span> <span class="identifier">v2</span><span class="special">))</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span> <span class="comment">// ((1 a) (2 b))
+</span></pre>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2001-2005 Joel de Guzman, Dan Marsden</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="joint_view.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../views.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="transform_view.html"><img src="../../../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
