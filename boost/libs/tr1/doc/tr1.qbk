@@ -77,6 +77,16 @@ set up the include paths as follows:\n\n
 4) Any other standard library replacements (STLport for example).\n
 5) Your regular standard library.]
 
+[blurb [*Important Note #3: Sun C++ Users]\n\n
+Sun's compiler has a particularly interesting form of `#include`, that
+will actually look for a file named `array.SUNWCCh` if you `#include <array>`.
+In order to make this library work with Sun's compiler you will need to
+set up the include paths as follows:\n\n
+1) boost-root/boost/tr1/tr1/sun\n
+2) boost-root/boost/tr1/tr1\n
+3) boost-root\n
+4) Any other standard library replacements (STLport for example).\n
+5) Your regular standard library.]
 
 [endsect]
 
@@ -1529,85 +1539,85 @@ Not supported.
 
 [section:array_header <array>]
 
-See: [link boost_tr1.array]
+See: [link boost_tr1.array Fixed Size Array]
 
 [endsect]
 
 [section:cmath_header <cmath>]
 
-See: [link boost_tr1.special]
+See: [link boost_tr1.special Special Functions]
 
 [endsect]
 
 [section:complex_header <complex>]
 
-See: [link boost_tr1.complex]
+See: [link boost_tr1.complex Additional Overloads for Complex Number Algorithms]
 
-See: [link boost_tr1.complex_trig]
+See: [link boost_tr1.complex_trig Additional Complex Number Algorithms]
 
 [endsect]
 
 [section:functional <functional>]
 
-See: [link boost_tr1.ref].
+See: [link boost_tr1.ref Reference Wrapper].
 
-See: [link boost_tr1.result_of].
+See: [link boost_tr1.result_of Result_of].
 
-See: [link boost_tr1.mem_fn].
+See: [link boost_tr1.mem_fn Member Function Wrappers].
 
-See: [link boost_tr1.bind].
+See: [link boost_tr1.bind Function Binders].
 
-See: [link boost_tr1.function].
+See: [link boost_tr1.function Polymorphic Function Wrappers].
 
-See: [link boost_tr1.hash].
+See: [link boost_tr1.hash Hash Functions].
 
 [endsect]
 
 [section:memory <memory>]
 
-See: [link boost_tr1.ptrs].
+See: [link boost_tr1.ptrs Smart Pointers].
 
 [endsect]
 
 [section:random_header <random>]
 
-See: [link boost_tr1.random].
+See: [link boost_tr1.random Random Numbers].
 
 [endsect]
 
 [section:regex_header <regex>]
 
-See: [link boost_tr1.regex].
+See: [link boost_tr1.regex Regular Expressions].
 
 [endsect]
 
 [section:tuple_header <tuple>]
 
-See: [link boost_tr1.tuple].
+See: [link boost_tr1.tuple Tuple Types].
 
 [endsect]
 
 [section:type_traits_header <type_traits>]
 
-See: [link boost_tr1.type_traits].
+See: [link boost_tr1.type_traits Type Traits].
 
 [endsect]
 
 [section:unordered_map_header <unordered_map>]
 
-See: [link boost_tr1.unordered_map]
+See: [link boost_tr1.unordered_map Unordered Associative Map]
 
 [endsect]
 
 [section:unordered_set_header <unordered_set>]
 
-See: [link boost_tr1.unordered_set].
+See: [link boost_tr1.unordered_set Unordered Associative Set].
 
 [endsect]
 
 [section:utility_header <utility>]
 
-See: [link boost_tr1.utility].
+See: [link boost_tr1.utility  Tuple Interface to std::pair].
 
 [endsect]
 
@@ -1680,6 +1690,7 @@ as the Boost-specific ones. This will allow these tests to be used against the s
 library's own TR1 implementation as well as the Boost one.
 
 [endsect]
+
 
 
 

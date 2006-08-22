@@ -251,9 +251,13 @@ int main()
    verify_return_type(xorc.base1(), pseudo_random_generator_architype());
    verify_return_type(xorc.base2(), pseudo_random_generator_architype());
 
+#ifndef __SUNPRO_CC
+   // we don't normally allow workarounds in here, but this
+   // class is unsupported on this platform.
    std::tr1::random_device d;
    check_uniform(&d);
    verify_return_type(d.entropy(), double(0));
+#endif
 
    uniform_random_generator_architype& gen = uniform_random_generator_architype::get();
    std::tr1::uniform_int<unsigned long> ui;
