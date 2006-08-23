@@ -345,7 +345,7 @@ public:
             "ill formed integer literal or integer constant too large",   // ill_formed_integer_literal
             "ill formed character literal",             // ill_formed_character_literal
             "unbalanced #if/#endif in include file",    // unbalanced_if_endif
-            "character literal out of range",           // character_literal_out_of_range
+            "expression contains out of range character literal", // character_literal_out_of_range
             "could not open output file",               // could_not_open_output_file
             "incompatible state information",           // incompatible_config
             "illformed pragma message",                 // ill_formed_pragma_message

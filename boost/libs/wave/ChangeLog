@@ -22,7 +22,7 @@ TODO (known issues):
 
 CHANGELOG
 
-- Wave Version 1.2.5
+- Wave Version 1.3
 - Changed the return value of the 'evaluated_conditional_expression()' pp hook
   to 'bool' allowing to force Wave to re-evaluate the current conditional
   expression. This was suggested by Felipe Magno de Almeida.
@@ -177,7 +177,15 @@ Boost V1.34.0
 - Fixed a couple of SunPro5.8 warnings.
 - Fixed a bug resulting in a crash if a macro was redefined with a shorter
   expansion list as it was defined initially. Added a corresponding test case.
+- Fixed a bug causing an infinite loop when there was a missing endif in the 
+  main preprocessed file.
+- Improved error recovery for illegal preprocessing directive errors.
+- Improved error handling and error recovery for conditional expressions 
+  (#if/#elif expressions).
   
+- Wave now passes 160 out of 161 tests from the MCPP V2.6.1 validation 
+  testsuite!
+
 Sat Feb 18 2005
 - Version 1.2.3
 - Added a missing throw() specification to the function 

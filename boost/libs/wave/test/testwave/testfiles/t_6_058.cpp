@@ -17,7 +17,7 @@
 
 // 32.5: Value of a numerical escape sequence in character constant should
 //       be in the range of char.
-//E t_6_058.cpp(21): warning: character literal out of range: '\x123'
+//E t_6_058.cpp(21): warning: expression contains out of range character literal: '\x123' == 0x123
 #if '\x123' == 0x123
 false
 #else

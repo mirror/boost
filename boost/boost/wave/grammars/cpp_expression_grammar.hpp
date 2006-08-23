@@ -83,7 +83,7 @@ namespace impl {
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  convert the given tokenvalue (integer literal) to a unsigned long
+//  convert the given token value (integer literal) to a unsigned long
 //
 ///////////////////////////////////////////////////////////////////////////////
     struct convert_intlit {
@@ -98,19 +98,20 @@ namespace impl {
         boost::wave::grammars::closures::closure_value 
         operator()(TokenT const &token) const
         { 
-            typedef boost::wave::grammars::closures::closure_value return_t;
+            typedef boost::wave::grammars::closures::closure_value return_type;
             bool is_unsigned = false;
             unsigned long ul = intlit_grammar_gen<TokenT>::evaluate(token, 
                 is_unsigned);
 
-            return is_unsigned ? return_t(ul) : return_t(static_cast<long>(ul));
+            return is_unsigned ? 
+                return_type(ul) : return_type(static_cast<long>(ul));
         }
     };
     phoenix::function<convert_intlit> const as_intlit;
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  convert the given tokenvalue (character literal) to a unsigned int
+//  convert the given token value (character literal) to a unsigned int
 //
 ///////////////////////////////////////////////////////////////////////////////
     struct convert_chlit {
@@ -125,15 +126,17 @@ namespace impl {
         boost::wave::grammars::closures::closure_value 
         operator()(TokenT const &token) const
         { 
-            typedef boost::wave::grammars::closures::closure_value return_t;
-            return return_t(chlit_grammar_gen<TokenT>::evaluate(token));
+            typedef boost::wave::grammars::closures::closure_value return_type;
+            value_error status = error_noerror;
+            unsigned int value = chlit_grammar_gen<TokenT>::evaluate(token, status);
+            return return_type(value, status);
         }
     };
     phoenix::function<convert_chlit> const as_chlit;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-//  Handle the ?: operator with correct type propagation
+//  Handle the ?: operator with correct type and error propagation
 //
 ////////////////////////////////////////////////////////////////////////////////
     struct operator_questionmark {
@@ -148,12 +151,121 @@ namespace impl {
         boost::wave::grammars::closures::closure_value 
         operator()(CondT const &cond, Arg1T &val1, Arg2T const &val2) const
         { 
-            typedef boost::wave::grammars::closures::closure_value return_t;
-            return return_t(val1.handle_questionmark(cond, val2));
+            return val1.handle_questionmark(cond, val2);
         }
     };
     phoenix::function<operator_questionmark> const questionmark;
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Handle type conversion conserving error conditions
+//
+///////////////////////////////////////////////////////////////////////////////
+    struct operator_to_bool {
     
+        template <typename ArgT>
+        struct result { 
+        
+            typedef boost::wave::grammars::closures::closure_value type; 
+        };
+
+        template <typename ArgT>
+        boost::wave::grammars::closures::closure_value 
+        operator()(ArgT &val) const
+        { 
+            typedef boost::wave::grammars::closures::closure_value return_type;
+            return return_type(
+                boost::wave::grammars::closures::as_bool(val), val.is_valid());
+        }
+    };
+    phoenix::function<operator_to_bool> const to_bool;
+    
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Handle explicit type conversion
+//
+///////////////////////////////////////////////////////////////////////////////
+    struct operator_as_bool {
+    
+        template <typename ArgT>
+        struct result { 
+        
+            typedef bool type; 
+        };
+
+        template <typename ArgT>
+        bool
+        operator()(ArgT &val) const
+        { 
+            return boost::wave::grammars::closures::as_bool(val);
+        }
+    };
+    phoenix::function<operator_as_bool> const as_bool;
+    
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Handle closure value operators with proper error propagation
+//
+///////////////////////////////////////////////////////////////////////////////
+#define BOOST_WAVE_BINARYOP(op, optok)                                        \
+    struct operator_binary_ ## op {                                           \
+                                                                              \
+        template <typename Arg1T, typename Arg2T>                             \
+        struct result {                                                       \
+                                                                              \
+            typedef boost::wave::grammars::closures::closure_value type;      \
+        };                                                                    \
+                                                                              \
+        template <typename Arg1T, typename Arg2T>                             \
+        boost::wave::grammars::closures::closure_value                        \
+        operator()(Arg1T &val1, Arg2T &val2) const                            \
+        {                                                                     \
+            return val1 optok val2;                                           \
+        }                                                                     \
+    };                                                                        \
+    phoenix::function<operator_binary_ ## op> const binary_ ## op             \
+    /**/
+
+    BOOST_WAVE_BINARYOP(and, &&);
+    BOOST_WAVE_BINARYOP(or, ||);
+    
+    BOOST_WAVE_BINARYOP(bitand, &);
+    BOOST_WAVE_BINARYOP(bitor, |);
+    BOOST_WAVE_BINARYOP(bitxor, ^);
+    
+    BOOST_WAVE_BINARYOP(lesseq, <=);
+    BOOST_WAVE_BINARYOP(less, <);
+    BOOST_WAVE_BINARYOP(greater, >);
+    BOOST_WAVE_BINARYOP(greateq, >=);
+    BOOST_WAVE_BINARYOP(eq, ==);
+    BOOST_WAVE_BINARYOP(ne, !=);
+
+#undef BOOST_WAVE_BINARYOP
+
+///////////////////////////////////////////////////////////////////////////////
+#define BOOST_WAVE_UNARYOP(op, optok)                                         \
+    struct operator_unary_ ## op {                                            \
+                                                                              \
+        template <typename ArgT>                                              \
+        struct result {                                                       \
+                                                                              \
+            typedef boost::wave::grammars::closures::closure_value type;      \
+        };                                                                    \
+                                                                              \
+        template <typename ArgT>                                              \
+        boost::wave::grammars::closures::closure_value                        \
+        operator()(ArgT &val) const                                           \
+        {                                                                     \
+            return optok val;                                                 \
+        }                                                                     \
+    };                                                                        \
+    phoenix::function<operator_unary_ ## op> const unary_ ## op               \
+    /**/
+
+    BOOST_WAVE_UNARYOP(neg, !);
+    
+#undef BOOST_WAVE_UNARYOP
+
 }   // namespace impl
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -236,7 +348,7 @@ struct expression_grammar :
 
             logical_or_exp 
                 =   logical_and_exp[logical_or_exp.val = arg1]
-                    >> *(   if_p(static_cast_<bool>(logical_or_exp.val))
+                    >> *(   if_p(impl::as_bool(logical_or_exp.val))
                             [
                                 // if one of the || operators is true, no more
                                 // evaluation is required
@@ -244,7 +356,7 @@ struct expression_grammar :
                                 >>  logical_and_exp_nocalc
                                     [
                                         logical_or_exp.val = 
-                                            static_cast_<bool>(logical_or_exp.val)
+                                            impl::to_bool(logical_or_exp.val)
                                     ]
                             ]
                             .else_p
@@ -253,7 +365,7 @@ struct expression_grammar :
                                 >>  logical_and_exp
                                     [
                                         logical_or_exp.val = 
-                                            logical_or_exp.val || arg1
+                                            impl::binary_or(logical_or_exp.val, arg1)
                                     ]
                             ]
                         )
@@ -261,13 +373,13 @@ struct expression_grammar :
 
             logical_and_exp
                 =   inclusive_or_exp[logical_and_exp.val = arg1]
-                    >> *(   if_p(static_cast_<bool>(logical_and_exp.val))
+                    >> *(   if_p(impl::as_bool(logical_and_exp.val))
                             [
                                 pattern_p(T_ANDAND, MainTokenMask)
                                 >>  inclusive_or_exp
                                     [
                                         logical_and_exp.val = 
-                                            logical_and_exp.val && arg1
+                                            impl::binary_and(logical_and_exp.val, arg1)
                                     ]
                             ]
                             .else_p
@@ -278,7 +390,7 @@ struct expression_grammar :
                                 >>  inclusive_or_exp_nocalc
                                     [
                                         logical_and_exp.val =
-                                            static_cast_<bool>(logical_and_exp.val)
+                                            impl::to_bool(logical_and_exp.val)
                                     ]
                             ]
                         )
@@ -290,8 +402,7 @@ struct expression_grammar :
                             >>  exclusive_or_exp
                                 [
                                     inclusive_or_exp.val = 
-                                          static_cast_<unsigned int>(inclusive_or_exp.val) 
-                                      |   static_cast_<unsigned int>(arg1)
+                                        impl::binary_bitor(inclusive_or_exp.val, arg1)
                                 ]
                         )
                 ;
@@ -302,8 +413,7 @@ struct expression_grammar :
                             >>  and_exp
                                 [
                                     exclusive_or_exp.val = 
-                                          static_cast_<unsigned int>(exclusive_or_exp.val)
-                                      ^   static_cast_<unsigned int>(arg1)
+                                        impl::binary_bitxor(exclusive_or_exp.val, arg1)
                                 ]
                         )
                 ;
@@ -314,8 +424,7 @@ struct expression_grammar :
                             >>  cmp_equality
                                 [
                                     and_exp.val = 
-                                          static_cast_<unsigned int>(and_exp.val)
-                                      &   static_cast_<unsigned int>(arg1)
+                                        impl::binary_bitand(and_exp.val, arg1)
                                 ]
                         )
                 ;
@@ -326,13 +435,13 @@ struct expression_grammar :
                             >>  cmp_relational
                                 [
                                     cmp_equality.val = 
-                                        cmp_equality.val == arg1
+                                        impl::binary_eq(cmp_equality.val, arg1)
                                 ]
                         |   pattern_p(T_NOTEQUAL, MainTokenMask)
                             >>  cmp_relational
                                 [
                                     cmp_equality.val = 
-                                        cmp_equality.val != arg1
+                                        impl::binary_ne(cmp_equality.val, arg1)
                                 ]
                         )
                 ;
@@ -343,25 +452,25 @@ struct expression_grammar :
                             >>  shift_exp
                                 [
                                     cmp_relational.val = 
-                                        cmp_relational.val <= arg1
+                                        impl::binary_lesseq(cmp_relational.val, arg1)
                                 ]
                         |   ch_p(T_GREATEREQUAL)
                             >>  shift_exp
                                 [
                                     cmp_relational.val = 
-                                        cmp_relational.val >= arg1
+                                        impl::binary_greateq(cmp_relational.val, arg1)
                                 ]
                         |   ch_p(T_LESS)
                             >>  shift_exp
                                 [
                                     cmp_relational.val = 
-                                        cmp_relational.val < arg1
+                                        impl::binary_less(cmp_relational.val, arg1)
                                 ]
                         |   ch_p(T_GREATER)
                             >>  shift_exp
                                 [
                                     cmp_relational.val = 
-                                        cmp_relational.val > arg1
+                                        impl::binary_greater(cmp_relational.val, arg1)
                                 ]
                         )
                 ;
@@ -432,7 +541,7 @@ struct expression_grammar :
                     ]
                 |   pattern_p(T_NOT, MainTokenMask) >> unary_exp
                     [
-                        unary_exp.val = !arg1
+                        unary_exp.val = impl::unary_neg(arg1)
                     ]
                 ;
 
@@ -638,7 +747,7 @@ expression_grammar_gen<TokenT>::evaluate(
     typename token_sequence_type::const_iterator const &first, 
     typename token_sequence_type::const_iterator const &last, 
     typename token_type::position_type const &act_pos,
-    bool if_block_status)
+    bool if_block_status, value_error &status)
 {
     using namespace boost::spirit;
     using namespace boost::wave;
@@ -699,7 +808,7 @@ expression_grammar_gen<TokenT>::evaluate(
             case T_NEWLINE:
             case T_EOF:
             case T_CPPCOMMENT:              // contains newline
-                return bool(result);        // expression is valid
+                return as_bool(result);     // expression is valid
                 
             default:
             // expression is illformed
@@ -719,24 +828,11 @@ expression_grammar_gen<TokenT>::evaluate(
         }
     }
 
-    if (closure_value::error_noerror != result.is_valid()) {
-    // division by zero occurred
-        string_type expression = as_string<string_type>(first, last);
-        if (0 == expression.size()) 
-            expression = "<empty expression>";
-            
-        if (closure_value::error_division_by_zero == result.is_valid()) {
-            BOOST_WAVE_THROW(preprocess_exception, division_by_zero, 
-                expression.c_str(), act_pos);
-        }
-        else if (closure_value::error_overflow == result.is_valid()) {
-            BOOST_WAVE_THROW(preprocess_exception, integer_overflow,
-                expression.c_str(), act_pos);
-        }
-    }
+    if (error_noerror != result.is_valid()) // division or other error by zero occurred
+        status = result.is_valid();
     
 // token sequence is a valid expression
-    return bool(result);
+    return as_bool(result);
 }
 
 #undef BOOST_WAVE_EXPRGRAMMAR_GEN_INLINE

@@ -736,12 +736,6 @@ cpp_grammar_gen<LexIteratorT, TokenContainerT>::parse_cpp_grammar (
     }
 #endif
 
-    if (!hit.match && token_id(found_directive) != T_EOF) {
-    // recognized invalid directive
-        BOOST_WAVE_THROW(preprocess_exception, ill_formed_directive, 
-            found_directive.get_value().c_str(), act_pos);
-    }
-
     return hit;
 }
 

@@ -292,7 +292,7 @@ struct chlit_grammar :
 template <typename TokenT>
 BOOST_WAVE_CHLITGRAMMAR_GEN_INLINE 
 unsigned int
-chlit_grammar_gen<TokenT>::evaluate(TokenT const &token)
+chlit_grammar_gen<TokenT>::evaluate(TokenT const &token, value_error &status)
 {
     using namespace boost::spirit;
     
@@ -309,25 +309,21 @@ parse_info<typename TokenT::string_type::const_iterator> hit =
     else {
     // range check
         if ('L' == token_val[0]) {
-        // recognised wide character
+        // recognized wide character
             if (g.overflow || 
                 result > (unsigned long)(std::numeric_limits<wchar_t>::max)()) 
             {
             // out of range
-                BOOST_WAVE_THROW(preprocess_exception, 
-                    character_literal_out_of_range, 
-                    token_val.c_str(), token.get_position());
+                status = error_character_overflow;
             }
         }
         else {
-        // recognised narrow ('normal') character
+        // recognized narrow ('normal') character
             if (g.overflow || 
                 result > (unsigned long)(std::numeric_limits<unsigned char>::max)()) 
             {
             // out of range
-                BOOST_WAVE_THROW(preprocess_exception, 
-                    character_literal_out_of_range, 
-                    token_val.c_str(), token.get_position());
+                status = error_character_overflow;
             }
         }
     }

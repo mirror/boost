@@ -17,7 +17,7 @@
 
 // 32.5: Value of a numerical escape sequence in character constant should
 //       be in the range of char.
-//E t_6_059.cpp(21): warning: character literal out of range: L'\xabcdef012'
+//E t_6_059.cpp(21): warning: expression contains out of range character literal: L'\xabcdef012' == 0xbcdef012
 #if L'\xabcdef012' == 0xbcdef012
 false
 #else
