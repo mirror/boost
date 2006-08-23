@@ -18,13 +18,13 @@
 
 namespace boost { namespace fusion
 {
-    template <typename OStream, typename Sequence>
+    template <typename Sequence>
     inline typename
         enable_if<
            fusion::traits::is_sequence<Sequence>
-          , OStream&
+          , std::ostream&
         >::type
-    operator<<(OStream& os, Sequence const& seq)
+    operator<<(std::ostream& os, Sequence const& seq)
     {
         detail::print_sequence(os, seq);
         return os;

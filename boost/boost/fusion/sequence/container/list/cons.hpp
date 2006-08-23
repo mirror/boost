@@ -24,6 +24,7 @@
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/mpl/or.hpp>
 
 namespace boost { namespace fusion
 {
@@ -86,7 +87,12 @@ namespace boost { namespace fusion
         template <typename Sequence>
         explicit cons(
             Sequence const& seq
-          , typename disable_if<is_convertible<Sequence, Car> >::type* dummy = 0)
+          , typename disable_if<
+                mpl::or_<
+                    is_convertible<Sequence, cons> // use copy ctor instead
+                  , is_convertible<Sequence, Car>  // use copy to car instead
+                > 
+            >::type* dummy = 0)
             : car(*fusion::begin(seq))
             , cdr(fusion::next(fusion::begin(seq)), mpl::true_()) {}
 
