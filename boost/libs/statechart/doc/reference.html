@@ -434,7 +434,9 @@
       of <code>cs</code>. <code>S::id_type</code> values are comparable with
       <code>operator==()</code> and <code>operator!=()</code>. An unspecified
       collating order can be established with <code>std::less&lt; S::id_type
-      &gt;</code></td>
+      &gt;</code>. In contrast to <code>typeid( cs )</code>, this function is 
+      available even on platforms that do not support C++ RTTI (or have been 
+      configured to not support it)</td>
     </tr>
 
     <tr>
@@ -451,19 +453,7 @@
       is not defined</td>
     </tr>
 
-    <tr>
-      <td width="25%"><code>typeid( cs )</code></td>
-
-      <td width="12%"><code>const std::<br>
-      type_info &amp;</code></td>
-
-      <td width="60%">A value unambiguously identifying the most-derived type
-      of <code>cs</code>, <b>if</b> <a href=
-      "configuration.html#ApplicationDefinedMacros">BOOST_STATECHART_USE_NATIVE_RTTI</a>
-      is defined. Otherwise, a value identifying the StateBase type is
-      returned</td>
-    </tr>
-  </table>
+    </table>
 
   <h2><a name="SimpleState" id="SimpleState">SimpleState</a> concept</h2>
 
@@ -2934,7 +2924,9 @@ id_type <a name="event_base::dynamic_type" id=
   <b>Note</b>: <code>id_type</code> values are comparable with
   <code>operator==()</code> and <code>operator!=()</code>. An unspecified
   collating order can be established with <code>std::less&lt; id_type
-  &gt;</code></p>
+  &gt;</code>. In contrast to <code>typeid( cs )</code>, this function is 
+  available even on platforms that do not support C++ RTTI (or have been 
+  configured to not support it)</p>
   <pre>
 template&lt; typename CustomId &gt;
 const CustomId * <a name="event_base::custom_dynamic_type_ptr" id=
@@ -3483,7 +3475,7 @@ namespace statechart
   alt="Valid HTML 4.01 Transitional" height="31" width="88"></a></p>
   
   <p>Revised 
-  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->08 July, 2006<!--webbot bot="Timestamp" endspan i-checksum="21156" --></p>
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->20 August, 2006<!--webbot bot="Timestamp" endspan i-checksum="34662" --></p>
 
   <p><i>&copy; Copyright <a href="contact.html">Andreas Huber D&ouml;nni</a>
   2003-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2006<!--webbot bot="Timestamp" endspan i-checksum="770" --></i></p>
