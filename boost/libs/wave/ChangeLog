@@ -45,7 +45,10 @@ CHANGELOG
 - Added new preprocessing hook function: found_line_directive() to be called 
   when a #line directive is encountered. This was suggested by Andreas
   Sæbjørnsen.
-  
+- Improved command line handling for the wave applet.
+- Incorporated latest bug fixes for the Hannibal sample provided by Danny 
+  Havenith. 
+
 Boost V1.34.0
 - Wave Version 1.2.4
 - Added the possibility to explicitely enable/disable the generation of #line 
@@ -171,7 +174,10 @@ Boost V1.34.0
 - Fixed RTTI build issue for VC7.1/bjam --v2 (thanks to Rene Rivera for 
   submitting a patch for the Wave Jamfile.v2).
 - Fixed certain problems reported by the Boost inspection tool.
-
+- Fixed a couple of SunPro5.8 warnings.
+- Fixed a bug resulting in a crash if a macro was redefined with a shorter
+  expansion list as it was defined initially. Added a corresponding test case.
+  
 Sat Feb 18 2005
 - Version 1.2.3
 - Added a missing throw() specification to the function 

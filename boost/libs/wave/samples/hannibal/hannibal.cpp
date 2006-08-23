@@ -59,9 +59,11 @@ namespace {
         return t.get_value(); 
     }
 
-}
+///////////////////////////////////////////////////////////////////////////////
+}   // unnamed namespace 
 #endif
 
+///////////////////////////////////////////////////////////////////////////////
 namespace {
     
     ///////////////////////////////////////////////////////////////////////////
@@ -115,7 +117,9 @@ namespace {
             return true;
         }
     }
-}
+    
+///////////////////////////////////////////////////////////////////////////////
+}   // unnamed namespace
 
 ///////////////////////////////////////////////////////////////////////////////
 // main entry point
@@ -175,63 +179,63 @@ boost::wave::util::file_position_type current_position;
     context_type ctx (instring.begin(), instring.end(), inputfile.c_str());
 
     // add include directories to the include path
-    if (vm.count("include")) {
-        vector<string> const &paths = 
-            vm["include"].as<vector<string> >();
-        vector<string>::const_iterator end = paths.end();
-        for (vector<string>::const_iterator cit = paths.begin(); 
-            cit != end; ++cit)
-        {
-            ctx.add_include_path((*cit).c_str());
+        if (vm.count("include")) {
+            vector<string> const &paths = 
+                vm["include"].as<vector<string> >();
+            vector<string>::const_iterator end = paths.end();
+            for (vector<string>::const_iterator cit = paths.begin(); 
+                cit != end; ++cit)
+            {
+                ctx.add_include_path((*cit).c_str());
+            }
         }
-    }
 
     // add system include directories to the include path
-    if (vm.count("sysinclude")) {
-        vector<string> const &syspaths = 
-            vm["sysinclude"].as<vector<string> >();
-        vector<string>::const_iterator end = syspaths.end();
-        for (vector<string>::const_iterator cit = syspaths.begin(); 
-            cit != end; ++cit)
-        {
-            ctx.add_sysinclude_path((*cit).c_str());
+        if (vm.count("sysinclude")) {
+            vector<string> const &syspaths = 
+                vm["sysinclude"].as<vector<string> >();
+            vector<string>::const_iterator end = syspaths.end();
+            for (vector<string>::const_iterator cit = syspaths.begin(); 
+                cit != end; ++cit)
+            {
+                ctx.add_sysinclude_path((*cit).c_str());
+            }
         }
-    }
 
     // add additional defined macros 
-    if (vm.count("define")) {
-        vector<string> const &macros = vm["define"].as<vector<string> >();
-        vector<string>::const_iterator end = macros.end();
-        for (vector<string>::const_iterator cit = macros.begin(); 
-             cit != end; ++cit)
-        {
-            ctx.add_macro_definition(*cit);
+        if (vm.count("define")) {
+            vector<string> const &macros = vm["define"].as<vector<string> >();
+            vector<string>::const_iterator end = macros.end();
+            for (vector<string>::const_iterator cit = macros.begin(); 
+                 cit != end; ++cit)
+            {
+                ctx.add_macro_definition(*cit);
+            }
         }
-    }
 
     // add additional predefined macros 
-    if (vm.count("predefine")) {
-        vector<string> const &predefmacros = 
-            vm["predefine"].as<vector<string> >();
-        vector<string>::const_iterator end = predefmacros.end();
-        for (vector<string>::const_iterator cit = predefmacros.begin(); 
-             cit != end; ++cit)
-        {
-            ctx.add_macro_definition(*cit, true);
+        if (vm.count("predefine")) {
+            vector<string> const &predefmacros = 
+                vm["predefine"].as<vector<string> >();
+            vector<string>::const_iterator end = predefmacros.end();
+            for (vector<string>::const_iterator cit = predefmacros.begin(); 
+                 cit != end; ++cit)
+            {
+                ctx.add_macro_definition(*cit, true);
+            }
         }
-    }
 
     // undefine specified macros
-    if (vm.count("undefine")) {
-        vector<string> const &undefmacros = 
-            vm["undefine"].as<vector<string> >();
-        vector<string>::const_iterator end = undefmacros.end();
-        for (vector<string>::const_iterator cit = undefmacros.begin(); 
-             cit != end; ++cit)
-        {
-            ctx.remove_macro_definition((*cit).c_str(), true);
+        if (vm.count("undefine")) {
+            vector<string> const &undefmacros = 
+                vm["undefine"].as<vector<string> >();
+            vector<string>::const_iterator end = undefmacros.end();
+            for (vector<string>::const_iterator cit = undefmacros.begin(); 
+                 cit != end; ++cit)
+            {
+                ctx.remove_macro_definition((*cit).c_str(), true);
+            }
         }
-    }
 
     // analyze the input file
     context_type::iterator_type first = ctx.begin();
@@ -257,8 +261,8 @@ boost::wave::util::file_position_type current_position;
 #endif
 
         if (pi.full) {
-            std::cout << "Hannibal: parsed sucessfully: " << inputfile 
-                      << std::endl;
+            std::cout 
+                << "Hannibal: parsed sucessfully: " << inputfile << std::endl;
 
 #if HANNIBAL_DUMP_PARSE_TREE != 0
             // generate xml dump from parse tree, if requested
@@ -267,10 +271,11 @@ boost::wave::util::file_position_type current_position;
 #endif
         }
         else {
-            std::cerr << "Hannibal: parsing failed: " << inputfile
-                      << std::endl;
-            std::cerr << "Hannibal: last recognized token was: " << *pi.stop
-                      << std::endl;
+            std::cerr 
+                << "Hannibal: parsing failed: " << inputfile << std::endl;
+            std::cerr 
+                << "Hannibal: last recognized token was: " << *pi.stop
+                << std::endl;
 
             using boost::wave::util::file_position_type;
             file_position_type const& pos(pi.stop->get_position());
@@ -283,15 +288,15 @@ boost::wave::util::file_position_type current_position;
     catch (boost::wave::cpp_exception const& e) {
     // some preprocessing error
         std::cerr 
-            << e.file_name() << ":" << e.line_no() << ":" << e.column_no() << ": "
-            << e.description() << std::endl;
+            << e.file_name() << ":" << e.line_no() << ":" << e.column_no() 
+            << ": " << e.description() << std::endl;
         return 2;
     }
     catch (boost::wave::cpplexer::lexing_exception const& e) {
     // some lexing error
         std::cerr 
-            << e.file_name() << ":" << e.line_no() << ":" << e.column_no() << ": "
-            << e.description() << std::endl;
+            << e.file_name() << ":" << e.line_no() << ":" << e.column_no() 
+            << ": " << e.description() << std::endl;
         return 2;
     }
     catch (std::exception const& e) {

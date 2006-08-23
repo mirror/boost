@@ -1080,6 +1080,12 @@ main (int argc, char *argv[])
             return do_actual_work("<stdin>", std::cin, vm, true);
         }
         else {
+            if (arguments.size() > 1) {
+            // this driver understands to parse one input file only
+                cerr << "wave: more than one input file specified, "
+                     << "ignoring all but the first!" << endl;
+            }
+
         std::string file_name(arguments[0].value[0]);
         ifstream instream(file_name.c_str());
 

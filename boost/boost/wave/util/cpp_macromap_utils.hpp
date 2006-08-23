@@ -235,7 +235,8 @@ const_iterator_type last1 = definition.end();
 const_iterator_type first2 = new_definition.begin();
 const_iterator_type last2 = new_definition.end();
     
-    while (first1 != last1 && token_equals(*first1, *first2)) {
+    while (first1 != last1 && first2 != last2 && token_equals(*first1, *first2)) 
+    {
     // skip whitespace, if both sequences have a whitespace next
     token_id id1 = next_token<const_iterator_type>::peek(first1, last1, false);
     token_id id2 = next_token<const_iterator_type>::peek(first2, last2, false);
@@ -279,8 +280,9 @@ parameters_equal(ContainerT const &parameters, ContainerT const &new_parameters)
 const_iterator_type first1 = parameters.begin();
 const_iterator_type last1 = parameters.end();
 const_iterator_type first2 = new_parameters.begin();
+const_iterator_type last2 = new_parameters.end();
 
-    while (first1 != last1) {
+    while (first1 != last1 && first2 != last2) {
     // parameters are different, if the corresponding tokens are different
         using namespace boost::wave;
         if (token_id(*first1) != token_id(*first2) ||
@@ -291,7 +293,7 @@ const_iterator_type first2 = new_parameters.begin();
         ++first1;
         ++first2;
     }
-    return (first1 == last1) ? true : false;
+    return (first1 == last1 && first2 == last2) ? true : false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
