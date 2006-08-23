@@ -13,7 +13,12 @@
 #if BOOST_VERSION >= 103300
 
 // In Boost 1.33+, we have a cons list in Fusion, so just include it.
-# include <boost/spirit/fusion/sequence/cons.hpp>
+
+# if BOOST_VERSION >= 103500
+#  include <boost/fusion/sequence/container/list/cons.hpp> // Boost 1.35+ has Fusion2
+# else
+#  include <boost/spirit/fusion/sequence/cons.hpp> // Fusion1
+# endif
 
 #else
 

@@ -22,7 +22,14 @@
 #include <typeinfo>
 #include <boost/shared_ptr.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/spirit/fusion/algorithm/for_each.hpp>
+#include <boost/version.hpp>
+
+#if BOOST_VERSION >= 103500
+# include <boost/fusion/algorithm/iteration/for_each.hpp>
+#else
+# include <boost/spirit/fusion/algorithm/for_each.hpp>
+#endif
+
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/dynamic/matchable.hpp>
 #include <boost/xpressive/detail/core/matchers.hpp>
@@ -266,7 +273,11 @@ private:
       , xpression_peeker<Char> *peeker
     )
     {
+#if BOOST_VERSION >= 103500
+        fusion::for_each(alternates.derived(), alt_link_pred(this, peeker, next));
+#else
         fusion::for_each(alternates.cast(), alt_link_pred(this, peeker, next));
+#endif
     }
 
     template<typename Traits>

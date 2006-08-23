@@ -9,10 +9,15 @@
 #ifndef BOOST_PROTO_FWD_HPP_EAN_04_01_2005
 #define BOOST_PROTO_FWD_HPP_EAN_04_01_2005
 
+#include <boost/version.hpp>
 #include <boost/call_traits.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/apply_fwd.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
+
+#if BOOST_VERSION >= 103500
+# define BOOST_PROTO_FUSION_V2
+#endif
 
 #ifdef BOOST_PROTO_FUSION_V2
 # include <boost/fusion/tuple/tuple_fwd.hpp>

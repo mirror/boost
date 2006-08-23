@@ -16,7 +16,12 @@
 
 #include <string>
 #include <boost/config.hpp>
+#include <boost/version.hpp>
 #include <boost/iterator/iterator_traits.hpp>
+
+#if BOOST_VERSION >= 103500
+# define BOOST_PROTO_FUSION_V2
+#endif
 
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 # error Sorry, xpressive requires a compiler that supports partial template specialization.
