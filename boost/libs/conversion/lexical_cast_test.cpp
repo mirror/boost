@@ -368,20 +368,17 @@ std::basic_string<CharT> to_str_gcc_workaround(std::basic_string<CharT> str)
 {
     std::locale loc;
     std::numpunct<CharT> const& np = BOOST_USE_FACET(std::numpunct<CharT>, loc);
+    std::ctype<CharT> const& ct = BOOST_USE_FACET(std::ctype<CharT>, loc);
 
     if(np.grouping().empty())
         return str;
 
-    CharT prefix[3] = {
-        boost::detail::lcast_char_constants<CharT>::minus,
-        np.thousands_sep(),
-        CharT()
-    };
+    CharT prefix[3] = { ct.widen('-'), np.thousands_sep(), CharT() };
 
     if(str.find(prefix) != 0)
         return str;
 
-    prefix[1] = CharT(); // "-," -> "-"
+    prefix[1] = CharT();
     str.replace(0, 2, prefix);
     return str;
 }
