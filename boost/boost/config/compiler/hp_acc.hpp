@@ -27,12 +27,14 @@
 #    define BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE
 #endif
 
-#if (__HP_aCC <= 33900) || !defined(BOOST_STRICT_CONFIG)
+// This version check is way to high, but we don't know the right one to use:
+#if (__HP_aCC < 60700) 
 #    define BOOST_NO_UNREACHABLE_RETURN_DETECTION
 #    define BOOST_NO_TEMPLATE_TEMPLATES
 #    define BOOST_NO_SWPRINTF
 #    define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
 #    define BOOST_NO_IS_ABSTRACT
+#    define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 //     std lib config should set this one already:
 //#    define BOOST_NO_STD_ALLOCATOR
 #endif 
@@ -46,8 +48,6 @@
 #if (__HP_aCC >= 50000 ) && (__HP_aCC <= 53800 ) || (__HP_aCC < 31300 )
 #    define BOOST_NO_MEMBER_TEMPLATE_KEYWORD
 #endif
-
-#define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 
 #define BOOST_COMPILER "HP aCC version " BOOST_STRINGIZE(__HP_aCC)
 

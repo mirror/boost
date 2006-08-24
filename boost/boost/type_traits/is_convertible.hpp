@@ -340,7 +340,7 @@ struct is_convertible_impl_select<true, false, true>
 template <typename From, typename To>
 struct is_convertible_impl_dispatch_base
 {
-#ifndef __HP_aCC
+#if !BOOST_WORKAROUND(__HP_aCC, < 60700)
    typedef is_convertible_impl_select< 
       ::boost::is_arithmetic<From>::value, 
       ::boost::is_arithmetic<To>::value,
