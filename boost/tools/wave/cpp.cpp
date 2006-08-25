@@ -217,7 +217,7 @@ namespace cmd_line_utils {
 
     // Read all options from a given config file, parse and add them to the
     // given variables_map
-    void read_config_file_options(string const &filename, 
+    bool read_config_file_options(string const &filename, 
         po::options_description const &desc, po::variables_map &vm,
         bool may_fail = false)
     {
@@ -229,7 +229,7 @@ namespace cmd_line_utils {
                     << ": command line warning: config file not found"
                     << endl;
             }
-            return;
+            return false;
         }
         
     vector<string> options;
@@ -256,6 +256,7 @@ namespace cmd_line_utils {
                 .options(desc).style(unix_style).run(), vm);
             po::notify(vm);
         }
+        return true;
     }
 
     // predicate to extract all positional arguments from the command line
@@ -1032,6 +1033,32 @@ main (int argc, char *argv[])
         cmd_line_utils::read_config_file_options(filename.string(), 
             desc_overall_cfgfile, vm, true);
 
+    // extract the arguments from the parsed command line
+    vector<po::option> arguments;
+    
+        std::remove_copy_if(opts.options.begin(), opts.options.end(), 
+            back_inserter(arguments), cmd_line_utils::is_argument());
+            
+    // And now try to find a config file somewhere up the filesystem hierarchy 
+    // starting with the input file path. This allows to use a general wave.cfg 
+    // file for all files in a certain project.
+        if (arguments.size() > 0 && arguments[0].value[0] != "-") {
+        // construct full path of input file
+            fs::path input_dir (fs::complete(fs::path(arguments[0].value[0], fs::native)));
+            input_dir = input_dir.branch_path();    // chop of file name
+
+        // walk up the hierarchy, trying to find a file wave.cfg 
+            while (!input_dir.empty()) {
+                fs::path filename = input_dir / "wave.cfg";
+                if (cmd_line_utils::read_config_file_options(filename.string(), 
+                    desc_overall_cfgfile, vm, true))
+                {
+                    break;    // break on the first cfg file found
+                }
+                input_dir = input_dir.branch_path();
+            }
+        }
+        
     // if there is specified at least one config file, parse it and add the 
     // options to the main variables_map
         if (vm.count("config-file")) {
@@ -1066,12 +1093,6 @@ main (int argc, char *argv[])
             return print_copyright();
         }
 
-    // extract the arguments from the parsed command line
-    vector<po::option> arguments;
-    
-        std::remove_copy_if(opts.options.begin(), opts.options.end(), 
-            back_inserter(arguments), cmd_line_utils::is_argument());
-            
     // if there is no input file given, then take input from stdin
         if (0 == arguments.size() || 0 == arguments[0].value.size() ||
             arguments[0].value[0] == "-") 

@@ -19,7 +19,7 @@
 
 #define CPP_VERSION_FULL_STR        BOOST_PP_STRINGIZE(CPP_VERSION_FULL)
                                      
-#define CPP_VERSION_DATE            20060514L
-#define CPP_VERSION_DATE_STR        "20060514"
+#define CPP_VERSION_DATE            20060825L
+#define CPP_VERSION_DATE_STR        "20060825"
 
 #endif // !defined(CPP_VERSION_HPP_CE4FE67F_63F9_468D_8364_C855F89D3C5D_INCLUDED)

@@ -48,7 +48,9 @@ CHANGELOG
 - Improved command line handling for the wave applet.
 - Incorporated latest bug fixes for the Hannibal sample provided by Danny 
   Havenith. 
-
+- Added loading a wave.cfg file from anywhere up the filesystem hierarchy 
+  starting from the input file to the wave driver applet.
+  
 Boost V1.34.0
 - Wave Version 1.2.4
 - Added the possibility to explicitely enable/disable the generation of #line 

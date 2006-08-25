@@ -922,9 +922,13 @@ pp_iterator_functor<ContextT>::can_ignore_pp_directive(IteratorT &it)
             break;
 
         case T_PP_ELSE:         // #else
+        case T_PP_ENDIF:        // #endif
             {
             // handle this directive
-                on_else();
+                if (T_PP_ELSE == token_id(*it))
+                    on_else();
+                else
+                    on_endif();
 
             // make sure, there are no (non-whitespace) tokens left on this line                
                 string_type value ((*it).get_value());
@@ -945,30 +949,6 @@ pp_iterator_functor<ContextT>::can_ignore_pp_directive(IteratorT &it)
             }
             return true;
               
-        case T_PP_ENDIF:        // #endif
-            {
-            // handle this directive
-                on_endif();
-
-            // make sure, there are no (non-whitespace) tokens left on this line                
-                string_type value ((*it).get_value());
-                if (!impl::pp_is_last_on_line(ctx, it, iter_ctx->last)) {
-                // enable error recovery (start over with the next line)
-                    impl::skip_to_eol(ctx, it, iter_ctx->last);
-                    seen_newline = true;
-                    iter_ctx->first = it;
-                
-                // report an invalid #else directive
-                    on_illformed(value);
-                    break;
-                }
-
-            // we skipped to the end of this line already
-                seen_newline = true;
-                iter_ctx->first = it;
-            }
-            return true;
-
         default:                // #something else
             on_illformed((*it).get_value());
             break;
@@ -1652,8 +1632,8 @@ token_sequence_type expanded;
                     ctx.get_if_block_status(), status);
                 
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
-    } while (ctx.get_hooks().evaluated_conditional_expression(toexpand, 
-             if_status), false);
+        ctx.get_hooks().evaluated_conditional_expression(toexpand, if_status);
+    } while (false);
 #else
     } while (ctx.get_hooks().evaluated_conditional_expression(ctx, 
                 found_directive, toexpand, if_status) 
@@ -1749,14 +1729,14 @@ token_sequence_type expanded;
         }
 #endif
 
-// parse the expression and enter the #elif block
+    // parse the expression and enter the #elif block
         if_status = grammars::expression_grammar_gen<result_type>::
             evaluate(expanded.begin(), expanded.end(), act_pos,
                 ctx.get_if_block_status(), status);
                 
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
-    } while (ctx.get_hooks().evaluated_conditional_expression(toexpand, 
-             if_status), false);
+        ctx.get_hooks().evaluated_conditional_expression(toexpand, if_status);
+    } while (false);
 #else
     } while (ctx.get_hooks().evaluated_conditional_expression(ctx, 
                 found_directive, toexpand, if_status) 
@@ -1776,7 +1756,7 @@ token_sequence_type expanded;
         if (grammars::error_integer_overflow & status) {
         // we validly may continue
             if (!ctx.enter_elif_block(if_status)) { 
-            // #else without matching #if
+            // #elif without matching #if
                 BOOST_WAVE_THROW(preprocess_exception, missing_matching_if, 
                     "#elif", act_pos);
             }
@@ -1787,7 +1767,7 @@ token_sequence_type expanded;
         if (grammars::error_character_overflow & status) {
         // we validly may continue
             if (!ctx.enter_elif_block(if_status)) { 
-            // #else without matching #if
+            // #elif without matching #if
                 BOOST_WAVE_THROW(preprocess_exception, missing_matching_if, 
                     "#elif", act_pos);
             }
@@ -1798,7 +1778,7 @@ token_sequence_type expanded;
     }
 
     if (!ctx.enter_elif_block(if_status)) { 
-    // #else without matching #if
+    // #elif without matching #if
         BOOST_WAVE_THROW(preprocess_exception, missing_matching_if, "#elif", 
             act_pos);
     }
