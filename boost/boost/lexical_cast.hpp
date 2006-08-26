@@ -434,8 +434,8 @@ namespace boost
 
                 --left;
                 --finish;
-				int const digit = n % 10;
-				int const cdigit = digit + lcast_char_constants<CharT>::zero;
+                int const digit = n % 10;
+                int const cdigit = digit + lcast_char_constants<CharT>::zero;
                 *finish = static_cast<char>(cdigit);
                 n /= 10;
             } while(n);
