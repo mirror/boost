@@ -185,6 +185,14 @@ void print_result(std::ostream& os, double time, double best)
 void output_xml_results(bool show_description, const std::string& title, const std::string& filename)
 {
     std::stringstream os;
+    // Generate the copyright and license on the output file
+    os << "<!--\n"
+          " Copyright 2004 Eric Niebler.\n"
+          "\n"
+          " Distributed under the Boost Software License, Version 1.0.\n"
+          " (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)\n"
+          "-->\n";
+
     if(result_list.size())
     {
         // calculate the number of columns in this table

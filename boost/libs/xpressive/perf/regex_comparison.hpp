@@ -61,7 +61,7 @@ struct results
         static_xpressive_time(-1),
         //posix_time(-1),
         //pcre_time(-1),
-        factor(std::numeric_limits<double>::max()),
+        factor((std::numeric_limits<double>::max)()),
         expression(ex), 
         description(desc)
    {}
