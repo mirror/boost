@@ -26,7 +26,7 @@
 
 using namespace boost;
 using namespace std;
-    
+
 void check_reference_type();
 
 void check_iterator_range()

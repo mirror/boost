@@ -815,18 +815,18 @@ syntax highlighted according to the current __source_mode__:
 Macros that are already defined are expanded in source code. Example:
 
 [pre'''
-[def __syntax_highlight__ [@quickbook/highlight.html syntax_highlight]]
-[def __quickbook__ [@index.html quickbook]]
+[def __array__ [@http://www.boost.org/doc/html/array/reference.html array]]
+[def __boost__ [@http://www.boost.org/libs/libraries.htm boost]]
 
-    using __quickbook__::__syntax_highlight__;
+    using __boost__::__array__;
 ''']
 
 Generates:
 
-[def __syntax_highlight__ [@quickbook/highlight.html syntax_highlight]]
-[def __quickbook__ [@index.html quickbook]]
+[def __array__ [@http://www.boost.org/doc/html/array/reference.html array]]
+[def __boost__ [@http://www.boost.org/libs/libraries.htm boost]]
 
-    using __quickbook__::__syntax_highlight__;
+    using __boost__::__array__;
 
 [endsect]
 [section:escape_back Escaping Back To QuickBook]

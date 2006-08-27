@@ -27,9 +27,9 @@
 // 
 struct abstract_base
 {
-	virtual ~abstract_base() {}
-	virtual void foo() = 0;
-	virtual abstract_base* clone() const = 0;
+    virtual ~abstract_base() {}
+    virtual void foo() = 0;
+    virtual abstract_base* clone() const = 0;
 };
 
 struct implementation : abstract_base
@@ -49,11 +49,11 @@ struct implementation : abstract_base
     implementation( int, std::string, int, std::string )
     { }
 
-	virtual void foo() {}
-	virtual abstract_base* clone() const
-	{
-		return new implementation( *this );
-	}
+    virtual void foo() {}
+    virtual abstract_base* clone() const
+    {
+        return new implementation( *this );
+    }
 };
 
 
