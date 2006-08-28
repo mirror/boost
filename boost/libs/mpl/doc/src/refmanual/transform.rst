@@ -9,7 +9,7 @@ Synopsis
 .. parsed-literal::
     
     template<
-          typename Seq
+          typename Sequence
         , typename Op
         , typename In = |unspecified|
         >
@@ -35,11 +35,11 @@ Description
 
 ``transform`` is an |overloaded name|:
 
-* ``transform<Seq,Op>`` returns a transformed copy of the original sequence 
+* ``transform<Sequence,Op>`` returns a transformed copy of the original sequence 
   produced by applying an unary transformation ``Op`` to every element 
   in the |begin/end<Sequence>| range.
 
-* ``transform<Seq1,Seq2,Op>`` returns a new sequence produced by applying a
+* ``transform<Seq1,Seq2,BinaryOp>`` returns a new sequence produced by applying a
   binary transformation ``BinaryOp`` to a pair of elements (e\ :sub:`1`, e2\ :sub:`1`) 
   from the corresponding |begin/end<Seq1>| and |begin/end<Seq2>| ranges.
 
