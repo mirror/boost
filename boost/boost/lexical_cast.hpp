@@ -335,7 +335,7 @@ namespace boost
         class lexical_streambuf : public std::basic_streambuf<CharT>
         {
         public:
-            void setbuf(CharT* start, CharT* finish)
+            void lcast_setbuf(CharT* start, CharT* finish)
             {
                 this->setg(start, start, finish);
             }
@@ -619,7 +619,7 @@ namespace boost
                     return false;
 
                 lexical_streambuf<CharT> sb;
-                sb.setbuf(start, finish);
+                sb.lcast_setbuf(start, finish);
 
                 std::basic_istream<CharT> stream(&sb);
                 stream.unsetf(std::ios::skipws);
