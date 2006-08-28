@@ -107,6 +107,19 @@ namespace boost { namespace type_of {
             typedef _typeof_fraction_iter<typename Pos::next> next;\
         };
 
+#ifdef __MWERKS__
+
+# define BOOST_TYPEOF_NESTED_TYPEDEF(name,expr) \
+template<typename T>\
+struct BOOST_PP_CAT(_typeof_template_,name) {\
+	BOOST_TYPEOF_NESTED_TYPEDEF_IMPL(expr)\
+	typedef typename boost::type_of::decode_type<_typeof_fraction_iter<boost::mpl::size_t<0> > >::type type;\
+};\
+typedef BOOST_PP_CAT(_typeof_template_,name)<int> name;
+
+# define BOOST_TYPEOF_NESTED_TYPEDEF_TPL(name,expr) BOOST_TYPEOF_NESTED_TYPEDEF(name,expr);
+
+#else
 # define BOOST_TYPEOF_NESTED_TYPEDEF_TPL(name,expr) \
     struct name {\
         BOOST_TYPEOF_NESTED_TYPEDEF_IMPL(expr)\
@@ -118,5 +131,6 @@ namespace boost { namespace type_of {
         BOOST_TYPEOF_NESTED_TYPEDEF_IMPL(expr)\
         typedef boost::type_of::decode_type<_typeof_fraction_iter<boost::mpl::size_t<0> > >::type type;\
     };
+#endif
 
 #endif//BOOST_TYPEOF_COMPLIANT_TYPEOF_IMPL_HPP_INCLUDED
