@@ -115,8 +115,8 @@ namespace boost { namespace type_of {
 # define BOOST_TYPEOF_NESTED_TYPEDEF(name,expr) \
 template<typename T>\
 struct BOOST_PP_CAT(_typeof_template_,name) {\
-	BOOST_TYPEOF_NESTED_TYPEDEF_IMPL(expr)\
-	typedef typename boost::type_of::decode_type<_typeof_fraction_iter<boost::mpl::size_t<0> > >::type type;\
+    BOOST_TYPEOF_NESTED_TYPEDEF_IMPL(expr)\
+    typedef typename boost::type_of::decode_type<_typeof_fraction_iter<boost::mpl::size_t<0> > >::type type;\
 };\
 typedef BOOST_PP_CAT(_typeof_template_,name)<int> name;
 
