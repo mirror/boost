@@ -22,7 +22,10 @@ namespace boost { namespace type_of {
 #include <boost/utility/enable_if.hpp>
 
 namespace boost { namespace type_of {
-
+# ifdef BOOST_NO_SFINAE
+    template<class V, class T> 
+    sizer<typename encode_type<V, T>::type> encode(const T&);
+# else	
     template<typename T>
         typename enable_if<is_function<T>, T&>::type
         ensure_obj(T&);
@@ -30,7 +33,7 @@ namespace boost { namespace type_of {
     template<typename T>
         typename disable_if<is_function<T>, T&>::type
         ensure_obj(const T&);
-
+# endif
 }}
 
 #endif//BOOST_NO_SFINAE
