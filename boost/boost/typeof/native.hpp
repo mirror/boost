@@ -23,8 +23,8 @@ namespace boost { namespace type_of {
 
 namespace boost { namespace type_of {
 # ifdef BOOST_NO_SFINAE
-    template<class V, class T> 
-    sizer<typename encode_type<V, T>::type> encode(const T&);
+    template<class T> 
+    T& encode(const T&);
 # else	
     template<typename T>
         typename enable_if<is_function<T>, T&>::type
