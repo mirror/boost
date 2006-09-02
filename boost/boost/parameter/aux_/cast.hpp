@@ -10,7 +10,12 @@
 
 namespace boost { namespace parameter { namespace aux {
 
-# ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+# if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
+  || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+
+#  define BOOST_PARAMETER_FUNCTION_CAST(value, predicate) value
+
+# else
 
 // Handles possible implicit casts. Used by preprocessor.hpp to
 // normalize user input.
@@ -54,11 +59,14 @@ struct cast<void(T)>
         typename boost::add_const<T>::type
     >::type reference;
 
-    static reference const execute(reference value)
+    static reference execute(reference value)
     {
         return value;
     }
 };
+
+#  define BOOST_PARAMETER_FUNCTION_CAST(value, predicate) \
+    boost::parameter::aux::cast<void predicate>::execute(value)
 
 # endif
 

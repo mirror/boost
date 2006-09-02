@@ -536,15 +536,14 @@ T const& as_lvalue(T const& value, int)
 # endif
 
 # define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_GET_ARG(arg, tag_ns) \
-    boost::parameter::aux::cast< \
-      void BOOST_PARAMETER_FN_ARG_PRED(arg) \
-    >::execute( \
+    BOOST_PARAMETER_FUNCTION_CAST( \
         args[ \
             BOOST_PARAMETER_FUNCTION_DEFAULT_EVAL_DEFAULT( \
                 arg, tag_ns \
             ) \
         ] \
-    ) \
+      , BOOST_PARAMETER_FN_ARG_PRED(arg) \
+    )
 
 # define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_BODY(name, n, split_args, tag_namespace) \
     { \
@@ -608,12 +607,11 @@ T const& as_lvalue(T const& value, int)
     )
 
 # define BOOST_PARAMETER_FUNCTION_DEFAULT_GET_ARG(r, tag_ns, arg) \
-    , boost::parameter::aux::cast< \
-          void BOOST_PARAMETER_FN_ARG_PRED(arg) \
-      >::execute( \
+    , BOOST_PARAMETER_FUNCTION_CAST( \
           args[ \
               boost::parameter::keyword<tag_ns::BOOST_PARAMETER_FN_ARG_KEYWORD(arg)>::get() \
           ] \
+        , BOOST_PARAMETER_FN_ARG_PRED(arg) \
       )
 
 // Generates the function template that recives a ArgumentPack, and then

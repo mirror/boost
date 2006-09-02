@@ -38,7 +38,7 @@ std::size_t count_instances::count = 0;
 BOOST_PARAMETER_NAME(x)
 BOOST_PARAMETER_NAME(y)
 
-BOOST_PARAMETER_FUNCTION((void), f, tag,
+BOOST_PARAMETER_FUNCTION((int), f, tag,
     (required
        (x, (int))
        (y, (int))
@@ -47,24 +47,27 @@ BOOST_PARAMETER_FUNCTION((void), f, tag,
 {
     BOOST_MPL_ASSERT((boost::is_same<x_type,int const>));
     BOOST_MPL_ASSERT((boost::is_same<y_type,int const>));
+    return 0;
 }
 
-BOOST_PARAMETER_FUNCTION((void), g, tag,
+BOOST_PARAMETER_FUNCTION((int), g, tag,
     (required
        (x, (count_instances))
     )
 )
 {
     assert(count_instances::count == 1);
+    return 0;
 }
 
-BOOST_PARAMETER_FUNCTION((void), h, tag,
+BOOST_PARAMETER_FUNCTION((int), h, tag,
     (required
        (x, (count_instances const&))
     )
 )
 {
     assert(count_instances::count == 1);
+    return 0;
 }
 
 int main()
