@@ -22,6 +22,7 @@ test-suite "parameter"
      [ compile-fail duplicates.cpp ]
      [ compile-fail unnamed_fail.cpp ]
      [ compile compose.cpp ]
+     [ compile normalized_argument_types.cpp ]
   ;
 
 import python ;
