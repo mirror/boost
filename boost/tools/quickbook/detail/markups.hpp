@@ -84,6 +84,8 @@ namespace quickbook { namespace /*unnamed*/
     const char* enumref_post_       = "</enumname>";
     const char* headerref_pre_      = "<headername alt=\"";
     const char* headerref_post_     = "</headername>";
+    const char* conceptref_pre_     = "<conceptname alt=\"";
+    const char* conceptref_post_    = "</conceptname>";
     const char* footnote_pre_       = "<footnote><para>";
     const char* footnote_post_      = "</para></footnote>";
     const char* escape_pre_         = "<!--quickbook-escape-prefix-->";
