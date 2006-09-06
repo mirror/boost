@@ -68,9 +68,8 @@ namespace boost { namespace type_of {
     {};
 
     template<class V, class T, T n>
-    struct encode_integral : encode_size_t< V, (typename get_unsigned<T>::type)n > 
+    struct encode_integral : encode_size_t< V, (typename get_unsigned<T>::type)n,(((typename get_unsigned<T>::type)n)>=0x3fffffff) > 
     {};
-
     ///////////////////////////
 
     template<std::size_t n, class Iter, bool overflow> 
