@@ -50,15 +50,23 @@
 
           <xsl:if test="concept">
             <section>
+              <xsl:choose>
+                <xsl:when test="@id">
+                  <xsl:attribute name="id">
+                    <xsl:value-of select="@id"/>
+                    <xsl:text>.concepts</xsl:text>
+                  </xsl:attribute>
+                </xsl:when>
+                <xsl:when test="ancestor::library/attribute::id">
+                  <xsl:attribute name="id">
+                    <xsl:value-of select="ancestor::library/attribute::id"/>
+                    <xsl:text>.concepts</xsl:text>
+                  </xsl:attribute>
+                </xsl:when>
+              </xsl:choose>
+
               <title>Concepts</title>
-
-              <xsl:if test="ancestor::library/attribute::id">
-                <xsl:attribute name="id">
-                  <xsl:value-of select="ancestor::library/attribute::id"/>
-                  <xsl:text>.concepts</xsl:text>
-                </xsl:attribute>
-              </xsl:if>
-
+              
               <itemizedlist>
                 <xsl:for-each select="concept">
                   <listitem>
