@@ -96,14 +96,14 @@ namespace boost { namespace type_of {
 
 #ifdef __DMC__
 #define BOOST_TYPEOF_NESTED_TYPEITEM_2(z,n,expr)\
-	typedef typename _typeof_encode_fraction<iteration>::BOOST_PP_CAT(item,n) BOOST_PP_CAT(item,n);
+    typedef typename _typeof_encode_fraction<iteration>::BOOST_PP_CAT(item,n) BOOST_PP_CAT(item,n);
 
 #define BOOST_TYPEOF_FRACTIONTYPE()\
-	BOOST_PP_REPEAT(BOOST_TYPEOF_LIMIT_SIZE,BOOST_TYPEOF_NESTED_TYPEITEM_2,_)\
-	typedef _typeof_fraction_iter<Pos> fraction_type;
+    BOOST_PP_REPEAT(BOOST_TYPEOF_LIMIT_SIZE,BOOST_TYPEOF_NESTED_TYPEITEM_2,_)\
+    typedef _typeof_fraction_iter<Pos> fraction_type;
 #else
 #define BOOST_TYPEOF_FRACTIONTYPE()\
-	typedef _typeof_encode_fraction<iteration> fraction_type;
+    typedef _typeof_encode_fraction<iteration> fraction_type;
 #endif
 
 #define BOOST_TYPEOF_NESTED_TYPEDEF_IMPL(expr) \
