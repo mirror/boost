@@ -94,6 +94,18 @@ namespace boost { namespace type_of {
     BOOST_STATIC_CONSTANT(int,BOOST_PP_CAT(value,n) = sizeof(boost::type_of::encode<_typeof_start_vector>(expr).item ## n));\
     typedef boost::mpl::size_t<BOOST_PP_CAT(value,n)> BOOST_PP_CAT(item,n);
 
+#ifdef __DMC__
+#define BOOST_TYPEOF_NESTED_TYPEITEM_2(z,n,expr)\
+	typedef typename _typeof_encode_fraction<iteration>::BOOST_PP_CAT(item,n) BOOST_PP_CAT(item,n);
+
+#define BOOST_TYPEOF_FRACTIONTYPE()\
+	BOOST_PP_REPEAT(BOOST_TYPEOF_LIMIT_SIZE,BOOST_TYPEOF_NESTED_TYPEITEM_2,_)\
+	typedef _typeof_fraction_iter<Pos> fraction_type;
+#else
+#define BOOST_TYPEOF_FRACTIONTYPE()\
+	typedef _typeof_encode_fraction<iteration> fraction_type;
+#endif
+
 #define BOOST_TYPEOF_NESTED_TYPEDEF_IMPL(expr) \
         template<int _Typeof_Iteration>\
         struct _typeof_encode_fraction {\
@@ -106,7 +118,8 @@ namespace boost { namespace type_of {
             BOOST_STATIC_CONSTANT(int,pos=(Pos::value));\
             BOOST_STATIC_CONSTANT(int,iteration=(pos/BOOST_TYPEOF_LIMIT_SIZE));\
             BOOST_STATIC_CONSTANT(int,where=pos%BOOST_TYPEOF_LIMIT_SIZE);\
-            typedef typename boost::type_of::v_iter<_typeof_encode_fraction<iteration>,boost::mpl::int_<where> >::type type;\
+            BOOST_TYPEOF_FRACTIONTYPE();\
+            typedef typename boost::type_of::v_iter<fraction_type,boost::mpl::int_<where> >::type type;\
             typedef _typeof_fraction_iter<typename Pos::next> next;\
         };
 
