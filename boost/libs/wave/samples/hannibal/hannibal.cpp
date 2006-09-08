@@ -274,8 +274,8 @@ boost::wave::util::file_position_type current_position;
             std::cerr 
                 << "Hannibal: parsing failed: " << inputfile << std::endl;
             std::cerr 
-                << "Hannibal: last recognized token was: " << *pi.stop
-                << std::endl;
+                << "Hannibal: last recognized token was: " 
+                << get_token_id(*pi.stop) << std::endl;
 
             using boost::wave::util::file_position_type;
             file_position_type const& pos(pi.stop->get_position());
