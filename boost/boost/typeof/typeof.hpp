@@ -122,7 +122,7 @@
      BOOST_TYPEOF_REGISTRATION_GROUP * 0x10000 + __LINE__
 
 #define BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()\
-     <boost/typeof/increment_registration_group.hpp>
+     <boost/typeof/incr_registration_group.hpp>
 
 #ifdef BOOST_TYPEOF_EMULATION
 #   define BOOST_TYPEOF_TEXT "using typeof emulation"
