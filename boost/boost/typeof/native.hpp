@@ -25,7 +25,7 @@ namespace boost { namespace type_of {
 # ifdef BOOST_NO_SFINAE
     template<class T> 
     T& ensure_obj(const T&);
-# else  
+# else
     template<typename T>
         typename enable_if<is_function<T>, T&>::type
         ensure_obj(T&);
