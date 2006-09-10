@@ -87,12 +87,17 @@ namespace boost { namespace fusion
         template <typename Sequence>
         explicit cons(
             Sequence const& seq
+#if defined(BOOST_MSVC)
+// VC++ gets confused when RHS is a derived type. It fails to call
+// the copy ctor and attempts to call this templated constructor instead.
           , typename disable_if<
                 mpl::or_<
                     is_convertible<Sequence, cons> // use copy ctor instead
                   , is_convertible<Sequence, Car>  // use copy to car instead
                 > 
-            >::type* dummy = 0)
+            >::type* dummy = 0
+#endif
+        )
             : car(*fusion::begin(seq))
             , cdr(fusion::next(fusion::begin(seq)), mpl::true_()) {}
 

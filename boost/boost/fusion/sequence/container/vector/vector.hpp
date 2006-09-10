@@ -16,6 +16,8 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/type_traits/add_const.hpp>
+#include <boost/type_traits/is_convertible.hpp>
+#include <boost/utility/enable_if.hpp>
 
 namespace boost { namespace fusion
 {
@@ -52,7 +54,16 @@ namespace boost { namespace fusion
             : vec(rhs.vec) {}
 
         template <typename T>
-        explicit vector(T const& rhs)
+        explicit vector(
+            T const& rhs
+#if defined(BOOST_MSVC)
+// VC++ gets confused when RHS is a derived type. It fails to call
+// the copy ctor and attempts to call this templated constructor instead.
+          , typename disable_if<
+                is_convertible<T, vector> // use copy ctor instead
+            >::type* dummy = 0
+#endif
+        )
             : vec(rhs) {}
 
         //  Expand a couple of forwarding constructors for arguments
