@@ -769,9 +769,22 @@ dynamic_bitset<Block, Allocator>::operator<<=(size_type n)
             b[div] = b[0];
         }
 
+	// disable std::fill_n deprecated warning in MSVC++ 8.0 (warning C4996)
+	// This will only work in MSVC++ 8.0 SP1, which brings up the warning
+	// in the line of user code; otherwise, the warning will come up
+	// in the line in the header itself, so if the user includes stdlib
+	// headers before dynamic_bitset, he will still get the warning.
+#if defined(_MSC_VER) && _MSC_VER >= 1400
+#pragma warning(push)
+#pragma warning(disable:4996)
+#endif
 
         // zero out div blocks at the less significant end
         std::fill_n(b, div, static_cast<block_type>(0));
+
+#if defined(_MSC_VER) && _MSC_VER >= 1400
+#pragma warning(pop)
+#endif
 
         // zero out any 1 bit that flowed into the unused part
         m_zero_unused_bits(); // thanks to Lester Gong
