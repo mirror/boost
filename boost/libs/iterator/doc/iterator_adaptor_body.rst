@@ -1,3 +1,7 @@
+.. Distributed under the Boost
+.. Software License, Version 1.0. (See accompanying
+.. file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
 .. Version 1.2 of this ReStructuredText document corresponds to
    n1530_, the paper accepted by the LWG for TR1.
 
