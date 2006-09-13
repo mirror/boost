@@ -74,7 +74,7 @@ struct tagged_argument : tagged_argument_base
         return value;
     }
 
-# ifdef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
+# if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING) || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
     template <class KW, class Default>
     Default& get_with_default(default_<KW,Default> const& x, int) const
     {
