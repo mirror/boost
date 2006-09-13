@@ -293,17 +293,17 @@ namespace boost
 
     // operator->() needs special support for input iterators to strictly meet the
     // standard's requirements. If *i is not a reference type, we must still
-    // produce a (constant) lvalue to which a pointer can be formed. We do that by
+    // produce a lvalue to which a pointer can be formed. We do that by
     // returning an instantiation of this special proxy class template.
     template <class T>
     struct operator_arrow_proxy
     {
         operator_arrow_proxy(T const* px) : m_value(*px) {}
-        const T* operator->() const { return &m_value; }
+        T* operator->() const { return &m_value; }
         // This function is needed for MWCW and BCC, which won't call operator->
         // again automatically per 13.3.1.2 para 8
-        operator const T*() const { return &m_value; }
-        T m_value;
+        operator T*() const { return &m_value; }
+        mutable T m_value;
     };
 
     // A metafunction that gets the result type for operator->.  Also
