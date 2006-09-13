@@ -48,12 +48,28 @@ struct unwrap_predicate<void*>
     typedef mpl::always<mpl::true_> type;
 };
 
+#if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x580))
+
+typedef void* voidstar;
+
+// A matching predicate is explicitly specified
+template <class Predicate>
+struct unwrap_predicate<voidstar (Predicate)>
+{
+    typedef Predicate type;
+};
+
+#else
+
 // A matching predicate is explicitly specified
 template <class Predicate>
 struct unwrap_predicate<void *(Predicate)>
 {
     typedef Predicate type;
 };
+
+#endif 
+
 
 // A type to which the argument is supposed to be convertible is
 // specified
