@@ -14,9 +14,9 @@ namespace
     //~ The next two lines change the regex so that it detects when the license
     //~ doesn't follow the prefered statement. Disabled because it currently
     //~ generates a large number of issues.
-    //~ "Distributed(\\s+|\\s+#\\s*|\\s+//\\s*)"
-    //~ "under(\\s+|\\s+#\\s*|\\s+//\\s*)the(\\s+|\\s+#\\s*|\\s+//\\s*)"
-    "boost(\\s+|\\s+#\\s*|\\s+//\\s*)software(\\s+|\\s+#\\s*|\\s+//\\s*)license",
+    //~ "Distributed[\\s\\W]+"
+    //~ "under[\\s\\W]+the[\\s\\W]+"
+    "boost[\\s\\W]+software[\\s\\W]+license",
     boost::regbase::normal | boost::regbase::icase);
 
 } // unnamed namespace
