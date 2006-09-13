@@ -9,9 +9,7 @@
 #include <boost/mpl/size.hpp>
 #include <boost/type_traits/add_pointer.hpp>
 
-# include <boost/type_traits/is_same.hpp>
-# include <boost/mpl/find.hpp>
-# include <boost/mpl/end.hpp>
+# include <boost/mpl/contains.hpp>
 
 namespace test
 {
@@ -23,13 +21,7 @@ namespace test
       template <class T>
       void operator()(T*)
       {
-#if 1 // mpl::set is too unreliable in this release.
-          typedef typename mpl::find<Set,T>::type pos;
-          typedef typename mpl::end<Set>::type not_found;
-          BOOST_MPL_ASSERT_NOT((boost::is_same<pos, not_found>));
-#else 
-          BOOST_MPL_ASSERT((mpl::has_key<Set,T>));
-#endif 
+          BOOST_MPL_ASSERT((mpl::contains<Set,T>));
       }
   };
 
@@ -42,7 +34,7 @@ namespace test
         , ==
         , mpl::size<Params>::value
       );
-      
+
       mpl::for_each<Params, boost::add_pointer<mpl::_1> >(assert_in_set<Expected>());
   }
 
