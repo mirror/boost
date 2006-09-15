@@ -57,7 +57,10 @@ struct proxy
     int& state;
 };
 
-struct value { int x; };
+struct value
+{
+    void mutator() {} // non-const member function
+};
 
 struct input_iter
   : boost::iterator_facade<
@@ -97,8 +100,8 @@ int main()
     // test for a fix to http://tinyurl.com/zuohe
     // These two lines should be equivalent (and both compile)
     input_iter p;
-    (*p).x = 2;
-    p->x = 2;
+    (*p).mutator();
+    p->mutator();
     
     return 0;
 }
