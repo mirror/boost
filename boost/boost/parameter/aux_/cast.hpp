@@ -46,11 +46,25 @@ struct cast<void*>
     }
 };
 
+#if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x580))
+
+typedef void* voidstar;
+
+template <class T>
+struct cast<voidstar(T)>
+  : cast<void*>
+{
+};
+
+#else
+
 template <class T>
 struct cast<void*(T)>
   : cast<void*>
 {
 };
+
+#endif
 
 template <class T>
 struct cast<void(T)>
