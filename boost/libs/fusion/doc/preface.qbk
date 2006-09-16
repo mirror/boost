@@ -5,7 +5,7 @@
 
 [heading Description]
 
-Fusion is a library for working with hetrogenous collections of data,
+Fusion is a library for working with heterogenous collections of data,
 commonly referred to as tuples. A set of containers (vector, list, set and map)
 is provided, along with views that provide a transformed presentation
 of their underlying data. Collectively the containers and views are referred to
