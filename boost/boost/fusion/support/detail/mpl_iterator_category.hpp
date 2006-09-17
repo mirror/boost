@@ -44,6 +44,24 @@ namespace boost { namespace fusion { namespace detail
     {
         typedef random_access_traversal_tag type;
     };
+
+    template <>
+    struct mpl_iterator_category<forward_traversal_tag>
+    {
+        typedef forward_traversal_tag type;
+    };
+
+    template <>
+    struct mpl_iterator_category<bidirectional_traversal_tag>
+    {
+        typedef bidirectional_traversal_tag type;
+    };
+
+    template <>
+    struct mpl_iterator_category<random_access_traversal_tag>
+    {
+        typedef random_access_traversal_tag type;
+    };
 }}}
 
 #endif

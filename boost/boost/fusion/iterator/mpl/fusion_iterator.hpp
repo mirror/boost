@@ -13,6 +13,7 @@
 #include <boost/fusion/iterator/prior.hpp>
 #include <boost/fusion/iterator/advance.hpp>
 #include <boost/fusion/iterator/distance.hpp>
+#include <boost/fusion/support/category_of.hpp>
 #include <boost/mpl/next_prior.hpp>
 #include <boost/mpl/advance_fwd.hpp>
 #include <boost/mpl/distance_fwd.hpp>
@@ -23,6 +24,7 @@ namespace boost { namespace mpl
     struct fusion_iterator
     {
         typedef typename fusion::result_of::value_of<Iterator>::type type;
+        typedef typename fusion::traits::category_of<Iterator>::type category;
         typedef Iterator iterator;
     };
 
