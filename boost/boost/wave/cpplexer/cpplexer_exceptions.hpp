@@ -109,7 +109,10 @@ public:
     
     virtual char const *what() const throw() = 0;   // to be overloaded
     virtual char const *description() const throw() = 0;
-    
+    virtual int get_errorcode() const throw() = 0;
+    virtual int get_severity() const throw() = 0;
+    virtual bool is_recoverable() const throw() = 0;
+
     int line_no() const throw() { return line; }
     int column_no() const throw() { return column; }
     char const *file_name() const throw() { return filename; }
@@ -155,13 +158,28 @@ public:
     {
         return buffer;
     }
-    util::severity get_severity() const
+    virtual int get_severity() const
     {
         return level;
     }
-    int get_errorcode() const
+    virtual int get_errorcode() const
     {
         return code;
+    }
+    virtual bool is_recoverable() const throw()
+    {
+        switch (get_errorcode()) {
+        case lexing_exception::universal_char_invalid:
+        case lexing_exception::universal_char_base_charset:
+        case lexing_exception::universal_char_not_allowed:
+        case lexing_exception::invalid_long_long_literal:
+            return true;    // for now allow all exceptions to be recoverable
+            
+        case lexing_exception::unexpected_error:
+        default:
+            break;
+        }
+        return false;
     }
     
     static char const *error_text(int code)
@@ -203,6 +221,21 @@ private:
     util::severity level;
     error_code code;
 };
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  The is_recoverable() function allows to decide, whether it is possible 
+//  simply to continue after a given exception was thrown by Wave.
+//
+//  This is kind of a hack to allow to recover from certain errors as long as 
+//  Wave doesn't provide better means of error recovery.
+//
+///////////////////////////////////////////////////////////////////////////////
+inline bool
+is_recoverable(lexing_exception const& e)
+{
+    return e.is_recoverable();
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace cpplexer

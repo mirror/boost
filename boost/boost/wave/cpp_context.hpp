@@ -69,10 +69,6 @@ namespace wave {
 //                      defaults to the
 //                          context_policies::default_preprocessing_hooks
 //                      type.
-//      WhitespaceT     The is the whitespace handling policy. This template 
-//                      parameter is optional and defaults to the
-//                          context_policies::eat_whitespace<token_type>
-//                      type.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -140,7 +136,11 @@ public:
         macros.init_predefined_macros(fname);
         includes.init_initial_path();
     }
-
+    
+// default copy constructor
+// default assignment operator
+// default destructor
+    
 // iterator interface
     iterator_type begin() 
     { 

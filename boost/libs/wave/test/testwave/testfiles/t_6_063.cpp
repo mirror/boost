@@ -13,12 +13,14 @@
     license reproduced at the end of this file.
 =============================================================================*/
 
-// Tests error reporting: #ifdef, #ifndef syntax errors.
+// Tests error reporting: undefined behavior: End of a source file without a 
+// <newline>.
 
-// 15.3: Not an identifier.
-//E t_6_019.cpp(20): error: ill formed preprocessor directive: #ifdef "string"
-#ifdef "string"
-#endif
+//E t_6_063.hpp(45): warning: last line of file ends without a newline
+#include "t_6_063.hpp"
+
+//R #line 19 "t_6_063.hpp"
+//R int dummy = 0;
 
 /*-
  * Copyright (c) 1998, 2002-2005 Kiyoshi Matsui <kmatsui@t3.rim.or.jp>
@@ -44,5 +46,4 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- */
-
+ */ 

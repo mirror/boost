@@ -13,89 +13,18 @@
 
 #include <exception>
 #include <string>
+#include <limits>
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/throw_exception.hpp>
-
 #include <boost/wave/wave_config.hpp>
+#include <boost/wave/cpp_throw.hpp>
 
 // this must occur after all of the includes and before any code appears
 #ifdef BOOST_HAS_ABI_HEADERS
 #include BOOST_ABI_PREFIX
 #endif
-
-///////////////////////////////////////////////////////////////////////////////
-// helper macro for throwing exceptions
-#if !defined(BOOST_WAVE_THROW)
-#ifdef BOOST_NO_STRINGSTREAM
-#include <strstream>
-#define BOOST_WAVE_THROW(cls, code, msg, act_pos)                             \
-    {                                                                         \
-        using namespace boost::wave;                                          \
-        std::strstream stream;                                                \
-            stream << cls::severity_text(cls::code) << ": "                   \
-            << cls::error_text(cls::code);                                    \
-        if ((msg)[0] != 0) stream << ": " << (msg);                           \
-        stream << std::ends;                                                  \
-        std::string throwmsg = stream.str(); stream.freeze(false);            \
-        boost::throw_exception(cls(throwmsg.c_str(), cls::code,               \
-            (act_pos).get_line(), (act_pos).get_column(),                     \
-            (act_pos).get_file().c_str()));                                   \
-    }                                                                         \
-    /**/
-#else
-#include <sstream>
-#define BOOST_WAVE_THROW(cls, code, msg, act_pos)                             \
-    {                                                                         \
-        using namespace boost::wave;                                          \
-        std::stringstream stream;                                             \
-            stream << cls::severity_text(cls::code) << ": "                   \
-            << cls::error_text(cls::code);                                    \
-        if ((msg)[0] != 0) stream << ": " << (msg);                           \
-        stream << std::ends;                                                  \
-        boost::throw_exception(cls(stream.str().c_str(), cls::code,           \
-            (act_pos).get_line(), (act_pos).get_column(),                     \
-            (act_pos).get_file().c_str()));                                   \
-    }                                                                         \
-    /**/
-#endif // BOOST_NO_STRINGSTREAM
-#endif // BOOST_WAVE_THROW
-
-#if !defined(BOOST_WAVE_THROW_NAME)
-#ifdef BOOST_NO_STRINGSTREAM
-#include <strstream>
-#define BOOST_WAVE_THROW_NAME(cls, code, msg, act_pos, name)                  \
-    {                                                                         \
-        using namespace boost::wave;                                          \
-        std::strstream stream;                                                \
-            stream << cls::severity_text(cls::code) << ": "                   \
-            << cls::error_text(cls::code);                                    \
-        if ((msg)[0] != 0) stream << ": " << (msg);                           \
-        stream << std::ends;                                                  \
-        std::string throwmsg = stream.str(); stream.freeze(false);            \
-        boost::throw_exception(cls(throwmsg.c_str(), cls::code,               \
-            (act_pos).get_line(), (act_pos).get_column(),                     \
-            (act_pos).get_file().c_str(), (name)));                           \
-    }                                                                         \
-    /**/
-#else
-#include <sstream>
-#define BOOST_WAVE_THROW_NAME(cls, code, msg, act_pos, name)                  \
-    {                                                                         \
-        using namespace boost::wave;                                          \
-        std::stringstream stream;                                             \
-            stream << cls::severity_text(cls::code) << ": "                   \
-            << cls::error_text(cls::code);                                    \
-        if ((msg)[0] != 0) stream << ": " << (msg);                           \
-        stream << std::ends;                                                  \
-        boost::throw_exception(cls(stream.str().c_str(), cls::code,           \
-            (act_pos).get_line(), (act_pos).get_column(),                     \
-            (act_pos).get_file().c_str(), (name)));                           \
-    }                                                                         \
-    /**/
-#endif // BOOST_NO_STRINGSTREAM
-#endif // BOOST_WAVE_THROW
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
@@ -119,10 +48,10 @@ namespace util {
     {
         static char const *severity_text[] = 
         {
-            "remark",           // severity_remark
-            "warning",          // severity_warning
-            "error",            // severity_error
-            "fatal error",      // severity_fatal
+            "remark",               // severity_remark
+            "warning",              // severity_warning
+            "error",                // severity_error
+            "fatal error",          // severity_fatal
             "command line error"    // severity_commandline_error
         };
         BOOST_ASSERT(severity_remark <= level && 
@@ -171,7 +100,8 @@ class preprocess_exception :
 {
 public:
     enum error_code {
-        unexpected_error = 0,
+        no_error = 0,
+        unexpected_error,
         macro_redefinition,
         macro_insertion_error,
         bad_include_file,
@@ -184,11 +114,14 @@ public:
         missing_matching_endif,
         ill_formed_operator,
         bad_define_statement,
+        bad_define_statement_va_args,
         too_few_macroarguments,
         too_many_macroarguments,
         empty_macroarguments,
         improperly_terminated_macro,
         bad_line_statement,
+        bad_line_number,
+        bad_line_filename,
         bad_undefine_statement,
         bad_macro_definition,
         illegal_redefinition,
@@ -253,6 +186,7 @@ public:
         switch (get_errorcode()) {
         // these are the exceptions thrown during processing not supposed to 
         // produce any tokens on the context::iterator level
+        case preprocess_exception::no_error:        // just a placeholder
         case preprocess_exception::macro_redefinition:
         case preprocess_exception::macro_insertion_error:
         case preprocess_exception::bad_macro_definition:
@@ -269,7 +203,10 @@ public:
         case preprocess_exception::missing_matching_endif:
         case preprocess_exception::unbalanced_if_endif:
         case preprocess_exception::bad_define_statement:
+        case preprocess_exception::bad_define_statement_va_args:
         case preprocess_exception::bad_line_statement:
+        case preprocess_exception::bad_line_number:
+        case preprocess_exception::bad_line_filename:
         case preprocess_exception::bad_undefine_statement:
         case preprocess_exception::division_by_zero:
         case preprocess_exception::integer_overflow:
@@ -303,6 +240,7 @@ public:
     // error texts in this array must appear in the same order as the items in
     // the error enum above
         static char const *preprocess_exception_errors[] = {
+            "no error",                                 // no_error
             "unexpected error (should not happen)",     // unexpected_error
             "illegal macro redefinition",               // macro_redefinition
             "macro definition failed (out of memory?)", // macro_insertion_error
@@ -316,6 +254,8 @@ public:
             "detected at least one missing #endif directive",   // missing_matching_endif
             "ill formed preprocessing operator",        // ill_formed_operator
             "ill formed #define directive",             // bad_define_statement
+            "__VA_ARGS__ can only appear in the "
+            "expansion of a C99 variadic macro",        // bad_define_statement_va_args
             "too few macro arguments",                  // too_few_macroarguments
             "too many macro arguments",                 // too_many_macroarguments
             "empty macro arguments are not supported in pure C++ mode, "
@@ -324,9 +264,14 @@ public:
             "or replacement-list terminates in partial "
             "macro expansion (not supported yet)",      // improperly_terminated_macro
             "ill formed #line directive",               // bad_line_statement
+            "line number argument of #line directive "
+            "should consist out of decimal digits "
+            "only and must be in range of [1..INT_MAX]", // bad_line_number
+            "filename argument of #line directive should "
+            "be a narrow string literal",               // bad_line_filename
             "#undef may not be used on this predefined name",   // bad_undefine_statement
             "invalid macro definition",                 // bad_macro_definition
-            "this predefined name may not be redefined",    // illegal_redefinition
+            "this predefined name may not be redefined",        // illegal_redefinition
             "duplicate macro parameter name",           // duplicate_parameter_name
             "pasting the following two tokens does not "
             "give a valid preprocessing token",         // invalid_concat
@@ -341,7 +286,8 @@ public:
             "qualified names are supported in C++0x mode only",  // unexpected_qualified_name
             "division by zero in preprocessor expression",       // division_by_zero
             "integer overflow in preprocessor expression",       // integer_overflow
-            "this macro name cannot be used as a as it is an operator in C++",  // illegal_operator_redefinition
+            "this cannot be used as a macro name as it is "
+            "an operator in C++",                       // illegal_operator_redefinition
             "ill formed integer literal or integer constant too large",   // ill_formed_integer_literal
             "ill formed character literal",             // ill_formed_character_literal
             "unbalanced #if/#endif in include file",    // unbalanced_if_endif
@@ -351,14 +297,14 @@ public:
             "illformed pragma message",                 // ill_formed_pragma_message
             "encountered #pragma message directive"     // pragma_message_directive
         };
-        BOOST_ASSERT(unexpected_error <= code && 
-            code <= last_error_number);
+        BOOST_ASSERT(no_error <= code && code <= last_error_number);
         return preprocess_exception_errors[code];
     }
 
     static util::severity severity_level(int code)
     {
         static util::severity preprocess_exception_severity[] = {
+            util::severity_remark,             // no_error
             util::severity_fatal,              // unexpected_error
             util::severity_warning,            // macro_redefinition
             util::severity_fatal,              // macro_insertion_error
@@ -372,11 +318,14 @@ public:
             util::severity_error,              // missing_matching_endif
             util::severity_error,              // ill_formed_operator
             util::severity_error,              // bad_define_statement
+            util::severity_error,              // bad_define_statement_va_args
             util::severity_warning,            // too_few_macroarguments
             util::severity_warning,            // too_many_macroarguments
             util::severity_warning,            // empty_macroarguments
             util::severity_error,              // improperly_terminated_macro
             util::severity_warning,            // bad_line_statement
+            util::severity_warning,            // bad_line_number
+            util::severity_warning,            // bad_line_filename
             util::severity_warning,            // bad_undefine_statement
             util::severity_commandline_error,  // bad_macro_definition
             util::severity_warning,            // illegal_redefinition
@@ -402,8 +351,7 @@ public:
             util::severity_warning,            // ill_formed_pragma_message
             util::severity_remark,             // pragma_message_directive
         };
-        BOOST_ASSERT(unexpected_error <= code && 
-            code <= last_error_number);
+        BOOST_ASSERT(no_error <= code && code <= last_error_number);
         return preprocess_exception_severity[code];
     }
     static char const *severity_text(int code)

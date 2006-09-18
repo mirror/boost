@@ -16,7 +16,7 @@
 // Tests error reporting: #define syntax errors.
 
 // 18.8: Argument is not an identifier.
-//E t_6_037.cpp(20): error: ill formed preprocessor directive: #define
+//E t_6_037.cpp(20): error: ill formed preprocessor directive: #define NUMARGS( 1, +, 2)   (1 + 2)
 #define NUMARGS( 1, +, 2)   (1 + 2)
 
 /*-

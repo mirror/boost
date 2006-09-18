@@ -16,7 +16,7 @@
 // Tests error reporting: illegal #if expressions. 
 
 // 14.4: Unbalanced parenthesis in #if defined operator.
-//E t_6_009.cpp(20): error: ill formed preprocessor expression: defined()
+//E t_6_009.cpp(20): error: ill formed preprocessor expression: defined(): defined ( MACRO
 #if defined ( MACRO
 #endif
 

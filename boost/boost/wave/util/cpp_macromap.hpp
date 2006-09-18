@@ -250,6 +250,13 @@ macromap<ContextT>::add_macro(token_type const &name, bool has_parameters,
         BOOST_WAVE_THROW_NAME(macro_handling_exception, illegal_redefinition, 
             name.get_value().c_str(), main_pos, name.get_value().c_str());
     }
+    if (boost::wave::need_variadics(ctx.get_language()) && 
+        "__VA_ARGS__" == name.get_value()) 
+    {
+    // can't use __VA_ARGS__ as a macro name
+        BOOST_WAVE_THROW_NAME(macro_handling_exception, bad_define_statement_va_args, 
+            name.get_value().c_str(), main_pos, name.get_value().c_str());
+    }
     if (AltExtTokenType == (token_id(name) & ExtTokenOnlyMask)) {
     // exclude special operator names
         BOOST_WAVE_THROW_NAME(macro_handling_exception, 
@@ -1344,8 +1351,10 @@ boost::spirit::parse_info<IteratorT> hit =
         parse_operator_defined(start, last, result);
     
     if (!hit.hit) {
+        string_type msg ("defined(): ");
+        msg = msg + util::impl::as_string<string_type>(first, last);
         BOOST_WAVE_THROW(preprocess_exception, ill_formed_expression, 
-            "defined()", main_pos);
+            msg.c_str(), main_pos);
     }
     impl::assign_iterator<IteratorT>::do_(first, hit.stop);
 

@@ -17,7 +17,7 @@
 
 // 7.4: string literal in #line directive shall be a character string
 //      literal.
-//E t_6_062.cpp(21): warning: ill formed #line directive: 123 L"wide"
+//E t_6_062.cpp(21): warning: filename argument of #line directive should be a narrow string literal: 123 L"wide"
 #line 123 L"wide"
 
 /*-

@@ -16,7 +16,7 @@
 // Tests error reporting: #undef errors.
 
 // 29.3: Not an identifier.
-//E t_6_051.cpp(20): error: ill formed preprocessor directive: #undef
+//E t_6_051.cpp(20): error: ill formed preprocessor directive: #undef  "string"
 #undef  "string"
 
 /*-

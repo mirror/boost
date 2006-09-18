@@ -16,7 +16,7 @@
 // Tests error reporting: #define syntax errors.
 
 // 18.6: Empty parameter list.
-//E t_6_035.cpp(20): error: ill formed preprocessor directive: #define
+//E t_6_035.cpp(20): error: ill formed preprocessor directive: #define math( op, a, )      op( (a), (b))
 #define math( op, a, )      op( (a), (b))
 
 /*-

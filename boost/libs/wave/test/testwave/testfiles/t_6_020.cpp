@@ -16,7 +16,7 @@
 // Tests error reporting: #ifdef, #ifndef syntax errors.
 
 // 15.3: Not an identifier.
-//E t_6_020.cpp(20): error: ill formed preprocessor directive: #ifdef
+//E t_6_020.cpp(20): error: ill formed preprocessor directive: #ifdef 123
 #ifdef 123
 #endif
 

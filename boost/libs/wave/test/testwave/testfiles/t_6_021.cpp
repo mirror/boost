@@ -16,7 +16,7 @@
 // Tests error reporting: #ifdef, #ifndef syntax errors.
 
 // 15.4: Excessive token sequence.
-//E t_6_021.cpp(20): error: ill formed preprocessor directive: #ifdef
+//E t_6_021.cpp(20): error: ill formed preprocessor directive: #ifdef  MACRO   Junk
 #ifdef  MACRO   Junk
 #endif
 

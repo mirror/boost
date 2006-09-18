@@ -16,7 +16,7 @@
 // Tests error reporting: #undef errors.
 
 // 29.4: Excessive token sequence.
-//E t_6_053.cpp(20): error: ill formed preprocessor directive: #undef
+//E t_6_053.cpp(20): error: ill formed preprocessor directive: #undef  MACRO_0     Junk
 #undef  MACRO_0     Junk
 
 /*-

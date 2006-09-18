@@ -160,7 +160,8 @@ testwave_app::got_expected_result(std::string const& filename,
                         }
                         std::string source = expected.substr(pos1+3, p-pos1-3);
                         std::string result, error;
-                        bool pp_result = preprocess_file(filename, source, result, error);
+                        bool pp_result = preprocess_file(filename, source, 
+                            result, error, true);
                         if (!pp_result) {
                             std::cerr 
                                 << "testwave: preprocessing error in $E directive: " 
@@ -551,7 +552,8 @@ testwave_app::extract_special_information(std::string const& filename,
                         }
                         std::string source = value.substr(4, p-4);
                         std::string result, error;
-                        bool pp_result = preprocess_file(filename, source, result, error);
+                        bool pp_result = preprocess_file(filename, source, 
+                            result, error, true);
                         if (!pp_result) {
                             std::cerr 
                                 << "testwave: preprocessing error in '" << flag
@@ -596,7 +598,8 @@ testwave_app::extract_special_information(std::string const& filename,
                         }
                         std::string source = value.substr(4, p-4);
                         std::string result, error;
-                        bool pp_result = preprocess_file(filename, source, result, error);
+                        bool pp_result = preprocess_file(filename, source, 
+                            result, error, true);
                         if (!pp_result) {
                             std::cerr 
                                 << "testwave: preprocessing error in '" << flag
@@ -672,7 +675,7 @@ testwave_app::extract_expected_output(std::string const& filename,
 template <typename Context>
 bool 
 testwave_app::extract_options(std::string const& filename, 
-    std::string const& instr, Context& ctx)
+    std::string const& instr, Context& ctx, bool single_line)
 {
     if (9 == debuglevel) {
         std::cerr << "extract_options: extracting options" << std::endl;
@@ -689,7 +692,7 @@ testwave_app::extract_options(std::string const& filename,
     //  object
         po::variables_map local_vm;
         cmd_line_utils::read_config_options(debuglevel, options, desc_options, local_vm);
-        initialise_options(ctx, local_vm);
+        initialise_options(ctx, local_vm, single_line);
     }
     catch (std::exception const &e) {
         std::cerr << filename << ": exception caught: " << e.what() 
@@ -727,10 +730,11 @@ namespace {
 
 template <typename Context>
 bool 
-testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
+testwave_app::initialise_options(Context& ctx, po::variables_map const& vm,
+    bool single_line)
 {
     if (9 == debuglevel) {
-        std::cerr << "initialise_options: initialising options" << std::endl;
+        std::cerr << "initialise_options: initializing options" << std::endl;
     }
 
 //  initialize the given context from the parsed options
@@ -788,11 +792,20 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm)
     ctx.set_language(boost::wave::set_support_options(ctx.get_language(), 
         (boost::wave::language_support)(
             boost::wave::get_support_options(ctx.get_language()) | 
-            boost::wave::support_option_convert_trigraphs |
-            boost::wave::support_option_single_line)
+            boost::wave::support_option_convert_trigraphs)
         )
     );
 
+// enable single_line mode
+    if (single_line) {
+        ctx.set_language(boost::wave::set_support_options(ctx.get_language(), 
+            (boost::wave::language_support)(
+                boost::wave::get_support_options(ctx.get_language()) | 
+                boost::wave::support_option_single_line)
+            )
+        );
+    }
+        
 //  add include directories to the system include search paths
     if (vm.count("sysinclude")) {
     std::vector<std::string> const& syspaths = 
@@ -1092,7 +1105,7 @@ testwave_app::add_predefined_macros(Context& ctx)
 ///////////////////////////////////////////////////////////////////////////////
 bool 
 testwave_app::preprocess_file(std::string filename, std::string const& instr, 
-    std::string& result, std::string& error)
+    std::string& result, std::string& error, bool single_line)
 {
 //  create the wave::context object and initialize it from the file to 
 //  preprocess (may contain options inside of special comments)
@@ -1111,11 +1124,11 @@ testwave_app::preprocess_file(std::string filename, std::string const& instr,
         context_type ctx(instr.begin(), instr.end(), filename.c_str());
 
     //  initialize the context from the options given on the command line
-        if (!initialise_options(ctx, global_vm))
+        if (!initialise_options(ctx, global_vm, single_line))
             return false;
 
     //  extract the options from the input data and initialize the context 
-        if (!extract_options(filename, instr, ctx))
+        if (!extract_options(filename, instr, ctx, single_line))
             return false;
 
     //  add special predefined macros

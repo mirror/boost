@@ -16,7 +16,7 @@
 // Tests error reporting: #define syntax errors.
 
 // 18.4: Not an identifier.
-//E t_6_033.cpp(20): error: ill formed preprocessor directive: #define
+//E t_6_033.cpp(20): error: ill formed preprocessor directive: #define 123
 #define 123
 
 /*-

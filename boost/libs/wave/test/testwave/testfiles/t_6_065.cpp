@@ -6,22 +6,25 @@
     Software License, Version 1.0. (See accompanying file
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-    The tests included in this file were initially taken from the mcpp V2.5
+    The tests included in this file were initially taken from the mcpp V2.6.1
     preprocessor validation suite and were modified to fit into the Boost.Wave 
     unit test requirements.
     The original files of the mcpp preprocessor are distributed under the 
     license reproduced at the end of this file.
 =============================================================================*/
 
-// Tests error reporting: #ifdef, #ifndef syntax errors.
+// Tests error reporting: Undefined behavior on out-of-range #line number.
 
-// 15.3: Not an identifier.
-//E t_6_019.cpp(20): error: ill formed preprocessor directive: #ifdef "string"
-#ifdef "string"
-#endif
+//O --variadics
+
+//  C99: Line number argument of #line directive should be in range of
+//       [1..2147483647]
+
+//E t_6_065.cpp(24): warning: line number argument of #line directive should consist out of decimal digits only and must be in range of [1..INT_MAX]
+#line 2147483648
 
 /*-
- * Copyright (c) 1998, 2002-2005 Kiyoshi Matsui <kmatsui@t3.rim.or.jp>
+ * Copyright (c) 1998, 2002-2006 Kiyoshi Matsui <kmatsui@t3.rim.or.jp>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without

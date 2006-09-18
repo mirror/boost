@@ -184,10 +184,17 @@ Boost V1.34.0
 - Improved error recovery for illegal preprocessing directive errors.
 - Improved error handling and error recovery for conditional expressions 
   (#if/#elif expressions).
-  
 - Wave now passes 160 out of 161 tests from the MCPP V2.6.1 validation 
   testsuite!
-
+- Added new warning for invalid #line number and filename arguments
+- Improved error diagnostics for invalid #line directives containing arbitrary
+  tokens after at the end of the line.
+- Improved error handling wrt the misuse of the __VA_ARG__ token in macro 
+  definitions.
+- The warning, that a file is not terminated by a newline is now issued for all
+  files, not only for the main file (as previous).
+- Added a couple of new test cases to verify various diagnostics.
+  
 Sat Feb 18 2005
 - Version 1.2.3
 - Added a missing throw() specification to the function 
