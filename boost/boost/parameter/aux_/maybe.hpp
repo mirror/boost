@@ -12,6 +12,7 @@
 # include <boost/optional.hpp>
 # include <boost/python/detail/referent_storage.hpp>
 # include <boost/type_traits/remove_cv.hpp>
+# include <boost/type_traits/add_const.hpp>
 
 namespace boost { namespace parameter { namespace aux {
 
