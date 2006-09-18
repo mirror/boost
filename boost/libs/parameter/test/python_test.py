@@ -3,7 +3,7 @@
 # LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 '''
->>> from python_parameter import X
+>>> from python_test_ext import X
 >>> x = X(y = 'baz')
 >>> x.value
 'foobaz'
@@ -33,8 +33,8 @@ def run(args = None):
     if args is not None:
         import sys
         sys.argv = args
-    import doctest, python 
-    return doctest.testmod(python)
+    import doctest, python_test 
+    return doctest.testmod(python_test)
 
 if __name__ == '__main__':
     import sys

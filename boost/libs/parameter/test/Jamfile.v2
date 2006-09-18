@@ -4,6 +4,8 @@
 
 # Boost Parameter Library test Jamfile
 
+import python ;
+
 project boost/parameter
   : default-build <warnings>off
   ;
@@ -18,12 +20,16 @@ test-suite "parameter"
      [ run singular.cpp ]
      [ run mpl.cpp ]
      [ run preprocessor.cpp ]
+     [ run preprocessor_deduced.cpp ]
      [ run efficiency.cpp : : : : : <variant>release ]
      [ run maybe.cpp ]
+     [ run deduced.cpp ]
      [ compile ntp.cpp ]
      [ compile unwrap_cv_reference.cpp ]
      [ compile-fail duplicates.cpp ]
      [ compile-fail unnamed_fail.cpp ]
      [ compile compose.cpp ]
+     [ compile normalized_argument_types.cpp ]
+     [ bpl-test python_test ]
   ;
 

@@ -19,8 +19,10 @@ test-suite "parameter"
      [ run singular.cpp ]
      [ run mpl.cpp ]
      [ run preprocessor.cpp ]
+     [ run preprocessor_deduced.cpp ]
      [ run efficiency.cpp : : : : : release ]
      [ run maybe.cpp ]
+     [ run deduced.cpp ]
      [ compile ntp.cpp ]
      [ compile unwrap_cv_reference.cpp ]
      [ compile-fail duplicates.cpp ]
@@ -31,13 +33,13 @@ test-suite "parameter"
 
 import python ;
 
-extension python_parameter 
-  : python.cpp
+extension python_test_ext
+  : python_test.cpp
     <template>@boost/libs/python/build/extension
   ;
 
 boost-python-runtest python-parameter-test
-  : python.py
-    <pyd>python_parameter
+  : python_test.py
+    <pyd>python_test_ext
   ;
 

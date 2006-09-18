@@ -105,7 +105,7 @@ struct h_fwd
     }
 };
 
-BOOST_PYTHON_MODULE(python_parameter)
+BOOST_PYTHON_MODULE(python_test_ext)
 {
     namespace mpl = boost::mpl;
     using namespace test;

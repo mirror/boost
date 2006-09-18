@@ -297,6 +297,12 @@ sfinae1(A0 const& a0)
 }
 #endif
 
+template <class T>
+T const& as_lvalue(T const& x)
+{
+    return x;
+}
+
 }
 
 int main()
@@ -304,7 +310,7 @@ int main()
     using namespace test;
 
     f(
-        tester = values(S("foo"), 1.f, 2)
+        values(S("foo"), 1.f, 2)
       , S("foo")
     );
 
@@ -314,41 +320,56 @@ int main()
     );
 
     int index_lvalue = 2;
-    
+
     f(
         tester = values(S("foo"), 1.f, 2)
       , name = S("foo")
+      , value = 1.f
+      , test::index = index_lvalue
+    );
+
+    f(
+        values(S("foo"), 1.f, 2)
+      , S("foo")
       , 1.f
       , index_lvalue
     );
 
     g(
-        tester = values(S("foo"), 1.f, 2)
-      , name = S("foo")
+        values(S("foo"), 1.f, 2)
+      , S("foo")
       , 1.f
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+      , as_lvalue(2)
+#else
       , 2
+#endif
     );
 
     h(
-        tester = values(S("foo"), 1.f, 2)
-      , name = S("foo")
+        values(S("foo"), 1.f, 2)
+      , S("foo")
       , 1.f
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+      , as_lvalue(2)
+#else
       , 2
+#endif
     );
 
     h2(
         tester = values(S("foo"), 1.f, 2)
       , name = S("foo")
-      , 1.f
+      , value = 1.f
     );
-    
+
     class_ x(
-        tester = values(S("foo"), 1.f, 2)
+        values(S("foo"), 1.f, 2)
       , S("foo"), test::index = 2
     );
 
     x.f(
-        tester = values(S("foo"), 1.f, 2)
+        values(S("foo"), 1.f, 2)
       , S("foo")
     );
 
@@ -358,7 +379,7 @@ int main()
     );
 
     x.f2(
-        tester = values(S("foo"), 1.f, 2)
+        values(S("foo"), 1.f, 2)
       , S("foo")
     );
 
@@ -370,7 +391,7 @@ int main()
     class_ const& x_const = x;
 
     x_const.f(
-        tester = values(S("foo"), 1.f, 2)
+        values(S("foo"), 1.f, 2)
       , S("foo")
     );
 
@@ -380,7 +401,7 @@ int main()
     );
 
     x_const.f2(
-        tester = values(S("foo"), 1.f, 2)
+        values(S("foo"), 1.f, 2)
       , S("foo")
     );
 
@@ -395,7 +416,7 @@ int main()
     );
 
     class_::f_static(
-        tester = values(S("foo"), 1.f, 2)
+        values(S("foo"), 1.f, 2)
       , S("foo")
     );
 

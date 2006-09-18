@@ -43,8 +43,9 @@ struct with_ntp
 {
     typedef typename parameter::parameters<
         a0_is<>, a1_is<>, a2_is<>
-      , parameter::unnamed<
-            a3_is<>, boost::is_base_and_derived<X, mpl::_>
+      , parameter::optional<
+            parameter::deduced<a3_is<> >
+          , boost::is_base_and_derived<X, mpl::_>
         >
     >::bind<A0,A1,A2,A3
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
@@ -100,10 +101,10 @@ BOOST_MPL_ASSERT((boost::is_same<
 >));
 
 BOOST_MPL_ASSERT((boost::is_same<
-    with_ntp<Y>::type, void(*)(void*,void*,void*, Y)
+    with_ntp<a0_is<int>, Y>::type, void(*)(int,void*,void*, Y)
 >));
 
 BOOST_MPL_ASSERT((boost::is_same<
-    with_ntp<int&, Y, a2_is<char> >::type, void(*)(int&,void*,char, Y)
+    with_ntp<int&, a2_is<char>, Y>::type, void(*)(int&,void*,char, Y)
 >));
 
