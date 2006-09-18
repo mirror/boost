@@ -25,6 +25,7 @@
 # include <boost/mpl/empty.hpp>
 # include <boost/python/def.hpp>
 # include <boost/python/make_constructor.hpp>
+# include <boost/python/init.hpp>
 # include <boost/python/to_python_converter.hpp>
 # include <boost/parameter/aux_/maybe.hpp>
 # include <boost/parameter/aux_/python/invoker.hpp>

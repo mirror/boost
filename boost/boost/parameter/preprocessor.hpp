@@ -32,6 +32,10 @@
 # include <boost/mpl/always.hpp>
 # include <boost/mpl/apply_wrap.hpp>
 
+# if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#  include <boost/type.hpp>
+# endif
+
 namespace boost { namespace parameter { namespace aux {
 
 #  ifndef BOOST_NO_SFINAE
@@ -93,6 +97,41 @@ struct match
 {};
 # endif 
 
+# if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+
+// Function template argument deduction does many of the same things
+// as type matching during partial specialization, so we call a
+// function template to "store" T into the type memory addressed by
+// void(*)(T).
+template <class T>
+msvc_store_type<T,void*(*)(void**(T))>
+msvc_store_predicate_type(void*(*)(void**(T)));
+
+template <class T>
+msvc_store_type<boost::is_convertible<mpl::_,T>,void*(*)(void*(T))>
+msvc_store_predicate_type(void*(*)(void*(T)));
+
+template <class FunctionType>
+struct unwrap_predicate
+{
+    static FunctionType f;
+
+    // We don't want the function to be evaluated, just instantiated,
+    // so protect it inside of sizeof.
+    enum { dummy = sizeof(msvc_store_predicate_type(f)) };
+
+    // Now pull the type out of the instantiated base class
+    typedef typename msvc_type_memory<FunctionType>::storage::type type;
+};
+
+template <>
+struct unwrap_predicate<void*(*)(void**)>
+{
+    typedef mpl::always<mpl::true_> type;
+};
+
+# endif
+
 template <
     class Parameters
   , BOOST_PP_ENUM_BINARY_PARAMS(
@@ -101,12 +140,12 @@ template <
 >
 struct argument_pack
 {
-    typedef typename mpl::apply_wrap1<
-        BOOST_PARAMETER_build_arg_list(
-            BOOST_PARAMETER_MAX_ARITY, aux::make_partial_arg_list
-          , typename Parameters::parameter_spec, A, aux::tag_keyword_arg
-        )
-      , typename Parameters::unnamed_list
+    typedef typename make_arg_list<
+        typename BOOST_PARAMETER_build_arg_list(
+            BOOST_PARAMETER_MAX_ARITY, make_items, typename Parameters::parameter_spec, A
+        )::type
+      , typename Parameters::deduced_list
+      , tag_keyword_arg
     >::type type;
 };
 
@@ -123,6 +162,58 @@ T const& as_lvalue(T const& value, int)
 {
     return value;
 }
+# endif
+
+
+# if BOOST_WORKAROUND(BOOST_MSVC, < 1300) \
+  || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+
+template <class Predicate, class T, class Args>
+struct apply_predicate
+{
+    BOOST_MPL_ASSERT((
+        mpl::and_<mpl::false_,T>
+    ));
+
+    typedef typename mpl::if_<
+        typename mpl::apply2<Predicate,T,Args>::type
+      , char
+      , int
+    >::type type;
+};
+
+template <class P>
+struct funptr_predicate
+{
+    static P p;
+
+    template <class T, class Args, class P0>
+    static typename apply_predicate<P0,T,Args>::type
+    check_predicate(type<T>, Args*, void**(*)(P0));
+
+    template <class T, class Args, class P0>
+    static typename mpl::if_<
+        is_convertible<T,P0>
+      , char
+      , int
+     >::type check_predicate(type<T>, Args*, void*(*)(P0));
+
+    template <class T, class Args>
+    struct apply
+    {
+        BOOST_STATIC_CONSTANT(bool, result = 
+            sizeof(check_predicate(boost::type<T>(), (Args*)0, &p)) == 1
+        );
+
+        typedef mpl::bool_<apply<T,Args>::result> type;
+    };
+};
+
+template <>
+struct funptr_predicate<void**>
+  : mpl::always<mpl::true_>
+{};
+
 # endif
 
 }}} // namespace boost::parameter::aux
@@ -182,7 +273,9 @@ T const& as_lvalue(T const& value, int)
 // Calculates [begin, end) arity range.
 
 # define BOOST_PARAMETER_ARITY_RANGE_M_optional(state) state
+# define BOOST_PARAMETER_ARITY_RANGE_M_deduced_optional(state) state
 # define BOOST_PARAMETER_ARITY_RANGE_M_required(state) BOOST_PP_INC(state)
+# define BOOST_PARAMETER_ARITY_RANGE_M_deduced_required(state) BOOST_PP_INC(state)
 
 # define BOOST_PARAMETER_ARITY_RANGE_M(s, state, x) \
     BOOST_PP_CAT( \
@@ -388,34 +481,62 @@ T const& as_lvalue(T const& value, int)
 /**/
 
 // Builds boost::parameter::parameters<> specialization
-# if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#  define BOOST_PARAMETER_FUNCTION_PARAMETERS_QUALIFIER_optional(tag) \
+    optional<tag
+
+#  define BOOST_PARAMETER_FUNCTION_PARAMETERS_QUALIFIER_required(tag) \
+    required<tag
+
+#  define BOOST_PARAMETER_FUNCTION_PARAMETERS_QUALIFIER_deduced_optional(tag) \
+    optional<boost::parameter::deduced<tag>
+
+#  define BOOST_PARAMETER_FUNCTION_PARAMETERS_QUALIFIER_deduced_required(tag) \
+    required<boost::parameter::deduced<tag>
+
+# if !BOOST_WORKAROUND(BOOST_MSVC, < 1300) && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+
+#  if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
+#   define BOOST_PARAMETER_PREDICATE_TYPE(p) void*(*) (void* p)
+#  else
+#   define BOOST_PARAMETER_PREDICATE_TYPE(p) void p
+#  endif
+
 #  define BOOST_PARAMETER_FUNCTION_PARAMETERS_M(r,tag_namespace,i,elem) \
     BOOST_PP_COMMA_IF(i) \
-    boost::parameter::BOOST_PARAMETER_FN_ARG_QUALIFIER(elem)< \
+    boost::parameter::BOOST_PP_CAT( \
+        BOOST_PARAMETER_FUNCTION_PARAMETERS_QUALIFIER_ \
+      , BOOST_PARAMETER_FN_ARG_QUALIFIER(elem) \
+    )( \
         tag_namespace::BOOST_PARAMETER_FUNCTION_KEYWORD( \
             BOOST_PARAMETER_FN_ARG_KEYWORD(elem) \
         ) \
+    ) \
       , typename boost::parameter::aux::unwrap_predicate< \
-            void BOOST_PARAMETER_FN_ARG_PRED(elem) \
+            BOOST_PARAMETER_PREDICATE_TYPE(BOOST_PARAMETER_FN_ARG_PRED(elem)) \
         >::type \
     >
 # else
 #  define BOOST_PARAMETER_FUNCTION_PARAMETERS_M(r,tag_namespace,i,elem) \
     BOOST_PP_COMMA_IF(i) \
-    boost::parameter::BOOST_PARAMETER_FN_ARG_QUALIFIER(elem)< \
+    boost::parameter::BOOST_PP_CAT( \
+        BOOST_PARAMETER_FUNCTION_PARAMETERS_QUALIFIER_ \
+      , BOOST_PARAMETER_FN_ARG_QUALIFIER(elem) \
+    )( \
         tag_namespace::BOOST_PARAMETER_FUNCTION_KEYWORD( \
             BOOST_PARAMETER_FN_ARG_KEYWORD(elem) \
         ) \
-      , boost::mpl::always<boost::mpl::true_> \
+    ) \
+      , boost::parameter::aux::funptr_predicate< \
+            void* BOOST_PARAMETER_FN_ARG_PRED(elem) \
+        > \
     >
 # endif
-/**/
 
 # define BOOST_PARAMETER_FUNCTION_PARAMETERS(tag_namespace, base, args)             \
-    template <class BoostParameterDummy>                                      \
-    struct BOOST_PP_CAT( \
-            BOOST_PP_CAT(boost_param_params_, __LINE__) \
-          , BOOST_PARAMETER_MEMBER_FUNCTION_NAME(base) \
+    template <class BoostParameterDummy>                                            \
+    struct BOOST_PP_CAT(                                                            \
+            BOOST_PP_CAT(boost_param_params_, __LINE__)                             \
+          , BOOST_PARAMETER_MEMBER_FUNCTION_NAME(base)                              \
     ) : boost::parameter::parameters<                                               \
             BOOST_PP_SEQ_FOR_EACH_I(                                                \
                 BOOST_PARAMETER_FUNCTION_PARAMETERS_M, tag_namespace, args          \
@@ -474,6 +595,9 @@ T const& as_lvalue(T const& value, int)
       , BOOST_PP_TUPLE_ELEM(4, 3, state) \
     )
 
+# define BOOST_PARAMETER_FUNCTION_SPLIT_ARG_deduced_required(state, arg) \
+    BOOST_PARAMETER_FUNCTION_SPLIT_ARG_required(state, arg)
+
 # define BOOST_PARAMETER_FUNCTION_SPLIT_ARG_optional(state, arg) \
     ( \
         BOOST_PP_TUPLE_ELEM(4, 0, state) \
@@ -481,6 +605,9 @@ T const& as_lvalue(T const& value, int)
       , BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(4, 2, state)) \
       , BOOST_PP_SEQ_PUSH_BACK(BOOST_PP_TUPLE_ELEM(4, 3, state), arg) \
     )
+
+# define BOOST_PARAMETER_FUNCTION_SPLIT_ARG_deduced_optional(state, arg) \
+    BOOST_PARAMETER_FUNCTION_SPLIT_ARG_optional(state, arg)
 
 # define BOOST_PARAMETER_FUNCTION_SPLIT_ARG(s, state, arg) \
     BOOST_PP_CAT( \
@@ -919,7 +1046,7 @@ T const& as_lvalue(T const& value, int)
     )
 /**/
 
-# if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+# ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 #  define BOOST_PARAMETER_FUNCTION_FWD_COMBINATION(r, _, i, elem) \
     (BOOST_PP_IF( \
         BOOST_PARAMETER_FUNCTION_IS_KEYWORD_QUALIFIER( \
@@ -928,6 +1055,18 @@ T const& as_lvalue(T const& value, int)
       , (const ParameterArgumentType ## i)(ParameterArgumentType ## i) \
       , (const ParameterArgumentType ## i) \
     ))
+// MSVC6.5 lets us bind rvalues to T&.
+# elif BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+#  define BOOST_PARAMETER_FUNCTION_FWD_COMBINATION(r, _, i, elem) \
+    (BOOST_PP_IF( \
+        BOOST_PARAMETER_FUNCTION_IS_KEYWORD_QUALIFIER( \
+            BOOST_PARAMETER_FN_ARG_NAME(elem) \
+        ) \
+      , (ParameterArgumentType ## i) \
+      , (const ParameterArgumentType ## i) \
+    ))
+// No partial ordering. This feature doesn't work.
+// This is exactly the same as for VC6.5, but we might change it later.
 # else
 #  define BOOST_PARAMETER_FUNCTION_FWD_COMBINATION(r, _, i, elem) \
     (BOOST_PP_IF( \

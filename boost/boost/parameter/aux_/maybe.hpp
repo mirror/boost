@@ -9,7 +9,6 @@
 # include <boost/mpl/identity.hpp>
 # include <boost/type_traits/is_reference.hpp>
 # include <boost/type_traits/add_reference.hpp>
-# include <boost/type_traits/add_const.hpp>
 # include <boost/optional.hpp>
 # include <boost/python/detail/referent_storage.hpp>
 # include <boost/type_traits/remove_cv.hpp>

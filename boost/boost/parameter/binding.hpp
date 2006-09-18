@@ -9,7 +9,11 @@
 # include <boost/mpl/and.hpp>
 # include <boost/parameter/aux_/result_of0.hpp>
 # include <boost/parameter/aux_/void.hpp>
-#  include <boost/type_traits/is_same.hpp>
+# include <boost/type_traits/is_same.hpp>
+
+# if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+#  include <boost/mpl/eval_if.hpp>
+# endif
 
 namespace boost { namespace parameter { 
 
@@ -33,6 +37,9 @@ struct binding_eti
           , is_same<type, void_>
         >
     ));
+# if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(3,binding,(Parameters,Keyword,Default))
+# endif
 };
 
 # if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
@@ -44,6 +51,8 @@ struct binding
       , mpl::identity<int>
       , binding_eti<Parameters, Keyword, Default>
     >::type type;
+
+    BOOST_MPL_AUX_LAMBDA_SUPPORT(3,binding,(Parameters,Keyword,Default))
 };
 # endif
 

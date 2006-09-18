@@ -12,7 +12,21 @@
 # include <boost/preprocessor/control/iif.hpp>
 # include <boost/preprocessor/tuple/eat.hpp>
 # include <boost/preprocessor/tuple/elem.hpp>
-# include <boost/preprocessor/detail/is_binary.hpp>
+
+# if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+# include <boost/preprocessor/detail/split.hpp>
+// From Paul Mensonides
+#  define BOOST_PARAMETER_IS_BINARY(x) \
+    BOOST_PP_SPLIT(1, BOOST_PARAMETER_IS_BINARY_C x BOOST_PP_COMMA() 0) \
+    /**/
+#  define BOOST_PARAMETER_IS_BINARY_C(x,y) \
+    ~, 1 BOOST_PP_RPAREN() \
+    BOOST_PP_TUPLE_EAT(2) BOOST_PP_LPAREN() ~ \
+    /**/
+# else
+#  include <boost/preprocessor/detail/is_binary.hpp>
+#  define BOOST_PARAMETER_IS_BINARY(x) BOOST_PP_IS_BINARY(x)
+# endif
 
 # if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 #  define BOOST_PARAMETER_NAME_OBJECT(tag, name)                    \
@@ -65,7 +79,7 @@
 
 # define BOOST_PARAMETER_NAME(name)                                 \
     BOOST_PP_IIF(                                                   \
-        BOOST_PP_IS_BINARY(name)                                    \
+        BOOST_PARAMETER_IS_BINARY(name)                             \
       , BOOST_PARAMETER_COMPLEX_NAME                                \
       , BOOST_PARAMETER_SIMPLE_NAME                                 \
     )(name)                                                         \

@@ -44,17 +44,22 @@
 #define N BOOST_PP_ITERATION()
 
 #define BOOST_PARAMETER_open_list(z, n, text) \
-    aux::make_arg_list< \
-        BOOST_PP_CAT(PS, n), BOOST_PP_CAT(A, n), aux::tag_keyword_arg
+    aux::item< \
+        BOOST_PP_CAT(PS, n), BOOST_PP_CAT(A, n)
 
 #define BOOST_PARAMETER_close_list(z, n, text) > 
 
 #define BOOST_PARAMETER_arg_list(n) \
-    mpl::apply_wrap1< \
-    BOOST_PP_ENUM(N, BOOST_PARAMETER_open_list, _) \
-  , mpl::always<aux::empty_arg_list> \
-    BOOST_PP_REPEAT(N, BOOST_PARAMETER_close_list, _) \
-  , unnamed_list>
+    aux::make_arg_list< \
+        BOOST_PP_ENUM(N, BOOST_PARAMETER_open_list, _) \
+        , void_ \
+        BOOST_PP_REPEAT(N, BOOST_PARAMETER_close_list, _) \
+      , deduced_list \
+      , aux::tag_keyword_arg \
+    >
+
+#define BOOST_PARAMETER_arg_pack_init(z, n, limit) \
+    BOOST_PP_CAT(a, BOOST_PP_SUB(limit,n))
 
 template<BOOST_PP_ENUM_PARAMS(N, class A)>
 typename BOOST_PARAMETER_arg_list(N)::type
@@ -63,7 +68,7 @@ operator()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, & a)) const
     typedef typename BOOST_PARAMETER_arg_list(N)::type arg_tuple;
 
     return arg_tuple(
-        BOOST_PP_ENUM_PARAMS(N, a)
+        BOOST_PP_ENUM(N, BOOST_PARAMETER_arg_pack_init, BOOST_PP_DEC(N))
         BOOST_PP_ENUM_TRAILING_PARAMS(
             BOOST_PP_SUB(BOOST_PARAMETER_MAX_ARITY, N)
           , aux::void_reference() BOOST_PP_INTERCEPT
