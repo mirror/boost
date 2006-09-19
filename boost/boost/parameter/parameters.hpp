@@ -381,6 +381,13 @@ namespace aux
   // so that it doesn't magically drop the const qualifier from
   // the argument type.
 
+  template <class T>
+  struct assert_matched_argument
+  {
+      BOOST_MPL_ASSERT((mpl::not_<is_same<T, void_> >));
+      typedef int type;
+  };
+
   template <
       class List
     , class DeducedArgs
@@ -449,12 +456,18 @@ namespace aux
       // We build the arg_list incrementally as we go, prepending new
       // nodes.
 
+      typedef typename mpl::eval_if<
+          EmitErrors
+        , assert_matched_argument<tagged>
+        , mpl::identity<int>
+      >::type assertion;
+/*
       BOOST_MPL_ASSERT((
           mpl::or_<
               mpl::not_<EmitErrors>
             , mpl::not_<is_same<tagged, void_> >
           >
-      ));
+      ));*/
 
       typedef typename mpl::if_<
           is_same<tagged, void_>
@@ -816,7 +829,7 @@ struct parameters
         aux::item<
             PS0,A0
         >
-      , void_
+      , deduced_list
       , aux::tag_keyword_arg
     >::type
     operator()(A0& a0) const

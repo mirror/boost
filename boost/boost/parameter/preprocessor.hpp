@@ -132,6 +132,8 @@ struct unwrap_predicate<void*(*)(void**)>
 
 # endif
 
+# undef false_
+
 template <
     class Parameters
   , BOOST_PP_ENUM_BINARY_PARAMS(
@@ -146,6 +148,7 @@ struct argument_pack
         )::type
       , typename Parameters::deduced_list
       , tag_keyword_arg
+      , mpl::false_
     >::type type;
 };
 

@@ -9,6 +9,10 @@
 #include <string>
 #include "basics.hpp"
 
+#ifndef BOOST_NO_SFINAE
+# include <boost/utility/enable_if.hpp>
+#endif
+
 namespace test {
 
 namespace mpl = boost::mpl;
@@ -73,6 +77,33 @@ BOOST_PARAMETER_FUNCTION((int), g, tag,
     return 1;
 }
 
+BOOST_PARAMETER_FUNCTION(
+    (int), sfinae, tag,
+    (deduced
+      (required
+        (x, *(boost::is_convertible<boost::mpl::_, std::string>))
+      )
+    )
+)
+{
+    return 1;
+}
+
+#ifndef BOOST_NO_SFINAE
+// On compilers that actually support SFINAE, add another overload
+// that is an equally good match and can only be in the overload set
+// when the others are not.  This tests that the SFINAE is actually
+// working.  On all other compilers we're just checking that
+// everything about SFINAE-enabled code will work, except of course
+// the SFINAE.
+template<class A0>
+typename boost::enable_if<boost::is_same<int,A0>, int>::type
+sfinae(A0 const& a0)
+{
+    return 0;
+}
+#endif
+
 } // namespace test
 
 using boost::make_tuple;
@@ -104,6 +135,11 @@ int main()
 
     g(make_tuple(0, str("foo"), X(1)), 0, _y = "foo", X(1));
     g(make_tuple(0, str("foo"), X(1)), X(1), 0, _y = "foo");
+
+#ifndef BOOST_NO_SFINAE
+    assert(sfinae("foo") == 1);
+    assert(sfinae(0) == 0);
+#endif
 
     return 0;
 }
