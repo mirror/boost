@@ -363,6 +363,7 @@ namespace aux
     , class Positional
     , class UsedArgs
     , class ArgumentPack
+    , class EmitErrors
   >
   struct make_arg_list_aux;
 
@@ -390,6 +391,7 @@ namespace aux
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
     , class argument
 #endif
+    , class EmitErrors
   >
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
   struct make_arg_list00
@@ -447,8 +449,13 @@ namespace aux
       // We build the arg_list incrementally as we go, prepending new
       // nodes.
 
-      // TODO. We should create a dummy node in the arg_list
-      // here. A node that swallows an argument in the constructor.
+      BOOST_MPL_ASSERT((
+          mpl::or_<
+              mpl::not_<EmitErrors>
+            , mpl::not_<is_same<tagged, void_> >
+          >
+      ));
+
       typedef typename mpl::if_<
           is_same<tagged, void_>
         , ArgumentPack
@@ -462,6 +469,7 @@ namespace aux
         , positional
         , typename deduced_data::second
         , argument_pack
+        , EmitErrors
       >::type type;
   };
 
@@ -473,6 +481,7 @@ namespace aux
     , class Positional
     , class UsedArgs
     , class ArgumentPack
+    , class EmitErrors
   >
   struct make_arg_list0
   {
@@ -486,6 +495,7 @@ namespace aux
             , UsedArgs
             , ArgumentPack
             , typename List::arg const
+            , EmitErrors
           >
         , make_arg_list00<
               List
@@ -495,6 +505,7 @@ namespace aux
             , UsedArgs
             , ArgumentPack
             , typename List::arg
+            , EmitErrors
           >
       >::type type;
   };
@@ -528,13 +539,14 @@ namespace aux
     , class Positional
     , class DeducedSet
     , class ArgumentPack
+    , class EmitErrors
   >
   struct make_arg_list_aux
   {
       typedef typename mpl::eval_if<
           is_same<List, void_>
         , mpl::identity<ArgumentPack>
-        , make_arg_list0<List, DeducedArgs, TagFn, Positional, DeducedSet, ArgumentPack>
+        , make_arg_list0<List, DeducedArgs, TagFn, Positional, DeducedSet, ArgumentPack, EmitErrors>
       >::type type;
   };
 
@@ -544,11 +556,12 @@ namespace aux
       class List
     , class DeducedArgs
     , class TagFn
+    , class EmitErrors = mpl::true_
   >
   struct make_arg_list
   {
       typedef typename make_arg_list_aux<
-          List, DeducedArgs, TagFn, mpl::true_, aux::set0, empty_arg_list
+          List, DeducedArgs, TagFn, mpl::true_, aux::set0, empty_arg_list, EmitErrors
       >::type type;
   };
 

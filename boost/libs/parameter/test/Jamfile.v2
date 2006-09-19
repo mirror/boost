@@ -28,6 +28,7 @@ test-suite "parameter"
      [ compile unwrap_cv_reference.cpp ]
      [ compile-fail duplicates.cpp ]
      [ compile-fail unnamed_fail.cpp ]
+     [ compile-fail deduced_unmatched_arg.cpp ]
      [ compile compose.cpp ]
      [ compile normalized_argument_types.cpp ]
      [ bpl-test python_test ]
