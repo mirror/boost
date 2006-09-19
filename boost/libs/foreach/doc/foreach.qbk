@@ -61,17 +61,21 @@ well-behaved one. It evaluates its arguments exactly once, leading to no nasty s
 [h2 Hello, world!]
 
 Below is a sample program that uses _foreach_ to loop over the contents of
-a null-terminated C-style string.
+a `std::string`.
 
+    #include <string>
     #include <iostream>
     #include <boost/foreach.hpp>
 
     int main()
     {
-        BOOST_FOREACH( char ch, "Hello, world!" )
+        std::string hello( "Hello, world!" );
+        
+        BOOST_FOREACH( char ch, hello )
         {
             std::cout << ch;
         }
+
         return 0;
     }
 
@@ -128,14 +132,14 @@ Predeclare the loop variable, and use `break`, `continue`, and `return` in the l
     int i = 0;
     BOOST_FOREACH( i, deque_int )
     {
-        if(i==0) return;
-        if(i==1) continue;
-        if(i==2) break;
+        if( i == 0 ) return;
+        if( i == 1 ) continue;
+        if( i == 2 ) break;
     }
 
 Iterate over a sequence by reference, and modify the underlying sequence:
 
-    short array_short[] = {1,2,3};
+    short array_short[] = { 1, 2, 3 };
     BOOST_FOREACH( short & i, array_short )
     {
         ++i;
