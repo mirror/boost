@@ -14,6 +14,7 @@ test-suite concept_check
       
     [ run where.cpp ]
     [ compile-fail where_fail.cpp ]
+    [ compile-fail usage_fail.cpp ]
       
       # Backward compatibility tests
     [ run old_concept_pass.cpp ]

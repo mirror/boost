@@ -23,9 +23,11 @@
 # include <boost/type_traits/is_same.hpp>
 # include <boost/type_traits/is_void.hpp>
 # include <boost/mpl/assert.hpp>
+# include <boost/mpl/bool.hpp>
 # include <boost/detail/workaround.hpp>
 # include <boost/detail/iterator.hpp>
 
+# include <boost/concept/usage.hpp>
 # include <boost/concept/detail/concept_def.hpp>
 
 namespace boost
@@ -63,7 +65,7 @@ namespace boost
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
       Integer();   // at least 2.96 and 3.4.3 both need this :(
 #endif
-      ~Integer()
+      BOOST_CONCEPT_USAGE(Integer)
         { 
             x.error_type_must_be_an_integer_type();
         }
@@ -85,7 +87,7 @@ namespace boost
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
     SignedInteger();   // at least 2.96 and 3.4.3 both need this :(
 #endif
-    ~SignedInteger() { 
+    BOOST_CONCEPT_USAGE(SignedInteger) { 
       x.error_type_must_be_a_signed_integer_type();
     }
    private:
@@ -104,7 +106,7 @@ namespace boost
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
     UnsignedInteger();   // at least 2.96 and 3.4.3 both need this :(
 #endif
-    ~UnsignedInteger() { 
+    BOOST_CONCEPT_USAGE(UnsignedInteger) { 
       x.error_type_must_be_an_unsigned_integer_type();
     }
    private:
@@ -130,7 +132,7 @@ namespace boost
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
     DefaultConstructible();   // at least 2.96 and 3.4.3 both need this :(
 #endif
-    ~DefaultConstructible() {
+    BOOST_CONCEPT_USAGE(DefaultConstructible) {
       TT a;               // require default constructor
       ignore_unused_variable_warning(a);
     }
@@ -142,7 +144,7 @@ namespace boost
     Assignable();   // at least 2.96 and 3.4.3 both need this :(
 #endif
 
-    ~Assignable() {
+    BOOST_CONCEPT_USAGE(Assignable) {
 #if !defined(_ITERATOR_) // back_insert_iterator broken for VC++ STL
       a = a;              // require assignment operator
 #endif
@@ -164,7 +166,7 @@ namespace boost
     CopyConstructible();   // at least 2.96 and 3.4.3 both need this :(
 #endif
 
-    ~CopyConstructible() {
+    BOOST_CONCEPT_USAGE(CopyConstructible) {
       TT a(b);            // require copy constructor
       TT* ptr = &a;       // require address of operator
       const_constraints(a);
@@ -187,7 +189,7 @@ namespace boost
     SGIAssignable();   // at least 2.96 and 3.4.3 both need this :(
 #endif
 
-    ~SGIAssignable() {
+    BOOST_CONCEPT_USAGE(SGIAssignable) {
       TT b(a);
 #if !defined(_ITERATOR_) // back_insert_iterator broken for VC++ STL
       a = a;              // require assignment operator
@@ -211,7 +213,7 @@ namespace boost
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
     Convertible();   // at least 2.96 and 3.4.3 both need this :(
 #endif
-    ~Convertible() {
+    BOOST_CONCEPT_USAGE(Convertible) {
       Y y = x;
       ignore_unused_variable_warning(y);
     }
@@ -239,7 +241,7 @@ namespace boost
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
     EqualityComparable();   // at least 2.96 and 3.4.3 both need this :(
 #endif
-    ~EqualityComparable() {
+    BOOST_CONCEPT_USAGE(EqualityComparable) {
       require_boolean_expr(a == b);
       require_boolean_expr(a != b);
     }
@@ -252,7 +254,7 @@ namespace boost
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
     LessThanComparable();   // at least 2.96 and 3.4.3 both need this :(
 #endif
-    ~LessThanComparable() {
+    BOOST_CONCEPT_USAGE(LessThanComparable) {
       require_boolean_expr(a < b);
     }
    private:
@@ -265,7 +267,7 @@ namespace boost
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
     Comparable();   // at least 2.96 and 3.4.3 both need this :(
 #endif
-    ~Comparable() {
+    BOOST_CONCEPT_USAGE(Comparable) {
       require_boolean_expr(a < b);
       require_boolean_expr(a > b);
       require_boolean_expr(a <= b);
@@ -280,7 +282,7 @@ namespace boost
   BOOST_concept(NAME, (First)(Second))                          \
   {                                                             \
       NAME();                                                   \
-      ~NAME() { (void)constraints_(); }                         \
+      BOOST_CONCEPT_USAGE(NAME) { (void)constraints_(); }                         \
      private:                                                   \
         bool constraints_() { return a OP b; }                  \
         First a;                                                \
@@ -290,7 +292,7 @@ namespace boost
 #define BOOST_DEFINE_BINARY_PREDICATE_OP_CONSTRAINT(OP,NAME)    \
   BOOST_concept(NAME, (First)(Second))                          \
   {                                                             \
-      ~NAME() { (void)constraints_(); }                         \
+      BOOST_CONCEPT_USAGE(NAME) { (void)constraints_(); }                         \
      private:                                                   \
         bool constraints_() { return a OP b; }                  \
         First a;                                                \
@@ -303,7 +305,7 @@ namespace boost
   BOOST_concept(NAME, (Ret)(First)(Second))                 \
   {                                                         \
       NAME();                                               \
-      ~NAME() { (void)constraints_(); }                     \
+      BOOST_CONCEPT_USAGE(NAME) { (void)constraints_(); }                     \
   private:                                                  \
       Ret constraints_() { return a OP b; }                 \
       First a;                                              \
@@ -313,7 +315,7 @@ namespace boost
 #define BOOST_DEFINE_BINARY_OPERATOR_CONSTRAINT(OP,NAME)    \
   BOOST_concept(NAME, (Ret)(First)(Second))                 \
   {                                                         \
-      ~NAME() { (void)constraints_(); }                     \
+      BOOST_CONCEPT_USAGE(NAME) { (void)constraints_(); }                     \
   private:                                                  \
       Ret constraints_() { return a OP b; }                 \
       First a;                                              \
@@ -342,7 +344,7 @@ namespace boost
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
       Generator();   // at least 2.96 and 3.4.3 both need this :(
 #endif
-      ~Generator() { test(is_void<Return>()); }
+      BOOST_CONCEPT_USAGE(Generator) { test(is_void<Return>()); }
       
    private:
       void test(boost::mpl::false_)
@@ -365,7 +367,7 @@ namespace boost
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
       UnaryFunction();   // at least 2.96 and 3.4.3 both need this :(
 #endif
-      ~UnaryFunction() { test(is_void<Return>()); }
+      BOOST_CONCEPT_USAGE(UnaryFunction) { test(is_void<Return>()); }
       
    private:
       void test(boost::mpl::false_)
@@ -389,7 +391,7 @@ namespace boost
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
       BinaryFunction();   // at least 2.96 and 3.4.3 both need this :(
 #endif
-      ~BinaryFunction() { test(is_void<Return>()); }
+      BOOST_CONCEPT_USAGE(BinaryFunction) { test(is_void<Return>()); }
    private:
       void test(boost::mpl::false_)
       {
@@ -413,7 +415,7 @@ namespace boost
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
     UnaryPredicate();   // at least 2.96 and 3.4.3 both need this :(
 #endif
-    ~UnaryPredicate() {
+    BOOST_CONCEPT_USAGE(UnaryPredicate) {
       require_boolean_expr(f(arg)); // require operator() returning bool
     }
    private:
@@ -426,7 +428,7 @@ namespace boost
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
     BinaryPredicate();   // at least 2.96 and 3.4.3 both need this :(
 #endif
-    ~BinaryPredicate() {
+    BOOST_CONCEPT_USAGE(BinaryPredicate) {
       require_boolean_expr(f(a, b)); // require operator() returning bool
     }
    private:
@@ -442,7 +444,7 @@ namespace boost
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
     Const_BinaryPredicate();   // at least 2.96 and 3.4.3 both need this :(
 #endif
-    ~Const_BinaryPredicate() { 
+    BOOST_CONCEPT_USAGE(Const_BinaryPredicate) { 
       const_constraints(f);
     }
    private:
@@ -463,7 +465,7 @@ namespace boost
 #if BOOST_WORKAROUND(__GNUC__, <= 3)
       AdaptableGenerator();   // at least 2.96 and 3.4.3 both need this :(
 #endif
-      ~AdaptableGenerator()
+      BOOST_CONCEPT_USAGE(AdaptableGenerator)
       {
           BOOST_CONCEPT_ASSERT((Convertible<result_type, Return>));
       }
