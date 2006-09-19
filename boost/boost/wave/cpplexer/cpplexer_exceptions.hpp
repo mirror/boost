@@ -158,11 +158,11 @@ public:
     {
         return buffer;
     }
-    virtual int get_severity() const
+    virtual int get_severity() const throw()
     {
         return level;
     }
-    virtual int get_errorcode() const
+    virtual int get_errorcode() const throw()
     {
         return code;
     }
