@@ -25,8 +25,6 @@ BOOST_PARAMETER_NAME(x)
 BOOST_PARAMETER_NAME(y)
 BOOST_PARAMETER_NAME(z)
 
-#if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x580))
-
 // Sun has problems with this syntax:
 //
 //   template1< r* ( template2<x> ) >
@@ -34,6 +32,8 @@ BOOST_PARAMETER_NAME(z)
 // Workaround: factor template2<x> into a separate typedef
 typedef is_convertible<_, int> predicate1;
 typedef is_convertible<_, std::string> predicate2;
+
+#if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x580))
 
 BOOST_PARAMETER_FUNCTION((int), f, tag,
     (required
