@@ -813,12 +813,8 @@ int error_count = 0;
     
         if (is_interactive) {
         // if interactive we don't warn for missing endif's etc.
-            ctx.set_language(boost::wave::set_support_options(ctx.get_language(), 
-                (boost::wave::language_support)(
-                    boost::wave::get_support_options(ctx.get_language()) | 
-                    boost::wave::support_option_single_line)
-                )
-            );
+            ctx.set_language(
+                boost::wave::enable_single_line(ctx.get_language()));
         }
         
     // analyze the input file

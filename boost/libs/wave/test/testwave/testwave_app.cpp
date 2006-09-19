@@ -789,23 +789,19 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm,
     }
     
 // enable trigraph conversion
-    ctx.set_language(boost::wave::set_support_options(ctx.get_language(), 
-        (boost::wave::language_support)(
-            boost::wave::get_support_options(ctx.get_language()) | 
-            boost::wave::support_option_convert_trigraphs)
-        )
-    );
+    if (9 == debuglevel) {
+        std::cerr << "initialise_options: option: convert_trigraphs" << std::endl;
+    }
+    ctx.set_language(boost::wave::enable_convert_trigraphs(ctx.get_language()));
 
 // enable single_line mode
     if (single_line) {
-        ctx.set_language(boost::wave::set_support_options(ctx.get_language(), 
-            (boost::wave::language_support)(
-                boost::wave::get_support_options(ctx.get_language()) | 
-                boost::wave::support_option_single_line)
-            )
-        );
+        if (9 == debuglevel) {
+            std::cerr << "initialise_options: option: single_line" << std::endl;
+        }
+        ctx.set_language(boost::wave::enable_single_line(ctx.get_language()));
     }
-        
+    
 //  add include directories to the system include search paths
     if (vm.count("sysinclude")) {
     std::vector<std::string> const& syspaths = 
