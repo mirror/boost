@@ -25,6 +25,28 @@ BOOST_PARAMETER_NAME(x)
 BOOST_PARAMETER_NAME(y)
 BOOST_PARAMETER_NAME(z)
 
+#if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x580))
+
+// Sun has problems with this syntax:
+//
+//   template1< r* ( template2<x> ) >
+//
+// Workaround: factor template2<x> into a separate typedef
+typedef is_convertible<_, int> predicate1;
+typedef is_convertible<_, std::string> predicate2;
+
+BOOST_PARAMETER_FUNCTION((int), f, tag,
+    (required
+       (expected, *)
+    )
+    (deduced
+       (required
+          (x, *(predicate1))
+          (y, *(predicate2))
+       )
+    )
+)
+#else
 BOOST_PARAMETER_FUNCTION((int), f, tag,
     (required
        (expected, *)
@@ -36,6 +58,7 @@ BOOST_PARAMETER_FUNCTION((int), f, tag,
        )
     )
 )
+#endif 
 {
     assert(equal(x, boost::tuples::get<0>(expected)));
     assert(equal(y, boost::tuples::get<1>(expected)));
@@ -56,6 +79,8 @@ struct X
     int x;
 };
 
+typedef is_convertible<_, X> predicate3;  // SunPro workaround; see above
+
 BOOST_PARAMETER_FUNCTION((int), g, tag,
     (required
       (expected, *)
@@ -66,7 +91,7 @@ BOOST_PARAMETER_FUNCTION((int), g, tag,
           (y, *(is_convertible<_, std::string>))
        )
        (optional
-          (z, *(is_convertible<_, X>), X())
+          (z, *(predicate3), X())
        )
     )
 )
@@ -81,7 +106,7 @@ BOOST_PARAMETER_FUNCTION(
     (int), sfinae, tag,
     (deduced
       (required
-        (x, *(boost::is_convertible<boost::mpl::_, std::string>))
+        (x, *(predicate2))
       )
     )
 )
