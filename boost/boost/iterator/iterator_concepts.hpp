@@ -6,12 +6,6 @@
 #ifndef BOOST_ITERATOR_CONCEPTS_HPP
 #define BOOST_ITERATOR_CONCEPTS_HPP
 
-//  Revision History
-//  26 Apr 2003 thw
-//       Adapted to new iterator concepts
-//  22 Nov 2002 Thomas Witt
-//       Added interoperable concept.
-
 #include <boost/concept_check.hpp>
 #include <boost/iterator/iterator_categories.hpp>
 
@@ -53,7 +47,7 @@ namespace boost_concepts
       typedef BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::value_type value_type;
       typedef BOOST_DEDUCED_TYPENAME boost::detail::iterator_traits<Iterator>::reference reference;
 
-      ~ReadableIterator()
+      BOOST_CONCEPT_USAGE(ReadableIterator)
       {
 
           value_type v = *i;
@@ -70,7 +64,7 @@ namespace boost_concepts
   struct WritableIterator
     : boost::CopyConstructible<Iterator>
   {
-      ~WritableIterator()
+      BOOST_CONCEPT_USAGE(WritableIterator)
       {
           *i = v;
       }
@@ -87,7 +81,7 @@ namespace boost_concepts
   
   BOOST_concept(SwappableIterator,(Iterator))
   {
-      ~SwappableIterator()
+      BOOST_CONCEPT_USAGE(SwappableIterator)
       {
           std::iter_swap(i1, i2);
       }
@@ -100,7 +94,7 @@ namespace boost_concepts
   {
       typedef typename boost::detail::iterator_traits<Iterator>::value_type value_type;
       
-      ~LvalueIterator()
+      BOOST_CONCEPT_USAGE(LvalueIterator)
       {
         value_type& r = const_cast<value_type&>(*i);
         boost::ignore_unused_variable_warning(r);
@@ -119,7 +113,7 @@ namespace boost_concepts
   {
       typedef typename boost::iterator_traversal<Iterator>::type traversal_category;
 
-      ~IncrementableIterator()
+      BOOST_CONCEPT_USAGE(IncrementableIterator)
       {
           BOOST_CONCEPT_ASSERT((
             boost::Convertible<
@@ -139,7 +133,7 @@ namespace boost_concepts
     , boost::EqualityComparable<Iterator>
 
   {
-      ~SinglePassIterator()
+      BOOST_CONCEPT_USAGE(SinglePassIterator)
       {
           BOOST_CONCEPT_ASSERT((
               boost::Convertible<
@@ -155,7 +149,7 @@ namespace boost_concepts
   {
       typedef typename boost::detail::iterator_traits<Iterator>::difference_type difference_type;
       
-      ~ForwardTraversal()
+      BOOST_CONCEPT_USAGE(ForwardTraversal)
       {
           BOOST_MPL_ASSERT((boost::is_integral<difference_type>));
           BOOST_MPL_ASSERT_RELATION(std::numeric_limits<difference_type>::is_signed, ==, true);
@@ -171,7 +165,7 @@ namespace boost_concepts
   BOOST_concept(BidirectionalTraversal,(Iterator))
     : ForwardTraversal<Iterator>
   {
-      ~BidirectionalTraversal()
+      BOOST_CONCEPT_USAGE(BidirectionalTraversal)
       {
           BOOST_CONCEPT_ASSERT((
               boost::Convertible<
@@ -190,7 +184,7 @@ namespace boost_concepts
     : BidirectionalTraversal<Iterator>
   {
    public:
-      ~RandomAccessTraversal()
+      BOOST_CONCEPT_USAGE(RandomAccessTraversal)
       {
           BOOST_CONCEPT_ASSERT((
               boost::Convertible<
@@ -274,7 +268,7 @@ namespace boost_concepts
       >::type const_traversal_category;
       
   public:
-      ~InteroperableIterator()
+      BOOST_CONCEPT_USAGE(InteroperableIterator)
       {
           BOOST_CONCEPT_ASSERT((SinglePassIterator<Iterator>));
           BOOST_CONCEPT_ASSERT((SinglePassIterator<ConstIterator>));
