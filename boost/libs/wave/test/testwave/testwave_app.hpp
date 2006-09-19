@@ -91,7 +91,7 @@ protected:
 
     //  This function compares the real result and the expected one but first 
     //  replaces all occurrences in the expected result of 
-    //      $E: to the occurrences of preprocessing the given expression
+    //      $E: to the result of preprocessing the given expression
     //      $F: to the passed full filepath 
     //      $P: to the full path
     //      $V: to the current Boost version number

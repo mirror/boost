@@ -659,7 +659,9 @@ bool returned_from_include_file = returned_from_include();
                  (returned_from_include_file = returned_from_include()));
 
     // overall eof reached
-        if (ctx.get_if_block_depth() > 0) {
+        if (ctx.get_if_block_depth() > 0 &&
+            !(support_option_single_line & get_support_options(ctx.get_language()))) 
+        {
         // missing endif directive(s)
             BOOST_WAVE_THROW(preprocess_exception, missing_matching_endif, "", 
                 act_pos);

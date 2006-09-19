@@ -194,7 +194,8 @@ Boost V1.34.0
 - The warning, that a file is not terminated by a newline is now issued for all
   files, not only for the main file (as previous).
 - Added a couple of new test cases to verify various diagnostics.
-  
+- Fixed wave applet not to report missing #endif's when in interactive mode.
+
 Sat Feb 18 2005
 - Version 1.2.3
 - Added a missing throw() specification to the function 

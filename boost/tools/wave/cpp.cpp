@@ -356,14 +356,26 @@ namespace {
 
     ///////////////////////////////////////////////////////////////////////////
     //  Generate some meaningful error messages
-    template <typename Context>
+    template <typename Exception>        
     inline int 
-    report_error_message(Context &ctx, boost::wave::cpp_exception const &e)
+    report_error_message(Exception const &e)
     {
         // default error reporting
         cerr 
             << e.file_name() << ":" << e.line_no() << ":" << e.column_no() 
             << ": " << e.description() << endl;
+
+        // errors count as one
+        return (e.get_severity() == boost::wave::util::severity_error ||
+                e.get_severity() == boost::wave::util::severity_fatal) ? 1 : 0;
+    }
+
+    template <typename Context>
+    inline int 
+    report_error_message(Context &ctx, boost::wave::cpp_exception const &e)
+    {
+        // default error reporting
+        int result = report_error_message(e);
 
         using boost::wave::preprocess_exception;
         switch(e.get_errorcode()) {
@@ -392,12 +404,10 @@ namespace {
         default:
             break;
         }
-        
-        // errors count as one
-        return (e.get_severity() == boost::wave::util::severity_error ||
-                e.get_severity() == boost::wave::util::severity_fatal) ? 1 : 0;
-    }
 
+        return result;
+    }
+    
     ///////////////////////////////////////////////////////////////////////////
     //  Read one logical line of text
     inline bool 
@@ -797,6 +807,20 @@ int error_count = 0;
             default_outfile = out_file.string();
         }
 
+    //  we assume the session to be interactive if input is stdin and output is 
+    //  stdout and the output is not inhibited
+    bool is_interactive = input_is_stdin && !output.is_open() && allow_output;
+    
+        if (is_interactive) {
+        // if interactive we don't warn for missing endif's etc.
+            ctx.set_language(boost::wave::set_support_options(ctx.get_language(), 
+                (boost::wave::language_support)(
+                    boost::wave::get_support_options(ctx.get_language()) | 
+                    boost::wave::support_option_single_line)
+                )
+            );
+        }
+        
     // analyze the input file
     context_type::iterator_type first = ctx.begin();
     context_type::iterator_type last = ctx.end();
@@ -817,10 +841,6 @@ int error_count = 0;
             }
         }
 
-    //  we assume the session to be interactive if input is stdin and output is 
-    //  stdout and the output is not inhibited
-    bool is_interactive = input_is_stdin && !output.is_open() && allow_output;
-    
         elapsed_time.set_print_time(!input_is_stdin && vm.count("timer") > 0);
         if (is_interactive) {
             print_interactive_version();  // print welcome message
@@ -890,10 +910,7 @@ int error_count = 0;
                     if (is_interactive || 
                         boost::wave::cpplexer::is_recoverable(e)) 
                     {
-                        cerr 
-                            << e.file_name() << ":" << e.line_no() << ":" 
-                            << e.column_no() << ": " << e.description() << endl;
-                        ++error_count;
+                        error_count += report_error_message(e);
                     }
                     else {
                         throw;      // re-throw for non-recoverable errors
@@ -907,16 +924,12 @@ int error_count = 0;
     }
     catch (boost::wave::cpp_exception const &e) {
     // some preprocessing error
-        cerr 
-            << e.file_name() << ":" << e.line_no() << ":" << e.column_no() << ": "
-            << e.description() << endl;
+        report_error_message(e);
         return 1;
     }
     catch (boost::wave::cpplexer::lexing_exception const &e) {
     // some lexing error
-        cerr 
-            << e.file_name() << ":" << e.line_no() << ":" << e.column_no() << ": "
-            << e.description() << endl;
+        report_error_message(e);
         return 2;
     }
     catch (std::exception const &e) {
