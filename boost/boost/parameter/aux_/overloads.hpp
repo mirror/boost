@@ -52,7 +52,7 @@
 #define BOOST_PARAMETER_arg_list(n) \
     aux::make_arg_list< \
         BOOST_PP_ENUM(N, BOOST_PARAMETER_open_list, _) \
-        , void_ \
+      , void_ \
         BOOST_PP_REPEAT(N, BOOST_PARAMETER_close_list, _) \
       , deduced_list \
       , aux::tag_keyword_arg \
@@ -62,12 +62,18 @@
     BOOST_PP_CAT(a, BOOST_PP_SUB(limit,n))
 
 template<BOOST_PP_ENUM_PARAMS(N, class A)>
-typename BOOST_PARAMETER_arg_list(N)::type
+typename mpl::first<
+    typename BOOST_PARAMETER_arg_list(N)::type
+>::type
 operator()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, & a)) const
 {
-    typedef typename BOOST_PARAMETER_arg_list(N)::type arg_tuple;
+    typedef typename BOOST_PARAMETER_arg_list(N)::type result;
 
-    return arg_tuple(
+    typedef typename mpl::first<result>::type result_type;
+    typedef typename mpl::second<result>::type error;
+    error();
+
+    return result_type(
         BOOST_PP_ENUM(N, BOOST_PARAMETER_arg_pack_init, BOOST_PP_DEC(N))
         BOOST_PP_ENUM_TRAILING_PARAMS(
             BOOST_PP_SUB(BOOST_PARAMETER_MAX_ARITY, N)

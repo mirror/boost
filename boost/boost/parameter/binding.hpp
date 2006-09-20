@@ -20,12 +20,11 @@ namespace boost { namespace parameter {
 // A metafunction that, given an argument pack, returns the type of
 // the parameter identified by the given keyword.  If no such
 // parameter has been specified, returns Default
-template <class Parameters, class Keyword, class Default = void_>
-# if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-struct binding
-# else
-struct binding_eti
-# endif
+
+# if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
+  || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+template <class Parameters, class Keyword, class Default>
+struct binding0
 {
     typedef typename mpl::apply_wrap2<
         typename Parameters::binding,Keyword,Default
@@ -37,6 +36,36 @@ struct binding_eti
           , is_same<type, void_>
         >
     ));
+};
+# endif
+
+template <class Parameters, class Keyword, class Default = void_>
+# if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+struct binding
+# else
+struct binding_eti
+# endif
+{
+# if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
+  || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+    typedef typename mpl::eval_if<
+        mpl::is_placeholder<Parameters>
+      , mpl::identity<int>
+      , binding0<Parameters,Keyword,Default>
+    >::type type;
+# else
+    typedef typename mpl::apply_wrap2<
+        typename Parameters::binding,Keyword,Default
+    >::type type;
+
+    BOOST_MPL_ASSERT_NOT((
+        mpl::and_<
+            is_same<Default, void_>
+          , is_same<type, void_>
+        >
+    ));
+# endif
+
 # if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     BOOST_MPL_AUX_LAMBDA_SUPPORT(3,binding,(Parameters,Keyword,Default))
 # endif

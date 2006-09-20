@@ -48,6 +48,16 @@
 #include <boost/parameter/aux_/set.hpp>
 #include <boost/parameter/config.hpp>
 
+namespace parameter_
+{
+  template <class T>
+  struct unmatched_argument
+  {
+      BOOST_MPL_ASSERT((boost::is_same<T,void>));
+      typedef int type;
+  }; 
+} // namespace parameter_
+
 namespace boost {
 
 template<class T> class reference_wrapper;
@@ -363,7 +373,7 @@ namespace aux
     , class Positional
     , class UsedArgs
     , class ArgumentPack
-    , class EmitErrors
+    , class Error
   >
   struct make_arg_list_aux;
 
@@ -381,13 +391,6 @@ namespace aux
   // so that it doesn't magically drop the const qualifier from
   // the argument type.
 
-  template <class T>
-  struct assert_matched_argument
-  {
-      BOOST_MPL_ASSERT((mpl::not_<is_same<T, void_> >));
-      typedef int type;
-  };
-
   template <
       class List
     , class DeducedArgs
@@ -398,7 +401,7 @@ namespace aux
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
     , class argument
 #endif
-    , class EmitErrors
+    , class Error
   >
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
   struct make_arg_list00
@@ -456,18 +459,14 @@ namespace aux
       // We build the arg_list incrementally as we go, prepending new
       // nodes.
 
-      typedef typename mpl::eval_if<
-          EmitErrors
-        , assert_matched_argument<tagged>
-        , mpl::identity<int>
-      >::type assertion;
-/*
-      BOOST_MPL_ASSERT((
-          mpl::or_<
-              mpl::not_<EmitErrors>
-            , mpl::not_<is_same<tagged, void_> >
+      typedef typename mpl::if_<
+          mpl::and_<
+              is_same<Error, void_>
+            , is_same<tagged, void_>
           >
-      ));*/
+        , parameter_::unmatched_argument<argument>
+        , void_
+      >::type error;
 
       typedef typename mpl::if_<
           is_same<tagged, void_>
@@ -482,7 +481,7 @@ namespace aux
         , positional
         , typename deduced_data::second
         , argument_pack
-        , EmitErrors
+        , error
       >::type type;
   };
 
@@ -494,7 +493,7 @@ namespace aux
     , class Positional
     , class UsedArgs
     , class ArgumentPack
-    , class EmitErrors
+    , class Error
   >
   struct make_arg_list0
   {
@@ -508,7 +507,7 @@ namespace aux
             , UsedArgs
             , ArgumentPack
             , typename List::arg const
-            , EmitErrors
+            , Error
           >
         , make_arg_list00<
               List
@@ -518,7 +517,7 @@ namespace aux
             , UsedArgs
             , ArgumentPack
             , typename List::arg
-            , EmitErrors
+            , Error
           >
       >::type type;
   };
@@ -552,14 +551,14 @@ namespace aux
     , class Positional
     , class DeducedSet
     , class ArgumentPack
-    , class EmitErrors
+    , class Error
   >
   struct make_arg_list_aux
   {
       typedef typename mpl::eval_if<
           is_same<List, void_>
-        , mpl::identity<ArgumentPack>
-        , make_arg_list0<List, DeducedArgs, TagFn, Positional, DeducedSet, ArgumentPack, EmitErrors>
+        , mpl::identity<mpl::pair<ArgumentPack, Error> >
+        , make_arg_list0<List, DeducedArgs, TagFn, Positional, DeducedSet, ArgumentPack, Error>
       >::type type;
   };
 
@@ -574,7 +573,7 @@ namespace aux
   struct make_arg_list
   {
       typedef typename make_arg_list_aux<
-          List, DeducedArgs, TagFn, mpl::true_, aux::set0, empty_arg_list, EmitErrors
+          List, DeducedArgs, TagFn, mpl::true_, aux::set0, empty_arg_list, void_
       >::type type;
   };
 
@@ -720,7 +719,7 @@ struct parameters
     // If NamedList satisfies the PS0, PS1, ..., this is a
     // metafunction returning parameters.  Otherwise it 
     // has no nested ::type.
-    template <class ArgumentPack>
+    template <class ArgumentPackAndError>
     struct match_base
       : mpl::if_<
             // mpl::and_<
@@ -730,13 +729,18 @@ struct parameters
             //           ..., mpl::true_
             // ...> >
             
-# define BOOST_PARAMETER_satisfies(z, n, text)                                   \
+# define BOOST_PARAMETER_satisfies(z, n, text)                                      \
             mpl::and_<                                                              \
-                aux::satisfies_requirements_of<ArgumentPack, BOOST_PP_CAT(PS, n)> ,
-      
-            BOOST_PP_REPEAT(BOOST_PARAMETER_MAX_ARITY, BOOST_PARAMETER_satisfies, _)
-            mpl::true_
-            BOOST_PP_REPEAT(BOOST_PARAMETER_MAX_ARITY, BOOST_PARAMETER_right_angle, _)
+                aux::satisfies_requirements_of<                                     \
+                    typename mpl::first<ArgumentPackAndError>::type                 \
+                  , BOOST_PP_CAT(PS, n)>                                            \
+                  ,
+            mpl::and_<
+                is_same<typename mpl::second<ArgumentPackAndError>::type, void_>
+              , BOOST_PP_REPEAT(BOOST_PARAMETER_MAX_ARITY, BOOST_PARAMETER_satisfies, _)
+                mpl::true_
+                BOOST_PP_REPEAT(BOOST_PARAMETER_MAX_ARITY, BOOST_PARAMETER_right_angle, _)
+            >
 
 # undef BOOST_PARAMETER_satisfies
 
@@ -758,19 +762,19 @@ struct parameters
         BOOST_PP_ENUM_BINARY_PARAMS(
             BOOST_PARAMETER_MAX_ARITY, class A, = void_ BOOST_PP_INTERCEPT
         )
-#endif            
+#endif
     >
     struct match
 # ifndef BOOST_NO_SFINAE
       : match_base<
             typename aux::make_arg_list<
-               typename BOOST_PARAMETER_build_arg_list(
-                   BOOST_PARAMETER_MAX_ARITY, aux::make_items, PS, A
-               )::type
-             , deduced_list
-             , aux::tag_keyword_arg
-             , mpl::false_ // Don't emit errors when doing SFINAE
-           >::type
+                typename BOOST_PARAMETER_build_arg_list(
+                    BOOST_PARAMETER_MAX_ARITY, aux::make_items, PS, A
+                )::type
+              , deduced_list
+              , aux::tag_keyword_arg
+              , mpl::false_ // Don't emit errors when doing SFINAE
+            >::type
         >::type
     {};
 # else
@@ -782,6 +786,9 @@ struct parameters
 # endif
 
     // Metafunction that returns an ArgumentPack.
+
+    // TODO, bind has to instantiate the error type in the result
+    // of make_arg_list.
 
     template <
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
@@ -803,7 +810,9 @@ struct parameters
             )::type
           , deduced_list
           , aux::tag_template_keyword_arg
-        >::type type;
+        >::type result;
+
+        typedef typename mpl::first<result>::type type;
     };
 
     BOOST_PARAMETER_FORWARD_TYPEDEFS(BOOST_PARAMETER_MAX_ARITY, PS, parameter_spec)
@@ -825,12 +834,14 @@ struct parameters
     }
 
     template<class A0>
-    typename aux::make_arg_list<
-        aux::item<
-            PS0,A0
-        >
-      , deduced_list
-      , aux::tag_keyword_arg
+    typename mpl::first<
+        typename aux::make_arg_list<
+            aux::item<
+                PS0,A0
+            >
+          , deduced_list
+          , aux::tag_keyword_arg
+        >::type
     >::type
     operator()(A0& a0) const
     {
@@ -840,7 +851,11 @@ struct parameters
             >
           , deduced_list
           , aux::tag_keyword_arg
-        >::type result_type;
+        >::type result;
+
+        typedef typename mpl::first<result>::type result_type;
+        typedef typename mpl::second<result>::type error;
+        error();
 
         return result_type(
             a0
@@ -852,15 +867,17 @@ struct parameters
     }
 
     template<class A0, class A1>
-    typename aux::make_arg_list<
-        aux::item<
-            PS0,A0
-          , aux::item<
-                PS1,A1
+    typename mpl::first<
+        typename aux::make_arg_list<
+            aux::item<
+                PS0,A0
+              , aux::item<
+                    PS1,A1
+                >
             >
-        >
-      , deduced_list
-      , aux::tag_keyword_arg
+          , deduced_list
+          , aux::tag_keyword_arg
+        >::type
     >::type
     operator()(A0& a0, A1& a1) const
     {
@@ -873,7 +890,11 @@ struct parameters
             >
           , deduced_list
           , aux::tag_keyword_arg
-        >::type result_type;
+        >::type result;
+
+        typedef typename mpl::first<result>::type result_type;
+        typedef typename mpl::second<result>::type error;
+        error();
 
         return result_type(
             a1,a0

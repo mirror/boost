@@ -23,6 +23,8 @@ test-suite "parameter"
      [ run efficiency.cpp : : : : : <variant>release ]
      [ run maybe.cpp ]
      [ run deduced.cpp ]
+     [ run optional_deduced_sfinae.cpp ]
+     [ run deduced_dependent_predicate.cpp ]
      [ compile ntp.cpp ]
      [ compile unwrap_cv_reference.cpp ]
      [ compile-fail duplicates.cpp ]
