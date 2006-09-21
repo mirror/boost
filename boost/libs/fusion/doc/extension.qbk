@@ -219,10 +219,8 @@ To see how `deref_impl` is used, lets have a look at the implementation of __der
     typename __result_of_deref__<Iterator>::type
     __deref__(Iterator const& i)
     {
-        typename __result_of_deref__<Iterator>::type result =
-            extension::deref_impl<typename Iterator::fusion_tag>::
-                template apply<Iterator>::call(i);
-        return result;
+        return extension::deref_impl<typename Iterator::fusion_tag>::
+			template apply<Iterator>::call(i);
     }
 
 So again __result_of_deref__ uses __tag_dispatching__ in exactly the
