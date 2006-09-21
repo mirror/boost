@@ -275,13 +275,11 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_rep()
 #pragma warning(disable:4127 4244)
 #endif
    const re_repeat* rep = static_cast<const re_repeat*>(pstate);
-   if(next_count->get_id() != rep->id)
-   {
-      // we're moving to a different repeat from the last
-      // one, so set up a counter object and recurse:
-      repeater_count<BidiIterator> r(rep->id, &next_count, position);
-      return match_rep();
-   }
+   //
+   // Always copy the repeat count, so that the state is restored
+   // when we exit this scope:
+   //
+   repeater_count<BidiIterator> r(rep->id, &next_count, position);
    //
    // If we've had at least one repeat already, and the last one 
    // matched the NULL string then set the repeat count to

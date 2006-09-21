@@ -373,6 +373,10 @@ void test_tricky_cases3()
    TEST_REGEX_SEARCH("\\l+", perl|icase, "abcXYZ", match_default, make_array(0, 6, -2, -2));
    TEST_REGEX_SEARCH("\\u+", perl|icase, "abcXYZ", match_default, make_array(0, 6, -2, -2));
    TEST_REGEX_SEARCH("(a)(?:b)", perl|nosubs, "ab", match_default, make_array(0, 2, -2, -2));
+   // bug reported 2006-09-20:
+   TEST_REGEX_SEARCH("(?:\\d{9}.*){2}", perl, "123456789dfsdfsdfsfsdfds123456789b", match_default, make_array(0, 34, -2, -2));
+   TEST_REGEX_SEARCH("(?:\\d{9}.*){2}", perl, "123456789dfsdfsdfsfsdfds12345678", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("(?:\\d{9}.*){2}", perl, "123456789dfsdfsdfsfsdfds", match_default, make_array(-2, -2));
 
 
    //
