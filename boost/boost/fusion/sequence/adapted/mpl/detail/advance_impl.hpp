@@ -35,8 +35,7 @@ namespace boost { namespace fusion
                 static type
                 call(Iterator const& i)
                 {
-                    static type result; 
-                    return result;
+                    return type();
                 }
             };
         };

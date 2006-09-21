@@ -38,8 +38,8 @@ namespace boost { namespace fusion
     inline typename result_of::size<Sequence>::type
     size(Sequence const&)
     {
-        static typename result_of::size<Sequence>::type result;
-        return result;
+        typedef typename result_of::size<Sequence>::type result;
+        return result();
     }
 }}
 

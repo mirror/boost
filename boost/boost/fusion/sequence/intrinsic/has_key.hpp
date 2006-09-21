@@ -43,8 +43,8 @@ namespace boost { namespace fusion
     inline typename result_of::has_key<Sequence, Key>::type
     has_key(Sequence const& seq)
     {
-        static typename result_of::has_key<Sequence, Key>::type result;
-        return result;
+        typedef typename result_of::has_key<Sequence, Key>::type result;
+        return result();
     }
 }}
 

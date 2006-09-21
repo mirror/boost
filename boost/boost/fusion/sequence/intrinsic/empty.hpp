@@ -41,8 +41,8 @@ namespace boost { namespace fusion
     inline typename result_of::empty<Sequence>::type
     empty(Sequence const&)
     {
-        static typename result_of::empty<Sequence>::type result;
-        return result;
+        typedef typename result_of::empty<Sequence>::type result;
+        return result();
     }
 }}
 

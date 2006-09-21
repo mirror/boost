@@ -34,11 +34,11 @@ namespace boost { namespace fusion
                   , typename Last::iterator_type>::type
                 call(First const&, Last const&)
                 {
-                    static typename mpl::distance<
+                    typedef typename mpl::distance<
                         typename First::iterator_type
                       , typename Last::iterator_type>::type
                     result;
-                    return result;
+                    return result();
                 }
             };
         };

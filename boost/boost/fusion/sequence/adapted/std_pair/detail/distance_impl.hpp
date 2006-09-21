@@ -29,10 +29,10 @@ namespace boost { namespace fusion
                     typename Last::index, typename First::index>::type
                 call(First const&, Last const&)
                 {
-                    static typename mpl::minus<
+                    typedef typename mpl::minus<
                         typename Last::index, typename First::index>::type 
                     result;
-                    return result;
+                    return result();
                 }
             };
         };
