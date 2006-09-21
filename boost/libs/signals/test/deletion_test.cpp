@@ -240,7 +240,7 @@ test_disconnect_equal()
   s0(); std::cout << std::endl;
   BOOST_CHECK(test_output == "0123");
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 0x1700)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
   connections[2].disconnect();
 #else
   s0.disconnect(remove_connection(2));
