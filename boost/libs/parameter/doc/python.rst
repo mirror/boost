@@ -754,7 +754,7 @@ an **arity range** of [2,2], so we only need one forwarding overload.
         def<
             f_fwd
           , mpl::vector<
-                void, tag::x(int), tag::y\*(int)
+                void, tag::\ x(int), tag::\ y\*(int)
             >
         >("f");
     }

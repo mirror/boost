@@ -335,8 +335,8 @@ shown in the table below.
 .. _`IncidenceGraph`: ../../../graph/doc/IncidenceGraph.html
 .. _`VertexListGraph`: ../../../graph/doc/VertexListGraph.html
 .. _`DFSVisitor`: ../../../graph/doc/DFSVisitor.html
-.. _`ReadWritePropertyMap`: ../../../property_map/doc/ReadWritePropertyMap.html
-.. _`ReadablePropertyMap`: ../../../property_map/doc/ReadablePropertyMap.html
+.. _`ReadWritePropertyMap`: ../../../property_map/ReadWritePropertyMap.html
+.. _`ReadablePropertyMap`: ../../../property_map/ReadablePropertyMap.html
 
 Don't be intimidated by the information in the second and third
 columns above.  For the purposes of this exercise, you don't need
@@ -1172,7 +1172,7 @@ Deduced Template Parameters
 To apply a deduced parameter interface here, we need only make the
 type requirements a bit tighter so the ``held_type`` and
 ``copyable`` parameters can be crisply distinguished from the
-others.  Boost.Python does this by requiring that ``base_list`` be
+others.  Boost.Python_ does this by requiring that ``base_list`` be
 a specialization of its ``bases< … >`` template (as opposed to
 being any old MPL sequence) and by requiring that ``copyable``, if
 explicitly supplied, be ``boost::noncopyable``.  One easy way of
@@ -1321,8 +1321,8 @@ its function call operator:
 .. parsed-literal::
 
   parameter::parameters<
-      required<tag::name, is_convertible<_,char const*> >
-    , optional<tag::index, is_convertible<_,int> >
+      required<tag::\ name, is_convertible<_,char const*> >
+    , optional<tag::\ index, is_convertible<_,int> >
   > const spec;
 
   int z0 = print_name_and_index( **spec(**\ "sam", 12\ **)** );
@@ -1685,6 +1685,17 @@ enclosing namespace without qualification::
       using graphs::color_map;
     }
 
+================
+ Python Binding
+================
+
+.. _python: python.html
+
+Follow `this link`__ for documentation on how to expose
+Boost.Parameter-enabled functions to Python with `Boost.Python`_.
+
+__ python.html
+
 ===========
  Reference
 ===========
@@ -1759,7 +1770,7 @@ __ ../../../graph/doc/bgl_named_params.html
    identify models of Boost.Python's KeywordExpression concept.
 
 __ http://www.boost.org/regression/release/user/lambda.html
-.. _Boost.Bind: ../../../libs/bind/index.html
+.. _Boost.Bind: ../../../bind/index.html
 
 
 .. [#using] You can always give the illusion that the function
