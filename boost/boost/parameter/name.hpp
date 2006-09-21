@@ -6,12 +6,14 @@
 # define BOOST_PARAMETER_NAME_060806_HPP
 
 # include <boost/parameter/keyword.hpp>
+# include <boost/parameter/value_type.hpp>
 # include <boost/detail/workaround.hpp>
 # include <boost/preprocessor/cat.hpp>
 # include <boost/preprocessor/stringize.hpp>
 # include <boost/preprocessor/control/iif.hpp>
 # include <boost/preprocessor/tuple/eat.hpp>
 # include <boost/preprocessor/tuple/elem.hpp>
+# include <boost/mpl/placeholders.hpp>
 
 # if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 # include <boost/preprocessor/detail/split.hpp>
@@ -50,6 +52,14 @@
           {                                                         \
               return BOOST_PP_STRINGIZE(tag);                       \
           }                                                         \
+                                                                    \
+          typedef boost::parameter::value_type<                     \
+              boost::mpl::_2, tag, boost::parameter::void_          \
+          > _;                                                      \
+                                                                    \
+          typedef boost::parameter::value_type<                     \
+              boost::mpl::_2, tag, boost::parameter::void_          \
+          > _1;                                                     \
       };                                                            \
     }                                                               \
     BOOST_PARAMETER_NAME_OBJECT(tag_namespace::tag, name)

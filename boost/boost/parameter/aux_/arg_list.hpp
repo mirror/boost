@@ -67,7 +67,7 @@ struct empty_arg_list
     // lookup given that default
     struct binding
     {
-        template<class KW, class Default>
+        template<class KW, class Default, class Reference = mpl::true_>
         struct apply
         {
             typedef Default type;
@@ -221,12 +221,12 @@ struct arg_list : Next
     // lookup given that default
     struct binding
     {
-        template <class KW, class Default>
+        template <class KW, class Default, class Reference = mpl::true_>
         struct apply
         {
           typedef typename mpl::eval_if<
                 boost::is_same<KW, key_type>
-              , mpl::identity<reference>
+              , mpl::if_<Reference, reference, value_type>
               , mpl::apply_wrap2<typename Next::binding, KW, Default>
           >::type type;
         };

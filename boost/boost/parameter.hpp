@@ -9,6 +9,7 @@
 #include <boost/parameter/parameters.hpp>
 #include <boost/parameter/keyword.hpp>
 #include <boost/parameter/binding.hpp>
+#include <boost/parameter/value_type.hpp>
 #include <boost/parameter/macros.hpp>
 #include <boost/parameter/match.hpp>
 #include <boost/parameter/name.hpp>

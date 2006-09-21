@@ -40,13 +40,13 @@ struct tagged_argument : tagged_argument_base
     // lookup given that default
     struct binding
     {
-        template <class KW, class Default>
+        template <class KW, class Default, class Reference>
         struct apply
         {
-          typedef typename mpl::if_<
+          typedef typename mpl::eval_if<
                 boost::is_same<KW, key_type>
-              , reference
-              , Default
+              , mpl::if_<Reference, reference, value_type>
+              , mpl::identity<Default>
           >::type type;
         };
     };

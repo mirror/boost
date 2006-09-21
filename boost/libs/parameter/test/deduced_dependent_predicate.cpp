@@ -55,6 +55,40 @@ int main()
       , 1U
     );
 
+    check<
+        parameters<
+            tag::x
+          , optional<
+                deduced<tag::y>
+              , is_same<
+                    mpl::_1
+                  , tag::x::_
+                > 
+            >
+        >
+    >(
+        (_x = 0U, _y = 1U)
+      , 0U
+      , 1U
+    );
+
+    check<
+        parameters<
+            tag::x
+          , optional<
+                deduced<tag::y>
+              , is_same<
+                    mpl::_1
+                  , tag::x::_1
+                > 
+            >
+        >
+    >(
+        (_x = 0U, _y = 1U)
+      , 0U
+      , 1U
+    );
+
     return 0;
 }
 
