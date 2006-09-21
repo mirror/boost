@@ -193,39 +193,48 @@ __sequence_concepts__).
 
 For Iterators, the return type is derived from one of:
 
-    struct incrementable_traversal_tag {};
-
-    struct single_pass_traversal_tag
-        : incrementable_traversal_tag {};
-
-    struct forward_traversal_tag
-        : single_pass_traversal_tag {};
-
-    struct bidirectional_traversal_tag
-        : forward_traversal_tag {};
-
-    struct random_access_traversal_tag
-        : bidirectional_traversal_tag {};
+		namespace boost { namespace fusion
+		{
+		    struct incrementable_traversal_tag {};
+		
+		    struct single_pass_traversal_tag
+		        : incrementable_traversal_tag {};
+		
+		    struct forward_traversal_tag
+		        : single_pass_traversal_tag {};
+		
+		    struct bidirectional_traversal_tag
+		        : forward_traversal_tag {};
+		
+		    struct random_access_traversal_tag
+		        : bidirectional_traversal_tag {};
+		}}
 
 For Sequences, the return type is derived from one of:
 
-    struct incrementable_sequence_tag {};
-
-    struct single_pass_sequence_tag
-        : incrementable_sequence_tag {};
-
-    struct forward_sequence_tag
-        : single_pass_sequence_tag {};
-
-    struct bidirectional_sequence_tag
-        : forward_sequence_tag {};
-
-    struct random_access_sequence_tag
-        : bidirectional_sequence_tag {};
+		namespace boost { namespace fusion
+		{
+		    struct incrementable_sequence_tag {};
+		
+		    struct single_pass_sequence_tag
+		        : incrementable_sequence_tag {};
+		
+		    struct forward_sequence_tag
+		        : single_pass_sequence_tag {};
+		
+		    struct bidirectional_sequence_tag
+		        : forward_sequence_tag {};
+		
+		    struct random_access_sequence_tag
+		        : bidirectional_sequence_tag {};
+		}}
 
 And optionally from:
 
-    struct associative_sequence_tag {};
+		namespace boost { namespace fusion
+		{
+		    struct associative_sequence_tag {};
+		}}
 
 [*Semantics]: Establishes the conceptual classification of a particular 
 __sequence__ or __iterator__.

@@ -91,57 +91,66 @@
         For Iterators, the return type is derived from one of:
       </p>
 <pre class="programlisting">
-<span class="keyword">struct</span> <span class="identifier">incrementable_traversal_tag</span> <span class="special">{};</span>
+<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">fusion</span>
+<span class="special">{</span>
+    <span class="keyword">struct</span> <span class="identifier">incrementable_traversal_tag</span> <span class="special">{};</span>
 
-<span class="keyword">struct</span> <span class="identifier">single_pass_traversal_tag</span>
-    <span class="special">:</span> <span class="identifier">incrementable_traversal_tag</span> <span class="special">{};</span>
+    <span class="keyword">struct</span> <span class="identifier">single_pass_traversal_tag</span>
+        <span class="special">:</span> <span class="identifier">incrementable_traversal_tag</span> <span class="special">{};</span>
 
-<span class="keyword">struct</span> <span class="identifier">forward_traversal_tag</span>
-    <span class="special">:</span> <span class="identifier">single_pass_traversal_tag</span> <span class="special">{};</span>
+    <span class="keyword">struct</span> <span class="identifier">forward_traversal_tag</span>
+        <span class="special">:</span> <span class="identifier">single_pass_traversal_tag</span> <span class="special">{};</span>
 
-<span class="keyword">struct</span> <span class="identifier">bidirectional_traversal_tag</span>
-    <span class="special">:</span> <span class="identifier">forward_traversal_tag</span> <span class="special">{};</span>
+    <span class="keyword">struct</span> <span class="identifier">bidirectional_traversal_tag</span>
+        <span class="special">:</span> <span class="identifier">forward_traversal_tag</span> <span class="special">{};</span>
 
-<span class="keyword">struct</span> <span class="identifier">random_access_traversal_tag</span>
-    <span class="special">:</span> <span class="identifier">bidirectional_traversal_tag</span> <span class="special">{};</span>
+    <span class="keyword">struct</span> <span class="identifier">random_access_traversal_tag</span>
+        <span class="special">:</span> <span class="identifier">bidirectional_traversal_tag</span> <span class="special">{};</span>
+<span class="special">}}</span>
 </pre>
 <p>
         For Sequences, the return type is derived from one of:
       </p>
 <pre class="programlisting">
-<span class="keyword">struct</span> <span class="identifier">incrementable_sequence_tag</span> <span class="special">{};</span>
+<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">fusion</span>
+<span class="special">{</span>
+    <span class="keyword">struct</span> <span class="identifier">incrementable_sequence_tag</span> <span class="special">{};</span>
 
-<span class="keyword">struct</span> <span class="identifier">single_pass_sequence_tag</span>
-    <span class="special">:</span> <span class="identifier">incrementable_sequence_tag</span> <span class="special">{};</span>
+    <span class="keyword">struct</span> <span class="identifier">single_pass_sequence_tag</span>
+        <span class="special">:</span> <span class="identifier">incrementable_sequence_tag</span> <span class="special">{};</span>
 
-<span class="keyword">struct</span> <span class="identifier">forward_sequence_tag</span>
-    <span class="special">:</span> <span class="identifier">single_pass_sequence_tag</span> <span class="special">{};</span>
+    <span class="keyword">struct</span> <span class="identifier">forward_sequence_tag</span>
+        <span class="special">:</span> <span class="identifier">single_pass_sequence_tag</span> <span class="special">{};</span>
 
-<span class="keyword">struct</span> <span class="identifier">bidirectional_sequence_tag</span>
-    <span class="special">:</span> <span class="identifier">forward_sequence_tag</span> <span class="special">{};</span>
+    <span class="keyword">struct</span> <span class="identifier">bidirectional_sequence_tag</span>
+        <span class="special">:</span> <span class="identifier">forward_sequence_tag</span> <span class="special">{};</span>
 
-<span class="keyword">struct</span> <span class="identifier">random_access_sequence_tag</span>
-    <span class="special">:</span> <span class="identifier">bidirectional_sequence_tag</span> <span class="special">{};</span>
+    <span class="keyword">struct</span> <span class="identifier">random_access_sequence_tag</span>
+        <span class="special">:</span> <span class="identifier">bidirectional_sequence_tag</span> <span class="special">{};</span>
+<span class="special">}}</span>
 </pre>
 <p>
         And optionally from:
       </p>
 <pre class="programlisting">
-<span class="keyword">struct</span> <span class="identifier">associative_sequence_tag</span> <span class="special">{};</span>
+<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">fusion</span>
+<span class="special">{</span>
+    <span class="keyword">struct</span> <span class="identifier">associative_sequence_tag</span> <span class="special">{};</span>
+<span class="special">}}</span>
 </pre>
 <p>
         <span class="bold"><b>Semantics</b></span>: Establishes the conceptual classification
         of a particular <a href="../sequences.html" title="Sequences">Sequence</a> or <a href="../iterators.html" title="Iterators">Iterator</a>.
       </p>
 <a name="fusion.support.category_of.header"></a><h4>
-<a name="id454197"></a>
+<a name="id454328"></a>
         <a href="category_of.html#fusion.support.category_of.header">Header</a>
       </h4>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">category_of</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.support.category_of.example"></a><h4>
-<a name="id454290"></a>
+<a name="id454421"></a>
         <a href="category_of.html#fusion.support.category_of.example">Example</a>
       </h4>
 <pre class="programlisting">
