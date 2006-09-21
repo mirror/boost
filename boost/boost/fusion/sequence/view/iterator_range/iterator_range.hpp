@@ -28,7 +28,7 @@ namespace boost { namespace fusion
     {
         typedef typename convert_iterator<First>::type begin_type;
         typedef typename convert_iterator<Last>::type end_type;
-        typedef iterator_range_tag ftag;
+        typedef iterator_range_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef typename result_of::distance<begin_type, end_type>::type size;
         typedef mpl::true_ is_view;

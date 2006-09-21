@@ -31,7 +31,7 @@ namespace boost { namespace fusion {
     struct zip_view_iterator
         : iterator_base<zip_view_iterator<IteratorSequence, Traversal> >
     {
-        typedef zip_view_iterator_tag ftag;
+        typedef zip_view_iterator_tag fusion_tag;
         typedef Traversal category;
 
         template<typename InitSeq>

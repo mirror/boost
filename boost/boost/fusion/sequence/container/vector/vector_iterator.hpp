@@ -32,7 +32,7 @@ namespace boost { namespace fusion
     {
         typedef mpl::int_<N> index;
         typedef Vector vector;
-        typedef vector_iterator_tag ftag;
+        typedef vector_iterator_tag fusion_tag;
         typedef random_access_traversal_tag category;
         typedef vector_iterator_identity<
             typename add_const<Vector>::type, N> identity;

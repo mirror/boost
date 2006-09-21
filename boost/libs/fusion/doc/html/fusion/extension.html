@@ -242,7 +242,7 @@
 <span class="keyword">struct</span> <a href="iterators/metafunctions/value_of.html" title="value_of"><tt class="computeroutput"><span class="identifier">value_of</span></tt></a>
 <span class="special">{</span>
     <span class="keyword">typedef</span> <span class="keyword">typename</span>
-        <span class="identifier">extension</span><span class="special">::</span><span class="identifier">value_of_impl</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">::</span><span class="identifier">ftag</span><span class="special">&gt;::</span>
+        <span class="identifier">extension</span><span class="special">::</span><span class="identifier">value_of_impl</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">::</span><span class="identifier">fusion_tag</span><span class="special">&gt;::</span>
             <span class="keyword">template</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;::</span><span class="identifier">type</span>
     <span class="identifier">type</span><span class="special">;</span>
 <span class="special">};</span>
@@ -305,7 +305,7 @@
     <span class="keyword">struct</span> <a href="iterators/functions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a>
     <span class="special">{</span>
         <span class="keyword">typedef</span> <span class="keyword">typename</span>
-            <span class="identifier">deref_impl</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">::</span><span class="identifier">ftag</span><span class="special">&gt;::</span>
+            <span class="identifier">deref_impl</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">::</span><span class="identifier">fusion_tag</span><span class="special">&gt;::</span>
                 <span class="keyword">template</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;::</span><span class="identifier">type</span>
         <span class="identifier">type</span><span class="special">;</span>
     <span class="special">};</span>
@@ -316,7 +316,7 @@
 <a href="iterators/functions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a><span class="special">(</span><span class="identifier">Iterator</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">i</span><span class="special">)</span>
 <span class="special">{</span>
     <span class="keyword">typename</span> <a href="iterators/metafunctions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></tt></a><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">result</span> <span class="special">=</span>
-        <span class="identifier">extension</span><span class="special">::</span><span class="identifier">deref_impl</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">::</span><span class="identifier">ftag</span><span class="special">&gt;::</span>
+        <span class="identifier">extension</span><span class="special">::</span><span class="identifier">deref_impl</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">::</span><span class="identifier">fusion_tag</span><span class="special">&gt;::</span>
             <span class="keyword">template</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">i</span><span class="special">);</span>
     <span class="keyword">return</span> <span class="identifier">result</span><span class="special">;</span>
 <span class="special">}</span>

@@ -33,7 +33,7 @@ namespace boost { namespace fusion
         typedef typename last_converter::type last_type;
         typedef typename concat_converter::type concat_type;
 
-        typedef joint_view_iterator_tag ftag;
+        typedef joint_view_iterator_tag fusion_tag;
         typedef forward_traversal_tag category;
         BOOST_STATIC_ASSERT((!result_of::equal_to<first_type, last_type>::value));
 

@@ -40,7 +40,7 @@ namespace boost { namespace fusion
     public:
     
         typedef typename vector_n::types types;
-        typedef typename vector_n::ftag ftag;
+        typedef typename vector_n::fusion_tag fusion_tag;
         typedef typename vector_n::tag tag;
         typedef typename vector_n::size size;
         typedef typename vector_n::category category;

@@ -26,7 +26,7 @@ namespace boost { namespace fusion
     template <typename T>
     struct single_view : sequence_base<single_view<T> >
     {
-        typedef single_view_tag ftag;
+        typedef single_view_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef forward_sequence_tag category;
         typedef mpl::true_ is_view;

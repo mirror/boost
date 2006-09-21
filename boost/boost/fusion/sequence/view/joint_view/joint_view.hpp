@@ -30,7 +30,7 @@ namespace boost { namespace fusion
     template <typename Sequence1, typename Sequence2>
     struct joint_view : sequence_base<joint_view<Sequence1, Sequence2> >
     {
-        typedef joint_view_tag ftag;
+        typedef joint_view_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef forward_sequence_tag category;
         typedef mpl::true_ is_view;

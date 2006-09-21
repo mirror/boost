@@ -29,7 +29,7 @@ namespace boost { namespace fusion
         typedef convert_iterator<Last> last_converter;
         typedef typename last_converter::type last_iter;
 
-        typedef filter_view_iterator_tag ftag;
+        typedef filter_view_iterator_tag fusion_tag;
         typedef forward_traversal_tag category;
         typedef detail::static_find_if<first_iter, last_iter, Pred> filter;
         typedef typename filter::type first_type;

@@ -71,7 +71,7 @@ namespace boost { namespace fusion {
         BOOST_MPL_ASSERT((detail::all_references<Sequences>));
         BOOST_MPL_ASSERT((detail::all_same_size<Sequences>));
         typedef typename detail::strictest_traversal<Sequences>::type category;
-        typedef zip_view_tag ftag;
+        typedef zip_view_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef mpl::true_ is_view;
         typedef typename fusion::result_of::as_vector<Sequences>::type sequences;

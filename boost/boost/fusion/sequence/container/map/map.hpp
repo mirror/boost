@@ -32,7 +32,7 @@ namespace boost { namespace fusion
     template <BOOST_PP_ENUM_PARAMS(FUSION_MAX_MAP_SIZE, typename T)>
     struct map : sequence_base<map<BOOST_PP_ENUM_PARAMS(FUSION_MAX_MAP_SIZE, T)> >
     {
-        typedef map_tag ftag;
+        typedef map_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef forward_sequence_tag category;
         typedef mpl::false_ is_view;

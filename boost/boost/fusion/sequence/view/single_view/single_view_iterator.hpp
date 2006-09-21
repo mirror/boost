@@ -23,7 +23,7 @@ namespace boost { namespace fusion
     struct single_view_iterator_end
         : iterator_base<single_view_iterator_end<SingleView> >
     {
-        typedef single_view_iterator_tag ftag;
+        typedef single_view_iterator_tag fusion_tag;
         typedef forward_traversal_tag category;
     };
 
@@ -31,7 +31,7 @@ namespace boost { namespace fusion
     struct single_view_iterator
         : iterator_base<single_view_iterator<SingleView> >
     {
-        typedef single_view_iterator_tag ftag;
+        typedef single_view_iterator_tag fusion_tag;
         typedef forward_traversal_tag category;
         typedef typename SingleView::value_type value_type;
         typedef SingleView single_view_type;

@@ -29,7 +29,7 @@ namespace boost { namespace fusion
     template <typename Cons = nil>
     struct cons_iterator : iterator_base<cons_iterator<Cons> >
     {
-        typedef cons_iterator_tag ftag;
+        typedef cons_iterator_tag fusion_tag;
         typedef forward_traversal_tag category;
         typedef Cons cons_type;
         typedef cons_iterator_identity<
@@ -45,7 +45,7 @@ namespace boost { namespace fusion
     struct nil_iterator : iterator_base<nil_iterator>
     {
         typedef forward_traversal_tag category;
-        typedef cons_iterator_tag ftag;
+        typedef cons_iterator_tag fusion_tag;
         typedef nil cons_type;
         typedef cons_iterator_identity<
             add_const<nil>::type> 

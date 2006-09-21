@@ -43,7 +43,7 @@ namespace boost { namespace fusion
     struct vector0 : sequence_base<vector0>
     {
         typedef mpl::vector0<> types;
-        typedef vector_tag ftag;
+        typedef vector_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef mpl::false_ is_view;
         typedef random_access_sequence_tag category;

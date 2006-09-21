@@ -27,7 +27,7 @@ namespace boost { namespace fusion
     struct transform_view_iterator
         : iterator_base<transform_view_iterator<First, F> >
     {
-        typedef transform_view_iterator_tag ftag;
+        typedef transform_view_iterator_tag fusion_tag;
         typedef convert_iterator<First> converter;
         typedef typename converter::type first_type;
         typedef typename traits::category_of<first_type>::type category;
@@ -47,7 +47,7 @@ namespace boost { namespace fusion
     struct transform_view_iterator2
         : iterator_base<transform_view_iterator2<First1, First2, F> >
     {
-        typedef transform_view_iterator2_tag ftag;
+        typedef transform_view_iterator2_tag fusion_tag;
         typedef convert_iterator<First1> converter1;
         typedef convert_iterator<First2> converter2;
         typedef typename converter1::type first1_type;

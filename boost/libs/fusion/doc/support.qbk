@@ -114,7 +114,7 @@ may be specialized to accomodate clients providing Fusion conforming views.
 All conforming Fusion sequences and iterators have an associated tag type. 
 The purpose of the tag is to enable __tag_dispatching__ from  __intrinsic__
 functions to implementations appropriate for the type. The default implementation
-of `tag_of` returns `T::ftag` for a given type `T`, if such a member typedef exists.
+of `tag_of` returns `T::fusion_tag` for a given type `T`, if such a member typedef exists.
 
 This metafunction may be specialized to accomodate clients providing Fusion conforming sequences.
 

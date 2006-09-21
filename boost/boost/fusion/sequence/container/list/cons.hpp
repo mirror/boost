@@ -36,7 +36,7 @@ namespace boost { namespace fusion
     struct nil : sequence_base<nil>
     {
         typedef mpl::int_<0> size;
-        typedef cons_tag ftag;
+        typedef cons_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef mpl::false_ is_view;
         typedef forward_sequence_tag category;
@@ -59,7 +59,7 @@ namespace boost { namespace fusion
     struct cons : sequence_base<cons<Car, Cdr> >
     {
         typedef mpl::int_<Cdr::size::value+1> size;
-        typedef cons_tag ftag;
+        typedef cons_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef mpl::false_ is_view;
         typedef forward_sequence_tag category;

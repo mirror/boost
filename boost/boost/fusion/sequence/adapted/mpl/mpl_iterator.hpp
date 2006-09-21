@@ -27,7 +27,7 @@ namespace boost { namespace fusion
     struct mpl_iterator
         : iterator_base<mpl_iterator<Iterator> >
     {
-        typedef mpl_iterator_tag ftag;
+        typedef mpl_iterator_tag fusion_tag;
         typedef typename detail::mpl_iterator_category<
             typename Iterator::category>::type 
         category;

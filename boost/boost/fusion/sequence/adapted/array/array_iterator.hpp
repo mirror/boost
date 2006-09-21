@@ -38,7 +38,7 @@ namespace boost { namespace fusion {
         BOOST_MPL_ASSERT_RELATION(Pos,<=,std::size_t(Array::static_size));
 
         typedef mpl::size_t<Pos> index;
-        typedef array_iterator_tag ftag;
+        typedef array_iterator_tag fusion_tag;
         typedef random_access_traversal_tag category;
         typedef Array array_type;
         typedef array_iterator<

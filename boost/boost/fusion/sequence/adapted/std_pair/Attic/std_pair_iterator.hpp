@@ -32,7 +32,7 @@ namespace boost { namespace fusion
         : iterator_base<std_pair_iterator<Pair, N> >
     {
         typedef mpl::int_<N> index;
-        typedef std_pair_iterator_tag ftag;
+        typedef std_pair_iterator_tag fusion_tag;
         typedef random_access_traversal_tag category;
         typedef std_pair_iterator_identity<
             typename add_const<Pair>::type, N> identity;

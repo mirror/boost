@@ -81,7 +81,7 @@
         typedef BOOST_PP_CAT(vector, N)<BOOST_PP_ENUM_PARAMS(N, T)> this_type;
         typedef BOOST_PP_CAT(vector_data, N)<this_type, BOOST_PP_ENUM_PARAMS(N, T)> base_type;
         typedef mpl::BOOST_PP_CAT(vector, N)<BOOST_PP_ENUM_PARAMS(N, T)> types;
-        typedef vector_tag ftag;
+        typedef vector_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef mpl::false_ is_view;
         typedef random_access_sequence_tag category;

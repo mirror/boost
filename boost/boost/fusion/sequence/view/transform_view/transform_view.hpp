@@ -35,7 +35,7 @@ namespace boost { namespace fusion
     struct transform_view : sequence_base<transform_view<Sequence1, Sequence2, F> >
     {
         BOOST_STATIC_ASSERT(result_of::size<Sequence1>::value == result_of::size<Sequence2>::value);
-        typedef transform_view2_tag ftag;
+        typedef transform_view2_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef mpl::true_ is_view;
 
@@ -68,7 +68,7 @@ namespace boost { namespace fusion
     template <typename Sequence, typename F>
     struct transform_view<Sequence, F> : sequence_base<transform_view<Sequence, F> >
     {
-        typedef transform_view_tag ftag;
+        typedef transform_view_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef mpl::true_ is_view;
 

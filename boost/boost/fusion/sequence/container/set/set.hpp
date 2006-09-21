@@ -31,7 +31,7 @@ namespace boost { namespace fusion
     template <BOOST_PP_ENUM_PARAMS(FUSION_MAX_SET_SIZE, typename T)>
     struct set : sequence_base<set<BOOST_PP_ENUM_PARAMS(FUSION_MAX_SET_SIZE, T)> >
     {
-        typedef set_tag ftag;
+        typedef set_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef forward_sequence_tag category;
         typedef mpl::false_ is_view;

@@ -34,7 +34,7 @@ namespace boost { namespace fusion {
         BOOST_STATIC_ASSERT(Pos >=0 && Pos < 3);
         typedef Struct struct_type;
         typedef mpl::int_<Pos> index;
-        typedef example_struct_iterator_tag ftag;
+        typedef example_struct_iterator_tag fusion_tag;
         typedef random_access_traversal_tag category;
 
         example_struct_iterator(Struct& str)

@@ -154,7 +154,7 @@ To understand how `value_of_impl` is used by the library we will look at the imp
     struct __value_of__
     {
         typedef typename
-            extension::value_of_impl<typename Iterator::ftag>::
+            extension::value_of_impl<typename Iterator::fusion_tag>::
                 template apply<Iterator>::type
         type;
     };
@@ -209,7 +209,7 @@ To see how `deref_impl` is used, lets have a look at the implementation of __der
         struct __deref__
         {
             typedef typename
-                deref_impl<typename Iterator::ftag>::
+                deref_impl<typename Iterator::fusion_tag>::
                     template apply<Iterator>::type
             type;
         };
@@ -220,7 +220,7 @@ To see how `deref_impl` is used, lets have a look at the implementation of __der
     __deref__(Iterator const& i)
     {
         typename __result_of_deref__<Iterator>::type result =
-            extension::deref_impl<typename Iterator::ftag>::
+            extension::deref_impl<typename Iterator::fusion_tag>::
                 template apply<Iterator>::call(i);
         return result;
     }

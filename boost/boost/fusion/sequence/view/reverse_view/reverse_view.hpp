@@ -30,7 +30,7 @@ namespace boost { namespace fusion
     template <typename Sequence>
     struct reverse_view : sequence_base<reverse_view<Sequence> >
     {
-        typedef reverse_view_tag ftag;
+        typedef reverse_view_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef mpl::true_ is_view;
 

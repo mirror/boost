@@ -27,7 +27,7 @@ namespace boost { namespace fusion
             struct apply
             {
                 typedef typename Iterator::first_type first_type;
-                typedef typename next_impl<typename first_type::ftag>::
+                typedef typename next_impl<typename first_type::fusion_tag>::
                     template apply<first_type>
                 wrapped;
     

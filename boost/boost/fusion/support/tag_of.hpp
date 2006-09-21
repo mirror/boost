@@ -19,7 +19,7 @@ namespace boost { namespace fusion
         
     namespace detail
     {
-        BOOST_MPL_HAS_XXX_TRAIT_DEF(ftag)
+        BOOST_MPL_HAS_XXX_TRAIT_DEF(fusion_tag)
     }
 
     namespace traits
@@ -31,9 +31,9 @@ namespace boost { namespace fusion
         };
 
         template<typename Sequence>
-        struct tag_of<Sequence, typename boost::enable_if<detail::has_ftag<Sequence> >::type>
+        struct tag_of<Sequence, typename boost::enable_if<detail::has_fusion_tag<Sequence> >::type>
         {
-            typedef typename Sequence::ftag type;
+            typedef typename Sequence::fusion_tag type;
         };
     }
 

@@ -28,7 +28,7 @@ namespace boost { namespace fusion
     template <typename Sequence, typename Pred>
     struct filter_view : sequence_base<filter_view<Sequence, Pred> >
     {
-        typedef filter_view_tag ftag;
+        typedef filter_view_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef forward_sequence_tag category;
         typedef mpl::true_ is_view;

@@ -30,7 +30,7 @@ namespace boost { namespace fusion
     {
         typedef convert_iterator<First> converter;
         typedef typename converter::type first_type;
-        typedef reverse_view_iterator_tag ftag;
+        typedef reverse_view_iterator_tag fusion_tag;
         typedef typename traits::category_of<first_type>::type category;
 
         BOOST_STATIC_ASSERT((
