@@ -154,6 +154,7 @@ BOOST_WAVE_OPTION(preserve_comments)        // support_option_preserve_comments
 BOOST_WAVE_OPTION(prefer_pp_numbers)        // support_option_prefer_pp_numbers
 BOOST_WAVE_OPTION(emit_line_directives)     // support_option_emit_line_directives
 BOOST_WAVE_OPTION(single_line)              // support_option_single_line
+BOOST_WAVE_OPTION(convert_trigraphs)        // support_option_convert_trigraphs
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
 BOOST_WAVE_OPTION(include_guard_detection)  // support_option_include_guard_detection
 #endif

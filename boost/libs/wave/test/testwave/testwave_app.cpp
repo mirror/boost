@@ -496,7 +496,7 @@ namespace {
         if (std::string::npos == first) 
             value.clear();
         else {
-            std::string::size_type last = last = value.find_last_not_of(" \t");
+            std::string::size_type last = value.find_last_not_of(" \t");
             assert(std::string::npos != last);
             value = value.substr(first, last-first+1);
         }
