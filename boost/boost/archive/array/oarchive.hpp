@@ -70,7 +70,8 @@ public:
   {
     const serialization::collection_size_type count(t.size());
     * this->This() << BOOST_SERIALIZATION_NVP(count);
-    * this->This() << serialization::make_array(serialization::detail::get_data(t),t.size());
+    if (!t.empty())
+      * this->This() << serialization::make_array(serialization::detail::get_data(t),t.size());
   }
 
   // the optimized implementation for serialization::array uses save_array

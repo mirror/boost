@@ -28,7 +28,7 @@ namespace boost { namespace serialization { namespace detail {
 template <class T, class Allocator>
 T* get_data(STD::vector<T,Allocator>& v)
 {
-  return &(v[0]);
+  return v.empty() ? 0 : &(v[0]);
 }
 
 template <class T, class Allocator>
@@ -41,7 +41,7 @@ T* get_data(STD::vector<T,Allocator> const & v)
 template <class T>
 T* get_data(STD::valarray<T>& v)
 {
-  return &(v[0]);
+  return v.size()==0 ? 0 : &(v[0]);
 }
 
 template <class T>
