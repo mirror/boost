@@ -18,10 +18,13 @@
 namespace boost { namespace fusion
 {
     struct non_fusion_tag;
+    struct array_tag; // boost::array tag
+    struct mpl_sequence_tag; // mpl sequence tag
+    struct std_pair_tag; // std::pair tag
 
     namespace extension
     {
-        template<typename T>
+        template <typename T>
         struct is_sequence_impl
             : is_base_and_derived<sequence_root, T>
         {
@@ -31,19 +34,29 @@ namespace boost { namespace fusion
             {};
         };
 
-        template<>
+        template <>
         struct is_sequence_impl<non_fusion_tag>
         {
             template<typename T>
             struct apply : mpl::false_ {};
         };
+
+        template <>
+        struct is_sequence_impl<array_tag>;
+
+        template <>
+        struct is_sequence_impl<mpl_sequence_tag>;
+
+        template <>
+        struct is_sequence_impl<std_pair_tag>;
     }
 
     namespace traits
     {
         template <typename T>
         struct is_sequence
-            : extension::is_sequence_impl<typename detail::tag_of<T>::type>::template apply<T>
+            : extension::is_sequence_impl<typename detail::tag_of<T>::type>::
+                template apply<T>
         {};
     }
 }}

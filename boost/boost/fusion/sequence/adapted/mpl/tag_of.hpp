@@ -19,7 +19,7 @@ namespace boost { namespace fusion
 
     namespace traits
     {
-        template<typename Sequence>
+        template <typename Sequence>
         struct tag_of<Sequence, typename boost::enable_if<detail::is_mpl_sequence<Sequence> >::type>
         {
             typedef mpl_sequence_tag type;

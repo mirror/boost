@@ -13,6 +13,10 @@
 
 namespace boost { namespace fusion 
 {
+    struct array_tag; // boost::array tag
+    struct mpl_sequence_tag; // mpl sequence tag
+    struct std_pair_tag; // std::pair tag
+
     namespace extension
     {
         template<typename Tag>
@@ -23,6 +27,15 @@ namespace boost { namespace fusion
                 : detail::fusion_is_view<T>
             {};
         };
+
+        template <>
+        struct is_view_impl<array_tag>;
+
+        template <>
+        struct is_view_impl<mpl_sequence_tag>;
+
+        template <>
+        struct is_view_impl<std_pair_tag>;
     }
 
     namespace traits
@@ -32,6 +45,7 @@ namespace boost { namespace fusion
             extension::is_view_impl<typename detail::tag_of<T>::type>::
                 template apply<T>::type
         {};
-}}}
+    }
+}}
 
 #endif

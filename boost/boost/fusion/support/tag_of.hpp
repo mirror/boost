@@ -10,8 +10,16 @@
 
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/fusion/support/tag_of_fwd.hpp>
+#include <boost/fusion/support/detail/is_mpl_sequence.hpp>
 #include <boost/mpl/has_xxx.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <utility>
+
+namespace boost
+{
+    template <typename T, std::size_t N>
+    class array; // forward
+}
 
 namespace boost { namespace fusion
 {
@@ -30,11 +38,20 @@ namespace boost { namespace fusion
             typedef non_fusion_tag type;
         };
 
-        template<typename Sequence>
+        template <typename Sequence>
         struct tag_of<Sequence, typename boost::enable_if<detail::has_fusion_tag<Sequence> >::type>
         {
             typedef typename Sequence::fusion_tag type;
         };
+
+        template <typename T, std::size_t N>
+        struct tag_of<boost::array<T, N> >;
+
+        template <typename Sequence>
+        struct tag_of<Sequence, typename boost::enable_if<detail::is_mpl_sequence<Sequence> >::type>;
+
+        template<typename T1, typename T2>
+        struct tag_of<std::pair<T1, T2> >;
     }
 
     namespace detail

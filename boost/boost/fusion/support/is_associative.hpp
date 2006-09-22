@@ -12,25 +12,26 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/fusion/support/tag_of.hpp>
 
-namespace boost { namespace fusion {
+namespace boost { namespace fusion 
+{
     namespace extension
     {
-      template<typename Tag>
-      struct is_associative_impl
-      {
-        template<typename Seq>
-        struct apply
-          : mpl::false_
-        {};
-      };
+        template<typename Tag>
+        struct is_associative_impl
+        {
+            template<typename Seq>
+            struct apply : mpl::false_ {};
+        };
     }
 
     namespace traits
     {
-      template <typename Seq>
-      struct is_associative
-        : extension::is_associative_impl<typename detail::tag_of<Seq>::type>::template apply<Seq>
-      {};
-}}}
+        template <typename Seq>
+        struct is_associative
+            : extension::is_associative_impl<typename detail::tag_of<Seq>::type>::
+                template apply<Seq>
+        {};
+    }
+}}
 
 #endif

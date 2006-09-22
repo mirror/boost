@@ -12,6 +12,10 @@
 
 namespace boost { namespace fusion
 {
+    struct array_iterator_tag; // boost::array iterator tag
+    struct mpl_iterator_tag; // mpl sequence iterator tag
+    struct std_pair_iterator_tag; // std::pair iterator tag
+
     namespace extension
     {
         template <typename Tag>
@@ -20,6 +24,15 @@ namespace boost { namespace fusion
             template <typename Iterator>
             struct apply {};
         };
+
+        template <>
+        struct prior_impl<array_iterator_tag>;
+
+        template <>
+        struct prior_impl<mpl_iterator_tag>;
+
+        template <>
+        struct prior_impl<std_pair_iterator_tag>;
     }
 
     namespace result_of

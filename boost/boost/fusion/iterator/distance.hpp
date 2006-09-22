@@ -20,6 +20,9 @@
 namespace boost { namespace fusion
 {
     struct random_access_traversal_tag;
+    struct array_iterator_tag; // boost::array iterator tag
+    struct mpl_iterator_tag; // mpl sequence iterator tag
+    struct std_pair_iterator_tag; // std::pair iterator tag
 
     namespace extension
     {
@@ -36,6 +39,15 @@ namespace boost { namespace fusion
                 BOOST_MPL_ASSERT_NOT((is_same<first_category, random_access_traversal_tag>));
             };
         };
+
+        template <>
+        struct distance_impl<array_iterator_tag>;
+
+        template <>
+        struct distance_impl<mpl_iterator_tag>;
+
+        template <>
+        struct distance_impl<std_pair_iterator_tag>;
     }
 
     namespace result_of

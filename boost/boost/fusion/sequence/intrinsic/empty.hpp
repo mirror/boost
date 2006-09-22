@@ -15,6 +15,7 @@
 namespace boost { namespace fusion
 {
     struct fusion_sequence_tag;
+    struct mpl_sequence_tag; // mpl sequence tag
 
     namespace extension
     {
@@ -26,6 +27,9 @@ namespace boost { namespace fusion
                 : mpl::bool_<(result_of::size<Sequence>::value == 0)>
             {};
         };
+
+        template <>
+        struct empty_impl<mpl_sequence_tag>;
     }
 
     namespace result_of

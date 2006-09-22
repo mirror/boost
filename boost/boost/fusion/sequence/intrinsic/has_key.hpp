@@ -16,6 +16,9 @@ namespace boost { namespace fusion
 {
     struct void_;
     struct fusion_sequence_tag;
+    struct array_tag; // boost::array tag
+    struct mpl_sequence_tag; // mpl sequence tag
+    struct std_pair_tag; // std::pair tag
 
     namespace extension
     {
@@ -28,6 +31,15 @@ namespace boost { namespace fusion
                     template meta_at_impl<Key>::type, void_> >
             {};
         };
+
+        template <>
+        struct has_key_impl<array_tag>;
+
+        template <>
+        struct has_key_impl<mpl_sequence_tag>;
+
+        template <>
+        struct has_key_impl<std_pair_tag>;
     }
     
     namespace result_of

@@ -23,6 +23,15 @@ namespace boost { namespace fusion
             template <typename Sequence>
             struct apply : Sequence::size {};
         };
+
+        template <>
+        struct size_impl<array_tag>;
+
+        template <>
+        struct size_impl<mpl_sequence_tag>;
+
+        template <>
+        struct size_impl<std_pair_tag>;
     }
 
     namespace result_of

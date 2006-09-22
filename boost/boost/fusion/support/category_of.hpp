@@ -13,7 +13,11 @@
 #include <boost/fusion/support/tags.hpp>
 
 namespace boost { namespace fusion
-{ 
+{
+    struct array_tag; // boost::array tag
+    struct mpl_sequence_tag; // mpl sequence tag
+    struct std_pair_tag; // std::pair tag
+
     namespace extension
     {
         template<typename Tag>
@@ -24,6 +28,15 @@ namespace boost { namespace fusion
                 : detail::fusion_category_of<T>
             {};
         };
+
+        template <>
+        struct category_of_impl<array_tag>;
+
+        template <>
+        struct category_of_impl<mpl_sequence_tag>;
+
+        template <>
+        struct category_of_impl<std_pair_tag>;
     }
 
     namespace traits
