@@ -56,8 +56,7 @@ namespace boost { namespace fusion { namespace distance_detail
         static type
         call(First const&, Last const&)
         {
-            static type result;
-            return result;
+            return type();
         }
     };
 

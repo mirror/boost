@@ -37,8 +37,7 @@ namespace boost { namespace fusion
     deref(Iterator const& i)
     {
         typedef result_of::deref<Iterator> deref_meta;
-        typename deref_meta::type result(deref_meta::call(i));
-        return result;
+        return deref_meta::call(i);
     }
 
     template <typename Iterator>
