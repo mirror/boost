@@ -33,23 +33,30 @@
 
 namespace boost { namespace fusion
 {
-
     namespace detail
     {
+        template <class F>
+        struct unpack_args_impl_helper
+        {
+            typedef typename remove_cv<F>::type f_nocv;
+
+            typedef 
+                typename mpl::eval_if<
+                    is_pointer<f_nocv>,
+                    mpl::identity<f_nocv>,
+                    mpl::eval_if<
+                        is_function<f_nocv>,
+                        add_pointer<f_nocv>,
+                        mpl::identity<F>
+                    >
+                >::type
+            type;
+        };
 
         template <
             class F,
             class Sequence,
-            class F_ =
-                typename boost::mpl::eval_if<
-                    boost::is_pointer<F>,
-                    boost::remove_cv<F>,
-                    boost::mpl::eval_if<
-                        boost::is_function<typename boost::remove_cv<F>::type>,
-                        boost::add_pointer<typename boost::remove_cv<F>::type>,
-                        boost::mpl::identity<F>
-                    >
-                >::type,
+            class F_ = typename unpack_args_impl_helper<F>::type,
             class Size = mpl::int_<result_of::size<Sequence>::value>
         >
         struct unpack_args_impl;
