@@ -168,9 +168,9 @@ void test_sequence_n(Sequence & seq, boost::mpl::int_<2>)
 
         BOOST_TEST(       f (element1, element2) == fusion::unpack_args(       f , seq));
         BOOST_TEST(const_(f)(element1, element2) == fusion::unpack_args(const_(f), seq));
-
-        BOOST_TEST(       f (const_(element1), element2) == fusion::unpack_args(       f , const_(seq)));
-        BOOST_TEST(const_(f)(const_(element1), element2) == fusion::unpack_args(const_(f), const_(seq)));
+        
+        BOOST_TEST(       f (element1, const_(element2)) == fusion::unpack_args(       f , const_(seq)));
+        BOOST_TEST(const_(f)(element1, const_(element2)) == fusion::unpack_args(const_(f), const_(seq)));
     }
 
     BOOST_TEST(baz1(element1, element2) == fusion::unpack_args(baz1, seq));
