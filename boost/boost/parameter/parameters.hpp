@@ -241,10 +241,11 @@ namespace aux
 #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
       // VC7.1 can't handle the sizeof() implementation below,
       // so we use this instead.
-      typedef typename mpl::apply_wrap2<
+      typedef typename mpl::apply_wrap3<
           typename ArgList::binding
         , typename ParameterRequirements::keyword
         , void_
+        , mpl::false_
       >::type bound;
 
       typedef typename mpl::eval_if<
@@ -252,7 +253,7 @@ namespace aux
         , typename ParameterRequirements::has_default
         , mpl::apply1<
               typename ParameterRequirements::predicate
-            , typename remove_reference<bound>::type
+            , bound
           >
       >::type type;
 #else
