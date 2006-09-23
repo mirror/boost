@@ -67,7 +67,7 @@ struct empty_arg_list
     // lookup given that default
     struct binding
     {
-        template<class KW, class Default, class Reference = mpl::true_>
+        template<class KW, class Default, class Reference>
         struct apply
         {
             typedef Default type;
@@ -221,13 +221,13 @@ struct arg_list : Next
     // lookup given that default
     struct binding
     {
-        template <class KW, class Default, class Reference = mpl::true_>
+        template <class KW, class Default, class Reference>
         struct apply
         {
           typedef typename mpl::eval_if<
                 boost::is_same<KW, key_type>
               , mpl::if_<Reference, reference, value_type>
-              , mpl::apply_wrap2<typename Next::binding, KW, Default>
+              , mpl::apply_wrap3<typename Next::binding, KW, Default, Reference>
           >::type type;
         };
     };
@@ -297,7 +297,7 @@ struct arg_list : Next
     // Outer indexing operators that dispatch to the right node's
     // get() function.
     template <class KW>
-    typename mpl::apply_wrap2<binding, KW, void_>::type
+    typename mpl::apply_wrap3<binding, KW, void_, mpl::true_>::type
     operator[](keyword<KW> const& x) const
     {
         typename mpl::apply_wrap1<key_owner, KW>::type const& sublist = *this;
@@ -305,7 +305,7 @@ struct arg_list : Next
     }
 
     template <class KW, class Default>
-    typename mpl::apply_wrap2<binding, KW, Default&>::type
+    typename mpl::apply_wrap3<binding, KW, Default&, mpl::true_>::type
     operator[](default_<KW, Default> x) const
     {
         typename mpl::apply_wrap1<key_owner, KW>::type const& sublist = *this;
@@ -313,9 +313,10 @@ struct arg_list : Next
     }
 
     template <class KW, class F>
-    typename mpl::apply_wrap2<
+    typename mpl::apply_wrap3<
         binding,KW
       , typename result_of0<F>::type
+      , mpl::true_
     >::type
     operator[](lazy_default<KW,F> x) const
     {

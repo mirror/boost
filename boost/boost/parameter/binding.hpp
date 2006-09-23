@@ -26,8 +26,8 @@ namespace boost { namespace parameter {
 template <class Parameters, class Keyword, class Default>
 struct binding0
 {
-    typedef typename mpl::apply_wrap2<
-        typename Parameters::binding,Keyword,Default
+    typedef typename mpl::apply_wrap3<
+        typename Parameters::binding,Keyword,Default,mpl::true_
     >::type type;
 
     BOOST_MPL_ASSERT_NOT((
@@ -54,8 +54,8 @@ struct binding_eti
       , binding0<Parameters,Keyword,Default>
     >::type type;
 # else
-    typedef typename mpl::apply_wrap2<
-        typename Parameters::binding,Keyword,Default
+    typedef typename mpl::apply_wrap3<
+        typename Parameters::binding,Keyword,Default,mpl::true_
     >::type type;
 
     BOOST_MPL_ASSERT_NOT((
@@ -92,10 +92,11 @@ struct binding
 template <class Parameters, class Keyword, class DefaultFn>
 struct lazy_binding
 {
-  typedef typename mpl::apply_wrap2<
+  typedef typename mpl::apply_wrap3<
       typename Parameters::binding
     , Keyword
     , typename aux::result_of0<DefaultFn>::type
+    , mpl::true_
   >::type type;
 };
 
