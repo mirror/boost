@@ -19,6 +19,7 @@ namespace boost
   {
     const int m_linked_to = 1;
     const int m_present = 2;
+    const int m_nounlinked_errors = 4;
 
     class link_check : public hypertext_inspector
     {

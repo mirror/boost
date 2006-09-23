@@ -52,6 +52,9 @@ namespace boost
       const path & full_path,   // example: c:/foo/boost/filesystem/path.hpp
       const string & contents )     // contents of file to be inspected
     {
+      if (contents.find( "boostinspect:" "nounlinked" ) != string::npos)
+          m_paths[ relative_to( full_path, fs::initial_path() ) ] |= m_nounlinked_errors;
+
       if (contents.find( "boostinspect:" "nolink" ) != string::npos) return;
 
       string::const_iterator start( contents.begin() );
@@ -158,6 +161,7 @@ namespace boost
      {
 // std::clog << itr->first << " " << itr->second << "\n";
        if ( (itr->second & m_linked_to) != m_linked_to
+         && (itr->second & m_nounlinked_errors) != m_nounlinked_errors
          && (itr->first.rfind( ".html" ) == itr->first.size()-5
           || itr->first.rfind( ".htm" ) == itr->first.size()-4)
          // because they may be redirectors, it is OK if these are unlinked:
