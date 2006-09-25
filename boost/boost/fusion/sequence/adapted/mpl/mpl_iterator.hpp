@@ -8,30 +8,104 @@
 #if !defined(FUSION_MPL_ITERATOR_05052005_0731)
 #define FUSION_MPL_ITERATOR_05052005_0731
 
-#include <boost/fusion/support/iterator_base.hpp>
 #include <boost/fusion/support/detail/mpl_iterator_category.hpp>
-#include <boost/fusion/sequence/adapted/mpl/detail/deref_impl.hpp>
-#include <boost/fusion/sequence/adapted/mpl/detail/next_impl.hpp>
-#include <boost/fusion/sequence/adapted/mpl/detail/prior_impl.hpp>
-#include <boost/fusion/sequence/adapted/mpl/detail/value_of_impl.hpp>
-#include <boost/fusion/sequence/adapted/mpl/detail/equal_to_impl.hpp>
-#include <boost/fusion/sequence/adapted/mpl/detail/distance_impl.hpp>
-#include <boost/fusion/sequence/adapted/mpl/detail/advance_impl.hpp>
+#include <boost/fusion/iterator/iterator_facade.hpp>
 #include <boost/type_traits/remove_const.hpp>
+#include <boost/mpl/deref.hpp>
+#include <boost/mpl/next.hpp>
+#include <boost/mpl/prior.hpp>
+#include <boost/mpl/advance.hpp>
+#include <boost/mpl/distance.hpp>
 
 namespace boost { namespace fusion
 {
-    struct mpl_iterator_tag;
-
     template <typename Iterator>
     struct mpl_iterator
-        : iterator_base<mpl_iterator<Iterator> >
+        : iterator_facade<
+            mpl_iterator<Iterator>
+          , typename detail::mpl_iterator_category<typename Iterator::category>::type
+        >
     {
-        typedef mpl_iterator_tag fusion_tag;
-        typedef typename detail::mpl_iterator_category<
-            typename Iterator::category>::type 
-        category;
         typedef typename remove_const<Iterator>::type iterator_type;
+
+        template <typename Iterator>
+        struct value_of : mpl::deref<typename Iterator::iterator_type> {};
+
+        template <typename Iterator>
+        struct deref
+        {
+            typedef typename mpl::deref<
+                typename Iterator::iterator_type>::type
+            type;
+
+            static type
+            call(Iterator)
+            {
+                return type();
+            }
+        };
+
+        template <typename Iterator>
+        struct next
+        {
+            typedef mpl_iterator<
+                typename mpl::next<typename Iterator::iterator_type>::type> 
+            type;
+
+            static type
+            call(Iterator)
+            {
+                return type();
+            }
+        };
+
+        template <typename Iterator>
+        struct prior
+        {
+            typedef mpl_iterator<
+                typename mpl::prior<typename Iterator::iterator_type>::type> 
+            type;
+
+            static type
+            call(Iterator)
+            {
+                return type();
+            }
+        };
+
+        template <typename Iterator, typename N>
+        struct advance
+        {
+            typedef mpl_iterator<
+                typename mpl::advance<typename Iterator::iterator_type, N>::type>
+            type;
+
+            static type
+            call(Iterator const& i)
+            {
+                return type();
+            }
+        };
+
+        template <typename I1, typename I2>
+        struct distance : 
+            mpl::distance<
+                typename I1::iterator_type
+              , typename I2::iterator_type>
+        {
+            typedef typename 
+                mpl::distance<
+                    typename I1::iterator_type
+                  , typename I2::iterator_type
+                >::type
+            type;
+            
+            static type
+            call(I1 const&, I2 const&)
+            {
+                return type();
+            }
+        };
     };
 }}
 

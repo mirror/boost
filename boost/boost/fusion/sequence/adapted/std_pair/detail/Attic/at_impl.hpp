@@ -12,6 +12,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/fusion/support/detail/access.hpp>
 
 namespace boost { namespace fusion {
 

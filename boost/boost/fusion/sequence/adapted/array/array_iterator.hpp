@@ -11,7 +11,7 @@
 
 #include <cstddef>
 #include <boost/config.hpp>
-#include <boost/mpl/size_t.hpp>
+#include <boost/mpl/int.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/minus.hpp>
@@ -22,14 +22,14 @@ namespace boost { namespace fusion
 {
     struct random_access_traversal_tag;
 
-    template<typename Array, std::size_t Pos>
+    template <typename Array, int Pos>
     struct array_iterator
         : iterator_facade<array_iterator<Array, Pos>, random_access_traversal_tag>
     {
-        BOOST_MPL_ASSERT_RELATION(Pos,>=,0);
-        BOOST_MPL_ASSERT_RELATION(Pos,<=,std::size_t(Array::static_size));
+        BOOST_MPL_ASSERT_RELATION(Pos, >=, 0);
+        BOOST_MPL_ASSERT_RELATION(Pos, <=, Array::static_size);
 
-        typedef mpl::size_t<Pos> index;
+        typedef mpl::int_<Pos> index;
         typedef Array array_type;
 
         array_iterator(Array& a)
@@ -63,36 +63,6 @@ namespace boost { namespace fusion
             }
         };
 
-        template <typename Iterator>
-        struct next
-        {
-            typedef typename Iterator::array_type array_type;
-            typedef typename Iterator::index index;
-            static int const index_val = index::value;
-            typedef array_iterator<array_type, index_val + 1> type;
-
-            static type
-            call(Iterator const& i)
-            {
-                return type(i.array);
-            }
-        };
-
-        template <typename Iterator>
-        struct prior
-        {
-            typedef typename Iterator::array_type array_type;
-            typedef typename Iterator::index index;
-            static int const index_val = index::value;
-            typedef array_iterator<array_type, index_val - 1> type;
-
-            static type
-            call(Iterator const& i)
-            {
-                return type(i.array);
-            }
-        };
-
         template <typename Iterator, typename N>
         struct advance
         {
@@ -107,15 +77,23 @@ namespace boost { namespace fusion
             }
         };
 
-        template <typename First, typename Last>
-        struct distance : mpl::minus<typename Last::index, typename First::index>
+        template <typename Iterator>
+        struct next : advance<Iterator, mpl::int_<1> > {};
+
+        template <typename Iterator>
+        struct prior : advance<Iterator, mpl::int_<-1> > {};
+
+        template <typename I1, typename I2>
+        struct distance : mpl::minus<typename I2::index, typename I1::index>
         {
-            typedef typename mpl::minus<
-                typename Last::index, typename First::index>::type 
+            typedef typename
+                mpl::minus<
+                    typename I2::index, typename I1::index
+                >::type 
             type;
 
             static type
-            call(First const&, Last const&)
+            call(I1 const&, I2 const&)
             {
                 return type();
             }
@@ -123,7 +101,7 @@ namespace boost { namespace fusion
 
     private:
 
-        array_iterator<Array, Pos> operator=(const array_iterator<Array, Pos>&);
+        array_iterator<Array, Pos>& operator=(array_iterator<Array, Pos> const&);
     };
 }}
 
