@@ -84,7 +84,7 @@
         typedef vector_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef mpl::false_ is_view;
-        typedef random_access_sequence_tag category;
+        typedef random_access_traversal_tag category;
         typedef mpl::int_<N> size;
     
         BOOST_PP_CAT(vector, N)() {}

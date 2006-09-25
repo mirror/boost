@@ -9,7 +9,6 @@
 #define FUSION_ITERATOR_RANGE_05062005_1224
 
 #include <boost/fusion/support/detail/access.hpp>
-#include <boost/fusion/support/detail/iterator_to_sequence_category.hpp>
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/sequence/view/iterator_range/detail/begin_impl.hpp>
@@ -33,11 +32,7 @@ namespace boost { namespace fusion
         typedef typename result_of::distance<begin_type, end_type>::type size;
         typedef mpl::true_ is_view;
 
-        typedef typename 
-            detail::iterator_to_sequence_category<
-                typename traits::category_of<begin_type>::type
-            >::type
-        category;
+        typedef typename traits::category_of<begin_type>::type category;
 
         iterator_range(First const& first, Last const& last)
             : first(convert_iterator<First>::call(first))

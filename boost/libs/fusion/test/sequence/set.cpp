@@ -13,7 +13,7 @@
 #include <boost/fusion/sequence/intrinsic/has_key.hpp>
 #include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/support/pair.hpp>
-#include <boost/fusion/support/is_associative.hpp>
+#include <boost/fusion/support/category_of.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/mpl/assert.hpp>
 #include <iostream>

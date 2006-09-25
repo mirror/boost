@@ -28,7 +28,6 @@ namespace boost { namespace fusion
             {    
                 static typename mpl::minus<
                     typename Last::index, typename First::index>::type
-
                 call(First const&, Last const&)
                 {
                     typedef typename mpl::minus<

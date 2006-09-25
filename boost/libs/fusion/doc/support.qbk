@@ -219,14 +219,14 @@ For Sequences, the return type is derived from one of:
 		    struct single_pass_sequence_tag
 		        : incrementable_sequence_tag {};
 		
-		    struct forward_sequence_tag
+		    struct forward_traversal_tag
 		        : single_pass_sequence_tag {};
 		
-		    struct bidirectional_sequence_tag
-		        : forward_sequence_tag {};
+		    struct bidirectional_traversal_tag
+		        : forward_traversal_tag {};
 		
-		    struct random_access_sequence_tag
-		        : bidirectional_sequence_tag {};
+		    struct random_access_traversal_tag
+		        : bidirectional_traversal_tag {};
 		}}
 
 And optionally from:
@@ -248,8 +248,8 @@ __sequence__ or __iterator__.
     using boost::is_base_of;
     typedef traits::category_of<__list__<> >::type list_category;
     typedef traits::category_of<__vector__<> >::type vector_category;
-    BOOST_MPL_ASSERT(( is_base_of<forward_sequence_tag, list_category> ));
-    BOOST_MPL_ASSERT(( is_base_of<random_access_sequence_tag, vector_category> ));
+    BOOST_MPL_ASSERT(( is_base_of<forward_traversal_tag, list_category> ));
+    BOOST_MPL_ASSERT(( is_base_of<random_access_traversal_tag, vector_category> ));
 
 [endsect]
 

@@ -9,7 +9,6 @@
 #if !defined(BOOST_FUSION_CATEGORY_OF_IMPL_20060217_2141)
 #define BOOST_FUSION_CATEGORY_OF_IMPL_20060217_2141
 
-#include <boost/fusion/support/detail/iterator_to_sequence_category.hpp>
 #include <boost/fusion/support/detail/mpl_iterator_category.hpp>
 #include <boost/mpl/begin_end.hpp>
 #include <boost/mpl/is_sequence.hpp>
@@ -28,11 +27,9 @@ namespace boost { namespace fusion {
         
             BOOST_STATIC_ASSERT(mpl::is_sequence<T>::value);
             typedef typename 
-            iterator_to_sequence_category<
-                typename mpl_iterator_category<
-                typename mpl::begin<T>::type::category
-            >::type
-            >::type
+                mpl_iterator_category<
+                    typename mpl::begin<T>::type::category
+                >::type
             type;
         };
     }

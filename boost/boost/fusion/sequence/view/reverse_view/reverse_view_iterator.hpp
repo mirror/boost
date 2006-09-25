@@ -17,7 +17,7 @@
 #include <boost/fusion/sequence/view/reverse_view/detail/advance_impl.hpp>
 #include <boost/fusion/sequence/view/reverse_view/detail/distance_impl.hpp>
 #include <boost/fusion/sequence/view/reverse_view/detail/value_of_impl.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
+#include <boost/type_traits/is_base_of.hpp>
 #include <boost/static_assert.hpp>
 
 namespace boost { namespace fusion
@@ -34,7 +34,7 @@ namespace boost { namespace fusion
         typedef typename traits::category_of<first_type>::type category;
 
         BOOST_STATIC_ASSERT((
-            is_base_and_derived<
+            is_base_of<
                 bidirectional_traversal_tag
               , category>::value));
 

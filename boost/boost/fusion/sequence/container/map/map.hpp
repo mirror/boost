@@ -9,7 +9,7 @@
 #define FUSION_MAP_07212005_1106
 
 #include <boost/fusion/support/pair.hpp>
-#include <boost/fusion/support/detail/access.hpp>
+#include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/support/detail/access.hpp>
 #include <boost/fusion/sequence/container/map/map_fwd.hpp>
 #include <boost/fusion/sequence/container/map/detail/lookup_key.hpp>
@@ -17,7 +17,6 @@
 #include <boost/fusion/sequence/container/map/detail/end_impl.hpp>
 #include <boost/fusion/sequence/container/map/detail/at_key_impl.hpp>
 #include <boost/fusion/sequence/container/map/detail/value_at_key_impl.hpp>
-#include <boost/fusion/sequence/container/map/detail/is_associative_impl.hpp>
 #include <boost/fusion/sequence/container/vector/vector.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/bool.hpp>
@@ -26,15 +25,15 @@ namespace boost { namespace fusion
 {
     struct void_;
     struct map_tag;
-    struct forward_sequence_tag;
     struct fusion_sequence_tag;
 
     template <BOOST_PP_ENUM_PARAMS(FUSION_MAX_MAP_SIZE, typename T)>
     struct map : sequence_base<map<BOOST_PP_ENUM_PARAMS(FUSION_MAX_MAP_SIZE, T)> >
     {
+        struct category : forward_traversal_tag, associative_sequence_tag {};
+        
         typedef map_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
-        typedef forward_sequence_tag category;
         typedef mpl::false_ is_view;
 
         typedef vector<

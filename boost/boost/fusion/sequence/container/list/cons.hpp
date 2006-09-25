@@ -30,7 +30,7 @@ namespace boost { namespace fusion
 {
     struct void_;
     struct cons_tag;
-    struct forward_sequence_tag;
+    struct forward_traversal_tag;
     struct fusion_sequence_tag;
 
     struct nil : sequence_base<nil>
@@ -39,7 +39,7 @@ namespace boost { namespace fusion
         typedef cons_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef mpl::false_ is_view;
-        typedef forward_sequence_tag category;
+        typedef forward_traversal_tag category;
         typedef void_ car_type;
         typedef void_ cdr_type;
 
@@ -62,7 +62,7 @@ namespace boost { namespace fusion
         typedef cons_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef mpl::false_ is_view;
-        typedef forward_sequence_tag category;
+        typedef forward_traversal_tag category;
         typedef Car car_type;
         typedef Cdr cdr_type;
 

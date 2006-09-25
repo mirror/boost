@@ -38,7 +38,7 @@ namespace boost { namespace fusion
 {
     struct vector_tag;
     struct fusion_sequence_tag;
-    struct random_access_sequence_tag;
+    struct random_access_traversal_tag;
 
     struct vector0 : sequence_base<vector0>
     {
@@ -46,7 +46,7 @@ namespace boost { namespace fusion
         typedef vector_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef mpl::false_ is_view;
-        typedef random_access_sequence_tag category;
+        typedef random_access_traversal_tag category;
         typedef mpl::int_<0> size;
     };
 

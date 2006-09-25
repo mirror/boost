@@ -15,7 +15,9 @@
 namespace boost { namespace fusion
 {
     struct void_;
-    struct fusion_sequence_tag;
+
+    // Special tags:
+    struct sequence_facade_tag;
     struct array_tag; // boost::array tag
     struct mpl_sequence_tag; // mpl sequence tag
     struct std_pair_tag; // std::pair tag
@@ -30,6 +32,13 @@ namespace boost { namespace fusion
                 : mpl::not_<is_same<typename Sequence::
                     template meta_at_impl<Key>::type, void_> >
             {};
+        };
+
+        template <>
+        struct has_key_impl<sequence_facade_tag>
+        {
+            template <typename Sequence, typename Key>
+            struct apply : Sequence::template has_key<Sequence, Key> {};
         };
 
         template <>

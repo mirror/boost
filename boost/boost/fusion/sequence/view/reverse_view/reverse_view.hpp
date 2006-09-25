@@ -18,7 +18,7 @@
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
+#include <boost/type_traits/is_base_of.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/mpl/bool.hpp>
 
@@ -40,7 +40,7 @@ namespace boost { namespace fusion
         typedef typename result_of::size<Sequence>::type size;
 
         BOOST_STATIC_ASSERT((
-            is_base_and_derived<
+            is_base_of<
                 bidirectional_traversal_tag
               , typename traits::category_of<first_type>::type>::value));
 

@@ -38,7 +38,7 @@ namespace boost { namespace fusion
 {
     struct vector_tag;
     struct fusion_sequence_tag;
-    struct random_access_sequence_tag;
+    struct random_access_traversal_tag;
 
 // expand vector41 to vector50
 #define BOOST_PP_FILENAME_1 <boost/fusion/sequence/container/vector/detail/vector_n.hpp>

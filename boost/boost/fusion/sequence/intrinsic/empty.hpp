@@ -14,7 +14,8 @@
 
 namespace boost { namespace fusion
 {
-    struct fusion_sequence_tag;
+    // Special tags:
+    struct sequence_facade_tag;
     struct mpl_sequence_tag; // mpl sequence tag
 
     namespace extension
@@ -26,6 +27,13 @@ namespace boost { namespace fusion
             struct apply 
                 : mpl::bool_<(result_of::size<Sequence>::value == 0)>
             {};
+        };
+
+        template <>
+        struct empty_impl<sequence_facade_tag>
+        {
+            template <typename Sequence>
+            struct apply : Sequence::template empty<Sequence> {};
         };
 
         template <>
