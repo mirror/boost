@@ -13,6 +13,8 @@
 
 namespace boost { namespace fusion 
 {
+    // Special tags:
+    struct sequence_facade_tag;
     struct array_tag; // boost::array tag
     struct mpl_sequence_tag; // mpl sequence tag
     struct std_pair_tag; // std::pair tag
@@ -22,10 +24,17 @@ namespace boost { namespace fusion
         template<typename Tag>
         struct is_view_impl
         {
-            template<typename T>
+            template <typename T>
             struct apply
                 : detail::fusion_is_view<T>
             {};
+        };
+
+        template <>
+        struct is_view_impl<sequence_facade_tag>
+        {
+            template <typename Sequence>
+            struct apply : Sequence::is_view {};
         };
 
         template <>

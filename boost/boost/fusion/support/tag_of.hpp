@@ -13,6 +13,7 @@
 #include <boost/fusion/support/detail/is_mpl_sequence.hpp>
 #include <boost/mpl/has_xxx.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <boost/mpl/bool.hpp>
 #include <utility>
 
 namespace boost
@@ -24,7 +25,7 @@ namespace boost
 namespace boost { namespace fusion
 {
     struct non_fusion_tag;
-        
+
     namespace detail
     {
         BOOST_MPL_HAS_XXX_TRAIT_DEF(fusion_tag)

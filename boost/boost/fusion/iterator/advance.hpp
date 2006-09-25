@@ -19,6 +19,9 @@
 namespace boost { namespace fusion
 {
     struct random_access_traversal_tag;
+        
+    // Special tags:
+    struct iterator_facade_tag; // iterator facade tag
     struct array_iterator_tag; // boost::array iterator tag
     struct mpl_iterator_tag; // mpl sequence iterator tag
     struct std_pair_iterator_tag; // std::pair iterator tag
@@ -37,9 +40,15 @@ namespace boost { namespace fusion
                   , advance_detail::backward<Iterator, N::value>
                 >::type
             {
-                typedef typename traits::category_of<Iterator>::type category;
-                BOOST_MPL_ASSERT_NOT((is_same<category, random_access_traversal_tag>));
+                BOOST_MPL_ASSERT_NOT((traits::is_random_access<Iterator>));
             };
+        };
+
+        template <>
+        struct advance_impl<iterator_facade_tag>
+        {
+            template <typename Iterator, typename N>
+            struct apply : Iterator::template advance<Iterator, N> {};
         };
 
         template <>

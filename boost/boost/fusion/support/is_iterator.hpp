@@ -8,14 +8,14 @@
 #if !defined(FUSION_IS_ITERATOR_05062005_1219)
 #define FUSION_IS_ITERATOR_05062005_1219
 
-#include <boost/type_traits/is_base_and_derived.hpp>
+#include <boost/type_traits/is_base_of.hpp>
 
 namespace boost { namespace fusion
 {
     struct iterator_root;
 
     template <typename T>
-    struct is_fusion_iterator : is_base_and_derived<iterator_root, T> {};
+    struct is_fusion_iterator : is_base_of<iterator_root, T> {};
 }}
 
 #endif

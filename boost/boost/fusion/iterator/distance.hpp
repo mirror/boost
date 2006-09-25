@@ -20,6 +20,9 @@
 namespace boost { namespace fusion
 {
     struct random_access_traversal_tag;
+
+    // Special tags:
+    struct iterator_facade_tag; // iterator facade tag
     struct array_iterator_tag; // boost::array iterator tag
     struct mpl_iterator_tag; // mpl sequence iterator tag
     struct std_pair_iterator_tag; // std::pair iterator tag
@@ -33,11 +36,16 @@ namespace boost { namespace fusion
             template <typename First, typename Last>
             struct apply : distance_detail::linear_distance<First, Last> 
             {
-                typedef typename traits::category_of<First>::type first_category;
-                typedef typename traits::category_of<Last>::type last_category;
-                BOOST_MPL_ASSERT((is_same<first_category, last_category>));
-                BOOST_MPL_ASSERT_NOT((is_same<first_category, random_access_traversal_tag>));
+                BOOST_MPL_ASSERT_NOT((traits::is_random_access<First>));
+                BOOST_MPL_ASSERT_NOT((traits::is_random_access<Last>));
             };
+        };
+
+        template <>
+        struct distance_impl<iterator_facade_tag>
+        {
+            template <typename First, typename Last>
+            struct apply : First::template distance<First, Last> {};
         };
 
         template <>

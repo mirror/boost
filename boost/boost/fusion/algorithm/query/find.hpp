@@ -12,7 +12,7 @@
 #include <boost/fusion/algorithm/query/detail/assoc_find.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
-#include <boost/fusion/support/is_associative.hpp>
+#include <boost/fusion/support/category_of.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/utility/enable_if.hpp>

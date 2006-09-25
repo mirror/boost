@@ -8,7 +8,7 @@
 #if !defined(FUSION_IS_SEQUENCE_05052005_1002)
 #define FUSION_IS_SEQUENCE_05052005_1002
 
-#include <boost/type_traits/is_base_and_derived.hpp>
+#include <boost/type_traits/is_base_of.hpp>
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/support/tag_of.hpp>
 #include <boost/mpl/is_sequence.hpp>
@@ -17,6 +17,7 @@
 
 namespace boost { namespace fusion
 {
+    // Special tags:
     struct non_fusion_tag;
     struct array_tag; // boost::array tag
     struct mpl_sequence_tag; // mpl sequence tag
@@ -26,18 +27,15 @@ namespace boost { namespace fusion
     {
         template <typename T>
         struct is_sequence_impl
-            : is_base_and_derived<sequence_root, T>
         {
-            template<typename Sequence>
-            struct apply 
-                : is_base_and_derived<sequence_root, Sequence>
-            {};
+            template <typename Sequence>
+            struct apply : is_base_of<sequence_root, Sequence> {};
         };
 
         template <>
         struct is_sequence_impl<non_fusion_tag>
         {
-            template<typename T>
+            template <typename T>
             struct apply : mpl::false_ {};
         };
 
