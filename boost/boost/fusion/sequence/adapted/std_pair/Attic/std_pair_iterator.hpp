@@ -8,18 +8,6 @@
 #if !defined(FUSION_STD_PAIR_ITERATOR_09262005_0934)
 #define FUSION_STD_PAIR_ITERATOR_09262005_0934
 
-//~ #include <boost/fusion/support/iterator_base.hpp>
-//~ #include <boost/fusion/sequence/adapted/std_pair/detail/advance_impl.hpp>
-//~ #include <boost/fusion/sequence/adapted/std_pair/detail/deref_impl.hpp>
-//~ #include <boost/fusion/sequence/adapted/std_pair/detail/distance_impl.hpp>
-//~ #include <boost/fusion/sequence/adapted/std_pair/detail/equal_to_impl.hpp>
-//~ #include <boost/fusion/sequence/adapted/std_pair/detail/next_impl.hpp>
-//~ #include <boost/fusion/sequence/adapted/std_pair/detail/prior_impl.hpp>
-//~ #include <boost/fusion/sequence/adapted/std_pair/detail/value_of_impl.hpp>
-//~ #include <boost/type_traits/add_const.hpp>
-
-
-
 #include <boost/fusion/iterator/iterator_facade.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/mpl/assert.hpp>
