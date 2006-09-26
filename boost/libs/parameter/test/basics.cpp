@@ -11,7 +11,6 @@
 
 #include "basics.hpp"
 
-
 namespace test
 {
   // A separate function for getting the "value" key, so we can deduce
