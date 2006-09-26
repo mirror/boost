@@ -113,10 +113,24 @@ void integral_constant_type_check(T1, T2)
    assert(sizeof(T1) == sizeof(T2));
    assert(t1 == t2);
 #endif
+#if defined(BOOST_HAS_STDINT_H)
+   // native headers are permitted to promote small
+   // unsigned types to type int:
+   if(sizeof(T1) >= sizeof(int))
+   {
+      if(t1 > 0)
+        assert(t2 > 0);
+      else
+        assert(!(t2 > 0));
+   }
+   else if(t1 < 0)
+      assert(!(t2 > 0));
+#else
    if(t1 > 0)
      assert(t2 > 0);
    else
      assert(!(t2 > 0));
+#endif
 }
 
 
