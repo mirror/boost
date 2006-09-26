@@ -19,14 +19,14 @@
 
 namespace boost { namespace fusion
 {
-    template <typename Iterator>
+    template <typename Iterator_>
     struct mpl_iterator
         : iterator_facade<
-            mpl_iterator<Iterator>
-          , typename detail::mpl_iterator_category<typename Iterator::category>::type
+            mpl_iterator<Iterator_>
+          , typename detail::mpl_iterator_category<typename Iterator_::category>::type
         >
     {
-        typedef typename remove_const<Iterator>::type iterator_type;
+        typedef typename remove_const<Iterator_>::type iterator_type;
 
         template <typename Iterator>
         struct value_of : mpl::deref<typename Iterator::iterator_type> {};

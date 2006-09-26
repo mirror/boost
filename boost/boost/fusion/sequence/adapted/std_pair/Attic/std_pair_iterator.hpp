@@ -21,65 +21,65 @@ namespace boost { namespace fusion
 {
     struct random_access_traversal_tag;
 
-    template <typename Pair, int N>
+    template <typename Pair_, int N>
     struct std_pair_iterator
-        : iterator_facade<std_pair_iterator<Pair, N>, random_access_traversal_tag>
+        : iterator_facade<std_pair_iterator<Pair_, N>, random_access_traversal_tag>
     {
         BOOST_MPL_ASSERT_RELATION(N, >=, 0);
         BOOST_MPL_ASSERT_RELATION(N, <=, 2);
 
         typedef mpl::int_<N> index;
-        typedef Pair pair_type;
+        typedef Pair_ pair_type;
 
-        std_pair_iterator(Pair& pair)
+        std_pair_iterator(Pair_& pair)
             : pair(pair) {}
-        Pair& pair;
+        Pair_& pair;
 
         template <typename Iterator>
         struct value_of;
 
-        template <typename Pair_>
-        struct value_of<std_pair_iterator<Pair_, 0> >
-            : mpl::identity<typename Pair_::first_type> {};
+        template <typename Pair>
+        struct value_of<std_pair_iterator<Pair, 0> >
+            : mpl::identity<typename Pair::first_type> {};
 
-        template <typename Pair_>
-        struct value_of<std_pair_iterator<Pair_, 1> >
-            : mpl::identity<typename Pair_::second_type> {};
+        template <typename Pair>
+        struct value_of<std_pair_iterator<Pair, 1> >
+            : mpl::identity<typename Pair::second_type> {};
 
         template <typename Iterator>
         struct deref;
 
-        template <typename Pair_>
-        struct deref<std_pair_iterator<Pair_, 0> >
+        template <typename Pair>
+        struct deref<std_pair_iterator<Pair, 0> >
         {
             typedef typename
                 mpl::if_<
-                    is_const<Pair_>
-                  , typename Pair_::first_type const&
-                  , typename Pair_::first_type&
+                    is_const<Pair>
+                  , typename Pair::first_type const&
+                  , typename Pair::first_type&
                 >::type
             type;
 
             static type
-            call(std_pair_iterator<Pair_, 0> const& iter)
+            call(std_pair_iterator<Pair, 0> const& iter)
             {
                 return iter.pair.first;
             }
         };
 
-        template <typename Pair_>
-        struct deref<std_pair_iterator<Pair_, 1> >
+        template <typename Pair>
+        struct deref<std_pair_iterator<Pair, 1> >
         {
             typedef typename
                 mpl::if_<
-                    is_const<Pair_>
-                  , typename Pair_::second_type const&
-                  , typename Pair_::second_type&
+                    is_const<Pair>
+                  , typename Pair::second_type const&
+                  , typename Pair::second_type&
                 >::type
             type;
 
             static type
-            call(std_pair_iterator<Pair_, 1> const& iter)
+            call(std_pair_iterator<Pair, 1> const& iter)
             {
                 return iter.pair.second;
             }
