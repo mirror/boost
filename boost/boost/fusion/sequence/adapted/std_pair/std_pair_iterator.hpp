@@ -21,14 +21,14 @@ namespace boost { namespace fusion
 {
     struct random_access_traversal_tag;
 
-    template <typename Pair_, int N>
+    template <typename Pair_, int N_>
     struct std_pair_iterator
-        : iterator_facade<std_pair_iterator<Pair_, N>, random_access_traversal_tag>
+        : iterator_facade<std_pair_iterator<Pair_, N_>, random_access_traversal_tag>
     {
-        BOOST_MPL_ASSERT_RELATION(N, >=, 0);
-        BOOST_MPL_ASSERT_RELATION(N, <=, 2);
+        BOOST_MPL_ASSERT_RELATION(N_, >=, 0);
+        BOOST_MPL_ASSERT_RELATION(N_, <=, 2);
 
-        typedef mpl::int_<N> index;
+        typedef mpl::int_<N_> index;
         typedef Pair_ pair_type;
 
         std_pair_iterator(Pair_& pair)
