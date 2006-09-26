@@ -35,10 +35,61 @@
 #  endif
 #endif
 
+// On FreeBSD and OpenBSD, numeric_limits is not reliable for long doubles, but
+// the macros defined in <float.h> are. I don't know if this is also be the case for
+// other BSDs, but using the macros if they're available seems like the best
+// choice.
+
+#if defined(__FreeBSD__) || defined(__NetBSD__) && \
+    defined(__OpenBSD__) || defined(__DragonFly__)
+#include <float.h>
+#endif
+
 namespace boost
 {
     namespace hash_detail
     {
+        template <class T>
+        struct float_limits : std::numeric_limits<T> {};
+
+#if defined(__FreeBSD__) || defined(__NetBSD__) && \
+    defined(__OpenBSD__) || defined(__DragonFly__)
+        template <>
+        struct float_limits<long double>
+             : std::numeric_limits<long double>
+        {
+#if defined(LDBL_EPSILON)
+            static long double epsilon() {
+                return LDBL_EPSILON;
+            }
+#endif
+
+#if defined(LDBL_MANT_DIG)
+            BOOST_STATIC_CONSTANT(int, digits = LDBL_MANT_DIG);
+#endif
+
+#if defined(LDBL_MAX)
+            static long double (max)() {
+                return LDBL_MAX;
+            }
+#endif
+
+#if defined(LDBL_MIN)
+            static long double (min)() {
+                return LDBL_MIN;
+            }
+#endif
+
+#if defined(LDBL_MAX_EXP)
+            BOOST_STATIC_CONSTANT(int, max_exponent = LDBL_MAX_EXP);
+#endif
+
+#if defined(LDBL_MIN_EXP)
+            BOOST_STATIC_CONSTANT(int, min_exponent = LDBL_MIN_EXP);
+#endif
+        };
+#endif // __FreeBSD__/__NetBSD__/__OpenBSD__/__DragonFly__
+
         inline void hash_float_combine(std::size_t& seed, std::size_t value)
         {
             seed ^= value + (seed<<6) + (seed>>2);
@@ -63,19 +114,19 @@ namespace boost
             //BOOST_ASSERT(0 <= v && v < 0.5);
 
             v = boost::hash_detail::call_ldexp(v,
-                    std::numeric_limits<std::size_t>::digits + 1);
+                    float_limits<std::size_t>::digits + 1);
             std::size_t seed = static_cast<std::size_t>(v);
             v -= seed;
 
             // ceiling(digits(T) * log2(radix(T))/ digits(size_t)) - 1;
             std::size_t const length
-                = (std::numeric_limits<T>::digits *
-                        boost::static_log2<std::numeric_limits<T>::radix>::value - 1)
-                / std::numeric_limits<std::size_t>::digits;
+                = (float_limits<T>::digits *
+                        boost::static_log2<float_limits<T>::radix>::value - 1)
+                / float_limits<std::size_t>::digits;
 
             for(std::size_t i = 0; i < length; ++i)
             {
-                v = boost::hash_detail::call_ldexp(v, std::numeric_limits<std::size_t>::digits);
+                v = boost::hash_detail::call_ldexp(v, float_limits<std::size_t>::digits);
                 std::size_t part = static_cast<std::size_t>(v);
                 v -= part;
                 hash_float_combine(seed, part);
