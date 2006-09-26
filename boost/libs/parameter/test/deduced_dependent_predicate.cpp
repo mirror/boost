@@ -19,6 +19,7 @@ int main()
 {
     using namespace parameter;
     using boost::is_same;
+    using boost::remove_reference;
     using boost::add_reference;
 
     check<
@@ -26,10 +27,17 @@ int main()
             tag::x
           , optional<
                 deduced<tag::y>
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))    
+              , is_same<
+                    mpl::_1
+                  , remove_reference<binding<mpl::_2,tag::x> >
+                > 
+#else
               , is_same<
                     add_reference<mpl::_1>
-                  , binding<mpl::_2,tag::x> 
+                  , binding<mpl::_2,tag::x>
                 > 
+#endif
             >
         >
     >(
@@ -43,10 +51,17 @@ int main()
             tag::x
           , optional<
                 deduced<tag::y>
+#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))    
+              , is_same<
+                    mpl::_1
+                  , remove_reference<binding<mpl::_2,tag::x> >
+                > 
+#else
               , is_same<
                     add_reference<mpl::_1>
-                  , binding<mpl::_2,tag::x> 
+                  , binding<mpl::_2,tag::x>
                 > 
+#endif
             >
         >
     >(

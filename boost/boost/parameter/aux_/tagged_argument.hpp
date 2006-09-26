@@ -88,7 +88,7 @@ struct tagged_argument : tagged_argument_base
     }
 
     template <class KW, class Default>
-    typename mpl::apply_wrap2<binding, KW, Default&>::type
+    typename mpl::apply_wrap3<binding, KW, Default&, mpl::true_>::type
     operator[](default_<KW,Default> const& x) const
     {
         return get_with_default(x, 0L);
@@ -108,9 +108,10 @@ struct tagged_argument : tagged_argument_base
     }
 
     template <class KW, class F>
-    typename mpl::apply_wrap2<
+    typename mpl::apply_wrap3<
         binding,KW
       , typename result_of0<F>::type
+      , mpl::true_
     >::type
     operator[](lazy_default<KW,F> const& x) const
     {

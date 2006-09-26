@@ -27,13 +27,13 @@ struct assert_expected
     }
 
     template <class K>
-    bool check(K const& k, not_present_tag const&, long) const
+    bool check1(K const& k, not_present_tag const&, long) const
     {
         return check_not_present(args[k | not_present]);
     }
 
     template <class K, class Expected>
-    bool check(K const& k, Expected const& expected, int) const
+    bool check1(K const& k, Expected const& expected, int) const
     {
         return test::equal(args[k], expected);
     }
@@ -42,7 +42,7 @@ struct assert_expected
     void operator()(K) const
     {
         boost::parameter::keyword<K> const& k = boost::parameter::keyword<K>::get();
-        assert(check(k, expected[k], 0L));
+        assert(check1(k, expected[k], 0L));
     }
 
     E const& expected;

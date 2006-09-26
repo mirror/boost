@@ -518,7 +518,7 @@ struct funptr_predicate<void**>
             BOOST_PARAMETER_PREDICATE_TYPE(BOOST_PARAMETER_FN_ARG_PRED(elem)) \
         >::type \
     >
-# else
+# elif BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 #  define BOOST_PARAMETER_FUNCTION_PARAMETERS_M(r,tag_namespace,i,elem) \
     BOOST_PP_COMMA_IF(i) \
     boost::parameter::BOOST_PP_CAT( \
@@ -532,6 +532,19 @@ struct funptr_predicate<void**>
       , boost::parameter::aux::funptr_predicate< \
             void* BOOST_PARAMETER_FN_ARG_PRED(elem) \
         > \
+    >
+# elif BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+#  define BOOST_PARAMETER_FUNCTION_PARAMETERS_M(r,tag_namespace,i,elem) \
+    BOOST_PP_COMMA_IF(i) \
+    boost::parameter::BOOST_PP_CAT( \
+        BOOST_PARAMETER_FUNCTION_PARAMETERS_QUALIFIER_ \
+      , BOOST_PARAMETER_FN_ARG_QUALIFIER(elem) \
+    )( \
+        tag_namespace::BOOST_PARAMETER_FUNCTION_KEYWORD( \
+            BOOST_PARAMETER_FN_ARG_KEYWORD(elem) \
+        ) \
+    ) \
+      , boost::mpl::always<boost::mpl::true_> \
     >
 # endif
 
