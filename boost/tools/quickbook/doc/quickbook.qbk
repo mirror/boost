@@ -1561,6 +1561,48 @@ rebuilds:
 
 [endsect]
 
+[section Debian, Ubuntu]
+
+The following instructions apply to Debian and its derivatives. It is based
+on a Ubuntu Edgy install, but it should work on other Debian based systems.
+
+# First install the `bjam`, `xsltproc`, `docbook-xsl` and `docbook-xml`
+ packages. If you're planning on building boost's documentation, you'll
+ also want to install the `doxygen` package as well. For example, using `apt-get`:
+
+    sudo apt-get install xsltprc docbook-xsl docbook-xml doxygen
+
+# Add the following to your `user-config.jam` file, which should be in your
+  home directory. If you don't have one create a text file containing just
+  this text.
+
+    using xsltproc ;
+
+    using boostbook 
+        : /usr/share/xml/docbook/stylesheet/nwalsh
+        : /usr/share/xml/docbook/schema/dtd/4.2
+        ;
+
+    # Remove this line if you're not using doxygen
+    using doxygen ;
+
+# Go to Quickbook's source directory (`BOOST_ROOT/tools/quickbook`).
+
+# Build the utility by issuing `bjam --v2`.
+
+# Copy the resulting `quickbook` binary (located at
+  `BOOST_ROOT/dist/bin/quickbook` hierarchy) to a safe place. The traditional
+  location would be `/usr/local/bin`, but anywhere sensible will do.
+
+# Add the following to your `user-config.jam` file (using the path where you
+  placed the quickbook executable):
+
+    using quickbook
+        : /usr/local/bin/quickbook
+        ;
+
+[endsect]
+
 [endsect]
 
 [section:ref Quick Reference]
