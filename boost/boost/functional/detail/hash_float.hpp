@@ -58,35 +58,21 @@ namespace boost
         struct float_limits<long double>
              : std::numeric_limits<long double>
         {
-#if defined(LDBL_EPSILON)
             static long double epsilon() {
                 return LDBL_EPSILON;
             }
-#endif
 
-#if defined(LDBL_MANT_DIG)
-            BOOST_STATIC_CONSTANT(int, digits = LDBL_MANT_DIG);
-#endif
-
-#if defined(LDBL_MAX)
             static long double (max)() {
                 return LDBL_MAX;
             }
-#endif
 
-#if defined(LDBL_MIN)
             static long double (min)() {
                 return LDBL_MIN;
             }
-#endif
 
-#if defined(LDBL_MAX_EXP)
+            BOOST_STATIC_CONSTANT(int, digits = LDBL_MANT_DIG);
             BOOST_STATIC_CONSTANT(int, max_exponent = LDBL_MAX_EXP);
-#endif
-
-#if defined(LDBL_MIN_EXP)
             BOOST_STATIC_CONSTANT(int, min_exponent = LDBL_MIN_EXP);
-#endif
         };
 #endif // __FreeBSD__/__NetBSD__/__OpenBSD__/__DragonFly__
 
