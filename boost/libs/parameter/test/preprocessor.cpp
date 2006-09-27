@@ -303,7 +303,31 @@ T const& as_lvalue(T const& x)
     return x;
 }
 
+struct udt
+{
+    udt(int foo, int bar)
+      : foo(foo)
+      , bar(bar)
+    {}
+
+    int foo;
+    int bar;
+};
+
+BOOST_PARAMETER_FUNCTION((int), lazy_defaults, tag,
+    (required
+      (name, *)
+    )
+    (optional
+      (value, *, name.foo)
+      (index, *, name.bar)
+    )
+)
+{
+    return 0;
 }
+
+} // namespace test
 
 int main()
 {
@@ -438,6 +462,17 @@ int main()
     
     assert(sfinae1(1) == 0);
 #endif
+
+    lazy_defaults(
+        name = udt(0,1)
+    );
+
+    lazy_defaults(
+        name = 0
+      , value = 1
+      , index = 2
+    );
+
     return 0;
 }
 
