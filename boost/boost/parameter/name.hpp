@@ -15,6 +15,50 @@
 # include <boost/preprocessor/tuple/elem.hpp>
 # include <boost/mpl/placeholders.hpp>
 
+# if !defined(BOOST_NO_SFINAE) \
+  && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+
+#  include <boost/utility/enable_if.hpp>
+#  include <boost/mpl/lambda.hpp>
+
+namespace boost { namespace parameter { namespace aux {
+
+// Tag type passed to MPL lambda.
+struct lambda_tag;
+
+struct name_tag_base 
+{};
+
+template <class Tag>
+struct name_tag
+{};
+
+template <class T>
+struct is_name_tag
+  : mpl::false_
+{};
+
+}}} // namespace boost::parameter::aux
+
+namespace boost { namespace mpl {
+
+template <class T>
+struct lambda<
+    T
+  , typename enable_if<
+        parameter::aux::is_name_tag<T>, parameter::aux::lambda_tag
+    >::type
+>
+{
+    typedef true_ is_le;
+    typedef bind2< quote2<parameter::value_type>, arg<2>, T > result_;
+    typedef result_ type;
+};
+
+}} // namespace boost::mpl
+
+# endif
+
 # if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 # include <boost/preprocessor/detail/split.hpp>
 // From Paul Mensonides

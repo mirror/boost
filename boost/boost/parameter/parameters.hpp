@@ -251,9 +251,12 @@ namespace aux
       typedef typename mpl::eval_if<
           is_same<bound, void_>
         , typename ParameterRequirements::has_default
-        , mpl::apply1<
-              typename ParameterRequirements::predicate
+        , mpl::apply_wrap2<
+              typename mpl::lambda<
+                  typename ParameterRequirements::predicate, lambda_tag
+              >::type
             , bound
+            , ArgList
           >
       >::type type;
 #else
@@ -261,7 +264,7 @@ namespace aux
           bool, value = (
               sizeof(
                   aux::to_yesno(
-                      ArgList::satisfies((ParameterRequirements*)0)
+                      ArgList::satisfies((ParameterRequirements*)0, (ArgList*)0)
                   )
               ) == sizeof(yes_tag)
           )
@@ -302,6 +305,8 @@ namespace aux
   >
   struct deduce_tag;
 
+  // Tag type passed to MPL lambda.
+  struct lambda_tag;
 
   // Helper for deduce_tag<> below.
   template <
@@ -315,8 +320,12 @@ namespace aux
   {
       typedef typename DeducedArgs::spec spec;
 
-      typedef typename mpl::apply2<
-          typename spec::predicate, Argument, ArgumentPack
+      typedef typename mpl::apply_wrap2<
+          typename mpl::lambda<
+              typename spec::predicate, lambda_tag
+          >::type
+        , Argument
+        , ArgumentPack
       >::type condition;
 
       // Deduced parameter matches several arguments.

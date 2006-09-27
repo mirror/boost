@@ -32,6 +32,9 @@ template<class T> struct keyword;
 
 namespace aux {
 
+// Tag type passed to MPL lambda.
+struct lambda_tag;
+
 //
 // Structures used to build the tuple of actual arguments.  The
 // tuple is a nested cons-style list of arg_list specializations
@@ -137,9 +140,9 @@ struct empty_arg_list
     // was found if we match this overload, so unless that parameter
     // has a default, we indicate that the actual arguments don't
     // match the function's requirements.
-    template <class ParameterRequirements>
+    template <class ParameterRequirements, class ArgPack>
     static typename ParameterRequirements::has_default
-    satisfies(ParameterRequirements*);
+    satisfies(ParameterRequirements*, ArgPack*);
 
     // MPL sequence support
     typedef empty_arg_list type;   // convenience
@@ -382,10 +385,14 @@ struct arg_list : Next
     // compile-time computation and never really called, so a
     // declaration is enough.
     //
-    template <class HasDefault, class Predicate>
-    static typename mpl::apply1<Predicate, value_type>::type
+    template <class HasDefault, class Predicate, class ArgPack>
+    static typename mpl::apply_wrap2<
+        typename mpl::lambda<Predicate, lambda_tag>::type
+      , value_type, ArgPack
+    >::type
     satisfies(
         parameter_requirements<key_type,Predicate,HasDefault>*
+      , ArgPack*
     );
 
     // Builds an overload set including satisfies functions defined

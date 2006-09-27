@@ -152,7 +152,7 @@ struct argument_pack
     >::type type;
 };
 
-# if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+# if 1 //BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 // Works around VC6 problem where it won't accept rvalues.
 template <class T>
 T& as_lvalue(T& value, long)
@@ -218,6 +218,8 @@ struct funptr_predicate<void**>
 {};
 
 # endif
+
+struct use_default_tag {};
 
 }}} // namespace boost::parameter::aux
 
@@ -682,33 +684,24 @@ struct funptr_predicate<void**>
     )
 
 // Generates a keyword | default expression.
-# if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-#  define BOOST_PARAMETER_FUNCTION_DEFAULT_EVAL_DEFAULT(arg, tag_namespace) \
+# define BOOST_PARAMETER_FUNCTION_DEFAULT_EVAL_DEFAULT(arg, tag_namespace) \
     boost::parameter::keyword< \
         tag_namespace::BOOST_PARAMETER_FN_ARG_KEYWORD(arg) \
-    >::get() | BOOST_PARAMETER_FN_ARG_DEFAULT(arg)
-# else // For some reason, VC6 won't accept rvalues in this context.
-#  define BOOST_PARAMETER_FUNCTION_DEFAULT_EVAL_DEFAULT(arg, tag_namespace) \
-    boost::parameter::keyword< \
-        tag_namespace::BOOST_PARAMETER_FN_ARG_KEYWORD(arg) \
-    >::get() | boost::parameter::aux::as_lvalue(BOOST_PARAMETER_FN_ARG_DEFAULT(arg), 0L)
-# endif
+    >::get() | boost::parameter::aux::use_default_tag()
 
 # define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_GET_ARG(arg, tag_ns) \
-    BOOST_PARAMETER_FUNCTION_CAST( \
-        args[ \
-            BOOST_PARAMETER_FUNCTION_DEFAULT_EVAL_DEFAULT( \
-                arg, tag_ns \
-            ) \
-        ] \
-      , BOOST_PARAMETER_FN_ARG_PRED(arg) \
-    )
+    args[ \
+        BOOST_PARAMETER_FUNCTION_DEFAULT_EVAL_DEFAULT( \
+            arg, tag_ns \
+        ) \
+    ] \
 
 # define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_BODY(name, n, split_args, tag_namespace) \
     { \
         return BOOST_PARAMETER_FUNCTION_DEFAULT_NAME(name)( \
             (ResultType(*)())0 \
           , args \
+          , 0L \
             BOOST_PARAMETER_FUNCTION_DEFAULT_ARGUMENTS( \
                 BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_PARAMETER \
               , n \
@@ -724,6 +717,53 @@ struct funptr_predicate<void**>
         ); \
     }
 
+# define BOOST_PARAMETER_FUNCTION_DEFAULT_EVAL_ACTUAL_DEFAULT(arg) \
+    BOOST_PARAMETER_FUNCTION_CAST( \
+        boost::parameter::aux::as_lvalue(BOOST_PARAMETER_FN_ARG_DEFAULT(arg), 0L) \
+      , BOOST_PARAMETER_FN_ARG_PRED(arg) \
+    )
+
+# define BOOST_PARAMETER_FUNCTION_DEFAULT_EVAL_DEFAULT_BODY(name, n, split_args, tag_ns, const_) \
+    template < \
+        class ResultType \
+      , class Args \
+        BOOST_PARAMETER_FUNCTION_DEFAULT_ARGUMENTS( \
+            BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_TEMPLATE_ARG \
+          , BOOST_PP_INC(n) \
+          , split_args \
+        ) \
+    > \
+    BOOST_PARAMETER_MEMBER_FUNCTION_STATIC(name) \
+    ResultType BOOST_PARAMETER_FUNCTION_DEFAULT_NAME(name)( \
+        ResultType(*)() \
+      , Args const& args \
+      , long \
+        BOOST_PARAMETER_FUNCTION_DEFAULT_ARGUMENTS( \
+            BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_ARG \
+          , BOOST_PP_INC(n) \
+          , split_args \
+        ) \
+      , boost::parameter::aux::use_default_tag \
+    ) BOOST_PP_EXPR_IF(const_, const) \
+    { \
+        return BOOST_PARAMETER_FUNCTION_DEFAULT_NAME(name)( \
+            (ResultType(*)())0 \
+          , args \
+          , 0L \
+            BOOST_PARAMETER_FUNCTION_DEFAULT_ARGUMENTS( \
+                BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_PARAMETER \
+              , BOOST_PP_INC(n) \
+              , split_args \
+            ) \
+          , BOOST_PARAMETER_FUNCTION_DEFAULT_EVAL_ACTUAL_DEFAULT( \
+                BOOST_PP_SEQ_ELEM( \
+                    BOOST_PP_SUB(BOOST_PP_TUPLE_ELEM(4,2,split_args), BOOST_PP_INC(n)) \
+                  , BOOST_PP_TUPLE_ELEM(4,3,split_args) \
+                ) \
+            ) \
+        ); \
+    }
+
 // Produces a forwarding layer in the default evaluation machine.
 //
 // data is a tuple:
@@ -734,35 +774,60 @@ struct funptr_predicate<void**>
 //
 //   (required_count, required_args, optional_count, required_args)
 //
-# define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION(z, n, data) \
+
+
+// defines the actual function body for BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION below.
+# define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION0(z, n, data) \
     template < \
         class ResultType \
       , class Args \
         BOOST_PARAMETER_FUNCTION_DEFAULT_ARGUMENTS( \
             BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_TEMPLATE_ARG \
           , n \
-          , BOOST_PP_TUPLE_ELEM(4,1,data) \
+          , BOOST_PP_TUPLE_ELEM(5,1,data) \
         ) \
     > \
-    BOOST_PARAMETER_MEMBER_FUNCTION_STATIC(BOOST_PP_TUPLE_ELEM(4,0,data)) \
-    ResultType BOOST_PARAMETER_FUNCTION_DEFAULT_NAME(BOOST_PP_TUPLE_ELEM(4,0,data))( \
+    BOOST_PARAMETER_MEMBER_FUNCTION_STATIC(BOOST_PP_TUPLE_ELEM(5,0,data)) \
+    ResultType BOOST_PARAMETER_FUNCTION_DEFAULT_NAME(BOOST_PP_TUPLE_ELEM(5,0,data))( \
         ResultType(*)() \
       , Args const& args \
+      , int \
         BOOST_PARAMETER_FUNCTION_DEFAULT_ARGUMENTS( \
             BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_ARG \
           , n \
-          , BOOST_PP_TUPLE_ELEM(4,1,data) \
+          , BOOST_PP_TUPLE_ELEM(5,1,data) \
         ) \
-    ) BOOST_PP_EXPR_IF(BOOST_PP_TUPLE_ELEM(4,2,data), const) \
+    ) BOOST_PP_EXPR_IF(BOOST_PP_TUPLE_ELEM(5,2,data), const) \
     BOOST_PP_IF( \
         n \
       , BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_BODY \
       , ; BOOST_PP_TUPLE_EAT(4) \
     )( \
-        BOOST_PP_TUPLE_ELEM(4,0,data) \
+        BOOST_PP_TUPLE_ELEM(5,0,data) \
       , n \
-      , BOOST_PP_TUPLE_ELEM(4,1,data) \
-      , BOOST_PP_TUPLE_ELEM(4,3,data) \
+      , BOOST_PP_TUPLE_ELEM(5,1,data) \
+      , BOOST_PP_TUPLE_ELEM(5,3,data) \
+    )
+
+# define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION(z, n, data) \
+    BOOST_PP_IF( \
+        BOOST_PP_AND( \
+            BOOST_PP_NOT(n) \
+          , BOOST_PP_TUPLE_ELEM(5,4,data) \
+        ) \
+      , BOOST_PP_TUPLE_EAT(3) \
+      , BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION0 \
+    )(z, n, data) \
+    BOOST_PP_IF( \
+        BOOST_PP_EQUAL(n, BOOST_PP_TUPLE_ELEM(4,2,BOOST_PP_TUPLE_ELEM(5,1,data))) \
+      , BOOST_PP_TUPLE_EAT(5) \
+      , BOOST_PARAMETER_FUNCTION_DEFAULT_EVAL_DEFAULT_BODY \
+    )( \
+        BOOST_PP_TUPLE_ELEM(5,0,data) \
+      , n \
+      , BOOST_PP_TUPLE_ELEM(5,1,data) \
+      , BOOST_PP_TUPLE_ELEM(5,3,data) \
+      , BOOST_PP_TUPLE_ELEM(5,2,data) \
     )
 
 # define BOOST_PARAMETER_FUNCTION_DEFAULT_GET_ARG(r, tag_ns, arg) \
@@ -785,6 +850,7 @@ struct funptr_predicate<void**>
         return BOOST_PARAMETER_FUNCTION_DEFAULT_NAME(name)( \
             (typename BOOST_PARAMETER_FUNCTION_RESULT_NAME(name)<Args>::type(*)())0 \
           , args \
+          , 0L \
  \
             BOOST_PP_SEQ_FOR_EACH( \
                 BOOST_PARAMETER_FUNCTION_DEFAULT_GET_ARG \
@@ -800,10 +866,10 @@ struct funptr_predicate<void**>
     name, split_args, skip_fwd_decl, const_, tag_namespace \
   ) \
     BOOST_PP_REPEAT_FROM_TO( \
-        skip_fwd_decl \
+        0 \
       , BOOST_PP_INC(BOOST_PP_TUPLE_ELEM(4, 2, split_args)) \
       , BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION \
-      , (name, split_args, const_, tag_namespace) \
+      , (name, split_args, const_, tag_namespace, skip_fwd_decl) \
     ) \
  \
     BOOST_PARAMETER_FUNCTION_INITIAL_DISPATCH_FUNCTION(name, split_args, const_, tag_namespace) \
@@ -821,6 +887,7 @@ struct funptr_predicate<void**>
     ResultType BOOST_PARAMETER_FUNCTION_DEFAULT_NAME(name)( \
         ResultType(*)() \
       , Args const& args \
+      , int \
         BOOST_PARAMETER_FUNCTION_DEFAULT_ARGUMENTS( \
             BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_ARG \
           , 0 \
