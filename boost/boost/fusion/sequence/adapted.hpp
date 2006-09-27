@@ -9,6 +9,7 @@
 #if !defined(BOOST_FUSION_ADAPTED_30122005_1420)
 #define BOOST_FUSION_ADAPTED_30122005_1420
 
+#include <boost/fusion/sequence/adapted/boost_tuple.hpp>
 #include <boost/fusion/sequence/adapted/std_pair.hpp>
 #include <boost/fusion/sequence/adapted/array.hpp>
 #include <boost/fusion/sequence/adapted/mpl.hpp>

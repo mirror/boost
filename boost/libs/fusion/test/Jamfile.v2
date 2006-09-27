@@ -45,6 +45,7 @@ import testing ;
     [ run sequence/as_map.cpp :  :  :  : ]
     [ run sequence/as_set.cpp :  :  :  : ]
     [ run sequence/as_vector.cpp :  :  :  : ]
+    [ run sequence/boost_tuple.cpp :  :  :  : ]
     [ run sequence/cons.cpp :  :  :  : ]
     [ run sequence/filter_view.cpp :  :  :  : ]
     [ run sequence/io.cpp :  :  :  : ]

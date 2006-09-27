@@ -20,6 +20,20 @@ namespace boost
 {
     template <typename T, std::size_t N>
     class array; // forward
+
+    namespace tuples
+    {
+        struct null_type;
+        
+        template <
+            class T0, class T1, class T2, class T3, class T4, 
+            class T5, class T6, class T7, class T8, class T9
+        >
+        class tuple;
+    
+        template <class Head, class Tail>
+        struct cons;
+    }
 }
 
 namespace boost { namespace fusion
@@ -44,6 +58,18 @@ namespace boost { namespace fusion
         {
             typedef typename Sequence::fusion_tag type;
         };
+
+        template <
+            class T0, class T1, class T2, class T3, class T4, 
+            class T5, class T6, class T7, class T8, class T9
+        >
+        struct tag_of<tuples::tuple<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9> >;
+
+        template <class Head, class Tail>
+        struct tag_of<tuples::cons<Head, Tail> >;
+
+        template <>
+        struct tag_of<tuples::null_type>;
 
         template <typename T, std::size_t N>
         struct tag_of<boost::array<T, N> >;

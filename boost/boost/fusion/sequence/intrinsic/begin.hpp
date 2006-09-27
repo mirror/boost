@@ -14,6 +14,7 @@ namespace boost { namespace fusion
 {
     // Special tags:
     struct sequence_facade_tag; // iterator facade tag
+    struct boost_tuple_tag; // boost::tuples::tuple tag
     struct array_tag; // boost::array tag
     struct mpl_sequence_tag; // mpl sequence tag
     struct std_pair_tag; // std::pair tag
@@ -33,6 +34,9 @@ namespace boost { namespace fusion
             template <typename Sequence>
             struct apply : Sequence::template begin<Sequence> {};
         };
+
+        template <>
+        struct begin_impl<boost_tuple_tag>;
 
         template <>
         struct begin_impl<array_tag>;
