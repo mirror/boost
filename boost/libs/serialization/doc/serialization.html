@@ -533,14 +533,18 @@ will have to be overridden.  Here is a simple example:
 class my_class {
 private:
     friend class boost::serialization::access;
-    int member;
+    const int m_attribute;  // some immutable aspect of the instance
+    int m_state;            // mutable state of this instance
     template&lt;class Archive&gt;
     void serialize(Archive &amp;ar, const unsigned int file_version){
-        ar &amp; member;
+        ar &amp; m_state;
     }
 public:
-    my_class(int m) :
-        member(m)
+    // no default construct guarentees that no invalid object
+    // ever exists
+    my_class(int attribute) :
+        m_attribute(attribute),
+        m_state(0)
     {}
 };
 </code></pre>
@@ -552,7 +556,7 @@ inline void save_construct_data(
     Archive &amp; ar, const my_class * t, const unsigned int file_version
 ){
     // save data required to construct instance
-    ar &lt;&lt; t-&gt;member;
+    ar &lt;&lt; t-&gt;m_attribute;
 }
 
 template&lt;class Archive&gt;
@@ -560,10 +564,10 @@ inline void load_construct_data(
     Archive &amp; ar, my_class * t, const unsigned int file_version
 ){
     // retrieve data from archive required to construct new instance
-    int m;
-    ar &gt;&gt; m;
+    int attribute;
+    ar &gt;&gt; attribute;
     // invoke inplace constructor to initialize instance of my_class
-    ::new(t)my_class(m);
+    ::new(t)my_class(attribute);
 }
 }} // namespace ...
 </code></pre>
