@@ -128,6 +128,11 @@ public:
         archive::save(* this, t.const_value());
         save_end(t.name());
     }
+protected:
+    // generally speaking, these archives cannot be destroyed through
+    // the base class pointer.  This is because there is no obvious way
+    // to forward to the "true" destructor
+    ~polymorphic_oarchive(){}
 public:
     // utility functions implemented by all legal archives
     virtual unsigned int get_flags() const = 0;

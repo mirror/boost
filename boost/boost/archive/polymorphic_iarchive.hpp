@@ -128,6 +128,11 @@ public:
         archive::load(* this, t.value());
         load_end(t.name());
     }
+protected:
+    // generally speaking, these archives cannot be destroyed through
+    // the base class pointer.  This is because there is no way to
+    // forward to the "true" destructor
+    ~polymorphic_iarchive(){}
 public:
     // utility function implemented by all legal archives
     virtual void set_library_version(unsigned int archive_library_version) = 0;
