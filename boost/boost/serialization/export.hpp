@@ -27,9 +27,9 @@
 #include <boost/preprocessor/stringize.hpp>
 
 #include <boost/archive/detail/dynamically_initialized.hpp>
-#include <boost/serialization/force_include.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/is_abstract.hpp>
+
 #include <boost/archive/detail/register_archive.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/and.hpp>
@@ -41,28 +41,20 @@ namespace boost {
 namespace archive {
 namespace detail {
 
-// forward template declarations
 class basic_pointer_iserializer;
-template<class Archive, class T>
-BOOST_DLLEXPORT const basic_pointer_iserializer &
-instantiate_pointer_iserializer(Archive * ar, T *) BOOST_USED;
-
 class basic_pointer_oserializer;
-template<class Archive, class T>
-BOOST_DLLEXPORT const basic_pointer_oserializer &
-instantiate_pointer_oserializer(Archive * ar, T *) BOOST_USED;
 
 template <class Archive, class Serializable>
 struct export_impl
 {
-    static void enable_load(mpl::true_)
-    {
-        instantiate_pointer_iserializer((Archive*)0,(Serializable*)0);
+    static const basic_pointer_iserializer &
+    enable_load(mpl::true_){
+        return pointer_iserializer<Archive, Serializable>::get_instance();
     }
 
-    static void enable_save(mpl::true_)
-    {
-        instantiate_pointer_oserializer((Archive*)0,(Serializable*)0);
+    static const basic_pointer_oserializer &
+    enable_save(mpl::true_){
+        return pointer_oserializer<Archive, Serializable>::get_instance();
     }
 
     inline static void enable_load(mpl::false_) {}
@@ -102,7 +94,6 @@ BOOST_DLLEXPORT guid_initializer<T>::guid_initializer(const char *key)
     instantiate_ptr_serialization((T*)0, 0);
 }
 
-
 // On many platforms, naming a specialization of this template is
 // enough to cause its argument to be instantiated.
 template <void(*)()>
@@ -112,7 +103,7 @@ template <class Archive, class Serializable>
 struct ptr_serialization_support
 {
 # ifdef BOOST_MSVC
-    virtual void instantiate();
+    virtual BOOST_DLLEXPORT void instantiate() BOOST_USED;
     
 # elif defined(__BORLANDC__)
     
@@ -130,7 +121,7 @@ struct ptr_serialization_support
 };
 
 template <class Archive, class Serializable>
-void ptr_serialization_support<Archive,Serializable>::instantiate()
+BOOST_DLLEXPORT void ptr_serialization_support<Archive,Serializable>::instantiate()
 {
     typedef mpl::not_<serialization::is_abstract<Serializable> > concrete;
     
@@ -139,7 +130,7 @@ void ptr_serialization_support<Archive,Serializable>::instantiate()
 
     export_impl<Archive,Serializable>::enable_load(
         mpl::and_<concrete, BOOST_DEDUCED_TYPENAME Archive::is_loading>());
-}
+} BOOST_USED
 
 } // namespace detail
 } // namespace archive
@@ -149,7 +140,7 @@ void ptr_serialization_support<Archive,Serializable>::instantiate()
 namespace                                                                           \
 {                                                                                   \
     ::boost::archive::detail::guid_initializer<T> const&                            \
-          BOOST_PP_CAT(boost_serialization_guid_initializer_, __LINE__)             \
+        BOOST_PP_CAT(boost_serialization_guid_initializer_, __LINE__)               \
           = ::boost::archive::detail::guid_initializer<T>::get_instance(K);         \
 }
 
