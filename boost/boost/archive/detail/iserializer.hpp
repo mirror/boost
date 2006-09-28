@@ -130,7 +130,7 @@ public:
         return boost::serialization::tracking_level<T>::value 
                 == boost::serialization::track_always
             || boost::serialization::tracking_level<T>::value 
-                == boost::serialization::track_selectivly
+                == boost::serialization::track_selectively
             && serialized_as_pointer();
     }
     virtual unsigned int version() const {
@@ -143,7 +143,7 @@ public:
             >::type::is_polymorphic::type typex;
         return typex::value;
     }
-    static iserializer & instantiate(){
+    static iserializer & get_instance(){
         static iserializer instance;
         return instance;
     }
@@ -172,7 +172,7 @@ class pointer_iserializer
 {
 private:
     virtual const basic_iserializer & get_basic_serializer() const {
-        return iserializer<Archive, T>::instantiate();
+        return iserializer<Archive, T>::get_instance();
     }
     virtual BOOST_DLLEXPORT void load_object_ptr(
         basic_iarchive & ar, 
@@ -193,6 +193,7 @@ public:
     void (* const m)(Archive &, T &, const unsigned);
     boost::serialization::extended_type_info * (* e)();
     #endif
+    BOOST_DLLEXPORT static const pointer_iserializer & get_instance() BOOST_USED;
 };
 
 // note trick to be sure that operator new is using class specific
@@ -318,8 +319,14 @@ BOOST_DLLEXPORT pointer_iserializer<Archive, T>::pointer_iserializer() :
     )
 #endif
 {
-    iserializer<Archive, T> & bis = iserializer<Archive, T>::instantiate();
+    iserializer<Archive, T> & bis = iserializer<Archive, T>::get_instance();
     bis.set_bpis(this);
+}
+
+template<class Archive, class T>
+BOOST_DLLEXPORT const pointer_iserializer<Archive, T> &
+pointer_iserializer<Archive, T>::get_instance() {
+    return instance;
 }
 
 template<class Archive, class T>
@@ -353,7 +360,7 @@ struct load_non_pointer_type {
             // its not called that way - so fix it her
             typedef BOOST_DEDUCED_TYPENAME boost::remove_const<T>::type typex;
             void * x = & const_cast<typex &>(t);
-            ar.load_object(x, iserializer<Archive, T>::instantiate());
+            ar.load_object(x, iserializer<Archive, T>::get_instance());
         }
     };
 
@@ -506,7 +513,7 @@ struct load_array_type {
     }
 };
 
-
+#if 0
 // note bogus arguments to workaround msvc 6 silent runtime failure
 template<class Archive, class T>
 BOOST_DLLEXPORT 
@@ -525,6 +532,7 @@ instantiate_pointer_iserializer(
 ){
     return pointer_iserializer<Archive,T>::instance;
 }
+#endif
 
 } // detail
 

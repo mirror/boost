@@ -122,7 +122,7 @@ public:
 //        if(0 != (flags &  no_tracking))
 //            return false;
         return boost::serialization::tracking_level<T>::value == boost::serialization::track_always
-            || boost::serialization::tracking_level<T>::value == boost::serialization::track_selectivly
+            || boost::serialization::tracking_level<T>::value == boost::serialization::track_selectively
             && serialized_as_pointer();
     }
     virtual unsigned int version() const {
@@ -134,7 +134,7 @@ public:
         >::type::is_polymorphic::type typex;
         return typex::value;
     }
-    static oserializer & instantiate(){
+    static oserializer & get_instance(){
         static oserializer instance;
         return instance;
     }
@@ -162,7 +162,7 @@ class pointer_oserializer
 {
 private:
     virtual const basic_oserializer & get_basic_serializer() const {
-        return oserializer<Archive, T>::instantiate();
+        return oserializer<Archive, T>::get_instance();
     }
     virtual BOOST_DLLEXPORT void save_object_ptr(
         basic_oarchive & ar,
@@ -182,6 +182,7 @@ public:
     void (* const m)(Archive &, T &, const unsigned);
     boost::serialization::extended_type_info * (* e)();
     #endif
+    BOOST_DLLEXPORT static const pointer_oserializer & get_instance() BOOST_USED;
 };
 
 template<class Archive, class T>
@@ -219,8 +220,14 @@ BOOST_DLLEXPORT pointer_oserializer<Archive, T>::pointer_oserializer() :
 #endif
 {
     // make sure appropriate member function is instantiated
-    oserializer<Archive, T> & bos = oserializer<Archive, T>::instantiate();
+    oserializer<Archive, T> & bos = oserializer<Archive, T>::get_instance();
     bos.set_bpos(this);
+}
+
+template<class Archive, class T>
+BOOST_DLLEXPORT const pointer_oserializer<Archive, T> &
+pointer_oserializer<Archive, T>::get_instance() {
+    return instance;
 }
 
 template<class Archive, class T>
@@ -248,7 +255,7 @@ struct save_non_pointer_type {
     // serialization level and class version
     struct save_standard {
         static void invoke(Archive &ar, const T & t){
-            ar.save_object(& t, oserializer<Archive, T>::instantiate());
+            ar.save_object(& t, oserializer<Archive, T>::get_instance());
         }
     };
 
@@ -483,7 +490,7 @@ struct save_array_type
 };
 
 
-
+#if 0
 // note bogus arguments to workaround msvc 6 silent runtime failure
 // declaration to satisfy gcc
 template<class Archive, class T>
@@ -501,6 +508,7 @@ instantiate_pointer_oserializer(
 ){
     return pointer_oserializer<Archive, T>::instance;
 }
+#endif
 
 } // detail
 
