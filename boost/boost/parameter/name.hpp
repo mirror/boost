@@ -51,7 +51,7 @@ struct lambda<
 >
 {
     typedef true_ is_le;
-    typedef bind2< quote2<parameter::value_type>, arg<2>, T > result_;
+    typedef bind3< quote3<parameter::value_type>, arg<2>, T, void> result_;
     typedef result_ type;
 };
 
