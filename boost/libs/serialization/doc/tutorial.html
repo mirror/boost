@@ -539,8 +539,11 @@ This is described later in the manual.
 
     <dt><a href="../example/demo_xml.cpp" target="demo_xml_cpp">demo_xml.cpp</a>
     <dd>This is a variation the original demo which supports xml archives in addition
-    to the others.  The extra wrapping macros are needed to associate a data
-    item name with the corresponding xml tag. For more information see
+    to the others. The extra wrapping macro, BOOST_SERIALIZATION_NVP(name), is 
+    needed to associate a data item name with the corresponding xml 
+    tag. It is importanted that 'name' be a valid xml tag, else it 
+    will be impossible to restore the archive. 
+    For more information see
     <a target="detail" href="wrappers.html#nvp">Name-Value Pairs</a>.
     <a href="../example/demo_save.xml" target="demo_save_xml">Here</a>
     is what an xml archive looks like.
