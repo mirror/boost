@@ -45,8 +45,8 @@ BOOST_PARAMETER_FUNCTION((int), f, tag,
     )
 )
 {
-    BOOST_MPL_ASSERT((boost::is_same<x_type,int const>));
-    BOOST_MPL_ASSERT((boost::is_same<y_type,int const>));
+    BOOST_MPL_ASSERT((boost::is_same<x_type,int>));
+    BOOST_MPL_ASSERT((boost::is_same<y_type,int>));
     return 0;
 }
 
@@ -56,7 +56,8 @@ BOOST_PARAMETER_FUNCTION((int), g, tag,
     )
 )
 {
-    assert(count_instances::count == 1);
+    BOOST_MPL_ASSERT((boost::is_same<x_type,count_instances>));
+    assert(count_instances::count > 0);
     return 0;
 }
 
@@ -66,6 +67,7 @@ BOOST_PARAMETER_FUNCTION((int), h, tag,
     )
 )
 {
+    BOOST_MPL_ASSERT((boost::is_same<x_type,count_instances const>));
     assert(count_instances::count == 1);
     return 0;
 }

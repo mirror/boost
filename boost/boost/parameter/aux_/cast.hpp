@@ -8,7 +8,7 @@
 # if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
   && !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 #  include <boost/type_traits/add_reference.hpp>
-#  include <boost/type_traits/add_const.hpp>
+#  include <boost/type_traits/remove_const.hpp>
 # endif
 
 namespace boost { namespace parameter { namespace aux {
@@ -47,6 +47,12 @@ struct cast<void*>
     {
         return value;
     }
+
+    template <class U>
+    static U& remove_const(U& x)
+    {
+        return x;
+    }
 };
 
 #if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x580))
@@ -73,17 +79,25 @@ template <class T>
 struct cast<void(T)>
 {
     typedef typename boost::add_reference<
-        typename boost::add_const<T>::type
+        typename boost::remove_const<T>::type 
     >::type reference;
 
-    static reference execute(reference value)
+    static T execute(T value)
     {
         return value;
+    }
+
+    template <class U>
+    static reference remove_const(U const& x)
+    {
+        return const_cast<reference>(x);
     }
 };
 
 #  define BOOST_PARAMETER_FUNCTION_CAST(value, predicate) \
-    boost::parameter::aux::cast<void predicate>::execute(value)
+    boost::parameter::aux::cast<void predicate>::remove_const( \
+        boost::parameter::aux::cast<void predicate>::execute(value) \
+    )
 
 # endif
 
