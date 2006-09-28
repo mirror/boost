@@ -184,6 +184,10 @@ Similarly there exists a macro definition that permits us to write:
 <pre><code>
 BOOST_SERIALIZATION_BASE_OBJECT_NVP(my_base_class)
 </code></pre>
+
+Note that these macros must be used in the namespace of the class, 
+and without qualifying the namespace in the argument. 
+
 <p>
 Included is 
 <a href="../example/demo_xml.hpp" target="demo_xml_hpp">demo_xml.hpp<a>
