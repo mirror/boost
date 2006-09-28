@@ -24,16 +24,6 @@
 #include <boost/serialization/hash_collections_load_imp.hpp>
 #include <boost/serialization/split_free.hpp>
 
-// function specializations must be defined in the appropriate
-// namespace - boost::serialization
-/*
-#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-#define std _STLP_std
-#else
-#define std BOOST_std_EXTENSION_NAMESPACE
-#endif
-*/
-
 namespace boost { 
 namespace serialization {
 
@@ -183,8 +173,6 @@ inline void serialize(
 
 BOOST_SERIALIZATION_COLLECTION_TRAITS(BOOST_STD_EXTENSION_NAMESPACE::hash_set)
 BOOST_SERIALIZATION_COLLECTION_TRAITS(BOOST_STD_EXTENSION_NAMESPACE::hash_multiset)
-
-//#undef STD
 
 #endif // BOOST_HAS_HASH
 #endif // BOOST_SERIALIZATION_HASH_SET_HPP

@@ -24,14 +24,6 @@
 #include <boost/serialization/collections_load_imp.hpp>
 #include <boost/serialization/split_free.hpp>
 
-/*
-#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-#define STD _STLP_STD
-#else
-#define STD std
-#endif
-*/
-
 namespace boost { 
 namespace serialization {
 
@@ -124,6 +116,5 @@ inline void serialize(
 
 BOOST_SERIALIZATION_COLLECTION_TRAITS(std::set)
 BOOST_SERIALIZATION_COLLECTION_TRAITS(std::multiset)
-//#undef STD
 
 #endif // BOOST_SERIALIZATION_SET_HPP
