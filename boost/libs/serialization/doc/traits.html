@@ -256,6 +256,8 @@ addressable in one over several ways:
   <li>use the macro <code style="white-space: normal">BOOST_IS_ABSTRACT(my_class)</code> to indicate
   that the class is an abstract base class.  This will cause the compiler
   to avoid generating code that causes this error.
+  This macro must be used in the global namespace, with full namespace 
+  qualification of the argument class. 
 </ul>
 <h3><a name="typeinfo">Type Information Implementation</a></h3>
 This last trait is also related to the serialization of objects
