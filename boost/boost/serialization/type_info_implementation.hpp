@@ -29,8 +29,6 @@
 namespace boost {
 namespace serialization {
 
-struct basic_traits;
-
 // note that T and const T are folded into const T so that
 // there is only one table entry per type
 template<class T>
@@ -39,9 +37,11 @@ struct type_info_implementation {
     struct traits_class_typeinfo_implementation {
       typedef BOOST_DEDUCED_TYPENAME U::type_info_implementation::type type;
     };
+    // note: at least one compiler complained w/o the full qualification
+    // on basic traits below
     typedef 
         BOOST_DEDUCED_TYPENAME mpl::eval_if<
-            is_base_and_derived<basic_traits, T>,
+            is_base_and_derived<boost::serialization::basic_traits, T>,
             traits_class_typeinfo_implementation<T>,
         //else
             mpl::identity<
