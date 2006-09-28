@@ -89,7 +89,7 @@ namespace archive {
 #define BOOST_ARCHIVE_TEST text_archive.hpp
 #endif
 
-#include <boost/test/test_tools.hpp>
+#include <boost/test/test_exec_monitor.hpp>
 
 // the following is to ensure that when one of the libraries changes
 // BJAM rebuilds and relinks the test.
