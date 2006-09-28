@@ -17,11 +17,10 @@ namespace boost { namespace archive { namespace detail {
 template <class T>
 struct dynamically_initialized
 {
-    static BOOST_DLLEXPORT T& instance;
-    
- private:
-    static BOOST_DLLEXPORT T& get_instance();
-
+protected:
+    static T& instance;
+private:
+    static T& get_instance();
 #if defined(__GNUC__)
   // Workaround "warning: all member functions in class `
   // boost::archive::detail::dynamically_initialized<T>' are private"
@@ -31,11 +30,11 @@ struct dynamically_initialized
 };
 
 template <class T>
-BOOST_DLLEXPORT T& dynamically_initialized<T>::instance
+T& dynamically_initialized<T>::instance
   = dynamically_initialized<T>::get_instance();
 
 template <class T>
-BOOST_DLLEXPORT T& dynamically_initialized<T>::get_instance()
+T& dynamically_initialized<T>::get_instance()
 {
     static T instance_;
     return instance_;
