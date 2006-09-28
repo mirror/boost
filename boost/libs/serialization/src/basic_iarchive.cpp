@@ -294,7 +294,6 @@ basic_iarchive_impl::reset_object_address(
                 reinterpret_cast<std::size_t>(new_address) - member_displacement
             );
        }
-        ++i;
     }
 }
 
