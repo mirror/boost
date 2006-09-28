@@ -122,9 +122,10 @@ inline void load_collection(Archive & ar, Container &s)
     collection_size_type count;
     unsigned int item_version;
     ar >> BOOST_SERIALIZATION_NVP(count);
-    if(3 < ar.get_library_version()){
+    if(3 < ar.get_library_version())
         ar >> BOOST_SERIALIZATION_NVP(item_version);
-    }
+    else
+        item_version = 0;
     R rx;
     rx(s, count);
     std::size_t c = count;
