@@ -35,7 +35,7 @@ inline void load_hash_collection(Archive & ar, Container &s)
     s.clear();
     // retrieve number of elements
     unsigned int count;
-    unsigned int item_version;
+    unsigned int item_version(0);
     unsigned int bucket_count;;
     ar >> BOOST_SERIALIZATION_NVP(count);
     if(3 < ar.get_library_version()){
