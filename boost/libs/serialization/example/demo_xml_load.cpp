@@ -13,7 +13,7 @@
 
 #include <boost/archive/xml_iarchive.hpp>
 
-#include "demo_xml.hpp"
+#include "demo_gps.hpp"
 
 void
 restore_schedule(bus_schedule &s, const char * filename)

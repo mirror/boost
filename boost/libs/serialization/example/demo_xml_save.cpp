@@ -13,7 +13,7 @@
 
 #include <boost/archive/xml_oarchive.hpp>
 
-#include "demo_xml.hpp"
+#include "demo_gps.hpp"
 
 void save_schedule(const bus_schedule &s, const char * filename){
     // make an archive
