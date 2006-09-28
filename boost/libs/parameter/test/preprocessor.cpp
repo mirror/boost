@@ -470,7 +470,7 @@ int main()
     lazy_defaults(
         name = 0
       , value = 1
-      , index = 2
+      , test::index = 2
     );
 
     return 0;
