@@ -27,12 +27,6 @@
 
 namespace std {
 
-// and this native STL lib is old Dinkumware (has not defined _CPPLIB_VER)
-//#if (defined _STLPORT_VERSION) \
-//&& !(defined _STLP_USE_NO_IOSTREAMS) \
-//&& (defined _YVALS)  \
-//&& (defined __IBMCPP__)
-
 // define i/o operators for 64 bit integers
 template<class CharType>
 basic_ostream<CharType> & 
