@@ -91,9 +91,26 @@ public:
     // text file don't include the optional information 
     void save_override(const class_id_optional_type & /* t */, int){}
 
+    // note the following four overrides are necessary for some borland
+    // compilers which don't handle BOOST_STRONG_TYPE properly.
+    void save_override(const version_type & t, int){
+        // note:t.t resolves borland ambguity
+        unsigned int x = t.t;
+        * this->This() << x;
+    }
+    void save_override(const class_id_type & t, int){
+        // note:t.t resolves borland ambguity
+        int x = t.t;
+        * this->This() << x;
+    }
+    void save_override(const class_id_reference_type & t, int){
+        // note:t.t resolves borland ambguity
+        int x = t.t;
+        * this->This() << x;
+    }
     void save_override(const class_name_type & t, int){
-                const std::string s(t);
-                * this->This() << s;
+        const std::string s(t);
+        * this->This() << s;
     }
 
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
