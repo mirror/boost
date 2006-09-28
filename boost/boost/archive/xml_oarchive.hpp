@@ -48,9 +48,9 @@ public:
     friend class save_access;
 protected:
 #endif
-    void end_preamble(){
-        basic_xml_oarchive<Archive>::end_preamble();
-    }
+    //void end_preamble(){
+    //    basic_xml_oarchive<Archive>::end_preamble();
+    //}
     template<class T>
     void save(const T & t){
         basic_text_oprimitive<std::ostream>::save(t);
