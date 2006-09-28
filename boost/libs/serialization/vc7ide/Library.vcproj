@@ -375,6 +375,9 @@
 			Name="Serialization Implementations"
 			Filter="">
 			<File
+				RelativePath="..\..\..\boost\serialization\array.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\serialization\binary_object.hpp">
 			</File>
 			<File
@@ -540,6 +543,15 @@
 				RelativePath="..\..\..\boost\archive\detail\common_oarchive.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\archive\detail\dynamically_initialized.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\array\iarchive.hpp">
+			</File>
+			<File
+				RelativePath=".\iarray_serializer.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\archive\detail\interface_iarchive.hpp">
 			</File>
 			<File
@@ -552,6 +564,9 @@
 				RelativePath="..\..\..\boost\archive\detail\known_archive_types.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\boost\archive\array\oarchive.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\boost\archive\detail\oserializer.hpp">
 			</File>
 			<File
@@ -559,6 +574,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\detail\polymorphic_oarchive_impl.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\detail\register_archive.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\serialization\serialization.hpp">

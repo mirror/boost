@@ -38,7 +38,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc7/$(OutDir)/runtime-link-static/libboost_serialization.lib $(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_wserialization.lib/vc7/$(OutDir)/runtime-link-static/libboost_wserialization.lib $(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc7/$(OutDir)/runtime-link-static/libboost_test_exec_monitor.lib"
 				LinkIncremental="2"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"
@@ -93,7 +92,6 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc7/$(OutDir)/runtime-link-static/libboost_serialization.lib $(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_wserialization.lib/vc7/$(OutDir)/runtime-link-static/libboost_wserialization.lib $(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc7/$(OutDir)/runtime-link-static/libboost_test_exec_monitor.lib"
 				OutputFile="$(OutDir)/test_not_serializable.exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="FALSE"
