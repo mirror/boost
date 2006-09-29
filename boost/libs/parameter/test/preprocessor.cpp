@@ -77,7 +77,10 @@ BOOST_PARAMETER_FUNCTION((int), h, tag,
     )
 )
 {
-    BOOST_MPL_ASSERT((boost::is_same<index_type, int const>));
+# if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) \
+  && !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+    BOOST_MPL_ASSERT((boost::is_same<index_type, int>));
+# endif
 
     tester(
         name
@@ -99,8 +102,9 @@ BOOST_PARAMETER_FUNCTION((int), h2, tag,
     )
 )
 {
-# if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-    BOOST_MPL_ASSERT((boost::is_same<index_type, int const>));
+# if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) \
+  && !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+    BOOST_MPL_ASSERT((boost::is_same<index_type, int>));
 # endif
 
     tester(

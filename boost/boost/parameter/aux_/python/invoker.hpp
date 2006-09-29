@@ -85,9 +85,9 @@ struct invoker<0, M, R, Args>
 template <class M, class R, class T, class Args>
 struct member_invoker<0, M, R, T, Args>
 {
-    static R execute()
+    static R execute(T& self)
     {
-        return M()(boost::type<R>());
+        return M()(boost::type<R>(), self);
     }
 };
 

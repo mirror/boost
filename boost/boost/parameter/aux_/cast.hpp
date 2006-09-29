@@ -13,6 +13,8 @@
 
 namespace boost { namespace parameter { namespace aux {
 
+struct use_default_tag {};
+
 # if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
   || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 
@@ -42,6 +44,16 @@ struct cast;
 template <>
 struct cast<void*>
 {
+    static use_default_tag execute(use_default_tag)
+    {
+        return use_default_tag();
+    }
+
+    static use_default_tag remove_const(use_default_tag)
+    {
+        return use_default_tag();
+    }
+
     template <class U>
     static U& execute(U& value)
     {
@@ -81,6 +93,16 @@ struct cast<void(T)>
     typedef typename boost::add_reference<
         typename boost::remove_const<T>::type 
     >::type reference;
+
+    static use_default_tag execute(use_default_tag)
+    {
+        return use_default_tag();
+    }
+
+    static use_default_tag remove_const(use_default_tag)
+    {
+        return use_default_tag();
+    }
 
     static T execute(T value)
     {

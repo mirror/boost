@@ -219,8 +219,6 @@ struct funptr_predicate<void**>
 
 # endif
 
-struct use_default_tag {};
-
 }}} // namespace boost::parameter::aux
 
 # if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
@@ -690,11 +688,14 @@ struct use_default_tag {};
     >::get() | boost::parameter::aux::use_default_tag()
 
 # define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_GET_ARG(arg, tag_ns) \
-    args[ \
-        BOOST_PARAMETER_FUNCTION_DEFAULT_EVAL_DEFAULT( \
-            arg, tag_ns \
-        ) \
-    ] \
+    BOOST_PARAMETER_FUNCTION_CAST( \
+        args[ \
+            BOOST_PARAMETER_FUNCTION_DEFAULT_EVAL_DEFAULT( \
+                arg, tag_ns \
+            ) \
+        ] \
+      , BOOST_PARAMETER_FN_ARG_PRED(arg) \
+    )
 
 # define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_BODY(name, n, split_args, tag_namespace) \
     { \

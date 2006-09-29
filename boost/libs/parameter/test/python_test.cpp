@@ -98,6 +98,18 @@ struct g_fwd
 
 struct h_fwd
 {
+    template <class R, class T>
+    R operator()(boost::type<R>, T& self)
+    {
+        return self.h();
+    }
+
+    template <class R, class T, class A0>
+    R operator()(boost::type<R>, T& self, A0 const& a0)
+    {
+        return self.h(a0);
+    }
+
     template <class R, class T, class A0, class A1>
     R operator()(boost::type<R>, T& self, A0 const& a0, A1 const& a1)
     {
@@ -142,7 +154,7 @@ BOOST_PYTHON_MODULE(python_test_ext)
           , boost::parameter::python::function<
                 h_fwd
               , mpl::vector<
-                    X&, tag::x*(std::string), tag::y*(std::string)
+                    X&, tag::x**(std::string), tag::y**(std::string)
                 >
             >()
           , return_arg<>()
