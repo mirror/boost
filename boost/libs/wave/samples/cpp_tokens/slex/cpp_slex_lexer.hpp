@@ -387,9 +387,9 @@ lexer<IteratorT, PositionT>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(POUND, "#"),
     TOKEN_DATA(POUND_ALT, Q("%:")),
     TOKEN_DATA(POUND_TRIGRAPH, TRI("=")),
-    TOKEN_DATA(ANY, "."),
     TOKEN_DATA(ANY_TRIGRAPH, TRI(Q("/"))),
-    { token_id(0) }       // this should be the last entry
+    TOKEN_DATA(ANY, "."),     // this should be the last recognized token
+    { token_id(0) }           // this should be the last entry
 };
 
 ///////////////////////////////////////////////////////////////////////////////

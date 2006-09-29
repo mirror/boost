@@ -114,7 +114,6 @@ lexer<IteratorT, PositionT>::lexer(IteratorT const &first,
 {
     using namespace std;        // some systems have memset in std
     memset(&scanner, '\0', sizeof(Scanner));
-    scanner.fd = -1;
     scanner.eol_offsets = aq_create();
     if (first != last) {
         scanner.first = scanner.act = (uchar *)&(*first);
@@ -126,9 +125,9 @@ lexer<IteratorT, PositionT>::lexer(IteratorT const &first,
     scanner.file_name = filename.c_str();
     
 #if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
-    scanner.enable_ms_extensions = 1;
+    scanner.enable_ms_extensions = true;
 #else
-    scanner.enable_ms_extensions = 0;
+    scanner.enable_ms_extensions = false;
 #endif
 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
@@ -136,9 +135,9 @@ lexer<IteratorT, PositionT>::lexer(IteratorT const &first,
 #endif
 
 #if BOOST_WAVE_SUPPORT_IMPORT_KEYWORD != 0
-    scanner.enable_import_keyword = boost::wave::need_c99(language) ? 0 : 1;
+    scanner.enable_import_keyword = !boost::wave::need_c99(language);
 #else
-    scanner.enable_import_keyword = 0;
+    scanner.enable_import_keyword = false;
 #endif
 
     scanner.detect_pp_numbers = boost::wave::need_prefer_pp_numbers(language);

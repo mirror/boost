@@ -64,13 +64,21 @@
 
 #include <iostream>
 
-#define BOOST_WAVE_RET(i)                                                     \
+///////////////////////////////////////////////////////////////////////////////
+#define BOOST_WAVE_UPDATE_CURSOR()                                            \
     {                                                                         \
         s->line += count_backslash_newlines(s, cursor);                       \
         s->curr_column = cursor.column;                                       \
         s->cur = cursor;                                                      \
         s->lim = limit;                                                       \
         s->ptr = marker;                                                      \
+    }                                                                         \
+    /**/
+
+///////////////////////////////////////////////////////////////////////////////
+#define BOOST_WAVE_RET(i)                                                     \
+    {                                                                         \
+        BOOST_WAVE_UPDATE_CURSOR()                                            \
         if (s->cur > s->lim)                                                  \
             return T_EOF;     /* may happen for empty files */                \
         return (i);                                                           \
@@ -87,13 +95,7 @@ namespace re2clex {
 
 int get_one_char(Scanner *s)
 {
-    if (s->fd != -1) {
-    uchar val;
-    
-        if (read(s->fd, &val, sizeof(val)))
-            return val;
-    }
-    else if (0 != s->act) {
+    if (0 != s->act) {
         RE2C_ASSERT(s->first != 0 && s->last != 0);
         RE2C_ASSERT(s->first <= s->act && s->act <= s->last);
         if (s->act < s->last) 
@@ -104,10 +106,7 @@ int get_one_char(Scanner *s)
 
 std::ptrdiff_t rewind_stream (Scanner *s, int cnt)
 {
-    if (s->fd != -1) {
-        return lseek(s->fd, cnt, SEEK_CUR);
-    }
-    else if (0 != s->act) {
+    if (0 != s->act) {
         RE2C_ASSERT(s->first != 0 && s->last != 0);
         s->act += cnt;
         RE2C_ASSERT(s->first <= s->act && s->act <= s->last);
@@ -233,13 +232,7 @@ uchar *fill(Scanner *s, uchar *cursor)
             s->bot = buf;
         }
 
-        if (s->fd != -1) {
-            if((cnt = read(s->fd, (char*) s->lim, BOOST_WAVE_BSIZE)) != BOOST_WAVE_BSIZE)
-            {
-                s->eof = &s->lim[cnt]; *(s->eof)++ = '\0';
-            }
-        }
-        else if (s->act != 0) {
+        if (s->act != 0) {
             cnt = s->last - s->act;
             if (cnt > BOOST_WAVE_BSIZE)
                 cnt = BOOST_WAVE_BSIZE;
@@ -405,6 +398,8 @@ struct uchar_wrapper
 ///////////////////////////////////////////////////////////////////////////////
 boost::wave::token_id scan(Scanner *s)
 {
+    BOOST_ASSERT(0 != s->error_proc);     // error handler must be given
+    
     uchar_wrapper cursor (s->tok = s->cur, s->column = s->curr_column);
     uchar_wrapper marker (s->ptr);
     uchar_wrapper limit (s->lim);

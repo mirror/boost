@@ -74,12 +74,12 @@ private:
 //  Helper macro to register rules for debugging
 #if HANNIBAL_DUMP_PARSE_TREE != 0
 #define HANNIBAL_REGISTER_RULE(r)                                             \
-    BOOST_SPIRIT_DEBUG_NODE(r);\
+    BOOST_SPIRIT_DEBUG_NODE(r);                                               \
     self.declare_rule(r, #r)                                                  \
     /**/
 #else
 #define HANNIBAL_REGISTER_RULE(r)                                             \
-    BOOST_SPIRIT_DEBUG_NODE(r) \
+    BOOST_SPIRIT_DEBUG_NODE(r)                                                \
     /**/
 #endif
 
@@ -345,7 +345,7 @@ struct translation_unit_grammar
             HANNIBAL_REGISTER_RULE( conditional_expression);
             conditional_expression
                 =   logical_or_expression 
-                    >>  !(   
+                    >> !(   
                                 ch_p(T_QUESTION_MARK) 
                             >>  expression 
                             >>  ch_p(T_COLON) 
@@ -356,7 +356,7 @@ struct translation_unit_grammar
             HANNIBAL_REGISTER_RULE( ta_conditional_expression);
             ta_conditional_expression
                 =   ta_logical_or_expression 
-                    >>  !(   
+                    >> !(   
                                 ch_p(T_QUESTION_MARK) 
                             >>  ta_expression 
                             >>  ch_p(T_COLON) 

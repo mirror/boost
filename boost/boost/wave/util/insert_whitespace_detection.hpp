@@ -223,7 +223,7 @@ public:
         case T_FLOATLIT:
             return impl::handle_floatlit(prev, beforeprev); 
         case T_STRINGLIT:
-            if (TOKEN_FROM_ID('L', UnknownTokenType) == prev)       // 'L'
+            if (TOKEN_FROM_ID('L', IdentifierTokenType) == prev)       // 'L'
                 return true;
             break;
         case T_LEFTBRACE_ALT:

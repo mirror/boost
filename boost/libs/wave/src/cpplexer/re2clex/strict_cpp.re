@@ -18,12 +18,13 @@
 /*!re2c
 re2c:indent:string = "    "; 
 any                = [\t\v\f\r\n\040-\377];
+anyctrl            = [\001-\037];
 OctalDigit         = [0-7];
 Digit              = [0-9];
 HexDigit           = [a-fA-F0-9];
 Integer            = (("0" [xX] HexDigit+) | ("0" OctalDigit*) | ([1-9] Digit*));
 ExponentStart      = [Ee] [+-];
-ExponentPart       = [Ee] [+-]? Digit+;
+ExponentPart       = ExponentStart? Digit+;
 FractionalConstant = (Digit* "." Digit+) | (Digit+ ".");
 FloatingSuffix     = [fF] [lL]? | [lL] [fF]?;
 IntegerSuffix      = [uU] [lL]? | [lL] [uU]?;
@@ -33,7 +34,7 @@ EscapeSequence     = Backslash ([abfnrtv?'"] | Backslash | "x" HexDigit+ | Octal
 HexQuad            = HexDigit HexDigit HexDigit HexDigit;
 UniversalChar      = Backslash ("u" HexQuad | "U" HexQuad HexQuad);
 Newline            = "\r\n" | "\n" | "\r";
-PPSpace            = ([ \t]|("/*"(any\[*]|Newline|("*"+(any\[*/]|Newline)))*"*"+"/"))*;
+PPSpace            = ([ \t\f\v]|("/*"(any\[*]|Newline|("*"+(any\[*/]|Newline)))*"*"+"/"))*;
 Pound              = "#" | "??=" | "%:";
 NonDigit           = [a-zA-Z_] | UniversalChar;
 */
@@ -288,23 +289,20 @@ NonDigit           = [a-zA-Z_] | UniversalChar;
     {
         if(cursor != s->eof) 
         {
-            using namespace std;      // some systems have printf in std
-            if (0 != s->error_proc)
-                (*s->error_proc)(s, "'\\000' in input stream");
-            else
-                printf("Error: 0 in file\n");
+            BOOST_WAVE_UPDATE_CURSOR();     // adjust the input cursor
+            (*s->error_proc)(s, "invalid character '\\000' in input stream");
         }
         BOOST_WAVE_RET(T_EOF);
     }
 
-    any
+    anyctrl
     {
-        /* if (0 != s->error_proc)
-            (*s->error_proc)(s, "Unexpected character: '%c'", *s->tok);
-        else
-            printf("unexpected character: '%c'\n", *s->tok);
-        */
-        BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType));
+        // flag the error
+        BOOST_WAVE_UPDATE_CURSOR();     // adjust the input cursor
+        (*s->error_proc)(s, "invalid character '\\%03o' in input stream", 
+            *--YYCURSOR);
+
+//        BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType));
     }
 */
 
@@ -325,27 +323,26 @@ ccomment:
 
     "\000"
     {
-        using namespace std;      // some systems have printf in std
         if(cursor == s->eof) 
         {
-            if (s->error_proc)
-                (*s->error_proc)(s, "Unterminated comment");
-            else
-                printf("Error: Unterminated comment\n");
+            BOOST_WAVE_UPDATE_CURSOR();   // adjust the input cursor
+            (*s->error_proc)(s, "unterminated 'C' style comment");
         }
         else
         {
-            if (s->error_proc)
-                (*s->error_proc)(s, "'\\000' in input stream");
-            else
-                printf("Error: 0 in file");
+            --YYCURSOR;                   // next call returns T_EOF
+            BOOST_WAVE_UPDATE_CURSOR();   // adjust the input cursor
+            (*s->error_proc)(s, "invalid character: '\\000' in input stream");
         }
-        /* adjust cursor such next call returns T_EOF */
-        --YYCURSOR;
-        /* the comment is unterminated, but nevertheless its a comment */
-        BOOST_WAVE_RET(T_CCOMMENT);
     }
 
+    anyctrl
+    {
+        // flag the error
+        BOOST_WAVE_UPDATE_CURSOR();   // adjust the input cursor
+        (*s->error_proc)(s, "invalid character '\\%03o' in input stream", 
+            *--YYCURSOR);
+    }
 */
 
 cppcomment:
@@ -363,18 +360,25 @@ cppcomment:
 
     "\000"
     {
-        using namespace std;      // some systems have printf in std
-        if(cursor != s->eof) 
+        if(cursor == s->eof) 
         {
-            if (s->error_proc)
-                (*s->error_proc)(s, "'\\000' in input stream");
-            else
-                printf("Error: 0 in file");
+            BOOST_WAVE_UPDATE_CURSOR();     // adjust the input cursor
+            (*s->error_proc)(s, "Unterminated 'C++' style comment");
         }
-        /* adjust cursor such next call returns T_EOF */
-        --YYCURSOR;
-        /* the comment is unterminated, but nevertheless its a comment */
-        BOOST_WAVE_RET(T_CPPCOMMENT);
+        else
+        {
+            --YYCURSOR;                     // next call returns T_EOF
+            BOOST_WAVE_UPDATE_CURSOR();     // adjust the input cursor
+            (*s->error_proc)(s, "invalid character '\\000' in input stream");
+        }
+    }
+
+    anyctrl
+    {
+        // flag the error
+        BOOST_WAVE_UPDATE_CURSOR();     // adjust the input cursor
+        (*s->error_proc)(s, "invalid character '\\%03o' in input stream",
+            *--YYCURSOR);
     }
 */
 

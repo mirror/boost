@@ -370,6 +370,7 @@ scan(boost::wave::cpplexer::re2clex::Scanner *s)
 /*!re2c
 re2c:indent:string = "    "; 
 any                = [\t\v\f\r\n\040-\377];
+anyctrl            = [\000-\377];
 OctalDigit         = [0-7];
 Digit              = [0-9];
 HexDigit           = [a-fA-F0-9];
@@ -495,13 +496,8 @@ Pound              = "#" | "??=" | "%:";
         BOOST_WAVE_RET(T_EOF);
     }
 
-    any
+    anyctrl
     {
-        /* if (0 != s->error_proc)
-            (*s->error_proc)(s, "Unexpected character: '%c'", *s->tok);
-        else
-            printf("unexpected character: '%c'\n", *s->tok);
-        */
         BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType));
     }
 */
@@ -540,6 +536,14 @@ ccomment:
         --YYCURSOR;
         /* the comment is unterminated, but nevertheless its a comment */
         BOOST_WAVE_RET(T_CCOMMENT);
+    }
+
+    anyctrl
+    {
+        if (s->error_proc)
+            (*s->error_proc)(s, "invalid character in input stream");
+        else
+            printf("Error: 0 in file");
     }
 
 */
