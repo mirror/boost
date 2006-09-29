@@ -374,8 +374,8 @@ sig(5, 3);
 <para>This program will print out the following:</para>
 <programlisting>
 The sum is 8
-The difference is 2
 The product is 15
+The difference is 2
 The quotient is 1.66667
 </programlisting>
 <para>So any values that are given to <code>sig</code> when it is
