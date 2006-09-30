@@ -23,46 +23,6 @@ typedef std::map<stored_group, group_list, compare_type> slot_container_type;
 typedef slot_container_type::iterator group_iterator;
 typedef slot_container_type::const_iterator const_group_iterator;
 
-named_slot_map_iterator::named_slot_map_iterator() : slot_assigned(false) {}
-
-named_slot_map_iterator::
-named_slot_map_iterator(const named_slot_map_iterator& other)
-  : group(other.group), last_group(other.last_group),
-    slot_assigned(other.slot_assigned)
-{
-  if (slot_assigned) slot_ = other.slot_;
-}
-
-named_slot_map_iterator&
-named_slot_map_iterator::operator=(const named_slot_map_iterator& other)
-{
-  slot_assigned = other.slot_assigned;
-  group = other.group;
-  last_group = other.last_group;
-  if (slot_assigned) slot_ = other.slot_;
-  return *this;
-}
-
-
-connection_slot_pair& named_slot_map_iterator::dereference() const
-{ return *slot_; }
-
-void named_slot_map_iterator::increment()
-{
-  ++slot_;
-  if (slot_ == group->second.end()) {
-    ++group;
-    init_next_group();
-  }
-}
-
-bool
-named_slot_map_iterator::equal(const named_slot_map_iterator& other) const
-{
-  return (group == other.group
-          && (group == last_group
-              || slot_ == other.slot_));
-}
 
 #if BOOST_WORKAROUND(_MSC_VER, <= 1400)
 void named_slot_map_iterator::decrement() { assert(false); }
