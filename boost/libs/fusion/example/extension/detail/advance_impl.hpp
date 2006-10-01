@@ -9,12 +9,15 @@
 #if !defined(BOOST_FUSION_ADVANCE_IMPL_20060222_2150)
 #define BOOST_FUSION_ADVANCE_IMPL_20060222_2150
 
-namespace boost { namespace fusion {
-
+namespace example
+{
     struct example_struct_iterator_tag;
 
     template<typename Struct, int Pos>
     struct example_struct_iterator;
+}
+
+namespace boost { namespace fusion {
 
     namespace extension
     {
@@ -22,14 +25,14 @@ namespace boost { namespace fusion {
         struct advance_impl;
 
         template<>
-        struct advance_impl<example_struct_iterator_tag>
+        struct advance_impl<example::example_struct_iterator_tag>
         {
             template<typename Iterator, typename N>
             struct apply
             {
                 typedef typename Iterator::struct_type struct_type;
                 typedef typename Iterator::index index;
-                typedef example_struct_iterator<
+                typedef example::example_struct_iterator<
                     struct_type, index::value + N::value> type;
 
                 static type

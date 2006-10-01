@@ -15,12 +15,15 @@
 
 #include <string>
 
-namespace boost { namespace fusion {
-
+namespace example
+{
     struct example_struct_iterator_tag;
 
     template<typename Struct, int Pos>
     struct example_struct_iterator;
+}
+
+namespace boost { namespace fusion {
 
     namespace extension
     {
@@ -28,32 +31,32 @@ namespace boost { namespace fusion {
         struct deref_impl;
 
         template<>
-        struct deref_impl<example_struct_iterator_tag>
+        struct deref_impl<example::example_struct_iterator_tag>
         {
             template<typename Iterator>
             struct apply;
 
             template<typename Struct>
-            struct apply<example_struct_iterator<Struct, 0> >
+            struct apply<example::example_struct_iterator<Struct, 0> >
             {
                 typedef typename mpl::if_<
                     is_const<Struct>, std::string const&, std::string&>::type type;
 
                 static type
-                call(example_struct_iterator<Struct, 0> const& it)
+                call(example::example_struct_iterator<Struct, 0> const& it)
                 {
                     return it.struct_.name;
                 }
             };
 
             template<typename Struct>
-            struct apply<example_struct_iterator<Struct, 1> >
+            struct apply<example::example_struct_iterator<Struct, 1> >
             {
                 typedef typename mpl::if_<
                     is_const<Struct>, int const&, int&>::type type;
 
                 static type
-                call(example_struct_iterator<Struct, 1> const& it)
+                call(example::example_struct_iterator<Struct, 1> const& it)
                 {
                     return it.struct_.age;
                 }

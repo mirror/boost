@@ -14,9 +14,12 @@
 #include <boost/mpl/int.hpp>
 #include <boost/type_traits/is_const.hpp>
 
-namespace boost { namespace fusion {
-
+namespace example
+{
     struct example_sequence_tag;
+}
+
+namespace boost { namespace fusion {
 
     namespace extension
     {
@@ -24,7 +27,7 @@ namespace boost { namespace fusion {
         struct at_impl;
 
         template<>
-        struct at_impl<example_sequence_tag>
+        struct at_impl<example::example_sequence_tag>
         {
             template<typename Sequence, typename Key>
             struct apply;

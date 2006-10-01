@@ -9,22 +9,24 @@
 #if !defined(BOOST_FUSION_CATEGORY_OF_IMPL_20060223_2037)
 #define BOOST_FUSION_CATEGORY_OF_IMPL_20060223_2037
 
-namespace boost { namespace fusion {
+#include <boost/fusion/support/category_of.hpp>
 
-    struct random_access_traversal_tag;
+namespace example
+{
+    struct example_sequence_tag;
+}
+
+namespace boost { namespace fusion {
 
     namespace extension
     {
-        template<typename Tag>
-        struct category_of_impl;
-
         template<>
-        struct category_of_impl<example_sequence_tag>
+        struct category_of_impl<example::example_sequence_tag>
         {
             template<typename Sequence>
             struct apply
             {
-                typedef random_access_traversal_tag type;
+                struct type : random_access_traversal_tag, associative_sequence_tag {};
             };
         };
     }

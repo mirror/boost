@@ -19,9 +19,12 @@ namespace fields
     struct age;
 }
 
-namespace boost { namespace fusion {
-
+namespace example
+{
     struct example_sequence_tag;
+}
+
+namespace boost { namespace fusion {
 
     namespace extension
     {
@@ -29,7 +32,7 @@ namespace boost { namespace fusion {
         struct at_key_impl;
 
         template<>
-        struct at_key_impl<example_sequence_tag>
+        struct at_key_impl<example::example_sequence_tag>
         {
             template<typename Sequence, typename Key>
             struct apply;

@@ -11,9 +11,12 @@
 
 #include <boost/mpl/equal_to.hpp>
 
-namespace boost { namespace fusion {
-
+namespace example
+{
     struct example_struct_iterator_tag;
+}
+
+namespace boost { namespace fusion {
 
     namespace extension
     {
@@ -21,7 +24,7 @@ namespace boost { namespace fusion {
         struct equal_to_impl;
 
         template<>
-        struct equal_to_impl<example_struct_iterator_tag>
+        struct equal_to_impl<example::example_struct_iterator_tag>
         {
             template<typename It1, typename It2>
             struct apply

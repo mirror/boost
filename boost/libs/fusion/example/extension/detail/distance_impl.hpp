@@ -11,9 +11,12 @@
 
 #include <boost/mpl/minus.hpp>
 
-namespace boost { namespace fusion {
-
+namespace example
+{
     struct example_struct_iterator_tag;
+}
+
+namespace boost { namespace fusion {
 
     namespace extension
     {
@@ -21,7 +24,7 @@ namespace boost { namespace fusion {
         struct distance_impl;
 
         template<>
-        struct distance_impl<example_struct_iterator_tag>
+        struct distance_impl<example::example_struct_iterator_tag>
         {
             template<typename First, typename Last>
             struct apply

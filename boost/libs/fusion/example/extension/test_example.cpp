@@ -12,8 +12,8 @@
 
 #include <boost/fusion/sequence/intrinsic.hpp>
 #include <boost/fusion/support/is_sequence.hpp>
+#include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/iterator.hpp>
-#include <boost/fusion/support/is_associative.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/assert.hpp>
 
@@ -21,8 +21,12 @@ int main()
 {
     example::example_struct bert("bert", 99);
     using namespace boost::fusion;
+
     BOOST_MPL_ASSERT((traits::is_associative<example::example_struct>));
-    BOOST_TEST(*begin(bert) == "bert");
+    BOOST_MPL_ASSERT((traits::is_random_access<example::example_struct>));
+    BOOST_MPL_ASSERT((traits::is_sequence<example::example_struct>));
+
+    BOOST_TEST(deref(begin(bert)) == "bert");
     BOOST_TEST(*next(begin(bert)) == 99);
     BOOST_TEST(*prior(end(bert)) == 99);
     BOOST_TEST(*advance_c<1>(begin(bert)) == 99);
@@ -54,10 +58,6 @@ int main()
     BOOST_MPL_ASSERT((boost::is_same<result_of::value_at_key<example::example_struct, fields::age>::type, int>));
 
     BOOST_TEST(size(bert) == 2);
-
-    BOOST_MPL_ASSERT((boost::is_same<traits::category_of<example::example_struct>::type, random_access_traversal_tag>));
-
-    BOOST_MPL_ASSERT((traits::is_sequence<example::example_struct>));
 
     return boost::report_errors();
 }

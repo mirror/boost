@@ -11,12 +11,15 @@
 
 #include <string>
 
-namespace boost { namespace fusion {
-
+namespace example
+{
     struct example_struct_iterator_tag;
 
     template<typename Struct, int Pos>
     struct example_struct_iterator;
+}
+
+namespace boost { namespace fusion {
 
     namespace extension
     {
@@ -24,23 +27,22 @@ namespace boost { namespace fusion {
         struct value_of_impl;
 
         template<>
-        struct value_of_impl<example_struct_iterator_tag>
+        struct value_of_impl<example::example_struct_iterator_tag>
         {
             template<typename Iterator>
             struct apply;
 
             template<typename Struct>
-            struct apply<example_struct_iterator<Struct, 0> >
+            struct apply<example::example_struct_iterator<Struct, 0> >
             {
                 typedef std::string type;
             };
 
             template<typename Struct>
-            struct apply<example_struct_iterator<Struct, 1> >
+            struct apply<example::example_struct_iterator<Struct, 1> >
             {
                 typedef int type;
             };
-
         };
     }
 }}

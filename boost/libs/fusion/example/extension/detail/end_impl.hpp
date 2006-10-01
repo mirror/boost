@@ -11,22 +11,25 @@
 
 #include "../example_struct_iterator.hpp"
 
+namespace example
+{
+    struct example_sequence_tag;
+}
+
 namespace boost { namespace fusion {
     
-    struct example_sequence_tag;
-
     namespace extension
     {
         template<typename Tag>
         struct end_impl;
 
         template<>
-        struct end_impl<example_sequence_tag>
+        struct end_impl<example::example_sequence_tag>
         {
             template<typename Sequence>
             struct apply
             {
-                typedef example_struct_iterator<Sequence, 2> type;
+                typedef example::example_struct_iterator<Sequence, 2> type;
 
                 static type
                 call(Sequence& seq)

@@ -21,7 +21,6 @@
 #include "./detail/value_at_key_impl.hpp"
 #include "./detail/has_key_impl.hpp"
 #include "./detail/is_sequence_impl.hpp"
-#include "./detail/is_associative_impl.hpp"
 #include "./detail/is_view_impl.hpp"
 
 #endif

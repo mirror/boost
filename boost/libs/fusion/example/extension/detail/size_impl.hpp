@@ -11,9 +11,12 @@
 
 #include <boost/mpl/int.hpp>
 
-namespace boost { namespace fusion {
-
+namespace example
+{
     struct example_sequence_tag;
+}
+
+namespace boost { namespace fusion {
 
     namespace extension
     {
@@ -21,7 +24,7 @@ namespace boost { namespace fusion {
         struct size_impl;
 
         template<>
-        struct size_impl<example_sequence_tag>
+        struct size_impl<example::example_sequence_tag>
         {
             template<typename Sequence>
             struct apply

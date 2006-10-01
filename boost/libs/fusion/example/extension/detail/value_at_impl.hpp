@@ -9,9 +9,12 @@
 #if !defined(BOOST_FUSION_VALUE_AT_IMPL_20060223_2025)
 #define BOOST_FUSION_VALUE_AT_IMPL_20060223_2025
 
-namespace boost { namespace fusion {
-
+namespace example
+{
     struct example_sequence_tag;
+}
+
+namespace boost { namespace fusion {
 
     namespace extension
     {
@@ -19,7 +22,7 @@ namespace boost { namespace fusion {
         struct value_at_impl;
 
         template<>
-        struct value_at_impl<example_sequence_tag>
+        struct value_at_impl<example::example_sequence_tag>
         {
             template<typename Sequence, typename N>
             struct apply;
