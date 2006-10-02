@@ -41,9 +41,9 @@ correct code for a given sequence type. In order to exploit the tag
 dispatching mechanism we must first declare a new tag type for the
 mechanism to use. For example:
 
-    namespace boost { namespace fusion {
+    namespace example {
         struct example_sequence_tag; // Only definition needed
-    }}
+    }
 
 Next we need to enable the `traits::tag_of` metafunction to return our newly chosen
 tag type for operations involving our sequence. This is done by specializing
@@ -51,18 +51,17 @@ tag type for operations involving our sequence. This is done by specializing
 
     #include <boost/fusion/support/tag_of_fwd.hpp>
 
-    namespace boost { namespace fusion { namespace traits {
-        
+    namespace boost { namespace fusion { namespace traits {        
         template<>
         struct tag_of<example_struct>
         {
-            typedef example_sequence_tag type;
+            typedef example::example_sequence_tag type;
         };
     }}}
 
 `traits::tag_of` also has a second template argument, 
 that can be used in conjuction with `boost::enable_if` to provide tag 
-support for whole clases of types. This feature is not necessary
+support for groups of related types. This feature is not necessary
 for our sequence, but for an example see the code in:
 
     #include <boost/fusion/sequence/adapted/mpl/tag_of.hpp>
@@ -79,12 +78,12 @@ We will use a simple design, in which the 2 members of
 
     template<typename Struct, int Pos>
     struct example_struct_iterator
-        : iterator_base<example_struct_iterator<Struct, Pos> >
+        : boost::fusion::iterator_base<example_struct_iterator<Struct, Pos> >
     {
         BOOST_STATIC_ASSERT(Pos >=0 && Pos < 3);
         typedef Struct struct_type;
-        typedef mpl::int_<Pos> index;
-        typedef random_access_traversal_tag category;
+        typedef boost::mpl::int_<Pos> index;
+        typedef boost::fusion::random_access_traversal_tag category;
 
         example_struct_iterator(Struct& str)
             : struct_(str) {}
@@ -102,20 +101,7 @@ A quick summary of the details of our iterator:
 # The constructor stores a reference to the `example_struct` being iterated over.
 
 We also need to enable __tag_dispatching__ for our iterator type, with another specialization of
-`traits::tag_of`:
-
-    namespace boost { namespace fusion {
-        struct example_struct_iterator_tag;
-
-        namespace traits
-        {
-            template<typename Struct, int Pos>
-            struct tag_of<boost::fusion::example_struct_iterator<Struct, Pos> >
-            {
-                typedef example_struct_iterator_tag type;
-            };
-        }
-    }}
+`traits::tag_of`.
 
 In isolation, the iterator implementation is pretty dry. Things should become clearer as we
 add features to our implementation.
@@ -127,19 +113,19 @@ do this, we provide a specialization of the `boost::fusion::extension::value_of_
 our iterator's tag type.
 
     template<>
-    struct value_of_impl<example_struct_iterator_tag>
+    struct value_of_impl<example::example_struct_iterator_tag>
     {
         template<typename Iterator>
         struct apply;
 
         template<typename Struct>
-        struct apply<example_struct_iterator<Struct, 0> >
+        struct apply<example::example_struct_iterator<Struct, 0> >
         {
             typedef std::string type;
         };
 
         template<typename Struct>
-        struct apply<example_struct_iterator<Struct, 1> >
+        struct apply<example::example_struct_iterator<Struct, 1> >
         {
             typedef int type;
         };
@@ -152,12 +138,9 @@ To understand how `value_of_impl` is used by the library we will look at the imp
 
     template <typename Iterator>
     struct __value_of__
-    {
-        typedef typename
-            extension::value_of_impl<typename Iterator::fusion_tag>::
-                template apply<Iterator>::type
-        type;
-    };
+        : extension::value_of_impl<typename detail::tag_of<Iterator>::type>::
+            template apply<Iterator>
+    {};
 
 So __value_of__ uses __tag_dispatching__ to select an __mpl_metafunction_class__
 to provide its functionality. You will notice this pattern throughout the
@@ -167,37 +150,38 @@ Ok, lets enable dereferencing of our iterator. In this case we must provide a su
 specialization of `deref_impl`.
 
     template<>
-    struct deref_impl<example_struct_iterator_tag>
+    struct deref_impl<example::example_struct_iterator_tag>
     {
         template<typename Iterator>
         struct apply;
 
         template<typename Struct>
-        struct apply<example_struct_iterator<Struct, 0> >
+        struct apply<example::example_struct_iterator<Struct, 0> >
         {
             typedef typename mpl::if_<
                 is_const<Struct>, std::string const&, std::string&>::type type;
 
             static type
-            call(example_struct_iterator<Struct, 0> const& it)
+            call(example::example_struct_iterator<Struct, 0> const& it)
             {
                 return it.struct_.name;
             }
         };
 
         template<typename Struct>
-        struct apply<example_struct_iterator<Struct, 1> >
+        struct apply<example::example_struct_iterator<Struct, 1> >
         {
             typedef typename mpl::if_<
                 is_const<Struct>, int const&, int&>::type type;
 
             static type
-            call(example_struct_iterator<Struct, 1> const& it)
+            call(example::example_struct_iterator<Struct, 1> const& it)
             {
-                return it.struct_.age;
-            }
+                    return it.struct_.age;
+                }
+            };
         };
-    };
+    }
 
 The use of `deref_impl` is very similar to that of `value_of_impl`, but it also
 provides some runtime functionality this time via the `call` static member function. 
@@ -207,20 +191,17 @@ To see how `deref_impl` is used, lets have a look at the implementation of __der
     {
         template <typename Iterator>
         struct __deref__
-        {
-            typedef typename
-                deref_impl<typename Iterator::fusion_tag>::
-                    template apply<Iterator>::type
-            type;
-        };
+            : extension::deref_impl<typename detail::tag_of<Iterator>::type>::
+                template apply<Iterator>
+        {};
     }
 
     template <typename Iterator>
-    typename __result_of_deref__<Iterator>::type
+    typename result_of::deref<Iterator>::type
     __deref__(Iterator const& i)
     {
-        return extension::deref_impl<typename Iterator::fusion_tag>::
-			template apply<Iterator>::call(i);
+        typedef result_of::deref<Iterator> deref_meta;
+        return deref_meta::call(i);
     }
 
 So again __result_of_deref__ uses __tag_dispatching__ in exactly the
@@ -247,19 +228,19 @@ Ok, now we have seen the way __value_of__ and __deref__ work, everything else wi
 by providing a `next_impl`:
 
     template<>
-    struct next_impl<example_struct_iterator_tag>
+    struct next_impl<example::example_struct_iterator_tag>
     {
         template<typename Iterator>
         struct apply
         {
             typedef typename Iterator::struct_type struct_type;
             typedef typename Iterator::index index;
-            typedef example_struct_iterator<struct_type, index::value + 1> type;
+            typedef example::example_struct_iterator<struct_type, index::value + 1> type;
 
             static type
             call(Iterator const& i)
             {
-                return type(i.struct_);
+                 return type(i.struct_);
             }
         };
     };
@@ -285,12 +266,12 @@ In order that Fusion can correctly identify our sequence as a Fusion sequence, w
 need to enable `is_sequence` for our sequence type. As usual we just create
 an `impl` type specialized for our sequence tag:
 
-    template<>
-    struct is_sequence_impl<example_sequence_tag>
-    {
-        template<typename T>
-        struct apply : mpl::true_ {};
-    };
+     template<>
+     struct is_sequence_impl<example::example_sequence_tag>
+     {
+         template<typename T>
+         struct apply : mpl::true_ {};
+     };
 
 We've some similar formalities to complete, providing `category_of_impl` so Fusion
 can correctly identify our sequence type, and `is_view_impl` so Fusion can correctly
@@ -302,12 +283,12 @@ __begin__ working so that we can get an iterator to start accessing the data in
 our sequence.
 
     template<>
-    struct begin_impl<example_sequence_tag>
+    struct begin_impl<example::example_sequence_tag>
     {
         template<typename Sequence>
         struct apply
         {
-            typedef example_struct_iterator<Sequence, 0> type;
+            typedef example::example_struct_iterator<Sequence, 0> type;
 
             static type
             call(Sequence& seq)
@@ -337,7 +318,7 @@ types described in the __quick_start__ guide with the appropriate members of `ex
 Our implementation is as follows:
 
     template<>
-    struct at_key_impl<example_sequence_tag>
+    struct at_key_impl<example::example_sequence_tag>
     {
         template<typename Sequence, typename Key>
         struct apply;
