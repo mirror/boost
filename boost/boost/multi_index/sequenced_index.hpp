@@ -355,7 +355,7 @@ public:
     BOOST_MULTI_INDEX_CHECK_DEREFERENCEABLE_ITERATOR(i);
     BOOST_MULTI_INDEX_CHECK_IS_OWNER(i,x);
     BOOST_MULTI_INDEX_SEQ_INDEX_CHECK_INVARIANT;
-    if(x==*this){
+    if(&x==this){
       if(position!=i)relink(position.get_node(),i.get_node());
     }
     else{
@@ -388,7 +388,7 @@ public:
     BOOST_MULTI_INDEX_CHECK_IS_OWNER(last,x);
     BOOST_MULTI_INDEX_CHECK_VALID_RANGE(first,last);
     BOOST_MULTI_INDEX_SEQ_INDEX_CHECK_INVARIANT;
-    if(x==*this){
+    if(&x==this){
       BOOST_MULTI_INDEX_CHECK_OUTSIDE_RANGE(position,first,last);
       if(position!=last)relink(
         position.get_node(),first.get_node(),last.get_node());

@@ -187,6 +187,43 @@ static void test_list_ops_non_unique_seq(
 
   ss.unique(same_integral_div<1>());
   CHECK_EQUAL(ss,{0 _ 3 _ 6 _ 9});
+
+  /* testcases for bugs reported at
+   * http://lists.boost.org/boost-users/2006/09/22604.php
+   */
+  {
+    Sequence ss,ss2;
+    ss.push_back(0);
+    ss2.push_back(0);
+    ss.splice(ss.end(),ss2,ss2.begin());
+    CHECK_EQUAL(ss,{0 _ 0});
+    BOOST_CHECK(ss2.empty());
+
+    ss.clear();
+    ss2.clear();
+    ss.push_back(0);
+    ss2.push_back(0);
+    ss.splice(ss.end(),ss2,ss2.begin(),ss2.end());
+    CHECK_EQUAL(ss,{0 _ 0});
+    BOOST_CHECK(ss2.empty());
+
+    ss.clear();
+    ss2.clear();
+    ss.push_back(0);
+    ss2.push_back(0);
+    ss.merge(ss2);
+    CHECK_EQUAL(ss,{0 _ 0});
+    BOOST_CHECK(ss2.empty());
+
+    typedef typename Sequence::value_type value_type;
+    ss.clear();
+    ss2.clear();
+    ss.push_back(0);
+    ss2.push_back(0);
+    ss.merge(ss2,std::less<value_type>());
+    CHECK_EQUAL(ss,{0 _ 0});
+    BOOST_CHECK(ss2.empty());
+  }
 }
 
 #if BOOST_WORKAROUND(__MWERKS__,<=0x3003)

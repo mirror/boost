@@ -1,4 +1,4 @@
-/* Copyright 2003-2005 Joaquín M López Muñoz.
+/* Copyright 2003-2006 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -60,7 +60,7 @@ template <typename SequencedIndex,typename Compare>
 void sequenced_index_merge(SequencedIndex& x,SequencedIndex& y,Compare comp)
 {
   typedef typename SequencedIndex::iterator iterator;
-  if(x!=y){
+  if(&x!=&y){
     iterator first0=x.begin(),last0=x.end();
     iterator first1=y.begin(),last1=y.end();
     while(first0!=last0&&first1!=last1){
