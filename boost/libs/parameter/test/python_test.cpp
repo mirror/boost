@@ -10,9 +10,9 @@
 
 namespace test {
 
-BOOST_PARAMETER_KEYWORD(tag, x)
-BOOST_PARAMETER_KEYWORD(tag, y)
-BOOST_PARAMETER_KEYWORD(tag, z)
+BOOST_PARAMETER_KEYWORD(tags, x)
+BOOST_PARAMETER_KEYWORD(tags, y)
+BOOST_PARAMETER_KEYWORD(tags, z)
 
 struct Xbase
 {
@@ -32,14 +32,14 @@ struct Xbase
 
 struct X : Xbase
 {
-    BOOST_PARAMETER_CONSTRUCTOR(X, (Xbase), tag,
+    BOOST_PARAMETER_CONSTRUCTOR(X, (Xbase), tags,
         (optional
          (x, *)
          (y, *)
         )
     )
 
-    BOOST_PARAMETER_BASIC_MEMBER_FUNCTION((int), f, tag,
+    BOOST_PARAMETER_BASIC_MEMBER_FUNCTION((int), f, tags,
         (required
          (x, *)
          (y, *)
@@ -52,7 +52,7 @@ struct X : Xbase
         return args[x] + args[y] + args[z | 0];
     }
 
-    BOOST_PARAMETER_BASIC_MEMBER_FUNCTION((std::string), g, tag,
+    BOOST_PARAMETER_BASIC_MEMBER_FUNCTION((std::string), g, tags,
         (optional
          (x, *)
          (y, *)
@@ -62,7 +62,7 @@ struct X : Xbase
         return std::string(args[x | "foo"]) + args[y | "bar"];
     }
 
-    BOOST_PARAMETER_MEMBER_FUNCTION((X&), h, tag,
+    BOOST_PARAMETER_MEMBER_FUNCTION((X&), h, tags,
         (optional (x, *, "") (y, *, ""))
     )
     {
@@ -127,7 +127,7 @@ BOOST_PYTHON_MODULE(python_test_ext)
         .def(
             boost::parameter::python::init<
                 mpl::vector<
-                    tag::x*(std::string), tag::y*(std::string)
+                    tags::x*(std::string), tags::y*(std::string)
                 >
             >()
         )
@@ -136,7 +136,7 @@ BOOST_PYTHON_MODULE(python_test_ext)
           , boost::parameter::python::function<
                 f_fwd
               , mpl::vector<
-                    int, tag::x(int), tag::y(int), tag::z*(int)
+                    int, tags::x(int), tags::y(int), tags::z*(int)
                 >
             >()
         )
@@ -145,7 +145,7 @@ BOOST_PYTHON_MODULE(python_test_ext)
           , boost::parameter::python::function<
                 g_fwd
               , mpl::vector<
-                    std::string, tag::x*(std::string), tag::y*(std::string)
+                    std::string, tags::x*(std::string), tags::y*(std::string)
                 >
             >()
         )
@@ -154,7 +154,7 @@ BOOST_PYTHON_MODULE(python_test_ext)
           , boost::parameter::python::function<
                 h_fwd
               , mpl::vector<
-                    X&, tag::x**(std::string), tag::y**(std::string)
+                    X&, tags::x**(std::string), tags::y**(std::string)
                 >
             >()
           , return_arg<>()
@@ -162,7 +162,7 @@ BOOST_PYTHON_MODULE(python_test_ext)
         .def(
             boost::parameter::python::call<
                 mpl::vector<
-                    X&, tag::x(int)
+                    X&, tags::x(int)
                 >
             >() [ return_arg<>() ]
         )

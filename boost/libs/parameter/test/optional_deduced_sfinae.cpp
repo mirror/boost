@@ -19,6 +19,27 @@ using boost::is_convertible;
 
 BOOST_PARAMETER_NAME(x)
 
+// Sun has problems with this syntax:
+//
+//   template1< r* ( template2<x> ) >
+//
+// Workaround: factor template2<x> into a separate typedef
+
+#if BOOST_WORKAROUND(__SUNPRO_CC, BOOST_TESTED_AT(0x580))
+
+typedef is_convertible<_,char const*> predicate;
+
+BOOST_PARAMETER_FUNCTION((int), sfinae, tag,
+  (deduced
+     (optional (x, *(predicate), 0))
+  )
+)
+{
+    return 1;
+}
+
+#else
+
 BOOST_PARAMETER_FUNCTION((int), sfinae, tag,
   (deduced
      (optional (x, *(is_convertible<_,char const*>), 0))
@@ -27,6 +48,8 @@ BOOST_PARAMETER_FUNCTION((int), sfinae, tag,
 {
     return 1;
 }
+
+#endif
 
 template<class A0>
 typename boost::enable_if<boost::is_same<int,A0>, int>::type
