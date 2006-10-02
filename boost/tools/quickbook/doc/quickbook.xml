@@ -628,13 +628,14 @@ Some link text]<!--quickbook-escape-postfix--></literal>.
 [classref fully::qualified::class_name The link text]
 [memberref fully::qualified::member_name The link text]
 [enumref fully::qualified::enum_name The link text]
+[macroref MACRO_NAME The link text]
 [conceptref ConceptName The link text]
 [headerref path/to/header.hpp The link text]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
           Again, the link text is optional. If this is not present, the link text
-          will automatically be the function, class, member, enum, concept or header.
-          Example:
+          will automatically be the function, class, member, enum, macro, concept
+          or header. Example:
         </para>
         
 <programlisting><!--quickbook-escape-prefix-->[classref boost::bar::baz]
@@ -1473,10 +1474,10 @@ sf_logo
             </thead>
             <tbody>
               <row>
-                <entry><!--quickbook-escape-prefix-->__DATE__<!--quickbook-escape-postfix--></entry><entry>Today's date</entry><entry>2006-Sep-06</entry>
+                <entry><!--quickbook-escape-prefix-->__DATE__<!--quickbook-escape-postfix--></entry><entry>Today's date</entry><entry>2006-Oct-02</entry>
               </row>
               <row>
-                <entry><!--quickbook-escape-prefix-->__TIME__<!--quickbook-escape-postfix--></entry><entry>The current time</entry><entry>03:03:30 PM</entry>
+                <entry><!--quickbook-escape-prefix-->__TIME__<!--quickbook-escape-postfix--></entry><entry>The current time</entry><entry>02:12:55 PM</entry>
               </row>
               <row>
                 <entry><!--quickbook-escape-prefix-->__FILENAME__<!--quickbook-escape-postfix--></entry><entry>Quickbook source filename</entry><entry>F:\boost\cvs\boost\tools\quickbook\doc\quickbook.qbk</entry>
@@ -2165,6 +2166,87 @@ for the journey to old age.]]]
     <phrase role="special">;</phrase>
 </programlisting>
     </section>
+    <section id="quickbook.installation_and_configuration.debian__ubuntu">
+      <title><link linkend="quickbook.installation_and_configuration.debian__ubuntu">Debian,
+      Ubuntu</link></title>
+      <para>
+        The following instructions apply to Debian and its derivatives. It is based
+        on a Ubuntu Edgy install, but it should work on other Debian based systems.
+      </para>
+      <orderedlist>
+        <listitem>
+          First install the <code><phrase role="identifier">bjam</phrase></code>,
+          <code><phrase role="identifier">xsltproc</phrase></code>, <code><phrase
+          role="identifier">docbook</phrase><phrase role="special">-</phrase><phrase
+          role="identifier">xsl</phrase></code> and <code><phrase role="identifier">docbook</phrase><phrase
+          role="special">-</phrase><phrase role="identifier">xml</phrase></code>
+          packages. If you're planning on building boost's documentation, you'll
+          also want to install the <code><phrase role="identifier">doxygen</phrase></code>
+          package as well. For example, using <code><phrase role="identifier">apt</phrase><phrase
+          role="special">-</phrase><phrase role="identifier">get</phrase></code>:
+        </listitem>
+      </orderedlist>
+      
+<programlisting>
+<phrase role="identifier">sudo</phrase> <phrase role="identifier">apt</phrase><phrase role="special">-</phrase><phrase role="identifier">get</phrase> <phrase role="identifier">install</phrase> <phrase role="identifier">xsltprc</phrase> <phrase role="identifier">docbook</phrase><phrase role="special">-</phrase><phrase role="identifier">xsl</phrase> <phrase role="identifier">docbook</phrase><phrase role="special">-</phrase><phrase role="identifier">xml</phrase> <phrase role="identifier">doxygen</phrase>
+</programlisting>
+      <orderedlist>
+        <listitem>
+          Add the following to your <code><phrase role="identifier">user</phrase><phrase
+          role="special">-</phrase><phrase role="identifier">config</phrase><phrase
+          role="special">.</phrase><phrase role="identifier">jam</phrase></code>
+          file, which should be in your home directory. If you don't have one create
+          a text file containing just this text.
+        </listitem>
+      </orderedlist>
+      
+<programlisting>
+<phrase role="identifier">using</phrase> <phrase role="identifier">xsltproc</phrase> <phrase role="special">;</phrase>
+
+<phrase role="identifier">using</phrase> <phrase role="identifier">boostbook</phrase> 
+    <phrase role="special">:</phrase> <phrase role="special">/</phrase><phrase role="identifier">usr</phrase><phrase role="special">/</phrase><phrase role="identifier">share</phrase><phrase role="special">/</phrase><phrase role="identifier">xml</phrase><phrase role="special">/</phrase><phrase role="identifier">docbook</phrase><phrase role="special">/</phrase><phrase role="identifier">stylesheet</phrase><phrase role="special">/</phrase><phrase role="identifier">nwalsh</phrase>
+    <phrase role="special">:</phrase> <phrase role="special">/</phrase><phrase role="identifier">usr</phrase><phrase role="special">/</phrase><phrase role="identifier">share</phrase><phrase role="special">/</phrase><phrase role="identifier">xml</phrase><phrase role="special">/</phrase><phrase role="identifier">docbook</phrase><phrase role="special">/</phrase><phrase role="identifier">schema</phrase><phrase role="special">/</phrase><phrase role="identifier">dtd</phrase><phrase role="special">/</phrase><phrase role="number">4.2</phrase>
+    <phrase role="special">;</phrase>
+
+<phrase role="comment"># Remove this line if you're not using doxygen
+</phrase><phrase role="identifier">using</phrase> <phrase role="identifier">doxygen</phrase> <phrase role="special">;</phrase>
+</programlisting>
+      <orderedlist>
+        <listitem>
+          Go to Quickbook's source directory (<code><phrase role="identifier">BOOST_ROOT</phrase><phrase
+          role="special">/</phrase><phrase role="identifier">tools</phrase><phrase
+          role="special">/</phrase><phrase role="identifier">quickbook</phrase></code>).
+        </listitem>
+        <listitem>
+          Build the utility by issuing <code><phrase role="identifier">bjam</phrase>&nbsp;<phrase
+          role="special">--</phrase><phrase role="identifier">v2</phrase></code>.
+        </listitem>
+        <listitem>
+          Copy the resulting <code><phrase role="identifier">quickbook</phrase></code>
+          binary (located at <code><phrase role="identifier">BOOST_ROOT</phrase><phrase
+          role="special">/</phrase><phrase role="identifier">dist</phrase><phrase
+          role="special">/</phrase><phrase role="identifier">bin</phrase><phrase
+          role="special">/</phrase><phrase role="identifier">quickbook</phrase></code>
+          hierarchy) to a safe place. The traditional location would be <code><phrase
+          role="special">/</phrase><phrase role="identifier">usr</phrase><phrase
+          role="special">/</phrase><phrase role="identifier">local</phrase><phrase
+          role="special">/</phrase><phrase role="identifier">bin</phrase></code>,
+          but anywhere sensible will do.
+        </listitem>
+        <listitem>
+          Add the following to your <code><phrase role="identifier">user</phrase><phrase
+          role="special">-</phrase><phrase role="identifier">config</phrase><phrase
+          role="special">.</phrase><phrase role="identifier">jam</phrase></code>
+          file (using the path where you placed the quickbook executable):
+        </listitem>
+      </orderedlist>
+      
+<programlisting>
+<phrase role="identifier">using</phrase> <phrase role="identifier">quickbook</phrase>
+    <phrase role="special">:</phrase> <phrase role="special">/</phrase><phrase role="identifier">usr</phrase><phrase role="special">/</phrase><phrase role="identifier">local</phrase><phrase role="special">/</phrase><phrase role="identifier">bin</phrase><phrase role="special">/</phrase><phrase role="identifier">quickbook</phrase>
+    <phrase role="special">;</phrase>
+</programlisting>
+    </section>
   </section>
   <section id="quickbook.ref">
     <title><link linkend="quickbook.ref"> Quick Reference</link></title>
@@ -2257,32 +2339,37 @@ for the journey to old age.]]]
           <row>
             <entry>function link</entry><entry><literal><!--quickbook-escape-prefix-->[funcref fully::qualified::function_name Link text]<!--quickbook-escape-postfix--></literal></entry><entry><link
             linkend="quickbook.syntax.phrase.code_links">function, class, member,
-            enum or header links</link></entry>
+            enum, macro, concept or header links</link></entry>
           </row>
           <row>
             <entry>class link</entry><entry><literal><!--quickbook-escape-prefix-->[classref fully::qualified::class_name Link text]<!--quickbook-escape-postfix--></literal></entry><entry><link
             linkend="quickbook.syntax.phrase.code_links">function, class, member,
-            enum or header links</link></entry>
+            enum, macro, concept or header links</link></entry>
           </row>
           <row>
             <entry>member link</entry><entry><literal><!--quickbook-escape-prefix-->[memberref fully::qualified::member_name Link text]<!--quickbook-escape-postfix--></literal></entry><entry><link
             linkend="quickbook.syntax.phrase.code_links">function, class, member,
-            enum or header links</link></entry>
+            enum, macro, concept or header links</link></entry>
           </row>
           <row>
             <entry>enum link</entry><entry><literal><!--quickbook-escape-prefix-->[enumref fully::qualified::enum_name Link text]<!--quickbook-escape-postfix--></literal></entry><entry><link
             linkend="quickbook.syntax.phrase.code_links">function, class, member,
-            enum or header links</link></entry>
+            enum, macro, concept or header links</link></entry>
+          </row>
+          <row>
+            <entry>macro link</entry><entry><literal><!--quickbook-escape-prefix-->[macroref MACRO_NAME Link text]<!--quickbook-escape-postfix--></literal></entry><entry><link
+            linkend="quickbook.syntax.phrase.code_links">function, class, member,
+            enum, macro, concept or header links</link></entry>
           </row>
           <row>
             <entry>concept link</entry><entry><literal><!--quickbook-escape-prefix-->[conceptref ConceptName Link text]<!--quickbook-escape-postfix--></literal></entry><entry><link
             linkend="quickbook.syntax.phrase.code_links">function, class, member,
-            enum or header links</link></entry>
+            enum, macro, concept or header links</link></entry>
           </row>
           <row>
             <entry>header link</entry><entry><literal><!--quickbook-escape-prefix-->[headerref path/to/header.hpp Link text]<!--quickbook-escape-postfix--></literal></entry><entry><link
             linkend="quickbook.syntax.phrase.code_links">function, class, member,
-            enum or header links</link></entry>
+            enum, macro, concept or header links</link></entry>
           </row>
           <row>
             <entry>escape</entry><entry><literal>'''escaped text (no processing/formatting)'''</literal></entry><entry><link

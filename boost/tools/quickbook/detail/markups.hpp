@@ -82,6 +82,8 @@ namespace quickbook { namespace /*unnamed*/
     const char* memberref_post_     = "</methodname>";
     const char* enumref_pre_        = "<enumname alt=\"";
     const char* enumref_post_       = "</enumname>";
+    const char* macroref_pre_       = "<macroname alt=\"";
+    const char* macroref_post_      = "</macroname>";
     const char* headerref_pre_      = "<headername alt=\"";
     const char* headerref_post_     = "</headername>";
     const char* conceptref_pre_     = "<conceptname alt=\"";

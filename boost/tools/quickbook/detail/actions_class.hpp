@@ -124,6 +124,8 @@ namespace quickbook
         markup_action           memberref_post;
         link_action             enumref_pre;
         markup_action           enumref_post;
+        link_action             macroref_pre;
+        markup_action           macroref_post;
         link_action             headerref_pre;
         markup_action           headerref_post;
         link_action             conceptref_pre;

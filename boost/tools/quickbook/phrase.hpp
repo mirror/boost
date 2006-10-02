@@ -194,6 +194,7 @@ namespace quickbook
                         |   classref
                         |   memberref
                         |   enumref
+                        |   macroref
                         |   headerref
                         |   conceptref
                         |   bold
@@ -288,6 +289,15 @@ namespace quickbook
                         )                               [actions.enumref_post]
                     ;
 
+                macroref =
+                    "macroref" >> hard_space
+                    >>  (*(anychar_p -
+                            (']' | hard_space)))        [actions.macroref_pre]
+                    >>  (   eps_p(']')
+                        |   (hard_space >> phrase)
+                        )                               [actions.macroref_post]
+                    ;
+
                 headerref =
                     "headerref" >> hard_space
                     >>  (*(anychar_p -
@@ -357,8 +367,8 @@ namespace quickbook
             rule<Scanner>   space, blank, comment, phrase, phrase_markup, image, 
                             close_bracket, bold, italic, underline, teletype, 
                             strikethrough, escape, url, common, funcref, 
-                            classref, memberref, enumref, headerref, conceptref, anchor, 
-                            link, hard_space, eol, inline_code, simple_format, 
+                            classref, memberref, enumref, macroref, headerref, conceptref,
+                            anchor, link, hard_space, eol, inline_code, simple_format, 
                             simple_bold, simple_italic, simple_underline, 
                             simple_teletype, source_mode, template_, template_arg,
                             quote, code_block, footnote, replaceable, macro,

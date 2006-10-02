@@ -41,7 +41,7 @@
 [def __links__              [link quickbook.syntax.phrase.links Links]]
 [def __anchor_links__       [link quickbook.syntax.phrase.anchor_links Anchor links]]
 [def __refentry_links__     [link quickbook.syntax.phrase.refentry_links refentry links]]
-[def __code_links__         [link quickbook.syntax.phrase.code_links function, class, member, enum or header links]]
+[def __code_links__         [link quickbook.syntax.phrase.code_links function, class, member, enum, macro, concept or header links]]
 [def __escape__             [link quickbook.syntax.phrase.escape Escape]]
 [def __single_char_escape__ [link quickbook.syntax.phrase.single_char_escape Single char escape]]
 [def __images__             [link quickbook.syntax.phrase.images Images]]
@@ -461,12 +461,13 @@ section, you can use:
 [classref fully::qualified::class_name The link text]
 [memberref fully::qualified::member_name The link text]
 [enumref fully::qualified::enum_name The link text]
+[macroref MACRO_NAME The link text]
 [conceptref ConceptName The link text]
 [headerref path/to/header.hpp The link text]
 ''']
 
 Again, the link text is optional. If this is not present, the link text will
-automatically be the function, class, member, enum, concept or header. Example:
+automatically be the function, class, member, enum, macro, concept or header. Example:
 
 [pre'''
 [classref boost::bar::baz]
@@ -1629,6 +1630,7 @@ on a Ubuntu Edgy install, but it should work on other Debian based systems.
     [[class link]           [[^'''[classref fully::qualified::class_name Link text]''']]        [__code_links__]]
     [[member link]          [[^'''[memberref fully::qualified::member_name Link text]''']]      [__code_links__]]
     [[enum link]            [[^'''[enumref fully::qualified::enum_name Link text]''']]          [__code_links__]]
+    [[macro link]           [[^'''[macroref MACRO_NAME Link text]''']]                          [__code_links__]]
     [[concept link]         [[^'''[conceptref ConceptName Link text]''']]                       [__code_links__]]
     [[header link]          [[^'''[headerref path/to/header.hpp Link text]''']]                 [__code_links__]]
     [[escape]               [[^\'\'\'escaped text (no processing/formatting)\'\'\']]            [__escape__]]

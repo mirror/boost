@@ -104,6 +104,8 @@ namespace quickbook
         , memberref_post(phrase, memberref_post_)
         , enumref_pre(phrase, enumref_pre_)
         , enumref_post(phrase, enumref_post_)
+        , macroref_pre(phrase, macroref_pre_)
+        , macroref_post(phrase, macroref_post_)
         , headerref_pre(phrase, headerref_pre_)
         , headerref_post(phrase, headerref_post_)
         , conceptref_pre(phrase, conceptref_pre_)
