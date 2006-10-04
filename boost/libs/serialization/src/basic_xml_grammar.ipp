@@ -22,7 +22,7 @@
 #include <boost/spirit/core/primitives/numerics.hpp>
 
 // for head_iterator test
-#include <boost/bind.hpp> 
+//#include <boost/bind.hpp> 
 #include <boost/function.hpp>
 #include <boost/pfto.hpp>
 
