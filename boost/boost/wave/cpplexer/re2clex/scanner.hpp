@@ -55,6 +55,7 @@ typedef struct Scanner {
     bool act_in_c99_mode;        /* lexer works in C99 mode */
     bool detect_pp_numbers;      /* lexer should prefer to detect pp-numbers */
     bool enable_import_keyword;  /* recognize import as a keyword */
+    bool single_line_only;       /* don't report missing eol's in C++ comments */
 } Scanner;
 
 ///////////////////////////////////////////////////////////////////////////////

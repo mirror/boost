@@ -1502,8 +1502,13 @@ macromap<ContextT>::is_valid_concat(string_type new_value,
     typedef typename ContextT::lexer_type lexer_type;
     
     std::string value_to_test(new_value.c_str());
+
+    boost::wave::language_support lang = 
+        boost::wave::enable_prefer_pp_numbers(ctx.get_language());
+    lang = boost::wave::enable_single_line(lang);
+    
     lexer_type it = lexer_type(value_to_test.begin(), value_to_test.end(), pos, 
-        boost::wave::enable_prefer_pp_numbers(ctx.get_language()));
+        lang);
     lexer_type end = lexer_type();
     for (/**/; it != end && T_EOF != token_id(*it); ++it) 
         rescanned.push_back(*it);

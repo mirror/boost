@@ -141,6 +141,7 @@ lexer<IteratorT, PositionT>::lexer(IteratorT const &first,
 #endif
 
     scanner.detect_pp_numbers = boost::wave::need_prefer_pp_numbers(language);
+    scanner.single_line_only = boost::wave::need_single_line(language);
 }
 
 template <typename IteratorT, typename PositionT>

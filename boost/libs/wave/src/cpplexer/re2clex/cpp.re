@@ -24,7 +24,7 @@ Digit              = [0-9];
 HexDigit           = [a-fA-F0-9];
 Integer            = (("0" [xX] HexDigit+) | ("0" OctalDigit*) | ([1-9] Digit*));
 ExponentStart      = [Ee] [+-];
-ExponentPart       = ExponentStart? Digit+;
+ExponentPart       = [Ee] [+-]? Digit+;
 FractionalConstant = (Digit* "." Digit+) | (Digit+ ".");
 FloatingSuffix     = [fF] [lL]? | [lL] [fF]?;
 IntegerSuffix      = [uU] [lL]? | [lL] [uU]?;
@@ -295,14 +295,14 @@ NonDigit           = [a-zA-Z_$] | UniversalChar;
         BOOST_WAVE_RET(T_EOF);
     }
 
+    any        { BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType)); }
+
     anyctrl
     {
         // flag the error
         BOOST_WAVE_UPDATE_CURSOR();     // adjust the input cursor
         (*s->error_proc)(s, "invalid character '\\%03o' in input stream",
             *--YYCURSOR);
-
-//        BOOST_WAVE_RET(TOKEN_FROM_ID(*s->tok, UnknownTokenType));
     }
 */
 
@@ -360,17 +360,20 @@ cppcomment:
 
     "\000"
     {
-        if(cursor == s->eof) 
-        {
-            BOOST_WAVE_UPDATE_CURSOR();     // adjust the input cursor
-            (*s->error_proc)(s, "Unterminated 'C++' style comment");
-        }
-        else
+        if (cursor != s->eof) 
         {
             --YYCURSOR;                     // next call returns T_EOF
             BOOST_WAVE_UPDATE_CURSOR();     // adjust the input cursor
             (*s->error_proc)(s, "invalid character '\\000' in input stream");
         }
+        
+        --YYCURSOR;                         // next call returns T_EOF
+        if (!s->single_line_only)
+        {
+            BOOST_WAVE_UPDATE_CURSOR();     // adjust the input cursor
+            (*s->error_proc)(s, "Unterminated 'C++' style comment");
+        }
+        BOOST_WAVE_RET(T_CPPCOMMENT);
     }
 
     anyctrl
