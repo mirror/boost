@@ -54,7 +54,9 @@ namespace detail {
     class basic_oserializer;
 }
 
-class polymorphic_oarchive :
+class polymorphic_oarchive;
+
+class polymorphic_oarchive_impl :
     public detail::interface_oarchive<polymorphic_oarchive>
 {
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
@@ -98,14 +100,6 @@ public:
     virtual void save_start(const char * name) = 0;
     virtual void save_end(const char * name) = 0;
     virtual void register_basic_serializer(const detail::basic_oserializer & bos) = 0;
-    virtual void lookup_basic_helper(
-        const boost::serialization::extended_type_info * const eti,
-                boost::shared_ptr<void> & sph
-    ) = 0;
-    virtual void insert_basic_helper(
-        const boost::serialization::extended_type_info * const eti,
-                shared_ptr<void> & sph
-    ) = 0;
 
     virtual void end_preamble() = 0;
 
@@ -114,7 +108,7 @@ public:
     template<class T>
     void save_override(T & t, BOOST_PFTO int)
     {
-        archive::save(* this, t);
+        archive::save(* this->This(), t);
     }
     // special treatment for name-value pairs.
     template<class T>
@@ -125,14 +119,14 @@ public:
                 ::boost::serialization::nvp<T> & t, int
         ){
         save_start(t.name());
-        archive::save(* this, t.const_value());
+        archive::save(* this->This(), t.const_value());
         save_end(t.name());
     }
 protected:
     // generally speaking, these archives cannot be destroyed through
     // the base class pointer.  This is because there is no obvious way
     // to forward to the "true" destructor
-    ~polymorphic_oarchive(){}
+    ~polymorphic_oarchive_impl(){}
 public:
     // utility functions implemented by all legal archives
     virtual unsigned int get_flags() const = 0;
@@ -148,6 +142,11 @@ public:
         const detail::basic_pointer_oserializer * bpos_ptr
     ) = 0;
 };
+
+// note: preserve naming symmetry
+class polymorphic_oarchive : 
+    public polymorphic_oarchive_impl
+{};
 
 } // namespace archive
 } // namespace boost

@@ -83,14 +83,36 @@ protected:
     ~xml_iarchive_impl();
 };
 
-// we use the following because we can't use
-// typedef xml_iarchive_impl<xml_iarchive_impl<...> > xml_iarchive;
-
-// do not derive from this class.  If you want to extend this functionality
-// via inhertance, derived from xml_iarchive_impl instead.  This will
+// do not derive from the classes below.  If you want to extend this functionality
+// via inhertance, derived from text_iarchive_impl instead.  This will
 // preserve correct static polymorphism.
+
+// same as xml_iarchive below - without the shared_ptr_helper
+class naked_xml_iarchive : 
+    public xml_iarchive_impl<naked_xml_iarchive>
+{
+public:
+    naked_xml_iarchive(std::istream & is, unsigned int flags = 0) :
+        xml_iarchive_impl<naked_xml_iarchive>(is, flags)
+    {}
+    ~naked_xml_iarchive(){}
+};
+
+} // namespace archive
+} // namespace boost
+
+// note special treatment of shared_ptr. This type needs a special
+// structure associated with every archive.  We created a "mix-in"
+// class to provide this functionality.  Since shared_ptr holds a
+// special esteem in the boost library - we included it here by default.
+#include <boost/archive/shared_ptr_helper.hpp>
+
+namespace boost { 
+namespace archive {
+
 class xml_iarchive : 
-    public xml_iarchive_impl<xml_iarchive>
+    public xml_iarchive_impl<xml_iarchive>,
+    public detail::shared_ptr_helper
 {
 public:
     xml_iarchive(std::istream & is, unsigned int flags = 0) :
@@ -104,6 +126,7 @@ public:
 
 // required by smart_cast for compilers not implementing 
 // partial template specialization
+BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::naked_xml_iarchive)
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::xml_iarchive)
 
 #include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas

@@ -18,14 +18,20 @@
 
 #include <boost/config.hpp>
 #include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/detail/polymorphic_iarchive_impl.hpp>
+#include <boost/archive/detail/polymorphic_iarchive_dispatch.hpp>
 
 namespace boost { 
 namespace archive {
 
-typedef detail::polymorphic_iarchive_impl<
-        text_iarchive_impl<text_iarchive> 
-> polymorphic_text_iarchive;
+class polymorphic_text_iarchive : 
+    public detail::polymorphic_iarchive_dispatch<naked_text_iarchive>
+{
+public:
+    polymorphic_text_iarchive(std::istream & is, unsigned int flags = 0) :
+        detail::polymorphic_iarchive_dispatch<naked_text_iarchive>(is, flags)
+    {}
+    ~polymorphic_text_iarchive(){}
+};
 
 } // namespace archive
 } // namespace boost

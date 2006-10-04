@@ -55,7 +55,9 @@ namespace detail {
     class basic_iserializer;
 }
 
-class polymorphic_iarchive :
+class polymorphic_iarchive;
+
+class polymorphic_iarchive_impl :
     public detail::interface_iarchive<polymorphic_iarchive>
 {
 #ifdef BOOST_NO_MEMBER_TEMPLATE_FRIENDS
@@ -99,21 +101,13 @@ public:
     virtual void load_start(const char * name) = 0;
     virtual void load_end(const char * name) = 0;
     virtual void register_basic_serializer(const detail::basic_iserializer & bis) = 0;
-    virtual void lookup_basic_helper(
-        const boost::serialization::extended_type_info * const eti,
-                boost::shared_ptr<void> & sph
-    ) = 0;
-    virtual void insert_basic_helper(
-        const boost::serialization::extended_type_info * const eti,
-                boost::shared_ptr<void> & sph
-    ) = 0;
 
     // msvc and borland won't automatically pass these to the base class so
     // make it explicit here
     template<class T>
     void load_override(T & t, BOOST_PFTO int)
     {
-        archive::load(* this, t);
+        archive::load(* this->This(), t);
     }
     // special treatment for name-value pairs.
     template<class T>
@@ -125,14 +119,14 @@ public:
                 int
         ){
         load_start(t.name());
-        archive::load(* this, t.value());
+        archive::load(* this->This(), t.value());
         load_end(t.name());
     }
 protected:
     // generally speaking, these archives cannot be destroyed through
     // the base class pointer.  This is because there is no way to
     // forward to the "true" destructor
-    ~polymorphic_iarchive(){}
+    ~polymorphic_iarchive_impl(){}
 public:
     // utility function implemented by all legal archives
     virtual void set_library_version(unsigned int archive_library_version) = 0;
@@ -159,6 +153,23 @@ public:
         )
     ) = 0;
 };
+
+} // namespace archive
+} // namespace boost
+
+// note special treatment of shared_ptr. This type needs a special
+// structure associated with every archive.  We created a "mix-in"
+// class to provide this functionality.  Since shared_ptr holds a
+// special esteem in the boost library - we included it here by default.
+#include <boost/archive/shared_ptr_helper.hpp>
+
+namespace boost { 
+namespace archive {
+
+class polymorphic_iarchive : 
+    public polymorphic_iarchive_impl,
+    public detail::shared_ptr_helper
+{};
 
 } // namespace archive
 } // namespace boost

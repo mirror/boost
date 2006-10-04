@@ -58,19 +58,6 @@ public:
         return & bpos;
     }
 
-    void lookup_helper(
-        const boost::serialization::extended_type_info * const eti,
-        boost::shared_ptr<void> & sph
-    ){
-        this->This()->lookup_basic_helper(eti, sph);
-    }
-
-    void insert_helper(
-        const boost::serialization::extended_type_info * const eti,
-        shared_ptr<void> & sph
-    ){
-        this->This()->insert_basic_helper(eti, sph);
-    }
     template<class T>
     Archive & operator<<(T & t){
         this->This()->save_override(t, 0);

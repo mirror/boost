@@ -18,13 +18,13 @@
 
 #include <boost/config.hpp>
 #include <boost/archive/xml_oarchive.hpp>
-#include <boost/archive/detail/polymorphic_oarchive_impl.hpp>
+#include <boost/archive/detail/polymorphic_oarchive_dispatch.hpp>
 
 namespace boost { 
 namespace archive {
 
-typedef detail::polymorphic_oarchive_impl<
-        xml_oarchive_impl<xml_oarchive> 
+typedef detail::polymorphic_oarchive_dispatch<
+    xml_oarchive_impl<naked_xml_oarchive> 
 > polymorphic_xml_oarchive;
 
 } // namespace archive

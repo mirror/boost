@@ -48,6 +48,8 @@ public:
     {}
 };
 
+typedef binary_woarchive naked_binary_woarchive;
+
 } // namespace archive
 } // namespace boost
 

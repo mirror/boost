@@ -18,14 +18,16 @@
 
 #include <boost/config.hpp>
 #include <boost/archive/binary_oarchive.hpp>
-#include <boost/archive/detail/polymorphic_oarchive_impl.hpp>
+#include <boost/archive/detail/polymorphic_oarchive_dispatch.hpp>
 
 namespace boost { 
 namespace archive {
 
-typedef detail::polymorphic_oarchive_impl<
+typedef detail::polymorphic_oarchive_dispatch<
     binary_oarchive_impl<
-        binary_oarchive, std::ostream::char_type, std::ostream::traits_type
+        naked_binary_oarchive, 
+        std::ostream::char_type, 
+        std::ostream::traits_type
     >
  > polymorphic_binary_oarchive;
 

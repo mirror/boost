@@ -114,6 +114,8 @@ public:
     ~text_woarchive(){}
 };
 
+typedef text_woarchive naked_text_woarchive;
+
 } // namespace archive
 } // namespace boost
 

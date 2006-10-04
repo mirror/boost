@@ -71,16 +71,6 @@ protected:
 public:
     // note: NOT part of the public interface
     void register_basic_serializer(const basic_oserializer & bos);
-    void
-    lookup_basic_helper(
-        const boost::serialization::extended_type_info * const eti,
-        shared_ptr<void> & sph
-    );
-    void 
-    insert_basic_helper(
-        const boost::serialization::extended_type_info * const eti,
-        shared_ptr<void> & sph
-    );
     void save_object(
         const void *x, 
         const basic_oserializer & bos

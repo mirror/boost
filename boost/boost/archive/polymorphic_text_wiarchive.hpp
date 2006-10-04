@@ -22,13 +22,13 @@
 #else
 
 #include <boost/archive/text_wiarchive.hpp>
-#include <boost/archive/detail/polymorphic_iarchive_impl.hpp>
+#include <boost/archive/detail/polymorphic_iarchive_dispatch.hpp>
 
 namespace boost { 
 namespace archive {
 
-typedef detail::polymorphic_iarchive_impl<
-        text_wiarchive_impl<text_wiarchive> 
+typedef detail::polymorphic_iarchive_dispatch<
+        text_wiarchive_impl<naked_text_wiarchive> 
 > polymorphic_text_wiarchive;
 
 } // namespace archive

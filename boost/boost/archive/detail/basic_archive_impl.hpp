@@ -20,7 +20,6 @@
 // #include <boost/scoped_ptr.hpp>
 
 #include <set>
-#include <boost/shared_ptr.hpp>
 
 #include <boost/archive/detail/abi_prefix.hpp> // must be the last header
 
@@ -35,48 +34,6 @@ namespace detail {
 //////////////////////////////////////////////////////////////////////
 class BOOST_ARCHIVE_DECL(BOOST_PP_EMPTY()) basic_archive_impl
 {
-    //////////////////////////////////////////////////////////////////////
-    // list of serialization helpers
-    // at least one compiler sunpro 5.3 erroneously doesn't give access to embedded structs
-    struct helper_compare;
-    friend struct helper_compare;
-
-    struct helper_type {
-        shared_ptr<void> m_helper;
-        const boost::serialization::extended_type_info * m_eti;
-        helper_type(
-            shared_ptr<void> h, 
-            const boost::serialization::extended_type_info * const eti
-        ) :
-            m_helper(h),
-            m_eti(eti)
-        {}
-    };
-
-    struct helper_compare {
-        bool operator()(
-            const helper_type & lhs, 
-            const helper_type & rhs
-        ) const {
-            return lhs.m_eti < rhs.m_eti;
-        }
-    };
-
-    typedef std::set<helper_type, helper_compare> collection;
-    typedef collection::iterator helper_iterator;
-    typedef collection::const_iterator helper_const_iterator;
-    collection m_helpers;
-protected:
-    void
-    lookup_helper(
-        const boost::serialization::extended_type_info * const eti,
-        shared_ptr<void> & sph
-    );
-    void
-    insert_helper(
-        const boost::serialization::extended_type_info * const eti,
-        shared_ptr<void> & sph
-    );
 };
 
 } // namespace detail

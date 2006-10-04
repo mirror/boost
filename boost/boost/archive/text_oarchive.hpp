@@ -88,6 +88,8 @@ public:
     ~text_oarchive(){}
 };
 
+typedef text_oarchive naked_text_oarchive;
+
 } // namespace archive
 } // namespace boost
 

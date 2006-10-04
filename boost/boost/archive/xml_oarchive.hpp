@@ -101,6 +101,8 @@ public:
     ~xml_oarchive(){}
 };
 
+typedef xml_oarchive naked_xml_oarchive;
+
 } // namespace archive
 } // namespace boost
 
