@@ -22,7 +22,7 @@ namespace std{ namespace tr1{
 
 using ::boost::array;
 
-#if !BOOST_WORKAROUND(__BORLANDC__, <= 0x570)
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
 // [6.1.3.2] Tuple creation functions
 using ::boost::swap;
 #endif

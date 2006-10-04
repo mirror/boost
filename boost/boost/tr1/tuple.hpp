@@ -1,6 +1,3 @@
-//  (C) Copyright John Maddock 2005.
-//  Use, modification and distribution are subject to the
-//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_TR1_TUPLE_HPP_INCLUDED
@@ -41,7 +38,7 @@ struct tuple_element
    typedef typename boost::tuples::element<I,T>::type type;
 };
 
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x570))
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
 // [6.1.3.4] Element access
 using ::boost::get;
 #endif

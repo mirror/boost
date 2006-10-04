@@ -42,7 +42,7 @@ namespace std{ namespace tr1{
 
    using ::boost::bad_weak_ptr;
    using ::boost::shared_ptr;
-#if !BOOST_WORKAROUND(__BORLANDC__, <= 0x570)
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
    using ::boost::swap;
 #endif
    using ::boost::static_pointer_cast;

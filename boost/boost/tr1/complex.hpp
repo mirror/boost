@@ -121,7 +121,7 @@ inline complex<double> polar(const unsigned __int64& rho, const unsigned __int64
 #endif
 
 template<class T, class U> 
-inline complex<typename ::boost::tr1_detail::promote_to_real<T, U>::type> 
+inline complex<typename boost::tr1_detail::promote_to_real<T, U>::type> 
    polar(const T& rho, const U& theta)
 {
    typedef typename boost::tr1_detail::promote_to_real<T, U>::type real_type;
