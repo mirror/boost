@@ -30,7 +30,7 @@ namespace std{
 }
 #endif
 
-#include <boost/test/test_tools.hpp>
+#include <boost/test/test_exec_monitor.hpp>
 #include <boost/limits.hpp>
 #include <boost/cstdint.hpp>
 

@@ -10,7 +10,7 @@
 #include <exception>
 #include <boost/smart_cast.hpp>
 
-#include <boost/test/test_tools.hpp>
+#include <boost/test/test_exec_monitor.hpp>
 #include <boost/noncopyable.hpp>
 
 using namespace boost;

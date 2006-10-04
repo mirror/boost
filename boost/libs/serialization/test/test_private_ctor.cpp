@@ -8,7 +8,7 @@
 
 #include <sstream>
 
-#include <boost/test/test_tools.hpp>
+#include <boost/test/test_exec_monitor.hpp>
 
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>

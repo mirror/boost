@@ -7,7 +7,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // <gennadiy.rozental@tfn.com>
 
-#include <boost/test/test_tools.hpp>
+#include <boost/test/test_exec_monitor.hpp>
 #include <boost/serialization/extended_type_info_typeid.hpp>
 #include <boost/serialization/void_cast.hpp>
 

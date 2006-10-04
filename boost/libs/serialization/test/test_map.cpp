@@ -144,13 +144,6 @@ test_multimap(){
 #ifdef BOOST_HAS_HASH
 #include <boost/serialization/hash_map.hpp>
 
-/*
-#if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
-#define STD _STLP_STD
-#else
-#define STD BOOST_STD_EXTENSION_NAMESPACE
-#endif
-*/
 namespace BOOST_STD_EXTENSION_NAMESPACE {
     template<>
     struct hash<random_key>{
