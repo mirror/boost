@@ -7,12 +7,17 @@
 #define BOOST_TR1_TEST_RESULT_HPP
 
 #include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/remove_cv.hpp>
 #include <boost/static_assert.hpp>
 
 template <class T1, class T2>
 void verify_return_type(T1, T2)
 {
-   BOOST_STATIC_ASSERT( (::boost::is_same<T1, T2>::value));
+   // This is a workaround for the broken type
+   // deduction in Borland C++:
+   typedef typename boost::remove_cv<T1>::type T1CV;
+   typedef typename boost::remove_cv<T2>::type T2CV;
+   BOOST_STATIC_ASSERT( (::boost::is_same<T1CV, T2CV>::value));
 }
 
 

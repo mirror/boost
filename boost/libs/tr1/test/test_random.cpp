@@ -159,8 +159,8 @@ void check_pseudo_random(T* p)
    t1.seed();
    t1.seed(s);
    t1.seed(seed);
-   T t5(seed_proc);
-   t1.seed(seed_proc);
+   T t5(&seed_proc);
+   t1.seed(&seed_proc);
    const T& x = t1;
    const T& y = t2;
    verify_return_type(x == y, true);
