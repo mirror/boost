@@ -326,7 +326,8 @@ BOOST_DLLEXPORT pointer_iserializer<Archive, T>::pointer_iserializer() :
 template<class Archive, class T>
 BOOST_DLLEXPORT const pointer_iserializer<Archive, T> &
 pointer_iserializer<Archive, T>::get_instance() {
-    return instance;
+    // note: comeau complains without full qualification
+    return dynamically_initialized<pointer_iserializer<Archive,T> >::instance;
 }
 
 template<class Archive, class T>
