@@ -720,22 +720,6 @@ would never be instantiated.  So in addition to including export key
 strings in an archive, <code style="white-space: normal">BOOST_CLASS_EXPORT_GUID</code> explicitly
 instantiates the class serialization code for all archive classes used 
 by the program.  
-<p>
-In order to do this, 
-<a href="../../../boost/serialization/export.hpp" target="export_hpp">export.hpp</a>
-includes meta programming code to build a <code style="white-space: normal">mpl::list</code>  
-of all the file types used by the module by checking for definition of the header 
-inclusion guards.
-
-Using this list,  
-<code style="white-space: normal">BOOST_CLASS_EXPORT_GUID</code> will explicitly instantiate serialization
-code for all exported classes.
-For this implementaton to function, the header file 
-<a href="../../../boost/serialization/export.hpp" target="export_hpp">export.hpp</a>
-has to come after all the archive header files.  This is enforced
-by code at the end of the header file:
-<a href="../../../boost/archive/basic_archive.hpp" target="basic_archive_hpp">basic_archive.hpp</a>
-which will trip a STATIC_ASSERT if this requirement is violated.
 
 <h4><a name="selectivetracking">Selective Tracking</a></h4>
 Whether or not an object is tracked is determined by its
