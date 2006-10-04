@@ -52,6 +52,7 @@ WSOURCES =
     xml_wgrammar
     xml_wiarchive
     xml_woarchive
+    codecvt_null
 ;
 
 template boost_serialization_base

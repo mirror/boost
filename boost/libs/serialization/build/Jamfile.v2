@@ -50,6 +50,7 @@ WSOURCES =
     xml_wgrammar
     xml_wiarchive
     xml_woarchive
+    codecvt_null
 ;
 
 lib boost_serialization 
