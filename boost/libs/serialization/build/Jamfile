@@ -14,10 +14,9 @@ import ./serialization ;
 
 SOURCES = 
     basic_archive
-    basic_archive_impl
     basic_iarchive
-    basic_oarchive
     basic_iserializer
+    basic_oarchive
     basic_oserializer
     basic_pointer_iserializer
     basic_pointer_oserializer
@@ -25,13 +24,17 @@ SOURCES =
     basic_text_iprimitive
     basic_text_oprimitive
     basic_xml_archive
+    basic_xml_grammar.ipp
     binary_iarchive
     binary_oarchive
+    codecvt_null
     extended_type_info
     extended_type_info_no_rtti
     extended_type_info_typeid
     polymorphic_iarchive
     polymorphic_oarchive
+    polymorphic_text_iarchive
+    shared_ptr_helper
     stl_port
     text_iarchive
     text_oarchive
@@ -42,14 +45,13 @@ SOURCES =
 ;
     
 WSOURCES = 
-    codecvt_null
-    utf8_codecvt_facet
     basic_text_wiprimitive
     basic_text_woprimitive
     binary_wiarchive
     binary_woarchive
     text_wiarchive
     text_woarchive
+    utf8_codecvt_facet
     xml_wgrammar
     xml_wiarchive
     xml_woarchive
