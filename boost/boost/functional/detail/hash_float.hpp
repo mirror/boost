@@ -40,7 +40,7 @@
 // other BSDs, but using the macros if they're available seems like the best
 // choice.
 
-#if defined(__FreeBSD__) || defined(__NetBSD__) && \
+#if defined(__FreeBSD__) || defined(__NetBSD__) || \
     defined(__OpenBSD__) || defined(__DragonFly__)
 #include <float.h>
 #endif
@@ -52,7 +52,7 @@ namespace boost
         template <class T>
         struct float_limits : std::numeric_limits<T> {};
 
-#if defined(__FreeBSD__) || defined(__NetBSD__) && \
+#if defined(__FreeBSD__) || defined(__NetBSD__) || \
     defined(__OpenBSD__) || defined(__DragonFly__)
         template <>
         struct float_limits<long double>
