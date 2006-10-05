@@ -35,13 +35,10 @@
 #  endif
 #endif
 
-// On FreeBSD and OpenBSD, numeric_limits is not reliable for long doubles, but
-// the macros defined in <float.h> are. I don't know if this is also be the case for
-// other BSDs, but using the macros if they're available seems like the best
-// choice.
+// On OpenBSD, numeric_limits is not reliable for long doubles, but
+// the macros defined in <float.h> are.
 
-#if defined(__FreeBSD__) || defined(__NetBSD__) || \
-    defined(__OpenBSD__) || defined(__DragonFly__)
+#if defined(__OpenBSD__)
 #include <float.h>
 #endif
 
@@ -52,8 +49,7 @@ namespace boost
         template <class T>
         struct float_limits : std::numeric_limits<T> {};
 
-#if defined(__FreeBSD__) || defined(__NetBSD__) || \
-    defined(__OpenBSD__) || defined(__DragonFly__)
+#if defined(__OpenBSD__)
         template <>
         struct float_limits<long double>
              : std::numeric_limits<long double>
@@ -74,7 +70,7 @@ namespace boost
             BOOST_STATIC_CONSTANT(int, max_exponent = LDBL_MAX_EXP);
             BOOST_STATIC_CONSTANT(int, min_exponent = LDBL_MIN_EXP);
         };
-#endif // __FreeBSD__/__NetBSD__/__OpenBSD__/__DragonFly__
+#endif // __OpenBSD__
 
         inline void hash_float_combine(std::size_t& seed, std::size_t value)
         {
