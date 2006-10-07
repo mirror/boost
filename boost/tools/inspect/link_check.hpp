@@ -31,8 +31,8 @@ namespace boost
       typedef std::map< string, int > m_path_map;
       m_path_map m_paths; // first() is relative initial_path()
 
-      void do_url( const string & url,
-        const string & library_name, const path & full_source_path );
+      void do_url( const string & url, const string & library_name,
+        const path & full_source_path, bool no_link_errors );
     public:
 
       link_check();
