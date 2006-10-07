@@ -1564,18 +1564,23 @@ rebuilds:
 
 [section Debian, Ubuntu]
 
-The following instructions apply to Debian and its derivatives. It is based
-on a Ubuntu Edgy install, but it should work on other Debian based systems.
+The following instructions apply to Debian and its derivatives. It is based on
+a Ubuntu Edgy install but it should work on other Debian based systems.
 
-# First install the `bjam`, `xsltproc`, `docbook-xsl` and `docbook-xml`
- packages. If you're planning on building boost's documentation, you'll
- also want to install the `doxygen` package as well. For example, using `apt-get`:
+First install the `bjam`, `xsltproc`, `docbook-xsl` and `docbook-xml` packages.
+For example, using `apt-get`:
 
-    sudo apt-get install xsltprc docbook-xsl docbook-xml doxygen
+    sudo apt-get install xsltprc docbook-xsl docbook-xml
 
-# Add the following to your `user-config.jam` file, which should be in your
-  home directory. If you don't have one create a text file containing just
-  this text.
+If you're planning on building boost's documentation, you'll also need to
+install the `doxygen` package as well.
+
+Next, we need to configure Boost Build to compile BoostBook files. Add the
+following to your `user-config.jam` file, which should be in your home
+directory. If you don't have one, create a file containing this text. For more
+information on setting up `user-config.jam`, see the
+[@http://boost.org/boost-build2/doc/html/bbv2/advanced/configuration.html Boost
+Build documentation].
 
     using xsltproc ;
 
@@ -1587,20 +1592,24 @@ on a Ubuntu Edgy install, but it should work on other Debian based systems.
     # Remove this line if you're not using doxygen
     using doxygen ;
 
-# Go to Quickbook's source directory (`BOOST_ROOT/tools/quickbook`).
+The above steps are enough to get a functional BoostBook setup.  Quickbook
+will be automatically built when needed.  If you want to avoid these
+rebuilds:
+
+# Go to Quickbook's source directory (`BOOST_ROOT\tools\quickbook`).
 
 # Build the utility by issuing `bjam --v2`.
 
-# Copy the resulting `quickbook` binary (located at
-  `BOOST_ROOT/dist/bin/quickbook` hierarchy) to a safe place. The traditional
-  location would be `/usr/local/bin`, but anywhere sensible will do.
+# Copy the resulting `quickbook.exe` binary (located under the
+  `BOOST_ROOT\bin.v2` hierarchy) to a safe place.  The traditional location is
+  `/usr/local/bin`.
 
-# Add the following to your `user-config.jam` file (using the path where you
-  placed the quickbook executable):
+# Add the following to your `user-config.jam` file, using the full path of the
+  quickbook executable:
 
-    using quickbook
-        : /usr/local/bin/quickbook
-        ;
+ using quickbook
+     : /usr/local/bin/quickbook
+     ;
 
 [endsect]
 
