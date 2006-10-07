@@ -9,12 +9,17 @@
 #if !defined(FUSION_END_IMPL_20060123_2208)
 #define FUSION_END_IMPL_20060123_2208
 
-#include <boost/fusion/sequence/intrinsic/end.hpp>
 #include <boost/fusion/sequence/view/zip_view/zip_view_iterator_fwd.hpp>
+#include <boost/fusion/sequence/intrinsic/end.hpp>
+#include <boost/fusion/sequence/intrinsic/begin.hpp>
+#include <boost/fusion/sequence/intrinsic/size.hpp>
+#include <boost/fusion/sequence/intrinsic/front.hpp>
+#include <boost/fusion/iterator/advance.hpp>
 #include <boost/fusion/algorithm/transformation/transform.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/is_reference.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/mpl/min.hpp>
 
 namespace boost { namespace fusion {
 
@@ -22,29 +27,30 @@ namespace boost { namespace fusion {
 
     namespace detail
     {
-        struct poly_end
+        template<typename M>
+        struct endpoints
         {
             template<typename SeqRef>
             struct result
-                : result_of::end<typename remove_reference<SeqRef>::type>
             {
-                BOOST_MPL_ASSERT((is_reference<SeqRef>));
+                typedef typename remove_reference<SeqRef>::type Seq;
+                typedef typename result_of::begin<Seq>::type begin;
+                typedef typename result_of::advance<begin, M>::type type;
             };
 
             template<typename Seq>
             typename result<Seq&>::type
             operator()(Seq& seq) const
             {
-                return fusion::end(seq);
+                return fusion::advance<M>(fusion::begin(seq));
             }
 
             template<typename Seq>
             typename result<Seq const&>::type
-            operator()(Seq const& seq) const
+            operator()(Seq const& seq)
             {
-                return fusion::end(seq);
+                return fusion::advance<M>(fusion::begin(seq));
             }
-
         };
     }
 
@@ -60,19 +66,16 @@ namespace boost { namespace fusion {
             struct apply
             {
                 typedef zip_view_iterator<
-                    typename result_of::transform<typename Sequence::sequences, detail::poly_end>::type,
+                    typename result_of::transform<typename Sequence::sequences, detail::endpoints<typename Sequence::size> >::type,
                     typename Sequence::category> type;
 
                 static type
                 call(Sequence& sequence)
                 {
                     return type(
-                        fusion::transform(sequence.sequences_, detail::poly_end()));
+                        fusion::transform(sequence.sequences_, detail::endpoints<typename Sequence::size>()));
                 }
             };
-
-
-            
         };
     }
 }}

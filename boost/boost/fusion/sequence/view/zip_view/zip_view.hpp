@@ -44,22 +44,28 @@ namespace boost { namespace fusion {
             : fusion::result_of::equal_to<typename fusion::result_of::find_if<Sequences, mpl::not_<is_reference<mpl::_> > >::type, typename fusion::result_of::end<Sequences>::type>
         {};
 
-        template<typename Sequences>
-        struct all_same_size_impl
+        struct seq_ref_size
         {
-            typedef mpl::transform_view<Sequences, fusion::result_of::size<remove_reference<mpl::_> > > sizes;
-            typedef typename mpl::at_c<sizes, 0>::type first_size;
-            typedef mpl::iterator_range<
-                typename mpl::next<typename mpl::begin<sizes>::type>::type,
-                typename mpl::end<sizes>::type> remainder;
-            typedef typename mpl::find_if<remainder, mpl::not_<is_same<mpl::_, first_size> > >::type found_difference;
-            typedef typename is_same<found_difference, typename mpl::end<remainder>::type>::type type;
+            template<typename Seq>
+            struct result
+                : result_of::size<typename remove_reference<Seq>::type>
+            {};
+        };
+
+        struct poly_min
+        {
+            template<typename Lhs, typename Rhs>
+            struct result
+                : mpl::min<Lhs, Rhs>
+            {};
         };
 
         template<typename Sequences>
-        struct all_same_size
-            : all_same_size_impl<Sequences>::type
-        {};
+        struct min_size
+        {
+            typedef typename result_of::transform<Sequences, detail::seq_ref_size>::type sizes;
+            typedef typename result_of::fold<sizes, typename result_of::front<sizes>::type, detail::poly_min>::type type;
+        };
     }
 
     struct zip_view_tag;
@@ -69,12 +75,12 @@ namespace boost { namespace fusion {
     struct zip_view : sequence_base< zip_view<Sequences> >
     {
         BOOST_MPL_ASSERT((detail::all_references<Sequences>));
-        BOOST_MPL_ASSERT((detail::all_same_size<Sequences>));
         typedef typename detail::strictest_traversal<Sequences>::type category;
         typedef zip_view_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef mpl::true_ is_view;
         typedef typename fusion::result_of::as_vector<Sequences>::type sequences;
+        typedef typename detail::min_size<Sequences>::type size;
 
         zip_view(
             const Sequences& seqs)
