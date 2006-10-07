@@ -1564,8 +1564,8 @@ rebuilds:
 
 [section Debian, Ubuntu]
 
-The following instructions apply to Debian and its derivatives. It is based on
-a Ubuntu Edgy install but it should work on other Debian based systems.
+The following instructions apply to Debian and its derivatives. They are based
+on a Ubuntu Edgy install but should work on other Debian based systems.
 
 First install the `bjam`, `xsltproc`, `docbook-xsl` and `docbook-xml` packages.
 For example, using `apt-get`:
