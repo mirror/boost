@@ -86,13 +86,17 @@ namespace boost { namespace numeric { namespace ublas {
         static
         BOOST_UBLAS_INLINE
         real_type type_abs (const_reference t) {
-            return std::abs (t);    // must use explict std:: as bultin types are not in std namespace
+            // we'll find either std::abs or else another version via ADL:
+            using namespace std;
+            return abs (t);
         }
         static
         BOOST_UBLAS_INLINE
         value_type type_sqrt (const_reference t) {
-               // force a type conversion back to value_type for intgral types
-            return value_type (std::sqrt (t));   // must use explict std:: as bultin types are not in std namespace
+            using namespace std;
+            // force a type conversion back to value_type for intgral types
+            // we'll find either std::sqrt or else another version via ADL:
+            return value_type (sqrt (t));
         }
 
         static
