@@ -65,7 +65,7 @@ __ ../../../../index.htm
    using namespace test;
    int x = ''');
 
-.. @build()
+.. @test('compile')
 
 
 -------------------------------------
@@ -137,7 +137,6 @@ positional interface becomes burdensome:
        window* w = new_window(
           "alert box", **default_border_width**, movability);
 
-
 * .. compound::
 
     It can become difficult for readers to understand the meaning of
@@ -152,6 +151,7 @@ positional interface becomes burdensome:
 * The author of the call may not remember the order of the
   arguments either, leading to hard-to-find bugs.
 
+.. @ignore(3)
 
 -------------------------
 Named Function Parameters
@@ -166,6 +166,8 @@ Named Function Parameters
   .. parsed-literal::
 
     window* w = new_window("alert box", **movable_=**\ false); // OK!
+
+.. @ignore()
 
 ---------------------------
 Deduced Function Parameters
@@ -190,6 +192,8 @@ Deduced Function Parameters
   Appropriately used, a deduced parameter interface can free the
   user of the burden of even remembering the formal parameter
   names.
+
+.. @ignore()
 
 --------------------------------
 Class Template Parameter Support
@@ -219,6 +223,8 @@ Class Template Parameter Support
     // *parameter interface.*
     smart_ptr<**shared**, **Client**> p;
     smart_ptr<**Client**, **shared**> q;
+
+.. @ignore(2)
 
 ==========
  Tutorial
@@ -269,10 +275,18 @@ components.  For the the rest of this tutorial, unless we say
 otherwise, you can use the rule above to figure out which header
 to ``#include`` to access any given component of the library.
 
+.. @example.append('''
+   using boost::parameter::keyword;
+   ''')
+
+.. @test('compile')
+
 Also, the examples below will also be written as if the
 namespace alias ::
 
   namespace parameter = boost::parameter;
+
+.. @ignore()
 
 has been declared: we'll write ``parameter::xxx`` instead of
 ``boost::parameter::xxx``.
@@ -293,6 +307,8 @@ required, its signature might be as follows::
      , typename graph_traits<g>::vertex_descriptor root_vertex
      , IndexMap index_map
      , ColorMap& color);
+
+.. @ignore()
 
 However, most of the parameters have a useful default value, as
 shown in the table below.
@@ -353,6 +369,8 @@ arguments for which the default is appropriate:
 
   graphs::depth_first_search(g, **color_map_=my_color_map**);
 
+.. @ignore()
+
 To make that syntax legal, there needs to be an object called
 “\ ``color_map_``\ ” whose assignment operator can accept a
 ``my_color_map`` argument.  In this step we'll create one such
@@ -382,6 +400,7 @@ library provides a convenient macro for defining keyword objects::
     BOOST_PARAMETER_NAME(color_map)
   }
 
+.. @test('compile')
 
 The declaration of the ``graph`` keyword you see here is
 equivalent to::
@@ -394,9 +413,12 @@ equivalent to::
     {
       // A reference to the keyword object
       boost::parameter::keyword<tag::graph>& _graph
-      = boost::parameter::keyword<tag::graph>::instance;
+      = boost::parameter::keyword<tag::graph>::get();
     }
   }
+
+.. @example.prepend('#include <boost/parameter/keyword.hpp>')
+.. @test('compile')
 
 It defines a *keyword tag type* named ``tag::graph`` and a *keyword
 object* reference named ``_graph``.
@@ -416,7 +438,7 @@ Now that we have our keywords defined, the function template
 definition follows a simple pattern using the
 ``BOOST_PARAMETER_FUNCTION`` macro::
 
-  #include <boost/parameter/function.hpp>
+  #include <boost/parameter/preprocessor.hpp>
 
   namespace graphs
   {
@@ -441,6 +463,27 @@ definition follows a simple pattern using the
         // use graph, visitor, index_map, and color_map
     }
   }
+
+.. @example.prepend('''
+   #include <boost/parameter/name.hpp>
+
+   BOOST_PARAMETER_NAME(graph)
+   BOOST_PARAMETER_NAME(visitor)
+   BOOST_PARAMETER_NAME(root_vertex)
+   BOOST_PARAMETER_NAME(index_map)
+   BOOST_PARAMETER_NAME(color_map)
+
+   namespace boost {
+
+   template <class T = int>
+   struct dfs_visitor
+   {};
+
+   int vertex_index = 0;
+
+   }''')
+
+.. @test('compile')
 
 The arguments to ``BOOST_PARAMETER_FUNCTION`` are:
 
@@ -489,6 +532,17 @@ Required Parameters
   required parameters, the ``(required … )`` clause can be omitted
   entirely.
 
+.. @example.prepend('''
+   #include <boost/parameter.hpp>
+
+   BOOST_PARAMETER_NAME(graph)
+
+   BOOST_PARAMETER_FUNCTION((void), f, tag,
+   ''')
+
+.. @example.append(') {}')
+.. @test('compile')
+
 Optional Parameters
 -------------------
 
@@ -501,13 +555,38 @@ Optional Parameters
 
   .. parsed-literal::
 
-    (optional **⁣
+    (optional **\
         (visitor,           \*, boost::dfs_visitor<>()) 
         (root_vertex,       \*, \*vertices(graph).first) 
         (index_map,         \*, get(boost::vertex_index,graph)) 
         (in_out(color_map), \*, 
           default_color_map(num_vertices(graph), index_map) )**
     )
+
+.. @example.prepend('''
+   #include <boost/parameter.hpp>
+
+   namespace boost
+   {
+     int vertex_index = 0;
+
+     template <class T = int>
+     struct dfs_visitor
+     {};
+   }
+
+   BOOST_PARAMETER_NAME(graph)
+   BOOST_PARAMETER_NAME(visitor)
+   BOOST_PARAMETER_NAME(root_vertex)
+   BOOST_PARAMETER_NAME(index_map)
+   BOOST_PARAMETER_NAME(color_map)
+
+   BOOST_PARAMETER_FUNCTION((void), f, tag,
+     (required (graph, *))
+   ''')
+
+.. @example.append(') {}')
+.. @test('compile')
 
 Handling “Out” Parameters
 -------------------------
@@ -533,6 +612,32 @@ Handling “Out” Parameters
           default_color_map(num_vertices(graph), index_map) )
     )
 
+.. @example.prepend('''
+   #include <boost/parameter.hpp>
+
+   namespace boost
+   {
+     int vertex_index = 0;
+
+     template <class T = int>
+     struct dfs_visitor
+     {};
+   }
+
+   BOOST_PARAMETER_NAME(graph)
+
+   BOOST_PARAMETER_NAME(visitor)
+   BOOST_PARAMETER_NAME(root_vertex)
+   BOOST_PARAMETER_NAME(index_map)
+   BOOST_PARAMETER_NAME(color_map)
+
+   BOOST_PARAMETER_FUNCTION((void), f, tag,
+     (required (graph, *))
+   ''')
+
+.. @example.append(') {}')
+.. @test('compile')
+
 If ``color_map`` were strictly going to be modified but not examined,
 we could have written ``out(color_map)``.  There is no functional
 difference between ``out`` and ``in_out``; the library provides
@@ -547,6 +652,8 @@ parameters are given in the signature, so for example in this
 call ::
 
   graphs::depth_first_search(x, y);
+
+.. @ignore()
 
 ``x`` will always be interpreted as a graph and ``y`` will always
 be interpreted as a visitor.
@@ -573,6 +680,8 @@ Default Expression Evaluation
             default_color_map(num_vertices(**graph**), index_map) ) 
         )
 
+  .. @ignore()
+
   A default expression is evaluated in the context of all preceding
   parameters, so you can use any of their values by name.
 
@@ -588,7 +697,7 @@ Default Expression Evaluation
     #include <boost/graph/depth_first_search.hpp> // for dfs_visitor
 
     BOOST_PARAMETER_FUNCTION(
-        (void), depth_first_search, graphs
+        (void), depth_first_search, tag
         *…signature goes here…*
     )
     {
@@ -604,14 +713,35 @@ Default Expression Evaluation
         depth_first_search(1, 2, 3, 4, 5);
 
         depth_first_search(
-            "1", '2', color_map = '5',
-            visitor = "4", root_vertex = "3");
+            "1", '2', _color_map = '5',
+            _index_map = "4", _root_vertex = "3");
     }
 
   Despite the fact that default expressions such as
   ``vertices(graph).first`` are ill-formed for the given ``graph``
   arguments, both calls will compile, and each one will print
   exactly the same thing.
+
+.. @example.prepend('''
+   #include <boost/parameter.hpp>
+   #include <iostream>
+
+   BOOST_PARAMETER_NAME(graph)
+   BOOST_PARAMETER_NAME(visitor)
+   BOOST_PARAMETER_NAME(root_vertex)
+   BOOST_PARAMETER_NAME(index_map)
+   BOOST_PARAMETER_NAME(color_map)''')
+
+.. @example.replace_emphasis('''
+   , (required 
+       (graph, *)
+       (visitor, *)
+       (root_vertex, *)
+       (index_map, *)
+       (color_map, *)
+     )
+   ''')
+.. @test('compile')
 
 Signature Matching and Overloading
 ----------------------------------
@@ -672,6 +802,8 @@ it would be ambiguous::
   // ambiguous!
   depth_first_search(boost::adjacency_list<>(), 2, "hello");
 
+.. @ignore()
+
 Adding Type Requirements
 ........................
 
@@ -691,6 +823,8 @@ __ `parameter table`_
   (root_vertex,       
        **(typename boost::graph_traits<graph_type>::vertex_descriptor)**,
        \*vertices(graph).first) 
+
+.. @ignore()
 
 Now the original ``depth_first_search`` will only be called when
 the ``root_vertex`` argument can be converted to the graph's vertex
@@ -724,11 +858,11 @@ in parentheses *and preceded by an asterix*, as follows:
           (graph 
            , **\ \*(boost::mpl::and_<
                    boost::is_convertible<
-                       boost::graph_traits<G>::traversal_category,
+                       boost::graph_traits<_>::traversal_category,
                      , boost::incidence_graph_tag
                    >
                  , boost::is_convertible<
-                       boost::graph_traits<G>::traversal_category,
+                       boost::graph_traits<_>::traversal_category,
                      , boost::vertex_list_graph_tag
                    >
                >)** ))
@@ -737,29 +871,59 @@ in parentheses *and preceded by an asterix*, as follows:
           (visitor, \*, boost::dfs_visitor<>()) // not checkable
 
           (root_vertex
-            , (typename boost::graph_traits<graph_type>::vertex_descriptor)
+            , (typename boost::graph_traits<graphs::graph::value>::vertex_descriptor)
             , \*vertices(graph).first)
  
           (index_map
             , **\ \*(boost::mpl::and_<
                   boost::is_integral<
-                      boost::property_traits<index_map_type>::value_type
+                      boost::property_traits<_>::value_type
                   >
                 , boost::is_same<
-                      typename boost::graph_traits<graph_type>::vertex_descriptor
-                    , boost::property_traits<index_map_type>::key_type
+                      typename boost::graph_traits<graphs::graph::value>::vertex_descriptor
+                    , boost::property_traits<_>::key_type
                   >
               >)**
             , get(boost::vertex_index,graph))
  
           (in_out(color_map)
             , **\ \*(boost::is_same<
-                  typename boost::graph_traits<graph_type>::vertex_descriptor
-                , boost::property_traits<index_map_type>::key_type
+                  typename boost::graph_traits<graphs::graph::value>::vertex_descriptor
+                , boost::property_traits<_>::key_type
               >)**
            , default_color_map(num_vertices(graph), index_map) ) 
         )
     )
+
+.. @example.prepend('''
+   #include <boost/parameter.hpp>
+
+   BOOST_PARAMETER_NAME((_graph, graphs) graph) 
+   BOOST_PARAMETER_NAME((_visitor, graphs) visitor) 
+   BOOST_PARAMETER_NAME((_root_vertex, graphs) root_vertex) 
+   BOOST_PARAMETER_NAME((_index_map, graphs) index_map) 
+   BOOST_PARAMETER_NAME((_color_map, graphs) color_map)
+
+   namespace boost
+   {
+     template <class T>
+     struct graph_traits
+     {
+         typedef int traversal_category;
+         typedef int vertex_descriptor;
+     };
+
+     template <class T>
+     struct property_traits
+     {
+         typedef int key_type;
+     };
+   }''')
+
+.. @example.append('''
+   {}''')
+
+.. @test('compile')
 
 __ ../../../mpl/doc/refmanual/metafunction.html
 
@@ -794,6 +958,8 @@ roughly as follows::
     , CallPolicies policies = default_call_policies()
   );
 
+.. @ignore()
+
 Try not to be too distracted by the use of the term “keywords” in
 this example: although it means something analogous in Boost.Python
 to what it means in the Parameter library, for the purposes of this
@@ -813,7 +979,7 @@ follows:
   namespace mpl = boost::mpl;
 
   BOOST_PARAMETER_FUNCTION(
-      (void), def, tag
+      (void), def, tag,
 
       (required (name,(char const\*)) (func,\*) )   // nondeduced
 
@@ -822,14 +988,14 @@ follows:
           (docstring, (char const\*), "")
 
           (keywords
-             , \*(is_keyword_expression<keywords_type>) // see [#is_keyword_expression]_
+             , \*(is_keyword_expression<mpl::_>) // see [#is_keyword_expression]_
              , no_keywords())
 
           (policies
              , \*(mpl::not_<
                    mpl::or_<
-                       boost::is_convertible<policies_type, char const\*>
-                     , is_keyword_expression<policies_type> // see [#is_keyword_expression]_
+                       boost::is_convertible<mpl::_, char const\*>
+                     , is_keyword_expression<mpl::_> // see [#is_keyword_expression]_
                    >
                >)
              , default_call_policies()
@@ -840,6 +1006,43 @@ follows:
    {
       *…*
    }
+
+.. @example.replace_emphasis('')
+
+.. @example.prepend('''
+   #include <boost/parameter.hpp>
+
+   BOOST_PARAMETER_NAME(name)
+   BOOST_PARAMETER_NAME(func)
+   BOOST_PARAMETER_NAME(docstring)
+   BOOST_PARAMETER_NAME(keywords)
+   BOOST_PARAMETER_NAME(policies)
+
+   struct default_call_policies
+   {};
+
+   struct no_keywords
+   {};
+
+   struct keywords
+   {};
+
+   template <class T>
+   struct is_keyword_expression
+     : boost::mpl::false_
+   {};
+
+   template <>
+   struct is_keyword_expression<keywords>
+     : boost::mpl::true_
+   {};
+
+   default_call_policies some_policies;
+
+   void f()
+   {}
+
+   ''')
 
 .. Admonition:: Syntax Note
 
@@ -855,6 +1058,10 @@ With the declaration above, the following two calls are equivalent:
   def("f", f, **some_policies**, **"Documentation for f"**);
   def("f", f, **"Documentation for f"**, **some_policies**);
 
+.. @example.prepend('''
+   int main()
+   {''')
+
 If the user wants to pass a ``policies`` argument that was also,
 for some reason, convertible to ``char const*``, she can always
 specify the parameter name explicitly, as follows:
@@ -864,6 +1071,9 @@ specify the parameter name explicitly, as follows:
   def(
       "f", f
      , **_policies = some_policies**, "Documentation for f");
+
+.. @example.append('}')
+.. @test('compile', howmany='all')
 
 .. _Boost.Python: ../../../python/doc/index.html
 .. |def| replace:: ``def``
@@ -885,11 +1095,16 @@ be used within the body of a class::
   struct callable2
   {
       BOOST_PARAMETER_CONST_MEMBER_FUNCTION(
-          (void), operator(), (required (arg1,(int))(arg2,(int))))
+          (void), operator(), tag, (required (arg1,(int))(arg2,(int))))
       {
           std::cout << arg1 << ", " << arg2 << std::endl;
       }
   };
+
+.. @example.prepend('''
+   #include <boost/parameter.hpp>''')
+
+.. @test('compile')
 
 These macros don't directly allow a function's interface to be
 separated from its implementation, but you can always forward
@@ -898,13 +1113,21 @@ arguments on to a separate implementation function::
   struct callable2
   {
       BOOST_PARAMETER_CONST_MEMBER_FUNCTION(
-          (void), operator(), (required (arg1,(int))(arg2,(int))))
+          (void), operator(), tag, (required (arg1,(int))(arg2,(int))))
       {
           call_impl(arg1,arg2);
       }
    private:
       void call_impl(int, int); // implemented elsewhere.
   };
+
+.. @example.prepend('''
+   #include <boost/parameter.hpp>
+
+   BOOST_PARAMETER_NAME(arg1)
+   BOOST_PARAMETER_NAME(arg2)''')
+
+.. @test('compile')
 
 ------------------------------
 Parameter-Enabled Constructors
@@ -939,6 +1162,10 @@ the |ArgumentPack| by *indexing* it with keyword objects::
       }
   };
 
+.. @example.prepend('''
+   #include <boost/parameter.hpp>
+   #include <iostream>''')
+
 Note that the bitwise or (“\ ``|``\ ”) operator has a special
 meaning when applied to keyword objects that are passed to an
 |ArgumentPack|\ 's indexing operator: it is used to indicate a
@@ -963,6 +1190,9 @@ interface as follows::
   myclass y(_index = 12, _name = "sally"); // named
   myclass z("june");                       // positional/defaulted
 
+.. @example.wrap('int main() {', '}')
+.. @test('run', howmany='all')
+
 For more on |ArgumentPack| manipulation, see the `Advanced Topics`_
 section.
 
@@ -980,6 +1210,8 @@ In this section we'll use Boost.Parameter to build Boost.Python_\
     , HeldType = ValueType, Copyable = void
   >
   class class\_;
+
+.. @ignore()
 
 Only the first argument, ``ValueType``, is required.
 
@@ -1004,6 +1236,8 @@ positionally or by name:
       **D**, **held_type<std::auto_ptr<D> >**, **base_list<bases<B> >**
   > …;
 
+.. @ignore()
+
 Template Keywords
 -----------------
 
@@ -1018,6 +1252,9 @@ The first step is to define keywords for each template parameter::
 
   }}
 
+.. @example.prepend('#include <boost/parameter.hpp>')
+.. @test('compile')
+
 The declaration of the ``class_type`` keyword you see here is
 equivalent to::
 
@@ -1030,6 +1267,9 @@ equivalent to::
   {};
 
   }}
+
+.. @example.prepend('#include <boost/parameter.hpp>')
+.. @test('compile')
 
 It defines a keyword tag type named ``tag::class_type`` and a
 *parameter passing template* named ``class_type``.
@@ -1062,6 +1302,10 @@ we'll give them generic names and use the special type
 
   }}
 
+.. @example.prepend('#include <boost/parameter.hpp>')
+.. @example.replace_emphasis('')
+.. @test('compile')
+
 Class Template Signatures
 -------------------------
 
@@ -1084,6 +1328,27 @@ separately)::
   > class_signature;
 
   }}
+
+.. @example.prepend('''
+   #include <boost/parameter.hpp>
+   #include <boost/mpl/is_sequence.hpp>
+   #include <boost/noncopyable.hpp>
+   #include <memory>
+
+   using namespace boost::parameter;
+
+   namespace boost { namespace python {
+
+   BOOST_PARAMETER_TEMPLATE_KEYWORD(class_type)
+   BOOST_PARAMETER_TEMPLATE_KEYWORD(base_list)
+   BOOST_PARAMETER_TEMPLATE_KEYWORD(held_type)
+   BOOST_PARAMETER_TEMPLATE_KEYWORD(copyable)
+
+   template <class B = int>
+   struct bases
+   {};
+
+   }}''')
 
 .. |ParameterSpec| replace:: :concept:`ParameterSpec`
 
@@ -1150,6 +1415,16 @@ Exercising the Code So Far
         D, held_type<std::auto_ptr<D> >, base_list<bases<B> > 
     > c2;
 
+  .. @example.prepend('''
+     using boost::python::class_type;
+     using boost::python::copyable;
+     using boost::python::held_type;
+     using boost::python::base_list;
+     using boost::python::bases;
+
+     struct B {};
+     struct D {};''')
+
   we can now examine the intended parameters::
 
     BOOST_MPL_ASSERT((boost::is_same<c1::class_type, B>));
@@ -1165,6 +1440,8 @@ Exercising the Code So Far
         boost::is_same<c2::held_type, std::auto_ptr<D> >
     ));
     BOOST_MPL_ASSERT((boost::is_same<c2::copyable, void>));
+
+.. @test('compile', howmany='all')
 
 Deduced Template Parameters
 ===========================
@@ -1186,10 +1463,29 @@ from the same class, as an implementation detail:
   namespace detail { struct bases_base {}; }
 
   template <class A0 = void, class A1 = void, class A2 = void *…* >
-  struct bases **: bases_base**
+  struct bases **: detail::bases_base**
   {};
 
   }}  
+
+.. @example.replace_emphasis('')
+.. @example.prepend('''
+   #include <boost/parameter.hpp>
+   #include <boost/mpl/is_sequence.hpp>
+   #include <boost/noncopyable.hpp>
+   #include <memory>
+
+   using namespace boost::parameter;
+   using boost::mpl::_;
+
+   namespace boost { namespace python {
+
+   BOOST_PARAMETER_TEMPLATE_KEYWORD(class_type)
+   BOOST_PARAMETER_TEMPLATE_KEYWORD(base_list)
+   BOOST_PARAMETER_TEMPLATE_KEYWORD(held_type)
+   BOOST_PARAMETER_TEMPLATE_KEYWORD(copyable)
+
+   }}''')
 
 Now we can rewrite our signature to make all three optional
 parameters deducible::
@@ -1199,14 +1495,14 @@ parameters deducible::
 
     , optional<
           deduced<tag::base_list>
-        , is_base_and_derived<bases_base,_>
+        , is_base_and_derived<detail::bases_base,_>
       >
 
     , optional<
           deduced<tag::held_type>
         , mpl::not_<
               mpl::or_<
-                  is_base_and_derived<bases_base,_>
+                  is_base_and_derived<detail::bases_base,_>
                 , is_same<noncopyable,_>
               >
           >
@@ -1215,6 +1511,39 @@ parameters deducible::
     , optional<deduced<tag::copyable>, is_same<noncopyable,_> >
 
   > class_signature;
+
+.. @example.prepend('''
+   namespace boost { namespace python {''')
+
+.. @example.append('''
+   template <
+       class A0
+     , class A1 = parameter::void_
+     , class A2 = parameter::void_
+     , class A3 = parameter::void_
+   >
+   struct class_
+   {
+       // Create ArgumentPack
+       typedef typename 
+         class_signature::bind<A0,A1,A2,A3>::type 
+       args;
+ 
+       // Extract first logical parameter.
+       typedef typename parameter::binding<
+         args, tag::class_type>::type class_type;
+      
+       typedef typename parameter::binding<
+         args, tag::base_list, bases<> >::type base_list;
+      
+       typedef typename parameter::binding<
+         args, tag::held_type, class_type>::type held_type;
+      
+       typedef typename parameter::binding<
+         args, tag::copyable, void>::type copyable;
+   };
+
+   }}''')
 
 It may seem like we've added a great deal of complexity, but the
 benefits to our users are greater.  Our original examples can now
@@ -1225,6 +1554,29 @@ be written without explicit parameter names:
   typedef boost::python::class_<**B**, **boost::noncopyable**> c1;
 
   typedef boost::python::class_<**D**, **std::auto_ptr<D>**, **bases<B>** > c2;
+
+.. @example.prepend('''
+   struct B {};
+   struct D {};
+
+   using boost::python::bases;''')
+
+.. @example.append('''
+   BOOST_MPL_ASSERT((boost::is_same<c1::class_type, B>));
+   BOOST_MPL_ASSERT((boost::is_same<c1::base_list, bases<> >));
+   BOOST_MPL_ASSERT((boost::is_same<c1::held_type, B>));
+   BOOST_MPL_ASSERT((
+        boost::is_same<c1::copyable, boost::noncopyable>
+   ));
+
+   BOOST_MPL_ASSERT((boost::is_same<c2::class_type, D>));
+   BOOST_MPL_ASSERT((boost::is_same<c2::base_list, bases<B> >));
+   BOOST_MPL_ASSERT((
+       boost::is_same<c2::held_type, std::auto_ptr<D> >
+   ));
+   BOOST_MPL_ASSERT((boost::is_same<c2::copyable, void>));''')
+
+.. @test('compile', howmany='all')
 
 ===============
 Advanced Topics
@@ -1246,6 +1598,8 @@ way to use ``BOOST_PARAMETER_NAME``:
 
    BOOST_PARAMETER_NAME(\ **(**\ *object-name*\ **,** *tag-namespace*\ **)** *parameter-name*\ )
 
+.. @ignore()
+
 Here is a usage example:
 
 .. parsed-literal::
@@ -1260,6 +1614,12 @@ Here is a usage example:
   }
 
   int x = f(**pass_foo** = 41);
+
+.. @example.prepend('#include <boost/parameter.hpp>')
+.. @example.append('''
+   int main()
+   {}''')
+.. @test('run')
 
 Before you use this more verbose form, however, please read the
 section on `best practices for keyword object naming`__.
@@ -1295,6 +1655,10 @@ keyword object::
 
    int x = print_index(_index = 3);  // prints "index = 3"
 
+.. @example.prepend('''
+   #include <boost/parameter.hpp>
+   #include <iostream>''')
+
 Also, |ArgumentPack|\ s can be composed using the comma operator.
 The extra parentheses below are used to prevent the compiler from
 seeing two separate arguments to ``print_name_and_index``::
@@ -1323,13 +1687,26 @@ its function call operator:
   parameter::parameters<
       required<tag::\ name, is_convertible<_,char const*> >
     , optional<tag::\ index, is_convertible<_,int> >
-  > const spec;
+  > spec;
 
   int z0 = print_name_and_index( **spec(**\ "sam", 12\ **)** );
 
   int z1 = print_name_and_index( 
      **spec(**\ _index=12, _name="sam"\ **)** 
   );
+
+.. @example.prepend('''
+   namespace parameter = boost::parameter;
+   using parameter::required;
+   using parameter::optional;
+   using boost::is_convertible;
+   using boost::mpl::_;''')
+
+.. @example.append('''
+   int main()
+   {}''')
+
+.. @test('run', howmany='all')
 
 Extracting Parameter Types
 ==========================
@@ -1343,17 +1720,34 @@ function template and allow *it* to do type deduction::
    BOOST_PARAMETER_NAME(index)
 
    template <class Name, class Index>
-   void deduce_arg_types_impl(Name& name, Index& index)
+   int deduce_arg_types_impl(Name& name, Index& index)
    {
        Name& n2 = name;  // we know the types
        Index& i2 = index;
+       return index;
    }
 
    template <class ArgumentPack>
    int deduce_arg_types(ArgumentPack const& args)
    {
-       deduce_arg_types_impl(args[_name], args[_index|42]);
+       return deduce_arg_types_impl(args[_name], args[_index|42]);
    }
+
+.. @example.prepend('''
+   #include <boost/parameter.hpp>
+   #include <cassert>''')
+
+.. @example.append('''
+   int a1 = deduce_arg_types((_name = "foo"));
+   int a2 = deduce_arg_types((_name = "foo", _index = 3));
+
+   int main()
+   {
+       assert(a1 == 42);
+       assert(a2 == 3);
+   }''')
+
+.. @test('run')
 
 Occasionally one needs to deduce argument types without an extra
 layer of function call.  For example, suppose we wanted to return
@@ -1367,10 +1761,26 @@ case we can use the ``binding< … >`` metafunction introduced
    typename parameter::binding<ArgumentPack, tag::index, int>::type
    twice_index(ArgumentPack const& args)
    {
-       return 2 * args[_index|42]);
+       return 2 * args[_index|42];
    }
 
    int six = twice_index(_index = 3);
+
+.. TODO: binding<> returns a reference. We should use value_type<> here.
+
+.. @example.prepend('''
+   #include <boost/parameter.hpp>
+   #include <cassert>
+
+   namespace parameter = boost::parameter;''')
+
+.. @example.append('''
+   int main()
+   {
+       assert(six == 6);
+   }''')
+
+.. @test('run')
 
 __ binding_intro_
 
