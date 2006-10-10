@@ -7,7 +7,6 @@
 import os
 import tempfile
 import litre
-import config
 import re
 import sys
 import traceback
@@ -39,9 +38,10 @@ class Example:
     closed = False
     in_emph = None
     
-    def __init__(self, node, line_offset, line_hash = '#'):
+    def __init__(self, node, section, line_offset, line_hash = '#'):
         # A list of text fragments comprising the Example.  Start with a #line
         # directive
+        self.section = section
         self.line_hash = line_hash
         self.node = node
         self.body = []
@@ -220,7 +220,7 @@ class BuildResult:
 
 class CPlusPlusTranslator(litre.LitreTranslator):
 
-    _exposed_attrs = ['compile', 'run', 'ignore', 'match_stdout', 'stack', 'config'
+    _exposed_attrs = ['compile', 'test', 'ignore', 'match_stdout', 'stack', 'config'
                       , 'example', 'prefix', 'preprocessors', 'litre_directory',
                       'litre_translator', 'includes', 'build', 'jam_prefix',
                       'run_python']
@@ -249,6 +249,9 @@ class CPlusPlusTranslator(litre.LitreTranslator):
         for m in self._exposed_attrs:
             self.globals[m] = getattr(self, m)
 
+        self.examples = {}
+        self.current_section = None
+
     #
     # Stuff for use by docutils writer framework
     #
@@ -259,19 +262,22 @@ class CPlusPlusTranslator(litre.LitreTranslator):
     def depart_emphasis(self, node):
         if self.in_literal:
             self.example.end_emphasis()
-        
+
+    def visit_section(self, node):
+        self.current_section = node['ids'][0]
+
     def visit_literal_block(self, node):
         if node.source is None:
             node.source = self.last_source
         self.last_source = node.source
-        
+
         # create a new example
-        self.example = Example(node, line_offset = self.line_offset, line_hash = self.config.line_hash)
-        
+        self.example = Example(node, self.current_section, line_offset = self.line_offset, line_hash = self.config.line_hash)
+
         self.stack.append(self.example)
 
         self.in_literal = True
-        
+
     def depart_literal_block(self, node):
         self.in_literal = False
 
@@ -298,7 +304,10 @@ class CPlusPlusTranslator(litre.LitreTranslator):
     def visit_Text(self, node):
         if self.in_literal:
             self.example.append_raw(node.astext())
-            
+
+    def depart_document(self, node):
+        self.write_examples()
+           
     #
     # Private stuff
     #
@@ -479,6 +488,72 @@ class CPlusPlusTranslator(litre.LitreTranslator):
                 print 'failed to unlink', built_file
         
         return status
+
+    def test(
+          self
+        , rule = 'run'
+        , howmany = 1
+        , pop = -1
+        , expect_error = False
+        , requirements = ''
+        , input = ''
+        ):
+
+        # Grab one example by default
+        if howmany == 'all':
+            howmany = len(self.stack)
+
+        source = '\n'.join(
+            self.prefix
+            + [str(x) for x in self.stack[-howmany:]]
+            )
+
+        source = reduce(lambda s, f: f(s), self.preprocessors, source)
+
+        id = self.example.section
+        if not id:
+            id = 'top-level'
+
+        if not self.examples.has_key(self.example.section):
+            self.examples[id] = [(rule, source)]
+        else:
+            self.examples[id].append((rule, source))
+
+        if pop:
+            if pop < 0:
+                pop = howmany
+            del self.stack[-pop:]
+
+        if len(self.stack):
+            self.example = self.stack[-1]
+
+    def write_examples(self):
+        jam = open(os.path.join(self.config.dump_dir, 'Jamfile.v2'), 'w')
+
+        jam.write('''
+import testing ;
+
+''')
+
+        for id,examples in self.examples.items():
+            for i in range(len(examples)):
+                cpp = '%s%d.cpp' % (id, i)
+
+                jam.write('%s %s ;\n' % (examples[i][0], cpp))
+
+                outfile = os.path.join(self.config.dump_dir, cpp)
+                print cpp,
+                try:
+                    if open(outfile, 'r').read() == examples[i][1]:
+                        print ' .. skip'
+                        continue
+                except:
+                    pass
+
+                open(outfile, 'w').write(examples[i][1])
+                print ' .. written'
+
+        jam.close()
 
     def build(
           self
@@ -662,7 +737,7 @@ use-project /boost : $(BOOST_ROOT) ;
         status, output = syscmd(exe, input = stdin)
         self.last_run_output = output
         
-    def run(self, howmany = 1, stdin = None, **kw):
+    def run_(self, howmany = 1, stdin = None, **kw):
         new_kw = { 'options':[], 'extension':'.exe' }
         new_kw.update(kw)
 
@@ -673,6 +748,7 @@ use-project /boost : $(BOOST_ROOT) ;
         )
 
     def astext(self):
+        return ""
         return '\n\n ---------------- Unhandled Fragment ------------ \n\n'.join(
             [''] # generates a leading announcement
             + [ unicode(s) for s in self.stack]
