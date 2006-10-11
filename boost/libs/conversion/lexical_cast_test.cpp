@@ -417,13 +417,15 @@ void test_conversion_from_integral_to_integral()
     T t = 0;
     BOOST_CHECK(lexical_cast<T>(t) == t);
 
-    t = 32767;
-    BOOST_CHECK(lexical_cast<short>(t) == t);
-    BOOST_CHECK(lexical_cast<unsigned short>(t) == t);
-    BOOST_CHECK(lexical_cast<int>(t) == t);
-    BOOST_CHECK(lexical_cast<unsigned int>(t) == t);
-    BOOST_CHECK(lexical_cast<long>(t) == t);
-    BOOST_CHECK(lexical_cast<unsigned long>(t) == t);
+    // Next two variables are used to supress warnings.
+    int st = 32767; unsigned int ut = st;
+    t = st;
+    BOOST_CHECK(lexical_cast<short>(t) == st);
+    BOOST_CHECK(lexical_cast<unsigned short>(t) == ut);
+    BOOST_CHECK(lexical_cast<int>(t) == st);
+    BOOST_CHECK(lexical_cast<unsigned int>(t) == ut);
+    BOOST_CHECK(lexical_cast<long>(t) == st);
+    BOOST_CHECK(lexical_cast<unsigned long>(t) == ut);
 
     t = std::numeric_limits<T>::max();
     BOOST_CHECK(lexical_cast<T>(t) == t);
@@ -453,10 +455,11 @@ void test_conversion_from_integral_to_string(CharT)
     {
         T const min_val = limits::min();
         T const max_val = limits::max();
-        int const counter = lcast_integral_test_counter < max_val / 2 ?
-            lcast_integral_test_counter : max_val / 2;
+        T const half_max_val = max_val / 2;
+        T const cnt = lcast_integral_test_counter; // to supress warnings
+        unsigned int const counter = cnt < half_max_val ? cnt : half_max_val;
 
-        int i;
+        unsigned int i;
 
         // Test values around min:
         t = min_val;
@@ -470,12 +473,12 @@ void test_conversion_from_integral_to_string(CharT)
 
         // Test values around zero:
         if(limits::is_signed)
-            for(t = -counter; t < counter; ++t)
+            for(t = -counter; t < static_cast<T>(counter); ++t)
                 BOOST_CHECK(lexical_cast<string_type>(t) == to_str<CharT>(t));
 
         // Test values around 100, 1000, 10000, ...
         T ten_power = 100;
-        for(i = 2; i <= limits::digits10; ++i, ten_power *= 10)
+        for(int e = 2; e <= limits::digits10; ++e, ten_power *= 10)
         {
             // I believe that (ten_power + 100) never overflows
             for(t = ten_power - 100; t != ten_power + 100; ++t)
