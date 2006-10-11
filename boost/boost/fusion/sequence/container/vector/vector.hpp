@@ -16,6 +16,8 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/type_traits/add_const.hpp>
+#include <boost/type_traits/is_base_of.hpp>
+#include <boost/detail/workaround.hpp>
 
 namespace boost { namespace fusion
 {
@@ -51,9 +53,16 @@ namespace boost { namespace fusion
         vector(vector<BOOST_PP_ENUM_PARAMS(FUSION_MAX_VECTOR_SIZE, U)> const& rhs)
             : vec(rhs.vec) {}
 
+        vector(vector const& rhs)
+            : vec(rhs.vec) {}
+
         template <typename T>
         explicit vector(T const& rhs)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
+            : vec(ctor_helper(rhs, is_base_of<vector, T>())) {}
+#else
             : vec(rhs) {}
+#endif
 
         //  Expand a couple of forwarding constructors for arguments
         //  of type (T0), (T0, T1), (T0, T1, T2) etc. Example:
@@ -117,10 +126,25 @@ namespace boost { namespace fusion
         >::type
         at_impl(I index) const
         { 
-            return vec.at_impl(mpl::int_<I::value>()); 
+            return vec.at_impl(mpl::int_<I::value>());
         }        
 
     private:
+        
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
+        static vector_n const& 
+        ctor_helper(vector const& rhs, mpl::true_)
+        {
+            return rhs.vec;
+        }
+
+        template <typename T>
+        static T const& 
+        ctor_helper(T const& rhs, mpl::false_)
+        {
+            return rhs;
+        }
+#endif
 
         vector_n vec;
     };
