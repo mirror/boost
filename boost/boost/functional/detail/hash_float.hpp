@@ -47,11 +47,11 @@ namespace boost
     namespace hash_detail
     {
         template <class T>
-        struct float_limits : std::numeric_limits<T> {};
+        struct limits : std::numeric_limits<T> {};
 
 #if defined(__OpenBSD__)
         template <>
-        struct float_limits<long double>
+        struct limits<long double>
              : std::numeric_limits<long double>
         {
             static long double epsilon() {
@@ -96,19 +96,19 @@ namespace boost
             //BOOST_ASSERT(0 <= v && v < 0.5);
 
             v = boost::hash_detail::call_ldexp(v,
-                    float_limits<std::size_t>::digits + 1);
+                    limits<std::size_t>::digits + 1);
             std::size_t seed = static_cast<std::size_t>(v);
             v -= seed;
 
             // ceiling(digits(T) * log2(radix(T))/ digits(size_t)) - 1;
             std::size_t const length
-                = (float_limits<T>::digits *
-                        boost::static_log2<float_limits<T>::radix>::value - 1)
-                / float_limits<std::size_t>::digits;
+                = (limits<T>::digits *
+                        boost::static_log2<limits<T>::radix>::value - 1)
+                / limits<std::size_t>::digits;
 
             for(std::size_t i = 0; i < length; ++i)
             {
-                v = boost::hash_detail::call_ldexp(v, float_limits<std::size_t>::digits);
+                v = boost::hash_detail::call_ldexp(v, limits<std::size_t>::digits);
                 std::size_t part = static_cast<std::size_t>(v);
                 v -= part;
                 hash_float_combine(seed, part);

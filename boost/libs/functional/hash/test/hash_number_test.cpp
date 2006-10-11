@@ -24,7 +24,7 @@
 template <class T>
 void numeric_test(T*)
 {
-    typedef boost::hash_detail::float_limits<T> limits;
+    typedef boost::hash_detail::limits<T> limits;
 
     compile_time_tests((T*) 0);
 
@@ -60,7 +60,7 @@ void numeric_test(T*)
 template <class T>
 void limits_test(T*)
 {
-    typedef boost::hash_detail::float_limits<T> limits;
+    typedef boost::hash_detail::limits<T> limits;
 
     if(limits::is_specialized)
     {
@@ -91,7 +91,7 @@ void limits_test(T*)
 template <class T>
 void poor_quality_tests(T*)
 {
-    typedef boost::hash_detail::float_limits<T> limits;
+    typedef boost::hash_detail::limits<T> limits;
 
     HASH_NAMESPACE::hash<T> x1;
     HASH_NAMESPACE::hash<T> x2;
