@@ -858,11 +858,11 @@ in parentheses *and preceded by an asterix*, as follows:
           (graph 
            , **\ \*(boost::mpl::and_<
                    boost::is_convertible<
-                       boost::graph_traits<_>::traversal_category,
+                       boost::graph_traits<_>::traversal_category
                      , boost::incidence_graph_tag
                    >
                  , boost::is_convertible<
-                       boost::graph_traits<_>::traversal_category,
+                       boost::graph_traits<_>::traversal_category
                      , boost::vertex_list_graph_tag
                    >
                >)** ))
@@ -871,7 +871,7 @@ in parentheses *and preceded by an asterix*, as follows:
           (visitor, \*, boost::dfs_visitor<>()) // not checkable
 
           (root_vertex
-            , (typename boost::graph_traits<graphs::graph::value>::vertex_descriptor)
+            , (typename boost::graph_traits<graphs::graph::_>::vertex_descriptor)
             , \*vertices(graph).first)
  
           (index_map
@@ -880,7 +880,7 @@ in parentheses *and preceded by an asterix*, as follows:
                       boost::property_traits<_>::value_type
                   >
                 , boost::is_same<
-                      typename boost::graph_traits<graphs::graph::value>::vertex_descriptor
+                      typename boost::graph_traits<graphs::graph::_>::vertex_descriptor
                     , boost::property_traits<_>::key_type
                   >
               >)**
@@ -888,7 +888,7 @@ in parentheses *and preceded by an asterix*, as follows:
  
           (in_out(color_map)
             , **\ \*(boost::is_same<
-                  typename boost::graph_traits<graphs::graph::value>::vertex_descriptor
+                  typename boost::graph_traits<graphs::graph::_>::vertex_descriptor
                 , boost::property_traits<_>::key_type
               >)**
            , default_color_map(num_vertices(graph), index_map) ) 
@@ -904,8 +904,15 @@ in parentheses *and preceded by an asterix*, as follows:
    BOOST_PARAMETER_NAME((_index_map, graphs) index_map) 
    BOOST_PARAMETER_NAME((_color_map, graphs) color_map)
 
+   using boost::mpl::_;
+
    namespace boost
    {
+     struct incidence_graph_tag {};
+     struct vertex_list_graph_tag {};
+
+     int vertex_index = 0;
+
      template <class T>
      struct graph_traits
      {
@@ -916,8 +923,13 @@ in parentheses *and preceded by an asterix*, as follows:
      template <class T>
      struct property_traits
      {
+         typedef int value_type;
          typedef int key_type;
      };
+
+     template <class T = int>
+     struct dfs_visitor 
+     {};
    }''')
 
 .. @example.append('''
@@ -1809,7 +1821,19 @@ when using |ArgumentPack|\ s explicitly, we need a tool other than
    }
 
    std::string x = f((_s1="hello,", _s2=" world", _s3="hi world"));
+
+.. @example.prepend('''
+   #include <boost/parameter.hpp>
+   #include <string>
    
+   namespace parameter = boost::parameter;''')
+
+.. @example.append('''
+   int main()
+   {}''')
+
+.. @test('run')
+
 In the example above, the string ``"hello, world"`` is constructed
 despite the fact that the user passed us a value for ``s3``.  To
 remedy that, we can compute the default value *lazily* (that is,
@@ -1823,6 +1847,34 @@ with a function object built by the Boost Lambda_ library: [#bind]_
    typename parameter::binding<
        ArgumentPack, tag::s3, std::string
    >::type s3 = args[_s3 **|| (lambda::var(s1)+lambda::var(s2))** ];
+
+.. @example.prepend('''
+   #include <boost/lambda/lambda.hpp>
+   #include <boost/parameter.hpp>
+   #include <string>
+
+   namespace parameter = boost::parameter;
+
+   BOOST_PARAMETER_NAME(s1)
+   BOOST_PARAMETER_NAME(s2)
+   BOOST_PARAMETER_NAME(s3)
+
+   template <class ArgumentPack>
+   std::string f(ArgumentPack const& args)
+   {
+       std::string const& s1 = args[_s1];
+       std::string const& s2 = args[_s2];''')
+
+.. @example.append('''
+       return s3;
+   }
+
+   std::string x = f((_s1="hello,", _s2=" world", _s3="hi world"));
+
+   int main()
+   {}''')
+
+.. @test('run')
 
 .. _Lambda: ../../../lambda/index.html
 
@@ -1886,6 +1938,8 @@ usually-silent bug:
     }
   }
 
+.. @ignore()
+
 Although in the case above, the user was trying to pass the value
 ``3`` as the ``age`` parameter to ``g``, what happened instead
 was that ``f``\ 's ``age`` argument got reassigned the value 3,
@@ -1917,8 +1971,8 @@ Boost.Parameter-enabled functions using those keywords:
 
   namespace lib
   {
-    **BOOST_PARAMETER_KEYWORD(name)
-    BOOST_PARAMETER_KEYWORD(index)**
+    **BOOST_PARAMETER_NAME(name)
+    BOOST_PARAMETER_NAME(index)**
 
     BOOST_PARAMETER_FUNCTION(
       (int), f, tag, 
@@ -1930,6 +1984,12 @@ Boost.Parameter-enabled functions using those keywords:
     }
   }
 
+.. @example.prepend('''
+   #include <boost/parameter.hpp>
+   #include <iostream>''')
+.. @namespace_setup = str(example)
+.. @ignore()
+
 Users of these functions have a few choices:
 
 1. Full qualification:
@@ -1939,6 +1999,10 @@ Users of these functions have a few choices:
     int x = **lib::**\ f(**lib::**\ _name = "jill", **lib::**\ _index = 1);
 
   This approach is more verbose than many users would like.
+
+.. @example.prepend(namespace_setup)
+.. @example.append('int main() {}')
+.. @test('run')
 
 2. Make keyword objects available through
    *using-declarations*:
@@ -1954,6 +2018,10 @@ Users of these functions have a few choices:
   *using-declarations* themselves can be verbose and hard-to
   manage.
 
+.. @example.prepend(namespace_setup)
+.. @example.append('int main() {}')
+.. @test('run')
+
 3. Bring in the entire namespace with a *using-directive*:
 
   .. parsed-literal::
@@ -1964,6 +2032,10 @@ Users of these functions have a few choices:
   This option is convenient, but it indiscriminately makes the
   *entire* contents of ``lib`` available without qualification.
 
+.. @example.prepend(namespace_setup)
+.. @example.append('int main() {}')
+.. @test('run')
+
 If we add an additional namespace around keyword declarations,
 though, we can give users more control:
 
@@ -1973,8 +2045,8 @@ though, we can give users more control:
   {
     **namespace keywords
     {**
-       BOOST_PARAMETER_KEYWORD(name)
-       BOOST_PARAMETER_KEYWORD(index)
+       BOOST_PARAMETER_NAME(name)
+       BOOST_PARAMETER_NAME(index)
     **}**
 
     BOOST_PARAMETER_FUNCTION(
@@ -1987,6 +2059,10 @@ though, we can give users more control:
     }
   }
 
+.. @example.prepend('''
+   #include <boost/parameter.hpp>
+   #include <iostream>''')
+
 Now users need only a single *using-directive* to bring in just the
 names of all keywords associated with ``lib``:
 
@@ -1994,6 +2070,9 @@ names of all keywords associated with ``lib``:
   
   **using namespace lib::keywords;**
   int y = lib::f(_name = "bob", _index = 2);
+
+.. @example.append('int main() {}')
+.. @test('run', howmany='all')
 
 -------------
 Documentation
