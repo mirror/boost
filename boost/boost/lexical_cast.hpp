@@ -27,6 +27,7 @@
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/call_traits.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/detail/lcast_precision.hpp>
 
 #ifdef BOOST_NO_STRINGSTREAM
 #include <strstream>
@@ -458,25 +459,7 @@ namespace boost
             lexical_stream(char_type* = 0, char_type* = 0)
             {
                 stream.unsetf(std::ios::skipws);
-
-#if (defined _MSC_VER)
-# pragma warning( push )
-  // conditional expression is constant
-# pragma warning( disable : 4127 )
-#endif
-
-                typedef std::numeric_limits<Target> t;
-                typedef std::numeric_limits<Source> s;
-
-                if(t::is_specialized)
-                    stream.precision(1 + t::digits10);
-                else if(s::is_specialized)
-                    stream.precision(1 + s::digits10);
-
-#if (defined _MSC_VER)
-# pragma warning( pop )
-#endif
-
+                lcast_set_precision<Source, Target>(stream);
             }
             ~lexical_stream()
             {
@@ -626,8 +609,7 @@ namespace boost
 
                 typedef std::numeric_limits<InputStreamable> limits;
 
-                if(limits::is_specialized)
-                    stream.precision(limits::digits10 + 1);
+                lcast_set_precision<InputStreamable>(stream);
 #if (defined _MSC_VER)
 # pragma warning( pop )
 #endif

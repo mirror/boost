@@ -5,8 +5,8 @@
 // (See accompanying file LICENSE_1_0.txt
 // or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_DETAIL_LCAST_SET_PRECISION_HPP_INCLUDED
-#define BOOST_DETAIL_LCAST_SET_PRECISION_HPP_INCLUDED
+#ifndef BOOST_DETAIL_LCAST_PRECISION_HPP_INCLUDED
+#define BOOST_DETAIL_LCAST_PRECISION_HPP_INCLUDED
 
 #include <climits>
 #include <ios>
@@ -28,7 +28,7 @@ namespace boost { namespace detail {
 
 #ifdef _MSC_VER
 #pragma warning (push)
-// conditional expression is constant (stream precision)
+// conditional expression is constant
 #pragma warning (disable : 4127)
 #endif
 
@@ -85,7 +85,7 @@ inline std::streamsize lcast_get_precision()
     // radix = 10 and digits10 == the number of decimal digits.
 
     return 6;
-} // template<class T> bool lcast_set_precision(std::ios_base& stream)
+}
 
 template<class T>
 inline void lcast_set_precision(std::ios_base& stream)
@@ -109,5 +109,5 @@ inline void lcast_set_precision(std::ios_base& stream)
 
 #undef BOOST_DETAIL_LCAST_ASSERT
 
-#endif //  BOOST_DETAIL_LCAST_SET_PRECISION_HPP_INCLUDED
+#endif //  BOOST_DETAIL_LCAST_PRECISION_HPP_INCLUDED
 
