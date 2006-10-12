@@ -109,8 +109,8 @@ template <typename IteratorT, typename PositionT>
 inline
 lexer<IteratorT, PositionT>::lexer(IteratorT const &first, 
         IteratorT const &last, PositionT const &pos, 
-        boost::wave::language_support language) 
-:   filename(pos.get_file()), at_eof(false), language(language)
+        boost::wave::language_support language_) 
+:   filename(pos.get_file()), at_eof(false), language(language_)
 {
     using namespace std;        // some systems have memset in std
     memset(&scanner, '\0', sizeof(Scanner));
