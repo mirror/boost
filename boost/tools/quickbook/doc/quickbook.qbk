@@ -1612,8 +1612,48 @@ rebuilds:
      ;
 
 [endsect]
+[endsect] [/Installation and configuration]
 
-[endsect]
+[section:editors Editor Support]
+
+Editing quickbook files is usually done with text editors both simple and 
+powerful. The following sections list the settings for some editors which can 
+help make editing quickbook files a bit easier.
+
+[blurb __note__ You may submit your settings, tips, and suggestions to the 
+authors, or through the [@https://lists.sourceforge.net/lists/listinfo/boost-
+docs Boost Docs mailing list].]
+
+[section:scite Scintilla Text Editor]
+
+[blurb Section contributed by Dean Michael Berris]
+
+The Scintilla Text Editor (SciTE) is a free source code editor for Win32 and X. 
+It uses the SCIntilla source code editing component.
+
+[blurb __tip__ SciTE can be downloaded from [@http://www.scintilla.org/SciTE.html]]
+
+You can use the following settings to highlight quickbook tags when
+editing quickbook files.
+
+[pre'''
+qbk=*.qbk
+lexer.*.qbk=props
+use.tabs.$(qbk)=0
+tab.size.$(qbk)=4
+indent.size.$(qbk)=4
+style.props.32=$(font.base)
+comment.stream.start.props=[/
+comment.stream.end.props=]
+comment.box.start.props=[/
+comment.box.middle.props=
+comment.box.end.props=]
+''']
+
+[blurb __note__ Thanks to Rene Rivera for the above SciTE settings.]
+
+[endsect] [/scite]
+[endsect] [/editors]
 
 [section:ref Quick Reference]
 
