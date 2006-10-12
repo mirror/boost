@@ -23,6 +23,10 @@
 #define BOOST_DETAIL_LCAST_ASSERT(cond) BOOST_STATIC_ASSERT(cond)
 // Remember, static_cast is evaluated even inside dead branches.
 #endif
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+# include <boost/type_traits/is_same.hpp>
+# include <boost/mpl/bool.hpp>
+#endif 
 
 namespace boost { namespace detail {
 
@@ -88,13 +92,21 @@ inline std::streamsize lcast_get_precision()
 }
 
 template<class T>
-inline void lcast_set_precision(std::ios_base& stream)
+inline void lcast_set_precision(std::ios_base& stream
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+                                , short = 0
+#endif 
+)
 {
     stream.precision(lcast_get_precision<T>());
 }
 
 template<class Source, class Target>
-inline void lcast_set_precision(std::ios_base& stream)
+inline void lcast_set_precision(std::ios_base& stream
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
+                                , long = 0
+#endif 
+)
 {
     std::streamsize const s = lcast_get_precision<Source>();
     std::streamsize const t = lcast_get_precision<Target>();
