@@ -17,11 +17,8 @@
 
 #ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #include <boost/assert.hpp>
-#define BOOST_DETAIL_LCAST_ASSERT(cond) BOOST_ASSERT(cond)
 #else
 #include <boost/static_assert.hpp>
-#define BOOST_DETAIL_LCAST_ASSERT(cond) BOOST_STATIC_ASSERT(cond)
-// Remember, static_cast is evaluated even inside dead branches.
 #endif
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 # include <boost/type_traits/is_same.hpp>
@@ -30,29 +27,80 @@
 
 namespace boost { namespace detail {
 
-#ifdef _MSC_VER
-#pragma warning (push)
-// conditional expression is constant
-#pragma warning (disable : 4127)
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+// Calculate an argument to pass to std::ios_base::precision from
+// lexical_cast. See alternative implementation for broken standard
+// libraries in lcast_get_precision below. Keep them in sync, please.
+template<class T>
+struct lcast_precision
+{
+    typedef std::numeric_limits<T> limits;
+
+    BOOST_STATIC_CONSTANT(bool, use_default_precision =
+            !limits::is_specialized || limits::is_exact
+        );
+
+    BOOST_STATIC_CONSTANT(bool, is_specialized_bin =
+            !use_default_precision &&
+            limits::radix == 2 && limits::digits > 0
+        );
+
+    BOOST_STATIC_CONSTANT(bool, is_specialized_dec =
+            !use_default_precision &&
+            limits::radix == 10 && limits::digits10 > 0
+        );
+
+    BOOST_STATIC_CONSTANT(std::streamsize, streamsize_max =
+            boost::integer_traits<std::streamsize>::const_max
+        );
+
+    BOOST_STATIC_CONSTANT(unsigned int, precision_dec = limits::digits10 + 1U);
+
+    BOOST_STATIC_ASSERT(!is_specialized_dec ||
+            precision_dec <= streamsize_max + 0UL
+        );
+
+    BOOST_STATIC_CONSTANT(unsigned long, precision_bin =
+            2UL + limits::digits * 30103UL / 100000UL
+        );
+
+    BOOST_STATIC_ASSERT(!is_specialized_bin ||
+            limits::digits + 0UL < ULONG_MAX / 30103UL &&
+            precision_bin > limits::digits10 + 0UL &&
+            precision_bin <= streamsize_max + 0UL
+        );
+
+    BOOST_STATIC_CONSTANT(std::streamsize, value =
+            is_specialized_bin ? precision_bin
+                               : is_specialized_dec ? precision_dec : 6
+        );
+};
 #endif
 
 template<class T>
 inline std::streamsize lcast_get_precision()
 {
+#if !defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS)
+    return lcast_precision<T>::value;
+#else // Follow lcast_precision algorithm at run-time:
+
     typedef std::numeric_limits<T> limits;
 
-    bool const is_floating = limits::is_specialized && !limits::is_exact;
-    if(is_floating)
+    bool const use_default_precision =
+        !limits::is_specialized || limits::is_exact;
+
+    if(!use_default_precision)
     { // Includes all built-in floating-point types, float, double ...
       // and UDT types for which digits (significand bits) is defined (not zero)
 
-        bool const is_specialized_binary = is_floating &&
+        bool const is_specialized_bin =
             limits::radix == 2 && limits::digits > 0;
-        bool const is_specialized_decimal = is_floating &&
+        bool const is_specialized_dec =
             limits::radix == 10 && limits::digits10 > 0;
-        std::streamsize const precision_maxarg =
-            boost::integer_traits<std::streamsize>::const_max;
-        if(is_specialized_binary)
+        std::streamsize const streamsize_max =
+            (boost::integer_traits<std::streamsize>::max)();
+
+        if(is_specialized_bin)
         { // Floating-point types with
           // limist::digits defined by the specialization.
 
@@ -60,20 +108,18 @@ inline std::streamsize lcast_get_precision()
             unsigned long const precision = 2UL + digits * 30103UL / 100000UL;
             // unsigned long is selected because it is at least 32-bits
             // and thus ULONG_MAX / 30103UL is big enough for all types.
-            BOOST_DETAIL_LCAST_ASSERT(!is_specialized_binary ||
+            BOOST_ASSERT(
                     digits < ULONG_MAX / 30103UL &&
                     precision > limits::digits10 + 0UL &&
-                    precision <= precision_maxarg + 0UL
+                    precision <= streamsize_max + 0UL
                 );
             return precision;
         }
-        else if(is_specialized_decimal)
+        else if(is_specialized_dec)
         {   // Decimal Floating-point type, most likely a User Defined Type
             // rather than a real floating-point hardware type.
             unsigned int const precision = limits::digits10 + 1U;
-            BOOST_DETAIL_LCAST_ASSERT(!is_specialized_decimal ||
-                    precision <= precision_maxarg + 0UL
-                );
+            BOOST_ASSERT(precision <= streamsize_max + 0UL);
             return precision;
         }
     }
@@ -89,6 +135,7 @@ inline std::streamsize lcast_get_precision()
     // radix = 10 and digits10 == the number of decimal digits.
 
     return 6;
+#endif
 }
 
 template<class T>
@@ -113,13 +160,7 @@ inline void lcast_set_precision(std::ios_base& stream
     stream.precision(s > t ? s : t);
 }
 
-#ifdef _MSC_VER
-#pragma warning (pop)
-#endif
-
 }}
-
-#undef BOOST_DETAIL_LCAST_ASSERT
 
 #endif //  BOOST_DETAIL_LCAST_PRECISION_HPP_INCLUDED
 
