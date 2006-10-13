@@ -51,7 +51,7 @@ inline std::streamsize lcast_get_precision()
         bool const is_specialized_decimal = is_floating &&
             limits::radix == 10 && limits::digits10 > 0;
         std::streamsize const precision_maxarg =
-            integer_traits<std::streamsize>::const_max;
+            boost::integer_traits<std::streamsize>::const_max;
         if(is_specialized_binary)
         { // Floating-point types with
           // limist::digits defined by the specialization.
