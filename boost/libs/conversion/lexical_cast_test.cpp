@@ -102,6 +102,7 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
     #endif
     suite->add(BOOST_TEST_CASE(&test_round_conversion_float));
     suite->add(BOOST_TEST_CASE(&test_round_conversion_double));
+    suite->add(BOOST_TEST_CASE(&test_round_conversion_long_double));
 
     return suite;
 }
