@@ -284,10 +284,8 @@ namespace boost {
               reinterpret_cast<const functor_type*>(&in_buffer.data);
             new ((void*)&out_buffer.data) functor_type(*in_functor);
           } else if (op == destroy_functor_tag) {
-            functor_type* out_functor = 
-              reinterpret_cast<functor_type*>(&out_buffer.data);
             // Some compilers (Borland, vc6, ...) are unhappy with ~functor_type.
-            out_functor->~Functor();
+            reinterpret_cast<functor_type*>(&out_buffer.data)->~Functor();
           } else /* op == check_functor_type_tag */ {
             const std::type_info& check_type = 
               *static_cast<const std::type_info*>(out_buffer.const_obj_ptr);
