@@ -102,7 +102,7 @@ inline std::streamsize lcast_get_precision()
 
         if(is_specialized_bin)
         { // Floating-point types with
-          // limist::digits defined by the specialization.
+          // limits::digits defined by the specialization.
 
             unsigned long const digits = limits::digits;
             unsigned long const precision = 2UL + digits * 30103UL / 100000UL;
