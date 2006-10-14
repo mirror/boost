@@ -613,23 +613,26 @@ void test_conversion_from_ulonglong()
 #endif
 
 template<class T>
-void test_round_conversion()
+void test_round_conversion(bool use_min_max_values = true)
 {
     T v1 = std::numeric_limits<T>::epsilon();
     std::string s1 = boost::lexical_cast<std::string>(v1);
     BOOST_CHECK(v1 == lexical_cast<T>(s1));
 
-    T v2 = (std::numeric_limits<T>::max)();
-    std::string s2 = boost::lexical_cast<std::string>(v2);
-    BOOST_CHECK(v2 == lexical_cast<T>(s2));
+    if(use_min_max_values)
+    {
+        T v2 = (std::numeric_limits<T>::max)();
+        std::string s2 = boost::lexical_cast<std::string>(v2);
+        BOOST_CHECK(v2 == lexical_cast<T>(s2));
 
-    T v3 = (std::numeric_limits<T>::min)();
-    std::string s3 = boost::lexical_cast<std::string>(v3);
-    BOOST_CHECK(v3 == lexical_cast<T>(s3));
+        T v3 = (std::numeric_limits<T>::min)();
+        std::string s3 = boost::lexical_cast<std::string>(v3);
+        BOOST_CHECK(v3 == lexical_cast<T>(s3));
 
-    T v4 = v2 / 137;
-    std::string s4 = boost::lexical_cast<std::string>(v4);
-    BOOST_CHECK(v4 == lexical_cast<T>(s4));
+        T v4 = v2 / 137;
+        std::string s4 = boost::lexical_cast<std::string>(v4);
+        BOOST_CHECK(v4 == lexical_cast<T>(s4));
+    }
 
     T v5 = v1 * 137;
     std::string s5 = boost::lexical_cast<std::string>(v5);
@@ -648,6 +651,12 @@ void test_round_conversion_double()
 
 void test_round_conversion_long_double()
 {
+#if defined(BOOST_NO_STDLIB_CONFIG)
     test_round_conversion<long double>();
+#elif defined(__i386__) && defined(__OpenBSD__)
+    test_round_conversion<long double>(false);
+#elif !defined(__i386__) || !defined(__FreeBSD__)
+    test_round_conversion<long double>();
+#endif
 }
 
