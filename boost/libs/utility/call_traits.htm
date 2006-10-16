@@ -606,7 +606,7 @@ template &lt;bool opt&gt;
 struct filler
 {
    template &lt;typename I, typename T&gt;
-   static void do_fill(I first, I last, typename boost::call_traits&lt;T&gt;::param_type val);
+   static void do_fill(I first, I last, typename boost::call_traits&lt;T&gt;::param_type val)
    {
       while(first != last)
       {
@@ -762,3 +762,4 @@ href="http://www.yahoogroups.com/list/boost">www.yahoogroups.com/list/boost</a>.
 <p>&nbsp;</p>
 </body>
 </html>
+
