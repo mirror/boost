@@ -79,6 +79,7 @@ along with suitable workarounds when available.
     </ul>
   </li>
   <li><a href="#msvc_80_x86_amd64">Microsoft Visual C++ 8.0 x64 cross-compiler</a></li>
+  <li><a href="#sun_11">Sun Studio 11 for Solaris</a></li>
   <li><a href="#portability">Portability techniques</a>
     <ul>
       <li><a href="#member_offset">Use of <code>member_offset</code></a></li>
@@ -641,6 +642,15 @@ No problems have been detected with this configuration.
 No problems have been detected with this compiler.
 </p>
 
+<h2><a name="sun_11">Sun Studio 11 for Solaris</a></h2>
+
+<p>
+No problems have been detected with this platform. The exact compiler version
+tested was Sun C++ 5.8 Patch 121017-03 2006/07/19. The option
+<code>-library=stlport4</code> was used to replace the default standard
+library with STLport.
+</p>
+
 <h2><a name="portability">Portability techniques</a></h2>
 
 <h3><a name="member_offset">Use of <code>member_offset</code></a></h3>
@@ -1061,7 +1071,7 @@ Performance
 
 <br>
 
-<p>Revised July 26th 2006</p>
+<p>Revised October 16th 2006</p>
 
 <p>&copy; Copyright 2003-2006 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
