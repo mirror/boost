@@ -50,7 +50,9 @@ private:
     template<typename Archive>
     void serialize(Archive &ar, const unsigned int version)
     {
-        ar & boost::serialization::base_object<base_type>(*this);
+        using namespace boost::serialization;
+        ar & make_nvp("symbol_table", 
+            boost::serialization::base_object<base_type>(*this));
     }
 #endif
 };

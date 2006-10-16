@@ -9,7 +9,8 @@
 =============================================================================*/
 
 #define BOOST_WAVE_SERIALIZATION        1             // enable serialization
-#define BOOST_WAVE_BINARY_SERIALIZATION 1             // use binary archives
+#define BOOST_WAVE_BINARY_SERIALIZATION 0             // use binary archives
+#define BOOST_WAVE_XML_SERIALIZATION    1             // use XML archives
 
 #include "cpp.hpp"                                    // global configuration
 
@@ -38,6 +39,11 @@
 #include <boost/archive/binary_oarchive.hpp>
 typedef boost::archive::binary_iarchive iarchive;
 typedef boost::archive::binary_oarchive oarchive;
+#elif BOOST_WAVE_XML_SERIALIZATION != 0
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+typedef boost::archive::xml_iarchive iarchive;
+typedef boost::archive::xml_oarchive oarchive;
 #else
 #include <boost/archive/text_iarchive.hpp>
 #include <boost/archive/text_oarchive.hpp>
@@ -449,12 +455,13 @@ namespace {
 #endif
                 ifstream ifs (state_file.string().c_str(), mode);
                 if (ifs.is_open()) {
+                    using namespace boost::serialization;
                     iarchive ia(ifs);
                     string version;
                     
-                    ia >> version;      // load version
+                    ia >> make_nvp("version", version);  // load version
                     if (version == CPP_VERSION_FULL_STR)
-                        ia >> ctx;      // load the internal tables from disc
+                        ia >> make_nvp("state", ctx);    // load the internal tables from disc
                     else {
                         cerr << "wave: detected version mismatch while loading state, state was not loaded." << endl;
                         cerr << "      loaded version:   " << version << endl;
@@ -497,10 +504,11 @@ namespace {
                     // this is non-fatal
                 }
                 else {
+                    using namespace boost::serialization;
                     oarchive oa(ofs);
                     string version(CPP_VERSION_FULL_STR);
-                    oa << version; // write version
-                    oa << ctx;                  // write the internal tables to disc
+                    oa << make_nvp("version", version);  // write version
+                    oa << make_nvp("state", ctx);        // write the internal tables to disc
                 }
             }
         }
@@ -648,6 +656,9 @@ int error_count = 0;
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
                  |  boost::wave::support_option_include_guard_detection
 #endif
+#if BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES != 0
+                 |  boost::wave::support_option_emit_pragma_directives
+#endif
                 ));
         }
         else if (vm.count("variadics")) {
@@ -777,6 +788,7 @@ int error_count = 0;
                 default_outfile = "-";
             }
             else {
+                out_file = fs::complete(out_file);
                 fs::create_directories(out_file.branch_path());
                 output.open(out_file.string().c_str());
                 if (!output.is_open()) {
@@ -874,8 +886,7 @@ int error_count = 0;
 
                     // print out the current token value
                         if (allow_output) {
-                            if (output.rdstate() & (std::ios::badbit | std::ios::failbit | std::ios::eofbit))
-                            {
+                            if (!output.good()) {
                                 cerr << "wave: problem writing to the current "
                                      << "output file" << endl;
                                 cerr << report_iostate_error(output.rdstate());

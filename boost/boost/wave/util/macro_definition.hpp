@@ -147,16 +147,17 @@ private:
     template<typename Archive>
     void serialize(Archive &ar, const unsigned int version)
     {
-        ar & macroname;
-        ar & macroparameters;
-        ar & macrodefinition;
-        ar & uid;
-        ar & is_functionlike;
-        ar & replaced_parameters;
-        ar & is_available_for_replacement;
-        ar & is_predefined;
+        using namespace boost::serialization;
+        ar & make_nvp("name", macroname);
+        ar & make_nvp("parameters", macroparameters);
+        ar & make_nvp("definition", macrodefinition);
+        ar & make_nvp("uid", uid);
+        ar & make_nvp("is_functionlike", is_functionlike);
+        ar & make_nvp("has_replaced_parameters", replaced_parameters);
+        ar & make_nvp("is_available_for_replacement", is_available_for_replacement);
+        ar & make_nvp("is_predefined", is_predefined);
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
-        ar & has_ellipsis;
+        ar & make_nvp("has_ellipsis", has_ellipsis);
 #endif
     }
 #endif

@@ -191,7 +191,7 @@ protected:
 
 //  Handle the concatenation operator '##' 
     template <typename ContainerT>
-    void concat_tokensequence(ContainerT &expanded);
+    bool concat_tokensequence(ContainerT &expanded);
 
     template <typename ContainerT>
     bool is_valid_concat(string_type new_value, 
@@ -207,16 +207,18 @@ private:
     template<typename Archive>
     void save(Archive &ar, const unsigned int version) const
     {
-        ar & defined_macros;
+        using namespace boost::serialization;
+        ar & make_nvp("defined_macros", defined_macros);
     }
     template<typename Archive>
     void load(Archive &ar, const unsigned int loaded_version)
     {
+        using namespace boost::serialization;
         if (version != (loaded_version & ~version_mask)) {
             BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
                 "cpp_context state version", get_main_pos());
         }
-        ar & defined_macros;
+        ar & make_nvp("defined_macros", defined_macros);
         current_macros = defined_macros.get();
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
@@ -247,21 +249,26 @@ macromap<ContextT>::add_macro(token_type const &name, bool has_parameters,
 {
     if (!is_predefined && impl::is_special_macroname (name.get_value())) {
     // exclude special macro names
-        BOOST_WAVE_THROW_NAME(macro_handling_exception, illegal_redefinition, 
-            name.get_value().c_str(), main_pos, name.get_value().c_str());
+        BOOST_WAVE_THROW_NAME_CTX(ctx, macro_handling_exception, 
+            illegal_redefinition, name.get_value().c_str(), main_pos, 
+            name.get_value().c_str());
+        return false;
     }
     if (boost::wave::need_variadics(ctx.get_language()) && 
         "__VA_ARGS__" == name.get_value()) 
     {
     // can't use __VA_ARGS__ as a macro name
-        BOOST_WAVE_THROW_NAME(macro_handling_exception, bad_define_statement_va_args, 
-            name.get_value().c_str(), main_pos, name.get_value().c_str());
+        BOOST_WAVE_THROW_NAME_CTX(ctx, macro_handling_exception, 
+            bad_define_statement_va_args, name.get_value().c_str(), main_pos, 
+            name.get_value().c_str());
+        return false;
     }
     if (AltExtTokenType == (token_id(name) & ExtTokenOnlyMask)) {
     // exclude special operator names
-        BOOST_WAVE_THROW_NAME(macro_handling_exception, 
+        BOOST_WAVE_THROW_NAME_CTX(ctx, macro_handling_exception, 
             illegal_operator_redefinition, name.get_value().c_str(), main_pos,
             name.get_value().c_str());
+        return false;
     }
     
 // try to define the new macro
@@ -274,8 +281,9 @@ typename defined_macros_type::iterator it = current_scope->find(name.get_value()
             !impl::parameters_equal((*it).second->macroparameters, parameters) ||
             !impl::definition_equals((*it).second->macrodefinition, definition))
         {
-            BOOST_WAVE_THROW_NAME(macro_handling_exception, macro_redefinition, 
-                name.get_value().c_str(), main_pos, name.get_value().c_str());
+            BOOST_WAVE_THROW_NAME_CTX(ctx, macro_handling_exception, 
+                macro_redefinition, name.get_value().c_str(), main_pos, 
+                name.get_value().c_str());
         }
         return false;
     }
@@ -296,9 +304,10 @@ typename defined_macros_type::iterator it = current_scope->find(name.get_value()
         
             if (pit != names.end()) {
             // duplicate parameter name
-                BOOST_WAVE_THROW_NAME(macro_handling_exception, 
+                BOOST_WAVE_THROW_NAME_CTX(ctx, macro_handling_exception, 
                     duplicate_parameter_name, (*pit).c_str(), main_pos, 
                     name.get_value().c_str());
+                return false;
             }
             names.insert((*itp).get_value());
         }
@@ -316,8 +325,10 @@ typename defined_macros_type::iterator it = current_scope->find(name.get_value()
         );
 
     if (!p.second) {
-        BOOST_WAVE_THROW_NAME(macro_handling_exception, macro_insertion_error, 
-            name.get_value().c_str(), main_pos, name.get_value().c_str());
+        BOOST_WAVE_THROW_NAME_CTX(ctx, macro_handling_exception, 
+            macro_insertion_error, name.get_value().c_str(), main_pos, 
+            name.get_value().c_str());
+        return false;
     }
 
 // add the parameters and the definition
@@ -376,8 +387,9 @@ token_id id = token_id(*begin);
         !IS_EXTCATEGORY(id, OperatorTokenType|AltExtTokenType) &&
         !IS_CATEGORY(id, BoolLiteralTokenType)) 
     {
-        BOOST_WAVE_THROW(preprocess_exception, invalid_macroname, 
+        BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, invalid_macroname, 
             impl::get_full_name(begin, end).c_str(), main_pos);
+        return false;
     }
 
 IteratorT it = begin;
@@ -386,8 +398,9 @@ typename defined_macros_type::iterator cit(current_macros -> find(name));
 
     if (++it != end) {
     // there should be only one token as the inspected name
-        BOOST_WAVE_THROW(preprocess_exception, invalid_macroname, 
+        BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, invalid_macroname, 
             impl::get_full_name(begin, end).c_str(), main_pos);
+        return false;
     }
     return cit != current_macros -> end();
 }
@@ -435,8 +448,9 @@ macromap<ContextT>::remove_macro(token_type const &token,
     if (it != current_macros->end()) {
         if ((*it).second->is_predefined) {
             if (!even_predefined || impl::is_special_macroname(name)) {
-                BOOST_WAVE_THROW(preprocess_exception, bad_undefine_statement, 
-                    name.c_str(), main_pos);
+                BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                    bad_undefine_statement, name.c_str(), main_pos);
+                return false;
             }
         }
         current_macros->erase(it);
@@ -450,7 +464,7 @@ macromap<ContextT>::remove_macro(token_type const &token,
         return true;
     }
     else if (impl::is_special_macroname(name)) {
-        BOOST_WAVE_THROW(preprocess_exception, bad_undefine_statement, 
+        BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, bad_undefine_statement, 
             name.c_str(), main_pos);
     }
     return false;       // macro was not defined
@@ -665,8 +679,10 @@ token_type startof_argument_list = *next;
             id != T_RIGHTPAREN && id != T_LEFTPAREN) 
         {
         // there shouldn't be any arguments
-            BOOST_WAVE_THROW(preprocess_exception, too_many_macroarguments, 
-                curr_token.get_value().c_str(), main_pos);
+            BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                too_many_macroarguments, curr_token.get_value().c_str(), 
+                main_pos);
+            return 0;
         }
         
         switch (static_cast<unsigned int>(id)) {
@@ -755,12 +771,13 @@ token_type startof_argument_list = *next;
 
     if (nested_parenthesis_level >= 1) {
     // missing ')': improperly terminated macro invocation
-        BOOST_WAVE_THROW(preprocess_exception, improperly_terminated_macro, 
-            "missing ')'", main_pos);
+        BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+            improperly_terminated_macro, "missing ')'", main_pos);
+        return 0;
     }
 
-// if there isn't expected any argument and there really wasn't found any, 
-// than remove the empty element
+// if no argument was expected and we didn't find any, than remove the empty 
+// element
     if (0 == parameter_count && 0 == count_arguments) {
         BOOST_ASSERT(1 == arguments.size());
         arguments.clear();
@@ -991,8 +1008,9 @@ bool adjacent_stringize = false;
 
     if (adjacent_stringize) {
     // error, '#' should not be the last token
-        BOOST_WAVE_THROW(preprocess_exception, ill_formed_operator,
+        BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, ill_formed_operator,
             "stringize ('#')", main_pos);
+        return;
     }
         
 // handle the cpp.concat operator
@@ -1150,16 +1168,17 @@ ContainerT replacement_list;
             {
                 if (count_args != arguments.size()) {
                 // must been at least one empty argument in C++ mode
-                    BOOST_WAVE_THROW(preprocess_exception, 
+                    BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
                         empty_macroarguments, curr_token.get_value().c_str(), 
                         main_pos);
                 }
                 else {
                 // too few macro arguments
-                    BOOST_WAVE_THROW(preprocess_exception, 
+                    BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
                         too_few_macroarguments, curr_token.get_value().c_str(), 
                         main_pos);
                 }
+                return false;
             }
             
             if (count_args > macro_def.macroparameters.size() ||
@@ -1170,8 +1189,10 @@ ContainerT replacement_list;
 #endif 
                 {
                 // too many macro arguments
-                    BOOST_WAVE_THROW(preprocess_exception, too_many_macroarguments, 
+                    BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                        too_many_macroarguments, 
                         curr_token.get_value().c_str(), main_pos);
+                    return false;
                 }
             }
                 
@@ -1210,8 +1231,8 @@ ContainerT replacement_list;
                 concat_tag);
                 
         // handle concatenation operators
-            if (found)
-                concat_tokensequence(replacement_list);
+            if (found && !concat_tokensequence(replacement_list))
+                return false;
         }
     }
     else {
@@ -1247,9 +1268,9 @@ ContainerT replacement_list;
                 concat_tag);
 
         // handle concatenation operators
-            if (found)
-                concat_tokensequence(replacement_list);
-
+            if (found && !concat_tokensequence(replacement_list))
+                return false;
+                
             ++first;                // skip macro name
         }
     }
@@ -1353,16 +1374,21 @@ boost::spirit::parse_info<IteratorT> hit =
     if (!hit.hit) {
         string_type msg ("defined(): ");
         msg = msg + util::impl::as_string<string_type>(first, last);
-        BOOST_WAVE_THROW(preprocess_exception, ill_formed_expression, 
+        BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, ill_formed_expression, 
             msg.c_str(), main_pos);
+
+    // insert a dummy token
+        pending.push_back(token_type(T_INTLIT, "0", main_pos));
     }
-    impl::assign_iterator<IteratorT>::do_(first, hit.stop);
+    else {
+        impl::assign_iterator<IteratorT>::do_(first, hit.stop);
 
-// insert a token, which reflects the outcome
-    pending.push_back(token_type(T_INTLIT, 
-        is_defined(result.begin(), result.end()) ? "1" : "0", 
-        main_pos));
-
+    // insert a token, which reflects the outcome
+        pending.push_back(token_type(T_INTLIT, 
+            is_defined(result.begin(), result.end()) ? "1" : "0", 
+            main_pos));
+    }
+    
 on_exit::pop_front<definition_container_type> pop_front_token(pending);
 
     return act_token = pending.front();
@@ -1389,9 +1415,10 @@ macromap<ContextT>::resolve_operator_pragma(IteratorT &first,
     token_type pragma_token = *first;
     
     if (!impl::skip_to_token(first, last, T_LEFTPAREN)) {
-    // misformed operator _Pragma
-        BOOST_WAVE_THROW(preprocess_exception, ill_formed_expression, 
+    // illformed operator _Pragma
+        BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, ill_formed_expression, 
             "operator _Pragma()", pragma_token.get_position());
+        return false;
     }
     
     std::vector<ContainerT> arguments;
@@ -1402,15 +1429,17 @@ macromap<ContextT>::resolve_operator_pragma(IteratorT &first,
     if (pragma_token.get_position().get_file().empty())
         pragma_token.set_position(act_token.get_position());
         
-    if (1 > count_args || 1 > arguments.size()) {
+    if (count_args < 1 || arguments.size() < 1) {
     // too few macro arguments
-        BOOST_WAVE_THROW(preprocess_exception, too_few_macroarguments, 
+        BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, too_few_macroarguments, 
             pragma_token.get_value().c_str(), pragma_token.get_position());
+        return false;
     }
-    if (1 < count_args || 1 < arguments.size()) {
+    if (count_args > 1 || arguments.size() > 1) {
     // too many macro arguments
-        BOOST_WAVE_THROW(preprocess_exception, too_many_macroarguments, 
+        BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, too_many_macroarguments, 
             pragma_token.get_value().c_str(), pragma_token.get_position());
+        return false;
     }
 
 // preprocess the pragma token body
@@ -1437,16 +1466,19 @@ macromap<ContextT>::resolve_operator_pragma(IteratorT &first,
             
         if (T_STRINGLIT != token_id(*it_exp)) {
         // ill formed operator _Pragma
-            BOOST_WAVE_THROW(preprocess_exception, ill_formed_pragma_option, 
-                "_Pragma", pragma_token.get_position());
+            BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                ill_formed_pragma_option, "_Pragma", 
+                pragma_token.get_position());
+            return false;
         }
-
         if (pragma_cmd.size() > 0) {
         // there should be exactly one string literal (string literals are to 
         // be concatenated at translation phase 6, but _Pragma operators are 
         // to be executed at translation phase 4)
-            BOOST_WAVE_THROW(preprocess_exception, ill_formed_pragma_option, 
-                "_Pragma", pragma_token.get_position());
+            BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                ill_formed_pragma_option, "_Pragma", 
+                pragma_token.get_position());
+            return false;
         }
         
     // remove the '\"' and concat all given string literal-values
@@ -1532,7 +1564,7 @@ macromap<ContextT>::is_valid_concat(string_type new_value,
 ///////////////////////////////////////////////////////////////////////////////
 template <typename ContextT>
 template <typename ContainerT>
-inline void 
+inline bool 
 macromap<ContextT>::concat_tokensequence(ContainerT &expanded)
 {
     using namespace boost::wave;
@@ -1548,8 +1580,9 @@ macromap<ContextT>::concat_tokensequence(ContainerT &expanded)
             ++next;
             if (prev == end || next == end) {
             // error, '##' should be in between two tokens
-                BOOST_WAVE_THROW(preprocess_exception, ill_formed_operator,
-                    "concat ('##')", main_pos);
+                BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                    ill_formed_operator, "concat ('##')", main_pos);
+                return false;
             }
 
         // replace prev##next with the concatenated value, skip whitespace
@@ -1558,8 +1591,9 @@ macromap<ContextT>::concat_tokensequence(ContainerT &expanded)
                 ++next;
                 if (next == end) {
                 // error, '##' should be in between two tokens
-                    BOOST_WAVE_THROW(preprocess_exception, ill_formed_operator,
-                        "concat ('##')", main_pos);
+                    BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                        ill_formed_operator, "concat ('##')", main_pos);
+                    return false;
                 }
             }
             
@@ -1604,8 +1638,9 @@ macromap<ContextT>::concat_tokensequence(ContainerT &expanded)
                 error_string += "\" and \"";
                 error_string += (*next).get_value();
                 error_string += "\"";
-                BOOST_WAVE_THROW(preprocess_exception, invalid_concat,
+                BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, invalid_concat,
                     error_string.c_str(), main_pos);
+                return false;
             }
 
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
@@ -1652,6 +1687,7 @@ macromap<ContextT>::concat_tokensequence(ContainerT &expanded)
 
         ++it;           // next token, please
     }
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

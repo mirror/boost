@@ -490,6 +490,10 @@ struct default_preprocessing_hooks
     //  The parameter 'message' references the argument token sequence of the
     //  encountered #warning directive.
     //
+    //  If the return value is false, the library throws a preprocessor 
+    //  exception of the type 'warning_directive', if the return value is true
+    //  the execution continues as if no #warning directive has been found.
+    //
     ///////////////////////////////////////////////////////////////////////////
     template <typename ContextT, typename ContainerT>
     bool
@@ -507,6 +511,10 @@ struct default_preprocessing_hooks
     //
     //  The parameter 'message' references the argument token sequence of the
     //  encountered #error directive.
+    //
+    //  If the return value is false, the library throws a preprocessor 
+    //  exception of the type 'error_directive', if the return value is true
+    //  the execution continues as if no #error directive has been found.
     //
     ///////////////////////////////////////////////////////////////////////////
     template <typename ContextT, typename ContainerT>
@@ -537,6 +545,27 @@ struct default_preprocessing_hooks
     found_line_directive(ContextT const& ctx, ContainerT const& arguments,
         unsigned int line, std::string const& filename)
     {}
+    
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    //  The function 'throw_exception' will be called by the library whenever a
+    //  preprocessing exception occurs.
+    //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
+    //  The parameter 'e' is the exception object containing detailed error 
+    //  information.
+    //
+    //  The default behavior is to call the function boost::throw_exception.
+    //  
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename ContextT, typename ExceptionT>
+    void
+    throw_exception(ContextT const& ctx, ExceptionT const& e)
+    {
+        boost::throw_exception(e);
+    }
 };
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -751,6 +751,9 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm,
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
               | boost::wave::support_option_include_guard_detection
 #endif
+#if BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES != 0
+              | boost::wave::support_option_emit_pragma_directives
+#endif
             ));
     }
     else if (vm.count("variadics")) {

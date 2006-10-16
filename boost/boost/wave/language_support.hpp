@@ -42,7 +42,8 @@ enum language_support {
     support_option_single_line = 0x0800,
     support_option_prefer_pp_numbers = 0x1000,
     support_option_emit_line_directives = 0x2000,
-    support_option_include_guard_detection = 0x4000
+    support_option_include_guard_detection = 0x4000,
+    support_option_emit_pragma_directives = 0x8000
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -161,6 +162,9 @@ BOOST_WAVE_OPTION(include_guard_detection)  // support_option_include_guard_dete
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
 BOOST_WAVE_OPTION(variadics)                // support_option_variadics
 #endif 
+#if BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES != 0
+BOOST_WAVE_OPTION(emit_pragma_directives)   // support_option_emit_pragma_directives
+#endif
 
 #undef BOOST_WAVE_NEED_OPTION
 #undef BOOST_WAVE_ENABLE_OPTION

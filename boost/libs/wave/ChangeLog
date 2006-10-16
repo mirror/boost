@@ -48,8 +48,19 @@ CHANGELOG
 - Improved command line handling for the wave applet.
 - Incorporated latest bug fixes for the Hannibal sample provided by Danny 
   Havenith. 
-- Added loading a wave.cfg file from anywhere up the filesystem hierarchy 
-  starting from the input file to the wave driver applet.
+- Added loading of a wave.cfg file from anywhere up the filesystem hierarchy 
+  starting from the main input file for the wave driver applet up to the 
+  root of the file system.
+- Added support_option_emit_pragma_directive to allow to control at runtime,
+  whether unknown #pragma directives should be emitted or not. To maintain 
+  compatibility with earlier versions this option is by default on if the
+  compile time constant BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES was defined to 
+  be not equal to zero and it is off otherwise.
+- Enabled XML serialization support.
+- Added the throw_exception preprocessing hook, which gets called for every 
+  occurring error (whenever an exception would have been thrown). The default
+  of this new hook function is to throw the corresponding exception, which 
+  reproduces the old behavior.
   
 Boost V1.34.0
 - Wave Version 1.2.4

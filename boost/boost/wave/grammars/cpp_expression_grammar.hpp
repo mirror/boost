@@ -781,7 +781,7 @@ expression_grammar_gen<TokenT>::evaluate(
             }
         }
     }
-    catch (wave::preprocess_exception const& e) {
+    catch (boost::wave::preprocess_exception const& e) {
     // expression is illformed
         if (if_block_status) {
             boost::throw_exception(e);

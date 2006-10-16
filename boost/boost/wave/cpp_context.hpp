@@ -53,7 +53,7 @@ namespace wave {
 //  The C preprocessor context template class
 //
 //      The boost::wave::context template is the main interface class to 
-//      control the behaviour of the preprocessing engine.
+//      control the behavior of the preprocessing engine.
 //
 //      The following template parameters has to be supplied:
 //
@@ -107,7 +107,7 @@ public:
     
 private:
 // stack of shared_ptr's to the pending iteration contexts 
-    typedef boost::shared_ptr<base_iteration_context<lexer_type> > 
+    typedef boost::shared_ptr<base_iteration_context<context, lexer_type> > 
         iteration_ptr_type;
     typedef boost::wave::util::iteration_context_stack<iteration_ptr_type> 
             iteration_context_stack_type;
@@ -129,6 +129,9 @@ public:
                     | support_option_emit_line_directives 
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
                     | support_option_include_guard_detection
+#endif
+#if BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES != 0
+                    | support_option_emit_pragma_directives
 #endif
                    ))
         , hooks(hooks_)
@@ -214,12 +217,13 @@ public:
     void reset_macro_definitions() 
         { macros.reset_macromap(); macros.init_predefined_macros(); }
 
-// get the pp-iterator version information 
+// get the Wave version information 
     static std::string get_version()  
         { return boost::wave::util::predefined_macros::get_fullversion(false); }
     static std::string get_version_string()  
         { return boost::wave::util::predefined_macros::get_versionstr(false); }
 
+// access current language options
     void set_language(boost::wave::language_support language_,
                       bool reset_macros = true) 
     { 
@@ -241,7 +245,7 @@ public:
 // return the directory of the currently preprocessed file
     boost::filesystem::path get_current_directory() const
         { return includes.get_current_directory(); }
-        
+
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
 protected:
     friend class boost::wave::pp_iterator<
@@ -276,7 +280,7 @@ protected:
     iteration_ptr_type pop_iteration_context()
         { iteration_ptr_type top = iter_ctxs.top(); iter_ctxs.pop(); return top; }
     void push_iteration_context(position_type const &act_pos, iteration_ptr_type iter_ctx)
-        { iter_ctxs.push(act_pos, iter_ctx); }
+        { iter_ctxs.push(*this, act_pos, iter_ctx); }
 
     position_type &get_main_pos() { return macros.get_main_pos(); }
     
@@ -285,7 +289,7 @@ protected:
 //  expand_tokensequence(): 
 //      expands all macros contained in a given token sequence, handles '##' 
 //      and '#' pp operators and re-scans the resulting sequence 
-//      (essentially preprocesses the token sequence).
+//      (essentially pre-processes the token sequence).
 //
 //      The expand_undefined parameter is true during macro expansion inside
 //      a C++ expression given for a #if or #elif statement. 
@@ -338,53 +342,70 @@ private:
     template<class Archive>
     void save(Archive & ar, const unsigned int version) const
     {
+        using namespace boost::serialization;
         typedef typename token_type::string_type string_type;
         
         string_type cfg(BOOST_PP_STRINGIZE(BOOST_WAVE_CONFIG));
         string_type kwd(BOOST_WAVE_PRAGMA_KEYWORD);
         string_type strtype(BOOST_PP_STRINGIZE((BOOST_WAVE_STRINGTYPE)));
-        ar & cfg;
-        ar & kwd;
-        ar & strtype;
+        ar & make_nvp("config", cfg);
+        ar & make_nvp("pragma_keyword", kwd);
+        ar & make_nvp("string_type", strtype);
         
-        ar & language;
-        ar & macros;
-        ar & includes;
+        ar & make_nvp("language_options", language);
+        ar & make_nvp("macro_definitions", macros);
+        ar & make_nvp("include_settings", includes);
     }
     template<class Archive>
     void load(Archive & ar, const unsigned int loaded_version)
     {
+        using namespace boost::serialization;
         if (version != (loaded_version & ~version_mask)) {
-            BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
-                "cpp_context state version", get_main_pos());
+            BOOST_WAVE_THROW_CTX((*this), preprocess_exception, 
+                incompatible_config, "cpp_context state version", 
+                get_main_pos());
+            return;
         }
         
         // check compatibility of the stored information
         typedef typename token_type::string_type string_type;
         string_type config, pragma_keyword, string_type_str;
         
-        ar & config;          // BOOST_WAVE_CONFIG
+        // BOOST_PP_STRINGIZE(BOOST_WAVE_CONFIG)
+        ar & make_nvp("config", config);
         if (config != BOOST_PP_STRINGIZE(BOOST_WAVE_CONFIG)) {
-            BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
-                "BOOST_WAVE_CONFIG", get_main_pos());
+            BOOST_WAVE_THROW_CTX((*this), preprocess_exception, 
+                incompatible_config, "BOOST_WAVE_CONFIG", get_main_pos());
+            return;
         }
         
-        ar & pragma_keyword;  // BOOST_WAVE_PRAGMA_KEYWORD
+        // BOOST_WAVE_PRAGMA_KEYWORD
+        ar & make_nvp("pragma_keyword", pragma_keyword);
         if (pragma_keyword != BOOST_WAVE_PRAGMA_KEYWORD) {
-            BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
-                "BOOST_WAVE_PRAGMA_KEYWORD", get_main_pos());
+            BOOST_WAVE_THROW_CTX((*this), preprocess_exception, 
+                incompatible_config, "BOOST_WAVE_PRAGMA_KEYWORD", 
+                get_main_pos());
+            return;
         }
 
-        ar & string_type_str; // BOOST_PP_STRINGIZE((BOOST_WAVE_STRINGTYPE))
+        // BOOST_PP_STRINGIZE((BOOST_WAVE_STRINGTYPE))
+        ar & make_nvp("string_type", string_type_str);
         if (string_type_str != BOOST_PP_STRINGIZE((BOOST_WAVE_STRINGTYPE))) {
-            BOOST_WAVE_THROW(preprocess_exception, incompatible_config, 
-                "BOOST_WAVE_STRINGTYPE", get_main_pos());
+            BOOST_WAVE_THROW_CTX((*this), preprocess_exception, 
+                incompatible_config, "BOOST_WAVE_STRINGTYPE", get_main_pos());
+            return;
         }
         
-        // read in the useful bits
-        ar & language;
-        ar & macros;
-        ar & includes;
+        try {
+            // read in the useful bits
+            ar & make_nvp("language_options", language);
+            ar & make_nvp("macro_definitions", macros);
+            ar & make_nvp("include_settings", includes);
+        }
+        catch (boost::wave::preprocess_exception const& e) {
+        // catch version mismatch exceptions and call error handler
+            get_hooks().throw_exception(*this, e); 
+        }
     }
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 #endif

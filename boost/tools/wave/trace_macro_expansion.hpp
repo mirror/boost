@@ -444,10 +444,11 @@ public:
             if (!enable_system_command) {
             // if the #pragma wave system() directive is not enabled, throw
             // a corresponding error (actually its a remark),
-                BOOST_WAVE_THROW(no_pragma_system_exception, 
+                BOOST_WAVE_THROW_CTX(ctx, no_pragma_system_exception, 
                     pragma_system_not_enabled,
                     boost::wave::util::impl::as_string(values).c_str(), 
                     act_token.get_position());
+                return false;
             }
             
         // try to spawn the given argument as a system command and return the
@@ -456,9 +457,10 @@ public:
         }
         if (option.get_value() == "stop") {
         // stop the execution and output the argument
-            BOOST_WAVE_THROW(preprocess_exception, error_directive,
+            BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, error_directive,
                 boost::wave::util::impl::as_string(values).c_str(), 
                 act_token.get_position());
+            return false;
         }
         if (option.get_value() == "option") {
         // handle different options 
@@ -553,7 +555,7 @@ protected:
     //  Interpret the different Wave specific pragma directives/operators
     template <typename ContextT, typename ContainerT>
     bool 
-    interpret_pragma_trace(ContextT const &/*ctx*/, ContainerT const &values, 
+    interpret_pragma_trace(ContextT& ctx, ContainerT const &values, 
         typename ContextT::token_type const &act_token)
     {
         typedef typename ContextT::token_type token_type;
@@ -592,8 +594,10 @@ protected:
                 option_str += boost::wave::util::impl::as_string(values);
                 option_str += ")";
             }
-            BOOST_WAVE_THROW(preprocess_exception, ill_formed_pragma_option,
-                option_str.c_str(), act_token.get_position());
+            BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                ill_formed_pragma_option, option_str.c_str(), 
+                act_token.get_position());
+            return false;
         }
         return true;
     }
@@ -705,8 +709,10 @@ protected:
             // open the new file
             outputstrm.open(fpath.string().c_str(), mode);
             if (!outputstrm.is_open()) { 
-                BOOST_WAVE_THROW(preprocess_exception, could_not_open_output_file,
+                BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                    could_not_open_output_file,
                     fpath.string().c_str(), act_token.get_position());
+                return false;
             }
             generate_output = true;
             return true;        
@@ -732,6 +738,10 @@ protected:
                 // there was a file name on the command line
                 fs::path fpath(default_outfile, fs::native);
                     
+                    // close the current file
+                    if (outputstrm.is_open())
+                        outputstrm.close();
+
                     // figure out, whether the file to open was last accessed by us
                     std::ios::openmode mode = std::ios::out;
                     if (fs::exists(fpath) && fs::last_write_time(fpath) >= started_at)
@@ -740,9 +750,10 @@ protected:
                     // open the new file
                     outputstrm.open(fpath.string().c_str(), mode);
                     if (!outputstrm.is_open()) { 
-                        BOOST_WAVE_THROW(preprocess_exception, 
+                        BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
                             could_not_open_output_file, fpath.string().c_str(), 
                             act_token.get_position());
+                        return false;
                     }
                     generate_output = true;
                 }
@@ -799,8 +810,10 @@ protected:
                     option_str += util::impl::as_string(values);
                     option_str += ")";
                 }
-                BOOST_WAVE_THROW(preprocess_exception, ill_formed_pragma_option,
+                BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                    ill_formed_pragma_option,
                     option_str.c_str(), act_token.get_position());
+                return false;
             }
             
             token_id id = util::impl::skip_whitespace(it, end);
@@ -814,7 +827,7 @@ protected:
     // interpret the #pragma wave system() directive
     template <typename ContextT, typename ContainerT>
     bool
-    interpret_pragma_system(ContextT const &ctx, ContainerT &pending, 
+    interpret_pragma_system(ContextT& ctx, ContainerT &pending, 
         ContainerT const &values, 
         typename ContextT::token_type const &act_token)
     {
@@ -834,18 +847,21 @@ protected:
         string_type error_str("unable to spawn command: ");
         
             error_str += native_cmd;
-            BOOST_WAVE_THROW(preprocess_exception, ill_formed_pragma_option,
+            BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                ill_formed_pragma_option,
                 error_str.c_str(), act_token.get_position());
+            return false;
         }
         
     // rescan the content of the stdout_file and insert it as the 
     // _Pragma replacement
         typedef typename ContextT::lexer_type lexer_type;
         typedef typename ContextT::input_policy_type input_policy_type;
-        typedef boost::wave::iteration_context<lexer_type, input_policy_type> 
+        typedef boost::wave::iteration_context<
+                ContextT, lexer_type, input_policy_type> 
             iteration_context_type;
 
-    iteration_context_type iter_ctx(stdout_file.c_str(), 
+    iteration_context_type iter_ctx(ctx, stdout_file.c_str(), 
         act_token.get_position(), ctx.get_language());
     ContainerT pragma;
 

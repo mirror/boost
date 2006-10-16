@@ -103,9 +103,10 @@ public:
     template<typename Archive>
     void serialize(Archive &ar, const unsigned int version)
     {
-        ar & id;
-        ar & value;
-        ar & pos;
+        using namespace boost::serialization;
+        ar & make_nvp("id", id);
+        ar & make_nvp("value", value);
+        ar & make_nvp("position", pos);
     }
 #endif
 
