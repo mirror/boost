@@ -14,6 +14,7 @@
  */
 
 // Revision History
+// 18 Oct 06  Various fixes for old compilers (Joaquín M López Muñoz)
 // 27 Dec 05  Add testing for Boolean conversion operator (Daryle Walker)
 // 24 Dec 05  Change code to use Boost.Test (Daryle Walker)
 // 04 Mar 01  Patches for Intel C++ and GCC (David Abrahams)
@@ -127,7 +128,16 @@ public:
             rational_type  r1, r2( 0 ), r3( 1 ), r4( -3 ), r5( 7, 2 ),
                            r6( 5, 15 ), r7( 14, -21 ), r8( -4, 6 ),
                            r9( -14, -70 );
-            parts const    result = { {r1, r2, r3, r4, r5, r6, r7, r8, r9} };
+            parts result;
+            result.parts_[0] = r1;
+            result.parts_[1] = r2;
+            result.parts_[2] = r3;
+            result.parts_[3] = r4;
+            result.parts_[4] = r5;
+            result.parts_[5] = r6;
+            result.parts_[6] = r7;
+            result.parts_[7] = r8;
+            result.parts_[8] = r9;
 
             return result;
         }
@@ -149,6 +159,13 @@ public:
 typedef ::boost::mpl::list<short, int, long>     builtin_signed_test_types;
 typedef ::boost::mpl::list<short, int, long, MyInt>  all_signed_test_types;
 
+// Without these explicit instantiations, MSVC++ 6.5/7.0 does not find
+// some friend operators in certain contexts.
+::boost::rational<short> dummy1;
+::boost::rational<int>   dummy2;
+::boost::rational<long>  dummy3;
+::boost::rational<MyInt> dummy4;
+
 // Should there be tests with unsigned integer types?
 
 } // namespace
@@ -164,41 +181,37 @@ BOOST_AUTO_TEST_SUITE( factoring_suite )
 // GCD tests
 BOOST_AUTO_TEST_CASE_TEMPLATE( gcd_test, T, all_signed_test_types )
 {
-    using boost::gcd;
-
-    BOOST_CHECK_EQUAL( gcd<T>(  1,  -1), static_cast<T>( 1) );
-    BOOST_CHECK_EQUAL( gcd<T>( -1,   1), static_cast<T>( 1) );
-    BOOST_CHECK_EQUAL( gcd<T>(  1,   1), static_cast<T>( 1) );
-    BOOST_CHECK_EQUAL( gcd<T>( -1,  -1), static_cast<T>( 1) );
-    BOOST_CHECK_EQUAL( gcd<T>(  0,   0), static_cast<T>( 0) );
-    BOOST_CHECK_EQUAL( gcd<T>(  7,   0), static_cast<T>( 7) );
-    BOOST_CHECK_EQUAL( gcd<T>(  0,   9), static_cast<T>( 9) );
-    BOOST_CHECK_EQUAL( gcd<T>( -7,   0), static_cast<T>( 7) );
-    BOOST_CHECK_EQUAL( gcd<T>(  0,  -9), static_cast<T>( 9) );
-    BOOST_CHECK_EQUAL( gcd<T>( 42,  30), static_cast<T>( 6) );
-    BOOST_CHECK_EQUAL( gcd<T>(  6,  -9), static_cast<T>( 3) );
-    BOOST_CHECK_EQUAL( gcd<T>(-10, -10), static_cast<T>(10) );
-    BOOST_CHECK_EQUAL( gcd<T>(-25, -10), static_cast<T>( 5) );
+    BOOST_CHECK_EQUAL( boost::gcd<T>(  1,  -1), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( boost::gcd<T>( -1,   1), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( boost::gcd<T>(  1,   1), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( boost::gcd<T>( -1,  -1), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( boost::gcd<T>(  0,   0), static_cast<T>( 0) );
+    BOOST_CHECK_EQUAL( boost::gcd<T>(  7,   0), static_cast<T>( 7) );
+    BOOST_CHECK_EQUAL( boost::gcd<T>(  0,   9), static_cast<T>( 9) );
+    BOOST_CHECK_EQUAL( boost::gcd<T>( -7,   0), static_cast<T>( 7) );
+    BOOST_CHECK_EQUAL( boost::gcd<T>(  0,  -9), static_cast<T>( 9) );
+    BOOST_CHECK_EQUAL( boost::gcd<T>( 42,  30), static_cast<T>( 6) );
+    BOOST_CHECK_EQUAL( boost::gcd<T>(  6,  -9), static_cast<T>( 3) );
+    BOOST_CHECK_EQUAL( boost::gcd<T>(-10, -10), static_cast<T>(10) );
+    BOOST_CHECK_EQUAL( boost::gcd<T>(-25, -10), static_cast<T>( 5) );
 }
 
 // LCM tests
 BOOST_AUTO_TEST_CASE_TEMPLATE( lcm_test, T, all_signed_test_types )
 {
-    using boost::lcm;
-
-    BOOST_CHECK_EQUAL( lcm<T>(  1,  -1), static_cast<T>( 1) );
-    BOOST_CHECK_EQUAL( lcm<T>( -1,   1), static_cast<T>( 1) );
-    BOOST_CHECK_EQUAL( lcm<T>(  1,   1), static_cast<T>( 1) );
-    BOOST_CHECK_EQUAL( lcm<T>( -1,  -1), static_cast<T>( 1) );
-    BOOST_CHECK_EQUAL( lcm<T>(  0,   0), static_cast<T>( 0) );
-    BOOST_CHECK_EQUAL( lcm<T>(  6,   0), static_cast<T>( 0) );
-    BOOST_CHECK_EQUAL( lcm<T>(  0,   7), static_cast<T>( 0) );
-    BOOST_CHECK_EQUAL( lcm<T>( -5,   0), static_cast<T>( 0) );
-    BOOST_CHECK_EQUAL( lcm<T>(  0,  -4), static_cast<T>( 0) );
-    BOOST_CHECK_EQUAL( lcm<T>( 18,  30), static_cast<T>(90) );
-    BOOST_CHECK_EQUAL( lcm<T>( -6,   9), static_cast<T>(18) );
-    BOOST_CHECK_EQUAL( lcm<T>(-10, -10), static_cast<T>(10) );
-    BOOST_CHECK_EQUAL( lcm<T>( 25, -10), static_cast<T>(50) );
+    BOOST_CHECK_EQUAL( boost::lcm<T>(  1,  -1), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( boost::lcm<T>( -1,   1), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( boost::lcm<T>(  1,   1), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( boost::lcm<T>( -1,  -1), static_cast<T>( 1) );
+    BOOST_CHECK_EQUAL( boost::lcm<T>(  0,   0), static_cast<T>( 0) );
+    BOOST_CHECK_EQUAL( boost::lcm<T>(  6,   0), static_cast<T>( 0) );
+    BOOST_CHECK_EQUAL( boost::lcm<T>(  0,   7), static_cast<T>( 0) );
+    BOOST_CHECK_EQUAL( boost::lcm<T>( -5,   0), static_cast<T>( 0) );
+    BOOST_CHECK_EQUAL( boost::lcm<T>(  0,  -4), static_cast<T>( 0) );
+    BOOST_CHECK_EQUAL( boost::lcm<T>( 18,  30), static_cast<T>(90) );
+    BOOST_CHECK_EQUAL( boost::lcm<T>( -6,   9), static_cast<T>(18) );
+    BOOST_CHECK_EQUAL( boost::lcm<T>(-10, -10), static_cast<T>(10) );
+    BOOST_CHECK_EQUAL( boost::lcm<T>( 25, -10), static_cast<T>(50) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
@@ -569,17 +582,15 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_input_passing_test, T,
 // Conversion test
 BOOST_AUTO_TEST_CASE( rational_cast_test )
 {
-    using boost::rational_cast;
-
     // Note that these are not generic.  The problem is that rational_cast<T>
     // requires a conversion from IntType to T.  However, for a user-defined
     // IntType, it is not possible to define such a conversion except as an
     // "operator T()".  This causes problems with overloading resolution.
     boost::rational<int> const  half( 1, 2 );
 
-    BOOST_CHECK_CLOSE( rational_cast<double>(half), 0.5, 0.01 );
-    BOOST_CHECK_EQUAL( rational_cast<int>(half), 0 );
-    BOOST_CHECK_EQUAL( rational_cast<MyInt>(half), MyInt() );
+    BOOST_CHECK_CLOSE( boost::rational_cast<double>(half), 0.5, 0.01 );
+    BOOST_CHECK_EQUAL( boost::rational_cast<int>(half), 0 );
+    BOOST_CHECK_EQUAL( boost::rational_cast<MyInt>(half), MyInt() );
 }
 
 // Dice tests (a non-main test)
