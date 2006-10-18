@@ -17,6 +17,8 @@
 //    Nickolay Mladenov, for the implementation of operator+=
 
 //  Revision History
+//  18 Oct 06  Use EXPLICIT_TEMPLATE_TYPE helper macros from Boost.Config
+//             (Joaquín M López Muñoz)
 //  27 Dec 05  Add Boolean conversion operator (Daryle Walker)
 //  28 Sep 02  Use _left versions of operators from operators.hpp
 //  05 Jul 01  Recode gcd(), avoiding std::swap (Helmut Zeisel)
@@ -508,7 +510,8 @@ std::ostream& operator<< (std::ostream& os, const rational<IntType>& r)
 
 // Type conversion
 template <typename T, typename IntType>
-inline T rational_cast(const rational<IntType>& src)
+inline T rational_cast(
+    const rational<IntType>& src BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
     return static_cast<T>(src.numerator())/src.denominator();
 }
