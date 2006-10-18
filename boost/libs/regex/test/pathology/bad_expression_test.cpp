@@ -44,6 +44,12 @@ int test_main( int , char* [] )
    BOOST_CHECK_THROW(boost::regex_search(bad_text, what, e2), std::runtime_error);
    BOOST_CHECK(boost::regex_search(good_text, what, e2));
 
+   bad_text.assign((std::string::size_type)500000, 'a');
+   e2.assign("aaa*@");
+   BOOST_CHECK_THROW(0 == boost::regex_search(bad_text, what, e2), std::runtime_error);
+   good_text.assign((std::string::size_type)5000, 'a');
+   BOOST_CHECK(0 == boost::regex_search(good_text, what, e2));
+
    return 0;
 }
 

@@ -77,15 +77,67 @@ void perl_matcher<BidiIterator, Allocator, traits>::construct_init(const basic_r
 template <class BidiIterator, class Allocator, class traits>
 void perl_matcher<BidiIterator, Allocator, traits>::estimate_max_state_count(std::random_access_iterator_tag*)
 {
-   static const difference_type k = 100000;
-   difference_type dist = boost::re_detail::distance(base, last);
-   traits_size_type states = static_cast<traits_size_type>(re.size());
+   //
+   // How many states should we allow our machine to visit before giving up?
+   // This is a heuristic: it takes the greater of O(N^2) and O(NS^2)
+   // where N is the length of the string, and S is the number of states
+   // in the machine.  It's tempting to up this to O(N^2S) or even O(N^2S^2)
+   // but these take unreasonably amounts of time to bale out in pathological
+   // cases.
+   //
+   // Calculate NS^2 first:
+   //
+   static const boost::uintmax_t k = 100000;
+   boost::uintmax_t dist = boost::re_detail::distance(base, last);
+   if(dist == 0)
+      dist = 1;
+   boost::uintmax_t states = re.size();
+   if(states == 0)
+      states = 1;
    states *= states;
-   difference_type lim = ((std::numeric_limits<difference_type>::max)() - k) / states;
-   if(dist >= lim)
-      max_state_count = (std::numeric_limits<difference_type>::max)();
-   else
-      max_state_count = k + states * dist;
+   if((std::numeric_limits<boost::uintmax_t>::max)() / dist < states)
+   {
+      max_state_count = (std::numeric_limits<boost::uintmax_t>::max)() - 2;
+      return;
+   }
+   states *= dist;
+   if((std::numeric_limits<boost::uintmax_t>::max)() - k < states)
+   {
+      max_state_count = (std::numeric_limits<boost::uintmax_t>::max)() - 2;
+      return;
+   }
+   states += k;
+
+   max_state_count = states;
+
+   //
+   // Now calculate N^2:
+   //
+   states = dist;
+   if((std::numeric_limits<boost::uintmax_t>::max)() / dist < states)
+   {
+      max_state_count = (std::numeric_limits<boost::uintmax_t>::max)() - 2;
+      return;
+   }
+   states *= dist;
+   if((std::numeric_limits<boost::uintmax_t>::max)() - k < states)
+   {
+      max_state_count = (std::numeric_limits<boost::uintmax_t>::max)() - 2;
+      return;
+   }
+   states += k;
+   //
+   // N^2 can be a very large number indeed, to prevent things getting out
+   // of control, cap the max states:
+   //
+   if(states > BOOST_REGEX_MAX_STATE_COUNT)
+      states = BOOST_REGEX_MAX_STATE_COUNT;
+   //
+   // If (the possibly capped) N^2 is larger than our first estimate,
+   // use this instead:
+   //
+   if(states > max_state_count)
+      max_state_count = states;
 }
 
 template <class BidiIterator, class Allocator, class traits>
