@@ -17,6 +17,7 @@
 //    Nickolay Mladenov, for the implementation of operator+=
 
 //  Revision History
+//  20 Oct 06  Fix operator bool_type for CW 8.3 (Joaquín M López Muñoz)
 //  18 Oct 06  Use EXPLICIT_TEMPLATE_TYPE helper macros from Boost.Config
 //             (Joaquín M López Muñoz)
 //  27 Dec 05  Add Boolean conversion operator (Daryle Walker)
@@ -50,6 +51,7 @@
 #include <cstdlib>               // for std::abs
 #include <boost/call_traits.hpp> // for boost::call_traits
 #include <boost/config.hpp>      // for BOOST_NO_STDC_NAMESPACE, BOOST_MSVC
+#include <boost/detail/workaround.hpp> // for BOOST_WORKAROUND
 
 namespace boost {
 
@@ -173,7 +175,19 @@ public:
     bool operator!() const { return !num; }
 
     // Boolean conversion
+    
+#if BOOST_WORKAROUND(__MWERKS__,<=0x3003)
+    // The "ISO C++ Template Parser" option in CW 8.3 chokes on the
+    // following, hence we selectively disable that option for the
+    // offending memfun.
+#pragma parse_mfunc_templ off
+#endif
+
     operator bool_type() const { return operator !() ? 0 : &helper::parts; }
+
+#if BOOST_WORKAROUND(__MWERKS__,<=0x3003)
+#pragma parse_mfunc_templ reset
+#endif
 
     // Comparison operators
     bool operator< (const rational& r) const;
