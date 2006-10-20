@@ -29,6 +29,7 @@
 #include <boost/archive/detail/dynamically_initialized.hpp>
 #include <boost/serialization/type_info_implementation.hpp>
 #include <boost/serialization/is_abstract.hpp>
+#include <boost/serialization/force_include.hpp>
 
 #include <boost/archive/detail/register_archive.hpp>
 #include <boost/mpl/assert.hpp>
