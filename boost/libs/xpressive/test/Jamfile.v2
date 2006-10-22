@@ -8,6 +8,8 @@ import testing ;
 project
     : requirements
         <toolset>intel:<debug-symbols>off
+        <toolset>msvc:<define>_SCL_SECURE_NO_DEPRECATE
+        <toolset>msvc:<define>_CRT_SECURE_NO_DEPRECATE
         <library>/boost/test//boost_unit_test_framework
         <link>static
     ;

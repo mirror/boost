@@ -34,7 +34,7 @@ inline bool push_context_match
 {
     // save state
     match_context<BidiIter> context = state.push_context(impl, next, context);
-    detail::ignore_unused(&context);
+    detail::ignore_unused(context);
 
     // match the nested regex
     bool success = impl.xpr_->match(state);

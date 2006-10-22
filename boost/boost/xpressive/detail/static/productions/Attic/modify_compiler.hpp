@@ -60,7 +60,7 @@ namespace boost { namespace xpressive { namespace detail
             new_visitor_type new_visitor(proto::left(node).call(visitor));
             new_visitor.swap(visitor);
             scoped_swap<Visitor, new_visitor_type> const undo = {&visitor, &new_visitor};
-            detail::ignore_unused(&undo);
+            detail::ignore_unused(undo);
             return proto::compile(proto::right(node), state, new_visitor, seq_tag());
         }
     };

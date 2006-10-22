@@ -13,6 +13,7 @@
 # pragma once
 #endif
 
+#include <boost/static_assert.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
@@ -154,7 +155,8 @@ namespace boost { namespace xpressive { namespace detail
       : mpl::bool_<width_of<Node>::value != unknown_width::value && is_pure<Node>::value>
     {
         // should never try to repeat something of 0-width
-        BOOST_MPL_ASSERT_RELATION(0, !=, width_of<Node>::value);
+        //BOOST_MPL_ASSERT_RELATION(0, !=, width_of<Node>::value);
+        BOOST_STATIC_ASSERT(0 != width_of<Node>::value);
     };
 
     template<bool B, quant_enum Q> struct use_simple_repeat_helper : mpl::false_ {};
@@ -164,7 +166,8 @@ namespace boost { namespace xpressive { namespace detail
     struct use_simple_repeat<proto::unary_op<Matcher, proto::noop_tag> >
       : use_simple_repeat_helper<as_matcher<Matcher>::type::pure, as_matcher<Matcher>::type::quant>
     {
-        BOOST_MPL_ASSERT_RELATION(0, !=, as_matcher<Matcher>::type::width);
+        //BOOST_MPL_ASSERT_RELATION(0, !=, as_matcher<Matcher>::type::width);
+        BOOST_STATIC_ASSERT(0 != as_matcher<Matcher>::type::width);
     };
 
     template<typename Node>

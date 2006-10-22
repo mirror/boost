@@ -20,6 +20,7 @@
 #include <boost/xpressive/detail/static/as_xpr.hpp>
 #include <boost/xpressive/detail/static/compile.hpp>
 #include <boost/xpressive/detail/static/modifier.hpp>
+#include <boost/xpressive/detail/utility/ignore_unused.hpp>
 #include <boost/xpressive/detail/static/regex_operators.hpp>
 #include <boost/xpressive/detail/static/productions/productions.hpp>
 
@@ -55,6 +56,7 @@ typedef assert_word_placeholder<word_end> assert_word_end;
 //    }                                                                                   \
 //    type const &name = detail::BOOST_PP_CAT(global_pod_, name)<0>::value
 */
+
 
 } // namespace detail
 
@@ -649,6 +651,44 @@ imbue(Locale const &loc)
       , regex_constants::ECMAScript
     };
     return mod;
+}
+
+
+namespace detail
+{
+    inline void ignore_unused_regex_primitives()
+    {
+        ignore_unused(repeat_max);
+        ignore_unused(inf);
+        ignore_unused(epsilon);
+        ignore_unused(nil);
+        ignore_unused(alnum);
+        ignore_unused(bos);
+        ignore_unused(eos);
+        ignore_unused(bol);
+        ignore_unused(eol);
+        ignore_unused(bow);
+        ignore_unused(eow);
+        ignore_unused(_b);
+        ignore_unused(_w);
+        ignore_unused(_d);
+        ignore_unused(_s);
+        ignore_unused(_n);
+        ignore_unused(_ln);
+        ignore_unused(_);
+        ignore_unused(self);
+        ignore_unused(set);
+        ignore_unused(s0);
+        ignore_unused(s1);
+        ignore_unused(s2);
+        ignore_unused(s3);
+        ignore_unused(s4);
+        ignore_unused(s5);
+        ignore_unused(s6);
+        ignore_unused(s7);
+        ignore_unused(s8);
+        ignore_unused(s9);
+    }
 }
 
 }} // namespace boost::xpressive

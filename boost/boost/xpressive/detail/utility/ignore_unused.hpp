@@ -16,7 +16,8 @@
 namespace boost { namespace xpressive { namespace detail
 {
 
-    inline void ignore_unused(void const *)
+    template<typename T>
+    void ignore_unused(T const &)
     {
     }
 

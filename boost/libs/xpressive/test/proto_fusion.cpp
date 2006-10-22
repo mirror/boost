@@ -53,7 +53,7 @@ std::ostream &operator <<(std::ostream &sout, boost::proto::binary_op<A,B,Tag> c
 //
 struct to_string
 {
-    to_string(std::stringstream &sout)
+    to_string(std::ostream &sout)
       : sout_(sout)
     {}
 
@@ -63,7 +63,7 @@ struct to_string
         this->sout_ << '(' << op << ')';
     }
 private:
-    std::stringstream &sout_;
+    std::ostream &sout_;
 };
 
 void test1()

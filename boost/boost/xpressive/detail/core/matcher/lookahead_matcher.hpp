@@ -57,7 +57,7 @@ namespace boost { namespace xpressive { namespace detail
             {
                 // negative look-ahead assertions do not trigger partial matches.
                 save_restore<bool> partial_match(state.found_partial_match_);
-                detail::ignore_unused(&partial_match);
+                detail::ignore_unused(partial_match);
 
                 if(this->xpr_.match(state))
                 {
@@ -98,7 +98,7 @@ namespace boost { namespace xpressive { namespace detail
             {
                 // negative look-ahead assertions do not trigger partial matches.
                 save_restore<bool> partial_match(state.found_partial_match_);
-                detail::ignore_unused(&partial_match);
+                detail::ignore_unused(partial_match);
 
                 if(this->xpr_.match(state))
                 {
