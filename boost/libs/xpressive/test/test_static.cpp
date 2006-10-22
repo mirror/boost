@@ -6,11 +6,11 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/xpressive/xpressive_static.hpp>
-#include "./test_minimal.hpp"
+#include <boost/test/unit_test.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
 // test_main
-int test_main( int, char*[] )
+void test_main()
 {
     using namespace boost::xpressive;
 
@@ -22,6 +22,17 @@ int test_main( int, char*[] )
     {
         BOOST_ERROR("oops");
     }
-
-    return 0;
 }
+
+using namespace boost::unit_test;
+
+///////////////////////////////////////////////////////////////////////////////
+// init_unit_test_suite
+//
+test_suite* init_unit_test_suite( int argc, char* argv[] )
+{
+    test_suite *test = BOOST_TEST_SUITE("test_static");
+    test->add(BOOST_TEST_CASE(&test_main));
+    return test;
+}
+

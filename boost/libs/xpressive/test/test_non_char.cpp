@@ -12,7 +12,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // test_main
 //   read the tests from the input file and execute them
-int test_main( int, char*[] )
+void test_main()
 {
     static int const data[] = {0, 1, 2, 3, 4, 5, 6};
     null_regex_traits<int> nul;
@@ -28,6 +28,15 @@ int test_main( int, char*[] )
         BOOST_CHECK(*what[0].first == 1);
         BOOST_CHECK(*what[0].second == 6);
     }
-
-    return 0;
 }
+
+///////////////////////////////////////////////////////////////////////////////
+// init_unit_test_suite
+//
+test_suite* init_unit_test_suite( int argc, char* argv[] )
+{
+    test_suite *test = BOOST_TEST_SUITE("test_non_char");
+    test->add(BOOST_TEST_CASE(&test_main));
+    return test;
+}
+

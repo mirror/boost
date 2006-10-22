@@ -14,16 +14,17 @@
 #endif
 
 #include <iostream>
+#include <boost/test/unit_test.hpp>
 #include <boost/xpressive/xpressive.hpp>
-#include "./test_minimal.hpp"
 
+using namespace boost::unit_test;
 using namespace boost::xpressive;
 
 ///////////////////////////////////////////////////////////////////////////////
 // test_main
 // regexes referred to by other regexes are kept alive via reference counting.
 // but cycles are handled naturally. the following works as expected and doesn't leak.
-int test_main( int, char*[] )
+void test_main()
 {
     {
         sregex v;
@@ -189,8 +190,16 @@ int test_main( int, char*[] )
     {
         BOOST_ERROR("leaks detected (cycle test 5)");
     }
+}
 
-    return 0;
+///////////////////////////////////////////////////////////////////////////////
+// init_unit_test_suite
+//
+test_suite* init_unit_test_suite( int argc, char* argv[] )
+{
+    test_suite *test = BOOST_TEST_SUITE("test_cycles");
+    test->add(BOOST_TEST_CASE(&test_main));
+    return test;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

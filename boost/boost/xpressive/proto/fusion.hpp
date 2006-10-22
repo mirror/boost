@@ -14,7 +14,6 @@
 #include <boost/type_traits/remove_reference.hpp>
 
 #ifdef BOOST_PROTO_FUSION_V2
-# include <boost/fusion/support/tags.hpp>
 # include <boost/fusion/support/is_view.hpp>
 # include <boost/fusion/support/category_of.hpp>
 # include <boost/fusion/sequence/container/list/cons.hpp>
@@ -55,7 +54,7 @@ namespace boost { namespace proto
       : fusion::iterator_base<binary_tree_iterator<Cons> >
     {
         typedef binary_tree_iterator_tag tag;   // for Fusion 1
-        typedef binary_tree_iterator_tag ftag;  // for Fusion 2
+        typedef binary_tree_iterator_tag fusion_tag;  // for Fusion 2
         #ifdef BOOST_PROTO_FUSION_V2
         typedef fusion::forward_traversal_tag category;
         #else
@@ -219,7 +218,7 @@ namespace boost { namespace fusion { namespace extension
         template<typename T>
         struct apply
         {
-            typedef forward_sequence_tag type;
+            typedef forward_traversal_tag type;
         };
     };
 

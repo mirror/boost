@@ -10,7 +10,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // test_main
 //   read the tests from the input file and execute them
-int test_main( int, char*[] )
+void test_main()
 {
 
 

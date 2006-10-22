@@ -8,8 +8,9 @@
 #include <iostream>
 #include <boost/xpressive/xpressive.hpp>
 #include <boost/xpressive/traits/cpp_regex_traits.hpp>
-#include "./test_minimal.hpp"
+#include <boost/test/unit_test.hpp>
 
+using namespace boost::unit_test;
 using namespace boost::xpressive;
 
 void test1()
@@ -230,16 +231,18 @@ void test6()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// test_main
+// init_unit_test_suite
 //
-int test_main( int, char*[] )
+test_suite* init_unit_test_suite( int argc, char* argv[] )
 {
-    test1();
-    test2();
-    test3();
-    test4();
-    test5();
-    test6();
+    test_suite *test = BOOST_TEST_SUITE("miscelaneous tests and examples from the docs");
 
-    return 0;
+    test->add(BOOST_TEST_CASE(&test1));
+    test->add(BOOST_TEST_CASE(&test2));
+    test->add(BOOST_TEST_CASE(&test3));
+    test->add(BOOST_TEST_CASE(&test4));
+    test->add(BOOST_TEST_CASE(&test5));
+    test->add(BOOST_TEST_CASE(&test6));
+
+    return test;
 }

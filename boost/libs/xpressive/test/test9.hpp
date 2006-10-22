@@ -11,93 +11,93 @@
 // get_test_cases
 //
 template<typename BidiIterT>
-boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
+boost::iterator_range<xpr_test_case<BidiIterT> const *> get_test_cases()
 {
     typedef typename boost::iterator_value<BidiIterT>::type char_type;
-    typedef test_case<BidiIterT> test_case;
+    typedef xpr_test_case<BidiIterT> xpr_test_case;
     typedef basic_regex<BidiIterT> regex_type;
 
     static char_type const *nilbr = 0;
-    static test_case const test_cases[] =
+    static xpr_test_case const test_cases[] =
     {
-        test_case
+        xpr_test_case
         (
             "test151"
           , L("bbbc")
           , regex_type(bos >> repeat<2>(s1= -optional(L('b'))) >> L("bc") >> eos)
           , backrefs(L("bbbc"), L("b"), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test152"
           , L("bbbbc")
           , regex_type(bos >> repeat<2>(s1= -optional(L('b'))) >> L("bc") >> eos)
           , no_match
         )
-      , test_case
+      , xpr_test_case
         (
             "test153"
           , L("bbbbc")
           , regex_type(bos >> *(s1= -optional(L('b'))) >> L('d') >> eos)
           , no_match
         )
-      , test_case
+      , xpr_test_case
         (
             "test154"
           , L("bc")
           , regex_type(bos >> -repeat<2>(s1= -optional(L('b'))) >> L("bc") >> eos)
           , backrefs(L("bc"), L(""), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test155"
           , L("bbc")
           , regex_type(bos >> -repeat<2>(s1= -optional(L('b'))) >> L("bc") >> eos)
           , backrefs(L("bbc"), L("b"), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test156"
           , L("bbbc")
           , regex_type(bos >> -repeat<2>(s1= -optional(L('b'))) >> L("bc") >> eos)
           , backrefs(L("bbbc"), L("b"), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test157"
           , L("bbbbc")
           , regex_type(bos >> -repeat<2>(s1= -optional(L('b'))) >> L("bc") >> eos)
           , no_match
         )
-      , test_case
+      , xpr_test_case
         (
             "test158"
           , L("bbbbc")
           , regex_type(bos >> -*(s1= -optional(L('b'))) >> L('d') >> eos)
           , no_match
         )
-      , test_case
+      , xpr_test_case
         (
             "test159"
           , L("bbc")
           , regex_type(bos >> *(s1= nil | nil | nil | L('b')) >> L("bc") >> eos)
           , backrefs(L("bbc"), L(""), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test160"
           , L("bbc")
           , regex_type(bos >> -*(s1= nil | nil | nil | L('b')) >> L("bc") >> eos)
           , backrefs(L("bbc"), L("b"), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test164"
           , L("1yzZ^aAc2")
           , regex_type(icase(+range(L('Z'),L('a'))))
           , backrefs(L("zZ^aA"), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test165"
           , L("1yzZ^aAc2")

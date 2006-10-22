@@ -25,6 +25,8 @@ doxygen autodoc
 xml xpressive
     :
         xpressive.qbk
+    :
+        <dependency>autodoc
     ;
 
 boostbook standalone

@@ -20,17 +20,18 @@
 #include <fstream>
 #include <boost/lexical_cast.hpp>
 #include <boost/xpressive/xpressive.hpp>
-#include "./test_minimal.hpp"
+#include <boost/test/unit_test.hpp>
 
 #define BOOST_XPR_CHECK(pred)                                                   \
     if(pred) {} else { BOOST_ERROR(format_msg(#pred).c_str()); }
 
+using namespace boost::unit_test;
 using namespace boost::xpressive;
 
 //////////////////////////////////////////////////////////////////////////////
-// test_case
+// xpr_test_case
 template<typename Char>
-struct test_case
+struct xpr_test_case
 {
     typedef std::basic_string<Char> string_type;
     std::string section;
@@ -42,7 +43,7 @@ struct test_case
     regex_constants::match_flag_type match_flags;
     std::vector<string_type> br;
 
-    test_case()
+    xpr_test_case()
     {
         this->reset();
     }
@@ -66,7 +67,7 @@ std::ifstream in;
 unsigned int test_count = 0;
 
 // The global object that contains the current test case
-test_case<char> test;
+xpr_test_case<char> test;
 
 sregex const rx_sec = '[' >> (s1= +_) >> ']';
 sregex const rx_str = "str=" >> (s1= *_);
@@ -92,7 +93,7 @@ std::wstring widen(std::string const &str)
 {
     std::ctype<char> const &ct = BOOST_USE_FACET(std::ctype<char>, std::locale());
     std::wstring res;
-    for(int i=0; i<str.size(); ++i)
+    for(size_t i=0; i<str.size(); ++i)
     {
         res += ct.widen(str[i]);
     }
@@ -102,9 +103,9 @@ std::wstring widen(std::string const &str)
 ///////////////////////////////////////////////////////////////////////////////
 // widen
 //  widens an entire test case
-test_case<wchar_t> widen(test_case<char> const &test)
+xpr_test_case<wchar_t> widen(xpr_test_case<char> const &test)
 {
-    test_case<wchar_t> wtest;
+    xpr_test_case<wchar_t> wtest;
     wtest.section = test.section;
     wtest.str = ::widen(test.str);
     wtest.pat = ::widen(test.pat);
@@ -232,7 +233,7 @@ bool get_test()
 // run_test_impl
 //   run the test
 template<typename Char>
-void run_test_impl(test_case<Char> const &test)
+void run_test_impl(xpr_test_case<Char> const &test)
 {
     try
     {
@@ -307,7 +308,7 @@ void run_test_a()
 void run_test_u()
 {
     #ifndef BOOST_XPRESSIVE_NO_WREGEX
-    test_case<wchar_t> wtest = ::widen(test);
+    xpr_test_case<wchar_t> wtest = ::widen(test);
     run_test_impl(wtest);
     #endif
 }
@@ -345,12 +346,11 @@ bool open_test()
 ///////////////////////////////////////////////////////////////////////////////
 // test_main
 //   read the tests from the input file and execute them
-int test_main(int argc, char* argv[])
+void test_main()
 {
     if(!open_test())
     {
-        std::cout << "Error: unable to open input file." << std::endl;
-        return -1;
+        BOOST_ERROR("Error: unable to open input file.");
     }
 
     while(get_test())
@@ -360,8 +360,16 @@ int test_main(int argc, char* argv[])
     }
 
     std::cout << test_count << " tests completed." << std::endl;
+}
 
-    return 0;
+///////////////////////////////////////////////////////////////////////////////
+// init_unit_test_suite
+//
+test_suite* init_unit_test_suite( int argc, char* argv[] )
+{
+    test_suite *test = BOOST_TEST_SUITE("basic regression test");
+    test->add(BOOST_TEST_CASE(&test_main));
+    return test;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -20,7 +20,9 @@
 #include <functional>
 #include <boost/range/iterator_range.hpp>
 #include <boost/xpressive/xpressive_static.hpp>
-#include "./test_minimal.hpp"
+#include <boost/test/unit_test.hpp>
+
+using namespace boost::unit_test;
 using namespace boost::xpressive;
 
 #define L(x) BOOST_XPR_CSTR_(char_type, x)
@@ -59,16 +61,16 @@ struct no_match_t {};
 no_match_t const no_match = {};
 
 template<typename BidiIter>
-struct test_case;
+struct xpr_test_case;
 
 template<typename BidiIter>
-std::string format_msg(test_case<BidiIter> const &test, char const *msg);
+std::string format_msg(xpr_test_case<BidiIter> const &test, char const *msg);
 
 ///////////////////////////////////////////////////////////////////////////////
-// test_case
+// xpr_test_case
 //
 template<typename BidiIter>
-struct test_case
+struct xpr_test_case
 {
     typedef BidiIter iterator_type;
     typedef typename boost::iterator_value<iterator_type>::type char_type;
@@ -76,7 +78,7 @@ struct test_case
     typedef std::basic_string<char_type> string_type;
     typedef std::vector<string_type> backrefs_type;
 
-    test_case(std::string section, string_type str, regex_type rex, backrefs_type brs)
+    xpr_test_case(std::string section, string_type str, regex_type rex, backrefs_type brs)
       : section_(section)
       , str_(str)
       , rex_(rex)
@@ -84,7 +86,7 @@ struct test_case
     {
     }
 
-    test_case(std::string section, string_type str, regex_type rex, no_match_t)
+    xpr_test_case(std::string section, string_type str, regex_type rex, no_match_t)
       : section_(section)
       , str_(str)
       , rex_(rex)
@@ -130,9 +132,9 @@ private:
 // test_runner
 template<typename BidiIter>
 struct test_runner
-  : std::unary_function<test_case<BidiIter>, void>
+  : std::unary_function<xpr_test_case<BidiIter>, void>
 {
-    void operator ()(test_case<BidiIter> const &test) const
+    void operator ()(xpr_test_case<BidiIter> const &test) const
     {
         test.run();
     }

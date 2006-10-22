@@ -166,7 +166,7 @@ namespace boost { namespace proto
     {
         typedef Arg arg_type;
         typedef Tag tag_type;
-        typedef tag<Tag> ftag; // for Fusion-2 compatibility
+        typedef tag<Tag> fusion_tag; // for Fusion-2 compatibility
         typedef tag<Tag> tag;  // for Fusion-1 compatibility
 
         typedef fusion::single_view<arg_type> arg_view;
@@ -202,7 +202,7 @@ namespace boost { namespace proto
         typedef Node node_type;
         typedef typename remove_reference<Node>::type::children_type const &children_type;
         typedef binary_segmented_view_tag tag;
-        typedef binary_segmented_view_tag ftag;
+        typedef binary_segmented_view_tag fusion_tag;
 
         explicit binary_segmented_view(typename call_traits<Node>::param_type node)
           : val(node)
@@ -237,7 +237,7 @@ namespace boost { namespace proto
         typedef typename tag_type<left_type>::type left_tag;
         typedef typename tag_type<right_type>::type right_tag;
         typedef Tag tag_type;
-        typedef tag<Tag> ftag; // for Fusion-2 compatibility
+        typedef tag<Tag> fusion_tag; // for Fusion-2 compatibility
         typedef tag<Tag> tag;  // for Fusion-1 compatibility
 
         typedef typename mpl::if_<
@@ -285,7 +285,7 @@ namespace boost { namespace proto
       : op_base<nary_op<Fun, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, A)> >
     {
         typedef function_tag tag_type;
-        typedef tag<function_tag> ftag; // for Fusion-2 compatibility
+        typedef tag<function_tag> fusion_tag; // for Fusion-2 compatibility
         typedef tag<function_tag> tag;  // for Fusion-1 compatibility
         typedef Fun functor_type;
         typedef fusion::tuple<

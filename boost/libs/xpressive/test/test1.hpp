@@ -11,114 +11,114 @@
 // get_test_cases
 //
 template<typename BidiIterT>
-boost::iterator_range<test_case<BidiIterT> const *> get_test_cases()
+boost::iterator_range<xpr_test_case<BidiIterT> const *> get_test_cases()
 {
     typedef typename boost::iterator_value<BidiIterT>::type char_type;
-    typedef test_case<BidiIterT> test_case;
+    typedef xpr_test_case<BidiIterT> xpr_test_case;
     typedef basic_regex<BidiIterT> regex_type;
 
     static char_type const *nilbr = 0;
-    static test_case const test_cases[] =
+    static xpr_test_case const test_cases[] =
     {
-        test_case
+        xpr_test_case
         (
             "test1"
           , L("foobarboo")
           , regex_type(as_xpr(L("foo")))
           , backrefs(L("foo"), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test2"
           , L("foobarboo")
           , regex_type(as_xpr(L("bar")))
           , backrefs(L("bar"), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test3"
           , L("foobarboo")
           , regex_type(as_xpr(L("bat")))
           , no_match
         )
-      , test_case
+      , xpr_test_case
         (
             "test4"
           , L("foobarboo")
           , regex_type(L('b') >> *_ >> L("ar"))
           , backrefs(L("bar"), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test5"
           , L("foobarboo")
           , regex_type(L('b') >> *_ >> L('r'))
           , backrefs(L("bar"), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test6"
           , L("foobarboo")
           , regex_type(L('b') >> *_ >> L('b'))
           , backrefs(L("barb"), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test7"
           , L("foobarboo")
           , regex_type(L('b') >> *_ >> L('o'))
           , backrefs(L("barboo"), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test8"
           , L("foobarboo")
           , regex_type(L('b') >> *_ >> L("oo"))
           , backrefs(L("barboo"), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test9"
           , L("foobarboo")
           , regex_type(L('b') >> +_ >> L("ar"))
           , no_match
         )
-      , test_case
+      , xpr_test_case
         (
             "test10"
           , L("foobarboo")
           , regex_type(L('b') >> +_ >> L('r'))
           , backrefs(L("bar"), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test11"
           , L("foobarboo")
           , regex_type(L('b') >> +_ >> L('b'))
           , backrefs(L("barb"), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test12"
           , L("foobarboo")
           , regex_type(L('b') >> +_ >> L('o'))
           , backrefs(L("barboo"), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test13"
           , L("foobarboo")
           , regex_type(L('b') >> +_ >> L("oo"))
           , backrefs(L("barboo"), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test14"
           , L("foobarboo")
           , regex_type(bos >> L("foo"))
           , backrefs(L("foo"), nilbr)
         )
-      , test_case
+      , xpr_test_case
         (
             "test15"
           , L("foobarboo")

@@ -5,7 +5,12 @@
 # bring in rules for testing
 import testing ;
 
-project : requirements <toolset>intel:<debug-symbols>off ;
+project
+    : requirements
+        <toolset>intel:<debug-symbols>off
+        <library>/boost/test//boost_unit_test_framework
+        <link>static
+    ;
 
 test-suite "xpressive"
        : [ run regress.cpp ]
@@ -19,8 +24,8 @@ test-suite "xpressive"
          [ run test7.cpp ]
          [ run test8.cpp ]
          [ run test9.cpp ]
-	 [ run test10.cpp ]
-	 [ run test11.cpp ]
+         [ run test10.cpp ]
+         [ run test11.cpp ]
          [ run test1u.cpp ]
          [ run test2u.cpp ]
          [ run test3u.cpp ]
@@ -30,8 +35,8 @@ test-suite "xpressive"
          [ run test7u.cpp ]
          [ run test8u.cpp ]
          [ run test9u.cpp ]
-	 [ run test10u.cpp ]
-	 [ run test11u.cpp ]
+         [ run test10u.cpp ]
+         [ run test11u.cpp ]
          [ run misc1.cpp ]
          [ run test_cycles.cpp ]
          [ run test_non_char.cpp ]
@@ -50,3 +55,10 @@ test-suite "xpressive"
          [ compile test_regex_traits.cpp ]
          [ compile test_sub_match.cpp ]
     ;
+
+test-suite "proto-fusion"
+    :
+        [ run proto_fusion.cpp ]
+    ;
+
+explicit "proto-fusion" ;
