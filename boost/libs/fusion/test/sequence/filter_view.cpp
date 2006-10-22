@@ -92,7 +92,8 @@ main()
     }
 
     {
-        // $$$ JDG $$$ For some obscure reason, comeau 4.3.3 has problems with this.
+        // $$$ JDG $$$ For some obscure reason, EDG based compilers
+        // (e.g. comeau 4.3.3, intel) have problems with this.
         // vc7.1 and g++ are ok. The errors from comeau are useless.
         
         typedef vector_c<int, 5, 1, 2, 3, 6, 0, -1> vector_type;
