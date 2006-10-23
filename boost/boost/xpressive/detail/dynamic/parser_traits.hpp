@@ -350,8 +350,10 @@ private:
         case BOOST_XPR_CHAR_(char_type, '-'): if(false == (set = !set)) break; // else fall-through
         default: throw regex_error(error_paren, "unknown pattern modifier");
         }
-        while(detail::ensure(++begin != end, error_paren, "incomplete extension"), true);
-        BOOST_UNREACHABLE_RETURN(token_no_mark);
+        while(detail::ensure(++begin != end, error_paren, "incomplete extension"));
+        // this return is technically unreachable, but this must
+        // be here to work around a bug in gcc 4.0
+        return token_no_mark;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
