@@ -45,8 +45,8 @@ namespace boost { namespace fusion
         map()
             : data() {}
         
-        template <typename T>
-        explicit map(T const& rhs)
+        template <typename Sequence>
+        map(Sequence const& rhs)
             : data(rhs) {}
 
         #include <boost/fusion/sequence/container/map/detail/map_forward_ctor.hpp>

@@ -45,8 +45,8 @@ namespace boost { namespace fusion
         set()
             : data() {}
         
-        template <typename T>
-        explicit set(T const& rhs)
+        template <typename Sequence>
+        set(Sequence const& rhs)
             : data(rhs) {}
 
         #include <boost/fusion/sequence/container/set/detail/set_forward_ctor.hpp>

@@ -88,7 +88,10 @@
         typedef mpl::int_<N> size;
     
         BOOST_PP_CAT(vector, N)() {}
-    
+
+#if (N == 1)
+        explicit
+#endif
         BOOST_PP_CAT(vector, N)(
             BOOST_PP_ENUM_BINARY_PARAMS(
                 N, typename detail::call_param<T, >::type _))
@@ -100,7 +103,7 @@
             : base_type(BOOST_PP_ENUM_PARAMS(N, vec.m)) {}
 
         template <typename Sequence>
-        explicit BOOST_PP_CAT(vector, N)(
+        BOOST_PP_CAT(vector, N)(
             Sequence const& seq
           , typename disable_if<is_convertible<Sequence, T0> >::type* dummy = 0)
             : base_type(base_type::init_from_sequence(seq)) {}

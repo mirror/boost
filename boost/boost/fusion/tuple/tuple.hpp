@@ -30,8 +30,8 @@ namespace boost { namespace fusion
         tuple()
             : base_type() {}
         
-        template <typename T>
-        explicit tuple(T const& rhs)
+        template <typename Sequence>
+        tuple(Sequence const& rhs)
             : base_type(rhs) {}
 
         #include <boost/fusion/tuple/detail/tuple_forward_ctor.hpp>

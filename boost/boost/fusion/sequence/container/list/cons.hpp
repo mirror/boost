@@ -85,7 +85,7 @@ namespace boost { namespace fusion
             : car(rhs.car), cdr(rhs.cdr) {}
 
         template <typename Sequence>
-        explicit cons(
+        cons(
             Sequence const& seq
           , typename disable_if<
                 mpl::or_<

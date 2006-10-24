@@ -35,8 +35,8 @@ namespace boost { namespace fusion
         list(list<BOOST_PP_ENUM_PARAMS(FUSION_MAX_LIST_SIZE, U)> const& rhs)
             : inherited_type(rhs) {}
 
-        template <typename T>
-        explicit list(T const& rhs)
+        template <typename Sequence>
+        list(Sequence const& rhs)
             : inherited_type(rhs) {}
 
         //  Expand a couple of forwarding constructors for arguments

@@ -56,10 +56,10 @@ namespace boost { namespace fusion
         vector(vector const& rhs)
             : vec(rhs.vec) {}
 
-        template <typename T>
-        explicit vector(T const& rhs)
+        template <typename Sequence>
+        vector(Sequence const& rhs)
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
-            : vec(ctor_helper(rhs, is_base_of<vector, T>())) {}
+            : vec(ctor_helper(rhs, is_base_of<vector, Sequence>())) {}
 #else
             : vec(rhs) {}
 #endif
