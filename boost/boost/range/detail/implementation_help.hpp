@@ -43,7 +43,7 @@ namespace boost
 #else
         inline const wchar_t* str_end( const wchar_t* s, const wchar_t* )
         {
-            if( s == 0 && s[0] == 0 )
+            if( s == 0 || s[0] == 0 )
                 return s;
             while( *++s != 0 )
                 ;
