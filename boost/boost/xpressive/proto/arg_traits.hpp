@@ -12,16 +12,11 @@
 #define BOOST_PROTO_ARG_TRAITS_HPP_EAN_04_01_2005
 
 #include <boost/call_traits.hpp>
+#include <boost/type_traits/add_const.hpp>
+#include <boost/type_traits/add_reference.hpp>
+#include <boost/type_traits/remove_reference.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/op_tags.hpp>
-
-#ifdef BOOST_PROTO_FUSION_V2
-# include <boost/fusion/sequence/intrinsic/at.hpp>
-# define BOOST_PROTO_AT(n, s) fusion::at_c<n>(s)
-#else
-# include <boost/spirit/fusion/sequence/at.hpp>
-# define BOOST_PROTO_AT(n, s) fusion::at<n>(s)
-#endif
 
 namespace boost { namespace proto
 {
@@ -47,6 +42,11 @@ namespace boost { namespace proto
       : arg_type<Node>
     {};
 
+    template<typename Node>
+    struct arg_type<Node const>
+      : arg_type<Node>
+    {};
+
     ///////////////////////////////////////////////////////////////////////////////
     // argument type extractors
     template<typename Node>
@@ -68,6 +68,11 @@ namespace boost { namespace proto
       : left_type<Node>
     {};
 
+    template<typename Node>
+    struct left_type<Node const>
+      : left_type<Node>
+    {};
+
     ///////////////////////////////////////////////////////////////////////////////
     // argument type extractors
     template<typename Node>
@@ -86,6 +91,11 @@ namespace boost { namespace proto
 
     template<typename Node>
     struct right_type<Node &>
+      : right_type<Node>
+    {};
+
+    template<typename Node>
+    struct right_type<Node const>
       : right_type<Node>
     {};
 
@@ -114,36 +124,38 @@ namespace boost { namespace proto
       : tag_type<Node, true>
     {};
 
+    template<typename Node>
+    struct tag_type<Node const, true>
+      : tag_type<Node, true>
+    {};
+
     ///////////////////////////////////////////////////////////////////////////////
     // is_unary
     template<typename Node>
     struct is_unary
       : boost::is_base_and_derived<unary_tag, typename tag_type<Node>::type>
-    {
-    };
+    {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // is_binary
     template<typename Node>
     struct is_binary
       : boost::is_base_and_derived<binary_tag, typename tag_type<Node>::type>
-    {
-    };
+    {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // is_nary
     template<typename Node>
     struct is_nary
       : boost::is_base_and_derived<nary_tag, typename tag_type<Node>::type>
-    {
-    };
+    {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // arg
     template<typename Node>
     inline typename arg_type<Node>::reference arg(Node const &node)
     {
-        return node.cast().child.val;
+        return node.cast().arg;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -151,7 +163,7 @@ namespace boost { namespace proto
     template<typename Node>
     inline typename left_type<Node>::reference left(Node const &node)
     {
-        return BOOST_PROTO_AT(0, node.cast().children).val;
+        return node.cast().left;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -159,7 +171,7 @@ namespace boost { namespace proto
     template<typename Node>
     inline typename right_type<Node>::reference right(Node const &node)
     {
-        return BOOST_PROTO_AT(1, node.cast().children).val;
+        return node.cast().right;
     }
 
 }}

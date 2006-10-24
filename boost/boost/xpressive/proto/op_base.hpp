@@ -29,17 +29,11 @@
 #include <boost/xpressive/proto/arg_traits.hpp>
 
 #ifdef BOOST_PROTO_FUSION_V2
-# include <boost/fusion/tuple.hpp>
 # include <boost/fusion/support/sequence_base.hpp>
-# include <boost/fusion/sequence/view/single_view.hpp>
-# include <boost/fusion/sequence/container/vector/vector10.hpp>
-# define BOOST_PROTO_VECTOR2 fusion::vector2
+# include <boost/fusion/tuple.hpp>
 #else
 # include <boost/spirit/fusion/sequence/detail/sequence_base.hpp>
 # include <boost/spirit/fusion/sequence/tuple.hpp>
-# include <boost/spirit/fusion/sequence/single_view.hpp>
-# include <boost/spirit/fusion/sequence/tuple10.hpp>
-# define BOOST_PROTO_VECTOR2 fusion::tuple2
 #endif
 
 namespace boost { namespace proto
@@ -47,9 +41,9 @@ namespace boost { namespace proto
 
     ///////////////////////////////////////////////////////////////////////////////
     // op_root
-    struct op_root : fusion::sequence_root
-    {
-    };
+    struct op_root
+      : fusion::sequence_root // TODO do NOT inherit from sequence_root because of the ADL implications.
+    {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // is_proxy
@@ -63,6 +57,16 @@ namespace boost { namespace proto
       : mpl::true_
     {};
 
+    template<typename T>
+    struct is_proxy<T &>
+      : is_proxy<T>
+    {};
+
+    template<typename T>
+    struct is_proxy<T const>
+      : is_proxy<T>
+    {};
+
     ///////////////////////////////////////////////////////////////////////////////
     // is_op
     template<typename T>
@@ -72,6 +76,11 @@ namespace boost { namespace proto
 
     template<typename T>
     struct is_op<T &>
+      : is_op<T>
+    {};
+
+    template<typename T>
+    struct is_op<T const>
       : is_op<T>
     {};
 
@@ -166,66 +175,31 @@ namespace boost { namespace proto
     {
         typedef Arg arg_type;
         typedef Tag tag_type;
-        typedef tag<Tag> fusion_tag; // for Fusion-2 compatibility
-        typedef tag<Tag> tag;  // for Fusion-1 compatibility
+        typedef tag<Tag> fusion_tag;    // for Fusion-2 compatibility
+        typedef tag<Tag> tag;           // for Fusion-1 compatibility
+        typedef void unary;
 
-        typedef fusion::single_view<arg_type> arg_view;
-        arg_view child;
+        arg_type arg;
 
         unary_op()
-          : child()
+          : arg()
         {}
 
-        explicit unary_op(typename call_traits<arg_type>::param_type arg)
-          : child(arg_view(arg))
+        explicit unary_op(typename call_traits<arg_type>::param_type arg_)
+          : arg(arg_)
         {}
 
         unary_op(unary_op<Arg, Tag> const &that)
-          : child(that.child)
+          : arg(that.arg)
         {}
 
         template<typename OtherArg>
         unary_op(unary_op<OtherArg, Tag> const &that)
-          : child(arg_view(proto::arg(that)))
+          : arg(proto::arg(that))
         {}
 
         using op_base<unary_op>::operator =;
     };
-
-    struct binary_segmented_view_tag;
-
-    // A segmented view of a binary proto parse tree
-    template<typename Node>
-    struct binary_segmented_view
-      : fusion::sequence_base<binary_segmented_view<Node> >
-    {
-        typedef Node node_type;
-        typedef typename remove_reference<Node>::type::children_type const &children_type;
-        typedef binary_segmented_view_tag tag;
-        typedef binary_segmented_view_tag fusion_tag;
-
-        explicit binary_segmented_view(typename call_traits<Node>::param_type node)
-          : val(node)
-        {}
-
-        Node node() const
-        {
-            return this->val;
-        }
-
-        children_type children() const
-        {
-            return this->val.children;
-        }
-
-        Node val;
-    };
-
-    template<typename Node>
-    binary_segmented_view<Node const &> make_segmented_view(Node const &node)
-    {
-        return binary_segmented_view<Node const &>(node);
-    }
 
     ///////////////////////////////////////////////////////////////////////////////
     // binary_op
@@ -234,45 +208,36 @@ namespace boost { namespace proto
     {
         typedef Left left_type;
         typedef Right right_type;
-        typedef typename tag_type<left_type>::type left_tag;
-        typedef typename tag_type<right_type>::type right_tag;
         typedef Tag tag_type;
-        typedef tag<Tag> fusion_tag; // for Fusion-2 compatibility
-        typedef tag<Tag> tag;  // for Fusion-1 compatibility
+        typedef tag<Tag> fusion_tag;    // for Fusion-2 compatibility
+        typedef tag<Tag> tag;           // for Fusion-1 compatibility
+        typedef void binary;
 
-        typedef typename mpl::if_<
-            is_same<Tag, left_tag>
-          , binary_segmented_view<left_type>
-          , fusion::single_view<left_type>
-        >::type left_view;
-
-        typedef typename mpl::if_<
-            is_same<Tag, right_tag>
-          , binary_segmented_view<right_type>
-          , fusion::single_view<right_type>
-        >::type right_view;
-
-        typedef BOOST_PROTO_VECTOR2<left_view, right_view> children_type;
-        children_type children;
+        left_type left;
+        right_type right;
 
         binary_op()
-          : children()
+          : left()
+          , right()
         {}
 
         binary_op(
-            typename call_traits<Left>::param_type left
-          , typename call_traits<Right>::param_type right
+            typename call_traits<Left>::param_type left_
+          , typename call_traits<Right>::param_type right_
         )
-          : children(left_view(left), right_view(right))
+          : left(left_)
+          , right(right_)
         {}
 
         binary_op(binary_op<Left, Right, Tag> const &that)
-          : children(that.children)
+          : left(that.left)
+          , right(that.right)
         {}
 
         template<typename OtherLeft, typename OtherRight>
         binary_op(binary_op<OtherLeft, OtherRight, Tag> const &that)
-          : children(left_view(proto::left(that)), right_view(proto::right(that)))
+          : left(proto::left(that))
+          , right(proto::right(that))
         {}
 
         using op_base<binary_op>::operator =;
@@ -285,12 +250,13 @@ namespace boost { namespace proto
       : op_base<nary_op<Fun, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, A)> >
     {
         typedef function_tag tag_type;
-        typedef tag<function_tag> fusion_tag; // for Fusion-2 compatibility
-        typedef tag<function_tag> tag;  // for Fusion-1 compatibility
+        typedef tag<function_tag> fusion_tag;   // for Fusion-2 compatibility
+        typedef tag<function_tag> tag;          // for Fusion-1 compatibility
         typedef Fun functor_type;
         typedef fusion::tuple<
             BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, A)
         > args_type;
+        typedef void nary;
 
         functor_type functor;
         args_type args;

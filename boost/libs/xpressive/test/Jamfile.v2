@@ -61,6 +61,7 @@ test-suite "xpressive"
 test-suite "proto-fusion"
     :
         [ run proto_fusion.cpp ]
+        [ run ext_/proto_fusion_s.cpp ]
     ;
 
 explicit "proto-fusion" ;

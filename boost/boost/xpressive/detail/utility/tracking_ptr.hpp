@@ -69,8 +69,8 @@ struct weak_iterator
         this->satisfy_();
     }
 
-//private:
-//    friend class iterator_core_access;
+private:
+    friend class boost::iterator_core_access;
 
     shared_ptr<Derived> const &dereference() const
     {
@@ -88,7 +88,6 @@ struct weak_iterator
         return this->iter_ == that.iter_;
     }
 
-private:
     void satisfy_()
     {
         while(this->iter_ != this->set_->end())

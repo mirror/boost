@@ -274,29 +274,24 @@ namespace boost { namespace mpl
     template<typename OpTag>
     struct begin_impl<proto::tag<OpTag> >
       : fusion::extension::begin_impl<proto::tag<OpTag> >
-    {
-    };
+    {};
 
     template<typename OpTag>
     struct end_impl<proto::tag<OpTag> >
       : fusion::extension::end_impl<proto::tag<OpTag> >
-    {
-    };
+    {};
 
     template<typename Cons>
     struct next<proto::binary_tree_iterator<Cons> >
       : proto::binary_tree_detail::next_impl<proto::binary_tree_iterator<Cons> >
-    {
-    };
+    {};
 
     template<typename Cons>
     struct deref<proto::binary_tree_iterator<Cons> >
       : proto::binary_tree_detail::value_impl<proto::binary_tree_iterator<Cons> >
-    {
-    };
+    {};
 
 }} // namespace boost::mpl
-
 
 #else
 
@@ -354,26 +349,22 @@ namespace boost { namespace mpl
     template<typename OpTag>
     struct begin_impl<proto::tag<OpTag> >
       : fusion::meta::begin_impl<proto::tag<OpTag> >
-    {
-    };
+    {};
 
     template<typename OpTag>
     struct end_impl<proto::tag<OpTag> >
       : fusion::meta::end_impl<proto::tag<OpTag> >
-    {
-    };
+    {};
 
     template<typename Cons>
     struct next<proto::binary_tree_iterator<Cons> >
       : proto::binary_tree_detail::next_impl<proto::binary_tree_iterator<Cons> >
-    {
-    };
+    {};
 
     template<typename Cons>
     struct deref<proto::binary_tree_iterator<Cons> >
       : proto::binary_tree_detail::value_impl<proto::binary_tree_iterator<Cons> >
-    {
-    };
+    {};
 
 }} // namespace boost::mpl
 
