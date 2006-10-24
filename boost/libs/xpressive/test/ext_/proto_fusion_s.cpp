@@ -94,6 +94,10 @@ void test1()
     sout.str("");
     boost::fusion::for_each_s(a_ >> b_ | c_ >> d_ | e_ >> (f_ | g_) >> h_, to_string(sout));
     BOOST_CHECK_EQUAL("(a>>b)(c>>d)(e>>f|g>>h)", sout.str());
+
+    sout.str("");
+    boost::fusion::for_each_s(a_(b_(c_ >> d_, e_ | f_), g_ >> h_)(i_), to_string(sout));
+    BOOST_CHECK_EQUAL("(a)(b)(c>>d)(e|f)(g>>h)(i)", sout.str());
 }
 
 using namespace boost::unit_test;

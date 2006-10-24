@@ -177,7 +177,6 @@ namespace boost { namespace proto
         typedef Tag tag_type;
         typedef tag<Tag> fusion_tag;    // for Fusion-2 compatibility
         typedef tag<Tag> tag;           // for Fusion-1 compatibility
-        typedef void unary;
 
         arg_type arg;
 
@@ -211,7 +210,6 @@ namespace boost { namespace proto
         typedef Tag tag_type;
         typedef tag<Tag> fusion_tag;    // for Fusion-2 compatibility
         typedef tag<Tag> tag;           // for Fusion-1 compatibility
-        typedef void binary;
 
         left_type left;
         right_type right;
@@ -256,7 +254,6 @@ namespace boost { namespace proto
         typedef fusion::tuple<
             BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, A)
         > args_type;
-        typedef void nary;
 
         functor_type functor;
         args_type args;

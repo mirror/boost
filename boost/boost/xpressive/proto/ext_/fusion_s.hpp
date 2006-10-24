@@ -63,6 +63,18 @@ namespace boost { namespace proto
         }
     };
 
+    template<typename Node>
+    struct elements_of<Node, typename enable_if<is_nary<Node> >::type>
+    {
+        typedef typename single_view_of<typename Node::functor_type>::type functor_view;
+        typedef fusion::joint_view<functor_view, typename Node::args_type const> const type;
+
+        static type make(Node &node)
+        {
+            return type(functor_view(node.functor), node.args);
+        }
+    };
+
     template<typename Tag>
     struct as_element
     {
