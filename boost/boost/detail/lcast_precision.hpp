@@ -74,7 +74,7 @@ struct lcast_precision
 #endif
 
 template<class T>
-inline std::streamsize lcast_get_precision()
+inline std::streamsize lcast_get_precision(T* = 0)
 {
 #if !defined(BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS)
     return lcast_precision<T>::value;
@@ -143,8 +143,8 @@ inline void lcast_set_precision(std::ios_base& stream, T* = 0)
 template<class Source, class Target>
 inline void lcast_set_precision(std::ios_base& stream, Source* = 0, Target* = 0)
 {
-    std::streamsize const s = lcast_get_precision<Source>();
-    std::streamsize const t = lcast_get_precision<Target>();
+    std::streamsize const s = lcast_get_precision((Source*)0);
+    std::streamsize const t = lcast_get_precision((Target*)0);
     stream.precision(s > t ? s : t);
 }
 
