@@ -13,6 +13,7 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/placeholders.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_reference.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/fusion/support/tag_of.hpp>
 #include <boost/fusion/support/is_sequence.hpp>
@@ -41,6 +42,11 @@ namespace boost { namespace fusion
             >
         {};
 
+        template<typename Sequence>
+        struct is_empty<Sequence &>
+          : is_empty<Sequence>
+        {};
+
         struct segmented_range_tag;
 
         ////////////////////////////////////////////////////////////////////////////
@@ -48,6 +54,7 @@ namespace boost { namespace fusion
         struct segmented_range
           : sequence_base<segmented_range<Sequence, Iterator, IsSegmented> >
         {
+            BOOST_MPL_ASSERT_NOT((is_reference<Sequence>));
             typedef mpl::bool_<IsSegmented> is_segmented;
             typedef segmented_range_tag fusion_tag;
             typedef fusion_sequence_tag tag; // this gets picked up by MPL
@@ -194,7 +201,8 @@ namespace boost { namespace fusion
 
             static type call(Sequence &seq)
             {
-                return type(fusion::segments(seq));
+                segments segs(fusion::segments(seq));
+                return type(segs);
             }
         };
 
@@ -239,7 +247,8 @@ namespace boost { namespace fusion
             static type call(Sequence &seq, State const &state)
             {
                 range rng(as_segmented_range<Sequence>::call(seq));
-                return push::call(*fusion::begin(rng), fusion::make_cons(rng, state));
+                next_ref nxt(*fusion::begin(rng));
+                return push::call(nxt, fusion::make_cons(rng, state));
             }
         };
 
