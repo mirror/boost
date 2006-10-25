@@ -31,6 +31,12 @@ namespace
     struct DD { operator CC() const { return CC(); }; };
 }
 
+boost::fusion::FUSION_SEQUENCE<double, double, double, double>
+foo(int i)
+{
+   return boost::fusion::FUSION_MAKE(i, i+1, i+2, i+3);
+}
+
 void
 test()
 {
@@ -60,4 +66,7 @@ test()
     BOOST_TEST(i==1);
     BOOST_TEST(c=='a');
     BOOST_TEST(d>5.4 && d<5.6);
+    
+    // returning a tuple with conversion
+    foo(2);
 }
