@@ -109,8 +109,8 @@ namespace boost { namespace proto
 
 namespace boost { namespace fusion { namespace extension
 {
-    template<typename Tag>
-    struct is_segmented_impl<proto::tag<Tag> >
+    template<>
+    struct is_segmented_impl<proto::proto_sequence_tag>
     {
         template<typename Sequence>
         struct apply
@@ -118,8 +118,8 @@ namespace boost { namespace fusion { namespace extension
         {};
     };
 
-    template<typename Tag>
-    struct segments_impl<proto::tag<Tag> >
+    template<>
+    struct segments_impl<proto::proto_sequence_tag>
     {
         template<typename Sequence>
         struct apply

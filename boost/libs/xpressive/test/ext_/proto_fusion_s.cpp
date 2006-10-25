@@ -71,6 +71,12 @@ void test1()
 {
     std::stringstream sout;
 
+    // Test for 1-way branching "tree"
+    sout.str("");
+    boost::fusion::for_each_s(!!!!(a_ >> b_), to_string(sout));
+    BOOST_CHECK_EQUAL("(a>>b)", sout.str());
+
+    // Tests for 2-way branching trees
     sout.str("");
     boost::fusion::for_each_s(a_ >> b_ >> c_, to_string(sout));
     BOOST_CHECK_EQUAL("(a)(b)(c)", sout.str());
@@ -95,6 +101,7 @@ void test1()
     boost::fusion::for_each_s(a_ >> b_ | c_ >> d_ | e_ >> (f_ | g_) >> h_, to_string(sout));
     BOOST_CHECK_EQUAL("(a>>b)(c>>d)(e>>f|g>>h)", sout.str());
 
+    // Test for n-way branching tree
     sout.str("");
     boost::fusion::for_each_s(a_(b_(c_ >> d_, e_ | f_), g_ >> h_)(i_), to_string(sout));
     BOOST_CHECK_EQUAL("(a)(b)(c>>d)(e|f)(g>>h)(i)", sout.str());

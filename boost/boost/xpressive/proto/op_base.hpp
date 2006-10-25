@@ -148,8 +148,7 @@ namespace boost { namespace proto
             (this->cast() BOOST_PP_REPEAT_ ## z(n, BOOST_PROTO_AS_OP_FUN, _));                  \
     }
 
-    template<typename Tag>
-    struct tag
+    struct proto_sequence_tag
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -175,8 +174,8 @@ namespace boost { namespace proto
     {
         typedef Arg arg_type;
         typedef Tag tag_type;
-        typedef tag<Tag> fusion_tag;    // for Fusion-2 compatibility
-        typedef tag<Tag> tag;           // for Fusion-1 compatibility
+        typedef proto_sequence_tag fusion_tag;    // for Fusion-2 compatibility
+        typedef proto_sequence_tag tag;           // for Fusion-1 compatibility
 
         arg_type arg;
 
@@ -208,8 +207,8 @@ namespace boost { namespace proto
         typedef Left left_type;
         typedef Right right_type;
         typedef Tag tag_type;
-        typedef tag<Tag> fusion_tag;    // for Fusion-2 compatibility
-        typedef tag<Tag> tag;           // for Fusion-1 compatibility
+        typedef proto_sequence_tag fusion_tag;    // for Fusion-2 compatibility
+        typedef proto_sequence_tag tag;           // for Fusion-1 compatibility
 
         left_type left;
         right_type right;
@@ -248,8 +247,8 @@ namespace boost { namespace proto
       : op_base<nary_op<Fun, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, A)> >
     {
         typedef function_tag tag_type;
-        typedef tag<function_tag> fusion_tag;   // for Fusion-2 compatibility
-        typedef tag<function_tag> tag;          // for Fusion-1 compatibility
+        typedef proto_sequence_tag fusion_tag;   // for Fusion-2 compatibility
+        typedef proto_sequence_tag tag;          // for Fusion-1 compatibility
         typedef Fun functor_type;
         typedef fusion::tuple<
             BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, A)
