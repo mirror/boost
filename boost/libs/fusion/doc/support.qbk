@@ -266,6 +266,22 @@ It is used as elements in __map__s, for example.
     template <typename First, typename Second>
     struct pair;
 
+    namespace result_of
+    {
+        template <typename First, typename Second>
+        struct first;
+
+        template <typename First, typename Second>
+        struct second;
+
+        template <typename First, typename Second>
+        struct make_pair;
+    }
+
+    template <typename First, typename Second>
+    typename result_of::make_pair<First,Second>::type
+    make_pair(Second const &);
+
 [heading Template parameters]
 
 [table
@@ -287,8 +303,10 @@ It is used as elements in __map__s, for example.
 
 [table
     [[Expression]       [Semantics]]
-    [[`P::first_type`]  [The type of the first template parameter, `F`.]]
-    [[`P::second_type`] [The type of the second template parameter, `S`.]]
+    [[`P::first_type`]  [The type of the first template parameter, `F`, equivalent to
+                        `result_of::first<P>::type`. ]]
+    [[`P::second_type`] [The type of the second template parameter, `S`, equivalent to
+                        `result_of::second<P>::type`. ]]
     [[`P()`]            [Default construction.]]
     [[`P(s)`]           [Construct a pair given value for the second type, `s`.]]
     [[`P(p2)`]          [Copy constructs a pair from another pair, `p2`.]]
