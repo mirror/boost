@@ -1,5 +1,6 @@
 /*=============================================================================
     Copyright (c) 2005 Joel de Guzman
+    Copyright (c) 2006 Tobias Schwinger
 
     Use, modification and distribution is subject to the Boost Software
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -40,8 +41,30 @@ namespace boost { namespace fusion
         Second second;
     };
 
+    namespace result_of
+    {
+        template<typename First, typename Second>
+        struct make_pair
+        {
+            typedef fusion::pair<First, 
+                        typename detail::as_fusion_element<Second>::type> type;
+        };
+
+        template<class Pair>
+        struct first
+        {
+            typedef typename Pair::first_type type;
+        };
+
+        template<class Pair>
+        struct second
+        {
+            typedef typename Pair::second_type type;
+        };
+    }
+
     template <typename First, typename Second>
-    inline pair<First, typename detail::as_fusion_element<Second>::type>
+    inline typename result_of::make_pair<First,Second>::type
     make_pair(Second const& val)
     {
         return pair<First, typename detail::as_fusion_element<Second>::type>(val);
