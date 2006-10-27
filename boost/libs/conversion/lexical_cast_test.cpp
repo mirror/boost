@@ -518,7 +518,7 @@ void test_conversion_from_integral()
     test_conversion_from_integral_to_char<T>(zero);
     test_conversion_from_integral_to_char<T>(szero);
     test_conversion_from_integral_to_char<T>(uzero);
-#ifndef DISABLE_WIDE_CHAR_SUPPORT
+#if !defined(DISABLE_WIDE_CHAR_SUPPORT) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
     wchar_t const wzero = L'0';
     test_conversion_from_integral_to_char<T>(wzero);
 #endif
