@@ -403,7 +403,7 @@ namespace boost
     namespace detail // lexical_streambuf and lexical_streambuf_fake
     {
         template<typename CharT>
-        class lexical_streambuf : protected std::basic_streambuf<CharT>
+        class lexical_streambuf : public std::basic_streambuf<CharT>
         {
         };
 
@@ -589,7 +589,7 @@ namespace boost
         template< class CharT // a result of widest_char transformation
                 , class Base  // lexical_streambuf or lexical_streambuf_fake
                 >
-        class lexical_stream_limited_src : protected Base
+        class lexical_stream_limited_src : public Base
         {
             // A string representation of Source is written to [start, finish).
             // Currently, it is assumed that [start, finish) is big enough
