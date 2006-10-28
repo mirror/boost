@@ -18,6 +18,7 @@
 #include <locale>
 #include <vector>
 #include <fstream>
+#include <iostream>
 #include <boost/lexical_cast.hpp>
 #include <boost/xpressive/xpressive.hpp>
 #include <boost/test/unit_test.hpp>
