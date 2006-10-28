@@ -67,9 +67,6 @@ void test_conversion_from_ulong();
 void test_conversion_from_longlong();
 void test_conversion_from_ulonglong();
 #endif
-void test_round_conversion_float();
-void test_round_conversion_double();
-void test_round_conversion_long_double();
 
 unit_test::test_suite *init_unit_test_suite(int, char *[])
 {
@@ -100,9 +97,6 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
     suite->add(BOOST_TEST_CASE(&test_conversion_from_longlong));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_ulonglong));
     #endif
-    suite->add(BOOST_TEST_CASE(&test_round_conversion_float));
-    suite->add(BOOST_TEST_CASE(&test_round_conversion_double));
-    suite->add(BOOST_TEST_CASE(&test_round_conversion_long_double));
 
     return suite;
 }
@@ -611,52 +605,4 @@ void test_conversion_from_ulonglong()
 }
 
 #endif
-
-template<class T>
-void test_round_conversion(bool use_min_max_values = true)
-{
-    T v1 = std::numeric_limits<T>::epsilon();
-    std::string s1 = boost::lexical_cast<std::string>(v1);
-    BOOST_CHECK(v1 == lexical_cast<T>(s1));
-
-    if(use_min_max_values)
-    {
-        T v2 = (std::numeric_limits<T>::max)();
-        std::string s2 = boost::lexical_cast<std::string>(v2);
-        BOOST_CHECK(v2 == lexical_cast<T>(s2));
-
-        T v3 = (std::numeric_limits<T>::min)();
-        std::string s3 = boost::lexical_cast<std::string>(v3);
-        BOOST_CHECK(v3 == lexical_cast<T>(s3));
-
-        T v4 = v2 / 137;
-        std::string s4 = boost::lexical_cast<std::string>(v4);
-        BOOST_CHECK(v4 == lexical_cast<T>(s4));
-    }
-
-    T v5 = v1 * 137;
-    std::string s5 = boost::lexical_cast<std::string>(v5);
-    BOOST_CHECK(v5 == lexical_cast<T>(s5));
-}
-
-void test_round_conversion_float()
-{
-    test_round_conversion<float>();
-}
-
-void test_round_conversion_double()
-{
-    test_round_conversion<double>();
-}
-
-void test_round_conversion_long_double()
-{
-#if defined(BOOST_NO_STDLIB_CONFIG)
-    test_round_conversion<long double>();
-#elif defined(__i386__) && defined(__OpenBSD__)
-    test_round_conversion<long double>(false);
-#elif !defined(__i386__) || !defined(__FreeBSD__)
-    test_round_conversion<long double>();
-#endif
-}
 
