@@ -1494,7 +1494,7 @@ not take any effect.
 
 [section Windows 2000, XP, 2003, Vista]
 
-[blurb Section contributed by Julio M. Merino Vidal]
+[:['Section contributed by Julio M. Merino Vidal]]
 
 The following instructions apply to any Windows system based on Windows
 2000, including Windows XP, Windows 2003 Server and Windows Vista.  The
@@ -1626,7 +1626,7 @@ docs Boost Docs mailing list].]
 
 [section:scite Scintilla Text Editor]
 
-[blurb Section contributed by Dean Michael Berris]
+[:['Section contributed by Dean Michael Berris]]
 
 The Scintilla Text Editor (SciTE) is a free source code editor for Win32 and X. 
 It uses the SCIntilla source code editing component.
@@ -1654,6 +1654,41 @@ comment.box.end.props=]
 
 [endsect] [/scite]
 [endsect] [/editors]
+
+[section:faq Frequently Asked Questions]
+
+[heading Can I use QuickBook for non-Boost documentation?]
+
+QuickBook can be used for non-Boost documentation with a little extra work.
+\n
+
+[:['Faq contributed by Michael Marcin]]
+
+When building HTML documentation with BoostBook a Boost C++ Libraries header 
+is added to the files. When using QuickBook to document projects outside of 
+Boost this is not desirable. This behavior can be overridden at the BoostBook 
+level by specifying some XSLT options. When using Boost Build version 2 (BBv2) 
+this can be achieved by adding parameters to the BoostBook target declaration.
+
+For example:
+[pre
+using quickbook ;
+
+xml my_doc : my_doc.qbk ;
+
+boostbook standalone
+    :
+        my_doc		
+    :
+        <xsl:param>boost.image.src=images/my_project_logo.png
+        <xsl:param>boost.image.alt="\\"My Project\\""
+        <xsl:param>boost.image.w=100
+        <xsl:param>boost.image.h=50
+        <xsl:param>nav.layout=none
+    ;
+]
+
+[endsect] [/faq]
 
 [section:ref Quick Reference]
 
