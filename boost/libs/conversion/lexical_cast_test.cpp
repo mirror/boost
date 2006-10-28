@@ -498,7 +498,7 @@ void test_conversion_from_integral_for_locale()
 {
     test_conversion_from_integral_to_integral<T>();
     test_conversion_from_integral_to_string<T>('0');
-#ifndef DISABLE_WIDE_CHAR_SUPPORT
+#if !defined(DISABLE_WIDE_CHAR_SUPPORT) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
     test_conversion_from_integral_to_string<T>(L'0');
 #endif
 }

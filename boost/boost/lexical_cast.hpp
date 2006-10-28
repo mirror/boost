@@ -955,7 +955,7 @@ namespace boost
             BOOST_STATIC_CONSTANT(bool, value = false);
         };
 
-#ifndef DISABLE_WIDE_CHAR_SUPPORT
+#if !defined(DISABLE_WIDE_CHAR_SUPPORT) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
         template<>
         struct lcast_streambuf_for_target<wchar_t>
         {
