@@ -90,6 +90,25 @@ set up the include paths as follows:\n\n
 
 [endsect]
 
+[section:writing_code Writing Code]
+
+Regardless of how the includes are setup, user code written to work 
+with Boost.TR1 is exactly the same as code written to use a native 
+tr1 implemnation.  That is, references to classes and functions
+need to explicitly use the `std::tr1` namespace or a `using std::tr1`
+statement.  For example, 
+
+   std::tr1::tuple<int, std::string> t = std::tr1::make_tuple(10, "hello");
+
+or
+
+  using std::tr1;
+  tuple<int, std::string> t = make_tuple(10, "hello");
+
+
+[endsect]
+
+
 [endsect]
 
 [section:config Configuration]
