@@ -34,9 +34,9 @@ struct translation_unit_skipper
             
             skip
                 =   pattern_p(WhiteSpaceTokenType, TokenTypeMask)
-                |	  pattern_p(EOLTokenType, TokenTypeMask)
-                |	  pattern_p(EOFTokenType, TokenTypeMask)
-                |	  comment_p(pattern_p(PPTokenType, TokenTypeMask), 
+                |   pattern_p(EOLTokenType, TokenTypeMask)
+                |   pattern_p(EOFTokenType, TokenTypeMask)
+                |   comment_p(pattern_p(PPTokenType, TokenTypeMask), 
                               pattern_p(EOLTokenType, TokenTypeMask))
                 ;
         }
