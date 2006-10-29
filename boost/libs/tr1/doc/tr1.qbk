@@ -94,7 +94,7 @@ set up the include paths as follows:\n\n
 
 Regardless of how the includes are setup, user code written to work 
 with Boost.TR1 is exactly the same as code written to use a native 
-tr1 implemnation.  That is, references to classes and functions
+tr1 implementation.  That is, references to classes and functions
 need to explicitly use the `std::tr1` namespace or a `using std::tr1`
 statement.  For example, 
 
@@ -120,7 +120,7 @@ it is more than usually sensitive to an incorrect configuration.
 
 The intention is that 
 [@../../libs/config/index.html Boost.Config] 
-will automaticaly define the configuration
+will automatically define the configuration
 macros used by this library, so that if your standard library is set up to
 support TR1 (note that few are at present) then this will be detected and Boost.TR1
 will use your standard library versions of these components rather than the 
@@ -582,7 +582,7 @@ or
 
    #include <random>
 
-The random number library is devided into three parts: 
+The random number library is divided into three parts: 
 [@../../libs/random/random-generators.html generators], which
 are nullary functors producing uniform random number distributions.  
 [@../../libs/random/random-distributions.html Distributions], which are unary 
