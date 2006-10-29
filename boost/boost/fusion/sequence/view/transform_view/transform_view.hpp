@@ -16,6 +16,7 @@
 #include <boost/fusion/sequence/view/transform_view/transform_view_fwd.hpp>
 #include <boost/fusion/sequence/view/transform_view/detail/begin_impl.hpp>
 #include <boost/fusion/sequence/view/transform_view/detail/end_impl.hpp>
+#include <boost/fusion/sequence/view/transform_view/detail/at_impl.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
@@ -46,6 +47,8 @@ namespace boost { namespace fusion
         typedef typename result_of::end<Sequence1>::type last1_type;
         typedef typename result_of::end<Sequence2>::type last2_type;
         typedef typename result_of::size<Sequence1>::type size;
+        typedef Sequence1 sequence1_type;
+        typedef Sequence2 sequence2_type;
         typedef F transform_type;
 
         transform_view(Sequence1& seq1, Sequence2& seq2, F const& binop)
@@ -76,6 +79,7 @@ namespace boost { namespace fusion
         typedef typename result_of::begin<Sequence>::type first_type;
         typedef typename result_of::end<Sequence>::type last_type;
         typedef typename result_of::size<Sequence>::type size;
+        typedef Sequence sequence_type;
         typedef F transform_type;
 
         transform_view(Sequence& seq, F const& f)
