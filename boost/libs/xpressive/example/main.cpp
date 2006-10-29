@@ -88,7 +88,7 @@ void example2()
     char const *str = "I was born on 5/30/1973 at 7am.";
 
     // define some custom mark_tags with names more meaningful than s1, s2, etc.
-    mark_tag day(1), month(2), year(3), delim(4);
+    mark_tag day = {{1}}, month = {{2}}, year = {{3}}, delim = {{4}};
 
     // this regex finds a date
     cregex date = (month= repeat<1,2>(_d))           // find the month ...
