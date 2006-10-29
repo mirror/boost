@@ -13,6 +13,7 @@
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
 #include <boost/fusion/sequence/view/transform_view/transform_view.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
+#include <boost/fusion/sequence/intrinsic/at.hpp>
 #include <boost/fusion/iterator/next.hpp>
 #include <boost/fusion/iterator/prior.hpp>
 #include <boost/fusion/iterator/advance.hpp>
@@ -82,6 +83,7 @@ main()
         BOOST_TEST((boost::fusion::distance(first_it, next_it) == 1));
 
         BOOST_TEST((*boost::fusion::advance_c<3>(boost::fusion::begin(xform)) == 64));
+        BOOST_TEST((boost::fusion::at_c<2>(xform) == 49));
     }
     
     {
@@ -95,6 +97,7 @@ main()
 
         std::cout << xform << std::endl;
         BOOST_TEST((xform == make_vector(15, 17, 19, 21)));
+        BOOST_TEST((boost::fusion::at_c<2>(xform) == 19));
     }
 
     return boost::report_errors();
