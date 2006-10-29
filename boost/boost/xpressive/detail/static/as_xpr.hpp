@@ -68,20 +68,21 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    // as_matcher
+    // as_matcher_type
     template<typename Matcher, bool IsXpr = is_xpr<Matcher>::value>
-    struct as_matcher
+    struct as_matcher_type
     {
         typedef Matcher type;
 
-        static type const &call(Matcher const &matcher)
+        template<typename Matcher2>
+        static Matcher2 const &call(Matcher2 const &matcher)
         {
             return matcher;
         }
     };
 
     template<typename Literal>
-    struct as_matcher<Literal, false>
+    struct as_matcher_type<Literal, false>
     {
         typedef typename mpl::eval_if
         <
@@ -90,18 +91,21 @@ namespace boost { namespace xpressive { namespace detail
           , mpl::identity<literal_placeholder<Literal, false> >
         >::type type;
 
-        static type call(Literal const &literal)
+        template<typename Literal2>
+        static type call(Literal2 const &literal)
         {
-            return type(literal);
+            type that = {literal};
+            return that;
         }
     };
 
     template<typename BidiIter>
-    struct as_matcher<basic_regex<BidiIter>, false>
+    struct as_matcher_type<basic_regex<BidiIter>, false>
     {
         typedef regex_placeholder<BidiIter, false> type;
 
-        static type call(basic_regex<BidiIter> const &rex)
+        template<typename Regex>
+        static type call(Regex const &rex)
         {
             typedef core_access<BidiIter> access;
             shared_ptr<regex_impl<BidiIter> > impl = access::get_regex_impl(rex);
@@ -109,50 +113,22 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
-    template<typename BidiIter>
-    struct as_matcher<reference_wrapper<basic_regex<BidiIter> const>, false>
+    template<typename T>
+    typename as_matcher_type<T>::type as_matcher(T const &t)
     {
-        typedef regex_placeholder<BidiIter, false> type;
-
-        static type call(reference_wrapper<basic_regex<BidiIter> const> const &rex)
-        {
-            typedef core_access<BidiIter> access;
-            shared_ptr<regex_impl<BidiIter> > impl = access::get_regex_impl(rex.get());
-            return type(impl);
-        }
-    };
-
-    template<typename Matcher>
-    struct as_matcher<Matcher &, true>
-      : as_matcher<Matcher, true>
-    {};
-
-    template<typename Matcher>
-    struct as_matcher<Matcher const, true>
-      : as_matcher<Matcher, true>
-    {};
-
-    template<typename Matcher>
-    struct as_matcher<Matcher &, false>
-      : as_matcher<Matcher, false>
-    {};
-
-    template<typename Matcher>
-    struct as_matcher<Matcher const, false>
-      : as_matcher<Matcher, false>
-    {};
-
+        return as_matcher_type<T>::call(t);
+    }
 
     ///////////////////////////////////////////////////////////////////////////////
     // as_xpr_type
     //
     template<typename Xpr>
-    struct as_xpr_type<Xpr, true> // is_op == true
+    struct as_xpr_type<Xpr, true> // is_expr == true
     {
         typedef Xpr type;
-        typedef Xpr const &reference;
 
-        static Xpr const &call(Xpr const &xpr)
+        template<typename Xpr2>
+        static Xpr2 const &call(Xpr2 const &xpr)
         {
             return xpr;
         }
@@ -161,17 +137,12 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Xpr>
     struct as_xpr_type<Xpr, false>
     {
-        typedef proto::unary_op
-        <
-            typename as_matcher<Xpr>::type
-          , proto::noop_tag
-        > type;
+        typedef typename proto::meta::terminal<typename as_matcher_type<Xpr>::type>::type type;
 
-        typedef type const reference;
-
-        static type const call(Xpr const &xpr)
+        template<typename Xpr2>
+        static type call(Xpr2 const &xpr)
         {
-            return proto::noop(detail::as_matcher<Xpr>::call(xpr));
+            return proto::make_terminal(detail::as_matcher(xpr));
         }
     };
 
@@ -185,8 +156,7 @@ namespace boost { namespace xpressive
     // as_xpr (from a literal to an xpression)
     //
     template<typename Xpr>
-    inline typename detail::as_xpr_type<Xpr>::reference
-    as_xpr(Xpr const &xpr)
+    inline typename detail::as_xpr_type<Xpr>::type as_xpr(Xpr const &xpr)
     {
         return detail::as_xpr_type<Xpr>::call(xpr);
     }

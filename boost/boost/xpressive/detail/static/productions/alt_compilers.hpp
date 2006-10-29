@@ -57,22 +57,22 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef fusion::nil state_type;
 
-        template<typename Node, typename State, typename Visitor>
+        template<typename Expr, typename State, typename Visitor>
         struct apply
         {
             typedef static_xpression
             <
-                alternate_matcher<Node, typename Visitor::traits_type>
+                alternate_matcher<Expr, typename Visitor::traits_type>
               , State
             > type;
         };
 
-        template<typename Node, typename State, typename Visitor>
-        static typename apply<Node, State, Visitor>::type
-        call(Node const &node, State const &state, Visitor &)
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &)
         {
             typedef typename Visitor::traits_type traits_type;
-            return make_static(alternate_matcher<Node, traits_type>(node), state);
+            return make_static(alternate_matcher<Expr, traits_type>(expr), state);
         }
     };
 
@@ -82,17 +82,17 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef alternate_end_xpression state_type;
 
-        template<typename Node, typename State, typename>
+        template<typename Expr, typename State, typename>
         struct apply
         {
-            typedef alternates_list<Node, State> type;
+            typedef alternates_list<Expr, State> type;
         };
 
-        template<typename Node, typename State>
-        static alternates_list<Node, State>
-        call(Node const &node, State const &state, dont_care)
+        template<typename Expr, typename State>
+        static alternates_list<Expr, State>
+        call(Expr const &expr, State const &state, dont_care)
         {
-            return alternates_list<Node, State>(node, state);
+            return alternates_list<Expr, State>(expr, state);
         }
     };
 

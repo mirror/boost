@@ -32,10 +32,10 @@ namespace boost { namespace xpressive { namespace detail
             typedef State type;
         };
 
-        template<typename Node, typename State, typename Visitor>
-        static State const &call(Node const &node, State const &state, Visitor &)
+        template<typename Expr, typename State, typename Visitor>
+        static State const &call(Expr const &expr, State const &state, Visitor &)
         {
-            return state.set(set_branch::get_matcher(node)), state;
+            return state.set(set_branch::get_matcher(expr)), state;
         }
 
     private:
@@ -53,23 +53,23 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef int state_type; // not used
 
-        template<typename Node, typename State, typename>
+        template<typename Expr, typename State, typename>
         struct apply
         {
-            typedef static_xpression<Node, State> type;
+            typedef static_xpression<Expr, State> type;
         };
 
-        template<typename Node, typename State>
-        static static_xpression<Node, State>
-        call(Node const &node, State const &state, dont_care)
+        template<typename Expr, typename State>
+        static static_xpression<Expr, State>
+        call(Expr const &expr, State const &state, dont_care)
         {
-            return make_static(node, state);
+            return make_static(expr, state);
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    // list_noop_compiler
-    struct list_noop_compiler
+    // list_terminal_compiler
+    struct list_terminal_compiler
     {
         template<typename, typename State, typename>
         struct apply
@@ -77,12 +77,12 @@ namespace boost { namespace xpressive { namespace detail
             typedef typename State::next_type type;
         };
 
-        template<typename Node, typename State, typename Visitor>
+        template<typename Expr, typename State, typename Visitor>
         static typename State::next_type
-        call(Node const &node, State const &state, Visitor &visitor)
+        call(Expr const &expr, State const &state, Visitor &visitor)
         {
             typedef typename Visitor::char_type char_type;
-            char_type ch = char_cast<char_type>(proto::arg(node), visitor.traits());
+            char_type ch = char_cast<char_type>(proto::arg(expr), visitor.traits());
             return state.push_back(ch, visitor.traits());
         }
     };
@@ -91,20 +91,20 @@ namespace boost { namespace xpressive { namespace detail
     // list_assign_compiler
     struct list_assign_compiler
     {
-        template<typename Node, typename, typename Visitor>
+        template<typename Expr, typename, typename Visitor>
         struct apply
         {
             typedef typename Visitor::traits_type traits_type;
             typedef set_matcher<traits_type, 1> type;
         };
 
-        template<typename Node, typename State, typename Visitor>
-        static typename apply<Node, State, Visitor>::type
-        call(Node const &node, State const &, Visitor &visitor)
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &, Visitor &visitor)
         {
             typedef typename Visitor::char_type char_type;
-            char_type ch = char_cast<char_type>(proto::arg(proto::right(node)), visitor.traits());
-            return typename apply<Node, State, Visitor>::type(ch, visitor.traits());
+            char_type ch = char_cast<char_type>(proto::arg(proto::right(expr)), visitor.traits());
+            return typename apply<Expr, State, Visitor>::type(ch, visitor.traits());
         }
     };
 
@@ -122,7 +122,7 @@ namespace boost { namespace proto
     };
 
     template<>
-    struct compiler<noop_tag, xpressive::detail::set_tag, void>
+    struct compiler<terminal_tag, xpressive::detail::set_tag, void>
       : branch_compiler<xpressive::detail::set_branch, xpressive::detail::seq_tag>
     {
     };
@@ -155,8 +155,8 @@ namespace boost { namespace proto
     };
 
     template<>
-    struct compiler<noop_tag, xpressive::detail::lst_tag, void>
-      : xpressive::detail::list_noop_compiler
+    struct compiler<terminal_tag, xpressive::detail::lst_tag, void>
+      : xpressive::detail::list_terminal_compiler
     {
     };
 

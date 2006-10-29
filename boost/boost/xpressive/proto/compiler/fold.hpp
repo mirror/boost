@@ -24,14 +24,14 @@ namespace boost { namespace proto
     struct fold_compiler
     {
         // sample compiler implementation for sequencing
-        template<typename Node, typename State, typename Visitor>
+        template<typename Expr, typename State, typename Visitor>
         struct apply
         {
-            typedef typename right_type<Node>::type right_type;
-            typedef typename left_type<Node>::type left_type;
+            typedef typename Expr::arg0_type left_type;
+            typedef typename Expr::arg1_type right_type;
 
             // compile the right branch
-            typedef typename compiler<typename tag_type<left_type>::type, DomainTag>::
+            typedef typename compiler<typename left_type::tag_type, DomainTag>::
                 BOOST_NESTED_TEMPLATE apply
             <
                 left_type
@@ -40,7 +40,7 @@ namespace boost { namespace proto
             >::type left_compiled_type;
 
             // forward the result of the right branch to the left
-            typedef typename compiler<typename tag_type<right_type>::type, DomainTag>::
+            typedef typename compiler<typename right_type::tag_type, DomainTag>::
                 BOOST_NESTED_TEMPLATE apply
             <
                 right_type
@@ -49,13 +49,13 @@ namespace boost { namespace proto
             >::type type;
         };
 
-        template<typename Node, typename State, typename Visitor>
-        static typename apply<Node, State, Visitor>::type
-        call(Node const &node, State const &state, Visitor &visitor)
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)
         {
             return proto::compile(
-                proto::right(node)
-              , proto::compile(proto::left(node), state, visitor, DomainTag())
+                proto::right(expr)
+              , proto::compile(proto::left(expr), state, visitor, DomainTag())
               , visitor
               , DomainTag()
             );
@@ -70,14 +70,14 @@ namespace boost { namespace proto
     struct reverse_fold_compiler
     {
         // sample compiler implementation for sequencing
-        template<typename Node, typename State, typename Visitor>
+        template<typename Expr, typename State, typename Visitor>
         struct apply
         {
-            typedef typename right_type<Node>::type right_type;
-            typedef typename left_type<Node>::type left_type;
+            typedef typename Expr::arg0_type left_type;
+            typedef typename Expr::arg1_type right_type;
 
             // compile the right branch
-            typedef typename compiler<typename tag_type<right_type>::type, DomainTag>::
+            typedef typename compiler<typename right_type::tag_type, DomainTag>::
                 BOOST_NESTED_TEMPLATE apply
             <
                 right_type
@@ -86,7 +86,7 @@ namespace boost { namespace proto
             >::type right_compiled_type;
 
             // forward the result of the right branch to the left
-            typedef typename compiler<typename tag_type<left_type>::type, DomainTag>::
+            typedef typename compiler<typename left_type::tag_type, DomainTag>::
                 BOOST_NESTED_TEMPLATE apply
             <
                 left_type
@@ -95,13 +95,13 @@ namespace boost { namespace proto
             >::type type;
         };
 
-        template<typename Node, typename State, typename Visitor>
-        static typename apply<Node, State, Visitor>::type
-        call(Node const &node, State const &state, Visitor &visitor)
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)
         {
             return proto::compile(
-                proto::left(node)
-              , proto::compile(proto::right(node), state, visitor, DomainTag())
+                proto::left(expr)
+              , proto::compile(proto::right(expr), state, visitor, DomainTag())
               , visitor
               , DomainTag()
             );

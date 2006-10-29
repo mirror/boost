@@ -21,7 +21,7 @@
 namespace boost { namespace xpressive { namespace detail
 {
 
-    typedef proto::unary_op<epsilon_matcher, proto::noop_tag> nil_op;
+    typedef proto::meta::terminal<epsilon_matcher>::type nil_op;
 
     ///////////////////////////////////////////////////////////////////////////////
     // repeater_compiler
@@ -74,15 +74,15 @@ namespace boost { namespace xpressive { namespace detail
     // min_repeater_compiler
     struct min_repeater_compiler
     {
-        template<typename Node, typename State, typename Visitor>
+        template<typename Expr, typename State, typename Visitor>
         struct apply
         {
-            typedef typename proto::arg_type<Node>::type arg_type;
+            typedef typename Expr::arg0_type arg_type;
 
             // Did you apply operator- to something that wasn't a quantifier?
             BOOST_MPL_ASSERT((is_greedy_quant<arg_type>));
 
-            typedef typename proto::tag_type<arg_type>::type tag_type;
+            typedef typename arg_type::tag_type tag_type;
             typedef repeater_compiler
             <
                 false
@@ -98,12 +98,12 @@ namespace boost { namespace xpressive { namespace detail
             >::type type;
         };
 
-        template<typename Node, typename State, typename Visitor>
-        static typename apply<Node, State, Visitor>::type
-        call(Node const &node, State const &state, Visitor &visitor)
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)
         {
-            typedef typename apply<Node, State, Visitor>::compiler_type compiler_type;
-            return compiler_type::call(proto::arg(node), state, visitor);
+            typedef typename apply<Expr, State, Visitor>::compiler_type compiler_type;
+            return compiler_type::call(proto::arg(expr), state, visitor);
         }
     };
 

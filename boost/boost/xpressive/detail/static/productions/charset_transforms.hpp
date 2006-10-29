@@ -115,22 +115,22 @@ namespace boost { namespace xpressive { namespace detail
               , charset_type
             > matcher_type;
 
-            typedef proto::unary_op<matcher_type, proto::noop_tag> type;
+            typedef typename proto::meta::terminal<matcher_type>::type type;
         };
 
-        template<typename Node, typename State, typename Visitor>
-        static typename apply<Node, State, Visitor>::type
-        call(Node const &node, State const &, Visitor &visitor, bool complement = false)
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &, Visitor &visitor, bool complement = false)
         {
-            typedef typename apply<Node, State, Visitor>::matcher_type matcher_type;
+            typedef typename apply<Expr, State, Visitor>::matcher_type matcher_type;
             matcher_type matcher;
             // Walks the tree and fills in the charset
-            proto::compile(proto::right(node), make_charset_state(matcher, visitor.traits()), visitor, set_tag());
+            proto::compile(proto::right(expr), make_charset_state(matcher, visitor.traits()), visitor, set_tag());
             if(complement)
             {
                 matcher.charset_.inverse();
             }
-            return proto::noop(matcher);
+            return proto::make_terminal(matcher);
         }
     };
 

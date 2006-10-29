@@ -39,7 +39,6 @@ struct quant_spec
 // matchable
 template<typename BidiIter>
 struct matchable
-  : xpression_base
 {
     typedef BidiIter iterator_type;
     typedef typename iterator_value<iterator_type>::type char_type;

@@ -208,7 +208,7 @@ private:
     template<typename Char>
     void peek_next_(mpl::false_, xpression_peeker<Char> &) const
     {
-        // no-node
+        // no-op
     }
 
     template<std::size_t Width>
@@ -246,7 +246,6 @@ make_static(Matcher const &matcher, Next const &next)
 // no_next
 //
 struct no_next
-  : xpression_base
 {
     BOOST_STATIC_CONSTANT(std::size_t, width = 0);
     BOOST_STATIC_CONSTANT(bool, pure = true);

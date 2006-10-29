@@ -106,7 +106,7 @@ private:
 
     void peek_next_(mpl::false_, xpression_peeker<char_type> &) const
     {
-        // no-node
+        // no-op
     }
 
     void repeat_(quant_spec const &, sequence<BidiIter> &, mpl::int_<quant_none>, mpl::false_) const
@@ -226,10 +226,10 @@ make_simple_repeat(quant_spec const &spec, sequence<BidiIter> &seq)
 }
 
 //////////////////////////////////////////////////////////////////////////
-// make_optional
+// make_exprtional
 template<typename BidiIter>
 inline void
-make_optional(quant_spec const &spec, sequence<BidiIter> &seq)
+make_exprtional(quant_spec const &spec, sequence<BidiIter> &seq)
 {
     typedef shared_matchable<BidiIter> xpr_type;
     seq += make_dynamic<BidiIter>(alternate_end_matcher());
@@ -246,10 +246,10 @@ make_optional(quant_spec const &spec, sequence<BidiIter> &seq)
 }
 
 //////////////////////////////////////////////////////////////////////////
-// make_optional
+// make_exprtional
 template<typename BidiIter>
 inline void
-make_optional(quant_spec const &spec, sequence<BidiIter> &seq, int mark_nbr)
+make_exprtional(quant_spec const &spec, sequence<BidiIter> &seq, int mark_nbr)
 {
     typedef shared_matchable<BidiIter> xpr_type;
     seq += make_dynamic<BidiIter>(alternate_end_matcher());
@@ -285,7 +285,7 @@ make_repeat(quant_spec const &spec, sequence<BidiIter> &seq)
     // if min is 0, the repeat must be made optional
     if(0 == spec.min_)
     {
-        make_optional(spec, seq);
+        make_exprtional(spec, seq);
     }
 }
 
@@ -320,7 +320,7 @@ make_repeat(quant_spec const &spec, sequence<BidiIter> &seq, int mark_nbr)
     // if min is 0, the repeat must be made optional
     if(0 == spec.min_)
     {
-        make_optional(spec, seq, mark_nbr);
+        make_exprtional(spec, seq, mark_nbr);
     }
 }
 

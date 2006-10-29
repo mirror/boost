@@ -10,41 +10,24 @@
 #define BOOST_PROTO_FWD_HPP_EAN_04_01_2005
 
 #include <boost/version.hpp>
-#include <boost/call_traits.hpp>
-#include <boost/mpl/bool.hpp>
-#include <boost/mpl/apply_fwd.hpp>
-#include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
-
-#if BOOST_VERSION >= 103500
-# define BOOST_PROTO_FUSION_V2
-#endif
-
-#ifdef BOOST_PROTO_FUSION_V2
-# include <boost/fusion/tuple/tuple_fwd.hpp>
-# define FUSION_MAX_TUPLE_SIZE FUSION_MAX_VECTOR_SIZE
-#else
-# include <boost/spirit/fusion/sequence/tuple_forward.hpp>
-#endif
+#include <boost/mpl/size.hpp>
+#include <boost/type_traits/remove_cv.hpp>
+#include <boost/type_traits/remove_reference.hpp>
+#include <boost/mpl/vector/vector10.hpp>
 
 #ifndef BOOST_PROTO_MAX_ARITY
-# define BOOST_PROTO_MAX_ARITY FUSION_MAX_TUPLE_SIZE
+# define BOOST_PROTO_MAX_ARITY 10
 #endif
 
 namespace boost { namespace proto
 {
-    #ifdef BOOST_PROTO_FUSION_V2
-    typedef fusion::void_ void_;
-    #else
-    typedef fusion::void_t void_;
-    #endif
-
     ///////////////////////////////////////////////////////////////////////////////
     // Operator tags
     struct unary_tag;
     struct binary_tag;
     struct nary_tag;
 
-    struct noop_tag;
+    struct terminal_tag;
     struct unary_plus_tag;
     struct unary_minus_tag;
     struct unary_star_tag;
@@ -92,70 +75,13 @@ namespace boost { namespace proto
 
     struct function_tag;
 
-    template<typename Tag>
-    struct is_unary;
+    template<typename Tag, typename Args, long Arity = mpl::size<Args>::value>
+    struct basic_expr;
 
-    template<typename Tag>
-    struct is_binary;
+    template<typename Expr>
+    struct ref;
 
-    template<typename Tag>
-    struct is_nary;
-
-    template<typename Arg, typename Node>
-    struct unary_op;
-
-    template<typename Left, typename Right, typename Node>
-    struct binary_op;
-
-    template<typename Node, typename Param = void>
-    struct op_proxy;
-
-    template
-    <
-        typename Fun
-      , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, void_)
-    >
-    struct nary_op;
-
-    struct op_root;
-
-    template<typename T>
-    struct is_proxy;
-
-    template<typename T>
-    struct is_op;
-
-    template<typename T, bool IsOp = is_op<T>::value>
-    struct as_op;
-
-    template<typename Node>
-    struct op_base;
-
-    template<typename Node, typename Arg>
-    unary_op<Arg, Node> const
-    make_op(Arg const &arg);
-
-    template<typename Node, typename Left, typename Right>
-    binary_op<Left, Right, Node> const
-    make_op(Left const &left, Right const &right);
-
-    template<typename Arg>
-    unary_op<typename call_traits<Arg>::param_type, noop_tag> const
-    noop(Arg const &arg);
-
-    template<typename Node>
-    struct arg_type;
-
-    template<typename Node>
-    struct left_type;
-
-    template<typename Node>
-    struct right_type;
-
-    template<typename Node, bool IsOp = is_op<Node>::value>
-    struct tag_type;
-
-    template<typename OpTag, typename DomainTag, typename Dummy = void>
+    template<typename OpTag, typename DomainTag, typename EnableIf = void>
     struct compiler;
 
     template<typename DomainTag>
@@ -198,21 +124,64 @@ namespace boost { namespace proto
     template<typename Predicate, typename IfTransform, typename ElseTransform = identity_transform>
     struct conditional_transform;
 
-    template<typename Node>
-    typename arg_type<Node>::const_reference arg(Node const &node);
+    struct proto_expr_tag;
+    struct proto_ref_tag;
+    struct proto_ref_iterator_tag;
 
-    template<typename Node>
-    typename left_type<Node>::const_reference left(Node const &node);
+    namespace meta
+    {
+        template<typename T>
+        struct value_type
+        {
+            typedef typename remove_cv<typename remove_reference<T>::type>::type type;
+        };
 
-    template<typename Node>
-    typename right_type<Node>::const_reference right(Node const &node);
+        template<typename T>
+        struct is_expr;
 
-    template<typename Node, typename State, typename Visitor, typename DomainTag>
-    struct compile_result;
+        template<typename T, bool IsExpr = is_expr<T>::value>
+        struct as_expr;
 
-    template<typename Node, typename State, typename Visitor, typename DomainTag>
-    typename compile_result<Node, State, Visitor, DomainTag>::type const
-    compile(Node const &node, State const &state, Visitor &visitor, DomainTag tag_type);
+        template<typename Expr, typename State, typename Visitor, typename DomainTag>
+        struct compile;
+
+        template<typename Tag, typename Arg>
+        struct unary_expr;
+
+        template<typename Tag, typename Left, typename Right>
+        struct binary_expr;
+
+        template<typename Expr>
+        struct terminal;
+
+        template<typename Expr>
+        struct arg;
+
+        template<typename Expr>
+        struct left;
+
+        template<typename Expr>
+        struct right;
+
+        template<typename Expr>
+        struct tag;
+
+        template<typename T>
+        struct unref;
+    }
+
+    using meta::unref;
+
+    namespace op
+    {
+        struct compile;
+        struct as_expr;
+        struct make_terminal;
+        struct arg;
+        struct left;
+        struct right;
+        struct as_expr;
+    }
 
 }} // namespace boost::proto
 

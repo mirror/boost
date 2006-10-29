@@ -194,18 +194,16 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Char>
     struct xpression_peeker;
 
-    typedef proto::unary_op<mark_placeholder, proto::noop_tag> mark_tag;
-
     struct any_matcher;
 
     template<typename Traits>
     struct logical_newline_matcher;
 
-    typedef proto::unary_op<logical_newline_placeholder, proto::noop_tag> logical_newline_xpression;
+    typedef proto::basic_expr<proto::terminal_tag, mpl::vector1<logical_newline_placeholder> > logical_newline_xpression;
 
     struct set_initializer;
 
-    typedef proto::unary_op<set_initializer, proto::noop_tag> set_initializer_type;
+    typedef proto::basic_expr<proto::terminal_tag, mpl::vector1<set_initializer> > set_initializer_type;
 
     struct seq_tag;
 
@@ -289,7 +287,7 @@ namespace boost { namespace xpressive { namespace detail
 
     struct action_state;
 
-    template<typename Xpr, bool IsOp = proto::is_op<Xpr>::value>
+    template<typename Xpr, bool IsExpr = proto::meta::is_expr<Xpr>::value>
     struct as_xpr_type;
 
     template<typename Traits, typename BidiIter>
@@ -347,10 +345,10 @@ namespace boost { namespace xpressive { namespace detail
     void make_repeat(quant_spec const &spec, sequence<BidiIter> &seq);
 
     template<typename BidiIter>
-    void make_optional(quant_spec const &spec, sequence<BidiIter> &seq);
+    void make_exprtional(quant_spec const &spec, sequence<BidiIter> &seq);
 
     template<typename BidiIter>
-    void make_optional(quant_spec const &spec, sequence<BidiIter> &seq, int mark_nbr);
+    void make_exprtional(quant_spec const &spec, sequence<BidiIter> &seq, int mark_nbr);
 
 }}} // namespace boost::xpressive::detail
 

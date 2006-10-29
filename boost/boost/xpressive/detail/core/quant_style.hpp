@@ -18,6 +18,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/not_equal_to.hpp>
+#include <boost/mpl/has_xxx.hpp>
 #include <boost/xpressive/detail/utility/width.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 
@@ -37,23 +38,27 @@ namespace boost { namespace xpressive { namespace detail
 //////////////////////////////////////////////////////////////////////////
 // xpression_base
 //
-struct xpression_base
-{
-#ifdef BOOST_XPR_DEBUG_STACK
-    virtual ~xpression_base()
-    {
-    }
-#endif
-};
+//struct xpression_base
+//{
+//#ifdef BOOST_XPR_DEBUG_STACK
+//    virtual ~xpression_base()
+//    {
+//    }
+//#endif
+//};
+
+// BUGBUG
+typedef void xpression_base;
+
+BOOST_MPL_HAS_XXX_TRAIT_DEF(is_xpression)
 
 ///////////////////////////////////////////////////////////////////////////////
 // is_xpr
 //
 template<typename Xpr>
 struct is_xpr
-  : is_base_and_derived<xpression_base, Xpr>
-{
-};
+  : has_is_xpression<Xpr>
+{};
 
 ///////////////////////////////////////////////////////////////////////////////
 // quant_enum
@@ -70,8 +75,9 @@ enum quant_enum
 //
 template<quant_enum QuantStyle, std::size_t Width = unknown_width::value, bool Pure = true>
 struct quant_style
-  : xpression_base
 {
+    typedef void is_xpression;
+
     // Which quantification strategy to use?
     BOOST_STATIC_CONSTANT(quant_enum, quant = QuantStyle);
 
@@ -86,6 +92,14 @@ struct quant_style
         return width;
     }
 };
+
+#define BOOST_XPR_QUANT_STYLE(Style, Width, Pure)\
+    typedef void is_xpression;\
+    BOOST_STATIC_CONSTANT(quant_enum, quant = Style);\
+    BOOST_STATIC_CONSTANT(std::size_t, width = Width);\
+    BOOST_STATIC_CONSTANT(bool, pure = Pure);\
+    static detail::width get_width() { return width; }\
+    /**/
 
 ///////////////////////////////////////////////////////////////////////////////
 // quant_style_none

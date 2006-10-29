@@ -101,6 +101,8 @@ struct regex_traits_type
 template<typename Locale>
 struct locale_modifier
 {
+    typedef Locale locale_type;
+
     locale_modifier(Locale const &loc)
       : loc_(loc)
     {
@@ -149,7 +151,7 @@ struct xpression_linker
     template<typename Matcher>
     void accept(Matcher const &, xpression_base const *)
     {
-        // no-node
+        // no-op
     }
 
     void accept(repeat_begin_matcher const &, xpression_base const *next)

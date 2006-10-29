@@ -24,8 +24,9 @@ namespace boost { namespace xpressive { namespace detail
     // assert_eos_matcher
     //   match the end of the sequence (\Z)
     struct assert_eos_matcher
-      : quant_style_assertion
     {
+        BOOST_XPR_QUANT_STYLE(quant_none, 0, true)
+
         template<typename BidiIter, typename Next>
         static bool match(state_type<BidiIter> &state, Next const &next)
         {

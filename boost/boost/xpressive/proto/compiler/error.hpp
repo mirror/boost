@@ -19,7 +19,7 @@ namespace boost { namespace proto
     // error_compiler
     struct error_compiler
     {
-        template<typename Node, typename State, typename Visitor>
+        template<typename Expr, typename State, typename Visitor>
         struct apply
         {
             typedef void type;

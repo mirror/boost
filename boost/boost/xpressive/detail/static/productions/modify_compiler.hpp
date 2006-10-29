@@ -36,32 +36,32 @@ namespace boost { namespace xpressive { namespace detail
     // modify_compiler
     struct modify_compiler
     {
-        template<typename Node, typename State, typename Visitor>
+        template<typename Expr, typename State, typename Visitor>
         struct apply
         {
-            typedef typename proto::left_type<Node>::type modifier_type;
+            typedef typename Expr::arg0_type modifier_type;
+            typedef typename Expr::arg1_type expr_type;
             typedef typename modifier_type::BOOST_NESTED_TEMPLATE apply<Visitor>::type visitor_type;
-            typedef typename proto::right_type<Node>::type op_type;
 
-            typedef typename proto::compiler<typename proto::tag_type<op_type>::type, seq_tag>::
+            typedef typename proto::compiler<typename expr_type::tag_type, seq_tag>::
                 BOOST_NESTED_TEMPLATE apply
             <
-                op_type
+                expr_type
               , State
               , visitor_type
             >::type type;
         };
 
-        template<typename Node, typename State, typename Visitor>
-        static typename apply<Node, State, Visitor>::type
-        call(Node const &node, State const &state, Visitor &visitor)
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)
         {
-            typedef typename apply<Node, State, Visitor>::visitor_type new_visitor_type;
-            new_visitor_type new_visitor(proto::left(node).call(visitor));
+            typedef typename apply<Expr, State, Visitor>::visitor_type new_visitor_type;
+            new_visitor_type new_visitor(proto::left(expr).call(visitor));
             new_visitor.swap(visitor);
             scoped_swap<Visitor, new_visitor_type> const undo = {&visitor, &new_visitor};
             detail::ignore_unused(undo);
-            return proto::compile(proto::right(node), state, new_visitor, seq_tag());
+            return proto::compile(proto::right(expr), state, new_visitor, seq_tag());
         }
     };
 

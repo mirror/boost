@@ -26,15 +26,11 @@ namespace boost { namespace xpressive { namespace detail
 //
 template<typename Char, bool Not>
 struct literal_placeholder
-  : quant_style_fixed_width<1>
 {
+    BOOST_XPR_QUANT_STYLE(quant_fixed_width, 1, true)
+
     typedef mpl::bool_<Not> not_type;
     Char ch_;
-
-    literal_placeholder(Char ch)
-      : ch_(ch)
-    {
-    }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -42,28 +38,20 @@ struct literal_placeholder
 //
 template<typename Char>
 struct string_placeholder
-  : quant_style_fixed_unknown_width
 {
-    std::basic_string<Char> str_;
+    BOOST_XPR_QUANT_STYLE(quant_fixed_width, unknown_width::value, true)
 
-    string_placeholder(std::basic_string<Char> const &str)
-      : str_(str)
-    {
-    }
+    std::basic_string<Char> str_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // mark_placeholder
 //
 struct mark_placeholder
-  : quant_style_variable_width
 {
-    int mark_number_;
+    BOOST_XPR_QUANT_STYLE(quant_variable_width, unknown_width::value, true)
 
-    mark_placeholder(int mark_number)
-      : mark_number_(mark_number)
-    {
-    }
+    int mark_number_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -71,8 +59,9 @@ struct mark_placeholder
 //
 template<typename BidiIter, bool ByRef>
 struct regex_placeholder
-  : quant_style<quant_variable_width, unknown_width::value, false>
 {
+    BOOST_XPR_QUANT_STYLE(quant_variable_width, unknown_width::value, false)
+
     shared_ptr<regex_impl<BidiIter> > impl_;
 
     regex_placeholder(shared_ptr<regex_impl<BidiIter> > const &impl)
@@ -85,16 +74,11 @@ struct regex_placeholder
 // posix_charset_placeholder
 //
 struct posix_charset_placeholder
-  : quant_style_fixed_width<1>
 {
+    BOOST_XPR_QUANT_STYLE(quant_fixed_width, 1, true)
+
     char const *name_;
     bool not_;
-
-    posix_charset_placeholder(char const *name)
-      : name_(name)
-      , not_(false)
-    {
-    }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -102,8 +86,8 @@ struct posix_charset_placeholder
 //
 template<typename Cond>
 struct assert_word_placeholder
-  : quant_style_assertion
 {
+    BOOST_XPR_QUANT_STYLE(quant_none, 0, true)
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -111,50 +95,44 @@ struct assert_word_placeholder
 //
 template<typename Char>
 struct range_placeholder
-  : quant_style_fixed_width<1>
 {
+    BOOST_XPR_QUANT_STYLE(quant_fixed_width, 1, true)
+
     Char ch_min_;
     Char ch_max_;
     bool not_;
-
-    range_placeholder(Char ch_min, Char ch_max)
-      : ch_min_(ch_min)
-      , ch_max_(ch_max)
-      , not_(false)
-    {
-    }
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // assert_bol_placeholder
 //
 struct assert_bol_placeholder
-  : quant_style_assertion
 {
+    BOOST_XPR_QUANT_STYLE(quant_none, 0, true)
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // assert_eol_placeholder
 //
 struct assert_eol_placeholder
-  : quant_style_assertion
 {
+    BOOST_XPR_QUANT_STYLE(quant_none, 0, true)
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // logical_newline_placeholder
 //
 struct logical_newline_placeholder
-  : quant_style_variable_width
 {
+    BOOST_XPR_QUANT_STYLE(quant_variable_width, unknown_width::value, true)
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // self_placeholder
 //
 struct self_placeholder
-  : quant_style<quant_variable_width, unknown_width::value, false>
 {
+    BOOST_XPR_QUANT_STYLE(quant_variable_width, unknown_width::value, false)
 };
 
 }}} // namespace boost::xpressive::detail

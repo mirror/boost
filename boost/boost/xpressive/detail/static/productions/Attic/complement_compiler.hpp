@@ -21,227 +21,262 @@
 namespace boost { namespace xpressive { namespace detail
 {
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // complement
-    //   the result of applying operator~ to various expressions
-    template<typename Node, typename Visitor>
+    template<typename OpTag, typename Arg0, typename Arg1>
     struct complement
     {
         // If your compile breaks here, then you are applying the complement operator ~
         // to something that does not support it. For instance, ~(_ >> 'a') will trigger this
         // assertion because the sub-expression (_ >> 'a') has no complement.
-        BOOST_MPL_ASSERT((never_true<Node>));
+        BOOST_MPL_ASSERT((never_true<OpTag>));
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    template<typename Char, bool Not, typename Visitor>
-    struct complement<proto::unary_op<literal_placeholder<Char, Not>, proto::noop_tag>, Visitor>
+    template<typename Char, bool Not>
+    struct complement<proto::terminal_tag, literal_placeholder<Char, Not>, void>
     {
-        typedef proto::unary_op<literal_placeholder<Char, !Not>, proto::noop_tag> type;
+        template<typename Expr, typename>
+        struct apply
+          : proto::meta::terminal<literal_placeholder<Char, !Not> >
+        {};
 
-        static type const call(proto::unary_op<literal_placeholder<Char, Not>, proto::noop_tag> const &node, Visitor &)
+        template<typename Expr, typename Visitor>
+        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
         {
-            literal_placeholder<Char, !Not> literal = proto::arg(node).ch_;
-            return proto::noop(literal);
+            typedef typename apply<Expr, Visitor>::type type;
+            type that = {{proto::arg(expr).ch_}};
+            return that;
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    template<typename Char, typename Visitor>
-    struct complement<proto::unary_op<Char, proto::noop_tag>, Visitor>
+    template<typename Traits, int Size>
+    struct complement<proto::terminal_tag, set_matcher<Traits, Size>, void>
     {
-        typedef proto::unary_op<literal_placeholder<Char, true>, proto::noop_tag> type;
+        template<typename Expr, typename>
+        struct apply
+          : proto::meta::terminal<set_matcher<Traits, Size> >
+        {};
 
-        static type const call(proto::unary_op<Char, proto::noop_tag> const &node, Visitor &)
+        template<typename Expr, typename Visitor>
+        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
         {
-            literal_placeholder<Char, true> literal = proto::arg(node);
-            return proto::noop(literal);
+            typedef typename apply<Expr, Visitor>::type type;
+            type that = {proto::arg(expr)};
+            that.arg0.complement();
+            return that;
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    template<typename Traits, int Size, typename Visitor>
-    struct complement<proto::unary_op<set_matcher<Traits, Size>, proto::noop_tag>, Visitor>
+    template<>
+    struct complement<proto::terminal_tag, posix_charset_placeholder, void>
     {
-        typedef proto::unary_op<set_matcher<Traits, Size>, proto::noop_tag> type;
+        template<typename, typename>
+        struct apply
+          : proto::meta::terminal<posix_charset_placeholder>
+        {};
 
-        static type const call(proto::unary_op<set_matcher<Traits, Size>, proto::noop_tag> const &node, Visitor &)
+        template<typename Expr, typename Visitor>
+        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
         {
-            set_matcher<Traits, Size> set = proto::arg(node);
-            set.complement();
-            return proto::noop(set);
+            typedef typename apply<Expr, Visitor>::type type;
+            type that = {proto::arg(expr)};
+            that.arg0.not_ = !that.arg0.not_;
+            return that;
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    template<typename Visitor>
-    struct complement<proto::unary_op<posix_charset_placeholder, proto::noop_tag>, Visitor>
+    template<typename Right>
+    struct complement<proto::subscript_tag, set_initializer_type, Right>
     {
-        typedef proto::unary_op<posix_charset_placeholder, proto::noop_tag> type;
+        template<typename Expr, typename Visitor>
+        struct apply
+          : charset_transform::BOOST_NESTED_TEMPLATE apply<
+                Expr
+              , dont_care
+              , Visitor
+            >
+        {};
 
-        static type const call(proto::unary_op<posix_charset_placeholder, proto::noop_tag> const &node, Visitor &)
+        template<typename Expr, typename Visitor>
+        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &visitor)
         {
-            posix_charset_placeholder posix = proto::arg(node);
-            posix.not_ = !posix.not_;
-            return proto::noop(posix);
-        }
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    //
-    template<typename Node, typename Visitor>
-    struct complement<proto::binary_op<set_initializer_type const, Node, proto::subscript_tag>, Visitor>
-    {
-        typedef typename charset_transform::BOOST_NESTED_TEMPLATE apply
-        <
-            proto::binary_op<set_initializer_type const, Node, proto::subscript_tag>
-          , dont_care
-          , Visitor
-        >::type type;
-
-        static type call(proto::binary_op<set_initializer_type const, Node, proto::subscript_tag> const &node, Visitor &visitor)
-        {
-            return charset_transform::call(node, dont_care(), visitor, true);
+            return charset_transform::call(expr, dont_care(), visitor, true);
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     // for complementing a list-initialized set, as in ~(set= 'a','b','c')
-    template<typename Left, typename Right, typename Visitor>
-    struct complement<proto::binary_op<Left, Right, proto::comma_tag>, Visitor>
+    template<typename Left, typename Right>
+    struct complement<proto::comma_tag, Left, Right>
     {
         // First, convert the parse tree into a set_matcher
-        typedef typename proto::compiler<proto::comma_tag, lst_tag>::BOOST_NESTED_TEMPLATE apply
-        <
-            proto::binary_op<Left, Right, proto::comma_tag>
-          , dont_care
-          , Visitor
-        >::type set_matcher;
+        template<typename Expr, typename Visitor>
+        struct apply
+          : proto::meta::terminal<typename proto::compiler<proto::comma_tag, lst_tag>
+                ::BOOST_NESTED_TEMPLATE apply<
+                    Expr
+                  , dont_care
+                  , Visitor
+                >::type
+            >
+        {};
 
-        typedef proto::unary_op<set_matcher, proto::noop_tag> type;
-
-        static type const call(proto::binary_op<Left, Right, proto::comma_tag> const &node, Visitor &visitor)
+        template<typename Expr, typename Visitor>
+        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &visitor)
         {
-            set_matcher set(proto::compile(node, dont_care(), visitor, lst_tag()));
-            set.complement();
-            return proto::noop(set);
+            typedef typename apply<Expr, Visitor>::type type;
+            type that = {proto::compile(expr, dont_care(), visitor, lst_tag())};
+            that.arg0.complement();
+            return that;
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    template<typename Node, typename Visitor>
-    struct complement<proto::unary_op<Node, lookahead_tag<true> >, Visitor>
+    template<typename Arg>
+    struct complement<lookahead_tag<true>, Arg, void>
     {
-        typedef proto::unary_op<Node, lookahead_tag<false> > type;
+        template<typename Expr, typename Visitor>
+        struct apply
+          : proto::meta::unary_expr<lookahead_tag<false>, Arg>
+        {};
 
-        static type call(proto::unary_op<Node, lookahead_tag<true> > const &node, Visitor &)
+        template<typename Expr, typename Visitor>
+        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
         {
-            return proto::make_op<lookahead_tag<false> >(proto::arg(node));
+            typedef typename apply<Expr, Visitor>::type type;
+            type that = {proto::arg(expr)};
+            return that;
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    template<typename Node, typename Visitor>
-    struct complement<proto::unary_op<Node, lookbehind_tag<true> >, Visitor>
+    template<typename Arg>
+    struct complement<lookbehind_tag<true>, Arg, void>
     {
-        typedef proto::unary_op<Node, lookbehind_tag<false> > type;
+        template<typename Expr, typename Visitor>
+        struct apply
+          : proto::meta::unary_expr<lookbehind_tag<false>, Arg>
+        {};
 
-        static type call(proto::unary_op<Node, lookbehind_tag<true> > const &node, Visitor &)
+        template<typename Expr, typename Visitor>
+        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
         {
-            return proto::make_op<lookbehind_tag<false> >(proto::arg(node));
+            typedef typename apply<Expr, Visitor>::type type;
+            type that = {proto::arg(expr)};
+            return that;
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    template<typename Visitor>
-    struct complement<proto::unary_op<assert_word_placeholder<word_boundary<true> >, proto::noop_tag>, Visitor>
+    template<>
+    struct complement<proto::terminal_tag, assert_word_placeholder<word_boundary<true> >, void>
     {
-        typedef proto::unary_op<assert_word_placeholder<word_boundary<false> >, proto::noop_tag> type;
+        template<typename Expr, typename Visitor>
+        struct apply
+          : proto::meta::terminal<assert_word_placeholder<word_boundary<false> > >
+        {};
 
-        static type call(proto::unary_op<assert_word_placeholder<word_boundary<true> >, proto::noop_tag> const &, Visitor &)
+        template<typename Expr, typename Visitor>
+        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
         {
-            return proto::noop(assert_word_placeholder<word_boundary<false> >());
+            typedef typename apply<Expr, Visitor>::type type;
+            type that = {};
+            return that;
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    template<typename Visitor>
-    struct complement<logical_newline_xpression, Visitor>
+    template<>
+    struct complement<proto::terminal_tag, logical_newline_placeholder, void>
     {
-        typedef proto::binary_op
-        <
-            proto::unary_op<logical_newline_xpression, lookahead_tag<false> >
-          , proto::unary_op<any_matcher, proto::noop_tag>
-          , proto::right_shift_tag
-        > type;
+        template<typename Expr, typename Visitor>
+        struct apply
+          : proto::meta::binary_expr<
+                proto::right_shift_tag
+              , typename proto::meta::unary_expr<lookahead_tag<false>, Expr>::type
+              , proto::meta::terminal<any_matcher>::type
+            >
+        {};
 
-        static type call(logical_newline_xpression const &node, Visitor &)
+        template<typename Expr, typename Visitor>
+        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
         {
-            return proto::make_op<lookahead_tag<false> >(node) >> proto::noop(any_matcher());
-        }
+            typedef typename apply<Expr, Visitor>::type type;
+            type that = {{expr}, {any_matcher()}};
+            return that;
+       }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    // complementing a complement is a no-node
-    template<typename Arg, typename Visitor>
-    struct complement<proto::unary_op<Arg, proto::complement_tag>, Visitor>
+    // complementing a complement is a no-op
+    template<typename Arg>
+    struct complement<proto::complement_tag, Arg, void>
     {
-        typedef Arg type;
-
-        static Arg const &call(proto::unary_op<Arg, proto::complement_tag> const &node, Visitor &)
+        template<typename Expr, typename Visitor>
+        struct apply
         {
-            return proto::arg(node);
+            typedef Arg type;
+        };
+
+        template<typename Expr, typename Visitor>
+        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
+        {
+            return proto::arg(expr);
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    template<typename Char, typename Visitor>
-    struct complement<proto::unary_op<range_placeholder<Char>, proto::noop_tag>, Visitor>
+    template<typename Char>
+    struct complement<proto::terminal_tag, range_placeholder<Char>, void>
     {
-        typedef proto::unary_op<range_placeholder<Char>, proto::noop_tag> type;
+        template<typename Expr, typename Visitor>
+        struct apply
+          : proto::meta::terminal<range_placeholder<Char> >
+        {};
 
-        static type const call(proto::unary_op<range_placeholder<Char>, proto::noop_tag> const &node, Visitor &)
+        template<typename Expr, typename Visitor>
+        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
         {
-            range_placeholder<Char> rng = proto::arg(node);
-            rng.not_ = !rng.not_;
-            return proto::noop(rng);
+            typedef typename apply<Expr, Visitor>::type type;
+            type that = {proto::arg(expr)};
+            that.arg0.not_ = !that.arg0.not_;
+            return that;
         }
     };
-
-    template<typename Node, typename Visitor>
-    struct complement<Node &, Visitor>
-      : complement<Node, Visitor>
-    {};
-
-    template<typename Node, typename Visitor>
-    struct complement<Node const, Visitor>
-      : complement<Node, Visitor>
-    {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // complement_transform
     struct complement_transform
     {
-        template<typename Node, typename, typename Visitor>
+        template<typename Expr, typename, typename Visitor>
         struct apply
         {
-            typedef typename complement<typename proto::arg_type<Node>::type, Visitor>::type type;
+            typedef typename Expr::arg0_type expr_type;
+            typedef typename expr_type::tag_type tag_type;
+            typedef typename proto::unref<typename expr_type::arg0_type>::type arg0_type;
+            typedef typename proto::unref<typename expr_type::arg1_type>::type arg1_type;
+
+            typedef complement<tag_type, arg0_type, arg1_type> complement;
+            typedef typename complement::BOOST_NESTED_TEMPLATE apply<expr_type, Visitor>::type type;
         };
 
-        template<typename Node, typename State, typename Visitor>
-        static typename complement<typename proto::arg_type<Node>::type, Visitor>::type
-        call(Node const &node, State const &, Visitor &visitor)
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &, Visitor &visitor)
         {
-            return complement<typename proto::arg_type<Node>::type, Visitor>::call(proto::arg(node), visitor);
+            typedef typename apply<Expr, State, Visitor>::complement complement;
+            return complement::call(proto::arg(expr), visitor);
         }
     };
 

@@ -24,8 +24,9 @@ namespace boost { namespace xpressive { namespace detail
     // any_matcher
     //
     struct any_matcher
-      : quant_style_fixed_width<1>
     {
+        BOOST_XPR_QUANT_STYLE(quant_fixed_width, 1, true)
+
         template<typename BidiIter, typename Next>
         static bool match(state_type<BidiIter> &state, Next const &next)
         {

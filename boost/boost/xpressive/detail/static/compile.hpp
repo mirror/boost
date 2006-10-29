@@ -52,7 +52,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // static_compile_impl1
     template<typename Xpr, typename BidiIter>
-    void static_compile_impl1(Xpr const &xpr, shared_ptr<regex_impl<BidiIter> > const &impl)
+    void static_compile_impl1(Xpr const &xpr, shared_ptr<regex_impl<BidiIter> > const &impl, mpl::false_)
     {
         // use default traits
         typedef typename iterator_value<BidiIter>::type char_type;
@@ -63,24 +63,36 @@ namespace boost { namespace xpressive { namespace detail
 
     ///////////////////////////////////////////////////////////////////////////////
     // static_compile_impl1
-    template<typename Locale, typename Xpr, typename BidiIter>
-    void static_compile_impl1
-    (
-        proto::binary_op<locale_modifier<Locale>, Xpr, modifier_tag> const &xpr
-      , shared_ptr<regex_impl<BidiIter> > const &impl
-    )
+    template<typename Xpr, typename BidiIter>
+    void static_compile_impl1(Xpr const &xpr, shared_ptr<regex_impl<BidiIter> > const &impl, mpl::true_)
     {
         // use specified traits
-        typedef typename regex_traits_type<Locale, BidiIter>::type traits_type;
+        typedef typename Xpr::arg0_type::locale_type locale_type;
+        typedef typename regex_traits_type<locale_type, BidiIter>::type traits_type;
         static_compile_impl2(proto::right(xpr), impl, traits_type(proto::left(xpr).getloc()));
     }
+
+    template<typename T>
+    struct is_locale_modifier
+      : mpl::false_
+    {};
+
+    template<typename Locale>
+    struct is_locale_modifier<locale_modifier<Locale> >
+      : mpl::true_
+    {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // static_compile
     template<typename Xpr, typename BidiIter>
     void static_compile(Xpr const &xpr, shared_ptr<regex_impl<BidiIter> > const &impl)
     {
-        static_compile_impl1(xpr, impl);
+        typedef mpl::and_<
+            is_same<modifier_tag, typename Xpr::tag_type>
+          , is_locale_modifier<typename proto::unref<typename Xpr::arg0_type>::type>
+        > is_imbued;
+
+        static_compile_impl1(xpr, impl, is_imbued());
     }
 
 }}} // namespace boost::xpressive::detail

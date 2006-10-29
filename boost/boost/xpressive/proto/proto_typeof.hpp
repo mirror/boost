@@ -24,7 +24,7 @@
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::unary_tag)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::binary_tag)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::nary_tag)
-BOOST_TYPEOF_REGISTER_TYPE(boost::proto::noop_tag)
+BOOST_TYPEOF_REGISTER_TYPE(boost::proto::terminal_tag)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::unary_plus_tag)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::unary_minus_tag)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::unary_star_tag)
@@ -69,7 +69,7 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::proto::bitxor_assign_tag)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::subscript_tag)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::function_tag)
 
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::unary_op, (typename)(typename))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::binary_op, (typename)(typename)(typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::ref, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::basic_expr, (typename)(typename)(long))
 
 #endif

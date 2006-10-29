@@ -24,29 +24,29 @@ namespace boost { namespace proto
     template<typename Lambda, typename Map>
     struct switch_compiler
     {
-        template<typename Node, typename State, typename Visitor>
+        template<typename Expr, typename State, typename Visitor>
         struct apply
         {
             typedef typename boost::mpl::at
             <
                 Map
-              , typename Lambda::BOOST_NESTED_TEMPLATE apply<Node, State, Visitor>::type
+              , typename Lambda::BOOST_NESTED_TEMPLATE apply<Expr, State, Visitor>::type
             >::type compiler_type;
             
             typedef typename compiler_type::BOOST_NESTED_TEMPLATE apply
             <
-                Node
+                Expr
               , State
               , Visitor
             >::type type;
         };
 
-        template<typename Node, typename State, typename Visitor>
-        static typename apply<Node, State, Visitor>::type
-        call(Node const &node, State const &state, Visitor &visitor)
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)
         {
-            typedef typename apply<Node, State, Visitor>::compiler_type compiler_type;
-            return compiler_type::call(node, state, visitor);
+            typedef typename apply<Expr, State, Visitor>::compiler_type compiler_type;
+            return compiler_type::call(expr, state, visitor);
         }
     };
 

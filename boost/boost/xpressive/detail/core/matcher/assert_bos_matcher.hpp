@@ -24,8 +24,9 @@ namespace boost { namespace xpressive { namespace detail
     // assert_bos_matcher
     //   match the beginning of the sequence (\A)
     struct assert_bos_matcher
-      : quant_style_assertion
     {
+        BOOST_XPR_QUANT_STYLE(quant_none, 0, true)
+
         template<typename BidiIter, typename Next>
         static bool match(state_type<BidiIter> &state, Next const &next)
         {

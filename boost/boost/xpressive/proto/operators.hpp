@@ -14,63 +14,44 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/preprocessor/punctuation/comma.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
-#include <boost/xpressive/proto/op_tags.hpp>
-#include <boost/xpressive/proto/op_base.hpp>
+#include <boost/xpressive/proto/tags.hpp>
+#include <boost/xpressive/proto/basic_expr.hpp>
 
 namespace boost { namespace proto
 {
-    ///////////////////////////////////////////////////////////////////////////////
-    // unary_op_generator
-    template<typename Arg, typename Tag>
-    struct unary_op_generator
-    {
-        typedef unary_op<
-            typename as_op<Arg>::reference
-          , Tag
-        > type;
-    };
+#define BOOST_PROTO_UNARY_OP(expr, tag)\
+    template<typename Tag, typename Args, long Arity>\
+    inline basic_expr<tag, mpl::vector1<ref<basic_expr<Tag, Args, Arity> > > > const\
+    operator expr(basic_expr<Tag, Args, Arity> const &arg)\
+    {\
+        basic_expr<tag, mpl::vector1<ref<basic_expr<Tag, Args, Arity> > > > that = {{arg}};\
+        return that;\
+    }\
+    /**/
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // binary_op_generator
-    template<typename Left, typename Right, typename Tag>
-    struct binary_op_generator
-    {
-        typedef binary_op<
-            typename as_op<Left>::reference
-          , typename as_op<Right>::reference
-          , Tag
-        > type;
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // unary operators
-    template<typename Arg>
-    inline unary_op<typename call_traits<Arg>::param_type, noop_tag> const
-    noop(Arg const &arg)
-    {
-        BOOST_MPL_ASSERT_NOT((is_op<Arg>));
-        return as_op<Arg>::make(arg);
-    }
-
-#define BOOST_PROTO_UNARY_OP(node, tag)                                                         \
-    template<typename Arg>                                                                      \
-    inline typename lazy_enable_if<is_op<Arg>, unary_op_generator<Arg, tag> >::type const       \
-    operator node(Arg const &arg)                                                               \
-    {                                                                                           \
-        return typename unary_op_generator<Arg, tag>::type(as_op<Arg>::make(arg));              \
-    }
-
-#define BOOST_PROTO_BINARY_OP(node, tag)                                                        \
-    template<typename Left, typename Right>                                                     \
-    inline typename lazy_enable_if<                                                             \
-        mpl::or_<is_op<Left>, is_op<Right> >                                                    \
-      , binary_op_generator<Left, Right, tag>                                                   \
-    >::type const                                                                               \
-    operator node(Left const &left, Right const &right)                                         \
-    {                                                                                           \
-        return typename binary_op_generator<Left, Right, tag>::type(                            \
-            as_op<Left>::make(left), as_op<Right>::make(right));                                \
-    }
+#define BOOST_PROTO_BINARY_OP(expr, tag)\
+    template<typename LTag, typename LArgs, long LArity, typename Right>\
+    inline basic_expr<tag, mpl::vector2<ref<basic_expr<LTag, LArgs, LArity> >, typename meta::terminal<Right>::type> > const\
+    operator expr(basic_expr<LTag, LArgs, LArity> const &left, Right const &right)\
+    {\
+        basic_expr<tag, mpl::vector2<ref<basic_expr<LTag, LArgs, LArity> >, typename meta::terminal<Right>::type> > that = {{left}, proto::make_terminal(right)};\
+        return that;\
+    }\
+    template<typename Left, typename RTag, typename RArgs, long RArity>\
+    inline basic_expr<tag, mpl::vector2<typename meta::terminal<Left>::type, ref<basic_expr<RTag, RArgs, RArity> > > > const\
+    operator expr(Left const &left, basic_expr<RTag, RArgs, RArity> const &right)\
+    {\
+        basic_expr<tag, mpl::vector2<typename meta::terminal<Left>::type, ref<basic_expr<RTag, RArgs, RArity> > > > that = {proto::make_terminal(left), {right}};\
+        return that;\
+    }\
+    template<typename LTag, typename LArgs, long LArity, typename RTag, typename RArgs, long RArity>\
+    inline basic_expr<tag, mpl::vector2<ref<basic_expr<LTag, LArgs, LArity> >, ref<basic_expr<RTag, RArgs, RArity> > > > const\
+    operator expr(basic_expr<LTag, LArgs, LArity> const &left, basic_expr<RTag, RArgs, RArity> const &right)\
+    {\
+        basic_expr<tag, mpl::vector2<ref<basic_expr<LTag, LArgs, LArity> >, ref<basic_expr<RTag, RArgs, RArity> > > > that = {{left}, {right}};\
+        return that;\
+    }\
+    /**/
 
     BOOST_PROTO_UNARY_OP(+, unary_plus_tag)
     BOOST_PROTO_UNARY_OP(-, unary_minus_tag)
@@ -113,24 +94,24 @@ namespace boost { namespace proto
     BOOST_PROTO_BINARY_OP(|=, bitor_assign_tag)
     BOOST_PROTO_BINARY_OP(^=, bitxor_assign_tag)
 
-#undef BOOST_PROTO_BINARY_OP
+    template<typename Tag, typename Args, long Arity>
+    inline basic_expr<post_inc_tag, mpl::vector1<ref<basic_expr<Tag, Args, Arity> > > > const
+    operator ++(basic_expr<Tag, Args, Arity> const &arg, int)
+    {
+        basic_expr<post_inc_tag, mpl::vector1<ref<basic_expr<Tag, Args, Arity> > > > that = {{arg}};
+        return that;
+    }
+
+    template<typename Tag, typename Args, long Arity>
+    inline basic_expr<post_dec_tag, mpl::vector1<ref<basic_expr<Tag, Args, Arity> > > > const
+    operator --(basic_expr<Tag, Args, Arity> const &arg, int)
+    {
+        basic_expr<post_dec_tag, mpl::vector1<ref<basic_expr<Tag, Args, Arity> > > > that = {{arg}};
+        return that;
+    }
+
 #undef BOOST_PROTO_UNARY_OP
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // post-fix operators
-    template<typename Arg>
-    inline typename lazy_enable_if<is_op<Arg>, unary_op_generator<Arg, post_inc_tag> >::type const
-    operator ++(Arg const &arg, int)
-    {
-        return typename unary_op_generator<Arg, post_inc_tag>::type(arg.cast());
-    }
-
-    template<typename Arg>
-    inline typename lazy_enable_if<is_op<Arg>, unary_op_generator<Arg, post_dec_tag> >::type const
-    operator --(Arg const &arg, int)
-    {
-        return typename unary_op_generator<Arg, post_dec_tag>::type(arg.cast());
-    }
+#undef BOOST_PROTO_BINARY_OP
 
 }}
 

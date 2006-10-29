@@ -33,14 +33,19 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Xpr>
         struct apply
         {
-            typedef proto::binary_op<Modifier, typename as_xpr_type<Xpr>::type, modifier_tag> type;
+            typedef typename proto::meta::binary_expr<
+                modifier_tag
+              , Modifier
+              , typename as_xpr_type<Xpr>::type
+            >::type type;
         };
 
         template<typename Xpr>
-        typename apply<Xpr>::type    
+        typename apply<Xpr>::type const
         operator ()(Xpr const &xpr) const
         {
-            return proto::make_op<modifier_tag>(this->mod_, as_xpr(xpr));
+            typename apply<Xpr>::type that = {this->mod_, as_xpr(xpr)};
+            return that;
         }
 
         operator opt_type() const

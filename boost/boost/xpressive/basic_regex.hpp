@@ -66,29 +66,29 @@ struct basic_regex
 
     /// Construct from a static regular expression.
     ///
-    /// \param  xpr The static regular expression
-    /// \pre    Xpr is the type of a static regular expression.
+    /// \param  expr The static regular expression
+    /// \pre    Expr is the type of a static regular expression.
     /// \post   regex_id()   != 0
     /// \post   mark_count() \>= 0
-    template<typename Xpr>
-    basic_regex(Xpr const &xpr)
+    template<typename Expr>
+    basic_regex(Expr const &expr)
       : impl_()
     {
-        this->operator =(xpr);
+        this->operator =(expr);
     }
 
     /// Construct from a static regular expression.
     ///
-    /// \param  xpr The static regular expression.
-    /// \pre    Xpr is the type of a static regular expression.
+    /// \param  expr The static regular expression.
+    /// \pre    Expr is the type of a static regular expression.
     /// \post   regex_id()   != 0
     /// \post   mark_count() \>= 0
     /// \throw  std::bad_alloc on out of memory
     /// \return *this
-    template<typename Xpr>
-    basic_regex<BidiIter> &operator =(Xpr const &xpr)
+    template<typename Expr>
+    basic_regex<BidiIter> &operator =(Expr const &expr)
     {
-        detail::static_compile(xpr, this->impl_.get());
+        detail::static_compile(expr, this->impl_.get());
         return *this;
     }
 
@@ -132,15 +132,21 @@ struct basic_regex
     // for binding actions to this regex when it is nested statically in another regex
     /// INTERNAL ONLY
     template<typename Action>
-    proto::binary_op
+    typename proto::meta::binary_expr
     <
-        proto::unary_op<basic_regex<BidiIter>, proto::noop_tag>
-      , proto::unary_op<Action, proto::noop_tag>
-      , proto::right_shift_tag
-    > const
+        proto::right_shift_tag
+      , typename proto::meta::terminal<basic_regex<BidiIter> >::type
+      , typename proto::meta::terminal<Action>::type
+    >::type const
     operator [](detail::action_matcher<Action> const &action) const
     {
-        return proto::noop(*this) >> proto::noop(*static_cast<Action const *>(&action));
+        typename proto::meta::binary_expr
+        <
+            proto::right_shift_tag
+          , typename proto::meta::terminal<basic_regex<BidiIter> >::type
+          , typename proto::meta::terminal<Action>::type
+        >::type that = {{*this}, {*static_cast<Action const *>(&action)}};
+        return that;
     }
 
     //{{AFX_DEBUG

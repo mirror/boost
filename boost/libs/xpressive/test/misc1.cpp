@@ -74,7 +74,8 @@ void test3()
         "Channel=10\r\n"
         "\r\n";
 
-    mark_tag name(1), value(2);
+    //mark_tag name(1), value(2);
+    mark_tag name = {{1}}, value = {{2}};
 
     sregex name_value_pair_ =
         (name= +alnum) >> *_s >> "=" >> *_s >>

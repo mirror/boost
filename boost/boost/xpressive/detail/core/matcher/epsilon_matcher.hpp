@@ -24,8 +24,9 @@ namespace boost { namespace xpressive { namespace detail
     // epsilon_matcher
     //
     struct epsilon_matcher
-      : quant_style_assertion
     {
+        BOOST_XPR_QUANT_STYLE(quant_none, 0, true)
+
         template<typename BidiIter, typename Next>
         static bool match(state_type<BidiIter> &state, Next const &next)
         {

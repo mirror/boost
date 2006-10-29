@@ -33,7 +33,8 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef Matcher type;
 
-        static type const &call(Matcher const &m, dont_care)
+        template<typename Matcher2>
+        static Matcher2 const &call(Matcher2 const &m, dont_care)
         {
             return m;
         }
@@ -44,8 +45,8 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef assert_bol_matcher<Traits> type;
 
-        template<typename Visitor>
-        static type call(assert_bol_placeholder, Visitor &visitor)
+        template<typename Matcher2, typename Visitor>
+        static type call(Matcher2, Visitor &visitor)
         {
             return type(visitor.traits());
         }
@@ -56,8 +57,8 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef assert_eol_matcher<Traits> type;
 
-        template<typename Visitor>
-        static type call(assert_eol_placeholder, Visitor &visitor)
+        template<typename Matcher2, typename Visitor>
+        static type call(Matcher2, Visitor &visitor)
         {
             return type(visitor.traits());
         }
@@ -68,8 +69,8 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef logical_newline_matcher<Traits> type;
 
-        template<typename Visitor>
-        static type call(logical_newline_placeholder, Visitor &visitor)
+        template<typename Matcher2, typename Visitor>
+        static type call(Matcher2, Visitor &visitor)
         {
             return type(visitor.traits());
         }
@@ -81,8 +82,8 @@ namespace boost { namespace xpressive { namespace detail
         typedef typename iterator_value<BidiIter>::type char_type;
         typedef literal_matcher<Traits, ICase::value, Not> type;
 
-        template<typename Visitor>
-        static type call(literal_placeholder<Char, Not> const &m, Visitor &visitor)
+        template<typename Matcher2, typename Visitor>
+        static type call(Matcher2 const &m, Visitor &visitor)
         {
             char_type ch = char_cast<char_type>(m.ch_, visitor.traits());
             return type(ch, visitor.traits());
@@ -97,8 +98,8 @@ namespace boost { namespace xpressive { namespace detail
         BOOST_MPL_ASSERT((is_same<Char, char_type>));
         typedef range_matcher<Traits, ICase::value> type;
 
-        template<typename Visitor>
-        static type call(range_placeholder<Char> const &m, Visitor &visitor)
+        template<typename Matcher2, typename Visitor>
+        static type call(Matcher2 const &m, Visitor &visitor)
         {
             return type(m.ch_min_, m.ch_max_, m.not_, visitor.traits());
         }
@@ -110,8 +111,8 @@ namespace boost { namespace xpressive { namespace detail
         typedef typename iterator_value<BidiIter>::type char_type;
         typedef string_matcher<Traits, ICase::value> type;
 
-        template<typename Visitor>
-        static type call(string_placeholder<Char> const &m, Visitor &visitor)
+        template<typename Matcher2, typename Visitor>
+        static type call(Matcher2 const &m, Visitor &visitor)
         {
             return type(string_cast<char_type>(m.str_, visitor.traits()), visitor.traits());
         }
@@ -122,8 +123,8 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef mark_matcher<Traits, ICase::value> type;
 
-        template<typename Visitor>
-        static type call(mark_placeholder const &m, Visitor &visitor)
+        template<typename Matcher2, typename Visitor>
+        static type call(Matcher2 const &m, Visitor &visitor)
         {
             return type(m.mark_number_, visitor.traits());
         }
@@ -134,8 +135,8 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef posix_charset_matcher<Traits> type;
 
-        template<typename Visitor>
-        static type call(posix_charset_placeholder const &m, Visitor &visitor)
+        template<typename Matcher2, typename Visitor>
+        static type call(Matcher2 const &m, Visitor &visitor)
         {
             char const *name_end = m.name_ + std::strlen(m.name_);
             return type(visitor.traits().lookup_classname(m.name_, name_end, ICase::value), m.not_);
@@ -147,8 +148,8 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef set_matcher<Traits, Size> type;
 
-        template<typename Visitor>
-        static type call(set_matcher<Traits, Size> m, Visitor &visitor)
+        template<typename Matcher2, typename Visitor>
+        static type call(Matcher2 m, Visitor &visitor)
         {
             m.nocase(visitor.traits());
             return m;
@@ -177,7 +178,8 @@ namespace boost { namespace xpressive { namespace detail
           , regex_matcher<BidiIter>
         >::type type;
 
-        static type call(regex_placeholder<BidiIter, ByRef> const &m, dont_care)
+        template<typename Matcher2>
+        static type call(Matcher2 const &m, dont_care)
         {
             return type(m.impl_);
         }
@@ -188,8 +190,8 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef regex_byref_matcher<BidiIter> type;
 
-        template<typename Visitor>
-        static type call(self_placeholder, Visitor &visitor)
+        template<typename Matcher2, typename Visitor>
+        static type call(Matcher2, Visitor &visitor)
         {
             return type(visitor.self());
         }

@@ -65,7 +65,8 @@ namespace boost { namespace xpressive
 
         struct mark_placeholder;
 
-        typedef proto::unary_op<detail::mark_placeholder, proto::noop_tag> mark_tag;
+        //typedef proto::meta::terminal<mark_placeholder>::type mark_tag;
+        typedef proto::basic_expr<proto::terminal_tag, mpl::vector1<mark_placeholder> > mark_tag;
 
     } // namespace detail
 

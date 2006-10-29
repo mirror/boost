@@ -11,20 +11,15 @@
 #include <boost/test/unit_test.hpp>
 #include <sstream>
 
-boost::proto::unary_op<char, boost::proto::noop_tag> a_('a');
-boost::proto::unary_op<char, boost::proto::noop_tag> b_('b');
-boost::proto::unary_op<char, boost::proto::noop_tag> c_('c');
-boost::proto::unary_op<char, boost::proto::noop_tag> d_('d');
-boost::proto::unary_op<char, boost::proto::noop_tag> e_('e');
-boost::proto::unary_op<char, boost::proto::noop_tag> f_('f');
-boost::proto::unary_op<char, boost::proto::noop_tag> g_('g');
-boost::proto::unary_op<char, boost::proto::noop_tag> h_('h');
-boost::proto::unary_op<char, boost::proto::noop_tag> i_('i');
-
-std::ostream &operator <<(std::ostream &sout, boost::proto::noop_tag)
-{
-    return sout;
-}
+boost::proto::meta::terminal<char>::type a_ = {'a'};
+boost::proto::meta::terminal<char>::type b_ = {'b'};
+boost::proto::meta::terminal<char>::type c_ = {'c'};
+boost::proto::meta::terminal<char>::type d_ = {'d'};
+boost::proto::meta::terminal<char>::type e_ = {'e'};
+boost::proto::meta::terminal<char>::type f_ = {'f'};
+boost::proto::meta::terminal<char>::type g_ = {'g'};
+boost::proto::meta::terminal<char>::type h_ = {'h'};
+boost::proto::meta::terminal<char>::type i_ = {'i'};
 
 std::ostream &operator <<(std::ostream &sout, boost::proto::right_shift_tag)
 {
@@ -36,16 +31,22 @@ std::ostream &operator <<(std::ostream &sout, boost::proto::bitor_tag)
     return sout << "|";
 }
 
-template<typename A, typename Tag>
-std::ostream &operator <<(std::ostream &sout, boost::proto::unary_op<A,Tag> const &op)
+template<typename Args>
+std::ostream &operator <<(std::ostream &sout, boost::proto::basic_expr<boost::proto::terminal_tag, Args, 1> const &op)
 {
-    return sout << Tag() << boost::proto::arg(op);
+    return sout << boost::proto::arg(op);
 }
 
-template<typename A, typename B, typename Tag>
-std::ostream &operator <<(std::ostream &sout, boost::proto::binary_op<A,B,Tag> const &op)
+template<typename Tag, typename Args>
+std::ostream &operator <<(std::ostream &sout, boost::proto::basic_expr<Tag, Args, 1> const &op)
 {
-    return sout << boost::proto::left(op) << Tag() << boost::proto::right(op);
+    return sout << Tag() << boost::proto::arg(op).cast();
+}
+
+template<typename Tag, typename Args>
+std::ostream &operator <<(std::ostream &sout, boost::proto::basic_expr<Tag, Args, 2> const &op)
+{
+    return sout << boost::proto::left(op).cast() << Tag() << boost::proto::right(op).cast();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
