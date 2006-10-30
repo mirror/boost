@@ -307,8 +307,8 @@ namespace boost { namespace fusion
     }
 }}
 
-namespace boost { namespace mpl
-{
+//namespace boost { namespace mpl
+//{
     //template<>
     //struct begin_impl<proto::proto_expr_tag>
     //{
@@ -350,48 +350,48 @@ namespace boost { namespace mpl
     //};
 
 
-    template<>
-    struct begin_impl<proto::proto_ref_tag>
-    {
-        template<typename Sequence>
-        struct apply
-          : begin_impl<typename sequence_tag<typename Sequence::args_type>::type>
-                ::template apply<typename Sequence::args_type>
-        {};
-    };
+    //template<>
+    //struct begin_impl<proto::proto_ref_tag>
+    //{
+    //    template<typename Sequence>
+    //    struct apply
+    //      : begin_impl<typename sequence_tag<typename Sequence::args_type>::type>
+    //            ::template apply<typename Sequence::args_type>
+    //    {};
+    //};
 
-    template<>
-    struct end_impl<proto::proto_ref_tag>
-    {
-        template<typename Sequence>
-        struct apply
-          : end_impl<typename sequence_tag<typename Sequence::args_type>::type>
-                ::template apply<typename Sequence::args_type>
-        {};
-    };
+    //template<>
+    //struct end_impl<proto::proto_ref_tag>
+    //{
+    //    template<typename Sequence>
+    //    struct apply
+    //      : end_impl<typename sequence_tag<typename Sequence::args_type>::type>
+    //            ::template apply<typename Sequence::args_type>
+    //    {};
+    //};
 
-    template<>
-    struct size_impl<proto::proto_ref_tag>
-    {
-        template<typename Sequence>
-        struct apply
-        {
-            typedef typename Sequence::arity type;
-        };
-    };
+    //template<>
+    //struct size_impl<proto::proto_ref_tag>
+    //{
+    //    template<typename Sequence>
+    //    struct apply
+    //    {
+    //        typedef typename Sequence::arity type;
+    //    };
+    //};
 
-    template<>
-    struct at_impl<proto::proto_ref_tag>
-    {
-        template<typename Sequence, typename N>
-        struct apply
-          : at_impl<typename sequence_tag<typename Sequence::args_type>::type>
-                ::template apply<typename Sequence::args_type, N>
-        {};
-    };
+    //template<>
+    //struct at_impl<proto::proto_ref_tag>
+    //{
+    //    template<typename Sequence, typename N>
+    //    struct apply
+    //      : at_impl<typename sequence_tag<typename Sequence::args_type>::type>
+    //            ::template apply<typename Sequence::args_type, N>
+    //    {};
+    //};
 
 
-}} // namespace boost::mpl
+//}} // namespace boost::mpl
 
 //namespace boost { namespace mpl
 //{

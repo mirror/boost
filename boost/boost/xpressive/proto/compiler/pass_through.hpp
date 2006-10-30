@@ -38,8 +38,7 @@ namespace boost { namespace proto
         {}
 
         template<typename Expr>
-        typename result<Expr>::type 
-        operator ()(Expr const &expr) const
+        typename result<Expr>::type operator ()(Expr const &expr) const
         {
             return proto::compile(expr.cast(), this->state_, this->visitor_, DomainTag());
         }

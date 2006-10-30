@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-/// \file unpack_expr.hpp
+/// \file make_expr.hpp
 /// Given a Fusion sequence of arguments and the type of a proto Expression,
 /// unpacks the sequence into the Expression.
 //
