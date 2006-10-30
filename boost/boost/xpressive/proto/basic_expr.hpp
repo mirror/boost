@@ -20,6 +20,7 @@
     #include <boost/preprocessor/repetition/enum_trailing.hpp>
     #include <boost/preprocessor/repetition/enum_params.hpp>
     #include <boost/preprocessor/repetition/enum_binary_params.hpp>
+    #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
 
     #include <boost/mpl/at.hpp>
@@ -61,7 +62,7 @@
             typedef Tag tag_type;
             typedef Args args_type;
             typedef mpl::long_<BOOST_PP_ITERATION()> arity;
-            typedef proto_expr_tag tag;
+            //typedef proto_expr_tag tag;
             typedef proto_expr_tag fusion_tag;
 
             BOOST_PP_REPEAT(BOOST_PP_ITERATION(), BOOST_PROTO_ARG, _)
@@ -88,6 +89,15 @@
                 return that;
             }
 
+            template<typename Sig>
+            struct result;
+
+            template<typename This>
+            struct result<This()>
+            {
+                typedef basic_expr<function_tag, mpl::vector1<ref<basic_expr> > > type;
+            };
+
             basic_expr<function_tag, mpl::vector1<ref<basic_expr> > > const
             operator ()() const
             {
@@ -103,6 +113,13 @@
 #elif BOOST_PP_ITERATION_DEPTH() == 2
 
     #define N BOOST_PP_ITERATION()
+
+        template<typename This BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
+        struct result<This(BOOST_PP_ENUM_PARAMS(N, A))>
+        {
+            typedef basic_expr<function_tag, BOOST_PP_CAT(mpl::vector, BOOST_PP_INC(N))<ref<basic_expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > type;
+        };
+
         template<BOOST_PP_ENUM_PARAMS(N, typename A)>
         basic_expr<function_tag, BOOST_PP_CAT(mpl::vector, BOOST_PP_INC(N))<ref<basic_expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > const
         operator ()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const &a)) const
@@ -110,6 +127,7 @@
             basic_expr<function_tag, BOOST_PP_CAT(mpl::vector, BOOST_PP_INC(N))<ref<basic_expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > that = {{*this} BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_AS_OP, _)};
             return that;
         }
+
     #undef N
 
 #endif

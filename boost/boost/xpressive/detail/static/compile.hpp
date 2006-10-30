@@ -89,7 +89,7 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef mpl::and_<
             is_same<modifier_tag, typename Xpr::tag_type>
-          , is_locale_modifier<typename proto::unref<typename Xpr::arg0_type>::type>
+          , is_locale_modifier<typename proto::meta::unref<typename Xpr::arg0_type>::type>
         > is_imbued;
 
         static_compile_impl1(xpr, impl, is_imbued());

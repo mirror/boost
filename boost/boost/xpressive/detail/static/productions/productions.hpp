@@ -39,7 +39,7 @@ namespace boost { namespace xpressive { namespace detail
         struct apply
         {
             typedef typename is_same<
-                typename proto::unref<typename Expr::arg0_type>::type
+                typename proto::meta::unref<typename Expr::arg0_type>::type
               , set_initializer_type
             >::type type;
         };
@@ -65,7 +65,7 @@ namespace boost { namespace xpressive { namespace detail
         call(Expr const &expr, State const &, Visitor &)
         {
             typename apply<Expr, State, Visitor>::type that =
-                {proto::left(expr), proto::right(expr)};
+                {expr.cast().arg0, expr.cast().arg1};
             return that;
         }
     };

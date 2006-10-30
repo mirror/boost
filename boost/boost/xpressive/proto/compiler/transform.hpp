@@ -116,7 +116,7 @@ namespace boost { namespace proto
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &, Visitor &)
         {
-            return proto::arg(expr);
+            return expr.cast().arg0;
         }
     };
 
@@ -134,7 +134,7 @@ namespace boost { namespace proto
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &, Visitor &)
         {
-            return proto::left(expr);
+            return expr.cast().arg0;
         }
     };
 
@@ -152,7 +152,7 @@ namespace boost { namespace proto
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &, Visitor &)
         {
-            return proto::right(expr);
+            return expr.cast().arg1;
         }
     };
 

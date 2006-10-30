@@ -179,8 +179,6 @@ namespace boost { namespace proto
         struct unref;
     }
 
-    using meta::unref;
-
     namespace op
     {
         struct compile;
@@ -190,6 +188,7 @@ namespace boost { namespace proto
         struct right;
         struct as_expr;
         struct as_expr_ref;
+        struct unref;
     }
 
 }} // namespace boost::proto

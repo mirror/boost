@@ -28,7 +28,7 @@ namespace boost { namespace xpressive { namespace detail
     struct is_repeater
       : is_same<
             repeat_tag
-          , typename proto::unref<typename Expr::arg0_type>::type
+          , typename proto::meta::unref<typename Expr::arg0_type>::type
         >
     {};
 

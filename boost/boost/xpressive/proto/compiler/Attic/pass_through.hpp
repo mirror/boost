@@ -29,7 +29,7 @@ namespace boost { namespace proto
     {
         template<typename Expr>
         struct result
-          : meta::compile<typename unref<Expr>::type, State, Visitor, DomainTag>
+          : meta::compile<typename meta::unref<Expr>::type, State, Visitor, DomainTag>
         {};
 
         pass_through_transformer(State const &state, Visitor &visitor)

@@ -65,7 +65,7 @@ namespace boost { namespace proto
             typedef Expr expr_type;
             typedef mpl::long_<Pos> index;
             typedef fusion::forward_traversal_tag category;
-            typedef proto_ref_iterator_tag tag;
+            //typedef proto_ref_iterator_tag tag;
             typedef proto_ref_iterator_tag fusion_tag;
 
             ref_iterator(Expr expr)

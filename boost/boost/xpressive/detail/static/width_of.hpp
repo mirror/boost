@@ -174,8 +174,8 @@ namespace boost { namespace xpressive { namespace detail
     struct width_of
       : width_of_impl<
             typename Expr::tag_type
-          , typename proto::unref<typename Expr::arg0_type>::type
-          , typename proto::unref<typename Expr::arg1_type>::type
+          , typename proto::meta::unref<typename Expr::arg0_type>::type
+          , typename proto::meta::unref<typename Expr::arg1_type>::type
         >
     {};
 

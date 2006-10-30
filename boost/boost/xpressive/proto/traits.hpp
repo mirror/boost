@@ -103,7 +103,7 @@ namespace boost { namespace proto
         struct arg
         {
             BOOST_STATIC_ASSERT(1 == Expr::arity::value);
-            typedef typename Expr::arg0_type type;
+            typedef typename unref<typename Expr::arg0_type>::type type;
         };
 
         // left
@@ -111,7 +111,7 @@ namespace boost { namespace proto
         struct left
         {
             BOOST_STATIC_ASSERT(2 == Expr::arity::value);
-            typedef typename Expr::arg0_type type;
+            typedef typename unref<typename Expr::arg0_type>::type type;
         };
 
         // right
@@ -119,7 +119,7 @@ namespace boost { namespace proto
         struct right
         {
             BOOST_STATIC_ASSERT(2 == Expr::arity::value);
-            typedef typename Expr::arg1_type type;
+            typedef typename unref<typename Expr::arg1_type>::type type;
         };
 
         // terminal
@@ -237,9 +237,9 @@ namespace boost { namespace proto
             {};
 
             template<typename Expr>
-            typename Expr::arg0_type const &operator()(Expr const &expr) const
+            typename meta::arg<Expr>::type const &operator()(Expr const &expr) const
             {
-                return expr.cast().arg0;
+                return proto::unref(expr.cast().arg0);
             }
         };
 
@@ -254,9 +254,9 @@ namespace boost { namespace proto
             {};
 
             template<typename Expr>
-            typename Expr::arg0_type const &operator()(Expr const &expr) const
+            typename meta::left<Expr>::type const &operator()(Expr const &expr) const
             {
-                return expr.cast().arg0;
+                return proto::unref(expr.cast().arg0);
             }
         };
 
@@ -271,9 +271,9 @@ namespace boost { namespace proto
             {};
 
             template<typename Expr>
-            typename Expr::arg1_type const &operator()(Expr const &expr) const
+            typename meta::right<Expr>::type const &operator()(Expr const &expr) const
             {
-                return expr.cast().arg1;
+                return proto::unref(expr.cast().arg1);
             }
         };
 

@@ -264,8 +264,8 @@ namespace boost { namespace xpressive { namespace detail
         {
             typedef typename Expr::arg0_type expr_type;
             typedef typename expr_type::tag_type tag_type;
-            typedef typename proto::unref<typename expr_type::arg0_type>::type arg0_type;
-            typedef typename proto::unref<typename expr_type::arg1_type>::type arg1_type;
+            typedef typename proto::meta::unref<typename expr_type::arg0_type>::type arg0_type;
+            typedef typename proto::meta::unref<typename expr_type::arg1_type>::type arg1_type;
 
             typedef complement<tag_type, arg0_type, arg1_type> complement;
             typedef typename complement::BOOST_NESTED_TEMPLATE apply<expr_type, Visitor>::type type;
