@@ -12,6 +12,7 @@
 #define BOOST_PROTO_ARG_TRAITS_HPP_EAN_04_01_2005
 
 #include <boost/ref.hpp>
+#include <boost/mpl/or.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/call_traits.hpp>
 #include <boost/static_assert.hpp>
@@ -26,25 +27,47 @@ namespace boost { namespace proto
 
     namespace meta
     {
-        // is_expr
+        // is_basic_expr
         template<typename T>
-        struct is_expr
+        struct is_basic_expr
           : mpl::false_
         {};
 
         template<typename Tag, typename Args, long Arity>
-        struct is_expr<basic_expr<Tag, Args, Arity> >
+        struct is_basic_expr<basic_expr<Tag, Args, Arity> >
           : mpl::true_
         {};
 
-        template<typename Expr>
-        struct is_expr<ref<Expr> >
+        template<typename T>
+        struct is_basic_expr<T const>
+          : is_basic_expr<T>
+        {};
+
+        // is_ref
+        template<typename T>
+        struct is_ref
+          : mpl::false_
+        {};
+
+        template<typename T>
+        struct is_ref<ref<T> >
           : mpl::true_
+        {};
+
+        template<typename T>
+        struct is_ref<T const>
+          : is_ref<T>
+        {};
+
+        // is_expr
+        template<typename T>
+        struct is_expr
+          : mpl::or_<is_basic_expr<T>, is_ref<T> >
         {};
 
         // as_expr
-        template<typename T, bool IsExpr>
-        struct as_expr
+        template<typename T>
+        struct as_expr<T, false>
         {
             typedef basic_expr<terminal_tag, mpl::vector1<typename call_traits<T>::value_type> > type;
         };
@@ -52,13 +75,27 @@ namespace boost { namespace proto
         template<typename T>
         struct as_expr<T, true>
         {
-            typedef ref<T> type;
+            typedef T type;
+        };
+
+        // as_expr_ref
+        template<typename T>
+        struct as_expr_ref<T, false, false>
+        {
+            typedef basic_expr<terminal_tag, mpl::vector1<typename call_traits<T>::value_type> > type;
         };
 
         template<typename T>
-        struct as_expr<ref<T>, true>
+        struct as_expr_ref<T, true, false>
         {
-            typedef ref<T> type;
+            typedef ref<typename remove_cv<T>::type> type;
+        };
+
+        template<typename T>
+        struct as_expr_ref<T, false, true>
+        {
+            BOOST_STATIC_ASSERT(!is_ref<typename T::expr_type>::value);
+            typedef T type;
         };
 
         // arg
@@ -131,6 +168,36 @@ namespace boost { namespace proto
             typename meta::as_expr<T>::type operator()(T const &t) const
             {
                 typename meta::as_expr<T>::type that = {t};
+                return that;
+            }
+
+            template<typename Tag, typename Args, long Arity>
+            basic_expr<Tag, Args, Arity> const &operator()(basic_expr<Tag, Args, Arity> const &t) const
+            {
+                return t;
+            }
+
+            template<typename T>
+            ref<T> const &operator()(ref<T> const &t) const
+            {
+                return t;
+            }
+        };
+
+        struct as_expr_ref
+        {
+            template<typename Sig>
+            struct result;
+
+            template<typename This, typename T>
+            struct result<This(T)>
+              : meta::as_expr_ref<typename meta::value_type<T>::type>
+            {};
+
+            template<typename T>
+            typename meta::as_expr_ref<T>::type operator()(T const &t) const
+            {
+                typename meta::as_expr_ref<T>::type that = {t};
                 return that;
             }
 
@@ -213,62 +280,11 @@ namespace boost { namespace proto
     }
 
     op::as_expr const as_expr = {};
+    op::as_expr_ref const as_expr_ref = {};
     op::make_terminal const make_terminal = {};
     op::arg const arg = {};
     op::left const left = {};
     op::right const right = {};
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // make_expr (unary)
-    template<typename Tag, typename Arg>
-    basic_expr<Tag, mpl::vector1<Arg> > const
-    make_expr(Arg const &arg)
-    {
-        basic_expr<Tag, mpl::vector1<Arg> > that = {arg};
-        return that;
-    }
-
-    template<typename Tag, typename Arg>
-    basic_expr<Tag, mpl::vector1<ref<Arg> > > const
-    make_expr(reference_wrapper<Arg> const &arg)
-    {
-        basic_expr<Tag, mpl::vector1<ref<Arg> > > that = {{arg.get()}};
-        return that;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // make_expr (binary)
-    template<typename Tag, typename Left, typename Right>
-    basic_expr<Tag, mpl::vector2<Left, Right> > const
-    make_expr(Left const &left, Right const &right)
-    {
-        basic_expr<Tag, mpl::vector2<Left, Right> > that = {left, right};
-        return that;
-    }
-
-    template<typename Tag, typename Left, typename Right>
-    basic_expr<Tag, mpl::vector2<ref<Left>, Right> > const
-    make_expr(reference_wrapper<Left> const &left, Right const &right)
-    {
-        basic_expr<Tag, mpl::vector2<ref<Left>, Right> > that = {{left.get()}, right};
-        return that;
-    }
-
-    template<typename Tag, typename Left, typename Right>
-    basic_expr<Tag, mpl::vector2<Left, ref<Right> > > const
-    make_expr(Left const &left, reference_wrapper<Right> const &right)
-    {
-        basic_expr<Tag, mpl::vector2<Left, ref<Right> > > that = {left, {right.get()}};
-        return that;
-    }
-
-    template<typename Tag, typename Left, typename Right>
-    basic_expr<Tag, mpl::vector2<ref<Left>, ref<Right> > > const
-    make_expr(reference_wrapper<Left> const &left, reference_wrapper<Right> const &right)
-    {
-        basic_expr<Tag, mpl::vector2<ref<Left>, ref<Right> > > that = {{left.get()}, {right.get()}};
-        return that;
-    }
 }}
 
 #endif

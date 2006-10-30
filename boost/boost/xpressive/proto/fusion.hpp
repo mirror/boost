@@ -13,14 +13,13 @@
 #include <boost/preprocessor/repetition/repeat.hpp>
 
 #include <boost/mpl/if.hpp>
-//#include <boost/mpl/at.hpp>
-//#include <boost/mpl/size.hpp>
-//#include <boost/mpl/deref.hpp>
-//#include <boost/mpl/advance.hpp>
-//#include <boost/mpl/distance.hpp>
-//#include <boost/mpl/begin_end.hpp>
-//#include <boost/mpl/next_prior.hpp>
-//#include <boost/mpl/sequence_tag_fwd.hpp>
+#include <boost/mpl/at.hpp>
+#include <boost/mpl/size.hpp>
+#include <boost/mpl/deref.hpp>
+#include <boost/mpl/advance.hpp>
+#include <boost/mpl/distance.hpp>
+#include <boost/mpl/begin_end.hpp>
+#include <boost/mpl/next_prior.hpp>
 
 #include <boost/fusion/support/is_view.hpp>
 #include <boost/fusion/support/tag_of_fwd.hpp>
@@ -42,7 +41,7 @@ namespace boost { namespace proto
         template<typename Expr, long N>
         struct arg_impl;
 
-    #define BOOST_PROTO_DEFINE_GET_IMPL(z, N, data)\
+    #define BOOST_PROTO_DEFINE_ARG_IMPL(z, N, data)\
         template<typename Expr>\
         struct arg_impl<Expr, N>\
         {\
@@ -55,7 +54,9 @@ namespace boost { namespace proto
         };\
         /**/
 
-        BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_DEFINE_GET_IMPL, _)
+        BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_DEFINE_ARG_IMPL, _)
+
+    #undef BOOST_PROTO_DEFINE_ARG_IMPL
 
         template<typename Expr, int Pos>
         struct ref_iterator
@@ -64,6 +65,7 @@ namespace boost { namespace proto
             typedef Expr expr_type;
             typedef mpl::long_<Pos> index;
             typedef fusion::forward_traversal_tag category;
+            typedef proto_ref_iterator_tag tag;
             typedef proto_ref_iterator_tag fusion_tag;
 
             ref_iterator(Expr expr)
@@ -305,61 +307,91 @@ namespace boost { namespace fusion
     }
 }}
 
-//namespace boost { namespace mpl
-//{
-//    template<typename Tag, typename Args, long Arity>
-//    struct sequence_tag<proto::basic_expr<Tag, Args, Arity> >
-//    {
-//        typedef proto::proto_expr_tag type;
-//    };
-//
-//    template<typename Expr>
-//    struct sequence_tag<proto::ref<Expr> >
-//    {
-//        typedef proto::proto_expr_tag type;
-//    };
-//
-//    template<>
-//    struct begin_impl<proto::proto_expr_tag>
-//    {
-//        template<typename Sequence>
-//        struct apply
-//          : begin_impl<typename sequence_tag<typename Sequence::args_type>::type>
-//                ::template apply<typename Sequence::args_type>
-//        {};
-//    };
-//
-//    template<>
-//    struct end_impl<proto::proto_expr_tag>
-//    {
-//        template<typename Sequence>
-//        struct apply
-//          : end_impl<typename sequence_tag<typename Sequence::args_type>::type>
-//                ::template apply<typename Sequence::args_type>
-//        {};
-//    };
-//
-//    template<>
-//    struct size_impl<proto::proto_expr_tag>
-//    {
-//        template<typename Sequence>
-//        struct apply
-//        {
-//            typedef typename Sequence::arity type;
-//        };
-//    };
-//
-//    template<>
-//    struct at_impl<proto::proto_expr_tag>
-//    {
-//        template<typename Sequence, typename N>
-//        struct apply
-//          : at_impl<typename sequence_tag<typename Sequence::args_type>::type>
-//                ::template apply<typename Sequence::args_type, N>
-//        {};
-//    };
-//
-//}} // namespace boost::mpl
+namespace boost { namespace mpl
+{
+    //template<>
+    //struct begin_impl<proto::proto_expr_tag>
+    //{
+    //    template<typename Sequence>
+    //    struct apply
+    //      : begin_impl<typename sequence_tag<typename Sequence::args_type>::type>
+    //            ::template apply<typename Sequence::args_type>
+    //    {};
+    //};
+
+    //template<>
+    //struct end_impl<proto::proto_expr_tag>
+    //{
+    //    template<typename Sequence>
+    //    struct apply
+    //      : end_impl<typename sequence_tag<typename Sequence::args_type>::type>
+    //            ::template apply<typename Sequence::args_type>
+    //    {};
+    //};
+
+    //template<>
+    //struct size_impl<proto::proto_expr_tag>
+    //{
+    //    template<typename Sequence>
+    //    struct apply
+    //    {
+    //        typedef typename Sequence::arity type;
+    //    };
+    //};
+
+    //template<>
+    //struct at_impl<proto::proto_expr_tag>
+    //{
+    //    template<typename Sequence, typename N>
+    //    struct apply
+    //      : at_impl<typename sequence_tag<typename Sequence::args_type>::type>
+    //            ::template apply<typename Sequence::args_type, N>
+    //    {};
+    //};
+
+
+    template<>
+    struct begin_impl<proto::proto_ref_tag>
+    {
+        template<typename Sequence>
+        struct apply
+          : begin_impl<typename sequence_tag<typename Sequence::args_type>::type>
+                ::template apply<typename Sequence::args_type>
+        {};
+    };
+
+    template<>
+    struct end_impl<proto::proto_ref_tag>
+    {
+        template<typename Sequence>
+        struct apply
+          : end_impl<typename sequence_tag<typename Sequence::args_type>::type>
+                ::template apply<typename Sequence::args_type>
+        {};
+    };
+
+    template<>
+    struct size_impl<proto::proto_ref_tag>
+    {
+        template<typename Sequence>
+        struct apply
+        {
+            typedef typename Sequence::arity type;
+        };
+    };
+
+    template<>
+    struct at_impl<proto::proto_ref_tag>
+    {
+        template<typename Sequence, typename N>
+        struct apply
+          : at_impl<typename sequence_tag<typename Sequence::args_type>::type>
+                ::template apply<typename Sequence::args_type, N>
+        {};
+    };
+
+
+}} // namespace boost::mpl
 
 //namespace boost { namespace mpl
 //{

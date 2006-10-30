@@ -137,10 +137,19 @@ namespace boost { namespace proto
         };
 
         template<typename T>
+        struct is_basic_expr;
+
+        template<typename T>
+        struct is_ref;
+
+        template<typename T>
         struct is_expr;
 
         template<typename T, bool IsExpr = is_expr<T>::value>
         struct as_expr;
+
+        template<typename T, bool IsBasicExpr = is_basic_expr<T>::value, bool IsRef = is_ref<T>::value>
+        struct as_expr_ref;
 
         template<typename Expr, typename State, typename Visitor, typename DomainTag>
         struct compile;
@@ -175,12 +184,12 @@ namespace boost { namespace proto
     namespace op
     {
         struct compile;
-        struct as_expr;
         struct make_terminal;
         struct arg;
         struct left;
         struct right;
         struct as_expr;
+        struct as_expr_ref;
     }
 
 }} // namespace boost::proto
