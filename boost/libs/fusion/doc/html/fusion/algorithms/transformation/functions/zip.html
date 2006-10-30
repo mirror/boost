@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.transformation.functions.zip"></a><a href="zip.html" title="zip">zip</a></h5></div></div></div>
 <a name="fusion.algorithms.transformation.functions.zip.description"></a><h6>
-<a name="id583233"></a>
+<a name="id582491"></a>
             <a href="zip.html#fusion.algorithms.transformation.functions.zip.description">Description</a>
           </h6>
 <p>
@@ -34,7 +34,7 @@
             of the members of the component sequences.
           </p>
 <a name="fusion.algorithms.transformation.functions.zip.synopsis"></a><h6>
-<a name="id583266"></a>
+<a name="id582524"></a>
             <a href="zip.html#fusion.algorithms.transformation.functions.zip.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -47,12 +47,9 @@
 <span class="keyword">typename</span> <a href="../metafunctions/zip.html" title="zip"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">zip</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence1</span><span class="special">,</span> <span class="identifier">Sequence2</span><span class="special">,</span> <span class="special">...</span> <span class="identifier">SequenceN</span><span class="special">&gt;::</span><span class="identifier">type</span> 
 <span class="identifier">zip</span><span class="special">(</span><span class="identifier">Sequence1</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq1</span><span class="special">,</span> <span class="identifier">Sequence2</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq2</span><span class="special">,</span> <span class="special">...</span> <span class="identifier">SequenceN</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seqN</span><span class="special">);</span>
 </pre>
-<div class="informaltable">
-<h4>
-<a name="id583554"></a>
-              <span class="table-title">Parameters</span>
-            </h4>
-<table class="table">
+<div class="table">
+<a name="id582807"></a><p class="title"><b>Table 1.67. Parameters</b></p>
+<table class="table" summary="Parameters">
 <colgroup>
 <col>
 <col>
@@ -65,19 +62,18 @@
 </tr></thead>
 <tbody><tr>
 <td>
-<tt class="computeroutput"><span class="identifier">seq1</span></tt> to
-                  <tt class="computeroutput"><span class="identifier">seqN</span></tt>
+<tt class="computeroutput"><span class="identifier">seq1</span></tt> to <tt class="computeroutput"><span class="identifier">seqN</span></tt>
 </td>
-<td>Each
-                  sequence is a model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
+<td>Each sequence
+                is a model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                  Sequence</a>.</td>
+                Sequence</a>.</td>
 <td>Operation's argument</td>
 </tr></tbody>
 </table>
 </div>
 <a name="fusion.algorithms.transformation.functions.zip.expression_semantics"></a><h6>
-<a name="id583645"></a>
+<a name="id582894"></a>
             <a href="zip.html#fusion.algorithms.transformation.functions.zip.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -97,21 +93,21 @@
             <tt class="computeroutput"><span class="special">(</span><span class="char">'a'</span><span class="special">,</span> <span class="char">'b'</span><span class="special">,</span> <span class="char">'c'</span><span class="special">)</span></tt> would return <tt class="computeroutput"><span class="special">((</span><span class="number">1</span><span class="special">,</span> <span class="char">'a'</span><span class="special">),(</span><span class="number">2</span><span class="special">,</span> <span class="char">'b'</span><span class="special">),(</span><span class="number">3</span><span class="special">,</span> <span class="char">'c'</span><span class="special">))</span></tt>
           </p>
 <a name="fusion.algorithms.transformation.functions.zip.complexity"></a><h6>
-<a name="id583945"></a>
+<a name="id583194"></a>
             <a href="zip.html#fusion.algorithms.transformation.functions.zip.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithms.transformation.functions.zip.header"></a><h6>
-<a name="id583977"></a>
+<a name="id583227"></a>
             <a href="zip.html#fusion.algorithms.transformation.functions.zip.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">zip</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithms.transformation.functions.zip.example"></a><h6>
-<a name="id584082"></a>
+<a name="id583332"></a>
             <a href="zip.html#fusion.algorithms.transformation.functions.zip.example">Example</a>
           </h6>
 <pre class="programlisting">

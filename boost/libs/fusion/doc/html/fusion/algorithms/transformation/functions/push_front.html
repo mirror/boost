@@ -26,14 +26,14 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.transformation.functions.push_front"></a><a href="push_front.html" title="push_front">push_front</a></h5></div></div></div>
 <a name="fusion.algorithms.transformation.functions.push_front.description"></a><h6>
-<a name="id586691"></a>
+<a name="id585915"></a>
             <a href="push_front.html#fusion.algorithms.transformation.functions.push_front.description">Description</a>
           </h6>
 <p>
             Returns a new sequence with an element added at the beginning.
           </p>
 <a name="fusion.algorithms.transformation.functions.push_front.synopsis"></a><h6>
-<a name="id586724"></a>
+<a name="id585948"></a>
             <a href="push_front.html#fusion.algorithms.transformation.functions.push_front.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -44,12 +44,9 @@
 <span class="keyword">typename</span> <a href="../metafunctions/push_front.html" title="push_front"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">push_front</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">push_front</span><span class="special">(</span>
     <span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">t</span><span class="special">);</span>
 </pre>
-<div class="informaltable">
-<h4>
-<a name="id586937"></a>
-              <span class="table-title">Parameters</span>
-            </h4>
-<table class="table">
+<div class="table">
+<a name="id586156"></a><p class="title"><b>Table 1.71. Parameters</b></p>
+<table class="table" summary="Parameters">
 <colgroup>
 <col>
 <col>
@@ -64,23 +61,23 @@
 <tr>
 <td><tt class="computeroutput"><span class="identifier">seq</span></tt></td>
 <td>A
-                  model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
+                model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                  Sequence</a>
+                Sequence</a>
 </td>
 <td>Operation's argument</td>
 </tr>
 <tr>
 <td><tt class="computeroutput"><span class="identifier">t</span></tt></td>
 <td>Any
-                  type</td>
+                type</td>
 <td>The value to add to the beginning</td>
 </tr>
 </tbody>
 </table>
 </div>
 <a name="fusion.algorithms.transformation.functions.push_front.expression_semantics"></a><h6>
-<a name="id587037"></a>
+<a name="id586252"></a>
             <a href="push_front.html#fusion.algorithms.transformation.functions.push_front.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -100,21 +97,21 @@
             <tt class="computeroutput"><span class="identifier">seq</span></tt>.
           </p>
 <a name="fusion.algorithms.transformation.functions.push_front.complexity"></a><h6>
-<a name="id587178"></a>
+<a name="id586393"></a>
             <a href="push_front.html#fusion.algorithms.transformation.functions.push_front.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithms.transformation.functions.push_front.header"></a><h6>
-<a name="id587209"></a>
+<a name="id586424"></a>
             <a href="push_front.html#fusion.algorithms.transformation.functions.push_front.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">push_front</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithms.transformation.functions.push_front.example"></a><h6>
-<a name="id587315"></a>
+<a name="id586531"></a>
             <a href="push_front.html#fusion.algorithms.transformation.functions.push_front.example">Example</a>
           </h6>
 <pre class="programlisting">

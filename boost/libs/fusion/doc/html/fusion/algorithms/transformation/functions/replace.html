@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.transformation.functions.replace"></a><a href="replace.html" title="replace">replace</a></h5></div></div></div>
 <a name="fusion.algorithms.transformation.functions.replace.description"></a><h6>
-<a name="id572665"></a>
+<a name="id572018"></a>
             <a href="replace.html#fusion.algorithms.transformation.functions.replace.description">Description</a>
           </h6>
 <p>
@@ -34,7 +34,7 @@
             a new value.
           </p>
 <a name="fusion.algorithms.transformation.functions.replace.synopsis"></a><h6>
-<a name="id572698"></a>
+<a name="id572051"></a>
             <a href="replace.html#fusion.algorithms.transformation.functions.replace.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -45,12 +45,9 @@
 <span class="keyword">typename</span> <a href="../metafunctions/replace.html" title="replace"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">replace</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">replace</span><span class="special">(</span>
     <span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">old_value</span><span class="special">,</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">new_value</span><span class="special">);</span>
 </pre>
-<div class="informaltable">
-<h4>
-<a name="id572945"></a>
-              <span class="table-title">Parameters</span>
-            </h4>
-<table class="table">
+<div class="table">
+<a name="id572294"></a><p class="title"><b>Table 1.56. Parameters</b></p>
+<table class="table" summary="Parameters">
 <colgroup>
 <col>
 <col>
@@ -65,34 +62,34 @@
 <tr>
 <td><tt class="computeroutput"><span class="identifier">seq</span></tt></td>
 <td>A
-                  model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
+                model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                  Sequence</a>, <tt class="computeroutput"><span class="identifier">e</span> <span class="special">==</span> <span class="identifier">old_value</span></tt>
-                  is a valid expression, convertible to <tt class="computeroutput"><span class="keyword">bool</span></tt>,
-                  for each element <tt class="computeroutput"><span class="identifier">e</span></tt>
-                  in <tt class="computeroutput"><span class="identifier">seq</span></tt> with type
-                  convertible to <tt class="computeroutput"><span class="identifier">T</span></tt>
+                Sequence</a>, <tt class="computeroutput"><span class="identifier">e</span> <span class="special">==</span> <span class="identifier">old_value</span></tt>
+                is a valid expression, convertible to <tt class="computeroutput"><span class="keyword">bool</span></tt>,
+                for each element <tt class="computeroutput"><span class="identifier">e</span></tt>
+                in <tt class="computeroutput"><span class="identifier">seq</span></tt> with type
+                convertible to <tt class="computeroutput"><span class="identifier">T</span></tt>
 </td>
 <td>Operation's
-                  argument</td>
+                argument</td>
 </tr>
 <tr>
 <td><tt class="computeroutput"><span class="identifier">old_value</span></tt></td>
 <td>Any
-                  type</td>
+                type</td>
 <td>Value to replace</td>
 </tr>
 <tr>
 <td><tt class="computeroutput"><span class="identifier">new_value</span></tt></td>
 <td>Any
-                  type</td>
+                type</td>
 <td>Replacement value</td>
 </tr>
 </tbody>
 </table>
 </div>
 <a name="fusion.algorithms.transformation.functions.replace.expression_semantics"></a><h6>
-<a name="id573132"></a>
+<a name="id572476"></a>
             <a href="replace.html#fusion.algorithms.transformation.functions.replace.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -111,21 +108,21 @@
             to elements with the same type and equal to <tt class="computeroutput"><span class="identifier">old_value</span></tt>.
           </p>
 <a name="fusion.algorithms.transformation.functions.replace.complexity"></a><h6>
-<a name="id573282"></a>
+<a name="id572627"></a>
             <a href="replace.html#fusion.algorithms.transformation.functions.replace.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithms.transformation.functions.replace.header"></a><h6>
-<a name="id573314"></a>
+<a name="id572659"></a>
             <a href="replace.html#fusion.algorithms.transformation.functions.replace.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">replace</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithms.transformation.functions.replace.example"></a><h6>
-<a name="id573420"></a>
+<a name="id572766"></a>
             <a href="replace.html#fusion.algorithms.transformation.functions.replace.example">Example</a>
           </h6>
 <pre class="programlisting">

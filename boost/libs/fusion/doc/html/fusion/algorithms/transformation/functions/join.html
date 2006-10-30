@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.transformation.functions.join"></a><a href="join.html" title="join">join</a></h5></div></div></div>
 <a name="fusion.algorithms.transformation.functions.join.description"></a><h6>
-<a name="id582300"></a>
+<a name="id581567"></a>
             <a href="join.html#fusion.algorithms.transformation.functions.join.description">Description</a>
           </h6>
 <p>
@@ -34,7 +34,7 @@
             first followed by the elements of the second.
           </p>
 <a name="fusion.algorithms.transformation.functions.join.synopsis"></a><h6>
-<a name="id582334"></a>
+<a name="id581601"></a>
             <a href="join.html#fusion.algorithms.transformation.functions.join.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -43,12 +43,9 @@
     <span class="keyword">typename</span> <span class="identifier">RhSequence</span><span class="special">&gt;</span>
 <span class="keyword">typename</span> <a href="../metafunctions/join.html" title="join"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">join</span></tt></a><span class="special">&lt;</span><span class="identifier">LhSequence</span><span class="special">,</span> <span class="identifier">RhSequence</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">join</span><span class="special">(</span><span class="identifier">LhSequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">lhs</span><span class="special">,</span> <span class="identifier">RhSequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rhs</span><span class="special">);</span>
 </pre>
-<div class="informaltable">
-<h4>
-<a name="id582546"></a>
-              <span class="table-title">Parameters</span>
-            </h4>
-<table class="table">
+<div class="table">
+<a name="id581808"></a><p class="title"><b>Table 1.66. Parameters</b></p>
+<table class="table" summary="Parameters">
 <colgroup>
 <col>
 <col>
@@ -63,18 +60,18 @@
 <tr>
 <td><tt class="computeroutput"><span class="identifier">lhs</span></tt></td>
 <td>A
-                  model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
+                model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                  Sequence</a>
+                Sequence</a>
 </td>
 <td>Operation's argument</td>
 </tr>
 <tr>
 <td><tt class="computeroutput"><span class="identifier">rhs</span></tt></td>
 <td>A
-                  model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
+                model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                  Sequence</a>
+                Sequence</a>
 </td>
 <td>Operation's argument</td>
 </tr>
@@ -82,7 +79,7 @@
 </table>
 </div>
 <a name="fusion.algorithms.transformation.functions.join.expression_semantics"></a><h6>
-<a name="id582651"></a>
+<a name="id581909"></a>
             <a href="join.html#fusion.algorithms.transformation.functions.join.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -101,21 +98,21 @@
             The order of th elements is preserved.
           </p>
 <a name="fusion.algorithms.transformation.functions.join.complexity"></a><h6>
-<a name="id582778"></a>
+<a name="id582037"></a>
             <a href="join.html#fusion.algorithms.transformation.functions.join.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithms.transformation.functions.join.header"></a><h6>
-<a name="id582810"></a>
+<a name="id582068"></a>
             <a href="join.html#fusion.algorithms.transformation.functions.join.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">join</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithms.transformation.functions.join.example"></a><h6>
-<a name="id582916"></a>
+<a name="id582174"></a>
             <a href="join.html#fusion.algorithms.transformation.functions.join.example">Example</a>
           </h6>
 <pre class="programlisting">

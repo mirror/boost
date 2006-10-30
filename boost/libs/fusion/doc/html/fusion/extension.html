@@ -48,7 +48,7 @@
       </li>
 </ol></div>
 <a name="fusion.extension.our_example"></a><h3>
-<a name="id607220"></a>
+<a name="id606290"></a>
       <a href="extension.html#fusion.extension.our_example">Our example</a>
     </h3>
 <p>
@@ -80,7 +80,7 @@
       Start</a> guide.
     </p>
 <a name="fusion.extension.enabling_tag_dispatching"></a><h3>
-<a name="id607501"></a>
+<a name="id606572"></a>
       <a href="extension.html#fusion.extension.enabling_tag_dispatching">Enabling Tag Dispatching</a>
     </h3>
 <p>
@@ -90,9 +90,9 @@
       a new tag type for the mechanism to use. For example:
     </p>
 <pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">fusion</span> <span class="special">{</span>
+<span class="keyword">namespace</span> <span class="identifier">example</span> <span class="special">{</span>
     <span class="keyword">struct</span> <span class="identifier">example_sequence_tag</span><span class="special">;</span> <span class="comment">// Only definition needed
-</span><span class="special">}}</span>
+</span><span class="special">}</span>
 </pre>
 <p>
       Next we need to enable the <tt class="computeroutput"><span class="identifier">traits</span><span class="special">::</span><span class="identifier">tag_of</span></tt>
@@ -103,26 +103,25 @@
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">tag_of_fwd</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
-<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">fusion</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">traits</span> <span class="special">{</span>
-    
+<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">fusion</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">traits</span> <span class="special">{</span>        
     <span class="keyword">template</span><span class="special">&lt;&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">tag_of</span><span class="special">&lt;</span><span class="identifier">example_struct</span><span class="special">&gt;</span>
     <span class="special">{</span>
-        <span class="keyword">typedef</span> <span class="identifier">example_sequence_tag</span> <span class="identifier">type</span><span class="special">;</span>
+        <span class="keyword">typedef</span> <span class="identifier">example</span><span class="special">::</span><span class="identifier">example_sequence_tag</span> <span class="identifier">type</span><span class="special">;</span>
     <span class="special">};</span>
 <span class="special">}}}</span>
 </pre>
 <p>
       <tt class="computeroutput"><span class="identifier">traits</span><span class="special">::</span><span class="identifier">tag_of</span></tt> also has a second template argument,
       that can be used in conjuction with <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">enable_if</span></tt>
-      to provide tag support for whole clases of types. This feature is not necessary
+      to provide tag support for groups of related types. This feature is not necessary
       for our sequence, but for an example see the code in:
     </p>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">adapted</span><span class="special">/</span><span class="identifier">mpl</span><span class="special">/</span><span class="identifier">tag_of</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.extension.designing_a_suitable_iterator"></a><h3>
-<a name="id608003"></a>
+<a name="id607064"></a>
       <a href="extension.html#fusion.extension.designing_a_suitable_iterator">Designing a
       suitable iterator</a>
     </h3>
@@ -139,12 +138,12 @@
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Struct</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">Pos</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">example_struct_iterator</span>
-    <span class="special">:</span> <span class="identifier">iterator_base</span><span class="special">&lt;</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">,</span> <span class="identifier">Pos</span><span class="special">&gt;</span> <span class="special">&gt;</span>
+    <span class="special">:</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">iterator_base</span><span class="special">&lt;</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">,</span> <span class="identifier">Pos</span><span class="special">&gt;</span> <span class="special">&gt;</span>
 <span class="special">{</span>
     <span class="identifier">BOOST_STATIC_ASSERT</span><span class="special">(</span><span class="identifier">Pos</span> <span class="special">&gt;=</span><span class="number">0</span> <span class="special">&amp;&amp;</span> <span class="identifier">Pos</span> <span class="special">&lt;</span> <span class="number">3</span><span class="special">);</span>
     <span class="keyword">typedef</span> <span class="identifier">Struct</span> <span class="identifier">struct_type</span><span class="special">;</span>
-    <span class="keyword">typedef</span> <span class="identifier">mpl</span><span class="special">::</span><span class="identifier">int_</span><span class="special">&lt;</span><span class="identifier">Pos</span><span class="special">&gt;</span> <span class="identifier">index</span><span class="special">;</span>
-    <span class="keyword">typedef</span> <span class="identifier">random_access_traversal_tag</span> <span class="identifier">category</span><span class="special">;</span>
+    <span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">int_</span><span class="special">&lt;</span><span class="identifier">Pos</span><span class="special">&gt;</span> <span class="identifier">index</span><span class="special">;</span>
+    <span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">random_access_traversal_tag</span> <span class="identifier">category</span><span class="special">;</span>
 
     <span class="identifier">example_struct_iterator</span><span class="special">(</span><span class="identifier">Struct</span><span class="special">&amp;</span> <span class="identifier">str</span><span class="special">)</span>
         <span class="special">:</span> <span class="identifier">struct_</span><span class="special">(</span><span class="identifier">str</span><span class="special">)</span> <span class="special">{}</span>
@@ -178,28 +177,14 @@
 <p>
       We also need to enable <a href="notes.html#fusion.notes.tag_dispatching"><span class="emphasis"><em>tag
       dispatching</em></span></a> for our iterator type, with another specialization
-      of <tt class="computeroutput"><span class="identifier">traits</span><span class="special">::</span><span class="identifier">tag_of</span></tt>:
+      of <tt class="computeroutput"><span class="identifier">traits</span><span class="special">::</span><span class="identifier">tag_of</span></tt>.
     </p>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">boost</span> <span class="special">{</span> <span class="keyword">namespace</span> <span class="identifier">fusion</span> <span class="special">{</span>
-    <span class="keyword">struct</span> <span class="identifier">example_struct_iterator_tag</span><span class="special">;</span>
-
-    <span class="keyword">namespace</span> <span class="identifier">traits</span>
-    <span class="special">{</span>
-        <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Struct</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">Pos</span><span class="special">&gt;</span>
-        <span class="keyword">struct</span> <span class="identifier">tag_of</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">,</span> <span class="identifier">Pos</span><span class="special">&gt;</span> <span class="special">&gt;</span>
-        <span class="special">{</span>
-            <span class="keyword">typedef</span> <span class="identifier">example_struct_iterator_tag</span> <span class="identifier">type</span><span class="special">;</span>
-        <span class="special">};</span>
-    <span class="special">}</span>
-<span class="special">}}</span>
-</pre>
 <p>
       In isolation, the iterator implementation is pretty dry. Things should become
       clearer as we add features to our implementation.
     </p>
 <a name="fusion.extension.a_first_couple_of_instructive_features"></a><h3>
-<a name="id608837"></a>
+<a name="id607700"></a>
       <a href="extension.html#fusion.extension.a_first_couple_of_instructive_features">A first
       couple of instructive features</a>
     </h3>
@@ -210,19 +195,19 @@
     </p>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">value_of_impl</span><span class="special">&lt;</span><span class="identifier">example_struct_iterator_tag</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">value_of_impl</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_struct_iterator_tag</span><span class="special">&gt;</span>
 <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">apply</span><span class="special">;</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Struct</span><span class="special">&gt;</span>
-    <span class="keyword">struct</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">,</span> <span class="number">0</span><span class="special">&gt;</span> <span class="special">&gt;</span>
+    <span class="keyword">struct</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">,</span> <span class="number">0</span><span class="special">&gt;</span> <span class="special">&gt;</span>
     <span class="special">{</span>
         <span class="keyword">typedef</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">type</span><span class="special">;</span>
     <span class="special">};</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Struct</span><span class="special">&gt;</span>
-    <span class="keyword">struct</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span> <span class="special">&gt;</span>
+    <span class="keyword">struct</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span> <span class="special">&gt;</span>
     <span class="special">{</span>
         <span class="keyword">typedef</span> <span class="keyword">int</span> <span class="identifier">type</span><span class="special">;</span>
     <span class="special">};</span>
@@ -240,12 +225,9 @@
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <a href="iterators/metafunctions/value_of.html" title="value_of"><tt class="computeroutput"><span class="identifier">value_of</span></tt></a>
-<span class="special">{</span>
-    <span class="keyword">typedef</span> <span class="keyword">typename</span>
-        <span class="identifier">extension</span><span class="special">::</span><span class="identifier">value_of_impl</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">::</span><span class="identifier">fusion_tag</span><span class="special">&gt;::</span>
-            <span class="keyword">template</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;::</span><span class="identifier">type</span>
-    <span class="identifier">type</span><span class="special">;</span>
-<span class="special">};</span>
+    <span class="special">:</span> <span class="identifier">extension</span><span class="special">::</span><span class="identifier">value_of_impl</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">detail</span><span class="special">::</span><span class="identifier">tag_of</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span>
+        <span class="keyword">template</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;</span>
+<span class="special">{};</span>
 </pre>
 <p>
       So <a href="iterators/metafunctions/value_of.html" title="value_of"><tt class="computeroutput"><span class="identifier">value_of</span></tt></a>
@@ -259,37 +241,38 @@
     </p>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">deref_impl</span><span class="special">&lt;</span><span class="identifier">example_struct_iterator_tag</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">deref_impl</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_struct_iterator_tag</span><span class="special">&gt;</span>
 <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">apply</span><span class="special">;</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Struct</span><span class="special">&gt;</span>
-    <span class="keyword">struct</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">,</span> <span class="number">0</span><span class="special">&gt;</span> <span class="special">&gt;</span>
+    <span class="keyword">struct</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">,</span> <span class="number">0</span><span class="special">&gt;</span> <span class="special">&gt;</span>
     <span class="special">{</span>
         <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">mpl</span><span class="special">::</span><span class="identifier">if_</span><span class="special">&lt;</span>
             <span class="identifier">is_const</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">&gt;,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="keyword">const</span><span class="special">&amp;,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;&gt;::</span><span class="identifier">type</span> <span class="identifier">type</span><span class="special">;</span>
 
         <span class="keyword">static</span> <span class="identifier">type</span>
-        <span class="identifier">call</span><span class="special">(</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">,</span> <span class="number">0</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">it</span><span class="special">)</span>
+        <span class="identifier">call</span><span class="special">(</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">,</span> <span class="number">0</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">it</span><span class="special">)</span>
         <span class="special">{</span>
             <span class="keyword">return</span> <span class="identifier">it</span><span class="special">.</span><span class="identifier">struct_</span><span class="special">.</span><span class="identifier">name</span><span class="special">;</span>
         <span class="special">}</span>
     <span class="special">};</span>
 
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Struct</span><span class="special">&gt;</span>
-    <span class="keyword">struct</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span> <span class="special">&gt;</span>
+    <span class="keyword">struct</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span> <span class="special">&gt;</span>
     <span class="special">{</span>
         <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">mpl</span><span class="special">::</span><span class="identifier">if_</span><span class="special">&lt;</span>
             <span class="identifier">is_const</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">&gt;,</span> <span class="keyword">int</span> <span class="keyword">const</span><span class="special">&amp;,</span> <span class="keyword">int</span><span class="special">&amp;&gt;::</span><span class="identifier">type</span> <span class="identifier">type</span><span class="special">;</span>
 
         <span class="keyword">static</span> <span class="identifier">type</span>
-        <span class="identifier">call</span><span class="special">(</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">it</span><span class="special">)</span>
+        <span class="identifier">call</span><span class="special">(</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Struct</span><span class="special">,</span> <span class="number">1</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">it</span><span class="special">)</span>
         <span class="special">{</span>
-            <span class="keyword">return</span> <span class="identifier">it</span><span class="special">.</span><span class="identifier">struct_</span><span class="special">.</span><span class="identifier">age</span><span class="special">;</span>
-        <span class="special">}</span>
+                <span class="keyword">return</span> <span class="identifier">it</span><span class="special">.</span><span class="identifier">struct_</span><span class="special">.</span><span class="identifier">age</span><span class="special">;</span>
+            <span class="special">}</span>
+        <span class="special">};</span>
     <span class="special">};</span>
-<span class="special">};</span>
+<span class="special">}</span>
 </pre>
 <p>
       The use of <tt class="computeroutput"><span class="identifier">deref_impl</span></tt> is very
@@ -303,22 +286,17 @@
 <span class="special">{</span>
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <a href="iterators/functions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a>
-    <span class="special">{</span>
-        <span class="keyword">typedef</span> <span class="keyword">typename</span>
-            <span class="identifier">deref_impl</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">::</span><span class="identifier">fusion_tag</span><span class="special">&gt;::</span>
-                <span class="keyword">template</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;::</span><span class="identifier">type</span>
-        <span class="identifier">type</span><span class="special">;</span>
-    <span class="special">};</span>
+        <span class="special">:</span> <span class="identifier">extension</span><span class="special">::</span><span class="identifier">deref_impl</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">detail</span><span class="special">::</span><span class="identifier">tag_of</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span>
+            <span class="keyword">template</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;</span>
+    <span class="special">{};</span>
 <span class="special">}</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">&gt;</span>
-<span class="keyword">typename</span> <a href="iterators/metafunctions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></tt></a><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<span class="keyword">typename</span> <span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;::</span><span class="identifier">type</span>
 <a href="iterators/functions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a><span class="special">(</span><span class="identifier">Iterator</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">i</span><span class="special">)</span>
 <span class="special">{</span>
-    <span class="keyword">typename</span> <a href="iterators/metafunctions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></tt></a><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">result</span> <span class="special">=</span>
-        <span class="identifier">extension</span><span class="special">::</span><span class="identifier">deref_impl</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">::</span><span class="identifier">fusion_tag</span><span class="special">&gt;::</span>
-            <span class="keyword">template</span> <span class="identifier">apply</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">i</span><span class="special">);</span>
-    <span class="keyword">return</span> <span class="identifier">result</span><span class="special">;</span>
+    <span class="keyword">typedef</span> <span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span><span class="special">&lt;</span><span class="identifier">Iterator</span><span class="special">&gt;</span> <span class="identifier">deref_meta</span><span class="special">;</span>
+    <span class="keyword">return</span> <span class="identifier">deref_meta</span><span class="special">::</span><span class="identifier">call</span><span class="special">(</span><span class="identifier">i</span><span class="special">);</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -349,7 +327,7 @@
       </p></td></tr>
 </table></div>
 <a name="fusion.extension.implementing_the_remaining_iterator_functionality"></a><h3>
-<a name="id611101"></a>
+<a name="id609940"></a>
       <a href="extension.html#fusion.extension.implementing_the_remaining_iterator_functionality">Implementing
       the remaining iterator functionality</a>
     </h3>
@@ -360,19 +338,19 @@
     </p>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">next_impl</span><span class="special">&lt;</span><span class="identifier">example_struct_iterator_tag</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">next_impl</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_struct_iterator_tag</span><span class="special">&gt;</span>
 <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">apply</span>
     <span class="special">{</span>
         <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">::</span><span class="identifier">struct_type</span> <span class="identifier">struct_type</span><span class="special">;</span>
         <span class="keyword">typedef</span> <span class="keyword">typename</span> <span class="identifier">Iterator</span><span class="special">::</span><span class="identifier">index</span> <span class="identifier">index</span><span class="special">;</span>
-        <span class="keyword">typedef</span> <span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">struct_type</span><span class="special">,</span> <span class="identifier">index</span><span class="special">::</span><span class="identifier">value</span> <span class="special">+</span> <span class="number">1</span><span class="special">&gt;</span> <span class="identifier">type</span><span class="special">;</span>
+        <span class="keyword">typedef</span> <span class="identifier">example</span><span class="special">::</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">struct_type</span><span class="special">,</span> <span class="identifier">index</span><span class="special">::</span><span class="identifier">value</span> <span class="special">+</span> <span class="number">1</span><span class="special">&gt;</span> <span class="identifier">type</span><span class="special">;</span>
 
         <span class="keyword">static</span> <span class="identifier">type</span>
         <span class="identifier">call</span><span class="special">(</span><span class="identifier">Iterator</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">i</span><span class="special">)</span>
         <span class="special">{</span>
-            <span class="keyword">return</span> <span class="identifier">type</span><span class="special">(</span><span class="identifier">i</span><span class="special">.</span><span class="identifier">struct_</span><span class="special">);</span>
+             <span class="keyword">return</span> <span class="identifier">type</span><span class="special">(</span><span class="identifier">i</span><span class="special">.</span><span class="identifier">struct_</span><span class="special">);</span>
         <span class="special">}</span>
     <span class="special">};</span>
 <span class="special">};</span>
@@ -404,7 +382,7 @@
       are provided in the example code.
     </p>
 <a name="fusion.extension.implementing_the_intrinsic_functions_of_the_sequence"></a><h3>
-<a name="id611704"></a>
+<a name="id610564"></a>
       <a href="extension.html#fusion.extension.implementing_the_intrinsic_functions_of_the_sequence">Implementing
       the intrinsic functions of the sequence</a>
     </h3>
@@ -416,7 +394,7 @@
     </p>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">is_sequence_impl</span><span class="special">&lt;</span><span class="identifier">example_sequence_tag</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">is_sequence_impl</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_sequence_tag</span><span class="special">&gt;</span>
 <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">apply</span> <span class="special">:</span> <span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span> <span class="special">{};</span>
@@ -435,12 +413,12 @@
     </p>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">begin_impl</span><span class="special">&lt;</span><span class="identifier">example_sequence_tag</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">begin_impl</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_sequence_tag</span><span class="special">&gt;</span>
 <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">apply</span>
     <span class="special">{</span>
-        <span class="keyword">typedef</span> <span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="number">0</span><span class="special">&gt;</span> <span class="identifier">type</span><span class="special">;</span>
+        <span class="keyword">typedef</span> <span class="identifier">example</span><span class="special">::</span><span class="identifier">example_struct_iterator</span><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="number">0</span><span class="special">&gt;</span> <span class="identifier">type</span><span class="special">;</span>
 
         <span class="keyword">static</span> <span class="identifier">type</span>
         <span class="identifier">call</span><span class="special">(</span><span class="identifier">Sequence</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">)</span>
@@ -463,7 +441,7 @@
       <tt class="computeroutput"><span class="identifier">value_at_impl</span></tt> and <tt class="computeroutput"><span class="identifier">at_impl</span></tt>.
     </p>
 <a name="fusion.extension.enabling_our_type_as_an_associative_container"></a><h3>
-<a name="id612255"></a>
+<a name="id611146"></a>
       <a href="extension.html#fusion.extension.enabling_our_type_as_an_associative_container">Enabling
       our type as an associative container</a>
     </h3>
@@ -483,7 +461,7 @@
     </p>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;&gt;</span>
-<span class="keyword">struct</span> <span class="identifier">at_key_impl</span><span class="special">&lt;</span><span class="identifier">example_sequence_tag</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">at_key_impl</span><span class="special">&lt;</span><span class="identifier">example</span><span class="special">::</span><span class="identifier">example_sequence_tag</span><span class="special">&gt;</span>
 <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Key</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">apply</span><span class="special">;</span>
@@ -529,7 +507,7 @@
       of <tt class="computeroutput"><span class="identifier">is_associative_impl</span></tt>.
     </p>
 <a name="fusion.extension.summary"></a><h3>
-<a name="id613219"></a>
+<a name="id612120"></a>
       <a href="extension.html#fusion.extension.summary">Summary</a>
     </h3>
 <p>

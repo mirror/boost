@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h3 class="title">
 <a name="fusion.support.pair"></a><a href="pair.html" title="pair">pair</a></h3></div></div></div>
 <a name="fusion.support.pair.description"></a><h4>
-<a name="id454739"></a>
+<a name="id454665"></a>
         <a href="pair.html#fusion.support.pair.description">Description</a>
       </h4>
 <p>
@@ -37,22 +37,34 @@
         for example.
       </p>
 <a name="fusion.support.pair.synopsis"></a><h4>
-<a name="id454839"></a>
+<a name="id454765"></a>
         <a href="pair.html#fusion.support.pair.synopsis">Synopsis</a>
       </h4>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">First</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Second</span><span class="special">&gt;</span>
 <span class="keyword">struct</span> <span class="identifier">pair</span><span class="special">;</span>
+
+<span class="keyword">namespace</span> <span class="identifier">result_of</span>
+<span class="special">{</span>
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">First</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Second</span><span class="special">&gt;</span>
+    <span class="keyword">struct</span> <span class="identifier">first</span><span class="special">;</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">First</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Second</span><span class="special">&gt;</span>
+    <span class="keyword">struct</span> <span class="identifier">second</span><span class="special">;</span>
+
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">First</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Second</span><span class="special">&gt;</span>
+    <span class="keyword">struct</span> <span class="identifier">make_pair</span><span class="special">;</span>
+<span class="special">}</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">First</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Second</span><span class="special">&gt;</span>
+<span class="keyword">typename</span> <span class="identifier">result_of</span><span class="special">::</span><span class="identifier">make_pair</span><span class="special">&lt;</span><span class="identifier">First</span><span class="special">,</span><span class="identifier">Second</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<span class="identifier">make_pair</span><span class="special">(</span><span class="identifier">Second</span> <span class="keyword">const</span> <span class="special">&amp;);</span>
 </pre>
 <a name="fusion.support.pair.template_parameters"></a><h4>
-<a name="id454933"></a>
+<a name="id455207"></a>
         <a href="pair.html#fusion.support.pair.template_parameters">Template parameters</a>
       </h4>
-<div class="informaltable">
-<h4>
-<a name="id454954"></a>
-        </h4>
-<table class="table">
+<div class="informaltable"><table class="table">
 <colgroup>
 <col>
 <col>
@@ -72,8 +84,7 @@
 <td>The second type. This contains data.</td>
 </tr>
 </tbody>
-</table>
-</div>
+</table></div>
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
@@ -106,14 +117,10 @@
 </dl>
 </div>
 <a name="fusion.support.pair.expression_semantics"></a><h4>
-<a name="id455159"></a>
+<a name="id455427"></a>
         <a href="pair.html#fusion.support.pair.expression_semantics">Expression Semantics</a>
       </h4>
-<div class="informaltable">
-<h4>
-<a name="id455180"></a>
-        </h4>
-<table class="table">
+<div class="informaltable"><table class="table">
 <colgroup>
 <col>
 <col>
@@ -126,12 +133,16 @@
 <tr>
 <td><tt class="computeroutput"><span class="identifier">P</span><span class="special">::</span><span class="identifier">first_type</span></tt></td>
 <td>The type
-              of the first template parameter, <tt class="computeroutput"><span class="identifier">F</span></tt>.</td>
+              of the first template parameter, <tt class="computeroutput"><span class="identifier">F</span></tt>,
+              equivalent to <tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">first</span><span class="special">&lt;</span><span class="identifier">P</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>.
+              </td>
 </tr>
 <tr>
 <td><tt class="computeroutput"><span class="identifier">P</span><span class="special">::</span><span class="identifier">second_type</span></tt></td>
 <td>The type
-              of the second template parameter, <tt class="computeroutput"><span class="identifier">S</span></tt>.</td>
+              of the second template parameter, <tt class="computeroutput"><span class="identifier">S</span></tt>,
+              equivalent to <tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">second</span><span class="special">&lt;</span><span class="identifier">P</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>.
+              </td>
 </tr>
 <tr>
 <td><tt class="computeroutput"><span class="identifier">P</span><span class="special">()</span></tt></td>
@@ -180,17 +191,16 @@
               for inequality.</td>
 </tr>
 </tbody>
-</table>
-</div>
+</table></div>
 <a name="fusion.support.pair.header"></a><h4>
-<a name="id455645"></a>
+<a name="id455990"></a>
         <a href="pair.html#fusion.support.pair.header">Header</a>
       </h4>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">pair</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.support.pair.example"></a><h4>
-<a name="id455737"></a>
+<a name="id456082"></a>
         <a href="pair.html#fusion.support.pair.example">Example</a>
       </h4>
 <pre class="programlisting">

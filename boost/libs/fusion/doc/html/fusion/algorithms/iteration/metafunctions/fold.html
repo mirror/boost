@@ -26,14 +26,14 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.iteration.metafunctions.fold"></a><a href="fold.html" title="fold">fold</a></h5></div></div></div>
 <a name="fusion.algorithms.iteration.metafunctions.fold.description"></a><h6>
-<a name="id554830"></a>
+<a name="id554364"></a>
             <a href="fold.html#fusion.algorithms.iteration.metafunctions.fold.description">Description</a>
           </h6>
 <p>
             Returns the result type of <a href="../functions/fold.html" title="fold"><tt class="computeroutput"><span class="identifier">fold</span></tt></a>.
           </p>
 <a name="fusion.algorithms.iteration.metafunctions.fold.synopsis"></a><h6>
-<a name="id554878"></a>
+<a name="id554412"></a>
             <a href="fold.html#fusion.algorithms.iteration.metafunctions.fold.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -46,12 +46,9 @@
     <span class="keyword">typedef</span> <span class="emphasis"><em>unspecified</em></span> <span class="identifier">type</span><span class="special">;</span>
 <span class="special">};</span>
 </pre>
-<div class="informaltable">
-<h4>
-<a name="id555017"></a>
-              <span class="table-title">Parameters</span>
-            </h4>
-<table class="table">
+<div class="table">
+<a name="id554546"></a><p class="title"><b>Table 1.35. Parameters</b></p>
+<table class="table" summary="Parameters">
 <colgroup>
 <col>
 <col>
@@ -66,35 +63,35 @@
 <tr>
 <td><tt class="computeroutput"><span class="identifier">Sequence</span></tt></td>
 <td>A
-                  model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
+                model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                  Sequence</a>
+                Sequence</a>
 </td>
 <td>The sequence to iterate</td>
 </tr>
 <tr>
 <td><tt class="computeroutput"><span class="identifier">State</span></tt></td>
 <td>Any
-                  type</td>
-<td>The initial state for the first application
-                  of <tt class="computeroutput"><span class="identifier">F</span></tt>
+                type</td>
+<td>The initial state for the first application of
+                <tt class="computeroutput"><span class="identifier">F</span></tt>
 </td>
 </tr>
 <tr>
 <td><tt class="computeroutput"><span class="identifier">F</span></tt></td>
 <td>A
-                  model of binary <a href="../../concepts/polymorphic_function_object.html" title="Polymorphic
+                model of binary <a href="../../concepts/polymorphic_function_object.html" title="Polymorphic
         Function Object">Polymorphic
-                  Function Object</a>
+                Function Object</a>
 </td>
 <td>The operation to be applied
-                  on forward traversal</td>
+                on forward traversal</td>
 </tr>
 </tbody>
 </table>
 </div>
 <a name="fusion.algorithms.iteration.metafunctions.fold.expression_semantics"></a><h6>
-<a name="id555155"></a>
+<a name="id554681"></a>
             <a href="fold.html#fusion.algorithms.iteration.metafunctions.fold.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -114,14 +111,14 @@
             Function Object</a> of type <tt class="computeroutput"><span class="identifier">F</span></tt>.
           </p>
 <a name="fusion.algorithms.iteration.metafunctions.fold.complexity"></a><h6>
-<a name="id555332"></a>
+<a name="id554859"></a>
             <a href="fold.html#fusion.algorithms.iteration.metafunctions.fold.complexity">Complexity</a>
           </h6>
 <p>
             Linear, exactly <tt class="computeroutput"><a href="../../../sequences/intrinsics/metafunctions/size.html" title="size"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">size</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">value</span></tt> applications of <tt class="computeroutput"><span class="identifier">F</span></tt>.
           </p>
 <a name="fusion.algorithms.iteration.metafunctions.fold.header"></a><h6>
-<a name="id555424"></a>
+<a name="id554950"></a>
             <a href="fold.html#fusion.algorithms.iteration.metafunctions.fold.header">Header</a>
           </h6>
 <pre class="programlisting">
