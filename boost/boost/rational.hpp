@@ -17,6 +17,9 @@
 //    Nickolay Mladenov, for the implementation of operator+=
 
 //  Revision History
+//  31 Oct 06  Recoded both operator< to use round-to-negative-infinity
+//             divisions; the rational-value version now uses continued fraction
+//             expansion to avoid overflows, for bug #798357 (Daryle Walker)
 //  20 Oct 06  Fix operator bool_type for CW 8.3 (Joaquín M López Muñoz)
 //  18 Oct 06  Use EXPLICIT_TEMPLATE_TYPE helper macros from Boost.Config
 //             (Joaquín M López Muñoz)
@@ -52,6 +55,7 @@
 #include <boost/call_traits.hpp> // for boost::call_traits
 #include <boost/config.hpp>      // for BOOST_NO_STDC_NAMESPACE, BOOST_MSVC
 #include <boost/detail/workaround.hpp> // for BOOST_WORKAROUND
+#include <boost/assert.hpp>      // for BOOST_ASSERT
 
 namespace boost {
 
@@ -383,44 +387,93 @@ template <typename IntType>
 bool rational<IntType>::operator< (const rational<IntType>& r) const
 {
     // Avoid repeated construction
-    IntType zero(0);
+    int_type const  zero( 0 );
 
-    // If the two values have different signs, we don't need to do the
-    // expensive calculations below. We take advantage here of the fact
-    // that the denominator is always positive.
-    if (num < zero && r.num >= zero) // -ve < +ve
-        return true;
-    if (num >= zero && r.num <= zero) // +ve or zero is not < -ve or zero
+    // This should really be a class-wide invariant.  The reason for these
+    // checks is that for 2's complement systems, INT_MIN has no corresponding
+    // positive, so negating it during normalization keeps it INT_MIN, which
+    // is bad for later calculations that assume a positive denominator.
+    BOOST_ASSERT( this->den > zero );
+    BOOST_ASSERT( r.den > zero );
+
+    // Determine relative order by expanding each value to its simple continued
+    // fraction representation using the Euclidian GCD algorithm.
+    struct { int_type  n, d, q, r; }  ts = { this->num, this->den, this->num /
+     this->den, this->num % this->den }, rs = { r.num, r.den, r.num / r.den,
+     r.num % r.den };
+    unsigned  reverse = 0u;
+
+    // Normalize negative moduli by repeatedly adding the (positive) denominator
+    // and decrementing the quotient.  Later cycles should have all positive
+    // values, so this only has to be done for the first cycle.  (The rules of
+    // C++ require a nonnegative quotient & remainder for a nonnegative dividend
+    // & positive divisor.)
+    while ( ts.r < zero )  { ts.r += ts.d; --ts.q; }
+    while ( rs.r < zero )  { rs.r += rs.d; --rs.q; }
+
+    // Loop through and compare each variable's continued-fraction components
+    while ( true )
+    {
+        // The quotients of the current cycle are the continued-fraction
+        // components.  Comparing two c.f. is comparing their sequences,
+        // stopping at the first difference.
+        if ( ts.q != rs.q )
+        {
+            // Since reciprocation changes the relative order of two variables,
+            // and c.f. use reciprocals, the less/greater-than test reverses
+            // after each index.  (Start w/ non-reversed @ whole-number place.)
+            return reverse ? ts.q > rs.q : ts.q < rs.q;
+        }
+
+        // Prepare the next cycle
+        reverse ^= 1u;
+
+        if ( (ts.r == zero) || (rs.r == zero) )
+        {
+            // At least one variable's c.f. expansion has ended
+            break;
+        }
+
+        ts.n = ts.d;         ts.d = ts.r;
+        ts.q = ts.n / ts.d;  ts.r = ts.n % ts.d;
+        rs.n = rs.d;         rs.d = rs.r;
+        rs.q = rs.n / rs.d;  rs.r = rs.n % rs.d;
+    }
+
+    // Compare infinity-valued components for otherwise equal sequences
+    if ( ts.r == rs.r )
+    {
+        // Both remainders are zero, so the next (and subsequent) c.f.
+        // components for both sequences are infinity.  Therefore, the sequences
+        // and their corresponding values are equal.
         return false;
-
-    // Avoid overflow
-    IntType gcd1 = gcd<IntType>(num, r.num);
-    IntType gcd2 = gcd<IntType>(r.den, den);
-    return (num/gcd1) * (r.den/gcd2) < (den/gcd2) * (r.num/gcd1);
+    }
+    else
+    {
+        // Exactly one of the remainders is zero, so all following c.f.
+        // components of that variable are infinity, while the other variable
+        // has a finite next c.f. component.  So that other variable has the
+        // lesser value (modulo the reversal flag!).
+        return ( ts.r != zero ) != static_cast<bool>( reverse );
+    }
 }
 
 template <typename IntType>
 bool rational<IntType>::operator< (param_type i) const
 {
     // Avoid repeated construction
-    IntType zero(0);
+    int_type const  zero( 0 );
 
-    // If the two values have different signs, we don't need to do the
-    // expensive calculations below. We take advantage here of the fact
-    // that the denominator is always positive.
-    if (num < zero && i >= zero) // -ve < +ve
-        return true;
-    if (num >= zero && i <= zero) // +ve or zero is not < -ve or zero
-        return false;
+    // Break value into mixed-fraction form, w/ always-nonnegative remainder
+    BOOST_ASSERT( this->den > zero );
+    int_type  q = this->num / this->den, r = this->num % this->den;
+    while ( r < zero )  { r += this->den; --q; }
 
-    // Now, use the fact that n/d truncates towards zero as long as n and d
-    // are both positive.
-    // Divide instead of multiplying to avoid overflow issues. Of course,
-    // division may be slower, but accuracy is more important than speed...
-    if (num > zero)
-        return (num/den) < i;
-    else
-        return -i < (-num/den);
+    // Compare with just the quotient, since the remainder always bumps the
+    // value up.  [Since q = floor(n/d), and if n/d < i then q < i, if n/d == i
+    // then q == i, if n/d == i + r/d then q == i, and if n/d >= i + 1 then
+    // q >= i + 1 > i; therefore n/d < i iff q < i.]
+    return q < i;
 }
 
 template <typename IntType>

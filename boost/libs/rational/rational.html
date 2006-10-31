@@ -403,8 +403,8 @@ underlying integer type, plus a normalization.
 <li>Increment and decrement operations are essentially as cheap as addition and
 subtraction on the underlying integer type.
 
-<li>(In)equality comparison is essentially as cheap as the same operation on
-the underlying integer type.
+<li>(In)equality comparison is essentially as cheap as two equality operations
+on the underlying integer type.
 
 <li>I/O operations are not cheap, but their performance is essentially
 dominated by the I/O time itself.
@@ -424,13 +424,15 @@ addition on the underlying integer type.
 <li>The multiplication and division operations require two gcd operations, two
 multiplications, and four divisions.
 
-<li>The comparison operations require two gcd operations, two multiplications,
-four divisions and a comparison in the worst case. On the assumption that
-IntType comparisons are the cheapest of these operations (and that comparisons
-agains zero may be cheaper still), these operations have a number of special
-case optimisations to reduce the overhead where possible. In particular,
-equality and inequality tests are only as expensive as two of the equivalent
-tests on the underlying integer type.
+<li>The compare-with-integer operation does a single integer division &amp;
+modulus pair, at most one extra integer addition and decrement, and one integer
+comparison.
+
+<li>The compare-with-rational operation does two double-sized GCD operations,
+two extra additions and decrements, and three comparisons in the worst case.
+(The GCD operations are double-sized because they are done in piecemeal and the
+interim quotients are retained and compared, whereas a direct GCD function only
+retains and compares the remainders.)
 
 <li>The final fundamental operation is normalizing a rational. This operation
 is performed whenever a rational is constructed (and assigned in place). All
@@ -657,7 +659,7 @@ on the boost list in January 2001.
 be used in the same Boolean contexts as the built-in numeric types, in December
 2005.
 
-<p>Revised December 27, 2005</p>
+<p>Revised October 31, 2006</p>
 
 <p>© Copyright Paul Moore 1999-2001; &copy; Daryle Walker 2005. Permission to
 copy, use, modify, sell and distribute this document is granted provided this

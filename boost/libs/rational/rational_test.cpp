@@ -14,6 +14,7 @@
  */
 
 // Revision History
+// 31 Oct 06  Add testing for operator<() overflow (Daryle Walker)
 // 18 Oct 06  Various fixes for old compilers (Joaquín M López Muñoz)
 // 27 Dec 05  Add testing for Boolean conversion operator (Daryle Walker)
 // 24 Dec 05  Change code to use Boost.Test (Daryle Walker)
@@ -31,10 +32,13 @@
 #include <boost/test/floating_point_comparison.hpp>
 #include <boost/test/test_case_template.hpp>
 
+#include <climits>
 #include <iostream>
 #include <istream>
 #include <ostream>
 #include <sstream>
+#include <stdexcept>
+#include <string>
 
 // We can override this on the compile, as -DINT_TYPE=short or whatever.
 // The default test is against rational<long>.
@@ -75,6 +79,128 @@ inline MyInt operator-(const MyInt& rhs) { return MyInt(-rhs.val); }
 inline std::istream& operator>>(std::istream& is, MyInt& i) { is >> i.val; return is; }
 inline std::ostream& operator<<(std::ostream& os, const MyInt& i) { os << i.val; return os; }
 inline MyInt abs(MyInt rhs) { if (rhs < MyInt()) rhs = -rhs; return rhs; }
+
+// This is an "unsigned" wrapper, that throws on overflow.  It can be used to
+// test rational<> when an operation goes out of bounds.
+class MyOverflowingUnsigned
+    : private boost::unit_steppable<MyOverflowingUnsigned>
+    , private boost::ordered_euclidian_ring_operators1<MyOverflowingUnsigned>
+{
+    // Helper type-aliases
+    typedef MyOverflowingUnsigned  self_type;
+    typedef unsigned self_type::*  bool_type;
+
+    // Member data
+    unsigned  v_;
+
+public:
+    // Exception base class
+    class exception_base  { protected: virtual ~exception_base() throw() {} };
+
+    // Divide-by-zero exception class
+    class divide_by_0_error
+        : public virtual exception_base
+        , public         std::domain_error
+    {
+    public:
+        explicit  divide_by_0_error( std::string const &w )
+          : std::domain_error( w )  {}
+
+        virtual  ~divide_by_0_error() throw()  {}
+    };
+
+    // Overflow exception class
+    class overflowing_error
+        : public virtual exception_base
+        , public         std::overflow_error
+    {
+    public:
+        explicit  overflowing_error( std::string const &w )
+          : std::overflow_error( w )  {}
+
+        virtual  ~overflowing_error() throw()  {}
+    };
+
+    // Lifetime management (use automatic dtr & copy-ctr)
+    MyOverflowingUnsigned( unsigned v = 0 )  : v_( v )  {}
+
+    // Operators (use automatic copy-assignment); arithmetic & comparison only
+    self_type &  operator ++()
+    {
+        if ( this->v_ == UINT_MAX )  throw overflowing_error( "increment" );
+        else ++this->v_;
+        return *this;
+    }
+    self_type &  operator --()
+    {
+        if ( !this->v_ )  throw overflowing_error( "decrement" );
+        else --this->v_;
+        return *this;
+    }
+
+    operator bool_type() const  { return this->v_ ? &self_type::v_ : 0; }
+
+    bool       operator !() const  { return !this->v_; }
+    self_type  operator +() const  { return self_type( +this->v_ ); }
+    self_type  operator -() const  { return self_type( -this->v_ ); }
+
+    bool  operator  <(self_type const &r) const  { return this->v_ <  r.v_; }
+    bool  operator ==(self_type const &r) const  { return this->v_ == r.v_; }
+
+    self_type &  operator *=( self_type const &r )
+    {
+        if ( r.v_ && this->v_ > UINT_MAX / r.v_ )
+        {
+            throw overflowing_error( "oversized factors" );
+        }
+        this->v_ *= r.v_;
+        return *this;
+    }
+    self_type &  operator /=( self_type const &r )
+    {
+        if ( !r.v_ )  throw divide_by_0_error( "division" );
+        this->v_ /= r.v_;
+        return *this;
+    }
+    self_type &  operator %=( self_type const &r )
+    {
+        if ( !r.v_ )  throw divide_by_0_error( "modulus" );
+        this->v_ %= r.v_;
+        return *this;
+    }
+    self_type &  operator +=( self_type const &r )
+    {
+        if ( this->v_ > UINT_MAX - r.v_ )
+        {
+            throw overflowing_error( "oversized addends" );
+        }
+        this->v_ += r.v_;
+        return *this;
+    }
+    self_type &  operator -=( self_type const &r )
+    {
+        if ( this->v_ < r.v_ )
+        {
+            throw overflowing_error( "oversized subtrahend" );
+        }
+        this->v_ -= r.v_;
+        return *this;
+    }
+
+    // Input & output
+    template < typename Ch, class Tr >
+    friend  std::basic_istream<Ch, Tr> &
+    operator >>( std::basic_istream<Ch, Tr> &i, self_type &x )
+    { return i >> x.v_; }
+
+    template < typename Ch, class Tr >
+    friend  std::basic_ostream<Ch, Tr> &
+    operator <<( std::basic_ostream<Ch, Tr> &o, self_type const &x )
+    { return o << x.v_; }
+
+};  // MyOverflowingUnsigned
+
+inline MyOverflowingUnsigned abs( MyOverflowingUnsigned const &x ) { return x; }
 
 // This fixture replaces the check of rational's packing at the start of main.
 class rational_size_check
@@ -161,10 +287,11 @@ typedef ::boost::mpl::list<short, int, long, MyInt>  all_signed_test_types;
 
 // Without these explicit instantiations, MSVC++ 6.5/7.0 does not find
 // some friend operators in certain contexts.
-::boost::rational<short> dummy1;
-::boost::rational<int>   dummy2;
-::boost::rational<long>  dummy3;
-::boost::rational<MyInt> dummy4;
+::boost::rational<short>                 dummy1;
+::boost::rational<int>                   dummy2;
+::boost::rational<long>                  dummy3;
+::boost::rational<MyInt>                 dummy4;
+::boost::rational<MyOverflowingUnsigned> dummy5;
 
 // Should there be tests with unsigned integer types?
 
@@ -305,6 +432,22 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_comparison_test, T,
     BOOST_CHECK( static_cast<T>(-2) <= r9 );
     BOOST_CHECK( static_cast<T>( 1) >  r1 );
     BOOST_CHECK( static_cast<T>( 1) >= r3 );
+
+    // Extra tests with values close in continued-fraction notation
+    boost::rational<T> const  x1( static_cast<T>(9), static_cast<T>(4) );
+    boost::rational<T> const  x2( static_cast<T>(61), static_cast<T>(27) );
+    boost::rational<T> const  x3( static_cast<T>(52), static_cast<T>(23) );
+    boost::rational<T> const  x4( static_cast<T>(70), static_cast<T>(31) );
+
+    BOOST_CHECK( x1 < x2 );
+    BOOST_CHECK( !(x1 < x1) );
+    BOOST_CHECK( !(x2 < x2) );
+    BOOST_CHECK( !(x2 < x1) );
+    BOOST_CHECK( x2 < x3 );
+    BOOST_CHECK( x4 < x2 );
+    BOOST_CHECK( !(x3 < x4) );
+    BOOST_CHECK( r7 < x1 );     // not close; wanted negative v. positive
+    BOOST_CHECK( !(x2 < r7) );
 }
 
 // Increment & decrement tests
@@ -609,6 +752,32 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( dice_roll_test, T, all_signed_test_types )
     r *= static_cast<T>( 6 );
 
     BOOST_CHECK_EQUAL( r, rational_type(147, 10) );
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+// The bugs, patches, and requests checking suite
+BOOST_AUTO_TEST_SUITE( bug_patch_request_suite )
+
+// "rational operator< can overflow"
+BOOST_AUTO_TEST_CASE( bug_798357_test )
+{
+    // Choose values such that rational-number comparisons will overflow if
+    // the multiplication method (n1/d1 ? n2/d2 == n1*d2 ? n2*d1) is used.
+    // (And make sure that the large components are relatively prime, so they
+    // won't partially cancel to make smaller, more reasonable, values.)
+    unsigned const  n1 = UINT_MAX - 2u, d1 = UINT_MAX - 1u;
+    unsigned const  n2 = d1, d2 = UINT_MAX;
+    boost::rational<MyOverflowingUnsigned> const  r1( n1, d1 ), r2( n2, d2 );
+
+    BOOST_REQUIRE_EQUAL( boost::gcd(n1, d1), 1u );
+    BOOST_REQUIRE_EQUAL( boost::gcd(n2, d2), 1u );
+    BOOST_REQUIRE( n1 > UINT_MAX / d2 );
+    BOOST_REQUIRE( n2 > UINT_MAX / d1 );
+    BOOST_CHECK( r1 < r2 );
+    BOOST_CHECK( !(r1 < r1) );
+    BOOST_CHECK( !(r2 < r1) );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
