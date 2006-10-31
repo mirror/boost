@@ -23,6 +23,8 @@
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
 
+    #include <boost/config.hpp>
+    #include <boost/detail/workaround.hpp>
     #include <boost/mpl/at.hpp>
     #include <boost/mpl/vector.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
@@ -43,7 +45,7 @@
         proto::as_expr_ref(BOOST_PP_CAT(a,n))\
         /**/
 
-    #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/basic_expr.hpp>))
+    #define BOOST_PP_ITERATION_PARAMS_1 (4, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/basic_expr.hpp>, 1))
     #include BOOST_PP_ITERATE()
     #undef BOOST_PP_ITERATION_PARAMS_1
 
@@ -51,9 +53,22 @@
     #undef BOOST_PROTO_VOID
     #undef BOOST_PROTO_AS_OP
     }}
+
+    #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400))
+    namespace boost
+    {
+        template<typename T>
+        struct result_of;
+
+    #define BOOST_PP_ITERATION_PARAMS_1 (4, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/basic_expr.hpp>, 2))
+    #include BOOST_PP_ITERATE()
+    #undef BOOST_PP_ITERATION_PARAMS_1
+    }
+    #endif
+
     #endif // BOOST_PROTO_BASIC_EXPR_HPP_EAN_04_01_2005
 
-#elif BOOST_PP_ITERATION_DEPTH() == 1
+#elif BOOST_PP_ITERATION_DEPTH() == 1 && BOOST_PP_ITERATION_FLAGS() == 1
 
         template<typename Tag, typename Args>
         struct basic_expr<Tag, Args, BOOST_PP_ITERATION()>
@@ -127,6 +142,22 @@
             basic_expr<function_tag, BOOST_PP_CAT(mpl::vector, BOOST_PP_INC(N))<ref<basic_expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > that = {{*this} BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_AS_OP, _)};
             return that;
         }
+
+    #undef N
+
+#elif BOOST_PP_ITERATION_DEPTH() == 1 && BOOST_PP_ITERATION_FLAGS() == 2
+
+    #define N BOOST_PP_ITERATION()
+
+        template<typename Tag, typename Args, long M BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
+        struct result_of<proto::basic_expr<Tag, Args, M>(BOOST_PP_ENUM_PARAMS(N, A))>
+          : proto::basic_expr<Tag, Args, M>::BOOST_NESTED_TEMPLATE result<void(BOOST_PP_ENUM_PARAMS(N, A))>
+        {};
+
+        template<typename Tag, typename Args, long M BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
+        struct result_of<proto::basic_expr<Tag, Args, M> const(BOOST_PP_ENUM_PARAMS(N, A))>
+          : proto::basic_expr<Tag, Args, M>::BOOST_NESTED_TEMPLATE result<void(BOOST_PP_ENUM_PARAMS(N, A))>
+        {};
 
     #undef N
 

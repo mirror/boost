@@ -21,6 +21,7 @@
     #include <boost/preprocessor/repetition/enum_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/preprocessor/repetition/enum_binary_params.hpp>
+    #include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
 
     #include <boost/detail/workaround.hpp>
     #include <boost/ref.hpp>
@@ -36,6 +37,9 @@
         namespace detail
         {
             template<typename Tag, long Arity>
+            struct msvc_make_expr_impl_result;
+
+            template<typename Tag, long Arity>
             struct make_expr_impl;
 
         #define BOOST_PROTO_AS_EXPR(z, n, data) proto::as_expr(BOOST_PP_CAT(a, n))
@@ -43,6 +47,12 @@
         #include BOOST_PP_ITERATE()
         #undef BOOST_PP_ITERATION_PARAMS_1
         #undef BOOST_PROTO_AS_EXPR
+        }
+
+        namespace meta
+        {
+            template<typename Tag BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(BOOST_PROTO_MAX_ARITY, typename A, = void BOOST_PP_INTERCEPT), typename Dummy = void>
+            struct make_expr;
         }
 
     #define BOOST_PP_ITERATION_PARAMS_1 (4, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/make_expr.hpp>, 2))
@@ -70,15 +80,6 @@
 
     }}
 
-    #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400))
-
-        // Work around annoying boost::result_of with MSVC
-        #define BOOST_PP_ITERATION_PARAMS_1 (4, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/make_expr.hpp>, 3))
-        #include BOOST_PP_ITERATE()
-        #undef BOOST_PP_ITERATION_PARAMS_1
-
-    #endif
-
     #endif // BOOST_PROTO_MAKE_EXPR_HPP_EAN_04_01_2005
 
 #elif 1 == BOOST_PP_ITERATION_FLAGS()
@@ -86,7 +87,7 @@
     #define N BOOST_PP_ITERATION()
 
             template<typename Tag>
-            struct make_expr_impl<Tag, N>
+            struct msvc_make_expr_impl_result<Tag, N>
             {
                 template<BOOST_PP_ENUM_PARAMS(N, typename A)>
                 struct result_
@@ -103,13 +104,20 @@
                 struct result<This(BOOST_PP_ENUM_PARAMS(N, A))>
                   : result_<BOOST_PP_ENUM_BINARY_PARAMS(N, typename meta::value_type<A, >::type BOOST_PP_INTERCEPT)>
                 {};
+            };
 
+            template<typename Tag>
+            struct make_expr_impl<Tag, N>
+              : msvc_make_expr_impl_result<Tag, N>
+            {
                 template<BOOST_PP_ENUM_PARAMS(N, typename A)>
-                typename result_<BOOST_PP_ENUM_PARAMS(N, A)>::type
+                typename msvc_make_expr_impl_result<Tag, N>
+                    ::BOOST_NESTED_TEMPLATE result_<BOOST_PP_ENUM_PARAMS(N, A)>::type
                 operator ()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const &a)) const
                 {
-                    typename result_<BOOST_PP_ENUM_PARAMS(N, A)>::type that =
-                        {BOOST_PP_ENUM(N, BOOST_PROTO_AS_EXPR, _)};
+                    typename msvc_make_expr_impl_result<Tag, N>
+                        ::BOOST_NESTED_TEMPLATE result_<BOOST_PP_ENUM_PARAMS(N, A)>::type that =
+                            {BOOST_PP_ENUM(N, BOOST_PROTO_AS_EXPR, _)};
                     return that;
                 }
             };
@@ -120,25 +128,19 @@
 
     #define N BOOST_PP_ITERATION()
 
+    namespace meta
+    {
+        template<typename Tag BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
+        struct make_expr<Tag BOOST_PP_ENUM_TRAILING_PARAMS(N, A)>
+          : detail::make_expr_impl<Tag, N>::BOOST_NESTED_TEMPLATE result_<BOOST_PP_ENUM_PARAMS(N, A)>
+        {};
+    }
+
     template<typename Tag BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
     typename detail::make_expr_impl<Tag, N>::BOOST_NESTED_TEMPLATE result_<BOOST_PP_ENUM_PARAMS(N, A)>::type
     make_expr(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const &a))
     {
         return detail::make_expr_impl<Tag, N>()(BOOST_PP_ENUM_PARAMS(N, a));
-    }
-
-    #undef N
-
-#elif 3 == BOOST_PP_ITERATION_FLAGS()
-
-    #define N BOOST_PP_ITERATION()
-    
-    namespace boost
-    {
-        template<typename Tag, long Arity BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-        struct result_of<proto::detail::make_expr_impl<Tag, Arity>(BOOST_PP_ENUM_PARAMS(N, A))>
-          : proto::detail::make_expr_impl<Tag, Arity>::template result_<BOOST_PP_ENUM_BINARY_PARAMS(N, typename proto::meta::value_type<A, >::type BOOST_PP_INTERCEPT)>
-        {};
     }
 
     #undef N

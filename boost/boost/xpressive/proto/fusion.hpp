@@ -235,7 +235,7 @@ namespace boost { namespace fusion
         };
 
         template<typename Tag>
-        struct as_element
+        struct msvc_as_element_result
         {
             template<typename Expr>
             struct result
@@ -245,11 +245,19 @@ namespace boost { namespace fusion
                   , fusion::single_view<typename Expr::expr_type const &>
                 >
             {};
+        };
 
+        template<typename Tag>
+        struct as_element
+          : msvc_as_element_result<Tag>
+        {
             template<typename Expr>
-            typename result<Expr>::type operator()(Expr &expr) const
+            typename msvc_as_element_result<Tag>
+                ::BOOST_NESTED_TEMPLATE result<Expr>::type
+            operator()(Expr &expr) const
             {
-                return typename result<Expr>::type(expr.cast());
+                return typename msvc_as_element_result<Tag>
+                    ::BOOST_NESTED_TEMPLATE result<Expr>::type(expr.cast());
             }
         };
 

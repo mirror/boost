@@ -16,8 +16,6 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/call_traits.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/type_traits/remove_const.hpp>
-#include <boost/type_traits/remove_reference.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/tags.hpp>
 #include <boost/xpressive/proto/ref.hpp>

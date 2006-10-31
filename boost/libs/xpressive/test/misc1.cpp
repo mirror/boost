@@ -19,7 +19,11 @@ void test1()
     sregex a = _;
     sregex b = _;
     sregex c = a >> b;
+    c = 'a' >> b;
+    c = a >> 'b';
     c = a | b;
+    c = 'a' | b;
+    c = a | 'b';
     c = !a;
     c = *a;
     c = +a;
@@ -74,6 +78,7 @@ void test3()
         "Channel=10\r\n"
         "\r\n";
 
+    // BUGBUG TODO FIXME!!!
     //mark_tag name(1), value(2);
     mark_tag name = {{1}}, value = {{2}};
 
