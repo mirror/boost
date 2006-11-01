@@ -14,6 +14,7 @@
 #include <boost/fusion/sequence/view/transform_view/transform_view.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
+#include <boost/fusion/sequence/intrinsic/value_at.hpp>
 #include <boost/fusion/iterator/next.hpp>
 #include <boost/fusion/iterator/prior.hpp>
 #include <boost/fusion/iterator/advance.hpp>
@@ -21,6 +22,8 @@
 #include <boost/fusion/iterator/distance.hpp>
 
 #include <boost/mpl/range_c.hpp>
+#include <boost/mpl/assert.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 struct square
 {
@@ -84,6 +87,7 @@ main()
 
         BOOST_TEST((*boost::fusion::advance_c<3>(boost::fusion::begin(xform)) == 64));
         BOOST_TEST((boost::fusion::at_c<2>(xform) == 49));
+        BOOST_MPL_ASSERT((boost::is_same<boost::fusion::result_of::value_at_c<xform_type, 0>::type, int>));
     }
     
     {
@@ -98,6 +102,7 @@ main()
         std::cout << xform << std::endl;
         BOOST_TEST((xform == make_vector(15, 17, 19, 21)));
         BOOST_TEST((boost::fusion::at_c<2>(xform) == 19));
+        BOOST_MPL_ASSERT((boost::is_same<boost::fusion::result_of::value_at_c<xform_type, 0>::type, int>));
     }
 
     return boost::report_errors();
