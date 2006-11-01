@@ -17,6 +17,7 @@
 #include <boost/fusion/sequence/view/transform_view/detail/begin_impl.hpp>
 #include <boost/fusion/sequence/view/transform_view/detail/end_impl.hpp>
 #include <boost/fusion/sequence/view/transform_view/detail/at_impl.hpp>
+#include <boost/fusion/sequence/view/transform_view/detail/value_at_impl.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
