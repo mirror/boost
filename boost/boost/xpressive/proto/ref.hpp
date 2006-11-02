@@ -25,7 +25,6 @@ namespace boost { namespace proto
         typedef typename Expr::tag_type tag_type;
         typedef typename Expr::args_type args_type;
         typedef typename Expr::arity arity;
-        //typedef proto_ref_tag tag;
         typedef proto_ref_tag fusion_tag;
 
         BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_ARG, _)
@@ -43,21 +42,15 @@ namespace boost { namespace proto
     namespace meta
     {
         template<typename T>
-        struct unref
+        struct unref<T, false>
         {
             typedef T type;
         };
 
         template<typename T>
-        struct unref<ref<T> >
+        struct unref<T, true>
         {
-            typedef T type;
-        };
-
-        template<typename T>
-        struct unref<ref<T> const>
-        {
-            typedef T type;
+            typedef typename T::expr_type type;
         };
     }
 
@@ -81,6 +74,12 @@ namespace boost { namespace proto
 
             template<typename T>
             T const &operator ()(ref<T> const &t) const
+            {
+                return t.cast();
+            }
+
+            template<typename T>
+            typename T::expr_type const &operator ()(extends_private_::extends_tag<T> const &t) const
             {
                 return t.cast();
             }

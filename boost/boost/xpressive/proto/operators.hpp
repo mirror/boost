@@ -19,34 +19,34 @@
 
 namespace boost { namespace proto
 {
-#define BOOST_PROTO_UNARY_OP(expr, tag)\
+#define BOOST_PROTO_UNARY_OP(op, tag)\
     template<typename Tag, typename Args, long Arity>\
     inline basic_expr<tag, mpl::vector1<ref<basic_expr<Tag, Args, Arity> > > > const\
-    operator expr(basic_expr<Tag, Args, Arity> const &arg)\
+    operator op(basic_expr<Tag, Args, Arity> const &arg)\
     {\
         basic_expr<tag, mpl::vector1<ref<basic_expr<Tag, Args, Arity> > > > that = {{arg}};\
         return that;\
     }\
     /**/
 
-#define BOOST_PROTO_BINARY_OP(expr, tag)\
+#define BOOST_PROTO_BINARY_OP(op, tag)\
     template<typename LTag, typename LArgs, long LArity, typename Right>\
     inline basic_expr<tag, mpl::vector2<ref<basic_expr<LTag, LArgs, LArity> >, typename meta::terminal<Right>::type> > const\
-    operator expr(basic_expr<LTag, LArgs, LArity> const &left, Right const &right)\
+    operator op(basic_expr<LTag, LArgs, LArity> const &left, Right const &right)\
     {\
         basic_expr<tag, mpl::vector2<ref<basic_expr<LTag, LArgs, LArity> >, typename meta::terminal<Right>::type> > that = {{left}, proto::make_terminal(right)};\
         return that;\
     }\
     template<typename Left, typename RTag, typename RArgs, long RArity>\
     inline basic_expr<tag, mpl::vector2<typename meta::terminal<Left>::type, ref<basic_expr<RTag, RArgs, RArity> > > > const\
-    operator expr(Left const &left, basic_expr<RTag, RArgs, RArity> const &right)\
+    operator op(Left const &left, basic_expr<RTag, RArgs, RArity> const &right)\
     {\
         basic_expr<tag, mpl::vector2<typename meta::terminal<Left>::type, ref<basic_expr<RTag, RArgs, RArity> > > > that = {proto::make_terminal(left), {right}};\
         return that;\
     }\
     template<typename LTag, typename LArgs, long LArity, typename RTag, typename RArgs, long RArity>\
     inline basic_expr<tag, mpl::vector2<ref<basic_expr<LTag, LArgs, LArity> >, ref<basic_expr<RTag, RArgs, RArity> > > > const\
-    operator expr(basic_expr<LTag, LArgs, LArity> const &left, basic_expr<RTag, RArgs, RArity> const &right)\
+    operator op(basic_expr<LTag, LArgs, LArity> const &left, basic_expr<RTag, RArgs, RArity> const &right)\
     {\
         basic_expr<tag, mpl::vector2<ref<basic_expr<LTag, LArgs, LArity> >, ref<basic_expr<RTag, RArgs, RArity> > > > that = {{left}, {right}};\
         return that;\

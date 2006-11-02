@@ -14,6 +14,7 @@
 #include <boost/xpressive/proto/tags.hpp>
 #include <boost/xpressive/proto/traits.hpp>
 #include <boost/xpressive/proto/compile.hpp>
+#include <boost/xpressive/proto/extends.hpp>
 #include <boost/xpressive/proto/operators.hpp>
 #include <boost/xpressive/proto/basic_expr.hpp>
 

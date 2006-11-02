@@ -58,7 +58,7 @@ namespace boost { namespace xpressive { namespace detail
     {};
 
     template<typename Right>
-    struct is_pure_impl<proto::assign_tag, mark_tag, Right>
+    struct is_pure_impl<proto::assign_tag, basic_mark_tag, Right>
       : mpl::false_
     {};
 

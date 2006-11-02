@@ -125,12 +125,12 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Xpr>
     struct as_xpr_type<Xpr, true> // is_expr == true
     {
-        typedef Xpr type;
+        typedef typename Xpr::expr_type type;
 
         template<typename Xpr2>
-        static Xpr2 const &call(Xpr2 const &xpr)
+        static type const &call(Xpr2 const &xpr)
         {
-            return xpr;
+            return xpr.cast();
         }
     };
 

@@ -270,7 +270,7 @@ struct no_next
 ///////////////////////////////////////////////////////////////////////////////
 // get_mark_number
 //
-inline int get_mark_number(mark_tag const &mark)
+inline int get_mark_number(basic_mark_tag const &mark)
 {
     return proto::arg(mark).mark_number_;
 }

@@ -78,9 +78,7 @@ void test3()
         "Channel=10\r\n"
         "\r\n";
 
-    // BUGBUG TODO FIXME!!!
-    //mark_tag name(1), value(2);
-    mark_tag name = {{1}}, value = {{2}};
+    mark_tag name(1), value(2);
 
     sregex name_value_pair_ =
         (name= +alnum) >> *_s >> "=" >> *_s >>

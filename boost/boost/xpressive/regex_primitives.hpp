@@ -27,9 +27,19 @@
 namespace boost { namespace xpressive { namespace detail
 {
 
-typedef assert_word_placeholder<word_boundary<true> > assert_word_boundary;
-typedef assert_word_placeholder<word_begin> assert_word_begin;
-typedef assert_word_placeholder<word_end> assert_word_end;
+    typedef assert_word_placeholder<word_boundary<true> > assert_word_boundary;
+    typedef assert_word_placeholder<word_begin> assert_word_begin;
+    typedef assert_word_placeholder<word_end> assert_word_end;
+
+    struct mark_tag_extension
+      : proto::extends<basic_mark_tag>
+    {
+        mark_tag_extension(int mark_nbr)
+        {
+            basic_mark_tag that = {{mark_nbr}};
+            this->assign(that);
+        }
+    };
 
 /*
 ///////////////////////////////////////////////////////////////////////////////
@@ -346,7 +356,7 @@ detail::set_initializer_type const set = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Sub-match placeholder, like $& in Perl
-detail::mark_tag const s0 = {{0}};
+mark_tag::type const s0 = {{0}};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Sub-match placeholder, like $1 in perl.
@@ -360,15 +370,15 @@ detail::mark_tag const s0 = {{0}};
 /// After a successful regex_match() or regex_search(), the sub-match placeholders
 /// can be used to index into the match_results\<\> object to retrieve the Nth
 /// sub-match.
-detail::mark_tag const s1 = {{1}};
-detail::mark_tag const s2 = {{2}};
-detail::mark_tag const s3 = {{3}};
-detail::mark_tag const s4 = {{4}};
-detail::mark_tag const s5 = {{5}};
-detail::mark_tag const s6 = {{6}};
-detail::mark_tag const s7 = {{7}};
-detail::mark_tag const s8 = {{8}};
-detail::mark_tag const s9 = {{9}};
+mark_tag::type const s1 = {{1}};
+mark_tag::type const s2 = {{2}};
+mark_tag::type const s3 = {{3}};
+mark_tag::type const s4 = {{4}};
+mark_tag::type const s5 = {{5}};
+mark_tag::type const s6 = {{6}};
+mark_tag::type const s7 = {{7}};
+mark_tag::type const s8 = {{8}};
+mark_tag::type const s9 = {{9}};
 
 // NOTE: For the purpose of xpressive's documentation, make icase() look like an
 // ordinary function. In reality, it is a function object defined in detail/icase.hpp

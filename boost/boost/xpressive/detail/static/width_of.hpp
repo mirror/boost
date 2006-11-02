@@ -76,7 +76,7 @@ namespace boost { namespace xpressive { namespace detail
     {};
 
     template<typename Right>
-    struct width_of_impl<proto::assign_tag, mark_tag, Right>
+    struct width_of_impl<proto::assign_tag, basic_mark_tag, Right>
       : width_of<Right>
     {};
 

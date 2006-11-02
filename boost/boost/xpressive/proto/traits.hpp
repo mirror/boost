@@ -57,10 +57,26 @@ namespace boost { namespace proto
           : is_ref<T>
         {};
 
+        // is_extends
+        template<typename T>
+        struct is_extends
+          : mpl::false_
+        {};
+
+        template<typename T>
+        struct is_extends<extends_private_::extends_tag<T> >
+          : mpl::true_
+        {};
+
+        template<typename T>
+        struct is_extends<T const>
+          : is_extends<T>
+        {};
+
         // is_expr
         template<typename T>
         struct is_expr
-          : mpl::or_<is_basic_expr<T>, is_ref<T> >
+          : mpl::or_<is_basic_expr<T>, is_ref<T>, is_extends<T> >
         {};
 
         // as_expr
@@ -72,52 +88,43 @@ namespace boost { namespace proto
 
         template<typename T>
         struct as_expr<T, true>
-        {
-            typedef T type;
-        };
+          : mpl::if_<is_extends<T>, typename T::expr_type, T>
+        {};
 
         // as_expr_ref
         template<typename T>
-        struct as_expr_ref<T, false, false>
+        struct as_expr_ref<T, false>
         {
             typedef basic_expr<terminal_tag, mpl::vector1<typename call_traits<T>::value_type> > type;
         };
 
         template<typename T>
-        struct as_expr_ref<T, true, false>
-        {
-            typedef ref<typename remove_cv<T>::type> type;
-        };
-
-        template<typename T>
-        struct as_expr_ref<T, false, true>
-        {
-            BOOST_STATIC_ASSERT(!is_ref<typename T::expr_type>::value);
-            typedef T type;
-        };
+        struct as_expr_ref<T, true>
+          : mpl::if_<is_ref<T>, T, ref<typename T::expr_type> >
+        {};
 
         // arg
         template<typename Expr>
         struct arg
         {
-            BOOST_STATIC_ASSERT(1 == Expr::arity::value);
-            typedef typename unref<typename Expr::arg0_type>::type type;
+            BOOST_STATIC_ASSERT(1 == Expr::expr_type::arity::value);
+            typedef typename unref<typename Expr::expr_type::arg0_type>::type type;
         };
 
         // left
         template<typename Expr>
         struct left
         {
-            BOOST_STATIC_ASSERT(2 == Expr::arity::value);
-            typedef typename unref<typename Expr::arg0_type>::type type;
+            BOOST_STATIC_ASSERT(2 == Expr::expr_type::arity::value);
+            typedef typename unref<typename Expr::expr_type::arg0_type>::type type;
         };
 
         // right
         template<typename Expr>
         struct right
         {
-            BOOST_STATIC_ASSERT(2 == Expr::arity::value);
-            typedef typename unref<typename Expr::arg1_type>::type type;
+            BOOST_STATIC_ASSERT(2 == Expr::expr_type::arity::value);
+            typedef typename unref<typename Expr::expr_type::arg1_type>::type type;
         };
 
         // terminal
@@ -146,7 +153,7 @@ namespace boost { namespace proto
         template<typename Expr>
         struct tag
         {
-            typedef typename Expr::tag_type type;
+            typedef typename Expr::expr_type::tag_type type;
         };
     }
 
@@ -180,6 +187,12 @@ namespace boost { namespace proto
             {
                 return t;
             }
+            
+            template<typename T>
+            typename T::expr_type const &operator()(extends_private_::extends_tag<T> const &t) const
+            {
+                return t.cast();
+            }
         };
 
         struct as_expr_ref
@@ -202,6 +215,13 @@ namespace boost { namespace proto
             template<typename T>
             ref<T> const &operator()(ref<T> const &t) const
             {
+                return t;
+            }
+
+            template<typename T>
+            ref<typename T::expr_type> operator()(extends_private_::extends_tag<T> const &t) const
+            {
+                ref<typename T::expr_type> that = {t.cast()};
                 return t;
             }
         };

@@ -128,6 +128,14 @@ namespace boost { namespace proto
     struct proto_ref_tag;
     struct proto_ref_iterator_tag;
 
+    namespace extends_private_
+    {
+        template<typename T>
+        struct extends_tag;
+    }
+
+    using extends_private_::extends_tag;
+
     namespace meta
     {
         template<typename T>
@@ -143,12 +151,15 @@ namespace boost { namespace proto
         struct is_ref;
 
         template<typename T>
+        struct is_extends;
+
+        template<typename T>
         struct is_expr;
 
         template<typename T, bool IsExpr = is_expr<T>::value>
         struct as_expr;
 
-        template<typename T, bool IsBasicExpr = is_basic_expr<T>::value, bool IsRef = is_ref<T>::value>
+        template<typename T, bool IsExpr = is_expr<T>::value>
         struct as_expr_ref;
 
         template<typename Expr, typename State, typename Visitor, typename DomainTag>
@@ -175,7 +186,7 @@ namespace boost { namespace proto
         template<typename Expr>
         struct tag;
 
-        template<typename T>
+        template<typename T, bool IsExpr = is_expr<T>::value>
         struct unref;
     }
 

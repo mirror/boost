@@ -325,7 +325,7 @@ namespace boost { namespace xpressive { namespace detail
     static_xpression<Matcher, Next> const
     make_static(Matcher const &matcher, Next const &next);
 
-    int get_mark_number(mark_tag const &);
+    int get_mark_number(basic_mark_tag const &);
 
     template<typename Xpr, typename BidiIter>
     void static_compile(Xpr const &xpr, shared_ptr<regex_impl<BidiIter> > const &impl);
