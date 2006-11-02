@@ -14,7 +14,8 @@
  */
 
 // Revision History
-// 31 Oct 06  Add testing for operator<() overflow (Daryle Walker)
+// 02 Oct 06  Add testing for operator<(int_type) w/ unsigneds (Daryle Walker)
+// 31 Oct 06  Add testing for operator<(rational) overflow (Daryle Walker)
 // 18 Oct 06  Various fixes for old compilers (Joaquín M López Muñoz)
 // 27 Dec 05  Add testing for Boolean conversion operator (Daryle Walker)
 // 24 Dec 05  Change code to use Boost.Test (Daryle Walker)
@@ -778,6 +779,17 @@ BOOST_AUTO_TEST_CASE( bug_798357_test )
     BOOST_CHECK( r1 < r2 );
     BOOST_CHECK( !(r1 < r1) );
     BOOST_CHECK( !(r2 < r1) );
+}
+
+// "rational::operator< fails for unsigned value types"
+BOOST_AUTO_TEST_CASE( patch_1434821_test )
+{
+    // If a zero-rational v. positive-integer comparison involves negation, then
+    // it may fail with unsigned types, which wrap around (for built-ins) or
+    // throw/be-undefined (for user-defined types).
+    boost::rational<unsigned> const  r( 0u );
+
+    BOOST_CHECK( r < 1u );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
