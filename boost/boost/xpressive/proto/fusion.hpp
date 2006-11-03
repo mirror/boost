@@ -38,26 +38,6 @@ namespace boost { namespace proto
 {
     namespace detail
     {
-        template<typename Expr, long N>
-        struct arg_impl;
-
-    #define BOOST_PROTO_DEFINE_ARG_IMPL(z, N, data)\
-        template<typename Expr>\
-        struct arg_impl<Expr, N>\
-        {\
-            typedef typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, N), _type) type;\
-            \
-            static type const &call(Expr const &expr)\
-            {\
-                return expr.cast().BOOST_PP_CAT(arg, N);\
-            }\
-        };\
-        /**/
-
-        BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_DEFINE_ARG_IMPL, _)
-
-    #undef BOOST_PROTO_DEFINE_ARG_IMPL
-
         template<typename Expr, int Pos>
         struct ref_iterator
           : fusion::iterator_base<ref_iterator<Expr, Pos> >
@@ -73,13 +53,6 @@ namespace boost { namespace proto
 
             Expr expr_;
         };
-    }
-
-    template<long N, typename Expr>
-    typename detail::arg_impl<Expr, N>::type const &
-    arg_c(Expr const &expr)
-    {
-        return detail::arg_impl<Expr, N>::call(expr);
     }
 
 }}
@@ -117,7 +90,7 @@ namespace boost { namespace fusion
         {
             template<typename Iterator>
             struct apply
-              : mpl::at<typename Iterator::expr_type::args_type, typename Iterator::index>
+              : proto::meta::arg<typename Iterator::expr_type, typename Iterator::index>
             {};
         };
 
@@ -130,11 +103,14 @@ namespace boost { namespace fusion
             template<typename Iterator>
             struct apply
             {
-                typedef typename mpl::at<typename Iterator::expr_type::args_type, typename Iterator::index>::type const &type;
+                typedef typename proto::meta::arg<
+                    typename Iterator::expr_type
+                  , typename Iterator::index
+                >::type const &type;
 
                 static type call(Iterator const &iter)
                 {
-                    return proto::arg_c<Iterator::index::value>(iter.expr_);
+                    return proto::arg<typename Iterator::index>(iter.expr_);
                 }
             };
         };
@@ -240,8 +216,10 @@ namespace boost { namespace fusion
             struct result
               : mpl::if_<
                     is_same<Tag, typename Expr::tag_type>
-                  , typename Expr::expr_type const &
-                  , fusion::single_view<typename Expr::expr_type const &>
+                  //, typename Expr::expr_type const &
+                  //, fusion::single_view<typename Expr::expr_type const &>
+                  , Expr const &
+                  , fusion::single_view<Expr const &>
                 >
             {};
         };
@@ -256,7 +234,8 @@ namespace boost { namespace fusion
             operator()(Expr &expr) const
             {
                 return typename msvc_as_element_result<Tag>
-                    ::BOOST_NESTED_TEMPLATE result<Expr>::type(expr.cast());
+                    //::BOOST_NESTED_TEMPLATE result<Expr>::type(expr.cast());
+                    ::BOOST_NESTED_TEMPLATE result<Expr>::type(expr);
             }
         };
 

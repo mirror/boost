@@ -13,6 +13,7 @@
 #include <boost/mpl/size.hpp>
 #include <boost/type_traits/remove_cv.hpp>
 #include <boost/type_traits/remove_reference.hpp>
+#include <boost/mpl/long.hpp>
 #include <boost/mpl/vector/vector10.hpp>
 
 #ifndef BOOST_PROTO_MAX_ARITY
@@ -182,8 +183,11 @@ namespace boost { namespace proto
         template<typename Expr>
         struct terminal;
 
-        template<typename Expr>
+        template<typename Expr, typename N = mpl::long_<0> >
         struct arg;
+
+        template<typename Expr, long N = 0>
+        struct arg_c;
 
         template<typename Expr>
         struct left;
@@ -206,6 +210,8 @@ namespace boost { namespace proto
         template<typename T> struct logical_not;
         template<typename T> struct pre_inc;
         template<typename T> struct pre_dec;
+        template<typename T> struct post_inc;
+        template<typename T> struct post_dec;
 
         template<typename T, typename U> struct left_shift;
         template<typename T, typename U> struct right_shift;
@@ -245,12 +251,17 @@ namespace boost { namespace proto
     {
         struct compile;
         struct make_terminal;
-        struct arg;
         struct left;
         struct right;
         struct as_expr;
         struct as_expr_ref;
         struct unref;
+
+        template<typename N = mpl::long_<0> >
+        struct arg;
+        
+        template<long N = 0>
+        struct arg_c;
     }
 
 }} // namespace boost::proto

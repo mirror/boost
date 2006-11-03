@@ -19,6 +19,7 @@
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/tags.hpp>
 #include <boost/xpressive/proto/ref.hpp>
+#include <boost/preprocessor/repetition/repeat.hpp>
 
 namespace boost { namespace proto
 {
@@ -103,20 +104,35 @@ namespace boost { namespace proto
           : mpl::if_<is_ref<T>, T, ref<typename T::expr_type> >
         {};
 
-        // arg
-        template<typename Expr>
+        // arg, arg_c
+    #define BOOST_PROTO_DEFINE_ARG_C(z, N, data)\
+        template<typename Expr>\
+        struct arg_c<Expr, N>\
+        {\
+            typedef typename unref<typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, N), _type)>::type type;\
+            \
+            static type const &call(Expr const &expr)\
+            {\
+                return proto::unref(expr.cast().BOOST_PP_CAT(arg, N));\
+            }\
+        };\
+        /**/
+
+        BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_DEFINE_ARG_C, _)
+
+    #undef BOOST_PROTO_DEFINE_ARG_C
+
+        template<typename Expr, typename N>
         struct arg
-        {
-            BOOST_STATIC_ASSERT(1 == Expr::expr_type::arity::value);
-            typedef typename unref<typename Expr::expr_type::arg0_type>::type type;
-        };
+          : arg_c<Expr, N::value>
+        {};
 
         // left
         template<typename Expr>
         struct left
         {
             BOOST_STATIC_ASSERT(2 == Expr::expr_type::arity::value);
-            typedef typename unref<typename Expr::expr_type::arg0_type>::type type;
+            typedef typename unref<typename Expr::arg0_type>::type type;
         };
 
         // right
@@ -124,7 +140,7 @@ namespace boost { namespace proto
         struct right
         {
             BOOST_STATIC_ASSERT(2 == Expr::expr_type::arity::value);
-            typedef typename unref<typename Expr::expr_type::arg1_type>::type type;
+            typedef typename unref<typename Expr::arg1_type>::type type;
         };
 
         // terminal
@@ -173,6 +189,8 @@ namespace boost { namespace proto
         BOOST_PROTO_UNARY_GENERATOR(logical_not)
         BOOST_PROTO_UNARY_GENERATOR(pre_inc)
         BOOST_PROTO_UNARY_GENERATOR(pre_dec)
+        BOOST_PROTO_UNARY_GENERATOR(post_inc)
+        BOOST_PROTO_UNARY_GENERATOR(post_dec)
 
         BOOST_PROTO_BINARY_GENERATOR(left_shift)
         BOOST_PROTO_BINARY_GENERATOR(right_shift)
@@ -213,7 +231,7 @@ namespace boost { namespace proto
         template<typename Expr>
         struct tag
         {
-            typedef typename Expr::expr_type::tag_type type;
+            typedef typename Expr::tag_type type;
         };
     }
 
@@ -304,6 +322,25 @@ namespace boost { namespace proto
             }
         };
 
+        template<long N>
+        struct arg_c
+        {
+            template<typename Sig>
+            struct result;
+
+            template<typename This, typename Expr>
+            struct result<This(Expr)>
+              : meta::arg_c<typename meta::value_type<Expr>::type, N>
+            {};
+
+            template<typename Expr>
+            typename meta::arg_c<Expr, N>::type const &operator()(Expr const &expr) const
+            {
+                return meta::arg_c<Expr, N>::call(expr);
+            }
+        };
+
+        template<typename N>
         struct arg
         {
             template<typename Sig>
@@ -311,13 +348,13 @@ namespace boost { namespace proto
 
             template<typename This, typename Expr>
             struct result<This(Expr)>
-              : meta::arg<typename meta::value_type<Expr>::type>
+              : meta::arg<typename meta::value_type<Expr>::type, N>
             {};
 
             template<typename Expr>
-            typename meta::arg<Expr>::type const &operator()(Expr const &expr) const
+            typename meta::arg<Expr, N>::type const &operator()(Expr const &expr) const
             {
-                return proto::unref(expr.cast().arg0);
+                return meta::arg<Expr, N>::call(expr);
             }
         };
 
@@ -360,9 +397,28 @@ namespace boost { namespace proto
     op::as_expr const as_expr = {};
     op::as_expr_ref const as_expr_ref = {};
     op::make_terminal const make_terminal = {};
-    op::arg const arg = {};
     op::left const left = {};
     op::right const right = {};
+
+    template<typename Expr>
+    typename meta::unref<typename Expr::expr_type::arg0_type>::type const &
+    arg(Expr const &expr)
+    {
+        return proto::unref(expr.cast().arg0);
+    };
+
+    template<typename N, typename Expr>
+    typename meta::arg<Expr, N>::type const &arg(Expr const &expr)
+    {
+        return meta::arg<Expr, N>::call(expr);
+    };
+
+    template<long N, typename Expr>
+    typename meta::arg_c<Expr, N>::type const &arg_c(Expr const &expr)
+    {
+        return meta::arg_c<Expr, N>::call(expr);
+    };
+
 }}
 
 #endif
