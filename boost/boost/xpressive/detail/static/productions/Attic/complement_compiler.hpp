@@ -201,9 +201,8 @@ namespace boost { namespace xpressive { namespace detail
     {
         template<typename Expr, typename Visitor>
         struct apply
-          : proto::meta::binary_expr<
-                proto::right_shift_tag
-              , typename proto::meta::unary_expr<lookahead_tag<false>, Expr>::type
+          : proto::meta::right_shift<
+                typename proto::meta::unary_expr<lookahead_tag<false>, Expr>::type
               , proto::meta::terminal<any_matcher>::type
             >
         {};

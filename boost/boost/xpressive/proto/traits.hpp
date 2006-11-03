@@ -149,6 +149,66 @@ namespace boost { namespace proto
             typedef basic_expr<Tag, mpl::vector2<T, U> > type;
         };
 
+    #define BOOST_PROTO_UNARY_GENERATOR(Name)\
+        template<typename T>\
+        struct Name\
+        {\
+            typedef basic_expr<BOOST_PP_CAT(Name, _tag), mpl::vector1<T> > type;\
+        };\
+        /**/
+
+    #define BOOST_PROTO_BINARY_GENERATOR(Name)\
+        template<typename T, typename U>\
+        struct Name\
+        {\
+            typedef basic_expr<BOOST_PP_CAT(Name, _tag), mpl::vector2<T, U> > type;\
+        };\
+        /**/
+
+        BOOST_PROTO_UNARY_GENERATOR(unary_plus)
+        BOOST_PROTO_UNARY_GENERATOR(unary_minus)
+        BOOST_PROTO_UNARY_GENERATOR(unary_star)
+        BOOST_PROTO_UNARY_GENERATOR(complement)
+        BOOST_PROTO_UNARY_GENERATOR(address_of)
+        BOOST_PROTO_UNARY_GENERATOR(logical_not)
+        BOOST_PROTO_UNARY_GENERATOR(pre_inc)
+        BOOST_PROTO_UNARY_GENERATOR(pre_dec)
+
+        BOOST_PROTO_BINARY_GENERATOR(left_shift)
+        BOOST_PROTO_BINARY_GENERATOR(right_shift)
+        BOOST_PROTO_BINARY_GENERATOR(multiply)
+        BOOST_PROTO_BINARY_GENERATOR(divide)
+        BOOST_PROTO_BINARY_GENERATOR(modulus)
+        BOOST_PROTO_BINARY_GENERATOR(add)
+        BOOST_PROTO_BINARY_GENERATOR(subtract)
+        BOOST_PROTO_BINARY_GENERATOR(less)
+        BOOST_PROTO_BINARY_GENERATOR(greater)
+        BOOST_PROTO_BINARY_GENERATOR(less_equal)
+        BOOST_PROTO_BINARY_GENERATOR(greater_equal)
+        BOOST_PROTO_BINARY_GENERATOR(equal)
+        BOOST_PROTO_BINARY_GENERATOR(not_equal)
+        BOOST_PROTO_BINARY_GENERATOR(logical_or)
+        BOOST_PROTO_BINARY_GENERATOR(logical_and)
+        BOOST_PROTO_BINARY_GENERATOR(bitwise_and)
+        BOOST_PROTO_BINARY_GENERATOR(bitwise_or)
+        BOOST_PROTO_BINARY_GENERATOR(bitwise_xor)
+        BOOST_PROTO_BINARY_GENERATOR(comma)
+        BOOST_PROTO_BINARY_GENERATOR(mem_ptr)
+
+        BOOST_PROTO_BINARY_GENERATOR(left_shift_assign)
+        BOOST_PROTO_BINARY_GENERATOR(right_shift_assign)
+        BOOST_PROTO_BINARY_GENERATOR(multiply_assign)
+        BOOST_PROTO_BINARY_GENERATOR(divide_assign)
+        BOOST_PROTO_BINARY_GENERATOR(modulus_assign)
+        BOOST_PROTO_BINARY_GENERATOR(add_assign)
+        BOOST_PROTO_BINARY_GENERATOR(subtract_assign)
+        BOOST_PROTO_BINARY_GENERATOR(bitwise_and_assign)
+        BOOST_PROTO_BINARY_GENERATOR(bitwise_or_assign)
+        BOOST_PROTO_BINARY_GENERATOR(bitwise_xor_assign)
+
+    #undef BOOST_PROTO_UNARY_GENERATOR
+    #undef BOOST_PROTO_BINARY_GENERATOR
+
         // tag
         template<typename Expr>
         struct tag

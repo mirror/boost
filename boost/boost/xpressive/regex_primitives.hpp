@@ -461,15 +461,13 @@ range(Char ch_min, Char ch_max)
 ///
 /// \param expr The sub-expression to make optional.
 template<typename Expr>
-inline typename proto::meta::unary_expr<
-    proto::logical_not_tag
-  , typename detail::as_xpr_type<Expr>::type
+inline typename proto::meta::logical_not<
+    typename detail::as_xpr_type<Expr>::type
 >::type const
 optional(Expr const &expr)
 {
-    typename proto::meta::unary_expr<
-        proto::logical_not_tag
-      , typename detail::as_xpr_type<Expr>::type
+    typename proto::meta::logical_not<
+        typename detail::as_xpr_type<Expr>::type
     >::type that = {as_xpr(expr)};
     return that;
 }

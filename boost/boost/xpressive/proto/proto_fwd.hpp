@@ -54,9 +54,9 @@ namespace boost { namespace proto
     struct not_equal_tag;
     struct logical_or_tag;
     struct logical_and_tag;
-    struct bitand_tag;
-    struct bitor_tag;
-    struct bitxor_tag;
+    struct bitwise_and_tag;
+    struct bitwise_or_tag;
+    struct bitwise_xor_tag;
     struct comma_tag;
     struct mem_ptr_tag;
 
@@ -68,12 +68,20 @@ namespace boost { namespace proto
     struct modulus_assign_tag;
     struct add_assign_tag;
     struct subtract_assign_tag;
-    struct bitand_assign_tag;
-    struct bitor_assign_tag;
-    struct bitxor_assign_tag;
+    struct bitwise_and_assign_tag;
+    struct bitwise_or_assign_tag;
+    struct bitwise_xor_assign_tag;
     struct subscript_tag;
 
     struct function_tag;
+
+    // for backwards compatibility
+    typedef bitwise_or_tag bitor_tag;
+    typedef bitwise_and_tag bitand_tag;
+    typedef bitwise_xor_tag bitxor_tag;
+    typedef bitwise_or_assign_tag bitor_assign_tag;
+    typedef bitwise_and_assign_tag bitand_assign_tag;
+    typedef bitwise_xor_assign_tag bitxor_assign_tag;
 
     template<typename Tag, typename Args, long Arity = mpl::size<Args>::value>
     struct basic_expr;
@@ -188,6 +196,49 @@ namespace boost { namespace proto
 
         template<typename T, bool IsExpr = is_expr<T>::value>
         struct unref;
+
+        // Specific expression generators, for convenience
+        template<typename T> struct unary_plus;
+        template<typename T> struct unary_minus;
+        template<typename T> struct unary_star;
+        template<typename T> struct complement;
+        template<typename T> struct address_of;
+        template<typename T> struct logical_not;
+        template<typename T> struct pre_inc;
+        template<typename T> struct pre_dec;
+
+        template<typename T, typename U> struct left_shift;
+        template<typename T, typename U> struct right_shift;
+        template<typename T, typename U> struct multiply;
+        template<typename T, typename U> struct divide;
+        template<typename T, typename U> struct modulus;
+        template<typename T, typename U> struct add;
+        template<typename T, typename U> struct subtract;
+        template<typename T, typename U> struct less;
+        template<typename T, typename U> struct greater;
+        template<typename T, typename U> struct less_equal;
+        template<typename T, typename U> struct greater_equal;
+        template<typename T, typename U> struct equal;
+        template<typename T, typename U> struct not_equal;
+        template<typename T, typename U> struct logical_or;
+        template<typename T, typename U> struct logical_and;
+        template<typename T, typename U> struct bitwise_and;
+        template<typename T, typename U> struct bitwise_or;
+        template<typename T, typename U> struct bitwise_xor;
+        template<typename T, typename U> struct comma;
+        template<typename T, typename U> struct mem_ptr;
+
+        template<typename T, typename U> struct left_shift_assign;
+        template<typename T, typename U> struct right_shift_assign;
+        template<typename T, typename U> struct multiply_assign;
+        template<typename T, typename U> struct divide_assign;
+        template<typename T, typename U> struct modulus_assign;
+        template<typename T, typename U> struct add_assign;
+        template<typename T, typename U> struct subtract_assign;
+        template<typename T, typename U> struct bitwise_and_assign;
+        template<typename T, typename U> struct bitwise_or_assign;
+        template<typename T, typename U> struct bitwise_xor_assign;
+
     }
 
     namespace op

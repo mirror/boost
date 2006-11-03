@@ -50,9 +50,9 @@ namespace boost { namespace proto
     struct not_equal_tag : binary_tag {};
     struct logical_or_tag : binary_tag {};
     struct logical_and_tag : binary_tag {};
-    struct bitand_tag : binary_tag {};
-    struct bitor_tag : binary_tag {};
-    struct bitxor_tag : binary_tag {};
+    struct bitwise_and_tag : binary_tag {};
+    struct bitwise_or_tag : binary_tag {};
+    struct bitwise_xor_tag : binary_tag {};
     struct comma_tag : binary_tag {};
     struct mem_ptr_tag : binary_tag {};
 
@@ -64,9 +64,9 @@ namespace boost { namespace proto
     struct modulus_assign_tag : binary_tag {};
     struct add_assign_tag : binary_tag {};
     struct subtract_assign_tag : binary_tag {};
-    struct bitand_assign_tag : binary_tag {};
-    struct bitor_assign_tag : binary_tag {};
-    struct bitxor_assign_tag : binary_tag {};
+    struct bitwise_and_assign_tag : binary_tag {};
+    struct bitwise_or_assign_tag : binary_tag {};
+    struct bitwise_xor_assign_tag : binary_tag {};
     struct subscript_tag : binary_tag {};
 
     struct function_tag : nary_tag {};

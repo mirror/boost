@@ -155,7 +155,7 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Expr, typename, typename>
         struct apply
         {
-            typedef typename proto::meta::unary_expr<proto::logical_not_tag, Expr>::type type;
+            typedef typename proto::meta::logical_not<Expr>::type type;
         };
 
         template<typename Expr, typename State, typename Visitor>
