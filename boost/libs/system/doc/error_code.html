@@ -1,0 +1,265 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="en-us">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Boost class error_code documentation
+</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h1>Header <a href="../../../boost/system/error_code.hpp">boost/system/error_code.hpp</a></h1>
+<p><a href="#Introduction">Introduction</a><br>
+<a href="#Synopsis">Synopsis</a><br>
+<a href="#Class-error_category">Class <code>error_category</code></a><br>
+&nbsp;&nbsp;&nbsp; <a href="#Class-error_category-members">Members</a><br>
+<a href="#Class-error_code">Class <code>error_code</code></a><br>
+&nbsp;&nbsp;&nbsp; <a href="#Class-error_code-members">Members</a><br>
+<a href="#Non-member">Non-member functions</a><br>
+<a href="#Acknowledgements">Acknowledgments</a></p>
+<h2><a name="Introduction">Introduction</a></h2>
+<p>This header provides components used to report errors from the operating 
+system or other low-level application program interface (API). It is based on the <i>Diagnostics</i> portion of the TR2 filesystem 
+proposal.</p>
+<p>Class <code><a href="#Class-error_code">error_code</a></code> encapsulates an error 
+code, usually one returned by an API. Class <code>
+<a href="#Class-error_category-members">error_category</a></code> encapsulates 
+an identifier for&nbsp;a 
+particular kind of error code. Users or 
+third-parties may add additional error categories.</p>
+<h2><a name="Synopsis">Synopsis</a></h2>
+<pre>namespace boost
+{
+  namespace system
+  {
+    class error_code;
+
+    typedef int         (*errno_decoder)( const error_code & );
+    typedef std::string (*message_decoder)( const error_code & );
+    typedef wstring_t   (*wmessage_decoder)( const error_code & );
+
+    class error_category : public <a href="../../utility/doc/identifier.html">identifier</a>< uint_least32_t, error_category >
+    {
+    public:
+      error_category();
+      explicit error_category( value_type v );
+    };
+
+    const error_category  errno_ecat = <i>unspecified-value</i>;
+    const error_category  native_ecat = <i>unspecified-value</i>;
+
+    class error_code
+    {
+    public:
+      typedef boost::int_least32_t  value_type;
+
+      // constructors:
+      <a href="#error_code">error_code</a>();
+      <a href="#error_code-2">error_code</a>( value_type val, error_category cat );
+      void <a href="#error_code-assign">assign</a>(value_type val, error_category cat);
+
+      // observers:
+      value_type      <a href="#value">value</a>() const;
+      error_category  <a href="#category">category</a>() const;
+      int             <a href="#to_errno">to_errno</a>() const;  // name chosen to limit surprises
+                                         // see Kohlhoff June 28 '06 boost posting
+      std::string     <a href="#message">message</a>() const;
+      std::wstring    <a href="#wmessage">wmessage</a>() const;
+
+      // relationals:
+      bool <a href="#operator-eq">operator==</a>( const error_code & rhs ) const;
+      bool <a href="#operator-ne">operator!=</a>( const error_code & rhs ) const;
+      bool <a href="#operator-lt">operator<</a> ( const error_code & rhs ) const;
+      bool <a href="#operator-le">operator<=</a>( const error_code & rhs ) const;
+      bool <a href="#operator-gt">operator></a> ( const error_code & rhs ) const;
+      bool <a href="#operator-ge">operator>=</a>( const error_code & rhs ) const;
+
+      <a href="#operator-unspecified-bool-type">operator <i>unspecified-bool-type</i></a>() const;
+      bool <a href="#operator-bang">operator!</a>() const;
+
+      // statics:
+      static error_category <a href="#new_category">new_category</a>( errno_decoder ed = 0,
+        message_decoder md = 0, wmessage_decoder wmd = 0 );
+      static bool <a href="#get_decoders">get_decoders</a>( error_category cat, errno_decoder & ed,
+        message_decoder & md,  wmessage_decoder & wmd );
+
+    };
+
+    std::size_t <a href="#hash_value">hash_value</a>( const error_code & ec );
+    
+  } // namespace system
+} // namespace boost</pre>
+<h2><a name="Class-error_category">Class <code>error_category</code></a></h2>
+<p>Class <code><a href="#Class-error_category-members">error_category</a></code> 
+encapsulates an identifier for&nbsp;a 
+particular kind of error code. Users or 
+third-parties may add additional error categories.</p>
+<p>For inherited members, see <a href="../../utility/doc/identifier.html">
+identifier documentation</a>.</p>
+<h3><a name="Class-error_category-members">Class <code>error_category</code> 
+members</a></h3>
+<pre>error_category();</pre>
+<blockquote>
+  <p><i>Effects:</i> Constructs an object of class <code>error_category</code>.</p>
+  <p><i>Postcondition:</i> <code>value() == value_type()</code>.</p>
+</blockquote>
+<pre>explicit error_category( value_type v );</pre>
+<blockquote>
+  <p><i>Effects:</i> Constructs an object of class <code>error_category</code>.</p>
+  <p><i>Postcondition:</i> <code>value() == v</code>.</p>
+</blockquote>
+<h2><a name="Class-error_code">Class <code>error_code</code></a></h2>
+<p>The value contained by an <code>error_code</code> object is the underlying 
+API error code itself if the API error code type can be stored in <code>
+value_type</code> without loss of any actual values and if 0 represents no 
+error. Otherwise, the value is an integer that maps to the API error code, with 
+the exact method of mapping unspecified.</p>
+<h3><a name="Class-error_code-members">Class <code>error_code</code> members</a></h3>
+<pre><a name="error_code">error_code</a>();</pre>
+<blockquote>
+  <p><i>Effects:</i> Constructs an object of class <code>error_code</code>.</p>
+  <p><i>Postcondition:</i> <code>value() == 0 &amp;&amp; category() == errno_ecat</code>.</p>
+</blockquote>
+<pre><a name="error_code-2">error_code</a>( value_type val, error_category cat );</pre>
+<blockquote>
+  <p><i>Effects:</i> Constructs an object of class <code>error_code</code>.</p>
+  <p><i>Postcondition:</i> <code>value() == val &amp;&amp; category() == cat</code>.</p>
+</blockquote>
+<pre>void <a name="error_code-assign">assign</a>(value_type val, error_category cat);</pre>
+<blockquote>
+  <p><i>Postconditions:</i> <code>value() == val &amp;&amp; category() == cat</code>.</p>
+</blockquote>
+<pre>value_type <a name="value">value</a>() const;</pre>
+<blockquote>
+  <p><i>Returns:</i> <code>value()</code> as specified by <i>postconditions</i>&nbsp;of the most 
+recent <code>assign</code>, if any, or of the constructor.</p>
+</blockquote>
+<pre>error_category <a name="category">category</a>() const;</pre>
+<blockquote>
+  <p><i>Returns:</i> <code>category()</code> as specified by <i>postconditions</i>&nbsp;of the most 
+recent <code>assign</code>, if any, or of the constructor.</p>
+</blockquote>
+<pre>int <a name="to_errno">to_errno</a>() const;</pre>
+<blockquote>
+<p><i>Effects: </i>&nbsp;<code>errno_decoder ed;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; message_decoder md;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wmessage_decoder wmd;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bool ok( get_decoders( category(), ed, md, 
+wmd ) );</code></p>
+<p><i>Returns:</i>&nbsp; If <code>ok &amp;&amp; ed</code>, <code>ed(*this)</code>, 
+otherwise <code>EOTHER</code>.</p>
+<p><i>[Note:</i> The intent is to return the <a href="http://www.unix.org/single_unix_specification/">
+ISO/IEC 9945:2003, <i>Portable Operating System Interface (POSIX)</i></a> error 
+number that the implementation determines most closely corresponds to <code>
+value()</code>. <i>--end note.]</i></p>
+</blockquote>
+<pre>std::string <a name="message">message</a>() const;</pre>
+<blockquote>
+<p><i>Effects: </i>&nbsp;<code>errno_decoder ed;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; message_decoder md;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wmessage_decoder wmd;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bool ok( get_decoders( category(), ed, md, 
+wmd ) );</code></p>
+<p><i>Returns:</i>&nbsp; If <code>ok &amp;&amp; md</code>, <code>md(*this)</code>, 
+otherwise <code>std::string()</code>.</p>
+<p><i>Remarks:</i> If <code>category() == errno_ec</code>, the string is as 
+returned by <code>strerror()</code>. Otherwise, the method used by the 
+implementation to determine the string is unspecified.</p>
+<p><i>[Note:</i> The intent is to return a locale sensitive string that describes the error 
+corresponding to <code>value()</code>.&nbsp; <i>--end note.]</i></p>
+</blockquote>
+<pre>wstring_t <a name="wmessage">wmessage</a>() const;</pre>
+<blockquote>
+<p><i>Effects: </i>&nbsp;<code>errno_decoder ed;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; message_decoder md;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; wmessage_decoder wmd;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bool ok( get_decoders( category(), ed, md, 
+wmd ) );</code></p>
+<p><i>Returns:</i>&nbsp; If <code>ok &amp;&amp; wmd</code>, <code>wmd(*this)</code>, 
+otherwise <code>std::wstring()</code>.</p>
+<p><i>Remarks:</i> If <code>category() == errno_ec</code>, the string is as 
+returned by <code>strerror()</code>. Otherwise, the method used by the 
+implementation to determine the string is unspecified.</p>
+<p><i>[Note:</i> The intent is to return a locale sensitive string that describes the error 
+corresponding to <code>value()</code>.&nbsp; <i>--end note.]</i></p>
+</blockquote>
+<pre>bool <a name="operator-eq">operator</a>==(const error_code &amp; rhs) const;</pre>
+<blockquote>
+  <p><i>Returns:</i> <code>value() == rhs.value() &amp;&amp; category() == rhs.category()</code>.</p>
+</blockquote>
+<pre>bool <a name="operator-ne">operator!</a>=(const error_code &amp; rhs) const;</pre>
+<blockquote>
+  <p><i>Returns:</i> <code>!(*this == rhs)</code>.</p>
+</blockquote>
+<pre>bool <a name="operator-lt">operator</a>&lt;(const error_code &amp; rhs) const;</pre>
+<blockquote>
+  <p><i>Returns:</i> <code>category() &lt; rhs.category() || ( category() == 
+  rhs.category() &amp;&amp; value() &lt; rhs.value() )</code>.</p>
+</blockquote>
+<pre>bool <a name="operator-le">operator</a>&lt;=(const error_code &amp; rhs) const;</pre>
+<blockquote>
+  <p><i>Returns:</i> <code>*this == rhs || *this &lt; rhs</code>.</p>
+</blockquote>
+<pre>bool <a name="operator-gt">operator</a>&gt;(const error_code &amp; rhs) const;</pre>
+<blockquote>
+  <p><i>Returns:</i> <code>!(*this &lt;= rhs)</code>.</p>
+</blockquote>
+<pre>bool <a name="operator-ge">operator</a>&gt;=(const error_code &amp; rhs) const;</pre>
+<blockquote>
+  <p><i>Returns:</i> <code>!(*this &lt; rhs)</code>.</p>
+</blockquote>
+<pre><a name="operator-unspecified-bool-type">operator <i>unspecified-bool-type</i></a>() const;</pre>
+<blockquote>
+  <p><i>Returns:</i> <code>&nbsp;value() != value_type() ? <i>unspecified-bool-type</i> 
+  : 0</code>.</p>
+<p><i>Throws:</i> nothing.</p>
+<p>[ <i>Note: </i>This conversion can be used in contexts where a <code>bool</code> 
+is expected (e.g., an <code>if</code> condition); however, implicit conversions 
+(e.g., to <code>int</code>) that can occur with <code>bool</code> are not 
+allowed, eliminating some sources of user error. One possible implementation 
+choice for this type is pointer-to-member. <i>—end note </i>]</p>
+</blockquote>
+<pre>bool <a name="operator-bang">operator!</a>() const;</pre>
+<blockquote>
+  <p><i>Returns:</i> <code>&nbsp;value() == value_type()</code>.</p>
+</blockquote>
+<pre>static error_category <a name="new_category">new_category</a>( errno_decoder ed = 0, message_decoder md = 0, wmessage_decoder wmd = 0 );</pre>
+<blockquote>
+  <p><i>Effects:</i> Constructs a new <code>error_category</code> object.<code>
+  </code>Creates an association between the object and <code>ed</code>,&nbsp;
+  <code>md</code>, and <code>wmd</code>.</p>
+  <p><i>Returns:</i> The object.</p>
+</blockquote>
+<pre>static bool <a name="get_decoders">get_decoders</a>( error_category cat, errno_decoder &amp; ed, message_decoder &amp; md, wmessage_decoder &amp; wmd );</pre>
+<blockquote>
+  <p><i>Effects:</i> If <code>cat</code> was created by <code>new_category()</code>, 
+  sets <code>ed</code>,&nbsp; <code>md</code>, and <code>wmd</code> 
+  to the respective values associated with <code>cat</code> by <code>
+  new_category()</code>. Otherwise, no effects.</p>
+  <p><i>Returns:</i> If <code>cat</code> was created by <code>new_category()</code>,
+  <code>true</code>, otherwise <code>false</code>.</p>
+</blockquote>
+<h2><a name="Non-member">Non-member</a> functions</h2>
+<pre>std::size_t <a name="hash_value">hash_value</a>( const error_code &amp; ec );</pre>
+<blockquote>
+  <p><i>Returns: </i>&nbsp;A hash value representing <code>ec</code>.</p>
+</blockquote>
+  <h2><a name="Acknowledgements">Acknowledgements</a></h2>
+  <p>Christopher Kohlhoff and Peter Dimov made important contributions to the 
+  design. Comments and suggestions were also received from Pavel Vozenilek, 
+  Gennaro Prota, Dave Abrahams, Jeff Garland, Iain Hanson, Oliver Kowalke, and 
+  Oleg Abrosimov.</p>
+<hr>
+<p>Last revised:
+<!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->06 September, 2006<!--webbot bot="Timestamp" endspan i-checksum="39349" --></p>
+<p>© Copyright Beman Dawes, 2006</p>
+<p>Distributed under the Boost Software License, Version 1.0. (See accompanying 
+file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or copy at
+<a href="http://www.boost.org/LICENSE_1_0.txt">www.boost.org/ LICENSE_1_0.txt</a>)</p>
+
+</body>
+
+</html>
