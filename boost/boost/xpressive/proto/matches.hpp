@@ -14,6 +14,7 @@
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/traits.hpp>
 #include <boost/mpl/if.hpp>
+#include <boost/mpl/and.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/placeholders.hpp>
 
@@ -41,6 +42,38 @@ namespace boost { namespace proto
         template<typename Expr>
         struct terminal_matches<Expr, mpl::_>
           : mpl::true_
+        {};
+
+        template<template<typename> class T, typename Expr0, typename Grammar0>
+        struct terminal_matches<T<Expr0>, T<Grammar0> >
+          : terminal_matches<Expr0, Grammar0>
+        {};
+
+        template<template<typename, typename> class T, typename Expr0, typename Expr1, typename Grammar0, typename Grammar1>
+        struct terminal_matches<T<Expr0, Expr1>, T<Grammar0, Grammar1> >
+          : mpl::and_<
+                terminal_matches<Expr0, Grammar0>
+              , terminal_matches<Expr1, Grammar1>
+            >
+        {};
+
+        template<template<typename, typename, typename> class T, typename Expr0, typename Expr1, typename Expr2, typename Grammar0, typename Grammar1, typename Grammar2>
+        struct terminal_matches<T<Expr0, Expr1, Expr2>, T<Grammar0, Grammar1, Grammar2> >
+          : mpl::and_<
+                terminal_matches<Expr0, Grammar0>
+              , terminal_matches<Expr1, Grammar1>
+              , terminal_matches<Expr2, Grammar2>
+            >
+        {};
+
+        template<template<typename, typename, typename, typename> class T, typename Expr0, typename Expr1, typename Expr2, typename Expr3, typename Grammar0, typename Grammar1, typename Grammar2, typename Grammar3>
+        struct terminal_matches<T<Expr0, Expr1, Expr2, Expr3>, T<Grammar0, Grammar1, Grammar2, Grammar3> >
+          : mpl::and_<
+                terminal_matches<Expr0, Grammar0>
+              , terminal_matches<Expr1, Grammar1>
+              , terminal_matches<Expr2, Grammar2>
+              , terminal_matches<Expr3, Grammar3>
+            >
         {};
 
         template<typename Args>
