@@ -260,8 +260,6 @@ namespace boost
 {
   namespace system
   {
-    BOOST_SYSTEM_DECL error_code throw_on_error;  // dummy meaningless value
-
     error_category error_code::new_category( 
       errno_decoder ed, message_decoder md, wmessage_decoder wmd )
     {
