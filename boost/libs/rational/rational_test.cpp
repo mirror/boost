@@ -14,7 +14,8 @@
  */
 
 // Revision History
-// 02 Oct 06  Add testing for operator<(int_type) w/ unsigneds (Daryle Walker)
+// 04 Nov 06  Resolve GCD issue with depreciation (Daryle Walker)
+// 02 Nov 06  Add testing for operator<(int_type) w/ unsigneds (Daryle Walker)
 // 31 Oct 06  Add testing for operator<(rational) overflow (Daryle Walker)
 // 18 Oct 06  Various fixes for old compilers (Joaquín M López Muñoz)
 // 27 Dec 05  Add testing for Boolean conversion operator (Daryle Walker)
@@ -26,6 +27,7 @@
 #include <boost/mpl/list.hpp>
 #include <boost/operators.hpp>
 #include <boost/preprocessor/stringize.hpp>
+#include <boost/math/common_factor_rt.hpp>
 
 #include <boost/rational.hpp>
 
@@ -36,6 +38,7 @@
 #include <climits>
 #include <iostream>
 #include <istream>
+#include <limits>
 #include <ostream>
 #include <sstream>
 #include <stdexcept>
@@ -203,6 +206,116 @@ public:
 
 inline MyOverflowingUnsigned abs( MyOverflowingUnsigned const &x ) { return x; }
 
+} // namespace
+
+
+// Specialize numeric_limits for the custom types
+namespace std
+{
+
+template < >
+class numeric_limits< MyInt >
+{
+    typedef numeric_limits<int>  limits_type;
+
+public:
+    static const bool is_specialized = limits_type::is_specialized;
+
+    static MyInt min() throw()  { return limits_type::min(); }
+    static MyInt max() throw()  { return limits_type::max(); }
+
+    static const int digits      = limits_type::digits;
+    static const int digits10    = limits_type::digits10;
+    static const bool is_signed  = limits_type::is_signed;
+    static const bool is_integer = limits_type::is_integer;
+    static const bool is_exact   = limits_type::is_exact;
+    static const int radix       = limits_type::radix;
+    static MyInt epsilon() throw()      { return limits_type::epsilon(); }
+    static MyInt round_error() throw()  { return limits_type::round_error(); }
+
+    static const int min_exponent   = limits_type::min_exponent;
+    static const int min_exponent10 = limits_type::min_exponent10;
+    static const int max_exponent   = limits_type::max_exponent;
+    static const int max_exponent10 = limits_type::max_exponent10;
+
+    static const bool has_infinity             = limits_type::has_infinity;
+    static const bool has_quiet_NaN            = limits_type::has_quiet_NaN;
+    static const bool has_signaling_NaN        = limits_type::has_signaling_NaN;
+    static const float_denorm_style has_denorm = limits_type::has_denorm;
+    static const bool has_denorm_loss          = limits_type::has_denorm_loss;
+
+    static MyInt infinity() throw()      { return limits_type::infinity(); }
+    static MyInt quiet_NaN() throw()     { return limits_type::quiet_NaN(); }
+    static MyInt signaling_NaN() throw() {return limits_type::signaling_NaN();}
+    static MyInt denorm_min() throw()    { return limits_type::denorm_min(); }
+
+    static const bool is_iec559  = limits_type::is_iec559;
+    static const bool is_bounded = limits_type::is_bounded;
+    static const bool is_modulo  = limits_type::is_modulo;
+
+    static const bool traps                    = limits_type::traps;
+    static const bool tinyness_before          = limits_type::tinyness_before;
+    static const float_round_style round_style = limits_type::round_style;
+
+};  // std::numeric_limits<MyInt>
+
+template < >
+class numeric_limits< MyOverflowingUnsigned >
+{
+    typedef numeric_limits<unsigned>  limits_type;
+
+public:
+    static const bool is_specialized = limits_type::is_specialized;
+
+    static MyOverflowingUnsigned min() throw()  { return limits_type::min(); }
+    static MyOverflowingUnsigned max() throw()  { return limits_type::max(); }
+
+    static const int digits      = limits_type::digits;
+    static const int digits10    = limits_type::digits10;
+    static const bool is_signed  = limits_type::is_signed;
+    static const bool is_integer = limits_type::is_integer;
+    static const bool is_exact   = limits_type::is_exact;
+    static const int radix       = limits_type::radix;
+    static MyOverflowingUnsigned epsilon() throw()
+        { return limits_type::epsilon(); }
+    static MyOverflowingUnsigned round_error() throw()
+        {return limits_type::round_error();}
+
+    static const int min_exponent   = limits_type::min_exponent;
+    static const int min_exponent10 = limits_type::min_exponent10;
+    static const int max_exponent   = limits_type::max_exponent;
+    static const int max_exponent10 = limits_type::max_exponent10;
+
+    static const bool has_infinity             = limits_type::has_infinity;
+    static const bool has_quiet_NaN            = limits_type::has_quiet_NaN;
+    static const bool has_signaling_NaN        = limits_type::has_signaling_NaN;
+    static const float_denorm_style has_denorm = limits_type::has_denorm;
+    static const bool has_denorm_loss          = limits_type::has_denorm_loss;
+
+    static MyOverflowingUnsigned infinity() throw()
+        { return limits_type::infinity(); }
+    static MyOverflowingUnsigned quiet_NaN() throw()
+        { return limits_type::quiet_NaN(); }
+    static MyOverflowingUnsigned signaling_NaN() throw()
+        { return limits_type::signaling_NaN(); }
+    static MyOverflowingUnsigned denorm_min() throw()
+        { return limits_type::denorm_min(); }
+
+    static const bool is_iec559  = limits_type::is_iec559;
+    static const bool is_bounded = limits_type::is_bounded;
+    static const bool is_modulo  = limits_type::is_modulo;
+
+    static const bool traps                    = limits_type::traps;
+    static const bool tinyness_before          = limits_type::tinyness_before;
+    static const float_round_style round_style = limits_type::round_style;
+
+};  // std::numeric_limits<MyOverflowingUnsigned>
+
+}  // namespace std
+
+
+namespace {
+
 // This fixture replaces the check of rational's packing at the start of main.
 class rational_size_check
 {
@@ -294,7 +407,7 @@ typedef ::boost::mpl::list<short, int, long, MyInt>  all_signed_test_types;
 ::boost::rational<MyInt>                 dummy4;
 ::boost::rational<MyOverflowingUnsigned> dummy5;
 
-// Should there be tests with unsigned integer types?
+// Should there be regular tests with unsigned integer types?
 
 } // namespace
 
@@ -303,6 +416,7 @@ typedef ::boost::mpl::list<short, int, long, MyInt>  all_signed_test_types;
 BOOST_GLOBAL_FIXTURE( rational_size_check )
 
 
+#if BOOST_CONTROL_RATIONAL_HAS_GCD
 // The factoring function template suite
 BOOST_AUTO_TEST_SUITE( factoring_suite )
 
@@ -343,6 +457,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( lcm_test, T, all_signed_test_types )
 }
 
 BOOST_AUTO_TEST_SUITE_END()
+#endif  // BOOST_CONTROL_RATIONAL_HAS_GCD
 
 
 // The basic test suite
@@ -447,7 +562,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_comparison_test, T,
     BOOST_CHECK( x2 < x3 );
     BOOST_CHECK( x4 < x2 );
     BOOST_CHECK( !(x3 < x4) );
-    BOOST_CHECK( r7 < x1 );     // not close; wanted negative v. positive
+    BOOST_CHECK( r7 < x1 );     // not actually close; wanted -ve v. +ve instead
     BOOST_CHECK( !(x2 < r7) );
 }
 
@@ -772,8 +887,8 @@ BOOST_AUTO_TEST_CASE( bug_798357_test )
     unsigned const  n2 = d1, d2 = UINT_MAX;
     boost::rational<MyOverflowingUnsigned> const  r1( n1, d1 ), r2( n2, d2 );
 
-    BOOST_REQUIRE_EQUAL( boost::gcd(n1, d1), 1u );
-    BOOST_REQUIRE_EQUAL( boost::gcd(n2, d2), 1u );
+    BOOST_REQUIRE_EQUAL( boost::math::gcd(n1, d1), 1u );
+    BOOST_REQUIRE_EQUAL( boost::math::gcd(n2, d2), 1u );
     BOOST_REQUIRE( n1 > UINT_MAX / d2 );
     BOOST_REQUIRE( n2 > UINT_MAX / d1 );
     BOOST_CHECK( r1 < r2 );
@@ -790,6 +905,30 @@ BOOST_AUTO_TEST_CASE( patch_1434821_test )
     boost::rational<unsigned> const  r( 0u );
 
     BOOST_CHECK( r < 1u );
+}
+
+// "rational.hpp::gcd returns a negative value sometimes"
+BOOST_AUTO_TEST_CASE( patch_1438626_test )
+{
+    // The issue only manifests with 2's-complement integers that use their
+    // entire range of bits.  [This means that ln(-INT_MIN)/ln(2) is an integer
+    // and INT_MAX + INT_MIN == -1.]  The common computer platforms match this.
+#if (INT_MAX + INT_MIN == -1) && ((INT_MAX ^ INT_MIN) == -1)
+    // If a GCD routine takes the absolute value of an argument only before
+    // processing, it won't realize that -INT_MIN -> INT_MIN (i.e. no change
+    // from negation) and will propagate a negative sign to its result.
+    BOOST_REQUIRE_EQUAL( boost::math::gcd(INT_MIN, 6), 2 );
+
+    // That is bad if the rational number type does not check for that
+    // possibility during normalization.
+    boost::rational<int> const  r1( INT_MIN / 2 + 3, 6 ),
+                                r2( INT_MIN / 2 - 3, 6 ), r3 = r1 + r2;
+
+    // If the error happens, the signs of the components will be switched.
+    // (The numerators' sum is INT_MIN, and its GCD with 6 would be negated.)
+    BOOST_CHECK_EQUAL( r3.numerator(), INT_MIN / 2 );
+    BOOST_CHECK_EQUAL( r3.denominator(), 3 );
+#endif
 }
 
 BOOST_AUTO_TEST_SUITE_END()
