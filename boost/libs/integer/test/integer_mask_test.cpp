@@ -19,16 +19,16 @@
 #include <iostream>  // for std::cout (std::endl indirectly)
 
 
-#define PRIVATE_HIGH_BIT_SLOW_TEST(v)  BOOST_TEST( ::boost::high_bit_mask_t< \
+#define PRIVATE_HIGH_BIT_SLOW_TEST(v)  BOOST_CHECK( ::boost::high_bit_mask_t< \
  (v) >::high_bit == (1ul << (v)) );
-#define PRIVATE_HIGH_BIT_FAST_TEST(v)  BOOST_TEST( ::boost::high_bit_mask_t< \
+#define PRIVATE_HIGH_BIT_FAST_TEST(v)  BOOST_CHECK( ::boost::high_bit_mask_t< \
  (v) >::high_bit_fast == (1ul << (v)) );
 #define PRIVATE_HIGH_BIT_TEST(v)  do { PRIVATE_HIGH_BIT_SLOW_TEST(v); \
  PRIVATE_HIGH_BIT_FAST_TEST(v); } while (false)
 
-#define PRIVATE_LOW_BITS_SLOW_TEST(v)  BOOST_TEST( ::boost::low_bits_mask_t< \
+#define PRIVATE_LOW_BITS_SLOW_TEST(v)  BOOST_CHECK( ::boost::low_bits_mask_t< \
  (v) >::sig_bits == ((1ul << (v)) - 1) );
-#define PRIVATE_LOW_BITS_FAST_TEST(v)  BOOST_TEST( ::boost::low_bits_mask_t< \
+#define PRIVATE_LOW_BITS_FAST_TEST(v)  BOOST_CHECK( ::boost::low_bits_mask_t< \
  (v) >::sig_bits_fast == ((1ul << (v)) - 1) );
 #define PRIVATE_LOW_BITS_TEST(v)  do { PRIVATE_LOW_BITS_SLOW_TEST(v); \
  PRIVATE_LOW_BITS_FAST_TEST(v); } while (false)

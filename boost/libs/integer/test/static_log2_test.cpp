@@ -20,7 +20,7 @@
 
 
 // Macros to compact code
-#define PRIVATE_LB_TEST( v, e )  BOOST_TEST( ::boost::static_log2<v>::value == e )
+#define PRIVATE_LB_TEST( v, e )  BOOST_CHECK( ::boost::static_log2<v>::value == e )
 
 #define PRIVATE_PRINT_LB( v )    ::std::cout << "boost::static_log2<" << (v) \
  << "> = " << ::boost::static_log2< (v) >::value << '.' << ::std::endl
