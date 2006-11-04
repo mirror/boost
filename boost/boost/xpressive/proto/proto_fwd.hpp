@@ -15,6 +15,7 @@
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/mpl/long.hpp>
 #include <boost/mpl/vector/vector10.hpp>
+#include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 
 #ifndef BOOST_PROTO_MAX_ARITY
 # define BOOST_PROTO_MAX_ARITY 10
@@ -133,6 +134,9 @@ namespace boost { namespace proto
     template<typename Predicate, typename IfTransform, typename ElseTransform = identity_transform>
     struct conditional_transform;
 
+    template<typename Expr, typename Grammar>
+    struct matches;
+
     struct proto_expr_tag;
     struct proto_ref_tag;
     struct proto_ref_iterator_tag;
@@ -244,6 +248,9 @@ namespace boost { namespace proto
         template<typename T, typename U> struct bitwise_and_assign;
         template<typename T, typename U> struct bitwise_or_assign;
         template<typename T, typename U> struct bitwise_xor_assign;
+
+        template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, void), typename Dummy = void>
+        struct function;
 
     }
 

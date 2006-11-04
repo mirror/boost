@@ -34,28 +34,24 @@
 #include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
 #include <boost/fusion/sequence/view/ext_/segmented_iterator.hpp>
 
-namespace boost { namespace proto
+namespace boost { namespace proto { namespace detail
 {
-    namespace detail
+    template<typename Expr, int Pos>
+    struct ref_iterator
+      : fusion::iterator_base<ref_iterator<Expr, Pos> >
     {
-        template<typename Expr, int Pos>
-        struct ref_iterator
-          : fusion::iterator_base<ref_iterator<Expr, Pos> >
-        {
-            typedef Expr expr_type;
-            typedef mpl::long_<Pos> index;
-            typedef fusion::forward_traversal_tag category;
-            typedef proto_ref_iterator_tag fusion_tag;
+        typedef Expr expr_type;
+        typedef mpl::long_<Pos> index;
+        typedef fusion::forward_traversal_tag category;
+        typedef proto_ref_iterator_tag fusion_tag;
 
-            ref_iterator(Expr expr)
-              : expr_(expr)
-            {}
+        ref_iterator(Expr const &expr)
+          : expr_(expr)
+        {}
 
-            Expr expr_;
-        };
-    }
-
-}}
+        Expr expr_;
+    };
+}}}
 
 namespace boost { namespace fusion
 {
@@ -124,9 +120,10 @@ namespace boost { namespace fusion
             template<typename Iterator>
             struct apply
             {
-                typedef typename Iterator::expr_type expr_type;
-                typedef typename Iterator::index index;
-                typedef proto::detail::ref_iterator<expr_type, index::value + 1> type;
+                typedef typename proto::detail::ref_iterator<
+                    typename Iterator::expr_type
+                  , Iterator::index::value + 1
+                > type;
 
                 static type call(Iterator const &iter)
                 {
@@ -216,8 +213,6 @@ namespace boost { namespace fusion
             struct result
               : mpl::if_<
                     is_same<Tag, typename Expr::tag_type>
-                  //, typename Expr::expr_type const &
-                  //, fusion::single_view<typename Expr::expr_type const &>
                   , Expr const &
                   , fusion::single_view<Expr const &>
                 >
@@ -234,7 +229,6 @@ namespace boost { namespace fusion
             operator()(Expr &expr) const
             {
                 return typename msvc_as_element_result<Tag>
-                    //::BOOST_NESTED_TEMPLATE result<Expr>::type(expr.cast());
                     ::BOOST_NESTED_TEMPLATE result<Expr>::type(expr);
             }
         };

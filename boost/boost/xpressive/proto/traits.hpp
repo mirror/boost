@@ -20,6 +20,8 @@
 #include <boost/xpressive/proto/tags.hpp>
 #include <boost/xpressive/proto/ref.hpp>
 #include <boost/preprocessor/repetition/repeat.hpp>
+#include <boost/preprocessor/repetition/enum_params.hpp>
+#include <boost/preprocessor/repetition/repeat_from_to.hpp>
 
 namespace boost { namespace proto
 {
@@ -226,6 +228,19 @@ namespace boost { namespace proto
 
     #undef BOOST_PROTO_UNARY_GENERATOR
     #undef BOOST_PROTO_BINARY_GENERATOR
+
+        // function
+    #define BOOST_PROTO_DEFINE_FUNCTION(z, n, data)\
+        template<BOOST_PP_ENUM_PARAMS_Z(z, n, typename A)>\
+        struct function<BOOST_PP_ENUM_PARAMS_Z(z, n, A)>\
+        {\
+            typedef basic_expr<function_tag, BOOST_PP_CAT(mpl::vector, n)<BOOST_PP_ENUM_PARAMS_Z(z, n, A)> > type;\
+        };\
+        /**/
+
+        BOOST_PP_REPEAT_FROM_TO(1, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_DEFINE_FUNCTION, _)
+
+    #undef BOOST_PROTO_DEFINE_FUNCTION
 
         // tag
         template<typename Expr>
