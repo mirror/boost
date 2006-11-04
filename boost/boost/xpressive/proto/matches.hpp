@@ -76,13 +76,19 @@ namespace boost { namespace proto
             >
         {};
 
-        template<typename Args>
-        struct expr_check< basic_expr<terminal_tag, Args, 1> >
+        struct expr_check_fail
         {
             template<typename Tag1, typename Args1, long N1>
             static
             no_match_t
             match( basic_expr<Tag1, Args1, N1> const & );
+        };
+
+        template<typename Args>
+        struct expr_check< basic_expr<terminal_tag, Args, 1> >
+          : expr_check_fail
+        {
+            using expr_check_fail::match;
 
             typedef typename meta::arg<
                 basic_expr<terminal_tag, Args, 1>
@@ -100,11 +106,9 @@ namespace boost { namespace proto
 
         template<typename Tag, typename Args>
         struct expr_check< basic_expr<Tag, Args, 1> >
+          : expr_check_fail
         {
-            template<typename Tag1, typename Args1, long N1>
-            static
-            no_match_t
-            match( basic_expr<Tag1, Args1, N1> const & );
+            using expr_check_fail::match;
 
             typedef typename meta::arg<
                 basic_expr<Tag, Args, 1>
@@ -123,11 +127,9 @@ namespace boost { namespace proto
 
         template<typename Tag, typename Args>
         struct expr_check< basic_expr<Tag, Args, 2> >
+          : expr_check_fail
         {
-            template<typename Tag1, typename Args1, long N1>
-            static
-            no_match_t
-            match( basic_expr<Tag1, Args1, N1> const & );
+            using expr_check_fail::match;
 
             typedef typename meta::left<
                 basic_expr<Tag, Args, 2>
@@ -159,11 +161,9 @@ namespace boost { namespace proto
     #define BOOST_PROTO_EXPR_CHECK_FUN(z, n, data)\
         template<typename Tag, typename Args>\
         struct expr_check< basic_expr<Tag, Args, n> >\
+          : expr_check_fail\
         {\
-            template<typename Tag1, typename Args1, long N1>\
-            static\
-            no_match_t\
-            match( basic_expr<Tag1, Args1, N1> const & );\
+            using expr_check_fail::match;\
             \
             template<typename Args1>\
             static\

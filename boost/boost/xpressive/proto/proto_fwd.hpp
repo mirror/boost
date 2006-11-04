@@ -238,6 +238,7 @@ namespace boost { namespace proto
         template<typename T, typename U> struct comma;
         template<typename T, typename U> struct mem_ptr;
 
+        template<typename T, typename U> struct assign;
         template<typename T, typename U> struct left_shift_assign;
         template<typename T, typename U> struct right_shift_assign;
         template<typename T, typename U> struct multiply_assign;
@@ -248,6 +249,7 @@ namespace boost { namespace proto
         template<typename T, typename U> struct bitwise_and_assign;
         template<typename T, typename U> struct bitwise_or_assign;
         template<typename T, typename U> struct bitwise_xor_assign;
+        template<typename T, typename U> struct subscript;
 
         template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, void), typename Dummy = void>
         struct function;

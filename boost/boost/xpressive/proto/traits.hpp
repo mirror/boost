@@ -215,6 +215,7 @@ namespace boost { namespace proto
         BOOST_PROTO_BINARY_GENERATOR(comma)
         BOOST_PROTO_BINARY_GENERATOR(mem_ptr)
 
+        BOOST_PROTO_BINARY_GENERATOR(assign)
         BOOST_PROTO_BINARY_GENERATOR(left_shift_assign)
         BOOST_PROTO_BINARY_GENERATOR(right_shift_assign)
         BOOST_PROTO_BINARY_GENERATOR(multiply_assign)
@@ -225,6 +226,7 @@ namespace boost { namespace proto
         BOOST_PROTO_BINARY_GENERATOR(bitwise_and_assign)
         BOOST_PROTO_BINARY_GENERATOR(bitwise_or_assign)
         BOOST_PROTO_BINARY_GENERATOR(bitwise_xor_assign)
+        BOOST_PROTO_BINARY_GENERATOR(subscript)
 
     #undef BOOST_PROTO_UNARY_GENERATOR
     #undef BOOST_PROTO_BINARY_GENERATOR
