@@ -14,6 +14,7 @@
  */
 
 // Revision History
+// 05 Nov 06  Add testing of zero-valued denominators & divisors (Daryle Walker)
 // 04 Nov 06  Resolve GCD issue with depreciation (Daryle Walker)
 // 02 Nov 06  Add testing for operator<(int_type) w/ unsigneds (Daryle Walker)
 // 31 Oct 06  Add testing for operator<(rational) overflow (Daryle Walker)
@@ -491,6 +492,10 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_initialization_test, T,
     BOOST_CHECK_EQUAL( r7.denominator(), static_cast<T>(3) );
     BOOST_CHECK_EQUAL( r8.denominator(), static_cast<T>(3) );
     BOOST_CHECK_EQUAL( r9.denominator(), static_cast<T>(5) );
+
+    BOOST_CHECK_THROW( boost::rational<T>( 3, 0), boost::bad_rational );
+    BOOST_CHECK_THROW( boost::rational<T>(-2, 0), boost::bad_rational );
+    BOOST_CHECK_THROW( boost::rational<T>( 0, 0), boost::bad_rational );
 }
 
 // Assignment (non-operator) tests
@@ -506,6 +511,10 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_assign_test, T, all_signed_test_types )
     r.assign( 0, -7 );
     BOOST_CHECK_EQUAL( r.numerator(),   static_cast<T>(0) );
     BOOST_CHECK_EQUAL( r.denominator(), static_cast<T>(1) );
+
+    BOOST_CHECK_THROW( r.assign( 4, 0), boost::bad_rational );
+    BOOST_CHECK_THROW( r.assign( 0, 0), boost::bad_rational );
+    BOOST_CHECK_THROW( r.assign(-7, 0), boost::bad_rational );
 }
 
 // Comparison tests
@@ -724,6 +733,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_division_test, T,
     BOOST_CHECK_EQUAL(     static_cast<T>(8) / rational_type(2, 7),
      static_cast<T>(28) );
 
+    BOOST_CHECK_THROW( rational_type(23, 17) / rational_type(),
+     boost::bad_rational );
+    BOOST_CHECK_THROW( rational_type( 4, 15) / static_cast<T>(0),
+     boost::bad_rational );
+
     rational_type  r = rational_type( 4, 3 );
 
     r /= rational_type( 5, 4 );
@@ -731,6 +745,9 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_division_test, T,
 
     r /= static_cast<T>( 4 );
     BOOST_CHECK_EQUAL( r, rational_type( 4, 15) );
+
+    BOOST_CHECK_THROW( r /= rational_type(), boost::bad_rational );
+    BOOST_CHECK_THROW( r /= static_cast<T>(0), boost::bad_rational );
 
     BOOST_CHECK_EQUAL( rational_type(-1) / rational_type(-3),
      rational_type(1, 3) );
@@ -755,6 +772,8 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_self_operations_test, T,
 
     r -= r;
     BOOST_CHECK_EQUAL( r, rational_type( 0, 1) );
+
+    BOOST_CHECK_THROW( r /= r, boost::bad_rational );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
