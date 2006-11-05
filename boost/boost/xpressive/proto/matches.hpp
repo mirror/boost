@@ -18,17 +18,70 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/placeholders.hpp>
 
+#include <boost/preprocessor/repetition/enum.hpp>
+#include <boost/preprocessor/repetition/enum_shifted_params.hpp>
+#include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
+
 namespace boost { namespace proto
 {
 
     namespace detail
     {
-        typedef char match_t;
-        typedef char (&no_match_t)[2];
+        // and_
+        template<bool B, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename P, void)>
+        struct and_impl
+        {
+            typedef typename and_impl<P0::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>::type type;
+            BOOST_STATIC_CONSTANT(bool, value = type::value);
+        };
 
-        template<typename Expr>
-        struct expr_check;
+        template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename P)>
+        struct and_impl<false, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, P)>
+        {
+            typedef mpl::false_ type;
+            BOOST_STATIC_CONSTANT(bool, value = false);
+        };
 
+        template<>
+        struct and_impl<true>
+        {
+            typedef mpl::true_ type;
+            BOOST_STATIC_CONSTANT(bool, value = true);
+        };
+
+        template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename P, void)>
+        struct and_
+          : and_impl<P0::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>
+        {};
+
+        // or_
+        template<bool B, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename P, void)>
+        struct or_impl
+        {
+            typedef typename or_impl<P0::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>::type type;
+            BOOST_STATIC_CONSTANT(bool, value = type::value);
+        };
+
+        template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename P)>
+        struct or_impl<true, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, P)>
+        {
+            typedef mpl::true_ type;
+            BOOST_STATIC_CONSTANT(bool, value = true);
+        };
+
+        template<>
+        struct or_impl<false>
+        {
+            typedef mpl::false_ type;
+            BOOST_STATIC_CONSTANT(bool, value = false);
+        };
+
+        template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename P, void)>
+        struct or_
+          : or_impl<P0::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>
+        {};
+
+        // terminal_matches
         template<typename Expr, typename Grammar>
         struct terminal_matches
           : mpl::false_
@@ -51,7 +104,7 @@ namespace boost { namespace proto
 
         template<template<typename, typename> class T, typename Expr0, typename Expr1, typename Grammar0, typename Grammar1>
         struct terminal_matches<T<Expr0, Expr1>, T<Grammar0, Grammar1> >
-          : mpl::and_<
+          : and_<
                 terminal_matches<Expr0, Grammar0>
               , terminal_matches<Expr1, Grammar1>
             >
@@ -59,7 +112,7 @@ namespace boost { namespace proto
 
         template<template<typename, typename, typename> class T, typename Expr0, typename Expr1, typename Expr2, typename Grammar0, typename Grammar1, typename Grammar2>
         struct terminal_matches<T<Expr0, Expr1, Expr2>, T<Grammar0, Grammar1, Grammar2> >
-          : mpl::and_<
+          : and_<
                 terminal_matches<Expr0, Grammar0>
               , terminal_matches<Expr1, Grammar1>
               , terminal_matches<Expr2, Grammar2>
@@ -68,7 +121,7 @@ namespace boost { namespace proto
 
         template<template<typename, typename, typename, typename> class T, typename Expr0, typename Expr1, typename Expr2, typename Expr3, typename Grammar0, typename Grammar1, typename Grammar2, typename Grammar3>
         struct terminal_matches<T<Expr0, Expr1, Expr2, Expr3>, T<Grammar0, Grammar1, Grammar2, Grammar3> >
-          : mpl::and_<
+          : and_<
                 terminal_matches<Expr0, Grammar0>
               , terminal_matches<Expr1, Grammar1>
               , terminal_matches<Expr2, Grammar2>
@@ -76,123 +129,54 @@ namespace boost { namespace proto
             >
         {};
 
-        struct expr_check_fail
-        {
-            template<typename Tag1, typename Args1, long N1>
-            static
-            no_match_t
-            match( basic_expr<Tag1, Args1, N1> const & );
-        };
-
-        template<typename Args>
-        struct expr_check< basic_expr<terminal_tag, Args, 1> >
-          : expr_check_fail
-        {
-            using expr_check_fail::match;
-
-            typedef typename meta::arg<
-                basic_expr<terminal_tag, Args, 1>
-            >::type arg_type;
-
-            template<typename Args1>
-            static
-                typename mpl::if_<
-                    terminal_matches< typename meta::arg< basic_expr<terminal_tag, Args1, 1> >::type, arg_type >
-                  , match_t
-                  , no_match_t
-                >::type
-            match( basic_expr<terminal_tag, Args1, 1> const & );
-        };
-
-        template<typename Tag, typename Args>
-        struct expr_check< basic_expr<Tag, Args, 1> >
-          : expr_check_fail
-        {
-            using expr_check_fail::match;
-
-            typedef typename meta::arg<
-                basic_expr<Tag, Args, 1>
-            >::type arg_type;
-
-            template<typename Args1>
-            static
-                typename mpl::if_c<(
-                        matches< typename meta::arg< basic_expr<Tag, Args1, 1> >::type, arg_type >::value
-                    )
-                  , match_t
-                  , no_match_t
-                >::type
-            match( basic_expr<Tag, Args1, 1> const & );
-        };
-
-        template<typename Tag, typename Args>
-        struct expr_check< basic_expr<Tag, Args, 2> >
-          : expr_check_fail
-        {
-            using expr_check_fail::match;
-
-            typedef typename meta::left<
-                basic_expr<Tag, Args, 2>
-            >::type left_type;
-
-            typedef typename meta::right<
-                basic_expr<Tag, Args, 2>
-            >::type right_type;
-
-            template<typename Args1>
-            static
-                typename mpl::if_c<(
-                        matches< typename meta::left< basic_expr<Tag, Args1, 2> >::type, left_type >::value
-                     && matches< typename meta::right< basic_expr<Tag, Args1, 2> >::type, right_type >::value
-                    )
-                  , match_t
-                  , no_match_t
-                >::type
-            match( basic_expr<Tag, Args1, 2> const & );
-        };
-
-    #define BOOST_PROTO_MATCHES_N_FUN(z, n, data)\
+        // matches_impl
+    #define BOOST_PROTO_MATCHES_N_FUN2(z, n, data)\
         matches<\
             typename meta::arg_c< basic_expr<Tag, Args1, data>, n >::type\
-          , typename meta::arg_c< basic_expr<Tag, Args, data>, n >::type\
-        >::value &&\
+          , typename meta::arg_c< basic_expr<Tag, Args2, data>, n >::type\
+        >\
         /**/
 
-    #define BOOST_PROTO_EXPR_CHECK_FUN(z, n, data)\
-        template<typename Tag, typename Args>\
-        struct expr_check< basic_expr<Tag, Args, n> >\
-          : expr_check_fail\
-        {\
-            using expr_check_fail::match;\
-            \
-            template<typename Args1>\
-            static\
-                typename mpl::if_c<(\
-                        BOOST_PP_REPEAT_ ## z(n, BOOST_PROTO_MATCHES_N_FUN, n) true\
-                    )\
-                  , match_t\
-                  , no_match_t\
-                >::type\
-            match( basic_expr<Tag, Args1, n> const & );\
-        };\
+        template<typename Expr, typename Grammar>
+        struct matches_impl;
+
+        template<typename Expr>
+        struct matches_impl< Expr, mpl::_ >
+          : mpl::true_
+        {};
+
+        template<typename Tag1, typename Args1, long Arity1, typename Tag2, typename Args2, long Arity2>
+        struct matches_impl< basic_expr<Tag1, Args1, Arity1>, basic_expr<Tag2, Args2, Arity2> >
+          : mpl::false_
+        {};
+
+        template<typename Tag, typename Args1, typename Args2>
+        struct matches_impl< basic_expr<Tag, Args1, 1>, basic_expr<Tag, Args2, 1> >
+          : BOOST_PROTO_MATCHES_N_FUN2(1, 0, 1)
+        {};
+
+        template<typename Args1, typename Args2>
+        struct matches_impl< basic_expr<terminal_tag, Args1, 1>, basic_expr<terminal_tag, Args2, 1> >
+          : terminal_matches<
+                typename meta::arg< basic_expr<terminal_tag, Args1, 1> >::type
+              , typename meta::arg< basic_expr<terminal_tag, Args2, 1> >::type
+            >
+        {};
+
+    #define BOOST_PROTO_EXPR_CHECK2(z, n, data)\
+        template<typename Tag, typename Args1, typename Args2>\
+        struct matches_impl< basic_expr<Tag, Args1, n>, basic_expr<Tag, Args2, n> >\
+          : and_<BOOST_PP_ENUM_ ## z(n, BOOST_PROTO_MATCHES_N_FUN2, n) >\
+        {};\
         /**/
 
-        BOOST_PP_REPEAT_FROM_TO(
-            3, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_EXPR_CHECK_FUN, ~)
+        BOOST_PP_REPEAT_FROM_TO(2, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_EXPR_CHECK2, ~)
 
-    #undef BOOST_PROTO_EXPR_CHECK_FUN
-    #undef BOOST_PROTO_MATCHES_N_FUN
-
-        template<>
-        struct expr_check< mpl::_ >
-        {
-            template<typename Expr>
-            static
-            match_t
-            match( Expr const & );
-        };
+    #undef BOOST_PROTO_EXPR_CHECK2
+    #undef BOOST_PROTO_MATCHES_N_FUN2
 
         // by default, assume parameter is an expression generator ... 
+        // (this also works for extends_tag<> types because they are also generators)
         template<typename Expr>
         struct deref
         {
@@ -216,13 +200,32 @@ namespace boost { namespace proto
 
     template<typename Expr, typename Grammar>
     struct matches
+      : mpl::or_<
+            is_same<Expr, typename detail::deref<Grammar>::type>
+          , detail::matches_impl<Expr, typename detail::deref<Grammar>::type>
+        >
+    {};
+
+    template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename G)>
+    struct or_
     {
-    private:
-        static Expr const &expr;
-    public:
-        BOOST_STATIC_CONSTANT(bool, value = sizeof(detail::expr_check<typename detail::deref<Grammar>::type>::match(expr)) == sizeof(detail::match_t));
-        typedef mpl::bool_<value> type;
+        typedef or_ type;
     };
+
+#define BOOST_PROTO_DEFINE_MATCHES(z, n, data)\
+    matches< Expr, BOOST_PP_CAT(G, n) >
+
+#define BOOST_PROTO_DEFINE_OR(z, n, data)\
+    template<typename Expr, BOOST_PP_ENUM_PARAMS_Z(z, n, typename G)>\
+    struct matches<Expr, or_<BOOST_PP_ENUM_PARAMS_Z(z, n, G)> >\
+      : detail::or_< BOOST_PP_ENUM_ ## z(n, BOOST_PROTO_DEFINE_MATCHES, ~) >\
+    {};\
+    /**/
+
+    BOOST_PP_REPEAT_FROM_TO(2, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_DEFINE_OR, ~)
+
+#undef BOOST_PROTO_DEFINE_MATCHES
+#undef BOOST_PROTO_DEFINE_OR
 
 }}
 

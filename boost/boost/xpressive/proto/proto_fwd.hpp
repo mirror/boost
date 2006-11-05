@@ -15,6 +15,7 @@
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/mpl/long.hpp>
 #include <boost/mpl/vector/vector10.hpp>
+#include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 
 #ifndef BOOST_PROTO_MAX_ARITY
@@ -136,6 +137,13 @@ namespace boost { namespace proto
 
     template<typename Expr, typename Grammar>
     struct matches;
+
+    template<
+        typename Grammar0
+      , typename Grammar1
+      , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY,2), typename G, void)
+    >
+    struct or_;
 
     struct proto_expr_tag;
     struct proto_ref_tag;
