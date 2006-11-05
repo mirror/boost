@@ -14,7 +14,8 @@
  */
 
 // Revision History
-// 05 Nov 06  Add testing of zero-valued denominators & divisors (Daryle Walker)
+// 05 Nov 06  Add testing of zero-valued denominators & divisors; casting with
+//            types that are not implicitly convertible (Daryle Walker)
 // 04 Nov 06  Resolve GCD issue with depreciation (Daryle Walker)
 // 02 Nov 06  Add testing for operator<(int_type) w/ unsigneds (Daryle Walker)
 // 31 Oct 06  Add testing for operator<(rational) overflow (Daryle Walker)
@@ -53,10 +54,13 @@
 
 namespace {
 
+class MyOverflowingUnsigned;
+
 // This is a trivial user-defined wrapper around the built in int type.
 // It can be used as a test type for rational<>
 class MyInt : boost::operators<MyInt>
 {
+    friend class MyOverflowingUnsigned;
     int val;
 public:
     MyInt(int n = 0) : val(n) {}
@@ -127,7 +131,8 @@ public:
     };
 
     // Lifetime management (use automatic dtr & copy-ctr)
-    MyOverflowingUnsigned( unsigned v = 0 )  : v_( v )  {}
+              MyOverflowingUnsigned( unsigned v = 0 )  : v_( v )  {}
+    explicit  MyOverflowingUnsigned( MyInt const &m )  : v_( m.val )  {}
 
     // Operators (use automatic copy-assignment); arithmetic & comparison only
     self_type &  operator ++()
@@ -869,6 +874,16 @@ BOOST_AUTO_TEST_CASE( rational_cast_test )
     BOOST_CHECK_CLOSE( boost::rational_cast<double>(half), 0.5, 0.01 );
     BOOST_CHECK_EQUAL( boost::rational_cast<int>(half), 0 );
     BOOST_CHECK_EQUAL( boost::rational_cast<MyInt>(half), MyInt() );
+    BOOST_CHECK_EQUAL( boost::rational_cast<boost::rational<MyInt> >(half),
+     boost::rational<MyInt>(1, 2) );
+
+    // Conversions via explicit-marked constructors
+    // (Note that the "explicit" mark prevents conversion to
+    // boost::rational<MyOverflowingUnsigned>.)
+    boost::rational<MyInt> const  threehalves( 3, 2 );
+
+    BOOST_CHECK_EQUAL( boost::rational_cast<MyOverflowingUnsigned>(threehalves),
+     MyOverflowingUnsigned(1u) );
 }
 
 // Dice tests (a non-main test)

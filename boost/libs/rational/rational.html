@@ -358,7 +358,7 @@ separate user-defined conversion will be more appropriate.
 
 <p><em>Implementation note:</em>
 
-<p>The actual implementation of the rational_cast function is
+<p>The implementation of the rational_cast function was
 
 <pre>
     template &lt;typename Float, typename Int&gt;
@@ -368,7 +368,10 @@ separate user-defined conversion will be more appropriate.
     }
 </pre>
 
-Programs should not be written to depend upon this implementation, however.
+Programs should not be written to depend upon this implementation, however,
+especially since this implementation is now obsolete.  (It required a mixed-mode
+division between types <var>Float</var> and <var>Int</var>, contrary to the <a
+href="#Integer%20Type%20Requirements">Integer Type Requirements</a>.)
 
 <h3><a name="Numerator and Denominator">Numerator and Denominator</a></h3>
 Finally, access to the internal representation of rationals is provided by
@@ -666,7 +669,7 @@ on the boost list in January 2001.
 be used in the same Boolean contexts as the built-in numeric types, in December
 2005.
 
-<p>Revised November 4, 2006</p>
+<p>Revised November 5, 2006</p>
 
 <p>© Copyright Paul Moore 1999-2001; &copy; Daryle Walker 2005. Permission to
 copy, use, modify, sell and distribute this document is granted provided this

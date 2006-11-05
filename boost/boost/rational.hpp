@@ -17,6 +17,8 @@
 //    Nickolay Mladenov, for the implementation of operator+=
 
 //  Revision History
+//  05 Nov 06  Change rational_cast to not depend on division between different
+//             types (Daryle Walker)
 //  04 Nov 06  Off-load GCD and LCM to Boost.Math; add some invariant checks;
 //             add std::numeric_limits<> requirement to help GCD (Daryle Walker)
 //  31 Oct 06  Recoded both operator< to use round-to-negative-infinity
@@ -575,7 +577,7 @@ template <typename T, typename IntType>
 inline T rational_cast(
     const rational<IntType>& src BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
-    return static_cast<T>(src.numerator())/src.denominator();
+    return static_cast<T>(src.numerator())/static_cast<T>(src.denominator());
 }
 
 // Do not use any abs() defined on IntType - it isn't worth it, given the
