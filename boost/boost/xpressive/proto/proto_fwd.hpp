@@ -145,6 +145,9 @@ namespace boost { namespace proto
     >
     struct or_;
 
+    template<typename Pred>
+    struct if_;
+
     struct proto_expr_tag;
     struct proto_ref_tag;
     struct proto_ref_iterator_tag;

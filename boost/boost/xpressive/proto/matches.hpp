@@ -16,6 +16,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/mpl/apply.hpp>
 #include <boost/mpl/placeholders.hpp>
 
 #include <boost/preprocessor/repetition/enum.hpp>
@@ -31,7 +32,7 @@ namespace boost { namespace proto
         template<bool B, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename P, void)>
         struct and_impl
         {
-            typedef typename and_impl<P0::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>::type type;
+            typedef typename and_impl<P0::type::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>::type type;
             BOOST_STATIC_CONSTANT(bool, value = type::value);
         };
 
@@ -51,14 +52,14 @@ namespace boost { namespace proto
 
         template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename P, void)>
         struct and_
-          : and_impl<P0::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>
+          : and_impl<P0::type::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>
         {};
 
         // or_
         template<bool B, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename P, void)>
         struct or_impl
         {
-            typedef typename or_impl<P0::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>::type type;
+            typedef typename or_impl<P0::type::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>::type type;
             BOOST_STATIC_CONSTANT(bool, value = type::value);
         };
 
@@ -78,7 +79,7 @@ namespace boost { namespace proto
 
         template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename P, void)>
         struct or_
-          : or_impl<P0::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>
+          : or_impl<P0::type::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>
         {};
 
         // terminal_matches
@@ -226,6 +227,17 @@ namespace boost { namespace proto
 
 #undef BOOST_PROTO_DEFINE_MATCHES
 #undef BOOST_PROTO_DEFINE_OR
+
+    template<typename Pred>
+    struct if_
+    {
+        typedef if_ type;
+    };
+
+    template<typename Expr, typename Pred>
+    struct matches<Expr, if_<Pred> >
+      : mpl::apply1<Pred, Expr>
+    {};
 
 }}
 
