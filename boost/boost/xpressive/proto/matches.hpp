@@ -220,6 +220,12 @@
             typedef or_ type;
         };
 
+        template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename G)>
+        struct and_
+        {
+            typedef and_ type;
+        };
+
         template<typename Pred>
         struct if_
         {
@@ -252,6 +258,12 @@
             template<typename Expr, BOOST_PP_ENUM_PARAMS(N, typename G)>
             struct matches_impl<Expr, proto::or_<BOOST_PP_ENUM_PARAMS(N, G)> >
               : detail::or_< BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_MATCHES, ~) >
+            {};
+
+            // handle proto::and_
+            template<typename Expr, BOOST_PP_ENUM_PARAMS(N, typename G)>
+            struct matches_impl<Expr, proto::and_<BOOST_PP_ENUM_PARAMS(N, G)> >
+              : detail::and_< BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_MATCHES, ~) >
             {};
 
     #undef N

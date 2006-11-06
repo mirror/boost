@@ -145,6 +145,13 @@ namespace boost { namespace proto
     >
     struct or_;
 
+    template<
+        typename Grammar0
+      , typename Grammar1
+      , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY,2), typename G, void)
+    >
+    struct and_;
+
     template<typename Pred>
     struct if_;
 
