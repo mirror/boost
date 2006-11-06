@@ -25,6 +25,7 @@
     #include <boost/preprocessor/repetition/enum.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
     #include <boost/preprocessor/repetition/enum_shifted_params.hpp>
+    #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 
     namespace boost { namespace proto
@@ -107,32 +108,32 @@
               : terminal_matches<Expr0, Grammar0>
             {};
 
-            template<template<typename, typename> class T, typename Expr0, typename Expr1, typename Grammar0, typename Grammar1>
-            struct terminal_matches<T<Expr0, Expr1>, T<Grammar0, Grammar1> >
-              : detail::and_<
-                    terminal_matches<Expr0, Grammar0>
-                  , terminal_matches<Expr1, Grammar1>
-                >
-            {};
+            //template<template<typename, typename> class T, typename Expr0, typename Expr1, typename Grammar0, typename Grammar1>
+            //struct terminal_matches<T<Expr0, Expr1>, T<Grammar0, Grammar1> >
+            //  : detail::and_<
+            //        terminal_matches<Expr0, Grammar0>
+            //      , terminal_matches<Expr1, Grammar1>
+            //    >
+            //{};
 
-            template<template<typename, typename, typename> class T, typename Expr0, typename Expr1, typename Expr2, typename Grammar0, typename Grammar1, typename Grammar2>
-            struct terminal_matches<T<Expr0, Expr1, Expr2>, T<Grammar0, Grammar1, Grammar2> >
-              : detail::and_<
-                    terminal_matches<Expr0, Grammar0>
-                  , terminal_matches<Expr1, Grammar1>
-                  , terminal_matches<Expr2, Grammar2>
-                >
-            {};
+            //template<template<typename, typename, typename> class T, typename Expr0, typename Expr1, typename Expr2, typename Grammar0, typename Grammar1, typename Grammar2>
+            //struct terminal_matches<T<Expr0, Expr1, Expr2>, T<Grammar0, Grammar1, Grammar2> >
+            //  : detail::and_<
+            //        terminal_matches<Expr0, Grammar0>
+            //      , terminal_matches<Expr1, Grammar1>
+            //      , terminal_matches<Expr2, Grammar2>
+            //    >
+            //{};
 
-            template<template<typename, typename, typename, typename> class T, typename Expr0, typename Expr1, typename Expr2, typename Expr3, typename Grammar0, typename Grammar1, typename Grammar2, typename Grammar3>
-            struct terminal_matches<T<Expr0, Expr1, Expr2, Expr3>, T<Grammar0, Grammar1, Grammar2, Grammar3> >
-              : detail::and_<
-                    terminal_matches<Expr0, Grammar0>
-                  , terminal_matches<Expr1, Grammar1>
-                  , terminal_matches<Expr2, Grammar2>
-                  , terminal_matches<Expr3, Grammar3>
-                >
-            {};
+            //template<template<typename, typename, typename, typename> class T, typename Expr0, typename Expr1, typename Expr2, typename Expr3, typename Grammar0, typename Grammar1, typename Grammar2, typename Grammar3>
+            //struct terminal_matches<T<Expr0, Expr1, Expr2, Expr3>, T<Grammar0, Grammar1, Grammar2, Grammar3> >
+            //  : detail::and_<
+            //        terminal_matches<Expr0, Grammar0>
+            //      , terminal_matches<Expr1, Grammar1>
+            //      , terminal_matches<Expr2, Grammar2>
+            //      , terminal_matches<Expr3, Grammar3>
+            //    >
+            //{};
 
             // matches_impl
         #define BOOST_PROTO_MATCHES_N_FUN(z, n, data)\
@@ -169,6 +170,7 @@
             {};
 
         #define BOOST_PROTO_DEFINE_MATCHES(z, n, data) matches< Expr, BOOST_PP_CAT(G, n) >
+        #define BOOST_PROTO_DEFINE_TERMINAL_MATCHES(z, n, data) terminal_matches< BOOST_PP_CAT(Expr, n), BOOST_PP_CAT(Grammar, n) >
         #define BOOST_PP_ITERATION_PARAMS_1 (3, (2, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/matches.hpp>))
 
         #include BOOST_PP_ITERATE()
@@ -176,6 +178,7 @@
         #undef BOOST_PP_ITERATION_PARAMS_1
         #undef BOOST_PROTO_MATCHES_N_FUN
         #undef BOOST_PROTO_DEFINE_MATCHES
+        #undef BOOST_PROTO_DEFINE_TERMINAL_MATCHES
 
             // handle proto::if_
             template<typename Expr, typename Pred>
@@ -248,6 +251,17 @@
 #else
 
     #define N BOOST_PP_ITERATION()
+
+            template<
+                template<BOOST_PP_ENUM_PARAMS(N, typename BOOST_PP_INTERCEPT)> class T
+                BOOST_PP_ENUM_TRAILING_PARAMS(N, typename Expr)
+                BOOST_PP_ENUM_TRAILING_PARAMS(N, typename Grammar)
+            >
+            struct terminal_matches<T<BOOST_PP_ENUM_PARAMS(N, Expr)>, T<BOOST_PP_ENUM_PARAMS(N, Grammar)> >
+              : detail::and_<
+                    BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_TERMINAL_MATCHES, ~)
+                >
+            {};
 
             template<typename Tag, typename Args1, typename Args2>
             struct matches_impl< basic_expr<Tag, Args1, N>, basic_expr<Tag, Args2, N> >
