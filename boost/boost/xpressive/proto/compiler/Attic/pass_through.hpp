@@ -9,17 +9,12 @@
 #ifndef BOOST_PROTO_COMPILER_PASS_THROUGH_HPP_EAN_04_23_2006
 #define BOOST_PROTO_COMPILER_PASS_THROUGH_HPP_EAN_04_23_2006
 
+#include <boost/type_traits/is_same.hpp>
+#include <boost/fusion/sequence/view/transform_view.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/traits.hpp>
 #include <boost/xpressive/proto/fusion.hpp>
 #include <boost/xpressive/proto/make_expr.hpp>
-#include <boost/mpl/transform.hpp>
-#include <boost/mpl/placeholders.hpp>
-#include <boost/mpl/apply.hpp>
-#include <boost/mpl/eval_if.hpp>
-#include <boost/mpl/not.hpp>
-#include <boost/type_traits/is_same.hpp>
-#include <boost/fusion/sequence/view/transform_view.hpp>
 
 namespace boost { namespace proto
 {

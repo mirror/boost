@@ -18,6 +18,7 @@
     #include <boost/mpl/bool.hpp>
     #include <boost/mpl/apply.hpp>
     #include <boost/mpl/placeholders.hpp>
+    #include <boost/utility/enable_if.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/traits.hpp>
 
@@ -225,6 +226,15 @@
             typedef if_ type;
         };
 
+        template<typename Expr, typename Grammar, typename Return>
+        struct if_matches
+          : enable_if<matches<Expr, Grammar>, Return>
+        {};
+
+        template<typename Expr, typename Grammar, typename Return>
+        struct if_not_matches
+          : disable_if<matches<Expr, Grammar>, Return>
+        {};
     }}
 
     #endif

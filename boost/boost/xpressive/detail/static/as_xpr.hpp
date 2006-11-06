@@ -16,11 +16,9 @@
 #include <boost/ref.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/assert.hpp>
-#include <boost/mpl/identity.hpp>
-#include <boost/mpl/apply.hpp>
-#include <boost/mpl/placeholders.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/logical.hpp>
+#include <boost/mpl/identity.hpp>
 #include <boost/type_traits/is_array.hpp>
 #include <boost/type_traits/remove_bounds.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
