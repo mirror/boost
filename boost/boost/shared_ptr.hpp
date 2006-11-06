@@ -512,6 +512,9 @@ template<class Y> std::ostream & operator<< (std::ostream & os, shared_ptr<Y> co
 
 #else
 
+// in STLport's no-iostreams mode no iostream symbols can be used
+#ifndef _STLP_NO_IOSTREAMS
+
 # if defined(BOOST_MSVC) && BOOST_WORKAROUND(BOOST_MSVC, < 1300 && __SGI_STL_PORT)
 // MSVC6 has problems finding std::basic_ostream through the using declaration in namespace _STL
 using std::basic_ostream;
@@ -524,7 +527,9 @@ template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::
     return os;
 }
 
-#endif
+#endif // _STLP_NO_IOSTREAMS
+
+#endif // __GNUC__ < 3
 
 // get_deleter (experimental)
 
