@@ -70,6 +70,6 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::proto::subscript_tag)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::function_tag)
 
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::ref, (typename))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::basic_expr, (typename)(typename)(typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::basic_expr, (typename)(typename)(long))
 
 #endif
