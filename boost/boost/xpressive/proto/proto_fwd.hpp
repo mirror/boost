@@ -20,7 +20,7 @@
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 
 #ifndef BOOST_PROTO_MAX_ARITY
-# define BOOST_PROTO_MAX_ARITY 10
+# define BOOST_PROTO_MAX_ARITY 5
 #endif
 
 namespace boost { namespace proto
