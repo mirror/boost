@@ -31,58 +31,18 @@ namespace boost { namespace proto
 
     namespace extends_private_
     {
-        template<typename Expr>
-        struct extends_tag
-          : Expr
-        {
-            typedef typename Expr::expr_type type;
-
-            extends_tag()
-              : Expr()
-            {}
-
-            template<typename A0>
-            explicit extends_tag(A0 const &a0)
-              : Expr(a0)
-            {}
-            
-        #define BOOST_PROTO_EXTENDS_TAG_CTOR(z, n, data)\
-            template<BOOST_PP_ENUM_PARAMS_Z(z, n, typename A)>\
-            extends_tag(BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, A, const &a))\
-              : Expr(BOOST_PP_ENUM_PARAMS_Z(z, n, a))\
-            {}\
-            /**/
-
-            BOOST_PP_REPEAT_FROM_TO(
-                2
-              , BOOST_PP_INC(BOOST_PROTO_EXTENDS_TAG_MAX_ARITY)
-              , BOOST_PROTO_EXTENDS_TAG_CTOR
-              , _
-            )
-
-        #undef BOOST_PROTO_EXTENDS_TAG_CTOR
-
-            using type::operator =;
-        };
+        //struct extends_base
+        //{};
 
     #define BOOST_PROTO_EXTENDS_BINARY_OP(op, tag)\
         template<typename Left, typename Right>\
-        basic_expr<tag, mpl::vector2<ref<typename Left::expr_type>, ref<typename Left::expr_type> > > const\
-        operator op(extends_tag<Left> const &left, extends_tag<Right> const &right)\
+        typename enable_if<\
+            mpl::and_<meta::is_extends<Left>, meta::is_extends<Right> >\
+          , basic_expr<tag, mpl::vector2<ref<typename Left::expr_type>, ref<typename Left::expr_type> > > const\
+        >::type\
+        operator op(Left const &left, Right const &right)\
         {\
             return left.cast() op right.cast();\
-        }\
-        template<typename LTag, typename LArgs, long LArity, typename Right>\
-        basic_expr<tag, mpl::vector2<ref<basic_expr<LTag, LArgs, LArity> >, ref<typename Right::expr_type> > > const\
-        operator op(basic_expr<LTag, LArgs, LArity> const &left, extends_tag<Right> const &right)\
-        {\
-            return left op right.cast();\
-        }\
-        template<typename Left, typename RTag, typename RArgs, long RArity>\
-        basic_expr<tag, mpl::vector2<ref<typename Left::expr_type>, ref<basic_expr<RTag, RArgs, RArity> > > > const\
-        operator op(extends_tag<Left> const &left, basic_expr<RTag, RArgs, RArity> const &right)\
-        {\
-            return left.cast() op right;\
         }\
         /**/
 
@@ -124,9 +84,10 @@ namespace boost { namespace proto
     template<typename Expr>
     struct extends
       : Expr
+      , extends_private_::extends_base
     {
         BOOST_MPL_ASSERT((meta::is_basic_expr<Expr>));
-        typedef Expr expr_type;
+        typedef Expr type;
 
         extends()
           : Expr()
@@ -137,10 +98,7 @@ namespace boost { namespace proto
             *static_cast<Expr *>(this) = that;
         }
 
-        Expr const &cast() const
-        {
-            return *this;
-        }
+        using Expr::operator =;
     };
 
 }}

@@ -64,6 +64,7 @@
     #include BOOST_PP_ITERATE()
     #undef BOOST_PP_ITERATION_PARAMS_1
     }
+
     #endif
 
     #endif // BOOST_PROTO_BASIC_EXPR_HPP_EAN_04_01_2005
@@ -71,7 +72,7 @@
 #elif BOOST_PP_ITERATION_DEPTH() == 1 && BOOST_PP_ITERATION_FLAGS() == 1
 
         template<typename Tag, typename Args>
-        struct basic_expr<Tag, Args, BOOST_PP_ITERATION()>
+        struct basic_expr<Tag, Args, BOOST_PP_ITERATION() >
         {
             typedef basic_expr expr_type;
             typedef Tag tag_type;
@@ -148,14 +149,14 @@
 
     #define N BOOST_PP_ITERATION()
 
-        template<typename Tag, typename Args, long M BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-        struct result_of<proto::basic_expr<Tag, Args, M>(BOOST_PP_ENUM_PARAMS(N, A))>
-          : proto::basic_expr<Tag, Args, M>::BOOST_NESTED_TEMPLATE result<void(BOOST_PP_ENUM_PARAMS(N, A))>
+        template<typename Tag, typename Args, long Arity BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
+        struct result_of<proto::basic_expr<Tag, Args, Arity>(BOOST_PP_ENUM_PARAMS(N, A))>
+          : proto::basic_expr<Tag, Args, Arity>::BOOST_NESTED_TEMPLATE result<void(BOOST_PP_ENUM_PARAMS(N, A))>
         {};
 
-        template<typename Tag, typename Args, long M BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-        struct result_of<proto::basic_expr<Tag, Args, M> const(BOOST_PP_ENUM_PARAMS(N, A))>
-          : proto::basic_expr<Tag, Args, M>::BOOST_NESTED_TEMPLATE result<void(BOOST_PP_ENUM_PARAMS(N, A))>
+        template<typename Tag, typename Args, long Arity BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
+        struct result_of<proto::basic_expr<Tag, Args, Arity> const(BOOST_PP_ENUM_PARAMS(N, A))>
+          : proto::basic_expr<Tag, Args, Arity>::BOOST_NESTED_TEMPLATE result<void(BOOST_PP_ENUM_PARAMS(N, A))>
         {};
 
     #undef N

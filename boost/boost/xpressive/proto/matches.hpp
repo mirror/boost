@@ -138,8 +138,8 @@
             // matches_impl
         #define BOOST_PROTO_MATCHES_N_FUN(z, n, data)\
             matches<\
-                typename meta::arg_c< basic_expr<Tag, Args1, data>, n >::type\
-              , typename meta::arg_c< basic_expr<Tag, Args2, data>, n >::type\
+                typename meta::arg_c< basic_expr<Tag, Args1, data >, n >::type\
+              , typename meta::arg_c< basic_expr<Tag, Args2, data >, n >::type\
             >\
             /**/
 

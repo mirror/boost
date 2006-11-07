@@ -31,17 +31,17 @@ namespace boost { namespace proto
 
 #define BOOST_PROTO_BINARY_OP(op, tag)\
     template<typename LTag, typename LArgs, long LArity, typename Right>\
-    inline basic_expr<tag, mpl::vector2<ref<basic_expr<LTag, LArgs, LArity> >, typename meta::terminal<Right>::type> > const\
+    inline basic_expr<tag, mpl::vector2<ref<basic_expr<LTag, LArgs, LArity> >, typename meta::as_expr_ref<Right>::type> > const\
     operator op(basic_expr<LTag, LArgs, LArity> const &left, Right const &right)\
     {\
-        basic_expr<tag, mpl::vector2<ref<basic_expr<LTag, LArgs, LArity> >, typename meta::terminal<Right>::type> > that = {{left}, proto::make_terminal(right)};\
+        basic_expr<tag, mpl::vector2<ref<basic_expr<LTag, LArgs, LArity> >, typename meta::as_expr_ref<Right>::type> > that = {{left}, proto::as_expr_ref(right)};\
         return that;\
     }\
     template<typename Left, typename RTag, typename RArgs, long RArity>\
-    inline basic_expr<tag, mpl::vector2<typename meta::terminal<Left>::type, ref<basic_expr<RTag, RArgs, RArity> > > > const\
+    inline basic_expr<tag, mpl::vector2<typename meta::as_expr_ref<Left>::type, ref<basic_expr<RTag, RArgs, RArity> > > > const\
     operator op(Left const &left, basic_expr<RTag, RArgs, RArity> const &right)\
     {\
-        basic_expr<tag, mpl::vector2<typename meta::terminal<Left>::type, ref<basic_expr<RTag, RArgs, RArity> > > > that = {proto::make_terminal(left), {right}};\
+        basic_expr<tag, mpl::vector2<typename meta::as_expr_ref<Left>::type, ref<basic_expr<RTag, RArgs, RArity> > > > that = {proto::as_expr_ref(left), {right}};\
         return that;\
     }\
     template<typename LTag, typename LArgs, long LArity, typename RTag, typename RArgs, long RArity>\

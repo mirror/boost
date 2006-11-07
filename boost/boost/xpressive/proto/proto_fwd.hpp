@@ -13,6 +13,7 @@
 #include <boost/mpl/size.hpp>
 #include <boost/type_traits/remove_cv.hpp>
 #include <boost/type_traits/remove_reference.hpp>
+#include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/mpl/long.hpp>
 #include <boost/mpl/vector/vector10.hpp>
 #include <boost/preprocessor/arithmetic/sub.hpp>
@@ -167,11 +168,13 @@ namespace boost { namespace proto
 
     namespace extends_private_
     {
-        template<typename T>
-        struct extends_tag;
+        struct extends_base {};
+
+        //template<typename T>
+        //struct extends_tag;
     }
 
-    using extends_private_::extends_tag;
+    //using extends_private_::extends_tag;
 
     namespace meta
     {
@@ -187,8 +190,14 @@ namespace boost { namespace proto
         template<typename T>
         struct is_ref;
 
+        //template<typename T>
+        //struct is_extends;
+
+        // is_extends
         template<typename T>
-        struct is_extends;
+        struct is_extends
+          : is_base_and_derived<extends_private_::extends_base, T>
+        {};
 
         template<typename T>
         struct is_expr;

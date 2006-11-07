@@ -6,87 +6,90 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_PROTO_COMPILER_PASS_THROUGH_HPP_EAN_04_23_2006
-#define BOOST_PROTO_COMPILER_PASS_THROUGH_HPP_EAN_04_23_2006
+#ifndef BOOST_PP_IS_ITERATING
 
-#include <boost/type_traits/is_same.hpp>
-#include <boost/fusion/sequence/view/transform_view.hpp>
-#include <boost/xpressive/proto/proto.hpp>
-#include <boost/xpressive/proto/traits.hpp>
-#include <boost/xpressive/proto/fusion.hpp>
-#include <boost/xpressive/proto/make_expr.hpp>
+    #ifndef BOOST_PROTO_COMPILER_PASS_THROUGH_HPP_EAN_04_23_2006
+    #define BOOST_PROTO_COMPILER_PASS_THROUGH_HPP_EAN_04_23_2006
 
-namespace boost { namespace proto
-{
+    #include <boost/preprocessor/cat.hpp>
+    #include <boost/preprocessor/enum.hpp>
+    #include <boost/preprocessor/iterate.hpp>
+    #include <boost/xpressive/proto/proto.hpp>
+    #include <boost/xpressive/proto/traits.hpp>
 
-    template<typename State, typename Visitor, typename DomainTag>
-    struct pass_through_transformer
+    namespace boost { namespace proto
     {
-        template<typename Expr>
-        struct result
-          : meta::compile<typename meta::unref<Expr>::type, State, Visitor, DomainTag>
-        {};
-
-        pass_through_transformer(State const &state, Visitor &visitor)
-          : state_(state)
-          , visitor_(visitor)
-        {}
-
-        template<typename Expr>
-        typename result<Expr>::type operator ()(Expr const &expr) const
+        template<typename DomainTag>
+        struct pass_through_compiler
         {
-            return proto::compile(expr.cast(), this->state_, this->visitor_, DomainTag());
-        }
+            template<typename Expr, typename State, typename Visitor, typename Tag, typename Arity>
+            struct apply_impl;
 
-    private:
-        State const &state_;
-        Visitor &visitor_;
-    };
+        #define BOOST_PROTO_DEFINE_META_COMPILE(z, n, data)\
+            typename meta::compile<typename meta::arg_c<Expr, n>::type, State, Visitor, DomainTag>::type
 
-    template<typename DomainTag>
-    struct pass_through_compiler
-    {
-        template<typename Expr, typename State, typename Visitor, typename Tag = typename Expr::tag_type>
-        struct apply
-        {
-            typedef typename meta::as_expr_ref<Expr>::type ref_type;
-            typedef pass_through_transformer<State, Visitor, DomainTag> trans_type;
-            typedef fusion::transform_view<ref_type const, trans_type> view_type;
-            typedef typename meta::unpack_expr<Tag, view_type>::type type;
+        #define BOOST_PROTO_DEFINE_COMPILE(z, n, data)\
+            proto::compile(proto::arg_c<n>(expr), state, visitor, DomainTag())
+
+        #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/compiler/pass_through.hpp>))
+
+        #include BOOST_PP_ITERATE()
+
+        #undef BOOST_PP_ITERATION_PARAMS_1
+        #undef BOOST_PROTO_DEFINE_COMPILE
+        #undef BOOST_PROTO_DEFINE_META_COMPILE
+
+            template<typename Expr, typename State, typename Visitor>
+            struct apply_impl<Expr, State, Visitor, terminal_tag, mpl::long_<1> >
+            {
+                typedef Expr type;
+
+                static type const &call(Expr const &expr, State const &, Visitor &)
+                {
+                    return expr;
+                }
+            };
+
+            template<typename Expr, typename State, typename Visitor>
+            struct apply
+              : apply_impl<Expr, State, Visitor, typename Expr::tag_type, typename Expr::arity>
+            {};
+
+            template<typename Expr, typename State, typename Visitor>
+            static typename apply<Expr, State, Visitor>::type
+            call(Expr const &expr, State const &state, Visitor &visitor)
+            {
+                return apply<Expr, State, Visitor>::call(expr, state, visitor);
+            }
         };
 
-        template<typename Expr, typename State, typename Visitor>
-        struct apply<Expr, State, Visitor, terminal_tag>
-        {
-            typedef Expr type;
-        };
+    }}
 
-        template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
-        {
-            return pass_through_compiler::call_impl(expr, state, visitor, typename Expr::tag_type());
-        }
+    #endif
 
-        template<typename Expr, typename State, typename Visitor, typename Tag>
-        static typename apply<Expr, State, Visitor>::type
-        call_impl(Expr const &expr, State const &state, Visitor &visitor, Tag)
-        {
-            typedef typename meta::as_expr_ref<Expr>::type ref_type;
-            typedef pass_through_transformer<State, Visitor, DomainTag> trans_type;
-            trans_type trans(state, visitor);
-            fusion::transform_view<ref_type const, trans_type> view(proto::as_expr_ref(expr), trans);
-            return proto::unpack_expr<Tag>(view);
-        }
+#else
 
-        template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call_impl(Expr const &expr, State const &, Visitor &, terminal_tag)
-        {
-            return expr;
-        }
-    };
+    #define N BOOST_PP_ITERATION()
 
-}}
+            template<typename Expr, typename State, typename Visitor, typename Tag>
+            struct apply_impl<Expr, State, Visitor, Tag, mpl::long_<N> >
+            {
+                typedef basic_expr<
+                    Tag
+                  , BOOST_PP_CAT(mpl::vector, N)<
+                        BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_META_COMPILE, ~)
+                    >
+                > type;
+
+                static type call(Expr const &expr, State const &state, Visitor &visitor)
+                {
+                    type that = {
+                        BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_COMPILE, ~)
+                    };
+                    return that;
+                }
+            };
+
+    #undef N
 
 #endif

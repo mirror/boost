@@ -67,21 +67,22 @@ namespace boost { namespace proto
             {};
 
             template<typename T>
-            T const &operator ()(T const &t) const
+            typename meta::unref<T>::type const &operator()(T const &t) const
+            {
+                return unref::call(t, meta::is_expr<T>());
+            }
+
+        private:
+            template<typename T>
+            static typename meta::unref<T>::type const &call(T const &t, mpl::true_)
+            {
+                return t.cast();
+            }
+
+            template<typename T>
+            static typename meta::unref<T>::type const &call(T const &t, mpl::false_)
             {
                 return t;
-            }
-
-            template<typename T>
-            T const &operator ()(ref<T> const &t) const
-            {
-                return t.cast();
-            }
-
-            template<typename T>
-            typename T::expr_type const &operator ()(extends_private_::extends_tag<T> const &t) const
-            {
-                return t.cast();
             }
         };
     }

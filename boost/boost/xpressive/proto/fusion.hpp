@@ -112,17 +112,17 @@ namespace boost { namespace fusion
         };
 
         template<typename Tag>
-        struct next_impl;
+        struct advance_impl;
 
         template<>
-        struct next_impl<proto::proto_ref_iterator_tag>
+        struct advance_impl<proto::proto_ref_iterator_tag>
         {
-            template<typename Iterator>
+            template<typename Iterator, typename N>
             struct apply
             {
                 typedef typename proto::detail::ref_iterator<
                     typename Iterator::expr_type
-                  , Iterator::index::value + 1
+                  , Iterator::index::value + N::value
                 > type;
 
                 static type call(Iterator const &iter)
@@ -130,6 +130,43 @@ namespace boost { namespace fusion
                     return type(iter.expr_);
                 }
             };
+        };
+
+        template<typename Tag>
+        struct distance_impl;
+
+        template<>
+        struct distance_impl<proto::proto_ref_iterator_tag>
+        {
+            template<typename IteratorFrom, typename IteratorTo>
+            struct apply
+            {
+                typedef mpl::long_<IteratorTo::index::value - IteratorFrom::index::value> type;
+            };
+        };
+
+        template<typename Tag>
+        struct next_impl;
+
+        template<>
+        struct next_impl<proto::proto_ref_iterator_tag>
+        {
+            template<typename Iterator>
+            struct apply
+              : advance_impl<proto::proto_ref_iterator_tag>::template apply<Iterator, mpl::long_<1> >
+            {};
+        };
+
+        template<typename Tag>
+        struct prior_impl;
+
+        template<>
+        struct prior_impl<proto::proto_ref_iterator_tag>
+        {
+            template<typename Iterator>
+            struct apply
+              : advance_impl<proto::proto_ref_iterator_tag>::template apply<Iterator, mpl::long_<-1> >
+            {};
         };
 
         template<typename Tag>
@@ -141,7 +178,7 @@ namespace boost { namespace fusion
             template<typename Sequence>
             struct apply
             {
-                typedef forward_traversal_tag type;
+                typedef random_access_traversal_tag type;
             };
         };
 
@@ -195,6 +232,37 @@ namespace boost { namespace fusion
         };
 
         template<typename Tag>
+        struct value_at_impl;
+
+        template<>
+        struct value_at_impl<proto::proto_ref_tag>
+        {
+            template<typename Sequence, typename N>
+            struct apply
+            {
+                typedef typename proto::meta::arg<Sequence, N>::type type;
+            };
+        };
+
+        template<typename Tag>
+        struct at_impl;
+
+        template<>
+        struct at_impl<proto::proto_ref_tag>
+        {
+            template<typename Sequence, typename N>
+            struct apply
+            {
+                typedef typename proto::meta::arg<Sequence, N>::type const &type;
+
+                static type call(Sequence &seq)
+                {
+                    return proto::arg_c<N::value>(seq);
+                }
+            };
+        };
+
+        template<typename Tag>
         struct is_segmented_impl;
 
         template<>
@@ -207,7 +275,7 @@ namespace boost { namespace fusion
         };
 
         template<typename Tag>
-        struct msvc_as_element_result
+        struct as_element
         {
             template<typename Expr>
             struct result
@@ -217,19 +285,12 @@ namespace boost { namespace fusion
                   , fusion::single_view<Expr const &>
                 >
             {};
-        };
 
-        template<typename Tag>
-        struct as_element
-          : msvc_as_element_result<Tag>
-        {
             template<typename Expr>
-            typename msvc_as_element_result<Tag>
-                ::BOOST_NESTED_TEMPLATE result<Expr>::type
+            typename result<Expr>::type
             operator()(Expr &expr) const
             {
-                return typename msvc_as_element_result<Tag>
-                    ::BOOST_NESTED_TEMPLATE result<Expr>::type(expr);
+                return typename result<Expr>::type(expr);
             }
         };
 

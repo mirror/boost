@@ -26,10 +26,13 @@
     #include <boost/detail/workaround.hpp>
     #include <boost/ref.hpp>
     #include <boost/mpl/vector.hpp>
+    #include <boost/type_traits/remove_const.hpp>
+    #include <boost/type_traits/remove_reference.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/traits.hpp>
+    #include <boost/fusion/sequence/intrinsic/at.hpp>
+    #include <boost/fusion/sequence/intrinsic/value_at.hpp>
     #include <boost/fusion/sequence/intrinsic/size.hpp>
-    #include <boost/fusion/sequence/utility/unpack_args.hpp>
 
     namespace boost { namespace proto
     {
@@ -43,10 +46,14 @@
             struct make_expr_impl;
 
         #define BOOST_PROTO_AS_EXPR(z, n, data) proto::as_expr(BOOST_PP_CAT(a, n))
+        #define BOOST_PROTO_VALUE_AT(z, n, data) typename  fusion::result_of::value_at_c< Sequence, n >::type
+        #define BOOST_PROTO_AT(z, n, data) fusion::at_c< n >(data)
         #define BOOST_PP_ITERATION_PARAMS_1 (4, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/make_expr.hpp>, 1))
         #include BOOST_PP_ITERATE()
         #undef BOOST_PP_ITERATION_PARAMS_1
         #undef BOOST_PROTO_AS_EXPR
+        #undef BOOST_PROTO_VALUE_AT
+        #undef BOOST_PROTO_AT
         }
 
         namespace meta
@@ -63,10 +70,8 @@
         {
             template<typename Tag, typename Sequence>
             struct unpack_expr
-              : fusion::result_of::unpack_args<
-                    detail::make_expr_impl<Tag, fusion::result_of::size<Sequence>::type::value>
-                  , Sequence
-                >
+              : detail::make_expr_impl<Tag, fusion::result_of::size<Sequence>::type::value>
+                    ::BOOST_NESTED_TEMPLATE from_sequence_result_<Sequence>
             {};
         }
 
@@ -74,8 +79,8 @@
         typename meta::unpack_expr<Tag, Sequence const>::type
         unpack_expr(Sequence const &sequence)
         {
-            detail::make_expr_impl<Tag, fusion::result_of::size<Sequence>::type::value> make_expr;
-            return fusion::unpack_args(make_expr, sequence);
+            typedef typename fusion::result_of::size<Sequence>::type size_type;
+            return detail::make_expr_impl<Tag, size_type::value>::from_sequence(sequence);
         }
 
     }}
@@ -92,6 +97,8 @@
                 template<BOOST_PP_ENUM_PARAMS(N, typename A)>
                 struct result_
                 {
+                    BOOST_STATIC_ASSERT(!is_reference<A0>::value);
+
                     typedef basic_expr<Tag, BOOST_PP_CAT(mpl::vector, N)<
                         BOOST_PP_ENUM_BINARY_PARAMS(N, typename meta::as_expr<A, >::type BOOST_PP_INTERCEPT)
                     > > type;
@@ -118,6 +125,21 @@
                     typename msvc_make_expr_impl_result<Tag, N>
                         ::BOOST_NESTED_TEMPLATE result_<BOOST_PP_ENUM_PARAMS(N, A)>::type that =
                             {BOOST_PP_ENUM(N, BOOST_PROTO_AS_EXPR, _)};
+                    return that;
+                }
+
+                template<typename Sequence>
+                struct from_sequence_result_
+                  : msvc_make_expr_impl_result<Tag, N>
+                        ::BOOST_NESTED_TEMPLATE result_<BOOST_PP_ENUM(N, BOOST_PROTO_VALUE_AT, _)>
+                {};
+
+                template<typename Sequence>
+                static typename from_sequence_result_<Sequence>::type
+                from_sequence(Sequence &seq)
+                {
+                    typename from_sequence_result_<Sequence>::type that =
+                        {BOOST_PP_ENUM(N, BOOST_PROTO_AT, seq)};
                     return that;
                 }
             };

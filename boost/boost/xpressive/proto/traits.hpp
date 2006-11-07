@@ -16,6 +16,7 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/call_traits.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/tags.hpp>
 #include <boost/xpressive/proto/ref.hpp>
@@ -60,17 +61,6 @@ namespace boost { namespace proto
           : is_ref<T>
         {};
 
-        // is_extends
-        template<typename T>
-        struct is_extends
-          : mpl::false_
-        {};
-
-        template<typename T>
-        struct is_extends<extends_private_::extends_tag<T> >
-          : mpl::true_
-        {};
-
         template<typename T>
         struct is_extends<T const>
           : is_extends<T>
@@ -86,6 +76,7 @@ namespace boost { namespace proto
         template<typename T>
         struct as_expr<T, false>
         {
+            BOOST_STATIC_ASSERT(!is_reference<T>::value);
             typedef basic_expr<terminal_tag, mpl::vector1<typename call_traits<T>::value_type> > type;
         };
 
@@ -98,6 +89,7 @@ namespace boost { namespace proto
         template<typename T>
         struct as_expr_ref<T, false>
         {
+            BOOST_STATIC_ASSERT(!is_reference<T>::value);
             typedef basic_expr<terminal_tag, mpl::vector1<typename call_traits<T>::value_type> > type;
         };
 
@@ -149,6 +141,7 @@ namespace boost { namespace proto
         template<typename T>
         struct terminal
         {
+            BOOST_STATIC_ASSERT(!is_reference<T>::value);
             typedef typename call_traits<T>::value_type value_type;
             typedef basic_expr<terminal_tag, mpl::vector1<value_type> > type;
         };
@@ -157,6 +150,7 @@ namespace boost { namespace proto
         template<typename Tag, typename T>
         struct unary_expr
         {
+            BOOST_STATIC_ASSERT(!is_reference<T>::value);
             typedef basic_expr<Tag, mpl::vector1<T> > type;
         };
 
@@ -164,6 +158,8 @@ namespace boost { namespace proto
         template<typename Tag, typename T, typename U>
         struct binary_expr
         {
+            BOOST_STATIC_ASSERT(!is_reference<T>::value);
+            BOOST_STATIC_ASSERT(!is_reference<U>::value);
             typedef basic_expr<Tag, mpl::vector2<T, U> > type;
         };
 
@@ -265,28 +261,34 @@ namespace boost { namespace proto
             {};
 
             template<typename T>
-            typename meta::as_expr<T>::type operator()(T const &t) const
-            {
-                typename meta::as_expr<T>::type that = {t};
-                return that;
-            }
-
-            template<typename Tag, typename Args, long Arity>
-            basic_expr<Tag, Args, Arity> const &operator()(basic_expr<Tag, Args, Arity> const &t) const
-            {
-                return t;
-            }
-
-            template<typename T>
             ref<T> const &operator()(ref<T> const &t) const
             {
                 return t;
             }
-            
+
             template<typename T>
-            typename T::expr_type const &operator()(extends_private_::extends_tag<T> const &t) const
+            typename mpl::if_<
+                meta::is_expr<T>
+              , typename meta::as_expr<T>::type const &
+              , typename meta::as_expr<T>::type
+            >::type
+            operator()(T const &t) const
+            {
+                return as_expr::call(t, meta::is_expr<T>());
+            }
+           
+        private:
+            template<typename T>
+            static typename meta::as_expr<T>::type const &call(T const &t, mpl::true_)
             {
                 return t.cast();
+            }
+
+            template<typename T>
+            static typename meta::as_expr<T>::type call(T const &t, mpl::false_)
+            {
+                typename meta::as_expr<T>::type that = {t};
+                return that;
             }
         };
 
@@ -301,23 +303,31 @@ namespace boost { namespace proto
             {};
 
             template<typename T>
-            typename meta::as_expr_ref<T>::type operator()(T const &t) const
-            {
-                typename meta::as_expr_ref<T>::type that = {t};
-                return that;
-            }
-
-            template<typename T>
             ref<T> const &operator()(ref<T> const &t) const
             {
                 return t;
             }
 
             template<typename T>
-            ref<typename T::expr_type> operator()(extends_private_::extends_tag<T> const &t) const
+            typename meta::as_expr_ref<T>::type
+            operator()(T const &t) const
+            {
+                return as_expr_ref::call(t, meta::is_expr<T>());
+            }
+           
+        private:
+            template<typename T>
+            static typename meta::as_expr_ref<T>::type call(T const &t, mpl::true_)
             {
                 ref<typename T::expr_type> that = {t.cast()};
-                return t;
+                return that;
+            }
+
+            template<typename T>
+            static typename meta::as_expr_ref<T>::type call(T const &t, mpl::false_)
+            {
+                typename meta::as_expr_ref<T>::type that = {t};
+                return that;
             }
         };
 

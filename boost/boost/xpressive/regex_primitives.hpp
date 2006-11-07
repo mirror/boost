@@ -31,14 +31,16 @@ namespace boost { namespace xpressive { namespace detail
     typedef assert_word_placeholder<word_begin> assert_word_begin;
     typedef assert_word_placeholder<word_end> assert_word_end;
 
-    struct mark_tag_extension
+    struct mark_tag
       : proto::extends<basic_mark_tag>
     {
-        mark_tag_extension(int mark_nbr)
+        mark_tag(int mark_nbr)
         {
             basic_mark_tag that = {{mark_nbr}};
             this->assign(that);
         }
+
+        using proto::extends<basic_mark_tag>::operator =;
     };
 
 /*
