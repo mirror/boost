@@ -61,6 +61,12 @@ namespace boost { namespace proto
           : is_ref<T>
         {};
 
+        // is_extends
+        template<typename T>
+        struct is_extends
+          : is_base_and_derived<extends_private_::extends_base, T>
+        {};
+
         template<typename T>
         struct is_extends<T const>
           : is_extends<T>

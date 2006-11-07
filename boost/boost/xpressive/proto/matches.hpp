@@ -108,33 +108,6 @@
               : terminal_matches<Expr0, Grammar0>
             {};
 
-            //template<template<typename, typename> class T, typename Expr0, typename Expr1, typename Grammar0, typename Grammar1>
-            //struct terminal_matches<T<Expr0, Expr1>, T<Grammar0, Grammar1> >
-            //  : detail::and_<
-            //        terminal_matches<Expr0, Grammar0>
-            //      , terminal_matches<Expr1, Grammar1>
-            //    >
-            //{};
-
-            //template<template<typename, typename, typename> class T, typename Expr0, typename Expr1, typename Expr2, typename Grammar0, typename Grammar1, typename Grammar2>
-            //struct terminal_matches<T<Expr0, Expr1, Expr2>, T<Grammar0, Grammar1, Grammar2> >
-            //  : detail::and_<
-            //        terminal_matches<Expr0, Grammar0>
-            //      , terminal_matches<Expr1, Grammar1>
-            //      , terminal_matches<Expr2, Grammar2>
-            //    >
-            //{};
-
-            //template<template<typename, typename, typename, typename> class T, typename Expr0, typename Expr1, typename Expr2, typename Expr3, typename Grammar0, typename Grammar1, typename Grammar2, typename Grammar3>
-            //struct terminal_matches<T<Expr0, Expr1, Expr2, Expr3>, T<Grammar0, Grammar1, Grammar2, Grammar3> >
-            //  : detail::and_<
-            //        terminal_matches<Expr0, Grammar0>
-            //      , terminal_matches<Expr1, Grammar1>
-            //      , terminal_matches<Expr2, Grammar2>
-            //      , terminal_matches<Expr3, Grammar3>
-            //    >
-            //{};
-
             // matches_impl
         #define BOOST_PROTO_MATCHES_N_FUN(z, n, data)\
             matches<\
@@ -187,7 +160,7 @@
             {};
 
             // by default, assume parameter is an expression generator ... 
-            // (this also works for extends_tag<> types because they are also generators)
+            // (this also works for extends<> types because they are also generators)
             template<typename Expr>
             struct deref
             {
@@ -212,8 +185,8 @@
         template<typename Expr, typename Grammar>
         struct matches
           : mpl::or_<
-                is_same<Expr, typename detail::deref<Grammar>::type>
-              , detail::matches_impl<Expr, typename detail::deref<Grammar>::type>
+                is_same<typename Expr::expr_type, typename detail::deref<Grammar>::type>
+              , detail::matches_impl<typename Expr::expr_type, typename detail::deref<Grammar>::type>
             >
         {};
 

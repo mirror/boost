@@ -168,13 +168,8 @@ namespace boost { namespace proto
 
     namespace extends_private_
     {
-        struct extends_base {};
-
-        //template<typename T>
-        //struct extends_tag;
+        struct extends_base;
     }
-
-    //using extends_private_::extends_tag;
 
     namespace meta
     {
@@ -190,14 +185,8 @@ namespace boost { namespace proto
         template<typename T>
         struct is_ref;
 
-        //template<typename T>
-        //struct is_extends;
-
-        // is_extends
         template<typename T>
-        struct is_extends
-          : is_base_and_derived<extends_private_::extends_base, T>
-        {};
+        struct is_extends;
 
         template<typename T>
         struct is_expr;

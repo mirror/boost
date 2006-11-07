@@ -31,8 +31,8 @@ namespace boost { namespace proto
 
     namespace extends_private_
     {
-        //struct extends_base
-        //{};
+        struct extends_base
+        {};
 
     #define BOOST_PROTO_EXTENDS_BINARY_OP(op, tag)\
         template<typename Left, typename Right>\
