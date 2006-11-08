@@ -496,7 +496,7 @@ pp_iterator_functor<ContextT>::operator()()
         {
             // feed ws eater FSM
             skipped_newline = false;
-            ctx.get_hooks().may_skip_whitespace(ctx, act_token, skipped_newline);
+//             ctx.get_hooks().may_skip_whitespace(ctx, act_token, skipped_newline);
             id = token_id(act_token);
         }
     }
@@ -560,7 +560,7 @@ pp_iterator_functor<ContextT>::operator()()
             act_token.get_position());
     }
     whitespace.shift_tokens(id);
-    return act_token;
+    return ctx.get_hooks().generated_token(ctx, act_token);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

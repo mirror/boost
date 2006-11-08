@@ -450,9 +450,35 @@ struct default_preprocessing_hooks
 
     ///////////////////////////////////////////////////////////////////////////
     //
+    //  The function 'generated_token' will be called by the library whenever a
+    //  token is about to be returned from the library.
+    //
+    //  The parameter 'ctx' is a reference to the context object used for 
+    //  instantiating the preprocessing iterators by the user.
+    //
+    //  The parameter 't' is the token about to be returned from the library.
+    //  This function may alter the token, but in this case it must be 
+    //  implemented with a corresponding signature: 
+    //
+    //      TokenT const&
+    //      generated_token(ContextT const& ctx, TokenT& t);
+    //
+    //  which makes it possible to modify the token in place.
+    //
+    //  The default behavior is to return the token passed as the parameter 
+    //  without modification.
+    //  
+    ///////////////////////////////////////////////////////////////////////////
+    template <typename ContextT, typename TokenT>
+    TokenT const&
+    generated_token(ContextT const& ctx, TokenT const& t)
+    { return t; }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //
     //  The function 'may_skip_whitespace' will be called by the 
-    //  library, whenever a token is about to be returned to the calling 
-    //  application. 
+    //  library, whenever it must be tested whether a specific token refers to 
+    //  whitespace and this whitespace has to be skipped.
     //
     //  The parameter 'ctx' is a reference to the context object used for 
     //  instantiating the preprocessing iterators by the user.

@@ -61,10 +61,16 @@ CHANGELOG
   occurring error (whenever an exception would have been thrown). The default
   of this new hook function is to throw the corresponding exception, which 
   reproduces the old behavior.
-  
+- Implemented a new preprocessing hook: generated_token(), which get's called
+  whenever a token is about to be returned form the library. This function may
+  be used to alter the token before it gets returned to the calling 
+  application.
+- Added a new sample 'real_positions' demonstrating the new generated_token()
+  preprocessing hook.
+
 Boost V1.34.0
 - Wave Version 1.2.4
-- Added the possibility to explicitely enable/disable the generation of #line 
+- Added the possibility to explicitly enable/disable the generation of #line 
   directives. Added a corresponding commandline argument to the Wave driver 
   tool (--line/-L) which takes either 0 or 1 as its parameter.
 - Added support for #pragma wave option(command: value) directives, which 
