@@ -224,6 +224,9 @@ namespace boost { namespace proto
         template<typename Expr>
         struct tag;
 
+        template<typename Expr>
+        struct id;
+
         template<typename T, bool IsExpr = is_expr<T>::value>
         struct unref;
 
