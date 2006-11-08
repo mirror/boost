@@ -1,5 +1,5 @@
 
-// Copyright Aleksey Gurtovoy 2000-2004
+// Copyright Aleksey Gurtovoy 2000-2006
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -65,7 +65,7 @@ struct AUX_WRAPPER_NAME
     typedef AUX_WRAPPER_INST(prior_value) prior;
 #elif BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x561)) \
     || BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(502)) \
-    || BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(53800))
+    || BOOST_WORKAROUND(__HP_aCC, <= 53800)
     typedef AUX_WRAPPER_INST( BOOST_MPL_AUX_STATIC_CAST(AUX_WRAPPER_VALUE_TYPE, (N + 1)) ) next;
     typedef AUX_WRAPPER_INST( BOOST_MPL_AUX_STATIC_CAST(AUX_WRAPPER_VALUE_TYPE, (N - 1)) ) prior;
 #else

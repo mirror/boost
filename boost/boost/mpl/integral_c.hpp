@@ -2,7 +2,7 @@
 #ifndef BOOST_MPL_INTEGRAL_C_HPP_INCLUDED
 #define BOOST_MPL_INTEGRAL_C_HPP_INCLUDED
 
-// Copyright Aleksey Gurtovoy 2000-2004
+// Copyright Aleksey Gurtovoy 2000-2006
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -19,7 +19,7 @@
 #include <boost/mpl/aux_/config/static_constant.hpp>
 #include <boost/mpl/aux_/config/workaround.hpp>
 
-#if BOOST_WORKAROUND(__HP_aCC, BOOST_TESTED_AT(53800))
+#if BOOST_WORKAROUND(__HP_aCC, <= 53800)
 // the type of non-type template arguments may not depend on template arguments
 #   define AUX_WRAPPER_PARAMS(N) typename T, long N
 #else
