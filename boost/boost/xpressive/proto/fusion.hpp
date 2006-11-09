@@ -32,6 +32,7 @@
 
 #include <boost/fusion/support/ext_/is_segmented.hpp>
 #include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
+#include <boost/fusion/sequence/intrinsic/ext_/size_s.hpp>
 #include <boost/fusion/sequence/view/ext_/segmented_iterator.hpp>
 
 namespace boost { namespace proto { namespace detail
@@ -343,6 +344,15 @@ namespace boost { namespace fusion
             template<typename Sequence>
             struct apply
               : fusion::segmented_end<Sequence>
+            {};
+        };
+
+        template<>
+        struct size_impl<proto::proto_expr_tag>
+        {
+            template<typename Sequence>
+            struct apply
+              : fusion::segmented_size<Sequence>
             {};
         };
     }
