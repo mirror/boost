@@ -56,7 +56,7 @@ namespace boost { namespace fusion
         lazy_disable_if<
             is_const<Sequence>
           , result_of::find<Sequence, T>
-        >::type
+        >::type const
     find(Sequence& seq)
     {
         typedef typename result_of::find<Sequence, T>::filter filter;
@@ -64,7 +64,7 @@ namespace boost { namespace fusion
     }
 
     template <typename T, typename Sequence>
-    inline typename result_of::find<Sequence const, T>::type
+    inline typename result_of::find<Sequence const, T>::type const
     find(Sequence const& seq)
     {
         typedef typename result_of::find<Sequence const, T>::filter filter;

@@ -58,14 +58,14 @@ namespace boost { namespace fusion
     }
 
     template <typename Sequence>
-    inline typename result_of::end<Sequence>::type
+    inline typename result_of::end<Sequence>::type const
     end(Sequence& seq)
     {
         return result_of::end<Sequence>::call(seq);
     }
 
     template <typename Sequence>
-    inline typename result_of::end<Sequence const>::type
+    inline typename result_of::end<Sequence const>::type const
     end(Sequence const& seq)
     {
         return result_of::end<Sequence const>::call(seq);

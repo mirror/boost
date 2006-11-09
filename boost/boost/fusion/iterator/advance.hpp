@@ -75,14 +75,14 @@ namespace boost { namespace fusion
     }
 
     template <int N, typename Iterator>
-    inline typename result_of::advance_c<Iterator, N>::type
+    inline typename result_of::advance_c<Iterator, N>::type const
     advance_c(Iterator const& i)
     {
         return result_of::advance_c<Iterator, N>::call(i);
     }
 
     template<typename N, typename Iterator>
-    inline typename result_of::advance<Iterator, N>::type
+    inline typename result_of::advance<Iterator, N>::type const
     advance(Iterator const& i)
     {
         return result_of::advance<Iterator, N>::call(i);

@@ -54,7 +54,7 @@ namespace boost { namespace fusion
     }
 
     template <typename Iterator>
-    typename result_of::next<Iterator>::type
+    typename result_of::next<Iterator>::type const
     next(Iterator const& i)
     {
         return result_of::next<Iterator>::call(i);

@@ -51,7 +51,7 @@ namespace boost { namespace fusion
     }
 
     template <typename Pred, typename Sequence>
-    inline typename result_of::find_if<Sequence const, Pred>::type
+    inline typename result_of::find_if<Sequence const, Pred>::type const
     find_if(Sequence const& seq)
     {
         typedef
