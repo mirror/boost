@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 #include <string>
 #include <vector>
 
@@ -27,6 +28,64 @@
 #include <boost/wave/cpplexer/cpp_lex_iterator.hpp> // lexer class
 
 #include "correct_token_positions.hpp"
+
+///////////////////////////////////////////////////////////////////////////////
+//
+//  Special output operator for a lex_token.
+//
+//      Note: this doesn't compile if BOOST_SPIRIT_DEBUG is defined.
+//
+///////////////////////////////////////////////////////////////////////////////
+template <typename PositionT>
+inline std::ostream &
+operator<< (std::ostream &stream, 
+    boost::wave::cpplexer::lex_token<PositionT> const &t)
+{
+    using namespace std;
+    using namespace boost::wave;
+    
+    token_id id = token_id(t);
+    stream << setw(16) 
+        << left << boost::wave::get_token_name(id) << " ("
+        << "#" << setw(3) << BASEID_FROM_TOKEN(id);
+
+    if (ExtTokenTypeMask & id) {
+    // this is an extended token id
+        if (AltTokenType == (id & ExtTokenOnlyMask)) {
+            stream << ", AltTokenType";
+        }
+        else if (TriGraphTokenType == (id & ExtTokenOnlyMask)) {
+            stream << ", TriGraphTokenType";
+        }
+        else if (AltExtTokenType == (id & ExtTokenOnlyMask)){
+            stream << ", AltExtTokenType";
+        }
+    }
+    
+    stream 
+        << ") at " << t.get_position().get_file() << " (" 
+        << setw(3) << right << t.get_position().get_line() << "/" 
+        << setw(2) << right << t.get_position().get_column() 
+        << "): >";
+    
+    typedef typename boost::wave::cpplexer::lex_token<PositionT>::string_type 
+        string_type;
+        
+    string_type const& value = t.get_value();
+    for (std::size_t i = 0; i < value.size(); ++i) {
+        switch (value[i]) {
+        case '\r':  stream << "\\r"; break;
+        case '\n':  stream << "\\n"; break;
+        case '\t':  stream << "\\t"; break;
+        default:
+            stream << value[i]; 
+            break;
+        }
+    }
+    stream << "<";
+
+    return stream;
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 // main entry point
@@ -89,7 +148,7 @@ boost::wave::util::file_position_type current_position;
 
         while (first != last) {
             current_position = (*first).get_position();
-            std::cout << (*first).get_value();
+            std::cout << *first << std::endl;
             ++first;
         }
     }
