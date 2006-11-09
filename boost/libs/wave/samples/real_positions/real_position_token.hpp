@@ -165,24 +165,7 @@ public:
         { return t.get_value(); }
 #endif 
     
-#if defined(BOOST_SPIRIT_DEBUG)
-// debug support
-    void print (std::ostream &stream) const
-    {
-        data->print(stream);
-    }
-#endif // defined(BOOST_SPIRIT_DEBUG)
-
 private:
-#if BOOST_WAVE_SERIALIZATION != 0
-    friend class boost::serialization::access;
-    template<typename Archive>
-    void serialize(Archive &ar, const unsigned int version)
-    {
-        data->serialize(ar, version);
-    }
-#endif
-
     // make a unique copy of the current object
     void make_unique()
     {
