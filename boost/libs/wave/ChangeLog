@@ -66,7 +66,8 @@ CHANGELOG
   be used to alter the token before it gets returned to the calling 
   application.
 - Added a new sample 'real_positions' demonstrating the new generated_token()
-  preprocessing hook.
+  preprocessing hook and showing how to use Wave with a new token type without 
+  using a new lexer type.
 
 Boost V1.34.0
 - Wave Version 1.2.4

@@ -33,7 +33,6 @@
 #include <boost/wave/cpplexer/token_cache.hpp>
 #include <boost/wave/cpplexer/convert_trigraphs.hpp>
 
-#include <boost/wave/cpplexer/cpp_lex_token.hpp>
 #include <boost/wave/cpplexer/cpp_lex_interface.hpp>
 #include <boost/wave/cpplexer/re2clex/scanner.hpp>
 #include <boost/wave/cpplexer/re2clex/cpp_re.hpp>

@@ -114,7 +114,7 @@ struct correct_token_position
         }
         
         // set the new position in the token to be returned
-        token.set_position(current_pos);
+        token.set_corrected_position(current_pos);
         return token;
     }
     
