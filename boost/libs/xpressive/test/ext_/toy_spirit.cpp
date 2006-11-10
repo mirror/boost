@@ -56,15 +56,28 @@ namespace boost
 
     template<typename T>
     struct literal
+      : proto::extends<typename proto::meta::terminal<T>::type>
     {
-        typedef typename proto::meta::terminal<T>::type type;
+        literal(T const &t)
+        {
+            typename proto::meta::terminal<T>::type that = {t};
+            this->assign(that);
+        }
+
+        template<typename U>
+        literal(literal<U> const &u)
+        {
+            typename proto::meta::terminal<T>::type that = {proto::arg(u)};
+            this->assign(that);
+        }
+
+        using proto::meta::terminal<T>::type::operator =;
     };
 
     template<typename T>
-    typename literal<T>::type lit(T const &t)
+    literal<T> lit(T const &t)
     {
-        typename literal<T>::type that = {t};
-        return that;
+        return literal<T>(t);
     }
 }
 
@@ -161,8 +174,10 @@ namespace boost { namespace spirit2
 
     namespace parser
     {
-        template<typename Node, typename Context>
-        bool parse(Node const &node, Context &ctx);
+        using mpl::_;
+
+        template<typename Expr, typename Context>
+        bool parse(Expr const &expr, Context &ctx);
 
         // context
         template<typename FwdIter, typename Skipper = never_p>
@@ -218,9 +233,9 @@ namespace boost { namespace spirit2
 
             // parse function for char_p
             template<typename Context>
-            bool parse(char_p const &p, Context &ctx)
+            bool parse(char_p const &expr, Context &ctx)
             {
-                if(ctx.first == ctx.second || *ctx.first != proto::arg(p.arg1))
+                if(ctx.first == ctx.second || *ctx.first != proto::arg(expr.arg1))
                     return false;
                 ++ctx.first;
                 return true;
@@ -228,7 +243,7 @@ namespace boost { namespace spirit2
 
             // parse function for space_p
             template<typename Context>
-            bool parse(space_p const &p, Context &ctx)
+            bool parse(space_p const &expr, Context &ctx)
             {
                 if(ctx.first == ctx.second || !std::isspace(*ctx.first))
                     return false;
@@ -238,41 +253,41 @@ namespace boost { namespace spirit2
 
             // parse function for bare character literals
             template<typename Context>
-            bool parse(chlit_p const &p, Context &ctx)
+            bool parse(chlit_p const &expr, Context &ctx)
             {
-                return primitives::parse(char_(p.arg0), ctx);
+                return primitives::parse(char_(expr.arg0), ctx);
             }
 
             // case-insensitive character parser
             template<typename Context>
-            bool parse(ichar_p const &p, Context &ctx)
+            bool parse(ichar_p const &expr, Context &ctx)
             {
                 if(ctx.first == ctx.second
-                  || !utility::char_icmp(*ctx.first, proto::arg(p.arg1), proto::arg(p.arg2)))
+                  || !utility::char_icmp(*ctx.first, proto::arg(expr.arg1), proto::arg(expr.arg2)))
                     return false;
                 ++ctx.first;
                 return true;
             }
 
             template<typename Context>
-            bool parse(szlit_p const &p, Context &ctx)
+            bool parse(szlit_p const &expr, Context &ctx)
             {
-                return utility::string_cmp(proto::arg(p), ctx.first, ctx.second);
+                return utility::string_cmp(proto::arg(expr), ctx.first, ctx.second);
             }
 
             template<typename Context>
-            bool parse(istr_p const &p, Context &ctx)
+            bool parse(istr_p const &expr, Context &ctx)
             {
-                return utility::string_icmp(proto::arg(p.arg1), ctx.first, ctx.second);
+                return utility::string_icmp(proto::arg(expr.arg1), ctx.first, ctx.second);
             }
 
             // parse function for char_range_p
             template<typename Context>
-            bool parse(char_range_p const &p, Context &ctx)
+            bool parse(char_range_p const &expr, Context &ctx)
             {
-                BOOST_ASSERT(proto::arg(p.arg1) <= proto::arg(p.arg2));
+                BOOST_ASSERT(proto::arg(expr.arg1) <= proto::arg(expr.arg2));
                 if(ctx.first == ctx.second
-                  || !utility::in_range(*ctx.first, proto::arg(p.arg1), proto::arg(p.arg2)))
+                  || !utility::in_range(*ctx.first, proto::arg(expr.arg1), proto::arg(expr.arg2)))
                     return false;
                 ++ctx.first;
                 return true;
@@ -280,11 +295,11 @@ namespace boost { namespace spirit2
 
             // parse function for ichar_range_p
             template<typename Context>
-            bool parse(ichar_range_p const &p, Context &ctx)
+            bool parse(ichar_range_p const &expr, Context &ctx)
             {
-                BOOST_ASSERT(proto::arg(p.arg1) <= proto::arg(p.arg2));
+                BOOST_ASSERT(proto::arg(expr.arg1) <= proto::arg(expr.arg2));
                 if(ctx.first == ctx.second
-                  || !utility::in_irange(*ctx.first, proto::arg(p.arg1), proto::arg(p.arg2)))
+                  || !utility::in_irange(*ctx.first, proto::arg(expr.arg1), proto::arg(expr.arg2)))
                     return false;
                 ++ctx.first;
                 return true;
@@ -292,11 +307,12 @@ namespace boost { namespace spirit2
 
             // parse function for complemented thingies (where thingies are assumed 
             // to be 1 character wide).
-            template<typename Args, typename Context>
-            bool parse(proto::basic_expr<proto::complement_tag, Args, 1> const &p, Context &ctx)
+            template<typename Expr, typename Context>
+            typename proto::if_matches<Expr, proto::meta::complement<_>, bool>::type
+            parse(Expr const &expr, Context &ctx)
             {
                 typename Context::iterator tmp = ctx.first;
-                if(primitives::parse(proto::arg(p), ctx))
+                if(primitives::parse(proto::arg(expr), ctx))
                     return ctx.first = tmp, false;
                 ctx.first = ++tmp;
                 return true;
@@ -317,28 +333,31 @@ namespace boost { namespace spirit2
         namespace composites
         {
             // for A >> B, succeeds if A and B matches.
-            template<typename Args, typename Context>
-            bool parse(proto::basic_expr<proto::right_shift_tag, Args, 2> const &node, Context &ctx)
+            template<typename Expr, typename Context>
+            typename proto::if_matches<Expr, proto::meta::right_shift<_, _>, bool>::type
+            parse(Expr const &expr, Context &ctx)
             {
-                return parser::parse(proto::left(node), ctx)
-                    && parser::parse(proto::right(node), ctx);
+                return parser::parse(proto::left(expr), ctx)
+                    && parser::parse(proto::right(expr), ctx);
             }
 
             // for A | B, succeeds if either A or B matches at this point.
-            template<typename Args, typename Context>
-            bool parse(proto::basic_expr<proto::bitor_tag, Args, 2> const &node, Context &ctx)
+            template<typename Expr, typename Context>
+            typename proto::if_matches<Expr, proto::meta::bitwise_or<_, _>, bool>::type
+            parse(Expr const &expr, Context &ctx)
             {
                 typename Context::iterator tmp = ctx.first;
-                return parser::parse(proto::left(node), ctx)
-                    || parser::parse(proto::right(node), reset(ctx, tmp));
+                return parser::parse(proto::left(expr), ctx)
+                    || parser::parse(proto::right(expr), reset(ctx, tmp));
             }
 
             // for *A, greedily match A as many times as possible.
-            template<typename Args, typename Context>
-            bool parse(proto::basic_expr<proto::unary_star_tag, Args, 1> const &node, Context &ctx)
+            template<typename Expr, typename Context>
+            typename proto::if_matches<Expr, proto::meta::unary_star<_>, bool>::type
+            parse(Expr const &expr, Context &ctx)
             {
                 typename Context::iterator tmp = ctx.first;
-                while(parser::parse(proto::arg(node), ctx))
+                while(parser::parse(proto::arg(expr), ctx))
                     tmp = ctx.first;
                 // make sure that when we return true, the iterator is at the correct position!
                 ctx.first = tmp;
@@ -346,30 +365,33 @@ namespace boost { namespace spirit2
             }
 
             // for +A, greedily match A one or more times.
-            template<typename Args, typename Context>
-            bool parse(proto::basic_expr<proto::unary_plus_tag, Args, 1> const &node, Context &ctx)
+            template<typename Expr, typename Context>
+            typename proto::if_matches<Expr, proto::meta::unary_plus<_>, bool>::type
+            parse(Expr const &expr, Context &ctx)
             {
-                return parser::parse(proto::arg(node), ctx)
-                    && parser::parse(*proto::arg(node), ctx);
+                return parser::parse(proto::arg(expr), ctx)
+                    && parser::parse(*proto::arg(expr), ctx);
             }
 
             // for !A, optionally match A.
-            template<typename Args, typename Context>
-            bool parse(proto::basic_expr<proto::logical_not_tag, Args, 1> const &node, Context &ctx)
+            template<typename Expr, typename Context>
+            typename proto::if_matches<Expr, proto::meta::logical_not<_>, bool>::type
+            parse(Expr const &expr, Context &ctx)
             {
                 typename Context::iterator tmp = ctx.first;
-                if(!parser::parse(proto::arg(node), ctx))
+                if(!parser::parse(proto::arg(expr), ctx))
                     ctx.first = tmp;
                 return true;
             }
 
             // for (A - B), matches when A but not B matches.
-            template<typename Args, typename Context>
-            bool parse(proto::basic_expr<proto::subtract_tag, Args, 2> const &node, Context &ctx)
+            template<typename Expr, typename Context>
+            typename proto::if_matches<Expr, proto::meta::subtract<_, _>, bool>::type
+            parse(Expr const &expr, Context &ctx)
             {
                 typename Context::iterator tmp = ctx.first;
-                return !parser::parse(proto::right(node), ctx)
-                    && parser::parse(proto::left(node), reset(ctx, tmp));
+                return !parser::parse(proto::right(expr), ctx)
+                    && parser::parse(proto::left(expr), reset(ctx, tmp));
             }
         }
 
@@ -385,21 +407,21 @@ namespace boost { namespace spirit2
         // A proto lambda
         struct is_primitive_predicate
         {
-            template<typename Node, typename State, typename Context>
+            template<typename Expr, typename State, typename Context>
             struct apply
-              : is_primitive<Node>
+              : is_primitive<Expr>
             {};
         };
 
         // parser for primitives, calls skip parser first
-        template<typename Node, typename Context>
-        bool parse(Node const &node, Context &ctx)
+        template<typename Expr, typename Context>
+        bool parse(Expr const &expr, Context &ctx)
         {
-            if(is_primitive<Node>::value)
+            if(is_primitive<Expr>::value)
                 ctx.skip();
             using primitives::parse;
             using composites::parse;
-            return (parse)(node, ctx);
+            return (parse)(expr, ctx);
         }
 
     } // namespace parser
@@ -422,10 +444,10 @@ namespace boost { namespace spirit2
         {
             typedef ichar_p type;
 
-            static type call(char_p const &p)
+            static type call(char_p const &expr)
             {
-                char lo = std::tolower(proto::arg(p.arg1));
-                char hi = std::toupper(proto::arg(p.arg1));
+                char lo = std::tolower(proto::arg(expr.arg1));
+                char hi = std::toupper(proto::arg(expr.arg1));
                 return ichar_(lo, hi);
             }
         };
@@ -435,10 +457,10 @@ namespace boost { namespace spirit2
         {
             typedef ichar_p type;
 
-            static type call(chlit_p const &p)
+            static type call(chlit_p const &expr)
             {
-                char lo = std::tolower(p.arg0);
-                char hi = std::toupper(p.arg0);
+                char lo = std::tolower(expr.arg0);
+                char hi = std::toupper(expr.arg0);
                 return ichar_(lo, hi);
             }
         };
@@ -448,10 +470,10 @@ namespace boost { namespace spirit2
         {
             typedef ichar_range_p type;
 
-            static type call(char_range_p const &p)
+            static type call(char_range_p const &expr)
             {
-                char lo = proto::arg(p.arg1);
-                char hi = proto::arg(p.arg2);
+                char lo = proto::arg(expr.arg1);
+                char hi = proto::arg(expr.arg2);
                 return ichar_range_(lo, hi);
             }
         };
@@ -460,10 +482,10 @@ namespace boost { namespace spirit2
         {
             typedef istr_p type;
 
-            template<typename Node>
-            static type call(Node const &p)
+            template<typename Expr>
+            static type call(Expr const &expr)
             {
-                return istr_(utility::to_istr(proto::arg(p)));
+                return istr_(utility::to_istr(proto::arg(expr)));
             }
         };
 
@@ -474,27 +496,27 @@ namespace boost { namespace spirit2
 
         struct no_case_compiler
         {
-            template<typename Node, typename State, typename Context>
+            template<typename Expr, typename State, typename Context>
             struct apply
-              : remove_case<Node>
+              : remove_case<Expr>
             {};
 
-            template<typename Node, typename State, typename Context>
-            static typename apply<Node, State, Context>::type
-            call(Node const &node, State const &, Context &)
+            template<typename Expr, typename State, typename Context>
+            static typename apply<Expr, State, Context>::type
+            call(Expr const &expr, State const &, Context &)
             {
-                return apply<Node, State, Context>::call(node);
+                return apply<Expr, State, Context>::call(expr);
             }
         };
 
         struct no_case_directive
         {
-            template<typename Node>
-            typename proto::meta::compile<Node, mpl::void_, mpl::void_, no_case_tag>::type
-            operator [](Node const &node) const
+            template<typename Expr>
+            typename proto::meta::compile<Expr, mpl::void_, mpl::void_, no_case_tag>::type
+            operator [](Expr const &expr) const
             {
                 mpl::void_ null;
-                return proto::compile(node, null, null, no_case_tag());
+                return proto::compile(expr, null, null, no_case_tag());
             }
         };
     }
@@ -503,21 +525,21 @@ namespace boost { namespace spirit2
     {
         struct skipper_compiler
         {
-            template<typename Node, typename State, typename Context>
+            template<typename Expr, typename State, typename Context>
             struct apply
             {
                 typedef typename proto::meta::binary_expr<
                     proto::right_shift_tag
                   , typename proto::meta::unary_expr<proto::unary_star_tag, State>::type
-                  , Node
+                  , Expr
                 >::type type;
             };
 
-            template<typename Node, typename State, typename Context>
-            static typename apply<Node, State, Context>::type
-            call(Node const &node, State const &state, Context &)
+            template<typename Expr, typename State, typename Context>
+            static typename apply<Expr, State, Context>::type
+            call(Expr const &expr, State const &state, Context &)
             {
-                typename apply<Node, State, Context>::type that = {{state}, node};
+                typename apply<Expr, State, Context>::type that = {{state}, expr};
                 return that;
             }
         };
@@ -529,12 +551,12 @@ namespace boost { namespace spirit2
               : skip_(skip)
             {}
 
-            template<typename Node>
-            typename proto::meta::compile<Node, Skipper, mpl::void_, skipper_tag>::type
-            operator [](Node const &node) const
+            template<typename Expr>
+            typename proto::meta::compile<Expr, Skipper, mpl::void_, skipper_tag>::type
+            operator [](Expr const &expr) const
             {
                 mpl::void_ null;
-                return proto::compile(node, this->skip_, null, skipper_tag());
+                return proto::compile(expr, this->skip_, null, skipper_tag());
             }
         private:
             Skipper skip_;
@@ -662,8 +684,8 @@ void test_toy_spirit()
     BOOST_CHECK(spirit2::parse(str.begin(), str.end()
                    , no_case[*char_('A','Z')]));
 
-    literal<char>::type a = lit('a');
-    literal<char const *>::type bcd = lit("bcd");
+    literal<char> a = lit('a');
+    literal<char const *> bcd = lit("bcd");
 
     // This will succeed:
     BOOST_CHECK(spirit2::parse(str.begin(), str.end()
