@@ -1,5 +1,4 @@
 
-
 #ifndef BOOST_MPL_ASSERT_HPP_INCLUDED
 #define BOOST_MPL_ASSERT_HPP_INCLUDED
 
@@ -245,11 +244,13 @@ BOOST_STATIC_CONSTANT( \
 #if defined(BOOST_MPL_CFG_ASSERT_USE_RELATION_NAMES)
 
 #   if !defined(BOOST_MPL_CFG_ASSERT_BROKEN_POINTER_TO_POINTER_TO_MEMBER)
+// agurt, 9/nov/06: 'enum' below is a workaround for gcc 4.0.4/4.1.1 bugs #29522 and #29518
 #   define BOOST_MPL_ASSERT_RELATION(x, rel, y) \
+enum { BOOST_PP_CAT(mpl_assert_rel_value,__LINE__) = (x rel y) }; \
 BOOST_STATIC_CONSTANT( \
       std::size_t \
     , BOOST_PP_CAT(mpl_assertion_in_line_,__LINE__) = sizeof( \
-        boost::mpl::assertion_failed<(x rel y)>( \
+        boost::mpl::assertion_failed<BOOST_PP_CAT(mpl_assert_rel_value,__LINE__)>( \
             (boost::mpl::failed ************ ( boost::mpl::assert_relation< \
                   boost::mpl::assert_::relations( sizeof( \
                       boost::mpl::assert_::arg rel boost::mpl::assert_::arg \
