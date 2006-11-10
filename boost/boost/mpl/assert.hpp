@@ -47,6 +47,12 @@
 #   define BOOST_MPL_CFG_ASSERT_BROKEN_POINTER_TO_POINTER_TO_MEMBER
 #endif
 
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
+#   define BOOST_MPL_AUX_ASSERT_CONSTANT(T, expr) enum { expr }
+#else
+#   define BOOST_MPL_AUX_ASSERT_CONSTANT(T, expr) BOOST_STATIC_CONSTANT(T, expr)
+#endif
+
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 
@@ -135,7 +141,7 @@ template< typename P > struct assert_arg_pred
 template< typename P > struct assert_arg_pred_not
 {
     typedef typename P::type p_type;
-    BOOST_STATIC_CONSTANT( bool, p = !p_type::value );
+    BOOST_MPL_AUX_ASSERT_CONSTANT( bool, p = !p_type::value );
     typedef typename assert_arg_pred_impl<p>::type type;
 };
 
@@ -204,7 +210,7 @@ BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
 // BOOST_MPL_ASSERT((pred<x,...>))
 
 #define BOOST_MPL_ASSERT(pred) \
-BOOST_STATIC_CONSTANT( \
+BOOST_MPL_AUX_ASSERT_CONSTANT( \
       std::size_t \
     , BOOST_PP_CAT(mpl_assertion_in_line_,__LINE__) = sizeof( \
           boost::mpl::assertion_failed<false>( \
@@ -228,7 +234,7 @@ enum { \
 /**/
 #else
 #   define BOOST_MPL_ASSERT_NOT(pred) \
-BOOST_STATIC_CONSTANT( \
+BOOST_MPL_AUX_ASSERT_CONSTANT( \
       std::size_t \
     , BOOST_PP_CAT(mpl_assertion_in_line_,__LINE__) = sizeof( \
           boost::mpl::assertion_failed<false>( \
@@ -247,7 +253,7 @@ BOOST_STATIC_CONSTANT( \
 // agurt, 9/nov/06: 'enum' below is a workaround for gcc 4.0.4/4.1.1 bugs #29522 and #29518
 #   define BOOST_MPL_ASSERT_RELATION(x, rel, y) \
 enum { BOOST_PP_CAT(mpl_assert_rel_value,__LINE__) = (x rel y) }; \
-BOOST_STATIC_CONSTANT( \
+BOOST_MPL_AUX_ASSERT_CONSTANT( \
       std::size_t \
     , BOOST_PP_CAT(mpl_assertion_in_line_,__LINE__) = sizeof( \
         boost::mpl::assertion_failed<BOOST_PP_CAT(mpl_assert_rel_value,__LINE__)>( \
@@ -263,14 +269,14 @@ BOOST_STATIC_CONSTANT( \
 /**/
 #   else
 #   define BOOST_MPL_ASSERT_RELATION(x, rel, y) \
-BOOST_STATIC_CONSTANT( \
+BOOST_MPL_AUX_ASSERT_CONSTANT( \
       std::size_t \
     , BOOST_PP_CAT(mpl_assert_rel,__LINE__) = sizeof( \
           boost::mpl::assert_::arg rel boost::mpl::assert_::arg \
         ) \
     ); \
-BOOST_STATIC_CONSTANT( bool, BOOST_PP_CAT(mpl_assert_rel_value,__LINE__) = (x rel y) ); \
-BOOST_STATIC_CONSTANT( \
+BOOST_MPL_AUX_ASSERT_CONSTANT( bool, BOOST_PP_CAT(mpl_assert_rel_value,__LINE__) = (x rel y) ); \
+BOOST_MPL_AUX_ASSERT_CONSTANT( \
       std::size_t \
     , BOOST_PP_CAT(mpl_assertion_in_line_,__LINE__) = sizeof( \
         boost::mpl::assertion_failed<BOOST_PP_CAT(mpl_assert_rel_value,__LINE__)>( \
@@ -289,7 +295,7 @@ BOOST_STATIC_CONSTANT( \
 
 #   if defined(BOOST_MPL_CFG_ASSERT_BROKEN_POINTER_TO_POINTER_TO_MEMBER)
 #   define BOOST_MPL_ASSERT_RELATION(x, rel, y) \
-BOOST_STATIC_CONSTANT( \
+BOOST_MPL_AUX_ASSERT_CONSTANT( \
       std::size_t \
     , BOOST_PP_CAT(mpl_assertion_in_line_,__LINE__) = sizeof( \
         boost::mpl::assertion_failed<(x rel y)>( boost::mpl::assert_rel_arg( \
@@ -300,7 +306,7 @@ BOOST_STATIC_CONSTANT( \
 /**/
 #   else
 #   define BOOST_MPL_ASSERT_RELATION(x, rel, y) \
-BOOST_STATIC_CONSTANT( \
+BOOST_MPL_AUX_ASSERT_CONSTANT( \
       std::size_t \
     , BOOST_PP_CAT(mpl_assertion_in_line_,__LINE__) = sizeof( \
         boost::mpl::assertion_failed<(x rel y)>( (boost::mpl::failed ************ ( \
@@ -324,7 +330,7 @@ typedef struct BOOST_PP_CAT(msg,__LINE__) : boost::mpl::assert_ \
     static boost::mpl::failed ************ (msg::************ assert_arg()) types_ \
     { return 0; } \
 } BOOST_PP_CAT(mpl_assert_arg,__LINE__); \
-BOOST_STATIC_CONSTANT( \
+BOOST_MPL_AUX_ASSERT_CONSTANT( \
       std::size_t \
     , BOOST_PP_CAT(mpl_assertion_in_line_,__LINE__) = sizeof( \
         boost::mpl::assertion<(c)>::failed( BOOST_PP_CAT(mpl_assert_arg,__LINE__)::assert_arg() ) \
@@ -339,7 +345,7 @@ typedef struct BOOST_PP_CAT(msg,__LINE__) : boost::mpl::assert_ \
     static boost::mpl::failed ************ (msg::************ assert_arg()) types_ \
     { return 0; } \
 } BOOST_PP_CAT(mpl_assert_arg,__LINE__); \
-BOOST_STATIC_CONSTANT( \
+BOOST_MPL_AUX_ASSERT_CONSTANT( \
       std::size_t \
     , BOOST_PP_CAT(mpl_assertion_in_line_,__LINE__) = sizeof( \
         boost::mpl::assertion_failed<(c)>( BOOST_PP_CAT(mpl_assert_arg,__LINE__)::assert_arg() ) \
