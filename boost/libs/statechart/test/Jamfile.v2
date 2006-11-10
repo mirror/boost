@@ -6,7 +6,7 @@
 
 project libs/statechart/test ;
 
-local test_monitor = ../../../libs/test/build//boost_test_exec_monitor ;
+local test_monitor = ../../../libs/test/build//boost_test_exec_monitor/<link>static ;
 # Some platforms have either problems with the automatic detection of the
 # threading mode (e.g. vc-7_1 & gcc >= 3.4.0) or don't support single-
 # threaded mode (e.g. vc-8_0). We therefore manually turn MT off here

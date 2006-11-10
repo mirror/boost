@@ -2,7 +2,7 @@
 rule sc-test ( name : extra-sources * )
 {
     return [ 
-      run $(name).cpp /boost/test//boost_unit_test_framework $(extra-sources) ]
+      run $(name).cpp /boost/test//boost_unit_test_framework/<link>static $(extra-sources) ]
     ;
 }
 

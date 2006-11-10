@@ -9,14 +9,14 @@
 
 test-suite "io"
    :    [  run ios_state_unit_test.cpp 
-                ../../../libs/test/build//boost_unit_test_framework
+                ../../../libs/test/build//boost_unit_test_framework/<link>static
               : # args
               : # input files
               # : std::locale-support
         ]
 
         [ run ios_state_test.cpp 
-                ../../../libs/test/build//boost_test_exec_monitor
+                ../../../libs/test/build//boost_test_exec_monitor/<link>static
               : # args
               : # input files
               # : std::locale-support

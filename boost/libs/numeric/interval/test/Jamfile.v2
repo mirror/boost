@@ -32,18 +32,18 @@ import testing ;
     [ run libs/numeric/interval/test/pow.cpp      ]
 
     [ run libs/numeric/interval/test/cmp.cpp
-        ../../../test/build//boost_test_exec_monitor ]
+        ../../../test/build//boost_test_exec_monitor/<link>static ]
     [ run libs/numeric/interval/test/cmp_exn.cpp
-        ../../../test/build//boost_test_exec_monitor ]
+        ../../../test/build//boost_test_exec_monitor/<link>static ]
     [ run libs/numeric/interval/test/cmp_exp.cpp
-        ../../../test/build//boost_test_exec_monitor ]
+        ../../../test/build//boost_test_exec_monitor/<link>static ]
     [ run libs/numeric/interval/test/cmp_lex.cpp
-        ../../../test/build//boost_test_exec_monitor ]
+        ../../../test/build//boost_test_exec_monitor/<link>static ]
     [ run libs/numeric/interval/test/cmp_set.cpp
-        ../../../test/build//boost_test_exec_monitor ]
+        ../../../test/build//boost_test_exec_monitor/<link>static ]
     [ run libs/numeric/interval/test/cmp_tribool.cpp
-        ../../../test/build//boost_test_exec_monitor ]
+        ../../../test/build//boost_test_exec_monitor/<link>static ]
     [ run libs/numeric/interval/test/test_float.cpp
-        ../../../test/build//boost_test_exec_monitor ]
+        ../../../test/build//boost_test_exec_monitor/<link>static ]
   ;
 }

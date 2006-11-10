@@ -7,37 +7,19 @@
 #  This software is provided "as is" without express or implied
 #  warranty, and with no claim as to its suitability for any purpose.
 
+project
+    : requirements 
+      <library>/boost/test//boost_test_exec_monitor/<link>static
+    ;
+
 import testing ;
 {
 
 test-suite "format"
-   :    [  run format_test1.cpp 
-                ../../../libs/test/build//boost_test_exec_monitor
-              : # args
-              : # input files
-#              : std::locale-support
-        ]
-
-        [ run format_test2.cpp 
-                ../../../libs/test/build//boost_test_exec_monitor
-              : # args
-              : # input files
-#              : std::locale-support
-        ]
-
-        [ run format_test3.cpp 
-                ../../../libs/test/build//boost_test_exec_monitor
-              : # args
-              : # input files
-#              : std::locale-support
-        ]
-
-        [ run format_test_wstring.cpp 
-                ../../../libs/test/build//boost_test_exec_monitor
-              : # args
-              : # input files
-#              : std::locale-support
-        ]
+   :    [ run format_test1.cpp ]
+        [ run format_test2.cpp ]
+        [ run format_test3.cpp ]
+        [ run format_test_wstring.cpp ]
   ;
 }
 
