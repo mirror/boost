@@ -130,7 +130,7 @@ test_hash_set(){
 }
 
 void
-test_hash_multi_set(){
+test_hash_multiset(){
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
