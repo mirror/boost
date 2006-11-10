@@ -16,6 +16,7 @@
 
 //  See http://www.boost.org for updates, documentation, and revision history.
 
+// (C) Copyright 2006 David Abrahams - http://www.boost.org.
 // implementation of class export functionality.  This is an alternative to
 // "forward declaration" method to provoke instantiation of derived classes
 // that are to be serialized through pointers.
@@ -131,7 +132,7 @@ BOOST_DLLEXPORT void ptr_serialization_support<Archive,Serializable>::instantiat
 
     export_impl<Archive,Serializable>::enable_load(
         mpl::and_<concrete, BOOST_DEDUCED_TYPENAME Archive::is_loading>());
-} BOOST_USED
+}
 
 } // namespace detail
 } // namespace archive
