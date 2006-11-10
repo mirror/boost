@@ -168,8 +168,11 @@ namespace boost { namespace proto
 
     namespace extends_private_
     {
-        struct extends_base;
+        template<typename Expr>
+        struct extends;
     }
+
+    using extends_private_::extends;
 
     namespace meta
     {
@@ -179,16 +182,13 @@ namespace boost { namespace proto
             typedef typename remove_cv<typename remove_reference<T>::type>::type type;
         };
 
-        template<typename T>
-        struct is_basic_expr;
-
-        template<typename T>
+        template<typename T, typename EnableIf = void>
         struct is_ref;
 
-        template<typename T>
+        template<typename T, typename EnableIf = void>
         struct is_extends;
 
-        template<typename T>
+        template<typename T, typename EnableIf = void>
         struct is_expr;
 
         template<typename T, bool IsExpr = is_expr<T>::value>

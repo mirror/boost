@@ -26,6 +26,8 @@ namespace boost { namespace proto
         typedef typename Expr::args_type args_type;
         typedef typename Expr::arity arity;
         typedef proto_ref_tag fusion_tag;
+        typedef void is_boost_proto_ref_;
+        typedef void is_boost_proto_expr_;
 
         BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_ARG, _)
 

@@ -116,14 +116,12 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Expr, typename, typename>
         struct apply
         {
-            typedef typename proto::meta::binary_expr
+            typedef typename proto::meta::right_shift
             <
-                proto::right_shift_tag
-              , proto::meta::terminal<repeat_begin_matcher>::type
-              , typename proto::meta::binary_expr
+                proto::meta::terminal<repeat_begin_matcher>::type
+              , typename proto::meta::right_shift
                 <
-                    proto::right_shift_tag
-                  , Expr
+                    Expr
                   , typename proto::meta::terminal<repeat_end_matcher<Greedy> >::type
                 >::type
             >::type type;

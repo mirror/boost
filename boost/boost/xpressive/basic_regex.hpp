@@ -132,18 +132,16 @@ struct basic_regex
     // for binding actions to this regex when it is nested statically in another regex
     /// INTERNAL ONLY
     template<typename Action>
-    typename proto::meta::binary_expr
+    typename proto::meta::right_shift
     <
-        proto::right_shift_tag
-      , typename proto::meta::terminal<basic_regex<BidiIter> >::type
+        typename proto::meta::terminal<basic_regex<BidiIter> >::type
       , typename proto::meta::terminal<Action>::type
     >::type const
     operator [](detail::action_matcher<Action> const &action) const
     {
-        typename proto::meta::binary_expr
+        typename proto::meta::right_shift
         <
-            proto::right_shift_tag
-          , typename proto::meta::terminal<basic_regex<BidiIter> >::type
+            typename proto::meta::terminal<basic_regex<BidiIter> >::type
           , typename proto::meta::terminal<Action>::type
         >::type that = {{*this}, {*static_cast<Action const *>(&action)}};
         return that;

@@ -17,7 +17,6 @@
     #include <boost/mpl/bool.hpp>
     #include <boost/call_traits.hpp>
     #include <boost/static_assert.hpp>
-    #include <boost/type_traits/is_base_and_derived.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/tags.hpp>
     #include <boost/xpressive/proto/ref.hpp>
@@ -30,53 +29,37 @@
 
         namespace meta
         {
-            // is_basic_expr
-            template<typename T>
-            struct is_basic_expr
+            // is_extends
+            template<typename T, typename EnableIf>
+            struct is_extends
               : mpl::false_
             {};
 
-            template<typename Tag, typename Args, long Arity>
-            struct is_basic_expr<basic_expr<Tag, Args, Arity> >
+            template<typename T>
+            struct is_extends<T, typename T::is_boost_proto_extends_private_extends_>
               : mpl::true_
             {};
 
-            template<typename T>
-            struct is_basic_expr<T const>
-              : is_basic_expr<T>
-            {};
-
             // is_ref
-            template<typename T>
+            template<typename T, typename EnableIf>
             struct is_ref
               : mpl::false_
             {};
 
             template<typename T>
-            struct is_ref<ref<T> >
+            struct is_ref<T, typename T::is_boost_proto_ref_>
               : mpl::true_
             {};
 
-            template<typename T>
-            struct is_ref<T const>
-              : is_ref<T>
-            {};
-
-            // is_extends
-            template<typename T>
-            struct is_extends
-              : is_base_and_derived<extends_private_::extends_base, T>
-            {};
-
-            template<typename T>
-            struct is_extends<T const>
-              : is_extends<T>
-            {};
-
             // is_expr
-            template<typename T>
+            template<typename T, typename EnableIf>
             struct is_expr
-              : mpl::or_<is_basic_expr<T>, is_ref<T>, is_extends<T> >
+              : mpl::false_
+            {};
+
+            template<typename T>
+            struct is_expr<T, typename T::is_boost_proto_expr_>
+              : mpl::true_
             {};
 
             // as_expr

@@ -51,14 +51,12 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Expr, typename, typename>
         struct apply
         {
-            typedef typename proto::meta::binary_expr
+            typedef typename proto::meta::right_shift
             <
-                proto::right_shift_tag
-              , proto::meta::terminal<mark_begin_matcher>::type
-              , typename proto::meta::binary_expr
+                proto::meta::terminal<mark_begin_matcher>::type
+              , typename proto::meta::right_shift
                 <
-                    proto::right_shift_tag
-                  , Expr
+                    Expr
                   , proto::meta::terminal<mark_end_matcher>::type
                 >::type
             >::type type;
