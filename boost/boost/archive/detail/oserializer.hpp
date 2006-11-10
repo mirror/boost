@@ -118,7 +118,7 @@ public:
         return boost::serialization::implementation_level<T>::value 
             >= boost::serialization::object_class_info;
     }
-    virtual bool tracking(const unsigned int flags) const {
+    virtual bool tracking(const unsigned int /* flags */) const {
 //        if(0 != (flags &  no_tracking))
 //            return false;
         return boost::serialization::tracking_level<T>::value == boost::serialization::track_always
