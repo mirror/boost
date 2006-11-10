@@ -47,7 +47,11 @@
 #   define BOOST_MPL_CFG_ASSERT_BROKEN_POINTER_TO_POINTER_TO_MEMBER
 #endif
 
-#if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
+// agurt, 10/nov/06: use enums for Borland (which cannot cope with static constants) 
+// and GCC (which issues "unused variable" warnings when static constants are used 
+// at a function scope)
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x600) \
+    || (BOOST_MPL_CFG_GCC != 0)
 #   define BOOST_MPL_AUX_ASSERT_CONSTANT(T, expr) enum { expr }
 #else
 #   define BOOST_MPL_AUX_ASSERT_CONSTANT(T, expr) BOOST_STATIC_CONSTANT(T, expr)
