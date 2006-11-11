@@ -835,7 +835,7 @@ struct parameters
     // !!!NOTE!!!
     //
     // The make_arg_list<> produces a reversed arg_list, so
-    // we need to pass the arguments to it's constructor
+    // we need to pass the arguments to its constructor
     // reversed.
     //
     aux::empty_arg_list operator()() const
