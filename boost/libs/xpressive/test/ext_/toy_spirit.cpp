@@ -235,7 +235,7 @@ namespace boost { namespace spirit2
             template<typename Context>
             bool parse(char_p const &expr, Context &ctx)
             {
-                if(ctx.first == ctx.second || *ctx.first != proto::arg(expr.arg1))
+                if(ctx.first == ctx.second || *ctx.first != proto::arg(proto::arg_c<1>(expr)))
                     return false;
                 ++ctx.first;
                 return true;
@@ -255,7 +255,7 @@ namespace boost { namespace spirit2
             template<typename Context>
             bool parse(chlit_p const &expr, Context &ctx)
             {
-                return primitives::parse(char_(expr.arg0), ctx);
+                return primitives::parse(char_(proto::arg(expr)), ctx);
             }
 
             // case-insensitive character parser
@@ -263,7 +263,7 @@ namespace boost { namespace spirit2
             bool parse(ichar_p const &expr, Context &ctx)
             {
                 if(ctx.first == ctx.second
-                  || !utility::char_icmp(*ctx.first, proto::arg(expr.arg1), proto::arg(expr.arg2)))
+                  || !utility::char_icmp(*ctx.first, proto::arg(proto::arg_c<1>(expr)), proto::arg(proto::arg_c<2>(expr))))
                     return false;
                 ++ctx.first;
                 return true;
@@ -278,16 +278,16 @@ namespace boost { namespace spirit2
             template<typename Context>
             bool parse(istr_p const &expr, Context &ctx)
             {
-                return utility::string_icmp(proto::arg(expr.arg1), ctx.first, ctx.second);
+                return utility::string_icmp(proto::arg(proto::arg_c<1>(expr)), ctx.first, ctx.second);
             }
 
             // parse function for char_range_p
             template<typename Context>
             bool parse(char_range_p const &expr, Context &ctx)
             {
-                BOOST_ASSERT(proto::arg(expr.arg1) <= proto::arg(expr.arg2));
+                BOOST_ASSERT(proto::arg(proto::arg_c<1>(expr)) <= proto::arg(proto::arg_c<2>(expr)));
                 if(ctx.first == ctx.second
-                  || !utility::in_range(*ctx.first, proto::arg(expr.arg1), proto::arg(expr.arg2)))
+                  || !utility::in_range(*ctx.first, proto::arg(proto::arg_c<1>(expr)), proto::arg(proto::arg_c<2>(expr))))
                     return false;
                 ++ctx.first;
                 return true;
@@ -297,9 +297,9 @@ namespace boost { namespace spirit2
             template<typename Context>
             bool parse(ichar_range_p const &expr, Context &ctx)
             {
-                BOOST_ASSERT(proto::arg(expr.arg1) <= proto::arg(expr.arg2));
+                BOOST_ASSERT(proto::arg(proto::arg_c<1>(expr)) <= proto::arg(proto::arg_c<2>(expr)));
                 if(ctx.first == ctx.second
-                  || !utility::in_irange(*ctx.first, proto::arg(expr.arg1), proto::arg(expr.arg2)))
+                  || !utility::in_irange(*ctx.first, proto::arg(proto::arg_c<1>(expr)), proto::arg(proto::arg_c<2>(expr))))
                     return false;
                 ++ctx.first;
                 return true;
@@ -446,8 +446,8 @@ namespace boost { namespace spirit2
 
             static type call(char_p const &expr)
             {
-                char lo = std::tolower(proto::arg(expr.arg1));
-                char hi = std::toupper(proto::arg(expr.arg1));
+                char lo = std::tolower(proto::arg(proto::arg_c<1>(expr)));
+                char hi = std::toupper(proto::arg(proto::arg_c<1>(expr)));
                 return ichar_(lo, hi);
             }
         };
@@ -459,8 +459,8 @@ namespace boost { namespace spirit2
 
             static type call(chlit_p const &expr)
             {
-                char lo = std::tolower(expr.arg0);
-                char hi = std::toupper(expr.arg0);
+                char lo = std::tolower(proto::arg(expr));
+                char hi = std::toupper(proto::arg(expr));
                 return ichar_(lo, hi);
             }
         };
@@ -472,8 +472,8 @@ namespace boost { namespace spirit2
 
             static type call(char_range_p const &expr)
             {
-                char lo = proto::arg(expr.arg1);
-                char hi = proto::arg(expr.arg2);
+                char lo = proto::arg(proto::arg_c<1>(expr));
+                char hi = proto::arg(proto::arg_c<2>(expr));
                 return ichar_range_(lo, hi);
             }
         };
