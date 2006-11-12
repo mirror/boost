@@ -528,9 +528,8 @@ namespace boost { namespace spirit2
             template<typename Expr, typename State, typename Context>
             struct apply
             {
-                typedef typename proto::meta::binary_expr<
-                    proto::right_shift_tag
-                  , typename proto::meta::unary_expr<proto::unary_star_tag, State>::type
+                typedef typename proto::meta::right_shift<
+                    typename proto::meta::unary_star<State>::type
                   , Expr
                 >::type type;
             };
@@ -578,12 +577,55 @@ namespace boost { namespace spirit2
     }
 
     /////////////
+    // Grammar
+    /////////////
+
+    struct SpiritGrammar;
+
+    struct SpiritTerminal
+      : proto::or_<
+            proto::if_<parser::is_primitive<mpl::_> >
+          , proto::meta::subtract< SpiritGrammar, SpiritGrammar >
+        >
+    {};
+
+    struct SpiritQuantified
+      : proto::or_<
+            proto::meta::unary_star< SpiritGrammar >
+          , proto::meta::unary_plus< SpiritGrammar >
+          , proto::meta::logical_not< SpiritGrammar >
+          , SpiritTerminal
+        >
+    {};
+
+    struct SpiritSequence
+      : proto::or_<
+            proto::meta::right_shift< SpiritGrammar, SpiritGrammar >
+          , SpiritQuantified
+        >
+    {};
+
+    struct SpiritAlternate
+      : proto::or_<
+            proto::meta::bitwise_or< SpiritGrammar, SpiritGrammar >
+          , SpiritSequence
+        >
+    {};
+
+    struct SpiritGrammar
+      : SpiritAlternate
+    {};
+
+    /////////////
     // parse
     /////////////
 
     template<typename FwdIter, typename Rule>
     bool parse(FwdIter begin, FwdIter end, Rule const &rule)
     {
+        // make sure the rule corresponds to the Spirit grammar:
+        BOOST_MPL_ASSERT((proto::matches<Rule, SpiritGrammar>));
+
         parser::context<FwdIter> ctx(begin, end);
         return parser::parse(rule, ctx);
     }
@@ -611,6 +653,9 @@ namespace boost { namespace spirit2
     template<typename FwdIter, typename Rule, typename Skipper>
     bool parse(FwdIter begin, FwdIter end, Rule const &rule, Skipper const &skipper)
     {
+        // make sure the rule corresponds to the Spirit grammar:
+        BOOST_MPL_ASSERT((proto::matches<Rule, SpiritGrammar>));
+
         //// Method 1: pass skip parser in the context structure.
         //parser::context<FwdIter, Skipper> ctx(begin, end, skipper);
         //return parser::parse(rule, ctx);
