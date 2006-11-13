@@ -10,6 +10,7 @@
 
 #include <boost/fusion/support/iterator_base.hpp>
 #include <boost/fusion/iterator/detail/advance.hpp>
+#include <boost/fusion/support/category_of.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/assert.hpp>
 
