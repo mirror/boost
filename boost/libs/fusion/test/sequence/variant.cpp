@@ -9,6 +9,10 @@
 
 #include <boost/fusion/sequence/adapted/variant.hpp>
 
+#include <boost/fusion/support/is_sequence.hpp>
+#include <boost/fusion/support/is_view.hpp>
+#include <boost/fusion/support/category_of.hpp>
+
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
@@ -32,6 +36,13 @@ int main()
     namespace fusion = boost::fusion;
     typedef boost::variant<double, std::string> var_type;
     var_type var = "hello";
+
+    BOOST_MPL_ASSERT((fusion::traits::is_sequence<var_type>));
+    BOOST_MPL_ASSERT_NOT((fusion::traits::is_view<var_type>));
+    BOOST_MPL_ASSERT((boost::is_same<
+                      fusion::traits::category_of<var_type>::type, 
+                      fusion::forward_traversal_tag>));
+
     BOOST_TEST(fusion::size(var) == 2);
     BOOST_TEST(fusion::distance(fusion::begin(var), fusion::end(var)) == 2);
     BOOST_TEST(*fusion::next(fusion::begin(var)) == "hello");
