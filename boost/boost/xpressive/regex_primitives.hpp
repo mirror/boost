@@ -435,12 +435,12 @@ icase(Expr const &expr)
 ///
 /// \param rex The basic_regex object to embed by reference.
 template<typename BidiIter>
-inline typename proto::meta::terminal<detail::regex_placeholder<BidiIter, true> >::type const
+inline typename proto::meta::terminal<detail::regex_placeholder<BidiIter, mpl::true_> >::type const
 by_ref(basic_regex<BidiIter> const &rex)
 {
     typedef detail::core_access<BidiIter> access;
     shared_ptr<detail::regex_impl<BidiIter> > impl = access::get_regex_impl(rex);
-    return proto::make_terminal(detail::regex_placeholder<BidiIter, true>(impl));
+    return proto::make_terminal(detail::regex_placeholder<BidiIter, mpl::true_>(impl));
 }
 
 ///////////////////////////////////////////////////////////////////////////////

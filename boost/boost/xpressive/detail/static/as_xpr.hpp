@@ -86,7 +86,7 @@ namespace boost { namespace xpressive { namespace detail
         <
             is_string_literal<Literal>
           , string_placeholder_generator<Literal>
-          , mpl::identity<literal_placeholder<Literal, false> >
+          , mpl::identity<literal_placeholder<Literal, mpl::false_> >
         >::type type;
 
         template<typename Literal2>
@@ -100,7 +100,7 @@ namespace boost { namespace xpressive { namespace detail
     template<typename BidiIter>
     struct as_matcher_type<basic_regex<BidiIter>, false>
     {
-        typedef regex_placeholder<BidiIter, false> type;
+        typedef regex_placeholder<BidiIter, mpl::false_> type;
 
         template<typename Regex>
         static type call(Regex const &rex)

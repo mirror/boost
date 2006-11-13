@@ -33,7 +33,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // placeholders
     //
-    template<typename Char, bool Not = false>
+    template<typename Char, typename Not = mpl::false_>
     struct literal_placeholder;
 
     template<typename Char>
@@ -41,7 +41,7 @@ namespace boost { namespace xpressive { namespace detail
 
     struct mark_placeholder;
 
-    template<typename BidiIter, bool ByRef>
+    template<typename BidiIter, typename ByRef>
     struct regex_placeholder;
 
     struct posix_charset_placeholder;
@@ -199,11 +199,11 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Traits>
     struct logical_newline_matcher;
 
-    typedef proto::basic_expr<proto::terminal_tag, mpl::vector1<logical_newline_placeholder> > logical_newline_xpression;
+    typedef proto::meta::terminal<logical_newline_placeholder>::type logical_newline_xpression;
 
     struct set_initializer;
 
-    typedef proto::basic_expr<proto::terminal_tag, mpl::vector1<set_initializer> > set_initializer_type;
+    typedef proto::meta::terminal<set_initializer>::type set_initializer_type;
 
     struct seq_tag;
 

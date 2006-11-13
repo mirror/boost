@@ -8,6 +8,7 @@
 #ifndef BOOST_XPRESSIVE_DETAIL_STATIC_PRODUCTIONS_COMPLEMENT_COMPILER_HPP_EAN_10_04_2005
 #define BOOST_XPRESSIVE_DETAIL_STATIC_PRODUCTIONS_COMPLEMENT_COMPILER_HPP_EAN_10_04_2005
 
+#include <boost/mpl/not.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/proto/proto.hpp>
@@ -32,12 +33,12 @@ namespace boost { namespace xpressive { namespace detail
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    template<typename Char, bool Not>
+    template<typename Char, typename Not>
     struct complement<proto::terminal_tag, literal_placeholder<Char, Not>, void>
     {
         template<typename Expr, typename>
         struct apply
-          : proto::meta::terminal<literal_placeholder<Char, !Not> >
+          : proto::meta::terminal<literal_placeholder<Char, typename mpl::not_<Not>::type> >
         {};
 
         template<typename Expr, typename Visitor>

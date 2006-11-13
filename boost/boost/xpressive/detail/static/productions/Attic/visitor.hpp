@@ -63,7 +63,7 @@ namespace boost { namespace xpressive { namespace detail
         {
         }
 
-        template<bool ByRef>
+        template<typename ByRef>
         void visit_(regex_placeholder<BidiIter, ByRef> const &rex)
         {
             // when visiting an embedded regex, track the references

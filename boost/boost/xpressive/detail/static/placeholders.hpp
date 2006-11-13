@@ -24,12 +24,12 @@ namespace boost { namespace xpressive { namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // literal_placeholder
 //
-template<typename Char, bool Not>
+template<typename Char, typename Not>
 struct literal_placeholder
 {
     BOOST_XPR_QUANT_STYLE(quant_fixed_width, 1, true)
 
-    typedef mpl::bool_<Not> not_type;
+    typedef Not not_type;
     Char ch_;
 };
 
@@ -57,7 +57,7 @@ struct mark_placeholder
 ///////////////////////////////////////////////////////////////////////////////
 // regex_placeholder
 //
-template<typename BidiIter, bool ByRef>
+template<typename BidiIter, typename ByRef>
 struct regex_placeholder
 {
     BOOST_XPR_QUANT_STYLE(quant_variable_width, unknown_width::value, false)

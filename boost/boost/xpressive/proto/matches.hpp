@@ -14,6 +14,7 @@
 
     #include <boost/config.hpp>
     #include <boost/mpl/if.hpp>
+    #include <boost/mpl/at.hpp>
     #include <boost/mpl/and.hpp>
     #include <boost/mpl/bool.hpp>
     #include <boost/mpl/apply.hpp>
@@ -33,6 +34,18 @@
 
         namespace detail
         {
+            template<typename T>
+            struct safe_unref
+            {
+                typedef T type;
+            };
+
+            template<typename T>
+            struct safe_unref<ref<T> >
+            {
+                typedef T type;
+            };
+
             // and_
             template<bool B, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename P, void)>
             struct and_impl
@@ -111,8 +124,8 @@
             // matches_impl
         #define BOOST_PROTO_MATCHES_N_FUN(z, n, data)\
             matches<\
-                typename meta::arg_c< basic_expr<Tag, Args1, data >, n >::type\
-              , typename meta::arg_c< basic_expr<Tag, Args2, data >, n >::type\
+                typename safe_unref<typename mpl::at_c<Args1, n>::type>::type\
+              , typename safe_unref<typename mpl::at_c<Args2, n>::type>::type\
             >\
             /**/
 
@@ -131,14 +144,17 @@
 
             template<typename Tag, typename Args1, typename Args2>
             struct matches_impl< basic_expr<Tag, Args1, 1>, basic_expr<Tag, Args2, 1> >
-              : BOOST_PROTO_MATCHES_N_FUN(1, 0, 1)
+              : matches<
+                    typename safe_unref<typename mpl::at_c<Args1, 0>::type>::type
+                  , typename safe_unref<typename mpl::at_c<Args2, 0>::type>::type
+                >
             {};
 
             template<typename Args1, typename Args2>
             struct matches_impl< basic_expr<terminal_tag, Args1, 1>, basic_expr<terminal_tag, Args2, 1> >
               : terminal_matches<
-                    typename meta::arg< basic_expr<terminal_tag, Args1, 1> >::type
-                  , typename meta::arg< basic_expr<terminal_tag, Args2, 1> >::type
+                    typename safe_unref<typename mpl::at_c<Args1, 0>::type>::type
+                  , typename safe_unref<typename mpl::at_c<Args2, 0>::type>::type
                 >
             {};
 
