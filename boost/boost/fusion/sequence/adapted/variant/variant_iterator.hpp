@@ -23,12 +23,12 @@ namespace boost { namespace fusion {
 
     struct forward_traversal_tag;
 
-    template<typename Variant, typename Iterator>
+    template<typename Variant, typename MPLIterator>
     struct variant_iterator
-        : iterator_facade<variant_iterator<Variant, Iterator>, forward_traversal_tag>
+        : iterator_facade<variant_iterator<Variant, MPLIterator>, forward_traversal_tag>
     {
         typedef Variant variant_type;
-        typedef Iterator iterator;
+        typedef MPLIterator iterator;
 
         variant_iterator(Variant& var)
             : var_(var) {}
@@ -72,10 +72,11 @@ namespace boost { namespace fusion {
         template <typename Iterator>
         struct deref
         {
-            typedef typename mpl::eval_if<
-                is_const<typename Iterator::variant_type>, 
-                typename add_const<typename mpl::deref<typename Iterator::iterator>::type>,
-                typename mpl::deref<typename Iterator::iterator>
+            typedef typename 
+                mpl::eval_if<
+                    is_const<typename Iterator::variant_type>
+                  , add_const<typename mpl::deref<typename Iterator::iterator>::type>
+                  , mpl::deref<typename Iterator::iterator>
                 >::type 
             value_type;
 
