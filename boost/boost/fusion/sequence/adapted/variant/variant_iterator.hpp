@@ -77,14 +77,20 @@ namespace boost { namespace fusion {
                 typename add_const<typename mpl::deref<typename Iterator::iterator>::type>,
                 typename mpl::deref<typename Iterator::iterator>
                 >::type 
+            value_type;
+
+            typedef typename 
+                add_reference<value_type>::type
             type;
 
             static type
             call(Iterator const & it)
             {
                 typedef typename mpl::deref<typename Iterator::iterator>::type type;
-                type* result = get<type>(&it.var_);
-                return result ? *result : type();
+                if (type* result = get<type>(&it.var_))
+                    return *result;
+                it.var_ = type(); // prime the variant
+                return *boost::get<type>(&it.var_); // no-throw!
             }
         };
     };

@@ -9,7 +9,9 @@
 #define FUSION_ITERATOR_FACADE_09252006_1011
 
 #include <boost/fusion/support/iterator_base.hpp>
+#include <boost/fusion/iterator/detail/advance.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/mpl/assert.hpp>
 
 namespace boost { namespace fusion
 {
@@ -22,6 +24,7 @@ namespace boost { namespace fusion
         typedef Derived derived_type;
         typedef Category category;
 
+        // default implementation
         template <typename I1, typename I2>
         struct equal_to // default implementation
             : is_same<
@@ -29,6 +32,18 @@ namespace boost { namespace fusion
               , typename I2::derived_type
             >
         {};
+
+        // default implementation
+        template <typename Iterator, typename N>
+        struct advance :
+            mpl::if_c<
+                (N::value > 0)
+              , advance_detail::forward<Iterator, N::value>
+              , advance_detail::backward<Iterator, N::value>
+            >::type
+        {
+            BOOST_MPL_ASSERT_NOT((traits::is_random_access<Iterator>));
+        };
     };
 }}
 
