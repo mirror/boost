@@ -5,9 +5,10 @@ Copyright (c) 2002-2003 The Trustees of Indiana University.
                         All rights reserved.
 Copyright (c) 2000-2001 University of Notre Dame. All rights reserved.
 
-The software included in this source file is licensed under the terms and
-conditions of the Software License, version 1.0, in the file LICENSE at the
-top level of the Caramel distribution. -->
+   Distributed under the Boost Software License, Version 1.0.
+   (See accompanying file LICENSE_1_0.txt or copy at
+   http://www.boost.org/LICENSE_1_0.txt)
+-->
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
   <xsl:strip-space elements="* xsl:*"/>

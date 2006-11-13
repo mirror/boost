@@ -1,3 +1,9 @@
+#   Copyright (c) 2002 Douglas Gregor <doug.gregor -at- gmail.com>
+# 
+#   Distributed under the Boost Software License, Version 1.0.
+#   (See accompanying file LICENSE_1_0.txt or copy at
+#   http://www.boost.org/LICENSE_1_0.txt)
+
 # This is a rewrite of setup_boostbook.sh in Python
 # It will work on Posix and Windows systems
 # The rewrite is not finished yet, so please don't use it
