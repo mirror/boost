@@ -40,13 +40,14 @@ namespace boost
 
     //  class error_category  ------------------------------------------------//
 
-    class BOOST_SYSTEM_DECL error_category : public identifier< uint_least32_t, error_category >
+    class BOOST_SYSTEM_DECL error_category
+      : public boost::detail::identifier< uint_least32_t, error_category >
     {
     public:
       error_category()
-        : boost::identifier< uint_least32_t, error_category >(0){}
+        : boost::detail::identifier< uint_least32_t, error_category >(0){}
       explicit error_category( value_type v )
-        : boost::identifier< uint_least32_t, error_category >(v){}
+        : boost::detail::identifier< uint_least32_t, error_category >(v){}
     };
 
     //  predefined error categories  -----------------------------------------//
