@@ -1009,8 +1009,8 @@
 
   <!-- Group member functions together under a category name (synopsis)-->
   <xsl:template match="method-group" mode="synopsis">
+    <xsl:param name="indentation"/>
     <xsl:if test="count(child::*) &gt; 0">
-      <xsl:param name="indentation"/>
       <xsl:text>&#10;</xsl:text>
       <xsl:text>&#10;</xsl:text>
       <xsl:call-template name="indent">
