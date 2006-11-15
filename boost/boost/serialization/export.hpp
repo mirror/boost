@@ -46,6 +46,11 @@ namespace detail {
 class basic_pointer_iserializer;
 class basic_pointer_oserializer;
 
+template<class Archive, class T>
+class pointer_iserializer;
+template<class Archive, class T>
+class pointer_iserializer;
+
 template <class Archive, class Serializable>
 struct export_impl
 {
