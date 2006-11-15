@@ -52,7 +52,7 @@ namespace boost { namespace xpressive
 
     struct XpressiveSet
       : proto::or_<
-            proto::meta::subscript<detail::set_initializer_type, mpl::_>
+            proto::meta::subscript<detail::set_initializer_type, XpressiveGrammar >
           , XpressiveListSet
         >
     {};
@@ -65,45 +65,81 @@ namespace boost { namespace xpressive
     {};
 
     struct XpressiveTaggedSubExpression
-      : proto::meta::assign<detail::basic_mark_tag, mpl::_>
+      : proto::meta::assign< detail::basic_mark_tag, XpressiveGrammar >
     {};
 
-    struct XpressiveLiterals
+    struct XpressiveLiteral
       : proto::or_<
             proto::meta::terminal<std::basic_string<mpl::_, mpl::_, mpl::_> >
+          , proto::meta::terminal<detail::string_placeholder<mpl::_> >
+          , proto::meta::terminal<detail::literal_placeholder<mpl::_, mpl::_> >
           , proto::and_<
                 proto::meta::terminal<mpl::_>
               , proto::or_<
-                    proto::if_<is_integral<proto::meta::arg<mpl::_> > >
-                  , proto::if_<is_pointer<proto::meta::arg<mpl::_> > >
+                    proto::if_<is_integral<proto::meta::arg<mpl::_> > > // character literal
+                  , proto::if_<is_pointer<proto::meta::arg<mpl::_> > >  // ntbs literal
                 >
+            >
+            // complemented character literals, as: ~_n or ~as_xpr('a')
+          , proto::and_<
+                proto::meta::complement<proto::meta::terminal<mpl::_> >
+              , proto::if_<is_integral<proto::meta::arg<proto::meta::arg<mpl::_> > > >
             >
         >
     {};
 
+    struct XpressiveLookAroundAssertion
+      : proto::or_<
+            proto::meta::unary_expr<detail::lookahead_tag<true>, XpressiveGrammar >
+          , proto::meta::unary_expr<detail::lookbehind_tag<true>, XpressiveGrammar >
+        >
+    {};
+
+    struct XpressiveComplementedLookAroundAssertion
+      : proto::or_<
+            proto::meta::complement< XpressiveLookAroundAssertion >
+          , XpressiveLookAroundAssertion
+        >
+    {};
+
+    struct XpressiveIndependentSubExpression
+      : proto::meta::unary_expr<detail::keeper_tag, XpressiveGrammar >
+    {};
+
+    struct XpressiveModifiedSubExpression
+      : proto::meta::binary_expr<detail::modifier_tag, mpl::_, XpressiveGrammar>
+    {};
+
     struct XpressiveTerminal
       : proto::or_<
-            proto::meta::terminal<detail::epsilon_matcher>
-          , proto::meta::terminal<detail::posix_charset_placeholder>
+            proto::meta::terminal<detail::posix_charset_placeholder>
+          , proto::meta::complement<proto::meta::terminal<detail::posix_charset_placeholder> >
           , proto::meta::terminal<detail::assert_bos_matcher>
           , proto::meta::terminal<detail::assert_eos_matcher>
           , proto::or_<
-                proto::meta::terminal<detail::assert_bol_placeholder>
+                proto::meta::terminal<detail::epsilon_matcher>
+              , proto::meta::terminal<detail::assert_bol_placeholder>
               , proto::meta::terminal<detail::assert_eol_placeholder>
               , proto::meta::terminal<detail::assert_word_placeholder<mpl::_> >
-              , proto::meta::terminal<detail::literal_placeholder<mpl::_, mpl::_> >
               , proto::or_<
                     proto::meta::terminal<detail::logical_newline_placeholder>
+                  , proto::meta::complement<proto::meta::terminal<detail::logical_newline_placeholder> >
                   , proto::meta::terminal<detail::any_matcher>
                   , proto::meta::terminal<detail::self_placeholder>
-                  , proto::meta::terminal<detail::mark_placeholder>
                   , proto::or_<
-                        proto::meta::terminal<detail::range_placeholder<mpl::_> >
+                        proto::meta::terminal<detail::mark_placeholder>
+                      , proto::meta::terminal<detail::range_placeholder<mpl::_> >
                       , proto::meta::terminal<detail::regex_placeholder<mpl::_, mpl::_> >
+                      , proto::meta::terminal<xpressive::basic_regex<mpl::_> >
                       , proto::or_<
-                            XpressiveLiterals
+                            XpressiveLiteral
                           , XpressiveComplementedSet
                           , XpressiveTaggedSubExpression
+                          , XpressiveComplementedLookAroundAssertion
+                          , proto::or_<
+                                XpressiveModifiedSubExpression
+                              , XpressiveIndependentSubExpression
+                            >
                         >
                     >
                 >

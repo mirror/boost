@@ -39,8 +39,8 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Expr, typename State, typename Visitor>
         struct apply
         {
-            typedef typename Expr::arg0_type modifier_type;
-            typedef typename Expr::arg1_type expr_type;
+            typedef typename proto::meta::arg<typename proto::meta::left<Expr>::type>::type modifier_type;
+            typedef typename proto::meta::right<Expr>::type expr_type;
             typedef typename modifier_type::BOOST_NESTED_TEMPLATE apply<Visitor>::type visitor_type;
 
             typedef typename proto::compiler<typename expr_type::tag_type, seq_tag>::
@@ -57,7 +57,7 @@ namespace boost { namespace xpressive { namespace detail
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
             typedef typename apply<Expr, State, Visitor>::visitor_type new_visitor_type;
-            new_visitor_type new_visitor(proto::left(expr).call(visitor));
+            new_visitor_type new_visitor(proto::arg(proto::left(expr)).call(visitor));
             new_visitor.swap(visitor);
             scoped_swap<Visitor, new_visitor_type> const undo = {&visitor, &new_visitor};
             detail::ignore_unused(undo);

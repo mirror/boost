@@ -120,9 +120,9 @@ struct locale_modifier
 
     template<typename Visitor>
     typename apply<Visitor>::type
-    call(Visitor &) const
+    call(Visitor &visitor) const
     {
-        return typename apply<Visitor>::type(this->loc_);
+        return typename apply<Visitor>::type(this->loc_, visitor.self());
     }
 
     Locale getloc() const

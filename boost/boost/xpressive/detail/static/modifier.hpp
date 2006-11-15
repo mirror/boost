@@ -35,7 +35,7 @@ namespace boost { namespace xpressive { namespace detail
         {
             typedef typename proto::meta::binary_expr<
                 modifier_tag
-              , Modifier
+              , typename proto::meta::terminal<Modifier>::type
               , typename as_xpr_type<Xpr>::type
             >::type type;
         };
@@ -44,7 +44,7 @@ namespace boost { namespace xpressive { namespace detail
         typename apply<Xpr>::type const
         operator ()(Xpr const &xpr) const
         {
-            typename apply<Xpr>::type that = {this->mod_, as_xpr(xpr)};
+            typename apply<Xpr>::type that = {{this->mod_}, as_xpr(xpr)};
             return that;
         }
 
