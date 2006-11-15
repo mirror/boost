@@ -49,7 +49,7 @@ class basic_pointer_oserializer;
 template<class Archive, class T>
 class pointer_iserializer;
 template<class Archive, class T>
-class pointer_iserializer;
+class pointer_oserializer;
 
 template <class Archive, class Serializable>
 struct export_impl
