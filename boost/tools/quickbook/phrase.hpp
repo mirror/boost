@@ -88,7 +88,12 @@ namespace quickbook
                     ;                                   // alpha-numeric or underscore
 
                 comment =
-                    "[/" >> *(anychar_p - ']') >> ']'
+                        "[//" >> *(anychar_p - eol_p) >> eol_p
+                    |   "[/" >> *(dummy_block | (anychar_p - ']')) >> ']'
+                    ;
+                
+                dummy_block =
+                    '[' >> *(dummy_block | (anychar_p - ']')) >> ']'
                     ;
 
                 common =
@@ -373,7 +378,7 @@ namespace quickbook
                             simple_bold, simple_italic, simple_underline, 
                             simple_teletype, source_mode, template_, template_arg,
                             quote, code_block, footnote, replaceable, macro,
-                            brackets, template_args;
+                            brackets, template_args, dummy_block;
 
             rule<Scanner> const&
             start() const { return common; }
@@ -406,12 +411,17 @@ namespace quickbook
                     ;
 
                 comment =
-                    "[/" >> *(anychar_p - ']') >> ']'
+                        "[//" >> *(anychar_p - eol_p) >> eol_p
+                    |   "[/" >> *(dummy_block | (anychar_p - ']')) >> ']'
+                    ;
+                
+                dummy_block =
+                    '[' >> *(dummy_block | (anychar_p - ']')) >> ']'
                     ;
             }
 
             bool unused;
-            rule<Scanner> phrase, comment;
+            rule<Scanner> phrase, comment, dummy_block;
             phrase_grammar<Actions> common;
 
             rule<Scanner> const&

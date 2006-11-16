@@ -145,6 +145,8 @@ Features include:
 * \[conceptref\] for referencing BoostBook <concept> entities.
 * Allow escape of spaces. The escaped space is removed from the output. Syntax: 
   `\ `.
+* Nested comments are now allowed.
+* Line-end terminated comments are now allowed. Example: `[// some comment`
 
 [endsect]
 
@@ -171,6 +173,28 @@ Can be placed anywhere.
 [pre
 '''[/ comment (no output generated) ]'''
 ]
+
+[/ for testing only... ]
+
+[pre
+'''[// Line-end terminates this type of comment'''
+]
+
+[// for testing only
+[// for testing only
+[// for testing only
+
+[pre
+'''[/ comments can be nested [/ some more here] ]'''
+]
+
+[/ for testing [/ only ] ]
+
+[pre
+'''[/ Quickbook blocks can nest inside comments. [*Comment this out too!] ]'''
+]
+
+[/ for testing [*only ] ]
 
 [endsect]
 
