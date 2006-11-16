@@ -868,13 +868,21 @@ namespace boost { namespace numeric { namespace ublas {
     public:
         BOOST_UBLAS_INLINE
         void resize (size_type size, bool preserve = true) {
-            // FIXME preserve unimplemented
-            BOOST_UBLAS_CHECK (!preserve, internal_logic ());
             size_ = size;
             capacity_ = restrict_capacity (capacity_);
-            index_data_. resize (capacity_);
-            value_data_. resize (capacity_);
-            filled_ = 0;
+            if (preserve) {
+                index_data_. resize (capacity_, size_type ());
+                value_data_. resize (capacity_, value_type ());
+                filled_ = (std::min) (capacity_, filled_);
+                while ((filled_ > 0) && (zero_based(index_data_[filled_ - 1]) >= size)) {
+                    --filled_;
+                }
+            }
+            else {
+                index_data_. resize (capacity_);
+                value_data_. resize (capacity_);
+                filled_ = 0;
+            }
             storage_invariants ();
         }
 
@@ -1316,6 +1324,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (capacity_ == index_data_.size (), internal_logic ());
             BOOST_UBLAS_CHECK (capacity_ == value_data_.size (), internal_logic ());
             BOOST_UBLAS_CHECK (filled_ <= capacity_, internal_logic ());
+            BOOST_UBLAS_CHECK ((0 == filled_) || (zero_based(index_data_[filled_ - 1]) < size_), internal_logic ());
         }
 
         size_type size_;
@@ -1471,11 +1480,15 @@ namespace boost { namespace numeric { namespace ublas {
         void resize (size_type size, bool preserve = true) {
             if (preserve)
                 sort ();    // remove duplicate elements.
+            size_ = size;
             capacity_ = restrict_capacity (capacity_);
             if (preserve) {
                 index_data_. resize (capacity_, size_type ());
                 value_data_. resize (capacity_, value_type ());
                 filled_ = (std::min) (capacity_, filled_);
+                while ((filled_ > 0) && (zero_based(index_data_[filled_ - 1]) >= size)) {
+                    --filled_;
+                }
             }
             else {
                 index_data_. resize (capacity_);
@@ -1483,7 +1496,6 @@ namespace boost { namespace numeric { namespace ublas {
                 filled_ = 0;
             }
             sorted_filled_ = filled_;
-            size_ = size;
             storage_invariants ();
         }
         // Reserving
@@ -1977,6 +1989,7 @@ namespace boost { namespace numeric { namespace ublas {
             BOOST_UBLAS_CHECK (filled_ <= capacity_, internal_logic ());
             BOOST_UBLAS_CHECK (sorted_filled_ <= filled_, internal_logic ());
             BOOST_UBLAS_CHECK (sorted_ == (sorted_filled_ == filled_), internal_logic ());
+            BOOST_UBLAS_CHECK ((0 == filled_) || (zero_based(index_data_[filled_ - 1]) < size_), internal_logic ());
         }
 
         size_type size_;
