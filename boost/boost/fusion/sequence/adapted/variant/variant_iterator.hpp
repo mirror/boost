@@ -18,6 +18,7 @@
 #include <boost/mpl/eval_if.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/add_const.hpp>
+#include <boost/type_traits/add_reference.hpp>
 
 namespace boost { namespace fusion {
 
