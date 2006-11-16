@@ -1202,43 +1202,43 @@ double dot [^".."] and terminated by the close parenthesis.
 Nullary templates look and act like simple macros. Example:
 
 [pre'''
-[template spirit[] [@http://spirit.sf.net Spirit]]
+[template alpha[]&apos;&apos;&apos;&amp;#945;&apos;&apos;&apos;]
+[template beta[]&apos;&apos;&apos;&amp;#946;&apos;&apos;&apos;]
 ''']
 
-[template spirit[] [@http://spirit.sf.net Spirit]]
+[template alpha[]'''&#945;''']
+[template beta[]'''&#946;''']
 
 Expanding:
 
-[pre'''
-Please see [spirit]'s site.
-''']
+[pre'''Some squigles...[*[alpha][beta]]''']
 
 We have:
 
-Please see [spirit]'s site.
+Some squiggles...[*[alpha][beta]]
 
 The difference with macros are 
 
 * The explicit [link quickbook.syntax.block.templates.template_expansion 
   template expansion syntax]. This is an advantage because, now, we don't 
   have to use obscure naming conventions like double underscores (e.g. 
-  \_\_spirit\_\_) to avoid unwanted 
+  \_\_alpha\_\_) to avoid unwanted 
   macro replacement.
 * The template is expanded at the point where it is invoked. A macro is
   expanded immediately at its point of declaration. This is subtle and
   can cause a slight difference in behavior especially if you refer to
   other macros and templates in the body.
   
-The empty brackets after the template identifier ([^spirit\[\]]) indicates 
-no arguments. If the template body does not look like a template argument 
-list (the example above does), we can elide the empty brackets. Example:
+The empty brackets after the template identifier ([^alpha\[\]]) indicates no 
+arguments. If the template body does not look like a template argument list, we 
+can elide the empty brackets. Example:
 
 [pre'''
 [template aristotle_quote Aristotle: [*['Education is the best provision 
 for the journey to old age.]]]
 ''']
 
-[template aristotle_quote Aristotle: [*['Education is the best provision 
+[template aristotle_quote\ Aristotle: [*['Education is the best provision 
 for the journey to old age.]]]
 
 Expanding:
@@ -1250,6 +1250,30 @@ Here's a quote from [aristotle_quote].
 We have:
 
 Here's a quote from [aristotle_quote].
+
+The disadvantage is that you can't avoid the space between the template 
+identifier, `aristotle_quote`, and the template body "Aristotle...". This space 
+will be part of the template body. If that space is unwanted, use empty 
+brackets or use the space escape: "`\ `". Example:
+
+[pre'''
+[template tag\ _tag]
+''']
+
+[template tag\ _tag]
+
+Then expanding:
+
+[pre'''
+`struct` x[tag];
+''']
+
+We have:
+
+`struct` x[tag];
+
+You have a couple of ways to do it. I personally prefer the explicit empty 
+brackets, though.
   
 [heading Simple Arguments]
 

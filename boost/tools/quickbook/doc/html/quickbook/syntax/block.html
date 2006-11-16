@@ -812,7 +812,7 @@ sf_logo
 <tr>
 <td>__TIME__</td>
 <td>The current time</td>
-<td>01:18:13 PM</td>
+<td>02:54:48 PM</td>
 </tr>
 <tr>
 <td>__FILENAME__</td>
@@ -965,18 +965,18 @@ replacement text...
 <p>
           Nullary templates look and act like simple macros. Example:
         </p>
-<pre class="programlisting">[template spirit[] [@http://spirit.sf.net Spirit]]
+<pre class="programlisting">[template alpha[]'''&amp;#945;''']
+[template beta[]'''&amp;#946;''']
 </pre>
 <p>
           Expanding:
         </p>
-<pre class="programlisting">Please see [spirit]'s site.
-</pre>
+<pre class="programlisting">Some squigles...[*[alpha][beta]]</pre>
 <p>
           We have:
         </p>
 <p>
-          Please see <a href="http://spirit.sf.net" target="_top">Spirit</a>'s site.
+          Some squiggles...<span class="bold"><b>&#945;&#946;</b></span>
         </p>
 <p>
           The difference with macros are
@@ -986,7 +986,7 @@ replacement text...
             The explicit <a href="block.html#quickbook.syntax.block.templates.template_expansion">template
             expansion syntax</a>. This is an advantage because, now, we don't
             have to use obscure naming conventions like double underscores (e.g.
-            __spirit__) to avoid unwanted macro replacement.
+            __alpha__) to avoid unwanted macro replacement.
           </li>
 <li>
             The template is expanded at the point where it is invoked. A macro is
@@ -996,10 +996,9 @@ replacement text...
           </li>
 </ul></div>
 <p>
-          The empty brackets after the template identifier (<tt class="literal">spirit[]</tt>)
+          The empty brackets after the template identifier (<tt class="literal">alpha[]</tt>)
           indicates no arguments. If the template body does not look like a template
-          argument list (the example above does), we can elide the empty brackets.
-          Example:
+          argument list, we can elide the empty brackets. Example:
         </p>
 <pre class="programlisting">[template aristotle_quote Aristotle: [*['Education is the best provision 
 for the journey to old age.]]]
@@ -1016,8 +1015,33 @@ for the journey to old age.]]]
           Here's a quote from Aristotle: <span class="bold"><b><span class="emphasis"><em>Education
           is the best provision for the journey to old age.</em></span></b></span>.
         </p>
+<p>
+          The disadvantage is that you can't avoid the space between the template
+          identifier, <tt class="computeroutput"><span class="identifier">aristotle_quote</span></tt>,
+          and the template body "Aristotle...". This space will be part
+          of the template body. If that space is unwanted, use empty brackets or
+          use the space escape: "<tt class="computeroutput"><span class="special">\</span> </tt>".
+          Example:
+        </p>
+<pre class="programlisting">[template tag\ _tag]
+</pre>
+<p>
+          Then expanding:
+        </p>
+<pre class="programlisting">`struct` x[tag];
+</pre>
+<p>
+          We have:
+        </p>
+<p>
+          <tt class="computeroutput"><span class="identifier">struct</span></tt> x_tag;
+        </p>
+<p>
+          You have a couple of ways to do it. I personally prefer the explicit empty
+          brackets, though.
+        </p>
 <a name="quickbook.syntax.block.templates.simple_arguments"></a><h5>
-<a name="id451950"></a>
+<a name="id452027"></a>
           <a href="block.html#quickbook.syntax.block.templates.simple_arguments">Simple
           Arguments</a>
         </h5>
@@ -1085,7 +1109,7 @@ for the journey to old age.]]]
           what do you think man?
         </p>
 <a name="quickbook.syntax.block.templates.punctuation_templates"></a><h5>
-<a name="id452117"></a>
+<a name="id452194"></a>
           <a href="block.html#quickbook.syntax.block.templates.punctuation_templates">Punctuation
           Templates</a>
         </h5>
@@ -1156,7 +1180,7 @@ for the journey to old age.]]]
           will generate:
         </p>
 <div class="table">
-<a name="id452312"></a><p class="title"><b>Table 4. A Simple Table</b></p>
+<a name="id452388"></a><p class="title"><b>Table 4. A Simple Table</b></p>
 <table class="table" summary="A Simple Table">
 <colgroup>
 <col>
@@ -1215,7 +1239,7 @@ for the journey to old age.]]]
           and thus:
         </p>
 <div class="table">
-<a name="id452420"></a><p class="title"><b>Table 5. Table with fat cells</b></p>
+<a name="id452497"></a><p class="title"><b>Table 5. Table with fat cells</b></p>
 <table class="table" summary="Table with fat cells">
 <colgroup>
 <col>
@@ -1261,7 +1285,7 @@ for the journey to old age.]]]
 ]
 </pre>
 <div class="table">
-<a name="id452500"></a><p class="title"><b>Table 6. Table with code</b></p>
+<a name="id452577"></a><p class="title"><b>Table 6. Table with code</b></p>
 <table class="table" summary="Table with code">
 <colgroup>
 <col>
