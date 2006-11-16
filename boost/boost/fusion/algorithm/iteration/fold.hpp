@@ -10,6 +10,7 @@
 
 #include <boost/fusion/algorithm/iteration/detail/fold.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
+#include <boost/fusion/iterator/equal_to.hpp>
 #include <boost/static_assert.hpp>
 
 namespace boost { namespace fusion
@@ -41,7 +42,7 @@ namespace boost { namespace fusion
           , fusion::end(seq)
           , state
           , f
-          , is_same<
+          , result_of::equal_to<
                 typename result_of::begin<Sequence>::type
               , typename result_of::end<Sequence>::type>()
         );
@@ -56,7 +57,7 @@ namespace boost { namespace fusion
           , fusion::end(seq)
           , state
           , f
-          , is_same<
+          , result_of::equal_to<
                 typename result_of::begin<Sequence const>::type
               , typename result_of::end<Sequence const>::type>()
         );
