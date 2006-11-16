@@ -23,6 +23,9 @@
     #include <boost/preprocessor/iteration/iterate.hpp>
     #include <boost/preprocessor/repetition/enum.hpp>
     #include <boost/preprocessor/repetition/enum_params.hpp>
+    #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
+    #include <boost/preprocessor/facilities/intercept.hpp>
+    #include <boost/preprocessor/arithmetic/sub.hpp>
 
     namespace boost { namespace proto
     {
@@ -437,7 +440,9 @@
 
         #if N > 0
             template<BOOST_PP_ENUM_PARAMS(N, typename A)>
-            struct function<BOOST_PP_ENUM_PARAMS(N, A)>
+            struct function<
+                BOOST_PP_ENUM_PARAMS(N, A) 
+                BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT), void >
             {
                 typedef basic_expr<function_tag, BOOST_PP_CAT(mpl::vector, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
             };
