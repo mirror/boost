@@ -1601,7 +1601,7 @@ sf_logo
         </para>
         <itemizedlist>
           <listitem>
-            The <!--quickbook-escape-prefix-->__FILENAME__<!--quickbook-escape-postfix-->predefined macro will reflect the name of the file currently being
+            The <!--quickbook-escape-prefix-->__FILENAME__<!--quickbook-escape-postfix--> predefined macro will reflect the name of the file currently being
             processed.
           </listitem>
           <listitem>

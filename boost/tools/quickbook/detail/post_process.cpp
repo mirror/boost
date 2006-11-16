@@ -275,7 +275,7 @@ namespace quickbook
                 
                 escape = str_p("<!--quickbook-escape-prefix-->") >> 
                     *(anychar_p - str_p("<!--quickbook-escape-postfix-->"))
-                     >> str_p("<!--quickbook-escape-postfix-->")
+                     >> lexeme_d[str_p("<!--quickbook-escape-postfix-->") >> *space_p]
                     ;
                 
                 start_tag = '<' >> tag >> *(anychar_p - '>') >> lexeme_d['>' >> *space_p];
