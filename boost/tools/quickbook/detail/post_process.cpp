@@ -282,7 +282,7 @@ namespace quickbook
                 start_end_tag = 
                         '<' >> tag >> *(anychar_p - ('/' | ch_p('>'))) >> lexeme_d["/>" >> *space_p]
                     |   "<?" >> tag >> *(anychar_p - '?') >> lexeme_d["?>" >> *space_p]
-                    |   "<!--" >> tag >> *(anychar_p - "-->") >> lexeme_d["-->" >> *space_p]
+                    |   "<!--" >> *(anychar_p - "-->") >> lexeme_d["-->" >> *space_p]
                     |   "<!" >> tag >> *(anychar_p - '>') >> lexeme_d['>' >> *space_p]
                     ;
                 content = lexeme_d[ +(anychar_p - '<') ];

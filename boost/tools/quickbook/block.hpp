@@ -87,8 +87,11 @@ namespace quickbook
                     ;                                   // alpha-numeric or underscore
 
                 comment =
+                    (
                         "[//" >> *(anychar_p - eol_p) >> eol_p
                     |   "[/" >> *(dummy_block | (anychar_p - ']')) >> ']'
+                    )
+                                                        [actions.comment]
                     ;
                 
                 dummy_block =

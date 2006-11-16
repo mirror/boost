@@ -103,6 +103,7 @@ namespace quickbook
         code_action             code_block;
         inline_code_action      inline_code;
         phrase_action           paragraph;
+        simple_phrase_action    comment;
         generic_header_action   h;
         header_action           h1, h2, h3, h4, h5, h6;
         markup_action           hr;

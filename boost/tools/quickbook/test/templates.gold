@@ -8,10 +8,13 @@
   <section id="templates.templates">
     <title><link linkend="templates.templates">Templates</link></title>
     <para>
+      <!--[/-------------------------------- nullary arg ]-->
       nullary_arg
+      <!--[/-------------------------------- unary arg, phrase syle ]-->
     </para>
     <para>
       foo baz
+      <!--[/-------------------------------- unary arg, block syle ]-->
     </para>
     <para>
       <para>
@@ -23,9 +26,11 @@
         This is a complete paragraph. kalamazoo kalamazoo kalamazoo kalamazoo kalamazoo
         kalamazoo kalamazoo kalamazoo kalamazoo.... blah blah blah......
       </para>
+      <!--[/-------------------------------- unary arg, using punctuation ]-->
     </para>
     <para>
       <!--quickbook-escape-prefix--><hey><!--quickbook-escape-postfix-->baz<!--quickbook-escape-prefix--></hey><!--quickbook-escape-postfix-->
+      <!--[/-------------------------------- recursive templates ]-->
     </para>
     <para>
       <para>
@@ -38,12 +43,14 @@
     </para>
     <para>
       exactly xanadu
+      <!--[/-------------------------------- space delimitted args ]-->
     </para>
     <para>
       wx
     </para>
     <para>
       wxyz wxyz trail
+      <!--[/-------------------------------- John's templates ]-->
     </para>
     <para>
       
@@ -61,7 +68,8 @@
       <!--quickbook-escape-prefix-->&alpha;<!--quickbook-escape-postfix--><!--quickbook-escape-prefix--><superscript><!--quickbook-escape-postfix-->2<!--quickbook-escape-prefix--></superscript><!--quickbook-escape-postfix-->
     </para>
     <para>
-      x<!--quickbook-escape-prefix--><superscript><!--quickbook-escape-postfix-->2<!--quickbook-escape-prefix--></superscript><!--quickbook-escape-postfix-->
+      x<!--quickbook-escape-prefix--><superscript><!--quickbook-escape-postfix-->2<!--quickbook-escape-prefix--></superscript><!--quickbook-escape-postfix-->&nbsp;
+      <!--[/-------------------------------- Some more ]-->
     </para>
     <para>
       got a banana?

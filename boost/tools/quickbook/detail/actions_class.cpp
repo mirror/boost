@@ -72,6 +72,7 @@ namespace quickbook
         , code_block(phrase, phrase, temp, source_mode, macro, *this)
         , inline_code(phrase, temp, source_mode, macro, *this)
         , paragraph(out, phrase, paragraph_pre, paragraph_post)
+        , comment(phrase, comment_pre, comment_post, macro)
         , h(out, phrase, doc_id, section_id, qualified_section_id, section_level)
         , h1(out, phrase, doc_id, section_id, qualified_section_id, h1_pre, h1_post)
         , h2(out, phrase, doc_id, section_id, qualified_section_id, h2_pre, h2_post)

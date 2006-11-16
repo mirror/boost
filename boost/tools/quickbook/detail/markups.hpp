@@ -12,6 +12,8 @@
 
 namespace quickbook { namespace /*unnamed*/
 {
+    const char* comment_pre         = "<!--";
+    const char* comment_post        = "-->";
     const char* paragraph_pre       = "<para>\n";
     const char* paragraph_post      = "</para>\n";
     const char* h1_pre              = "<bridgehead renderas=\"sect1\">";
