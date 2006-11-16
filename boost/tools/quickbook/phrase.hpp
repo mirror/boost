@@ -213,6 +213,7 @@ namespace quickbook
 
                 escape =
                         str_p("\\n")                    [actions.break_]
+                    |   "\\ "                           // ignore an escaped char
                     |   '\\' >> punct_p                 [actions.raw_char]
                     |   (
                             ("'''" >> !eol)             [actions.escape_pre]

@@ -478,7 +478,7 @@ namespace quickbook
 
             // How do we know if we are to parse the template as a block or
             // a phrase? We apply a simple heuristic: if the body starts with
-            // a newline, then we regard is as a block, otherwise, we parse
+            // a newline, then we regard it as a block, otherwise, we parse
             // it as a phrase.
             
             std::string::const_iterator iter = body.begin();

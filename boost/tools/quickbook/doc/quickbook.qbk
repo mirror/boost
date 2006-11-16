@@ -143,6 +143,8 @@ Features include:
 * Various code cleanup/maintenance
 * Templates!
 * \[conceptref\] for referencing BoostBook <concept> entities.
+* Allow escape of spaces. The escaped space is removed from the output. Syntax: 
+  `\ `.
 
 [endsect]
 
@@ -257,6 +259,7 @@ at all if __spirit__, being more or less a formal EBNF parser, can handle
 the context sensitivity and ambiguity.].
 
 * Simple markups cannot nest. You can combine a simple markup with a nestable markup.
+* Simple markups cannot contain any other form of quickbook markup.
 * A non-space character must follow the leading markup
 * A non-space character must precede the trailing markup
 * A space or a punctuation must follow the trailing markup
@@ -283,6 +286,7 @@ the context sensitivity and ambiguity.].
     [[[^'''*This is bold*.''']]                         [*This is bold*.]]
     [[[^'''*B*. (bold B)''']]                           [*B*. (bold B)]]
     [[[^'''['*Bold-Italic*]''']]                        [['*Bold-Italic*]]]
+    [[[^'''*side-by*/-side/''']]                        [*side-by*/-side/]]
 ]
 
 [endsect]
@@ -511,6 +515,9 @@ For example, how do you escape the triple quote? Simple: [^\\'\\'\\']
 
 `\n` has a special meaning. It is used to generate line breaks. Note that `\n`
 is now preferred over `[br]`.
+
+The escaped space: `\ ` also has a special meaning. The escaped space is removed 
+from the output. 
 
 [endsect]
 [section Images]

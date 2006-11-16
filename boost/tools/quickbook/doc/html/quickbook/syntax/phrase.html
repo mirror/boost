@@ -135,13 +135,16 @@ the true business precept.]
 <p>
           Unlike QuickBook's standard formatting scheme, the rules for simpler alternatives
           are much stricter
-          <sup>[<a name="id377716" href="#ftn.id377716">1</a>]</sup>
+          <sup>[<a name="id378270" href="#ftn.id378270">1</a>]</sup>
           .
         </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
             Simple markups cannot nest. You can combine a simple markup with a nestable
             markup.
+          </li>
+<li>
+            Simple markups cannot contain any other form of quickbook markup.
           </li>
 <li>
             A non-space character must follow the leading markup
@@ -167,7 +170,7 @@ the true business precept.]
           </li>
 </ul></div>
 <div class="table">
-<a name="id447224"></a><p class="title"><b>Table 1. More Formatting Samples</b></p>
+<a name="id377477"></a><p class="title"><b>Table 1. More Formatting Samples</b></p>
 <table class="table" summary="More Formatting Samples">
 <colgroup>
 <col>
@@ -241,6 +244,12 @@ the true business precept.]
 <tr>
 <td><tt class="literal">['*Bold-Italic*]</tt></td>
 <td><span class="emphasis"><em><span class="bold"><b>Bold-Italic</b></span></em></span></td>
+</tr>
+<tr>
+<td><tt class="literal">*side-by*/-side/</tt></td>
+<td>
+<span class="bold"><b>side-by</b></span><span class="emphasis"><em>-side</em></span>
+</td>
 </tr>
 </tbody>
 </table>
@@ -349,7 +358,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
           whereas a Python comment <tt class="computeroutput"><span class="comment">#looks like this</span></tt>.
         </p>
 <div class="table">
-<a name="id447959"></a><p class="title"><b>Table 2. Supported Source Modes</b></p>
+<a name="id448411"></a><p class="title"><b>Table 2. Supported Source Modes</b></p>
 <table class="table" summary="Supported Source Modes">
 <colgroup>
 <col>
@@ -549,6 +558,10 @@ escape (no processing/formatting)
           has a special meaning. It is used to generate line breaks. Note that <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt> is
           now preferred over <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.
         </p>
+<p>
+          The escaped space: <tt class="computeroutput"><span class="special">\</span> </tt>
+          also has a special meaning. The escaped space is removed from the output.
+        </p>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
@@ -574,7 +587,7 @@ escape (no processing/formatting)
 </pre>
 <p>
           will generate this
-          <sup>[<a name="id448698" href="#ftn.id448698">2</a>]</sup>
+          <sup>[<a name="id449163" href="#ftn.id449163">2</a>]</sup>
           .
         </p>
 <div class="section" lang="en">
@@ -603,14 +616,14 @@ escape (no processing/formatting)
 </div>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id377716" href="#id377716">1</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id378270" href="#id378270">1</a>] </sup>
               Thanks to David Barrett, author of <a href="http://quinthar.com/qwikiwiki/index.php?page=Home" target="_top">Qwiki</a>,
               for sharing these samples and teaching me these obscure formatting
               rules. I wasn't sure at all if <a href="http://spirit.sourceforge.net" target="_top">Spirit</a>,
               being more or less a formal EBNF parser, can handle the context sensitivity
               and ambiguity.
             </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id448698" href="#id448698">2</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id449163" href="#id449163">2</a>] </sup>
               A sample footnote
             </p></div>
 </div>
