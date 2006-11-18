@@ -13,12 +13,21 @@
 # pragma once
 #endif
 
+#include <boost/mpl/assert.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/matches.hpp>
 #include <boost/xpressive/proto/traits.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_pointer.hpp>
+
+#ifdef BOOST_XPRESSIVE_BETTER_ERRORS
+# define BOOST_XPRESSIVE_CHECK_GRAMMAR(Expr, Char)\
+    BOOST_MPL_ASSERT((boost::proto::matches<Expr, boost::xpressive::XpressiveGrammar<Char> >))
+#else
+# define BOOST_XPRESSIVE_CHECK_GRAMMAR(Expr, Char)\
+    BOOST_MPL_ASSERT((mpl::true_))
+#endif
 
 namespace boost { namespace xpressive
 {
@@ -33,156 +42,228 @@ namespace boost { namespace xpressive
         struct is_generic_repeat<generic_quant_tag<Min, Max> >
           : mpl::true_
         {};
+
+        // is_xpressive_terminal
+        template<typename Char, typename T>
+        struct is_xpressive_terminal
+          : mpl::false_
+        {};
+
+        template<typename Char>
+        struct is_xpressive_terminal<Char, posix_charset_placeholder>
+          : mpl::true_
+        {};
+
+        template<typename Char>
+        struct is_xpressive_terminal<Char, assert_bos_matcher>
+          : mpl::true_
+        {};
+
+        template<typename Char>
+        struct is_xpressive_terminal<Char, assert_eos_matcher>
+          : mpl::true_
+        {};
+
+        template<typename Char>
+        struct is_xpressive_terminal<Char, epsilon_matcher>
+          : mpl::true_
+        {};
+
+        template<typename Char>
+        struct is_xpressive_terminal<Char, assert_bol_placeholder>
+          : mpl::true_
+        {};
+
+        template<typename Char>
+        struct is_xpressive_terminal<Char, assert_eol_placeholder>
+          : mpl::true_
+        {};
+
+        template<typename Char, typename Cond>
+        struct is_xpressive_terminal<Char, assert_word_placeholder<Cond> >
+          : mpl::true_
+        {};
+
+        template<typename Char>
+        struct is_xpressive_terminal<Char, logical_newline_placeholder>
+          : mpl::true_
+        {};
+
+        template<typename Char>
+        struct is_xpressive_terminal<Char, any_matcher>
+          : mpl::true_
+        {};
+
+        template<typename Char>
+        struct is_xpressive_terminal<Char, self_placeholder>
+          : mpl::true_
+        {};
+
+        template<typename Char>
+        struct is_xpressive_terminal<Char, mark_placeholder>
+          : mpl::true_
+        {};
+
+        template<typename Char>
+        struct is_xpressive_terminal<Char, range_placeholder<Char> >
+          : mpl::true_
+        {};
+
+        template<typename Char, typename BidiIter, typename ByRef>
+        struct is_xpressive_terminal<Char, regex_placeholder<BidiIter, ByRef> >
+          : mpl::true_
+        {};
+
+        template<typename Char, typename Traits, typename Alloc>
+        struct is_xpressive_terminal<Char, std::basic_string<Char, Traits, Alloc> >
+          : mpl::true_
+        {};
+
+        template<typename Char, typename BidiIter>
+        struct is_xpressive_terminal<Char, xpressive::basic_regex<BidiIter> >
+          : mpl::true_
+        {};
+
+        template<typename Char>
+        struct is_xpressive_terminal<Char, Char>
+          : mpl::true_
+        {};
+
+        template<typename Char>
+        struct is_xpressive_terminal<Char, Char const *>
+          : mpl::true_
+        {};
+
+        template<typename Char>
+        struct is_xpressive_terminal<Char, string_placeholder<Char> >
+          : mpl::true_
+        {};
+
+        template<typename Char, typename Not>
+        struct is_xpressive_terminal<Char, literal_placeholder<Char, Not> >
+          : mpl::true_
+        {};
     }
 
+    template<typename Char>
     struct XpressiveGrammar;
 
+    template<typename Char>
     struct XpressiveListSet
       : proto::or_<
-            proto::and_<
-                proto::meta::comma< XpressiveListSet, mpl::_ >
-              , proto::if_< is_integral< proto::meta::arg<proto::meta::right<mpl::_> > > >
-            >
-          , proto::and_<
-                proto::meta::assign<detail::set_initializer_type, mpl::_>
-              , proto::if_< is_integral< proto::meta::arg<proto::meta::right<mpl::_> > > >
-            >
+            proto::meta::comma< XpressiveListSet<Char>, proto::meta::terminal<Char> >
+          , proto::meta::assign<detail::set_initializer_type, proto::meta::terminal<Char> >
         >
     {};
 
+    template<typename Char>
     struct XpressiveSet
       : proto::or_<
-            proto::meta::subscript<detail::set_initializer_type, XpressiveGrammar >
-          , XpressiveListSet
+            proto::meta::subscript<detail::set_initializer_type, XpressiveGrammar<Char> >
+          , XpressiveListSet<Char>
         >
     {};
 
+    template<typename Char>
     struct XpressiveComplementedSet
       : proto::or_<
-            proto::meta::complement<XpressiveSet>
-          , XpressiveSet
+            proto::meta::complement<XpressiveSet<Char> >
+          , XpressiveSet<Char>
         >
     {};
 
+    template<typename Char>
     struct XpressiveTaggedSubExpression
-      : proto::meta::assign< detail::basic_mark_tag, XpressiveGrammar >
+      : proto::meta::assign< detail::basic_mark_tag, XpressiveGrammar<Char> >
     {};
 
-    struct XpressiveLiteral
-      : proto::or_<
-            proto::meta::terminal<std::basic_string<mpl::_, mpl::_, mpl::_> >
-          , proto::meta::terminal<detail::string_placeholder<mpl::_> >
-          , proto::meta::terminal<detail::literal_placeholder<mpl::_, mpl::_> >
-          , proto::and_<
-                proto::meta::terminal<mpl::_>
-              , proto::or_<
-                    proto::if_<is_integral<proto::meta::arg<mpl::_> > > // character literal
-                  , proto::if_<is_pointer<proto::meta::arg<mpl::_> > >  // ntbs literal
-                >
-            >
-            // complemented character literals, as: ~_n or ~as_xpr('a')
-          , proto::and_<
-                proto::meta::complement<proto::meta::terminal<mpl::_> >
-              , proto::if_<is_integral<proto::meta::arg<proto::meta::arg<mpl::_> > > >
-            >
-        >
-    {};
-
+    template<typename Char>
     struct XpressiveLookAroundAssertion
       : proto::or_<
-            proto::meta::unary_expr<detail::lookahead_tag<true>, XpressiveGrammar >
-          , proto::meta::unary_expr<detail::lookbehind_tag<true>, XpressiveGrammar >
+            proto::meta::unary_expr<detail::lookahead_tag<true>, XpressiveGrammar<Char> >
+          , proto::meta::unary_expr<detail::lookbehind_tag<true>, XpressiveGrammar<Char> >
         >
     {};
 
+    template<typename Char>
     struct XpressiveComplementedLookAroundAssertion
       : proto::or_<
-            proto::meta::complement< XpressiveLookAroundAssertion >
-          , XpressiveLookAroundAssertion
+            proto::meta::complement< XpressiveLookAroundAssertion<Char> >
+          , XpressiveLookAroundAssertion<Char>
         >
     {};
 
+    template<typename Char>
     struct XpressiveIndependentSubExpression
-      : proto::meta::unary_expr<detail::keeper_tag, XpressiveGrammar >
+      : proto::meta::unary_expr<detail::keeper_tag, XpressiveGrammar<Char> >
     {};
 
+    template<typename Char>
     struct XpressiveModifiedSubExpression
-      : proto::meta::binary_expr<detail::modifier_tag, mpl::_, XpressiveGrammar>
+      : proto::meta::binary_expr<detail::modifier_tag, mpl::_, XpressiveGrammar<Char> >
     {};
 
+    template<typename Char>
     struct XpressiveTerminal
       : proto::or_<
-            proto::meta::terminal<detail::posix_charset_placeholder>
+            proto::and_<
+                proto::meta::terminal<mpl::_>
+              , proto::if_<detail::is_xpressive_terminal<Char, proto::meta::arg<mpl::_> > >
+            >
+          , proto::meta::complement<proto::meta::terminal<Char> >
           , proto::meta::complement<proto::meta::terminal<detail::posix_charset_placeholder> >
-          , proto::meta::terminal<detail::assert_bos_matcher>
-          , proto::meta::terminal<detail::assert_eos_matcher>
+          , proto::meta::complement<proto::meta::terminal<detail::logical_newline_placeholder> >
           , proto::or_<
-                proto::meta::terminal<detail::epsilon_matcher>
-              , proto::meta::terminal<detail::assert_bol_placeholder>
-              , proto::meta::terminal<detail::assert_eol_placeholder>
-              , proto::meta::terminal<detail::assert_word_placeholder<mpl::_> >
-              , proto::or_<
-                    proto::meta::terminal<detail::logical_newline_placeholder>
-                  , proto::meta::complement<proto::meta::terminal<detail::logical_newline_placeholder> >
-                  , proto::meta::terminal<detail::any_matcher>
-                  , proto::meta::terminal<detail::self_placeholder>
-                  , proto::or_<
-                        proto::meta::terminal<detail::mark_placeholder>
-                      , proto::meta::terminal<detail::range_placeholder<mpl::_> >
-                      , proto::meta::terminal<detail::regex_placeholder<mpl::_, mpl::_> >
-                      , proto::meta::terminal<xpressive::basic_regex<mpl::_> >
-                      , proto::or_<
-                            XpressiveLiteral
-                          , XpressiveComplementedSet
-                          , XpressiveTaggedSubExpression
-                          , XpressiveComplementedLookAroundAssertion
-                          , proto::or_<
-                                XpressiveModifiedSubExpression
-                              , XpressiveIndependentSubExpression
-                            >
-                        >
-                    >
-                >
+                XpressiveComplementedSet<Char>
+              , XpressiveTaggedSubExpression<Char>
+              , XpressiveComplementedLookAroundAssertion<Char>
+              , XpressiveModifiedSubExpression<Char>
+              , XpressiveIndependentSubExpression<Char>
             >
         >
     {};
 
+    template<typename Char>
     struct XpressiveQuantified
       : proto::or_<
-            proto::meta::unary_star< XpressiveGrammar >
-          , proto::meta::unary_plus< XpressiveGrammar >
-          , proto::meta::logical_not< XpressiveGrammar >
+            proto::meta::unary_star< XpressiveGrammar<Char> >
+          , proto::meta::unary_plus< XpressiveGrammar<Char> >
+          , proto::meta::logical_not< XpressiveGrammar<Char> >
           , proto::and_<
                 proto::if_<detail::is_generic_repeat<proto::meta::tag<mpl::_> > >
-              , proto::if_<proto::matches<proto::meta::arg<mpl::_>, XpressiveGrammar> >
+              , proto::if_<proto::matches<proto::meta::arg<mpl::_>, XpressiveGrammar<Char> > >
             >
         >
     {};
 
+    template<typename Char>
     struct XpressiveLazyQuantified
       : proto::or_<
-            proto::meta::unary_minus< XpressiveQuantified >
-          , XpressiveQuantified
-          , XpressiveTerminal
+            proto::meta::unary_minus< XpressiveQuantified<Char> >
+          , XpressiveQuantified<Char>
+          , XpressiveTerminal<Char>
         >
     {};
 
+    template<typename Char>
     struct XpressiveSequence
       : proto::or_<
-            proto::meta::right_shift< XpressiveGrammar, XpressiveGrammar >
-          , XpressiveLazyQuantified
+            proto::meta::right_shift< XpressiveGrammar<Char>, XpressiveGrammar<Char> >
+          , XpressiveLazyQuantified<Char>
         >
     {};
 
+    template<typename Char>
     struct XpressiveAlternate
       : proto::or_<
-            proto::meta::bitwise_or< XpressiveGrammar, XpressiveGrammar >
-          , XpressiveSequence
+            proto::meta::bitwise_or< XpressiveGrammar<Char>, XpressiveGrammar<Char> >
+          , XpressiveSequence<Char>
         >
     {};
 
+    template<typename Char>
     struct XpressiveGrammar
-      : XpressiveAlternate
+      : XpressiveAlternate<Char>
     {};
 
 }}

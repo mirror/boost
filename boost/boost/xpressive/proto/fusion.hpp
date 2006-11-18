@@ -10,7 +10,6 @@
 #define BOOST_PROTO_FUSION_HPP_EAN_04_29_2006
 
 #include <boost/xpressive/proto/proto.hpp>
-#include <boost/preprocessor/repetition/repeat.hpp>
 
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/at.hpp>

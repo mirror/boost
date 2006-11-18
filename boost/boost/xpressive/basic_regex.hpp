@@ -23,6 +23,7 @@
 #include <boost/xpressive/regex_constants.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/regex_impl.hpp>
+#include <boost/xpressive/detail/static/grammar.hpp>
 
 namespace boost { namespace xpressive
 {
@@ -88,6 +89,7 @@ struct basic_regex
     template<typename Expr>
     basic_regex<BidiIter> &operator =(Expr const &expr)
     {
+        BOOST_XPRESSIVE_CHECK_GRAMMAR(Expr, char_type);
         detail::static_compile(expr, this->impl_.get());
         return *this;
     }
