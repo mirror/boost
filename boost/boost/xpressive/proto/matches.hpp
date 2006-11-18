@@ -34,18 +34,6 @@
 
         namespace detail
         {
-            template<typename T>
-            struct safe_unref
-            {
-                typedef T type;
-            };
-
-            template<typename T>
-            struct safe_unref<ref<T> >
-            {
-                typedef T type;
-            };
-
             // and_
             template<bool B, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename P, void)>
             struct and_impl
@@ -121,60 +109,6 @@
               : terminal_matches<Expr0, Grammar0>
             {};
 
-            // matches_impl
-        #define BOOST_PROTO_MATCHES_N_FUN(z, n, data)\
-            matches<\
-                typename safe_unref<typename mpl::at_c<Args1, n>::type>::type\
-              , typename safe_unref<typename mpl::at_c<Args2, n>::type>::type\
-            >\
-            /**/
-
-            template<typename Expr, typename Grammar>
-            struct matches_impl;
-
-            template<typename Expr>
-            struct matches_impl< Expr, mpl::_ >
-              : mpl::true_
-            {};
-
-            template<typename Tag1, typename Args1, long Arity1, typename Tag2, typename Args2, long Arity2>
-            struct matches_impl< basic_expr<Tag1, Args1, Arity1>, basic_expr<Tag2, Args2, Arity2> >
-              : mpl::false_
-            {};
-
-            template<typename Tag, typename Args1, typename Args2>
-            struct matches_impl< basic_expr<Tag, Args1, 1>, basic_expr<Tag, Args2, 1> >
-              : matches<
-                    typename safe_unref<typename mpl::at_c<Args1, 0>::type>::type
-                  , typename safe_unref<typename mpl::at_c<Args2, 0>::type>::type
-                >
-            {};
-
-            template<typename Args1, typename Args2>
-            struct matches_impl< basic_expr<terminal_tag, Args1, 1>, basic_expr<terminal_tag, Args2, 1> >
-              : terminal_matches<
-                    typename safe_unref<typename mpl::at_c<Args1, 0>::type>::type
-                  , typename safe_unref<typename mpl::at_c<Args2, 0>::type>::type
-                >
-            {};
-
-        #define BOOST_PROTO_DEFINE_MATCHES(z, n, data) matches< Expr, BOOST_PP_CAT(G, n) >
-        #define BOOST_PROTO_DEFINE_TERMINAL_MATCHES(z, n, data) terminal_matches< BOOST_PP_CAT(Expr, n), BOOST_PP_CAT(Grammar, n) >
-        #define BOOST_PP_ITERATION_PARAMS_1 (3, (2, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/matches.hpp>))
-
-        #include BOOST_PP_ITERATE()
-
-        #undef BOOST_PP_ITERATION_PARAMS_1
-        #undef BOOST_PROTO_MATCHES_N_FUN
-        #undef BOOST_PROTO_DEFINE_MATCHES
-        #undef BOOST_PROTO_DEFINE_TERMINAL_MATCHES
-
-            // handle proto::if_
-            template<typename Expr, typename Pred>
-            struct matches_impl<Expr, if_<Pred> >
-              : mpl::apply1<Pred, Expr>
-            {};
-
             // by default, assume parameter is an expression generator ... 
             // (this also works for extends<> types because they are also generators)
             template<typename Expr>
@@ -196,14 +130,66 @@
             {
                 typedef mpl::_ type;
             };
+
+            // matches_impl
+            template<typename Expr, typename Grammar>
+            struct matches_impl;
+
+        #define BOOST_PROTO_MATCHES_N_FUN(z, n, data)\
+            matches_impl<\
+                typename mpl::at_c<Args1, n>::type::expr_type\
+              , typename deref<typename mpl::at_c<Args2, n>::type>::type\
+            >\
+            /**/
+
+            template<typename Expr>
+            struct matches_impl< Expr, mpl::_ >
+              : mpl::true_
+            {};
+
+            template<typename Tag1, typename Args1, long Arity1, typename Tag2, typename Args2, long Arity2>
+            struct matches_impl< basic_expr<Tag1, Args1, Arity1>, basic_expr<Tag2, Args2, Arity2> >
+              : mpl::false_
+            {};
+
+            template<typename Tag, typename Args1, typename Args2>
+            struct matches_impl< basic_expr<Tag, Args1, 1>, basic_expr<Tag, Args2, 1> >
+              : matches_impl<
+                    typename mpl::at_c<Args1, 0>::type::expr_type
+                  , typename deref<typename mpl::at_c<Args2, 0>::type>::type
+                >
+            {};
+
+            template<typename Args1, typename Args2>
+            struct matches_impl< basic_expr<terminal_tag, Args1, 1>, basic_expr<terminal_tag, Args2, 1> >
+              : terminal_matches<
+                    typename mpl::at_c<Args1, 0>::type
+                  , typename mpl::at_c<Args2, 0>::type
+                >
+            {};
+
+        #define BOOST_PROTO_DEFINE_MATCHES(z, n, data) matches< Expr, BOOST_PP_CAT(G, n) >
+        #define BOOST_PROTO_DEFINE_TERMINAL_MATCHES(z, n, data) terminal_matches< BOOST_PP_CAT(Expr, n), BOOST_PP_CAT(Grammar, n) >
+        #define BOOST_PP_ITERATION_PARAMS_1 (3, (2, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/matches.hpp>))
+
+        #include BOOST_PP_ITERATE()
+
+        #undef BOOST_PP_ITERATION_PARAMS_1
+        #undef BOOST_PROTO_MATCHES_N_FUN
+        #undef BOOST_PROTO_DEFINE_MATCHES
+        #undef BOOST_PROTO_DEFINE_TERMINAL_MATCHES
+
+            // handle proto::if_
+            template<typename Expr, typename Pred>
+            struct matches_impl<Expr, if_<Pred> >
+              : mpl::apply1<Pred, Expr>
+            {};
+
         }
 
         template<typename Expr, typename Grammar>
         struct matches
-          : mpl::or_<
-                is_same<typename Expr::expr_type, typename detail::deref<Grammar>::type>
-              , detail::matches_impl<typename Expr::expr_type, typename detail::deref<Grammar>::type>
-            >
+          : detail::matches_impl<typename Expr::expr_type, typename detail::deref<Grammar>::type>
         {};
 
         template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename G)>
