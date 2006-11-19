@@ -75,6 +75,12 @@ namespace
             << test::measure<accumulator<int> >(seq, repeats)
             << std::endl;
     }
+
+    template <typename T>
+    void test_assembler(T const& seq)
+    {
+        test::live_code = boost::fusion::accumulate(seq, 0, poly_add());
+    }
 }
 
 // We'll initialize the sequences from numeric strings that
@@ -155,6 +161,9 @@ int main()
     measure(lmedium,    "medium list time:                   ", repeats);
     measure(vbig,       "big vector time:                    ", repeats);
     measure(lbig,       "big list time:                      ", repeats);
+    
+    // Let's see how this looks in assembler
+    test_assembler(vmedium);
 
     // This is ultimately responsible for preventing all the test code
     // from being optimized away.  Change this to return 0 and you
