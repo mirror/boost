@@ -84,7 +84,7 @@ namespace quickbook
                     ;                                   // when preformatted.
 
                 hard_space =
-                    (eps_p - (alnum_p | '_')) >> space  // must not be followed by
+                    (eps_p - (alnum_p | '_')) >> space  // must not be preceded by
                     ;                                   // alpha-numeric or underscore
 
                 comment =

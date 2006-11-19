@@ -146,7 +146,9 @@ Features include:
 * Allow escape of spaces. The escaped space is removed from the output. Syntax: 
   `\ `.
 * Nested comments are now allowed.
+* Quickbook blocks can nest inside comments.
 * Line-end terminated comments are now allowed. Example: `[// some comment`
+* Comments are now passed through to XML as-is.
 
 [endsect]
 
