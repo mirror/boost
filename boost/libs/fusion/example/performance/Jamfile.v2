@@ -13,3 +13,6 @@ exe accumulate : accumulate.cpp ;
 exe inner_product : inner_product.cpp ;
 
 exe inner_product2 : inner_product2.cpp ;
+
+exe sequence_efficiency : sequence_efficiency.cpp ;
+
