@@ -133,7 +133,9 @@
 
             // matches_impl
             template<typename Expr, typename Grammar>
-            struct matches_impl;
+            struct matches_impl
+              : mpl::false_
+            {};
 
         #define BOOST_PROTO_MATCHES_N_FUN(z, n, data)\
             matches_impl<\
@@ -145,11 +147,6 @@
             template<typename Expr>
             struct matches_impl< Expr, mpl::_ >
               : mpl::true_
-            {};
-
-            template<typename Tag1, typename Args1, long Arity1, typename Tag2, typename Args2, long Arity2>
-            struct matches_impl< basic_expr<Tag1, Args1, Arity1>, basic_expr<Tag2, Args2, Arity2> >
-              : mpl::false_
             {};
 
             template<typename Tag, typename Args1, typename Args2>

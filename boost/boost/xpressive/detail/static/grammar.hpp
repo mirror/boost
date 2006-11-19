@@ -13,6 +13,7 @@
 # pragma once
 #endif
 
+#include <boost/mpl/or.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/matches.hpp>
@@ -33,6 +34,7 @@ namespace boost { namespace xpressive
 {
     namespace detail
     {
+        // is_generic_repeat
         template<typename T>
         struct is_generic_repeat
           : mpl::false_
@@ -43,10 +45,55 @@ namespace boost { namespace xpressive
           : mpl::true_
         {};
 
+        // is_xpressive_literal_impl
+        template<typename Char, typename T>
+        struct is_xpressive_literal_impl
+          : mpl::false_
+        {};
+
+        template<typename Char>
+        struct is_xpressive_literal_impl<Char, Char>
+          : mpl::true_
+        {};
+
+        template<typename Char>
+        struct is_xpressive_literal_impl<Char, Char const *>
+          : mpl::true_
+        {};
+
+        template<typename Char>
+        struct is_xpressive_literal_impl<Char, string_placeholder<Char> >
+          : mpl::true_
+        {};
+
+        template<typename Char, typename Not>
+        struct is_xpressive_literal_impl<Char, literal_placeholder<Char, Not> >
+          : mpl::true_
+        {};
+
+        template<typename Char, typename Traits, typename Alloc>
+        struct is_xpressive_literal_impl<Char, std::basic_string<Char, Traits, Alloc> >
+          : mpl::true_
+        {};
+
+        // is_xpressive_literal
+        template<typename Char, typename T>
+        struct is_xpressive_literal
+          : mpl::or_<
+                is_xpressive_literal_impl<Char, T>
+              , is_xpressive_literal_impl<char, T>
+            >
+        {};
+
+        template<typename T>
+        struct is_xpressive_literal<char, T>
+          : is_xpressive_literal_impl<char, T>
+        {};
+
         // is_xpressive_terminal
         template<typename Char, typename T>
         struct is_xpressive_terminal
-          : mpl::false_
+          : is_xpressive_literal<Char, T>
         {};
 
         template<typename Char>
@@ -114,33 +161,8 @@ namespace boost { namespace xpressive
           : mpl::true_
         {};
 
-        template<typename Char, typename Traits, typename Alloc>
-        struct is_xpressive_terminal<Char, std::basic_string<Char, Traits, Alloc> >
-          : mpl::true_
-        {};
-
         template<typename Char, typename BidiIter>
         struct is_xpressive_terminal<Char, xpressive::basic_regex<BidiIter> >
-          : mpl::true_
-        {};
-
-        template<typename Char>
-        struct is_xpressive_terminal<Char, Char>
-          : mpl::true_
-        {};
-
-        template<typename Char>
-        struct is_xpressive_terminal<Char, Char const *>
-          : mpl::true_
-        {};
-
-        template<typename Char>
-        struct is_xpressive_terminal<Char, string_placeholder<Char> >
-          : mpl::true_
-        {};
-
-        template<typename Char, typename Not>
-        struct is_xpressive_terminal<Char, literal_placeholder<Char, Not> >
           : mpl::true_
         {};
     }
