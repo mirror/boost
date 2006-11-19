@@ -31,26 +31,6 @@
 namespace boost { namespace xpressive { namespace detail
 {
 
-#ifdef BOOST_XPR_DEBUG_STACK
-///////////////////////////////////////////////////////////////////////////////
-// top_type
-//
-template<typename Top>
-struct top_type
-{
-    typedef Top type;
-};
-
-///////////////////////////////////////////////////////////////////////////////
-// top_type
-//
-template<typename Top, typename Next>
-struct top_type<stacked_xpression<Top, Next> >
-{
-    typedef Next type;
-};
-#endif
-
 ///////////////////////////////////////////////////////////////////////////////
 // stacked_xpression
 //
@@ -71,9 +51,8 @@ struct stacked_xpression
     //   jump back to the xpression on top of the xpression stack,
     //   and keep the xpression on the stack.
     template<typename BidiIter>
-    static bool top_match(state_type<BidiIter> &state, xpression_base const *top)
+    static bool top_match(state_type<BidiIter> &state, void const *top)
     {
-        BOOST_XPR_DEBUG_STACK_ASSERT(typeid(*top) == typeid(typename top_type<Top>::type));
         return static_cast<Top const *>(top)->
             BOOST_NESTED_TEMPLATE push_match<Top>(state);
     }
@@ -82,9 +61,8 @@ struct stacked_xpression
     //   jump back to the xpression on top of the xpression stack,
     //   pop the xpression off the stack.
     template<typename BidiIter>
-    static bool pop_match(state_type<BidiIter> &state, xpression_base const *top)
+    static bool pop_match(state_type<BidiIter> &state, void const *top)
     {
-        BOOST_XPR_DEBUG_STACK_ASSERT(typeid(*top) == typeid(typename top_type<Top>::type));
         return static_cast<Top const *>(top)->match(state);
     }
 

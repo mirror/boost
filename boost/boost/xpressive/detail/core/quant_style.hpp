@@ -22,42 +22,17 @@
 #include <boost/xpressive/detail/utility/width.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 
-#if defined(NDEBUG) & defined(BOOST_XPR_DEBUG_STACK)
-# undef BOOST_XPR_DEBUG_STACK
-#endif
-
-#ifdef BOOST_XPR_DEBUG_STACK
-# define BOOST_XPR_DEBUG_STACK_ASSERT BOOST_ASSERT
-#else
-# define BOOST_XPR_DEBUG_STACK_ASSERT(x) static_cast<void>(0)
-#endif
-
 namespace boost { namespace xpressive { namespace detail
 {
 
-//////////////////////////////////////////////////////////////////////////
-// xpression_base
-//
-//struct xpression_base
-//{
-//#ifdef BOOST_XPR_DEBUG_STACK
-//    virtual ~xpression_base()
-//    {
-//    }
-//#endif
-//};
-
-// BUGBUG
-typedef void xpression_base;
-
-BOOST_MPL_HAS_XXX_TRAIT_DEF(is_xpression)
+BOOST_MPL_HAS_XXX_TRAIT_DEF(is_boost_xpressive_xpression_)
 
 ///////////////////////////////////////////////////////////////////////////////
 // is_xpr
 //
 template<typename Xpr>
 struct is_xpr
-  : has_is_xpression<Xpr>
+  : has_is_boost_xpressive_xpression_<Xpr>
 {};
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -76,7 +51,7 @@ enum quant_enum
 template<quant_enum QuantStyle, std::size_t Width = unknown_width::value, bool Pure = true>
 struct quant_style
 {
-    typedef void is_xpression;
+    typedef void is_boost_xpressive_xpression_;
 
     // Which quantification strategy to use?
     BOOST_STATIC_CONSTANT(quant_enum, quant = QuantStyle);
@@ -94,7 +69,7 @@ struct quant_style
 };
 
 #define BOOST_XPR_QUANT_STYLE(Style, Width, Pure)\
-    typedef void is_xpression;\
+    typedef void is_boost_xpressive_xpression_;\
     BOOST_STATIC_CONSTANT(quant_enum, quant = Style);\
     BOOST_STATIC_CONSTANT(std::size_t, width = Width);\
     BOOST_STATIC_CONSTANT(bool, pure = Pure);\

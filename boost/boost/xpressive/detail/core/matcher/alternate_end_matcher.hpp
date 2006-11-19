@@ -28,7 +28,7 @@ namespace boost { namespace xpressive { namespace detail
     struct alternate_end_matcher
       : quant_style_assertion
     {
-        mutable xpression_base const *back_;
+        mutable void const *back_;
 
         alternate_end_matcher()
           : back_(0)

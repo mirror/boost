@@ -88,12 +88,12 @@ struct matchable_ex
         return this->match(state);
     }
 
-    static bool top_match(state_type<BidiIter> &state, xpression_base const *top)
+    static bool top_match(state_type<BidiIter> &state, void const *top)
     {
         return static_cast<matchable_ex<BidiIter> const *>(top)->match(state);
     }
 
-    static bool pop_match(state_type<BidiIter> &state, xpression_base const *top)
+    static bool pop_match(state_type<BidiIter> &state, void const *top)
     {
         return static_cast<matchable_ex<BidiIter> const *>(top)->match(state);
     }

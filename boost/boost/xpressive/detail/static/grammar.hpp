@@ -174,7 +174,17 @@ namespace boost { namespace xpressive
     struct XpressiveListSet
       : proto::or_<
             proto::meta::comma< XpressiveListSet<Char>, proto::meta::terminal<Char> >
+          , proto::meta::comma< XpressiveListSet<Char>, proto::meta::terminal<char> >
           , proto::meta::assign<detail::set_initializer_type, proto::meta::terminal<Char> >
+          , proto::meta::assign<detail::set_initializer_type, proto::meta::terminal<char> >
+        >
+    {};
+
+    template<>
+    struct XpressiveListSet<char>
+      : proto::or_<
+            proto::meta::comma< XpressiveListSet<char>, proto::meta::terminal<char> >
+          , proto::meta::assign<detail::set_initializer_type, proto::meta::terminal<char> >
         >
     {};
 
@@ -226,15 +236,28 @@ namespace boost { namespace xpressive
     {};
 
     template<typename Char>
+    struct XpressiveComplementedCharacterLiteral
+      : proto::or_<
+            proto::meta::complement<proto::meta::terminal<detail::literal_placeholder<Char, mpl::_> > >
+          , proto::meta::complement<proto::meta::terminal<detail::literal_placeholder<char, mpl::_> > >
+        >
+    {};
+
+    template<>
+    struct XpressiveComplementedCharacterLiteral<char>
+      : proto::meta::complement<proto::meta::terminal<detail::literal_placeholder<char, mpl::_> > >
+    {};
+
+    template<typename Char>
     struct XpressiveTerminal
       : proto::or_<
             proto::and_<
                 proto::meta::terminal<mpl::_>
               , proto::if_<detail::is_xpressive_terminal<Char, proto::meta::arg<mpl::_> > >
             >
-          , proto::meta::complement<proto::meta::terminal<Char> >
           , proto::meta::complement<proto::meta::terminal<detail::posix_charset_placeholder> >
           , proto::meta::complement<proto::meta::terminal<detail::logical_newline_placeholder> >
+          , XpressiveComplementedCharacterLiteral<Char>
           , proto::or_<
                 XpressiveComplementedSet<Char>
               , XpressiveTaggedSubExpression<Char>

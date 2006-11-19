@@ -149,77 +149,77 @@ struct xpression_linker
     }
 
     template<typename Matcher>
-    void accept(Matcher const &, xpression_base const *)
+    void accept(Matcher const &, void const *)
     {
         // no-op
     }
 
-    void accept(repeat_begin_matcher const &, xpression_base const *next)
+    void accept(repeat_begin_matcher const &, void const *next)
     {
         this->back_stack_.push(next);
     }
 
     template<bool Greedy>
-    void accept(repeat_end_matcher<Greedy> const &matcher, xpression_base const *)
+    void accept(repeat_end_matcher<Greedy> const &matcher, void const *)
     {
         matcher.back_ = this->back_stack_.top();
         this->back_stack_.pop();
     }
 
     template<typename Alternates, typename Traits>
-    void accept(alternate_matcher<Alternates, Traits> const &matcher, xpression_base const *next)
+    void accept(alternate_matcher<Alternates, Traits> const &matcher, void const *next)
     {
         xpression_peeker<Char> peeker(matcher.bset_, this->get_traits<Traits>());
         this->alt_link(matcher.alternates_, next, &peeker);
     }
 
-    void accept(alternate_end_matcher const &matcher, xpression_base const *)
+    void accept(alternate_end_matcher const &matcher, void const *)
     {
         matcher.back_ = this->back_stack_.top();
         this->back_stack_.pop();
     }
 
     template<typename Xpr, bool Greedy>
-    void accept(optional_matcher<Xpr, Greedy> const &matcher, xpression_base const *next)
+    void accept(optional_matcher<Xpr, Greedy> const &matcher, void const *next)
     {
         this->back_stack_.push(next);
         matcher.xpr_.link(*this);
     }
 
     template<typename Xpr, bool Greedy>
-    void accept(optional_mark_matcher<Xpr, Greedy> const &matcher, xpression_base const *next)
+    void accept(optional_mark_matcher<Xpr, Greedy> const &matcher, void const *next)
     {
         this->back_stack_.push(next);
         matcher.xpr_.link(*this);
     }
 
     template<typename Xpr>
-    void accept(keeper_matcher<Xpr> const &matcher, xpression_base const *)
+    void accept(keeper_matcher<Xpr> const &matcher, void const *)
     {
         matcher.xpr_.link(*this);
     }
 
     template<typename Xpr>
-    void accept(lookahead_matcher<Xpr> const &matcher, xpression_base const *)
+    void accept(lookahead_matcher<Xpr> const &matcher, void const *)
     {
         matcher.xpr_.link(*this);
     }
 
     template<typename Xpr>
-    void accept(lookbehind_matcher<Xpr> const &matcher, xpression_base const *)
+    void accept(lookbehind_matcher<Xpr> const &matcher, void const *)
     {
         matcher.xpr_.link(*this);
     }
 
     template<typename Xpr, bool Greedy>
-    void accept(simple_repeat_matcher<Xpr, Greedy> const &matcher, xpression_base const *)
+    void accept(simple_repeat_matcher<Xpr, Greedy> const &matcher, void const *)
     {
         matcher.xpr_.link(*this);
     }
 
     // for use by alt_link_pred below
     template<typename Xpr>
-    void alt_branch_link(Xpr const &xpr, xpression_base const *next, xpression_peeker<Char> *peeker)
+    void alt_branch_link(Xpr const &xpr, void const *next, xpression_peeker<Char> *peeker)
     {
         this->back_stack_.push(next);
         xpr.link(*this);
@@ -235,13 +235,13 @@ private:
     {
         xpression_linker<Char> *linker_;
         xpression_peeker<Char> *peeker_;
-        xpression_base const *next_;
+        void const *next_;
 
         alt_link_pred
         (
             xpression_linker<Char> *linker
           , xpression_peeker<Char> *peeker
-          , xpression_base const *next
+          , void const *next
         )
           : linker_(linker)
           , peeker_(peeker)
@@ -260,7 +260,7 @@ private:
     void alt_link
     (
         alternates_vector<BidiIter> const &alternates
-      , xpression_base const *next
+      , void const *next
       , xpression_peeker<Char> *peeker
     )
     {
@@ -271,7 +271,7 @@ private:
     void alt_link
     (
         fusion::sequence_base<Alternates> const &alternates
-      , xpression_base const *next
+      , void const *next
       , xpression_peeker<Char> *peeker
     )
     {
@@ -289,7 +289,7 @@ private:
         return *static_cast<Traits const *>(this->traits_);
     }
 
-    std::stack<xpression_base const *> back_stack_;
+    std::stack<void const *> back_stack_;
     void const *traits_;
     std::type_info const *traits_type_;
 };

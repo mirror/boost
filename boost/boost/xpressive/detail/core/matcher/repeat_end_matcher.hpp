@@ -31,7 +31,7 @@ namespace boost { namespace xpressive { namespace detail
         typedef mpl::bool_<Greedy> greedy_type;
         int mark_number_;
         unsigned int min_, max_;
-        mutable xpression_base const *back_;
+        mutable void const *back_;
 
         repeat_end_matcher(int mark_number, unsigned int min, unsigned int max)
           : mark_number_(mark_number)
