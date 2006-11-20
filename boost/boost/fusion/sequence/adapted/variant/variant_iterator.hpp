@@ -19,9 +19,10 @@
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
+#include <boost/variant/get.hpp>
 
-namespace boost { namespace fusion {
-
+namespace boost { namespace fusion 
+{
     struct forward_traversal_tag;
 
     template<typename Variant, typename MPLIterator>
@@ -89,14 +90,13 @@ namespace boost { namespace fusion {
             call(Iterator const & it)
             {
                 typedef typename mpl::deref<typename Iterator::iterator>::type type;
-                if (type* result = get<type>(&it.var_))
+                if (type* result = boost::get<type>(&it.var_))
                     return *result;
                 it.var_ = type(); // prime the variant
                 return *boost::get<type>(&it.var_); // no-throw!
             }
         };
     };
-
 }}
 
 #endif
