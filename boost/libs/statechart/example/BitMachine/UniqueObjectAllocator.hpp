@@ -1,7 +1,7 @@
 #ifndef BOOST_STATECHART_EXAMPLE_UNIQUE_OBJECT_ALLOCATOR_HPP_INCLUDED
 #define BOOST_STATECHART_EXAMPLE_UNIQUE_OBJECT_ALLOCATOR_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2002-2005
+// (c) Copyright Andreas Huber Doenni 2002-2006
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@ class UniqueObjectAllocator
 {
   public:
     //////////////////////////////////////////////////////////////////////////
-    static void * allocate( size_t size )
+    static void * allocate( std::size_t size )
     {
       boost::statechart::detail::avoid_unused_warning( size );
       BOOST_ASSERT( !constructed_ && ( size == sizeof( T ) ) );
@@ -45,7 +45,7 @@ class UniqueObjectAllocator
       return &storage_.data_[ 0 ];
     }
 
-    static void deallocate( void * p, size_t size )
+    static void deallocate( void * p, std::size_t size )
     {
       boost::statechart::detail::avoid_unused_warning( p );
       boost::statechart::detail::avoid_unused_warning( size );
