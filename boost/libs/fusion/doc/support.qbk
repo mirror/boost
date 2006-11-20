@@ -111,12 +111,12 @@ may be specialized to accomodate clients providing Fusion conforming views.
 
 [heading Description]
 
-All conforming Fusion sequences and iterators have an associated tag type. 
-The purpose of the tag is to enable __tag_dispatching__ from  __intrinsic__
-functions to implementations appropriate for the type. The default implementation
-of `tag_of` returns `T::fusion_tag` for a given type `T`, if such a member typedef exists.
+All conforming Fusion sequences and iterators have an associated tag type. The 
+purpose of the tag is to enable __tag_dispatching__ from  __intrinsic__ 
+functions to implementations appropriate for the type. 
 
-This metafunction may be specialized to accomodate clients providing Fusion conforming sequences.
+This metafunction may be specialized to accomodate clients providing Fusion 
+conforming sequences.
 
 [heading Synopsis]
 
@@ -128,6 +128,7 @@ This metafunction may be specialized to accomodate clients providing Fusion conf
             typedef __unspecified__ type;
         };
     }
+
 [heading Parameters]
 
 [table
@@ -149,10 +150,10 @@ This metafunction may be specialized to accomodate clients providing Fusion conf
 
 [heading Example]
 
-    typedef traits::is_sequence<__list__<> tag1;
-    typedef traits::is_sequence<__list__<int> > tag2;
-    typedef traits::is_sequence<__vector__<> > tag3;
-    typedef traits::is_sequence<__vector__<int> > tag4;
+    typedef traits::tag_of<__list__<> >::type tag1;
+    typedef traits::tag_of<__list__<int> >::type tag2;
+    typedef traits::tag_of<__vector__<> >::type tag3;
+    typedef traits::tag_of<__vector__<int> >::type tag4;
 
     BOOST_MPL_ASSERT((boost::is_same<tag1, tag2>));
     BOOST_MPL_ASSERT((boost::is_same<tag3, tag4>));

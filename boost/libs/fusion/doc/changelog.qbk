@@ -1,3 +1,8 @@
 [section Change log]
+
 This section summarizes significant changes to the Fusion library.
+
+* Sep 27, 2006: Added `boost::tuple` support.
+* Nov 17, 2006: Added `boost::variant` support.
+
 [endsect]
