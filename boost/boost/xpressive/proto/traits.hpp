@@ -18,8 +18,9 @@
     #include <boost/call_traits.hpp>
     #include <boost/static_assert.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
-    #include <boost/xpressive/proto/tags.hpp>
     #include <boost/xpressive/proto/ref.hpp>
+    #include <boost/xpressive/proto/args.hpp>
+    #include <boost/xpressive/proto/tags.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
     #include <boost/preprocessor/repetition/enum.hpp>
     #include <boost/preprocessor/repetition/enum_params.hpp>
@@ -70,7 +71,7 @@
             struct as_expr<T, false>
             {
                 BOOST_STATIC_ASSERT(!is_reference<T>::value);
-                typedef basic_expr<terminal_tag, mpl::vector1<typename call_traits<T>::value_type> > type;
+                typedef expr<terminal_tag, args1<typename call_traits<T>::value_type> > type;
             };
 
             template<typename T>
@@ -83,7 +84,7 @@
             struct as_expr_ref<T, false>
             {
                 BOOST_STATIC_ASSERT(!is_reference<T>::value);
-                typedef basic_expr<terminal_tag, mpl::vector1<typename call_traits<T>::value_type> > type;
+                typedef expr<terminal_tag, args1<typename call_traits<T>::value_type> > type;
             };
 
             template<typename T>
@@ -118,7 +119,7 @@
             {
                 BOOST_STATIC_ASSERT(!is_reference<T>::value);
                 typedef typename call_traits<T>::value_type value_type;
-                typedef basic_expr<terminal_tag, mpl::vector1<value_type> > type;
+                typedef expr<terminal_tag, args1<value_type> > type;
             };
 
             // unary_expr
@@ -126,7 +127,7 @@
             struct unary_expr
             {
                 BOOST_STATIC_ASSERT(!is_reference<T>::value);
-                typedef basic_expr<Tag, mpl::vector1<T> > type;
+                typedef expr<Tag, args1<T> > type;
             };
 
             // binary_expr
@@ -135,14 +136,14 @@
             {
                 BOOST_STATIC_ASSERT(!is_reference<T>::value);
                 BOOST_STATIC_ASSERT(!is_reference<U>::value);
-                typedef basic_expr<Tag, mpl::vector2<T, U> > type;
+                typedef expr<Tag, args2<T, U> > type;
             };
 
         #define BOOST_PROTO_UNARY_GENERATOR(Name)\
             template<typename T>\
             struct Name\
             {\
-                typedef basic_expr<BOOST_PP_CAT(Name, _tag), mpl::vector1<T> > type;\
+                typedef expr<BOOST_PP_CAT(Name, _tag), args1<T> > type;\
             };\
             /**/
 
@@ -150,7 +151,7 @@
             template<typename T, typename U>\
             struct Name\
             {\
-                typedef basic_expr<BOOST_PP_CAT(Name, _tag), mpl::vector2<T, U> > type;\
+                typedef expr<BOOST_PP_CAT(Name, _tag), args2<T, U> > type;\
             };\
             /**/
 
@@ -216,9 +217,9 @@
             {};
 
             template<typename Args>
-            struct id<basic_expr<terminal_tag, Args, 1> >
+            struct id<expr<terminal_tag, Args, 1> >
             {
-                typedef basic_expr<terminal_tag, Args, 1> type;
+                typedef expr<terminal_tag, Args, 1> type;
             };
 
         #define BOOST_PROTO_ARG_ID(z, N, data)\
@@ -444,7 +445,16 @@
                 BOOST_PP_ENUM_PARAMS(N, A) 
                 BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT), void >
             {
-                typedef basic_expr<function_tag, BOOST_PP_CAT(mpl::vector, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
+                typedef expr<function_tag, BOOST_PP_CAT(args, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
+            };
+
+            template<typename Tag, typename Args>
+            struct id<expr<Tag, Args, N> >
+            {
+                typedef expr<Tag, Args, N> raw_expr_;
+                typedef expr<Tag, BOOST_PP_CAT(args, N)<
+                    BOOST_PP_ENUM(N, BOOST_PROTO_ARG_ID, raw_expr_)
+                > > type;
             };
         #endif
 
@@ -457,15 +467,6 @@
                 {
                     return proto::unref(expr.cast().BOOST_PP_CAT(arg, N));
                 }
-            };
-
-            template<typename Tag, typename Args>
-            struct id<basic_expr<Tag, Args, N> >
-            {
-                typedef basic_expr<Tag, Args, N> raw_expr_;
-                typedef basic_expr<Tag, BOOST_PP_CAT(mpl::vector, N)<
-                    BOOST_PP_ENUM(N, BOOST_PROTO_ARG_ID, raw_expr_)
-                > > type;
             };
 
     #undef N

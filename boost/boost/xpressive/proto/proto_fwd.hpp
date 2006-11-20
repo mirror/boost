@@ -15,7 +15,6 @@
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/mpl/long.hpp>
-#include <boost/mpl/vector/vector10.hpp>
 #include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 
@@ -87,8 +86,8 @@ namespace boost { namespace proto
     typedef bitwise_and_assign_tag bitand_assign_tag;
     typedef bitwise_xor_assign_tag bitxor_assign_tag;
 
-    template<typename Tag, typename Args, long Arity = mpl::size<Args>::value>
-    struct basic_expr;
+    template<typename Tag, typename Args, long Arity = Args::size>
+    struct expr;
 
     template<typename Expr>
     struct ref;

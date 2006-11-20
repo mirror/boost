@@ -15,7 +15,7 @@
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/xpressive/proto/ref.hpp>
 #include <boost/xpressive/proto/traits.hpp>
-#include <boost/xpressive/proto/basic_expr.hpp>
+#include <boost/xpressive/proto/expr.hpp>
 #include <boost/preprocessor/punctuation/comma.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
@@ -46,7 +46,7 @@ namespace boost { namespace proto { namespace extends_private_
     template<typename Left, typename Right>\
     typename enable_if<\
         mpl::and_<meta::is_extends<Left>, meta::is_extends<Right> >\
-      , basic_expr<tag, mpl::vector2<ref<typename Left::expr_type>, ref<typename Left::expr_type> > > const\
+      , expr<tag, args2<ref<typename Left::expr_type>, ref<typename Left::expr_type> > > const\
     >::type\
     operator op(Left const &left, Right const &right)\
     {\

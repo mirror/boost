@@ -446,7 +446,7 @@ namespace boost { namespace fusion
 //namespace boost { namespace mpl
 //{
 //    template<typename Tag, typename Args, long Arity>
-//    struct sequence_tag<proto::basic_expr<Tag, Args, Arity> >
+//    struct sequence_tag<proto::expr<Tag, Args, Arity> >
 //    {
 //        typedef proto::proto_expr_tag type;
 //    };

@@ -116,9 +116,9 @@
             template<typename Expr, typename State, typename Visitor, typename Tag>
             struct apply_impl<Expr, State, Visitor, Tag, mpl::long_<N> >
             {
-                typedef basic_expr<
+                typedef expr<
                     Tag
-                  , BOOST_PP_CAT(mpl::vector, N)<
+                  , BOOST_PP_CAT(args, N)<
                         BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_META_COMPILE, ~)
                     >
                 > expr_type;

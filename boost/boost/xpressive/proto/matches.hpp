@@ -14,7 +14,6 @@
 
     #include <boost/config.hpp>
     #include <boost/mpl/if.hpp>
-    #include <boost/mpl/at.hpp>
     #include <boost/mpl/and.hpp>
     #include <boost/mpl/bool.hpp>
     #include <boost/mpl/apply.hpp>
@@ -119,9 +118,9 @@
 
             // ... but it could be a plain expression ...
             template<typename Tag, typename Args, long Arity>
-            struct deref<basic_expr<Tag, Args, Arity> >
+            struct deref<expr<Tag, Args, Arity> >
             {
-                typedef basic_expr<Tag, Args, Arity> type;
+                typedef expr<Tag, Args, Arity> type;
             };
 
             // ... or the placeholder
@@ -139,8 +138,8 @@
 
         #define BOOST_PROTO_MATCHES_N_FUN(z, n, data)\
             matches_impl<\
-                typename mpl::at_c<Args1, n>::type::expr_type\
-              , typename deref<typename mpl::at_c<Args2, n>::type>::type\
+                typename Args1::BOOST_PP_CAT(arg, n)::expr_type\
+              , typename deref<typename Args2::BOOST_PP_CAT(arg, n)>::type\
             >\
             /**/
 
@@ -150,18 +149,18 @@
             {};
 
             template<typename Tag, typename Args1, typename Args2>
-            struct matches_impl< basic_expr<Tag, Args1, 1>, basic_expr<Tag, Args2, 1> >
+            struct matches_impl< expr<Tag, Args1, 1>, expr<Tag, Args2, 1> >
               : matches_impl<
-                    typename mpl::at_c<Args1, 0>::type::expr_type
-                  , typename deref<typename mpl::at_c<Args2, 0>::type>::type
+                    typename Args1::arg0::expr_type
+                  , typename deref<typename Args2::arg0>::type
                 >
             {};
 
             template<typename Args1, typename Args2>
-            struct matches_impl< basic_expr<terminal_tag, Args1, 1>, basic_expr<terminal_tag, Args2, 1> >
+            struct matches_impl< expr<terminal_tag, Args1, 1>, expr<terminal_tag, Args2, 1> >
               : terminal_matches<
-                    typename mpl::at_c<Args1, 0>::type
-                  , typename mpl::at_c<Args2, 0>::type
+                    typename Args1::arg0
+                  , typename Args2::arg0
                 >
             {};
 
@@ -236,7 +235,7 @@
             {};
 
             template<typename Tag, typename Args1, typename Args2>
-            struct matches_impl< basic_expr<Tag, Args1, N>, basic_expr<Tag, Args2, N> >
+            struct matches_impl< expr<Tag, Args1, N>, expr<Tag, Args2, N> >
               : detail::and_<BOOST_PP_ENUM(N, BOOST_PROTO_MATCHES_N_FUN, N) >
             {};
 

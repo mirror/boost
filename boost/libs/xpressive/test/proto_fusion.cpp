@@ -21,6 +21,11 @@ boost::proto::meta::terminal<char>::type g_ = {'g'};
 boost::proto::meta::terminal<char>::type h_ = {'h'};
 boost::proto::meta::terminal<char>::type i_ = {'i'};
 
+std::ostream &operator <<(std::ostream &sout, boost::proto::terminal_tag)
+{
+    return sout;
+}
+
 std::ostream &operator <<(std::ostream &sout, boost::proto::right_shift_tag)
 {
     return sout << ">>";
@@ -31,22 +36,16 @@ std::ostream &operator <<(std::ostream &sout, boost::proto::bitor_tag)
     return sout << "|";
 }
 
-template<typename Args>
-std::ostream &operator <<(std::ostream &sout, boost::proto::basic_expr<boost::proto::terminal_tag, Args, 1> const &op)
+template<typename Tag, typename Args>
+std::ostream &operator <<(std::ostream &sout, boost::proto::expr<Tag, Args, 1> const &op)
 {
-    return sout << boost::proto::arg(op);
+    return sout << Tag() << boost::proto::arg(op);
 }
 
 template<typename Tag, typename Args>
-std::ostream &operator <<(std::ostream &sout, boost::proto::basic_expr<Tag, Args, 1> const &op)
+std::ostream &operator <<(std::ostream &sout, boost::proto::expr<Tag, Args, 2> const &op)
 {
-    return sout << Tag() << boost::proto::arg(op).cast();
-}
-
-template<typename Tag, typename Args>
-std::ostream &operator <<(std::ostream &sout, boost::proto::basic_expr<Tag, Args, 2> const &op)
-{
-    return sout << boost::proto::left(op).cast() << Tag() << boost::proto::right(op).cast();
+    return sout << boost::proto::left(op) << Tag() << boost::proto::right(op);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

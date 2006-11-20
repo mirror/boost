@@ -19,8 +19,6 @@
 #include <boost/xpressive/proto/matches.hpp>
 #include <boost/xpressive/proto/traits.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
-#include <boost/type_traits/is_integral.hpp>
-#include <boost/type_traits/is_pointer.hpp>
 
 #ifdef BOOST_XPRESSIVE_BETTER_ERRORS
 # define BOOST_XPRESSIVE_CHECK_GRAMMAR(Expr, Char)\

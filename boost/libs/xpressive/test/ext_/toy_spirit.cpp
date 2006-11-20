@@ -58,20 +58,22 @@ namespace boost
     struct literal
       : proto::extends<typename proto::meta::terminal<T>::type>
     {
+        typedef typename proto::meta::terminal<T>::type terminal_type;
+
         literal(T const &t)
         {
-            typename proto::meta::terminal<T>::type that = {t};
+            terminal_type that = {t};
             this->assign(that);
         }
 
         template<typename U>
         literal(literal<U> const &u)
         {
-            typename proto::meta::terminal<T>::type that = {proto::arg(u)};
+            terminal_type that = {proto::arg(u)};
             this->assign(that);
         }
 
-        using proto::meta::terminal<T>::type::operator =;
+        using terminal_type::operator =;
     };
 
     template<typename T>

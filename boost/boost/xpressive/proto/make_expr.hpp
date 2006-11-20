@@ -25,7 +25,6 @@
 
     #include <boost/detail/workaround.hpp>
     #include <boost/ref.hpp>
-    #include <boost/mpl/vector.hpp>
     #include <boost/type_traits/remove_const.hpp>
     #include <boost/type_traits/remove_reference.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
@@ -99,7 +98,7 @@
                 {
                     BOOST_STATIC_ASSERT(!is_reference<A0>::value);
 
-                    typedef basic_expr<Tag, BOOST_PP_CAT(mpl::vector, N)<
+                    typedef expr<Tag, BOOST_PP_CAT(args, N)<
                         BOOST_PP_ENUM_BINARY_PARAMS(N, typename meta::as_expr<A, >::type BOOST_PP_INTERCEPT)
                     > > type;
                 };

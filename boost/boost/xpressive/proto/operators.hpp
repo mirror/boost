@@ -15,40 +15,40 @@
 #include <boost/preprocessor/punctuation/comma.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/tags.hpp>
-#include <boost/xpressive/proto/basic_expr.hpp>
+#include <boost/xpressive/proto/expr.hpp>
 
 namespace boost { namespace proto
 {
 #define BOOST_PROTO_UNARY_OP(op, tag)\
     template<typename Tag, typename Args, long Arity>\
-    inline basic_expr<tag, mpl::vector1<ref<basic_expr<Tag, Args, Arity> > > > const\
-    operator op(basic_expr<Tag, Args, Arity> const &arg)\
+    inline expr<tag, args1<ref<expr<Tag, Args, Arity> > > > const\
+    operator op(expr<Tag, Args, Arity> const &arg)\
     {\
-        basic_expr<tag, mpl::vector1<ref<basic_expr<Tag, Args, Arity> > > > that = {{arg}};\
+        expr<tag, args1<ref<expr<Tag, Args, Arity> > > > that = {{arg}};\
         return that;\
     }\
     /**/
 
 #define BOOST_PROTO_BINARY_OP(op, tag)\
     template<typename LTag, typename LArgs, long LArity, typename Right>\
-    inline basic_expr<tag, mpl::vector2<ref<basic_expr<LTag, LArgs, LArity> >, typename meta::as_expr_ref<Right>::type> > const\
-    operator op(basic_expr<LTag, LArgs, LArity> const &left, Right const &right)\
+    inline expr<tag, args2<ref<expr<LTag, LArgs, LArity> >, typename meta::as_expr_ref<Right>::type> > const\
+    operator op(expr<LTag, LArgs, LArity> const &left, Right const &right)\
     {\
-        basic_expr<tag, mpl::vector2<ref<basic_expr<LTag, LArgs, LArity> >, typename meta::as_expr_ref<Right>::type> > that = {{left}, proto::as_expr_ref(right)};\
+        expr<tag, args2<ref<expr<LTag, LArgs, LArity> >, typename meta::as_expr_ref<Right>::type> > that = {{left}, proto::as_expr_ref(right)};\
         return that;\
     }\
     template<typename Left, typename RTag, typename RArgs, long RArity>\
-    inline basic_expr<tag, mpl::vector2<typename meta::as_expr_ref<Left>::type, ref<basic_expr<RTag, RArgs, RArity> > > > const\
-    operator op(Left const &left, basic_expr<RTag, RArgs, RArity> const &right)\
+    inline expr<tag, args2<typename meta::as_expr_ref<Left>::type, ref<expr<RTag, RArgs, RArity> > > > const\
+    operator op(Left const &left, expr<RTag, RArgs, RArity> const &right)\
     {\
-        basic_expr<tag, mpl::vector2<typename meta::as_expr_ref<Left>::type, ref<basic_expr<RTag, RArgs, RArity> > > > that = {proto::as_expr_ref(left), {right}};\
+        expr<tag, args2<typename meta::as_expr_ref<Left>::type, ref<expr<RTag, RArgs, RArity> > > > that = {proto::as_expr_ref(left), {right}};\
         return that;\
     }\
     template<typename LTag, typename LArgs, long LArity, typename RTag, typename RArgs, long RArity>\
-    inline basic_expr<tag, mpl::vector2<ref<basic_expr<LTag, LArgs, LArity> >, ref<basic_expr<RTag, RArgs, RArity> > > > const\
-    operator op(basic_expr<LTag, LArgs, LArity> const &left, basic_expr<RTag, RArgs, RArity> const &right)\
+    inline expr<tag, args2<ref<expr<LTag, LArgs, LArity> >, ref<expr<RTag, RArgs, RArity> > > > const\
+    operator op(expr<LTag, LArgs, LArity> const &left, expr<RTag, RArgs, RArity> const &right)\
     {\
-        basic_expr<tag, mpl::vector2<ref<basic_expr<LTag, LArgs, LArity> >, ref<basic_expr<RTag, RArgs, RArity> > > > that = {{left}, {right}};\
+        expr<tag, args2<ref<expr<LTag, LArgs, LArity> >, ref<expr<RTag, RArgs, RArity> > > > that = {{left}, {right}};\
         return that;\
     }\
     /**/
@@ -95,18 +95,18 @@ namespace boost { namespace proto
     BOOST_PROTO_BINARY_OP(^=, bitxor_assign_tag)
 
     template<typename Tag, typename Args, long Arity>
-    inline basic_expr<post_inc_tag, mpl::vector1<ref<basic_expr<Tag, Args, Arity> > > > const
-    operator ++(basic_expr<Tag, Args, Arity> const &arg, int)
+    inline expr<post_inc_tag, args1<ref<expr<Tag, Args, Arity> > > > const
+    operator ++(expr<Tag, Args, Arity> const &arg, int)
     {
-        basic_expr<post_inc_tag, mpl::vector1<ref<basic_expr<Tag, Args, Arity> > > > that = {{arg}};
+        expr<post_inc_tag, args1<ref<expr<Tag, Args, Arity> > > > that = {{arg}};
         return that;
     }
 
     template<typename Tag, typename Args, long Arity>
-    inline basic_expr<post_dec_tag, mpl::vector1<ref<basic_expr<Tag, Args, Arity> > > > const
-    operator --(basic_expr<Tag, Args, Arity> const &arg, int)
+    inline expr<post_dec_tag, args1<ref<expr<Tag, Args, Arity> > > > const
+    operator --(expr<Tag, Args, Arity> const &arg, int)
     {
-        basic_expr<post_dec_tag, mpl::vector1<ref<basic_expr<Tag, Args, Arity> > > > that = {{arg}};
+        expr<post_dec_tag, args1<ref<expr<Tag, Args, Arity> > > > that = {{arg}};
         return that;
     }
 
