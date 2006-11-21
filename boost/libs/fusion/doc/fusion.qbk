@@ -32,6 +32,8 @@
 [def __boost_any__              [@http://boost.org/doc/html/any.html Boost.Any]]
 [def __new_iterator_concepts__  [@http://boost.org/libs/iterator/doc/new-iter-concepts.html New Iterator Concepts]]
 [def __boost_array_library__    [@http://www.boost.org/doc/html/array.html Boost.Array Library]]
+[def __boost_variant_library__    [@http://www.boost.org/doc/html/variant.html Boost.Variant Library]]
+[def __boost_tuple_library__    [@http://www.boost.org/libs/tuple/doc/tuple_users_guide.html Boost.Tuple Library]]
 [def __boost_ref__              [@http://www.boost.org/doc/html/ref.html Boost.Ref]]
 [def __boost_ref_call__         [@http://www.boost.org/doc/html/ref.html `ref`]]
 [def __std_pair_doc__           [@http://www.sgi.com/tech/stl/pair.html `std::pair`]]

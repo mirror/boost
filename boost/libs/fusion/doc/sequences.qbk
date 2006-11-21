@@ -1326,6 +1326,58 @@ __boost_array_library__
 
 [endsect]
 
+[section boost::tuple]
+This module provides adapters for `boost::tuple`. Including the module 
+header makes `boost::tuple` a fully conforming __forward_sequence__.
+
+[heading Header]
+
+    #include <boost/fusion/sequence/adapted/boost_tuple.hpp>
+
+[heading Model of]
+
+* __forward_sequence__
+
+[heading Example]
+
+    boost::tuple<int,std::string> example_tuple(101, "hello");
+    std::cout << *boost::fusion::begin(example_tuple) << '\n';
+    std::cout << *boost::fusion::next(boost::fusion::begin(example_tuple)) << '\n';
+
+[heading See also]
+
+__boost_tuple_library__
+
+[endsect]
+
+[section boost::variant]
+This module provides adapters for `boost::variant`. Including the module 
+header makes `boost::variant` a fully conforming __forward_sequence__.
+The variant acts as a sequence of the types that can be contained in the variant.
+Accessing types not currently stored int the variant will lead to the variant
+being populated with a default constructed value of that type.
+
+[heading Header]
+
+    #include <boost/fusion/sequence/adapted/variant.hpp>
+
+[heading Model of]
+
+* __forward_sequence__
+
+[heading Example]
+
+    boost::variant<int,std::string> example_variant = 101;
+    std::cout << example_variant << '\n';
+    *boost::fusion::find<std::string>(example_variant) = "hello";
+    std::cout << example_variant << '\n';
+
+[heading See also]
+
+__boost_variant_library__
+
+[endsect]
+
 [endsect]
 
 [section Intrinsics]
