@@ -45,6 +45,10 @@
         proto::as_expr_ref(BOOST_PP_CAT(a,n))\
         /**/
 
+    #define BOOST_PP_ITERATION_PARAMS_1 (4, (1, 1, <boost/xpressive/proto/expr.hpp>, 0))
+    #include BOOST_PP_ITERATE()
+    #undef BOOST_PP_ITERATION_PARAMS_1
+
     #define BOOST_PP_ITERATION_PARAMS_1 (4, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/expr.hpp>, 1))
     #include BOOST_PP_ITERATE()
     #undef BOOST_PP_ITERATION_PARAMS_1
@@ -67,15 +71,22 @@
 
     #endif
 
-    #endif // BOOST_PROTO_BASIC_EXPR_HPP_EAN_04_01_2005
+    #endif // BOOST_PROTO_EXPR_HPP_EAN_04_01_2005
 
-#elif BOOST_PP_ITERATION_DEPTH() == 1 && BOOST_PP_ITERATION_FLAGS() == 1
+#elif BOOST_PP_ITERATION_DEPTH() == 1 && BOOST_PP_ITERATION_FLAGS() < 2
 
+    #if BOOST_PP_ITERATION_FLAGS() == 0
+        template<typename Args>
+        struct expr<terminal_tag, Args, 1>
+        {
+            typedef terminal_tag tag_type;
+    #else
         template<typename Tag, typename Args>
         struct expr<Tag, Args, BOOST_PP_ITERATION() >
         {
-            typedef expr expr_type;
             typedef Tag tag_type;
+    #endif
+            typedef expr expr_type;
             typedef Args args_type;
             typedef mpl::long_<BOOST_PP_ITERATION()> arity;
             typedef proto_expr_tag fusion_tag;
@@ -83,6 +94,14 @@
 
             BOOST_PP_REPEAT(BOOST_PP_ITERATION(), BOOST_PROTO_ARG, _)
             BOOST_PP_REPEAT_FROM_TO(BOOST_PP_ITERATION(), BOOST_PROTO_MAX_ARITY, BOOST_PROTO_VOID, _)
+
+            typedef expr
+    #if BOOST_PP_ITERATION_FLAGS() == 1
+                <tag_type, BOOST_PP_CAT(args, BOOST_PP_ITERATION()) <
+                    BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_ITERATION(), typename Args::arg, ::expr_type::id BOOST_PP_INTERCEPT)
+                > >
+    #endif
+            id;
 
             expr const &cast() const
             {

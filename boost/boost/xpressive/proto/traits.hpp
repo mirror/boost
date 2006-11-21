@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file traits.hpp
-/// Contains definitions for arg_type\<\>, left_type\<\>,
-/// right_type\<\>, tag_type\<\>, and the helper functions arg(), left(),
-/// and right().
+/// Contains definitions for arg\<\>, arg_c\<\>, left\<\>,
+/// right\<\>, tag\<\>, and the helper functions arg(), arg_c(),
+/// left() and right().
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
@@ -213,24 +213,13 @@
             // id
             template<typename Expr>
             struct id
-              : id<typename Expr::expr_type>
-            {};
-
-            template<typename Args>
-            struct id<expr<terminal_tag, Args, 1> >
             {
-                typedef expr<terminal_tag, Args, 1> type;
+                typedef typename Expr::expr_type::id type;
             };
-
-        #define BOOST_PROTO_ARG_ID(z, N, data)\
-            typename id<typename data::BOOST_PP_CAT(BOOST_PP_CAT(arg, N), _type)::expr_type>::type\
-            /**/
 
         #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/traits.hpp>))
         #include BOOST_PP_ITERATE()
         #undef BOOST_PP_ITERATION_PARAMS_1
-
-        #undef BOOST_PROTO_ARG_ID
         }
 
         namespace op
@@ -446,15 +435,6 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT), void >
             {
                 typedef expr<function_tag, BOOST_PP_CAT(args, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
-            };
-
-            template<typename Tag, typename Args>
-            struct id<expr<Tag, Args, N> >
-            {
-                typedef expr<Tag, Args, N> raw_expr_;
-                typedef expr<Tag, BOOST_PP_CAT(args, N)<
-                    BOOST_PP_ENUM(N, BOOST_PROTO_ARG_ID, raw_expr_)
-                > > type;
             };
         #endif
 

@@ -18,6 +18,7 @@
 #include <boost/config.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
+#include <boost/xpressive/proto/deep_copy.hpp>
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 
@@ -71,5 +72,37 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::proto::function_tag)
 
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::ref, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::expr, (typename)(typename)(long))
+
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args1, 1)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args2, 2)
+// can't use PP metaprogramming here because all typeof registrations
+// must be on separate lines.
+#if BOOST_PROTO_MAX_ARITY >= 3
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args3, 3)
+#endif
+#if BOOST_PROTO_MAX_ARITY >= 4
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args4, 4)
+#endif
+#if BOOST_PROTO_MAX_ARITY >= 5
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args5, 5)
+#endif
+#if BOOST_PROTO_MAX_ARITY >= 6
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args6, 6)
+#endif
+#if BOOST_PROTO_MAX_ARITY >= 7
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args7, 7)
+#endif
+#if BOOST_PROTO_MAX_ARITY >= 8
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args8, 8)
+#endif
+#if BOOST_PROTO_MAX_ARITY >= 9
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args9, 9)
+#endif
+#if BOOST_PROTO_MAX_ARITY >= 10
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args10, 10)
+#endif
+
+#define BOOST_PROTO_AUTO(Var, Expr) BOOST_AUTO(Var, boost::proto::deep_copy(Expr))
+#define BOOST_PROTO_AUTO_TPL(Var, Expr) BOOST_AUTO_TPL(Var, boost::proto::deep_copy(Expr))
 
 #endif
