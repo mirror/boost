@@ -19,16 +19,27 @@
 namespace boost { namespace fusion
 {
     template <typename Sequence>
-    inline typename
-        enable_if<
-           fusion::traits::is_sequence<Sequence>
-          , std::ostream&
-        >::type
-    operator<<(std::ostream& os, Sequence const& seq)
+    inline std::ostream&
+    out(std::ostream& os, Sequence& seq)
     {
         detail::print_sequence(os, seq);
         return os;
     }
+    
+    namespace operators
+    {
+        template <typename Sequence>
+        inline typename
+            enable_if<
+               fusion::traits::is_sequence<Sequence>
+              , std::ostream&
+            >::type
+        operator<<(std::ostream& os, Sequence const& seq)
+        {
+            return fusion::out(os, seq);
+        }
+    }
+    using operators::operator<<;
 }}
 
 #endif

@@ -12,6 +12,7 @@
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
+#include <boost/fusion/sequence/comparison/detail/enable_comparison.hpp>
 
 #if defined(FUSION_DIRECT_OPERATOR_USAGE)
 #include <boost/fusion/sequence/comparison/detail/not_equal_to.hpp>
@@ -19,34 +20,37 @@
 #include <boost/fusion/sequence/comparison/equal_to.hpp>
 #endif
 
-#include <boost/fusion/sequence/comparison/detail/enable_comparison.hpp>
-#include <boost/utility/enable_if.hpp>
-
 namespace boost { namespace fusion
 {
-    namespace sequence_operators
+    template <typename Seq1, typename Seq2>
+    inline bool
+    not_equal_to(Seq1 const& a, Seq2 const& b)
+    {
+#if defined(FUSION_DIRECT_OPERATOR_USAGE)
+        return result_of::size<Seq1>::value != result_of::size<Seq2>::value
+            || detail::sequence_not_equal_to<
+            Seq1 const, Seq2 const
+            , result_of::size<Seq1>::value == result_of::size<Seq2>::value>::
+            call(fusion::begin(a), fusion::begin(b));
+#else
+        return !(a == b);
+#endif
+    }
+
+    namespace operators
     {
         template <typename Seq1, typename Seq2>
-        inline typename 
-        enable_if<
-            detail::enable_equality<Seq1, Seq2>
-            , bool
+        inline typename
+            enable_if<
+                detail::enable_equality<Seq1, Seq2>
+              , bool
             >::type
         operator!=(Seq1 const& a, Seq2 const& b)
         {
-#if defined(FUSION_DIRECT_OPERATOR_USAGE)
-            return result_of::size<Seq1>::value != result_of::size<Seq2>::value
-                || detail::sequence_not_equal_to<
-                Seq1 const, Seq2 const
-                , result_of::size<Seq1>::value == result_of::size<Seq2>::value>::
-                call(fusion::begin(a), fusion::begin(b));
-#else
-            return !(a == b);
-#endif
+            return fusion::not_equal_to(a, b);
         }
     }
-
-    using sequence_operators::operator!=;
+    using operators::operator!=;
 }}
 
 #endif

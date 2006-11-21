@@ -14,28 +14,34 @@
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/sequence/comparison/detail/equal_to.hpp>
 #include <boost/fusion/sequence/comparison/detail/enable_comparison.hpp>
-#include <boost/utility/enable_if.hpp>
 
 namespace boost { namespace fusion
 {
-    namespace sequence_operators
+    template <typename Seq1, typename Seq2>
+    inline bool
+    equal_to(Seq1 const& a, Seq2 const& b)
+    {
+        return result_of::size<Seq1>::value == result_of::size<Seq2>::value
+            && detail::sequence_equal_to<
+            Seq1 const, Seq2 const
+            , result_of::size<Seq1>::value == result_of::size<Seq2>::value>::
+            call(fusion::begin(a), fusion::begin(b));
+    }
+
+    namespace operators
     {
         template <typename Seq1, typename Seq2>
-        inline typename 
-        enable_if<
-            detail::enable_equality<Seq1, Seq2>
-            , bool
+        inline typename
+            enable_if<
+                detail::enable_equality<Seq1, Seq2>
+              , bool
             >::type
         operator==(Seq1 const& a, Seq2 const& b)
         {
-            return result_of::size<Seq1>::value == result_of::size<Seq2>::value
-                && detail::sequence_equal_to<
-                Seq1 const, Seq2 const
-                , result_of::size<Seq1>::value == result_of::size<Seq2>::value>::
-                call(fusion::begin(a), fusion::begin(b));
+            return fusion::equal_to(a, b);
         }
     }
-    using sequence_operators::operator==;
+    using operators::operator==;
 }}
 
 #endif

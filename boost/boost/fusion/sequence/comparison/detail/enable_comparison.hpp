@@ -18,16 +18,20 @@
 
 namespace boost { namespace fusion { namespace detail
 {
+    template <typename Sequence>
+    struct is_native_fusion_sequence : is_base_of<sequence_root, Sequence> {};
+
     template <typename Seq1, typename Seq2>
     struct enable_equality
-        : mpl::or_<fusion::traits::is_sequence<Seq1>, fusion::traits::is_sequence<Seq2> >
+        : mpl::or_<is_native_fusion_sequence<Seq1>, is_native_fusion_sequence<Seq2> >
     {};
 
     template <typename Seq1, typename Seq2>
     struct enable_comparison
         : mpl::and_<
-        mpl::or_<fusion::traits::is_sequence<Seq1>, fusion::traits::is_sequence<Seq2> >,
-        mpl::equal_to<result_of::size<Seq1>, result_of::size<Seq2> > >
+            mpl::or_<is_native_fusion_sequence<Seq1>, is_native_fusion_sequence<Seq2> >
+          , mpl::equal_to<result_of::size<Seq1>, result_of::size<Seq2> > 
+        >
     {};
 
 }}}

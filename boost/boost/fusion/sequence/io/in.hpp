@@ -12,23 +12,32 @@
 
 #include <istream>
 #include <boost/fusion/sequence/io/detail/in.hpp>
-#include <boost/fusion/support/is_sequence.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/mpl/or.hpp>
+#include <boost/fusion/support/sequence_base.hpp>
 
 namespace boost { namespace fusion
 {
     template <typename Sequence>
-    inline typename
-        enable_if<
-            fusion::traits::is_sequence<Sequence>
-          , std::istream&
-        >::type
-    operator>>(std::istream& is, Sequence& seq)
+    inline std::istream&
+    in(std::istream& is, Sequence& seq)
     {
         detail::read_sequence(is, seq);
         return is;
     }
+    
+    namespace operators
+    {
+        template <typename Sequence>
+        inline typename
+            enable_if<
+               fusion::traits::is_sequence<Sequence>
+              , std::istream&
+            >::type
+        operator>>(std::istream& is, Sequence& seq)
+        {
+            return fusion::in(is, seq);
+        }
+    }
+    using operators::operator>>;
 }}
 
 #endif

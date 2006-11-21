@@ -14,21 +14,31 @@
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/sequence/comparison/detail/less.hpp>
 #include <boost/fusion/sequence/comparison/detail/enable_comparison.hpp>
-#include <boost/utility/enable_if.hpp>
 
 namespace boost { namespace fusion
 {
     template <typename Seq1, typename Seq2>
-    inline typename 
-        enable_if<
-            detail::enable_comparison<Seq1, Seq2>
-          , bool
-        >::type
-    operator<(Seq1 const& a, Seq2 const& b)
+    inline bool
+    less(Seq1 const& a, Seq2 const& b)
     {
         return detail::sequence_less<Seq1 const, Seq2 const>::
             call(fusion::begin(a), fusion::begin(b));
     }
+
+    namespace operators
+    {
+        template <typename Seq1, typename Seq2>
+        inline typename
+            enable_if<
+                detail::enable_comparison<Seq1, Seq2>
+              , bool
+            >::type
+        operator<(Seq1 const& a, Seq2 const& b)
+        {
+            return fusion::less(a, b);
+        }
+    }
+    using operators::operator<;
 }}
 
 #endif
