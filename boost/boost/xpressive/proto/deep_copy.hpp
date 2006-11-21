@@ -40,12 +40,12 @@
             template<typename Expr>
             struct deep_copy
             {
-                typedef typename Expr::id type;
+                typedef typename Expr::id_type type;
             };
         }
 
         template<typename Expr>
-        typename Expr::id deep_copy(Expr const &expr)
+        typename Expr::id_type deep_copy(Expr const &expr)
         {
             return detail::deep_copy_impl<Expr>::call(expr);
         }
@@ -74,10 +74,9 @@
             template<typename Expr, typename Tag>
             struct deep_copy_impl<Expr, Tag, N>
             {
-                static typename Expr::id
-                call(Expr const &expr)
+                static typename Expr::id_type call(Expr const &expr)
                 {
-                    typename Expr::id that = {
+                    typename Expr::id_type that = {
                         BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY, ~)
                     };
                     return that;

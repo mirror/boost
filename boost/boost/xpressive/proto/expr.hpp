@@ -98,10 +98,10 @@
             typedef expr
     #if BOOST_PP_ITERATION_FLAGS() == 1
                 <tag_type, BOOST_PP_CAT(args, BOOST_PP_ITERATION()) <
-                    BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_ITERATION(), typename Args::arg, ::expr_type::id BOOST_PP_INTERCEPT)
+                    BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_ITERATION(), typename Args::arg, ::expr_type::id_type BOOST_PP_INTERCEPT)
                 > >
     #endif
-            id;
+            id_type;
 
             expr const &cast() const
             {

@@ -214,7 +214,7 @@
             template<typename Expr>
             struct id
             {
-                typedef typename Expr::expr_type::id type;
+                typedef typename Expr::id_type type;
             };
 
         #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/traits.hpp>))

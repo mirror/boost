@@ -25,7 +25,7 @@ namespace boost { namespace proto
         typedef typename Expr::tag_type tag_type;
         typedef typename Expr::args_type args_type;
         typedef typename Expr::arity arity;
-        typedef typename Expr::id id;
+        typedef typename Expr::id_type id_type;
         typedef proto_ref_tag fusion_tag;
         typedef void is_boost_proto_ref_;
         typedef void is_boost_proto_expr_;
