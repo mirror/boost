@@ -50,7 +50,7 @@ class fifo_scheduler : noncopyable
     {
       processor_handle result;
       work_item item =
-        container_.create_processor< Processor >( result, *this );
+        container_.template create_processor< Processor >( result, *this );
       worker_.queue_work_item( item );
       return result;
     }
@@ -59,8 +59,8 @@ class fifo_scheduler : noncopyable
     processor_handle create_processor( Arg1 arg1 )
     {
       processor_handle result;
-      work_item item =
-        container_.create_processor< Processor >( result, *this, arg1 );
+      work_item item = container_.template create_processor< Processor >(
+        result, *this, arg1 );
       worker_.queue_work_item( item );
       return result;
     }
@@ -69,8 +69,8 @@ class fifo_scheduler : noncopyable
     processor_handle create_processor( Arg1 arg1, Arg2 arg2 )
     {
       processor_handle result;
-      work_item item =
-        container_.create_processor< Processor >( result, *this, arg1, arg2 );
+      work_item item = container_.template create_processor< Processor >(
+        result, *this, arg1, arg2 );
       worker_.queue_work_item( item );
       return result;
     }
@@ -79,7 +79,7 @@ class fifo_scheduler : noncopyable
     processor_handle create_processor( Arg1 arg1, Arg2 arg2, Arg3 arg3 )
     {
       processor_handle result;
-      work_item item = container_.create_processor< Processor >(
+      work_item item = container_.template create_processor< Processor >(
         result, *this, arg1, arg2, arg3 );
       worker_.queue_work_item( item );
       return result;
@@ -92,7 +92,7 @@ class fifo_scheduler : noncopyable
       Arg1 arg1, Arg2 arg2, Arg3 arg3, Arg4 arg4 )
     {
       processor_handle result;
-      work_item item = container_.create_processor< Processor >(
+      work_item item = container_.template create_processor< Processor >(
         result, *this, arg1, arg2, arg3, arg4 );
       worker_.queue_work_item( item );
       return result;
@@ -105,7 +105,7 @@ class fifo_scheduler : noncopyable
       Arg1 arg1, Arg2 arg2, Arg3 arg3, Arg4 arg4, Arg5 arg5 )
     {
       processor_handle result;
-      work_item item = container_.create_processor< Processor >(
+      work_item item = container_.template create_processor< Processor >(
         result, *this, arg1, arg2, arg3, arg4, arg5 );
       worker_.queue_work_item( item );
       return result;
@@ -118,7 +118,7 @@ class fifo_scheduler : noncopyable
       Arg1 arg1, Arg2 arg2, Arg3 arg3, Arg4 arg4, Arg5 arg5, Arg6 arg6 )
     {
       processor_handle result;
-      work_item item = container_.create_processor< Processor >(
+      work_item item = container_.template create_processor< Processor >(
         result, *this, arg1, arg2, arg3, arg4, arg5, arg6 );
       worker_.queue_work_item( item );
       return result;
