@@ -70,13 +70,7 @@ int
 get_one_char(boost::wave::cpplexer::re2clex::Scanner *s)
 {
     using namespace boost::wave::cpplexer::re2clex;
-    if (s->fd != -1) {
-    uchar val;
-    
-        if (read(s->fd, &val, sizeof(val)))
-            return val;
-    }
-    else if (0 != s->act) {
+    if (0 != s->act) {
         RE2C_ASSERT(s->first != 0 && s->last != 0);
         RE2C_ASSERT(s->first <= s->act && s->act <= s->last);
         if (s->act < s->last) 
@@ -88,10 +82,7 @@ get_one_char(boost::wave::cpplexer::re2clex::Scanner *s)
 std::ptrdiff_t 
 rewind_stream (boost::wave::cpplexer::re2clex::Scanner *s, int cnt)
 {
-    if (s->fd != -1) {
-        return lseek(s->fd, cnt, SEEK_CUR);
-    }
-    else if (0 != s->act) {
+    if (0 != s->act) {
         RE2C_ASSERT(s->first != 0 && s->last != 0);
         s->act += cnt;
         RE2C_ASSERT(s->first <= s->act && s->act <= s->last);
@@ -228,13 +219,7 @@ fill(boost::wave::cpplexer::re2clex::Scanner *s,
             s->bot = buf;
         }
 
-        if (s->fd != -1) {
-            if((cnt = read(s->fd, (char*) s->lim, BOOST_WAVE_BSIZE)) != BOOST_WAVE_BSIZE)
-            {
-                s->eof = &s->lim[cnt]; *(s->eof)++ = '\0';
-            }
-        }
-        else if (s->act != 0) {
+        if (s->act != 0) {
             cnt = s->last - s->act;
             if (cnt > BOOST_WAVE_BSIZE)
                 cnt = BOOST_WAVE_BSIZE;
@@ -321,7 +306,7 @@ fill(boost::wave::cpplexer::re2clex::Scanner *s,
                 else if (next != -1) /* -1 means end of file */
                 {
                     /* next was something else, so rewind the stream */
-                    lseek(s->fd, -1, SEEK_CUR);
+                    rewind_stream(s, -1);
                 }
             }
             /* check \ \r EOB */

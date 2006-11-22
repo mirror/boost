@@ -15,6 +15,7 @@
 
 #include <boost/wave/language_support.hpp>
 #include <boost/wave/util/file_position.hpp>
+#include <boost/wave/cpplexer/cpp_lex_interface.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost {
@@ -33,8 +34,6 @@ namespace slex {
 //  new_lexer_gen: generates a new instance of the required C++ lexer
 //
 ///////////////////////////////////////////////////////////////////////////////
-template <typename TokenT> struct slex_input_interface; 
-
 template <
     typename IteratorT, 
     typename PositionT = boost::wave::util::file_position_type
@@ -44,7 +43,7 @@ struct BOOST_WAVE_NEW_LEXER_DECL new_lexer_gen
 //  The NewLexer function allows the opaque generation of a new lexer object.
 //  It is coupled to the token type to allow to decouple the lexer/token 
 //  configurations at compile time.
-    static slex_input_interface<slex_token<PositionT> > *
+    static lex_input_interface<slex_token<PositionT> > *
     new_lexer(IteratorT const &first, IteratorT const &last, 
         PositionT const &pos, boost::wave::language_support language);
 };
@@ -53,31 +52,25 @@ struct BOOST_WAVE_NEW_LEXER_DECL new_lexer_gen
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-//  The lex_input_interface decouples the lex_iterator_shim from the actual 
-//  lexer. This is done to allow compile time reduction.
-//  Thanks to JCAB for having this idea.
+//  The slex_input_interface helps to instantiate a concrete lexer to be used 
+//  by the Wave preprocessor module.
+//  This is done to allow compile time reduction.
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 template <typename TokenT>
 struct slex_input_interface 
+:   lex_input_interface<TokenT>
 {
-    typedef typename TokenT::position_type position_type;
+    typedef typename lex_input_interface<TokenT>::position_type position_type;
     
-    virtual TokenT get() = 0;
-    virtual void set_position(position_type const &pos) = 0;
-
-    virtual ~slex_input_interface() {}
+    ~slex_input_interface() {}
     
-#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-    virtual bool has_include_guards(std::string& guard_name) const = 0;
-#endif    
-
 //  The new_lexer function allows the opaque generation of a new lexer object.
 //  It is coupled to the token type to allow to distinguish different 
 //  lexer/token configurations at compile time.
     template <typename IteratorT>
-    static slex_input_interface *
+    static lex_input_interface<TokenT> *
     new_lexer(IteratorT const &first, IteratorT const &last, 
         position_type const &pos, boost::wave::language_support language)
     { 

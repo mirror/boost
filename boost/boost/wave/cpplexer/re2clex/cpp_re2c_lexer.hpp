@@ -40,6 +40,8 @@
 #include <boost/wave/cpplexer/detect_include_guards.hpp>
 #endif
 
+#include <boost/wave/cpplexer/cpp_lex_interface_generator.hpp>
+
 // this must occur after all of the includes and before any code appears
 #ifdef BOOST_HAS_ABI_HEADERS
 #include BOOST_ABI_PREFIX
@@ -316,7 +318,9 @@ lexer<IteratorT, PositionT>::report_error(Scanner const *s, char const *msg, ...
      
 template <typename IteratorT, typename PositionT = boost::wave::util::file_position_type>
 class lex_functor 
-:   public lex_input_interface<typename lexer<IteratorT, PositionT>::token_type>
+:   public lex_input_interface_generator<
+        typename lexer<IteratorT, PositionT>::token_type
+    >
 {    
 public:
 

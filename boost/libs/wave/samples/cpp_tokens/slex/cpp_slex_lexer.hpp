@@ -32,6 +32,7 @@
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
 #include <boost/wave/cpplexer/detect_include_guards.hpp>
 #endif
+#include <boost/wave/cpplexer/cpp_lex_interface.hpp>
 
 #include "../slex_interface.hpp"
 #include "../slex_token.hpp"
@@ -749,7 +750,7 @@ lexer::lexer<IteratorT, PositionT> slex_functor<IteratorT, PositionT>::lexer;
 
 template <typename IteratorT, typename PositionT>
 BOOST_WAVE_SLEX_NEW_LEXER_INLINE
-slex_input_interface<slex_token<PositionT> > *
+lex_input_interface<slex_token<PositionT> > *
 new_lexer_gen<IteratorT, PositionT>::new_lexer(IteratorT const &first,
     IteratorT const &last, PositionT const &pos, 
     boost::wave::language_support language)

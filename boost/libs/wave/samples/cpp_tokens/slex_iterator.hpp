@@ -84,7 +84,7 @@ public:
 #endif    
 
 private:
-    boost::shared_ptr<slex_input_interface<TokenT> > functor_ptr;
+    boost::shared_ptr<lex_input_interface<TokenT> > functor_ptr;
 };
 
 #if 0 != __COMO_VERSION__

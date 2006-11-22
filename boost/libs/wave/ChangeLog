@@ -68,6 +68,8 @@ CHANGELOG
 - Added a new sample 'real_positions' demonstrating the new generated_token()
   preprocessing hook and showing how to use Wave with a new token type without 
   using a new lexer type.
+- Factored out the pure lex_input_interface to simplify writing different lexer 
+  types for Wave.
 
 Boost V1.34.0
 - Wave Version 1.2.4

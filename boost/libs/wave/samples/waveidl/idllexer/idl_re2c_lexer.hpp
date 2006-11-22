@@ -62,7 +62,7 @@ public:
     typedef char                                        char_t;
     typedef boost::wave::cpplexer::re2clex::Scanner     base_t;
     typedef boost::wave::cpplexer::lex_token<PositionT> token_type;
-    typedef typename token_type::string_type                  string_type;
+    typedef typename token_type::string_type            string_type;
     
     lexer(IteratorT const &first, IteratorT const &last, 
         PositionT const &pos, boost::wave::language_support language);
@@ -102,7 +102,6 @@ lexer<IteratorT, PositionT>::lexer(IteratorT const &first,
     using namespace boost::wave::cpplexer::re2clex;
     
     memset(&scanner, '\0', sizeof(scanner_t));
-    scanner.fd = -1;
     scanner.eol_offsets = aq_create();
     scanner.first = scanner.act = (uchar *)&(*first);
     scanner.last = scanner.first + std::distance(first, last);
@@ -194,7 +193,9 @@ template <
     typename PositionT = boost::wave::util::file_position_type
 >
 class lex_functor 
-:   public lex_input_interface<typename lexer<IteratorT, PositionT>::token_type>
+:   public lex_input_interface_generator<
+        typename lexer<IteratorT, PositionT>::token_type
+    >
 {    
 public:
 
@@ -255,7 +256,7 @@ private:
 
 template <typename IteratorT, typename PositionT>
 BOOST_WAVE_RE2C_NEW_LEXER_INLINE
-lex_input_interface<boost::wave::cpplexer::lex_token<PositionT> > *
+cpplexer::lex_input_interface<cpplexer::lex_token<PositionT> > *
 new_lexer_gen<IteratorT, PositionT>::new_lexer(IteratorT const &first,
     IteratorT const &last, PositionT const &pos, 
     wave::language_support language)
