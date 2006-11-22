@@ -38,6 +38,16 @@
 # endif
 #endif
 
+// BOOST_HAS_LONG_LONG implies BOOST_CXX0X_LONG_LONG, and vice-versa
+#if defined(BOOST_HAS_LONG_LONG) || defined(BOOST_CXX0X_LONG_LONG)
+#  ifndef BOOST_HAS_LONG_LONG
+#    define BOOST_HAS_LONG_LONG
+#  endif
+#  ifndef BOOST_CXX0X_LONG_LONG
+#    define BOOST_CXX0X_LONG_LONG
+#  endif
+#endif
+
 // GCC 3.x will clean up all of those nasty macro definitions that
 // BOOST_NO_CTYPE_FUNCTIONS is intended to help work around, so undefine
 // it under GCC 3.x.

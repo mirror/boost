@@ -19,6 +19,7 @@
 <a href="#macro_ref">Boost Macro Reference</a>
    <a href="#defects">Macros that describe defects</a>
    <a href="#features">Macros that describe optional features</a>
+   <a href="#cpp0x">Macros that describe C++0x features</a>
    <a href="#helpers">Boost Helper Macros</a>
    <a href="#info_macros">Boost Informational Macros</a>
    <a href="#source">Macros for libraries with separate source code</a>
@@ -869,17 +870,17 @@ void g() { return f(); }</pre>
                hash_set and hash_map; BOOST_STD_EXTENSION_NAMESPACE will provide the namespace 
                in which the two class templates reside.</td>
          </tr>
+         <tr>
+            <td>BOOST_HAS_LONG_LONG</td>
+	    <td>Compiler</td>
+            <td>The compiler supports the long long data type.</td>
+         </tr>
          <TR>
             <TD vAlign="top" width="48%">BOOST_HAS_LOG1P</TD>
             <TD vAlign="top" width="15%">Platform</TD>
             <TD vAlign="top" width="37%">The platform has the functions log1p, log1pf and 
                log1pl in &lt;math.h&gt;.</TD>
          </TR>
-         <tr>
-            <td>BOOST_HAS_LONG_LONG</td>
-            <td>Compiler</td>
-            <td>The compiler supports the long long data type.</td>
-         </tr>
          <tr>
             <td valign="top" width="48%">BOOST_HAS_MACRO_USE_FACET</td>
             <td valign="top" width="15%">Standard library</td>
@@ -1123,6 +1124,69 @@ void g() { return f(); }</pre>
                default is not present, conforming to the current C++ standard).</td>
          </tr>
       </table>
+      <h4><a name="cpp0x"></a>Macros that describe C++0x features</h4>
+      <p>The following macros describe features that are likely to be
+      included in the upcoming ISO C++ standard, C++0x.</p>
+
+      <table border="1" cellpadding="7" cellspacing="1" width="100%">
+         <tr>
+            <td valign="top" width="50%"><p align="center"><b>Macro</b></p>
+            </td>
+            <td valign="top" width="50%"><p align="center"><b>Description</b></p>
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">BOOST_CXX0X_CONCEPTS</td>
+            <td valign="top" width="50%">
+	    The compiler supports <a
+            href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2081.pdf">concepts</a>. <b>Note</b>: concepts have been
+            proposed for C++0x, but have not yet been approved for
+            inclusion in the language.
+            </td>
+         </tr>
+	 <tr>
+            <td valign="top" width="50%">BOOST_CXX0X_LONG_LONG</td>
+            <td valign="top" width="50%">
+	    The compiler supports the long long. Identical to <tt>BOOST_HAS_LONG_LONG</tt>.
+	    </td>
+	 </tr>
+	 <tr>
+            <td valign="top" width="50%">BOOST_CXX0X_PREPROCESSOR</td>
+            <td valign="top" width="50%">
+	    The compiler supports the <a
+            href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1653.htm">C99
+            preprocessor</a>, which includes variadic macros,
+            concatenation of wide string literals, and the
+            <code>_Pragma</code> operator.
+	    </td>
+	 </tr>
+         <tr>
+            <td valign="top" width="50%">BOOST_CXX0X_RVALUE_REFERENCES</td>
+            <td valign="top" width="50%">
+	    The compiler supports <a
+            href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2118.html">rvalue
+            references</a>.
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">BOOST_CXX0X_STATIC_ASSERT</td>
+            <td valign="top" width="50%">
+	    The compiler supports <a
+            href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1720.html">static assertions</a>.
+            </td>
+         </tr>
+         <tr>
+            <td valign="top" width="50%">BOOST_CXX0X_VARIADIC_TEMPLATES</td>
+            <td valign="top" width="50%">
+	    The compiler supports <a
+            href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2080.pdf">variadic
+            templates</a>. <b>Note</b>: variadic templates have been
+            proposed for C++0x, but have not yet been approved for
+            inclusion in the language.
+            </td>
+         </tr>
+      </table>
+      
       <h4><a name="helpers"></a>Boost Helper Macros</h4>
       <p>The following macros are either simple helpers, or macros that provide 
          workarounds for compiler/standard library defects.</p>
