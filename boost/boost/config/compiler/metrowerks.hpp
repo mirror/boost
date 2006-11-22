@@ -80,6 +80,13 @@
 #  define BOOST_COMPILER_VERSION __MWERKS__
 #endif
 
+//
+// C++0x features
+//
+#if __option(rvalue_refs)
+#  define BOOST_CXX0X_RVALUE_REFERENCES
+#endif
+
 #define BOOST_COMPILER "Metrowerks CodeWarrior C++ version " BOOST_STRINGIZE(BOOST_COMPILER_VERSION)
 
 //
