@@ -12,6 +12,7 @@
 # $Revision$
 
 import preprocess
+import os.path
 
 preprocess.main(
       [ "plain" ]
