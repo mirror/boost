@@ -12,6 +12,11 @@ subproject libs/wave/samples/list_includes/build ;
 
 exe list_includes
     : ../list_includes.cpp 
+      ../instantiate_cpp_exprgrammar.cpp 
+      ../instantiate_cpp_grammar.cpp 
+      ../instantiate_cpp_literalgrs.cpp 
+      ../instantiate_defined_grammar.cpp 
+      ../instantiate_lexertl_lexer.cpp 
       <lib>../../../build/boost_wave
       <lib>../../../../../libs/program_options/build/boost_program_options
       <lib>../../../../../libs/filesystem/build/boost_filesystem

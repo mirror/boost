@@ -72,6 +72,8 @@ CHANGELOG
   types for Wave.
 - Added the token_statistics sample showing how to use Xpressive to build a 
   lexer for Wave.
+- Changed the list_includes sample to use a lexer which is based on the lexertl 
+  library written by Ben Hanson (http://www.benhanson.net/lexertl.html).
   
 Boost V1.34.0
 - Wave Version 1.2.4
