@@ -1653,12 +1653,12 @@ The above steps are enough to get a functional BoostBook setup.  Quickbook
 will be automatically built when needed.  If you want to avoid these
 rebuilds:
 
-# Go to Quickbook's source directory (`BOOST_ROOT\tools\quickbook`).
+# Go to Quickbook's source directory (`BOOST_ROOT/tools/quickbook`).
 
 # Build the utility by issuing `bjam --v2`.
 
-# Copy the resulting `quickbook.exe` binary (located under the
-  `BOOST_ROOT\bin.v2` hierarchy) to a safe place.  The traditional location is
+# Copy the resulting `quickbook` binary (located under the
+  `BOOST_ROOT/bin.v2` hierarchy) to a safe place.  The traditional location is
   `/usr/local/bin`.
 
 # Add the following to your `user-config.jam` file, using the full path of the
