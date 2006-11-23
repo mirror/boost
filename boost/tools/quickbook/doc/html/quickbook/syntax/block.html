@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title> Block Level Elements</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../index.html" title="Quickbook 1.4">
 <link rel="up" href="../syntax.html" title=" Syntax Summary">
 <link rel="prev" href="phrase.html" title=" Phrase Level Elements">
@@ -112,16 +112,16 @@
           for. In its absence, version 1.1 is assumed.
         </p>
 <p>
-          <tt class="literal">version</tt>, <tt class="literal">id</tt>, <tt class="literal">dirname</tt>,
-          <tt class="literal">copyright</tt>, <tt class="literal">purpose</tt>, <tt class="literal">category</tt>,
-          <tt class="literal">authors</tt>, <tt class="literal">license</tt>, <tt class="literal">last-revision</tt>
-          and <tt class="literal">source-mode</tt> are optional information.
+          <code class="literal">version</code>, <code class="literal">id</code>, <code class="literal">dirname</code>,
+          <code class="literal">copyright</code>, <code class="literal">purpose</code>, <code class="literal">category</code>,
+          <code class="literal">authors</code>, <code class="literal">license</code>, <code class="literal">last-revision</code>
+          and <code class="literal">source-mode</code> are optional information.
         </p>
 <p>
-          <tt class="literal">source-type</tt> is a lowercase string setting the initial
+          <code class="literal">source-type</code> is a lowercase string setting the initial
           <a href="phrase.html#quickbook.syntax.phrase.source_mode" title="Source Mode">Source Mode</a>.
-          If the <tt class="literal">source-mode</tt> field is omitted, a default value
-          of <tt class="literal">c++</tt> will be used.
+          If the <code class="literal">source-mode</code> field is omitted, a default value
+          of <code class="literal">c++</code> will be used.
         </p>
 </div>
 <div class="section" lang="en">
@@ -135,8 +135,8 @@
 <p>
           where <span class="emphasis"><em>id</em></span> is optional. id will be the filename of the
           generated section. If it is not present, "The Section Title"
-          will be normalized and become the id. Valid characters are <tt class="literal">a-Z</tt>,
-          <tt class="literal">A-Z</tt>, <tt class="literal">0-9</tt> and <tt class="literal">_</tt>.
+          will be normalized and become the id. Valid characters are <code class="literal">a-Z</code>,
+          <code class="literal">A-Z</code>, <code class="literal">0-9</code> and <code class="literal">_</code>.
           All non-valid characters are converted to underscore and all upper-case
           are converted to lower case. Thus: "The Section Title" will be
           normalized to "the_section_title".
@@ -521,7 +521,7 @@
 <a name="quickbook.syntax.block.preformatted"></a><a href="block.html#quickbook.syntax.block.preformatted" title="Preformatted">Preformatted</a></h4></div></div></div>
 <p>
           Sometimes, you don't want some preformatted text to be parsed as C++. In
-          such cases, use the <tt class="literal">[pre ... ]</tt> markup block.
+          such cases, use the <code class="literal">[pre ... ]</code> markup block.
         </p>
 <pre class="programlisting">[pre
 
@@ -538,16 +538,16 @@
           level markup, pre (and Code) are the only ones that allow multiple newlines.
           The markup above will generate:
         </p>
-<pre class="programlisting">Some <span class="bold"><b>preformatted</b></span> text                    Some <span class="bold"><b>preformatted</b></span> text
+<pre class="programlisting">Some <span class="bold"><strong>preformatted</strong></span> text                    Some <span class="bold"><strong>preformatted</strong></span> text
 
-    Some <span class="bold"><b>preformatted</b></span> text            Some <span class="bold"><b>preformatted</b></span> text
+    Some <span class="bold"><strong>preformatted</strong></span> text            Some <span class="bold"><strong>preformatted</strong></span> text
 
-        Some <span class="bold"><b>preformatted</b></span> text    Some <span class="bold"><b>preformatted</b></span> text
+        Some <span class="bold"><strong>preformatted</strong></span> text    Some <span class="bold"><strong>preformatted</strong></span> text
 
 </pre>
 <p>
           Notice that unlike Code, phrase markup such as font style is still permitted
-          inside <tt class="literal">pre</tt> blocks.
+          inside <code class="literal">pre</code> blocks.
         </p>
 </div>
 <div class="section" lang="en">
@@ -576,7 +576,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
+<tr><td align="left" valign="top"><p>
             This is a note
           </p></td></tr>
 </table></div>
@@ -585,7 +585,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../images/tip.png"></td>
 <th align="left">Tip</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
+<tr><td align="left" valign="top"><p>
             This is a tip
           </p></td></tr>
 </table></div>
@@ -594,7 +594,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../../images/important.png"></td>
 <th align="left">Important</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
+<tr><td align="left" valign="top"><p>
             This is important
           </p></td></tr>
 </table></div>
@@ -603,7 +603,7 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../images/caution.png"></td>
 <th align="left">Caution</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
+<tr><td align="left" valign="top"><p>
             This is a caution
           </p></td></tr>
 </table></div>
@@ -612,13 +612,13 @@
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../images/warning.png"></td>
 <th align="left">Warning</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
+<tr><td align="left" valign="top"><p>
             This is a warning
           </p></td></tr>
 </table></div>
 <p>
           These are the only admonitions supported by <a href="http://www.docbook.org/" target="_top">DocBook</a>.
-          So, for example <tt class="literal">[information This is some information]</tt>
+          So, for example <code class="literal">[information This is some information]</code>
           is unlikely to produce the desired effect.
         </p>
 </div>
@@ -633,36 +633,36 @@
 [h6 Heading 6]
 </pre>
 <a name="quickbook.syntax.block.headings.heading_1"></a><h1>
-<a name="id450799"></a>
+<a name="id2568026"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_1">Heading 1</a>
         </h1>
 <a name="quickbook.syntax.block.headings.heading_2"></a><h2>
-<a name="id450823"></a>
+<a name="id2568046"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_2">Heading 2</a>
         </h2>
 <a name="quickbook.syntax.block.headings.heading_3"></a><h3>
-<a name="id450848"></a>
+<a name="id2568067"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_3">Heading 3</a>
         </h3>
 <a name="quickbook.syntax.block.headings.heading_4"></a><h4>
-<a name="id450872"></a>
+<a name="id2568087"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_4">Heading 4</a>
         </h4>
 <a name="quickbook.syntax.block.headings.heading_5"></a><h5>
-<a name="id450898"></a>
+<a name="id2568108"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_5">Heading 5</a>
         </h5>
 <a name="quickbook.syntax.block.headings.heading_6"></a><h5>
-<a name="id450923"></a>
+<a name="id2568128"></a>
           <a href="block.html#quickbook.syntax.block.headings.heading_6">Heading 6</a>
         </h5>
 <p>
           Headings 1-3 [h1 h2 and h3] will automatically have anchors with normalized
-          names with <tt class="literal">name="section_id.normalized_header_text"</tt>
-          (i.e. valid characters are <tt class="literal">a-z</tt>, <tt class="literal">A-Z</tt>,
-          <tt class="literal">0-9</tt> and <tt class="literal">_</tt>. All non-valid characters
+          names with <code class="literal">name="section_id.normalized_header_text"</code>
+          (i.e. valid characters are <code class="literal">a-z</code>, <code class="literal">A-Z</code>,
+          <code class="literal">0-9</code> and <code class="literal">_</code>. All non-valid characters
           are converted to underscore and all upper-case are converted to lower-case.
-          For example: Heading 1 in section Section 2 will be normalized to <tt class="literal">section_2.heading_1</tt>).
+          For example: Heading 1 in section Section 2 will be normalized to <code class="literal">section_2.heading_1</code>).
           You can use:
         </p>
 <pre class="programlisting">[link section_id.normalized_header_text The link text]
@@ -746,19 +746,19 @@ sf_logo
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Tip]" src="../../images/tip.png"></td>
 <th align="left">Tip</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
+<tr><td align="left" valign="top"><p>
             It's a good idea to use macro identifiers that are distinguishable. For
             instance, in this document, macro identifiers have two leading and trailing
-            underscores (e.g. <tt class="literal">__spirit__</tt>). The reason is to avoid unwanted
+            underscores (e.g. <code class="literal">__spirit__</code>). The reason is to avoid unwanted
             macro replacement.
           </p></td></tr>
 </table></div>
 <p>
-          Links (URLS) and images are good candidates for macros. <span class="bold"><b>1</b></span>)
+          Links (URLS) and images are good candidates for macros. <span class="bold"><strong>1</strong></span>)
           They tend to change a lot. It is a good idea to place all links and images
-          in one place near the top to make it easy to make changes. <span class="bold"><b>2</b></span>)
-          The syntax is not pretty. It's easier to read and write, e.g. <tt class="literal">__spirit__</tt>
-          than <tt class="literal">[@http://spirit.sourceforge.net Spirit]</tt>.
+          in one place near the top to make it easy to make changes. <span class="bold"><strong>2</strong></span>)
+          The syntax is not pretty. It's easier to read and write, e.g. <code class="literal">__spirit__</code>
+          than <code class="literal">[@http://spirit.sourceforge.net Spirit]</code>.
         </p>
 <p>
           Some more examples:
@@ -791,7 +791,7 @@ sf_logo
           Quickbook has some predefined macros that you can already use.
         </p>
 <div class="table">
-<a name="id451358"></a><p class="title"><b>Table 3. Predefined Macros</b></p>
+<a name="id2568523"></a><p class="title"><b>Table 3. Predefined Macros</b></p>
 <table class="table" summary="Predefined Macros">
 <colgroup>
 <col>
@@ -807,17 +807,17 @@ sf_logo
 <tr>
 <td>__DATE__</td>
 <td>Today's date</td>
-<td>2006-Nov-16</td>
+<td>2006-Nov-23</td>
 </tr>
 <tr>
 <td>__TIME__</td>
 <td>The current time</td>
-<td>07:56:15 PM</td>
+<td>10:01:28 AM</td>
 </tr>
 <tr>
 <td>__FILENAME__</td>
 <td>Quickbook source filename</td>
-<td>C:\dev\boost\tools\quickbook\doc\quickbook.qbk</td>
+<td>/home/daniel/src/boost/tools/quickbook/doc/quickbook.qbk</td>
 </tr>
 </tbody>
 </table>
@@ -844,7 +844,7 @@ Hi, my name is [name]. I am [age] years old. I am a [what].
 ]
 </pre>
 <a name="quickbook.syntax.block.templates.template_identifier"></a><h5>
-<a name="id451486"></a>
+<a name="id2568636"></a>
           <a href="block.html#quickbook.syntax.block.templates.template_identifier">Template
           Identifier</a>
         </h5>
@@ -862,7 +862,7 @@ Hi, my name is [name]. I am [age] years old. I am a [what].
           </li>
 </ul></div>
 <a name="quickbook.syntax.block.templates.formal_template_arguments"></a><h5>
-<a name="id451533"></a>
+<a name="id2568678"></a>
           <a href="block.html#quickbook.syntax.block.templates.formal_template_arguments">Formal
           Template Arguments</a>
         </h5>
@@ -874,15 +874,15 @@ Hi, my name is [name]. I am [age] years old. I am a [what].
 <p>
           A template formal argument temporarily hides a template of the same name
           at the point where the <a href="block.html#quickbook.syntax.block.templates.template_expansion">template
-          is expanded</a>. Note that the body of the <tt class="literal">person</tt>
-          template above refers to <tt class="literal">name</tt> <tt class="literal">age</tt>
-          and <tt class="literal">what</tt> as <tt class="literal">[name]</tt> <tt class="literal">[age]</tt>
-          and <tt class="literal">[what]</tt>. <tt class="literal">name</tt> <tt class="literal">age</tt>
-          and <tt class="literal">what</tt> are actually templates that exist in the duration
+          is expanded</a>. Note that the body of the <code class="literal">person</code>
+          template above refers to <code class="literal">name</code> <code class="literal">age</code>
+          and <code class="literal">what</code> as <code class="literal">[name]</code> <code class="literal">[age]</code>
+          and <code class="literal">[what]</code>. <code class="literal">name</code> <code class="literal">age</code>
+          and <code class="literal">what</code> are actually templates that exist in the duration
           of the template call.
         </p>
 <a name="quickbook.syntax.block.templates.template_body"></a><h5>
-<a name="id451654"></a>
+<a name="id2568786"></a>
           <a href="block.html#quickbook.syntax.block.templates.template_body">Template
           Body</a>
         </h5>
@@ -907,7 +907,7 @@ replacement text...
           block level elements are not allowed in phrase templates.
         </p>
 <a name="quickbook.syntax.block.templates.template_expansion"></a><h5>
-<a name="id451709"></a>
+<a name="id2568840"></a>
           <a href="block.html#quickbook.syntax.block.templates.template_expansion">Template
           Expansion</a>
         </h5>
@@ -943,7 +943,7 @@ replacement text...
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Caution]" src="../../images/caution.png"></td>
 <th align="left">Caution</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
+<tr><td align="left" valign="top"><p>
             A word of caution: Templates are recursive. A template can call another
             template or even itself, directly or indirectly. There are no control
             structures in QuickBook (yet) so this will always mean infinite recursion.
@@ -954,11 +954,11 @@ replacement text...
 <p>
           Each actual argument can be a word, a text fragment or just about any
           <a href="phrase.html" title=" Phrase Level Elements">QuickBook phrase</a>. Arguments
-          are separated by the double dot <tt class="literal">".."</tt> and terminated
+          are separated by the double dot <code class="literal">".."</code> and terminated
           by the close parenthesis.
         </p>
 <a name="quickbook.syntax.block.templates.nullary_templates"></a><h5>
-<a name="id451813"></a>
+<a name="id2568934"></a>
           <a href="block.html#quickbook.syntax.block.templates.nullary_templates">Nullary
           Templates</a>
         </h5>
@@ -976,7 +976,7 @@ replacement text...
           We have:
         </p>
 <p>
-          Some squiggles...<span class="bold"><b>&#945;&#946;</b></span>
+          Some squiggles...<span class="bold"><strong>&#945;&#946;</strong></span>
         </p>
 <p>
           The difference with macros are
@@ -996,7 +996,7 @@ replacement text...
           </li>
 </ul></div>
 <p>
-          The empty brackets after the template identifier (<tt class="literal">alpha[]</tt>)
+          The empty brackets after the template identifier (<code class="literal">alpha[]</code>)
           indicates no arguments. If the template body does not look like a template
           argument list, we can elide the empty brackets. Example:
         </p>
@@ -1012,15 +1012,15 @@ for the journey to old age.]]]
           We have:
         </p>
 <p>
-          Here's a quote from Aristotle: <span class="bold"><b><span class="emphasis"><em>Education
-          is the best provision for the journey to old age.</em></span></b></span>.
+          Here's a quote from Aristotle: <span class="bold"><strong><span class="emphasis"><em>Education
+          is the best provision for the journey to old age.</em></span></strong></span>.
         </p>
 <p>
           The disadvantage is that you can't avoid the space between the template
-          identifier, <tt class="computeroutput"><span class="identifier">aristotle_quote</span></tt>,
+          identifier, <code class="computeroutput"><span class="identifier">aristotle_quote</span></code>,
           and the template body "Aristotle...". This space will be part
           of the template body. If that space is unwanted, use empty brackets or
-          use the space escape: "<tt class="computeroutput"><span class="special">\</span> </tt>".
+          use the space escape: "<code class="computeroutput"><span class="special">\</span> </code>".
           Example:
         </p>
 <pre class="programlisting">[template tag\ _tag]
@@ -1034,26 +1034,26 @@ for the journey to old age.]]]
           We have:
         </p>
 <p>
-          <tt class="computeroutput"><span class="identifier">struct</span></tt> x_tag;
+          <code class="computeroutput"><span class="identifier">struct</span></code> x_tag;
         </p>
 <p>
           You have a couple of ways to do it. I personally prefer the explicit empty
           brackets, though.
         </p>
 <a name="quickbook.syntax.block.templates.simple_arguments"></a><h5>
-<a name="id452033"></a>
+<a name="id2569136"></a>
           <a href="block.html#quickbook.syntax.block.templates.simple_arguments">Simple
           Arguments</a>
         </h5>
 <p>
-          As mentioned, arguments are separated by the double dot <tt class="literal">".."</tt>.
+          As mentioned, arguments are separated by the double dot <code class="literal">".."</code>.
           If there are less arguments passed than expected, QuickBook attempts to
           break the last argument into two or more arguments following this logic:
         </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-            Break the last argument into two, at the first space found (<tt class="literal">'',
-            '\n', \t' or '\r'</tt>).
+            Break the last argument into two, at the first space found (<code class="literal">'',
+            '\n', \t' or '\r'</code>).
           </li>
 <li>
             Repeat until there are enough arguments or if there are no more spaces
@@ -1074,8 +1074,8 @@ for the journey to old age.]]]
         </p>
 <p>
           "w x y z" is initially treated as a single argument because we
-          didn't supply any <tt class="literal">".."</tt> separators. However,
-          since <tt class="literal">simple</tt> expects 4 arguments, "w x y z"
+          didn't supply any <code class="literal">".."</code> separators. However,
+          since <code class="literal">simple</code> expects 4 arguments, "w x y z"
           is broken down iteratively (applying the logic above) until we have "w",
           "x", "y" and "z".
         </p>
@@ -1096,8 +1096,8 @@ for the journey to old age.]]]
         </p>
 <p>
           It should be obvious now that for simple arguments with no spaces, we can
-          get by without separating the arguments with <tt class="literal">".."</tt>
-          separators. It is possible to combine <tt class="literal">".."</tt>
+          get by without separating the arguments with <code class="literal">".."</code>
+          separators. It is possible to combine <code class="literal">".."</code>
           separators with the argument passing simplification presented above. Example:
         </p>
 <pre class="programlisting">[simple what do you think ..m a n?]
@@ -1109,7 +1109,7 @@ for the journey to old age.]]]
           what do you think man?
         </p>
 <a name="quickbook.syntax.block.templates.punctuation_templates"></a><h5>
-<a name="id452200"></a>
+<a name="id2569286"></a>
           <a href="block.html#quickbook.syntax.block.templates.punctuation_templates">Punctuation
           Templates</a>
         </h5>
@@ -1148,8 +1148,8 @@ for the journey to old age.]]]
           will generate this:
         </p>
 <p class="blurb">
-          <span class="inlinemediaobject"><img src="../../images/smiley.png" alt="smiley"></span> <span class="bold"><b>An eye catching advertisement
-          or note...</b></span><br> <br> <a href="http://spirit.sourceforge.net" target="_top">Spirit</a>
+          <span class="inlinemediaobject"><img src="../../images/smiley.png" alt="smiley"></span> <span class="bold"><strong>An eye catching advertisement
+          or note...</strong></span><br> <br> <a href="http://spirit.sourceforge.net" target="_top">Spirit</a>
           is an object-oriented recursive-descent parser generator framework implemented
           using template meta-programming techniques. Expression templates allow
           us to approximate the syntax of Extended Backus-Normal Form (EBNF) completely
@@ -1160,7 +1160,7 @@ for the journey to old age.]]]
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
+<tr><td align="left" valign="top"><p>
             Prefer <a href="block.html#quickbook.syntax.block.admonitions" title="Admonitions">admonitions</a>
             wherever appropriate.
           </p></td></tr>
@@ -1180,7 +1180,7 @@ for the journey to old age.]]]
           will generate:
         </p>
 <div class="table">
-<a name="id452395"></a><p class="title"><b>Table 4. A Simple Table</b></p>
+<a name="id2569461"></a><p class="title"><b>Table 4. A Simple Table</b></p>
 <table class="table" summary="A Simple Table">
 <colgroup>
 <col>
@@ -1213,7 +1213,7 @@ for the journey to old age.]]]
 </div>
 <p>
           The table title is optional. The first row of the table is automatically
-          treated as the table header; that is, it is wrapped in <tt class="literal">&lt;thead&gt;...&lt;/thead&gt;</tt>
+          treated as the table header; that is, it is wrapped in <code class="literal">&lt;thead&gt;...&lt;/thead&gt;</code>
           XML tags. Note that unlike the original QuickDoc, the columns are nested
           in [ cells... ]. The syntax is free-format and allows big cells to be formatted
           nicely. Example:
@@ -1239,7 +1239,7 @@ for the journey to old age.]]]
           and thus:
         </p>
 <div class="table">
-<a name="id452503"></a><p class="title"><b>Table 5. Table with fat cells</b></p>
+<a name="id2569560"></a><p class="title"><b>Table 5. Table with fat cells</b></p>
 <table class="table" summary="Table with fat cells">
 <colgroup>
 <col>
@@ -1285,7 +1285,7 @@ for the journey to old age.]]]
 ]
 </pre>
 <div class="table">
-<a name="id452583"></a><p class="title"><b>Table 6. Table with code</b></p>
+<a name="id2569633"></a><p class="title"><b>Table 6. Table with code</b></p>
 <table class="table" summary="Table with code">
 <colgroup>
 <col>
@@ -1370,7 +1370,7 @@ for the journey to old age.]]]
           </li>
 </ul></div>
 <p>
-          The <tt class="literal">[include]</tt> directive lets you specify a document
+          The <code class="literal">[include]</code> directive lets you specify a document
           id to use for the included file. When this id is not explicitly specified,
           the id defaults to the filename ("someother", in the example
           above). You can specify the id like this:
@@ -1381,11 +1381,11 @@ for the journey to old age.]]]
           All auto-generated anchors will use the document id as a unique prefix.
           So for instance, if there is a top section in someother.qbk named "Intro",
           the named anchor for that section will be "someid.intro", and
-          you can link to it with <tt class="literal">[link someid.intro The Intro]</tt>.
+          you can link to it with <code class="literal">[link someid.intro The Intro]</code>.
         </p>
 </div>
 </div>
-<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<table width="100%"><tr>
 <td align="left"></td>
 <td align="right"><small>Copyright © 2002, 2004, 2006 Joel de Guzman,
       Eric Niebler</small></td>

@@ -1,0 +1,71 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title> Scintilla Text Editor</title>
+<link rel="stylesheet" href="../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="../../index.html" title="Quickbook 1.4">
+<link rel="up" href="../editors.html" title="
+    Editor Support">
+<link rel="prev" href="../editors.html" title="
+    Editor Support">
+<link rel="next" href="../faq.html" title=" Frequently
+    Asked Questions">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%">
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../more/index.htm">More</a></td>
+</table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../editors.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../editors.html"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="../faq.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="quickbook.editors.scite"></a><a href="scite.html" title=" Scintilla Text Editor"> Scintilla Text Editor</a></h3></div></div></div>
+<div class="blockquote"><blockquote class="blockquote"><p>
+          <span class="emphasis"><em>Section contributed by Dean Michael Berris</em></span>
+        </p></blockquote></div>
+<p>
+        The Scintilla Text Editor (SciTE) is a free source code editor for Win32
+        and X. It uses the SCIntilla source code editing component.
+      </p>
+<p class="blurb">
+        <span class="inlinemediaobject"><img src="../../images/tip.png" alt="tip"></span> SciTE can be downloaded from <a href="http://www.scintilla.org/SciTE.html" target="_top">http://www.scintilla.org/SciTE.html</a>
+      </p>
+<p>
+        You can use the following settings to highlight quickbook tags when editing
+        quickbook files.
+      </p>
+<pre class="programlisting">qbk=*.qbk
+lexer.*.qbk=props
+use.tabs.$(qbk)=0
+tab.size.$(qbk)=4
+indent.size.$(qbk)=4
+style.props.32=$(font.base)
+comment.stream.start.props=[/
+comment.stream.end.props=]
+comment.box.start.props=[/
+comment.box.middle.props=
+comment.box.end.props=]
+</pre>
+<p class="blurb">
+        <span class="inlinemediaobject"><img src="../../images/note.png" alt="note"></span> Thanks to Rene Rivera for the above SciTE settings.
+      </p>
+</div>
+<table width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2002, 2004, 2006 Joel de Guzman,
+      Eric Niebler</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="../editors.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../editors.html"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="../faq.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

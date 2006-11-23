@@ -1,0 +1,79 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title> Frequently
+    Asked Questions</title>
+<link rel="stylesheet" href="../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="../index.html" title="Quickbook 1.4">
+<link rel="up" href="../index.html" title="Quickbook 1.4">
+<link rel="prev" href="editors/scite.html" title=" Scintilla Text Editor">
+<link rel="next" href="ref.html" title=" Quick Reference">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%">
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../libs/libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../more/index.htm">More</a></td>
+</table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="editors/scite.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="ref.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h2 class="title" style="clear: both">
+<a name="quickbook.faq"></a><a href="faq.html" title=" Frequently
+    Asked Questions"> Frequently
+    Asked Questions</a></h2></div></div></div>
+<a name="quickbook.faq.can_i_use_quickbook_for_non_boost_documentation_"></a><h3>
+<a name="id2571662"></a>
+      <a href="faq.html#quickbook.faq.can_i_use_quickbook_for_non_boost_documentation_">Can
+      I use QuickBook for non-Boost documentation?</a>
+    </h3>
+<p>
+      QuickBook can be used for non-Boost documentation with a little extra work.
+      <br>
+    </p>
+<div class="blockquote"><blockquote class="blockquote"><p>
+        <span class="emphasis"><em>Faq contributed by Michael Marcin</em></span>
+      </p></blockquote></div>
+<p>
+      When building HTML documentation with BoostBook a Boost C++ Libraries header
+      is added to the files. When using QuickBook to document projects outside of
+      Boost this is not desirable. This behavior can be overridden at the BoostBook
+      level by specifying some XSLT options. When using Boost Build version 2 (BBv2)
+      this can be achieved by adding parameters to the BoostBook target declaration.
+    </p>
+<p>
+      For example:
+    </p>
+<pre class="programlisting">using quickbook ;
+
+xml my_doc : my_doc.qbk ;
+
+boostbook standalone
+    :
+        my_doc		
+    :
+        &lt;xsl:param&gt;boost.image.src=images/my_project_logo.png
+        &lt;xsl:param&gt;boost.image.alt="\"My Project\""
+        &lt;xsl:param&gt;boost.image.w=100
+        &lt;xsl:param&gt;boost.image.h=50
+        &lt;xsl:param&gt;nav.layout=none
+    ;
+</pre>
+</div>
+<table width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2002, 2004, 2006 Joel de Guzman,
+      Eric Niebler</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="editors/scite.html"><img src="../images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../images/home.png" alt="Home"></a><a accesskey="n" href="ref.html"><img src="../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
