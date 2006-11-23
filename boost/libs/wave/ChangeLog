@@ -70,7 +70,9 @@ CHANGELOG
   using a new lexer type.
 - Factored out the pure lex_input_interface to simplify writing different lexer 
   types for Wave.
-
+- Added the token_statistics sample showing how to use Xpressive to build a 
+  lexer for Wave.
+  
 Boost V1.34.0
 - Wave Version 1.2.4
 - Added the possibility to explicitly enable/disable the generation of #line 
