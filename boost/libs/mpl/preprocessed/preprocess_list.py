@@ -1,5 +1,5 @@
 
-# Copyright Aleksey Gurtovoy 2001-2004
+# Copyright Aleksey Gurtovoy 2001-2006
 #
 # Distributed under the Boost Software License, Version 1.0. 
 # (See accompanying file LICENSE_1_0.txt or copy at 
@@ -16,5 +16,5 @@ import preprocess
 preprocess.main(
       [ "plain" ]
     , "list"
-    , "boost\\mpl\\list\\aux_\\preprocessed"
+    , os.path.join( "boost", "mpl", "list", "aux_", "preprocessed" )
     )
