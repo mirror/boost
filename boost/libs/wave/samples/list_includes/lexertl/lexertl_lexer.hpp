@@ -410,7 +410,7 @@ lexertl<Iterator, Position>::init_dfa(wave::language_support lang)
 // generate minimized DFA
     ::lexertl::generator::build (rules_, state_machine_);
     ::lexertl::generator::minimise_dfa (state_machine_._dfa_alphabet,
-	    state_machine_._dfa);
+        state_machine_._dfa);
 
     has_compiled_dfa = true;
 }
@@ -444,10 +444,10 @@ lexertl<Iterator, Position>::next_token(Iterator &first, Iterator const &last,
     }
 
     if (end_state) {
-	      // return longest match
-	      string_type str(first, end_token);
-	      token_value.swap(str);
-	      first = end_token;
+        // return longest match
+        string_type str(first, end_token);
+        token_value.swap(str);
+        first = end_token;
         return wave::token_id(id);
     }
     return T_EOF;
