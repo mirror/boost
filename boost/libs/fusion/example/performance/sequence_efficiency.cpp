@@ -26,6 +26,36 @@
 # pragma inline_depth(255)    // max inline depth
 #endif
 
+//  About the tests:
+//
+//  The tests below compare various fusion sequences to see how abstraction
+//  affects prformance.
+//
+//  We have 3 sequence sizes for each fusion sequence we're going to test.
+//
+//      small = 3 elements
+//      medium = 10 elements
+//      big = 30 elements
+//
+//  The sequences are initialized with values 0..N-1 from numeric strings
+//  parsed by boost::lexical_cast to make sure that the compiler is not 
+//  optimizing by replacing the computation with constant results computed 
+//  at compile time.
+//
+//  These sequences will be subjected to our accumulator which calls
+//  fusion::accumulate:
+//  
+//      this->sum += boost::fusion::accumulate(seq, 0, poly_add());
+//
+//  where poly_add simply sums the current value with the content of
+//  the sequence element. This accumulator will be called many times
+//  through the "hammer" test (see measure.hpp).
+//
+//  The tests are compared against a base using a plain_accumulator
+//  which does a simple addition:
+//
+//      this->sum += x;
+
 namespace
 {
     struct poly_add
@@ -59,6 +89,23 @@ namespace
         
         T sum;
     };
+
+    // Plain Accumulator function
+    template <typename T>
+    struct plain_accumulator
+    {
+        plain_accumulator()
+            : sum()
+        {}
+        
+        template <typename X>
+        void operator()(X const& x)
+        {
+            this->sum += x;
+        }
+        
+        T sum;
+    };
     
     template <typename T>
     void check(T const& seq, char const* info)
@@ -68,11 +115,13 @@ namespace
     }
 
     template <typename T>
-    void measure(T const& seq, char const* info, long const repeats)
+    void measure(T const& seq, char const* info, long const repeats, double base)
     {
+        double t = test::measure<accumulator<int> >(seq, repeats);
         std::cout 
             << info
-            << test::measure<accumulator<int> >(seq, repeats)
+            << t
+            << " (" << int((t/base)*100) << "%)"
             << std::endl;
     }
 
@@ -92,7 +141,6 @@ namespace
 int main()
 {
     using namespace boost::fusion;
-
     std::cout.setf(std::ios::scientific);
 
     vector<
@@ -138,6 +186,7 @@ int main()
         
         boost::timer time;
 
+        test::hammer<plain_accumulator<int> >(0, repeats);
         test::hammer<accumulator<int> >(vsmall, repeats);
         test::hammer<accumulator<int> >(lsmall, repeats);
         test::hammer<accumulator<int> >(vmedium, repeats);
@@ -148,6 +197,22 @@ int main()
         measured = time.elapsed();
     }
 
+    test::measure<plain_accumulator<int> >(1, 1);
+    std::cout 
+        << "base accumulated result:            " 
+        << test::live_code 
+        << std::endl;
+
+    double base_time = test::measure<plain_accumulator<int> >(1, repeats);
+    std::cout 
+        << "base time:                          "
+        << base_time;
+
+    std::cout 
+        << std::endl
+        << "-------------------------------------------------------------------"
+        << std::endl;
+
     check(vsmall,       "small vector accumulated result:    ");
     check(lsmall,       "small list accumulated result:      ");
     check(vmedium,      "medium vector accumulated result:   ");
@@ -155,13 +220,21 @@ int main()
     check(vbig,         "big vector accumulated result:      "); 
     check(lbig,         "big list accumulated result:        ");
 
-    measure(vsmall,     "small vector time:                  ", repeats);
-    measure(lsmall,     "small list time:                    ", repeats);
-    measure(vmedium,    "medium vector time:                 ", repeats);
-    measure(lmedium,    "medium list time:                   ", repeats);
-    measure(vbig,       "big vector time:                    ", repeats);
-    measure(lbig,       "big list time:                      ", repeats);
-    
+    std::cout 
+        << "-------------------------------------------------------------------"
+        << std::endl;
+
+    measure(vsmall,     "small vector time:                  ", repeats, base_time);
+    measure(lsmall,     "small list time:                    ", repeats, base_time);
+    measure(vmedium,    "medium vector time:                 ", repeats, base_time);
+    measure(lmedium,    "medium list time:                   ", repeats, base_time);
+    measure(vbig,       "big vector time:                    ", repeats, base_time);
+    measure(lbig,       "big list time:                      ", repeats, base_time);
+
+    std::cout 
+        << "-------------------------------------------------------------------"
+        << std::endl;
+
     // Let's see how this looks in assembler
     test_assembler(vmedium);
 

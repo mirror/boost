@@ -3,6 +3,10 @@
 // 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+#if !defined(LIVE_CODE_TYPE)
+# define LIVE_CODE_TYPE int
+#endif
+
 #include <boost/timer.hpp>
 
 namespace test
@@ -11,7 +15,7 @@ namespace test
   // code elimination doesn't optimize away anything we're testing.
   // We'll use it to compute the return code of the executable to make
   // sure it's needed.
-  int live_code;
+  LIVE_CODE_TYPE live_code;
 
   // Call objects of the given Accumulator type repeatedly with x as
   // an argument.
