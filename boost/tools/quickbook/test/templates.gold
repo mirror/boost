@@ -29,7 +29,7 @@
       <!--[/-------------------------------- unary arg, using punctuation ]-->
     </para>
     <para>
-      <!--quickbook-escape-prefix--><hey><!--quickbook-escape-postfix-->baz<!--quickbook-escape-prefix--></hey><!--quickbook-escape-postfix-->
+      <hey>baz</hey>
       <!--[/-------------------------------- recursive templates ]-->
     </para>
     <para>
@@ -62,13 +62,13 @@
 </programlisting>
     </para>
     <para>
-      x<!--quickbook-escape-prefix--><superscript><!--quickbook-escape-postfix-->2<!--quickbook-escape-prefix--></superscript><!--quickbook-escape-postfix-->
+      x<superscript>2</superscript>
     </para>
     <para>
-      <!--quickbook-escape-prefix-->&alpha;<!--quickbook-escape-postfix--><!--quickbook-escape-prefix--><superscript><!--quickbook-escape-postfix-->2<!--quickbook-escape-prefix--></superscript><!--quickbook-escape-postfix-->
+      &alpha;<superscript>2</superscript>
     </para>
     <para>
-      x<!--quickbook-escape-prefix--><superscript><!--quickbook-escape-postfix-->2<!--quickbook-escape-prefix--></superscript><!--quickbook-escape-postfix-->&nbsp;
+      x<superscript>2</superscript>&nbsp;
       <!--[/-------------------------------- Some more ]-->
     </para>
     <para>

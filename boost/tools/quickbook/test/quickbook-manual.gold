@@ -321,50 +321,50 @@ the true business precept.]
           </thead>
           <tbody>
             <row>
-              <entry><literal><!--quickbook-escape-prefix-->*Bold*<!--quickbook-escape-postfix--></literal></entry><entry><emphasis role="bold">Bold</emphasis></entry>
+              <entry><literal>*Bold*</literal></entry><entry><emphasis role="bold">Bold</emphasis></entry>
             </row>
             <row>
-              <entry><literal><!--quickbook-escape-prefix-->*Is bold*<!--quickbook-escape-postfix--></literal></entry><entry><emphasis role="bold">Is bold</emphasis></entry>
+              <entry><literal>*Is bold*</literal></entry><entry><emphasis role="bold">Is bold</emphasis></entry>
             </row>
             <row>
-              <entry><literal><!--quickbook-escape-prefix-->* Not bold* *Not bold * * Not bold *<!--quickbook-escape-postfix--></literal></entry><entry>* Not bold* *Not bold * *
+              <entry><literal>* Not bold* *Not bold * * Not bold *</literal></entry><entry>* Not bold* *Not bold * *
               Not bold *</entry>
             </row>
             <row>
-              <entry><literal><!--quickbook-escape-prefix-->This*Isn't*Bold (no bold)<!--quickbook-escape-postfix--></literal></entry><entry>This*Isn't*Bold (no bold)</entry>
+              <entry><literal>This*Isn't*Bold (no bold)</literal></entry><entry>This*Isn't*Bold (no bold)</entry>
             </row>
             <row>
-              <entry><literal><!--quickbook-escape-prefix-->(*Bold Inside*) (parenthesis not bold)<!--quickbook-escape-postfix--></literal></entry><entry>(<emphasis role="bold">Bold
+              <entry><literal>(*Bold Inside*) (parenthesis not bold)</literal></entry><entry>(<emphasis role="bold">Bold
               Inside</emphasis>) (parenthesis not bold)</entry>
             </row>
             <row>
-              <entry><literal><!--quickbook-escape-prefix-->*(Bold Outside)* (parenthesis bold)<!--quickbook-escape-postfix--></literal></entry><entry><emphasis role="bold">(Bold
+              <entry><literal>*(Bold Outside)* (parenthesis bold)</literal></entry><entry><emphasis role="bold">(Bold
               Outside)</emphasis> (parenthesis bold)</entry>
             </row>
             <row>
-              <entry><literal><!--quickbook-escape-prefix-->3*4*5 = 60 (no bold)<!--quickbook-escape-postfix--></literal></entry><entry>3*4*5 = 60 (no bold)</entry>
+              <entry><literal>3*4*5 = 60 (no bold)</literal></entry><entry>3*4*5 = 60 (no bold)</entry>
             </row>
             <row>
-              <entry><literal><!--quickbook-escape-prefix-->3 * 4 * 5 = 60 (no bold)<!--quickbook-escape-postfix--></literal></entry><entry>3 * 4 * 5 = 60 (no bold)</entry>
+              <entry><literal>3 * 4 * 5 = 60 (no bold)</literal></entry><entry>3 * 4 * 5 = 60 (no bold)</entry>
             </row>
             <row>
-              <entry><literal><!--quickbook-escape-prefix-->3 *4* 5 = 60 (4 is bold)<!--quickbook-escape-postfix--></literal></entry><entry>3 <emphasis role="bold">4</emphasis>
+              <entry><literal>3 *4* 5 = 60 (4 is bold)</literal></entry><entry>3 <emphasis role="bold">4</emphasis>
               5 = 60 (4 is bold)</entry>
             </row>
             <row>
-              <entry><literal><!--quickbook-escape-prefix-->*This is bold* this is not *but this is*<!--quickbook-escape-postfix--></literal></entry><entry><emphasis role="bold">This
+              <entry><literal>*This is bold* this is not *but this is*</literal></entry><entry><emphasis role="bold">This
               is bold</emphasis> this is not <emphasis role="bold">but this is</emphasis></entry>
             </row>
             <row>
-              <entry><literal><!--quickbook-escape-prefix-->*This is bold*.<!--quickbook-escape-postfix--></literal></entry><entry><emphasis role="bold">This
+              <entry><literal>*This is bold*.</literal></entry><entry><emphasis role="bold">This
               is bold</emphasis>.</entry>
             </row>
             <row>
-              <entry><literal><!--quickbook-escape-prefix-->*B*. (bold B)<!--quickbook-escape-postfix--></literal></entry><entry><emphasis role="bold">B</emphasis>.
+              <entry><literal>*B*. (bold B)</literal></entry><entry><emphasis role="bold">B</emphasis>.
               (bold B)</entry>
             </row>
             <row>
-              <entry><literal><!--quickbook-escape-prefix-->['*Bold-Italic*]<!--quickbook-escape-postfix--></literal></entry><entry><emphasis><emphasis role="bold">Bold-Italic</emphasis></emphasis></entry>
+              <entry><literal>['*Bold-Italic*]</literal></entry><entry><emphasis><emphasis role="bold">Bold-Italic</emphasis></emphasis></entry>
             </row>
           </tbody>
         </tgroup>
@@ -406,8 +406,8 @@ the true business precept.]
             <phrase>note</phrase>
           </textobject>
           </inlinemediaobject> Note that we simply enclose the code with the tick:
-          <literal><!--quickbook-escape-prefix-->"`"<!--quickbook-escape-postfix--></literal>, not the single quote: <code><phrase role="string">&quot;'&quot;</phrase></code>.
-          Note too that <literal><!--quickbook-escape-prefix-->`some code`<!--quickbook-escape-postfix--></literal> is preferred over <literal><!--quickbook-escape-prefix-->[^some code]<!--quickbook-escape-postfix--></literal>.
+          <literal>"`"</literal>, not the single quote: <code><phrase role="string">&quot;'&quot;</phrase></code>.
+          Note too that <literal>`some code`</literal> is preferred over <literal>[^some code]</literal>.
         </para>
       </section>
       <section id="quickbook.syntax.phrase.code_blocks">
@@ -528,8 +528,8 @@ C++ comment `// looks like this` whereas a Python comment [python]
 <!--quickbook-escape-postfix--></programlisting>
         <para>
           A named anchor is a hook that can be referenced by a link elsewhere in
-          the document. You can then reference an anchor with <literal><!--quickbook-escape-prefix-->[link named_anchor
-Some link text]<!--quickbook-escape-postfix--></literal>.
+          the document. You can then reference an anchor with <literal>[link named_anchor
+Some link text]</literal>.
           See <link linkend="quickbook.syntax.phrase.anchor_links">Anchor links</link>,
           <link linkend="quickbook.syntax.block.section">Section</link> and <link
           linkend="quickbook.syntax.block.headings">Heading</link>.
@@ -647,8 +647,7 @@ escape (no processing/formatting)
 '''
 </programlisting>
         <para>
-          <!--quickbook-escape-prefix--><emphasis role="bold">This is direct XML markup</emphasis>
-<!--quickbook-escape-postfix-->
+          <emphasis role="bold">This is direct XML markup</emphasis>
         </para>
         <para role="blurb">
           <inlinemediaobject><imageobject><imagedata fileref="images/alert.png"></imagedata></imageobject>
@@ -1336,15 +1335,15 @@ sf_logo
           </textobject>
           </inlinemediaobject> It's a good idea to use macro identifiers that are
           distinguishable. For instance, in this document, macro identifiers have
-          two leading and trailing underscores (e.g. <literal><!--quickbook-escape-prefix-->__spirit__<!--quickbook-escape-postfix--></literal>). The reason
+          two leading and trailing underscores (e.g. <literal>__spirit__</literal>). The reason
           is to avoid unwanted macro replacement.
         </para>
         <para>
           Links (URLS) and images are good candidates for macros. <emphasis role="bold">1</emphasis>)
           They tend to change a lot. It is a good idea to place all links and images
           in one place near the top to make it easy to make changes. <emphasis role="bold">2</emphasis>)
-          The syntax is not pretty. It's easier to read and write, e.g. <literal><!--quickbook-escape-prefix-->__spirit__<!--quickbook-escape-postfix--></literal>
-          than <literal><!--quickbook-escape-prefix-->[@http://spirit.sourceforge.net Spirit]<!--quickbook-escape-postfix--></literal>.
+          The syntax is not pretty. It's easier to read and write, e.g. <literal>__spirit__</literal>
+          than <literal>[@http://spirit.sourceforge.net Spirit]</literal>.
         </para>
         <para>
           Some more examples:
@@ -1390,13 +1389,13 @@ sf_logo
           </thead>
           <tbody>
             <row>
-              <entry><!--quickbook-escape-prefix-->__DATE__<!--quickbook-escape-postfix--></entry><entry>Today's date</entry><entry>2000-Dec-20</entry>
+              <entry>__DATE__</entry><entry>Today's date</entry><entry>2000-Dec-20</entry>
             </row>
             <row>
-              <entry><!--quickbook-escape-prefix-->__TIME__<!--quickbook-escape-postfix--></entry><entry>The current time</entry><entry>12:00:00 PM</entry>
+              <entry>__TIME__</entry><entry>The current time</entry><entry>12:00:00 PM</entry>
             </row>
             <row>
-              <entry><!--quickbook-escape-prefix-->__FILENAME__<!--quickbook-escape-postfix--></entry><entry>Quickbook source filename</entry><entry>NO_FILENAME_MACRO_GENERATED_IN_DEBUG_MODE</entry>
+              <entry>__FILENAME__</entry><entry>Quickbook source filename</entry><entry>NO_FILENAME_MACRO_GENERATED_IN_DEBUG_MODE</entry>
             </row>
           </tbody>
         </tgroup>
@@ -1603,7 +1602,7 @@ sf_logo
         </para>
         <itemizedlist>
           <listitem>
-            The <!--quickbook-escape-prefix-->__FILENAME__<!--quickbook-escape-postfix--> predefined macro will reflect the name of the file currently being
+            The __FILENAME__ predefined macro will reflect the name of the file currently being
             processed.
           </listitem>
           <listitem>
@@ -1642,31 +1641,31 @@ sf_logo
       </thead>
       <tbody>
         <row>
-          <entry>comment</entry><entry><literal><!--[/ some comment]--><!--quickbook-escape-prefix-->[/ some comment]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>comment</entry><entry><literal><!--[/ some comment]-->[/ some comment]</literal></entry><entry><link
           linkend="quickbook.syntax.comments">Comments</link></entry>
         </row>
         <row>
-          <entry><emphasis>italics</emphasis></entry><entry><literal><!--quickbook-escape-prefix-->['italics] or /italics/<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry><emphasis>italics</emphasis></entry><entry><literal>['italics] or /italics/</literal></entry><entry><link
           linkend="quickbook.syntax.phrase.font_styles">Font Styles</link> and <link
           linkend="quickbook.syntax.phrase.simple_formatting">formatting Simple formatting</link></entry>
         </row>
         <row>
-          <entry><emphasis role="bold">bold</emphasis></entry><entry><literal><!--quickbook-escape-prefix-->[*bold] or *bold*<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry><emphasis role="bold">bold</emphasis></entry><entry><literal>[*bold] or *bold*</literal></entry><entry><link
           linkend="quickbook.syntax.phrase.font_styles">Font Styles</link> and <link
           linkend="quickbook.syntax.phrase.simple_formatting">formatting Simple formatting</link></entry>
         </row>
         <row>
-          <entry><emphasis role="underline">underline</emphasis></entry><entry><literal><!--quickbook-escape-prefix-->[_underline] or _underline_<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry><emphasis role="underline">underline</emphasis></entry><entry><literal>[_underline] or _underline_</literal></entry><entry><link
           linkend="quickbook.syntax.phrase.font_styles">Font Styles</link> and <link
           linkend="quickbook.syntax.phrase.simple_formatting">formatting Simple formatting</link></entry>
         </row>
         <row>
-          <entry><literal>teletype</literal></entry><entry><literal><!--quickbook-escape-prefix-->[^teletype] or =teletype=<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry><literal>teletype</literal></entry><entry><literal>[^teletype] or =teletype=</literal></entry><entry><link
           linkend="quickbook.syntax.phrase.font_styles">Font Styles</link> and <link
           linkend="quickbook.syntax.phrase.simple_formatting">formatting Simple formatting</link></entry>
         </row>
         <row>
-          <entry><emphasis role="strikethrough">strikethrough</emphasis></entry><entry><literal><!--quickbook-escape-prefix-->[-strikethrough]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry><emphasis role="strikethrough">strikethrough</emphasis></entry><entry><literal>[-strikethrough]</literal></entry><entry><link
           linkend="quickbook.syntax.phrase.font_styles">Font Styles</link> and <link
           linkend="quickbook.syntax.phrase.simple_formatting">formatting Simple formatting</link></entry>
         </row>
@@ -1675,64 +1674,64 @@ sf_logo
           <replaceable>
             replaceable
           </replaceable>
-          </entry><entry><literal><!--quickbook-escape-prefix-->[~replaceable]<!--quickbook-escape-postfix--></literal></entry><entry><link linkend="quickbook.syntax.phrase.replaceable">Replaceble</link></entry>
+          </entry><entry><literal>[~replaceable]</literal></entry><entry><link linkend="quickbook.syntax.phrase.replaceable">Replaceble</link></entry>
         </row>
         <row>
           <entry>source mode</entry><entry><literal>[c++]</literal> or <literal>[python]</literal></entry><entry><link
           linkend="quickbook.syntax.phrase.source_mode">Source Mode</link></entry>
         </row>
         <row>
-          <entry>inline code</entry><entry><literal><!--quickbook-escape-prefix-->`int main();`<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>inline code</entry><entry><literal>`int main();`</literal></entry><entry><link
           linkend="quickbook.syntax.phrase.inline_code">Inline code</link></entry>
         </row>
         <row>
-          <entry>code block</entry><entry><literal><!--quickbook-escape-prefix-->``int main();``<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>code block</entry><entry><literal>``int main();``</literal></entry><entry><link
           linkend="quickbook.syntax.block.code">Code</link></entry>
         </row>
         <row>
-          <entry>code escape</entry><entry><literal><!--quickbook-escape-prefix-->``from c++ to QuickBook``<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>code escape</entry><entry><literal>``from c++ to QuickBook``</literal></entry><entry><link
           linkend="quickbook.syntax.block.escape_back">Escaping Back To QuickBook</link></entry>
         </row>
         <row>
-          <entry>line break</entry><entry><literal><!--quickbook-escape-prefix-->[br] or \n<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>line break</entry><entry><literal>[br] or \n</literal></entry><entry><link
           linkend="quickbook.syntax.phrase.line_break">line-break</link></entry>
         </row>
         <row>
-          <entry>anchor</entry><entry><literal><!--quickbook-escape-prefix-->[#anchor]<!--quickbook-escape-postfix--></literal></entry><entry><link linkend="quickbook.syntax.phrase.anchors">Anchors</link></entry>
+          <entry>anchor</entry><entry><literal>[#anchor]</literal></entry><entry><link linkend="quickbook.syntax.phrase.anchors">Anchors</link></entry>
         </row>
         <row>
-          <entry>link</entry><entry><literal><!--quickbook-escape-prefix-->[@http://www.boost.org Boost]<!--quickbook-escape-postfix--></literal></entry><entry><link linkend="quickbook.syntax.phrase.links">Links</link></entry>
+          <entry>link</entry><entry><literal>[@http://www.boost.org Boost]</literal></entry><entry><link linkend="quickbook.syntax.phrase.links">Links</link></entry>
         </row>
         <row>
-          <entry>anchor link</entry><entry><literal><!--quickbook-escape-prefix-->[link section.anchor Link text]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>anchor link</entry><entry><literal>[link section.anchor Link text]</literal></entry><entry><link
           linkend="quickbook.syntax.phrase.anchor_links">Anchor links</link></entry>
         </row>
         <row>
-          <entry>refentry link</entry><entry><literal><!--quickbook-escape-prefix-->[link xml.refentry Link text]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>refentry link</entry><entry><literal>[link xml.refentry Link text]</literal></entry><entry><link
           linkend="quickbook.syntax.phrase.refentry_links">refentry links</link></entry>
         </row>
         <row>
-          <entry>function link</entry><entry><literal><!--quickbook-escape-prefix-->[funcref fully::qualified::function_name Link text]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>function link</entry><entry><literal>[funcref fully::qualified::function_name Link text]</literal></entry><entry><link
           linkend="quickbook.syntax.phrase.code_links">function, class, member, enum
           or header links</link></entry>
         </row>
         <row>
-          <entry>class link</entry><entry><literal><!--quickbook-escape-prefix-->[classref fully::qualified::class_name Link text]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>class link</entry><entry><literal>[classref fully::qualified::class_name Link text]</literal></entry><entry><link
           linkend="quickbook.syntax.phrase.code_links">function, class, member, enum
           or header links</link></entry>
         </row>
         <row>
-          <entry>member link</entry><entry><literal><!--quickbook-escape-prefix-->[memberref fully::qualified::member_name Link text]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>member link</entry><entry><literal>[memberref fully::qualified::member_name Link text]</literal></entry><entry><link
           linkend="quickbook.syntax.phrase.code_links">function, class, member, enum
           or header links</link></entry>
         </row>
         <row>
-          <entry>enum link</entry><entry><literal><!--quickbook-escape-prefix-->[enumref fully::qualified::enum_name Link text]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>enum link</entry><entry><literal>[enumref fully::qualified::enum_name Link text]</literal></entry><entry><link
           linkend="quickbook.syntax.phrase.code_links">function, class, member, enum
           or header links</link></entry>
         </row>
         <row>
-          <entry>header link</entry><entry><literal><!--quickbook-escape-prefix-->[headerref path/to/header.hpp Link text]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>header link</entry><entry><literal>[headerref path/to/header.hpp Link text]</literal></entry><entry><link
           linkend="quickbook.syntax.phrase.code_links">function, class, member, enum
           or header links</link></entry>
         </row>
@@ -1745,14 +1744,14 @@ sf_logo
           linkend="quickbook.syntax.phrase.single_char_escape">Single char escape</link></entry>
         </row>
         <row>
-          <entry>images</entry><entry><literal><!--quickbook-escape-prefix-->[$image.jpg]<!--quickbook-escape-postfix--></literal></entry><entry><link linkend="quickbook.syntax.phrase.images">Images</link></entry>
+          <entry>images</entry><entry><literal>[$image.jpg]</literal></entry><entry><link linkend="quickbook.syntax.phrase.images">Images</link></entry>
         </row>
         <row>
-          <entry>begin section</entry><entry><literal><!--quickbook-escape-prefix-->[section The Section Title]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>begin section</entry><entry><literal>[section The Section Title]</literal></entry><entry><link
           linkend="quickbook.syntax.block.section">Section</link></entry>
         </row>
         <row>
-          <entry>end section</entry><entry><literal><!--quickbook-escape-prefix-->[endsect]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>end section</entry><entry><literal>[endsect]</literal></entry><entry><link
           linkend="quickbook.syntax.block.section">Section</link></entry>
         </row>
         <row>
@@ -1774,45 +1773,45 @@ sf_logo
           or a tab.</entry><entry><link linkend="quickbook.syntax.block.code">Code</link></entry>
         </row>
         <row>
-          <entry>preformatted</entry><entry><literal><!--quickbook-escape-prefix-->[pre preformatted]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>preformatted</entry><entry><literal>[pre preformatted]</literal></entry><entry><link
           linkend="quickbook.syntax.block.preformatted">Preformatted</link></entry>
         </row>
         <row>
-          <entry>block quote</entry><entry><literal><!--quickbook-escape-prefix-->[:sometext...]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>block quote</entry><entry><literal>[:sometext...]</literal></entry><entry><link
           linkend="quickbook.syntax.block.blockquote">Blockquote</link></entry>
         </row>
         <row>
-          <entry>heading 1</entry><entry><literal><!--quickbook-escape-prefix-->[h1 Heading 1]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>heading 1</entry><entry><literal>[h1 Heading 1]</literal></entry><entry><link
           linkend="quickbook.syntax.block.headings">Heading</link></entry>
         </row>
         <row>
-          <entry>heading 2</entry><entry><literal><!--quickbook-escape-prefix-->[h2 Heading 2]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>heading 2</entry><entry><literal>[h2 Heading 2]</literal></entry><entry><link
           linkend="quickbook.syntax.block.headings">Heading</link></entry>
         </row>
         <row>
-          <entry>heading 3</entry><entry><literal><!--quickbook-escape-prefix-->[h3 Heading 3]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>heading 3</entry><entry><literal>[h3 Heading 3]</literal></entry><entry><link
           linkend="quickbook.syntax.block.headings">Heading</link></entry>
         </row>
         <row>
-          <entry>heading 4</entry><entry><literal><!--quickbook-escape-prefix-->[h4 Heading 4]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>heading 4</entry><entry><literal>[h4 Heading 4]</literal></entry><entry><link
           linkend="quickbook.syntax.block.headings">Heading</link></entry>
         </row>
         <row>
-          <entry>heading 5</entry><entry><literal><!--quickbook-escape-prefix-->[h5 Heading 5]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>heading 5</entry><entry><literal>[h5 Heading 5]</literal></entry><entry><link
           linkend="quickbook.syntax.block.headings">Heading</link></entry>
         </row>
         <row>
-          <entry>heading 6</entry><entry><literal><!--quickbook-escape-prefix-->[h6 Heading 6]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>heading 6</entry><entry><literal>[h6 Heading 6]</literal></entry><entry><link
           linkend="quickbook.syntax.block.headings">Heading</link></entry>
         </row>
         <row>
-          <entry>macro</entry><entry><literal><!--quickbook-escape-prefix-->[def macro_identifier some text]<!--quickbook-escape-postfix--></literal></entry><entry><link linkend="quickbook.syntax.block.macros">Macros</link></entry>
+          <entry>macro</entry><entry><literal>[def macro_identifier some text]</literal></entry><entry><link linkend="quickbook.syntax.block.macros">Macros</link></entry>
         </row>
         <row>
-          <entry>blurb</entry><entry><literal><!--quickbook-escape-prefix-->[blurb advertisement or note...]<!--quickbook-escape-postfix--></literal></entry><entry><link linkend="quickbook.syntax.block.blurbs">Blurbs</link></entry>
+          <entry>blurb</entry><entry><literal>[blurb advertisement or note...]</literal></entry><entry><link linkend="quickbook.syntax.block.blurbs">Blurbs</link></entry>
         </row>
         <row>
-          <entry>admonition</entry><entry><literal><!--quickbook-escape-prefix-->[warning Warning text...]<!--quickbook-escape-postfix--></literal></entry><entry><link
+          <entry>admonition</entry><entry><literal>[warning Warning text...]</literal></entry><entry><link
           linkend="quickbook.syntax.block.admonitions">Admonitions</link></entry>
         </row>
         <row>
@@ -1825,7 +1824,7 @@ sf_logo
           Lists</link></entry>
         </row>
         <row>
-          <entry>include</entry><entry><literal><!--quickbook-escape-prefix-->[include someother.qbk]<!--quickbook-escape-postfix--></literal></entry><entry><link linkend="quickbook.syntax.block.include">Include</link></entry>
+          <entry>include</entry><entry><literal>[include someother.qbk]</literal></entry><entry><link linkend="quickbook.syntax.block.include">Include</link></entry>
         </row>
       </tbody>
     </tgroup>

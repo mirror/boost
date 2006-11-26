@@ -279,7 +279,14 @@ namespace quickbook
                     [
                         bind(&tidy_grammar::do_escape, &self, _1, _2)
                     ]
-                     >> lexeme_d[str_p("<!--quickbook-escape-postfix-->") >> *space_p]
+                    >> lexeme_d
+                        [
+                            str_p("<!--quickbook-escape-postfix-->") >> 
+                            (*space_p)
+                            [
+                                bind(&tidy_grammar::do_escape_post, &self, _1, _2)
+                            ]
+                        ]
                     ;
                 
                 start_tag = '<' >> tag >> *(anychar_p - '>') >> lexeme_d['>' >> *space_p];
@@ -310,6 +317,12 @@ namespace quickbook
             rule<Scanner>   tidy, tag, start_tag, start_end_tag,
                             content, end_tag, markup, code, escape;
         };
+
+        void do_escape_post(iter_type f, iter_type l) const
+        {
+            for (iter_type i = f; i != l; ++i)
+                state.out += *i;
+        }
 
         void do_escape(iter_type f, iter_type l) const
         {
