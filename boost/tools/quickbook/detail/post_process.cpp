@@ -273,8 +273,12 @@ namespace quickbook
                 // It is there to preserve the space after the tag that is
                 // otherwise consumed by the space_p skipper.
                 
-                escape = str_p("<!--quickbook-escape-prefix-->") >> 
+                escape = 
+                    str_p("<!--quickbook-escape-prefix-->") >> 
                     *(anychar_p - str_p("<!--quickbook-escape-postfix-->"))
+                     [
+                        bind(&tidy_grammar::do_escape, &self, _1, _2)
+                     ]
                      >> lexeme_d[str_p("<!--quickbook-escape-postfix-->") >> *space_p]
                     ;
                 
@@ -289,7 +293,7 @@ namespace quickbook
                 end_tag = "</" >> +(anychar_p - '>') >> lexeme_d['>' >> *space_p];
 
                 markup = 
-                        escape          [bind(&tidy_grammar::do_escape, &self, _1, _2)]
+                        escape
                     |   code            [bind(&tidy_grammar::do_code, &self, _1, _2)]
                     |   start_end_tag   [bind(&tidy_grammar::do_start_end_tag, &self, _1, _2)]
                     |   start_tag       [bind(&tidy_grammar::do_start_tag, &self, _1, _2)]
