@@ -275,10 +275,10 @@ namespace quickbook
                 
                 escape = 
                     str_p("<!--quickbook-escape-prefix-->") >> 
-                    *(anychar_p - str_p("<!--quickbook-escape-postfix-->"))
-                     [
+                    (*(anychar_p - str_p("<!--quickbook-escape-postfix-->")))
+                    [
                         bind(&tidy_grammar::do_escape, &self, _1, _2)
-                     ]
+                    ]
                      >> lexeme_d[str_p("<!--quickbook-escape-postfix-->") >> *space_p]
                     ;
                 
