@@ -17,12 +17,7 @@ rule independent-obj-build (
   for local cpp-source in $(cpp-sources)
   {
     obj $(name)$(cpp-source)
-      : $(directory)/$(cpp-source).cpp
-        # Some platforms have either problems with the automatic detection of
-        # the threading mode (e.g. vc-7_1 & gcc >= 3.4.0) or don't support
-        # single-threaded mode (e.g. vc-8_0). We therefore manually turn MT
-        # off here
-      : <threading>single:<define>BOOST_DISABLE_THREADS $(requirements) ;
+      : $(directory)/$(cpp-source).cpp : $(requirements) ;
     objs += $(name)$(cpp-source) ;
   }
 
@@ -34,7 +29,12 @@ rule statechart-st-example-build (
 {
   exe $(name) : [ independent-obj-build $(name)
                     : $(directory) : $(cpp-sources)
-                    : <threading>single $(requirements) ] ;
+                    # Some platforms have either problems with the automatic
+                    # detection of the threading mode (e.g. vc-7_1 &
+                    # gcc >= 3.4.0) or don't support single-threaded mode
+                    # (e.g. vc-8_0). We therefore manually turn MT
+                    # off here
+                    : <define>BOOST_DISABLE_THREADS $(requirements) ] ;
 
   return $(name) ;
 }

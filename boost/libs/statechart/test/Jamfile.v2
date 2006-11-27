@@ -6,7 +6,8 @@
 
 project libs/statechart/test ;
 
-local test_monitor = ../../../libs/test/build//boost_test_exec_monitor/<link>static ;
+local test_monitor =
+  ../../../libs/test/build//boost_test_exec_monitor/<link>static ;
 # Some platforms have either problems with the automatic detection of the
 # threading mode (e.g. vc-7_1 & gcc >= 3.4.0) or don't support single-
 # threaded mode (e.g. vc-8_0). We therefore manually turn MT off here
@@ -25,9 +26,7 @@ rule independent-obj-build ( name : cpp-sources + : requirements * )
 
   for local cpp-source in $(cpp-sources)
   {
-    obj $(name)$(cpp-source)
-      : $(cpp-source).cpp
-      : <threading>single:$(st-requirements) $(requirements) ;
+    obj $(name)$(cpp-source) : $(cpp-source).cpp : $(requirements) ;
     objs += $(name)$(cpp-source) ;
   }
 
@@ -39,22 +38,20 @@ rule statechart-st-lib ( name : cpp-sources + : requirements * )
   lib $(name)
     : [ independent-obj-build $(name)
           : $(cpp-sources)
-          : <threading>single <link>shared:$(dll-export) $(requirements) ] ;
+          : $(st-requirements) <link>shared:$(dll-export) $(requirements) ] ;
   
   return $(name) ;
 }
 
 rule statechart-run ( name : sources + : requirements * )
 {
-  return [ run $(sources) $(test_monitor) : :
-             : <threading>single:$(st-requirements) $(requirements)
-             : $(name) ] ;
+  return [ run $(sources) $(test_monitor) : : : $(requirements) : $(name) ] ;
 }
 
 rule statechart-st-run ( name : sources + : requirements * )
 {
   return [ statechart-run $(name)
-             : $(sources) : <threading>single $(requirements) ] ;
+             : $(sources) : $(st-requirements) $(requirements) ] ;
 }
 
 rule statechart-st-run-variants ( cpp-source )
@@ -107,7 +104,7 @@ rule statechart-st-lib-run (
 rule statechart-st-compile-example ( name : directory : cpp-sources + )
 {
   return [ link ../example/$(directory)/$(cpp-sources).cpp
-             : <threading>single $(st-requirements) : $(name)Example ] ;
+             : $(st-requirements) : $(name)Example ] ;
 }
 
 test-suite statechart
