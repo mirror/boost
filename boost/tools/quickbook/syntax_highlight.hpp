@@ -84,7 +84,7 @@ namespace quickbook
                     ;
 
                 preprocessor
-                    =   '#' >> ((alpha_p | '_') >> *(alnum_p | '_'))
+                    =   '#' >> *space_p >> ((alpha_p | '_') >> *(alnum_p | '_'))
                     ;
 
                 comment

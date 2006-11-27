@@ -279,7 +279,7 @@ namespace quickbook
                     [
                         bind(&tidy_grammar::do_escape, &self, _1, _2)
                     ]
-                    >> lexeme_d
+                    >>  lexeme_d
                         [
                             str_p("<!--quickbook-escape-postfix-->") >> 
                             (*space_p)
