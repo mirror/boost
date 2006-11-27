@@ -38,7 +38,7 @@ rule statechart-st-lib ( name : cpp-sources + : requirements * )
   lib $(name)
     : [ independent-obj-build $(name)
           : $(cpp-sources)
-          : $(st-requirements) <link>shared:$(dll-export) $(requirements) ] ;
+          : <threading>single $(st-requirements) <link>shared:$(dll-export) $(requirements) ] ;
   
   return $(name) ;
 }
@@ -51,7 +51,7 @@ rule statechart-run ( name : sources + : requirements * )
 rule statechart-st-run ( name : sources + : requirements * )
 {
   return [ statechart-run $(name)
-             : $(sources) : $(st-requirements) $(requirements) ] ;
+             : $(sources) : <threading>single $(st-requirements) $(requirements) ] ;
 }
 
 rule statechart-st-run-variants ( cpp-source )
@@ -104,7 +104,7 @@ rule statechart-st-lib-run (
 rule statechart-st-compile-example ( name : directory : cpp-sources + )
 {
   return [ link ../example/$(directory)/$(cpp-sources).cpp
-             : $(st-requirements) : $(name)Example ] ;
+             : <threading>single $(st-requirements) : $(name)Example ] ;
 }
 
 test-suite statechart

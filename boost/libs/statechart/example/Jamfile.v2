@@ -34,7 +34,7 @@ rule statechart-st-example-build (
                     # gcc >= 3.4.0) or don't support single-threaded mode
                     # (e.g. vc-8_0). We therefore manually turn MT
                     # off here
-                    : <define>BOOST_DISABLE_THREADS $(requirements) ] ;
+                    : <threading>single <define>BOOST_DISABLE_THREADS $(requirements) ] ;
 
   return $(name) ;
 }
