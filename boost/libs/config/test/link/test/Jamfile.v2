@@ -86,9 +86,24 @@ run ../main.cpp link_test
   : : : <link>static <runtime-link>shared <threading>multi release : link_test_dyn_multi_release ;
 
 run ../main.cpp link_test
+  : : : <link>static <runtime-link>shared <threading>single debug : link_test_dyn_single_debug ;
+
+run ../main.cpp link_test
+  : : : <link>static <runtime-link>shared <threading>single release : link_test_dyn_single_release ;
+
+run ../main.cpp link_test
   : : : <define>BOOST_DYN_LINK=1 <link>shared <runtime-link>shared <threading>multi debug : link_test_dll_dyn_multi_debug ;
 
 run ../main.cpp link_test
   : : : <define>BOOST_DYN_LINK=1 <link>shared <runtime-link>shared <threading>multi release : link_test_dll_dyn_multi_release ;
+
+run ../main.cpp link_test
+  : : : <define>BOOST_DYN_LINK=1 <link>shared <runtime-link>shared <threading>single debug : link_test_dll_dyn_single_debug ;
+
+run ../main.cpp link_test
+  : : : <define>BOOST_DYN_LINK=1 <link>shared <runtime-link>shared <threading>single release : link_test_dll_dyn_single_release ;
+
+
+
 
 
