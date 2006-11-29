@@ -2640,6 +2640,7 @@ which require that the argument types are references.
 <row><entry><literal><![CDATA[&]]></literal></entry><entry><literal><![CDATA[other_action<address_of_action>]]></literal></entry></row>
 <row><entry><literal><![CDATA[*]]></literal></entry><entry><literal><![CDATA[other_action<contents_of_action>]]></literal></entry></row>
 <row><entry><literal><![CDATA[,]]></literal></entry><entry><literal><![CDATA[other_action<comma_action>]]></literal></entry></row>
+<row><entry><literal><![CDATA[->*]]></literal></entry><entry><literal><![CDATA[other_action<member_pointer_action>]]></literal></entry></row>
 
 </tbody>
 </tgroup>
