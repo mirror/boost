@@ -41,6 +41,7 @@ namespace boost { namespace wave { namespace cpplexer { namespace lexertl
 #endif
 #define INIT_DATA_CPP_SIZE          15
 #define INIT_DATA_PP_NUMBER_SIZE    2
+#define INIT_MACRO_DATA_SIZE        25
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace lexer
@@ -62,7 +63,7 @@ public:
     wave::token_id next_token(Iterator &first, Iterator const &last,
         string_type& token_value);
     
-    void init_dfa(wave::language_support lang);
+    void init_dfa(wave::language_support lang, Position const& pos);
     
 private:
     ::lexertl::rules rules_;
@@ -70,13 +71,18 @@ private:
     bool has_compiled_dfa;
     
 // initialization data (regular expressions for the token definitions)
+    struct lexer_macro_data {
+        char_type const *name;          // macro name
+        char_type const *macro;         // associated macro definition
+    };
+    static lexer_macro_data const init_macro_data[INIT_MACRO_DATA_SIZE];    // macro patterns
+    
     struct lexer_data {
         token_id tokenid;               // token data
         char_type const *tokenregex;    // associated token to match
     };
-
-    static lexer_data const init_data[INIT_DATA_SIZE];          // common patterns
-    static lexer_data const init_data_cpp[INIT_DATA_CPP_SIZE];  // C++ only patterns
+    static lexer_data const init_data[INIT_DATA_SIZE];              // common patterns
+    static lexer_data const init_data_cpp[INIT_DATA_CPP_SIZE];      // C++ only patterns
     static lexer_data const init_data_pp_number[INIT_DATA_PP_NUMBER_SIZE];  // pp-number only patterns
 };
 
@@ -142,6 +148,51 @@ private:
 
 #define PP_NUMBERDEF        Q(".") "?" DIGIT "(" DIGIT OR NONDIGIT OR EXPSTART OR Q(".") ")*"
 
+//  helper for initializing macro definitions
+#define MACRO_DATA(name, macro) { name, macro }
+
+// lexertl macro definitions
+template <typename Iterator, typename Position>
+typename lexertl<Iterator, Position>::lexer_macro_data const 
+lexertl<Iterator, Position>::init_macro_data[INIT_MACRO_DATA_SIZE] = 
+{
+    MACRO_DATA("TRI", "\\?\\?"),
+    MACRO_DATA("BLANK", "[ \\t]"),
+    MACRO_DATA("CCOMMENT", "\\/\\*[^*]*\\*+([^/*][^*]*\\*+)*\\/"),
+    MACRO_DATA("PPSPACE", "({BLANK}|{CCOMMENT})*"),
+    MACRO_DATA("OCTALDIGIT", "[0-7]"),
+    MACRO_DATA("DIGIT", "[0-9]"),
+    MACRO_DATA("HEXDIGIT", "[0-9a-fA-F]"),
+    MACRO_DATA("OPTSIGN", "[-+]?"),
+    MACRO_DATA("EXPSTART", "[eE][-+]"),
+    MACRO_DATA("EXPONENT", "([eE]{OPTSIGN}{DIGIT}+)"),
+    MACRO_DATA("NONDIGIT", "[a-zA-Z_]"),
+    MACRO_DATA("INTEGER", "((0x|0X){HEXDIGIT}+|0{OCTALDIGIT}*|[1-9]{DIGIT}*)"),
+    MACRO_DATA("INTEGER_SUFFIX", "([uU][lL]?|[lL][uU]?)"),
+#if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
+    MACRO_DATA("LONGINTEGER_SUFFIX", "([uU]([lL][lL])|([lL][lL])[uU]?|i64)"),
+#else
+    MACRO_DATA("LONGINTEGER_SUFFIX", "([uU]([lL][lL])|([lL][lL])[uU]?)"),
+#endif
+    MACRO_DATA("FLOAT_SUFFIX", "([fF][lL]?|[lL][fF]?)"),
+    MACRO_DATA("CHAR_SPEC", "L?"),
+    MACRO_DATA("BACKSLASH", "(\\\\|{TRI}\\/)"),
+    MACRO_DATA("ESCAPESEQ", "{BACKSLASH}([abfnrtv?'\"]|{BACKSLASH}|x{HEXDIGIT}+|{OCTALDIGIT}{1,3})"),
+    MACRO_DATA("HEXQUAD", "{HEXDIGIT}{4}"),
+    MACRO_DATA("UNIVERSALCHAR", "{BACKSLASH}(u{HEXQUAD}|U{HEXQUAD}{2})"),
+    MACRO_DATA("POUNDDEF", "(#|{TRI}=|\\%:)"),
+    MACRO_DATA("NEWLINEDEF", "(\\n|\\r|\\r\\n)"),
+#if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
+    MACRO_DATA("INCLUDEDEF", "(include|include_next)"),
+#else
+    MACRO_DATA("INCLUDEDEF", "include"),
+#endif
+    MACRO_DATA("PP_NUMBERDEF", "\\.?{DIGIT}({DIGIT}|{NONDIGIT}|{EXPSTART}|\\.)*"),
+    MACRO_DATA(NULL, NULL)      // should be the last entry
+};
+
+#undef MACRO_DATA
+
 //  helper for initializing token data
 #define TOKEN_DATA(id, regex) { id, regex }
 
@@ -155,13 +206,13 @@ lexertl<Iterator, Position>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(T_ASSIGN, "="),
     TOKEN_DATA(T_ANDASSIGN, "&="),
     TOKEN_DATA(T_OR, Q("|")),
-    TOKEN_DATA(T_OR_TRIGRAPH, TRI("!")),
+    TOKEN_DATA(T_OR_TRIGRAPH, "{TRI}!"),
     TOKEN_DATA(T_ORASSIGN, Q("|=")),
-    TOKEN_DATA(T_ORASSIGN_TRIGRAPH, TRI("!=")),
+    TOKEN_DATA(T_ORASSIGN_TRIGRAPH, "{TRI}!="),
     TOKEN_DATA(T_XOR, Q("^")),
-    TOKEN_DATA(T_XOR_TRIGRAPH, TRI("'")),
+    TOKEN_DATA(T_XOR_TRIGRAPH, "{TRI}'"),
     TOKEN_DATA(T_XORASSIGN, Q("^=")),
-    TOKEN_DATA(T_XORASSIGN_TRIGRAPH, TRI("'=")),
+    TOKEN_DATA(T_XORASSIGN_TRIGRAPH, "{TRI}'="),
     TOKEN_DATA(T_COMMA, ","),
     TOKEN_DATA(T_COLON, ":"),
     TOKEN_DATA(T_DIVIDEASSIGN, Q("/=")),
@@ -173,13 +224,13 @@ lexertl<Iterator, Position>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(T_GREATEREQUAL, ">="),
     TOKEN_DATA(T_LEFTBRACE, Q("{")),
     TOKEN_DATA(T_LEFTBRACE_ALT, "<" Q("%")),
-    TOKEN_DATA(T_LEFTBRACE_TRIGRAPH, TRI("<")),
+    TOKEN_DATA(T_LEFTBRACE_TRIGRAPH, "{TRI}<"),
     TOKEN_DATA(T_LESS, "<"),
     TOKEN_DATA(T_LESSEQUAL, "<="),
     TOKEN_DATA(T_LEFTPAREN, Q("(")),
     TOKEN_DATA(T_LEFTBRACKET, Q("[")),
     TOKEN_DATA(T_LEFTBRACKET_ALT, "<:"),
-    TOKEN_DATA(T_LEFTBRACKET_TRIGRAPH, TRI(Q("("))),
+    TOKEN_DATA(T_LEFTBRACKET_TRIGRAPH, "{TRI}" Q("(")),
     TOKEN_DATA(T_MINUS, Q("-")),
     TOKEN_DATA(T_MINUSASSIGN, Q("-=")),
     TOKEN_DATA(T_MINUSMINUS, Q("-") Q("-")),
@@ -188,7 +239,7 @@ lexertl<Iterator, Position>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(T_NOT, "!"),
     TOKEN_DATA(T_NOTEQUAL, "!="),
     TOKEN_DATA(T_OROR, Q("|") Q("|")),
-    TOKEN_DATA(T_OROR_TRIGRAPH, TRI("!") Q("|") OR Q("|") TRI("!") OR TRI("!") TRI("!")),
+    TOKEN_DATA(T_OROR_TRIGRAPH, "({TRI}!\\|)|(\\|{TRI}!)|({TRI}!{TRI}!)"),
     TOKEN_DATA(T_PLUS, Q("+")),
     TOKEN_DATA(T_PLUSASSIGN, Q("+=")),
     TOKEN_DATA(T_PLUSPLUS, Q("+") Q("+")),
@@ -196,11 +247,11 @@ lexertl<Iterator, Position>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(T_QUESTION_MARK, Q("?")),
     TOKEN_DATA(T_RIGHTBRACE, Q("}")),
     TOKEN_DATA(T_RIGHTBRACE_ALT, Q("%>")),
-    TOKEN_DATA(T_RIGHTBRACE_TRIGRAPH, TRI(">")),
+    TOKEN_DATA(T_RIGHTBRACE_TRIGRAPH, "{TRI}>"),
     TOKEN_DATA(T_RIGHTPAREN, Q(")")),
     TOKEN_DATA(T_RIGHTBRACKET, Q("]")),
     TOKEN_DATA(T_RIGHTBRACKET_ALT, ":>"),
-    TOKEN_DATA(T_RIGHTBRACKET_TRIGRAPH, TRI(Q(")"))),
+    TOKEN_DATA(T_RIGHTBRACKET_TRIGRAPH, "{TRI}" Q(")")),
     TOKEN_DATA(T_SEMICOLON, ";"),
     TOKEN_DATA(T_SHIFTLEFT, "<<"),
     TOKEN_DATA(T_SHIFTLEFTASSIGN, "<<="),
@@ -208,7 +259,7 @@ lexertl<Iterator, Position>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(T_SHIFTRIGHTASSIGN, ">>="),
     TOKEN_DATA(T_STAR, Q("*")),
     TOKEN_DATA(T_COMPL, Q("~")),
-    TOKEN_DATA(T_COMPL_TRIGRAPH, TRI("-")),
+    TOKEN_DATA(T_COMPL_TRIGRAPH, "{TRI}-"),
     TOKEN_DATA(T_STARASSIGN, Q("*=")),
     TOKEN_DATA(T_ASM, "asm"),
     TOKEN_DATA(T_AUTO, "auto"),
@@ -273,24 +324,21 @@ lexertl<Iterator, Position>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(T_VOLATILE, "volatile"),
     TOKEN_DATA(T_WCHART, "wchar_t"),
     TOKEN_DATA(T_WHILE, "while"),
-    TOKEN_DATA(T_PP_DEFINE, POUNDDEF PPSPACE "define"),
-    TOKEN_DATA(T_PP_IF, POUNDDEF PPSPACE "if"),
-    TOKEN_DATA(T_PP_IFDEF, POUNDDEF PPSPACE "ifdef"),
-    TOKEN_DATA(T_PP_IFNDEF, POUNDDEF PPSPACE "ifndef"),
-    TOKEN_DATA(T_PP_ELSE, POUNDDEF PPSPACE "else"),
-    TOKEN_DATA(T_PP_ELIF, POUNDDEF PPSPACE "elif"),
-    TOKEN_DATA(T_PP_ENDIF, POUNDDEF PPSPACE "endif"),
-    TOKEN_DATA(T_PP_ERROR, POUNDDEF PPSPACE "error"),
-    TOKEN_DATA(T_PP_QHEADER, POUNDDEF PPSPACE \
-        INCLUDEDEF PPSPACE Q("\"") "[^\\n\\r\"]+" Q("\"")),
-    TOKEN_DATA(T_PP_HHEADER, POUNDDEF PPSPACE \
-        INCLUDEDEF PPSPACE "<" "[^\\n\\r>]+" ">"),
-    TOKEN_DATA(T_PP_INCLUDE, POUNDDEF PPSPACE \
-        INCLUDEDEF PPSPACE),
-    TOKEN_DATA(T_PP_LINE, POUNDDEF PPSPACE "line"),
-    TOKEN_DATA(T_PP_PRAGMA, POUNDDEF PPSPACE "pragma"),
-    TOKEN_DATA(T_PP_UNDEF, POUNDDEF PPSPACE "undef"),
-    TOKEN_DATA(T_PP_WARNING, POUNDDEF PPSPACE "warning"),
+    TOKEN_DATA(T_PP_DEFINE, "{POUNDDEF}{PPSPACE}define"),
+    TOKEN_DATA(T_PP_IF, "{POUNDDEF}{PPSPACE}if"),
+    TOKEN_DATA(T_PP_IFDEF, "{POUNDDEF}{PPSPACE}ifdef"),
+    TOKEN_DATA(T_PP_IFNDEF, "{POUNDDEF}{PPSPACE}ifndef"),
+    TOKEN_DATA(T_PP_ELSE, "{POUNDDEF}{PPSPACE}else"),
+    TOKEN_DATA(T_PP_ELIF, "{POUNDDEF}{PPSPACE}elif"),
+    TOKEN_DATA(T_PP_ENDIF, "{POUNDDEF}{PPSPACE}endif"),
+    TOKEN_DATA(T_PP_ERROR, "{POUNDDEF}{PPSPACE}error"),
+    TOKEN_DATA(T_PP_QHEADER, "{POUNDDEF}{PPSPACE}{INCLUDEDEF}{PPSPACE}" Q("\"") "[^\\n\\r\"]+" Q("\"")),
+    TOKEN_DATA(T_PP_HHEADER, "{POUNDDEF}{PPSPACE}{INCLUDEDEF}{PPSPACE}" "<" "[^\\n\\r>]+" ">"),
+    TOKEN_DATA(T_PP_INCLUDE, "{POUNDDEF}{PPSPACE}{INCLUDEDEF}{PPSPACE}"),
+    TOKEN_DATA(T_PP_LINE, "{POUNDDEF}{PPSPACE}line"),
+    TOKEN_DATA(T_PP_PRAGMA, "{POUNDDEF}{PPSPACE}pragma"),
+    TOKEN_DATA(T_PP_UNDEF, "{POUNDDEF}{PPSPACE}undef"),
+    TOKEN_DATA(T_PP_WARNING, "{POUNDDEF}{PPSPACE}warning"),
 #if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
     TOKEN_DATA(T_MSEXT_INT8, "__int8"),
     TOKEN_DATA(T_MSEXT_INT16, "__int16"),
@@ -307,39 +355,40 @@ lexertl<Iterator, Position>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(T_MSEXT_LEAVE, "__leave"),
     TOKEN_DATA(T_MSEXT_INLINE, "_?" "_inline"),
     TOKEN_DATA(T_MSEXT_ASM, "_?" "_asm"),
-    TOKEN_DATA(T_MSEXT_PP_REGION, POUNDDEF PPSPACE "region"),
-    TOKEN_DATA(T_MSEXT_PP_ENDREGION, POUNDDEF PPSPACE "endregion"),
+    TOKEN_DATA(T_MSEXT_PP_REGION, "{POUNDDEF}{PPSPACE}region"),
+    TOKEN_DATA(T_MSEXT_PP_ENDREGION, "{POUNDDEF}{PPSPACE}endregion"),
 #endif // BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
-    TOKEN_DATA(T_LONGINTLIT, INTEGER LONGINTEGER_SUFFIX),
-    TOKEN_DATA(T_INTLIT, INTEGER INTEGER_SUFFIX "?"),
+    TOKEN_DATA(T_LONGINTLIT, "{INTEGER}{LONGINTEGER_SUFFIX}"),
+    TOKEN_DATA(T_INTLIT, "{INTEGER}{INTEGER_SUFFIX}?"),
     TOKEN_DATA(T_FLOATLIT, 
-        "(" DIGIT "*" Q(".") DIGIT "+" OR DIGIT "+" Q(".") ")" 
-        EXPONENT "?" FLOAT_SUFFIX "?" OR
-        DIGIT "+" EXPONENT FLOAT_SUFFIX "?"),
+        "(" "{DIGIT}*" Q(".") "{DIGIT}+|{DIGIT}+" Q(".") "){EXPONENT}?{FLOAT_SUFFIX}?|"
+        "{DIGIT}+{EXPONENT}{FLOAT_SUFFIX}?"),
 #if BOOST_WAVE_USE_STRICT_LEXER != 0
-    TOKEN_DATA(T_IDENTIFIER, "([a-zA-Z_]" OR UNIVERSALCHAR ")([a-zA-Z0-9_]" OR UNIVERSALCHAR ")*"),
+    TOKEN_DATA(T_IDENTIFIER, 
+        "({NONDIGIT}|{UNIVERSALCHAR})({NONDIGIT}|{DIGIT}|{UNIVERSALCHAR})*"),
 #else
-    TOKEN_DATA(T_IDENTIFIER, "([a-zA-Z_$]" OR UNIVERSALCHAR ")([a-zA-Z0-9_$]" OR UNIVERSALCHAR ")*"),
+    TOKEN_DATA(T_IDENTIFIER, 
+        "({NONDIGIT}|" Q("$") "|{UNIVERSALCHAR})({NONDIGIT}|{DIGIT}|" Q("$") "|{UNIVERSALCHAR})*"),
 #endif
-    TOKEN_DATA(T_CCOMMENT, CCOMMENT),
-    TOKEN_DATA(T_CPPCOMMENT, Q("/") Q("/[^\\n\\r]*") NEWLINEDEF ),
-    TOKEN_DATA(T_CHARLIT, CHAR_SPEC "'" 
-                "(" ESCAPESEQ OR "[^\\n\\r']" OR UNIVERSALCHAR ")+" "'"),
-    TOKEN_DATA(T_STRINGLIT, CHAR_SPEC Q("\"") 
-                "(" ESCAPESEQ OR "[^\\n\\r\"]" OR UNIVERSALCHAR ")*" Q("\"")),
-    TOKEN_DATA(T_SPACE, BLANK "+"),
+    TOKEN_DATA(T_CCOMMENT, "{CCOMMENT}"),
+    TOKEN_DATA(T_CPPCOMMENT, Q("/") Q("/[^\\n\\r]*") "{NEWLINEDEF}" ),
+    TOKEN_DATA(T_CHARLIT, 
+        "{CHAR_SPEC}" "'" "({ESCAPESEQ}|[^\\n\\r']|{UNIVERSALCHAR})+" "'"),
+    TOKEN_DATA(T_STRINGLIT, 
+        "{CHAR_SPEC}" Q("\"") "({ESCAPESEQ}|[^\\n\\r\"]|{UNIVERSALCHAR})*" Q("\"")),
+    TOKEN_DATA(T_SPACE, "{BLANK}+"),
     TOKEN_DATA(T_SPACE2, "[\\v\\f]+"),
     TOKEN_DATA(T_CONTLINE, Q("\\") "\\n"), 
-    TOKEN_DATA(T_NEWLINE, NEWLINEDEF),
+    TOKEN_DATA(T_NEWLINE, "{NEWLINEDEF}"),
     TOKEN_DATA(T_POUND_POUND, "##"),
     TOKEN_DATA(T_POUND_POUND_ALT, Q("%:") Q("%:")),
-    TOKEN_DATA(T_POUND_POUND_TRIGRAPH, TRI("=") TRI("=")),
+    TOKEN_DATA(T_POUND_POUND_TRIGRAPH, "({TRI}=){2}"),
     TOKEN_DATA(T_POUND, "#"),
     TOKEN_DATA(T_POUND_ALT, Q("%:")),
-    TOKEN_DATA(T_POUND_TRIGRAPH, TRI("=")),
-    TOKEN_DATA(T_ANY_TRIGRAPH, TRI(Q("/"))),
+    TOKEN_DATA(T_POUND_TRIGRAPH, "{TRI}="),
+    TOKEN_DATA(T_ANY_TRIGRAPH, "{TRI}\\/"),
     TOKEN_DATA(T_ANY, "."),     // this should be the last recognized token
-    { token_id(0) }       // this should be the last entry
+    { token_id(0) }             // this should be the last entry
 };
 
 // C++ only token definitions
@@ -372,7 +421,7 @@ template <typename Iterator, typename Position>
 typename lexertl<Iterator, Position>::lexer_data const 
 lexertl<Iterator, Position>::init_data_pp_number[INIT_DATA_PP_NUMBER_SIZE] = 
 {
-    TOKEN_DATA(T_PP_NUMBER, PP_NUMBERDEF),
+    TOKEN_DATA(T_PP_NUMBER, "{PP_NUMBERDEF}"),
     { token_id(0) }       // this should be the last entry
 };
 
@@ -382,11 +431,17 @@ lexertl<Iterator, Position>::init_data_pp_number[INIT_DATA_PP_NUMBER_SIZE] =
 // initialize lexertl lexer from C++ token regex's
 template <typename Iterator, typename Position>
 inline void
-lexertl<Iterator, Position>::init_dfa(wave::language_support lang)
+lexertl<Iterator, Position>::init_dfa(wave::language_support lang, 
+    Position const& pos)
 {
     if (has_compiled_dfa)
         return;
-        
+
+// register macro definitions
+    for (int k = 0; NULL != init_macro_data[k].name; ++k) {
+        rules_.add_macro(init_macro_data[k].name, init_macro_data[k].macro);
+    }
+
 // if pp-numbers should be preferred, insert the corresponding rule first
     if (wave::need_prefer_pp_numbers(lang)) {
         for (int j = 0; 0 != init_data_pp_number[j].tokenid; ++j) {
@@ -408,10 +463,18 @@ lexertl<Iterator, Position>::init_dfa(wave::language_support lang)
     }
 
 // generate minimized DFA
-    ::lexertl::generator::build (rules_, state_machine_);
-    ::lexertl::generator::minimise_dfa (state_machine_._dfa_alphabet,
-        state_machine_._dfa);
-
+    try {
+        ::lexertl::generator::build (rules_, state_machine_);
+        ::lexertl::generator::minimise_dfa (state_machine_._dfa_alphabet,
+            state_machine_._dfa);
+    }
+    catch (std::runtime_error const& e) {
+        string_type msg("lexertl initialization error: ");
+        msg += e.what();
+        BOOST_WAVE_LEXER_THROW(boost::wave::cpplexer::lexing_exception, 
+            unexpected_error, msg.c_str(), 
+            pos.get_line(), pos.get_column(), pos.get_file().c_str());
+    }
     has_compiled_dfa = true;
 }
 
@@ -471,7 +534,7 @@ public:
             Position const &pos_, wave::language_support language)
     :   first(first_, last_, pos_), language(language), at_eof(false)
     {
-        lexer_.init_dfa(language);
+        lexer_.init_dfa(language, pos_);
     }
     ~lexertl_functor() {}
 
