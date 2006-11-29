@@ -313,6 +313,11 @@ public:
                 IS_CATEGORY(prev, KeywordTokenType))
                 return true;
             break;
+            
+        case T_STAR:
+            if (T_STAR == prev)
+                return false;     // '*****' do not need to be separated
+            break;
         }
 
     // else, handle operators separately

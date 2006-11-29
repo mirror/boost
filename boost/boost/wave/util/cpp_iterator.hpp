@@ -494,7 +494,6 @@ pp_iterator_functor<ContextT>::operator()()
     // must emit a #line directive
         if (need_emit_line_directives(ctx.get_language()) && emit_line_directive()) 
         {
-            // feed ws eater FSM
             skipped_newline = false;
 //             ctx.get_hooks().may_skip_whitespace(ctx, act_token, skipped_newline);
             id = token_id(act_token);
@@ -502,7 +501,6 @@ pp_iterator_functor<ContextT>::operator()()
     }
     
 // cleanup of certain tokens required
-    seen_newline = skipped_newline;
     switch (static_cast<unsigned int>(id)) {
     case T_NONREPLACABLE_IDENTIFIER:
         act_token.set_token_id(T_IDENTIFIER);
@@ -547,6 +545,9 @@ pp_iterator_functor<ContextT>::operator()()
         break;
 
     default:
+        // make sure whitespace at line begin keeps seen_newline status
+        if (IS_CATEGORY(id, WhiteSpaceTokenType))
+            seen_newline = skipped_newline;
         break;
     }
 
