@@ -498,7 +498,7 @@ public:
                     case T_IDENTIFIER:
                     // test identifier characters for validity (throws if 
                     // invalid chars found)
-                        if (!boost::wave::need_no_character_validation(language))) {
+                        if (!boost::wave::need_no_character_validation(language)) {
                             using boost::wave::cpplexer::impl::validate_identifier_name;
                             validate_identifier_name(token_val, 
                                 pos.get_line(), pos.get_column(), pos.get_file()); 
@@ -513,7 +513,7 @@ public:
                             using wave::cpplexer::impl::convert_trigraphs;
                             token_val = convert_trigraphs(token_val); 
                         }
-                        if (!boost::wave::need_option_no_character_validation(language)) {
+                        if (!boost::wave::need_no_character_validation(language)) {
                             using wave::cpplexer::impl::validate_literal;
                             validate_literal(token_val, 
                                 pos.get_line(), pos.get_column(), pos.get_file()); 
