@@ -16,6 +16,7 @@ exe real_positions
         ../instantiate_defined_grammar
         ../instantiate_re2c_lexer 
         /boost/wave//boost_wave
-        /boost/wave//boost_filesystem
+        /boost/filesystem//boost_filesystem
+        /boost/system//boost_system
     ;  
 

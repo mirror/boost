@@ -32,17 +32,21 @@ TESTWAVE_ARGUMENTS =
 TESTWAVE_FILES = test.cfg
     ;
 
-
 project wave/test
     : requirements
-        <toolset-msvc:version>7.1:<rtti>off   # workaround for compiler bug
-#        <os>NT:<runtime-link>static
         <threading>single
         <variant>debug
         <define>BOOST_LIB_DIAGNOSTIC=1
-	<define>BOOST_ALL_NO_LIB=1
-	<link>shared:<define>BOOST_ALL_DYN_LINK=1
+	      <define>BOOST_ALL_NO_LIB=1
+	      <link>shared:<define>BOOST_ALL_DYN_LINK=1
     ;
+
+for local source in $(SOURCES)
+{
+    local requirements ;
+    requirements += <toolset-msvc:version>7.1:<rtti>off ; # workaround for compiler bug
+    obj $(source) : $(source).cpp : $(requirements) ;
+}
 
 #
 # Wave test suite
@@ -56,6 +60,7 @@ test-suite wave
                 /boost/wave//boost_wave 
                 /boost/program_options//boost_program_options
                 /boost/filesystem//boost_filesystem    
+                /boost/system//boost_system    
             :
             # arguments
                 $(TESTWAVE_ARGUMENTS) 
@@ -76,6 +81,7 @@ test-suite wave
                 /boost/wave//boost_wave/<link>static
                 /boost/program_options//boost_program_options/<link>static
                 /boost/filesystem//boost_filesystem/<link>static
+                /boost/system//boost_system/<link>static
             :
             # arguments
                 $(TESTWAVE_ARGUMENTS) 
@@ -84,7 +90,7 @@ test-suite wave
             # input files
             : 
             # requirements
-	    <link>static     # Linking to DLL tested by testwave_dll
+	              <link>static     # Linking to DLL tested by testwave_dll
             : 
             # name
                 testwave
@@ -96,6 +102,9 @@ test-suite wave
             # sources
                 ../testlexers/test_slex_lexer.cpp
                 /boost/wave//boost_wave
+                /boost/program_options//boost_program_options
+                /boost/filesystem//boost_filesystem
+                /boost/system//boost_system
             :
             # arguments
             :
@@ -112,6 +121,9 @@ test-suite wave
             # sources
                 ../testlexers/test_re2c_lexer.cpp
                 /boost/wave//boost_wave
+                /boost/program_options//boost_program_options
+                /boost/filesystem//boost_filesystem
+                /boost/system//boost_system
             :
             # arguments
             :

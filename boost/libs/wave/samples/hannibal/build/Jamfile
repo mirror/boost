@@ -15,6 +15,7 @@ exe hannibal
       <lib>../../../build/boost_wave
       <lib>../../../../../libs/program_options/build/boost_program_options
       <lib>../../../../../libs/filesystem/build/boost_filesystem
+      <lib>../../../../../libs/system/build/boost_system
     :
       <sysinclude>$(BOOST_ROOT)
       <vc-7_1><*><rtti>off        # workaround for compiler bug

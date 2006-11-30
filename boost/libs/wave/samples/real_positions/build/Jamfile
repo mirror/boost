@@ -19,6 +19,7 @@ exe real_positions
       ../instantiate_re2c_lexer.cpp 
       <lib>../../../build/boost_wave
       <lib>../../../../../libs/filesystem/build/boost_filesystem
+      <lib>../../../../../libs/system/build/boost_system
     :
       <sysinclude>$(BOOST_ROOT)
       <vc-7_1><*><rtti>off        # workaround for compiler bug

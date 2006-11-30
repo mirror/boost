@@ -21,6 +21,7 @@ exe token_statistics
         /boost/wave//boost_wave
         /boost/program_options//boost_program_options
         /boost/filesystem//boost_filesystem     
+        /boost/system//boost_system     
     ;
 
 for local source in $(SOURCES)
