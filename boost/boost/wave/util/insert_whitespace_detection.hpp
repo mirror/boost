@@ -205,13 +205,17 @@ namespace impl {
 class insert_whitespace_detection 
 {
 public:
-    insert_whitespace_detection() 
-    :   prev(boost::wave::T_EOF), beforeprev(boost::wave::T_EOF) 
+    insert_whitespace_detection(bool insert_whitespace_ = true) 
+    :   insert_whitespace(insert_whitespace_),
+        prev(boost::wave::T_EOF), beforeprev(boost::wave::T_EOF) 
     {}
     
     template <typename StringT>
     bool must_insert(boost::wave::token_id current, StringT const &value)
     {
+        if (!insert_whitespace)
+            return false;       // skip whitespace insertion alltogether
+            
         using namespace boost::wave;
         switch (static_cast<unsigned int>(current)) {
         case T_NONREPLACABLE_IDENTIFIER:
@@ -330,11 +334,14 @@ public:
     }
     void shift_tokens (boost::wave::token_id next_id)
     {
-        beforeprev = prev;
-        prev = next_id;
+        if (insert_whitespace) {
+            beforeprev = prev;
+            prev = next_id;
+        }
     }
     
 private:
+    bool insert_whitespace;            // enable this component
     boost::wave::token_id prev;        // the previous analyzed token
     boost::wave::token_id beforeprev;  // the token before the previous
 };

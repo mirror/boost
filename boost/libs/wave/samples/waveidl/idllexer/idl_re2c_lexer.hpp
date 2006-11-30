@@ -140,14 +140,14 @@ lexer<IteratorT, PositionT>::get()
     
     if (T_IDENTIFIER == id) {
     // test identifier characters for validity (throws if invalid chars found)
-        if (!(language & support_option_no_character_validation)) {
+        if (!boost::wave::need_no_character_validation(language)) {
             boost::wave::cpplexer::impl::validate_identifier_name(value, 
                 scanner.line, -1, filename); 
         }
     }
     else if (T_STRINGLIT == id || T_CHARLIT == id) {
     // test literal characters for validity (throws if invalid chars found)
-        if (!(language & support_option_no_character_validation)) {
+        if (!boost::wave::need_no_character_validation(language)) {
             boost::wave::cpplexer::impl::validate_literal(value, scanner.line, 
                 -1, filename); 
         }

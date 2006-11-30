@@ -74,6 +74,13 @@ CHANGELOG
   lexer for Wave.
 - Changed the list_includes sample to use a lexer which is based on the lexertl 
   library written by Ben Hanson (http://www.benhanson.net/lexertl.html).
+- Added a new support_option: insert_whitespace, allowing to switch off 
+  whitespace insertion which is normally (by default) in place to disambiugate
+  C++ tokens, which would otherwise form different tokens in the output.
+- Added a new commandline option to the Wave applet: --disambiguate, allowing
+  to control whitespace insertion. The default value for this option is 
+  --disambiguate=1, resembling the previous behaviour. Specifying the option
+  --disambiguate=0 allows to suppress whitespace insertion alltogether.
   
 Boost V1.34.0
 - Wave Version 1.2.4

@@ -602,7 +602,7 @@ public:
                     case T_IDENTIFIER:
                     // test identifier characters for validity (throws if 
                     // invalid chars found)
-                        if (!(language & support_option_no_character_validation)) {
+                        if (!boost::wave::need_no_character_validation(language)) {
                             using boost::wave::cpplexer::impl::validate_identifier_name;
                             validate_identifier_name(token_val, 
                                 pos.get_line(), pos.get_column(), pos.get_file()); 
@@ -613,11 +613,11 @@ public:
                     case T_CHARLIT:
                     // test literal characters for validity (throws if invalid 
                     // chars found)
-                        if (language & support_option_convert_trigraphs) {
+                        if (boost::wave::need_convert_trigraphs(language)) {
                             using boost::wave::cpplexer::impl::convert_trigraphs;
                             token_val = convert_trigraphs(token_val); 
                         }
-                        if (!(language & support_option_no_character_validation)) {
+                        if (!boost::wave::need_no_character_validation(language)) {
                             using boost::wave::cpplexer::impl::validate_literal;
                             validate_literal(token_val, 
                                 pos.get_line(), pos.get_column(), pos.get_file()); 
@@ -666,7 +666,7 @@ public:
                     case T_COMPL_TRIGRAPH:
                     case T_POUND_TRIGRAPH:
                     case T_ANY_TRIGRAPH:
-                        if (language & support_option_convert_trigraphs)
+                        if (boost::wave::need_convert_trigraphs(language))
                         {
                             using boost::wave::cpplexer::impl::convert_trigraph;
                             token_val = convert_trigraph(token_val);

@@ -528,7 +528,8 @@ testwave_app::extract_special_information(std::string const& filename,
             boost::wave::support_option_variadics | 
             boost::wave::support_option_long_long |
             boost::wave::support_option_no_character_validation |
-            boost::wave::support_option_convert_trigraphs);
+            boost::wave::support_option_convert_trigraphs |
+            boost::wave::support_option_insert_whitespace);
     
     position_type pos(filename.c_str());
     lexer_type it = lexer_type(instr.begin(), instr.end(), pos, lang_opts);
@@ -754,6 +755,7 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm,
 #if BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES != 0
               | boost::wave::support_option_emit_pragma_directives
 #endif
+              | boost::wave::support_option_insert_whitespace
             ));
     }
     else if (vm.count("variadics")) {

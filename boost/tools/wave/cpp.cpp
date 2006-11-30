@@ -659,6 +659,7 @@ int error_count = 0;
 #if BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES != 0
                  |  boost::wave::support_option_emit_pragma_directives
 #endif
+                 |  boost::wave::support_option_insert_whitespace
                 ));
         }
         else if (vm.count("variadics")) {
@@ -690,9 +691,28 @@ int error_count = 0;
         
     // control the generation of #line directives
         if (vm.count("line")) {
+            int lineopt = vm["line"].as<int>();
+            if (0 != lineopt && 1 != lineopt) {
+                cerr << "wave: bogus value for --line command line option: " 
+                    << lineopt << endl;
+                return -1;
+            }
             ctx.set_language(
                 boost::wave::enable_emit_line_directives(ctx.get_language(), 
-                    vm["line"].as<int>() != 0));
+                    lineopt != 0));
+        }
+
+    // control whether whitespace should be inserted to disambiguate output
+        if (vm.count("disambiguate")) {
+            int disambiguateopt = vm["disambiguate"].as<int>();
+            if (0 != disambiguateopt && 1 != disambiguateopt) {
+                cerr << "wave: bogus value for --disambiguate command line option: " 
+                    << disambiguateopt << endl;
+                return -1;
+            }
+            ctx.set_language(
+                boost::wave::enable_insert_whitespace(ctx.get_language(), 
+                    disambiguateopt != 0));
         }
 
     // add include directories to the system include search paths
@@ -1029,8 +1049,13 @@ main (int argc, char *argv[])
                             "2: all whitespace is preserved")
             ("line,L", po::value<int>()->default_value(1), 
                 "control the generation of #line directives\n"
-                            "0: no #line directives are generated\n"
+                            "0: no #line directives are generated,\n"
                             "1: #line directives will be emitted (default)")
+            ("disambiguate", po::value<int>()->default_value(1), 
+                "control whitespace insertion to disambiguate\n"
+                "consecutive tokens\n"
+                            "0: no additional whitespace is generated,\n"
+                            "1: whitespace is used to disambiguate output (default)")
             ("extended,x", "enable the #pragma wave system() directive")
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
             ("noguard,G", "disable include guard detection")

@@ -171,7 +171,7 @@ lexer<IteratorT, PositionT>::get()
     // test identifier characters for validity (throws if invalid chars found)
         value = string_type((char const *)scanner.tok, 
             scanner.cur-scanner.tok);
-        if (!(language & support_option_no_character_validation))
+        if (!boost::wave::need_no_character_validation(language))
             impl::validate_identifier_name(value, actline, scanner.column, filename); 
         break;
  
@@ -180,9 +180,9 @@ lexer<IteratorT, PositionT>::get()
     // test literal characters for validity (throws if invalid chars found)
         value = string_type((char const *)scanner.tok, 
             scanner.cur-scanner.tok);
-        if (language & support_option_convert_trigraphs)
+        if (boost::wave::need_convert_trigraphs(language))
             value = impl::convert_trigraphs(value); 
-        if (!(language & support_option_no_character_validation))
+        if (!boost::wave::need_no_character_validation(language))
             impl::validate_literal(value, actline, scanner.column, filename); 
         break;
 
@@ -244,7 +244,7 @@ lexer<IteratorT, PositionT>::get()
     case T_RIGHTBRACKET_TRIGRAPH:
     case T_COMPL_TRIGRAPH:
     case T_POUND_TRIGRAPH:
-        if (language & support_option_convert_trigraphs) {
+        if (boost::wave::need_convert_trigraphs(language)) {
             value = cache.get_token_value(BASEID_FROM_TOKEN(id));
         }
         else {
@@ -254,7 +254,7 @@ lexer<IteratorT, PositionT>::get()
         break;
         
     case T_ANY_TRIGRAPH:
-        if (language & support_option_convert_trigraphs) {
+        if (boost::wave::need_convert_trigraphs(language)) {
             value = impl::convert_trigraph(
                 string_type((char const *)scanner.tok)); 
         }

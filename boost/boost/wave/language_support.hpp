@@ -35,7 +35,8 @@ enum language_support {
     support_c99 = support_option_variadics | support_option_long_long | 0x08,
 #endif 
 
-    support_option_mask = 0xFF00,
+    support_option_mask = 0xFF80,
+    support_option_insert_whitespace = 0x0080,
     support_option_preserve_comments = 0x0100,
     support_option_no_character_validation = 0x0200,
     support_option_convert_trigraphs = 0x0400,
@@ -151,6 +152,7 @@ set_support_options(language_support language, language_support option)
     
 ///////////////////////////////////////////////////////////////////////////////
 BOOST_WAVE_OPTION(long_long)                // support_option_long_long
+BOOST_WAVE_OPTION(no_character_validation)  // support_option_no_character_validation
 BOOST_WAVE_OPTION(preserve_comments)        // support_option_preserve_comments
 BOOST_WAVE_OPTION(prefer_pp_numbers)        // support_option_prefer_pp_numbers
 BOOST_WAVE_OPTION(emit_line_directives)     // support_option_emit_line_directives
@@ -165,6 +167,7 @@ BOOST_WAVE_OPTION(variadics)                // support_option_variadics
 #if BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES != 0
 BOOST_WAVE_OPTION(emit_pragma_directives)   // support_option_emit_pragma_directives
 #endif
+BOOST_WAVE_OPTION(insert_whitespace)        // support_option_insert_whitespace
 
 #undef BOOST_WAVE_NEED_OPTION
 #undef BOOST_WAVE_ENABLE_OPTION

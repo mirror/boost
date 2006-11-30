@@ -83,7 +83,7 @@ class context : private boost::noncopyable
 public:
 
 // concept checks
-// the given iterator shall be at least a forward iterator type
+// the given iterator should be at least a forward iterator type
     BOOST_CLASS_REQUIRE(IteratorT, boost, ForwardIteratorConcept);
     
 // public typedefs
@@ -133,6 +133,7 @@ public:
 #if BOOST_WAVE_EMIT_PRAGMA_DIRECTIVES != 0
                     | support_option_emit_pragma_directives
 #endif
+                    | support_option_insert_whitespace
                    ))
         , hooks(hooks_)
     {

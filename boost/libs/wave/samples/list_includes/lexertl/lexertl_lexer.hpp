@@ -89,67 +89,10 @@ private:
 ///////////////////////////////////////////////////////////////////////////////
 // token regex definitions
 
-#define OR                  "|"
-#define Q(c)                "\\" c
-#define TRI(c)              Q("?") Q("?") c
-
-// definition of some sub-token regexp's to simplify the regex definitions
-#define BLANK               "[ \\t]"
-#define CCOMMENT            \
-    Q("/") Q("*") "[^*]*" Q("*") "+" "(" "[^/*][^*]*" Q("*") "+" ")*" Q("/")
-        
-#define PPSPACE             "(" BLANK OR CCOMMENT ")*"
-
-#define OCTALDIGIT          "[0-7]"
-#define DIGIT               "[0-9]"
-#define HEXDIGIT            "[0-9a-fA-F]"
-#define OPTSIGN             "[-+]?"
-#define EXPSTART            "[eE]" "[-+]"
-#define EXPONENT            "(" "[eE]" OPTSIGN "[0-9]+" ")"
-#define NONDIGIT            "[a-zA-Z_]"
-
-#define INTEGER             \
-    "(" "(0x|0X)" HEXDIGIT "+" OR "0" OCTALDIGIT "*" OR "[1-9]" DIGIT "*" ")"
-            
-#define INTEGER_SUFFIX      "(" "[uU][lL]?|[lL][uU]?" ")"
-#if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
-#define LONGINTEGER_SUFFIX  "(" "[uU]" "(" "[lL][lL]" ")" OR \
-                                "(" "[lL][lL]" ")" "[uU]" "?" OR \
-                                "i64" \
-                            ")" 
-#else
-#define LONGINTEGER_SUFFIX  "(" "[uU]" "(" "[lL][lL]" ")" OR \
-                            "(" "[lL][lL]" ")" "[uU]" "?" ")"
-#endif
-#define FLOAT_SUFFIX        "(" "[fF][lL]?|[lL][fF]?" ")"
-#define CHAR_SPEC           "L?"
-
-#define BACKSLASH           "(" Q("\\") OR TRI(Q("/")) ")"
-#define ESCAPESEQ           BACKSLASH "(" \
-                                "[abfnrtv?'\"]" OR \
-                                BACKSLASH OR \
-                                "x" HEXDIGIT "+" OR \
-                                OCTALDIGIT OCTALDIGIT "?" OCTALDIGIT "?" \
-                            ")"
-#define HEXQUAD             HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT 
-#define UNIVERSALCHAR       BACKSLASH "(" \
-                                "u" HEXQUAD OR \
-                                "U" HEXQUAD HEXQUAD \
-                            ")" 
-
-#define POUNDDEF            "(" "#" OR TRI("=") OR Q("%:") ")"
-#define NEWLINEDEF          "(" "\\n" OR "\\r" OR "\\r\\n" ")"
-
-#if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
-#define INCLUDEDEF          "(include|include_next)"
-#else
-#define INCLUDEDEF          "include"
-#endif
-
-#define PP_NUMBERDEF        Q(".") "?" DIGIT "(" DIGIT OR NONDIGIT OR EXPSTART OR Q(".") ")*"
-
-//  helper for initializing macro definitions
+//  helper for initializing token data and macro definitions
+#define Q(c)                    "\\" c
 #define MACRO_DATA(name, macro) { name, macro }
+#define TOKEN_DATA(id, regex)   { id, regex }
 
 // lexertl macro definitions
 template <typename Iterator, typename Position>
@@ -191,11 +134,6 @@ lexertl<Iterator, Position>::init_macro_data[INIT_MACRO_DATA_SIZE] =
     MACRO_DATA(NULL, NULL)      // should be the last entry
 };
 
-#undef MACRO_DATA
-
-//  helper for initializing token data
-#define TOKEN_DATA(id, regex) { id, regex }
-
 // common C++/C99 token definitions
 template <typename Iterator, typename Position>
 typename lexertl<Iterator, Position>::lexer_data const 
@@ -218,7 +156,7 @@ lexertl<Iterator, Position>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(T_DIVIDEASSIGN, Q("/=")),
     TOKEN_DATA(T_DIVIDE, Q("/")),
     TOKEN_DATA(T_DOT, Q(".")),
-    TOKEN_DATA(T_ELLIPSIS, Q(".") Q(".") Q(".")),
+    TOKEN_DATA(T_ELLIPSIS, Q(".") "{3}"),
     TOKEN_DATA(T_EQUAL, "=="),
     TOKEN_DATA(T_GREATER, ">"),
     TOKEN_DATA(T_GREATEREQUAL, ">="),
@@ -233,16 +171,16 @@ lexertl<Iterator, Position>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(T_LEFTBRACKET_TRIGRAPH, "{TRI}" Q("(")),
     TOKEN_DATA(T_MINUS, Q("-")),
     TOKEN_DATA(T_MINUSASSIGN, Q("-=")),
-    TOKEN_DATA(T_MINUSMINUS, Q("-") Q("-")),
+    TOKEN_DATA(T_MINUSMINUS, Q("-") "{2}"),
     TOKEN_DATA(T_PERCENT, Q("%")),
     TOKEN_DATA(T_PERCENTASSIGN, Q("%=")),
     TOKEN_DATA(T_NOT, "!"),
     TOKEN_DATA(T_NOTEQUAL, "!="),
-    TOKEN_DATA(T_OROR, Q("|") Q("|")),
-    TOKEN_DATA(T_OROR_TRIGRAPH, "({TRI}!\\|)|(\\|{TRI}!)|({TRI}!{TRI}!)"),
+    TOKEN_DATA(T_OROR, Q("|") "{2}"),
+    TOKEN_DATA(T_OROR_TRIGRAPH, "{TRI}!\\||\\|{TRI}!|{TRI}!{TRI}!"),
     TOKEN_DATA(T_PLUS, Q("+")),
     TOKEN_DATA(T_PLUSASSIGN, Q("+=")),
-    TOKEN_DATA(T_PLUSPLUS, Q("+") Q("+")),
+    TOKEN_DATA(T_PLUSPLUS, Q("+") "{2}"),
     TOKEN_DATA(T_ARROW, Q("->")),
     TOKEN_DATA(T_QUESTION_MARK, Q("?")),
     TOKEN_DATA(T_RIGHTBRACE, Q("}")),
@@ -361,7 +299,8 @@ lexertl<Iterator, Position>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(T_LONGINTLIT, "{INTEGER}{LONGINTEGER_SUFFIX}"),
     TOKEN_DATA(T_INTLIT, "{INTEGER}{INTEGER_SUFFIX}?"),
     TOKEN_DATA(T_FLOATLIT, 
-        "(" "{DIGIT}*" Q(".") "{DIGIT}+|{DIGIT}+" Q(".") "){EXPONENT}?{FLOAT_SUFFIX}?|"
+//         "(" "{DIGIT}*" Q(".") "{DIGIT}+|{DIGIT}+" Q(".") "){EXPONENT}?{FLOAT_SUFFIX}?|"
+        "({DIGIT}*\\.{DIGIT}+|{DIGIT}+\\.){EXPONENT}?{FLOAT_SUFFIX}?|"
         "{DIGIT}+{EXPONENT}{FLOAT_SUFFIX}?"),
 #if BOOST_WAVE_USE_STRICT_LEXER != 0
     TOKEN_DATA(T_IDENTIFIER, 
@@ -425,7 +364,9 @@ lexertl<Iterator, Position>::init_data_pp_number[INIT_DATA_PP_NUMBER_SIZE] =
     { token_id(0) }       // this should be the last entry
 };
 
+#undef MACRO_DATA
 #undef TOKEN_DATA
+#undef Q
 
 ///////////////////////////////////////////////////////////////////////////////
 // initialize lexertl lexer from C++ token regex's
@@ -557,7 +498,7 @@ public:
                     case T_IDENTIFIER:
                     // test identifier characters for validity (throws if 
                     // invalid chars found)
-                        if (!(language & support_option_no_character_validation)) {
+                        if (!boost::wave::need_no_character_validation(language))) {
                             using boost::wave::cpplexer::impl::validate_identifier_name;
                             validate_identifier_name(token_val, 
                                 pos.get_line(), pos.get_column(), pos.get_file()); 
@@ -568,11 +509,11 @@ public:
                     case T_CHARLIT:
                     // test literal characters for validity (throws if invalid 
                     // chars found)
-                        if (language & support_option_convert_trigraphs) {
+                        if (boost::wave::need_convert_trigraphs(language)) {
                             using wave::cpplexer::impl::convert_trigraphs;
                             token_val = convert_trigraphs(token_val); 
                         }
-                        if (!(language & support_option_no_character_validation)) {
+                        if (!boost::wave::need_option_no_character_validation(language)) {
                             using wave::cpplexer::impl::validate_literal;
                             validate_literal(token_val, 
                                 pos.get_line(), pos.get_column(), pos.get_file()); 
@@ -621,7 +562,7 @@ public:
                     case T_COMPL_TRIGRAPH:
                     case T_POUND_TRIGRAPH:
                     case T_ANY_TRIGRAPH:
-                        if (language & support_option_convert_trigraphs)
+                        if (boost::wave::need_convert_trigraphs(language))
                         {
                             using wave::cpplexer::impl::convert_trigraph;
                             token_val = convert_trigraph(token_val);

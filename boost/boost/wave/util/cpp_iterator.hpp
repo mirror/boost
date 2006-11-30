@@ -262,7 +262,8 @@ public:
                 pos_.get_file().c_str()
             )), 
         seen_newline(true), must_emit_line_directive(false),
-        act_pos(ctx_.get_main_pos())
+        act_pos(ctx_.get_main_pos()),
+        whitespace(boost::wave::need_insert_whitespace(ctx.get_language()))
     {
         act_pos.set_file(pos_.get_file());
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
@@ -501,6 +502,7 @@ pp_iterator_functor<ContextT>::operator()()
     }
     
 // cleanup of certain tokens required
+    seen_newline = false;
     switch (static_cast<unsigned int>(id)) {
     case T_NONREPLACABLE_IDENTIFIER:
         act_token.set_token_id(T_IDENTIFIER);
