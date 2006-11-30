@@ -412,7 +412,7 @@ lexertl<Iterator, Position>::init_dfa(wave::language_support lang,
     catch (std::runtime_error const& e) {
         string_type msg("lexertl initialization error: ");
         msg += e.what();
-        BOOST_WAVE_LEXER_THROW(boost::wave::cpplexer::lexing_exception, 
+        BOOST_WAVE_LEXER_THROW(wave::cpplexer::lexing_exception, 
             unexpected_error, msg.c_str(), 
             pos.get_line(), pos.get_column(), pos.get_file().c_str());
     }
@@ -498,8 +498,8 @@ public:
                     case T_IDENTIFIER:
                     // test identifier characters for validity (throws if 
                     // invalid chars found)
-                        if (!boost::wave::need_no_character_validation(language)) {
-                            using boost::wave::cpplexer::impl::validate_identifier_name;
+                        if (!wave::need_no_character_validation(language)) {
+                            using wave::cpplexer::impl::validate_identifier_name;
                             validate_identifier_name(token_val, 
                                 pos.get_line(), pos.get_column(), pos.get_file()); 
                         }
@@ -509,11 +509,11 @@ public:
                     case T_CHARLIT:
                     // test literal characters for validity (throws if invalid 
                     // chars found)
-                        if (boost::wave::need_convert_trigraphs(language)) {
+                        if (wave::need_convert_trigraphs(language)) {
                             using wave::cpplexer::impl::convert_trigraphs;
                             token_val = convert_trigraphs(token_val); 
                         }
-                        if (!boost::wave::need_no_character_validation(language)) {
+                        if (!wave::need_no_character_validation(language)) {
                             using wave::cpplexer::impl::validate_literal;
                             validate_literal(token_val, 
                                 pos.get_line(), pos.get_column(), pos.get_file()); 
@@ -524,7 +524,7 @@ public:
                         if (!wave::need_long_long(language)) {
                         // syntax error: not allowed in C++ mode
                             BOOST_WAVE_LEXER_THROW(
-                                boost::wave::cpplexer::lexing_exception, 
+                                wave::cpplexer::lexing_exception, 
                                 invalid_long_long_literal, token_val.c_str(), 
                                 pos.get_line(), pos.get_column(), 
                                 pos.get_file().c_str());
@@ -562,7 +562,7 @@ public:
                     case T_COMPL_TRIGRAPH:
                     case T_POUND_TRIGRAPH:
                     case T_ANY_TRIGRAPH:
-                        if (boost::wave::need_convert_trigraphs(language))
+                        if (wave::need_convert_trigraphs(language))
                         {
                             using wave::cpplexer::impl::convert_trigraph;
                             token_val = convert_trigraph(token_val);
