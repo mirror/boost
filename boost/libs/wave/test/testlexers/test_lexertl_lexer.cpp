@@ -21,8 +21,8 @@
 #endif
 
 //  include the lexertl lexer related stuff
-#include <boost/wave/cpplexer/cpp_lex_token.hpp>                  // token type
-#include <libs/wave/samples/list_includes/lexertl/lexertl_lexer.hpp>   // lexer type
+#include <boost/wave/cpplexer/cpp_lex_token.hpp>                      // token type
+#include <libs/wave/samples/list_includes/lexertl/lexertl_lexer.hpp>  // lexer type
 
 typedef boost::wave::cpplexer::lex_token<> token_type;
 typedef boost::wave::cpplexer::lexertl::lex_iterator<token_type> lexer_type;
@@ -81,7 +81,7 @@ main(int argc, char *argv[])
     catch (boost::wave::cpplexer::lexing_exception &e) {
     // some lexing error
         std::cerr 
-            << "test_re2c_lexer: "
+            << "test_lexertl_lexer: "
             << e.description() << std::endl;
         return (std::numeric_limits<int>::max)() - 1;
     }

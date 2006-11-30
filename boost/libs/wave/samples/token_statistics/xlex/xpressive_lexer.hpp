@@ -75,7 +75,7 @@ public:
     void register_regex(string_type const& regex, Token const& id, 
         Callback const& cb = Callback());
 
-    // match the given input and return the next recognised token
+    // match the given input and return the next recognized token
     Token next_token(Iterator &first, Iterator const& last, string_type& token);
 
 private:
