@@ -634,7 +634,7 @@ namespace boost { namespace numeric { namespace ublas {
 
   /** \brief A class implementing an indexed random access iterator.
    *
-   * \param C the mutable container type
+   * \param C the (mutable) container type
    * \param IC the iterator category
    *
    * This class implements a random access iterator. The current 
@@ -739,7 +739,7 @@ namespace boost { namespace numeric { namespace ublas {
 
   /** \brief A class implementing an indexed random access iterator.
    *
-   * \param C the mutable container type
+   * \param C the (immutable) container type
    * \param IC the iterator category
    *
    * This class implements a random access iterator. The current 
@@ -857,7 +857,7 @@ namespace boost { namespace numeric { namespace ublas {
   /** \brief A class implementing an indexed random access iterator 
    * of a matrix.
    *
-   * \param C the mutable container type
+   * \param C the (mutable) container type
    * \param IC the iterator category
    *
    * This class implements a random access iterator. The current
@@ -1150,7 +1150,7 @@ namespace boost { namespace numeric { namespace ublas {
   /** \brief A class implementing an indexed random access iterator 
    * of a matrix.
    *
-   * \param C the mutable container type
+   * \param C the (mutable) container type
    * \param IC the iterator category
    *
    * This class implements a random access iterator. The current
