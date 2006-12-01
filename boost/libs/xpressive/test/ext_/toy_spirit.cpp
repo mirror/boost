@@ -678,12 +678,12 @@ namespace boost { namespace proto
     {};
 
     template<>
-    struct compiler<terminal_tag, spirit2::no_case_tag>
+    struct compiler<tag::terminal, spirit2::no_case_tag>
       : spirit2::no_case_::no_case_compiler
     {};
 
     template<>
-    struct compiler<function_tag, spirit2::no_case_tag>
+    struct compiler<tag::function, spirit2::no_case_tag>
       : spirit2::no_case_::no_case_compiler
     {};
 

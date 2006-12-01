@@ -102,7 +102,7 @@ namespace boost { namespace proto
 {
     // production for alternates in sequence
     template<>
-    struct compiler<bitor_tag, xpressive::detail::seq_tag, void>
+    struct compiler<tag::bitwise_or, xpressive::detail::seq_tag, void>
       : branch_compiler<xpressive::detail::alt_branch, xpressive::detail::alt_tag>
     {
     };
@@ -116,7 +116,7 @@ namespace boost { namespace proto
 
     // production for alternates in alternate
     template<>
-    struct compiler<bitor_tag, xpressive::detail::alt_tag, void>
+    struct compiler<tag::bitwise_or, xpressive::detail::alt_tag, void>
       : reverse_fold_compiler<xpressive::detail::alt_tag>
     {
     };

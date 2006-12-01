@@ -40,7 +40,7 @@ namespace boost { namespace proto
 {
 
     template<>
-    struct compiler<assign_tag, xpressive::detail::seq_tag, void>
+    struct compiler<tag::assign, xpressive::detail::seq_tag, void>
       : xpressive::detail::assign_compiler
     {
     };

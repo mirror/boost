@@ -53,60 +53,60 @@ namespace boost { namespace proto
     }\
     /**/
 
-    BOOST_PROTO_UNARY_OP(+, unary_plus_tag)
-    BOOST_PROTO_UNARY_OP(-, unary_minus_tag)
-    BOOST_PROTO_UNARY_OP(*, unary_star_tag)
-    BOOST_PROTO_UNARY_OP(~, complement_tag)
-    BOOST_PROTO_UNARY_OP(&, address_of_tag)
-    BOOST_PROTO_UNARY_OP(!, logical_not_tag)
-    BOOST_PROTO_UNARY_OP(++, pre_inc_tag)
-    BOOST_PROTO_UNARY_OP(--, pre_dec_tag)
+    BOOST_PROTO_UNARY_OP(+, tag::unary_plus)
+    BOOST_PROTO_UNARY_OP(-, tag::unary_minus)
+    BOOST_PROTO_UNARY_OP(*, tag::unary_star)
+    BOOST_PROTO_UNARY_OP(~, tag::complement)
+    BOOST_PROTO_UNARY_OP(&, tag::address_of)
+    BOOST_PROTO_UNARY_OP(!, tag::logical_not)
+    BOOST_PROTO_UNARY_OP(++, tag::pre_inc)
+    BOOST_PROTO_UNARY_OP(--, tag::pre_dec)
 
-    BOOST_PROTO_BINARY_OP(<<, left_shift_tag)
-    BOOST_PROTO_BINARY_OP(>>, right_shift_tag)
-    BOOST_PROTO_BINARY_OP(*, multiply_tag)
-    BOOST_PROTO_BINARY_OP(/, divide_tag)
-    BOOST_PROTO_BINARY_OP(%, modulus_tag)
-    BOOST_PROTO_BINARY_OP(+, add_tag)
-    BOOST_PROTO_BINARY_OP(-, subtract_tag)
-    BOOST_PROTO_BINARY_OP(<, less_tag)
-    BOOST_PROTO_BINARY_OP(>, greater_tag)
-    BOOST_PROTO_BINARY_OP(<=, less_equal_tag)
-    BOOST_PROTO_BINARY_OP(>=, greater_equal_tag)
-    BOOST_PROTO_BINARY_OP(==, equal_tag)
-    BOOST_PROTO_BINARY_OP(!=, not_equal_tag)
-    BOOST_PROTO_BINARY_OP(||, logical_or_tag)
-    BOOST_PROTO_BINARY_OP(&&, logical_and_tag)
-    BOOST_PROTO_BINARY_OP(&, bitwise_and_tag)
-    BOOST_PROTO_BINARY_OP(|, bitwise_or_tag)
-    BOOST_PROTO_BINARY_OP(^, bitwise_xor_tag)
-    BOOST_PROTO_BINARY_OP(BOOST_PP_COMMA(), comma_tag)
-    BOOST_PROTO_BINARY_OP(->*, mem_ptr_tag)
+    BOOST_PROTO_BINARY_OP(<<, tag::left_shift)
+    BOOST_PROTO_BINARY_OP(>>, tag::right_shift)
+    BOOST_PROTO_BINARY_OP(*, tag::multiply)
+    BOOST_PROTO_BINARY_OP(/, tag::divide)
+    BOOST_PROTO_BINARY_OP(%, tag::modulus)
+    BOOST_PROTO_BINARY_OP(+, tag::add)
+    BOOST_PROTO_BINARY_OP(-, tag::subtract)
+    BOOST_PROTO_BINARY_OP(<, tag::less)
+    BOOST_PROTO_BINARY_OP(>, tag::greater)
+    BOOST_PROTO_BINARY_OP(<=, tag::less_equal)
+    BOOST_PROTO_BINARY_OP(>=, tag::greater_equal)
+    BOOST_PROTO_BINARY_OP(==, tag::equal)
+    BOOST_PROTO_BINARY_OP(!=, tag::not_equal)
+    BOOST_PROTO_BINARY_OP(||, tag::logical_or)
+    BOOST_PROTO_BINARY_OP(&&, tag::logical_and)
+    BOOST_PROTO_BINARY_OP(&, tag::bitwise_and)
+    BOOST_PROTO_BINARY_OP(|, tag::bitwise_or)
+    BOOST_PROTO_BINARY_OP(^, tag::bitwise_xor)
+    BOOST_PROTO_BINARY_OP(BOOST_PP_COMMA(), tag::comma)
+    BOOST_PROTO_BINARY_OP(->*, tag::mem_ptr)
 
-    BOOST_PROTO_BINARY_OP(<<=, left_shift_assign_tag)
-    BOOST_PROTO_BINARY_OP(>>=, right_shift_assign_tag)
-    BOOST_PROTO_BINARY_OP(*=, multiply_assign_tag)
-    BOOST_PROTO_BINARY_OP(/=, divide_assign_tag)
-    BOOST_PROTO_BINARY_OP(%=, modulus_assign_tag)
-    BOOST_PROTO_BINARY_OP(+=, add_assign_tag)
-    BOOST_PROTO_BINARY_OP(-=, subtract_assign_tag)
-    BOOST_PROTO_BINARY_OP(&=, bitwise_and_assign_tag)
-    BOOST_PROTO_BINARY_OP(|=, bitwise_or_assign_tag)
-    BOOST_PROTO_BINARY_OP(^=, bitwise_xor_assign_tag)
+    BOOST_PROTO_BINARY_OP(<<=, tag::left_shift_assign)
+    BOOST_PROTO_BINARY_OP(>>=, tag::right_shift_assign)
+    BOOST_PROTO_BINARY_OP(*=, tag::multiply_assign)
+    BOOST_PROTO_BINARY_OP(/=, tag::divide_assign)
+    BOOST_PROTO_BINARY_OP(%=, tag::modulus_assign)
+    BOOST_PROTO_BINARY_OP(+=, tag::add_assign)
+    BOOST_PROTO_BINARY_OP(-=, tag::subtract_assign)
+    BOOST_PROTO_BINARY_OP(&=, tag::bitwise_and_assign)
+    BOOST_PROTO_BINARY_OP(|=, tag::bitwise_or_assign)
+    BOOST_PROTO_BINARY_OP(^=, tag::bitwise_xor_assign)
 
     template<typename Tag, typename Args, long Arity>
-    inline expr<post_inc_tag, args1<ref<expr<Tag, Args, Arity> > > > const
+    inline expr<tag::post_inc, args1<ref<expr<Tag, Args, Arity> > > > const
     operator ++(expr<Tag, Args, Arity> const &arg, int)
     {
-        expr<post_inc_tag, args1<ref<expr<Tag, Args, Arity> > > > that = {{arg}};
+        expr<tag::post_inc, args1<ref<expr<Tag, Args, Arity> > > > that = {{arg}};
         return that;
     }
 
     template<typename Tag, typename Args, long Arity>
-    inline expr<post_dec_tag, args1<ref<expr<Tag, Args, Arity> > > > const
+    inline expr<tag::post_dec, args1<ref<expr<Tag, Args, Arity> > > > const
     operator --(expr<Tag, Args, Arity> const &arg, int)
     {
-        expr<post_dec_tag, args1<ref<expr<Tag, Args, Arity> > > > that = {{arg}};
+        expr<tag::post_dec, args1<ref<expr<Tag, Args, Arity> > > > that = {{arg}};
         return that;
     }
 

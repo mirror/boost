@@ -13,6 +13,7 @@
     #define BOOST_PROTO_ARG_TRAITS_HPP_EAN_04_01_2005
 
     #include <boost/ref.hpp>
+    #include <boost/mpl/if.hpp>
     #include <boost/mpl/or.hpp>
     #include <boost/mpl/bool.hpp>
     #include <boost/call_traits.hpp>
@@ -71,7 +72,7 @@
             struct as_expr<T, false>
             {
                 BOOST_STATIC_ASSERT(!is_reference<T>::value);
-                typedef expr<terminal_tag, args1<typename call_traits<T>::value_type> > type;
+                typedef expr<proto::tag::terminal, args1<typename call_traits<T>::value_type> > type;
             };
 
             template<typename T>
@@ -84,7 +85,7 @@
             struct as_expr_ref<T, false>
             {
                 BOOST_STATIC_ASSERT(!is_reference<T>::value);
-                typedef expr<terminal_tag, args1<typename call_traits<T>::value_type> > type;
+                typedef expr<proto::tag::terminal, args1<typename call_traits<T>::value_type> > type;
             };
 
             template<typename T>
@@ -119,7 +120,7 @@
             {
                 BOOST_STATIC_ASSERT(!is_reference<T>::value);
                 typedef typename call_traits<T>::value_type value_type;
-                typedef expr<terminal_tag, args1<value_type> > type;
+                typedef expr<proto::tag::terminal, args1<value_type> > type;
             };
 
             // unary_expr
@@ -143,7 +144,7 @@
             template<typename T>\
             struct Name\
             {\
-                typedef expr<BOOST_PP_CAT(Name, _tag), args1<T> > type;\
+                typedef expr<proto::tag::Name, args1<T> > type;\
             };\
             /**/
 
@@ -151,7 +152,7 @@
             template<typename T, typename U>\
             struct Name\
             {\
-                typedef expr<BOOST_PP_CAT(Name, _tag), args2<T, U> > type;\
+                typedef expr<proto::tag::Name, args2<T, U> > type;\
             };\
             /**/
 
@@ -433,7 +434,7 @@
                 BOOST_PP_ENUM_PARAMS(N, A) 
                 BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT), void >
             {
-                typedef expr<function_tag, BOOST_PP_CAT(args, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
+                typedef expr<proto::tag::function, BOOST_PP_CAT(args, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
             };
         #endif
 

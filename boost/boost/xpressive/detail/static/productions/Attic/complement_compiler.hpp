@@ -34,7 +34,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     //
     template<typename Char, typename Not>
-    struct complement<proto::terminal_tag, literal_placeholder<Char, Not>, void>
+    struct complement<proto::tag::terminal, literal_placeholder<Char, Not>, void>
     {
         template<typename Expr, typename>
         struct apply
@@ -53,7 +53,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     //
     template<typename Traits, int Size>
-    struct complement<proto::terminal_tag, set_matcher<Traits, Size>, void>
+    struct complement<proto::tag::terminal, set_matcher<Traits, Size>, void>
     {
         template<typename Expr, typename>
         struct apply
@@ -73,7 +73,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     //
     template<>
-    struct complement<proto::terminal_tag, posix_charset_placeholder, void>
+    struct complement<proto::tag::terminal, posix_charset_placeholder, void>
     {
         template<typename, typename>
         struct apply
@@ -93,7 +93,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     //
     template<typename Right>
-    struct complement<proto::subscript_tag, set_initializer_type, Right>
+    struct complement<proto::tag::subscript, set_initializer_type, Right>
     {
         template<typename Expr, typename Visitor>
         struct apply
@@ -114,12 +114,12 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // for complementing a list-initialized set, as in ~(set= 'a','b','c')
     template<typename Left, typename Right>
-    struct complement<proto::comma_tag, Left, Right>
+    struct complement<proto::tag::comma, Left, Right>
     {
         // First, convert the parse tree into a set_matcher
         template<typename Expr, typename Visitor>
         struct apply
-          : proto::meta::terminal<typename proto::compiler<proto::comma_tag, lst_tag>
+          : proto::meta::terminal<typename proto::compiler<proto::tag::comma, lst_tag>
                 ::BOOST_NESTED_TEMPLATE apply<
                     Expr
                   , dont_care
@@ -179,7 +179,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     //
     template<>
-    struct complement<proto::terminal_tag, assert_word_placeholder<word_boundary<true> >, void>
+    struct complement<proto::tag::terminal, assert_word_placeholder<word_boundary<true> >, void>
     {
         template<typename Expr, typename Visitor>
         struct apply
@@ -198,7 +198,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     //
     template<>
-    struct complement<proto::terminal_tag, logical_newline_placeholder, void>
+    struct complement<proto::tag::terminal, logical_newline_placeholder, void>
     {
         template<typename Expr, typename Visitor>
         struct apply
@@ -220,7 +220,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // complementing a complement is a no-op
     template<typename Arg>
-    struct complement<proto::complement_tag, Arg, void>
+    struct complement<proto::tag::complement, Arg, void>
     {
         template<typename Expr, typename Visitor>
         struct apply
@@ -238,7 +238,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     //
     template<typename Char>
-    struct complement<proto::terminal_tag, range_placeholder<Char>, void>
+    struct complement<proto::tag::terminal, range_placeholder<Char>, void>
     {
         template<typename Expr, typename Visitor>
         struct apply
@@ -286,7 +286,7 @@ namespace boost { namespace proto
 {
 
     template<>
-    struct compiler<complement_tag, xpressive::detail::seq_tag, void>
+    struct compiler<tag::complement, xpressive::detail::seq_tag, void>
       : transform_compiler<xpressive::detail::complement_transform, xpressive::detail::seq_tag>
     {
     };

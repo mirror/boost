@@ -115,21 +115,21 @@ namespace boost { namespace proto
 
     // production for one or more quant
     template<>
-    struct compiler<unary_plus_tag, xpressive::detail::seq_tag, void>
+    struct compiler<tag::unary_plus, xpressive::detail::seq_tag, void>
       : xpressive::detail::repeater_compiler<true, 1, UINT_MAX-1>
     {
     };
 
     // production for zero or more quant
     template<>
-    struct compiler<unary_star_tag, xpressive::detail::seq_tag, void>
+    struct compiler<tag::unary_star, xpressive::detail::seq_tag, void>
       : xpressive::detail::repeater_compiler<true, 0, UINT_MAX-1>
     {
     };
 
     // production for optional
     template<>
-    struct compiler<logical_not_tag, xpressive::detail::seq_tag, void>
+    struct compiler<tag::logical_not, xpressive::detail::seq_tag, void>
       : xpressive::detail::repeater_compiler<true, 0, 1>
     {
     };
@@ -143,7 +143,7 @@ namespace boost { namespace proto
 
     // production for non-greedy quantifiers
     template<>
-    struct compiler<unary_minus_tag, xpressive::detail::seq_tag, void>
+    struct compiler<tag::unary_minus, xpressive::detail::seq_tag, void>
       : xpressive::detail::min_repeater_compiler
     {
     };

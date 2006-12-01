@@ -82,7 +82,7 @@
         #undef BOOST_PROTO_DEFINE_META_COMPILE
 
             template<typename Expr, typename State, typename Visitor>
-            struct apply_impl<Expr, State, Visitor, terminal_tag, mpl::long_<1> >
+            struct apply_impl<Expr, State, Visitor, tag::terminal, mpl::long_<1> >
             {
                 typedef Expr type;
 

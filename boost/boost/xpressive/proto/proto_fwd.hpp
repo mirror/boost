@@ -9,11 +9,8 @@
 #ifndef BOOST_PROTO_FWD_HPP_EAN_04_01_2005
 #define BOOST_PROTO_FWD_HPP_EAN_04_01_2005
 
-#include <boost/version.hpp>
-#include <boost/mpl/size.hpp>
 #include <boost/type_traits/remove_cv.hpp>
 #include <boost/type_traits/remove_reference.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/mpl/long.hpp>
 #include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
@@ -26,59 +23,109 @@ namespace boost { namespace proto
 {
     ///////////////////////////////////////////////////////////////////////////////
     // Operator tags
-    struct unary_tag;
-    struct binary_tag;
-    struct nary_tag;
+    namespace tag
+    {
+        struct unary;
+        struct binary;
+        struct nary;
 
-    struct terminal_tag;
-    struct unary_plus_tag;
-    struct unary_minus_tag;
-    struct unary_star_tag;
-    struct complement_tag;
-    struct address_of_tag;
-    struct logical_not_tag;
-    struct pre_inc_tag;
-    struct pre_dec_tag;
-    struct post_inc_tag;
-    struct post_dec_tag;
+        struct terminal;
+        struct unary_plus;
+        struct unary_minus;
+        struct unary_star;
+        struct complement;
+        struct address_of;
+        struct logical_not;
+        struct pre_inc;
+        struct pre_dec;
+        struct post_inc;
+        struct post_dec;
 
-    struct left_shift_tag;
-    struct right_shift_tag;
-    struct multiply_tag;
-    struct divide_tag;
-    struct modulus_tag;
-    struct add_tag;
-    struct subtract_tag;
-    struct less_tag;
-    struct greater_tag;
-    struct less_equal_tag;
-    struct greater_equal_tag;
-    struct equal_tag;
-    struct not_equal_tag;
-    struct logical_or_tag;
-    struct logical_and_tag;
-    struct bitwise_and_tag;
-    struct bitwise_or_tag;
-    struct bitwise_xor_tag;
-    struct comma_tag;
-    struct mem_ptr_tag;
+        struct left_shift;
+        struct right_shift;
+        struct multiply;
+        struct divide;
+        struct modulus;
+        struct add;
+        struct subtract;
+        struct less;
+        struct greater;
+        struct less_equal;
+        struct greater_equal;
+        struct equal;
+        struct not_equal;
+        struct logical_or;
+        struct logical_and;
+        struct bitwise_and;
+        struct bitwise_or;
+        struct bitwise_xor;
+        struct comma;
+        struct mem_ptr;
 
-    struct assign_tag;
-    struct left_shift_assign_tag;
-    struct right_shift_assign_tag;
-    struct multiply_assign_tag;
-    struct divide_assign_tag;
-    struct modulus_assign_tag;
-    struct add_assign_tag;
-    struct subtract_assign_tag;
-    struct bitwise_and_assign_tag;
-    struct bitwise_or_assign_tag;
-    struct bitwise_xor_assign_tag;
-    struct subscript_tag;
+        struct assign;
+        struct left_shift_assign;
+        struct right_shift_assign;
+        struct multiply_assign;
+        struct divide_assign;
+        struct modulus_assign;
+        struct add_assign;
+        struct subtract_assign;
+        struct bitwise_and_assign;
+        struct bitwise_or_assign;
+        struct bitwise_xor_assign;
+        struct subscript;
 
-    struct function_tag;
+        struct function;
+    }
 
     // for backwards compatibility
+    typedef tag::unary unary_type;
+    typedef tag::binary binary_tag;
+    typedef tag::nary nary_tag;
+    typedef tag::terminal terminal_tag;
+    typedef tag::unary_plus unary_plus_tag;
+    typedef tag::unary_minus unary_minus_tag;
+    typedef tag::unary_star unary_star_tag;
+    typedef tag::complement complement_tag;
+    typedef tag::address_of address_of_tag;
+    typedef tag::logical_not logical_not_tag;
+    typedef tag::pre_inc pre_inc_tag;
+    typedef tag::pre_dec pre_dec_tag;
+    typedef tag::post_inc post_inc_tag;
+    typedef tag::post_dec post_dec_tag;
+    typedef tag::left_shift left_shift_tag;
+    typedef tag::right_shift right_shift_tag;
+    typedef tag::multiply multiply_tag;
+    typedef tag::divide divide_tag;
+    typedef tag::modulus modulus_tag;
+    typedef tag::add add_tag;
+    typedef tag::subtract subtract_tag;
+    typedef tag::less less_tag;
+    typedef tag::greater greater_tag;
+    typedef tag::less_equal less_equal_tag;
+    typedef tag::greater_equal greater_equal_tag;
+    typedef tag::equal equal_tag;
+    typedef tag::not_equal not_equal_tag;
+    typedef tag::logical_or logical_or_tag;
+    typedef tag::logical_and logical_and_tag;
+    typedef tag::bitwise_and bitwise_and_tag;
+    typedef tag::bitwise_or bitwise_or_tag;
+    typedef tag::bitwise_xor bitwise_xor_tag;
+    typedef tag::comma comma_tag;
+    typedef tag::mem_ptr mem_ptr_tag;
+    typedef tag::assign assign_tag;
+    typedef tag::left_shift_assign left_shift_assign_tag;
+    typedef tag::right_shift_assign right_shift_assign_tag;
+    typedef tag::multiply_assign multiply_assign_tag;
+    typedef tag::divide_assign divide_assign_tag;
+    typedef tag::modulus_assign modulus_assign_tag;
+    typedef tag::add_assign add_assign_tag;
+    typedef tag::subtract_assign subtract_assign_tag;
+    typedef tag::bitwise_and_assign bitwise_and_assign_tag;
+    typedef tag::bitwise_or_assign bitwise_or_assign_tag;
+    typedef tag::bitwise_xor_assign bitwise_xor_assign_tag;
+    typedef tag::subscript subscript_tag;
+    typedef tag::function function_tag;
     typedef bitwise_or_tag bitor_tag;
     typedef bitwise_and_tag bitand_tag;
     typedef bitwise_xor_tag bitxor_tag;

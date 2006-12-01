@@ -28,7 +28,7 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Expr>
     struct is_marker<Expr, 2>
       : mpl::and_<
-            is_same<proto::assign_tag, typename Expr::tag_type>
+            is_same<proto::tag::assign, typename Expr::tag_type>
           , is_same<basic_mark_tag, typename proto::meta::unref<typename Expr::arg0_type>::type>
         >
     {};

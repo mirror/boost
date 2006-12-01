@@ -17,12 +17,12 @@
 namespace boost { namespace xpressive { namespace detail
 {
     template<bool Positive>
-    struct lookahead_tag : proto::unary_tag {};
+    struct lookahead_tag : proto::tag::unary {};
 
     template<bool Positive>
-    struct lookbehind_tag : proto::unary_tag {};
+    struct lookbehind_tag : proto::tag::unary {};
 
-    struct keeper_tag : proto::unary_tag {};
+    struct keeper_tag : proto::tag::unary {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // lookahead_branch

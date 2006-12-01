@@ -90,18 +90,18 @@
             }
 
             template<typename A>
-            expr<assign_tag, args2<ref<expr>, typename meta::as_expr_ref<A>::type> > const
+            expr<tag::assign, args2<ref<expr>, typename meta::as_expr_ref<A>::type> > const
             operator =(A const &a) const
             {
-                expr<assign_tag, args2<ref<expr>, typename meta::as_expr_ref<A>::type> > that = {{*this}, proto::as_expr_ref(a)};
+                expr<tag::assign, args2<ref<expr>, typename meta::as_expr_ref<A>::type> > that = {{*this}, proto::as_expr_ref(a)};
                 return that;
             }
 
             template<typename A>
-            expr<subscript_tag, args2<ref<expr>, typename meta::as_expr_ref<A>::type> > const
+            expr<tag::subscript, args2<ref<expr>, typename meta::as_expr_ref<A>::type> > const
             operator [](A const &a) const
             {
-                expr<subscript_tag, args2<ref<expr>, typename meta::as_expr_ref<A>::type> > that = {{*this}, proto::as_expr_ref(a)};
+                expr<tag::subscript, args2<ref<expr>, typename meta::as_expr_ref<A>::type> > that = {{*this}, proto::as_expr_ref(a)};
                 return that;
             }
 
@@ -111,13 +111,13 @@
             template<typename This>
             struct result<This()>
             {
-                typedef expr<function_tag, args1<ref<expr> > > type;
+                typedef expr<tag::function, args1<ref<expr> > > type;
             };
 
-            expr<function_tag, args1<ref<expr> > > const
+            expr<tag::function, args1<ref<expr> > > const
             operator ()() const
             {
-                expr<function_tag, args1<ref<expr> > > that = {{*this}};
+                expr<tag::function, args1<ref<expr> > > that = {{*this}};
                 return that;
             }
 
@@ -133,14 +133,14 @@
         template<typename This BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
         struct result<This(BOOST_PP_ENUM_PARAMS(N, A))>
         {
-            typedef expr<function_tag, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > type;
+            typedef expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > type;
         };
 
         template<BOOST_PP_ENUM_PARAMS(N, typename A)>
-        expr<function_tag, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > const
+        expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > const
         operator ()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const &a)) const
         {
-            expr<function_tag, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > that = {{*this} BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_AS_OP, _)};
+            expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > that = {{*this} BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_AS_OP, _)};
             return that;
         }
 

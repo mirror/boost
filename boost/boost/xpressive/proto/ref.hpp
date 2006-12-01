@@ -9,6 +9,7 @@
 #ifndef BOOST_PROTO_REF_HPP_EAN_04_01_2005
 #define BOOST_PROTO_REF_HPP_EAN_04_01_2005
 
+#include <boost/mpl/bool.hpp>
 #include <boost/preprocessor/repetition/repeat.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 

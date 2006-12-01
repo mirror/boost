@@ -21,17 +21,17 @@ boost::proto::meta::terminal<char>::type g_ = {'g'};
 boost::proto::meta::terminal<char>::type h_ = {'h'};
 boost::proto::meta::terminal<char>::type i_ = {'i'};
 
-std::ostream &operator <<(std::ostream &sout, boost::proto::terminal_tag)
+std::ostream &operator <<(std::ostream &sout, boost::proto::tag::terminal)
 {
     return sout;
 }
 
-std::ostream &operator <<(std::ostream &sout, boost::proto::right_shift_tag)
+std::ostream &operator <<(std::ostream &sout, boost::proto::tag::right_shift)
 {
     return sout << ">>";
 }
 
-std::ostream &operator <<(std::ostream &sout, boost::proto::bitor_tag)
+std::ostream &operator <<(std::ostream &sout, boost::proto::tag::bitwise_or)
 {
     return sout << "|";
 }

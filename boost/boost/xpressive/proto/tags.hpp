@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file tags.hpp
 /// Contains the tags for all the overloadable operators in C++, as well as
-/// the base tags unary_tag, binary_tag and nary_tag, as well as the is_unary\<\>,
+/// the base tags unary, binary and nary, as well as the is_unary\<\>,
 /// is_binary\<\> and is_nary\<\> predicates.
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
@@ -14,63 +14,63 @@
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 
-namespace boost { namespace proto
+namespace boost { namespace proto { namespace tag
 {
 
     ///////////////////////////////////////////////////////////////////////////////
     // Operator tags
-    struct unary_tag {};
-    struct binary_tag {};
-    struct nary_tag {}; // for operator()
+    struct unary {};
+    struct binary {};
+    struct nary {}; // for operator()
 
-    struct terminal_tag : unary_tag {};
-    struct unary_plus_tag : unary_tag {};
-    struct unary_minus_tag : unary_tag {};
-    struct unary_star_tag : unary_tag {};
-    struct complement_tag : unary_tag {};
-    struct address_of_tag : unary_tag {};
-    struct logical_not_tag : unary_tag {};
-    struct pre_inc_tag : unary_tag {};
-    struct pre_dec_tag : unary_tag {};
-    struct post_inc_tag : unary_tag {};
-    struct post_dec_tag : unary_tag {};
+    struct terminal : unary {};
+    struct unary_plus : unary {};
+    struct unary_minus : unary {};
+    struct unary_star : unary {};
+    struct complement : unary {};
+    struct address_of : unary {};
+    struct logical_not : unary {};
+    struct pre_inc : unary {};
+    struct pre_dec : unary {};
+    struct post_inc : unary {};
+    struct post_dec : unary {};
     
-    struct left_shift_tag : binary_tag {};
-    struct right_shift_tag : binary_tag {};
-    struct multiply_tag : binary_tag {};
-    struct divide_tag : binary_tag {};
-    struct modulus_tag : binary_tag {};
-    struct add_tag : binary_tag {};
-    struct subtract_tag : binary_tag {};
-    struct less_tag : binary_tag {};
-    struct greater_tag : binary_tag {};
-    struct less_equal_tag : binary_tag {};
-    struct greater_equal_tag : binary_tag {};
-    struct equal_tag : binary_tag {};
-    struct not_equal_tag : binary_tag {};
-    struct logical_or_tag : binary_tag {};
-    struct logical_and_tag : binary_tag {};
-    struct bitwise_and_tag : binary_tag {};
-    struct bitwise_or_tag : binary_tag {};
-    struct bitwise_xor_tag : binary_tag {};
-    struct comma_tag : binary_tag {};
-    struct mem_ptr_tag : binary_tag {};
+    struct left_shift : binary {};
+    struct right_shift : binary {};
+    struct multiply : binary {};
+    struct divide : binary {};
+    struct modulus : binary {};
+    struct add : binary {};
+    struct subtract : binary {};
+    struct less : binary {};
+    struct greater : binary {};
+    struct less_equal : binary {};
+    struct greater_equal : binary {};
+    struct equal : binary {};
+    struct not_equal : binary {};
+    struct logical_or : binary {};
+    struct logical_and : binary {};
+    struct bitwise_and : binary {};
+    struct bitwise_or : binary {};
+    struct bitwise_xor : binary {};
+    struct comma : binary {};
+    struct mem_ptr : binary {};
 
-    struct assign_tag : binary_tag {};
-    struct left_shift_assign_tag : binary_tag {};
-    struct right_shift_assign_tag : binary_tag {};
-    struct multiply_assign_tag : binary_tag {};
-    struct divide_assign_tag : binary_tag {};
-    struct modulus_assign_tag : binary_tag {};
-    struct add_assign_tag : binary_tag {};
-    struct subtract_assign_tag : binary_tag {};
-    struct bitwise_and_assign_tag : binary_tag {};
-    struct bitwise_or_assign_tag : binary_tag {};
-    struct bitwise_xor_assign_tag : binary_tag {};
-    struct subscript_tag : binary_tag {};
+    struct assign : binary {};
+    struct left_shift_assign : binary {};
+    struct right_shift_assign : binary {};
+    struct multiply_assign : binary {};
+    struct divide_assign : binary {};
+    struct modulus_assign : binary {};
+    struct add_assign : binary {};
+    struct subtract_assign : binary {};
+    struct bitwise_and_assign : binary {};
+    struct bitwise_or_assign : binary {};
+    struct bitwise_xor_assign : binary {};
+    struct subscript : binary {};
 
-    struct function_tag : nary_tag {};
+    struct function : nary {};
 
-}}
+}}}
 
 #endif

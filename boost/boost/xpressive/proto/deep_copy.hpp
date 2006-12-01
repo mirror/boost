@@ -25,7 +25,7 @@
             struct deep_copy_impl;
 
             template<typename Expr>
-            struct deep_copy_impl<Expr, terminal_tag, 1>
+            struct deep_copy_impl<Expr, tag::terminal, 1>
             {
                 typedef typename Expr::expr_type type;
 
