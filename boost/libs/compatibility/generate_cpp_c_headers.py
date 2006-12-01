@@ -20,11 +20,9 @@
 # Python is available at:
 #   http://www.python.org/
 #
-# Copyright (c) 2001 Ralf W. Grosse-Kunstleve. Permission to copy,
-# use, modify, sell and distribute this script is granted provided this
-# copyright notice appears in all copies. This document is provided "as
-# is" without express or implied warranty, and with no claim as to its
-# suitability for any purpose.
+# Copyright (c) 2001 Ralf W. Grosse-Kunstleve.
+# Distributed under the Boost Software License, Version 1.0. (See accompany-
+# ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 #
 # Revision history:
 #   16 Apr 01 moved to boost CVS tree (R.W. Grosse-Kunstleve)
