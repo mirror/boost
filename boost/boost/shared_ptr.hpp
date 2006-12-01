@@ -531,7 +531,7 @@ template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::
 
 #endif // __GNUC__ < 3
 
-// get_deleter (experimental)
+// get_deleter
 
 #if ( defined(__GNUC__) && BOOST_WORKAROUND(__GNUC__, < 3) ) || \
     ( defined(__EDG_VERSION__) && BOOST_WORKAROUND(__EDG_VERSION__, <= 238) ) || \
