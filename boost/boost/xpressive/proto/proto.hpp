@@ -13,11 +13,12 @@
 #include <boost/xpressive/proto/ref.hpp>
 #include <boost/xpressive/proto/args.hpp>
 #include <boost/xpressive/proto/tags.hpp>
+#include <boost/xpressive/proto/expr.hpp>
 #include <boost/xpressive/proto/traits.hpp>
 #include <boost/xpressive/proto/compile.hpp>
 #include <boost/xpressive/proto/matches.hpp>
 #include <boost/xpressive/proto/extends.hpp>
 #include <boost/xpressive/proto/operators.hpp>
-#include <boost/xpressive/proto/expr.hpp>
+#include <boost/xpressive/proto/deep_copy.hpp>
 
 #endif

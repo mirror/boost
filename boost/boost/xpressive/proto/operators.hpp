@@ -77,9 +77,9 @@ namespace boost { namespace proto
     BOOST_PROTO_BINARY_OP(!=, not_equal_tag)
     BOOST_PROTO_BINARY_OP(||, logical_or_tag)
     BOOST_PROTO_BINARY_OP(&&, logical_and_tag)
-    BOOST_PROTO_BINARY_OP(&, bitand_tag)
-    BOOST_PROTO_BINARY_OP(|, bitor_tag)
-    BOOST_PROTO_BINARY_OP(^, bitxor_tag)
+    BOOST_PROTO_BINARY_OP(&, bitwise_and_tag)
+    BOOST_PROTO_BINARY_OP(|, bitwise_or_tag)
+    BOOST_PROTO_BINARY_OP(^, bitwise_xor_tag)
     BOOST_PROTO_BINARY_OP(BOOST_PP_COMMA(), comma_tag)
     BOOST_PROTO_BINARY_OP(->*, mem_ptr_tag)
 
@@ -90,9 +90,9 @@ namespace boost { namespace proto
     BOOST_PROTO_BINARY_OP(%=, modulus_assign_tag)
     BOOST_PROTO_BINARY_OP(+=, add_assign_tag)
     BOOST_PROTO_BINARY_OP(-=, subtract_assign_tag)
-    BOOST_PROTO_BINARY_OP(&=, bitand_assign_tag)
-    BOOST_PROTO_BINARY_OP(|=, bitor_assign_tag)
-    BOOST_PROTO_BINARY_OP(^=, bitxor_assign_tag)
+    BOOST_PROTO_BINARY_OP(&=, bitwise_and_assign_tag)
+    BOOST_PROTO_BINARY_OP(|=, bitwise_or_assign_tag)
+    BOOST_PROTO_BINARY_OP(^=, bitwise_xor_assign_tag)
 
     template<typename Tag, typename Args, long Arity>
     inline expr<post_inc_tag, args1<ref<expr<Tag, Args, Arity> > > > const

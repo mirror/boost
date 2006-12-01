@@ -226,6 +226,9 @@ namespace boost { namespace proto
         template<typename Expr>
         struct id;
 
+        template<typename Expr>
+        struct deep_copy;
+
         template<typename T, bool IsExpr = is_expr<T>::value>
         struct unref;
 
@@ -289,6 +292,7 @@ namespace boost { namespace proto
         struct as_expr;
         struct as_expr_ref;
         struct unref;
+        struct deep_copy;
 
         template<typename N = mpl::long_<0> >
         struct arg;

@@ -27,8 +27,9 @@
             template<typename Expr>
             struct deep_copy_impl<Expr, terminal_tag, 1>
             {
-                static typename Expr::expr_type const &
-                call(Expr const &expr)
+                typedef typename Expr::expr_type type;
+
+                static type const &call(Expr const &expr)
                 {
                     return expr.cast();
                 }
@@ -39,28 +40,48 @@
         {
             template<typename Expr>
             struct deep_copy
+              : detail::deep_copy_impl<Expr>
+            {};
+        }
+
+        namespace op
+        {
+            struct deep_copy
             {
-                typedef typename Expr::id_type type;
+                template<typename Sig>
+                struct result;
+
+                template<typename This, typename Expr>
+                struct result<This(Expr)>
+                  : meta::deep_copy<typename meta::value_type<Expr>::type>
+                {};
+
+                template<typename Expr>
+                typename meta::deep_copy<Expr>::type
+                operator()(Expr const &expr) const
+                {
+                    return meta::deep_copy<Expr>::call(expr);
+                }
             };
         }
 
-        template<typename Expr>
-        typename Expr::id_type deep_copy(Expr const &expr)
-        {
-            return detail::deep_copy_impl<Expr>::call(expr);
-        }
+        op::deep_copy const deep_copy = {};
 
         namespace detail
         {
-        #define BOOST_PROTO_DEFINE_DEEP_COPY(z, n, data)\
-            proto::deep_copy(BOOST_PP_CAT(expr.cast().arg, n).cast())
+        #define BOOST_PROTO_DEFINE_DEEP_COPY_TYPE(z, n, data)\
+            typename deep_copy_impl<typename Expr:: BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type) ::expr_type>::type
+
+        #define BOOST_PROTO_DEFINE_DEEP_COPY_FUN(z, n, data)\
+            proto::deep_copy(expr.cast(). BOOST_PP_CAT(arg, n) .cast())
 
         #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/deep_copy.hpp>))
 
         #include BOOST_PP_ITERATE()
 
         #undef BOOST_PP_ITERATION_PARAMS_1
-        #undef BOOST_PROTO_DEFINE_DEEP_COPY
+        #undef BOOST_PROTO_DEFINE_DEEP_COPY_FUN
+        #undef BOOST_PROTO_DEFINE_DEEP_COPY_TYPE
         }
 
     }}
@@ -74,10 +95,14 @@
             template<typename Expr, typename Tag>
             struct deep_copy_impl<Expr, Tag, N>
             {
-                static typename Expr::id_type call(Expr const &expr)
+                typedef expr<Tag, BOOST_PP_CAT(args, N)<
+                    BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_TYPE, ~)
+                > > type;
+
+                static type call(Expr const &expr)
                 {
-                    typename Expr::id_type that = {
-                        BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY, ~)
+                    type that = {
+                        BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_FUN, ~)
                     };
                     return that;
                 }

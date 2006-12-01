@@ -9,17 +9,11 @@
 #ifndef BOOST_PROTO_EXTENDS_HPP_EAN_11_1_2006
 #define BOOST_PROTO_EXTENDS_HPP_EAN_11_1_2006
 
-#include <boost/mpl/and.hpp>
 #include <boost/mpl/bool.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/xpressive/proto/ref.hpp>
-#include <boost/xpressive/proto/traits.hpp>
+#include <boost/xpressive/proto/args.hpp>
 #include <boost/xpressive/proto/expr.hpp>
 #include <boost/preprocessor/punctuation/comma.hpp>
-#include <boost/preprocessor/repetition/enum_params.hpp>
-#include <boost/preprocessor/repetition/enum_binary_params.hpp>
-#include <boost/preprocessor/repetition/repeat_from_to.hpp>
 
 namespace boost { namespace proto { namespace extends_private_
 {
@@ -28,6 +22,7 @@ namespace boost { namespace proto { namespace extends_private_
       : Expr
     {
         typedef Expr type;
+        typedef Expr boost_proto_extends_private_extends_expr_type_;
         typedef void is_boost_proto_extends_private_extends_;
 
         extends()
@@ -44,10 +39,10 @@ namespace boost { namespace proto { namespace extends_private_
 
 #define BOOST_PROTO_EXTENDS_BINARY_OP(op, tag)\
     template<typename Left, typename Right>\
-    typename enable_if<\
-        mpl::and_<meta::is_extends<Left>, meta::is_extends<Right> >\
-      , expr<tag, args2<ref<typename Left::expr_type>, ref<typename Left::expr_type> > > const\
-    >::type\
+    expr<tag, args2<\
+        ref<typename Left::boost_proto_extends_private_extends_expr_type_>\
+      , ref<typename Right::boost_proto_extends_private_extends_expr_type_>\
+    > > const\
     operator op(Left const &left, Right const &right)\
     {\
         return left.cast() op right.cast();\
@@ -69,9 +64,9 @@ namespace boost { namespace proto { namespace extends_private_
     BOOST_PROTO_EXTENDS_BINARY_OP(!=, not_equal_tag)
     BOOST_PROTO_EXTENDS_BINARY_OP(||, logical_or_tag)
     BOOST_PROTO_EXTENDS_BINARY_OP(&&, logical_and_tag)
-    BOOST_PROTO_EXTENDS_BINARY_OP(&, bitand_tag)
-    BOOST_PROTO_EXTENDS_BINARY_OP(|, bitor_tag)
-    BOOST_PROTO_EXTENDS_BINARY_OP(^, bitxor_tag)
+    BOOST_PROTO_EXTENDS_BINARY_OP(&, bitwise_and_tag)
+    BOOST_PROTO_EXTENDS_BINARY_OP(|, bitwise_or_tag)
+    BOOST_PROTO_EXTENDS_BINARY_OP(^, bitwise_xor_tag)
     BOOST_PROTO_EXTENDS_BINARY_OP(BOOST_PP_COMMA(), comma_tag)
     BOOST_PROTO_EXTENDS_BINARY_OP(->*, mem_ptr_tag)
 
@@ -82,9 +77,9 @@ namespace boost { namespace proto { namespace extends_private_
     BOOST_PROTO_EXTENDS_BINARY_OP(%=, modulus_assign_tag)
     BOOST_PROTO_EXTENDS_BINARY_OP(+=, add_assign_tag)
     BOOST_PROTO_EXTENDS_BINARY_OP(-=, subtract_assign_tag)
-    BOOST_PROTO_EXTENDS_BINARY_OP(&=, bitand_assign_tag)
-    BOOST_PROTO_EXTENDS_BINARY_OP(|=, bitor_assign_tag)
-    BOOST_PROTO_EXTENDS_BINARY_OP(^=, bitxor_assign_tag)
+    BOOST_PROTO_EXTENDS_BINARY_OP(&=, bitwise_and_assign_tag)
+    BOOST_PROTO_EXTENDS_BINARY_OP(|=, bitwise_or_assign_tag)
+    BOOST_PROTO_EXTENDS_BINARY_OP(^=, bitwise_xor_assign_tag)
 
 #undef BOOST_PROTO_EXTENDS_BINARY_OP
 

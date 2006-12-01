@@ -213,9 +213,8 @@
             // id
             template<typename Expr>
             struct id
-            {
-                typedef typename Expr::id_type type;
-            };
+              : deep_copy<Expr>
+            {};
 
         #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/traits.hpp>))
         #include BOOST_PP_ITERATE()
