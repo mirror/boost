@@ -19,6 +19,9 @@
 #include <boost/wave/cpplexer/validate_universal_char.hpp>
 #include <boost/wave/cpplexer/convert_trigraphs.hpp>
 #include <boost/wave/cpplexer/cpplexer_exceptions.hpp>
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+#include <boost/wave/cpplexer/detect_include_guards.hpp>
+#endif
 
 #include "../lexertl_iterator.hpp"
 
@@ -41,7 +44,10 @@ namespace boost { namespace wave { namespace cpplexer { namespace lexertl
 #endif
 #define INIT_DATA_CPP_SIZE          15
 #define INIT_DATA_PP_NUMBER_SIZE    2
-#define INIT_MACRO_DATA_SIZE        25
+#define INIT_MACRO_DATA_SIZE        27
+
+//  this is just a hack to have a unique token id not otherwise used by Wave
+#define T_ANYCTRL   T_LAST_TOKEN_ID
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace lexer
@@ -58,17 +64,18 @@ private:
         char_type;
 
 public:
-    lexertl() : has_compiled_dfa(false) {}
+    lexertl() : has_compiled_dfa_(false) {}
     
     wave::token_id next_token(Iterator &first, Iterator const &last,
         string_type& token_value);
     
-    void init_dfa(wave::language_support lang, Position const& pos);
+    bool init_dfa(wave::language_support lang, Position const& pos);
+    bool is_initialized() const { return has_compiled_dfa_; }
     
 private:
     ::lexertl::rules rules_;
     ::lexertl::state_machine state_machine_;
-    bool has_compiled_dfa;
+    bool has_compiled_dfa_;
     
 // initialization data (regular expressions for the token definitions)
     struct lexer_macro_data {
@@ -91,6 +98,8 @@ private:
 
 //  helper for initializing token data and macro definitions
 #define Q(c)                    "\\" c
+#define TRI(c)                  "{TRI}" c
+#define OR                      "|"
 #define MACRO_DATA(name, macro) { name, macro }
 #define TOKEN_DATA(id, regex)   { id, regex }
 
@@ -99,10 +108,12 @@ template <typename Iterator, typename Position>
 typename lexertl<Iterator, Position>::lexer_macro_data const 
 lexertl<Iterator, Position>::init_macro_data[INIT_MACRO_DATA_SIZE] = 
 {
+    MACRO_DATA("ANY", "[\t\v\f\r\n\\040-\\377]"),
+    MACRO_DATA("ANYCTRL", "[\\000-\\037]"),
     MACRO_DATA("TRI", "\\?\\?"),
-    MACRO_DATA("BLANK", "[ \\t]"),
+    MACRO_DATA("BLANK", "[ \t\v\f]"),
     MACRO_DATA("CCOMMENT", "\\/\\*[^*]*\\*+([^/*][^*]*\\*+)*\\/"),
-    MACRO_DATA("PPSPACE", "({BLANK}|{CCOMMENT})*"),
+    MACRO_DATA("PPSPACE", "(" "{BLANK}" OR "{CCOMMENT}" ")*"),
     MACRO_DATA("OCTALDIGIT", "[0-7]"),
     MACRO_DATA("DIGIT", "[0-9]"),
     MACRO_DATA("HEXDIGIT", "[0-9a-fA-F]"),
@@ -110,21 +121,21 @@ lexertl<Iterator, Position>::init_macro_data[INIT_MACRO_DATA_SIZE] =
     MACRO_DATA("EXPSTART", "[eE][-+]"),
     MACRO_DATA("EXPONENT", "([eE]{OPTSIGN}{DIGIT}+)"),
     MACRO_DATA("NONDIGIT", "[a-zA-Z_]"),
-    MACRO_DATA("INTEGER", "((0x|0X){HEXDIGIT}+|0{OCTALDIGIT}*|[1-9]{DIGIT}*)"),
-    MACRO_DATA("INTEGER_SUFFIX", "([uU][lL]?|[lL][uU]?)"),
+    MACRO_DATA("INTEGER", "(" "(0x|0X){HEXDIGIT}+" OR "0{OCTALDIGIT}*" OR "[1-9]{DIGIT}*" ")"),
+    MACRO_DATA("INTEGER_SUFFIX", "(" "[uU][lL]?" OR "[lL][uU]?" ")"),
 #if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
     MACRO_DATA("LONGINTEGER_SUFFIX", "([uU]([lL][lL])|([lL][lL])[uU]?|i64)"),
 #else
     MACRO_DATA("LONGINTEGER_SUFFIX", "([uU]([lL][lL])|([lL][lL])[uU]?)"),
 #endif
-    MACRO_DATA("FLOAT_SUFFIX", "([fF][lL]?|[lL][fF]?)"),
+    MACRO_DATA("FLOAT_SUFFIX", "(" "[fF][lL]?" OR "[lL][fF]?" ")"),
     MACRO_DATA("CHAR_SPEC", "L?"),
-    MACRO_DATA("BACKSLASH", "(\\\\|{TRI}\\/)"),
+    MACRO_DATA("BACKSLASH", "(" Q("\\") OR TRI(Q("/")) ")"),
     MACRO_DATA("ESCAPESEQ", "{BACKSLASH}([abfnrtv?'\"]|{BACKSLASH}|x{HEXDIGIT}+|{OCTALDIGIT}{1,3})"),
     MACRO_DATA("HEXQUAD", "{HEXDIGIT}{4}"),
     MACRO_DATA("UNIVERSALCHAR", "{BACKSLASH}(u{HEXQUAD}|U{HEXQUAD}{2})"),
-    MACRO_DATA("POUNDDEF", "(#|{TRI}=|\\%:)"),
-    MACRO_DATA("NEWLINEDEF", "(\\n|\\r|\\r\\n)"),
+    MACRO_DATA("POUNDDEF", "(" "#" OR TRI("=") OR Q("%:") ")"),
+    MACRO_DATA("NEWLINEDEF", "(" "\\n" OR "\\r" OR "\\r\\n" ")"),
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
     MACRO_DATA("INCLUDEDEF", "(include|include_next)"),
 #else
@@ -299,15 +310,16 @@ lexertl<Iterator, Position>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(T_LONGINTLIT, "{INTEGER}{LONGINTEGER_SUFFIX}"),
     TOKEN_DATA(T_INTLIT, "{INTEGER}{INTEGER_SUFFIX}?"),
     TOKEN_DATA(T_FLOATLIT, 
-//         "(" "{DIGIT}*" Q(".") "{DIGIT}+|{DIGIT}+" Q(".") "){EXPONENT}?{FLOAT_SUFFIX}?|"
-        "({DIGIT}*\\.{DIGIT}+|{DIGIT}+\\.){EXPONENT}?{FLOAT_SUFFIX}?|"
+        "(" "{DIGIT}*" Q(".") "{DIGIT}+" OR "{DIGIT}+" Q(".") "){EXPONENT}?{FLOAT_SUFFIX}?" OR
         "{DIGIT}+{EXPONENT}{FLOAT_SUFFIX}?"),
 #if BOOST_WAVE_USE_STRICT_LEXER != 0
     TOKEN_DATA(T_IDENTIFIER, 
-        "({NONDIGIT}|{UNIVERSALCHAR})({NONDIGIT}|{DIGIT}|{UNIVERSALCHAR})*"),
+        "(" "{NONDIGIT}" OR "{UNIVERSALCHAR}" ")"
+        "(" "{NONDIGIT}" OR "{DIGIT}" OR "{UNIVERSALCHAR}" ")*"),
 #else
     TOKEN_DATA(T_IDENTIFIER, 
-        "({NONDIGIT}|" Q("$") "|{UNIVERSALCHAR})({NONDIGIT}|{DIGIT}|" Q("$") "|{UNIVERSALCHAR})*"),
+        "(" "{NONDIGIT}" OR Q("$") OR "{UNIVERSALCHAR}" ")"
+        "(" "{NONDIGIT}" OR Q("$") OR "{DIGIT}" OR "{UNIVERSALCHAR}" ")*"),
 #endif
     TOKEN_DATA(T_CCOMMENT, "{CCOMMENT}"),
     TOKEN_DATA(T_CPPCOMMENT, Q("/") Q("/[^\\n\\r]*") "{NEWLINEDEF}" ),
@@ -316,7 +328,6 @@ lexertl<Iterator, Position>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(T_STRINGLIT, 
         "{CHAR_SPEC}" Q("\"") "({ESCAPESEQ}|[^\\n\\r\"]|{UNIVERSALCHAR})*" Q("\"")),
     TOKEN_DATA(T_SPACE, "{BLANK}+"),
-    TOKEN_DATA(T_SPACE2, "[\\v\\f]+"),
     TOKEN_DATA(T_CONTLINE, Q("\\") "\\n"), 
     TOKEN_DATA(T_NEWLINE, "{NEWLINEDEF}"),
     TOKEN_DATA(T_POUND_POUND, "##"),
@@ -326,8 +337,9 @@ lexertl<Iterator, Position>::init_data[INIT_DATA_SIZE] =
     TOKEN_DATA(T_POUND_ALT, Q("%:")),
     TOKEN_DATA(T_POUND_TRIGRAPH, "{TRI}="),
     TOKEN_DATA(T_ANY_TRIGRAPH, "{TRI}\\/"),
-    TOKEN_DATA(T_ANY, "."),     // this should be the last recognized token
-    { token_id(0) }             // this should be the last entry
+    TOKEN_DATA(T_ANY, "{ANY}"), 
+    TOKEN_DATA(T_ANYCTRL, "{ANYCTRL}"),   // this should be the last recognized token
+    { token_id(0) }               // this should be the last entry
 };
 
 // C++ only token definitions
@@ -366,17 +378,19 @@ lexertl<Iterator, Position>::init_data_pp_number[INIT_DATA_PP_NUMBER_SIZE] =
 
 #undef MACRO_DATA
 #undef TOKEN_DATA
+#undef OR
+#undef TRI
 #undef Q
 
 ///////////////////////////////////////////////////////////////////////////////
 // initialize lexertl lexer from C++ token regex's
 template <typename Iterator, typename Position>
-inline void
+inline bool
 lexertl<Iterator, Position>::init_dfa(wave::language_support lang, 
     Position const& pos)
 {
-    if (has_compiled_dfa)
-        return;
+    if (has_compiled_dfa_)
+        return true;
 
 // register macro definitions
     for (int k = 0; NULL != init_macro_data[k].name; ++k) {
@@ -415,8 +429,10 @@ lexertl<Iterator, Position>::init_dfa(wave::language_support lang,
         BOOST_WAVE_LEXER_THROW(wave::cpplexer::lexing_exception, 
             unexpected_error, msg.c_str(), 
             pos.get_line(), pos.get_column(), pos.get_file().c_str());
+        return false;
     }
-    has_compiled_dfa = true;
+    has_compiled_dfa_ = true;
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -433,11 +449,13 @@ lexertl<Iterator, Position>::next_token(Iterator &first, Iterator const &last,
     bool end_state = (*ptr != 0);
     size_t id = *(ptr + 1);
 
-    while (curr != last && ptr != dfa_start) {
-        size_t charset = state_machine_._lookup[*curr];
+    while (curr != last) {
+			  size_t const state = ptr[state_machine_._lookup[*curr]];
+			  if (0 == state)
+				    break;
         ++curr;
 
-        ptr = &dfa_start[ptr[charset] * (state_machine_._dfa_alphabet +
+        ptr = &dfa_start[state * (state_machine_._dfa_alphabet +
             ::lexertl::dfa_offset)];
 
         if (0 != *ptr) {
@@ -448,6 +466,10 @@ lexertl<Iterator, Position>::next_token(Iterator &first, Iterator const &last,
     }
 
     if (end_state) {
+        if (T_ANY == id) {
+            id = TOKEN_FROM_ID(*first, UnknownTokenType);
+        }
+        
         // return longest match
         string_type str(first, end_token);
         token_value.swap(str);
@@ -483,8 +505,7 @@ public:
     token_type get()
     {
         token_type token;
-
-        if (!at_eof) {
+        if (lexer_.is_initialized() && !at_eof) {
             do {
             // generate and return the next token
             string_type token_val;
@@ -542,8 +563,8 @@ public:
                             typename string_type::size_type start = token_val.find("include");
                             if (0 == token_val.compare(start, 12, "include_next", 12))
                                 id = token_id(id | AltTokenType);
-                            break;
                         }
+                        break;
 #endif // BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
 
                     case T_EOF:
@@ -568,14 +589,37 @@ public:
                             token_val = convert_trigraph(token_val);
                         }
                         break;
+                        
+                    case T_ANYCTRL:
+                        // matched some unexpected character
+                        {
+                            // 21 is the max required size for a 64 bit integer 
+                            // represented as a string
+                            char buffer[22];
+                            string_type msg("invalid character in input stream: '0x");
+
+                            // for some systems sprintf is in namespace std
+                            using namespace std;    
+                            sprintf(buffer, "%02x'", token_val[0]);
+                            msg += buffer;
+                            BOOST_WAVE_LEXER_THROW(
+                                wave::cpplexer::lexing_exception, 
+                                generic_lexing_error, 
+                                msg.c_str(), pos.get_line(), pos.get_column(), 
+                                pos.get_file().c_str());
+                        }
+                        break;
                     }
+                    
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+                    return guards.detect_guard(token_type(id, token_val, pos));
+#else
                     return token_type(id, token_val, pos);
+#endif
                 }
-            
-            // skip the T_CONTLINE token
-            } while (true);
+            } while (true);     // skip the T_CONTLINE token
         }
-        return token;       // return T_EOI
+        return token;           // return T_EOI
     }
     
     void set_position(Position const &pos) 
@@ -586,7 +630,8 @@ public:
     }
 
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-    bool has_include_guards(std::string& guard_name) const { return false; }
+    bool has_include_guards(std::string& guard_name) const 
+        { return guards.detected(guard_name); }
 #endif    
 
 private:
@@ -595,6 +640,9 @@ private:
 
     wave::language_support language;
     bool at_eof;
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+    include_guards<token_type> guards;
+#endif
     
     static lexer::lexertl<iterator_type, Position> lexer_;
 };
@@ -607,6 +655,8 @@ lexer::lexertl<
 #undef INIT_DATA_SIZE
 #undef INIT_DATA_CPP_SIZE
 #undef INIT_DATA_PP_NUMBER_SIZE
+#undef INIT_MACRO_DATA_SIZE
+#undef T_ANYCTRL
 
 ///////////////////////////////////////////////////////////////////////////////
 //  

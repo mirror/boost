@@ -38,6 +38,8 @@ lexem const lexems[] =
     { "/* some C comment */", boost::wave::T_CCOMMENT },
     { "/* some multiline \n  C comment \n */", boost::wave::T_CCOMMENT },
     { "// some c++ comment\n", boost::wave::T_CPPCOMMENT },
+    { " ", boost::wave::T_SPACE },
+    { "\t\v\f", boost::wave::T_SPACE },
     { "'c'", boost::wave::T_CHARLIT },
     { "'\\n'", boost::wave::T_CHARLIT },
     { "'\\u1234'", boost::wave::T_CHARLIT },

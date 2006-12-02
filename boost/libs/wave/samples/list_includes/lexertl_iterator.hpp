@@ -54,6 +54,9 @@ public:
             wave::language_support language)
     :   functor_ptr(lexertl_input_interface<TokenT>
             ::new_lexer(first, last, pos, language)) 
+#if 0 != __DECCXX_VER
+      , eof()
+#endif // 0 != __DECCXX_VER
     {}
 
 // interface to the boost::spirit::multi_pass_policies::functor_input policy
@@ -72,6 +75,14 @@ public:
         functor_ptr->set_position(pos);
     }
     
+#if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
+    bool has_include_guards(std::string& guard_name) const
+    {
+        BOOST_ASSERT(0 != functor_ptr.get());
+        return functor_ptr->has_include_guards(guard_name);
+    }
+#endif    
+
 private:
     boost::shared_ptr<lex_input_interface<TokenT> > functor_ptr;
 };
@@ -163,7 +174,7 @@ public:
     // For now we always return false, but this can be fixed easily later on.
     bool has_include_guards(std::string& guard_name) const
     {
-        return false;
+        return base_type::get_functor().has_include_guards(guard_name);
     }
 #endif    
 };

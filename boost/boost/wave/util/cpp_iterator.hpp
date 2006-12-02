@@ -592,8 +592,7 @@ bool returned_from_include_file = returned_from_include();
             util::on_exit::pop_front<token_sequence_type> 
                 pop_front_token(pending_queue);
 
-                whitespace.shift_tokens(act_token = pending_queue.front());
-                return act_token;
+                return act_token = pending_queue.front();
             }
             
         // fetch the current token        
@@ -627,10 +626,10 @@ bool returned_from_include_file = returned_from_include();
             // (the C++ comment token includes the trailing newline)
                 seen_newline = true;
                 ++iter_ctx->first;
-                whitespace.shift_tokens(id);  // whitespace controller
                 
                 if (!ctx.get_if_block_status()) {
                 // skip this token because of the disabled #if block
+                    whitespace.shift_tokens(id);  // whitespace controller
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
                     ctx.get_hooks().skipped_token(act_token);
 #else
@@ -717,7 +716,7 @@ typename ContextT::position_type pos = act_token.get_position();
             iter_ctx->emitted_lines+1 == act_pos.get_line()) 
         {
         // prefer to output a single newline instead of the #line directive
-            whitespace.shift_tokens(T_NEWLINE);
+//             whitespace.shift_tokens(T_NEWLINE);
             act_token = result_type(T_NEWLINE, "\n", pos);
         }
         else {
@@ -762,7 +761,7 @@ typename ContextT::position_type pos = act_token.get_position();
             pending_queue.push_front(result_type(T_SPACE, " ", pos));
             
         // return the #line token itself
-            whitespace.shift_tokens(T_PP_LINE);
+//             whitespace.shift_tokens(T_PP_LINE);
             pos.set_column(1);
             act_token = result_type(T_PP_LINE, "#line", pos);
         }
