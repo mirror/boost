@@ -232,7 +232,10 @@ Boost V1.34.0
   were the first non-whitespace token on the line. This error occured only
   if the #line directive generation was suppressed. Thanks to Joan Grant for
   reporting this problem.
-
+- Fixed a problem in the Wave applet which prevented the correct recognition of 
+  Windows file paths in a configuration file, if this path was enclosed in 
+  quotes.
+  
 Sat Feb 18 2005
 - Version 1.2.3
 - Added a missing throw() specification to the function 

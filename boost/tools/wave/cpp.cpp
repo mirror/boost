@@ -273,6 +273,16 @@ namespace cmd_line_utils {
         }
     };
 
+    // trim quotes from path names, if any
+    std::string trim_quotes(std::string const& file)
+    {
+        if (('"' == file[0] || '\'' == file[0]) && file[0] == file[file.size()-1])
+        {
+            return file.substr(1, file.size()-2);
+        }
+        return file;
+    }
+    
 ///////////////////////////////////////////////////////////////////////////////
 }
 
@@ -723,7 +733,7 @@ int error_count = 0;
             for (vector<string>::const_iterator cit = syspaths.begin(); 
                  cit != end; ++cit)
             {
-                ctx.add_sysinclude_path((*cit).c_str());
+                ctx.add_sysinclude_path(cmd_line_utils::trim_quotes(*cit).c_str());
             }
         }
         
@@ -736,10 +746,10 @@ int error_count = 0;
             for (vector<string>::const_iterator cit = ip.paths.begin(); 
                  cit != end; ++cit)
             {
-                ctx.add_include_path((*cit).c_str());
+                ctx.add_include_path(cmd_line_utils::trim_quotes(*cit).c_str());
             }
 
-        // if -I- was goven on the command line, this has to be propagated
+        // if -I- was given on the command line, this has to be propagated
             if (ip.seen_separator) 
                 ctx.set_sysinclude_delimiter();
                  
@@ -748,7 +758,7 @@ int error_count = 0;
             for (vector<string>::const_iterator syscit = ip.syspaths.begin(); 
                  syscit != sysend; ++syscit)
             {
-                ctx.add_sysinclude_path((*syscit).c_str());
+                ctx.add_sysinclude_path(cmd_line_utils::trim_quotes(*syscit).c_str());
             }
         }
     
