@@ -1,5 +1,5 @@
-// (c) Copyright Caleb Epstein 2005
-// (c) Copyright John Maddock 2006
+// Copyright 2005 Caleb Epstein
+// Copyright 2006 John Maddock
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
