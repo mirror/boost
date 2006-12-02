@@ -36,24 +36,18 @@
             // and_
             template<bool B, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename P, void)>
             struct and_impl
-            {
-                typedef typename and_impl<P0::type::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>::type type;
-                BOOST_STATIC_CONSTANT(bool, value = type::value);
-            };
+              : and_impl<P0::type::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>
+            {};
 
             template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename P)>
             struct and_impl<false, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, P)>
-            {
-                typedef mpl::false_ type;
-                BOOST_STATIC_CONSTANT(bool, value = false);
-            };
+              : mpl::false_
+            {};
 
             template<>
             struct and_impl<true>
-            {
-                typedef mpl::true_ type;
-                BOOST_STATIC_CONSTANT(bool, value = true);
-            };
+              : mpl::true_
+            {};
 
             template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename P, void)>
             struct and_
@@ -63,24 +57,18 @@
             // or_
             template<bool B, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename P, void)>
             struct or_impl
-            {
-                typedef typename or_impl<P0::type::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>::type type;
-                BOOST_STATIC_CONSTANT(bool, value = type::value);
-            };
+              : or_impl<P0::type::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>
+            {};
 
             template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename P)>
             struct or_impl<true, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, P)>
-            {
-                typedef mpl::true_ type;
-                BOOST_STATIC_CONSTANT(bool, value = true);
-            };
+              : mpl::true_
+            {};
 
             template<>
             struct or_impl<false>
-            {
-                typedef mpl::false_ type;
-                BOOST_STATIC_CONSTANT(bool, value = false);
-            };
+              : mpl::false_
+            {};
 
             template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename P, void)>
             struct or_
@@ -140,8 +128,7 @@
             matches_impl<\
                 typename Args1::BOOST_PP_CAT(arg, n)::expr_type\
               , typename deref<typename Args2::BOOST_PP_CAT(arg, n)>::type\
-            >\
-            /**/
+            >
 
             template<typename Expr>
             struct matches_impl< Expr, mpl::_ >
@@ -164,8 +151,12 @@
                 >
             {};
 
-        #define BOOST_PROTO_DEFINE_MATCHES(z, n, data) matches< Expr, BOOST_PP_CAT(G, n) >
-        #define BOOST_PROTO_DEFINE_TERMINAL_MATCHES(z, n, data) terminal_matches< BOOST_PP_CAT(Expr, n), BOOST_PP_CAT(Grammar, n) >
+        #define BOOST_PROTO_DEFINE_MATCHES(z, n, data)\
+            matches_impl<typename Expr::expr_type, typename deref<BOOST_PP_CAT(G, n)>::type>
+
+        #define BOOST_PROTO_DEFINE_TERMINAL_MATCHES(z, n, data)\
+            terminal_matches< BOOST_PP_CAT(Expr, n), BOOST_PP_CAT(Grammar, n) >
+
         #define BOOST_PP_ITERATION_PARAMS_1 (3, (2, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/matches.hpp>))
 
         #include BOOST_PP_ITERATE()

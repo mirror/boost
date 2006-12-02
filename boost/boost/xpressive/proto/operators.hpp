@@ -11,7 +11,6 @@
 #define BOOST_PROTO_OPERATORS_HPP_EAN_04_01_2005
 
 #include <boost/mpl/or.hpp>
-#include <boost/utility/enable_if.hpp>
 #include <boost/preprocessor/punctuation/comma.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/tags.hpp>
