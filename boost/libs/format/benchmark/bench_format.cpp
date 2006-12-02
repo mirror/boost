@@ -2,7 +2,7 @@
 //  Boost general library 'format'  ---------------------------
 //  See http://www.boost.org for updates, documentation, and revision history.
 
-//  (C) Copyright Samuel Krempp 2001
+//  Copyright (c) 2001 Samuel Krempp
 //                  krempp@crans.ens-cachan.fr
 //  Distributed under the Boost Software License, Version 1.0. (See
 //  accompanying file LICENSE_1_0.txt or copy at
