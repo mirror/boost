@@ -273,7 +273,7 @@ BOOST_MPL_AUX_ASSERT_CONSTANT( \
     ) \
 /**/
 #   else
-#   define BOOST_MPL_ASSERT_RELATION_IMPL(x, rel, y) \
+#   define BOOST_MPL_ASSERT_RELATION_IMPL(counter, x, rel, y)    \
 BOOST_MPL_AUX_ASSERT_CONSTANT( \
       std::size_t \
     , BOOST_PP_CAT(mpl_assert_rel,counter) = sizeof( \
@@ -297,7 +297,7 @@ BOOST_MPL_AUX_ASSERT_CONSTANT( \
 #   endif
 
 #   define BOOST_MPL_ASSERT_RELATION(x, rel, y) \
-BOOST_MPL_ASSERT_RELATION_IMPL(BOOST_MPL_AUX_PP_COUNTER(),x, rel, y) \
+BOOST_MPL_ASSERT_RELATION_IMPL(BOOST_MPL_AUX_PP_COUNTER(), x, rel, y) \
 /**/
 
 #else // !BOOST_MPL_CFG_ASSERT_USE_RELATION_NAMES
