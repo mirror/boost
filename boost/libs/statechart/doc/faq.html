@@ -292,21 +292,23 @@ struct MyPump : PumpBase
 
   <h2><a name="Uml2" id="Uml2">What about UML 2.0 features?</a></h2>
 
-  <p>The library was designed before 2.0 came along. Therefore, if not 
-  explicitly noted otherwise, the library implements the 
-  behavior mandated by the UML1.5 standard. Here's an incomplete list of 
-  differences between the 2.0 semantics &amp; Boost.Statechart semantics:</p>
-<ul>
- <li>All transitions are always external. Local transitions are not supported 
- at all. Unfortunately, the UML2.0 specifications are not entirely clear how 
- local transitions are supposed to work, see
- <a href="http://thread.gmane.org/gmane.comp.lib.boost.user/18641">here</a> 
- for more information</li>
- <li>There is no direct support for the UML2.0 elements entry point and exit 
- point. However, both can easily be simulated, the former with a typedef and 
- the latter with a state that is a template (with the transition destination 
- as a template parameter)</li>
-</ul>
+  <p>The library was designed before 2.0 came along. Therefore, if not
+  explicitly noted otherwise, the library implements the behavior mandated by
+  the UML1.5 standard. Here's an incomplete list of differences between the
+  2.0 semantics &amp; Boost.Statechart semantics:</p>
+
+  <ul>
+    <li>All transitions are always external. Local transitions are not
+    supported at all. Unfortunately, the UML2.0 specifications are not
+    entirely clear how local transitions are supposed to work, see <a href=
+    "http://thread.gmane.org/gmane.comp.lib.boost.user/18641">here</a> for
+    more information</li>
+
+    <li>There is no direct support for the UML2.0 elements entry point and
+    exit point. However, both can easily be simulated, the former with a
+    typedef and the latter with a state that is a template (with the
+    transition destination as a template parameter)</li>
+  </ul>
 
   <h2><a name="EmbeddedApplications" id="EmbeddedApplications">Is
   Boost.Statechart suitable for embedded applications?</a></h2>
@@ -422,8 +424,8 @@ struct A : sc::simple_state&lt;
 
   <ol>
     <li>Your compiler is too buggy to compile the library, see <a href=
-    "index.html#SupportedPlatforms">here</a> for information on the status
-    of your compiler. If you absolutely must use such a compiler for your
+    "index.html#SupportedPlatforms">here</a> for information on the status of
+    your compiler. If you absolutely must use such a compiler for your
     project, I'm afraid Boost.Statechart is not for you.</li>
 
     <li>The error is reported on a line similar to the following:
@@ -496,11 +498,11 @@ the culprit close to the bottom in file InconsistentHistoryTest1.cpp on line
     </li>
 
     <li>The error is reported on a line nowhere near a BOOST_STATIC_ASSERT.
-    Use the technique described
-    under point 2 to see what line of your code causes the problem. If your
-    code is correct then you've found a bug in either the compiler or Boost.Statechart. Please 
-    <a href="contact.html">send me</a> a small but complete program showing 
-    the problem. Thank you!</li>
+    Use the technique described under point 2 to see what line of your code
+    causes the problem. If your code is correct then you've found a bug in
+    either the compiler or Boost.Statechart. Please <a href=
+    "contact.html">send me</a> a small but complete program showing the
+    problem. Thank you!</li>
   </ol>
 
   <h2><a name="Dll" id="Dll">How can I compile a state machine into a dynamic
@@ -706,15 +708,15 @@ Inner::~Inner()
   alter the order of destruction.</p>
   <hr>
 
-  <p><a href="http://validator.w3.org/check?uri=referer"><img border="0"
-  src="http://www.w3.org/Icons/valid-html401"
-  alt="Valid HTML 4.01 Transitional" height="31" width="88"></a></p>
-  
-  <p>Revised 
-  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 July, 2006<!--webbot bot="Timestamp" endspan i-checksum="21145" --></p>
+  <p><a href="http://validator.w3.org/check?uri=referer"><img border="0" src=
+  "http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional"
+  height="31" width="88"></a></p>
 
-  <p><i>&copy; Copyright <a href="contact.html">Andreas Huber D&ouml;nni</a>
-  2003-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2006<!--webbot bot="Timestamp" endspan i-checksum="770" --></i></p>
+  <p>Revised 
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38512" --></p>
+
+  <p><i>Copyright &copy; 2003-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2006<!--webbot bot="Timestamp" endspan i-checksum="770" -->
+  <a href="contact.html">Andreas Huber D&ouml;nni</a></i></p>
 
   <p><i>Distributed under the Boost Software License, Version 1.0. (See
   accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or

@@ -434,8 +434,8 @@
       of <code>cs</code>. <code>S::id_type</code> values are comparable with
       <code>operator==()</code> and <code>operator!=()</code>. An unspecified
       collating order can be established with <code>std::less&lt; S::id_type
-      &gt;</code>. In contrast to <code>typeid( cs )</code>, this function is 
-      available even on platforms that do not support C++ RTTI (or have been 
+      &gt;</code>. In contrast to <code>typeid( cs )</code>, this function is
+      available even on platforms that do not support C++ RTTI (or have been
       configured to not support it)</td>
     </tr>
 
@@ -452,8 +452,7 @@
       "configuration.html#ApplicationDefinedMacros">BOOST_STATECHART_USE_NATIVE_RTTI</a>
       is not defined</td>
     </tr>
-
-    </table>
+  </table>
 
   <h2><a name="SimpleState" id="SimpleState">SimpleState</a> concept</h2>
 
@@ -1124,18 +1123,17 @@ void <a name="post_event3" id="post_event3">post_event</a>( const <a href=
   );</code><br>
   <b>Throws</b>: Any exceptions propagated from
   <code>Allocator::allocate()</code></p>
-
   <pre>
-void <a name="unconsumed_event" id="unconsumed_event">unconsumed_event</a>( const <a href=
+void <a name="unconsumed_event" id=
+"unconsumed_event">unconsumed_event</a>( const <a href=
 "#Classevent_base">event_base</a> &amp; evt );
 </pre>
 
   <p><b>Effects</b>: None<br>
-  <b>Note</b>: This function (or, if present, the equally named derived class 
-  member function) is called by 
-  <a href="#process_event">process_event</a>() whenever a dispatched event did
-  not trigger a reaction, see  
-  <a href="#process_event">process_event</a>() effects, point 10 for more
+  <b>Note</b>: This function (or, if present, the equally named derived class
+  member function) is called by <a href="#process_event">process_event</a>()
+  whenever a dispatched event did not trigger a reaction, see <a href=
+  "#process_event">process_event</a>() effects, point 10 for more
   information.</p>
 
   <h3>Class template <code>state_machine</code> observer functions</h3>
@@ -2924,8 +2922,8 @@ id_type <a name="event_base::dynamic_type" id=
   <b>Note</b>: <code>id_type</code> values are comparable with
   <code>operator==()</code> and <code>operator!=()</code>. An unspecified
   collating order can be established with <code>std::less&lt; id_type
-  &gt;</code>. In contrast to <code>typeid( cs )</code>, this function is 
-  available even on platforms that do not support C++ RTTI (or have been 
+  &gt;</code>. In contrast to <code>typeid( cs )</code>, this function is
+  available even on platforms that do not support C++ RTTI (or have been
   configured to not support it)</p>
   <pre>
 template&lt; typename CustomId &gt;
@@ -3470,15 +3468,15 @@ namespace statechart
   <b>Effects</b>: Destructs the result object</p>
   <hr>
 
-  <p><a href="http://validator.w3.org/check?uri=referer"><img border="0"
-  src="http://www.w3.org/Icons/valid-html401"
-  alt="Valid HTML 4.01 Transitional" height="31" width="88"></a></p>
-  
-  <p>Revised 
-  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->20 August, 2006<!--webbot bot="Timestamp" endspan i-checksum="34662" --></p>
+  <p><a href="http://validator.w3.org/check?uri=referer"><img border="0" src=
+  "http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional"
+  height="31" width="88"></a></p>
 
-  <p><i>&copy; Copyright <a href="contact.html">Andreas Huber D&ouml;nni</a>
-  2003-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2006<!--webbot bot="Timestamp" endspan i-checksum="770" --></i></p>
+  <p>Revised 
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38512" --></p>
+
+  <p><i>Copyright &copy; 2003-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2006<!--webbot bot="Timestamp" endspan i-checksum="770" -->
+  <a href="contact.html">Andreas Huber D&ouml;nni</a></i></p>
 
   <p><i>Distributed under the Boost Software License, Version 1.0. (See
   accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or

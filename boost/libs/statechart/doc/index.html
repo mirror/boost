@@ -26,7 +26,6 @@
         <p align="center">(formerly known as boost::fsm)</p>
 
         <h2 align="center">Overview</h2>
-
       </td>
     </tr>
   </table>
@@ -124,18 +123,17 @@
   <p>Whether and how Boost.Statechart will work on your platform is best
   determined on the <a href=
   "http://engineering.meta-comm.com/boost-regression/CVS-HEAD/developer/statechart.html">
-  status page</a>. 
-  If the cells in your compilers column are all green, the library
-  should work as advertised. Cells of different color indicate possible
-  problems; follow the links for details. Before employing the library I
-  would also advise to run the tests (see <a href="#GettingStarted">Getting
-  started</a>) on your particular platform in all the modes (debug, release,
-  etc.) that are later used during development (the status page shows debug
-  mode results only). The closer the test compiler switches mirror the ones
-  that are later used during development, the less likely are future
-  surprises. An example of such a surprise is Intel 9.0 with MSVC 7.1 base
-  toolset, where DllTestNormal and DllTestNative pass in debug mode but fail
-  in release mode.</p>
+  status page</a>. If the cells in your compilers column are all green, the
+  library should work as advertised. Cells of different color indicate
+  possible problems; follow the links for details. Before employing the
+  library I would also advise to run the tests (see <a href=
+  "#GettingStarted">Getting started</a>) on your particular platform in all
+  the modes (debug, release, etc.) that are later used during development
+  (the status page shows debug mode results only). The closer the test
+  compiler switches mirror the ones that are later used during development,
+  the less likely are future surprises. An example of such a surprise is
+  Intel 9.0 with MSVC 7.1 base toolset, where DllTestNormal and DllTestNative
+  pass in debug mode but fail in release mode.</p>
 
   <h3><a name="GettingStarted" id="GettingStarted">Getting started</a></h3>
 
@@ -144,23 +142,22 @@
     "../../../more/getting_started.html">Boost Getting Started Page</a>.
     After doing so, somewhere on your hard drive you should have a directory
     containing the boost distribution (e.g. under
-    <code>D:\Data\boost_1_34_0</code>), the bjam executable installed in
-    your <code>PATH</code> and your toolset configured in
-    <a href="../../../tools/build/v2/user-config.jam">user-config.jam</a>.
-    </li>
+    <code>D:\Data\boost_1_34_0</code>), the bjam executable installed in your
+    <code>PATH</code> and your toolset configured in <a href=
+    "../../../tools/build/v2/user-config.jam">user-config.jam</a>.</li>
 
     <li>Open a command prompt and change the current directory to
     <code>D:\Data\boost_1_34_0\libs\statechart\examples</code></li>
 
-    <li>To compile the examples in debug mode, type <code>bjam</code> and hit 
-    CR. Please refer to the bjam command line documentation for other options.
-    After the build has finished you will find all executables in
+    <li>To compile the examples in debug mode, type <code>bjam</code> and hit
+    CR. Please refer to the bjam command line documentation for other
+    options. After the build has finished you will find all executables in
     <code>D:\Data\boost_1_34_0\libs\statechart\examples\run</code>. In
     addition to the examples discussed in the tutorial, this script also
     builds the Performance executable in different variants, which show the
     effects of various choices on runtime performance, executable size, etc.
     Moreover, the Handcrafted executable is also built, which serves to
-    compare performance of a simple Boost.Statechart machine with its 
+    compare performance of a simple Boost.Statechart machine with its
     handcrafted equivalent</li>
 
     <li>Optional: To run the tests, invoke bjam in the directory
@@ -176,13 +173,11 @@
 
   <ul>
     <li><a href=
-    "http://www.objectmentor.com/resources/articles/umlfsm.pdf">
-    http://www.objectmentor.com/resources/articles/umlfsm.pdf</a>
+    "http://www.objectmentor.com/resources/articles/umlfsm.pdf">http://www.objectmentor.com/resources/articles/umlfsm.pdf</a>
     introduces state machines and UML statecharts</li>
 
     <li><a href=
-    "http://www.sts.tu-harburg.de/teaching/ws-99.00/OOA+D/StateDiagrams.pdf">
-    http://www.sts.tu-harburg.de/teaching/ws-99.00/OOA+D/StateDiagrams.pdf</a>
+    "http://www.sts.tu-harburg.de/teaching/ws-99.00/OOA+D/StateDiagrams.pdf">http://www.sts.tu-harburg.de/teaching/ws-99.00/OOA+D/StateDiagrams.pdf</a>
     explains most of the UML statechart elements and terminology</li>
 
     <li>The inventor of statecharts, David Harel, presents a thorough but
@@ -191,8 +186,7 @@
     http://www.wisdom.weizmann.ac.il/~dharel/SCANNED.PAPERS/Statecharts.pdf</a></li>
 
     <li>The UML specifications (formal) can be found here: <a href=
-    "http://www.omg.org/cgi-bin/doc?formal/03-03-01">
-    http://www.omg.org/cgi-bin/doc?formal/03-03-01</a>
+    "http://www.omg.org/cgi-bin/doc?formal/03-03-01">http://www.omg.org/cgi-bin/doc?formal/03-03-01</a>
     (see chapters 2.12 and 3.74)</li>
   </ul>
 
@@ -201,15 +195,15 @@
   information.</p>
   <hr>
 
-  <p><a href="http://validator.w3.org/check?uri=referer"><img border="0"
-  src="http://www.w3.org/Icons/valid-html401"
-  alt="Valid HTML 4.01 Transitional" height="31" width="88"></a></p>
-  
-  <p>Revised 
-  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->12 July, 2006<!--webbot bot="Timestamp" endspan i-checksum="21145" --></p>
+  <p><a href="http://validator.w3.org/check?uri=referer"><img border="0" src=
+  "http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional"
+  height="31" width="88"></a></p>
 
-  <p><i>&copy; Copyright <a href="contact.html">Andreas Huber D&ouml;nni</a>
-  2003-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2006<!--webbot bot="Timestamp" endspan i-checksum="770" --></i></p>
+  <p>Revised 
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38512" --></p>
+
+  <p><i>Copyright &copy; 2003-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2006<!--webbot bot="Timestamp" endspan i-checksum="770" -->
+  <a href="contact.html">Andreas Huber D&ouml;nni</a></i></p>
 
   <p><i>Distributed under the Boost Software License, Version 1.0. (See
   accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or

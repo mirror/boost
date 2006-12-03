@@ -1,4 +1,4 @@
-REM (c) Copyright Andreas Huber Doenni 2004-2006
+REM Copyright 2004-2006 Andreas Huber Doenni
 REM Distributed under the Boost Software License, Version 1.0. (See accompany-
 REM ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 

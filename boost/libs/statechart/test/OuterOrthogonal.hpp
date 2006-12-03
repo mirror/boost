@@ -1,7 +1,7 @@
 #ifndef BOOST_STATECHART_TEST_OUTER_ORTHOGONAL_HPP_INCLUDED
 #define BOOST_STATECHART_TEST_OUTER_ORTHOGONAL_HPP_INCLUDED
 //////////////////////////////////////////////////////////////////////////////
-// (c) Copyright Andreas Huber Doenni 2004-2005
+// Copyright 2004-2006 Andreas Huber Doenni
 // Distributed under the Boost Software License, Version 1.0. (See accompany-
 // ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //////////////////////////////////////////////////////////////////////////////
