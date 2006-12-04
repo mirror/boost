@@ -17,6 +17,7 @@ project
         <library>../../test/build//boost_test_exec_monitor
         <library>../build//boost_signals
         <define>BOOST_SIGNALS_STATIC_LINK
+        <link>static
     ;
 {
   test-suite signals
