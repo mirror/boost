@@ -12,7 +12,6 @@
 
 #include <boost/type_traits.hpp>
 #include <boost/signals/connection.hpp>
-#include <boost/pending/ct_if.hpp>
 #include <boost/ref.hpp>
 #include <boost/utility/addressof.hpp>
 #include <list>
