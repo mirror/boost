@@ -1,59 +1,130 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
-<HTML>
-<HEAD>
-<TITLE>Pool</TITLE>
-<LINK HREF="../pool.css" REL="stylesheet" TYPE="text/css">
-</HEAD>
-<BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
 
-<IMG SRC="../../../../boost.png" WIDTH=276 HEIGHT=86 ALT="C++ Boost">
+<html>
+<head>
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+  <link href="../pool.css" rel="stylesheet" type="text/css">
 
-<H1 ALIGN=CENTER>User Allocators</H1>
+  <title>Pool</title>
+</head>
 
-<P>
-<H2>Introduction</H2>
+<body>
+  <img src="../../../../boost.png" width="276" height="86" alt="C++ Boost">
 
-<P>
-Pool objects need to request memory blocks from the system, which the Pool then splits into chunks to allocate to the user.  By specifying a <SPAN CLASS="code">UserAllocator</SPAN> template parameter to various Pool interfaces, users can control how those system memory blocks are allocated.
+  <h1 align="center">User Allocators</h1>
 
-<P>
-<H2>Semantics</H2>
+  <h2>Introduction</h2>
 
-<P>
-<TABLE BORDER ALIGN=CENTER>
-<CAPTION><EM>Symbol Table</EM></CAPTION>
-<TR><TH>Symbol<TH>Meaning
-<TR><TD CLASS="code">UserAllocator<TD>A User Allocator type
-<TR><TD CLASS="code">block<TD>value of type <SPAN CLASS="code">char *</SPAN>
-<TR><TD CLASS="code">n<TD>value of type <SPAN CLASS="code">UserAllocator::size_type</SPAN>
-</TABLE>
+  <p>Pool objects need to request memory blocks from the system, which the
+  Pool then splits into chunks to allocate to the user. By specifying a
+  <span class="code">UserAllocator</span> template parameter to various Pool
+  interfaces, users can control how those system memory blocks are
+  allocated.</p>
 
-<P>
-<TABLE BORDER ALIGN=CENTER>
-<CAPTION><EM>Typedefs</EM></CAPTION>
-<TR><TH>Expression<TH>Type
-<TR><TD CLASS="code">UserAllocator::size_type<TD>An unsigned integral type that can represent the size of the largest object to be allocated
-<TR><TD CLASS="code">UserAllocator::difference_type<TD>A signed integral type that can represent the difference of any two pointers
-</TABLE>
+  <h2>Semantics</h2>
 
-<P>
-<TABLE BORDER ALIGN=CENTER>
-<CAPTION><EM>Allocation and Deallocation</EM></CAPTION>
-<TR><TH>Expression<TH>Return Type<TH>Pre-Condition/Notes
-<TR><TD CLASS="code">UserAllocator::malloc(n)<TD CLASS="code">char *<TD>Attempts to allocate <SPAN CLASS="code">n</SPAN> bytes from the system.  Returns 0 if out-of-memory.
-<TR><TD CLASS="code">UserAllocator::free(block)<TD CLASS="code">void<TD><SPAN CLASS="code">block</SPAN> must have been previously returned from a call to <SPAN CLASS="code">UserAllocator::malloc</SPAN>.
-</TABLE>
+  <table border align="center" summary="">
+    <caption>
+      <em>Symbol Table</em>
+    </caption>
 
-<P>
-<H2>Provided Implementations</H2>
+    <tr>
+      <th>Symbol</th>
 
-<P>
-There are two <SPAN CLASS="code">UserAllocator</SPAN> classes provided.  Both of them are in pool.hpp (see <A HREF="pool.html">pool</A>).  The default value for the template parameter <SPAN CLASS="code">UserAllocator</SPAN> is always <SPAN CLASS="code">default_user_allocator_new_delete</SPAN>.
+      <th>Meaning</th>
+    </tr>
 
-<P>
-<H3>Synopsis</H3>
+    <tr>
+      <td class="code">UserAllocator</td>
 
-<PRE CLASS="code">struct default_user_allocator_new_delete
+      <td>A User Allocator type</td>
+    </tr>
+
+    <tr>
+      <td class="code">block</td>
+
+      <td>value of type <span class="code">char *</span></td>
+    </tr>
+
+    <tr>
+      <td class="code">n</td>
+
+      <td>value of type <span class=
+      "code">UserAllocator::size_type</span></td>
+    </tr>
+  </table><br>
+
+  <table border align="center" summary="">
+    <caption>
+      <em>Typedefs</em>
+    </caption>
+
+    <tr>
+      <th>Expression</th>
+
+      <th>Type</th>
+    </tr>
+
+    <tr>
+      <td class="code">UserAllocator::size_type</td>
+
+      <td>An unsigned integral type that can represent the size of the
+      largest object to be allocated</td>
+    </tr>
+
+    <tr>
+      <td class="code">UserAllocator::difference_type</td>
+
+      <td>A signed integral type that can represent the difference of any two
+      pointers</td>
+    </tr>
+  </table><br>
+
+  <table border align="center" summary="">
+    <caption>
+      <em>Allocation and Deallocation</em>
+    </caption>
+
+    <tr>
+      <th>Expression</th>
+
+      <th>Return Type</th>
+
+      <th>Pre-Condition/Notes</th>
+    </tr>
+
+    <tr>
+      <td class="code">UserAllocator::malloc(n)</td>
+
+      <td class="code">char *</td>
+
+      <td>Attempts to allocate <span class="code">n</span> bytes from the
+      system. Returns 0 if out-of-memory.</td>
+    </tr>
+
+    <tr>
+      <td class="code">UserAllocator::free(block)</td>
+
+      <td class="code">void</td>
+
+      <td><span class="code">block</span> must have been previously returned
+      from a call to <span class="code">UserAllocator::malloc</span>.</td>
+    </tr>
+  </table>
+
+  <h2>Provided Implementations</h2>
+
+  <p>There are two <span class="code">UserAllocator</span> classes provided.
+  Both of them are in pool.hpp (see <a href="pool.html">pool</a>). The
+  default value for the template parameter <span class=
+  "code">UserAllocator</span> is always <span class=
+  "code">default_user_allocator_new_delete</span>.</p>
+
+  <h3>Synopsis</h3>
+  <pre class="code">
+struct default_user_allocator_new_delete
 {
   typedef std::size_t size_type;
   typedef std::ptrdiff_t difference_type;
@@ -73,19 +144,24 @@ struct default_user_allocator_malloc_free
   { return reinterpret_cast&lt;char *&gt;(std::malloc(bytes)); }
   static void free(char * const block)
   { std::free(block); }
-};</PRE>
+};
+</pre>
+  <hr>
 
-<P>
-<HR>
+  <p><a href="http://validator.w3.org/check?uri=referer"><img border="0" src=
+  "http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional"
+  height="31" width="88"></a></p>
 
-<P>
-Copyright &copy; 2000, 2001 Stephen Cleary (scleary AT jerviswebb DOT com)
+  <p>Revised 
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->05
+  December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38516" --></p>
 
-<P>
-This file can be redistributed and/or modified under the terms found in <A HREF="../copyright.html">copyright.html</A>
+  <p><i>Copyright &copy; 2000, 2001 Stephen Cleary (scleary AT jerviswebb DOT
+  com)</i></p>
 
-<P>
-This software and its documentation is provided &quot;as is&quot; without express or implied warranty, and with no claim as to its suitability for any purpose.
-
-</BODY>
-</HTML>
+  <p><i>Distributed under the Boost Software License, Version 1.0. (See
+  accompanying file <a href="../../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a>
+  or copy at <a href=
+  "http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</i></p>
+</body>
+</html>

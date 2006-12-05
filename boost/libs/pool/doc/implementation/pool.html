@@ -1,28 +1,39 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
-<HTML>
-<HEAD>
-<TITLE>Pool Implementation</TITLE>
-<LINK HREF="../pool.css" REL="stylesheet" TYPE="text/css">
-</HEAD>
-<BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
 
-<IMG SRC="../../../../boost.png" WIDTH=276 HEIGHT=86 ALT="C++ Boost">
+<html>
+<head>
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+  <link href="../pool.css" rel="stylesheet" type="text/css">
 
-<H1 ALIGN=CENTER>Pool Implementation</H1>
+  <title>Pool Implementation</title>
+</head>
 
-<P>
-<H2>Dependencies</H2>
+<body>
+  <img src="../../../../boost.png" width="276" height="86" alt="C++ Boost">
 
-<P>
-Includes the system headers <SPAN CLASS="code">&lt;functional&gt;</SPAN>, <SPAN CLASS="code">&lt;new&gt;</SPAN>, <SPAN CLASS="code">&lt;cstddef&gt;</SPAN>, <SPAN CLASS="code">&lt;cstdlib&gt;</SPAN>, and <SPAN CLASS="code">&lt;exception&gt;</SPAN>.
+  <h1 align="center">Pool Implementation</h1>
 
-<P>
-Includes the Boost headers <SPAN CLASS="code">&quot;detail/ct_gcd_lcm.hpp&quot;</SPAN> (see <A HREF="ct_gcd_lcm.html">ct_gcd_lcm.html</A>), <SPAN CLASS="code">&quot;detail/gcd_lcm.hpp&quot;</SPAN> (see <A HREF="gcd_lcm.html">gcd_lcm.html</A>), and <SPAN CLASS="code">&quot;simple_segregated_storage.hpp&quot;</SPAN> (see <A HREF="simple_segregated_storage.html">simple_segregated_storage.html</A>).
+  <h2>Dependencies</h2>
 
-<P>
-<H2>Synopsis</H2>
+  <p>Includes the system headers <span class=
+  "code">&lt;functional&gt;</span>, <span class="code">&lt;new&gt;</span>,
+  <span class="code">&lt;cstddef&gt;</span>, <span class=
+  "code">&lt;cstdlib&gt;</span>, and <span class=
+  "code">&lt;exception&gt;</span>.</p>
 
-<PRE CLASS="code">namespace details {
+  <p>Includes the Boost headers <span class=
+  "code">"detail/ct_gcd_lcm.hpp"</span> (see <a href=
+  "ct_gcd_lcm.html">ct_gcd_lcm.html</a>), <span class=
+  "code">"detail/gcd_lcm.hpp"</span> (see <a href=
+  "gcd_lcm.html">gcd_lcm.html</a>), and <span class=
+  "code">"simple_segregated_storage.hpp"</span> (see <a href=
+  "simple_segregated_storage.html">simple_segregated_storage.html</a>).</p>
+
+  <h2>Synopsis</h2>
+  <pre class="code">
+namespace details {
 
 template &lt;typename SizeType&gt;
 class PODptr
@@ -37,17 +48,17 @@ class PODptr
 
     bool valid() const;
     void invalidate();
-    char * & begin();
+    char * &amp; begin();
     char * begin() const;
     char * end() const;
     size_type total_size() const;
     size_type element_size() const;
 
-    size_type & next_size() const;
-    char * & next_ptr() const;
+    size_type &amp; next_size() const;
+    char * &amp; next_ptr() const;
 
     PODptr next() const;
-    void next(const PODptr & arg) const;
+    void next(const PODptr &amp; arg) const;
 };
 
 } // namespace details
@@ -60,8 +71,8 @@ class pool: protected simple_segregated_storage&lt;typename UserAllocator::size_
   protected:
     details::PODptr&lt;size_type&gt; list;
 
-    simple_segregated_storage&lt;size_type&gt; & store();
-    const simple_segregated_storage&lt;size_type&gt; & store() const;
+    simple_segregated_storage&lt;size_type&gt; &amp; store();
+    const simple_segregated_storage&lt;size_type&gt; &amp; store() const;
 
     const size_type requested_size;
     size_type next_size;
@@ -74,143 +85,201 @@ class pool: protected simple_segregated_storage&lt;typename UserAllocator::size_
     pool(size_type requested_size, size_type next_size);
     size_type get_next_size() const;
     void set_next_size(size_type);
-};</PRE>
+};
+</pre>
 
-<P>
-<H2>Extensions to Public Interface</H2>
+  <h2>Extensions to Public Interface</h2>
 
-<P>
-Whenever an object of type <SPAN CLASS="code">pool</SPAN> needs memory from the system, it will request it from its <SPAN CLASS="code">UserAllocator</SPAN> template parameter.  The amount requested is determined using a doubling algorithm; that is, each time more system memory is allocated, the amount of system memory requested is doubled.  Users may control the doubling algorithm by using the following extensions.
+  <p>Whenever an object of type <span class="code">pool</span> needs memory
+  from the system, it will request it from its <span class=
+  "code">UserAllocator</span> template parameter. The amount requested is
+  determined using a doubling algorithm; that is, each time more system
+  memory is allocated, the amount of system memory requested is doubled.
+  Users may control the doubling algorithm by using the following
+  extensions.</p>
 
-<P>
-<H3>Additional constructor parameter</H3>
+  <h3>Additional constructor parameter</h3>
 
-<P>
-Users may pass an additional constructor parameter to <SPAN CLASS="code">pool</SPAN>.  This parameter is of type <SPAN CLASS="code">size_type</SPAN>, and is the number of chunks to request from the system the first time that object needs to allocate system memory.  The default is 32.  This parameter may not be 0.
+  <p>Users may pass an additional constructor parameter to <span class=
+  "code">pool</span>. This parameter is of type <span class=
+  "code">size_type</span>, and is the number of chunks to request from the
+  system the first time that object needs to allocate system memory. The
+  default is 32. This parameter may not be 0.</p>
 
-<P>
-<H3><SPAN CLASS="code">next_size</SPAN> accessor functions</H3>
+  <h3><span class="code">next_size</span> accessor functions</h3>
 
-<P>
-The pair of functions <SPAN CLASS="code">size_type get_next_size() const;</SPAN> and <SPAN CLASS="code">void set_next_size(size_type);</SPAN> allow users to explicitly read and write the <SPAN CLASS="code">next_size</SPAN> value.  This value is the number of chunks to request from the system the next time that object needs to allocate system memory.  This value should never be set to 0.
+  <p>The pair of functions <span class="code">size_type get_next_size()
+  const;</span> and <span class="code">void set_next_size(size_type);</span>
+  allow users to explicitly read and write the <span class=
+  "code">next_size</span> value. This value is the number of chunks to
+  request from the system the next time that object needs to allocate system
+  memory. This value should never be set to 0.</p>
 
-<P>
-<H2>Class <SPAN CLASS="code">PODptr</SPAN></H2>
+  <h2>Class <span class="code">PODptr</span></h2>
 
-<P>
-<SPAN CLASS="code">PODptr</SPAN> is a class that pretends to be a &quot;pointer&quot; to different class types that don't really exist.  It provides member functions to access the &quot;data&quot; of the &quot;object&quot; it points to.  Since these &quot;class&quot; types are of differing sizes, and contain some information at the end of their memory (for alignment reasons), <SPAN CLASS="code">PODptr</SPAN> must contain the size of this &quot;class&quot; as well as the pointer to this &quot;object&quot;.
+  <p><span class="code">PODptr</span> is a class that pretends to be a
+  "pointer" to different class types that don't really exist. It provides
+  member functions to access the "data" of the "object" it points to. Since
+  these "class" types are of differing sizes, and contain some information at
+  the end of their memory (for alignment reasons), <span class=
+  "code">PODptr</span> must contain the size of this "class" as well as the
+  pointer to this "object".</p>
 
-<P>
-A <SPAN CLASS="code">PODptr</SPAN> holds the location and size of a memory block allocated from the system.  Each memory block is split logically into three sections:
-<OL>
-<LI>Chunk area.  This section may be different sizes.  <SPAN CLASS="code">PODptr</SPAN> does not care what the size of the chunks is, but it does care (and keep track of) the total size of the chunk area.</LI>
-<LI>Next pointer.  This section is always the same size for a given <SPAN CLASS="code">SizeType</SPAN>.  It holds a pointer to the location of the next memory block in the memory block list, or 0 if there is no such block.</LI>
-<LI>Next size.  This section is always the same size for a given <SPAN CLASS="code">SizeType</SPAN>.  It holds the size of the next memory block in the memory block list.</LI>
-</OL>
+  <p>A <span class="code">PODptr</span> holds the location and size of a
+  memory block allocated from the system. Each memory block is split
+  logically into three sections:</p>
 
-<P>
-The <SPAN CLASS="code">PODptr</SPAN> class just provides cleaner ways of dealing with raw memory blocks.
+  <ol>
+    <li>Chunk area. This section may be different sizes. <span class=
+    "code">PODptr</span> does not care what the size of the chunks is, but it
+    does care (and keep track of) the total size of the chunk area.</li>
 
-<P>
-<H3>Validity</H3>
+    <li>Next pointer. This section is always the same size for a given
+    <span class="code">SizeType</span>. It holds a pointer to the location of
+    the next memory block in the memory block list, or 0 if there is no such
+    block.</li>
 
-<P>
-A <SPAN CLASS="code">PODptr</SPAN> object is either <EM>valid</EM> or <EM>invalid</EM>.  An invalid <SPAN CLASS="code">PODptr</SPAN> is analogous to a null pointer.
+    <li>Next size. This section is always the same size for a given
+    <span class="code">SizeType</span>. It holds the size of the next memory
+    block in the memory block list.</li>
+  </ol>
 
-<P>
-The default constructor for <SPAN CLASS="code">PODptr</SPAN> will result in an invalid object.  Calling the member function <SPAN CLASS="code">invalidate</SPAN> will result in that object becoming invalid.  The member function <SPAN CLASS="code">valid</SPAN> can be used to test for validity.
+  <p>The <span class="code">PODptr</span> class just provides cleaner ways of
+  dealing with raw memory blocks.</p>
 
-<P>
-<H3>Getting <SPAN CLASS="code">PODptr</SPAN> objects</H3>
+  <h3>Validity</h3>
 
-<P>
-A <SPAN CLASS="code">PODptr</SPAN> may be created to point to a memory block by passing the address and size of that memory block into the constructor.  A <SPAN CLASS="code">PODptr</SPAN> constructed in this way is valid.  
+  <p>A <span class="code">PODptr</span> object is either <em>valid</em> or
+  <em>invalid</em>. An invalid <span class="code">PODptr</span> is analogous
+  to a null pointer.</p>
 
-<P>
-A <SPAN CLASS="code">PODptr</SPAN> may also be created by a call to the member function <SPAN CLASS="code">next</SPAN>, which returns a <SPAN CLASS="code">PODptr</SPAN> which points to the next memory block in the memory block list, or an invalid <SPAN CLASS="code">PODptr</SPAN> if there is no such block.
+  <p>The default constructor for <span class="code">PODptr</span> will result
+  in an invalid object. Calling the member function <span class=
+  "code">invalidate</span> will result in that object becoming invalid. The
+  member function <span class="code">valid</span> can be used to test for
+  validity.</p>
 
-<P>
-<H3>Accessing the &quot;pointer&quot; data</H3>
+  <h3>Getting <span class="code">PODptr</span> objects</h3>
 
-<P>
-Each <SPAN CLASS="code">PODptr</SPAN> keeps the address and size of its memory block.  The address may be read or written by the member functions <SPAN CLASS="code">begin</SPAN>.  The size of the memory block may only be read, and is done so by the member function <SPAN CLASS="code">total_size</SPAN>.
+  <p>A <span class="code">PODptr</span> may be created to point to a memory
+  block by passing the address and size of that memory block into the
+  constructor. A <span class="code">PODptr</span> constructed in this way is
+  valid.</p>
 
-<P>
-<H3>Accessing the sections of the memory block</H3>
+  <p>A <span class="code">PODptr</span> may also be created by a call to the
+  member function <span class="code">next</span>, which returns a
+  <span class="code">PODptr</span> which points to the next memory block in
+  the memory block list, or an invalid <span class="code">PODptr</span> if
+  there is no such block.</p>
 
-<P>
-The chunk area may be accessed by the member functions <SPAN CLASS="code">begin</SPAN> and <SPAN CLASS="code">end</SPAN>, in conjunction with <SPAN CLASS="code">element_size</SPAN>.  The value returned by <SPAN CLASS="code">end</SPAN> is always the value returned by <SPAN CLASS="code">begin</SPAN> plus <SPAN CLASS="code">element_size</SPAN>.  Only <SPAN CLASS="code">begin</SPAN> is writeable.  <SPAN CLASS="code">end</SPAN> is a past-the-end value; using pointers beginning at <SPAN CLASS="code">begin</SPAN> and ending before <SPAN CLASS="code">end</SPAN> allows one to iterate through the chunks in a memory block.
+  <h3>Accessing the "pointer" data</h3>
 
-<P>
-The next pointer area may be accessed by the member function <SPAN CLASS="code">next_ptr</SPAN>.  The next size area may be accessed by the member function <SPAN CLASS="code">next_size</SPAN>.  Both of these are writeable.  They may both be read or set at the same time through the member function <SPAN CLASS="code">next</SPAN>.
+  <p>Each <span class="code">PODptr</span> keeps the address and size of its
+  memory block. The address may be read or written by the member functions
+  <span class="code">begin</span>. The size of the memory block may only be
+  read, and is done so by the member function <span class=
+  "code">total_size</span>.</p>
 
-<P>
-<H2>Protected Interface</H2>
+  <h3>Accessing the sections of the memory block</h3>
 
-<P>
-<H3>Protected Derivation</H3>
+  <p>The chunk area may be accessed by the member functions <span class=
+  "code">begin</span> and <span class="code">end</span>, in conjunction with
+  <span class="code">element_size</span>. The value returned by <span class=
+  "code">end</span> is always the value returned by <span class=
+  "code">begin</span> plus <span class="code">element_size</span>. Only
+  <span class="code">begin</span> is writeable. <span class="code">end</span>
+  is a past-the-end value; using pointers beginning at <span class=
+  "code">begin</span> and ending before <span class="code">end</span> allows
+  one to iterate through the chunks in a memory block.</p>
 
-Pool derives from a simple segregated storage via protected derivation; this exposes all the <A HREF="simple_segregated_storage.html">simple segregated storage implementation details</A> to all classes derived from Pool as well.
+  <p>The next pointer area may be accessed by the member function
+  <span class="code">next_ptr</span>. The next size area may be accessed by
+  the member function <span class="code">next_size</span>. Both of these are
+  writeable. They may both be read or set at the same time through the member
+  function <span class="code">next</span>.</p>
 
-<P>
-<H3 CLASS="code">details::PODptr&lt;size_type&gt; list;</H3>
+  <h2>Protected Interface</h2>
 
-<P>
-This is the list of memory blocks that have been allocated by this Pool object.  It is <STRONG>not</STRONG> the same as the list of free memory chunks (exposed by simple segregated storage as <SPAN CLASS="code">first</SPAN>).
+  <h3>Protected Derivation</h3>Pool derives from a simple segregated storage
+  via protected derivation; this exposes all the <a href=
+  "simple_segregated_storage.html">simple segregated storage implementation
+  details</a> to all classes derived from Pool as well.
 
-<P>
-<H3><SPAN CLASS="code">store</SPAN> functions</H3>
+  <h3 class="code">details::PODptr&lt;size_type&gt; list;</h3>
 
-<P>
-These are convenience functions, used to return the base simple segregated storage object.
+  <p>This is the list of memory blocks that have been allocated by this Pool
+  object. It is <strong>not</strong> the same as the list of free memory
+  chunks (exposed by simple segregated storage as <span class=
+  "code">first</span>).</p>
 
-<P>
-<H3 CLASS="code">const size_type requested_size;</H3>
+  <h3><span class="code">store</span> functions</h3>
 
-<P>
-The first argument passed into the constructor.  Represents the number of bytes in each chunk requested by the user.  The actual size of the chunks may be different; see <SPAN CLASS="code">alloc_size</SPAN>, below.
+  <p>These are convenience functions, used to return the base simple
+  segregated storage object.</p>
 
-<P>
-<H3 CLASS="code">size_type next_size</H3>
+  <h3 class="code">const size_type requested_size;</h3>
 
-<P>
-The number of chunks to request from the <SPAN CLASS="code">UserAllocator</SPAN> the next time we need to allocate system memory.  See the extensions descriptions, above.
+  <p>The first argument passed into the constructor. Represents the number of
+  bytes in each chunk requested by the user. The actual size of the chunks
+  may be different; see <span class="code">alloc_size</span>, below.</p>
 
-<P>
-<H3 CLASS="code">details::PODptr&lt;size_type&gt; find_POD(void * chunk) const;</H3>
+  <h3 class="code">size_type next_size</h3>
 
-<P>
-Searches through the memory block list, looking for the block that <SPAN CLASS="code">chunk</SPAN> was allocated from or may be allocated from in the future.  Returns that block if found, or an invalid value if <SPAN CLASS="code">chunk</SPAN> has been allocated from another Pool or may be allocated from another Pool in the future.  Results for other values of <SPAN CLASS="code">chunk</SPAN> may be wrong.
+  <p>The number of chunks to request from the <span class=
+  "code">UserAllocator</span> the next time we need to allocate system
+  memory. See the extensions descriptions, above.</p>
 
-<P>
-<H3 CLASS="code">static bool is_from(void * chunk, char * i, size_type sizeof_i);</H3>
+  <h3 class="code">details::PODptr&lt;size_type&gt; find_POD(void * chunk)
+  const;</h3>
 
-<P>
-Tests <SPAN CLASS="code">chunk</SPAN> to see if it has been allocated from the memory chunk at <SPAN CLASS="code">i</SPAN> with an element size of <SPAN CLASS="code">sizeof_i</SPAN>.  Note that <SPAN CLASS="code">sizeof_i</SPAN> is the size of the chunk area of that block, not the total size of that block.
+  <p>Searches through the memory block list, looking for the block that
+  <span class="code">chunk</span> was allocated from or may be allocated from
+  in the future. Returns that block if found, or an invalid value if
+  <span class="code">chunk</span> has been allocated from another Pool or may
+  be allocated from another Pool in the future. Results for other values of
+  <span class="code">chunk</span> may be wrong.</p>
 
-<P>
-Returns <SPAN CLASS="code">true</SPAN> if <SPAN CLASS="code">chunk</SPAN> has been allocated from that memory block or may be allocated from that block in the future.  Returns <SPAN CLASS="code">false</SPAN> if <SPAN CLASS="code">chunk</SPAN> has been allocated from another block or may be allocated from another block in the future.  Results for other values of <SPAN CLASS="code">chunk</SPAN> may be wrong.
+  <h3 class="code">static bool is_from(void * chunk, char * i, size_type
+  sizeof_i);</h3>
 
-<P>
-<H3 CLASS="code">size_type alloc_size() const;</H3>
+  <p>Tests <span class="code">chunk</span> to see if it has been allocated
+  from the memory chunk at <span class="code">i</span> with an element size
+  of <span class="code">sizeof_i</span>. Note that <span class=
+  "code">sizeof_i</span> is the size of the chunk area of that block, not the
+  total size of that block.</p>
 
-<P>
-Returns the calculated size of the memory chunks that will be allocated by this Pool.  For <A HREF="alignment.html">alignment reasons</A>, this is defined to be <SPAN CLASS="code">lcm(requested_size, sizeof(void *), sizeof(size_type))</SPAN>.
+  <p>Returns <span class="code">true</span> if <span class=
+  "code">chunk</span> has been allocated from that memory block or may be
+  allocated from that block in the future. Returns <span class=
+  "code">false</span> if <span class="code">chunk</span> has been allocated
+  from another block or may be allocated from another block in the future.
+  Results for other values of <span class="code">chunk</span> may be
+  wrong.</p>
 
-<P>
-<H2><A HREF="../interfaces/pool.html">Interface Description</A></H2>
+  <h3 class="code">size_type alloc_size() const;</h3>
 
-<P>
-<HR>
+  <p>Returns the calculated size of the memory chunks that will be allocated
+  by this Pool. For <a href="alignment.html">alignment reasons</a>, this is
+  defined to be <span class="code">lcm(requested_size, sizeof(void *),
+  sizeof(size_type))</span>.</p>
 
-<P>
-Copyright &copy; 2000, 2001 Stephen Cleary (scleary AT jerviswebb DOT com)
+  <h2><a href="../interfaces/pool.html">Interface Description</a></h2>
+  <hr>
 
-<P>
-This file can be redistributed and/or modified under the terms found in <A HREF="../copyright.html">copyright.html</A>
+  <p><a href="http://validator.w3.org/check?uri=referer"><img border="0" src=
+  "http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional"
+  height="31" width="88"></a></p>
 
-<P>
-This software and its documentation is provided &quot;as is&quot; without express or implied warranty, and with no claim as to its suitability for any purpose.
+  <p>Revised 
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->05
+  December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38516" --></p>
 
-</BODY>
-</HTML>
+  <p><i>Copyright &copy; 2000, 2001 Stephen Cleary (scleary AT jerviswebb DOT
+  com)</i></p>
+
+  <p><i>Distributed under the Boost Software License, Version 1.0. (See
+  accompanying file <a href="../../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a>
+  or copy at <a href=
+  "http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</i></p>
+</body>
+</html>

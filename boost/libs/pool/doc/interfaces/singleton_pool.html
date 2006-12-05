@@ -1,25 +1,31 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
-<HTML>
-<HEAD>
-<TITLE>Singleton Pool</TITLE>
-<LINK HREF="../pool.css" REL="stylesheet" TYPE="text/css">
-</HEAD>
-<BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
 
-<IMG SRC="../../../../boost.png" WIDTH=276 HEIGHT=86 ALT="C++ Boost">
+<html>
+<head>
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+  <link href="../pool.css" rel="stylesheet" type="text/css">
 
-<H1 ALIGN=CENTER>Singleton Pool</H1>
+  <title>Singleton Pool</title>
+</head>
 
-<P>
-<H2>Introduction</H2>
+<body>
+  <img src="../../../../boost.png" width="276" height="86" alt="C++ Boost">
 
-<P>
-singleton_pool.hpp provides a template class <SPAN CLASS="code">singleton_pool</SPAN>, which provides access to a <SPAN CLASS="code">pool</SPAN> as a singleton object.  For information on other pool-based interfaces, see <A HREF="../interfaces.html">the other pool interfaces</A>.
+  <h1 align="center">Singleton Pool</h1>
 
-<P>
-<H2>Synopsis</H2>
+  <h2>Introduction</h2>
 
-<PRE CLASS="code">template &lt;typename Tag, unsigned RequestedSize,
+  <p>singleton_pool.hpp provides a template class <span class=
+  "code">singleton_pool</span>, which provides access to a <span class=
+  "code">pool</span> as a singleton object. For information on other
+  pool-based interfaces, see <a href="../interfaces.html">the other pool
+  interfaces</a>.</p>
+
+  <h2>Synopsis</h2>
+  <pre class="code">
+template &lt;typename Tag, unsigned RequestedSize,
     typename UserAllocator = default_user_allocator_new_delete&gt;
 struct singleton_pool
 {
@@ -50,108 +56,253 @@ struct singleton_pool
 
     static bool release_memory();
     static bool purge_memory();
-};</PRE>
+};
+</pre>
 
-<P>
-<H2>Notes</H2>
+  <h2>Notes</h2>
 
-<P>
-The underlying pool <SPAN CLASS="code">p</SPAN> referenced by the static functions in <SPAN CLASS="code">singleton_pool</SPAN> is actually declared in a way that it is:
-<UL>
-<LI>Thread-safe if there is only one thread running before main() begins and after main() ends -- all of the static functions of <SPAN CLASS="code">singleton_pool</SPAN> synchronize their access to <SPAN CLASS="code">p</SPAN>.</LI>
-<LI>Guaranteed to be constructed before it is used -- thus, the simple static object in the synopsis above would actually be an incorrect implementation.  The actual <A HREF="../implementation/singleton_pool.html">implementation</A> to guarantee this is considerably more complicated.
-</UL>
+  <p>The underlying pool <span class="code">p</span> referenced by the static
+  functions in <span class="code">singleton_pool</span> is actually declared
+  in a way that it is:</p>
 
-<P>
-Note that a different underlying pool <SPAN CLASS="code">p</SPAN> exists for each different set of template parameters, including <A HREF="../implementation/singleton_pool.html">implementation-specific ones</A>.
+  <ul>
+    <li>Thread-safe if there is only one thread running before main() begins
+    and after main() ends -- all of the static functions of <span class=
+    "code">singleton_pool</span> synchronize their access to <span class=
+    "code">p</span>.</li>
 
-<P>
-<H2>Template Parameters</H2>
+    <li>Guaranteed to be constructed before it is used -- thus, the simple
+    static object in the synopsis above would actually be an incorrect
+    implementation. The actual <a href=
+    "../implementation/singleton_pool.html">implementation</a> to guarantee
+    this is considerably more complicated.</li>
+  </ul>
 
-<P>
-<H3>Tag</H3>
+  <p>Note that a different underlying pool <span class="code">p</span> exists
+  for each different set of template parameters, including <a href=
+  "../implementation/singleton_pool.html">implementation-specific
+  ones</a>.</p>
 
-<P>
-The <SPAN CLASS="code">Tag</SPAN> template parameter allows different unbounded sets of singleton pools to exist.  For example, the <A HREF="pool_alloc.html">pool allocators</A> use two tag classes to ensure that the two different allocator types never share the same underlying singleton pool.
+  <h2>Template Parameters</h2>
 
-<P>
-<SPAN CLASS="code">Tag</SPAN> is never actually used by <SPAN CLASS="code">singleton_pool</SPAN>.
+  <h3>Tag</h3>
 
-<P>
-<H3>RequestedSize</H3>
+  <p>The <span class="code">Tag</span> template parameter allows different
+  unbounded sets of singleton pools to exist. For example, the <a href=
+  "pool_alloc.html">pool allocators</a> use two tag classes to ensure that
+  the two different allocator types never share the same underlying singleton
+  pool.</p>
 
-<P>
-The requested size of memory chunks to allocate.  This is passed as a constructor parameter to the underlying <SPAN CLASS="code">pool</SPAN>.  Must be greater than 0.
+  <p><span class="code">Tag</span> is never actually used by <span class=
+  "code">singleton_pool</span>.</p>
 
-<P>
-<H3>UserAllocator</H3>
+  <h3>RequestedSize</h3>
 
-<P>
-Defines the method that the underlying <SPAN CLASS="code">pool</SPAN> will use to allocate memory from the system.  See <A HREF="user_allocator.html">User Allocators</A> for details.
+  <p>The requested size of memory chunks to allocate. This is passed as a
+  constructor parameter to the underlying <span class="code">pool</span>.
+  Must be greater than 0.</p>
 
-<P>
-<H2>Semantics</H2>
+  <h3>UserAllocator</h3>
 
-<P>
-<TABLE BORDER ALIGN=CENTER>
-<CAPTION><EM>Symbol Table</EM></CAPTION>
-<TR><TH>Symbol<TH>Meaning
-<TR><TD CLASS="code">SingletonPool<TD CLASS="code">singleton_pool&lt;Tag, RequestedSize, UserAllocator&gt;
-<TR><TD CLASS="code">chunk<TD>value of type <SPAN CLASS="code">void *</SPAN>
-<TR><TD CLASS="code">n<TD>value of type <SPAN CLASS="code">size_type</SPAN>
-</TABLE>
+  <p>Defines the method that the underlying <span class="code">pool</span>
+  will use to allocate memory from the system. See <a href=
+  "user_allocator.html">User Allocators</a> for details.</p>
 
-<P>
-<TABLE BORDER ALIGN=CENTER>
-<CAPTION><EM>Typedefs/Static Const Values</EM></CAPTION>
-<TR><TH>Expression<TH>Type/Value
-<TR><TD CLASS="code">SingletonPool::tag<TD CLASS="code">Tag
-<TR><TD CLASS="code">SingletonPool::user_allocator<TD CLASS="code">UserAllocator
-<TR><TD CLASS="code">SingletonPool::size_type<TD CLASS="code">pool&lt;UserAllocator&gt;::size_type
-<TR><TD CLASS="code">SingletonPool::difference_type<TD CLASS="code">pool&lt;UserAllocator&gt;::difference_type
-<TR><TD CLASS="code">SingletonPool::requested_size<TD CLASS="code">RequestedSize
-</TABLE>
+  <h2>Semantics</h2>
 
-<P>
-<TABLE BORDER ALIGN=CENTER>
-<CAPTION><EM>Functions</EM></CAPTION>
-<TR><TH>Expression<TH>Return Type<TH>Semantic Equivalent
-<TR><TD CLASS="code">SingletonPool::is_from(chunk)<TD CLASS="code">bool<TD><SPAN CLASS="code">SingletonPool::p.is_from(chunk);</SPAN> synchronized
-<TR><TD CLASS="code">SingletonPool::malloc()<TD CLASS="code">void *<TD><SPAN CLASS="code">SingletonPool::p.malloc();</SPAN> synchronized
-<TR><TD CLASS="code">SingletonPool::ordered_malloc(n)<TD CLASS="code">void *<TD><SPAN CLASS="code">SingletonPool::p.ordered_malloc(n);</SPAN> synchronized
-<TR><TD CLASS="code">SingletonPool::free(chunk)<TD CLASS="code">void<TD><SPAN CLASS="code">SingletonPool::p.free(chunk);</SPAN> synchronized
-<TR><TD CLASS="code">SingletonPool::ordered_free(chunk)<TD CLASS="code">void<TD><SPAN CLASS="code">SingletonPool::p.ordered_free(chunk);</SPAN> synchronized
-<TR><TD CLASS="code">SingletonPool::free(chunk, n)<TD CLASS="code">void<TD><SPAN CLASS="code">SingletonPool::p.free(chunk, n);</SPAN> synchronized
-<TR><TD CLASS="code">SingletonPool::ordered_free(chunk, n)<TD CLASS="code">void<TD><SPAN CLASS="code">SingletonPool::p.ordered_free(chunk, n);</SPAN> synchronized
-<TR><TD CLASS="code">SingletonPool::release_memory()<TD CLASS="code">bool<TD><SPAN CLASS="code">SingletonPool::p.release_memory();</SPAN> synchronized
-<TR><TD CLASS="code">SingletonPool::purge_memory()<TD CLASS="code">bool<TD><SPAN CLASS="code">SingletonPool::p.purge_memory();</SPAN> synchronized
-</TABLE>
+  <table border align="center" summary="">
+    <caption>
+      <em>Symbol Table</em>
+    </caption>
 
-<P>
-For more information on the semantics of these functions, see the <A HREF="pool.html">pool interface</A>.
+    <tr>
+      <th>Symbol</th>
 
-<P>
-<H2>Symbols</H2>
+      <th>Meaning</th>
+    </tr>
 
-<P>
-<UL>
-<LI>boost::singleton_pool</LI>
-</UL>
+    <tr>
+      <td class="code">SingletonPool</td>
 
-<P>
-<H2><A HREF="../implementation/singleton_pool.html">Implementation Details</A></H2>
+      <td class="code">singleton_pool&lt;Tag, RequestedSize,
+      UserAllocator&gt;</td>
+    </tr>
 
-<P>
-<HR>
+    <tr>
+      <td class="code">chunk</td>
 
-<P>
-Copyright &copy; 2000, 2001 Stephen Cleary (scleary AT jerviswebb DOT com)
+      <td>value of type <span class="code">void *</span></td>
+    </tr>
 
-<P>
-This file can be redistributed and/or modified under the terms found in <A HREF="../copyright.html">copyright.html</A>
+    <tr>
+      <td class="code">n</td>
 
-<P>
-This software and its documentation is provided &quot;as is&quot; without express or implied warranty, and with no claim as to its suitability for any purpose.
+      <td>value of type <span class="code">size_type</span></td>
+    </tr>
+  </table><br>
 
-</BODY>
-</HTML>
+  <table border align="center" summary="">
+    <caption>
+      <em>Typedefs/Static Const Values</em>
+    </caption>
+
+    <tr>
+      <th>Expression</th>
+
+      <th>Type/Value</th>
+    </tr>
+
+    <tr>
+      <td class="code">SingletonPool::tag</td>
+
+      <td class="code">Tag</td>
+    </tr>
+
+    <tr>
+      <td class="code">SingletonPool::user_allocator</td>
+
+      <td class="code">UserAllocator</td>
+    </tr>
+
+    <tr>
+      <td class="code">SingletonPool::size_type</td>
+
+      <td class="code">pool&lt;UserAllocator&gt;::size_type</td>
+    </tr>
+
+    <tr>
+      <td class="code">SingletonPool::difference_type</td>
+
+      <td class="code">pool&lt;UserAllocator&gt;::difference_type</td>
+    </tr>
+
+    <tr>
+      <td class="code">SingletonPool::requested_size</td>
+
+      <td class="code">RequestedSize</td>
+    </tr>
+  </table><br>
+
+  <table border align="center" summary="">
+    <caption>
+      <em>Functions</em>
+    </caption>
+
+    <tr>
+      <th>Expression</th>
+
+      <th>Return Type</th>
+
+      <th>Semantic Equivalent</th>
+    </tr>
+
+    <tr>
+      <td class="code">SingletonPool::is_from(chunk)</td>
+
+      <td class="code">bool</td>
+
+      <td><span class="code">SingletonPool::p.is_from(chunk);</span>
+      synchronized</td>
+    </tr>
+
+    <tr>
+      <td class="code">SingletonPool::malloc()</td>
+
+      <td class="code">void *</td>
+
+      <td><span class="code">SingletonPool::p.malloc();</span>
+      synchronized</td>
+    </tr>
+
+    <tr>
+      <td class="code">SingletonPool::ordered_malloc(n)</td>
+
+      <td class="code">void *</td>
+
+      <td><span class="code">SingletonPool::p.ordered_malloc(n);</span>
+      synchronized</td>
+    </tr>
+
+    <tr>
+      <td class="code">SingletonPool::free(chunk)</td>
+
+      <td class="code">void</td>
+
+      <td><span class="code">SingletonPool::p.free(chunk);</span>
+      synchronized</td>
+    </tr>
+
+    <tr>
+      <td class="code">SingletonPool::ordered_free(chunk)</td>
+
+      <td class="code">void</td>
+
+      <td><span class="code">SingletonPool::p.ordered_free(chunk);</span>
+      synchronized</td>
+    </tr>
+
+    <tr>
+      <td class="code">SingletonPool::free(chunk, n)</td>
+
+      <td class="code">void</td>
+
+      <td><span class="code">SingletonPool::p.free(chunk, n);</span>
+      synchronized</td>
+    </tr>
+
+    <tr>
+      <td class="code">SingletonPool::ordered_free(chunk, n)</td>
+
+      <td class="code">void</td>
+
+      <td><span class="code">SingletonPool::p.ordered_free(chunk, n);</span>
+      synchronized</td>
+    </tr>
+
+    <tr>
+      <td class="code">SingletonPool::release_memory()</td>
+
+      <td class="code">bool</td>
+
+      <td><span class="code">SingletonPool::p.release_memory();</span>
+      synchronized</td>
+    </tr>
+
+    <tr>
+      <td class="code">SingletonPool::purge_memory()</td>
+
+      <td class="code">bool</td>
+
+      <td><span class="code">SingletonPool::p.purge_memory();</span>
+      synchronized</td>
+    </tr>
+  </table>
+
+  <p>For more information on the semantics of these functions, see the
+  <a href="pool.html">pool interface</a>.</p>
+
+  <h2>Symbols</h2>
+
+  <ul>
+    <li>boost::singleton_pool</li>
+  </ul>
+
+  <h2><a href="../implementation/singleton_pool.html">Implementation
+  Details</a></h2>
+  <hr>
+
+  <p><a href="http://validator.w3.org/check?uri=referer"><img border="0" src=
+  "http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional"
+  height="31" width="88"></a></p>
+
+  <p>Revised 
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->05 December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38516" --></p>
+
+  <p><i>Copyright &copy; 2000, 2001 Stephen Cleary (scleary AT jerviswebb DOT com)</i></p>
+
+  <p><i>Distributed under the Boost Software License, Version 1.0. (See 
+  accompanying file <a href="../../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a>
+  or copy at <a href=
+  "http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</i></p>
+</body>
+</html>

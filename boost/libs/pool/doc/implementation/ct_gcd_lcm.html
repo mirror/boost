@@ -1,24 +1,28 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
-<HTML>
-<HEAD>
-<TITLE>ct_gcd_lcm - Compile-Time GCD and LCM</TITLE>
-<LINK HREF="../pool.css" REL="stylesheet" TYPE="text/css">
-</HEAD>
-<BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
 
-<IMG SRC="../../../../boost.png" WIDTH=276 HEIGHT=86 ALT="C++ Boost">
+<html>
+<head>
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+  <link href="../pool.css" rel="stylesheet" type="text/css">
 
-<H1 ALIGN=CENTER>ct_gcd_lcm - Compile-Time GCD and LCM</H1>
+  <title>ct_gcd_lcm - Compile-Time GCD and LCM</title>
+</head>
 
-<P>
-<H2>Introduction</H2>
+<body>
+  <img src="../../../../boost.png" width="276" height="86" alt="C++ Boost">
 
-<P>
-detail/ct_gcd_lcm.hpp provides two compile-time algorithms: greatest common divisor and least common multiple.
+  <h1 align="center">ct_gcd_lcm - Compile-Time GCD and LCM</h1>
 
-<P>
-<H2>Synopsis</H2>
-<PRE CLASS="code">namespace details {
+  <h2>Introduction</h2>
+
+  <p>detail/ct_gcd_lcm.hpp provides two compile-time algorithms: greatest
+  common divisor and least common multiple.</p>
+
+  <h2>Synopsis</h2>
+  <pre class="code">
+namespace details {
 namespace pool {
 
 template &lt;unsigned A, unsigned B&gt;
@@ -33,62 +37,120 @@ struct ct_lcm
 };
 
 } // namespace pool
-} // namespace details</PRE>
+} // namespace details
+</pre>
 
-<P>
-<H2>Semantics</H2>
+  <h2>Semantics</h2>
 
-<TABLE ALIGN=CENTER BORDER>
-<CAPTION><EM>Symbol Table</EM></CAPTION>
-<TR><TH>Symbol<TH>Meaning</TR>
-<TR><TD CLASS="code">A, B<TD>compile-time unsigned integer constants<A HREF="#5.19/1"><SUP>[5.19/1]</SUP></A></TR>
-</TABLE>
+  <table align="center" border summary="">
+    <caption>
+      <em>Symbol Table</em>
+    </caption>
 
-<TABLE ALIGN=CENTER BORDER>
-<CAPTION><EM>Semantics</EM></CAPTION>
-<TR><TH>Expression<TH>Result Type<TH>Value<TH>Precondition
-<TR><TD CLASS="code">ct_gcd&lt;A, B&gt;::value<TD>compile-time unsigned integer constant<TD>The greatest common divisor of <SPAN CLASS="code">A</SPAN> and <SPAN CLASS="code">B</SPAN><TD CLASS="code">A != 0 &amp;&amp; B != 0
-<TR><TD CLASS="code">ct_lcm&lt;A, B&gt;::value<TD>compile-time unsigned integer constant<TD>The least common multiple of <SPAN CLASS="code">A</SPAN> and <SPAN CLASS="code">B</SPAN><TD CLASS="code">A != 0 &amp;&amp; B != 0
-</TABLE>
+    <tr>
+      <th>Symbol</th>
 
-<P>
-<H2>Notes</H2>
+      <th>Meaning</th>
+    </tr>
 
-<P>
-Since these are compile-time algorithms, violation of the preconditions will result in a compile-time error.
+    <tr>
+      <td class="code">A, B</td>
 
-<P>
-<H2>Dependencies</H2>
+      <td>compile-time unsigned integer constants<a href=
+      "#s519p1"><sup>[5.19/1]</sup></a></td>
+    </tr>
+  </table><br>
 
-<UL>
-<LI>&lt;boost/static_assert.hpp&gt; (see <A HREF="../../../static_assert/static_assert.htm">Boost.Static_Assert</A>), to ensure preconditions are met.</LI>
-<LI>&lt;boost/type_traits/ice.hpp&gt; (see <A HREF="../../../../more/int_const_guidelines.htm">Coding Guidelines for Integral Constant Expressions</A>), to help with portability.</LI>
-</UL>
+  <table align="center" border summary="">
+    <caption>
+      <em>Semantics</em>
+    </caption>
 
-<P>
-<H2>Selected Quotations from the Standard</H2>
+    <tr>
+      <th>Expression</th>
 
-<P>
-<A NAME="5.19/1">
-<STRONG>5.19/1: Expressions: Constant Expressions:</STRONG> &quot;. . . An <EM>integral constant expression</EM> can involve only literals (2.13), enumerators, <SPAN CLASS="code">const</SPAN> variables or static data members of integral or enumeration types initialized with constant expressions (8.5), non-type template parameters of integral or enumeration types, and <SPAN CLASS="code">sizeof</SPAN> expressions.  Floating literals (2.13.3) can appear only if they are cast to integral or enumeration types.  Only type conversions to integral or enumeration types can be used.  In particular, except in <SPAN CLASS="code">sizeof</SPAN> expressions, functions, class objects, pointers, or references shall not be used, and assignment, increment, decrement, function-call, or comma operators shall not be used.&quot;</A>
+      <th>Result Type</th>
 
-<P>
-<H2>Future Directions</H2>
+      <th>Value</th>
 
-<P>
-This header may be replaced by a Boost compile-time algorithms library.
+      <th>Precondition</th>
+    </tr>
 
-<P>
-<HR>
+    <tr>
+      <td class="code">ct_gcd&lt;A, B&gt;::value</td>
 
-<P>
-Copyright &copy; 2000, 2001 Stephen Cleary (scleary AT jerviswebb DOT com)
+      <td>compile-time unsigned integer constant</td>
 
-<P>
-This file can be redistributed and/or modified under the terms found in <A HREF="../copyright.html">copyright.html</A>
+      <td>The greatest common divisor of <span class="code">A</span> and
+      <span class="code">B</span></td>
 
-<P>
-This software and its documentation is provided &quot;as is&quot; without express or implied warranty, and with no claim as to its suitability for any purpose.
+      <td class="code">A != 0 &amp;&amp; B != 0</td>
+    </tr>
 
-</BODY>
-</HTML>
+    <tr>
+      <td class="code">ct_lcm&lt;A, B&gt;::value</td>
+
+      <td>compile-time unsigned integer constant</td>
+
+      <td>The least common multiple of <span class="code">A</span> and
+      <span class="code">B</span></td>
+
+      <td class="code">A != 0 &amp;&amp; B != 0</td>
+    </tr>
+  </table>
+
+  <h2>Notes</h2>
+
+  <p>Since these are compile-time algorithms, violation of the preconditions
+  will result in a compile-time error.</p>
+
+  <h2>Dependencies</h2>
+
+  <ul>
+    <li>&lt;boost/static_assert.hpp&gt; (see <a href=
+    "../../../static_assert/static_assert.htm">Boost.Static_Assert</a>), to
+    ensure preconditions are met.</li>
+
+    <li>&lt;boost/type_traits/ice.hpp&gt; (see <a href=
+    "../../../../more/int_const_guidelines.htm">Coding Guidelines for
+    Integral Constant Expressions</a>), to help with portability.</li>
+  </ul>
+
+  <h2>Selected Quotations from the Standard</h2>
+
+  <p><a name="s519p1" id="s519p1"></a><strong>5.19/1: Expressions: Constant
+  Expressions:</strong> ". . . An <em>integral constant expression</em> can
+  involve only literals (2.13), enumerators, <span class="code">const</span>
+  variables or static data members of integral or enumeration types
+  initialized with constant expressions (8.5), non-type template parameters
+  of integral or enumeration types, and <span class="code">sizeof</span>
+  expressions. Floating literals (2.13.3) can appear only if they are cast to
+  integral or enumeration types. Only type conversions to integral or
+  enumeration types can be used. In particular, except in <span class=
+  "code">sizeof</span> expressions, functions, class objects, pointers, or
+  references shall not be used, and assignment, increment, decrement,
+  function-call, or comma operators shall not be used."</p>
+
+  <h2>Future Directions</h2>
+
+  <p>This header may be replaced by a Boost compile-time algorithms
+  library.</p>
+  <hr>
+
+  <p><a href="http://validator.w3.org/check?uri=referer"><img border="0" src=
+  "http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional"
+  height="31" width="88"></a></p>
+
+  <p>Revised 
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->05
+  December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38516" --></p>
+
+  <p><i>Copyright &copy; 2000, 2001 Stephen Cleary (scleary AT jerviswebb DOT
+  com)</i></p>
+
+  <p><i>Distributed under the Boost Software License, Version 1.0. (See
+  accompanying file <a href="../../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a>
+  or copy at <a href=
+  "http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</i></p>
+</body>
+</html>

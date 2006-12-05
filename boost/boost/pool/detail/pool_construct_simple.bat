@@ -2,10 +2,8 @@
 rem
 rem Copyright (C) 2001 Stephen Cleary
 rem
-rem This file can be redistributed and/or modified under the terms found
-rem  in "copyright.html"
-rem This software and its documentation is provided "as is" without express or
-rem  implied warranty, and with no claim as to its suitability for any purpose.
+rem Distributed under the Boost Software License, Version 1.0. (See accompany-
+rem ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 rem
 rem See http://www.boost.org for updates, documentation, and revision history.
 rem

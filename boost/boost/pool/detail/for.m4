@@ -1,10 +1,8 @@
 m4_dnl 
 m4_dnl Copyright (C) 2000 Stephen Cleary
 m4_dnl 
-m4_dnl This file can be redistributed and/or modified under the terms found
-m4_dnl  in "copyright.html"
-m4_dnl This software and its documentation is provided "as is" without express or
-m4_dnl  implied warranty, and with no claim as to its suitability for any purpose.
+m4_dnl Distributed under the Boost Software License, Version 1.0. (See accompany-
+m4_dnl ing file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 m4_dnl
 m4_dnl See http://www.boost.org for updates, documentation, and revision history.
 m4_dnl 

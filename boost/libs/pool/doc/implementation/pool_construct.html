@@ -1,62 +1,83 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
-<HTML>
-<HEAD>
-<TITLE>Object Pool Constructors Generator</TITLE>
-<LINK HREF="../pool.css" REL="stylesheet" TYPE="text/css">
-</HEAD>
-<BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
 
-<IMG SRC="../../../../boost.png" WIDTH=276 HEIGHT=86 ALT="C++ Boost">
+<html>
+<head>
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+  <link href="../pool.css" rel="stylesheet" type="text/css">
 
-<H1 ALIGN=CENTER>Object Pool Constructors Generator</H1>
+  <title>Object Pool Constructors Generator</title>
+</head>
 
-<P>
-<H2>Description</H2>
+<body>
+  <img src="../../../../boost.png" width="276" height="86" alt="C++ Boost">
 
-<P>
-The template class <SPAN CLASS="code">object_pool</SPAN> (see <A HREF="object_pool.html">object_pool.html</A>) contains a number of functions <SPAN CLASS="code">construct(..)</SPAN>, which both allocate and construct an object in a single operation.
+  <h1 align="center">Object Pool Constructors Generator</h1>
 
-<P>
-Since the number and type of arguments to this function is totally arbitrary, a simple system has been set up to automatically generate template <SPAN CLASS="code">construct</SPAN> functions.  This system is based on the macro preprocessor <STRONG>m4</STRONG>, which is standard on UNIX systems and also available for Win32 systems.
+  <h2>Description</h2>
 
-<P>
-detail/pool_construct.m4, when run with <STRONG>m4</STRONG>, will create the file detail/pool_construct.inc, which only defines the <SPAN CLASS="code">construct</SPAN> functions for the proper number of arguments.  The number of arguments may be passed into the file as an m4 macro, <SPAN CLASS="code">NumberOfArguments</SPAN>; if not provided, it will default to <SPAN CLASS="code">3</SPAN>.
+  <p>The template class <span class="code">object_pool</span> (see <a href=
+  "object_pool.html">object_pool.html</a>) contains a number of functions
+  <span class="code">construct(..)</span>, which both allocate and construct
+  an object in a single operation.</p>
 
-<P>
-For each different number of arguments (<SPAN CLASS="code">1</SPAN> to <SPAN CLASS="code">NumberOfArguments</SPAN>), a template function is generated.  There are the same number of template parameters as there are arguments, and each argument's type is a reference to that (possibly cv-qualified) template argument.  Each possible permutation of the cv-qualifications is also generated.
+  <p>Since the number and type of arguments to this function is totally
+  arbitrary, a simple system has been set up to automatically generate
+  template <span class="code">construct</span> functions. This system is
+  based on the macro preprocessor <strong>m4</strong>, which is standard on
+  UNIX systems and also available for Win32 systems.</p>
 
-<P>
-Because each permutation is generated for each possible number of arguments, the included file size grows exponentially in terms of the number of constructor arguments, not linearly.  For the sake of rational compile times, only use as many arguments as you need.
+  <p>detail/pool_construct.m4, when run with <strong>m4</strong>, will create
+  the file detail/pool_construct.inc, which only defines the <span class=
+  "code">construct</span> functions for the proper number of arguments. The
+  number of arguments may be passed into the file as an m4 macro,
+  <span class="code">NumberOfArguments</span>; if not provided, it will
+  default to <span class="code">3</span>.</p>
 
-<P>
-detail/pool_construct.bat and detail/pool_construct.sh are also provided to call <STRONG>m4</STRONG>, defining <SPAN CLASS="code">NumberOfArguments</SPAN> to be their command-line parameter.  See these files for more details.
+  <p>For each different number of arguments (<span class="code">1</span> to
+  <span class="code">NumberOfArguments</span>), a template function is
+  generated. There are the same number of template parameters as there are
+  arguments, and each argument's type is a reference to that (possibly
+  cv-qualified) template argument. Each possible permutation of the
+  cv-qualifications is also generated.</p>
 
-<P>
-<H2>Dependencies</H2>
+  <p>Because each permutation is generated for each possible number of
+  arguments, the included file size grows exponentially in terms of the
+  number of constructor arguments, not linearly. For the sake of rational
+  compile times, only use as many arguments as you need.</p>
 
-<P>
-Dependent on for.m4 (see <A HREF="for.html">for.html</A>).
+  <p>detail/pool_construct.bat and detail/pool_construct.sh are also provided
+  to call <strong>m4</strong>, defining <span class=
+  "code">NumberOfArguments</span> to be their command-line parameter. See
+  these files for more details.</p>
 
-<P>
-<H2>Future Directions</H2>
+  <h2>Dependencies</h2>
 
-<P>
-This system may be complemented by or replaced by a Python (or some other language) script.
+  <p>Dependent on for.m4 (see <a href="for.html">for.html</a>).</p>
 
-<P>
-<H2><A HREF="../interfaces/object_pool.html">Interface Description</A></H2>
+  <h2>Future Directions</h2>
 
-<P>
-<HR>
+  <p>This system may be complemented by or replaced by a Python (or some
+  other language) script.</p>
 
-<P>
-Copyright &copy; 2000, 2001 Stephen Cleary (scleary AT jerviswebb DOT com)
+  <h2><a href="../interfaces/object_pool.html">Interface Description</a></h2>
+  <hr>
 
-<P>
-This file can be redistributed and/or modified under the terms found in <A HREF="../copyright.html">copyright.html</A>
+  <p><a href="http://validator.w3.org/check?uri=referer"><img border="0" src=
+  "http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional"
+  height="31" width="88"></a></p>
 
-<P>
-This software and its documentation is provided &quot;as is&quot; without express or implied warranty, and with no claim as to its suitability for any purpose.
+  <p>Revised 
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->05
+  December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38516" --></p>
 
-</BODY>
-</HTML>
+  <p><i>Copyright &copy; 2000, 2001 Stephen Cleary (scleary AT jerviswebb DOT
+  com)</i></p>
+
+  <p><i>Distributed under the Boost Software License, Version 1.0. (See
+  accompanying file <a href="../../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a>
+  or copy at <a href=
+  "http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</i></p>
+</body>
+</html>

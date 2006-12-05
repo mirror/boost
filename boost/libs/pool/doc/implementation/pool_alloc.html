@@ -1,28 +1,35 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"> 
-<HTML>
-<HEAD>
-<TITLE>pool_alloc - Boost Pool Standard Allocators Implementation</TITLE>
-<LINK HREF="../pool.css" REL="stylesheet" TYPE="text/css">
-</HEAD>
-<BODY>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
 
-<IMG SRC="../../../../boost.png" WIDTH=276 HEIGHT=86 ALT="C++ Boost">
+<html>
+<head>
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+  <link href="../pool.css" rel="stylesheet" type="text/css">
 
-<H1 ALIGN=CENTER>pool_alloc - Boost Pool Standard Allocators Implementation</H1>
+  <title>pool_alloc - Boost Pool Standard Allocators Implementation</title>
+</head>
 
-<P>
-<H2>Dependencies</H2>
+<body>
+  <img src="../../../../boost.png" width="276" height="86" alt="C++ Boost">
 
-<P>
-Includes the system headers <SPAN CLASS="code">&lt;new&gt;</SPAN> and <SPAN CLASS="code">&lt;limits&gt;</SPAN>.
+  <h1 align="center">pool_alloc - Boost Pool Standard Allocators
+  Implementation</h1>
 
-<P>
-Includes the Boost headers <SPAN CLASS="code">&quot;singleton_pool.hpp&quot;</SPAN> (see <A HREF="singleton_pool.html">singleton_pool.html</A>) and <SPAN CLASS="code">&quot;detail/mutex.hpp&quot;</SPAN> (see <A HREF="mutex.html">mutex.html</A>).
+  <h2>Dependencies</h2>
 
-<P>
-<H2>Synopsis</H2>
+  <p>Includes the system headers <span class="code">&lt;new&gt;</span> and
+  <span class="code">&lt;limits&gt;</span>.</p>
 
-<PRE CLASS="code">template &lt;typename T,
+  <p>Includes the Boost headers <span class=
+  "code">"singleton_pool.hpp"</span> (see <a href=
+  "singleton_pool.html">singleton_pool.html</a>) and <span class=
+  "code">"detail/mutex.hpp"</span> (see <a href=
+  "mutex.html">mutex.html</a>).</p>
+
+  <h2>Synopsis</h2>
+  <pre class="code">
+template &lt;typename T,
     typename UserAllocator = default_user_allocator_new_delete,
     typename Mutex = details::pool::default_mutex,
     unsigned NextSize = 32&gt;
@@ -60,68 +67,77 @@ class fast_pool_allocator
     {
       typedef fast_pool_allocator&lt;U, UserAllocator, Mutex, NextSize&gt; other;
     };
-};</PRE>
+};
+</pre>
 
-<P>
-<H2>Extensions to Public Interface</H2>
+  <h2>Extensions to Public Interface</h2>
 
-<P>
-<H3>Additional template parameters</H3>
+  <h3>Additional template parameters</h3>
 
-<P>
-<H4 CLASS="code">Mutex</H4>
+  <h4 class="code">Mutex</h4>
 
-<P>
-This parameter allows the user to determine the type of synchronization to be used on the underlying singleton pool.  See the extensions to the public interface of <A HREF="singleton_pool.html">singleton pool</A> for more information.
+  <p>This parameter allows the user to determine the type of synchronization
+  to be used on the underlying singleton pool. See the extensions to the
+  public interface of <a href="singleton_pool.html">singleton pool</a> for
+  more information.</p>
 
-<P>
-<H4 CLASS="code">NextSize</H4>
+  <h4 class="code">NextSize</h4>
 
-<P>
-The value of this parameter is passed to the underlying Pool when it is created.  See the extensions to the public interface of <A HREF="pool.html">pool</A> for more information.
+  <p>The value of this parameter is passed to the underlying Pool when it is
+  created. See the extensions to the public interface of <a href=
+  "pool.html">pool</a> for more information.</p>
 
-<P>
-<H3>Modification of <SPAN CLASS="code">rebind</SPAN></H3>
+  <h3>Modification of <span class="code">rebind</span></h3>
 
-<P>
-The struct <SPAN CLASS="code">rebind</SPAN> has been redefined to preserve the values of the additional template parameters.
+  <p>The struct <span class="code">rebind</span> has been redefined to
+  preserve the values of the additional template parameters.</p>
 
-<P>
-<H3>Additional members</H3>
+  <h3>Additional members</h3>
 
-<P>
-The typedef <SPAN CLASS="code">mutex</SPAN> and the static const value <SPAN CLASS="code">next_size</SPAN> publish the values of the template parameters <SPAN CLASS="code">Mutex</SPAN> and <SPAN CLASS="code">NextSize</SPAN>, respectively.
+  <p>The typedef <span class="code">mutex</span> and the static const value
+  <span class="code">next_size</span> publish the values of the template
+  parameters <span class="code">Mutex</span> and <span class=
+  "code">NextSize</span>, respectively.</p>
 
-<P>
-<H2>Notes</H2>
+  <h2>Notes</h2>
 
-<P>
-A number of common STL libraries contain bugs in their using of allocators.  Specifically, they pass null pointers to the <SPAN CLASS="code">deallocate</SPAN> function, which is explicitly forbidden by the Standard [20.1.5 Table 32].  PoolAlloc will work around these libraries if it detects them; currently, workarounds are in place for:
-<UL>
-<LI>Borland C++ (Builder and command-line compiler) with default (RogueWave) library, ver. 5 and earlier</LI>
-<LI>STLport (with any compiler), ver. 4.0 and earlier</LI>
-</UL>
+  <p>A number of common STL libraries contain bugs in their using of
+  allocators. Specifically, they pass null pointers to the <span class=
+  "code">deallocate</span> function, which is explicitly forbidden by the
+  Standard [20.1.5 Table 32]. PoolAlloc will work around these libraries if
+  it detects them; currently, workarounds are in place for:</p>
 
-<P>
-<H2>Future Directions</H2>
+  <ul>
+    <li>Borland C++ (Builder and command-line compiler) with default
+    (RogueWave) library, ver. 5 and earlier</li>
 
-<P>
-When the Boost multithreading library is completed, the <SPAN CLASS="code">Mutex</SPAN> parameter will be replaced by something from that library providing the same flexibility and will move from an implementation detail into the interface specification.
+    <li>STLport (with any compiler), ver. 4.0 and earlier</li>
+  </ul>
 
-<P>
-<H2><A HREF="../interfaces/pool_alloc.html">Interface Description</A></H2>
+  <h2>Future Directions</h2>
 
-<P>
-<HR>
+  <p>When the Boost multithreading library is completed, the <span class=
+  "code">Mutex</span> parameter will be replaced by something from that
+  library providing the same flexibility and will move from an implementation
+  detail into the interface specification.</p>
 
-<P>
-Copyright &copy; 2000, 2001 Stephen Cleary (scleary AT jerviswebb DOT com)
+  <h2><a href="../interfaces/pool_alloc.html">Interface Description</a></h2>
+  <hr>
 
-<P>
-This file can be redistributed and/or modified under the terms found in <A HREF="../copyright.html">copyright.html</A>
+  <p><a href="http://validator.w3.org/check?uri=referer"><img border="0" src=
+  "http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional"
+  height="31" width="88"></a></p>
 
-<P>
-This software and its documentation is provided &quot;as is&quot; without express or implied warranty, and with no claim as to its suitability for any purpose.
+  <p>Revised 
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->05
+  December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38516" --></p>
 
-</BODY>
-</HTML>
+  <p><i>Copyright &copy; 2000, 2001 Stephen Cleary (scleary AT jerviswebb DOT
+  com)</i></p>
+
+  <p><i>Distributed under the Boost Software License, Version 1.0. (See
+  accompanying file <a href="../../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a>
+  or copy at <a href=
+  "http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</i></p>
+</body>
+</html>
