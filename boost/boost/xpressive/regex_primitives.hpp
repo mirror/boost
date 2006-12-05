@@ -10,6 +10,7 @@
 #define BOOST_XPRESSIVE_REGEX_PRIMITIVES_HPP_EAN_10_04_2005
 
 #include <climits>
+#include <boost/mpl/if.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/xpressive/proto/proto.hpp>
@@ -19,6 +20,7 @@
 #include <boost/xpressive/detail/core/matchers.hpp>
 #include <boost/xpressive/detail/static/as_xpr.hpp>
 #include <boost/xpressive/detail/static/compile.hpp>
+#include <boost/xpressive/detail/static/grammar.hpp>
 #include <boost/xpressive/detail/static/modifier.hpp>
 #include <boost/xpressive/detail/utility/ignore_unused.hpp>
 #include <boost/xpressive/detail/static/regex_operators.hpp>
@@ -627,6 +629,74 @@ imbue(Locale const &loc)
     return mod;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+/// \brief For checking if an expression matches xpressive's grammar
+///
+/// checker\<\> can be used to see if a given expression is a valid
+/// xpressive regular expression. If it is, it will simply return it.
+/// If it isn't, it will cause a simple and short compile-time error.
+/// You may use it as follows:
+///   checker\<char\> check;
+///   sregex rx = check( _ << "oops" );
+///
+/// See also xpressive::check and xpressive::wcheck.
+///
+/// \param Char The character type of the regular expression.
+template<typename Char>
+struct checker
+{
+private:
+    struct some_valid_expression
+      : proto::extends<typename proto::meta::terminal<Char>::type>
+    {
+        template<typename Xpr>
+        some_valid_expression(Xpr const &);
+    };
+
+    struct expression_does_not_match_xpressive_grammar
+      : mpl::false_
+    {};
+
+public:
+    template<typename Xpr>
+    typename mpl::if_
+    <
+        proto::matches<Xpr, XpressiveGrammar<Char> >
+      , Xpr const &
+      , some_valid_expression
+    >::type operator ()(Xpr const &xpr) const
+    {
+        typedef typename mpl::if_
+        <
+            proto::matches<Xpr, XpressiveGrammar<Char> >
+          , mpl::true_
+          , expression_does_not_match_xpressive_grammar
+        >::type does_expression_match_xpressive_grammar;
+
+        BOOST_MPL_ASSERT((does_expression_match_xpressive_grammar));
+        return xpr;
+    }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+/// \brief For checking if an expression matches xpressive's grammar
+///
+/// check can be used to see if a given expression is a valid narrow
+/// xpressive regular expression. If it is, it will simply return it.
+/// If it isn't, it will cause a simple and short compile-time error.
+/// You may use it as follows:
+///   sregex rx = check( _ << "oops" );
+checker<char> const check = {};
+
+///////////////////////////////////////////////////////////////////////////////
+/// \brief For checking if an expression matches xpressive's grammar
+///
+/// check can be used to see if a given expression is a valid wide
+/// xpressive regular expression. If it is, it will simply return it.
+/// If it isn't, it will cause a simple and short compile-time error.
+/// You may use it as follows:
+///   wsregex rx = wcheck( _ << L"oops" );
+checker<wchar_t> const wcheck = {};
 
 namespace detail
 {
@@ -662,6 +732,8 @@ namespace detail
         ignore_unused(s7);
         ignore_unused(s8);
         ignore_unused(s9);
+        ignore_unused(check);
+        ignore_unused(wcheck);
     }
 }
 
