@@ -1,212 +1,210 @@
-<HTML>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
 <!--
-  -- Copyright (c) Jeremy Siek 2000
-  --
-  -- Permission to use, copy, modify, distribute and sell this software
-  -- and its documentation for any purpose is hereby granted without fee,
-  -- provided that the above copyright notice appears in all copies and
-  -- that both that copyright notice and this permission notice appear
-  -- in supporting documentation.  Silicon Graphics makes no
-  -- representations about the suitability of this software for any
-  -- purpose.  It is provided "as is" without express or implied warranty.
+  == Copyright (c) 1996-1999
+  == Silicon Graphics Computer Systems, Inc.
+  ==
+  == Permission to use, copy, modify, distribute and sell this software
+  == and its documentation for any purpose is hereby granted without fee,
+  == provided that the above copyright notice appears in all copies and
+  == that both that copyright notice and this permission notice appear
+  == in supporting documentation.  Silicon Graphics makes no
+  == representations about the suitability of this software for any
+  == purpose.  It is provided "as is" without express or implied warranty.
+  ==
+  == Copyright (c) 1994
+  == Hewlett-Packard Company
+  ==
+  == Permission to use, copy, modify, distribute and sell this software
+  == and its documentation for any purpose is hereby granted without fee,
+  == provided that the above copyright notice appears in all copies and
+  == that both that copyright notice and this permission notice appear
+  == in supporting documentation.  Hewlett-Packard Company makes no
+  == representations about the suitability of this software for any
+  == purpose.  It is provided "as is" without express or implied warranty.
+  ==
   -->
-<!--
-  -- Copyright (c) 1996-1999
-  -- Silicon Graphics Computer Systems, Inc.
-  --
-  -- Permission to use, copy, modify, distribute and sell this software
-  -- and its documentation for any purpose is hereby granted without fee,
-  -- provided that the above copyright notice appears in all copies and
-  -- that both that copyright notice and this permission notice appear
-  -- in supporting documentation.  Silicon Graphics makes no
-  -- representations about the suitability of this software for any
-  -- purpose.  It is provided "as is" without express or implied warranty.
-  --
-  -- Copyright (c) 1994
-  -- Hewlett-Packard Company
-  --
-  -- Permission to use, copy, modify, distribute and sell this software
-  -- and its documentation for any purpose is hereby granted without fee,
-  -- provided that the above copyright notice appears in all copies and
-  -- that both that copyright notice and this permission notice appear
-  -- in supporting documentation.  Hewlett-Packard Company makes no
-  -- representations about the suitability of this software for any
-  -- purpose.  It is provided "as is" without express or implied warranty.
-  --
-  -->
-<Head>
-<Title>LessThanComparable</Title>
-</Head>
-<BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
-        ALINK="#ff0000"> 
-<IMG SRC="../../boost.png" 
-     ALT="C++ Boost" width="277" height="86"> 
-<!--end header-->
-<BR Clear>
-<H1>LessThanComparable</H1>
 
-<h3>Description</h3>
-A type is LessThanComparable if it is ordered: it must
-be possible to compare two objects of that type using <tt>operator&lt;</tt>, and
-<tt>operator&lt;</tt> must be a strict weak ordering relation.
+<head>
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
 
+  <title>LessThanComparable</title>
+</head>
 
-<h3>Refinement of</h3>
-<h3>Associated types</h3>
-<h3>Notation</h3>
-<Table>
-<TR>
-<TD VAlign=top>
-<tt>X</tt>
-</TD>
-<TD VAlign=top>
-A type that is a model of LessThanComparable
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-<tt>x</tt>, <tt>y</tt>, <tt>z</tt>
-</TD>
-<TD VAlign=top>
-Object of type <tt>X</tt>
-</TD>
-</tr>
-</table>
-<h3>Definitions</h3>
-Consider the relation <tt>!(x &lt; y) &amp;&amp; !(y &lt; x)</tt>.  If this relation is
-transitive (that is, if <tt>!(x &lt; y) &amp;&amp; !(y &lt; x) &amp;&amp; !(y &lt; z) &amp;&amp; !(z &lt; y)</tt>
-implies <tt>!(x &lt; z) &amp;&amp; !(z &lt; x)</tt>), then it satisfies the mathematical
-definition of an equivalence relation.  In this case, <tt>operator&lt;</tt>
-is a <i>strict weak ordering</i>.
-<P>
-If <tt>operator&lt;</tt> is a strict weak ordering, and if each equivalence class
-has only a single element, then <tt>operator&lt;</tt> is a <i>total ordering</i>.
-<h3>Valid expressions</h3>
-<Table border>
-<TR>
-<TH>
-Name
-</TH>
-<TH>
-Expression
-</TH>
-<TH>
-Type requirements
-</TH>
-<TH>
-Return type
-</TH>
-</TR>
-<TR>
-<TD VAlign=top>
-Less
-</TD>
-<TD VAlign=top>
-<tt>x &lt; y</tt>
-</TD>
-<TD VAlign=top>
-&nbsp;
-</TD>
-<TD VAlign=top>
-Convertible to <tt>bool</tt>
-</TD>
-</TR>
-</table>
+<body bgcolor="#FFFFFF" link="#0000EE" text="#000000" vlink="#551A8B" alink=
+"#FF0000">
+  <img src="../../boost.png" alt="C++ Boost" width="277" height=
+  "86"><br clear="none">
 
+  <h1>LessThanComparable</h1>
 
+  <h3>Description</h3>
 
-<h3>Expression semantics</h3>
-<Table border>
-<TR>
-<TH>
-Name
-</TH>
-<TH>
-Expression
-</TH>
-<TH>
-Precondition
-</TH>
-<TH>
-Semantics
-</TH>
-<TH>
-Postcondition
-</TH>
-</TR>
-<TR>
-<TD VAlign=top>
-Less
-</TD>
-<TD VAlign=top>
-<tt>x &lt; y</tt>
-</TD>
-<TD VAlign=top>
-<tt>x</tt> and <tt>y</tt> are in the domain of <tt>&lt;</tt>
-</TD>
-<TD VAlign=top>
-&nbsp;
-</TD>
-</table>
+  <p>A type is LessThanComparable if it is ordered: it must be possible to
+  compare two objects of that type using <tt>operator&lt;</tt>, and
+  <tt>operator&lt;</tt> must be a strict weak ordering relation.</p>
 
+  <h3>Refinement of</h3>
 
-<h3>Complexity guarantees</h3>
-<h3>Invariants</h3>
-<Table border>
-<TR>
-<TD VAlign=top>
-Irreflexivity
-</TD>
-<TD VAlign=top>
-<tt>x &lt; x</tt> must be false.
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Antisymmetry
-</TD>
-<TD VAlign=top>
-<tt>x &lt; y</tt> implies !(y &lt; x) <A href="#2">[2]</A>
-</TD>
-</TR>
-<TR>
-<TD VAlign=top>
-Transitivity
-</TD>
-<TD VAlign=top>
-<tt>x &lt; y</tt> and <tt>y &lt; z</tt> implies <tt>x &lt; z</tt> <A href="#3">[3]</A>
-</TD>
-</tr>
-</table>
-<h3>Models</h3>
-<UL>
-<LI>
-int
-</UL>
-<h3>Notes</h3>
-<P><A name="1">[1]</A>
-Only <tt>operator&lt;</tt> is fundamental; the other inequality operators
-are essentially syntactic sugar.
-<P><A name="2">[2]</A>
-Antisymmetry is a theorem, not an axiom: it follows from
-irreflexivity and transitivity.
-<P><A name="3">[3]</A>
-Because of irreflexivity and transitivity, <tt>operator&lt;</tt> always
-satisfies the definition of a <i>partial ordering</i>.  The definition of
-a <i>strict weak ordering</i> is stricter, and the definition of a
-<i>total ordering</i> is stricter still.
-<h3>See also</h3>
-<A href="http://www.sgi.com/tech/stl/EqualityComparable.html">EqualityComparable</A>, <A href="http://www.sgi.com/tech/stl/StrictWeakOrdering.html">StrictWeakOrdering</A>
+  <h3>Associated types</h3>
 
+  <h3>Notation</h3>
 
+  <table summary="">
+    <tr>
+      <td valign="top"><tt>X</tt></td>
 
-<br>
-<HR>
-<TABLE>
-<TR valign=top>
-<TD nowrap>Copyright &copy 2000</TD><TD>
-<A HREF=http://www.lsc.nd.edu/~jsiek>Jeremy Siek</A>, Univ.of Notre Dame (<A HREF="mailto:jsiek@lsc.nd.edu">jsiek@lsc.nd.edu</A>)
-</TD></TR></TABLE>
+      <td valign="top">A type that is a model of LessThanComparable</td>
+    </tr>
 
-</BODY>
-</HTML> 
+    <tr>
+      <td valign="top"><tt>x</tt>, <tt>y</tt>, <tt>z</tt></td>
+
+      <td valign="top">Object of type <tt>X</tt></td>
+    </tr>
+  </table>
+
+  <h3>Definitions</h3>
+
+  <p>Consider the relation <tt>!(x &lt; y) &amp;&amp; !(y &lt; x)</tt>. If
+  this relation is transitive (that is, if <tt>!(x &lt; y) &amp;&amp; !(y
+  &lt; x) &amp;&amp; !(y &lt; z) &amp;&amp; !(z &lt; y)</tt> implies <tt>!(x
+  &lt; z) &amp;&amp; !(z &lt; x)</tt>), then it satisfies the mathematical
+  definition of an equivalence relation. In this case, <tt>operator&lt;</tt>
+  is a <i>strict weak ordering</i>.</p>
+
+  <p>If <tt>operator&lt;</tt> is a strict weak ordering, and if each
+  equivalence class has only a single element, then <tt>operator&lt;</tt> is
+  a <i>total ordering</i>.</p>
+
+  <h3>Valid expressions</h3>
+
+  <table border summary="">
+    <tr>
+      <th>Name</th>
+
+      <th>Expression</th>
+
+      <th>Type requirements</th>
+
+      <th>Return type</th>
+    </tr>
+
+    <tr>
+      <td valign="top">Less</td>
+
+      <td valign="top"><tt>x &lt; y</tt></td>
+
+      <td valign="top">&nbsp;</td>
+
+      <td valign="top">Convertible to <tt>bool</tt></td>
+    </tr>
+  </table>
+
+  <h3>Expression semantics</h3>
+
+  <table border summary="">
+    <tr>
+      <th>Name</th>
+
+      <th>Expression</th>
+
+      <th>Precondition</th>
+
+      <th>Semantics</th>
+
+      <th>Postcondition</th>
+    </tr>
+
+    <tr>
+      <td valign="top">Less</td>
+
+      <td valign="top"><tt>x &lt; y</tt></td>
+
+      <td valign="top"><tt>x</tt> and <tt>y</tt> are in the domain of
+      <tt>&lt;</tt></td>
+
+      <td valign="top">&nbsp;</td>
+    </tr>
+  </table>
+
+  <h3>Complexity guarantees</h3>
+
+  <h3>Invariants</h3>
+
+  <table border summary="">
+    <tr>
+      <td valign="top">Irreflexivity</td>
+
+      <td valign="top"><tt>x &lt; x</tt> must be false.</td>
+    </tr>
+
+    <tr>
+      <td valign="top">Antisymmetry</td>
+
+      <td valign="top"><tt>x &lt; y</tt> implies !(y &lt; x) <a href=
+      "#n2">[2]</a></td>
+    </tr>
+
+    <tr>
+      <td valign="top">Transitivity</td>
+
+      <td valign="top"><tt>x &lt; y</tt> and <tt>y &lt; z</tt> implies <tt>x
+      &lt; z</tt> <a href="#n3">[3]</a></td>
+    </tr>
+  </table>
+
+  <h3>Models</h3>
+
+  <ul>
+    <li>int</li>
+  </ul>
+
+  <h3>Notes</h3>
+
+  <p><a name="n1" id="n1">[1]</a> Only <tt>operator&lt;</tt> is fundamental;
+  the other inequality operators are essentially syntactic sugar.</p>
+
+  <p><a name="n2" id="n2">[2]</a> Antisymmetry is a theorem, not an axiom: it
+  follows from irreflexivity and transitivity.</p>
+
+  <p><a name="n3" id="n3">[3]</a> Because of irreflexivity and transitivity,
+  <tt>operator&lt;</tt> always satisfies the definition of a <i>partial
+  ordering</i>. The definition of a <i>strict weak ordering</i> is stricter,
+  and the definition of a <i>total ordering</i> is stricter still.</p>
+
+  <h3>See also</h3>
+
+  <p><a href=
+  "http://www.sgi.com/tech/stl/EqualityComparable.html">EqualityComparable</a>,
+  <a href=
+  "http://www.sgi.com/tech/stl/StrictWeakOrdering.html">StrictWeakOrdering</a><br>
+  </p>
+  <hr>
+
+  <p><a href="http://validator.w3.org/check?uri=referer"><img border="0" src=
+  "http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional"
+  height="31" width="88"></a></p>
+
+  <p>Revised 
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->05
+  December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38516" --></p>
+
+  <table summary="">
+    <tr valign="top">
+      <td nowrap><i>Copyright &copy; 2000</i></td>
+
+      <td><i><a href="http://www.lsc.nd.edu/~jsiek">Jeremy Siek</a>, Univ.of
+      Notre Dame (<a href=
+      "mailto:jsiek@lsc.nd.edu">jsiek@lsc.nd.edu</a>)</i></td>
+    </tr>
+  </table>
+
+  <p><i>Distributed under the Boost Software License, Version 1.0. (See
+  accompanying file <a href="../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or
+  copy at <a href=
+  "http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</i></p>
+</body>
+</html>

@@ -1,178 +1,139 @@
-<HTML>
-<!--
-  -- Copyright (c) Jeremy Siek 2000
-  --
-  -- Permission to use, copy, modify, distribute and sell this software
-  -- and its documentation for any purpose is hereby granted without fee,
-  -- provided that the above copyright notice appears in all copies and
-  -- that both that copyright notice and this permission notice appear
-  -- in supporting documentation.  Silicon Graphics makes no
-  -- representations about the suitability of this software for any
-  -- purpose.  It is provided "as is" without express or implied warranty.
-  -->
-<Head>
-<Title>Copy Constructible</Title>
-</HEAD>
-<BODY BGCOLOR="#ffffff" LINK="#0000ee" TEXT="#000000" VLINK="#551a8b" 
-        ALINK="#ff0000"> 
-<IMG SRC="../../boost.png" 
-     ALT="C++ Boost" width="277" height="86"> 
-<!--end header-->
-<BR Clear>
-<H1>Copy Constructible</H1>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
-<h3>Description</h3>
-A type is Copy Constructible if it is possible to copy objects of that
-type.
+<html>
+<head>
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
 
-<h3>Notation</h3>
-<Table>
-<TR>
-<TD VAlign=top>
-<tt>T</tt>
-</TD>
-<TD VAlign=top>
-is type that is a model of Copy Constructible
-</TD>
-</TR>
+  <title>Copy Constructible</title>
+</head>
 
-<TR>
-<TD VAlign=top>
-<tt>t</tt>
-</TD>
-<TD VAlign=top>
-is an object of type <tt>T</tt>
-</TD>
-</tr>
+<body bgcolor="#FFFFFF" link="#0000EE" text="#000000" vlink="#551A8B" alink=
+"#FF0000">
+  <img src="../../boost.png" alt="C++ Boost" width="277" height=
+  "86"><br clear="none">
 
-<TR>
-<TD VAlign=top>
-<tt>u</tt>
-</TD>
-<TD VAlign=top>
-is an object of type <tt>const T</tt>
-</TD>
-</tr>
+  <h1>Copy Constructible</h1>
 
-</table>
-<h3>Definitions</h3>
-<h3>Valid expressions</h3>
-<Table border>
-<TR>
-<TH>
-Name
-</TH>
-<TH>
-Expression
-</TH>
-<TH>
-Return type
-</TH>
-<TH>
-Semantics
-</TH>
-</TR>
-<TR>
-<TD VAlign=top>
-Copy constructor
-</TD>
-<TD VAlign=top>
-<tt>T(t)</tt>
-</TD>
-<TD VAlign=top>
-<tt>T</tt>
-</TD>
-<TD VAlign=top>
-<tt>t</tt> is equivalent to <tt>T(t)</tt>
-</TD>
-</TR>
+  <h3>Description</h3>
 
+  <p>A type is Copy Constructible if it is possible to copy objects of that
+  type.</p>
 
-<TR>
-<TD VAlign=top>
-Copy constructor
-</TD>
-<TD VAlign=top>
-<pre>
+  <h3>Notation</h3>
+
+  <table summary="">
+    <tr>
+      <td valign="top"><tt>T</tt></td>
+
+      <td valign="top">is type that is a model of Copy Constructible</td>
+    </tr>
+
+    <tr>
+      <td valign="top"><tt>t</tt></td>
+
+      <td valign="top">is an object of type <tt>T</tt></td>
+    </tr>
+
+    <tr>
+      <td valign="top"><tt>u</tt></td>
+
+      <td valign="top">is an object of type <tt>const T</tt></td>
+    </tr>
+  </table>
+
+  <h3>Definitions</h3>
+
+  <h3>Valid expressions</h3>
+
+  <table border summary="">
+    <tr>
+      <th>Name</th>
+
+      <th>Expression</th>
+
+      <th>Return type</th>
+
+      <th>Semantics</th>
+    </tr>
+
+    <tr>
+      <td valign="top">Copy constructor</td>
+
+      <td valign="top"><tt>T(t)</tt></td>
+
+      <td valign="top"><tt>T</tt></td>
+
+      <td valign="top"><tt>t</tt> is equivalent to <tt>T(t)</tt></td>
+    </tr>
+
+    <tr>
+      <td valign="top">Copy constructor</td>
+
+      <td valign="top">
+        <pre>
 T(u)
 </pre>
-</TD>
-<TD VAlign=top>
-<tt>T</tt>
-</TD>
-<TD VAlign=top>
-<tt>u</tt> is equivalent to <tt>T(u)</tt>
-</TD>
-</TR>
+      </td>
 
+      <td valign="top"><tt>T</tt></td>
 
-<TR>
-<TD VAlign=top>
-Destructor
-</TD>
-<TD VAlign=top>
-<pre>
+      <td valign="top"><tt>u</tt> is equivalent to <tt>T(u)</tt></td>
+    </tr>
+
+    <tr>
+      <td valign="top">Destructor</td>
+
+      <td valign="top">
+        <pre>
 t.~T()
 </pre>
-</TD>
-<TD VAlign=top>
-<tt>T</tt>
-</TD>
-<TD VAlign=top>
-&nbsp;
-</TD>
-</TR>
+      </td>
 
-<TR>
-<TD VAlign=top>
-Address Operator
-</TD>
-<TD VAlign=top>
-<pre>
+      <td valign="top"><tt>T</tt></td>
+
+      <td valign="top">&nbsp;</td>
+    </tr>
+
+    <tr>
+      <td valign="top">Address Operator</td>
+
+      <td valign="top">
+        <pre>
 &amp;t
 </pre>
-</TD>
-<TD VAlign=top>
-<tt>T*</tt>
-</TD>
-<TD VAlign=top>
-denotes the address of <tt>t</tt>
-</TD>
-</TR>
+      </td>
 
-<TR>
-<TD VAlign=top>
-Address Operator
-</TD>
-<TD VAlign=top>
-<pre>
+      <td valign="top"><tt>T*</tt></td>
+
+      <td valign="top">denotes the address of <tt>t</tt></td>
+    </tr>
+
+    <tr>
+      <td valign="top">Address Operator</td>
+
+      <td valign="top">
+        <pre>
 &amp;u
 </pre>
-</TD>
-<TD VAlign=top>
-<tt>T*</tt>
-</TD>
-<TD VAlign=top>
-denotes the address of <tt>u</tt>
-</TD>
-</TR>
+      </td>
 
+      <td valign="top"><tt>T*</tt></td>
 
+      <td valign="top">denotes the address of <tt>u</tt></td>
+    </tr>
+  </table>
 
-</table>
+  <h3>Models</h3>
 
+  <ul>
+    <li><tt>int</tt></li>
 
-</table>
-<h3>Models</h3>
+    <li><tt>std::pair</tt></li>
+  </ul>
 
-<UL>
-<LI><tt>int</tt>
-<LI><tt>std::pair</tt>
-</UL>
-
-<h3>Concept Checking Class</h3>
-
-<pre>
+  <h3>Concept Checking Class</h3>
+  <pre>
   template &lt;class T&gt;
   struct CopyConstructibleConcept
   {
@@ -192,19 +153,33 @@ denotes the address of <tt>u</tt>
   };
 </pre>
 
-<h3>See also</h3>
-<A
-href="http://www.sgi.com/tech/stl/DefaultConstructible.html">Default Constructible</A>
-and 
-<A hrefa="./Assignable.html">Assignable</A>
+  <h3>See also</h3>
 
-<br>
-<HR>
-<TABLE>
-<TR valign=top>
-<TD nowrap>Copyright &copy 2000</TD><TD>
-<A HREF=http://www.lsc.nd.edu/~jsiek>Jeremy Siek</A>, Univ.of Notre Dame (<A HREF="mailto:jsiek@lsc.nd.edu">jsiek@lsc.nd.edu</A>)
-</TD></TR></TABLE>
+  <p><a href="http://www.sgi.com/tech/stl/DefaultConstructible.html">Default
+  Constructible</a> and <a href="./Assignable.html">Assignable</a><br></p>
+  <hr>
 
-</BODY>
-</HTML> 
+  <p><a href="http://validator.w3.org/check?uri=referer"><img border="0" src=
+  "http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional"
+  height="31" width="88"></a></p>
+
+  <p>Revised 
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->05
+  December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38516" --></p>
+
+  <table summary="">
+    <tr valign="top">
+      <td nowrap><i>Copyright &copy; 2000</i></td>
+
+      <td><i><a href="http://www.lsc.nd.edu/~jsiek">Jeremy Siek</a>, Univ.of
+      Notre Dame (<a href=
+      "mailto:jsiek@lsc.nd.edu">jsiek@lsc.nd.edu</a>)</i></td>
+    </tr>
+  </table>
+
+  <p><i>Distributed under the Boost Software License, Version 1.0. (See
+  accompanying file <a href="../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or
+  copy at <a href=
+  "http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</i></p>
+</body>
+</html>
