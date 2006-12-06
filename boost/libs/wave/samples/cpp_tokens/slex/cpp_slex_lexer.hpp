@@ -48,12 +48,12 @@ namespace slex {
 namespace lexer {
 
 ///////////////////////////////////////////////////////////////////////////////
-//  The following numbers are the arraysizes of the token regex's which we
+//  The following numbers are the array sizes of the token regex's which we
 //  need to specify to make the CW compiler happy (at least up to V9.5).
 #if BOOST_WAVE_SUPPORT_MS_EXTENSIONS != 0
-#define INIT_DATA_SIZE              176
+#define INIT_DATA_SIZE              175
 #else
-#define INIT_DATA_SIZE              159
+#define INIT_DATA_SIZE              158
 #endif
 #define INIT_DATA_CPP_SIZE          15
 #define INIT_DATA_PP_NUMBER_SIZE    2
@@ -148,7 +148,7 @@ private:
 #define LONGINTEGER_SUFFIX  "(" "[uU]" "(" "[lL][lL]" ")" OR \
                             "(" "[lL][lL]" ")" "[uU]" "?" ")"
 #endif
-#define FLOAT_SUFFIX        "(" "[fF][lL]?|[lL][fF]?" ")"
+#define FLOAT_SUFFIX        "(" "[fF][lL]?" OR "[lL][fF]?" ")"
 #define CHAR_SPEC           "L?"
 
 #define BACKSLASH           "(" Q("\\") OR TRI(Q("/")) ")"
@@ -378,8 +378,8 @@ lexer<IteratorT, PositionT>::init_data[INIT_DATA_SIZE] =
                 "(" ESCAPESEQ OR "[^\\n\\r']" OR UNIVERSALCHAR ")+" "'"),
     TOKEN_DATA(STRINGLIT, CHAR_SPEC Q("\"") 
                 "(" ESCAPESEQ OR "[^\\n\\r\"]" OR UNIVERSALCHAR ")*" Q("\"")),
-    TOKEN_DATA(SPACE, BLANK "+"),
-    TOKEN_DATA(SPACE2, "[\\v\\f]+"),
+    TOKEN_DATA(SPACE, "[ \t\v\f]+"),
+//    TOKEN_DATA(SPACE2, "[\\v\\f]+"),
     TOKEN_DATA(CONTLINE, Q("\\") "\\n"), 
     TOKEN_DATA(NEWLINE, NEWLINEDEF),
     TOKEN_DATA(POUND_POUND, "##"),
