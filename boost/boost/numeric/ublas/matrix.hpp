@@ -1968,18 +1968,18 @@ namespace boost { namespace numeric { namespace ublas {
 
 
     // Zero matrix class
-    template<class T>
+    template<class T, class ALLOC>
     class zero_matrix:
-        public matrix_container<zero_matrix<T> > {
+        public matrix_container<zero_matrix<T, ALLOC> > {
 
         typedef const T *const_pointer;
-        typedef zero_matrix<T> self_type;
+        typedef zero_matrix<T, ALLOC> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_container<self_type>::operator ();
 #endif
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename ALLOC::size_type size_type;
+        typedef typename ALLOC::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;
@@ -2323,23 +2323,23 @@ namespace boost { namespace numeric { namespace ublas {
         static const value_type zero_;
     };
 
-    template<class T>
-    const typename zero_matrix<T>::value_type zero_matrix<T>::zero_ (0);
+    template<class T, class ALLOC>
+    const typename zero_matrix<T, ALLOC>::value_type zero_matrix<T, ALLOC>::zero_ (0);
 
 
     // Identity matrix class
-    template<class T>
+    template<class T, class ALLOC>
     class identity_matrix:
-        public matrix_container<identity_matrix<T> > {
+        public matrix_container<identity_matrix<T, ALLOC> > {
 
         typedef const T *const_pointer;
-        typedef identity_matrix<T> self_type;
+        typedef identity_matrix<T, ALLOC> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_container<self_type>::operator ();
 #endif
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename ALLOC::size_type size_type;
+        typedef typename ALLOC::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;
@@ -2705,19 +2705,19 @@ namespace boost { namespace numeric { namespace ublas {
         static const value_type one_;
     };
 
-    template<class T>
-    const typename identity_matrix<T>::value_type identity_matrix<T>::zero_ (0);
-    template<class T>
-    const typename identity_matrix<T>::value_type identity_matrix<T>::one_ (1);
+    template<class T, class ALLOC>
+    const typename identity_matrix<T, ALLOC>::value_type identity_matrix<T, ALLOC>::zero_ (0);
+    template<class T, class ALLOC>
+    const typename identity_matrix<T, ALLOC>::value_type identity_matrix<T, ALLOC>::one_ (1);
 
 
     // Scalar matrix class
-    template<class T>
+    template<class T, class ALLOC>
     class scalar_matrix:
-        public matrix_container<scalar_matrix<T> > {
+        public matrix_container<scalar_matrix<T, ALLOC> > {
 
         typedef const T *const_pointer;
-        typedef scalar_matrix<T> self_type;
+        typedef scalar_matrix<T, ALLOC> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_container<self_type>::operator ();

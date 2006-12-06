@@ -93,11 +93,11 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T, std::size_t N>
     class bounded_vector;
 
-    template<class T = int>
+    template<class T = int, class ALLOC = std::allocator<T> >
     class unit_vector;
-    template<class T = int>
+    template<class T = int, class ALLOC = std::allocator<T> >
     class zero_vector;
-    template<class T = int>
+    template<class T = int, class ALLOC = std::allocator<T> >
     class scalar_vector;
 
     template<class T, std::size_t N>
@@ -130,11 +130,11 @@ namespace boost { namespace numeric { namespace ublas {
     template<class T, std::size_t M, std::size_t N, class L = row_major>
     class bounded_matrix;
 
-    template<class T = int>
+    template<class T = int, class ALLOC = std::allocator<T> >
     class identity_matrix;
-    template<class T = int>
+    template<class T = int, class ALLOC = std::allocator<T> >
     class zero_matrix;
-    template<class T = int>
+    template<class T = int, class ALLOC = std::allocator<T> >
     class scalar_matrix;
 
     template<class T, std::size_t M, std::size_t N>

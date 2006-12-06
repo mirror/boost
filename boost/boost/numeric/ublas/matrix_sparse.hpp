@@ -2512,7 +2512,7 @@ namespace boost { namespace numeric { namespace ublas {
         // is_convertable (IA::size_type, TA::size_type)
         typedef typename IA::value_type size_type;
         // size_type for the data arrays.
-        typedef typename IA::size_type  array_size_type;
+        typedef typename IA::size_type array_size_type;
         // FIXME difference type for sparse storage iterators should it be in the container?
         typedef typename IA::difference_type difference_type;
         typedef T value_type;
@@ -3869,13 +3869,12 @@ namespace boost { namespace numeric { namespace ublas {
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using matrix_container<self_type>::operator ();
 #endif
-        // ISSUE require type consistency check
-        // is_convertable (IA::size_type, TA::size_type)
+        // ISSUE require type consistency check, is_convertable (IA::size_type, TA::size_type)
         typedef typename IA::value_type size_type;
+        // ISSUE difference_type cannot be deduced for sparse indices, we only know the value_type
+        typedef typename std::ptrdiff_t difference_type;
         // size_type for the data arrays.
-        typedef typename IA::size_type  array_size_type;
-        // FIXME difference type for sprase storage iterators should it be in the container?
-        typedef typename IA::difference_type difference_type;
+        typedef typename IA::size_type array_size_type;
         typedef T value_type;
         typedef const T &const_reference;
 #ifndef BOOST_UBLAS_STRICT_MATRIX_SPARSE
@@ -3902,7 +3901,7 @@ namespace boost { namespace numeric { namespace ublas {
             storage_invariants ();
         }
         BOOST_UBLAS_INLINE
-        coordinate_matrix (size_type size1, size_type size2, size_type non_zeros = 0):
+        coordinate_matrix (size_type size1, size_type size2, array_size_type non_zeros = 0):
             matrix_container<self_type> (),
             size1_ (size1), size2_ (size2), capacity_ (restrict_capacity (non_zeros)),
             filled_ (0), sorted_filled_ (filled_), sorted_ (true),
@@ -3919,7 +3918,7 @@ namespace boost { namespace numeric { namespace ublas {
         }
         template<class AE>
         BOOST_UBLAS_INLINE
-        coordinate_matrix (const matrix_expression<AE> &ae, size_type non_zeros = 0):
+        coordinate_matrix (const matrix_expression<AE> &ae, array_size_type non_zeros = 0):
             matrix_container<self_type> (),
             size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), capacity_ (restrict_capacity (non_zeros)),
             filled_ (0), sorted_filled_ (filled_), sorted_ (true),
@@ -3993,9 +3992,9 @@ namespace boost { namespace numeric { namespace ublas {
         // Resizing
     private:
         BOOST_UBLAS_INLINE
-        size_type restrict_capacity (size_type non_zeros) const {
+        array_size_type restrict_capacity (array_size_type non_zeros) const {
             // minimum non_zeros
-            non_zeros = (std::max) (non_zeros, (std::min) (size1_, size2_));
+            non_zeros = (std::max) (non_zeros, array_size_type((std::min) (size1_, size2_)));
             // ISSUE no maximum as coordinate may contain inserted duplicates
             return non_zeros;
         }
@@ -4018,7 +4017,7 @@ namespace boost { namespace numeric { namespace ublas {
 
         // Reserving
         BOOST_UBLAS_INLINE
-        void reserve (size_type non_zeros, bool preserve = true) {
+        void reserve (array_size_type non_zeros, bool preserve = true) {
             sort ();    // remove duplicate elements
             capacity_ = restrict_capacity (non_zeros);
             if (preserve) {
@@ -4368,7 +4367,7 @@ namespace boost { namespace numeric { namespace ublas {
                     }
                 } else /* if (direction < 0)  */ {
                     if (layout_type::fast_i ()) {
-                        if (it == index2_data_.begin () + zero_based (*itv))
+                        if (it == index2_data_.begin () + array_size_type (zero_based (*itv)))
                             return const_iterator1 (*this, rank, i, j, itv, it);
                         i = zero_based (*(it - 1));
                     } else {
@@ -4409,7 +4408,7 @@ namespace boost { namespace numeric { namespace ublas {
                     }
                 } else /* if (direction < 0)  */ {
                     if (layout_type::fast_i ()) {
-                        if (it == index2_data_.begin () + zero_based (*itv))
+                        if (it == index2_data_.begin () + array_size_type (zero_based (*itv)))
                             return iterator1 (*this, rank, i, j, itv, it);
                         i = zero_based (*(it - 1));
                     } else {
@@ -4450,7 +4449,7 @@ namespace boost { namespace numeric { namespace ublas {
                     }
                 } else /* if (direction < 0)  */ {
                     if (layout_type::fast_j ()) {
-                        if (it == index2_data_.begin () + zero_based (*itv))
+                        if (it == index2_data_.begin () + array_size_type (zero_based (*itv)))
                             return const_iterator2 (*this, rank, i, j, itv, it);
                         j = zero_based (*(it - 1));
                     } else {
@@ -4491,7 +4490,7 @@ namespace boost { namespace numeric { namespace ublas {
                     }
                 } else /* if (direction < 0)  */ {
                     if (layout_type::fast_j ()) {
-                        if (it == index2_data_.begin () + zero_based (*itv))
+                        if (it == index2_data_.begin () + array_size_type (zero_based (*itv)))
                             return iterator2 (*this, rank, i, j, itv, it);
                         j = zero_based (*(it - 1));
                     } else {

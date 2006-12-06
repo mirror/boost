@@ -569,18 +569,18 @@ namespace boost { namespace numeric { namespace ublas {
 
 
     // Zero vector class
-    template<class T>
+    template<class T, class ALLOC>
     class zero_vector:
-        public vector_container<zero_vector<T> > {
+        public vector_container<zero_vector<T, ALLOC> > {
 
         typedef const T *const_pointer;
-        typedef zero_vector<T> self_type;
+        typedef zero_vector<T, ALLOC> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_container<self_type>::operator ();
 #endif
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename ALLOC::size_type size_type;
+        typedef typename ALLOC::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;
@@ -754,23 +754,23 @@ namespace boost { namespace numeric { namespace ublas {
         static const_value_type zero_;
     };
 
-    template<class T>
-    typename zero_vector<T>::const_value_type zero_vector<T>::zero_ (0);
+    template<class T, class ALLOC>
+    typename zero_vector<T, ALLOC>::const_value_type zero_vector<T, ALLOC>::zero_ (0);
 
 
     // Unit vector class
-    template<class T>
+    template<class T, class ALLOC>
     class unit_vector:
-        public vector_container<unit_vector<T> > {
+        public vector_container<unit_vector<T, ALLOC> > {
 
         typedef const T *const_pointer;
-        typedef unit_vector<T> self_type;
+        typedef unit_vector<T, ALLOC> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_container<self_type>::operator ();
 #endif
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename ALLOC::size_type size_type;
+        typedef typename ALLOC::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;
@@ -966,25 +966,25 @@ namespace boost { namespace numeric { namespace ublas {
         static const_value_type one_;
     };
 
-    template<class T>
-    typename unit_vector<T>::const_value_type unit_vector<T>::zero_ (0);
-    template<class T>
-    typename unit_vector<T>::const_value_type unit_vector<T>::one_ (1);
+    template<class T, class ALLOC>
+    typename unit_vector<T, ALLOC>::const_value_type unit_vector<T, ALLOC>::zero_ (0);
+    template<class T, class ALLOC>
+    typename unit_vector<T, ALLOC>::const_value_type unit_vector<T, ALLOC>::one_ (1);
 
 
     // Scalar vector class
-    template<class T>
+    template<class T, class ALLOC>
     class scalar_vector:
-        public vector_container<scalar_vector<T> > {
+        public vector_container<scalar_vector<T, ALLOC> > {
 
         typedef const T *const_pointer;
-        typedef scalar_vector<T> self_type;
+        typedef scalar_vector<T, ALLOC> self_type;
     public:
 #ifdef BOOST_UBLAS_ENABLE_PROXY_SHORTCUTS
         using vector_container<self_type>::operator ();
 #endif
-        typedef std::size_t size_type;
-        typedef std::ptrdiff_t difference_type;
+        typedef typename ALLOC::size_type size_type;
+        typedef typename ALLOC::difference_type difference_type;
         typedef T value_type;
         typedef const T &const_reference;
         typedef T &reference;

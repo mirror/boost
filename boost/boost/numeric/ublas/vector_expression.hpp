@@ -1427,8 +1427,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef typename E::const_iterator::iterator_category iterator_category;
         typedef vector_scalar_unary<E, F> self_type;
     public:
-        typedef typename F::size_type size_type;
-        typedef typename F::difference_type difference_type;
         typedef typename F::result_type value_type;
         typedef const self_type const_closure_type;
         typedef const_closure_type closure_type;
@@ -1501,9 +1499,9 @@ namespace boost { namespace numeric { namespace ublas {
     // sum v = sum (v [i])
     template<class E>
     BOOST_UBLAS_INLINE
-    typename vector_scalar_unary_traits<E, vector_sum<typename E::value_type> >::result_type
+    typename vector_scalar_unary_traits<E, vector_sum<E> >::result_type
     sum (const vector_expression<E> &e) {
-        typedef typename vector_scalar_unary_traits<E, vector_sum<typename E::value_type> >::expression_type expression_type;
+        typedef typename vector_scalar_unary_traits<E, vector_sum<E> >::expression_type expression_type;
         return expression_type (e ());
     }
 
@@ -1511,9 +1509,9 @@ namespace boost { namespace numeric { namespace ublas {
     // complex: norm_1 v = sum (abs (real (v [i])) + abs (imag (v [i])))
     template<class E>
     BOOST_UBLAS_INLINE
-    typename vector_scalar_unary_traits<E, vector_norm_1<typename E::value_type> >::result_type
+    typename vector_scalar_unary_traits<E, vector_norm_1<E> >::result_type
     norm_1 (const vector_expression<E> &e) {
-        typedef typename vector_scalar_unary_traits<E, vector_norm_1<typename E::value_type> >::expression_type expression_type;
+        typedef typename vector_scalar_unary_traits<E, vector_norm_1<E> >::expression_type expression_type;
         return expression_type (e ());
     }
 
@@ -1521,9 +1519,9 @@ namespace boost { namespace numeric { namespace ublas {
     // complex: norm_2 v = sqrt (sum (v [i] * conj (v [i])))
     template<class E>
     BOOST_UBLAS_INLINE
-    typename vector_scalar_unary_traits<E, vector_norm_2<typename E::value_type> >::result_type
+    typename vector_scalar_unary_traits<E, vector_norm_2<E> >::result_type
     norm_2 (const vector_expression<E> &e) {
-        typedef typename vector_scalar_unary_traits<E, vector_norm_2<typename E::value_type> >::expression_type expression_type;
+        typedef typename vector_scalar_unary_traits<E, vector_norm_2<E> >::expression_type expression_type;
         return expression_type (e ());
     }
 
@@ -1531,18 +1529,18 @@ namespace boost { namespace numeric { namespace ublas {
     // complex: norm_inf v = maximum (maximum (abs (real (v [i])), abs (imag (v [i]))))
     template<class E>
     BOOST_UBLAS_INLINE
-    typename vector_scalar_unary_traits<E, vector_norm_inf<typename E::value_type> >::result_type
+    typename vector_scalar_unary_traits<E, vector_norm_inf<E> >::result_type
     norm_inf (const vector_expression<E> &e) {
-        typedef typename vector_scalar_unary_traits<E, vector_norm_inf<typename E::value_type> >::expression_type expression_type;
+        typedef typename vector_scalar_unary_traits<E, vector_norm_inf<E> >::expression_type expression_type;
         return expression_type (e ());
     }
 
     // real: index_norm_inf v = minimum (i: abs (v [i]) == maximum (abs (v [i])))
     template<class E>
     BOOST_UBLAS_INLINE
-    typename vector_scalar_unary_traits<E, vector_index_norm_inf<typename E::value_type> >::result_type
+    typename vector_scalar_unary_traits<E, vector_index_norm_inf<E> >::result_type
     index_norm_inf (const vector_expression<E> &e) {
-        typedef typename vector_scalar_unary_traits<E, vector_index_norm_inf<typename E::value_type> >::expression_type expression_type;
+        typedef typename vector_scalar_unary_traits<E, vector_index_norm_inf<E> >::expression_type expression_type;
         return expression_type (e ());
     }
 
@@ -1560,8 +1558,6 @@ namespace boost { namespace numeric { namespace ublas {
         typedef vector_scalar_binary<E1, E2, F> self_type;
     public:
         static const unsigned complexity = 1;
-        typedef typename F::size_type size_type;
-        typedef typename F::difference_type difference_type;
         typedef typename F::result_type value_type;
         typedef const self_type const_closure_type;
         typedef const_closure_type closure_type;
@@ -1639,31 +1635,27 @@ namespace boost { namespace numeric { namespace ublas {
     // inner_prod (v1, v2) = sum (v1 [i] * v2 [i])
     template<class E1, class E2>
     BOOST_UBLAS_INLINE
-    typename vector_scalar_binary_traits<E1, E2, vector_inner_prod<typename E1::value_type,
-                                                                   typename E2::value_type,
+    typename vector_scalar_binary_traits<E1, E2, vector_inner_prod<E1, E2,
                                                                    typename promote_traits<typename E1::value_type,
                                                                                            typename E2::value_type>::promote_type> >::result_type
     inner_prod (const vector_expression<E1> &e1,
                 const vector_expression<E2> &e2) {
-        typedef typename vector_scalar_binary_traits<E1, E2, vector_inner_prod<typename E1::value_type,
-                                                                                           typename E2::value_type,
-                                                                                           typename promote_traits<typename E1::value_type,
-                                                                                                                               typename E2::value_type>::promote_type> >::expression_type expression_type;
+        typedef typename vector_scalar_binary_traits<E1, E2, vector_inner_prod<E1, E2,
+                                                                   typename promote_traits<typename E1::value_type,
+                                                                                           typename E2::value_type>::promote_type> >::expression_type expression_type;
         return expression_type (e1 (), e2 ());
     }
 
     template<class E1, class E2>
     BOOST_UBLAS_INLINE
-    typename vector_scalar_binary_traits<E1, E2, vector_inner_prod<typename E1::value_type,
-                                                                   typename E2::value_type,
+    typename vector_scalar_binary_traits<E1, E2, vector_inner_prod<E1, E2,
                                                                    typename type_traits<typename promote_traits<typename E1::value_type,
                                                                                                                 typename E2::value_type>::promote_type>::precision_type> >::result_type
     prec_inner_prod (const vector_expression<E1> &e1,
                      const vector_expression<E2> &e2) {
-        typedef typename vector_scalar_binary_traits<E1, E2, vector_inner_prod<typename E1::value_type,
-                                                                                           typename E2::value_type,
-                                                                                           typename type_traits<typename promote_traits<typename E1::value_type,
-                                                                                                                                                                typename E2::value_type>::promote_type>::precision_type> >::expression_type expression_type;
+        typedef typename vector_scalar_binary_traits<E1, E2, vector_inner_prod<E1, E2,
+                                                                   typename type_traits<typename promote_traits<typename E1::value_type,
+                                                                                                                typename E2::value_type>::promote_type>::precision_type> >::expression_type expression_type;
         return expression_type (e1 (), e2 ());
     }
 
