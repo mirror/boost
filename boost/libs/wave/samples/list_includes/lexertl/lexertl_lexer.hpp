@@ -10,11 +10,14 @@
 #if !defined(BOOST_WAVE_LEXERTL_LEXER_HPP_INCLUDED)
 #define BOOST_WAVE_LEXERTL_LEXER_HPP_INCLUDED
 
+#include <fstream>
+
 #include <boost/iterator/iterator_traits.hpp>
 
 #include <boost/wave/wave_config.hpp>
 #include <boost/wave/language_support.hpp>
 #include <boost/wave/token_ids.hpp>
+#include <boost/wave/util/time_conversion_helper.hpp>
 
 #include <boost/wave/cpplexer/validate_universal_char.hpp>
 #include <boost/wave/cpplexer/convert_trigraphs.hpp>
@@ -69,11 +72,24 @@ public:
     wave::token_id next_token(Iterator &first, Iterator const &last,
         string_type& token_value);
     
-    bool init_dfa(wave::language_support lang, Position const& pos);
+    bool init_dfa(wave::language_support lang, Position const& pos,
+        bool force_reinit = false);
     bool is_initialized() const { return has_compiled_dfa_; }
     
+// get time of last compilation
+    static std::time_t get_compilation_time() 
+        { return compilation_time.get_time(); }
+
+    bool load (istream& instrm);
+    bool save (ostream& outstrm);
+    enum {
+        lexertl_signature = 0x4C54584C,    // "LXTL"
+        lexertl_version_100 = 0x0100,      // file format version
+        lexertl_last_known_version = lexertl_version_100,
+        lexertl_minor_version_mask = 0xFF
+    };
+    
 private:
-    ::lexertl::rules rules_;
     ::lexertl::state_machine state_machine_;
     bool has_compiled_dfa_;
     
@@ -91,7 +107,16 @@ private:
     static lexer_data const init_data[INIT_DATA_SIZE];              // common patterns
     static lexer_data const init_data_cpp[INIT_DATA_CPP_SIZE];      // C++ only patterns
     static lexer_data const init_data_pp_number[INIT_DATA_PP_NUMBER_SIZE];  // pp-number only patterns
+
+// helper for calculation of the time of last compilation
+    static boost::wave::util::time_conversion_helper compilation_time;
 };
+
+///////////////////////////////////////////////////////////////////////////////
+// get time of last compilation of this file
+template <typename IteratorT, typename PositionT>
+boost::wave::util::time_conversion_helper 
+    lexertl<IteratorT, PositionT>::compilation_time(__DATE__ " " __TIME__);
 
 ///////////////////////////////////////////////////////////////////////////////
 // token regex definitions
@@ -387,50 +412,69 @@ lexertl<Iterator, Position>::init_data_pp_number[INIT_DATA_PP_NUMBER_SIZE] =
 template <typename Iterator, typename Position>
 inline bool
 lexertl<Iterator, Position>::init_dfa(wave::language_support lang, 
-    Position const& pos)
+    Position const& pos, bool force_reinit)
 {
     if (has_compiled_dfa_)
         return true;
 
-// register macro definitions
-    for (int k = 0; NULL != init_macro_data[k].name; ++k) {
-        rules_.add_macro(init_macro_data[k].name, init_macro_data[k].macro);
-    }
+std::ifstream dfa_in("wave_lexertl_lexer.dfa", std::ios::in|std::ios::binary);
 
-// if pp-numbers should be preferred, insert the corresponding rule first
-    if (wave::need_prefer_pp_numbers(lang)) {
-        for (int j = 0; 0 != init_data_pp_number[j].tokenid; ++j) {
-            rules_.add(init_data_pp_number[j].tokenregex, 
-                init_data_pp_number[j].tokenid);
-        }
-    }
+    if (force_reinit || !dfa_in.is_open() || !load (dfa_in))
+    {
+        dfa_in.close();
         
-// if in C99 mode, some of the keywords are not valid    
-    if (!wave::need_c99(lang)) {
-        for (int j = 0; 0 != init_data_cpp[j].tokenid; ++j) {
-            rules_.add(init_data_cpp[j].tokenregex, 
-                init_data_cpp[j].tokenid);
+        state_machine_._lookup.clear();
+        state_machine_._dfa_alphabet = 0;
+        state_machine_._dfa.clear();
+        
+    // register macro definitions
+        ::lexertl::rules rules;
+        for (int k = 0; NULL != init_macro_data[k].name; ++k) {
+            rules.add_macro(init_macro_data[k].name, init_macro_data[k].macro);
         }
+
+    // if pp-numbers should be preferred, insert the corresponding rule first
+        if (wave::need_prefer_pp_numbers(lang)) {
+            for (int j = 0; 0 != init_data_pp_number[j].tokenid; ++j) {
+                rules.add(init_data_pp_number[j].tokenregex, 
+                    init_data_pp_number[j].tokenid);
+            }
+        }
+            
+    // if in C99 mode, some of the keywords are not valid    
+        if (!wave::need_c99(lang)) {
+            for (int j = 0; 0 != init_data_cpp[j].tokenid; ++j) {
+                rules.add(init_data_cpp[j].tokenregex, 
+                    init_data_cpp[j].tokenid);
+            }
+        }
+        
+        for (int i = 0; 0 != init_data[i].tokenid; ++i) {
+            rules.add(init_data[i].tokenregex, init_data[i].tokenid);
+        }
+
+    // generate minimized DFA
+        try {
+            ::lexertl::generator::build (rules, state_machine_);
+            ::lexertl::generator::minimise_dfa (state_machine_._dfa_alphabet,
+                state_machine_._dfa);
+        }
+        catch (std::runtime_error const& e) {
+            string_type msg("lexertl initialization error: ");
+            msg += e.what();
+            BOOST_WAVE_LEXER_THROW(wave::cpplexer::lexing_exception, 
+                unexpected_error, msg.c_str(), 
+                pos.get_line(), pos.get_column(), pos.get_file().c_str());
+            return false;
+        }
+
+    std::ofstream dfa_out ("wave_lexertl_lexer.dfa", 
+        std::ios::out|std::ios::binary|std::ios::trunc);
+
+        if (dfa_out.is_open())
+            save (dfa_out);
     }
     
-    for (int i = 0; 0 != init_data[i].tokenid; ++i) {
-        rules_.add(init_data[i].tokenregex, init_data[i].tokenid);
-    }
-
-// generate minimized DFA
-    try {
-        ::lexertl::generator::build (rules_, state_machine_);
-        ::lexertl::generator::minimise_dfa (state_machine_._dfa_alphabet,
-            state_machine_._dfa);
-    }
-    catch (std::runtime_error const& e) {
-        string_type msg("lexertl initialization error: ");
-        msg += e.what();
-        BOOST_WAVE_LEXER_THROW(wave::cpplexer::lexing_exception, 
-            unexpected_error, msg.c_str(), 
-            pos.get_line(), pos.get_column(), pos.get_file().c_str());
-        return false;
-    }
     has_compiled_dfa_ = true;
     return true;
 }
@@ -479,6 +523,102 @@ lexertl<Iterator, Position>::next_token(Iterator &first, Iterator const &last,
     return T_EOF;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//  load the DFA tables to/from a stream
+#define LEXERTL_IN(strm, val)                                                 \
+    strm.read((char*)&val, sizeof(val));                                      \
+    if (std::ios::goodbit != strm.rdstate()) return false                     \
+    /**/
+
+template <typename Iterator, typename Position>
+inline bool
+lexertl<Iterator, Position>::load (istream& instrm)
+{
+// ensure correct signature and version
+    long in_long = 0;
+    LEXERTL_IN (instrm, in_long);
+    if (in_long != lexertl_signature)
+        return false;       // not for us
+
+    LEXERTL_IN (instrm, in_long);
+    if ((in_long & ~lexertl_minor_version_mask) > lexertl_last_known_version)
+        return false;       // too new for us
+
+    LEXERTL_IN (instrm, in_long);
+    if (in_long != (long)get_compilation_time())
+        return false;       // not saved by us
+
+// load the lookup and DFA tables
+    long in_size = 0;
+    LEXERTL_IN (instrm, in_size);
+    state_machine_._lookup.resize(in_size);
+    for (long l = 0; l < in_size; ++l)
+    {
+        LEXERTL_IN(instrm, in_long);
+        state_machine_._lookup[l] = in_long;
+    }
+
+    LEXERTL_IN (instrm, state_machine_._dfa_alphabet);
+    
+    LEXERTL_IN (instrm, in_size);
+    state_machine_._dfa.resize(in_size);
+    for (long d = 0; d < in_size; ++d)
+    {
+        LEXERTL_IN(instrm, in_long);
+        state_machine_._dfa[d] = in_long;
+    }
+    return true;
+}
+
+#undef LEXERTL_IN
+
+///////////////////////////////////////////////////////////////////////////////
+//  save the DFA tables to/from a stream
+#define LEXERTL_OUT(strm, val)                                                \
+    strm.write((char*)&val, sizeof(val));                                     \
+    if (!strm.good()) return false                                            \
+    /**/
+
+template <typename Iterator, typename Position>
+inline bool
+lexertl<Iterator, Position>::save (ostream& outstrm)
+{
+// save signature and version information
+    long out_long = lexertl_signature;
+    LEXERTL_OUT(outstrm, out_long);
+    out_long = lexertl_version_100;
+    LEXERTL_OUT(outstrm, out_long);
+    out_long = (long)get_compilation_time();
+    LEXERTL_OUT(outstrm, out_long);
+    
+// save lookup and DFA tables
+    typedef ::lexertl::state_machine::size_t_vector::iterator iterator_type;
+    
+    out_long = static_cast<long>(state_machine_._lookup.size());
+    LEXERTL_OUT(outstrm, out_long);
+    iterator_type end_lookup = state_machine_._lookup.end();
+    for (iterator_type it_lookup = state_machine_._lookup.begin();
+         it_lookup != end_lookup; ++it_lookup)
+    {
+        LEXERTL_OUT(outstrm, *it_lookup);
+    }
+
+    LEXERTL_OUT(outstrm, state_machine_._dfa_alphabet);
+
+    out_long = static_cast<long>(state_machine_._dfa.size());
+    LEXERTL_OUT(outstrm, out_long);
+    iterator_type end_dfa = state_machine_._dfa.end();
+    for (iterator_type it_dfa = state_machine_._dfa.begin();
+         it_dfa != end_dfa; ++it_dfa)
+    {
+        LEXERTL_OUT(outstrm, *it_dfa);
+    }
+    return true;
+}
+
+#undef LEXERTL_OUT
+
+///////////////////////////////////////////////////////////////////////////////
 }   // namespace lexer
 
 ///////////////////////////////////////////////////////////////////////////////
