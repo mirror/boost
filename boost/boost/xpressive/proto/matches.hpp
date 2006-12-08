@@ -124,12 +124,6 @@
               : mpl::false_
             {};
 
-        #define BOOST_PROTO_MATCHES_N_FUN(z, n, data)\
-            matches_impl<\
-                typename Args1::BOOST_PP_CAT(arg, n)::expr_type\
-              , typename deref<typename Args2::BOOST_PP_CAT(arg, n)>::type\
-            >
-
             template<typename Expr>
             struct matches_impl< Expr, mpl::_ >
               : mpl::true_
@@ -151,11 +145,23 @@
                 >
             {};
 
+        #define BOOST_PROTO_MATCHES_N_FUN(z, n, data)\
+            matches_impl<\
+                typename Args1::BOOST_PP_CAT(arg, n)::expr_type\
+              , typename deref<typename Args2::BOOST_PP_CAT(arg, n)>::type\
+            >
+
         #define BOOST_PROTO_DEFINE_MATCHES(z, n, data)\
-            matches_impl<typename Expr::expr_type, typename deref<BOOST_PP_CAT(G, n)>::type>
+            matches_impl<\
+                typename Expr::expr_type\
+              , typename deref<BOOST_PP_CAT(G, n)>::type\
+            >
 
         #define BOOST_PROTO_DEFINE_TERMINAL_MATCHES(z, n, data)\
-            terminal_matches< BOOST_PP_CAT(Expr, n), BOOST_PP_CAT(Grammar, n) >
+            terminal_matches<\
+                BOOST_PP_CAT(Expr, n)\
+              , BOOST_PP_CAT(Grammar, n)\
+            >
 
         #define BOOST_PP_ITERATION_PARAMS_1 (3, (2, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/matches.hpp>))
 

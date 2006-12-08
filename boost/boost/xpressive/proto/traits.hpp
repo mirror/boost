@@ -18,6 +18,7 @@
     #include <boost/mpl/bool.hpp>
     #include <boost/call_traits.hpp>
     #include <boost/static_assert.hpp>
+    #include <boost/utility/result_of.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/ref.hpp>
     #include <boost/xpressive/proto/args.hpp>
@@ -25,6 +26,7 @@
     #include <boost/preprocessor/iteration/iterate.hpp>
     #include <boost/preprocessor/repetition/enum.hpp>
     #include <boost/preprocessor/repetition/enum_params.hpp>
+    #include <boost/preprocessor/repetition/enum_trailing.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/preprocessor/facilities/intercept.hpp>
     #include <boost/preprocessor/arithmetic/sub.hpp>
@@ -217,9 +219,17 @@
               : deep_copy<Expr>
             {};
 
+        #define BOOST_PROTO_ARG_N_TYPE(z, n, data)\
+            typename proto::meta::unref<\
+                typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)\
+            >::type\
+            /**/
+
         #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/traits.hpp>))
         #include BOOST_PP_ITERATE()
         #undef BOOST_PP_ITERATION_PARAMS_1
+
+        #undef BOOST_PROTO_ARG_N_TYPE
         }
 
         namespace op
@@ -432,9 +442,16 @@
             template<BOOST_PP_ENUM_PARAMS(N, typename A)>
             struct function<
                 BOOST_PP_ENUM_PARAMS(N, A) 
-                BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT), void >
+                BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT), void
+            >
             {
                 typedef expr<proto::tag::function, BOOST_PP_CAT(args, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
+            };
+
+            template<typename Expr, typename Fun>
+            struct eval<Expr, Fun, N>
+              : boost::result_of<Fun(typename Expr::tag_type BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_ARG_N_TYPE, ~))>
+            {
             };
         #endif
 

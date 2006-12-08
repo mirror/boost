@@ -24,9 +24,9 @@
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
 
-    #include <boost/config.hpp>
-    #include <boost/detail/workaround.hpp>
+    #include <boost/utility/result_of.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
+    #include <boost/xpressive/proto/ref.hpp>
     #include <boost/xpressive/proto/args.hpp>
     #include <boost/xpressive/proto/traits.hpp>
 
@@ -45,6 +45,14 @@
         proto::as_expr_ref(BOOST_PP_CAT(a,n))\
         /**/
 
+    #define BOOST_PROTO_UNREF_ARG_TYPE(z, n, data)\
+        typename proto::meta::unref<typename Args::BOOST_PP_CAT(arg, n)>::type\
+        /**/
+
+    #define BOOST_PROTO_UNREF_ARG(z, n, data)\
+        proto::unref(this->BOOST_PP_CAT(arg, n))\
+        /**/
+
     #define BOOST_PP_ITERATION_PARAMS_1 (4, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/expr.hpp>, 1))
     #include BOOST_PP_ITERATE()
     #undef BOOST_PP_ITERATION_PARAMS_1
@@ -52,14 +60,13 @@
     #undef BOOST_PROTO_ARG
     #undef BOOST_PROTO_VOID
     #undef BOOST_PROTO_AS_OP
+    #undef BOOST_PROTO_UNREF_ARG_TYPE
+    #undef BOOST_PROTO_UNREF_ARG
     }}
 
     #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400))
     namespace boost
     {
-        template<typename T>
-        struct result_of;
-
     #define BOOST_PP_ITERATION_PARAMS_1 (4, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/expr.hpp>, 2))
     #include BOOST_PP_ITERATE()
     #undef BOOST_PP_ITERATION_PARAMS_1
@@ -81,27 +88,41 @@
             typedef proto_expr_tag fusion_tag;
             typedef void is_boost_proto_expr_;
 
-            BOOST_PP_REPEAT(BOOST_PP_ITERATION(), BOOST_PROTO_ARG, _)
-            BOOST_PP_REPEAT_FROM_TO(BOOST_PP_ITERATION(), BOOST_PROTO_MAX_ARITY, BOOST_PROTO_VOID, _)
+            BOOST_PP_REPEAT(BOOST_PP_ITERATION(), BOOST_PROTO_ARG, ~)
+            BOOST_PP_REPEAT_FROM_TO(BOOST_PP_ITERATION(), BOOST_PROTO_MAX_ARITY, BOOST_PROTO_VOID, ~)
 
             expr const &cast() const
             {
                 return *this;
             }
 
+            template<typename Fun>
+            typename boost::result_of<Fun(Tag BOOST_PP_ENUM_TRAILING(BOOST_PP_ITERATION(), BOOST_PROTO_UNREF_ARG_TYPE, ~))>::type
+            eval(Fun &fun) const
+            {
+                return fun(Tag() BOOST_PP_ENUM_TRAILING(BOOST_PP_ITERATION(), BOOST_PROTO_UNREF_ARG, ~));
+            }
+
+            template<typename Fun>
+            typename boost::result_of<Fun const(Tag BOOST_PP_ENUM_TRAILING(BOOST_PP_ITERATION(), BOOST_PROTO_UNREF_ARG_TYPE, ~))>::type
+            eval(Fun const &fun) const
+            {
+                return fun(Tag(), BOOST_PP_ENUM(BOOST_PP_ITERATION(), BOOST_PROTO_UNREF_ARG, ~));
+            }
+
             template<typename A>
-            expr<tag::assign, args2<ref<expr>, typename meta::as_expr_ref<A>::type> > const
+            expr<tag::assign, args2<ref<expr>, typename proto::meta::as_expr_ref<A>::type> > const
             operator =(A const &a) const
             {
-                expr<tag::assign, args2<ref<expr>, typename meta::as_expr_ref<A>::type> > that = {{*this}, proto::as_expr_ref(a)};
+                expr<tag::assign, args2<ref<expr>, typename proto::meta::as_expr_ref<A>::type> > that = {{*this}, proto::as_expr_ref(a)};
                 return that;
             }
 
             template<typename A>
-            expr<tag::subscript, args2<ref<expr>, typename meta::as_expr_ref<A>::type> > const
+            expr<tag::subscript, args2<ref<expr>, typename proto::meta::as_expr_ref<A>::type> > const
             operator [](A const &a) const
             {
-                expr<tag::subscript, args2<ref<expr>, typename meta::as_expr_ref<A>::type> > that = {{*this}, proto::as_expr_ref(a)};
+                expr<tag::subscript, args2<ref<expr>, typename proto::meta::as_expr_ref<A>::type> > that = {{*this}, proto::as_expr_ref(a)};
                 return that;
             }
 
@@ -133,14 +154,14 @@
         template<typename This BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
         struct result<This(BOOST_PP_ENUM_PARAMS(N, A))>
         {
-            typedef expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > type;
+            typedef expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename proto::meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > type;
         };
 
         template<BOOST_PP_ENUM_PARAMS(N, typename A)>
-        expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > const
+        expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename proto::meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > const
         operator ()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const &a)) const
         {
-            expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > that = {{*this} BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_AS_OP, _)};
+            expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename proto::meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > that = {{*this} BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_AS_OP, _)};
             return that;
         }
 

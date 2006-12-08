@@ -279,6 +279,9 @@ namespace boost { namespace proto
         template<typename T, bool IsExpr = is_expr<T>::value>
         struct unref;
 
+        template<typename Expr, typename Fun, long Arity = Expr::arity::value>
+        struct eval;
+
         // Specific expression generators, for convenience
         template<typename T> struct unary_plus;
         template<typename T> struct unary_minus;

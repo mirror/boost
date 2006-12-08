@@ -681,7 +681,7 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief For checking if an expression matches xpressive's grammar
 ///
-/// check can be used to see if a given expression is a valid narrow
+/// check() can be used to see if a given expression is a valid narrow
 /// xpressive regular expression. If it is, it will simply return it.
 /// If it isn't, it will cause a simple and short compile-time error.
 /// You may use it as follows:
@@ -691,7 +691,7 @@ checker<char> const check = {};
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief For checking if an expression matches xpressive's grammar
 ///
-/// check can be used to see if a given expression is a valid wide
+/// wcheck() can be used to see if a given expression is a valid wide
 /// xpressive regular expression. If it is, it will simply return it.
 /// If it isn't, it will cause a simple and short compile-time error.
 /// You may use it as follows:
