@@ -85,12 +85,12 @@ void    RunTests()
     //  Confirm at() throws the std lib defined exception
     try {
         BadValue( test_case.at( 0 ) );
-    } catch ( const std::range_error & ) {
+    } catch ( const std::out_of_range & ) {
     }
 
     try {
         BadValue( const_test_case.at( 0 ) );
-    } catch ( const std::range_error & ) {
+    } catch ( const std::out_of_range & ) {
     }
 }
 
