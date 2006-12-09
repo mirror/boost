@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2003 Douglas Gregor -->
+<!-- Distributed under the Boost Software License, Version 1.0. -->
+<!-- (See accompanying file LICENSE_1_0.txt or http://www.boost.org/LICENSE_1_0.txt) -->
+
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 version="1.0">
