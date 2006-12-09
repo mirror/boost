@@ -22,6 +22,7 @@
    // version does not do so.
    //
 #   include <boost/type_traits/detail/is_mem_fun_pointer_impl.hpp>
+#   include <boost/type_traits/remove_cv.hpp>
 #else
 #   include <boost/type_traits/is_reference.hpp>
 #   include <boost/type_traits/is_array.hpp>
@@ -41,7 +42,7 @@ namespace boost {
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(
       is_member_function_pointer
     , T
-    , ::boost::type_traits::is_mem_fun_pointer_impl<T>::value
+    , ::boost::type_traits::is_mem_fun_pointer_impl<typename remove_cv<T>::type>::value
     )
 
 #else
