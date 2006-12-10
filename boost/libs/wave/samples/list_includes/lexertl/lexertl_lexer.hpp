@@ -494,9 +494,9 @@ lexertl<Iterator, Position>::next_token(Iterator &first, Iterator const &last,
     size_t id = *(ptr + 1);
 
     while (curr != last) {
-			  size_t const state = ptr[state_machine_._lookup[*curr]];
-			  if (0 == state)
-				    break;
+        size_t const state = ptr[state_machine_._lookup[*curr]];
+        if (0 == state)
+            break;
         ++curr;
 
         ptr = &dfa_start[state * (state_machine_._dfa_alphabet +
