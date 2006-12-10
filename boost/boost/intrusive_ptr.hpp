@@ -112,11 +112,13 @@ public:
 
     T & operator*() const
     {
+        BOOST_ASSERT( p_ != 0 );
         return *p_;
     }
 
     T * operator->() const
     {
+        BOOST_ASSERT( p_ != 0 );
         return p_;
     }
 
