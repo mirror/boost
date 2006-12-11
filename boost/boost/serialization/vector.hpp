@@ -138,7 +138,7 @@ inline void save(
     const unsigned int /* file_version */
 ){
     // record number of elements
-    collection_size_type count = t.size();
+    collection_size_type count (t.size());
     ar << BOOST_SERIALIZATION_NVP(count);
     std::vector<bool>::const_iterator it = t.begin();
     while(count-- > 0){

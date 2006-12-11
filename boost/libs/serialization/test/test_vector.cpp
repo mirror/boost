@@ -33,15 +33,15 @@ int test_vector(T)
     BOOST_REQUIRE(NULL != testfile);
 
     // test array of objects
-    std::vector<A> avector;
-    avector.push_back(A());
-    avector.push_back(A());
+    std::vector<T> avector;
+    avector.push_back(T());
+    avector.push_back(T());
     {   
         test_ostream os(testfile, TEST_STREAM_FLAGS);
         test_oarchive oa(os);
         oa << boost::serialization::make_nvp("avector", avector);
     }
-    std::vector<A> avector1;
+    std::vector<T> avector1;
     {
         test_istream is(testfile, TEST_STREAM_FLAGS);
         test_iarchive ia(is);
@@ -55,9 +55,12 @@ int test_vector(T)
 int test_main( int /* argc */, char* /* argv */[] )
 {
    int res = test_vector(A());
-    // test an int array for which optimized versions should be available
+    // test an int vector for which optimized versions should be available
    if (res == EXIT_SUCCESS)
      res = test_vector(0);  
+    // test a bool vector
+   if (res == EXIT_SUCCESS)
+     res = test_vector(false);  
    return res;
 }
 

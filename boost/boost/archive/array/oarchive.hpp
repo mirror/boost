@@ -14,6 +14,7 @@
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/detail/get_data.hpp>
 #include <boost/type_traits/remove_const.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/pfto.hpp>
@@ -90,12 +91,16 @@ public:
   template<class ValueType, class Allocator>
   void save_override(std::vector<ValueType,Allocator> const &x, unsigned int version)
   {
-    typedef typename mpl::apply1<
+    typedef BOOST_DEDUCED_TYPENAME remove_const<ValueType>::type value_type;
+    typedef typename mpl::and_<
+      mpl::not_<is_same<value_type,bool> >,
+      mpl::apply1<
         BOOST_DEDUCED_TYPENAME Archive::use_array_optimization
-      , BOOST_DEDUCED_TYPENAME remove_const<ValueType>::type
+      , value_type>
     >::type use_optimized;
     save_optimized(x,version,use_optimized() );   
   }
+
   
   
   // dispatch saving of arrays to the optimized version where supported

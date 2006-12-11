@@ -14,7 +14,7 @@
 #include <boost/serialization/array.hpp>
 #include <boost/serialization/collection_size_type.hpp>
 #include <boost/serialization/detail/get_data.hpp>
-#include <boost/type_traits/has_trivial_constructor.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/apply.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/pfto.hpp>
@@ -94,9 +94,11 @@ public:
   template<class ValueType, class Allocator>
   void load_override(std::vector<ValueType,Allocator> &x, unsigned int version)
   {
-    typedef typename mpl::apply1<
+    typedef typename mpl::and_<
+      mpl::not_<is_same<ValueType,bool> >,
+      mpl::apply1<
         BOOST_DEDUCED_TYPENAME Archive::use_array_optimization
-      , ValueType
+      , ValueType>
     >::type use_optimized;
     load_optimized(x,version, use_optimized() );   
   }
