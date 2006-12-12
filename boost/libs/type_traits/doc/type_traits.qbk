@@ -1795,11 +1795,11 @@ __examples
 [:`is_base_of<Base, Derived>::value` is an integral constant 
 expression that evaluates to /true/.]
 
-[:`is_base_of<Base, Base>::value` is an integral constant 
-expression that evaluates to /false/: a class is not it's own base.]
+[:`is_base_of<Base, Derived>::value` is an integral constant 
+expression that evaluates to /true/.]
 
-[:`is_base_of<Derived, Base>::value` is an integral constant 
-expression that evaluates to /false/: the arguments are the wrong way round.]
+[:`is_base_of<Base, Base>::value` is an integral constant 
+expression that evaluates to /true/: a class is regarded as it's own base.]
 
 [:`is_base_of<T>::value_type` is the type `bool`.]
 
@@ -2992,5 +2992,7 @@ should be directed to boost@lists.boost.org
 www.boost.org/more/mailing_lists.htm#main] for subscription details).
 
 [endsect]
+
+
 
 
