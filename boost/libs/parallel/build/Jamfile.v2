@@ -1,0 +1,49 @@
+# Copyright (C) 2005, 2006 The Trustees of Indiana University.
+# Copyright (C) 2005 Douglas Gregor <doug.gregor -at- gmail.com>
+
+# Use, modification and distribution is subject to the Boost Software
+# License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+
+#  Authors: Douglas Gregor
+#           Andrew Lumsdaine
+
+import mpi ;
+
+project boost/python 
+  : source-location ../src/mpi
+  ;
+
+if [ mpi.configured ]
+{
+
+lib boost_mpi 
+  : 
+    broadcast.cpp
+    communicator.cpp
+    computation_tree.cpp
+    content_oarchive.cpp
+    environment.cpp
+    mpi_datatype_cache.cpp
+    mpi_datatype_oarchive.cpp
+    packed_iarchive.cpp
+    packed_oarchive.cpp
+    packed_skeleton_iarchive.cpp
+    packed_skeleton_oarchive.cpp
+    point_to_point.cpp
+    request.cpp
+    text_skeleton_oarchive.cpp
+    timer.cpp
+  : # Requirements
+    <library>../../serialization/build//boost_serialization
+    <library>/mpi//mpi
+  : # Default build
+    <link>shared
+  : # Usage requirements
+  ;
+}
+else
+{
+  ECHO "The mpi module has not been initialized; MPI libraries will not be built." ;
+  ECHO "hint: add \"using mpi ;\" to user-config.jam to enable MPI support." ;
+}
