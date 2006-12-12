@@ -9,9 +9,10 @@
 #           Andrew Lumsdaine
 
 import mpi ;
+import python ;
 
-project boost/python 
-  : source-location ../src/mpi
+project boost/parallel
+  : source-location ../src
   ;
 
 if [ mpi.configured ]
@@ -19,28 +20,58 @@ if [ mpi.configured ]
 
 lib boost_mpi 
   : 
-    broadcast.cpp
-    communicator.cpp
-    computation_tree.cpp
-    content_oarchive.cpp
-    environment.cpp
-    mpi_datatype_cache.cpp
-    mpi_datatype_oarchive.cpp
-    packed_iarchive.cpp
-    packed_oarchive.cpp
-    packed_skeleton_iarchive.cpp
-    packed_skeleton_oarchive.cpp
-    point_to_point.cpp
-    request.cpp
-    text_skeleton_oarchive.cpp
-    timer.cpp
+    mpi/broadcast.cpp
+    mpi/communicator.cpp
+    mpi/computation_tree.cpp
+    mpi/content_oarchive.cpp
+    mpi/environment.cpp
+    mpi/mpi_datatype_cache.cpp
+    mpi/mpi_datatype_oarchive.cpp
+    mpi/packed_iarchive.cpp
+    mpi/packed_oarchive.cpp
+    mpi/packed_skeleton_iarchive.cpp
+    mpi/packed_skeleton_oarchive.cpp
+    mpi/point_to_point.cpp
+    mpi/request.cpp
+    mpi/text_skeleton_oarchive.cpp
+    mpi/timer.cpp
   : # Requirements
-    <library>../../serialization/build//boost_serialization
     <library>/mpi//mpi
   : # Default build
     <link>shared
   : # Usage requirements
+    <library>../../serialization/build//boost_serialization
   ;
+
+  if [ python.configured ]
+  {
+    lib boost_mpi_python
+      : # Sources
+        mpi/python/serialize.cpp
+      : # Requirements
+      <library>boost_mpi
+      <library>/boost/python//boost_python
+      ;
+
+    python-extension mpi 
+      : # Sources
+        mpi/python/collectives.cpp
+        mpi/python/py_communicator.cpp
+        mpi/python/datatypes.cpp
+        mpi/python/documentation.cpp
+        mpi/python/py_environment.cpp
+        mpi/python/exception.cpp
+        mpi/python/module.cpp
+        mpi/python/py_request.cpp
+        mpi/python/skeleton_and_content.cpp
+        mpi/python/status.cpp
+        mpi/python/py_timer.cpp
+      : # Requirements
+        <library>boost_mpi_python
+      <library>boost_mpi
+      <library>/boost/python//boost_python
+      ;
+    }
 }
 else
 {
