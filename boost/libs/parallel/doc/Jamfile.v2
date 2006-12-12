@@ -34,7 +34,6 @@ doxygen mpi_autodoc
   ;
 
 boostbook mpi : mpi.qbk mpi_autodoc 
-              : <xsl:param>boost.root=http://www.boost.org
               # Uncomment this line when generating PDF output
               # <xsl:param>max-columns=66
               ;
