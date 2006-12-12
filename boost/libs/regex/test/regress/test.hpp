@@ -58,7 +58,12 @@ template <class charT, class tagT>
 void do_test(const charT& c, const tagT& tag)
 {
 #ifndef BOOST_NO_STD_LOCALE
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200) && defined(TEST_THREADS)
+   // typeid appears to fail in multithreaded environments:
+   test_info<charT>::set_typename("");
+#else
    test_info<charT>::set_typename(typeid(boost::basic_regex<charT, boost::cpp_regex_traits<charT> >).name());
+#endif
    boost::basic_regex<charT, boost::cpp_regex_traits<charT> > e1;
    static bool done_empty_test = false;
    if(done_empty_test == false)
