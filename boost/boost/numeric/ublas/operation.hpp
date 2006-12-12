@@ -642,7 +642,7 @@ namespace boost { namespace numeric { namespace ublas {
                 typename matrix_column<expression1_type>::const_iterator itc (mc.begin ());
                 typename matrix_column<expression1_type>::const_iterator itc_end (mc.end ());
                 while (itc != itc_end) {
-                    if (triangular_restriction::functor_type ().other (itc.index (), it2.index2 ()))
+                    if (triangular_restriction::other (itc.index (), it2.index2 ()))
                         m (itc.index (), it2.index2 ()) += *it1 * *itc;
                     ++ itc;
                 }
