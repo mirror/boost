@@ -117,7 +117,7 @@ namespace detail {
 } // end namespace detail
 
 template<typename T>
-void broadcast(const communicator& comm, T& value, int root = 0)
+void broadcast(const communicator& comm, T& value, int root)
 {
   detail::broadcast_impl(comm, value, root, is_mpi_datatype<T>());
 }
