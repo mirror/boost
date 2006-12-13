@@ -350,7 +350,7 @@ for the Storage array are <code>unbounded_array&lt;T&gt;</code> ,
 <code>std::vector&lt;T&gt;</code> .</p>
 <h2><a name="unit_vector" id="unit_vector"></a>Unit Vector</h2>
 <h4>Description</h4>
-<p>The templated class <code>unit_vector&lt;T&gt;</code> represents
+<p>The templated class <code>unit_vector&lt;T, ALLOC&gt;</code> represents
 canonical unit vectors. For the <em>k</em>-th
 <em>n</em>-dimensional canonical unit vector and <em>0 &lt;= i &lt;
 n</em> holds <em>u</em><sup><em>k</em></sup><sub><em>i</em></sub>
@@ -384,6 +384,11 @@ int main () {
 <td><code>T</code></td>
 <td>The type of object stored in the vector.</td>
 <td><code>int</code></td>
+</tr>
+<tr>
+<td><code>ALLOC</code></td>
+<td>An STL Allocator for size_type and difference_type.</td>
+<td>std::allocator</td>
 </tr>
 </tbody>
 </table>
@@ -479,7 +484,7 @@ end of the reversed <code>unit_vector</code>.</td>
 </table>
 <h2><a name="zero_vector" id="zero_vector"></a>Zero Vector</h2>
 <h4>Description</h4>
-<p>The templated class <code>zero_vector&lt;T&gt;</code> represents
+<p>The templated class <code>zero_vector&lt;T, ALLOC&gt;</code> represents
 zero vectors. For a <em>n</em>-dimensional zero vector and <em>0
 &lt;= i &lt; n</em> holds <em>z</em><sub><em>i</em></sub> <em>=
 0</em>.</p>
@@ -508,6 +513,11 @@ int main () {
 <td><code>T</code></td>
 <td>The type of object stored in the vector.</td>
 <td><code>int</code></td>
+</tr>
+<tr>
+<td><code>ALLOC</code></td>
+<td>An STL Allocator for size_type and difference_type.</td>
+<td>std::allocator</td>
 </tr>
 </tbody>
 </table>
@@ -599,7 +609,7 @@ end of the reversed <code>zero_vector</code>.</td>
 </table>
 <h2><a name="scalar_vector" id="scalar_vector"></a>Scalar Vector</h2>
 <h4>Description</h4>
-<p>The templated class <code>scalar_vector&lt;T&gt;</code>
+<p>The templated class <code>scalar_vector&lt;T, ALLOC&gt;</code>
 represents scalar vectors. For a <em>n</em>-dimensional scalar
 vector and <em>0 &lt;= i &lt; n</em> holds
 <em>z</em><sub><em>i</em></sub> <em>= s</em>.</p>
@@ -628,6 +638,11 @@ int main () {
 <td><code>T</code></td>
 <td>The type of object stored in the vector.</td>
 <td><code>int</code></td>
+</tr>
+<tr>
+<td><code>ALLOC</code></td>
+<td>An STL Allocator for size_type and difference_type.</td>
+<td>std::allocator</td>
 </tr>
 </tbody>
 </table>
