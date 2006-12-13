@@ -27,8 +27,8 @@ namespace boost { namespace proto
         template<typename Expr, typename State, typename Visitor>
         struct apply
         {
-            typedef typename Expr::arg0_type left_type;
-            typedef typename Expr::arg1_type right_type;
+            typedef typename Expr::arg0_type::expr_type left_type;
+            typedef typename Expr::arg1_type::expr_type right_type;
 
             // compile the right branch
             typedef typename compiler<typename left_type::tag_type, DomainTag>::
@@ -73,8 +73,8 @@ namespace boost { namespace proto
         template<typename Expr, typename State, typename Visitor>
         struct apply
         {
-            typedef typename Expr::arg0_type left_type;
-            typedef typename Expr::arg1_type right_type;
+            typedef typename Expr::arg0_type::expr_type left_type;
+            typedef typename Expr::arg1_type::expr_type right_type;
 
             // compile the right branch
             typedef typename compiler<typename right_type::tag_type, DomainTag>::
