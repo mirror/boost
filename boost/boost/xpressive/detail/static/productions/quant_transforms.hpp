@@ -1,4 +1,5 @@
-///////////////////////////////////////////////////////////////////////////////
+/////////
+//////////////////////////////////////////////////////////////////////
 // quant_transforms.hpp
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
@@ -20,16 +21,10 @@
 
 namespace boost { namespace xpressive { namespace detail
 {
-    typedef proto::meta::terminal<repeat_begin_matcher>::type repeat_tag;
-
     ///////////////////////////////////////////////////////////////////////////////
-    // is_repeater
-    template<typename Expr>
-    struct is_repeater
-      : is_same<
-            repeat_tag
-          , typename proto::meta::unref<typename Expr::arg0_type>::type
-        >
+    // RepeaterPattern
+    struct RepeaterPattern
+      : proto::meta::right_shift<proto::meta::terminal<repeat_begin_matcher>, mpl::_>
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -38,10 +33,8 @@ namespace boost { namespace xpressive { namespace detail
     {
         template<typename Expr, typename, typename>
         struct apply
-        {
-            typedef typename Expr::arg0_type expr_type;
-            typedef typename mpl::or_<is_marker<expr_type>, is_repeater<expr_type> >::type type;
-        };
+          : proto::matches<typename Expr::arg0_type, proto::or_<MarkerPattern, RepeaterPattern> >
+        {};
     };
 
     ///////////////////////////////////////////////////////////////////////////////

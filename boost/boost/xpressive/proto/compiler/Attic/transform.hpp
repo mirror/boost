@@ -78,8 +78,6 @@ namespace boost { namespace proto
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
-            //typename apply<Expr, State, Visitor>::trans_type trans = Lambda::call(expr, state, visitor);
-            //return proto::compile(trans, state, visitor, DomainTag());
             return proto::compile(Lambda::call(expr, state, visitor), state, visitor, DomainTag());
         }
     };
@@ -109,14 +107,14 @@ namespace boost { namespace proto
         template<typename Expr, typename, typename>
         struct apply
         {
-            typedef typename Expr::arg0_type type;
+            typedef typename meta::arg<Expr>::type type;
         };
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
+        static typename apply<Expr, State, Visitor>::type const &
         call(Expr const &expr, State const &, Visitor &)
         {
-            return expr.cast().arg0;
+            return proto::arg(expr);
         }
     };
 
@@ -127,14 +125,14 @@ namespace boost { namespace proto
         template<typename Expr, typename, typename>
         struct apply
         {
-            typedef typename Expr::arg0_type type;
+            typedef typename meta::left<Expr>::type type;
         };
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
+        static typename apply<Expr, State, Visitor>::type const &
         call(Expr const &expr, State const &, Visitor &)
         {
-            return expr.cast().arg0;
+            return proto::left(expr);
         }
     };
 
@@ -145,14 +143,14 @@ namespace boost { namespace proto
         template<typename Expr, typename, typename>
         struct apply
         {
-            typedef typename Expr::arg1_type type;
+            typedef typename meta::right<Expr>::type type;
         };
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
+        static typename apply<Expr, State, Visitor>::type const &
         call(Expr const &expr, State const &, Visitor &)
         {
-            return expr.cast().arg1;
+            return proto::right(expr);
         }
     };
 

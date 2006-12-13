@@ -18,19 +18,10 @@
 namespace boost { namespace xpressive { namespace detail
 {
     ///////////////////////////////////////////////////////////////////////////////
-    // is_marker
+    // MarkerPattern
     // (s1= ...) is a marker
-    template<typename Expr, long Arity = Expr::arity::value>
-    struct is_marker
-      : mpl::false_
-    {};
-
-    template<typename Expr>
-    struct is_marker<Expr, 2>
-      : mpl::and_<
-            is_same<proto::tag::assign, typename Expr::tag_type>
-          , is_same<basic_mark_tag, typename proto::meta::unref<typename Expr::arg0_type>::type>
-        >
+    struct MarkerPattern
+      : proto::meta::assign<basic_mark_tag, mpl::_>
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -39,7 +30,7 @@ namespace boost { namespace xpressive { namespace detail
     {
         template<typename Expr, typename, typename>
         struct apply
-          : is_marker<Expr>
+          : proto::matches<Expr, MarkerPattern>
         {};
     };
 
@@ -96,7 +87,7 @@ namespace boost { namespace xpressive { namespace detail
         {
             return marker_insert_transform::call
             (
-                expr.cast().arg1 //proto::right(expr)
+                proto::right(expr)
               , state
               , visitor
               , proto::arg(proto::left(expr)).mark_number_
