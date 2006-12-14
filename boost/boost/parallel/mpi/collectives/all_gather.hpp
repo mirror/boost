@@ -24,34 +24,60 @@ namespace detail {
   // datatype, so we'll use MPI_Gather to do all of the work.
   template<typename T>
   void
-  all_gather_impl(const communicator& comm, const T& value,
-                  std::vector<T>& values, mpl::true_)
+  all_gather_impl(const communicator& comm, const T* in_values, int n, 
+                  T* out_values, mpl::true_)
   {
-    values.resize(comm.size());
-
     MPI_Datatype type = boost::parallel::mpi::get_mpi_datatype<T>();
     BOOST_MPI_CHECK_RESULT(MPI_Allgather,
-                           (const_cast<T*>(&value), 1, type,
-                            &values[0], 1, type, comm));
+                           (const_cast<T*>(in_values), n, type,
+                            out_values, n, type, comm));
   }
 
-  // We're all-gathering for a type that has no associated MPI. So,
-  // we'll do a manual gather followed by a broadcast.
+  // We're all-gathering for a type that has no associated MPI
+  // type. So, we'll do a manual gather followed by a broadcast.
   template<typename T>
   void
-  all_gather_impl(const communicator& comm, const T& value,
-                  std::vector<T>& values, mpl::false_)
+  all_gather_impl(const communicator& comm, const T* in_values, int n, 
+                  T* out_values, mpl::false_)
   {
-    gather(comm, value, values, 0);
-    broadcast(comm, values, 0);
+    std::cerr << comm.rank() << ": gathering " << n << " values to root 0..." << std::endl;
+    std::cerr << in_values << ", " << out_values << std::endl;
+    gather(comm, in_values, n, out_values, 0);
+    std::cerr << comm.rank() << ":  broadcasting from root 0..." << std::endl;
+    broadcast(comm, out_values, comm.size() * n, 0);
   }
 } // end namespace detail
 
 template<typename T>
-void
-all_gather(const communicator& comm, const T& value, std::vector<T>& values)
+inline void
+all_gather(const communicator& comm, const T& in_value, T* out_values)
 {
-  detail::all_gather_impl(comm, value, values, is_mpi_datatype<T>());
+  detail::all_gather_impl(comm, &in_value, 1, out_values, is_mpi_datatype<T>());
+}
+
+template<typename T>
+void
+all_gather(const communicator& comm, const T& in_value, 
+           std::vector<T>& out_values)
+{
+  out_values.resize(comm.size());
+  ::boost::parallel::mpi::all_gather(comm, &in_value, 1, &out_values[0]);
+}
+
+template<typename T>
+inline void
+all_gather(const communicator& comm, const T* in_values, int n, T* out_values)
+{
+  detail::all_gather_impl(comm, in_values, n, out_values, is_mpi_datatype<T>());
+}
+
+template<typename T>
+void
+all_gather(const communicator& comm, const T* in_values, int n,
+           std::vector<T>& out_values)
+{
+  out_values.resize(comm.size() * n);
+  ::boost::parallel::mpi::all_gather(comm, in_values, n, &out_values[0]);
 }
 
 } } } // end namespace boost::parallel::mpi

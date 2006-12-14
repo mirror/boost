@@ -88,10 +88,12 @@ namespace detail {
   // We're sending a type that has an associated MPI datatype, so
   // we'll use MPI_Bcast to do all of the work.
   template<typename T>
-  void broadcast_impl(const communicator& comm, T& value, int root, mpl::true_)
+  void 
+  broadcast_impl(const communicator& comm, T* values, int n, int root, 
+                 mpl::true_)
   {
     BOOST_MPI_CHECK_RESULT(MPI_Bcast,
-                           (&value, 1,
+                           (values, n,
                             boost::parallel::mpi::get_mpi_datatype<T>(),
                             root, MPI_Comm(comm)));
   }
@@ -102,16 +104,19 @@ namespace detail {
   // root to everyone else.
   template<typename T>
   void
-  broadcast_impl(const communicator& comm, T& value, int root, mpl::false_)
+  broadcast_impl(const communicator& comm, T* values, int n, int root, 
+                 mpl::false_)
   {
     if (comm.rank() == root) {
       packed_oarchive oa(comm);
-      oa << value;
+      for (int i = 0; i < n; ++i)
+        oa << values[i];
       broadcast(comm, oa, root);
     } else {
       packed_iarchive ia(comm);
       broadcast(comm, ia, root);
-      ia >> value;
+      for (int i = 0; i < n; ++i)
+        ia >> values[i];
     }
   }
 } // end namespace detail
@@ -119,7 +124,13 @@ namespace detail {
 template<typename T>
 void broadcast(const communicator& comm, T& value, int root)
 {
-  detail::broadcast_impl(comm, value, root, is_mpi_datatype<T>());
+  detail::broadcast_impl(comm, &value, 1, root, is_mpi_datatype<T>());
+}
+
+template<typename T>
+void broadcast(const communicator& comm, T* values, int n, int root)
+{
+  detail::broadcast_impl(comm, values, n, root, is_mpi_datatype<T>());
 }
 
 } } } // end namespace boost::parallel::mpi

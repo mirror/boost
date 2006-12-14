@@ -20,27 +20,20 @@
 #include <boost/parallel/mpi/allocator.hpp>
 
 namespace boost { namespace parallel { namespace mpi {
-
-
-template<typename T>
-void
-all_to_all(const communicator& comm, const std::vector<T>& in_values,
-           std::vector<T>& out_values);
-           
+          
 namespace detail {
   // We're performaing an all-to-all with a type that has an
   // associated MPI datatype, so we'll use MPI_Alltoall to do all of
   // the work.
   template<typename T>
   void
-  all_to_all_impl(const communicator& comm, const std::vector<T>& in_values,
-                  std::vector<T>& out_values, mpl::true_)
+  all_to_all_impl(const communicator& comm, const T* in_values, int n, 
+                  T* out_values, mpl::true_)
   {
     MPI_Datatype type = get_mpi_datatype<T>();
-    out_values.resize(comm.size());
     BOOST_MPI_CHECK_RESULT(MPI_Alltoall,
-                           (const_cast<T*>(&in_values.front()), 1, type,
-                            &out_values.front(), 1, type, comm));
+                           (const_cast<T*>(in_values), n, type,
+                            out_values, n, type, comm));
   }
 
   // We're performing an all-to-all with a type that does not have an
@@ -50,13 +43,11 @@ namespace detail {
   // processes.
   template<typename T>
   void
-  all_to_all_impl(const communicator& comm, const std::vector<T>& in_values,
-                  std::vector<T>& out_values, mpl::false_)
+  all_to_all_impl(const communicator& comm, const T* in_values, int n,
+                  T* out_values, mpl::false_)
   {
     int size = comm.size();
     int rank = comm.rank();
-
-    out_values.resize(comm.size());
 
     // The amount of data to be sent to each process
     std::vector<int> send_sizes(size);
@@ -75,7 +66,8 @@ namespace detail {
       // Our own value will never be transmitted, so don't pack it.
       if (dest != rank) {
         packed_oarchive oa(comm, outgoing);
-        oa << in_values[dest];
+        for (int i = 0; i < n; ++i)
+          oa << in_values[dest * n + i];
       }
 
       // Keep track of the sizes
@@ -105,15 +97,25 @@ namespace detail {
 
     // Deserialize data from the iarchive
     for (int src = 0; src < size; ++src) {
-      if (src == rank) out_values[src] = in_values[src];
+      if (src == rank) 
+        std::copy(in_values + src * n, in_values + (src + 1) * n, 
+                  out_values + src * n);
       else {
         packed_iarchive ia(comm, incoming, boost::archive::no_header,
                            recv_disps[src]);
-        ia >> out_values[src];
+        for (int i = 0; i < n; ++i)
+          ia >> out_values[src * n + i];
       }
     }
   }
 } // end namespace detail
+
+template<typename T>
+inline void
+all_to_all(const communicator& comm, const T* in_values, T* out_values)
+{
+  detail::all_to_all_impl(comm, in_values, 1, out_values, is_mpi_datatype<T>());
+}
 
 template<typename T>
 void
@@ -121,7 +123,25 @@ all_to_all(const communicator& comm, const std::vector<T>& in_values,
            std::vector<T>& out_values)
 {
   BOOST_ASSERT((int)in_values.size() == comm.size());
-  detail::all_to_all_impl(comm, in_values, out_values, is_mpi_datatype<T>());
+  out_values.resize(comm.size());
+  ::boost::parallel::mpi::all_to_all(comm, &in_values[0], &out_values[0]);
+}
+
+template<typename T>
+inline void
+all_to_all(const communicator& comm, const T* in_values, int n, T* out_values)
+{
+  detail::all_to_all_impl(comm, in_values, n, out_values, is_mpi_datatype<T>());
+}
+
+template<typename T>
+void
+all_to_all(const communicator& comm, const std::vector<T>& in_values, int n,
+           std::vector<T>& out_values)
+{
+  BOOST_ASSERT((int)in_values.size() == comm.size() * n);
+  out_values.resize(comm.size() * n);
+  ::boost::parallel::mpi::all_to_all(comm, &in_values[0], n, &out_values[0]);
 }
 
 } } } // end namespace boost::parallel::mpi

@@ -38,15 +38,41 @@ namespace boost { namespace parallel { namespace mpi {
  *    @param comm The communicator over which the all-gather will
  *    occur.
  *
- *    @param value The value to be transmitted by each process.
+ *    @param in_value The value to be transmitted by each process. To
+ *    gather an array of values, @c in_values points to the @c n local
+ *    values to be transmitted.
  *
- *    @param values A vector that will be populated with the values
- *    from each process, indexed by the process ID number. This vector
- *    will be resized accordingly.
+ *    @param out_values A vector or pointer to storage that will be
+ *    populated with the values from each process, indexed by the
+ *    process ID number. If it is a vector, the vector will be resized
+ *    accordingly.
  */
 template<typename T>
 void
-all_gather(const communicator& comm, const T& value, std::vector<T>& values);
+all_gather(const communicator& comm, const T& in_value, 
+           std::vector<T>& out_values);
+
+/**
+ * \overload
+ */
+template<typename T>
+void
+all_gather(const communicator& comm, const T& in_value, T* out_values);
+
+/**
+ * \overload
+ */
+template<typename T>
+void
+all_gather(const communicator& comm, const T* in_values, int n,
+           std::vector<T>& out_values);
+
+/**
+ * \overload
+ */
+template<typename T>
+void
+all_gather(const communicator& comm, const T* in_values, int n, T* out_values);
 
 /**
  *  @brief Combine the values stored by each process into a single
@@ -70,7 +96,9 @@ all_gather(const communicator& comm, const T& value, std::vector<T>& values);
  *    occur.
  *
  *    @param in_value The local value to be combined with the local
- *    values of every other process.
+ *    values of every other process. For reducing arrays, @c in_values
+ *    is a pointer to the local values to be reduced and @c n is the
+ *    number of values to reduce. See @c reduce for more information.
  *
  *    @param out_value Will receive the result of the reduction
  *    operation. If this parameter is omitted, the outgoing value will
@@ -102,6 +130,65 @@ template<typename T, typename Op>
 T all_reduce(const communicator& comm, const T& in_value, Op op);
 
 /**
+ * \overload
+ */
+template<typename T, typename Op>
+void
+all_reduce(const communicator& comm, const T* in_values, int n, T* out_values, 
+           Op op);
+
+/**
+ *  @brief Send data from every process to every other process.
+ *
+ *  @c all_to_all is a collective algorithm that transmits @c p values
+ *  from every process to every other process. On process i, jth value
+ *  of the @p in_values vector is sent to process j and placed in the
+ *  ith position of the @p out_values vector in process @p j. The type
+ *  @c T of the values may be any type that is serializable or has an
+ *  associated MPI data type. If @c n is provided, then arrays of @p n
+ *  values will be transferred from one process to another.
+ *
+ *  When the type @c T has an associated MPI data type, this routine
+ *  invokes @c MPI_Alltoall to scatter the values.
+ *
+ *    @param comm The communicator over which the all-to-all
+ *    communication will occur.
+ *
+ *    @param in_values A vector or pointer to storage that contains
+ *    the values to send to each process, indexed by the process ID
+ *    number.
+ *
+ *    @param out_values A vector or pointer to storage that will be
+ *    updated to contain the values received from other processes. The
+ *    jth value in @p out_values will come from the procss with rank j.
+ */
+template<typename T>
+void
+all_to_all(const communicator& comm, const std::vector<T>& in_values,
+           std::vector<T>& out_values);
+
+/**
+ * \overload
+ */
+template<typename T>
+void all_to_all(const communicator& comm, const T* in_values, T* out_values);
+
+/**
+ * \overload
+ */
+template<typename T>
+void
+all_to_all(const communicator& comm, const std::vector<T>& in_values, int n,
+           std::vector<T>& out_values);
+
+/**
+ * \overload
+ */
+template<typename T>
+void 
+all_to_all(const communicator& comm, const T* in_values, int n, T* out_values);
+
+/**
  * @brief Broadcast a value from a root process to all other
  * processes.
  *
@@ -123,19 +210,30 @@ T all_reduce(const communicator& comm, const T& in_value, Op op);
  *   @param comm The communicator over which the broadcast will
  *   occur.
  *
- *   @param value The value to be transmitted (if the rank of @p comm
- *   is equal to @p root) or received (if the rank of @p comm is not
- *   equal to @p root). When the @p value is a @c skeleton_proxy, only
- *   the skeleton of the object will be broadcast. In this case, the
- *   @p root will build a skeleton from the object help in the proxy
- *   and all of the non-roots will reshape the objects held in their
- *   proxies based on the skeleton sent from the root.
+ *   @param value The value (or values, if @p n is provided) to be
+ *   transmitted (if the rank of @p comm is equal to @p root) or
+ *   received (if the rank of @p comm is not equal to @p root). When
+ *   the @p value is a @c skeleton_proxy, only the skeleton of the
+ *   object will be broadcast. In this case, the @p root will build a
+ *   skeleton from the object help in the proxy and all of the
+ *   non-roots will reshape the objects held in their proxies based on
+ *   the skeleton sent from the root.
+ *
+ *   @param n When supplied, the number of values that the pointer @p
+ *   values points to, for broadcasting an array of values. The value
+ *   of @p n must be the same for all processes in @p comm.
  *
  *   @param root The rank/process ID of the process that will be
  *   transmitting the value.
  */
 template<typename T>
 void broadcast(const communicator& comm, T& value, int root);
+
+/**
+ * \overload
+ */
+template<typename T>
+void broadcast(const communicator& comm, T* values, int n, int root);
 
 /**
  * \overload
@@ -165,27 +263,58 @@ broadcast(const communicator& comm, const skeleton_proxy<T>& value, int root);
  *
  *    @param comm The communicator over which the gather will occur.
  *
- *    @param value The value to be transmitted by each process.
+ *    @param in_value The value to be transmitted by each process. For
+ *    gathering arrays of values, @c in_values points to storage for
+ *    @c n*comm.size() values.
  *
- *    @param values A vector that will be populated with the values
- *    from each process, indexed by the process ID number. This vector
- *    will be resized accordingly. For non-root processes, this
- *    parameter may be omitted. If it is still provided, however, it
- *    will be unchanged.
+ *    @param out_values A vector or pointer to storage that will be
+ *    populated with the values from each process, indexed by the
+ *    process ID number. If it is a vector, it will be resized
+ *    accordingly. For non-root processes, this parameter may be
+ *    omitted. If it is still provided, however, it will be unchanged.
  *
  *    @param root The process ID number that will collect the
  *    values. This value must be the same on all processes.
  */
 template<typename T>
 void
-gather(const communicator& comm, const T& value, std::vector<T>& values,
+gather(const communicator& comm, const T& in_value, std::vector<T>& out_values,
        int root);
 
 /**
  * \overload
  */
 template<typename T>
-void gather(const communicator& comm, const T& value, int root);
+void
+gather(const communicator& comm, const T& in_value, T* out_values, int root);
+
+/**
+ * \overload
+ */
+template<typename T>
+void gather(const communicator& comm, const T& in_value, int root);
+
+/**
+ * \overload
+ */
+template<typename T>
+void
+gather(const communicator& comm, const T* in_values, int n, 
+       std::vector<T>& out_values, int root);
+
+/**
+ * \overload
+ */
+template<typename T>
+void
+gather(const communicator& comm, const T* in_values, int n, T* out_values, 
+       int root);
+
+/**
+ * \overload
+ */
+template<typename T>
+void gather(const communicator& comm, const T* in_values, int n, int root);
 
 /**
  *  @brief Scatter the values stored at the root to all processes
@@ -193,7 +322,7 @@ void gather(const communicator& comm, const T& value, int root);
  *
  *  @c scatter is a collective algorithm that scatters the values
  *  stored in the @p root process (inside a vector) to all of the
- *  processes in the communicator. The vector @p values (only
+ *  processes in the communicator. The vector @p out_values (only
  *  significant at the @p root) is indexed by the process number to
  *  which the corresponding value will be sent. The type @c T of the
  *  values may be any type that is serializable or has an associated
@@ -204,54 +333,57 @@ void gather(const communicator& comm, const T& value, int root);
  *
  *    @param comm The communicator over which the gather will occur.
  *
- *    @param values A vector that will contain the values to send to
- *    each process, indexed by the process ID number. For non-root
- *    processes, this parameter may be omitted. If it is still
- *    provided, however, it will be unchanged.
+ *    @param in_values A vector or pointer to storage that will contain
+ *    the values to send to each process, indexed by the process rank.
+ *    For non-root processes, this parameter may be omitted. If it is
+ *    still provided, however, it will be unchanged.
  *
- *    @param value The value received by each process.
+ *    @param out_value The value received by each process. When
+ *    scattering an array of values, @p out_values points to the @p n
+ *    values that will be received by each process.
  *
  *    @param root The process ID number that will scatter the
  *    values. This value must be the same on all processes.
  */
 template<typename T>
 void
-scatter(const communicator& comm, const std::vector<T>& values, T& value,
+scatter(const communicator& comm, const std::vector<T>& in_values, T& out_value,
         int root);
 
 /**
  * \overload
  */
 template<typename T>
-void scatter(const communicator& comm, T& value, int root);
+void
+scatter(const communicator& comm, const T* in_values, T& out_value, int root);
 
 /**
- *  @brief Send data from every process to every other process.
- *
- *  @c all_to_all is a collective algorithm that transmits @c p values
- *  from every process to every other process. On process i, jth value
- *  of the @p in_values vector is sent to process j and placed in the
- *  ith position of the @p out_values vector in process @p j. The type
- *  @c T of the values may be any type that is serializable or has an
- *  associated MPI data type.
- *
- *  When the type @c T has an associated MPI data type, this routine
- *  invokes @c MPI_Alltoall to scatter the values.
- *
- *    @param comm The communicator over which the all-to-all
- *    communication will occur.
- *
- *    @param in_values A vector that will containing the values to
- *    send to each process, indexed by the process ID number.
- *
- *    @param out_values A vector that will be updated to contain the
- *    values received from other processes. The jth value in the
- *    vector will come from the procss with rank j.
+ * \overload
+ */
+template<typename T>
+void scatter(const communicator& comm, T& out_value, int root);
+
+/**
+ * \overload
  */
 template<typename T>
 void
-all_to_all(const communicator& comm, const std::vector<T>& in_values,
-           std::vector<T>& out_values);
+scatter(const communicator& comm, const std::vector<T>& in_values, 
+        T* out_values, int n, int root);
+
+/**
+ * \overload
+ */
+template<typename T>
+void
+scatter(const communicator& comm, const T* in_values, T* out_values, int n,
+        int root);
+
+/**
+ * \overload
+ */
+template<typename T>
+void scatter(const communicator& comm, T* out_values, int n, int root);
 
 /**
  *  @brief Combine the values stored by each process into a single
@@ -264,7 +396,7 @@ all_to_all(const communicator& comm, const std::vector<T>& in_values,
  *  serializable or has an associated MPI data type. One can think of
  *  this operation as a @c gather to the @p root, followed by an @c
  *  std::accumulate() over the gathered values and using the operation
- *  @c op.
+ *  @c op. 
  *
  *  When the type @c T has an associated MPI data type, this routine
  *  invokes @c MPI_Reduce to perform the reduction. If possible,
@@ -275,12 +407,19 @@ all_to_all(const communicator& comm, const std::vector<T>& in_values,
  *    occur.
  *
  *    @param in_value The local value to be combined with the local
- *    values of every other process.
+ *    values of every other process. For reducing arrays, @c in_values
+ *    contains a pointer to the local values. In this case, @c n is
+ *    the number of values that will be reduced. Reduction occurs
+ *    independently for each of the @p n values referenced by @p
+ *    in_values, e.g., calling reduce on an array of @p n values is
+ *    like calling @c reduce @p n separate times, one for each
+ *    location in @p in_values and @p out_values.
  *
  *    @param out_value Will receive the result of the reduction
  *    operation, but only for the @p root process. Non-root processes
  *    may omit if parameter; if they choose to supply the parameter,
- *    it will be unchanged.
+ *    it will be unchanged. For reducing arrays, @c out_values
+ *    contains a pointer to the storage for the output values.
  *
  *    @param op The binary operation that combines two values of type
  *    @c T into a third value of type @c T. For types @c T that has
@@ -309,6 +448,21 @@ template<typename T, typename Op>
 void reduce(const communicator& comm, const T& in_value, Op op, int root);
 
 /**
+ * \overload
+ */
+template<typename T, typename Op>
+void
+reduce(const communicator& comm, const T* in_values, int n, T* out_values, 
+       Op op, int root);
+
+/**
+ * \overload
+ */
+template<typename T, typename Op>
+void 
+reduce(const communicator& comm, const T* in_values, int n, Op op, int root);
+
+/**
  *  @brief Compute a prefix reduction of values from all processes in
  *  the communicator.
  *
@@ -331,11 +485,18 @@ void reduce(const communicator& comm, const T& in_value, Op op, int root);
  *    will occur.
  *
  *    @param in_value The local value to be combined with the local
- *    values of other processes.
+ *    values of other processes. For the array variant, the @c
+ *    in_values parameter points to the @c n local values that will be
+ *    combined.
  *
  *    @param out_value If provided, the ith process will receive the
  *    value @c op(in_value[0], op(in_value[1], op(..., in_value[i])
- *    ... )).
+ *    ... )). For the array variant, @c out_values contains a pointer
+ *    to storage for the @c n output values. The prefix reduction
+ *    occurs independently for each of the @p n values referenced by
+ *    @p in_values, e.g., calling scan on an array of @p n values is
+ *    like calling @c scan @p n separate times, one for each location
+ *    in @p in_values and @p out_values.
  *
  *    @param op The binary operation that combines two values of type
  *    @c T into a third value of type @c T. For types @c T that has
@@ -359,6 +520,13 @@ scan(const communicator& comm, const T& in_value, T& out_value, Op op);
 template<typename T, typename Op>
 T
 scan(const communicator& comm, const T& in_value, Op op);
+
+/**
+ * \overload
+ */
+template<typename T, typename Op>
+void
+scan(const communicator& comm, const T* in_values, int n, T* out_values, Op op);
 
 } } } // end namespace boost::parallel::mpi
 #endif // BOOST_PARALLEL_MPI_COLLECTIVES_HPP

@@ -25,27 +25,26 @@ namespace detail {
   // datatype, so we'll use MPI_Gather to do all of the work.
   template<typename T>
   void
-  gather_impl(const communicator& comm, const T& value, std::vector<T>& values,
-              int root, mpl::true_)
+  gather_impl(const communicator& comm, const T* in_values, int n, 
+              T* out_values, int root, mpl::true_)
   {
-    values.resize(comm.size());
-
     MPI_Datatype type = get_mpi_datatype<T>();
     BOOST_MPI_CHECK_RESULT(MPI_Gather,
-                           (const_cast<T*>(&value), 1, type,
-                            &values[0], 1, type, root, comm));
+                           (const_cast<T*>(in_values), n, type,
+                            out_values, n, type, root, comm));
   }
 
   // We're gathering from a non-root for a type that has an associated MPI
   // datatype, so we'll use MPI_Gather to do all of the work.
   template<typename T>
   void
-  gather_impl(const communicator& comm, const T& value, int root, mpl::true_)
+  gather_impl(const communicator& comm, const T* in_values, int n, int root, 
+              mpl::true_)
   {
     MPI_Datatype type = get_mpi_datatype<T>();
     BOOST_MPI_CHECK_RESULT(MPI_Gather,
-                           (const_cast<T*>(&value), 1, type,
-                            0, 1, type, root, comm));
+                           (const_cast<T*>(in_values), n, type,
+                            0, n, type, root, comm));
   }
 
   // We're gathering at the root for a type that does not have an
@@ -55,33 +54,17 @@ namespace detail {
   // messages to the root.
   template<typename T>
   void
-  gather_impl(const communicator& comm, const T& value, std::vector<T>& values,
-              int root, mpl::false_)
+  gather_impl(const communicator& comm, const T* in_values, int n, 
+              T* out_values, int root, mpl::false_)
   {
     int tag = environment::collectives_tag();
     int size = comm.size();
 
-    // We know we'll get "size" values
-    values.clear();
-    values.reserve(size);
-
-    MPI_Status status;
     for (int src = 0; src < size; ++src) {
-      if (src == root) {
-        // Our own value will never be transmitted: just copy it.
-        values.push_back(value);
-      } else {
-        // Receive archive
-        packed_iarchive ia(comm);
-        detail::packed_archive_recv(comm, src, tag, ia, status);
-
-        // Unpack the data
-        T value_from_src;
-        ia >> value_from_src;
-
-        // Save the result
-        values.push_back(value_from_src);
-      }
+      if (src == root)
+        std::copy(in_values, in_values + n, out_values + n * src);
+      else
+        comm.recv(src, tag, out_values + n * src, n);
     }
   }
 
@@ -92,33 +75,70 @@ namespace detail {
   // messages to the root.
   template<typename T>
   void
-  gather_impl(const communicator& comm, const T& value, int root, mpl::false_)
+  gather_impl(const communicator& comm, const T* in_values, int n, int root, 
+              mpl::false_)
   {
     int tag = environment::collectives_tag();
-
-    packed_oarchive oa(comm);
-    oa << value;
-    detail::packed_archive_send(comm, root, tag, oa);
+    comm.send(root, tag, in_values, n);
   }
 } // end namespace detail
 
 template<typename T>
 void
-gather(const communicator& comm, const T& value, std::vector<T>& values,
-       int root)
+gather(const communicator& comm, const T& in_value, T* out_values, int root)
 {
   if (comm.rank() == root)
-    detail::gather_impl(comm, value, values, root, is_mpi_datatype<T>());
+    detail::gather_impl(comm, &in_value, 1, out_values, root, 
+                        is_mpi_datatype<T>());
   else
-    detail::gather_impl(comm, value, root, is_mpi_datatype<T>());
+    detail::gather_impl(comm, &in_value, 1, root, is_mpi_datatype<T>());
 }
 
 template<typename T>
-void gather(const communicator& comm, const T& value, int root)
+void
+gather(const communicator& comm, const T& in_value, std::vector<T>& out_values,
+       int root)
+{
+  if (comm.rank() == root)
+    out_values.resize(comm.size());
+
+  ::boost::parallel::mpi::gather(comm, in_value, &out_values[0], root);
+}
+
+template<typename T>
+void gather(const communicator& comm, const T& in_value, int root)
 {
   BOOST_ASSERT(comm.rank() != root);
-  detail::gather_impl(comm, value, root, is_mpi_datatype<T>());
+  detail::gather_impl(comm, &in_value, 1, root, is_mpi_datatype<T>());
 }
+
+template<typename T>
+void
+gather(const communicator& comm, const T* in_values, int n, T* out_values, 
+       int root)
+{
+  if (comm.rank() == root)
+    detail::gather_impl(comm, in_values, n, out_values, root, 
+                        is_mpi_datatype<T>());
+  else
+    detail::gather_impl(comm, in_values, n, root, is_mpi_datatype<T>());
+}
+
+template<typename T>
+void
+gather(const communicator& comm, const T* in_values, int n, 
+       std::vector<T>& out_values, int root)
+{
+  ::boost::parallel::mpi::gather(comm, in_values, n, &out_values[0], root);
+}
+
+template<typename T>
+void gather(const communicator& comm, const T* in_values, int n, int root)
+{
+  BOOST_ASSERT(comm.rank() != root);
+  detail::gather_impl(comm, in_values, n, root, is_mpi_datatype<T>());
+}
+
 
 } } } // end namespace boost::parallel::mpi
 
