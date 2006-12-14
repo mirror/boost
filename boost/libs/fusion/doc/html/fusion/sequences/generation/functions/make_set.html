@@ -26,14 +26,14 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.sequences.generation.functions.make_set"></a><a href="make_set.html" title="make_set">make_set</a></h5></div></div></div>
 <a name="fusion.sequences.generation.functions.make_set.description"></a><h6>
-<a name="id526286"></a>
+<a name="id526344"></a>
             <a href="make_set.html#fusion.sequences.generation.functions.make_set.description">Description</a>
           </h6>
 <p>
             Create a <a href="../../containers/set.html" title="set"><tt class="computeroutput"><span class="identifier">set</span></tt></a> from one or more values.
           </p>
 <a name="fusion.sequences.generation.functions.make_set.synopsis"></a><h6>
-<a name="id526333"></a>
+<a name="id526391"></a>
             <a href="make_set.html#fusion.sequences.generation.functions.make_set.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -44,7 +44,7 @@
 <p>
             The variadic function accepts <tt class="computeroutput"><span class="number">0</span></tt>
             to <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
-            <sup>[<a name="id526618" href="#ftn.id526618">9</a>]</sup>
+            <sup>[<a name="id526676" href="#ftn.id526676">9</a>]</sup>
             elements, where <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
             is a user definable predefined maximum that defaults to <tt class="computeroutput"><span class="number">10</span></tt>. You may define the preprocessor constant
             <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
@@ -54,7 +54,7 @@
 <span class="preprocessor">#define</span> <span class="identifier">FUSION_MAX_VECTOR_SIZE</span> <span class="number">20</span>
 </pre>
 <a name="fusion.sequences.generation.functions.make_set.parameters"></a><h6>
-<a name="id526714"></a>
+<a name="id526772"></a>
             <a href="make_set.html#fusion.sequences.generation.functions.make_set.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -79,7 +79,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.sequences.generation.functions.make_set.expression_semantics"></a><h6>
-<a name="id526858"></a>
+<a name="id526916"></a>
             <a href="make_set.html#fusion.sequences.generation.functions.make_set.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -97,21 +97,21 @@
             key types.
           </p>
 <a name="fusion.sequences.generation.functions.make_set.header"></a><h6>
-<a name="id527090"></a>
+<a name="id527148"></a>
             <a href="make_set.html#fusion.sequences.generation.functions.make_set.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">generation</span><span class="special">/</span><span class="identifier">make_set</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.generation.functions.make_set.example"></a><h6>
-<a name="id527196"></a>
+<a name="id527254"></a>
             <a href="make_set.html#fusion.sequences.generation.functions.make_set.example">Example</a>
           </h6>
 <pre class="programlisting">
 <span class="identifier">make_set</span><span class="special">(</span><span class="number">123</span><span class="special">,</span> <span class="string">"hello"</span><span class="special">,</span> <span class="number">12.5</span><span class="special">)</span>
 </pre>
 <a name="fusion.sequences.generation.functions.make_set.see_also"></a><h6>
-<a name="id527271"></a>
+<a name="id527330"></a>
             <a href="make_set.html#fusion.sequences.generation.functions.make_set.see_also">See
             also</a>
           </h6>
@@ -120,7 +120,7 @@
           </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id526618" href="#id526618">9</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id526676" href="#id526676">9</a>] </sup>
                 <tt class="computeroutput"><span class="identifier">set</span></tt> is implemented
                 in terms of the vector. That is why we reuse <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
               </p></div>
