@@ -16,6 +16,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/optional.hpp>
 #include <string>
+#include <boost/parallel/mpi/config.hpp>
 
 namespace boost { namespace parallel { namespace mpi {
 
@@ -46,6 +47,23 @@ namespace boost { namespace parallel { namespace mpi {
  */
 class environment : noncopyable {
 public:
+#ifdef BOOST_MPI_HAS_NOARG_INITIALIZATION
+  /** Initialize the MPI environment. 
+   *
+   *  If the MPI environment has not already been initialized,
+   *  initializes MPI with a call to @c MPI_Init. Since this
+   *  constructor does not take command-line arguments (@c argc and @c
+   *  argv), it is only available when the underlying MPI
+   *  implementation supports calling @c MPI_Init with @c NULL
+   *  arguments, indicated by the macro @c
+   *  BOOST_MPI_HAS_NOARG_INITIALIZATION.
+   *
+   *  @param abort_on_exception When true, this object will abort the
+   *  program if it is destructed due to an uncaught exception.
+   */
+  explicit environment(bool abort_on_exception = true);
+#endif
+
   /** Initialize the MPI environment.
    *
    *  If the MPI environment has not already been initialized,

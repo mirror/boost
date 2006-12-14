@@ -27,11 +27,22 @@
  *  these memory-allocation routines.
  */
 #  define BOOST_MPI_HAS_MEMORY_ALLOCATION
+
+/** @brief Determine if the MPI implementation has supports initialization 
+ *  without command-line arguments.
+ *
+ *  This macro will be defined when the underlying implementation
+ *  supports initialization of MPI without passing along command-line
+ *  arguments, e.g., @c MPI_Init(NULL, NULL). When defined, the @c
+ *  environment class will provide a default constructor. This macro is 
+ *  always defined for MPI-2 implementations. */
+#  define BOOST_MPI_HAS_NOARG_INITIALIZATION
 #endif
 
 #if defined(LAM_MPI)
 // Configuration for LAM/MPI
 #  define BOOST_MPI_HAS_MEMORY_ALLOCATION
+#  define BOOST_MPI_HAS_NOARG_INITIALIZATION
 #elif defined(MPICH_NAME)
 // Configuration for MPICH
 #endif

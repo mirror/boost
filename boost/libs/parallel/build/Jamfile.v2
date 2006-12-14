@@ -37,6 +37,7 @@ lib boost_mpi
     mpi/timer.cpp
   : # Requirements
     <library>/mpi//mpi
+    <library>../../serialization/build//boost_serialization
   : # Default build
     <link>shared
   : # Usage requirements

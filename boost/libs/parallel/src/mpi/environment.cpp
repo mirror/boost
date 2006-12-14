@@ -13,6 +13,20 @@
 
 namespace boost { namespace parallel { namespace mpi {
 
+#ifdef BOOST_MPI_HAS_NOARG_INITIALIZATION
+environment::environment(bool abort_on_exception)
+  : i_initialized(false),
+    abort_on_exception(abort_on_exception)
+{
+  if (!initialized()) {
+    BOOST_MPI_CHECK_RESULT(MPI_Init, (0, 0));
+    i_initialized = true;
+  }
+
+  MPI_Errhandler_set(MPI_COMM_WORLD, MPI_ERRORS_RETURN);
+}
+#endif
+
 environment::environment(int& argc, char** &argv, bool abort_on_exception)
   : i_initialized(false),
     abort_on_exception(abort_on_exception)
