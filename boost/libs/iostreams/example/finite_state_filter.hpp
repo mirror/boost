@@ -253,7 +253,8 @@ private:
             return state;
         }
     };
-#if BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042)) // Tru64.
+#if BOOST_WORKAROUND(__DECCXX_VER, BOOST_TESTED_AT(60590042)) /* Tru64 */ \
+ || BOOST_WORKAROUND(__MWERKS__,   BOOST_TESTED_AT(0x3205))   /* CW9.4 */
     public:
 #endif
     template<typename FSM>
