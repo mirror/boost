@@ -1647,6 +1647,84 @@ primitives. For this reason, it is always possible to extract enough
 information from the abstractions in Boost.MPI to minimize
 the amount of effort required to interface between Boost.MPI
 and the C MPI library.
+[endsect]
+
+[section:performance Performance Evaluation]
+
+Message-passing performance is crucial in high-performance distributed
+computing. To evaluate the performance of Boost.MPI, we modified the
+standard [@http://www.scl.ameslab.gov/netpipe/ NetPIPE] benchmark
+(version 3.6.2) to use Boost.MPI and compared its performance against
+raw MPI. We ran five different variants of the NetPIPE benchmark:
+
+# MPI: The unmodified NetPIPE benchmark.
+
+# Boost.MPI: NetPIPE modified to use Boost.MPI calls for
+  communication.
+
+# MPI (Datatypes): NetPIPE modified to use a derived datatype (which
+  itself contains a single `MPI_BYTE`) rathan than a fundamental
+  datatype.
+
+# Boost.MPI (Datatypes): NetPIPE modified to use a user-defined type
+  `Char` in place of the fundamental `char` type. The `Char` type
+  contains a single `char`, a `serialize()` method to make it
+  serializable, and specializes [classref
+  boost::parallel::mpi::is_mpi_datatype is_mpi_datatype] to force
+  Boost.MPI to build a derived MPI data type for it.
+
+# Boost.MPI (Serialized): NetPIPE modified to use a user-defined type
+  `Char` in place of the fundamental `char` type. This `Char` type
+  contains a single `char` and is serializable. Unlike the Datatypes
+  case, [classref boost::parallel::mpi::is_mpi_datatype
+  is_mpi_datatype] is *not* specialized, forcing Boost.MPI to perform
+  many, many serialization calls.
+
+The actual tests were performed on the Odin cluster in the
+[@http://www.cs.indiana.edu/ Department of Computer Science] at
+[@http://www.iub.edu Indiana University], which contains 128 nodes
+connected via Infiniband. Each node contains 4GB memory and two AMD
+Opteron processors. The NetPIPE benchmarks were compiled with Intel's
+C++ Compiler, version 9.0, Boost 1.35.0 (prerelease), and
+[@http://www.open-mpi.org/ Open MPI] version 1.1. The NetPIPE results
+follow:
+
+[$../../../libs/parallel/doc/netpipe.png]
+
+There are a some observations we can make about these NetPIPE
+results. First of all, the top two plots show that Boost.MPI performs
+on par with MPI for fundamental types. The next two plots show that
+Boost.MPI performs on par with MPI for derived data types, even though
+Boost.MPI provides a much more abstract, completely transparent
+approach to building derived data types than raw MPI. Overall
+performance for derived data types is significantly worse than for
+fundamental data types, but the bottleneck is in the underlying MPI
+implementation itself. Finally, when forcing Boost.MPI to serialize
+characters individually, performance suffers greatly. This particular
+instance is the worst possible case for Boost.MPI, because we are
+serializing millions of individual characters.  Overall, the
+additional abstraction provided by Boost.MPI does not impair its
+performance.
 
 [endsect]
 
+[section:history Revision History]
+
+* *Boost 1.35.0*: Initial release, containing the following post-review changes 
+  * Support for arrays in all collective operations
+  * Support default-construction of [classref boost::parallel::mpi::environment environment]
+    
+* *2006-09-21*: Boost.MPI accepted into Boost.
+
+[endsect]
+
+[section:acknowledge Acknowledgments]
+Boost.MPI was developed with support from Zurcher Kantonalbank. Daniel
+Egloff and Michael Gauckler contributed many ideas to Boost.MPI's
+design, particularly in the design of its abstractions for
+MPI data types. Prabhanjan (Anju) Kambadur developed the predecessor to
+Boost.MPI that proved the usefulness of the Serialization library in
+an MPI setting and the performance benefits of specialization in a C++
+abstraction layer for MPI. Jeremy Siek managed the formal review of Boost.MPI.
+
+[endsect]
