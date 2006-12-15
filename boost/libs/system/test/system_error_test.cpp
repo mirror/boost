@@ -22,7 +22,9 @@
 #include <boost/system/system_error.hpp>
 #include <iostream>
 
-#include <winerror.h>
+#ifdef BOOST_WINDOWS_API
+# include <winerror.h>
+#endif
 
 using boost::system::system_error;
 using boost::system::error_code;
