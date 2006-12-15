@@ -22,6 +22,7 @@
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/traits.hpp>
 
+    #include <boost/preprocessor/arithmetic/dec.hpp>
     #include <boost/preprocessor/repetition/enum.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
     #include <boost/preprocessor/repetition/enum_shifted_params.hpp>
@@ -34,13 +35,13 @@
         namespace detail
         {
             // and_
-            template<bool B, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename P, void)>
+            template<bool B, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), typename P, void)>
             struct and_impl
-              : and_impl<P0::type::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>
+              : and_impl<P0::type::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), P)>
             {};
 
-            template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename P)>
-            struct and_impl<false, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, P)>
+            template<BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), typename P)>
+            struct and_impl<false, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), P)>
               : mpl::false_
             {};
 
@@ -55,13 +56,13 @@
             {};
 
             // or_
-            template<bool B, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename P, void)>
+            template<bool B, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), typename P, void)>
             struct or_impl
-              : or_impl<P0::type::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>
+              : or_impl<P0::type::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), P)>
             {};
 
-            template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename P)>
-            struct or_impl<true, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, P)>
+            template<BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), typename P)>
+            struct or_impl<true, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), P)>
               : mpl::true_
             {};
 
