@@ -289,17 +289,33 @@ namespace boost { namespace xpressive
     {};
 
     template<typename Char>
+    struct XpressiveSequenceRecurse
+      : proto::or_<
+            proto::meta::right_shift< XpressiveSequenceRecurse<Char>, XpressiveSequenceRecurse<Char> >
+          , XpressiveGrammar<Char>
+        >
+    {};
+
+    template<typename Char>
     struct XpressiveSequence
       : proto::or_<
-            proto::meta::right_shift< XpressiveGrammar<Char>, XpressiveGrammar<Char> >
+            proto::meta::right_shift< XpressiveSequenceRecurse<Char>, XpressiveSequenceRecurse<Char> >
           , XpressiveLazyQuantified<Char>
+        >
+    {};
+
+    template<typename Char>
+    struct XpressiveAlternateRecurse
+      : proto::or_<
+            proto::meta::bitwise_or< XpressiveAlternateRecurse<Char>, XpressiveAlternateRecurse<Char> >
+          , XpressiveGrammar<Char>
         >
     {};
 
     template<typename Char>
     struct XpressiveAlternate
       : proto::or_<
-            proto::meta::bitwise_or< XpressiveGrammar<Char>, XpressiveGrammar<Char> >
+            proto::meta::bitwise_or< XpressiveAlternateRecurse<Char>, XpressiveAlternateRecurse<Char> >
           , XpressiveSequence<Char>
         >
     {};
