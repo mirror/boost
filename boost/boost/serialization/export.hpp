@@ -146,9 +146,19 @@ BOOST_DLLEXPORT void ptr_serialization_support<Archive,Serializable>::instantiat
 #define BOOST_CLASS_EXPORT_GUID(T, K)                                               \
 namespace                                                                           \
 {                                                                                   \
-    ::boost::archive::detail::guid_initializer<T> const&                            \
+    ::boost::archive::detail::guid_initializer< T > const&                          \
         BOOST_PP_CAT(boost_serialization_guid_initializer_, __LINE__)               \
-          = ::boost::archive::detail::guid_initializer<T>::get_instance(K);         \
+          = ::boost::archive::detail::guid_initializer< T >::get_instance(K);       \
+}
+
+// the following is solely to support de-serialization of pointers serialized
+// under 1.32
+#define BOOST_CLASS_EXPORT_GUID_1(T, K)                                             \
+namespace                                                                           \
+{                                                                                   \
+    ::boost::archive::detail::guid_initializer< T > const&                          \
+    BOOST_PP_CAT(boost_serialization_guid_initializer_, __LINE__ ## _1)             \
+          = ::boost::archive::detail::guid_initializer< T >::get_instance(K);       \
 }
 
 #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3205))

@@ -116,14 +116,17 @@ inline void load(
     T* r;
     #ifdef BOOST_SERIALIZATION_SHARED_PTR_132_HPP
     if(file_version < 1){
+        //ar.register_type(static_cast<
+        //    boost_132::detail::sp_counted_base_impl<T *, boost::checked_deleter<T> > *
+        //>(NULL));
         ar.register_type(static_cast<
-            boost_132::detail::sp_counted_base_impl<T *, boost::checked_deleter<T> > *
+            boost_132::detail::sp_counted_base_impl<T *, boost::archive::detail::null_deleter > *
         >(NULL));
         boost_132::shared_ptr<T> sp;
         ar >> boost::serialization::make_nvp("px", sp.px);
         ar >> boost::serialization::make_nvp("pn", sp.pn);
         // got to keep the sps around so the sp.pns don't disappear
-        get_helper<Archive, boost_132::serialization::detail::shared_ptr_helper>(ar).append(sp);
+        ar.append(sp);
         r = sp.get();
     }
     else    
