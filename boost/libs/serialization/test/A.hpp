@@ -30,7 +30,7 @@ namespace std{
 }
 #endif
 
-#include <boost/test/test_exec_monitor.hpp>
+//#include <boost/test/test_exec_monitor.hpp>
 #include <boost/limits.hpp>
 #include <boost/cstdint.hpp>
 
@@ -133,7 +133,7 @@ public:
     friend std::istream & operator>>(std::istream & is, A & a);
 };
 
-BOOST_TEST_DONT_PRINT_LOG_VALUE(A)
+BOOST_TEST_DONT_PRINT_LOG_VALUE(A);
 
 template<class S>
 void randomize(S &x)
