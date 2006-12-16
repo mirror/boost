@@ -10,7 +10,6 @@
 // test_tools.hpp
 //
 // (C) Copyright 2002 Robert Ramey - http://www.rrsd.com . 
-// (C) Copyright 2006 Boris Gubenko.
 // Use, modification and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -76,7 +75,7 @@ namespace archive {
 
 #else // defined(_WIN32) || defined(__WIN32__) || defined(WIN32)
 #if defined(__hpux)
-
+// (C) Copyright 2006 Boris Gubenko.
 // HP-UX has a restriction that for multi-thread applications, (i.e.
 // the ones compiled -mt) if argument to tmpnam is a NULL pointer, then,
 // citing the tmpnam(3S) manpage, "the operation is not performed and a
@@ -108,7 +107,44 @@ namespace archive {
 #define BOOST_ARCHIVE_TEST text_archive.hpp
 #endif
 
-#include <boost/test/test_exec_monitor.hpp>
+//#include <boost/test/test_tools.hpp>
+#include <boost/detail/lightweight_test.hpp>
+
+#define BOOST_CHECK( P ) \
+    BOOST_TEST( (P) )
+#define BOOST_REQUIRE( P )  \
+    BOOST_TEST( (P) )
+#define BOOST_CHECK_MESSAGE( P, M )  \
+    ((P)? (void)0 : ::boost::detail::error_impl( (M) , __FILE__, __LINE__, BOOST_CURRENT_FUNCTION))
+#define BOOST_REQUIRE_MESSAGE( P, M ) \
+    BOOST_CHECK_MESSAGE( (P), (M) )
+#define BOOST_CHECK_EQUAL( A , B ) \
+    BOOST_TEST( (A) == (B) )
+
+namespace boost { namespace detail {
+inline void msg_impl(char const * msg, char const * file, int line, char const * function)
+{
+    std::cerr << file << "(" << line << "): " << msg << " in function '" << function << "'" << std::endl;
+}
+} } // boost::detail
+
+#define BOOST_WARN_MESSAGE( P, M )  \
+    ((P)? (void)0 : ::boost::detail::msg_impl( (M) , __FILE__, __LINE__, BOOST_CURRENT_FUNCTION))
+#define BOOST_MESSAGE( M ) \
+    BOOST_WARN_MESSAGE( true , (M) )
+
+#define BOOST_TEST_DONT_PRINT_LOG_VALUE( T ) 
+
+#define BOOST_FAIL( M ) BOOST_REQUIRE_MESSAGE( false, (M) )
+#define EXIT_SUCCESS 0
+
+int test_main(int argc, char * argv[]);
+
+int
+main(int argc, char * argv[]){
+    test_main(argc, argv);
+    return boost::report_errors();
+}
 
 // the following is to ensure that when one of the libraries changes
 // BJAM rebuilds and relinks the test.
