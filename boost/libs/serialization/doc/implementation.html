@@ -257,7 +257,18 @@ they are not strictly necessary to use the serialization package, the example an
 program presume that they are enabled.  So be sure your command line or IDE settings 
 enable these features if you want
 these switches are enabled if you want to build and run these programs.
-
+<p>
+This compiler can treat <code style="white-space: normal">wchar_t</code> as either
+a short integer or an intrinsic type.
+If <code style="white-space: normal">/Zc:wchar_t</code> is specified on the
+compile command line, <code style="white-space: normal">wchar_t</code> will be 
+considered an intrinsic type - otherwise
+it will be treated as a synonym for a 16 bit integer.  The libary can be used
+either way - <strong>BUT</strong> - both the libray <strong>AND</strong> the application 
+must be  compiled with the same switch settings.  Note that <code style="white-space: normal">BJAM</code>
+includes this switch by default.  So if want to use the libraries that
+<code style="white-space: normal">BJAM</code> builds, you should include this switch
+when you compile your own applications.
 <h5>Using the Visual C++ IDE</h5>
 The library includes a VC++ 7.1 "Solution" - <code style="white-space: normal">BoostSerializationLibrary</code>
 along with of a set of project files - one for each demo and test. Consider the following if you
