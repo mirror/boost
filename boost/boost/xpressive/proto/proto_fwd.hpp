@@ -258,7 +258,7 @@ namespace boost { namespace proto
         template<typename Expr, typename N = mpl::long_<0> >
         struct arg;
 
-        template<typename Expr, long N = 0>
+        template<typename Expr, long N>
         struct arg_c;
 
         template<typename Expr>
@@ -347,9 +347,38 @@ namespace boost { namespace proto
         template<typename N = mpl::long_<0> >
         struct arg;
         
-        template<long N = 0>
+        template<long N>
         struct arg_c;
     }
+
+    namespace transform
+    {
+        template<typename Grammar, typename N = mpl::long_<0> >
+        struct arg;
+
+        template<typename Grammar, long N>
+        struct arg_c;
+
+        template<typename Grammar>
+        struct left;
+
+        template<typename Grammar>
+        struct right;
+
+        template<typename Grammar, typename BranchState>
+        struct branch;
+
+        template<typename Grammar>
+        struct fold;
+
+        template<typename Grammar>
+        struct reverse_fold;
+
+        template<typename Grammar>
+        struct list;
+    }
+
+    namespace trans = transform;
 
 }} // namespace boost::proto
 

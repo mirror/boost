@@ -34,6 +34,12 @@
 
         namespace detail
         {
+            template<typename Expr>
+            struct deref;
+
+            template<typename Expr, typename Grammar>
+            struct matches_impl;
+
             // and_
             template<bool B, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), typename P, void)>
             struct and_impl
@@ -74,6 +80,31 @@
             template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename P, void)>
             struct or_
               : or_impl<P0::type::value, BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, P)>
+            {};
+
+            // which
+            template<typename Expr, bool B, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename G, void)>
+            struct which_impl
+              : which_impl<
+                    Expr
+                  , matches_impl<Expr, typename deref<G1>::type>::type::value
+                  , BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, G)
+                >
+            {};
+
+            template<typename Expr, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename G)>
+            struct which_impl<Expr, true, BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, G)>
+            {
+                typedef G0 type;
+            };
+
+            template<typename Expr, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename G, void)>
+            struct which
+              : which_impl<
+                    typename Expr::expr_type
+                  , matches_impl<typename Expr::expr_type, typename deref<G0>::type>::type::value
+                  , BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, G)
+                >
             {};
 
             // terminal_matches
@@ -190,6 +221,25 @@
         struct or_
         {
             typedef or_ type;
+
+            template<typename Expr, typename State, typename Visitor>
+            struct apply
+            {
+                typedef typename detail::which<
+                    Expr
+                  , BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, G)
+                >::type grammar_type;
+
+                typedef typename grammar_type::template apply<Expr, State, Visitor>::type type;
+            };
+
+            template<typename Expr, typename State, typename Visitor>
+            static typename apply<Expr, State, Visitor>::type
+            call(Expr const &expr, State const &state, Visitor &visitor)
+            {
+                typedef typename apply<Expr, State, Visitor>::grammar_type grammar_type;
+                return grammar_type::call(expr, state, visitor);
+            }
         };
 
         template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename G)>
