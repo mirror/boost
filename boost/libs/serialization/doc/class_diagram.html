@@ -20,7 +20,7 @@ http://www.boost.org/LICENSE_1_0.txt)
     </td>
     <td valign="top"> 
       <h1 align="center">Serialization</h1>
-      <h2 align="center">Archive Class Diagram</h2>
+      <h2 align="center">Text Archive Class Diagram</h2>
     </td>
   </tr>
 </table>
@@ -72,7 +72,7 @@ serialization) for text files.  The hierachy and organization is identical for s
 other types of archives as well.  In the diagram, classes written in <font color="blue">blue</font> 
 implement loading for a given archive type. (in this case its text archives).
 Users include classes in <font color="red">red</font> to load their data from a partcular
-type of archive.  Other classes whose names are in black implment the library and should
+type of archive.  Other classes whose names are in black implement the library and should
 never change.  They are in <code>namespace boost::archive::detail</code>
 <dl>
   <dt><code>
