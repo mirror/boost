@@ -65,7 +65,7 @@ test_map(){
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
-    BOOST_CHECKPOINT("map");
+    BOOST_MESSAGE("map");
     // test map of objects
     std::map<random_key, A> amap;
     amap.insert(std::make_pair(random_key(), A()));
@@ -90,7 +90,7 @@ test_map_2(){
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
-    BOOST_CHECKPOINT("map_2");
+    BOOST_MESSAGE("map_2");
     std::pair<int, int> a(11, 22);
     std::map<int, int> b;
     b[0] = 0;
@@ -122,7 +122,7 @@ test_multimap(){
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
-    BOOST_CHECKPOINT("multimap");
+    BOOST_MESSAGE("multimap");
     std::multimap<random_key, A> amultimap;
     amultimap.insert(std::make_pair(random_key(), A()));
     amultimap.insert(std::make_pair(random_key(), A()));

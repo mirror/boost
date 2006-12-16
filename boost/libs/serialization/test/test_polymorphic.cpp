@@ -18,11 +18,11 @@ namespace std{
 }
 #endif
 
+#include "test_tools.hpp"
+
 #if !defined(BOOST_ARCHIVE_TEST)
 #define BOOST_ARCHIVE_TEST polymorphic_text_archive.hpp
 #endif
-
-#include "test_tools.hpp"
 
 // the following is to ensure that when one of the libraries changes
 // BJAM rebuilds and relinks the test.

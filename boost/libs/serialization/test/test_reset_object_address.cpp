@@ -19,7 +19,7 @@ namespace std{
 }
 #endif
 
-#include <boost/test/test_exec_monitor.hpp>
+#include "test_tools.hpp"
 
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
