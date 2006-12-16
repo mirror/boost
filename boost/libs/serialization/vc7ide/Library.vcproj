@@ -458,9 +458,6 @@
 				<File
 					RelativePath="..\..\..\boost\archive\shared_ptr_helper.hpp">
 				</File>
-				<File
-					RelativePath=".\shared_ptr_helper.hpp">
-				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -800,52 +797,6 @@
 			<File
 				RelativePath="..\src\xml_oarchive.cpp">
 			</File>
-			<Filter
-				Name="Dataflow Iterators"
-				Filter="">
-				<File
-					RelativePath="..\..\..\boost\archive\iterators\base64_from_binary.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\boost\archive\iterators\binary_from_base64.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\boost\archive\iterators\dataflow_exception.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\boost\archive\iterators\escape.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\boost\archive\iterators\insert_linebreaks.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\boost\archive\iterators\istream_iterator.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\boost\archive\iterators\mb_from_wchar.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\boost\archive\iterators\ostream_iterator.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\boost\archive\iterators\remove_whitespace.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\boost\archive\iterators\transform_width.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\boost\archive\iterators\unescape.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\boost\archive\iterators\wchar_from_mb.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\boost\archive\iterators\xml_escape.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\boost\archive\iterators\xml_unescape.hpp">
-				</File>
-			</Filter>
 		</Filter>
 		<Filter
 			Name="Archive Implementations"
@@ -900,6 +851,52 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\xml_oarchive.hpp">
+			</File>
+		</Filter>
+		<Filter
+			Name="Dataflow Iterators"
+			Filter="">
+			<File
+				RelativePath="..\..\..\boost\archive\iterators\base64_from_binary.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\iterators\binary_from_base64.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\iterators\dataflow_exception.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\iterators\escape.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\iterators\insert_linebreaks.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\iterators\istream_iterator.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\iterators\mb_from_wchar.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\iterators\ostream_iterator.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\iterators\remove_whitespace.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\iterators\transform_width.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\iterators\unescape.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\iterators\wchar_from_mb.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\iterators\xml_escape.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\archive\iterators\xml_unescape.hpp">
 			</File>
 		</Filter>
 	</Files>
