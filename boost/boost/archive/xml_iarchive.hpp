@@ -124,9 +124,7 @@ public:
 } // namespace archive
 } // namespace boost
 
-// required by smart_cast for compilers not implementing 
-// partial template specialization
-BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::naked_xml_iarchive)
+// required by export
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::xml_iarchive)
 
 #include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas

@@ -34,8 +34,7 @@ typedef detail::polymorphic_oarchive_dispatch<
 } // namespace archive
 } // namespace boost
 
-// required by smart_cast for compilers not implementing 
-// partial template specialization
+// required by export
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(
     boost::archive::polymorphic_xml_woarchive
 )

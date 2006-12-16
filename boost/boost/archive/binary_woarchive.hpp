@@ -53,8 +53,7 @@ typedef binary_woarchive naked_binary_woarchive;
 } // namespace archive
 } // namespace boost
 
-// required by smart_cast for compilers not implementing 
-// partial template specialization
+// required by export
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::binary_woarchive)
 
 #endif // BOOST_NO_STD_WSTREAMBUF

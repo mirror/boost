@@ -48,8 +48,7 @@ typedef binary_oarchive naked_binary_oarchive;
 } // namespace archive
 } // namespace boost
 
-// required by smart_cast for compilers not implementing 
-// partial template specialization
+// required by export
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::binary_oarchive)
 
 #endif // BOOST_ARCHIVE_BINARY_OARCHIVE_HPP

@@ -106,8 +106,7 @@ typedef xml_oarchive naked_xml_oarchive;
 } // namespace archive
 } // namespace boost
 
-// required by smart_cast for compilers not implementing 
-// partial template specialization
+// required by export
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::xml_oarchive)
 
 #include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas

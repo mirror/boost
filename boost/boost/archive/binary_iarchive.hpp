@@ -86,9 +86,7 @@ public:
 } // namespace archive
 } // namespace boost
 
-// required by smart_cast for compilers not implementing 
-// partial template specialization
-BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::naked_binary_iarchive)
+// required by export
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::archive::binary_iarchive)
 
 #endif // BOOST_ARCHIVE_BINARY_IARCHIVE_HPP
