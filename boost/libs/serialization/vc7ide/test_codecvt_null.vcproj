@@ -315,7 +315,7 @@
 				IgnoreImportLibrary="TRUE"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin/boost/libs/test/build/libboost_test_exec_monitor.lib/vc-7_1/debug/runtime-link-dynamic/threading-multi&quot;;&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/debug/runtime-link-dynamic/threading-multi&quot;"
+				AdditionalLibraryDirectories="&quot;$(ProjectDir)../../../bin/boost/libs/serialization/build/libboost_serialization.lib/vc-7_1/debug/runtime-link-dynamic/threading-multi&quot;"
 				GenerateDebugInformation="TRUE"
 				SubSystem="1"/>
 			<Tool
@@ -346,7 +346,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\test\../src/codecvt_null.cpp">
+			RelativePath="..\src\codecvt_null.cpp">
 		</File>
 		<File
 			RelativePath="..\test\test_codecvt_null.cpp">
