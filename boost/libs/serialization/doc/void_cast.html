@@ -57,8 +57,8 @@ This function "registers" a pair of related types.  It stores the fact that
   pre-runtime and is available anywhere else in the program.
   <li>only adjacent base/derived pairs need be registered.  That is,
   <pre><code>
-  void_cast_register<A, B>();
-  void_cast_register<B, C>();
+  void_cast_register&lt;A, B&gt;();
+  void_cast_register&lt;B, C&gt;();
   </code></pre>
   automatically derives the fact that A can be upcast to C and vice-versa.
 </ul>
