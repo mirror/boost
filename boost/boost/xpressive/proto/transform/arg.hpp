@@ -28,7 +28,7 @@ namespace boost { namespace proto { namespace transform
         {};
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
+        static typename apply<Expr, State, Visitor>::type const &
         call(Expr const &expr, State const &, Visitor &)
         {
             return proto::arg<N>(expr);
@@ -48,7 +48,7 @@ namespace boost { namespace proto { namespace transform
         {};
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
+        static typename apply<Expr, State, Visitor>::type const &
         call(Expr const &expr, State const &, Visitor &)
         {
             return proto::arg_c<N>(expr);
@@ -68,7 +68,7 @@ namespace boost { namespace proto { namespace transform
         {};
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
+        static typename apply<Expr, State, Visitor>::type const &
         call(Expr const &expr, State const &, Visitor &)
         {
             return proto::left(expr);
@@ -88,7 +88,7 @@ namespace boost { namespace proto { namespace transform
         {};
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
+        static typename apply<Expr, State, Visitor>::type const &
         call(Expr const &expr, State const &, Visitor &)
         {
             return proto::right(expr);
