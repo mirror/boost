@@ -133,6 +133,9 @@ inline void msg_impl(char const * msg, char const * file, int line, char const *
 #define BOOST_MESSAGE( M ) \
     BOOST_WARN_MESSAGE( true , (M) )
 
+#define BOOST_CHECKPOINT( M ) \
+    BOOST_WARN_MESSAGE( true , (M) )
+
 #define BOOST_TEST_DONT_PRINT_LOG_VALUE( T ) 
 
 #define BOOST_FAIL( M ) BOOST_REQUIRE_MESSAGE( false, (M) )
