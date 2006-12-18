@@ -198,21 +198,35 @@ namespace
     int result;
     for (;;)
     {
-      if ( (result = strerror_r( ec.value(), bp, sz )) != 0 )
+      // strerror_r returns 0 on success, otherwise ERANGE if buffer too small,
+      // EINVAL if ec.value() not a valid error number
+      if ( (result = strerror_r( ec.value(), bp, sz )) == 0 )
+        break;
+      else
       {
 #  if defined(__linux)
+        // Linux strerror_r returns -1 on error, with error number in errno
         result = errno;
 #  endif
         if ( result !=  ERANGE ) break;
+        if ( sz > sizeof(buf) ) std::free( bp );
+        sz *= 2;
+        if ( (bp = static_cast<char*>(std::malloc( sz ))) == 0 )
+          return std::string( "ENOMEM" );
       }
-      if ( sz > sizeof(buf) ) std::free( bp );
-      sz *= 2;
-      if ( (bp = static_cast<char*>(std::malloc( sz ))) == 0 )
-        return std::string( "ENOMEM" );
     }
-    std::string msg( ( result == EINVAL ) ? "EINVAL" : bp );
-    if ( sz > sizeof(buf) ) std::free( bp );
-    return msg;
+    try
+    {
+      std::string msg( ( result == EINVAL ) ? "EINVAL" : bp );
+      if ( sz > sizeof(buf) ) std::free( bp );
+      sz = 0;
+      return msg;
+    }
+    catch(...)
+    {
+      if ( sz > sizeof(buf) ) std::free( bp );
+      throw;
+    }
 #  endif
 # endif
   }
