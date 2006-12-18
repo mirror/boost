@@ -43,6 +43,13 @@ namespace boost { namespace fusion { namespace detail
         struct apply : result_of::as_vector<Sequence> {};
     };
 
+    template<>
+    struct as_impl<deque_tag>
+    {
+        template <typename Sequence>
+        struct apply : result_of::as_deque<Sequence> {};
+    };
+
     template <typename Tag, typename Sequence>
     struct as
     {

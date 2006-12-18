@@ -12,5 +12,6 @@
 #include <boost/fusion/sequence/container/list.hpp>
 #include <boost/fusion/sequence/container/map.hpp>
 #include <boost/fusion/sequence/container/set.hpp>
+#include <boost/fusion/sequence/container/deque.hpp>
 
 #endif
