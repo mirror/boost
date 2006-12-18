@@ -11,12 +11,12 @@
 import mpi ;
 import python ;
 
+if [ mpi.configured ]
+{
+
 project boost/parallel
   : source-location ../src
   ;
-
-if [ mpi.configured ]
-{
 
 lib boost_mpi 
   : 
@@ -36,12 +36,13 @@ lib boost_mpi
     mpi/text_skeleton_oarchive.cpp
     mpi/timer.cpp
   : # Requirements
-    <library>/mpi//mpi
     <library>../../serialization/build//boost_serialization
+    <library>/mpi//mpi [ mpi.extra-requirements ]
   : # Default build
     <link>shared
   : # Usage requirements
     <library>../../serialization/build//boost_serialization
+    <library>/mpi//mpi [ mpi.extra-requirements ]
   ;
 
   if [ python.configured ]
@@ -69,8 +70,8 @@ lib boost_mpi
         mpi/python/py_timer.cpp
       : # Requirements
         <library>boost_mpi_python
-      <library>boost_mpi
-      <library>/boost/python//boost_python
+        <library>boost_mpi 
+        <library>/boost/python//boost_python
       ;
     }
 }
