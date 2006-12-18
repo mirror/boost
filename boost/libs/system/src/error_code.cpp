@@ -182,7 +182,15 @@ namespace
 
   std::string errno_md( const error_code & ec )
   {
-# if defined(BOOST_WINDOWS_API) || defined(__hpux) || (defined(__linux) && !defined(__USE_XOPEN2K))
+  // strerror_r is preferred because it is always thread safe,
+  // however, we fallback to strerror in certain cases because:
+  //   -- Windows doesn't provide strerror_r.
+  //   -- HP and Sundo provide strerror_r on newer systems, but there is
+  //      no way to tell if is available at runtime and in any case their
+  //      versions of strerror are thread safe anyhow.
+  //   -- Linux only sometimes provides strerror_r.
+# if defined(BOOST_WINDOWS_API) || defined(__hpux) || defined(__sun)\
+     || (defined(__linux) && (!defined(__USE_XOPEN2K) || defined(BOOST_SYSTEM_USE_STRERROR)))
     const char * c_str = std::strerror( ec.value() );
     return std::string( c_str ? c_str : "EINVAL" );
 # else
