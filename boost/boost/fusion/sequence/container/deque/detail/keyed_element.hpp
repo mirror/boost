@@ -9,7 +9,6 @@
 #if !defined(BOOST_FUSION_DEQUE_DETAIL_KEYED_ELEMENT_26112006_1330)
 #define BOOST_FUSION_DEQUE_DETAIL_KEYED_ELEMENT_26112006_1330
 
-#include <boost/fusion/support/sequence_base.hpp>
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/type_traits/add_const.hpp>
 
@@ -20,7 +19,6 @@ namespace boost { namespace fusion {
 namespace detail {
 
     struct nil_keyed_element
-        : sequence_base<nil_keyed_element>
     {
         typedef fusion_sequence_tag tag;
         void get();

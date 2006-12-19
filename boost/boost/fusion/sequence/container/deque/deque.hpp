@@ -28,6 +28,8 @@
 #include <boost/fusion/sequence/container/deque/detail/end_impl.hpp>
 #include <boost/mpl/bool.hpp>
 
+#include <boost/fusion/support/sequence_base.hpp>
+
 namespace boost { namespace fusion {
 
     struct deque_tag;
@@ -39,7 +41,8 @@ namespace boost { namespace fusion {
     template<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, typename T)>
     struct deque
         : 
-        detail::deque_keyed_values<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, T)>::type
+        detail::deque_keyed_values<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, T)>::type,
+        sequence_base<deque<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, T)> >
     {
         typedef deque_tag fusion_tag;
         typedef typename detail::deque_keyed_values<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, T)>::type base;

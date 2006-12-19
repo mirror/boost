@@ -18,10 +18,13 @@
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
 
+#include <boost/fusion/support/sequence_base.hpp>
+
 namespace boost { namespace fusion {
     template<typename Deque, typename T>
     struct front_extended_deque
-        : detail::keyed_element<typename Deque::next_down, T, Deque>
+        : detail::keyed_element<typename Deque::next_down, T, Deque>,
+          sequence_base<front_extended_deque<Deque, T> >
     {
         typedef detail::keyed_element<typename Deque::next_down, T, Deque> base;
         typedef mpl::int_<mpl::minus<typename Deque::next_down, mpl::int_<1> >::value> next_down;
