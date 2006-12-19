@@ -19,4 +19,5 @@ test-suite quickbook.test :
     [ quickbook-test link-side-by-side ]
     [ quickbook-test escape ]
     [ quickbook-test templates ]
+    [ quickbook-test xinclude ]
     ;

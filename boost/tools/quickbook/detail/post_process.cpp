@@ -201,6 +201,7 @@ namespace quickbook
         , "variablelist"
         , "warning"
         , "xml"
+        , "xi:include"
     };
 
     char const* doc_types_[] = 
@@ -261,7 +262,7 @@ namespace quickbook
         {
             definition(tidy_grammar const& self)
             {
-                tag = (lexeme_d[+alnum_p])  [bind(&tidy_grammar::do_tag, &self, _1, _2)];
+                tag = (lexeme_d[+(alpha_p | '_' | ':')])  [bind(&tidy_grammar::do_tag, &self, _1, _2)];
 
                 code =
                         "<programlisting>"
@@ -291,7 +292,7 @@ namespace quickbook
                 
                 start_tag = '<' >> tag >> *(anychar_p - '>') >> lexeme_d['>' >> *space_p];
                 start_end_tag = 
-                        '<' >> tag >> *(anychar_p - ('/' | ch_p('>'))) >> lexeme_d["/>" >> *space_p]
+                        '<' >> tag >> *(anychar_p - ("/>" | ch_p('>'))) >> lexeme_d["/>" >> *space_p]
                     |   "<?" >> tag >> *(anychar_p - '?') >> lexeme_d["?>" >> *space_p]
                     |   "<!--" >> *(anychar_p - "-->") >> lexeme_d["-->" >> *space_p]
                     |   "<!" >> tag >> *(anychar_p - '>') >> lexeme_d['>' >> *space_p]
@@ -441,7 +442,7 @@ namespace quickbook
                 ::quickbook::detail::outerr("",0)
                     << "Warning: Post Processing Failed." 
                     << std::endl;
-                out << in;
+                out << in;                
             }
         }
         
