@@ -111,7 +111,7 @@
 //   http://www.generic-programming.org/software/ConceptGCC/
 #ifdef __GXX_CONCEPTS__
 #  define BOOST_CXX0X_CONCEPTS
-#  define "ConceptGCC version " __VERSION__
+#  define BOOST_COMPILER "ConceptGCC version " __VERSION__
 #endif
 
 #ifndef BOOST_COMPILER
