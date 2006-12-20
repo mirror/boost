@@ -42,5 +42,9 @@ void test_alt()
    TEST_REGEX_SEARCH("a|", basic|bk_vbar, "a|", match_default, make_array(0, 2, -2, -2));
    TEST_REGEX_SEARCH("a\\|b", basic|bk_vbar, "a", match_default, make_array(0, 1, -2, -2));
    TEST_REGEX_SEARCH("a\\|b", basic|bk_vbar, "b", match_default, make_array(0, 1, -2, -2));
+   TEST_REGEX_SEARCH("a\nb", grep, "b", match_default, make_array(0, 1, -2, -2));
+   TEST_REGEX_SEARCH("a\nb", grep, "a", match_default, make_array(0, 1, -2, -2));
+   TEST_REGEX_SEARCH("a\nb", egrep, "b", match_default, make_array(0, 1, -2, -2));
+   TEST_REGEX_SEARCH("a\nb", egrep, "a", match_default, make_array(0, 1, -2, -2));
 }
 

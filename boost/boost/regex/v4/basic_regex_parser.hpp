@@ -222,6 +222,11 @@ bool basic_regex_parser<charT, traits>::parse_basic()
       }
    case regex_constants::syntax_open_set:
       return parse_set();
+   case regex_constants::syntax_newline:
+      if(this->flags() & regbase::newline_alt)
+         return parse_alt();
+      else
+         return parse_literal();
    default:
       return parse_literal();
    }
@@ -286,6 +291,11 @@ bool basic_regex_parser<charT, traits>::parse_extended()
       return parse_alt();
    case regex_constants::syntax_open_set:
       return parse_set();
+   case regex_constants::syntax_newline:
+      if(this->flags() & regbase::newline_alt)
+         return parse_alt();
+      else
+         return parse_literal();
    case regex_constants::syntax_hash:
       //
       // If we have a mod_x flag set, then skip until
