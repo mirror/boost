@@ -135,13 +135,13 @@ inline std::streamsize lcast_get_precision(T* = 0)
 }
 
 template<class T>
-inline void lcast_set_precision(std::ios_base& stream, T* = 0)
+inline void lcast_set_precision(std::ios_base& stream, T*)
 {
     stream.precision(lcast_get_precision<T>());
 }
 
 template<class Source, class Target>
-inline void lcast_set_precision(std::ios_base& stream, Source* = 0, Target* = 0)
+inline void lcast_set_precision(std::ios_base& stream, Source*, Target*)
 {
     std::streamsize const s = lcast_get_precision((Source*)0);
     std::streamsize const t = lcast_get_precision((Target*)0);
