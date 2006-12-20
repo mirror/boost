@@ -70,7 +70,7 @@
          that you need to reuse.</P>
       <P>Now let's take that expression and place it in some C++ code to validate the 
          format of a credit card number:</P>
-      <PRE><B>bool</B> validate_card_format(<B>const</B> std::string s)
+      <PRE><B>bool</B> validate_card_format(<B>const</B> std::string& s)
 {
    <B>static</B> <B>const</B> <A href="basic_regex.html">boost::regex</A> e("(\\d{4}[- ]){3}\\d{4}");
    <B>return</B> <A href="regex_match.html">regex_match</A>(s, e);
@@ -178,3 +178,4 @@ std::string human_readable_card_number(<B>const</B> std::string s)
             or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</A>)</I></P>
    </body>
 </html>
+
