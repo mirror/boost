@@ -1,7 +1,7 @@
 Boost.Wave: A Standard compliant C++ preprocessor library
 http://www.boost.org/
 
-Copyright (c) 2001-2006 Hartmut Kaiser. Distributed under the Boost
+Copyright (c) 2001-2007 Hartmut Kaiser. Distributed under the Boost
 Software License, Version 1.0. (See accompanying file
 LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 -------------------------------------------------------------------------------
@@ -235,7 +235,8 @@ Boost V1.34.0
 - Fixed a problem in the Wave applet which prevented the correct recognition of 
   Windows file paths in a configuration file, if this path was enclosed in 
   quotes.
-  
+- Extended the copyright notice to include the year 2007.
+
 Sat Feb 18 2005
 - Version 1.2.3
 - Added a missing throw() specification to the function 
