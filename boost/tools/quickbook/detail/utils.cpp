@@ -8,8 +8,13 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 #include "./utils.hpp"
-#include <cctype>
 #include <boost/spirit/core.hpp>
+
+#include <cctype>
+#include <stdexcept>
+#include <fstream>
+#include <iostream>
+#include <map>
 
 namespace quickbook {
     extern bool ms_errors;
@@ -17,8 +22,7 @@ namespace quickbook {
 
 namespace quickbook { namespace detail
 {
-    void
-    print_char(char ch, std::ostream& out)
+    void print_char(char ch, std::ostream& out)
     {
         switch (ch)
         {
@@ -32,8 +36,7 @@ namespace quickbook { namespace detail
         }
     }
 
-    void
-    print_string(std::basic_string<char> const& str, std::ostream& out)
+    void print_string(std::basic_string<char> const& str, std::ostream& out)
     {
         for (std::string::const_iterator cur = str.begin();
             cur != str.end(); ++cur)
@@ -42,48 +45,12 @@ namespace quickbook { namespace detail
         }
     }
 
-    void
-    print_space(char ch, std::ostream& out)
+    void print_space(char ch, std::ostream& out)
     {
         out << ch;
     }
-    
-    namespace
-    {
-        bool 
-        find_empty_content_pattern(
-            std::basic_string<char> const& str
-          , std::string::size_type& pos
-          , std::string::size_type& len)
-        {
-            using namespace boost::spirit;
-            typedef std::basic_string<char>::const_iterator iter;
-            for (iter i = str.begin(); i!=str.end(); ++i)
-            {
-                parse_info<iter> r = parse(i, str.end(), '>' >> +blank_p >> '<');
-                if (r.hit)
-                {
-                    pos = i-str.begin();
-                    len = r.length;
-                    return true;
-                }
-            }
 
-            return false;
-        }
-    }
-
-    void
-    convert_nbsp(std::basic_string<char>& str)
-    {
-        std::string::size_type pos;
-        std::string::size_type len;
-        while (find_empty_content_pattern(str, pos, len))
-            str.replace(pos, len, ">&nbsp;<");
-    }
-
-    char
-    filter_identifier_char(char ch)
+    char filter_identifier_char(char ch)
     {
         if (!std::isalnum(static_cast<unsigned char>(ch)))
             ch = '_';
@@ -145,21 +112,85 @@ namespace quickbook { namespace detail
         return uri;
     }
     
-    std::ostream & outerr(const std::string & file, int line)
+    std::ostream& outerr(std::string const& file, int line)
     {
-        if (ms_errors)
-            return std::clog << file << "(" << line << "): error: ";
+        if (line >= 0)
+        {
+            if (ms_errors)
+                return std::clog << file << "(" << line << "): error: ";
+            else
+                return std::clog << file << ":" << line << ": error: ";
+        }
         else
-            return std::clog << file << ":" << line << ": error: ";
+        {
+            return std::clog << file << ": error: ";
+        }
     }
     
-    std::ostream & outwarn(const std::string & file, int line)
+    std::ostream& outwarn(std::string const& file, int line)
     {
-        if (ms_errors)
-            return std::clog << file << "(" << line << "): warning: ";
+        if (line >= 0)
+        {
+            if (ms_errors)
+                return std::clog << file << "(" << line << "): warning: ";
+            else
+                return std::clog << file << ":" << line << ": warning: ";
+        }
         else
-            return std::clog << file << ":" << line << ": warning: ";
+        {
+            return std::clog << file << ": warning: ";
+        }
     }
+
+    int load(std::string const& filename, std::string& storage)
+    {
+        using std::cerr;
+        using std::endl;
+        using std::ios;
+        using std::ifstream;
+        using std::istream_iterator;
+
+        ifstream in(filename.c_str(), std::ios_base::in);
+
+        if (!in)
+        {
+            outerr(filename,-1) << "Could not open input file." << endl;
+            return 1;
+        }
+
+        // Turn off white space skipping on the stream
+        in.unsetf(ios::skipws);
+
+        std::copy(
+            istream_iterator<char>(in),
+            istream_iterator<char>(),
+            std::back_inserter(storage));
+
+        //  ensure that we have enough trailing newlines to eliminate
+        //  the need to check for end of file in the grammar.
+        storage.push_back('\n');
+        storage.push_back('\n');
+        return 0;
+    }
+
+    file_type get_file_type(std::string const& extension)
+    {
+        static std::map<std::string, file_type> ftypes;
+        if (ftypes.empty())
+        {
+            // init the map of types
+            ftypes["cpp"] = cpp_file;
+            ftypes["hpp"] = cpp_file;
+            ftypes["h"] = cpp_file;
+            ftypes["c"] = cpp_file;
+            ftypes["cxx"] = cpp_file;
+            ftypes["hxx"] = cpp_file;
+            ftypes["ipp"] = cpp_file;
+            ftypes["py"] = python_file;
+        }
+        return ftypes[extension];
+    }
+
 }}
 
 

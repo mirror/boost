@@ -10,9 +10,9 @@ last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $" xmlns:xi="http://www.w3.o
     <para>
       <link linkend="x">x</link> and <link linkend="y">y</link> are two distinct
       links, which should be separated by whitespace when they appear together as
-      in <link linkend="x">x</link>&nbsp;<link linkend="y">y</link>. Also in <link
-      linkend="x">x</link> <link linkend="y">y</link>, and in <link linkend="x">x</link>
-      <link linkend="y">y</link> as well.
+      in <link linkend="x">x</link> <link linkend="y">y</link>. Also in <link linkend="x">x</link>
+      <link linkend="y">y</link>, and in <link linkend="x">x</link> <link linkend="y">y</link>
+      as well.
     </para>
   </section>
 </article>

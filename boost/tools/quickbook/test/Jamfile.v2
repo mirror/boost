@@ -20,4 +20,5 @@ test-suite quickbook.test :
     [ quickbook-test escape ]
     [ quickbook-test templates ]
     [ quickbook-test xinclude ]
+    [ quickbook-test import ]
     ;

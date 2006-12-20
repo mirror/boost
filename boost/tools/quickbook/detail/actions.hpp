@@ -623,6 +623,18 @@ namespace quickbook
         quickbook::actions& actions;
     };
 
+    struct import_action
+    {
+        // Handles import of source code files (e.g. *.cpp *.py)
+        import_action(collector& out_, quickbook::actions& actions_)
+            : out(out_), actions(actions_) {}
+
+        void operator()(iterator first, iterator last) const;
+
+        collector& out;
+        quickbook::actions& actions;
+    };
+
     struct xml_author
     {
         // Handles xml author

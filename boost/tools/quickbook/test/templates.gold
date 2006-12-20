@@ -55,9 +55,9 @@
     <para>
       
 <programlisting>
-<phrase role="keyword">int</phrase>&nbsp;<phrase role="identifier">main</phrase><phrase role="special">()</phrase>
+<phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase>
 <phrase role="special">{</phrase>
-    <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase>&nbsp;<phrase role="special">&lt;&lt;</phrase> &quot;Hello, World&quot; <phrase role="special">&lt;&lt;</phrase>&nbsp;<phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">endl</phrase><phrase role="special">;</phrase>
+    <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">cout</phrase> <phrase role="special">&lt;&lt;</phrase> &quot;Hello, World&quot; <phrase role="special">&lt;&lt;</phrase> <phrase role="identifier">std</phrase><phrase role="special">::</phrase><phrase role="identifier">endl</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
     </para>
@@ -68,7 +68,7 @@
       &alpha;<superscript>2</superscript>
     </para>
     <para>
-      x<superscript>2</superscript>&nbsp;
+      x<superscript>2</superscript>
       <!--[/-------------------------------- Some more ]-->
     </para>
     <para>

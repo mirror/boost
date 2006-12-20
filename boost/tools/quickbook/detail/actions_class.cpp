@@ -164,6 +164,7 @@ namespace quickbook
         , end_section(out, section_level, qualified_section_id)
         , xinclude(out, *this)
         , include(*this)
+        , import(out, *this)
 
         , escape_pre(phrase, escape_pre_)
         , escape_post(phrase, escape_post_)

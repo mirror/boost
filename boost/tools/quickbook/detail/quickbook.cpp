@@ -42,44 +42,6 @@ namespace quickbook
 
     ///////////////////////////////////////////////////////////////////////////
     //
-    //  Load a file
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    static int
-    load(char const* filename, std::string& storage)
-    {
-        using std::cerr;
-        using std::endl;
-        using std::ios;
-        using std::ifstream;
-        using std::istream_iterator;
-
-        ifstream in(filename, std::ios_base::in);
-
-        if (!in)
-        {
-            detail::outerr(filename,1)
-                << "Could not open input file." << endl;
-            return 1;
-        }
-
-        // Turn off white space skipping on the stream
-        in.unsetf(ios::skipws);
-
-        std::copy(
-            istream_iterator<char>(in),
-            istream_iterator<char>(),
-            std::back_inserter(storage));
-
-        //  ensure that we have enough trailing newlines to eliminate
-        //  the need to check for end of file in the grammar.
-        storage.push_back('\n');
-        storage.push_back('\n');
-        return 0;
-    }
-
-    ///////////////////////////////////////////////////////////////////////////
-    //
     //  Parse a file
     //
     ///////////////////////////////////////////////////////////////////////////
@@ -91,7 +53,7 @@ namespace quickbook
         using std::string;
 
         std::string storage;
-        int err = quickbook::load(filein_, storage);
+        int err = detail::load(filein_, storage);
         if (err != 0)
             return err;
 

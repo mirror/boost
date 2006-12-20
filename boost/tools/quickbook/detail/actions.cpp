@@ -32,7 +32,6 @@ namespace quickbook
     {
         std::string str;
         phrase.swap(str);
-        detail::convert_nbsp(str);
         out << pre << str << post;
     }
 
@@ -40,7 +39,6 @@ namespace quickbook
     {
         std::string str;
         phrase.swap(str);
-        detail::convert_nbsp(str);
 
         if (qbk_version_n < 103) // version 1.2 and below
         {
@@ -76,7 +74,6 @@ namespace quickbook
             level_ = 6;                     // further than that
         std::string str;
         phrase.swap(str);
-        detail::convert_nbsp(str);
 
         std::string anchor = 
             library_id + '.' + qualified_section_id + '.' +
@@ -657,7 +654,6 @@ namespace quickbook
 
         std::string str;
         actions.phrase.swap(str);
-        detail::convert_nbsp(str);
         actions.out << str;
 
         actions.out << "</tbody>\n"
@@ -765,36 +761,179 @@ namespace quickbook
         }
     }
 
-    fs::path path_difference(fs::path const& outdir, fs::path const& xmlfile)
+    fs::path path_difference(fs::path const& outdir, fs::path const& path)
     {
-        fs::path outtmp, xmltmp;
-        fs::path::iterator out = outdir.begin(), xml = xmlfile.begin();
-        for(; out != outdir.end() && xml != xmlfile.end(); ++out, ++xml)
+        fs::path outtmp, temp;
+        fs::path::iterator out = outdir.begin(), file = path.begin();
+        for(; out != outdir.end() && file != path.end(); ++out, ++file)
         {
-            if(!fs::equivalent(outtmp /= *out, xmltmp /= *xml))
+            if(!fs::equivalent(outtmp /= *out, temp /= *file))
                 break;
         }
         std::divides<fs::path> concat;
         out = (out == outdir.begin()) ? outdir.end() : out;
-        xmltmp = std::accumulate(out, outdir.end(), fs::path(), boost::bind(concat, _1, ".."));
-        return std::accumulate(xml, xmlfile.end(), xmltmp, concat);
+        temp = std::accumulate(out, outdir.end(), fs::path(), boost::bind(concat, _1, ".."));
+        return std::accumulate(file, path.end(), temp, concat);
+    }
+
+    fs::path calculate_relative_path(
+        iterator first, iterator last, quickbook::actions& actions)
+    {
+        // Given a source file and the current filename, calculate the
+        // path to the source file relative to the output directory.
+        fs::path path(std::string(first, last));
+        if (!path.is_complete())
+        {
+            fs::path infile = fs::complete(actions.filename).normalize();
+            path = (infile.branch_path() / path).normalize();
+            fs::path outdir = fs::complete(actions.outdir).normalize();
+            path = path_difference(outdir, path);
+        }
+        return path;
     }
 
     void xinclude_action::operator()(iterator first, iterator last) const
     {
-        // Given an xml file to include and the current filename, calculate the
-        // path to the XML file relative to the output directory.
-        fs::path xmlfile(std::string(first, last));
-        if (!xmlfile.is_complete())
-        {
-            fs::path infile = fs::complete(actions.filename).normalize();
-            xmlfile = (infile.branch_path() / xmlfile).normalize();
-            fs::path outdir = fs::complete(actions.outdir).normalize();
-            xmlfile = path_difference(outdir, xmlfile);
-        }
+        fs::path path = calculate_relative_path(first, last, actions);
         out << "\n<xi:include href=\"";
-        detail::print_string(detail::escape_uri(xmlfile.string()), out.get());
+        detail::print_string(detail::escape_uri(path.string()), out.get());
         out << "\" />\n";
+    }
+
+    struct cpp_code_snippet_grammar
+        : grammar<cpp_code_snippet_grammar>
+    {
+        cpp_code_snippet_grammar(std::vector<template_symbol>& storage)
+            : storage(storage) {}
+
+        template <typename Scanner>
+        struct definition
+        {
+            definition(cpp_code_snippet_grammar const& self)
+            {
+                typedef cpp_code_snippet_grammar self_type;
+                start_ = 
+                    +(
+                            snippet                 [boost::bind(&self_type::compile, &self, _1, _2)]
+                        |   anychar_p
+                    )
+                    ;
+
+                identifier =
+                    (alpha_p | '_') >> *(alnum_p | '_')
+                    ;
+
+                snippet = 
+                    "//[" >> *space_p
+                    >> identifier                   [assign_a(self.id)]
+                    >> (*(code_elements - "//]"))
+                    >> "//]"
+                    ;
+                
+                code_elements =
+                        escaped_comment         
+                    |   (anychar_p - "//]")         [boost::bind(&self_type::pass_thru, &self, _1, _2)]
+                    ;
+                
+                escaped_comment =
+                        *space_p >> "//`" >> *space_p
+                        >> (*(anychar_p - eol_p))   [boost::bind(&self_type::escaped_comment, &self, _1, _2)]
+                        >> eol_p
+                    |   *space_p >> "/*`" >> *space_p
+                        >> (*(anychar_p - "*/"))    [boost::bind(&self_type::escaped_comment, &self, _1, _2)]
+                        >> "*/"
+                    ;
+            }
+
+            rule<Scanner> start_, snippet, identifier, code_elements, escaped_comment;
+
+            rule<Scanner> const&
+            start() const { return start_; }
+        };
+
+        
+        void pass_thru(iterator first, iterator last) const
+        {
+            code += *first;
+        }
+
+        void escaped_comment(iterator first, iterator last) const
+        {
+            if (!code.empty())
+            {
+                detail::unindent(code); // remove all indents
+                snippet += "\n\n``\n" + code + "``\n\n";
+                code.clear();
+            }
+            std::string temp(first, last);
+            detail::unindent(temp); // remove all indents
+            snippet += temp;
+        }
+
+        void compile(iterator first, iterator last) const
+        {
+            if (!code.empty())
+            {
+                detail::unindent(code); // remove all indents
+                snippet += "\n\n``\n" + code + "``\n\n";
+            }
+            
+            std::vector<std::string> tinfo;
+            tinfo.push_back(id);
+            tinfo.push_back(snippet);
+            storage.push_back(boost::make_tuple(tinfo, first.get_position()));
+
+            code.clear();
+            snippet.clear();
+            id.clear();
+        }
+
+        mutable std::string code;
+        mutable std::string snippet;
+        mutable std::string id;
+        std::vector<template_symbol>& storage;
+    };
+
+    void load_snippets(
+        std::string const& file
+      , std::vector<template_symbol>& storage   // snippets are stored in a 
+                                                // vector of template_symbols
+      , std::string const& extension)
+    {
+        std::string code;
+        int err = detail::load(file, code);
+        if (err != 0)
+            return; // return early on error
+
+        typedef position_iterator<std::string::const_iterator> iterator_type;
+        iterator_type first(code.begin(), code.end(), file);
+        iterator_type last(code.end(), code.end());
+
+        cpp_code_snippet_grammar g(storage);
+        boost::spirit::parse(first, last, g);
+    }
+
+    void import_action::operator()(iterator first, iterator last) const
+    {
+        fs::path path(std::string(first, last), fs::native);
+        std::string ext = fs::extension(path);
+        std::vector<template_symbol> storage;
+        load_snippets(path.string(), storage, ext);
+        
+        BOOST_FOREACH(template_symbol const& ts, storage)
+        {
+            std::string tname = boost::get<0>(ts)[0];
+            if (actions.templates.find_top_scope(tname))
+            {
+                boost::spirit::file_position const pos = boost::get<1>(ts);
+                detail::outerr(pos.file, pos.line)
+                    << "Template Redefinition: " << tname << std::endl;
+            }
+            else
+            {
+                actions.templates.add(tname, ts);
+            }
+        }
     }
 
     void include_action::operator()(iterator first, iterator last) const

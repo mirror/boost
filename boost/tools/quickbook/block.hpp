@@ -118,6 +118,7 @@ namespace quickbook
                         |   variablelist
                         |   xinclude
                         |   include
+                        |   import
                         |   template_
                         )
                     >>  (   (space >> ']' >> +eol)
@@ -321,6 +322,13 @@ namespace quickbook
                             close_bracket))             [actions.xinclude]
                     ;
 
+                import =
+                       "import"
+                    >> hard_space
+                    >> (*(anychar_p -
+                            close_bracket))             [actions.import]
+                    ;
+
                 include =
                        "include"
                     >> hard_space
@@ -406,7 +414,7 @@ namespace quickbook
                             preformatted, list_item, begin_section, end_section,
                             xinclude, include, hard_space, eol, paragraph_end,
                             template_, template_id, template_formal_arg,
-                            template_body, identifier, dummy_block;
+                            template_body, identifier, dummy_block, import;
 
             symbols<>       paragraph_end_markups;
             

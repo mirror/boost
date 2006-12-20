@@ -68,6 +68,7 @@
 [def __tables__             [link quickbook.syntax.block.tables Tables]]
 [def __variable_lists__     [link quickbook.syntax.block.variable_lists Variable Lists]]
 [def __include__            [link quickbook.syntax.block.include Include]]
+[def __import__             [link quickbook.syntax.block.import Import]]
 
 [section:intro Introduction]
 
@@ -848,6 +849,8 @@ syntax highlighted according to the current __source_mode__:
 
         return cgi.escape(text)
 
+[c++]
+
 Macros that are already defined are expanded in source code. Example:
 
 [pre'''
@@ -1535,6 +1538,19 @@ named anchor for that section will be "someid.intro", and you can link to
 it with [^\[link someid.intro The Intro\]].
 
 [endsect]
+
+[section Import]
+
+Importing source code...
+
+[import ../test/stub.cpp]
+
+[foo]
+
+[bar]
+
+[endsect]
+
 [endsect]
 [endsect]
 
@@ -1735,7 +1751,7 @@ xml my_doc : my_doc.qbk ;
 
 boostbook standalone
     :
-        my_doc		
+        my_doc    
     :
         <xsl:param>boost.image.src=images/my_project_logo.png
         <xsl:param>boost.image.alt="\\"My Project\\""
