@@ -1595,9 +1595,9 @@ use distinguishable comments following the form:
     //]
     
 The first comment line above initiates a named code-snippet. This prefix will 
-not be visible in quickbook. The entire code-snippet from `[` to `]` will be 
-inserted as a template in quickbook with name /id/. The comment `//]` ends a 
-code-snippet This too will not be visible in quickbook.
+not be visible in quickbook. The entire code-snippet in between `//[id` and 
+`//]` will be inserted as a template in quickbook with name ['/id/]. The comment 
+`//]` ends a code-snippet This too will not be visible in quickbook.
 
 [heading Special Comments]
 
