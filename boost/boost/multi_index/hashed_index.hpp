@@ -274,13 +274,17 @@ public:
     hashed_index_node_impl* y=x->next();
     while(y!=x){
       if(eq(k,key(node_type::from_impl(y)->value()))){
+        bool b;
         do{
           hashed_index_node_impl* z=y->next();
+          b=z!=x&&eq(
+            key(node_type::from_impl(y)->value()),
+            key(node_type::from_impl(z)->value()));
           this->final_erase_(
             static_cast<final_node_type*>(node_type::from_impl(y)));
           y=z;
           ++s;
-        }while(y!=x&&eq(k,key(node_type::from_impl(y)->value())));
+        }while(b);
         break;
       }
       y=y->next();

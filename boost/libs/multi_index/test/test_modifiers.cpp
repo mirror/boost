@@ -16,6 +16,37 @@
 #include "employee.hpp"
 #include <boost/test/test_tools.hpp>
 
+class always_one
+{
+public:
+  always_one():n(1){}
+  ~always_one(){n=0;}
+
+  int get()const{return n;}
+
+private:
+  int n;
+};
+
+
+inline bool operator==(const always_one& x,const always_one& y)
+{
+  return x.get()==y.get();
+}
+
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
+namespace boost{
+#endif
+
+inline std::size_t hash_value(const always_one& x)
+{
+  return static_cast<std::size_t>(x.get());
+}
+
+#if defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
+} /* namespace boost */
+#endif
+
 using namespace boost::multi_index;
 
 void test_modifiers()
@@ -236,4 +267,20 @@ void test_modifiers()
 
   es2.clear();
   BOOST_CHECK(es2.size()==0);
+
+  /* testcase for problem reported at
+   * http://lists.boost.org/boost-users/2006/12/24215.php
+   */
+
+  multi_index_container<
+    always_one,
+    indexed_by<
+      hashed_non_unique<identity<always_one> >
+    >
+  > aoc;
+
+  aoc.insert(always_one());
+  aoc.insert(always_one());
+  aoc.erase(*(aoc.begin()));
+  BOOST_CHECK(aoc.empty());
 }
