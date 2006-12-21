@@ -26,20 +26,10 @@ namespace boost { namespace proto
         template<typename Expr, typename State, typename Visitor>
         struct apply
         {
-            typedef proto::compiler<typename Expr::tag_type, DomainTag> compiler_type;
-
-            // Compile the branch
-            typedef typename compiler_type::BOOST_NESTED_TEMPLATE apply
-            <
-                Expr
-              , typename Lambda::state_type
-              , Visitor
-            >::type branch_type;
-
-            // Pass the branch, state and visitor to the lambda
+            // Compile the branch, pass the result, state and visitor to the lambda
             typedef typename Lambda::BOOST_NESTED_TEMPLATE apply
             <
-                branch_type
+                typename meta::compile<Expr, typename Lambda::state_type, Visitor, DomainTag>::type
               , State
               , Visitor
             >::type type;

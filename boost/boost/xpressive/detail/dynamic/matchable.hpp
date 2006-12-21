@@ -156,7 +156,7 @@ struct shared_matchable
         this->xpr_->peek(peeker);
     }
 
-    // BUGBUG yuk! 
+    // BUGBUG yuk!
     template<typename Top>
     bool push_match(state_type<BidiIter> &state) const
     {

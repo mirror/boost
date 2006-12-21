@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file cpp_regex_traits.hpp
-/// Contains the definition of the cpp_regex_traits\<\> template, which is a 
+/// Contains the definition of the cpp_regex_traits\<\> template, which is a
 /// wrapper for std::locale that can be used to customize the behavior of
 /// static and dynamic regexes.
 //
@@ -154,7 +154,7 @@ namespace detail
     umaskex_t const non_std_ctype_blank = 1 << 12;
     umaskex_t const non_std_ctype_newline = 1 << 13;
 
-    static umaskex_t const std_masks[] = 
+    static umaskex_t const std_masks[] =
     {
         mask_cast<std::ctype_base::alnum>::value
       , mask_cast<std::ctype_base::alpha>::value
@@ -274,7 +274,7 @@ namespace detail
             this->masks_[static_cast<unsigned char>('\r')] |= non_std_ctype_newline;
             this->masks_[static_cast<unsigned char>('\f')] |= non_std_ctype_newline;
         }
- 
+
         bool is(std::ctype<Char> const &, Char ch, umaskex_t mask) const
         {
             return 0 != (this->masks_[static_cast<unsigned char>(ch)] & mask);
@@ -303,7 +303,7 @@ namespace detail
 ///////////////////////////////////////////////////////////////////////////////
 // cpp_regex_traits
 //
-/// \brief Encapsaulates a std::locale for use by the 
+/// \brief Encapsaulates a std::locale for use by the
 /// basic_regex\<\> class template.
 template<typename Char>
 struct cpp_regex_traits
@@ -456,7 +456,7 @@ struct cpp_regex_traits
     /// such that if the character sequence [G1, G2) sorts before the character sequence [H1, H2)
     /// when character case is not considered then
     /// v.transform_primary(G1, G2) < v.transform_primary(H1, H2).
-    /// 
+    ///
     /// \attention Not used in xpressive 1.0
     template<typename FwdIter>
     string_type transform_primary(FwdIter begin, FwdIter end) const
@@ -530,7 +530,7 @@ struct cpp_regex_traits
     /// \param ch The digit character.
     /// \param radix The radix to use for the conversion.
     /// \pre radix is one of 8, 10, or 16.
-    /// \return -1 if ch is not a digit character, the integer value of the character otherwise. 
+    /// \return -1 if ch is not a digit character, the integer value of the character otherwise.
     ///     The conversion is performed by imbueing a std::stringstream with this->getloc();
     ///     setting the radix to one of oct, hex or dec; inserting ch into the stream; and
     ///     extracting an int.

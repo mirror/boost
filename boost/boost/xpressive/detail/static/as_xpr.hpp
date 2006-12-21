@@ -123,7 +123,7 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Xpr>
     struct as_xpr_type<Xpr, true> // is_expr == true
     {
-        typedef typename Xpr::expr_type type;
+        typedef typename Xpr::type type;
 
         template<typename Xpr2>
         static type const &call(Xpr2 const &xpr)

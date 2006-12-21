@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file pass_through.hpp
-/// 
+///
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
@@ -24,8 +24,8 @@
             template<typename Expr, typename State, typename Visitor, typename DomainTag>
             struct is_same_expr
               : is_same<
-                    typename meta::compile<typename Expr::expr_type, State, Visitor, DomainTag>::type
-                  , typename Expr::expr_type
+                    typename meta::compile<typename Expr::type, State, Visitor, DomainTag>::type
+                  , typename Expr::type
                 >
             {};
 
@@ -34,7 +34,7 @@
             >
             struct compile_if
             {
-                typedef typename meta::compile<typename Expr::expr_type, State, Visitor, DomainTag>::type type;
+                typedef typename meta::compile<typename Expr::type, State, Visitor, DomainTag>::type type;
 
                 static type call(Expr const &expr, State const &state, Visitor &visitor)
                 {
@@ -123,7 +123,7 @@
                     >
                 > expr_type;
 
-                typedef is_same<typename Expr::expr_type, expr_type> is_same_expr;
+                typedef is_same<typename Expr::type, expr_type> is_same_expr;
                 typedef typename mpl::if_<is_same_expr, Expr, expr_type>::type type;
 
                 static type call(Expr const &expr, State const &state, Visitor &visitor)

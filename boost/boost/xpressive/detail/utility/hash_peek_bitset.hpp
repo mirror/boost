@@ -143,7 +143,7 @@ struct hash_peek_bitset
 
 private:
 
-    // Make sure all sub-expressions being merged have the same case-sensitivity    
+    // Make sure all sub-expressions being merged have the same case-sensitivity
     bool test_icase_(bool icase)
     {
         std::size_t count = this->bset_.count();

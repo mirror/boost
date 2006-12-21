@@ -34,7 +34,7 @@ namespace boost { namespace proto { namespace tag
     struct pre_dec : unary {};
     struct post_inc : unary {};
     struct post_dec : unary {};
-    
+
     struct left_shift : binary {};
     struct right_shift : binary {};
     struct multiply : binary {};

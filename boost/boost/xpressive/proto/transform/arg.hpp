@@ -22,16 +22,16 @@ namespace boost { namespace proto { namespace transform
     {
         arg();
 
-        template<typename Expr, typename, typename>
+        template<typename Expr, typename State, typename Visitor>
         struct apply
-          : proto::meta::arg<Expr, N>
+          : proto::meta::arg<typename Grammar::template apply<Expr, State, Visitor>::type, N>
         {};
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type const &
-        call(Expr const &expr, State const &, Visitor &)
+        call(Expr const &expr, State const &state, Visitor &visitor)
         {
-            return proto::arg<N>(expr);
+            return proto::arg<N>(Grammar::call(expr, state, visitor));
         }
     };
 
@@ -42,16 +42,16 @@ namespace boost { namespace proto { namespace transform
     {
         arg_c();
 
-        template<typename Expr, typename, typename>
+        template<typename Expr, typename State, typename Visitor>
         struct apply
-          : proto::meta::arg_c<Expr, N>
+          : proto::meta::arg_c<typename Grammar::template apply<Expr, State, Visitor>::type, N>
         {};
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type const &
-        call(Expr const &expr, State const &, Visitor &)
+        call(Expr const &expr, State const &state, Visitor &visitor)
         {
-            return proto::arg_c<N>(expr);
+            return proto::arg_c<N>(Grammar::call(expr, state, visitor));
         }
     };
 
@@ -62,16 +62,16 @@ namespace boost { namespace proto { namespace transform
     {
         left();
 
-        template<typename Expr, typename, typename>
+        template<typename Expr, typename State, typename Visitor>
         struct apply
-          : proto::meta::left<Expr>
+          : proto::meta::left<typename Grammar::template apply<Expr, State, Visitor>::type>
         {};
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type const &
-        call(Expr const &expr, State const &, Visitor &)
+        call(Expr const &expr, State const &state, Visitor &visitor)
         {
-            return proto::left(expr);
+            return proto::left(Grammar::call(expr, state, visitor));
         }
     };
 
@@ -82,16 +82,16 @@ namespace boost { namespace proto { namespace transform
     {
         right();
 
-        template<typename Expr, typename, typename>
+        template<typename Expr, typename State, typename Visitor>
         struct apply
-          : proto::meta::right<Expr>
+          : proto::meta::right<typename Grammar::template apply<Expr, State, Visitor>::type>
         {};
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type const &
-        call(Expr const &expr, State const &, Visitor &)
+        call(Expr const &expr, State const &state, Visitor &visitor)
         {
-            return proto::right(expr);
+            return proto::right(Grammar::call(expr, state, visitor));
         }
     };
 

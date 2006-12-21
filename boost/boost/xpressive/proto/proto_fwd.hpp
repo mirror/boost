@@ -346,7 +346,7 @@ namespace boost { namespace proto
 
         template<typename N = mpl::long_<0> >
         struct arg;
-        
+
         template<long N>
         struct arg_c;
     }
@@ -379,6 +379,23 @@ namespace boost { namespace proto
     }
 
     namespace trans = transform;
+
+#define BOOST_PROTO_IDENTITY_TRANSFORM()\
+    template<typename Expr_, typename State_, typename Visitor_>\
+    static typename Expr_::type const &call(Expr_ const &expr_, State_ const &, Visitor_ &)\
+    {\
+        return expr_.cast();\
+    }\
+    template<typename Expr_, typename, typename>\
+    struct apply\
+    {\
+        typedef typename Expr_::type type;\
+    }
+
+    struct has_identity_transform
+    {
+        BOOST_PROTO_IDENTITY_TRANSFORM();
+    };
 
 }} // namespace boost::proto
 

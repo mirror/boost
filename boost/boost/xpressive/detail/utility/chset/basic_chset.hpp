@@ -76,7 +76,7 @@ struct basic_chset_8bit
     basic_chset_8bit(basic_chset_8bit const &arg);
 
     bool empty() const;
-    
+
     void set(Char from, Char to);
     template<typename Traits>
     void set(Char from, Char to, Traits const &traits);

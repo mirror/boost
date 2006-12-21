@@ -175,7 +175,7 @@ basic_chset<Char>::operator -=(basic_chset<Char> const &that)
 {
     typedef typename range_run<Char>::const_iterator const_iterator;
     for(const_iterator iter = that.rr_.begin(); iter != that.rr_.end(); ++iter)
-    {   
+    {
         this->rr_.clear(*iter);
     }
     return *this;

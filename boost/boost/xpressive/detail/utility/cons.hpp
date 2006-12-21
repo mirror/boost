@@ -191,7 +191,7 @@ namespace boost { namespace fusion
     {
         typedef cons_iterator_tag tag;
         typedef Cons cons_type;
-        
+
         explicit cons_iterator(cons_type& cons_)
             : cons(cons_) {}
 

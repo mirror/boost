@@ -57,20 +57,12 @@ namespace boost { namespace proto
         template<typename Expr, typename State, typename Visitor>
         struct apply
         {
-            typedef typename Lambda::BOOST_NESTED_TEMPLATE apply
+            typedef typename meta::compile
             <
-                Expr
+                typename Lambda::BOOST_NESTED_TEMPLATE apply<Expr, State, Visitor>::type
               , State
               , Visitor
-            >::type trans_type;
-
-            typedef proto::compiler<typename trans_type::tag_type, DomainTag> compiler_type;
-
-            typedef typename compiler_type::BOOST_NESTED_TEMPLATE apply
-            <
-                trans_type
-              , State
-              , Visitor
+              , DomainTag
             >::type type;
         };
 

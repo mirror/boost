@@ -67,7 +67,7 @@ struct hash_peek_finder
     bool operator ()(state_type<BidiIter> &state) const
     {
         Traits const &traits = traits_cast<Traits>(state);
-        state.cur_ = (this->bset_.icase() 
+        state.cur_ = (this->bset_.icase()
             ? this->find_(state.cur_, state.end_, traits, mpl::true_())
             : this->find_(state.cur_, state.end_, traits, mpl::false_()));
         return state.cur_ != state.end_;

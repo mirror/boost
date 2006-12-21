@@ -223,7 +223,7 @@ proto::meta::terminal<detail::posix_charset_placeholder>::type const xdigit = {{
 proto::meta::terminal<detail::assert_bos_matcher>::type const bos = {};
 
 ///////////////////////////////////////////////////////////////////////////////
-/// \brief End of sequence assertion. 
+/// \brief End of sequence assertion.
 ///
 /// For the character sequence [begin, end),
 /// 'eos' matches the zero-width sub-sequence [end, end).
@@ -234,7 +234,7 @@ proto::meta::terminal<detail::assert_bos_matcher>::type const bos = {};
 proto::meta::terminal<detail::assert_eos_matcher>::type const eos = {};
 
 ///////////////////////////////////////////////////////////////////////////////
-/// \brief Beginning of line assertion. 
+/// \brief Beginning of line assertion.
 ///
 /// 'bol' matches the zero-width sub-sequence
 /// immediately following a logical newline sequence. The regex traits
@@ -250,7 +250,7 @@ proto::meta::terminal<detail::assert_bol_placeholder>::type const bol = {};
 proto::meta::terminal<detail::assert_eol_placeholder>::type const eol = {};
 
 ///////////////////////////////////////////////////////////////////////////////
-/// \brief Beginning of word assertion. 
+/// \brief Beginning of word assertion.
 ///
 /// 'bow' matches the zero-width sub-sequence
 /// immediately following a non-word character and preceeding a word character.
@@ -258,7 +258,7 @@ proto::meta::terminal<detail::assert_eol_placeholder>::type const eol = {};
 proto::meta::terminal<detail::assert_word_begin>::type const bow = {};
 
 ///////////////////////////////////////////////////////////////////////////////
-/// \brief End of word assertion. 
+/// \brief End of word assertion.
 ///
 /// 'eow' matches the zero-width sub-sequence
 /// immediately following a word character and preceeding a non-word character.

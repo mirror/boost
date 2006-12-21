@@ -32,7 +32,7 @@ namespace boost { namespace proto
                 Map
               , typename Lambda::BOOST_NESTED_TEMPLATE apply<Expr, State, Visitor>::type
             >::type compiler_type;
-            
+
             typedef typename compiler_type::BOOST_NESTED_TEMPLATE apply
             <
                 Expr

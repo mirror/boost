@@ -154,7 +154,7 @@ namespace boost { namespace xpressive { namespace detail
       : mpl::size_t<1>
     {};
 
-    // The subscript operator[] is used for sets, as in set['a' | range('b','h')], 
+    // The subscript operator[] is used for sets, as in set['a' | range('b','h')],
     // or for actions as in (any >> expr)[ action ]
     template<typename Left, typename Right>
     struct width_of_impl<proto::tag::subscript, Left, Right>

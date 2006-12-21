@@ -27,7 +27,7 @@
             template<typename Expr>
             struct deep_copy_impl<Expr, tag::terminal, 1>
             {
-                typedef typename Expr::expr_type type;
+                typedef typename Expr::type type;
 
                 static type const &call(Expr const &expr)
                 {
@@ -70,7 +70,7 @@
         namespace detail
         {
         #define BOOST_PROTO_DEFINE_DEEP_COPY_TYPE(z, n, data)\
-            typename deep_copy_impl<typename Expr:: BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type) ::expr_type>::type
+            typename deep_copy_impl<typename Expr:: BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type) ::type>::type
 
         #define BOOST_PROTO_DEFINE_DEEP_COPY_FUN(z, n, data)\
             proto::deep_copy(expr.cast(). BOOST_PP_CAT(arg, n) .cast())

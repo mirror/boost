@@ -29,7 +29,7 @@ namespace boost { namespace xpressive { namespace detail
         typedef Traits traits_type;
         typedef typename CharSet::char_type char_type;
         typedef typename CharSet::icase_type icase_type;
-      
+
         explicit charset_state(CharSet &charset, traits_type const &traits)
           : charset_(charset)
           , traits_(traits)
@@ -71,7 +71,7 @@ namespace boost { namespace xpressive { namespace detail
         void set(Unknown const &) const
         {
             // If this assert fires, it means that you have put something in a set[] that doesn't
-            // belong there. For instance, set["hello"]. Legal members of sets are characters, 
+            // belong there. For instance, set["hello"]. Legal members of sets are characters,
             // character ranges, list-initialized sets such as (set='a','b','c') and posix-style
             // character sets such as digit and ~alpha.
             BOOST_MPL_ASSERT((never_true<Unknown>));

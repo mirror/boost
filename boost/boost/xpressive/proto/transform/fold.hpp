@@ -26,12 +26,14 @@ namespace boost { namespace proto { namespace transform
         fold();
 
         typedef typename Grammar::type grammar_type;
-        typedef typename proto::meta::left<grammar_type>::type left_grammar;
-        typedef typename proto::meta::right<grammar_type>::type right_grammar;
+        typedef typename grammar_type::arg0_type left_grammar;
+        typedef typename grammar_type::arg1_type right_grammar;
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
         {
+            // BUGBUG
+            //typedef typename Grammar::template apply<Expr, State, Visitor>::type expr_type;
             typedef typename proto::meta::left<Expr>::type left_expr;
             typedef typename proto::meta::right<Expr>::type right_expr;
 
@@ -63,12 +65,14 @@ namespace boost { namespace proto { namespace transform
         reverse_fold();
 
         typedef typename Grammar::type grammar_type;
-        typedef typename proto::meta::left<grammar_type>::type left_grammar;
-        typedef typename proto::meta::right<grammar_type>::type right_grammar;
+        typedef typename grammar_type::arg0_type left_grammar;
+        typedef typename grammar_type::arg1_type right_grammar;
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
         {
+            // BUGBUG
+            //typedef typename Grammar::template apply<Expr, State, Visitor>::type expr_type;
             typedef typename proto::meta::left<Expr>::type left_expr;
             typedef typename proto::meta::right<Expr>::type right_expr;
 

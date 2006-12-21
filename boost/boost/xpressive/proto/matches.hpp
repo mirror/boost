@@ -101,8 +101,8 @@
             template<typename Expr, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename G, void)>
             struct which
               : which_impl<
-                    typename Expr::expr_type
-                  , matches_impl<typename Expr::expr_type, typename deref<G0>::type>::type::value
+                    typename Expr::type
+                  , matches_impl<typename Expr::type, typename deref<G0>::type>::type::value
                   , BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, G)
                 >
             {};
@@ -128,19 +128,13 @@
               : terminal_matches<Expr0, Grammar0>
             {};
 
-            // by default, assume parameter is an expression generator ... 
-            // (this also works for extends<> types because they are also generators)
+            // by default, assume parameter is an expression generator ...
+            // (this also works for expr<>, ref<> and extends<> types because
+            // they are also expression generators)
             template<typename Expr>
             struct deref
             {
                 typedef typename Expr::type type;
-            };
-
-            // ... but it could be a plain expression ...
-            template<typename Tag, typename Args, long Arity>
-            struct deref<expr<Tag, Args, Arity> >
-            {
-                typedef expr<Tag, Args, Arity> type;
             };
 
             // ... or the placeholder
@@ -164,7 +158,7 @@
             template<typename Tag, typename Args1, typename Args2>
             struct matches_impl< expr<Tag, Args1, 1>, expr<Tag, Args2, 1> >
               : matches_impl<
-                    typename Args1::arg0::expr_type
+                    typename Args1::arg0::type
                   , typename deref<typename Args2::arg0>::type
                 >
             {};
@@ -179,13 +173,13 @@
 
         #define BOOST_PROTO_MATCHES_N_FUN(z, n, data)\
             matches_impl<\
-                typename Args1::BOOST_PP_CAT(arg, n)::expr_type\
+                typename Args1::BOOST_PP_CAT(arg, n)::type\
               , typename deref<typename Args2::BOOST_PP_CAT(arg, n)>::type\
             >
 
         #define BOOST_PROTO_DEFINE_MATCHES(z, n, data)\
             matches_impl<\
-                typename Expr::expr_type\
+                typename Expr::type\
               , typename deref<BOOST_PP_CAT(G, n)>::type\
             >
 
@@ -214,7 +208,7 @@
 
         template<typename Expr, typename Grammar>
         struct matches
-          : detail::matches_impl<typename Expr::expr_type, typename detail::deref<Grammar>::type>
+          : detail::matches_impl<typename Expr::type, typename detail::deref<Grammar>::type>
         {};
 
         template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename G)>

@@ -82,12 +82,13 @@
         struct expr<Tag, Args, BOOST_PP_ITERATION() >
         {
             typedef Tag tag_type;
-            typedef expr expr_type;
+            typedef expr type;
             typedef Args args_type;
             typedef mpl::long_<BOOST_PP_ITERATION()> arity;
             typedef proto_expr_tag fusion_tag;
             typedef void is_boost_proto_expr_;
 
+            BOOST_PROTO_IDENTITY_TRANSFORM();
             BOOST_PP_REPEAT(BOOST_PP_ITERATION(), BOOST_PROTO_ARG, ~)
             BOOST_PP_REPEAT_FROM_TO(BOOST_PP_ITERATION(), BOOST_PROTO_MAX_ARITY, BOOST_PROTO_VOID, ~)
 

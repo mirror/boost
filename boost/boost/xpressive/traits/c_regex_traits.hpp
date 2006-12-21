@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 /// \file c_regex_traits.hpp
-/// Contains the definition of the c_regex_traits\<\> template, which is a 
+/// Contains the definition of the c_regex_traits\<\> template, which is a
 /// wrapper for the C locale functions that can be used to customize the
 /// behavior of static and dynamic regexes.
 //
@@ -111,7 +111,7 @@ struct regex_traits_version_1_tag;
 ///////////////////////////////////////////////////////////////////////////////
 // c_regex_traits
 //
-/// \brief Encapsaulates the standard C locale functions for use by the 
+/// \brief Encapsaulates the standard C locale functions for use by the
 /// basic_regex\<\> class template.
 template<typename Char>
 struct c_regex_traits
@@ -224,7 +224,7 @@ struct c_regex_traits
     /// such that if the character sequence [G1, G2) sorts before the character sequence [H1, H2)
     /// when character case is not considered then
     /// v.transform_primary(G1, G2) < v.transform_primary(H1, H2).
-    /// 
+    ///
     /// \attention Not used in xpressive 1.0
     template<typename FwdIter>
     static string_type transform_primary(FwdIter begin, FwdIter end)

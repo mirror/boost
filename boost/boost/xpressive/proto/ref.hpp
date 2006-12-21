@@ -17,12 +17,15 @@ namespace boost { namespace proto
 {
 
 #define BOOST_PROTO_ARG(z, n, data)\
-    typedef typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type) BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type);
+    typedef\
+        typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)\
+    BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type);\
+    /**/
 
     template<typename Expr>
     struct ref
     {
-        typedef Expr expr_type;
+        typedef Expr type;
         typedef typename Expr::tag_type tag_type;
         typedef typename Expr::args_type args_type;
         typedef typename Expr::arity arity;
@@ -30,6 +33,7 @@ namespace boost { namespace proto
         typedef void is_boost_proto_ref_;
         typedef void is_boost_proto_expr_;
 
+        BOOST_PROTO_IDENTITY_TRANSFORM();
         BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_ARG, _)
 
         Expr const &cast() const
@@ -53,7 +57,7 @@ namespace boost { namespace proto
         template<typename T>
         struct unref<T, true>
         {
-            typedef typename T::expr_type type;
+            typedef typename T::type type;
         };
     }
 

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file null_regex_traits.hpp
-/// Contains the definition of the null_regex_traits\<\> template, which is a 
+/// Contains the definition of the null_regex_traits\<\> template, which is a
 /// stub regex traits implementation that can be used by static and dynamic
 /// regexes for searching non-character data.
 //
@@ -126,7 +126,7 @@ struct null_regex_traits
     /// \param last The top of the range, inclusive.
     /// \param ch The source character.
     /// \return first <= ch && ch <= last.
-    /// \attention Since the null_regex_traits does not do case-folding, 
+    /// \attention Since the null_regex_traits does not do case-folding,
     /// this function is equivalent to in_range().
     static bool in_range_nocase(char_type first, char_type last, char_type ch)
     {
@@ -148,7 +148,7 @@ struct null_regex_traits
     /// such that if the character sequence [G1, G2) sorts before the character sequence [H1, H2)
     /// when character case is not considered then
     /// v.transform_primary(G1, G2) < v.transform_primary(H1, H2).
-    /// 
+    ///
     /// \attention Not used in xpressive 1.0
     template<typename FwdIter>
     static string_type transform_primary(FwdIter begin, FwdIter end)
