@@ -18,7 +18,7 @@ std::string bar()
 //]
 
 //[ foo
-//` This is the [*/foo/] function.
+/*` This is the [*['foo]] function. */
 std::string foo()
 {
     // return 'em, foo man!

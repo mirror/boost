@@ -18,6 +18,7 @@
 #include "./actions_class.hpp"
 #include "../block.hpp"
 #include "../phrase.hpp"
+#include "../code_snippet.hpp"
 
 namespace quickbook
 {
@@ -799,100 +800,42 @@ namespace quickbook
         detail::print_string(detail::escape_uri(path.string()), out.get());
         out << "\" />\n";
     }
-
-    struct cpp_code_snippet_grammar
-        : grammar<cpp_code_snippet_grammar>
+   
+    void cpp_code_snippet_grammar::pass_thru(iterator first, iterator last) const
     {
-        cpp_code_snippet_grammar(std::vector<template_symbol>& storage)
-            : storage(storage) {}
+        code += *first;
+    }
 
-        template <typename Scanner>
-        struct definition
+    void cpp_code_snippet_grammar::escaped_comment(iterator first, iterator last) const
+    {
+        if (!code.empty())
         {
-            definition(cpp_code_snippet_grammar const& self)
-            {
-                typedef cpp_code_snippet_grammar self_type;
-                start_ = 
-                    +(
-                            snippet                 [boost::bind(&self_type::compile, &self, _1, _2)]
-                        |   anychar_p
-                    )
-                    ;
-
-                identifier =
-                    (alpha_p | '_') >> *(alnum_p | '_')
-                    ;
-
-                snippet = 
-                    "//[" >> *space_p
-                    >> identifier                   [assign_a(self.id)]
-                    >> (*(code_elements - "//]"))
-                    >> "//]"
-                    ;
-                
-                code_elements =
-                        escaped_comment         
-                    |   (anychar_p - "//]")         [boost::bind(&self_type::pass_thru, &self, _1, _2)]
-                    ;
-                
-                escaped_comment =
-                        *space_p >> "//`" >> *space_p
-                        >> (*(anychar_p - eol_p))   [boost::bind(&self_type::escaped_comment, &self, _1, _2)]
-                        >> eol_p
-                    |   *space_p >> "/*`" >> *space_p
-                        >> (*(anychar_p - "*/"))    [boost::bind(&self_type::escaped_comment, &self, _1, _2)]
-                        >> "*/"
-                    ;
-            }
-
-            rule<Scanner> start_, snippet, identifier, code_elements, escaped_comment;
-
-            rule<Scanner> const&
-            start() const { return start_; }
-        };
-
-        
-        void pass_thru(iterator first, iterator last) const
-        {
-            code += *first;
-        }
-
-        void escaped_comment(iterator first, iterator last) const
-        {
-            if (!code.empty())
-            {
-                detail::unindent(code); // remove all indents
-                snippet += "\n\n``\n" + code + "``\n\n";
-                code.clear();
-            }
-            std::string temp(first, last);
-            detail::unindent(temp); // remove all indents
-            snippet += temp;
-        }
-
-        void compile(iterator first, iterator last) const
-        {
-            if (!code.empty())
-            {
-                detail::unindent(code); // remove all indents
-                snippet += "\n\n``\n" + code + "``\n\n";
-            }
-            
-            std::vector<std::string> tinfo;
-            tinfo.push_back(id);
-            tinfo.push_back(snippet);
-            storage.push_back(boost::make_tuple(tinfo, first.get_position()));
-
+            detail::unindent(code); // remove all indents
+            snippet += "\n\n``\n" + code + "``\n\n";
             code.clear();
-            snippet.clear();
-            id.clear();
         }
+        std::string temp(first, last);
+        detail::unindent(temp); // remove all indents
+        snippet += temp;
+    }
 
-        mutable std::string code;
-        mutable std::string snippet;
-        mutable std::string id;
-        std::vector<template_symbol>& storage;
-    };
+    void cpp_code_snippet_grammar::compile(iterator first, iterator last) const
+    {
+        if (!code.empty())
+        {
+            detail::unindent(code); // remove all indents
+            snippet += "\n\n``\n" + code + "``\n\n";
+        }
+        
+        std::vector<std::string> tinfo;
+        tinfo.push_back(id);
+        tinfo.push_back(snippet);
+        storage.push_back(boost::make_tuple(tinfo, first.get_position()));
+
+        code.clear();
+        snippet.clear();
+        id.clear();
+    }
 
     void load_snippets(
         std::string const& file

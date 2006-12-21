@@ -150,6 +150,7 @@ Features include:
 * Quickbook blocks can nest inside comments.
 * Line-end terminated comments are now allowed. Example: `[// some comment`
 * Comments are now passed through to XML as-is.
+* __import__ facility!!!
 
 [endsect]
 
@@ -1541,13 +1542,77 @@ it with [^\[link someid.intro The Intro\]].
 
 [section Import]
 
-Importing source code...
+When documenting code, you'd surely need to present code from actual source 
+files. While it is possible to copy some code and paste them in your QuickBook 
+file, doing so is error prone and the extracted code in the documentation tends 
+to get out of sync with the actual code as the code evolves. The problem, as 
+always, is that once documentation is written, the tendency is for the docs to 
+languish in the archives without maintenance. 
+
+QuickBook's import facility provides a nice solution.
+
+[heading Example]
+
+You can effortlessly import code snippets from source code into your QuickBook.
+The following illustrates how this is done:
+
+[pre'''
+[import ../test/stub.cpp]
+[foo]
+[bar]
+''']
+
+The first line:
+
+[pre'''
+[import ../test/stub.cpp]
+''']
+
+collects specially marked-up code snippets from [@../../test/stub.cpp stub.cpp] 
+and places them in your QuickBook file as virtual templates. Each of the 
+specially marked-up code snippets has a name (e.g. `foo` and `bar` in the 
+example above). This shall be the template identifier for that particular code 
+snippet. The second and third line above does the actual template expansion:
+
+[pre'''
+[foo]
+[bar]
+''']
+
+And the result is:
 
 [import ../test/stub.cpp]
-
 [foo]
-
 [bar]
+
+[heading Code Snippet Markup]
+
+Note how the code snippets in [@../../test/stub.cpp stub.cpp] get marked up. We 
+use distinguishable comments following the form:
+
+    //[id
+    some code here
+    //]
+    
+The first comment line above initiates a named code-snippet. This prefix will 
+not be visible in quickbook. The entire code-snippet from `[` to `]` will be 
+inserted as a template in quickbook with name /id/. The comment `//]` ends a 
+code-snippet This too will not be visible in quickbook.
+
+[heading Special Comments]
+
+Special comments of the form:
+
+    //` some [*quickbook] markup here
+    
+and:
+
+    /*` some [*quickbook] markup here */
+
+will be parsed by QuickBook. This can contain quickbook /blocks/ (e.g. sections, 
+paragraphs, tables, etc). In the first case, the initial slash-slash, tick and 
+white-space shall be ignored. In the second, the initial slash-star-tick and the 
+final star-slash shall be ignored.
 
 [endsect]
 
