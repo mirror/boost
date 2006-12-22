@@ -683,7 +683,7 @@ The first part guarantees the successful compilation of something like this:
    
 and the second part provides the library's users with a mechanism to make the 
 above code work not only for `char`, `int` or other built-in type, 
-but for they own types as well:
+but for their own types as well:
 
    namespace myspace{
       struct MyClass {};
