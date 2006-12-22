@@ -685,7 +685,7 @@ struct funptr_predicate<void**>
 # define BOOST_PARAMETER_FUNCTION_DEFAULT_EVAL_DEFAULT(arg, tag_namespace) \
     boost::parameter::keyword< \
         tag_namespace::BOOST_PARAMETER_FN_ARG_KEYWORD(arg) \
-    >::get() | boost::parameter::aux::use_default_tag()
+    >::instance | boost::parameter::aux::use_default_tag()
 
 # define BOOST_PARAMETER_FUNCTION_DEFAULT_FUNCTION_GET_ARG(arg, tag_ns) \
     BOOST_PARAMETER_FUNCTION_CAST( \
@@ -834,7 +834,7 @@ struct funptr_predicate<void**>
 # define BOOST_PARAMETER_FUNCTION_DEFAULT_GET_ARG(r, tag_ns, arg) \
     , BOOST_PARAMETER_FUNCTION_CAST( \
           args[ \
-              boost::parameter::keyword<tag_ns::BOOST_PARAMETER_FN_ARG_KEYWORD(arg)>::get() \
+              boost::parameter::keyword<tag_ns::BOOST_PARAMETER_FN_ARG_KEYWORD(arg)>::instance \
           ] \
         , BOOST_PARAMETER_FN_ARG_PRED(arg) \
       )

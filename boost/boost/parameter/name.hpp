@@ -76,14 +76,14 @@ struct lambda<
 
 # if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 #  define BOOST_PARAMETER_NAME_OBJECT(tag, name)                    \
-    static ::boost::parameter::keyword<tag>& name                   \
-       = ::boost::parameter::keyword<tag>::get();
+    static ::boost::parameter::keyword<tag> const& name             \
+       = ::boost::parameter::keyword<tag>::instance;
 # else
 #  define BOOST_PARAMETER_NAME_OBJECT(tag, name)                    \
     namespace                                                       \
     {                                                               \
-       ::boost::parameter::keyword<tag>& name                       \
-       = ::boost::parameter::keyword<tag>::get();                   \
+       ::boost::parameter::keyword<tag> const& name                 \
+       = ::boost::parameter::keyword<tag>::instance;                \
     }
 # endif
 
