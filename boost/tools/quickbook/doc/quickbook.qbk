@@ -1223,7 +1223,7 @@ We have:
 
 Some squiggles...[*[alpha][beta]]
 
-The difference with macros are 
+The difference with macros are
 
 * The explicit [link quickbook.syntax.block.templates.template_expansion 
   template expansion syntax]. This is an advantage because, now, we don't 
@@ -1632,6 +1632,8 @@ not take any effect.
 
 [section:windows Windows 2000, XP, 2003, Vista]
 
+[python]
+
 [:['Section contributed by Julio M. Merino Vidal]]
 
 The following instructions apply to any Windows system based on Windows
@@ -1829,6 +1831,8 @@ boostbook standalone
 [endsect] [/faq]
 
 [section:ref Quick Reference]
+
+[cpp]
 
 [table Syntax Compendium
     [[To do this...]        [Use this...]                                   [See this...]]
