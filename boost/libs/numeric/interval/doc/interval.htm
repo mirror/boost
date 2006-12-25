@@ -684,8 +684,8 @@ namespace boost {
 namespace numeric {
 namespace interval_lib {
 
-<font color=
-"#FF0000">/* built-in rounding policy and its specializations */</font>
+<span style=
+"color: #FF0000">/* built-in rounding policy and its specializations */</span>
 template &lt;class T&gt;  struct rounded_math;
 template &lt;&gt;         struct rounded_math&lt;float&gt;;
 template &lt;&gt;         struct rounded_math&lt;double&gt;;
@@ -707,7 +707,7 @@ template &lt;class T, class Rounding = rounded_arith_opp  &lt;T&gt; &gt;  struct
 template &lt;class Rounding&gt; struct save_state;
 template &lt;class Rounding&gt; struct save_state_nothing;
 
-<font color="#FF0000">/* built-in checking policies */</font>
+<span style="color: #FF0000">/* built-in checking policies */</span>
 template &lt;class T&gt; struct checking_base;
 template &lt;class T, class Checking = checking_base&lt;T&gt;, class Exception = exception_create_empty&gt;   struct checking_no_empty;
 template &lt;class T, class Checking = checking_base&lt;T&gt; &gt;                                            struct checking_no_nan;
@@ -727,9 +727,7 @@ template&lt;class I&gt; I pi();
 template&lt;class I&gt; I pi_half();
 template&lt;class I&gt; I pi_twice();
 
-<span style=
-"color: #FF0000">/* interval explicit comparison functions</span><span style=
-"color: #FF0000">:
+<span style="color: #FF0000">/* interval explicit comparison functions:
  * the mode can be cer=certainly or pos=possibly,
  * the function lt=less_than, gt=greater_than, le=less_than_or_equal_to, ge=greater_than_or_equal_to
  *   eq=equal_to, ne= not_equal_to */</span>
@@ -781,7 +779,7 @@ template &lt;class T, class Policies&gt;  bool posne(const interval&lt;T, Polici
 template &lt;class T, class Policies&gt;  bool posne(const interval&lt;T, Policies&gt;&amp; x, const T&amp; y);
 template &lt;class T, class Policies&gt;  bool posne(const T&amp; x, const interval&lt;T, Policies&gt;&amp; y);
 
-<font color="#FF0000">/* comparison namespaces */</font>
+<span style="color: #FF0000">/* comparison namespaces */</span>
 namespace compare {
   namespace certain;
   namespace possible;
@@ -978,7 +976,7 @@ namespace compare {
   height="31" width="88"></a></p>
 
   <p>Revised 
-  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y-%m-%d" startspan -->2006-12-24<!--webbot bot="Timestamp" endspan i-checksum="12172" --></p>
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y-%m-%d" startspan -->2006-12-25<!--webbot bot="Timestamp" endspan i-checksum="12174" --></p>
 
   <p><i>Copyright &copy; 2002 Guillaume Melquiond, Sylvain Pion, Herv&eacute;
   Br&ouml;nnimann, Polytechnic University<br>
