@@ -1,52 +1,41 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
+<html>
 <head>
-<meta http-equiv="Content-Type"
-content="text/html; charset=iso-8859-1">
-<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
-<title>Boost Token Iterator</title>
-<!--
-  -- Copyright © John Bandela 2001
-  --
-  -- Permission to use, copy, modify, distribute and sell this software
-  -- and its documentation for any purpose is hereby granted without fee,
-  -- provided that the above copyright notice appears in all copies and
-  -- that both that copyright notice and this permission notice appear
-  -- in supporting documentation.  Jeremy Siek makes no
-  -- representations about the suitability of this software for any
-  -- purpose.  It is provided "as is" without express or implied warranty.
-  -->
+  <meta http-equiv="Content-Language" content="en-us">
+  <meta http-equiv="Content-Type" content="text/html; charset=us-ascii">
+  <meta name="GENERATOR" content="Microsoft FrontPage 6.0">
+  <meta name="ProgId" content="FrontPage.Editor.Document">
+
+  <title>Boost Token Iterator</title>
 </head>
 
-<body bgcolor="#FFFFFF" text="#000000" link="#0000EE"
-vlink="#551A8B" alink="#FF0000">
+<body bgcolor="#FFFFFF" text="#000000" link="#0000EE" vlink="#551A8B" alink=
+"#FF0000">
+  <p><img src="../../boost.png" alt="C++ Boost" width="277" height=
+  "86"><br></p>
 
-<p><img src="../../boost.png" alt="C++ Boost" width="277"
-height="86"> <br>
-</p>
-
-<h1 align="center">Token Iterator</h1>
-
-<pre>
+  <h1 align="center">Token Iterator</h1>
+  <pre>
 template &lt;
-	class TokenizerFunc = char_delimiters_separator&lt;char&gt;, 
-	class Iterator = std::string::const_iterator,
-	class Type = std::string
+        class TokenizerFunc = char_delimiters_separator&lt;char&gt;, 
+        class Iterator = std::string::const_iterator,
+        class Type = std::string
 &gt;
-class token_iterator_generator </pre>
-
-<pre>template&lt;class Type, class Iterator, class TokenizerFunc&gt;
+class token_iterator_generator 
+</pre>
+  <pre>
+template&lt;class Type, class Iterator, class TokenizerFunc&gt;
 typename token_iterator_generator&lt;TokenizerFunc,Iterator,Type&gt;::type 
 make_token_iterator(Iterator begin, Iterator end,const TokenizerFunc&amp; fun)
 
 </pre>
 
-<p>The token iterator serves to provide an iterator view of the
-tokens in a parsed sequence.</p>
+  <p>The token iterator serves to provide an iterator view of the tokens in a
+  parsed sequence.</p>
 
-<h2>Example</h2>
-
-<pre>
+  <h2>Example</h2>
+  <pre>
 /// simple_example_5.cpp
 #include&lt;iostream&gt;
 #include&lt;boost/token_iterator.hpp&gt;
@@ -55,7 +44,7 @@ tokens in a parsed sequence.</p>
 int main(){
    using namespace std;
    using namespace boost;
-   string s = &quot;12252001&quot;;
+   string s = "12252001";
    int offsets[] = {2,2,4};
    offset_separator f(offsets, offsets+3);
    typedef token_iterator_generator&lt;offset_separator&gt;::type Iter;
@@ -64,92 +53,119 @@ int main(){
    // The above statement could also have been what is below
    // Iter end;
    for(;beg!=end;++beg){
-     cout &lt;&lt; *beg &lt;&lt; &quot;\n&quot;;
+     cout &lt;&lt; *beg &lt;&lt; "\n";
    }
 }
 </pre>
 
-<pre>
+  <p>&nbsp;</p>
+
+  <h3>Template Parameters</h3>
+
+  <table border="1" summary="">
+    <tr>
+      <th>Parameter</th>
+
+      <th>Description</th>
+    </tr>
+
+    <tr>
+      <td><tt>TokenizerFunc</tt></td>
+
+      <td>The TokenizerFunction used to parse the sequence.</td>
+    </tr>
+
+    <tr>
+      <td><tt>Iterator</tt></td>
+
+      <td>The type of the iterator the specifies the sequence.</td>
+    </tr>
+
+    <tr>
+      <td><tt>Type</tt></td>
+
+      <td>The type of the token, typically string.</td>
+    </tr>
+  </table>
+
+  <h2>Model of</h2>
+
+  <p>The category of Iterator, up to and including Forward Iterator. Anything
+  higher will get scaled down to Forward Iterator.</p>
+
+  <h2>Related Types</h2>
+
+  <table border="1" summary="">
+    <tr>
+      <td>
+        <p align="center"><strong>Type</strong></p>
+      </td>
+
+      <td>
+        <p align="center"><strong>Remarks</strong></p>
+      </td>
+    </tr>
+
+    <tr>
+      <td>token_iterator_generator::type</td>
+
+      <td>The type of the token iterator.</td>
+    </tr>
+  </table>
+
+  <h2>Creation</h2>
+  <pre>
+template&lt;class Type, class Iterator, class TokenizerFunc&gt;
+typename token_iterator_generator&lt;TokenizerFunc,Iterator,Type&gt;::type 
+make_token_iterator(Iterator begin, Iterator end,const TokenizerFunc&amp; fun)
 </pre>
 
-<p>&nbsp;</p>
-
-<h3>Template Parameters</h3>
-
-<table border="1">
+  <table border="1" summary="">
     <tr>
-        <th>Parameter</th>
-        <th>Description</th>
+      <td>
+        <p align="center"><strong>Parameter</strong></p>
+      </td>
+
+      <td>
+        <p align="center"><strong>Description</strong></p>
+      </td>
     </tr>
+
     <tr>
-        <td><tt>TokenizerFunc</tt></td>
-        <td>The TokenizerFunction used to parse the sequence.</td>
+      <td>begin</td>
+
+      <td>The beginning of the sequence to be parsed.</td>
     </tr>
+
     <tr>
-        <td><tt>Iterator</tt></td>
-        <td>The type of the iterator the specifies the sequence.</td>
+      <td>end</td>
+
+      <td>Past the end of the sequence to be parsed.</td>
     </tr>
+
     <tr>
-        <td><tt>Type</tt></td>
-        <td>The type of the token, typically string.</td>
+      <td>fun</td>
+
+      <td>A functor that is a model of TokenizerFunction</td>
     </tr>
-</table>
+  </table>
 
-<h2>Model of</h2>
+  <p>&nbsp;</p>
+  <hr>
 
-<p>The category of Iterator, up to and including Forward Iterator.
-Anything higher will get scaled down to Forward Iterator.</p>
+  <p><a href="http://validator.w3.org/check?uri=referer"><img border="0" src=
+  "http://www.w3.org/Icons/valid-html401" alt="Valid HTML 4.01 Transitional"
+  height="31" width="88"></a></p>
 
-<h2>Related Types</h2>
+  <p>Revised 
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->25
+  December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38518" --></p>
 
-<table border="1">
-    <tr>
-        <td><p align="center"><strong>Type</strong></p>
-        </td>
-        <td><p align="center"><strong>Remarks</strong></p>
-        </td>
-    </tr>
-    <tr>
-        <td>token_iterator_generator::type</td>
-        <td>The type of the token iterator.</td>
-    </tr>
-</table>
+  <p><i>Copyright &copy; 2001 John R. Bandela</i></p>
 
-<h2>Creation</h2>
-
-<pre>template&lt;class Type, class Iterator, class TokenizerFunc&gt;
-typename token_iterator_generator&lt;TokenizerFunc,Iterator,Type&gt;::type 
-make_token_iterator(Iterator begin, Iterator end,const TokenizerFunc&amp; fun)</pre>
-
-<table border="1">
-    <tr>
-        <td><p align="center"><strong>Parameter</strong></p>
-        </td>
-        <td><p align="center"><strong>Description</strong></p>
-        </td>
-    </tr>
-    <tr>
-        <td>begin</td>
-        <td>The beginning of the sequence to be parsed.</td>
-    </tr>
-    <tr>
-        <td>end</td>
-        <td>Past the end of the sequence to be parsed.</td>
-    </tr>
-    <tr>
-        <td>fun</td>
-        <td>A functor that is a model of TokenizerFunction</td>
-    </tr>
-</table>
-
-<p>&nbsp;</p>
-
-<hr>
-
-<p>© Copyright John R. Bandela 2001. Permission to copy, use,
-modify, sell and distribute this document is granted provided
-this copyright notice appears in all copies. This document is
-provided &quot;as is&quot; without express or implied warranty,
-and with no claim as to its suitability for any purpose.</p>
+  <p><i>Distributed under the Boost Software License, Version 1.0. (See
+  accompanying file <a href="../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or
+  copy at <a href=
+  "http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</i></p>
 </body>
 </html>
