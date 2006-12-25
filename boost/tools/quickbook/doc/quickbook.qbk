@@ -32,7 +32,7 @@
 [def __font_styles__        [link quickbook.syntax.phrase.font_styles Font Styles]]
 [def __quotations__         [link quickbook.syntax.phrase.quotations Quotations]]
 [def __replaceable__        [link quickbook.syntax.phrase.replaceable Replaceble]]
-[def __simple_formatting__  [link quickbook.syntax.phrase.simple_formatting formatting Simple formatting]]
+[def __simple_formatting__  [link quickbook.syntax.phrase.simple_formatting Simple formatting]]
 [def __inline_code__        [link quickbook.syntax.phrase.inline_code Inline code]]
 [def __code_blocks__        [link quickbook.syntax.phrase.code_blocks Code blocks]]
 [def __source_mode__        [link quickbook.syntax.phrase.source_mode Source Mode]]
@@ -1805,7 +1805,7 @@ QuickBook can be used for non-Boost documentation with a little extra work.
 [:['Faq contributed by Michael Marcin]]
 
 When building HTML documentation with BoostBook a Boost C++ Libraries header 
-is added to the files. When using QuickBook to document projects outside of 
+is added to the files. When using QuickBook to document projects outside of
 Boost this is not desirable. This behavior can be overridden at the BoostBook 
 level by specifying some XSLT options. When using Boost Build version 2 (BBv2) 
 this can be achieved by adding parameters to the BoostBook target declaration.
