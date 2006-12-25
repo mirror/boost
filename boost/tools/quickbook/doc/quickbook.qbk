@@ -1619,7 +1619,7 @@ final star-slash shall be ignored.
 [endsect]
 [endsect]
 
-[section Installation and configuration]
+[section:install Installation and configuration]
 
 This section provides some guidelines on how to install and configure
 BoostBook and Quickbook under several operating systems.
@@ -1630,12 +1630,12 @@ be absolutely sure to delete any `bin` and `bin.v2` directories generated
 by the build before trying again.  Otherwise your configuration fixes will
 not take any effect.
 
-[section Windows 2000, XP, 2003, Vista]
+[section:windows Windows 2000, XP, 2003, Vista]
 
 [:['Section contributed by Julio M. Merino Vidal]]
 
 The following instructions apply to any Windows system based on Windows
-2000, including Windows XP, Windows 2003 Server and Windows Vista.  The
+2000, including Windows XP, Windows 2003 Server and Windows Vista. The
 paths shown below are taken from a Windows Vista machine; you will need to
 adjust them to match your system in case you are running an older version.
 
@@ -1700,7 +1700,7 @@ rebuilds:
 
 [endsect]
 
-[section Debian, Ubuntu]
+[section:linux Debian, Ubuntu]
 
 The following instructions apply to Debian and its derivatives. They are based
 on a Ubuntu Edgy install but should work on other Debian based systems.
