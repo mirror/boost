@@ -36,6 +36,20 @@ namespace boost { namespace proto { namespace transform
         {};
 
         template<typename Tag, typename Grammar>
+        struct fold_to_list
+          : branch<
+                fold<
+                    meta::binary_expr<
+                        Tag
+                      , fold_to_list_recurse<Tag, Grammar>
+                      , fold_to_list_recurse<Tag, Grammar>
+                    >
+                >
+              , fusion::nil
+            >
+        {};
+
+        template<typename Tag, typename Grammar>
         struct reverse_fold_to_list_recurse
           : proto::or_<
                 reverse_fold<
@@ -48,80 +62,51 @@ namespace boost { namespace proto { namespace transform
               , list<Grammar>
             >
         {};
+
+        template<typename Tag, typename Grammar>
+        struct reverse_fold_to_list
+          : branch<
+                reverse_fold<
+                    meta::binary_expr<
+                        Tag
+                      , reverse_fold_to_list_recurse<Tag, Grammar>
+                      , reverse_fold_to_list_recurse<Tag, Grammar>
+                    >
+                >
+              , fusion::nil
+            >
+        {};
+
     }
 
     template<typename Grammar>
     struct fold_to_list
-      : Grammar
+      : detail::fold_to_list<
+            typename Grammar::type::tag_type
+          , typename Grammar::type::arg0_type
+        >
     {
-        fold_to_list();
-
-        typedef typename Grammar::type grammar_type;
-        typedef typename grammar_type::tag_type tag_type;
-        typedef typename grammar_type::arg0_type left_grammar;
-        typedef typename grammar_type::arg1_type right_grammar;
-        BOOST_MPL_ASSERT((is_same<left_grammar, right_grammar>));
-        typedef detail::fold_to_list_recurse<tag_type, left_grammar> recurse_grammar;
-
-        typedef branch<
-            reverse_fold<
-                meta::binary_expr<tag_type, recurse_grammar, recurse_grammar>
+        BOOST_MPL_ASSERT((
+            is_same<
+                typename Grammar::type::arg0_type
+              , typename Grammar::type::arg1_type
             >
-          , fusion::nil
-        > transform;
-
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
-          : transform::template apply<
-                typename Grammar::template apply<Expr, State, Visitor>::type
-              , State
-              , Visitor
-            >
-        {};
-
-        template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
-        {
-            return transform::call(Grammar::call(expr, state, visitor), state, visitor);
-        }
+        ));
     };
 
     template<typename Grammar>
     struct reverse_fold_to_list
-      : Grammar
+      : detail::reverse_fold_to_list<
+            typename Grammar::type::tag_type
+          , typename Grammar::type::arg0_type
+        >
     {
-        reverse_fold_to_list();
-
-        typedef typename Grammar::type grammar_type;
-        typedef typename grammar_type::tag_type tag_type;
-        typedef typename grammar_type::arg0_type left_grammar;
-        typedef typename grammar_type::arg1_type right_grammar;
-        BOOST_MPL_ASSERT((is_same<left_grammar, right_grammar>));
-        typedef detail::reverse_fold_to_list_recurse<tag_type, left_grammar> recurse_grammar;
-
-        typedef branch<
-            reverse_fold<
-                meta::binary_expr<tag_type, recurse_grammar, recurse_grammar>
+        BOOST_MPL_ASSERT((
+            is_same<
+                typename Grammar::type::arg0_type
+              , typename Grammar::type::arg1_type
             >
-          , fusion::nil
-        > transform;
-
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
-          : transform::template apply<
-                typename Grammar::template apply<Expr, State, Visitor>::type
-              , State
-              , Visitor
-            >
-        {};
-
-        template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
-        {
-            return transform::call(Grammar::call(expr, state, visitor), state, visitor);
-        }
+        ));
     };
 
 }}}

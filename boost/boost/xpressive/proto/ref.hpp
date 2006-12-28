@@ -52,6 +52,7 @@ namespace boost { namespace proto
         struct unref
         {
             typedef T type;
+            typedef T const &reference;
 
         private:
             friend struct op::unref;
@@ -65,6 +66,7 @@ namespace boost { namespace proto
         struct unref<T, typename T::is_boost_proto_expr_>
         {
             typedef typename T::type type;
+            typedef typename T::type const &reference;
 
         private:
             friend struct op::unref;
@@ -78,12 +80,28 @@ namespace boost { namespace proto
         struct unref<T &, void>
         {
             typedef T type;
+            typedef T &reference;
         };
 
         template<typename T>
         struct unref<T const &, void>
         {
             typedef T type;
+            typedef T const &reference;
+        };
+
+        template<typename T, std::size_t N>
+        struct unref<T (&)[N], void>
+        {
+            typedef T (&type)[N];
+            typedef T (&reference)[N];
+        };
+
+        template<typename T, std::size_t N>
+        struct unref<T const (&)[N], void>
+        {
+            typedef T const (&type)[N];
+            typedef T const (&reference)[N];
         };
     }
 

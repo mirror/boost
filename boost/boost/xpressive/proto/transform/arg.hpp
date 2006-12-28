@@ -28,7 +28,7 @@ namespace boost { namespace proto { namespace transform
         {};
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type const &
+        static typename apply<Expr, State, Visitor>::reference
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
             return proto::arg<N>(Grammar::call(expr, state, visitor));

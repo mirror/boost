@@ -29,7 +29,7 @@
             struct deep_copy_impl<Expr, tag::terminal, 1>
             {
                 typedef typename meta::terminal<
-                    typename call_traits<typename meta::arg<Expr>::type>::value_type
+                    typename meta::arg<Expr>::type
                 >::type type;
 
                 static type call(Expr const &expr)

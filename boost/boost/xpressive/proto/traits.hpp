@@ -409,20 +409,20 @@
         op::right const right = {};
 
         template<typename Expr>
-        typename meta::unref<typename Expr::type::arg0_type>::type const &
+        typename meta::unref<typename Expr::type::arg0_type>::reference
         arg(Expr const &expr)
         {
             return proto::unref(expr.cast().arg0);
         };
 
         template<typename N, typename Expr>
-        typename meta::arg<Expr, N>::type const &arg(Expr const &expr)
+        typename meta::arg<Expr, N>::reference arg(Expr const &expr)
         {
             return meta::arg<Expr, N>::call(expr);
         };
 
         template<long N, typename Expr>
-        typename meta::arg_c<Expr, N>::type const &arg_c(Expr const &expr)
+        typename meta::arg_c<Expr, N>::reference arg_c(Expr const &expr)
         {
             return meta::arg_c<Expr, N>::call(expr);
         };
@@ -455,10 +455,9 @@
             // If N == 0, this could be a terminal, which must be handled differently
             template<typename Expr>
             struct arg_c<Expr, 0>
+              : unref<typename Expr::arg0_type>
             {
-                typedef typename unref<typename Expr::arg0_type>::type type;
-
-                static type const &call(Expr const &expr)
+                static typename unref<typename Expr::arg0_type>::reference call(Expr const &expr)
                 {
                     return proto::unref(expr.cast().BOOST_PP_CAT(arg, N));
                 }
@@ -468,6 +467,7 @@
             struct arg_c<Expr, N>
             {
                 typedef typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, N), _type)::type type;
+                typedef type const &reference;
 
                 static type const &call(Expr const &expr)
                 {

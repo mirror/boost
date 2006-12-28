@@ -32,8 +32,6 @@ namespace boost { namespace proto { namespace transform
         template<typename Expr, typename State, typename Visitor>
         struct apply
         {
-            // BUGBUG
-            //typedef typename Grammar::template apply<Expr, State, Visitor>::type expr_type;
             typedef typename proto::meta::left<Expr>::type left_expr;
             typedef typename proto::meta::right<Expr>::type right_expr;
 
@@ -71,8 +69,6 @@ namespace boost { namespace proto { namespace transform
         template<typename Expr, typename State, typename Visitor>
         struct apply
         {
-            // BUGBUG
-            //typedef typename Grammar::template apply<Expr, State, Visitor>::type expr_type;
             typedef typename proto::meta::left<Expr>::type left_expr;
             typedef typename proto::meta::right<Expr>::type right_expr;
 
