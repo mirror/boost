@@ -29,6 +29,10 @@ namespace boost { namespace proto { namespace extends_private_
           : Expr()
         {}
 
+        extends(Expr const &expr)
+          : Expr(expr)
+        {}
+
         void assign(Expr const &that)
         {
             *static_cast<Expr *>(this) = that;

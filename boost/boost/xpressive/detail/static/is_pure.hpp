@@ -36,108 +36,128 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // is_pure
     //
-    template<typename Expr>
+    template<typename Expr, typename Tag = typename Expr::tag_type>
     struct is_pure;
 
-    template<typename Tag, typename Arg0, typename Arg1>
-    struct is_pure_impl;
-
-    template<typename Matcher>
-    struct is_pure_impl<proto::tag::terminal, Matcher, void>
-      : mpl::bool_<as_matcher_type<Matcher>::type::pure>
+    template<typename Expr>
+    struct is_pure<Expr, proto::tag::terminal>
+      : mpl::bool_<as_matcher_type<typename proto::meta::arg<Expr>::type>::type::pure>
     {};
 
-    template<typename Left, typename Right>
-    struct is_pure_impl<proto::tag::right_shift, Left, Right>
-      : BOOST_XPR_AND_PURE_(is_pure<Left>, is_pure<Right>)
+    template<typename Expr>
+    struct is_pure<Expr, proto::tag::right_shift>
+      : BOOST_XPR_AND_PURE_(
+            is_pure<typename proto::meta::left<Expr>::type>
+          , is_pure<typename proto::meta::right<Expr>::type>
+        )
     {};
 
-    template<typename Left, typename Right>
-    struct is_pure_impl<proto::tag::bitwise_or, Left, Right>
-      : BOOST_XPR_AND_PURE_(is_pure<Left>, is_pure<Right>)
+    template<typename Expr>
+    struct is_pure<Expr, proto::tag::bitwise_or>
+      : BOOST_XPR_AND_PURE_(
+            is_pure<typename proto::meta::left<Expr>::type>
+          , is_pure<typename proto::meta::right<Expr>::type>
+        )
     {};
 
-    template<typename Right>
-    struct is_pure_impl<proto::tag::assign, basic_mark_tag, Right>
+    template<typename Left>
+    struct is_pure_assign;
+
+    template<>
+    struct is_pure_assign<basic_mark_tag>
       : mpl::false_
     {};
 
-    template<typename Right>
-    struct is_pure_impl<proto::tag::assign, set_initializer_type, Right>
+    template<>
+    struct is_pure_assign<set_initializer_type>
       : mpl::true_
     {};
 
-    template<typename Modifier, typename Expr>
-    struct is_pure_impl<modifier_tag, Modifier, Expr>
-      : is_pure<Expr>
-    {};
-
-    template<typename Expr, bool Positive>
-    struct is_pure_impl<lookahead_tag<Positive>, Expr, void>
-      : is_pure<Expr>
-    {};
-
-    template<typename Expr, bool Positive>
-    struct is_pure_impl<lookbehind_tag<Positive>, Expr, void>
-      : is_pure<Expr>
+    // either (s1 = ...) or (set = ...)
+    template<typename Expr>
+    struct is_pure<Expr, proto::tag::assign>
+      : is_pure_assign<typename proto::meta::left<Expr>::type>
     {};
 
     template<typename Expr>
-    struct is_pure_impl<keeper_tag, Expr, void>
-      : is_pure<Expr>
+    struct is_pure<Expr, modifier_tag>
+      : is_pure<typename proto::meta::arg<Expr>::type>
+    {};
+
+    template<typename Expr, bool Positive>
+    struct is_pure<Expr, lookahead_tag<Positive> >
+      : is_pure<typename proto::meta::arg<Expr>::type>
+    {};
+
+    template<typename Expr, bool Positive>
+    struct is_pure<Expr, lookbehind_tag<Positive> >
+      : is_pure<typename proto::meta::arg<Expr>::type>
+    {};
+
+    template<typename Expr>
+    struct is_pure<Expr, keeper_tag>
+      : is_pure<typename proto::meta::arg<Expr>::type>
     {};
 
     // when complementing a set or an assertion, the purity is that of the set (true) or the assertion
     template<typename Expr>
-    struct is_pure_impl<proto::tag::complement, Expr, void>
-      : is_pure<Expr>
+    struct is_pure<Expr, proto::tag::complement>
+      : is_pure<typename proto::meta::arg<Expr>::type>
     {};
 
     // The comma is used in list-initialized sets, which are pure
-    template<typename Left, typename Right>
-    struct is_pure_impl<proto::tag::comma, Left, Right>
+    template<typename Expr>
+    struct is_pure<Expr, proto::tag::comma>
       : mpl::true_
     {};
 
     // The subscript operator[] is used for sets, as in set['a' | range('b','h')]
     // It is also used for actions, which by definition have side-effects and thus are impure
-    template<typename Left, typename Right>
-    struct is_pure_impl<proto::tag::subscript, Left, Right>
+
+    // The subscript operator[] is used for sets, as in set['a' | range('b','h')],
+    // or for actions as in (any >> expr)[ action ]
+    template<typename Expr, typename Left>
+    struct is_pure_subscript
       : mpl::false_
     {};
 
-    template<typename Right>
-    struct is_pure_impl<proto::tag::subscript, set_initializer_type, Right>
+    template<typename Expr>
+    struct is_pure_subscript<Expr, set_initializer_type>
       : mpl::true_
     {
         // If Left is "set" then make sure that Right is pure
-        BOOST_MPL_ASSERT((is_pure<Right>));
+        BOOST_MPL_ASSERT((is_pure<typename proto::meta::right<Expr>::type>));
     };
+
+    template<typename Expr>
+    struct is_pure<Expr, proto::tag::subscript>
+      : is_pure_subscript<Expr, typename proto::meta::left<Expr>::type>
+    {};
 
     // Quantified expressions are pure IFF they use the simple_repeat_matcher
     template<typename Expr>
-    struct is_pure_impl<proto::tag::unary_plus, Expr, void>
-      : use_simple_repeat<Expr>
+    struct is_pure<Expr, proto::tag::unary_plus>
+      : use_simple_repeat<typename proto::meta::arg<Expr>::type>
     {};
 
     template<typename Expr>
-    struct is_pure_impl<proto::tag::unary_star, Expr, void>
-      : use_simple_repeat<Expr>
+    struct is_pure<Expr, proto::tag::unary_star>
+      : use_simple_repeat<typename proto::meta::arg<Expr>::type>
     {};
 
     template<typename Expr>
-    struct is_pure_impl<proto::tag::logical_not, Expr, void>
-      : use_simple_repeat<Expr>
+    struct is_pure<Expr, proto::tag::logical_not>
+      : use_simple_repeat<typename proto::meta::arg<Expr>::type>
     {};
 
     template<typename Expr, uint_t Min, uint_t Max>
-    struct is_pure_impl<generic_quant_tag<Min, Max>, Expr, void>
-      : use_simple_repeat<Expr>
+    struct is_pure<Expr, generic_quant_tag<Min, Max> >
+      : use_simple_repeat<typename proto::meta::arg<Expr>::type>
     {};
 
     template<typename Expr>
-    struct is_pure_impl<proto::tag::unary_minus, Expr, void>
-      : is_pure<Expr>
+    struct is_pure<Expr, proto::tag::unary_minus>
+      : is_pure<typename proto::meta::arg<Expr>::type>
     {};
 
     // simple_repeat_helper
@@ -166,23 +186,13 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Expr>
     struct use_simple_repeat<Expr, proto::tag::terminal>
       : use_simple_repeat_helper<
-            as_matcher_type<typename Expr::arg0_type>::type::pure
-          , as_matcher_type<typename Expr::arg0_type>::type::quant
+            as_matcher_type<typename proto::meta::arg<Expr>::type>::type::pure
+          , as_matcher_type<typename proto::meta::arg<Expr>::type>::type::quant
         >
     {
-        //BOOST_MPL_ASSERT_RELATION(0, !=, as_matcher_type<typename Expr::arg0_type>::type::width);
-        BOOST_STATIC_ASSERT(0 != as_matcher_type<typename Expr::arg0_type>::type::width);
+        //BOOST_MPL_ASSERT_RELATION(0, !=, as_matcher_type<typename proto::meta::arg<Expr>::type>::type::width);
+        BOOST_STATIC_ASSERT(0 != as_matcher_type<typename proto::meta::arg<Expr>::type>::type::width);
     };
-
-    // is_pure
-    template<typename Expr>
-    struct is_pure
-      : is_pure_impl<
-            typename Expr::tag_type
-          , typename proto::meta::unref<typename Expr::arg0_type>::type
-          , typename proto::meta::unref<typename Expr::arg1_type>::type
-        >
-    {};
 
 }}} // namespace boost::xpressive::detail
 

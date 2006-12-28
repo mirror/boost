@@ -97,6 +97,13 @@
                 return *this;
             }
 
+            template<BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), typename A)>
+            static expr make(BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_ITERATION(), A, const &a))
+            {
+                expr that = {BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), a)};
+                return that;
+            }
+
             template<typename Fun>
             typename boost::result_of<Fun(Tag BOOST_PP_ENUM_TRAILING(BOOST_PP_ITERATION(), BOOST_PROTO_UNREF_ARG_TYPE, ~))>::type
             eval(Fun &fun) const

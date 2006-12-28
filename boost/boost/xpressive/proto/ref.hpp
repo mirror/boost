@@ -48,16 +48,42 @@ namespace boost { namespace proto
 
     namespace meta
     {
+        template<typename T, typename EnableIf>
+        struct unref
+        {
+            typedef T type;
+
+        private:
+            friend struct op::unref;
+            static T const &call(T const &t)
+            {
+                return t;
+            }
+        };
+
         template<typename T>
-        struct unref<T, false>
+        struct unref<T, typename T::is_boost_proto_expr_>
+        {
+            typedef typename T::type type;
+
+        private:
+            friend struct op::unref;
+            static typename T::type const &call(T const &t)
+            {
+                return t.cast();
+            }
+        };
+
+        template<typename T>
+        struct unref<T &, void>
         {
             typedef T type;
         };
 
         template<typename T>
-        struct unref<T, true>
+        struct unref<T const &, void>
         {
-            typedef typename T::type type;
+            typedef T type;
         };
     }
 
@@ -76,20 +102,7 @@ namespace boost { namespace proto
             template<typename T>
             typename meta::unref<T>::type const &operator()(T const &t) const
             {
-                return unref::call(t, meta::is_expr<T>());
-            }
-
-        private:
-            template<typename T>
-            static typename meta::unref<T>::type const &call(T const &t, mpl::true_)
-            {
-                return t.cast();
-            }
-
-            template<typename T>
-            static typename meta::unref<T>::type const &call(T const &t, mpl::false_)
-            {
-                return t;
+                return meta::unref<T>::call(t);
             }
         };
     }

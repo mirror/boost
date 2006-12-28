@@ -7,6 +7,7 @@ import testing ;
 
 project
     : requirements
+#        <toolset>gcc:<cxxflags>-ftemplate-depth-1024
         <toolset>intel:<debug-symbols>off
         <toolset>msvc-7.1:<debug-symbols>off
         <toolset>msvc-8.0:<define>_SCL_SECURE_NO_DEPRECATE
@@ -14,6 +15,7 @@ project
         <toolset>gcc:<cxxflags>-ftemplate-depth-1024
         <library>/boost/test//boost_unit_test_framework
         <link>static
+#        <define>BOOST_XPRESSIVE_BETTER_ERRORS
     ;
 
 test-suite "xpressive"
@@ -65,7 +67,7 @@ test-suite "proto"
         [ run proto/proto_fusion.cpp : : : <toolset>gcc:<cxxflags>-ftemplate-depth-1024 ]
         [ run proto/proto_fusion_s.cpp ]
         [ run proto/toy_spirit.cpp ]
-        [ run proto/toy_spirit2.cpp ]
+#        [ run proto/toy_spirit2.cpp ]
         [ run proto/calculator.cpp ]
     ;
 

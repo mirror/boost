@@ -11,6 +11,7 @@
     #ifndef BOOST_PROTO_DEEP_COPY_HPP_EAN_11_21_2006
     #define BOOST_PROTO_DEEP_COPY_HPP_EAN_11_21_2006
 
+    #include <boost/call_traits.hpp>
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/enum.hpp>
     #include <boost/preprocessor/iterate.hpp>
@@ -27,11 +28,14 @@
             template<typename Expr>
             struct deep_copy_impl<Expr, tag::terminal, 1>
             {
-                typedef typename Expr::type type;
+                typedef typename meta::terminal<
+                    typename call_traits<typename meta::arg<Expr>::type>::value_type
+                >::type type;
 
-                static type const &call(Expr const &expr)
+                static type call(Expr const &expr)
                 {
-                    return expr.cast();
+                    type that = {proto::arg(expr)};
+                    return that;
                 }
             };
         }

@@ -22,29 +22,31 @@
 namespace boost { namespace xpressive { namespace detail
 {
 
-    template<typename OpTag, typename Arg0, typename Arg1>
-    struct complement
+    ///////////////////////////////////////////////////////////////////////////////
+    //
+    template<typename Term>
+    struct complement_terminal
     {
         // If your compile breaks here, then you are applying the complement operator ~
         // to something that does not support it. For instance, ~(_ >> 'a') will trigger this
         // assertion because the sub-expression (_ >> 'a') has no complement.
-        BOOST_MPL_ASSERT((never_true<OpTag>));
+        BOOST_MPL_ASSERT((never_true<Term>));
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     //
     template<typename Char, typename Not>
-    struct complement<proto::tag::terminal, literal_placeholder<Char, Not>, void>
+    struct complement_terminal<literal_placeholder<Char, Not> >
     {
-        template<typename Expr, typename>
+        template<typename>
         struct apply
           : proto::meta::terminal<literal_placeholder<Char, typename mpl::not_<Not>::type> >
         {};
 
         template<typename Expr, typename Visitor>
-        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
+        static typename apply<Visitor>::type call(Expr const &expr, Visitor &)
         {
-            typedef typename apply<Expr, Visitor>::type type;
+            typedef typename apply<Visitor>::type type;
             type that = {{proto::arg(expr).ch_}};
             return that;
         }
@@ -53,17 +55,17 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     //
     template<typename Traits, int Size>
-    struct complement<proto::tag::terminal, set_matcher<Traits, Size>, void>
+    struct complement_terminal<set_matcher<Traits, Size> >
     {
-        template<typename Expr, typename>
+        template<typename>
         struct apply
           : proto::meta::terminal<set_matcher<Traits, Size> >
         {};
 
         template<typename Expr, typename Visitor>
-        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
+        static typename apply<Visitor>::type call(Expr const &expr, Visitor &)
         {
-            typedef typename apply<Expr, Visitor>::type type;
+            typedef typename apply<Visitor>::type type;
             type that = {proto::arg(expr)};
             that.arg0.complement();
             return that;
@@ -73,17 +75,17 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     //
     template<>
-    struct complement<proto::tag::terminal, posix_charset_placeholder, void>
+    struct complement_terminal<posix_charset_placeholder>
     {
-        template<typename, typename>
+        template<typename>
         struct apply
           : proto::meta::terminal<posix_charset_placeholder>
         {};
 
         template<typename Expr, typename Visitor>
-        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
+        static typename apply<Visitor>::type call(Expr const &expr, Visitor &)
         {
-            typedef typename apply<Expr, Visitor>::type type;
+            typedef typename apply<Visitor>::type type;
             type that = {proto::arg(expr)};
             that.arg0.not_ = !that.arg0.not_;
             return that;
@@ -92,86 +94,20 @@ namespace boost { namespace xpressive { namespace detail
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    template<typename Right>
-    struct complement<proto::tag::subscript, set_initializer_type, Right>
+    template<typename Char>
+    struct complement_terminal<range_placeholder<Char> >
     {
-        template<typename Expr, typename Visitor>
+        template<typename Visitor>
         struct apply
-          : charset_transform::BOOST_NESTED_TEMPLATE apply<
-                Expr
-              , dont_care
-              , Visitor
-            >
+          : proto::meta::terminal<range_placeholder<Char> >
         {};
 
         template<typename Expr, typename Visitor>
-        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &visitor)
+        static typename apply<Visitor>::type call(Expr const &expr, Visitor &)
         {
-            return charset_transform::call(expr, dont_care(), visitor, true);
-        }
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // for complementing a list-initialized set, as in ~(set= 'a','b','c')
-    template<typename Left, typename Right>
-    struct complement<proto::tag::comma, Left, Right>
-    {
-        // First, convert the parse tree into a set_matcher
-        template<typename Expr, typename Visitor>
-        struct apply
-          : proto::meta::terminal<typename proto::compiler<proto::tag::comma, lst_tag>
-                ::BOOST_NESTED_TEMPLATE apply<
-                    Expr
-                  , dont_care
-                  , Visitor
-                >::type
-            >
-        {};
-
-        template<typename Expr, typename Visitor>
-        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &visitor)
-        {
-            typedef typename apply<Expr, Visitor>::type type;
-            type that = {proto::compile(expr, dont_care(), visitor, lst_tag())};
-            that.arg0.complement();
-            return that;
-        }
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    //
-    template<typename Arg>
-    struct complement<lookahead_tag<true>, Arg, void>
-    {
-        template<typename Expr, typename Visitor>
-        struct apply
-          : proto::meta::unary_expr<lookahead_tag<false>, Arg>
-        {};
-
-        template<typename Expr, typename Visitor>
-        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
-        {
-            typedef typename apply<Expr, Visitor>::type type;
+            typedef typename apply<Visitor>::type type;
             type that = {proto::arg(expr)};
-            return that;
-        }
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    //
-    template<typename Arg>
-    struct complement<lookbehind_tag<true>, Arg, void>
-    {
-        template<typename Expr, typename Visitor>
-        struct apply
-          : proto::meta::unary_expr<lookbehind_tag<false>, Arg>
-        {};
-
-        template<typename Expr, typename Visitor>
-        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
-        {
-            typedef typename apply<Expr, Visitor>::type type;
-            type that = {proto::arg(expr)};
+            that.arg0.not_ = !that.arg0.not_;
             return that;
         }
     };
@@ -179,17 +115,17 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     //
     template<>
-    struct complement<proto::tag::terminal, assert_word_placeholder<word_boundary<true> >, void>
+    struct complement_terminal<assert_word_placeholder<word_boundary<true> > >
     {
-        template<typename Expr, typename Visitor>
+        template<typename>
         struct apply
           : proto::meta::terminal<assert_word_placeholder<word_boundary<false> > >
         {};
 
         template<typename Expr, typename Visitor>
-        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
+        static typename apply<Visitor>::type call(Expr const &, Visitor &)
         {
-            typedef typename apply<Expr, Visitor>::type type;
+            typedef typename apply<Visitor>::type type;
             type that = {};
             return that;
         }
@@ -198,60 +134,139 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     //
     template<>
-    struct complement<proto::tag::terminal, logical_newline_placeholder, void>
+    struct complement_terminal<logical_newline_placeholder>
     {
-        template<typename Expr, typename Visitor>
+        // ~_ln matches any one character that is not in the "newline" character class
+        template<typename>
         struct apply
-          : proto::meta::right_shift<
-                typename proto::meta::unary_expr<lookahead_tag<false>, Expr>::type
-              , proto::meta::terminal<any_matcher>::type
-            >
+          : proto::meta::terminal<posix_charset_placeholder>
         {};
 
         template<typename Expr, typename Visitor>
-        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
+        static typename apply<Visitor>::type call(Expr const &, Visitor &)
         {
-            typedef typename apply<Expr, Visitor>::type type;
-            type that = {{expr}, {any_matcher()}};
+            typedef typename apply<Visitor>::type type;
+            type that = {{"newline", true}};
             return that;
-       }
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // complementing a complement is a no-op
-    template<typename Arg>
-    struct complement<proto::tag::complement, Arg, void>
-    {
-        template<typename Expr, typename Visitor>
-        struct apply
-        {
-            typedef Arg type;
-        };
-
-        template<typename Expr, typename Visitor>
-        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
-        {
-            return proto::arg(expr);
         }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    template<typename Char>
-    struct complement<proto::tag::terminal, range_placeholder<Char>, void>
+    template<typename Expr, typename Tag = typename Expr::tag_type>
+    struct complement
     {
-        template<typename Expr, typename Visitor>
+        // If your compile breaks here, then you are applying the complement operator ~
+        // to something that does not support it. For instance, ~(_ >> 'a') will trigger this
+        // assertion because the sub-expression (_ >> 'a') has no complement.
+        BOOST_MPL_ASSERT((never_true<Tag>));
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    //
+    template<typename Expr>
+    struct complement<Expr, proto::tag::terminal>
+      : complement_terminal<typename proto::meta::arg<Expr>::type>
+    {};
+
+    ///////////////////////////////////////////////////////////////////////////////
+    //
+    template<typename Expr>
+    struct complement<Expr, proto::tag::subscript>
+    {
+        template<typename Visitor>
         struct apply
-          : proto::meta::terminal<range_placeholder<Char> >
+          : charset_transform::BOOST_NESTED_TEMPLATE apply<
+                Expr
+              , dont_care
+              , Visitor
+            >
+        {
+            BOOST_MPL_ASSERT((is_same<set_initializer_type, typename proto::meta::left<Expr>::type>));
+        };
+
+        template<typename Visitor>
+        static typename apply<Visitor>::type call(Expr const &expr, Visitor &visitor)
+        {
+            return charset_transform::call(expr, dont_care(), visitor, true);
+        }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // for complementing a list-initialized set, as in ~(set= 'a','b','c')
+    template<typename Expr>
+    struct complement<Expr, proto::tag::comma>
+    {
+        // First, convert the parse tree into a set_matcher
+        template<typename Visitor>
+        struct apply
+          : proto::meta::terminal<
+                typename proto::meta::compile<Expr, dont_care, Visitor, lst_tag>::type
+            >
         {};
 
-        template<typename Expr, typename Visitor>
-        static typename apply<Expr, Visitor>::type call(Expr const &expr, Visitor &)
+        template<typename Visitor>
+        static typename apply<Visitor>::type call(Expr const &expr, Visitor &visitor)
         {
-            typedef typename apply<Expr, Visitor>::type type;
-            type that = {proto::arg(expr)};
-            that.arg0.not_ = !that.arg0.not_;
+            typedef typename apply<Visitor>::type type;
+            type that = {proto::compile(expr, dont_care(), visitor, lst_tag())};
+            that.arg0.complement();
             return that;
+        }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    //
+    template<typename Expr>
+    struct complement<Expr, lookahead_tag<true> >
+    {
+        template<typename Visitor>
+        struct apply
+          : proto::meta::unary_expr<lookahead_tag<false>, typename proto::meta::arg<Expr>::type>
+        {};
+
+        template<typename Visitor>
+        static typename apply<Visitor>::type call(Expr const &expr, Visitor &)
+        {
+            typedef typename apply<Visitor>::type type;
+            type that = {proto::arg(expr)};
+            return that;
+        }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    //
+    template<typename Expr>
+    struct complement<Expr, lookbehind_tag<true> >
+    {
+        template<typename Visitor>
+        struct apply
+          : proto::meta::unary_expr<lookbehind_tag<false>, typename proto::meta::arg<Expr>::type>
+        {};
+
+        template<typename Visitor>
+        static typename apply<Visitor>::type call(Expr const &expr, Visitor &)
+        {
+            typedef typename apply<Visitor>::type type;
+            type that = {proto::arg(expr)};
+            return that;
+        }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // complementing a complement is a no-op
+    template<typename Expr>
+    struct complement<Expr, proto::tag::complement>
+    {
+        template<typename>
+        struct apply
+          : proto::meta::arg<Expr>
+        {};
+
+        template<typename Visitor>
+        static typename apply<Visitor>::type call(Expr const &expr, Visitor &)
+        {
+            return proto::arg(expr);
         }
     };
 
@@ -262,13 +277,8 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Expr, typename, typename Visitor>
         struct apply
         {
-            typedef typename Expr::arg0_type expr_type;
-            typedef typename expr_type::tag_type tag_type;
-            typedef typename proto::meta::unref<typename expr_type::arg0_type>::type arg0_type;
-            typedef typename proto::meta::unref<typename expr_type::arg1_type>::type arg1_type;
-
-            typedef complement<tag_type, arg0_type, arg1_type> complement;
-            typedef typename complement::BOOST_NESTED_TEMPLATE apply<expr_type, Visitor>::type type;
+            typedef complement<typename proto::meta::arg<Expr>::type> complement;
+            typedef typename complement::BOOST_NESTED_TEMPLATE apply<Visitor>::type type;
         };
 
         template<typename Expr, typename State, typename Visitor>

@@ -185,6 +185,9 @@ namespace boost { namespace proto
     template<typename Expr, typename Grammar>
     struct matches;
 
+    template<typename T>
+    struct exact;
+
     template<
         typename Grammar0
       , typename Grammar1
@@ -276,7 +279,7 @@ namespace boost { namespace proto
         template<typename Expr>
         struct deep_copy;
 
-        template<typename T, bool IsExpr = is_expr<T>::value>
+        template<typename T, typename EnableIf = void>
         struct unref;
 
         template<typename Expr, typename Fun, long Arity = Expr::arity::value>
@@ -396,6 +399,9 @@ namespace boost { namespace proto
     {
         BOOST_PROTO_IDENTITY_TRANSFORM();
     };
+
+    template<typename Grammar>
+    struct has_pass_through_transform;
 
 }} // namespace boost::proto
 

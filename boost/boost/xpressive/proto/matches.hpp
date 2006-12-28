@@ -19,6 +19,9 @@
     #include <boost/mpl/apply.hpp>
     #include <boost/mpl/placeholders.hpp>
     #include <boost/utility/enable_if.hpp>
+    #include <boost/type_traits/add_const.hpp>
+    #include <boost/type_traits/add_reference.hpp>
+    #include <boost/type_traits/is_convertible.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/traits.hpp>
 
@@ -107,19 +110,25 @@
                 >
             {};
 
+            template<typename T>
+            struct wrap_terminal
+            {
+                wrap_terminal(typename add_reference<typename add_const<T>::type>::type);
+            };
+
             // terminal_matches
             template<typename Expr, typename Grammar>
             struct terminal_matches
-              : mpl::false_
-            {};
-
-            template<typename Grammar>
-            struct terminal_matches<Grammar, Grammar>
-              : mpl::true_
+              : is_convertible<Expr, wrap_terminal<Grammar> >
             {};
 
             template<typename Expr>
             struct terminal_matches<Expr, mpl::_>
+              : mpl::true_
+            {};
+
+            template<typename T>
+            struct terminal_matches<T, exact<T> >
               : mpl::true_
             {};
 
@@ -201,7 +210,7 @@
             // handle proto::if_
             template<typename Expr, typename Pred>
             struct matches_impl<Expr, if_<Pred> >
-              : mpl::apply1<Pred, Expr>
+              : mpl::apply1<Pred, Expr>::type
             {};
 
         }
@@ -256,6 +265,10 @@
         template<typename Expr, typename Grammar, typename Return>
         struct if_not_matches
           : disable_if<matches<Expr, Grammar>, Return>
+        {};
+
+        template<typename T>
+        struct exact
         {};
     }}
 

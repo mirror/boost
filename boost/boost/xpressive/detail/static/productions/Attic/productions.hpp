@@ -37,12 +37,8 @@ namespace boost { namespace xpressive { namespace detail
     {
         template<typename Expr, typename, typename>
         struct apply
-        {
-            typedef typename is_same<
-                typename proto::meta::unref<typename Expr::arg0_type>::type
-              , set_initializer_type
-            >::type type;
-        };
+          : proto::matches<Expr, proto::meta::subscript<set_initializer_type, mpl::_> >
+        {};
     };
 
     ///////////////////////////////////////////////////////////////////////////////

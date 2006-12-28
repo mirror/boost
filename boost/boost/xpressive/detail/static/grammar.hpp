@@ -13,6 +13,8 @@
 # pragma once
 #endif
 
+#include <boost/mpl/print.hpp>
+
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
@@ -56,6 +58,16 @@ namespace boost { namespace xpressive
 
         template<typename Char>
         struct is_xpressive_literal_impl<Char, Char const *>
+          : mpl::true_
+        {};
+
+        template<typename Char, std::size_t N>
+        struct is_xpressive_literal_impl<Char, Char[N]>
+          : mpl::true_
+        {};
+
+        template<typename Char, std::size_t N>
+        struct is_xpressive_literal_impl<Char, Char const[N]>
           : mpl::true_
         {};
 

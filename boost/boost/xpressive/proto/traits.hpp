@@ -23,6 +23,7 @@
     #include <boost/xpressive/proto/ref.hpp>
     #include <boost/xpressive/proto/args.hpp>
     #include <boost/xpressive/proto/tags.hpp>
+    #include <boost/xpressive/proto/transform/pass_through.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
     #include <boost/preprocessor/repetition/enum.hpp>
     #include <boost/preprocessor/repetition/enum_params.hpp>
@@ -73,7 +74,6 @@
             template<typename T>
             struct as_expr<T, false>
             {
-                BOOST_STATIC_ASSERT(!is_reference<T>::value);
                 typedef expr<proto::tag::terminal, args1<typename call_traits<T>::value_type> > type;
             };
 
@@ -86,8 +86,7 @@
             template<typename T>
             struct as_expr_ref<T, false>
             {
-                BOOST_STATIC_ASSERT(!is_reference<T>::value);
-                typedef expr<proto::tag::terminal, args1<typename call_traits<T>::value_type> > type;
+                typedef expr<proto::tag::terminal, args1<T const &> > type;
             };
 
             template<typename T>
@@ -104,16 +103,14 @@
             template<typename Expr>
             struct left
             {
-                BOOST_STATIC_ASSERT(2 == Expr::type::arity::value);
-                typedef typename unref<typename Expr::arg0_type>::type type;
+                typedef typename Expr::arg0_type::type type;
             };
 
             // right
             template<typename Expr>
             struct right
             {
-                BOOST_STATIC_ASSERT(2 == Expr::type::arity::value);
-                typedef typename unref<typename Expr::arg1_type>::type type;
+                typedef typename Expr::arg1_type::type type;
             };
 
             // terminal
@@ -121,33 +118,28 @@
             struct terminal : has_identity_transform
             {
                 terminal();
-                BOOST_STATIC_ASSERT(!is_reference<T>::value);
-                typedef typename call_traits<T>::value_type value_type;
-                typedef expr<proto::tag::terminal, args1<value_type> > type;
+                typedef expr<proto::tag::terminal, args1<T> > type;
             };
 
             // unary_expr
             template<typename Tag, typename T>
-            struct unary_expr : has_identity_transform
+            struct unary_expr : has_pass_through_transform<unary_expr<Tag, T> >
             {
                 unary_expr();
-                BOOST_STATIC_ASSERT(!is_reference<T>::value);
                 typedef expr<Tag, args1<T> > type;
             };
 
             // binary_expr
             template<typename Tag, typename T, typename U>
-            struct binary_expr : has_identity_transform
+            struct binary_expr : has_pass_through_transform<binary_expr<Tag, T, U> >
             {
                 binary_expr();
-                BOOST_STATIC_ASSERT(!is_reference<T>::value);
-                BOOST_STATIC_ASSERT(!is_reference<U>::value);
                 typedef expr<Tag, args2<T, U> > type;
             };
 
         #define BOOST_PROTO_UNARY_GENERATOR(Name)\
             template<typename T>\
-            struct Name : has_identity_transform\
+            struct Name : has_pass_through_transform<Name<T> >\
             {\
                 Name();\
                 typedef expr<proto::tag::Name, args1<T> > type;\
@@ -156,7 +148,7 @@
 
         #define BOOST_PROTO_BINARY_GENERATOR(Name)\
             template<typename T, typename U>\
-            struct Name : has_identity_transform\
+            struct Name : has_pass_through_transform<Name<T, U> >\
             {\
                 Name();\
                 typedef expr<proto::tag::Name, args2<T, U> > type;\
@@ -459,16 +451,30 @@
             {};
         #endif
 
+        #if N == 0
+            // If N == 0, this could be a terminal, which must be handled differently
             template<typename Expr>
-            struct arg_c<Expr, N>
+            struct arg_c<Expr, 0>
             {
-                typedef typename unref<typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, N), _type)>::type type;
+                typedef typename unref<typename Expr::arg0_type>::type type;
 
                 static type const &call(Expr const &expr)
                 {
                     return proto::unref(expr.cast().BOOST_PP_CAT(arg, N));
                 }
             };
+        #else
+            template<typename Expr>
+            struct arg_c<Expr, N>
+            {
+                typedef typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, N), _type)::type type;
+
+                static type const &call(Expr const &expr)
+                {
+                    return expr.cast().BOOST_PP_CAT(arg, N).cast();
+                }
+            };
+        #endif
 
     #undef N
 
