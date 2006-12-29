@@ -138,30 +138,34 @@
   <h3><a name="GettingStarted" id="GettingStarted">Getting started</a></h3>
 
   <ol>
-    <li>Follow the steps 1-3 described on the <a href=
+    <li>Follow the steps 1-4 described on the <a href=
     "../../../more/getting_started.html">Boost Getting Started Page</a>.
-    After doing so, somewhere on your hard drive you should have a directory
-    containing the boost distribution (e.g. under
-    <code>D:\Data\boost_1_34_0</code>), the bjam executable installed in your
-    <code>PATH</code> and your toolset configured in <a href=
-    "../../../tools/build/v2/user-config.jam">user-config.jam</a>.</li>
+    Since Boost.Statechart is a header-only library, you should now know
+    enough to compile the examples in the tutorial in your favorite
+    environment (except PingPong which requires Boost.Thread binaries)</li>
 
-    <li>Open a command prompt and change the current directory to
-    <code>D:\Data\boost_1_34_0\libs\statechart\examples</code></li>
+    <li>Optional: If you want to compile the PingPong example or use <a href=
+    "reference.html#ClassTemplatefifo_scheduler">fifo_scheduler&lt;&gt;</a>
+    in your project, you need to get hold of the Boost.Thread binaries and
+    link against them, see steps 5-6 on the Boost Getting Started Page</li>
 
-    <li>To compile the examples in debug mode, type <code>bjam</code> and hit
-    CR. Please refer to the bjam command line documentation for other
-    options. After the build has finished you will find all executables in
-    <code>D:\Data\boost_1_34_0\libs\statechart\examples\run</code>. In
-    addition to the examples discussed in the tutorial, this script also
-    builds the Performance executable in different variants, which show the
-    effects of various choices on runtime performance, executable size, etc.
-    Moreover, the Handcrafted executable is also built, which serves to
-    compare performance of a simple Boost.Statechart machine with its
-    handcrafted equivalent</li>
+    <li>Optional: If you want to run the tests, you need to get the bjam
+    executable, as described under step 5.2 on the Boost Getting Started
+    Page. After doing so, bjam should be installed in your <code>PATH</code>.
+    Open a command prompt and change the current directory to
+    <code>boost_1_34_0/libs/statechart/test</code>. Type
+      <pre>
+bjam --toolset=<i>your-toolset</i>
+</pre>
 
-    <li>Optional: To run the tests, invoke bjam in the directory
-    <code>D:\Data\boost_1_33_0\libs\statechart\test</code></li>
+      <p>(where <code><i>your-toolset</i></code> is one of the names
+      documented under step 5.2.2 on the Boost Getting Started Page) and hit
+      CR. After the test run, failures (if any) are indicated at the end of
+      the output, in the form of&nbsp; a "<code>...failed updating X
+      targets...</code>" message. For some platforms certain failures are
+      expected, see <a href="#SupportedPlatforms">Supported
+      platforms</a>.</p>
+    </li>
   </ol>
 
   <h3><a name="Audience" id="Audience">Audience</a></h3>
@@ -200,10 +204,13 @@
   height="31" width="88"></a></p>
 
   <p>Revised 
-  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38512" --></p>
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->29
+  December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38526" --></p>
 
-  <p><i>Copyright &copy; 2003-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2006<!--webbot bot="Timestamp" endspan i-checksum="770" -->
-  <a href="contact.html">Andreas Huber D&ouml;nni</a></i></p>
+  <p><i>Copyright &copy; 2003-
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2006
+  <!--webbot bot="Timestamp" endspan i-checksum="770" -->
+   <a href="contact.html">Andreas Huber D&ouml;nni</a></i></p>
 
   <p><i>Distributed under the Boost Software License, Version 1.0. (See
   accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or
