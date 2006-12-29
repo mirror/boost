@@ -688,7 +688,9 @@
 
       <td width="51%">A model of the standard Allocator concept</td>
 
-      <td width="18%">&nbsp;</td>
+      <td width="18%"><code>Allocator::rebind&lt;&gt;::other</code> is used
+      to allocate and deallocate all <code>simple_state</code> subtype
+      objects and internal objects of dynamic storage duration</td>
 
       <td width="19%"><code>std::allocator&lt; void &gt;</code></td>
     </tr>
@@ -866,9 +868,7 @@ void <a name="initiate" id="initiate">initiate</a>();
   parameters:</p>
 
   <ul>
-    <li><code>operator new()</code> (used to allocate states)</li>
-
-    <li><code>Allocator::allocate()</code></li>
+    <li><code>Allocator::rebind&lt;&gt;::other::allocate()</code></li>
 
     <li>state constructors</li>
 
@@ -950,9 +950,7 @@ void <a name="terminate" id="terminate">terminate</a>();
   parameters:</p>
 
   <ul>
-    <li><code>operator new()</code> (used to allocate states)</li>
-
-    <li><code>Allocator::allocate()</code></li>
+    <li><code>Allocator::rebind&lt;&gt;::other::allocate()</code></li>
 
     <li>state constructors</li>
 
@@ -1091,9 +1089,7 @@ void <a name="process_event" id=
   parameters:</p>
 
   <ul>
-    <li><code>operator new()</code> (used to allocate states)</li>
-
-    <li><code>Allocator::allocate()</code></li>
+    <li><code>Allocator::rebind&lt;&gt;::other::allocate()</code></li>
 
     <li>state constructors</li>
 
@@ -2144,12 +2140,7 @@ namespace statechart
 <a name="simple_state" id="simple_state">simple_state</a>();
 </pre>
 
-  <p><b>Requires</b>: The constructors of all direct and indirect subtypes
-  must be exception-neutral<b><br>
-  Effects</b>: Constructs a state object<br>
-  <b>Throws</b>: Any exceptions propagated from
-  <code>Allocator::allocate()</code> (the template parameter passed to the
-  base class of <code>outermost_context_type</code>)</p>
+  <p><b>Effects</b>: Constructs a state object</p>
   <pre>
 <a name="simple_statedtor" id="simple_statedtor">~simple_state</a>();
 </pre>
@@ -2238,8 +2229,9 @@ void <a name="post_event1" id="post_event1">post_event</a>( const <a href=
   The user-supplied <code>react</code> member function must return this
   object to its caller<br>
   <b>Throws</b>: Any exceptions propagated from
-  <code>Allocator::allocate()</code> (the template parameter passed to the
-  base class of <code>outermost_context_type</code>)</p>
+  <code>Allocator::rebind&lt;&gt;::other::allocate()</code> (the template
+  parameter passed to the base class of
+  <code>outermost_context_type</code>)</p>
   <pre>
 template&lt; class DestinationState &gt;
 <a href="#Classresult">result</a> <a name="transit1" id=
@@ -2308,10 +2300,9 @@ template&lt; class DestinationState &gt;
   <b>Throws</b>: Any exceptions propagated from:</p>
 
   <ul>
-    <li><code>operator new()</code> (used to allocate states)</li>
-
-    <li><code>Allocator::allocate()</code> (the template parameter passed to
-    the base class of <code>outermost_context_type</code>)</li>
+    <li><code>Allocator::rebind&lt;&gt;::other::allocate()</code> (the
+    template parameter passed to the base class of
+    <code>outermost_context_type</code>)</li>
 
     <li>state constructors</li>
 
@@ -2398,10 +2389,9 @@ template&lt;
   <b>Throws</b>: Any exceptions propagated from:</p>
 
   <ul>
-    <li><code>operator new()</code> (used to allocate states)</li>
-
-    <li><code>Allocator::allocate()</code> (the template parameter passed to
-    the base class of <code>outermost_context_type</code>)</li>
+    <li><code>Allocator::rebind&lt;&gt;::other::allocate()</code> (the
+    template parameter passed to the base class of
+    <code>outermost_context_type</code>)</li>
 
     <li>state constructors</li>
 
@@ -2462,9 +2452,10 @@ template&lt;
   <b>Throws</b>: Any exceptions propagated from:</p>
 
   <ul>
-    <li><code>Allocator::allocate()</code> (the template parameter passed to
-    the base class of <code>outermost_context_type</code>, used to allocate
-    space to save history)</li>
+    <li><code>Allocator::rebind&lt;&gt;::other::allocate()</code> (the
+    template parameter passed to the base class of
+    <code>outermost_context_type</code>, used to allocate space to save
+    history)</li>
 
     <li><code>exit</code> member functions</li>
   </ul>
@@ -2497,8 +2488,9 @@ void <a name="clear_shallow_history" id=
   specified by <code>orthogonalPosition</code> of the state specified by
   <code>HistoryContext</code><br>
   <b>Throws</b>: Any exceptions propagated from
-  <code>Allocator::allocate()</code> (the template parameter passed to the
-  base class of <code>outermost_context_type</code>)</p>
+  <code>Allocator::rebind&lt;&gt;::other::allocate()</code> (the template
+  parameter passed to the base class of
+  <code>outermost_context_type</code>)</p>
   <pre>
 template&lt;
   class HistoryContext,
@@ -2520,8 +2512,9 @@ void <a name="clear_deep_history" id=
   by <code>orthogonalPosition</code> of the state specified by
   <code>HistoryContext</code><br>
   <b>Throws</b>: Any exceptions propagated from
-  <code>Allocator::allocate()</code> (the template parameter passed to the
-  base class of <code>outermost_context_type</code>)</p>
+  <code>Allocator::rebind&lt;&gt;::other::allocate()</code> (the template
+  parameter passed to the base class of
+  <code>outermost_context_type</code>)</p>
 
   <h3>Class template <code>simple_state</code> observer functions</h3>
   <pre>
@@ -2947,16 +2940,58 @@ const CustomId * <a name="event_base::custom_dynamic_type_ptr" id=
 
   <p>This is the base class template of all events.</p>
 
+  <h3>Class template <code>event</code> parameters</h3>
+
+  <table border="3" cellpadding="2" width="100%" summary="event parameters">
+    <tr>
+      <td width="15%"><b>Template parameter</b></td>
+
+      <td width="51%"><b>Requirements</b></td>
+
+      <td width="18%"><b>Semantics</b></td>
+
+      <td width="19%"><b>Default</b></td>
+    </tr>
+
+    <tr>
+      <td width="15%"><code>MostDerived</code></td>
+
+      <td width="51%">The most-derived subtype of this class template</td>
+
+      <td width="18%">&nbsp;</td>
+
+      <td width="19%">&nbsp;</td>
+    </tr>
+
+    <tr>
+      <td width="15%"><code>Allocator</code></td>
+
+      <td width="51%">A model of the standard Allocator concept</td>
+
+      <td width="18%"><code>Allocator::rebind&lt; MostDerived
+      &gt;::other</code> is used to allocate and deallocate all event subtype
+      objects of dynamic storage duration, see <code><a href=
+      "#event::operatornew">operator new</a></code></td>
+
+      <td width="19%"><code>std::allocator&lt; void &gt;</code></td>
+    </tr>
+  </table>
+
   <h3>Class template <code>event</code> synopsis</h3>
   <pre>
 namespace boost
 {
 namespace statechart
 {
-  template&lt; class MostDerived &gt;
+  template&lt; class MostDerived, class Allocator = std::allocator&lt; void &gt; &gt;
   class event : <i>implementation-defined</i>
   {
     public:
+      static void * <a href=
+"#event::operatornew">operator new</a>( std::size_t size );
+      static void <a href=
+"#event::operatordelete">operator delete</a>( void * pEvent );
+
       static id_type <a href="#event::static_type">static_type</a>();
 
       template&lt; class CustomId &gt;
@@ -2988,6 +3023,24 @@ virtual <a name="eventdtor" id="eventdtor">~event</a>();
   <p><b>Effects</b>: Destructs an event</p>
 
   <h3>Class template <code>event</code> static functions</h3>
+  <pre>
+static void * <a name="event::operatornew" id=
+"event::operatornew">operator new</a>( std::size_t size );
+</pre>
+
+  <p><b>Effects</b>: <code>Allocator::rebind&lt; MostDerived
+  &gt;::other().allocate( 1, static_cast&lt; MostDerived * &gt;( 0 )
+  );</code><br>
+  <b>Returns</b>: The return value of the above call<br>
+  <b>Throws</b>: Whatever the above call throws</p>
+  <pre>
+static void <a name="event::operatordelete" id=
+"event::operatordelete">operator delete</a>( void * pEvent );
+</pre>
+
+  <p><b>Effects</b>: <code>Allocator::rebind&lt; MostDerived
+  &gt;::other().deallocate( static_cast&lt; MostDerived * &gt;( pEvent ), 1
+  );</code></p>
   <pre>
 static id_type <a name="event::static_type" id=
 "event::static_type">static_type</a>();
@@ -3473,10 +3526,13 @@ namespace statechart
   height="31" width="88"></a></p>
 
   <p>Revised 
-  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->03 December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38512" --></p>
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->29
+  December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38526" --></p>
 
-  <p><i>Copyright &copy; 2003-<!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2006<!--webbot bot="Timestamp" endspan i-checksum="770" -->
-  <a href="contact.html">Andreas Huber D&ouml;nni</a></i></p>
+  <p><i>Copyright &copy; 2003- 
+  <!--webbot bot="Timestamp" s-type="EDITED" s-format="%Y" startspan -->2006
+  <!--webbot bot="Timestamp" endspan i-checksum="770" -->
+   <a href="contact.html">Andreas Huber D&ouml;nni</a></i></p>
 
   <p><i>Distributed under the Boost Software License, Version 1.0. (See
   accompanying file <a href="../../../LICENSE_1_0.txt">LICENSE_1_0.txt</a> or
