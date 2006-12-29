@@ -75,10 +75,9 @@ template< ActionPtr pAction >
 std::string ThrowDescription()
 {
   static const std::string throwing = "Throwing exception in ";
-  static ActionDescriptionSequence dummy;
-  dummy.clear();
-  pAction( dummy );
-  return throwing + dummy.front()();
+  ActionDescriptionSequence sequence;
+  pAction( sequence );
+  return throwing + sequence.front()();
 }
 
 
