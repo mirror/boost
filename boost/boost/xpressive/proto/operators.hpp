@@ -18,37 +18,88 @@
 
 namespace boost { namespace proto
 {
+    namespace detail
+    {
+        template<typename Tag, typename Left, typename Right, typename Enable1 = void, typename Enable2 = void>
+        struct as_expr_if2
+        {};
+
+        template<typename Tag, typename Left, typename Right>
+        struct as_expr_if2<Tag, Left, Right, typename Left::is_boost_proto_expr_, void>
+        {
+            typedef expr<
+                Tag
+              , args2<
+                    ref<typename Left::boost_proto_expr_type_>
+                  , expr<tag::terminal, args1<Right const &> >
+                >
+            > type;
+
+            static type make(Left const &left, Right const &right)
+            {
+                type that = {{left.cast()}, {right}};
+                return that;
+            }
+        };
+
+        template<typename Tag, typename Left, typename Right>
+        struct as_expr_if2<Tag, Left, Right, void, typename Right::is_boost_proto_expr_>
+        {
+            typedef expr<
+                Tag
+              , args2<
+                    expr<tag::terminal, args1<Left const &> >
+                  , ref<typename Right::boost_proto_expr_type_>
+                >
+            > type;
+
+            static type make(Left const &left, Right const &right)
+            {
+                type that = {{left}, {right.cast()}};
+                return that;
+            }
+        };
+
+        template<typename Tag, typename Left, typename Right, typename Enable1 = void, typename Enable2 = void>
+        struct as_expr_if
+          : as_expr_if2<Tag, Left, Right>
+        {};
+
+        template<typename Tag, typename Left, typename Right>
+        struct as_expr_if<Tag, Left, Right, typename Left::is_boost_proto_expr_, typename Right::is_boost_proto_expr_>
+        {
+            typedef expr<
+                Tag
+              , args2<
+                    ref<typename Left::boost_proto_expr_type_>
+                  , ref<typename Right::boost_proto_expr_type_>
+                >
+            > type;
+
+            static type make(Left const &left, Right const &right)
+            {
+                type that = {{left.cast()}, {right.cast()}};
+                return that;
+            }
+        };
+    }
+
 #define BOOST_PROTO_UNARY_OP(op, tag)\
-    template<typename Tag, typename Args, long Arity>\
-    inline expr<tag, args1<ref<expr<Tag, Args, Arity> > > > const\
-    operator op(expr<Tag, Args, Arity> const &arg)\
+    template<typename Arg>\
+    inline expr<tag, args1<ref<typename Arg::boost_proto_expr_type_> > > const\
+    operator op(Arg const &arg)\
     {\
-        expr<tag, args1<ref<expr<Tag, Args, Arity> > > > that = {{arg}};\
+        expr<tag, args1<ref<typename Arg::boost_proto_expr_type_> > > that = {{arg.cast()}};\
         return that;\
     }\
     /**/
 
 #define BOOST_PROTO_BINARY_OP(op, tag)\
-    template<typename LTag, typename LArgs, long LArity, typename Right>\
-    inline expr<tag, args2<ref<expr<LTag, LArgs, LArity> >, typename meta::as_expr_ref<Right>::type> > const\
-    operator op(expr<LTag, LArgs, LArity> const &left, Right const &right)\
+    template<typename Left, typename Right>\
+    inline typename detail::as_expr_if<tag, Left, Right>::type const\
+    operator op(Left const &left, Right const &right)\
     {\
-        expr<tag, args2<ref<expr<LTag, LArgs, LArity> >, typename meta::as_expr_ref<Right>::type> > that = {{left}, proto::as_expr_ref(right)};\
-        return that;\
-    }\
-    template<typename Left, typename RTag, typename RArgs, long RArity>\
-    inline expr<tag, args2<typename meta::as_expr_ref<Left>::type, ref<expr<RTag, RArgs, RArity> > > > const\
-    operator op(Left const &left, expr<RTag, RArgs, RArity> const &right)\
-    {\
-        expr<tag, args2<typename meta::as_expr_ref<Left>::type, ref<expr<RTag, RArgs, RArity> > > > that = {proto::as_expr_ref(left), {right}};\
-        return that;\
-    }\
-    template<typename LTag, typename LArgs, long LArity, typename RTag, typename RArgs, long RArity>\
-    inline expr<tag, args2<ref<expr<LTag, LArgs, LArity> >, ref<expr<RTag, RArgs, RArity> > > > const\
-    operator op(expr<LTag, LArgs, LArity> const &left, expr<RTag, RArgs, RArity> const &right)\
-    {\
-        expr<tag, args2<ref<expr<LTag, LArgs, LArity> >, ref<expr<RTag, RArgs, RArity> > > > that = {{left}, {right}};\
-        return that;\
+        return detail::as_expr_if<tag, Left, Right>::make(left, right);\
     }\
     /**/
 
@@ -93,19 +144,19 @@ namespace boost { namespace proto
     BOOST_PROTO_BINARY_OP(|=, tag::bitwise_or_assign)
     BOOST_PROTO_BINARY_OP(^=, tag::bitwise_xor_assign)
 
-    template<typename Tag, typename Args, long Arity>
-    inline expr<tag::post_inc, args1<ref<expr<Tag, Args, Arity> > > > const
-    operator ++(expr<Tag, Args, Arity> const &arg, int)
+    template<typename Arg>
+    inline expr<tag::post_inc, args1<ref<typename Arg::boost_proto_expr_type_> > > const
+    operator ++(Arg const &arg, int)
     {
-        expr<tag::post_inc, args1<ref<expr<Tag, Args, Arity> > > > that = {{arg}};
+        expr<tag::post_inc, args1<ref<typename Arg::boost_proto_expr_type_> > > that = {{arg.cast()}};
         return that;
     }
 
-    template<typename Tag, typename Args, long Arity>
-    inline expr<tag::post_dec, args1<ref<expr<Tag, Args, Arity> > > > const
-    operator --(expr<Tag, Args, Arity> const &arg, int)
+    template<typename Arg>
+    inline expr<tag::post_dec, args1<ref<typename Arg::boost_proto_expr_type_> > > const
+    operator --(Arg const &arg, int)
     {
-        expr<tag::post_dec, args1<ref<expr<Tag, Args, Arity> > > > that = {{arg}};
+        expr<tag::post_dec, args1<ref<typename Arg::boost_proto_expr_type_> > > that = {{arg.cast()}};
         return that;
     }
 

@@ -32,6 +32,7 @@ namespace boost { namespace proto
         typedef proto_ref_tag fusion_tag;
         typedef void is_boost_proto_ref_;
         typedef void is_boost_proto_expr_;
+        typedef Expr boost_proto_expr_type_;
 
         BOOST_PROTO_IDENTITY_TRANSFORM();
         BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_ARG, _)

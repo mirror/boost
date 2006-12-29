@@ -87,6 +87,7 @@
             typedef mpl::long_<BOOST_PP_ITERATION()> arity;
             typedef proto_expr_tag fusion_tag;
             typedef void is_boost_proto_expr_;
+            typedef expr boost_proto_expr_type_;
 
             BOOST_PROTO_IDENTITY_TRANSFORM();
             BOOST_PP_REPEAT(BOOST_PP_ITERATION(), BOOST_PROTO_ARG, ~)
