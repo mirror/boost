@@ -42,7 +42,7 @@ struct lambda_context_result
 #define BIN_OP_RESULT(Left, Op, Right)\
     typedef typename proto::meta::eval<Left, ctx_type>::type left_type;\
     typedef typename proto::meta::eval<Right, ctx_type>::type right_type;\
-    typedef BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, (*(left_type*)0) Op (*(right_type*)0))\
+    BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, (*(left_type*)0) Op (*(right_type*)0))\
     typedef typename nested::type type\
     /**/
 
