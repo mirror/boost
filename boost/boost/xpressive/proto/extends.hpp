@@ -24,6 +24,7 @@ namespace boost { namespace proto
         typedef Domain domain;
         typedef typename Expr::type type;
         typedef void is_boost_proto_extends_private_extends_;
+        typedef Derived boost_proto_expr_type_;
 
         extends()
           : Expr()

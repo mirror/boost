@@ -10,11 +10,7 @@
 #include <iostream>
 #include <boost/assert.hpp>
 #include <boost/mpl/assert.hpp>
-#include <boost/utility/result_of.hpp>
-#include <boost/type_traits/is_same.hpp>
 #include <boost/xpressive/proto/proto.hpp>
-#include <boost/xpressive/proto/compiler/pass_through.hpp>
-#include <boost/xpressive/proto/compiler/conditional.hpp>
 #include <boost/test/unit_test.hpp>
 
 namespace boost
@@ -572,7 +568,7 @@ namespace boost { namespace spirit2
     struct no_case_directive
     {
         template<typename Expr>
-        typename mpl::apply_wrap3<SpiritGrammar, Expr, mpl::void_, mpl::void_>::type
+        typename SpiritGrammar::apply<Expr, mpl::void_, mpl::void_>::type
         operator [](Expr const &expr) const
         {
             mpl::void_ null;
@@ -591,7 +587,7 @@ namespace boost { namespace spirit2
         {}
 
         template<typename Expr>
-        typename mpl::apply_wrap3<SkipperGrammar, Expr, Skipper, mpl::void_>::type
+        typename SkipperGrammar::apply<Expr, Skipper, mpl::void_>::type
         operator [](Expr const &expr) const
         {
             mpl::void_ null;

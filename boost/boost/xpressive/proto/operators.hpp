@@ -46,28 +46,21 @@ namespace boost { namespace proto
               , expr<
                     Tag
                   , args2<
-                        //ref<typename Left::boost_proto_expr_type_>
                         ref<Left>
-                      , expr<tag::terminal, args1<Right const &> >
+                      , typename meta::generate<typename Left::domain, expr<tag::terminal, args1<Right const &> > >::type
                     >
                 >
             >
         {
-            typedef expr<
-                Tag
-              , args2<
-                    //ref<typename Left::boost_proto_expr_type_>
-                    ref<Left>
-                  , expr<tag::terminal, args1<Right const &> >
-                >
-            > expr_type;
+            typedef expr<tag::terminal, args1<Right const &> > term_type;
+            typedef expr<Tag, args2<ref<Left>, typename meta::generate<typename Left::domain, term_type>::type> > expr_type;
 
             template<typename Left2>
             static typename meta::generate<typename Left2::domain, expr_type>::type
             make(Left2 const &left, Right const &right)
             {
-                //expr_type that = {{left.cast()}, {right}};
-                expr_type that = {{left}, {right}};
+                term_type term = {right};
+                expr_type that = {{left}, meta::generate<typename Left::domain, term_type>::make(term)};
                 return meta::generate<typename Left::domain, expr_type>::make(that);
             }
         };
@@ -79,28 +72,21 @@ namespace boost { namespace proto
               , expr<
                     Tag
                   , args2<
-                        expr<tag::terminal, args1<Left const &> >
-                      //, ref<typename Right::boost_proto_expr_type_>
+                        typename meta::generate<typename Right::domain, expr<tag::terminal, args1<Left const &> > >::type
                       , ref<Right>
                     >
                 >
             >
         {
-            typedef expr<
-                Tag
-              , args2<
-                    expr<tag::terminal, args1<Left const &> >
-                  //, ref<typename Right::boost_proto_expr_type_>
-                  , ref<Right>
-                >
-            > expr_type;
+            typedef expr<tag::terminal, args1<Left const &> > term_type;
+            typedef expr<Tag, args2<typename meta::generate<typename Right::domain, term_type>::type, ref<Right> > > expr_type;
 
             template<typename Right2>
             static typename meta::generate<typename Right2::domain, expr_type>::type
             make(Left const &left, Right2 const &right)
             {
-                //expr_type that = {{left}, {right.cast()}};
-                expr_type that = {{left}, {right}};
+                term_type term = {left};
+                expr_type that = {meta::generate<typename Right::domain, term_type>::make(term), {right}};
                 return meta::generate<typename Right::domain, expr_type>::make(that);
             }
         };
@@ -114,34 +100,16 @@ namespace boost { namespace proto
         struct as_expr_if<Tag, Left, Right, typename Left::is_boost_proto_expr_, typename Right::is_boost_proto_expr_>
           : meta::generate<
                 typename Left::domain
-              , expr<
-                    Tag
-                  , args2<
-                      //  ref<typename Left::boost_proto_expr_type_>
-                      //, ref<typename Right::boost_proto_expr_type_>
-                        ref<Left>
-                      , ref<Right>
-                    >
-                >
+              , expr<Tag, args2<ref<Left>, ref<Right> > >
             >
         {
-            typedef expr<
-                Tag
-              , args2<
-                  //  ref<typename Left::boost_proto_expr_type_>
-                  //, ref<typename Right::boost_proto_expr_type_>
-                    ref<Left>
-                  , ref<Right>
-                >
-            > expr_type;
-
+            typedef expr<Tag, args2<ref<Left>, ref<Right> > > expr_type;
             BOOST_MPL_ASSERT((is_same<typename Left::domain, typename Right::domain>));
 
             template<typename Left2>
             static typename meta::generate<typename Left2::domain, expr_type>::type
             make(Left2 const &left, Right const &right)
             {
-                //expr_type that = {{left.cast()}, {right.cast()}};
                 expr_type that = {{left}, {right}};
                 return meta::generate<typename Left::domain, expr_type>::make(that);
             }
@@ -153,7 +121,7 @@ namespace boost { namespace proto
     inline typename meta::generate<typename Arg::domain, expr<tag, args1<ref<typename Arg::boost_proto_expr_type_> > > >::type const\
     operator op(Arg const &arg)\
     {\
-        expr<tag, args1<ref<typename Arg::boost_proto_expr_type_> > > that = {{arg.cast()}};\
+        expr<tag, args1<ref<typename Arg::boost_proto_expr_type_> > > that = {{arg}};\
         return meta::generate<typename Arg::domain, expr<tag, args1<ref<typename Arg::boost_proto_expr_type_> > > >::make(that);\
     }\
     /**/
@@ -212,7 +180,7 @@ namespace boost { namespace proto
     inline typename meta::generate<typename Arg::domain, expr<tag::post_inc, args1<ref<typename Arg::boost_proto_expr_type_> > > >::type const
     operator ++(Arg const &arg, int)
     {
-        expr<tag::post_inc, args1<ref<typename Arg::boost_proto_expr_type_> > > that = {{arg.cast()}};
+        expr<tag::post_inc, args1<ref<typename Arg::boost_proto_expr_type_> > > that = {{arg}};
         return meta::generate<typename Arg::domain, expr<tag::post_inc, args1<ref<typename Arg::boost_proto_expr_type_> > > >::make(that);
     }
 
@@ -220,7 +188,7 @@ namespace boost { namespace proto
     inline typename meta::generate<typename Arg::domain, expr<tag::post_dec, args1<ref<typename Arg::boost_proto_expr_type_> > > >::type const
     operator --(Arg const &arg, int)
     {
-        expr<tag::post_dec, args1<ref<typename Arg::boost_proto_expr_type_> > > that = {{arg.cast()}};
+        expr<tag::post_dec, args1<ref<typename Arg::boost_proto_expr_type_> > > that = {{arg}};
         return meta::generate<typename Arg::domain, expr<tag::post_dec, args1<ref<typename Arg::boost_proto_expr_type_> > > >::make(that);
     }
 

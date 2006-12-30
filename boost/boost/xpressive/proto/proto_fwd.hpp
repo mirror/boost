@@ -271,7 +271,7 @@ namespace boost { namespace proto
         template<typename Expr>
         struct deep_copy;
 
-        template<typename T, typename EnableIf = void>
+        template<typename T>
         struct unref;
 
         template<typename Expr, typename Fun, long Arity = Expr::arity::value>

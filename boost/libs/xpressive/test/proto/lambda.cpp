@@ -39,35 +39,53 @@ struct lambda_context_result
         typedef typename fusion::result_of::value_at_c<Tuple, I>::type type;
     };
 
+#define UN_OP_RESULT(Op, Arg)\
+    typedef typename proto::meta::eval<Arg, ctx_type>::type arg_type;\
+    BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, Op (*(arg_type const*)0))\
+    typedef typename nested::type type;\
+    static type call(arg_type const &arg) {\
+        return Op arg;\
+    }\
+    /**/
+
 #define BIN_OP_RESULT(Left, Op, Right)\
     typedef typename proto::meta::eval<Left, ctx_type>::type left_type;\
     typedef typename proto::meta::eval<Right, ctx_type>::type right_type;\
-    BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, (*(left_type*)0) Op (*(right_type*)0))\
-    typedef typename nested::type type\
+    BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, (*(left_type const*)0) Op (*(right_type const*)0))\
+    typedef typename nested::type type;\
+    static type call(left_type const &left, right_type const &right) {\
+        return left Op right;\
+    }\
     /**/
+
+    template<typename This, typename Arg>
+    struct result<This(proto::tag::unary_minus, Arg)>
+    {
+        UN_OP_RESULT(-, Arg)
+    };
 
     template<typename This, typename Left, typename Right>
     struct result<This(proto::tag::add, Left, Right)>
     {
-        BIN_OP_RESULT(Left, +, Right);
+        BIN_OP_RESULT(Left, +, Right)
     };
 
     template<typename This, typename Left, typename Right>
     struct result<This(proto::tag::subtract, Left, Right)>
     {
-        BIN_OP_RESULT(Left, -, Right);
+        BIN_OP_RESULT(Left, -, Right)
     };
 
     template<typename This, typename Left, typename Right>
     struct result<This(proto::tag::multiply, Left, Right)>
     {
-        BIN_OP_RESULT(Left, *, Right);
+        BIN_OP_RESULT(Left, *, Right)
     };
 
     template<typename This, typename Left, typename Right>
     struct result<This(proto::tag::divide, Left, Right)>
     {
-        BIN_OP_RESULT(Left, /, Right);
+        BIN_OP_RESULT(Left, /, Right)
     };
 };
 
@@ -95,32 +113,18 @@ struct lambda_context
         return fusion::get<I>(this->args_);
     }
 
-    template<typename Left, typename Right>
-    typename result_of<this_type(proto::tag::add, Left, Right)>::type
-    operator()(proto::tag::add, Left const &left, Right const &right)
+    template<typename Tag, typename Arg>
+    typename lambda_context_result<Tuple>::template result<this_type(Tag, Arg)>::type
+    operator()(Tag, Arg const &arg)
     {
-        return left.eval(*this) + right.eval(*this);
+        return lambda_context_result<Tuple>::template result<this_type(Tag, Arg)>::call(arg.eval(*this));
     }
 
-    template<typename Left, typename Right>
-    typename result_of<this_type(proto::tag::subtract, Left, Right)>::type
-    operator()(proto::tag::subtract, Left const &left, Right const &right)
+    template<typename Tag, typename Left, typename Right>
+    typename lambda_context_result<Tuple>::template result<this_type(Tag, Left, Right)>::type
+    operator()(Tag, Left const &left, Right const &right)
     {
-        return left.eval(*this) - right.eval(*this);
-    }
-
-    template<typename Left, typename Right>
-    typename result_of<this_type(proto::tag::multiply, Left, Right)>::type
-    operator()(proto::tag::multiply, Left const &left, Right const &right)
-    {
-        return left.eval(*this) * right.eval(*this);
-    }
-
-    template<typename Left, typename Right>
-    typename result_of<this_type(proto::tag::divide, Left, Right)>::type
-    operator()(proto::tag::divide, Left const &left, Right const &right)
-    {
-        return left.eval(*this) / right.eval(*this);
+        return lambda_context_result<Tuple>::template result<this_type(Tag, Left, Right)>::call(left.eval(*this), right.eval(*this));
     }
 
 private:
@@ -181,6 +185,7 @@ lambda<proto::meta::terminal<placeholder<1> >::type> const _2;
 void test_lambda()
 {
     BOOST_CHECK_EQUAL(11, ( (_1 + 2) / 4 )(42));
+    BOOST_CHECK_EQUAL(-11, ( (-(_1 + 2)) / 4 )(42));
     BOOST_CHECK_CLOSE(2.58, ( (4 - _2) * 3 )(42, 3.14), 0.1);
 }
 

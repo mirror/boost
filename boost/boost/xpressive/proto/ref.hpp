@@ -55,7 +55,7 @@ namespace boost { namespace proto
 
     namespace meta
     {
-        template<typename T, typename EnableIf>
+        template<typename T>
         struct unref
         {
             typedef T type;
@@ -70,42 +70,42 @@ namespace boost { namespace proto
         };
 
         template<typename T>
-        struct unref<T, typename T::is_boost_proto_expr_>
+        struct unref<ref<T> >
         {
-            typedef typename T::type type;
-            typedef typename T::type const &reference;
+            typedef T type;
+            typedef T const &reference;
 
         private:
             friend struct op::unref;
-            static typename T::type const &call(T const &t)
+            static T const &call(ref<T> const &t)
             {
-                return t.cast();
+                return t.expr;
             }
         };
 
         template<typename T>
-        struct unref<T &, void>
+        struct unref<T &>
         {
             typedef T type;
             typedef T &reference;
         };
 
         template<typename T>
-        struct unref<T const &, void>
+        struct unref<T const &>
         {
             typedef T type;
             typedef T const &reference;
         };
 
         template<typename T, std::size_t N>
-        struct unref<T (&)[N], void>
+        struct unref<T (&)[N]>
         {
             typedef T (&type)[N];
             typedef T (&reference)[N];
         };
 
         template<typename T, std::size_t N>
-        struct unref<T const (&)[N], void>
+        struct unref<T const (&)[N]>
         {
             typedef T const (&type)[N];
             typedef T const (&reference)[N];
