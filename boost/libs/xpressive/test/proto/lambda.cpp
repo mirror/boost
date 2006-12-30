@@ -5,8 +5,13 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <sstream>
+#include <boost/mpl/if.hpp>
+#include <boost/mpl/print.hpp>
 #include <boost/fusion/tuple.hpp>
 #include <boost/typeof/typeof.hpp>
+#include <boost/type_traits/add_const.hpp>
+#include <boost/type_traits/add_reference.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
@@ -19,6 +24,19 @@ template<int I> struct placeholder {};
 template<typename Tuple>
 struct lambda_context;
 
+template<typename T> T make();
+
+template<typename T>
+char check_reference(T &);
+
+template<typename T>
+char (&check_reference(T const &))[2];
+
+template<typename T>
+struct param
+  : add_reference<typename add_const<T>::type>
+{};
+
 template<typename Tuple>
 struct lambda_context_result
 {
@@ -28,22 +46,27 @@ struct lambda_context_result
     struct result;
 
     template<typename This, typename Arg>
-    struct result<This(proto::tag::terminal, Arg)>
+    struct result<This(proto::tag::terminal, Arg &)>
     {
-        typedef Arg type;
+        typedef Arg &type;
     };
 
     template<typename This, int I>
-    struct result<This(proto::tag::terminal, placeholder<I>)>
+    struct result<This(proto::tag::terminal, placeholder<I> const &)>
     {
         typedef typename fusion::result_of::value_at_c<Tuple, I>::type type;
     };
 
 #define UN_OP_RESULT(Op, Arg)\
     typedef typename proto::meta::eval<Arg, ctx_type>::type arg_type;\
-    BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, Op (*(arg_type const*)0))\
-    typedef typename nested::type type;\
-    static type call(arg_type const &arg) {\
+    BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, Op ::make<arg_type>())\
+    typedef typename mpl::if_c<\
+        1==sizeof(check_reference(Op ::make<arg_type>()))\
+      , typename nested::type &\
+      , typename nested::type\
+    >::type type;\
+    static type call(typename param<arg_type>::type arg)\
+    {\
         return Op arg;\
     }\
     /**/
@@ -51,41 +74,58 @@ struct lambda_context_result
 #define BIN_OP_RESULT(Left, Op, Right)\
     typedef typename proto::meta::eval<Left, ctx_type>::type left_type;\
     typedef typename proto::meta::eval<Right, ctx_type>::type right_type;\
-    BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, (*(left_type const*)0) Op (*(right_type const*)0))\
-    typedef typename nested::type type;\
-    static type call(left_type const &left, right_type const &right) {\
+    BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, ::make<left_type>() Op ::make<right_type>())\
+    typedef typename mpl::if_c<\
+        1==sizeof(check_reference(::make<left_type>() Op ::make<right_type>()))\
+      , typename nested::type &\
+      , typename nested::type\
+    >::type type;\
+    static type call(typename param<left_type>::type left, typename param<right_type>::type right)\
+    {\
         return left Op right;\
     }\
     /**/
 
     template<typename This, typename Arg>
-    struct result<This(proto::tag::unary_minus, Arg)>
+    struct result<This(proto::tag::unary_minus, Arg &)>
     {
         UN_OP_RESULT(-, Arg)
     };
 
     template<typename This, typename Left, typename Right>
-    struct result<This(proto::tag::add, Left, Right)>
+    struct result<This(proto::tag::add, Left &, Right &)>
     {
         BIN_OP_RESULT(Left, +, Right)
     };
 
     template<typename This, typename Left, typename Right>
-    struct result<This(proto::tag::subtract, Left, Right)>
+    struct result<This(proto::tag::subtract, Left &, Right &)>
     {
         BIN_OP_RESULT(Left, -, Right)
     };
 
     template<typename This, typename Left, typename Right>
-    struct result<This(proto::tag::multiply, Left, Right)>
+    struct result<This(proto::tag::multiply, Left &, Right &)>
     {
         BIN_OP_RESULT(Left, *, Right)
     };
 
     template<typename This, typename Left, typename Right>
-    struct result<This(proto::tag::divide, Left, Right)>
+    struct result<This(proto::tag::divide, Left &, Right &)>
     {
         BIN_OP_RESULT(Left, /, Right)
+    };
+
+    template<typename This, typename Left, typename Right>
+    struct result<This(proto::tag::left_shift, Left &, Right &)>
+    {
+        BIN_OP_RESULT(Left, <<, Right)
+    };
+
+    template<typename This, typename Left, typename Right>
+    struct result<This(proto::tag::right_shift, Left &, Right &)>
+    {
+        BIN_OP_RESULT(Left, >>, Right)
     };
 };
 
@@ -94,14 +134,16 @@ struct lambda_context
   : lambda_context_result<Tuple>
 {
     typedef lambda_context<Tuple> this_type;
+    typedef lambda_context_result<Tuple> base_type;
+    template<typename Sig> struct result_ : base_type::template result<Sig> {};
 
     lambda_context(Tuple const &args)
       : args_(args)
     {}
 
     template<typename Arg>
-    Arg const &
-    operator()(proto::tag::terminal, Arg const &arg)
+    Arg &
+    operator()(proto::tag::terminal, Arg &arg)
     {
         return arg;
     }
@@ -114,17 +156,17 @@ struct lambda_context
     }
 
     template<typename Tag, typename Arg>
-    typename lambda_context_result<Tuple>::template result<this_type(Tag, Arg)>::type
-    operator()(Tag, Arg const &arg)
+    typename result_<this_type(Tag, Arg &)>::type
+    operator()(Tag, Arg &arg)
     {
-        return lambda_context_result<Tuple>::template result<this_type(Tag, Arg)>::call(arg.eval(*this));
+        return result_<this_type(Tag, Arg &)>::call(arg.eval(*this));
     }
 
     template<typename Tag, typename Left, typename Right>
-    typename lambda_context_result<Tuple>::template result<this_type(Tag, Left, Right)>::type
-    operator()(Tag, Left const &left, Right const &right)
+    typename result_<this_type(Tag, Left &, Right &)>::type
+    operator()(Tag, Left &left, Right &right)
     {
-        return lambda_context_result<Tuple>::template result<this_type(Tag, Left, Right)>::call(left.eval(*this), right.eval(*this));
+        return result_<this_type(Tag, Left &, Right &)>::call(left.eval(*this), right.eval(*this));
     }
 
 private:
@@ -150,18 +192,20 @@ struct lambda
     // hide base_type::operator() by defining our own which
     // evaluates the lambda expression.
     template<typename A0>
-    typename proto::meta::eval<T, lambda_context<fusion::tuple<A0> > >::type
+    typename proto::meta::eval<T, lambda_context<fusion::tuple<A0 const &> > >::type
     operator()(A0 const &a0) const
     {
-        lambda_context<fusion::tuple<A0> > ctx(fusion::make_tuple(a0));
+        fusion::tuple<A0 const &> args(a0);
+        lambda_context<fusion::tuple<A0 const &> > ctx(args);
         return this->eval(ctx);
     }
 
     template<typename A0, typename A1>
-    typename proto::meta::eval<T, lambda_context<fusion::tuple<A0, A1> > >::type
+    typename proto::meta::eval<T, lambda_context<fusion::tuple<A0 const &, A1 const &> > >::type
     operator()(A0 const &a0, A1 const &a1) const
     {
-        lambda_context<fusion::tuple<A0, A1> > ctx(fusion::make_tuple(a0, a1));
+        fusion::tuple<A0 const &, A1 const &> args(a0, a1);
+        lambda_context<fusion::tuple<A0 const &, A1 const &> > ctx(args);
         return this->eval(ctx);
     }
 };
@@ -187,6 +231,10 @@ void test_lambda()
     BOOST_CHECK_EQUAL(11, ( (_1 + 2) / 4 )(42));
     BOOST_CHECK_EQUAL(-11, ( (-(_1 + 2)) / 4 )(42));
     BOOST_CHECK_CLOSE(2.58, ( (4 - _2) * 3 )(42, 3.14), 0.1);
+
+    std::stringstream sout;
+    (sout << _1 << " -- " << _2)(42, "Life, the Universe and Everything!");
+    BOOST_CHECK_EQUAL("42 -- Life, the Universe and Everything!", sout.str());
 }
 
 using namespace unit_test;

@@ -210,7 +210,7 @@
         #define BOOST_PROTO_ARG_N_TYPE(z, n, data)\
             typename proto::meta::unref<\
                 typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)\
-            >::type\
+            >::reference\
             /**/
 
         #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/traits.hpp>))

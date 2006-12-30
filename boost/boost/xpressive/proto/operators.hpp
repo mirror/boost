@@ -47,17 +47,17 @@ namespace boost { namespace proto
                     Tag
                   , args2<
                         ref<Left>
-                      , typename meta::generate<typename Left::domain, expr<tag::terminal, args1<Right const &> > >::type
+                      , typename meta::generate<typename Left::domain, expr<tag::terminal, args1<Right &> > >::type
                     >
                 >
             >
         {
-            typedef expr<tag::terminal, args1<Right const &> > term_type;
+            typedef expr<tag::terminal, args1<Right &> > term_type;
             typedef expr<Tag, args2<ref<Left>, typename meta::generate<typename Left::domain, term_type>::type> > expr_type;
 
             template<typename Left2>
             static typename meta::generate<typename Left2::domain, expr_type>::type
-            make(Left2 const &left, Right const &right)
+            make(Left2 &left, Right &right)
             {
                 term_type term = {right};
                 expr_type that = {{left}, meta::generate<typename Left::domain, term_type>::make(term)};
@@ -72,18 +72,18 @@ namespace boost { namespace proto
               , expr<
                     Tag
                   , args2<
-                        typename meta::generate<typename Right::domain, expr<tag::terminal, args1<Left const &> > >::type
+                        typename meta::generate<typename Right::domain, expr<tag::terminal, args1<Left &> > >::type
                       , ref<Right>
                     >
                 >
             >
         {
-            typedef expr<tag::terminal, args1<Left const &> > term_type;
+            typedef expr<tag::terminal, args1<Left &> > term_type;
             typedef expr<Tag, args2<typename meta::generate<typename Right::domain, term_type>::type, ref<Right> > > expr_type;
 
             template<typename Right2>
             static typename meta::generate<typename Right2::domain, expr_type>::type
-            make(Left const &left, Right2 const &right)
+            make(Left &left, Right2 &right)
             {
                 term_type term = {left};
                 expr_type that = {meta::generate<typename Right::domain, term_type>::make(term), {right}};
@@ -108,7 +108,7 @@ namespace boost { namespace proto
 
             template<typename Left2>
             static typename meta::generate<typename Left2::domain, expr_type>::type
-            make(Left2 const &left, Right const &right)
+            make(Left2 &left, Right &right)
             {
                 expr_type that = {{left}, {right}};
                 return meta::generate<typename Left::domain, expr_type>::make(that);
@@ -129,9 +129,27 @@ namespace boost { namespace proto
 #define BOOST_PROTO_BINARY_OP(op, tag)\
     template<typename Left, typename Right>\
     inline typename detail::as_expr_if<tag, Left, Right>::type const\
-    operator op(Left const &left, Right const &right)\
+    operator op(Left &left, Right &right)\
     {\
         return detail::as_expr_if<tag, Left, Right>::make(left, right);\
+    }\
+    template<typename Left, typename Right>\
+    inline typename detail::as_expr_if<tag, Left, Right const>::type const\
+    operator op(Left &left, Right const &right)\
+    {\
+        return detail::as_expr_if<tag, Left, Right const>::make(left, right);\
+    }\
+    template<typename Left, typename Right>\
+    inline typename detail::as_expr_if<tag, Left const, Right>::type const\
+    operator op(Left const &left, Right &right)\
+    {\
+        return detail::as_expr_if<tag, Left const, Right>::make(left, right);\
+    }\
+    template<typename Left, typename Right>\
+    inline typename detail::as_expr_if<tag, Left const, Right const>::type const\
+    operator op(Left const &left, Right const &right)\
+    {\
+        return detail::as_expr_if<tag, Left const, Right const>::make(left, right);\
     }\
     /**/
 

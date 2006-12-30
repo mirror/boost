@@ -60,13 +60,6 @@ namespace boost { namespace proto
         {
             typedef T type;
             typedef T const &reference;
-
-        private:
-            friend struct op::unref;
-            static T const &call(T const &t)
-            {
-                return t;
-            }
         };
 
         template<typename T>
@@ -74,13 +67,6 @@ namespace boost { namespace proto
         {
             typedef T type;
             typedef T const &reference;
-
-        private:
-            friend struct op::unref;
-            static T const &call(ref<T> const &t)
-            {
-                return t.expr;
-            }
         };
 
         template<typename T>
@@ -125,9 +111,27 @@ namespace boost { namespace proto
             {};
 
             template<typename T>
-            typename meta::unref<T>::type const &operator()(T const &t) const
+            T &operator()(T &t) const
             {
-                return meta::unref<T>::call(t);
+                return t;
+            }
+
+            template<typename T>
+            T const &operator()(T const &t) const
+            {
+                return t;
+            }
+
+            template<typename T>
+            T const &operator()(ref<T> &t) const
+            {
+                return t.expr;
+            }
+
+            template<typename T>
+            T const &operator()(ref<T> const &t) const
+            {
+                return t.expr;
             }
         };
     }

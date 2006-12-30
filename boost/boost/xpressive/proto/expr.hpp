@@ -46,7 +46,7 @@
         /**/
 
     #define BOOST_PROTO_UNREF_ARG_TYPE(z, n, data)\
-        typename proto::meta::unref<typename Args::BOOST_PP_CAT(arg, n)>::type\
+        typename proto::meta::unref<typename Args::BOOST_PP_CAT(arg, n)>::reference\
         /**/
 
     #define BOOST_PROTO_UNREF_ARG(z, n, data)\
