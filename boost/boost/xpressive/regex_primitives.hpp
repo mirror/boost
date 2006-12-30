@@ -34,7 +34,7 @@ namespace boost { namespace xpressive { namespace detail
     typedef assert_word_placeholder<word_end> assert_word_end;
 
     struct mark_tag
-      : proto::extends<basic_mark_tag>
+      : proto::extends<basic_mark_tag, mark_tag>
     {
         mark_tag(int mark_nbr)
         {
@@ -42,7 +42,7 @@ namespace boost { namespace xpressive { namespace detail
             this->assign(that);
         }
 
-        using proto::extends<basic_mark_tag>::operator =;
+        using proto::extends<basic_mark_tag, mark_tag>::operator =;
     };
 
 /*
@@ -647,7 +647,7 @@ struct checker
 {
 private:
     struct some_valid_expression
-      : proto::extends<typename proto::meta::terminal<Char>::type>
+      : proto::extends<typename proto::meta::terminal<Char>::type, some_valid_expression>
     {
         template<typename Xpr>
         some_valid_expression(Xpr const &);

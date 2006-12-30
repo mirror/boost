@@ -37,17 +37,6 @@
 
         namespace meta
         {
-            // is_extends
-            template<typename T, typename EnableIf>
-            struct is_extends
-              : mpl::false_
-            {};
-
-            template<typename T>
-            struct is_extends<T, typename T::is_boost_proto_extends_private_extends_>
-              : mpl::true_
-            {};
-
             // is_ref
             template<typename T, typename EnableIf>
             struct is_ref
@@ -71,28 +60,30 @@
             {};
 
             // as_expr
-            template<typename T>
-            struct as_expr<T, false>
+            template<typename T, typename EnableIf>
+            struct as_expr
             {
                 typedef expr<proto::tag::terminal, args1<typename call_traits<T>::value_type> > type;
             };
 
             template<typename T>
-            struct as_expr<T, true>
-              : mpl::if_<is_extends<T>, typename T::type, T>
-            {};
+            struct as_expr<T, typename T::is_boost_proto_expr_>
+            {
+                typedef T type;
+            };
 
             // as_expr_ref
-            template<typename T>
-            struct as_expr_ref<T, false>
+            template<typename T, typename EnableIf>
+            struct as_expr_ref
             {
                 typedef expr<proto::tag::terminal, args1<T const &> > type;
             };
 
             template<typename T>
-            struct as_expr_ref<T, true>
-              : mpl::if_<is_ref<T>, T, ref<typename T::type> >
-            {};
+            struct as_expr_ref<T, typename T::is_boost_proto_expr_>
+            {
+                typedef ref<T> type;
+            };
 
             template<typename Expr, typename N>
             struct arg
@@ -262,7 +253,7 @@
                 template<typename T>
                 static typename meta::as_expr<T>::type const &call(T const &t, mpl::true_)
                 {
-                    return t.cast();
+                    return t;
                 }
 
                 template<typename T>
@@ -292,20 +283,6 @@
                 template<typename T>
                 typename meta::as_expr_ref<T>::type
                 operator()(T const &t) const
-                {
-                    return as_expr_ref::call(t, meta::is_expr<T>());
-                }
-
-            private:
-                template<typename T>
-                static typename meta::as_expr_ref<T>::type call(T const &t, mpl::true_)
-                {
-                    ref<typename T::type> that = {t.cast()};
-                    return that;
-                }
-
-                template<typename T>
-                static typename meta::as_expr_ref<T>::type call(T const &t, mpl::false_)
                 {
                     typename meta::as_expr_ref<T>::type that = {t};
                     return that;

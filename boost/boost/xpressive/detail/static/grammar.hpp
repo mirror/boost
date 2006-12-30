@@ -62,12 +62,12 @@ namespace boost { namespace xpressive
         {};
 
         template<typename Char, std::size_t N>
-        struct is_xpressive_literal_impl<Char, Char[N]>
+        struct is_xpressive_literal_impl<Char, Char (&)[N]>
           : mpl::true_
         {};
 
         template<typename Char, std::size_t N>
-        struct is_xpressive_literal_impl<Char, Char const[N]>
+        struct is_xpressive_literal_impl<Char, Char const (&)[N]>
           : mpl::true_
         {};
 

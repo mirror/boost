@@ -69,6 +69,7 @@ test-suite "proto"
         [ run proto/toy_spirit.cpp ]
 #        [ run proto/toy_spirit2.cpp ]
         [ run proto/calculator.cpp ]
+        [ run proto/lambda.cpp ]
     ;
 
 explicit "proto" ;

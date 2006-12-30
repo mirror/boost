@@ -34,21 +34,21 @@ namespace boost
 
     template<typename T>
     struct literal
-      : proto::extends<typename proto::meta::terminal<T>::type>
+      : proto::extends<typename proto::meta::terminal<T>::type, literal<T> >
     {
         typedef typename proto::meta::terminal<T>::type terminal_type;
 
         template<typename U>
         literal(U const &u)
-          : proto::extends<terminal_type>(terminal_type::make(u))
+          : proto::extends<terminal_type, literal<T> >(terminal_type::make(u))
         {}
 
         template<typename U>
         literal(literal<U> const &u)
-          : proto::extends<terminal_type>(terminal_type::make(proto::arg(u)))
+          : proto::extends<terminal_type, literal<T> >(terminal_type::make(proto::arg(u)))
         {}
 
-        using terminal_type::operator =;
+        using proto::extends<terminal_type, literal<T> >::operator =;
     };
 
     template<typename T>

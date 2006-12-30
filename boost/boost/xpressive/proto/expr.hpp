@@ -84,6 +84,7 @@
             typedef Tag tag_type;
             typedef expr type;
             typedef Args args_type;
+            typedef void domain;
             typedef mpl::long_<BOOST_PP_ITERATION()> arity;
             typedef proto_expr_tag fusion_tag;
             typedef void is_boost_proto_expr_;

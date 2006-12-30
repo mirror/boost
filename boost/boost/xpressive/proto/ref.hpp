@@ -25,10 +25,11 @@ namespace boost { namespace proto
     template<typename Expr>
     struct ref
     {
-        typedef Expr type;
+        typedef typename Expr::type type;
         typedef typename Expr::tag_type tag_type;
         typedef typename Expr::args_type args_type;
         typedef typename Expr::arity arity;
+        typedef typename Expr::domain domain;
         typedef proto_ref_tag fusion_tag;
         typedef void is_boost_proto_ref_;
         typedef void is_boost_proto_expr_;
@@ -37,13 +38,18 @@ namespace boost { namespace proto
         BOOST_PROTO_IDENTITY_TRANSFORM();
         BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_ARG, _)
 
-        Expr const &cast() const
+        type const &cast() const
         {
-            return this->expr;
+            return this->expr.cast();
         }
 
         Expr const &expr;
     };
+
+    // ref-to-ref is not allowed. this will cause a compile error.
+    template<typename Expr>
+    struct ref<ref<Expr> >
+    {};
 
 #undef BOOST_PROTO_ARG
 
