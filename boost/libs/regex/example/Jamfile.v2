@@ -20,6 +20,7 @@ rule regex-test-run ( sources + : input * : name * )
             $(input)
          :  # test-files
          :  # requirements
+            <toolset>msvc-7.1:<define>TEST_MFC=1 <toolset>msvc-7.0:<define>TEST_MFC=1
          :  # test name
             $(name)
         ] ;
@@ -52,6 +53,7 @@ test-suite regex-examples :
   : : :  <threading>multi <define>BOOST_REGEX_MATCH_EXTRA=1 ]
 
 ;
+
 
 
 

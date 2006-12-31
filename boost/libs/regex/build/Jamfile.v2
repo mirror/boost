@@ -66,7 +66,7 @@ rule check-icu-config ( )
       {
          ECHO Building Boost.Regex with the optional Unicode/ICU support disabled. ;
          ECHO Please refer to the Boost.Regex documentation for more information ;
-         ECHO (and if you don't know what ICU is then you probably don't need it). ;
+         ECHO (don't panic: this is a strictly optional feature). ;
          if $(ICU_PATH)
          {
             ECHO Couldn't find utypes.h in $(ICU_PATH:J=" ")$(SLASH)include$(SLASH)unicode ;
@@ -134,4 +134,5 @@ lib boost_regex : ../src/$(SOURCES) $(ICU_EXTRA_SOURCE)
 	     <link>shared:<define>BOOST_REGEX_DYN_LINK=1
 	     $(BOOST_REGEX_ICU_OPTS)
     ;
+
 
