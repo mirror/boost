@@ -4,7 +4,7 @@
 # http://www.boost.org/LICENSE_1_0.txt.
 
 project
-    : requirements <threading>multi <link>shared:<define>BOOST_REGEX_DYN_LINK=1
+    : requirements <threading>multi <link>shared:<define>BOOST_REGEX_DYN_LINK=1 <toolset>msvc-7.1:<define>TEST_MFC=1 <toolset>msvc-7.0:<define>TEST_MFC=1
     ;
 
 #
@@ -131,6 +131,7 @@ test-suite regex
  ]
 ;
       
+
 
 
 
