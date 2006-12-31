@@ -25,13 +25,13 @@ namespace boost { namespace proto { namespace transform
     {
         fold();
 
-        typedef typename Grammar::type grammar_type;
-        typedef typename grammar_type::arg0_type left_grammar;
-        typedef typename grammar_type::arg1_type right_grammar;
-
         template<typename Expr, typename State, typename Visitor>
         struct apply
         {
+            typedef typename Grammar::type grammar_type;
+            typedef typename grammar_type::arg0_type left_grammar;
+            typedef typename grammar_type::arg1_type right_grammar;
+
             typedef typename proto::meta::left<Expr>::type left_expr;
             typedef typename proto::meta::right<Expr>::type right_expr;
 
@@ -46,6 +46,10 @@ namespace boost { namespace proto { namespace transform
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
+            typedef typename Grammar::type grammar_type;
+            typedef typename grammar_type::arg0_type left_grammar;
+            typedef typename grammar_type::arg1_type right_grammar;
+
             return right_grammar::call(
                 proto::right(expr)
               , left_grammar::call(proto::left(expr), state, visitor)
@@ -62,13 +66,13 @@ namespace boost { namespace proto { namespace transform
     {
         reverse_fold();
 
-        typedef typename Grammar::type grammar_type;
-        typedef typename grammar_type::arg0_type left_grammar;
-        typedef typename grammar_type::arg1_type right_grammar;
-
         template<typename Expr, typename State, typename Visitor>
         struct apply
         {
+            typedef typename Grammar::type grammar_type;
+            typedef typename grammar_type::arg0_type left_grammar;
+            typedef typename grammar_type::arg1_type right_grammar;
+
             typedef typename proto::meta::left<Expr>::type left_expr;
             typedef typename proto::meta::right<Expr>::type right_expr;
 
@@ -83,6 +87,10 @@ namespace boost { namespace proto { namespace transform
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
+            typedef typename Grammar::type grammar_type;
+            typedef typename grammar_type::arg0_type left_grammar;
+            typedef typename grammar_type::arg1_type right_grammar;
+
             return left_grammar::call(
                 proto::left(expr)
               , right_grammar::call(proto::right(expr), state, visitor)

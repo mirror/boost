@@ -172,8 +172,24 @@
                 >
             {};
 
+            template<typename Tag, typename Args1, typename Args2>
+            struct matches_impl< expr<Tag, Args1, 1>, expr<mpl::_, Args2, 1> >
+              : matches_impl<
+                    typename Args1::arg0::type
+                  , typename deref<typename Args2::arg0>::type
+                >
+            {};
+
             template<typename Args1, typename Args2>
             struct matches_impl< expr<tag::terminal, Args1, 1>, expr<tag::terminal, Args2, 1> >
+              : terminal_matches<
+                    typename Args1::arg0
+                  , typename Args2::arg0
+                >
+            {};
+
+            template<typename Args1, typename Args2>
+            struct matches_impl< expr<tag::terminal, Args1, 1>, expr<mpl::_, Args2, 1> >
               : terminal_matches<
                     typename Args1::arg0
                   , typename Args2::arg0
@@ -291,6 +307,11 @@
 
             template<typename Tag, typename Args1, typename Args2>
             struct matches_impl< expr<Tag, Args1, N>, expr<Tag, Args2, N> >
+              : detail::and_<BOOST_PP_ENUM(N, BOOST_PROTO_MATCHES_N_FUN, N) >
+            {};
+
+            template<typename Tag, typename Args1, typename Args2>
+            struct matches_impl< expr<Tag, Args1, N>, expr<mpl::_, Args2, N> >
               : detail::and_<BOOST_PP_ENUM(N, BOOST_PROTO_MATCHES_N_FUN, N) >
             {};
 

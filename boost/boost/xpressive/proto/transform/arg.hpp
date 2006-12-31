@@ -95,6 +95,45 @@ namespace boost { namespace proto { namespace transform
         }
     };
 
+    // Just return the state
+    template<typename Grammar>
+    struct state
+      : Grammar
+    {
+        template<typename, typename State, typename>
+        struct apply
+        {
+            typedef State type;
+        };
+
+        template<typename Expr, typename State, typename Visitor>
+        static State const &
+        call(Expr const &, State const &state_, Visitor &)
+        {
+            return state_;
+        }
+    };
+
+    // Just return the visitor
+    template<typename Grammar>
+    struct visitor
+      : Grammar
+    {
+        template<typename, typename, typename Visitor>
+        struct apply
+        {
+            typedef Visitor type;
+        };
+
+        template<typename Expr, typename State, typename Visitor>
+        static Visitor &
+        call(Expr const &, State const &, Visitor &visitor_)
+        {
+            return visitor_;
+        }
+    };
+
+
 }}}
 
 #endif

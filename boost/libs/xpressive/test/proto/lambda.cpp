@@ -6,20 +6,24 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <sstream>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/print.hpp>
+#include <boost/mpl/int.hpp>
+#include <boost/mpl/min_max.hpp>
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/next_prior.hpp>
 #include <boost/fusion/tuple.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/xpressive/proto/proto.hpp>
+#include <boost/xpressive/proto/transform/arg.hpp>
+#include <boost/xpressive/proto/transform/fold.hpp>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
 
 using namespace boost;
 
 struct lambda_domain {};
-template<int I> struct placeholder {};
+template<typename I> struct placeholder { typedef I arity; };
 
 template<typename Tuple>
 struct lambda_context;
@@ -37,6 +41,41 @@ struct param
   : add_reference<typename add_const<T>::type>
 {};
 
+// Some custom transforms for calculating the max arity of a lambda expression
+template<typename Grammar>
+struct max_arity
+  : Grammar
+{
+    template<typename Expr, typename State, typename Visitor>
+    struct apply
+    {
+        typedef typename Grammar::template apply<Expr, State, Visitor>::type arity;
+        typedef typename mpl::max<arity, State>::type type;
+    };
+};
+
+template<typename Grammar>
+struct placeholder_arity
+  : Grammar
+{
+    template<typename Expr, typename, typename>
+    struct apply
+      : mpl::next<typename proto::meta::arg<Expr>::type::arity>
+    {};
+};
+
+// The lambda grammar, with the transforms for calculating the max arity
+struct LambdaGrammar
+  : max_arity<
+        proto::or_<
+            placeholder_arity< proto::meta::terminal<placeholder<mpl::_> > >
+          , proto::trans::state< proto::meta::terminal<mpl::_> >
+          , proto::trans::arg< proto::meta::unary_expr<mpl::_, LambdaGrammar> >
+          , proto::trans::fold< proto::meta::binary_expr<mpl::_, LambdaGrammar, LambdaGrammar> >
+        >
+    >
+{};
+
 template<typename Tuple>
 struct lambda_context_result
 {
@@ -51,10 +90,10 @@ struct lambda_context_result
         typedef Arg &type;
     };
 
-    template<typename This, int I>
+    template<typename This, typename I>
     struct result<This(proto::tag::terminal, placeholder<I> const &)>
     {
-        typedef typename fusion::result_of::value_at_c<Tuple, I>::type type;
+        typedef typename fusion::result_of::value_at<Tuple, I>::type type;
     };
 
 #define UN_OP_RESULT(Op, Arg)\
@@ -65,8 +104,7 @@ struct lambda_context_result
       , typename nested::type &\
       , typename nested::type\
     >::type type;\
-    static type call(typename param<arg_type>::type arg)\
-    {\
+    static type call(typename param<arg_type>::type arg) {\
         return Op arg;\
     }\
     /**/
@@ -80,8 +118,7 @@ struct lambda_context_result
       , typename nested::type &\
       , typename nested::type\
     >::type type;\
-    static type call(typename param<left_type>::type left, typename param<right_type>::type right)\
-    {\
+    static type call(typename param<left_type>::type left, typename param<right_type>::type right) {\
         return left Op right;\
     }\
     /**/
@@ -134,8 +171,6 @@ struct lambda_context
   : lambda_context_result<Tuple>
 {
     typedef lambda_context<Tuple> this_type;
-    typedef lambda_context_result<Tuple> base_type;
-    template<typename Sig> struct result_ : base_type::template result<Sig> {};
 
     lambda_context(Tuple const &args)
       : args_(args)
@@ -148,25 +183,25 @@ struct lambda_context
         return arg;
     }
 
-    template<int I>
-    typename fusion::result_of::at_c<Tuple, I>::type
+    template<typename I>
+    typename fusion::result_of::at<Tuple, I>::type
     operator()(proto::tag::terminal, placeholder<I>)
     {
-        return fusion::get<I>(this->args_);
+        return fusion::at<I>(this->args_);
     }
 
     template<typename Tag, typename Arg>
-    typename result_<this_type(Tag, Arg &)>::type
+    typename lambda_context_result<Tuple>::template result<this_type(Tag, Arg &)>::type
     operator()(Tag, Arg &arg)
     {
-        return result_<this_type(Tag, Arg &)>::call(arg.eval(*this));
+        return lambda_context_result<Tuple>::template result<this_type(Tag, Arg &)>::call(arg.eval(*this));
     }
 
     template<typename Tag, typename Left, typename Right>
-    typename result_<this_type(Tag, Left &, Right &)>::type
+    typename lambda_context_result<Tuple>::template result<this_type(Tag, Left &, Right &)>::type
     operator()(Tag, Left &left, Right &right)
     {
-        return result_<this_type(Tag, Left &, Right &)>::call(left.eval(*this), right.eval(*this));
+        return lambda_context_result<Tuple>::template result<this_type(Tag, Left &, Right &)>::call(left.eval(*this), right.eval(*this));
     }
 
 private:
@@ -188,6 +223,21 @@ struct lambda
     {}
 
     using base_type::operator =;
+
+    // Careful not to evaluate the return type of the nullary function
+    // unless we have a nullary lambda!
+    typedef typename mpl::eval_if<
+        typename LambdaGrammar::apply<T, mpl::int_<0>, mpl::void_>::type
+      , mpl::identity<void>
+      , proto::meta::eval<T, lambda_context<fusion::tuple<> > >
+    >::type nullary_type;
+
+    nullary_type operator()() const
+    {
+        fusion::tuple<> args;
+        lambda_context<fusion::tuple<> > ctx(args);
+        return this->eval(ctx);
+    }
 
     // hide base_type::operator() by defining our own which
     // evaluates the lambda expression.
@@ -216,6 +266,7 @@ namespace boost { namespace proto { namespace meta
     struct generate<lambda_domain, Expr, Tag>
     {
         typedef lambda<Expr> type;
+
         static type make(Expr const &expr)
         {
             return lambda<Expr>(expr);
@@ -223,8 +274,15 @@ namespace boost { namespace proto { namespace meta
     };
 }}}
 
-lambda<proto::meta::terminal<placeholder<0> >::type> const _1;
-lambda<proto::meta::terminal<placeholder<1> >::type> const _2;
+lambda<proto::meta::terminal<placeholder<mpl::int_<0> > >::type> const _1;
+lambda<proto::meta::terminal<placeholder<mpl::int_<1> > >::type> const _2;
+
+template<typename T>
+lambda<typename proto::meta::terminal<T>::type> const constant(T const &t)
+{
+    typename proto::meta::terminal<T>::type that = {t};
+    return lambda<typename proto::meta::terminal<int>::type>(that);
+}
 
 void test_lambda()
 {
@@ -232,9 +290,13 @@ void test_lambda()
     BOOST_CHECK_EQUAL(-11, ( (-(_1 + 2)) / 4 )(42));
     BOOST_CHECK_CLOSE(2.58, ( (4 - _2) * 3 )(42, 3.14), 0.1);
 
+    // check non-const ref terminals
     std::stringstream sout;
     (sout << _1 << " -- " << _2)(42, "Life, the Universe and Everything!");
     BOOST_CHECK_EQUAL("42 -- Life, the Universe and Everything!", sout.str());
+
+    // check nullary lambdas
+    BOOST_CHECK_EQUAL(3, (constant(1) + constant(2))());
 }
 
 using namespace unit_test;
