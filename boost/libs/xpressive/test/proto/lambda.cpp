@@ -76,6 +76,12 @@ struct LambdaGrammar
     >
 {};
 
+// simple wrapper for calculating a lambda expression's arity.
+template<typename Expr>
+struct LambdaArity
+  : LambdaGrammar::apply<Expr, mpl::int_<0>, mpl::void_>
+{};
+
 template<typename Tuple>
 struct lambda_context_result
 {
@@ -171,6 +177,8 @@ struct lambda_context
   : lambda_context_result<Tuple>
 {
     typedef lambda_context<Tuple> this_type;
+    typedef lambda_context_result<Tuple> base_type;
+    template<typename Sig> struct result_ : base_type::template result<Sig> {};
 
     lambda_context(Tuple const &args)
       : args_(args)
@@ -191,17 +199,17 @@ struct lambda_context
     }
 
     template<typename Tag, typename Arg>
-    typename lambda_context_result<Tuple>::template result<this_type(Tag, Arg &)>::type
+    typename result_<this_type(Tag, Arg &)>::type
     operator()(Tag, Arg &arg)
     {
-        return lambda_context_result<Tuple>::template result<this_type(Tag, Arg &)>::call(arg.eval(*this));
+        return result_<this_type(Tag, Arg &)>::call(arg.eval(*this));
     }
 
     template<typename Tag, typename Left, typename Right>
-    typename lambda_context_result<Tuple>::template result<this_type(Tag, Left &, Right &)>::type
+    typename result_<this_type(Tag, Left &, Right &)>::type
     operator()(Tag, Left &left, Right &right)
     {
-        return lambda_context_result<Tuple>::template result<this_type(Tag, Left &, Right &)>::call(left.eval(*this), right.eval(*this));
+        return result_<this_type(Tag, Left &, Right &)>::call(left.eval(*this), right.eval(*this));
     }
 
 private:
@@ -227,7 +235,7 @@ struct lambda
     // Careful not to evaluate the return type of the nullary function
     // unless we have a nullary lambda!
     typedef typename mpl::eval_if<
-        typename LambdaGrammar::apply<T, mpl::int_<0>, mpl::void_>::type
+        typename LambdaArity<T>::type
       , mpl::identity<void>
       , proto::meta::eval<T, lambda_context<fusion::tuple<> > >
     >::type nullary_type;
@@ -280,8 +288,7 @@ lambda<proto::meta::terminal<placeholder<mpl::int_<1> > >::type> const _2;
 template<typename T>
 lambda<typename proto::meta::terminal<T>::type> const constant(T const &t)
 {
-    typename proto::meta::terminal<T>::type that = {t};
-    return lambda<typename proto::meta::terminal<int>::type>(that);
+    return proto::meta::terminal<T>::type::make(t);
 }
 
 void test_lambda()
