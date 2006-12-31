@@ -1,4 +1,4 @@
-//  This file was automatically generated on Wed Feb 15 14:14:06 2006
+//  This file was automatically generated on Sun Dec 31 16:29:33 2006
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -93,6 +93,11 @@ namespace boost_no_exception_std_namespace = empty_boost;
 #include "boost_no_exp_func_tem_arg.ipp"
 #else
 namespace boost_no_explicit_function_template_arguments = empty_boost;
+#endif
+#ifndef BOOST_NO_FUNCTION_TYPE_SPECIALIZATIONS
+#include "boost_no_function_type_spec.ipp"
+#else
+namespace boost_no_function_type_specializations = empty_boost;
 #endif
 #ifndef BOOST_NO_FUNCTION_TEMPLATE_ORDERING
 #include "boost_no_func_tmp_order.ipp"
@@ -268,6 +273,11 @@ namespace boost_no_swprintf = empty_boost;
 #include "boost_no_template_template.ipp"
 #else
 namespace boost_no_template_templates = empty_boost;
+#endif
+#ifndef BOOST_NO_TWO_PHASE_NAME_LOOKUP
+#include "boost_no_two_phase_name_lookup.ipp"
+#else
+namespace boost_no_two_phase_name_lookup = empty_boost;
 #endif
 #ifndef BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #include "boost_no_using_breaks_adl.ipp"
@@ -843,6 +853,11 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
+   if(0 != boost_no_function_type_specializations::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_FUNCTION_TYPE_SPECIALIZATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
    if(0 != boost_no_function_template_ordering::test())
    {
       std::cerr << "Failed test for BOOST_NO_FUNCTION_TEMPLATE_ORDERING at: " << __FILE__ << ":" << __LINE__ << std::endl;
@@ -1016,6 +1031,11 @@ int main( int, char *[] )
    if(0 != boost_no_template_templates::test())
    {
       std::cerr << "Failed test for BOOST_NO_TEMPLATE_TEMPLATES at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_two_phase_name_lookup::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_TWO_PHASE_NAME_LOOKUP at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_function_scope_using_declaration_breaks_adl::test())
