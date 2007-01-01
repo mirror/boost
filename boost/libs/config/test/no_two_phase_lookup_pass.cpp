@@ -1,4 +1,4 @@
-//  This file was automatically generated on Sun Dec 31 16:29:33 2006
+//  This file was automatically generated on Mon Jan 01 12:05:16 2007
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -8,9 +8,9 @@
 //  See http://www.boost.org/libs/config for the most recent version.
 
 // Test file for macro BOOST_NO_TWO_PHASE_NAME_LOOKUP
-// This file should not compile, if it does then
-// BOOST_NO_TWO_PHASE_NAME_LOOKUP should not be defined.
-// See file boost_no_two_phase_name_lookup.ipp for details
+// This file should compile, if it does not then
+// BOOST_NO_TWO_PHASE_NAME_LOOKUP should be defined.
+// See file boost_no_two_phase_lookup.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
 // the objective of this file:
@@ -21,10 +21,10 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifdef BOOST_NO_TWO_PHASE_NAME_LOOKUP
-#include "boost_no_two_phase_name_lookup.ipp"
+#ifndef BOOST_NO_TWO_PHASE_NAME_LOOKUP
+#include "boost_no_two_phase_lookup.ipp"
 #else
-#error "this file should not compile"
+namespace boost_no_two_phase_name_lookup = empty_boost;
 #endif
 
 int main( int, char *[] )

@@ -1,4 +1,4 @@
-//  This file was automatically generated on Sun Dec 31 16:29:33 2006
+//  This file was automatically generated on Mon Jan 01 12:39:24 2007
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -275,7 +275,7 @@ namespace boost_no_swprintf = empty_boost;
 namespace boost_no_template_templates = empty_boost;
 #endif
 #ifndef BOOST_NO_TWO_PHASE_NAME_LOOKUP
-#include "boost_no_two_phase_name_lookup.ipp"
+#include "boost_no_two_phase_lookup.ipp"
 #else
 namespace boost_no_two_phase_name_lookup = empty_boost;
 #endif
