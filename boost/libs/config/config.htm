@@ -872,7 +872,7 @@ void g() { return f(); }</pre>
          </tr>
          <tr>
             <td>BOOST_HAS_LONG_LONG</td>
-	    <td>Compiler</td>
+            <td>Compiler</td>
             <td>The compiler supports the long long data type.</td>
          </tr>
          <TR>
@@ -1125,9 +1125,8 @@ void g() { return f(); }</pre>
          </tr>
       </table>
       <h4><a name="cpp0x"></a>Macros that describe C++0x features</h4>
-      <p>The following macros describe features that are likely to be
-      included in the upcoming ISO C++ standard, C++0x.</p>
-
+      <p>The following macros describe features that are likely to be included in the 
+         upcoming ISO C++ standard, C++0x.</p>
       <table border="1" cellpadding="7" cellspacing="1" width="100%">
          <tr>
             <td valign="top" width="50%"><p align="center"><b>Macro</b></p>
@@ -1138,55 +1137,48 @@ void g() { return f(); }</pre>
          <tr>
             <td valign="top" width="50%">BOOST_CXX0X_CONCEPTS</td>
             <td valign="top" width="50%">
-	    The compiler supports <a
-            href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2081.pdf">concepts</a>. <b>Note</b>: concepts have been
-            proposed for C++0x, but have not yet been approved for
-            inclusion in the language.
+               The compiler supports <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2081.pdf">
+                  concepts</a>. <b>Note</b>: concepts have been proposed for C++0x, but have 
+               not yet been approved for inclusion in the language.
             </td>
          </tr>
-	 <tr>
+         <tr>
             <td valign="top" width="50%">BOOST_CXX0X_LONG_LONG</td>
             <td valign="top" width="50%">
-	    The compiler supports the long long. Identical to <tt>BOOST_HAS_LONG_LONG</tt>.
-	    </td>
-	 </tr>
-	 <tr>
+               The compiler supports the long long. Identical to <tt>BOOST_HAS_LONG_LONG</tt>.
+            </td>
+         </tr>
+         <tr>
             <td valign="top" width="50%">BOOST_CXX0X_PREPROCESSOR</td>
             <td valign="top" width="50%">
-	    The compiler supports the <a
-            href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1653.htm">C99
-            preprocessor</a>, which includes variadic macros,
-            concatenation of wide string literals, and the
-            <code>_Pragma</code> operator.
-	    </td>
-	 </tr>
+               The compiler supports the <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1653.htm">
+                  C99 preprocessor</a>, which includes variadic macros, concatenation of wide 
+               string literals, and the <code>_Pragma</code> operator.
+            </td>
+         </tr>
          <tr>
             <td valign="top" width="50%">BOOST_CXX0X_RVALUE_REFERENCES</td>
             <td valign="top" width="50%">
-	    The compiler supports <a
-            href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2118.html">rvalue
-            references</a>.
+               The compiler supports <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2118.html">
+                  rvalue references</a>.
             </td>
          </tr>
          <tr>
             <td valign="top" width="50%">BOOST_CXX0X_STATIC_ASSERT</td>
             <td valign="top" width="50%">
-	    The compiler supports <a
-            href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1720.html">static assertions</a>.
+               The compiler supports <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1720.html">
+                  static assertions</a>.
             </td>
          </tr>
          <tr>
             <td valign="top" width="50%">BOOST_CXX0X_VARIADIC_TEMPLATES</td>
             <td valign="top" width="50%">
-	    The compiler supports <a
-            href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2080.pdf">variadic
-            templates</a>. <b>Note</b>: variadic templates have been
-            proposed for C++0x, but have not yet been approved for
-            inclusion in the language.
+               The compiler supports <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2080.pdf">
+                  variadic templates</a>. <b>Note</b>: variadic templates have been proposed 
+               for C++0x, but have not yet been approved for inclusion in the language.
             </td>
          </tr>
       </table>
-      
       <h4><a name="helpers"></a>Boost Helper Macros</h4>
       <p>The following macros are either simple helpers, or macros that provide 
          workarounds for compiler/standard library defects.</p>
@@ -1620,12 +1612,36 @@ int test()
 
 }</pre>
       <p>
-         Once the test code is in place, build and run the program "generate.cpp" that 
-         you will find in the boost-root/libs/config/tools/ directory. This generates 
-         two .cpp test files from the new test code, and adds the tests to the 
-         regression test Jamfile, and the config_test.cpp test program. Finally add a 
-         new entry to config_info.cpp so that the new macro gets printed out when that 
-         program is run.</p>
+         Once the test code is in place in libs/config/test, updating the configuration 
+         test system proceeds as:</p>
+      <UL>
+         <LI>
+            cd into libs/config/tools and run <EM>bjam --v2 </EM>: this generates the .cpp 
+            file test cases from the .ipp file, updates the Jamfile, config_test.cpp and 
+            config_info.cpp.</LI>
+         <LI>
+            cd into libs/config/test and run <EM>bjam --v2 MACRONAME compiler-list</EM>&nbsp;: 
+            where <EM>MACRONAME</EM> is the name of the new macro, and <EM>compiler-list</EM>
+            is the list of compilers to test with.&nbsp; You should see the tests pass with 
+            those compilers that don't have the defect, and fail with those that do.</LI>
+         <LI>
+            cd into libs/config/test and run <EM>bjam --v2 config_info config_test 
+               compiler-list</EM> : config_info should build and run cleanly for all the 
+            compilers in <EM>compiler-list</EM> while config_test should fail for those 
+            that have the defect, and pass for those that do not.</LI></UL>
+      <P>Then you should:</P>
+      <UL>
+         <LI>
+            Define the defect macro in those config headers that require it.</LI>
+         <LI>
+            Document the macro in this documentation (please do not forget this step!!)</LI>
+         <LI>
+            Commit everything.</LI>
+         <LI>
+            Keep an eye on the regression tests for new failures in Boost.Config caused by 
+            the addition.</LI>
+         <LI>
+            Start using the macro.</LI></UL>
       <h4><a name="feature_guidelines"></a>Adding New Feature Test Macros</h4>
       <p>When you need to add a macro that describes a feature that the standard does 
          not require, follow the convention for adding a new defect macro (above), but 
@@ -1732,8 +1748,9 @@ int test()
       <p>Copyright&nbsp;Beman Dawes 2001</p>
       <p>Copyright&nbsp;Vesa Karvonen 2001</p>
       <p>Copyright&nbsp;John Maddock 2001</p>
-      <P>Distributed under the Boost Software License, Version 1.0. (See accompanying file <A href="../../LICENSE_1_0.txt">
-            LICENSE_1_0.txt</A> or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">www.boost.org/LICENSE_1_0.txt</A>).</P>
+      <P>Distributed under the Boost Software License, Version 1.0. (See accompanying 
+         file <A href="../../LICENSE_1_0.txt">LICENSE_1_0.txt</A> or copy at <A href="http://www.boost.org/LICENSE_1_0.txt">
+            www.boost.org/LICENSE_1_0.txt</A>).</P>
       <p>&nbsp;</p>
       <p>&nbsp;</p>
       <p>&nbsp;</p>
@@ -1741,4 +1758,3 @@ int test()
       <p>&nbsp;</p>
    </body>
 </html>
-
