@@ -45,19 +45,19 @@ namespace boost { namespace proto
         }
 
         template<typename A>
-        typename meta::generate<Domain, expr<tag::assign, args2<ref<Derived>, typename proto::meta::as_expr_ref<A>::type> >, tag::assign>::type const
+        typename meta::generate<Domain, expr<tag::assign, args2<ref<Derived>, typename meta::as_expr_ref<A>::type> >, tag::assign>::type const
         operator =(A const &a) const
         {
-            expr<tag::assign, args2<ref<Derived>, typename proto::meta::as_expr_ref<A>::type> > that = {{this->derived()}, proto::as_expr_ref(a)};
-            return meta::generate<Domain, expr<tag::assign, args2<ref<Derived>, typename proto::meta::as_expr_ref<A>::type> >, tag::assign>::make(that);
+            expr<tag::assign, args2<ref<Derived>, typename meta::as_expr_ref<A>::type> > that = {{this->derived()}, proto::as_expr_ref(a)};
+            return meta::generate<Domain, expr<tag::assign, args2<ref<Derived>, typename meta::as_expr_ref<A>::type> >, tag::assign>::make(that);
         }
 
         template<typename A>
-        typename meta::generate<Domain, expr<tag::subscript, args2<ref<Derived>, typename proto::meta::as_expr_ref<A>::type> >, tag::subscript>::type const
+        typename meta::generate<Domain, expr<tag::subscript, args2<ref<Derived>, typename meta::as_expr_ref<A>::type> >, tag::subscript>::type const
         operator [](A const &a) const
         {
-            expr<tag::subscript, args2<ref<Derived>, typename proto::meta::as_expr_ref<A>::type> > that = {{this->derived()}, proto::as_expr_ref(a)};
-            return meta::generate<Domain, expr<tag::subscript, args2<ref<Derived>, typename proto::meta::as_expr_ref<A>::type> >, tag::subscript>::make(that);
+            expr<tag::subscript, args2<ref<Derived>, typename meta::as_expr_ref<A>::type> > that = {{this->derived()}, proto::as_expr_ref(a)};
+            return meta::generate<Domain, expr<tag::subscript, args2<ref<Derived>, typename meta::as_expr_ref<A>::type> >, tag::subscript>::make(that);
         }
 
         template<typename Sig>
@@ -84,14 +84,14 @@ namespace boost { namespace proto
         template<typename This BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>\
         struct result<This(BOOST_PP_ENUM_PARAMS(N, A))>\
         {\
-            typedef typename meta::generate<Domain, expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<Derived> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename proto::meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> >, tag::function>::type type;\
+            typedef typename meta::generate<Domain, expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<Derived> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> >, tag::function>::type type;\
         };\
         template<BOOST_PP_ENUM_PARAMS(N, typename A)>\
-        typename meta::generate<Domain, expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<Derived> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename proto::meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > >::type const\
+        typename meta::generate<Domain, expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<Derived> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > >::type const\
         operator ()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const &a)) const\
         {\
-            expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<Derived> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename proto::meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > that = {{this->derived()} BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_AS_OP, _)};\
-            return meta::generate<Domain, expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<Derived> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename proto::meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> >, tag::function>::make(that);\
+            expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<Derived> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > that = {{this->derived()} BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_AS_OP, _)};\
+            return meta::generate<Domain, expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<Derived> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> >, tag::function>::make(that);\
         }\
         /**/
 
