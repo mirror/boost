@@ -13,7 +13,7 @@
 #define FUSION_AT at_c
 #endif
 
-namespace
+namespace test_detail
 {
     // no public default constructor
     class foo
@@ -38,6 +38,7 @@ void
 test()
 {
     using namespace boost::fusion;
+    using namespace test_detail;
 
     FUSION_SEQUENCE<int, float, bool, foo> t1(5, 12.2f, true, foo(4));
     FUSION_AT<0>(t1) = 6;

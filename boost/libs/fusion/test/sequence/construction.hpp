@@ -13,7 +13,7 @@
 #define FUSION_AT at_c
 #endif
 
-namespace
+namespace test_detail
 {
     // something to prevent warnings for unused variables
     template<class T> void dummy(const T&) {}
@@ -51,6 +51,7 @@ inline void
 test()
 {
     using namespace boost::fusion;
+    using namespace test_detail;
 
     FUSION_SEQUENCE<int> t1;
     BOOST_TEST(FUSION_AT<0>(t1) == int());

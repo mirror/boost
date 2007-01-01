@@ -30,7 +30,7 @@
         Iterator">Forward
         Iterator</a></h4></div></div></div>
 <a name="fusion.iterators.concepts.forward_iterator.description"></a><h5>
-<a name="id457205"></a>
+<a name="id457187"></a>
           <a href="forward_iterator.html#fusion.iterators.concepts.forward_iterator.description">Description</a>
         </h5>
 <p>
@@ -63,7 +63,7 @@
 </dl>
 </div>
 <a name="fusion.iterators.concepts.forward_iterator.expression_requirements"></a><h5>
-<a name="id457354"></a>
+<a name="id457335"></a>
           <a href="forward_iterator.html#fusion.iterators.concepts.forward_iterator.expression_requirements">Expression
           requirements</a>
         </h5>
@@ -91,15 +91,17 @@
 <td>Constant</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">i</span> <span class="special">==</span> <span class="identifier">j</span></tt></td>
-<td>Convertible to
-                bool</td>
+<td><tt class="computeroutput"><span class="identifier">i</span> <span class="special">==</span>
+                <span class="identifier">j</span></tt></td>
+<td>Convertible
+                to bool</td>
 <td>Constant</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">i</span> <span class="special">!=</span> <span class="identifier">j</span></tt></td>
-<td>Convertible to
-                bool</td>
+<td><tt class="computeroutput"><span class="identifier">i</span> <span class="special">!=</span>
+                <span class="identifier">j</span></tt></td>
+<td>Convertible
+                to bool</td>
 <td>Constant</td>
 </tr>
 <tr>
@@ -115,8 +117,8 @@
 <td>Constant</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><a href="../functions/distance.html" title="distance"><tt class="computeroutput"><span class="identifier">distance</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">,</span> <span class="identifier">j</span><span class="special">)</span></tt></td>
-<td><tt class="computeroutput"><a href="../metafunctions/distance.html" title="distance"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">distance</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">J</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
+<td><tt class="computeroutput"><a href="../functions/distance.html" title="distance"><tt class="computeroutput"><span class="identifier">distance</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">,</span> <span class="identifier">j</span><span class="special">)</span></tt></td>
+<td><tt class="computeroutput"><a href="../metafunctions/distance.html" title="distance"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">distance</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">J</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
 <td>Constant</td>
 </tr>
 <tr>
@@ -132,7 +134,7 @@
 </tbody>
 </table></div>
 <a name="fusion.iterators.concepts.forward_iterator.meta_expressions"></a><h5>
-<a name="id457952"></a>
+<a name="id457932"></a>
           <a href="forward_iterator.html#fusion.iterators.concepts.forward_iterator.meta_expressions">Meta
           Expressions</a>
         </h5>
@@ -152,20 +154,20 @@
                 time</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><a href="../metafunctions/equal_to.html" title="equal_to"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">equal_to</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">J</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
+<td><tt class="computeroutput"><a href="../metafunctions/equal_to.html" title="equal_to"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">equal_to</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">J</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
 <td>Amortized constant
                 time</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><a href="../metafunctions/advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance_c</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
+<td><tt class="computeroutput"><a href="../metafunctions/advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance_c</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
 <td>Linear</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><a href="../metafunctions/advance.html" title="advance"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span> <span class="special">,</span><span class="identifier">M</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
+<td><tt class="computeroutput"><a href="../metafunctions/advance.html" title="advance"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span> <span class="special">,</span><span class="identifier">M</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
 <td>Linear</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><a href="../metafunctions/distance.html" title="distance"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">distance</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span> <span class="special">,</span><span class="identifier">J</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
+<td><tt class="computeroutput"><a href="../metafunctions/distance.html" title="distance"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">distance</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span> <span class="special">,</span><span class="identifier">J</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
 <td>Linear</td>
 </tr>
 <tr>
@@ -181,7 +183,7 @@
 </tbody>
 </table></div>
 <a name="fusion.iterators.concepts.forward_iterator.expression_semantics"></a><h5>
-<a name="id458464"></a>
+<a name="id458443"></a>
           <a href="forward_iterator.html#fusion.iterators.concepts.forward_iterator.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -202,14 +204,16 @@
 </td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">i</span> <span class="special">==</span> <span class="identifier">j</span></tt></td>
-<td>Iterator equality
-                comparison</td>
+<td><tt class="computeroutput"><span class="identifier">i</span> <span class="special">==</span>
+                <span class="identifier">j</span></tt></td>
+<td>Iterator
+                equality comparison</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">i</span> <span class="special">!=</span> <span class="identifier">j</span></tt></td>
-<td>Iterator inequality
-                comparison</td>
+<td><tt class="computeroutput"><span class="identifier">i</span> <span class="special">!=</span>
+                <span class="identifier">j</span></tt></td>
+<td>Iterator
+                inequality comparison</td>
 </tr>
 <tr>
 <td><tt class="computeroutput"><a href="../functions/advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">advance_c</span></tt></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></tt></td>
@@ -224,7 +228,7 @@
 </td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><a href="../functions/distance.html" title="distance"><tt class="computeroutput"><span class="identifier">distance</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">,</span> <span class="identifier">j</span><span class="special">)</span></tt></td>
+<td><tt class="computeroutput"><a href="../functions/distance.html" title="distance"><tt class="computeroutput"><span class="identifier">distance</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">,</span> <span class="identifier">j</span><span class="special">)</span></tt></td>
 <td>The
                 number of elements between <tt class="computeroutput"><span class="identifier">i</span></tt>
                 and <tt class="computeroutput"><span class="identifier">j</span></tt>
@@ -245,16 +249,17 @@
 </tbody>
 </table></div>
 <a name="fusion.iterators.concepts.forward_iterator.invariants"></a><h5>
-<a name="id458958"></a>
+<a name="id458935"></a>
           <a href="forward_iterator.html#fusion.iterators.concepts.forward_iterator.invariants">Invariants</a>
         </h5>
 <p>
           The following invariants always hold:
         </p>
 <div class="itemizedlist"><ul type="disc">
-<li><tt class="computeroutput"><span class="special">!(</span><span class="identifier">i</span> <span class="special">==</span> <span class="identifier">j</span><span class="special">)</span> <span class="special">==</span> <span class="special">(</span><span class="identifier">i</span> <span class="special">!=</span> <span class="identifier">j</span><span class="special">)</span></tt></li>
-<li><tt class="computeroutput"><a href="../functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span> <span class="special">==</span> <a href="../functions/advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">advance_c</span></tt></a><span class="special">&lt;</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></tt></li>
-<li><tt class="computeroutput"><a href="../functions/distance.html" title="distance"><tt class="computeroutput"><span class="identifier">distance</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">,</span> <a href="../functions/advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">advance_c</span></tt></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">))</span> <span class="special">==</span> <span class="identifier">N</span></tt></li>
+<li><tt class="computeroutput"><span class="special">!(</span><span class="identifier">i</span>
+            <span class="special">==</span> <span class="identifier">j</span><span class="special">)</span> <span class="special">==</span> <span class="special">(</span><span class="identifier">i</span> <span class="special">!=</span> <span class="identifier">j</span><span class="special">)</span></tt></li>
+<li><tt class="computeroutput"><a href="../functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span> <span class="special">==</span> <a href="../functions/advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">advance_c</span></tt></a><span class="special">&lt;</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></tt></li>
+<li><tt class="computeroutput"><a href="../functions/distance.html" title="distance"><tt class="computeroutput"><span class="identifier">distance</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">,</span> <a href="../functions/advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">advance_c</span></tt></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">))</span> <span class="special">==</span> <span class="identifier">N</span></tt></li>
 <li>
             Using <tt class="computeroutput"><a href="../functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a></tt> to traverse the
             sequence will never return to a previously seen position
@@ -264,11 +269,12 @@
             is equivalent to <tt class="computeroutput"><span class="special">*</span><span class="identifier">i</span></tt>
 </li>
 <li>
-            If <tt class="computeroutput"><span class="identifier">i</span> <span class="special">==</span> <span class="identifier">j</span></tt> then <tt class="computeroutput"><span class="special">*</span><span class="identifier">i</span></tt> is equivalent to <tt class="computeroutput"><span class="special">*</span><span class="identifier">j</span></tt>
+            If <tt class="computeroutput"><span class="identifier">i</span> <span class="special">==</span>
+            <span class="identifier">j</span></tt> then <tt class="computeroutput"><span class="special">*</span><span class="identifier">i</span></tt> is equivalent to <tt class="computeroutput"><span class="special">*</span><span class="identifier">j</span></tt>
 </li>
 </ul></div>
 <a name="fusion.iterators.concepts.forward_iterator.models"></a><h5>
-<a name="id459374"></a>
+<a name="id459348"></a>
           <a href="forward_iterator.html#fusion.iterators.concepts.forward_iterator.models">Models</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">

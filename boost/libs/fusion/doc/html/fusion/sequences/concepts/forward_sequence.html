@@ -30,7 +30,7 @@
         Sequence">Forward
         Sequence</a></h4></div></div></div>
 <a name="fusion.sequences.concepts.forward_sequence.description"></a><h5>
-<a name="id476797"></a>
+<a name="id476766"></a>
           <a href="forward_sequence.html#fusion.sequences.concepts.forward_sequence.description">Description</a>
         </h5>
 <p>
@@ -62,7 +62,7 @@
 </dl>
 </div>
 <a name="fusion.sequences.concepts.forward_sequence.valid_expressions"></a><h5>
-<a name="id376836"></a>
+<a name="id476883"></a>
           <a href="forward_sequence.html#fusion.sequences.concepts.forward_sequence.valid_expressions">Valid
           Expressions</a>
         </h5>
@@ -120,12 +120,12 @@
 <td>Constant</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><a href="../intrinsics/functions/front.html" title="front"><tt class="computeroutput"><span class="identifier">front</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">o</span></tt></td>
+<td><tt class="computeroutput"><a href="../intrinsics/functions/front.html" title="front"><tt class="computeroutput"><span class="identifier">front</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">o</span></tt></td>
 <td>Any
                 type</td>
 <td>
 <tt class="computeroutput"><span class="identifier">s</span></tt>
-                is mutable and <tt class="computeroutput"><span class="identifier">e</span> <span class="special">=</span> <span class="identifier">o</span></tt>,
+                is mutable and <tt class="computeroutput"><span class="identifier">e</span> <span class="special">=</span> <span class="identifier">o</span></tt>,
                 where <tt class="computeroutput"><span class="identifier">e</span></tt> is the first
                 element in the sequence, is a valid expression.</td>
 <td>Constant</td>
@@ -133,7 +133,7 @@
 </tbody>
 </table></div>
 <a name="fusion.sequences.concepts.forward_sequence.result_type_expressions"></a><h5>
-<a name="id477475"></a>
+<a name="id477306"></a>
           <a href="forward_sequence.html#fusion.sequences.concepts.forward_sequence.result_type_expressions">Result
           Type Expressions</a>
         </h5>
@@ -173,7 +173,7 @@
 </tbody>
 </table></div>
 <a name="fusion.sequences.concepts.forward_sequence.expression_semantics"></a><h5>
-<a name="id477827"></a>
+<a name="id477658"></a>
           <a href="forward_sequence.html#fusion.sequences.concepts.forward_sequence.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -206,8 +206,9 @@
 <td><tt class="computeroutput"><a href="../intrinsics/functions/empty.html" title="empty"><tt class="computeroutput"><span class="identifier">empty</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt></td>
 <td>A
                 boolean Integral Constant <tt class="computeroutput"><span class="identifier">c</span></tt>
-                such that <tt class="computeroutput"><span class="identifier">c</span><span class="special">::</span><span class="identifier">value</span> <span class="special">==</span> <span class="keyword">true</span></tt> if and only if the sequence is
-                empty; see <a href="../intrinsics/functions/empty.html" title="empty"><tt class="computeroutput"><span class="identifier">empty</span></tt></a>.</td>
+                such that <tt class="computeroutput"><span class="identifier">c</span><span class="special">::</span><span class="identifier">value</span> <span class="special">==</span>
+                <span class="keyword">true</span></tt> if and only if the sequence
+                is empty; see <a href="../intrinsics/functions/empty.html" title="empty"><tt class="computeroutput"><span class="identifier">empty</span></tt></a>.</td>
 </tr>
 <tr>
 <td><tt class="computeroutput"><a href="../intrinsics/functions/front.html" title="front"><tt class="computeroutput"><span class="identifier">front</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt></td>
@@ -217,7 +218,7 @@
 </tbody>
 </table></div>
 <a name="fusion.sequences.concepts.forward_sequence.invariants"></a><h5>
-<a name="id478218"></a>
+<a name="id478048"></a>
           <a href="forward_sequence.html#fusion.sequences.concepts.forward_sequence.invariants">Invariants</a>
         </h5>
 <p>
@@ -225,11 +226,11 @@
         </p>
 <div class="itemizedlist"><ul type="disc">
 <li>
-<tt class="computeroutput"><span class="special">[</span><a href="../intrinsics/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">),</span> <a href="../intrinsics/functions/end.html" title="end"><tt class="computeroutput"><span class="identifier">end</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">))</span></tt> is always a valid range.
+<tt class="computeroutput"><span class="special">[</span><a href="../intrinsics/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">),</span> <a href="../intrinsics/functions/end.html" title="end"><tt class="computeroutput"><span class="identifier">end</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">))</span></tt> is always a valid range.
           </li>
 <li>
             An <a href="../../algorithms.html" title="Algorithms">Algorithm</a> that iterates through
-            the range <tt class="computeroutput"><span class="special">[</span><a href="../intrinsics/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">),</span> <a href="../intrinsics/functions/end.html" title="end"><tt class="computeroutput"><span class="identifier">end</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">))</span></tt> will pass through every element of
+            the range <tt class="computeroutput"><span class="special">[</span><a href="../intrinsics/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">),</span> <a href="../intrinsics/functions/end.html" title="end"><tt class="computeroutput"><span class="identifier">end</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">))</span></tt> will pass through every element of
             <tt class="computeroutput"><span class="identifier">s</span></tt> exactly once.
           </li>
 <li>
@@ -243,7 +244,7 @@
           </li>
 </ul></div>
 <a name="fusion.sequences.concepts.forward_sequence.models"></a><h5>
-<a name="id478523"></a>
+<a name="id478352"></a>
           <a href="forward_sequence.html#fusion.sequences.concepts.forward_sequence.models">Models</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">

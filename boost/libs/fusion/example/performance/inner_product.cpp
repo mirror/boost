@@ -73,7 +73,7 @@ namespace
         int i = 0;
         long long iter = 65536;
         long long counter, repeats;
-        double result = std::numeric_limits<double>::max();
+        double result = (std::numeric_limits<double>::max)();
         double runtime = 0;
         double run;
         boost::array<int, N> arr1;
@@ -116,7 +116,7 @@ namespace
         int i = 0;
         long long iter = 65536;
         long long counter, repeats;
-        double result = std::numeric_limits<double>::max();
+        double result = (std::numeric_limits<double>::max)();
         double runtime = 0;
         double run;
         boost::array<int, N> arr1;

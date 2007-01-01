@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.sequences.generation.functions.make_map"></a><a href="make_map.html" title="make_map">make_map</a></h5></div></div></div>
 <a name="fusion.sequences.generation.functions.make_map.description"></a><h6>
-<a name="id527406"></a>
+<a name="id527202"></a>
             <a href="make_map.html#fusion.sequences.generation.functions.make_map.description">Description</a>
           </h6>
 <p>
@@ -34,7 +34,7 @@
             pairs.
           </p>
 <a name="fusion.sequences.generation.functions.make_map.synopsis"></a><h6>
-<a name="id527454"></a>
+<a name="id527250"></a>
             <a href="make_map.html#fusion.sequences.generation.functions.make_map.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -47,7 +47,7 @@
 <p>
             The variadic function accepts <tt class="computeroutput"><span class="number">0</span></tt>
             to <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
-            <sup>[<a name="id527826" href="#ftn.id527826">10</a>]</sup>
+            <sup>[<a name="id527622" href="#ftn.id527622">10</a>]</sup>
             elements, where <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
             is a user definable predefined maximum that defaults to <tt class="computeroutput"><span class="number">10</span></tt>. You may define the preprocessor constant
             <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
@@ -57,7 +57,7 @@
 <span class="preprocessor">#define</span> <span class="identifier">FUSION_MAX_VECTOR_SIZE</span> <span class="number">20</span>
 </pre>
 <a name="fusion.sequences.generation.functions.make_map.parameters"></a><h6>
-<a name="id527922"></a>
+<a name="id527718"></a>
             <a href="make_map.html#fusion.sequences.generation.functions.make_map.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -73,25 +73,31 @@
 </tr></thead>
 <tbody>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">K0</span><span class="special">,</span> <span class="identifier">K1</span><span class="special">,...</span> <span class="identifier">KN</span></tt></td>
-<td>The key types</td>
-<td>Keys
-                  associated with <tt class="computeroutput"><span class="identifier">x0</span><span class="special">,</span> <span class="identifier">x1</span><span class="special">,...</span> <span class="identifier">xN</span></tt>
+<td><tt class="computeroutput"><span class="identifier">K0</span><span class="special">,</span>
+                  <span class="identifier">K1</span><span class="special">,...</span>
+                  <span class="identifier">KN</span></tt></td>
+<td>The
+                  key types</td>
+<td>Keys associated with <tt class="computeroutput"><span class="identifier">x0</span><span class="special">,</span> <span class="identifier">x1</span><span class="special">,...</span> <span class="identifier">xN</span></tt>
 </td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">x0</span><span class="special">,</span> <span class="identifier">x1</span><span class="special">,...</span> <span class="identifier">xN</span></tt></td>
-<td>Instances of
-                  <tt class="computeroutput"><span class="identifier">T0</span><span class="special">,</span> <span class="identifier">T1</span><span class="special">,...</span> <span class="identifier">TN</span></tt>
+<td><tt class="computeroutput"><span class="identifier">x0</span><span class="special">,</span>
+                  <span class="identifier">x1</span><span class="special">,...</span>
+                  <span class="identifier">xN</span></tt></td>
+<td>Instances
+                  of <tt class="computeroutput"><span class="identifier">T0</span><span class="special">,</span>
+                  <span class="identifier">T1</span><span class="special">,...</span>
+                  <span class="identifier">TN</span></tt>
 </td>
-<td>The arguments
-                  to <tt class="computeroutput"><span class="identifier">make_map</span></tt>
+<td>The
+                  arguments to <tt class="computeroutput"><span class="identifier">make_map</span></tt>
 </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequences.generation.functions.make_map.expression_semantics"></a><h6>
-<a name="id528141"></a>
+<a name="id527935"></a>
             <a href="make_map.html#fusion.sequences.generation.functions.make_map.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -99,25 +105,27 @@
 <span class="identifier">make_map</span><span class="special">&lt;</span><span class="identifier">K0</span><span class="special">,</span> <span class="identifier">K1</span><span class="special">,...</span> <span class="identifier">KN</span><span class="special">&gt;(</span><span class="identifier">x0</span><span class="special">,</span> <span class="identifier">x1</span><span class="special">,...</span> <span class="identifier">xN</span><span class="special">);</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: <a href="../metafunctions/make_map.html" title="make_map"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">make_map</span></tt></a><tt class="computeroutput"><span class="special">&lt;</span><span class="identifier">K0</span><span class="special">,</span> <span class="identifier">K0</span><span class="special">,...</span> <span class="identifier">KN</span><span class="special">,</span> <span class="identifier">T0</span><span class="special">,</span> <span class="identifier">T1</span><span class="special">,...</span> <span class="identifier">TN</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
+            <span class="bold"><b>Return type</b></span>: <a href="../metafunctions/make_map.html" title="make_map"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">make_map</span></tt></a><tt class="computeroutput"><span class="special">&lt;</span><span class="identifier">K0</span><span class="special">,</span> <span class="identifier">K0</span><span class="special">,...</span> <span class="identifier">KN</span><span class="special">,</span> <span class="identifier">T0</span><span class="special">,</span> <span class="identifier">T1</span><span class="special">,...</span> <span class="identifier">TN</span><span class="special">&gt;::</span><span class="identifier">type</span></tt>
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Create a <a href="../../containers/map.html" title="map"><tt class="computeroutput"><span class="identifier">map</span></tt></a> from <tt class="computeroutput"><span class="identifier">K0</span><span class="special">,</span> <span class="identifier">K1</span><span class="special">,...</span> <span class="identifier">KN</span></tt>
-            keys and <tt class="computeroutput"><span class="identifier">x0</span><span class="special">,</span> <span class="identifier">x1</span><span class="special">,...</span> <span class="identifier">xN</span></tt> data.
+            <span class="bold"><b>Semantics</b></span>: Create a <a href="../../containers/map.html" title="map"><tt class="computeroutput"><span class="identifier">map</span></tt></a> from <tt class="computeroutput"><span class="identifier">K0</span><span class="special">,</span> <span class="identifier">K1</span><span class="special">,...</span> <span class="identifier">KN</span></tt>
+            keys and <tt class="computeroutput"><span class="identifier">x0</span><span class="special">,</span>
+            <span class="identifier">x1</span><span class="special">,...</span>
+            <span class="identifier">xN</span></tt> data.
           </p>
 <p>
             <span class="bold"><b>Precondition</b></span>: There may be no duplicate
             key types.
           </p>
 <a name="fusion.sequences.generation.functions.make_map.header"></a><h6>
-<a name="id528472"></a>
+<a name="id528264"></a>
             <a href="make_map.html#fusion.sequences.generation.functions.make_map.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">generation</span><span class="special">/</span><span class="identifier">make_map</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.generation.functions.make_map.example"></a><h6>
-<a name="id528578"></a>
+<a name="id528369"></a>
             <a href="make_map.html#fusion.sequences.generation.functions.make_map.example">Example</a>
           </h6>
 <pre class="programlisting">
@@ -126,7 +134,7 @@
   <span class="special">,</span> <a href="../../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">make_pair</span></tt></a><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;(</span><span class="string">"Men"</span><span class="special">))</span>
 </pre>
 <a name="fusion.sequences.generation.functions.make_map.see_also"></a><h6>
-<a name="id528708"></a>
+<a name="id528499"></a>
             <a href="make_map.html#fusion.sequences.generation.functions.make_map.see_also">See
             also</a>
           </h6>
@@ -136,7 +144,7 @@
           </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id527826" href="#id527826">10</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id527622" href="#id527622">10</a>] </sup>
                 <tt class="computeroutput"><span class="identifier">map</span></tt> is implemented
                 in terms of the vector. That is why we reuse <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
               </p></div>

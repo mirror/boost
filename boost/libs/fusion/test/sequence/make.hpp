@@ -19,7 +19,7 @@
 #define FUSION_MAKE BOOST_PP_CAT(make_, FUSION_SEQUENCE)
 #endif
 
-namespace
+namespace test_detail
 {
     // something to prevent warnings for unused variables
     template<class T> void dummy(const T&) {}
@@ -34,6 +34,7 @@ void
 test()
 {
     using namespace boost::fusion;
+    using namespace test_detail;
 
     {
         FUSION_SEQUENCE<int, char> t1 = FUSION_MAKE(5, 'a');

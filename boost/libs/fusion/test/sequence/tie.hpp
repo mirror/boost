@@ -21,7 +21,7 @@
 #define FUSION_TIE BOOST_PP_CAT(FUSION_SEQUENCE, _tie)
 #endif
 
-namespace
+namespace test_detail
 {
     // something to prevent warnings for unused variables
     template<class T> void dummy(const T&) {}
@@ -49,6 +49,7 @@ void
 test()
 {
     using namespace boost::fusion;
+    using namespace test_detail;
 
     int a;
     char b;

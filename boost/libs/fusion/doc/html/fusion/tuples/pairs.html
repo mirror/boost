@@ -27,7 +27,7 @@
 <div class="titlepage"><div><div><h3 class="title">
 <a name="fusion.tuples.pairs"></a><a href="pairs.html" title="Pairs">Pairs</a></h3></div></div></div>
 <a name="fusion.tuples.pairs.description"></a><h4>
-<a name="id607156"></a>
+<a name="id606874"></a>
         <a href="pairs.html#fusion.tuples.pairs.description">Description</a>
       </h4>
 <p>
@@ -36,7 +36,7 @@
         as if it were a 2 element tuple.
       </p>
 <a name="fusion.tuples.pairs.specification"></a><h4>
-<a name="id607211"></a>
+<a name="id606929"></a>
         <a href="pairs.html#fusion.tuples.pairs.specification">Specification</a>
       </h4>
 <pre class="programlisting">
@@ -77,16 +77,21 @@
 <span class="keyword">const</span> <span class="identifier">P</span><span class="special">&amp;</span> <span class="identifier">get</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">,</span> <span class="identifier">T2</span><span class="special">&gt;&amp;</span> <span class="identifier">pr</span><span class="special">);</span>
 </pre>
 <p>
-        <span class="bold"><b>Type</b></span>: If <tt class="computeroutput"><span class="identifier">I</span> <span class="special">==</span> <span class="number">0</span></tt> <tt class="computeroutput"><span class="identifier">P</span></tt> is <tt class="computeroutput"><span class="identifier">T1</span></tt>,
-        else if <tt class="computeroutput"><span class="identifier">I</span> <span class="special">==</span> <span class="number">1</span></tt> <tt class="computeroutput"><span class="identifier">P</span></tt>
+        <span class="bold"><b>Type</b></span>: If <tt class="computeroutput"><span class="identifier">I</span>
+        <span class="special">==</span> <span class="number">0</span></tt>
+        <tt class="computeroutput"><span class="identifier">P</span></tt> is <tt class="computeroutput"><span class="identifier">T1</span></tt>,
+        else if <tt class="computeroutput"><span class="identifier">I</span> <span class="special">==</span>
+        <span class="number">1</span></tt> <tt class="computeroutput"><span class="identifier">P</span></tt>
         is <tt class="computeroutput"><span class="identifier">T2</span></tt> else the program is
         ill-formed.
       </p>
 <p>
         <span class="bold"><b>Returns: <tt class="computeroutput"><span class="identifier">pr</span><span class="special">.</span><span class="identifier">first</span></tt>
-        if <tt class="computeroutput"><span class="identifier">I</span> <span class="special">==</span> <span class="number">0</span></tt> else <tt class="computeroutput"><span class="identifier">pr</span><span class="special">.</span><span class="identifier">second</span></tt>.</b></span>[*Returns:
-        <tt class="computeroutput"><span class="identifier">pr</span><span class="special">.</span><span class="identifier">first</span></tt> if <tt class="computeroutput"><span class="identifier">I</span> <span class="special">==</span> <span class="number">0</span></tt> else
-        <tt class="computeroutput"><span class="identifier">pr</span><span class="special">.</span><span class="identifier">second</span></tt>.
+        if <tt class="computeroutput"><span class="identifier">I</span> <span class="special">==</span>
+        <span class="number">0</span></tt> else <tt class="computeroutput"><span class="identifier">pr</span><span class="special">.</span><span class="identifier">second</span></tt>.</b></span>[*Returns:
+        <tt class="computeroutput"><span class="identifier">pr</span><span class="special">.</span><span class="identifier">first</span></tt> if <tt class="computeroutput"><span class="identifier">I</span>
+        <span class="special">==</span> <span class="number">0</span></tt>
+        else <tt class="computeroutput"><span class="identifier">pr</span><span class="special">.</span><span class="identifier">second</span></tt>.
       </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

@@ -27,21 +27,21 @@
 <a name="fusion.sequences.views.transform_view"></a><a href="transform_view.html" title="transform_view">transform_view</a></h4></div></div></div>
 <p>
           <tt class="computeroutput"><span class="identifier">transform_view</span></tt> presents
-          a transformed view of its underlying sequence given a unary <a href="../../algorithms/concepts/polymorphic_function_object.html" title="Polymorphic
-        Function Object">Polymorphic
+          a transformed view of its underlying sequence given a unary <a href="../../algorithms/concepts/poly.html" title=" Polymorphic Function
+        Object">Polymorphic
           Function Object</a>. The <tt class="computeroutput"><span class="identifier">transform_view</span></tt>
           inherits the traversal characteristics (see <a href="../concepts.html#fusion.sequences.concepts.traversal">Sequence
           Traversal Concept</a>) of its underlying sequence.
         </p>
 <a name="fusion.sequences.views.transform_view.header"></a><h5>
-<a name="id497514"></a>
+<a name="id497328"></a>
           <a href="transform_view.html#fusion.sequences.views.transform_view.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">transform_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.views.transform_view.synopsis"></a><h5>
-<a name="id497619"></a>
+<a name="id497433"></a>
           <a href="transform_view.html#fusion.sequences.views.transform_view.synopsis">Synopsis</a>
         </h5>
 <p>
@@ -59,7 +59,7 @@
 <span class="keyword">struct</span> <span class="identifier">transform_view</span><span class="special">;</span>
 </pre>
 <a name="fusion.sequences.views.transform_view.template_parameters"></a><h5>
-<a name="id497822"></a>
+<a name="id497636"></a>
           <a href="transform_view.html#fusion.sequences.views.transform_view.template_parameters">Template
           parameters</a>
         </h5>
@@ -105,16 +105,16 @@
 <tr>
 <td><tt class="computeroutput"><span class="identifier">F</span></tt></td>
 <td>A
-                <a href="../../algorithms/concepts/polymorphic_function_object.html" title="Polymorphic
-        Function Object">Polymorphic
-                Function Object</a>
+                <a href="../../algorithms/concepts/poly.html" title=" Polymorphic Function
+        Object">Polymorphic Function
+                Object</a>
 </td>
 <td> </td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequences.views.transform_view.model_of"></a><h5>
-<a name="id497991"></a>
+<a name="id497803"></a>
           <a href="transform_view.html#fusion.sequences.views.transform_view.model_of">Model of</a>
         </h5>
 <div class="itemizedlist"><ul type="disc"><li>
@@ -169,7 +169,7 @@
 </dl>
 </div>
 <a name="fusion.sequences.views.transform_view.expression_semantics"></a><h5>
-<a name="id498305"></a>
+<a name="id498117"></a>
           <a href="transform_view.html#fusion.sequences.views.transform_view.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -196,23 +196,23 @@
 </tr></thead>
 <tbody>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">UTV</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span> <span class="identifier">f</span><span class="special">)</span></tt></td>
+<td><tt class="computeroutput"><span class="identifier">UTV</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span> <span class="identifier">f</span><span class="special">)</span></tt></td>
 <td>Creates
                 a unary <tt class="computeroutput"><span class="identifier">transform_view</span></tt>
                 given sequence, <tt class="computeroutput"><span class="identifier">s</span></tt>
-                and unary <a href="../../algorithms/concepts/polymorphic_function_object.html" title="Polymorphic
-        Function Object">Polymorphic
+                and unary <a href="../../algorithms/concepts/poly.html" title=" Polymorphic Function
+        Object">Polymorphic
                 Function Object</a>, <tt class="computeroutput"><span class="identifier">f</span></tt>.</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">BTV</span><span class="special">(</span><span class="identifier">s1</span><span class="special">,</span> <span class="identifier">s2</span><span class="special">,</span> <span class="identifier">f</span><span class="special">)</span></tt></td>
+<td><tt class="computeroutput"><span class="identifier">BTV</span><span class="special">(</span><span class="identifier">s1</span><span class="special">,</span> <span class="identifier">s2</span><span class="special">,</span> <span class="identifier">f</span><span class="special">)</span></tt></td>
 <td>Creates
                 a binary <tt class="computeroutput"><span class="identifier">transform_view</span></tt>
                 given sequences, <tt class="computeroutput"><span class="identifier">s1</span></tt>
                 and <tt class="computeroutput"><span class="identifier">s2</span></tt> and unary
-                <a href="../../algorithms/concepts/polymorphic_function_object.html" title="Polymorphic
-        Function Object">Polymorphic
-                Function Object</a>, <tt class="computeroutput"><span class="identifier">f</span></tt>.</td>
+                <a href="../../algorithms/concepts/poly.html" title=" Polymorphic Function
+        Object">Polymorphic Function
+                Object</a>, <tt class="computeroutput"><span class="identifier">f</span></tt>.</td>
 </tr>
 <tr>
 <td><tt class="computeroutput"><span class="identifier">TV</span><span class="special">(</span><span class="identifier">tv</span><span class="special">)</span></tt></td>
@@ -222,9 +222,10 @@
                 <tt class="computeroutput"><span class="identifier">tv</span></tt>.</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">tv</span> <span class="special">=</span> <span class="identifier">tv2</span></tt></td>
-<td>Assigns to a
-                <tt class="computeroutput"><span class="identifier">transform_view</span></tt>,
+<td><tt class="computeroutput"><span class="identifier">tv</span> <span class="special">=</span>
+                <span class="identifier">tv2</span></tt></td>
+<td>Assigns
+                to a <tt class="computeroutput"><span class="identifier">transform_view</span></tt>,
                 <tt class="computeroutput"><span class="identifier">tv</span></tt>, from another
                 <tt class="computeroutput"><span class="identifier">transform_view</span></tt>,
                 <tt class="computeroutput"><span class="identifier">tv2</span></tt>.</td>
@@ -232,7 +233,7 @@
 </tbody>
 </table></div>
 <a name="fusion.sequences.views.transform_view.example"></a><h5>
-<a name="id498732"></a>
+<a name="id498542"></a>
           <a href="transform_view.html#fusion.sequences.views.transform_view.example">Example</a>
         </h5>
 <pre class="programlisting">

@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.sequences.containers.cons"></a><a href="cons.html" title="cons">cons</a></h4></div></div></div>
 <a name="fusion.sequences.containers.cons.description"></a><h5>
-<a name="id485072"></a>
+<a name="id484893"></a>
           <a href="cons.html#fusion.sequences.containers.cons.description">Description</a>
         </h5>
 <p>
@@ -41,14 +41,14 @@
           Inlined Functions</a>).
         </p>
 <a name="fusion.sequences.containers.cons.header"></a><h5>
-<a name="id485209"></a>
+<a name="id485029"></a>
           <a href="cons.html#fusion.sequences.containers.cons.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">list</span><span class="special">/</span><span class="identifier">cons</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.containers.cons.synopsis"></a><h5>
-<a name="id485324"></a>
+<a name="id485144"></a>
           <a href="cons.html#fusion.sequences.containers.cons.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -56,7 +56,7 @@
 <span class="keyword">struct</span> <span class="identifier">cons</span><span class="special">;</span>
 </pre>
 <a name="fusion.sequences.containers.cons.template_parameters"></a><h5>
-<a name="id485432"></a>
+<a name="id485252"></a>
           <a href="cons.html#fusion.sequences.containers.cons.template_parameters">Template
           parameters</a>
         </h5>
@@ -87,7 +87,7 @@
 </tbody>
 </table></div>
 <a name="fusion.sequences.containers.cons.model_of"></a><h5>
-<a name="id485537"></a>
+<a name="id485357"></a>
           <a href="cons.html#fusion.sequences.containers.cons.model_of">Model of</a>
         </h5>
 <div class="itemizedlist"><ul type="disc"><li><a href="../concepts/forward_sequence.html" title="Forward
@@ -129,7 +129,7 @@
 </dl>
 </div>
 <a name="fusion.sequences.containers.cons.expression_semantics"></a><h5>
-<a name="id485768"></a>
+<a name="id485589"></a>
           <a href="cons.html#fusion.sequences.containers.cons.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -166,7 +166,8 @@
                 and default constructed tail.</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">C</span><span class="special">(</span><span class="identifier">car</span><span class="special">,</span> <span class="identifier">cdr</span><span class="special">)</span></tt></td>
+<td><tt class="computeroutput"><span class="identifier">C</span><span class="special">(</span><span class="identifier">car</span><span class="special">,</span>
+                <span class="identifier">cdr</span><span class="special">)</span></tt></td>
 <td>Creates
                 a cons with <tt class="computeroutput"><span class="identifier">car</span></tt> head
                 and <tt class="computeroutput"><span class="identifier">cdr</span></tt> tail.</td>
@@ -179,9 +180,11 @@
                 Sequence</a>, <tt class="computeroutput"><span class="identifier">s</span></tt>.</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">l</span> <span class="special">=</span> <span class="identifier">s</span></tt></td>
-<td>Assigns to a cons,
-                <tt class="computeroutput"><span class="identifier">l</span></tt>, from a <a href="../concepts/forward_sequence.html" title="Forward
+<td><tt class="computeroutput"><span class="identifier">l</span> <span class="special">=</span>
+                <span class="identifier">s</span></tt></td>
+<td>Assigns
+                to a cons, <tt class="computeroutput"><span class="identifier">l</span></tt>, from
+                a <a href="../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
                 Sequence</a>, <tt class="computeroutput"><span class="identifier">s</span></tt>.</td>
 </tr>
@@ -193,7 +196,7 @@
 </tbody>
 </table></div>
 <p class="blurb">
-          <span class="inlinemediaobject"><img src="../../../images/note.png" alt="note"></span> <tt class="computeroutput"><a href="../intrinsics/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span></tt> is
+          <span class="inlinemediaobject"><img src="../../../images/note.png" alt="note"></span> <tt class="computeroutput"><a href="../intrinsics/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span></tt> is
           provided for convenience and compatibility with the original <a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html" target="_top">Boost.Tuple</a>
           library, despite <tt class="computeroutput"><span class="identifier">cons</span></tt> being
           a <a href="../concepts/forward_sequence.html" title="Forward
@@ -205,7 +208,7 @@
           Inlined Functions</a>).
         </p>
 <a name="fusion.sequences.containers.cons.example"></a><h5>
-<a name="id486314"></a>
+<a name="id486134"></a>
           <a href="cons.html#fusion.sequences.containers.cons.example">Example</a>
         </h5>
 <pre class="programlisting">

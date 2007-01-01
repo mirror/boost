@@ -31,7 +31,7 @@
         Access Sequence">Random
         Access Sequence</a></h4></div></div></div>
 <a name="fusion.sequences.concepts.random_access_sequence.description"></a><h5>
-<a name="id479908"></a>
+<a name="id479736"></a>
           <a href="random_access_sequence.html#fusion.sequences.concepts.random_access_sequence.description">Description</a>
         </h5>
 <p>
@@ -43,7 +43,7 @@
           sequence elements.
         </p>
 <a name="fusion.sequences.concepts.random_access_sequence.refinement_of"></a><h5>
-<a name="id479960"></a>
+<a name="id479788"></a>
           <a href="random_access_sequence.html#fusion.sequences.concepts.random_access_sequence.refinement_of">Refinement
           of</a>
         </h5>
@@ -78,7 +78,7 @@
 </dl>
 </div>
 <a name="fusion.sequences.concepts.random_access_sequence.valid_expressions"></a><h5>
-<a name="id480096"></a>
+<a name="id479924"></a>
           <a href="random_access_sequence.html#fusion.sequences.concepts.random_access_sequence.valid_expressions">Valid
           Expressions</a>
         </h5>
@@ -126,12 +126,12 @@
 <td>Constant</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><a href="../intrinsics/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">o</span></tt></td>
+<td><tt class="computeroutput"><a href="../intrinsics/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">o</span></tt></td>
 <td>Any
                 type</td>
 <td>
 <tt class="computeroutput"><span class="identifier">s</span></tt>
-                is mutable and <tt class="computeroutput"><span class="identifier">e</span> <span class="special">=</span> <span class="identifier">o</span></tt>,
+                is mutable and <tt class="computeroutput"><span class="identifier">e</span> <span class="special">=</span> <span class="identifier">o</span></tt>,
                 where <tt class="computeroutput"><span class="identifier">e</span></tt> is the first
                 element in the sequence, is a valid expression.</td>
 <td>Constant</td>
@@ -139,7 +139,7 @@
 </tbody>
 </table></div>
 <a name="fusion.sequences.concepts.random_access_sequence.result_type_expressions"></a><h5>
-<a name="id480454"></a>
+<a name="id480280"></a>
           <a href="random_access_sequence.html#fusion.sequences.concepts.random_access_sequence.result_type_expressions">Result
           Type Expressions</a>
         </h5>
@@ -164,27 +164,27 @@
                 time</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><a href="../intrinsics/metafunctions/at.html" title="at"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
+<td><tt class="computeroutput"><a href="../intrinsics/metafunctions/at.html" title="at"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
 <td>Amortized constant
                 time</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><a href="../intrinsics/metafunctions/value_at.html" title="value_at"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_at</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
+<td><tt class="computeroutput"><a href="../intrinsics/metafunctions/value_at.html" title="value_at"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_at</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
 <td>Amortized constant
                 time</td>
 </tr>
 </tbody>
 </table></div>
 <p class="blurb">
-          <span class="inlinemediaobject"><img src="../../../images/note.png" alt="note"></span> <tt class="computeroutput"><a href="../intrinsics/metafunctions/at.html" title="at"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span></tt>
-          returns the actual type returned by <tt class="computeroutput"><a href="../intrinsics/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span></tt>. In
+          <span class="inlinemediaobject"><img src="../../../images/note.png" alt="note"></span> <tt class="computeroutput"><a href="../intrinsics/metafunctions/at.html" title="at"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span></tt> returns the actual type returned by
+          <tt class="computeroutput"><a href="../intrinsics/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span></tt>. In
           most cases, this is a reference. Hence, there is no way to know the exact
-          element type using <tt class="computeroutput"><a href="../intrinsics/metafunctions/at.html" title="at"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span></tt>.The
-          element at <tt class="computeroutput"><span class="identifier">N</span></tt> may actually
-          be a reference to begin with. For this purpose, you can use <tt class="computeroutput"><a href="../intrinsics/metafunctions/value_at.html" title="value_at"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_at</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span></tt>.
+          element type using <tt class="computeroutput"><a href="../intrinsics/metafunctions/at.html" title="at"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span></tt>.The element at <tt class="computeroutput"><span class="identifier">N</span></tt>
+          may actually be a reference to begin with. For this purpose, you can use
+          <tt class="computeroutput"><a href="../intrinsics/metafunctions/value_at.html" title="value_at"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_at</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span></tt>.
         </p>
 <a name="fusion.sequences.concepts.random_access_sequence.expression_semantics"></a><h5>
-<a name="id481022"></a>
+<a name="id480848"></a>
           <a href="random_access_sequence.html#fusion.sequences.concepts.random_access_sequence.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -210,7 +210,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.sequences.concepts.random_access_sequence.models"></a><h5>
-<a name="id481161"></a>
+<a name="id480986"></a>
           <a href="random_access_sequence.html#fusion.sequences.concepts.random_access_sequence.models">Models</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">

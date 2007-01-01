@@ -26,14 +26,14 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.sequences.intrinsics.functions.at_c"></a><a href="at_c.html" title="at_c">at_c</a></h5></div></div></div>
 <a name="fusion.sequences.intrinsics.functions.at_c.description"></a><h6>
-<a name="id510165"></a>
+<a name="id509970"></a>
             <a href="at_c.html#fusion.sequences.intrinsics.functions.at_c.description">Description</a>
           </h6>
 <p>
             Returns the N-th element from the beginning of the sequence.
           </p>
 <a name="fusion.sequences.intrinsics.functions.at_c.synopsis"></a><h6>
-<a name="id510197"></a>
+<a name="id510002"></a>
             <a href="at_c.html#fusion.sequences.intrinsics.functions.at_c.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -46,7 +46,7 @@
 <span class="identifier">at_c</span><span class="special">(</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">);</span>
 </pre>
 <a name="fusion.sequences.intrinsics.functions.at_c.parameters"></a><h6>
-<a name="id510531"></a>
+<a name="id510336"></a>
             <a href="at_c.html#fusion.sequences.intrinsics.functions.at_c.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -80,7 +80,7 @@
 </tbody>
 </table></div>
 <a name="fusion.sequences.intrinsics.functions.at_c.expression_semantics"></a><h6>
-<a name="id510639"></a>
+<a name="id510444"></a>
             <a href="at_c.html#fusion.sequences.intrinsics.functions.at_c.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -91,13 +91,16 @@
             <span class="bold"><b>Return type</b></span>: Returns a reference to
             the N-th element from the beginning of the sequence <tt class="computeroutput"><span class="identifier">seq</span></tt>
             if <tt class="computeroutput"><span class="identifier">seq</span></tt> is mutable and
-            <tt class="computeroutput"><span class="identifier">e</span> <span class="special">=</span> <span class="identifier">o</span></tt>, where <tt class="computeroutput"><span class="identifier">e</span></tt>
+            <tt class="computeroutput"><span class="identifier">e</span> <span class="special">=</span>
+            <span class="identifier">o</span></tt>, where <tt class="computeroutput"><span class="identifier">e</span></tt>
             is the N-th element from the beginning of the sequence, is a valid expression.
             Else, returns a type convertable to the N-th element from the beginning
             of the sequence.
           </p>
 <p>
-            <span class="bold"><b>Precondition</b></span>: <tt class="computeroutput"><span class="number">0</span> <span class="special">&lt;=</span> <span class="identifier">N</span> <span class="special">&lt;</span> <a href="size.html" title="size"><tt class="computeroutput"><span class="identifier">size</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt>
+            <span class="bold"><b>Precondition</b></span>: <tt class="computeroutput"><span class="number">0</span>
+            <span class="special">&lt;=</span> <span class="identifier">N</span>
+            <span class="special">&lt;</span> <a href="size.html" title="size"><tt class="computeroutput"><span class="identifier">size</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt>
           </p>
 <p>
             <span class="bold"><b>Semantics</b></span>: Equivalent to
@@ -106,14 +109,14 @@
 <a href="../../../iterators/functions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a><span class="special">(</span><a href="../../../iterators/functions/advance.html" title="advance"><tt class="computeroutput"><span class="identifier">advance</span></tt></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><a href="begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">s</span><span class="special">)))</span>
 </pre>
 <a name="fusion.sequences.intrinsics.functions.at_c.header"></a><h6>
-<a name="id510940"></a>
+<a name="id510744"></a>
             <a href="at_c.html#fusion.sequences.intrinsics.functions.at_c.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">intrinsic</span><span class="special">/</span><span class="identifier">at_c</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.intrinsics.functions.at_c.example"></a><h6>
-<a name="id511045"></a>
+<a name="id510849"></a>
             <a href="at_c.html#fusion.sequences.intrinsics.functions.at_c.example">Example</a>
           </h6>
 <pre class="programlisting">

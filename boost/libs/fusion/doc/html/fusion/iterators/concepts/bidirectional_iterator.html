@@ -31,7 +31,7 @@
         Iterator">Bidirectional
         Iterator</a></h4></div></div></div>
 <a name="fusion.iterators.concepts.bidirectional_iterator.description"></a><h5>
-<a name="id459716"></a>
+<a name="id459689"></a>
           <a href="bidirectional_iterator.html#fusion.iterators.concepts.bidirectional_iterator.description">Description</a>
         </h5>
 <p>
@@ -61,7 +61,7 @@
 </dl>
 </div>
 <a name="fusion.iterators.concepts.bidirectional_iterator.refinement_of"></a><h5>
-<a name="id459842"></a>
+<a name="id459815"></a>
           <a href="bidirectional_iterator.html#fusion.iterators.concepts.bidirectional_iterator.refinement_of">Refinement
           of</a>
         </h5>
@@ -70,7 +70,7 @@
         Iterator">Forward Iterator</a>
         </p>
 <a name="fusion.iterators.concepts.bidirectional_iterator.expression_requirements"></a><h5>
-<a name="id459883"></a>
+<a name="id459856"></a>
           <a href="bidirectional_iterator.html#fusion.iterators.concepts.bidirectional_iterator.expression_requirements">Expression
           requirements</a>
         </h5>
@@ -123,7 +123,7 @@
 </tbody>
 </table></div>
 <a name="fusion.iterators.concepts.bidirectional_iterator.meta_expressions"></a><h5>
-<a name="id460187"></a>
+<a name="id460160"></a>
           <a href="bidirectional_iterator.html#fusion.iterators.concepts.bidirectional_iterator.meta_expressions">Meta
           Expressions</a>
         </h5>
@@ -143,7 +143,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.iterators.concepts.bidirectional_iterator.expression_semantics"></a><h5>
-<a name="id460303"></a>
+<a name="id460277"></a>
           <a href="bidirectional_iterator.html#fusion.iterators.concepts.bidirectional_iterator.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -170,7 +170,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.iterators.concepts.bidirectional_iterator.invariants"></a><h5>
-<a name="id460425"></a>
+<a name="id460399"></a>
           <a href="bidirectional_iterator.html#fusion.iterators.concepts.bidirectional_iterator.invariants">Invariants</a>
         </h5>
 <p>
@@ -179,15 +179,16 @@
           Iterator</a>, the following invariants always hold:
         </p>
 <div class="itemizedlist"><ul type="disc">
-<li><tt class="computeroutput"><a href="../functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><a href="../functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span> <span class="special">==</span> <span class="identifier">i</span> <span class="special">&amp;&amp;</span> <a href="../functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><a href="../functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span> <span class="special">==</span> <a href="../functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><a href="../functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span></tt></li>
-<li><tt class="computeroutput"><a href="../functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span> <span class="special">==</span> <a href="../functions/advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">advance_c</span></tt></a><span class="special">&lt;-</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></tt></li>
+<li><tt class="computeroutput"><a href="../functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><a href="../functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span> <span class="special">==</span> <span class="identifier">i</span> <span class="special">&amp;&amp;</span>
+            <a href="../functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><a href="../functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span> <span class="special">==</span> <a href="../functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><a href="../functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">))</span></tt></li>
+<li><tt class="computeroutput"><a href="../functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span> <span class="special">==</span> <a href="../functions/advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">advance_c</span></tt></a><span class="special">&lt;-</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">i</span><span class="special">)</span></tt></li>
 <li>
             Using <tt class="computeroutput"><a href="../functions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a></tt> to traverse a sequence
             will never return a previously seen position
           </li>
 </ul></div>
 <a name="fusion.iterators.concepts.bidirectional_iterator.models"></a><h5>
-<a name="id460763"></a>
+<a name="id460735"></a>
           <a href="bidirectional_iterator.html#fusion.iterators.concepts.bidirectional_iterator.models">Models</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">

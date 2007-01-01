@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.transformation.functions.remove_if"></a><a href="remove_if.html" title="remove_if">remove_if</a></h5></div></div></div>
 <a name="fusion.algorithms.transformation.functions.remove_if.description"></a><h6>
-<a name="id576825"></a>
+<a name="id576567"></a>
             <a href="remove_if.html#fusion.algorithms.transformation.functions.remove_if.description">Description</a>
           </h6>
 <p>
@@ -34,7 +34,7 @@
             those where a given unary function object evaluates to <tt class="computeroutput"><span class="keyword">true</span></tt>.
           </p>
 <a name="fusion.algorithms.transformation.functions.remove_if.synopsis"></a><h6>
-<a name="id576869"></a>
+<a name="id576612"></a>
             <a href="remove_if.html#fusion.algorithms.transformation.functions.remove_if.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -45,7 +45,7 @@
 <span class="keyword">typename</span> <a href="../metafunctions/remove_if.html" title="remove_if"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">remove_if</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">Pred</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">remove_if</span><span class="special">(</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id577054"></a><p class="title"><b>Table 1.59. Parameters</b></p>
+<a name="id576797"></a><p class="title"><b>Table 1.59. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -77,7 +77,7 @@
 </table>
 </div>
 <a name="fusion.algorithms.transformation.functions.remove_if.expression_semantics"></a><h6>
-<a name="id577150"></a>
+<a name="id576892"></a>
             <a href="remove_if.html#fusion.algorithms.transformation.functions.remove_if.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -93,24 +93,25 @@
             <span class="bold"><b>Semantics</b></span>: Returns a new sequence, containing
             all the elements of <tt class="computeroutput"><span class="identifier">seq</span></tt>,
             in their original order, except those elements with types for which
-            <tt class="computeroutput"><span class="identifier">Pred</span></tt> evaluates to <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></tt>. Equivalent to <tt class="computeroutput"><a href="filter.html" title="filter"><tt class="computeroutput"><span class="identifier">filter</span></tt></a><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">not_</span><span class="special">&lt;</span><span class="identifier">Pred</span><span class="special">&gt;</span> <span class="special">&gt;(</span><span class="identifier">seq</span><span class="special">)</span></tt>.
+            <tt class="computeroutput"><span class="identifier">Pred</span></tt> evaluates to <tt class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></tt>. Equivalent to <tt class="computeroutput"><a href="filter.html" title="filter"><tt class="computeroutput"><span class="identifier">filter</span></tt></a><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">not_</span><span class="special">&lt;</span><span class="identifier">Pred</span><span class="special">&gt;</span>
+            <span class="special">&gt;(</span><span class="identifier">seq</span><span class="special">)</span></tt>.
           </p>
 <a name="fusion.algorithms.transformation.functions.remove_if.complexity"></a><h6>
-<a name="id577391"></a>
+<a name="id577133"></a>
             <a href="remove_if.html#fusion.algorithms.transformation.functions.remove_if.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithms.transformation.functions.remove_if.header"></a><h6>
-<a name="id577422"></a>
+<a name="id577164"></a>
             <a href="remove_if.html#fusion.algorithms.transformation.functions.remove_if.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">remove_if</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithms.transformation.functions.remove_if.example"></a><h6>
-<a name="id577528"></a>
+<a name="id577271"></a>
             <a href="remove_if.html#fusion.algorithms.transformation.functions.remove_if.example">Example</a>
           </h6>
 <pre class="programlisting">

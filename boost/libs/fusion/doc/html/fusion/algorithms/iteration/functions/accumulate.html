@@ -26,18 +26,18 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.iteration.functions.accumulate"></a><a href="accumulate.html" title="accumulate">accumulate</a></h5></div></div></div>
 <a name="fusion.algorithms.iteration.functions.accumulate.description"></a><h6>
-<a name="id553582"></a>
+<a name="id553338"></a>
             <a href="accumulate.html#fusion.algorithms.iteration.functions.accumulate.description">Description</a>
           </h6>
 <p>
-            Repeatedly applies binary <a href="../../concepts/polymorphic_function_object.html" title="Polymorphic
-        Function Object">Polymorphic
-            Function Object</a> <tt class="computeroutput"><span class="identifier">f</span></tt>
+            Repeatedly applies binary <a href="../../concepts/poly.html" title=" Polymorphic Function
+        Object">Polymorphic
+            Function Object</a> <tt class="computeroutput"><span class="identifier">f</span></tt>
             to each element of a sequence and the previous state. <a href="accumulate.html" title="accumulate"><tt class="computeroutput"><span class="identifier">accumulate</span></tt></a> is equivalent to
             <a href="fold.html" title="fold"><tt class="computeroutput"><span class="identifier">fold</span></tt></a>.
           </p>
 <a name="fusion.algorithms.iteration.functions.accumulate.synopsis"></a><h6>
-<a name="id553666"></a>
+<a name="id553423"></a>
             <a href="accumulate.html#fusion.algorithms.iteration.functions.accumulate.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -50,7 +50,7 @@
     <span class="identifier">Sequence</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">State</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">initial_state</span><span class="special">,</span> <span class="identifier">F</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id553926"></a><p class="title"><b>Table 1.33. Parameters</b></p>
+<a name="id553682"></a><p class="title"><b>Table 1.33. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -68,7 +68,7 @@
 <td>A
                 model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a>, <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">eN</span> <span class="special">....</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">e2</span><span class="special">,</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">e1</span><span class="special">,</span><span class="identifier">initial_state</span><span class="special">)))</span></tt> must be a valid expression for
+                Sequence</a>, <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">eN</span> <span class="special">....</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">e2</span><span class="special">,</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">e1</span><span class="special">,</span><span class="identifier">initial_state</span><span class="special">)))</span></tt> must be a valid expression for
                 each element <tt class="computeroutput"><span class="identifier">e1</span></tt> to
                 <tt class="computeroutput"><span class="identifier">eN</span></tt> in <tt class="computeroutput"><span class="identifier">seq</span></tt>
 </td>
@@ -83,8 +83,8 @@
 <tr>
 <td><tt class="computeroutput"><span class="identifier">f</span></tt></td>
 <td>A
-                model of binary <a href="../../concepts/polymorphic_function_object.html" title="Polymorphic
-        Function Object">Polymorphic
+                model of binary <a href="../../concepts/poly.html" title=" Polymorphic Function
+        Object">Polymorphic
                 Function Object</a>
 </td>
 <td>Operation's argument</td>
@@ -93,7 +93,7 @@
 </table>
 </div>
 <a name="fusion.algorithms.iteration.functions.accumulate.expression_semantics"></a><h6>
-<a name="id554157"></a>
+<a name="id553914"></a>
             <a href="accumulate.html#fusion.algorithms.iteration.functions.accumulate.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -104,25 +104,25 @@
             <span class="bold"><b>Return type</b></span>: Any type
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Equivalent to <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">eN</span> <span class="special">....</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">e2</span><span class="special">,</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">e1</span><span class="special">,</span><span class="identifier">initial_state</span><span class="special">)))</span></tt>
-            where <tt class="computeroutput"><span class="identifier">e1</span> <span class="special">...</span><span class="identifier">eN</span></tt> are the elements of <tt class="computeroutput"><span class="identifier">seq</span></tt>.
+            <span class="bold"><b>Semantics</b></span>: Equivalent to <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">eN</span> <span class="special">....</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">e2</span><span class="special">,</span><span class="identifier">f</span><span class="special">(</span><span class="identifier">e1</span><span class="special">,</span><span class="identifier">initial_state</span><span class="special">)))</span></tt>
+            where <tt class="computeroutput"><span class="identifier">e1</span> <span class="special">...</span><span class="identifier">eN</span></tt> are the elements of <tt class="computeroutput"><span class="identifier">seq</span></tt>.
           </p>
 <a name="fusion.algorithms.iteration.functions.accumulate.complexity"></a><h6>
-<a name="id554363"></a>
+<a name="id554119"></a>
             <a href="accumulate.html#fusion.algorithms.iteration.functions.accumulate.complexity">Complexity</a>
           </h6>
 <p>
             Linear, exactly <tt class="computeroutput"><a href="../../../sequences/intrinsics/metafunctions/size.html" title="size"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">size</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">value</span></tt> applications of <tt class="computeroutput"><span class="identifier">f</span></tt>.
           </p>
 <a name="fusion.algorithms.iteration.functions.accumulate.header"></a><h6>
-<a name="id554455"></a>
+<a name="id554211"></a>
             <a href="accumulate.html#fusion.algorithms.iteration.functions.accumulate.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">iteration</span><span class="special">/</span><span class="identifier">accumulate</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithms.iteration.functions.accumulate.example"></a><h6>
-<a name="id554561"></a>
+<a name="id554317"></a>
             <a href="accumulate.html#fusion.algorithms.iteration.functions.accumulate.example">Example</a>
           </h6>
 <pre class="programlisting">

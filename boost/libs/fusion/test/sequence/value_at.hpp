@@ -20,7 +20,7 @@
 #define FUSION_VALUE_AT(S, N) result_of::value_at_c<S, N>
 #endif
 
-namespace
+namespace test_detail
 {
     // something to prevent warnings for unused variables
     template<class T> void dummy(const T&) {}
@@ -32,6 +32,7 @@ void
 test()
 {
     using namespace boost::fusion;
+    using namespace test_detail;
 
     double d = 2.7;
     A a;

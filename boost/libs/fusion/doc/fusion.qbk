@@ -174,7 +174,7 @@
 
 [def __algorithm__              [link fusion.algorithms Algorithm]]
 [def __algorithms__             [link fusion.algorithms Algorithms]]
-[def __poly_func_obj__          [link fusion.algorithms.concepts.polymorphic_function_object Polymorphic Function Object]]
+[def __poly_func_obj__          [link fusion.algorithms.concepts.poly Polymorphic Function Object]]
 [def __fold__                   [link fusion.algorithms.iteration.functions.fold `fold`]]
 [def __result_of_fold__         [link fusion.algorithms.iteration.metafunctions.fold `result_of::fold`]]
 [def __accumulate__             [link fusion.algorithms.iteration.functions.accumulate `accumulate`]]

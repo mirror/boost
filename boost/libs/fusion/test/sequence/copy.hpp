@@ -22,7 +22,7 @@
 #define FUSION_TIE BOOST_PP_CAT(FUSION_SEQUENCE, _tie)
 #endif
 
-namespace
+namespace test_detail
 {
     // classes with different kinds of conversions
     class AA {};
@@ -41,6 +41,7 @@ void
 test()
 {
     using namespace boost::fusion;
+    using namespace test_detail;
 
     FUSION_SEQUENCE<int, char> t1(4, 'a');
     FUSION_SEQUENCE<int, char> t2(5, 'b');
