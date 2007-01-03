@@ -82,14 +82,14 @@ namespace boost { namespace proto { namespace transform
     template<typename Grammar>
     struct fold_to_list
       : detail::fold_to_list<
-            typename Grammar::type::tag_type
-          , typename Grammar::type::arg0_type
+            typename Grammar::tag_type
+          , typename Grammar::arg0_type
         >
     {
         BOOST_MPL_ASSERT((
             is_same<
-                typename Grammar::type::arg0_type
-              , typename Grammar::type::arg1_type
+                typename Grammar::arg0_type
+              , typename Grammar::arg1_type
             >
         ));
     };
@@ -97,14 +97,14 @@ namespace boost { namespace proto { namespace transform
     template<typename Grammar>
     struct reverse_fold_to_list
       : detail::reverse_fold_to_list<
-            typename Grammar::type::tag_type
-          , typename Grammar::type::arg0_type
+            typename Grammar::tag_type
+          , typename Grammar::arg0_type
         >
     {
         BOOST_MPL_ASSERT((
             is_same<
-                typename Grammar::type::arg0_type
-              , typename Grammar::type::arg1_type
+                typename Grammar::arg0_type
+              , typename Grammar::arg1_type
             >
         ));
     };

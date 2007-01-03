@@ -24,12 +24,12 @@
         struct pass_through_impl;
 
         #define BOOST_PROTO_DEFINE_META_COMPILE(z, n, data)\
-            typename Grammar::type::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)\
+            typename Grammar::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)\
                 ::template apply<typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)::type, State, Visitor>\
             ::type
 
         #define BOOST_PROTO_DEFINE_COMPILE(z, n, data)\
-            Grammar::type::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)::call(\
+            Grammar::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)::call(\
                 expr.BOOST_PP_CAT(arg, n).cast(), state, visitor\
             )
 

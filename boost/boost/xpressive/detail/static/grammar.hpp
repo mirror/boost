@@ -13,8 +13,6 @@
 # pragma once
 #endif
 
-#include <boost/mpl/print.hpp>
-
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>

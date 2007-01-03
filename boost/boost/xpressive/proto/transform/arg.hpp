@@ -15,7 +15,7 @@
 namespace boost { namespace proto { namespace transform
 {
 
-    // A compiler that simply extracts the arg from an expression
+    // A transform that simply extracts the arg from an expression
     template<typename Grammar, typename N>
     struct arg
       : Grammar
@@ -28,14 +28,16 @@ namespace boost { namespace proto { namespace transform
         {};
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::reference
+        static typename apply<Expr, State, Visitor>::type //reference
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
+            // BUGBUG Grammar::call could return a temporary!
+            // Don't return a dangling reference
             return proto::arg<N>(Grammar::call(expr, state, visitor));
         }
     };
 
-    // A compiler that simply extracts the arg from an expression
+    // A transform that simply extracts the arg from an expression
     template<typename Grammar, long N>
     struct arg_c
       : Grammar
@@ -48,14 +50,14 @@ namespace boost { namespace proto { namespace transform
         {};
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type const &
+        static typename apply<Expr, State, Visitor>::type //const &
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
             return proto::arg_c<N>(Grammar::call(expr, state, visitor));
         }
     };
 
-    // A compiler that simply extracts the left arg from an expression
+    // A transform that simply extracts the left arg from an expression
     template<typename Grammar>
     struct left
       : Grammar
@@ -68,14 +70,14 @@ namespace boost { namespace proto { namespace transform
         {};
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type const &
+        static typename apply<Expr, State, Visitor>::type //const &
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
             return proto::left(Grammar::call(expr, state, visitor));
         }
     };
 
-    // A compiler that simply extracts the right arg from an expression
+    // A transform that simply extracts the right arg from an expression
     template<typename Grammar>
     struct right
       : Grammar
@@ -88,7 +90,7 @@ namespace boost { namespace proto { namespace transform
         {};
 
         template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type const &
+        static typename apply<Expr, State, Visitor>::type //const &
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
             return proto::right(Grammar::call(expr, state, visitor));
@@ -100,6 +102,8 @@ namespace boost { namespace proto { namespace transform
     struct state
       : Grammar
     {
+        state();
+
         template<typename, typename State, typename>
         struct apply
         {
@@ -119,6 +123,8 @@ namespace boost { namespace proto { namespace transform
     struct visitor
       : Grammar
     {
+        visitor();
+
         template<typename, typename, typename Visitor>
         struct apply
         {
@@ -132,7 +138,6 @@ namespace boost { namespace proto { namespace transform
             return visitor_;
         }
     };
-
 
 }}}
 

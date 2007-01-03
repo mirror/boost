@@ -110,6 +110,8 @@
             {
                 terminal();
                 typedef expr<proto::tag::terminal, args1<T> > type;
+                typedef proto::tag::terminal tag_type;
+                typedef T arg0_type;
             };
 
             // unary_expr
@@ -118,6 +120,8 @@
             {
                 unary_expr();
                 typedef expr<Tag, args1<T> > type;
+                typedef Tag tag_type;
+                typedef T arg0_type;
             };
 
             // binary_expr
@@ -126,6 +130,9 @@
             {
                 binary_expr();
                 typedef expr<Tag, args2<T, U> > type;
+                typedef Tag tag_type;
+                typedef T arg0_type;
+                typedef U arg1_type;
             };
 
         #define BOOST_PROTO_UNARY_GENERATOR(Name)\
@@ -134,6 +141,8 @@
             {\
                 Name();\
                 typedef expr<proto::tag::Name, args1<T> > type;\
+                typedef proto::tag::Name tag_type;\
+                typedef T arg0_type;\
             };\
             /**/
 
@@ -143,6 +152,9 @@
             {\
                 Name();\
                 typedef expr<proto::tag::Name, args2<T, U> > type;\
+                typedef proto::tag::Name tag_type;\
+                typedef T arg0_type;\
+                typedef U arg1_type;\
             };\
             /**/
 
@@ -207,6 +219,10 @@
               : deep_copy<Expr>
             {};
 
+        #define BOOST_PROTO_ARG(z, n, data)\
+            typedef BOOST_PP_CAT(A, n) BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type);\
+            /**/
+
         #define BOOST_PROTO_ARG_N_TYPE(z, n, data)\
             typename proto::meta::unref<\
                 typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)\
@@ -217,6 +233,7 @@
         #include BOOST_PP_ITERATE()
         #undef BOOST_PP_ITERATION_PARAMS_1
 
+        #undef BOOST_PROTO_ARG
         #undef BOOST_PROTO_ARG_N_TYPE
         }
 
@@ -417,9 +434,17 @@
             struct function<
                 BOOST_PP_ENUM_PARAMS(N, A)
                 BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT), void
-            > : has_identity_transform
+            >
+              : has_pass_through_transform<
+                    function<
+                        BOOST_PP_ENUM_PARAMS(N, A)
+                        BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT), void
+                    >
+                >
             {
                 typedef expr<proto::tag::function, BOOST_PP_CAT(args, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
+                typedef proto::tag::function tag_type;
+                BOOST_PP_REPEAT(N, BOOST_PROTO_ARG, ~)
             };
 
             template<typename Expr, typename Fun>
