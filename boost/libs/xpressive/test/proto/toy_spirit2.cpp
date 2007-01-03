@@ -229,10 +229,80 @@ namespace boost { namespace spirit2
         char_range(char from, char to)
           : std::pair<char, char>(from, to)
         {}
+    };
 
-        friend std::ostream &operator<<(std::ostream &sout, char_range const &rng)
+    struct ichar
+    {
+        ichar(char ch)
+          : lo_(std::tolower(ch))
+          , hi_(std::toupper(ch))
+        {}
+
+        char lo_, hi_;
+    };
+
+    struct istr
+    {
+        istr(char const *sz)
+          : str_(utility::to_istr(sz))
+        {}
+
+        std::string str_;
+    };
+
+    struct ichar_range
+      : std::pair<char, char>
+    {
+        ichar_range(char_range const &rng)
+          : std::pair<char, char>(rng)
+        {}
+    };
+
+    // The no-case directive
+    namespace tag
+    {
+        struct no_case {};
+    }
+
+    struct no_case_directive
+    {
+        template<typename T>
+        typename proto::meta::unary_expr<
+            tag::no_case
+          , typename proto::meta::as_expr_ref<T>::type
+        >::type
+        operator[](T const &t) const
         {
-            return sout << rng.first << ", " << rng.second;
+            typedef typename proto::meta::unary_expr<
+                tag::no_case
+              , typename proto::meta::as_expr_ref<T>::type
+            >::type type;
+            type that = {proto::as_expr_ref(t)};
+            return that;
+        }
+    };
+
+    no_case_directive const no_case = {};
+
+    // The no-case transform, applies the tree-transform with
+    // mpl::true_ as the visitor.
+    template<typename Grammar>
+    struct no_case_transform
+      : Grammar
+    {
+        no_case_transform();
+
+        template<typename Expr, typename State, typename>
+        struct apply
+          : Grammar::template apply<Expr, State, mpl::true_>
+        {};
+
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &)
+        {
+            mpl::true_ case_sensitive;
+            return Grammar::call(expr, state, case_sensitive);
         }
     };
 
@@ -240,19 +310,90 @@ namespace boost { namespace spirit2
     /// Begin ToySpiritGrammar here
     ///////////////////////////////////////////////////////////////////////////////
 
+    template<typename T, bool CaseSensitive>
+    struct remove_case
+    {
+        typedef T type;
+        static T const &call(T const &t)
+        {
+            return t;
+        }
+    };
+
+    template<>
+    struct remove_case<char, true>
+    {
+        typedef ichar type;
+        static ichar call(char ch)
+        {
+            return ichar(ch);
+        }
+    };
+
+    template<>
+    struct remove_case<char const *, true>
+    {
+        typedef istr type;
+        static istr call(char const *sz)
+        {
+            return istr(sz);
+        }
+    };
+
+    template<typename T, std::size_t N>
+    struct remove_case<T(&)[N], true>
+      : remove_case<char const *, true>
+    {};
+
+    template<>
+    struct remove_case<char_range, true>
+    {
+        typedef ichar_range type;
+        static ichar_range call(char_range const &rng)
+        {
+            return ichar_range(rng);
+        }
+    };
+
+    template<typename Grammar>
+    struct case_sensitive
+      : Grammar
+    {
+        case_sensitive();
+
+        template<typename Expr, typename State, typename Visitor>
+        struct apply
+          : remove_case<
+                typename Grammar::template apply<Expr, State, Visitor>::type
+              , Visitor::value
+            >
+        {};
+
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)       
+        {
+            return apply<Expr, State, Visitor>::call(Grammar::call(expr, state, visitor));
+        }
+    };
+
     struct ToySpiritGrammar;
 
     // Extract the arg from terminals
     struct ToySpiritTerminal
       : proto::or_<
-            proto::trans::arg< CharLiteral >
-          , proto::trans::arg< NTBSLiteral >
-          , proto::trans::arg< proto::meta::terminal<char_tag> >
-          , proto::trans::arg< proto::trans::arg_c< CharParser, 1 > >   // char_('a')
-          , proto::trans::construct<                                    // char_('a','z')
-                char_range
-              , proto::trans::arg< proto::trans::arg_c< CharRangeParser, 1 > >
-              , proto::trans::arg< proto::trans::arg_c< CharRangeParser, 2 > >
+            proto::trans::arg< proto::meta::terminal<char_tag> >
+          , case_sensitive< proto::trans::arg< CharLiteral > >
+          , case_sensitive< proto::trans::arg< NTBSLiteral > >
+          , case_sensitive< 
+                proto::trans::arg< proto::trans::arg_c< CharParser, 1 > >   // char_('a')
+            >
+          , case_sensitive<
+                proto::trans::construct<                                    // char_('a','z')
+                    char_range
+                  , proto::trans::arg< proto::trans::arg_c< CharRangeParser, 1 > >
+                  , proto::trans::arg< proto::trans::arg_c< CharRangeParser, 2 > >
+                >
             >
         >
     {};
@@ -285,6 +426,11 @@ namespace boost { namespace spirit2
             ToySpiritSequence
           , ToySpiritAlternate
           , ToySpiritTerminal
+          , no_case_transform< 
+                proto::trans::arg<
+                    proto::meta::unary_expr< tag::no_case, ToySpiritGrammar >
+                >
+            >
         >
     {};
 
@@ -356,14 +502,35 @@ namespace boost { namespace spirit2
             return true;
         }
 
+        bool operator()(ichar ich) const
+        {
+            if(this->done() || !utility::char_icmp(*this->first, ich.lo_, ich.hi_))
+                return false;
+            ++this->first;
+            return true;
+        }
+
         bool operator()(char const *sz) const
         {
             return utility::string_cmp(sz, this->first, this->second);
         }
 
+        bool operator()(istr const &s) const
+        {
+            return utility::string_icmp(s.str_, this->first, this->second);
+        }
+
         bool operator()(char_range rng) const
         {
             if(this->done() || !utility::in_range(*this->first, rng.first, rng.second))
+                return false;
+            ++this->first;
+            return true;
+        }
+
+        bool operator()(ichar_range rng) const
+        {
+            if(this->done() || !utility::in_irange(*this->first, rng.first, rng.second))
                 return false;
             ++this->first;
             return true;
@@ -383,9 +550,9 @@ namespace boost { namespace spirit2
     typename proto::if_matches< Rule, ToySpiritGrammar, bool >::type
     parse_impl(Rule const &rule, Iterator begin, Iterator end)
     {
-        int nil = 0;
+        mpl::false_ is_case_sensitive;
         parser<Iterator> parse_fun(begin, end);
-        return parse_fun(ToySpiritGrammar::call(rule, nil, nil));
+        return parse_fun(ToySpiritGrammar::call(rule, 0, is_case_sensitive));
     }
 
     // 2nd overload provides a short error message for invalid rules
@@ -411,6 +578,7 @@ using namespace boost;
 
 void test_toy_spirit2()
 {
+    using spirit2::no_case;
     std::string hello("abcd");
 
     BOOST_CHECK(
@@ -431,7 +599,7 @@ void test_toy_spirit2()
 
     BOOST_CHECK(
        !spirit2::parse(
-            char_ >> char_('b') >> 'c' >> 'e'
+            char_ >> char_('b') >> 'c' >> 'D'
           , hello.begin()
           , hello.end()
         )
@@ -440,7 +608,7 @@ void test_toy_spirit2()
     BOOST_CHECK(
         spirit2::parse(
             char_ >> char_('b') >> 'c' >> 'e'
-          | char_ >> char_('b') >> 'c' >> char_('d','z')
+          | char_ >> no_case[char_('B') >> "C" >> char_('D','Z')]
           , hello.begin()
           , hello.end()
         )
