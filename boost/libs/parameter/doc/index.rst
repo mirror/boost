@@ -75,8 +75,8 @@ __ ../../../../index.htm
 :Organization:  `Boost Consulting`_
 :Date:          $Date: 2005/07/18 20:34:31 $
 
-:Copyright:     Copyright David Abrahams, Daniel Wallin
-                2005. Distributed under the Boost Software License,
+:Copyright:     Copyright David Abrahams, Daniel Wallin 2005. 
+                Distributed under the Boost Software License,
                 Version 1.0. (See accompanying file LICENSE_1_0.txt
                 or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -2082,7 +2082,10 @@ The interface idioms enabled by Boost.Parameter are completely new
 (to C++), and as such are not served by pre-existing documentation
 conventions.  
 
-  *write something here!!*
+.. Note:: This space is empty because we haven't settled on any
+   best practices yet.  We'd be very pleased to link to your
+   documentation if you've got a style that you think is worth
+   sharing.
 
 ============================
  Portability Considerations

@@ -70,7 +70,7 @@ namespace test
 }
 using namespace test;
 int x = '''); -->
-<!-- @build() -->
+<!-- @test('compile') -->
 <hr class="docutils" />
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -84,8 +84,8 @@ int x = '''); -->
 </tr>
 <tr class="field"><th class="field-name">Date:</th><td class="field-body">$Date: 2005/07/18 20:34:31 $</td>
 </tr>
-<tr class="field"><th class="field-name">Copyright:</th><td class="field-body">Copyright David Abrahams, Daniel Wallin
-2005. Distributed under the Boost Software License,
+<tr class="field"><th class="field-name">Copyright:</th><td class="field-body">Copyright David Abrahams, Daniel Wallin 2005.
+Distributed under the Boost Software License,
 Version 1.0. (See accompanying file LICENSE_1_0.txt
 or copy at <a class="reference" href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>)</td>
 </tr>
@@ -217,6 +217,7 @@ of arguments to be sure.</p>
 arguments either, leading to hard-to-find bugs.</p>
 </li>
 </ul>
+<!-- @ignore(3) -->
 <div class="section">
 <h2><a class="toc-backref" href="#id24" id="named-function-parameters" name="named-function-parameters">1.1&nbsp;&nbsp;&nbsp;Named Function Parameters</a></h2>
 <div class="compound">
@@ -227,6 +228,7 @@ arguments by name, rather than by position:</p>
 window* w = new_window(&quot;alert box&quot;, <strong>movable_=</strong>false); // OK!
 </pre>
 </div>
+<!-- @ignore() -->
 </div>
 <div class="section">
 <h2><a class="toc-backref" href="#id25" id="deduced-function-parameters" name="deduced-function-parameters">1.2&nbsp;&nbsp;&nbsp;Deduced Function Parameters</a></h2>
@@ -247,6 +249,7 @@ window* w = new_window(<strong>&quot;alert box&quot;</strong>, movable_=false); 
 user of the burden of even remembering the formal parameter
 names.</p>
 </div>
+<!-- @ignore() -->
 </div>
 <div class="section">
 <h2><a class="toc-backref" href="#id26" id="class-template-parameter-support" name="class-template-parameter-support">1.3&nbsp;&nbsp;&nbsp;Class Template Parameter Support</a></h2>
@@ -271,6 +274,7 @@ smart_ptr&lt;<strong>shared</strong>, <strong>Client</strong>&gt; p;
 smart_ptr&lt;<strong>Client</strong>, <strong>shared</strong>&gt; q;
 </pre>
 </div>
+<!-- @ignore(2) -->
 </div>
 </div>
 <div class="section">
@@ -306,11 +310,16 @@ compiler.  There is also a combined header,
 components.  For the the rest of this tutorial, unless we say
 otherwise, you can use the rule above to figure out which header
 to <tt class="docutils literal"><span class="pre">#include</span></tt> to access any given component of the library.</p>
+<!-- @example.append('''
+using boost::parameter::keyword;
+''') -->
+<!-- @test('compile') -->
 <p>Also, the examples below will also be written as if the
 namespace alias</p>
 <pre class="literal-block">
 namespace parameter = boost::parameter;
 </pre>
+<!-- @ignore() -->
 <p>has been declared: we'll write <tt class="docutils literal"><span class="pre">parameter::xxx</span></tt> instead of
 <tt class="docutils literal"><span class="pre">boost::parameter::xxx</span></tt>.</p>
 </div>
@@ -330,6 +339,7 @@ void depth_first_search(
   , IndexMap index_map
   , ColorMap&amp; color);
 </pre>
+<!-- @ignore() -->
 <p>However, most of the parameters have a useful default value, as
 shown in the table below.</p>
 <table border="1" class="docutils" id="default-expressions">
@@ -398,6 +408,7 @@ arguments for which the default is appropriate:</p>
 <pre class="literal-block">
 graphs::depth_first_search(g, <strong>color_map_=my_color_map</strong>);
 </pre>
+<!-- @ignore() -->
 <p>To make that syntax legal, there needs to be an object called
 “<tt class="docutils literal"><span class="pre">color_map_</span></tt>” whose assignment operator can accept a
 <tt class="docutils literal"><span class="pre">my_color_map</span></tt> argument.  In this step we'll create one such
@@ -425,6 +436,7 @@ namespace graphs
   BOOST_PARAMETER_NAME(color_map)
 }
 </pre>
+<!-- @test('compile') -->
 <p>The declaration of the <tt class="docutils literal"><span class="pre">graph</span></tt> keyword you see here is
 equivalent to:</p>
 <pre class="literal-block">
@@ -436,10 +448,12 @@ namespace graphs
   {
     // A reference to the keyword object
     boost::parameter::keyword&lt;tag::graph&gt;&amp; _graph
-    = boost::parameter::keyword&lt;tag::graph&gt;::instance;
+    = boost::parameter::keyword&lt;tag::graph&gt;::get();
   }
 }
 </pre>
+<!-- @example.prepend('#include <boost/parameter/keyword.hpp>') -->
+<!-- @test('compile') -->
 <p>It defines a <em>keyword tag type</em> named <tt class="docutils literal"><span class="pre">tag::graph</span></tt> and a <em>keyword
 object</em> reference named <tt class="docutils literal"><span class="pre">_graph</span></tt>.</p>
 <p>This “fancy dance” involving an unnamed namespace and references
@@ -453,7 +467,7 @@ units (MSVC6.x users see <a class="reference" href="#compiler-can-t-see-referenc
 definition follows a simple pattern using the
 <tt class="docutils literal"><span class="pre">BOOST_PARAMETER_FUNCTION</span></tt> macro:</p>
 <pre class="literal-block">
-#include &lt;boost/parameter/function.hpp&gt;
+#include &lt;boost/parameter/preprocessor.hpp&gt;
 
 namespace graphs
 {
@@ -479,6 +493,25 @@ namespace graphs
   }
 }
 </pre>
+<!-- @example.prepend('''
+#include <boost/parameter/name.hpp>
+
+BOOST_PARAMETER_NAME(graph)
+BOOST_PARAMETER_NAME(visitor)
+BOOST_PARAMETER_NAME(root_vertex)
+BOOST_PARAMETER_NAME(index_map)
+BOOST_PARAMETER_NAME(color_map)
+
+namespace boost {
+
+template <class T = int>
+struct dfs_visitor
+{};
+
+int vertex_index = 0;
+
+}''') -->
+<!-- @test('compile') -->
 <p>The arguments to <tt class="docutils literal"><span class="pre">BOOST_PARAMETER_FUNCTION</span></tt> are:</p>
 <ol class="arabic simple">
 <li>The return type of the resulting function template.  Parentheses
@@ -516,6 +549,15 @@ optional parameters in a signature, but if there are <em>no</em>
 required parameters, the <tt class="docutils literal"><span class="pre">(required</span> <span class="pre">…</span> <span class="pre">)</span></tt> clause can be omitted
 entirely.</p>
 </div>
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>
+
+BOOST_PARAMETER_NAME(graph)
+
+BOOST_PARAMETER_FUNCTION((void), f, tag,
+''') -->
+<!-- @example.append(') {}') -->
+<!-- @test('compile') -->
 </div>
 <div class="section">
 <h4><a class="toc-backref" href="#id35" id="optional-parameters" name="optional-parameters">2.1.5.2&nbsp;&nbsp;&nbsp;Optional Parameters</a></h4>
@@ -525,8 +567,7 @@ as a series of adjacent <em>three</em>-element tuples describing the
 parameter name, any requirements on the argument type, <em>and</em> and an
 expression representing the parameter's default value:</p>
 <pre class="compound-last literal-block">
-(optional <strong>⁣
-    (visitor,           *, boost::dfs_visitor&lt;&gt;())
+(optional <strong>    (visitor,           *, boost::dfs_visitor&lt;&gt;())
     (root_vertex,       *, *vertices(graph).first)
     (index_map,         *, get(boost::vertex_index,graph))
     (in_out(color_map), *,
@@ -534,6 +575,29 @@ expression representing the parameter's default value:</p>
 )
 </pre>
 </div>
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>
+
+namespace boost
+{
+  int vertex_index = 0;
+
+  template <class T = int>
+  struct dfs_visitor
+  {};
+}
+
+BOOST_PARAMETER_NAME(graph)
+BOOST_PARAMETER_NAME(visitor)
+BOOST_PARAMETER_NAME(root_vertex)
+BOOST_PARAMETER_NAME(index_map)
+BOOST_PARAMETER_NAME(color_map)
+
+BOOST_PARAMETER_FUNCTION((void), f, tag,
+  (required (graph, *))
+''') -->
+<!-- @example.append(') {}') -->
+<!-- @test('compile') -->
 </div>
 <div class="section">
 <h4><a class="toc-backref" href="#id36" id="handling-out-parameters" name="handling-out-parameters">2.1.5.3&nbsp;&nbsp;&nbsp;Handling “Out” Parameters</a></h4>
@@ -556,6 +620,30 @@ its name in <tt class="docutils literal"><span class="pre">in_out(…)</span></t
 )
 </pre>
 </div>
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>
+
+namespace boost
+{
+  int vertex_index = 0;
+
+  template <class T = int>
+  struct dfs_visitor
+  {};
+}
+
+BOOST_PARAMETER_NAME(graph)
+
+BOOST_PARAMETER_NAME(visitor)
+BOOST_PARAMETER_NAME(root_vertex)
+BOOST_PARAMETER_NAME(index_map)
+BOOST_PARAMETER_NAME(color_map)
+
+BOOST_PARAMETER_FUNCTION((void), f, tag,
+  (required (graph, *))
+''') -->
+<!-- @example.append(') {}') -->
+<!-- @test('compile') -->
 <p>If <tt class="docutils literal"><span class="pre">color_map</span></tt> were strictly going to be modified but not examined,
 we could have written <tt class="docutils literal"><span class="pre">out(color_map)</span></tt>.  There is no functional
 difference between <tt class="docutils literal"><span class="pre">out</span></tt> and <tt class="docutils literal"><span class="pre">in_out</span></tt>; the library provides
@@ -570,6 +658,7 @@ call</p>
 <pre class="literal-block">
 graphs::depth_first_search(x, y);
 </pre>
+<!-- @ignore() -->
 <p><tt class="docutils literal"><span class="pre">x</span></tt> will always be interpreted as a graph and <tt class="docutils literal"><span class="pre">y</span></tt> will always
 be interpreted as a visitor.</p>
 </div>
@@ -589,6 +678,7 @@ used in the default expressions for <tt class="docutils literal"><span class="pr
     default_color_map(num_vertices(<strong>graph</strong>), index_map) )
 )
 </pre>
+<!-- @ignore() -->
 <p class="compound-last">A default expression is evaluated in the context of all preceding
 parameters, so you can use any of their values by name.</p>
 </div>
@@ -601,7 +691,7 @@ demonstrate that with our code so far by replacing the body of
 #include &lt;boost/graph/depth_first_search.hpp&gt; // for dfs_visitor
 
 BOOST_PARAMETER_FUNCTION(
-    (void), depth_first_search, graphs
+    (void), depth_first_search, tag
     <em>…signature goes here…</em>
 )
 {
@@ -617,8 +707,8 @@ int main()
     depth_first_search(1, 2, 3, 4, 5);
 
     depth_first_search(
-        &quot;1&quot;, '2', color_map = '5',
-        visitor = &quot;4&quot;, root_vertex = &quot;3&quot;);
+        &quot;1&quot;, '2', _color_map = '5',
+        _index_map = &quot;4&quot;, _root_vertex = &quot;3&quot;);
 }
 </pre>
 <p class="compound-last">Despite the fact that default expressions such as
@@ -626,6 +716,25 @@ int main()
 arguments, both calls will compile, and each one will print
 exactly the same thing.</p>
 </div>
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>
+#include <iostream>
+
+BOOST_PARAMETER_NAME(graph)
+BOOST_PARAMETER_NAME(visitor)
+BOOST_PARAMETER_NAME(root_vertex)
+BOOST_PARAMETER_NAME(index_map)
+BOOST_PARAMETER_NAME(color_map)''') -->
+<!-- @example.replace_emphasis('''
+, (required
+    (graph, *)
+    (visitor, *)
+    (root_vertex, *)
+    (index_map, *)
+    (color_map, *)
+  )
+''') -->
+<!-- @test('compile') -->
 </div>
 <div class="section">
 <h4><a class="toc-backref" href="#id39" id="signature-matching-and-overloading" name="signature-matching-and-overloading">2.1.5.6&nbsp;&nbsp;&nbsp;Signature Matching and Overloading</a></h4>
@@ -680,6 +789,7 @@ BOOST_PARAMETER_FUNCTION(
 // ambiguous!
 depth_first_search(boost::adjacency_list&lt;&gt;(), 2, &quot;hello&quot;);
 </pre>
+<!-- @ignore() -->
 <div class="section">
 <h5><a class="toc-backref" href="#id40" id="adding-type-requirements" name="adding-type-requirements">2.1.5.6.1&nbsp;&nbsp;&nbsp;Adding Type Requirements</a></h5>
 <p>We really don't want the compiler to consider the original version
@@ -695,6 +805,7 @@ of the signature with the required type, in parentheses:</p>
      <strong>(typename boost::graph_traits&lt;graph_type&gt;::vertex_descriptor)</strong>,
      *vertices(graph).first)
 </pre>
+<!-- @ignore() -->
 <p>Now the original <tt class="docutils literal"><span class="pre">depth_first_search</span></tt> will only be called when
 the <tt class="docutils literal"><span class="pre">root_vertex</span></tt> argument can be converted to the graph's vertex
 descriptor type, and our example that <em>was</em> ambiguous will smoothly
@@ -724,11 +835,11 @@ BOOST_PARAMETER_FUNCTION(
       (graph
        , <strong>*(boost::mpl::and_&lt;
                boost::is_convertible&lt;
-                   boost::graph_traits&lt;G&gt;::traversal_category,
+                   boost::graph_traits&lt;_&gt;::traversal_category
                  , boost::incidence_graph_tag
                &gt;
              , boost::is_convertible&lt;
-                   boost::graph_traits&lt;G&gt;::traversal_category,
+                   boost::graph_traits&lt;_&gt;::traversal_category
                  , boost::vertex_list_graph_tag
                &gt;
            &gt;)</strong> ))
@@ -737,30 +848,69 @@ BOOST_PARAMETER_FUNCTION(
       (visitor, *, boost::dfs_visitor&lt;&gt;()) // not checkable
 
       (root_vertex
-        , (typename boost::graph_traits&lt;graph_type&gt;::vertex_descriptor)
+        , (typename boost::graph_traits&lt;graphs::graph::_&gt;::vertex_descriptor)
         , *vertices(graph).first)
 
       (index_map
         , <strong>*(boost::mpl::and_&lt;
               boost::is_integral&lt;
-                  boost::property_traits&lt;index_map_type&gt;::value_type
+                  boost::property_traits&lt;_&gt;::value_type
               &gt;
             , boost::is_same&lt;
-                  typename boost::graph_traits&lt;graph_type&gt;::vertex_descriptor
-                , boost::property_traits&lt;index_map_type&gt;::key_type
+                  typename boost::graph_traits&lt;graphs::graph::_&gt;::vertex_descriptor
+                , boost::property_traits&lt;_&gt;::key_type
               &gt;
           &gt;)</strong>
         , get(boost::vertex_index,graph))
 
       (in_out(color_map)
         , <strong>*(boost::is_same&lt;
-              typename boost::graph_traits&lt;graph_type&gt;::vertex_descriptor
-            , boost::property_traits&lt;index_map_type&gt;::key_type
+              typename boost::graph_traits&lt;graphs::graph::_&gt;::vertex_descriptor
+            , boost::property_traits&lt;_&gt;::key_type
           &gt;)</strong>
        , default_color_map(num_vertices(graph), index_map) )
     )
 )
 </pre>
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>
+
+BOOST_PARAMETER_NAME((_graph, graphs) graph)
+BOOST_PARAMETER_NAME((_visitor, graphs) visitor)
+BOOST_PARAMETER_NAME((_root_vertex, graphs) root_vertex)
+BOOST_PARAMETER_NAME((_index_map, graphs) index_map)
+BOOST_PARAMETER_NAME((_color_map, graphs) color_map)
+
+using boost::mpl::_;
+
+namespace boost
+{
+  struct incidence_graph_tag {};
+  struct vertex_list_graph_tag {};
+
+  int vertex_index = 0;
+
+  template <class T>
+  struct graph_traits
+  {
+      typedef int traversal_category;
+      typedef int vertex_descriptor;
+  };
+
+  template <class T>
+  struct property_traits
+  {
+      typedef int value_type;
+      typedef int key_type;
+  };
+
+  template <class T = int>
+  struct dfs_visitor
+  {};
+}''') -->
+<!-- @example.append('''
+{}''') -->
+<!-- @test('compile') -->
 <p>We acknowledge that this signature is pretty hairy looking.
 Fortunately, it usually isn't necessary to so completely encode the
 type requirements on arguments to generic functions.  However, it
@@ -790,6 +940,7 @@ void def(
   , CallPolicies policies = default_call_policies()
 );
 </pre>
+<!-- @ignore() -->
 <p>Try not to be too distracted by the use of the term “keywords” in
 this example: although it means something analogous in Boost.Python
 to what it means in the Parameter library, for the purposes of this
@@ -806,7 +957,7 @@ follows:</p>
 namespace mpl = boost::mpl;
 
 BOOST_PARAMETER_FUNCTION(
-    (void), def, tag
+    (void), def, tag,
 
     (required (name,(char const*)) (func,*) )   // nondeduced
 
@@ -815,14 +966,14 @@ BOOST_PARAMETER_FUNCTION(
         (docstring, (char const*), &quot;&quot;)
 
         (keywords
-           , *(is_keyword_expression&lt;keywords_type&gt;) // see<a class="footnote-reference" href="#is-keyword-expression" id="id12" name="id12"><sup>6</sup></a>
+           , *(is_keyword_expression&lt;mpl::_&gt;) // see<a class="footnote-reference" href="#is-keyword-expression" id="id12" name="id12"><sup>6</sup></a>
            , no_keywords())
 
         (policies
            , *(mpl::not_&lt;
                  mpl::or_&lt;
-                     boost::is_convertible&lt;policies_type, char const*&gt;
-                   , is_keyword_expression&lt;policies_type&gt; // see<a class="footnote-reference" href="#is-keyword-expression" id="id13" name="id13"><sup>6</sup></a>
+                     boost::is_convertible&lt;mpl::_, char const*&gt;
+                   , is_keyword_expression&lt;mpl::_&gt; // see<a class="footnote-reference" href="#is-keyword-expression" id="id13" name="id13"><sup>6</sup></a>
                  &gt;
              &gt;)
            , default_call_policies()
@@ -834,6 +985,41 @@ BOOST_PARAMETER_FUNCTION(
     <em>…</em>
  }
 </pre>
+<!-- @example.replace_emphasis('') -->
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>
+
+BOOST_PARAMETER_NAME(name)
+BOOST_PARAMETER_NAME(func)
+BOOST_PARAMETER_NAME(docstring)
+BOOST_PARAMETER_NAME(keywords)
+BOOST_PARAMETER_NAME(policies)
+
+struct default_call_policies
+{};
+
+struct no_keywords
+{};
+
+struct keywords
+{};
+
+template <class T>
+struct is_keyword_expression
+  : boost::mpl::false_
+{};
+
+template <>
+struct is_keyword_expression<keywords>
+  : boost::mpl::true_
+{};
+
+default_call_policies some_policies;
+
+void f()
+{}
+
+''') -->
 <div class="admonition-syntax-note admonition">
 <p class="first admonition-title">Syntax Note</p>
 <p class="last">A <tt class="docutils literal"><span class="pre">(deduced</span> <span class="pre">…)</span></tt> clause always contains a <tt class="docutils literal"><span class="pre">(required</span> <span class="pre">…)</span></tt>
@@ -846,6 +1032,9 @@ nondeduced parameters at the outer level.</p>
 def(&quot;f&quot;, f, <strong>some_policies</strong>, <strong>&quot;Documentation for f&quot;</strong>);
 def(&quot;f&quot;, f, <strong>&quot;Documentation for f&quot;</strong>, <strong>some_policies</strong>);
 </pre>
+<!-- @example.prepend('''
+int main()
+{''') -->
 <p>If the user wants to pass a <tt class="docutils literal"><span class="pre">policies</span></tt> argument that was also,
 for some reason, convertible to <tt class="docutils literal"><span class="pre">char</span> <span class="pre">const*</span></tt>, she can always
 specify the parameter name explicitly, as follows:</p>
@@ -854,6 +1043,8 @@ def(
     &quot;f&quot;, f
    , <strong>_policies = some_policies</strong>, &quot;Documentation for f&quot;);
 </pre>
+<!-- @example.append('}') -->
+<!-- @test('compile', howmany='all') -->
 </div>
 </div>
 </div>
@@ -870,12 +1061,15 @@ BOOST_PARAMETER_NAME(arg2)
 struct callable2
 {
     BOOST_PARAMETER_CONST_MEMBER_FUNCTION(
-        (void), operator(), (required (arg1,(int))(arg2,(int))))
+        (void), operator(), tag, (required (arg1,(int))(arg2,(int))))
     {
         std::cout &lt;&lt; arg1 &lt;&lt; &quot;, &quot; &lt;&lt; arg2 &lt;&lt; std::endl;
     }
 };
 </pre>
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>''') -->
+<!-- @test('compile') -->
 <p>These macros don't directly allow a function's interface to be
 separated from its implementation, but you can always forward
 arguments on to a separate implementation function:</p>
@@ -883,7 +1077,7 @@ arguments on to a separate implementation function:</p>
 struct callable2
 {
     BOOST_PARAMETER_CONST_MEMBER_FUNCTION(
-        (void), operator(), (required (arg1,(int))(arg2,(int))))
+        (void), operator(), tag, (required (arg1,(int))(arg2,(int))))
     {
         call_impl(arg1,arg2);
     }
@@ -891,6 +1085,12 @@ struct callable2
     void call_impl(int, int); // implemented elsewhere.
 };
 </pre>
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>
+
+BOOST_PARAMETER_NAME(arg1)
+BOOST_PARAMETER_NAME(arg2)''') -->
+<!-- @test('compile') -->
 </div>
 <div class="section">
 <h2><a class="toc-backref" href="#id44" id="parameter-enabled-constructors" name="parameter-enabled-constructors">2.3&nbsp;&nbsp;&nbsp;Parameter-Enabled Constructors</a></h2>
@@ -922,6 +1122,9 @@ struct myclass_impl
     }
 };
 </pre>
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>
+#include <iostream>''') -->
 <p>Note that the bitwise or (“<tt class="docutils literal"><span class="pre">|</span></tt>”) operator has a special
 meaning when applied to keyword objects that are passed to an
 <span class="concept">ArgumentPack</span>'s indexing operator: it is used to indicate a
@@ -945,6 +1148,8 @@ myclass x(&quot;bob&quot;, 3);                     // positional
 myclass y(_index = 12, _name = &quot;sally&quot;); // named
 myclass z(&quot;june&quot;);                       // positional/defaulted
 </pre>
+<!-- @example.wrap('int main() {', '}') -->
+<!-- @test('run', howmany='all') -->
 <p>For more on <span class="concept">ArgumentPack</span> manipulation, see the <a class="reference" href="#advanced-topics">Advanced Topics</a>
 section.</p>
 </div>
@@ -958,6 +1163,7 @@ template class&lt;
 &gt;
 class class_;
 </pre>
+<!-- @ignore() -->
 <p>Only the first argument, <tt class="docutils literal"><span class="pre">ValueType</span></tt>, is required.</p>
 <div class="section">
 <h3><a class="toc-backref" href="#id46" id="named-template-parameters" name="named-template-parameters">2.4.1&nbsp;&nbsp;&nbsp;Named Template Parameters</a></h3>
@@ -975,6 +1181,7 @@ class_&lt;
     <strong>D</strong>, <strong>held_type&lt;std::auto_ptr&lt;D&gt; &gt;</strong>, <strong>base_list&lt;bases&lt;B&gt; &gt;</strong>
 &gt; …;
 </pre>
+<!-- @ignore() -->
 <div class="section">
 <h4><a class="toc-backref" href="#id47" id="template-keywords" name="template-keywords">2.4.1.1&nbsp;&nbsp;&nbsp;Template Keywords</a></h4>
 <p>The first step is to define keywords for each template parameter:</p>
@@ -988,6 +1195,8 @@ BOOST_PARAMETER_TEMPLATE_KEYWORD(copyable)
 
 }}
 </pre>
+<!-- @example.prepend('#include <boost/parameter.hpp>') -->
+<!-- @test('compile') -->
 <p>The declaration of the <tt class="docutils literal"><span class="pre">class_type</span></tt> keyword you see here is
 equivalent to:</p>
 <pre class="literal-block">
@@ -1001,6 +1210,8 @@ struct class_type
 
 }}
 </pre>
+<!-- @example.prepend('#include <boost/parameter.hpp>') -->
+<!-- @test('compile') -->
 <p>It defines a keyword tag type named <tt class="docutils literal"><span class="pre">tag::class_type</span></tt> and a
 <em>parameter passing template</em> named <tt class="docutils literal"><span class="pre">class_type</span></tt>.</p>
 </div>
@@ -1029,6 +1240,9 @@ struct class_
 
 }}
 </pre>
+<!-- @example.prepend('#include <boost/parameter.hpp>') -->
+<!-- @example.replace_emphasis('') -->
+<!-- @test('compile') -->
 </div>
 <div class="section">
 <h4><a class="toc-backref" href="#id49" id="class-template-signatures" name="class-template-signatures">2.4.1.3&nbsp;&nbsp;&nbsp;Class Template Signatures</a></h4>
@@ -1052,6 +1266,26 @@ typedef parameter::parameters&lt;
 
 }}
 </pre>
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>
+#include <boost/mpl/is_sequence.hpp>
+#include <boost/noncopyable.hpp>
+#include <memory>
+
+using namespace boost::parameter;
+
+namespace boost { namespace python {
+
+BOOST_PARAMETER_TEMPLATE_KEYWORD(class_type)
+BOOST_PARAMETER_TEMPLATE_KEYWORD(base_list)
+BOOST_PARAMETER_TEMPLATE_KEYWORD(held_type)
+BOOST_PARAMETER_TEMPLATE_KEYWORD(copyable)
+
+template <class B = int>
+struct bases
+{};
+
+}}''') -->
 </div>
 <div class="section">
 <h4><a class="toc-backref" href="#id50" id="argument-packs-and-parameter-extraction" name="argument-packs-and-parameter-extraction"><span id="binding-intro"></span>2.4.1.4&nbsp;&nbsp;&nbsp;Argument Packs and Parameter Extraction</a></h4>
@@ -1107,6 +1341,15 @@ typedef boost::python::class_&lt;
     D, held_type&lt;std::auto_ptr&lt;D&gt; &gt;, base_list&lt;bases&lt;B&gt; &gt;
 &gt; c2;
 </pre>
+<!-- @example.prepend('''
+using boost::python::class_type;
+using boost::python::copyable;
+using boost::python::held_type;
+using boost::python::base_list;
+using boost::python::bases;
+
+struct B {};
+struct D {};''') -->
 <p class="compound-middle">we can now examine the intended parameters:</p>
 <pre class="compound-last literal-block">
 BOOST_MPL_ASSERT((boost::is_same&lt;c1::class_type, B&gt;));
@@ -1124,6 +1367,7 @@ BOOST_MPL_ASSERT((
 BOOST_MPL_ASSERT((boost::is_same&lt;c2::copyable, void&gt;));
 </pre>
 </div>
+<!-- @test('compile', howmany='all') -->
 </div>
 <div class="section">
 <h3><a class="toc-backref" href="#id52" id="deduced-template-parameters" name="deduced-template-parameters">2.4.3&nbsp;&nbsp;&nbsp;Deduced Template Parameters</a></h3>
@@ -1142,11 +1386,29 @@ namespace boost { namespace python {
 namespace detail { struct bases_base {}; }
 
 template &lt;class A0 = void, class A1 = void, class A2 = void <em>…</em> &gt;
-struct bases <strong>: bases_base</strong>
+struct bases <strong>: detail::bases_base</strong>
 {};
 
 }}
 </pre>
+<!-- @example.replace_emphasis('') -->
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>
+#include <boost/mpl/is_sequence.hpp>
+#include <boost/noncopyable.hpp>
+#include <memory>
+
+using namespace boost::parameter;
+using boost::mpl::_;
+
+namespace boost { namespace python {
+
+BOOST_PARAMETER_TEMPLATE_KEYWORD(class_type)
+BOOST_PARAMETER_TEMPLATE_KEYWORD(base_list)
+BOOST_PARAMETER_TEMPLATE_KEYWORD(held_type)
+BOOST_PARAMETER_TEMPLATE_KEYWORD(copyable)
+
+}}''') -->
 <p>Now we can rewrite our signature to make all three optional
 parameters deducible:</p>
 <pre class="literal-block">
@@ -1155,14 +1417,14 @@ typedef parameter::parameters&lt;
 
   , optional&lt;
         deduced&lt;tag::base_list&gt;
-      , is_base_and_derived&lt;bases_base,_&gt;
+      , is_base_and_derived&lt;detail::bases_base,_&gt;
     &gt;
 
   , optional&lt;
         deduced&lt;tag::held_type&gt;
       , mpl::not_&lt;
             mpl::or_&lt;
-                is_base_and_derived&lt;bases_base,_&gt;
+                is_base_and_derived&lt;detail::bases_base,_&gt;
               , is_same&lt;noncopyable,_&gt;
             &gt;
         &gt;
@@ -1172,6 +1434,37 @@ typedef parameter::parameters&lt;
 
 &gt; class_signature;
 </pre>
+<!-- @example.prepend('''
+namespace boost { namespace python {''') -->
+<!-- @example.append('''
+template <
+    class A0
+  , class A1 = parameter::void_
+  , class A2 = parameter::void_
+  , class A3 = parameter::void_
+>
+struct class_
+{
+    // Create ArgumentPack
+    typedef typename
+      class_signature::bind<A0,A1,A2,A3>::type
+    args;
+
+    // Extract first logical parameter.
+    typedef typename parameter::binding<
+      args, tag::class_type>::type class_type;
+
+    typedef typename parameter::binding<
+      args, tag::base_list, bases<> >::type base_list;
+
+    typedef typename parameter::binding<
+      args, tag::held_type, class_type>::type held_type;
+
+    typedef typename parameter::binding<
+      args, tag::copyable, void>::type copyable;
+};
+
+}}''') -->
 <p>It may seem like we've added a great deal of complexity, but the
 benefits to our users are greater.  Our original examples can now
 be written without explicit parameter names:</p>
@@ -1180,6 +1473,26 @@ typedef boost::python::class_&lt;<strong>B</strong>, <strong>boost::noncopyable<
 
 typedef boost::python::class_&lt;<strong>D</strong>, <strong>std::auto_ptr&lt;D&gt;</strong>, <strong>bases&lt;B&gt;</strong> &gt; c2;
 </pre>
+<!-- @example.prepend('''
+struct B {};
+struct D {};
+
+using boost::python::bases;''') -->
+<!-- @example.append('''
+BOOST_MPL_ASSERT((boost::is_same<c1::class_type, B>));
+BOOST_MPL_ASSERT((boost::is_same<c1::base_list, bases<> >));
+BOOST_MPL_ASSERT((boost::is_same<c1::held_type, B>));
+BOOST_MPL_ASSERT((
+     boost::is_same<c1::copyable, boost::noncopyable>
+));
+
+BOOST_MPL_ASSERT((boost::is_same<c2::class_type, D>));
+BOOST_MPL_ASSERT((boost::is_same<c2::base_list, bases<B> >));
+BOOST_MPL_ASSERT((
+    boost::is_same<c2::held_type, std::auto_ptr<D> >
+));
+BOOST_MPL_ASSERT((boost::is_same<c2::copyable, void>));''') -->
+<!-- @test('compile', howmany='all') -->
 </div>
 </div>
 </div>
@@ -1196,6 +1509,7 @@ way to use <tt class="docutils literal"><span class="pre">BOOST_PARAMETER_NAME</
 <pre class="literal-block">
 BOOST_PARAMETER_NAME(<strong>(</strong><em>object-name</em><strong>,</strong> <em>tag-namespace</em><strong>)</strong> <em>parameter-name</em>)
 </pre>
+<!-- @ignore() -->
 <p>Here is a usage example:</p>
 <pre class="literal-block">
 BOOST_PARAMETER_NAME((<strong>pass_foo</strong>, <strong>keywords</strong>) <strong>foo</strong>)
@@ -1209,6 +1523,11 @@ BOOST_PARAMETER_FUNCTION(
 
 int x = f(<strong>pass_foo</strong> = 41);
 </pre>
+<!-- @example.prepend('#include <boost/parameter.hpp>') -->
+<!-- @example.append('''
+int main()
+{}''') -->
+<!-- @test('run') -->
 <p>Before you use this more verbose form, however, please read the
 section on <a class="reference" href="#keyword-naming">best practices for keyword object naming</a>.</p>
 </div>
@@ -1235,6 +1554,9 @@ int print_index(ArgumentPack const&amp; args)
 
 int x = print_index(_index = 3);  // prints &quot;index = 3&quot;
 </pre>
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>
+#include <iostream>''') -->
 <p>Also, <span class="concept">ArgumentPack</span>s can be composed using the comma operator.
 The extra parentheses below are used to prevent the compiler from
 seeing two separate arguments to <tt class="docutils literal"><span class="pre">print_name_and_index</span></tt>:</p>
@@ -1261,7 +1583,7 @@ its function call operator:</p>
 parameter::parameters&lt;
     required&lt;tag::name, is_convertible&lt;_,char const*&gt; &gt;
   , optional&lt;tag::index, is_convertible&lt;_,int&gt; &gt;
-&gt; const spec;
+&gt; spec;
 
 int z0 = print_name_and_index( <strong>spec(</strong>&quot;sam&quot;, 12<strong>)</strong> );
 
@@ -1269,6 +1591,16 @@ int z1 = print_name_and_index(
    <strong>spec(</strong>_index=12, _name=&quot;sam&quot;<strong>)</strong>
 );
 </pre>
+<!-- @example.prepend('''
+namespace parameter = boost::parameter;
+using parameter::required;
+using parameter::optional;
+using boost::is_convertible;
+using boost::mpl::_;''') -->
+<!-- @example.append('''
+int main()
+{}''') -->
+<!-- @test('run', howmany='all') -->
 </div>
 <div class="section">
 <h3><a class="toc-backref" href="#id57" id="extracting-parameter-types" name="extracting-parameter-types">3.2.2&nbsp;&nbsp;&nbsp;Extracting Parameter Types</a></h3>
@@ -1281,18 +1613,32 @@ BOOST_PARAMETER_NAME(name)
 BOOST_PARAMETER_NAME(index)
 
 template &lt;class Name, class Index&gt;
-void deduce_arg_types_impl(Name&amp; name, Index&amp; index)
+int deduce_arg_types_impl(Name&amp; name, Index&amp; index)
 {
     Name&amp; n2 = name;  // we know the types
     Index&amp; i2 = index;
+    return index;
 }
 
 template &lt;class ArgumentPack&gt;
 int deduce_arg_types(ArgumentPack const&amp; args)
 {
-    deduce_arg_types_impl(args[_name], args[_index|42]);
+    return deduce_arg_types_impl(args[_name], args[_index|42]);
 }
 </pre>
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>
+#include <cassert>''') -->
+<!-- @example.append('''
+int a1 = deduce_arg_types((_name = "foo"));
+int a2 = deduce_arg_types((_name = "foo", _index = 3));
+
+int main()
+{
+    assert(a1 == 42);
+    assert(a2 == 3);
+}''') -->
+<!-- @test('run') -->
 <p>Occasionally one needs to deduce argument types without an extra
 layer of function call.  For example, suppose we wanted to return
 twice the value of the <tt class="docutils literal"><span class="pre">index</span></tt> parameter?  In that
@@ -1305,11 +1651,23 @@ template &lt;class ArgumentPack&gt;
 typename parameter::binding&lt;ArgumentPack, tag::index, int&gt;::type
 twice_index(ArgumentPack const&amp; args)
 {
-    return 2 * args[_index|42]);
+    return 2 * args[_index|42];
 }
 
 int six = twice_index(_index = 3);
 </pre>
+<!-- TODO: binding<> returns a reference. We should use value_type<> here. -->
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>
+#include <cassert>
+
+namespace parameter = boost::parameter;''') -->
+<!-- @example.append('''
+int main()
+{
+    assert(six == 6);
+}''') -->
+<!-- @test('run') -->
 </div>
 <div class="section">
 <h3><a class="toc-backref" href="#id58" id="lazy-default-computation" name="lazy-default-computation">3.2.3&nbsp;&nbsp;&nbsp;Lazy Default Computation</a></h3>
@@ -1336,6 +1694,15 @@ std::string f(ArgumentPack const&amp; args)
 
 std::string x = f((_s1=&quot;hello,&quot;, _s2=&quot; world&quot;, _s3=&quot;hi world&quot;));
 </pre>
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>
+#include <string>
+
+namespace parameter = boost::parameter;''') -->
+<!-- @example.append('''
+int main()
+{}''') -->
+<!-- @test('run') -->
 <p>In the example above, the string <tt class="docutils literal"><span class="pre">&quot;hello,</span> <span class="pre">world&quot;</span></tt> is constructed
 despite the fact that the user passed us a value for <tt class="docutils literal"><span class="pre">s3</span></tt>.  To
 remedy that, we can compute the default value <em>lazily</em> (that is,
@@ -1348,6 +1715,31 @@ typename parameter::binding&lt;
     ArgumentPack, tag::s3, std::string
 &gt;::type s3 = args[_s3 <strong>|| (lambda::var(s1)+lambda::var(s2))</strong> ];
 </pre>
+<!-- @example.prepend('''
+#include <boost/lambda/lambda.hpp>
+#include <boost/parameter.hpp>
+#include <string>
+
+namespace parameter = boost::parameter;
+
+BOOST_PARAMETER_NAME(s1)
+BOOST_PARAMETER_NAME(s2)
+BOOST_PARAMETER_NAME(s3)
+
+template <class ArgumentPack>
+std::string f(ArgumentPack const& args)
+{
+    std::string const& s1 = args[_s1];
+    std::string const& s2 = args[_s2];''') -->
+<!-- @example.append('''
+    return s3;
+}
+
+std::string x = f((_s1="hello,", _s2=" world", _s3="hi world"));
+
+int main()
+{}''') -->
+<!-- @test('run') -->
 <div class="sidebar">
 <p class="first sidebar-title">Mnemonics</p>
 <p class="last">To remember the difference between <tt class="docutils literal"><span class="pre">|</span></tt> and <tt class="docutils literal"><span class="pre">||</span></tt>, recall that
@@ -1402,6 +1794,7 @@ namespace people
   }
 }
 </pre>
+<!-- @ignore() -->
 <p>Although in the case above, the user was trying to pass the value
 <tt class="docutils literal"><span class="pre">3</span></tt> as the <tt class="docutils literal"><span class="pre">age</span></tt> parameter to <tt class="docutils literal"><span class="pre">g</span></tt>, what happened instead
 was that <tt class="docutils literal"><span class="pre">f</span></tt>'s <tt class="docutils literal"><span class="pre">age</span></tt> argument got reassigned the value 3,
@@ -1428,8 +1821,8 @@ Boost.Parameter-enabled functions using those keywords:</p>
 <pre class="literal-block">
 namespace lib
 {
-  <strong>BOOST_PARAMETER_KEYWORD(name)
-  BOOST_PARAMETER_KEYWORD(index)</strong>
+  <strong>BOOST_PARAMETER_NAME(name)
+  BOOST_PARAMETER_NAME(index)</strong>
 
   BOOST_PARAMETER_FUNCTION(
     (int), f, tag,
@@ -1441,6 +1834,11 @@ namespace lib
   }
 }
 </pre>
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>
+#include <iostream>''') -->
+<!-- @namespace_setup = str(example) -->
+<!-- @ignore() -->
 <p>Users of these functions have a few choices:</p>
 <ol class="arabic simple">
 <li>Full qualification:</li>
@@ -1451,6 +1849,9 @@ int x = <strong>lib::</strong>f(<strong>lib::</strong>_name = &quot;jill&quot;, 
 </pre>
 <p>This approach is more verbose than many users would like.</p>
 </blockquote>
+<!-- @example.prepend(namespace_setup) -->
+<!-- @example.append('int main() {}') -->
+<!-- @test('run') -->
 <ol class="arabic simple" start="2">
 <li>Make keyword objects available through
 <em>using-declarations</em>:</li>
@@ -1466,6 +1867,9 @@ int x = lib::f(_name = &quot;jill&quot;, _index = 1);
 <em>using-declarations</em> themselves can be verbose and hard-to
 manage.</p>
 </blockquote>
+<!-- @example.prepend(namespace_setup) -->
+<!-- @example.append('int main() {}') -->
+<!-- @test('run') -->
 <ol class="arabic simple" start="3">
 <li>Bring in the entire namespace with a <em>using-directive</em>:</li>
 </ol>
@@ -1477,6 +1881,9 @@ int x = <strong>f</strong>(_name = &quot;jill&quot;, _index = 3);
 <p>This option is convenient, but it indiscriminately makes the
 <em>entire</em> contents of <tt class="docutils literal"><span class="pre">lib</span></tt> available without qualification.</p>
 </blockquote>
+<!-- @example.prepend(namespace_setup) -->
+<!-- @example.append('int main() {}') -->
+<!-- @test('run') -->
 <p>If we add an additional namespace around keyword declarations,
 though, we can give users more control:</p>
 <pre class="literal-block">
@@ -1484,8 +1891,8 @@ namespace lib
 {
   <strong>namespace keywords
   {</strong>
-     BOOST_PARAMETER_KEYWORD(name)
-     BOOST_PARAMETER_KEYWORD(index)
+     BOOST_PARAMETER_NAME(name)
+     BOOST_PARAMETER_NAME(index)
   <strong>}</strong>
 
   BOOST_PARAMETER_FUNCTION(
@@ -1498,20 +1905,30 @@ namespace lib
   }
 }
 </pre>
+<!-- @example.prepend('''
+#include <boost/parameter.hpp>
+#include <iostream>''') -->
 <p>Now users need only a single <em>using-directive</em> to bring in just the
 names of all keywords associated with <tt class="docutils literal"><span class="pre">lib</span></tt>:</p>
 <pre class="literal-block">
 <strong>using namespace lib::keywords;</strong>
 int y = lib::f(_name = &quot;bob&quot;, _index = 2);
 </pre>
+<!-- @example.append('int main() {}') -->
+<!-- @test('run', howmany='all') -->
 </div>
 <div class="section">
 <h2><a class="toc-backref" href="#id62" id="documentation" name="documentation">4.3&nbsp;&nbsp;&nbsp;Documentation</a></h2>
 <p>The interface idioms enabled by Boost.Parameter are completely new
 (to C++), and as such are not served by pre-existing documentation
 conventions.</p>
-<blockquote>
-<em>write something here!!</em></blockquote>
+<div class="note">
+<p class="first admonition-title">Note</p>
+<p class="last">This space is empty because we haven't settled on any
+best practices yet.  We'd be very pleased to link to your
+documentation if you've got a style that you think is worth
+sharing.</p>
+</div>
 </div>
 </div>
 <div class="section">
@@ -1734,7 +2151,7 @@ information on SFINAE.</td></tr>
 </div>
 <div class="footer">
 <hr class="footer" />
-Generated on: 2006-09-21 02:23 UTC.
+Generated on: 2007-01-03 16:39 UTC.
 Generated by <a class="reference" href="http://docutils.sourceforge.net/">Docutils</a> from <a class="reference" href="http://docutils.sourceforge.net/rst.html">reStructuredText</a> source.
 
 </div>
