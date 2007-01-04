@@ -420,17 +420,22 @@ namespace boost { namespace spirit2
         >
     {};
 
-    // A ToySpiritGrammar is an alternate, a sequence or a terminal
+    // Directives such as no_case are handled here
+    struct ToySpiritDirective
+      : no_case_transform< 
+            proto::trans::arg<
+                proto::meta::unary_expr< tag::no_case, ToySpiritGrammar >
+            >
+        >
+    {};
+
+    // A ToySpiritGrammar is an alternate, a sequence, a directive or a terminal
     struct ToySpiritGrammar
       : proto::or_<
             ToySpiritSequence
           , ToySpiritAlternate
+          , ToySpiritDirective
           , ToySpiritTerminal
-          , no_case_transform< 
-                proto::trans::arg<
-                    proto::meta::unary_expr< tag::no_case, ToySpiritGrammar >
-                >
-            >
         >
     {};
 

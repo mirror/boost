@@ -350,6 +350,18 @@ namespace boost { namespace proto
 
     namespace transform
     {
+        namespace detail
+        {
+            template<typename T>
+            struct static_
+            {
+                static T const value;
+            };
+
+            template<typename T>
+            T const static_<T>::value = T();
+        }
+
         template<typename Grammar, typename N = mpl::long_<0> >
         struct arg;
 
@@ -361,6 +373,18 @@ namespace boost { namespace proto
 
         template<typename Grammar>
         struct right;
+
+        template<typename Grammar>
+        struct state;
+
+        template<typename Grammar>
+        struct visitor;
+
+        template<typename Grammar>
+        struct identity;
+
+        template<typename Grammar, typename Always, Always const &Value = detail::static_<Always>::value>
+        struct always;
 
         template<typename Grammar, typename BranchState>
         struct branch;
@@ -389,14 +413,14 @@ namespace boost { namespace proto
 
 #define BOOST_PROTO_IDENTITY_TRANSFORM()\
     template<typename Expr_, typename State_, typename Visitor_>\
-    static typename Expr_::type const &call(Expr_ const &expr_, State_ const &, Visitor_ &)\
+    static Expr_ const &call(Expr_ const &expr_, State_ const &, Visitor_ &)\
     {\
-        return expr_.cast();\
+        return expr_;\
     }\
     template<typename Expr_, typename, typename>\
     struct apply\
     {\
-        typedef typename Expr_::type type;\
+        typedef Expr_ type;\
     }
 
     struct has_identity_transform

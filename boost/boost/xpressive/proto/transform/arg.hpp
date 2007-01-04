@@ -139,6 +139,36 @@ namespace boost { namespace proto { namespace transform
         }
     };
 
+    // Always return the specified type/object
+    template<typename Grammar, typename Always, Always const &Value>
+    struct always
+      : Grammar
+    {
+        always();
+
+        template<typename, typename, typename>
+        struct apply
+        {
+            typedef Always type;
+        };
+
+        template<typename Expr, typename State, typename Visitor>
+        static Always const &
+        call(Expr const &, State const &, Visitor &)
+        {
+            return Value;
+        }
+    };
+
+    // Just return the passed in Expr
+    template<typename Grammar>
+    struct identity
+      : Grammar
+    {
+        identity();
+        BOOST_PROTO_IDENTITY_TRANSFORM();
+    };
+
 }}}
 
 #endif
