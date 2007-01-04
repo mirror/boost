@@ -1,0 +1,37 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[section Installing Proto]
+
+[h2 Getting Proto]
+
+Currently the only way to get Proto is through CVS via the boost project on 
+SourceForge.net. Just go to [@http://sf.net/projects/boost] and follow the 
+instructions there for anonymous CVS access.
+
+[h2 Building with Proto]
+
+Proto is a header-only template library, which means you don't need to alter 
+your build scripts or link to any separate lib file to use it. All you need 
+to do is `#include <boost/xpressive/proto/proto.hpp>`. This will include the
+core of Proto. If you want to use any transforms, you must include the 
+appropriate header from the [^boost/xpressive/proto/transform/] directory.
+
+[h2 Requirements]
+
+Proto depends on Boost. You must use the version in CVS HEAD.
+
+[h2 Supported Compilers]
+
+Currently, Boost.Proto is known to work on the following compilers:
+
+* Visual C++ 7.1 and higher
+* GNU C++ 3.2 and higher
+
+[note Please send any questions, comments and bug reports to eric <at> boost-consulting <dot> com.]
+
+[endsect]

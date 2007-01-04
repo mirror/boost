@@ -1,0 +1,61 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[section Preface]
+
+[:Something witty.]
+[:[*['-- Someone Famous]]]
+
+[h2 Description]
+
+Proto is a framework for constructing, type-checking, transforming and 
+executing ['expression templates][footnote See 
+[@http://www.wikipedia.org/Expression_templates Expression Templates]]. Proto 
+provides ET library authors with the following:
+
+* An expression tree data structure.
+* Operator overloads for building the tree from an expression.
+* Utilities for defining the meta-grammar to which an expression must conform.
+* An extensible mechanism for immediately executing an expression template.
+* An extensible set of tree transformations to apply to expression trees.
+
+[h2 Motivation]
+
+Expression Templates are an advanced technique that C++ library developers use 
+to define embedded mini-languages that target specific problem domains. The 
+technique has been used to create hyper-efficient and easy-to-use libraries 
+for linear algebra as well as to define C++ parser generators with a readable 
+syntax. But developing such a library involves writing an inordinate amount of 
+unreadable and unmaintainable template mumbo-jumbo. Boost.Proto eases the 
+development of domain-specific embedded languages (DSELs). Use Proto to define 
+the primitives of your mini-language and let Proto handle the operator 
+overloading and the construction of the expression parse tree. Immediately 
+evaluate the expression tree by passing it a function object. Or transform the 
+expression tree by defining the meta-grammar of your mini-language, decorated 
+with an assortment of tree transforms provided by Proto or defined by you. 
+Then use the meta-grammar to give your users short and readable syntax errors 
+for invalid expressions! No more mumbo-jumbo -- an expression template library 
+developed with Proto is declarative and readable. 
+
+In short, Proto is a DSEL for defining DSELs. 
+
+[h2 Influences and Related Work]
+
+Proto was initially developed as part of _xpressive_ to simplify the job of 
+transforming an expression template into an executable finite state machine 
+capable of matching a regular expression. Since then, Proto has found 
+application in the redesigned and improved Spirit-2 and the related Karma
+library, currently under development. As a result of these efforts, Proto 
+evolved into a generic and abstract meta-grammar and tree transformation 
+framework applicable in a wide variety of DSEL scenarios.
+
+The meta-grammar and tree transformation framework is modelled on Spirit's
+grammar and semantic action framework. The expression tree data structure
+is similar to Fusion data structures in many respects, and is interoperable
+with Fusion's iterators and algorithms.
+
+[endsect]

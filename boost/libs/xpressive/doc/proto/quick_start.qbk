@@ -1,0 +1,137 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[section Quick Start]
+
+In this section, we'll see a simple ['hello world] for Proto and take a quick
+tour of the types and functions Proto provides.
+
+[h2 Hello, world!]
+
+Below is a very simple program that uses Proto to build an expression template.
+It simply uses Proto's debug facilities to display the expression. We'll see 
+later how to do more interesting things with the expression.
+
+    #include <boost/xpressive/proto/proto.hpp>
+    #include <boost/xpressive/proto/debug.hpp>
+    
+    using namespace boost;
+    
+    int main()
+    {
+        // Function for Proto-ifying a literal
+        using proto::lit;
+        
+        // Use the Proto's operator overloads to build
+        // expression. Then use Proto's debug facilities
+        // to display the expression tree.
+        proto::display_expr(
+            42 + lit('a') * "hello world"
+        );
+        
+        return 0;
+    }
+
+This program outputs the following:
+
+[pre
+add(
+    terminal(42)
+  , multiply(
+        terminal(a)
+      , terminal(hello world)
+    )
+)
+]
+
+Notice that in order to build a Proto expression template, at least one 
+argument in the expression must be a Proto-ified. In this case, that is done 
+with the _lit_ function, which returns a _literal_ wrapper. That "infects" the 
+expression, and brings Proto's operator overloads into consideration. Any 
+literals in the expression are then Proto-ified by wrapping them in a Proto 
+terminal before they are combined into larger Proto expressions.
+
+[blurb [*Proto Design Philosophy]\n
+\n
+Before we continue, let's use the above example to illustrate an important
+design principle of Proto's. The expression template created in the ['hello 
+world] example is totally general and abstract. It is not tied in any way to
+any particular domain or application, nor does it have any particular meaning 
+or behavior on its own. It is really just a heterogeneous tree, which might 
+mean something in one domain, and something else entirely in a different one.\n
+\n
+As we'll see later, there is a way to create Proto expression trees that are
+['not] purely abstract, and that have meaning and behaviors independent of any
+domain. There is also a way to control which operators are overloaded for your
+particular domain. But that is not the default behavior. We'll see later why 
+the default is often a good thing.]
+
+[h2 Proto's Tool-Box]
+
+Let's begin with the nickel tour of the utilities Proto provides.
+
+[table Proto's Tool-Box
+    [[Tool]                     [Description]]
+    [[_expr_]                   [The structure from which Proto's expression 
+                                    trees are built.]]
+    [[_ref_]                    [A wrapper for holding an _expr_ by reference 
+                                    within another _expr_.]]
+    [[_unref_]                  [Removes a top-level reference, be it a real
+                                    reference or a _ref_ wrapper.]]
+    [[_deep_copy_]              [A function for transforming an expression 
+                                    tree such that all nodes are held by value
+                                    instead of by reference.]]
+    [[_as_expr_, _as_expr_ref_] [_as_expr_ is a function that Proto-ifies an 
+                                    object if it is not already a Proto 
+                                    expression. _as_expr_ref_ is similar except
+                                    the argument is stored by reference.]]
+    [[_is_expr_]                [Tests a type to see if it is a Proto
+                                    expression type.]]
+    [[_tag_]                    [Meta-function which returns the node type
+                                    of the specified expression.]]
+    [[_arg_, _arg_c_]           [For extracting the ['N]th child expression
+                                    from a proto expression tree.]]
+    [[_left_, _right_]          [For extracting the left or right child 
+                                    expression from a binary proto expression
+                                    tree.]]
+    [[_extends_]                [A domain-specific wrapper for giving an 
+                                    expression additional behaviors.]]
+    [[_literal_, _lit_]         [A wrapper for a Proto terminal, and a function
+                                    for generating them, respectively.]]
+    [[_terminal_, _unary_expr_,
+        _binary_expr_, /etc./]  [Expression type generators. For example, 
+                                    `meta::right_shift<A, B>::type` is the type
+                                    of a right-shift expression with `A` and 
+                                    `B` as children. These are also used for
+                                    specifying productions in meta-grammars.]]
+    [[_matches_]                [A compile-time predicate for determining
+                                    whether an expression type matches a
+                                    given meta-grammar.]]
+    [[_or_]                     [For specifying alternate productions in a
+                                    Proto meta-grammar.]]
+    [[_and_]                    [For specifying a compound production in a
+                                    Proto meta-grammar.]]
+    [[_if_]                     [Allows an arbitrary compile-time predicate 
+                                    to be used as a production in a Proto 
+                                    meta-grammar.]]
+    [[_exact_]                  [Used to specify that a terminal type must 
+                                    match exactly in a Proto meta-grammar.
+                                    (By default, matches are ['fuzzy].)]]
+]
+
+[/
+    [[_make_expr_]              [A function for building a Proto expression
+                                    given a node type and children expressions.]]
+    [[_unpack_expr_]            [Like _make_expr_, except the children
+                                    expressions are in a Fusion sequence.]]
+]
+
+
+Now that you know a bit about the tools proto provides, let's look at how to 
+use them to implement some domain-specific embedded languages.
+
+[endsect]

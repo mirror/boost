@@ -1,0 +1,86 @@
+
+[library Boost.Proto
+    [quickbook 1.3]
+    [authors [Niebler, Eric]]
+    [copyright 2006 Eric Niebler]
+    [category template]
+    [id proto]
+    [dirname proto]
+    [purpose 
+        Generic expression template, meta-grammar and
+        tree-transformation framework.
+    ]
+    [license
+        Distributed under the Boost Software License, Version 1.0.
+        (See accompanying file LICENSE_1_0.txt or copy at
+        [@http://www.boost.org/LICENSE_1_0.txt])
+    ]
+]
+
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[/ QuickBook Document version 1.3 ]
+
+[/  Images   ]
+
+[def __note__               [$images/note.png]]
+[def __alert__              [$images/caution.png]]
+[def __detail__             [$images/note.png]]
+[def __tip__                [$images/tip.png]]
+
+[/  Links   ]
+
+[def _spirit_fx_            [@http://spirit.sourceforge.net Spirit Parser Framework]]
+[def _spirit_               [@http://spirit.sourceforge.net Spirit]]
+[def _xpressive_            [@../../../libs/xpressive/doc/index.html Boost.Xpressive]]
+[def _expr_                 `expr<>`]
+[def _ref_                  `ref<>`]
+[def _unref_                `unref()`]
+[def _deep_copy_            `deep_copy()`]
+[def _extends_              `extends<>`]
+[def _as_expr_              `as_expr()`]
+[def _as_expr_ref_          `as_expr_ref()`]
+[def _make_expr_            `make_expr()`]
+[def _unpack_expr_          `unpack_expr()`]
+[def _matches_              `matches<>`]
+[def _or_                   `or_<>`]
+[def _and_                  `and_<>`]
+[def _if_                   `if_<>`]
+[def _exact_                `exact<>`]
+[def _is_expr_              `is_expr<>`]
+[def _tag_                  `tag<>`]
+[def _arg_                  `arg()`]
+[def _arg_c_                `arg_c()`]
+[def _left_                 `left()`]
+[def _right_                `right()`]
+[def _terminal_             `terminal<>`]
+[def _unary_expr_           `unary_expr<>`]
+[def _binary_expr_          `binary_expr<>`]
+[def _literal_              `literal<>`]
+[def _lit_                  `lit()`]
+
+[include preface.qbk]
+
+[section User's Guide]
+
+This section describes how to use Boost.Proto to build an expression template library.
+If you are looking for detailed information regarding specific components in Boost.Proto,
+check the [link proto.reference Reference] section.
+
+[include installation.qbk]
+
+[include quick_start.qbk]
+
+[include examples.qbk]
+
+[endsect]
+
+[include reference.qbk]
+
+[include acknowledgements.qbk]
+
