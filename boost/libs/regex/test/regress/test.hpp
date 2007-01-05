@@ -77,13 +77,23 @@ void do_test(const charT& c, const tagT& tag)
       test(e1, tag);
 #endif
 #if !BOOST_WORKAROUND(__BORLANDC__, < 0x560)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200) && defined(TEST_THREADS)
+   // typeid appears to fail in multithreaded environments:
+   test_info<charT>::set_typename("");
+#else
    test_info<charT>::set_typename(typeid(boost::basic_regex<charT, boost::c_regex_traits<charT> >).name());
+#endif
    boost::basic_regex<charT, boost::c_regex_traits<charT> > e2;
    if(test_locale::c_locale_state() != test_locale::no_test)
       test(e2, tag);
 #endif
 #if defined(_WIN32) && !defined(BOOST_REGEX_NO_W32)
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200) && defined(TEST_THREADS)
+   // typeid appears to fail in multithreaded environments:
+   test_info<charT>::set_typename("");
+#else
    test_info<charT>::set_typename(typeid(boost::basic_regex<charT, boost::w32_regex_traits<charT> >).name());
+#endif
    boost::basic_regex<charT, boost::w32_regex_traits<charT> > e3;
    if(test_locale::win_locale_state() == test_locale::test_with_locale)
       e3.imbue(test_locale::win_locale());
