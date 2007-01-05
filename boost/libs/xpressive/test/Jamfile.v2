@@ -62,14 +62,3 @@ test-suite "xpressive"
          [ compile test_sub_match.cpp ]
     ;
 
-test-suite "proto"
-    :
-        [ run proto/proto_fusion.cpp : : : <toolset>gcc:<cxxflags>-ftemplate-depth-1024 ]
-        [ run proto/proto_fusion_s.cpp ]
-        [ run proto/toy_spirit.cpp ]
-        [ run proto/toy_spirit2.cpp ]
-        [ run proto/calculator.cpp ]
-        [ run proto/lambda.cpp ]
-    ;
-
-explicit "proto" ;
