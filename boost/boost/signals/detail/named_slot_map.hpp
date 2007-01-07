@@ -123,8 +123,8 @@ public:
   }
   bool equal(const named_slot_map_iterator& other) const {
     return (group == other.group
-	    && (group == last_group
-		|| slot_ == other.slot_));
+        && (group == last_group
+        || slot_ == other.slot_));
   }
 
 #if BOOST_WORKAROUND(_MSC_VER, <= 1400)
