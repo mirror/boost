@@ -859,6 +859,14 @@ namespace quickbook
     void import_action::operator()(iterator first, iterator last) const
     {
         fs::path path(std::string(first, last), fs::native);
+
+        // check to see if the path is complete and if not, make it relative to the current path
+        if (!path.is_complete())
+        {
+            path = actions.filename.branch_path() / path;
+            path.normalize();
+        }
+
         std::string ext = fs::extension(path);
         std::vector<template_symbol> storage;
         load_snippets(path.string(), storage, ext);
