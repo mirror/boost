@@ -28,30 +28,8 @@ namespace boost
     proto::meta::terminal<char_tag>::type const char_ = {{}};
     proto::meta::terminal<space_tag>::type const space = {{}};
 
-    template<typename T>
-    struct literal
-      : proto::extends<typename proto::meta::terminal<T>::type, literal<T> >
-    {
-        typedef typename proto::meta::terminal<T>::type terminal_type;
-
-        template<typename U>
-        literal(U const &u)
-          : proto::extends<terminal_type, literal<T> >(terminal_type::make(u))
-        {}
-
-        template<typename U>
-        literal(literal<U> const &u)
-          : proto::extends<terminal_type, literal<T> >(terminal_type::make(proto::arg(u)))
-        {}
-
-        using proto::extends<terminal_type, literal<T> >::operator =;
-    };
-
-    template<typename T>
-    literal<T const &> lit(T const &t)
-    {
-        return literal<T const &>(t);
-    }
+    using proto::lit;
+    using proto::literal;
 }
 
 namespace boost { namespace spirit2

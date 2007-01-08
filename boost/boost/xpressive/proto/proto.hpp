@@ -18,6 +18,7 @@
 #include <boost/xpressive/proto/compile.hpp>
 #include <boost/xpressive/proto/matches.hpp>
 #include <boost/xpressive/proto/extends.hpp>
+#include <boost/xpressive/proto/literal.hpp>
 #include <boost/xpressive/proto/operators.hpp>
 #include <boost/xpressive/proto/deep_copy.hpp>
 

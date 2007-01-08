@@ -78,14 +78,14 @@ struct LambdaGrammar
 
 // simple wrapper for calculating a lambda expression's arity.
 template<typename Expr>
-struct LambdaArity
+struct lambda_arity
   : LambdaGrammar::apply<Expr, mpl::int_<0>, mpl::void_>
 {};
 
 template<typename Tuple>
-struct lambda_context_result
+struct lambda_context
 {
-    typedef lambda_context<Tuple> ctx_type;
+    typedef lambda_context<Tuple> this_type;
 
     template<typename Sig>
     struct result;
@@ -102,83 +102,48 @@ struct lambda_context_result
         typedef typename fusion::result_of::value_at<Tuple, I>::type type;
     };
 
-#define UN_OP_RESULT(Op, Arg)\
-    typedef typename proto::meta::eval<Arg, ctx_type>::type arg_type;\
-    BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, Op ::make<arg_type>())\
-    typedef typename mpl::if_c<\
-        1==sizeof(check_reference(Op ::make<arg_type>()))\
-      , typename nested::type &\
-      , typename nested::type\
-    >::type type;\
-    static type call(typename param<arg_type>::type arg) {\
-        return Op arg;\
-    }\
-    /**/
+#define UN_OP_RESULT(Op, Tag)\
+    template<typename This, typename Arg>\
+    struct result<This(Tag, Arg &)>\
+    {\
+        typedef typename proto::meta::eval<Arg, this_type>::type arg_type;\
+        BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, Op ::make<arg_type>())\
+        typedef typename mpl::if_c<\
+            1==sizeof(check_reference(Op ::make<arg_type>()))\
+          , typename nested::type &\
+          , typename nested::type\
+        >::type type;\
+        static type call(typename param<arg_type>::type arg)\
+        {\
+            return Op arg;\
+        }\
+    }
 
-#define BIN_OP_RESULT(Left, Op, Right)\
-    typedef typename proto::meta::eval<Left, ctx_type>::type left_type;\
-    typedef typename proto::meta::eval<Right, ctx_type>::type right_type;\
-    BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, ::make<left_type>() Op ::make<right_type>())\
-    typedef typename mpl::if_c<\
-        1==sizeof(check_reference(::make<left_type>() Op ::make<right_type>()))\
-      , typename nested::type &\
-      , typename nested::type\
-    >::type type;\
-    static type call(typename param<left_type>::type left, typename param<right_type>::type right) {\
-        return left Op right;\
-    }\
-    /**/
+#define BIN_OP_RESULT(Op, Tag)\
+    template<typename This, typename Left, typename Right>\
+    struct result<This(Tag, Left &, Right &)>\
+    {\
+        typedef typename proto::meta::eval<Left, this_type>::type left_type;\
+        typedef typename proto::meta::eval<Right, this_type>::type right_type;\
+        BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, ::make<left_type>() Op ::make<right_type>())\
+        typedef typename mpl::if_c<\
+            1==sizeof(check_reference(::make<left_type>() Op ::make<right_type>()))\
+          , typename nested::type &\
+          , typename nested::type\
+        >::type type;\
+        static type call(typename param<left_type>::type left, typename param<right_type>::type right)\
+        {\
+            return left Op right;\
+        }\
+    }
 
-    template<typename This, typename Arg>
-    struct result<This(proto::tag::unary_minus, Arg &)>
-    {
-        UN_OP_RESULT(-, Arg)
-    };
-
-    template<typename This, typename Left, typename Right>
-    struct result<This(proto::tag::add, Left &, Right &)>
-    {
-        BIN_OP_RESULT(Left, +, Right)
-    };
-
-    template<typename This, typename Left, typename Right>
-    struct result<This(proto::tag::subtract, Left &, Right &)>
-    {
-        BIN_OP_RESULT(Left, -, Right)
-    };
-
-    template<typename This, typename Left, typename Right>
-    struct result<This(proto::tag::multiply, Left &, Right &)>
-    {
-        BIN_OP_RESULT(Left, *, Right)
-    };
-
-    template<typename This, typename Left, typename Right>
-    struct result<This(proto::tag::divide, Left &, Right &)>
-    {
-        BIN_OP_RESULT(Left, /, Right)
-    };
-
-    template<typename This, typename Left, typename Right>
-    struct result<This(proto::tag::left_shift, Left &, Right &)>
-    {
-        BIN_OP_RESULT(Left, <<, Right)
-    };
-
-    template<typename This, typename Left, typename Right>
-    struct result<This(proto::tag::right_shift, Left &, Right &)>
-    {
-        BIN_OP_RESULT(Left, >>, Right)
-    };
-};
-
-template<typename Tuple>
-struct lambda_context
-  : lambda_context_result<Tuple>
-{
-    typedef lambda_context<Tuple> this_type;
-    typedef lambda_context_result<Tuple> base_type;
-    template<typename Sig> struct result_ : base_type::template result<Sig> {};
+    UN_OP_RESULT(-, proto::tag::unary_minus);
+    BIN_OP_RESULT(+, proto::tag::add);
+    BIN_OP_RESULT(-, proto::tag::subtract);
+    BIN_OP_RESULT(*, proto::tag::multiply);
+    BIN_OP_RESULT(/, proto::tag::divide);
+    BIN_OP_RESULT(<<, proto::tag::left_shift);
+    BIN_OP_RESULT(>>, proto::tag::right_shift);
 
     lambda_context(Tuple const &args)
       : args_(args)
@@ -199,17 +164,17 @@ struct lambda_context
     }
 
     template<typename Tag, typename Arg>
-    typename result_<this_type(Tag, Arg &)>::type
+    typename result<this_type(Tag, Arg &)>::type
     operator()(Tag, Arg &arg)
     {
-        return result_<this_type(Tag, Arg &)>::call(arg.eval(*this));
+        return result<this_type(Tag, Arg &)>::call(arg.eval(*this));
     }
 
     template<typename Tag, typename Left, typename Right>
-    typename result_<this_type(Tag, Left &, Right &)>::type
+    typename result<this_type(Tag, Left &, Right &)>::type
     operator()(Tag, Left &left, Right &right)
     {
-        return result_<this_type(Tag, Left &, Right &)>::call(left.eval(*this), right.eval(*this));
+        return result<this_type(Tag, Left &, Right &)>::call(left.eval(*this), right.eval(*this));
     }
 
 private:
@@ -235,7 +200,7 @@ struct lambda
     // Careful not to evaluate the return type of the nullary function
     // unless we have a nullary lambda!
     typedef typename mpl::eval_if<
-        typename LambdaArity<T>::type
+        typename lambda_arity<T>::type
       , mpl::identity<void>
       , proto::meta::eval<T, lambda_context<fusion::tuple<> > >
     >::type nullary_type;

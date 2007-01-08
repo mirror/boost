@@ -64,16 +64,6 @@
     #undef BOOST_PROTO_UNREF_ARG
     }}
 
-    #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400))
-    namespace boost
-    {
-    #define BOOST_PP_ITERATION_PARAMS_1 (4, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/expr.hpp>, 2))
-    #include BOOST_PP_ITERATE()
-    #undef BOOST_PP_ITERATION_PARAMS_1
-    }
-
-    #endif
-
     #endif // BOOST_PROTO_EXPR_HPP_EAN_04_01_2005
 
 #elif BOOST_PP_ITERATION_DEPTH() == 1 && BOOST_PP_ITERATION_FLAGS() < 2
@@ -174,22 +164,6 @@
             expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > that = {{*this} BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_AS_OP, _)};
             return that;
         }
-
-    #undef N
-
-#elif BOOST_PP_ITERATION_DEPTH() == 1 && BOOST_PP_ITERATION_FLAGS() == 2
-
-    #define N BOOST_PP_ITERATION()
-
-        template<typename Tag, typename Args, long Arity BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-        struct result_of<proto::expr<Tag, Args, Arity>(BOOST_PP_ENUM_PARAMS(N, A))>
-          : proto::expr<Tag, Args, Arity>::BOOST_NESTED_TEMPLATE result<void(BOOST_PP_ENUM_PARAMS(N, A))>
-        {};
-
-        template<typename Tag, typename Args, long Arity BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-        struct result_of<proto::expr<Tag, Args, Arity> const(BOOST_PP_ENUM_PARAMS(N, A))>
-          : proto::expr<Tag, Args, Arity>::BOOST_NESTED_TEMPLATE result<void(BOOST_PP_ENUM_PARAMS(N, A))>
-        {};
 
     #undef N
 

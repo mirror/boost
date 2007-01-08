@@ -39,9 +39,6 @@
         namespace detail
         {
             template<typename Tag, long Arity>
-            struct msvc_make_expr_impl_result;
-
-            template<typename Tag, long Arity>
             struct make_expr_impl;
 
         #define BOOST_PROTO_AS_EXPR(z, n, data) proto::as_expr(BOOST_PP_CAT(a, n))
@@ -91,7 +88,7 @@
     #define N BOOST_PP_ITERATION()
 
             template<typename Tag>
-            struct msvc_make_expr_impl_result<Tag, N>
+            struct make_expr_impl<Tag, N>
             {
                 template<BOOST_PP_ENUM_PARAMS(N, typename A)>
                 struct result_
@@ -110,27 +107,19 @@
                 struct result<This(BOOST_PP_ENUM_PARAMS(N, A))>
                   : result_<BOOST_PP_ENUM_BINARY_PARAMS(N, typename meta::value_type<A, >::type BOOST_PP_INTERCEPT)>
                 {};
-            };
 
-            template<typename Tag>
-            struct make_expr_impl<Tag, N>
-              : msvc_make_expr_impl_result<Tag, N>
-            {
                 template<BOOST_PP_ENUM_PARAMS(N, typename A)>
-                typename msvc_make_expr_impl_result<Tag, N>
-                    ::BOOST_NESTED_TEMPLATE result_<BOOST_PP_ENUM_PARAMS(N, A)>::type
+                typename result_<BOOST_PP_ENUM_PARAMS(N, A)>::type
                 operator ()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const &a)) const
                 {
-                    typename msvc_make_expr_impl_result<Tag, N>
-                        ::BOOST_NESTED_TEMPLATE result_<BOOST_PP_ENUM_PARAMS(N, A)>::type that =
-                            {BOOST_PP_ENUM(N, BOOST_PROTO_AS_EXPR, _)};
+                    typename result_<BOOST_PP_ENUM_PARAMS(N, A)>::type that =
+                        {BOOST_PP_ENUM(N, BOOST_PROTO_AS_EXPR, _)};
                     return that;
                 }
 
                 template<typename Sequence>
                 struct from_sequence_result_
-                  : msvc_make_expr_impl_result<Tag, N>
-                        ::BOOST_NESTED_TEMPLATE result_<BOOST_PP_ENUM(N, BOOST_PROTO_VALUE_AT, _)>
+                  : result_<BOOST_PP_ENUM(N, BOOST_PROTO_VALUE_AT, _)>
                 {};
 
                 template<typename Sequence>
