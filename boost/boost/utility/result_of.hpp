@@ -29,27 +29,24 @@ namespace detail {
 
 BOOST_MPL_HAS_XXX_TRAIT_DEF(result_type)
 
-template<typename F, typename FArgs, bool HasResultType> struct get_result_of;
+template<typename F, typename FArgs, bool HasResultType> struct result_of_impl;
 
 template<typename F, typename FArgs>
-struct get_result_of<F, FArgs, true>
+struct result_of_impl<F, FArgs, true>
 {
   typedef typename F::result_type type;
 };
 
 template<typename F, typename FArgs>
-struct get_result_of<F, FArgs, false>
+struct result_of_impl<F, FArgs, false>
   : F::template result<FArgs>
 {};
 
 template<typename F>
-struct get_result_of<F, F(void), false>
+struct result_of_impl<F, F(void), false>
 {
   typedef void type;
 };
-
-template<typename F, typename FArgs>
-struct result_of_impl : get_result_of<F, FArgs, (has_result_type<F>::value)> {};
 
 } // end namespace detail
 

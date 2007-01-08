@@ -21,21 +21,21 @@
 template<typename F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
          BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct result_of<F(BOOST_RESULT_OF_ARGS)>
-    : detail::result_of_impl<F, F(BOOST_RESULT_OF_ARGS)> {};
+    : detail::result_of_impl<F, F(BOOST_RESULT_OF_ARGS), (detail::has_result_type<F>::value)> {};
 #endif
 
 namespace detail {
 
 template<typename R,  typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
          BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
-struct result_of_impl<R (*)(BOOST_RESULT_OF_ARGS), FArgs>
+struct result_of_impl<R (*)(BOOST_RESULT_OF_ARGS), FArgs, false>
 {
   typedef R type;
 };
 
 template<typename R,  typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
          BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
-struct result_of_impl<R (&)(BOOST_RESULT_OF_ARGS), FArgs>
+struct result_of_impl<R (&)(BOOST_RESULT_OF_ARGS), FArgs, false>
 {
   typedef R type;
 };
@@ -47,7 +47,7 @@ template<typename R, typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
          BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct result_of_impl<R (T0::*)
                      (BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_ITERATION(),T)),
-                 FArgs>
+                 FArgs, false>
 {
   typedef R type;
 };
@@ -57,7 +57,7 @@ template<typename R, typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
 struct result_of_impl<R (T0::*)
                      (BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_ITERATION(),T))
                      const,
-                 FArgs>
+                 FArgs, false>
 {
   typedef R type;
 };
@@ -67,7 +67,7 @@ template<typename R, typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
 struct result_of_impl<R (T0::*)
                      (BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_ITERATION(),T))
                      volatile,
-                 FArgs>
+                 FArgs, false>
 {
   typedef R type;
 };
@@ -77,7 +77,7 @@ template<typename R, typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
 struct result_of_impl<R (T0::*)
                      (BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_ITERATION(),T))
                      const volatile,
-                 FArgs>
+                 FArgs, false>
 {
   typedef R type;
 };

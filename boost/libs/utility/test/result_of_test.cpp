@@ -24,6 +24,24 @@ struct int_result_type_and_float_result_of
   template<typename F> struct result { typedef float type; };
 };
 
+template<typename T>
+struct int_result_type_template { typedef int result_type; };
+
+template<typename T>
+struct int_result_of_template
+{
+  template<typename F> struct result;
+  template<typename This, typename That> struct result<This(That)> { typedef int type; };
+};
+
+template<typename T>
+struct int_result_type_and_float_result_of_template
+{
+  typedef int result_type;
+  template<typename F> struct result;
+  template<typename This, typename That> struct result<This(That)> { typedef float type; };
+};
+
 struct X {};
 
 int main()
@@ -43,6 +61,12 @@ int main()
   BOOST_STATIC_ASSERT((is_same<result_of<const int_result_of(double)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<volatile int_result_of(void)>::type, void>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<int_result_type_and_float_result_of(char)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<result_of<int_result_type_template<void>(float)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<result_of<int_result_of_template<void>(double)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<result_of<int_result_of_template<void>(void)>::type, void>::value));
+  BOOST_STATIC_ASSERT((is_same<result_of<const int_result_of_template<void>(double)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<result_of<volatile int_result_of_template<void>(void)>::type, void>::value));
+  BOOST_STATIC_ASSERT((is_same<result_of<int_result_type_and_float_result_of_template<void>(char)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<func_ptr(char, float)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<func_ref(char, float)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<mem_func_ptr(X,char)>::type, int>::value));
