@@ -3,8 +3,8 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_TR1_FUNCTIONAL_HPP_INCLUDED
-#  define BOOST_TR1_FUNCTIONAL_HPP_INCLUDED
+#ifndef BOOST_TR1_TYPE_TRAITS_HPP_INCLUDED
+#  define BOOST_TR1_TYPE_TRAITS_HPP_INCLUDED
 #  include <boost/tr1/detail/config.hpp>
 
 #ifdef BOOST_HAS_TR1_TYPE_TRAITS
