@@ -9,9 +9,16 @@
 #ifndef BOOST_PROTO_REF_HPP_EAN_04_01_2005
 #define BOOST_PROTO_REF_HPP_EAN_04_01_2005
 
-#include <boost/mpl/bool.hpp>
 #include <boost/preprocessor/repetition/repeat.hpp>
+
+#if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
+#include <boost/mpl/bool.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
+#else
+/// INTERNAL ONLY
+/// Needed to work around doxygen bug
+struct a_dummy_global;
+#endif
 
 namespace boost { namespace proto
 {

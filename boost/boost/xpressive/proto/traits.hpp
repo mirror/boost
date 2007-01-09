@@ -1,17 +1,26 @@
-///////////////////////////////////////////////////////////////////////////////
-/// \file traits.hpp
-/// Contains definitions for arg\<\>, arg_c\<\>, left\<\>,
-/// right\<\>, tag\<\>, and the helper functions arg(), arg_c(),
-/// left() and right().
-//
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
-//  Software License, Version 1.0. (See accompanying file
-//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 #ifndef BOOST_PP_IS_ITERATING
+    ///////////////////////////////////////////////////////////////////////////////
+    /// \file traits.hpp
+    /// Contains definitions for arg\<\>, arg_c\<\>, left\<\>,
+    /// right\<\>, tag\<\>, and the helper functions arg(), arg_c(),
+    /// left() and right().
+    //
+    //  Copyright 2004 Eric Niebler. Distributed under the Boost
+    //  Software License, Version 1.0. (See accompanying file
+    //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
     #ifndef BOOST_PROTO_ARG_TRAITS_HPP_EAN_04_01_2005
     #define BOOST_PROTO_ARG_TRAITS_HPP_EAN_04_01_2005
 
+    #include <boost/preprocessor/iteration/iterate.hpp>
+    #include <boost/preprocessor/repetition/enum.hpp>
+    #include <boost/preprocessor/repetition/enum_params.hpp>
+    #include <boost/preprocessor/repetition/enum_trailing.hpp>
+    #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
+    #include <boost/preprocessor/facilities/intercept.hpp>
+    #include <boost/preprocessor/arithmetic/sub.hpp>
+
+    #if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
     #include <boost/ref.hpp>
     #include <boost/mpl/if.hpp>
     #include <boost/mpl/or.hpp>
@@ -24,13 +33,11 @@
     #include <boost/xpressive/proto/args.hpp>
     #include <boost/xpressive/proto/tags.hpp>
     #include <boost/xpressive/proto/transform/pass_through.hpp>
-    #include <boost/preprocessor/iteration/iterate.hpp>
-    #include <boost/preprocessor/repetition/enum.hpp>
-    #include <boost/preprocessor/repetition/enum_params.hpp>
-    #include <boost/preprocessor/repetition/enum_trailing.hpp>
-    #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
-    #include <boost/preprocessor/facilities/intercept.hpp>
-    #include <boost/preprocessor/arithmetic/sub.hpp>
+    #else
+    /// INTERNAL ONLY
+    /// Needed to work around doxygen bug
+    struct a_dummy_global;
+    #endif
 
     namespace boost { namespace proto
     {

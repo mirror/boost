@@ -1,22 +1,30 @@
-///////////////////////////////////////////////////////////////////////////////
-/// \file construct.hpp
-/// For constructing an arbitrary type from a bunch of transforms. This assumes
-/// that all the grammars corresponding to the transforms are equivalent; that is,
-/// that they match the same expressions.
-//
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
-//  Software License, Version 1.0. (See accompanying file
-//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 #ifndef BOOST_PP_IS_ITERATING
+    ///////////////////////////////////////////////////////////////////////////////
+    /// \file construct.hpp
+    /// For constructing an arbitrary type from a bunch of transforms. This assumes
+    /// that all the grammars corresponding to the transforms are equivalent; that is,
+    /// that they match the same expressions.
+    //
+    //  Copyright 2004 Eric Niebler. Distributed under the Boost
+    //  Software License, Version 1.0. (See accompanying file
+    //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
     #ifndef BOOST_PROTO_TRANSFORM_CONSTRUCT_HPP_EAN_12_26_2006
     #define BOOST_PROTO_TRANSFORM_CONSTRUCT_HPP_EAN_12_26_2006
 
     #include <boost/preprocessor/iterate.hpp>
+    #include <boost/preprocessor/arithmetic/sub.hpp>
+    #include <boost/preprocessor/facilities/intercept.hpp>
     #include <boost/preprocessor/repetition/enum_binary_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
+
+    #if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
     #include <boost/xpressive/proto/proto_fwd.hpp>
+    #else
+    /// INTERNAL ONLY
+    /// Needed to work around doxygen bug
+    struct a_dummy_global;
+    #endif
 
     namespace boost { namespace proto { namespace transform
     {

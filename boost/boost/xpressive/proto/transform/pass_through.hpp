@@ -1,22 +1,28 @@
-///////////////////////////////////////////////////////////////////////////////
-/// \file pass_through.hpp
-///
-//
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
-//  Software License, Version 1.0. (See accompanying file
-//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 #ifndef BOOST_PP_IS_ITERATING
+    ///////////////////////////////////////////////////////////////////////////////
+    /// \file pass_through.hpp
+    /// TODO 
+    //
+    //  Copyright 2004 Eric Niebler. Distributed under the Boost
+    //  Software License, Version 1.0. (See accompanying file
+    //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
     #ifndef BOOST_PROTO_TRANSFORM_PASS_THROUGH_HPP_EAN_12_26_2006
     #define BOOST_PROTO_TRANSFORM_PASS_THROUGH_HPP_EAN_12_26_2006
 
-    #include <boost/mpl/if.hpp>
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/enum.hpp>
     #include <boost/preprocessor/iterate.hpp>
+
+    #if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
+    #include <boost/mpl/if.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/args.hpp>
+    #else
+    /// INTERNAL ONLY
+    /// Needed to work around doxygen bug
+    struct a_dummy_global;
+    #endif
 
     namespace boost { namespace proto { namespace transform
     {

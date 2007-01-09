@@ -1,17 +1,31 @@
-///////////////////////////////////////////////////////////////////////////////
-/// \file matches.hpp
-/// Contains definition of matches\<\> metafunction for determining if
-/// a given expression matches a given pattern.
-//
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
-//  Software License, Version 1.0. (See accompanying file
-//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 #ifndef BOOST_PP_IS_ITERATING
+    ///////////////////////////////////////////////////////////////////////////////
+    /// \file matches.hpp
+    /// Contains definition of matches\<\> metafunction for determining if
+    /// a given expression matches a given pattern.
+    //
+    //  Copyright 2004 Eric Niebler. Distributed under the Boost
+    //  Software License, Version 1.0. (See accompanying file
+    //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
     #ifndef BOOST_PROTO_MATCHES_HPP_EAN_11_03_2006
     #define BOOST_PROTO_MATCHES_HPP_EAN_11_03_2006
 
+    #include <boost/preprocessor/cat.hpp>
+    #include <boost/preprocessor/arithmetic/dec.hpp>
+    #include <boost/preprocessor/arithmetic/sub.hpp>
+    #include <boost/preprocessor/repetition/enum.hpp>
+    #include <boost/preprocessor/iteration/local.hpp>
+    #include <boost/preprocessor/iteration/iterate.hpp>
+    #include <boost/preprocessor/facilities/intercept.hpp>
+    #include <boost/preprocessor/punctuation/comma_if.hpp>
+    #include <boost/preprocessor/repetition/enum_params.hpp>
+    #include <boost/preprocessor/repetition/enum_shifted.hpp>
+    #include <boost/preprocessor/repetition/enum_shifted_params.hpp>
+    #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
+    #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
+
+    #if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
     #include <boost/config.hpp>
     #include <boost/mpl/if.hpp>
     #include <boost/mpl/and.hpp>
@@ -24,13 +38,11 @@
     #include <boost/type_traits/is_convertible.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/traits.hpp>
-
-    #include <boost/preprocessor/arithmetic/dec.hpp>
-    #include <boost/preprocessor/repetition/enum.hpp>
-    #include <boost/preprocessor/iteration/iterate.hpp>
-    #include <boost/preprocessor/repetition/enum_shifted_params.hpp>
-    #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
-    #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
+    #else
+    /// INTERNAL ONLY
+    /// Needed to work around doxygen bug
+    struct a_dummy_global;
+    #endif
 
     namespace boost { namespace proto
     {

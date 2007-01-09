@@ -11,6 +11,16 @@
 #ifndef BOOST_PROTO_CONTEXT_HPP_EAN_01_08_2007
 #define BOOST_PROTO_CONTEXT_HPP_EAN_01_08_2007
 
+#include <boost/preprocessor/iteration/local.hpp>
+#include <boost/preprocessor/punctuation/comma.hpp>
+#include <boost/preprocessor/facilities/intercept.hpp>
+#include <boost/preprocessor/repetition/enum_trailing_params.hpp>
+#include <boost/preprocessor/repetition/enum_binary_params.hpp>
+#include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
+#include <boost/preprocessor/repetition/enum_shifted_params.hpp>
+#include <boost/preprocessor/repetition/enum_shifted_binary_params.hpp>
+
+#if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/mpl/if.hpp>
@@ -21,13 +31,11 @@
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/tags.hpp>
-#include <boost/preprocessor/iteration/local.hpp>
-#include <boost/preprocessor/punctuation/comma.hpp>
-#include <boost/preprocessor/repetition/enum_trailing_params.hpp>
-#include <boost/preprocessor/repetition/enum_binary_params.hpp>
-#include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
-#include <boost/preprocessor/repetition/enum_shifted_params.hpp>
-#include <boost/preprocessor/repetition/enum_shifted_binary_params.hpp>
+#else
+/// INTERNAL ONLY
+/// Needed to work around doxygen bug
+struct a_dummy_global;
+#endif
 
 namespace boost { namespace proto
 {

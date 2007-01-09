@@ -1,13 +1,12 @@
-///////////////////////////////////////////////////////////////////////////////
-/// \file make_expr.hpp
-/// Given a Fusion sequence of arguments and the type of a proto Expression,
-/// unpacks the sequence into the Expression.
-//
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
-//  Software License, Version 1.0. (See accompanying file
-//  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-
 #ifndef BOOST_PP_IS_ITERATING
+    ///////////////////////////////////////////////////////////////////////////////
+    /// \file make_expr.hpp
+    /// Given a Fusion sequence of arguments and the type of a proto Expression,
+    /// unpacks the sequence into the Expression.
+    //
+    //  Copyright 2004 Eric Niebler. Distributed under the Boost
+    //  Software License, Version 1.0. (See accompanying file
+    //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
     #ifndef BOOST_PROTO_MAKE_EXPR_HPP_EAN_04_01_2005
     #define BOOST_PROTO_MAKE_EXPR_HPP_EAN_04_01_2005
@@ -23,6 +22,7 @@
     #include <boost/preprocessor/repetition/enum_binary_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
 
+    #if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
     #include <boost/detail/workaround.hpp>
     #include <boost/ref.hpp>
     #include <boost/type_traits/remove_const.hpp>
@@ -32,6 +32,11 @@
     #include <boost/fusion/sequence/intrinsic/at.hpp>
     #include <boost/fusion/sequence/intrinsic/value_at.hpp>
     #include <boost/fusion/sequence/intrinsic/size.hpp>
+    #else
+    /// INTERNAL ONLY
+    /// Needed to work around doxygen bug
+    struct a_dummy_global;
+    #endif
 
     namespace boost { namespace proto
     {

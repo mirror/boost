@@ -80,7 +80,7 @@ check the [link proto.reference Reference] section.
 
 [endsect]
 
-[include reference.qbk]
+[xinclude protodoc.boostbook]
 
 [include acknowledgements.qbk]
 

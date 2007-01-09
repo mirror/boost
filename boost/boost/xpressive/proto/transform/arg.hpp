@@ -9,8 +9,14 @@
 #ifndef BOOST_PROTO_TRANSFORM_ARG_HPP_EAN_12_16_2006
 #define BOOST_PROTO_TRANSFORM_ARG_HPP_EAN_12_16_2006
 
+#if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/traits.hpp>
+#else
+/// INTERNAL ONLY
+/// Needed to work around doxygen bug
+struct a_dummy_global;
+#endif
 
 namespace boost { namespace proto { namespace transform
 {

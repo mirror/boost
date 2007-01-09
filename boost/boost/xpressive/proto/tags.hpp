@@ -11,8 +11,14 @@
 #ifndef BOOST_PROTO_OP_TAGS_HPP_EAN_04_01_2005
 #define BOOST_PROTO_OP_TAGS_HPP_EAN_04_01_2005
 
+#if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
+#else
+/// INTERNAL ONLY
+/// Needed to work around doxygen bug
+struct a_dummy_global;
+#endif
 
 namespace boost { namespace proto { namespace tag
 {
