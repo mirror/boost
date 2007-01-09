@@ -15,6 +15,7 @@
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/xpressive/proto/proto.hpp>
+#include <boost/xpressive/proto/context.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
 #include <boost/xpressive/proto/transform/fold.hpp>
 #include <boost/test/unit_test.hpp>
@@ -24,22 +25,6 @@ using namespace boost;
 
 struct lambda_domain {};
 template<typename I> struct placeholder { typedef I arity; };
-
-template<typename Tuple>
-struct lambda_context;
-
-template<typename T> T make();
-
-template<typename T>
-char check_reference(T &);
-
-template<typename T>
-char (&check_reference(T const &))[2];
-
-template<typename T>
-struct param
-  : add_reference<typename add_const<T>::type>
-{};
 
 // Some custom transforms for calculating the max arity of a lambda expression
 template<typename Grammar>
@@ -82,105 +67,44 @@ struct lambda_arity
   : LambdaGrammar::apply<Expr, mpl::int_<0>, mpl::void_>
 {};
 
+// The lambda context is the same as the default context 
+// with the addition of special handling for lambda placeholders
 template<typename Tuple>
 struct lambda_context
+  : proto::context<lambda_context<Tuple> >
 {
     typedef lambda_context<Tuple> this_type;
 
     template<typename Sig>
-    struct result;
-
-    template<typename This, typename Arg>
-    struct result<This(proto::tag::terminal, Arg &)>
-    {
-        typedef Arg &type;
-    };
+    struct result
+      : proto::context<lambda_context<Tuple> >::template result<Sig>
+    {};
 
     template<typename This, typename I>
     struct result<This(proto::tag::terminal, placeholder<I> const &)>
     {
-        typedef typename fusion::result_of::value_at<Tuple, I>::type type;
+        typedef typename fusion::result_of::at<Tuple, I>::type type;
     };
-
-#define UN_OP_RESULT(Op, Tag)\
-    template<typename This, typename Arg>\
-    struct result<This(Tag, Arg &)>\
-    {\
-        typedef typename proto::meta::eval<Arg, this_type>::type arg_type;\
-        BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, Op ::make<arg_type>())\
-        typedef typename mpl::if_c<\
-            1==sizeof(check_reference(Op ::make<arg_type>()))\
-          , typename nested::type &\
-          , typename nested::type\
-        >::type type;\
-        static type call(typename param<arg_type>::type arg)\
-        {\
-            return Op arg;\
-        }\
-    }
-
-#define BIN_OP_RESULT(Op, Tag)\
-    template<typename This, typename Left, typename Right>\
-    struct result<This(Tag, Left &, Right &)>\
-    {\
-        typedef typename proto::meta::eval<Left, this_type>::type left_type;\
-        typedef typename proto::meta::eval<Right, this_type>::type right_type;\
-        BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, ::make<left_type>() Op ::make<right_type>())\
-        typedef typename mpl::if_c<\
-            1==sizeof(check_reference(::make<left_type>() Op ::make<right_type>()))\
-          , typename nested::type &\
-          , typename nested::type\
-        >::type type;\
-        static type call(typename param<left_type>::type left, typename param<right_type>::type right)\
-        {\
-            return left Op right;\
-        }\
-    }
-
-    UN_OP_RESULT(-, proto::tag::unary_minus);
-    BIN_OP_RESULT(+, proto::tag::add);
-    BIN_OP_RESULT(-, proto::tag::subtract);
-    BIN_OP_RESULT(*, proto::tag::multiply);
-    BIN_OP_RESULT(/, proto::tag::divide);
-    BIN_OP_RESULT(<<, proto::tag::left_shift);
-    BIN_OP_RESULT(>>, proto::tag::right_shift);
 
     lambda_context(Tuple const &args)
       : args_(args)
     {}
 
-    template<typename Arg>
-    Arg &
-    operator()(proto::tag::terminal, Arg &arg)
-    {
-        return arg;
-    }
+    using proto::context<lambda_context<Tuple> >::operator();
 
     template<typename I>
     typename fusion::result_of::at<Tuple, I>::type
-    operator()(proto::tag::terminal, placeholder<I>)
+    operator()(proto::tag::terminal, placeholder<I> const &)
     {
         return fusion::at<I>(this->args_);
-    }
-
-    template<typename Tag, typename Arg>
-    typename result<this_type(Tag, Arg &)>::type
-    operator()(Tag, Arg &arg)
-    {
-        return result<this_type(Tag, Arg &)>::call(arg.eval(*this));
-    }
-
-    template<typename Tag, typename Left, typename Right>
-    typename result<this_type(Tag, Left &, Right &)>::type
-    operator()(Tag, Left &left, Right &right)
-    {
-        return result<this_type(Tag, Left &, Right &)>::call(left.eval(*this), right.eval(*this));
     }
 
 private:
     Tuple args_;
 };
 
+// The lambda<> expression wrapper makes expressions polymorphic
+// function objects
 template<typename T>
 struct lambda
   : proto::extends<T, lambda<T>, lambda_domain>
@@ -195,6 +119,8 @@ struct lambda
       : base_type(t)
     {}
 
+    // This is needed because by default, the compiler-generated
+    // assignment operator hides the operator= defined in our base class.
     using base_type::operator =;
 
     // Careful not to evaluate the return type of the nullary function
@@ -235,6 +161,8 @@ struct lambda
 
 namespace boost { namespace proto { namespace meta
 {
+    // This causes expressions in the lambda domain to
+    // be wrapped in a lambda<> expression wrapper.
     template<typename Expr, typename Tag>
     struct generate<lambda_domain, Expr, Tag>
     {
@@ -247,13 +175,20 @@ namespace boost { namespace proto { namespace meta
     };
 }}}
 
+// Define some lambda placeholders
 lambda<proto::meta::terminal<placeholder<mpl::int_<0> > >::type> const _1;
 lambda<proto::meta::terminal<placeholder<mpl::int_<1> > >::type> const _2;
 
 template<typename T>
-lambda<typename proto::meta::terminal<T>::type> const constant(T const &t)
+lambda<typename proto::meta::terminal<T>::type> const val(T const &t)
 {
     return proto::meta::terminal<T>::type::make(t);
+}
+
+template<typename T>
+lambda<typename proto::meta::terminal<T &>::type> const var(T &t)
+{
+    return proto::meta::terminal<T &>::type::make(t);
 }
 
 void test_lambda()
@@ -268,7 +203,14 @@ void test_lambda()
     BOOST_CHECK_EQUAL("42 -- Life, the Universe and Everything!", sout.str());
 
     // check nullary lambdas
-    BOOST_CHECK_EQUAL(3, (constant(1) + constant(2))());
+    BOOST_CHECK_EQUAL(3, (val(1) + val(2))());
+
+    // check array indexing for kicks
+    int integers[5] = {0};
+    (var(integers)[2] = 2)();
+    (var(integers)[_1] = _1)(3);
+    BOOST_CHECK_EQUAL(2, integers[2]);
+    BOOST_CHECK_EQUAL(3, integers[3]);
 }
 
 using namespace unit_test;

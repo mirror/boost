@@ -89,6 +89,17 @@
                 return *this;
             }
 
+        #if 1 == BOOST_PP_ITERATION()
+            // only terminals need this special case, because only
+            // they can contain non-const references
+            template<typename A0>
+            static expr make(A0 &a0)
+            {
+                expr that = {a0};
+                return that;
+            }
+        #endif
+
             template<BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), typename A)>
             static expr make(BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_ITERATION(), A, const &a))
             {

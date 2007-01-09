@@ -24,6 +24,11 @@ namespace boost { namespace proto
         typedef typename meta::terminal<T>::type terminal_type;
 
         template<typename U>
+        literal(U &u)
+          : extends<terminal_type, literal<T> >(terminal_type::make(u))
+        {}
+
+        template<typename U>
         literal(U const &u)
           : extends<terminal_type, literal<T> >(terminal_type::make(u))
         {}
@@ -35,6 +40,12 @@ namespace boost { namespace proto
 
         using extends<terminal_type, literal<T> >::operator =;
     };
+
+    template<typename T>
+    inline literal<T &> lit(T &t)
+    {
+        return literal<T &>(t);
+    }
 
     template<typename T>
     inline literal<T const &> lit(T const &t)

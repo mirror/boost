@@ -218,6 +218,9 @@ namespace boost { namespace proto
     template<typename Expr, typename Derived, typename Domain = void>
     struct extends;
 
+    template<typename Derived = void>
+    struct context;
+
     namespace meta
     {
         template<typename T>
