@@ -38,7 +38,7 @@ std::list<int> make_list()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// define come containers
+// define some containers
 //
 std::list<int> my_list = make_list();
 std::list<int> const &my_const_list = my_list;

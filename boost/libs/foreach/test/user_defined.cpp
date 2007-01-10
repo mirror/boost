@@ -20,10 +20,10 @@ namespace mine
 
 namespace boost
 {
-    char * boost_range_begin(mine::dummy&) {return 0;}
-    char const * boost_range_begin(mine::dummy const&) {return 0;}
-    char * boost_range_end(mine::dummy&) {return 0;}
-    char const * boost_range_end(mine::dummy const&) {return 0;}
+    char * range_begin(mine::dummy&) {return 0;}
+    char const * range_begin(mine::dummy const&) {return 0;}
+    char * range_end(mine::dummy&) {return 0;}
+    char const * range_end(mine::dummy const&) {return 0;}
 }
 
 #include <boost/foreach.hpp>
@@ -31,7 +31,7 @@ namespace boost
 namespace boost
 {
     template<>
-    struct range_iterator<mine::dummy>
+    struct range_mutable_iterator<mine::dummy>
     {
         typedef char * type;
     };

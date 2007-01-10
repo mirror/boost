@@ -23,7 +23,7 @@ typedef int const &foreach_const_reference_type;
 #include "./utility.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
-// define come containers
+// define some containers
 //
 int my_array[] = { 1,2,3,4,5 };
 std::pair<int*,int*> my_pair(my_array,my_array+5);
