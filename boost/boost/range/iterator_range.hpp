@@ -159,8 +159,7 @@ namespace boost
             typedef IteratorT iterator;
 
             iterator_range() : m_Begin( iterator() ), m_End( iterator() )
-
-                 #ifndef NDEBUG
+                #ifndef NDEBUG
             , singular( true )
                 #endif
             { }
@@ -386,6 +385,12 @@ namespace boost
             }
             #endif
 
+        protected:
+            //
+            // Allow subclasses an easy way to access the
+            // base type
+            //
+            typedef iterator_range iterator_range_;
         };
 
 //  iterator range free-standing operators ---------------------------//
