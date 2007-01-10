@@ -93,7 +93,7 @@ namespace boost
 
             return array_end<T,sz>( boost_range_array, tag() );
             */
-            return boost_range_end + sz;
+            return boost_range_array + sz;
         }
         
         template< class T, std::size_t sz >
@@ -106,7 +106,7 @@ namespace boost
         
             return array_end<T,sz>( boost_range_array, tag() );
             */
-            return boost_range_end + sz;
+            return boost_range_array + sz;
         }
 
         /////////////////////////////////////////////////////////////////////
