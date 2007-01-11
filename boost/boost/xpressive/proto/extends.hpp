@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-/// \file entends.hpp
+/// \file extends.hpp
 /// A base class for defining end-user expression types
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
