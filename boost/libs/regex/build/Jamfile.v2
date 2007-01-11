@@ -14,65 +14,110 @@ local ICU_PATH = [ modules.peek : ICU_PATH ] ;
 rule check-icu-config ( )
 {
    local ICU_PATH = [ modules.peek : ICU_PATH ] ;
+   local HAVE_ICU = [ modules.peek : HAVE_ICU ] ;
+   local ICU_LINK = [ modules.peek : ICU_LINK ] ;
+
    if ! $(gICU_CONFIG_CHECKED)
    {
-      if $(ICU_PATH)
+      if $(HAVE_ICU)
+      {
+         gHAS_ICU = true ;
+         gICU_CORE_LIB = icuuc ;
+         gICU_IN_LIB = icui18n ;
+         gICU_CONFIG_CHECKED = true ;
+      }
+      else if $(ICU_PATH)
       {
          dir = $(ICU_PATH) ;
-      }
       
-      if [ GLOB $(dir)/include/unicode : utypes.h ]
-      {
-         ECHO Building Boost.Regex with Unicode/ICU support enabled ;
-         ECHO Using ICU in $(ICU_PATH:J=" ")/include ;
-         gHAS_ICU = true ;
-         
-         # try and find ICU libraries, look for NT versions first:
-         if [ GLOB $(dir)/lib : icuuc.* ]
+         if [ GLOB $(dir)/include/unicode : utypes.h ]
          {
-            gICU_CORE_LIB = icuuc ;
-         }
-         else if [ GLOB $(dir)/lib : libicuuc.* ]
-         {
-            gICU_CORE_LIB = icuuc ;
-         }
-         else if [ GLOB $(ICU_PATH)/lib : cygicuuc.dll ]
-         {
-            gICU_CORE_LIB = cygicuuc.dll ;
+            ECHO Building Boost.Regex with Unicode/ICU support enabled ;
+            ECHO Using ICU in $(ICU_PATH:J=" ")/include ;
+            gHAS_ICU = true ;
+            
+            # try and find ICU libraries, look for NT versions first:
+            if $(ICU_LINK)
+            {
+               gICU_LIBS += <linkflags>$(ICU_LINK) ;
+            }
+            else if [ GLOB $(dir)/lib64 : icuuc.* ]
+            {
+               gICU_CORE_LIB = icuuc ;
+            }
+            else if [ GLOB $(dir)/lib : libicuuc.* ]
+            {
+               gICU_CORE_LIB = icuuc ;
+            }
+            else if [ GLOB $(dir)/lib : libicuuc.* ]
+            {
+               gICU_CORE_LIB = icuuc ;
+            }
+            else if [ GLOB $(ICU_PATH)/lib : cygicuuc.dll ]
+            {
+               gICU_CORE_LIB = cygicuuc.dll ;
+            }
+            else if [ GLOB $(ICU_PATH)/lib : cygicuuc32.dll ]
+            {
+               gICU_CORE_LIB = cygicuuc32.dll ;
+            }
+            else
+            {
+               ECHO WARNING: ICU shared common library not found in path. ;
+               ECHO HINT:    If the regex library fails to link then try again ;
+               ECHO          with the environment variable ICU_LINK set to contain ;
+               ECHO          the linker options required to link to ICU. ;
+               ECHO          Defaulting to look for libicuuc ... ;
+               gICU_CORE_LIB = icuuc ;
+            }
+            
+            if $(ICU_LINK)
+            {
+               # nothing to do, it's already been done!
+               # gICU_LIBS += <linkflags>$(ICU_LINK) ;
+            }
+            else if [ GLOB $(dir)/lib : icuin.* ]
+            {
+               gICU_IN_LIB = icuin ;
+            }
+            else if [ GLOB $(dir)/lib64 : libicui18n.* ]
+            {
+               gICU_IN_LIB = icui18n ;
+            }
+            else if [ GLOB $(dir)/lib : libicui18n.* ]
+            {
+               gICU_IN_LIB = icui18n ;
+            }
+            else if [ GLOB $(ICU_PATH)/lib : cygicuin.dll ]
+            {
+               gICU_IN_LIB = cygicuin.dll ;
+            }
+            else if [ GLOB $(ICU_PATH)/lib : cygicuin32.dll ]
+            {
+               gICU_IN_LIB = cygicuin32.dll ;
+            }
+            else
+            {
+               ECHO WARNING: ICU shared i18n library not found in path. ;
+               ECHO HINT:    If the regex library fails to link then try again ;
+               ECHO          with the environment variable ICU_LINK set to contain ;
+               ECHO          the linker options required to link to ICU. ;
+               ECHO          Defaulting to look for libicui18n ... ;
+               gICU_IN_LIB = icui18n ;
+            }
          }
          else
          {
-            ECHO ICU shared common library not found. ;
+            ECHO Building Boost.Regex with the optional Unicode/ICU support disabled. ;
+            ECHO Please refer to the Boost.Regex documentation for more information ;
+            ECHO (don't panic: this is a strictly optional feature). ;
+            if $(ICU_PATH)
+            {
+               ECHO Couldn't find utypes.h in $(ICU_PATH:J=" ")/include/unicode ;
+            }
          }
-         
-         if [ GLOB $(dir)/lib : icuin.* ]
-         {
-            gICU_IN_LIB = icuin ;
-         }
-         else if [ GLOB $(dir)/lib : libicui18n.* ]
-         {
-            gICU_IN_LIB = icui18n ;
-         }
-         else if [ GLOB $(ICU_PATH)/lib : cygicuin.dll ]
-         {
-            gICU_IN_LIB = cygicuin.dll ;
-         }
-         else
-         {
-            ECHO ICU shared i18n library not found. ;
-         }
+         gICU_CONFIG_CHECKED = true ;
       }
-      else
-      {
-         ECHO Building Boost.Regex with the optional Unicode/ICU support disabled. ;
-         ECHO Please refer to the Boost.Regex documentation for more information ;
-         ECHO (don't panic: this is a strictly optional feature). ;
-         if $(ICU_PATH)
-         {
-            ECHO Couldn't find utypes.h in $(ICU_PATH:J=" ")$(SLASH)include$(SLASH)unicode ;
-         }
-      }
-      gICU_CONFIG_CHECKED = true ;
    }
     if $(gHAS_ICU)
     {
@@ -83,9 +128,15 @@ rule check-icu-config ( )
 if [ check-icu-config ]
 {
    BOOST_REGEX_ICU_OPTS = "<define>BOOST_HAS_ICU=1" ;
-   if ($(ICU_PATH) != /usr) && ($(ICU_PATH) != /usr/local)
+
+   if $(ICU_PATH)
    {
-      ICU_SEARCH_OPTS = <search>/$(ICU_PATH)/lib ;
+      if $(ICU_PATH) != "/usr" && $(ICU_PATH) != "/usr/local"
+      {
+         ECHO "BAH!" ;
+         BOOST_REGEX_ICU_OPTS += "<include>$(ICU_PATH)/include" ;
+         ICU_SEARCH_OPTS = <search>/$(ICU_PATH)/lib ;
+      }
    }
    
    if $(gICU_CORE_LIB)
@@ -97,13 +148,6 @@ if [ check-icu-config ]
    {
       lib icuin : : <name>$(gICU_IN_LIB) $(ICU_SEARCH_OPTS) ;
       ICU_EXTRA_SOURCE += icuin ;
-   }
-   if $(ICU_PATH)
-   {
-      if ($(ICU_PATH) != /usr) && ($(ICU_PATH) != /usr/local)
-      {
-         BOOST_REGEX_ICU_OPTS += "<include>$(ICU_PATH)/include" ;
-      }
    }
 }
 
@@ -134,5 +178,6 @@ lib boost_regex : ../src/$(SOURCES) $(ICU_EXTRA_SOURCE)
 	     <link>shared:<define>BOOST_REGEX_DYN_LINK=1
 	     $(BOOST_REGEX_ICU_OPTS)
     ;
+
 
 

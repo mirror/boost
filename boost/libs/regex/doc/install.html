@@ -49,16 +49,20 @@
             support</A> via ICU.&nbsp; There is no need to enable this support if you 
          don't need it, but if you use ICU for your Unicode support already, and want to 
          work with Unicode-aware regular expressions then read on.</P>
+      <P>Most of the information you will need is in the <A href="../../../more/getting_started.html">
+            getting started guide</A>, the only additional step you need to take is to 
+         tell bjam that you want Boost.Regex to use ICU and optionally to tell bjam 
+         where ICU is located.</P>
       <P>If you're building on a Unix-like platform, and ICU is already installed in 
          you're compilers search path (with an install&nbsp;prefix of /usr or /usr/local 
          for example), then set the environment variable HAVE_ICU to enable ICU 
          support.&nbsp; For example you might build with the command line:</P>
-      <PRE>bjam -sHAVE_ICU=1 -sTOOLS=<A href="../../../more/getting_started.html#Tools">my-compiler</A></PRE>
+      <PRE>bjam -sHAVE_ICU=1 --toolset=<A href="../../../more/getting_started/windows.html#toolset-name">toolset-name</A> install</PRE>
       <P>If ICU is not already in your compilers path then you need to set the 
          environment variable ICU_PATH to point to the route directory of your ICU 
          installation, for example if ICU was installed to /usr/local/icu/3.3 you might 
          use:</P>
-      <PRE>bjam -sICU_PATH=/usr/local/icu/3.3 -sTOOLS=<A href="../../../more/getting_started.html#Tools" >my-compiler</A></PRE>
+      <PRE>bjam -sICU_PATH=/usr/local/icu/3.3 --toolset=<A href="../../../more/getting_started/windows.html#toolset-name">toolset-name</A> install</PRE>
       <P>Note that ICU is a C++ library just like Boost is, as such your copy of ICU 
          must have been built with the same C++ compiler (and compiler version) that you 
          are using to build Boost.&nbsp; <STRONG>Boost.Regex will not work correctly unless 
