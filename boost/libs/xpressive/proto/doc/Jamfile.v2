@@ -2,37 +2,46 @@
 # subject to the Boost Software License, Version 1.0. (See accompanying
 # file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#import doxygen ;
+import path ;
+import doxygen ;
 import quickbook ;
 
-#doxygen protodoc
-#    :
-#        ../../../../boost/xpressive/proto/args.hpp
-#        ../../../../boost/xpressive/proto/context.hpp
-#        ../../../../boost/xpressive/proto/debug.hpp
-#        ../../../../boost/xpressive/proto/deep_copy.hpp
-#        ../../../../boost/xpressive/proto/expr.hpp
-#        ../../../../boost/xpressive/proto/extends.hpp
-#        ../../../../boost/xpressive/proto/fusion.hpp
-#        ../../../../boost/xpressive/proto/literal.hpp
-#        ../../../../boost/xpressive/proto/make_expr.hpp
-#        ../../../../boost/xpressive/proto/matches.hpp
-#        ../../../../boost/xpressive/proto/operators.hpp
-#        ../../../../boost/xpressive/proto/ref.hpp
-#        ../../../../boost/xpressive/proto/tags.hpp
-#        ../../../../boost/xpressive/proto/traits.hpp
-#        [ glob ../../../../boost/xpressive/proto/transform/*.hpp ]
-#    :
-#        <doxygen:param>EXTRACT_ALL=YES
-#        <doxygen:param>HIDE_UNDOC_MEMBERS=NO
-#        <doxygen:param>"INPUT_FILTER=wave.bat"
-#    ;
+wave-command = [ path.native ../../../../dist/bin/wave ] ;
+
+# Generate reference section using Doxygen
+doxygen protodoc
+    :
+        ../../../../boost/xpressive/proto/args.hpp
+        ../../../../boost/xpressive/proto/context.hpp
+        ../../../../boost/xpressive/proto/debug.hpp
+        ../../../../boost/xpressive/proto/deep_copy.hpp
+        ../../../../boost/xpressive/proto/expr.hpp
+        ../../../../boost/xpressive/proto/extends.hpp
+        ../../../../boost/xpressive/proto/fusion.hpp
+        ../../../../boost/xpressive/proto/literal.hpp
+        ../../../../boost/xpressive/proto/make_expr.hpp
+        ../../../../boost/xpressive/proto/matches.hpp
+        ../../../../boost/xpressive/proto/operators.hpp
+        ../../../../boost/xpressive/proto/ref.hpp
+        ../../../../boost/xpressive/proto/tags.hpp
+        ../../../../boost/xpressive/proto/traits.hpp
+        [ glob ../../../../boost/xpressive/proto/transform/*.hpp ]
+    :
+        <doxygen:param>EXTRACT_ALL=YES
+        <doxygen:param>HIDE_UNDOC_MEMBERS=NO
+        # Use Boost.Wave to preprocess Proto's source
+        <doxygen:param>"INPUT_FILTER=\"$(wave-command) -S ../../../.. \\
+                                        -D BOOST_PROTO_DOXYGEN_INVOKED \\
+                                        -D \"BOOST_TYPEOF_NESTED_TYPEDEF_TPL(X,Y)=struct X{ typedef detail::type type; };\" \\
+                                        -D \"BOOST_WORKAROUND(X,Y)=0\" \\
+                                        -D BOOST_PROTO_MAX_ARITY=5 -p 1 \""
+        # This ensures that Wave is actually built before we try to execute it
+        <dependency>../../../../tools/wave/build release
+    ;
 
 xml proto
     :
         proto.qbk
-#    :
-#        <dependency>protodoc
     ;
 
 boostbook standalone
@@ -42,4 +51,5 @@ boostbook standalone
         <xsl:param>toc.max.depth=3
         <xsl:param>toc.section.depth=3
         <xsl:param>chunk.section.depth=3
+        <dependency>protodoc
     ;

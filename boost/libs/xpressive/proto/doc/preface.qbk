@@ -12,10 +12,11 @@
 
 [h2 Description]
 
-Proto is a framework for constructing, type-checking, transforming and 
+Proto is a framework for building Domain Specific Embedded Languages
+in C++. It provides tools for constructing, type-checking, transforming and 
 executing ['expression templates][footnote See 
 [@http://www.osl.iu.edu/~tveldhui/papers/Expression-Templates/exprtmpl.html Expression Templates]].
-Proto provides ET library authors with the following:
+More specifically, Proto provides:
 
 * An expression tree data structure.
 * Operator overloads for building the tree from an expression.

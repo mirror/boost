@@ -1,0 +1,223 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[section Calculator]
+
+Let's use Proto to build a Domain Specific Embedded Language for a
+lazily-evaluated calculator. We'll see how to define the terminals in your 
+mini-language, how Proto combines the terminals into larger expressions, and 
+how to define an evaluation context so that your expressions can do useful 
+work.
+
+When we're done, we'll have a mini-language that will allow us to declare a 
+lazily-evaluated arithmetic expression, such as `(_2 - _1) / _2 * 100`, where 
+`_1` and `_2` are placeholders for values to be passed in when the expression 
+is evaluated.
+
+[h3 Defining Terminals]
+
+The first order of business is to define the placeholders `_1` and `_2`. For 
+that, we'll use the _terminal_ expression generator.
+
+    // Define some placeholder types
+    struct placeholder1 {};
+    struct placeholder2 {};
+    
+    // Define the Proto-ified placeholder terminals
+    proto::meta::terminal< placeholder1 >::type const _1 = {{}};
+    proto::meta::terminal< placeholder2 >::type const _2 = {{}};
+
+The initialization may look a little odd at first, but there is a good reason
+for doing things this way. The objects `_1` and `_2` above do not require 
+run-time construction -- they are ['statically initialized], which means they 
+are essentially initialized at compile time.
+
+[/ TODO Move this discussion into expr_trees.qbk]
+
+[blurb [*Static Initialization]\n
+\n
+Why is static initialization important? The terminals of many domain-specific
+embedded languages are likely to be global const objects, like `_1` and `_2`
+above. Were these object to require run-time initialization, it might be 
+possible to use these objects before they are initialized. That would be bad. 
+Statically initialized objects cannot be misused that way.]
+
+The actual type of `_1` looks like this:
+
+    proto::expr< proto::tag::terminal, proto::args1< placeholder1 >, 1 >
+
+The _expr_ template makes up the nodes in expression trees. The first template
+parameter is the node type; in this case, `proto::tag::terminal`. That means 
+that `_1` is a leaf-node in the expression tree. The second template parameter
+is a list of children types. Terminals will always have only one type in the
+type list. The last parameter is the number of types in the list. It is 
+deduced from the type list, so you won't need to worry about it.
+
+The _expr_ struct is defined as follows:
+
+    template< typename Tag, typename Args, long Arity = Args::size >
+    struct expr;
+    
+    template< typename Tag, typename Args >
+    struct expr< Tag, Args, 1 >
+    {
+        typename Args::arg0 arg0;
+        // ...
+    };
+
+The _expr_ struct does not define a constructor, or anything else that would 
+prevent static initialization. All _expr_ objects are initialized using 
+['aggregate initialization] -- with curly braces. In our example, `_1`
+is initialized with the initializer `{{}}`. The outer braces is the initializer
+for the _expr_ struct, and the inner braces are for the member `_1.arg0` which
+is of type `placeholder1`. Note that we use braces to initialize `_1.arg0` 
+because `placeholder1` is also an aggregate.
+
+[h3 Constructing Expression Trees]
+
+Now that we have terminals, we can use Proto's operator overloads to combine
+these terminals into larger expressions. So, for instance, we can immediately
+create the expression `(_2 - _1) / _2 * 100`. This creates an expression tree
+with a node for each operator. The type of the resulting object is large and
+complex, but we are not terribly interested in it.
+
+So far, the object is just a tree representing the expression. It has no
+behavior. In particular, it is not yet a calculator. Below we'll see how
+to make it a calculator by defining an evaluation context.
+
+[h3 Defining an Evaluation Context]
+
+To make your expression templates actually do work, you'll need to define
+an ['evaluation context]. The context is like a function object that associates
+behaviors with the node types in your expression tree. And example should make
+it clear.
+
+    struct calculator_context
+    {
+        calculator_context(double d1, double d2)
+          : d1_(d1), d2_(d2)
+        {}
+        
+        // Define the result type of the calculator
+        // (This makes the the calculator_context work
+        // with boost::result_of<>)
+        typedef double result_type;
+
+        // Handle the placeholders:
+        double operator()(proto::tag::terminal, placeholder1) const
+        {
+            return this->d1_;
+        }        
+        
+        double operator()(proto::tag::terminal, placeholder2) const
+        {
+            return this->d2_;
+        }
+        
+        // Handle literals:
+        double operator()(proto::tag::terminal, double d) const
+        {
+            return d;
+        }        
+        
+        // Handle addition:
+        template< typename Left, typename Right >
+        double operator()(proto::tag::add, Left const &left, Right const &right) const
+        {
+            return left.eval(*this) + right.eval(*this);
+        }
+        
+        // Handle subtraction:
+        template< typename Left, typename Right >
+        double operator()(proto::tag::subtract, Left const &left, Right const &right) const
+        {
+            return left.eval(*this) - right.eval(*this);
+        }
+        
+        // Handle multiplication:
+        template< typename Left, typename Right >
+        double operator()(proto::tag::multiply, Left const &left, Right const &right) const
+        {
+            return left.eval(*this) * right.eval(*this);
+        }
+        
+        // Handle division:
+        template< typename Left, typename Right >
+        double operator()(proto::tag::divide, Left const &left, Right const &right) const
+        {
+            return left.eval(*this) / right.eval(*this);
+        }
+        
+    private:
+        double d1_, d2_;
+    };
+
+Notice how the binary arithmetic operations are handled. First the left 
+and right operands are evaluated by invoking their `eval()` members. `eval()`
+is a member function defined in the _expr_ struct, so every Proto expression
+tree, from terminals to complicated aggregate expressions, have an `eval()`
+member that accepts an evaluation context. After the left and right children
+are evaluated, the results are combined using the appropriate arithmetic 
+operation.
+
+Now that we have an evaluation context for our calculator, we can use it to
+evaluate our arithmetic expressions, as below:
+
+    // Define a calculator context, where _1 is 45 and _2 is 50
+    calculator_context ctx( 45, 50 );
+
+    // Create an arithmetic expression and immediately evaluate it
+    double d = ( (_2 - _1) / _2 * 100 ).eval( ctx );
+    
+    // This prints "10"
+    std::cout << d << std::endl;
+
+[h3 The Default Evaluation Context]
+
+You might notice that the `calculator_context` has a lot of boilerplate. It
+is fairly common for addition nodes to be handled by evaluating the left and
+right children and then adding the result, for instance. We might want this to 
+be the default behavior, in fact. Proto provides a default `context<>` template
+which implements the obvious defaults for the operators, and uses Boost.Typeof 
+to deduce the return types. We can use it to simplify our `calculator_context`
+considerably:
+
+    struct calculator_context
+      : proto::context< calculator_context >
+    {
+        calculator_context(double d1, double d2)
+          : d1_(d1), d2_(d2)
+        {}
+        
+        // Define the result type of the calculator
+        // (This makes the the calculator_context work
+        // with boost::result_of<>)
+        typedef double result_type;
+        
+        // Bring proto::context<>'s function call operators into scope.
+        using proto::context< calculator_context >::operator();
+        
+        // Handle the placeholders:
+        double operator()(proto::tag::terminal, placeholder1) const
+        {
+            return this->d1_;
+        }        
+        
+        double operator()(proto::tag::terminal, placeholder2) const
+        {
+            return this->d2_;
+        }
+        
+    private:
+        double d1_, d2_;
+    };
+
+That's pretty simple!
+
+
+
+[endsect]

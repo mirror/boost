@@ -39,7 +39,7 @@
 [def _spirit_               [@http://spirit.sourceforge.net Spirit]]
 [def _xpressive_            [@../../../libs/xpressive/doc/index.html Boost.Xpressive]]
 [def _expr_                 `expr<>`]
-[def _ref_                  `ref<>`]
+[def _ref_                  [classref boost::proto::ref `ref<>`]]
 [def _unref_                `unref()`]
 [def _deep_copy_            `deep_copy()`]
 [def _extends_              `extends<>`]
@@ -75,6 +75,8 @@ check the [link proto.reference Reference] section.
 [include installation.qbk]
 
 [include quick_start.qbk]
+
+[include calculator.qbk]
 
 [include examples.qbk]
 
