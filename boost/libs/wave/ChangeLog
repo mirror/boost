@@ -243,6 +243,8 @@ Boost V1.34.0
   Windows file paths in a configuration file, if this path was enclosed in 
   quotes.
 - Extended the copyright notice to include the year 2007.
+- Fixed a problem in preserve=1 mode, when a C style comment triggered the 
+  generation of a #line directive.
 
 Sat Feb 18 2005
 - Version 1.2.3
@@ -343,8 +345,6 @@ Sat Dec 24 13:33:53 CST 2005
 - Added the get_severity() function to the exceptions thrown by the Wave
   library.
 - Extended the copyright notice to include the year 2006.
-- Fixed a problem in preserve=1 mode, when a C style comment triggered the 
-  generation of a #line directive.
   
 Mon Dec  5 22:05:22 CST 2005
 Boost V1.33.1
