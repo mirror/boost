@@ -826,8 +826,12 @@ protected:
             }        
             else if ((*it).get_value() == "push") {
             // push current output option onto the internal option stack
-                if (!default_outfile.empty() && current_outfile.empty())
-                    current_outfile = fs::complete(default_outfile, ctx.get_current_directory());
+                if (!default_outfile.empty() && current_outfile.empty() && 
+                    default_outfile != "-")
+                {
+                    current_outfile = fs::complete(default_outfile, 
+                        ctx.get_current_directory());
+                }
                 output_options.push(
                     output_option_type(generate_output, current_outfile));
                 return true;
@@ -846,7 +850,8 @@ protected:
                 current_outfile = opts.second;
                 if (!current_outfile.empty()) {
                 // re-open the last file
-                    interpret_pragma_option_output_open(current_outfile, ctx, act_token);
+                    interpret_pragma_option_output_open(current_outfile, ctx, 
+                        act_token);
                 }
                 else {
                 // either no output or generate to std::cout
