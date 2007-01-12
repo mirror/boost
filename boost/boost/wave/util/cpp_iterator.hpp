@@ -795,6 +795,7 @@ token_id id = token_id(*iter_ctx->first);
         // if there are pending tokens in the queue, return the first one
             act_token = pending_queue.front();
             pending_queue.pop_front();
+            act_pos = act_token.get_position();
         }
         else if (!unput_queue.empty()
               || T_IDENTIFIER == id 
@@ -815,8 +816,6 @@ token_id id = token_id(*iter_ctx->first);
         id = token_id(act_token);
         
     } while (T_PLACEHOLDER == id);
-
-    act_pos = act_token.get_position();
     return act_token;
 }
 
