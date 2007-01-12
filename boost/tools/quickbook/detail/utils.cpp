@@ -75,7 +75,8 @@ namespace quickbook { namespace detail
                 break;
             }
 
-            program.erase(pos, n);
+            std::string::size_type next = program.find_first_of("\r\n", pos);
+            program.erase(pos, (std::min)(n, next-pos));
         }
     }
 
