@@ -29,19 +29,39 @@ namespace context_policies {
 
 namespace util {
     ///////////////////////////////////////////////////////////////////////////
+    //  This function returns true if the given C style comment contains at 
+    //  least one newline
     template <typename TokenT>
     bool ccomment_has_newline(TokenT const& token)
     {
         using namespace boost::wave;
 
-        if (T_CCOMMENT == token_id(token)) {
-            if (TokenT::string_type::npos != 
-                token.get_value().find_first_of("\n"))
-            {
-                return true;
-            }
+        if (T_CCOMMENT == token_id(token) &&
+            TokenT::string_type::npos != token.get_value().find_first_of("\n"))
+        {
+            return true;
         }
         return false;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //  This function returns the number of newlines in the given C style 
+    //  comment 
+    template <typename TokenT>
+    int ccomment_count_newlines(TokenT const& token)
+    {
+        using namespace boost::wave;
+        int newlines = 0;
+        if (T_CCOMMENT == token_id(token)) {
+        TokenT::string_type const& value = token.get_value();
+        TokenT::string_type::size_type p = value.find_first_of("\n");
+
+            while (TokenT::string_type::npos != p) {
+                ++newlines;
+                p = value.find_first_of("\n", p+1);
+            } 
+        }
+        return newlines;
     }
 }
 

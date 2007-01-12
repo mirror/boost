@@ -343,7 +343,9 @@ Sat Dec 24 13:33:53 CST 2005
 - Added the get_severity() function to the exceptions thrown by the Wave
   library.
 - Extended the copyright notice to include the year 2006.
-
+- Fixed a problem in preserve=1 mode, when a C style comment triggered the 
+  generation of a #line directive.
+  
 Mon Dec  5 22:05:22 CST 2005
 Boost V1.33.1
 - Version 1.2.1
