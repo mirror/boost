@@ -61,27 +61,28 @@ enum trace_flags {
 //  disabled
 //
 ///////////////////////////////////////////////////////////////////////////////
-class no_pragma_system_exception :
+class bad_pragma_exception :
     public boost::wave::preprocess_exception
 {
 public:
     enum error_code {
-        pragma_system_not_enabled = boost::wave::preprocess_exception::last_error_number + 1
+        pragma_system_not_enabled = boost::wave::preprocess_exception::last_error_number + 1,
+        pragma_mismatched_push_pop,
     };
     
-    no_pragma_system_exception(char const *what_, error_code code, int line_, 
+    bad_pragma_exception(char const *what_, error_code code, int line_, 
         int column_, char const *filename_) throw() 
     :   boost::wave::preprocess_exception(what_, 
             (boost::wave::preprocess_exception::error_code)code, line_, 
             column_, filename_)
     {
     }
-    ~no_pragma_system_exception() throw() {}
+    ~bad_pragma_exception() throw() {}
     
     
     virtual char const *what() const throw()
     {
-        return "boost::wave::no_pragma_system_exception";
+        return "boost::wave::bad_pragma_exception";
     }
     virtual bool is_recoverable() const throw()
     {
@@ -94,12 +95,26 @@ public:
     
     static char const *error_text(int code)
     {
-        return "the directive '#pragma wave system()' was not enabled, use the "
-               "-x command line argument to enable the execution of";
+        switch(code) {
+        case pragma_system_not_enabled:
+            return "the directive '#pragma wave system()' was not enabled, use the "
+                   "-x command line argument to enable the execution of";
+                   
+        case pragma_mismatched_push_pop:
+            return "unbalanced #pragma push/pop in input file(s) for option";
+        }
+        return "Unknown exception";
     }
     static boost::wave::util::severity severity_level(int code)
     {
-        return boost::wave::util::severity_remark;
+        switch(code) {
+        case pragma_system_not_enabled:
+            return boost::wave::util::severity_remark;
+    
+        case pragma_mismatched_push_pop:
+            return boost::wave::util::severity_error;
+        }
+        return boost::wave::util::severity_fatal;
     }
     static char const *severity_text(int code)
     {
@@ -445,7 +460,7 @@ public:
             if (!enable_system_command) {
             // if the #pragma wave system() directive is not enabled, throw
             // a corresponding error (actually its a remark),
-                BOOST_WAVE_THROW_CTX(ctx, no_pragma_system_exception, 
+                BOOST_WAVE_THROW_CTX(ctx, bad_pragma_exception, 
                     pragma_system_not_enabled,
                     boost::wave::util::impl::as_string(values).c_str(), 
                     act_token.get_position());
@@ -660,6 +675,13 @@ protected:
                 return true;
             }
             else if ((*it).get_value() == "pop") {
+            // test for mismatched push/pop #pragmas
+                if (preserve_options.empty()) {
+                    BOOST_WAVE_THROW_CTX(ctx, bad_pragma_exception, 
+                        pragma_mismatched_push_pop, "preserve", 
+                        act_token.get_position());
+                }
+                
             // pop output preserve from the internal option stack
                 bool result = interpret_pragma_option_preserve_set(
                     preserve_options.top(), preserve_whitespace, ctx);
@@ -697,6 +719,13 @@ protected:
                 return true;
             }
             else if ((*it).get_value() == "pop") {
+            // test for mismatched push/pop #pragmas
+                if (line_options.empty()) {
+                    BOOST_WAVE_THROW_CTX(ctx, bad_pragma_exception, 
+                        pragma_mismatched_push_pop, "line", 
+                        act_token.get_position());
+                }
+                
             // pop output line from the internal option stack
                 ctx.set_language(
                     enable_emit_line_directives(ctx.get_language(), line_options.top()),
@@ -804,6 +833,13 @@ protected:
                 return true;
             }
             else if ((*it).get_value() == "pop") {
+            // test for mismatched push/pop #pragmas
+                if (output_options.empty()) {
+                    BOOST_WAVE_THROW_CTX(ctx, bad_pragma_exception, 
+                        pragma_mismatched_push_pop, "output", 
+                        act_token.get_position());
+                }
+                
             // pop output option from the internal option stack
                 output_option_type const& opts = output_options.top();
                 generate_output = opts.first;
