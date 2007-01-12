@@ -81,6 +81,13 @@ CHANGELOG
   to control whitespace insertion. The default value for this option is 
   --disambiguate=1, resembling the previous behaviour. Specifying the option
   --disambiguate=0 allows to suppress whitespace insertion alltogether.
+- Switched to Re2C V0.11.0
+- Added pragma option values push and pop to the opetions line, preserve and 
+  output allowing to store and restore the current option. The syntax is:
+    #pragma wave options(<option>: push) and
+    #pragma wave options(<option>: pop)
+  where <option> may be line, preserve or output. Thanks to Eric Niebler for 
+  suggesting this feature.
   
 Boost V1.34.0
 - Wave Version 1.2.4

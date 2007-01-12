@@ -16,6 +16,7 @@
 
 #include <ostream>
 #include <string>
+#include <stack>
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
@@ -603,7 +604,35 @@ protected:
     }
 
     ///////////////////////////////////////////////////////////////////////////
-    //  interpret the pragma wave option(preserve: [0|1|2]) directive
+    //  interpret the pragma wave option(preserve: [0|1|2|push|pop]) directive
+    template <typename ContextT>
+    static bool 
+    interpret_pragma_option_preserve_set(int mode, bool &preserve_whitespace, 
+        ContextT &ctx)
+    {
+        switch(mode) {
+        case 0:   
+            preserve_whitespace = false;
+            ctx.set_language(
+                enable_preserve_comments(ctx.get_language(), false),
+                false);
+            break;
+
+        case 2:
+            preserve_whitespace = true;
+              /* fall through */
+        case 1:
+            ctx.set_language(
+                enable_preserve_comments(ctx.get_language()),
+                false);
+            break;
+
+        default:
+              return false;
+        }
+        return true;
+    }
+
     template <typename ContextT, typename IteratorT>
     bool 
     interpret_pragma_option_preserve(ContextT &ctx, IteratorT &it,
@@ -615,34 +644,40 @@ protected:
         if (T_COLON == id)
             id = util::impl::skip_whitespace(it, end);
         
+        // implement push/pop
+        if (T_IDENTIFIER == id) {
+            if ((*it).get_value() == "push") {
+            // push current preserve option onto the internal option stack
+                if (preserve_whitespace) {
+                    if (need_preserve_comments(ctx.get_language()))
+                        preserve_options.push(2);
+                    else
+                        preserve_options.push(1);
+                }
+                else {
+                    preserve_options.push(0);
+                }                    
+                return true;
+            }
+            else if ((*it).get_value() == "pop") {
+            // pop output preserve from the internal option stack
+                bool result = interpret_pragma_option_preserve_set(
+                    preserve_options.top(), preserve_whitespace, ctx);
+                line_options.pop();
+                return result;
+            }
+            return false;
+        }
+
         if (T_PP_NUMBER != id) 
             return false;
             
         using namespace std;    // some platforms have atoi in namespace std
-        switch(atoi((*it).get_value().c_str())) {
-        case 0:   
-            preserve_whitespace = false;
-            ctx.set_language(
-                enable_preserve_comments(ctx.get_language(), false),
-                false);
-            break;
-            
-        case 2:
-            preserve_whitespace = true;
-            /* fall through */
-        case 1:
-            ctx.set_language(
-                enable_preserve_comments(ctx.get_language()),
-                false);
-            break;
-            
-        default:
-            return false;
-        }
-        return true;
+        return interpret_pragma_option_preserve_set(
+            atoi((*it).get_value().c_str()), preserve_whitespace, ctx);
     }
     
-    //  interpret the pragma wave option(line: [0|1]) directive
+    //  interpret the pragma wave option(line: [0|1|push|pop]) directive
     template <typename ContextT, typename IteratorT>
     bool 
     interpret_pragma_option_line(ContextT &ctx, IteratorT &it,
@@ -654,6 +689,24 @@ protected:
         if (T_COLON == id)
             id = util::impl::skip_whitespace(it, end);
         
+        // implement push/pop
+        if (T_IDENTIFIER == id) {
+            if ((*it).get_value() == "push") {
+            // push current line option onto the internal option stack
+                line_options.push(need_emit_line_directives(ctx.get_language()));
+                return true;
+            }
+            else if ((*it).get_value() == "pop") {
+            // pop output line from the internal option stack
+                ctx.set_language(
+                    enable_emit_line_directives(ctx.get_language(), line_options.top()),
+                    false);
+                line_options.pop();
+                return true;
+            }
+            return false;
+        }
+
         if (T_PP_NUMBER != id) 
             return false;
             
@@ -669,7 +722,48 @@ protected:
         return false;
     }
 
-    //  interpret the pragma wave option(output: ["filename"|null]) directive
+    //  interpret the pragma wave option(output: ["filename"|null|default|push|pop]) 
+    //  directive
+    template <typename ContextT>
+    bool 
+    interpret_pragma_option_output_open(boost::filesystem::path &fpath, 
+        ContextT& ctx, typename ContextT::token_type const &act_token)
+    {
+        namespace fs = boost::filesystem;
+        
+        // ensure all directories for this file do exist
+        fs::create_directories(fpath.branch_path());
+
+        // figure out, whether the file to open was last accessed by us
+        std::ios::openmode mode = std::ios::out;
+        if (fs::exists(fpath) && fs::last_write_time(fpath) >= started_at)
+            mode = (std::ios::openmode)(std::ios::out | std::ios::app);
+
+        // close the current file
+        if (outputstrm.is_open())
+            outputstrm.close();
+
+        // open the new file
+        outputstrm.open(fpath.string().c_str(), mode);
+        if (!outputstrm.is_open()) { 
+            BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
+                could_not_open_output_file,
+                fpath.string().c_str(), act_token.get_position());
+            return false;
+        }
+        generate_output = true;
+        current_outfile = fpath;
+        return true;        
+    }
+    
+    void interpret_pragma_option_output_close(bool generate)
+    {
+        if (outputstrm.is_open())
+            outputstrm.close();
+        current_outfile = fs::path();
+        generate_output = generate;
+    }
+
     template <typename ContextT, typename IteratorT>
     bool 
     interpret_pragma_option_output(ContextT &ctx, IteratorT &it,
@@ -693,76 +787,57 @@ protected:
                 util::impl::unescape_lit(fname.substr(1, fname.size()-2)).c_str(),
                 fs::native);
             fpath = fs::complete(fpath, ctx.get_current_directory());
-            
-            // close the current file
-            if (outputstrm.is_open())
-                outputstrm.close();
-
-            // ensure all directories for this file do exist
-            fs::create_directories(fpath.branch_path());
-            
-            // figure out, whether the file to open was last accessed by us
-            std::ios::openmode mode = std::ios::out;
-            if (fs::exists(fpath) && fs::last_write_time(fpath) >= started_at)
-                mode = (std::ios::openmode)(std::ios::out | std::ios::app);
-
-            // open the new file
-            outputstrm.open(fpath.string().c_str(), mode);
-            if (!outputstrm.is_open()) { 
-                BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
-                    could_not_open_output_file,
-                    fpath.string().c_str(), act_token.get_position());
-                return false;
-            }
-            generate_output = true;
-            return true;        
+            return interpret_pragma_option_output_open(fpath, ctx, act_token);
         }
-        if (T_IDENTIFIER == id && (*it).get_value() == "null") {
-        // suppress all output from this point on
-            if (outputstrm.is_open())
-                outputstrm.close();
-            generate_output = false;
-            return true;        
+        if (T_IDENTIFIER == id) {
+            if ((*it).get_value() == "null") {
+            // suppress all output from this point on
+                interpret_pragma_option_output_close(false);
+                return true;
+            }        
+            else if ((*it).get_value() == "push") {
+            // push current output option onto the internal option stack
+                if (!default_outfile.empty() && current_outfile.empty())
+                    current_outfile = fs::complete(default_outfile, ctx.get_current_directory());
+                output_options.push(
+                    output_option_type(generate_output, current_outfile));
+                return true;
+            }
+            else if ((*it).get_value() == "pop") {
+            // pop output option from the internal option stack
+                output_option_type const& opts = output_options.top();
+                generate_output = opts.first;
+                current_outfile = opts.second;
+                if (!current_outfile.empty()) {
+                // re-open the last file
+                    interpret_pragma_option_output_open(current_outfile, ctx, act_token);
+                }
+                else {
+                // either no output or generate to std::cout
+                    interpret_pragma_option_output_close(generate_output);
+                }
+                output_options.pop();
+                return true;
+            }
         }
         if (T_DEFAULT == id) {
         // re-open the default output given on command line
-            if (outputstrm.is_open())
-                outputstrm.close();
-            
             if (!default_outfile.empty()) {
                 if (default_outfile == "-") {
                 // the output was suppressed on the command line
-                    generate_output = false;
+                    interpret_pragma_option_output_close(false);
                 }
                 else {
                 // there was a file name on the command line
-                fs::path fpath(default_outfile, fs::native);
-                    
-                    // close the current file
-                    if (outputstrm.is_open())
-                        outputstrm.close();
-
-                    // figure out, whether the file to open was last accessed by us
-                    std::ios::openmode mode = std::ios::out;
-                    if (fs::exists(fpath) && fs::last_write_time(fpath) >= started_at)
-                        mode = (std::ios::openmode)(std::ios::out | std::ios::app);
-
-                    // open the new file
-                    outputstrm.open(fpath.string().c_str(), mode);
-                    if (!outputstrm.is_open()) { 
-                        BOOST_WAVE_THROW_CTX(ctx, preprocess_exception, 
-                            could_not_open_output_file, fpath.string().c_str(), 
-                            act_token.get_position());
-                        return false;
-                    }
-                    generate_output = true;
+                    fs::path fpath(default_outfile, fs::native);
+                    return interpret_pragma_option_output_open(fpath, ctx, act_token);
                 }
             }
             else {
             // generate the output to std::cout
-                generate_output = true;
+                interpret_pragma_option_output_close(true);
             }
-            return true;        
+            return true;      
         }
         return false;
     }
@@ -786,17 +861,17 @@ protected:
             
             token_type const &value = *it;
             if (value.get_value() == "preserve") {
-            // #pragma wave option(preserve: [0|1|2])
+            // #pragma wave option(preserve: [0|1|2|push|pop])
                 valid_option = interpret_pragma_option_preserve(ctx, it, end, 
                     act_token);
             }
             else if (value.get_value() == "line") {
-            // #pragma wave option(line: [0|1])
+            // #pragma wave option(line: [0|1|push|pop])
                 valid_option = interpret_pragma_option_line(ctx, it, end, 
                     act_token);
             }
             else if (value.get_value() == "output") {
-            // #pragma wave option(output: ["filename"|null])
+            // #pragma wave option(output: ["filename"|null|default|push|pop])
                 valid_option = interpret_pragma_option_output(ctx, it, end, 
                     act_token);
             }
@@ -964,10 +1039,16 @@ private:
     bool enable_system_command;     // enable #pragma wave system() command
     bool preserve_whitespace;       // enable whitespace preservation
     bool& generate_output;          // allow generated tokens to be streamed to output
-    std::string const& default_outfile;    // name of the output file given on command line
+    std::string const& default_outfile;         // name of the output file given on command line
+    boost::filesystem::path current_outfile;    // name of the current output file 
     
     stop_watch elapsed_time;        // trace timings
     std::time_t started_at;         // time, this process was started at
+    
+    typedef std::pair<bool, boost::filesystem::path> output_option_type;
+    std::stack<output_option_type> output_options;  // output option stack
+    std::stack<int> line_options;       // line option stack
+    std::stack<int> preserve_options;   // preserve option stack
 };
 
 #undef BOOST_WAVE_GETSTRING

@@ -423,9 +423,7 @@ std::ifstream dfa_in("wave_lexertl_lexer.dfa", std::ios::in|std::ios::binary);
     {
         dfa_in.close();
         
-        state_machine_._lookup.clear();
-        state_machine_._dfa_alphabet = 0;
-        state_machine_._dfa.clear();
+        state_machine_.clear();
         
     // register macro definitions
         ::lexertl::rules rules;
@@ -456,8 +454,7 @@ std::ifstream dfa_in("wave_lexertl_lexer.dfa", std::ios::in|std::ios::binary);
     // generate minimized DFA
         try {
             ::lexertl::generator::build (rules, state_machine_);
-            ::lexertl::generator::minimise_dfa (state_machine_._dfa_alphabet,
-                state_machine_._dfa);
+            ::lexertl::generator::minimise_dfa (state_machine_);
         }
         catch (std::runtime_error const& e) {
             string_type msg("lexertl initialization error: ");
@@ -486,21 +483,23 @@ inline wave::token_id
 lexertl<Iterator, Position>::next_token(Iterator &first, Iterator const &last,
     string_type& token_value)
 {
-    size_t const* dfa_start = &state_machine_._dfa.front();
-    size_t const* ptr = dfa_start + state_machine_._dfa_alphabet + ::lexertl::dfa_offset;
+    size_t const* const lookup = &state_machine_._lookup[0]->front ();
+		size_t const dfa_alphabet_ = state_machine_._dfa_alphabet[0];
+
+    size_t const* dfa_start = &state_machine_._dfa[0]->front();
+    size_t const* ptr = dfa_start + dfa_alphabet_ + ::lexertl::dfa_offset;
     Iterator curr = first;
     Iterator end_token = first;
     bool end_state = (*ptr != 0);
     size_t id = *(ptr + 1);
 
     while (curr != last) {
-        size_t const state = ptr[state_machine_._lookup[*curr]];
+        size_t const state = ptr[lookup[*curr]];
         if (0 == state)
             break;
         ++curr;
 
-        ptr = &dfa_start[state * (state_machine_._dfa_alphabet +
-            ::lexertl::dfa_offset)];
+        ptr = &dfa_start[state * (dfa_alphabet_ + ::lexertl::dfa_offset)];
 
         if (0 != *ptr) {
             end_state = true;
@@ -534,40 +533,41 @@ template <typename Iterator, typename Position>
 inline bool
 lexertl<Iterator, Position>::load (istream& instrm)
 {
-// ensure correct signature and version
-    long in_long = 0;
-    LEXERTL_IN (instrm, in_long);
-    if (in_long != lexertl_signature)
-        return false;       // not for us
-
-    LEXERTL_IN (instrm, in_long);
-    if ((in_long & ~lexertl_minor_version_mask) > lexertl_last_known_version)
-        return false;       // too new for us
-
-    LEXERTL_IN (instrm, in_long);
-    if (in_long != (long)get_compilation_time())
-        return false;       // not saved by us
-
-// load the lookup and DFA tables
-    long in_size = 0;
-    LEXERTL_IN (instrm, in_size);
-    state_machine_._lookup.resize(in_size);
-    for (long l = 0; l < in_size; ++l)
-    {
-        LEXERTL_IN(instrm, in_long);
-        state_machine_._lookup[l] = in_long;
-    }
-
-    LEXERTL_IN (instrm, state_machine_._dfa_alphabet);
-    
-    LEXERTL_IN (instrm, in_size);
-    state_machine_._dfa.resize(in_size);
-    for (long d = 0; d < in_size; ++d)
-    {
-        LEXERTL_IN(instrm, in_long);
-        state_machine_._dfa[d] = in_long;
-    }
-    return true;
+// // ensure correct signature and version
+//     long in_long = 0;
+//     LEXERTL_IN (instrm, in_long);
+//     if (in_long != lexertl_signature)
+//         return false;       // not for us
+// 
+//     LEXERTL_IN (instrm, in_long);
+//     if ((in_long & ~lexertl_minor_version_mask) > lexertl_last_known_version)
+//         return false;       // too new for us
+// 
+//     LEXERTL_IN (instrm, in_long);
+//     if (in_long != (long)get_compilation_time())
+//         return false;       // not saved by us
+// 
+// // load the lookup and DFA tables
+//     long in_size = 0;
+//     LEXERTL_IN (instrm, in_size);
+//     state_machine_._lookup.resize(in_size);
+//     for (long l = 0; l < in_size; ++l)
+//     {
+//         LEXERTL_IN(instrm, in_long);
+//         state_machine_._lookup[l] = in_long;
+//     }
+// 
+//     LEXERTL_IN (instrm, state_machine_._dfa_alphabet);
+//     
+//     LEXERTL_IN (instrm, in_size);
+//     state_machine_._dfa.resize(in_size);
+//     for (long d = 0; d < in_size; ++d)
+//     {
+//         LEXERTL_IN(instrm, in_long);
+//         state_machine_._dfa[d] = in_long;
+//     }
+//     return true;
+    return false;
 }
 
 #undef LEXERTL_IN
@@ -583,37 +583,38 @@ template <typename Iterator, typename Position>
 inline bool
 lexertl<Iterator, Position>::save (ostream& outstrm)
 {
-// save signature and version information
-    long out_long = lexertl_signature;
-    LEXERTL_OUT(outstrm, out_long);
-    out_long = lexertl_version_100;
-    LEXERTL_OUT(outstrm, out_long);
-    out_long = (long)get_compilation_time();
-    LEXERTL_OUT(outstrm, out_long);
-    
-// save lookup and DFA tables
-    typedef ::lexertl::state_machine::size_t_vector::iterator iterator_type;
-    
-    out_long = static_cast<long>(state_machine_._lookup.size());
-    LEXERTL_OUT(outstrm, out_long);
-    iterator_type end_lookup = state_machine_._lookup.end();
-    for (iterator_type it_lookup = state_machine_._lookup.begin();
-         it_lookup != end_lookup; ++it_lookup)
-    {
-        LEXERTL_OUT(outstrm, *it_lookup);
-    }
-
-    LEXERTL_OUT(outstrm, state_machine_._dfa_alphabet);
-
-    out_long = static_cast<long>(state_machine_._dfa.size());
-    LEXERTL_OUT(outstrm, out_long);
-    iterator_type end_dfa = state_machine_._dfa.end();
-    for (iterator_type it_dfa = state_machine_._dfa.begin();
-         it_dfa != end_dfa; ++it_dfa)
-    {
-        LEXERTL_OUT(outstrm, *it_dfa);
-    }
-    return true;
+// // save signature and version information
+//     long out_long = lexertl_signature;
+//     LEXERTL_OUT(outstrm, out_long);
+//     out_long = lexertl_version_100;
+//     LEXERTL_OUT(outstrm, out_long);
+//     out_long = (long)get_compilation_time();
+//     LEXERTL_OUT(outstrm, out_long);
+// 
+// // save lookup and DFA tables
+//     typedef ::lexertl::state_machine::size_t_vector::iterator iterator_type;
+//     
+//     out_long = static_cast<long>(state_machine_._lookup.size());
+//     LEXERTL_OUT(outstrm, out_long);
+//     iterator_type end_lookup = state_machine_._lookup.end();
+//     for (iterator_type it_lookup = state_machine_._lookup.begin();
+//          it_lookup != end_lookup; ++it_lookup)
+//     {
+//         LEXERTL_OUT(outstrm, *it_lookup);
+//     }
+// 
+//     LEXERTL_OUT(outstrm, state_machine_._dfa_alphabet);
+// 
+//     out_long = static_cast<long>(state_machine_._dfa.size());
+//     LEXERTL_OUT(outstrm, out_long);
+//     iterator_type end_dfa = state_machine_._dfa.end();
+//     for (iterator_type it_dfa = state_machine_._dfa.begin();
+//          it_dfa != end_dfa; ++it_dfa)
+//     {
+//         LEXERTL_OUT(outstrm, *it_dfa);
+//     }
+//     return true;
+    return false;
 }
 
 #undef LEXERTL_OUT
