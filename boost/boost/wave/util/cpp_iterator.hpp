@@ -496,7 +496,7 @@ pp_iterator_functor<ContextT>::operator()()
         if (need_emit_line_directives(ctx.get_language()) && emit_line_directive()) 
         {
             skipped_newline = false;
-//             ctx.get_hooks().may_skip_whitespace(ctx, act_token, skipped_newline);
+            ctx.get_hooks().may_skip_whitespace(ctx, act_token, skipped_newline);     // feed ws eater FSM
             id = token_id(act_token);
         }
     }

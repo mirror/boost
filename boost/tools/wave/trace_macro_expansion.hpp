@@ -785,12 +785,13 @@ protected:
         return true;        
     }
     
-    void interpret_pragma_option_output_close(bool generate)
+    bool interpret_pragma_option_output_close(bool generate)
     {
         if (outputstrm.is_open())
             outputstrm.close();
-        current_outfile = fs::path();
+        current_outfile = boost::filesystem::path();
         generate_output = generate;
+        return true;
     }
 
     template <typename ContextT, typename IteratorT>
@@ -808,6 +809,7 @@ protected:
         if (T_COLON == id)
             id = util::impl::skip_whitespace(it, end);
         
+        bool result = false;
         if (T_STRINGLIT == id) {
             namespace fs = boost::filesystem;
             
@@ -816,25 +818,26 @@ protected:
                 util::impl::unescape_lit(fname.substr(1, fname.size()-2)).c_str(),
                 fs::native);
             fpath = fs::complete(fpath, ctx.get_current_directory());
-            return interpret_pragma_option_output_open(fpath, ctx, act_token);
+            result = interpret_pragma_option_output_open(fpath, ctx, act_token);
         }
-        if (T_IDENTIFIER == id) {
+        else if (T_IDENTIFIER == id) {
             if ((*it).get_value() == "null") {
             // suppress all output from this point on
-                interpret_pragma_option_output_close(false);
-                return true;
+                result = interpret_pragma_option_output_close(false);
             }        
             else if ((*it).get_value() == "push") {
-            // push current output option onto the internal option stack
-                if (!default_outfile.empty() && current_outfile.empty() && 
-                    default_outfile != "-")
+            // initialize the current_outfile, if appropriate
+                if (output_options.empty() && current_outfile.empty() &&
+                    !default_outfile.empty() && default_outfile != "-")
                 {
                     current_outfile = fs::complete(default_outfile, 
                         ctx.get_current_directory());
                 }
+
+            // push current output option onto the internal option stack
                 output_options.push(
                     output_option_type(generate_output, current_outfile));
-                return true;
+                result = true;
             }
             else if ((*it).get_value() == "pop") {
             // test for mismatched push/pop #pragmas
@@ -842,6 +845,7 @@ protected:
                     BOOST_WAVE_THROW_CTX(ctx, bad_pragma_exception, 
                         pragma_mismatched_push_pop, "output", 
                         act_token.get_position());
+                    return false;
                 }
                 
             // pop output option from the internal option stack
@@ -850,37 +854,36 @@ protected:
                 current_outfile = opts.second;
                 if (!current_outfile.empty()) {
                 // re-open the last file
-                    interpret_pragma_option_output_open(current_outfile, ctx, 
-                        act_token);
+                    result = interpret_pragma_option_output_open(current_outfile, 
+                        ctx, act_token);
                 }
                 else {
                 // either no output or generate to std::cout
-                    interpret_pragma_option_output_close(generate_output);
+                    result = interpret_pragma_option_output_close(generate_output);
                 }
                 output_options.pop();
-                return true;
             }
         }
-        if (T_DEFAULT == id) {
+        else if (T_DEFAULT == id) {
         // re-open the default output given on command line
             if (!default_outfile.empty()) {
                 if (default_outfile == "-") {
                 // the output was suppressed on the command line
-                    interpret_pragma_option_output_close(false);
+                    result = interpret_pragma_option_output_close(false);
                 }
                 else {
                 // there was a file name on the command line
                     fs::path fpath(default_outfile, fs::native);
-                    return interpret_pragma_option_output_open(fpath, ctx, act_token);
+                    result = interpret_pragma_option_output_open(fpath, ctx, 
+                        act_token);
                 }
             }
             else {
             // generate the output to std::cout
-                interpret_pragma_option_output_close(true);
+                result = interpret_pragma_option_output_close(true);
             }
-            return true;      
         }
-        return false;
+        return result;      
     }
 
     ///////////////////////////////////////////////////////////////////////////
