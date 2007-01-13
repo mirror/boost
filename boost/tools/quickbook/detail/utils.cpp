@@ -60,14 +60,35 @@ namespace quickbook { namespace detail
     // un-indent a code segment
     void unindent(std::string& program)
     {
+        // Erase leading newlines
         std::string::size_type const start = program.find_first_not_of("\r\n");
-        program.erase(0, start); // erase leading newlines
+        program.erase(0, start);
 
-        std::string::size_type const n = program.find_first_not_of(" \t");
-        BOOST_ASSERT(std::string::npos != n);
-        program.erase(0, n);
-
+        // Get the first line indent
+        std::string::size_type indent = program.find_first_not_of(" \t");
         std::string::size_type pos = 0;
+        BOOST_ASSERT(std::string::npos != indent);
+
+        // Calculate the minimum indent from the rest of the lines
+        do
+        {
+            pos = program.find_first_not_of("\r\n", pos);
+            if (std::string::npos == pos)
+                break;
+
+            std::string::size_type n = program.find_first_not_of(" \t", pos);
+            if (n != std::string::npos)
+            {
+                char ch = program[n];
+                if (ch != '\r' && ch != '\n') // ignore empty lines
+                    indent = (std::min)(indent, n-pos);
+            }
+        }
+        while (std::string::npos != (pos = program.find_first_of("\r\n", pos)));
+
+        // Trim white spaces from column 0..indent
+        pos = 0;
+        program.erase(0, indent);
         while (std::string::npos != (pos = program.find_first_of("\r\n", pos)))
         {
             if (std::string::npos == (pos = program.find_first_not_of("\r\n", pos)))
@@ -76,7 +97,7 @@ namespace quickbook { namespace detail
             }
 
             std::string::size_type next = program.find_first_of("\r\n", pos);
-            program.erase(pos, (std::min)(n, next-pos));
+            program.erase(pos, (std::min)(indent, next-pos));
         }
     }
 

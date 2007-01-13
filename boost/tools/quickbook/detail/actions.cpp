@@ -748,6 +748,8 @@ namespace quickbook
             boost::spirit::file_position const pos = first.get_position();
             detail::outerr(pos.file,pos.line)
                 << "Mismatched [endsect] near column " << pos.column << ".\n";
+            // $$$ TODO: somehow fail parse else BOOST_ASSERT(std::string::npos != n)
+            // $$$ below will assert.
         }
         if (section_level == 0)
         {
