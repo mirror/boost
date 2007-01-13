@@ -11,11 +11,12 @@
     #ifndef BOOST_PROTO_MATCHES_HPP_EAN_11_03_2006
     #define BOOST_PROTO_MATCHES_HPP_EAN_11_03_2006
 
+    #include <boost/xpressive/proto/detail/prefix.hpp>
+
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/arithmetic/dec.hpp>
     #include <boost/preprocessor/arithmetic/sub.hpp>
     #include <boost/preprocessor/repetition/enum.hpp>
-    #include <boost/preprocessor/iteration/local.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
     #include <boost/preprocessor/facilities/intercept.hpp>
     #include <boost/preprocessor/punctuation/comma_if.hpp>
@@ -24,8 +25,6 @@
     #include <boost/preprocessor/repetition/enum_shifted_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
-
-    #if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
     #include <boost/config.hpp>
     #include <boost/mpl/if.hpp>
     #include <boost/mpl/and.hpp>
@@ -38,11 +37,8 @@
     #include <boost/type_traits/is_convertible.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/traits.hpp>
-    #else
-    /// INTERNAL ONLY
-    /// Needed to work around doxygen bug
-    struct a_dummy_global;
-    #endif
+
+    #include <boost/xpressive/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto
     {
@@ -65,34 +61,6 @@
             struct and1
               : mpl::bool_<B>
             {};
-
-        #define BOOST_PP_LOCAL_MACRO(N)\
-            template<bool B, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), typename P)>\
-            struct BOOST_PP_CAT(or, N)\
-              : BOOST_PP_CAT(or, BOOST_PP_DEC(N))<\
-                    P0::value BOOST_PP_COMMA_IF(BOOST_PP_SUB(N,2))\
-                    BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_DEC(N), P)\
-                >\
-            {};\
-            template<BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), typename P)>\
-            struct BOOST_PP_CAT(or, N)<true, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), P)>\
-              : mpl::true_\
-            {};\
-            template<bool B, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), typename P)>\
-            struct BOOST_PP_CAT(and, N)\
-              : BOOST_PP_CAT(and, BOOST_PP_DEC(N))<\
-                    P0::value BOOST_PP_COMMA_IF(BOOST_PP_SUB(N,2))\
-                    BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_DEC(N), P)\
-                >\
-            {};\
-            template<BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), typename P)>\
-            struct BOOST_PP_CAT(and, N)<false, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), P)>\
-              : mpl::false_\
-            {};\
-            /**/
-
-        #define BOOST_PP_LOCAL_LIMITS (2, BOOST_PROTO_MAX_ARITY)
-        #include BOOST_PP_LOCAL_ITERATE()
 
             // which
             template<typename Expr, bool B, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename G, void)>
@@ -227,7 +195,6 @@
 
         #include BOOST_PP_ITERATE()
 
-        #undef BOOST_PP_ITERATION_PARAMS_1
         #undef BOOST_PROTO_MATCHES_N_FUN
         #undef BOOST_PROTO_DEFINE_MATCHES
         #undef BOOST_PROTO_DEFINE_TERMINAL_MATCHES
@@ -302,6 +269,32 @@
 #else
 
     #define N BOOST_PP_ITERATION()
+
+            template<bool B, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), typename P)>
+            struct BOOST_PP_CAT(or, N)
+              : BOOST_PP_CAT(or, BOOST_PP_DEC(N))<
+                    P0::value BOOST_PP_COMMA_IF(BOOST_PP_SUB(N,2))
+                    BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_DEC(N), P)
+                >
+            {};
+            
+            template<BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), typename P)>
+            struct BOOST_PP_CAT(or, N)<true, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), P)>
+              : mpl::true_
+            {};
+            
+            template<bool B, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), typename P)>
+            struct BOOST_PP_CAT(and, N)
+              : BOOST_PP_CAT(and, BOOST_PP_DEC(N))<
+                    P0::value BOOST_PP_COMMA_IF(BOOST_PP_SUB(N,2))
+                    BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_DEC(N), P)
+                >
+            {};
+
+            template<BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), typename P)>
+            struct BOOST_PP_CAT(and, N)<false, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), P)>
+              : mpl::false_
+            {};
 
             template<
                 template<BOOST_PP_ENUM_PARAMS(N, typename BOOST_PP_INTERCEPT)> class T

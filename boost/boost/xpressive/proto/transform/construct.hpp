@@ -12,19 +12,16 @@
     #ifndef BOOST_PROTO_TRANSFORM_CONSTRUCT_HPP_EAN_12_26_2006
     #define BOOST_PROTO_TRANSFORM_CONSTRUCT_HPP_EAN_12_26_2006
 
+    #include <boost/xpressive/proto/detail/prefix.hpp>
+
     #include <boost/preprocessor/iterate.hpp>
     #include <boost/preprocessor/arithmetic/sub.hpp>
     #include <boost/preprocessor/facilities/intercept.hpp>
     #include <boost/preprocessor/repetition/enum_binary_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
-
-    #if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
     #include <boost/xpressive/proto/proto_fwd.hpp>
-    #else
-    /// INTERNAL ONLY
-    /// Needed to work around doxygen bug
-    struct a_dummy_global;
-    #endif
+
+    #include <boost/xpressive/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto { namespace transform
     {

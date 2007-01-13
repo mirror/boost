@@ -10,22 +10,20 @@
 #ifndef BOOST_PROTO_LITERAL_HPP_EAN_01_03_2007
 #define BOOST_PROTO_LITERAL_HPP_EAN_01_03_2007
 
-#if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
+#include <boost/xpressive/proto/detail/prefix.hpp>
+
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/expr.hpp>
 #include <boost/xpressive/proto/traits.hpp>
 #include <boost/xpressive/proto/extends.hpp>
-#else
-/// INTERNAL ONLY
-/// Needed to work around doxygen bug
-struct a_dummy_global;
-#endif
+
+#include <boost/xpressive/proto/detail/suffix.hpp>
 
 namespace boost { namespace proto
 {
-    template<typename T>
+    template<typename T, typename Domain>
     struct literal
-      : extends<typename meta::terminal<T>::type, literal<T> >
+      : extends<typename meta::terminal<T>::type, literal<T, Domain>, Domain>
     {
         typedef typename meta::terminal<T>::type terminal_type;
 

@@ -10,20 +10,17 @@
     #ifndef BOOST_PROTO_ARGS_HPP_EAN_04_01_2005
     #define BOOST_PROTO_ARGS_HPP_EAN_04_01_2005
 
+    #include <boost/xpressive/proto/detail/prefix.hpp>
+
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/iterate.hpp>
     #include <boost/preprocessor/repetition/enum_params.hpp>
     #include <boost/preprocessor/repetition/repeat.hpp>
     #include <boost/preprocessor/repetition/repeat_from_to.hpp>
-
-    #if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
     #include <boost/mpl/void.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
-    #else
-    /// INTERNAL ONLY
-    /// Needed to work around doxygen bug
-    struct a_dummy_global;
-    #endif
+
+    #include <boost/xpressive/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto
     {

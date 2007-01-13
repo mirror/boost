@@ -10,10 +10,7 @@
 #ifndef BOOST_XPRESSIVE_PROTO_PROTO_TYPEOF_H
 #define BOOST_XPRESSIVE_PROTO_PROTO_TYPEOF_H
 
-// MS compatible compilers support #pragma once
-#if defined(_MSC_VER) && (_MSC_VER >= 1020)
-# pragma once
-#endif
+#include <boost/xpressive/proto/detail/prefix.hpp>
 
 #include <boost/config.hpp>
 #include <boost/typeof/typeof.hpp>
@@ -21,6 +18,8 @@
 #include <boost/xpressive/proto/deep_copy.hpp>
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
+
+#include <boost/xpressive/proto/detail/suffix.hpp>
 
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::unary)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::binary)
@@ -72,6 +71,7 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::function)
 
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::ref, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::expr, (typename)(typename)(long))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::terminal, (typename))
 
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args1, 1)
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args2, 2)

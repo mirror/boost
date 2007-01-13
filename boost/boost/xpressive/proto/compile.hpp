@@ -9,9 +9,11 @@
 #ifndef BOOST_PROTO_COMPILE_HPP_EAN_04_01_2005
 #define BOOST_PROTO_COMPILE_HPP_EAN_04_01_2005
 
+#include <boost/xpressive/proto/detail/prefix.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/ref.hpp>
 #include <boost/xpressive/proto/traits.hpp>
+#include <boost/xpressive/proto/detail/suffix.hpp>
 
 namespace boost { namespace proto
 {

@@ -9,11 +9,15 @@
 #ifndef BOOST_PROTO_FWD_HPP_EAN_04_01_2005
 #define BOOST_PROTO_FWD_HPP_EAN_04_01_2005
 
-#include <boost/type_traits/remove_cv.hpp>
-#include <boost/type_traits/remove_reference.hpp>
-#include <boost/mpl/long.hpp>
+#include <boost/xpressive/proto/detail/prefix.hpp>
+
 #include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
+#include <boost/mpl/long.hpp>
+#include <boost/type_traits/remove_cv.hpp>
+#include <boost/type_traits/remove_reference.hpp>
+
+#include <boost/xpressive/proto/detail/suffix.hpp>
 
 #ifndef BOOST_PROTO_MAX_ARITY
 # define BOOST_PROTO_MAX_ARITY 5
@@ -220,6 +224,9 @@ namespace boost { namespace proto
 
     template<typename Derived = void>
     struct context;
+
+    template<typename T, typename Domain = void>
+    struct literal;
 
     namespace meta
     {

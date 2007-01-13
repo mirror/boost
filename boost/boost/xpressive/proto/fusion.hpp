@@ -9,7 +9,7 @@
 #ifndef BOOST_PROTO_FUSION_HPP_EAN_04_29_2006
 #define BOOST_PROTO_FUSION_HPP_EAN_04_29_2006
 
-#if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
+#include <boost/xpressive/proto/detail/prefix.hpp>
 
 #include <boost/xpressive/proto/proto.hpp>
 
@@ -36,11 +36,7 @@
 #include <boost/fusion/sequence/intrinsic/ext_/size_s.hpp>
 #include <boost/fusion/sequence/view/ext_/segmented_iterator.hpp>
 
-#else
-/// INTERNAL ONLY
-/// Needed to work around doxygen bug
-struct a_dummy_global;
-#endif
+#include <boost/xpressive/proto/detail/suffix.hpp>
 
 namespace boost { namespace proto { namespace detail
 {

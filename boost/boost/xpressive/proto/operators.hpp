@@ -10,20 +10,17 @@
 #ifndef BOOST_PROTO_OPERATORS_HPP_EAN_04_01_2005
 #define BOOST_PROTO_OPERATORS_HPP_EAN_04_01_2005
 
-#include <boost/preprocessor/punctuation/comma.hpp>
+#include <boost/xpressive/proto/detail/prefix.hpp>
 
-#if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
+#include <boost/preprocessor/punctuation/comma.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/tags.hpp>
 #include <boost/xpressive/proto/expr.hpp>
-#else
-/// INTERNAL ONLY
-/// Needed to work around doxygen bug
-struct a_dummy_global;
-#endif
+
+#include <boost/xpressive/proto/detail/suffix.hpp>
 
 namespace boost { namespace proto
 {

@@ -10,10 +10,12 @@
     #ifndef BOOST_PROTO_EXPR_HPP_EAN_04_01_2005
     #define BOOST_PROTO_EXPR_HPP_EAN_04_01_2005
 
+    #include <boost/xpressive/proto/detail/prefix.hpp>
+
     #include <boost/preprocessor/inc.hpp>
     #include <boost/preprocessor/dec.hpp>
     #include <boost/preprocessor/cat.hpp>
-    #include <boost/preprocessor/iterate.hpp>
+    #include <boost/preprocessor/iteration/iterate.hpp>
     #include <boost/preprocessor/punctuation/comma.hpp>
     #include <boost/preprocessor/facilities/intercept.hpp>
     #include <boost/preprocessor/repetition/repeat.hpp>
@@ -23,18 +25,13 @@
     #include <boost/preprocessor/repetition/enum_binary_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
-
-    #if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
     #include <boost/utility/result_of.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/ref.hpp>
     #include <boost/xpressive/proto/args.hpp>
     #include <boost/xpressive/proto/traits.hpp>
-    #else
-    /// INTERNAL ONLY
-    /// Needed to work around doxygen bug
-    struct a_dummy_global;
-    #endif
+
+    #include <boost/xpressive/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto
     {
@@ -59,9 +56,8 @@
         proto::unref(this->BOOST_PP_CAT(arg, n))\
         /**/
 
-    #define BOOST_PP_ITERATION_PARAMS_1 (4, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/expr.hpp>, 1))
+    #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/expr.hpp>))
     #include BOOST_PP_ITERATE()
-    #undef BOOST_PP_ITERATION_PARAMS_1
 
     #undef BOOST_PROTO_ARG
     #undef BOOST_PROTO_VOID
@@ -72,7 +68,7 @@
 
     #endif // BOOST_PROTO_EXPR_HPP_EAN_04_01_2005
 
-#elif BOOST_PP_ITERATION_DEPTH() == 1 && BOOST_PP_ITERATION_FLAGS() < 2
+#elif BOOST_PP_ITERATION_DEPTH() == 1
 
         template<typename Tag, typename Args>
         struct expr<Tag, Args, BOOST_PP_ITERATION() >
@@ -161,7 +157,6 @@
 
     #define BOOST_PP_ITERATION_PARAMS_2 (3, (1, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), <boost/xpressive/proto/expr.hpp>))
     #include BOOST_PP_ITERATE()
-    #undef BOOST_PP_ITERATION_PARAMS_2
         };
 
 #elif BOOST_PP_ITERATION_DEPTH() == 2

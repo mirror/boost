@@ -10,14 +10,10 @@
 #ifndef BOOST_PROTO_TRANSFORM_LIST_HPP_EAN_12_16_2006
 #define BOOST_PROTO_TRANSFORM_LIST_HPP_EAN_12_16_2006
 
-#if !defined(__WAVE__) || !defined(BOOST_PROTO_DOXYGEN_INVOKED)
+#include <boost/xpressive/proto/detail/prefix.hpp>
 #include <boost/fusion/sequence/container/list/cons.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
-#else
-/// INTERNAL ONLY
-/// Needed to work around doxygen bug
-struct a_dummy_global;
-#endif
+#include <boost/xpressive/proto/detail/suffix.hpp>
 
 namespace boost { namespace proto { namespace transform
 {
