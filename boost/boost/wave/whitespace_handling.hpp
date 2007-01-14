@@ -53,8 +53,8 @@ namespace util {
         using namespace boost::wave;
         int newlines = 0;
         if (T_CCOMMENT == token_id(token)) {
-        TokenT::string_type const& value = token.get_value();
-        TokenT::string_type::size_type p = value.find_first_of("\n");
+        typename TokenT::string_type const& value = token.get_value();
+        typename TokenT::string_type::size_type p = value.find_first_of("\n");
 
             while (TokenT::string_type::npos != p) {
                 ++newlines;
