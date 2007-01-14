@@ -18,6 +18,7 @@
 #include <boost/fusion/sequence/container/vector/vector50.hpp>
 
 #include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_empty.hpp>
 #include <boost/static_assert.hpp>
 #include <iostream>
 
@@ -36,6 +37,7 @@ main()
         vector0 vec;
         (void) vec;
         cout << "(): " << sizeof(vec) << endl;
+        cout << (boost::is_empty<vector0>::value ? "is empty" : "is not empty") << endl;
     }
 
     {
