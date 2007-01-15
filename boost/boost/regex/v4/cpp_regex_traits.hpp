@@ -562,7 +562,7 @@ typename cpp_regex_traits_implementation<charT>::string_type
       // std::collate<wchar_t>::transform returns a different string!
       // So as a workaround, we'll truncate the string at the first NULL
       // which _seems_ to work....
-#if BOOST_WORKAROUND(__BORLANDC__, < 0x600)
+#if BOOST_WORKAROUND(__BORLANDC__, < 0x580)
       result.erase(result.find(charT(0)));
 #else
       //
@@ -1039,3 +1039,4 @@ static_mutex& cpp_regex_traits<charT>::get_mutex_inst()
 #endif
 
 #endif
+
