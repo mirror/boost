@@ -242,25 +242,7 @@ namespace boost { namespace spirit2
         struct no_case {};
     }
 
-    struct no_case_directive
-    {
-        template<typename T>
-        typename proto::meta::unary_expr<
-            tag::no_case
-          , typename proto::meta::as_expr_ref<T>::type
-        >::type
-        operator[](T const &t) const
-        {
-            typedef typename proto::meta::unary_expr<
-                tag::no_case
-              , typename proto::meta::as_expr_ref<T>::type
-            >::type type;
-            type that = {proto::as_expr_ref(t)};
-            return that;
-        }
-    };
-
-    no_case_directive const no_case = {};
+    proto::meta::terminal<tag::no_case>::type const no_case = {{}};
 
     // The no-case transform, applies the tree-transform with
     // mpl::true_ as the visitor.
@@ -400,9 +382,10 @@ namespace boost { namespace spirit2
 
     // Directives such as no_case are handled here
     struct ToySpiritDirective
-      : no_case_transform< 
-            proto::trans::arg<
-                proto::meta::unary_expr< tag::no_case, ToySpiritGrammar >
+      : no_case_transform<
+            proto::trans::arg_c<
+                proto::meta::subscript< proto::meta::terminal<tag::no_case>, ToySpiritGrammar >
+              , 1
             >
         >
     {};

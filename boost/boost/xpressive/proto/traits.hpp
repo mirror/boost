@@ -457,30 +457,15 @@
             {};
         #endif
 
-        #if N == 0
-            // If N == 0, this could be a terminal, which must be handled differently
             template<typename Expr>
-            struct arg_c<Expr, 0>
-              : unref<typename Expr::arg0_type>
+            struct arg_c<Expr, N>
+              : unref<typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, N), _type)>
             {
-                static typename unref<typename Expr::arg0_type>::reference call(Expr const &expr)
+                static typename arg_c::reference call(Expr const &expr)
                 {
                     return proto::unref(expr.cast().BOOST_PP_CAT(arg, N));
                 }
             };
-        #else
-            template<typename Expr>
-            struct arg_c<Expr, N>
-            {
-                typedef typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, N), _type)::type type;
-                typedef type const &reference;
-
-                static type const &call(Expr const &expr)
-                {
-                    return expr.cast().BOOST_PP_CAT(arg, N).cast();
-                }
-            };
-        #endif
 
     #undef N
 
