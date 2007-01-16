@@ -1020,7 +1020,7 @@ namespace boost
                 , typename CharT
                 >
         Target lexical_cast(
-            BOOST_DEDUCED_TYPENAME boost::call_traits<Source>::value_type arg,
+            BOOST_DEDUCED_TYPENAME boost::call_traits<Source>::param_type arg,
             CharT* buf, std::size_t src_len)
         {
             typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
