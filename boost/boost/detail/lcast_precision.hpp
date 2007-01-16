@@ -15,6 +15,10 @@
 #include <boost/config.hpp>
 #include <boost/integer_traits.hpp>
 
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400)) // VC++ 8.0
+#include <boost/type_traits/is_abstract.hpp>
+#endif
+
 #ifdef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 #include <boost/assert.hpp>
 #else
@@ -23,6 +27,27 @@
 
 namespace boost { namespace detail {
 
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400))
+
+template<class T, bool IsAbstract> struct lcast_msvc_limits;
+
+template<class T>
+struct lcast_msvc_limits<T,false>
+  : std::numeric_limits<T>
+{
+};
+
+// Non-abstract class that does define a specialization of numeric_limits:
+class lcast_msvc_without_limits {};
+
+template<class T>
+struct lcast_msvc_limits<T,true>
+  : std::numeric_limits<lcast_msvc_without_limits>
+{
+};
+
+#endif // VC++ workaround
+
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 // Calculate an argument to pass to std::ios_base::precision from
 // lexical_cast. See alternative implementation for broken standard
@@ -30,7 +55,11 @@ namespace boost { namespace detail {
 template<class T>
 struct lcast_precision
 {
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400))
+    typedef lcast_msvc_limits<T, (boost::is_abstract<T>::value)> limits;
+#else
     typedef std::numeric_limits<T> limits;
+#endif
 
     BOOST_STATIC_CONSTANT(bool, use_default_precision =
             !limits::is_specialized || limits::is_exact
