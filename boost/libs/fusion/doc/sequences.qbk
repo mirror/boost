@@ -356,7 +356,7 @@ sequence container, and in many cases the most efficient.
 [heading Header]
 
     #include <boost/fusion/sequence/container/vector.hpp>
-    #include <boost/fusion/sequence/container/vector/vector_forward.hpp>
+    #include <boost/fusion/sequence/container/vector/vector_fwd.hpp>
 
     // numbered forms
     #include <boost/fusion/sequence/container/vector/vector10.hpp>

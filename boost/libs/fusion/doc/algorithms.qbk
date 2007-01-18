@@ -1082,7 +1082,7 @@ Constant. Returns a view which is lazily evaluated.
     struct triple
     {
         template<typename T>
-        struct apply
+        struct result
         {
             typedef T type;
         };
