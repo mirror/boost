@@ -23,6 +23,7 @@ test-suite conversion
     [ run ../lexical_cast_test.cpp ../../test/build//boost_unit_test_framework/<link>static ]
     [ run lexical_cast_loopback_test.cpp ../../test/build//boost_unit_test_framework/<link>static ]
     [ run lexical_cast_abstract_test.cpp ../../test/build//boost_unit_test_framework/<link>static ]
+    [ run lexical_cast_noncopyable_test.cpp ../../test/build//boost_unit_test_framework/<link>static ]
   ;
 
       
