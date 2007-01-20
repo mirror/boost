@@ -32,6 +32,7 @@
 #include "lexertl/rules.hpp"
 #include "lexertl/state_machine.hpp"
 #include "lexertl/consts.h"
+#include "lexertl/serialise.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost { namespace wave { namespace cpplexer { namespace lexertl 
@@ -82,12 +83,6 @@ public:
 
     bool load (istream& instrm);
     bool save (ostream& outstrm);
-    enum {
-        lexertl_signature = 0x4C54584C,    // "LXTL"
-        lexertl_version_100 = 0x0100,      // file format version
-        lexertl_last_known_version = lexertl_version_100,
-        lexertl_minor_version_mask = 0xFF
-    };
     
 private:
     ::lexertl::state_machine state_machine_;
@@ -524,100 +519,27 @@ lexertl<Iterator, Position>::next_token(Iterator &first, Iterator const &last,
 
 ///////////////////////////////////////////////////////////////////////////////
 //  load the DFA tables to/from a stream
-#define LEXERTL_IN(strm, val)                                                 \
-    strm.read((char*)&val, sizeof(val));                                      \
-    if (std::ios::goodbit != strm.rdstate()) return false                     \
-    /**/
-
 template <typename Iterator, typename Position>
 inline bool
-lexertl<Iterator, Position>::load (istream& instrm)
+lexertl<Iterator, Position>::load (std::istream& instrm)
 {
-// // ensure correct signature and version
-//     long in_long = 0;
-//     LEXERTL_IN (instrm, in_long);
-//     if (in_long != lexertl_signature)
-//         return false;       // not for us
-// 
-//     LEXERTL_IN (instrm, in_long);
-//     if ((in_long & ~lexertl_minor_version_mask) > lexertl_last_known_version)
-//         return false;       // too new for us
-// 
-//     LEXERTL_IN (instrm, in_long);
-//     if (in_long != (long)get_compilation_time())
-//         return false;       // not saved by us
-// 
-// // load the lookup and DFA tables
-//     long in_size = 0;
-//     LEXERTL_IN (instrm, in_size);
-//     state_machine_._lookup.resize(in_size);
-//     for (long l = 0; l < in_size; ++l)
-//     {
-//         LEXERTL_IN(instrm, in_long);
-//         state_machine_._lookup[l] = in_long;
-//     }
-// 
-//     LEXERTL_IN (instrm, state_machine_._dfa_alphabet);
-//     
-//     LEXERTL_IN (instrm, in_size);
-//     state_machine_._dfa.resize(in_size);
-//     for (long d = 0; d < in_size; ++d)
-//     {
-//         LEXERTL_IN(instrm, in_long);
-//         state_machine_._dfa[d] = in_long;
-//     }
-//     return true;
-    return false;
+    std::size_t version = 0;
+    ::lexertl::serialise::load(instrm, state_machine_, version);
+    if (version != (std::size_t)get_compilation_time())
+        return false;       // too new for us
+    return instrm.good();
 }
-
-#undef LEXERTL_IN
 
 ///////////////////////////////////////////////////////////////////////////////
 //  save the DFA tables to/from a stream
-#define LEXERTL_OUT(strm, val)                                                \
-    strm.write((char*)&val, sizeof(val));                                     \
-    if (!strm.good()) return false                                            \
-    /**/
-
 template <typename Iterator, typename Position>
 inline bool
-lexertl<Iterator, Position>::save (ostream& outstrm)
+lexertl<Iterator, Position>::save (std::ostream& outstrm)
 {
-// // save signature and version information
-//     long out_long = lexertl_signature;
-//     LEXERTL_OUT(outstrm, out_long);
-//     out_long = lexertl_version_100;
-//     LEXERTL_OUT(outstrm, out_long);
-//     out_long = (long)get_compilation_time();
-//     LEXERTL_OUT(outstrm, out_long);
-// 
-// // save lookup and DFA tables
-//     typedef ::lexertl::state_machine::size_t_vector::iterator iterator_type;
-//     
-//     out_long = static_cast<long>(state_machine_._lookup.size());
-//     LEXERTL_OUT(outstrm, out_long);
-//     iterator_type end_lookup = state_machine_._lookup.end();
-//     for (iterator_type it_lookup = state_machine_._lookup.begin();
-//          it_lookup != end_lookup; ++it_lookup)
-//     {
-//         LEXERTL_OUT(outstrm, *it_lookup);
-//     }
-// 
-//     LEXERTL_OUT(outstrm, state_machine_._dfa_alphabet);
-// 
-//     out_long = static_cast<long>(state_machine_._dfa.size());
-//     LEXERTL_OUT(outstrm, out_long);
-//     iterator_type end_dfa = state_machine_._dfa.end();
-//     for (iterator_type it_dfa = state_machine_._dfa.begin();
-//          it_dfa != end_dfa; ++it_dfa)
-//     {
-//         LEXERTL_OUT(outstrm, *it_dfa);
-//     }
-//     return true;
-    return false;
+    ::lexertl::serialise::save(state_machine_, outstrm, 
+        (std::size_t)get_compilation_time());
+    return outstrm.good();
 }
-
-#undef LEXERTL_OUT
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace lexer
