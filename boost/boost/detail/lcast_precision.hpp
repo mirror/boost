@@ -15,7 +15,9 @@
 #include <boost/config.hpp>
 #include <boost/integer_traits.hpp>
 
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400)) // VC++ 8.0
+#ifndef BOOST_NO_IS_ABSTRACT
+// Fix for SF:1358600 - lexical_cast & pure virtual functions & VC 8 STL
+#include <boost/mpl/if.hpp>
 #include <boost/type_traits/is_abstract.hpp>
 #endif
 
@@ -27,26 +29,7 @@
 
 namespace boost { namespace detail {
 
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400))
-
-template<class T, bool IsAbstract> struct lcast_msvc_limits;
-
-template<class T>
-struct lcast_msvc_limits<T,false>
-  : std::numeric_limits<T>
-{
-};
-
-// Non-abstract class that does define a specialization of numeric_limits:
-class lcast_msvc_without_limits {};
-
-template<class T>
-struct lcast_msvc_limits<T,true>
-  : std::numeric_limits<lcast_msvc_without_limits>
-{
-};
-
-#endif // VC++ workaround
+class lcast_abstract_stub {};
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
 // Calculate an argument to pass to std::ios_base::precision from
@@ -55,10 +38,14 @@ struct lcast_msvc_limits<T,true>
 template<class T>
 struct lcast_precision
 {
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400))
-    typedef lcast_msvc_limits<T, (boost::is_abstract<T>::value)> limits;
+#ifdef BOOST_NO_IS_ABSTRACT
+    typedef std::numeric_limits<T> limits; // No fix for SF:1358600.
 #else
-    typedef std::numeric_limits<T> limits;
+    typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<
+        boost::is_abstract<T>
+      , std::numeric_limits<lcast_abstract_stub>
+      , std::numeric_limits<T>
+      >::type limits;
 #endif
 
     BOOST_STATIC_CONSTANT(bool, use_default_precision =
@@ -109,7 +96,15 @@ inline std::streamsize lcast_get_precision(T* = 0)
     return lcast_precision<T>::value;
 #else // Follow lcast_precision algorithm at run-time:
 
-    typedef std::numeric_limits<T> limits;
+#ifdef BOOST_NO_IS_ABSTRACT
+    typedef std::numeric_limits<T> limits; // No fix for SF:1358600.
+#else
+    typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<
+        boost::is_abstract<T>
+      , std::numeric_limits<lcast_abstract_stub>
+      , std::numeric_limits<T>
+      >::type limits;
+#endif
 
     bool const use_default_precision =
         !limits::is_specialized || limits::is_exact;
