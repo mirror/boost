@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.transformation.functions.transform"></a><a href="transform.html" title="transform">transform</a></h5></div></div></div>
 <a name="fusion.algorithms.transformation.functions.transform.description"></a><h6>
-<a name="id571892"></a>
+<a name="id571910"></a>
             <a href="transform.html#fusion.algorithms.transformation.functions.transform.description">Description</a>
           </h6>
 <p>
@@ -38,7 +38,7 @@
             to each element of <tt class="computeroutput"><span class="identifier">seq</span></tt>.
           </p>
 <a name="fusion.algorithms.transformation.functions.transform.unary_version_synopsis"></a><h6>
-<a name="id571986"></a>
+<a name="id572004"></a>
             <a href="transform.html#fusion.algorithms.transformation.functions.transform.unary_version_synopsis">Unary
             version synopsis</a>
           </h6>
@@ -51,7 +51,7 @@
     <span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id572190"></a><p class="title"><b>Table 1.54. Parameters</b></p>
+<a name="id572208"></a><p class="title"><b>Table 1.54. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -88,7 +88,7 @@
 </table>
 </div>
 <a name="fusion.algorithms.transformation.functions.transform.expression_semantics"></a><h6>
-<a name="id572339"></a>
+<a name="id572357"></a>
             <a href="transform.html#fusion.algorithms.transformation.functions.transform.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -106,7 +106,7 @@
             within <tt class="computeroutput"><span class="identifier">seq</span></tt>.
           </p>
 <a name="fusion.algorithms.transformation.functions.transform.binary_version_synopsis"></a><h6>
-<a name="id572492"></a>
+<a name="id572510"></a>
             <a href="transform.html#fusion.algorithms.transformation.functions.transform.binary_version_synopsis">Binary
             version synopsis</a>
           </h6>
@@ -120,7 +120,7 @@
     <span class="identifier">Sequence1</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq1</span><span class="special">,</span> <span class="identifier">Sequence2</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq2</span><span class="special">,</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id572758"></a><p class="title"><b>Table 1.55. Parameters</b></p>
+<a name="id572776"></a><p class="title"><b>Table 1.55. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -176,28 +176,28 @@
             within <tt class="computeroutput"><span class="identifier">seq1</span></tt> and <tt class="computeroutput"><span class="identifier">seq2</span></tt> respectively.
           </p>
 <a name="fusion.algorithms.transformation.functions.transform.complexity"></a><h6>
-<a name="id573077"></a>
+<a name="id573095"></a>
             <a href="transform.html#fusion.algorithms.transformation.functions.transform.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithms.transformation.functions.transform.header"></a><h6>
-<a name="id573108"></a>
+<a name="id573126"></a>
             <a href="transform.html#fusion.algorithms.transformation.functions.transform.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">transform</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithms.transformation.functions.transform.example"></a><h6>
-<a name="id573214"></a>
+<a name="id573233"></a>
             <a href="transform.html#fusion.algorithms.transformation.functions.transform.example">Example</a>
           </h6>
 <pre class="programlisting">
 <span class="keyword">struct</span> <span class="identifier">triple</span>
 <span class="special">{</span>
     <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
-    <span class="keyword">struct</span> <span class="identifier">apply</span>
+    <span class="keyword">struct</span> <span class="identifier">result</span>
     <span class="special">{</span>
         <span class="keyword">typedef</span> <span class="identifier">T</span> <span class="identifier">type</span><span class="special">;</span>
     <span class="special">};</span>
