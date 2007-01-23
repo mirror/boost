@@ -116,7 +116,7 @@ Linear, exactly `__result_of_size__<Sequence>::value` applications of `f`.
     struct make_string
     {
         template<typename T, typename State>
-        struct apply
+        struct result
         {
             typedef std::string type;
         };
@@ -172,7 +172,7 @@ Linear, exactly `__result_of_size__<Sequence>::value` applications of `f`.
     struct make_string
     {
         template<typename T, typename State>
-        struct apply
+        struct result
         {
             typedef std::string type;
         };
@@ -1828,7 +1828,7 @@ Returns the result of type __transform__, given the sequence and __poly_func_obj
 
 [*Return type]: A model of __forward_sequence__.
 
-[*Semantics]: Returns a sequence with values `F::apply<E>::type` for each element type `E` in `Sequence`.
+[*Semantics]: Returns a sequence with values `F::result<E>::type` for each element type `E` in `Sequence`.
 
 [heading Complexity]
 Constant.
