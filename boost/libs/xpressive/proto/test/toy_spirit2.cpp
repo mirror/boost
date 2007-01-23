@@ -26,15 +26,7 @@ namespace boost
 {
     // global tags
     struct char_tag {};
-    struct ichar_tag {};
-    struct istring_tag {};
-    struct ichar_range_tag {};
-    struct never_tag {};
-    struct always_tag {};
     struct space_tag {};
-
-    inline std::ostream & operator<<(std::ostream &sout, char_tag)
-    { return sout; }
 
     // global primitives
     proto::meta::terminal<char_tag>::type const char_ = {{}};
@@ -46,59 +38,6 @@ namespace boost
 
 namespace boost { namespace spirit2
 {
-
-    // Spirit2-specific tags ...
-    struct parser_tag {};
-    struct no_case_tag {};
-    struct skipper_tag {};
-
-    // handy typedefs
-    typedef proto::meta::terminal<char_tag>::type anychar_p;
-    typedef proto::meta::terminal<ichar_tag>::type ianychar_p;
-    typedef proto::meta::terminal<char>::type chlit_p;
-    typedef proto::meta::terminal<std::string>::type str_p;
-    typedef proto::meta::terminal<char const *>::type szlit_p;
-    typedef proto::meta::terminal<istring_tag>::type ianystr_p;
-    typedef proto::meta::terminal<ichar_range_tag>::type ianychar_range_p;
-    typedef proto::meta::terminal<never_tag>::type never_p;
-    typedef proto::meta::terminal<space_tag>::type space_p;
-
-    struct CharLiteral
-      : proto::meta::terminal<char>
-    {};
-
-    struct NTBSLiteral
-      : proto::meta::terminal<char const *>
-    {};
-
-    struct StdStringLiteral
-      : proto::meta::terminal<std::string const &> // the const & is to work around a GCC bug
-    {};
-
-    struct CharParser
-      : proto::meta::function<anychar_p, CharLiteral>
-    {};
-
-    struct ICharParser
-      : proto::meta::function<ianychar_p, CharLiteral, CharLiteral>
-    {};
-
-    struct CharRangeParser
-      : proto::meta::function<anychar_p, CharLiteral, CharLiteral>
-    {};
-
-    struct IStrParser
-      : proto::meta::function<ianystr_p, StdStringLiteral>
-    {};
-
-    struct ICharRangeParser
-      : proto::meta::function<ianychar_range_p, CharLiteral, CharLiteral>
-    {};
-
-    ianychar_p const ichar_ = {{}};
-    ianystr_p const istr_ = {{}};
-    ianychar_range_p const ichar_range_ = {{}};
-
     namespace utility
     {
         inline bool char_icmp(char ch, char lo, char hi)
@@ -141,12 +80,6 @@ namespace boost { namespace spirit2
                 || in_range(std::tolower(ch), lo, hi)
                 || in_range(std::toupper(ch), lo, hi);
         }
-
-        struct any_convertible
-        {
-            template<typename T>
-            any_convertible(T const &);
-        };
 
         inline std::string to_istr(char const *sz)
         {
@@ -237,12 +170,7 @@ namespace boost { namespace spirit2
     };
 
     // The no-case directive
-    namespace tag
-    {
-        struct no_case {};
-    }
-
-    proto::meta::terminal<tag::no_case>::type const no_case = {{}};
+    struct no_case_tag {};
 
     // The no-case transform, applies the tree-transform with
     // mpl::true_ as the visitor.
@@ -266,10 +194,7 @@ namespace boost { namespace spirit2
         }
     };
 
-    ///////////////////////////////////////////////////////////////////////////////
-    /// Begin ToySpiritGrammar here
-    ///////////////////////////////////////////////////////////////////////////////
-
+    // remove_case specializations for stripping case-sensitivity from parsers
     template<typename T, bool CaseSensitive>
     struct remove_case
     {
@@ -315,6 +240,8 @@ namespace boost { namespace spirit2
         }
     };
 
+    // A case-sensitive transform that removes case conditionally, depending on
+    // a compile-time flag carried by the visitor.
     template<typename Grammar>
     struct case_sensitive
       : Grammar
@@ -337,12 +264,40 @@ namespace boost { namespace spirit2
         }
     };
 
+    ///////////////////////////////////////////////////////////////////////////////
+    /// Begin ToySpiritGrammar here
+    ///////////////////////////////////////////////////////////////////////////////
+
     struct ToySpiritGrammar;
+
+    struct AnyChar
+      : proto::meta::terminal<char_tag>
+    {};
+
+    struct CharLiteral
+      : proto::meta::terminal<char>
+    {};
+
+    struct NTBSLiteral
+      : proto::meta::terminal<char const *>
+    {};
+
+    struct CharParser
+      : proto::meta::function<AnyChar, CharLiteral>
+    {};
+
+    struct CharRangeParser
+      : proto::meta::function<AnyChar, CharLiteral, CharLiteral>
+    {};
+
+    struct NoCase
+      : proto::meta::terminal<no_case_tag>
+    {};
 
     // Extract the arg from terminals
     struct ToySpiritTerminal
       : proto::or_<
-            proto::trans::arg< proto::meta::terminal<char_tag> >
+            proto::trans::arg< AnyChar >
           , case_sensitive< proto::trans::arg< CharLiteral > >
           , case_sensitive< proto::trans::arg< NTBSLiteral > >
           , case_sensitive< 
@@ -384,7 +339,7 @@ namespace boost { namespace spirit2
     struct ToySpiritDirective
       : no_case_transform<
             proto::trans::arg_c<
-                proto::meta::subscript< proto::meta::terminal<tag::no_case>, ToySpiritGrammar >
+                proto::meta::subscript< NoCase, ToySpiritGrammar >
               , 1
             >
         >
@@ -404,38 +359,54 @@ namespace boost { namespace spirit2
     /// End ToySpiritGrammar
     ///////////////////////////////////////////////////////////////////////////////
 
-    template<typename Iterator>
-    struct parser
+    // Globals
+    NoCase::type const no_case = {{}};
+
+    // Parser
+    template<typename Iterator, typename Derived>
+    struct with_reset
     {
-        parser(Iterator begin, Iterator end)
+        with_reset(Iterator begin, Iterator end)
           : first(begin), second(end)
         {}
 
-        struct with_reset
+        template<typename T>
+        bool operator()(T const &t) const
         {
-            with_reset(parser const &that, Iterator where)
-              : that_(that), where_(where)
-            {}
+            Iterator tmp = this->first;
+            if((*static_cast<Derived const *>(this))(t))
+                return true;
+            this->first = tmp;
+            return false;
+        }
 
-            template<typename T>
-            bool operator()(T const &t) const
-            {
-                this->that_.first = this->where_;
-                return this->that_(t);
-            }
-        private:
-            parser const &that_;
-            Iterator where_;
-        };
+        bool done() const
+        {
+            return this->first == this->second;
+        }
 
-        template<typename, typename>
+        mutable Iterator first;
+        Iterator second;
+    };
+
+    template<typename Iterator>
+    struct parser
+      : with_reset<Iterator, parser<Iterator> >
+    {
+        typedef with_reset<Iterator, parser<Iterator> > with_reset;
+
+        parser(Iterator begin, Iterator end)
+          : with_reset(begin, end)
+        {}
+
+        template<typename, typename> // used by fusion::fold
         struct result
         {
             typedef bool type;
         };
 
         template<typename T>
-        bool operator()(T const &t, bool success) const
+        bool operator()(T const &t, bool success) const // used by fusion::fold
         {
             return success && (*this)(t);
         }
@@ -443,7 +414,7 @@ namespace boost { namespace spirit2
         template<typename List>
         bool operator()(composite<proto::tag::bitwise_or, List> const &alternates) const
         {
-            return fusion::any(alternates.elems(), with_reset(*this, this->first));
+            return fusion::any(alternates.elems(), *static_cast<with_reset const *>(this));
         }
 
         template<typename List>
@@ -501,15 +472,6 @@ namespace boost { namespace spirit2
             ++this->first;
             return true;
         }
-
-    private:
-        bool done() const
-        {
-            return this->first == this->second;
-        }
-
-        mutable Iterator first;
-        Iterator second;
     };
 
     template<typename Rule, typename Iterator>
