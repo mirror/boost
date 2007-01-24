@@ -31,6 +31,24 @@ BOOST_MPL_HAS_XXX_TRAIT_DEF(result_type)
 
 template<typename F, typename FArgs, bool HasResultType> struct result_of_impl;
 
+template<typename F>
+struct result_of_void_impl
+{
+  typedef void type;
+};
+
+template<typename R>
+struct result_of_void_impl<R (*)(void)>
+{
+  typedef R type;
+};
+
+template<typename R>
+struct result_of_void_impl<R (&)(void)>
+{
+  typedef R type;
+};
+
 template<typename F, typename FArgs>
 struct result_of_impl<F, FArgs, true>
 {
@@ -44,9 +62,8 @@ struct result_of_impl<F, FArgs, false>
 
 template<typename F>
 struct result_of_impl<F, F(void), false>
-{
-  typedef void type;
-};
+  : result_of_void_impl<F>
+{};
 
 } // end namespace detail
 

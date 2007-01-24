@@ -50,10 +50,13 @@ int main()
 
   typedef int (*func_ptr)(float, double);
   typedef int (&func_ref)(float, double);
+  typedef int (*func_ptr_0)();
+  typedef int (&func_ref_0)();
   typedef int (X::*mem_func_ptr)(float);
   typedef int (X::*mem_func_ptr_c)(float) const;
   typedef int (X::*mem_func_ptr_v)(float) volatile;
   typedef int (X::*mem_func_ptr_cv)(float) const volatile;
+  typedef int (X::*mem_func_ptr_0)();
 
   BOOST_STATIC_ASSERT((is_same<result_of<int_result_type(float)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<int_result_of(double)>::type, int>::value));
@@ -69,9 +72,13 @@ int main()
   BOOST_STATIC_ASSERT((is_same<result_of<int_result_type_and_float_result_of_template<void>(char)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<func_ptr(char, float)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<func_ref(char, float)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<result_of<func_ptr_0()>::type, int>::value)); 
+  BOOST_STATIC_ASSERT((is_same<result_of<func_ref_0()>::type, int>::value)); 
   BOOST_STATIC_ASSERT((is_same<result_of<mem_func_ptr(X,char)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<mem_func_ptr_c(X,char)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<mem_func_ptr_v(X,char)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<mem_func_ptr_cv(X,char)>::type, int>::value));
+  BOOST_STATIC_ASSERT((is_same<result_of<mem_func_ptr_0(X)>::type, int>::value)); 
+
   return 0;
 }
