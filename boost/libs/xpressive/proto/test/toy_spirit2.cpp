@@ -94,25 +94,25 @@ namespace boost { namespace spirit2
         }
     } // namespace utility
 
-    // composite tags
-    inline char const *tag_name(proto::tag::bitwise_or) { return "alternate"; }
-    inline char const *tag_name(proto::tag::right_shift) { return "sequence"; }
-
     // Composite parser that contains a Fusion cons-list of other parsers
     // OR
     // A compiler that compiles an expression and wraps the result in 
     // a composite<> wrapper
-    template<typename Tag, typename ListOrGrammar>
+    template<typename Tag, typename List>
     struct composite
-      : ListOrGrammar, Tag
     {
-        composite();
-
-        explicit composite(ListOrGrammar const &list)
-          : ListOrGrammar(list)
+        composite(List const &list)
+          : elems(list)
         {}
 
-        ListOrGrammar const &elems() const { return *this; }
+        List elems;
+    };
+
+    template<typename Tag, typename Grammar>
+    struct as_composite
+      : Grammar
+    {
+        as_composite();
 
         // The apply<> struct and the call() member are to satisfy the
         // proto compiler/transform protocol
@@ -121,7 +121,7 @@ namespace boost { namespace spirit2
         {
             typedef composite<
                 Tag
-              , typename ListOrGrammar::template apply<Expr, State, Visitor>::type
+              , typename Grammar::template apply<Expr, State, Visitor>::type
             > type;
         };
 
@@ -130,7 +130,7 @@ namespace boost { namespace spirit2
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
             return typename apply<Expr, State, Visitor>::type
-                (ListOrGrammar::call(expr, state, visitor));
+                (Grammar::call(expr, state, visitor));
         }
     };
 
@@ -316,7 +316,7 @@ namespace boost { namespace spirit2
     // sequence rule folds all >>'s together into a list
     // and wraps the result in a composite<> wrapper
     struct ToySpiritSequence
-      : composite<
+      : as_composite<
             proto::tag::right_shift
           , proto::trans::reverse_fold_to_list<
                 proto::meta::right_shift<ToySpiritGrammar, ToySpiritGrammar>
@@ -327,7 +327,7 @@ namespace boost { namespace spirit2
     // alternate rule folds all |'s together into a list
     // and wraps the result in a composite<> wrapper
     struct ToySpiritAlternate
-      : composite<
+      : as_composite<
             proto::tag::bitwise_or
           , proto::trans::reverse_fold_to_list<
                 proto::meta::bitwise_or<ToySpiritGrammar, ToySpiritGrammar>
@@ -414,13 +414,13 @@ namespace boost { namespace spirit2
         template<typename List>
         bool operator()(composite<proto::tag::bitwise_or, List> const &alternates) const
         {
-            return fusion::any(alternates.elems(), *static_cast<with_reset const *>(this));
+            return fusion::any(alternates.elems, *static_cast<with_reset const *>(this));
         }
 
         template<typename List>
         bool operator()(composite<proto::tag::right_shift, List> const &sequence) const
         {
-            return fusion::fold(sequence.elems(), true, *this);
+            return fusion::fold(sequence.elems, true, *this);
         }
 
         bool operator()(char_tag ch) const
