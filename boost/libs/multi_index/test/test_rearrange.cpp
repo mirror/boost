@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for rearrange operations.
  *
- * Copyright 2003-2006 Joaquín M López Muñoz.
+ * Copyright 2003-2007 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -32,7 +32,7 @@ using namespace boost::multi_index;
   int v[]=check_range;\
   std::size_t size_v=sizeof(v)/sizeof(int);\
   BOOST_CHECK(std::size_t(std::distance((p).begin(),(p).end()))==size_v);\
-  BOOST_CHECK(std::equal((p).begin(),(p).end(),v));\
+  BOOST_CHECK(std::equal((p).begin(),(p).end(),&v[0]));\
 }
 
 #undef CHECK_VOID_RANGE

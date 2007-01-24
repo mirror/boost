@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for range().
  *
- * Copyright 2003-2004 Joaquín M López Muñoz.
+ * Copyright 2003-2007 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -33,7 +33,7 @@ typedef int_set::iterator int_set_iterator;
   int v[]=check_range;\
   std::size_t size_v=sizeof(v)/sizeof(int);\
   BOOST_CHECK(std::size_t(std::distance((p).first,(p).second))==size_v);\
-  BOOST_CHECK(std::equal((p).first,(p).second,v));\
+  BOOST_CHECK(std::equal((p).first,(p).second,&v[0]));\
 }
 
 #undef CHECK_VOID_RANGE
