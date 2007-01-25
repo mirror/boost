@@ -125,6 +125,7 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #     define BOOST_HAS_MS_INT64
 #  endif
 #  define BOOST_NO_SWPRINTF
+#  define BOOST_NO_TWO_PHASE_NAME_LOOKUP
 #elif defined(_WIN32)
 #  define BOOST_DISABLE_WIN32
 #endif
@@ -144,13 +145,14 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #endif
 //
 // last known and checked version:
-#if (BOOST_INTEL_CXX_VERSION > 910)
+#if (BOOST_INTEL_CXX_VERSION > 1000)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  elif defined(_MSC_VER)
 #     pragma message("Unknown compiler version - please run the configure tests and report the results")
 #  endif
 #endif
+
 
 
 
