@@ -524,7 +524,7 @@ inline bool
 lexertl<Iterator, Position>::load (std::istream& instrm)
 {
     std::size_t version = 0;
-    ::lexertl::serialise::load(instrm, state_machine_, version);
+    ::lexertl::serialise::load_as_binary(instrm, state_machine_, version);
     if (version != (std::size_t)get_compilation_time())
         return false;       // too new for us
     return instrm.good();
@@ -536,7 +536,7 @@ template <typename Iterator, typename Position>
 inline bool
 lexertl<Iterator, Position>::save (std::ostream& outstrm)
 {
-    ::lexertl::serialise::save(state_machine_, outstrm, 
+    ::lexertl::serialise::save_as_binary(state_machine_, outstrm, 
         (std::size_t)get_compilation_time());
     return outstrm.good();
 }
