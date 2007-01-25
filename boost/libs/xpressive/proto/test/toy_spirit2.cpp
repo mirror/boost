@@ -11,6 +11,7 @@
 #include <iostream>
 #include <boost/assert.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/call_traits.hpp>
 #include <boost/utility/result_of.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/xpressive/proto/proto.hpp>
@@ -199,7 +200,7 @@ namespace boost { namespace spirit2
     struct remove_case
     {
         typedef T type;
-        static T const &call(T const &t)
+        static typename call_traits<T>::const_reference call(typename call_traits<T>::const_reference t)
         {
             return t;
         }
