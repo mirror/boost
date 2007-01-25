@@ -235,7 +235,7 @@
         };
 
         template<typename Pred>
-        struct if_
+        struct if_ : has_identity_transform
         {
             typedef if_ type;
         };
