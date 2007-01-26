@@ -224,26 +224,26 @@ namespace boost { namespace xpressive
 
     template<typename Char>
     struct XpressiveModifiedSubExpression
-      : proto::meta::binary_expr<detail::modifier_tag, mpl::_, XpressiveGrammar<Char> >
+      : proto::meta::binary_expr<detail::modifier_tag, proto::_, XpressiveGrammar<Char> >
     {};
 
     template<typename Char>
     struct XpressiveComplementedCharacterLiteral
       : proto::or_<
-            proto::meta::complement<proto::meta::terminal<detail::literal_placeholder<Char, mpl::_> > >
-          , proto::meta::complement<proto::meta::terminal<detail::literal_placeholder<char, mpl::_> > >
+            proto::meta::complement<proto::meta::terminal<detail::literal_placeholder<Char, proto::_> > >
+          , proto::meta::complement<proto::meta::terminal<detail::literal_placeholder<char, proto::_> > >
         >
     {};
 
     template<>
     struct XpressiveComplementedCharacterLiteral<char>
-      : proto::meta::complement<proto::meta::terminal<detail::literal_placeholder<char, mpl::_> > >
+      : proto::meta::complement<proto::meta::terminal<detail::literal_placeholder<char, proto::_> > >
     {};
 
     template<typename Char>
     struct XpressiveComplementedExpression
       : proto::and_<
-            proto::meta::complement<mpl::_>
+            proto::meta::complement<proto::_>
           , proto::or_<
                 proto::meta::complement<proto::meta::terminal<detail::posix_charset_placeholder> >
               , proto::meta::complement<proto::meta::terminal<detail::logical_newline_placeholder> >
@@ -258,7 +258,7 @@ namespace boost { namespace xpressive
     struct XpressiveTerminal
       : proto::or_<
             proto::and_<
-                proto::meta::terminal<mpl::_>
+                proto::meta::terminal<proto::_>
               , proto::if_<detail::is_xpressive_terminal<Char, proto::meta::arg<mpl::_> > >
             >
           , XpressiveComplementedExpression<Char>
@@ -275,11 +275,11 @@ namespace boost { namespace xpressive
     template<typename Char>
     struct XpressiveQuantified
       : proto::and_<
-            proto::meta::unary_expr<mpl::_, XpressiveGrammar<Char> >
+            proto::meta::unary_expr<proto::_, XpressiveGrammar<Char> >
           , proto::or_<
-                proto::meta::unary_star< mpl::_ >
-              , proto::meta::unary_plus< mpl::_ >
-              , proto::meta::logical_not< mpl::_ >
+                proto::meta::unary_star< proto::_ >
+              , proto::meta::unary_plus< proto::_ >
+              , proto::meta::logical_not< proto::_ >
               , proto::if_<detail::is_generic_repeat<proto::meta::tag<mpl::_> > >
             >
         >

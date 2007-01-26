@@ -54,8 +54,8 @@ namespace boost { namespace xpressive { namespace detail
     struct XpressiveLocaleModifier
       : proto::meta::binary_expr<
             modifier_tag
-          , proto::meta::terminal<locale_modifier<mpl::_> >
-          , mpl::_
+          , proto::meta::terminal<locale_modifier<proto::_> >
+          , proto::_
         >
     {};
 

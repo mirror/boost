@@ -53,10 +53,10 @@ struct placeholder_arity
 struct LambdaGrammar
   : max_arity<
         proto::or_<
-            placeholder_arity< proto::meta::terminal<placeholder<mpl::_> > >
-          , proto::trans::always< proto::meta::terminal<mpl::_>, mpl::int_<0> >
-          , proto::trans::arg< proto::meta::unary_expr<mpl::_, LambdaGrammar> >
-          , proto::trans::fold< proto::meta::binary_expr<mpl::_, LambdaGrammar, LambdaGrammar> >
+            placeholder_arity< proto::meta::terminal<placeholder<proto::_> > >
+          , proto::trans::always< proto::meta::terminal<proto::_>, mpl::int_<0> >
+          , proto::trans::arg< proto::meta::unary_expr<proto::_, LambdaGrammar> >
+          , proto::trans::fold< proto::meta::binary_expr<proto::_, LambdaGrammar, LambdaGrammar> >
         >
     >
 {};

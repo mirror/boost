@@ -21,7 +21,7 @@ namespace boost { namespace xpressive { namespace detail
     // MarkerPattern
     // (s1= ...) is a marker
     struct MarkerPattern
-      : proto::meta::assign<basic_mark_tag, mpl::_>
+      : proto::meta::assign<basic_mark_tag, proto::_>
     {};
 
     ///////////////////////////////////////////////////////////////////////////////

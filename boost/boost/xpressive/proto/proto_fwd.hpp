@@ -441,6 +441,8 @@ namespace boost { namespace proto
     template<typename Grammar>
     struct has_pass_through_transform;
 
+    struct _;
+
 }} // namespace boost::proto
 
 #endif

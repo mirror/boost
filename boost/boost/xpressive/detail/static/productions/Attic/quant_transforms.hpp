@@ -23,7 +23,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // RepeaterPattern
     struct RepeaterPattern
-      : proto::meta::right_shift<proto::meta::terminal<repeat_begin_matcher>, mpl::_>
+      : proto::meta::right_shift<proto::meta::terminal<repeat_begin_matcher>, proto::_>
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
