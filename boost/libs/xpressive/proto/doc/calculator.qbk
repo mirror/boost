@@ -91,10 +91,10 @@ to make it a calculator by defining an evaluation context.
 
 [h3 Defining an Evaluation Context]
 
-To make your expression templates actually do work, you'll need to define
-an ['evaluation context]. The context is like a function object that associates
-behaviors with the node types in your expression tree. And example should make
-it clear.
+No doubt you want your expression templates to actually /do/ something. One 
+approach is to define an ['evaluation context]. The context is like a function 
+object that associates behaviors with the node types in your expression tree. 
+An example should make it clear.
 
     struct calculator_context
     {

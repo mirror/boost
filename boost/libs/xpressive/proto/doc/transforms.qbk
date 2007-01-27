@@ -1,0 +1,257 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[section Tree Transformations]
+
+Sometimes, rather than immediately executing an expression template, you'd 
+like to transform it into some other object. Maybe the transformation is simple,
+like converting all references into values. Maybe it's complicated, like 
+transforming an expression template into a finite-state automata for matching a
+regular expression. Proto provides a framework for applying tree 
+transformations and several canned transformations that are generally useful.
+
+[h3 Transformation Overview]
+
+Defining tree transformations involves defining the meta-grammar for your DSEL
+and decorating it with transformations. Each rule in your meta-grammar will 
+have an associated transform describing how sub-expressions matching that rule 
+are to be transformed. Just as the meta-grammar is defined recursively, so too
+is the tree transformation. 
+
+A meta-grammar decorated with transforms has a static member function named
+`call()` which takes three parameters:
+
+* `expr`    -- the expression to transform
+* `state`   -- the state of the transformation so far
+* `visitor` -- any optional auxiliary mutable state information
+
+It also has a nested `apply<>` template which is used to calculate the return 
+type of the `call()` member function.
+
+Let's say we have a meta-grammar called `Grammar`, an expression template 
+object called `expr` that matches the meta-grammar, and `state` and `visitor` 
+objects of your choosing. What happens when you call 
+`Grammar::call(expr, state, visitor)`? Well, if `Grammar` were defined as
+`meta::right_shift< Rule1, Rule2 >`, for instance, it might transform the left 
+child of `expr` according to `Rule1`'s transform, do the same thing to the 
+right child using `Rule2`, and combine the results somehow. Of course, `Rule1` 
+and `Rule2` might be defined in terms of other rules with other transforms, so 
+the process executes recursively. Some transforms, the binary `fold<>` in 
+particular, use the result of transforming one child as the `state` parameter 
+when transforming the other child. In this way, the results of the recursive
+transformations can be accumulated bottom-up.
+
+That's it, in a nutshell. Now let's crack this nut and peek inside.
+
+[h3 Defining a Grammar]
+
+Let's have another look at our trusty calculator example. If you recall, the
+calculator allows the lazy evaluation of arithmetic expressions, with 
+placeholders substituted with actual values provided at evaluation time. Valid
+expressions are of the form:
+
+    (_1 + 3)
+    (_2 - _1) / _2 * 100
+
+... and so on. In the first expression, one argument must be provided before 
+the expression can be evaluated. In the second, two arguments are needed. We
+could say the /arity/ of the first expression is one and of the second is two.
+The arity is determined by the highest placeholder in the expression. Our job
+will be to write a transform that calculates the arity of any calculator 
+expression.
+
+First, we must write the grammar for the calculator. It's really very simple.
+Calculator expression can be made up of any combination of 5 constituents:
+
+* Placeholder 1
+* Placeholder 2
+* A literal
+* Unary operations
+* Binary operations
+
+We can immediately write the calculator grammar as follows:
+
+    using namespace proto;
+
+    struct CalculatorGrammar
+      : or_<
+            meta::terminal< placeholder1 >
+          , meta::terminal< placeholder2 >
+          , meta::terminal< _ >
+          , meta::unary_expr< _, CalculatorGrammar >
+          , meta::binary_expr< _, CalculatorGrammar, CalculatorGrammar >
+        >
+    {};
+
+We can read this as follows: a calculator expression is either placeholder 1, 
+placeholder 2, some other terminal, or some unary or binary operator whose 
+operands are calculator expressions. Recall that `proto::_` is a wildcard which
+matches anything. So `meta::terminal<_>` will match any terminal, and 
+`meta::unary_expr< _, CalculatorGrammar >` will match any unary expression
+for which the operand matches CalculatorGrammar (the `_` matches any operator
+tag).
+
+[h3 Writing the Transform]
+
+It's straightforward to describe in words how the arity of an expression should
+be calculated. First, we describe the arity of each of the 5 constituents in 
+the calculator grammar.
+
+[table Calculator Sub-Expression Arities
+    [[Sub-Expression]       [Arity]]
+    [[Placeholder 1]        [`1`]]
+    [[Placeholder 2]        [`2`]]
+    [[Literal]              [`0`]]
+    [[Unary Expression]     [ /arity of the operand/ ]]
+    [[Binary Expression]    [ /max arity of the two operands/ ]]
+]
+
+The total arity of a calculator expression is found by recursively evaluating
+the arity of all of the sub-expressions and taking the maximum. 
+
+Let's look at the sub-expression for placeholder 1. It is matched by this part 
+of our grammar: `meta::terminal< placeholder1 >`. We want to associate this 
+part of our grammar with an arity of `1`. We do that by attaching a transform. 
+Since the arity of an expression can be evaluated at compile time, let's use 
+`mpl::int_<1>` to represent the arity of the first placeholder. The following
+attaches a transform that always evaluates to `mpl::int_<1>`:
+
+    trans::always< meta::terminal< placeholder1 >, mpl::int_<1> >
+
+This grammar rule will match any `placeholder1` terminal, and will transform it
+to `mpl::int_<1>`. Likewise, we will use the `trans::always<>` transform to 
+transform `placeholder2` terminals into `mpl::int_<2>`, and other terminals 
+into `mpl::int_<0>`.
+
+Next, let's write a transform for unary operators that returns the arity of the
+operand. It is simply:
+
+    trans::arg< meta::unary_expr< _, CalculatorGrammar > >
+
+As you might expect, the `trans::arg<>` transform returns the argument of the 
+unary expression. This looks simple, but there is quite a lot going on here. 
+
+First, you should know that transforms are written so that they can be chained.
+So `trans::arg<>` invokes the transform associated with 
+`meta::unary_expr< _, CalculatorGrammar >` before it does anything else.
+
+Second, `meta::unary_expr< _, CalculatorGrammar >`, has a default transform 
+associated with it. It is a /pass-through/ transform. Given an expression 
+of the form `expr< T, arg1< X > >`, the transform will invoke the 
+`CalculatorGrammar` transform (which we haven't completely defined yet -- 
+patience) on `X` resulting in `Y`, and then reassemble the expression as 
+`expr< T, arg1< Y > >`. 
+
+So, to put a few things together, consider the calculator expression `+_1`,
+which would have the following type:
+
+    expr< tag::unary_plus, arg1< 
+        expr< tag::terminal, arg1< placeholder1 > >
+    > >
+
+If we executed the `meta::unary_expr< _, CalculatorGrammar >` transform on this
+expression, we would expect to get:
+
+    expr< tag::unary_plus, arg1< 
+        mpl::int_<1>
+    > >
+
+And if we added the `trans::arg<>` transform also, as in 
+`trans::arg< meta::unary_expr< _, CalculatorGrammar > >`, we expect the result
+to be:
+
+    mpl::int_<1>
+
+Which is exactly what we want.
+
+[note *Default Transforms*\n
+\n
+All the tools Proto provides for defining grammar rules have default transforms
+associated with them. Just as `meta::unary_expr<>` has a pass-through transform,
+so too does `meta::binary_expr<>`, `meta::right_shift<>`, and all the others.
+`proto::or_<>` has a default transform which evaluates the transform of the 
+branch that matched. Even `proto::expr<>` and `proto::_` have no-op default 
+transforms that simply return unmodified the expressions passed to them.
+]
+
+The arity of a binary operator is the maximum of the arity of the left and 
+right operands. Proto does not provide a transform that can help us, so we must
+write our own. This is what it looks like, and we'll describe it below:
+
+    template<typename Grammar>
+    struct binary_max
+      : Grammar
+    {
+        template<typename Expr, typename State, typename Visitor>
+        struct apply
+        {
+            typedef typename mpl::apply_wrap3<Grammar, Expr, State, Visitor>::type expr_type;
+            typedef typename meta::left<expr_type>::type left_arity;
+            typedef typename meta::right<expr_type>::type right_arity;
+            typedef typename mpl::max<left_arity, right_arity>::type type;
+        };
+
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &, State const &, Visitor &)
+        {
+            return typename apply<Expr, State, Visitor>::type();
+        }
+    };
+
+This transform will be used as follows: 
+`binary_max< meta::binary_expr< _, CalculatorGrammar, CalculatorGrammar > >`.
+First, note that the transform is a template that takes a Grammar as a template
+parameter. It inherits from the Grammar, as all transforms must. Next, we 
+define a nested `apply<>` template which calculates the return type. The first 
+thing it does is invoke Grammar's transform. Recall that `meta::binary_expr<>` 
+has a pass-through transform. Given an expression like 
+`expr< T, arg2< A, B > >`, it transforms it to `expr< T, arg2< X, Y > >`, where 
+`X` and `Y` are the results of transforming `A` and `B` according to 
+`CalculatorGrammar`. 
+
+Next, we extract from this transformed binary expression the left and right 
+argument types. As the arguments were transformed in the previous step, we
+expect them to already be of the form `mpl::int_<N>`. Then we use `mpl::max<>`
+to find the maximum, and we're done.
+
+The static `call()` member function is needed to complete the transform 
+interface. It simply returns a default-constructed object, which will be an
+instantiation of `mpl::int_<>`.
+
+Piecing it all together, the complete `CalculatorGrammar` looks like this:
+
+    struct CalculatorGrammar
+      : or_<
+            trans::always< meta::terminal< placeholder1 >, mpl::int_<1> >
+          , trans::always< meta::terminal< placeholder2 >, mpl::int_<2> >
+          , trans::always< meta::terminal< _ >, mpl::int_<0> >
+          , trans::arg< meta::unary_expr< _, CalculatorGrammar > >
+          , binary_max< meta::binary_expr< _, CalculatorGrammar, CalculatorGrammar > >
+        >
+    {};
+
+We can use our CalculatorGrammar transform to calculate the arity of any
+calculator expression:
+
+    int i = 0; // not used, dummy state and visitor parameter
+
+    std::cout << CalculatorGrammar::call( lit(100) * 200, i, i) << '\n';
+    std::cout << CalculatorGrammar::call( (_1 - _1) / _1 * 100, i, i) << '\n';
+    std::cout << CalculatorGrammar::call( (_2 - _1) / _2 * 100, i, i) << '\n';
+
+This displays the following:
+
+[pre
+0
+1
+2
+]
+
+(Aside: this uses the fact that `mpl::int_<1>` has a conversion to `int(1)`.)
+
+[endsect]

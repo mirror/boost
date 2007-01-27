@@ -95,18 +95,19 @@
             {};
 
             // left
+                // BUGBUG this forces the instantiation of Expr. Couldn't we
+                // partially specialize left<> on expr< T, A > and 
+                // ref< expr< T, A > > and return A::arg0 ?
             template<typename Expr>
             struct left
-            {
-                typedef typename Expr::arg0_type::type type;
-            };
+              : unref<typename Expr::arg0_type>
+            {};
 
             // right
             template<typename Expr>
             struct right
-            {
-                typedef typename Expr::arg1_type::type type;
-            };
+              : unref<typename Expr::arg1_type>
+            {};
 
             // terminal
             template<typename T>
