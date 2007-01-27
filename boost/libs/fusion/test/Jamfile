@@ -103,6 +103,7 @@ import testing ;
     [ run sequence/vector_value_at.cpp :  :  :  : ]
     [ run sequence/zip_view.cpp : : : : ]
     [ run sequence/zip_view2.cpp : : : : ]
+    [ run sequence/deduce_sequence.cpp : : : : ]
 #   [ compile-fail xxx.cpp :  :  :  :  ]
     
     ;
