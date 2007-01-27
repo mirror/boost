@@ -4,7 +4,7 @@
 <title> Operator
         !=</title>
 <link rel="stylesheet" href="../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../operators.html" title="Operators">
 <link rel="prev" href="operator_equality.html" title=" Operator
@@ -30,14 +30,14 @@
         !="> Operator
         !=</a></h4></div></div></div>
 <a name="fusion.iterators.operators.operator_inequality.description"></a><h5>
-<a name="id468553"></a>
+<a name="id937480"></a>
           <a href="operator_inequality.html#fusion.iterators.operators.operator_inequality.description">Description</a>
         </h5>
 <p>
           Compares 2 iterators for inequality.
         </p>
 <a name="fusion.iterators.operators.operator_inequality.synopsis"></a><h5>
-<a name="id468584"></a>
+<a name="id937508"></a>
           <a href="operator_inequality.html#fusion.iterators.operators.operator_inequality.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -48,7 +48,7 @@
 <span class="emphasis"><em>unspecified</em></span> <span class="keyword">operator</span><span class="special">==(</span><span class="identifier">I</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">i</span><span class="special">,</span> <span class="identifier">J</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">i</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id468726"></a><p class="title"><b>Table 1.10. Parameters</b></p>
+<a name="id937633"></a><p class="title"><b>Table 1.10. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -62,7 +62,7 @@
 </tr></thead>
 <tbody><tr>
 <td>
-<tt class="computeroutput"><span class="identifier">i</span></tt>, <tt class="computeroutput"><span class="identifier">j</span></tt>
+<code class="computeroutput"><span class="identifier">i</span></code>, <code class="computeroutput"><span class="identifier">j</span></code>
 </td>
 <td>Any fusion iterators</td>
 <td>Operation's
@@ -71,20 +71,20 @@
 </table>
 </div>
 <a name="fusion.iterators.operators.operator_inequality.expression_semantics"></a><h5>
-<a name="id468801"></a>
+<a name="id937701"></a>
           <a href="operator_inequality.html#fusion.iterators.operators.operator_inequality.expression_semantics">Expression
           Semantics</a>
         </h5>
 <p>
-          <span class="bold"><b>Return type</b></span>: Convertible to <tt class="computeroutput"><span class="keyword">bool</span></tt>.
+          <span class="bold"><strong>Return type</strong></span>: Convertible to <code class="computeroutput"><span class="keyword">bool</span></code>.
         </p>
 <p>
-          <span class="bold"><b>Semantics</b></span>: Equivalent to <tt class="computeroutput"><span class="special">!</span><a href="../metafunctions/equal_to.html" title="equal_to"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">equal_to</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span><span class="identifier">J</span><span class="special">&gt;::</span><span class="identifier">value</span></tt>
-          where <tt class="computeroutput"><span class="identifier">I</span></tt> and <tt class="computeroutput"><span class="identifier">J</span></tt> are the types of <tt class="computeroutput"><span class="identifier">i</span></tt>
-          and <tt class="computeroutput"><span class="identifier">j</span></tt> respectively.
+          <span class="bold"><strong>Semantics</strong></span>: Equivalent to <code class="computeroutput"><span class="special">!</span><a href="../metafunctions/equal_to.html" title="equal_to"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">equal_to</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span><span class="identifier">J</span><span class="special">&gt;::</span><span class="identifier">value</span></code>
+          where <code class="computeroutput"><span class="identifier">I</span></code> and <code class="computeroutput"><span class="identifier">J</span></code> are the types of <code class="computeroutput"><span class="identifier">i</span></code>
+          and <code class="computeroutput"><span class="identifier">j</span></code> respectively.
         </p>
 <a name="fusion.iterators.operators.operator_inequality.header"></a><h5>
-<a name="id468965"></a>
+<a name="id937845"></a>
           <a href="operator_inequality.html#fusion.iterators.operators.operator_inequality.header">Header</a>
         </h5>
 <pre class="programlisting">

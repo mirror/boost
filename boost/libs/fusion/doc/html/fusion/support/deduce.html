@@ -1,0 +1,98 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>deduce</title>
+<link rel="stylesheet" href="../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="../../index.html" title="Chapter 1. Fusion 2.0">
+<link rel="up" href="../support.html" title="Support">
+<link rel="prev" href="category_of.html" title="category_of">
+<link rel="next" href="deduce_sequence.html" title="deduce_sequence">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%">
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../more/index.htm">More</a></td>
+</table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="category_of.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../support.html"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="deduce_sequence.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="fusion.support.deduce"></a><a href="deduce.html" title="deduce">deduce</a></h3></div></div></div>
+<a name="fusion.support.deduce.description"></a><h4>
+<a name="id906818"></a>
+        <a href="deduce.html#fusion.support.deduce.description">Description</a>
+      </h4>
+<p>
+        Metafunction to apply <a href="../notes.html#fusion.notes.element_conversion"><span class="emphasis"><em>element
+        conversion</em></span></a> to the full argument type.
+      </p>
+<p>
+        It removes references to <code class="computeroutput"><span class="keyword">const</span></code>,
+        references to array types are kept, even if the array is <code class="computeroutput"><span class="keyword">const</span></code>.
+        Reference wrappers are removed (see <a href="../notes.html#fusion.notes.boost__ref"><code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">ref</span></code></a>).
+      </p>
+<a name="fusion.support.deduce.header"></a><h4>
+<a name="id906900"></a>
+        <a href="deduce.html#fusion.support.deduce.header">Header</a>
+      </h4>
+<pre class="programlisting">
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">deduce</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+</pre>
+<a name="fusion.support.deduce.synopsis"></a><h4>
+<a name="id906981"></a>
+        <a href="deduce.html#fusion.support.deduce.synopsis">Synopsis</a>
+      </h4>
+<pre class="programlisting">
+<span class="keyword">namespace</span> <span class="identifier">traits</span>
+<span class="special">{</span>
+    <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span> 
+    <span class="keyword">struct</span> <span class="identifier">deduce</span>
+    <span class="special">{</span>
+        <span class="keyword">typedef</span> <span class="emphasis"><em>unspecified</em></span> <span class="identifier">type</span><span class="special">;</span>
+    <span class="special">};</span>
+<span class="special">}</span>
+</pre>
+<a name="fusion.support.deduce.example"></a><h4>
+<a name="id907095"></a>
+        <a href="deduce.html#fusion.support.deduce.example">Example</a>
+      </h4>
+<pre class="programlisting">
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="keyword">struct</span> <span class="identifier">holder</span>
+<span class="special">{</span>
+    <span class="keyword">typename</span> <span class="identifier">traits</span><span class="special">::</span><span class="identifier">deduce</span><span class="special">&lt;</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;&gt;::</span><span class="identifier">type</span> <span class="identifier">element</span><span class="special">;</span>
+
+    <span class="identifier">holder</span><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">a</span><span class="special">)</span>
+      <span class="special">:</span> <span class="identifier">element</span><span class="special">(</span><span class="identifier">a</span><span class="special">)</span>
+    <span class="special">{</span> <span class="special">}</span>
+<span class="special">};</span>
+
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
+<span class="identifier">holder</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">make_holder</span><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">a</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="keyword">return</span> <span class="identifier">holder</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">a</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<a name="fusion.support.deduce.see_also"></a><h4>
+<a name="id907415"></a>
+        <a href="deduce.html#fusion.support.deduce.see_also">See also</a>
+      </h4>
+<div class="itemizedlist"><ul type="disc"><li><a href="deduce_sequence.html" title="deduce_sequence"><code class="computeroutput"><span class="identifier">deduce_sequence</span></code></a></li></ul></div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2001-2005 Joel de Guzman, Dan Marsden</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="category_of.html"><img src="../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../support.html"><img src="../../images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../images/home.png" alt="Home"></a><a accesskey="n" href="deduce_sequence.html"><img src="../../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>

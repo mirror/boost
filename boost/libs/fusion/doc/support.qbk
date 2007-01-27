@@ -254,6 +254,96 @@ __sequence__ or __iterator__.
 
 [endsect]
 
+[section deduce]
+
+[heading Description]
+Metafunction to apply __element_conversion__ to the full argument type.
+
+It removes references to `const`, references to array types are kept, even 
+if the array is `const`. Reference wrappers are removed (see 
+__note_boost_ref__).
+
+[heading Header]
+
+    #include <boost/fusion/support/deduce.hpp>
+
+[heading Synopsis]
+    namespace traits
+    {
+        template <typename T> 
+        struct deduce
+        {
+            typedef __unspecified__ type;
+        };
+    }
+
+[heading Example]
+    template <typename T>
+    struct holder
+    {
+        typename traits::deduce<T const &>::type element;
+
+        holder(T const & a)
+          : element(a)
+        { }
+    };
+
+    template <typename T>
+    holder<T> make_holder(T const & a)
+    {
+        return holder<T>(a);
+    }
+
+[heading See also]
+* __deduce_sequence__
+
+[endsect]
+
+[section deduce_sequence]
+
+[heading Description]
+Applies __element_conversion__ to each element in a __forward_sequence__.
+The resulting type is a __random_access_sequence__ that provides a converting
+constructor accepting the original type as its argument.
+
+[heading Header]
+
+    #include <boost/fusion/support/deduce_sequence.hpp>
+
+[heading Synopsis]
+    namespace traits
+    {
+        template <class Sequence> 
+        struct deduce_sequence
+        {
+            typedef __unspecified__ type;
+        };
+    }
+
+[heading Example]
+    template <class Seq>
+    struct holder
+    {
+        typename traits::deduce_sequence<Seq>::type element;
+
+        holder(Seq const & a)
+          : element(a)
+        { }
+    };
+
+    template <typename T0, typename T1>
+    holder< __vector__<T0 const &, T1 const &> > 
+    make_holder(T0 const & a0, T1 const & a1)
+    {
+        typedef __vector__<T0 const &, T1 const &> arg_vec_t;
+        return holder<arg_vec_t>( arg_vec_t(a0,a1) ); 
+    }
+
+[heading See also]
+* __deduce__
+
+[endsect]
+
 [section pair]
 
 [heading Description]

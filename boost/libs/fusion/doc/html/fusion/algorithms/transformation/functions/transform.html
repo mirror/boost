@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>transform</title>
 <link rel="stylesheet" href="../../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
 <link rel="prev" href="filter_if.html" title="filter_if">
@@ -26,19 +26,19 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.transformation.functions.transform"></a><a href="transform.html" title="transform">transform</a></h5></div></div></div>
 <a name="fusion.algorithms.transformation.functions.transform.description"></a><h6>
-<a name="id571910"></a>
+<a name="id1116159"></a>
             <a href="transform.html#fusion.algorithms.transformation.functions.transform.description">Description</a>
           </h6>
 <p>
-            For a sequence <tt class="computeroutput"><span class="identifier">seq</span></tt> and
+            For a sequence <code class="computeroutput"><span class="identifier">seq</span></code> and
             <a href="../../concepts/poly.html" title=" Polymorphic Function
         Object">Polymorphic Function
-            Object</a> <tt class="computeroutput"><span class="identifier">F</span></tt>, <tt class="computeroutput"><span class="identifier">transform</span></tt> returns a new sequence with
-            elements created by applying <tt class="computeroutput"><span class="identifier">F</span></tt>
-            to each element of <tt class="computeroutput"><span class="identifier">seq</span></tt>.
+            Object</a> <code class="computeroutput"><span class="identifier">F</span></code>, <code class="computeroutput"><span class="identifier">transform</span></code> returns a new sequence with
+            elements created by applying <code class="computeroutput"><span class="identifier">F</span></code>
+            to each element of <code class="computeroutput"><span class="identifier">seq</span></code>.
           </p>
 <a name="fusion.algorithms.transformation.functions.transform.unary_version_synopsis"></a><h6>
-<a name="id572004"></a>
+<a name="id1116242"></a>
             <a href="transform.html#fusion.algorithms.transformation.functions.transform.unary_version_synopsis">Unary
             version synopsis</a>
           </h6>
@@ -47,11 +47,11 @@
     <span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">F</span>
     <span class="special">&gt;</span>
-<span class="keyword">typename</span> <a href="../metafunctions/transform.html" title="transform"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">transform</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">F</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">transform</span><span class="special">(</span>
+<span class="keyword">typename</span> <a href="../metafunctions/transform.html" title="transform"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">transform</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">F</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">transform</span><span class="special">(</span>
     <span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id572208"></a><p class="title"><b>Table 1.54. Parameters</b></p>
+<a name="id1116420"></a><p class="title"><b>Table 1.54. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -65,7 +65,7 @@
 </tr></thead>
 <tbody>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">seq</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">seq</span></code></td>
 <td>A
                 model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
@@ -74,12 +74,12 @@
 <td>Operation's argument</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">f</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">f</span></code></td>
 <td>A
                 model of unary <a href="../../concepts/poly.html" title=" Polymorphic Function
         Object">Polymorphic
-                Function Object</a> where <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">e</span><span class="special">)</span></tt> is a valid expression for each element
-                <tt class="computeroutput"><span class="identifier">e</span></tt> of <tt class="computeroutput"><span class="identifier">seq</span></tt>
+                Function Object</a> where <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">e</span><span class="special">)</span></code> is a valid expression for each element
+                <code class="computeroutput"><span class="identifier">e</span></code> of <code class="computeroutput"><span class="identifier">seq</span></code>
 </td>
 <td>Transformation
                 function</td>
@@ -88,25 +88,25 @@
 </table>
 </div>
 <a name="fusion.algorithms.transformation.functions.transform.expression_semantics"></a><h6>
-<a name="id572357"></a>
+<a name="id1116553"></a>
             <a href="transform.html#fusion.algorithms.transformation.functions.transform.expression_semantics">Expression
             Semantics</a>
           </h6>
 <pre class="programlisting">
-<a href="transform.html" title="transform"><tt class="computeroutput"><span class="identifier">transform</span></tt></a><span class="special">(</span><span class="identifier">seq</span><span class="special">,</span> <span class="identifier">f</span><span class="special">);</span>
+<a href="transform.html" title="transform"><code class="computeroutput"><span class="identifier">transform</span></code></a><span class="special">(</span><span class="identifier">seq</span><span class="special">,</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: A model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
+            <span class="bold"><strong>Return type</strong></span>: A model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
             Sequence</a>
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Returns a new sequence, containing
-            the return values of <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">e</span><span class="special">)</span></tt> for each element <tt class="computeroutput"><span class="identifier">e</span></tt>
-            within <tt class="computeroutput"><span class="identifier">seq</span></tt>.
+            <span class="bold"><strong>Semantics</strong></span>: Returns a new sequence, containing
+            the return values of <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">e</span><span class="special">)</span></code> for each element <code class="computeroutput"><span class="identifier">e</span></code>
+            within <code class="computeroutput"><span class="identifier">seq</span></code>.
           </p>
 <a name="fusion.algorithms.transformation.functions.transform.binary_version_synopsis"></a><h6>
-<a name="id572510"></a>
+<a name="id1116688"></a>
             <a href="transform.html#fusion.algorithms.transformation.functions.transform.binary_version_synopsis">Binary
             version synopsis</a>
           </h6>
@@ -116,11 +116,11 @@
     <span class="keyword">typename</span> <span class="identifier">Sequence2</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">F</span>
     <span class="special">&gt;</span>
-<span class="keyword">typename</span> <a href="../metafunctions/transform.html" title="transform"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">transform</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence1</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">Sequence2</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">F</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">transform</span><span class="special">(</span>
+<span class="keyword">typename</span> <a href="../metafunctions/transform.html" title="transform"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">transform</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence1</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">Sequence2</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">F</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">transform</span><span class="special">(</span>
     <span class="identifier">Sequence1</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq1</span><span class="special">,</span> <span class="identifier">Sequence2</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq2</span><span class="special">,</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id572776"></a><p class="title"><b>Table 1.55. Parameters</b></p>
+<a name="id1116921"></a><p class="title"><b>Table 1.55. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -134,7 +134,7 @@
 </tr></thead>
 <tbody>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">seq1</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">seq1</span></code></td>
 <td>A
                 model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
@@ -143,7 +143,7 @@
 <td>Operation's argument</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">seq2</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">seq2</span></code></td>
 <td>A
                 model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
@@ -152,13 +152,13 @@
 <td>Operation's argument</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">f</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">f</span></code></td>
 <td>A
                 model of binary <a href="../../concepts/poly.html" title=" Polymorphic Function
         Object">Polymorphic
-                Function Object</a> where <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">e1</span><span class="special">,</span> <span class="identifier">e2</span><span class="special">)</span></tt> is a valid expression for each pair
-                of elements <tt class="computeroutput"><span class="identifier">e1</span></tt> and
-                <tt class="computeroutput"><span class="identifier">e2</span></tt> of <tt class="computeroutput"><span class="identifier">seq1</span></tt> and <tt class="computeroutput"><span class="identifier">seq2</span></tt>
+                Function Object</a> where <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">e1</span><span class="special">,</span> <span class="identifier">e2</span><span class="special">)</span></code> is a valid expression for each pair
+                of elements <code class="computeroutput"><span class="identifier">e1</span></code> and
+                <code class="computeroutput"><span class="identifier">e2</span></code> of <code class="computeroutput"><span class="identifier">seq1</span></code> and <code class="computeroutput"><span class="identifier">seq2</span></code>
                 respectively</td>
 <td>Transformation function</td>
 </tr>
@@ -166,31 +166,31 @@
 </table>
 </div>
 <p>
-            <span class="bold"><b>Return type</b></span>: A model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
+            <span class="bold"><strong>Return type</strong></span>: A model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
             Sequence</a>.
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Returns a new sequence, containing
-            the return values of <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">e1</span><span class="special">,</span> <span class="identifier">e2</span><span class="special">)</span></tt> for each pair of elements <tt class="computeroutput"><span class="identifier">e1</span></tt> and <tt class="computeroutput"><span class="identifier">e2</span></tt>
-            within <tt class="computeroutput"><span class="identifier">seq1</span></tt> and <tt class="computeroutput"><span class="identifier">seq2</span></tt> respectively.
+            <span class="bold"><strong>Semantics</strong></span>: Returns a new sequence, containing
+            the return values of <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">e1</span><span class="special">,</span> <span class="identifier">e2</span><span class="special">)</span></code> for each pair of elements <code class="computeroutput"><span class="identifier">e1</span></code> and <code class="computeroutput"><span class="identifier">e2</span></code>
+            within <code class="computeroutput"><span class="identifier">seq1</span></code> and <code class="computeroutput"><span class="identifier">seq2</span></code> respectively.
           </p>
 <a name="fusion.algorithms.transformation.functions.transform.complexity"></a><h6>
-<a name="id573095"></a>
+<a name="id1117202"></a>
             <a href="transform.html#fusion.algorithms.transformation.functions.transform.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithms.transformation.functions.transform.header"></a><h6>
-<a name="id573126"></a>
+<a name="id1117230"></a>
             <a href="transform.html#fusion.algorithms.transformation.functions.transform.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">transform</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithms.transformation.functions.transform.example"></a><h6>
-<a name="id573233"></a>
+<a name="id1117324"></a>
             <a href="transform.html#fusion.algorithms.transformation.functions.transform.example">Example</a>
           </h6>
 <pre class="programlisting">
@@ -209,7 +209,7 @@
     <span class="special">};</span>
 <span class="special">};</span>
 <span class="special">...</span>
-<span class="identifier">assert</span><span class="special">(</span><a href="transform.html" title="transform"><tt class="computeroutput"><span class="identifier">transform</span></tt></a><span class="special">(</span><a href="../../../sequences/generation/functions/make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">),</span> <span class="identifier">triple</span><span class="special">())</span> <span class="special">==</span> <a href="../../../sequences/generation/functions/make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a><span class="special">(</span><span class="number">3</span><span class="special">,</span><span class="number">6</span><span class="special">,</span><span class="number">9</span><span class="special">));</span>
+<span class="identifier">assert</span><span class="special">(</span><a href="transform.html" title="transform"><code class="computeroutput"><span class="identifier">transform</span></code></a><span class="special">(</span><a href="../../../sequences/generation/functions/make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">),</span> <span class="identifier">triple</span><span class="special">())</span> <span class="special">==</span> <a href="../../../sequences/generation/functions/make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">3</span><span class="special">,</span><span class="number">6</span><span class="special">,</span><span class="number">9</span><span class="special">));</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

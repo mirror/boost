@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>advance_c</title>
 <link rel="stylesheet" href="../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="advance.html" title="advance">
@@ -26,14 +26,14 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.iterators.metafunctions.advance_c"></a><a href="advance_c.html" title="advance_c">advance_c</a></h4></div></div></div>
 <a name="fusion.iterators.metafunctions.advance_c.description"></a><h5>
-<a name="id475453"></a>
+<a name="id943570"></a>
           <a href="advance_c.html#fusion.iterators.metafunctions.advance_c.description">Description</a>
         </h5>
 <p>
           Moves an iterator by a specified distance.
         </p>
 <a name="fusion.iterators.metafunctions.advance_c.synopsis"></a><h5>
-<a name="id475483"></a>
+<a name="id943598"></a>
           <a href="advance_c.html#fusion.iterators.metafunctions.advance_c.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -47,7 +47,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id475600"></a><p class="title"><b>Table 1.18. Parameters</b></p>
+<a name="id943701"></a><p class="title"><b>Table 1.18. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -61,7 +61,7 @@
 </tr></thead>
 <tbody>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">I</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">I</span></code></td>
 <td>Model
               of <a href="../concepts/forward_iterator.html" title="Forward
         Iterator">Forward
@@ -70,7 +70,7 @@
 <td>Iterator to move relative to</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">N</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">N</span></code></td>
 <td>Integer
               constant</td>
 <td>Number of positions to move</td>
@@ -79,43 +79,43 @@
 </table>
 </div>
 <a name="fusion.iterators.metafunctions.advance_c.expression_semantics"></a><h5>
-<a name="id475694"></a>
+<a name="id961260"></a>
           <a href="advance_c.html#fusion.iterators.metafunctions.advance_c.expression_semantics">Expression
           Semantics</a>
         </h5>
 <pre class="programlisting">
-<a href="advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance_c</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<a href="advance_c.html" title="advance_c"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance_c</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-          <span class="bold"><b>Return type</b></span>: A model of the same iterator
-          concept as <tt class="computeroutput"><span class="identifier">I</span></tt>.
+          <span class="bold"><strong>Return type</strong></span>: A model of the same iterator
+          concept as <code class="computeroutput"><span class="identifier">I</span></code>.
         </p>
 <p>
-          <span class="bold"><b>Semantics</b></span>: Returns an iterator a distance
-          <tt class="computeroutput"><span class="identifier">N</span></tt> from <tt class="computeroutput"><span class="identifier">I</span></tt>.
-          If <tt class="computeroutput"><span class="identifier">I</span></tt> is a <a href="../concepts/bidirectional_iterator.html" title="Bidirectional
+          <span class="bold"><strong>Semantics</strong></span>: Returns an iterator a distance
+          <code class="computeroutput"><span class="identifier">N</span></code> from <code class="computeroutput"><span class="identifier">I</span></code>.
+          If <code class="computeroutput"><span class="identifier">I</span></code> is a <a href="../concepts/bidirectional_iterator.html" title="Bidirectional
         Iterator">Bidirectional
-          Iterator</a> then <tt class="computeroutput"><span class="identifier">N</span></tt>
-          may be negative. Equivalent to <tt class="computeroutput"><a href="advance.html" title="advance"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">int_</span><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;</span> <span class="special">&gt;::</span><span class="identifier">type</span></tt>.
+          Iterator</a> then <code class="computeroutput"><span class="identifier">N</span></code>
+          may be negative. Equivalent to <code class="computeroutput"><a href="advance.html" title="advance"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">,</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">int_</span><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;</span> <span class="special">&gt;::</span><span class="identifier">type</span></code>.
         </p>
 <a name="fusion.iterators.metafunctions.advance_c.header"></a><h5>
-<a name="id475965"></a>
+<a name="id961498"></a>
           <a href="advance_c.html#fusion.iterators.metafunctions.advance_c.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">advance</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.iterators.metafunctions.advance_c.example"></a><h5>
-<a name="id476059"></a>
+<a name="id961581"></a>
           <a href="advance_c.html#fusion.iterators.metafunctions.advance_c.example">Example</a>
         </h5>
 <pre class="programlisting">
-<span class="keyword">typedef</span> <a href="../../sequences/containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">double</span><span class="special">,</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
-<span class="keyword">typedef</span> <a href="../../sequences/intrinsics/metafunctions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></tt></a><span class="special">&lt;</span><span class="identifier">vec</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">first</span><span class="special">;</span>
-<span class="keyword">typedef</span> <a href="next.html" title="next"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">next</span></tt></a><span class="special">&lt;</span><span class="identifier">first</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">second</span><span class="special">;</span>
-<span class="keyword">typedef</span> <a href="next.html" title="next"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">next</span></tt></a><span class="special">&lt;</span><span class="identifier">second</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">third</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="../../sequences/containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">double</span><span class="special">,</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="../../sequences/intrinsics/metafunctions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></code></a><span class="special">&lt;</span><span class="identifier">vec</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">first</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="next.html" title="next"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">next</span></code></a><span class="special">&lt;</span><span class="identifier">first</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">second</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="next.html" title="next"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">next</span></code></a><span class="special">&lt;</span><span class="identifier">second</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">third</span><span class="special">;</span>
 
-<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span><a href="equal_to.html" title="equal_to"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">equal_to</span></tt></a><span class="special">&lt;</span><a href="advance_c.html" title="advance_c"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance_c</span></tt></a><span class="special">&lt;</span><span class="identifier">first</span><span class="special">,</span> <span class="number">2</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">,</span> <span class="identifier">third</span><span class="special">&gt;));</span>
+<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span><a href="equal_to.html" title="equal_to"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">equal_to</span></code></a><span class="special">&lt;</span><a href="advance_c.html" title="advance_c"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">advance_c</span></code></a><span class="special">&lt;</span><span class="identifier">first</span><span class="special">,</span> <span class="number">2</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">,</span> <span class="identifier">third</span><span class="special">&gt;));</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

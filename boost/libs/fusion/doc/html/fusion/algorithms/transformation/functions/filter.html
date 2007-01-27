@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>filter</title>
 <link rel="stylesheet" href="../../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
 <link rel="prev" href="../functions.html" title="Functions">
@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.transformation.functions.filter"></a><a href="filter.html" title="filter">filter</a></h5></div></div></div>
 <a name="fusion.algorithms.transformation.functions.filter.description"></a><h6>
-<a name="id570026"></a>
+<a name="id1114492"></a>
             <a href="filter.html#fusion.algorithms.transformation.functions.filter.description">Description</a>
           </h6>
 <p>
@@ -34,7 +34,7 @@
             the elements of a specified type.
           </p>
 <a name="fusion.algorithms.transformation.functions.filter.synopsis"></a><h6>
-<a name="id570060"></a>
+<a name="id1114521"></a>
             <a href="filter.html#fusion.algorithms.transformation.functions.filter.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -42,10 +42,10 @@
     <span class="keyword">typename</span> <span class="identifier">T</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">Sequence</span>
     <span class="special">&gt;</span>
-<span class="keyword">typename</span> <a href="../metafunctions/filter.html" title="filter"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">filter</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">filter</span><span class="special">(</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">);</span>
+<span class="keyword">typename</span> <a href="../metafunctions/filter.html" title="filter"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">filter</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">filter</span><span class="special">(</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id570244"></a><p class="title"><b>Table 1.52. Parameters</b></p>
+<a name="id1114683"></a><p class="title"><b>Table 1.52. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -59,7 +59,7 @@
 </tr></thead>
 <tbody>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">seq</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">seq</span></code></td>
 <td>A
                 model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
@@ -68,7 +68,7 @@
 <td>Operation's argument</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">T</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">T</span></code></td>
 <td>Any
                 type</td>
 <td>The type to retain</td>
@@ -77,45 +77,45 @@
 </table>
 </div>
 <a name="fusion.algorithms.transformation.functions.filter.expression_semantics"></a><h6>
-<a name="id570338"></a>
+<a name="id1114769"></a>
             <a href="filter.html#fusion.algorithms.transformation.functions.filter.expression_semantics">Expression
             Semantics</a>
           </h6>
 <pre class="programlisting">
-<a href="filter.html" title="filter"><tt class="computeroutput"><span class="identifier">filter</span></tt></a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">seq</span><span class="special">);</span>
+<a href="filter.html" title="filter"><code class="computeroutput"><span class="identifier">filter</span></code></a><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">seq</span><span class="special">);</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: A model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
+            <span class="bold"><strong>Return type</strong></span>: A model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
             Sequence</a>.
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Returns a sequence containing
-            all the elements of <tt class="computeroutput"><span class="identifier">seq</span></tt>
-            of type <tt class="computeroutput"><span class="identifier">T</span></tt>. Equivalent
-            to <tt class="computeroutput"><a href="filter_if.html" title="filter_if"><tt class="computeroutput"><span class="identifier">filter_if</span></tt></a><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">same_type</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&gt;(</span><span class="identifier">seq</span><span class="special">)</span></tt>.
+            <span class="bold"><strong>Semantics</strong></span>: Returns a sequence containing
+            all the elements of <code class="computeroutput"><span class="identifier">seq</span></code>
+            of type <code class="computeroutput"><span class="identifier">T</span></code>. Equivalent
+            to <code class="computeroutput"><a href="filter_if.html" title="filter_if"><code class="computeroutput"><span class="identifier">filter_if</span></code></a><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">same_type</span><span class="special">&lt;</span><span class="identifier">_</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="special">&gt;(</span><span class="identifier">seq</span><span class="special">)</span></code>.
           </p>
 <a name="fusion.algorithms.transformation.functions.filter.complexity"></a><h6>
-<a name="id570547"></a>
+<a name="id1114953"></a>
             <a href="filter.html#fusion.algorithms.transformation.functions.filter.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithms.transformation.functions.filter.header"></a><h6>
-<a name="id570579"></a>
+<a name="id1114982"></a>
             <a href="filter.html#fusion.algorithms.transformation.functions.filter.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">filter</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithms.transformation.functions.filter.example"></a><h6>
-<a name="id570685"></a>
+<a name="id1115075"></a>
             <a href="filter.html#fusion.algorithms.transformation.functions.filter.example">Example</a>
           </h6>
 <pre class="programlisting">
-<span class="keyword">const</span> <a href="../../../sequences/containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">long</span><span class="special">,</span><span class="keyword">long</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">,</span><span class="number">4</span><span class="special">);</span>
-<span class="identifier">assert</span><span class="special">(</span><a href="filter.html" title="filter"><tt class="computeroutput"><span class="identifier">filter</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(</span><span class="identifier">vec</span><span class="special">)</span> <span class="special">==</span> <a href="../../../sequences/generation/functions/make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">));</span>
+<span class="keyword">const</span> <a href="../../../sequences/containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">long</span><span class="special">,</span><span class="keyword">long</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">,</span><span class="number">4</span><span class="special">);</span>
+<span class="identifier">assert</span><span class="special">(</span><a href="filter.html" title="filter"><code class="computeroutput"><span class="identifier">filter</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(</span><span class="identifier">vec</span><span class="special">)</span> <span class="special">==</span> <a href="../../../sequences/generation/functions/make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">));</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

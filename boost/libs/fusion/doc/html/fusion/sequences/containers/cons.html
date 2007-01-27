@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>cons</title>
 <link rel="stylesheet" href="../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../containers.html" title="Containers">
 <link rel="prev" href="vector.html" title="vector">
@@ -26,29 +26,29 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.sequences.containers.cons"></a><a href="cons.html" title="cons">cons</a></h4></div></div></div>
 <a name="fusion.sequences.containers.cons.description"></a><h5>
-<a name="id484912"></a>
+<a name="id969405"></a>
           <a href="cons.html#fusion.sequences.containers.cons.description">Description</a>
         </h5>
 <p>
-          <tt class="computeroutput"><span class="identifier">cons</span></tt> is a simple <a href="../concepts/forward_sequence.html" title="Forward
+          <code class="computeroutput"><span class="identifier">cons</span></code> is a simple <a href="../concepts/forward_sequence.html" title="Forward
         Sequence">Forward Sequence</a>.
-          It is a lisp style recursive list structure where <tt class="computeroutput"><span class="identifier">car</span></tt>
-          is the <span class="emphasis"><em>head</em></span> and <tt class="computeroutput"><span class="identifier">cdr</span></tt>
-          is the <span class="emphasis"><em>tail</em></span>: usually another cons structure or <tt class="computeroutput"><span class="identifier">nil</span></tt>: the empty list. Fusion's <a href="list.html" title="list"><tt class="computeroutput"><span class="identifier">list</span></tt></a> is built on top of this more
-          primitive data structure. It is more efficient than <a href="vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a> when the target sequence
+          It is a lisp style recursive list structure where <code class="computeroutput"><span class="identifier">car</span></code>
+          is the <span class="emphasis"><em>head</em></span> and <code class="computeroutput"><span class="identifier">cdr</span></code>
+          is the <span class="emphasis"><em>tail</em></span>: usually another cons structure or <code class="computeroutput"><span class="identifier">nil</span></code>: the empty list. Fusion's <a href="list.html" title="list"><code class="computeroutput"><span class="identifier">list</span></code></a> is built on top of this more
+          primitive data structure. It is more efficient than <a href="vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a> when the target sequence
           is constructed piecemeal (a data at a time). The runtime cost of access
           to each element is peculiarly constant (see <a href="../../notes.html#fusion.notes.recursive_inlined_functions">Recursive
           Inlined Functions</a>).
         </p>
 <a name="fusion.sequences.containers.cons.header"></a><h5>
-<a name="id485048"></a>
+<a name="id969527"></a>
           <a href="cons.html#fusion.sequences.containers.cons.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">list</span><span class="special">/</span><span class="identifier">cons</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.containers.cons.synopsis"></a><h5>
-<a name="id485163"></a>
+<a name="id969627"></a>
           <a href="cons.html#fusion.sequences.containers.cons.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -56,7 +56,7 @@
 <span class="keyword">struct</span> <span class="identifier">cons</span><span class="special">;</span>
 </pre>
 <a name="fusion.sequences.containers.cons.template_parameters"></a><h5>
-<a name="id485271"></a>
+<a name="id969721"></a>
           <a href="cons.html#fusion.sequences.containers.cons.template_parameters">Template
           parameters</a>
         </h5>
@@ -73,21 +73,21 @@
 </tr></thead>
 <tbody>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">Car</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">Car</span></code></td>
 <td>Head
                 type</td>
 <td> </td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">Cdr</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">Cdr</span></code></td>
 <td>Tail
                 type</td>
-<td><tt class="computeroutput"><span class="identifier">nil</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">nil</span></code></td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequences.containers.cons.model_of"></a><h5>
-<a name="id485376"></a>
+<a name="id969814"></a>
           <a href="cons.html#fusion.sequences.containers.cons.model_of">Model of</a>
         </h5>
 <div class="itemizedlist"><ul type="disc"><li><a href="../concepts/forward_sequence.html" title="Forward
@@ -95,41 +95,41 @@
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">nil</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">nil</span></code></span></dt>
 <dd>
-            An empty <tt class="computeroutput"><span class="identifier">cons</span></tt>
+            An empty <code class="computeroutput"><span class="identifier">cons</span></code>
 </dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">C</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">C</span></code></span></dt>
 <dd>
-            A <tt class="computeroutput"><span class="identifier">cons</span></tt> type
+            A <code class="computeroutput"><span class="identifier">cons</span></code> type
           </dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">l</span></tt>,
-          <tt class="computeroutput"><span class="identifier">l2</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">l</span></code>,
+          <code class="computeroutput"><span class="identifier">l2</span></code></span></dt>
 <dd>
-            Instances of <tt class="computeroutput"><span class="identifier">cons</span></tt>
+            Instances of <code class="computeroutput"><span class="identifier">cons</span></code>
 </dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">car</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">car</span></code></span></dt>
 <dd>
             An arbitrary data
           </dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">cdr</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">cdr</span></code></span></dt>
 <dd>
-            Another <tt class="computeroutput"><span class="identifier">cons</span></tt> list
+            Another <code class="computeroutput"><span class="identifier">cons</span></code> list
           </dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">s</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">s</span></code></span></dt>
 <dd>
             A <a href="../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
             Sequence</a>
 </dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">N</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">N</span></code></span></dt>
 <dd>
             An Integral Constant
           </dd>
 </dl>
 </div>
 <a name="fusion.sequences.containers.cons.expression_semantics"></a><h5>
-<a name="id485608"></a>
+<a name="id970018"></a>
           <a href="cons.html#fusion.sequences.containers.cons.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -150,71 +150,71 @@
 </tr></thead>
 <tbody>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">nil</span><span class="special">()</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">nil</span><span class="special">()</span></code></td>
 <td>Creates
                 an empty list.</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">C</span><span class="special">()</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">C</span><span class="special">()</span></code></td>
 <td>Creates
                 a cons with default constructed elements.</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">C</span><span class="special">(</span><span class="identifier">car</span><span class="special">)</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">C</span><span class="special">(</span><span class="identifier">car</span><span class="special">)</span></code></td>
 <td>Creates
-                a cons with <tt class="computeroutput"><span class="identifier">car</span></tt> head
+                a cons with <code class="computeroutput"><span class="identifier">car</span></code> head
                 and default constructed tail.</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">C</span><span class="special">(</span><span class="identifier">car</span><span class="special">,</span>
-                <span class="identifier">cdr</span><span class="special">)</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">C</span><span class="special">(</span><span class="identifier">car</span><span class="special">,</span>
+                <span class="identifier">cdr</span><span class="special">)</span></code></td>
 <td>Creates
-                a cons with <tt class="computeroutput"><span class="identifier">car</span></tt> head
-                and <tt class="computeroutput"><span class="identifier">cdr</span></tt> tail.</td>
+                a cons with <code class="computeroutput"><span class="identifier">car</span></code> head
+                and <code class="computeroutput"><span class="identifier">cdr</span></code> tail.</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">C</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">C</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code></td>
 <td>Copy
                 constructs a cons from a <a href="../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a>, <tt class="computeroutput"><span class="identifier">s</span></tt>.</td>
+                Sequence</a>, <code class="computeroutput"><span class="identifier">s</span></code>.</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">l</span> <span class="special">=</span>
-                <span class="identifier">s</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">l</span> <span class="special">=</span>
+                <span class="identifier">s</span></code></td>
 <td>Assigns
-                to a cons, <tt class="computeroutput"><span class="identifier">l</span></tt>, from
+                to a cons, <code class="computeroutput"><span class="identifier">l</span></code>, from
                 a <a href="../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a>, <tt class="computeroutput"><span class="identifier">s</span></tt>.</td>
+                Sequence</a>, <code class="computeroutput"><span class="identifier">s</span></code>.</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><a href="../intrinsics/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span></tt></td>
+<td><code class="computeroutput"><a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span></code></td>
 <td>The
-                Nth element from the beginning of the sequence; see <a href="../intrinsics/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a>.</td>
+                Nth element from the beginning of the sequence; see <a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a>.</td>
 </tr>
 </tbody>
 </table></div>
 <p class="blurb">
-          <span class="inlinemediaobject"><img src="../../../images/note.png" alt="note"></span> <tt class="computeroutput"><a href="../intrinsics/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span></tt> is
+          <span class="inlinemediaobject"><img src="../../../images/note.png" alt="note"></span> <code class="computeroutput"><a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="identifier">N</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span></code> is
           provided for convenience and compatibility with the original <a href="http://www.boost.org/libs/tuple/doc/tuple_users_guide.html" target="_top">Boost.Tuple</a>
-          library, despite <tt class="computeroutput"><span class="identifier">cons</span></tt> being
+          library, despite <code class="computeroutput"><span class="identifier">cons</span></code> being
           a <a href="../concepts/forward_sequence.html" title="Forward
         Sequence">Forward Sequence</a>
-          only (<tt class="computeroutput"><span class="identifier">at</span></tt> is supposed to
+          only (<code class="computeroutput"><span class="identifier">at</span></code> is supposed to
           be a <a href="../concepts/random_access_sequence.html" title="Random
         Access Sequence">Random
-          Access Sequence</a> requirement). The runtime complexity of <a href="../intrinsics/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a> is constant (see <a href="../../notes.html#fusion.notes.recursive_inlined_functions">Recursive
+          Access Sequence</a> requirement). The runtime complexity of <a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a> is constant (see <a href="../../notes.html#fusion.notes.recursive_inlined_functions">Recursive
           Inlined Functions</a>).
         </p>
 <a name="fusion.sequences.containers.cons.example"></a><h5>
-<a name="id486152"></a>
+<a name="id970499"></a>
           <a href="cons.html#fusion.sequences.containers.cons.example">Example</a>
         </h5>
 <pre class="programlisting">
 <span class="identifier">cons</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="identifier">cons</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">l</span><span class="special">(</span><span class="number">12</span><span class="special">,</span> <span class="identifier">cons</span><span class="special">&lt;</span><span class="keyword">float</span><span class="special">&gt;(</span><span class="number">5.5f</span><span class="special">));</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../intrinsics/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../intrinsics/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="number">0</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="number">1</span><span class="special">&gt;(</span><span class="identifier">l</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

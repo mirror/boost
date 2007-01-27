@@ -50,6 +50,8 @@
 [def __is_view__                [link fusion.support.is_view `is_view`]]
 [def __tag_of__                 [link fusion.support.tag_of `tag_of`]]
 [def __category_of__            [link fusion.support.category_of `category_of`]]
+[def __deduce__                 [link fusion.support.deduce `deduce`]]
+[def __deduce_sequence__        [link fusion.support.deduce_sequence `deduce_sequence`]]
 [def __fusion_pair__            [link fusion.support.pair `fusion::pair`]]
 [def __pair__                   [link fusion.support.pair `pair`]]
 [def __fusion_make_pair__       [link fusion.support.pair `make_pair`]]
