@@ -48,8 +48,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+#if !defined(BOOST_WAVE_STRINGTYPE_USE_STDSTRING)
 template struct boost::wave::cpplexer::new_lexer_gen<std::string::iterator>;
 template struct boost::wave::cpplexer::new_lexer_gen<std::string::const_iterator>;
+#endif
 
 // the suffix header occurs after all of the code
 #ifdef BOOST_HAS_ABI_HEADERS

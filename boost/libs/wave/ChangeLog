@@ -245,7 +245,9 @@ Boost V1.34.0
 - Extended the copyright notice to include the year 2007.
 - Fixed a problem in preserve=1 mode, when a C style comment triggered the 
   generation of a #line directive.
-
+- Worked around a linker issue for the True64/CXX compiler, complaining about
+  multiple defined symbols when using the flex_string class.
+  
 Sat Feb 18 2005
 - Version 1.2.3
 - Added a missing throw() specification to the function 

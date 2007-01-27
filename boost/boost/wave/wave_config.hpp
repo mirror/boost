@@ -164,10 +164,17 @@
 #if !defined(BOOST_WAVE_STRINGTYPE)
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || \
-    BOOST_WORKAROUND(__MWERKS__, < 0x3200)
-// VC7 isn't able to compile the flex_string class, fallback to std::string 
-// CW upto 8.3 chokes as well *sigh*
+    BOOST_WORKAROUND(__MWERKS__, < 0x3200) || \
+    (defined(__DECCXX) && defined(__alpha)) || \
+    defined(BOOST_WAVE_STRINGTYPE_USE_STDSTRING)
+    
+// VC7 isn't able to compile the flex_string class, fall back to std::string 
+// CW up to 8.3 chokes as well *sigh*
+// Tru64/CXX has linker problems when using flex_string
 #define BOOST_WAVE_STRINGTYPE std::string
+#if !defined(BOOST_WAVE_STRINGTYPE_USE_STDSTRING)
+#define BOOST_WAVE_STRINGTYPE_USE_STDSTRING 1
+#endif
 
 #else
 // use the following, if you have a fast std::allocator<char>
