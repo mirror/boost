@@ -17,6 +17,7 @@
 #include <boost/fusion/sequence/view/transform_view/detail/value_of_impl.hpp>
 #include <boost/fusion/sequence/view/transform_view/detail/advance_impl.hpp>
 #include <boost/fusion/sequence/view/transform_view/detail/distance_impl.hpp>
+#include <boost/fusion/sequence/view/transform_view/detail/equal_to_impl.hpp>
 
 namespace boost { namespace fusion
 {
