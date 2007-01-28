@@ -1,0 +1,232 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[section Pattern Matching and Meta-Grammars]
+
+Expression trees can have a very rich and complicated structure. Often, you
+need to know some things about an expression's structure before you can process
+it. Imagine your DSEL is a miniature I/O facility, with iostream operations 
+that execute lazily. You might want expressions representing input operations
+to be processed by one function, and output operations to be processed by a 
+different function. How would you do that?
+
+[h3 Expression Patterns]
+
+The answer is to write patterns that match the structure of input and output
+expressions. Proto provides utilities for defining the patterns, and the 
+_matches_ template for checking whether a given expression type matches the 
+pattern.
+
+First, let's define a terminal we can use in our lazy I/O expressions:
+
+    meta::terminal< std::ostream & >::type cout_ = { std::cout };
+
+Now, we can use `cout_` instead of `std::cout`, and get I/O expression trees
+that we can execute later. (We could have also defined it as: 
+`literal< std::ostream & > cout_ = lit( std::cout );`. It doesn't matter for 
+this discussion.)
+
+To define patterns that match intput and output expressions of the form 
+`cout_ >> 1` and `cout_ << 1` we do this:
+
+    struct Input
+      : meta::right_shift< meta::terminal< std::ostream & >, _ >
+    {};
+
+    struct Output
+      : meta::left_shift< meta::terminal< std::ostream & >, _ >
+    {};
+
+We've seen the template `meta::terminal<>` before, but here we're using it 
+without accessing the nested `::type`. When used like this, it is a very simple
+pattern, as are `meta::right_shift<>` and `meta::left_shift<>`. The newcomer 
+here is `_` in the `proto` namespace. It is a wildcard that matches anything.
+The `Input` struct is a pattern that matches any right-shift expression that
+has a `std::ostream` terminal as its left operand.
+
+We can use these patterns together with the _matches_ template to query at
+compile time whether a given I/O expression type is an input or output 
+operation. Consider the following:
+
+    template< typename Expr >
+    void input_output( Expr const & expr )
+    {
+        if( proto::matches< Expr, Input >::value )
+        {
+            std::cout << "Input!\n";
+        }
+
+        if( proto::matches< Expr, Output >::value )
+        {
+            std::cout << "Output!\n";
+        }
+    }
+
+    int main()
+    {
+        input_output( cout_ << 1 );
+        input_output( cout_ >> 1 );
+        
+        return 0;
+    }
+
+This program prints the following:
+
+[pre
+Output!
+Input!
+]
+
+If we wanted to break the `input_output()` function into two functions, one
+that handles input expressions and one for output expressions, we can use 
+`boost::enable_if<>`, as follows:
+
+    template< typename Expr >
+    typename enable_if< matches< Expr, Input > >::type
+    input_output( Expr const & expr )
+    {
+        std::cout << "Input!\n";
+    }
+
+    template< typename Expr >
+    typename enable_if< matches< Expr, Output > >::type
+    input_output( Expr const & expr )
+    {
+        std::cout << "Output!\n";
+    }
+
+This works as the previous version did. However, the following does not compile
+at all:
+
+    input_output( cout_ << 1 << 2 ); // oops!
+
+What's wrong? The problem is that our pattern does not take the associativity 
+of the left-shift operator into account. The expression groups as if it were 
+written like `(cout_ << 1) << 2`. It will not match the `Output` pattern, which
+expects the left operand to be a terminal, not another left-shift operation. We
+need to fix the pattern.
+
+We notice that in order to verify an expression as input or output, we'll need
+to recurse down to the bottom-left-most leaf and check that it is a 
+`std::ostream`. When we get to the terminal, we must stop recursing. We can 
+express this in our pattern using _or_. Here are the correct `Input` and 
+`Output` patterns:
+
+    struct Input
+      : or_<
+            meta::right_shift< meta::terminal<std::ostream &>, _ >
+          , meta::right_shift< Input, _ >
+        >
+    {};
+
+    struct Output
+      : or_<
+            meta::left_shift< meta::terminal<std::ostream &>, _ >
+          , meta::left_shift< Output, _ >
+        >
+    {};
+
+This may look a little odd at first. We seem to be defining the `Input` and
+`Output` types in terms of themselves. This is perfectly OK, actually. At
+the point in the pattern that the `Input` and `Output` types are being used,
+they are /incomplete/, but by the time we actually evaluate the pattern with
+_matches_, the types will be complete. These are recursive patterns, and 
+rightly so because they must match a recursive data structure!
+
+When the `Output` pattern is evaluated against an expression like 
+`cout_ << 1 << 2`, the first alternate of the _or_ is tried first. It will 
+fail, because the expression `cout_ << 1 << 2` does not match the pattern
+`meta::left_shift< meta::terminal<std::ostream &>, _ >`. Then the second 
+alternate is tried. We match the expression against 
+`meta::left_shift< Output, _ >`. The expression is a left-shift, so we try 
+the operands. The right operand `2` matches `_` trivially. To see if 
+the left operand `cout_ << 1` matches `Output`, we must recursively evaluate 
+the `Output` pattern. This time we succeed, because `cout_ << 1` will match 
+the first alternate of the _or_. We're done -- the pattern matches 
+successfully.
+
+[h3 Fuzzy and Exact Matches of Terminals]
+
+By default the terminals in an expression tree are stored by reference.
+They could be const or non-const references, or they might not be references
+at all. When writing patterns, you usually don't have to worry about it because
+_matches_ gives you wiggle room when matching terminals. Two terminal types
+are considered a match if there is a /built-in/ conversion from the actual type
+to the type in the pattern. (User-defined conversions are not considered.) The
+following are considered built-in conversions that you can rely on when writing
+Proto patterns:
+
+* Const and volatile conversions
+* Array-to-pointer conversions
+* Integer and floating-point conversions
+* Base-to-derived conversions
+* Function-to-function-pointer conversions
+
+For instance, consider the following program fragment:
+
+    struct CharString
+      : meta::terminal<char const *>
+    {};
+    
+    typedef meta::terminal<char const (&)[6]>::type char_array;
+
+    BOOST_MPL_ASSERT(( matches< char_array, CharString > ));
+
+The type `char_array` might be the type of a string literal such as `"hello"`.
+Even though it is an array type, it successfully matches the pattern 
+`meta::terminal<char const *>` because C++ has a built-in conversion from array
+types to pointers.
+
+What if we really only wanted `CharString` to match terminals of exactly the 
+type `char const *`? Proto provides the template _exact_ for turning off the 
+fuzzy matching of terminals. You could use it as follows:
+
+    struct CharString
+      : meta::terminal< exact< char const * > >
+    {};
+    
+    typedef meta::terminal<char const (&)[6]>::type char_array;
+    typedef meta::terminal<char const *>::type      char_string;
+
+    BOOST_MPL_ASSERT(( matches< char_string, CharString > ));
+    BOOST_MPL_ASSERT_NOT(( matches< char_array, CharString > ));
+
+Now, `CharString` does not match array types, only character string pointers.
+
+[h3 Other Valid Patterns]
+
+We've already seen how to use expression generators like `meta::terminal<>` and
+`meta::right_shift<>` as patterns. We've also seen _or_, which we can use to 
+express a set of alternate patterns. There are a few others of interest; in 
+particular, _if_ and _and_.
+
+The _if_ template is used together with an MPL lambda expression, which is 
+evaluated against expression types to find matches. The _and_ template is like
+_or_, except that each alternate must match in order for the _and_ to match.
+As an example, consider the definition of `CharString` above that uses _exact_.
+It could have been written without _exact_ as follows:
+
+    struct CharString
+      : and_<
+            meta::terminal< _ >
+          , if_< is_same< meta::arg< mpl::_ >, char const * > >
+        >
+    {};
+
+This says that a `CharString` must be a terminal, *and* its argument must be
+the same as `char const *`. Notice the template argument of _if_: 
+`is_same< meta::arg< mpl::_ >, char const * >`. This is an MPL lambda 
+expression because it has the MPL placeholder `mpl::_` in it. 
+
+[warning Do not confuse `mpl::_` with `proto::_`. The first is only useful in
+MPL lambda expressions. The second is Proto's pattern wildcard. The only place
+`mpl::_` should appear in your patterns is in an _if_. Elsewhere in your 
+patterns you should be using `proto::_`.]
+
+
+
+[endsect]

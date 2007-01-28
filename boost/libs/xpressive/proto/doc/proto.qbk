@@ -78,6 +78,8 @@ check the [link proto.reference Reference] section.
 
 [include calculator.qbk]
 
+[include grammars.qbk]
+
 [include transforms.qbk]
 
 [include examples.qbk]
