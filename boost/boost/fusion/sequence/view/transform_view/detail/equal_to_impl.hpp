@@ -13,6 +13,7 @@
 namespace boost { namespace fusion {
 
     struct transform_view_iterator_tag;
+    struct transform_view_iterator2_tag;
 
     namespace extension
     {
@@ -25,6 +26,15 @@ namespace boost { namespace fusion {
             template<typename It1, typename It2>
             struct apply
                 : result_of::equal_to<typename It1::first_type, typename It2::first_type>
+            {};
+        };
+
+        template<>
+        struct equal_to_impl<transform_view_iterator2_tag>
+        {
+            template<typename It1, typename It2>
+            struct apply
+                : result_of::equal_to<typename It1::first1_type, typename It2::first1_type>
             {};
         };
     }
