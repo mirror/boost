@@ -2,7 +2,7 @@
 #ifndef BOOST_MPL_AUX_LAMBDA_SPEC_HPP_INCLUDED
 #define BOOST_MPL_AUX_LAMBDA_SPEC_HPP_INCLUDED
 
-// Copyright Aleksey Gurtovoy 2001-2004
+// Copyright Aleksey Gurtovoy 2001-2007
 //
 // Distributed under the Boost Software License, Version 1.0. 
 // (See accompanying file LICENSE_1_0.txt or copy at 
@@ -35,7 +35,8 @@ struct lambda< \
     > \
 { \
     typedef false_ is_le; \
-    typedef name< BOOST_MPL_PP_PARAMS(i, T) > type; \
+    typedef name< BOOST_MPL_PP_PARAMS(i, T) > result_; \
+    typedef result_ type; \
 }; \
 /**/
 
