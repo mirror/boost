@@ -77,6 +77,8 @@ lib boost_mpi
 }
 else
 {
-  ECHO "The mpi module has not been initialized; MPI libraries will not be built." ;
-  ECHO "hint: add \"using mpi ;\" to user-config.jam to enable MPI support." ;
+  ECHO "warning: skipping optional Message Passing Interface (MPI) library." ;
+  ECHO "note: to enable MPI support, add \"using mpi ;\" to user-config.jam." ;
+  ECHO "note: to suppress this message, pass \"--without-mpi\" to bjam." ;
+  ECHO "note: otherwise, you can safely ignore this message." ;
 }
