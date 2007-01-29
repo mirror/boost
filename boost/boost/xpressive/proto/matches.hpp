@@ -26,11 +26,8 @@
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
     #include <boost/config.hpp>
-    #include <boost/mpl/if.hpp>
-    #include <boost/mpl/and.hpp>
     #include <boost/mpl/bool.hpp>
     #include <boost/mpl/apply.hpp>
-    #include <boost/mpl/placeholders.hpp>
     #include <boost/utility/enable_if.hpp>
     #include <boost/type_traits/is_convertible.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
@@ -43,6 +40,8 @@
 
         namespace detail
         {
+            struct _;
+
             template<typename Expr, typename Grammar>
             struct matches_impl;
 
@@ -59,6 +58,9 @@
               : mpl::bool_<B>
             {};
 
+            template<bool B, typename Pred>
+            struct and2;
+
             template<typename And>
             struct last;
 
@@ -73,6 +75,29 @@
             {
                 wrap_terminal(T &);
             };
+
+            // vararg_matches_impl
+            template<typename Args1, typename Back, long From, long To>
+            struct vararg_matches_impl;
+
+            // vararg_matches
+            template<typename Args1, typename Args2, typename Back, bool Can, bool Zero>
+            struct vararg_matches
+              : mpl::false_
+            {};
+
+            template<typename Args1, typename Args2, typename Back>
+            struct vararg_matches<Args1, Args2, vararg<Back>, true, true>
+              : matches_impl<expr<_, Args1, Args1::size>, expr<_, Args2, Args1::size> >
+            {};
+
+            template<typename Args1, typename Args2, typename Back>
+            struct vararg_matches<Args1, Args2, vararg<Back>, true, false>
+              : and2<
+                    matches_impl<expr<_, Args1, Args2::size>, expr<_, Args2, Args2::size> >::value
+                  , vararg_matches_impl<Args1, typename Back::type, Args2::size + 1, Args1::size>
+                >
+            {};
 
             // terminal_matches
             template<typename Expr, typename Grammar>
@@ -104,6 +129,16 @@
             template<typename Expr>
             struct matches_impl< Expr, proto::_ >
               : mpl::true_
+            {};
+
+            template<typename Tag, typename Args1, long N1, typename Args2, long N2>
+            struct matches_impl< expr<Tag, Args1, N1>, expr<Tag, Args2, N2> >
+              : vararg_matches< Args1, Args2, typename Args2::back_, (N1+2 > N2), (N2 > N1) >
+            {};
+
+            template<typename Tag, typename Args1, long N1, typename Args2, long N2>
+            struct matches_impl< expr<Tag, Args1, N1>, expr<proto::_, Args2, N2> >
+              : vararg_matches< Args1, Args2, typename Args2::back_, (N1+2 > N2), (N2 > N1) >
             {};
 
             template<typename Tag, typename Args1, typename Args2>
@@ -218,6 +253,11 @@
             typedef if_ type;
         };
 
+        template<typename Grammar>
+        struct vararg
+          : Grammar
+        {};
+
         template<typename Expr, typename Grammar, typename Return>
         struct if_matches
           : enable_if<matches<Expr, Grammar>, Return>
@@ -273,6 +313,19 @@
               : mpl::false_
             {};
 
+            template<typename Args, typename Back, long To>
+            struct vararg_matches_impl<Args, Back, N, To>
+              : and2<
+                    matches_impl<typename Args::BOOST_PP_CAT(arg, BOOST_PP_DEC(N))::type, Back>::value
+                  , vararg_matches_impl<Args, Back, N + 1, To>
+                >
+            {};
+
+            template<typename Args, typename Back>
+            struct vararg_matches_impl<Args, Back, N, N>
+              : matches_impl<typename Args::BOOST_PP_CAT(arg, BOOST_PP_DEC(N))::type, Back>
+            {};
+
             template<
                 template<BOOST_PP_ENUM_PARAMS(N, typename BOOST_PP_INTERCEPT)> class T
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename Expr)
@@ -288,16 +341,16 @@
             template<typename Tag, typename Args1, typename Args2>
             struct matches_impl< expr<Tag, Args1, N>, expr<Tag, Args2, N> >
               : BOOST_PP_CAT(and, N)<
-                    BOOST_PROTO_MATCHES_N_FUN(~, 0, N)::value,
-                    BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_MATCHES_N_FUN, N)
+                    BOOST_PROTO_MATCHES_N_FUN(~, 0, ~)::value,
+                    BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_MATCHES_N_FUN, ~)
                 >
             {};
 
             template<typename Tag, typename Args1, typename Args2>
             struct matches_impl< expr<Tag, Args1, N>, expr<proto::_, Args2, N> >
               : BOOST_PP_CAT(and, N)<
-                    BOOST_PROTO_MATCHES_N_FUN(~, 0, N)::value,
-                    BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_MATCHES_N_FUN, N)
+                    BOOST_PROTO_MATCHES_N_FUN(~, 0, ~)::value,
+                    BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_MATCHES_N_FUN, ~)
                 >
             {};
 

@@ -13,7 +13,8 @@
     #include <boost/xpressive/proto/detail/prefix.hpp>
 
     #include <boost/preprocessor/cat.hpp>
-    #include <boost/preprocessor/iterate.hpp>
+    #include <boost/preprocessor/arithmetic/dec.hpp>
+    #include <boost/preprocessor/iteration/iterate.hpp>
     #include <boost/preprocessor/repetition/enum_params.hpp>
     #include <boost/preprocessor/repetition/repeat.hpp>
     #include <boost/preprocessor/repetition/repeat_from_to.hpp>
@@ -50,6 +51,7 @@
             BOOST_STATIC_CONSTANT(long, size = N);
             BOOST_PP_REPEAT(N, BOOST_PROTO_DEFINE_ARG_N, ~)
             BOOST_PP_REPEAT_FROM_TO(N, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_DEFINE_VOID_N, ~)
+            typedef BOOST_PP_CAT(Arg, BOOST_PP_DEC(N)) back_;
         };
 
     #undef N

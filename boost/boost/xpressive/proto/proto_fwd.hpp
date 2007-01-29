@@ -257,6 +257,9 @@ namespace boost { namespace proto
         template<typename Tag, typename Left, typename Right>
         struct binary_expr;
 
+        template<typename Tag, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, void), typename Dummy = void>
+        struct nary_expr;
+
         template<typename Expr>
         struct terminal;
 
@@ -442,6 +445,9 @@ namespace boost { namespace proto
     struct has_pass_through_transform;
 
     struct _;
+
+    template<typename Grammar>
+    struct vararg;
 
 }} // namespace boost::proto
 

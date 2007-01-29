@@ -470,6 +470,25 @@
                 BOOST_PP_REPEAT(N, BOOST_PROTO_ARG, ~)
             };
 
+            template<typename Tag BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
+            struct nary_expr<
+                Tag
+                BOOST_PP_ENUM_TRAILING_PARAMS(N, A)
+                BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT), void
+            >
+              : has_pass_through_transform<
+                    nary_expr<
+                        Tag
+                        BOOST_PP_ENUM_TRAILING_PARAMS(N, A)
+                        BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY, N), void BOOST_PP_INTERCEPT), void
+                    >
+                >
+            {
+                typedef expr<Tag, BOOST_PP_CAT(args, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
+                typedef Tag tag_type;
+                BOOST_PP_REPEAT(N, BOOST_PROTO_ARG, ~)
+            };
+
             template<typename Expr, typename Fun>
             struct eval<Expr, Fun, N>
               : boost::result_of<Fun(typename Expr::tag_type BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_ARG_N_TYPE, ~))>
