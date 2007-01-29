@@ -108,34 +108,22 @@
 
             template<typename Tag, typename Args1, typename Args2>
             struct matches_impl< expr<Tag, Args1, 1>, expr<Tag, Args2, 1> >
-              : matches_impl<
-                    typename Args1::arg0::type
-                  , typename Args2::arg0::type
-                >
+              : matches_impl<typename Args1::arg0::type, typename Args2::arg0::type>
             {};
 
             template<typename Tag, typename Args1, typename Args2>
             struct matches_impl< expr<Tag, Args1, 1>, expr<proto::_, Args2, 1> >
-              : matches_impl<
-                    typename Args1::arg0::type
-                  , typename Args2::arg0::type
-                >
+              : matches_impl<typename Args1::arg0::type, typename Args2::arg0::type>
             {};
 
             template<typename Args1, typename Args2>
             struct matches_impl< expr<tag::terminal, Args1, 1>, expr<tag::terminal, Args2, 1> >
-              : terminal_matches<
-                    typename Args1::arg0
-                  , typename Args2::arg0
-                >
+              : terminal_matches<typename Args1::arg0, typename Args2::arg0>
             {};
 
             template<typename Args1, typename Args2>
             struct matches_impl< expr<tag::terminal, Args1, 1>, expr<proto::_, Args2, 1> >
-              : terminal_matches<
-                    typename Args1::arg0
-                  , typename Args2::arg0
-                >
+              : terminal_matches<typename Args1::arg0, typename Args2::arg0>
             {};
 
         #define BOOST_PROTO_MATCHES_N_FUN(z, n, data)\
@@ -261,8 +249,7 @@
             struct BOOST_PP_CAT(or, N)
               : BOOST_PP_CAT(or, BOOST_PP_DEC(N))<
                     matches_impl<Expr, typename G1::type>::value
-                  , Expr 
-                  , BOOST_PP_ENUM_SHIFTED_PARAMS(N, G)
+                  , Expr, BOOST_PP_ENUM_SHIFTED_PARAMS(N, G)
                 >
             {};
 

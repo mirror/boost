@@ -25,7 +25,6 @@
     #include <boost/mpl/if.hpp>
     #include <boost/mpl/or.hpp>
     #include <boost/mpl/bool.hpp>
-    #include <boost/call_traits.hpp>
     #include <boost/static_assert.hpp>
     #include <boost/utility/result_of.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
@@ -67,13 +66,45 @@
             template<typename T, typename EnableIf>
             struct as_expr
             {
-                typedef expr<proto::tag::terminal, args1<typename call_traits<T>::value_type> > type;
+                typedef expr<proto::tag::terminal, args1<T> > type;
+
+            private:
+                friend struct op::as_expr;
+                typedef type result_type;
+                static result_type call(T const &t)
+                {
+                    type that = {t};
+                    return that;
+                }
+            };
+
+            template<typename T, std::size_t N>
+            struct as_expr<T [N], void>
+            {
+                typedef expr<proto::tag::terminal, args1<T (&)[N]> > type;
+
+            private:
+                friend struct op::as_expr;
+                typedef type result_type;
+                static result_type call(T (&t)[N])
+                {
+                    type that = {t};
+                    return that;
+                }
             };
 
             template<typename T>
             struct as_expr<T, typename T::is_boost_proto_expr_>
             {
                 typedef T type;
+
+            private:
+                friend struct op::as_expr;
+                typedef T const &result_type;
+                static result_type call(T const &t)
+                {
+                    return t;
+                }
             };
 
             // as_expr_ref
@@ -254,35 +285,22 @@
                   : meta::as_expr<typename meta::value_type<T>::type>
                 {};
 
-                template<typename T>
-                ref<T> const &operator()(ref<T> const &t) const
+                template<typename T, std::size_t N>
+                typename meta::as_expr<T[N]>::result_type operator()(T (&t)[N]) const
                 {
-                    return t;
+                    return meta::as_expr<T[N]>::call(t);
+                }
+
+                template<typename T, std::size_t N>
+                typename meta::as_expr<T const[N]>::result_type operator()(T const (&t)[N]) const
+                {
+                    return meta::as_expr<T const[N]>::call(t);
                 }
 
                 template<typename T>
-                typename mpl::if_<
-                    meta::is_expr<T>
-                  , typename meta::as_expr<T>::type const &
-                  , typename meta::as_expr<T>::type
-                >::type
-                operator()(T const &t) const
+                typename meta::as_expr<T>::result_type operator()(T const &t) const
                 {
-                    return as_expr::call(t, meta::is_expr<T>());
-                }
-
-            private:
-                template<typename T>
-                static typename meta::as_expr<T>::type const &call(T const &t, mpl::true_)
-                {
-                    return t;
-                }
-
-                template<typename T>
-                static typename meta::as_expr<T>::type call(T const &t, mpl::false_)
-                {
-                    typename meta::as_expr<T>::type that = {t};
-                    return that;
+                    return meta::as_expr<T>::call(t);
                 }
             };
 
@@ -341,7 +359,7 @@
                 {};
 
                 template<typename Expr>
-                typename meta::arg_c<Expr, N>::type const &operator()(Expr const &expr) const
+                typename meta::arg_c<Expr, N>::reference operator()(Expr const &expr) const
                 {
                     return meta::arg_c<Expr, N>::call(expr);
                 }
@@ -359,7 +377,7 @@
                 {};
 
                 template<typename Expr>
-                typename meta::arg<Expr, N>::type const &operator()(Expr const &expr) const
+                typename meta::arg<Expr, N>::reference operator()(Expr const &expr) const
                 {
                     return meta::arg<Expr, N>::call(expr);
                 }
@@ -376,7 +394,7 @@
                 {};
 
                 template<typename Expr>
-                typename meta::left<Expr>::type const &operator()(Expr const &expr) const
+                typename meta::left<Expr>::reference operator()(Expr const &expr) const
                 {
                     return proto::unref(expr.cast().arg0);
                 }
@@ -393,7 +411,7 @@
                 {};
 
                 template<typename Expr>
-                typename meta::right<Expr>::type const &operator()(Expr const &expr) const
+                typename meta::right<Expr>::reference operator()(Expr const &expr) const
                 {
                     return proto::unref(expr.cast().arg1);
                 }
