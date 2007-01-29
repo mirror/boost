@@ -1118,7 +1118,7 @@ public:
   library that must be linked into your application to use
   Signals. Please refer to
     the <ulink url="../../more/getting_started.html">Getting Started</ulink>
-  guide. You will need to link against the <tt>boost_signals</tt>
+  guide. You will need to link against the <code>boost_signals</code>
   library.</para>
 </section>
 
