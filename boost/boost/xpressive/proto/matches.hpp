@@ -81,18 +81,18 @@
             struct vararg_matches_impl;
 
             // vararg_matches
-            template<typename Args1, typename Args2, typename Back, bool Can, bool Zero>
+            template<typename Args1, typename Args2, typename Back, bool Can, bool Zero, typename EnableIf = void>
             struct vararg_matches
               : mpl::false_
             {};
 
             template<typename Args1, typename Args2, typename Back>
-            struct vararg_matches<Args1, Args2, vararg<Back>, true, true>
+            struct vararg_matches<Args1, Args2, Back, true, true, typename Back::boost_proto_is_vararg_>
               : matches_impl<expr<_, Args1, Args1::size>, expr<_, Args2, Args1::size> >
             {};
 
             template<typename Args1, typename Args2, typename Back>
-            struct vararg_matches<Args1, Args2, vararg<Back>, true, false>
+            struct vararg_matches<Args1, Args2, Back, true, false, typename Back::boost_proto_is_vararg_>
               : and2<
                     matches_impl<expr<_, Args1, Args2::size>, expr<_, Args2, Args2::size> >::value
                   , vararg_matches_impl<Args1, typename Back::type, Args2::size + 1, Args1::size>
@@ -256,7 +256,9 @@
         template<typename Grammar>
         struct vararg
           : Grammar
-        {};
+        {
+            typedef void boost_proto_is_vararg_;
+        };
 
         template<typename Expr, typename Grammar, typename Return>
         struct if_matches

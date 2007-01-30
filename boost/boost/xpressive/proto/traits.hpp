@@ -44,11 +44,11 @@
         {
             namespace meta_detail
             {
-                template<typename T>
+                template<typename T, typename EnableIf = void>
                 struct if_vararg;
 
                 template<typename T>
-                struct if_vararg< vararg<T> >
+                struct if_vararg<T, typename T::boost_proto_is_vararg_>
                   : T
                 {};
             }

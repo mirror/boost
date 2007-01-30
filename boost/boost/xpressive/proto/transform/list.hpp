@@ -43,6 +43,27 @@ namespace boost { namespace proto { namespace transform
         }
     };
 
+    // A tail transform, that returns the tail of a fusion cons-list
+    template<typename Grammar>
+    struct tail
+      : Grammar
+    {
+        tail();
+
+        template<typename Expr, typename State, typename Visitor>
+        struct apply
+        {
+            typedef typename Grammar::template apply<Expr, State, Visitor>::type::cdr_type type;
+        };
+
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)
+        {
+            return Grammar::call(expr, state, visitor).cdr;
+        }
+    };
+
 }}}
 
 #endif
