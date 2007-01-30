@@ -19,6 +19,8 @@
     #include <boost/preprocessor/repetition/enum_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
+    #include <boost/preprocessor/repetition/repeat.hpp>
+    #include <boost/preprocessor/repetition/repeat_from_to.hpp>
     #include <boost/preprocessor/facilities/intercept.hpp>
     #include <boost/preprocessor/arithmetic/sub.hpp>
     #include <boost/ref.hpp>
@@ -40,6 +42,17 @@
 
         namespace meta
         {
+            namespace meta_detail
+            {
+                template<typename T>
+                struct if_vararg;
+
+                template<typename T>
+                struct if_vararg< vararg<T> >
+                  : T
+                {};
+            }
+
             // is_ref
             template<typename T, typename EnableIf>
             struct is_ref
@@ -256,7 +269,7 @@
             {};
 
         #define BOOST_PROTO_ARG(z, n, data)\
-            typedef BOOST_PP_CAT(A, n) BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type);\
+            typedef BOOST_PP_CAT(data, n) BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type);\
             /**/
 
         #define BOOST_PROTO_ARG_N_TYPE(z, n, data)\
@@ -467,7 +480,8 @@
             {
                 typedef expr<proto::tag::function, BOOST_PP_CAT(args, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
                 typedef proto::tag::function tag_type;
-                BOOST_PP_REPEAT(N, BOOST_PROTO_ARG, ~)
+                BOOST_PP_REPEAT(N, BOOST_PROTO_ARG, A)
+                BOOST_PP_REPEAT_FROM_TO(N, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_ARG, meta_detail::if_vararg<BOOST_PP_CAT(A, BOOST_PP_DEC(N))> BOOST_PP_INTERCEPT)
             };
 
             template<typename Tag BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
@@ -486,7 +500,8 @@
             {
                 typedef expr<Tag, BOOST_PP_CAT(args, N)<BOOST_PP_ENUM_PARAMS(N, A)> > type;
                 typedef Tag tag_type;
-                BOOST_PP_REPEAT(N, BOOST_PROTO_ARG, ~)
+                BOOST_PP_REPEAT(N, BOOST_PROTO_ARG, A)
+                BOOST_PP_REPEAT_FROM_TO(N, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_ARG, meta_detail::if_vararg<BOOST_PP_CAT(A, BOOST_PP_DEC(N))> BOOST_PP_INTERCEPT)
             };
 
             template<typename Expr, typename Fun>
