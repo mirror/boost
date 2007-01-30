@@ -291,9 +291,9 @@
     // aBC
     
     typedef split_iterator&lt;string::iterator&gt; string_split_iterator;
-    for(string_find_iterator It=
+    for(string_split_iterator It=
         make_split_iterator(str1, first_finder("-*-", is_iequal()));
-        It!=string_find_iterator();
+        It!=string_split_iterator();
         ++It)
     {
         cout &lt;&lt; copy_range&lt;std::string&gt;(*It) &lt;&lt; endl;
