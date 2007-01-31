@@ -32,7 +32,7 @@
 #include "lexertl/rules.hpp"
 #include "lexertl/state_machine.hpp"
 #include "lexertl/consts.h"
-#include "lexertl/serialise.hpp"
+#include "lexertl/examples/serialise.hpp"
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost { namespace wave { namespace cpplexer { namespace lexertl 
