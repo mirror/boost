@@ -28,11 +28,12 @@
     #include <boost/config.hpp>
     #include <boost/mpl/bool.hpp>
     #include <boost/mpl/apply.hpp>
+    #include <boost/mpl/aux_/template_arity.hpp>
+    #include <boost/mpl/aux_/lambda_arity_param.hpp>
     #include <boost/utility/enable_if.hpp>
     #include <boost/type_traits/is_convertible.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/traits.hpp>
-
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto
@@ -64,9 +65,21 @@
             template<typename And>
             struct last;
 
-            template<typename T, typename U>
+            template<typename T, typename U
+                BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(long Arity = mpl::aux::template_arity<U>::value)
+            >
             struct lambda_matches
-              : mpl::false_
+              : is_same<T, U>
+            {};
+
+            template<typename T>
+            struct lambda_matches<T, proto::_ BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1)>
+              : mpl::true_
+            {};
+
+            template<template<typename> class T, typename Expr0, typename Grammar0>
+            struct lambda_matches<T<Expr0>, T<Grammar0> BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(1) >
+              : lambda_matches<Expr0, Grammar0>
             {};
 
             // wrap_terminal
@@ -136,11 +149,6 @@
               : mpl::true_
             {};
 
-            template<template<typename> class T, typename Expr0, typename Grammar0>
-            struct lambda_matches<T<Expr0>, T<Grammar0> >
-              : terminal_matches<Expr0, Grammar0>
-            {};
-
             // matches_impl
             template<typename Expr, typename Grammar>
             struct matches_impl
@@ -194,8 +202,8 @@
               , typename BOOST_PP_CAT(G, n)::type\
             >
 
-        #define BOOST_PROTO_DEFINE_TERMINAL_MATCHES(z, n, data)\
-            terminal_matches<\
+        #define BOOST_PROTO_DEFINE_LAMBDA_MATCHES(z, n, data)\
+            lambda_matches<\
                 BOOST_PP_CAT(Expr, n)\
               , BOOST_PP_CAT(Grammar, n)\
             >
@@ -206,7 +214,7 @@
 
         #undef BOOST_PROTO_MATCHES_N_FUN
         #undef BOOST_PROTO_DEFINE_MATCHES
-        #undef BOOST_PROTO_DEFINE_TERMINAL_MATCHES
+        #undef BOOST_PROTO_DEFINE_LAMBDA_MATCHES
 
             // handle proto::if_
             template<typename Expr, typename Pred>
@@ -354,10 +362,10 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename Expr)
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename Grammar)
             >
-            struct lambda_matches<T<BOOST_PP_ENUM_PARAMS(N, Expr)>, T<BOOST_PP_ENUM_PARAMS(N, Grammar)> >
+            struct lambda_matches<T<BOOST_PP_ENUM_PARAMS(N, Expr)>, T<BOOST_PP_ENUM_PARAMS(N, Grammar)> BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(N) >
               : BOOST_PP_CAT(and, N)<
-                    BOOST_PROTO_DEFINE_TERMINAL_MATCHES(~, 0, ~)::value,
-                    BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_DEFINE_TERMINAL_MATCHES, ~)
+                    BOOST_PROTO_DEFINE_LAMBDA_MATCHES(~, 0, ~)::value,
+                    BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_DEFINE_LAMBDA_MATCHES, ~)
                 >
             {};
 

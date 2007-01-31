@@ -58,7 +58,7 @@ namespace boost { namespace spirit2
     {};
 
     struct StdStringLiteral
-      : proto::meta::terminal<std::string const &> // the const & is to work around a GCC bug
+      : proto::meta::terminal<std::string>
     {};
 
     struct CharParser
