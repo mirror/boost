@@ -65,6 +65,7 @@
             #undef BOOST_PROTO_REVERSE_FOLD_STATE_TYPE
             #undef BOOST_PROTO_FOLD_STATE
             #undef BOOST_PROTO_FOLD_STATE_TYPE
+            #undef BOOST_PROTO_ARG_N_TYPE
         }
 
         // A fold transform that transforms the left sub-tree and

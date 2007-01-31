@@ -56,6 +56,12 @@
         proto::unref(this->BOOST_PP_CAT(arg, n))\
         /**/
 
+        namespace detail
+        {
+        #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), <boost/xpressive/proto/detail/funop.hpp>))
+        #include BOOST_PP_ITERATE()
+        }
+
     #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/expr.hpp>))
     #include BOOST_PP_ITERATE()
 
@@ -165,16 +171,15 @@
 
         template<typename This BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
         struct result<This(BOOST_PP_ENUM_PARAMS(N, A))>
-        {
-            typedef expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > type;
-        };
+          : detail::BOOST_PP_CAT(funop, N)<expr BOOST_PP_ENUM_TRAILING_PARAMS(N, A)>
+        {};
 
         template<BOOST_PP_ENUM_PARAMS(N, typename A)>
-        expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > const
+        typename detail::BOOST_PP_CAT(funop, N)<expr BOOST_PP_ENUM_TRAILING_PARAMS(N, A)>::type const
         operator ()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const &a)) const
         {
-            expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<expr> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename meta::as_expr_ref<A, >::type BOOST_PP_INTERCEPT)> > that = {{*this} BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_AS_OP, _)};
-            return that;
+            return detail::BOOST_PP_CAT(funop, N)<expr BOOST_PP_ENUM_TRAILING_PARAMS(N, A)>
+                ::call(*this BOOST_PP_ENUM_TRAILING_PARAMS(N, a));
         }
 
     #undef N
