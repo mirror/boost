@@ -64,16 +64,37 @@
             template<typename And>
             struct last;
 
+            template<typename T, typename U>
+            struct lambda_matches
+              : mpl::false_
+            {};
+
+            // wrap_terminal
             template<typename T>
             struct wrap_terminal
             {
                 wrap_terminal(T const &);
+                
+                template<typename U>
+                wrap_terminal(U const &, typename enable_if<lambda_matches<U, T> >::type * = 0 );
             };
 
             template<typename T>
             struct wrap_terminal<T &>
             {
                 wrap_terminal(T &);
+                
+                template<typename U>
+                wrap_terminal(U &, typename enable_if<lambda_matches<U, T> >::type * = 0 );
+            };
+
+            template<typename T>
+            struct wrap_terminal<T const &>
+            {
+                wrap_terminal(T const &);
+
+                template<typename U>
+                wrap_terminal(U const &, typename enable_if<lambda_matches<U, T> >::type * = 0 );
             };
 
             // vararg_matches_impl
@@ -116,7 +137,7 @@
             {};
 
             template<template<typename> class T, typename Expr0, typename Grammar0>
-            struct terminal_matches<T<Expr0>, T<Grammar0> >
+            struct lambda_matches<T<Expr0>, T<Grammar0> >
               : terminal_matches<Expr0, Grammar0>
             {};
 
@@ -333,7 +354,7 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename Expr)
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename Grammar)
             >
-            struct terminal_matches<T<BOOST_PP_ENUM_PARAMS(N, Expr)>, T<BOOST_PP_ENUM_PARAMS(N, Grammar)> >
+            struct lambda_matches<T<BOOST_PP_ENUM_PARAMS(N, Expr)>, T<BOOST_PP_ENUM_PARAMS(N, Grammar)> >
               : BOOST_PP_CAT(and, N)<
                     BOOST_PROTO_DEFINE_TERMINAL_MATCHES(~, 0, ~)::value,
                     BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_DEFINE_TERMINAL_MATCHES, ~)
