@@ -10,6 +10,7 @@
 =============================================================================*/
 
 #define BOOST_WAVE_SOURCE 1
+#include <cstring>
 #include <boost/preprocessor/stringize.hpp>
 
 #include <boost/wave/wave_config.hpp>
