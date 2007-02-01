@@ -197,6 +197,20 @@ fuzzy matching of terminals. You could use it as follows:
 
 Now, `CharString` does not match array types, only character string pointers.
 
+There is one more way you can perform a fuzzy match on terminals. Consider the
+problem of trying to match a `std::complex<>` terminal. You can easily match
+a `std::complex<float>` or a `std::complex<double>`, but how would you match
+any instantiation of `std::complex<>`? You can use `proto::_` here to solve 
+this problem. Here is the pattern to match any `std::complex<>` instantiation:
+
+    struct StdComplex
+      : meta::terminal< std::complex< _ > >
+    {};
+
+When given a pattern like this, Proto will deconstruct the pattern and the 
+expression it is being matched against and see if it can match all the 
+constituents. 
+
 [h3 Other Valid Patterns]
 
 We've already seen how to use expression generators like `meta::terminal<>` and
@@ -227,6 +241,50 @@ MPL lambda expressions. The second is Proto's pattern wildcard. The only place
 `mpl::_` should appear in your patterns is in an _if_. Elsewhere in your 
 patterns you should be using `proto::_`.]
 
+[h3 Matching Vararg Functions]
 
+Not all of C++'s overloadable operators are unary or binary. There is the 
+oddball `operator()` -- the function call operator -- which can have any number
+of argumentrs. Likewise, with Proto you may define your own "operators" that 
+could also take more that two arguments. As a result, there may be nodes in 
+your Proto expression tree that have an arbitrary number of children (up to 
+some predefined maximum). How do you write a pattern to match such a node?
+
+For such cases, Proto provides the _vararg_ class template. Its template
+argument is a pattern, and the _vararg_ will match the pattern zero or more
+times. Consider a Proto lazy function called `fun()` that can take zero or
+more characters as arguments, as follows:
+
+    struct fun_tag {};
+    struct FunTag : meta::terminal<fun_tag> {};
+    FunTag::type const fun = {{}};
+    
+    // example usage:
+    fun();
+    fun('a');
+    fun('a', 'b');
+
+Below is the pattern that matches all the allowable invocations of `fun()`:
+
+    struct FunCall
+      : meta::function< FunTag, vararg< meta::terminal<char> > >
+    {};
+
+The `FunCall` pattern uses _vararg_ to match zero or more character literals
+as arguments of the `fun()` function.
+
+As another example, can you guess what the following pattern matches?
+
+    struct Foo
+      : or_<
+            meta::terminal<_>
+          , meta::nary_expr<_, vararg< Foo > >
+        >
+    {};
+
+Here's a hint: the first template parameter to `nary_expr<>` represents the 
+node type, and any additional template parameters represent children nodes. The
+answer is that this is a degenerate pattern that matches every possible 
+expression tree, from root to leaves.
 
 [endsect]
