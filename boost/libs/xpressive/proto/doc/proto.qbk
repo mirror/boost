@@ -63,6 +63,8 @@
 [def _binary_expr_          `binary_expr<>`]
 [def _literal_              `literal<>`]
 [def _lit_                  `lit()`]
+[def _vararg_               `vararg<>`]
+[def _context_              `context<>`]
 
 [include preface.qbk]
 

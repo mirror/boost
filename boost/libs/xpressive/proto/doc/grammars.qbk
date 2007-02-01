@@ -21,20 +21,17 @@ expressions. Proto provides utilities for defining the patterns, and the
 _matches_ template for checking whether a given expression type matches the 
 pattern.
 
-First, let's define a terminal we can use in our lazy I/O expressions:
+First, let's define some terminals we can use in our lazy I/O expressions:
 
+    meta::terminal< std::istream & >::type cin_ = { std::cin };
     meta::terminal< std::ostream & >::type cout_ = { std::cout };
 
 Now, we can use `cout_` instead of `std::cout`, and get I/O expression trees
-that we can execute later. (We could have also defined it as: 
-`literal< std::ostream & > cout_ = lit( std::cout );`. It doesn't matter for 
-this discussion.)
-
-To define patterns that match intput and output expressions of the form 
-`cout_ >> 1` and `cout_ << 1` we do this:
+that we can execute later. To define patterns that match intput and output 
+expressions of the form `cin_ >> i` and `cout_ << 1` we do this:
 
     struct Input
-      : meta::right_shift< meta::terminal< std::ostream & >, _ >
+      : meta::right_shift< meta::terminal< std::istream & >, _ >
     {};
 
     struct Output
@@ -46,7 +43,7 @@ without accessing the nested `::type`. When used like this, it is a very simple
 pattern, as are `meta::right_shift<>` and `meta::left_shift<>`. The newcomer 
 here is `_` in the `proto` namespace. It is a wildcard that matches anything.
 The `Input` struct is a pattern that matches any right-shift expression that
-has a `std::ostream` terminal as its left operand.
+has a `std::istream` terminal as its left operand.
 
 We can use these patterns together with the _matches_ template to query at
 compile time whether a given I/O expression type is an input or output 
@@ -68,8 +65,9 @@ operation. Consider the following:
 
     int main()
     {
+        int i = 0;
         input_output( cout_ << 1 );
-        input_output( cout_ >> 1 );
+        input_output( cin_ >> i );
         
         return 0;
     }
@@ -104,21 +102,20 @@ at all:
 
     input_output( cout_ << 1 << 2 ); // oops!
 
-What's wrong? The problem is that our pattern does not take the associativity 
-of the left-shift operator into account. The expression groups as if it were 
-written like `(cout_ << 1) << 2`. It will not match the `Output` pattern, which
-expects the left operand to be a terminal, not another left-shift operation. We
-need to fix the pattern.
+What's wrong? The problem is that this expression does not match our pattern. 
+The expression groups as if it were written like `(cout_ << 1) << 2`. It will 
+not match the `Output` pattern, which expects the left operand to be a 
+terminal, not another left-shift operation. We need to fix the pattern.
 
 We notice that in order to verify an expression as input or output, we'll need
 to recurse down to the bottom-left-most leaf and check that it is a 
-`std::ostream`. When we get to the terminal, we must stop recursing. We can 
-express this in our pattern using _or_. Here are the correct `Input` and 
-`Output` patterns:
+`std::istream` or `std::ostream`. When we get to the terminal, we must stop 
+recursing. We can express this in our pattern using _or_. Here are the correct 
+`Input` and `Output` patterns:
 
     struct Input
       : or_<
-            meta::right_shift< meta::terminal<std::ostream &>, _ >
+            meta::right_shift< meta::terminal<std::istream &>, _ >
           , meta::right_shift< Input, _ >
         >
     {};
@@ -263,6 +260,7 @@ more characters as arguments, as follows:
     fun();
     fun('a');
     fun('a', 'b');
+    ...
 
 Below is the pattern that matches all the allowable invocations of `fun()`:
 
@@ -286,5 +284,123 @@ Here's a hint: the first template parameter to `nary_expr<>` represents the
 node type, and any additional template parameters represent children nodes. The
 answer is that this is a degenerate pattern that matches every possible 
 expression tree, from root to leaves.
+
+[h3 Meta-Grammars]
+
+We've already seen how to use small patterns to answer simple questions about 
+expression trees. Here's a harder question: Does this expression conform to the
+grammar of my domain-specific embedded language? In this section we'll see how
+to use Proto to define a grammar for your DSEL and use it to validate 
+expression templates, giving short, readable compile-time errors for invalid
+expressions.
+
+[tip You might be thinking that this is a backwards way of doing things.
+["If Proto let me select which operators to overload, my users wouldn't be able 
+to create invalid expressions in the first place, and I wouldn't need a grammar
+at all!] That /may/ be true, but there are reasons for preferring to do things
+this way. First, it lets you develop your DSEL rapidly -- all the operators are
+there for you already! -- and worry about invalid syntax later. Second, it 
+might be the case that some operators are only allowed in certain contexts 
+within your DSEL. This is easy to express with a grammar, and hard to do with 
+straight operator overloading. Third, using a DSEL grammar to flag invalid 
+expressions can often yield better errors than manually selecting the 
+overloaded operators. Fourth, the grammar can be used for more than just 
+validation. As we'll see later, you can use your grammar to define ['tree 
+transformations] that convert expression templates into other more useful 
+objects.\n
+\n
+If none of the above convinces you, you actually /can/ use Proto to control
+which operators are overloaded within your domain. We'll see how later.
+]
+
+In a previous section, we used Proto to define a DSEL for a lazily evaluated
+calculator that allowed any combination of placeholders, floating-point 
+literals, addition, subtraction, multiplaction, division and grouping. If
+we were to write the grammar for this DSEL in  
+[@http://en.wikipedia.org/wiki/Extended_Backus_Naur_Form EBNF], it might look
+like this:
+
+[pre
+group       ::= '(' expression ')'
+factor      ::= double | placeholder1 | placeholder2 | group
+term        ::= factor (('*' factor) | ('/' factor))*
+expression  ::= term (('+' term) | ('-' term))*
+]
+
+This captures the syntax, associativity and precedence rules of a calculator.
+Writing the grammar for our calculator DSEL using Proto is actually a great 
+deal simpler. Since we are using C++ as the host language, we are bound to the
+associativity and precedence rules for the C++ operators. Our grammar can 
+assume them. Also, in C++ grouping is already handled for us with the use of 
+parenthesis, so we don't have to code that into our grammar.
+
+Let's begin our grammar for forward-declaring it:
+
+    struct CalculatorGrammar;
+    
+It's an incomplete type at this point, but we'll still be able to use it to 
+define the rules of our grammar. Let's define patterns for the terminals:
+
+    struct Double
+      : meta::terminal< double >
+    {};
+
+    struct Placeholder1
+      : meta::terminal< placeholder1 >
+    {};
+
+    struct Placeholder2
+      : meta::terminal< placeholder2 >
+    {};
+    
+    struct Terminal
+      : or_<Double, Placeholder1, Placeholder2>
+    {};
+
+Now let's define the rules for addition, subtraction, multiplication and 
+division. Here, we can ignore issues of associativity and precedence -- the C++
+compiler will enforce that for us. We only must enforce that the arguments to
+the operators must themselves conform to the `CalculatorGrammar` that we 
+forward-declared above.
+
+    struct Add
+      : meta::add< CalculatorGrammar, CalculatorGrammar >
+    {};
+
+    struct Subtract
+      : meta::subtract< CalculatorGrammar, CalculatorGrammar >
+    {};
+
+    struct Multiply
+      : meta::multiply< CalculatorGrammar, CalculatorGrammar >
+    {};
+
+    struct Divide
+      : meta::divide< CalculatorGrammar, CalculatorGrammar >
+    {};
+
+Now that we've defined all the parts of the grammar, we can define 
+`CalculatorGrammar`:
+
+    struct CalculatorGrammar
+      : or_<
+            Terminal
+          , Add
+          , Subtract
+          , Multiply
+          , Divide
+        >
+    {};
+
+That's it! Now we can use `CalculatorGrammar` to enforce that an expression
+template conforms to our grammar. We can use _matches_ and `BOOST_MPL_ASSERT()`
+to issue readable compile-time errors for invalid expressions, as below:
+
+    template< typename Expr >
+    void evaluate( Expr const & expr )
+    {
+        BOOST_MPL_ASSERT(( matches< Expr, CalculatorGrammar > ));
+        // ...
+    }
 
 [endsect]

@@ -12,48 +12,45 @@ tour of the types and functions Proto provides.
 
 [h2 Hello, world!]
 
-Below is a very simple program that uses Proto to build an expression template.
-It simply uses Proto's debug facilities to display the expression. We'll see 
-later how to do more interesting things with the expression.
+Below is a very simple program that uses Proto to build an expression template
+and then execute it.
 
+    #include <iostream>
     #include <boost/xpressive/proto/proto.hpp>
-    #include <boost/xpressive/proto/debug.hpp>
-    
+    #include <boost/xpressive/proto/context.hpp>
     using namespace boost;
+    
+    proto::meta::terminal< std::ostream & >::type cout_ = { std::cout };
+    
+    template< typename Expr >
+    void evaluate( Expr const & expr )
+    {
+        proto::context<> ctx;
+        expr.eval( ctx );
+    }
     
     int main()
     {
-        // Function for Proto-ifying a literal
-        using proto::lit;
-        
-        // Use the Proto's operator overloads to build
-        // expression. Then use Proto's debug facilities
-        // to display the expression tree.
-        proto::display_expr(
-            42 + lit('a') * "hello world"
-        );
-        
+        evaluate( cout_ << "hello" << ',' << " world" );
         return 0;
     }
 
 This program outputs the following:
 
 [pre
-add(
-    terminal(42)
-  , multiply(
-        terminal(a)
-      , terminal(hello world)
-    )
-)
+hello, world
 ]
 
 Notice that in order to build a Proto expression template, at least one 
 argument in the expression must be a Proto-ified. In this case, that is done 
-with the _lit_ function, which returns a _literal_ wrapper. That "infects" the 
-expression, and brings Proto's operator overloads into consideration. Any 
-literals in the expression are then Proto-ified by wrapping them in a Proto 
-terminal before they are combined into larger Proto expressions.
+with the _terminal_ class template, which is used to wrap `std::cout`. That 
+"infects" the expression, and brings Proto's operator overloads into 
+consideration. Any literals in the expression are then Proto-ified by wrapping
+them in a Proto terminal before they are combined into larger Proto 
+expressions. The use of _context_ assigns the standard meanings to the 
+operators in the expression. (By using a different context, you could give
+the operators in your expressions different semantics. By default, Proto
+makes no assumptions about what operators actually /mean/.)
 
 [blurb [*Proto Design Philosophy]\n
 \n
@@ -61,8 +58,9 @@ Before we continue, let's use the above example to illustrate an important
 design principle of Proto's. The expression template created in the ['hello 
 world] example is totally general and abstract. It is not tied in any way to
 any particular domain or application, nor does it have any particular meaning 
-or behavior on its own. It is really just a heterogeneous tree, which might 
-mean something in one domain, and something else entirely in a different one.\n
+or behavior on its own, until it is evaluated in a /context/. Expression 
+templates are really just heterogeneous trees, which might mean something in 
+one domain, and something else entirely in a different one.\n
 \n
 As we'll see later, there is a way to create Proto expression trees that are
 ['not] purely abstract, and that have meaning and behaviors independent of any
