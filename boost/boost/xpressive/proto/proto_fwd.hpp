@@ -246,7 +246,7 @@ namespace boost { namespace proto
         struct as_expr;
 
         template<typename T, typename EnableIf = void>
-        struct as_expr_ref;
+        struct as_arg;
 
         template<typename Expr, typename State, typename Visitor, typename DomainTag>
         struct compile;
@@ -350,7 +350,7 @@ namespace boost { namespace proto
         struct left;
         struct right;
         struct as_expr;
-        struct as_expr_ref;
+        struct as_arg;
         struct unref;
         struct deep_copy;
 

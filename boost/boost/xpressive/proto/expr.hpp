@@ -16,7 +16,6 @@
     #include <boost/preprocessor/dec.hpp>
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
-    #include <boost/preprocessor/punctuation/comma.hpp>
     #include <boost/preprocessor/facilities/intercept.hpp>
     #include <boost/preprocessor/repetition/repeat.hpp>
     #include <boost/preprocessor/repetition/repeat_from_to.hpp>
@@ -45,7 +44,7 @@
         /**/
 
     #define BOOST_PROTO_AS_OP(z, n, data)\
-        proto::as_expr_ref(BOOST_PP_CAT(a,n))\
+        proto::as_arg(BOOST_PP_CAT(a,n))\
         /**/
 
     #define BOOST_PROTO_UNREF_ARG_TYPE(z, n, data)\
@@ -56,7 +55,7 @@
         proto::unref(this->BOOST_PP_CAT(arg, n))\
         /**/
 
-        namespace detail
+        namespace aux_
         {
         #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), <boost/xpressive/proto/detail/funop.hpp>))
         #include BOOST_PP_ITERATE()
@@ -130,18 +129,18 @@
             }
 
             template<typename A>
-            expr<tag::assign, args2<ref<expr>, typename meta::as_expr_ref<A>::type> > const
+            expr<tag::assign, args2<ref<expr>, typename meta::as_arg<A>::type> > const
             operator =(A const &a) const
             {
-                expr<tag::assign, args2<ref<expr>, typename meta::as_expr_ref<A>::type> > that = {{*this}, proto::as_expr_ref(a)};
+                expr<tag::assign, args2<ref<expr>, typename meta::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
                 return that;
             }
 
             template<typename A>
-            expr<tag::subscript, args2<ref<expr>, typename meta::as_expr_ref<A>::type> > const
+            expr<tag::subscript, args2<ref<expr>, typename meta::as_arg<A>::type> > const
             operator [](A const &a) const
             {
-                expr<tag::subscript, args2<ref<expr>, typename meta::as_expr_ref<A>::type> > that = {{*this}, proto::as_expr_ref(a)};
+                expr<tag::subscript, args2<ref<expr>, typename meta::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
                 return that;
             }
 
@@ -171,14 +170,14 @@
 
         template<typename This BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
         struct result<This(BOOST_PP_ENUM_PARAMS(N, A))>
-          : detail::BOOST_PP_CAT(funop, N)<expr BOOST_PP_ENUM_TRAILING_PARAMS(N, A)>
+          : aux_::BOOST_PP_CAT(funop, N)<expr BOOST_PP_ENUM_TRAILING_PARAMS(N, A)>
         {};
 
         template<BOOST_PP_ENUM_PARAMS(N, typename A)>
-        typename detail::BOOST_PP_CAT(funop, N)<expr BOOST_PP_ENUM_TRAILING_PARAMS(N, A)>::type const
+        typename aux_::BOOST_PP_CAT(funop, N)<expr BOOST_PP_ENUM_TRAILING_PARAMS(N, A)>::type const
         operator ()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const &a)) const
         {
-            return detail::BOOST_PP_CAT(funop, N)<expr BOOST_PP_ENUM_TRAILING_PARAMS(N, A)>
+            return aux_::BOOST_PP_CAT(funop, N)<expr BOOST_PP_ENUM_TRAILING_PARAMS(N, A)>
                 ::call(*this BOOST_PP_ENUM_TRAILING_PARAMS(N, a));
         }
 

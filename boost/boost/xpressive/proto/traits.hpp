@@ -120,15 +120,15 @@
                 }
             };
 
-            // as_expr_ref
+            // as_arg
             template<typename T, typename EnableIf>
-            struct as_expr_ref
+            struct as_arg
             {
                 typedef expr<proto::tag::terminal, args1<T const &> > type;
             };
 
             template<typename T>
-            struct as_expr_ref<T, typename T::is_boost_proto_expr_>
+            struct as_arg<T, typename T::is_boost_proto_expr_>
             {
                 typedef ref<T> type;
             };
@@ -317,14 +317,14 @@
                 }
             };
 
-            struct as_expr_ref
+            struct as_arg
             {
                 template<typename Sig>
                 struct result;
 
                 template<typename This, typename T>
                 struct result<This(T)>
-                  : meta::as_expr_ref<typename meta::value_type<T>::type>
+                  : meta::as_arg<typename meta::value_type<T>::type>
                 {};
 
                 template<typename T>
@@ -334,10 +334,10 @@
                 }
 
                 template<typename T>
-                typename meta::as_expr_ref<T>::type
+                typename meta::as_arg<T>::type
                 operator()(T const &t) const
                 {
-                    typename meta::as_expr_ref<T>::type that = {t};
+                    typename meta::as_arg<T>::type that = {t};
                     return that;
                 }
             };
@@ -433,7 +433,7 @@
         }
 
         op::as_expr const as_expr = {};
-        op::as_expr_ref const as_expr_ref = {};
+        op::as_arg const as_arg = {};
         op::make_terminal const make_terminal = {};
         op::left const left = {};
         op::right const right = {};
