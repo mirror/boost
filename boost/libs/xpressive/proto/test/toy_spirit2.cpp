@@ -497,7 +497,6 @@ namespace boost { namespace spirit2
     template<typename Rule, typename Iterator>
     bool parse(Rule const &rule, Iterator begin, Iterator end)
     {
-        //BOOST_MPL_ASSERT((is_array<Rule const>));
         return parse_impl(proto::as_expr(rule), begin, end);
     }
 
@@ -517,7 +516,7 @@ void test_toy_spirit2()
           , hello.end()
         )
     );
-/*
+
     BOOST_CHECK(
         spirit2::parse(
             char_ >> char_('b') >> 'c' >> char_
@@ -542,7 +541,6 @@ void test_toy_spirit2()
           , hello.end()
         )
     );
-    //*/
 }
 
 using namespace boost::unit_test;
