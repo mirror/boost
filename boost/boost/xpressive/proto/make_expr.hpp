@@ -42,7 +42,7 @@
             struct make_expr_impl;
 
         #define BOOST_PROTO_AS_EXPR(z, n, data) proto::as_expr(BOOST_PP_CAT(a, n))
-        #define BOOST_PROTO_VALUE_AT(z, n, data) typename  fusion::result_of::value_at_c< Sequence, n >::type
+        #define BOOST_PROTO_VALUE_AT(z, n, data) typename fusion::result_of::value_at_c< Sequence, n >::type
         #define BOOST_PROTO_AT(z, n, data) fusion::at_c< n >(data)
         #define BOOST_PP_ITERATION_PARAMS_1 (4, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/make_expr.hpp>, 1))
         #include BOOST_PP_ITERATE()
@@ -93,8 +93,6 @@
                 template<BOOST_PP_ENUM_PARAMS(N, typename A)>
                 struct result_
                 {
-                    BOOST_STATIC_ASSERT(!is_reference<A0>::value);
-
                     typedef expr<Tag, BOOST_PP_CAT(args, N)<
                         BOOST_PP_ENUM_BINARY_PARAMS(N, typename result_of::as_expr<A, >::type BOOST_PP_INTERCEPT)
                     > > type;
@@ -105,11 +103,11 @@
 
                 template<typename This BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
                 struct result<This(BOOST_PP_ENUM_PARAMS(N, A))>
-                  : result_<BOOST_PP_ENUM_BINARY_PARAMS(N, typename detail::remove_cv_ref<A, >::type BOOST_PP_INTERCEPT)>
+                  : result_<BOOST_PP_ENUM_BINARY_PARAMS(N, typename remove_reference<A, >::type BOOST_PP_INTERCEPT)>
                 {};
 
                 template<BOOST_PP_ENUM_PARAMS(N, typename A)>
-                typename result_<BOOST_PP_ENUM_PARAMS(N, A)>::type
+                typename result_<BOOST_PP_ENUM_PARAMS(N, const A)>::type
                 operator ()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const &a)) const
                 {
                     typename result_<BOOST_PP_ENUM_PARAMS(N, A)>::type that =

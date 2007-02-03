@@ -28,6 +28,8 @@
     #include <boost/mpl/bool.hpp>
     #include <boost/static_assert.hpp>
     #include <boost/utility/result_of.hpp>
+    #include <boost/type_traits/is_array.hpp>
+    #include <boost/type_traits/is_function.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/ref.hpp>
     #include <boost/xpressive/proto/args.hpp>
@@ -66,42 +68,27 @@
             template<typename T, typename EnableIf>
             struct as_expr
             {
-                typedef expr<proto::tag::terminal, args1<T> > type;
+                typedef typename mpl::if_<mpl::or_<is_function<T>, is_array<T> >, T &, T>::type arg0_type;
+                typedef expr<proto::tag::terminal, args1<arg0_type> > type;
 
             private:
                 friend struct op::as_expr;
                 typedef type result_type;
-                static result_type call(T const &t)
+                static result_type call(T &t)
                 {
-                    type that = {t};
-                    return that;
-                }
-            };
-
-            template<typename T, std::size_t N>
-            struct as_expr<T [N], void>
-            {
-                typedef expr<proto::tag::terminal, args1<T (&)[N]> > type;
-
-            private:
-                friend struct op::as_expr;
-                typedef type result_type;
-                static result_type call(T (&t)[N])
-                {
-                    type that = {t};
-                    return that;
+                    return type::make(t);
                 }
             };
 
             template<typename T>
             struct as_expr<T, typename T::is_boost_proto_expr_>
             {
-                typedef T type;
+                typedef typename T::boost_proto_expr_type_ type;
 
             private:
                 friend struct op::as_expr;
-                typedef T const &result_type;
-                static result_type call(T const &t)
+                typedef type const &result_type;
+                static result_type call(T &t)
                 {
                     return t;
                 }
@@ -111,13 +98,13 @@
             template<typename T, typename EnableIf>
             struct as_arg
             {
-                typedef expr<proto::tag::terminal, args1<T const &> > type;
+                typedef expr<proto::tag::terminal, args1<T &> > type;
             };
 
             template<typename T>
             struct as_arg<T, typename T::is_boost_proto_expr_>
             {
-                typedef ref<T> type;
+                typedef ref<typename T::boost_proto_expr_type_> type;
             };
 
             template<typename Expr, typename N>
@@ -294,25 +281,19 @@
 
                 template<typename This, typename T>
                 struct result<This(T)>
-                  : result_of::as_expr<typename detail::remove_cv_ref<T>::type>
+                  : result_of::as_expr<typename remove_reference<T>::type>
                 {};
 
-                template<typename T, std::size_t N>
-                typename result_of::as_expr<T[N]>::result_type operator()(T (&t)[N]) const
+                template<typename T>
+                typename result_of::as_expr<T>::result_type operator()(T &t) const
                 {
-                    return result_of::as_expr<T[N]>::call(t);
-                }
-
-                template<typename T, std::size_t N>
-                typename result_of::as_expr<T const[N]>::result_type operator()(T const (&t)[N]) const
-                {
-                    return result_of::as_expr<T const[N]>::call(t);
+                    return result_of::as_expr<T>::call(t);
                 }
 
                 template<typename T>
-                typename result_of::as_expr<T>::result_type operator()(T const &t) const
+                typename result_of::as_expr<T const>::result_type operator()(T const &t) const
                 {
-                    return result_of::as_expr<T>::call(t);
+                    return result_of::as_expr<T const>::call(t);
                 }
             };
 
@@ -323,7 +304,7 @@
 
                 template<typename This, typename T>
                 struct result<This(T)>
-                  : result_of::as_arg<typename detail::remove_cv_ref<T>::type>
+                  : result_of::as_arg<typename remove_reference<T>::type>
                 {};
 
                 template<typename T>
@@ -334,9 +315,17 @@
 
                 template<typename T>
                 typename result_of::as_arg<T>::type
-                operator()(T const &t) const
+                operator()(T &t) const
                 {
                     typename result_of::as_arg<T>::type that = {t};
+                    return that;
+                }
+
+                template<typename T>
+                typename result_of::as_arg<T const>::type
+                operator()(T const &t) const
+                {
+                    typename result_of::as_arg<T const>::type that = {t};
                     return that;
                 }
             };

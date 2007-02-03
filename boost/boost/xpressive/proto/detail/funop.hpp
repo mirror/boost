@@ -27,7 +27,7 @@ struct BOOST_PP_CAT(funop, BOOST_PP_ITERATION())
 
     static type const call(
         Expr const &expr
-        BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(BOOST_PP_ITERATION(), A, const &a)
+        BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(BOOST_PP_ITERATION(), A, &a)
     )
     {
         type that = {

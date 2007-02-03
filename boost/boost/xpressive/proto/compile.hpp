@@ -22,9 +22,8 @@ namespace boost { namespace proto
         template<typename Expr, typename State, typename Visitor, typename DomainTag>
         struct compile
         {
-            typedef typename result_of::unref<typename result_of::as_expr<Expr>::type>::type expr_type;
-            typedef compiler<typename tag_of<expr_type>::type, DomainTag> compiler;
-            typedef typename compiler::BOOST_NESTED_TEMPLATE apply<expr_type, State, Visitor>::type type;
+            typedef compiler<typename tag_of<Expr>::type, DomainTag> compiler;
+            typedef typename compiler::BOOST_NESTED_TEMPLATE apply<Expr, State, Visitor>::type type;
         };
     }
 
@@ -49,9 +48,8 @@ namespace boost { namespace proto
             typename result_of::compile<Expr, State, Visitor, DomainTag>::type
             operator()(Expr const &expr, State const &state, Visitor &visitor, DomainTag) const
             {
-                typedef typename result_of::unref<typename result_of::as_expr<Expr>::type>::type expr_type;
-                typedef compiler<typename tag_of<expr_type>::type, DomainTag> compiler;
-                return compiler::call(proto::unref(proto::as_expr(expr)), state, visitor);
+                typedef compiler<typename tag_of<Expr>::type, DomainTag> compiler;
+                return compiler::call(expr, state, visitor);
             }
         };
     }

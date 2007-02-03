@@ -53,19 +53,19 @@ namespace boost { namespace proto
         }
 
         template<typename A>
-        typename generate<Domain, expr<tag::assign, args2<ref<Derived>, typename result_of::as_arg<A>::type> >, tag::assign>::type const
+        typename generate<Domain, expr<tag::assign, args2<ref<Derived>, typename result_of::as_arg<A const>::type> >, tag::assign>::type const
         operator =(A const &a) const
         {
-            expr<tag::assign, args2<ref<Derived>, typename result_of::as_arg<A>::type> > that = {{this->derived()}, proto::as_arg(a)};
-            return generate<Domain, expr<tag::assign, args2<ref<Derived>, typename result_of::as_arg<A>::type> >, tag::assign>::make(that);
+            expr<tag::assign, args2<ref<Derived>, typename result_of::as_arg<A const>::type> > that = {{this->derived()}, proto::as_arg(a)};
+            return generate<Domain, expr<tag::assign, args2<ref<Derived>, typename result_of::as_arg<A const>::type> >, tag::assign>::make(that);
         }
 
         template<typename A>
-        typename generate<Domain, expr<tag::subscript, args2<ref<Derived>, typename result_of::as_arg<A>::type> >, tag::subscript>::type const
+        typename generate<Domain, expr<tag::subscript, args2<ref<Derived>, typename result_of::as_arg<A const>::type> >, tag::subscript>::type const
         operator [](A const &a) const
         {
-            expr<tag::subscript, args2<ref<Derived>, typename result_of::as_arg<A>::type> > that = {{this->derived()}, proto::as_arg(a)};
-            return generate<Domain, expr<tag::subscript, args2<ref<Derived>, typename result_of::as_arg<A>::type> >, tag::subscript>::make(that);
+            expr<tag::subscript, args2<ref<Derived>, typename result_of::as_arg<A const>::type> > that = {{this->derived()}, proto::as_arg(a)};
+            return generate<Domain, expr<tag::subscript, args2<ref<Derived>, typename result_of::as_arg<A const>::type> >, tag::subscript>::make(that);
         }
 
         template<typename Sig>
@@ -84,28 +84,45 @@ namespace boost { namespace proto
             return generate<Domain, expr<tag::function, args1<ref<Derived> > >, tag::function>::make(that);
         }
 
-    #define BOOST_PROTO_AS_OP(z, n, data)\
-        proto::as_arg(BOOST_PP_CAT(a,n))\
-        /**/
-
     #define BOOST_PP_LOCAL_MACRO(N) \
         template<typename This BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>\
         struct result<This(BOOST_PP_ENUM_PARAMS(N, A))>\
-        {\
-            typedef typename generate<Domain, expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<Derived> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename result_of::as_arg<A, >::type BOOST_PP_INTERCEPT)> >, tag::function>::type type;\
-        };\
+          : generate<\
+                Domain\
+              , typename result_of::BOOST_PP_CAT(funop, N)<\
+                    Derived\
+                    BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(\
+                        N\
+                      , typename remove_reference<A\
+                      , >::type BOOST_PP_INTERCEPT\
+                    )\
+                >::type\
+              , tag::function\
+            >\
+        {};\
         template<BOOST_PP_ENUM_PARAMS(N, typename A)>\
-        typename generate<Domain, expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<Derived> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename result_of::as_arg<A, >::type BOOST_PP_INTERCEPT)> > >::type const\
+        typename generate<\
+            Domain\
+          , typename result_of::BOOST_PP_CAT(funop, N)<\
+                Derived\
+                BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)\
+            >::type\
+          , tag::function\
+        >::type const\
         operator ()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const &a)) const\
         {\
-            expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<Derived> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename result_of::as_arg<A, >::type BOOST_PP_INTERCEPT)> > that = {{this->derived()} BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_AS_OP, _)};\
-            return generate<Domain, expr<tag::function, BOOST_PP_CAT(args, BOOST_PP_INC(N))<ref<Derived> BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename result_of::as_arg<A, >::type BOOST_PP_INTERCEPT)> >, tag::function>::make(that);\
+            typedef result_of::BOOST_PP_CAT(funop, N)<\
+                Derived\
+                BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)\
+            > funop;\
+            return generate<Domain, typename funop::type, tag::function>::make(\
+                funop::call(this->derived() BOOST_PP_ENUM_TRAILING_PARAMS(N, a))\
+            );\
         }\
         /**/
 
     #define BOOST_PP_LOCAL_LIMITS (1, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY))
     #include BOOST_PP_LOCAL_ITERATE()
-    #undef BOOST_PROTO_AS_OP
     };
 
 }}
