@@ -181,75 +181,75 @@ namespace boost { namespace xpressive
     template<typename Char>
     struct XpressiveListSet
       : proto::or_<
-            proto::meta::comma< XpressiveListSet<Char>, proto::meta::terminal<Char> >
-          , proto::meta::comma< XpressiveListSet<Char>, proto::meta::terminal<char> >
-          , proto::meta::assign<detail::set_initializer_type, proto::meta::terminal<Char> >
-          , proto::meta::assign<detail::set_initializer_type, proto::meta::terminal<char> >
+            proto::comma< XpressiveListSet<Char>, proto::terminal<Char> >
+          , proto::comma< XpressiveListSet<Char>, proto::terminal<char> >
+          , proto::assign<detail::set_initializer_type, proto::terminal<Char> >
+          , proto::assign<detail::set_initializer_type, proto::terminal<char> >
         >
     {};
 
     template<>
     struct XpressiveListSet<char>
       : proto::or_<
-            proto::meta::comma< XpressiveListSet<char>, proto::meta::terminal<char> >
-          , proto::meta::assign<detail::set_initializer_type, proto::meta::terminal<char> >
+            proto::comma< XpressiveListSet<char>, proto::terminal<char> >
+          , proto::assign<detail::set_initializer_type, proto::terminal<char> >
         >
     {};
 
     template<typename Char>
     struct XpressiveSet
       : proto::or_<
-            proto::meta::subscript<detail::set_initializer_type, XpressiveGrammar<Char> >
+            proto::subscript<detail::set_initializer_type, XpressiveGrammar<Char> >
           , XpressiveListSet<Char>
         >
     {};
 
     template<typename Char>
     struct XpressiveTaggedSubExpression
-      : proto::meta::assign< detail::basic_mark_tag, XpressiveGrammar<Char> >
+      : proto::assign< detail::basic_mark_tag, XpressiveGrammar<Char> >
     {};
 
     template<typename Char>
     struct XpressiveLookAroundAssertion
       : proto::or_<
-            proto::meta::unary_expr<detail::lookahead_tag<true>, XpressiveGrammar<Char> >
-          , proto::meta::unary_expr<detail::lookbehind_tag<true>, XpressiveGrammar<Char> >
+            proto::unary_expr<detail::lookahead_tag<true>, XpressiveGrammar<Char> >
+          , proto::unary_expr<detail::lookbehind_tag<true>, XpressiveGrammar<Char> >
         >
     {};
 
     template<typename Char>
     struct XpressiveIndependentSubExpression
-      : proto::meta::unary_expr<detail::keeper_tag, XpressiveGrammar<Char> >
+      : proto::unary_expr<detail::keeper_tag, XpressiveGrammar<Char> >
     {};
 
     template<typename Char>
     struct XpressiveModifiedSubExpression
-      : proto::meta::binary_expr<detail::modifier_tag, proto::_, XpressiveGrammar<Char> >
+      : proto::binary_expr<detail::modifier_tag, proto::_, XpressiveGrammar<Char> >
     {};
 
     template<typename Char>
     struct XpressiveComplementedCharacterLiteral
       : proto::or_<
-            proto::meta::complement<proto::meta::terminal<detail::literal_placeholder<Char, proto::_> > >
-          , proto::meta::complement<proto::meta::terminal<detail::literal_placeholder<char, proto::_> > >
+            proto::complement<proto::terminal<detail::literal_placeholder<Char, proto::_> > >
+          , proto::complement<proto::terminal<detail::literal_placeholder<char, proto::_> > >
         >
     {};
 
     template<>
     struct XpressiveComplementedCharacterLiteral<char>
-      : proto::meta::complement<proto::meta::terminal<detail::literal_placeholder<char, proto::_> > >
+      : proto::complement<proto::terminal<detail::literal_placeholder<char, proto::_> > >
     {};
 
     template<typename Char>
     struct XpressiveComplementedExpression
       : proto::and_<
-            proto::meta::complement<proto::_>
+            proto::complement<proto::_>
           , proto::or_<
-                proto::meta::complement<proto::meta::terminal<detail::posix_charset_placeholder> >
-              , proto::meta::complement<proto::meta::terminal<detail::logical_newline_placeholder> >
+                proto::complement<proto::terminal<detail::posix_charset_placeholder> >
+              , proto::complement<proto::terminal<detail::logical_newline_placeholder> >
               , XpressiveComplementedCharacterLiteral<Char>
-              , proto::meta::complement<XpressiveSet<Char> >
-              , proto::meta::complement<XpressiveLookAroundAssertion<Char> >
+              , proto::complement<XpressiveSet<Char> >
+              , proto::complement<XpressiveLookAroundAssertion<Char> >
             >
         >
     {};
@@ -258,8 +258,8 @@ namespace boost { namespace xpressive
     struct XpressiveTerminal
       : proto::or_<
             proto::and_<
-                proto::meta::terminal<proto::_>
-              , proto::if_<detail::is_xpressive_terminal<Char, proto::meta::arg<mpl::_> > >
+                proto::terminal<proto::_>
+              , proto::if_<detail::is_xpressive_terminal<Char, proto::result_of::arg<mpl::_> > >
             >
           , XpressiveComplementedExpression<Char>
           , proto::or_<
@@ -275,12 +275,12 @@ namespace boost { namespace xpressive
     template<typename Char>
     struct XpressiveQuantified
       : proto::and_<
-            proto::meta::unary_expr<proto::_, XpressiveGrammar<Char> >
+            proto::unary_expr<proto::_, XpressiveGrammar<Char> >
           , proto::or_<
-                proto::meta::unary_star< proto::_ >
-              , proto::meta::unary_plus< proto::_ >
-              , proto::meta::logical_not< proto::_ >
-              , proto::if_<detail::is_generic_repeat<proto::meta::tag<mpl::_> > >
+                proto::unary_star< proto::_ >
+              , proto::unary_plus< proto::_ >
+              , proto::logical_not< proto::_ >
+              , proto::if_<detail::is_generic_repeat<proto::tag_of<mpl::_> > >
             >
         >
     {};
@@ -288,9 +288,9 @@ namespace boost { namespace xpressive
     template<typename Char>
     struct XpressiveGrammar
       : proto::or_<
-            proto::meta::right_shift< XpressiveGrammar<Char>, XpressiveGrammar<Char> >
-          , proto::meta::bitwise_or< XpressiveGrammar<Char>, XpressiveGrammar<Char> >
-          , proto::meta::unary_minus< XpressiveQuantified<Char> >
+            proto::right_shift< XpressiveGrammar<Char>, XpressiveGrammar<Char> >
+          , proto::bitwise_or< XpressiveGrammar<Char>, XpressiveGrammar<Char> >
+          , proto::unary_minus< XpressiveQuantified<Char> >
           , XpressiveQuantified<Char>
           , XpressiveTerminal<Char>
         >

@@ -12,7 +12,6 @@
     #define BOOST_PROTO_MAKE_EXPR_HPP_EAN_04_01_2005
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
-
     #include <boost/preprocessor/inc.hpp>
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/punctuation/paren.hpp>
@@ -32,7 +31,6 @@
     #include <boost/fusion/sequence/intrinsic/at.hpp>
     #include <boost/fusion/sequence/intrinsic/value_at.hpp>
     #include <boost/fusion/sequence/intrinsic/size.hpp>
-
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto
@@ -54,7 +52,7 @@
         #undef BOOST_PROTO_AT
         }
 
-        namespace meta
+        namespace result_of
         {
             template<typename Tag BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(BOOST_PROTO_MAX_ARITY, typename A, = void BOOST_PP_INTERCEPT), typename Dummy = void>
             struct make_expr;
@@ -64,7 +62,7 @@
     #include BOOST_PP_ITERATE()
     #undef BOOST_PP_ITERATION_PARAMS_1
 
-        namespace meta
+        namespace result_of
         {
             template<typename Tag, typename Sequence>
             struct unpack_expr
@@ -74,7 +72,7 @@
         }
 
         template<typename Tag, typename Sequence>
-        typename meta::unpack_expr<Tag, Sequence const>::type
+        typename result_of::unpack_expr<Tag, Sequence const>::type
         unpack_expr(Sequence const &sequence)
         {
             typedef typename fusion::result_of::size<Sequence>::type size_type;
@@ -98,7 +96,7 @@
                     BOOST_STATIC_ASSERT(!is_reference<A0>::value);
 
                     typedef expr<Tag, BOOST_PP_CAT(args, N)<
-                        BOOST_PP_ENUM_BINARY_PARAMS(N, typename meta::as_expr<A, >::type BOOST_PP_INTERCEPT)
+                        BOOST_PP_ENUM_BINARY_PARAMS(N, typename result_of::as_expr<A, >::type BOOST_PP_INTERCEPT)
                     > > type;
                 };
 
@@ -107,7 +105,7 @@
 
                 template<typename This BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
                 struct result<This(BOOST_PP_ENUM_PARAMS(N, A))>
-                  : result_<BOOST_PP_ENUM_BINARY_PARAMS(N, typename meta::value_type<A, >::type BOOST_PP_INTERCEPT)>
+                  : result_<BOOST_PP_ENUM_BINARY_PARAMS(N, typename detail::remove_cv_ref<A, >::type BOOST_PP_INTERCEPT)>
                 {};
 
                 template<BOOST_PP_ENUM_PARAMS(N, typename A)>
@@ -140,7 +138,7 @@
 
     #define N BOOST_PP_ITERATION()
 
-    namespace meta
+    namespace result_of
     {
         template<typename Tag BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
         struct make_expr<Tag BOOST_PP_ENUM_TRAILING_PARAMS(N, A)>

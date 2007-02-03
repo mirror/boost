@@ -57,7 +57,7 @@ namespace boost { namespace proto
         template<typename Expr, typename State, typename Visitor>
         struct apply
         {
-            typedef typename meta::compile
+            typedef typename result_of::compile
             <
                 typename Lambda::BOOST_NESTED_TEMPLATE apply<Expr, State, Visitor>::type
               , State
@@ -99,7 +99,7 @@ namespace boost { namespace proto
         template<typename Expr, typename, typename>
         struct apply
         {
-            typedef typename meta::arg<Expr>::type type;
+            typedef typename result_of::arg<Expr>::type type;
         };
 
         template<typename Expr, typename State, typename Visitor>
@@ -117,7 +117,7 @@ namespace boost { namespace proto
         template<typename Expr, typename, typename>
         struct apply
         {
-            typedef typename meta::left<Expr>::type type;
+            typedef typename result_of::left<Expr>::type type;
         };
 
         template<typename Expr, typename State, typename Visitor>
@@ -135,7 +135,7 @@ namespace boost { namespace proto
         template<typename Expr, typename, typename>
         struct apply
         {
-            typedef typename meta::right<Expr>::type type;
+            typedef typename result_of::right<Expr>::type type;
         };
 
         template<typename Expr, typename State, typename Visitor>
@@ -155,14 +155,14 @@ namespace boost { namespace proto
         template<typename Expr, typename, typename>
         struct apply
         {
-            typedef typename meta::unary_expr<Tag, Expr>::type type;
+            typedef typename unary_expr<Tag, Expr>::type type;
         };
 
         template<typename Expr, typename State, typename Visitor>
-        static typename meta::unary_expr<Tag, Expr>::type
+        static typename unary_expr<Tag, Expr>::type
         call(Expr const &expr, State const &, Visitor &)
         {
-            typename meta::unary_expr<Tag, Expr>::type that = {expr};
+            typename unary_expr<Tag, Expr>::type that = {expr};
             return that;
         }
     };

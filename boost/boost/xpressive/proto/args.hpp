@@ -11,7 +11,6 @@
     #define BOOST_PROTO_ARGS_HPP_EAN_04_01_2005
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
-
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/arithmetic/dec.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
@@ -20,7 +19,6 @@
     #include <boost/preprocessor/repetition/repeat_from_to.hpp>
     #include <boost/mpl/void.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
-
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto

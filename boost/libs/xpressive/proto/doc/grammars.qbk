@@ -23,24 +23,24 @@ pattern.
 
 First, let's define some terminals we can use in our lazy I/O expressions:
 
-    meta::terminal< std::istream & >::type cin_ = { std::cin };
-    meta::terminal< std::ostream & >::type cout_ = { std::cout };
+    terminal< std::istream & >::type cin_ = { std::cin };
+    terminal< std::ostream & >::type cout_ = { std::cout };
 
 Now, we can use `cout_` instead of `std::cout`, and get I/O expression trees
 that we can execute later. To define patterns that match intput and output 
 expressions of the form `cin_ >> i` and `cout_ << 1` we do this:
 
     struct Input
-      : meta::right_shift< meta::terminal< std::istream & >, _ >
+      : right_shift< terminal< std::istream & >, _ >
     {};
 
     struct Output
-      : meta::left_shift< meta::terminal< std::ostream & >, _ >
+      : left_shift< terminal< std::ostream & >, _ >
     {};
 
-We've seen the template `meta::terminal<>` before, but here we're using it 
+We've seen the template `terminal<>` before, but here we're using it 
 without accessing the nested `::type`. When used like this, it is a very simple
-pattern, as are `meta::right_shift<>` and `meta::left_shift<>`. The newcomer 
+pattern, as are `right_shift<>` and `left_shift<>`. The newcomer 
 here is `_` in the `proto` namespace. It is a wildcard that matches anything.
 The `Input` struct is a pattern that matches any right-shift expression that
 has a `std::istream` terminal as its left operand.
@@ -52,12 +52,12 @@ operation. Consider the following:
     template< typename Expr >
     void input_output( Expr const & expr )
     {
-        if( proto::matches< Expr, Input >::value )
+        if( matches< Expr, Input >::value )
         {
             std::cout << "Input!\n";
         }
 
-        if( proto::matches< Expr, Output >::value )
+        if( matches< Expr, Output >::value )
         {
             std::cout << "Output!\n";
         }
@@ -115,15 +115,15 @@ recursing. We can express this in our pattern using _or_. Here are the correct
 
     struct Input
       : or_<
-            meta::right_shift< meta::terminal<std::istream &>, _ >
-          , meta::right_shift< Input, _ >
+            right_shift< terminal< std::istream & >, _ >
+          , right_shift< Input, _ >
         >
     {};
 
     struct Output
       : or_<
-            meta::left_shift< meta::terminal<std::ostream &>, _ >
-          , meta::left_shift< Output, _ >
+            left_shift< terminal< std::ostream & >, _ >
+          , left_shift< Output, _ >
         >
     {};
 
@@ -137,9 +137,9 @@ rightly so because they must match a recursive data structure!
 When the `Output` pattern is evaluated against an expression like 
 `cout_ << 1 << 2`, the first alternate of the _or_ is tried first. It will 
 fail, because the expression `cout_ << 1 << 2` does not match the pattern
-`meta::left_shift< meta::terminal<std::ostream &>, _ >`. Then the second 
+`left_shift< terminal< std::ostream & >, _ >`. Then the second 
 alternate is tried. We match the expression against 
-`meta::left_shift< Output, _ >`. The expression is a left-shift, so we try 
+`left_shift< Output, _ >`. The expression is a left-shift, so we try 
 the operands. The right operand `2` matches `_` trivially. To see if 
 the left operand `cout_ << 1` matches `Output`, we must recursively evaluate 
 the `Output` pattern. This time we succeed, because `cout_ << 1` will match 
@@ -166,16 +166,16 @@ Proto patterns:
 For instance, consider the following program fragment:
 
     struct CharString
-      : meta::terminal<char const *>
+      : terminal< char const * >
     {};
     
-    typedef meta::terminal<char const (&)[6]>::type char_array;
+    typedef terminal< char const (&)[6] >::type char_array;
 
     BOOST_MPL_ASSERT(( matches< char_array, CharString > ));
 
 The type `char_array` might be the type of a string literal such as `"hello"`.
 Even though it is an array type, it successfully matches the pattern 
-`meta::terminal<char const *>` because C++ has a built-in conversion from array
+`terminal< char const * >` because C++ has a built-in conversion from array
 types to pointers.
 
 What if we really only wanted `CharString` to match terminals of exactly the 
@@ -183,11 +183,11 @@ type `char const *`? Proto provides the template _exact_ for turning off the
 fuzzy matching of terminals. You could use it as follows:
 
     struct CharString
-      : meta::terminal< exact< char const * > >
+      : terminal< exact< char const * > >
     {};
     
-    typedef meta::terminal<char const (&)[6]>::type char_array;
-    typedef meta::terminal<char const *>::type      char_string;
+    typedef terminal<char const (&)[6]>::type char_array;
+    typedef terminal<char const *>::type      char_string;
 
     BOOST_MPL_ASSERT(( matches< char_string, CharString > ));
     BOOST_MPL_ASSERT_NOT(( matches< char_array, CharString > ));
@@ -201,7 +201,7 @@ any instantiation of `std::complex<>`? You can use `proto::_` here to solve
 this problem. Here is the pattern to match any `std::complex<>` instantiation:
 
     struct StdComplex
-      : meta::terminal< std::complex< _ > >
+      : terminal< std::complex< _ > >
     {};
 
 When given a pattern like this, Proto will deconstruct the pattern and the 
@@ -210,8 +210,8 @@ constituents.
 
 [h3 Other Valid Patterns]
 
-We've already seen how to use expression generators like `meta::terminal<>` and
-`meta::right_shift<>` as patterns. We've also seen _or_, which we can use to 
+We've already seen how to use expression generators like `terminal<>` and
+`right_shift<>` as patterns. We've also seen _or_, which we can use to 
 express a set of alternate patterns. There are a few others of interest; in 
 particular, _if_ and _and_.
 
@@ -223,14 +223,14 @@ It could have been written without _exact_ as follows:
 
     struct CharString
       : and_<
-            meta::terminal< _ >
-          , if_< is_same< meta::arg< mpl::_ >, char const * > >
+            terminal< _ >
+          , if_< is_same< result_of::arg< mpl::_ >, char const * > >
         >
     {};
 
 This says that a `CharString` must be a terminal, *and* its argument must be
 the same as `char const *`. Notice the template argument of _if_: 
-`is_same< meta::arg< mpl::_ >, char const * >`. This is an MPL lambda 
+`is_same< result_of::arg< mpl::_ >, char const * >`. This is an MPL lambda 
 expression because it has the MPL placeholder `mpl::_` in it. 
 
 [warning Do not confuse `mpl::_` with `proto::_`. The first is only useful in
@@ -253,7 +253,7 @@ times. Consider a Proto lazy function called `fun()` that can take zero or
 more characters as arguments, as follows:
 
     struct fun_tag {};
-    struct FunTag : meta::terminal<fun_tag> {};
+    struct FunTag : terminal< fun_tag > {};
     FunTag::type const fun = {{}};
     
     // example usage:
@@ -265,7 +265,7 @@ more characters as arguments, as follows:
 Below is the pattern that matches all the allowable invocations of `fun()`:
 
     struct FunCall
-      : meta::function< FunTag, vararg< meta::terminal<char> > >
+      : function< FunTag, vararg< terminal< char > > >
     {};
 
 The `FunCall` pattern uses _vararg_ to match zero or more character literals
@@ -275,8 +275,8 @@ As another example, can you guess what the following pattern matches?
 
     struct Foo
       : or_<
-            meta::terminal<_>
-          , meta::nary_expr<_, vararg< Foo > >
+            terminal< _ >
+          , nary_expr< _, vararg< Foo > >
         >
     {};
 
@@ -328,11 +328,11 @@ expression  ::= term (('+' term) | ('-' term))*
 ]
 
 This captures the syntax, associativity and precedence rules of a calculator.
-Writing the grammar for our calculator DSEL using Proto is actually a great 
-deal simpler. Since we are using C++ as the host language, we are bound to the
-associativity and precedence rules for the C++ operators. Our grammar can 
-assume them. Also, in C++ grouping is already handled for us with the use of 
-parenthesis, so we don't have to code that into our grammar.
+Writing the grammar for our calculator DSEL using Proto is /even simpler/. 
+Since we are using C++ as the host language, we are bound to the associativity 
+and precedence rules for the C++ operators. Our grammar can assume them. Also, 
+in C++ grouping is already handled for us with the use of parenthesis, so we 
+don't have to code that into our grammar.
 
 Let's begin our grammar for forward-declaring it:
 
@@ -342,19 +342,19 @@ It's an incomplete type at this point, but we'll still be able to use it to
 define the rules of our grammar. Let's define patterns for the terminals:
 
     struct Double
-      : meta::terminal< double >
+      : terminal< double >
     {};
 
     struct Placeholder1
-      : meta::terminal< placeholder1 >
+      : terminal< placeholder1 >
     {};
 
     struct Placeholder2
-      : meta::terminal< placeholder2 >
+      : terminal< placeholder2 >
     {};
     
     struct Terminal
-      : or_<Double, Placeholder1, Placeholder2>
+      : or_< Double, Placeholder1, Placeholder2 >
     {};
 
 Now let's define the rules for addition, subtraction, multiplication and 
@@ -364,19 +364,19 @@ the operators must themselves conform to the `CalculatorGrammar` that we
 forward-declared above.
 
     struct Add
-      : meta::add< CalculatorGrammar, CalculatorGrammar >
+      : add< CalculatorGrammar, CalculatorGrammar >
     {};
 
     struct Subtract
-      : meta::subtract< CalculatorGrammar, CalculatorGrammar >
+      : subtract< CalculatorGrammar, CalculatorGrammar >
     {};
 
     struct Multiply
-      : meta::multiply< CalculatorGrammar, CalculatorGrammar >
+      : multiply< CalculatorGrammar, CalculatorGrammar >
     {};
 
     struct Divide
-      : meta::divide< CalculatorGrammar, CalculatorGrammar >
+      : divide< CalculatorGrammar, CalculatorGrammar >
     {};
 
 Now that we've defined all the parts of the grammar, we can define 

@@ -59,22 +59,22 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Expr>
     struct width_of<Expr, proto::tag::terminal>
-      : mpl::size_t<as_matcher_type<typename proto::meta::arg<Expr>::type>::type::width>
+      : mpl::size_t<as_matcher_type<typename proto::result_of::arg<Expr>::type>::type::width>
     {};
 
     template<typename Expr>
     struct width_of<Expr, proto::tag::right_shift>
       : BOOST_XPR_ADD_WIDTH_(
-            width_of<typename proto::meta::left<Expr>::type>
-          , width_of<typename proto::meta::right<Expr>::type>
+            width_of<typename proto::result_of::left<Expr>::type>
+          , width_of<typename proto::result_of::right<Expr>::type>
         )
     {};
 
     template<typename Expr>
     struct width_of<Expr, proto::tag::bitwise_or>
       : BOOST_XPR_EQUAL_WIDTH_(
-            width_of<typename proto::meta::left<Expr>::type>
-          , width_of<typename proto::meta::right<Expr>::type>
+            width_of<typename proto::result_of::left<Expr>::type>
+          , width_of<typename proto::result_of::right<Expr>::type>
         )
     {};
 
@@ -83,7 +83,7 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Expr>
     struct width_of_assign<Expr, basic_mark_tag>
-      : width_of<typename proto::meta::right<Expr>::type>
+      : width_of<typename proto::result_of::right<Expr>::type>
     {};
 
     template<typename Expr>
@@ -93,12 +93,12 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Expr>
     struct width_of<Expr, proto::tag::assign>
-      : width_of_assign<Expr, typename proto::meta::left<Expr>::type>
+      : width_of_assign<Expr, typename proto::result_of::left<Expr>::type>
     {};
 
     template<typename Expr>
     struct width_of<Expr, modifier_tag>
-      : width_of<typename proto::meta::right<Expr>::type>
+      : width_of<typename proto::result_of::right<Expr>::type>
     {};
 
     template<typename Expr, bool Positive>
@@ -120,7 +120,7 @@ namespace boost { namespace xpressive { namespace detail
         // If this assert fires, you put something that doesn't require backtracking
         // in a keep(). In that case, the keep() is not necessary and you should just
         // remove it.
-        BOOST_MPL_ASSERT_RELATION(width_of<typename proto::meta::arg<Expr>::type>::value, ==, unknown_width::value);
+        BOOST_MPL_ASSERT_RELATION(width_of<typename proto::result_of::arg<Expr>::type>::value, ==, unknown_width::value);
     };
 
     template<typename Expr>
@@ -145,18 +145,18 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Expr, uint_t Count>
     struct width_of<Expr, generic_quant_tag<Count, Count> >
-      : BOOST_XPR_MULT_WIDTH_(width_of<typename proto::meta::arg<Expr>::type>, mpl::size_t<Count>)
+      : BOOST_XPR_MULT_WIDTH_(width_of<typename proto::result_of::arg<Expr>::type>, mpl::size_t<Count>)
     {};
 
     template<typename Expr>
     struct width_of<Expr, proto::tag::unary_minus>
-      : width_of<typename proto::meta::arg<Expr>::type>
+      : width_of<typename proto::result_of::arg<Expr>::type>
     {};
 
     // when complementing a set or an assertion, the width is that of the set (1) or the assertion (0)
     template<typename Expr>
     struct width_of<Expr, proto::tag::complement>
-      : width_of<typename proto::meta::arg<Expr>::type>
+      : width_of<typename proto::result_of::arg<Expr>::type>
     {};
 
     // The comma is used in list-initialized sets, and the width of sets are 1
@@ -177,12 +177,12 @@ namespace boost { namespace xpressive { namespace detail
       : mpl::size_t<1>
     {
         // If Left is "set" then make sure that Right has a width_of 1
-        BOOST_MPL_ASSERT_RELATION(1, ==, width_of<typename proto::meta::right<Expr>::type>::value);
+        BOOST_MPL_ASSERT_RELATION(1, ==, width_of<typename proto::result_of::right<Expr>::type>::value);
     };
 
     template<typename Expr>
     struct width_of<Expr, proto::tag::subscript>
-      : width_of_subscript<Expr, typename proto::meta::left<Expr>::type>
+      : width_of_subscript<Expr, typename proto::result_of::left<Expr>::type>
     {};
 
 }}} // namespace boost::xpressive::detail

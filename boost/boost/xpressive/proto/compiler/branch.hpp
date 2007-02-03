@@ -29,7 +29,7 @@ namespace boost { namespace proto
             // Compile the branch, pass the result, state and visitor to the lambda
             typedef typename Lambda::BOOST_NESTED_TEMPLATE apply
             <
-                typename meta::compile<Expr, typename Lambda::state_type, Visitor, DomainTag>::type
+                typename result_of::compile<Expr, typename Lambda::state_type, Visitor, DomainTag>::type
               , State
               , Visitor
             >::type type;

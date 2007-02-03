@@ -10,13 +10,11 @@
 #define BOOST_PROTO_FWD_HPP_EAN_04_01_2005
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
-
 #include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 #include <boost/mpl/long.hpp>
 #include <boost/type_traits/remove_cv.hpp>
 #include <boost/type_traits/remove_reference.hpp>
-
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
 #ifndef BOOST_PROTO_MAX_ARITY
@@ -228,20 +226,14 @@ namespace boost { namespace proto
     template<typename T, typename Domain = void>
     struct literal;
 
-    namespace meta
+    template<typename T, typename EnableIf = void>
+    struct is_ref;
+
+    template<typename T, typename EnableIf = void>
+    struct is_expr;
+
+    namespace result_of
     {
-        template<typename T>
-        struct value_type
-        {
-            typedef typename remove_cv<typename remove_reference<T>::type>::type type;
-        };
-
-        template<typename T, typename EnableIf = void>
-        struct is_ref;
-
-        template<typename T, typename EnableIf = void>
-        struct is_expr;
-
         template<typename T, typename EnableIf = void>
         struct as_expr;
 
@@ -250,18 +242,6 @@ namespace boost { namespace proto
 
         template<typename Expr, typename State, typename Visitor, typename DomainTag>
         struct compile;
-
-        template<typename Tag, typename Arg>
-        struct unary_expr;
-
-        template<typename Tag, typename Left, typename Right>
-        struct binary_expr;
-
-        template<typename Tag, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, void), typename Dummy = void>
-        struct nary_expr;
-
-        template<typename Expr>
-        struct terminal;
 
         template<typename Expr, typename N = mpl::long_<0> >
         struct arg;
@@ -276,12 +256,6 @@ namespace boost { namespace proto
         struct right;
 
         template<typename Expr>
-        struct tag;
-
-        template<typename Expr>
-        struct id;
-
-        template<typename Expr>
         struct deep_copy;
 
         template<typename T>
@@ -289,59 +263,84 @@ namespace boost { namespace proto
 
         template<typename Expr, typename Fun, long Arity = Expr::arity::value>
         struct eval;
-
-        // Specific expression generators, for convenience
-        template<typename T> struct unary_plus;
-        template<typename T> struct unary_minus;
-        template<typename T> struct unary_star;
-        template<typename T> struct complement;
-        template<typename T> struct address_of;
-        template<typename T> struct logical_not;
-        template<typename T> struct pre_inc;
-        template<typename T> struct pre_dec;
-        template<typename T> struct post_inc;
-        template<typename T> struct post_dec;
-
-        template<typename T, typename U> struct left_shift;
-        template<typename T, typename U> struct right_shift;
-        template<typename T, typename U> struct multiply;
-        template<typename T, typename U> struct divide;
-        template<typename T, typename U> struct modulus;
-        template<typename T, typename U> struct add;
-        template<typename T, typename U> struct subtract;
-        template<typename T, typename U> struct less;
-        template<typename T, typename U> struct greater;
-        template<typename T, typename U> struct less_equal;
-        template<typename T, typename U> struct greater_equal;
-        template<typename T, typename U> struct equal;
-        template<typename T, typename U> struct not_equal;
-        template<typename T, typename U> struct logical_or;
-        template<typename T, typename U> struct logical_and;
-        template<typename T, typename U> struct bitwise_and;
-        template<typename T, typename U> struct bitwise_or;
-        template<typename T, typename U> struct bitwise_xor;
-        template<typename T, typename U> struct comma;
-        template<typename T, typename U> struct mem_ptr;
-
-        template<typename T, typename U> struct assign;
-        template<typename T, typename U> struct left_shift_assign;
-        template<typename T, typename U> struct right_shift_assign;
-        template<typename T, typename U> struct multiply_assign;
-        template<typename T, typename U> struct divide_assign;
-        template<typename T, typename U> struct modulus_assign;
-        template<typename T, typename U> struct add_assign;
-        template<typename T, typename U> struct subtract_assign;
-        template<typename T, typename U> struct bitwise_and_assign;
-        template<typename T, typename U> struct bitwise_or_assign;
-        template<typename T, typename U> struct bitwise_xor_assign;
-        template<typename T, typename U> struct subscript;
-
-        template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, void), typename Dummy = void>
-        struct function;
-
-        template<typename Domain, typename Expr, typename Tag = typename Expr::tag_type>
-        struct generate;
     }
+
+    namespace detail
+    {
+        template<typename T>
+        struct remove_cv_ref
+          : remove_cv<typename remove_reference<T>::type>
+        {};
+    }
+
+    template<typename Expr>
+    struct tag_of;
+
+    template<typename Expr>
+    struct id;
+
+    // Generic expression generators
+    template<typename Tag, typename Arg>
+    struct unary_expr;
+
+    template<typename Tag, typename Left, typename Right>
+    struct binary_expr;
+
+    template<typename Tag, BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, void), typename Dummy = void>
+    struct nary_expr;
+
+    // Specific expression generators, for convenience
+    template<typename T> struct terminal;
+    template<typename T> struct unary_plus;
+    template<typename T> struct unary_minus;
+    template<typename T> struct unary_star;
+    template<typename T> struct complement;
+    template<typename T> struct address_of;
+    template<typename T> struct logical_not;
+    template<typename T> struct pre_inc;
+    template<typename T> struct pre_dec;
+    template<typename T> struct post_inc;
+    template<typename T> struct post_dec;
+
+    template<typename T, typename U> struct left_shift;
+    template<typename T, typename U> struct right_shift;
+    template<typename T, typename U> struct multiply;
+    template<typename T, typename U> struct divide;
+    template<typename T, typename U> struct modulus;
+    template<typename T, typename U> struct add;
+    template<typename T, typename U> struct subtract;
+    template<typename T, typename U> struct less;
+    template<typename T, typename U> struct greater;
+    template<typename T, typename U> struct less_equal;
+    template<typename T, typename U> struct greater_equal;
+    template<typename T, typename U> struct equal;
+    template<typename T, typename U> struct not_equal;
+    template<typename T, typename U> struct logical_or;
+    template<typename T, typename U> struct logical_and;
+    template<typename T, typename U> struct bitwise_and;
+    template<typename T, typename U> struct bitwise_or;
+    template<typename T, typename U> struct bitwise_xor;
+    template<typename T, typename U> struct comma;
+    template<typename T, typename U> struct mem_ptr;
+
+    template<typename T, typename U> struct assign;
+    template<typename T, typename U> struct left_shift_assign;
+    template<typename T, typename U> struct right_shift_assign;
+    template<typename T, typename U> struct multiply_assign;
+    template<typename T, typename U> struct divide_assign;
+    template<typename T, typename U> struct modulus_assign;
+    template<typename T, typename U> struct add_assign;
+    template<typename T, typename U> struct subtract_assign;
+    template<typename T, typename U> struct bitwise_and_assign;
+    template<typename T, typename U> struct bitwise_or_assign;
+    template<typename T, typename U> struct bitwise_xor_assign;
+    template<typename T, typename U> struct subscript;
+
+    template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, void), typename Dummy = void>
+    struct function;
+
+    template<typename Domain, typename Expr, typename Tag = typename Expr::tag_type>
+    struct generate;
 
     namespace op
     {

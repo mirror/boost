@@ -11,14 +11,12 @@
     #define BOOST_PROTO_TRANSFORM_PASS_THROUGH_HPP_EAN_12_26_2006
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
-
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/enum.hpp>
     #include <boost/preprocessor/iterate.hpp>
     #include <boost/mpl/if.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/args.hpp>
-
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto { namespace transform

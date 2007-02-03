@@ -13,14 +13,12 @@
     #define BOOST_PROTO_TRANSFORM_CONSTRUCT_HPP_EAN_12_26_2006
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
-
     #include <boost/preprocessor/iterate.hpp>
     #include <boost/preprocessor/arithmetic/sub.hpp>
     #include <boost/preprocessor/facilities/intercept.hpp>
     #include <boost/preprocessor/repetition/enum_binary_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
-
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto { namespace transform

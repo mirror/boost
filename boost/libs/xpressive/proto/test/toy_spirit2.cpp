@@ -30,8 +30,8 @@ namespace boost
     struct space_tag {};
 
     // global primitives
-    proto::meta::terminal<char_tag>::type const char_ = {{}};
-    proto::meta::terminal<space_tag>::type const space = {{}};
+    proto::terminal<char_tag>::type const char_ = {{}};
+    proto::terminal<space_tag>::type const space = {{}};
 
     using proto::lit;
     using proto::literal;
@@ -272,27 +272,27 @@ namespace boost { namespace spirit2
     struct ToySpiritGrammar;
 
     struct AnyChar
-      : proto::meta::terminal<char_tag>
+      : proto::terminal<char_tag>
     {};
 
     struct CharLiteral
-      : proto::meta::terminal<char>
+      : proto::terminal<char>
     {};
 
     struct NTBSLiteral
-      : proto::meta::terminal<char const *>
+      : proto::terminal<char const *>
     {};
 
     struct CharParser
-      : proto::meta::function<AnyChar, CharLiteral>
+      : proto::function<AnyChar, CharLiteral>
     {};
 
     struct CharRangeParser
-      : proto::meta::function<AnyChar, CharLiteral, CharLiteral>
+      : proto::function<AnyChar, CharLiteral, CharLiteral>
     {};
 
     struct NoCase
-      : proto::meta::terminal<no_case_tag>
+      : proto::terminal<no_case_tag>
     {};
 
     // Extract the arg from terminals
@@ -320,7 +320,7 @@ namespace boost { namespace spirit2
       : as_composite<
             proto::tag::right_shift
           , proto::trans::reverse_fold_to_list<
-                proto::meta::right_shift<ToySpiritGrammar, ToySpiritGrammar>
+                proto::right_shift<ToySpiritGrammar, ToySpiritGrammar>
             >
         >
     {};
@@ -331,7 +331,7 @@ namespace boost { namespace spirit2
       : as_composite<
             proto::tag::bitwise_or
           , proto::trans::reverse_fold_to_list<
-                proto::meta::bitwise_or<ToySpiritGrammar, ToySpiritGrammar>
+                proto::bitwise_or<ToySpiritGrammar, ToySpiritGrammar>
             >
         >
     {};
@@ -340,7 +340,7 @@ namespace boost { namespace spirit2
     struct ToySpiritDirective
       : no_case_transform<
             proto::trans::arg_c<
-                proto::meta::subscript< NoCase, ToySpiritGrammar >
+                proto::subscript< NoCase, ToySpiritGrammar >
               , 1
             >
         >

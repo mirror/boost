@@ -20,7 +20,7 @@ and then execute it.
     #include <boost/xpressive/proto/context.hpp>
     using namespace boost;
     
-    proto::meta::terminal< std::ostream & >::type cout_ = { std::cout };
+    proto::terminal< std::ostream & >::type cout_ = { std::cout };
     
     template< typename Expr >
     void evaluate( Expr const & expr )
@@ -83,13 +83,13 @@ Let's begin with the nickel tour of the utilities Proto provides.
     [[_deep_copy_]              [A function for transforming an expression 
                                     tree such that all nodes are held by value
                                     instead of by reference.]]
-    [[_as_expr_, _as_expr_ref_] [_as_expr_ is a function that Proto-ifies an 
+    [[_as_expr_, _as_arg_]      [_as_expr_ is a function that Proto-ifies an 
                                     object if it is not already a Proto 
-                                    expression. _as_expr_ref_ is similar except
+                                    expression. _as_arg_ is similar except
                                     the argument is stored by reference.]]
     [[_is_expr_]                [Tests a type to see if it is a Proto
                                     expression type.]]
-    [[_tag_]                    [Meta-function which returns the node type
+    [[_tag_of_]                 [Meta-function which returns the node type
                                     of the specified expression.]]
     [[_arg_, _arg_c_]           [For extracting the ['N]th child expression
                                     from a proto expression tree.]]
@@ -102,7 +102,7 @@ Let's begin with the nickel tour of the utilities Proto provides.
                                     for generating them, respectively.]]
     [[_terminal_, _unary_expr_,
         _binary_expr_, /etc./]  [Expression type generators. For example, 
-                                    `meta::right_shift<A, B>::type` is the type
+                                    `right_shift<A, B>::type` is the type
                                     of a right-shift expression with `A` and 
                                     `B` as children. These are also used for
                                     specifying productions in meta-grammars.]]

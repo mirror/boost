@@ -12,7 +12,6 @@
 #define BOOST_PROTO_CONTEXT_HPP_EAN_01_08_2007
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
-
 #include <boost/preprocessor/iteration/local.hpp>
 #include <boost/preprocessor/punctuation/comma.hpp>
 #include <boost/preprocessor/facilities/intercept.hpp>
@@ -31,7 +30,6 @@
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/tags.hpp>
-
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
 namespace boost { namespace proto
@@ -79,7 +77,7 @@ namespace boost { namespace proto
         template<typename This, typename A0>\
         struct result<This(Tag, A0 &)>\
         {\
-            typedef typename proto::meta::eval<A0, derived_type>::type eval_type0;\
+            typedef typename proto::result_of::eval<A0, derived_type>::type eval_type0;\
             BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, (Op detail::make<eval_type0>()))\
             typedef typename mpl::if_c<\
                 1==sizeof(detail::check_reference((Op detail::make<eval_type0>())))\
@@ -96,8 +94,8 @@ namespace boost { namespace proto
         template<typename This, typename A0, typename A1>\
         struct result<This(Tag, A0 &, A1 &)>\
         {\
-            typedef typename proto::meta::eval<A0, derived_type>::type eval_type0;\
-            typedef typename proto::meta::eval<A1, derived_type>::type eval_type1;\
+            typedef typename proto::result_of::eval<A0, derived_type>::type eval_type0;\
+            typedef typename proto::result_of::eval<A1, derived_type>::type eval_type1;\
             BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, (detail::make<eval_type0>() Op detail::make<eval_type1>()))\
             typedef typename mpl::if_c<\
                 1==sizeof(detail::check_reference((detail::make<eval_type0>() Op detail::make<eval_type1>())))\
@@ -158,7 +156,7 @@ namespace boost { namespace proto
         template<typename This, typename A0>
         struct result<This(proto::tag::post_inc, A0 &)>
         {
-            typedef typename proto::meta::eval<A0, derived_type>::type eval_type0;
+            typedef typename proto::result_of::eval<A0, derived_type>::type eval_type0;
             BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, (detail::make<eval_type0>() ++))
             typedef typename mpl::if_c<
                 1==sizeof(detail::check_reference((detail::make<eval_type0>() ++)))
@@ -175,7 +173,7 @@ namespace boost { namespace proto
         template<typename This, typename A0>
         struct result<This(proto::tag::post_dec, A0 &)>
         {
-            typedef typename proto::meta::eval<A0, derived_type>::type eval_type0;
+            typedef typename proto::result_of::eval<A0, derived_type>::type eval_type0;
             BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, (detail::make<eval_type0>() ++))
             typedef typename mpl::if_c<
                 1==sizeof(detail::check_reference((detail::make<eval_type0>() ++)))
@@ -192,8 +190,8 @@ namespace boost { namespace proto
         template<typename This, typename A0, typename A1>
         struct result<This(proto::tag::subscript, A0 &, A1 &)>
         {
-            typedef typename proto::meta::eval<A0, derived_type>::type eval_type0;
-            typedef typename proto::meta::eval<A1, derived_type>::type eval_type1;
+            typedef typename proto::result_of::eval<A0, derived_type>::type eval_type0;
+            typedef typename proto::result_of::eval<A1, derived_type>::type eval_type1;
             BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, (detail::make<eval_type0>() [ detail::make<eval_type1>() ] ))
             typedef typename mpl::if_c<
                 1==sizeof(detail::check_reference((detail::make<eval_type0>() [ detail::make<eval_type1>() ] )))
@@ -210,7 +208,7 @@ namespace boost { namespace proto
     #if !BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400))
     #define BOOST_PROTO_ARG(z, n, data)\
         typedef\
-            typename proto::meta::eval<BOOST_PP_CAT(A, n), derived_type>::type\
+            typename proto::result_of::eval<BOOST_PP_CAT(A, n), derived_type>::type\
         BOOST_PP_CAT(eval_type, n);\
         /**/
 

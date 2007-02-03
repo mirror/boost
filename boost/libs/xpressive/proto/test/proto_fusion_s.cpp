@@ -11,15 +11,15 @@
 #include <boost/test/unit_test.hpp>
 #include <sstream>
 
-boost::proto::meta::terminal<char>::type a_ = {'a'};
-boost::proto::meta::terminal<char>::type b_ = {'b'};
-boost::proto::meta::terminal<char>::type c_ = {'c'};
-boost::proto::meta::terminal<char>::type d_ = {'d'};
-boost::proto::meta::terminal<char>::type e_ = {'e'};
-boost::proto::meta::terminal<char>::type f_ = {'f'};
-boost::proto::meta::terminal<char>::type g_ = {'g'};
-boost::proto::meta::terminal<char>::type h_ = {'h'};
-boost::proto::meta::terminal<char>::type i_ = {'i'};
+boost::proto::terminal<char>::type a_ = {'a'};
+boost::proto::terminal<char>::type b_ = {'b'};
+boost::proto::terminal<char>::type c_ = {'c'};
+boost::proto::terminal<char>::type d_ = {'d'};
+boost::proto::terminal<char>::type e_ = {'e'};
+boost::proto::terminal<char>::type f_ = {'f'};
+boost::proto::terminal<char>::type g_ = {'g'};
+boost::proto::terminal<char>::type h_ = {'h'};
+boost::proto::terminal<char>::type i_ = {'i'};
 
 std::ostream &operator <<(std::ostream &sout, boost::proto::tag::terminal)
 {

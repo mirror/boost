@@ -25,13 +25,13 @@ namespace boost { namespace xpressive
 ///////////////////////////////////////////////////////////////////////////////
 // operator +
 template<typename BidiIter>
-inline typename proto::meta::unary_plus<
-    typename proto::meta::terminal<basic_regex<BidiIter> >::type
+inline typename proto::unary_plus<
+    typename proto::terminal<basic_regex<BidiIter> >::type
 >::type
 operator +(basic_regex<BidiIter> const &regex)
 {
-    typename proto::meta::unary_plus<
-        typename proto::meta::terminal<basic_regex<BidiIter> >::type
+    typename proto::unary_plus<
+        typename proto::terminal<basic_regex<BidiIter> >::type
     >::type that = {{regex}};
     return that;
 }
@@ -39,13 +39,13 @@ operator +(basic_regex<BidiIter> const &regex)
 ///////////////////////////////////////////////////////////////////////////////
 // operator *
 template<typename BidiIter>
-inline typename proto::meta::unary_star<
-    typename proto::meta::terminal<basic_regex<BidiIter> >::type
+inline typename proto::unary_star<
+    typename proto::terminal<basic_regex<BidiIter> >::type
 >::type
 operator *(basic_regex<BidiIter> const &regex)
 {
-    typename proto::meta::unary_star<
-        typename proto::meta::terminal<basic_regex<BidiIter> >::type
+    typename proto::unary_star<
+        typename proto::terminal<basic_regex<BidiIter> >::type
     >::type that = {{regex}};
     return that;
 }
@@ -53,13 +53,13 @@ operator *(basic_regex<BidiIter> const &regex)
 ///////////////////////////////////////////////////////////////////////////////
 // operator !
 template<typename BidiIter>
-inline typename proto::meta::logical_not<
-    typename proto::meta::terminal<basic_regex<BidiIter> >::type
+inline typename proto::logical_not<
+    typename proto::terminal<basic_regex<BidiIter> >::type
 >::type
 operator !(basic_regex<BidiIter> const &regex)
 {
-    typename proto::meta::logical_not<
-        typename proto::meta::terminal<basic_regex<BidiIter> >::type
+    typename proto::logical_not<
+        typename proto::terminal<basic_regex<BidiIter> >::type
     >::type that = {{regex}};
     return that;
 }
@@ -69,17 +69,17 @@ operator !(basic_regex<BidiIter> const &regex)
 template<typename Right, typename BidiIter>
 inline typename lazy_disable_if
 <
-    proto::meta::is_expr<Right>
-  , proto::meta::right_shift<
-        typename proto::meta::terminal<basic_regex<BidiIter> >::type
-      , typename proto::meta::terminal<Right>::type
+    proto::is_expr<Right>
+  , proto::right_shift<
+        typename proto::terminal<basic_regex<BidiIter> >::type
+      , typename proto::terminal<Right>::type
     >
 >::type
 operator >>(basic_regex<BidiIter> const &regex, Right const &right)
 {
-    typename proto::meta::right_shift<
-        typename proto::meta::terminal<basic_regex<BidiIter> >::type
-      , typename proto::meta::terminal<Right>::type
+    typename proto::right_shift<
+        typename proto::terminal<basic_regex<BidiIter> >::type
+      , typename proto::terminal<Right>::type
     >::type that = {{regex}, {right}};
     return that;
 }
@@ -89,17 +89,17 @@ operator >>(basic_regex<BidiIter> const &regex, Right const &right)
 template<typename BidiIter, typename Left>
 inline typename lazy_disable_if
 <
-    proto::meta::is_expr<Left>
-  , proto::meta::right_shift<
-        typename proto::meta::terminal<Left>::type
-      , typename proto::meta::terminal<basic_regex<BidiIter> >::type
+    proto::is_expr<Left>
+  , proto::right_shift<
+        typename proto::terminal<Left>::type
+      , typename proto::terminal<basic_regex<BidiIter> >::type
     >
 >::type
 operator >>(Left const &left, basic_regex<BidiIter> const &regex)
 {
-    typename proto::meta::right_shift<
-        typename proto::meta::terminal<Left>::type
-      , typename proto::meta::terminal<basic_regex<BidiIter> >::type
+    typename proto::right_shift<
+        typename proto::terminal<Left>::type
+      , typename proto::terminal<basic_regex<BidiIter> >::type
     >::type that = {{left}, {regex}};
     return that;
 }
@@ -107,15 +107,15 @@ operator >>(Left const &left, basic_regex<BidiIter> const &regex)
 ///////////////////////////////////////////////////////////////////////////////
 // operator >>
 template<typename BidiIter>
-inline typename proto::meta::right_shift<
-    typename proto::meta::terminal<basic_regex<BidiIter> >::type
-  , typename proto::meta::terminal<basic_regex<BidiIter> >::type
+inline typename proto::right_shift<
+    typename proto::terminal<basic_regex<BidiIter> >::type
+  , typename proto::terminal<basic_regex<BidiIter> >::type
 >::type
 operator >>(basic_regex<BidiIter> const &left, basic_regex<BidiIter> const &right)
 {
-    typename proto::meta::right_shift<
-        typename proto::meta::terminal<basic_regex<BidiIter> >::type
-      , typename proto::meta::terminal<basic_regex<BidiIter> >::type
+    typename proto::right_shift<
+        typename proto::terminal<basic_regex<BidiIter> >::type
+      , typename proto::terminal<basic_regex<BidiIter> >::type
     >::type that = {{left}, {right}};
     return that;
 }
@@ -125,17 +125,17 @@ operator >>(basic_regex<BidiIter> const &left, basic_regex<BidiIter> const &righ
 template<typename Right, typename BidiIter>
 inline typename lazy_disable_if
 <
-    proto::meta::is_expr<Right>
-  , proto::meta::bitwise_or<
-        typename proto::meta::terminal<basic_regex<BidiIter> >::type
-      , typename proto::meta::terminal<Right>::type
+    proto::is_expr<Right>
+  , proto::bitwise_or<
+        typename proto::terminal<basic_regex<BidiIter> >::type
+      , typename proto::terminal<Right>::type
     >
 >::type
 operator |(basic_regex<BidiIter> const &regex, Right const &right)
 {
-    typename proto::meta::bitwise_or<
-        typename proto::meta::terminal<basic_regex<BidiIter> >::type
-      , typename proto::meta::terminal<Right>::type
+    typename proto::bitwise_or<
+        typename proto::terminal<basic_regex<BidiIter> >::type
+      , typename proto::terminal<Right>::type
     >::type that = {{regex}, {right}};
     return that;
 }
@@ -145,17 +145,17 @@ operator |(basic_regex<BidiIter> const &regex, Right const &right)
 template<typename BidiIter, typename Left>
 inline typename lazy_disable_if
 <
-    proto::meta::is_expr<Left>
-  , proto::meta::bitwise_or<
-        typename proto::meta::terminal<Left>::type
-      , typename proto::meta::terminal<basic_regex<BidiIter> >::type
+    proto::is_expr<Left>
+  , proto::bitwise_or<
+        typename proto::terminal<Left>::type
+      , typename proto::terminal<basic_regex<BidiIter> >::type
     >
 >::type
 operator |(Left const &left, basic_regex<BidiIter> const &regex)
 {
-    typename proto::meta::bitwise_or<
-        typename proto::meta::terminal<Left>::type
-      , typename proto::meta::terminal<basic_regex<BidiIter> >::type
+    typename proto::bitwise_or<
+        typename proto::terminal<Left>::type
+      , typename proto::terminal<basic_regex<BidiIter> >::type
     >::type that = {{left}, {regex}};
     return that;
 }
@@ -163,15 +163,15 @@ operator |(Left const &left, basic_regex<BidiIter> const &regex)
 ///////////////////////////////////////////////////////////////////////////////
 // operator |
 template<typename BidiIter>
-inline typename proto::meta::bitwise_or<
-    typename proto::meta::terminal<basic_regex<BidiIter> >::type
-  , typename proto::meta::terminal<basic_regex<BidiIter> >::type
+inline typename proto::bitwise_or<
+    typename proto::terminal<basic_regex<BidiIter> >::type
+  , typename proto::terminal<basic_regex<BidiIter> >::type
 >::type
 operator |(basic_regex<BidiIter> const &left, basic_regex<BidiIter> const &right)
 {
-    typename proto::meta::bitwise_or<
-        typename proto::meta::terminal<basic_regex<BidiIter> >::type
-      , typename proto::meta::terminal<basic_regex<BidiIter> >::type
+    typename proto::bitwise_or<
+        typename proto::terminal<basic_regex<BidiIter> >::type
+      , typename proto::terminal<basic_regex<BidiIter> >::type
     >::type that = {{left}, {right}};
     return that;
 }

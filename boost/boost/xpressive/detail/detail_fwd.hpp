@@ -199,11 +199,11 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Traits>
     struct logical_newline_matcher;
 
-    typedef proto::meta::terminal<logical_newline_placeholder>::type logical_newline_xpression;
+    typedef proto::terminal<logical_newline_placeholder>::type logical_newline_xpression;
 
     struct set_initializer;
 
-    typedef proto::meta::terminal<set_initializer>::type set_initializer_type;
+    typedef proto::terminal<set_initializer>::type set_initializer_type;
 
     struct seq_tag;
 
@@ -287,7 +287,7 @@ namespace boost { namespace xpressive { namespace detail
 
     struct action_state;
 
-    template<typename Xpr, bool IsExpr = proto::meta::is_expr<Xpr>::value>
+    template<typename Xpr, bool IsExpr = proto::is_expr<Xpr>::value>
     struct as_xpr_type;
 
     template<typename Traits, typename BidiIter>

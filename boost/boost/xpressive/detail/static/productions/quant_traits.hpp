@@ -63,7 +63,7 @@ namespace boost { namespace xpressive { namespace detail
     {
         template<typename Expr, typename, typename>
         struct apply
-          : use_simple_repeat<typename proto::meta::arg<Expr>::type>
+          : use_simple_repeat<typename proto::result_of::arg<Expr>::type>
         {};
     };
 

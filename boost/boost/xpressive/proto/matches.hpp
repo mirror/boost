@@ -12,7 +12,6 @@
     #define BOOST_PROTO_MATCHES_HPP_EAN_11_03_2006
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
-
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/arithmetic/dec.hpp>
     #include <boost/preprocessor/arithmetic/sub.hpp>

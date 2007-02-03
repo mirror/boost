@@ -11,14 +11,12 @@
     #define BOOST_PROTO_DEEP_COPY_HPP_EAN_11_21_2006
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
-
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/enum.hpp>
     #include <boost/preprocessor/iterate.hpp>
     #include <boost/call_traits.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/expr.hpp>
-
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto
@@ -31,8 +29,8 @@
             template<typename Expr>
             struct deep_copy_impl<Expr, tag::terminal, 1>
             {
-                typedef typename meta::terminal<
-                    typename meta::arg<Expr>::type
+                typedef typename terminal<
+                    typename result_of::arg<Expr>::type
                 >::type type;
 
                 static type call(Expr const &expr)
@@ -43,7 +41,7 @@
             };
         }
 
-        namespace meta
+        namespace result_of
         {
             template<typename Expr>
             struct deep_copy
@@ -60,14 +58,14 @@
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
-                  : meta::deep_copy<typename meta::value_type<Expr>::type>
+                  : result_of::deep_copy<typename detail::remove_cv_ref<Expr>::type>
                 {};
 
                 template<typename Expr>
-                typename meta::deep_copy<Expr>::type
+                typename result_of::deep_copy<Expr>::type
                 operator()(Expr const &expr) const
                 {
-                    return meta::deep_copy<Expr>::call(expr);
+                    return result_of::deep_copy<Expr>::call(expr);
                 }
             };
         }

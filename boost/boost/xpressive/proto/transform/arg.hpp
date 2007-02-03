@@ -26,7 +26,7 @@ namespace boost { namespace proto { namespace transform
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
-          : proto::meta::arg<typename Grammar::template apply<Expr, State, Visitor>::type, N>
+          : proto::result_of::arg<typename Grammar::template apply<Expr, State, Visitor>::type, N>
         {};
 
         template<typename Expr, typename State, typename Visitor>
@@ -48,7 +48,7 @@ namespace boost { namespace proto { namespace transform
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
-          : proto::meta::arg_c<typename Grammar::template apply<Expr, State, Visitor>::type, N>
+          : proto::result_of::arg_c<typename Grammar::template apply<Expr, State, Visitor>::type, N>
         {};
 
         template<typename Expr, typename State, typename Visitor>
@@ -68,7 +68,7 @@ namespace boost { namespace proto { namespace transform
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
-          : proto::meta::left<typename Grammar::template apply<Expr, State, Visitor>::type>
+          : proto::result_of::left<typename Grammar::template apply<Expr, State, Visitor>::type>
         {};
 
         template<typename Expr, typename State, typename Visitor>
@@ -88,7 +88,7 @@ namespace boost { namespace proto { namespace transform
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
-          : proto::meta::right<typename Grammar::template apply<Expr, State, Visitor>::type>
+          : proto::result_of::right<typename Grammar::template apply<Expr, State, Visitor>::type>
         {};
 
         template<typename Expr, typename State, typename Visitor>

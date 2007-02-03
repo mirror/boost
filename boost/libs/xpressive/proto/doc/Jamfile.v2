@@ -8,7 +8,7 @@ import quickbook ;
 
 wave-command = [ path.native ../../../../dist/bin/wave ] ;
 
-# Generate reference section using Doxygen
+## Generate reference section using Doxygen
 #doxygen protodoc
 #    :
 #        ../../../../boost/xpressive/proto/args.hpp

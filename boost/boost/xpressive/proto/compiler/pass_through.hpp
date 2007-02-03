@@ -19,12 +19,12 @@
 
     namespace boost { namespace proto
     {
-        namespace meta
+        namespace result_of
         {
             template<typename Expr, typename State, typename Visitor, typename DomainTag>
             struct is_same_expr
               : is_same<
-                    typename meta::compile<typename Expr::type, State, Visitor, DomainTag>::type
+                    typename result_of::compile<typename Expr::type, State, Visitor, DomainTag>::type
                   , typename Expr::type
                 >
             {};
@@ -34,7 +34,7 @@
             >
             struct compile_if
             {
-                typedef typename meta::compile<typename Expr::type, State, Visitor, DomainTag>::type type;
+                typedef typename result_of::compile<typename Expr::type, State, Visitor, DomainTag>::type type;
 
                 static type call(Expr const &expr, State const &state, Visitor &visitor)
                 {
@@ -55,10 +55,10 @@
         }
 
         template<typename Expr, typename State, typename Visitor, typename DomainTag>
-        typename meta::compile_if<Expr, State, Visitor, DomainTag>::type
+        typename result_of::compile_if<Expr, State, Visitor, DomainTag>::type
         compile_if(Expr const &expr, State const &state, Visitor &visitor, DomainTag)
         {
-            return meta::compile_if<Expr, State, Visitor, DomainTag>::call(expr, state, visitor);
+            return result_of::compile_if<Expr, State, Visitor, DomainTag>::call(expr, state, visitor);
         }
 
         template<typename DomainTag>
@@ -68,7 +68,7 @@
             struct apply_impl;
 
         #define BOOST_PROTO_DEFINE_META_COMPILE(z, n, data)\
-            typename meta::compile_if<typename BOOST_PP_CAT(BOOST_PP_CAT(Expr::arg, n), _type), State, Visitor, DomainTag>::type
+            typename result_of::compile_if<typename BOOST_PP_CAT(BOOST_PP_CAT(Expr::arg, n), _type), State, Visitor, DomainTag>::type
 
         #define BOOST_PROTO_DEFINE_COMPILE(z, n, data)\
             proto::compile_if(BOOST_PP_CAT(expr.arg, n), state, visitor, DomainTag())

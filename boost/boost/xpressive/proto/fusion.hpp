@@ -10,9 +10,7 @@
 #define BOOST_PROTO_FUSION_HPP_EAN_04_29_2006
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
-
 #include <boost/xpressive/proto/proto.hpp>
-
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/at.hpp>
 #include <boost/mpl/size.hpp>
@@ -21,7 +19,6 @@
 #include <boost/mpl/distance.hpp>
 #include <boost/mpl/begin_end.hpp>
 #include <boost/mpl/next_prior.hpp>
-
 #include <boost/fusion/support/is_view.hpp>
 #include <boost/fusion/support/tag_of_fwd.hpp>
 #include <boost/fusion/support/category_of.hpp>
@@ -30,12 +27,10 @@
 #include <boost/fusion/sequence/intrinsic.hpp>
 #include <boost/fusion/sequence/view/single_view.hpp>
 #include <boost/fusion/sequence/view/transform_view.hpp>
-
 #include <boost/fusion/support/ext_/is_segmented.hpp>
 #include <boost/fusion/sequence/intrinsic/ext_/segments.hpp>
 #include <boost/fusion/sequence/intrinsic/ext_/size_s.hpp>
 #include <boost/fusion/sequence/view/ext_/segmented_iterator.hpp>
-
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
 namespace boost { namespace proto { namespace detail
@@ -90,7 +85,7 @@ namespace boost { namespace fusion
         {
             template<typename Iterator>
             struct apply
-              : proto::meta::arg<typename Iterator::expr_type, typename Iterator::index>
+              : proto::result_of::arg<typename Iterator::expr_type, typename Iterator::index>
             {};
         };
 
@@ -103,7 +98,7 @@ namespace boost { namespace fusion
             template<typename Iterator>
             struct apply
             {
-                typedef typename proto::meta::arg<
+                typedef typename proto::result_of::arg<
                     typename Iterator::expr_type
                   , typename Iterator::index
                 >::type const &type;
@@ -244,7 +239,7 @@ namespace boost { namespace fusion
             template<typename Sequence, typename N>
             struct apply
             {
-                typedef typename proto::meta::arg<Sequence, N>::type type;
+                typedef typename proto::result_of::arg<Sequence, N>::type type;
             };
         };
 
@@ -257,7 +252,7 @@ namespace boost { namespace fusion
             template<typename Sequence, typename N>
             struct apply
             {
-                typedef typename proto::meta::arg<Sequence, N>::type const &type;
+                typedef typename proto::result_of::arg<Sequence, N>::type const &type;
 
                 static type call(Sequence &seq)
                 {

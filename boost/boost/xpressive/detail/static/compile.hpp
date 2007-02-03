@@ -52,9 +52,9 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // pattern for imbued regexes.
     struct XpressiveLocaleModifier
-      : proto::meta::binary_expr<
+      : proto::binary_expr<
             modifier_tag
-          , proto::meta::terminal<locale_modifier<proto::_> >
+          , proto::terminal<locale_modifier<proto::_> >
           , proto::_
         >
     {};
@@ -79,7 +79,7 @@ namespace boost { namespace xpressive { namespace detail
     static_compile_impl1(Xpr const &xpr, shared_ptr<regex_impl<BidiIter> > const &impl)
     {
         // use specified traits
-        typedef typename proto::meta::arg<typename proto::meta::left<Xpr>::type>::type::locale_type locale_type;
+        typedef typename proto::result_of::arg<typename proto::result_of::left<Xpr>::type>::type::locale_type locale_type;
         typedef typename regex_traits_type<locale_type, BidiIter>::type traits_type;
         static_compile_impl2(proto::right(xpr), impl, traits_type(proto::arg(proto::left(xpr)).getloc()));
     }

@@ -25,8 +25,8 @@ namespace boost
     struct space_tag {};
 
     // global primitives
-    proto::meta::terminal<char_tag>::type const char_ = {{}};
-    proto::meta::terminal<space_tag>::type const space = {{}};
+    proto::terminal<char_tag>::type const char_ = {{}};
+    proto::terminal<space_tag>::type const space = {{}};
 
     using proto::lit;
     using proto::literal;
@@ -36,12 +36,12 @@ namespace boost { namespace spirit2
 {
 
     // handy typedefs
-    typedef proto::meta::terminal<char_tag>::type anychar_p;
-    typedef proto::meta::terminal<ichar_tag>::type ianychar_p;
-    typedef proto::meta::terminal<istring_tag>::type ianystr_p;
-    typedef proto::meta::terminal<ichar_range_tag>::type ianychar_range_p;
-    typedef proto::meta::terminal<never_tag>::type never_p;
-    typedef proto::meta::terminal<space_tag>::type space_p;
+    typedef proto::terminal<char_tag>::type anychar_p;
+    typedef proto::terminal<ichar_tag>::type ianychar_p;
+    typedef proto::terminal<istring_tag>::type ianystr_p;
+    typedef proto::terminal<ichar_range_tag>::type ianychar_range_p;
+    typedef proto::terminal<never_tag>::type never_p;
+    typedef proto::terminal<space_tag>::type space_p;
 
     struct SpiritGrammar;
     struct SkipperGrammar;
@@ -50,35 +50,35 @@ namespace boost { namespace spirit2
     struct SpiritComposites;
 
     struct CharLiteral
-      : proto::meta::terminal<char>
+      : proto::terminal<char>
     {};
 
     struct NTBSLiteral
-      : proto::meta::terminal<char const *>
+      : proto::terminal<char const *>
     {};
 
     struct StdStringLiteral
-      : proto::meta::terminal<std::string>
+      : proto::terminal<std::string>
     {};
 
     struct CharParser
-      : proto::meta::function<anychar_p, CharLiteral>
+      : proto::function<anychar_p, CharLiteral>
     {};
 
     struct ICharParser
-      : proto::meta::function<ianychar_p, CharLiteral, CharLiteral>
+      : proto::function<ianychar_p, CharLiteral, CharLiteral>
     {};
 
     struct CharRangeParser
-      : proto::meta::function<anychar_p, CharLiteral, CharLiteral>
+      : proto::function<anychar_p, CharLiteral, CharLiteral>
     {};
 
     struct IStrParser
-      : proto::meta::function<ianystr_p, StdStringLiteral>
+      : proto::function<ianystr_p, StdStringLiteral>
     {};
 
     struct ICharRangeParser
-      : proto::meta::function<ianychar_range_p, CharLiteral, CharLiteral>
+      : proto::function<ianychar_range_p, CharLiteral, CharLiteral>
     {};
 
     ianychar_p const ichar_ = {{}};
@@ -344,10 +344,10 @@ namespace boost { namespace spirit2
     template<>
     struct remove_case<CharParser>
     {
-        typedef proto::meta::function<
+        typedef proto::function<
             ianychar_p
-          , proto::meta::terminal<char>::type
-          , proto::meta::terminal<char>::type
+          , proto::terminal<char>::type
+          , proto::terminal<char>::type
         >::type type;
 
         template<typename Expr>
@@ -363,10 +363,10 @@ namespace boost { namespace spirit2
     template<>
     struct remove_case<CharRangeParser>
     {
-        typedef proto::meta::function<
+        typedef proto::function<
             ianychar_range_p
-          , proto::meta::terminal<char>::type
-          , proto::meta::terminal<char>::type
+          , proto::terminal<char>::type
+          , proto::terminal<char>::type
         >::type type;
 
         template<typename Expr>
@@ -382,10 +382,10 @@ namespace boost { namespace spirit2
     template<>
     struct remove_case<CharLiteral>
     {
-        typedef proto::meta::function<
+        typedef proto::function<
             ianychar_p
-          , proto::meta::terminal<char>::type
-          , proto::meta::terminal<char>::type
+          , proto::terminal<char>::type
+          , proto::terminal<char>::type
         >::type type;
 
         template<typename Expr>
@@ -401,9 +401,9 @@ namespace boost { namespace spirit2
     template<>
     struct remove_case<NTBSLiteral>
     {
-        typedef proto::meta::function<
+        typedef proto::function<
             ianystr_p
-          , proto::meta::terminal<std::string>::type
+          , proto::terminal<std::string>::type
         >::type type;
 
         template<typename Expr>
@@ -417,9 +417,9 @@ namespace boost { namespace spirit2
     template<>
     struct remove_case<StdStringLiteral>
     {
-        typedef proto::meta::function<
+        typedef proto::function<
             ianystr_p
-          , proto::meta::terminal<std::string>::type
+          , proto::terminal<std::string>::type
         >::type type;
 
         template<typename Expr>
@@ -460,8 +460,8 @@ namespace boost { namespace spirit2
         template<typename Expr, typename State, typename Visitor>
         struct apply
         {
-            typedef typename proto::meta::right_shift<
-                typename proto::meta::unary_star<State>::type
+            typedef typename proto::right_shift<
+                typename proto::unary_star<State>::type
               , Expr
             >::type type;
         };
@@ -498,7 +498,7 @@ namespace boost { namespace spirit2
           , IStrParser
           , ICharParser
           , ICharRangeParser
-          , proto::meta::complement<SpiritPrimitives>
+          , proto::complement<SpiritPrimitives>
         >
     {};
 
@@ -512,13 +512,13 @@ namespace boost { namespace spirit2
     template<typename Grammar>
     struct SpiritComposites
       : proto::or_<
-            proto::meta::bitwise_or< Grammar, Grammar >
-          , proto::meta::right_shift< Grammar, Grammar >
-          , proto::meta::subtract< Grammar, Grammar >
+            proto::bitwise_or< Grammar, Grammar >
+          , proto::right_shift< Grammar, Grammar >
+          , proto::subtract< Grammar, Grammar >
           , proto::or_<
-                proto::meta::unary_star< Grammar >
-              , proto::meta::unary_plus< Grammar >
-              , proto::meta::logical_not< Grammar >
+                proto::unary_star< Grammar >
+              , proto::unary_plus< Grammar >
+              , proto::logical_not< Grammar >
             >
         >
     {};

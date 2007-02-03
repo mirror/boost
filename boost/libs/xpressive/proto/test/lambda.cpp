@@ -45,7 +45,7 @@ struct placeholder_arity
 {
     template<typename Expr, typename, typename>
     struct apply
-      : mpl::next<typename proto::meta::arg<Expr>::type::arity>
+      : mpl::next<typename proto::result_of::arg<Expr>::type::arity>
     {};
 };
 
@@ -54,10 +54,10 @@ using proto::_;
 // The lambda grammar, with the transforms for calculating the max arity
 struct LambdaGrammar
   : proto::or_<
-        placeholder_arity< proto::meta::terminal< placeholder<_> > >
-      , proto::trans::always< proto::meta::terminal<_>, mpl::int_<0> >
+        placeholder_arity< proto::terminal< placeholder<_> > >
+      , proto::trans::always< proto::terminal<_>, mpl::int_<0> >
       , proto::trans::fold<
-            proto::meta::nary_expr<_, proto::vararg< max_arity< LambdaGrammar > > >
+            proto::nary_expr<_, proto::vararg< max_arity< LambdaGrammar > > >
         >
     >
 {};
@@ -129,7 +129,7 @@ struct lambda
     typedef typename mpl::eval_if<
         typename lambda_arity<T>::type
       , mpl::identity<void>
-      , proto::meta::eval<T, lambda_context<fusion::tuple<> > >
+      , proto::result_of::eval<T, lambda_context<fusion::tuple<> > >
     >::type nullary_type;
 
     nullary_type operator()() const
@@ -142,7 +142,7 @@ struct lambda
     // hide base_type::operator() by defining our own which
     // evaluates the lambda expression.
     template<typename A0>
-    typename proto::meta::eval<T, lambda_context<fusion::tuple<A0 const &> > >::type
+    typename proto::result_of::eval<T, lambda_context<fusion::tuple<A0 const &> > >::type
     operator()(A0 const &a0) const
     {
         fusion::tuple<A0 const &> args(a0);
@@ -151,7 +151,7 @@ struct lambda
     }
 
     template<typename A0, typename A1>
-    typename proto::meta::eval<T, lambda_context<fusion::tuple<A0 const &, A1 const &> > >::type
+    typename proto::result_of::eval<T, lambda_context<fusion::tuple<A0 const &, A1 const &> > >::type
     operator()(A0 const &a0, A1 const &a1) const
     {
         fusion::tuple<A0 const &, A1 const &> args(a0, a1);
@@ -160,7 +160,7 @@ struct lambda
     }
 };
 
-namespace boost { namespace proto { namespace meta
+namespace boost { namespace proto
 {
     // This causes expressions in the lambda domain to
     // be wrapped in a lambda<> expression wrapper.
@@ -174,22 +174,22 @@ namespace boost { namespace proto { namespace meta
             return lambda<Expr>(expr);
         }
     };
-}}}
+}}
 
 // Define some lambda placeholders
-lambda<proto::meta::terminal<placeholder<mpl::int_<0> > >::type> const _1;
-lambda<proto::meta::terminal<placeholder<mpl::int_<1> > >::type> const _2;
+lambda<proto::terminal<placeholder<mpl::int_<0> > >::type> const _1;
+lambda<proto::terminal<placeholder<mpl::int_<1> > >::type> const _2;
 
 template<typename T>
-lambda<typename proto::meta::terminal<T>::type> const val(T const &t)
+lambda<typename proto::terminal<T>::type> const val(T const &t)
 {
-    return proto::meta::terminal<T>::type::make(t);
+    return proto::terminal<T>::type::make(t);
 }
 
 template<typename T>
-lambda<typename proto::meta::terminal<T &>::type> const var(T &t)
+lambda<typename proto::terminal<T &>::type> const var(T &t)
 {
-    return proto::meta::terminal<T &>::type::make(t);
+    return proto::terminal<T &>::type::make(t);
 }
 
 void test_lambda()

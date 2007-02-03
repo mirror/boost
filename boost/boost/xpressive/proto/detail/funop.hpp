@@ -19,7 +19,7 @@ struct BOOST_PP_CAT(funop, BOOST_PP_ITERATION())
             ref<Expr>
             BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
                 BOOST_PP_ITERATION()
-              , typename meta::as_arg<A
+              , typename result_of::as_arg<A
               , >::type BOOST_PP_INTERCEPT
             )
         >

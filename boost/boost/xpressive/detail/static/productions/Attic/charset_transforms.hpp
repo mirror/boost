@@ -115,7 +115,7 @@ namespace boost { namespace xpressive { namespace detail
               , charset_type
             > matcher_type;
 
-            typedef typename proto::meta::terminal<matcher_type>::type type;
+            typedef typename proto::terminal<matcher_type>::type type;
         };
 
         template<typename Expr, typename State, typename Visitor>

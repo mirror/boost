@@ -40,7 +40,7 @@ namespace boost { namespace xpressive { namespace detail
     {
         template<typename>
         struct apply
-          : proto::meta::terminal<literal_placeholder<Char, typename mpl::not_<Not>::type> >
+          : proto::terminal<literal_placeholder<Char, typename mpl::not_<Not>::type> >
         {};
 
         template<typename Expr, typename Visitor>
@@ -59,7 +59,7 @@ namespace boost { namespace xpressive { namespace detail
     {
         template<typename>
         struct apply
-          : proto::meta::terminal<set_matcher<Traits, Size> >
+          : proto::terminal<set_matcher<Traits, Size> >
         {};
 
         template<typename Expr, typename Visitor>
@@ -79,7 +79,7 @@ namespace boost { namespace xpressive { namespace detail
     {
         template<typename>
         struct apply
-          : proto::meta::terminal<posix_charset_placeholder>
+          : proto::terminal<posix_charset_placeholder>
         {};
 
         template<typename Expr, typename Visitor>
@@ -99,7 +99,7 @@ namespace boost { namespace xpressive { namespace detail
     {
         template<typename Visitor>
         struct apply
-          : proto::meta::terminal<range_placeholder<Char> >
+          : proto::terminal<range_placeholder<Char> >
         {};
 
         template<typename Expr, typename Visitor>
@@ -119,7 +119,7 @@ namespace boost { namespace xpressive { namespace detail
     {
         template<typename>
         struct apply
-          : proto::meta::terminal<assert_word_placeholder<word_boundary<false> > >
+          : proto::terminal<assert_word_placeholder<word_boundary<false> > >
         {};
 
         template<typename Expr, typename Visitor>
@@ -139,7 +139,7 @@ namespace boost { namespace xpressive { namespace detail
         // ~_ln matches any one character that is not in the "newline" character class
         template<typename>
         struct apply
-          : proto::meta::terminal<posix_charset_placeholder>
+          : proto::terminal<posix_charset_placeholder>
         {};
 
         template<typename Expr, typename Visitor>
@@ -166,7 +166,7 @@ namespace boost { namespace xpressive { namespace detail
     //
     template<typename Expr>
     struct complement<Expr, proto::tag::terminal>
-      : complement_terminal<typename proto::meta::arg<Expr>::type>
+      : complement_terminal<typename proto::result_of::arg<Expr>::type>
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -182,7 +182,7 @@ namespace boost { namespace xpressive { namespace detail
               , Visitor
             >
         {
-            BOOST_MPL_ASSERT((is_same<set_initializer_type, typename proto::meta::left<Expr>::type>));
+            BOOST_MPL_ASSERT((is_same<set_initializer_type, typename proto::result_of::left<Expr>::type>));
         };
 
         template<typename Visitor>
@@ -200,8 +200,8 @@ namespace boost { namespace xpressive { namespace detail
         // First, convert the parse tree into a set_matcher
         template<typename Visitor>
         struct apply
-          : proto::meta::terminal<
-                typename proto::meta::compile<Expr, dont_care, Visitor, lst_tag>::type
+          : proto::terminal<
+                typename proto::result_of::compile<Expr, dont_care, Visitor, lst_tag>::type
             >
         {};
 
@@ -222,7 +222,7 @@ namespace boost { namespace xpressive { namespace detail
     {
         template<typename Visitor>
         struct apply
-          : proto::meta::unary_expr<lookahead_tag<false>, typename proto::meta::arg<Expr>::type>
+          : proto::unary_expr<lookahead_tag<false>, typename proto::result_of::arg<Expr>::type>
         {};
 
         template<typename Visitor>
@@ -241,7 +241,7 @@ namespace boost { namespace xpressive { namespace detail
     {
         template<typename Visitor>
         struct apply
-          : proto::meta::unary_expr<lookbehind_tag<false>, typename proto::meta::arg<Expr>::type>
+          : proto::unary_expr<lookbehind_tag<false>, typename proto::result_of::arg<Expr>::type>
         {};
 
         template<typename Visitor>
@@ -260,7 +260,7 @@ namespace boost { namespace xpressive { namespace detail
     {
         template<typename>
         struct apply
-          : proto::meta::arg<Expr>
+          : proto::result_of::arg<Expr>
         {};
 
         template<typename Visitor>
@@ -277,7 +277,7 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Expr, typename, typename Visitor>
         struct apply
         {
-            typedef complement<typename proto::meta::arg<Expr>::type> complement;
+            typedef complement<typename proto::result_of::arg<Expr>::type> complement;
             typedef typename complement::BOOST_NESTED_TEMPLATE apply<Visitor>::type type;
         };
 

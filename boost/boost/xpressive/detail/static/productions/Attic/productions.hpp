@@ -37,7 +37,7 @@ namespace boost { namespace xpressive { namespace detail
     {
         template<typename Expr, typename, typename>
         struct apply
-          : proto::matches<Expr, proto::meta::subscript<set_initializer_type, proto::_> >
+          : proto::matches<Expr, proto::subscript<set_initializer_type, proto::_> >
         {};
     };
 
@@ -48,7 +48,7 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Expr, typename, typename>
         struct apply
         {
-            typedef typename proto::meta::right_shift
+            typedef typename proto::right_shift
             <
                 typename Expr::arg0_type
               , typename Expr::arg1_type

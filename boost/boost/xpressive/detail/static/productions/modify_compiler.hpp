@@ -39,8 +39,8 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Expr, typename State, typename Visitor>
         struct apply
         {
-            typedef typename proto::meta::arg<typename proto::meta::left<Expr>::type>::type modifier_type;
-            typedef typename proto::meta::right<Expr>::type expr_type;
+            typedef typename proto::result_of::arg<typename proto::result_of::left<Expr>::type>::type modifier_type;
+            typedef typename proto::result_of::right<Expr>::type expr_type;
             typedef typename modifier_type::BOOST_NESTED_TEMPLATE apply<Visitor>::type visitor_type;
 
             typedef typename proto::compiler<typename expr_type::tag_type, seq_tag>::

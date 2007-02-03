@@ -23,7 +23,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // RepeaterPattern
     struct RepeaterPattern
-      : proto::meta::right_shift<proto::meta::terminal<repeat_begin_matcher>, proto::_>
+      : proto::right_shift<proto::terminal<repeat_begin_matcher>, proto::_>
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -108,13 +108,13 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Expr, typename, typename>
         struct apply
         {
-            typedef typename proto::meta::right_shift
+            typedef typename proto::right_shift
             <
-                proto::meta::terminal<repeat_begin_matcher>::type
-              , typename proto::meta::right_shift
+                proto::terminal<repeat_begin_matcher>::type
+              , typename proto::right_shift
                 <
                     Expr
-                  , typename proto::meta::terminal<repeat_end_matcher<Greedy> >::type
+                  , typename proto::terminal<repeat_end_matcher<Greedy> >::type
                 >::type
             >::type type;
         };
@@ -145,7 +145,7 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Expr, typename, typename>
         struct apply
         {
-            typedef typename proto::meta::logical_not<Expr>::type type;
+            typedef typename proto::logical_not<Expr>::type type;
         };
 
         template<typename Expr, typename State, typename Visitor>

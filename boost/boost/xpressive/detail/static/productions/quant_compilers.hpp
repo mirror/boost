@@ -21,7 +21,7 @@
 namespace boost { namespace xpressive { namespace detail
 {
 
-    typedef proto::meta::terminal<epsilon_matcher>::type nil_op;
+    typedef proto::terminal<epsilon_matcher>::type nil_op;
 
     ///////////////////////////////////////////////////////////////////////////////
     // repeater_compiler

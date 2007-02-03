@@ -11,21 +11,19 @@
 #define BOOST_PROTO_LITERAL_HPP_EAN_01_03_2007
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
-
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/expr.hpp>
 #include <boost/xpressive/proto/traits.hpp>
 #include <boost/xpressive/proto/extends.hpp>
-
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
 namespace boost { namespace proto
 {
     template<typename T, typename Domain>
     struct literal
-      : extends<typename meta::terminal<T>::type, literal<T, Domain>, Domain>
+      : extends<typename terminal<T>::type, literal<T, Domain>, Domain>
     {
-        typedef typename meta::terminal<T>::type terminal_type;
+        typedef typename terminal<T>::type terminal_type;
 
         template<typename U>
         literal(U &u)

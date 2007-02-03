@@ -10,11 +10,9 @@
 #define BOOST_PROTO_REF_HPP_EAN_04_01_2005
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
-
 #include <boost/preprocessor/repetition/repeat.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
-
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
 namespace boost { namespace proto
@@ -56,7 +54,7 @@ namespace boost { namespace proto
 
 #undef BOOST_PROTO_ARG
 
-    namespace meta
+    namespace result_of
     {
         template<typename T>
         struct unref
@@ -110,7 +108,7 @@ namespace boost { namespace proto
 
             template<typename This, typename T>
             struct result<This(T)>
-              : meta::unref<typename meta::value_type<T>::type>
+              : result_of::unref<typename detail::remove_cv_ref<T>::type>
             {};
 
             template<typename T>

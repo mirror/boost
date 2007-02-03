@@ -11,7 +11,7 @@
 using namespace boost;
 
 struct placeholder {};
-proto::meta::terminal<placeholder>::type const _1 = {{}};
+proto::terminal<placeholder>::type const _1 = {{}};
 
 struct calculator
 {
@@ -62,7 +62,7 @@ private:
 template<typename Fun, typename Expr>
 struct functor
 {
-    typedef typename proto::meta::eval<Expr, Fun>::type result_type;
+    typedef typename proto::result_of::eval<Expr, Fun>::type result_type;
 
     functor(Expr const &expr)
       : expr_(expr)

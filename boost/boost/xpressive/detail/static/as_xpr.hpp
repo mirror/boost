@@ -135,7 +135,7 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Xpr>
     struct as_xpr_type<Xpr, false>
     {
-        typedef typename proto::meta::terminal<typename as_matcher_type<Xpr>::type>::type type;
+        typedef typename proto::terminal<typename as_matcher_type<Xpr>::type>::type type;
 
         template<typename Xpr2>
         static type call(Xpr2 const &xpr)

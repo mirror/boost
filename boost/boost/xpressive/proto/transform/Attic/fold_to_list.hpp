@@ -27,7 +27,7 @@ namespace boost { namespace proto { namespace transform
         struct fold_to_list_recurse
           : proto::or_<
                 fold<
-                    meta::binary_expr<
+                    binary_expr<
                         Tag
                       , fold_to_list_recurse<Tag, Grammar>
                       , fold_to_list_recurse<Tag, Grammar>
@@ -41,7 +41,7 @@ namespace boost { namespace proto { namespace transform
         struct fold_to_list
           : branch<
                 fold<
-                    meta::binary_expr<
+                    binary_expr<
                         Tag
                       , fold_to_list_recurse<Tag, Grammar>
                       , fold_to_list_recurse<Tag, Grammar>
@@ -55,7 +55,7 @@ namespace boost { namespace proto { namespace transform
         struct reverse_fold_to_list_recurse
           : proto::or_<
                 reverse_fold<
-                    meta::binary_expr<
+                    binary_expr<
                         Tag
                       , reverse_fold_to_list_recurse<Tag, Grammar>
                       , reverse_fold_to_list_recurse<Tag, Grammar>
@@ -69,7 +69,7 @@ namespace boost { namespace proto { namespace transform
         struct reverse_fold_to_list
           : branch<
                 reverse_fold<
-                    meta::binary_expr<
+                    binary_expr<
                         Tag
                       , reverse_fold_to_list_recurse<Tag, Grammar>
                       , reverse_fold_to_list_recurse<Tag, Grammar>

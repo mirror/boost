@@ -28,8 +28,8 @@ that, we'll use the _terminal_ expression generator.
     struct placeholder2 {};
     
     // Define the Proto-ified placeholder terminals
-    proto::meta::terminal< placeholder1 >::type const _1 = {{}};
-    proto::meta::terminal< placeholder2 >::type const _2 = {{}};
+    proto::terminal< placeholder1 >::type const _1 = {{}};
+    proto::terminal< placeholder2 >::type const _2 = {{}};
 
 The initialization may look a little odd at first, but there is a good reason
 for doing things this way. The objects `_1` and `_2` above do not require 
