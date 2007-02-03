@@ -148,6 +148,11 @@
               : mpl::true_
             {};
 
+            template<typename T, std::size_t M, typename U>
+            struct terminal_matches<T(&)[M], U(&)[proto::N]>
+              : is_convertible<T(&)[M], U(&)[M]>
+            {};
+
             // matches_impl
             template<typename Expr, typename Grammar>
             struct matches_impl

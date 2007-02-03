@@ -9,6 +9,8 @@
 #ifndef BOOST_PROTO_FWD_HPP_EAN_04_01_2005
 #define BOOST_PROTO_FWD_HPP_EAN_04_01_2005
 
+#include <cstddef>
+#include <climits>
 #include <boost/xpressive/proto/detail/prefix.hpp>
 #include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
@@ -446,6 +448,8 @@ namespace boost { namespace proto
 
     template<typename Grammar>
     struct vararg;
+
+    int const N = INT_MAX;
 
 }} // namespace boost::proto
 
