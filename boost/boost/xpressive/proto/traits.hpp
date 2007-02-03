@@ -13,6 +13,8 @@
     #define BOOST_PROTO_ARG_TRAITS_HPP_EAN_04_01_2005
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
+    #include <boost/config.hpp>
+    #include <boost/detail/workaround.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
     #include <boost/preprocessor/repetition/enum.hpp>
     #include <boost/preprocessor/repetition/enum_params.hpp>
@@ -30,12 +32,19 @@
     #include <boost/utility/result_of.hpp>
     #include <boost/type_traits/is_array.hpp>
     #include <boost/type_traits/is_function.hpp>
+    #include <boost/type_traits/remove_const.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/ref.hpp>
     #include <boost/xpressive/proto/args.hpp>
     #include <boost/xpressive/proto/tags.hpp>
     #include <boost/xpressive/proto/transform/pass_through.hpp>
     #include <boost/xpressive/proto/detail/suffix.hpp>
+
+    #if BOOST_WORKAROUND( BOOST_MSVC, == 1310 )
+        #define BOOST_PROTO_IS_ARRAY_(T) boost::is_array<typename boost::remove_const<T>::type>
+    #else
+        #define BOOST_PROTO_IS_ARRAY_(T) boost::is_array<T>
+    #endif
 
     namespace boost { namespace proto
     {
@@ -68,11 +77,9 @@
             template<typename T, typename EnableIf>
             struct as_expr
             {
-                typedef typename mpl::if_<mpl::or_<is_function<T>, is_array<T> >, T &, T>::type arg0_type;
+                typedef typename mpl::if_<mpl::or_<BOOST_PROTO_IS_ARRAY_(T), is_function<T> >, T &, T>::type arg0_type;
                 typedef expr<proto::tag::terminal, args1<arg0_type> > type;
 
-            private:
-                friend struct op::as_expr;
                 typedef type result_type;
                 static result_type call(T &t)
                 {
@@ -85,9 +92,7 @@
             {
                 typedef typename T::boost_proto_expr_type_ type;
 
-            private:
-                friend struct op::as_expr;
-                typedef type const &result_type;
+                typedef T &result_type;
                 static result_type call(T &t)
                 {
                     return t;
@@ -308,22 +313,14 @@
                 {};
 
                 template<typename T>
-                ref<T> const &operator()(ref<T> const &t) const
-                {
-                    return t;
-                }
-
-                template<typename T>
-                typename result_of::as_arg<T>::type
-                operator()(T &t) const
+                typename result_of::as_arg<T>::type operator()(T &t) const
                 {
                     typename result_of::as_arg<T>::type that = {t};
                     return that;
                 }
 
                 template<typename T>
-                typename result_of::as_arg<T const>::type
-                operator()(T const &t) const
+                typename result_of::as_arg<T const>::type operator()(T const &t) const
                 {
                     typename result_of::as_arg<T const>::type that = {t};
                     return that;

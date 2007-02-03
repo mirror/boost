@@ -41,6 +41,9 @@ This program outputs the following:
 hello, world
 ]
 
+This program builds an object representing the output operation and passes
+it to an `evaluate()` function, which then executes it.
+
 Notice that in order to build a Proto expression template, at least one 
 argument in the expression must be a Proto-ified. In this case, that is done 
 with the _terminal_ class template, which is used to wrap `std::cout`. That 
