@@ -140,7 +140,8 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Xpr2>
         static type call(Xpr2 const &xpr)
         {
-            return proto::make_terminal(detail::as_matcher(xpr));
+            type that = {detail::as_matcher(xpr)};
+            return that;
         }
     };
 

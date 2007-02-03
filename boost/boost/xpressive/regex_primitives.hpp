@@ -442,7 +442,8 @@ by_ref(basic_regex<BidiIter> const &rex)
 {
     typedef detail::core_access<BidiIter> access;
     shared_ptr<detail::regex_impl<BidiIter> > impl = access::get_regex_impl(rex);
-    return proto::make_terminal(detail::regex_placeholder<BidiIter, mpl::true_>(impl));
+    detail::regex_placeholder<BidiIter, mpl::true_> rex_ref(impl);
+    return proto::as_expr(rex_ref);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -456,8 +457,8 @@ template<typename Char>
 inline typename proto::terminal<detail::range_placeholder<Char> >::type const
 range(Char ch_min, Char ch_max)
 {
-    typename proto::terminal<detail::range_placeholder<Char> >::type that = {{ch_min, ch_max, false}};
-    return that;
+    detail::range_placeholder<Char> that = {ch_min, ch_max, false};
+    return proto::as_expr(that);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

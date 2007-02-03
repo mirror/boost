@@ -130,7 +130,7 @@ namespace boost { namespace xpressive { namespace detail
             {
                 matcher.charset_.inverse();
             }
-            return proto::make_terminal(matcher);
+            return proto::as_expr(matcher);
         }
     };
 

@@ -341,24 +341,6 @@
                 }
             };
 
-            struct make_terminal
-            {
-                template<typename Sig>
-                struct result;
-
-                template<typename This, typename T>
-                struct result<This(T)>
-                  : terminal<typename detail::remove_cv_ref<T>::type>
-                {};
-
-                template<typename T>
-                typename terminal<T>::type operator()(T const &t) const
-                {
-                    typename terminal<T>::type that = {t};
-                    return that;
-                }
-            };
-
             template<long N>
             struct arg_c
             {
@@ -433,7 +415,6 @@
 
         op::as_expr const as_expr = {};
         op::as_arg const as_arg = {};
-        op::make_terminal const make_terminal = {};
         op::left const left = {};
         op::right const right = {};
 

@@ -345,7 +345,6 @@ namespace boost { namespace proto
     namespace op
     {
         struct compile;
-        struct make_terminal;
         struct left;
         struct right;
         struct as_expr;
