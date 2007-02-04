@@ -586,6 +586,8 @@ larger expressions.
 If you want to use `typeof_nested_typedef` in a template-context, use `BOOST_TYPEOF_NESTED_TYPEDEF_TPL(name,expr)`, 
 which takes care of `typename` inside the `typeof` expression.
 
+'typeof_nested_typedef' can not be used at function/block scope.
+
 [h4 Sample Code]
 
     template<typename A, typename B>
