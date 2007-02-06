@@ -101,6 +101,10 @@ and becomes widely available.
 
 [section:tuto Tutorial]
 
+To start using typeof include the typeof header:
+
+    #include <boost/typeof/typeof.hpp>
+
 To deduce the type of an expression at compile time
 use the `BOOST_TYPEOF` macro:
 
