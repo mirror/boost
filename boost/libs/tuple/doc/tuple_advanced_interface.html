@@ -101,7 +101,7 @@ For a one-element cons list the tail argument (<code>null_type</code>) can be om
 <p>
 The template <code>access_traits</code> defines three type functions. Let <code>T</code> be a type of an element in a tuple:
 <ol>
-<li><code>access_traits&lt;T&gt;::type</code> maps <code>T</code> to the return type of the non-const access functions (nonmeber and member <code>get</code> functions, and the <code>get_head</code> function).</li>
+<li><code>access_traits&lt;T&gt;::non_const_type</code> maps <code>T</code> to the return type of the non-const access functions (nonmeber and member <code>get</code> functions, and the <code>get_head</code> function).</li>
 <li><code>access_traits&lt;T&gt;::const_type</code> maps <code>T</code> to the return type of the const access functions.</li>
 <li><code>access_traits&lt;T&gt;::parameter_type</code> maps <code>T</code> to the parameter type of the tuple constructor.</li>
 </ol>
