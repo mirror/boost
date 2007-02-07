@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>map</title>
 <link rel="stylesheet" href="../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../containers.html" title="Containers">
 <link rel="prev" href="set.html" title="set">
@@ -26,14 +26,14 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.sequences.containers.map"></a><a href="map.html" title="map">map</a></h4></div></div></div>
 <a name="fusion.sequences.containers.map.description"></a><h5>
-<a name="id973536"></a>
+<a name="id491387"></a>
           <a href="map.html#fusion.sequences.containers.map.description">Description</a>
         </h5>
 <p>
           map is an <a href="../concepts/associative_sequence.html" title="Associative
         Sequence">Associative
           Sequence</a> of heteregenous typed data elements. Each element is a
-          key/data pair (see <a href="../../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">pair</span></code></a>)
+          key/data pair (see <a href="../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">pair</span></tt></a>)
           where the key has no data (type only). Type identity is used to impose
           an equivalence relation on keys. A map may contain at most one element
           for each key. Membership testing and element key lookup has constant runtime
@@ -41,14 +41,14 @@
           Functions</a>).
         </p>
 <a name="fusion.sequences.containers.map.header"></a><h5>
-<a name="id973607"></a>
+<a name="id491465"></a>
           <a href="map.html#fusion.sequences.containers.map.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">container</span><span class="special">/</span><span class="identifier">map</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.containers.map.synopsis"></a><h5>
-<a name="id973699"></a>
+<a name="id491570"></a>
           <a href="map.html#fusion.sequences.containers.map.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -62,24 +62,24 @@
 <span class="keyword">struct</span> <span class="identifier">map</span><span class="special">;</span>
 </pre>
 <p>
-          The variadic class interface accepts <code class="computeroutput"><span class="number">0</span></code>
-          to <code class="computeroutput"><span class="identifier">FUSION_MAX_MAP_SIZE</span></code>
-          elements, where <code class="computeroutput"><span class="identifier">FUSION_MAX_MAP_SIZE</span></code>
-          is a user definable predefined maximum that defaults to <code class="computeroutput"><span class="number">10</span></code>.
+          The variadic class interface accepts <tt class="computeroutput"><span class="number">0</span></tt>
+          to <tt class="computeroutput"><span class="identifier">FUSION_MAX_MAP_SIZE</span></tt>
+          elements, where <tt class="computeroutput"><span class="identifier">FUSION_MAX_MAP_SIZE</span></tt>
+          is a user definable predefined maximum that defaults to <tt class="computeroutput"><span class="number">10</span></tt>.
           Example:
         </p>
 <pre class="programlisting">
-<span class="identifier">map</span><span class="special">&lt;</span><a href="../../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">pair</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;,</span> <a href="../../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">pair</span></code></a><span class="special">&lt;</span><span class="keyword">char</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;,</span> <a href="../../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">pair</span></code></a><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;</span> <span class="special">&gt;</span>
+<span class="identifier">map</span><span class="special">&lt;</span><a href="../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">pair</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;,</span> <a href="../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">pair</span></tt></a><span class="special">&lt;</span><span class="keyword">char</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;,</span> <a href="../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">pair</span></tt></a><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;</span> <span class="special">&gt;</span>
 </pre>
 <p>
-          You may define the preprocessor constant <code class="computeroutput"><span class="identifier">FUSION_MAX_MAP_SIZE</span></code>
+          You may define the preprocessor constant <tt class="computeroutput"><span class="identifier">FUSION_MAX_MAP_SIZE</span></tt>
           before including any Fusion header to change the default. Example:
         </p>
 <pre class="programlisting">
 <span class="preprocessor">#define</span> <span class="identifier">FUSION_MAX_MAP_SIZE</span> <span class="number">20</span>
 </pre>
 <a name="fusion.sequences.containers.map.template_parameters"></a><h5>
-<a name="id974068"></a>
+<a name="id491987"></a>
           <a href="map.html#fusion.sequences.containers.map.template_parameters">Template
           parameters</a>
         </h5>
@@ -96,14 +96,14 @@
 </tr></thead>
 <tbody><tr>
 <td>
-<code class="computeroutput"><span class="identifier">T0</span></code>...<code class="computeroutput"><span class="identifier">TN</span></code>
+<tt class="computeroutput"><span class="identifier">T0</span></tt>...<tt class="computeroutput"><span class="identifier">TN</span></tt>
 </td>
 <td>Element types</td>
 <td><span class="emphasis"><em>unspecified-type</em></span></td>
 </tr></tbody>
 </table></div>
 <a name="fusion.sequences.containers.map.model_of"></a><h5>
-<a name="id974147"></a>
+<a name="id492077"></a>
           <a href="map.html#fusion.sequences.containers.map.model_of">Model of</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">
@@ -116,19 +116,19 @@
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">M</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">M</span></tt></span></dt>
 <dd>
-            A <code class="computeroutput"><span class="identifier">map</span></code> type
+            A <tt class="computeroutput"><span class="identifier">map</span></tt> type
           </dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">m</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">m</span></tt></span></dt>
 <dd>
-            An instance of <code class="computeroutput"><span class="identifier">map</span></code>
+            An instance of <tt class="computeroutput"><span class="identifier">map</span></tt>
 </dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">e0</span></code>...<code class="computeroutput"><span class="identifier">en</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">e0</span></tt>...<tt class="computeroutput"><span class="identifier">en</span></tt></span></dt>
 <dd>
-            Heterogeneous key/value pairs (see <a href="../../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">pair</span></code></a>)
+            Heterogeneous key/value pairs (see <a href="../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">fusion</span><span class="special">::</span><span class="identifier">pair</span></tt></a>)
           </dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">s</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">s</span></tt></span></dt>
 <dd>
             A <a href="../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
@@ -137,7 +137,7 @@
 </dl>
 </div>
 <a name="fusion.sequences.containers.map.expression_semantics"></a><h5>
-<a name="id974321"></a>
+<a name="id492273"></a>
           <a href="map.html#fusion.sequences.containers.map.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -160,50 +160,50 @@
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">M</span><span class="special">()</span></code></td>
+<td><tt class="computeroutput"><span class="identifier">M</span><span class="special">()</span></tt></td>
 <td>Creates
                 a map with default constructed elements.</td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">M</span><span class="special">(</span><span class="identifier">e0</span><span class="special">,</span> <span class="identifier">e1</span><span class="special">,...</span>
-                <span class="identifier">en</span><span class="special">)</span></code></td>
+<td><tt class="computeroutput"><span class="identifier">M</span><span class="special">(</span><span class="identifier">e0</span><span class="special">,</span> <span class="identifier">e1</span><span class="special">,...</span>
+                <span class="identifier">en</span><span class="special">)</span></tt></td>
 <td>Creates
-                a map with element pairs <code class="computeroutput"><span class="identifier">e0</span></code>...<code class="computeroutput"><span class="identifier">en</span></code>.</td>
+                a map with element pairs <tt class="computeroutput"><span class="identifier">e0</span></tt>...<tt class="computeroutput"><span class="identifier">en</span></tt>.</td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">M</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code></td>
+<td><tt class="computeroutput"><span class="identifier">M</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt></td>
 <td>Copy
                 constructs a map from a <a href="../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a> <code class="computeroutput"><span class="identifier">s</span></code>.</td>
+                Sequence</a> <tt class="computeroutput"><span class="identifier">s</span></tt>.</td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">m</span> <span class="special">=</span>
-                <span class="identifier">s</span></code></td>
+<td><tt class="computeroutput"><span class="identifier">m</span> <span class="special">=</span>
+                <span class="identifier">s</span></tt></td>
 <td>Assigns
-                to a map, <code class="computeroutput"><span class="identifier">m</span></code>, from
+                to a map, <tt class="computeroutput"><span class="identifier">m</span></tt>, from
                 a <a href="../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a> <code class="computeroutput"><span class="identifier">s</span></code>.</td>
+                Sequence</a> <tt class="computeroutput"><span class="identifier">s</span></tt>.</td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequences.containers.map.example"></a><h5>
-<a name="id974576"></a>
+<a name="id492561"></a>
           <a href="map.html#fusion.sequences.containers.map.example">Example</a>
         </h5>
 <pre class="programlisting">
 <span class="keyword">typedef</span> <span class="identifier">map</span><span class="special">&lt;</span>
-    <a href="../../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">pair</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;</span>
-  <span class="special">,</span> <a href="../../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">pair</span></code></a><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="special">&gt;</span> 
+    <a href="../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">pair</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;</span>
+  <span class="special">,</span> <a href="../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">pair</span></tt></a><span class="special">&lt;</span><span class="keyword">double</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="special">&gt;</span> 
 <span class="identifier">map_type</span><span class="special">;</span>
 
 <span class="identifier">map_type</span> <span class="identifier">m</span><span class="special">(</span>
-    <a href="../../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">make_pair</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(</span><span class="char">'X'</span><span class="special">)</span>
-  <span class="special">,</span> <a href="../../support/pair.html" title="pair"><code class="computeroutput"><span class="identifier">make_pair</span></code></a><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;(</span><span class="string">"Men"</span><span class="special">));</span>
+    <a href="../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">make_pair</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(</span><span class="char">'X'</span><span class="special">)</span>
+  <span class="special">,</span> <a href="../../support/pair.html" title="pair"><tt class="computeroutput"><span class="identifier">make_pair</span></tt></a><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;(</span><span class="string">"Men"</span><span class="special">));</span>
 
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(</span><span class="identifier">m</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;(</span><span class="identifier">m</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../intrinsics/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;(</span><span class="identifier">m</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <a href="../intrinsics/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;(</span><span class="identifier">m</span><span class="special">)</span> <span class="special">&lt;&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">endl</span><span class="special">;</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

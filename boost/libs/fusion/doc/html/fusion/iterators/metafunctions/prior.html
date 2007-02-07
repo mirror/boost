@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>prior</title>
 <link rel="stylesheet" href="../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="next.html" title="next">
@@ -26,14 +26,14 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.iterators.metafunctions.prior"></a><a href="prior.html" title="prior">prior</a></h4></div></div></div>
 <a name="fusion.iterators.metafunctions.prior.description"></a><h5>
-<a name="id940363"></a>
+<a name="id473475"></a>
           <a href="prior.html#fusion.iterators.metafunctions.prior.description">Description</a>
         </h5>
 <p>
           Returns the type of the previous iterator in a sequence.
         </p>
 <a name="fusion.iterators.metafunctions.prior.synopsis"></a><h5>
-<a name="id940391"></a>
+<a name="id473506"></a>
           <a href="prior.html#fusion.iterators.metafunctions.prior.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -46,7 +46,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id940478"></a><p class="title"><b>Table 1.14. Parameters</b></p>
+<a name="id473605"></a><p class="title"><b>Table 1.14. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -59,7 +59,7 @@
 <th>Description</th>
 </tr></thead>
 <tbody><tr>
-<td><code class="computeroutput"><span class="identifier">I</span></code></td>
+<td><tt class="computeroutput"><span class="identifier">I</span></tt></td>
 <td>Model
               of <a href="../concepts/bidirectional_iterator.html" title="Bidirectional
         Iterator">Bidirectional
@@ -70,40 +70,40 @@
 </table>
 </div>
 <a name="fusion.iterators.metafunctions.prior.expression_semantics"></a><h5>
-<a name="id940543"></a>
+<a name="id473678"></a>
           <a href="prior.html#fusion.iterators.metafunctions.prior.expression_semantics">Expression
           Semantics</a>
         </h5>
 <pre class="programlisting">
-<a href="prior.html" title="prior"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">prior</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<a href="prior.html" title="prior"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">prior</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-          <span class="bold"><strong>Return type</strong></span>: A model of the same iterator
-          concept as <code class="computeroutput"><span class="identifier">I</span></code>.
+          <span class="bold"><b>Return type</b></span>: A model of the same iterator
+          concept as <tt class="computeroutput"><span class="identifier">I</span></tt>.
         </p>
 <p>
-          <span class="bold"><strong>Semantics</strong></span>: Returns an iterator to the
-          previous element in the sequence before <code class="computeroutput"><span class="identifier">I</span></code>.
+          <span class="bold"><b>Semantics</b></span>: Returns an iterator to the
+          previous element in the sequence before <tt class="computeroutput"><span class="identifier">I</span></tt>.
         </p>
 <a name="fusion.iterators.metafunctions.prior.header"></a><h5>
-<a name="id940650"></a>
+<a name="id473800"></a>
           <a href="prior.html#fusion.iterators.metafunctions.prior.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">prior</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.iterators.metafunctions.prior.example"></a><h5>
-<a name="id940733"></a>
+<a name="id473894"></a>
           <a href="prior.html#fusion.iterators.metafunctions.prior.example">Example</a>
         </h5>
 <pre class="programlisting">
-<span class="keyword">typedef</span> <a href="../../sequences/containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
-<span class="keyword">typedef</span> <a href="next.html" title="next"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">next</span></code></a><span class="special">&lt;</span><a href="../../sequences/intrinsics/metafunctions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></code></a><span class="special">&lt;</span><span class="identifier">vec</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">second</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="../../sequences/containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="next.html" title="next"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">next</span></tt></a><span class="special">&lt;</span><a href="../../sequences/intrinsics/metafunctions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">begin</span></tt></a><span class="special">&lt;</span><span class="identifier">vec</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">second</span><span class="special">;</span>
 
-<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_same</span><span class="special">&lt;</span><a href="value_of.html" title="value_of"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_of</span></code></a><span class="special">&lt;</span><span class="identifier">second</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;));</span>
+<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_same</span><span class="special">&lt;</span><a href="value_of.html" title="value_of"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_of</span></tt></a><span class="special">&lt;</span><span class="identifier">second</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;));</span>
 
-<span class="keyword">typedef</span> <a href="prior.html" title="prior"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">prior</span></code></a><span class="special">&lt;</span><span class="identifier">second</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">first</span><span class="special">;</span>
-<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_same</span><span class="special">&lt;</span><a href="value_of.html" title="value_of"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_of</span></code></a><span class="special">&lt;</span><span class="identifier">first</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&gt;));</span>
+<span class="keyword">typedef</span> <a href="prior.html" title="prior"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">prior</span></tt></a><span class="special">&lt;</span><span class="identifier">second</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">first</span><span class="special">;</span>
+<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_same</span><span class="special">&lt;</span><a href="value_of.html" title="value_of"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_of</span></tt></a><span class="special">&lt;</span><span class="identifier">first</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">,</span> <span class="keyword">int</span><span class="special">&gt;));</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

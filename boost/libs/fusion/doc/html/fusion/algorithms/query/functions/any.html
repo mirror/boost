@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>any</title>
 <link rel="stylesheet" href="../../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
 <link rel="prev" href="../functions.html" title="Functions">
@@ -26,18 +26,18 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.query.functions.any"></a><a href="any.html" title="any">any</a></h5></div></div></div>
 <a name="fusion.algorithms.query.functions.any.description"></a><h6>
-<a name="id1104041"></a>
+<a name="id559966"></a>
             <a href="any.html#fusion.algorithms.query.functions.any.description">Description</a>
           </h6>
 <p>
-            For a sequence <code class="computeroutput"><span class="identifier">seq</span></code> and
-            unary function object <code class="computeroutput"><span class="identifier">f</span></code>,
-            <code class="computeroutput"><span class="identifier">any</span></code> returns true if
-            <code class="computeroutput"><span class="identifier">f</span></code> returns true for at
-            least one element of <code class="computeroutput"><span class="identifier">seq</span></code>.
+            For a sequence <tt class="computeroutput"><span class="identifier">seq</span></tt> and
+            unary function object <tt class="computeroutput"><span class="identifier">f</span></tt>,
+            <tt class="computeroutput"><span class="identifier">any</span></tt> returns true if
+            <tt class="computeroutput"><span class="identifier">f</span></tt> returns true for at
+            least one element of <tt class="computeroutput"><span class="identifier">seq</span></tt>.
           </p>
 <a name="fusion.algorithms.query.functions.any.synopsis"></a><h6>
-<a name="id1104114"></a>
+<a name="id560046"></a>
             <a href="any.html#fusion.algorithms.query.functions.any.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -45,11 +45,11 @@
     <span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">,</span>
     <span class="keyword">typename</span> <span class="identifier">F</span>
     <span class="special">&gt;</span>
-<span class="keyword">typename</span> <a href="../metafunctions/any.html" title="any"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">any</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span><span class="identifier">F</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">any</span><span class="special">(</span>
+<span class="keyword">typename</span> <a href="../metafunctions/any.html" title="any"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">any</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span><span class="identifier">F</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">any</span><span class="special">(</span>
     <span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">,</span> <span class="identifier">F</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id1104282"></a><p class="title"><b>Table 1.38. Parameters</b></p>
+<a name="id560239"></a><p class="title"><b>Table 1.38. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -63,19 +63,19 @@
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">seq</span></code></td>
+<td><tt class="computeroutput"><span class="identifier">seq</span></tt></td>
 <td>A
                 model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
-                Sequence</a>, <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">e</span><span class="special">)</span></code> must be a valid expression, convertible
-                to <code class="computeroutput"><span class="keyword">bool</span></code>, for each element
-                <code class="computeroutput"><span class="identifier">e</span></code> in <code class="computeroutput"><span class="identifier">seq</span></code>
+                Sequence</a>, <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">e</span><span class="special">)</span></tt> must be a valid expression, convertible
+                to <tt class="computeroutput"><span class="keyword">bool</span></tt>, for each element
+                <tt class="computeroutput"><span class="identifier">e</span></tt> in <tt class="computeroutput"><span class="identifier">seq</span></tt>
 </td>
 <td>The sequence
                 to search</td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">f</span></code></td>
+<td><tt class="computeroutput"><span class="identifier">f</span></tt></td>
 <td>A
                 unary function object</td>
 <td>The search predicate</td>
@@ -84,38 +84,38 @@
 </table>
 </div>
 <a name="fusion.algorithms.query.functions.any.expression_semantics"></a><h6>
-<a name="id1104415"></a>
+<a name="id560389"></a>
             <a href="any.html#fusion.algorithms.query.functions.any.expression_semantics">Expression
             semantics</a>
           </h6>
 <pre class="programlisting">
-<a href="any.html" title="any"><code class="computeroutput"><span class="identifier">any</span></code></a><span class="special">(</span><span class="identifier">seq</span><span class="special">,</span> <span class="identifier">f</span><span class="special">);</span>
+<a href="any.html" title="any"><tt class="computeroutput"><span class="identifier">any</span></tt></a><span class="special">(</span><span class="identifier">seq</span><span class="special">,</span> <span class="identifier">f</span><span class="special">);</span>
 </pre>
 <p>
-            <span class="bold"><strong>Return type</strong></span>: <code class="computeroutput"><span class="keyword">bool</span></code>
+            <span class="bold"><b>Return type</b></span>: <tt class="computeroutput"><span class="keyword">bool</span></tt>
           </p>
 <p>
-            <span class="bold"><strong>Semantics</strong></span>: Returns true if and only
-            if <code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">e</span><span class="special">)</span></code>
-            evaluates to <code class="computeroutput"><span class="keyword">true</span></code> for some
-            element <code class="computeroutput"><span class="identifier">e</span></code> in <code class="computeroutput"><span class="identifier">seq</span></code>.
+            <span class="bold"><b>Semantics</b></span>: Returns true if and only
+            if <tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">e</span><span class="special">)</span></tt>
+            evaluates to <tt class="computeroutput"><span class="keyword">true</span></tt> for some
+            element <tt class="computeroutput"><span class="identifier">e</span></tt> in <tt class="computeroutput"><span class="identifier">seq</span></tt>.
           </p>
 <a name="fusion.algorithms.query.functions.any.complexity"></a><h6>
-<a name="id1104557"></a>
+<a name="id560552"></a>
             <a href="any.html#fusion.algorithms.query.functions.any.complexity">Complexity</a>
           </h6>
 <p>
-            Linear. At most <code class="computeroutput"><a href="../../../sequences/intrinsics/metafunctions/size.html" title="size"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">size</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">value</span></code> comparisons.
+            Linear. At most <tt class="computeroutput"><a href="../../../sequences/intrinsics/metafunctions/size.html" title="size"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">size</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">&gt;::</span><span class="identifier">value</span></tt> comparisons.
           </p>
 <a name="fusion.algorithms.query.functions.any.header"></a><h6>
-<a name="id1104630"></a>
+<a name="id560634"></a>
             <a href="any.html#fusion.algorithms.query.functions.any.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">query</span><span class="special">/</span><span class="identifier">any</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithms.query.functions.any.example"></a><h6>
-<a name="id1104721"></a>
+<a name="id560739"></a>
             <a href="any.html#fusion.algorithms.query.functions.any.example">Example</a>
           </h6>
 <pre class="programlisting">
@@ -128,8 +128,8 @@
     <span class="special">}</span>
 <span class="special">};</span>
 <span class="special">...</span>
-<span class="identifier">assert</span><span class="special">(</span><a href="any.html" title="any"><code class="computeroutput"><span class="identifier">any</span></code></a><span class="special">(</span><a href="../../../sequences/generation/functions/make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">),</span> <span class="identifier">odd</span><span class="special">()));</span>
-<span class="identifier">assert</span><span class="special">(!</span><a href="any.html" title="any"><code class="computeroutput"><span class="identifier">any</span></code></a><span class="special">(</span><a href="../../../sequences/generation/functions/make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">2</span><span class="special">,</span><span class="number">4</span><span class="special">),</span> <span class="identifier">odd</span><span class="special">()));</span>
+<span class="identifier">assert</span><span class="special">(</span><a href="any.html" title="any"><tt class="computeroutput"><span class="identifier">any</span></tt></a><span class="special">(</span><a href="../../../sequences/generation/functions/make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">),</span> <span class="identifier">odd</span><span class="special">()));</span>
+<span class="identifier">assert</span><span class="special">(!</span><a href="any.html" title="any"><tt class="computeroutput"><span class="identifier">any</span></tt></a><span class="special">(</span><a href="../../../sequences/generation/functions/make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a><span class="special">(</span><span class="number">2</span><span class="special">,</span><span class="number">4</span><span class="special">),</span> <span class="identifier">odd</span><span class="special">()));</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

@@ -4,7 +4,7 @@
 <title> Operator
         *</title>
 <link rel="stylesheet" href="../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../operators.html" title="Operators">
 <link rel="prev" href="../operators.html" title="Operators">
@@ -30,24 +30,24 @@
         *"> Operator
         *</a></h4></div></div></div>
 <a name="fusion.iterators.operators.operator_unary_star.description"></a><h5>
-<a name="id936213"></a>
+<a name="id468777"></a>
           <a href="operator_unary_star.html#fusion.iterators.operators.operator_unary_star.description">Description</a>
         </h5>
 <p>
           Dereferences an iterator.
         </p>
 <a name="fusion.iterators.operators.operator_unary_star.synopsis"></a><h5>
-<a name="id936240"></a>
+<a name="id468807"></a>
           <a href="operator_unary_star.html#fusion.iterators.operators.operator_unary_star.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">I</span>
     <span class="special">&gt;</span>
-<span class="keyword">typename</span> <a href="../metafunctions/deref.html" title="deref"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="keyword">operator</span><span class="special">*(</span><span class="emphasis"><em>unspecified</em></span><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">i</span><span class="special">);</span>
+<span class="keyword">typename</span> <a href="../metafunctions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">deref</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="keyword">operator</span><span class="special">*(</span><span class="emphasis"><em>unspecified</em></span><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">i</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id936379"></a><p class="title"><b>Table 1.8. Parameters</b></p>
+<a name="id468964"></a><p class="title"><b>Table 1.8. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -60,7 +60,7 @@
 <th>Description</th>
 </tr></thead>
 <tbody><tr>
-<td><code class="computeroutput"><span class="identifier">i</span></code></td>
+<td><tt class="computeroutput"><span class="identifier">i</span></tt></td>
 <td>Model
               of <a href="../concepts/forward_iterator.html" title="Forward
         Iterator">Forward
@@ -71,7 +71,7 @@
 </table>
 </div>
 <a name="fusion.iterators.operators.operator_unary_star.expression_semantics"></a><h5>
-<a name="id936446"></a>
+<a name="id469039"></a>
           <a href="operator_unary_star.html#fusion.iterators.operators.operator_unary_star.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -79,31 +79,31 @@
 <span class="special">*</span><span class="identifier">i</span>
 </pre>
 <p>
-          <span class="bold"><strong>Return type</strong></span>: Equivalent to the return
-          type of <code class="computeroutput"><a href="../functions/deref.html" title="deref"><code class="computeroutput"><span class="identifier">deref</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></code>.
+          <span class="bold"><b>Return type</b></span>: Equivalent to the return
+          type of <tt class="computeroutput"><a href="../functions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></tt>.
         </p>
 <p>
-          <span class="bold"><strong>Semantics</strong></span>: Equivalent to <code class="computeroutput"><a href="../functions/deref.html" title="deref"><code class="computeroutput"><span class="identifier">deref</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></code>.
+          <span class="bold"><b>Semantics</b></span>: Equivalent to <tt class="computeroutput"><a href="../functions/deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">)</span></tt>.
         </p>
 <a name="fusion.iterators.operators.operator_unary_star.header"></a><h5>
-<a name="id936564"></a>
+<a name="id469173"></a>
           <a href="operator_unary_star.html#fusion.iterators.operators.operator_unary_star.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">deref</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.iterators.operators.operator_unary_star.example"></a><h5>
-<a name="id936648"></a>
+<a name="id469268"></a>
           <a href="operator_unary_star.html#fusion.iterators.operators.operator_unary_star.example">Example</a>
         </h5>
 <pre class="programlisting">
-<span class="keyword">typedef</span> <a href="../../sequences/containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="../../sequences/containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
 
 <span class="keyword">int</span> <span class="identifier">i</span><span class="special">(</span><span class="number">0</span><span class="special">);</span>
 <span class="identifier">vec</span> <span class="identifier">v</span><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="identifier">i</span><span class="special">);</span>
-<span class="identifier">assert</span><span class="special">(*</span><a href="../../sequences/intrinsics/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">v</span><span class="special">)</span> <span class="special">==</span> <span class="number">1</span><span class="special">);</span>
-<span class="identifier">assert</span><span class="special">(*</span><a href="../functions/next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><a href="../../sequences/intrinsics/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">v</span><span class="special">))</span> <span class="special">==</span> <span class="number">0</span><span class="special">);</span>
-<span class="identifier">assert</span><span class="special">(&amp;(*</span><a href="../functions/next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><a href="../../sequences/intrinsics/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">v</span><span class="special">)))</span> <span class="special">==</span> <span class="special">&amp;</span><span class="identifier">i</span><span class="special">);</span>
+<span class="identifier">assert</span><span class="special">(*</span><a href="../../sequences/intrinsics/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">v</span><span class="special">)</span> <span class="special">==</span> <span class="number">1</span><span class="special">);</span>
+<span class="identifier">assert</span><span class="special">(*</span><a href="../functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><a href="../../sequences/intrinsics/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">v</span><span class="special">))</span> <span class="special">==</span> <span class="number">0</span><span class="special">);</span>
+<span class="identifier">assert</span><span class="special">(&amp;(*</span><a href="../functions/next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><a href="../../sequences/intrinsics/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">v</span><span class="special">)))</span> <span class="special">==</span> <span class="special">&amp;</span><span class="identifier">i</span><span class="special">);</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

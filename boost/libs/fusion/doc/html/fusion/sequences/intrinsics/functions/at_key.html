@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>at_key</title>
 <link rel="stylesheet" href="../../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
 <link rel="prev" href="has_key.html" title="has_key">
@@ -26,27 +26,27 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.sequences.intrinsics.functions.at_key"></a><a href="at_key.html" title="at_key">at_key</a></h5></div></div></div>
 <a name="fusion.sequences.intrinsics.functions.at_key.description"></a><h6>
-<a name="id1010669"></a>
+<a name="id513650"></a>
             <a href="at_key.html#fusion.sequences.intrinsics.functions.at_key.description">Description</a>
           </h6>
 <p>
             Returns the element associated with a Key from the sequence.
           </p>
 <a name="fusion.sequences.intrinsics.functions.at_key.synopsis"></a><h6>
-<a name="id1010698"></a>
+<a name="id513682"></a>
             <a href="at_key.html#fusion.sequences.intrinsics.functions.at_key.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Key</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
-<span class="keyword">typename</span> <a href="../metafunctions/at_key.html" title="at_key"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at_key</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">Key</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<span class="keyword">typename</span> <a href="../metafunctions/at_key.html" title="at_key"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at_key</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">Key</span><span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="identifier">at_key</span><span class="special">(</span><span class="identifier">Sequence</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">);</span>
 
 <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Key</span><span class="special">,</span> <span class="keyword">typename</span> <span class="identifier">Sequence</span><span class="special">&gt;</span>
-<span class="keyword">typename</span> <a href="../metafunctions/at_key.html" title="at_key"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at_key</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">Key</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<span class="keyword">typename</span> <a href="../metafunctions/at_key.html" title="at_key"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at_key</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">,</span> <span class="identifier">Key</span><span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="identifier">at_key</span><span class="special">(</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">);</span>
 </pre>
 <a name="fusion.sequences.intrinsics.functions.at_key.parameters"></a><h6>
-<a name="id1010991"></a>
+<a name="id514015"></a>
             <a href="at_key.html#fusion.sequences.intrinsics.functions.at_key.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -62,7 +62,7 @@
 </tr></thead>
 <tbody>
 <tr>
-<td><code class="computeroutput"><span class="identifier">seq</span></code></td>
+<td><tt class="computeroutput"><span class="identifier">seq</span></tt></td>
 <td>Model
                   of <a href="../../concepts/associative_sequence.html" title="Associative
         Sequence">Associative
@@ -71,7 +71,7 @@
 <td>The sequence we wish to investigate.</td>
 </tr>
 <tr>
-<td><code class="computeroutput"><span class="identifier">Key</span></code></td>
+<td><tt class="computeroutput"><span class="identifier">Key</span></tt></td>
 <td>Any
                   type</td>
 <td>The queried key.</td>
@@ -79,7 +79,7 @@
 </tbody>
 </table></div>
 <a name="fusion.sequences.intrinsics.functions.at_key.expression_semantics"></a><h6>
-<a name="id1011089"></a>
+<a name="id514123"></a>
             <a href="at_key.html#fusion.sequences.intrinsics.functions.at_key.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -87,34 +87,34 @@
 <span class="identifier">at_key</span><span class="special">&lt;</span><span class="identifier">Key</span><span class="special">&gt;(</span><span class="identifier">seq</span><span class="special">);</span>
 </pre>
 <p>
-            <span class="bold"><strong>Return type</strong></span>: Returns a reference to
-            the element associated with Key from the sequence <code class="computeroutput"><span class="identifier">seq</span></code>
-            if <code class="computeroutput"><span class="identifier">seq</span></code> is mutable and
-            <code class="computeroutput"><span class="identifier">e</span> <span class="special">=</span>
-            <span class="identifier">o</span></code>, where <code class="computeroutput"><span class="identifier">e</span></code>
+            <span class="bold"><b>Return type</b></span>: Returns a reference to
+            the element associated with Key from the sequence <tt class="computeroutput"><span class="identifier">seq</span></tt>
+            if <tt class="computeroutput"><span class="identifier">seq</span></tt> is mutable and
+            <tt class="computeroutput"><span class="identifier">e</span> <span class="special">=</span>
+            <span class="identifier">o</span></tt>, where <tt class="computeroutput"><span class="identifier">e</span></tt>
             is the element associated with Key, is a valid expression. Else, returns
             a type convertable to the element associated with Key.
           </p>
 <p>
-            <span class="bold"><strong>Precondition</strong></span>: <code class="computeroutput"><span class="identifier">has_key</span><span class="special">&lt;</span><span class="identifier">Key</span><span class="special">&gt;(</span><span class="identifier">seq</span><span class="special">)</span> <span class="special">==</span> <span class="keyword">true</span></code>
+            <span class="bold"><b>Precondition</b></span>: <tt class="computeroutput"><span class="identifier">has_key</span><span class="special">&lt;</span><span class="identifier">Key</span><span class="special">&gt;(</span><span class="identifier">seq</span><span class="special">)</span> <span class="special">==</span> <span class="keyword">true</span></tt>
           </p>
 <p>
-            <span class="bold"><strong>Semantics</strong></span>: Returns the element associated
+            <span class="bold"><b>Semantics</b></span>: Returns the element associated
             with Key.
           </p>
 <a name="fusion.sequences.intrinsics.functions.at_key.header"></a><h6>
-<a name="id1011266"></a>
+<a name="id514322"></a>
             <a href="at_key.html#fusion.sequences.intrinsics.functions.at_key.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">intrinsic</span><span class="special">/</span><span class="identifier">at_key</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.intrinsics.functions.at_key.example"></a><h6>
-<a name="id1011359"></a>
+<a name="id514428"></a>
             <a href="at_key.html#fusion.sequences.intrinsics.functions.at_key.example">Example</a>
           </h6>
 <pre class="programlisting">
-<a href="../../containers/set.html" title="set"><code class="computeroutput"><span class="identifier">set</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">bool</span><span class="special">&gt;</span> <span class="identifier">s</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="char">'x'</span><span class="special">,</span> <span class="keyword">true</span><span class="special">);</span>
+<a href="../../containers/set.html" title="set"><tt class="computeroutput"><span class="identifier">set</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">bool</span><span class="special">&gt;</span> <span class="identifier">s</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="char">'x'</span><span class="special">,</span> <span class="keyword">true</span><span class="special">);</span>
 <span class="identifier">assert</span><span class="special">(</span><span class="identifier">at_key</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span> <span class="special">==</span> <span class="char">'x'</span><span class="special">);</span>
 </pre>
 </div>

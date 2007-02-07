@@ -54,9 +54,6 @@ types.
     [[`t1 ...tN`][Objects with types `T1 ...TN`]]
 ]
 
-[heading Refinement of]
-__mpl_metafunction_class__
-
 [heading Expression requirements]
 
 [table
@@ -515,14 +512,14 @@ Finds the first element of a given type within a sequence.
 
 [heading Synopsis]
     template<
-        typename Sequence,
-        typename T
+        typename T,
+        typename Sequence
         >
     __unspecified__ find(Sequence const& seq);
 
     template<
-        typename Sequence,
-        typename T
+        typename T,
+        typename Sequence
         >
     __unspecified__ find(Sequence& seq);
 
@@ -561,14 +558,14 @@ Finds the first element within a sequence with a type for which a given __mpl_la
 
 [heading Synopsis]
     template<
-        typename Sequence,
-        typename F
+        typename F,
+        typename Sequence
         >
     __unspecified__ find_if(Sequence const& seq);
 
     template<
-        typename Sequence,
-        typename F
+        typename F,
+        typename Sequence
         >
     __unspecified__ find_if(Sequence& seq);
 

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>prior</title>
 <link rel="stylesheet" href="../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
 <link rel="prev" href="next.html" title="next">
@@ -26,24 +26,24 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.iterators.functions.prior"></a><a href="prior.html" title="prior">prior</a></h4></div></div></div>
 <a name="fusion.iterators.functions.prior.description"></a><h5>
-<a name="id933274"></a>
+<a name="id465444"></a>
           <a href="prior.html#fusion.iterators.functions.prior.description">Description</a>
         </h5>
 <p>
           Moves an iterator 1 position backwards.
         </p>
 <a name="fusion.iterators.functions.prior.synopsis"></a><h5>
-<a name="id933300"></a>
+<a name="id465474"></a>
           <a href="prior.html#fusion.iterators.functions.prior.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">I</span>
     <span class="special">&gt;</span>
-<span class="keyword">typename</span> <a href="../metafunctions/prior.html" title="prior"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">prior</span></code></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">prior</span><span class="special">(</span><span class="identifier">I</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">i</span><span class="special">);</span>
+<span class="keyword">typename</span> <a href="../metafunctions/prior.html" title="prior"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">prior</span></tt></a><span class="special">&lt;</span><span class="identifier">I</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">prior</span><span class="special">(</span><span class="identifier">I</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">i</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id933426"></a><p class="title"><b>Table 1.4. Parameters</b></p>
+<a name="id465617"></a><p class="title"><b>Table 1.4. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -56,7 +56,7 @@
 <th>Description</th>
 </tr></thead>
 <tbody><tr>
-<td><code class="computeroutput"><span class="identifier">i</span></code></td>
+<td><tt class="computeroutput"><span class="identifier">i</span></tt></td>
 <td>Model
               of <a href="../concepts/bidirectional_iterator.html" title="Bidirectional
         Iterator">Bidirectional
@@ -67,38 +67,38 @@
 </table>
 </div>
 <a name="fusion.iterators.functions.prior.expression_semantics"></a><h5>
-<a name="id933492"></a>
+<a name="id465691"></a>
           <a href="prior.html#fusion.iterators.functions.prior.expression_semantics">Expression
           Semantics</a>
         </h5>
 <pre class="programlisting">
-<a href="prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">);</span>
+<a href="prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">);</span>
 </pre>
 <p>
-          <span class="bold"><strong>Return type</strong></span>: A model of the same iterator
-          concept as <code class="computeroutput"><span class="identifier">i</span></code>.
+          <span class="bold"><b>Return type</b></span>: A model of the same iterator
+          concept as <tt class="computeroutput"><span class="identifier">i</span></tt>.
         </p>
 <p>
-          <span class="bold"><strong>Semantics</strong></span>: Returns an iterator to the
-          element prior to <code class="computeroutput"><span class="identifier">i</span></code>.
+          <span class="bold"><b>Semantics</b></span>: Returns an iterator to the
+          element prior to <tt class="computeroutput"><span class="identifier">i</span></tt>.
         </p>
 <a name="fusion.iterators.functions.prior.header"></a><h5>
-<a name="id933586"></a>
+<a name="id465795"></a>
           <a href="prior.html#fusion.iterators.functions.prior.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">iterator</span><span class="special">/</span><span class="identifier">prior</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.iterators.functions.prior.example"></a><h5>
-<a name="id933668"></a>
+<a name="id465890"></a>
           <a href="prior.html#fusion.iterators.functions.prior.example">Example</a>
         </h5>
 <pre class="programlisting">
-<span class="keyword">typedef</span> <a href="../../sequences/containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="../../sequences/containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
 
 <span class="identifier">vec</span> <span class="identifier">v</span><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">);</span>
-<span class="identifier">assert</span><span class="special">(</span><a href="deref.html" title="deref"><code class="computeroutput"><span class="identifier">deref</span></code></a><span class="special">(</span><a href="next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><a href="../../sequences/intrinsics/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">v</span><span class="special">)))</span> <span class="special">==</span> <span class="number">2</span><span class="special">);</span>
-<span class="identifier">assert</span><span class="special">(</span><a href="deref.html" title="deref"><code class="computeroutput"><span class="identifier">deref</span></code></a><span class="special">(</span><a href="prior.html" title="prior"><code class="computeroutput"><span class="identifier">prior</span></code></a><span class="special">(</span><a href="next.html" title="next"><code class="computeroutput"><span class="identifier">next</span></code></a><span class="special">(</span><a href="../../sequences/intrinsics/functions/begin.html" title="begin"><code class="computeroutput"><span class="identifier">begin</span></code></a><span class="special">(</span><span class="identifier">v</span><span class="special">))))</span> <span class="special">==</span> <span class="number">1</span><span class="special">);</span>
+<span class="identifier">assert</span><span class="special">(</span><a href="deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a><span class="special">(</span><a href="next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><a href="../../sequences/intrinsics/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">v</span><span class="special">)))</span> <span class="special">==</span> <span class="number">2</span><span class="special">);</span>
+<span class="identifier">assert</span><span class="special">(</span><a href="deref.html" title="deref"><tt class="computeroutput"><span class="identifier">deref</span></tt></a><span class="special">(</span><a href="prior.html" title="prior"><tt class="computeroutput"><span class="identifier">prior</span></tt></a><span class="special">(</span><a href="next.html" title="next"><tt class="computeroutput"><span class="identifier">next</span></tt></a><span class="special">(</span><a href="../../sequences/intrinsics/functions/begin.html" title="begin"><tt class="computeroutput"><span class="identifier">begin</span></tt></a><span class="special">(</span><span class="identifier">v</span><span class="special">))))</span> <span class="special">==</span> <span class="number">1</span><span class="special">);</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

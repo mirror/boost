@@ -4,7 +4,7 @@
 <title> Polymorphic Function
         Object</title>
 <link rel="stylesheet" href="../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../concepts.html" title="Concepts">
 <link rel="prev" href="../concepts.html" title="Concepts">
@@ -29,47 +29,39 @@
         Object"> Polymorphic Function
         Object</a></h4></div></div></div>
 <a name="fusion.algorithms.concepts.poly.description"></a><h5>
-<a name="id1080544"></a>
+<a name="id553170"></a>
           <a href="poly.html#fusion.algorithms.concepts.poly.description">Description</a>
         </h5>
 <p>
-          A type of function object with a nested metafunction <code class="computeroutput"><span class="identifier">result</span></code>.
-          <code class="computeroutput"><span class="identifier">result</span></code> returns the result
+          A type of function object with a nested metafunction <tt class="computeroutput"><span class="identifier">result</span></tt>.
+          <tt class="computeroutput"><span class="identifier">result</span></tt> returns the result
           type of calling the function object, given the argument types.
         </p>
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">F</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">F</span></tt></span></dt>
 <dd>
             A Polymorphic Function Object type
           </dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">f</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">f</span></tt></span></dt>
 <dd>
             A Polymorphic Function Object
           </dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">T1</span>
-          <span class="special">...</span><span class="identifier">TN</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">T1</span>
+          <span class="special">...</span><span class="identifier">TN</span></tt></span></dt>
 <dd>
             Arbitrary types
           </dd>
-<dt><span class="term"><code class="computeroutput"><span class="identifier">t1</span>
-          <span class="special">...</span><span class="identifier">tN</span></code></span></dt>
+<dt><span class="term"><tt class="computeroutput"><span class="identifier">t1</span>
+          <span class="special">...</span><span class="identifier">tN</span></tt></span></dt>
 <dd>
-            Objects with types <code class="computeroutput"><span class="identifier">T1</span> <span class="special">...</span><span class="identifier">TN</span></code>
+            Objects with types <tt class="computeroutput"><span class="identifier">T1</span> <span class="special">...</span><span class="identifier">TN</span></tt>
 </dd>
 </dl>
 </div>
-<a name="fusion.algorithms.concepts.poly.refinement_of"></a><h5>
-<a name="id1080698"></a>
-          <a href="poly.html#fusion.algorithms.concepts.poly.refinement_of">Refinement
-          of</a>
-        </h5>
-<p>
-          MPL Metafunction Class
-        </p>
 <a name="fusion.algorithms.concepts.poly.expression_requirements"></a><h5>
-<a name="id1080725"></a>
+<a name="id553345"></a>
           <a href="poly.html#fusion.algorithms.concepts.poly.expression_requirements">Expression
           requirements</a>
         </h5>
@@ -86,8 +78,8 @@
                 Complexity</th>
 </tr></thead>
 <tbody><tr>
-<td><code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">t1</span><span class="special">,</span> <span class="special">...</span><span class="identifier">tN</span><span class="special">)</span></code></td>
-<td><code class="computeroutput"><span class="identifier">F</span><span class="special">::</span><span class="identifier">result</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">,</span> <span class="special">...</span><span class="identifier">TN</span><span class="special">&gt;::</span><span class="identifier">type</span></code></td>
+<td><tt class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">t1</span><span class="special">,</span> <span class="special">...</span><span class="identifier">tN</span><span class="special">)</span></tt></td>
+<td><tt class="computeroutput"><span class="identifier">F</span><span class="special">::</span><span class="identifier">result</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">,</span> <span class="special">...</span><span class="identifier">TN</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
 <td>Unspecified</td>
 </tr></tbody>
 </table></div>
