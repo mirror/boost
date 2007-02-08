@@ -65,6 +65,7 @@
 [def _lit_                  `lit()`]
 [def _vararg_               `vararg<>`]
 [def _context_              `context<>`]
+[def _generate_             `generate<>`]
 
 [include preface.qbk]
 
@@ -83,6 +84,8 @@ check the [link proto.reference Reference] section.
 [include grammars.qbk]
 
 [include transforms.qbk]
+
+[include extensibility.qbk]
 
 [include examples.qbk]
 

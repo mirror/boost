@@ -1,0 +1,165 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[section Extending Proto]
+
+In this section, we'll see how to associate Proto expressions with a /domain/,
+how to add members to expressions within a domain, how to control which 
+operators are overloaded in a domain, and how to define your own "operators".
+
+[h3 Domains]
+
+In the examples we've seen so far, Proto has been used to construct an 
+expression tree that either is evaluated with the help of a /context/ or else
+is transformed into some other object. What if you need something else? Take
+our old friend the calculator example. Perhaps we would like to build a 
+calculator expression and immediately use it as a function object to a standard
+algorithm, like this:
+
+    double data[] = {1., 2., 3., 4.};
+    
+    // Use the calculator DSEL to square each element ... FAILS! :-(
+    std::transform( data, data + 4, data, _1 * _1 );
+
+This will not compile. The problem is that the object created by the expression
+`_1 * _1` does not meet the `UnaryFunction` requirements of the 
+`std::transform()` algorithm. In particular, it doesn't have an `operator()`
+member function that takes a `double` and returns a `double`, like 
+`std::transform()` expects. What can we do?
+
+[h3 The [^extends<>] Expression Wrapper]
+
+The general idea is to add behaviors to the _expr_ type by wrapping it in a 
+class template that you define. This wrapper is associated with a domain. Proto
+will build larger expressions out of your wrapper objects, and you will want 
+those objects to also be wrapped. You do that by hooking Proto's expression
+generator for your domain.
+
+The first step to giving your calculator expressions extra behaviors is to 
+define a calculator domain. All expressions within the calculator domain will 
+be imbued with calculator-ness, as we'll see.
+
+    // An empty type to be used as a domain tag
+    struct calculator_domain
+    {};
+    
+We use this domain type when extending the _expr_ type, which we do with the
+_extends_ class template. Here is our expression wrapper, which imbues an 
+expression with calculator-ness. We'll describe it below.
+
+    // The calculator<> expression wrapper makes expressions
+    // function objects.
+    template< typename Expr >
+    struct calculator
+      : proto::extends< Expr, calculator< Expr >, calculator_domain >
+    {
+        typedef proto::extends< Expr, calculator< Expr >, calculator_domain > base_type;
+        
+        calculator( Expr const &expr = Expr() )
+          : base_type( expr )
+        {}
+        
+        // This is usually needed because by default, the compiler-generated
+        // assignment operator hides the extends<>::operator=
+        using base_type::operator =;
+        
+        // Hide base_type::operator() by defining our own which
+        // evaluates the calculator expression with a calculator context.
+        typedef double result_type;
+        result_type operator()( double d1 = 0.0, double d2 = 0.0 ) const
+        {
+            calculator_context ctx( d1, d2 );
+            return this->eval( ctx );
+        }
+    };
+
+We want calculator expressions to be function objects, so we have to define an
+`operator()` that takes and returns `double`s. The `calculator<>` wrapper above
+does that with the help of the _extends_ template. The first template to 
+_extends_ parameter is the expression type we are extending. The second is the
+type of the wrapped expression. The third parameter is the domain that this 
+wrapper is associated with. A wrapper type like `calculator<>` that inherits 
+from _extends_ behaves just like the expression type it has extended, with any 
+additional behaviors you choose to give it. 
+
+Although not strictly necessary in this case, we bring `extends<>::operator=` 
+into scope with a `using` declaration. This is really only necessary if you 
+want expressions like `_1 = 3` to create a lazily evaluated assignment. 
+_extends_ defines the appropriate `operator=` for you, but the 
+compiler-generated `calculator<>::operator=` will hide it unless you make it
+available with the `using` declaration. 
+
+Note that in the implementation of `calculator<>::operator()`, we evaluate the
+expression with the `calculator_context` we defined earlier. As we saw before, 
+the context is what gives the operators their meaning. In the case of the 
+calculator, the context is also what defines the meaning of the placeholder 
+terminals.
+
+Now that we have defined the `calculator<>` expression wrapper, we need to 
+wrap the placeholders to imbue them with calculator-ness:
+
+    calculator< proto::terminal< placeholder1 >::type > const _1;
+    calculator< proto::terminal< placeholder2 >::type > const _2;
+
+[h3 The [^generate<>] Expression Generator]
+
+The last thing that remains to be done is to tell Proto that it needs to wrap
+all of our calculator expressions in our `calculator<>` wrapper. We have 
+already wrapped the placeholders, but we want /all/ expressions that involve
+the calculator placeholders to be calculators. We can do that by hooking 
+Proto's expression generator.
+
+Proto uses a class template called _generate_ to generate expressions. After
+Proto has calculated a new expression type, it checks the domains of the 
+children expressions. They must match. Assuming they do, Proto creates the
+new expression and passes it to `generate< Domain, Expr >::make()` for any
+additional processing. The default implementation of _generate_ looks like 
+this:
+
+    // The default implementation of proto::generate<>
+    template< typename Domain, typename Expr, typename Tag = typename Expr::tag_type >
+    struct generate
+    {
+        typedef Expr type;
+        
+        static Expr const & make( Expr const & expr )
+        {
+            return expr;
+        }
+    };
+
+The default implementation just passes expression object through unchanged.
+But we want expressions in the calculator domain to be wrapped in our 
+`calculator<>` wrapper, so we specialize the _generate_ template as follows:
+
+    namespace boost { namespace proto
+    {
+        // A specialization of generate<> that causes expression in the
+        // calculator_domain to be wrapped in the calculator<> wrapper.
+        template< typename Expr, typename Tag >
+        struct generate< calculator_domain, Expr, Tag >
+        {
+            typedef calculator< Expr > type;
+            
+            static type make( Expr const & expr )
+            {
+                return type( expr );
+            }
+        };
+    }}
+
+This instructs Proto to wrap all expressions in the `calculator_domain` in the
+`calculator<>` wrapper. Now we can use calculator expressions as function 
+objects to STL algorithms, as follows:
+
+
+    double data[] = {1., 2., 3., 4.};
+    
+    // Use the calculator DSEL to square each element ... WORKS!
+    std::transform( data, data + 4, data, _1 * _1 );
+
+[endsect]

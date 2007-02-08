@@ -194,6 +194,15 @@ fuzzy matching of terminals. You could use it as follows:
 
 Now, `CharString` does not match array types, only character string pointers.
 
+The inverse problem is a little trickier: what if you wanted to match all 
+character arrays, but not character pointers? Consider that string literals, 
+when they are terminals in a proto expression tree, are stored as references to
+an array. For instance, the expression `as_expr("hello")` has the type 
+`terminal< char const (&)[ 6 ] >::type`. If you wanted to match character 
+arrays of arbitrary size, you could use `proto::N`, which is an array-size
+wildcard. The following pattern would match any string literal: 
+`terminal< char const (&)[ proto::N ] >`.
+
 There is one more way you can perform a fuzzy match on terminals. Consider the
 problem of trying to match a `std::complex<>` terminal. You can easily match
 a `std::complex<float>` or a `std::complex<double>`, but how would you match
@@ -242,7 +251,7 @@ patterns you should be using `proto::_`.]
 
 Not all of C++'s overloadable operators are unary or binary. There is the 
 oddball `operator()` -- the function call operator -- which can have any number
-of argumentrs. Likewise, with Proto you may define your own "operators" that 
+of arguments. Likewise, with Proto you may define your own "operators" that 
 could also take more that two arguments. As a result, there may be nodes in 
 your Proto expression tree that have an arbitrary number of children (up to 
 some predefined maximum). How do you write a pattern to match such a node?
