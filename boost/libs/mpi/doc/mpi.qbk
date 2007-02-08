@@ -164,8 +164,8 @@ appears to be working with a C++ compiler and we're ready to move on.
 
 [section:getting Getting Boost.MPI]
 
-Boost.MPI uses features of the _serialization_ library that are not
-available in the Boost 1.34.x series. You may need to retrieve the
+Boost.MPI is not available in any version of Boost prior to the 1.35.x
+series. You may need to retrieve the 
 latest version of Boost from CVS using the commands below. When CVS
 asks for a password, just hit "enter".
 
@@ -175,22 +175,12 @@ cvs -z3 -d:pserver:anonymous@boost.cvs.sourceforge.net:/cvsroot/boost \
   co -P boost
 ]
 
-To update to the latest version of the Boost.MPI library from the
-Boost sandbox CVS repository:
-
-[pre
-cvs -d:pserver:anonymous@boost-sandbox.cvs.sourceforge.net:/cvsroot/boost-sandbox \
-  login
-cvs -z3 -d:pserver:anonymous@boost-sandbox.cvs.sourceforge.net:/cvsroot/boost-sandbox \
-  co -P boost-sandbox
-]
-
 [endsect]
 
 [section:config Configure and Build]
 
-Boost.MPI uses the
-[@http://www.boost.org/tools/build/index.html Boost.Build] system for
+Boost.MPI uses version 2 of the
+[@http://www.boost.org/doc/html/bbv2.html Boost.Build] system for
 configuring and building the library binary. You will need a very new
 version of [@http://www.boost.org/tools/build/jam_src/index.html
 Boost.Jam] (3.1.12 or later). If you already have Boost.Jam, run `bjam
@@ -203,57 +193,53 @@ available here]. However, most users need only run `build.sh` in the
 copy the resulting `bjam` executable some place convenient.
 
 For many users using _LAM_, _MPICH_, or _OpenMPI_, configuration is
-automatic. First, enter the directory
-`libs/mpi/build`, then run `bjam` with no
-arguments. The automatic configuration requires that (1) your MPI
-implementation provide a wrapper compiler `mpiCC` in your path, and
-(2) that the default compiler for your system is the compiler
-underneath the wrapper compiler. This is typically true on Unix-like
-systems, but is not always the case.
+almost automatic. If you don't already have a file `user-config.jam`
+in your home directory, copy `tools/build/v2/user-config.jam`
+there. For many users, MPI support can be enabled simply by adding the
+following line to your user-config.jam file, which is used to configure
+Boost.Build version 2. 
 
-If the default compiler for your system is not detected by Boost.Jam
-or you want to use a different compiler, please refer to the
-[@http://www.boost.org/more/getting_started.html Getting Started
-guide] for information about configuring Boost.Jam build
-options. Users not familiar with Boost.Build, but who need to manually
-configure Boost.Build for their compiler or MPI implementation, should
-refer to Getting Started guide as well.
+  using mpi ;
 
-Configuration of MPI support for Boost.Build is done through variables
-passed to `bjam` on the command line. For instance, the following
-command-line overrides the default value of `MPICXX`:
+This should auto-detect MPI settings based on the MPI wrapper compiler in 
+your path, e.g., `mpic++`. If the wrapper compiler is not in your
+path, see below.
+
+To actually build the MPI library, go into the top-level Boost
+directory and execute the command:
 
 [pre
-bjam -sMPICXX=/opt/lam-mpi-7.1.1/bin/mpiCC
+bjam --with-mpi
 ]
 
-The following Boost.Build variables have an effect on the MPI
-configuration:
+If your MPI wrapper compiler has a different name from the default,
+you can pass the name of the wrapper compiler as the first argument to
+the mpi module:
 
-* `MPICXX`: Set this to the name of the MPI C++ compiler, typically
-  `/some/path/mpic++` or `/some/path/mpiCC`. Boost.Build
-  will infer MPI-specific compiler options from this compiler,
-  if possible.\n*Default*: `mpiCC`
-* `MPIRUN`: Set this to the name of the program that spawns multiple 
-  MPI processes, typically `mpirun`. This is used only for
-  testing MPI programs within the Boost.Build test 
-  environment and is not required to build the library.\n*Default*: `mpirun`
-* `MPIRUN_FLAGS`: Flags to pass to `MPIRUN`. These flags will only be used 
-  during testing.\n*Default*: empty
-* `MPIBUILD`: Set this to the set of features required to build an MPI
-  program. This is only necessary if automatic configuration
-  via `MPICXX` is not possible. The `MPIBUILD` variable works 
-  similarly to the Boost.Build-wide `BUILD` variable, and
-  has the same format, but applies only to MPI
-  programs. MPIBUILD might look something like this:\n
-  `MPIBUILD="<include>/usr/local/include/mpi <library-path>/usr/local/lib/mpi <find-library>mpi <find-library>lam"`\n*Default*: Automatically detected.
-* For the Boost.MPI Python module, any of the Boost.Python
-  configuration macros. See the
-  [@http://www.boost.org/libs/python/doc/building.html Boost.Python
-  build documentation] for complete information. Most users will only
-  need to set `PYTHON_VERSION=2.x` (where x is the minor version
-  number). To disable Python support in Boost.MPI, use
-  `--without-python`.
+  using mpi : /opt/mpich2-1.0.4/bin/mpiCC ;
+
+If your MPI implementation does not have a wrapper compiler, or the MPI 
+auto-detection code does not work with your MPI's wrapper compiler,
+you can pass MPI-related options explicitly via the second parameter to the 
+`mpi` module:
+
+   using mpi : : <find-shared-library>lammpio <find-shared-library>lammpi++
+                 <find-shared-library>mpi <find-shared-library>lam 
+                 <find-shared-library>dl ;
+
+To see the results of MPI auto-detection, pass `--debug-configuration` on
+the bjam command line.
+
+The (optional) fourth argument configures Boost.MPI for running
+regression tests. These parameters specify the executable used to
+launch jobs (default: "mpirun") followed by any necessary arguments
+to this to run tests and tell the program to expect the number of
+processors to follow (default: "-np").  With the default parameters,
+for instance, the test harness will execute, e.g.,
+
+[pre  
+mpirun -np 4 all_gather_test
+]
 
 [endsect]
 
@@ -264,24 +250,12 @@ specifying `install` on the command line and (optionally) providing an
 installation location, e.g.,
 
 [pre
-bjam -sMPICXX=/opt/lam-mpi-7.1.1/bin/mpiCC install
+bjam --with-mpi install
 ]
 
-This command will install libraries into the Python executable prefix
-(if Python is enabled), or `/usr`, by default. It should be run from
-the `libs/mpi/build` subdirectory. There are several command-line
-options that can change the installation location:
-
-* `--exec-prefix=PATH`: Sets the executable prefix to
-  `PATH`. Libraries will be placed into `PATH/lib` and the Python
-  module (if enabled) will be placed into
-  `PATH/lib/python2.x/site-packages`, where `x` is the Python minor
-  version number.
-* `--home=PATH`: Configures home-directory installation. Libraries
-  will be placed in `PATH/lib` and the Python module will be placed in
-  `PATH/lib/python`. 
-* `--libdir=PATH`: Install libraries in PATH.
-* `--pythonlibdir=PATH`: Install the Python module in PATH.
+This command will install libraries into a default system location. To
+change the path where libraries will be installed, add the option
+`--prefix=PATH`.
 
 To build applications based on Boost.MPI, compile and link them as you
 normally would for MPI programs, but remember to link against the
@@ -307,8 +281,8 @@ within Python.
 If you would like to verify that Boost.MPI is working properly with
 your compiler, platform, and MPI implementation, a self-contained test
 suite is available. To use this test suite, you will need to first
-configure Boost.Build for your MPI environment and then run `bjam
-test` in `libs/mpi/test` (possibly with some extra options). For
+configure Boost.Build for your MPI environment and then run `bjam` in
+`libs/mpi/test` (possibly with some extra options). For 
 _LAM_, you will need to run `lamboot` before running `bjam`. For
 _MPICH_, you may need to create a machine file and pass
 `-sMPIRUN_FLAGS="-machinefile <filename>"` to Boost.Jam; see the
