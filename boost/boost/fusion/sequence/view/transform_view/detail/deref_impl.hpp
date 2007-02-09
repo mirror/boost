@@ -68,7 +68,8 @@ namespace boost { namespace fusion
                     return i.f(*i.first1, *i.first2);
                 }
             };
-        };    }
+        };    
+    }
 }}
 
 #endif

@@ -22,6 +22,7 @@
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/type_traits/add_const.hpp>
 
+#include <boost/fusion/sequence/container/deque/deque_fwd.hpp>
 #include <boost/fusion/sequence/container/deque/detail/value_at_impl.hpp>
 #include <boost/fusion/sequence/container/deque/detail/at_impl.hpp>
 #include <boost/fusion/sequence/container/deque/detail/begin_impl.hpp>
@@ -35,12 +36,9 @@ namespace boost { namespace fusion {
     struct deque_tag;
     struct void_;
 
-    template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(FUSION_MAX_DEQUE_SIZE, typename T, void_)>
-    struct deque;
-
     template<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, typename T)>
     struct deque
-        : 
+        :
         detail::deque_keyed_values<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, T)>::type,
         sequence_base<deque<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, T)> >
     {
@@ -54,7 +52,7 @@ namespace boost { namespace fusion {
 
 #include <boost/fusion/sequence/container/deque/detail/deque_forward_ctor.hpp>
 
-        deque() 
+        deque()
             {}
 
         explicit deque(typename add_reference<typename add_const<T0>::type>::type t0)

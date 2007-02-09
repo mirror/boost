@@ -62,7 +62,7 @@ namespace boost { namespace fusion
     {
         template <typename T>
         struct category_of
-            : extension::category_of_impl<typename detail::tag_of<T>::type>::
+            : extension::category_of_impl<typename fusion::detail::tag_of<T>::type>::
                 template apply<T>
         {};
 
@@ -70,42 +70,42 @@ namespace boost { namespace fusion
         struct is_associative
             : is_base_of<
                 associative_sequence_tag
-              , typename category_of<T>::type> 
+              , typename category_of<T>::type>
         {};
 
         template <typename T>
         struct is_incrementable
             : is_base_of<
                 incrementable_traversal_tag
-              , typename category_of<T>::type> 
+              , typename category_of<T>::type>
         {};
 
         template <typename T>
         struct is_single_pass
             : is_base_of<
                 single_pass_traversal_tag
-              , typename category_of<T>::type> 
+              , typename category_of<T>::type>
         {};
-            
+
         template <typename T>
         struct is_forward
             : is_base_of<
                 forward_traversal_tag
-              , typename category_of<T>::type> 
-        {};        
-            
+              , typename category_of<T>::type>
+        {};
+
         template <typename T>
         struct is_bidirectional
             : is_base_of<
                 bidirectional_traversal_tag
-              , typename category_of<T>::type> 
-        {};      
-            
+              , typename category_of<T>::type>
+        {};
+
         template <typename T>
         struct is_random_access
             : is_base_of<
                 random_access_traversal_tag
-              , typename category_of<T>::type> 
+              , typename category_of<T>::type>
         {};
     }
 }}

@@ -11,7 +11,7 @@
 #include <boost/fusion/support/detail/is_view.hpp>
 #include <boost/fusion/support/tag_of.hpp>
 
-namespace boost { namespace fusion 
+namespace boost { namespace fusion
 {
     // Special tags:
     struct sequence_facade_tag;
@@ -54,8 +54,8 @@ namespace boost { namespace fusion
     namespace traits
     {
         template <typename T>
-        struct is_view : 
-            extension::is_view_impl<typename detail::tag_of<T>::type>::
+        struct is_view :
+            extension::is_view_impl<typename fusion::detail::tag_of<T>::type>::
                 template apply<T>::type
         {};
     }

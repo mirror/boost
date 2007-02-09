@@ -8,56 +8,74 @@
 #if !defined(FUSION_AS_10022005_1442)
 #define FUSION_AS_10022005_1442
 
-#include <boost/fusion/sequence/conversion.hpp>
-
-namespace boost { namespace fusion { namespace detail 
+namespace boost { namespace fusion
 {
-    template <typename Tag>
-    struct as_impl;
-
-    template <>
-    struct as_impl<cons_tag>
+    namespace result_of
     {
         template <typename Sequence>
-        struct apply : result_of::as_list<Sequence> {};
-    };
+        struct as_list;
 
-    template <>
-    struct as_impl<map_tag>
-    {
         template <typename Sequence>
-        struct apply : result_of::as_map<Sequence> {};
-    };
+        struct as_map;
 
-    template <>
-    struct as_impl<set_tag>
-    {
         template <typename Sequence>
-        struct apply : result_of::as_set<Sequence> {};
-    };
+        struct as_set;
 
-    template <>
-    struct as_impl<vector_tag>
-    {
         template <typename Sequence>
-        struct apply : result_of::as_vector<Sequence> {};
-    };
+        struct as_vector;
 
-    template<>
-    struct as_impl<deque_tag>
-    {
         template <typename Sequence>
-        struct apply : result_of::as_deque<Sequence> {};
-    };
+        struct as_deque;
+    }
 
-    template <typename Tag, typename Sequence>
-    struct as
+    namespace detail
     {
-        typedef typename
-            as_impl<Tag>::template apply<Sequence>::type
-        type;
-    };
+        template <typename Tag>
+        struct as_impl;
 
-}}}
+        template <>
+        struct as_impl<cons_tag>
+        {
+            template <typename Sequence>
+            struct apply : result_of::as_list<Sequence> {};
+        };
+
+        template <>
+        struct as_impl<map_tag>
+        {
+            template <typename Sequence>
+            struct apply : result_of::as_map<Sequence> {};
+        };
+
+        template <>
+        struct as_impl<set_tag>
+        {
+            template <typename Sequence>
+            struct apply : result_of::as_set<Sequence> {};
+        };
+
+        template <>
+        struct as_impl<vector_tag>
+        {
+            template <typename Sequence>
+            struct apply : result_of::as_vector<Sequence> {};
+        };
+
+        template<>
+        struct as_impl<deque_tag>
+        {
+            template <typename Sequence>
+            struct apply : result_of::as_deque<Sequence> {};
+        };
+
+        template <typename Tag, typename Sequence>
+        struct as
+        {
+            typedef typename
+                as_impl<Tag>::template apply<Sequence>::type
+            type;
+        };
+    }
+}}
 
 #endif
