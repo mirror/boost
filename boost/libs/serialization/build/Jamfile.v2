@@ -10,6 +10,26 @@ project boost/serialization
     : source-location ../src
     ;
 
+rule include-spirit ( properties * )
+{
+    local result ;
+    local SPIRIT_ROOT = [ modules.peek : SPIRIT_ROOT ] ;
+    for local tset in borland { # vc iw
+        if ( <toolset>$(tset) in $(properties) ) {
+            if ( $(SPIRIT_ROOT) ) {
+                result = <cxxflags>-I$(SPIRIT_ROOT) ;
+            }
+            else {
+                echo **** spirit 1.6x required to build library with this compiler **** ;
+                result = <build>no ;
+
+            }
+        }
+    }
+    return $(result) ;
+}
+
+
 SOURCES = 
     basic_archive
     basic_iarchive
@@ -55,15 +75,13 @@ WSOURCES =
 lib boost_serialization 
         : $(SOURCES).cpp
 	: <toolset>msvc:<cxxflags>/Gy 
-  	  <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1
-	:
-	: <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1
+	  <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1
+          <conditional>@include-spirit
 	;
 
 lib boost_wserialization 
         : $(WSOURCES).cpp boost_serialization 
-	: <toolset>msvc:<cxxflags>/Gy 
-          <link>shared:<define>BOOST_WSERIALIZATION_DYN_LINK=1
-        :	  
-	: <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1	
+        : <toolset>msvc:<cxxflags>/Gy 
+	  <link>shared:<define>BOOST_SERIALIZATION_DYN_LINK=1	
+          <conditional>@include-spirit
 	;
