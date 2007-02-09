@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2007 Tobias Schwinger
-  
-    Use modification and distribution are subject to the Boost Software 
+
+    Use modification and distribution are subject to the Boost Software
     License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt).
 ==============================================================================*/
@@ -71,10 +71,10 @@ int main()
     TEST_SAME_TYPE(deduce< int volatile (&)[2] >::type, int volatile (&)[2]);
     TEST_SAME_TYPE(deduce< int const volatile (&)[2] >::type, int const volatile (&)[2]);
 
-    TEST_SAME_ELEMENTS(deduce_sequence<args1>::type,storable1); 
-    TEST_SAME_ELEMENTS(deduce_sequence<args2>::type,storable2); 
-    TEST_SAME_ELEMENTS(deduce_sequence<args3>::type,storable3); 
-    TEST_SAME_ELEMENTS(deduce_sequence<args4>::type,storable4); 
+    TEST_SAME_ELEMENTS(deduce_sequence<args1>::type,storable1);
+    TEST_SAME_ELEMENTS(deduce_sequence<args2>::type,storable2);
+    TEST_SAME_ELEMENTS(deduce_sequence<args3>::type,storable3);
+    TEST_SAME_ELEMENTS(deduce_sequence<args4>::type,storable4);
 
     return boost::report_errors();
 }

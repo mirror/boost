@@ -8,6 +8,7 @@
     http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/fusion/sequence/container/deque/deque.hpp>
+#include <boost/fusion/sequence/conversion/as_deque.hpp>
 #include <boost/fusion/sequence/adapted/mpl.hpp>
 
 #define FUSION_SEQUENCE deque

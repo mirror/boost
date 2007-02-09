@@ -7,6 +7,8 @@
     http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/fusion/tuple.hpp>
+#include <boost/fusion/sequence/conversion/as_vector.hpp>
+#include <boost/fusion/sequence/adapted/mpl.hpp>
 
 #define FUSION_SEQUENCE tuple
 #define FUSION_AT get

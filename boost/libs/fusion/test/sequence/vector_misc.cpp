@@ -7,6 +7,8 @@
     http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/fusion/sequence/container/vector/vector.hpp>
+#include <boost/fusion/sequence/conversion/as_vector.hpp>
+#include <boost/fusion/sequence/adapted/mpl.hpp>
 
 #define FUSION_SEQUENCE vector
 #include "misc.hpp"

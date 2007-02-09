@@ -7,6 +7,7 @@
     http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #include <boost/fusion/sequence/container/list/list.hpp>
+#include <boost/fusion/sequence/conversion/as_list.hpp>
 #include <boost/fusion/sequence/adapted/mpl.hpp>
 
 #define FUSION_SEQUENCE list
