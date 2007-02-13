@@ -45,14 +45,14 @@ namespace boost { namespace proto
               , expr<
                     Tag
                   , args2<
-                        ref<typename Left::boost_proto_expr_type_>
+                        ref<Left>
                       , typename generate<typename Left::domain, expr<tag::terminal, args1<Right &> > >::type
                     >
                 >
             >
         {
             typedef expr<tag::terminal, args1<Right &> > term_type;
-            typedef expr<Tag, args2<ref<typename Left::boost_proto_expr_type_>, typename generate<typename Left::domain, term_type>::type> > expr_type;
+            typedef expr<Tag, args2<ref<Left>, typename generate<typename Left::domain, term_type>::type> > expr_type;
 
             template<typename Left2>
             static typename generate<typename Left2::domain, expr_type>::type
@@ -72,13 +72,13 @@ namespace boost { namespace proto
                     Tag
                   , args2<
                         typename generate<typename Right::domain, expr<tag::terminal, args1<Left &> > >::type
-                      , ref<typename Right::boost_proto_expr_type_>
+                      , ref<Right>
                     >
                 >
             >
         {
             typedef expr<tag::terminal, args1<Left &> > term_type;
-            typedef expr<Tag, args2<typename generate<typename Right::domain, term_type>::type, ref<typename Right::boost_proto_expr_type_> > > expr_type;
+            typedef expr<Tag, args2<typename generate<typename Right::domain, term_type>::type, ref<Right> > > expr_type;
 
             template<typename Right2>
             static typename generate<typename Right2::domain, expr_type>::type
@@ -99,10 +99,10 @@ namespace boost { namespace proto
         struct as_expr_if<Tag, Left, Right, typename Left::is_boost_proto_expr_, typename Right::is_boost_proto_expr_>
           : generate<
                 typename Left::domain
-              , expr<Tag, args2<ref<typename Left::boost_proto_expr_type_>, ref<typename Right::boost_proto_expr_type_> > >
+              , expr<Tag, args2<ref<Left>, ref<Right> > >
             >
         {
-            typedef expr<Tag, args2<ref<typename Left::boost_proto_expr_type_>, ref<typename Right::boost_proto_expr_type_> > > expr_type;
+            typedef expr<Tag, args2<ref<Left>, ref<Right> > > expr_type;
             BOOST_MPL_ASSERT((is_same<typename Left::domain, typename Right::domain>));
 
             template<typename Left2>
@@ -118,10 +118,17 @@ namespace boost { namespace proto
 #define BOOST_PROTO_UNARY_OP(op, tag)\
     template<typename Arg>\
     inline typename generate<typename Arg::domain, expr<tag, args1<ref<typename Arg::boost_proto_expr_type_> > > >::type const\
-    operator op(Arg const &arg)\
+    operator op(Arg &arg)\
     {\
         expr<tag, args1<ref<typename Arg::boost_proto_expr_type_> > > that = {{arg}};\
         return generate<typename Arg::domain, expr<tag, args1<ref<typename Arg::boost_proto_expr_type_> > > >::make(that);\
+    }\
+    template<typename Arg>\
+    inline typename generate<typename Arg::domain, expr<tag, args1<ref<typename Arg::boost_proto_expr_type_ const> > > >::type const\
+    operator op(Arg const &arg)\
+    {\
+        expr<tag, args1<ref<typename Arg::boost_proto_expr_type_ const> > > that = {{arg}};\
+        return generate<typename Arg::domain, expr<tag, args1<ref<typename Arg::boost_proto_expr_type_ const> > > >::make(that);\
     }\
     /**/
 
@@ -195,18 +202,34 @@ namespace boost { namespace proto
 
     template<typename Arg>
     inline typename generate<typename Arg::domain, expr<tag::post_inc, args1<ref<typename Arg::boost_proto_expr_type_> > > >::type const
-    operator ++(Arg const &arg, int)
+    operator ++(Arg &arg, int)
     {
         expr<tag::post_inc, args1<ref<typename Arg::boost_proto_expr_type_> > > that = {{arg}};
         return generate<typename Arg::domain, expr<tag::post_inc, args1<ref<typename Arg::boost_proto_expr_type_> > > >::make(that);
     }
 
     template<typename Arg>
+    inline typename generate<typename Arg::domain, expr<tag::post_inc, args1<ref<typename Arg::boost_proto_expr_type_ const> > > >::type const
+    operator ++(Arg const &arg, int)
+    {
+        expr<tag::post_inc, args1<ref<typename Arg::boost_proto_expr_type_ const> > > that = {{arg}};
+        return generate<typename Arg::domain, expr<tag::post_inc, args1<ref<typename Arg::boost_proto_expr_type_ const> > > >::make(that);
+    }
+
+    template<typename Arg>
     inline typename generate<typename Arg::domain, expr<tag::post_dec, args1<ref<typename Arg::boost_proto_expr_type_> > > >::type const
-    operator --(Arg const &arg, int)
+    operator --(Arg &arg, int)
     {
         expr<tag::post_dec, args1<ref<typename Arg::boost_proto_expr_type_> > > that = {{arg}};
         return generate<typename Arg::domain, expr<tag::post_dec, args1<ref<typename Arg::boost_proto_expr_type_> > > >::make(that);
+    }
+
+    template<typename Arg>
+    inline typename generate<typename Arg::domain, expr<tag::post_dec, args1<ref<typename Arg::boost_proto_expr_type_ const> > > >::type const
+    operator --(Arg const &arg, int)
+    {
+        expr<tag::post_dec, args1<ref<typename Arg::boost_proto_expr_type_ const> > > that = {{arg}};
+        return generate<typename Arg::domain, expr<tag::post_dec, args1<ref<typename Arg::boost_proto_expr_type_ const> > > >::make(that);
     }
 
 #undef BOOST_PROTO_UNARY_OP

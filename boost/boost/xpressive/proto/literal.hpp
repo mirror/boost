@@ -43,12 +43,16 @@ namespace boost { namespace proto
         using extends<terminal_type, literal<T> >::operator =;
     };
 
+    /// lit
+    ///
     template<typename T>
     inline literal<T &> lit(T &t)
     {
         return literal<T &>(t);
     }
 
+    /// \overload
+    ///
     template<typename T>
     inline literal<T const &> lit(T const &t)
     {

@@ -77,7 +77,12 @@
             template<typename T, typename EnableIf>
             struct as_expr
             {
-                typedef typename mpl::if_<mpl::or_<BOOST_PROTO_IS_ARRAY_(T), is_function<T> >, T &, T>::type arg0_type;
+                typedef typename mpl::if_<
+                    mpl::or_<BOOST_PROTO_IS_ARRAY_(T), is_function<T> >
+                  , T &
+                  , T
+                >::type arg0_type;
+
                 typedef expr<proto::tag::terminal, args1<arg0_type> > type;
 
                 typedef type result_type;
@@ -109,7 +114,7 @@
             template<typename T>
             struct as_arg<T, typename T::is_boost_proto_expr_>
             {
-                typedef ref<typename T::boost_proto_expr_type_> type;
+                typedef ref<T> type;
             };
 
             template<typename Expr, typename N>
@@ -267,7 +272,7 @@
     #define BOOST_PROTO_ARG_N_TYPE(z, n, data)\
         typename proto::result_of::unref<\
             typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)\
-        >::reference\
+        >::const_reference\
         /**/
 
     #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/traits.hpp>))
@@ -339,7 +344,13 @@
                 {};
 
                 template<typename Expr>
-                typename result_of::arg_c<Expr, N>::reference operator()(Expr const &expr) const
+                typename result_of::arg_c<Expr, N>::reference operator()(Expr &expr) const
+                {
+                    return result_of::arg_c<Expr, N>::call(expr);
+                }
+
+                template<typename Expr>
+                typename result_of::arg_c<Expr, N>::const_reference operator()(Expr const &expr) const
                 {
                     return result_of::arg_c<Expr, N>::call(expr);
                 }
@@ -357,7 +368,13 @@
                 {};
 
                 template<typename Expr>
-                typename result_of::arg<Expr, N>::reference operator()(Expr const &expr) const
+                typename result_of::arg<Expr, N>::reference operator()(Expr &expr) const
+                {
+                    return result_of::arg<Expr, N>::call(expr);
+                }
+
+                template<typename Expr>
+                typename result_of::arg<Expr, N>::const_reference operator()(Expr const &expr) const
                 {
                     return result_of::arg<Expr, N>::call(expr);
                 }
@@ -374,9 +391,15 @@
                 {};
 
                 template<typename Expr>
-                typename result_of::left<Expr>::reference operator()(Expr const &expr) const
+                typename result_of::left<Expr>::reference operator()(Expr &expr) const
                 {
-                    return proto::unref(expr.cast().arg0);
+                    return proto::unref(expr.arg0);
+                }
+
+                template<typename Expr>
+                typename result_of::left<Expr>::const_reference operator()(Expr const &expr) const
+                {
+                    return proto::unref(expr.arg0);
                 }
             };
 
@@ -391,9 +414,15 @@
                 {};
 
                 template<typename Expr>
-                typename result_of::right<Expr>::reference operator()(Expr const &expr) const
+                typename result_of::right<Expr>::reference operator()(Expr &expr) const
                 {
-                    return proto::unref(expr.cast().arg1);
+                    return proto::unref(expr.arg1);
+                }
+
+                template<typename Expr>
+                typename result_of::right<Expr>::const_reference operator()(Expr const &expr) const
+                {
+                    return proto::unref(expr.arg1);
                 }
             };
 
@@ -404,21 +433,55 @@
         op::left const left = {};
         op::right const right = {};
 
+        /// arg
+        ///
         template<typename Expr>
         typename result_of::unref<typename Expr::type::arg0_type>::reference
-        arg(Expr const &expr)
+        arg(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
         {
-            return proto::unref(expr.cast().arg0);
+            return proto::unref(expr.arg0);
         };
 
+        /// \overload
+        ///
+        template<typename Expr>
+        typename result_of::unref<typename Expr::type::arg0_type>::const_reference
+        arg(Expr const &expr)
+        {
+            return proto::unref(expr.arg0);
+        };
+
+        /// \overload
+        ///
         template<typename N, typename Expr>
-        typename result_of::arg<Expr, N>::reference arg(Expr const &expr)
+        typename result_of::arg<Expr, N>::reference 
+        arg(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
         {
             return result_of::arg<Expr, N>::call(expr);
         };
 
+        /// \overload
+        ///
+        template<typename N, typename Expr>
+        typename result_of::arg<Expr, N>::const_reference 
+        arg(Expr const &expr)
+        {
+            return result_of::arg<Expr, N>::call(expr);
+        };
+
+        /// arg_c
+        ///
         template<long N, typename Expr>
-        typename result_of::arg_c<Expr, N>::reference arg_c(Expr const &expr)
+        typename result_of::arg_c<Expr, N>::reference
+        arg_c(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
+        {
+            return result_of::arg_c<Expr, N>::call(expr);
+        };
+
+        /// \overload
+        ///
+        template<long N, typename Expr>
+        typename result_of::arg_c<Expr, N>::const_reference arg_c(Expr const &expr)
         {
             return result_of::arg_c<Expr, N>::call(expr);
         };
@@ -483,11 +546,21 @@
             struct arg_c<Expr, N>
               : unref<typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, N), _type)>
             {
-                static typename arg_c::reference call(Expr const &expr)
+                static typename arg_c::reference call(Expr &expr)
                 {
-                    return proto::unref(expr.cast().BOOST_PP_CAT(arg, N));
+                    return proto::unref(expr.BOOST_PP_CAT(arg, N));
+                }
+
+                static typename arg_c::const_reference call(Expr const &expr)
+                {
+                    return proto::unref(expr.BOOST_PP_CAT(arg, N));
                 }
             };
+
+            template<typename Expr>
+            struct arg_c<Expr const, N>
+              : arg_c<Expr, N>
+            {};
         }
 
     #undef N

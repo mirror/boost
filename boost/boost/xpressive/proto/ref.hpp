@@ -44,7 +44,7 @@ namespace boost { namespace proto
             return this->expr.cast();
         }
 
-        Expr const &expr;
+        Expr &expr;
     };
 
     // ref-to-ref is not allowed. this will cause a compile error.
@@ -60,14 +60,16 @@ namespace boost { namespace proto
         struct unref
         {
             typedef T type;
-            typedef T const &reference;
+            typedef T &reference;
+            typedef T const &const_reference;
         };
 
         template<typename T>
         struct unref<ref<T> >
         {
-            typedef T type;
-            typedef T const &reference;
+            typedef typename T::boost_proto_expr_type_ type;
+            typedef T &reference;
+            typedef T &const_reference;
         };
 
         template<typename T>
@@ -75,6 +77,7 @@ namespace boost { namespace proto
         {
             typedef T type;
             typedef T &reference;
+            typedef T &const_reference;
         };
 
         template<typename T>
@@ -82,6 +85,7 @@ namespace boost { namespace proto
         {
             typedef T type;
             typedef T const &reference;
+            typedef T const &const_reference;
         };
 
         template<typename T, std::size_t N>
@@ -89,6 +93,7 @@ namespace boost { namespace proto
         {
             typedef T (&type)[N];
             typedef T (&reference)[N];
+            typedef T (&const_reference)[N];
         };
 
         template<typename T, std::size_t N>
@@ -96,6 +101,7 @@ namespace boost { namespace proto
         {
             typedef T const (&type)[N];
             typedef T const (&reference)[N];
+            typedef T const (&const_reference)[N];
         };
     }
 
@@ -124,13 +130,13 @@ namespace boost { namespace proto
             }
 
             template<typename T>
-            T const &operator()(ref<T> &t) const
+            T &operator()(ref<T> &t) const
             {
                 return t.expr;
             }
 
             template<typename T>
-            T const &operator()(ref<T> const &t) const
+            T &operator()(ref<T> const &t) const
             {
                 return t.expr;
             }

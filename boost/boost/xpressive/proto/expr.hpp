@@ -46,7 +46,7 @@
         /**/
 
     #define BOOST_PROTO_UNREF_ARG_TYPE(z, n, data)\
-        typename result_of::unref<typename Args::BOOST_PP_CAT(arg, n)>::reference\
+        typename result_of::unref<typename Args::BOOST_PP_CAT(arg, n)>::const_reference\
         /**/
 
     #define BOOST_PROTO_UNREF_ARG(z, n, data)\
@@ -127,34 +127,34 @@
             }
 
             template<typename A>
-            expr<tag::assign, args2<ref<expr>, typename result_of::as_arg<A>::type> > const
+            expr<tag::assign, args2<ref<expr const>, typename result_of::as_arg<A>::type> > const
             operator =(A &a) const
             {
-                expr<tag::assign, args2<ref<expr>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
+                expr<tag::assign, args2<ref<expr const>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
                 return that;
             }
 
             template<typename A>
-            expr<tag::assign, args2<ref<expr>, typename result_of::as_arg<A const>::type> > const
+            expr<tag::assign, args2<ref<expr const>, typename result_of::as_arg<A const>::type> > const
             operator =(A const &a) const
             {
-                expr<tag::assign, args2<ref<expr>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
+                expr<tag::assign, args2<ref<expr const>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
                 return that;
             }
 
             template<typename A>
-            expr<tag::subscript, args2<ref<expr>, typename result_of::as_arg<A>::type> > const
+            expr<tag::subscript, args2<ref<expr const>, typename result_of::as_arg<A>::type> > const
             operator [](A &a) const
             {
-                expr<tag::subscript, args2<ref<expr>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
+                expr<tag::subscript, args2<ref<expr const>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
                 return that;
             }
 
             template<typename A>
-            expr<tag::subscript, args2<ref<expr>, typename result_of::as_arg<A const>::type> > const
+            expr<tag::subscript, args2<ref<expr const>, typename result_of::as_arg<A const>::type> > const
             operator [](A const &a) const
             {
-                expr<tag::subscript, args2<ref<expr>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
+                expr<tag::subscript, args2<ref<expr const>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
                 return that;
             }
 
@@ -164,13 +164,13 @@
             template<typename This>
             struct result<This()>
             {
-                typedef expr<tag::function, args1<ref<expr> > > type;
+                typedef expr<tag::function, args1<ref<expr const> > > type;
             };
 
-            expr<tag::function, args1<ref<expr> > > const
+            expr<tag::function, args1<ref<expr const> > > const
             operator ()() const
             {
-                expr<tag::function, args1<ref<expr> > > that = {{*this}};
+                expr<tag::function, args1<ref<expr const> > > that = {{*this}};
                 return that;
             }
 

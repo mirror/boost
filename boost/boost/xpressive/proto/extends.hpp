@@ -53,37 +53,37 @@ namespace boost { namespace proto
         }
 
         template<typename A>
-        typename generate<Domain, expr<tag::assign, args2<ref<Derived>, typename result_of::as_arg<A>::type> > >::type const
+        typename generate<Domain, expr<tag::assign, args2<ref<Derived const>, typename result_of::as_arg<A>::type> > >::type const
         operator =(A &a) const
         {
-            typedef expr<tag::assign, args2<ref<Derived>, typename result_of::as_arg<A>::type> > that_type;
+            typedef expr<tag::assign, args2<ref<Derived const>, typename result_of::as_arg<A>::type> > that_type;
             that_type that = {{this->derived()}, proto::as_arg(a)};
             return generate<Domain, that_type>::make(that);
         }
 
         template<typename A>
-        typename generate<Domain, expr<tag::assign, args2<ref<Derived>, typename result_of::as_arg<A const>::type> > >::type const
+        typename generate<Domain, expr<tag::assign, args2<ref<Derived const>, typename result_of::as_arg<A const>::type> > >::type const
         operator =(A const &a) const
         {
-            typedef expr<tag::assign, args2<ref<Derived>, typename result_of::as_arg<A const>::type> > that_type;
+            typedef expr<tag::assign, args2<ref<Derived const>, typename result_of::as_arg<A const>::type> > that_type;
             that_type that = {{this->derived()}, proto::as_arg(a)};
             return generate<Domain, that_type>::make(that);
         }
 
         template<typename A>
-        typename generate<Domain, expr<tag::subscript, args2<ref<Derived>, typename result_of::as_arg<A>::type> > >::type const
+        typename generate<Domain, expr<tag::subscript, args2<ref<Derived const>, typename result_of::as_arg<A>::type> > >::type const
         operator [](A &a) const
         {
-            typedef expr<tag::subscript, args2<ref<Derived>, typename result_of::as_arg<A>::type> > that_type;
+            typedef expr<tag::subscript, args2<ref<Derived const>, typename result_of::as_arg<A>::type> > that_type;
             that_type that = {{this->derived()}, proto::as_arg(a)};
             return generate<Domain, that_type>::make(that);
         }
 
         template<typename A>
-        typename generate<Domain, expr<tag::subscript, args2<ref<Derived>, typename result_of::as_arg<A const>::type> > >::type const
+        typename generate<Domain, expr<tag::subscript, args2<ref<Derived const>, typename result_of::as_arg<A const>::type> > >::type const
         operator [](A const &a) const
         {
-            typedef expr<tag::subscript, args2<ref<Derived>, typename result_of::as_arg<A const>::type> > that_type;
+            typedef expr<tag::subscript, args2<ref<Derived const>, typename result_of::as_arg<A const>::type> > that_type;
             that_type that = {{this->derived()}, proto::as_arg(a)};
             return generate<Domain, that_type>::make(that);
         }
@@ -94,14 +94,16 @@ namespace boost { namespace proto
         template<typename This>
         struct result<This()>
         {
-            typedef typename generate<Domain, expr<tag::function, args1<ref<Derived> > > >::type type;
+            typedef typename generate<Domain, expr<tag::function, args1<ref<Derived const> > > >::type type;
         };
 
-        typename generate<Domain, expr<tag::function, args1<ref<Derived> > > >::type const
+        // BUGBUG Derived is incomplete here!
+        //typename generate<Domain, expr<tag::function, args1<ref<Derived const> > >, void >::type const
+        expr<tag::function, args1<ref<Derived const> > > const
         operator ()() const
         {
-            expr<tag::function, args1<ref<Derived> > > that = {{this->derived()}};
-            return generate<Domain, expr<tag::function, args1<ref<Derived> > > >::make(that);
+            expr<tag::function, args1<ref<Derived const> > > that = {{this->derived()}};
+            return generate<Domain, expr<tag::function, args1<ref<Derived const> > > >::make(that);
         }
 
     #define BOOST_PP_LOCAL_MACRO(N) \

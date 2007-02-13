@@ -9,19 +9,35 @@
 #ifndef BOOST_PROTO_FWD_HPP_EAN_04_01_2005
 #define BOOST_PROTO_FWD_HPP_EAN_04_01_2005
 
+#include <boost/xpressive/proto/detail/prefix.hpp> // must be first include
 #include <cstddef>
 #include <climits>
-#include <boost/xpressive/proto/detail/prefix.hpp>
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 #include <boost/mpl/long.hpp>
 #include <boost/type_traits/remove_cv.hpp>
 #include <boost/type_traits/remove_reference.hpp>
-#include <boost/xpressive/proto/detail/suffix.hpp>
 
 #ifndef BOOST_PROTO_MAX_ARITY
 # define BOOST_PROTO_MAX_ARITY 5
 #endif
+
+#if BOOST_WORKAROUND(__GNUC__, == 3)
+# define BOOST_PROTO_BROKEN_CONST_OVERLOADS
+#endif
+
+#ifdef BOOST_PROTO_BROKEN_CONST_OVERLOADS
+# include <boost/utility/enable_if.hpp>
+# include <boost/type_traits/is_const.hpp>
+# define BOOST_PROTO_DISABLE_IF_IS_CONST(T)\
+    , typename boost::disable_if<boost::is_const<T> >::type * = 0
+#else
+# define BOOST_PROTO_DISABLE_IF_IS_CONST(T)
+#endif
+
+#include <boost/xpressive/proto/detail/suffix.hpp> // must be last include
 
 namespace boost { namespace proto
 {
