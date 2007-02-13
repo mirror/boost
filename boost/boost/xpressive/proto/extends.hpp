@@ -53,19 +53,39 @@ namespace boost { namespace proto
         }
 
         template<typename A>
-        typename generate<Domain, expr<tag::assign, args2<ref<Derived>, typename result_of::as_arg<A const>::type> >, tag::assign>::type const
-        operator =(A const &a) const
+        typename generate<Domain, expr<tag::assign, args2<ref<Derived>, typename result_of::as_arg<A>::type> > >::type const
+        operator =(A &a) const
         {
-            expr<tag::assign, args2<ref<Derived>, typename result_of::as_arg<A const>::type> > that = {{this->derived()}, proto::as_arg(a)};
-            return generate<Domain, expr<tag::assign, args2<ref<Derived>, typename result_of::as_arg<A const>::type> >, tag::assign>::make(that);
+            typedef expr<tag::assign, args2<ref<Derived>, typename result_of::as_arg<A>::type> > that_type;
+            that_type that = {{this->derived()}, proto::as_arg(a)};
+            return generate<Domain, that_type>::make(that);
         }
 
         template<typename A>
-        typename generate<Domain, expr<tag::subscript, args2<ref<Derived>, typename result_of::as_arg<A const>::type> >, tag::subscript>::type const
+        typename generate<Domain, expr<tag::assign, args2<ref<Derived>, typename result_of::as_arg<A const>::type> > >::type const
+        operator =(A const &a) const
+        {
+            typedef expr<tag::assign, args2<ref<Derived>, typename result_of::as_arg<A const>::type> > that_type;
+            that_type that = {{this->derived()}, proto::as_arg(a)};
+            return generate<Domain, that_type>::make(that);
+        }
+
+        template<typename A>
+        typename generate<Domain, expr<tag::subscript, args2<ref<Derived>, typename result_of::as_arg<A>::type> > >::type const
+        operator [](A &a) const
+        {
+            typedef expr<tag::subscript, args2<ref<Derived>, typename result_of::as_arg<A>::type> > that_type;
+            that_type that = {{this->derived()}, proto::as_arg(a)};
+            return generate<Domain, that_type>::make(that);
+        }
+
+        template<typename A>
+        typename generate<Domain, expr<tag::subscript, args2<ref<Derived>, typename result_of::as_arg<A const>::type> > >::type const
         operator [](A const &a) const
         {
-            expr<tag::subscript, args2<ref<Derived>, typename result_of::as_arg<A const>::type> > that = {{this->derived()}, proto::as_arg(a)};
-            return generate<Domain, expr<tag::subscript, args2<ref<Derived>, typename result_of::as_arg<A const>::type> >, tag::subscript>::make(that);
+            typedef expr<tag::subscript, args2<ref<Derived>, typename result_of::as_arg<A const>::type> > that_type;
+            that_type that = {{this->derived()}, proto::as_arg(a)};
+            return generate<Domain, that_type>::make(that);
         }
 
         template<typename Sig>
@@ -74,14 +94,14 @@ namespace boost { namespace proto
         template<typename This>
         struct result<This()>
         {
-            typedef typename generate<Domain, expr<tag::function, args1<ref<Derived> > >, tag::function>::type type;
+            typedef typename generate<Domain, expr<tag::function, args1<ref<Derived> > > >::type type;
         };
 
-        typename generate<Domain, expr<tag::function, args1<ref<Derived> > >, tag::function>::type const
+        typename generate<Domain, expr<tag::function, args1<ref<Derived> > > >::type const
         operator ()() const
         {
             expr<tag::function, args1<ref<Derived> > > that = {{this->derived()}};
-            return generate<Domain, expr<tag::function, args1<ref<Derived> > >, tag::function>::make(that);
+            return generate<Domain, expr<tag::function, args1<ref<Derived> > > >::make(that);
         }
 
     #define BOOST_PP_LOCAL_MACRO(N) \
@@ -97,7 +117,6 @@ namespace boost { namespace proto
                       , >::type BOOST_PP_INTERCEPT\
                     )\
                 >::type\
-              , tag::function\
             >\
         {};\
         template<BOOST_PP_ENUM_PARAMS(N, typename A)>\
@@ -107,7 +126,6 @@ namespace boost { namespace proto
                 Derived\
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)\
             >::type\
-          , tag::function\
         >::type const\
         operator ()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const &a)) const\
         {\
@@ -115,7 +133,7 @@ namespace boost { namespace proto
                 Derived\
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)\
             > funop;\
-            return generate<Domain, typename funop::type, tag::function>::make(\
+            return generate<Domain, typename funop::type>::make(\
                 funop::call(this->derived() BOOST_PP_ENUM_TRAILING_PARAMS(N, a))\
             );\
         }\

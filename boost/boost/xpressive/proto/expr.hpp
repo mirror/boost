@@ -127,10 +127,26 @@
             }
 
             template<typename A>
+            expr<tag::assign, args2<ref<expr>, typename result_of::as_arg<A>::type> > const
+            operator =(A &a) const
+            {
+                expr<tag::assign, args2<ref<expr>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
+                return that;
+            }
+
+            template<typename A>
             expr<tag::assign, args2<ref<expr>, typename result_of::as_arg<A const>::type> > const
             operator =(A const &a) const
             {
                 expr<tag::assign, args2<ref<expr>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
+                return that;
+            }
+
+            template<typename A>
+            expr<tag::subscript, args2<ref<expr>, typename result_of::as_arg<A>::type> > const
+            operator [](A &a) const
+            {
+                expr<tag::subscript, args2<ref<expr>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
                 return that;
             }
 

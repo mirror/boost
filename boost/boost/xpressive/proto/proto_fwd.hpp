@@ -341,7 +341,7 @@ namespace boost { namespace proto
     template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, void), typename Dummy = void>
     struct function;
 
-    template<typename Domain, typename Expr, typename Tag = typename Expr::tag_type>
+    template<typename Domain, typename Expr, typename EnableIf = void>
     struct generate;
 
     namespace op

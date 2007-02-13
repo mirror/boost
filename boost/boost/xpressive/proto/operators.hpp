@@ -22,7 +22,7 @@
 
 namespace boost { namespace proto
 {
-    template<typename Domain, typename Expr, typename Tag>
+    template<typename Domain, typename Expr, typename EnableIf>
     struct generate
     {
         typedef Expr type;
