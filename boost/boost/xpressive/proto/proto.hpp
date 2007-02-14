@@ -16,10 +16,12 @@
 #include <boost/xpressive/proto/tags.hpp>
 #include <boost/xpressive/proto/expr.hpp>
 #include <boost/xpressive/proto/traits.hpp>
+#include <boost/xpressive/proto/domain.hpp>
 #include <boost/xpressive/proto/compile.hpp>
 #include <boost/xpressive/proto/matches.hpp>
 #include <boost/xpressive/proto/extends.hpp>
 #include <boost/xpressive/proto/literal.hpp>
+#include <boost/xpressive/proto/generate.hpp>
 #include <boost/xpressive/proto/operators.hpp>
 #include <boost/xpressive/proto/deep_copy.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>

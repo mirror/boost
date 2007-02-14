@@ -21,6 +21,7 @@
 #include <boost/xpressive/proto/traits.hpp>
 #include <boost/xpressive/proto/expr.hpp>
 #include <boost/xpressive/proto/args.hpp>
+#include <boost/xpressive/proto/generate.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
 namespace boost { namespace proto
@@ -97,9 +98,7 @@ namespace boost { namespace proto
             typedef typename generate<Domain, expr<tag::function, args1<ref<Derived const> > > >::type type;
         };
 
-        // BUGBUG Derived is incomplete here!
-        //typename generate<Domain, expr<tag::function, args1<ref<Derived const> > >, void >::type const
-        expr<tag::function, args1<ref<Derived const> > > const
+        typename generate<Domain, expr<tag::function, args1<ref<Derived const> > > >::type const
         operator ()() const
         {
             expr<tag::function, args1<ref<Derived const> > > that = {{this->derived()}};

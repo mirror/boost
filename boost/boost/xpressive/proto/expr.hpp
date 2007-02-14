@@ -79,7 +79,7 @@
             typedef Tag tag_type;
             typedef expr type;
             typedef Args args_type;
-            typedef void domain;
+            typedef default_domain domain;
             typedef mpl::long_<BOOST_PP_ITERATION()> arity;
             typedef proto_expr_tag fusion_tag;
             typedef void is_boost_proto_expr_;
@@ -184,7 +184,7 @@
 
         template<typename This BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
         struct result<This(BOOST_PP_ENUM_PARAMS(N, A))>
-            : result_of::BOOST_PP_CAT(funop, N)<expr BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename remove_reference<A, >::type BOOST_PP_INTERCEPT)>
+          : result_of::BOOST_PP_CAT(funop, N)<expr BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename remove_reference<A, >::type BOOST_PP_INTERCEPT)>
         {};
 
         template<BOOST_PP_ENUM_PARAMS(N, typename A)>

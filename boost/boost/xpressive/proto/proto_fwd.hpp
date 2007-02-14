@@ -235,13 +235,20 @@ namespace boost { namespace proto
     struct proto_ref_tag;
     struct proto_ref_iterator_tag;
 
-    template<typename Expr, typename Derived, typename Domain = void>
+    struct _;
+
+    template<typename Grammar = proto::_>
+    struct domain;
+
+    typedef domain<> default_domain;
+
+    template<typename Expr, typename Derived, typename Domain = default_domain>
     struct extends;
 
     template<typename Derived = void>
     struct context;
 
-    template<typename T, typename Domain = void>
+    template<typename T, typename Domain = default_domain>
     struct literal;
 
     template<typename T, typename EnableIf = void>
@@ -357,8 +364,11 @@ namespace boost { namespace proto
     template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, void), typename Dummy = void>
     struct function;
 
-    template<typename Domain, typename Expr, typename EnableIf = void>
+    template<typename Domain, typename Expr>
     struct generate;
+
+    template<typename Domain, typename Expr, typename EnableIf = void>
+    struct is_allowed;
 
     namespace op
     {
@@ -459,8 +469,6 @@ namespace boost { namespace proto
 
     template<typename Grammar>
     struct has_pass_through_transform;
-
-    struct _;
 
     template<typename Grammar>
     struct vararg;
