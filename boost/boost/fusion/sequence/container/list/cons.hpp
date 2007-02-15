@@ -19,6 +19,7 @@
 #include <boost/fusion/sequence/container/list/detail/end_impl.hpp>
 #include <boost/fusion/sequence/container/list/detail/at_impl.hpp>
 #include <boost/fusion/sequence/container/list/detail/value_at_impl.hpp>
+#include <boost/fusion/sequence/container/list/detail/empty_impl.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/fusion/support/sequence_base.hpp>
