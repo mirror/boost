@@ -37,34 +37,6 @@ sequence type.
 [heading Header]
     #include <boost/fusion/algorithm.hpp>
 
-[section Concepts]
-
-[section:poly Polymorphic Function Object]
-
-[heading Description] 
-
-A type of function object with a nested metafunction `result`. `result` 
-returns the result type of calling the function object, given the argument 
-types.
-
-[variablelist Notation
-    [[`F`][A Polymorphic Function Object type]]
-    [[`f`][A Polymorphic Function Object]]
-    [[`T1 ...TN`][Arbitrary types]]
-    [[`t1 ...tN`][Objects with types `T1 ...TN`]]
-]
-
-[heading Expression requirements]
-
-[table
-    [[Expression][Return Type][Runtime Complexity]]
-    [[`f(t1, ...tN)`][`F::result<T1, ...TN>::type`][Unspecified]]
-]
-
-[endsect]
-
-[endsect]
-
 [section Iteration]
 
 The iteration algorithms provide the fundamental algorithms for traversing 
