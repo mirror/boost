@@ -11,7 +11,9 @@
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
 #include <boost/preprocessor/repetition/repeat.hpp>
+#include <boost/mpl/if.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/type_traits/is_const.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
@@ -39,7 +41,8 @@ namespace boost { namespace proto
 
         BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_ARG, _)
 
-        type const &cast() const
+        typename mpl::if_<is_const<Expr>, type const &, type &>::type
+        cast() const
         {
             return this->expr.cast();
         }

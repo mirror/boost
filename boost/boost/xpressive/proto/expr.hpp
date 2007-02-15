@@ -89,6 +89,11 @@
             BOOST_PP_REPEAT(BOOST_PP_ITERATION(), BOOST_PROTO_ARG, ~)
             BOOST_PP_REPEAT_FROM_TO(BOOST_PP_ITERATION(), BOOST_PROTO_MAX_ARITY, BOOST_PROTO_VOID, ~)
 
+            expr &cast()
+            {
+                return *this;
+            }
+
             expr const &cast() const
             {
                 return *this;
