@@ -43,13 +43,18 @@ The first step to giving your calculator expressions extra behaviors is to
 define a calculator domain. All expressions within the calculator domain will 
 be imbued with calculator-ness, as we'll see.
 
-    // An empty type to be used as a domain tag
+    // A type to be used as a domain tag
     struct calculator_domain
+      : proto::domain<>
     {};
-    
+
 We use this domain type when extending the _expr_ type, which we do with the
-_extends_ class template. Here is our expression wrapper, which imbues an 
-expression with calculator-ness. We'll describe it below.
+_extends_ class template. The `proto::domain<>` class template lets you 
+optionally specify a grammar to use to control the operator overloads in the
+domain. We'll see an example of that below.
+
+Here is our expression wrapper, which imbues an expression with 
+calculator-ness. It is described below.
 
     // The calculator<> expression wrapper makes expressions
     // function objects.
@@ -121,7 +126,7 @@ additional processing. The default implementation of _generate_ looks like
 this:
 
     // The default implementation of proto::generate<>
-    template< typename Domain, typename Expr, typename Tag = typename Expr::tag_type >
+    template< typename Domain, typename Expr >
     struct generate
     {
         typedef Expr type;
@@ -140,8 +145,8 @@ But we want expressions in the calculator domain to be wrapped in our
     {
         // A specialization of generate<> that causes expression in the
         // calculator_domain to be wrapped in the calculator<> wrapper.
-        template< typename Expr, typename Tag >
-        struct generate< calculator_domain, Expr, Tag >
+        template< typename Expr >
+        struct generate< calculator_domain, Expr >
         {
             typedef calculator< Expr > type;
             
@@ -156,10 +161,194 @@ This instructs Proto to wrap all expressions in the `calculator_domain` in the
 `calculator<>` wrapper. Now we can use calculator expressions as function 
 objects to STL algorithms, as follows:
 
-
     double data[] = {1., 2., 3., 4.};
     
-    // Use the calculator DSEL to square each element ... WORKS!
+    // Use the calculator DSEL to square each element ... WORKS! :-)
     std::transform( data, data + 4, data, _1 * _1 );
+
+[h3 Controlling Operator Overloads]
+
+By default, Proto defines every possible operator overload for Proto-ified 
+expressions. This makes it simple to bang together a DSEL, and Proto's grammar
+building and checking facilities make it simple to detect and report invalid
+expressions. In some cases, however, the presence of Proto's promiscuous 
+overloads can lead to confusion or worse. When that happens, you'll have to 
+disable some of Proto's overloaded operators.
+
+As an example, consider a simple linear algebra DSEL that lets you efficiently
+add vectors without creating temporaries. With such a DSEL, we could initialize
+vectors and add them as follows:
+
+    // lazy_vectors with 4 elements each.
+    lazy_vector< double > v1( 4, 1.0 ), v2( 4, 2.0 ), v3( 4, 3.0 );
+    
+    // Add two vectors lazily and get the 2nd element.
+    double d1 = ( v2 + v3 )[ 2 ];   // Look ma, no temporaries!
+    
+    // Subtract two vectors and add the result to a third vector.
+    v1 += v2 - v3;                  // Still no temporaries!
+
+Consider the uses of the `operator[]` and `operator+=` in the examples above.
+We want them to do real work instead of creating expression templates. We need
+to imbue our expression templates with linear algebra-ness and then give 
+`operator[]` and `operator+=` new domain-specific semantics. As above, we do 
+that by defining an appropriate domain-specific expression wrapper.
+
+Here is the code. It is described below.
+
+    struct lazy_vector_domain
+      : proto::domain<>
+    {};
+
+    // Here is an evaluation context that indexes into an algebraic
+    // expression, and combines the result.
+    template<typename Size = std::size_t>
+    struct lazy_subscript_context
+      : proto::context< lazy_subscript_context<Size> >
+    {
+        typedef lazy_subscript_context<Size> this_type;
+
+        lazy_subscript_context(Size subscript)
+          : subscript_(subscript)
+        {}
+
+        // Use the default context for all the operations ...
+        template<typename Sig>
+        struct result
+          : proto::context< this_type >::template result<Sig>
+        {};
+
+        // ... except for terminals, which we index with our subscript
+        template<typename This, typename Vector>
+        struct result<This(proto::tag::terminal, Vector &)>
+        {
+            typedef typename Vector::value_type type;
+        };
+
+        using proto::context< this_type >::operator();
+
+        template<typename Vector>
+        typename Vector::value_type
+        operator()(proto::tag::terminal, Vector &expr)
+        {
+            return expr[this->subscript_];
+        }
+
+    private:
+        Size subscript_;
+    };
+
+    // Here is the domain-specific expression wrapper, which overrides
+    // operator[] to evaluate the expression using the lazy_subscript_context.
+    template<typename Expr>
+    struct lazy_vector_expr
+      : proto::extends<Expr, lazy_vector_expr<Expr>, lazy_vector_domain>
+    {
+        typedef proto::extends<Expr, lazy_vector_expr<Expr>, lazy_vector_domain> base_type;
+
+        lazy_vector_expr( Expr const & expr = Expr() )
+          : base_type( expr )
+        {}
+
+        template< typename Size >
+        typename proto::result_of::eval< Expr, lazy_subscript_context<Size> >::type
+        operator []( Size subscript ) const
+        {
+            lazy_subscript_context<Size> ctx(subscript);
+            return this->eval(ctx);
+        }
+    };
+
+    // Here is our lazy_vector terminal, implemented in terms of lazy_vector_expr
+    template< typename T >
+    struct lazy_vector
+      : lazy_vector_expr< typename proto::terminal< std::vector<T> >::type >
+    {
+        typedef typename proto::terminal< std::vector<T> >::type expr_type;
+
+        lazy_vector( std::size_t size = 0, T const & value = T() )
+          : lazy_vector_expr( expr_type::make( std::vector<T>( size, value ) ) )
+        {}
+
+        template< typename Expr >
+        lazy_vector &operator += (Expr const & expr)
+        {
+            std::size_t size = proto::arg(*this).size();
+            for(std::size_t i = 0; i < size; ++i)
+            {
+                proto::arg(*this)[i] += expr[i];
+            }
+            return *this;
+        }
+    };
+
+    namespace boost { namespace proto
+    {
+        template< typename Expr >
+        struct generate< lazy_vector_domain, Expr >
+        {
+            typedef lazy_vector_expr<Expr> type;
+            
+            static type make(Expr const &expr)
+            {
+                return type(expr);
+            }
+        };
+    }}
+
+The `lazy_subscript_context<>` struct is used to evaluate expressions like 
+`(v1 + v2)[2]` as if they were written `v1[2] + v2[2]`. The `lazy_vector_expr<>`
+struct is a wrapper for expressions. It defines an `operator[]` which evaluates
+the expression using `lazy_subscript_context<>`. The `lazy_vector<>` struct is
+used for the vector terminals in our expression trees. It is essentially a 
+`proto::terminal< std::vector<T> >::type`, with `operator[]` and `operator+=`
+defined to evaluate the expressions. With the above code, we can do the 
+following:
+
+    // lazy_vectors with 4 elements each.
+    lazy_vector< double > v1( 4, 1.0 ), v2( 4, 2.0 ), v3( 4, 3.0 );
+    
+    // Add two vectors lazily and get the 2nd element.
+    double d1 = ( v2 + v3 )[ 2 ];   // Look ma, no temporaries!
+    
+    // Subtract two vectors and add the result to a third vector.
+    v1 += v2 - v3;                  // Still no temporaries!
+    
+    // But what does this do?
+    (v2 + v3) += v1;
+
+The last line is clearly a bug. It is nonsensical to add two vectors and then
+assign to the result. But strangely, this code compiles! And even more 
+strangely, it had no effect! It is building an expression template and then 
+discarding it. We would like this to be a compile error, instead. We can make
+it an error by disabling Proto's `operator+=` overload, and all the other 
+overloaded operators that don't make sense in our domain. To do that, we define
+the grammar for our domain. Let's say we want to allow addition and subtraction 
+of our vector terminals. Our grammar looks like this:
+
+    using proto::_;
+    
+    struct LazyVectorGrammar
+      : proto::or_<
+            proto::terminal< std::vector<_> >
+          , proto::add< LazyVectorGrammar, LazyVectorGrammar>
+          , proto::subtract< LazyVectorGrammar, LazyVectorGrammar>
+        >
+    {};
+
+Notice that even though the terminals of our DSEL are `lazy_vector<>`'s, they
+will match `terminal< std::vector<_> >` because `lazy_vector<T>` extends 
+`terminal< std::vector<T> >::type`. Once we have defined the grammar of our 
+DSEL, using it to control the operator overloads in our domain is as simple
+as:
+
+    // Expressions in the lazy_vector_domain must conform to the
+    // LazyVectorGrammar
+    struct lazy_vector_domain
+      : proto::domain< LazyVectorGrammar >
+    {};
+
+And that's it! Now, all operators that do not produce valid lazy-vector 
+expressions are automatically disabled. 
 
 [endsect]
