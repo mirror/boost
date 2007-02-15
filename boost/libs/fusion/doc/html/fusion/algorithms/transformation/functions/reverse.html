@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>reverse</title>
 <link rel="stylesheet" href="../../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
 <link rel="prev" href="remove_if.html" title="remove_if">
@@ -26,24 +26,24 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.transformation.functions.reverse"></a><a href="reverse.html" title="reverse">reverse</a></h5></div></div></div>
 <a name="fusion.algorithms.transformation.functions.reverse.description"></a><h6>
-<a name="id579301"></a>
+<a name="id1138382"></a>
             <a href="reverse.html#fusion.algorithms.transformation.functions.reverse.description">Description</a>
           </h6>
 <p>
             Returns a new sequence with the elements of the original in reverse order.
           </p>
 <a name="fusion.algorithms.transformation.functions.reverse.synposis"></a><h6>
-<a name="id579333"></a>
+<a name="id1138412"></a>
             <a href="reverse.html#fusion.algorithms.transformation.functions.reverse.synposis">Synposis</a>
           </h6>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;</span>
     <span class="keyword">typename</span> <span class="identifier">Sequence</span>
     <span class="special">&gt;</span>
-<span class="keyword">typename</span> <a href="../metafunctions/reverse.html" title="reverse"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">reverse</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">reverse</span><span class="special">(</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">);</span>
+<span class="keyword">typename</span> <a href="../metafunctions/reverse.html" title="reverse"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">reverse</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="identifier">reverse</span><span class="special">(</span><span class="identifier">Sequence</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">seq</span><span class="special">);</span>
 </pre>
 <div class="table">
-<a name="id579489"></a><p class="title"><b>Table 1.60. Parameters</b></p>
+<a name="id1138549"></a><p class="title"><b>Table 1.60. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -56,7 +56,7 @@
 <th>Description</th>
 </tr></thead>
 <tbody><tr>
-<td><tt class="computeroutput"><span class="identifier">seq</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">seq</span></code></td>
 <td>A
                 model of <a href="../../../sequences/concepts/bidirectional_sequence.html" title="Bidirectional
         Sequence">Bidirectional
@@ -67,43 +67,43 @@
 </table>
 </div>
 <a name="fusion.algorithms.transformation.functions.reverse.expression_semantics"></a><h6>
-<a name="id579564"></a>
+<a name="id1138616"></a>
             <a href="reverse.html#fusion.algorithms.transformation.functions.reverse.expression_semantics">Expression
             Semantics</a>
           </h6>
 <pre class="programlisting">
-<a href="reverse.html" title="reverse"><tt class="computeroutput"><span class="identifier">reverse</span></tt></a><span class="special">(</span><span class="identifier">seq</span><span class="special">);</span>
+<a href="reverse.html" title="reverse"><code class="computeroutput"><span class="identifier">reverse</span></code></a><span class="special">(</span><span class="identifier">seq</span><span class="special">);</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: A model of <a href="../../../sequences/concepts/bidirectional_sequence.html" title="Bidirectional
+            <span class="bold"><strong>Return type</strong></span>: A model of <a href="../../../sequences/concepts/bidirectional_sequence.html" title="Bidirectional
         Sequence">Bidirectional
             Sequence</a>.
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Returns a new sequence containing
-            all the elements of <tt class="computeroutput"><span class="identifier">seq</span></tt>
+            <span class="bold"><strong>Semantics</strong></span>: Returns a new sequence containing
+            all the elements of <code class="computeroutput"><span class="identifier">seq</span></code>
             in reverse order.
           </p>
 <a name="fusion.algorithms.transformation.functions.reverse.complexity"></a><h6>
-<a name="id579670"></a>
+<a name="id1138711"></a>
             <a href="reverse.html#fusion.algorithms.transformation.functions.reverse.complexity">Complexity</a>
           </h6>
 <p>
             Constant. Returns a view which is lazily evaluated.
           </p>
 <a name="fusion.algorithms.transformation.functions.reverse.header"></a><h6>
-<a name="id579703"></a>
+<a name="id1138739"></a>
             <a href="reverse.html#fusion.algorithms.transformation.functions.reverse.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">transformation</span><span class="special">/</span><span class="identifier">reverse</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.algorithms.transformation.functions.reverse.example"></a><h6>
-<a name="id579809"></a>
+<a name="id1138833"></a>
             <a href="reverse.html#fusion.algorithms.transformation.functions.reverse.example">Example</a>
           </h6>
 <pre class="programlisting">
-<span class="identifier">assert</span><span class="special">(</span><a href="reverse.html" title="reverse"><tt class="computeroutput"><span class="identifier">reverse</span></tt></a><span class="special">(</span><a href="../../../sequences/generation/functions/make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">))</span> <span class="special">==</span> <a href="../../../sequences/generation/functions/make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a><span class="special">(</span><span class="number">3</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">1</span><span class="special">));</span>
+<span class="identifier">assert</span><span class="special">(</span><a href="reverse.html" title="reverse"><code class="computeroutput"><span class="identifier">reverse</span></code></a><span class="special">(</span><a href="../../../sequences/generation/functions/make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">3</span><span class="special">))</span> <span class="special">==</span> <a href="../../../sequences/generation/functions/make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">3</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">1</span><span class="special">));</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

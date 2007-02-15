@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Tiers</title>
 <link rel="stylesheet" href="../../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../functions.html" title="Functions">
 <link rel="prev" href="make_map.html" title="make_map">
@@ -32,8 +32,8 @@
             flavors.
           </p>
 <div class="itemizedlist"><ul type="disc">
-<li><a href="list_tie.html" title="list_tie"><tt class="computeroutput"><span class="identifier">list_tie</span></tt></a></li>
-<li><a href="vector_tie.html" title="vector_tie"><tt class="computeroutput"><span class="identifier">vector_tie</span></tt></a></li>
+<li><a href="list_tie.html" title="list_tie"><code class="computeroutput"><span class="identifier">list_tie</span></code></a></li>
+<li><a href="vector_tie.html" title="vector_tie"><code class="computeroutput"><span class="identifier">vector_tie</span></code></a></li>
 </ul></div>
 <p>
             Example:
@@ -41,14 +41,14 @@
 <pre class="programlisting">
 <span class="keyword">int</span> <span class="identifier">i</span><span class="special">;</span> <span class="keyword">char</span> <span class="identifier">c</span><span class="special">;</span> <span class="keyword">double</span> <span class="identifier">d</span><span class="special">;</span> 
   <span class="special">...</span>
-<a href="vector_tie.html" title="vector_tie"><tt class="computeroutput"><span class="identifier">vector_tie</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">,</span> <span class="identifier">c</span><span class="special">,</span> <span class="identifier">a</span><span class="special">);</span>
+<a href="vector_tie.html" title="vector_tie"><code class="computeroutput"><span class="identifier">vector_tie</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">,</span> <span class="identifier">c</span><span class="special">,</span> <span class="identifier">a</span><span class="special">);</span>
 </pre>
 <p>
-            The <a href="vector_tie.html" title="vector_tie"><tt class="computeroutput"><span class="identifier">vector_tie</span></tt></a> function creates
-            a <a href="../../containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a>
-            of type <tt class="computeroutput"><a href="../../containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;,</span> <span class="keyword">char</span><span class="special">&amp;,</span> <span class="keyword">double</span><span class="special">&amp;&gt;</span></tt>.
-            The same result could be achieved with the call <a href="make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a>(<a href="http://www.boost.org/doc/html/ref.html" target="_top"><tt class="computeroutput"><span class="identifier">ref</span></tt></a>(i), <a href="http://www.boost.org/doc/html/ref.html" target="_top"><tt class="computeroutput"><span class="identifier">ref</span></tt></a>(c), <a href="http://www.boost.org/doc/html/ref.html" target="_top"><tt class="computeroutput"><span class="identifier">ref</span></tt></a>(a))
-            <sup>[<a name="id530746" href="#ftn.id530746">11</a>]</sup>
+            The <a href="vector_tie.html" title="vector_tie"><code class="computeroutput"><span class="identifier">vector_tie</span></code></a> function creates
+            a <a href="../../containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a>
+            of type <code class="computeroutput"><a href="../../containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;,</span> <span class="keyword">char</span><span class="special">&amp;,</span> <span class="keyword">double</span><span class="special">&amp;&gt;</span></code>.
+            The same result could be achieved with the call <a href="make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a>(<a href="http://www.boost.org/doc/html/ref.html" target="_top"><code class="computeroutput"><span class="identifier">ref</span></code></a>(i), <a href="http://www.boost.org/doc/html/ref.html" target="_top"><code class="computeroutput"><span class="identifier">ref</span></code></a>(c), <a href="http://www.boost.org/doc/html/ref.html" target="_top"><code class="computeroutput"><span class="identifier">ref</span></code></a>(a))
+            <sup>[<a name="id1043350" href="#ftn.id1043350">11</a>]</sup>
             .
           </p>
 <p>
@@ -57,7 +57,7 @@
           </p>
 <pre class="programlisting">
 <span class="keyword">int</span> <span class="identifier">i</span><span class="special">;</span> <span class="keyword">char</span> <span class="identifier">c</span><span class="special">;</span> <span class="keyword">double</span> <span class="identifier">d</span><span class="special">;</span> 
-<a href="vector_tie.html" title="vector_tie"><tt class="computeroutput"><span class="identifier">vector_tie</span></tt></a><span class="special">(</span><span class="identifier">i</span><span class="special">,</span> <span class="identifier">c</span><span class="special">,</span> <span class="identifier">d</span><span class="special">)</span> <span class="special">=</span> <a href="make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="char">'a'</span><span class="special">,</span> <span class="number">5.5</span><span class="special">);</span>
+<a href="vector_tie.html" title="vector_tie"><code class="computeroutput"><span class="identifier">vector_tie</span></code></a><span class="special">(</span><span class="identifier">i</span><span class="special">,</span> <span class="identifier">c</span><span class="special">,</span> <span class="identifier">d</span><span class="special">)</span> <span class="special">=</span> <a href="make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="char">'a'</span><span class="special">,</span> <span class="number">5.5</span><span class="special">);</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span> <span class="special">&lt;&lt;</span> <span class="identifier">i</span> <span class="special">&lt;&lt;</span> <span class="string">" "</span> <span class="special">&lt;&lt;</span>  <span class="identifier">c</span> <span class="special">&lt;&lt;</span> <span class="string">" "</span> <span class="special">&lt;&lt;</span> <span class="identifier">d</span><span class="special">;</span>
 </pre>
 <p>
@@ -66,7 +66,7 @@
             when calling functions which return sequences.
           </p>
 <a name="fusion.sequences.generation.functions.tiers.ignore"></a><h6>
-<a name="id531049"></a>
+<a name="id1043619"></a>
             <a href="tiers.html#fusion.sequences.generation.functions.tiers.ignore">Ignore</a>
           </h6>
 <p>
@@ -77,13 +77,13 @@
           </p>
 <pre class="programlisting">
 <span class="keyword">char</span> <span class="identifier">c</span><span class="special">;</span>
-<a href="vector_tie.html" title="vector_tie"><tt class="computeroutput"><span class="identifier">vector_tie</span></tt></a><span class="special">(</span><span class="identifier">ignore</span><span class="special">,</span> <span class="identifier">c</span><span class="special">)</span> <span class="special">=</span> <a href="make_vector.html" title="make_vector"><tt class="computeroutput"><span class="identifier">make_vector</span></tt></a><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="char">'a'</span><span class="special">);</span>
+<a href="vector_tie.html" title="vector_tie"><code class="computeroutput"><span class="identifier">vector_tie</span></code></a><span class="special">(</span><span class="identifier">ignore</span><span class="special">,</span> <span class="identifier">c</span><span class="special">)</span> <span class="special">=</span> <a href="make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="char">'a'</span><span class="special">);</span>
 </pre>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id530746" href="#id530746">11</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1043350" href="#id1043350">11</a>] </sup>
                 see <a href="http://www.boost.org/doc/html/ref.html" target="_top">Boost.Ref</a>
-                for details about <tt class="computeroutput"><span class="identifier">ref</span></tt>
+                for details about <code class="computeroutput"><span class="identifier">ref</span></code>
               </p></div>
 </div>
 </div>

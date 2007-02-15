@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>single_view</title>
 <link rel="stylesheet" href="../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../views.html" title="Views">
 <link rel="prev" href="../views.html" title="Views">
@@ -26,18 +26,18 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.sequences.views.single_view"></a><a href="single_view.html" title="single_view">single_view</a></h4></div></div></div>
 <p>
-          <tt class="computeroutput"><span class="identifier">single_view</span></tt> is a view into
+          <code class="computeroutput"><span class="identifier">single_view</span></code> is a view into
           a value as a single element sequence.
         </p>
 <a name="fusion.sequences.views.single_view.header"></a><h5>
-<a name="id493159"></a>
+<a name="id975166"></a>
           <a href="single_view.html#fusion.sequences.views.single_view.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">view</span><span class="special">/</span><span class="identifier">single_view</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.views.single_view.synopsis"></a><h5>
-<a name="id493262"></a>
+<a name="id975256"></a>
           <a href="single_view.html#fusion.sequences.views.single_view.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -45,7 +45,7 @@
 <span class="keyword">struct</span> <span class="identifier">single_view</span><span class="special">;</span>
 </pre>
 <a name="fusion.sequences.views.single_view.template_parameters"></a><h5>
-<a name="id493341"></a>
+<a name="id975325"></a>
           <a href="single_view.html#fusion.sequences.views.single_view.template_parameters">Template
           parameters</a>
         </h5>
@@ -61,14 +61,14 @@
 <th>Default</th>
 </tr></thead>
 <tbody><tr>
-<td><tt class="computeroutput"><span class="identifier">T</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">T</span></code></td>
 <td>Any
                 type</td>
 <td> </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.sequences.views.single_view.model_of"></a><h5>
-<a name="id493418"></a>
+<a name="id975393"></a>
           <a href="single_view.html#fusion.sequences.views.single_view.model_of">Model of</a>
         </h5>
 <div class="itemizedlist"><ul type="disc"><li><a href="../concepts/forward_sequence.html" title="Forward
@@ -76,23 +76,23 @@
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">S</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">S</span></code></span></dt>
 <dd>
-            A <tt class="computeroutput"><span class="identifier">single_view</span></tt> type
+            A <code class="computeroutput"><span class="identifier">single_view</span></code> type
           </dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">s</span></tt>,
-          <tt class="computeroutput"><span class="identifier">s2</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">s</span></code>,
+          <code class="computeroutput"><span class="identifier">s2</span></code></span></dt>
 <dd>
-            Instances of <tt class="computeroutput"><span class="identifier">single_view</span></tt>
+            Instances of <code class="computeroutput"><span class="identifier">single_view</span></code>
 </dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">x</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">x</span></code></span></dt>
 <dd>
-            An instance of <tt class="computeroutput"><span class="identifier">T</span></tt>
+            An instance of <code class="computeroutput"><span class="identifier">T</span></code>
 </dd>
 </dl>
 </div>
 <a name="fusion.sequences.views.single_view.expression_semantics"></a><h5>
-<a name="id493560"></a>
+<a name="id975518"></a>
           <a href="single_view.html#fusion.sequences.views.single_view.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -113,30 +113,30 @@
 </tr></thead>
 <tbody>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span></code></td>
 <td>Creates
-                a <tt class="computeroutput"><span class="identifier">single_view</span></tt> from
-                <tt class="computeroutput"><span class="identifier">x</span></tt>.</td>
+                a <code class="computeroutput"><span class="identifier">single_view</span></code> from
+                <code class="computeroutput"><span class="identifier">x</span></code>.</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">S</span><span class="special">(</span><span class="identifier">s</span><span class="special">)</span></code></td>
 <td>Copy
-                constructs a <tt class="computeroutput"><span class="identifier">single_view</span></tt>
-                from another <tt class="computeroutput"><span class="identifier">single_view</span></tt>,
-                <tt class="computeroutput"><span class="identifier">s</span></tt>.</td>
+                constructs a <code class="computeroutput"><span class="identifier">single_view</span></code>
+                from another <code class="computeroutput"><span class="identifier">single_view</span></code>,
+                <code class="computeroutput"><span class="identifier">s</span></code>.</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">s</span> <span class="special">=</span>
-                <span class="identifier">s2</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">s</span> <span class="special">=</span>
+                <span class="identifier">s2</span></code></td>
 <td>Assigns
-                to a <tt class="computeroutput"><span class="identifier">single_view</span></tt>,
-                <tt class="computeroutput"><span class="identifier">s</span></tt>, from another
-                <tt class="computeroutput"><span class="identifier">single_view</span></tt>, <tt class="computeroutput"><span class="identifier">s2</span></tt>.</td>
+                to a <code class="computeroutput"><span class="identifier">single_view</span></code>,
+                <code class="computeroutput"><span class="identifier">s</span></code>, from another
+                <code class="computeroutput"><span class="identifier">single_view</span></code>, <code class="computeroutput"><span class="identifier">s2</span></code>.</td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequences.views.single_view.example"></a><h5>
-<a name="id493816"></a>
+<a name="id975744"></a>
           <a href="single_view.html#fusion.sequences.views.single_view.example">Example</a>
         </h5>
 <pre class="programlisting">

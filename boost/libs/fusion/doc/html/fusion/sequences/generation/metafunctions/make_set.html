@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>make_set</title>
 <link rel="stylesheet" href="../../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="MetaFunctions">
 <link rel="prev" href="make_vector.html" title="make_vector">
@@ -26,14 +26,14 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.sequences.generation.metafunctions.make_set"></a><a href="make_set.html" title="make_set">make_set</a></h5></div></div></div>
 <a name="fusion.sequences.generation.metafunctions.make_set.description"></a><h6>
-<a name="id535345"></a>
+<a name="id1047413"></a>
             <a href="make_set.html#fusion.sequences.generation.metafunctions.make_set.description">Description</a>
           </h6>
 <p>
-            Returns the result type of <a href="../functions/make_set.html" title="make_set"><tt class="computeroutput"><span class="identifier">make_set</span></tt></a>.
+            Returns the result type of <a href="../functions/make_set.html" title="make_set"><code class="computeroutput"><span class="identifier">make_set</span></code></a>.
           </p>
 <a name="fusion.sequences.generation.metafunctions.make_set.synopsis"></a><h6>
-<a name="id535394"></a>
+<a name="id1047456"></a>
             <a href="make_set.html#fusion.sequences.generation.metafunctions.make_set.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -41,19 +41,19 @@
 <span class="keyword">struct</span> <span class="identifier">make_set</span><span class="special">;</span>
 </pre>
 <p>
-            The variadic function accepts <tt class="computeroutput"><span class="number">0</span></tt>
-            to <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
-            <sup>[<a name="id535523" href="#ftn.id535523">12</a>]</sup>
-            elements, where <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
-            is a user definable predefined maximum that defaults to <tt class="computeroutput"><span class="number">10</span></tt>. You may define the preprocessor constant
-            <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
+            The variadic function accepts <code class="computeroutput"><span class="number">0</span></code>
+            to <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
+            <sup>[<a name="id1047570" href="#ftn.id1047570">12</a>]</sup>
+            elements, where <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
+            is a user definable predefined maximum that defaults to <code class="computeroutput"><span class="number">10</span></code>. You may define the preprocessor constant
+            <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
             before including any Fusion header to change the default. Example:
           </p>
 <pre class="programlisting">
 <span class="preprocessor">#define</span> <span class="identifier">FUSION_MAX_VECTOR_SIZE</span> <span class="number">20</span>
 </pre>
 <a name="fusion.sequences.generation.metafunctions.make_set.parameters"></a><h6>
-<a name="id535620"></a>
+<a name="id1047658"></a>
             <a href="make_set.html#fusion.sequences.generation.metafunctions.make_set.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -68,17 +68,17 @@
 <th>Description</th>
 </tr></thead>
 <tbody><tr>
-<td><tt class="computeroutput"><span class="identifier">T0</span><span class="special">,</span>
+<td><code class="computeroutput"><span class="identifier">T0</span><span class="special">,</span>
                   <span class="identifier">T1</span><span class="special">,...</span>
-                  <span class="identifier">TN</span></tt></td>
+                  <span class="identifier">TN</span></code></td>
 <td>Any
                   type</td>
-<td>The arguments to <tt class="computeroutput"><span class="identifier">make_set</span></tt>
+<td>The arguments to <code class="computeroutput"><span class="identifier">make_set</span></code>
 </td>
 </tr></tbody>
 </table></div>
 <a name="fusion.sequences.generation.metafunctions.make_set.expression_semantics"></a><h6>
-<a name="id535732"></a>
+<a name="id1047757"></a>
             <a href="make_set.html#fusion.sequences.generation.metafunctions.make_set.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -86,26 +86,26 @@
 <span class="identifier">result_of</span><span class="special">::</span><span class="identifier">make_set</span><span class="special">&lt;</span><span class="identifier">T0</span><span class="special">,</span> <span class="identifier">T1</span><span class="special">,...</span> <span class="identifier">TN</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: A <a href="../../containers/set.html" title="set"><tt class="computeroutput"><span class="identifier">set</span></tt></a> with elements of types converted
+            <span class="bold"><strong>Return type</strong></span>: A <a href="../../containers/set.html" title="set"><code class="computeroutput"><span class="identifier">set</span></code></a> with elements of types converted
             following the rules for <a href="../../../notes.html#fusion.notes.element_conversion"><span class="emphasis"><em>element
             conversion</em></span></a>.
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Create a <a href="../../containers/set.html" title="set"><tt class="computeroutput"><span class="identifier">set</span></tt></a> from <tt class="computeroutput"><span class="identifier">T0</span><span class="special">,</span> <span class="identifier">T1</span><span class="special">,...</span> <span class="identifier">TN</span></tt>.
+            <span class="bold"><strong>Semantics</strong></span>: Create a <a href="../../containers/set.html" title="set"><code class="computeroutput"><span class="identifier">set</span></code></a> from <code class="computeroutput"><span class="identifier">T0</span><span class="special">,</span> <span class="identifier">T1</span><span class="special">,...</span> <span class="identifier">TN</span></code>.
           </p>
 <p>
-            <span class="bold"><b>Precondition</b></span>: There may be no duplicate
+            <span class="bold"><strong>Precondition</strong></span>: There may be no duplicate
             key types.
           </p>
 <a name="fusion.sequences.generation.metafunctions.make_set.header"></a><h6>
-<a name="id535930"></a>
+<a name="id1047931"></a>
             <a href="make_set.html#fusion.sequences.generation.metafunctions.make_set.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">generation</span><span class="special">/</span><span class="identifier">make_set</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.generation.metafunctions.make_set.example"></a><h6>
-<a name="id536036"></a>
+<a name="id1048024"></a>
             <a href="make_set.html#fusion.sequences.generation.metafunctions.make_set.example">Example</a>
           </h6>
 <pre class="programlisting">
@@ -113,9 +113,9 @@
 </pre>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id535523" href="#id535523">12</a>] </sup>
-                <tt class="computeroutput"><span class="identifier">set</span></tt> is implemented
-                in terms of the vector. That is why we reuse <tt class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></tt>
+<div class="footnote"><p><sup>[<a name="ftn.id1047570" href="#id1047570">12</a>] </sup>
+                <code class="computeroutput"><span class="identifier">set</span></code> is implemented
+                in terms of the vector. That is why we reuse <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
               </p></div>
 </div>
 </div>

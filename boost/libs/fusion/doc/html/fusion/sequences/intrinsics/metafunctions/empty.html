@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>empty</title>
 <link rel="stylesheet" href="../../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="end.html" title="end">
@@ -26,14 +26,14 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.sequences.intrinsics.metafunctions.empty"></a><a href="empty.html" title="empty">empty</a></h5></div></div></div>
 <a name="fusion.sequences.intrinsics.metafunctions.empty.description"></a><h6>
-<a name="id516093"></a>
+<a name="id1012893"></a>
             <a href="empty.html#fusion.sequences.intrinsics.metafunctions.empty.description">Description</a>
           </h6>
 <p>
-            Returns the result type of <a href="../functions/empty.html" title="empty"><tt class="computeroutput"><span class="identifier">empty</span></tt></a>.
+            Returns the result type of <a href="../functions/empty.html" title="empty"><code class="computeroutput"><span class="identifier">empty</span></code></a>.
           </p>
 <a name="fusion.sequences.intrinsics.metafunctions.empty.synopsis"></a><h6>
-<a name="id516140"></a>
+<a name="id1012935"></a>
             <a href="empty.html#fusion.sequences.intrinsics.metafunctions.empty.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -44,7 +44,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id516238"></a><p class="title"><b>Table 1.21. Parameters</b></p>
+<a name="id1013021"></a><p class="title"><b>Table 1.21. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -57,7 +57,7 @@
 <th>Description</th>
 </tr></thead>
 <tbody><tr>
-<td><tt class="computeroutput"><span class="identifier">Seq</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">Seq</span></code></td>
 <td>A
                 model of <a href="../../concepts/forward_sequence.html" title="Forward
         Sequence">Forward
@@ -68,7 +68,7 @@
 </table>
 </div>
 <a name="fusion.sequences.intrinsics.metafunctions.empty.expression_semantics"></a><h6>
-<a name="id516313"></a>
+<a name="id1013088"></a>
             <a href="empty.html#fusion.sequences.intrinsics.metafunctions.empty.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -76,30 +76,31 @@
 <span class="identifier">result_of</span><span class="special">::</span><span class="identifier">empty</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: An MPL Integral Constant
+            <span class="bold"><strong>Return type</strong></span>: An <a href="http://www.boost.org/libs/mpl/doc/refmanual/integral-constant.html" target="_top">MPL
+            Integral Constant</a>
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Returns <tt class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></tt>
-            if <tt class="computeroutput"><span class="identifier">Seq</span></tt> has zero elements,
-            <tt class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">false_</span></tt> otherwise.
+            <span class="bold"><strong>Semantics</strong></span>: Returns <code class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">true_</span></code>
+            if <code class="computeroutput"><span class="identifier">Seq</span></code> has zero elements,
+            <code class="computeroutput"><span class="identifier">mpl</span><span class="special">::</span><span class="identifier">false_</span></code> otherwise.
           </p>
 <a name="fusion.sequences.intrinsics.metafunctions.empty.header"></a><h6>
-<a name="id516456"></a>
+<a name="id1013220"></a>
             <a href="empty.html#fusion.sequences.intrinsics.metafunctions.empty.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">intrinsic</span><span class="special">/</span><span class="identifier">empty</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.intrinsics.metafunctions.empty.example"></a><h6>
-<a name="id516561"></a>
+<a name="id1013313"></a>
             <a href="empty.html#fusion.sequences.intrinsics.metafunctions.empty.example">Example</a>
           </h6>
 <pre class="programlisting">
-<span class="keyword">typedef</span> <a href="../../containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;&gt;</span> <span class="identifier">empty_vec</span><span class="special">;</span>
-<span class="keyword">typedef</span> <a href="../../containers/vector.html" title="vector"><tt class="computeroutput"><span class="identifier">vector</span></tt></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">float</span><span class="special">,</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="../../containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;&gt;</span> <span class="identifier">empty_vec</span><span class="special">;</span>
+<span class="keyword">typedef</span> <a href="../../containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">float</span><span class="special">,</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">vec</span><span class="special">;</span>
 
-<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span><a href="empty.html" title="empty"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">empty</span></tt></a><span class="special">&lt;</span><span class="identifier">empty_vec</span><span class="special">&gt;));</span>
-<span class="identifier">BOOST_MPL_ASSERT_NOT</span><span class="special">((</span><a href="empty.html" title="empty"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">empty</span></tt></a><span class="special">&lt;</span><span class="identifier">vec</span><span class="special">&gt;));</span>
+<span class="identifier">BOOST_MPL_ASSERT</span><span class="special">((</span><a href="empty.html" title="empty"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">empty</span></code></a><span class="special">&lt;</span><span class="identifier">empty_vec</span><span class="special">&gt;));</span>
+<span class="identifier">BOOST_MPL_ASSERT_NOT</span><span class="special">((</span><a href="empty.html" title="empty"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">empty</span></code></a><span class="special">&lt;</span><span class="identifier">vec</span><span class="special">&gt;));</span>
 </pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

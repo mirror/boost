@@ -4,7 +4,7 @@
 <title>Associative
         Sequence</title>
 <link rel="stylesheet" href="../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../concepts.html" title="Concepts">
 <link rel="prev" href="random_access_sequence.html" title="Random
@@ -30,7 +30,7 @@
         Sequence">Associative
         Sequence</a></h4></div></div></div>
 <a name="fusion.sequences.concepts.associative_sequence.description"></a><h5>
-<a name="id482988"></a>
+<a name="id966177"></a>
           <a href="associative_sequence.html#fusion.sequences.concepts.associative_sequence.description">Description</a>
         </h5>
 <p>
@@ -48,30 +48,30 @@
 <div class="variablelist">
 <p class="title"><b>Notation</b></p>
 <dl>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">s</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">s</span></code></span></dt>
 <dd>
             An Associative Sequence
           </dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">S</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">S</span></code></span></dt>
 <dd>
             An Associative Sequence type
           </dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">K</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">K</span></code></span></dt>
 <dd>
             An arbitrary <span class="emphasis"><em>key</em></span> type
           </dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">o</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">o</span></code></span></dt>
 <dd>
             An arbitrary object
           </dd>
-<dt><span class="term"><tt class="computeroutput"><span class="identifier">e</span></tt></span></dt>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">e</span></code></span></dt>
 <dd>
             A Sequence element
           </dd>
 </dl>
 </div>
 <a name="fusion.sequences.concepts.associative_sequence.valid_expressions"></a><h5>
-<a name="id483152"></a>
+<a name="id966326"></a>
           <a href="associative_sequence.html#fusion.sequences.concepts.associative_sequence.valid_expressions">Valid
           Expressions</a>
         </h5>
@@ -94,34 +94,35 @@
 </tr></thead>
 <tbody>
 <tr>
-<td><tt class="computeroutput"><a href="../intrinsics/functions/has_key.html" title="has_key"><tt class="computeroutput"><span class="identifier">has_key</span></tt></a><span class="special">&lt;</span><span class="identifier">K</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span></tt></td>
-<td>MPL
-                Boolean Constant. Convertible to bool.</td>
+<td><code class="computeroutput"><a href="../intrinsics/functions/has_key.html" title="has_key"><code class="computeroutput"><span class="identifier">has_key</span></code></a><span class="special">&lt;</span><span class="identifier">K</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span></code></td>
+<td>
+<a href="http://www.boost.org/libs/mpl/doc/refmanual/integral-constant.html" target="_top">MPL
+                Boolean Constant</a>. Convertible to bool.</td>
 <td> </td>
 <td>Constant</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><a href="../intrinsics/functions/at_key.html" title="at_key"><tt class="computeroutput"><span class="identifier">at_key</span></tt></a><span class="special">&lt;</span><span class="identifier">K</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span></tt></td>
+<td><code class="computeroutput"><a href="../intrinsics/functions/at_key.html" title="at_key"><code class="computeroutput"><span class="identifier">at_key</span></code></a><span class="special">&lt;</span><span class="identifier">K</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span></code></td>
 <td>Any
                 type</td>
 <td> </td>
 <td>Constant</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><a href="../intrinsics/functions/at_key.html" title="at_key"><tt class="computeroutput"><span class="identifier">at_key</span></tt></a><span class="special">&lt;</span><span class="identifier">K</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">o</span></tt></td>
+<td><code class="computeroutput"><a href="../intrinsics/functions/at_key.html" title="at_key"><code class="computeroutput"><span class="identifier">at_key</span></code></a><span class="special">&lt;</span><span class="identifier">K</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">o</span></code></td>
 <td>Any
                 type</td>
 <td>
-<tt class="computeroutput"><span class="identifier">s</span></tt>
-                is mutable and <tt class="computeroutput"><span class="identifier">e</span> <span class="special">=</span> <span class="identifier">o</span></tt>,
-                where <tt class="computeroutput"><span class="identifier">e</span></tt> is the first
+<code class="computeroutput"><span class="identifier">s</span></code>
+                is mutable and <code class="computeroutput"><span class="identifier">e</span> <span class="special">=</span> <span class="identifier">o</span></code>,
+                where <code class="computeroutput"><span class="identifier">e</span></code> is the first
                 element in the sequence, is a valid expression.</td>
 <td>Constant</td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequences.concepts.associative_sequence.result_type_expressions"></a><h5>
-<a name="id483448"></a>
+<a name="id966594"></a>
           <a href="associative_sequence.html#fusion.sequences.concepts.associative_sequence.result_type_expressions">Result
           Type Expressions</a>
         </h5>
@@ -136,32 +137,32 @@
 </tr></thead>
 <tbody>
 <tr>
-<td><tt class="computeroutput"><a href="../intrinsics/metafunctions/has_key.html" title="has_key"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">has_key</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">K</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
+<td><code class="computeroutput"><a href="../intrinsics/metafunctions/has_key.html" title="has_key"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">has_key</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">K</span><span class="special">&gt;::</span><span class="identifier">type</span></code></td>
 <td>Amortized constant
                 time</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><a href="../intrinsics/metafunctions/at_key.html" title="at_key"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at_key</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">K</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
+<td><code class="computeroutput"><a href="../intrinsics/metafunctions/at_key.html" title="at_key"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at_key</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">K</span><span class="special">&gt;::</span><span class="identifier">type</span></code></td>
 <td>Amortized constant
                 time</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><a href="../intrinsics/metafunctions/value_at_key.html" title="value_at_key"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_at_key</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">K</span><span class="special">&gt;::</span><span class="identifier">type</span></tt></td>
+<td><code class="computeroutput"><a href="../intrinsics/metafunctions/value_at_key.html" title="value_at_key"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_at_key</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">K</span><span class="special">&gt;::</span><span class="identifier">type</span></code></td>
 <td>Amortized constant
                 time</td>
 </tr>
 </tbody>
 </table></div>
 <p class="blurb">
-          <span class="inlinemediaobject"><img src="../../../images/note.png" alt="note"></span> <tt class="computeroutput"><a href="../intrinsics/metafunctions/at_key.html" title="at_key"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at_key</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">K</span><span class="special">&gt;</span></tt> returns the actual type returned by
-          <tt class="computeroutput"><a href="../intrinsics/functions/at_key.html" title="at_key"><tt class="computeroutput"><span class="identifier">at_key</span></tt></a><span class="special">&lt;</span><span class="identifier">K</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span></tt>. In
+          <span class="inlinemediaobject"><img src="../../../images/note.png" alt="note"></span> <code class="computeroutput"><a href="../intrinsics/metafunctions/at_key.html" title="at_key"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at_key</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">K</span><span class="special">&gt;</span></code> returns the actual type returned by
+          <code class="computeroutput"><a href="../intrinsics/functions/at_key.html" title="at_key"><code class="computeroutput"><span class="identifier">at_key</span></code></a><span class="special">&lt;</span><span class="identifier">K</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span></code>. In
           most cases, this is a reference. Hence, there is no way to know the exact
-          element type using <tt class="computeroutput"><a href="../intrinsics/metafunctions/at_key.html" title="at_key"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at_key</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">K</span><span class="special">&gt;</span></tt>.The element at <tt class="computeroutput"><span class="identifier">K</span></tt>
+          element type using <code class="computeroutput"><a href="../intrinsics/metafunctions/at_key.html" title="at_key"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">at_key</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">K</span><span class="special">&gt;</span></code>.The element at <code class="computeroutput"><span class="identifier">K</span></code>
           may actually be a reference to begin with. For this purpose, you can use
-          <tt class="computeroutput"><a href="../intrinsics/metafunctions/value_at_key.html" title="value_at_key"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_at_key</span></tt></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span></tt>.
+          <code class="computeroutput"><a href="../intrinsics/metafunctions/value_at_key.html" title="value_at_key"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">value_at_key</span></code></a><span class="special">&lt;</span><span class="identifier">S</span><span class="special">,</span> <span class="identifier">N</span><span class="special">&gt;</span></code>.
         </p>
 <a name="fusion.sequences.concepts.associative_sequence.expression_semantics"></a><h5>
-<a name="id483972"></a>
+<a name="id967057"></a>
           <a href="associative_sequence.html#fusion.sequences.concepts.associative_sequence.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -176,30 +177,30 @@
 </tr></thead>
 <tbody>
 <tr>
-<td><tt class="computeroutput"><a href="../intrinsics/functions/has_key.html" title="has_key"><tt class="computeroutput"><span class="identifier">has_key</span></tt></a><span class="special">&lt;</span><span class="identifier">K</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span></tt></td>
+<td><code class="computeroutput"><a href="../intrinsics/functions/has_key.html" title="has_key"><code class="computeroutput"><span class="identifier">has_key</span></code></a><span class="special">&lt;</span><span class="identifier">K</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span></code></td>
 <td>A
-                boolean Integral Constant <tt class="computeroutput"><span class="identifier">c</span></tt>
-                such that <tt class="computeroutput"><span class="identifier">c</span><span class="special">::</span><span class="identifier">value</span> <span class="special">==</span>
-                <span class="keyword">true</span></tt> if and only if there
-                is one or more elements with the key <tt class="computeroutput"><span class="identifier">k</span></tt>
-                in <tt class="computeroutput"><span class="identifier">s</span></tt>; see <a href="../intrinsics/functions/has_key.html" title="has_key"><tt class="computeroutput"><span class="identifier">has_key</span></tt></a>.</td>
+                boolean Integral Constant <code class="computeroutput"><span class="identifier">c</span></code>
+                such that <code class="computeroutput"><span class="identifier">c</span><span class="special">::</span><span class="identifier">value</span> <span class="special">==</span>
+                <span class="keyword">true</span></code> if and only if there
+                is one or more elements with the key <code class="computeroutput"><span class="identifier">k</span></code>
+                in <code class="computeroutput"><span class="identifier">s</span></code>; see <a href="../intrinsics/functions/has_key.html" title="has_key"><code class="computeroutput"><span class="identifier">has_key</span></code></a>.</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><a href="../intrinsics/functions/at_key.html" title="at_key"><tt class="computeroutput"><span class="identifier">at_key</span></tt></a><span class="special">&lt;</span><span class="identifier">K</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span></tt></td>
+<td><code class="computeroutput"><a href="../intrinsics/functions/at_key.html" title="at_key"><code class="computeroutput"><span class="identifier">at_key</span></code></a><span class="special">&lt;</span><span class="identifier">K</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">)</span></code></td>
 <td>The
-                element associated with the key <tt class="computeroutput"><span class="identifier">K</span></tt>
-                in the sequence <tt class="computeroutput"><span class="identifier">s</span></tt>;
-                see <a href="../intrinsics/functions/at.html" title="at"><tt class="computeroutput"><span class="identifier">at</span></tt></a>.</td>
+                element associated with the key <code class="computeroutput"><span class="identifier">K</span></code>
+                in the sequence <code class="computeroutput"><span class="identifier">s</span></code>;
+                see <a href="../intrinsics/functions/at.html" title="at"><code class="computeroutput"><span class="identifier">at</span></code></a>.</td>
 </tr>
 </tbody>
 </table></div>
 <a name="fusion.sequences.concepts.associative_sequence.models"></a><h5>
-<a name="id484251"></a>
+<a name="id967302"></a>
           <a href="associative_sequence.html#fusion.sequences.concepts.associative_sequence.models">Models</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">
-<li><a href="../containers/set.html" title="set"><tt class="computeroutput"><span class="identifier">set</span></tt></a></li>
-<li><a href="../containers/map.html" title="map"><tt class="computeroutput"><span class="identifier">map</span></tt></a></li>
+<li><a href="../containers/set.html" title="set"><code class="computeroutput"><span class="identifier">set</span></code></a></li>
+<li><a href="../containers/map.html" title="map"><code class="computeroutput"><span class="identifier">map</span></code></a></li>
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

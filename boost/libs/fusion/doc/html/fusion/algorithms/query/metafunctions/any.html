@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>any</title>
 <link rel="stylesheet" href="../../../../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.66.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../metafunctions.html" title="Metafunctions">
 <link rel="prev" href="../metafunctions.html" title="Metafunctions">
@@ -26,14 +26,14 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.algorithms.query.metafunctions.any"></a><a href="any.html" title="any">any</a></h5></div></div></div>
 <a name="fusion.algorithms.query.metafunctions.any.description"></a><h6>
-<a name="id567375"></a>
+<a name="id1110339"></a>
             <a href="any.html#fusion.algorithms.query.metafunctions.any.description">Description</a>
           </h6>
 <p>
-            A metafunction returning the result type of <a href="../functions/any.html" title="any"><tt class="computeroutput"><span class="identifier">any</span></tt></a>.
+            A metafunction returning the result type of <a href="../functions/any.html" title="any"><code class="computeroutput"><span class="identifier">any</span></code></a>.
           </p>
 <a name="fusion.algorithms.query.metafunctions.any.synopsis"></a><h6>
-<a name="id567422"></a>
+<a name="id1110381"></a>
             <a href="any.html#fusion.algorithms.query.metafunctions.any.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -47,7 +47,7 @@
 <span class="special">};</span>
 </pre>
 <div class="table">
-<a name="id567542"></a><p class="title"><b>Table 1.45. Parameters</b></p>
+<a name="id1110487"></a><p class="title"><b>Table 1.45. Parameters</b></p>
 <table class="table" summary="Parameters">
 <colgroup>
 <col>
@@ -61,7 +61,7 @@
 </tr></thead>
 <tbody>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">Sequence</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">Sequence</span></code></td>
 <td>A
                 model of <a href="../../../sequences/concepts/forward_sequence.html" title="Forward
         Sequence">Forward
@@ -70,9 +70,9 @@
 <td>Operation's argument</td>
 </tr>
 <tr>
-<td><tt class="computeroutput"><span class="identifier">F</span></tt></td>
+<td><code class="computeroutput"><span class="identifier">F</span></code></td>
 <td>A
-                model of unary <a href="../../concepts/poly.html" title=" Polymorphic Function
+                model of unary <a href="../../../functional/concepts/poly.html" title=" Polymorphic Function
         Object">Polymorphic
                 Function Object</a>
 </td>
@@ -82,34 +82,34 @@
 </table>
 </div>
 <a name="fusion.algorithms.query.metafunctions.any.expression_semantics"></a><h6>
-<a name="id567644"></a>
+<a name="id1110577"></a>
             <a href="any.html#fusion.algorithms.query.metafunctions.any.expression_semantics">Expression
             Semantics</a>
           </h6>
 <pre class="programlisting">
-<a href="any.html" title="any"><tt class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">any</span></tt></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">F</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<a href="any.html" title="any"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">any</span></code></a><span class="special">&lt;</span><span class="identifier">Sequence</span><span class="special">,</span> <span class="identifier">F</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <p>
-            <span class="bold"><b>Return type</b></span>: <tt class="computeroutput"><span class="keyword">bool</span></tt>.
+            <span class="bold"><strong>Return type</strong></span>: <code class="computeroutput"><span class="keyword">bool</span></code>.
           </p>
 <p>
-            <span class="bold"><b>Semantics</b></span>: Returns the return type of
-            <a href="../functions/any.html" title="any"><tt class="computeroutput"><span class="identifier">any</span></tt></a>
-            given a sequence of type <tt class="computeroutput"><span class="identifier">Sequence</span></tt>
-            and a unary <a href="../../concepts/poly.html" title=" Polymorphic Function
+            <span class="bold"><strong>Semantics</strong></span>: Returns the return type of
+            <a href="../functions/any.html" title="any"><code class="computeroutput"><span class="identifier">any</span></code></a>
+            given a sequence of type <code class="computeroutput"><span class="identifier">Sequence</span></code>
+            and a unary <a href="../../../functional/concepts/poly.html" title=" Polymorphic Function
         Object">Polymorphic
-            Function Object</a> of type <tt class="computeroutput"><span class="identifier">F</span></tt>.
-            The return type is always <tt class="computeroutput"><span class="keyword">bool</span></tt>.
+            Function Object</a> of type <code class="computeroutput"><span class="identifier">F</span></code>.
+            The return type is always <code class="computeroutput"><span class="keyword">bool</span></code>.
           </p>
 <a name="fusion.algorithms.query.metafunctions.any.complexity"></a><h6>
-<a name="id567824"></a>
+<a name="id1110736"></a>
             <a href="any.html#fusion.algorithms.query.metafunctions.any.complexity">Complexity</a>
           </h6>
 <p>
             Constant.
           </p>
 <a name="fusion.algorithms.query.metafunctions.any.header"></a><h6>
-<a name="id567854"></a>
+<a name="id1110764"></a>
             <a href="any.html#fusion.algorithms.query.metafunctions.any.header">Header</a>
           </h6>
 <pre class="programlisting">

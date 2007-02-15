@@ -1,0 +1,110 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title> Polymorphic Function
+        Object</title>
+<link rel="stylesheet" href="../../../boostbook.css" type="text/css">
+<meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
+<link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
+<link rel="up" href="../concepts.html" title="Concepts">
+<link rel="prev" href="callable.html" title=" Callable Object">
+<link rel="next" href="def_callable.html" title=" Deferred
+        Callable Object">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table cellpadding="2" width="100%">
+<td valign="top"><img alt="Boost C++ Libraries" width="277" height="86" src="../../../../../../../boost.png"></td>
+<td align="center"><a href="../../../../../../../index.htm">Home</a></td>
+<td align="center"><a href="../../../../../../libraries.htm">Libraries</a></td>
+<td align="center"><a href="../../../../../../../people/people.htm">People</a></td>
+<td align="center"><a href="../../../../../../../more/faq.htm">FAQ</a></td>
+<td align="center"><a href="../../../../../../../more/index.htm">More</a></td>
+</table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="callable.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="def_callable.html"><img src="../../../images/next.png" alt="Next"></a>
+</div>
+<div class="section" lang="en">
+<div class="titlepage"><div><div><h4 class="title">
+<a name="fusion.functional.concepts.poly"></a><a href="poly.html" title=" Polymorphic Function
+        Object"> Polymorphic Function
+        Object</a></h4></div></div></div>
+<a name="fusion.functional.concepts.poly.description"></a><h5>
+<a name="id1187028"></a>
+          <a href="poly.html#fusion.functional.concepts.poly.description">Description</a>
+        </h5>
+<p>
+          A type of function object with a nested metafunction <code class="computeroutput"><span class="identifier">result</span></code>.
+          <code class="computeroutput"><span class="identifier">result</span></code> returns the result
+          type of calling the function object, given the argument types.
+        </p>
+<a name="fusion.functional.concepts.poly.refinement_of"></a><h5>
+<a name="id1187074"></a>
+          <a href="poly.html#fusion.functional.concepts.poly.refinement_of">Refinement
+          of</a>
+        </h5>
+<div class="itemizedlist"><ul type="disc"><li><a href="callable.html" title=" Callable Object">Callable Object</a></li></ul></div>
+<div class="variablelist">
+<p class="title"><b>Notation</b></p>
+<dl>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">F</span></code></span></dt>
+<dd>
+            A Polymorphic Function Object type
+          </dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">f</span></code></span></dt>
+<dd>
+            A Polymorphic Function Object
+          </dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">T1</span>
+          <span class="special">...</span><span class="identifier">TN</span></code></span></dt>
+<dd>
+            Arbitrary types
+          </dd>
+<dt><span class="term"><code class="computeroutput"><span class="identifier">t1</span>
+          <span class="special">...</span><span class="identifier">tN</span></code></span></dt>
+<dd>
+            Objects with types <code class="computeroutput"><span class="identifier">T1</span> <span class="special">...</span><span class="identifier">TN</span></code>
+</dd>
+</dl>
+</div>
+<a name="fusion.functional.concepts.poly.expression_requirements"></a><h5>
+<a name="id1187218"></a>
+          <a href="poly.html#fusion.functional.concepts.poly.expression_requirements">Expression
+          requirements</a>
+        </h5>
+<div class="informaltable"><table class="table">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>Expression</th>
+<th>Return Type</th>
+<th>Runtime
+                Complexity</th>
+</tr></thead>
+<tbody><tr>
+<td><code class="computeroutput"><span class="identifier">f</span><span class="special">(</span><span class="identifier">t1</span><span class="special">,</span> <span class="special">...</span><span class="identifier">tN</span><span class="special">)</span></code></td>
+<td><code class="computeroutput"><span class="identifier">F</span><span class="special">::</span><span class="identifier">result</span><span class="special">&lt;</span><span class="identifier">T1</span><span class="special">,</span> <span class="special">...</span><span class="identifier">TN</span><span class="special">&gt;::</span><span class="identifier">type</span></code></td>
+<td>Unspecified</td>
+</tr></tbody>
+</table></div>
+<a name="fusion.functional.concepts.poly.models"></a><h5>
+<a name="id1187362"></a>
+          <a href="poly.html#fusion.functional.concepts.poly.models">Models</a>
+        </h5>
+<div class="itemizedlist"><ul type="disc"><li>
+            all Fusion <a href="../adapters.html" title=" Adapters">functional adapters</a>
+</li></ul></div>
+</div>
+<table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
+<td align="left"></td>
+<td align="right"><small>Copyright © 2001-2005 Joel de Guzman, Dan Marsden</small></td>
+</tr></table>
+<hr>
+<div class="spirit-nav">
+<a accesskey="p" href="callable.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="def_callable.html"><img src="../../../images/next.png" alt="Next"></a>
+</div>
+</body>
+</html>
