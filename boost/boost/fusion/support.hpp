@@ -16,5 +16,7 @@
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/support/tag_of.hpp>
+#include <boost/fusion/support/deduce.hpp>
+#include <boost/fusion/support/deduce_sequence.hpp>
 
 #endif
