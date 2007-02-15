@@ -23,7 +23,7 @@
 
 using namespace boost;
 
-struct lambda_domain {};
+struct lambda_domain : proto::domain<> {};
 template<typename I> struct placeholder { typedef I arity; };
 
 // Some custom transforms for calculating the max arity of a lambda expression
@@ -108,22 +108,11 @@ private:
 // function objects
 template<typename T>
 struct lambda
-  : proto::extends<T, lambda<T>, lambda_domain>
 {
-    typedef proto::extends<T, lambda<T>, lambda_domain> base_type;
+    BOOST_PROTO_EXTENDS(T, lambda<T>, lambda_domain)
+    BOOST_PROTO_EXTENDS_ASSIGN(T, lambda<T>, lambda_domain)
+    BOOST_PROTO_EXTENDS_SUBSCRIPT(T, lambda<T>, lambda_domain)
     
-    lambda()
-      : base_type()
-    {}
-
-    lambda(T const &t)
-      : base_type(t)
-    {}
-
-    // This is needed because by default, the compiler-generated
-    // assignment operator hides the operator= defined in our base class.
-    using base_type::operator =;
-
     // Careful not to evaluate the return type of the nullary function
     // unless we have a nullary lambda!
     typedef typename mpl::eval_if<
@@ -164,32 +153,34 @@ namespace boost { namespace proto
 {
     // This causes expressions in the lambda domain to
     // be wrapped in a lambda<> expression wrapper.
-    template<typename Expr, typename Tag>
-    struct generate<lambda_domain, Expr, Tag>
+    template<typename Expr>
+    struct generate<lambda_domain, Expr>
     {
         typedef lambda<Expr> type;
 
         static type make(Expr const &expr)
         {
-            return lambda<Expr>(expr);
+            return type::make(expr);
         }
     };
 }}
 
 // Define some lambda placeholders
-lambda<proto::terminal<placeholder<mpl::int_<0> > >::type> const _1;
-lambda<proto::terminal<placeholder<mpl::int_<1> > >::type> const _2;
+lambda<proto::terminal<placeholder<mpl::int_<0> > >::type> const _1 = {{}};
+lambda<proto::terminal<placeholder<mpl::int_<1> > >::type> const _2 = {{}};
 
 template<typename T>
 lambda<typename proto::terminal<T>::type> const val(T const &t)
 {
-    return proto::terminal<T>::type::make(t);
+    lambda<typename proto::terminal<T>::type> that = {{t}};
+    return that;
 }
 
 template<typename T>
 lambda<typename proto::terminal<T &>::type> const var(T &t)
 {
-    return proto::terminal<T &>::type::make(t);
+    lambda<typename proto::terminal<T &>::type> that = {{t}};
+    return that;
 }
 
 void test_lambda()

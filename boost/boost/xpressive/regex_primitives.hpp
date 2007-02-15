@@ -38,8 +38,13 @@ namespace boost { namespace xpressive { namespace detail
     {
         mark_tag(int mark_nbr)
         {
-            basic_mark_tag that = {{mark_nbr}};
-            this->assign(that);
+            mark_placeholder mark = {mark_nbr};
+            proto::arg(*this) = mark;
+        }
+
+        operator basic_mark_tag const &() const
+        {
+            return this->cast();
         }
 
         using proto::extends<basic_mark_tag, mark_tag>::operator =;

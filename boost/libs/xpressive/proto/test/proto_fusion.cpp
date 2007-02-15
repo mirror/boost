@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// proto_fusion.hpp
+// proto_fusion.cpp
 //
 //  Copyright 2006 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
@@ -9,6 +9,7 @@
 #include <boost/xpressive/proto/fusion.hpp>
 #include <boost/fusion/algorithm/iteration/for_each.hpp>
 #include <boost/test/unit_test.hpp>
+#include <boost/utility/addressof.hpp>
 #include <sstream>
 
 boost::proto::terminal<char>::type a_ = {'a'};
@@ -21,11 +22,6 @@ boost::proto::terminal<char>::type g_ = {'g'};
 boost::proto::terminal<char>::type h_ = {'h'};
 boost::proto::terminal<char>::type i_ = {'i'};
 
-std::ostream &operator <<(std::ostream &sout, boost::proto::tag::terminal)
-{
-    return sout;
-}
-
 std::ostream &operator <<(std::ostream &sout, boost::proto::tag::right_shift)
 {
     return sout << ">>";
@@ -36,16 +32,22 @@ std::ostream &operator <<(std::ostream &sout, boost::proto::tag::bitwise_or)
     return sout << "|";
 }
 
-template<typename Tag, typename Args>
-std::ostream &operator <<(std::ostream &sout, boost::proto::expr<Tag, Args, 1> const &op)
+template<typename Args>
+std::ostream &operator <<(std::ostream &sout, boost::proto::expr<boost::proto::tag::terminal, Args, 1> const *op)
 {
-    return sout << Tag() << boost::proto::arg(op);
+    return sout << boost::proto::arg(*op);
 }
 
 template<typename Tag, typename Args>
-std::ostream &operator <<(std::ostream &sout, boost::proto::expr<Tag, Args, 2> const &op)
+std::ostream &operator <<(std::ostream &sout, boost::proto::expr<Tag, Args, 1> const *op)
 {
-    return sout << boost::proto::left(op) << Tag() << boost::proto::right(op);
+    return sout << Tag() << boost::addressof(boost::proto::arg(*op));
+}
+
+template<typename Tag, typename Args>
+std::ostream &operator <<(std::ostream &sout, boost::proto::expr<Tag, Args, 2> const *op)
+{
+    return sout << boost::addressof(boost::proto::left(*op)) << Tag() << boost::addressof(boost::proto::right(*op));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -60,7 +62,7 @@ struct to_string
     template<typename Op>
     void operator()(Op const &op) const
     {
-        this->sout_ << '(' << op << ')';
+        this->sout_ << '(' << boost::addressof(op) << ')';
     }
 private:
     std::ostream &sout_;

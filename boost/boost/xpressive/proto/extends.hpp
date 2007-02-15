@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file extends.hpp
-/// A base class for defining end-user expression types
+/// Macros and a base class for defining end-user expression types
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
@@ -10,6 +10,7 @@
 #define BOOST_PROTO_EXTENDS_HPP_EAN_11_1_2006
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
+#include <boost/preprocessor/tuple/elem.hpp>
 #include <boost/preprocessor/arithmetic/inc.hpp>
 #include <boost/preprocessor/arithmetic/dec.hpp>
 #include <boost/preprocessor/iteration/local.hpp>
@@ -29,17 +30,17 @@ namespace boost { namespace proto
 {
     /// INTERNAL ONLY
     ///
-    #define BOOST_PROTO_DEFINE_FUN_OP(Z, N, DATA)\
+    #define BOOST_PROTO_DEFINE_FUN_OP(Z, N, Data)\
         template<typename This BOOST_PP_ENUM_TRAILING_PARAMS_Z(Z, N, typename A)>\
         struct result<This(BOOST_PP_ENUM_PARAMS_Z(Z, N, A))>\
           : boost::proto::generate<\
-                Domain\
+                BOOST_PP_TUPLE_ELEM(3, 2, Data)\
               , typename boost::proto::result_of::BOOST_PP_CAT(funop, N)<\
-                    Derived\
+                    BOOST_PP_TUPLE_ELEM(3, 1, Data)\
                     BOOST_PP_ENUM_TRAILING_BINARY_PARAMS_Z(\
                         Z\
                       , N\
-                      , typename remove_reference<A\
+                      , typename boost::remove_reference<A\
                       , >::type BOOST_PP_INTERCEPT\
                     )\
                 >::type\
@@ -48,20 +49,20 @@ namespace boost { namespace proto
         \
         template<BOOST_PP_ENUM_PARAMS_Z(Z, N, typename A)>\
         typename boost::proto::generate<\
-            Domain\
+            BOOST_PP_TUPLE_ELEM(3, 2, Data)\
           , typename boost::proto::result_of::BOOST_PP_CAT(funop, N)<\
-                Derived\
+                BOOST_PP_TUPLE_ELEM(3, 1, Data)\
                 BOOST_PP_ENUM_TRAILING_PARAMS_Z(Z, N, const A)\
             >::type\
         >::type const\
         operator ()(BOOST_PP_ENUM_BINARY_PARAMS_Z(Z, N, A, const &a)) const\
         {\
             typedef boost::proto::result_of::BOOST_PP_CAT(funop, N)<\
-                Derived\
+                BOOST_PP_TUPLE_ELEM(3, 1, Data)\
                 BOOST_PP_ENUM_TRAILING_PARAMS_Z(Z, N, const A)\
             > funop;\
-            return boost::proto::generate<Domain, typename funop::type>::make(\
-                funop::call(this->derived() BOOST_PP_ENUM_TRAILING_PARAMS_Z(Z, N, a))\
+            return boost::proto::generate<BOOST_PP_TUPLE_ELEM(3, 2, Data), typename funop::type>::make(\
+                funop::call(*static_cast<BOOST_PP_TUPLE_ELEM(3, 1, Data) const *>(this) BOOST_PP_ENUM_TRAILING_PARAMS_Z(Z, N, a))\
             );\
         }\
         /**/
@@ -84,6 +85,7 @@ namespace boost { namespace proto
         typedef typename Expr::args_type args_type;\
         typedef typename Expr::arity arity;\
         typedef void is_boost_proto_expr_;\
+        typedef boost::proto::proto_expr_tag fusion_tag;\
         \
         BOOST_PROTO_IDENTITY_TRANSFORM();\
         BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_EXTENDS_ARG, Expr)\
@@ -102,11 +104,6 @@ namespace boost { namespace proto
         Expr const &cast() const\
         {\
             return this->expr;\
-        }\
-        \
-        Derived const &derived() const\
-        {\
-            return *static_cast<Derived const *>(this);\
         }\
         \
         template<typename Fun>\
@@ -130,7 +127,7 @@ namespace boost { namespace proto
         operator =(A &a) const\
         {\
             typedef boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref<Derived const>, typename boost::proto::result_of::as_arg<A>::type> > that_type;\
-            that_type that = {{this->derived()}, boost::proto::as_arg(a)};\
+            that_type that = {{*static_cast<Derived const *>(this)}, boost::proto::as_arg(a)};\
             return boost::proto::generate<Domain, that_type>::make(that);\
         }\
         \
@@ -139,7 +136,7 @@ namespace boost { namespace proto
         operator =(A const &a) const\
         {\
             typedef boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref<Derived const>, typename boost::proto::result_of::as_arg<A const>::type> > that_type;\
-            that_type that = {{this->derived()}, boost::proto::as_arg(a)};\
+            that_type that = {{*static_cast<Derived const *>(this)}, boost::proto::as_arg(a)};\
             return boost::proto::generate<Domain, that_type>::make(that);\
         }\
         /**/
@@ -150,7 +147,7 @@ namespace boost { namespace proto
         operator [](A &a) const\
         {\
             typedef boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref<Derived const>, typename boost::proto::result_of::as_arg<A>::type> > that_type;\
-            that_type that = {{this->derived()}, boost::proto::as_arg(a)};\
+            that_type that = {{*static_cast<Derived const *>(this)}, boost::proto::as_arg(a)};\
             return boost::proto::generate<Domain, that_type>::make(that);\
         }\
         \
@@ -159,12 +156,14 @@ namespace boost { namespace proto
         operator [](A const &a) const\
         {\
             typedef boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref<Derived const>, typename boost::proto::result_of::as_arg<A const>::type> > that_type;\
-            that_type that = {{this->derived()}, boost::proto::as_arg(a)};\
+            that_type that = {{*static_cast<Derived const *>(this)}, boost::proto::as_arg(a)};\
             return boost::proto::generate<Domain, that_type>::make(that);\
         }\
         /**/
 
-    #define BOOST_PROTO_EXTENDS_FUNCTION(Expr, Derived, Domain)\
+        /// INTERNAL ONLY
+        ///
+    #define BOOST_PROTO_EXTENDS_FUNCTION_(Expr, Derived, Domain)\
         template<typename Sig>\
         struct result;\
         \
@@ -177,98 +176,50 @@ namespace boost { namespace proto
         typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::function, boost::proto::args1<boost::proto::ref<Derived const> > > >::type const\
         operator ()() const\
         {\
-            typedef boost::proto::expr<boost::proto::tag::function, boost::proto::args1<boost::proto::ref<Derived const> > > type_type;\
-            that_type that = {{this->derived()}};\
+            typedef boost::proto::expr<boost::proto::tag::function, boost::proto::args1<boost::proto::ref<Derived const> > > that_type;\
+            that_type that = {{*static_cast<Derived const *>(this)}};\
             return boost::proto::generate<Domain, that_type>::make(that);\
         }\
-        \
-        BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), BOOST_PROTO_DEFINE_FUN_OP, ~)\
         /**/
+
+    #define BOOST_PROTO_EXTENDS_FUNCTION(Expr, Derived, Domain)\
+        BOOST_PROTO_EXTENDS_FUNCTION_(Expr, Derived, Domain)\
+        BOOST_PP_REPEAT_FROM_TO(1, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), BOOST_PROTO_DEFINE_FUN_OP, (Expr, Derived, Domain))\
+        /**/
+
+    /// \brief Empty type to be used as a dummy template parameter of
+    ///     POD expression wrappers. It allows argument-dependent look-up
+    ///     to find proto's operator overloads.
+    ///
+    struct is_proto_expr
+    {};
 
     /// \brief extends<> class template for adding behaviors to a proto expression template
     ///
     template<typename Expr, typename Derived, typename Domain>
     struct extends
-      : Expr
     {
-        typedef Domain domain;
-        typedef typename Expr::type type;
-        typedef Derived boost_proto_expr_type_;
-
         extends()
-          : Expr()
+          : expr()
         {}
 
-        extends(Expr const &expr)
-          : Expr(expr)
+        extends(Expr const &expr_)
+          : expr(expr_)
         {}
 
-        Derived const &derived() const
-        {
-            return *static_cast<Derived const *>(this);
-        }
+        BOOST_PROTO_EXTENDS(Expr, Derived, Domain)
+        BOOST_PROTO_EXTENDS_ASSIGN(Expr, Derived, Domain)
+        BOOST_PROTO_EXTENDS_SUBSCRIPT(Expr, Derived, Domain)
 
-        void assign(Expr const &that)
-        {
-            *static_cast<Expr *>(this) = that;
-        }
-
-        template<typename A>
-        typename generate<Domain, expr<tag::assign, args2<ref<Derived const>, typename result_of::as_arg<A>::type> > >::type const
-        operator =(A &a) const
-        {
-            typedef expr<tag::assign, args2<ref<Derived const>, typename result_of::as_arg<A>::type> > that_type;
-            that_type that = {{this->derived()}, proto::as_arg(a)};
-            return generate<Domain, that_type>::make(that);
-        }
-
-        template<typename A>
-        typename generate<Domain, expr<tag::assign, args2<ref<Derived const>, typename result_of::as_arg<A const>::type> > >::type const
-        operator =(A const &a) const
-        {
-            typedef expr<tag::assign, args2<ref<Derived const>, typename result_of::as_arg<A const>::type> > that_type;
-            that_type that = {{this->derived()}, proto::as_arg(a)};
-            return generate<Domain, that_type>::make(that);
-        }
-
-        template<typename A>
-        typename generate<Domain, expr<tag::subscript, args2<ref<Derived const>, typename result_of::as_arg<A>::type> > >::type const
-        operator [](A &a) const
-        {
-            typedef expr<tag::subscript, args2<ref<Derived const>, typename result_of::as_arg<A>::type> > that_type;
-            that_type that = {{this->derived()}, proto::as_arg(a)};
-            return generate<Domain, that_type>::make(that);
-        }
-
-        template<typename A>
-        typename generate<Domain, expr<tag::subscript, args2<ref<Derived const>, typename result_of::as_arg<A const>::type> > >::type const
-        operator [](A const &a) const
-        {
-            typedef expr<tag::subscript, args2<ref<Derived const>, typename result_of::as_arg<A const>::type> > that_type;
-            that_type that = {{this->derived()}, proto::as_arg(a)};
-            return generate<Domain, that_type>::make(that);
-        }
-
-        template<typename Sig>
-        struct result;
-
-        template<typename This>
-        struct result<This()>
-        {
-            typedef typename generate<Domain, expr<tag::function, args1<ref<Derived const> > > >::type type;
-        };
-
-        typename generate<Domain, expr<tag::function, args1<ref<Derived const> > > >::type const
-        operator ()() const
-        {
-            expr<tag::function, args1<ref<Derived const> > > that = {{this->derived()}};
-            return generate<Domain, expr<tag::function, args1<ref<Derived const> > > >::make(that);
-        }
+        // Instead of using BOOST_PROTO_EXTENDS_FUNCTION, which uses
+        // nested preprocessor loops, use file iteration here to generate
+        // the operator() overloads, which is more efficient.
+        BOOST_PROTO_EXTENDS_FUNCTION_(Expr, Derived, Domain)
 
         /// INTERNAL ONLY
         ///
     #define BOOST_PP_LOCAL_MACRO(N) \
-        BOOST_PROTO_DEFINE_FUN_OP(1, N, ~)\
+        BOOST_PROTO_DEFINE_FUN_OP(1, N, (Expr, Derived, Domain))\
         /**/
 
         /// INTERNAL ONLY
