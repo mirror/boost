@@ -28,7 +28,7 @@ namespace detail {
   scatter_impl(const communicator& comm, const T* in_values, T* out_values, 
                int n, int root, mpl::true_)
   {
-    MPI_Datatype type = get_mpi_datatype<T>();
+    MPI_Datatype type = get_mpi_datatype<T>(*in_values);
     BOOST_MPI_CHECK_RESULT(MPI_Scatter,
                            (const_cast<T*>(in_values), n, type,
                             out_values, n, type, root, comm));
@@ -41,7 +41,7 @@ namespace detail {
   scatter_impl(const communicator& comm, T* out_values, int n, int root, 
                mpl::true_)
   {
-    MPI_Datatype type = get_mpi_datatype<T>();
+    MPI_Datatype type = get_mpi_datatype<T>(*out_values);
     BOOST_MPI_CHECK_RESULT(MPI_Scatter,
                            (0, n, type,
                             out_values, n, type,
@@ -112,10 +112,10 @@ scatter(const communicator& comm, const std::vector<T>& in_values, T& out_value,
         int root)
 {
   if (comm.rank() == root)
-    ::boost::mpi::scatter(comm, &in_values[0], out_value, root);
+    ::boost::mpi::scatter<T>(comm, &in_values[0], out_value, root);
   else
-    ::boost::mpi::scatter(comm, static_cast<const T*>(0), out_value, 
-                                    root);
+    ::boost::mpi::scatter<T>(comm, static_cast<const T*>(0), out_value, 
+                             root);
 }
 
 template<typename T>

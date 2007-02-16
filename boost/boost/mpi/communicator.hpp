@@ -35,6 +35,11 @@
 #include <boost/mpi/status.hpp>
 #include <boost/mpi/request.hpp>
 
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable : 4800) // forcing to bool 'true' or 'false'
+#endif
+
 namespace boost { namespace mpi {
 
 /**
@@ -955,7 +960,7 @@ optional<int> status::count_impl(mpl::true_)
 
   int return_value;
   BOOST_MPI_CHECK_RESULT(MPI_Get_count,
-                         (&m_status, get_mpi_datatype<T>(), &return_value));
+                         (&m_status, get_mpi_datatype<T>(T()), &return_value));
   if (return_value == MPI_UNDEFINED)
     return optional<int>();
   else
@@ -979,7 +984,7 @@ void
 communicator::send_impl(int dest, int tag, const T& value, mpl::true_) const
 {
   BOOST_MPI_CHECK_RESULT(MPI_Send,
-                         (const_cast<T*>(&value), 1, get_mpi_datatype<T>(),
+                         (const_cast<T*>(&value), 1, get_mpi_datatype<T>(value),
                           dest, tag, MPI_Comm(*this)));
 }
 
@@ -1011,7 +1016,8 @@ communicator::array_send_impl(int dest, int tag, const T* values, int n,
                               mpl::true_) const
 {
   BOOST_MPI_CHECK_RESULT(MPI_Send,
-                         (const_cast<T*>(values), n, get_mpi_datatype<T>(),
+                         (const_cast<T*>(values), n, 
+						  get_mpi_datatype<T>(*values),
                           dest, tag, MPI_Comm(*this)));
 }
 
@@ -1043,7 +1049,8 @@ status communicator::recv_impl(int source, int tag, T& value, mpl::true_) const
   status stat;
 
   BOOST_MPI_CHECK_RESULT(MPI_Recv,
-                         (const_cast<T*>(&value), 1, get_mpi_datatype<T>(),
+                         (const_cast<T*>(&value), 1, 
+						  get_mpi_datatype<T>(value),
                           source, tag, MPI_Comm(*this), &stat.m_status));
   return stat;
 }
@@ -1077,7 +1084,8 @@ communicator::array_recv_impl(int source, int tag, T* values, int n,
 {
   status stat;
   BOOST_MPI_CHECK_RESULT(MPI_Recv,
-                         (const_cast<T*>(values), n, get_mpi_datatype<T>(),
+                         (const_cast<T*>(values), n, 
+						  get_mpi_datatype<T>(*values),
                           source, tag, MPI_Comm(*this), &stat.m_status));
   return stat;
 }
@@ -1123,7 +1131,8 @@ communicator::isend_impl(int dest, int tag, const T& value, mpl::true_) const
 {
   request req;
   BOOST_MPI_CHECK_RESULT(MPI_Isend,
-                         (const_cast<T*>(&value), 1, get_mpi_datatype<T>(),
+                         (const_cast<T*>(&value), 1, 
+						  get_mpi_datatype<T>(value),
                           dest, tag, MPI_Comm(*this), &req.m_requests[0]));
   return req;
 }
@@ -1157,7 +1166,8 @@ communicator::array_isend_impl(int dest, int tag, const T* values, int n,
 {
   request req;
   BOOST_MPI_CHECK_RESULT(MPI_Isend,
-                         (const_cast<T*>(values), n, get_mpi_datatype<T>(),
+                         (const_cast<T*>(values), n, 
+						  get_mpi_datatype<T>(*values),
                           dest, tag, MPI_Comm(*this), &req.m_requests[0]));
   return req;
 }
@@ -1396,7 +1406,8 @@ communicator::irecv_impl(int source, int tag, T& value, mpl::true_) const
 {
   request req;
   BOOST_MPI_CHECK_RESULT(MPI_Irecv,
-                         (const_cast<T*>(&value), 1, get_mpi_datatype<T>(),
+                         (const_cast<T*>(&value), 1, 
+						  get_mpi_datatype<T>(value),
                           source, tag, MPI_Comm(*this), &req.m_requests[0]));
   return req;
 }
@@ -1412,7 +1423,8 @@ communicator::irecv_impl(int source, int tag, T& value, mpl::false_) const
   req.m_handler = request::handle_serialized_irecv<T>;
 
   BOOST_MPI_CHECK_RESULT(MPI_Irecv,
-                         (&data->count, 1, get_mpi_datatype<std::size_t>(),
+                         (&data->count, 1, 
+						  get_mpi_datatype<std::size_t>(data->count),
                           source, tag, MPI_Comm(*this), &req.m_requests[0]));
   
   return req;
@@ -1432,7 +1444,8 @@ communicator::array_irecv_impl(int source, int tag, T* values, int n,
 {
   request req;
   BOOST_MPI_CHECK_RESULT(MPI_Irecv,
-                         (const_cast<T*>(values), n, get_mpi_datatype<T>(),
+                         (const_cast<T*>(values), n, 
+						  get_mpi_datatype<T>(*values),
                           source, tag, MPI_Comm(*this), &req.m_requests[0]));
   return req;
 }
@@ -1449,7 +1462,8 @@ communicator::array_irecv_impl(int source, int tag, T* values, int n,
   req.m_handler = request::handle_serialized_array_irecv<T>;
 
   BOOST_MPI_CHECK_RESULT(MPI_Irecv,
-                         (&data->count, 1, get_mpi_datatype<std::size_t>(),
+                         (&data->count, 1, 
+						  get_mpi_datatype<std::size_t>(data->count),
                           source, tag, MPI_Comm(*this), &req.m_requests[0]));
 
   return req;
@@ -1578,6 +1592,10 @@ communicator::irecv<content>(int source, int tag,
 // the code to send/receive skeletons and content.
 #ifdef BOOST_MPI_SKELETON_AND_CONTENT_HPP
 #  include <boost/mpi/detail/communicator_sc.hpp>
+#endif
+
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
 #endif
 
 #endif // BOOST_MPI_COMMUNICATOR_HPP

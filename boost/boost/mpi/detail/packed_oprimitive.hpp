@@ -74,7 +74,7 @@ public:
     template<class T>
     void save(const T & t)
     {
-        save_impl(&t, get_mpi_datatype<T>(), 1);
+        save_impl(&t, get_mpi_datatype<T>(t), 1);
     }
 
         void save(const std::string &s)

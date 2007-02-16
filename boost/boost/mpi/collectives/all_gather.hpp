@@ -27,7 +27,7 @@ namespace detail {
   all_gather_impl(const communicator& comm, const T* in_values, int n, 
                   T* out_values, mpl::true_)
   {
-    MPI_Datatype type = boost::mpi::get_mpi_datatype<T>();
+    MPI_Datatype type = boost::mpi::get_mpi_datatype<T>(*in_values);
     BOOST_MPI_CHECK_RESULT(MPI_Allgather,
                            (const_cast<T*>(in_values), n, type,
                             out_values, n, type, comm));

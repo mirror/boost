@@ -51,7 +51,7 @@ namespace detail {
   {
     BOOST_MPI_CHECK_RESULT(MPI_Scan,
                            (const_cast<T*>(in_values), out_values, n,
-                            boost::mpi::get_mpi_datatype<T>(),
+                            boost::mpi::get_mpi_datatype<T>(*in_values),
                             is_mpi_op<Op, T>::op(), comm));
   }
 
@@ -70,7 +70,7 @@ namespace detail {
     user_op<Op, T> mpi_op(op);
     BOOST_MPI_CHECK_RESULT(MPI_Scan,
                            (const_cast<T*>(in_values), out_values, n,
-                            boost::mpi::get_mpi_datatype<T>(),
+                            boost::mpi::get_mpi_datatype<T>(*in_values),
                             mpi_op.get_mpi_op(), comm));
   }
 

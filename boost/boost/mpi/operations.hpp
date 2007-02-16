@@ -18,7 +18,7 @@
 #ifndef BOOST_MPI_IS_MPI_OP_HPP
 #define BOOST_MPI_IS_MPI_OP_HPP
 
-#include <mpi.h>
+#include <boost/mpi/config.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/and.hpp>
@@ -305,7 +305,7 @@ namespace detail {
     MPI_Op mpi_op;
     static Op* op_ptr;
 
-    static void perform(void* vinvec, void* voutvec, int* plen, MPI_Datatype*)
+    static void BOOST_MPI_CALLING_CONVENTION perform(void* vinvec, void* voutvec, int* plen, MPI_Datatype*)
     {
       T* invec = static_cast<T*>(vinvec);
       T* outvec = static_cast<T*>(voutvec);

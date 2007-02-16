@@ -95,7 +95,7 @@ namespace detail {
   {
     BOOST_MPI_CHECK_RESULT(MPI_Bcast,
                            (values, n,
-                            boost::mpi::get_mpi_datatype<T>(),
+                            boost::mpi::get_mpi_datatype<T>(*values),
                             root, MPI_Comm(comm)));
   }
 

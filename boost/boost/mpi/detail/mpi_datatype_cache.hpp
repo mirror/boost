@@ -18,6 +18,15 @@
 #include <map>
 #include <typeinfo>
 
+// The std::type_info::before function in Visual C++ 8.0 (and probably earlier)
+// incorrectly returns an "int" instead of a "bool". Then the compiler has the
+// audacity to complain when that "int" is converted to a "bool". Silence
+// this warning.
+#ifdef BOOST_MSVC
+#  pragma warning(push)
+#  pragma warning(disable : 4800)
+#endif
+
 namespace boost { namespace mpi { namespace detail {
 
 /// @brief comparison function object for two std::type_info pointers
@@ -55,13 +64,13 @@ public:
   }
 
   template <class T>
-  MPI_Datatype datatype(const T& = T(), typename boost::enable_if<is_mpi_builtin_datatype<T> >::type* =0)
+  MPI_Datatype datatype(const T& x = T(), typename boost::enable_if<is_mpi_builtin_datatype<T> >::type* =0)
   {
-    return get_mpi_datatype<T>();
+    return get_mpi_datatype<T>(x);
   }
 
   template <class T>
-  MPI_Datatype datatype(const T& x=T(), typename boost::disable_if<is_mpi_builtin_datatype<T> >::type* =0 )
+  MPI_Datatype datatype(const T& x =T(), typename boost::disable_if<is_mpi_builtin_datatype<T> >::type* =0 )
   {
     BOOST_MPL_ASSERT((is_mpi_datatype<T>));
 
@@ -94,5 +103,8 @@ extern mpi_datatype_map mpi_datatype_cache;
 
 } } } // end namespace boost::mpi::detail
 
+#ifdef BOOST_MSVC
+#  pragma warning(pop)
+#endif
 
 #endif // BOOST_MPI_DETAIL_TYPE_MPI_DATATYPE_CACHE_HPP

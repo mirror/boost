@@ -30,7 +30,7 @@ namespace detail {
   all_to_all_impl(const communicator& comm, const T* in_values, int n, 
                   T* out_values, mpl::true_)
   {
-    MPI_Datatype type = get_mpi_datatype<T>();
+    MPI_Datatype type = get_mpi_datatype<T>(*in_values);
     BOOST_MPI_CHECK_RESULT(MPI_Alltoall,
                            (const_cast<T*>(in_values), n, type,
                             out_values, n, type, comm));
@@ -86,6 +86,10 @@ namespace detail {
       sum += recv_sizes[src];
     }
     std::vector<char, allocator<char> > incoming(sum > 0? sum : 1);
+
+    // Make sure we don't try to reference an empty vector
+    if (outgoing.empty())
+      outgoing.push_back(0);
 
     // Transmit the actual data
     BOOST_MPI_CHECK_RESULT(MPI_Alltoallv,

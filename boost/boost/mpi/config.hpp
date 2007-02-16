@@ -39,6 +39,22 @@
 #  define BOOST_MPI_HAS_NOARG_INITIALIZATION
 #endif
 
+#if defined(MPIAPI)
+#  define BOOST_MPI_CALLING_CONVENTION MPIAPI
+#else
+/** @brief Specifies the calling convention that will be used for callbacks
+ *  from the underlying C MPI. 
+ *
+ *  This is a Windows-specific macro, which will be used internally to state
+ *  the calling convention of any function that is to be used as a callback
+ *  from MPI. For example, the internally-defined functions that are used in
+ *  a call to @c MPI_Op_create. This macro is likely only to be useful to
+ *  users that wish to bypass Boost.MPI, registering their own callbacks in
+ *  certain cases, e.g., through @c MPI_Op_create.
+ */
+#  define BOOST_MPI_CALLING_CONVENTION
+#endif
+
 #if defined(LAM_MPI)
 // Configuration for LAM/MPI
 #  define BOOST_MPI_HAS_MEMORY_ALLOCATION

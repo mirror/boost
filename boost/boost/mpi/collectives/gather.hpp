@@ -28,7 +28,7 @@ namespace detail {
   gather_impl(const communicator& comm, const T* in_values, int n, 
               T* out_values, int root, mpl::true_)
   {
-    MPI_Datatype type = get_mpi_datatype<T>();
+    MPI_Datatype type = get_mpi_datatype<T>(*in_values);
     BOOST_MPI_CHECK_RESULT(MPI_Gather,
                            (const_cast<T*>(in_values), n, type,
                             out_values, n, type, root, comm));
@@ -41,7 +41,7 @@ namespace detail {
   gather_impl(const communicator& comm, const T* in_values, int n, int root, 
               mpl::true_)
   {
-    MPI_Datatype type = get_mpi_datatype<T>();
+    MPI_Datatype type = get_mpi_datatype<T>(*in_values);
     BOOST_MPI_CHECK_RESULT(MPI_Gather,
                            (const_cast<T*>(in_values), n, type,
                             0, n, type, root, comm));
@@ -99,10 +99,12 @@ void
 gather(const communicator& comm, const T& in_value, std::vector<T>& out_values,
        int root)
 {
-  if (comm.rank() == root)
+  if (comm.rank() == root) {
     out_values.resize(comm.size());
-
-  ::boost::mpi::gather(comm, in_value, &out_values[0], root);
+    ::boost::mpi::gather(comm, in_value, &out_values[0], root);
+  } else {
+    ::boost::mpi::gather(comm, in_value, root);
+  }
 }
 
 template<typename T>
