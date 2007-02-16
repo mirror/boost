@@ -34,11 +34,19 @@ all_to_all_test(const communicator& comm, Generator generator,
   for (int p = 0; p < comm.size(); ++p)
     in_values.push_back(generator((p + 1) * (comm.rank() + 1)));
 
+  if (comm.rank() == 0) {
+    std::cout << "Performing all-to-all operation on " << kind << "...";
+    std::cout.flush();
+  }
   std::vector<value_type> out_values;
   all_to_all(comm, in_values, out_values);
 
   for (int p = 0; p < comm.size(); ++p) {
     BOOST_CHECK(out_values[p] == generator((p + 1) * (comm.rank() + 1)));
+  }
+
+  if (comm.rank() == 0) {
+    std::cout << " done." << std::endl;
   }
 
   (comm.barrier)();

@@ -31,7 +31,8 @@ packed_archive_send(MPI_Comm comm, int dest, int tag,
   const void* size = &ar.size();
   BOOST_MPI_CHECK_RESULT(MPI_Send,
                          (const_cast<void*>(size), 1, 
-                          get_mpi_datatype<std::size_t>(), dest, tag, comm));
+                          get_mpi_datatype<std::size_t>(ar.size()), 
+						  dest, tag, comm));
   BOOST_MPI_CHECK_RESULT(MPI_Send,
                          (const_cast<void*>(ar.address()), ar.size(),
                           MPI_PACKED,
@@ -47,7 +48,7 @@ packed_archive_isend(MPI_Comm comm, int dest, int tag,
   const void* size = &ar.size();
   BOOST_MPI_CHECK_RESULT(MPI_Isend,
                          (const_cast<void*>(size), 1, 
-                          get_mpi_datatype<std::size_t>(), 
+                          get_mpi_datatype<std::size_t>(ar.size()), 
                           dest, tag, comm, out_requests));
   BOOST_MPI_CHECK_RESULT(MPI_Isend,
                          (const_cast<void*>(ar.address()), ar.size(),
@@ -67,7 +68,7 @@ packed_archive_isend(MPI_Comm comm, int dest, int tag,
   const void* size = &ar.size();
   BOOST_MPI_CHECK_RESULT(MPI_Isend,
                          (const_cast<void*>(size), 1, 
-                          get_mpi_datatype<std::size_t>(), 
+                          get_mpi_datatype<std::size_t>(ar.size()), 
                           dest, tag, comm, out_requests));
   BOOST_MPI_CHECK_RESULT(MPI_Isend,
                          (const_cast<void*>(ar.address()), ar.size(),
@@ -83,7 +84,7 @@ packed_archive_recv(MPI_Comm comm, int source, int tag, packed_iarchive& ar,
 {
   std::size_t count;
   BOOST_MPI_CHECK_RESULT(MPI_Recv,
-                         (&count, 1, get_mpi_datatype<std::size_t>(),
+                         (&count, 1, get_mpi_datatype<std::size_t>(count),
                           source, tag, comm, &status));
 
   // Prepare input buffer and receive the message
