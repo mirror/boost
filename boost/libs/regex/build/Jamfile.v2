@@ -106,23 +106,24 @@ rule check-icu-config ( )
                gICU_IN_LIB = icui18n ;
             }
          }
-         else
-         {
-            ECHO Building Boost.Regex with the optional Unicode/ICU support disabled. ;
-            ECHO Please refer to the Boost.Regex documentation for more information ;
-            ECHO (don't panic: this is a strictly optional feature). ;
-            if $(ICU_PATH)
-            {
-               ECHO Couldn't find utypes.h in $(ICU_PATH:J=" ")/include/unicode ;
-            }
-         }
-         gICU_CONFIG_CHECKED = true ;
+      }
+      gICU_CONFIG_CHECKED = true ;
+   }
+   
+   if $(gHAS_ICU)
+   {
+      return true ;
+   }
+   else
+   {
+      ECHO Building Boost.Regex with the optional Unicode/ICU support disabled. ;
+      ECHO Please refer to the Boost.Regex documentation for more information ;
+      ECHO (don't panic: this is a strictly optional feature). ;
+      if $(ICU_PATH)
+      {
+         ECHO Couldn't find utypes.h in $(ICU_PATH:J=" ")/include/unicode ;
       }
    }
-    if $(gHAS_ICU)
-    {
-        return true ;
-    }
 }
 
 if [ check-icu-config ]
@@ -133,7 +134,6 @@ if [ check-icu-config ]
    {
       if $(ICU_PATH) != "/usr" && $(ICU_PATH) != "/usr/local"
       {
-         ECHO "BAH!" ;
          BOOST_REGEX_ICU_OPTS += "<include>$(ICU_PATH)/include" ;
          ICU_SEARCH_OPTS = <search>/$(ICU_PATH)/lib ;
       }
@@ -178,8 +178,11 @@ lib boost_regex : ../src/$(SOURCES) $(ICU_EXTRA_SOURCE)
 	     <link>shared:<define>BOOST_REGEX_DYN_LINK=1
 	     <toolset>gcc-mw:<link>static
 	     <toolset>gcc-mingw:<link>static
+	     <toolset>gcc-cygwin:<link>static
 	     $(BOOST_REGEX_ICU_OPTS)
     ;
+
+
 
 
 
