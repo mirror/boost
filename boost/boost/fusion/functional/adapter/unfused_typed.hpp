@@ -16,6 +16,9 @@
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/facilities/intercept.hpp>
 
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
+
 #include <boost/type_traits/remove_reference.hpp>
 
 #include <boost/fusion/support/detail/access.hpp>
@@ -28,6 +31,7 @@
 #include <boost/fusion/functional/adapter/limits.hpp>
 #include <boost/fusion/functional/adapter/detail/has_type.hpp>
 #include <boost/fusion/functional/adapter/detail/nullary_call_base.hpp>
+
 
 namespace boost { namespace fusion
 {
@@ -170,12 +174,15 @@ namespace boost { namespace fusion
                 return static_cast<Derived const *>(this)->fnc_transformed(arg);
             }
 
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1400) \
+    || BOOST_FUSION_UNFUSED_TYPED_MAX_ARITY <= 4
             inline typename Function::template result<arg_vector_t>::type 
             operator()(BOOST_PP_ENUM(N,M,arg_vector_t)) 
             {
                 arg_vector_t arg(BOOST_PP_ENUM_PARAMS(N,a));
                 return static_cast<Derived *>(this)->fnc_transformed(arg);
             }
+#endif
 
 #undef M
         };
