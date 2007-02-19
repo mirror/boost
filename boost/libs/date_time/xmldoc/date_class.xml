@@ -2,7 +2,7 @@
 <!DOCTYPE library PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" 
 "../../../tools/boostbook/dtd/boostbook.dtd">
 
-<!-- Copyright (c) 2001-2005 CrystalClear Software, Inc.
+<!-- Copyright (c) 2001-2007 CrystalClear Software, Inc.
      Subject to the Boost Software License, Version 1.0. 
      (See accompanying file LICENSE-1.0 or  http://www.boost.org/LICENSE-1.0)
 -->
@@ -252,7 +252,7 @@ d.day_of_year(); // --> 10</screen></entry>
 	</row>
 	<row>
 	  <entry><screen>date d(2000,Jan,10);
-d.day_of_year(); // --> 2000-Jan-31</screen></entry>
+d.end_of_month(); // --> 2000-Jan-31</screen></entry>
         </row>
                 
 	<row>
