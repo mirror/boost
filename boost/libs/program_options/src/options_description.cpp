@@ -23,6 +23,7 @@
 #include <cstring>
 #include <cstdarg>
 #include <sstream>
+#include <iterator>
 using namespace std;
 
 namespace boost { namespace program_options {
