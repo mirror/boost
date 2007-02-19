@@ -479,7 +479,7 @@ lexertl<Iterator, Position>::next_token(Iterator &first, Iterator const &last,
     string_type& token_value)
 {
     size_t const* const lookup = &state_machine_._lookup[0]->front ();
-		size_t const dfa_alphabet_ = state_machine_._dfa_alphabet[0];
+    size_t const dfa_alphabet_ = state_machine_._dfa_alphabet[0];
 
     size_t const* dfa_start = &state_machine_._dfa[0]->front();
     size_t const* ptr = dfa_start + dfa_alphabet_ + ::lexertl::dfa_offset;
