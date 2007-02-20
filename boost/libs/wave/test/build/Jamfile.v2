@@ -45,6 +45,7 @@ for local source in $(SOURCES)
 {
     local requirements ;
     requirements += <toolset-msvc:version>7.1:<rtti>off ; # workaround for compiler bug
+    requirements += <toolset-msvc:version>7.1_stlport4:<rtti>off ; 
     obj $(source) : ../testwave/$(source).cpp : $(requirements) ;
 }
 
