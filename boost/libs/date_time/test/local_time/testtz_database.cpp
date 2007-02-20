@@ -74,8 +74,8 @@ int main(){
   check("nyc GMT Offset", nyc_test->base_utc_offset() == hours(-5));
   check("nyc DST Offset", nyc_test->dst_offset() == hours(1));
   //std::cout << nyc_test->dst_local_start_time(2004) << std::endl;
-  check("nyc dst start",  nyc_test->dst_local_start_time(2004) == ptime(date(2004, Apr, 4), hours(2)));
-  check("nyc dst end", nyc_test->dst_local_end_time(2004) == ptime(date(2004, Oct, 31), hours(2)));
+  check("nyc dst start",  nyc_test->dst_local_start_time(2007) == ptime(date(2007, Mar, 11), hours(2)));
+  check("nyc dst end", nyc_test->dst_local_end_time(2007) == ptime(date(2007, Nov, 4), hours(2)));
   check("nyc has dst", nyc_test->has_dst());
   
   time_zone_ptr phx_test = tz_db.time_zone_from_region("America/Phoenix");
