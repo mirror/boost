@@ -26,3 +26,11 @@ std::string foo()
 }
 //]
 
+//[ foo_bar
+std::string foo_bar() /*< The *Mythical* FooBar.
+                      See [@http://en.wikipedia.org/wiki/Foobar Foobar for details] >*/
+{
+    return "foo-bar"; /*< return 'em, foo-bar man! >*/
+}
+//]
+

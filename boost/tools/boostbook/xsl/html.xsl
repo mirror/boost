@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
    Copyright (c) 2002 Douglas Gregor <doug.gregor -at- gmail.com>
-  
+
    Distributed under the Boost Software License, Version 1.0.
    (See accompanying file LICENSE_1_0.txt or copy at
    http://www.boost.org/LICENSE_1_0.txt)
@@ -20,6 +20,7 @@
   <xsl:import href="admon.xsl"/>
   <xsl:import href="xref.xsl"/>
   <xsl:import href="relative-href.xsl"/>
+  <xsl:import href="callout.xsl"/>
 
   <xsl:param name="admon.style"/>
   <xsl:param name="admon.graphics">1</xsl:param>
@@ -36,7 +37,7 @@
   <xsl:param name="doc.standalone">false</xsl:param>
   <xsl:param name="chunker.output.indent">yes</xsl:param>
   <xsl:param name="toc.max.depth">2</xsl:param>
-  
+
 <xsl:param name="admon.style">
     <!-- Remove the style. Let the CSS do the styling -->
 </xsl:param>
@@ -69,22 +70,22 @@ set       toc,title
     <xsl:param name="text"/>
 
     <!-- Remove the "$Date: " -->
-    <xsl:variable name="text.noprefix" 
+    <xsl:variable name="text.noprefix"
       select="substring-after($text, '$Date: ')"/>
 
     <!-- Grab the year -->
     <xsl:variable name="year" select="substring-before($text.noprefix, '/')"/>
-    <xsl:variable name="text.noyear" 
+    <xsl:variable name="text.noyear"
       select="substring-after($text.noprefix, '/')"/>
 
     <!-- Grab the month -->
     <xsl:variable name="month" select="substring-before($text.noyear, '/')"/>
-    <xsl:variable name="text.nomonth" 
+    <xsl:variable name="text.nomonth"
       select="substring-after($text.noyear, '/')"/>
 
     <!-- Grab the year -->
     <xsl:variable name="day" select="substring-before($text.nomonth, ' ')"/>
-    <xsl:variable name="text.noday" 
+    <xsl:variable name="text.noday"
       select="substring-after($text.nomonth, ' ')"/>
 
     <!-- Get the time -->
@@ -116,27 +117,27 @@ set       toc,title
     <xsl:param name="text"/>
 
     <!-- Remove the "$Date: " -->
-    <xsl:variable name="text.noprefix" 
+    <xsl:variable name="text.noprefix"
       select="substring-after($text, '$Date: ')"/>
 
     <!-- Grab the year -->
     <xsl:variable name="year" select="substring-before($text.noprefix, '-')"/>
-    <xsl:variable name="text.noyear" 
+    <xsl:variable name="text.noyear"
       select="substring-after($text.noprefix, '-')"/>
 
     <!-- Grab the month -->
     <xsl:variable name="month" select="substring-before($text.noyear, '-')"/>
-    <xsl:variable name="text.nomonth" 
+    <xsl:variable name="text.nomonth"
       select="substring-after($text.noyear, '-')"/>
 
     <!-- Grab the year -->
     <xsl:variable name="day" select="substring-before($text.nomonth, ' ')"/>
-    <xsl:variable name="text.noday" 
+    <xsl:variable name="text.noday"
       select="substring-after($text.nomonth, ' ')"/>
 
     <!-- Get the time -->
     <xsl:variable name="time" select="substring-before($text.noday, ' ')"/>
-    <xsl:variable name="text.notime" 
+    <xsl:variable name="text.notime"
       select="substring-after($text.noday, ' ')"/>
 
     <!-- Get the timezone -->
@@ -190,14 +191,14 @@ set       toc,title
     <table width="100%">
       <tr>
         <td align="left">
-          <xsl:variable name="revision-nodes" 
+          <xsl:variable name="revision-nodes"
             select="ancestor-or-self::*
                     [not (attribute::rev:last-revision='')]"/>
           <xsl:if test="count($revision-nodes) &gt; 0">
             <xsl:variable name="revision-node"
               select="$revision-nodes[last()]"/>
             <xsl:variable name="revision-text">
-              <xsl:value-of 
+              <xsl:value-of
                 select="normalize-space($revision-node/attribute::rev:last-revision)"/>
             </xsl:variable>
             <xsl:if test="string-length($revision-text) &gt; 0">
@@ -223,7 +224,7 @@ set       toc,title
         </td>
         <td align="right">
           <small>
-            <xsl:apply-templates select="ancestor::*/*/copyright" 
+            <xsl:apply-templates select="ancestor::*/*/copyright"
               mode="boost.footer"/>
           </small>
         </td>

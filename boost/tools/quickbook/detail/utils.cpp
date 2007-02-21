@@ -31,7 +31,7 @@ namespace quickbook { namespace detail
             case '&': out << "&amp;";   break;
             case '"': out << "&quot;";  break;
             default:  out << ch;        break;
-            // note &apos; is not included. see the curse of apos: 
+            // note &apos; is not included. see the curse of apos:
             // http://fishbowl.pastiche.org/2003/07/01/the_curse_of_apos
         }
     }
@@ -133,7 +133,7 @@ namespace quickbook { namespace detail
         }
         return uri;
     }
-    
+
     std::ostream& outerr(std::string const& file, int line)
     {
         if (line >= 0)
@@ -148,7 +148,7 @@ namespace quickbook { namespace detail
             return std::clog << file << ": error: ";
         }
     }
-    
+
     std::ostream& outwarn(std::string const& file, int line)
     {
         if (line >= 0)

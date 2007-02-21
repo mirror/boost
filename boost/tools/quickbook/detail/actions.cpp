@@ -12,6 +12,7 @@
 #include <functional>
 #include <boost/bind.hpp>
 #include <boost/filesystem/convenience.hpp>
+#include <boost/lexical_cast.hpp>
 #include "./actions.hpp"
 #include "./utils.hpp"
 #include "./markups.hpp"
@@ -52,14 +53,14 @@ namespace quickbook
         }
         else // version 1.3 and above
         {
-            std::string anchor = 
+            std::string anchor =
                 library_id + '.' + qualified_section_id + '.' +
                 detail::make_identifier(str.begin(), str.end());
 
             out << "<anchor id=\"" << anchor << "\"/>"
-                << pre 
+                << pre
                 << "<link linkend=\"" << anchor << "\">"
-                << str 
+                << str
                 << "</link>"
                 << post
                 ;
@@ -68,23 +69,23 @@ namespace quickbook
 
     void generic_header_action::operator()(iterator first, iterator last) const
     {
-        int level_ = section_level + 2;     // section_level is zero-based. We need to use a 
+        int level_ = section_level + 2;     // section_level is zero-based. We need to use a
                                             // 0ne-based heading which is one greater
                                             // than the current. Thus: section_level + 2.
-        if (level_ > 6)                     // The max is h6, clip it if it goes 
+        if (level_ > 6)                     // The max is h6, clip it if it goes
             level_ = 6;                     // further than that
         std::string str;
         phrase.swap(str);
 
-        std::string anchor = 
+        std::string anchor =
             library_id + '.' + qualified_section_id + '.' +
             detail::make_identifier(str.begin(), str.end());
 
-        out 
+        out
             << "<anchor id=\"" << anchor << "\"/>"
             << "<bridgehead renderas=\"sect" << level_ << "\">"
             << "<link linkend=\"" << anchor << "\">"
-            << str 
+            << str
             << "</link>"
             << "</bridgehead>"
             ;
@@ -282,7 +283,7 @@ namespace quickbook
         {
             parse(first_, last_, python_p);
         }
-        
+
         std::string str;
         temp.swap(str);
         phrase.swap(save);
@@ -296,7 +297,7 @@ namespace quickbook
     {
         std::string save;
         out.swap(save);
- 
+
         // print the code with syntax coloring
         if (source_mode == "c++")
         {
@@ -378,8 +379,8 @@ namespace quickbook
             boost::spirit::file_position const pos = first.get_position();
             detail::outerr(pos.file,pos.line)
                 << "Template Redefinition: " << actions.template_info[0] << std::endl;
-        }            
-        
+        }
+
         actions.template_info.push_back(std::string(first, last));
         actions.templates.add(
             actions.template_info[0]
@@ -403,7 +404,7 @@ namespace quickbook
                     // and push it into the back of template_info. Do this
                     // recursively until we have all the expected number of
                     // arguments, or if there is no more spaces left.
-                    
+
                     std::string& str = template_info.back();
                     std::string::size_type l_pos = str.find_first_of(" \t\r\n");
                     if (l_pos == std::string::npos)
@@ -414,7 +415,7 @@ namespace quickbook
                     str = first;
                     template_info.push_back(second);
                 }
-                
+
                 if (template_.size()-1 != template_info.size())
                 {
                     detail::outerr(pos.file, pos.line)
@@ -423,7 +424,7 @@ namespace quickbook
                         << " argument(s), got: "
                         << template_info.size()-1
                         << " argument(s) instead."
-                        << std::endl;                    
+                        << std::endl;
                     return false;
                 }
             }
@@ -438,8 +439,8 @@ namespace quickbook
           , quickbook::actions& actions
         )
         {
-            std::vector<std::string>::const_iterator arg = template_info.begin()+1; 
-            std::vector<std::string>::const_iterator tpl = template_.begin()+1; 
+            std::vector<std::string>::const_iterator arg = template_info.begin()+1;
+            std::vector<std::string>::const_iterator tpl = template_.begin()+1;
 
             // Store each of the argument passed in as local templates:
             while (arg != template_info.end())
@@ -478,7 +479,7 @@ namespace quickbook
             // a phrase? We apply a simple heuristic: if the body starts with
             // a newline, then we regard it as a block, otherwise, we parse
             // it as a phrase.
-            
+
             std::string::const_iterator iter = body.begin();
             while (iter != body.end() && ((*iter == ' ') || (*iter == '\t')))
                 ++iter; // skip spaces and tabs
@@ -524,20 +525,20 @@ namespace quickbook
             --actions.template_depth;
             return;
         }
-        
+
         std::string result;
         actions.push(); // scope the actions' states
         {
-            template_symbol const* symbol = 
+            template_symbol const* symbol =
                 actions.templates.find(actions.template_info[0]);
             BOOST_ASSERT(symbol);
-            
+
             std::vector<std::string> template_ = boost::get<0>(*symbol);
             boost::spirit::file_position template_pos = boost::get<1>(*symbol);
 
             std::vector<std::string> template_info;
             std::swap(template_info, actions.template_info);
-            
+
             ///////////////////////////////////
             // Break the arguments
             if (!break_arguments(template_info, template_, pos))
@@ -551,7 +552,7 @@ namespace quickbook
             // Prepare the arguments as local templates
             bool get_arg_result;
             std::vector<std::string>::const_iterator tpl;
-            boost::tie(get_arg_result, tpl) = 
+            boost::tie(get_arg_result, tpl) =
                 get_arguments(template_info, template_, pos, actions);
 
             if (!get_arg_result)
@@ -668,7 +669,7 @@ namespace quickbook
         {
             actions.out << "</informaltable>\n";
         }
-                     
+
         actions.table_span = 0;
         actions.table_header.clear();
         actions.table_title.clear();
@@ -693,7 +694,7 @@ namespace quickbook
 
     void start_col_action::operator()(char) const
     {
-        phrase << start_cell_; 
+        phrase << start_cell_;
         ++span;
     }
 
@@ -711,12 +712,12 @@ namespace quickbook
 
         if (qbk_version_n < 103) // version 1.2 and below
         {
-            out << "\n<section id=\"" 
+            out << "\n<section id=\""
                 << library_id << "." << section_id << "\">\n";
         }
         else // version 1.3 and above
         {
-            out << "\n<section id=\"" << library_id 
+            out << "\n<section id=\"" << library_id
                 << "." << qualified_section_id << "\">\n";
         }
         std::string str;
@@ -728,10 +729,10 @@ namespace quickbook
         }
         else // version 1.3 and above
         {
-            out << "<title>" 
+            out << "<title>"
                 << "<link linkend=\"" << library_id
                     << "." << qualified_section_id << "\">"
-                << str 
+                << str
                 << "</link>"
                 << "</title>\n"
                 ;
@@ -757,7 +758,7 @@ namespace quickbook
         }
         else
         {
-            std::string::size_type const n = 
+            std::string::size_type const n =
                 qualified_section_id.find_last_of('.');
             BOOST_ASSERT(std::string::npos != n);
             qualified_section_id.erase(n, std::string::npos);
@@ -802,10 +803,27 @@ namespace quickbook
         detail::print_string(detail::escape_uri(path.string()), out.get());
         out << "\" />\n";
     }
-   
+
     void cpp_code_snippet_grammar::pass_thru(iterator first, iterator last) const
     {
         code += *first;
+    }
+
+    namespace detail
+    {
+        int callout_id = 0;
+    }
+
+    void cpp_code_snippet_grammar::callout(iterator first, iterator last) const
+    {
+        using detail::callout_id;
+        code += "``'''<co id=\"";
+        code += doc_id + boost::lexical_cast<std::string>(callout_id + callouts.size()) + "co\" ";
+        code += "linkends=\"";
+        code += doc_id + boost::lexical_cast<std::string>(callout_id + callouts.size()) + "\" />";
+        code += "'''``";
+
+        callouts.push_back(std::string(first, last));
     }
 
     void cpp_code_snippet_grammar::escaped_comment(iterator first, iterator last) const
@@ -823,17 +841,36 @@ namespace quickbook
 
     void cpp_code_snippet_grammar::compile(iterator first, iterator last) const
     {
+        using detail::callout_id;
         if (!code.empty())
         {
             detail::unindent(code); // remove all indents
-            snippet += "\n\n``\n" + code + "``\n\n";
+            snippet += "\n\n```\n" + code + "```\n\n";
+
+            snippet += "'''<calloutlist>'''";
+            for (size_t i = 0; i < callouts.size(); ++i)
+            {
+                snippet += "'''<callout arearefs=\"";
+                snippet += doc_id + boost::lexical_cast<std::string>(callout_id + i) + "co\" ";
+                snippet += "id=\"";
+                snippet += doc_id + boost::lexical_cast<std::string>(callout_id + i) + "\">";
+                snippet += "'''";
+
+                snippet += "'''<para>'''";
+                snippet += callouts[i];
+                snippet += "'''</para>'''";
+                snippet += "'''</callout>'''";
+            }
+            snippet += "'''</calloutlist>'''";
         }
-        
+
         std::vector<std::string> tinfo;
         tinfo.push_back(id);
         tinfo.push_back(snippet);
         storage.push_back(boost::make_tuple(tinfo, first.get_position()));
 
+        callout_id += callouts.size();
+        callouts.clear();
         code.clear();
         snippet.clear();
         id.clear();
@@ -841,9 +878,10 @@ namespace quickbook
 
     void load_snippets(
         std::string const& file
-      , std::vector<template_symbol>& storage   // snippets are stored in a 
+      , std::vector<template_symbol>& storage   // snippets are stored in a
                                                 // vector of template_symbols
-      , std::string const& extension)
+      , std::string const& extension
+      , std::string const& doc_id)
     {
         std::string code;
         int err = detail::load(file, code);
@@ -854,7 +892,7 @@ namespace quickbook
         iterator_type first(code.begin(), code.end(), file);
         iterator_type last(code.end(), code.end());
 
-        cpp_code_snippet_grammar g(storage);
+        cpp_code_snippet_grammar g(storage, doc_id);
         boost::spirit::parse(first, last, g);
     }
 
@@ -871,8 +909,8 @@ namespace quickbook
 
         std::string ext = fs::extension(path);
         std::vector<template_symbol> storage;
-        load_snippets(path.string(), storage, ext);
-        
+        load_snippets(path.string(), storage, ext, actions.doc_id);
+
         BOOST_FOREACH(template_symbol const& ts, storage)
         {
             std::string tname = boost::get<0>(ts)[0];
@@ -958,7 +996,7 @@ namespace quickbook
 
     void pre(collector& out, quickbook::actions& actions, bool ignore_docinfo)
     {
-        // The doc_info in the file has been parsed. Here's what we'll do 
+        // The doc_info in the file has been parsed. Here's what we'll do
         // *before* anything else.
 
         if (actions.doc_id.empty())
@@ -975,7 +1013,7 @@ namespace quickbook
             char strdate[64];
             strftime(
                 strdate, sizeof(strdate),
-                (debug_mode ? 
+                (debug_mode ?
                     "DEBUG MODE Date: %Y/%m/%d %H:%M:%S $" :
                     "$" /* prevent CVS substitution */ "Date: %Y/%m/%d %H:%M:%S $"),
                 current_gm_time
@@ -1001,7 +1039,7 @@ namespace quickbook
         }
         else
         {
-            qbk_version_n = (qbk_major_version * 100) + qbk_minor_version; 
+            qbk_version_n = (qbk_major_version * 100) + qbk_minor_version;
         }
 
         out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"

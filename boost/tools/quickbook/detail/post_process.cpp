@@ -19,13 +19,13 @@ namespace quickbook
     using namespace boost::spirit;
     using boost::bind;
     typedef std::string::const_iterator iter_type;
-    
+
     struct printer
     {
         printer(std::string& out, int& current_indent, int linewidth)
             : prev(0), out(out), current_indent(current_indent) , column(0)
             , in_string(false), linewidth(linewidth) {}
-                
+
         void indent()
         {
             BOOST_ASSERT(current_indent >= 0); // this should not happen!
@@ -40,7 +40,7 @@ namespace quickbook
             out += '\n';
             indent();
         }
-        
+
         bool line_is_empty() const
         {
             for (iter_type i = out.end()-(column-current_indent); i != out.end(); ++i)
@@ -50,7 +50,7 @@ namespace quickbook
             }
             return true;
         }
-        
+
         void align_indent()
         {
             // make sure we are at the proper indent position
@@ -73,7 +73,7 @@ namespace quickbook
                 else
                 {
                     // will this happen? (i.e. column <= current_indent)
-                    while (column != current_indent) 
+                    while (column != current_indent)
                     {
                         out += ' ';
                         ++column;
@@ -86,17 +86,17 @@ namespace quickbook
         {
             // Print a char. Attempt to break the line if we are exceeding
             // the target linewidth. The linewidth is not an absolute limit.
-            // There are many cases where a line will exceed the linewidth 
+            // There are many cases where a line will exceed the linewidth
             // and there is no way to properly break the line. Preformatted
             // code that exceeds the linewidth are examples. We cannot break
             // preformatted code. We shall not attempt to be very strict with
             // line breaking. What's more important is to have a reproducable
-            // output (i.e. processing two logically equivalent xml files 
-            // results in two lexically equivalent xml files). *** pretty 
+            // output (i.e. processing two logically equivalent xml files
+            // results in two lexically equivalent xml files). *** pretty
             // formatting is a secondary goal ***
 
             // Strings will occur only in tag attributes. Normal content
-            // will have &quot; instead. We shall deal only with tag 
+            // will have &quot; instead. We shall deal only with tag
             // attributes here.
             if (ch == '"')
                 in_string = !in_string; // don't break strings!
@@ -124,11 +124,11 @@ namespace quickbook
             }
             else
             {
-                // we can break tag boundaries and stuff after 
+                // we can break tag boundaries and stuff after
                 // delimiters if they are not inside strings
                 // and *only-if* the preceding char is a space
-                if (!in_string 
-                    && column >= linewidth 
+                if (!in_string
+                    && column >= linewidth
                     && (ch == '<' && std::isspace(static_cast<unsigned char>(prev))))
                     break_line();
                 out += ch;
@@ -138,14 +138,14 @@ namespace quickbook
             prev = ch;
         }
 
-        void         
+        void
         print(iter_type f, iter_type l)
         {
             for (iter_type i = f; i != l; ++i)
                 print(*i);
         }
 
-        void         
+        void
         print_tag(iter_type f, iter_type l, bool is_flow_tag)
         {
             if (is_flow_tag)
@@ -154,7 +154,7 @@ namespace quickbook
             }
             else
             {
-                // This is not a flow tag, so, we're going to do a 
+                // This is not a flow tag, so, we're going to do a
                 // carriage return anyway. Let us remove extra right
                 // spaces.
                 std::string str(f, l);
@@ -163,7 +163,7 @@ namespace quickbook
                 while (i != str.begin() && std::isspace(static_cast<unsigned char>(*(i-1))))
                     --i;
                 print(str.begin(), i);
-            }            
+            }
         }
 
         char prev;
@@ -172,9 +172,9 @@ namespace quickbook
         int column;
         bool in_string;
         int linewidth;
-    };    
+    };
 
-    char const* block_tags_[] = 
+    char const* block_tags_[] =
     {
           "author"
         , "blockquote"
@@ -202,9 +202,11 @@ namespace quickbook
         , "warning"
         , "xml"
         , "xi:include"
+        , "calloutlist"
+        , "callout"
     };
 
-    char const* doc_types_[] = 
+    char const* doc_types_[] =
     {
           "book"
         , "article"
@@ -238,7 +240,7 @@ namespace quickbook
                 block_tags.insert(doc_types_[i] + std::string("purpose"));
             }
         }
-        
+
         bool is_flow_tag(std::string const& tag)
         {
             return block_tags.find(tag) == block_tags.end();
@@ -250,8 +252,8 @@ namespace quickbook
         int current_indent;
         printer printer_;
         std::string current_tag;
-    };    
-    
+    };
+
     struct tidy_grammar : grammar<tidy_grammar>
     {
         tidy_grammar(tidy_compiler& state, int indent)
@@ -273,25 +275,25 @@ namespace quickbook
                 // What's the business of lexeme_d['>' >> *space_p]; ?
                 // It is there to preserve the space after the tag that is
                 // otherwise consumed by the space_p skipper.
-                
-                escape = 
-                    str_p("<!--quickbook-escape-prefix-->") >> 
+
+                escape =
+                    str_p("<!--quickbook-escape-prefix-->") >>
                     (*(anychar_p - str_p("<!--quickbook-escape-postfix-->")))
                     [
                         bind(&tidy_grammar::do_escape, &self, _1, _2)
                     ]
                     >>  lexeme_d
                         [
-                            str_p("<!--quickbook-escape-postfix-->") >> 
+                            str_p("<!--quickbook-escape-postfix-->") >>
                             (*space_p)
                             [
                                 bind(&tidy_grammar::do_escape_post, &self, _1, _2)
                             ]
                         ]
                     ;
-                
+
                 start_tag = '<' >> tag >> *(anychar_p - '>') >> lexeme_d['>' >> *space_p];
-                start_end_tag = 
+                start_end_tag =
                         '<' >> tag >> *(anychar_p - ("/>" | ch_p('>'))) >> lexeme_d["/>" >> *space_p]
                     |   "<?" >> tag >> *(anychar_p - '?') >> lexeme_d["?>" >> *space_p]
                     |   "<!--" >> *(anychar_p - "-->") >> lexeme_d["-->" >> *space_p]
@@ -300,7 +302,7 @@ namespace quickbook
                 content = lexeme_d[ +(anychar_p - '<') ];
                 end_tag = "</" >> +(anychar_p - '>') >> lexeme_d['>' >> *space_p];
 
-                markup = 
+                markup =
                         escape
                     |   code            [bind(&tidy_grammar::do_code, &self, _1, _2)]
                     |   start_end_tag   [bind(&tidy_grammar::do_start_end_tag, &self, _1, _2)]
@@ -336,7 +338,7 @@ namespace quickbook
         void do_code(iter_type f, iter_type l) const
         {
             state.out += '\n';
-            // print the string taking care of line 
+            // print the string taking care of line
             // ending CR/LF platform issues
             for (iter_type i = f; i != l; ++i)
             {
@@ -380,7 +382,7 @@ namespace quickbook
 
         void do_start_tag(iter_type f, iter_type l) const
         {
-            state.tags.push(state.current_tag);                     
+            state.tags.push(state.current_tag);
             bool is_flow_tag = state.is_flow_tag(state.current_tag);
             if (!is_flow_tag)
                 state.printer_.align_indent();
@@ -408,9 +410,9 @@ namespace quickbook
             state.printer_.print_tag(f, l, is_flow_tag);
             if (!is_flow_tag)
                 state.printer_.break_line();
-            state.tags.pop();                     
+            state.tags.pop();
         }
-        
+
         tidy_compiler& state;
         int indent;
     };
@@ -440,17 +442,17 @@ namespace quickbook
             {
                 // fallback!
                 ::quickbook::detail::outerr("",0)
-                    << "Warning: Post Processing Failed." 
+                    << "Warning: Post Processing Failed."
                     << std::endl;
-                out << in;                
+                out << in;
             }
         }
-        
+
         catch(...)
         {
             // fallback!
             ::quickbook::detail::outerr("",0)
-                << "Warning: Post Processing Failed." 
+                << "Warning: Post Processing Failed."
                 << std::endl;
             out << in;
         }

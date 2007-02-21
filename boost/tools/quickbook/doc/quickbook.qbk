@@ -144,13 +144,14 @@ Features include:
 * Various code cleanup/maintenance
 * Templates!
 * \[conceptref\] for referencing BoostBook <concept> entities.
-* Allow escape of spaces. The escaped space is removed from the output. Syntax: 
+* Allow escape of spaces. The escaped space is removed from the output. Syntax:
   `\ `.
 * Nested comments are now allowed.
 * Quickbook blocks can nest inside comments.
 * Line-end terminated comments are now allowed. Example: `[// some comment`
 * Comments are now passed through to XML as-is.
-* __import__ facility!!!
+* __import__ facility.
+* Callouts on imported code
 
 [endsect]
 
@@ -234,7 +235,7 @@ When you want content that may or must be replaced by the user, use the syntax:
 [~replacement]
 ''']
 
-This will generate: 
+This will generate:
 
 [~replacement]
 
@@ -251,7 +252,7 @@ will generate:
 ["A question that sometimes drives me hazy: am I or are the others crazy?]--Einstein
 
 Note the proper left and right quote marks. Also, while you can simply use
-ordinary quote marks like "quoted", our quotation, above, will generate correct 
+ordinary quote marks like "quoted", our quotation, above, will generate correct
 DocBook quotations (e.g. <quote>quoted</quote>).
 
 Like all phrase elements, quotations may be nested. Example:
@@ -279,11 +280,11 @@ will generate:
 
 /italic/, *bold*, _underline_, =teletype=
 
-Unlike QuickBook's standard formatting scheme, the rules for simpler 
-alternatives are much stricter[footnote Thanks to David Barrett, author of 
-[@http://quinthar.com/qwikiwiki/index.php?page=Home Qwiki], for sharing 
-these samples and teaching me these obscure formatting rules. I wasn't sure 
-at all if __spirit__, being more or less a formal EBNF parser, can handle 
+Unlike QuickBook's standard formatting scheme, the rules for simpler
+alternatives are much stricter[footnote Thanks to David Barrett, author of
+[@http://quinthar.com/qwikiwiki/index.php?page=Home Qwiki], for sharing
+these samples and teaching me these obscure formatting rules. I wasn't sure
+at all if __spirit__, being more or less a formal EBNF parser, can handle
 the context sensitivity and ambiguity.].
 
 * Simple markups cannot nest. You can combine a simple markup with a nestable markup.
@@ -332,8 +333,8 @@ will generate:
 This text has inlined code `int main() { return 0; }` in it. The code will be
 syntax highlighted.
 
-[note We simply enclose the code with the tick: [^'''"`"'''], not the 
-single quote: `"'"`. Note too that [^'''`some code`'''] is preferred over 
+[note We simply enclose the code with the tick: [^'''"`"'''], not the
+single quote: `"'"`. Note too that [^'''`some code`'''] is preferred over
 [^'''[^some code]''']. ]
 
 [endsect]
@@ -530,7 +531,7 @@ Escaping allows us to pass XML markup to __boostbook__ or __docbook__. For examp
 <emphasis role="bold">This is direct XML markup</emphasis>
 '''
 
-[important Be careful when using the escape. The text must conform to 
+[important Be careful when using the escape. The text must conform to
 __boostbook__/__docbook__ syntax.]
 
 [endsect]
@@ -544,8 +545,8 @@ For example, how do you escape the triple quote? Simple: [^\\'\\'\\']
 `\n` has a special meaning. It is used to generate line breaks. Note that `\n`
 is now preferred over `[br]`.
 
-The escaped space: `\ ` also has a special meaning. The escaped space is removed 
-from the output. 
+The escaped space: `\ ` also has a special meaning. The escaped space is removed
+from the output.
 
 [endsect]
 [section Images]
@@ -993,7 +994,7 @@ to link to them. See __anchor_links__ and __section__ for more info.
 [endsect]
 [section Generic Heading]
 
-In cases when you don't want to care about the heading level (1 to 6), you 
+In cases when you don't want to care about the heading level (1 to 6), you
 can use the /Generic Heading/:
 
 [pre'''
@@ -1004,8 +1005,8 @@ The /Generic Heading/ assumes the level, plus one, of the innermost section
 where it is placed. For example, if it is placed in the outermost section,
 then, it assumes /h2/.
 
-Headings are often used as an alternative to sections. It is used 
-particularly if you do not want to start a new section. In many cases, 
+Headings are often used as an alternative to sections. It is used
+particularly if you do not want to start a new section. In many cases,
 however, headings in a particular section is just flat. Example:
 
 [pre'''
@@ -1013,12 +1014,12 @@ however, headings in a particular section is just flat. Example:
 [h2 X]
 [h2 Y]
 [h2 Z]
-[endsect] 
+[endsect]
 ''']
 
-Here we use h2 assuming that section A is the outermost level. If it is 
-placed in an inner level, you'll have to use h3, h4, etc. depending on 
-where the section is. In general, it is the section level plus one. It is 
+Here we use h2 assuming that section A is the outermost level. If it is
+placed in an inner level, you'll have to use h3, h4, etc. depending on
+where the section is. In general, it is the section level plus one. It is
 rather tedious, however, to scan the section level everytime. If you
 rewrite the example above as shown below, this will be automatic:
 
@@ -1027,12 +1028,12 @@ rewrite the example above as shown below, this will be automatic:
 [heading X]
 [heading Y]
 [heading Z]
-[endsect] 
+[endsect]
 ''']
 
-They work well regardless where you place them. You can rearrange sections 
-at will without any extra work to ensure correct heading levels. In fact, 
-with /section/ and /heading/, you have all you need. /h1/../h6/ becomes 
+They work well regardless where you place them. You can rearrange sections
+at will without any extra work to ensure correct heading levels. In fact,
+with /section/ and /heading/, you have all you need. /h1/../h6/ becomes
 redundant. /h1/../h6/ might be deprecated in the future.
 
 [endsect]
@@ -1042,10 +1043,10 @@ redundant. /h1/../h6/ might be deprecated in the future.
 [def macro_identifier some text]
 ''']
 
-When a macro is defined, the identifier replaces the text anywhere in the 
+When a macro is defined, the identifier replaces the text anywhere in the
 file, in paragraphs, in markups, etc. macro_identifier is a string of non-
-white space characters except '\]'. A macro may not follow an alphabetic 
-character or the underscore. The replacement text can be any phrase (even 
+white space characters except '\]'. A macro may not follow an alphabetic
+character or the underscore. The replacement text can be any phrase (even
 marked up). Example:
 
 [pre'''
@@ -1058,9 +1059,9 @@ Now everywhere the sf_logo is placed, the picture will be inlined.
 [def sf_logo [$http://sourceforge.net/sflogo.php?group_id=28447&type=1]]
 sf_logo
 
-[tip It's a good idea to use macro identifiers that are distinguishable. 
-For instance, in this document, macro identifiers have two leading and 
-trailing underscores (e.g. [^'''__spirit__''']). The reason is to avoid 
+[tip It's a good idea to use macro identifiers that are distinguishable.
+For instance, in this document, macro identifiers have two leading and
+trailing underscores (e.g. [^'''__spirit__''']). The reason is to avoid
 unwanted macro replacement.]
 
 Links (URLS) and images are good candidates for macros. *1*) They tend to
@@ -1102,12 +1103,12 @@ Quickbook has some predefined macros that you can already use.
 [endsect]
 [section Templates]
 
-Templates provide a more versatile text substitution mechanism. Templates 
-come in handy when you need to create parameterizable, multi-line, 
-boilerplate text that you specify once and expand many times. Templates 
-accept one or more arguments. These arguments act like place-holders for 
-text replacement. Unlike simple macros, which are limited to phrase level 
-markup, templates can contain block level markup (e.g. paragraphs, code 
+Templates provide a more versatile text substitution mechanism. Templates
+come in handy when you need to create parameterizable, multi-line,
+boilerplate text that you specify once and expand many times. Templates
+accept one or more arguments. These arguments act like place-holders for
+text replacement. Unlike simple macros, which are limited to phrase level
+markup, templates can contain block level markup (e.g. paragraphs, code
 blocks and tables).
 
 Example template:
@@ -1130,29 +1131,29 @@ Hi, my name is [name]. I am [age] years old. I am a [what].
 
 Template identifiers can either consist of:
 
-* An initial alphabetic character or the underscore, followed by 
-  zero or more alphanumeric characters or the underscore. This is 
-  similar to your typical C/C++ identifier. 
+* An initial alphabetic character or the underscore, followed by
+  zero or more alphanumeric characters or the underscore. This is
+  similar to your typical C/C++ identifier.
 * A single character punctuation (a non-alphanumeric printable character)
 
 [heading Formal Template Arguments]
 
-Template formal arguments are identifiers consisting of an initial 
-alphabetic character or the underscore, followed by zero or more 
-alphanumeric characters or the underscore. This is similar to your typical 
+Template formal arguments are identifiers consisting of an initial
+alphabetic character or the underscore, followed by zero or more
+alphanumeric characters or the underscore. This is similar to your typical
 C/C++ identifier.
 
-A template formal argument temporarily hides a template of the same name at 
-the point where the [link quickbook.syntax.block.templates.template_expansion 
-template is expanded]. Note that the body of the [^person] template above 
-refers to [^name] [^age] and [^what] as [^\[name\]] [^\[age\]] and 
-[^\[what\]]. [^name] [^age] and [^what] are actually templates that exist 
+A template formal argument temporarily hides a template of the same name at
+the point where the [link quickbook.syntax.block.templates.template_expansion
+template is expanded]. Note that the body of the [^person] template above
+refers to [^name] [^age] and [^what] as [^\[name\]] [^\[age\]] and
+[^\[what\]]. [^name] [^age] and [^what] are actually templates that exist
 in the duration of the template call.
 
 [heading Template Body]
 
-The template body can be just about any QuickBook block or phrase. There 
-are actually two forms. Templates may be phrase or block level. Phrase 
+The template body can be just about any QuickBook block or phrase. There
+are actually two forms. Templates may be phrase or block level. Phrase
 templates are of the form:
 
 [pre'''
@@ -1162,15 +1163,15 @@ templates are of the form:
 Block templates are of the form:
 
 [pre'''
-[template sample[arg1 arg2...argN] 
-replacement text... 
+[template sample[arg1 arg2...argN]
+replacement text...
 ]
 ''']
 
-The basic rule is as follows: if a newline immediately follows the argument 
+The basic rule is as follows: if a newline immediately follows the argument
 list, then it is a block template, otherwise, it is a phrase template.
-Phrase templates are typically expanded as part of phrases. Like macros, 
-block level elements are not allowed in phrase templates. 
+Phrase templates are typically expanded as part of phrases. Like macros,
+block level elements are not allowed in phrase templates.
 
 [heading Template Expansion]
 
@@ -1180,7 +1181,7 @@ You expand a template this way:
 [template_identifier arg1..arg2..arg3]
 ''']
 
-At template expansion, you supply the actual arguments. The template will 
+At template expansion, you supply the actual arguments. The template will
 be expanded with your supplied arguments. Example:
 
 [pre'''
@@ -1193,14 +1194,14 @@ Which will expand to:
 [person James Bond..39..Spy]
 [person Santa Clause..87..Big Red Fatso]
 
-[caution A word of caution: Templates are recursive. A template can call 
-another template or even itself, directly or indirectly. There are no 
-control structures in QuickBook (yet) so this will always mean infinite 
-recursion. QuickBook can detect this situation and report an error if 
+[caution A word of caution: Templates are recursive. A template can call
+another template or even itself, directly or indirectly. There are no
+control structures in QuickBook (yet) so this will always mean infinite
+recursion. QuickBook can detect this situation and report an error if
 recursion exceeds a certain limit.]
 
-Each actual argument can be a word, a text fragment or just about any [link 
-quickbook.syntax.phrase QuickBook phrase]. Arguments are separated by the 
+Each actual argument can be a word, a text fragment or just about any [link
+quickbook.syntax.phrase QuickBook phrase]. Arguments are separated by the
 double dot [^".."] and terminated by the close parenthesis.
 
 [heading Nullary Templates]
@@ -1225,26 +1226,26 @@ Some squiggles...[*[alpha][beta]]
 
 The difference with macros are
 
-* The explicit [link quickbook.syntax.block.templates.template_expansion 
-  template expansion syntax]. This is an advantage because, now, we don't 
-  have to use obscure naming conventions like double underscores (e.g. 
-  \_\_alpha\_\_) to avoid unwanted 
+* The explicit [link quickbook.syntax.block.templates.template_expansion
+  template expansion syntax]. This is an advantage because, now, we don't
+  have to use obscure naming conventions like double underscores (e.g.
+  \_\_alpha\_\_) to avoid unwanted
   macro replacement.
 * The template is expanded at the point where it is invoked. A macro is
   expanded immediately at its point of declaration. This is subtle and
   can cause a slight difference in behavior especially if you refer to
   other macros and templates in the body.
-  
-The empty brackets after the template identifier ([^alpha\[\]]) indicates no 
-arguments. If the template body does not look like a template argument list, we 
+
+The empty brackets after the template identifier ([^alpha\[\]]) indicates no
+arguments. If the template body does not look like a template argument list, we
 can elide the empty brackets. Example:
 
 [pre'''
-[template aristotle_quote Aristotle: [*['Education is the best provision 
+[template aristotle_quote Aristotle: [*['Education is the best provision
 for the journey to old age.]]]
 ''']
 
-[template aristotle_quote\ Aristotle: [*['Education is the best provision 
+[template aristotle_quote\ Aristotle: [*['Education is the best provision
 for the journey to old age.]]]
 
 Expanding:
@@ -1257,9 +1258,9 @@ We have:
 
 Here's a quote from [aristotle_quote].
 
-The disadvantage is that you can't avoid the space between the template 
-identifier, `aristotle_quote`, and the template body "Aristotle...". This space 
-will be part of the template body. If that space is unwanted, use empty 
+The disadvantage is that you can't avoid the space between the template
+identifier, `aristotle_quote`, and the template body "Aristotle...". This space
+will be part of the template body. If that space is unwanted, use empty
 brackets or use the space escape: "`\ `". Example:
 
 [pre'''
@@ -1278,20 +1279,20 @@ We have:
 
 `struct` x[tag];
 
-You have a couple of ways to do it. I personally prefer the explicit empty 
+You have a couple of ways to do it. I personally prefer the explicit empty
 brackets, though.
-  
+
 [heading Simple Arguments]
 
-As mentioned, arguments are separated by the double dot [^".."]. If there 
-are less arguments passed than expected, QuickBook attempts to break the 
+As mentioned, arguments are separated by the double dot [^".."]. If there
+are less arguments passed than expected, QuickBook attempts to break the
 last argument into two or more arguments following this logic:
 
-* Break the last argument into two, at the first space found ([^'', '\\n', 
+* Break the last argument into two, at the first space found ([^'', '\\n',
   \\t' or '\\r']).
-* Repeat until there are enough arguments or if there are no more spaces 
-  found (in which case, an error is reported). 
-  
+* Repeat until there are enough arguments or if there are no more spaces
+  found (in which case, an error is reported).
+
 For example:
 
 [pre'''
@@ -1304,9 +1305,9 @@ will produce:
 [template simple[a b c d] [a][b][c][d]]
 [simple w x y z]
 
-"w x y z" is initially treated as a single argument because we didn't 
-supply any [^".."] separators. However, since [^simple] expects 4 
-arguments, "w x y z" is broken down iteratively (applying the logic above) 
+"w x y z" is initially treated as a single argument because we didn't
+supply any [^".."] separators. However, since [^simple] expects 4
+arguments, "w x y z" is broken down iteratively (applying the logic above)
 until we have "w", "x", "y" and "z".
 
 QuickBook only tries to get the arguments it needs. For example:
@@ -1321,9 +1322,9 @@ will produce:
 
 The arguments being: "w", "x", "y" and "z trail".
 
-It should be obvious now that for simple arguments with no spaces, we can 
-get by without separating the arguments with [^".."] separators. It is 
-possible to combine [^".."] separators with the argument passing 
+It should be obvious now that for simple arguments with no spaces, we can
+get by without separating the arguments with [^".."] separators. It is
+possible to combine [^".."] separators with the argument passing
 simplification presented above. Example:
 
 [pre'''
@@ -1336,11 +1337,11 @@ will produce:
 
 [heading Punctuation Templates]
 
-With templates, one of our objectives is to allow us to rewrite QuickBook 
-in QuickBook (as a qbk library). For that to happen, we need to accommodate 
-single character punctuation templates which are fairly common in 
-QuickBook. You might have noticed that single character punctuations are 
-allowed as [link quickbook.syntax.block.templates.template_identifier 
+With templates, one of our objectives is to allow us to rewrite QuickBook
+in QuickBook (as a qbk library). For that to happen, we need to accommodate
+single character punctuation templates which are fairly common in
+QuickBook. You might have noticed that single character punctuations are
+allowed as [link quickbook.syntax.block.templates.template_identifier
 template identifiers]. Example:
 
 [pre'''
@@ -1380,7 +1381,7 @@ will generate this:
     (EBNF) completely in C++.
 ]
 
-[note Prefer [link quickbook.syntax.block.admonitions admonitions] wherever 
+[note Prefer [link quickbook.syntax.block.admonitions admonitions] wherever
 appropriate.]
 
 [endsect]
@@ -1524,30 +1525,30 @@ into the current document, with the following exceptions:
   file currently being processed.
 * Any macros defined in the included file are scoped to that file.
 
-The [^\[include\]] directive lets you specify a document id to use for the 
-included file. When this id is not explicitly specified, the id defaults to 
-the filename ("someother", in the example above). You can specify the id 
+The [^\[include\]] directive lets you specify a document id to use for the
+included file. When this id is not explicitly specified, the id defaults to
+the filename ("someother", in the example above). You can specify the id
 like this:
 
 [pre'''
 [include:someid someother.qbk]
 ''']
 
-All auto-generated anchors will use the document id as a unique prefix. So 
-for instance, if there is a top section in someother.qbk named "Intro", the 
-named anchor for that section will be "someid.intro", and you can link to 
+All auto-generated anchors will use the document id as a unique prefix. So
+for instance, if there is a top section in someother.qbk named "Intro", the
+named anchor for that section will be "someid.intro", and you can link to
 it with [^\[link someid.intro The Intro\]].
 
 [endsect]
 
 [section Import]
 
-When documenting code, you'd surely need to present code from actual source 
-files. While it is possible to copy some code and paste them in your QuickBook 
-file, doing so is error prone and the extracted code in the documentation tends 
-to get out of sync with the actual code as the code evolves. The problem, as 
-always, is that once documentation is written, the tendency is for the docs to 
-languish in the archives without maintenance. 
+When documenting code, you'd surely need to present code from actual source
+files. While it is possible to copy some code and paste them in your QuickBook
+file, doing so is error prone and the extracted code in the documentation tends
+to get out of sync with the actual code as the code evolves. The problem, as
+always, is that once documentation is written, the tendency is for the docs to
+languish in the archives without maintenance.
 
 QuickBook's import facility provides a nice solution.
 
@@ -1568,10 +1569,10 @@ The first line:
 [import ../test/stub.cpp]
 ''']
 
-collects specially marked-up code snippets from [@../../test/stub.cpp stub.cpp] 
-and places them in your QuickBook file as virtual templates. Each of the 
-specially marked-up code snippets has a name (e.g. `foo` and `bar` in the 
-example above). This shall be the template identifier for that particular code 
+collects specially marked-up code snippets from [@../../test/stub.cpp stub.cpp]
+and places them in your QuickBook file as virtual templates. Each of the
+specially marked-up code snippets has a name (e.g. `foo` and `bar` in the
+example above). This shall be the template identifier for that particular code
 snippet. The second and third line above does the actual template expansion:
 
 [pre'''
@@ -1587,16 +1588,16 @@ And the result is:
 
 [heading Code Snippet Markup]
 
-Note how the code snippets in [@../../test/stub.cpp stub.cpp] get marked up. We 
+Note how the code snippets in [@../../test/stub.cpp stub.cpp] get marked up. We
 use distinguishable comments following the form:
 
     //[id
     some code here
     //]
-    
-The first comment line above initiates a named code-snippet. This prefix will 
-not be visible in quickbook. The entire code-snippet in between `//[id` and 
-`//]` will be inserted as a template in quickbook with name ['/id/]. The comment 
+
+The first comment line above initiates a named code-snippet. This prefix will
+not be visible in quickbook. The entire code-snippet in between `//[id` and
+`//]` will be inserted as a template in quickbook with name ['/id/]. The comment
 `//]` ends a code-snippet This too will not be visible in quickbook.
 
 [heading Special Comments]
@@ -1604,15 +1605,31 @@ not be visible in quickbook. The entire code-snippet in between `//[id` and
 Special comments of the form:
 
     //` some [*quickbook] markup here
-    
+
 and:
 
     /*` some [*quickbook] markup here */
 
-will be parsed by QuickBook. This can contain quickbook /blocks/ (e.g. sections, 
-paragraphs, tables, etc). In the first case, the initial slash-slash, tick and 
-white-space shall be ignored. In the second, the initial slash-star-tick and the 
+will be parsed by QuickBook. This can contain quickbook /blocks/ (e.g. sections,
+paragraphs, tables, etc). In the first case, the initial slash-slash, tick and
+white-space shall be ignored. In the second, the initial slash-star-tick and the
 final star-slash shall be ignored.
+
+[heading Callouts]
+
+Special comments of the form:
+
+    /*< some [*quickbook] markup here >*/
+
+will be regarded as callouts. These will be collected, numbered and
+rendered as a "callout bug" (a small icon with a number). After the
+whole snippet is parsed, the callout list is generated. See
+[@http://www.docbook.org/tdg/en/html/callout.html Callouts] for details.
+Example:
+
+[foo_bar]
+
+Checkout [@../../test/stub.cpp stub.cpp] to see the actual code.
 
 [endsect]
 
@@ -1724,7 +1741,7 @@ Build documentation].
 
     using xsltproc ;
 
-    using boostbook 
+    using boostbook
         : /usr/share/xml/docbook/stylesheet/nwalsh
         : /usr/share/xml/docbook/schema/dtd/4.2
         ;
@@ -1756,11 +1773,11 @@ rebuilds:
 
 [section:editors Editor Support]
 
-Editing quickbook files is usually done with text editors both simple and 
-powerful. The following sections list the settings for some editors which can 
+Editing quickbook files is usually done with text editors both simple and
+powerful. The following sections list the settings for some editors which can
 help make editing quickbook files a bit easier.
 
-[blurb __note__ You may submit your settings, tips, and suggestions to the 
+[blurb __note__ You may submit your settings, tips, and suggestions to the
 authors, or through the [@https://lists.sourceforge.net/lists/listinfo/boost-
 docs Boost Docs mailing list].]
 
@@ -1768,7 +1785,7 @@ docs Boost Docs mailing list].]
 
 [:['Section contributed by Dean Michael Berris]]
 
-The Scintilla Text Editor (SciTE) is a free source code editor for Win32 and X. 
+The Scintilla Text Editor (SciTE) is a free source code editor for Win32 and X.
 It uses the SCIntilla source code editing component.
 
 [blurb __tip__ SciTE can be downloaded from [@http://www.scintilla.org/SciTE.html]]
@@ -1804,10 +1821,10 @@ QuickBook can be used for non-Boost documentation with a little extra work.
 
 [:['Faq contributed by Michael Marcin]]
 
-When building HTML documentation with BoostBook a Boost C++ Libraries header 
+When building HTML documentation with BoostBook a Boost C++ Libraries header
 is added to the files. When using QuickBook to document projects outside of
-Boost this is not desirable. This behavior can be overridden at the BoostBook 
-level by specifying some XSLT options. When using Boost Build version 2 (BBv2) 
+Boost this is not desirable. This behavior can be overridden at the BoostBook
+level by specifying some XSLT options. When using Boost Build version 2 (BBv2)
 this can be achieved by adding parameters to the BoostBook target declaration.
 
 For example:
@@ -1818,7 +1835,7 @@ xml my_doc : my_doc.qbk ;
 
 boostbook standalone
     :
-        my_doc    
+        my_doc
     :
         <xsl:param>boost.image.src=images/my_project_logo.png
         <xsl:param>boost.image.alt="\\"My Project\\""

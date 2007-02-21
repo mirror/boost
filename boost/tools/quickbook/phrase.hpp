@@ -31,10 +31,10 @@ namespace quickbook
                 (
                     graph_p                     // A single char. e.g. *c*
                     >> eps_p(mark
-                        >> (space_p | punct_p | end_p)) 
-                                                // space_p, punct_p or end_p 
+                        >> (space_p | punct_p | end_p))
+                                                // space_p, punct_p or end_p
                 )                               // must follow mark
-            |   
+            |
                 (   graph_p >>                  // graph_p must follow mark
                     *(anychar_p -
                         (   eol                 // Make sure that we don't go
@@ -42,14 +42,14 @@ namespace quickbook
                         )
                     ) >> graph_p                // graph_p must precede mark
                     >> eps_p(mark
-                        >> (space_p | punct_p | end_p)) 
-                                                // space_p, punct_p or end_p 
+                        >> (space_p | punct_p | end_p))
+                                                // space_p, punct_p or end_p
                 )                               // must follow mark
             )                                   [action]
             >> mark
             ;
     }
-    
+
     template <typename Actions>
     struct phrase_grammar : grammar<phrase_grammar<Actions> >
     {
@@ -94,7 +94,7 @@ namespace quickbook
                     )
                                                         [actions.comment]
                     ;
-                
+
                 dummy_block =
                     '[' >> *(dummy_block | (anychar_p - ']')) >> ']'
                     ;
@@ -108,13 +108,13 @@ namespace quickbook
                     |   escape
                     |   comment
                     ;
-                    
-                macro = 
+
+                macro =
                     eps_p(actions.macro                 // must not be followed by
                         >> (eps_p - (alpha_p | '_')))   // alpha or underscore
                     >> actions.macro                    [actions.do_macro]
                     ;
-                
+
                 template_args =
                     template_arg                        [push_back_a(actions.template_info)]
                     >> *(
@@ -124,7 +124,7 @@ namespace quickbook
 
                 template_ =
                     (
-                        (eps_p(punct_p) 
+                        (eps_p(punct_p)
                             >> actions.templates.scope
                         )                               [push_back_a(actions.template_info)]
                         >> !template_args
@@ -133,16 +133,16 @@ namespace quickbook
                         (actions.templates.scope
                             >> eps_p
                         )                               [push_back_a(actions.template_info)]
-                        >> !(hard_space 
+                        >> !(hard_space
                             >> template_args)
                     )
                     ;
 
-                brackets = 
+                brackets =
                     '[' >> +template_arg >> ']'
                     ;
 
-                template_arg = 
+                template_arg =
                     +(brackets | (anychar_p - (str_p("..") | ']')))
                     ;
 
@@ -159,12 +159,22 @@ namespace quickbook
                     ;
 
                 code_block =
-                    "``" >>
-                    (
-                       *(anychar_p - "``")
-                            >> eps_p("``")
-                    )                                   [actions.code_block]
-                    >>  "``"
+                        (
+                            "```" >>
+                            (
+                               *(anychar_p - "```")
+                                    >> eps_p("```")
+                            )                           [actions.code_block]
+                            >>  "```"
+                        )
+                    |   (
+                            "``" >>
+                            (
+                               *(anychar_p - "``")
+                                    >> eps_p("``")
+                            )                           [actions.code_block]
+                            >>  "``"
+                        )
                     ;
 
                 simple_format =
@@ -174,13 +184,13 @@ namespace quickbook
                     |   simple_teletype
                     ;
 
-                simple_markup(simple_bold, 
+                simple_markup(simple_bold,
                     '*', actions.simple_bold, eol);
-                simple_markup(simple_italic, 
+                simple_markup(simple_italic,
                     '/', actions.simple_italic, eol);
-                simple_markup(simple_underline, 
+                simple_markup(simple_underline,
                     '_', actions.simple_underline, eol);
-                simple_markup(simple_teletype, 
+                simple_markup(simple_teletype,
                     '=', actions.simple_teletype, eol);
 
                 phrase =
@@ -197,7 +207,7 @@ namespace quickbook
                         |   url
                         |   link
                         |   anchor
-                        |   source_mode    
+                        |   source_mode
                         |   funcref
                         |   classref
                         |   memberref
@@ -349,7 +359,7 @@ namespace quickbook
                         ch_p('-')                       [actions.strikethrough_pre]
                     >>  blank >> phrase                 [actions.strikethrough_post]
                     ;
-                
+
                 quote =
                         ch_p('"')                       [actions.quote_pre]
                     >>  blank >> phrase                 [actions.quote_post]
@@ -372,13 +382,13 @@ namespace quickbook
                     >>  blank >> phrase                 [actions.footnote_post]
                     ;
             }
-            
-            rule<Scanner>   space, blank, comment, phrase, phrase_markup, image, 
-                            close_bracket, bold, italic, underline, teletype, 
-                            strikethrough, escape, url, common, funcref, 
+
+            rule<Scanner>   space, blank, comment, phrase, phrase_markup, image,
+                            close_bracket, bold, italic, underline, teletype,
+                            strikethrough, escape, url, common, funcref,
                             classref, memberref, enumref, macroref, headerref, conceptref,
-                            anchor, link, hard_space, eol, inline_code, simple_format, 
-                            simple_bold, simple_italic, simple_underline, 
+                            anchor, link, hard_space, eol, inline_code, simple_format,
+                            simple_bold, simple_italic, simple_underline,
                             simple_teletype, source_mode, template_, template_arg,
                             quote, code_block, footnote, replaceable, macro,
                             brackets, template_args, dummy_block;
@@ -420,7 +430,7 @@ namespace quickbook
                     )
                                                     [actions.comment]
                     ;
-                
+
                 dummy_block =
                     '[' >> *(dummy_block | (anychar_p - ']')) >> ']'
                     ;

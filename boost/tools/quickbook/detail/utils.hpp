@@ -56,9 +56,9 @@ namespace quickbook { namespace detail
 
     // remove the extension from a filename
     std::string remove_extension(std::string const& filename);
-    
+
     std::string escape_uri(std::string uri);
-    
+
     // Preformats an error/warning message so that it can be parsed by
     // common IDEs. Uses the ms_errors global to determine if VS format
     // or GCC format. Returns the stream to continue ouput of the verbose
@@ -67,18 +67,18 @@ namespace quickbook { namespace detail
     std::ostream & outwarn(std::string const& file, int line);
 
     // load file into memory with extra trailing newlines to eliminate
-    //  the need to check for end of file in the grammar. 
+    //  the need to check for end of file in the grammar.
     int load(std::string const& filename, std::string& storage);
-    
+
     // given a file extension, return the type of the source file
     // we'll have an internal database for known file types.
-    
+
     enum file_type
     {
         cpp_file
       , python_file
     };
-    
+
     file_type get_file_type(std::string const& extension);
 }}
 

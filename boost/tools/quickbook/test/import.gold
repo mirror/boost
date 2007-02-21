@@ -15,5 +15,6 @@
 </phrase>    <phrase role="keyword">return</phrase> <phrase role="string">&quot;foo&quot;</phrase><phrase role="special">;</phrase>
 <phrase role="special">}</phrase>
 </programlisting>
+    <calloutlist></calloutlist>
   </para>
 </article>
