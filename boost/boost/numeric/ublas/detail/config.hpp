@@ -171,7 +171,7 @@ namespace std {
 
 // Cannot continue with an unsupported compiler
 #if defined(BOOST_UBLAS_UNSUPPORTED_COMPILER) && (BOOST_UBLAS_UNSUPPORTED_COMPILER != 0)
-#error Your compiler is unsupported by this verions of uBLAS. Boost 1.32.0 includes uBLAS with support for many old compilers.
+#error Your compiler and/or configuration is unsupported by this verions of uBLAS. Define BOOST_UBLAS_UNSUPPORTED_COMPILER=0 to override this message. Boost 1.32.0 includes uBLAS with support for many older compilers.
 #endif
 
 
