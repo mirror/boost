@@ -41,9 +41,9 @@ public:
   BOOST_STATIC_ASSERT(!std::numeric_limits<RealType>::is_integer);
 #endif
 
-  explicit cauchy_distribution(result_type median = result_type(0), 
-                               result_type sigma = result_type(1))
-    : _median(median), _sigma(sigma) { }
+  explicit cauchy_distribution(result_type median_arg = result_type(0), 
+                               result_type sigma_arg = result_type(1))
+    : _median(median_arg), _sigma(sigma_arg) { }
 
   // compiler-generated copy ctor and assignment operator are fine
 

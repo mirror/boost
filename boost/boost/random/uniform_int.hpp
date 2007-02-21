@@ -40,14 +40,14 @@ public:
   typedef IntType result_type;
   typedef typename random::detail::make_unsigned<result_type>::type range_type;
 
-  explicit uniform_int(IntType min = 0, IntType max = 9)
-    : _min(min), _max(max)
+  explicit uniform_int(IntType min_arg = 0, IntType max_arg = 9)
+    : _min(min_arg), _max(max_arg)
   {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
     // MSVC fails BOOST_STATIC_ASSERT with std::numeric_limits at class scope
     BOOST_STATIC_ASSERT(std::numeric_limits<IntType>::is_integer);
 #endif
-    assert(min <= max);
+    assert(min_arg <= max_arg);
     init();
   }
 

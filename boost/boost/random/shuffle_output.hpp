@@ -52,7 +52,7 @@ public:
     : _rng(x._rng), y(x.y) { std::copy(x.v, x.v+k, v); }
 #endif
   template<class T>
-  explicit shuffle_output(T seed) : _rng(seed) { init(); }
+  explicit shuffle_output(T s) : _rng(s) { init(); }
   explicit shuffle_output(const base_type & rng) : _rng(rng) { init(); }
   template<class It> shuffle_output(It& first, It last)
     : _rng(first, last) { init(); }

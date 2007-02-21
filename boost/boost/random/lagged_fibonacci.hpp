@@ -102,8 +102,8 @@ private:
   void init_wordmask()
   {
     wordmask = 0;
-    for(int i = 0; i < w; ++i)
-      wordmask |= (1u << i);
+    for(int j = 0; j < w; ++j)
+      wordmask |= (1u << j);
   }
 
 public:
@@ -319,8 +319,8 @@ public:
     unsigned int j;
     for(j = 0; j < long_lag && first != last; ++j, ++first) {
       x[j] = RealType(0);
-      for(int i = 0; i < w/32 && first != last; ++i, ++first)
-        x[j] += *first / pow(two32,i+1);
+      for(int k = 0; k < w/32 && first != last; ++k, ++first)
+        x[j] += *first / pow(two32,k+1);
       if(first != last && mask != 0)
         x[j] += fmod((*first & mask) / _modulus, RealType(1));
     }

@@ -37,10 +37,10 @@ public:
   typedef RealType input_type;
   typedef IntType result_type;
 
-  explicit geometric_distribution(const RealType& p = RealType(0.5))
-    : _p(p)
+  explicit geometric_distribution(const RealType& p_arg = RealType(0.5))
+    : _p(p_arg)
   {
-    assert(RealType(0) < p && p < RealType(1));
+    assert(RealType(0) < _p && _p < RealType(1));
     init();
   }
 
