@@ -29,8 +29,8 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef IntType result_type;
 
-  uniform_int_float(base_type rng, IntType min = 0, IntType max = 0xffffffff)
-    : _rng(rng), _min(min), _max(max)
+  uniform_int_float(base_type rng, IntType min_arg = 0, IntType max_arg = 0xffffffff)
+    : _rng(rng), _min(min_arg), _max(max_arg)
   {
     init();
   }
