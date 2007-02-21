@@ -37,6 +37,7 @@
   <xsl:param name="doc.standalone">false</xsl:param>
   <xsl:param name="chunker.output.indent">yes</xsl:param>
   <xsl:param name="toc.max.depth">2</xsl:param>
+  <xsl:param name="callout.graphics.number.limit">15</xsl:param>
 
 <xsl:param name="admon.style">
     <!-- Remove the style. Let the CSS do the styling -->
