@@ -188,9 +188,26 @@ namespace boost { namespace proto
         /**/
 
     /// \brief Empty type to be used as a dummy template parameter of
-    ///     POD expression wrappers. It allows argument-dependent look-up
+    ///     POD expression wrappers. It allows argument-dependent lookup
     ///     to find proto's operator overloads.
     ///
+    /// For example:
+    ///
+    ///     template< typename T, typename Dummy = proto::is_proto_expr >
+    ///     struct my_terminal
+    ///     {
+    ///         BOOST_PROTO_EXTENDS(
+    ///             typename proto::terminal<T>::type
+    ///           , my_terminal<T>
+    ///           , default_domain
+    ///         )
+    ///     };
+    ///
+    ///     my_terminal<int> _1, _2;
+    ///     _1 + _2; // OK, uses proto::operator+
+    ///
+    /// Without the second Dummy template parameter, Proto's operator 
+    /// overloads would not be considered by name lookup.
     struct is_proto_expr
     {};
 

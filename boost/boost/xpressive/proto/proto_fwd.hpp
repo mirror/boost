@@ -24,6 +24,10 @@
 # define BOOST_PROTO_MAX_ARITY 5
 #endif
 
+#ifndef BOOST_PROTO_MAX_LOGICAL_ARITY
+# define BOOST_PROTO_MAX_LOGICAL_ARITY 8
+#endif
+
 #if BOOST_WORKAROUND(__GNUC__, == 3)
 # define BOOST_PROTO_BROKEN_CONST_OVERLOADS
 #endif
@@ -211,14 +215,14 @@ namespace boost { namespace proto
     template<
         typename Grammar0
       , typename Grammar1
-      , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY,2), typename G, void)
+      , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_SUB(BOOST_PROTO_MAX_LOGICAL_ARITY,2), typename G, void)
     >
     struct or_;
 
     template<
         typename Grammar0
       , typename Grammar1
-      , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_SUB(BOOST_PROTO_MAX_ARITY,2), typename G, void)
+      , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_SUB(BOOST_PROTO_MAX_LOGICAL_ARITY,2), typename G, void)
     >
     struct and_;
 
