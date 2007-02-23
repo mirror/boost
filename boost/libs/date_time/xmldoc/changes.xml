@@ -23,6 +23,18 @@
       </thead>
       <tbody>
         <row>
+          <entry>Feature</entry>
+          <entry>
+             Updated the data in the date_time_zonespec.csv file to reflect new US/Canada 
+             daylight savings time rules for 2007.  If you upgrade to the new file, be aware
+             that the library will only give correct answers for current/future date
+             conversions.  So if you are converting dates from earlier years the answers 
+             will reflect current time zone rules not past rules.  The library doesn't support 
+             historic timezone rules presently. 
+          </entry>
+        </row>
+
+        <row>
           <entry>Bug Fix</entry>
           <entry>Fix a problem with potential linking error with multiple definitions due
                  to I/O code.
@@ -59,11 +71,6 @@
           </entry>
         </row>
 
-        <row>
-          <entry>Bug Fix</entry>
-          <entry>
-          </entry>
-        </row>
 
         <row>
           <entry>Bug Fix</entry>
