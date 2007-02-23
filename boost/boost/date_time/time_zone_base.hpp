@@ -10,6 +10,7 @@
 
 
 #include <string>
+#include <sstream>
 
 namespace boost {
 namespace date_time {
