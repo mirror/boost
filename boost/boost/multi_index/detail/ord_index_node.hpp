@@ -1,4 +1,4 @@
-/* Copyright 2003-2006 Joaquín M López Muñoz.
+/* Copyright 2003-2007 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -91,6 +91,17 @@ private:
  * ordered_index_node_impl by 25%.
  */
 
+#if defined(BOOST_MSVC)
+/* This code casts pointers to an integer type that has been computed
+ * to be large enough to hold the pointer, however the metaprogramming
+ * logic is not always spotted by the VC++ code analyser that issues a
+ * long list of warnings.
+ */
+
+#pragma warning(push)
+#pragma warning(disable:4312 4311)
+#endif
+
 struct ordered_index_node_compressed_base
 {
   struct color_ref
@@ -169,6 +180,9 @@ private:
   ordered_index_node_impl* left_;
   ordered_index_node_impl* right_;
 };
+#if defined(BOOST_MSVC)
+#pragma warning(pop)
+#endif
 #endif
 
 struct ordered_index_node_impl:
