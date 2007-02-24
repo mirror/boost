@@ -113,14 +113,14 @@ namespace boost_concepts
   {
       typedef typename boost::iterator_traversal<Iterator>::type traversal_category;
 
+      BOOST_CONCEPT_ASSERT((
+        boost::Convertible<
+            traversal_category
+          , boost::incrementable_traversal_tag
+        >));
+
       BOOST_CONCEPT_USAGE(IncrementableIterator)
       {
-          BOOST_CONCEPT_ASSERT((
-            boost::Convertible<
-                traversal_category
-              , boost::incrementable_traversal_tag
-            >));
-
           ++i;
           (void)i++;
       }
@@ -133,14 +133,11 @@ namespace boost_concepts
     , boost::EqualityComparable<Iterator>
 
   {
-      BOOST_CONCEPT_USAGE(SinglePassIterator)
-      {
-          BOOST_CONCEPT_ASSERT((
-              boost::Convertible<
-                 BOOST_DEDUCED_TYPENAME SinglePassIterator::traversal_category
-               , boost::single_pass_traversal_tag
-              > ));
-      }
+      BOOST_CONCEPT_ASSERT((
+          boost::Convertible<
+             BOOST_DEDUCED_TYPENAME SinglePassIterator::traversal_category
+           , boost::single_pass_traversal_tag
+          > ));
   };
 
   BOOST_concept(ForwardTraversal,(Iterator))
@@ -149,30 +146,27 @@ namespace boost_concepts
   {
       typedef typename boost::detail::iterator_traits<Iterator>::difference_type difference_type;
       
-      BOOST_CONCEPT_USAGE(ForwardTraversal)
-      {
-          BOOST_MPL_ASSERT((boost::is_integral<difference_type>));
-          BOOST_MPL_ASSERT_RELATION(std::numeric_limits<difference_type>::is_signed, ==, true);
-          
-          BOOST_CONCEPT_ASSERT((
-              boost::Convertible<
-                 BOOST_DEDUCED_TYPENAME ForwardTraversal::traversal_category
-               , boost::forward_traversal_tag
-              > ));
-    }
+      BOOST_MPL_ASSERT((boost::is_integral<difference_type>));
+      BOOST_MPL_ASSERT_RELATION(std::numeric_limits<difference_type>::is_signed, ==, true);
+
+      BOOST_CONCEPT_ASSERT((
+          boost::Convertible<
+             BOOST_DEDUCED_TYPENAME ForwardTraversal::traversal_category
+           , boost::forward_traversal_tag
+          > ));
   };
   
   BOOST_concept(BidirectionalTraversal,(Iterator))
     : ForwardTraversal<Iterator>
   {
+      BOOST_CONCEPT_ASSERT((
+          boost::Convertible<
+             BOOST_DEDUCED_TYPENAME BidirectionalTraversal::traversal_category
+           , boost::bidirectional_traversal_tag
+          > ));
+
       BOOST_CONCEPT_USAGE(BidirectionalTraversal)
       {
-          BOOST_CONCEPT_ASSERT((
-              boost::Convertible<
-                 BOOST_DEDUCED_TYPENAME BidirectionalTraversal::traversal_category
-               , boost::bidirectional_traversal_tag
-              > ));
-          
           --i;
           (void)i--;
       }
@@ -183,15 +177,14 @@ namespace boost_concepts
   BOOST_concept(RandomAccessTraversal,(Iterator))
     : BidirectionalTraversal<Iterator>
   {
-   public:
+      BOOST_CONCEPT_ASSERT((
+          boost::Convertible<
+             BOOST_DEDUCED_TYPENAME RandomAccessTraversal::traversal_category
+           , boost::random_access_traversal_tag
+          > ));
+
       BOOST_CONCEPT_USAGE(RandomAccessTraversal)
       {
-          BOOST_CONCEPT_ASSERT((
-              boost::Convertible<
-                 BOOST_DEDUCED_TYPENAME RandomAccessTraversal::traversal_category
-               , boost::random_access_traversal_tag
-              > ));
-          
           i += n;
           i = i + n;
           i = n + i;
@@ -268,11 +261,11 @@ namespace boost_concepts
       >::type const_traversal_category;
       
   public:
+      BOOST_CONCEPT_ASSERT((SinglePassIterator<Iterator>));
+      BOOST_CONCEPT_ASSERT((SinglePassIterator<ConstIterator>));
+
       BOOST_CONCEPT_USAGE(InteroperableIterator)
       {
-          BOOST_CONCEPT_ASSERT((SinglePassIterator<Iterator>));
-          BOOST_CONCEPT_ASSERT((SinglePassIterator<ConstIterator>));
-
           detail::interop_single_pass_constraints(i, ci);
           detail::interop_rand_access_constraints(i, ci, traversal_category(), const_traversal_category());
 
