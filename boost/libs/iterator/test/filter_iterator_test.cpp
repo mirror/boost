@@ -268,6 +268,5 @@ int main()
         dummyT(1), dummyT(4));
 
 
-  std::cout << "test successful " << std::endl;
-  return boost::exit_success;
+    return boost::report_errors();
 }

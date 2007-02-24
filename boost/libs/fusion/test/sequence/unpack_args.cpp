@@ -225,4 +225,5 @@ int main()
     test_sequence(l1);
     test_sequence(l2);
     test_sequence(l3);
+    return boost::report_errors();
 }

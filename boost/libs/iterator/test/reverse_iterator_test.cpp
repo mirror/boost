@@ -170,6 +170,5 @@ int main()
 #endif
   }
 
-  std::cout << "test successful " << std::endl;
-  return boost::exit_success;
+  return boost::report_errors();
 }

@@ -5,7 +5,7 @@
 
 #include <boost/parameter.hpp>
 #include <boost/parameter/match.hpp>
-#include <boost/assert.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <string>
 #include <boost/type_traits/is_convertible.hpp>
 
@@ -38,14 +38,14 @@ namespace test
   // vc++ 6 ICE.
   void assert_equal_string(std::string x, std::string y)
   {
-        BOOST_ASSERT(x == y);
+        BOOST_TEST(x == y);
   }
   
   template<class P>
   void f_impl(P const& p)
   {
       float v = p[value | 3.f];
-      BOOST_ASSERT(v == 3.f);
+      BOOST_TEST(v == 3.f);
       assert_equal_string(p[name | "bar"], "foo");
   }
 
@@ -97,9 +97,8 @@ int main()
     f(value = 3.f, name = "foo");
 
 #ifndef BOOST_NO_SFINAE
-    return f(3, 4);
-#else 
-    return 0;
-#endif 
+    BOOST_TEST(f(3, 4) == 0);
+#endif
+    return boost::report_errors();
 }
 
