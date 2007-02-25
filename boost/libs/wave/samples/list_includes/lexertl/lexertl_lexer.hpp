@@ -26,18 +26,27 @@
 #include <boost/wave/cpplexer/detect_include_guards.hpp>
 #endif
 
+#include "wave_lexertl_config.hpp"
 #include "../lexertl_iterator.hpp"
 
+#if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES != 0
+#include "wave_lexertl_tables.hpp"
+#else
 #include "lexertl/generator.hpp"
 #include "lexertl/rules.hpp"
 #include "lexertl/state_machine.hpp"
 #include "lexertl/consts.h"
 #include "lexertl/examples/serialise.hpp"
+#if BOOST_WAVE_LEXERTL_GENERATE_CPP_CODE != 0
+#include "lexertl/examples/cpp_code.hpp"
+#endif
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 namespace boost { namespace wave { namespace cpplexer { namespace lexertl 
 {
 
+#if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
 ///////////////////////////////////////////////////////////////////////////////
 //  The following numbers are the array sizes of the token regex's which we
 //  need to specify to make the CW compiler happy (at least up to V9.5).
@@ -49,6 +58,7 @@ namespace boost { namespace wave { namespace cpplexer { namespace lexertl
 #define INIT_DATA_CPP_SIZE          15
 #define INIT_DATA_PP_NUMBER_SIZE    2
 #define INIT_MACRO_DATA_SIZE        27
+#endif // #if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
 
 //  this is just a hack to have a unique token id not otherwise used by Wave
 #define T_ANYCTRL   T_LAST_TOKEN_ID
@@ -68,11 +78,14 @@ private:
         char_type;
 
 public:
-    lexertl() : has_compiled_dfa_(false) {}
-    
     wave::token_id next_token(Iterator &first, Iterator const &last,
         string_type& token_value);
     
+#if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES != 0
+    lexertl() {}
+    bool is_initialized() const { return true; }
+#else
+    lexertl() : has_compiled_dfa_(false) {}
     bool init_dfa(wave::language_support lang, Position const& pos,
         bool force_reinit = false);
     bool is_initialized() const { return has_compiled_dfa_; }
@@ -105,8 +118,10 @@ private:
 
 // helper for calculation of the time of last compilation
     static boost::wave::util::time_conversion_helper compilation_time;
+#endif // #if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
 };
 
+#if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
 ///////////////////////////////////////////////////////////////////////////////
 // get time of last compilation of this file
 template <typename IteratorT, typename PositionT>
@@ -470,6 +485,7 @@ std::ifstream dfa_in("wave_lexertl_lexer.dfa", std::ios::in|std::ios::binary);
     has_compiled_dfa_ = true;
     return true;
 }
+#endif // BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
 
 ///////////////////////////////////////////////////////////////////////////////
 // return next token from the input stream
@@ -478,11 +494,16 @@ inline wave::token_id
 lexertl<Iterator, Position>::next_token(Iterator &first, Iterator const &last,
     string_type& token_value)
 {
+#if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
     size_t const* const lookup = &state_machine_._lookup[0]->front ();
     size_t const dfa_alphabet_ = state_machine_._dfa_alphabet[0];
 
-    size_t const* dfa_start = &state_machine_._dfa[0]->front();
-    size_t const* ptr = dfa_start + dfa_alphabet_ + ::lexertl::dfa_offset;
+    size_t const* dfa = &state_machine_._dfa[0]->front();
+    size_t const* ptr = dfa + dfa_alphabet_ + ::lexertl::dfa_offset;
+#else
+	  const std::size_t *ptr = dfa + dfa_offset;
+#endif // BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
+
     Iterator curr = first;
     Iterator end_token = first;
     bool end_state = (*ptr != 0);
@@ -494,7 +515,11 @@ lexertl<Iterator, Position>::next_token(Iterator &first, Iterator const &last,
             break;
         ++curr;
 
-        ptr = &dfa_start[state * (dfa_alphabet_ + ::lexertl::dfa_offset)];
+#if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
+        ptr = &dfa[state * (dfa_alphabet_ + ::lexertl::dfa_offset)];
+#else
+        ptr = &dfa[state * dfa_offset];
+#endif // BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
 
         if (0 != *ptr) {
             end_state = true;
@@ -517,17 +542,22 @@ lexertl<Iterator, Position>::next_token(Iterator &first, Iterator const &last,
     return T_EOF;
 }
 
+#if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
 ///////////////////////////////////////////////////////////////////////////////
 //  load the DFA tables to/from a stream
 template <typename Iterator, typename Position>
 inline bool
 lexertl<Iterator, Position>::load (std::istream& instrm)
 {
+#if !defined(BOOST_WAVE_LEXERTL_GENERATE_CPP_CODE)
     std::size_t version = 0;
     ::lexertl::serialise::load_as_binary(instrm, state_machine_, version);
     if (version != (std::size_t)get_compilation_time())
         return false;       // too new for us
     return instrm.good();
+#else
+    return false;   // always create the dfa when generating the C++ code
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -536,10 +566,15 @@ template <typename Iterator, typename Position>
 inline bool
 lexertl<Iterator, Position>::save (std::ostream& outstrm)
 {
+#if defined(BOOST_WAVE_LEXERTL_GENERATE_CPP_CODE)
+    cpp_code::generate(state_machine_, outstrm);
+#else
     ::lexertl::serialise::save_as_binary(state_machine_, outstrm, 
         (std::size_t)get_compilation_time());
+#endif
     return outstrm.good();
 }
+#endif // #if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
 
 ///////////////////////////////////////////////////////////////////////////////
 }   // namespace lexer
@@ -560,7 +595,9 @@ public:
             Position const &pos_, wave::language_support language)
     :   first(first_, last_, pos_), language(language), at_eof(false)
     {
+#if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
         lexer_.init_dfa(language, pos_);
+#endif // #if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
     }
     ~lexertl_functor() {}
 

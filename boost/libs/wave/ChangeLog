@@ -88,7 +88,9 @@ CHANGELOG
     #pragma wave options(<option>: pop)
   where <option> may be line, preserve or output. Thanks to Eric Niebler for 
   suggesting this feature.
-  
+- Added the possibility to use static pre-compiled DFA tables for the lexertl 
+  based lexer.
+
 Boost V1.34.0
 - Wave Version 1.2.4
 - Added the possibility to explicitly enable/disable the generation of #line 
