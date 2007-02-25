@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.functional.adapters.unfused_typed"></a><a href="unfused_typed.html" title="unfused_typed">unfused_typed</a></h4></div></div></div>
 <a name="fusion.functional.adapters.unfused_typed.description"></a><h5>
-<a name="id1218094"></a>
+<a name="id1218072"></a>
           <a href="unfused_typed.html#fusion.functional.adapters.unfused_typed.description">Description</a>
         </h5>
 <p>
@@ -85,14 +85,14 @@
           </p></td></tr>
 </table></div>
 <a name="fusion.functional.adapters.unfused_typed.header"></a><h5>
-<a name="id1218234"></a>
+<a name="id1218212"></a>
           <a href="unfused_typed.html#fusion.functional.adapters.unfused_typed.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">adapter</span><span class="special">/</span><span class="identifier">unfused_typed</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_typed.synopsis"></a><h5>
-<a name="id1218325"></a>
+<a name="id1218304"></a>
           <a href="unfused_typed.html#fusion.functional.adapters.unfused_typed.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -100,7 +100,7 @@
 <span class="keyword">class</span> <span class="identifier">unfused_typed</span><span class="special">;</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_typed.template_parameters"></a><h5>
-<a name="id1218412"></a>
+<a name="id1218390"></a>
           <a href="unfused_typed.html#fusion.functional.adapters.unfused_typed.template_parameters">Template
           parameters</a>
         </h5>
@@ -135,7 +135,7 @@
 </tbody>
 </table></div>
 <a name="fusion.functional.adapters.unfused_typed.model_of"></a><h5>
-<a name="id1218510"></a>
+<a name="id1218488"></a>
           <a href="unfused_typed.html#fusion.functional.adapters.unfused_typed.model_of">Model
           of</a>
         </h5>
@@ -181,7 +181,7 @@
 </dl>
 </div>
 <a name="fusion.functional.adapters.unfused_typed.expression_semantics"></a><h5>
-<a name="id1218758"></a>
+<a name="id1218736"></a>
           <a href="unfused_typed.html#fusion.functional.adapters.unfused_typed.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -217,7 +217,7 @@
 </tbody>
 </table></div>
 <a name="fusion.functional.adapters.unfused_typed.example"></a><h5>
-<a name="id1218958"></a>
+<a name="id1218936"></a>
           <a href="unfused_typed.html#fusion.functional.adapters.unfused_typed.example">Example</a>
         </h5>
 <pre class="programlisting">
@@ -250,7 +250,7 @@
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Seq</span><span class="special">&gt;</span>
     <span class="keyword">void</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">Seq</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">s</span><span class="special">)</span> <span class="keyword">const</span>
     <span class="special">{</span>
-        <a href="../../algorithms/iteration/functions.html#fusion.algorithms.iteration.functions.for_each" title="for_each"><code class="computeroutput"><span class="identifier">for_each</span></code></a><span class="special">(</span><a href="../../algorithms/transformation/functions.html#fusion.algorithms.transformation.functions.zip" title="zip"><code class="computeroutput"><span class="identifier">zip</span></code></a><span class="special">(</span><span class="identifier">tie_dest</span><span class="special">,</span><span class="identifier">s</span><span class="special">),</span> <a href="fused.html" title="fused"><code class="computeroutput"><span class="identifier">fused</span></code></a><span class="special">&lt;</span><span class="identifier">add_assign</span><span class="special">&gt;()</span> <span class="special">);</span>
+        <a href="../../algorithms/iteration/functions/for_each.html" title="for_each"><code class="computeroutput"><span class="identifier">for_each</span></code></a><span class="special">(</span><a href="../../algorithms/transformation/functions/zip.html" title="zip"><code class="computeroutput"><span class="identifier">zip</span></code></a><span class="special">(</span><span class="identifier">tie_dest</span><span class="special">,</span><span class="identifier">s</span><span class="special">),</span> <a href="fused.html" title="fused"><code class="computeroutput"><span class="identifier">fused</span></code></a><span class="special">&lt;</span><span class="identifier">add_assign</span><span class="special">&gt;()</span> <span class="special">);</span>
     <span class="special">}</span>
 <span class="special">};</span>
 
@@ -286,7 +286,7 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_typed.see_also"></a><h5>
-<a name="id1220201"></a>
+<a name="id1220179"></a>
           <a href="unfused_typed.html#fusion.functional.adapters.unfused_typed.see_also">See also</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">
@@ -299,7 +299,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2001-2005 Joel de Guzman, Dan Marsden</small></td>
+<td align="right"><small>Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
+      Schwinger</small></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.functional.adapters.fused_procedure"></a><a href="fused_procedure.html" title="fused_procedure">fused_procedure</a></h4></div></div></div>
 <a name="fusion.functional.adapters.fused_procedure.description"></a><h5>
-<a name="id1210487"></a>
+<a name="id1210465"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.description">Description</a>
         </h5>
 <p>
@@ -67,14 +67,14 @@
           implemented).
         </p>
 <a name="fusion.functional.adapters.fused_procedure.header"></a><h5>
-<a name="id1210648"></a>
+<a name="id1210626"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">adapter</span><span class="special">/</span><span class="identifier">fused_procedure</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.functional.adapters.fused_procedure.synopsis"></a><h5>
-<a name="id1210740"></a>
+<a name="id1210718"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -82,7 +82,7 @@
 <span class="keyword">class</span> <span class="identifier">fused_procedure</span><span class="special">;</span>
 </pre>
 <a name="fusion.functional.adapters.fused_procedure.template_parameters"></a><h5>
-<a name="id1210809"></a>
+<a name="id1210788"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.template_parameters">Template
           parameters</a>
         </h5>
@@ -106,7 +106,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused_procedure.model_of"></a><h5>
-<a name="id1210884"></a>
+<a name="id1210862"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.model_of">Model
           of</a>
         </h5>
@@ -142,7 +142,7 @@
 </dl>
 </div>
 <a name="fusion.functional.adapters.fused_procedure.expression_semantics"></a><h5>
-<a name="id1211058"></a>
+<a name="id1211036"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -176,14 +176,14 @@
 </tbody>
 </table></div>
 <a name="fusion.functional.adapters.fused_procedure.example"></a><h5>
-<a name="id1211241"></a>
+<a name="id1211220"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.example">Example</a>
         </h5>
 <pre class="programlisting">
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">SequenceOfSequences</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Func</span><span class="special">&gt;</span>
 <span class="keyword">void</span> <span class="identifier">n_ary_for_each</span><span class="special">(</span><span class="identifier">SequenceOfSequences</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">s</span><span class="special">,</span> <span class="identifier">Func</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">f</span><span class="special">)</span>
 <span class="special">{</span>
-    <a href="../../algorithms/iteration/functions.html#fusion.algorithms.iteration.functions.for_each" title="for_each"><code class="computeroutput"><span class="identifier">for_each</span></code></a><span class="special">(</span><a href="../../sequences/views/zip_view.html" title="zip_view"><code class="computeroutput"><span class="identifier">zip_view</span></code></a><span class="special">&lt;</span><span class="identifier">SequenceOfSequences</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">),</span> 
+    <a href="../../algorithms/iteration/functions/for_each.html" title="for_each"><code class="computeroutput"><span class="identifier">for_each</span></code></a><span class="special">(</span><a href="../../sequences/views/zip_view.html" title="zip_view"><code class="computeroutput"><span class="identifier">zip_view</span></code></a><span class="special">&lt;</span><span class="identifier">SequenceOfSequences</span><span class="special">&gt;(</span><span class="identifier">s</span><span class="special">),</span> 
         <span class="identifier">fused_procedure</span><span class="special">&lt;</span><span class="identifier">Func</span> <span class="keyword">const</span> <span class="special">&amp;&gt;(</span><span class="identifier">f</span><span class="special">));</span>
 <span class="special">}</span> 
 
@@ -192,24 +192,26 @@
     <a href="../../sequences/containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">float</span><span class="special">&gt;</span> <span class="identifier">a</span><span class="special">(</span><span class="number">2</span><span class="special">,</span><span class="number">2.0f</span><span class="special">);</span>
     <a href="../../sequences/containers/vector.html" title="vector"><code class="computeroutput"><span class="identifier">vector</span></code></a><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span><span class="keyword">float</span><span class="special">&gt;</span> <span class="identifier">b</span><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">1.5f</span><span class="special">);</span>
     <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">lambda</span><span class="special">;</span>
-    <span class="identifier">n_ary_for_each</span><span class="special">(</span><a href="../../sequences/generation/functions.html#fusion.sequences.generation.functions.vector_tie" title="vector_tie"><code class="computeroutput"><span class="identifier">vector_tie</span></code></a><span class="special">(</span><span class="identifier">a</span><span class="special">,</span><span class="identifier">b</span><span class="special">),</span> <span class="identifier">_1</span> <span class="special">-=</span> <span class="identifier">_2</span><span class="special">);</span>
-    <span class="identifier">assert</span><span class="special">(</span><span class="identifier">a</span> <span class="special">==</span> <a href="../../sequences/generation/functions.html#fusion.sequences.generation.functions.make_vector" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">0.5f</span><span class="special">));</span>
+    <span class="identifier">n_ary_for_each</span><span class="special">(</span><a href="../../sequences/generation/functions/vector_tie.html" title="vector_tie"><code class="computeroutput"><span class="identifier">vector_tie</span></code></a><span class="special">(</span><span class="identifier">a</span><span class="special">,</span><span class="identifier">b</span><span class="special">),</span> <span class="identifier">_1</span> <span class="special">-=</span> <span class="identifier">_2</span><span class="special">);</span>
+    <span class="identifier">assert</span><span class="special">(</span><span class="identifier">a</span> <span class="special">==</span> <a href="../../sequences/generation/functions/make_vector.html" title="make_vector"><code class="computeroutput"><span class="identifier">make_vector</span></code></a><span class="special">(</span><span class="number">1</span><span class="special">,</span><span class="number">0.5f</span><span class="special">));</span>
 <span class="special">}</span>
 </pre>
 <a name="fusion.functional.adapters.fused_procedure.see_also"></a><h5>
-<a name="id1211780"></a>
+<a name="id1211758"></a>
           <a href="fused_procedure.html#fusion.functional.adapters.fused_procedure.see_also">See
           also</a>
         </h5>
 <div class="itemizedlist"><ul type="disc">
 <li><a href="fused.html" title="fused"><code class="computeroutput"><span class="identifier">fused</span></code></a></li>
 <li><a href="fused_function_object.html" title="fused_function_object"><code class="computeroutput"><span class="identifier">fused_function_object</span></code></a></li>
-<li><a href="../invocation/functions.html#fusion.functional.invocation.functions.invoke_procedure" title="invoke_procedure"><code class="computeroutput"><span class="identifier">invoke_procedure</span></code></a></li>
+<li><a href="../invocation/functions/invoke_proc.html" title="
+          invoke_procedure"><code class="computeroutput"><span class="identifier">invoke_procedure</span></code></a></li>
 </ul></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2001-2005 Joel de Guzman, Dan Marsden</small></td>
+<td align="right"><small>Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
+      Schwinger</small></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

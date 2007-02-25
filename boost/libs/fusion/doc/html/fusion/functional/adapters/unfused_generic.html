@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.functional.adapters.unfused_generic"></a><a href="unfused_generic.html" title="unfused_generic">unfused_generic</a></h4></div></div></div>
 <a name="fusion.functional.adapters.unfused_generic.description"></a><h5>
-<a name="id1213504"></a>
+<a name="id1213482"></a>
           <a href="unfused_generic.html#fusion.functional.adapters.unfused_generic.description">Description</a>
         </h5>
 <p>
@@ -81,14 +81,14 @@
           object is held by value, the adapter is const).
         </p>
 <a name="fusion.functional.adapters.unfused_generic.header"></a><h5>
-<a name="id1213664"></a>
+<a name="id1213642"></a>
           <a href="unfused_generic.html#fusion.functional.adapters.unfused_generic.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">adapter</span><span class="special">/</span><span class="identifier">unfused_generic</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_generic.synopsis"></a><h5>
-<a name="id1213758"></a>
+<a name="id1213736"></a>
           <a href="unfused_generic.html#fusion.functional.adapters.unfused_generic.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -96,7 +96,7 @@
 <span class="keyword">class</span> <span class="identifier">unfused_generic</span><span class="special">;</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_generic.template_parameters"></a><h5>
-<a name="id1213828"></a>
+<a name="id1213806"></a>
           <a href="unfused_generic.html#fusion.functional.adapters.unfused_generic.template_parameters">Template
           parameters</a>
         </h5>
@@ -122,7 +122,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.adapters.unfused_generic.model_of"></a><h5>
-<a name="id1213902"></a>
+<a name="id1213881"></a>
           <a href="unfused_generic.html#fusion.functional.adapters.unfused_generic.model_of">Model
           of</a>
         </h5>
@@ -163,7 +163,7 @@
 </dl>
 </div>
 <a name="fusion.functional.adapters.unfused_generic.expression_semantics"></a><h5>
-<a name="id1214110"></a>
+<a name="id1214088"></a>
           <a href="unfused_generic.html#fusion.functional.adapters.unfused_generic.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -198,7 +198,7 @@
 </tbody>
 </table></div>
 <a name="fusion.functional.adapters.unfused_generic.example"></a><h5>
-<a name="id1214298"></a>
+<a name="id1214276"></a>
           <a href="unfused_generic.html#fusion.functional.adapters.unfused_generic.example">Example</a>
         </h5>
 <pre class="programlisting">
@@ -215,14 +215,14 @@
 
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Seq</span><span class="special">&gt;</span>
     <span class="keyword">struct</span> <span class="identifier">result</span>
-        <span class="special">:</span> <a href="../invocation/metafunctions.html#fusion.functional.invocation.metafunctions.invoke" title="invoke"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">invoke</span></code></a><span class="special">&lt;</span> <span class="identifier">Function</span><span class="special">,</span>
-            <span class="keyword">typename</span> <a href="../../algorithms/transformation/metafunctions.html#fusion.algorithms.transformation.metafunctions.push_front" title="push_front"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">push_front</span></code></a><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="special">&gt;</span>
+        <span class="special">:</span> <a href="../invocation/metafunctions/invoke.html" title="invoke"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">invoke</span></code></a><span class="special">&lt;</span> <span class="identifier">Function</span><span class="special">,</span>
+            <span class="keyword">typename</span> <a href="../../algorithms/transformation/metafunctions/push_front.html" title="push_front"><code class="computeroutput"><span class="identifier">result_of</span><span class="special">::</span><span class="identifier">push_front</span></code></a><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="special">&gt;</span>
     <span class="special">{</span> <span class="special">};</span>
 
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Seq</span><span class="special">&gt;</span>
     <span class="keyword">typename</span> <span class="identifier">result</span><span class="special">&lt;</span><span class="identifier">Seq</span><span class="special">&gt;::</span><span class="identifier">type</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">Seq</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">s</span><span class="special">)</span> <span class="keyword">const</span>
     <span class="special">{</span>
-        <span class="keyword">return</span> <a href="../invocation/functions.html#fusion.functional.invocation.functions.invoke" title="invoke"><code class="computeroutput"><span class="identifier">invoke</span></code></a><span class="special">(</span><span class="identifier">fnc_deferred</span><span class="special">,</span> <span class="identifier">push_front</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span><span class="identifier">xxx_bound</span><span class="special">));</span>
+        <span class="keyword">return</span> <a href="../invocation/functions/invoke.html" title="invoke"><code class="computeroutput"><span class="identifier">invoke</span></code></a><span class="special">(</span><span class="identifier">fnc_deferred</span><span class="special">,</span> <span class="identifier">push_front</span><span class="special">(</span><span class="identifier">s</span><span class="special">,</span><span class="identifier">xxx_bound</span><span class="special">));</span>
     <span class="special">}</span>
 <span class="special">};</span>
 
@@ -246,7 +246,7 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_generic.see_also"></a><h5>
-<a name="id1215450"></a>
+<a name="id1215428"></a>
           <a href="unfused_generic.html#fusion.functional.adapters.unfused_generic.see_also">See
           also</a>
         </h5>
@@ -260,7 +260,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2001-2005 Joel de Guzman, Dan Marsden</small></td>
+<td align="right"><small>Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
+      Schwinger</small></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

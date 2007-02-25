@@ -26,7 +26,7 @@
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.functional.adapters.unfused_lvalue_args"></a><a href="unfused_lvalue_args.html" title="unfused_lvalue_args">unfused_lvalue_args</a></h4></div></div></div>
 <a name="fusion.functional.adapters.unfused_lvalue_args.description"></a><h5>
-<a name="id1215582"></a>
+<a name="id1215560"></a>
           <a href="unfused_lvalue_args.html#fusion.functional.adapters.unfused_lvalue_args.description">Description</a>
         </h5>
 <p>
@@ -68,14 +68,14 @@
           object is held by value, the adapter is const).
         </p>
 <a name="fusion.functional.adapters.unfused_lvalue_args.header"></a><h5>
-<a name="id1215689"></a>
+<a name="id1215668"></a>
           <a href="unfused_lvalue_args.html#fusion.functional.adapters.unfused_lvalue_args.header">Header</a>
         </h5>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">adapter</span><span class="special">/</span><span class="identifier">unfused_lvalue_args</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_lvalue_args.synopsis"></a><h5>
-<a name="id1215783"></a>
+<a name="id1215761"></a>
           <a href="unfused_lvalue_args.html#fusion.functional.adapters.unfused_lvalue_args.synopsis">Synopsis</a>
         </h5>
 <pre class="programlisting">
@@ -83,7 +83,7 @@
 <span class="keyword">class</span> <span class="identifier">unfused_lvalue_args</span><span class="special">;</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_lvalue_args.template_parameters"></a><h5>
-<a name="id1215856"></a>
+<a name="id1215834"></a>
           <a href="unfused_lvalue_args.html#fusion.functional.adapters.unfused_lvalue_args.template_parameters">Template
           parameters</a>
         </h5>
@@ -109,7 +109,7 @@
 </tr></tbody>
 </table></div>
 <a name="fusion.functional.adapters.unfused_lvalue_args.model_of"></a><h5>
-<a name="id1215930"></a>
+<a name="id1215908"></a>
           <a href="unfused_lvalue_args.html#fusion.functional.adapters.unfused_lvalue_args.model_of">Model
           of</a>
         </h5>
@@ -150,7 +150,7 @@
 </dl>
 </div>
 <a name="fusion.functional.adapters.unfused_lvalue_args.expression_semantics"></a><h5>
-<a name="id1216140"></a>
+<a name="id1216118"></a>
           <a href="unfused_lvalue_args.html#fusion.functional.adapters.unfused_lvalue_args.expression_semantics">Expression
           Semantics</a>
         </h5>
@@ -185,7 +185,7 @@
 </tbody>
 </table></div>
 <a name="fusion.functional.adapters.unfused_lvalue_args.example"></a><h5>
-<a name="id1216328"></a>
+<a name="id1216306"></a>
           <a href="unfused_lvalue_args.html#fusion.functional.adapters.unfused_lvalue_args.example">Example</a>
         </h5>
 <pre class="programlisting">
@@ -200,7 +200,7 @@
     <span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">Seq</span><span class="special">&gt;</span>
     <span class="keyword">void</span> <span class="keyword">operator</span><span class="special">()(</span><span class="identifier">Seq</span> <span class="keyword">const</span> <span class="special">&amp;</span> <span class="identifier">s</span><span class="special">)</span> <span class="keyword">const</span>
     <span class="special">{</span>
-        <a href="../../algorithms/iteration/functions.html#fusion.algorithms.iteration.functions.for_each" title="for_each"><code class="computeroutput"><span class="identifier">for_each</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">,++</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">lambda</span><span class="special">::</span><span class="identifier">_1</span><span class="special">);</span>
+        <a href="../../algorithms/iteration/functions/for_each.html" title="for_each"><code class="computeroutput"><span class="identifier">for_each</span></code></a><span class="special">(</span><span class="identifier">s</span><span class="special">,++</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">lambda</span><span class="special">::</span><span class="identifier">_1</span><span class="special">);</span>
     <span class="special">}</span>
 <span class="special">};</span>
 
@@ -213,7 +213,7 @@
 <span class="special">}</span>
 </pre>
 <a name="fusion.functional.adapters.unfused_lvalue_args.see_also"></a><h5>
-<a name="id1216767"></a>
+<a name="id1216745"></a>
           <a href="unfused_lvalue_args.html#fusion.functional.adapters.unfused_lvalue_args.see_also">See
           also</a>
         </h5>
@@ -225,7 +225,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2001-2005 Joel de Guzman, Dan Marsden</small></td>
+<td align="right"><small>Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
+      Schwinger</small></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

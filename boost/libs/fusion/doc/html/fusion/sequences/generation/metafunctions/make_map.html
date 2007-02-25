@@ -26,14 +26,14 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="fusion.sequences.generation.metafunctions.make_map"></a><a href="make_map.html" title="make_map">make_map</a></h5></div></div></div>
 <a name="fusion.sequences.generation.metafunctions.make_map.description"></a><h6>
-<a name="id1048124"></a>
+<a name="id1048131"></a>
             <a href="make_map.html#fusion.sequences.generation.metafunctions.make_map.description">Description</a>
           </h6>
 <p>
             Returns the result type of <a href="../functions/make_map.html" title="make_map"><code class="computeroutput"><span class="identifier">make_map</span></code></a>.
           </p>
 <a name="fusion.sequences.generation.metafunctions.make_map.synopsis"></a><h6>
-<a name="id1048166"></a>
+<a name="id1048174"></a>
             <a href="make_map.html#fusion.sequences.generation.metafunctions.make_map.synopsis">Synopsis</a>
           </h6>
 <pre class="programlisting">
@@ -45,7 +45,7 @@
 <p>
             The variadic function accepts <code class="computeroutput"><span class="number">0</span></code>
             to <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
-            <sup>[<a name="id1048328" href="#ftn.id1048328">13</a>]</sup>
+            <sup>[<a name="id1048336" href="#ftn.id1048336">13</a>]</sup>
             elements, where <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
             is a user definable predefined maximum that defaults to <code class="computeroutput"><span class="number">10</span></code>. You may define the preprocessor constant
             <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
@@ -55,7 +55,7 @@
 <span class="preprocessor">#define</span> <span class="identifier">FUSION_MAX_VECTOR_SIZE</span> <span class="number">20</span>
 </pre>
 <a name="fusion.sequences.generation.metafunctions.make_map.parameters"></a><h6>
-<a name="id1048416"></a>
+<a name="id1048424"></a>
             <a href="make_map.html#fusion.sequences.generation.metafunctions.make_map.parameters">Parameters</a>
           </h6>
 <div class="informaltable"><table class="table">
@@ -91,7 +91,7 @@
 </tbody>
 </table></div>
 <a name="fusion.sequences.generation.metafunctions.make_map.expression_semantics"></a><h6>
-<a name="id1066076"></a>
+<a name="id1066083"></a>
             <a href="make_map.html#fusion.sequences.generation.metafunctions.make_map.expression_semantics">Expression
             Semantics</a>
           </h6>
@@ -111,21 +111,21 @@
             key types.
           </p>
 <a name="fusion.sequences.generation.metafunctions.make_map.header"></a><h6>
-<a name="id1066366"></a>
+<a name="id1066373"></a>
             <a href="make_map.html#fusion.sequences.generation.metafunctions.make_map.header">Header</a>
           </h6>
 <pre class="programlisting">
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">sequence</span><span class="special">/</span><span class="identifier">generation</span><span class="special">/</span><span class="identifier">make_map</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 </pre>
 <a name="fusion.sequences.generation.metafunctions.make_map.example"></a><h6>
-<a name="id1066459"></a>
+<a name="id1066467"></a>
             <a href="make_map.html#fusion.sequences.generation.metafunctions.make_map.example">Example</a>
           </h6>
 <pre class="programlisting">
 <span class="identifier">result_of</span><span class="special">::</span><span class="identifier">make_map</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">double</span><span class="special">,</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">double</span><span class="special">&gt;::</span><span class="identifier">type</span>
 </pre>
 <a name="fusion.sequences.generation.metafunctions.make_map.see_also"></a><h6>
-<a name="id1066550"></a>
+<a name="id1066558"></a>
             <a href="make_map.html#fusion.sequences.generation.metafunctions.make_map.see_also">See
             also</a>
           </h6>
@@ -134,7 +134,7 @@
           </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id1048328" href="#id1048328">13</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id1048336" href="#id1048336">13</a>] </sup>
                 <code class="computeroutput"><span class="identifier">map</span></code> is implemented
                 in terms of the vector. That is why we reuse <code class="computeroutput"><span class="identifier">FUSION_MAX_VECTOR_SIZE</span></code>
               </p></div>
@@ -142,7 +142,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2001-2005 Joel de Guzman, Dan Marsden</small></td>
+<td align="right"><small>Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
+      Schwinger</small></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">

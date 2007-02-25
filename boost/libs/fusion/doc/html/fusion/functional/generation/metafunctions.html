@@ -6,8 +6,10 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.68.1">
 <link rel="start" href="../../../index.html" title="Chapter 1. Fusion 2.0">
 <link rel="up" href="../generation.html" title="Generation">
-<link rel="prev" href="functions.html" title="Functions">
-<link rel="next" href="../../notes.html" title="Notes">
+<link rel="prev" href="functions/mk_unfused_rvargs.html" title="
+          make_unfused_rvalue_args">
+<link rel="next" href="metafunctions/mk_fused.html" title="
+          make_fused">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%">
@@ -20,255 +22,34 @@
 </table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="functions.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../generation.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="../../notes.html"><img src="../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="functions/mk_unfused_rvargs.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../generation.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="metafunctions/mk_fused.html"><img src="../../../images/next.png" alt="Next"></a>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="fusion.functional.generation.metafunctions"></a><a href="metafunctions.html" title="Metafunctions">Metafunctions</a></h4></div></div></div>
 <div class="toc"><dl>
-<dt><span class="section"><a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused">make_fused</a></span></dt>
-<dt><span class="section"><a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused_procedure">make_fused_procedure</a></span></dt>
-<dt><span class="section"><a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused_function_object">make_fused_function_object</a></span></dt>
-<dt><span class="section"><a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_generic">make_unfused_generic</a></span></dt>
-<dt><span class="section"><a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_lvalue_args">make_unfused_lvalue_args</a></span></dt>
-<dt><span class="section"><a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_rvalue_args">make_unfused_rvalue_args</a></span></dt>
+<dt><span class="section"><a href="metafunctions/mk_fused.html">
+          make_fused</a></span></dt>
+<dt><span class="section"><a href="metafunctions/mk_fused_proc.html">
+          make_fused_procedure</a></span></dt>
+<dt><span class="section"><a href="metafunctions/mk_fused_fobj.html">
+          make_fused_function_object</a></span></dt>
+<dt><span class="section"><a href="metafunctions/mk_unfused_genrc.html">
+          make_unfused_generic</a></span></dt>
+<dt><span class="section"><a href="metafunctions/mk_unfused_lvargs.html">
+          make_unfused_lvalue_args</a></span></dt>
+<dt><span class="section"><a href="metafunctions/mk_unfused_rvargs.html">
+          make_unfused_rvalue_args</a></span></dt>
 </dl></div>
-<div class="section" lang="en">
-<div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.functional.generation.metafunctions.make_fused"></a><a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused" title="make_fused">make_fused</a></h5></div></div></div>
-<a name="fusion.functional.generation.metafunctions.make_fused.description"></a><h6>
-<a name="id1244325"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused.description">Description</a>
-          </h6>
-<p>
-            Returns the result type of <a href="functions.html#fusion.functional.generation.functions.make_fused" title="make_fused"><code class="computeroutput"><span class="identifier">make_fused</span></code></a>.
-          </p>
-<a name="fusion.functional.generation.metafunctions.make_fused.header"></a><h6>
-<a name="id1244367"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused.header">Header</a>
-          </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">generation</span><span class="special">/</span><span class="identifier">make_fused</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
-</pre>
-<a name="fusion.functional.generation.metafunctions.make_fused.synopsis"></a><h6>
-<a name="id1244460"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused.synopsis">Synopsis</a>
-          </h6>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">result_of</span>
-<span class="special">{</span>
-    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Function</span><span class="special">&gt;</span>
-    <span class="keyword">struct</span> <span class="identifier">make_fused</span>
-    <span class="special">{</span>
-        <span class="keyword">typedef</span> <span class="emphasis"><em>unspecified</em></span> <span class="identifier">type</span><span class="special">;</span>
-    <span class="special">};</span>
-<span class="special">}</span>
-</pre>
-<a name="fusion.functional.generation.metafunctions.make_fused.see_also"></a><h6>
-<a name="id1244577"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused.see_also">See
-            also</a>
-          </h6>
-<div class="itemizedlist"><ul type="disc"><li><a href="functions.html#fusion.functional.generation.functions.make_fused" title="make_fused"><code class="computeroutput"><span class="identifier">make_fused</span></code></a></li></ul></div>
-</div>
-<div class="section" lang="en">
-<div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.functional.generation.metafunctions.make_fused_procedure"></a><a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused_procedure" title="make_fused_procedure">make_fused_procedure</a></h5></div></div></div>
-<a name="fusion.functional.generation.metafunctions.make_fused_procedure.description"></a><h6>
-<a name="id1244642"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused_procedure.description">Description</a>
-          </h6>
-<p>
-            Returns the result type of <a href="functions.html#fusion.functional.generation.functions.make_fused_procedure" title="make_fused_procedure"><code class="computeroutput"><span class="identifier">make_fused_procedure</span></code></a>.
-          </p>
-<a name="fusion.functional.generation.metafunctions.make_fused_procedure.header"></a><h6>
-<a name="id1244686"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused_procedure.header">Header</a>
-          </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">generation</span><span class="special">/</span><span class="identifier">make_fused_procedure</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
-</pre>
-<a name="fusion.functional.generation.metafunctions.make_fused_procedure.synopsis"></a><h6>
-<a name="id1244781"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused_procedure.synopsis">Synopsis</a>
-          </h6>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">result_of</span>
-<span class="special">{</span>
-    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Function</span><span class="special">&gt;</span>
-    <span class="keyword">struct</span> <span class="identifier">make_fused_procedure</span>
-    <span class="special">{</span>
-        <span class="keyword">typedef</span> <span class="emphasis"><em>unspecified</em></span> <span class="identifier">type</span><span class="special">;</span>
-    <span class="special">};</span>
-<span class="special">}</span>
-</pre>
-<a name="fusion.functional.generation.metafunctions.make_fused_procedure.see_also"></a><h6>
-<a name="id1244899"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused_procedure.see_also">See
-            also</a>
-          </h6>
-<div class="itemizedlist"><ul type="disc"><li><a href="functions.html#fusion.functional.generation.functions.make_fused_procedure" title="make_fused_procedure"><code class="computeroutput"><span class="identifier">make_fused_procedure</span></code></a></li></ul></div>
-</div>
-<div class="section" lang="en">
-<div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.functional.generation.metafunctions.make_fused_function_object"></a><a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused_function_object" title="make_fused_function_object">make_fused_function_object</a></h5></div></div></div>
-<a name="fusion.functional.generation.metafunctions.make_fused_function_object.description"></a><h6>
-<a name="id1244967"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused_function_object.description">Description</a>
-          </h6>
-<p>
-            Returns the result type of <a href="functions.html#fusion.functional.generation.functions.make_fused_function_object" title="make_fused_function_object"><code class="computeroutput"><span class="identifier">make_fused_function_object</span></code></a>.
-          </p>
-<a name="fusion.functional.generation.metafunctions.make_fused_function_object.header"></a><h6>
-<a name="id1245012"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused_function_object.header">Header</a>
-          </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">generation</span><span class="special">/</span><span class="identifier">make_fused_function_object</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
-</pre>
-<a name="fusion.functional.generation.metafunctions.make_fused_function_object.synopsis"></a><h6>
-<a name="id1245107"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused_function_object.synopsis">Synopsis</a>
-          </h6>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">result_of</span>
-<span class="special">{</span>
-    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Function</span><span class="special">&gt;</span>
-    <span class="keyword">struct</span> <span class="identifier">make_fused_function_object</span>
-    <span class="special">{</span>
-        <span class="keyword">typedef</span> <span class="emphasis"><em>unspecified</em></span> <span class="identifier">type</span><span class="special">;</span>
-    <span class="special">};</span>
-<span class="special">}</span>
-</pre>
-<a name="fusion.functional.generation.metafunctions.make_fused_function_object.see_also"></a><h6>
-<a name="id1245224"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_fused_function_object.see_also">See
-            also</a>
-          </h6>
-<div class="itemizedlist"><ul type="disc"><li><a href="functions.html#fusion.functional.generation.functions.make_fused_function_object" title="make_fused_function_object"><code class="computeroutput"><span class="identifier">make_fused_function_object</span></code></a></li></ul></div>
-</div>
-<div class="section" lang="en">
-<div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.functional.generation.metafunctions.make_unfused_generic"></a><a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_generic" title="make_unfused_generic">make_unfused_generic</a></h5></div></div></div>
-<a name="fusion.functional.generation.metafunctions.make_unfused_generic.description"></a><h6>
-<a name="id1245290"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_generic.description">Description</a>
-          </h6>
-<p>
-            Returns the result type of <a href="functions.html#fusion.functional.generation.functions.make_unfused_generic" title="make_unfused_generic"><code class="computeroutput"><span class="identifier">make_unfused_generic</span></code></a>.
-          </p>
-<a name="fusion.functional.generation.metafunctions.make_unfused_generic.header"></a><h6>
-<a name="id1245334"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_generic.header">Header</a>
-          </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">generation</span><span class="special">/</span><span class="identifier">make_unfused_generic</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
-</pre>
-<a name="fusion.functional.generation.metafunctions.make_unfused_generic.synopsis"></a><h6>
-<a name="id1245429"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_generic.synopsis">Synopsis</a>
-          </h6>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">result_of</span>
-<span class="special">{</span>
-    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Function</span><span class="special">&gt;</span>
-    <span class="keyword">struct</span> <span class="identifier">make_unfused_generic</span>
-    <span class="special">{</span>
-        <span class="keyword">typedef</span> <span class="emphasis"><em>unspecified</em></span> <span class="identifier">type</span><span class="special">;</span>
-    <span class="special">};</span>
-<span class="special">}</span>
-</pre>
-<a name="fusion.functional.generation.metafunctions.make_unfused_generic.see_also"></a><h6>
-<a name="id1245547"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_generic.see_also">See
-            also</a>
-          </h6>
-<div class="itemizedlist"><ul type="disc"><li><a href="functions.html#fusion.functional.generation.functions.make_unfused_generic" title="make_unfused_generic"><code class="computeroutput"><span class="identifier">make_unfused_generic</span></code></a></li></ul></div>
-</div>
-<div class="section" lang="en">
-<div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.functional.generation.metafunctions.make_unfused_lvalue_args"></a><a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_lvalue_args" title="make_unfused_lvalue_args">make_unfused_lvalue_args</a></h5></div></div></div>
-<a name="fusion.functional.generation.metafunctions.make_unfused_lvalue_args.description"></a><h6>
-<a name="id1245614"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_lvalue_args.description">Description</a>
-          </h6>
-<p>
-            Returns the result type of <a href="functions.html#fusion.functional.generation.functions.make_unfused_lvalue_args" title="make_unfused_lvalue_args"><code class="computeroutput"><span class="identifier">make_unfused_lvalue_args</span></code></a>.
-          </p>
-<a name="fusion.functional.generation.metafunctions.make_unfused_lvalue_args.header"></a><h6>
-<a name="id1245659"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_lvalue_args.header">Header</a>
-          </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">generation</span><span class="special">/</span><span class="identifier">make_unfused_lvalue_args</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
-</pre>
-<a name="fusion.functional.generation.metafunctions.make_unfused_lvalue_args.synopsis"></a><h6>
-<a name="id1245753"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_lvalue_args.synopsis">Synopsis</a>
-          </h6>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">result_of</span>
-<span class="special">{</span>
-    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Function</span><span class="special">&gt;</span>
-    <span class="keyword">struct</span> <span class="identifier">make_unfused_lvalue_args</span>
-    <span class="special">{</span>
-        <span class="keyword">typedef</span> <span class="emphasis"><em>unspecified</em></span> <span class="identifier">type</span><span class="special">;</span>
-    <span class="special">};</span>
-<span class="special">}</span>
-</pre>
-<a name="fusion.functional.generation.metafunctions.make_unfused_lvalue_args.see_also"></a><h6>
-<a name="id1245872"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_lvalue_args.see_also">See
-            also</a>
-          </h6>
-<div class="itemizedlist"><ul type="disc"><li><a href="functions.html#fusion.functional.generation.functions.make_unfused_lvalue_args" title="make_unfused_lvalue_args"><code class="computeroutput"><span class="identifier">make_unfused_lvalue_args</span></code></a></li></ul></div>
-</div>
-<div class="section" lang="en">
-<div class="titlepage"><div><div><h5 class="title">
-<a name="fusion.functional.generation.metafunctions.make_unfused_rvalue_args"></a><a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_rvalue_args" title="make_unfused_rvalue_args">make_unfused_rvalue_args</a></h5></div></div></div>
-<a name="fusion.functional.generation.metafunctions.make_unfused_rvalue_args.description"></a><h6>
-<a name="id1245937"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_rvalue_args.description">Description</a>
-          </h6>
-<p>
-            Returns the result type of <a href="functions.html#fusion.functional.generation.functions.make_unfused_rvalue_args" title="make_unfused_rvalue_args"><code class="computeroutput"><span class="identifier">make_unfused_rvalue_args</span></code></a>.
-          </p>
-<a name="fusion.functional.generation.metafunctions.make_unfused_rvalue_args.header"></a><h6>
-<a name="id1245981"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_rvalue_args.header">Header</a>
-          </h6>
-<pre class="programlisting">
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">fusion</span><span class="special">/</span><span class="identifier">functional</span><span class="special">/</span><span class="identifier">generation</span><span class="special">/</span><span class="identifier">make_unfused_rvalue_args</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
-</pre>
-<a name="fusion.functional.generation.metafunctions.make_unfused_rvalue_args.synopsis"></a><h6>
-<a name="id1246076"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_rvalue_args.synopsis">Synopsis</a>
-          </h6>
-<pre class="programlisting">
-<span class="keyword">namespace</span> <span class="identifier">result_of</span>
-<span class="special">{</span>
-    <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">Function</span><span class="special">&gt;</span>
-    <span class="keyword">struct</span> <span class="identifier">make_unfused_rvalue_args</span>
-    <span class="special">{</span>
-        <span class="keyword">typedef</span> <span class="emphasis"><em>unspecified</em></span> <span class="identifier">type</span><span class="special">;</span>
-    <span class="special">};</span>
-<span class="special">}</span>
-</pre>
-<a name="fusion.functional.generation.metafunctions.make_unfused_rvalue_args.see_also"></a><h6>
-<a name="id1246194"></a>
-            <a href="metafunctions.html#fusion.functional.generation.metafunctions.make_unfused_rvalue_args.see_also">See
-            also</a>
-          </h6>
-<div class="itemizedlist"><ul type="disc"><li><a href="functions.html#fusion.functional.generation.functions.make_unfused_rvalue_args" title="make_unfused_rvalue_args"><code class="computeroutput"><span class="identifier">make_unfused_rvalue_args</span></code></a></li></ul></div>
-</div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><small>Copyright © 2001-2005 Joel de Guzman, Dan Marsden</small></td>
+<td align="right"><small>Copyright © 2001-2007 Joel de Guzman, Dan Marsden, Tobias
+      Schwinger</small></td>
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="functions.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../generation.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="../../notes.html"><img src="../../../images/next.png" alt="Next"></a>
+<a accesskey="p" href="functions/mk_unfused_rvargs.html"><img src="../../../images/prev.png" alt="Prev"></a><a accesskey="u" href="../generation.html"><img src="../../../images/up.png" alt="Up"></a><a accesskey="h" href="../../../index.html"><img src="../../../images/home.png" alt="Home"></a><a accesskey="n" href="metafunctions/mk_fused.html"><img src="../../../images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>
