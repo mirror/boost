@@ -90,7 +90,6 @@ import testing ;
     [ run sequence/tuple_mutate.cpp :  :  :  : ]
     [ run sequence/tuple_tie.cpp :  :  :  : ]
     [ run sequence/transform_view.cpp :  :  :  : ]
-    [ run sequence/unpack_args.cpp ]
     [ run sequence/vector_comparison.cpp :  :  :  : ]
     [ run sequence/vector_construction.cpp :  :  :  : ]
     [ run sequence/vector_copy.cpp :  :  :  : ]
