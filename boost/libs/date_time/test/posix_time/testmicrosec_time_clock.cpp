@@ -50,7 +50,7 @@ main()
     check("seconds match", 
           t1.time_of_day().minutes() == t2.time_of_day().minutes());
     check("hours date", t1.date() == t2.date());
-    if( !check("last is less", last < t2) ) {
+    if( !check("last is less", last <= t2) ) {
       std::cout << to_simple_string(last) << " < " 
         << to_simple_string(t2) << std::endl;
     }
@@ -91,8 +91,8 @@ main()
     check("seconds match", 
           t1.time_of_day().minutes() == t2.time_of_day().minutes());
     check("hours date", t1.date() == t2.date());
-    //check("last is less", last < t2);
-    if( !check("last is less", last < t2) ) {
+    //following check might be equal on a really fast machine
+    if( !check("last is less", last <= t2) ) {
       std::cout << to_simple_string(last) << " < " 
         << to_simple_string(t2) << std::endl;
     }
