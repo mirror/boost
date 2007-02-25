@@ -73,7 +73,7 @@ int cpp_main(int /*argc*/, char * /*argv*/[])
    get_array_data();  // initialises data.
 
    std::list<boost::shared_ptr<boost::thread> > threads;
-   for(int i = 0; i < 10; ++i)
+   for(int i = 0; i < 5; ++i)
    {
       threads.push_back(boost::shared_ptr<boost::thread>(new boost::thread(&run_tests)));
    }
