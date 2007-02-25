@@ -4,5 +4,4 @@
 * Improved motivation section
 * Expand details of view concept
 * Examples, examples, examples
-* unpack_args documentation
 * look at lambda stuff
