@@ -13,7 +13,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 //  If the BOOST_WAVE_LEXERTL_USE_STATIC_TABLES constant is defined to be not 
 //  equal to zero, the lexer will use static pre-compiled dfa tables (as 
-//  included in the file: wave_lexertl_tables.hpp)
+//  included in the file: wave_lexertl_tables.hpp). Enabling the static tables
+//  makes the code compilable even without having the lexertl library 
+//  available.
 #if !defined(BOOST_WAVE_LEXERTL_USE_STATIC_TABLES)
 #define BOOST_WAVE_LEXERTL_USE_STATIC_TABLES 1
 #endif

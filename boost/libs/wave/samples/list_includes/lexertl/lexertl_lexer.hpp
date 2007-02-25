@@ -83,6 +83,8 @@ public:
     
 #if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES != 0
     lexertl() {}
+    void init_dfa(wave::language_support lang, Position const& pos,
+        bool force_reinit = false) {}
     bool is_initialized() const { return true; }
 #else
     lexertl() : has_compiled_dfa_(false) {}
@@ -496,12 +498,12 @@ lexertl<Iterator, Position>::next_token(Iterator &first, Iterator const &last,
 {
 #if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
     size_t const* const lookup = &state_machine_._lookup[0]->front ();
-    size_t const dfa_alphabet_ = state_machine_._dfa_alphabet[0];
+    size_t const dfa_alphabet = state_machine_._dfa_alphabet[0];
 
     size_t const* dfa = &state_machine_._dfa[0]->front();
-    size_t const* ptr = dfa + dfa_alphabet_ + ::lexertl::dfa_offset;
+    size_t const* ptr = dfa + dfa_alphabet + ::lexertl::dfa_offset;
 #else
-	  const std::size_t *ptr = dfa + dfa_offset;
+    const std::size_t *ptr = dfa + dfa_offset;
 #endif // BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
 
     Iterator curr = first;
@@ -516,7 +518,7 @@ lexertl<Iterator, Position>::next_token(Iterator &first, Iterator const &last,
         ++curr;
 
 #if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
-        ptr = &dfa[state * (dfa_alphabet_ + ::lexertl::dfa_offset)];
+        ptr = &dfa[state * (dfa_alphabet + ::lexertl::dfa_offset)];
 #else
         ptr = &dfa[state * dfa_offset];
 #endif // BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
@@ -595,9 +597,7 @@ public:
             Position const &pos_, wave::language_support language)
     :   first(first_, last_, pos_), language(language), at_eof(false)
     {
-#if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
         lexer_.init_dfa(language, pos_);
-#endif // #if BOOST_WAVE_LEXERTL_USE_STATIC_TABLES == 0
     }
     ~lexertl_functor() {}
 
