@@ -209,7 +209,7 @@ the result of the call expression.
 
 [endsect]
 
-[section invoke_procedure]
+[section:invoke_proc invoke_procedure]
 
 [heading Description]
 
@@ -279,7 +279,7 @@ implemented).
 
 [endsect]
 
-[section invoke_function_object]
+[section:invoke_fobj invoke_function_object]
 
 [heading Description]
 
@@ -388,7 +388,7 @@ the size of the sequence.
 
 [endsect]
 
-[section invoke_procedure]
+[section:invoke_proc invoke_procedure]
 
 [heading Description]
 Returns the result type of __invoke_procedure__.
@@ -415,7 +415,7 @@ the size of the sequence.
 
 [endsect]
 
-[section invoke_function_object]
+[section:invoke_fobj invoke_function_object]
 
 [heading Description]
 Returns the result type of __invoke_function_object__.
@@ -1171,7 +1171,7 @@ is optimized automatically to avoid by-value parameters.]
 
 [section Functions]
 
-[section make_fused]
+[section:mk_fused make_fused]
 
 [heading Description]
 Creates a __fused__ adapter for a given __def_callable_obj__. The usual
@@ -1219,7 +1219,7 @@ __element_conversion__ is applied to the target function.
 
 [endsect]
 
-[section make_fused_procedure]
+[section:mk_fused_proc make_fused_procedure]
 
 [heading Description]
 Creates a __fused_procedure__ adapter for a given __def_callable_obj__. 
@@ -1261,7 +1261,7 @@ The usual __element_conversion__ applied to the target function.
 
 [endsect]
 
-[section make_fused_function_object]
+[section:mk_fused_fobj make_fused_function_object]
 
 [heading Description]
 Creates a __fused_function_object__ adapter for a given __def_callable_obj__. 
@@ -1321,7 +1321,7 @@ The usual __element_conversion__ is applied to the target function.
 
 [endsect]
 
-[section make_unfused_generic]
+[section:mk_unfused_genrc make_unfused_generic]
 
 [heading Description]
 Creates a __unfused_generic__ adapter for a given, unary __poly_func_obj__. 
@@ -1393,7 +1393,7 @@ The usual __element_conversion__ is applied to the target function.
 
 [endsect]
 
-[section make_unfused_lvalue_args]
+[section:mk_unfused_lvargs make_unfused_lvalue_args]
 
 [heading Description]
 Creates a __unfused_lvalue_args__ adapter for a given, unary __poly_func_obj__. 
@@ -1452,7 +1452,7 @@ The usual __element_conversion__ is applied to the target function.
 
 [endsect]
 
-[section make_unfused_rvalue_args]
+[section:mk_unfused_rvargs make_unfused_rvalue_args]
 
 [heading Description]
 Creates a __unfused_rvalue_args__ adapter for a given, unary __poly_func_obj__. 
@@ -1514,7 +1514,7 @@ The usual __element_conversion__ is applied to the target function.
 
 [section Metafunctions]
 
-[section make_fused]
+[section:mk_fused make_fused]
 
 [heading Description]
 Returns the result type of __make_fused__.
@@ -1538,7 +1538,7 @@ Returns the result type of __make_fused__.
 
 [endsect]
 
-[section make_fused_procedure]
+[section:mk_fused_proc make_fused_procedure]
 
 [heading Description]
 Returns the result type of __make_fused_procedure__.
@@ -1562,7 +1562,7 @@ Returns the result type of __make_fused_procedure__.
 
 [endsect]
 
-[section make_fused_function_object]
+[section:mk_fused_fobj make_fused_function_object]
 
 [heading Description]
 Returns the result type of __make_fused_function_object__.
@@ -1586,7 +1586,7 @@ Returns the result type of __make_fused_function_object__.
 
 [endsect]
 
-[section make_unfused_generic]
+[section:mk_unfused_genrc make_unfused_generic]
 
 [heading Description]
 Returns the result type of __make_unfused_generic__.
@@ -1610,7 +1610,7 @@ Returns the result type of __make_unfused_generic__.
 
 [endsect]
 
-[section make_unfused_lvalue_args]
+[section:mk_unfused_lvargs make_unfused_lvalue_args]
 
 [heading Description]
 Returns the result type of __make_unfused_lvalue_args__.
@@ -1634,7 +1634,7 @@ Returns the result type of __make_unfused_lvalue_args__.
 
 [endsect]
 
-[section make_unfused_rvalue_args]
+[section:mk_unfused_rvargs make_unfused_rvalue_args]
 
 [heading Description]
 Returns the result type of __make_unfused_rvalue_args__.
