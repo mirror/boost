@@ -1,4 +1,4 @@
-/* Copyright 2003-2006 Joaquín M López Muñoz.
+/* Copyright 2003-2007 Joaquín M López Muñoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -502,6 +502,11 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
 
   sequenced_index(const sequenced_index<SuperMeta,TagList>& x):
     super(x)
+
+#if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
+    ,safe_super()
+#endif
+
   {
     /* The actual copying takes place in subsequent call to copy_().
      */
