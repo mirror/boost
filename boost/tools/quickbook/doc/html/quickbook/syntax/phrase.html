@@ -135,7 +135,7 @@ the true business precept.]
 <p>
           Unlike QuickBook's standard formatting scheme, the rules for simpler alternatives
           are much stricter
-          <sup>[<a name="id383261" href="#ftn.id383261">1</a>]</sup>
+          <sup>[<a name="id383135" href="#ftn.id383135">1</a>]</sup>
           .
         </p>
 <div class="itemizedlist"><ul type="disc">
@@ -156,11 +156,12 @@ the true business precept.]
             A space or a punctuation must follow the trailing markup
           </li>
 <li>
-            If the matching markup cannot be found within a line, the formatting
+            If the matching markup cannot be found within a block, the formatting
             will not be applied. This is to ensure that un-matched formatting markups,
             which can be a common mistake, does not corrupt anything past a single
-            line. We do not want the rest of the document to be rendered bold just
-            because we forgot a trailing '*'.
+            block. We do not want the rest of the document to be rendered bold just
+            because we forgot a trailing '*'. A single block is terminated by two
+            end of lines or the close bracket: ']'.
           </li>
 <li>
             A line starting with the star will be interpreted as an unordered list.
@@ -170,90 +171,224 @@ the true business precept.]
           </li>
 </ul></div>
 <div class="table">
-<a name="id453521"></a><p class="title"><b>Table 1. More Formatting Samples</b></p>
+<a name="id453602"></a><p class="title"><b>Table 1. More Formatting Samples</b></p>
 <table class="table" summary="More Formatting Samples">
 <colgroup>
 <col>
 <col>
 </colgroup>
 <thead><tr>
-<th>Markup</th>
-<th>Result</th>
+<th>
+              <p>
+                Markup
+              </p>
+              </th>
+<th>
+              <p>
+                Result
+              </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
-<td><tt class="literal">*Bold*</tt></td>
-<td><span class="bold"><b>Bold</b></span></td>
-</tr>
-<tr>
-<td><tt class="literal">*Is bold*</tt></td>
-<td><span class="bold"><b>Is bold</b></span></td>
-</tr>
-<tr>
-<td><tt class="literal">* Not bold* *Not bold * * Not bold *</tt></td>
-<td>* Not bold* *Not bold * *
-              Not bold *</td>
-</tr>
-<tr>
-<td><tt class="literal">This*Isn't*Bold (no bold)</tt></td>
-<td>This*Isn't*Bold (no bold)</td>
-</tr>
-<tr>
-<td><tt class="literal">(*Bold Inside*) (parenthesis not bold)</tt></td>
-<td>(<span class="bold"><b>Bold
-              Inside</b></span>) (parenthesis not bold)</td>
-</tr>
-<tr>
-<td><tt class="literal">*(Bold Outside)* (parenthesis bold)</tt></td>
 <td>
-<span class="bold"><b>(Bold
-              Outside)</b></span> (parenthesis bold)</td>
-</tr>
-<tr>
-<td><tt class="literal">3*4*5 = 60 (no bold)</tt></td>
-<td>3*4*5 = 60 (no bold)</td>
-</tr>
-<tr>
-<td><tt class="literal">3 * 4 * 5 = 60 (no bold)</tt></td>
-<td>3 * 4 * 5 = 60 (no bold)</td>
-</tr>
-<tr>
-<td><tt class="literal">3 *4* 5 = 60 (4 is bold)</tt></td>
-<td>3 <span class="bold"><b>4</b></span>
-              5 = 60 (4 is bold)</td>
-</tr>
-<tr>
-<td><tt class="literal">*This is bold* this is not *but this is*</tt></td>
+              <p>
+                <tt class="literal">*Bold*</tt>
+              </p>
+              </td>
 <td>
-<span class="bold"><b>This
-              is bold</b></span> this is not <span class="bold"><b>but this is</b></span>
-</td>
+              <p>
+                <span class="bold"><b>Bold</b></span>
+              </p>
+              </td>
 </tr>
 <tr>
-<td><tt class="literal">*This is bold*.</tt></td>
 <td>
-<span class="bold"><b>This
-              is bold</b></span>.</td>
-</tr>
-<tr>
-<td><tt class="literal">*B*. (bold B)</tt></td>
+              <p>
+                <tt class="literal">*Is bold*</tt>
+              </p>
+              </td>
 <td>
-<span class="bold"><b>B</b></span>.
-              (bold B)</td>
+              <p>
+                <span class="bold"><b>Is bold</b></span>
+              </p>
+              </td>
 </tr>
 <tr>
-<td><tt class="literal">['*Bold-Italic*]</tt></td>
-<td><span class="emphasis"><em><span class="bold"><b>Bold-Italic</b></span></em></span></td>
-</tr>
-<tr>
-<td><tt class="literal">*side-by*/-side/</tt></td>
 <td>
-<span class="bold"><b>side-by</b></span><span class="emphasis"><em>-side</em></span>
-</td>
+              <p>
+                <tt class="literal">* Not bold* *Not bold * * Not bold *</tt>
+              </p>
+              </td>
+<td>
+              <p>
+                * Not bold* *Not bold * * Not bold *
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="literal">This*Isn't*Bold (no bold)</tt>
+              </p>
+              </td>
+<td>
+              <p>
+                This*Isn't*Bold (no bold)
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="literal">(*Bold Inside*) (parenthesis not bold)</tt>
+              </p>
+              </td>
+<td>
+              <p>
+                (<span class="bold"><b>Bold Inside</b></span>) (parenthesis not bold)
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="literal">*(Bold Outside)* (parenthesis bold)</tt>
+              </p>
+              </td>
+<td>
+              <p>
+                <span class="bold"><b>(Bold Outside)</b></span> (parenthesis bold)
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="literal">3*4*5 = 60 (no bold)</tt>
+              </p>
+              </td>
+<td>
+              <p>
+                3*4*5 = 60 (no bold)
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="literal">3 * 4 * 5 = 60 (no bold)</tt>
+              </p>
+              </td>
+<td>
+              <p>
+                3 * 4 * 5 = 60 (no bold)
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="literal">3 *4* 5 = 60 (4 is bold)</tt>
+              </p>
+              </td>
+<td>
+              <p>
+                3 <span class="bold"><b>4</b></span> 5 = 60 (4 is bold)
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="literal">*This is bold* this is not *but this is*</tt>
+              </p>
+              </td>
+<td>
+              <p>
+                <span class="bold"><b>This is bold</b></span> this is not <span class="bold"><b>but this is</b></span>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="literal">*This is bold*.</tt>
+              </p>
+              </td>
+<td>
+              <p>
+                <span class="bold"><b>This is bold</b></span>.
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="literal">*B*. (bold B)</tt>
+              </p>
+              </td>
+<td>
+              <p>
+                <span class="bold"><b>B</b></span>. (bold B)
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="literal">['*Bold-Italic*]</tt>
+              </p>
+              </td>
+<td>
+              <p>
+                <span class="emphasis"><em><span class="bold"><b>Bold-Italic</b></span></em></span>
+              </p>
+              </td>
+</tr>
+<tr>
+<td>
+              <p>
+                <tt class="literal">*side-by*/-side/</tt>
+              </p>
+              </td>
+<td>
+              <p>
+                <span class="bold"><b>side-by</b></span><span class="emphasis"><em>-side</em></span>
+              </p>
+              </td>
 </tr>
 </tbody>
 </table>
 </div>
+<p>
+          As mentioned, simple markups cannot go past a single block. The text from
+          "have" to "full" in the following paragraph will be
+          rendered as bold:
+        </p>
+<pre class="programlisting">Baa baa black sheep, *have you any wool?
+Yes sir, yes sir, three bags full!*
+One for the master, one for the dame,
+And one for the little boy who lives down the lane.
+</pre>
+<p>
+          Baa baa black sheep, <span class="bold"><b>have you any wool? Yes sir,
+          yes sir, three bags full!</b></span> One for the master, one for the dame,
+          And one for the little boy who lives down the lane.
+        </p>
+<p>
+          But in the following paragraph, bold is not applied:
+        </p>
+<pre class="programlisting">Baa baa black sheep, *have you any wool?
+Yes sir, yes sir, three bags full!
+One for the master, one for the dame,
+And one for the little boy who lives down the lane.
+</pre>
+<p>
+          Baa baa black sheep, *have you any wool? Yes sir, yes sir, three bags full!
+          One for the master, one for the dame, And one for the little boy who lives
+          down the lane.
+        </p>
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h4 class="title">
@@ -276,11 +411,17 @@ the true business precept.]
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
-            We simply enclose the code with the tick: <tt class="literal">"`"</tt>, not the
-            single quote: <tt class="computeroutput"><span class="string">"'"</span></tt>.
-            Note too that <tt class="literal">`some code`</tt> is preferred over <tt class="literal">[^some code]</tt>.
-          </p></td></tr>
+<tr><td colspan="2" align="left" valign="top">
+<p>
+            </p>
+<p>
+              We simply enclose the code with the tick: <tt class="literal">"`"</tt>, not
+              the single quote: <tt class="computeroutput"><span class="string">"'"</span></tt>.
+              Note too that <tt class="literal">`some code`</tt> is preferred over <tt class="literal">[^some code]</tt>.
+            </p>
+<p>
+          </p>
+</td></tr>
 </table></div>
 </div>
 <div class="section" lang="en">
@@ -359,24 +500,48 @@ C++ comment `// looks like this` whereas a Python comment [python]
           whereas a Python comment <tt class="computeroutput"><span class="comment">#looks like this</span></tt>.
         </p>
 <div class="table">
-<a name="id454273"></a><p class="title"><b>Table 2. Supported Source Modes</b></p>
+<a name="id454572"></a><p class="title"><b>Table 2. Supported Source Modes</b></p>
 <table class="table" summary="Supported Source Modes">
 <colgroup>
 <col>
 <col>
 </colgroup>
 <thead><tr>
-<th>Mode</th>
-<th>Source Mode Markup</th>
+<th>
+              <p>
+                Mode
+              </p>
+              </th>
+<th>
+              <p>
+                Source Mode Markup
+              </p>
+              </th>
 </tr></thead>
 <tbody>
 <tr>
-<td>C++</td>
-<td><tt class="literal">[c++]</tt></td>
+<td>
+              <p>
+                C++
+              </p>
+              </td>
+<td>
+              <p>
+                <tt class="literal">[c++]</tt>
+              </p>
+              </td>
 </tr>
 <tr>
-<td>Python</td>
-<td><tt class="literal">[python]</tt></td>
+<td>
+              <p>
+                Python
+              </p>
+              </td>
+<td>
+              <p>
+                <tt class="literal">[python]</tt>
+              </p>
+              </td>
 </tr>
 </tbody>
 </table>
@@ -386,9 +551,15 @@ C++ comment `// looks like this` whereas a Python comment [python]
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../images/note.png"></td>
 <th align="left">Note</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
-            The source mode strings are lowercase.
-          </p></td></tr>
+<tr><td colspan="2" align="left" valign="top">
+<p>
+            </p>
+<p>
+              The source mode strings are lowercase.
+            </p>
+<p>
+          </p>
+</td></tr>
 </table></div>
 </div>
 <div class="section" lang="en">
@@ -396,15 +567,23 @@ C++ comment `// looks like this` whereas a Python comment [python]
 <a name="quickbook.syntax.phrase.line_break"></a><a href="phrase.html#quickbook.syntax.phrase.line_break" title="line-break">line-break</a></h4></div></div></div>
 <pre class="programlisting">[br]
 </pre>
-<div class="note"><table border="0" summary="Note">
+<div class="warning"><table border="0" summary="Warning">
 <tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../../images/note.png"></td>
-<th align="left">Note</th>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../images/warning.png"></td>
+<th align="left">Warning</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
-            Note that <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt>
-            is now preferred over <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.
-          </p></td></tr>
+<tr><td colspan="2" align="left" valign="top">
+<p>
+            </p>
+<p>
+              <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt> is now deprecated. <a href="block.html#quickbook.syntax.block.blurbs" title="Blurbs">Blurbs</a>,
+              <a href="block.html#quickbook.syntax.block.admonitions" title="Admonitions">Admonitions</a>
+              and table cells (see <a href="block.html#quickbook.syntax.block.tables" title="Tables">Tables</a>)
+              may now contain paragraphs.
+            </p>
+<p>
+          </p>
+</td></tr>
 </table></div>
 </div>
 <div class="section" lang="en">
@@ -537,9 +716,15 @@ escape (no processing/formatting)
 <td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../../images/important.png"></td>
 <th align="left">Important</th>
 </tr>
-<tr><td colspan="2" align="left" valign="top"><p>
-            Be careful when using the escape. The text must conform to <a href="http://www.boost.org/doc/html/boostbook.html" target="_top">BoostBook</a>/<a href="http://www.docbook.org/" target="_top">DocBook</a> syntax.
-          </p></td></tr>
+<tr><td colspan="2" align="left" valign="top">
+<p>
+            </p>
+<p>
+              Be careful when using the escape. The text must conform to <a href="http://www.boost.org/doc/html/boostbook.html" target="_top">BoostBook</a>/<a href="http://www.docbook.org/" target="_top">DocBook</a> syntax.
+            </p>
+<p>
+          </p>
+</td></tr>
 </table></div>
 </div>
 <div class="section" lang="en">
@@ -555,9 +740,27 @@ escape (no processing/formatting)
         </p>
 <p>
           <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt>
-          has a special meaning. It is used to generate line breaks. Note that <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt> is
-          now preferred over <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt>.
+          has a special meaning. It is used to generate line breaks.
         </p>
+<div class="warning"><table border="0" summary="Warning">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../images/warning.png"></td>
+<th align="left">Warning</th>
+</tr>
+<tr><td colspan="2" align="left" valign="top">
+<p>
+            </p>
+<p>
+              <tt class="computeroutput"><span class="special">\</span><span class="identifier">n</span></tt>
+              and <tt class="computeroutput"><span class="special">[</span><span class="identifier">br</span><span class="special">]</span></tt> are now deprecated. <a href="block.html#quickbook.syntax.block.blurbs" title="Blurbs">Blurbs</a>,
+              <a href="block.html#quickbook.syntax.block.admonitions" title="Admonitions">Admonitions</a>
+              and table cells (see <a href="block.html#quickbook.syntax.block.tables" title="Tables">Tables</a>)
+              may now contain paragraphs.
+            </p>
+<p>
+          </p>
+</td></tr>
+</table></div>
 <p>
           The escaped space: <tt class="computeroutput"><span class="special">\</span> </tt> also
           has a special meaning. The escaped space is removed from the output.
@@ -587,7 +790,7 @@ escape (no processing/formatting)
 </pre>
 <p>
           will generate this
-          <sup>[<a name="id455028" href="#ftn.id455028">2</a>]</sup>
+          <sup>[<a name="id455412" href="#ftn.id455412">2</a>]</sup>
           .
         </p>
 <div class="section" lang="en">
@@ -616,14 +819,14 @@ escape (no processing/formatting)
 </div>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a name="ftn.id383261" href="#id383261">1</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id383135" href="#id383135">1</a>] </sup>
               Thanks to David Barrett, author of <a href="http://quinthar.com/qwikiwiki/index.php?page=Home" target="_top">Qwiki</a>,
               for sharing these samples and teaching me these obscure formatting
               rules. I wasn't sure at all if <a href="http://spirit.sourceforge.net" target="_top">Spirit</a>,
               being more or less a formal EBNF parser, can handle the context sensitivity
               and ambiguity.
             </p></div>
-<div class="footnote"><p><sup>[<a name="ftn.id455028" href="#id455028">2</a>] </sup>
+<div class="footnote"><p><sup>[<a name="ftn.id455412" href="#id455412">2</a>] </sup>
               A sample footnote
             </p></div>
 </div>

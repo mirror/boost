@@ -39,7 +39,7 @@ namespace quickbook
     struct actions;
     extern tm* current_time; // the current time
     extern tm* current_gm_time; // the current UTC time
-    extern bool debug_mode; 
+    extern bool debug_mode;
     extern unsigned qbk_major_version;
     extern unsigned qbk_minor_version;
     extern unsigned qbk_version_n; // qbk_major_version * 100 + qbk_minor_version
@@ -47,7 +47,7 @@ namespace quickbook
     // forward declarations
     struct actions;
     int parse(char const* filein_, actions& actor, bool ignore_docinfo = false);
-    
+
     struct error_action
     {
         // Prints an error message to std::cerr
@@ -307,7 +307,7 @@ namespace quickbook
       , unexpected_char
       , collector>
     cpp_p_type;
-        
+
     typedef python_highlight<
         span
       , space
@@ -417,7 +417,7 @@ namespace quickbook
 
         collector& phrase;
     };
-    
+
     struct markup_action
     {
         // A generic markup action
@@ -439,6 +439,18 @@ namespace quickbook
 
         collector& phrase;
         std::string str;
+    };
+
+    struct break_action
+    {
+        // Handles line-breaks (DEPRECATED!!!)
+
+        break_action(collector& phrase)
+        : phrase(phrase) {}
+
+        void operator()(iterator f, iterator) const;
+
+        collector& phrase;
     };
 
     struct macro_identifier_action
@@ -480,7 +492,7 @@ namespace quickbook
     struct do_template_action
     {
         // Handles template substitutions
-        
+
         do_template_action(quickbook::actions& actions)
         : actions(actions) {}
 
@@ -552,6 +564,17 @@ namespace quickbook
 
         collector& phrase;
         unsigned& span;
+    };
+
+    struct end_col_action
+    {
+        end_col_action(collector& phrase, collector& temp_para)
+        : phrase(phrase), temp_para(temp_para) {}
+
+        void operator()(char) const;
+
+        collector& phrase;
+        collector& temp_para;
     };
 
     struct begin_section_action

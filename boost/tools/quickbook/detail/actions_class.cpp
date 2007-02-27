@@ -72,7 +72,7 @@ namespace quickbook
         , code_block(phrase, phrase, temp, source_mode, macro, *this)
         , inline_code(phrase, temp, source_mode, macro, *this)
         , paragraph(out, phrase, paragraph_pre, paragraph_post)
-        , comment(phrase, comment_pre, comment_post, macro)
+        , inside_paragraph(temp_para, phrase, paragraph_pre, paragraph_post)
         , h(out, phrase, doc_id, section_id, qualified_section_id, section_level)
         , h1(out, phrase, doc_id, section_id, qualified_section_id, h1_pre, h1_post)
         , h2(out, phrase, doc_id, section_id, qualified_section_id, h2_pre, h2_post)
@@ -81,14 +81,14 @@ namespace quickbook
         , h5(out, phrase, doc_id, section_id, qualified_section_id, h5_pre, h5_post)
         , h6(out, phrase, doc_id, section_id, qualified_section_id, h6_pre, h6_post)
         , hr(out, hr_)
-        , blurb(out, phrase, blurb_pre, blurb_post)
-        , blockquote(out, phrase, blockquote_pre, blockquote_post)
+        , blurb(out, temp_para, blurb_pre, blurb_post)
+        , blockquote(out, temp_para, blockquote_pre, blockquote_post)
         , preformatted(out, phrase, preformatted_pre, preformatted_post)
-        , warning(out, phrase, warning_pre, warning_post)
-        , caution(out, phrase, caution_pre, caution_post)
-        , important(out, phrase, important_pre, important_post)
-        , note(out, phrase, note_pre, note_post)
-        , tip(out, phrase, tip_pre, tip_post)
+        , warning(out, temp_para, warning_pre, warning_post)
+        , caution(out, temp_para, caution_pre, caution_post)
+        , important(out, temp_para, important_pre, important_post)
+        , note(out, temp_para, note_pre, note_post)
+        , tip(out, temp_para, tip_pre, tip_post)
         , plain_char(phrase)
         , raw_char(phrase)
         , image(phrase)
@@ -143,7 +143,7 @@ namespace quickbook
         , start_varlistitem(phrase, start_varlistitem_)
         , end_varlistitem(phrase, end_varlistitem_)
 
-        , break_(phrase, break_mark)
+        , break_(phrase)
         , macro_identifier(*this)
         , macro_definition(*this)
         , do_macro(phrase)
@@ -157,7 +157,7 @@ namespace quickbook
         , start_row(phrase, table_span, table_header)
         , end_row(phrase, end_row_)
         , start_cell(phrase, table_span)
-        , end_cell(phrase, end_cell_)
+        , end_cell(phrase, temp_para)
         , anchor(out)
 
         , begin_section(out, phrase, doc_id, section_id, section_level, qualified_section_id)
@@ -170,8 +170,8 @@ namespace quickbook
         , escape_post(phrase, escape_post_)
     {
         // turn off __FILENAME__ macro on debug mode = true
-        std::string filename_str = debug_mode ? 
-            std::string("NO_FILENAME_MACRO_GENERATED_IN_DEBUG_MODE") : 
+        std::string filename_str = debug_mode ?
+            std::string("NO_FILENAME_MACRO_GENERATED_IN_DEBUG_MODE") :
             filename.native_file_string();
 
         // add the predefined macros
@@ -195,13 +195,13 @@ namespace quickbook
               , source_mode
             )
         );
-        
+
         out.push();
         phrase.push();
         temp.push();
         list_buffer.push();
         templates.push();
-    }   
+    }
 
     void actions::pop()
     {

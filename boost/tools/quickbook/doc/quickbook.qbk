@@ -73,7 +73,10 @@
 [section:intro Introduction]
 
 [:[*['["Why program by hand in five days what you can spend five years of your
-life automating?]]]\n\n-- Terrence Parr, author ANTLR/PCCTS]
+life automating?]]]
+
+-- Terrence Parr, author ANTLR/PCCTS
+]
 
 Well, QuickBook started as a weekend hack. It was originally intended to be a
 sample application using __spirit__. What is it? What you are viewing now, this
@@ -148,10 +151,12 @@ Features include:
   `\ `.
 * Nested comments are now allowed.
 * Quickbook blocks can nest inside comments.
-* Line-end terminated comments are now allowed. Example: `[// some comment`
-* Comments are now passed through to XML as-is.
 * __import__ facility.
 * Callouts on imported code
+* Simple markups can now span a whole block.
+* __blurbs__, __admonitions__ and table cells (see __tables__) may now
+  contain paragraphs.
+* `\n` and `[br]` are now deprecated.
 
 [endsect]
 
@@ -180,14 +185,6 @@ Can be placed anywhere.
 ]
 
 [/ for testing only... ]
-
-[pre
-'''[// Line-end terminates this type of comment'''
-]
-
-[// for testing only
-[// for testing only
-[// for testing only
 
 [pre
 '''[/ comments can be nested [/ some more here] ]'''
@@ -292,11 +289,12 @@ the context sensitivity and ambiguity.].
 * A non-space character must follow the leading markup
 * A non-space character must precede the trailing markup
 * A space or a punctuation must follow the trailing markup
-* If the matching markup cannot be found within a line, the formatting
+* If the matching markup cannot be found within a block, the formatting
   will not be applied. This is to ensure that un-matched formatting markups,
-  which can be a common mistake, does not corrupt anything past a single line.
+  which can be a common mistake, does not corrupt anything past a single block.
   We do not want the rest of the document to be rendered bold just because we
-  forgot a trailing '*'.
+  forgot a trailing '*'. A single block is terminated by two end of lines or
+  the close bracket: ']'.
 * A line starting with the star will be interpreted as an unordered list.
   See __unordered_lists__.
 
@@ -317,6 +315,36 @@ the context sensitivity and ambiguity.].
     [[[^'''['*Bold-Italic*]''']]                        [['*Bold-Italic*]]]
     [[[^'''*side-by*/-side/''']]                        [*side-by*/-side/]]
 ]
+
+As mentioned, simple markups cannot go past a single block. The text
+from "have" to "full" in the following paragraph will be rendered as
+bold:
+
+[pre'''
+Baa baa black sheep, *have you any wool?
+Yes sir, yes sir, three bags full!*
+One for the master, one for the dame,
+And one for the little boy who lives down the lane.
+''']
+
+Baa baa black sheep, *have you any wool?
+Yes sir, yes sir, three bags full!*
+One for the master, one for the dame,
+And one for the little boy who lives down the lane.
+
+But in the following paragraph, bold is not applied:
+
+[pre'''
+Baa baa black sheep, *have you any wool?
+Yes sir, yes sir, three bags full!
+One for the master, one for the dame,
+And one for the little boy who lives down the lane.
+''']
+
+Baa baa black sheep, *have you any wool?
+Yes sir, yes sir, three bags full!
+One for the master, one for the dame,
+And one for the little boy who lives down the lane.
 
 [endsect]
 [section Inline code]
@@ -412,7 +440,8 @@ C++ comment `// looks like this` whereas a Python comment [python]
 [br]
 ''']
 
-[note Note that `\n` is now preferred over `[br]`.]
+[warning `[br]` is now deprecated. __blurbs__, __admonitions__ and
+table cells (see __tables__) may now contain paragraphs.]
 
 [endsect]
 [section Anchors]
@@ -542,8 +571,11 @@ punctuation immediately after the backslash is passed without any processing.
 This is useful when we need to escape QuickBook punctuations such as `[` and `]`.
 For example, how do you escape the triple quote? Simple: [^\\'\\'\\']
 
-`\n` has a special meaning. It is used to generate line breaks. Note that `\n`
-is now preferred over `[br]`.
+
+`\n` has a special meaning. It is used to generate line breaks.
+
+[warning `\n` and `[br]` are now deprecated. __blurbs__, __admonitions__
+and table cells (see __tables__) may now contain paragraphs.]
 
 The escaped space: `\ ` also has a special meaning. The escaped space is removed
 from the output.
@@ -1364,7 +1396,8 @@ We will have:
 [section Blurbs]
 
 [pre'''
-[blurb :-) [*An eye catching advertisement or note...]\n\n
+[blurb :-) [*An eye catching advertisement or note...]
+
     __spirit__ is an object-oriented recursive-descent parser generator framework
     implemented using template meta-programming techniques. Expression templates
     allow us to approximate the syntax of Extended Backus-Normal Form (EBNF)
@@ -1374,7 +1407,8 @@ We will have:
 
 will generate this:
 
-[blurb :-) [*An eye catching advertisement or note...]\n\n
+[blurb :-) [*An eye catching advertisement or note...]
+
     __spirit__ is an object-oriented recursive-descent parser generator
     framework implemented using template meta-programming techniques. Expression
     templates allow us to approximate the syntax of Extended Backus-Normal Form
@@ -1417,10 +1451,14 @@ big cells to be formatted nicely. Example:
     [
         [Row 0, Col 0: a small cell]
         [
-            Row 0, Col 1:
-            A very big cell...A very big cell...A very big cell...
-            A very big cell...A very big cell...A very big cell...
-            A very big cell...A very big cell...A very big cell...
+            Row 0, Col 1: a big fat cell with paragraphs
+
+            Boost provides free peer-reviewed portable C++ source libraries.
+
+            We emphasize libraries that work well with the C++ Standard Library.
+            Boost libraries are intended to be widely useful, and usable across
+            a broad spectrum of applications. The Boost license encourages both
+            commercial and non-commercial use.
         ]
     ]
     [
@@ -1437,10 +1475,14 @@ and thus:
     [
         [Row 0, Col 0: a small cell]
         [
-            Row 0, Col 1:
-            A very big cell...A very big cell...A very big cell...
-            A very big cell...A very big cell...A very big cell...
-            A very big cell...A very big cell...A very big cell...
+            Row 0, Col 1: a big fat cell with paragraphs
+
+            Boost provides free peer-reviewed portable C++ source libraries.
+
+            We emphasize libraries that work well with the C++ Standard Library.
+            Boost libraries are intended to be widely useful, and usable across
+            a broad spectrum of applications. The Boost license encourages both
+            commercial and non-commercial use.
         ]
     ]
     [
@@ -1817,7 +1859,6 @@ comment.box.end.props=]
 [heading Can I use QuickBook for non-Boost documentation?]
 
 QuickBook can be used for non-Boost documentation with a little extra work.
-\n
 
 [:['Faq contributed by Michael Marcin]]
 
@@ -1851,6 +1892,41 @@ boostbook standalone
 
 [cpp]
 
+[template ordered_list_sample[]
+[pre'''
+# one
+# two
+# three
+''']
+]
+
+[template unordered_list_sample[]
+[pre'''
+* one
+* two
+* three
+''']
+]
+
+[template table_sample[]
+[pre'''
+[table Title
+[[a][b][c]]
+[[a][b][c]]
+]
+''']
+]
+
+[template var_list_sample[]
+[pre'''
+[variablelist Title
+[[a][b]]
+[[a][b]]
+]
+''']
+]
+
+
 [table Syntax Compendium
     [[To do this...]        [Use this...]                                   [See this...]]
     [[comment]              [[^'''[/ some comment]''']]                     [__comments__]]
@@ -1864,7 +1940,7 @@ boostbook standalone
     [[inline code]          [[^'''`int main();`''']]                        [__inline_code__]]
     [[code block]           [[^'''``int main();``''']]                      [__code__]]
     [[code escape]          [[^'''``from c++ to QuickBook``''']]            [__escape_back__]]
-    [[line break]           [[^'''[br] or \n''']]                           [__line_break__]]
+    [[line break]           [[^'''[br] or \n''']]                           [__line_break__ *DEPRECATED*]]
     [[anchor]               [[^'''[#anchor]''']]                            [__anchors__]]
     [[link]                 [[^'''[@http://www.boost.org Boost]''']]        [__links__]]
     [[anchor link]          [[^'''[link section.anchor Link text]''']]      [__anchor_links__]]
@@ -1882,8 +1958,8 @@ boostbook standalone
     [[begin section]        [[^'''[section The Section Title]''']]          [__section__]]
     [[end section]          [[^'''[endsect]''']]                            [__section__]]
     [[paragraph]            [No markup. Paragraphs start left-flushed and are terminated by two or more newlines.]  [__paragraphs__]]
-    [[ordered list]         [[^# one\n# two\n# three\n]]                    [__ordered_lists__]]
-    [[unordered list]       [[^\* one\n\* two\n\* three\n]]                 [__unordered_lists__]]
+    [[ordered list]         [[ordered_list_sample]]                         [__ordered_lists__]]
+    [[unordered list]       [[unordered_list_sample]]                       [__unordered_lists__]]
     [[code]                 [No markup. Preformatted code starts with a space or a tab.]        [__code__]]
     [[preformatted]         [[^'''[pre preformatted]''']]                   [__preformatted__]]
     [[block quote]          [[^'''[:sometext...]''']]                       [__blockquote__]]
@@ -1897,8 +1973,8 @@ boostbook standalone
     [[template]             [[^'''[template[a b] [a] body [b]]''']]         [__templates__]]
     [[blurb]                [[^'''[blurb advertisement or note...]''']]     [__blurbs__]]
     [[admonition]           [[^'''[warning Warning text...]''']]            [__admonitions__]]
-    [[table]                [[^[table Title\n \[\[a\]\[b\]\[c\]\]\n    \[\[a\]\[b\]\[c\]\]\n\]]]    [__tables__]]
-    [[variablelist]         [[^[variablelist Title\n \[\[a\]\[b\]\]\n    \[\[a\]\[b\]\]\n\]]]       [__variable_lists__]]
+    [[table]                [[table_sample]]                                [__tables__]]
+    [[variablelist]         [[var_list_sample]]                             [__variable_lists__]]
     [[include]              [[^'''[include someother.qbk]''']]              [__include__]]
 ]
 

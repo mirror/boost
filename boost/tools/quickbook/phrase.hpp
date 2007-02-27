@@ -23,7 +23,12 @@ namespace quickbook
 
     template <typename Rule, typename Action>
     inline void
-    simple_markup(Rule& simple, char mark, Action const& action, Rule const& eol)
+    simple_markup(
+        Rule& simple
+      , char mark
+      , Action const& action
+      , Rule const& close
+    )
     {
         simple =
             mark >>
@@ -37,8 +42,8 @@ namespace quickbook
             |
                 (   graph_p >>                  // graph_p must follow mark
                     *(anychar_p -
-                        (   eol                 // Make sure that we don't go
-                        |   (graph_p >> mark)   // past a single line
+                        (   (graph_p >> mark)   // Make sure that we don't go
+                        |   close               // past a single block
                         )
                     ) >> graph_p                // graph_p must precede mark
                     >> eps_p(mark
@@ -53,8 +58,8 @@ namespace quickbook
     template <typename Actions>
     struct phrase_grammar : grammar<phrase_grammar<Actions> >
     {
-        phrase_grammar(Actions& actions, bool& is_not_preformatted)
-            : is_not_preformatted(is_not_preformatted), actions(actions) {}
+        phrase_grammar(Actions& actions, bool& no_eols)
+            : no_eols(no_eols), actions(actions) {}
 
         template <typename Scanner>
         struct definition
@@ -77,7 +82,7 @@ namespace quickbook
 
                 close_bracket =
                     ']' |
-                    if_p(var(self.is_not_preformatted))
+                    if_p(var(self.no_eols))
                     [
                         eol_p >> eol_p                  // Make sure that we don't go
                     ]                                   // past a single block, except
@@ -88,11 +93,7 @@ namespace quickbook
                     ;                                   // alpha-numeric or underscore
 
                 comment =
-                    (
-                        "[//" >> *(anychar_p - eol_p) >> eol_p
-                    |   "[/" >> *(dummy_block | (anychar_p - ']')) >> ']'
-                    )
-                                                        [actions.comment]
+                    "[/" >> *(dummy_block | (anychar_p - ']')) >> ']'
                     ;
 
                 dummy_block =
@@ -185,13 +186,13 @@ namespace quickbook
                     ;
 
                 simple_markup(simple_bold,
-                    '*', actions.simple_bold, eol);
+                    '*', actions.simple_bold, close_bracket);
                 simple_markup(simple_italic,
-                    '/', actions.simple_italic, eol);
+                    '/', actions.simple_italic, close_bracket);
                 simple_markup(simple_underline,
-                    '_', actions.simple_underline, eol);
+                    '_', actions.simple_underline, close_bracket);
                 simple_markup(simple_teletype,
-                    '=', actions.simple_teletype, eol);
+                    '=', actions.simple_teletype, close_bracket);
 
                 phrase =
                    *(   common
@@ -397,7 +398,7 @@ namespace quickbook
             start() const { return common; }
         };
 
-        bool& is_not_preformatted;
+        bool& no_eols;
         Actions& actions;
     };
 
@@ -424,11 +425,7 @@ namespace quickbook
                     ;
 
                 comment =
-                    (
-                        "[//" >> *(anychar_p - eol_p) >> eol_p
-                    |   "[/" >> *(dummy_block | (anychar_p - ']')) >> ']'
-                    )
-                                                    [actions.comment]
+                    "[/" >> *(dummy_block | (anychar_p - ']')) >> ']'
                     ;
 
                 dummy_block =

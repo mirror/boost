@@ -13,7 +13,7 @@
 #include "./actions.hpp"
 #include <boost/tuple/tuple.hpp>
 
-namespace quickbook 
+namespace quickbook
 {
     using namespace boost::spirit;
     namespace fs = boost::filesystem;
@@ -50,10 +50,11 @@ namespace quickbook
 
     // main output stream
         collector               out;
-    
+
     // auxilliary streams
         collector               phrase;
         collector               temp;
+        collector               temp_para;
         collector               list_buffer;
 
     // state
@@ -63,20 +64,20 @@ namespace quickbook
         int                     section_level;
         std::string             section_id;
         std::string             qualified_section_id;
-        std::string             source_mode;                   
-        
+        std::string             source_mode;
+
         typedef boost::tuple<
-            fs::path   
-          , fs::path   
+            fs::path
+          , fs::path
           , string_symbols
-          , int        
+          , int
           , std::string
           , std::string
           , std::string>
         state_tuple;
-        
+
         std::stack<state_tuple> state_stack;
-       
+
     // temporary or global state
         std::string             table_title;
         unsigned                table_span;
@@ -103,7 +104,7 @@ namespace quickbook
         code_action             code_block;
         inline_code_action      inline_code;
         phrase_action           paragraph;
-        simple_phrase_action    comment;
+        phrase_action           inside_paragraph;
         generic_header_action   h;
         header_action           h1, h2, h3, h4, h5, h6;
         markup_action           hr;
@@ -163,7 +164,7 @@ namespace quickbook
         markup_action           start_varlistitem;
         markup_action           end_varlistitem;
 
-        markup_action           break_;
+        break_action            break_;
         macro_identifier_action macro_identifier;
         macro_definition_action macro_definition;
         do_macro_action         do_macro;
@@ -177,7 +178,7 @@ namespace quickbook
         start_row_action        start_row;
         markup_action           end_row;
         start_col_action        start_cell;
-        markup_action           end_cell;
+        end_col_action          end_cell;
         anchor_action           anchor;
 
         begin_section_action    begin_section;

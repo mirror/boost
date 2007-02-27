@@ -8,13 +8,10 @@
   <section id="templates.templates">
     <title><link linkend="templates.templates">Templates</link></title>
     <para>
-      <!--[/-------------------------------- nullary arg ]-->
       nullary_arg
-      <!--[/-------------------------------- unary arg, phrase syle ]-->
     </para>
     <para>
       foo baz
-      <!--[/-------------------------------- unary arg, block syle ]-->
     </para>
     <para>
       <para>
@@ -26,11 +23,9 @@
         This is a complete paragraph. kalamazoo kalamazoo kalamazoo kalamazoo kalamazoo
         kalamazoo kalamazoo kalamazoo kalamazoo.... blah blah blah......
       </para>
-      <!--[/-------------------------------- unary arg, using punctuation ]-->
     </para>
     <para>
       <hey>baz</hey>
-      <!--[/-------------------------------- recursive templates ]-->
     </para>
     <para>
       <para>
@@ -43,14 +38,12 @@
     </para>
     <para>
       exactly xanadu
-      <!--[/-------------------------------- space delimitted args ]-->
     </para>
     <para>
       wx
     </para>
     <para>
       wxyz wxyz trail
-      <!--[/-------------------------------- John's templates ]-->
     </para>
     <para>
       
@@ -69,7 +62,6 @@
     </para>
     <para>
       x<superscript>2</superscript>
-      <!--[/-------------------------------- Some more ]-->
     </para>
     <para>
       got a banana?

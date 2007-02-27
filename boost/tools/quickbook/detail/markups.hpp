@@ -29,8 +29,8 @@ namespace quickbook { namespace /*unnamed*/
     const char* h6_pre              = "<bridgehead renderas=\"sect6\">";
     const char* h6_post             = "</bridgehead>";
     const char* hr_                 = "<para/>";
-    const char* blurb_pre           = "<para role=\"blurb\">\n";
-    const char* blurb_post          = "</para>\n";
+    const char* blurb_pre           = "<sidebar role=\"blurb\">\n";
+    const char* blurb_post          = "</sidebar>\n";
     const char* blockquote_pre      = "<blockquote><para>";
     const char* blockquote_post     = "</para></blockquote>";
     const char* preformatted_pre    = "<programlisting>";

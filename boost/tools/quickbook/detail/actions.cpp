@@ -23,6 +23,15 @@
 
 namespace quickbook
 {
+    // Handles line-breaks (DEPRECATED!!!)
+    void break_action::operator()(iterator first, iterator) const
+    {
+        boost::spirit::file_position const pos = first.get_position();
+        detail::outwarn(pos.file,pos.line) << "in column:" << pos.column << ", "
+            << "[br] and \\n are deprecated" << ".\n";
+        phrase << break_mark;
+    }
+
     void error_action::operator()(iterator first, iterator /*last*/) const
     {
         boost::spirit::file_position const pos = first.get_position();
@@ -695,7 +704,16 @@ namespace quickbook
     void start_col_action::operator()(char) const
     {
         phrase << start_cell_;
+        phrase.push();
         ++span;
+    }
+
+    void end_col_action::operator()(char) const
+    {
+        std::string str;
+        temp_para.swap(str);
+        phrase.pop();
+        phrase << str << end_cell_;
     }
 
     void begin_section_action::operator()(iterator first, iterator last) const

@@ -33,8 +33,8 @@ namespace quickbook
         struct definition
         {
             definition(block_grammar const& self)
-                : is_not_preformatted(true)
-                , common(self.actions, is_not_preformatted)
+                : no_eols(true)
+                , common(self.actions, no_eols)
             {
                 using detail::var;
                 Actions& actions = self.actions;
@@ -76,7 +76,7 @@ namespace quickbook
 
                 close_bracket =
                     ']' |
-                    if_p(var(is_not_preformatted))
+                    if_p(var(no_eols))
                     [
                         eol_p >> eol_p                  // Make sure that we don't go
                     ]                                   // past a single block, except
@@ -87,13 +87,9 @@ namespace quickbook
                     ;                                   // alpha-numeric or underscore
 
                 comment =
-                    (
-                        "[//" >> *(anychar_p - eol_p) >> eol_p
-                    |   "[/" >> *(dummy_block | (anychar_p - ']')) >> ']'
-                    )
-                                                        [actions.comment]
+                    "[/" >> *(dummy_block | (anychar_p - ']')) >> ']'
                     ;
-                
+
                 dummy_block =
                     '[' >> *(dummy_block | (anychar_p - ']')) >> ']'
                     ;
@@ -151,43 +147,49 @@ namespace quickbook
                 h5 = "h5" >> hard_space >> phrase       [actions.h5];
                 h6 = "h6" >> hard_space >> phrase       [actions.h6];
 
+                static const bool true_ = true;
+                static const bool false_ = false;
+
+                inside_paragraph =
+                    phrase                              [actions.inside_paragraph]
+                    >> *(
+                        eol >> eol >> phrase            [actions.inside_paragraph]
+                    )
+                    ;
+
                 blurb =
                     "blurb" >> hard_space
-                    >> phrase                           [actions.blurb]
+                    >> inside_paragraph                 [actions.blurb]
+                    >> eps_p
                     ;
 
                 blockquote =
                     ':' >> blank >>
-                    phrase                              [actions.blockquote]
+                    inside_paragraph                    [actions.blockquote]
                     ;
 
                 admonition =
                     "warning" >> blank >>
-                    phrase                              [self.actions.warning]
+                    inside_paragraph                    [actions.warning]
                     |
                     "caution" >> blank >>
-                    phrase                              [self.actions.caution]
+                    inside_paragraph                    [actions.caution]
                     |
                     "important" >> blank >>
-                    phrase                              [self.actions.important]
+                    inside_paragraph                    [actions.important]
                     |
                     "note" >> blank >>
-                    phrase                              [self.actions.note]
+                    inside_paragraph                    [actions.note]
                     |
                     "tip" >> blank >>
-                    phrase                              [self.actions.tip]
+                    inside_paragraph                    [actions.tip]
                     ;
 
-                {
-                    static const bool true_ = true;
-                    static const bool false_ = false;
-                    
-                    preformatted =
-                        "pre" >> hard_space             [assign_a(is_not_preformatted, false_)]
-                        >> !eol >> phrase               [actions.preformatted]
-                        >> eps_p                        [assign_a(is_not_preformatted, true_)]
-                        ;
-                }
+                preformatted =
+                    "pre" >> hard_space                 [assign_a(no_eols, false_)]
+                    >> !eol >> phrase                   [actions.preformatted]
+                    >> eps_p                            [assign_a(no_eols, true_)]
+                    ;
 
                 macro_identifier =
                     +(anychar_p - (space_p | ']'))
@@ -210,7 +212,7 @@ namespace quickbook
                 template_ =
                     "template"
                     >> hard_space >> template_id        [push_back_a(actions.template_info)]
-                    >> 
+                    >>
                     !(
                         space >> '['
                         >> *(
@@ -220,7 +222,7 @@ namespace quickbook
                     )
                     >> template_body                    [actions.template_body]
                     ;
-                
+
                 template_body =
                    *(('[' >> template_body >> ']') | (anychar_p - ']'))
                     >> space >> eps_p(']')
@@ -279,7 +281,7 @@ namespace quickbook
                     ;
 
                 table =
-                    "table" 
+                    "table"
                     >>  (eps_p(*blank_p >> eol_p) | hard_space)
                     >>  (*(anychar_p - eol))            [assign_a(actions.table_title)]
                     >>  +eol
@@ -307,7 +309,7 @@ namespace quickbook
                     >>
                     (
                         (
-                            phrase
+                            inside_paragraph
                             >>  ch_p(']')               [actions.end_cell]
                             >>  space
                         )
@@ -332,7 +334,7 @@ namespace quickbook
                 include =
                        "include"
                     >> hard_space
-                    >> 
+                    >>
                    !(
                         ':'
                         >> (*((alnum_p | '_') - space_p))[assign_a(actions.include_doc_id)]
@@ -341,7 +343,7 @@ namespace quickbook
                     >> (*(anychar_p -
                             close_bracket))             [actions.include]
                     ;
-                
+
                 code =
                     (
                         code_line
@@ -403,10 +405,10 @@ namespace quickbook
                     ;
             }
 
-            bool is_not_preformatted;
-            
-            rule<Scanner>   start_, blocks, block_markup, code, code_line, 
-                            paragraph, space, blank, comment, headings, h, h1, h2, 
+            bool no_eols;
+
+            rule<Scanner>   start_, blocks, block_markup, code, code_line,
+                            paragraph, space, blank, comment, headings, h, h1, h2,
                             h3, h4, h5, h6, hr, blurb, blockquote, admonition,
                             phrase, list, close_bracket, ordered_list, def_macro,
                             macro_identifier, table, table_row, variablelist,
@@ -414,10 +416,11 @@ namespace quickbook
                             preformatted, list_item, begin_section, end_section,
                             xinclude, include, hard_space, eol, paragraph_end,
                             template_, template_id, template_formal_arg,
-                            template_body, identifier, dummy_block, import;
+                            template_body, identifier, dummy_block, import,
+                            inside_paragraph;
 
             symbols<>       paragraph_end_markups;
-            
+
             phrase_grammar<Actions> common;
 
             rule<Scanner> const&
