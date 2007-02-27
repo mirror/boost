@@ -68,7 +68,13 @@ struct char_architype
 //
 } // namespace boost
 namespace std{
-   template<> struct char_traits<boost::char_architype>{};
+   template<> struct char_traits<boost::char_architype>
+   {
+      // The intent is that this template is not instantiated,
+      // but this typedef gives us a chance of compilation in
+      // case it is:
+      typedef char_architype char_type;
+   };
 }
 namespace boost{
 //
