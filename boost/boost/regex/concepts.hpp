@@ -73,7 +73,7 @@ namespace std{
       // The intent is that this template is not instantiated,
       // but this typedef gives us a chance of compilation in
       // case it is:
-      typedef char_architype char_type;
+      typedef boost::char_architype char_type;
    };
 }
 namespace boost{
