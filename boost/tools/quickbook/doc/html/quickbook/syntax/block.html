@@ -873,7 +873,7 @@ sf_logo
               </td>
 <td>
               <p>
-                2007-Feb-27
+                2007-Feb-28
               </p>
               </td>
 </tr>
@@ -890,7 +890,7 @@ sf_logo
               </td>
 <td>
               <p>
-                11:13:46 PM
+                06:17:12 PM
               </p>
               </td>
 </tr>
@@ -1732,9 +1732,9 @@ This is the <span class="bold"><b><span class="emphasis"><em>bar</em></span></b>
             
 </p>
 <pre class="programlisting">
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">foo_bar</span><span class="special">()</span> <a name="quickbook0co" href="block.html#quickbook0"><img src="../../images/callouts/1.png" alt="1" border="0"></a>
+<span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">foo_bar</span><span class="special">()</span> <span class="callout_bug"><a name="quickbook0co" href="block.html#quickbook0"><img src="../../images/callouts/1.png" alt="1" border="0"></a></span>
 <span class="special">{</span>
-    <span class="keyword">return</span> <span class="string">"foo-bar"</span><span class="special">;</span> <a name="quickbook1co" href="block.html#quickbook1"><img src="../../images/callouts/2.png" alt="2" border="0"></a>
+    <span class="keyword">return</span> <span class="string">"foo-bar"</span><span class="special">;</span> <span class="callout_bug"><a name="quickbook1co" href="block.html#quickbook1"><img src="../../images/callouts/2.png" alt="2" border="0"></a></span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -1747,7 +1747,7 @@ This is the <span class="bold"><b><span class="emphasis"><em>bar</em></span></b>
 <tr>
 <td width="5%" valign="top" align="left">
 <a name="quickbook0"></a><a href="#quickbook0co"><img src="../../images/callouts/1.png" alt="1" border="0"></a> </td>
-<td valign="top" align="left"><p> The <span class="bold"><b>Mythical</b></span> FooBar. See <a href="http://en.wikipedia.org/wiki/Foobar" target="_top">Foobar
+<td valign="top" align="left"><p> The <span class="emphasis"><em>Mythical</em></span> FooBar. See <a href="http://en.wikipedia.org/wiki/Foobar" target="_top">Foobar
             for details</a> </p></td>
 </tr>
 <tr>
@@ -1761,9 +1761,106 @@ This is the <span class="bold"><b><span class="emphasis"><em>bar</em></span></b>
 <p>
         </p>
 <p>
-          Checkout <a href="../../../../test/stub.cpp" target="_top">stub.cpp</a> to see the actual
-          code.
+          This is the actual code:
         </p>
+<pre class="programlisting">
+<span class="comment">//[ foo_bar
+</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">foo_bar</span><span class="special">()</span> <span class="comment">/*&lt; The /Mythical/ FooBar.
+                      See [@http://en.wikipedia.org/wiki/Foobar Foobar for details] &gt;*/</span>
+<span class="special">{</span>
+    <span class="keyword">return</span> <span class="string">"foo-bar"</span><span class="special">;</span> <span class="comment">/*&lt; return 'em, foo-bar man! &gt;*/</span>
+<span class="special">}</span>
+<span class="comment">//]
+</span></pre>
+<p>
+          The callouts bugs are placed exactly where the special callout comment
+          is situated. It can be anywhere in the code. The bugs can be rather obtrusive,
+          however. They get in the way of the clarity of the code. Another special
+          callout comment style is available:
+        </p>
+<pre class="programlisting">
+<span class="comment">/*&lt;&lt; some [*quickbook] markup here &gt;&gt;*/</span>
+</pre>
+<p>
+          This is the line-oriented version of the callout. With this, the "bug"
+          is placed at the very left of the code block, away from the actual code.
+          By placing it at the far left, the code is rendered un-obscured. Example:
+        </p>
+<p>
+          </p>
+<p>
+            
+</p>
+<pre class="programlisting">
+<span class="keyword">class</span> <span class="identifier">x</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+
+    <span class="line_callout_bug"><a name="quickbook2co" href="block.html#quickbook2"><img src="../../images/callouts/1.png" alt="1" border="0"></a></span><span class="identifier">x</span><span class="special">()</span> <span class="special">:</span> <span class="identifier">n</span><span class="special">(</span><span class="number">0</span><span class="special">)</span>
+    <span class="special">{</span>
+    <span class="special">}</span>
+    <span class="line_callout_bug"><a name="quickbook3co" href="block.html#quickbook3"><img src="../../images/callouts/2.png" alt="2" border="0"></a></span><span class="special">~</span><span class="identifier">x</span><span class="special">()</span>
+    <span class="special">{</span>
+    <span class="special">}</span>
+
+<span class="keyword">private</span><span class="special">:</span>
+
+    <span class="line_callout_bug"><a name="quickbook4co" href="block.html#quickbook4"><img src="../../images/callouts/3.png" alt="3" border="0"></a></span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">;</span>
+<span class="special">};</span>
+</pre>
+<p>
+          </p>
+<p>
+          </p>
+<p>
+            </p>
+<div class="calloutlist"><table border="0" summary="Callout list">
+<tr>
+<td width="5%" valign="top" align="left">
+<a name="quickbook2"></a><a href="#quickbook2co"><img src="../../images/callouts/1.png" alt="1" border="0"></a> </td>
+<td valign="top" align="left"><p> Constructor </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left">
+<a name="quickbook3"></a><a href="#quickbook3co"><img src="../../images/callouts/2.png" alt="2" border="0"></a> </td>
+<td valign="top" align="left"><p> Destructor </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left">
+<a name="quickbook4"></a><a href="#quickbook4co"><img src="../../images/callouts/3.png" alt="3" border="0"></a> </td>
+<td valign="top" align="left"><p> <tt class="computeroutput"><span class="identifier">n</span></tt>
+            member variable </p></td>
+</tr>
+</table></div>
+<p>
+          </p>
+<p>
+        </p>
+<p>
+          Here's the code for that:
+        </p>
+<pre class="programlisting">
+<span class="comment">//[ class_
+</span><span class="keyword">class</span> <span class="identifier">x</span>
+<span class="special">{</span>
+<span class="keyword">public</span><span class="special">:</span>
+
+    <span class="comment">/*&lt;&lt; Constructor &gt;&gt;*/</span>
+    <span class="identifier">x</span><span class="special">()</span> <span class="special">:</span> <span class="identifier">n</span><span class="special">(</span><span class="number">0</span><span class="special">)</span>
+    <span class="special">{</span>
+    <span class="special">}</span>
+    <span class="comment">/*&lt;&lt; Destructor &gt;&gt;*/</span>
+    <span class="special">~</span><span class="identifier">x</span><span class="special">()</span>
+    <span class="special">{</span>
+    <span class="special">}</span>
+
+<span class="keyword">private</span><span class="special">:</span>
+
+    <span class="comment">/*&lt;&lt; `n` member variable &gt;&gt;*/</span>
+    <span class="keyword">int</span> <span class="identifier">n</span><span class="special">;</span>
+<span class="special">};</span>
+<span class="comment">//]
+</span></pre>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

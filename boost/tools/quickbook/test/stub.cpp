@@ -27,10 +27,30 @@ std::string foo()
 //]
 
 //[ foo_bar
-std::string foo_bar() /*< The *Mythical* FooBar.
+std::string foo_bar() /*< The /Mythical/ FooBar.
                       See [@http://en.wikipedia.org/wiki/Foobar Foobar for details] >*/
 {
     return "foo-bar"; /*< return 'em, foo-bar man! >*/
 }
 //]
 
+//[ class_
+class x
+{
+public:
+
+    /*<< Constructor >>*/
+    x() : n(0)
+    {
+    }
+    /*<< Destructor >>*/
+    ~x()
+    {
+    }
+
+private:
+
+    /*<< `n` member variable >>*/
+    int n;
+};
+//]

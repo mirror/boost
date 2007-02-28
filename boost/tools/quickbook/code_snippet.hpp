@@ -49,14 +49,22 @@ namespace quickbook
 
                 code_elements =
                         escaped_comment
-                    |   callout
+                    |   line_callout
+                    |   inline_callout
                     |   (anychar_p - "//]")         [boost::bind(&self_type::pass_thru, &self, _1, _2)]
                     ;
 
-                callout =
+                inline_callout =
                     "/*<"
-                    >> (*(anychar_p - ">*/"))       [boost::bind(&self_type::callout, &self, _1, _2)]
+                    >> (*(anychar_p - ">*/"))       [boost::bind(&self_type::inline_callout, &self, _1, _2)]
                     >> ">*/"
+                    ;
+
+                line_callout =
+                    "/*<<"
+                    >> (*(anychar_p - ">>*/"))      [boost::bind(&self_type::line_callout, &self, _1, _2)]
+                    >> ">>*/"
+                    >> *space_p
                     ;
 
                 escaped_comment =
@@ -69,7 +77,9 @@ namespace quickbook
                     ;
             }
 
-            rule<Scanner> start_, snippet, identifier, code_elements, escaped_comment, callout;
+            rule<Scanner>
+                start_, snippet, identifier, code_elements, escaped_comment,
+                inline_callout, line_callout;
 
             rule<Scanner> const&
             start() const { return start_; }
@@ -78,7 +88,9 @@ namespace quickbook
         void pass_thru(iterator first, iterator last) const;
         void escaped_comment(iterator first, iterator last) const;
         void compile(iterator first, iterator last) const;
-        void callout(iterator first, iterator last) const;
+        void callout(iterator first, iterator last, char const* role) const;
+        void inline_callout(iterator first, iterator last) const;
+        void line_callout(iterator first, iterator last) const;
 
         mutable std::string code;
         mutable std::string snippet;
