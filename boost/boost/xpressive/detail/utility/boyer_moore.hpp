@@ -61,7 +61,7 @@ struct boyer_moore
         std::ptrdiff_t const uchar_max = UCHAR_MAX;
         std::ptrdiff_t diff = std::distance(begin, end);
         this->length_  = static_cast<unsigned char>((std::min)(diff, uchar_max));
-        std::fill_n(this->offsets_, uchar_max + 1, this->length_);
+        std::fill_n(static_cast<unsigned char *>(this->offsets_), uchar_max + 1, this->length_);
         --this->length_;
 
         icase ? this->init_(traits, case_fold()) : this->init_(traits, mpl::false_());
