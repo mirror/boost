@@ -59,7 +59,13 @@
                  to I/O code.
           </entry>
         </row>
-
+        <row>
+          <entry>Bug Fix</entry>
+          <entry>Changed serialization code in both greg_serialize.hpp and time_serialize.hpp
+                 to eliminate warnings due to unused variables for version and file_version.
+                 Thanks to Caleb Epstein for the patch suggestion.
+          </entry>
+        </row>
         <row>
           <entry>Bug Fix</entry>
           <entry>Fix regression errors that showed up under FreeBSD with GCC and the 
