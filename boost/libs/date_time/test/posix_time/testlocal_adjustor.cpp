@@ -1,4 +1,4 @@
-/* Copyright (c) 2002,2003 CrystalClear Software, Inc.
+/* Copyright (c) 2002,2003, 2007 CrystalClear Software, Inc.
  * Use, modification and distribution is subject to the 
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE-1.0 or http://www.boost.org/LICENSE-1.0)
@@ -141,10 +141,21 @@ main()
     check("check us_local_adjustor3", t7c == t7a);
   }
 
-//   std::cout << to_simple_string(t7) << " in Arizona is " 
-//             << to_simple_string(t8) << " UTC time "
-//             << std::endl;
+  {
+    ptime t7a(date(2007,Mar,11), hours(4)); 
+    ptime t7b = us_eastern3::local_to_utc(t7a);
+    ptime t7c = us_eastern3::utc_to_local(t7b);
+    //converted to local then back ot utc
+    check("check us_local_adjustor3 2007", t7c == t7a);
+  }
 
+  {
+    ptime t7a(date(2007,Mar,11), hours(3)); 
+    ptime t7b = us_eastern3::local_to_utc(t7a);
+    ptime t7c = us_eastern3::utc_to_local(t7b);
+    //converted to local then back ot utc
+    check("check us_local_adjustor3 2007 a", t7c == t7a);
+  }
 
   //still experimental
   typedef boost::date_time::dynamic_local_time_adjustor<ptime, us_dst> lta;
@@ -156,6 +167,9 @@ main()
 //   check("check non-dst offset",   adjustor.utc_offset(false)==hours(-7));
 //   check("check dst offset",   adjustor.utc_offset(true)==hours(-6));
   
+
+  check("dst start", lta::local_dst_start_day(2007) == date(2007,Mar,11));
+  check("dst end",   lta::local_dst_end_day(2007) == date(2007,Nov,4));
 
   return printTestStats();
 

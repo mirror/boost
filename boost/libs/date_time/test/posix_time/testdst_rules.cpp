@@ -13,17 +13,32 @@
 // back Mar 1
 
 struct paraguay_dst_traits { 
+  typedef boost::gregorian::date           date_type;
   typedef boost::gregorian::date::day_type day_type;
   typedef boost::gregorian::date::month_type month_type;
+  typedef boost::gregorian::date::year_type year_type;
   typedef boost::date_time::partial_date<boost::gregorian::date> start_rule_functor;
   typedef boost::date_time::partial_date<boost::gregorian::date> end_rule_functor;
-  static day_type start_day() {return 1;}
-  static month_type start_month() {return boost::date_time::Oct;}
-  static day_type end_day() {return 1;}
-  static month_type end_month() {return boost::date_time::Mar;}
+  static day_type start_day(year_type) {return 1;}
+  static month_type start_month(year_type) {return boost::date_time::Oct;}
+  static day_type end_day(year_type) {return 1;}
+  static month_type end_month(year_type) {return boost::date_time::Mar;}
   static int dst_start_offset_minutes() { return 120;}
   static int dst_end_offset_minutes() { return 120; }
   static int dst_shift_length_minutes() { return 60; }
+  static date_type local_dst_start_day(year_type year)
+  {
+    start_rule_functor start(start_day(year), 
+                             start_month(year));
+    return start.get_date(year);      
+  }
+  static date_type local_dst_end_day(year_type year)
+  {
+    end_rule_functor end(end_day(year), 
+                         end_month(year));
+    return end.get_date(year);      
+  }
+
 
 };
 
@@ -174,32 +189,62 @@ main()
   typedef boost::date_time::dst_calc_engine<date, time_duration, us_dst_traits>
     us_dst_calc2;
     
-  //  us_dst_calc2
-  check("dst start", us_dst_calc2::local_dst_start_day(2002) == dst_start);
-  check("dst end",   us_dst_calc2::local_dst_end_day(2002) == dst_end);
-  //  std::cout << us_dst_calc2::local_dst_end_day(2002) << std::endl;
-  check("dst boundary",   us_dst_calc2::is_dst_boundary_day(dst_start));
-  check("dst boundary",   us_dst_calc2::is_dst_boundary_day(dst_end));
+  {
+    //  us_dst_calc2
+    check("dst start", us_dst_calc2::local_dst_start_day(2002) == dst_start);
+    check("dst end",   us_dst_calc2::local_dst_end_day(2002) == dst_end);
+    //  std::cout << us_dst_calc2::local_dst_end_day(2002) << std::endl;
+    check("dst boundary",   us_dst_calc2::is_dst_boundary_day(dst_start));
+    check("dst boundary",   us_dst_calc2::is_dst_boundary_day(dst_end));
+    
+    check("check if time is dst -- not",   
+          us_dst_calc2::local_is_dst(t.date(), t.time_of_day())==boost::date_time::is_not_in_dst);
+    check("label on dst boundary invalid", 
+          us_dst_calc2::local_is_dst(t3a.date(),t3a.time_of_day())==boost::date_time::invalid_time_label);
+    check("label on dst boundary invalid",   
+          us_dst_calc2::local_is_dst(t3b.date(),t3b.time_of_day())==boost::date_time::invalid_time_label);
+    check("check if time is dst -- not",   
+          us_dst_calc2::local_is_dst(t4.date(),t4.time_of_day())==boost::date_time::is_not_in_dst);
+    check("check if time is dst -- yes",   
+          us_dst_calc2::local_is_dst(t5.date(),t5.time_of_day())==boost::date_time::is_in_dst);
 
-  check("check if time is dst -- not",   
-        us_dst_calc2::local_is_dst(t.date(), t.time_of_day())==boost::date_time::is_not_in_dst);
-  check("label on dst boundary invalid", 
-        us_dst_calc2::local_is_dst(t3a.date(),t3a.time_of_day())==boost::date_time::invalid_time_label);
-  check("label on dst boundary invalid",   
-        us_dst_calc2::local_is_dst(t3b.date(),t3b.time_of_day())==boost::date_time::invalid_time_label);
-   check("check if time is dst -- not",   
-         us_dst_calc2::local_is_dst(t4.date(),t4.time_of_day())==boost::date_time::is_not_in_dst);
-   check("check if time is dst -- yes",   
-         us_dst_calc2::local_is_dst(t5.date(),t5.time_of_day())==boost::date_time::is_in_dst);
+    check("check if time is dst -- not",   
+          us_dst_calc2::local_is_dst(t6.date(),t6.time_of_day())==boost::date_time::is_in_dst);
+    check("check if time is dst -- ambig", 
+          us_dst_calc2::local_is_dst(t7.date(),t7.time_of_day())==boost::date_time::ambiguous);
+    check("check if time is dst -- ambig", 
+          us_dst_calc2::local_is_dst(t8.date(),t8.time_of_day())==boost::date_time::ambiguous);
+    check("check if time is dst -- not",   
+          us_dst_calc2::local_is_dst(t9.date(),t9.time_of_day())==boost::date_time::is_not_in_dst);
+  }
+  {
+    //some new checks for the new 2007 us dst rules
+    date dst_start07(2007,Mar, 11);
+    date dst_end07(2007,Nov, 4);
 
-   check("check if time is dst -- not",   
-         us_dst_calc2::local_is_dst(t6.date(),t6.time_of_day())==boost::date_time::is_in_dst);
-   check("check if time is dst -- ambig", 
-         us_dst_calc2::local_is_dst(t7.date(),t7.time_of_day())==boost::date_time::ambiguous);
-   check("check if time is dst -- ambig", 
-         us_dst_calc2::local_is_dst(t8.date(),t8.time_of_day())==boost::date_time::ambiguous);
-   check("check if time is dst -- not",   
-         us_dst_calc2::local_is_dst(t9.date(),t9.time_of_day())==boost::date_time::is_not_in_dst);
+    check("dst start07", us_dst_calc2::local_dst_start_day(2007) == dst_start07);
+    check("dst end07",   us_dst_calc2::local_dst_end_day(2007) == dst_end07);
+    check("dst boundary07",   us_dst_calc2::is_dst_boundary_day(dst_start07));
+    check("dst boundary07",   us_dst_calc2::is_dst_boundary_day(dst_end07));
+
+    date dst_start08(2008,Mar, 9);
+    date dst_end08(2008,Nov, 2);
+
+    check("dst start08", us_dst_calc2::local_dst_start_day(2008) == dst_start08);
+    check("dst end08",   us_dst_calc2::local_dst_end_day(2008) == dst_end08);
+    check("dst boundary08",   us_dst_calc2::is_dst_boundary_day(dst_start08));
+    check("dst boundary08",   us_dst_calc2::is_dst_boundary_day(dst_end08));
+
+    date dst_start09(2009,Mar, 8);
+    date dst_end09(2009,Nov, 1);
+
+    check("dst start09", us_dst_calc2::local_dst_start_day(2009) == dst_start09);
+    check("dst end09",   us_dst_calc2::local_dst_end_day(2009) == dst_end09);
+    check("dst boundary09",   us_dst_calc2::is_dst_boundary_day(dst_start09));
+    check("dst boundary09",   us_dst_calc2::is_dst_boundary_day(dst_end09));
+    
+  }
+
 
 
   /******************** post release 1 -- new dst calc engine - eu dst ********/

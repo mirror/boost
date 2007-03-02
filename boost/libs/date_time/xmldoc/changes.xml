@@ -33,6 +33,25 @@
              historic timezone rules presently. 
           </entry>
         </row>
+        <row>
+          <entry>Feature</entry>
+          <entry>
+              Two other dst calculation features have also been update to reflect the new
+              US/Canada timzone rules. This is the boost::date_time::us_dst_rules and
+              dst_calc_engine.  While the us_dst_rules is officially deprecated, a patch
+              by Graham Bennett has been applied which allows this class to work correctly
+              for both historical and future dates.  The dst_calc_engine was updated to also
+              work for historical and future times.  This allows the various local_adjustor
+              classes to work correctly.  There was an interface change for classes using the
+              dst_calc_engine with custom dst traits classes.  The traits classes signatures
+              changed to take a 'year' parameter on most of the methods such as end_month.
+              In addition,  2 new functions are needed on the traits classes:
+                   <code>static date_type local_dst_start_day(year_type year)</code> and
+                   <code>static date_type local_dst_end_day(year_type year)</code>.
+              Implementers should see <code>date_time/local_timezone_defs.hpp</code> for
+              examples.
+          </entry>
+        </row>
 
         <row>
           <entry>Bug Fix</entry>
