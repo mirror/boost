@@ -1,9 +1,8 @@
 /*=============================================================================
     Copyright (c) 2006 Eric Niebler
 
-    Use, modification and distribution is subject to the Boost Software
-    License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
-    http://www.boost.org/LICENSE_1_0.txt)
+    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(FUSION_SIZE_S_08112006_1141)
 #define FUSION_SIZE_S_08112006_1141

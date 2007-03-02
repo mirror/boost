@@ -1,9 +1,8 @@
 /*=============================================================================
     Copyright (c) 2006 Eric Niebler
 
-    Use, modification and distribution is subject to the Boost Software
-    License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
-    http://www.boost.org/LICENSE_1_0.txt)
+    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(FUSION_IS_SEGMENTED_03202006_0015)
 #define FUSION_IS_SEGMENTED_03202006_0015
