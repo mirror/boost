@@ -166,7 +166,7 @@ namespace boost {
       static day_of_week_type end_day(year_type) {return Sunday;}
       static month_type end_month(year_type) {return Mar;}
       static int dst_start_offset_minutes() { return 120;}
-      static int dst_end_offset_minutes() { return 120; }
+      static int dst_end_offset_minutes() { return 180; }
       static int dst_shift_length_minutes() { return 60; }
       static date_type local_dst_start_day(year_type year)
       {

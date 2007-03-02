@@ -120,7 +120,7 @@ main()
   boost::date_time::time_is_dst_result a1 =
     dstcalc::local_is_dst(date(2002,May,1),hours(3),
                           dst_start2, 120,
-                          dst_end2, 120,
+                          dst_end2, 180,
                           60);
 
   check("check southern not dst",  a1==boost::date_time::is_not_in_dst);
@@ -128,7 +128,7 @@ main()
   boost::date_time::time_is_dst_result a2 =
     dstcalc::local_is_dst(date(2002,Jan,1),hours(3),
                           dst_start2, 120,
-                          dst_end2, 120,
+                          dst_end2, 180,
                           60);
 
   check("check southern is dst",  a2==boost::date_time::is_in_dst);
@@ -136,50 +136,50 @@ main()
   boost::date_time::time_is_dst_result a3 =
     dstcalc::local_is_dst(date(2002,Oct,28),hours(3),
                           dst_start2, 120,
-                          dst_end2, 120,
+                          dst_end2, 180,
                           60);
 
   check("check southern is dst",  a3==boost::date_time::is_in_dst);
   boost::date_time::time_is_dst_result a4 =
     dstcalc::local_is_dst(date(2002,Oct,27),time_duration(1,59,59),
                           dst_start2, 120,
-                          dst_end2, 120,
+                          dst_end2, 180,
                           60);
   check("check southern boundary-not dst",  a4==boost::date_time::is_not_in_dst);
   boost::date_time::time_is_dst_result a5 =
     dstcalc::local_is_dst(date(2002,Oct,27),hours(3),
                           dst_start2, 120,
-                          dst_end2, 120,
+                          dst_end2, 180,
                           60);
   check("check southern boundary-is dst",  a5==boost::date_time::is_in_dst);
   boost::date_time::time_is_dst_result a6 =
     dstcalc::local_is_dst(date(2002,Oct,27),hours(2),
                           dst_start2, 120,
-                          dst_end2, 120,
+                          dst_end2, 180,
                           60);
   check("check southern boundary-invalid time",  a6==boost::date_time::invalid_time_label);
   boost::date_time::time_is_dst_result a7 =
-    dstcalc::local_is_dst(date(2002,Mar,31),time_duration(0,59,59),
+    dstcalc::local_is_dst(date(2002,Mar,31),time_duration(1,59,59),
                           dst_start2, 120,
-                          dst_end2, 120,
+                          dst_end2, 180,
                           60);
   check("check southern boundary-is dst",  a7==boost::date_time::is_in_dst);
   boost::date_time::time_is_dst_result a8 =
-    dstcalc::local_is_dst(date(2002,Mar,31),time_duration(1,0,0),
+    dstcalc::local_is_dst(date(2002,Mar,31),time_duration(2,0,0),
                           dst_start2, 120,
-                          dst_end2, 120,
+                          dst_end2, 180,
                           60);
   check("check southern boundary-ambiguous",  a8==boost::date_time::ambiguous);
   boost::date_time::time_is_dst_result a9 =
-    dstcalc::local_is_dst(date(2002,Mar,31),time_duration(1,59,59),
+    dstcalc::local_is_dst(date(2002,Mar,31),time_duration(2,59,59),
                           dst_start2, 120,
-                          dst_end2, 120,
+                          dst_end2, 180,
                           60);
   check("check southern boundary-ambiguous",  a9==boost::date_time::ambiguous);
   boost::date_time::time_is_dst_result a10 =
-    dstcalc::local_is_dst(date(2002,Mar,31),time_duration(2,0,0),
+    dstcalc::local_is_dst(date(2002,Mar,31),time_duration(3,0,0),
                           dst_start2, 120,
-                          dst_end2, 120,
+                          dst_end2, 180,
                           60);
   check("check southern boundary-not",  a10==boost::date_time::is_not_in_dst);
 
@@ -406,10 +406,10 @@ main()
     ptime acst_invalid2(acst_dst_start, time_duration(2,59,59)); //invalid time label
     ptime acst_notdst1(acst_dst_start, time_duration(1,59,59));   //not ds 
     ptime acst_isdst1(acst_dst_start, time_duration(3,0,0));   //always dst
-    ptime acst_isdst2(acst_dst_end, time_duration(0,59,59)); //is dst
-    ptime acst_amgbig1(acst_dst_end, time_duration(1,0,0));   //ambiguous
-    ptime acst_amgbig2(acst_dst_end, time_duration(1,59,59));   //ambiguous 
-    ptime acst_notdst2(acst_dst_end, time_duration(2,0,0));   //always not dst
+    ptime acst_isdst2(acst_dst_end, time_duration(1,59,59)); //is dst
+    ptime acst_amgbig1(acst_dst_end, time_duration(2,0,0));   //ambiguous
+    ptime acst_amgbig2(acst_dst_end, time_duration(2,59,59));   //ambiguous 
+    ptime acst_notdst2(acst_dst_end, time_duration(3,0,0));   //always not dst
     
 //     std::cout << "acst dst_start: " << acst_dst_calc::local_dst_start_day(2002)
 //               << std::endl;

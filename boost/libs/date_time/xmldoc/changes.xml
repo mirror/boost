@@ -55,6 +55,13 @@
 
         <row>
           <entry>Bug Fix</entry>
+          <entry>Fix DST traits for Austrialia (sf# 1672139) to set end of DST at 3:00 am instead of 2:00 am.
+                
+          </entry>
+        </row>
+
+        <row>
+          <entry>Bug Fix</entry>
           <entry>Fix a problem with potential linking error with multiple definitions due
                  to I/O code.
           </entry>
