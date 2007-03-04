@@ -26,7 +26,6 @@
 
 namespace boost { namespace xpressive { namespace detail
 {
-
     ///////////////////////////////////////////////////////////////////////////////
     // regex_byref_matcher
     //
@@ -52,15 +51,24 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Next>
         bool match(state_type<BidiIter> &state, Next const &next) const
         {
-            // regex_matcher is used for embeding a dynamic regex in a static regex. As such,
-            // Next will always point to a static regex.
-            BOOST_MPL_ASSERT((is_static_xpression<Next>));
             BOOST_ASSERT(this->pimpl_ == this->wimpl_.lock().get());
             ensure(this->pimpl_->xpr_, regex_constants::error_badref, "bad regex reference");
 
+            return push_context_match(*this->pimpl_, state, this->wrap_(next, is_static_xpression<Next>()));
+        }
+
+    private:
+        template<typename Next>
+        static xpression_adaptor<reference_wrapper<Next const>, matchable<BidiIter> > wrap_(Next const &next, mpl::true_)
+        {
             // wrap the static xpression in a matchable interface
-            xpression_adaptor<reference_wrapper<Next const>, matchable<BidiIter> > adaptor(boost::cref(next));
-            return push_context_match(*this->pimpl_, state, adaptor);
+            return xpression_adaptor<reference_wrapper<Next const>, matchable<BidiIter> >(boost::cref(next));
+        }
+
+        template<typename Next>
+        static Next const &wrap_(Next const &next, mpl::false_)
+        {
+            return next;
         }
     };
 

@@ -226,6 +226,7 @@ struct compiler_traits
             case BOOST_XPR_CHAR_(char_type, '#'): ++begin; return token_comment;
             case BOOST_XPR_CHAR_(char_type, '='): ++begin; return token_positive_lookahead;
             case BOOST_XPR_CHAR_(char_type, '!'): ++begin; return token_negative_lookahead;
+            case BOOST_XPR_CHAR_(char_type, 'R'): ++begin; return token_recurse_self;
             case BOOST_XPR_CHAR_(char_type, '<'):
                 this->eat_ws_(++begin, end);
                 detail::ensure(begin != end, error_paren, "incomplete extension");

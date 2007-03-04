@@ -180,7 +180,7 @@ struct state_type
     ///////////////////////////////////////////////////////////////////////////////
     // pop_context
     //  called after a nested match failed to restore the context
-    void pop_context(regex_impl const &impl, bool success)
+    bool pop_context(regex_impl const &impl, bool success)
     {
         match_context &context = *this->context_.prev_context_;
         if(!success)
@@ -198,6 +198,7 @@ struct state_type
         match_results &results = *this->context_.results_ptr_;
         this->sub_matches_ = access::get_sub_matches(access::get_sub_match_vector(results));
         this->mark_count_ = results.size();
+        return success;
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -220,6 +221,12 @@ struct state_type
     bool eos()
     {
         return this->cur_ == this->end_ && this->found_partial_match();
+    }
+
+    // is this the regex that is currently executing?
+    bool is_active_regex(regex_impl const &impl) const
+    {
+        return impl.xpr_.get() == this->context_.results_ptr_->regex_id();
     }
 
     // fetch the n-th sub_match

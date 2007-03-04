@@ -46,6 +46,7 @@ enum compiler_token_type
     token_negative_lookbehind,          // ?<!
     token_independent_sub_expression,   // ?>
     token_comment,                      // ?#
+    token_recurse_self,                 // ?R
 
     token_assert_begin_sequence,        // \A
     token_assert_end_sequence,          // \Z

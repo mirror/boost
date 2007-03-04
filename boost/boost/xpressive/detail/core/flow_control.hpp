@@ -32,16 +32,21 @@ inline bool push_context_match
   , matchable<BidiIter> const &next
 )
 {
+    // avoid infinite recursion
+    // BUGBUG this only catches direct infinite recursion, like sregex::compile("(?R)"), but
+    // not indirect infinite recursion where two rules invoke each other recursively.
+    if(state.is_active_regex(impl) && state.cur_ == state.sub_match(0).begin_)
+    {
+        return next.match(state);
+    }
+
     // save state
     match_context<BidiIter> context = state.push_context(impl, next, context);
     detail::ignore_unused(context);
 
-    // match the nested regex
-    bool success = impl.xpr_->match(state);
-
-    // uninitialize the match context (reclaims the sub_match objects if necessary)
-    state.pop_context(impl, success);
-    return success;
+    // match the nested regex and uninitialize the match context
+    // (reclaims the sub_match objects if necessary)
+    return state.pop_context(impl, impl.xpr_->match(state));
 }
 
 ///////////////////////////////////////////////////////////////////////////////

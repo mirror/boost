@@ -54,6 +54,7 @@ struct regex_compiler
       , hidden_mark_count_(0)
       , traits_(traits)
       , upper_(0)
+      , self_()
     {
         this->upper_ = lookup_classname(this->rxtraits(), "upper");
         BOOST_ASSERT(0 != this->upper_);
@@ -99,6 +100,9 @@ struct regex_compiler
 
         string_iterator begin = pat.begin(), end = pat.end();
 
+        basic_regex<BidiIter> rex;
+        this->self_ = detail::core_access<BidiIter>::get_regex_impl(rex);
+
         // at the top level, a regex is a sequence of alternates
         detail::sequence<BidiIter> seq = this->parse_alternates(begin, end);
         detail::ensure(begin == end, regex_constants::error_paren, "mismatched parenthesis");
@@ -107,14 +111,13 @@ struct regex_compiler
         seq += detail::make_dynamic<BidiIter>(detail::end_matcher());
 
         // bundle the regex information into a regex_impl object
-        basic_regex<BidiIter> rex;
-        shared_ptr<detail::regex_impl<BidiIter> > const &impl = detail::core_access<BidiIter>::get_regex_impl(rex);
-        detail::common_compile(seq.xpr().matchable(), *impl, this->rxtraits());
+        detail::common_compile(seq.xpr().matchable(), *this->self_, this->rxtraits());
 
-        impl->traits_ = new detail::traits_holder<RegexTraits>(this->rxtraits());
-        impl->mark_count_ = this->mark_count_;
-        impl->hidden_mark_count_ = this->hidden_mark_count_;
+        this->self_->traits_ = new detail::traits_holder<RegexTraits>(this->rxtraits());
+        this->self_->mark_count_ = this->mark_count_;
+        this->self_->hidden_mark_count_ = this->hidden_mark_count_;
 
+        this->self_.reset();
         return rex;
     }
 
@@ -235,6 +238,15 @@ private:
                 }
             }
             break;
+
+        case token_recurse_self:
+            detail::ensure
+            (
+                begin != end && token_group_end == this->traits_.get_token(begin, end)
+              , error_paren
+              , "mismatched parenthesis"
+            );
+            return detail::make_dynamic<BidiIter>(detail::regex_byref_matcher<BidiIter>(this->self_));
 
         default:
             mark_nbr = static_cast<int>(++this->mark_count_);
@@ -540,6 +552,7 @@ private:
     std::size_t hidden_mark_count_;
     CompilerTraits traits_;
     typename RegexTraits::char_class_type upper_;
+    shared_ptr<detail::regex_impl<BidiIter> > self_;
 };
 
 }} // namespace boost::xpressive

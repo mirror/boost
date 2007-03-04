@@ -84,6 +84,8 @@
             //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(&)()>::type>));
         }
 
+        /// INTERNAL ONLY
+        ///
 #define BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL(Nested, Expr)\
         BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested_and_hidden, Expr)\
         struct Nested\
