@@ -15,6 +15,8 @@
 #include <boost/preprocessor.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/mpl/has_xxx.hpp>
+#include <boost/mpl/if.hpp>
+#include <boost/mpl/bool.hpp>
 
 #ifndef BOOST_RESULT_OF_NUM_ARGS
 #  define BOOST_RESULT_OF_NUM_ARGS 10
@@ -55,14 +57,21 @@ struct result_of_impl<F, FArgs, true>
   typedef typename F::result_type type;
 };
 
-template<typename F, typename FArgs>
-struct result_of_impl<F, FArgs, false>
-  : F::template result<FArgs>
-{};
+template<typename FArgs>
+struct is_function_with_no_args : mpl::false_ {};
 
 template<typename F>
-struct result_of_impl<F, F(void), false>
-  : result_of_void_impl<F>
+struct is_function_with_no_args<F(void)> : mpl::true_ {};
+
+template<typename F, typename FArgs>
+struct result_of_nested_result : F::template result<FArgs>
+{};
+
+template<typename F, typename FArgs>
+struct result_of_impl<F, FArgs, false>
+  : mpl::if_<is_function_with_no_args<FArgs>,
+	     result_of_void_impl<F>,
+	     result_of_nested_result<F, FArgs> >::type
 {};
 
 } // end namespace detail

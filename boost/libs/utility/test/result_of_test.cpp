@@ -79,6 +79,7 @@ int main()
   BOOST_STATIC_ASSERT((is_same<result_of<mem_func_ptr_v(X,char)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<mem_func_ptr_cv(X,char)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<mem_func_ptr_0(X)>::type, int>::value)); 
+  BOOST_STATIC_ASSERT((is_same<result_of<func_ptr(void)>::type, int>::value));
 
   return 0;
 }
