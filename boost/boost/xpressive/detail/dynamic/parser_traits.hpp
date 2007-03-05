@@ -46,8 +46,10 @@ struct compiler_traits
       : traits_(traits)
       , flags_(regex_constants::ECMAScript)
       , space_(lookup_classname(traits_, "space"))
+      , alnum_(lookup_classname(traits_, "alnum"))
     {
         BOOST_ASSERT(0 != this->space_);
+        BOOST_ASSERT(0 != this->alnum_);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -82,6 +84,7 @@ struct compiler_traits
     {
         locale_type oldloc = this->traits().imbue(loc);
         this->space_ = lookup_classname(this->traits(), "space");
+        this->alnum_ = lookup_classname(this->traits(), "alnum");
         BOOST_ASSERT(0 != this->space_);
         return oldloc;
     }
@@ -211,7 +214,7 @@ struct compiler_traits
 
     ///////////////////////////////////////////////////////////////////////////
     // get_group_type
-    regex_constants::compiler_token_type get_group_type(iterator_type &begin, iterator_type end)
+    regex_constants::compiler_token_type get_group_type(iterator_type &begin, iterator_type end, std::string &name)
     {
         using namespace regex_constants;
         if(this->eat_ws_(begin, end) != end && BOOST_XPR_CHAR_(char_type, '?') == *begin)
@@ -226,7 +229,22 @@ struct compiler_traits
             case BOOST_XPR_CHAR_(char_type, '#'): ++begin; return token_comment;
             case BOOST_XPR_CHAR_(char_type, '='): ++begin; return token_positive_lookahead;
             case BOOST_XPR_CHAR_(char_type, '!'): ++begin; return token_negative_lookahead;
-            case BOOST_XPR_CHAR_(char_type, 'R'): ++begin; return token_recurse_self;
+            case BOOST_XPR_CHAR_(char_type, 'R'): ++begin; return token_recurse;
+            case BOOST_XPR_CHAR_(char_type, '$'):
+                this->eat_ws_(++begin, end);
+                for( name.clear(); begin != end && this->traits().isctype(*begin, this->alnum_); ++begin)
+                {
+                    name.push_back(*begin);
+                }
+                this->eat_ws_(begin, end);
+                detail::ensure(begin != end && !name.empty(), error_paren, "incomplete extension");
+                if(BOOST_XPR_CHAR_(char_type, '=') == *begin)
+                {
+                    ++begin;
+                    return token_rule_assign;
+                }
+                return token_rule_ref;
+
             case BOOST_XPR_CHAR_(char_type, '<'):
                 this->eat_ws_(++begin, end);
                 detail::ensure(begin != end, error_paren, "incomplete extension");
@@ -396,6 +414,7 @@ private:
     regex_traits traits_;
     regex_constants::syntax_option_type flags_;
     typename regex_traits::char_class_type space_;
+    typename regex_traits::char_class_type alnum_;
 };
 
 }} // namespace boost::xpressive

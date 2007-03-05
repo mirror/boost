@@ -220,6 +220,8 @@ enum error_type
     error_badlookbehind,        ///< An attempt to create a variable-width look-behind assertion
                                 ///< was detected.
                                 ///<
+    error_badrule,              ///< An invalid use of a rule was detected.
+                                ///<
     error_internal              ///< An internal error has occured.
                                 ///<
 };

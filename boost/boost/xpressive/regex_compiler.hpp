@@ -15,6 +15,7 @@
 # pragma once
 #endif
 
+#include <map>
 #include <boost/xpressive/basic_regex.hpp>
 #include <boost/xpressive/detail/dynamic/parser.hpp>
 #include <boost/xpressive/detail/dynamic/parse_charset.hpp>
@@ -55,6 +56,7 @@ struct regex_compiler
       , traits_(traits)
       , upper_(0)
       , self_()
+      , rules_()
     {
         this->upper_ = lookup_classname(this->rxtraits(), "upper");
         BOOST_ASSERT(0 != this->upper_);
@@ -95,17 +97,32 @@ struct regex_compiler
     /// \throw  regex_error when the string has invalid regular expression syntax.
     basic_regex<BidiIter> compile(string_type pat, flag_type flags = regex_constants::ECMAScript)
     {
+        using namespace regex_constants;
         this->reset();
         this->traits_.flags(flags);
 
-        string_iterator begin = pat.begin(), end = pat.end();
+        string_iterator begin = pat.begin(), end = pat.end(), tmp = begin;
 
-        basic_regex<BidiIter> rex;
+        // Check if this regex is a named rule:
+        std::string name("__self__");
+        if(token_group_begin == this->traits_.get_token(tmp, end) &&
+           token_rule_assign == this->traits_.get_group_type(tmp, end, name))
+        {
+            begin = tmp;
+            detail::ensure
+            (
+                begin != end && token_group_end == this->traits_.get_token(begin, end)
+              , error_paren
+              , "mismatched parenthesis"
+            );
+        }
+
+        basic_regex<BidiIter> &rex = this->rules_[name];
         this->self_ = detail::core_access<BidiIter>::get_regex_impl(rex);
 
         // at the top level, a regex is a sequence of alternates
         detail::sequence<BidiIter> seq = this->parse_alternates(begin, end);
-        detail::ensure(begin == end, regex_constants::error_paren, "mismatched parenthesis");
+        detail::ensure(begin == end, error_paren, "mismatched parenthesis");
 
         // terminate the sequence
         seq += detail::make_dynamic<BidiIter>(detail::end_matcher());
@@ -117,6 +134,8 @@ struct regex_compiler
         this->self_->mark_count_ = this->mark_count_;
         this->self_->hidden_mark_count_ = this->hidden_mark_count_;
 
+        // References changed, update dependencies.
+        this->self_->tracking_update();
         this->self_.reset();
         return rex;
     }
@@ -190,13 +209,14 @@ private:
         bool lookahead = false;
         bool lookbehind = false;
         bool negative = false;
+        std::string name;
 
         detail::sequence<BidiIter> seq, seq_end;
         string_iterator tmp = string_iterator();
 
         syntax_option_type old_flags = this->traits_.flags();
 
-        switch(this->traits_.get_group_type(begin, end))
+        switch(this->traits_.get_group_type(begin, end, name))
         {
         case token_no_mark:
             // Don't process empty groups like (?:) or (?i)
@@ -239,7 +259,7 @@ private:
             }
             break;
 
-        case token_recurse_self:
+        case token_recurse:
             detail::ensure
             (
                 begin != end && token_group_end == this->traits_.get_token(begin, end)
@@ -247,6 +267,24 @@ private:
               , "mismatched parenthesis"
             );
             return detail::make_dynamic<BidiIter>(detail::regex_byref_matcher<BidiIter>(this->self_));
+
+        case token_rule_assign:
+            throw regex_error(error_badrule, "rule assignments must be at the front of the regex");
+
+        case token_rule_ref:
+            {
+                typedef detail::core_access<BidiIter> access;
+                detail::ensure
+                (
+                    begin != end && token_group_end == this->traits_.get_token(begin, end)
+                  , error_paren
+                  , "mismatched parenthesis"
+                );
+                basic_regex<BidiIter> &rex = this->rules_[name];
+                shared_ptr<detail::regex_impl<BidiIter> > impl = access::get_regex_impl(rex);
+                this->self_->track_reference(*impl);
+                return detail::make_dynamic<BidiIter>(detail::regex_byref_matcher<BidiIter>(impl));
+            }
 
         default:
             mark_nbr = static_cast<int>(++this->mark_count_);
@@ -553,6 +591,7 @@ private:
     CompilerTraits traits_;
     typename RegexTraits::char_class_type upper_;
     shared_ptr<detail::regex_impl<BidiIter> > self_;
+    std::map<std::string, basic_regex<BidiIter> > rules_;
 };
 
 }} // namespace boost::xpressive
