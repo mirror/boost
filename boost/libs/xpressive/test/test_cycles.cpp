@@ -9,13 +9,14 @@
 // leaks portably.
 #define BOOST_XPRESSIVE_DEBUG_CYCLE_TEST
 
-#ifdef _MSC_VER
-# include <crtdbg.h>
-#endif
-
 #include <iostream>
 #include <boost/test/unit_test.hpp>
 #include <boost/xpressive/xpressive.hpp>
+
+#if defined(_MSC_VER) && defined(_DEBUG)
+# define _CRTDBG_MAP_ALLOC
+# include <crtdbg.h>
+#endif
 
 using namespace boost::unit_test;
 using namespace boost::xpressive;

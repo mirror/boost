@@ -11,10 +11,6 @@
    7 March 2004 : Initial version.
 */
 
-#if defined(_MSC_VER) && defined(_DEBUG)
-# include <crtdbg.h>
-#endif
-
 #include <locale>
 #include <vector>
 #include <fstream>
@@ -22,6 +18,11 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/xpressive/xpressive.hpp>
 #include <boost/test/unit_test.hpp>
+
+#if defined(_MSC_VER) && defined(_DEBUG)
+# define _CRTDBG_MAP_ALLOC
+# include <crtdbg.h>
+#endif
 
 #define BOOST_XPR_CHECK(pred)                                                   \
     if(pred) {} else { BOOST_ERROR(format_msg(#pred).c_str()); }
