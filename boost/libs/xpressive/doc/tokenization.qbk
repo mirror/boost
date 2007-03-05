@@ -1,3 +1,10 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
 [section String Splitting and Tokenization]
 
 _regex_token_iterator_ is the Ginsu knife of the text manipulation world. It slices! It dices! This section describes

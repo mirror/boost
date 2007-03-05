@@ -1,3 +1,10 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
 [section Grammars and Nested Matches]
 
 [h2 Overview]
@@ -100,9 +107,6 @@ match `"9*(10+3)"`. It only matches well-formed mathematical expressions, where 
 balanced and the infix operators have two arguments each. Don't try this with just any regular expression
 engine!
 
-[note There is no way for a dynamic regex to refer to other regexes, so they can only
-be used as terminals in a grammar. Use static regexes for non-terminal grammar rules.]
-
 Let's take a closer look at this regular expression grammar. Notice that it is cyclic: `expression` is
 implemented in terms of `term`, which is implemented in terms of `factor`, which is implemented in terms
 of `group`, which is implemented in terms of `expression`, closing the loop. In general, the way to define
@@ -119,9 +123,53 @@ involves one less indirection, making your patterns match a little faster. Besid
 are simpler and will make your grammars easier to reason about. Don't worry about the expense of "copying"
 a regex. Each regex object shares its implementation with all of its copies.]
 
+[h2 Dynamic Regex Grammars]
+
+Using _regex_compiler_, you can also build grammars out of dynamic regular expressions.
+You do that by creating named regexes, and referring to other regexes by name. Each
+_regex_compiler_ instance keeps a mapping from names to regexes that have been created
+with it.
+
+You can create a named dynamic regex by prefacing your regex with `"(?$name=)"`, where 
+/name/ is the name of the regex. You can refer to a named regex from another regex with
+`"(?$name)"`. The named regex does not need to exist yet at the time it is referenced
+in another regex, but it must exist by the time you use the regex.
+
+Below is a code fragment that uses dynamic regex grammars to implement the calculator
+example from above.
+
+    using namespace boost::xpressive;
+    using namespace regex_constants;
+
+    sregex expr;
+
+    {
+         sregex_compiler compiler;
+         syntax_option_type x = ignore_white_space;
+
+                compiler.compile("(? $group  = ) \\( (? $expr ) \\) ", x);
+                compiler.compile("(? $factor = ) \\d+ | (? $group ) ", x);
+                compiler.compile("(? $term   = ) (? $factor ) ( \\* (? $factor ) | / (? $factor ) )* ", x);
+         expr = compiler.compile("(? $expr   = ) (? $term )   ( \\+ (? $term )   | - (? $term )   )* ", x);
+    }
+
+    std::string str("foo 9*(10+3) bar");
+    smatch what;
+
+    if(regex_search(str, what, expr))
+    {
+         // This prints "9*(10+3)":
+         std::cout << what[0] << std::endl;
+    }
+
+As with static regex grammars, nested regex invocations create nested
+match results (see /Nested Results/ below). The result is a complete parse tree 
+for string that matched. Unlike static regexes, dynamic regexes are always 
+embedded by reference, not by value.
+
 [h2 Cyclic Patterns, Copying and Memory Management, Oh My!]
 
-The calculator example above raises a number of very complicated memory-management issues. Each of the
+The calculator examples above raises a number of very complicated memory-management issues. Each of the
 four regex objects refer to each other, some directly and some indirectly, some by value and some by
 reference. What if we were to return one of them from a function and let the others go out of scope?
 What becomes of the references? The answer is that the regex objects are internally reference counted,
@@ -130,7 +178,7 @@ object by value is never a problem, even if it refers to other regex objects tha
 
 Those of you who have dealt with reference counting are probably familiar with its Achilles Heel: cyclic
 references. If regex objects are reference counted, what happens to cycles like the one created in the
-calculator example? Are they leaked? The answer is no, they are not leaked. The _basic_regex_ object has some tricky
+calculator examples? Are they leaked? The answer is no, they are not leaked. The _basic_regex_ object has some tricky
 reference tracking code that ensures that even cyclic regex grammars are cleaned up when the last external
 reference goes away. So don't worry about it. Create cyclic grammars, pass your regex objects around and
 copy them all you want. It is fast and efficient and guaranteed not to leak or result in dangling references.
@@ -257,5 +305,7 @@ cindy
 456
 789
 ]
+
+
 
 [endsect]
