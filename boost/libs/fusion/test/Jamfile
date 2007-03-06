@@ -102,6 +102,7 @@ import testing ;
     [ run sequence/vector_value_at.cpp :  :  :  : ]
     [ run sequence/zip_view.cpp : : : : ]
     [ run sequence/zip_view2.cpp : : : : ]
+    [ run sequence/zip_view_ignore.cpp : : : : ]
     [ run sequence/deduce_sequence.cpp : : : : ]
     [ run functional/fused.cpp : : : : ]
     [ run functional/fused_function_object.cpp : : : : ]
