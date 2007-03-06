@@ -90,9 +90,6 @@ CHANGELOG
   suggesting this feature.
 - Added the possibility to use static pre-compiled DFA tables for the lexertl 
   based lexer.
-- Added the is_macro_defined(name) function to the context object as described 
-  in the documentation. This function is usable with any string type compatible 
-  with std::string.
   
 Boost V1.34.0
 - Wave Version 1.2.4
@@ -252,6 +249,9 @@ Boost V1.34.0
   generation of a #line directive.
 - Worked around a linker issue for the True64/CXX compiler, complaining about
   multiple defined symbols when using the flex_string class.
+- Added the is_macro_defined(name) function to the context object as described 
+  in the documentation. This function is usable with any string type compatible 
+  with std::string.
   
 Sat Feb 18 2005
 - Version 1.2.3
