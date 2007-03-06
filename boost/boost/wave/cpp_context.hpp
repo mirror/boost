@@ -194,6 +194,9 @@ public:
             bool is_predefined = false)
         { return macros.add_macro(name, has_params, parameters, definition, 
             is_predefined); }
+    template <typename StringT>
+    bool is_defined_macro(StringT const &str) 
+        { return macros.is_defined(str.begin(), str.end()); }
     template <typename IteratorT2>
     bool is_defined_macro(IteratorT2 const &begin, IteratorT2 const &end) 
         { return macros.is_defined(begin, end); }

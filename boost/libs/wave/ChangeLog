@@ -90,7 +90,10 @@ CHANGELOG
   suggesting this feature.
 - Added the possibility to use static pre-compiled DFA tables for the lexertl 
   based lexer.
-
+- Added the is_macro_defined(name) function to the context object as described 
+  in the documentation. This function is usable with any string type compatible 
+  with std::string.
+  
 Boost V1.34.0
 - Wave Version 1.2.4
 - Added the possibility to explicitly enable/disable the generation of #line 
