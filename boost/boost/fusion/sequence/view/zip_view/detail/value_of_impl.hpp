@@ -12,6 +12,10 @@
 #include <boost/fusion/algorithm/transformation/transform.hpp>
 #include <boost/fusion/iterator/value_of.hpp>
 #include <boost/mpl/placeholders.hpp>
+#include <boost/fusion/support/unused.hpp>
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/identity.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 namespace boost { namespace fusion {
 
@@ -23,7 +27,9 @@ namespace boost { namespace fusion {
         {
             template<typename It>
             struct result
-                : result_of::value_of<It>
+                : mpl::eval_if<is_same<It, unused_type>,
+                               mpl::identity<unused_type>,
+                               result_of::value_of<It> >
             {};
         };
     }

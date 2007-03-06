@@ -17,5 +17,6 @@
 #include <boost/fusion/support/tag_of.hpp>
 #include <boost/fusion/support/deduce.hpp>
 #include <boost/fusion/support/deduce_sequence.hpp>
+#include <boost/fusion/support/unused.hpp>
 
 #endif

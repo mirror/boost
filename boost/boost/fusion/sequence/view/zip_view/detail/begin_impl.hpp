@@ -13,7 +13,11 @@
 #include <boost/fusion/algorithm/transformation/transform.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/is_reference.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/identity.hpp>
+#include <boost/fusion/support/unused.hpp>
 
 namespace boost { namespace fusion {
 
@@ -25,7 +29,9 @@ namespace boost { namespace fusion {
         {
             template<typename SeqRef>
             struct result
-                : result_of::begin<typename remove_reference<SeqRef>::type>
+                : mpl::eval_if<is_same<SeqRef, unused_type const&>,
+                               mpl::identity<unused_type>,
+                               result_of::begin<typename remove_reference<SeqRef>::type> >
             {
                 BOOST_MPL_ASSERT((is_reference<SeqRef>));
             };
@@ -44,6 +50,10 @@ namespace boost { namespace fusion {
                 return fusion::begin(seq);
             }
 
+            unused_type operator()(unused_type const&) const
+            {
+                return unused_type();
+            }
         };
     }
 

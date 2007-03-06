@@ -12,6 +12,10 @@
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/algorithm/transformation/transform.hpp>
 #include <boost/fusion/sequence/conversion/as_vector.hpp>
+#include <boost/fusion/support/unused.hpp>
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/identity.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 namespace boost { namespace fusion {
 
@@ -23,7 +27,9 @@ namespace boost { namespace fusion {
         {
             template<typename It>
             struct result
-                : result_of::deref<It>
+                : mpl::eval_if<is_same<It, unused_type>,
+                               mpl::identity<unused_type>,
+                               result_of::deref<It> >
             {};
 
             template<typename It>
@@ -31,6 +37,11 @@ namespace boost { namespace fusion {
             operator()(const It& it) const
             {
                 return fusion::deref(it);
+            }
+
+            unused_type operator()(unused_type const&) const
+            {
+                return unused_type();
             }
         };
     }

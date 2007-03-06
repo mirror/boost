@@ -12,6 +12,10 @@
 #include <boost/fusion/algorithm/transformation/transform.hpp>
 #include <boost/fusion/sequence/intrinsic/value_at.hpp>
 #include <boost/type_traits/remove_reference.hpp>
+#include <boost/fusion/support/unused.hpp>
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/identity.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 namespace boost { namespace fusion {
     
@@ -24,7 +28,9 @@ namespace boost { namespace fusion {
         {
             template<typename Seq>
             struct result
-                : result_of::value_at<typename remove_reference<Seq>::type, N>
+                : mpl::eval_if<is_same<Seq, unused_type const&>,
+                               mpl::identity<unused_type>,
+                               result_of::value_at<typename remove_reference<Seq>::type, N> >
             {};
         };
     }

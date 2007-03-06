@@ -15,6 +15,11 @@
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/is_reference.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/fusion/support/unused.hpp>
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/identity.hpp>
+#include <boost/type_traits/is_same.hpp>
+
 
 namespace boost { namespace fusion 
 {
@@ -27,7 +32,9 @@ namespace boost { namespace fusion
         {
             template<typename SeqRef>
             struct result
-                : result_of::at<typename remove_reference<SeqRef>::type, N>
+                : mpl::eval_if<is_same<SeqRef, unused_type const&>,
+                               mpl::identity<unused_type>,
+                               result_of::at<typename remove_reference<SeqRef>::type, N> >
             {
                 BOOST_MPL_ASSERT((is_reference<SeqRef>));
             };
@@ -44,6 +51,11 @@ namespace boost { namespace fusion
             operator()(Seq const& seq) const
             {
                 return fusion::at<N>(seq);
+            }
+
+            unused_type operator()(unused_type const&) const
+            {
+                return unused_type();
             }
         };
     }

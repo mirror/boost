@@ -9,6 +9,7 @@
 #define FUSION_ZIP_VIEW_23012006_0813
 
 #include <boost/fusion/support/sequence_base.hpp>
+#include <boost/fusion/support/unused.hpp>
 #include <boost/fusion/iterator/equal_to.hpp>
 #include <boost/fusion/sequence/view/zip_view/detail/strictest_traversal.hpp>
 #include <boost/fusion/sequence/view/zip_view/detail/begin_impl.hpp>
@@ -21,6 +22,7 @@
 #include <boost/fusion/sequence/intrinsic/end.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/sequence/intrinsic/mpl.hpp>
+#include <boost/fusion/algorithm/transformation/remove.hpp>
 
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/not.hpp>
@@ -73,13 +75,14 @@ namespace boost { namespace fusion {
     template<typename Sequences>
     struct zip_view : sequence_base< zip_view<Sequences> >
     {
+        typedef typename result_of::remove<Sequences, unused_type const&>::type real_sequences;
         BOOST_MPL_ASSERT((detail::all_references<Sequences>));
-        typedef typename detail::strictest_traversal<Sequences>::type category;
+        typedef typename detail::strictest_traversal<real_sequences>::type category;
         typedef zip_view_tag fusion_tag;
         typedef fusion_sequence_tag tag; // this gets picked up by MPL
         typedef mpl::true_ is_view;
         typedef typename fusion::result_of::as_vector<Sequences>::type sequences;
-        typedef typename detail::min_size<Sequences>::type size;
+        typedef typename detail::min_size<real_sequences>::type size;
 
         zip_view(
             const Sequences& seqs)

@@ -20,21 +20,34 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/min.hpp>
 
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/identity.hpp>
+#include <boost/type_traits/is_same.hpp>
+
 namespace boost { namespace fusion {
 
     struct zip_view_tag;
 
     namespace detail
     {
+        template<typename SeqRef, typename M>
+        struct get_endpoint
+        {
+            typedef typename remove_reference<SeqRef>::type Seq;
+            typedef typename result_of::begin<Seq>::type begin;
+            typedef typename result_of::advance<begin, M>::type type;            
+        };
+
         template<typename M>
         struct endpoints
         {
             template<typename SeqRef>
             struct result
+                : mpl::eval_if<is_same<SeqRef, unused_type const&>,
+                               mpl::identity<unused_type>,
+                               get_endpoint<SeqRef, M> >
             {
-                typedef typename remove_reference<SeqRef>::type Seq;
-                typedef typename result_of::begin<Seq>::type begin;
-                typedef typename result_of::advance<begin, M>::type type;
+                BOOST_MPL_ASSERT((is_reference<SeqRef>));
             };
 
             template<typename Seq>
@@ -49,6 +62,11 @@ namespace boost { namespace fusion {
             operator()(Seq const& seq)
             {
                 return fusion::advance<M>(fusion::begin(seq));
+            }
+
+            unused_type operator()(unused_type const&) const
+            {
+                return unused_type();
             }
         };
     }
