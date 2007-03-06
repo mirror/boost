@@ -41,6 +41,7 @@ import testing ;
     [ run algorithm/join.cpp :  :  :  : ]
     [ run algorithm/zip.cpp : : : : ]
     [ run algorithm/zip2.cpp : : : : ]
+    [ run algorithm/zip_ignore.cpp : : : : ]
 
     [ run sequence/as_list.cpp :  :  :  : ]
     [ run sequence/as_map.cpp :  :  :  : ]
