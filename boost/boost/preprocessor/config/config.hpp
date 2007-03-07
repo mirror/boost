@@ -31,7 +31,11 @@
 #    elif defined(__MWERKS__) && __MWERKS__ >= 0x3200
 #        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_STRICT())
 #    elif defined(__EDG__) || defined(__EDG_VERSION__)
-#        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_EDG() | BOOST_PP_CONFIG_STRICT())
+#        if defined(_MSC_VER) && __EDG_VERSION__ >= 308
+#            define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_MSVC())
+#        else
+#            define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_EDG() | BOOST_PP_CONFIG_STRICT())
+#        endif
 #    elif defined(__MWERKS__)
 #        define BOOST_PP_CONFIG_FLAGS() (BOOST_PP_CONFIG_MWCC())
 #    elif defined(__DMC__)
