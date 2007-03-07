@@ -43,14 +43,27 @@ public:
     x() : n(0)
     {
     }
+
     /*<< Destructor >>*/
     ~x()
     {
     }
 
+    /*<< Get the `n` member variable >>*/
+    int get() const
+    {
+        return n; /*<- this will be ignored by quickbook ->*/
+    }
+
+    /*<< Set the `n` member variable >>*/
+    void set(int n_)
+    {
+        n = n_;
+    }
+//<- this will be ignored by quickbook
 private:
 
-    /*<< `n` member variable >>*/
     int n;
+//->
 };
 //]

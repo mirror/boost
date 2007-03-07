@@ -873,7 +873,7 @@ sf_logo
               </td>
 <td>
               <p>
-                2007-Feb-28
+                2007-Mar-07
               </p>
               </td>
 </tr>
@@ -890,7 +890,7 @@ sf_logo
               </td>
 <td>
               <p>
-                06:17:12 PM
+                09:27:51 AM
               </p>
               </td>
 </tr>
@@ -1710,8 +1710,27 @@ This is the <span class="bold"><b><span class="emphasis"><em>bar</em></span></b>
           slash-slash, tick and white-space shall be ignored. In the second, the
           initial slash-star-tick and the final star-slash shall be ignored.
         </p>
+<p>
+          Special comments of the form:
+        </p>
+<pre class="programlisting">
+<span class="comment">/*&lt;-- this will be ignored --&gt;*/</span>
+</pre>
+<p>
+          or
+        </p>
+<pre class="programlisting">
+<span class="comment">//&lt;--
+</span><span class="keyword">private</span><span class="special">:</span>
+    <span class="keyword">int</span> <span class="identifier">some_member</span><span class="special">;</span>
+<span class="comment">//--&gt;
+</span></pre>
+<p>
+          can be used to inhibit code from passing through to quickbook. All text
+          between the delimeters will simply be ignored.
+        </p>
 <a name="quickbook.syntax.block.import.callouts"></a><h5>
-<a name="id459825"></a>
+<a name="id459898"></a>
           <a href="block.html#quickbook.syntax.block.import.callouts">Callouts</a>
         </h5>
 <p>
@@ -1799,13 +1818,20 @@ This is the <span class="bold"><b><span class="emphasis"><em>bar</em></span></b>
     <span class="line_callout_bug"><a name="quickbook2co" href="block.html#quickbook2"><img src="../../images/callouts/1.png" alt="1" border="0"></a></span><span class="identifier">x</span><span class="special">()</span> <span class="special">:</span> <span class="identifier">n</span><span class="special">(</span><span class="number">0</span><span class="special">)</span>
     <span class="special">{</span>
     <span class="special">}</span>
+
     <span class="line_callout_bug"><a name="quickbook3co" href="block.html#quickbook3"><img src="../../images/callouts/2.png" alt="2" border="0"></a></span><span class="special">~</span><span class="identifier">x</span><span class="special">()</span>
     <span class="special">{</span>
     <span class="special">}</span>
 
-<span class="keyword">private</span><span class="special">:</span>
+    <span class="line_callout_bug"><a name="quickbook4co" href="block.html#quickbook4"><img src="../../images/callouts/3.png" alt="3" border="0"></a></span><span class="keyword">int</span> <span class="identifier">get</span><span class="special">()</span> <span class="keyword">const</span>
+    <span class="special">{</span>
+        <span class="keyword">return</span> <span class="identifier">n</span><span class="special">;</span> 
+    <span class="special">}</span>
 
-    <span class="line_callout_bug"><a name="quickbook4co" href="block.html#quickbook4"><img src="../../images/callouts/3.png" alt="3" border="0"></a></span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">;</span>
+    <span class="line_callout_bug"><a name="quickbook5co" href="block.html#quickbook5"><img src="../../images/callouts/4.png" alt="4" border="0"></a></span><span class="keyword">void</span> <span class="identifier">set</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n_</span><span class="special">)</span>
+    <span class="special">{</span>
+        <span class="identifier">n</span> <span class="special">=</span> <span class="identifier">n_</span><span class="special">;</span>
+    <span class="special">}</span>
 <span class="special">};</span>
 </pre>
 <p>
@@ -1828,7 +1854,13 @@ This is the <span class="bold"><b><span class="emphasis"><em>bar</em></span></b>
 <tr>
 <td width="5%" valign="top" align="left">
 <a name="quickbook4"></a><a href="#quickbook4co"><img src="../../images/callouts/3.png" alt="3" border="0"></a> </td>
-<td valign="top" align="left"><p> <tt class="computeroutput"><span class="identifier">n</span></tt>
+<td valign="top" align="left"><p> Get the <tt class="computeroutput"><span class="identifier">n</span></tt>
+            member variable </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left">
+<a name="quickbook5"></a><a href="#quickbook5co"><img src="../../images/callouts/4.png" alt="4" border="0"></a> </td>
+<td valign="top" align="left"><p> Set the <tt class="computeroutput"><span class="identifier">n</span></tt>
             member variable </p></td>
 </tr>
 </table></div>
@@ -1837,30 +1869,8 @@ This is the <span class="bold"><b><span class="emphasis"><em>bar</em></span></b>
 <p>
         </p>
 <p>
-          Here's the code for that:
+          See the actual code here: <a href="../../../../test/stub.cpp" target="_top">../../test/stub.cpp</a>
         </p>
-<pre class="programlisting">
-<span class="comment">//[ class_
-</span><span class="keyword">class</span> <span class="identifier">x</span>
-<span class="special">{</span>
-<span class="keyword">public</span><span class="special">:</span>
-
-    <span class="comment">/*&lt;&lt; Constructor &gt;&gt;*/</span>
-    <span class="identifier">x</span><span class="special">()</span> <span class="special">:</span> <span class="identifier">n</span><span class="special">(</span><span class="number">0</span><span class="special">)</span>
-    <span class="special">{</span>
-    <span class="special">}</span>
-    <span class="comment">/*&lt;&lt; Destructor &gt;&gt;*/</span>
-    <span class="special">~</span><span class="identifier">x</span><span class="special">()</span>
-    <span class="special">{</span>
-    <span class="special">}</span>
-
-<span class="keyword">private</span><span class="special">:</span>
-
-    <span class="comment">/*&lt;&lt; `n` member variable &gt;&gt;*/</span>
-    <span class="keyword">int</span> <span class="identifier">n</span><span class="special">;</span>
-<span class="special">};</span>
-<span class="comment">//]
-</span></pre>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

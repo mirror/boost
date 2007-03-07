@@ -1657,6 +1657,20 @@ paragraphs, tables, etc). In the first case, the initial slash-slash, tick and
 white-space shall be ignored. In the second, the initial slash-star-tick and the
 final star-slash shall be ignored.
 
+Special comments of the form:
+
+    /*<-- this will be ignored -->*/
+
+or
+
+    //<--
+    private:
+        int some_member;
+    //-->
+
+can be used to inhibit code from passing through to quickbook. All text between
+the delimeters will simply be ignored.
+
 [heading Callouts]
 
 Special comments of the form:
@@ -1695,28 +1709,7 @@ Example:
 
 [class_]
 
-Here's the code for that:
-
-    //[ class_
-    class x
-    {
-    public:
-
-        /*<< Constructor >>*/
-        x() : n(0)
-        {
-        }
-        /*<< Destructor >>*/
-        ~x()
-        {
-        }
-
-    private:
-
-        /*<< `n` member variable >>*/
-        int n;
-    };
-    //]
+See the actual code here: [@../../test/stub.cpp]
 
 [endsect]
 

@@ -49,6 +49,7 @@ namespace quickbook
 
                 code_elements =
                         escaped_comment
+                    |   ignore
                     |   line_callout
                     |   inline_callout
                     |   (anychar_p - "//]")         [boost::bind(&self_type::pass_thru, &self, _1, _2)]
@@ -67,6 +68,15 @@ namespace quickbook
                     >> *space_p
                     ;
 
+                ignore =
+                        "//<-"
+                        >> (*(anychar_p - "//->"))
+                        >> "//->" >> *blank_p >> eol_p
+                    |    "/*<-"
+                        >> (*(anychar_p - "->*/"))
+                        >> "->*/"
+                    ;
+
                 escaped_comment =
                         *space_p >> "//`" >> *space_p
                         >> ((*(anychar_p - eol_p))
@@ -79,7 +89,7 @@ namespace quickbook
 
             rule<Scanner>
                 start_, snippet, identifier, code_elements, escaped_comment,
-                inline_callout, line_callout;
+                inline_callout, line_callout, ignore;
 
             rule<Scanner> const&
             start() const { return start_; }
