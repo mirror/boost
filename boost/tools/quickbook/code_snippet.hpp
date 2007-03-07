@@ -69,7 +69,7 @@ namespace quickbook
                     ;
 
                 ignore =
-                        "//<-"
+                        *blank_p >> "//<-"
                         >> (*(anychar_p - "//->"))
                         >> "//->" >> *blank_p >> eol_p
                     |    "/*<-"
