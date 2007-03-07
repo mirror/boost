@@ -104,11 +104,13 @@ struct regex_compiler
         string_iterator begin = pat.begin(), end = pat.end(), tmp = begin;
 
         // Check if this regex is a named rule:
-        std::string name("__self__");
+        std::string name;
+        basic_regex<BidiIter> rextmp, *prex = &rextmp;
         if(token_group_begin == this->traits_.get_token(tmp, end) &&
            token_rule_assign == this->traits_.get_group_type(tmp, end, name))
         {
             begin = tmp;
+            prex = &this->rules_[name];
             detail::ensure
             (
                 begin != end && token_group_end == this->traits_.get_token(begin, end)
@@ -117,8 +119,7 @@ struct regex_compiler
             );
         }
 
-        basic_regex<BidiIter> &rex = this->rules_[name];
-        this->self_ = detail::core_access<BidiIter>::get_regex_impl(rex);
+        this->self_ = detail::core_access<BidiIter>::get_regex_impl(*prex);
 
         // at the top level, a regex is a sequence of alternates
         detail::sequence<BidiIter> seq = this->parse_alternates(begin, end);
@@ -137,7 +138,7 @@ struct regex_compiler
         // References changed, update dependencies.
         this->self_->tracking_update();
         this->self_.reset();
-        return rex;
+        return *prex;
     }
 
 private:
