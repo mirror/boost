@@ -196,10 +196,7 @@ public:
             is_predefined); }
     template <typename StringT>
     bool is_defined_macro(StringT const &str) 
-        { return macros.is_defined(str.begin(), str.end()); }
-    template <typename IteratorT2>
-    bool is_defined_macro(IteratorT2 const &begin, IteratorT2 const &end) 
-        { return macros.is_defined(begin, end); }
+        { return macros.is_defined(str); }
     bool get_macro_definition(typename token_type::string_type const &name, 
             bool &has_params, bool &is_predefined, position_type &pos,
             std::vector<token_type> &parameters, token_sequence_type &definition)
@@ -258,6 +255,10 @@ protected:
         boost::wave::context<IteratorT, lexer_type, InputPolicyT, HooksT> >;
 #endif
     
+    template <typename IteratorT2>
+    bool is_defined_macro(IteratorT2 const &begin, IteratorT2 const &end) 
+        { return macros.is_defined(begin, end); }
+
 // maintain include paths (helper functions)
     bool find_include_file (std::string &s, std::string &d, bool is_system, 
         char const *current_file) const

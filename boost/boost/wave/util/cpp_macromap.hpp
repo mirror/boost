@@ -99,8 +99,14 @@ public:
     bool is_defined(string_type const &name, 
         typename defined_macros_type::iterator &it, 
         defined_macros_type *scope = 0) const;
+        
+    // expects a token sequence as its parameters
     template <typename IteratorT>
     bool is_defined(IteratorT const &begin, IteratorT const &end);
+    
+    // expects an arbitrary string as its parameter
+    template<typename StringT>
+    bool is_defined(StringT const &str);
 
 //  Get the macro definition for the given macro scope
     bool get_macro(string_type const &name, bool &has_parameters, 
@@ -393,7 +399,7 @@ token_id id = token_id(*begin);
     }
 
 IteratorT it = begin;
-string_type name ((*it).get_value().c_str());
+string_type name ((*it).get_value());
 typename defined_macros_type::iterator cit(current_macros -> find(name));
 
     if (++it != end) {
@@ -402,6 +408,19 @@ typename defined_macros_type::iterator cit(current_macros -> find(name));
             impl::get_full_name(begin, end).c_str(), main_pos);
         return false;
     }
+    return cit != current_macros -> end();
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//  same as above, only takes an arbitrary string type as its parameter
+template <typename ContextT>
+template<typename StringT>
+inline bool 
+macromap<ContextT>::is_defined(StringT const &str)
+{
+string_type name (str.c_str());
+typename defined_macros_type::iterator cit(current_macros -> find(name));
+
     return cit != current_macros -> end();
 }
 
