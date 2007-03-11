@@ -1807,7 +1807,7 @@ on a Ubuntu Edgy install but should work on other Debian based systems.
 First install the `bjam`, `xsltproc`, `docbook-xsl` and `docbook-xml` packages.
 For example, using `apt-get`:
 
-    sudo apt-get install xsltprc docbook-xsl docbook-xml
+    sudo apt-get install xsltproc docbook-xsl docbook-xml
 
 If you're planning on building boost's documentation, you'll also need to
 install the `doxygen` package as well.
