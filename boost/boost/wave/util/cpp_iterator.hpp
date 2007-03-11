@@ -459,6 +459,9 @@ pp_iterator_functor<ContextT>::operator()()
 {
     using namespace boost::wave;
 
+    // make sure the cwd has been initialized
+    ctx.init_context();
+    
     // loop over skip able whitespace until something significant is found
     bool skipped_newline = false;
     bool was_seen_newline = seen_newline;

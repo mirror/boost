@@ -889,7 +889,7 @@ int error_count = 0;
             cerr << "wave: ignoring the command line option 'state', "
                  << "use it in interactive mode only." << endl;
         }
-        
+
     // >>>>>>>>>>>>> The actual preprocessing happens here. <<<<<<<<<<<<<<<<<<<
     // loop over the input lines if reading from stdin, otherwise this loop
     // will be executed once

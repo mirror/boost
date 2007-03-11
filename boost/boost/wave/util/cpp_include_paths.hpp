@@ -164,8 +164,6 @@ public:
     boost::filesystem::path get_current_directory() const 
         { return current_dir; }
 
-    void init_initial_path() { boost::filesystem::initial_path(); }
-    
 protected:
     bool find_include_file (std::string &s, std::string &dir, 
         include_list_type const &pathes, char const *) const;

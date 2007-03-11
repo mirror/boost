@@ -119,11 +119,12 @@ public:
     context(target_iterator_type const &first_, target_iterator_type const &last_, 
             char const *fname = "<Unknown>", HooksT const &hooks_ = HooksT())
     :   first(first_), last(last_), filename(fname)
+      , has_been_initialized(false)
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
-        , current_filename(fname)
+      , current_filename(fname)
 #endif 
-        , macros(*this_())
-        , language(language_support(
+      , macros(*this_())
+      , language(language_support(
                       support_cpp 
                     | support_option_convert_trigraphs 
                     | support_option_emit_line_directives 
@@ -135,10 +136,9 @@ public:
 #endif
                     | support_option_insert_whitespace
                    ))
-        , hooks(hooks_)
+      , hooks(hooks_)
     {
         macros.init_predefined_macros(fname);
-        includes.init_initial_path();
     }
     
 // default copy constructor
@@ -153,7 +153,6 @@ public:
             using namespace boost::filesystem;
             path fpath(complete(path(filename)));
             fname = fpath.string();
-            includes.set_current_directory(fname.c_str());
         }
         return iterator_type(*this, first, last, position_type(fname.c_str())); 
     }
@@ -166,7 +165,6 @@ public:
             using namespace boost::filesystem;
             path fpath(complete(path(filename)));
             fname = fpath.string();
-            includes.set_current_directory(fname.c_str());
         }
         return iterator_type(*this, first_, last_, position_type(fname.c_str())); 
     }
@@ -254,6 +252,21 @@ protected:
     friend class boost::wave::impl::pp_iterator_functor<
         boost::wave::context<IteratorT, lexer_type, InputPolicyT, HooksT> >;
 #endif
+
+// make sure the context has been initialized    
+    void init_context()
+    {
+        if (!has_been_initialized) {
+            std::string fname(filename);
+            if (filename != "<Unknown>" && filename != "<stdin>") {
+                using namespace boost::filesystem;
+                path fpath(complete(path(filename)));
+                fname = fpath.string();
+                includes.set_current_directory(fname.c_str());
+            }
+            has_been_initialized = true;  // execute once
+        }
+    }
     
     template <typename IteratorT2>
     bool is_defined_macro(IteratorT2 const &begin, IteratorT2 const &end) 
@@ -420,6 +433,7 @@ private:
     target_iterator_type first;         // underlying input stream
     target_iterator_type last;
     std::string filename;               // associated main filename
+    bool has_been_initialized;          // set cwd once
 #if BOOST_WAVE_SUPPORT_PRAGMA_ONCE != 0
     std::string current_filename;       // real name of current preprocessed file
 #endif 

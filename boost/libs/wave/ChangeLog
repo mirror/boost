@@ -81,7 +81,6 @@ CHANGELOG
   to control whitespace insertion. The default value for this option is 
   --disambiguate=1, resembling the previous behaviour. Specifying the option
   --disambiguate=0 allows to suppress whitespace insertion alltogether.
-- Switched to Re2C V0.11.0
 - Added pragma option values push and pop to the line, preserve and output 
   options allowing to store and restore the current option. The syntax is:
     #pragma wave options(<option>: push) and
@@ -95,6 +94,9 @@ CHANGELOG
 - Added the is_macro_defined(name) function to the context object as described 
   in the documentation. This function is usable with any string type compatible 
   with std::string.
+- Changed behavior of the --force_include functionality, which now looks for 
+  the file to be (force-)included in the current directory first.
+- Switched to Re2C V0.11.2
 
 Boost V1.34.0
 - Wave Version 1.2.4
