@@ -22,26 +22,14 @@ namespace boost { namespace xpressive { namespace detail
 {
 
 ///////////////////////////////////////////////////////////////////////////////
-// literal_placeholder
+// not_literal_placeholder
 //
-template<typename Char, typename Not>
-struct literal_placeholder
+template<typename Char>
+struct not_literal_placeholder
 {
     BOOST_XPR_QUANT_STYLE(quant_fixed_width, 1, true)
 
-    typedef Not not_type;
     Char ch_;
-};
-
-///////////////////////////////////////////////////////////////////////////////
-// string_placeholder
-//
-template<typename Char>
-struct string_placeholder
-{
-    BOOST_XPR_QUANT_STYLE(quant_fixed_width, unknown_width::value, true)
-
-    std::basic_string<Char> str_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -55,16 +43,16 @@ struct mark_placeholder
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// regex_placeholder
+// regex_byref_placeholder
 //
-template<typename BidiIter, typename ByRef>
-struct regex_placeholder
+template<typename BidiIter>
+struct regex_byref_placeholder
 {
     BOOST_XPR_QUANT_STYLE(quant_variable_width, unknown_width::value, false)
 
     shared_ptr<regex_impl<BidiIter> > impl_;
 
-    regex_placeholder(shared_ptr<regex_impl<BidiIter> > const &impl)
+    regex_byref_placeholder(shared_ptr<regex_impl<BidiIter> > const &impl)
       : impl_(impl)
     {
     }

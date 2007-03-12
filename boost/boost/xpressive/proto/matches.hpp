@@ -25,6 +25,7 @@
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
     #include <boost/config.hpp>
+    #include <boost/mpl/or.hpp>
     #include <boost/mpl/bool.hpp>
     #include <boost/mpl/apply.hpp>
     #include <boost/mpl/aux_/template_arity.hpp>
@@ -67,18 +68,18 @@
             template<typename T, typename U
                 BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(long Arity = mpl::aux::template_arity<U>::value)
             >
-            struct lambda_matches
+            struct lambda_matches_impl
               : is_same<T, U>
             {};
 
             template<typename T>
-            struct lambda_matches<T, proto::_ BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1)>
+            struct lambda_matches_impl<T, proto::_ BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1)>
               : mpl::true_
             {};
 
             template<template<typename> class T, typename Expr0, typename Grammar0>
-            struct lambda_matches<T<Expr0>, T<Grammar0> BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(1) >
-              : lambda_matches<Expr0, Grammar0>
+            struct lambda_matches_impl<T<Expr0>, T<Grammar0> BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(1) >
+              : lambda_matches_impl<Expr0, Grammar0>
             {};
 
             // wrap_terminal
@@ -86,28 +87,25 @@
             struct wrap_terminal
             {
                 wrap_terminal(T const &);
-                
-                template<typename U>
-                wrap_terminal(U const &, typename enable_if<lambda_matches<U, T> >::type * = 0 );
             };
 
             template<typename T>
             struct wrap_terminal<T &>
             {
                 wrap_terminal(T &);
-                
-                template<typename U>
-                wrap_terminal(U &, typename enable_if<lambda_matches<U, T> >::type * = 0 );
             };
 
             template<typename T>
             struct wrap_terminal<T const &>
             {
                 wrap_terminal(T const &);
-
-                template<typename U>
-                wrap_terminal(U const &, typename enable_if<lambda_matches<U, T> >::type * = 0 );
             };
+
+            // TODO: this is a little too loose; it allows "foo<T> const &" to match "foo<_> &"
+            template<typename T, typename U>
+            struct lambda_matches
+              : lambda_matches_impl<typename remove_cv_ref<T>::type, typename remove_cv_ref<U>::type>
+            {};
 
             // vararg_matches_impl
             template<typename Args1, typename Back, long From, long To>
@@ -135,7 +133,10 @@
             // terminal_matches
             template<typename Expr, typename Grammar>
             struct terminal_matches
-              : is_convertible<Expr, wrap_terminal<Grammar> >
+              : mpl::or_<
+                    lambda_matches<Expr, Grammar>
+                  , is_convertible<Expr, wrap_terminal<Grammar> >
+                >
             {};
 
             template<typename Expr>
@@ -207,7 +208,7 @@
             >
 
         #define BOOST_PROTO_DEFINE_LAMBDA_MATCHES(z, n, data)\
-            lambda_matches<\
+            lambda_matches_impl<\
                 BOOST_PP_CAT(Expr, n)\
               , BOOST_PP_CAT(Grammar, n)\
             >
@@ -392,7 +393,7 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename Expr)
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename Grammar)
             >
-            struct lambda_matches<T<BOOST_PP_ENUM_PARAMS(N, Expr)>, T<BOOST_PP_ENUM_PARAMS(N, Grammar)> BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(N) >
+            struct lambda_matches_impl<T<BOOST_PP_ENUM_PARAMS(N, Expr)>, T<BOOST_PP_ENUM_PARAMS(N, Grammar)> BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(N) >
               : BOOST_PP_CAT(and, N)<
                     BOOST_PROTO_DEFINE_LAMBDA_MATCHES(~, 0, ~)::value,
                     BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_DEFINE_LAMBDA_MATCHES, ~)

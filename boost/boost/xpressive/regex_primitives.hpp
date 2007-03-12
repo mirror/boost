@@ -18,12 +18,10 @@
 #include <boost/xpressive/detail/core/icase.hpp>
 #include <boost/xpressive/detail/core/action.hpp>
 #include <boost/xpressive/detail/core/matchers.hpp>
-#include <boost/xpressive/detail/static/as_xpr.hpp>
 #include <boost/xpressive/detail/static/compile.hpp>
 #include <boost/xpressive/detail/static/grammar.hpp>
 #include <boost/xpressive/detail/static/modifier.hpp>
 #include <boost/xpressive/detail/utility/ignore_unused.hpp>
-#include <boost/xpressive/detail/static/regex_operators.hpp>
 #include <boost/xpressive/detail/static/productions/productions.hpp>
 
 namespace boost { namespace xpressive { namespace detail
@@ -317,7 +315,7 @@ proto::terminal<detail::posix_charset_placeholder>::type const _s = {{"s", false
 /// that is not a newline.
 ///
 /// \attention ~_n is like '.' in perl without the /s modifier.
-proto::terminal<detail::literal_placeholder<char> >::type const _n = {{'\n'}};
+proto::terminal<char>::type const _n = {'\n'};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Matches a logical newline sequence.
@@ -392,7 +390,8 @@ mark_tag::type const s9 = {{9}};
 // NOTE: For the purpose of xpressive's documentation, make icase() look like an
 // ordinary function. In reality, it is a function object defined in detail/icase.hpp
 // so that it can serve double-duty as regex_constants::icase, the syntax_option_type.
-// Do the same for as_xpr(), which is actually defined in detail/static/as_xpr.hpp
+// Do the same for as_xpr(), which is actually defined below using proto's as_expr
+// function object.
 #ifdef BOOST_XPRESSIVE_DOXYGEN_INVOKED
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Makes a literal into a regular expression.
@@ -407,10 +406,10 @@ mark_tag::type const s9 = {{9}};
 /// character literal, as with ~as_xpr('a'). This will match any one character
 /// that is not an 'a'.
 template<typename Literal>
-inline typename detail::as_xpr_type<Literal>::type
+inline typename proto::result_of::as_expr<Literal>::type
 as_xpr(Literal const &literal)
 {
-    return detail::as_xpr_type<Literal>::call(expr);
+    return proto::as_expr(literal);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -423,7 +422,7 @@ template<typename Expr>
 inline typename proto::binary_expr<
     modifier_tag
   , detail::icase_modifier
-  , typename detail::as_xpr_type<Expr>::type
+  , typename proto::result_of::as_expr<Expr>::type
 >::type const
 icase(Expr const &expr)
 {
@@ -431,10 +430,13 @@ icase(Expr const &expr)
     typename proto::binary_expr<
         modifier_tag
       , detail::icase_modifier
-      , typename detail::as_xpr_type<Expr>::type
-    >::type that = {mod, as_xpr(expr)};
+      , typename proto::result_of::as_expr<Expr>::type
+    >::type that = {mod, proto::as_expr(expr)};
     return that;
 }
+#else
+// Re-use proto's as_expr function object as xpressive's as_xpr() function.
+proto::op::as_expr const as_xpr = {};
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -442,13 +444,13 @@ icase(Expr const &expr)
 ///
 /// \param rex The basic_regex object to embed by reference.
 template<typename BidiIter>
-inline typename proto::terminal<detail::regex_placeholder<BidiIter, mpl::true_> >::type const
+inline typename proto::terminal<detail::regex_byref_placeholder<BidiIter> >::type const
 by_ref(basic_regex<BidiIter> const &rex)
 {
     typedef detail::core_access<BidiIter> access;
     shared_ptr<detail::regex_impl<BidiIter> > impl = access::get_regex_impl(rex);
-    detail::regex_placeholder<BidiIter, mpl::true_> rex_ref(impl);
-    return proto::terminal<detail::regex_placeholder<BidiIter, mpl::true_> >::type::make(rex_ref);
+    detail::regex_byref_placeholder<BidiIter> rex_ref(impl);
+    return proto::terminal<detail::regex_byref_placeholder<BidiIter> >::type::make(rex_ref);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -472,13 +474,13 @@ range(Char ch_min, Char ch_max)
 /// \param expr The sub-expression to make optional.
 template<typename Expr>
 inline typename proto::logical_not<
-    typename detail::as_xpr_type<Expr>::type
+    typename proto::result_of::as_expr<Expr>::type
 >::type const
 optional(Expr const &expr)
 {
     typename proto::logical_not<
-        typename detail::as_xpr_type<Expr>::type
-    >::type that = {as_xpr(expr)};
+        typename proto::result_of::as_expr<Expr>::type
+    >::type that = {proto::as_expr(expr)};
     return that;
 }
 
@@ -497,15 +499,15 @@ template<unsigned int Min, unsigned int Max, typename Expr>
 inline typename proto::unary_expr
 <
     detail::generic_quant_tag<Min, Max>
-  , typename detail::as_xpr_type<Expr>::type
+  , typename proto::result_of::as_expr<Expr>::type
 >::type const
 repeat(Expr const &expr)
 {
     typename proto::unary_expr
     <
         detail::generic_quant_tag<Min, Max>
-      , typename detail::as_xpr_type<Expr>::type
-    >::type that = {as_xpr(expr)};
+      , typename proto::result_of::as_expr<Expr>::type
+    >::type that = {proto::as_expr(expr)};
     return that;
 }
 
@@ -515,15 +517,15 @@ template<unsigned int Count, typename Xpr2>
 inline typename proto::unary_expr
 <
     detail::generic_quant_tag<Count, Count>
-  , typename detail::as_xpr_type<Xpr2>::type
+  , typename proto::result_of::as_expr<Xpr2>::type
 >::type const
 repeat(Xpr2 const &expr)
 {
     typename proto::unary_expr
     <
         detail::generic_quant_tag<Count, Count>
-      , typename detail::as_xpr_type<Xpr2>::type
-    >::type that = {as_xpr(expr)};
+      , typename proto::result_of::as_expr<Xpr2>::type
+    >::type that = {proto::as_expr(expr)};
     return that;
 }
 
@@ -541,15 +543,15 @@ template<typename Expr>
 inline typename proto::unary_expr
 <
     detail::keeper_tag
-  , typename detail::as_xpr_type<Expr>::type
+  , typename proto::result_of::as_expr<Expr>::type
 >::type const
 keep(Expr const &expr)
 {
     typename proto::unary_expr
     <
         detail::keeper_tag
-      , typename detail::as_xpr_type<Expr>::type
-    >::type that = {as_xpr(expr)};
+      , typename proto::result_of::as_expr<Expr>::type
+    >::type that = {proto::as_expr(expr)};
     return that;
 }
 
@@ -570,15 +572,15 @@ template<typename Expr>
 inline typename proto::unary_expr
 <
     detail::lookahead_tag<true>
-  , typename detail::as_xpr_type<Expr>::type
+  , typename proto::result_of::as_expr<Expr>::type
 >::type const
 before(Expr const &expr)
 {
     typename proto::unary_expr
     <
         detail::lookahead_tag<true>
-      , typename detail::as_xpr_type<Expr>::type
-    >::type that = {as_xpr(expr)};
+      , typename proto::result_of::as_expr<Expr>::type
+    >::type that = {proto::as_expr(expr)};
     return that;
 }
 
@@ -601,15 +603,15 @@ template<typename Expr>
 inline typename proto::unary_expr
 <
     detail::lookbehind_tag<true>
-  , typename detail::as_xpr_type<Expr>::type
+  , typename proto::result_of::as_expr<Expr>::type
 >::type const
 after(Expr const &expr)
 {
     typename proto::unary_expr
     <
         detail::lookbehind_tag<true>
-      , typename detail::as_xpr_type<Expr>::type
-    >::type that = {as_xpr(expr)};
+      , typename proto::result_of::as_expr<Expr>::type
+    >::type that = {proto::as_expr(expr)};
     return that;
 }
 

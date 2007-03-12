@@ -17,7 +17,6 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
-#include <boost/xpressive/detail/static/as_xpr.hpp>
 #include <boost/xpressive/detail/static/width_of.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -34,6 +33,34 @@ namespace boost { namespace xpressive { namespace detail
     struct use_simple_repeat;
 
     ///////////////////////////////////////////////////////////////////////////////
+    // is_terminal_pure
+    //
+    template<typename Expr>
+    struct is_terminal_pure
+      : mpl::true_      // char literals
+    {};
+
+    template<typename Expr>
+    struct is_terminal_pure<Expr *>
+      : mpl::true_      // string literals
+    {};
+
+    template<typename Char, std::size_t N>
+    struct is_terminal_pure<Char (&) [N]>
+      : mpl::true_      // string literals
+    {};
+
+    template<typename Char, std::size_t N>
+    struct is_terminal_pure<Char const (&) [N]>
+      : mpl::true_      // string literals
+    {};
+
+    template<typename BidiIter>
+    struct is_terminal_pure<tracking_ptr<regex_impl<BidiIter> > >
+      : mpl::false_     // basic_regex
+    {};
+
+    ///////////////////////////////////////////////////////////////////////////////
     // is_pure
     //
     template<typename Expr, typename Tag = typename Expr::tag_type>
@@ -41,7 +68,7 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Expr>
     struct is_pure<Expr, proto::tag::terminal>
-      : mpl::bool_<as_matcher_type<typename proto::result_of::arg<Expr>::type>::type::pure>
+      : is_terminal_pure<typename proto::result_of::arg<Expr>::type>
     {};
 
     template<typename Expr>
@@ -113,9 +140,6 @@ namespace boost { namespace xpressive { namespace detail
 
     // The subscript operator[] is used for sets, as in set['a' | range('b','h')]
     // It is also used for actions, which by definition have side-effects and thus are impure
-
-    // The subscript operator[] is used for sets, as in set['a' | range('b','h')],
-    // or for actions as in (any >> expr)[ action ]
     template<typename Expr, typename Left>
     struct is_pure_subscript
       : mpl::false_
@@ -160,38 +184,49 @@ namespace boost { namespace xpressive { namespace detail
       : is_pure<typename proto::result_of::arg<Expr>::type>
     {};
 
-    // simple_repeat_helper
-    template<bool B, quant_enum Q>
-    struct use_simple_repeat_helper
-      : mpl::false_
+    ///////////////////////////////////////////////////////////////////////////////
+    // use_simple_repeat_terminal
+    //
+    template<typename Char>
+    struct use_simple_repeat_terminal
+      : mpl::true_      // char literals
     {};
 
-    template<>
-    struct use_simple_repeat_helper<true, quant_fixed_width>
-      : mpl::true_
+    template<typename Char>
+    struct use_simple_repeat_terminal<Char *>
+      : mpl::true_      // string literals
+    {};
+
+    template<typename Char, std::size_t N>
+    struct use_simple_repeat_terminal<Char (&) [N]>
+      : mpl::true_      // string literals
+    {};
+
+    template<typename Char, std::size_t N>
+    struct use_simple_repeat_terminal<Char const (&) [N]>
+      : mpl::true_      // string literals
+    {};
+
+    template<typename BidiIter>
+    struct use_simple_repeat_terminal<tracking_ptr<regex_impl<BidiIter> > >
+      : mpl::false_     // basic_regex
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // use_simple_repeat
-    //  TODO this doesn't optimize +(_ >> "hello")
+    //
     template<typename Expr, typename Tag>
     struct use_simple_repeat
       : mpl::bool_<width_of<Expr>::value != unknown_width::value && is_pure<Expr>::value>
     {
         // should never try to repeat something of 0-width
-        //BOOST_MPL_ASSERT_RELATION(0, !=, width_of<Expr>::value);
-        BOOST_STATIC_ASSERT(0 != width_of<Expr>::value);
+        BOOST_MPL_ASSERT_RELATION(0, !=, width_of<Expr>::value);
     };
 
     template<typename Expr>
     struct use_simple_repeat<Expr, proto::tag::terminal>
-      : use_simple_repeat_helper<
-            as_matcher_type<typename proto::result_of::arg<Expr>::type>::type::pure
-          , as_matcher_type<typename proto::result_of::arg<Expr>::type>::type::quant
-        >
+      : use_simple_repeat_terminal<typename proto::result_of::arg<Expr>::type>
     {
-        //BOOST_MPL_ASSERT_RELATION(0, !=, as_matcher_type<typename proto::result_of::arg<Expr>::type>::type::width);
-        BOOST_STATIC_ASSERT(0 != as_matcher_type<typename proto::result_of::arg<Expr>::type>::type::width);
     };
 
 }}} // namespace boost::xpressive::detail

@@ -220,6 +220,10 @@ namespace boost { namespace proto
           : expr()
         {}
 
+        extends(extends const &that)
+          : expr(that.expr)
+        {}
+
         extends(Expr const &expr_)
           : expr(expr_)
         {}

@@ -63,11 +63,16 @@ namespace boost { namespace xpressive { namespace detail
         {
         }
 
-        template<typename ByRef>
-        void visit_(regex_placeholder<BidiIter, ByRef> const &rex)
+        void visit_(regex_byref_placeholder<BidiIter> const &rex)
         {
             // when visiting an embedded regex, track the references
             this->self_->track_reference(*rex.impl_);
+        }
+
+        void visit_(tracking_ptr<regex_impl<BidiIter> > const &rex)
+        {
+            // when visiting an embedded regex, track the references
+            this->self_->track_reference(*rex.get());
         }
 
         void visit_(mark_placeholder const &backref)

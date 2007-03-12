@@ -101,22 +101,23 @@ struct regex_compiler
         this->reset();
         this->traits_.flags(flags);
 
+        basic_regex<BidiIter> rextmp, *prex = &rextmp;
         string_iterator begin = pat.begin(), end = pat.end(), tmp = begin;
 
         // Check if this regex is a named rule:
         std::string name;
-        basic_regex<BidiIter> rextmp, *prex = &rextmp;
         if(token_group_begin == this->traits_.get_token(tmp, end) &&
+           detail::ensure(tmp != end, error_paren, "mismatched parenthesis") &&
            token_rule_assign == this->traits_.get_group_type(tmp, end, name))
         {
             begin = tmp;
-            prex = &this->rules_[name];
             detail::ensure
             (
                 begin != end && token_group_end == this->traits_.get_token(begin, end)
               , error_paren
               , "mismatched parenthesis"
             );
+            prex = &this->rules_[name];
         }
 
         this->self_ = detail::core_access<BidiIter>::get_regex_impl(*prex);

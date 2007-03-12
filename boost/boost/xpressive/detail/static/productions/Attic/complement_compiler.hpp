@@ -24,31 +24,70 @@ namespace boost { namespace xpressive { namespace detail
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    template<typename Term>
-    struct complement_terminal
+    template<typename Type>
+    struct uncomplementible_terminal
     {
         // If your compile breaks here, then you are applying the complement operator ~
-        // to something that does not support it. For instance, ~(_ >> 'a') will trigger this
-        // assertion because the sub-expression (_ >> 'a') has no complement.
-        BOOST_MPL_ASSERT((never_true<Term>));
+        // to something that does not support it. For instance, ~as_xpr("hello") will trigger this
+        // assertion because the sub-expression as_xpr("hello") has no complement.
+        BOOST_MPL_ASSERT((never_true<Type>));
+        template<typename> struct apply : proto::terminal<Type> {};
+        static Type const &call(Type const &t, dont_care) { return t; }
     };
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    template<typename Char, typename Not>
-    struct complement_terminal<literal_placeholder<Char, Not> >
+    template<typename Term>
+    struct complement_terminal // complement a character literal
     {
         template<typename>
         struct apply
-          : proto::terminal<literal_placeholder<Char, typename mpl::not_<Not>::type> >
+          : proto::terminal<not_literal_placeholder<Term> >
         {};
 
         template<typename Expr, typename Visitor>
         static typename apply<Visitor>::type call(Expr const &expr, Visitor &)
         {
             typedef typename apply<Visitor>::type type;
-            type that = {{proto::arg(expr).ch_}};
+            type that = {{proto::arg(expr)}};
             return that;
+        }
+    };
+
+    template<typename Char>
+    struct complement_terminal<Char *>
+      : uncomplementible_terminal<Char *>
+    {};
+
+    template<typename Char, std::size_t N>
+    struct complement_terminal<Char (&)[N]>
+      : uncomplementible_terminal<Char (&)[N]>
+    {};
+
+    template<typename Char, std::size_t N>
+    struct complement_terminal<Char const (&)[N]>
+      : uncomplementible_terminal<Char const (&)[N]>
+    {};
+
+    template<typename BidiIter>
+    struct complement_terminal<tracking_ptr<regex_impl<BidiIter> > >
+      : uncomplementible_terminal<tracking_ptr<regex_impl<BidiIter> > >
+    {};
+
+    ///////////////////////////////////////////////////////////////////////////////
+    //
+    template<typename Char>
+    struct complement_terminal<not_literal_placeholder<Char> >
+    {
+        template<typename>
+        struct apply
+          : proto::terminal<Char>
+        {};
+
+        template<typename Expr, typename Visitor>
+        static typename apply<Visitor>::type call(Expr const &expr, Visitor &)
+        {
+            return proto::terminal<Char>::type::make(proto::arg(expr).ch_);
         }
     };
 

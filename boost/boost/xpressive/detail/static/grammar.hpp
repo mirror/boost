@@ -70,12 +70,7 @@ namespace boost { namespace xpressive
         {};
 
         template<typename Char>
-        struct is_xpressive_literal_impl<Char, string_placeholder<Char> >
-          : mpl::true_
-        {};
-
-        template<typename Char, typename Not>
-        struct is_xpressive_literal_impl<Char, literal_placeholder<Char, Not> >
+        struct is_xpressive_literal_impl<Char, not_literal_placeholder<Char> >
           : mpl::true_
         {};
 
@@ -164,13 +159,13 @@ namespace boost { namespace xpressive
           : mpl::true_
         {};
 
-        template<typename Char, typename BidiIter, typename ByRef>
-        struct is_xpressive_terminal<Char, regex_placeholder<BidiIter, ByRef> >
+        template<typename Char, typename BidiIter>
+        struct is_xpressive_terminal<Char, regex_byref_placeholder<BidiIter> >
           : mpl::true_
         {};
 
         template<typename Char, typename BidiIter>
-        struct is_xpressive_terminal<Char, xpressive::basic_regex<BidiIter> >
+        struct is_xpressive_terminal<Char, tracking_ptr<regex_impl<BidiIter> > >
           : mpl::true_
         {};
     }
@@ -230,14 +225,14 @@ namespace boost { namespace xpressive
     template<typename Char>
     struct XpressiveComplementedCharacterLiteral
       : proto::or_<
-            proto::complement<proto::terminal<detail::literal_placeholder<Char, proto::_> > >
-          , proto::complement<proto::terminal<detail::literal_placeholder<char, proto::_> > >
+            proto::complement<proto::terminal<detail::not_literal_placeholder<Char> > >
+          , proto::complement<proto::terminal<detail::not_literal_placeholder<char> > >
         >
     {};
 
     template<>
     struct XpressiveComplementedCharacterLiteral<char>
-      : proto::complement<proto::terminal<detail::literal_placeholder<char, proto::_> > >
+      : proto::complement<proto::terminal<detail::not_literal_placeholder<char> > >
     {};
 
     template<typename Char>

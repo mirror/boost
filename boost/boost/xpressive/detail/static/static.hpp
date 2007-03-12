@@ -18,6 +18,7 @@
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/detail/core/linker.hpp>
 #include <boost/xpressive/detail/core/peeker.hpp>
+#include <boost/xpressive/detail/static/placeholders.hpp>
 #include <boost/xpressive/detail/utility/width.hpp>
 
 // Random thoughts:

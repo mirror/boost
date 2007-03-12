@@ -17,7 +17,7 @@
 #include <boost/mpl/size_t.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
-#include <boost/xpressive/detail/static/as_xpr.hpp>
+#include <boost/xpressive/proto/traits.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
 // add widths
@@ -51,6 +51,35 @@
 
 namespace boost { namespace xpressive { namespace detail
 {
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // width_of_terminal
+    //
+    template<typename Expr>
+    struct width_of_terminal
+      : mpl::size_t<1>      // char literals
+    {};
+
+    template<typename Expr>
+    struct width_of_terminal<Expr *>
+      : unknown_width       // string literals
+    {};
+
+    template<typename Char, std::size_t N>
+    struct width_of_terminal<Char (&) [N]>
+      : mpl::size_t<N-1>    // string literals
+    {};
+
+    template<typename Char, std::size_t N>
+    struct width_of_terminal<Char const (&) [N]>
+      : mpl::size_t<N-1>    // string literals
+    {};
+
+    template<typename BidiIter>
+    struct width_of_terminal<tracking_ptr<regex_impl<BidiIter> > >
+      : unknown_width       // basic_regex
+    {};
+
     ///////////////////////////////////////////////////////////////////////////////
     // width_of
     //
@@ -59,7 +88,7 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Expr>
     struct width_of<Expr, proto::tag::terminal>
-      : mpl::size_t<as_matcher_type<typename proto::result_of::arg<Expr>::type>::type::width>
+      : width_of_terminal<typename proto::result_of::arg<Expr>::type>
     {};
 
     template<typename Expr>

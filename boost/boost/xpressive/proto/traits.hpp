@@ -80,7 +80,7 @@
                 typedef typename mpl::if_<
                     mpl::or_<BOOST_PROTO_IS_ARRAY_(T), is_function<T> >
                   , T &
-                  , T
+                  , typename remove_cv<T>::type
                 >::type arg0_type;
 
                 typedef expr<proto::tag::terminal, args1<arg0_type> > type;

@@ -33,16 +33,13 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // placeholders
     //
-    template<typename Char, typename Not = mpl::false_>
-    struct literal_placeholder;
-
     template<typename Char>
-    struct string_placeholder;
+    struct not_literal_placeholder;
 
     struct mark_placeholder;
 
-    template<typename BidiIter, typename ByRef>
-    struct regex_placeholder;
+    template<typename BidiIter>
+    struct regex_byref_placeholder;
 
     struct posix_charset_placeholder;
 
@@ -286,9 +283,6 @@ namespace boost { namespace xpressive { namespace detail
     struct sub_match_vector;
 
     struct action_state;
-
-    template<typename Xpr, bool IsExpr = proto::is_expr<Xpr>::value>
-    struct as_xpr_type;
 
     template<typename Traits, typename BidiIter>
     Traits const &traits_cast(state_type<BidiIter> const &state);

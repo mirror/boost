@@ -17,6 +17,8 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/type_traits/is_array.hpp>
+#include <boost/type_traits/remove_reference.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/matchers.hpp>
 #include <boost/xpressive/detail/static/placeholders.hpp>
@@ -25,11 +27,54 @@
 
 namespace boost { namespace xpressive { namespace detail
 {
+    template<typename T>
+    struct is_string_literal
+      : is_array<typename remove_reference<T>::type>
+    {};
+
+    template<typename T>
+    struct is_string_literal<T *>
+      : mpl::true_
+    {};
+
     ///////////////////////////////////////////////////////////////////////////////
     // transmogrify
     //
+    template<typename BidiIter, typename ICase, typename Traits, typename Matcher, typename EnableIf = void>
+    struct default_transmogrify
+    {
+        typedef typename iterator_value<BidiIter>::type char_type;
+        typedef std::basic_string<char_type> string_type;
+
+        typedef typename mpl::if_
+        <
+            is_string_literal<Matcher>
+          , string_matcher<Traits, ICase::value>
+          , literal_matcher<Traits, ICase::value, false>
+        >::type type;
+
+        template<typename Matcher2, typename Visitor>
+        static type call(Matcher2 const &m, Visitor &visitor)
+        {
+            return default_transmogrify::call_(m, visitor, is_string_literal<Matcher2>());
+        }
+
+        template<typename Matcher2, typename Visitor>
+        static type call_(Matcher2 const &m, Visitor &visitor, mpl::false_)
+        {
+            char_type ch = char_cast<char_type>(m, visitor.traits());
+            return type(ch, visitor.traits());
+        }
+
+        template<typename Matcher2, typename Visitor>
+        static type call_(Matcher2 const &m, Visitor &visitor, mpl::true_)
+        {
+            return type(string_cast<char_type>(string_type(m), visitor.traits()), visitor.traits());
+        }
+    };
+
     template<typename BidiIter, typename ICase, typename Traits, typename Matcher>
-    struct transmogrify
+    struct default_transmogrify<BidiIter, ICase, Traits, Matcher, typename Matcher::is_boost_xpressive_xpression_>
     {
         typedef Matcher type;
 
@@ -40,8 +85,13 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
+    template<typename BidiIter, typename ICase, typename Traits, typename Matcher>
+    struct transmogrify
+      : default_transmogrify<BidiIter, ICase, Traits, Matcher>
+    {};
+
     template<typename BidiIter, typename ICase, typename Traits>
-    struct transmogrify<BidiIter, ICase, Traits, assert_bol_placeholder>
+    struct transmogrify<BidiIter, ICase, Traits, assert_bol_placeholder >
     {
         typedef assert_bol_matcher<Traits> type;
 
@@ -53,7 +103,7 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     template<typename BidiIter, typename ICase, typename Traits>
-    struct transmogrify<BidiIter, ICase, Traits, assert_eol_placeholder>
+    struct transmogrify<BidiIter, ICase, Traits, assert_eol_placeholder >
     {
         typedef assert_eol_matcher<Traits> type;
 
@@ -65,7 +115,7 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     template<typename BidiIter, typename ICase, typename Traits>
-    struct transmogrify<BidiIter, ICase, Traits, logical_newline_placeholder>
+    struct transmogrify<BidiIter, ICase, Traits, logical_newline_placeholder >
     {
         typedef logical_newline_matcher<Traits> type;
 
@@ -76,11 +126,11 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
-    template<typename BidiIter, typename ICase, typename Traits, typename Char, typename Not>
-    struct transmogrify<BidiIter, ICase, Traits, literal_placeholder<Char, Not> >
+    template<typename BidiIter, typename ICase, typename Traits, typename Char>
+    struct transmogrify<BidiIter, ICase, Traits, not_literal_placeholder<Char> >
     {
         typedef typename iterator_value<BidiIter>::type char_type;
-        typedef literal_matcher<Traits, ICase::value, Not::value> type;
+        typedef literal_matcher<Traits, ICase::value, true> type;
 
         template<typename Matcher2, typename Visitor>
         static type call(Matcher2 const &m, Visitor &visitor)
@@ -105,21 +155,8 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
-    template<typename BidiIter, typename ICase, typename Traits, typename Char>
-    struct transmogrify<BidiIter, ICase, Traits, string_placeholder<Char> >
-    {
-        typedef typename iterator_value<BidiIter>::type char_type;
-        typedef string_matcher<Traits, ICase::value> type;
-
-        template<typename Matcher2, typename Visitor>
-        static type call(Matcher2 const &m, Visitor &visitor)
-        {
-            return type(string_cast<char_type>(m.str_, visitor.traits()), visitor.traits());
-        }
-    };
-
     template<typename BidiIter, typename ICase, typename Traits>
-    struct transmogrify<BidiIter, ICase, Traits, mark_placeholder>
+    struct transmogrify<BidiIter, ICase, Traits, mark_placeholder >
     {
         typedef mark_matcher<Traits, ICase::value> type;
 
@@ -131,7 +168,7 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     template<typename BidiIter, typename ICase, typename Traits>
-    struct transmogrify<BidiIter, ICase, Traits, posix_charset_placeholder>
+    struct transmogrify<BidiIter, ICase, Traits, posix_charset_placeholder >
     {
         typedef posix_charset_matcher<Traits> type;
 
@@ -168,15 +205,10 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
-    template<typename BidiIter, typename ICase, typename Traits, typename ByRef>
-    struct transmogrify<BidiIter, ICase, Traits, regex_placeholder<BidiIter, ByRef> >
+    template<typename BidiIter, typename ICase, typename Traits>
+    struct transmogrify<BidiIter, ICase, Traits, regex_byref_placeholder<BidiIter> >
     {
-        typedef typename mpl::if_
-        <
-            ByRef
-          , regex_byref_matcher<BidiIter>
-          , regex_matcher<BidiIter>
-        >::type type;
+        typedef regex_byref_matcher<BidiIter> type;
 
         template<typename Matcher2>
         static type call(Matcher2 const &m, dont_care)
@@ -186,7 +218,19 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     template<typename BidiIter, typename ICase, typename Traits>
-    struct transmogrify<BidiIter, ICase, Traits, self_placeholder>
+    struct transmogrify<BidiIter, ICase, Traits, tracking_ptr<regex_impl<BidiIter> > >
+    {
+        typedef regex_matcher<BidiIter> type;
+
+        template<typename Matcher2>
+        static type call(Matcher2 const &m, dont_care)
+        {
+            return type(m.get());
+        }
+    };
+
+    template<typename BidiIter, typename ICase, typename Traits>
+    struct transmogrify<BidiIter, ICase, Traits, self_placeholder >
     {
         typedef regex_byref_matcher<BidiIter> type;
 

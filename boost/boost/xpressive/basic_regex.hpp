@@ -19,7 +19,7 @@
 # include <iostream>
 #endif
 #include <boost/mpl/bool.hpp>
-#include <boost/xpressive/proto/proto_fwd.hpp>
+#include <boost/xpressive/proto/extends.hpp>
 #include <boost/xpressive/regex_constants.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/regex_impl.hpp>
@@ -34,7 +34,16 @@ namespace boost { namespace xpressive
 /// \brief Class template basic_regex\<\> is a class for holding a compiled regular expression.
 template<typename BidiIter>
 struct basic_regex
+  : proto::extends<
+        typename proto::terminal<detail::tracking_ptr<detail::regex_impl<BidiIter> > >::type
+      , basic_regex<BidiIter>
+    >
 {
+private:
+    typedef typename proto::terminal<detail::tracking_ptr<detail::regex_impl<BidiIter> > >::type pimpl_type;
+    typedef proto::extends<pimpl_type, basic_regex<BidiIter> > base_type;
+
+public:
     typedef BidiIter iterator_type;
     typedef typename iterator_value<BidiIter>::type char_type;
     typedef std::basic_string<char_type> string_type;
@@ -43,7 +52,7 @@ struct basic_regex
     /// \post regex_id()    == 0
     /// \post mark_count()  == 0
     basic_regex()
-      : impl_()
+      : base_type()
     {
     }
 
@@ -51,7 +60,7 @@ struct basic_regex
     /// \post regex_id()    == that.regex_id()
     /// \post mark_count()  == that.mark_count()
     basic_regex(basic_regex<BidiIter> const &that)
-      : impl_(that.impl_)
+      : base_type(that)
     {
     }
 
@@ -61,7 +70,7 @@ struct basic_regex
     /// \return *this
     basic_regex<BidiIter> &operator =(basic_regex<BidiIter> const &that)
     {
-        this->impl_ = that.impl_;
+        proto::arg(*this) = proto::arg(that);
         return *this;
     }
 
@@ -73,7 +82,7 @@ struct basic_regex
     /// \post   mark_count() \>= 0
     template<typename Expr>
     basic_regex(Expr const &expr)
-      : impl_()
+      : base_type()
     {
         this->operator =(expr);
     }
@@ -90,7 +99,7 @@ struct basic_regex
     basic_regex<BidiIter> &operator =(Expr const &expr)
     {
         BOOST_XPRESSIVE_CHECK_GRAMMAR(Expr, char_type);
-        detail::static_compile(expr, this->impl_.get());
+        detail::static_compile(expr, proto::arg(*this).get());
         return *this;
     }
 
@@ -98,14 +107,14 @@ struct basic_regex
     ///
     std::size_t mark_count() const
     {
-        return this->impl_ ? this->impl_->mark_count_ : 0;
+        return proto::arg(*this) ? proto::arg(*this)->mark_count_ : 0;
     }
 
     /// Returns a token which uniquely identifies this regular expression.
     ///
     regex_id_type regex_id() const
     {
-        return this->impl_ ? this->impl_->xpr_.get() : 0;
+        return proto::arg(*this) ? proto::arg(*this)->xpr_.get() : 0;
     }
 
     /// Swaps the contents of this basic_regex object with another.
@@ -118,7 +127,7 @@ struct basic_regex
     /// \throw nothrow
     void swap(basic_regex<BidiIter> &that) // throw()
     {
-        this->impl_.swap(that.impl_);
+        proto::arg(*this).swap(proto::arg(that));
     }
 
     /// Factory method for building a regex object from a string.
@@ -129,24 +138,6 @@ struct basic_regex
     static basic_regex<BidiIter> compile(string_type const &str, flag_type flags = regex_constants::ECMAScript)
     {
         return regex_compiler<BidiIter>().compile(str, flags);
-    }
-
-    // for binding actions to this regex when it is nested statically in another regex
-    /// INTERNAL ONLY
-    template<typename Action>
-    typename proto::right_shift
-    <
-        typename proto::terminal<basic_regex<BidiIter> >::type
-      , typename proto::terminal<Action>::type
-    >::type const
-    operator [](detail::action_matcher<Action> const &action) const
-    {
-        typename proto::right_shift
-        <
-            typename proto::terminal<basic_regex<BidiIter> >::type
-          , typename proto::terminal<Action>::type
-        >::type that = {{*this}, {*static_cast<Action const *>(&action)}};
-        return that;
     }
 
     //{{AFX_DEBUG
@@ -177,22 +168,18 @@ private:
     /// INTERNAL ONLY
     bool match_(detail::state_type<BidiIter> &state) const
     {
-        return this->impl_->xpr_->match(state);
+        return proto::arg(*this)->xpr_->match(state);
     }
 
     // Returns true if this basic_regex object does not contain a valid regular expression.
     /// INTERNAL ONLY
     bool invalid_() const
     {
-        return !this->impl_ || !this->impl_->xpr_;
+        return !proto::arg(*this) || !proto::arg(*this)->xpr_;
     }
 
     /// INTERNAL ONLY
     void dump_(std::ostream &sout) const;
-
-    // the tracking_ptr manages lazy-init, COW, cycle-breaking, and
-    // reference/dependency tracking.
-    detail::tracking_ptr<detail::regex_impl<BidiIter> > impl_;
 };
 
 //{{AFX_DEBUG
@@ -203,13 +190,13 @@ private:
 template<typename BidiIter>
 inline void basic_regex<BidiIter>::dump_(std::ostream &sout) const
 {
-    if(!this->impl_)
+    if(!proto::arg(*this))
     {
         sout << "<null> refs={} deps={}";
     }
     else
     {
-        sout << *this->impl_;
+        sout << *proto::arg(*this);
     }
 }
 #endif
@@ -233,5 +220,31 @@ inline void swap(basic_regex<BidiIter> &left, basic_regex<BidiIter> &right) // t
 }
 
 }} // namespace boost::xpressive
+
+
+namespace boost { namespace proto
+{
+    // Turn off the operator & overload on regex terminals
+    template<typename Domain, typename Expr>
+    struct is_allowed<
+        Domain
+      , Expr
+      , typename enable_if<
+            matches<
+                Expr
+              , address_of<
+                    terminal<
+                        xpressive::detail::tracking_ptr<
+                            xpressive::detail::regex_impl<_>
+                        >
+                    >
+                >
+            >
+        >::type
+    >
+      : mpl::false_
+    {};
+
+}}
 
 #endif // BOOST_XPRESSIVE_REGEX_HPP_EAN_10_04_2005

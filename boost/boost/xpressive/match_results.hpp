@@ -186,7 +186,7 @@ public:
     ///
     difference_type length(size_type sub = 0) const
     {
-        return (*this)[ sub ].length();
+        return this->sub_matches_[ sub ].length();
     }
 
     /// If !(*this)[sub].matched then returns -1. Otherwise returns std::distance(base, (*this)[sub].first),
@@ -194,14 +194,14 @@ public:
     /// of a repeated search with a regex_iterator then base is the same as prefix().first – end note]
     difference_type position(size_type sub = 0) const
     {
-        return (*this)[ sub ].matched ? std::distance(this->base_, (*this)[ sub ].first) : -1;
+        return this->sub_matches_[ sub ].matched ? std::distance(this->base_, this->sub_matches_[ sub ].first) : -1;
     }
 
     /// Returns string_type((*this)[sub]).
     ///
     string_type str(size_type sub = 0) const
     {
-        return (*this)[ sub ].str();
+        return this->sub_matches_[ sub ].str();
     }
 
     /// Returns a reference to the sub_match object representing the sequence that
@@ -256,14 +256,14 @@ public:
     ///
     operator bool_type() const
     {
-        return (*this)[ 0 ].matched ? &dummy::i_ : 0;
+        return this->sub_matches_[ 0 ].matched ? &dummy::i_ : 0;
     }
 
     /// Returns true if empty() || !(*this)[0].matched, else returns false.
     ///
     bool operator !() const
     {
-        return this->empty() || !(*this)[ 0 ].matched;
+        return this->empty() || !this->sub_matches_[ 0 ].matched;
     }
 
     /// Returns the id of the basic_regex object most recently used with this match_results object.
@@ -317,7 +317,7 @@ public:
             else if(BOOST_XPR_CHAR_(char_type, '&') == *cur) // whole match
             {
                 ++cur;
-                out = std::copy((*this)[ 0 ].first, (*this)[ 0 ].second, out);
+                out = std::copy(this->sub_matches_[ 0 ].first, this->sub_matches_[ 0 ].second, out);
             }
             else if(BOOST_XPR_CHAR_(char_type, '`') == *cur) // prefix
             {
@@ -332,9 +332,9 @@ public:
             else if(-1 != traits.value(*cur, 10)) // a sub-match
             {
                 int max = static_cast<int>(this->size() - 1);
-                int br_nbr = detail::toi(cur, end, traits, 10, max);
-                detail::ensure(0 != br_nbr, regex_constants::error_subreg, "invalid back-reference");
-                out = std::copy((*this)[ br_nbr ].first, (*this)[ br_nbr ].second, out);
+                int sub = detail::toi(cur, end, traits, 10, max);
+                detail::ensure(0 != sub, regex_constants::error_subreg, "invalid back-reference");
+                out = std::copy(this->sub_matches_[ sub ].first, this->sub_matches_[ sub ].second, out);
             }
             else
             {
@@ -446,10 +446,10 @@ private:
         this->base_ = begin;
 
         this->prefix_.first = begin;
-        this->prefix_.second = (*this)[ 0 ].first;
+        this->prefix_.second = this->sub_matches_[ 0 ].first;
         this->prefix_.matched = this->prefix_.first != this->prefix_.second;
 
-        this->suffix_.first = (*this)[ 0 ].second;
+        this->suffix_.first = this->sub_matches_[ 0 ].second;
         this->suffix_.second = end;
         this->suffix_.matched = this->suffix_.first != this->suffix_.second;
 
