@@ -404,7 +404,7 @@
 
       <xsl:choose>
         <xsl:when test="$highlight">
-          <xsl:apply-templates select="$parameter/default/*" mode="highlight"/>
+          <xsl:apply-templates select="$parameter/default/*|$parameter/default/text()" mode="highlight"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$def"/>
