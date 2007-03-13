@@ -214,7 +214,7 @@ struct compiler_traits
 
     ///////////////////////////////////////////////////////////////////////////
     // get_group_type
-    regex_constants::compiler_token_type get_group_type(iterator_type &begin, iterator_type end, std::string &name)
+    regex_constants::compiler_token_type get_group_type(iterator_type &begin, iterator_type end, string_type &name)
     {
         using namespace regex_constants;
         if(this->eat_ws_(begin, end) != end && BOOST_XPR_CHAR_(char_type, '?') == *begin)

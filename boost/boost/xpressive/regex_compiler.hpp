@@ -16,6 +16,7 @@
 #endif
 
 #include <map>
+#include <stdexcept>
 #include <boost/xpressive/basic_regex.hpp>
 #include <boost/xpressive/detail/dynamic/parser.hpp>
 #include <boost/xpressive/detail/dynamic/parse_charset.hpp>
@@ -105,7 +106,7 @@ struct regex_compiler
         string_iterator begin = pat.begin(), end = pat.end(), tmp = begin;
 
         // Check if this regex is a named rule:
-        std::string name;
+        string_type name;
         if(token_group_begin == this->traits_.get_token(tmp, end) &&
            detail::ensure(tmp != end, error_paren, "mismatched parenthesis") &&
            token_rule_assign == this->traits_.get_group_type(tmp, end, name))
@@ -140,6 +141,35 @@ struct regex_compiler
         this->self_->tracking_update();
         this->self_.reset();
         return *prex;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // operator[]
+    /// Return a reference to the named regular expression. If no such named
+    /// regular expression exists, create a new regular expression and return
+    /// a reference to it.
+    ///
+    /// \param  name A std::string containing the name of the regular expression.
+    /// \pre    The string is not empty.
+    /// \throw  bad_alloc on allocation failure, invalid_argument for empty string.
+    basic_regex<BidiIter> &operator [](string_type const &name)
+    {
+        if(name.empty())
+        {
+            throw std::invalid_argument("bad regular expression name");
+        }
+        return this->rules_[name];
+    }
+
+    /// \overload
+    ///
+    basic_regex<BidiIter> const &operator [](string_type const &name) const
+    {
+        if(name.empty())
+        {
+            throw std::invalid_argument("bad regular expression name");
+        }
+        return this->rules_[name];
     }
 
 private:
@@ -211,7 +241,7 @@ private:
         bool lookahead = false;
         bool lookbehind = false;
         bool negative = false;
-        std::string name;
+        string_type name;
 
         detail::sequence<BidiIter> seq, seq_end;
         string_iterator tmp = string_iterator();
@@ -593,7 +623,7 @@ private:
     CompilerTraits traits_;
     typename RegexTraits::char_class_type upper_;
     shared_ptr<detail::regex_impl<BidiIter> > self_;
-    std::map<std::string, basic_regex<BidiIter> > rules_;
+    std::map<string_type, basic_regex<BidiIter> > rules_;
 };
 
 }} // namespace boost::xpressive
