@@ -221,30 +221,4 @@ inline void swap(basic_regex<BidiIter> &left, basic_regex<BidiIter> &right) // t
 
 }} // namespace boost::xpressive
 
-
-namespace boost { namespace proto
-{
-    // Turn off the operator & overload on regex terminals
-    template<typename Domain, typename Expr>
-    struct is_allowed<
-        Domain
-      , Expr
-      , typename enable_if<
-            matches<
-                Expr
-              , address_of<
-                    terminal<
-                        xpressive::detail::tracking_ptr<
-                            xpressive::detail::regex_impl<_>
-                        >
-                    >
-                >
-            >
-        >::type
-    >
-      : mpl::false_
-    {};
-
-}}
-
-#endif // BOOST_XPRESSIVE_REGEX_HPP_EAN_10_04_2005
+#endif // BOOST_XPRESSIVE_BASIC_REGEX_HPP_EAN_10_04_2005

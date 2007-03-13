@@ -24,6 +24,7 @@
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
     #include <boost/utility/result_of.hpp>
+    #include <boost/utility/addressof.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/ref.hpp>
     #include <boost/xpressive/proto/args.hpp>
@@ -52,6 +53,21 @@
     #define BOOST_PROTO_UNREF_ARG(z, n, data)\
         proto::unref(this->BOOST_PP_CAT(arg, n))\
         /**/
+
+        namespace detail
+        {
+            template<typename Tag, typename Arg>
+            struct address_of_hack
+            {
+                typedef address_of_hack type;
+            };
+
+            template<typename Expr>
+            struct address_of_hack<tag::address_of, ref<Expr> >
+            {
+                typedef Expr *type;
+            };
+        }
 
         namespace result_of
         {
@@ -107,6 +123,14 @@
             {
                 expr that = {a0};
                 return that;
+            }
+
+            // HACKHACK proto overloads operator&, which means that proto-ified objects
+            // cannot have their addresses taken, unless we use the following hack to
+            // make &x implicitly convertible to X*.
+            operator typename detail::address_of_hack<Tag, arg0_type>::type() const
+            {
+                return boost::addressof(this->arg0.expr);
             }
         #endif
 
