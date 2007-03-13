@@ -45,7 +45,7 @@ class event_base;
 template< class Event, class Destination,
           class TransitionContext = detail::no_context< Event >,
           void ( TransitionContext::*pTransitionAction )( const Event & ) =
-            &detail::template no_context< Event >::no_function >
+            &detail::no_context< Event >::no_function >
 class transition
 {
   private:
