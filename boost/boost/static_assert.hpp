@@ -28,7 +28,7 @@
 #  define BOOST_SA_GCC_WORKAROUND
 #endif
 
-#ifdef BOOST_CXX0X_STATIC_ASSERT
+#ifdef BOOST_HAS_STATIC_ASSERT
 #  define BOOST_STATIC_ASSERT( B ) static_assert(B, #B)
 #else
 

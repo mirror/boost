@@ -84,7 +84,7 @@
 // C++0x features
 //
 #if __option(rvalue_refs)
-#  define BOOST_CXX0X_RVALUE_REFERENCES
+#  define BOOST_HAS_RVALUE_REFS
 #endif
 
 #define BOOST_COMPILER "Metrowerks CodeWarrior C++ version " BOOST_STRINGIZE(BOOST_COMPILER_VERSION)

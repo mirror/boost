@@ -92,8 +92,10 @@
 // defined by some very early development versions of GCC 4.3; we will
 // remove this part of the check in the near future.
 #  if defined(__GXX_EXPERIMENTAL_CPP0X__) || defined(__GXX_EXPERIMENTAL_CXX0X__)
-#    define BOOST_CXX0X_PREPROCESSOR
-#    define BOOST_CXX0X_STATIC_ASSERT
+#    define BOOST_HAS_STATIC_ASSERT
+#    ifndef __STRICT_ANSI__
+#      define BOOST_HAS_VARIADIC_TMPL
+#    endif
 #  endif
 #endif
 
@@ -104,13 +106,13 @@
 // Variadic templates compiler: 
 //   http://www.generic-programming.org/~dgregor/cpp/variadic-templates.html
 #ifdef __VARIADIC_TEMPLATES
-#  define BOOST_CXX0X_VARIADIC_TEMPLATES
+#  define BOOST_HAS_VARIADIC_TMPL
 #endif
 
 // ConceptGCC compiler:
 //   http://www.generic-programming.org/software/ConceptGCC/
 #ifdef __GXX_CONCEPTS__
-#  define BOOST_CXX0X_CONCEPTS
+#  define BOOST_HAS_CONCEPTS
 #  define BOOST_COMPILER "ConceptGCC version " __VERSION__
 #endif
 
