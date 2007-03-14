@@ -720,24 +720,29 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
       mode="reference">
       <xsl:with-param name="indentation" select="$indentation + 2"/>
     </xsl:apply-templates>
-    
+
+    <!-- Enums -->
+    <xsl:apply-templates select="enum" mode="synopsis">
+      <xsl:with-param name="indentation" select="$indentation + 2"/>
+    </xsl:apply-templates>
+
     <!-- Construct/Copy/Destruct -->
     <xsl:call-template name="construct-copy-destruct-synopsis">
       <xsl:with-param name="indentation" select="$indentation + 2"/>
     </xsl:call-template>
-    
+
     <!-- Member functions -->
     <xsl:apply-templates 
       select="method-group|method|overloaded-method" 
       mode="synopsis">
       <xsl:with-param name="indentation" select="$indentation + 2"/>
     </xsl:apply-templates>
-    
+
     <!-- Data members -->
     <xsl:apply-templates select="data-member" mode="synopsis">
       <xsl:with-param name="indentation" select="$indentation + 2"/>
     </xsl:apply-templates>
-    
+
     <!-- Closing brace -->
     <xsl:text>&#10;</xsl:text>
     <xsl:call-template name="indent">
@@ -803,9 +808,23 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
         <xsl:apply-templates select="description"/>
         
         <xsl:call-template name="construct-copy-destruct-reference"/>
+        
         <xsl:apply-templates 
           select="method-group|method|overloaded-method"
           mode="reference"/>
+        
+        <!-- Emit reference docs for nested classes -->
+        <xsl:apply-templates 
+          select="class|class-specialization|
+                  struct|struct-specialization|
+                  union|union-specialization"
+          mode="namespace-reference"/>
+        
+        <!-- Emit reference docs for nested enums -->
+        <xsl:apply-templates 
+          select="enum"
+          mode="namespace-reference"/>
+        
         <xsl:apply-templates select="free-function-group" mode="reference">
           <xsl:with-param name="class" select="@name"/>
         </xsl:apply-templates>

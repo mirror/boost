@@ -46,7 +46,6 @@
 
   <xsl:key name="compounds-by-kind" match="compounddef" use="@kind"/>
   <xsl:key name="compounds-by-id" match="compounddef" use="@id"/>
-  <xsl:key name="inner-classes" match="compounddef[not(attribute::kind='namespace') and not(attribute::kind='file')]/innerclass" use="@refid"/>
 
   <xsl:strip-space elements="briefdescription detaileddescription"/>
 
@@ -184,8 +183,8 @@ Cannot handle compounddef with kind=<xsl:value-of select="@kind"/>
     <xsl:param name="with-namespace-refs"/>
 
     <xsl:if test="contains(string(location/attribute::file), 
-                           concat('/', $in-file)) and
-                  not (key('inner-classes', @id))">
+                           concat('/', $in-file)) ">
+    
       <!-- The short name of this class -->
       <xsl:variable name="name-with-spec">
         <xsl:call-template name="strip-qualifiers">
