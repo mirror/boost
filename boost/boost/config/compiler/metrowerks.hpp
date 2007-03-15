@@ -83,7 +83,7 @@
 //
 // C++0x features
 //
-#if __option(rvalue_refs)
+#if __MWERKS__ > 0x3206 && __option(rvalue_refs)
 #  define BOOST_HAS_RVALUE_REFS
 #endif
 
