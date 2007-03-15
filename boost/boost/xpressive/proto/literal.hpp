@@ -24,23 +24,24 @@ namespace boost { namespace proto
       : extends<typename terminal<T>::type, literal<T, Domain>, Domain>
     {
         typedef typename terminal<T>::type terminal_type;
+        typedef extends<terminal_type, literal<T, Domain>, Domain> base_type;
 
         template<typename U>
         literal(U &u)
-          : extends<terminal_type, literal<T> >(terminal_type::make(u))
+          : base_type(terminal_type::make(u))
         {}
 
         template<typename U>
         literal(U const &u)
-          : extends<terminal_type, literal<T> >(terminal_type::make(u))
+          : base_type(terminal_type::make(u))
         {}
 
         template<typename U>
-        literal(literal<U> const &u)
-          : extends<terminal_type, literal<T> >(terminal_type::make(proto::arg(u)))
+        literal(literal<U, Domain> const &u)
+          : base_type(terminal_type::make(proto::arg(u)))
         {}
 
-        using extends<terminal_type, literal<T> >::operator =;
+        using base_type::operator =;
     };
 
     /// lit
