@@ -51,8 +51,13 @@ lib boost_mpi
       : # Sources
         python/serialize.cpp
       : # Requirements
-      <library>boost_mpi
-      <library>/boost/python//boost_python
+        <library>boost_mpi
+        <library>/mpi//mpi [ mpi.extra-requirements ]
+      	<library>/boost/python//boost_python
+      : # Default build
+        <link>shared
+      : # Usage requirements
+        <library>/mpi//mpi [ mpi.extra-requirements ]
       ;
 
     python-extension mpi 
@@ -70,8 +75,8 @@ lib boost_mpi
         python/py_timer.cpp
       : # Requirements
         <library>boost_mpi_python
-        <library>boost_mpi 
-        <library>/boost/python//boost_python
+        <library>boost_mpi
+        <library>/mpi//mpi [ mpi.extra-requirements ]
       ;
   }
 }
