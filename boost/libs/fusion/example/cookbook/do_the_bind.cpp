@@ -22,10 +22,10 @@
     form. 
 ==============================================================================*/
 
-#include <boost/fusion/functional/invoke.hpp>
-#include <boost/fusion/functional/unfused_generic.hpp>
-#include <boost/fusion/functional/unfused_rvalue_args.hpp>
-#include <boost/fusion/functional/storable_arguments.hpp>
+#include <boost/fusion/functional/invocation/invoke.hpp>
+#include <boost/fusion/functional/adapter/unfused_generic.hpp>
+#include <boost/fusion/functional/adapter/unfused_rvalue_args.hpp>
+#include <boost/fusion/support/deduce_sequence.hpp>
 
 #include <boost/fusion/sequence/intrinsic/at.hpp>
 #include <boost/fusion/sequence/intrinsic/mpl.hpp>
@@ -49,6 +49,7 @@
 namespace impl
 {
     namespace fusion = boost::fusion;
+    namespace traits = boost::fusion::traits;
     namespace result_of = boost::fusion::result_of;
     namespace mpl = boost::mpl;
     using mpl::placeholders::_;
@@ -103,7 +104,9 @@ namespace impl
     // returned by bind
     template <class BindArgs> class fused_bound_function 
     {
-        BindArgs fsq_bind_args;
+        typedef typename traits::deduce_sequence<BindArgs>::type bound_args;
+
+        bound_args fsq_bind_args;
     public:
 
         fused_bound_function(BindArgs const & bind_args)
@@ -113,15 +116,15 @@ namespace impl
         template <class FinalArgs, bool Enable =
         // Disable for empty sequences if we expect arguments 
             ! (result_of::empty<FinalArgs>::value &&
-                !! mpl::count_if<BindArgs,is_placeholder<_> >::value) > 
+                !! mpl::count_if<bound_args,is_placeholder<_> >::value) > 
         struct result
         { };
 
         template <class FinalArgs>
         struct result<FinalArgs,true>
-            : result_of::invoke< typename result_of::front<BindArgs>::type,
+            : result_of::invoke< typename result_of::front<bound_args>::type,
                 typename result_of::transform<
-                    typename result_of::pop_front<BindArgs>::type,
+                    typename result_of::pop_front<bound_args>::type,
                     argument_transform<FinalArgs> const 
                 >::type
             >
@@ -147,8 +150,8 @@ namespace impl
         {
             // We have to transform the arguments so they are held by-value
             // in the returned function. 
-            typedef fusion::unfused_generic< fused_bound_function<
-                typename fusion::storable_arguments<BindArgs>::type > > type;
+            typedef fusion::unfused_generic< 
+                fused_bound_function<BindArgs> > type;
         };
 
         template <class BindArgs>
