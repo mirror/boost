@@ -29,10 +29,10 @@
 
 namespace boost { namespace numeric { namespace ublas {
 
-    template<class V, class T1, class IA1, class TA1, class E2>
+    template<class V, class T1, class L1, class IA1, class TA1, class E2>
     BOOST_UBLAS_INLINE
     V &
-    axpy_prod (const compressed_matrix<T1, row_major, 0, IA1, TA1> &e1,
+    axpy_prod (const compressed_matrix<T1, L1, 0, IA1, TA1> &e1,
                const vector_expression<E2> &e2,
                V &v, row_major_tag) {
         typedef typename V::size_type size_type;
@@ -49,10 +49,10 @@ namespace boost { namespace numeric { namespace ublas {
         return v;
     }
 
-    template<class V, class T1, class IA1, class TA1, class E2>
+    template<class V, class T1, class L1, class IA1, class TA1, class E2>
     BOOST_UBLAS_INLINE
     V &
-    axpy_prod (const compressed_matrix<T1, column_major, 0, IA1, TA1> &e1,
+    axpy_prod (const compressed_matrix<T1, L1, 0, IA1, TA1> &e1,
                const vector_expression<E2> &e2,
                V &v, column_major_tag) {
         typedef typename V::size_type size_type;
