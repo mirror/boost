@@ -340,8 +340,9 @@ namespace detail {
             it += size;
         }
 #if BOOST_UBLAS_TYPE_CHECK
-        if (! disable_type_check<bool>::value)
-            BOOST_UBLAS_CHECK (detail::expression_type_check (v, cv), external_logic ());
+        if (! disable_type_check<bool>::value) 
+            BOOST_UBLAS_CHECK (detail::expression_type_check (v, cv), 
+                               external_logic ("external logic or bad condition of inputs"));
 #endif
     }
     // Sparse case
@@ -367,8 +368,9 @@ namespace detail {
             ++ ite;
         }
 #if BOOST_UBLAS_TYPE_CHECK
-        if (! disable_type_check<bool>::value)
-            BOOST_UBLAS_CHECK (detail::expression_type_check (v, cv), external_logic ());
+        if (! disable_type_check<bool>::value) 
+            BOOST_UBLAS_CHECK (detail::expression_type_check (v, cv), 
+                               external_logic ("external logic or bad condition of inputs"));
 #endif
     }
     // Sparse proxy or functional case
@@ -434,7 +436,8 @@ namespace detail {
         }
 #if BOOST_UBLAS_TYPE_CHECK
         if (! disable_type_check<bool>::value)
-            BOOST_UBLAS_CHECK (detail::expression_type_check (v, cv), external_logic ());
+            BOOST_UBLAS_CHECK (detail::expression_type_check (v, cv), 
+                               external_logic ("external logic or bad condition of inputs"));
 #endif
     }
 
