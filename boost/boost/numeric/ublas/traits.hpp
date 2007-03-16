@@ -25,6 +25,8 @@
 #include <boost/numeric/ublas/detail/iterator.hpp>
 #include <boost/numeric/ublas/detail/returntype_deduction.hpp>
 
+#include <boost/type_traits.hpp>
+#include <complex>
 
 namespace boost { namespace numeric { namespace ublas {
 
@@ -483,6 +485,24 @@ namespace boost { namespace numeric { namespace ublas {
         }
 #endif
         it = it_end;
+    }
+
+    namespace detail {
+
+        // specialisation which define whether a type has a trivial constructor
+        // or not. This is used by array types.
+        template<typename T>
+        struct has_trivial_constructor : public boost::has_trivial_constructor<T> {};
+
+        template<typename T>
+        struct has_trivial_destructor : public boost::has_trivial_destructor<T> {};
+
+        template<typename FLT>
+        struct has_trivial_constructor<std::complex<FLT> > : public boost::true_type {};
+        
+        template<typename FLT>
+        struct has_trivial_destructor<std::complex<FLT> > : public boost::true_type {};
+
     }
 
 }}}

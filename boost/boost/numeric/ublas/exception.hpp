@@ -267,11 +267,19 @@ namespace boost { namespace numeric { namespace ublas {
 //        return (std::min) (size1, size2);
 //    }
 // #define BOOST_UBLAS_SAME(size1, size2) same_impl ((size1), (size2))
-    template<class T>
+     // need two types here because different containers can have
+     // different size_types (especially sparse types)
+    template<class T1, class T2>
     BOOST_UBLAS_INLINE
     // Kresimir Fresl and Dan Muller reported problems with COMO.
     // We better change the signature instead of libcomo ;-)
     // const T &same_impl_ex (const T &size1, const T &size2, const char *file, int line) {
+    T1 same_impl_ex (const T1 &size1, const T2 &size2, const char *file, int line) {
+        BOOST_UBLAS_CHECK_EX (size1 == size2, file, line, bad_argument ());
+        return (size1 < size2)?(size1):(size2);
+    }
+    template<class T>
+    BOOST_UBLAS_INLINE
     T same_impl_ex (const T &size1, const T &size2, const char *file, int line) {
         BOOST_UBLAS_CHECK_EX (size1 == size2, file, line, bad_argument ());
         return (std::min) (size1, size2);

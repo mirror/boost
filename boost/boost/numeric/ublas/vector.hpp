@@ -63,6 +63,10 @@ namespace boost { namespace numeric { namespace ublas {
             vector_container<self_type> (),
             data_ (data) {}
         BOOST_UBLAS_INLINE
+        vector (size_type size, const value_type &init):
+            vector_container<self_type> (),
+            data_ (size, init) {}
+        BOOST_UBLAS_INLINE
         vector (const vector &v):
             vector_container<self_type> (),
             data_ (v.data_) {}

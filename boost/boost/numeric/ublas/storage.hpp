@@ -23,6 +23,7 @@
 #endif
 
 #include <boost/numeric/ublas/exception.hpp>
+#include <boost/numeric/ublas/traits.hpp>
 #include <boost/numeric/ublas/detail/iterator.hpp>
 
 
@@ -63,19 +64,15 @@ namespace boost { namespace numeric { namespace ublas {
         explicit BOOST_UBLAS_INLINE
         unbounded_array (size_type size, const ALLOC &a = ALLOC()):
             alloc_(a), size_ (size) {
-            if (size_) {
-                data_ = alloc_.allocate (size_);
-                // ISSUE some compilers may zero POD here
-#ifdef BOOST_UBLAS_USEFUL_ARRAY_PLACEMENT_NEW
-                // array form fails on some compilers due to size cookie, is it standard conforming?
-                new (data_) value_type[size_];
-#else
-                for (pointer d = data_; d != data_ + size_; ++d)
-                    new (d) value_type;
-#endif
-            }
-            else
-                data_ = 0;
+          if (size_) {
+              data_ = alloc_.allocate (size_);
+              if (not detail::has_trivial_constructor<T>::value) {
+                  for (pointer d = data_; d != data_ + size_; ++d)
+                      alloc_.construct(d, value_type());
+              }
+          }
+          else
+              data_ = 0;
         }
         // No value initialised, but still be default constructed
         BOOST_UBLAS_INLINE
@@ -101,9 +98,12 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         ~unbounded_array () {
             if (size_) {
-                const iterator i_end = end();
-                for (iterator i = begin (); i != i_end; ++i) {
-                    iterator_destroy (i); 
+                if (not detail::has_trivial_destructor<T>::value) {
+                    // std::_Destroy (begin(), end(), alloc_);
+                    const iterator i_end = end();
+                    for (iterator i = begin (); i != i_end; ++i) {
+                        iterator_destroy (i); 
+                    }
                 }
                 alloc_.deallocate (data_, size_);
             }
@@ -137,20 +137,18 @@ namespace boost { namespace numeric { namespace ublas {
                         }
                     }
                     else {
-                        // ISSUE some compilers may zero POD here
-#ifdef BOOST_UBLAS_USEFUL_ARRAY_PLACEMENT_NEW
-                        // array form fails on some compilers due to size cookie, is it standard conforming?
-                        new (data_) value_type[size];
-#else
-                        for (pointer di = data_; di != data_ + size; ++di)
-                            new (di) value_type;
-#endif
+                        if (not detail::has_trivial_constructor<T>::value) {
+                            for (pointer di = data_; di != data_ + size; ++di)
+                                alloc_.construct (di, value_type());
+                        }
                     }
                 }
 
                 if (size_) {
-                    for (pointer si = p_data; si != p_data + size_; ++si)
-                        alloc_.destroy (si);
+                    if (not detail::has_trivial_destructor<T>::value) {
+                        for (pointer si = p_data; si != p_data + size_; ++si)
+                            alloc_.destroy (si);
+                    }
                     alloc_.deallocate (p_data, size_);
                 }
 

@@ -97,6 +97,10 @@ namespace boost { namespace numeric { namespace ublas {
             matrix_container<self_type> (),
             size1_ (size1), size2_ (size2), data_ (layout_type::storage_size (size1, size2)) {
         }
+        matrix (size_type size1, size_type size2, const value_type &init):
+            matrix_container<self_type> (),
+            size1_ (size1), size2_ (size2), data_ (layout_type::storage_size (size1, size2), init) {
+        }
         BOOST_UBLAS_INLINE
         matrix (size_type size1, size_type size2, const array_type &data):
             matrix_container<self_type> (),
