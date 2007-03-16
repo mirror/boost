@@ -867,7 +867,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Element lookup
         BOOST_UBLAS_INLINE
         const_iterator find (size_type i) const {
-            return const_iterator (*this, i == index_);
+            return const_iterator (*this, i <= index_);
         }
 
         class const_iterator:
