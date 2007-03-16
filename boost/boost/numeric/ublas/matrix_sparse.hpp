@@ -3200,7 +3200,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1 && layout_type::fast_i ())
                     -- it_;
                 else {
-                    i_ = index1 () - 1;
+                    --i_;
                     if (rank_ == 1)
                         *this = (*this) ().find1 (rank_, i_, j_, -1);
                 }
@@ -3352,7 +3352,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1 && layout_type::fast_i ())
                     -- it_;
                 else {
-                    i_ = index1 () - 1;
+                    --i_;
                     if (rank_ == 1)
                         *this = (*this) ().find1 (rank_, i_, j_, -1);
                 }
@@ -3509,7 +3509,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1 && layout_type::fast_j ())
                     -- it_;
                 else {
-                    j_ = index2 () - 1;
+                    --j_;
                     if (rank_ == 1)
                         *this = (*this) ().find2 (rank_, i_, j_, -1);
                 }
@@ -3661,7 +3661,7 @@ namespace boost { namespace numeric { namespace ublas {
                 if (rank_ == 1 && layout_type::fast_j ())
                     -- it_;
                 else {
-                    j_ = index2 ();
+                    --j_;
                     if (rank_ == 1)
                         *this = (*this) ().find2 (rank_, i_, j_, -1);
                 }
