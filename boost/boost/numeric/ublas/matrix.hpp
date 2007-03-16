@@ -1054,9 +1054,9 @@ namespace boost { namespace numeric { namespace ublas {
         BOOST_UBLAS_INLINE
         vector_of_vector (const matrix_expression<AE> &ae):
             matrix_container<self_type> (),
-            size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ (layout_type::size1 (size1_, size2_) + 1) {
-            for (size_type k = 0; k < layout_type::size1 (size1_, size2_); ++ k)
-                data ()[k].resize (layout_type::size2 (size1_, size2_));
+            size1_ (ae ().size1 ()), size2_ (ae ().size2 ()), data_ (layout_type::size_M (size1_, size2_) + 1) {
+            for (size_type k = 0; k < layout_type::size_M (size1_, size2_); ++ k)
+                data ()[k].resize (layout_type::size_m (size1_, size2_));
             matrix_assign<scalar_assign> (*this, ae);
         }
 
@@ -1086,14 +1086,14 @@ namespace boost { namespace numeric { namespace ublas {
             size1_ = size1;
             size2_ = size2;
             if (preserve)
-                data ().resize (layout_type::size1 (size1, size2) + 1, typename array_type::value_type ());
+                data ().resize (layout_type::size_M (size1, size2) + 1, typename array_type::value_type ());
             else
-                data ().resize (layout_type::size1 (size1, size2) + 1);
-            for (size_type k = 0; k < layout_type::size1 (size1, size2); ++ k) {
+                data ().resize (layout_type::size_M (size1, size2) + 1);
+            for (size_type k = 0; k < layout_type::size_M (size1, size2); ++ k) {
                 if (preserve)
-                    data () [k].resize (layout_type::size2 (size1, size2), value_type ());
+                    data () [k].resize (layout_type::size_m (size1, size2), value_type ());
                 else
-                    data () [k].resize (layout_type::size2 (size1, size2));
+                    data () [k].resize (layout_type::size_m (size1, size2));
             }
         }
 
@@ -1124,7 +1124,7 @@ namespace boost { namespace numeric { namespace ublas {
         // Zeroing
         BOOST_UBLAS_INLINE
         void clear () {
-            for (size_type k = 0; k < layout_type::size1 (size1_, size2_); ++ k)
+            for (size_type k = 0; k < layout_type::size_M (size1_, size2_); ++ k)
                 std::fill (data () [k].begin (), data () [k].end (), value_type/*zero*/());
         }
 
