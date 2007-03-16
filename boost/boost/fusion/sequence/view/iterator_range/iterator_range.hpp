@@ -31,7 +31,9 @@ namespace boost { namespace fusion
         typedef typename result_of::distance<begin_type, end_type>::type size;
         typedef mpl::true_ is_view;
 
-        typedef typename traits::category_of<begin_type>::type category;
+        typedef forward_traversal_tag category;
+        // typedef typename traits::category_of<begin_type>::type category;
+        // TODO: make it work - tosh
 
         iterator_range(First const& first, Last const& last)
             : first(convert_iterator<First>::call(first))
