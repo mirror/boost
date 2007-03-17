@@ -3872,7 +3872,7 @@ namespace boost { namespace numeric { namespace ublas {
         // ISSUE require type consistency check, is_convertable (IA::size_type, TA::size_type)
         typedef typename IA::value_type size_type;
         // ISSUE difference_type cannot be deduced for sparse indices, we only know the value_type
-        typedef typename std::ptrdiff_t difference_type;
+        typedef std::ptrdiff_t difference_type;
         // size_type for the data arrays.
         typedef typename IA::size_type array_size_type;
         typedef T value_type;
