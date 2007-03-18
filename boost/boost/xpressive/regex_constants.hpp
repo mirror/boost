@@ -154,12 +154,12 @@ enum match_flag_type
                                         ///< the expression, are copied unchanged to the output
                                         ///< string.
                                         ///<
-    //format_sed              = 1 << 13,  ///< Specifies that when a regular expression match is to be
-    //                                    ///< replaced by a new string, that the new string is
-    //                                    ///< constructed using the rules used by the Unix sed
-    //                                    ///< utility in IEEE Std 1003.1-2001, Portable Operating
-    //                                    ///< SystemInterface (POSIX), Shells and Utilities.
-    //                                    ///<
+    format_sed              = 1 << 13,  ///< Specifies that when a regular expression match is to be
+                                        ///< replaced by a new string, that the new string is
+                                        ///< constructed using the rules used by the Unix sed
+                                        ///< utility in IEEE Std 1003.1-2001, Portable Operating
+                                        ///< SystemInterface (POSIX), Shells and Utilities.
+                                        ///<
     format_perl             = 1 << 14,  ///< Specifies that when a regular expression match is to be
                                         ///< replaced by a new string, that the new string is
                                         ///< constructed using an implementation defined superset

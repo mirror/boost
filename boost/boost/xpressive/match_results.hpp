@@ -150,14 +150,16 @@ private:
 };
 
 template<typename Iterator>
-void set_transform(Iterator &, case_transform)
+inline bool set_transform(Iterator &, case_transform)
 {
+    return false;
 }
 
 template<typename Iterator, typename Char>
-void set_transform(case_converting_iterator<Iterator, Char> &iter, case_transform trans)
+inline bool set_transform(case_converting_iterator<Iterator, Char> &iter, case_transform trans)
 {
     iter.set_transform(trans);
+    return true;
 }
 
 } // namespace detail
@@ -400,10 +402,14 @@ public:
         }
         else if(0 != (regex_constants::format_perl & flags))
         {
-            return this->format_perl(cur, end, out);
+            return this->format_perl_(cur, end, out);
+        }
+        else if(0 != (regex_constants::format_sed & flags))
+        {
+            return this->format_sed_(cur, end, out);
         }
 
-        return this->format_ecma_262(cur, end, out);
+        return this->format_ecma_262_(cur, end, out);
     }
 
     /// Returns a copy of the string fmt. For each format specifier or escape sequence in fmt,
@@ -411,7 +417,7 @@ public:
     /// *this to which it refers. The bitmasks specified in flags determines what format specifiers
     /// or escape sequences are recognized, by default this is the format used by ECMA-262,
     /// ECMAScript Language Specification, Chapter 15 part 5.4.11 String.prototype.replace.
-    string_type format(const string_type &fmt, regex_constants::match_flag_type flags = regex_constants::format_default) const
+    string_type format(string_type const &fmt, regex_constants::match_flag_type flags = regex_constants::format_default) const
     {
         string_type result;
         result.reserve(fmt.length() * 2);
@@ -555,7 +561,7 @@ private:
     /// INTERNAL ONLY
     ///
     template<typename ForwardIterator, typename OutputIterator>
-    OutputIterator format_ecma_262(ForwardIterator cur, ForwardIterator end, OutputIterator out) const
+    OutputIterator format_ecma_262_(ForwardIterator cur, ForwardIterator end, OutputIterator out) const
     {
         while(cur != end)
         {
@@ -577,7 +583,34 @@ private:
     /// INTERNAL ONLY
     ///
     template<typename ForwardIterator, typename OutputIterator>
-    OutputIterator format_perl(ForwardIterator cur, ForwardIterator end, OutputIterator out) const
+    OutputIterator format_sed_(ForwardIterator cur, ForwardIterator end, OutputIterator out) const
+    {
+        while(cur != end)
+        {
+            switch(*cur)
+            {
+            case BOOST_XPR_CHAR_(char_type, '&'):
+                ++cur;
+                out = std::copy(this->sub_matches_[ 0 ].first, this->sub_matches_[ 0 ].second, out);
+                break;
+
+            case BOOST_XPR_CHAR_(char_type, '\\'):
+                out = this->format_escape_(++cur, end, out);
+                break;
+
+            default:
+                *out++ = *cur++;
+                break;
+            }
+        }
+
+        return out;
+    }
+
+    /// INTERNAL ONLY
+    ///
+    template<typename ForwardIterator, typename OutputIterator>
+    OutputIterator format_perl_(ForwardIterator cur, ForwardIterator end, OutputIterator out) const
     {
         detail::case_converting_iterator<OutputIterator, char_type> iout(out, this->traits_.get());
 
@@ -740,23 +773,38 @@ private:
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'l'):
-            detail::set_transform(out, detail::lower_next);
+            if(!detail::set_transform(out, detail::lower_next))
+            {
+                *out++ = BOOST_XPR_CHAR_(char_type, 'l');
+            }
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'L'):
-            detail::set_transform(out, detail::lower);
+            if(!detail::set_transform(out, detail::lower))
+            {
+                *out++ = BOOST_XPR_CHAR_(char_type, 'L');
+            }
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'u'):
-            detail::set_transform(out, detail::upper_next);
+            if(!detail::set_transform(out, detail::upper_next))
+            {
+                *out++ = BOOST_XPR_CHAR_(char_type, 'u');
+            }
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'U'):
-            detail::set_transform(out, detail::upper);
+            if(!detail::set_transform(out, detail::upper))
+            {
+                *out++ = BOOST_XPR_CHAR_(char_type, 'U');
+            }
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'E'):
-            detail::set_transform(out, detail::none);
+            if(!detail::set_transform(out, detail::none))
+            {
+                *out++ = BOOST_XPR_CHAR_(char_type, 'E');
+            }
             break;
 
         default:
