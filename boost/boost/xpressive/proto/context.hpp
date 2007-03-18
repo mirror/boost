@@ -106,7 +106,7 @@
 
         /// INTERNAL ONLY
         ///
-    #define BOOST_PROTO_TYPEOF_BINARY(Op, Arg0, ARG1, Type)\
+    #define BOOST_PROTO_TYPEOF_BINARY(Op, Arg0, Arg1, Type)\
         BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL(nested, (detail::make<Arg0>() Op detail::make<Arg1>()))\
         typedef typename nested::type Type;\
         /**/
