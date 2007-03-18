@@ -532,6 +532,22 @@ br6=good</bald> men
 br7=bold
 [end]
 
+[test64.sed]
+str=Now <foo>is</foo> the time for all <BOLD>good</bald> men</bold> to come to the aid of their country.
+pat=<(.*?)>(.*?)</(\1)>
+flg=igd
+sub={\1}\2{/\3}
+res=Now {foo}is{/foo} the time for all {BOLD}good</bald> men{/bold} to come to the aid of their country.
+br0=<foo>is</foo>
+br1=foo
+br2=is
+br3=foo
+br4=<BOLD>good</bald> men</bold>
+br5=BOLD
+br6=good</bald> men
+br7=bold
+[end]
+
 [test68]
 str=Now is the time for all good men to come to the aid of their country.
 pat=o
@@ -578,10 +594,29 @@ res=Foo(FooBar)foobar
 br0=Bar
 [end]
 
+[test72.perl]
+str=FooBarfoobar
+pat=bar
+flg=ip
+sub=($`$&)
+res=Foo(FooBar)foobar
+br0=Bar
+[end]
+
 [test73]
 str=FooBarfoobar
 pat=bar
 flg=gi
+sub=($`$&)
+res=Foo(FooBar)foo(FooBarfoobar)
+br0=Bar
+br1=bar
+[end]
+
+[test73.perl]
+str=FooBarfoobar
+pat=bar
+flg=gip
 sub=($`$&)
 res=Foo(FooBar)foo(FooBarfoobar)
 br0=Bar
@@ -598,6 +633,16 @@ br0=Bar
 br1=bar
 [end]
 
+[test74.perl]
+str=FooBarfoobar
+pat=bar
+flg=gip
+sub=($'$&)
+res=Foo(foobarBar)foo(bar)
+br0=Bar
+br1=bar
+[end]
+
 [test75]
 str=fooooo
 pat=fo{1,}
@@ -605,25 +650,49 @@ flg=
 br0=fooooo
 [end]
 
-;[test76]
-;str=fOO bAr BaZ
-;pat=\w+
-;flg=g
-;sub=\L\u$&
-;res=Foo Bar Baz
-;br0=BaZ
-;[end]
+[test76.perl]
+str=fOO bAr BaZ
+pat=\w+
+flg=gp
+sub=\L\u$&
+res=Foo Bar Baz
+br0=fOO
+br1=bAr
+br2=BaZ
+[end]
 
-;[test77]
-;str=fOO bAr BaZ
-;pat=\w+
-;flg=ga
-;sub=a\LA\Ua\Ea
-;res=aaAa aaAa aaAa
-;br0=fOO
-;br1=bAr
-;br2=BaZ
-;[end]
+[test76.all]
+str=fOO bAr BaZ
+pat=\w+
+flg=ga
+sub=\L\u$&
+res=Foo Bar Baz
+br0=fOO
+br1=bAr
+br2=BaZ
+[end]
+
+[test77.perl]
+str=fOO bAr BaZ
+pat=\w+
+flg=gp
+sub=a\LA\Ua\Ea
+res=aaAa aaAa aaAa
+br0=fOO
+br1=bAr
+br2=BaZ
+[end]
+
+[test77.all]
+str=fOO bAr BaZ
+pat=\w+
+flg=ga
+sub=a\LA\Ua\Ea
+res=aaAa aaAa aaAa
+br0=fOO
+br1=bAr
+br2=BaZ
+[end]
 
 [test78]
 str=This (has) parens
@@ -1271,6 +1340,21 @@ str=foo
 pat=\w??
 sub=<$&>
 flg=g
+res=<><f><><o><><o><>
+br0=
+br1=f
+br2=
+br3=o
+br4=
+br5=o
+br6=
+[end]
+
+[test161.sed]
+str=foo
+pat=\w??
+sub=<&>
+flg=gd
 res=<><f><><o><><o><>
 br0=
 br1=f
@@ -3544,3 +3628,24 @@ br2=
 br3=
 br4=c
 [end]
+
+[replace1]
+str=acab
+pat=(a(c)?)|(b)
+flg=iga
+sub=(?1(?2(C:):A):B:)
+res=C:AB:
+br0=ac
+br1=ac
+br2=c
+br3=
+br4=a
+br5=a
+br6=
+br7=
+br8=b
+br9=
+br10=
+br11=b
+[end]
+

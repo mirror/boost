@@ -210,6 +210,18 @@ bool get_test()
             {
                 test.match_flags = test.match_flags & ~regex_constants::format_first_only;
             }
+            if(std::string::npos != flg.find('a'))
+            {
+                test.match_flags = test.match_flags | regex_constants::format_all;
+            }
+            if(std::string::npos != flg.find('p'))
+            {
+                test.match_flags = test.match_flags | regex_constants::format_perl;
+            }
+            if(std::string::npos != flg.find('d'))
+            {
+                test.match_flags = test.match_flags | regex_constants::format_sed;
+            }
         }
         else if(regex_match(line, what, rx_br))
         {
