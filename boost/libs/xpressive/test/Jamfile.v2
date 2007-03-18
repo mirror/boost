@@ -16,7 +16,7 @@ project
         <toolset>msvc,<stdlib>stlport:<define>_STLP_EXPOSE_GLOBALS_IMPLEMENTATION
         <library>/boost/test//boost_unit_test_framework
         <link>static
-        <define>BOOST_XPRESSIVE_BETTER_ERRORS
+#        <define>BOOST_XPRESSIVE_BETTER_ERRORS
     ;
 
 test-suite "xpressive"
