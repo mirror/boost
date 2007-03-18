@@ -15,7 +15,7 @@
     #include <boost/xpressive/proto/detail/prefix.hpp>
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/iteration/iterate.hpp>
-    #include <boost/preprocessor/punctuation/comma.hpp>
+    #include <boost/preprocessor/facilities/apply.hpp>
     #include <boost/preprocessor/facilities/intercept.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/preprocessor/repetition/enum_binary_params.hpp>
@@ -86,7 +86,7 @@
 
         /// INTERNAL ONLY
         ///
-#define BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL(Nested, Expr)\
+    #define BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL(Nested, Expr)\
         BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested_and_hidden, Expr)\
         struct Nested\
           : mpl::if_c<\
@@ -95,6 +95,20 @@
               , typename nested_and_hidden::type\
             >\
         {};\
+        /**/
+
+        /// INTERNAL ONLY
+        ///
+    #define BOOST_PROTO_TYPEOF_UNARY(Op, Arg0, Type)\
+        BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL(nested, (Op detail::make<Arg0>()))\
+        typedef typename nested::type Type;\
+        /**/
+
+        /// INTERNAL ONLY
+        ///
+    #define BOOST_PROTO_TYPEOF_BINARY(Op, Arg0, ARG1, Type)\
+        BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL(nested, (detail::make<Arg0>() Op detail::make<Arg1>()))\
+        typedef typename nested::type Type;\
         /**/
 
         template<typename Derived>
@@ -111,6 +125,9 @@
                 return *static_cast<derived_type *>(this);
             }
 
+            // BUGBUG Doxygen can't make any sense of the nested result<> templates
+        #ifndef BOOST_PROTO_DOXYGEN_INVOKED
+
             template<typename Sig>
             struct result;
 
@@ -125,13 +142,12 @@
             struct result<This(Tag, A0 &)>\
             {\
                 typedef typename proto::result_of::eval<A0, derived_type>::type eval_type0;\
-                BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL(nested, (Op detail::make<eval_type0>()))\
-                typedef typename nested::type type;\
+                BOOST_PROTO_TYPEOF_UNARY(Op, eval_type0, type)\
                 static type call(typename detail::as_param<eval_type0>::type a0)\
                 {\
                     return Op a0;\
                 }\
-            }\
+            };\
             /**/
 
         #define BOOST_PROTO_BINARY_OP_RESULT(Op, Tag)\
@@ -140,14 +156,13 @@
             {\
                 typedef typename proto::result_of::eval<A0, derived_type>::type eval_type0;\
                 typedef typename proto::result_of::eval<A1, derived_type>::type eval_type1;\
-                BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL(nested, (detail::make<eval_type0>() Op detail::make<eval_type1>()))\
-                typedef typename nested::type type;\
+                BOOST_PROTO_TYPEOF_BINARY(Op, eval_type0, eval_type1, type)\
                 static type\
                     call(typename detail::as_param<eval_type0>::type a0, typename detail::as_param<eval_type1>::type a1)\
                 {\
                     return a0 Op a1;\
                 }\
-            }\
+            };\
             /**/
 
             // GCC will ICE if we try to evaluate the typeof an op= expression, like (i += 1)
@@ -167,55 +182,68 @@
                     {\
                         return a0 Op a1;\
                     }\
-                }\
+                };\
                 /**/
         #endif
 
-            BOOST_PROTO_UNARY_OP_RESULT(+, proto::tag::unary_plus);
-            BOOST_PROTO_UNARY_OP_RESULT(-, proto::tag::unary_minus);
-            BOOST_PROTO_UNARY_OP_RESULT(*, proto::tag::unary_star);
-            BOOST_PROTO_UNARY_OP_RESULT(~, proto::tag::complement);
-            BOOST_PROTO_UNARY_OP_RESULT(&, proto::tag::address_of);
-            BOOST_PROTO_UNARY_OP_RESULT(!, proto::tag::logical_not);
-            BOOST_PROTO_UNARY_OP_RESULT(++, proto::tag::pre_inc);
-            BOOST_PROTO_UNARY_OP_RESULT(--, proto::tag::pre_dec);
+            BOOST_PROTO_UNARY_OP_RESULT(+, proto::tag::unary_plus)
+            BOOST_PROTO_UNARY_OP_RESULT(-, proto::tag::unary_minus)
+            BOOST_PROTO_UNARY_OP_RESULT(*, proto::tag::unary_star)
+            BOOST_PROTO_UNARY_OP_RESULT(~, proto::tag::complement)
+            BOOST_PROTO_UNARY_OP_RESULT(&, proto::tag::address_of)
+            BOOST_PROTO_UNARY_OP_RESULT(!, proto::tag::logical_not)
+            BOOST_PROTO_UNARY_OP_RESULT(++, proto::tag::pre_inc)
+            BOOST_PROTO_UNARY_OP_RESULT(--, proto::tag::pre_dec)
 
-            BOOST_PROTO_BINARY_OP_RESULT(<<, proto::tag::left_shift);
-            BOOST_PROTO_BINARY_OP_RESULT(>>, proto::tag::right_shift);
-            BOOST_PROTO_BINARY_OP_RESULT(*, proto::tag::multiply);
-            BOOST_PROTO_BINARY_OP_RESULT(/, proto::tag::divide);
-            BOOST_PROTO_BINARY_OP_RESULT(%, proto::tag::modulus);
-            BOOST_PROTO_BINARY_OP_RESULT(+, proto::tag::add);
-            BOOST_PROTO_BINARY_OP_RESULT(-, proto::tag::subtract);
-            BOOST_PROTO_BINARY_OP_RESULT(<, proto::tag::less);
-            BOOST_PROTO_BINARY_OP_RESULT(>, proto::tag::greater);
-            BOOST_PROTO_BINARY_OP_RESULT(<=, proto::tag::less_equal);
-            BOOST_PROTO_BINARY_OP_RESULT(>=, proto::tag::greater_equal);
-            BOOST_PROTO_BINARY_OP_RESULT(==, proto::tag::equal);
-            BOOST_PROTO_BINARY_OP_RESULT(!=, proto::tag::not_equal);
-            BOOST_PROTO_BINARY_OP_RESULT(||, proto::tag::logical_or);
-            BOOST_PROTO_BINARY_OP_RESULT(&&, proto::tag::logical_and);
-            BOOST_PROTO_BINARY_OP_RESULT(&, proto::tag::bitwise_and);
-            BOOST_PROTO_BINARY_OP_RESULT(|, proto::tag::bitwise_or);
-            BOOST_PROTO_BINARY_OP_RESULT(^, proto::tag::bitwise_xor);
-            BOOST_PROTO_BINARY_OP_RESULT(BOOST_PP_COMMA(), proto::tag::comma);
-            BOOST_PROTO_BINARY_OP_RESULT(->*, proto::tag::mem_ptr);
-            BOOST_PROTO_BINARY_OP_RESULT(=, proto::tag::assign);
+            BOOST_PROTO_BINARY_OP_RESULT(<<, proto::tag::left_shift)
+            BOOST_PROTO_BINARY_OP_RESULT(>>, proto::tag::right_shift)
+            BOOST_PROTO_BINARY_OP_RESULT(*, proto::tag::multiply)
+            BOOST_PROTO_BINARY_OP_RESULT(/, proto::tag::divide)
+            BOOST_PROTO_BINARY_OP_RESULT(%, proto::tag::modulus)
+            BOOST_PROTO_BINARY_OP_RESULT(+, proto::tag::add)
+            BOOST_PROTO_BINARY_OP_RESULT(-, proto::tag::subtract)
+            BOOST_PROTO_BINARY_OP_RESULT(<, proto::tag::less)
+            BOOST_PROTO_BINARY_OP_RESULT(>, proto::tag::greater)
+            BOOST_PROTO_BINARY_OP_RESULT(<=, proto::tag::less_equal)
+            BOOST_PROTO_BINARY_OP_RESULT(>=, proto::tag::greater_equal)
+            BOOST_PROTO_BINARY_OP_RESULT(==, proto::tag::equal)
+            BOOST_PROTO_BINARY_OP_RESULT(!=, proto::tag::not_equal)
+            BOOST_PROTO_BINARY_OP_RESULT(||, proto::tag::logical_or)
+            BOOST_PROTO_BINARY_OP_RESULT(&&, proto::tag::logical_and)
+            BOOST_PROTO_BINARY_OP_RESULT(&, proto::tag::bitwise_and)
+            BOOST_PROTO_BINARY_OP_RESULT(|, proto::tag::bitwise_or)
+            BOOST_PROTO_BINARY_OP_RESULT(^, proto::tag::bitwise_xor)
+            BOOST_PROTO_BINARY_OP_RESULT(->*, proto::tag::mem_ptr)
+            BOOST_PROTO_BINARY_OP_RESULT(=, proto::tag::assign)
 
-            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(<<=, proto::tag::left_shift_assign);
-            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(>>=, proto::tag::right_shift_assign);
-            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(*=, proto::tag::multiply_assign);
-            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(/=, proto::tag::divide_assign);
-            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(%=, proto::tag::modulus_assign);
-            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(+=, proto::tag::add_assign);
-            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(-=, proto::tag::subtract_assign);
-            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(&=, proto::tag::bitwise_and_assign);
-            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(|=, proto::tag::bitwise_or_assign);
-            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(^=, proto::tag::bitwise_xor_assign);
+            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(<<=, proto::tag::left_shift_assign)
+            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(>>=, proto::tag::right_shift_assign)
+            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(*=, proto::tag::multiply_assign)
+            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(/=, proto::tag::divide_assign)
+            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(%=, proto::tag::modulus_assign)
+            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(+=, proto::tag::add_assign)
+            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(-=, proto::tag::subtract_assign)
+            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(&=, proto::tag::bitwise_and_assign)
+            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(|=, proto::tag::bitwise_or_assign)
+            BOOST_PROTO_BINARY_OP_ASSIGN_RESULT(^=, proto::tag::bitwise_xor_assign)
 
         #undef BOOST_PROTO_UNARY_OP_RESULT
         #undef BOOST_PROTO_BINARY_OP_RESULT
         #undef BOOST_PROTO_BINARY_OP_ASSIGN_RESULT
+
+            // Handle comma specially.
+            template<typename This, typename A0, typename A1>
+            struct result<This(proto::tag::comma, A0 &, A1 &)>
+            {
+                typedef typename proto::result_of::eval<A0, derived_type>::type eval_type0;
+                typedef typename proto::result_of::eval<A1, derived_type>::type eval_type1;
+                BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL(nested, (detail::make<eval_type0>(), detail::make<eval_type1>()))
+                typedef typename nested::type type;
+                static type call(typename detail::as_param<eval_type0>::type a0, typename detail::as_param<eval_type1>::type a1)
+                {
+                    return a0, a1;
+                }
+            };
 
             // Handle post-increment specially.
             template<typename This, typename A0>
@@ -235,7 +263,7 @@
             struct result<This(proto::tag::post_dec, A0 &)>
             {
                 typedef typename proto::result_of::eval<A0, derived_type>::type eval_type0;
-                BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL(nested, (detail::make<eval_type0>() ++))
+                BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL(nested, (detail::make<eval_type0>() --))
                 typedef typename nested::type type;
                 static type call(typename detail::as_param<eval_type0>::type a0)
                 {
@@ -256,6 +284,18 @@
                     return a0 [ a1 ];
                 }
             };
+
+        #else // BOOST_PROTO_DOXYGEN_INVOKED
+
+            /// Calculates the return type of context\<\>::operator()
+            ///
+            template<typename Sig>
+            struct result
+            {
+                typedef detail::unspecified type;
+            };
+
+        #endif // BOOST_PROTO_DOXYGEN_INVOKED
 
             template<typename A0>
             A0 &
@@ -284,6 +324,8 @@
 
     #define N BOOST_PP_ITERATION()
 
+            // BUGBUG Doxygen can't make any sense of the nested result<> templates
+        #ifndef BOOST_PROTO_DOXYGEN_INVOKED
             template<typename This BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
             struct result<This(proto::tag::function BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, A, & BOOST_PP_INTERCEPT))>
             {
@@ -297,6 +339,7 @@
                     return a0 ( BOOST_PP_ENUM_SHIFTED_PARAMS(N, a) );
                 }
             };
+        #endif
 
             template<typename Tag BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
             typename result<derived_type(Tag BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, A, & BOOST_PP_INTERCEPT))>::type

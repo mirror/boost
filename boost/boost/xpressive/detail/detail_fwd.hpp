@@ -284,6 +284,9 @@ namespace boost { namespace xpressive { namespace detail
 
     struct action_state;
 
+    template<typename Char>
+    struct traits;
+
     template<typename Traits, typename BidiIter>
     Traits const &traits_cast(state_type<BidiIter> const &state);
 

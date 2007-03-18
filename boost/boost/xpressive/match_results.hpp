@@ -18,8 +18,11 @@
 
 #include <iterator>
 #include <boost/assert.hpp>
+#include <boost/integer.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/iterator_adaptors.hpp>
+#include <boost/mpl/assert.hpp>
+#include <boost/numeric/conversion/converter.hpp>
 #if BOOST_ITERATOR_ADAPTORS_VERSION >= 0x0200
 # include <boost/iterator/filter_iterator.hpp>
 #endif
@@ -48,21 +51,114 @@ struct results_extras
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// results_traits
+// char_overflow_handler_
 //
-template<typename Char>
-struct results_traits
+struct char_overflow_handler_
 {
-    static int value(Char ch, int radix = 10)
+    void operator ()(numeric::range_check_result result) const // throw(regex_error)
     {
-        BOOST_ASSERT(10 == radix);
-        if(ch >= BOOST_XPR_CHAR_(Char, '0') && ch <= BOOST_XPR_CHAR_(Char, '9'))
+        if(numeric::cInRange != result)
         {
-            return ch - BOOST_XPR_CHAR_(Char, '0');
+            throw regex_error(regex_constants::error_escape,
+                "character escape too large to fit in target character type");
         }
-        return -1;
     }
 };
+
+///////////////////////////////////////////////////////////////////////////////
+// case_transform enum
+//
+enum case_transform
+{
+    none
+  , lower_next
+  , lower
+  , upper_next
+  , upper
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// case_converting_iterator
+//
+template<typename OutputIterator, typename Char>
+struct case_converting_iterator
+  : std::iterator<std::output_iterator_tag, Char, void, void, void>
+{
+    case_converting_iterator(OutputIterator const &out, traits<Char> const *traits)
+      : out_(out)
+      , traits_(traits)
+      , trans_(none)
+    {}
+
+    OutputIterator base() const
+    {
+        return this->out_;
+    }
+
+    void set_transform(case_transform trans)
+    {
+        this->trans_ = trans;
+    }
+
+    case_converting_iterator &operator ++()
+    {
+        ++this->out_;
+        return *this;
+    }
+
+    case_converting_iterator operator ++(int)
+    {
+        case_converting_iterator tmp(*this);
+        ++*this;
+        return tmp;
+    }
+
+    case_converting_iterator &operator *()
+    {
+        return *this;
+    }
+
+    case_converting_iterator &operator =(Char const &ch)
+    {
+        switch(this->trans_)
+        {
+        case lower_next:
+            this->trans_ = none;
+        case lower:
+            *this->out_ = this->traits_->tolower(ch);
+            break;
+
+        case upper_next:
+            this->trans_ = none;
+        case upper:
+            *this->out_ = this->traits_->toupper(ch);
+            break;
+
+        case none:
+        default:
+            *this->out_ = ch;
+            break;
+        }
+
+        return *this;
+    }
+
+private:
+    OutputIterator out_;
+    traits<Char> const *traits_;
+    case_transform trans_;
+};
+
+template<typename Iterator>
+void set_transform(Iterator &, case_transform)
+{
+}
+
+template<typename Iterator, typename Char>
+void set_transform(case_converting_iterator<Iterator, Char> &iter, case_transform trans)
+{
+    iter.set_transform(trans);
+}
 
 } // namespace detail
 
@@ -110,6 +206,7 @@ public:
       , nested_results_()
       , action_state_()
       , extras_ptr_()
+      , traits_()
     {
     }
 
@@ -132,6 +229,7 @@ public:
       , nested_results_()
       , action_state_(that.action_state_)
       , extras_ptr_()
+      , traits_()
     {
         if(that)
         {
@@ -145,6 +243,7 @@ public:
             this->prefix_ = that.prefix_;
             this->suffix_ = that.suffix_;
             this->base_ = that.base_;
+            this->traits_ = that.traits_;
         }
     }
 
@@ -293,57 +392,18 @@ public:
       , regex_constants::match_flag_type flags = regex_constants::format_default
     ) const
     {
-        detail::results_traits<char_type> traits;
         typename string_type::const_iterator cur = fmt.begin(), end = fmt.end();
 
         if(0 != (regex_constants::format_literal & flags))
         {
-            out = std::copy(cur, end, out);
+            return std::copy(cur, end, out);
         }
-        else while(cur != end)
+        else if(0 != (regex_constants::format_perl & flags))
         {
-            if(BOOST_XPR_CHAR_(char_type, '$') != *cur)
-            {
-                *out++ = *cur++;
-            }
-            else if(++cur == end)
-            {
-                *out++ = BOOST_XPR_CHAR_(char_type, '$');
-            }
-            else if(BOOST_XPR_CHAR_(char_type, '$') == *cur)
-            {
-                *out++ = *cur++;
-            }
-            else if(BOOST_XPR_CHAR_(char_type, '&') == *cur) // whole match
-            {
-                ++cur;
-                out = std::copy(this->sub_matches_[ 0 ].first, this->sub_matches_[ 0 ].second, out);
-            }
-            else if(BOOST_XPR_CHAR_(char_type, '`') == *cur) // prefix
-            {
-                ++cur;
-                out = std::copy(this->prefix().first, this->prefix().second, out);
-            }
-            else if(BOOST_XPR_CHAR_(char_type, '\'') == *cur) // suffix
-            {
-                ++cur;
-                out = std::copy(this->suffix().first, this->suffix().second, out);
-            }
-            else if(-1 != traits.value(*cur, 10)) // a sub-match
-            {
-                int max = static_cast<int>(this->size() - 1);
-                int sub = detail::toi(cur, end, traits, 10, max);
-                detail::ensure(0 != sub, regex_constants::error_subreg, "invalid back-reference");
-                out = std::copy(this->sub_matches_[ sub ].first, this->sub_matches_[ sub ].second, out);
-            }
-            else
-            {
-                *out++ = BOOST_XPR_CHAR_(char_type, '$');
-                *out++ = *cur++;
-            }
+            return this->format_perl(cur, end, out);
         }
 
-        return out;
+        return this->format_ecma_262(cur, end, out);
     }
 
     /// Returns a copy of the string fmt. For each format specifier or escape sequence in fmt,
@@ -374,9 +434,11 @@ public:
         this->nested_results_.swap(that.nested_results_);
         std::swap(this->action_state_, that.action_state_);
         this->extras_ptr_.swap(that.extras_ptr_);
+        this->traits_.swap(that.traits_);
     }
 
     /// INTERNAL ONLY
+    ///
     match_results<BidiIter> const &operator ()(regex_id_type regex_id, size_type index = 0) const
     {
         // BUGBUG this is linear, make it O(1)
@@ -392,6 +454,7 @@ public:
     }
 
     /// INTERNAL ONLY
+    ///
     match_results<BidiIter> const &operator ()(basic_regex<BidiIter> const &rex, std::size_t index = 0) const
     {
         return (*this)(rex.regex_id(), index);
@@ -399,6 +462,7 @@ public:
 
     // state:
     /// INTERNAL ONLY
+    ///
     template<typename State>
     void set_action_state(State &state)
     {
@@ -406,6 +470,7 @@ public:
     }
 
     /// INTERNAL ONLY
+    ///
     template<typename State>
     State &get_action_state() const
     {
@@ -418,18 +483,22 @@ private:
     typedef detail::results_extras<BidiIter> extras_type;
 
     /// INTERNAL ONLY
+    ///
     void init_
     (
         regex_id_type regex_id
+      , intrusive_ptr<detail::traits<char_type> const> const &traits
       , detail::sub_match_impl<BidiIter> *sub_matches
       , size_type size
     )
     {
+        this->traits_ = traits;
         this->regex_id_ = regex_id;
         detail::core_access<BidiIter>::init_sub_match_vector(this->sub_matches_, sub_matches, size);
     }
 
     /// INTERNAL ONLY
+    ///
     extras_type &get_extras_()
     {
         if(!this->extras_ptr_)
@@ -441,6 +510,7 @@ private:
     }
 
     /// INTERNAL ONLY
+    ///
     void set_prefix_suffix_(BidiIter begin, BidiIter end)
     {
         this->base_ = begin;
@@ -462,12 +532,14 @@ private:
     }
 
     /// INTERNAL ONLY
+    ///
     void reset_()
     {
         detail::core_access<BidiIter>::init_sub_match_vector(this->sub_matches_, 0, 0);
     }
 
     /// INTERNAL ONLY
+    ///
     void set_base_(BidiIter base)
     {
         this->base_ = base;
@@ -480,6 +552,229 @@ private:
         }
     }
 
+    /// INTERNAL ONLY
+    ///
+    template<typename ForwardIterator, typename OutputIterator>
+    OutputIterator format_ecma_262(ForwardIterator cur, ForwardIterator end, OutputIterator out) const
+    {
+        while(cur != end)
+        {
+            switch(*cur)
+            {
+            case BOOST_XPR_CHAR_(char_type, '$'):
+                out = this->format_backref_(++cur, end, out);
+                break;
+
+            default:
+                *out++ = *cur++;
+                break;
+            }
+        }
+
+        return out;
+    }
+
+    /// INTERNAL ONLY
+    ///
+    template<typename ForwardIterator, typename OutputIterator>
+    OutputIterator format_perl(ForwardIterator cur, ForwardIterator end, OutputIterator out) const
+    {
+        detail::case_converting_iterator<OutputIterator, char_type> iout(out, this->traits_.get());
+
+        while(cur != end)
+        {
+            switch(*cur)
+            {
+            case BOOST_XPR_CHAR_(char_type, '$'):
+                iout = this->format_backref_(++cur, end, iout);
+                break;
+
+            case BOOST_XPR_CHAR_(char_type, '\\'):
+                iout = this->format_escape_(++cur, end, iout);
+                break;
+
+            default:
+                *iout++ = *cur++;
+                break;
+            }
+        }
+
+        return iout.base();
+    }
+
+    /// INTERNAL ONLY
+    ///
+    template<typename OutputIterator>
+    OutputIterator format_backref_
+    (
+        typename string_type::const_iterator &cur
+      , typename string_type::const_iterator end
+      , OutputIterator out
+    ) const
+    {
+        if(cur == end)
+        {
+            *out++ = BOOST_XPR_CHAR_(char_type, '$');
+        }
+        else if(BOOST_XPR_CHAR_(char_type, '$') == *cur)
+        {
+            *out++ = *cur++;
+        }
+        else if(BOOST_XPR_CHAR_(char_type, '&') == *cur) // whole match
+        {
+            ++cur;
+            out = std::copy(this->sub_matches_[ 0 ].first, this->sub_matches_[ 0 ].second, out);
+        }
+        else if(BOOST_XPR_CHAR_(char_type, '`') == *cur) // prefix
+        {
+            ++cur;
+            out = std::copy(this->prefix().first, this->prefix().second, out);
+        }
+        else if(BOOST_XPR_CHAR_(char_type, '\'') == *cur) // suffix
+        {
+            ++cur;
+            out = std::copy(this->suffix().first, this->suffix().second, out);
+        }
+        else if(-1 != this->traits_->value(*cur, 10)) // a sub-match
+        {
+            int max = static_cast<int>(this->size() - 1);
+            int sub = detail::toi(cur, end, *this->traits_, 10, max);
+            detail::ensure(0 != sub, regex_constants::error_subreg, "invalid back-reference");
+            out = std::copy(this->sub_matches_[ sub ].first, this->sub_matches_[ sub ].second, out);
+        }
+        else
+        {
+            *out++ = BOOST_XPR_CHAR_(char_type, '$');
+            *out++ = *cur++;
+        }
+
+        return out;
+    }
+
+    /// INTERNAL ONLY
+    ///
+    template<typename OutputIterator>
+    OutputIterator format_escape_
+    (
+        typename string_type::const_iterator &cur
+      , typename string_type::const_iterator end
+      , OutputIterator out
+    ) const
+    {
+        using namespace regex_constants;
+        typename string_type::const_iterator tmp;
+        // define an unsigned type the same size as char_type
+        typedef typename boost::uint_t<CHAR_BIT * sizeof(char_type)>::least uchar_t;
+        BOOST_MPL_ASSERT_RELATION(sizeof(uchar_t), ==, sizeof(char_type));
+        typedef numeric::conversion_traits<uchar_t, int> converstion_traits;
+        numeric::converter<int, uchar_t, converstion_traits, detail::char_overflow_handler_> converter;
+
+        if(cur == end)
+        {
+            *out++ = BOOST_XPR_CHAR_(char_type, '\\');
+            return out;
+        }
+
+        char_type ch = *cur++;
+        switch(ch)
+        {
+        case BOOST_XPR_CHAR_(char_type, 'a'):
+            *out++ = BOOST_XPR_CHAR_(char_type, '\a');
+            break;
+
+        case BOOST_XPR_CHAR_(char_type, 'e'):
+            *out++ = converter(27);
+            break;
+
+        case BOOST_XPR_CHAR_(char_type, 'f'):
+            *out++ = BOOST_XPR_CHAR_(char_type, '\f');
+            break;
+
+        case BOOST_XPR_CHAR_(char_type, 'n'):
+            *out++ = BOOST_XPR_CHAR_(char_type, '\n');
+            break;
+
+        case BOOST_XPR_CHAR_(char_type, 'r'):
+            *out++ = BOOST_XPR_CHAR_(char_type, '\r');
+            break;
+
+        case BOOST_XPR_CHAR_(char_type, 't'):
+            *out++ = BOOST_XPR_CHAR_(char_type, '\t');
+            break;
+
+        case BOOST_XPR_CHAR_(char_type, 'v'):
+            *out++ = BOOST_XPR_CHAR_(char_type, '\v');
+            break;
+
+        case BOOST_XPR_CHAR_(char_type, 'x'):
+            detail::ensure(cur != end, error_escape, "unexpected end of format found");
+            if(BOOST_XPR_CHAR_(char_type, '{') == *cur)
+            {
+                detail::ensure(++cur != end, error_escape, "unexpected end of format found");
+                tmp = cur;
+                *out++ = converter(detail::toi(cur, end, *this->traits_, 16, 0xffff));
+                detail::ensure(4 == std::distance(tmp, cur) && cur != end && BOOST_XPR_CHAR_(char_type, '}') == *cur++
+                  , error_escape, "invalid hex escape : must be \\x { HexDigit HexDigit HexDigit HexDigit }");
+            }
+            else
+            {
+                tmp = cur;
+                *out++ = converter(detail::toi(cur, end, *this->traits_, 16, 0xff));
+                detail::ensure(2 == std::distance(tmp, cur), error_escape
+                  , "invalid hex escape : must be \\x HexDigit HexDigit");
+            }
+            break;
+
+        case BOOST_XPR_CHAR_(char_type, 'c'):
+            detail::ensure(cur != end, error_escape, "unexpected end of format found");
+            detail::ensure
+            (
+                this->traits_->in_range(BOOST_XPR_CHAR_(char_type, 'a'), BOOST_XPR_CHAR_(char_type, 'z'), *cur)
+             || this->traits_->in_range(BOOST_XPR_CHAR_(char_type, 'A'), BOOST_XPR_CHAR_(char_type, 'Z'), *cur)
+              , error_escape
+              , "invalid escape control letter; must be one of a-z or A-Z"
+            );
+            // Convert to character according to ECMA-262, section 15.10.2.10:
+            *out++ = converter(*cur % 32);
+            ++cur;
+            break;
+
+        case BOOST_XPR_CHAR_(char_type, 'l'):
+            detail::set_transform(out, detail::lower_next);
+            break;
+
+        case BOOST_XPR_CHAR_(char_type, 'L'):
+            detail::set_transform(out, detail::lower);
+            break;
+
+        case BOOST_XPR_CHAR_(char_type, 'u'):
+            detail::set_transform(out, detail::upper_next);
+            break;
+
+        case BOOST_XPR_CHAR_(char_type, 'U'):
+            detail::set_transform(out, detail::upper);
+            break;
+
+        case BOOST_XPR_CHAR_(char_type, 'E'):
+            detail::set_transform(out, detail::none);
+            break;
+
+        default:
+            if(0 < this->traits_->value(ch, 10))
+            {
+                int sub = this->traits_->value(ch, 10);
+                out = std::copy(this->sub_matches_[ sub ].first, this->sub_matches_[ sub ].second, out);
+            }
+            else
+            {
+                *out++ = ch;
+            }
+            break;
+        }
+
+        return out;
+    }
+
     regex_id_type regex_id_;
     detail::sub_match_vector<BidiIter> sub_matches_;
     BidiIter base_;
@@ -488,11 +783,13 @@ private:
     nested_results_type nested_results_;
     detail::action_state action_state_;
     intrusive_ptr<extras_type> extras_ptr_;
+    intrusive_ptr<detail::traits<char_type> const> traits_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // action_state_cast
 /// INTERNAL ONLY
+///
 template<typename State, typename BidiIter>
 inline State &action_state_cast(match_results<BidiIter> const &what)
 {

@@ -40,10 +40,7 @@ struct boyer_moore
 {
     typedef typename iterator_value<BidiIter>::type char_type;
     typedef Traits traits_type;
-    typedef is_convertible<
-        typename Traits::version_tag *
-      , regex_traits_version_1_case_fold_tag *
-    > case_fold;
+    typedef has_fold_case<Traits> case_fold;
     typedef typename Traits::string_type string_type;
 
     // initialize the Boyer-Moore search data structure, using the

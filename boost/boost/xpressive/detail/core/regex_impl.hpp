@@ -34,18 +34,25 @@ struct finder
 
 ///////////////////////////////////////////////////////////////////////////////
 // traits
+template<typename Char>
 struct traits
-  : counted_base<traits>
+  : counted_base<traits<Char> >
 {
     virtual ~traits() {}
+    virtual Char tolower(Char ch) const = 0;
+    virtual Char toupper(Char ch) const = 0;
+    virtual bool in_range(Char from, Char to, Char ch) const = 0;
+    virtual int value(Char ch, int radix) const = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
 // traits_holder
 template<typename Traits>
 struct traits_holder
-  : traits
+  : traits<typename Traits::char_type>
 {
+    typedef typename Traits::char_type char_type;
+
     explicit traits_holder(Traits const &traits)
       : traits_(traits)
     {
@@ -55,7 +62,48 @@ struct traits_holder
     {
         return this->traits_;
     }
+
+    char_type tolower(char_type ch) const
+    {
+        return this->tolower_(ch, typename Traits::version_tag());
+    }
+
+    char_type toupper(char_type ch) const
+    {
+        return this->toupper_(ch, typename Traits::version_tag());
+    }
+
+    int value(char_type ch, int radix) const
+    {
+        return this->traits_.value(ch, radix);
+    }
+
+    bool in_range(char_type from, char_type to, char_type ch) const
+    {
+        return this->traits_.in_range(from, to, ch);
+    }
+
 private:
+    char_type tolower_(char_type ch, regex_traits_version_1_tag) const
+    {
+        return ch;
+    }
+
+    char_type toupper_(char_type ch, regex_traits_version_1_tag) const
+    {
+        return ch;
+    }
+
+    char_type tolower_(char_type ch, regex_traits_version_2_tag) const
+    {
+        return this->traits_.tolower(ch);
+    }
+
+    char_type toupper_(char_type ch, regex_traits_version_2_tag) const
+    {
+        return this->traits_.toupper(ch);
+    }
+
     Traits traits_;
 };
 
@@ -112,7 +160,7 @@ struct regex_impl
     }
 
     intrusive_ptr<matchable_ex<BidiIter> const> xpr_;
-    intrusive_ptr<traits const> traits_;
+    intrusive_ptr<traits<char_type> const> traits_;
     intrusive_ptr<finder<BidiIter> > finder_;
     std::size_t mark_count_;
     std::size_t hidden_mark_count_;

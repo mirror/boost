@@ -78,7 +78,15 @@ namespace boost { namespace xpressive
 
     struct regex_traits_version_1_tag;
 
+    struct regex_traits_version_2_tag;
+
+    // DEPRECATED
+    /// INTERNAL ONLY
+    ///
     struct regex_traits_version_1_case_fold_tag;
+
+    template<typename Trait>
+    struct has_fold_case;
 
     template<typename BidiIter>
     struct basic_regex;

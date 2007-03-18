@@ -286,19 +286,8 @@ namespace detail
 
     #endif
 
-    template<typename Char>
-    struct version_tag
-    {
-        typedef regex_traits_version_1_tag type;
-    };
-
-    template<>
-    struct version_tag<char>
-    {
-        typedef regex_traits_version_1_case_fold_tag type;
-    };
-
 } // namespace detail
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // cpp_regex_traits
@@ -313,7 +302,7 @@ struct cpp_regex_traits
     typedef std::basic_string<char_type> string_type;
     typedef std::locale locale_type;
     typedef detail::umaskex_t char_class_type;
-    typedef typename detail::version_tag<Char>::type version_tag;
+    typedef regex_traits_version_2_tag version_tag;
     typedef detail::cpp_regex_traits_base<Char> base_type;
 
     /// Initialize a cpp_regex_traits object to use the specified std::locale,
@@ -378,10 +367,27 @@ struct cpp_regex_traits
         return this->ctype_->tolower(ch);
     }
 
+    /// Converts a character to lower-case using the internally-stored std::locale.
+    ///
+    /// \param ch The source character.
+    /// \return std::tolower(ch, this->getloc()).
+    char_type tolower(char_type ch) const
+    {
+        return this->ctype_->tolower(ch);
+    }
+
+    /// Converts a character to upper-case using the internally-stored std::locale.
+    ///
+    /// \param ch The source character.
+    /// \return std::toupper(ch, this->getloc()).
+    char_type toupper(char_type ch) const
+    {
+        return this->ctype_->toupper(ch);
+    }
+
     /// Returns a string_type containing all the characters that compare equal
     /// disregrarding case to the one passed in. This function can only be called
-    /// if is_convertible<version_tag*, regex_traits_version_1_case_fold_tag*>::value
-    /// is true.
+    /// if has_fold_case<cpp_regex_traits<Char> >::value is true.
     ///
     /// \param ch The source character.
     /// \return string_type containing all chars which are equal to ch when disregarding
@@ -670,6 +676,14 @@ inline unsigned char cpp_regex_traits<wchar_t>::hash(wchar_t ch)
     return static_cast<unsigned char>(ch);
 }
 #endif
+
+// Narrow C++ traits has fold_case() member function.
+template<>
+struct has_fold_case<cpp_regex_traits<char> >
+  : mpl::true_
+{
+};
+
 
 }}
 

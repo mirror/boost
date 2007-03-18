@@ -31,6 +31,8 @@ namespace boost { namespace xpressive { namespace detail
 template<typename BidiIter>
 struct match_context
 {
+    typedef typename iterator_value<BidiIter>::type char_type;
+
     match_context()
       : results_ptr_(0)
       , prev_context_(0)
@@ -49,7 +51,7 @@ struct match_context
     matchable<BidiIter> const *next_ptr_;
 
     // A pointer to the current traits object
-    detail::traits const *traits_;
+    detail::traits<char_type> const *traits_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -265,7 +267,7 @@ private:
         this->sub_matches_ += impl.hidden_mark_count_;
 
         // initialize the match_results struct
-        access::init_match_results(what, id, this->sub_matches_, this->mark_count_);
+        access::init_match_results(what, id, impl.traits_, this->sub_matches_, this->mark_count_);
     }
 
     void uninit_(regex_impl const &impl, match_results &)

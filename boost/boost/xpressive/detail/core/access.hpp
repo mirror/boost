@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// accesss.hpp
+// access.hpp
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
@@ -26,6 +26,8 @@ namespace boost { namespace xpressive { namespace detail
 template<typename BidiIter>
 struct core_access
 {
+    typedef typename iterator_value<BidiIter>::type char_type;
+
     static std::size_t get_hidden_mark_count(basic_regex<BidiIter> const &rex)
     {
         return proto::arg(rex)->hidden_mark_count_;
@@ -72,11 +74,12 @@ struct core_access
     (
         match_results<BidiIter> &what
       , regex_id_type regex_id
+      , intrusive_ptr<traits<char_type> const> const &traits
       , sub_match_impl<BidiIter> *sub_matches
       , std::size_t size
     )
     {
-        what.init_(regex_id, sub_matches, size);
+        what.init_(regex_id, traits, sub_matches, size);
     }
 
     static sub_match_vector<BidiIter> &get_sub_match_vector(match_results<BidiIter> &what)

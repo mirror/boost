@@ -128,7 +128,8 @@
             // HACKHACK proto overloads operator&, which means that proto-ified objects
             // cannot have their addresses taken, unless we use the following hack to
             // make &x implicitly convertible to X*.
-            operator typename detail::address_of_hack<Tag, arg0_type>::type() const
+            typedef typename detail::address_of_hack<Tag, arg0_type>::type address_of_hack_type_;
+            operator address_of_hack_type_() const
             {
                 return boost::addressof(this->arg0.expr);
             }

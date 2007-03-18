@@ -121,7 +121,7 @@ struct c_regex_traits
     typedef std::basic_string<char_type> string_type;
     typedef detail::empty_locale locale_type;
     typedef typename detail::char_class_impl<Char>::char_class_type char_class_type;
-    typedef regex_traits_version_1_tag version_tag;
+    typedef regex_traits_version_2_tag version_tag;
     typedef detail::c_regex_traits_base<Char> base_type;
 
     /// Initialize a c_regex_traits object to use the global C locale.
@@ -179,6 +179,45 @@ struct c_regex_traits
     static char_type translate_nocase(char_type ch)
     {
         return detail::c_tolower(ch);
+    }
+
+    /// Converts a character to lower-case using the current global C locale.
+    ///
+    /// \param ch The source character.
+    /// \return std::tolower(ch) if Char is char, std::towlower(ch) if Char is wchar_t.
+    static char_type tolower(char_type ch)
+    {
+        return detail::c_tolower(ch);
+    }
+
+    /// Converts a character to upper-case using the current global C locale.
+    ///
+    /// \param ch The source character.
+    /// \return std::toupper(ch) if Char is char, std::towupper(ch) if Char is wchar_t.
+    static char_type toupper(char_type ch)
+    {
+        return detail::c_toupper(ch);
+    }
+
+    /// Returns a string_type containing all the characters that compare equal
+    /// disregrarding case to the one passed in. This function can only be called
+    /// if has_fold_case<cc_regex_traits<Char> >::value is true.
+    ///
+    /// \param ch The source character.
+    /// \return string_type containing all chars which are equal to ch when disregarding
+    ///     case
+    //typedef array<char_type, 2> fold_case_type;
+    string_type fold_case(char_type ch) const
+    {
+        BOOST_MPL_ASSERT((is_same<char_type, char>));
+        char_type ntcs[] = {
+            detail::c_tolower(ch)
+          , detail::c_toupper(ch)
+          , 0
+        };
+        if(ntcs[1] == ntcs[0])
+            ntcs[1] = 0;
+        return string_type(ntcs);
     }
 
     /// Checks to see if a character is within a character range.
@@ -360,6 +399,13 @@ inline int c_regex_traits<wchar_t>::value(wchar_t ch, int radix)
     return begin == end ? -1 : val;
 }
 #endif
+
+// Narrow C traits has fold_case() member function.
+template<>
+struct has_fold_case<c_regex_traits<char> >
+  : mpl::true_
+{
+};
 
 }}
 

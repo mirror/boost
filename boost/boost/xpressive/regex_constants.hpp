@@ -160,13 +160,13 @@ enum match_flag_type
     //                                    ///< utility in IEEE Std 1003.1-2001, Portable Operating
     //                                    ///< SystemInterface (POSIX), Shells and Utilities.
     //                                    ///<
-    //format_perl             = 1 << 14,  ///< Specifies that when a regular expression match is to be
-    //                                    ///< replaced by a new string, that the new string is
-    //                                    ///< constructed using an implementation defined superset
-    //                                    ///< of the rules used by the ECMAScript replace function in
-    //                                    ///< ECMA-262, ECMAScript Language Specification, Chapter 15
-    //                                    ///< part 5.4.11 String.prototype.replace (FWD.1).
-    //                                    ///<
+    format_perl             = 1 << 14,  ///< Specifies that when a regular expression match is to be
+                                        ///< replaced by a new string, that the new string is
+                                        ///< constructed using an implementation defined superset
+                                        ///< of the rules used by the ECMAScript replace function in
+                                        ///< ECMA-262, ECMAScript Language Specification, Chapter 15
+                                        ///< part 5.4.11 String.prototype.replace (FWD.1).
+                                        ///<
     format_no_copy          = 1 << 15,  ///< When specified during a search and replace operation,
                                         ///< then sections of the character container sequence being
                                         ///< searched that do match the regular expression, are not
