@@ -90,11 +90,6 @@ struct case_converting_iterator
         return this->out_;
     }
 
-    void set_transform(transform_op trans, transform_scope scope)
-    {
-        (scope == Next ? this->next_ : this->rest_) = trans;
-    }
-
     case_converting_iterator &operator ++()
     {
         ++this->out_;
@@ -111,6 +106,12 @@ struct case_converting_iterator
     case_converting_iterator &operator *()
     {
         return *this;
+    }
+
+    friend bool set_transform(case_converting_iterator &iter, transform_op trans, transform_scope scope)
+    {
+        (scope == Next ? iter.next_ : iter.rest_) = trans;
+        return true;
     }
 
     case_converting_iterator &operator =(Char const &ch)
@@ -158,13 +159,6 @@ inline bool set_transform(Iterator &, transform_op, transform_scope)
     return false;
 }
 
-template<typename Iterator, typename Char>
-inline bool set_transform(case_converting_iterator<Iterator, Char> &iter, transform_op trans, transform_scope scope)
-{
-    iter.set_transform(trans, scope);
-    return true;
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 // noop_output_iterator
 //
@@ -192,7 +186,6 @@ struct noop_output_iterator
         return *this;
     }
 };
-
 
 } // namespace detail
 
@@ -886,35 +879,35 @@ private:
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'l'):
-            if(!detail::set_transform(out, detail::Lower, detail::Next))
+            if(!set_transform(out, detail::Lower, detail::Next))
             {
                 *out++ = BOOST_XPR_CHAR_(char_type, 'l');
             }
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'L'):
-            if(!detail::set_transform(out, detail::Lower, detail::Rest))
+            if(!set_transform(out, detail::Lower, detail::Rest))
             {
                 *out++ = BOOST_XPR_CHAR_(char_type, 'L');
             }
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'u'):
-            if(!detail::set_transform(out, detail::Upper, detail::Next))
+            if(!set_transform(out, detail::Upper, detail::Next))
             {
                 *out++ = BOOST_XPR_CHAR_(char_type, 'u');
             }
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'U'):
-            if(!detail::set_transform(out, detail::Upper, detail::Rest))
+            if(!set_transform(out, detail::Upper, detail::Rest))
             {
                 *out++ = BOOST_XPR_CHAR_(char_type, 'U');
             }
             break;
 
         case BOOST_XPR_CHAR_(char_type, 'E'):
-            if(!detail::set_transform(out, detail::None, detail::Rest))
+            if(!set_transform(out, detail::None, detail::Rest))
             {
                 *out++ = BOOST_XPR_CHAR_(char_type, 'E');
             }
