@@ -74,7 +74,11 @@ namespace detail
 /// INTERNAL ONLY
 inline bool ensure(bool predicate, regex_constants::error_type code, char const *str = "")
 {
-    return predicate ? true : throw regex_error(code, str);
+    if(!predicate)
+    {
+        throw regex_error(code, str);
+    }
+    return true;
 }
 
 }}} // namespace boost::xpressive::detail

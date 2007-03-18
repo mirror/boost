@@ -162,6 +162,35 @@ inline bool set_transform(case_converting_iterator<Iterator, Char> &iter, case_t
     return true;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+// noop_output_iterator
+//
+struct noop_output_iterator
+  : std::iterator<std::output_iterator_tag, void, void, void, void>
+{
+    noop_output_iterator &operator ++()
+    {
+        return *this;
+    }
+
+    noop_output_iterator &operator ++(int)
+    {
+        return *this;
+    }
+
+    noop_output_iterator &operator *()
+    {
+        return *this;
+    }
+
+    template<typename T>
+    noop_output_iterator &operator =(T const &)
+    {
+        return *this;
+    }
+};
+
+
 } // namespace detail
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -408,6 +437,10 @@ public:
         {
             return this->format_sed_(cur, end, out);
         }
+        else if(0 != (regex_constants::format_all & flags))
+        {
+            return this->format_all_(cur, end, out);
+        }
 
         return this->format_ecma_262_(cur, end, out);
     }
@@ -637,6 +670,82 @@ private:
 
     /// INTERNAL ONLY
     ///
+    template<typename ForwardIterator, typename OutputIterator>
+    OutputIterator format_all_(ForwardIterator cur, ForwardIterator end, OutputIterator out) const
+    {
+        detail::case_converting_iterator<OutputIterator, char_type> iout(out, this->traits_.get());
+        iout = this->format_all_impl_(cur, end, iout);
+        detail::ensure(cur == end
+          , regex_constants::error_paren, "unbalanced parentheses in format string");
+        return iout.base();
+    }
+
+    /// INTERNAL ONLY
+    ///
+    template<typename ForwardIterator, typename OutputIterator>
+    OutputIterator format_all_impl_(ForwardIterator &cur, ForwardIterator end, OutputIterator out, bool metacolon = false) const
+    {
+        int max = 0, sub = 0;
+        detail::noop_output_iterator noop;
+
+        while(cur != end)
+        {
+            switch(*cur)
+            {
+            case BOOST_XPR_CHAR_(char_type, '$'):
+                out = this->format_backref_(++cur, end, out);
+                break;
+
+            case BOOST_XPR_CHAR_(char_type, '\\'):
+                out = this->format_escape_(++cur, end, out);
+                break;
+
+            case BOOST_XPR_CHAR_(char_type, '('):
+                out = this->format_all_impl_(++cur, end, out);
+                detail::ensure(BOOST_XPR_CHAR_(char_type, ')') == *(cur-1)
+                  , regex_constants::error_paren, "unbalanced parentheses in format string");
+                break;
+
+            case BOOST_XPR_CHAR_(char_type, '?'):
+                detail::ensure(++cur != end
+                  , regex_constants::error_subreg, "malformed conditional in format string");
+                max = static_cast<int>(this->size() - 1);
+                sub = detail::toi(cur, end, *this->traits_, 10, max);
+                detail::ensure(0 != sub, regex_constants::error_subreg, "invalid back-reference");
+                if(this->sub_matches_[ sub ].matched)
+                {
+                    out = this->format_all_impl_(cur, end, out, true);
+                    if(BOOST_XPR_CHAR_(char_type, ':') == *(cur-1))
+                        this->format_all_impl_(cur, end, noop);
+                }
+                else
+                {
+                    this->format_all_impl_(cur, end, noop, true);
+                    if(BOOST_XPR_CHAR_(char_type, ':') == *(cur-1))
+                        out = this->format_all_impl_(cur, end, out);
+                }
+                return out;
+
+            case BOOST_XPR_CHAR_(char_type, ':'):
+                if(metacolon)
+                {
+            case BOOST_XPR_CHAR_(char_type, ')'):
+                    ++cur;
+                    return out;
+                }
+                // else fall-through
+
+            default:
+                *out++ = *cur++;
+                break;
+            }
+        }
+
+        return out;
+    }
+
+    /// INTERNAL ONLY
+    ///
     template<typename OutputIterator>
     OutputIterator format_backref_
     (
@@ -673,7 +782,8 @@ private:
             int max = static_cast<int>(this->size() - 1);
             int sub = detail::toi(cur, end, *this->traits_, 10, max);
             detail::ensure(0 != sub, regex_constants::error_subreg, "invalid back-reference");
-            out = std::copy(this->sub_matches_[ sub ].first, this->sub_matches_[ sub ].second, out);
+            if(this->sub_matches_[ sub ].matched)
+                out = std::copy(this->sub_matches_[ sub ].first, this->sub_matches_[ sub ].second, out);
         }
         else
         {
@@ -811,7 +921,8 @@ private:
             if(0 < this->traits_->value(ch, 10))
             {
                 int sub = this->traits_->value(ch, 10);
-                out = std::copy(this->sub_matches_[ sub ].first, this->sub_matches_[ sub ].second, out);
+                if(this->sub_matches_[ sub ].matched)
+                    out = std::copy(this->sub_matches_[ sub ].first, this->sub_matches_[ sub ].second, out);
             }
             else
             {

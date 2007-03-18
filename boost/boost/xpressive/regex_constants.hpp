@@ -176,7 +176,11 @@ enum match_flag_type
                                         ///< then only the first occurrence of the regular
                                         ///< expression is replaced.
                                         ///<
-    format_literal          = 1 << 17   ///< Treat the format string as a literal.
+    format_literal          = 1 << 17,  ///< Treat the format string as a literal.
+                                        ///<
+    format_all              = 1 << 18   ///< Specifies that all syntax extensions are enabled,
+                                        ///< including conditional (?ddexpression1:expression2)
+                                        ///< replacements.
                                         ///<
 };
 
