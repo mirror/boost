@@ -55,6 +55,7 @@ void test_replace()
    TEST_REGEX_REPLACE("(A+)", perl, "...AAA,,,", match_default|format_no_copy, "\\l$1", "aAA");
    TEST_REGEX_REPLACE("(A+)", perl, "...AAA,,,", match_default|format_no_copy, "\\L$1", "aaa");
    TEST_REGEX_REPLACE("(A+)", perl, "...AAA,,,", match_default|format_no_copy, "\\L$1\\E$1", "aaaAAA");
+   TEST_REGEX_REPLACE("\\w+", perl, "fee FOO FAR bAR", match_default|format_perl, "\\L\\u$0", "Fee Foo Far Bar");
    // sed format sequences:
    TEST_REGEX_REPLACE("(a+)(b+)", perl, " ...aabb,,", match_default|format_sed|format_no_copy, "\\0", "aabb");
    TEST_REGEX_REPLACE("(a+)(b+)", perl, " ...aabb,,", match_default|format_sed|format_no_copy, "\\1", "aa");
