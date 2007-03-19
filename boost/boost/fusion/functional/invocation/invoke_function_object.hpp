@@ -19,7 +19,6 @@
 
 #include <boost/blank.hpp>
 
-#include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 
 #include <boost/fusion/support/category_of.hpp>
@@ -53,10 +52,7 @@ namespace boost { namespace fusion
         template< 
             class Function, class Sequence, 
             int N = result_of::size<Sequence>::value,
-            bool RandomAccess = boost::is_convertible< 
-                    typename traits::category_of<Sequence>::type,
-                    fusion::random_access_traversal_tag 
-                >::value 
+            bool RandomAccess = traits::is_random_access<Sequence>::value 
             >
         struct invoke_function_object_impl
         {

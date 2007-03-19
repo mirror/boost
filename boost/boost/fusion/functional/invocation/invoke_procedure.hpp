@@ -31,7 +31,6 @@
 
 #include <boost/blank.hpp>
 
-#include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 
 #include <boost/function_types/is_callable_builtin.hpp>
@@ -72,10 +71,7 @@ namespace boost { namespace fusion
             int N = result_of::size<Sequence>::value,
             bool CBI = ft::is_callable_builtin<Function>::value,
             bool MFP = ft::is_member_function_pointer<Function>::value,
-            bool RandomAccess = boost::is_convertible< 
-                    typename traits::category_of<Sequence>::type,
-                    fusion::random_access_traversal_tag 
-                >::value 
+            bool RandomAccess = traits::is_random_access<Sequence>::value
             >
         struct invoke_procedure_impl
         {
