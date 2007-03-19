@@ -12,6 +12,8 @@
 #include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/sequence/view/iterator_range/detail/begin_impl.hpp>
 #include <boost/fusion/sequence/view/iterator_range/detail/end_impl.hpp>
+#include <boost/fusion/sequence/view/iterator_range/detail/at_impl.hpp>
+#include <boost/fusion/sequence/view/iterator_range/detail/value_at_impl.hpp>
 #include <boost/fusion/iterator/mpl/convert_iterator.hpp>
 #include <boost/fusion/iterator/distance.hpp>
 #include <boost/mpl/bool.hpp>
@@ -31,9 +33,7 @@ namespace boost { namespace fusion
         typedef typename result_of::distance<begin_type, end_type>::type size;
         typedef mpl::true_ is_view;
 
-        typedef forward_traversal_tag category;
-        // typedef typename traits::category_of<begin_type>::type category;
-        // TODO: make it work - tosh
+        typedef typename traits::category_of<begin_type>::type category;
 
         iterator_range(First const& first, Last const& last)
             : first(convert_iterator<First>::call(first))
