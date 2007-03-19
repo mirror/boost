@@ -47,10 +47,21 @@ namespace boost { namespace fusion {
 
         struct seq_ref_size
         {
-            template<typename Seq>
+            template<typename Seq, 
+                typename SeqClass = typename remove_reference<Seq>::type, 
+                bool HasSize = traits::is_forward<SeqClass>::value
+                >
             struct result
-                : result_of::size<typename remove_reference<Seq>::type>
+                : result_of::size<SeqClass>
             {};
+
+            static int const int_max = static_cast<int>(
+                static_cast<unsigned>(~0) >> 1);
+
+            template<typename Seq, typename SeqClass>
+            struct result<Seq, SeqClass, false>
+                : mpl::int_<int_max>
+            {}; 
         };
 
         struct poly_min

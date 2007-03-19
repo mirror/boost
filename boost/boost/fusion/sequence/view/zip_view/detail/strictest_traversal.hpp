@@ -15,7 +15,7 @@
 #include <boost/fusion/sequence/intrinsic/mpl.hpp>
 #include <boost/fusion/algorithm/iteration/fold.hpp>
 #include <boost/type_traits/remove_reference.hpp>
-#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_convertible.hpp>
 
 namespace boost { namespace fusion {
     
@@ -25,6 +25,19 @@ namespace boost { namespace fusion {
 
     namespace detail
     {
+        template<typename Tag1, typename Tag2,
+            bool Tag1Stricter = boost::is_convertible<Tag2,Tag1>::value>
+        struct stricter_traversal
+        {
+            typedef Tag1 type;
+        };
+
+        template<typename Tag1, typename Tag2>
+        struct stricter_traversal<Tag1,Tag2,false>
+        {
+            typedef Tag2 type;
+        };
+
         template<typename Next, typename StrictestSoFar>
         struct strictest_traversal_impl
         {
@@ -32,23 +45,7 @@ namespace boost { namespace fusion {
             typedef typename traits::category_of<
                 typename remove_reference<Next>::type>::type tag2;
 
-            typedef typename mpl::or_<
-                is_same<tag1, fusion::forward_traversal_tag>,
-                is_same<tag2, fusion::forward_traversal_tag> >::type 
-            has_forward_traversal;
-
-            typedef typename mpl::or_<
-                is_same<tag1, fusion::bidirectional_traversal_tag>,
-                is_same<tag2, fusion::bidirectional_traversal_tag> >::type
-            has_bidirectional_traversal;
-
-            typedef typename mpl::if_<
-                has_forward_traversal,
-                forward_traversal_tag,
-                typename mpl::if_<
-                has_bidirectional_traversal,
-                bidirectional_traversal_tag,
-                random_access_traversal_tag>::type>::type type;
+            typedef typename stricter_traversal<tag1,tag2>::type type;
         };
 
         template<typename Sequence>
