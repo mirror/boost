@@ -113,11 +113,18 @@ deserve consideration:
    library's acceptance, but it would be worth while for the authors to
    consider a more telling name.
 
+   Dan - I like the name Fusion, and there is precendent for less direct
+   library names like Spirit and Xpressive in Boost. (And Boost is not
+   exactly an explicit name either).
+
 * The mechanism for extending Fusion with new containers and iterators
    is complex and involves implementing a number of components,
    especially regarding iterators. An adaptation layer that is
    analogous to the Boost.Iterator library would be a fine addition to
    Fusion.
+
+   Dan - Joel added iterator and container adapters, still to be documented
+   as part of the improved extension docs to be done by me.
 
 * It would be beneficial to supply Boost.Serialization support for the
    Fusion container types. I am sure, as mentioned, that the authors
