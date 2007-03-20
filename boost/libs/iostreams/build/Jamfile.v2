@@ -32,7 +32,7 @@ for local v in NO_COMPRESSION
 # main target and returns it. If compression is disabled, returns nothing.
 # The 'sources' argument is the list of sources names for the library,
 # which will be used if building the library.
-rule create-library ( library-name : windows-name unix-name : sources + )
+rule create-library ( library-name : windows-name unix-name : sources + : requirements * )
 {
     local LIB = $(library-name:U) ;
     if ! $(library-name) in zlib bzip2
@@ -68,13 +68,14 @@ rule create-library ( library-name : windows-name unix-name : sources + )
             $(LIB)_INCLUDE = $($(LIB)_SOURCE) ;
         }
         
-        # Should be use prebuilt library or built it owselfs?        
+        # Should we use prebuilt library or build it ourselves?        
         if $($(LIB)_SOURCE)
         {
             return [ lib boost_$(library-name) 
               : $($(LIB)_SOURCE)/$(sources).c
               : <include>$($(LIB)_INCLUDE)
 	        <location-prefix>$(LIB:L)
+	        $(requirements)
               :
               : <include>$($(LIB)_INCLUDE)
               ] ;                        
@@ -115,7 +116,8 @@ rule create-library ( library-name : windows-name unix-name : sources + )
 
 local sources ;
 local z = [ create-library zlib : zll z : adler32 compress 
-     crc32 deflate gzio infback inffast inflate inftrees trees uncompr zutil ] ;
+     crc32 deflate gzio infback inffast inflate inftrees trees uncompr zutil :
+     <link>shared:<define>ZLIB_DLL ] ;
 
 if $(z)
 {
@@ -124,7 +126,8 @@ if $(z)
 
 local bz2 = [ create-library bzip2 : libbz2 bz2 : 
     blocksort bzlib compress crctable decompress huffman 
-    mk251 randtable ] ;
+    mk251 randtable :
+    <link>shared:<def-file>$(BZIP2_SOURCE)/libbz2.def ] ;
 
 if $(bz2)
 {
