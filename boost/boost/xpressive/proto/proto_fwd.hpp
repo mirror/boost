@@ -396,13 +396,13 @@ namespace boost { namespace proto
         namespace detail
         {
             template<typename T>
-            struct static_
+            struct default_factory
             {
-                static T const value;
+                T operator()() const
+                {
+                    return T();
+                }
             };
-
-            template<typename T>
-            T const static_<T>::value = T();
         }
 
         template<typename Grammar, typename N = mpl::long_<0> >
@@ -426,7 +426,7 @@ namespace boost { namespace proto
         template<typename Grammar>
         struct identity;
 
-        template<typename Grammar, typename Always, Always const &Value = detail::static_<Always>::value>
+        template<typename Grammar, typename Always, typename Factory = detail::default_factory<Always> >
         struct always;
 
         template<typename Grammar, typename BranchState>

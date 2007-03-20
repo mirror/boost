@@ -142,7 +142,7 @@ namespace boost { namespace proto { namespace transform
     };
 
     // Always return the specified type/object
-    template<typename Grammar, typename Always, Always const &Value>
+    template<typename Grammar, typename Always, typename Factory>
     struct always
       : Grammar
     {
@@ -155,10 +155,10 @@ namespace boost { namespace proto { namespace transform
         };
 
         template<typename Expr, typename State, typename Visitor>
-        static Always const &
+        static Always
         call(Expr const &, State const &, Visitor &)
         {
-            return Value;
+            return Factory()();
         }
     };
 
