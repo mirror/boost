@@ -97,6 +97,7 @@ CHANGELOG
 - Changed behavior of the --force_include functionality, which now looks for 
   the file to be (force-)included in the current directory first.
 - Switched to Re2C V0.11.2
+- Added const specifiers to some of the context member functions.
 
 Boost V1.34.0
 - Wave Version 1.2.4
@@ -256,7 +257,8 @@ Boost V1.34.0
   generation of a #line directive.
 - Worked around a linker issue for the True64/CXX compiler, complaining about
   multiple defined symbols when using the flex_string class.
-  
+- Added missing documentation for the context::get_macro_definition function.
+
 Sat Feb 18 2005
 - Version 1.2.3
 - Added a missing throw() specification to the function 

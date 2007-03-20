@@ -193,11 +193,12 @@ public:
         { return macros.add_macro(name, has_params, parameters, definition, 
             is_predefined); }
     template <typename StringT>
-    bool is_defined_macro(StringT const &str) 
+    bool is_defined_macro(StringT const &str) const
         { return macros.is_defined(str); }
     bool get_macro_definition(typename token_type::string_type const &name, 
             bool &has_params, bool &is_predefined, position_type &pos,
-            std::vector<token_type> &parameters, token_sequence_type &definition)
+            std::vector<token_type> &parameters, 
+            token_sequence_type &definition) const
         { 
             return macros.get_macro(name, has_params, is_predefined, pos,
                 parameters, definition); 
@@ -269,7 +270,7 @@ protected:
     }
     
     template <typename IteratorT2>
-    bool is_defined_macro(IteratorT2 const &begin, IteratorT2 const &end) 
+    bool is_defined_macro(IteratorT2 const &begin, IteratorT2 const &end) const
         { return macros.is_defined(begin, end); }
 
 // maintain include paths (helper functions)

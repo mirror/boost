@@ -3,7 +3,8 @@
     <head>
         <title>The Context Object</title>
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-        <link rel="stylesheet" href="theme/style.css" type="text/css"></head>
+        <link rel="stylesheet" href="theme/style.css" type="text/css">
+    </head>
     <body text="#000000" background="theme/bkd.gif">
 <table width="100%" border="0" cellspacing="2" background="theme/bkd2.gif">
   <tr> 
@@ -60,7 +61,7 @@
         <span class="keyword">typedef</span> pp_iterator&lt;context&gt; iterator_type; 
         <span class="keyword">typedef</span> Token token_type;
         <span class="keyword">typedef</span> <span class="keyword">typename</span> token_type::position_type position_type;
-
+        <span class="keyword">typedef</span> std::list&lt;token_type&gt; token_sequence_type;<br>
     <span class="comment">// constructor</span>
         <a href="class_reference_context.html#constructor">context</a>(Iterator<span class="keyword"> const</span> &amp;first_, 
             Iterator <span class="keyword">const</span> &amp;last_, 
@@ -81,10 +82,16 @@
     <span class="comment">// maintain defined macros</span>
         <span class="keyword">bool</span> <a href="class_reference_context.html#add_macro_definition">add_macro_definition</a>(<span class="keyword">std::string</span> macrostring, 
             <span class="keyword">bool</span> is_predefined = <span class="keyword">false</span>);
-        <span class="keyword">bool</span> <a href="class_reference_context.html#is_defined_macro">is_defined_macro</a>(<span class="keyword">std::string const</span> &amp;name) <span class="keyword">const</span>;
+        <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;
+        <span class="keyword">bool</span> <a href="class_reference_context.html#is_defined_macro">is_defined_macro</a>(<span class="keyword">String const</span> &amp;name) <span class="keyword">const</span>;
         <span class="keyword">bool</span> <a href="class_reference_context.html#remove_macro_definition">remove_macro_definition</a>(<span class="keyword">std::string const</span> &amp;name, 
             <span class="keyword">bool</span> even_predefined = <span class="keyword">false</span>);
         <span class="keyword">void</span> <a href="class_reference_context.html#reset_macro_definitions">reset_macro_definitions</a>();
+    <span class="keyword">    bool</span></span> <a href="class_reference_context.html#get_macro_definition">get_macro_definition</a>(
+        <span class="keyword">    std::string const</span> &amp;name, <span class="keyword">bool</span> &amp;is_function_style, <span class="keyword">
+            bool</span> &amp;is_predefined, position_type &amp;pos, 
+            std::vector&lt;token_type&gt; &amp;parameters, 
+            token_sequence_type &amp;definition) <span class="keyword">const</span>; 
 
     <span class="comment">// other options</span>
         <span class="keyword">void</span> <a href="class_reference_context.html#language_support">set_language</a>(language_support enable);
@@ -328,10 +335,22 @@
     C++ Standard), the function throws a corresponding <tt>preprocess_exception</tt>.</p>
 </blockquote>
 <p><a name="is_defined_macro"></a><b>is_defined_macro</b></p>
-<pre><span class="keyword">    bool</span> is_defined_macro(<span class="keyword">std::string const</span> &amp;name) <span class="keyword">const</span>; </pre>
+<pre>    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> String&gt;
+    <span class="keyword">bool</span></span> is_defined_macro(String <span class="keyword">const</span> &amp;name) <span class="keyword">const</span>; </pre>
 <blockquote>
   <p>Returns, if a macro with the given <tt>name</tt> is defined, i.e. if it is 
     contained in the macro symbol table.</p>
+  </blockquote>
+<p><strong><a name="get_macro_definition"></a>get_macro_definition</strong></p>
+<pre>    <span class="keyword">bool</span></span> get_macro_definition(
+        <span class="keyword">std::string const</span> &amp;name, <span class="keyword">bool</span> &amp;is_function_style, <span class="keyword">
+        bool</span> &amp;is_predefined, position_type &amp;pos, 
+        std::vector&lt;token_type&gt; &amp;parameters, 
+        token_sequence_type &amp;definition) <span class="keyword">const</span>; </pre>
+<blockquote>
+  <p>Allows to retrieve all information known with regard to a macro definition. The parameter <tt>name</tt>    specifies the name of the macro the information should be returned for. The parameters 
+  <tt>is_function_style</tt> and <tt>is_predefined</tt> return, whether the macro has been defined as a function style macro or as a predefined macro resp. The parameter <tt>pos</tt> will contain the position the macro was defined at. The parameter <tt>parameters</tt> will contain the names of the parameters the macro was defined with and the parameter <tt>definition</tt> will contain the token sequence for the definition (macro body).</p>
+  <p>The function returns <tt>true</tt> is the macro was defined and the requested information has been successfully retrieved, <tt>false</tt> otherwise.</p>
 </blockquote>
 <p><a name="remove_macro_definition"></a><b>remove_macro_definition</b></p>
 <pre><span class="keyword">    bool</span> remove_macro_definition(
@@ -471,7 +490,7 @@
   <font size="2">Distributed under the Boost Software License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) </font> </p>
 <span class="updated"></span>
 <p class="copyright"><span class="updated">Last updated: 
-  <!-- #BeginDate format:fcAm1m -->Tuesday, March 7, 2006  13:23<!-- #EndDate -->
+  <!-- #BeginDate format:fcAm1m -->Tuesday, March 20, 2007  14:04<!-- #EndDate -->
   </span>
 </p>
 <p>&nbsp;</p>
