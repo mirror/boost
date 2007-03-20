@@ -1,7 +1,126 @@
-* Consider object equivalent of functions and algorithms (so you can do transform(iterators, deref()) with needing to put together a wrapper for deref).
+* Consider object equivalent of functions and algorithms (so you can do
+  transform(iterators, deref()) with needing to put together a wrapper for deref).
+
 * Consider segmented sequence / algorithm support
+
 * Consider utility element_ref<Seq,Member>::type thats consts and refs as appropriate
+
 * Improved motivation section
+
 * Expand details of view concept
+
 * Examples, examples, examples
+
 * look at lambda stuff
+
+* The error messages when e.g. the function is not set as const are difficult
+  to decipher. e.g. transform(s, f) <<- where f has a non-const operator()
+
+* mpl, fusion, container type preserving operations incompatible
+  -- shall we consider container-type preserving variations of the
+  functions/algorithms?
+
+* map_tie is implemented. It seems not yet documented?
+
+* multi_set, multi_map?
+
+* why is insert_range not spelled insert_sequence ?
+
+* Document the new fusion extension mechanisms
+  ->iterator_facade
+  ->sequence_facade
+
+* David A:
+  Wouldn't extension be a lot easier if iterator_base and sequence_base
+  took (optional) 2nd arguments that specify the tag?  Then you wouldn't
+  need that whole dance that enables tag dispatching (right?)
+
+* David A: is_iterator isn't documented?
+  JDG: There is no is_iterator ;) There is is_fusion_iterator, but it should
+  probably be placed in detail.
+
+* for_each takes the function object by reference to const, so you have to
+  const qualify operator() and make the data members mutable so you can change
+  them anyway.
+  Eric N: IMO, this is a bug in Fusion. There should be an overload of for_each
+  that takes a function object by non-const reference. Stateful predicates should
+  be supported, and Fusion should be explicit about where and when predicates
+  are copied, so that the state doesn't get messed up.
+
+* Make Boost.parameters library's ArgumentPacks a conforming fusion sequence
+
+* Optimize container performance with typeof / compiler defect typeof. In particular
+  improve the performance of the prototype deque implementation.
+
+* Deque docs if we decide we like it
+
+* Rewrite the whole extension docs section. More formal docs of extension point,
+  example to use the various facade types, rather than hand coding everything.
+
+* zip optimization - Zip is rather compiler heavy, try and reduce the likelihood
+  of compilers like msvc7 hitting internal compiler limits
+
+* Document the unused support added to zip for Hartmut.
+
+* Rationalize support/unused.hpp and the ignore stuff needed for tie etc.
+
+==========================================================
+
+From the fusion review (please mark all done items):
+
+The following comments refer to issues that the library authors should
+address prior to merging the library into CVS:
+
+* Documentation: Many of the reviewers stated that they would like to
+   see more tutorial documentation that demonstrates not only what the
+   particular constructs in Fusion do, but also how they are expected
+   to be used. A reasonably concise motivating example has been
+   requested. It has already been pointed out that Fusion is used for
+   some other boost libraries. A well-developed and self-contained
+   case study of when and how to use Fusion would be greatly
+   appreciated. The relationship between this library and the current
+   Boost.Tuple library, as well as Boost.Mpl, should be discussed. The
+   reference documentation is quite thorough and detailed comments
+   regarding them have already been addressed by the authors. However
+   the notion of "views" requires greater documentation. The
+   examples in the algorithm sections currently do little more than
+   demonstrate the syntax by which they can be called. Examples that
+   more specifically express intent would be a notable
+   improvement. (see for example Matt Austern's "Generic Programming
+   and the STL"). In general the documentation would benefit from
+   copy-editing.
+
+* Several commented on the use of the name "pair" for the fusion type
+   that has typedefs for two types but only contains the second type.
+   Although the typedefs and member names are consistent with the
+   std::pair object, the name "pair" is confusing. The
+   compile-time/run-time hybrid nature of this library makes it
+   difficult to find perfect metaphors for constructs in the library.
+   In this case, it seems better to find a term for this template (and
+   the concept that it models) that more directly states its purpose.
+   The name "tag_of" would also benefit from renaming.
+
+* The behavior of Fusion functions in the face of argument-dependent
+   lookup (ADL) is not well specified. This should be made
+   explicit in the reference documentation.
+
+The following comments refer to issues that, while not mandatory,
+deserve consideration:
+
+* The library name "Fusion", though not arbitrary, says little about
+   the library's purpose. There is precedent for this within boost,
+   however. A name change is not mandatory for the
+   library's acceptance, but it would be worth while for the authors to
+   consider a more telling name.
+
+* The mechanism for extending Fusion with new containers and iterators
+   is complex and involves implementing a number of components,
+   especially regarding iterators. An adaptation layer that is
+   analogous to the Boost.Iterator library would be a fine addition to
+   Fusion.
+
+* It would be beneficial to supply Boost.Serialization support for the
+   Fusion container types. I am sure, as mentioned, that the authors
+   of this library would accept a volunteer to implement this
+   functionality.
+
