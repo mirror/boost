@@ -20,6 +20,9 @@
   -- shall we consider container-type preserving variations of the
   functions/algorithms?
 
+  How about making joint_view Concept preserving? This way push/pop/front/back
+  will return a view of the same Concept. - tosh
+
 * map_tie is implemented. It seems not yet documented?
 
 * multi_set, multi_map?
@@ -67,6 +70,26 @@
 * Why do we need to set FUSION_MAX_VECTOR_SIZE when we set
   FUSION_MAX_MAP_SIZE?
 
+tosh:
+
+* Document Incrementable / Single Pass Concepts
+* Provide infinity-aware default implementation for Incrementable Sequences
+
+  Thoughts: It would probably be cleaner to have infinity conceptually
+  orthogonal so there can be infinite Bidi/RA/Assoc Sequences. 
+  OTOH it complicates things in way that might not be worth it...
+
+* Document new Concept-preserving semantics of iterator_range
+* Document forgotten Concept preserving semantics of zip_view
+
+* Implement always_view/always with repetitive_view<single_view<T> > 
+  semantics - using repetitive_view will for this purpose will be way
+  too much overhead.
+
+? Functional wrappers for intrinsics/algorithms.
+
+* Rewrite functional benchmark
+ 
 ==========================================================
 
 From the fusion review (please mark all done items):
