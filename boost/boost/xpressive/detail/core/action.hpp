@@ -13,57 +13,26 @@
 # pragma once
 #endif
 
-#include <typeinfo>
-#include <stdexcept>
-#include <boost/xpressive/detail/detail_fwd.hpp>
-#include <boost/xpressive/detail/core/quant_style.hpp>
-#include <boost/xpressive/detail/core/action_state.hpp>
-#include <boost/xpressive/detail/core/matcher/action_matcher.hpp>
-
-namespace boost { namespace xpressive
+namespace boost { namespace xpressive { namespace detail
 {
 
-///////////////////////////////////////////////////////////////////////////////
-// action
-//
-template<typename Action, typename Saved>
-struct action
-  : detail::action_matcher<Action>
-{
-    typedef Action action_type;
-    typedef Saved saved_type;
-
-    Saved &save()
-    {
-        return *static_cast<Saved *>(this);
-    }
-
+    ///////////////////////////////////////////////////////////////////////////////
+    // actionable
+    //
     template<typename BidiIter>
-    bool operator ()(match_results<BidiIter> const &match, BidiIter cur)
+    struct actionable
     {
-        return true;
-    }
+        virtual ~actionable() {}
+        virtual void execute() const {}
 
-    void restore(Saved const &saved)
-    {
-        this->action_() = saved;
-    }
-};
+        actionable()
+          : next(0)
+        {
+        }
 
-template<typename Action>
-struct action<Action, void>
-  : action<Action, int>
-{
-    int save()
-    {
-        return 0;
-    }
+        actionable<BidiIter> const *next;
+    };
 
-    void restore(int)
-    {
-    }
-};
-
-}} // namespace boost::xpressive
+}}} // namespace boost::xpressive::detail
 
 #endif

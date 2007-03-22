@@ -95,6 +95,18 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
+    ///////////////////////////////////////////////////////////////////////////////
+    // marker_transform
+    struct marker_transform
+      : proto::conditional_transform
+        <
+            is_marker_predicate
+          , marker_replace_transform
+          , marker_insert_transform
+        >
+    {
+    };
+
 }}}
 
 #endif

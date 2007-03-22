@@ -16,7 +16,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/access.hpp>
-#include <boost/xpressive/detail/core/action_state.hpp>
+#include <boost/xpressive/detail/core/action.hpp>
 #include <boost/xpressive/detail/core/sub_match_vector.hpp>
 #include <boost/xpressive/detail/utility/sequence_stack.hpp>
 #include <boost/xpressive/detail/core/regex_impl.hpp>
@@ -90,6 +90,7 @@ template<typename BidiIter>
 struct state_type
   : noncopyable
 {
+    typedef BidiIter iterator;
     typedef core_access<BidiIter> access;
     typedef match_context<BidiIter> match_context;
     typedef results_extras<BidiIter> results_extras;
@@ -97,6 +98,7 @@ struct state_type
     typedef matchable<BidiIter> matchable;
     typedef match_results<BidiIter> match_results;
     typedef sub_match_impl<BidiIter> sub_match_impl;
+    typedef actionable<BidiIter> actionable;
 
     BidiIter cur_;
     sub_match_impl *sub_matches_;
@@ -109,7 +111,8 @@ struct state_type
 
     match_context context_;
     results_extras &extras_;
-    action_state action_state_;
+    actionable action_list_;
+    actionable const **action_list_tail_;
 
     ///////////////////////////////////////////////////////////////////////////////
     //
@@ -130,7 +133,8 @@ struct state_type
       , found_partial_match_(false)
       , context_() // zero-initializes the fields of context_
       , extras_(core_access<BidiIter>::get_extras(what))
-      , action_state_(core_access<BidiIter>::get_action_state(what))
+      , action_list_()
+      , action_list_tail_(&action_list_.next)
     {
         // reclaim any cached memory in the match_results struct
         this->extras_.sub_match_stack_.unwind();
@@ -290,6 +294,7 @@ struct memento
 {
     sub_match_impl<BidiIter> *old_sub_matches_;
     std::size_t nested_results_count_;
+    actionable<BidiIter> const **action_list_tail_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -302,6 +307,7 @@ inline memento<BidiIter> save_sub_matches(state_type<BidiIter> &state)
     {
         state.extras_.sub_match_stack_.push_sequence(state.mark_count_, no_fill)
       , state.context_.results_ptr_->nested_results().size()
+      , state.action_list_tail_
     };
     std::copy(state.sub_matches_, state.sub_matches_ + state.mark_count_, mem.old_sub_matches_);
     return mem;
@@ -319,13 +325,15 @@ inline void restore_sub_matches(memento<BidiIter> const &mem, state_type<BidiIte
     state.extras_.results_cache_.reclaim_last_n(nested, count);
     std::copy(mem.old_sub_matches_, mem.old_sub_matches_ + state.mark_count_, state.sub_matches_);
     state.extras_.sub_match_stack_.unwind_to(mem.old_sub_matches_);
+    state.action_list_tail_ = mem.action_list_tail_;
+    *state.action_list_tail_ = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 // reclaim_sub_matches
 //
 template<typename BidiIter>
-inline void reclaim_sub_matches(memento<BidiIter> const &mem, state_type<BidiIter> &state)
+inline void reclaim_sub_matches(memento<BidiIter> const &mem, state_type<BidiIter> &state, bool success)
 {
     std::size_t count = state.context_.results_ptr_->nested_results().size() - mem.nested_results_count_;
     if(count == 0)
@@ -334,6 +342,12 @@ inline void reclaim_sub_matches(memento<BidiIter> const &mem, state_type<BidiIte
     }
     // else we have we must orphan this block of backrefs because we are using the stack
     // space above it.
+
+    if(!success)
+    {
+        state.action_list_tail_ = mem.action_list_tail_;
+        *state.action_list_tail_ = 0;
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

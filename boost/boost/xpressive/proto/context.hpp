@@ -314,6 +314,12 @@
         #include BOOST_PP_ITERATE()
         #undef BOOST_PROTO_ARG
 
+            template<typename A0, typename A1>
+            typename result<derived_type(proto::tag::comma, A0 &, A1 &)>::type
+            operator()(proto::tag::comma, A0 &a0, A1 &a1)
+            {
+                return a0.eval(this->cast()), a1.eval(this->cast());
+            }
         };
 
     }}

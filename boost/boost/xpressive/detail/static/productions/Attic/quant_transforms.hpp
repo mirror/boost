@@ -164,12 +164,7 @@ namespace boost { namespace xpressive { namespace detail
     struct repeater_transform
       : proto::compose_transforms
         <
-            proto::conditional_transform
-            <
-                is_marker_predicate
-              , marker_replace_transform
-              , marker_insert_transform
-            >
+            marker_transform
           , repeater_insert_transform<Greedy, Min, Max>
         >
     {

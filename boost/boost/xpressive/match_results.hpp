@@ -31,7 +31,7 @@
 #include <boost/xpressive/detail/core/sub_match_vector.hpp>
 #include <boost/xpressive/detail/utility/sequence_stack.hpp>
 #include <boost/xpressive/detail/core/results_cache.hpp>
-#include <boost/xpressive/detail/core/action_state.hpp>
+//#include <boost/xpressive/detail/core/action_state.hpp>
 #include <boost/xpressive/detail/utility/literals.hpp>
 #include <boost/xpressive/detail/utility/algorithm.hpp>
 #include <boost/xpressive/detail/utility/counted_base.hpp>
@@ -231,7 +231,7 @@ public:
       , prefix_()
       , suffix_()
       , nested_results_()
-      , action_state_()
+      //, action_state_()
       , extras_ptr_()
       , traits_()
     {
@@ -254,7 +254,7 @@ public:
       , prefix_()
       , suffix_()
       , nested_results_()
-      , action_state_(that.action_state_)
+      //, action_state_(that.action_state_)
       , extras_ptr_()
       , traits_()
     {
@@ -467,7 +467,7 @@ public:
         std::swap(this->prefix_, that.prefix_);
         std::swap(this->suffix_, that.suffix_);
         this->nested_results_.swap(that.nested_results_);
-        std::swap(this->action_state_, that.action_state_);
+        //std::swap(this->action_state_, that.action_state_);
         this->extras_ptr_.swap(that.extras_ptr_);
         this->traits_.swap(that.traits_);
     }
@@ -498,19 +498,19 @@ public:
     // state:
     /// INTERNAL ONLY
     ///
-    template<typename State>
-    void set_action_state(State &state)
-    {
-        this->action_state_.set(state);
-    }
+    //template<typename State>
+    //void set_action_state(State &state)
+    //{
+    //    this->action_state_.set(state);
+    //}
 
     /// INTERNAL ONLY
     ///
-    template<typename State>
-    State &get_action_state() const
-    {
-        return this->action_state_.BOOST_NESTED_TEMPLATE get<State>();
-    }
+    //template<typename State>
+    //State &get_action_state() const
+    //{
+    //    return this->action_state_.BOOST_NESTED_TEMPLATE get<State>();
+    //}
 
 private:
 
@@ -936,7 +936,7 @@ private:
     sub_match<BidiIter> prefix_;
     sub_match<BidiIter> suffix_;
     nested_results_type nested_results_;
-    detail::action_state action_state_;
+    //detail::action_state action_state_;
     intrusive_ptr<extras_type> extras_ptr_;
     intrusive_ptr<detail::traits<char_type> const> traits_;
 };
@@ -945,11 +945,11 @@ private:
 // action_state_cast
 /// INTERNAL ONLY
 ///
-template<typename State, typename BidiIter>
-inline State &action_state_cast(match_results<BidiIter> const &what)
-{
-    return what.BOOST_NESTED_TEMPLATE get_action_state<State>();
-}
+//template<typename State, typename BidiIter>
+//inline State &action_state_cast(match_results<BidiIter> const &what)
+//{
+//    return what.BOOST_NESTED_TEMPLATE get_action_state<State>();
+//}
 
 ///////////////////////////////////////////////////////////////////////////////
 // regex_id_filter_predicate

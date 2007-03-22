@@ -102,10 +102,10 @@ struct core_access
         return what.nested_results_;
     }
 
-    static action_state &get_action_state(match_results<BidiIter> &what)
-    {
-        return what.action_state_;
-    }
+    //static action_state &get_action_state(match_results<BidiIter> &what)
+    //{
+    //    return what.action_state_;
+    //}
 
     static void set_prefix_suffix(match_results<BidiIter> &what, BidiIter begin, BidiIter end)
     {

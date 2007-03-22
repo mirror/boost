@@ -42,25 +42,48 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    //
+    // action_transform
+    //  turn A[B] into (mark_begin(n) >> A >> mark_end(n) >> action_matcher<B>(n))
     struct action_transform
     {
-        template<typename Expr, typename, typename>
+        template<typename Expr, typename State, typename Visitor>
         struct apply
         {
+            typedef typename proto::result_of::left<Expr>::type expr_type;
+            typedef typename proto::result_of::right<Expr>::type action_type;
+
+            typedef typename marker_transform::
+                template apply<expr_type, State, Visitor>::type
+            marked_expr_type;
+
             typedef typename proto::right_shift
             <
-                typename Expr::arg0_type
-              , typename Expr::arg1_type
+                marked_expr_type
+              , typename proto::terminal<action_matcher<action_type> >::type
             >::type type;
         };
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &, Visitor &)
+        call(Expr const &expr, State const &state, Visitor &visitor)
         {
-            typename apply<Expr, State, Visitor>::type that =
-                {expr.cast().arg0, expr.cast().arg1};
+            typedef apply<Expr, State, Visitor> apply_type;
+            typedef typename apply_type::action_type action_type;
+
+            typename apply_type::marked_expr_type marked_expr =
+                marker_transform::call(proto::left(expr), state, visitor);
+
+            typename apply_type::type that =
+            {
+                marked_expr
+              , {
+                    action_matcher<action_type>
+                    (
+                        proto::right(expr)
+                      , proto::arg(proto::left(marked_expr)).mark_number_
+                    )
+                }
+            };
             return that;
         }
     };

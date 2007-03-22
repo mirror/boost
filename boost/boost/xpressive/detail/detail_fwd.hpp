@@ -127,7 +127,7 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Traits, bool ICase>
     struct string_matcher;
 
-    template<typename Action>
+    template<typename Actor>
     struct action_matcher;
 
     template<typename Xpr, bool Greedy>
@@ -282,7 +282,10 @@ namespace boost { namespace xpressive { namespace detail
     template<typename BidiIter>
     struct sub_match_vector;
 
-    struct action_state;
+    //struct action_state;
+
+    template<typename BidiIter>
+    struct actionable;
 
     template<typename Char>
     struct traits;

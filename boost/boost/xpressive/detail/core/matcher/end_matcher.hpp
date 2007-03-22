@@ -39,12 +39,19 @@ namespace boost { namespace xpressive { namespace detail
             // SPECIAL: if there is a match context on the context stack, then
             // this pattern has been nested within another. pop that context and
             // continue executing.
-            if(state.context_.prev_context_)
+            if(0 != state.context_.prev_context_)
             {
                 if(!pop_context_match(state))
                 {
                     return false;
                 }
+
+                // record the end of sub-match zero
+                s0.first = s0.begin_;
+                s0.second = tmp;
+                s0.matched = true;
+
+                return true;
             }
             else if(state.flags_.match_all_ && !state.eos() ||
                     state.flags_.match_not_null_ && state.cur_ == s0.begin_)
@@ -56,6 +63,12 @@ namespace boost { namespace xpressive { namespace detail
             s0.first = s0.begin_;
             s0.second = tmp;
             s0.matched = true;
+
+            // Now execute any actions that have been queued
+            for(actionable<BidiIter> const *actor = state.action_list_.next; 0 != actor; actor = actor->next)
+            {
+                actor->execute();
+            }
 
             return true;
         }

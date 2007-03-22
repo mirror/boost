@@ -72,12 +72,12 @@ namespace boost { namespace xpressive { namespace detail
 
             if(!this->xpr_.match(state))
             {
-                reclaim_sub_matches(mem, state);
+                reclaim_sub_matches(mem, state, false);
                 return false;
             }
             else if(next.match(state))
             {
-                reclaim_sub_matches(mem, state);
+                reclaim_sub_matches(mem, state, true);
                 return true;
             }
 

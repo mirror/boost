@@ -108,22 +108,22 @@ namespace boost { namespace xpressive { namespace detail
                 }
                 else if(next.match(state))
                 {
-                    reclaim_sub_matches(mem, state);
+                    reclaim_sub_matches(mem, state, true);
                     return true;
                 }
-                reclaim_sub_matches(mem, state);
+                reclaim_sub_matches(mem, state, false);
             }
             else
             {
                 if(!this->xpr_.match(state))
                 {
-                    reclaim_sub_matches(mem, state);
+                    reclaim_sub_matches(mem, state, false);
                     return false;
                 }
                 state.cur_ = tmp;
                 if(next.match(state))
                 {
-                    reclaim_sub_matches(mem, state);
+                    reclaim_sub_matches(mem, state, true);
                     return true;
                 }
                 restore_sub_matches(mem, state);

@@ -13,62 +13,137 @@
 # pragma once
 #endif
 
+#include <boost/assert.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
-#include <boost/xpressive/detail/core/access.hpp>
 #include <boost/xpressive/detail/core/quant_style.hpp>
+#include <boost/xpressive/detail/core/action.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
+#include <boost/xpressive/proto/proto.hpp>
+#include <boost/xpressive/proto/context.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
 
     ///////////////////////////////////////////////////////////////////////////////
+    // action
+    //
+    template<typename BidiIter, typename Actor>
+    struct action
+      : actionable<BidiIter>
+    {
+        action(Actor const &actor)
+          : actionable<BidiIter>()
+          , actor_(actor)
+        {
+        }
+
+        virtual void execute() const
+        {
+            proto::context<> ctx;
+            this->actor_.eval(ctx);
+        }
+
+    private:
+        Actor actor_;
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // subreg_transform
+    //
+    template<typename Grammar>
+    struct subreg_transform
+      : Grammar
+    {
+        subreg_transform();
+
+        template<typename Expr, typename State, typename Visitor>
+        struct apply
+          : proto::terminal<sub_match<typename State::iterator> >
+        {};
+        
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)
+        {
+            sub_match<typename State::iterator> const &sub = state.sub_matches_[ visitor ];
+            return proto::as_expr(sub);
+        }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // mark_transform
+    //
+    template<typename Grammar>
+    struct mark_transform
+      : Grammar
+    {
+        mark_transform();
+
+        template<typename Expr, typename State, typename Visitor>
+        struct apply
+          : proto::terminal<sub_match<typename State::iterator> >
+        {};
+        
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &)
+        {
+            sub_match<typename State::iterator> const &sub = state.sub_matches_[ proto::arg(expr).mark_number_ ];
+            return proto::as_expr(sub);
+        }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // BindActionArgs
+    //
+    struct BindActionArgs
+      : proto::or_<
+            subreg_transform< proto::terminal<detail::any_matcher> >
+          , mark_transform< detail::mark_tag >
+          , proto::terminal<proto::_>
+          , proto::nary_expr<proto::_, proto::vararg<BindActionArgs> >
+        >
+    {};
+
+    ///////////////////////////////////////////////////////////////////////////////
     // action_matcher
     //
-    template<typename Action>
+    template<typename Actor>
     struct action_matcher
       : quant_style<quant_none, 0, false>
     {
-        Action *action_ptr_;
+        int sub_;
+        Actor actor_;
 
-        action_matcher()
-          : action_ptr_(&action_())
+        action_matcher(Actor const &actor, int sub)
+          : sub_(sub)
+          , actor_(actor)
         {
-        }
-
-        action_matcher(action_matcher const &)
-          : action_ptr_(&action_())
-        {
-        }
-
-        action_matcher &operator =(action_matcher const &)
-        {
-            return *this; // no-op
         }
 
         template<typename BidiIter, typename Next>
         bool match(state_type<BidiIter> &state, Next const &next) const
         {
-            Action &action = *this->action_ptr_;
-            typename Action::saved_type saved(action.save());
+            // Bind the arguments
+            typedef typename BindActionArgs::apply<Actor, state_type<BidiIter>, int>::type action_type;
+            action<BidiIter, action_type> actor(BindActionArgs::call(this->actor_, state, this->sub_));
 
-            // set the action state pointer, so that action_state_cast works correctly
-            core_access<BidiIter>::get_action_state(*state.context_.results_ptr_) = state.action_state_;
+            // Put the action in the action list
+            actionable<BidiIter> const **action_list_tail = state.action_list_tail_;
+            *state.action_list_tail_ = &actor;
+            state.action_list_tail_ = &actor.next;
 
-            match_results<BidiIter> const &what = *state.context_.results_ptr_;
-            if(!action(what, state.cur_) || !next.match(state))
+            // Match the rest of the pattern
+            if(!next.match(state))
             {
-                action.restore(saved);
+                BOOST_ASSERT(0 == actor.next);
+                // remove action from list
+                *action_list_tail = 0;
+                state.action_list_tail_ = action_list_tail;
                 return false;
             }
 
             return true;
-        }
-
-    protected:
-
-        Action &action_()
-        {
-            return *static_cast<Action *>(this);
         }
     };
 

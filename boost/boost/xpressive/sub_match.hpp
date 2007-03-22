@@ -328,6 +328,56 @@ bool operator <= (sub_match<BidiIter> const &lhs, typename iterator_value<BidiIt
     return lhs.str() <= rhs;
 }
 
+// Operator+ convenience function
+template<typename BidiIter>
+typename sub_match<BidiIter>::string_type
+operator + (sub_match<BidiIter> const &lhs, sub_match<BidiIter> const &rhs)
+{
+    return lhs.str() + rhs.str();
+}
+
+template<typename BidiIter>
+typename sub_match<BidiIter>::string_type
+operator + (sub_match<BidiIter> const &lhs, typename iterator_value<BidiIter>::type const &rhs)
+{
+    return lhs.str() + rhs;
+}
+
+template<typename BidiIter>
+typename sub_match<BidiIter>::string_type
+operator + (typename iterator_value<BidiIter>::type const &lhs, sub_match<BidiIter> const &rhs)
+{
+    return lhs + rhs.str();
+}
+
+template<typename BidiIter>
+typename sub_match<BidiIter>::string_type
+operator + (sub_match<BidiIter> const &lhs, typename iterator_value<BidiIter>::type const *rhs)
+{
+    return lhs.str() + rhs;
+}
+
+template<typename BidiIter>
+typename sub_match<BidiIter>::string_type
+operator + (typename iterator_value<BidiIter>::type const *lhs, sub_match<BidiIter> const &rhs)
+{
+    return lhs + rhs.str();
+}
+
+template<typename BidiIter>
+typename sub_match<BidiIter>::string_type
+operator + (sub_match<BidiIter> const &lhs, typename sub_match<BidiIter>::string_type const &rhs)
+{
+    return lhs.str() + rhs;
+}
+
+template<typename BidiIter>
+typename sub_match<BidiIter>::string_type
+operator + (typename sub_match<BidiIter>::string_type const &lhs, sub_match<BidiIter> const &rhs)
+{
+    return lhs + rhs.str();
+}
+
 }} // namespace boost::xpressive
 
 #endif
