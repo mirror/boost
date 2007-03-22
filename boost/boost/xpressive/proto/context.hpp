@@ -35,6 +35,19 @@
     #include <boost/xpressive/proto/tags.hpp>
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
+    /// INTERNAL ONLY
+    ///
+    #define BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL(Nested, Expr)\
+        BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested_and_hidden, Expr)\
+        struct Nested\
+          : mpl::if_c<\
+                1==sizeof(detail::check_reference(Expr))\
+              , typename nested_and_hidden::type &\
+              , typename nested_and_hidden::type\
+            >\
+        {};\
+        /**/
+
     namespace boost { namespace proto
     {
         namespace detail
@@ -82,20 +95,32 @@
             //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(* const)()>::type>));
             //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(* const &)()>::type>));
             //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(&)()>::type>));
-        }
 
-        /// INTERNAL ONLY
-        ///
-    #define BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL(Nested, Expr)\
-        BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested_and_hidden, Expr)\
-        struct Nested\
-          : mpl::if_c<\
-                1==sizeof(detail::check_reference(Expr))\
-              , typename nested_and_hidden::type &\
-              , typename nested_and_hidden::type\
-            >\
-        {};\
-        /**/
+            template<typename A0, typename A1>
+            struct comma_result
+            {
+                BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL(nested, (detail::make<A0>(), detail::make<A1>()))
+                typedef typename nested::type type;
+            };
+
+            template<typename A0>
+            struct comma_result<A0, void>
+            {
+                typedef void type;
+            };
+
+            template<typename A1>
+            struct comma_result<void, A1>
+            {
+                typedef A1 type;
+            };
+
+            template<>
+            struct comma_result<void, void>
+            {
+                typedef void type;
+            };
+        }
 
         /// INTERNAL ONLY
         ///
@@ -237,12 +262,7 @@
             {
                 typedef typename proto::result_of::eval<A0, derived_type>::type eval_type0;
                 typedef typename proto::result_of::eval<A1, derived_type>::type eval_type1;
-                BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL(nested, (detail::make<eval_type0>(), detail::make<eval_type1>()))
-                typedef typename nested::type type;
-                static type call(typename detail::as_param<eval_type0>::type a0, typename detail::as_param<eval_type1>::type a1)
-                {
-                    return a0, a1;
-                }
+                typedef typename detail::comma_result<eval_type0, eval_type1>::type type;
             };
 
             // Handle post-increment specially.

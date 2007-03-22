@@ -30,6 +30,17 @@ namespace boost { namespace xpressive
             return const_cast<T &>(t);
         }
 
+        struct push_impl
+        {
+            typedef void result_type;
+
+            template<typename Sequence, typename Value>
+            void operator()(Sequence &seq, Value const &val) const
+            {
+                detail::unconst(seq).push(val);
+            }
+        };
+
         struct push_back_impl
         {
             typedef void result_type;
@@ -52,6 +63,93 @@ namespace boost { namespace xpressive
             }
         };
 
+        struct pop_impl
+        {
+            typedef void result_type;
+
+            template<typename Sequence>
+            void operator()(Sequence &seq) const
+            {
+                detail::unconst(seq).pop();
+            }
+        };
+
+        struct pop_back_impl
+        {
+            typedef void result_type;
+
+            template<typename Sequence>
+            void operator()(Sequence &seq) const
+            {
+                detail::unconst(seq).pop_back();
+            }
+        };
+
+        struct pop_front_impl
+        {
+            typedef void result_type;
+
+            template<typename Sequence>
+            void operator()(Sequence &seq) const
+            {
+                detail::unconst(seq).pop_front();
+            }
+        };
+
+        struct front_impl
+        {
+            template<typename Sig>
+            struct result;
+
+            template<typename This, typename Sequence>
+            struct result<This(Sequence &)>
+            {
+                typedef typename Sequence::value_type type;
+            };
+
+            template<typename Sequence>
+            typename Sequence::value_type operator()(Sequence &seq) const
+            {
+                return seq.front();
+            }
+        };
+
+        struct back_impl
+        {
+            template<typename Sig>
+            struct result;
+
+            template<typename This, typename Sequence>
+            struct result<This(Sequence &)>
+            {
+                typedef typename Sequence::value_type type;
+            };
+
+            template<typename Sequence>
+            typename Sequence::value_type operator()(Sequence &seq) const
+            {
+                return seq.back();
+            }
+        };
+
+        struct top_impl
+        {
+            template<typename Sig>
+            struct result;
+
+            template<typename This, typename Sequence>
+            struct result<This(Sequence &)>
+            {
+                typedef typename Sequence::value_type type;
+            };
+
+            template<typename Sequence>
+            typename Sequence::value_type operator()(Sequence &seq) const
+            {
+                return seq.top();
+            }
+        };
+
         template<typename T>
         struct as_impl
         {
@@ -65,8 +163,15 @@ namespace boost { namespace xpressive
         };
     }
 
+    proto::terminal<detail::push_impl>::type const push = {{}};
     proto::terminal<detail::push_back_impl>::type const push_back = {{}};
     proto::terminal<detail::push_front_impl>::type const push_front = {{}};
+    proto::terminal<detail::pop_impl>::type const pop = {{}};
+    proto::terminal<detail::pop_back_impl>::type const pop_back = {{}};
+    proto::terminal<detail::pop_front_impl>::type const pop_front = {{}};
+    proto::terminal<detail::top_impl>::type const top = {{}};
+    proto::terminal<detail::back_impl>::type const back = {{}};
+    proto::terminal<detail::front_impl>::type const front = {{}};
 
     template<typename T, typename D>
     typename proto::function<
