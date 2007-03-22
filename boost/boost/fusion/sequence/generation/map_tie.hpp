@@ -14,6 +14,7 @@
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 #include <boost/fusion/sequence/container/map/map.hpp>
+#include <boost/fusion/sequence/container/map/limits.hpp>
 #include <boost/fusion/support/pair.hpp>
 #include <boost/fusion/sequence/generation/pair_tie.hpp>
 #include <boost/type_traits/add_reference.hpp>
@@ -26,9 +27,9 @@ namespace boost { namespace fusion
     {
         template <
             BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(
-                FUSION_MAX_VECTOR_SIZE, typename K, void_)
+                FUSION_MAX_MAP_SIZE, typename K, void_)
           , BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(
-                FUSION_MAX_VECTOR_SIZE, typename D, void_)
+                FUSION_MAX_MAP_SIZE, typename D, void_)
           , typename Extra = void_
         >
         struct map_tie;
@@ -55,7 +56,7 @@ namespace boost { namespace fusion
     fusion::pair_tie<BOOST_PP_CAT(K, n)>(BOOST_PP_CAT(_, n))                   \
 
 #define BOOST_PP_FILENAME_1 <boost/fusion/sequence/generation/map_tie.hpp>
-#define BOOST_PP_ITERATION_LIMITS (1, FUSION_MAX_VECTOR_SIZE)
+#define BOOST_PP_ITERATION_LIMITS (1, FUSION_MAX_MAP_SIZE)
 #include BOOST_PP_ITERATE()
 
 #undef BOOST_FUSION_PAIR
