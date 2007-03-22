@@ -5,8 +5,11 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#define BOOST_XPRESSIVE_BETTER_ERRORS
+
 #include <map>
 #include <list>
+#include <stack>
 #include <numeric>
 #include <boost/xpressive/xpressive_static.hpp>
 #include <boost/xpressive/regex_actions.hpp>
@@ -72,7 +75,7 @@ void test3()
     }
     else
     {
-        BOOST_REQUIRE_EQUAL(result.size(), 4);
+        BOOST_REQUIRE_EQUAL(result.size(), 4u);
         BOOST_CHECK_EQUAL(*result.begin(), 1);
         BOOST_CHECK_EQUAL(*++result.begin(), 23);
         BOOST_CHECK_EQUAL(*++++result.begin(), 456);
@@ -98,10 +101,69 @@ void test4()
     }
     else
     {
-        BOOST_REQUIRE_EQUAL(result.size(), 3);
+        BOOST_REQUIRE_EQUAL(result.size(), 3u);
         BOOST_CHECK_EQUAL(result["aaa"], 1);
         BOOST_CHECK_EQUAL(result["bbb"], 23);
         BOOST_CHECK_EQUAL(result["ccc"], 456);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// test5
+//  calculator that calculates. This is just silly, but hey.
+void test5()
+{
+    using namespace boost::xpressive;
+
+    int left = 0, right = 0;
+    std::stack<int> stack;
+    std::string str("4+5*(1+1)");
+
+    sregex group, factor, term, expression;
+
+    group       = '(' >> by_ref(expression) >> ')';
+    factor      = (+_d)[ push(stack, as<int>(_)) ] | group;
+    term        = factor >> *(
+                                ('*' >> factor)
+                                    [ var(right) = top(stack)
+                                    , pop(stack)
+                                    , var(left) = top(stack)
+                                    , pop(stack)
+                                    , push(stack, var(left) * var(right))
+                                    ]
+                              | ('/' >> factor)
+                                    [ var(right) = top(stack)
+                                    , pop(stack)
+                                    , var(left) = top(stack)
+                                    , pop(stack)
+                                    , push(stack, var(left) / var(right))
+                                    ]
+                             );
+    expression  = term >> *(
+                                ('+' >> term)
+                                    [ var(right) = top(stack)
+                                    , pop(stack)
+                                    , var(left) = top(stack)
+                                    , pop(stack)
+                                    , push(stack, var(left) + var(right))
+                                    ]
+                              | ('-' >> term)
+                                    [ var(right) = top(stack)
+                                    , pop(stack)
+                                    , var(left) = top(stack)
+                                    , pop(stack)
+                                    , push(stack, var(left) - var(right))
+                                    ]
+                             );
+
+    if(!regex_match(str, expression))
+    {
+        BOOST_ERROR("oops");
+    }
+    else
+    {
+        BOOST_REQUIRE_EQUAL(stack.size(), 1u);
+        BOOST_CHECK_EQUAL(stack.top(), 14);
     }
 }
 
@@ -117,6 +179,7 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
     test->add(BOOST_TEST_CASE(&test2));
     test->add(BOOST_TEST_CASE(&test3));
     test->add(BOOST_TEST_CASE(&test4));
+    test->add(BOOST_TEST_CASE(&test5));
     return test;
 }
 
