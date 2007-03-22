@@ -2604,6 +2604,7 @@ succeeding sections document the various /tier/ flavors.
 
 * __list_tie__
 * __vector_tie__
+* __map_tie__
 
 Example:
 
@@ -2727,6 +2728,57 @@ default. Example:
     int i = 123;
     double d = 123.456;
     vector_tie(i, d)
+
+[endsect]
+
+[section map_tie]
+
+[heading Description]
+
+Constructs a tie using a __map__ sequence.
+
+[heading Synopsis]
+
+    template <typename K0, typename K1,... typename KN, typename D0, typename D1,... typename DN>
+    __map__<__pair__<K0, D0&>, __pair__<K1, D1&>,... __pair__<KN, DN&> >
+    map_tie(D0& d0, D1& d1... DN& dN);
+
+The variadic function accepts `0` to `FUSION_MAX_MAP_SIZE` elements, 
+where `FUSION_MAX_MAP_SIZE` is a user definable predefined maximum that 
+defaults to `10`, and a corresponding number of key types. 
+You may define the preprocessor constant  `FUSION_MAX_MAP_SIZE` before 
+including any Fusion header to change the default. Example:
+
+    #define FUSION_MAX_MAP_SIZE 20
+
+[heading Parameters]
+
+[table
+    [[Parameter]        [Requirement]                       [Description]]
+    [[`K0, K1,... KN`]  [Any type][The key types associated with each of the `x1,x2,...,xN` values]]
+    [[`x0, x1,... xN`]  [Instances of `T0, T1,... TN`]                      [The arguments to `map_tie`]]
+]
+
+[heading Expression Semantics]
+
+    map_tie<K0, K1,... KN>(x0, x1,... xN);
+
+[*Return type]: __map__<__pair__<K0, D0&>, __pair__<K1, D1&>,... __pair__<KN, DN&> >
+
+[*Semantics]: Create a __map__ of references from `x0, x1,... xN` with keys `K0, K1,... KN`
+
+[heading Header]
+
+    #include <boost/fusion/sequence/generation/map_tie.hpp>
+
+[heading Example]
+
+    struct int_key;
+    struct double_key;
+    ...
+    int i = 123;
+    double d = 123.456;
+    map_tie<int_key, double_key>(i, d)
 
 [endsect]
 
@@ -3048,6 +3100,54 @@ default. Example:
 [heading Example]
 
     result_of::vector_tie<int, double>::type
+
+[endsect]
+
+[section map_tie]
+
+[heading Description]
+
+Returns the result type of __map_tie__.
+
+[heading Synopsis]
+
+    template <typename K0, typename K1,... typename KN, typename D0, typename D1,... typename DN>
+    struct map_tie;
+
+The variadic function accepts `0` to `FUSION_MAX_MAP_SIZE` elements, 
+where `FUSION_MAX_MAP_SIZE` is a user definable predefined maximum that 
+defaults to `10`. You may define the preprocessor constant 
+`FUSION_MAX_MAP_SIZE` before including any Fusion header to change the 
+default. Example:
+
+    #define FUSION_MAX_MAP_SIZE 20
+
+[heading Parameters]
+
+[table
+    [[Parameter]        [Requirement]       [Description]]
+    [[`K0, K1,... KN`]  [Any type]          [The key types for `map_tie`]]
+    [[`D0, D1,... DN`]  [Any type]          [The arguments types for `map_tie`]]
+]
+
+[heading Expression Semantics]
+
+    result_of::map_tie<K0, K1,... KN, D0, D1,... DN>::type;
+
+[*Return type]: __map__<__pair__<K0, D0&>, __pair__<K1, D1&>,... __pair__<KN, DN&> >
+
+[*Semantics]: Create a __map__ of references from `D0, D1,... DN` with keys `K0, K1,... KN`
+
+[heading Header]
+
+    #include <boost/fusion/sequence/generation/map_tie.hpp>
+
+[heading Example]
+
+    struct int_key;
+    struct double_key;
+    ...
+    result_of::map_tie<int_key, double_key, int, double>::type
 
 [endsect]
 

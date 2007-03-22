@@ -161,6 +161,7 @@
 [def __make_vector__            [link fusion.sequences.generation.functions.make_vector `make_vector`]]
 [def __result_of_make_vector__  [link fusion.sequences.generation.metafunctions.make_vector `result_of::make_vector`]]
 [def __vector_tie__             [link fusion.sequences.generation.functions.vector_tie `vector_tie`]]
+[def __map_tie__             [link fusion.sequences.generation.functions.vector_tie `map_tie`]]
 [def __result_of_vector_tie__   [link fusion.sequences.generation.metafunctions.vector_tie `result_of::vector_tie`]]
 [def __make_vector__            [link fusion.sequences.generation.functions.make_vector `make_vector`]]
 [def __result_of_make_vector__  [link fusion.sequences.generation.metafunctions.make_vector `result_of::make_vector`]]

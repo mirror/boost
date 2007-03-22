@@ -25,7 +25,7 @@
   How about making joint_view Concept preserving? This way push/pop/front/back
   will return a view of the same Concept. - tosh
 
-* map_tie is implemented. It seems not yet documented?
+* map_tie is implemented. It seems not yet documented? - Dan: done now!
 
 * multi_set, multi_map?
 
