@@ -250,6 +250,11 @@ namespace boost { namespace xpressive
     {};
 
     template<typename Char>
+    struct XpressiveAction
+      : proto::subscript< XpressiveGrammar<Char>, proto::_ >
+    {};
+
+    template<typename Char>
     struct XpressiveTerminal
       : proto::or_<
             proto::and_<
@@ -257,13 +262,12 @@ namespace boost { namespace xpressive
               , proto::if_<detail::is_xpressive_terminal<Char, proto::result_of::arg<mpl::_> > >
             >
           , XpressiveComplementedExpression<Char>
-          , proto::or_<
-                XpressiveTaggedSubExpression<Char>
-              , XpressiveLookAroundAssertion<Char>
-              , XpressiveModifiedSubExpression<Char>
-              , XpressiveIndependentSubExpression<Char>
-              , XpressiveSet<Char>
-            >
+          , XpressiveTaggedSubExpression<Char>
+          , XpressiveLookAroundAssertion<Char>
+          , XpressiveModifiedSubExpression<Char>
+          , XpressiveIndependentSubExpression<Char>
+          , XpressiveSet<Char>
+          , XpressiveAction<Char>
         >
     {};
 
