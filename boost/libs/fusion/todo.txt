@@ -1,6 +1,8 @@
 * Consider object equivalent of functions and algorithms (so you can do
   transform(iterators, deref()) with needing to put together a wrapper for deref).
 
+* Make algorithms work with mutable data 
+
 * Consider segmented sequence / algorithm support
 
 * Consider utility element_ref<Seq,Member>::type thats consts and refs as appropriate
