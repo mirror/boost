@@ -12,7 +12,9 @@
 #include <boost/fusion/support/detail/is_mpl_sequence.hpp>
 #include <boost/mpl/has_xxx.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <boost/mpl/identity.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/mpl/if.hpp>
 #include <utility>
 
 namespace boost
@@ -38,6 +40,7 @@ namespace boost
 namespace boost { namespace fusion
 {
     struct non_fusion_tag;
+    struct mpl_sequence_tag;
 
     namespace detail
     {
@@ -48,9 +51,10 @@ namespace boost { namespace fusion
     {
         template <typename Sequence, typename Active>
         struct tag_of
-        {
-            typedef non_fusion_tag type;
-        };
+          : mpl::if_< detail::is_mpl_sequence<Sequence>,
+              mpl::identity<mpl_sequence_tag>,
+              mpl::identity<non_fusion_tag> >::type
+        { };
 
         template <typename Sequence>
         struct tag_of<Sequence, typename boost::enable_if<detail::has_fusion_tag<Sequence> >::type>
@@ -72,9 +76,6 @@ namespace boost { namespace fusion
 
         template <typename T, std::size_t N>
         struct tag_of<boost::array<T, N> >;
-
-        template <typename Sequence>
-        struct tag_of<Sequence, typename boost::enable_if<detail::is_mpl_sequence<Sequence> >::type>;
 
         template<typename T1, typename T2>
         struct tag_of<std::pair<T1, T2> >;
