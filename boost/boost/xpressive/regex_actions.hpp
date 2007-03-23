@@ -188,9 +188,21 @@ namespace boost { namespace xpressive
     }
 
     template<typename T>
-    typename proto::result_of::as_arg<T>::type var(T &t)
+    typename proto::terminal<T>::type val(T const &t)
     {
-        return proto::as_arg(t);
+        return proto::terminal<T>::type::make(t);
+    }
+
+    template<typename T>
+    typename proto::terminal<T &>::type ref(T &t)
+    {
+        return proto::terminal<T &>::type::make(t);
+    }
+
+    template<typename T>
+    typename proto::terminal<T const &>::type cref(T const &t)
+    {
+        return proto::terminal<T const &>::type::make(t);
     }
 
     template<typename Predicate>

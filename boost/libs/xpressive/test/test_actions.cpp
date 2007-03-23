@@ -92,7 +92,7 @@ void test4()
 
     std::map<std::string, int> result;
     std::string str("aaa=>1 bbb=>23 ccc=>456");
-    sregex pair = ( (s1= +_w) >> "=>" >> (s2= +_d) )[ var(result)[s1] = as<int>(s2) ];
+    sregex pair = ( (s1= +_w) >> "=>" >> (s2= +_d) )[ ref(result)[s1] = as<int>(s2) ];
     sregex rx = pair >> *(+_s >> pair);
 
     if(!regex_match(str, rx))
@@ -125,34 +125,34 @@ void test5()
     factor      = (+_d)[ push(stack, as<int>(_)) ] | group;
     term        = factor >> *(
                                 ('*' >> factor)
-                                    [ var(right) = top(stack)
+                                    [ ref(right) = top(stack)
                                     , pop(stack)
-                                    , var(left) = top(stack)
+                                    , ref(left) = top(stack)
                                     , pop(stack)
-                                    , push(stack, var(left) * var(right))
+                                    , push(stack, ref(left) * ref(right))
                                     ]
                               | ('/' >> factor)
-                                    [ var(right) = top(stack)
+                                    [ ref(right) = top(stack)
                                     , pop(stack)
-                                    , var(left) = top(stack)
+                                    , ref(left) = top(stack)
                                     , pop(stack)
-                                    , push(stack, var(left) / var(right))
+                                    , push(stack, ref(left) / ref(right))
                                     ]
                              );
     expression  = term >> *(
                                 ('+' >> term)
-                                    [ var(right) = top(stack)
+                                    [ ref(right) = top(stack)
                                     , pop(stack)
-                                    , var(left) = top(stack)
+                                    , ref(left) = top(stack)
                                     , pop(stack)
-                                    , push(stack, var(left) + var(right))
+                                    , push(stack, ref(left) + ref(right))
                                     ]
                               | ('-' >> term)
-                                    [ var(right) = top(stack)
+                                    [ ref(right) = top(stack)
                                     , pop(stack)
-                                    , var(left) = top(stack)
+                                    , ref(left) = top(stack)
                                     , pop(stack)
-                                    , push(stack, var(left) - var(right))
+                                    , push(stack, ref(left) - ref(right))
                                     ]
                              );
 

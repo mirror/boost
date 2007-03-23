@@ -134,16 +134,16 @@ namespace boost { namespace xpressive { namespace detail
             state.action_list_tail_ = &actor.next;
 
             // Match the rest of the pattern
-            if(!next.match(state))
+            if(next.match(state))
             {
-                BOOST_ASSERT(0 == actor.next);
-                // remove action from list
-                *action_list_tail = 0;
-                state.action_list_tail_ = action_list_tail;
-                return false;
+                return true;
             }
 
-            return true;
+            BOOST_ASSERT(0 == actor.next);
+            // remove action from list
+            *action_list_tail = 0;
+            state.action_list_tail_ = action_list_tail;
+            return false;
         }
     };
 
