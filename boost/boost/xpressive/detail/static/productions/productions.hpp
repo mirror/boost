@@ -56,10 +56,16 @@ namespace boost { namespace xpressive { namespace detail
                 template apply<expr_type, State, Visitor>::type
             marked_expr_type;
 
+            typedef typename mpl::if_<
+                proto::matches<action_type, proto::terminal<predicate_placeholder<proto::_> > >
+              , predicate_matcher<action_type>
+              , action_matcher<action_type>
+            >::type matcher_type;
+
             typedef typename proto::right_shift
             <
                 marked_expr_type
-              , typename proto::terminal<action_matcher<action_type> >::type
+              , typename proto::terminal<matcher_type>::type
             >::type type;
         };
 
@@ -68,7 +74,7 @@ namespace boost { namespace xpressive { namespace detail
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
             typedef apply<Expr, State, Visitor> apply_type;
-            typedef typename apply_type::action_type action_type;
+            typedef typename apply_type::matcher_type matcher_type;
 
             typename apply_type::marked_expr_type marked_expr =
                 marker_transform::call(proto::left(expr), state, visitor);
@@ -77,7 +83,7 @@ namespace boost { namespace xpressive { namespace detail
             {
                 marked_expr
               , {
-                    action_matcher<action_type>
+                    matcher_type
                     (
                         proto::right(expr)
                       , proto::arg(proto::left(marked_expr)).mark_number_

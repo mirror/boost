@@ -57,6 +57,9 @@ namespace boost { namespace xpressive { namespace detail
 
     struct self_placeholder;
 
+    template<typename Predicate>
+    struct predicate_placeholder;
+
     ///////////////////////////////////////////////////////////////////////////////
     // matchers
     //
@@ -129,6 +132,9 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Actor>
     struct action_matcher;
+
+    template<typename Predicate>
+    struct predicate_matcher;
 
     template<typename Xpr, bool Greedy>
     struct optional_matcher;

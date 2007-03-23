@@ -123,6 +123,17 @@ struct self_placeholder
     BOOST_XPR_QUANT_STYLE(quant_variable_width, unknown_width::value, false)
 };
 
+///////////////////////////////////////////////////////////////////////////////
+// self_placeholder
+//
+template<typename Predicate>
+struct predicate_placeholder
+{
+    BOOST_XPR_QUANT_STYLE(quant_variable_width, unknown_width::value, false)
+
+    Predicate pred;
+};
+
 }}} // namespace boost::xpressive::detail
 
 #endif

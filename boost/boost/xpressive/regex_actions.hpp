@@ -18,6 +18,7 @@
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/detail/core/matcher/action_matcher.hpp>
+#include <boost/xpressive/detail/core/matcher/predicate_matcher.hpp>
 
 namespace boost { namespace xpressive
 {
@@ -190,6 +191,14 @@ namespace boost { namespace xpressive
     typename proto::result_of::as_arg<T>::type var(T &t)
     {
         return proto::as_arg(t);
+    }
+
+    template<typename Predicate>
+    typename proto::terminal<detail::predicate_placeholder<Predicate> >::type
+    if_(Predicate const &pred)
+    {
+        detail::predicate_placeholder<Predicate> p = {pred};
+        return proto::as_expr(p);
     }
 
 }}
