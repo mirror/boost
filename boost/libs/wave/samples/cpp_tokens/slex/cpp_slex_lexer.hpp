@@ -151,21 +151,21 @@ private:
 #define FLOAT_SUFFIX        "(" "[fF][lL]?" OR "[lL][fF]?" ")"
 #define CHAR_SPEC           "L?"
 
-#define BACKSLASH           "(" Q("\\") OR TRI(Q("/")) ")"
-#define ESCAPESEQ           BACKSLASH "(" \
+#define BACKSLASH           "(" "\\" OR TRI(Q("/")) ")"
+#define ESCAPESEQ           "(" BACKSLASH "(" \
                                 "[abfnrtv?'\"]" OR \
                                 BACKSLASH OR \
                                 "x" HEXDIGIT "+" OR \
                                 OCTALDIGIT OCTALDIGIT "?" OCTALDIGIT "?" \
-                            ")"
+                            "))"
 #define HEXQUAD             HEXDIGIT HEXDIGIT HEXDIGIT HEXDIGIT 
-#define UNIVERSALCHAR       BACKSLASH "(" \
+#define UNIVERSALCHAR       "(" BACKSLASH "(" \
                                 "u" HEXQUAD OR \
                                 "U" HEXQUAD HEXQUAD \
-                            ")" 
+                            "))" 
 
 #define POUNDDEF            "(" "#" OR TRI("=") OR Q("%:") ")"
-#define NEWLINEDEF          "(" "\\n" OR "\\r" OR "\\r\\n" ")"
+#define NEWLINEDEF          "(" "\n" OR "\r" OR "\r\n" ")"
 
 #if BOOST_WAVE_SUPPORT_INCLUDE_NEXT != 0
 #define INCLUDEDEF          "(include|include_next)"
@@ -380,7 +380,7 @@ lexer<IteratorT, PositionT>::init_data[INIT_DATA_SIZE] =
                 "(" ESCAPESEQ OR "[^\\n\\r\"]" OR UNIVERSALCHAR ")*" Q("\"")),
     TOKEN_DATA(SPACE, "[ \t\v\f]+"),
 //    TOKEN_DATA(SPACE2, "[\\v\\f]+"),
-    TOKEN_DATA(CONTLINE, Q("\\") "\\n"), 
+    TOKEN_DATA(CONTLINE, "\\" "\\n"), 
     TOKEN_DATA(NEWLINE, NEWLINEDEF),
     TOKEN_DATA(POUND_POUND, "##"),
     TOKEN_DATA(POUND_POUND_ALT, Q("%:") Q("%:")),
