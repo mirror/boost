@@ -335,7 +335,7 @@
         #undef BOOST_PROTO_ARG
 
             template<typename A0, typename A1>
-            typename result<derived_type(proto::tag::comma, A0 &, A1 &)>::type
+            typename boost::result_of<derived_type(proto::tag::comma, A0 &, A1 &)>::type
             operator()(proto::tag::comma, A0 &a0, A1 &a1)
             {
                 return a0.eval(this->cast()), a1.eval(this->cast());
@@ -368,7 +368,7 @@
         #endif
 
             template<typename Tag BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-            typename result<derived_type(Tag BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, A, & BOOST_PP_INTERCEPT))>::type
+            typename boost::result_of<derived_type(Tag BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, A, & BOOST_PP_INTERCEPT))>::type
             operator()(Tag BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, A, & a))
             {
                 return result<derived_type(Tag, BOOST_PP_ENUM_BINARY_PARAMS(N, A, & BOOST_PP_INTERCEPT))>::call(

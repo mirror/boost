@@ -106,8 +106,8 @@ namespace boost { namespace xpressive { namespace detail
         struct apply
         {
             typedef typename proto::result_of::arg<Expr>::type action_arg_type;
-            typedef typename action_arg_type::type arg_type;
-            typedef typename proto::terminal<arg_type &>::type type;
+            typedef typename action_arg_type::reference arg_type;
+            typedef typename proto::terminal<arg_type>::type type;
         };
         
         template<typename Expr, typename State, typename Visitor>

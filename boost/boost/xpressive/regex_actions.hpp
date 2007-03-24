@@ -30,10 +30,11 @@ namespace boost { namespace xpressive
         struct action_arg
         {
             typedef T type;
+            typedef typename add_reference<T>::type reference;
 
-            T &cast(void *pv) const
+            reference cast(void *pv) const
             {
-                return *static_cast<T *>(pv);
+                return *static_cast<typename remove_reference<T>::type *>(pv);
             }
         };
 
