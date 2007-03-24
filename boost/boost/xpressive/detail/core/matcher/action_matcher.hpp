@@ -128,9 +128,9 @@ namespace boost { namespace xpressive { namespace detail
     //
     struct BindActionArgs
       : proto::or_<
-            subreg_transform< proto::terminal<detail::any_matcher> >
-          , mark_transform< detail::mark_tag >
-          , action_arg_transform< proto::terminal< action_arg<proto::_, proto::_> > >
+            subreg_transform<proto::terminal<detail::any_matcher> >
+          , mark_transform<proto::terminal<detail::mark_placeholder> >
+          , action_arg_transform<proto::terminal<action_arg<proto::_, proto::_> > >
           , proto::terminal<proto::_>
           , proto::nary_expr<proto::_, proto::vararg<BindActionArgs> >
         >
