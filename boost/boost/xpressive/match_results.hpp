@@ -16,12 +16,15 @@
 # pragma once
 #endif
 
+#include <map>
+#include <utility>
 #include <iterator>
+#include <typeinfo>
 #include <boost/assert.hpp>
 #include <boost/integer.hpp>
+#include <boost/mpl/assert.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/iterator_adaptors.hpp>
-#include <boost/mpl/assert.hpp>
 #include <boost/numeric/conversion/converter.hpp>
 #if BOOST_ITERATOR_ADAPTORS_VERSION >= 0x0200
 # include <boost/iterator/filter_iterator.hpp>
@@ -31,13 +34,31 @@
 #include <boost/xpressive/detail/core/sub_match_vector.hpp>
 #include <boost/xpressive/detail/utility/sequence_stack.hpp>
 #include <boost/xpressive/detail/core/results_cache.hpp>
-//#include <boost/xpressive/detail/core/action_state.hpp>
 #include <boost/xpressive/detail/utility/literals.hpp>
 #include <boost/xpressive/detail/utility/algorithm.hpp>
 #include <boost/xpressive/detail/utility/counted_base.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
+
+///////////////////////////////////////////////////////////////////////////////
+// type_info_less
+//
+struct type_info_less
+{
+    bool operator()(std::type_info const *left, std::type_info const *right) const
+    {
+        return 0 != left->before(*right);
+    }
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// ActionArgBinding
+//
+struct ActionArgBinding
+  : proto::assign<proto::terminal<action_arg<proto::_, proto::_> >, proto::terminal<proto::_> >
+{
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 // results_extras
@@ -231,9 +252,9 @@ public:
       , prefix_()
       , suffix_()
       , nested_results_()
-      //, action_state_()
       , extras_ptr_()
       , traits_()
+      , args_()
     {
     }
 
@@ -254,9 +275,9 @@ public:
       , prefix_()
       , suffix_()
       , nested_results_()
-      //, action_state_(that.action_state_)
       , extras_ptr_()
       , traits_()
+      , args_(that.args_)
     {
         if(that)
         {
@@ -467,9 +488,24 @@ public:
         std::swap(this->prefix_, that.prefix_);
         std::swap(this->suffix_, that.suffix_);
         this->nested_results_.swap(that.nested_results_);
-        //std::swap(this->action_state_, that.action_state_);
         this->extras_ptr_.swap(that.extras_ptr_);
         this->traits_.swap(that.traits_);
+        this->args_.swap(that.args_);
+    }
+
+    /// TODO document me
+    ///
+    template<typename Arg>
+    match_results<BidiIter> &bind(Arg const &arg)
+    {
+        typedef typename proto::result_of::left<Arg>::type left_type;
+        typedef typename proto::result_of::right<Arg>::type right_type;
+        typedef typename proto::result_of::arg<left_type>::type arg_left_type;
+        typedef typename proto::result_of::arg<right_type>::type arg_right_type;
+        BOOST_MPL_ASSERT((proto::matches<Arg, detail::ActionArgBinding>));
+        BOOST_MPL_ASSERT((is_same<typename arg_left_type::type, arg_right_type>));
+        this->args_[&typeid(proto::arg(proto::left(arg)))] = &proto::arg(proto::right(arg));
+        return *this;
     }
 
     /// INTERNAL ONLY
@@ -494,23 +530,6 @@ public:
     {
         return (*this)(rex.regex_id(), index);
     }
-
-    // state:
-    /// INTERNAL ONLY
-    ///
-    //template<typename State>
-    //void set_action_state(State &state)
-    //{
-    //    this->action_state_.set(state);
-    //}
-
-    /// INTERNAL ONLY
-    ///
-    //template<typename State>
-    //State &get_action_state() const
-    //{
-    //    return this->action_state_.BOOST_NESTED_TEMPLATE get<State>();
-    //}
 
 private:
 
@@ -936,20 +955,10 @@ private:
     sub_match<BidiIter> prefix_;
     sub_match<BidiIter> suffix_;
     nested_results_type nested_results_;
-    //detail::action_state action_state_;
     intrusive_ptr<extras_type> extras_ptr_;
     intrusive_ptr<detail::traits<char_type> const> traits_;
+    detail::action_args_type args_;
 };
-
-///////////////////////////////////////////////////////////////////////////////
-// action_state_cast
-/// INTERNAL ONLY
-///
-//template<typename State, typename BidiIter>
-//inline State &action_state_cast(match_results<BidiIter> const &what)
-//{
-//    return what.BOOST_NESTED_TEMPLATE get_action_state<State>();
-//}
 
 ///////////////////////////////////////////////////////////////////////////////
 // regex_id_filter_predicate

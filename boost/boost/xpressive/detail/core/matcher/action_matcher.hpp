@@ -94,12 +94,43 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     ///////////////////////////////////////////////////////////////////////////////
+    // action_arg_transform
+    //
+    template<typename Grammar>
+    struct action_arg_transform
+      : Grammar
+    {
+        action_arg_transform();
+
+        template<typename Expr, typename State, typename Visitor>
+        struct apply
+        {
+            typedef typename proto::result_of::arg<Expr>::type action_arg_type;
+            typedef typename action_arg_type::type arg_type;
+            typedef typename proto::terminal<arg_type &>::type type;
+        };
+        
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &)
+        {
+            detail::action_args_type::iterator where = state.action_args_->find(&typeid(proto::arg(expr)));
+            if(where == state.action_args_->end())
+            {
+                throw regex_error(regex_constants::error_badarg, "An argument to an action was unspecified");
+            }
+            return proto::as_arg(proto::arg(expr).cast(where->second));
+        }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
     // BindActionArgs
     //
     struct BindActionArgs
       : proto::or_<
             subreg_transform< proto::terminal<detail::any_matcher> >
           , mark_transform< detail::mark_tag >
+          , action_arg_transform< proto::terminal< action_arg<proto::_, proto::_> > >
           , proto::terminal<proto::_>
           , proto::nary_expr<proto::_, proto::vararg<BindActionArgs> >
         >

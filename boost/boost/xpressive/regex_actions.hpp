@@ -14,6 +14,7 @@
 # pragma once
 #endif
 
+#include <boost/mpl/identity.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
@@ -25,6 +26,17 @@ namespace boost { namespace xpressive
 
     namespace detail
     {
+        template<typename T, typename U>
+        struct action_arg
+        {
+            typedef T type;
+
+            T &cast(void *pv) const
+            {
+                return *static_cast<T *>(pv);
+            }
+        };
+
         template<typename T>
         T &unconst(T const &t)
         {
@@ -212,6 +224,14 @@ namespace boost { namespace xpressive
         detail::predicate_placeholder<Predicate> p = {pred};
         return proto::as_expr(p);
     }
+
+    template<typename T, typename U = void>
+    struct arg
+      : proto::extends<typename proto::terminal<detail::action_arg<T, U> >::type, arg<T, U> >
+    {
+        typedef proto::extends<typename proto::terminal<detail::action_arg<T, U> >::type, arg<T, U> > base_type;
+        using base_type::operator =;
+    };
 
 }}
 

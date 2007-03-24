@@ -113,6 +113,7 @@ struct state_type
     results_extras &extras_;
     actionable action_list_;
     actionable const **action_list_tail_;
+    action_args_type *action_args_;
 
     ///////////////////////////////////////////////////////////////////////////////
     //
@@ -135,6 +136,7 @@ struct state_type
       , extras_(core_access<BidiIter>::get_extras(what))
       , action_list_()
       , action_list_tail_(&action_list_.next)
+      , action_args_(&core_access<BidiIter>::get_action_args(what))
     {
         // reclaim any cached memory in the match_results struct
         this->extras_.sub_match_stack_.unwind();

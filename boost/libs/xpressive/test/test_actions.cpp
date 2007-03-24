@@ -67,7 +67,7 @@ void test3()
     std::list<int> result;
     std::string str("1 23 456 7890");
     sregex rx = (+_d)[ push_back( result, as<int>(_) ) ] 
-        >> *(' ' >> (+_w)[ push_back( result, as<int>(_) ) ]);
+        >> *(' ' >> (+_d)[ push_back( result, as<int>(_) ) ]);
 
     if(!regex_match(str, rx))
     {
@@ -109,6 +109,35 @@ void test4()
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+// test4_aux
+//  build a map of strings to integers, with a late-bound action argument.
+void test4_aux()
+{
+    using namespace boost::xpressive;
+    arg< std::map<std::string, int> > map;
+
+    sregex pair = ( (s1= +_w) >> "=>" >> (s2= +_d) )[ map[s1] = as<int>(s2) ];
+    sregex rx = pair >> *(+_s >> pair);
+
+    std::string str("aaa=>1 bbb=>23 ccc=>456");
+    smatch what;
+    std::map<std::string, int> result;
+    what.bind( map = result ); // bind the argument!
+
+    if(!regex_match(str, what, rx))
+    {
+        BOOST_ERROR("oops");
+    }
+    else
+    {
+        BOOST_REQUIRE_EQUAL(result.size(), 3u);
+        BOOST_CHECK_EQUAL(result["aaa"], 1);
+        BOOST_CHECK_EQUAL(result["bbb"], 23);
+        BOOST_CHECK_EQUAL(result["ccc"], 456);
+    }
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // test5
 //  calculator that calculates. This is just silly, but hey.
 void test5()
@@ -117,7 +146,7 @@ void test5()
 
     int left = 0, right = 0;
     std::stack<int> stack;
-    std::string str("4+5*(1+1)");
+    std::string str("4+5*(3-1)");
 
     sregex group, factor, term, expression;
 
@@ -179,6 +208,7 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
     test->add(BOOST_TEST_CASE(&test2));
     test->add(BOOST_TEST_CASE(&test3));
     test->add(BOOST_TEST_CASE(&test4));
+    test->add(BOOST_TEST_CASE(&test4_aux));
     test->add(BOOST_TEST_CASE(&test5));
     return test;
 }

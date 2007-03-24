@@ -226,6 +226,8 @@ enum error_type
                                 ///<
     error_badrule,              ///< An invalid use of a rule was detected.
                                 ///<
+    error_badarg,               ///< An argument to an action was unbound.
+                                ///<
     error_internal              ///< An internal error has occured.
                                 ///<
 };

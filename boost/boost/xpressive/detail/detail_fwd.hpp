@@ -13,7 +13,9 @@
 # pragma once
 #endif
 
+#include <map>
 #include <climits> // for INT_MAX
+#include <typeinfo>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/size_t.hpp>
 #include <boost/shared_ptr.hpp>
@@ -29,6 +31,10 @@ namespace boost { namespace xpressive { namespace detail
     struct modifier_tag;
 
     typedef mpl::size_t<INT_MAX / 2 - 1> unknown_width;
+
+    struct type_info_less;
+
+    typedef std::map<std::type_info const *, void *, detail::type_info_less> action_args_type;
 
     ///////////////////////////////////////////////////////////////////////////////
     // placeholders
@@ -288,7 +294,8 @@ namespace boost { namespace xpressive { namespace detail
     template<typename BidiIter>
     struct sub_match_vector;
 
-    //struct action_state;
+    template<typename T, typename U>
+    struct action_arg;
 
     template<typename BidiIter>
     struct actionable;
