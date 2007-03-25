@@ -708,27 +708,27 @@ void TestTransitions( M & machine )
   };
   machine.CompareToExpectedActionSequence( term );
 
-  machine.ThrowAction( Entry< Default0< S1< M > > > );
+  machine.ThrowAction( &::Entry< Default0< S1< M > > > );
   BOOST_REQUIRE_THROW( machine.initiate(), TransitionTestException );
   ActionArray initThrow1 = 
   {
     Entry< S0< M > >,
     Entry< S1< M > >,
-    Throw< Entry< Default0< S1< M > > > >,
+    Throw< &::Entry< Default0< S1< M > > > >,
     Dtor< S1< M > >,
     Dtor< S0< M > >
   };
   machine.CompareToExpectedActionSequence( initThrow1 );
   BOOST_REQUIRE( machine.terminated() );
 
-  machine.ThrowAction( Entry< S11< M > > );
+  machine.ThrowAction( &::Entry< S11< M > > );
   BOOST_REQUIRE_THROW( machine.initiate(), TransitionTestException );
   ActionArray initThrow2 = 
   {
     Entry< S0< M > >,
     Entry< S1< M > >,
     Entry< Default0< S1< M > > >,
-    Throw< Entry< S11< M > > >,
+    Throw< &::Entry< S11< M > > >,
     Dtor< Default0< S1< M > > >,
     Dtor< S1< M > >,
     Dtor< S0< M > >
@@ -736,7 +736,7 @@ void TestTransitions( M & machine )
   machine.CompareToExpectedActionSequence( initThrow2 );
   BOOST_REQUIRE( machine.terminated() );
 
-  machine.ThrowAction( Trans< S0< M >, A > );
+  machine.ThrowAction( &::Trans< S0< M >, A > );
   machine.initiate();
   BOOST_REQUIRE_THROW( machine.process_event( A() ), TransitionTestException );
   ActionArray a1Throw1 =
@@ -752,7 +752,7 @@ void TestTransitions( M & machine )
     Exit< S11< M > >,
     Exit< Default0< S1< M > > >,
     Exit< S1< M > >,
-    Throw< Trans< S0< M >, A > >,
+    Throw< &::Trans< S0< M >, A > >,
     Dtor< Default2< S0< M > > >,
     Dtor< Default1< S0< M > > >,
     Dtor< S0< M > >
@@ -760,7 +760,7 @@ void TestTransitions( M & machine )
   machine.CompareToExpectedActionSequence( a1Throw1 );
   BOOST_REQUIRE( machine.terminated() );
 
-  machine.ThrowAction( Entry< S211< M > > );
+  machine.ThrowAction( &::Entry< S211< M > > );
   machine.initiate();
   BOOST_REQUIRE_THROW( machine.process_event( C() ), TransitionTestException );
   ActionArray c1Throw1 =
@@ -782,7 +782,7 @@ void TestTransitions( M & machine )
     Entry< Default1< S2< M > > >,
     Entry< S21< M > >,
     Entry< Default0< S21< M > > >,
-    Throw< Entry< S211< M > > >,
+    Throw< &::Entry< S211< M > > >,
     Dtor< Default2< S0< M > > >,
     Dtor< Default1< S0< M > > >,
     Dtor< Default0< S21< M > > >,
@@ -795,7 +795,7 @@ void TestTransitions( M & machine )
   machine.CompareToExpectedActionSequence( c1Throw1 );
   BOOST_REQUIRE( machine.terminated() );
 
-  machine.ThrowAction( ExitFn< S11< M > > );
+  machine.ThrowAction( &::ExitFn< S11< M > > );
   machine.initiate();
   BOOST_REQUIRE_THROW( machine.process_event( C() ), TransitionTestException );
   ActionArray c1Throw2 =
@@ -808,7 +808,7 @@ void TestTransitions( M & machine )
     Entry< Default1< S0< M > > >,
     Entry< Default2< S0< M > > >,
     Exit< Default2< S1< M > > >,
-    Throw< ExitFn< S11< M > > >,
+    Throw< &::ExitFn< S11< M > > >,
     Dtor< S11< M > >,
     Dtor< Default2< S0< M > > >,
     Dtor< Default1< S0< M > > >,
