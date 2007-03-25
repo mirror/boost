@@ -41,6 +41,7 @@ test-suite multi_array
       [ run assign.cpp ]
       [ run assign_to_array.cpp ]
       [ run index_bases.cpp ]
+      [ run storage_order_convert.cpp ]
       [ run storage_order.cpp ]
       [ run reshape.cpp ]
       [ run range1.cpp  ]
