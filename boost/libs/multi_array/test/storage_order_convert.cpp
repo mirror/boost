@@ -31,9 +31,9 @@ test_main(int,char*[]) {
   general_storage_order<5> fortran_storage(fortran_ordering.begin(),
                                            ascending.begin());
  
-  BOOST_TEST(c_storage == (general_storage_order<5>) c_storage_order());
-  BOOST_TEST(fortran_storage ==
+  BOOST_CHECK(c_storage == (general_storage_order<5>) c_storage_order());
+  BOOST_CHECK(fortran_storage ==
              (general_storage_order<5>) fortran_storage_order());
 
-  return boost::report_errors();
+  return boost::exit_success;
 }
