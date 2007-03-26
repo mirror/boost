@@ -8,7 +8,7 @@
 #if !defined(BOOST_FUSION_MPL_31122005_1152)
 #define BOOST_FUSION_MPL_31122005_1152
 
-#include <boost/fusion/sequence/adapted/mpl/tag_of.hpp>
+#include <boost/fusion/sequence/adapted/mpl/mpl_iterator.hpp>
 #include <boost/fusion/sequence/adapted/mpl/detail/begin_impl.hpp>
 #include <boost/fusion/sequence/adapted/mpl/detail/end_impl.hpp>
 #include <boost/fusion/sequence/adapted/mpl/detail/is_sequence_impl.hpp>
