@@ -137,6 +137,13 @@
               : unref<typename Expr::arg1_type>
             {};
 
+            // eval
+            template<typename Expr, typename Context>
+            struct eval
+            {
+                typedef typename Context::template eval<Expr>::result_type type;
+            };
+
         }
 
         namespace detail
@@ -535,13 +542,6 @@
 
         namespace result_of
         {
-        #if N > 0
-            template<typename Expr, typename Fun>
-            struct eval<Expr, Fun, N>
-              : boost::result_of<Fun(typename Expr::tag_type BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_ARG_N_TYPE, ~))>
-            {};
-        #endif
-
             template<typename Expr>
             struct arg_c<Expr, N>
               : unref<typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, N), _type)>

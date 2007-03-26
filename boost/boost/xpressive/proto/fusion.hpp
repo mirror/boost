@@ -189,9 +189,8 @@ namespace boost { namespace fusion
         {
             template<typename Sequence>
             struct apply
-            {
-                typedef typename Sequence::arity type;
-            };
+              : Sequence::arity
+            {};
         };
 
         template<typename Tag>

@@ -39,7 +39,7 @@ namespace boost { namespace xpressive { namespace detail
 
         virtual void execute() const
         {
-            proto::context<> ctx;
+            proto::default_context ctx;
             this->actor_.eval(ctx);
         }
 

@@ -6,6 +6,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/xpressive/proto/proto.hpp>
+#include <boost/xpressive/proto/context.hpp>
 #include <boost/test/unit_test.hpp>
 
 using namespace boost;
@@ -13,7 +14,7 @@ using namespace boost;
 struct placeholder {};
 proto::terminal<placeholder>::type const _1 = {{}};
 
-struct calculator
+struct calculator : proto::fanout_context<calculator>
 {
     typedef int result_type;
 

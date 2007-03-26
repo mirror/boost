@@ -72,35 +72,27 @@ struct lambda_arity
 // with the addition of special handling for lambda placeholders
 template<typename Tuple>
 struct lambda_context
-  : proto::context<lambda_context<Tuple> >
 {
-    typedef lambda_context<Tuple> this_type;
-
-    template<typename Sig>
-    struct result
-      : proto::context<lambda_context<Tuple> >::template result<Sig>
-    {};
-
-    template<typename This, typename I>
-    struct result<This(proto::tag::terminal, placeholder<I> const &)>
-    {
-        typedef typename fusion::result_of::at<Tuple, I>::type type;
-    };
-
     lambda_context(Tuple const &args)
       : args_(args)
     {}
 
-    using proto::context<lambda_context<Tuple> >::operator();
+    template<typename Expr, typename EnableIf = void>
+    struct eval
+      : proto::default_eval<Expr, lambda_context<Tuple> >
+    {};
 
-    template<typename I>
-    typename fusion::result_of::at<Tuple, I>::type
-    operator()(proto::tag::terminal, placeholder<I> const &)
+    template<typename Expr>
+    struct eval<Expr, typename enable_if<proto::matches<Expr, proto::terminal<placeholder<_> > > >::type>
     {
-        return fusion::at<I>(this->args_);
-    }
+        typedef typename proto::result_of::arg<Expr>::type::arity index;
+        typedef typename fusion::result_of::at<Tuple, index>::type result_type;
+        result_type operator()(Expr const &expr, lambda_context<Tuple> &ctx)
+        {
+            return fusion::at<index>(ctx.args_);
+        }
+    };
 
-private:
     Tuple args_;
 };
 
@@ -121,6 +113,7 @@ struct lambda
       , proto::result_of::eval<T, lambda_context<fusion::tuple<> > >
     >::type nullary_type;
 
+    // Define our operator() that evaluates the lambda expression.
     nullary_type operator()() const
     {
         fusion::tuple<> args;
@@ -128,8 +121,6 @@ struct lambda
         return this->eval(ctx);
     }
 
-    // hide base_type::operator() by defining our own which
-    // evaluates the lambda expression.
     template<typename A0>
     typename proto::result_of::eval<T, lambda_context<fusion::tuple<A0 const &> > >::type
     operator()(A0 const &a0) const

@@ -250,8 +250,10 @@ namespace boost { namespace proto
     template<typename Expr, typename Derived, typename Domain = default_domain>
     struct extends;
 
-    template<typename Derived = void>
-    struct context;
+    struct default_context;
+
+    template<typename Derived>
+    struct fanout_context;
 
     template<typename T, typename Domain = default_domain>
     struct literal;
@@ -291,7 +293,7 @@ namespace boost { namespace proto
         template<typename T>
         struct unref;
 
-        template<typename Expr, typename Fun, long Arity = Expr::arity::value>
+        template<typename Expr, typename Context>
         struct eval;
     }
 

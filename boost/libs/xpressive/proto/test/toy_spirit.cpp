@@ -11,6 +11,7 @@
 #include <boost/assert.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/xpressive/proto/proto.hpp>
+#include <boost/xpressive/proto/context.hpp>
 #include <boost/test/unit_test.hpp>
 
 namespace boost
@@ -144,6 +145,7 @@ namespace boost { namespace spirit2
     template<typename FwdIter, typename Skipper = never_p>
     struct spirit_context
       : std::pair<FwdIter, FwdIter>
+      , proto::fanout_context<spirit_context<FwdIter, Skipper> >
     {
         typedef bool result_type;
         typedef FwdIter iterator;

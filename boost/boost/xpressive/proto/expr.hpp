@@ -143,17 +143,17 @@
             }
 
             template<typename Fun>
-            typename boost::result_of<Fun(Tag BOOST_PP_ENUM_TRAILING(BOOST_PP_ITERATION(), BOOST_PROTO_UNREF_ARG_TYPE, ~))>::type
+            typename Fun::template eval<expr>::result_type
             eval(Fun &fun) const
             {
-                return fun(Tag() BOOST_PP_ENUM_TRAILING(BOOST_PP_ITERATION(), BOOST_PROTO_UNREF_ARG, ~));
+                return typename Fun::template eval<expr>()(*this, fun);
             }
 
             template<typename Fun>
-            typename boost::result_of<Fun const(Tag BOOST_PP_ENUM_TRAILING(BOOST_PP_ITERATION(), BOOST_PROTO_UNREF_ARG_TYPE, ~))>::type
+            typename Fun::template eval<expr>::result_type
             eval(Fun const &fun) const
             {
-                return fun(Tag(), BOOST_PP_ENUM(BOOST_PP_ITERATION(), BOOST_PROTO_UNREF_ARG, ~));
+                return typename Fun::template eval<expr>()(*this, fun);
             }
 
             template<typename A>
