@@ -721,7 +721,7 @@ __random_access_sequence__ of references that is passed to the target function.
 Non-const __lvalue__ arguments are transported as references to non-const, otherwise 
 references to const are used. 
 
-[tip Detecting mutable LValues on a per-argument basis is currently a 
+[blurb __tip__ Detecting mutable LValues on a per-argument basis is currently a 
 compile time expensive operation (see __the_forwarding_problem__ for 
 details). Therefore, there are two, lightweight and more restricted variants 
 of this class template, __unfused_lvalue_args__ and __unfused_rvalue_args__.]
@@ -1045,9 +1045,13 @@ reference. Const qualification is preserved and propagated appropriately
 the target function object is const - or, in case the target function object
 is held by value, the adapter is const).
 
-[tip If the type sequence passed to this template contains non-reference 
-elements, the element is copied only once - the call operator's signature
-is optimized automatically to avoid by-value parameters.]
+[blurb __note__ For Microsoft Visual C++ 7.1 (Visual Studio 2003) the detection
+of the Function Object's const qualification easily causes an internal error.
+Therefore the adapter is always treated as if it was const. ] 
+
+[blurb __tip__ If the type sequence passed to this template contains 
+non-reference elements, the element is copied only once - the call operator's 
+signature is optimized automatically to avoid by-value parameters.]
 
 [heading Header]
     #include <boost/fusion/functional/adapter/unfused_typed.hpp>
