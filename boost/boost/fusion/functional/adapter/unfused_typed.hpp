@@ -174,8 +174,7 @@ namespace boost { namespace fusion
                 return static_cast<Derived const *>(this)->fnc_transformed(arg);
             }
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1400) \
-    || BOOST_FUSION_UNFUSED_TYPED_MAX_ARITY <= 4
+#if !BOOST_WORKAROUND(BOOST_MSVC, < 1400)
             inline typename Function::template result<arg_vector_t>::type 
             operator()(BOOST_PP_ENUM(N,M,arg_vector_t)) 
             {
