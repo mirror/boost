@@ -145,7 +145,7 @@ namespace boost { namespace spirit2
     template<typename FwdIter, typename Skipper = never_p>
     struct spirit_context
       : std::pair<FwdIter, FwdIter>
-      , proto::fanout_context<spirit_context<FwdIter, Skipper> >
+      , proto::callable_context<spirit_context<FwdIter, Skipper> >
     {
         typedef bool result_type;
         typedef FwdIter iterator;
@@ -517,11 +517,9 @@ namespace boost { namespace spirit2
             proto::bitwise_or< Grammar, Grammar >
           , proto::right_shift< Grammar, Grammar >
           , proto::subtract< Grammar, Grammar >
-          , proto::or_<
-                proto::unary_star< Grammar >
-              , proto::unary_plus< Grammar >
-              , proto::logical_not< Grammar >
-            >
+          , proto::unary_star< Grammar >
+          , proto::unary_plus< Grammar >
+          , proto::logical_not< Grammar >
         >
     {};
 

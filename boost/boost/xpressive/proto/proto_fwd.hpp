@@ -253,7 +253,7 @@ namespace boost { namespace proto
     struct default_context;
 
     template<typename Derived>
-    struct fanout_context;
+    struct callable_context;
 
     template<typename T, typename Domain = default_domain>
     struct literal;

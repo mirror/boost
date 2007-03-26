@@ -14,7 +14,7 @@ using namespace boost;
 struct placeholder {};
 proto::terminal<placeholder>::type const _1 = {{}};
 
-struct calculator : proto::fanout_context<calculator>
+struct calculator : proto::callable_context<calculator>
 {
     typedef int result_type;
 

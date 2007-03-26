@@ -35,7 +35,7 @@
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
 #include <boost/xpressive/proto/fusion.hpp>
-#include <boost/fusion/functional/adapter/fused.hpp>
+#include <boost/fusion/functional/invocation/invoke.hpp>
 #include <boost/fusion/sequence/view/transform_view.hpp>
 #include <boost/fusion/algorithm/transformation/pop_front.hpp>
 #include <boost/fusion/algorithm/transformation/push_front.hpp>
@@ -246,8 +246,8 @@ namespace boost { namespace proto
     template<typename Expr, typename Context>
     struct default_eval<Expr, Context, proto::tag::comma>
     {
-        typedef typename result_of::eval<typename result_of::arg_c<Expr, 0>::type, Context>::type arg0_type;
-        typedef typename result_of::eval<typename result_of::arg_c<Expr, 1>::type, Context>::type arg1_type;
+        typedef typename proto::result_of::eval<typename proto::result_of::arg_c<Expr, 0>::type, Context>::type arg0_type;
+        typedef typename proto::result_of::eval<typename proto::result_of::arg_c<Expr, 1>::type, Context>::type arg1_type;
         typedef typename detail::comma_result<arg0_type, arg1_type>::type result_type;
 
         result_type operator()(Expr const &expr, Context &ctx) const
@@ -299,32 +299,34 @@ namespace boost { namespace proto
     template<typename Expr, typename Context>
     struct default_eval<Expr, Context, proto::tag::function>
     {
-        static Expr const &sexpr;
-        static Context &sctx;
-        BOOST_PROTO_TYPEOF_2(proto::arg_c<0>(sexpr).eval(sctx), function_type)
         typedef
-            typename fusion::fused<function_type>
-                ::template result<
-                    fusion::transform_view<
-                        typename fusion::result_of::pop_front<ref<Expr const> >::type const
-                      , detail::eval_transform<Context>
-                    >
+            typename proto::result_of::eval<
+                typename proto::result_of::arg_c<Expr, 0>::type
+              , Context
+            >::type
+        function_type;
+        typedef
+            typename fusion::result_of::invoke<
+                function_type
+              , fusion::transform_view<
+                    typename fusion::result_of::pop_front<ref<Expr const> >::type const
+                  , detail::eval_transform<Context>
                 >
-            ::type
+            >::type
         result_type;
         result_type operator()(Expr const &expr, Context &ctx) const
         {
             ref<Expr const> ref_expr = {expr};
-            return fusion::fused<function_type>(proto::arg_c<0>(expr).eval(ctx))
-                (
-                    fusion::transform_view<
-                        typename fusion::result_of::pop_front<ref<Expr const> >::type const
-                      , detail::eval_transform<Context>
-                    >(
-                        fusion::pop_front(ref_expr)
-                      , detail::eval_transform<Context>(ctx)
-                    )
-                );
+            return fusion::invoke<function_type>(
+                proto::arg_c<0>(expr).eval(ctx)
+              , fusion::transform_view<
+                    typename fusion::result_of::pop_front<ref<Expr const> >::type const
+                  , detail::eval_transform<Context>
+                >(
+                    fusion::pop_front(ref_expr)
+                  , detail::eval_transform<Context>(ctx)
+                )
+            );
         }
     };
 
@@ -338,28 +340,29 @@ namespace boost { namespace proto
         {};
     };
 
-    /// fanout_context
+    /// callable_context
     ///
     template<typename Derived>
-    struct fanout_context
+    struct callable_context
     {
         template<typename Expr>
         struct eval
         {
-            typedef typename fusion::fused<Derived &>::template result<
-                typename fusion::result_of::push_front<proto::ref<Expr const>, typename Expr::tag_type>::type const
+            typedef typename fusion::result_of::invoke<
+                Derived &
+              , typename fusion::result_of::push_front<proto::ref<Expr const>, typename Expr::tag_type>::type const
             >::type result_type;
 
             result_type operator()(Expr const &expr, Derived &ctx)
             {
                 proto::ref<Expr const> ref = {expr};
-                return fusion::fused<Derived &>(ctx)(fusion::push_front(ref, typename Expr::tag_type()));
+                return fusion::invoke<Derived &>(ctx, fusion::push_front(ref, typename Expr::tag_type()));
             }
 
             result_type operator()(Expr const &expr, Derived const &ctx)
             {
                 proto::ref<Expr const> ref = {expr};
-                return fusion::fused<Derived const &>(ctx)(fusion::push_front(ref, typename Expr::tag_type()));
+                return fusion::invoke<Derived const &>(ctx, fusion::push_front(ref, typename Expr::tag_type()));
             }
         };
     };
