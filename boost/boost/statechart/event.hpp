@@ -14,7 +14,7 @@
 
 #include <boost/cast.hpp> // boost::polymorphic_downcast
 
-#include <memory>   // std::allocator
+#include <memory> // std::allocator
 
 
 
@@ -38,6 +38,11 @@ class event : public detail::rtti_policy::rtti_derived_type<
     void * operator new( std::size_t size )
     {
       return detail::allocate< MostDerived, Allocator >( size );
+    }
+
+    void * operator new( std::size_t, void * p )
+    {
+      return p;
     }
 
     void operator delete( void * pEvent )
