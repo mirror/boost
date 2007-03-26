@@ -99,6 +99,12 @@ void result_type_tests()
     BOOST_TEST(( is_same< boost::result_of< test_func_3(long &, int, char) >::type, long >::value ));
 }
 
+#if defined(BOOST_MSVC) && BOOST_MSVC < 1400
+#		define BOOST_TEST_NO_VC71(cond) (void)((cond)?0:1)
+#else
+#		define BOOST_TEST_NO_VC71(cond) BOOST_TEST(cond)
+#endif
+
 int main()
 {
     result_type_tests();
@@ -117,7 +123,7 @@ int main()
     BOOST_TEST(unfused_func_c_ref() == 0);
 
     long lvalue = 1;
-    BOOST_TEST(unfused_func(lvalue) == 100);
+    BOOST_TEST_NO_VC71(unfused_func(lvalue) == 100);
     BOOST_TEST(lvalue == 1 + 1*sizeof(lvalue));
     BOOST_TEST(unfused_func_ref(lvalue) == 100);
     BOOST_TEST(lvalue == 1 + 2*sizeof(lvalue));
@@ -129,7 +135,7 @@ int main()
     BOOST_TEST(lvalue == 1 + 5*sizeof(lvalue));
 
     static const long expected = 2*sizeof(int) + 7*sizeof(char);
-    BOOST_TEST(unfused_func(lvalue,2,'\007') == 100 + expected);
+    BOOST_TEST_NO_VC71(unfused_func(lvalue,2,'\007') == 100 + expected);
     BOOST_TEST(lvalue == 1 + 6*sizeof(lvalue));
     BOOST_TEST(unfused_func_ref(lvalue,2,'\007') == 100 + expected);
     BOOST_TEST(lvalue == 1 + 7*sizeof(lvalue));
