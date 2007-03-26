@@ -26,6 +26,7 @@
 #include <boost/system/error_code.hpp>
 #include <boost/cerrno.hpp>
 #include <vector>
+#include <cstdlib>
 
 using namespace boost::system;
 
