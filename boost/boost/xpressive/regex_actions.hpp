@@ -204,6 +204,17 @@ namespace boost { namespace xpressive
             }
         };
 
+        struct matched
+        {
+            typedef bool result_type;
+
+            template<typename Sub>
+            bool operator()(Sub &sub) const
+            {
+                return sub.matched;
+            }
+        };
+
         struct length
         {
             template<typename Sig>
@@ -293,6 +304,7 @@ namespace boost { namespace xpressive
     proto::terminal<op::front>::type const front = {{}};
     proto::terminal<op::first>::type const first = {{}};
     proto::terminal<op::second>::type const second = {{}};
+    proto::terminal<op::matched>::type const matched = {{}};
     proto::terminal<op::length>::type const length = {{}};
     proto::terminal<op::str>::type const str = {{}};
 
@@ -423,6 +435,7 @@ namespace boost { namespace xpressive
             ignore_unused(front);
             ignore_unused(first);
             ignore_unused(second);
+            ignore_unused(matched);
             ignore_unused(length);
             ignore_unused(str);
         }

@@ -33,24 +33,69 @@
 #include <boost/fusion/sequence/view/ext_/segmented_iterator.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
-namespace boost { namespace proto { namespace detail
+namespace boost { namespace proto
 {
-    template<typename Expr, int Pos>
-    struct ref_iterator
-      : fusion::iterator_base<ref_iterator<Expr, Pos> >
+    namespace detail
     {
-        typedef Expr expr_type;
-        typedef mpl::long_<Pos> index;
-        typedef fusion::forward_traversal_tag category;
-        typedef proto_ref_iterator_tag fusion_tag;
+        template<typename Expr, int Pos>
+        struct ref_iterator
+          : fusion::iterator_base<ref_iterator<Expr, Pos> >
+        {
+            typedef Expr expr_type;
+            typedef mpl::long_<Pos> index;
+            typedef fusion::forward_traversal_tag category;
+            typedef proto_ref_iterator_tag fusion_tag;
 
-        ref_iterator(Expr const &expr)
-          : expr_(expr)
+            ref_iterator(Expr const &expr)
+              : expr_(expr)
+            {}
+
+            Expr expr_;
+        };
+    }
+
+    template<typename Expr>
+    struct children
+      : proto::ref<Expr>
+    {
+        children(Expr &expr)
+          : proto::ref<Expr>(proto::ref<Expr>::make(expr))
+        {}
+    };
+
+    template<typename Expr>
+    children<Expr> children_of(Expr &expr)
+    {
+        return children<Expr>(expr);
+    }
+
+    template<typename Context>
+    struct eval_fun
+    {
+        eval_fun(Context &ctx)
+          : ctx_(ctx)
         {}
 
-        Expr expr_;
+        template<typename Arg>
+        struct result
+        {
+            typedef 
+                typename Context::template eval<
+                    typename detail::remove_cv_ref<Arg>::type
+                >::result_type
+            type;
+        };
+
+        template<typename Arg>
+        typename result<Arg>::type operator()(Arg &arg) const
+        {
+            return arg.eval(ctx_);
+        }
+
+    private:
+        Context &ctx_;
     };
-}}}
+}}
 
 namespace boost { namespace fusion
 {

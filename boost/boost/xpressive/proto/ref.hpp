@@ -47,6 +47,12 @@ namespace boost { namespace proto
             return this->expr.cast();
         }
 
+        static ref<Expr> make(Expr &expr)
+        {
+            ref<Expr> that = {expr};
+            return that;
+        }
+
         Expr &expr;
     };
 
