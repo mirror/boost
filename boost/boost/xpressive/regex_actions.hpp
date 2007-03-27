@@ -20,6 +20,7 @@
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/detail/core/matcher/action_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/predicate_matcher.hpp>
+#include <boost/xpressive/detail/utility/ignore_unused.hpp>
 
 namespace boost { namespace xpressive
 {
@@ -328,7 +329,7 @@ namespace boost { namespace xpressive
 
     template<typename Predicate>
     typename proto::terminal<detail::predicate_placeholder<Predicate> >::type
-    if_(Predicate const &pred)
+    check(Predicate const &pred)
     {
         detail::predicate_placeholder<Predicate> p = {pred};
         return proto::as_expr(p);
@@ -404,6 +405,27 @@ namespace boost { namespace xpressive
           , typename proto::result_of::as_expr<A2>::type
         >::type that = {{{}}, proto::as_expr(a0), proto::as_expr(a1), proto::as_expr(a2)};
         return that;
+    }
+
+    namespace detail
+    {
+        inline void ignore_unused_regex_actions()
+        {
+            ignore_unused(repeat_max);
+            ignore_unused(push);
+            ignore_unused(push_back);
+            ignore_unused(push_front);
+            ignore_unused(pop);
+            ignore_unused(pop_back);
+            ignore_unused(pop_front);
+            ignore_unused(top);
+            ignore_unused(back);
+            ignore_unused(front);
+            ignore_unused(first);
+            ignore_unused(second);
+            ignore_unused(length);
+            ignore_unused(str);
+        }
     }
 
 }}

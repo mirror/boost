@@ -639,18 +639,18 @@ imbue(Locale const &loc)
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief For checking if an expression matches xpressive's grammar
 ///
-/// checker\<\> can be used to see if a given expression is a valid
+/// validator\<\> can be used to see if a given expression is a valid
 /// xpressive regular expression. If it is, it will simply return it.
 /// If it isn't, it will cause a simple and short compile-time error.
 /// You may use it as follows:
-///   checker\<char\> check;
-///   sregex rx = check( _ << "oops" );
+///   validator\<char\> validate;
+///   sregex rx = validate( _ << "oops" );
 ///
-/// See also xpressive::check and xpressive::wcheck.
+/// See also xpressive::validate and xpressive::wvalidate.
 ///
 /// \param Char The character type of the regular expression.
 template<typename Char>
-struct checker
+struct validator
 {
 private:
     struct some_valid_expression
@@ -688,22 +688,22 @@ public:
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief For checking if an expression matches xpressive's grammar
 ///
-/// check() can be used to see if a given expression is a valid narrow
+/// validate() can be used to see if a given expression is a valid narrow
 /// xpressive regular expression. If it is, it will simply return it.
 /// If it isn't, it will cause a simple and short compile-time error.
 /// You may use it as follows:
-///   sregex rx = check( _ << "oops" );
-checker<char> const check = {};
+///   sregex rx = validate( _ << "oops" );
+validator<char> const validate = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief For checking if an expression matches xpressive's grammar
 ///
-/// wcheck() can be used to see if a given expression is a valid wide
+/// wvalidate() can be used to see if a given expression is a valid wide
 /// xpressive regular expression. If it is, it will simply return it.
 /// If it isn't, it will cause a simple and short compile-time error.
 /// You may use it as follows:
-///   wsregex rx = wcheck( _ << L"oops" );
-checker<wchar_t> const wcheck = {};
+///   wsregex rx = wvalidate( _ << L"oops" );
+validator<wchar_t> const wvalidate = {};
 
 namespace detail
 {
@@ -739,8 +739,8 @@ namespace detail
         ignore_unused(s7);
         ignore_unused(s8);
         ignore_unused(s9);
-        ignore_unused(check);
-        ignore_unused(wcheck);
+        ignore_unused(validate);
+        ignore_unused(wvalidate);
     }
 }
 
