@@ -99,6 +99,8 @@ CHANGELOG
 - Switched to Re2C V0.11.2
 - Added const specifiers to some of the context member functions.
 - Fixed a problem in the SLex C++ lexer (cpp_tokens example).
+- Fixed a runtime problem in the Re2C generated lexers when feeded with
+  empty input files (thanks to Leo Davis for reporting and providing a patch).
 
 Boost V1.34.0
 - Wave Version 1.2.4

@@ -287,7 +287,7 @@ NonDigit           = [a-zA-Z_$] | UniversalChar;
 
     "\000"
     {
-        if(cursor != s->eof) 
+        if (s->eof && cursor != s->eof) 
         {
             BOOST_WAVE_UPDATE_CURSOR();     // adjust the input cursor
             (*s->error_proc)(s, "invalid character '\\000' in input stream");
@@ -360,7 +360,7 @@ cppcomment:
 
     "\000"
     {
-        if (cursor != s->eof) 
+        if (s->eof && cursor != s->eof) 
         {
             --YYCURSOR;                     // next call returns T_EOF
             BOOST_WAVE_UPDATE_CURSOR();     // adjust the input cursor
