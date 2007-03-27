@@ -25,6 +25,54 @@ namespace boost { namespace xpressive { namespace detail
 {
 
     ///////////////////////////////////////////////////////////////////////////////
+    // action_context
+    //
+    struct action_context
+    {
+        template<typename Expr, typename Tag = typename Expr::tag_type>
+        struct eval
+          : proto::default_eval<Expr, action_context>
+        {};
+
+        template<typename Expr>
+        struct eval<Expr, proto::tag::mem_ptr>
+        {
+            typedef typename proto::result_of::right<Expr>::type right_type;
+            
+            typedef
+                typename proto::result_of::arg<
+                    typename proto::result_of::arg_c<right_type, 0>::type
+                >::type
+            function_type;
+
+            typedef 
+                fusion::transform_view<
+                    typename fusion::result_of::push_front<
+                        typename fusion::result_of::pop_front<proto::children<right_type const> >::type const
+                      , typename proto::result_of::left<Expr>::type
+                    >::type const
+                  , proto::eval_fun<action_context>
+                >
+            evaluated_args;
+
+            typedef
+                typename fusion::result_of::invoke<function_type, evaluated_args>::type
+            result_type;
+
+            result_type operator()(Expr const &expr, action_context &ctx) const
+            {
+                return fusion::invoke<function_type>(
+                    proto::arg(proto::arg_c<0>(proto::right(expr)))
+                  , evaluated_args(
+                        fusion::push_front(fusion::pop_front(proto::children_of(proto::right(expr))), proto::left(expr))
+                      , proto::eval_fun<action_context>(ctx)
+                    )
+                );
+            }
+        };
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
     // action
     //
     template<typename BidiIter, typename Actor>
@@ -39,7 +87,7 @@ namespace boost { namespace xpressive { namespace detail
 
         virtual void execute() const
         {
-            proto::default_context ctx;
+            action_context ctx;
             this->actor_.eval(ctx);
         }
 

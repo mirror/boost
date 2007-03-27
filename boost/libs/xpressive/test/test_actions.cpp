@@ -59,15 +59,15 @@ void test2()
 
 ///////////////////////////////////////////////////////////////////////////////
 // test3
-//  cast string to int, push back into list
+//  cast string to int, push back into list, use alternate ->* syntax
 void test3()
 {
     using namespace boost::xpressive;
 
     std::list<int> result;
     std::string str("1 23 456 7890");
-    sregex rx = (+_d)[ push_back( result, as<int>(_) ) ] 
-        >> *(' ' >> (+_d)[ push_back( result, as<int>(_) ) ]);
+    sregex rx = (+_d)[ result->*push_back( as<int>(_) ) ] 
+        >> *(' ' >> (+_d)[ result->*push_back( as<int>(_) ) ]);
 
     if(!regex_match(str, rx))
     {

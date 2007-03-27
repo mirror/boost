@@ -76,20 +76,21 @@ namespace boost { namespace proto
           : ctx_(ctx)
         {}
 
-        template<typename Arg>
+        template<typename Expr>
         struct result
         {
             typedef 
                 typename Context::template eval<
-                    typename detail::remove_cv_ref<Arg>::type
+                    typename detail::remove_cv_ref<Expr>::type
                 >::result_type
             type;
         };
 
-        template<typename Arg>
-        typename result<Arg>::type operator()(Arg &arg) const
+        template<typename Expr>
+        typename result<Expr>::type
+        operator()(Expr const &expr) const
         {
-            return arg.eval(ctx_);
+            return expr.eval(this->ctx_);
         }
 
     private:
