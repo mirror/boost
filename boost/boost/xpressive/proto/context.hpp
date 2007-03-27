@@ -11,7 +11,7 @@
 #ifndef BOOST_PROTO_CONTEXT_HPP_EAN_01_08_2007
 #define BOOST_PROTO_CONTEXT_HPP_EAN_01_08_2007
 
-#include <boost/xpressive/proto/detail/prefix.hpp>
+#include <boost/xpressive/proto/detail/prefix.hpp> // must be first include
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/iteration/iterate.hpp>
 #include <boost/preprocessor/facilities/apply.hpp>
@@ -32,13 +32,12 @@
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/tags.hpp>
-#include <boost/xpressive/proto/detail/suffix.hpp>
-
 #include <boost/xpressive/proto/fusion.hpp>
 #include <boost/fusion/functional/invocation/invoke.hpp>
 #include <boost/fusion/sequence/view/transform_view.hpp>
 #include <boost/fusion/algorithm/transformation/pop_front.hpp>
 #include <boost/fusion/algorithm/transformation/push_front.hpp>
+#include <boost/xpressive/proto/detail/suffix.hpp> // must be last include
 
 /// INTERNAL ONLY
 ///
