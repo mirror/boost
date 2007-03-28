@@ -1727,6 +1727,89 @@ be absolutely sure to delete any `bin` and `bin.v2` directories generated
 by the build before trying again.  Otherwise your configuration fixes will
 not take any effect.
 
+[section:macosx Mac OS X]
+
+[:['Section contributed by Julio M. Merino Vidal]]
+
+The following instructions explain how to install Docbook XML, Docbook XSL
+and Doxygen in a Mac OS X system, how to configure Boost.Build v2 to
+recognize them and how to build and install Quickbook.  They were taken
+from a 10.4 (Tiger) machine so it is likely that they also apply to future
+versions; they may not work with older ones, though.
+
+The text below assumes you want to install all the necessary utilities in a
+system-wide location, allowing any user in the machine to have access to
+them. Therefore, all files will be put in the `/usr/local` hierarchy.  If
+you do not want this, you can choose any other prefix such as
+`~/Applications` for a single-user installation.
+
+Mac OS X comes with `xsltproc` and all related libraries preinstalled, so
+you do not need to take any extra steps to set them up.  It is probable
+that future versions will include them too, but these instructions may not
+apply to older versions.
+
+To get started:
+
+# Download [@http://www.docbook.org/xml/4.2/docbook-xml-4.2.zip Docbook XML
+  4.2] and unpack it inside `/usr/local/share/xml/docbook/4.2`.
+
+# Download the latest
+  [@http://sourceforge.net/project/showfiles.php?group_id=21935&package_id=16608
+  Docbook XSL] version and unpack it.  Put the results in
+  `/usr/local/share/xsl/docbook`, thus effectively removing the version
+  number from the directory name (for simplicity).
+
+# Add the following to your `user-config.jam` file, which should live in
+  your home directory (`/Users/<your_username>`).  You must already have it
+  somewhere or otherwise you could not be building Boost (i.e. missing
+  tools configuration).
+
+ using xsltproc ;
+
+ using boostbook
+     : "/usr/local/share/xsl/docbook"
+     : "/usr/local/share/xml/docbook/4.2"
+     ;
+
+The above steps are enough to get a functional BoostBook setup.  Quickbook
+will be automatically built when needed.  If you want to avoid these
+rebuilds and install a system-wide Quickbook instead:
+
+# Go to Quickbook's source directory (`BOOST_ROOT/tools/quickbook`).
+
+# Build the utility by issuing `bjam --v2`.
+
+# Copy the resulting `quickbook` binary (located under the
+  `BOOST_ROOT/bin.v2` hierarchy) to a safe place.  Following our previous
+  example, you can install it into: `/usr/local/bin`.
+
+# Add the following to your `user-config.jam` file:
+
+ using quickbook
+     : "/usr/local/bin/quickbook" ;
+     ;
+
+Additionally, if you need to build documentation that uses
+[@http://www.doxygen.org Doxygen], you will need to install it too:
+
+# Go to the [@http://www.stack.nl/~dimitri/doxygen/download.html#latestsrc
+  downloads section] and get the disk image (`dmg` file) for Mac OS X.
+  
+# Open the disk image and drag the Doxygen application to your
+  `Applications` folder to install it.
+
+# Add the following to your `user-config.jam` file:
+
+ using doxygen
+     : /Applications/Doxygen.app/Contents/Resources/doxygen
+     ;
+
+Alternatively, you may want to install all the prerequistes through a
+package system to avoid manual management of the installations.  In that
+case, check out [@http://www.pkgsrc.org pkgsrc].
+
+[endsect]
+
 [section:windows Windows 2000, XP, 2003, Vista]
 
 [python]
