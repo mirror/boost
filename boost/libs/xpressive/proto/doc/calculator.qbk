@@ -97,14 +97,14 @@ object that associates behaviors with the node types in your expression tree.
 An example should make it clear.
 
     struct calculator_context
+      : proto::callable_context< calculator_context const >
     {
         calculator_context(double d1, double d2)
           : d1_(d1), d2_(d2)
         {}
         
-        // Define the result type of the calculator
-        // (This makes the the calculator_context work
-        // with boost::result_of<>)
+        // Define the result type of the calculator.
+        // (This makes the the calculator_context "callable".)
         typedef double result_type;
 
         // Handle the placeholders:
@@ -176,30 +176,28 @@ evaluate our arithmetic expressions, as below:
     // This prints "10"
     std::cout << d << std::endl;
 
-[h3 The Default Evaluation Context]
+[h3 Default Expression Evaluation]
 
 You might notice that the `calculator_context` has a lot of boilerplate. It
 is fairly common for addition nodes to be handled by evaluating the left and
-right children and then adding the result, for instance. We might want this to 
-be the default behavior, in fact. Proto provides a default `context<>` template
-which implements the obvious defaults for the operators, and uses Boost.Typeof 
-to deduce the return types. We can use it to simplify our `calculator_context`
+right children and then adding the result, for instance. For this purpose, 
+proto provides the _default_context_, which gives the operators their usual
+meanings, and uses Boost.Typeof to deduce return types. In fact, the 
+_callable_context_ from which our `calculator_context` inherits uses 
+_default_context_ as a fall-back for any expression types you don't handle
+explicitly. We can use that fact to simplify our `calculator_context`
 considerably:
 
     struct calculator_context
-      : proto::context< calculator_context >
+      : proto::callable_context< calculator_context const >
     {
         calculator_context(double d1, double d2)
           : d1_(d1), d2_(d2)
         {}
         
-        // Define the result type of the calculator
-        // (This makes the the calculator_context work
-        // with boost::result_of<>)
+        // Define the result type of the calculator.
+        // (This makes the the calculator_context "callable".)
         typedef double result_type;
-        
-        // Bring proto::context<>'s function call operators into scope.
-        using proto::context< calculator_context >::operator();
         
         // Handle the placeholders:
         double operator()(proto::tag::terminal, placeholder1) const

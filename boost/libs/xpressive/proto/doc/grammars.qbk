@@ -297,8 +297,8 @@ expression tree, from root to leaves.
 [h3 Meta-Grammars]
 
 We've already seen how to use small patterns to answer simple questions about 
-expression trees. Here's a harder question: Does this expression conform to the
-grammar of my domain-specific embedded language? In this section we'll see how
+expression trees. Here's a harder question: ["Does this expression conform to the
+grammar of my domain-specific embedded language?] In this section we'll see how
 to use Proto to define a grammar for your DSEL and use it to validate 
 expression templates, giving short, readable compile-time errors for invalid
 expressions.
@@ -306,7 +306,7 @@ expressions.
 [tip You might be thinking that this is a backwards way of doing things.
 ["If Proto let me select which operators to overload, my users wouldn't be able 
 to create invalid expressions in the first place, and I wouldn't need a grammar
-at all!] That /may/ be true, but there are reasons for preferring to do things
+at all!] That may be true, but there are reasons for preferring to do things
 this way. First, it lets you develop your DSEL rapidly -- all the operators are
 there for you already! -- and worry about invalid syntax later. Second, it 
 might be the case that some operators are only allowed in certain contexts 

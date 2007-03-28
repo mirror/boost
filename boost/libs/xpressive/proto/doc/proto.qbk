@@ -64,7 +64,8 @@
 [def _literal_              [classref boost::proto::literal `literal<>`]]
 [def _lit_                  [funcref boost::proto::lit `lit()`]]
 [def _vararg_               [classref boost::proto::vararg `vararg<>`]]
-[def _context_              [classref boost::proto::context `context<>`]]
+[def _default_context_      [classref boost::proto::default_context `default_context`]]
+[def _callable_context_     [classref boost::proto::callable_context `callable_context<>`]]
 [def _generate_             [classref boost::proto:generate `generate<>`]]
 
 [include preface.qbk]
