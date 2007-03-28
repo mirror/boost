@@ -20,6 +20,11 @@
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/context.hpp>
+#include <boost/xpressive/proto/fusion.hpp>
+#include <boost/fusion/sequence/view/transform_view.hpp>
+#include <boost/fusion/functional/invocation/invoke.hpp>
+#include <boost/fusion/algorithm/transformation/push_front.hpp>
+#include <boost/fusion/algorithm/transformation/pop_front.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
