@@ -84,24 +84,40 @@
                 >::type arg0_type;
 
                 typedef expr<proto::tag::terminal, args1<arg0_type> > type;
-
                 typedef type result_type;
+
+            #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+                template<typename T2>
+                static result_type call(T2 &t)
+                {
+                    return type::make(t);
+                }
+            #else
                 static result_type call(T &t)
                 {
                     return type::make(t);
                 }
+            #endif
             };
 
             template<typename T>
             struct as_expr<T, typename T::is_boost_proto_expr_>
             {
                 typedef typename T::boost_proto_expr_type_ type;
-
                 typedef T &result_type;
+
+            #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+                template<typename T2>
+                static result_type call(T2 &t)
+                {
+                    return t;
+                }
+            #else
                 static result_type call(T &t)
                 {
                     return t;
                 }
+            #endif
             };
 
             // as_arg
@@ -136,13 +152,6 @@
             struct right
               : unref<typename Expr::arg1_type>
             {};
-
-            // eval
-            template<typename Expr, typename Context>
-            struct eval
-            {
-                typedef typename Context::template eval<Expr>::result_type type;
-            };
 
         }
 

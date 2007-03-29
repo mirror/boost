@@ -51,6 +51,7 @@ namespace boost { namespace xpressive { namespace detail
         {
             typedef typename proto::result_of::left<Expr>::type expr_type;
             typedef typename proto::result_of::right<Expr>::type action_type;
+            typedef typename proto::result_of::deep_copy<action_type>::type action_copy_type;
 
             typedef typename marker_transform::
                 template apply<expr_type, State, Visitor>::type
@@ -58,8 +59,8 @@ namespace boost { namespace xpressive { namespace detail
 
             typedef typename mpl::if_<
                 proto::matches<action_type, proto::terminal<predicate_placeholder<proto::_> > >
-              , predicate_matcher<action_type>
-              , action_matcher<action_type>
+              , predicate_matcher<action_copy_type>
+              , action_matcher<action_copy_type>
             >::type matcher_type;
 
             typedef typename proto::right_shift
@@ -85,7 +86,7 @@ namespace boost { namespace xpressive { namespace detail
               , {
                     matcher_type
                     (
-                        proto::right(expr)
+                        proto::deep_copy(proto::right(expr))
                       , proto::arg(proto::left(marked_expr)).mark_number_
                     )
                 }

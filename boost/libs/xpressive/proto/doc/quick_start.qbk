@@ -26,7 +26,7 @@ and then execute it.
     void evaluate( Expr const & expr )
     {
         proto::default_context ctx;
-        expr.eval( ctx );
+        proto::eval(expr, ctx);
     }
 
     int main()

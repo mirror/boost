@@ -14,8 +14,11 @@
 # pragma once
 #endif
 
+#include <boost/ref.hpp>
+#include <boost/mpl/if.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/type_traits/is_const.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/detail/core/matcher/action_matcher.hpp>
@@ -38,12 +41,6 @@ namespace boost { namespace xpressive
                 return *static_cast<typename remove_reference<T>::type *>(pv);
             }
         };
-
-        template<typename T>
-        T &unconst(T const &t)
-        {
-            return const_cast<T &>(t);
-        }
     }
 
     namespace op
@@ -55,7 +52,7 @@ namespace boost { namespace xpressive
             template<typename Sequence, typename Value>
             void operator()(Sequence &seq, Value const &val) const
             {
-                detail::unconst(seq).push(val);
+                seq.push(val);
             }
         };
 
@@ -66,7 +63,7 @@ namespace boost { namespace xpressive
             template<typename Sequence, typename Value>
             void operator()(Sequence &seq, Value const &val) const
             {
-                detail::unconst(seq).push_back(val);
+                seq.push_back(val);
             }
         };
 
@@ -77,7 +74,7 @@ namespace boost { namespace xpressive
             template<typename Sequence, typename Value>
             void operator()(Sequence &seq, Value const &val) const
             {
-                detail::unconst(seq).push_front(val);
+                seq.push_front(val);
             }
         };
 
@@ -88,7 +85,7 @@ namespace boost { namespace xpressive
             template<typename Sequence>
             void operator()(Sequence &seq) const
             {
-                detail::unconst(seq).pop();
+                seq.pop();
             }
         };
 
@@ -99,7 +96,7 @@ namespace boost { namespace xpressive
             template<typename Sequence>
             void operator()(Sequence &seq) const
             {
-                detail::unconst(seq).pop_back();
+                seq.pop_back();
             }
         };
 
@@ -110,7 +107,7 @@ namespace boost { namespace xpressive
             template<typename Sequence>
             void operator()(Sequence &seq) const
             {
-                detail::unconst(seq).pop_front();
+                seq.pop_front();
             }
         };
 
@@ -122,11 +119,17 @@ namespace boost { namespace xpressive
             template<typename This, typename Sequence>
             struct result<This(Sequence &)>
             {
-                typedef typename Sequence::value_type type;
+                typedef 
+                    typename mpl::if_<
+                        is_const<Sequence>
+                      , typename Sequence::const_reference
+                      , typename Sequence::reference
+                    >::type
+                type;
             };
 
             template<typename Sequence>
-            typename Sequence::value_type operator()(Sequence &seq) const
+            typename result<front(Sequence &)>::type operator()(Sequence &seq) const
             {
                 return seq.front();
             }
@@ -140,11 +143,17 @@ namespace boost { namespace xpressive
             template<typename This, typename Sequence>
             struct result<This(Sequence &)>
             {
-                typedef typename Sequence::value_type type;
+                typedef 
+                    typename mpl::if_<
+                        is_const<Sequence>
+                      , typename Sequence::const_reference
+                      , typename Sequence::reference
+                    >::type
+                type;
             };
 
             template<typename Sequence>
-            typename Sequence::value_type operator()(Sequence &seq) const
+            typename result<back(Sequence &)>::type operator()(Sequence &seq) const
             {
                 return seq.back();
             }
@@ -158,11 +167,17 @@ namespace boost { namespace xpressive
             template<typename This, typename Sequence>
             struct result<This(Sequence &)>
             {
-                typedef typename Sequence::value_type type;
+                typedef 
+                    typename mpl::if_<
+                        is_const<Sequence>
+                      , typename Sequence::value_type const &
+                      , typename Sequence::value_type &
+                    >::type
+                type;
             };
 
             template<typename Sequence>
-            typename Sequence::value_type operator()(Sequence &seq) const
+            typename result<top(Sequence &)>::type operator()(Sequence &seq) const
             {
                 return seq.top();
             }
@@ -328,15 +343,15 @@ namespace boost { namespace xpressive
     }
 
     template<typename T>
-    typename proto::terminal<T &>::type ref(T &t)
+    typename proto::terminal<reference_wrapper<T> >::type ref(T &t)
     {
-        return proto::terminal<T &>::type::make(t);
+        return proto::terminal<reference_wrapper<T> >::type::make(reference_wrapper<T>(t));
     }
 
     template<typename T>
-    typename proto::terminal<T const &>::type cref(T const &t)
+    typename proto::terminal<reference_wrapper<T const> >::type cref(T const &t)
     {
-        return proto::terminal<T const &>::type::make(t);
+        return proto::terminal<reference_wrapper<T const> >::type::make(reference_wrapper<T const>(t));
     }
 
     template<typename Predicate>

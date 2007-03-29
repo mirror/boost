@@ -5,7 +5,7 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_XPRESSIVE_BETTER_ERRORS
+//#define BOOST_XPRESSIVE_BETTER_ERRORS
 
 #include <map>
 #include <list>
@@ -24,7 +24,7 @@ void test1()
 
     std::string result;
     std::string str("foo bar baz foo bar baz");
-    sregex rx = (+_w)[ result += _ ] >> *(' ' >> (+_w)[ result += ',' + _ ]);
+    sregex rx = (+_w)[ ref(result) += _ ] >> *(' ' >> (+_w)[ ref(result) += ',' + _ ]);
 
     if(!regex_match(str, rx))
     {
@@ -45,7 +45,7 @@ void test2()
 
     std::string result;
     std::string str("foo bar baz foo bar baz");
-    sregex rx = (+_w)[ result += _ ] >> *(' ' >> (+_w)[ result += ',' + _ ]) >> repeat<4>(_);
+    sregex rx = (+_w)[ ref(result) += _ ] >> *(' ' >> (+_w)[ ref(result) += ',' + _ ]) >> repeat<4>(_);
 
     if(!regex_match(str, rx))
     {
@@ -66,8 +66,8 @@ void test3()
 
     std::list<int> result;
     std::string str("1 23 456 7890");
-    sregex rx = (+_d)[ result->*push_back( as<int>(_) ) ] 
-        >> *(' ' >> (+_d)[ result->*push_back( as<int>(_) ) ]);
+    sregex rx = (+_d)[ ref(result)->*push_back( as<int>(_) ) ] 
+        >> *(' ' >> (+_d)[ ref(result)->*push_back( as<int>(_) ) ]);
 
     if(!regex_match(str, rx))
     {
@@ -151,37 +151,37 @@ void test5()
     sregex group, factor, term, expression;
 
     group       = '(' >> by_ref(expression) >> ')';
-    factor      = (+_d)[ push(stack, as<int>(_)) ] | group;
+    factor      = (+_d)[ push(ref(stack), as<int>(_)) ] | group;
     term        = factor >> *(
                                 ('*' >> factor)
-                                    [ ref(right) = top(stack)
-                                    , pop(stack)
-                                    , ref(left) = top(stack)
-                                    , pop(stack)
-                                    , push(stack, ref(left) * ref(right))
+                                    [ ref(right) = top(ref(stack))
+                                    , pop(ref(stack))
+                                    , ref(left) = top(ref(stack))
+                                    , pop(ref(stack))
+                                    , push(ref(stack), ref(left) * ref(right))
                                     ]
                               | ('/' >> factor)
-                                    [ ref(right) = top(stack)
-                                    , pop(stack)
-                                    , ref(left) = top(stack)
-                                    , pop(stack)
-                                    , push(stack, ref(left) / ref(right))
+                                    [ ref(right) = top(ref(stack))
+                                    , pop(ref(stack))
+                                    , ref(left) = top(ref(stack))
+                                    , pop(ref(stack))
+                                    , push(ref(stack), ref(left) / ref(right))
                                     ]
                              );
     expression  = term >> *(
                                 ('+' >> term)
-                                    [ ref(right) = top(stack)
-                                    , pop(stack)
-                                    , ref(left) = top(stack)
-                                    , pop(stack)
-                                    , push(stack, ref(left) + ref(right))
+                                    [ ref(right) = top(ref(stack))
+                                    , pop(ref(stack))
+                                    , ref(left) = top(ref(stack))
+                                    , pop(ref(stack))
+                                    , push(ref(stack), ref(left) + ref(right))
                                     ]
                               | ('-' >> term)
-                                    [ ref(right) = top(stack)
-                                    , pop(stack)
-                                    , ref(left) = top(stack)
-                                    , pop(stack)
-                                    , push(stack, ref(left) - ref(right))
+                                    [ ref(right) = top(ref(stack))
+                                    , pop(ref(stack))
+                                    , ref(left) = top(ref(stack))
+                                    , pop(ref(stack))
+                                    , push(ref(stack), ref(left) - ref(right))
                                     ]
                              );
 

@@ -171,7 +171,7 @@ namespace boost { namespace spirit2
         bool operator()(proto::tag::function, anychar_p, Expr const &expr)
         {
             this->skip();
-            return expr.eval(*this);
+            return proto::eval(expr, *this);
         }
 
         // parse function for space_p
@@ -254,7 +254,7 @@ namespace boost { namespace spirit2
         {
             this->skip();
             iterator where = this->first;
-            if(expr.eval(*this))
+            if(proto::eval(expr, *this))
                 return this->first = where, false;
             this->first = ++where;
             return true;
@@ -270,7 +270,7 @@ namespace boost { namespace spirit2
         template<typename Left, typename Right>
         bool operator()(proto::tag::right_shift, Left const &left, Right const &right)
         {
-            return left.eval(*this) && right.eval(*this);
+            return proto::eval(left, *this) && proto::eval(right, *this);
         }
 
         // for A | B, succeeds if either A or B matches at this point.
@@ -278,7 +278,7 @@ namespace boost { namespace spirit2
         bool operator()(proto::tag::bitwise_or, Left const &left, Right const &right)
         {
             iterator where = this->first;
-            return left.eval(*this) || right.eval(this->reset(where));
+            return proto::eval(left, *this) || proto::eval(right, this->reset(where));
         }
 
         // for *A, greedily match A as many times as possible.
@@ -286,7 +286,7 @@ namespace boost { namespace spirit2
         bool operator()(proto::tag::unary_star, Expr const &expr)
         {
             iterator where = this->first;
-            while(expr.eval(*this))
+            while(proto::eval(expr, *this))
                 where = this->first;
             // make sure that when we return true, the iterator is at the correct position!
             this->first = where;
@@ -297,7 +297,7 @@ namespace boost { namespace spirit2
         template<typename Expr>
         bool operator()(proto::tag::unary_plus, Expr const &expr)
         {
-            return expr.eval(*this) && (*expr).eval(*this);
+            return proto::eval(expr, *this) && proto::eval(*expr, *this);
         }
 
         // for !A, optionally match A.
@@ -305,7 +305,7 @@ namespace boost { namespace spirit2
         bool operator()(proto::tag::logical_not, Expr const &expr)
         {
             iterator where = this->first;
-            if(!expr.eval(*this))
+            if(!proto::eval(expr, *this))
                 this->first = where;
             return true;
         }
@@ -315,7 +315,7 @@ namespace boost { namespace spirit2
         bool operator()(proto::tag::subtract, Left const &left, Right const &right)
         {
             iterator where = this->first;
-            return !right.eval(*this) && left.eval(this->reset(where));
+            return !proto::eval(right, *this) && proto::eval(left, this->reset(where));
         }
     private:
         spirit_context &reset(iterator where)
@@ -329,7 +329,7 @@ namespace boost { namespace spirit2
             if(!this->in_skip_)
             {
                 this->in_skip_ = true;
-                while(this->skip_.eval(*this))
+                while(proto::eval(this->skip_, *this))
                 {}
                 this->in_skip_ = false;
             }
@@ -546,7 +546,7 @@ namespace boost { namespace spirit2
     struct no_case_directive
     {
         template<typename Expr>
-        typename SpiritGrammar::apply<Expr, mpl::void_, mpl::void_>::type
+        typename SpiritGrammar::apply<Expr, mpl::void_, mpl::void_>::type const
         operator [](Expr const &expr) const
         {
             mpl::void_ null;
@@ -565,7 +565,7 @@ namespace boost { namespace spirit2
         {}
 
         template<typename Expr>
-        typename SkipperGrammar::apply<Expr, Skipper, mpl::void_>::type
+        typename SkipperGrammar::apply<Expr, Skipper, mpl::void_>::type const
         operator [](Expr const &expr) const
         {
             mpl::void_ null;
@@ -593,7 +593,7 @@ namespace boost { namespace spirit2
         BOOST_MPL_ASSERT((proto::matches<Rule, SpiritGrammar>));
 
         spirit_context<FwdIter> ctx(begin, end);
-        return rule.eval(ctx);
+        return proto::eval(rule, ctx);
     }
 
     // parse with a skip parser can be implemented in one of two ways:
@@ -624,11 +624,11 @@ namespace boost { namespace spirit2
 
         //// Method 1: pass skip parser in the context structure.
         //spirit_context<FwdIter, Skipper> ctx(begin, end, skipper);
-        //return rule.eval(ctx);
+        //return proto::eval(rule, ctx);
 
         // Method 2: Embed skip parser via tree transformation.
         spirit_context<FwdIter> ctx(begin, end);
-        return spirit2::skip(skipper)[rule].eval(ctx);
+        return proto::eval(spirit2::skip(skipper)[rule], ctx);
     }
 
 }}

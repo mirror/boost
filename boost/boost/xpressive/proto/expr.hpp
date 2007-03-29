@@ -142,18 +142,20 @@
                 return that;
             }
 
-            template<typename Fun>
-            typename Fun::template eval<expr>::result_type
-            eval(Fun &fun) const
+            template<typename A>
+            expr<tag::assign, args2<ref<expr>, typename result_of::as_arg<A>::type> > const
+            operator =(A &a)
             {
-                return typename Fun::template eval<expr>()(*this, fun);
+                expr<tag::assign, args2<ref<expr>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
+                return that;
             }
 
-            template<typename Fun>
-            typename Fun::template eval<expr>::result_type
-            eval(Fun const &fun) const
+            template<typename A>
+            expr<tag::assign, args2<ref<expr>, typename result_of::as_arg<A const>::type> > const
+            operator =(A const &a)
             {
-                return typename Fun::template eval<expr>()(*this, fun);
+                expr<tag::assign, args2<ref<expr>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
+                return that;
             }
 
             template<typename A>
@@ -169,6 +171,22 @@
             operator =(A const &a) const
             {
                 expr<tag::assign, args2<ref<expr const>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
+                return that;
+            }
+
+            template<typename A>
+            expr<tag::subscript, args2<ref<expr>, typename result_of::as_arg<A>::type> > const
+            operator [](A &a)
+            {
+                expr<tag::subscript, args2<ref<expr>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
+                return that;
+            }
+
+            template<typename A>
+            expr<tag::subscript, args2<ref<expr>, typename result_of::as_arg<A const>::type> > const
+            operator [](A const &a)
+            {
+                expr<tag::subscript, args2<ref<expr>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
                 return that;
             }
 
@@ -214,14 +232,14 @@
 
         template<typename This BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
         struct result<This(BOOST_PP_ENUM_PARAMS(N, A))>
-          : result_of::BOOST_PP_CAT(funop, N)<expr BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename remove_reference<A, >::type BOOST_PP_INTERCEPT)>
+          : result_of::BOOST_PP_CAT(funop, N)<expr const BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename remove_reference<A, >::type BOOST_PP_INTERCEPT)>
         {};
 
         template<BOOST_PP_ENUM_PARAMS(N, typename A)>
-        typename result_of::BOOST_PP_CAT(funop, N)<expr BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)>::type const
+        typename result_of::BOOST_PP_CAT(funop, N)<expr const BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)>::type const
         operator ()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const &a)) const
         {
-            return result_of::BOOST_PP_CAT(funop, N)<expr BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)>
+            return result_of::BOOST_PP_CAT(funop, N)<expr const BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)>
                 ::call(*this BOOST_PP_ENUM_TRAILING_PARAMS(N, a));
         }
 

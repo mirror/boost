@@ -40,6 +40,25 @@ namespace boost { namespace xpressive { namespace detail
         {};
 
         template<typename Expr>
+        struct eval<Expr, proto::tag::terminal>
+        {
+            typedef
+                typename add_reference<
+                    typename unwrap_reference<
+                        typename remove_reference<
+                            typename proto::default_eval<Expr, action_context>::result_type
+                        >::type
+                    >::type
+                >::type
+            result_type;
+
+            result_type operator()(Expr &expr, action_context &ctx) const
+            {
+                return proto::default_eval<Expr, action_context>()(expr, ctx);
+            }
+        };
+
+        template<typename Expr>
         struct eval<Expr, proto::tag::mem_ptr>
         {
             typedef typename proto::result_of::right<Expr>::type right_type;
@@ -64,7 +83,7 @@ namespace boost { namespace xpressive { namespace detail
                 typename fusion::result_of::invoke<function_type, evaluated_args>::type
             result_type;
 
-            result_type operator()(Expr const &expr, action_context &ctx) const
+            result_type operator()(Expr &expr, action_context &ctx) const
             {
                 return fusion::invoke<function_type>(
                     proto::arg(proto::arg_c<0>(proto::right(expr)))
@@ -93,7 +112,7 @@ namespace boost { namespace xpressive { namespace detail
         virtual void execute() const
         {
             action_context ctx;
-            this->actor_.eval(ctx);
+            proto::eval(this->actor_, ctx);
         }
 
     private:

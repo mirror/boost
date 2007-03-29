@@ -16,6 +16,7 @@ wave-command = [ path.native ../../../../dist/bin/wave ] ;
 #        ../../../../boost/xpressive/proto/debug.hpp
 #        ../../../../boost/xpressive/proto/deep_copy.hpp
 #        ../../../../boost/xpressive/proto/domain.hpp
+#        ../../../../boost/xpressive/proto/eval.hpp
 #        ../../../../boost/xpressive/proto/expr.hpp
 #        ../../../../boost/xpressive/proto/extends.hpp
 #        ../../../../boost/xpressive/proto/fusion.hpp

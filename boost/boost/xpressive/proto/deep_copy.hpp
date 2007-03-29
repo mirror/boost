@@ -33,7 +33,8 @@
                     typename result_of::arg<Expr>::type
                 >::type type;
 
-                static type call(Expr const &expr)
+                template<typename Expr2>
+                static type call(Expr2 const &expr)
                 {
                     type that = {proto::arg(expr)};
                     return that;
@@ -104,7 +105,8 @@
                     BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_TYPE, ~)
                 > > type;
 
-                static type call(Expr const &expr)
+                template<typename Expr2>
+                static type call(Expr2 const &expr)
                 {
                     type that = {
                         BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_FUN, ~)

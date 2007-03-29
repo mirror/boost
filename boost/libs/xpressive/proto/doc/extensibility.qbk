@@ -78,7 +78,7 @@ calculator-ness. It is described below.
         result_type operator()( double d1 = 0.0, double d2 = 0.0 ) const
         {
             calculator_context ctx( d1, d2 );
-            return this->eval( ctx );
+            return proto::eval(*this, ctx );
         }
     };
 
@@ -255,7 +255,7 @@ Here is the code. It is described below.
         operator []( Size subscript ) const
         {
             lazy_subscript_context<Size> ctx(subscript);
-            return this->eval(ctx);
+            return proto::eval(*this, ctx);
         }
     };
 

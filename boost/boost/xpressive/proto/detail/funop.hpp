@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
-/// \file funop.hpp
-/// Contains definition of funop[n]\<\> class template.
+// funop.hpp
+// Contains definition of funop[n]\<\> class template.
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
@@ -16,7 +16,7 @@ struct BOOST_PP_CAT(funop, BOOST_PP_ITERATION())
     typedef expr<
         tag::function
       , BOOST_PP_CAT(args, BOOST_PP_INC(BOOST_PP_ITERATION()))<
-            ref<Expr const>
+            ref<Expr>
             BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
                 BOOST_PP_ITERATION()
               , typename result_of::as_arg<A
@@ -26,7 +26,7 @@ struct BOOST_PP_CAT(funop, BOOST_PP_ITERATION())
     > type;
 
     static type const call(
-        Expr const &expr
+        Expr &expr
         BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(BOOST_PP_ITERATION(), A, &a)
     )
     {

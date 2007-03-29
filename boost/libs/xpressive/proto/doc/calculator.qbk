@@ -128,41 +128,38 @@ An example should make it clear.
         template< typename Left, typename Right >
         double operator()(proto::tag::add, Left const &left, Right const &right) const
         {
-            return left.eval(*this) + right.eval(*this);
+            return proto::eval(left, *this) + proto::eval(right, *this);
         }
         
         // Handle subtraction:
         template< typename Left, typename Right >
         double operator()(proto::tag::subtract, Left const &left, Right const &right) const
         {
-            return left.eval(*this) - right.eval(*this);
+            return proto::eval(left, *this) - proto::eval(right, *this);
         }
         
         // Handle multiplication:
         template< typename Left, typename Right >
         double operator()(proto::tag::multiply, Left const &left, Right const &right) const
         {
-            return left.eval(*this) * right.eval(*this);
+            return proto::eval(left, *this) * proto::eval(right, *this);
         }
         
         // Handle division:
         template< typename Left, typename Right >
         double operator()(proto::tag::divide, Left const &left, Right const &right) const
         {
-            return left.eval(*this) / right.eval(*this);
+            return proto::eval(left, *this) / proto::eval(right, *this);
         }
         
     private:
         double d1_, d2_;
     };
 
-Notice how the binary arithmetic operations are handled. First the left 
-and right operands are evaluated by invoking their `eval()` members. `eval()`
-is a member function defined in the _expr_ struct, so every Proto expression
-tree, from terminals to complicated aggregate expressions, have an `eval()`
-member that accepts an evaluation context. After the left and right children
-are evaluated, the results are combined using the appropriate arithmetic 
-operation.
+Notice how the binary arithmetic operations are handled. First the left and 
+right operands are evaluated by invoking `proto::eval()`. After the left and 
+right children are evaluated, the results are combined using the appropriate 
+arithmetic operation.
 
 Now that we have an evaluation context for our calculator, we can use it to
 evaluate our arithmetic expressions, as below:
@@ -171,7 +168,7 @@ evaluate our arithmetic expressions, as below:
     calculator_context ctx( 45, 50 );
 
     // Create an arithmetic expression and immediately evaluate it
-    double d = ( (_2 - _1) / _2 * 100 ).eval( ctx );
+    double d = proto::eval( (_2 - _1) / _2 * 100, ctx );
     
     // This prints "10"
     std::cout << d << std::endl;

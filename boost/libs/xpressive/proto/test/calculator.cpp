@@ -35,25 +35,25 @@ struct calculator : proto::callable_context<calculator const>
     template<typename Left, typename Right>
     int operator()(proto::tag::add, Left const &left, Right const &right) const
     {
-        return left.eval(*this) + right.eval(*this);
+        return proto::eval(left, *this) + proto::eval(right, *this);
     }
 
     template<typename Left, typename Right>
     int operator()(proto::tag::subtract, Left const &left, Right const &right) const
     {
-        return left.eval(*this) - right.eval(*this);
+        return proto::eval(left, *this) - proto::eval(right, *this);
     }
 
     template<typename Left, typename Right>
     int operator()(proto::tag::multiply, Left const &left, Right const &right) const
     {
-        return left.eval(*this) * right.eval(*this);
+        return proto::eval(left, *this) * proto::eval(right, *this);
     }
 
     template<typename Left, typename Right>
     int operator()(proto::tag::divide, Left const &left, Right const &right) const
     {
-        return left.eval(*this) / right.eval(*this);
+        return proto::eval(left, *this) / proto::eval(right, *this);
     }
 
 private:
@@ -73,7 +73,7 @@ struct functor
     result_type operator()(T const &t) const
     {
         Fun fun(t);
-        return this->expr_.eval(fun);
+        return proto::eval(this->expr_, fun);
     }
 
 private:
@@ -88,8 +88,8 @@ functor<Fun, Expr> as(Expr const &expr)
 
 void test_calculator()
 {
-    BOOST_CHECK_EQUAL(10, (((_1 + 42)-3)/4).eval(calculator(1)));
-    BOOST_CHECK_EQUAL(11, (((_1 + 42)-3)/4).eval(calculator(5)));
+    BOOST_CHECK_EQUAL(10, proto::eval(((_1 + 42)-3)/4, calculator(1)));
+    BOOST_CHECK_EQUAL(11, proto::eval(((_1 + 42)-3)/4, calculator(5)));
 
     BOOST_CHECK_EQUAL(10, as<calculator>(((_1 + 42)-3)/4)(1));
     BOOST_CHECK_EQUAL(11, as<calculator>(((_1 + 42)-3)/4)(5));

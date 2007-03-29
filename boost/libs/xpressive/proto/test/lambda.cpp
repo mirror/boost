@@ -110,7 +110,7 @@ struct lambda
     typedef typename mpl::eval_if<
         typename lambda_arity<T>::type
       , mpl::identity<void>
-      , proto::result_of::eval<T, lambda_context<fusion::tuple<> > >
+      , proto::result_of::eval<T const, lambda_context<fusion::tuple<> > >
     >::type nullary_type;
 
     // Define our operator() that evaluates the lambda expression.
@@ -118,25 +118,25 @@ struct lambda
     {
         fusion::tuple<> args;
         lambda_context<fusion::tuple<> > ctx(args);
-        return this->eval(ctx);
+        return proto::eval(*this, ctx);
     }
 
     template<typename A0>
-    typename proto::result_of::eval<T, lambda_context<fusion::tuple<A0 const &> > >::type
+    typename proto::result_of::eval<T const, lambda_context<fusion::tuple<A0 const &> > >::type
     operator()(A0 const &a0) const
     {
         fusion::tuple<A0 const &> args(a0);
         lambda_context<fusion::tuple<A0 const &> > ctx(args);
-        return this->eval(ctx);
+        return proto::eval(*this, ctx);
     }
 
     template<typename A0, typename A1>
-    typename proto::result_of::eval<T, lambda_context<fusion::tuple<A0 const &, A1 const &> > >::type
+    typename proto::result_of::eval<T const, lambda_context<fusion::tuple<A0 const &, A1 const &> > >::type
     operator()(A0 const &a0, A1 const &a1) const
     {
         fusion::tuple<A0 const &, A1 const &> args(a0, a1);
         lambda_context<fusion::tuple<A0 const &, A1 const &> > ctx(args);
-        return this->eval(ctx);
+        return proto::eval(*this, ctx);
     }
 };
 

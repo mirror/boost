@@ -90,7 +90,7 @@ namespace boost { namespace proto
         typename result<Expr>::type
         operator()(Expr const &expr) const
         {
-            return expr.eval(this->ctx_);
+            return proto::eval(expr, this->ctx_);
         }
 
     private:
