@@ -496,7 +496,7 @@ public:
     /// TODO document me
     ///
     template<typename Arg>
-    match_results<BidiIter> &bind(Arg const &arg)
+    match_results<BidiIter> &let(Arg const &arg)
     {
         typedef typename proto::result_of::left<Arg>::type left_type;
         typedef typename proto::result_of::right<Arg>::type right_type;

@@ -122,7 +122,7 @@ void test4_aux()
     std::string str("aaa=>1 bbb=>23 ccc=>456");
     smatch what;
     std::map<std::string, int> result;
-    what.bind( map = result ); // bind the argument!
+    what.let(map = result); // bind the argument!
 
     if(!regex_match(str, what, rx))
     {
@@ -144,44 +144,49 @@ void test5()
 {
     using namespace boost::xpressive;
 
-    int left = 0, right = 0;
-    std::stack<int> stack;
+    // test for "local" variables.
+    local<int> left = 0, right = 0;
+
+    // test for reference<> to an existing variable
+    std::stack<int> stack_;
+    reference<std::stack<int> > stack(stack_);
+
     std::string str("4+5*(3-1)");
 
     sregex group, factor, term, expression;
 
     group       = '(' >> by_ref(expression) >> ')';
-    factor      = (+_d)[ push(ref(stack), as<int>(_)) ] | group;
+    factor      = (+_d)[ push(stack, as<int>(_)) ] | group;
     term        = factor >> *(
                                 ('*' >> factor)
-                                    [ ref(right) = top(ref(stack))
-                                    , pop(ref(stack))
-                                    , ref(left) = top(ref(stack))
-                                    , pop(ref(stack))
-                                    , push(ref(stack), ref(left) * ref(right))
+                                    [ right = top(stack)
+                                    , pop(stack)
+                                    , left = top(stack)
+                                    , pop(stack)
+                                    , push(stack, left * right)
                                     ]
                               | ('/' >> factor)
-                                    [ ref(right) = top(ref(stack))
-                                    , pop(ref(stack))
-                                    , ref(left) = top(ref(stack))
-                                    , pop(ref(stack))
-                                    , push(ref(stack), ref(left) / ref(right))
+                                    [ right = top(stack)
+                                    , pop(stack)
+                                    , left = top(stack)
+                                    , pop(stack)
+                                    , push(stack, left / right)
                                     ]
                              );
     expression  = term >> *(
                                 ('+' >> term)
-                                    [ ref(right) = top(ref(stack))
-                                    , pop(ref(stack))
-                                    , ref(left) = top(ref(stack))
-                                    , pop(ref(stack))
-                                    , push(ref(stack), ref(left) + ref(right))
+                                    [ right = top(stack)
+                                    , pop(stack)
+                                    , left = top(stack)
+                                    , pop(stack)
+                                    , push(stack, left + right)
                                     ]
                               | ('-' >> term)
-                                    [ ref(right) = top(ref(stack))
-                                    , pop(ref(stack))
-                                    , ref(left) = top(ref(stack))
-                                    , pop(ref(stack))
-                                    , push(ref(stack), ref(left) - ref(right))
+                                    [ right = top(stack)
+                                    , pop(stack)
+                                    , left = top(stack)
+                                    , pop(stack)
+                                    , push(stack, left - right)
                                     ]
                              );
 
@@ -191,8 +196,11 @@ void test5()
     }
     else
     {
-        BOOST_REQUIRE_EQUAL(stack.size(), 1u);
-        BOOST_CHECK_EQUAL(stack.top(), 14);
+        BOOST_REQUIRE_EQUAL(stack_.size(), 1u);
+        BOOST_CHECK_EQUAL(stack_.top(), 14);
+
+        BOOST_REQUIRE_EQUAL(stack.get().size(), 1u);
+        BOOST_CHECK_EQUAL(stack.get().top(), 14);
     }
 }
 

@@ -41,6 +41,20 @@ namespace boost { namespace xpressive
                 return *static_cast<typename remove_reference<T>::type *>(pv);
             }
         };
+
+        template<typename T>
+        struct value_wrapper
+        {
+            value_wrapper()
+              : value()
+            {}
+
+            value_wrapper(T const &t)
+              : value(t)
+            {}
+
+            T value;
+        };
     }
 
     namespace op
@@ -323,6 +337,103 @@ namespace boost { namespace xpressive
     proto::terminal<op::length>::type const length = {{}};
     proto::terminal<op::str>::type const str = {{}};
 
+    template<typename T>
+    struct value
+      : proto::extends<typename proto::terminal<T>::type, value<T> >
+    {
+        typedef proto::extends<typename proto::terminal<T>::type, value<T> > base_type;
+        
+        value()
+          : base_type()
+        {}
+        
+        value(T const &t)
+          : base_type(base_type::type::make(t))
+        {}
+        
+        using base_type::operator =;
+        
+        T &get()
+        {
+            return proto::arg(*this);
+        }
+
+        T const &get() const
+        {
+            return proto::arg(*this);
+        }
+    };
+
+    template<typename T>
+    struct reference
+      : proto::extends<typename proto::terminal<reference_wrapper<T> >::type, reference<T> >
+    {
+        typedef proto::extends<typename proto::terminal<reference_wrapper<T> >::type, reference<T> > base_type;
+        
+        reference(T &t)
+          : base_type(base_type::type::make(boost::ref(t)))
+        {}
+        
+        using base_type::operator =;
+
+        T &get() const
+        {
+            return proto::arg(*this).get();
+        }
+    };
+
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4522) // Warning: multiple assignment operators specified
+#endif
+
+    template<typename T>
+    struct local
+      : detail::value_wrapper<T>
+      , proto::extends<typename proto::terminal<reference_wrapper<T> >::type, local<T> >
+    {
+        typedef proto::extends<typename proto::terminal<reference_wrapper<T> >::type, local<T> > base_type;
+        
+        local()
+          : detail::value_wrapper<T>()
+          , base_type(base_type::type::make(boost::ref(detail::value_wrapper<T>::value)))
+        {}
+        
+        local(T const &t)
+          : detail::value_wrapper<T>(t)
+          , base_type(base_type::type::make(boost::ref(detail::value_wrapper<T>::value)))
+        {}
+
+        // copies refer to the value in that, not this!
+        local(local const &that)
+          : detail::value_wrapper<T>()
+          , base_type(that)
+        {}
+        
+        // copies refer to the value in that, not this!
+        local &operator =(local const &that)
+        {
+            *static_cast<base_type *>(this) = *static_cast<base_type const *>(&that);
+            return *this;
+        }
+        
+        using base_type::operator =;
+        
+        T &get()
+        {
+            return proto::arg(*this);
+        }
+
+        T const &get() const
+        {
+            return proto::arg(*this);
+        }
+    };
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
     template<typename T, typename D>
     typename proto::function<
         typename proto::terminal<op::as<T> >::type
@@ -337,21 +448,21 @@ namespace boost { namespace xpressive
     }
 
     template<typename T>
-    typename proto::terminal<T>::type val(T const &t)
+    value<T> val(T const &t)
     {
-        return proto::terminal<T>::type::make(t);
+        return value<T>(t);
     }
 
     template<typename T>
-    typename proto::terminal<reference_wrapper<T> >::type ref(T &t)
+    reference<T> ref(T &t)
     {
-        return proto::terminal<reference_wrapper<T> >::type::make(reference_wrapper<T>(t));
+        return reference<T>(t);
     }
 
     template<typename T>
-    typename proto::terminal<reference_wrapper<T const> >::type cref(T const &t)
+    reference<T const> cref(T const &t)
     {
-        return proto::terminal<reference_wrapper<T const> >::type::make(reference_wrapper<T const>(t));
+        return reference<T const>(t);
     }
 
     template<typename Predicate>
