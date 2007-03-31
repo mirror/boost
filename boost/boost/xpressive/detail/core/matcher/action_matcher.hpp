@@ -13,7 +13,11 @@
 # pragma once
 #endif
 
+#include <boost/ref.hpp>
 #include <boost/assert.hpp>
+#include <boost/mpl/if.hpp>
+#include <boost/type_traits/is_const.hpp>
+#include <boost/type_traits/remove_reference.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/quant_style.hpp>
 #include <boost/xpressive/detail/core/action.hpp>
@@ -88,7 +92,17 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Expr>
         struct eval<Expr, proto::tag::mem_ptr>
         {
-            typedef typename proto::result_of::right<Expr>::type right_type;
+            typedef typename remove_reference<typename mpl::if_<
+                is_const<Expr>
+              , typename proto::result_of::right<Expr>::const_reference
+              , typename proto::result_of::right<Expr>::reference
+            >::type>::type right_type;
+            
+            typedef typename remove_reference<typename mpl::if_<
+                is_const<Expr>
+              , typename proto::result_of::left<Expr>::const_reference
+              , typename proto::result_of::left<Expr>::reference
+            >::type>::type left_type;
             
             typedef
                 typename proto::result_of::arg<
@@ -99,8 +113,8 @@ namespace boost { namespace xpressive { namespace detail
             typedef 
                 fusion::transform_view<
                     typename fusion::result_of::push_front<
-                        typename fusion::result_of::pop_front<proto::children<right_type const> >::type const
-                      , typename proto::result_of::left<Expr>::type
+                        typename fusion::result_of::pop_front<proto::children<right_type> >::type const
+                      , reference_wrapper<left_type>
                     >::type const
                   , proto::eval_fun<action_context const>
                 >
@@ -115,7 +129,7 @@ namespace boost { namespace xpressive { namespace detail
                 return fusion::invoke<function_type>(
                     proto::arg(proto::arg_c<0>(proto::right(expr)))
                   , evaluated_args(
-                        fusion::push_front(fusion::pop_front(proto::children_of(proto::right(expr))), proto::left(expr))
+                        fusion::push_front(fusion::pop_front(proto::children_of(proto::right(expr))), boost::ref(proto::left(expr)))
                       , proto::eval_fun<action_context const>(ctx)
                     )
                 );

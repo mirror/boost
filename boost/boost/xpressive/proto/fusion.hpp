@@ -81,14 +81,14 @@ namespace boost { namespace proto
         {
             typedef 
                 typename Context::template eval<
-                    typename detail::remove_cv_ref<Expr>::type
+                    typename remove_reference<Expr>::type
                 >::result_type
             type;
         };
 
         template<typename Expr>
         typename result<Expr>::type
-        operator()(Expr const &expr) const
+        operator()(Expr &expr) const
         {
             return proto::eval(expr, this->ctx_);
         }
