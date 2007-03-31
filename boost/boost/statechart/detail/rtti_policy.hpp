@@ -86,7 +86,7 @@ struct rtti_policy
   typedef bool id_provider_type; // dummy
   #else
   typedef const void * id_type;
-  typedef const id_provider & id_provider_type;
+  typedef const id_provider * id_provider_type;
   #endif
 
   ////////////////////////////////////////////////////////////////////////////
@@ -102,7 +102,7 @@ struct rtti_policy
         #ifdef BOOST_STATECHART_USE_NATIVE_RTTI
         return id_type( typeid( *this ) );
         #else
-        return &idProvider_;
+        return idProvider_;
         #endif
       }
 
@@ -111,9 +111,9 @@ struct rtti_policy
       const CustomId * custom_dynamic_type_ptr() const
       {
         BOOST_ASSERT(
-          ( idProvider_.pCustomId_ == 0 ) ||
-          ( *idProvider_.pCustomIdType_ == typeid( CustomId ) ) );
-        return static_cast< const CustomId * >( idProvider_.pCustomId_ );
+          ( idProvider_->pCustomId_ == 0 ) ||
+          ( *idProvider_->pCustomIdType_ == typeid( CustomId ) ) );
+        return static_cast< const CustomId * >( idProvider_->pCustomId_ );
       }
       #endif
 
@@ -201,7 +201,7 @@ struct rtti_policy
       #ifdef BOOST_STATECHART_USE_NATIVE_RTTI
       rtti_derived_type() : Base( false ) {}
       #else
-      rtti_derived_type() : Base( id_holder< MostDerived >::idProvider_ ) {}
+      rtti_derived_type() : Base( &id_holder< MostDerived >::idProvider_ ) {}
       #endif
   };
 };
