@@ -13,6 +13,8 @@
 # pragma once
 #endif
 
+#include <boost/xpressive/detail/detail_fwd.hpp>
+
 namespace boost { namespace xpressive { namespace detail
 {
 
@@ -23,7 +25,7 @@ namespace boost { namespace xpressive { namespace detail
     struct actionable
     {
         virtual ~actionable() {}
-        virtual void execute() const {}
+        virtual void execute(action_args_type *action_args) const {}
 
         actionable()
           : next(0)

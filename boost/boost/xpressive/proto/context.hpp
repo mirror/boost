@@ -211,6 +211,7 @@
         BOOST_PROTO_BINARY_OP_RESULT(^, proto::tag::bitwise_xor)
         BOOST_PROTO_BINARY_OP_RESULT(->*, proto::tag::mem_ptr)
 
+        BOOST_PROTO_BINARY_OP_RESULT(=, proto::tag::assign)
         BOOST_PROTO_BINARY_OP_RESULT(<<=, proto::tag::left_shift_assign)
         BOOST_PROTO_BINARY_OP_RESULT(>>=, proto::tag::right_shift_assign)
         BOOST_PROTO_BINARY_OP_RESULT(*=, proto::tag::multiply_assign)
@@ -236,21 +237,6 @@
             result_type operator()(Expr &expr, Context &) const
             {
                 return proto::arg(expr);
-            }
-        };
-
-        // Handle assignment specially.
-        template<typename Expr, typename Context>
-        struct default_eval<Expr, Context, proto::tag::assign, 2>
-        {
-        private:
-            static Expr &sexpr;
-            static Context &sctx;
-        public:
-            BOOST_PROTO_TYPEOF(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx) = proto::eval(BOOST_PROTO_REF(proto::arg_c<1>(sexpr)), sctx), result_type)
-            result_type operator()(Expr &expr, Context &ctx) const
-            {
-                return proto::eval(proto::arg_c<0>(expr), ctx) = proto::eval(proto::arg_c<1>(expr), ctx);
             }
         };
 

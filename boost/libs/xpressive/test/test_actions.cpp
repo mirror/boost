@@ -145,7 +145,7 @@ void test5()
     using namespace boost::xpressive;
 
     // test for "local" variables.
-    local<int> left = 0, right = 0;
+    local<int> left, right;
 
     // test for reference<> to an existing variable
     std::stack<int> stack_;

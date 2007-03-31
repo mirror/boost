@@ -347,7 +347,7 @@ namespace boost { namespace xpressive
           : base_type()
         {}
         
-        value(T const &t)
+        explicit value(T const &t)
           : base_type(base_type::type::make(t))
         {}
         
@@ -370,7 +370,7 @@ namespace boost { namespace xpressive
     {
         typedef proto::extends<typename proto::terminal<reference_wrapper<T> >::type, reference<T> > base_type;
         
-        reference(T &t)
+        explicit reference(T &t)
           : base_type(base_type::type::make(boost::ref(t)))
         {}
         
@@ -399,7 +399,7 @@ namespace boost { namespace xpressive
           , base_type(base_type::type::make(boost::ref(detail::value_wrapper<T>::value)))
         {}
         
-        local(T const &t)
+        explicit local(T const &t)
           : detail::value_wrapper<T>(t)
           , base_type(base_type::type::make(boost::ref(detail::value_wrapper<T>::value)))
         {}

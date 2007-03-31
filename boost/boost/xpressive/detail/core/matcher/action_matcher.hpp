@@ -34,29 +34,56 @@ namespace boost { namespace xpressive { namespace detail
     //
     struct action_context
     {
+        explicit action_context(action_args_type *action_args)
+          : action_args_(action_args)
+        {}
+
+        action_args_type const &args() const
+        {
+            return *this->action_args_;
+        }
+
+        // eval_terminal
+        template<typename Expr, typename Arg = typename proto::result_of::arg<Expr>::type>
+        struct eval_terminal
+          : proto::default_eval<Expr, action_context const>
+        {};
+
+        template<typename Expr, typename Arg>
+        struct eval_terminal<Expr, reference_wrapper<Arg> >
+        {
+            typedef Arg &result_type;
+            result_type operator()(Expr &expr, action_context const &) const
+            {
+                return proto::arg(expr).get();
+            }
+        };
+
+        template<typename Expr, typename Type, typename Int>
+        struct eval_terminal<Expr, action_arg<Type, Int> >
+        {
+            typedef typename action_arg<Type, Int>::reference result_type;
+            result_type operator()(Expr &expr, action_context const &ctx) const
+            {
+                action_args_type::const_iterator where = ctx.args().find(&typeid(proto::arg(expr)));
+                if(where == ctx.args().end())
+                {
+                    throw regex_error(regex_constants::error_badarg, "An argument to an action was unspecified");
+                }
+                return proto::arg(expr).cast(where->second);
+            }
+        };
+
+        // eval
         template<typename Expr, typename Tag = typename Expr::tag_type>
         struct eval
-          : proto::default_eval<Expr, action_context>
+          : proto::default_eval<Expr, action_context const>
         {};
 
         template<typename Expr>
         struct eval<Expr, proto::tag::terminal>
-        {
-            typedef
-                typename add_reference<
-                    typename unwrap_reference<
-                        typename remove_reference<
-                            typename proto::default_eval<Expr, action_context>::result_type
-                        >::type
-                    >::type
-                >::type
-            result_type;
-
-            result_type operator()(Expr &expr, action_context &ctx) const
-            {
-                return proto::default_eval<Expr, action_context>()(expr, ctx);
-            }
-        };
+          : eval_terminal<Expr>
+        {};
 
         template<typename Expr>
         struct eval<Expr, proto::tag::mem_ptr>
@@ -75,7 +102,7 @@ namespace boost { namespace xpressive { namespace detail
                         typename fusion::result_of::pop_front<proto::children<right_type const> >::type const
                       , typename proto::result_of::left<Expr>::type
                     >::type const
-                  , proto::eval_fun<action_context>
+                  , proto::eval_fun<action_context const>
                 >
             evaluated_args;
 
@@ -83,17 +110,20 @@ namespace boost { namespace xpressive { namespace detail
                 typename fusion::result_of::invoke<function_type, evaluated_args>::type
             result_type;
 
-            result_type operator()(Expr &expr, action_context &ctx) const
+            result_type operator()(Expr &expr, action_context const &ctx) const
             {
                 return fusion::invoke<function_type>(
                     proto::arg(proto::arg_c<0>(proto::right(expr)))
                   , evaluated_args(
                         fusion::push_front(fusion::pop_front(proto::children_of(proto::right(expr))), proto::left(expr))
-                      , proto::eval_fun<action_context>(ctx)
+                      , proto::eval_fun<action_context const>(ctx)
                     )
                 );
             }
         };
+
+    private:
+        action_args_type *action_args_;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -109,9 +139,9 @@ namespace boost { namespace xpressive { namespace detail
         {
         }
 
-        virtual void execute() const
+        virtual void execute(action_args_type *action_args) const
         {
-            action_context ctx;
+            action_context const ctx(action_args);
             proto::eval(this->actor_, ctx);
         }
 
@@ -166,32 +196,24 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     ///////////////////////////////////////////////////////////////////////////////
-    // action_arg_transform
+    // by_ref_transform
     //
     template<typename Grammar>
-    struct action_arg_transform
+    struct by_ref_transform
       : Grammar
     {
-        action_arg_transform();
+        by_ref_transform();
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
-        {
-            typedef typename proto::result_of::arg<Expr>::type action_arg_type;
-            typedef typename action_arg_type::reference arg_type;
-            typedef typename proto::terminal<arg_type>::type type;
-        };
+          : proto::terminal<typename proto::result_of::arg<Expr>::const_reference>
+        {};
         
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &state, Visitor &)
         {
-            detail::action_args_type::iterator where = state.action_args_->find(&typeid(proto::arg(expr)));
-            if(where == state.action_args_->end())
-            {
-                throw regex_error(regex_constants::error_badarg, "An argument to an action was unspecified");
-            }
-            return proto::as_arg(proto::arg(expr).cast(where->second));
+            return apply<Expr, State, Visitor>::type::make(proto::arg(expr));
         }
     };
 
@@ -202,8 +224,7 @@ namespace boost { namespace xpressive { namespace detail
       : proto::or_<
             subreg_transform<proto::terminal<detail::any_matcher> >
           , mark_transform<proto::terminal<detail::mark_placeholder> >
-          , action_arg_transform<proto::terminal<action_arg<proto::_, proto::_> > >
-          , proto::terminal<proto::_>
+          , by_ref_transform<proto::terminal<proto::_> >
           , proto::nary_expr<proto::_, proto::vararg<BindActionArgs> >
         >
     {};
