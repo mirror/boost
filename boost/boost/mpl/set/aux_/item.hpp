@@ -2,7 +2,7 @@
 #ifndef BOOST_MPL_SET_AUX_ITEM_HPP_INCLUDED
 #define BOOST_MPL_SET_AUX_ITEM_HPP_INCLUDED
 
-// Copyright Aleksey Gurtovoy 2003-2004
+// Copyright Aleksey Gurtovoy 2003-2007
 // Copyright David Abrahams 2003-2004
 //
 // Distributed under the Boost Software License, Version 1.0. 
@@ -31,9 +31,7 @@ struct s_item
 {
     typedef s_item<T,Base> item_;
     typedef void_       last_masked_;
-    typedef Base        next_;
     typedef T           item_type_;
-    typedef item_type_  type;
     typedef Base        base;
     
     typedef typename next< typename Base::size >::type  size;

@@ -2,7 +2,7 @@
 #ifndef BOOST_MPL_SET_AUX_BEGIN_END_IMPL_HPP_INCLUDED
 #define BOOST_MPL_SET_AUX_BEGIN_END_IMPL_HPP_INCLUDED
 
-// Copyright Aleksey Gurtovoy 2003-2004
+// Copyright Aleksey Gurtovoy 2003-2007
 // Copyright David Abrahams 2003-2004
 //
 // Distributed under the Boost Software License, Version 1.0. 
@@ -24,8 +24,8 @@ template<>
 struct begin_impl< aux::set_tag >
 {
     template< typename Set > struct apply
+        : s_iter_get<Set,typename Set::item_>
     {
-        typedef s_iter<Set,Set> type;
     };
 };
 
