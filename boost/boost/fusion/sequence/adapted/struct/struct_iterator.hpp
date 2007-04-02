@@ -9,9 +9,9 @@
 #define FUSION_STRUCT_ITERATOR_APRIL_2_2007_1008AM
 
 #include <boost/fusion/iterator/iterator_facade.hpp>
+#include <boost/fusion/sequence/adapted/struct/extension.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
-#include <boost/type_traits/add_const.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/if.hpp>
@@ -21,35 +21,6 @@
 
 namespace boost { namespace fusion
 {
-    namespace extension
-    {
-        template <typename Struct, int N>
-        struct struct_member;
-
-        template <typename Struct>
-        struct struct_size;
-
-        template <typename Struct, int N>
-        struct struct_member<Struct const, N>
-        {
-            typedef typename
-                add_const<typename struct_member<Struct, N>::type>::type
-            type;
-
-            static type&
-            call(Struct const& struct_)
-            {
-                return struct_member<Struct, N>::call(
-                    const_cast<Struct&>(struct_));
-            }
-        };
-
-        template <typename Struct>
-        struct struct_size<Struct const>
-            : struct_size<Struct>
-        {};
-    }
-
     struct random_access_traversal_tag;
 
     template <typename Struct, int N_>
