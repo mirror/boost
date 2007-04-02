@@ -2,40 +2,43 @@
     Copyright (c) 2001-2006 Joel de Guzman
     Copyright (c) 2005-2006 Dan Marsden
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(BOOST_FUSION_AT_IMPL_24122005_1807)
 #define BOOST_FUSION_AT_IMPL_24122005_1807
 
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/int.hpp>
-#include <boost/static_assert.hpp>
 #include <boost/fusion/support/detail/access.hpp>
+#include <boost/mpl/assert.hpp>
+#include <boost/mpl/int.hpp>
 
-namespace boost { namespace fusion {
-
-    struct std_pair_tag;
+namespace boost { namespace fusion
+{
+    struct struct_tag;
 
     namespace extension
     {
         template<typename T>
         struct at_impl;
 
+        template <typename Struct, int N>
+        struct struct_member;
+
+        template <typename Struct>
+        struct struct_size;
+
         template <>
-        struct at_impl<std_pair_tag>
+        struct at_impl<struct_tag>
         {
             template <typename Sequence, typename N>
-            struct apply 
+            struct apply
             {
                 static int const n_value = N::value;
-                BOOST_STATIC_ASSERT((n_value >= 0 && n_value < 2));
+                BOOST_MPL_ASSERT_RELATION(
+                    n_value, <=, extension::struct_size<Sequence>::value);
+
                 typedef typename
-                    mpl::if_c<
-                        (n_value == 0)
-                      , typename Sequence::first_type
-                      , typename Sequence::second_type
-                    >
+                    extension::struct_member<Sequence, N::value>
                 element;
 
                 typedef typename
@@ -46,22 +49,11 @@ namespace boost { namespace fusion {
                     >::type
                 type;
 
-                template <typename RT>
-                static RT get(Sequence& p, mpl::int_<0>)
-                {
-                    return  p.first;
-                }
-
-                template <typename RT>
-                static RT get(Sequence& p, mpl::int_<1>)
-                {
-                    return  p.second;
-                }
-
                 static type
-                call(Sequence& p)
+                call(Sequence& seq)
                 {
-                    return get<type>(p, N());
+                    return extension::
+                        struct_member<Sequence, N::value>::call(seq);
                 }
             };
         };
