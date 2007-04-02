@@ -8,6 +8,9 @@
 #if !defined(BOOST_FUSION_STRUCT_24122005_1744)
 #define BOOST_FUSION_STD_STRUCT_24122005_1744
 
+#include <boost/fusion/sequence/adapted/struct/extension.hpp>
+#include <boost/fusion/sequence/adapted/struct/adapt_struct.hpp>
+#include <boost/fusion/sequence/adapted/struct/struct_iterator.hpp>
 #include <boost/fusion/sequence/adapted/struct/detail/is_view_impl.hpp>
 #include <boost/fusion/sequence/adapted/struct/detail/is_sequence_impl.hpp>
 #include <boost/fusion/sequence/adapted/struct/detail/category_of_impl.hpp>

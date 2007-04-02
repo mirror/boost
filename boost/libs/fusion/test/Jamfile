@@ -107,6 +107,8 @@ import testing ;
     [ run sequence/zip_view_ignore.cpp : : : : ]
     [ run sequence/repetitive_view.cpp : : : : ]
     [ run sequence/deduce_sequence.cpp : : : : ]
+    [ run sequence/adapt_struct.cpp : : : : ]
+
     [ run functional/fused.cpp : : : : ]
     [ run functional/fused_function_object.cpp : : : : ]
     [ run functional/fused_procedure.cpp : : : : ]
@@ -125,7 +127,7 @@ import testing ;
     [ run functional/invoke_procedure.cpp : : : : ]
 
 #   [ compile-fail xxx.cpp :  :  :  :  ]
-    
+
     ;
 }
 
