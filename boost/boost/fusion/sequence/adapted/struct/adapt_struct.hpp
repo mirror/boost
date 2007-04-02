@@ -29,21 +29,21 @@
 #include <boost/mpl/int.hpp>
 #include <utility>
 
-#define BOOST_SPIRIT_ADAPT_STRUCT(name, bseq)                                   \
-    BOOST_SPIRIT_ADAPT_STRUCT_I(                                                \
-        name, BOOST_PP_CAT(BOOST_SPIRIT_ADAPT_STRUCT_X bseq, 0))                \
+#define BOOST_FUSION_ADAPT_STRUCT(name, bseq)                                   \
+    BOOST_FUSION_ADAPT_STRUCT_I(                                                \
+        name, BOOST_PP_CAT(BOOST_FUSION_ADAPT_STRUCT_X bseq, 0))                \
     /***/
 
-#define BOOST_SPIRIT_ADAPT_STRUCT_X(x, y) ((x, y)) BOOST_SPIRIT_ADAPT_STRUCT_Y
-#define BOOST_SPIRIT_ADAPT_STRUCT_Y(x, y) ((x, y)) BOOST_SPIRIT_ADAPT_STRUCT_X
-#define BOOST_SPIRIT_ADAPT_STRUCT_X0
-#define BOOST_SPIRIT_ADAPT_STRUCT_Y0
+#define BOOST_FUSION_ADAPT_STRUCT_X(x, y) ((x, y)) BOOST_FUSION_ADAPT_STRUCT_Y
+#define BOOST_FUSION_ADAPT_STRUCT_Y(x, y) ((x, y)) BOOST_FUSION_ADAPT_STRUCT_X
+#define BOOST_FUSION_ADAPT_STRUCT_X0
+#define BOOST_FUSION_ADAPT_STRUCT_Y0
 
-// BOOST_SPIRIT_ADAPT_STRUCT_I generates the overarching structure and uses
+// BOOST_FUSION_ADAPT_STRUCT_I generates the overarching structure and uses
 // SEQ_FOR_EACH_I to generate the "linear" substructures.
 // Thanks to Paul Mensonides for the PP macro help
 
-#define BOOST_SPIRIT_ADAPT_STRUCT_I(name, seq)                                  \
+#define BOOST_FUSION_ADAPT_STRUCT_I(name, seq)                                  \
     namespace boost { namespace fusion { namespace traits                       \
     {                                                                           \
         template <>                                                             \
@@ -56,11 +56,11 @@
     {                                                                           \
         template <>                                                             \
         struct struct_size<name> : mpl::int_<BOOST_PP_SEQ_SIZE(seq)> {};        \
-        BOOST_PP_SEQ_FOR_EACH_I(BOOST_SPIRIT_ADAPT_STRUCT_C, name, seq)         \
+        BOOST_PP_SEQ_FOR_EACH_I(BOOST_FUSION_ADAPT_STRUCT_C, name, seq)         \
     }}}                                                                         \
     /***/
 
-#define BOOST_SPIRIT_ADAPT_STRUCT_C(r, name, i, xy)                             \
+#define BOOST_FUSION_ADAPT_STRUCT_C(r, name, i, xy)                             \
     template <>                                                                 \
     struct struct_member<name, i>                                               \
     {                                                                           \

@@ -36,7 +36,7 @@ namespace ns
     };
 }
 
-BOOST_SPIRIT_ADAPT_STRUCT(
+BOOST_FUSION_ADAPT_STRUCT(
     ns::point,
     (int, x)
     (int, y)
