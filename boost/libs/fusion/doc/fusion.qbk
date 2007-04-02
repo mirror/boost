@@ -41,7 +41,7 @@
 [def __boost_result_of__        [@http://www.boost.org/libs/utility/utility.htm#result_of Boost.ResultOf]]
 [def __boost_result_of_call__   [@http://www.boost.org/libs/utility/utility.htm#result_of `boost::result_of`]]
 [def __boost_enable_if__        [@http://www.boost.org/libs/utility/enable_if.html Boost.EnableIf utility]]
-[def __boost_shared_ptr_call__  [@http://www.boost.org/libs/smart_ptr/smart_ptr.hpp `boost::shared_ptr`]]
+[def __boost_shared_ptr_call__  [@http://www.boost.org/libs/smart_ptr/shared_ptr.htm `boost::shared_ptr`]]
 [def __std_pair_doc__           [@http://www.sgi.com/tech/stl/pair.html `std::pair`]]
 [def __std_plus_doc__           [@http://www.sgi.com/tech/stl/plus.html `std::plus`]]
 [def __std_minus_doc__          [@http://www.sgi.com/tech/stl/minus.html `std::minus`]]
