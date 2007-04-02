@@ -469,7 +469,7 @@ reference. Const qualification is preserved and propagated appropriately
 target function object that is const or, if the target function object
 is held by value, the adapter is const - these semantics have nothing to
 do with the const qualification of a member function, which is referring
-to the type of object pointed to by [^this], which is specified with the
+to the type of object pointed to by [^this] that is specified with the
 first element in the sequence passed to the adapter).
 
 If the target function is a pointer to a class members, the corresponding
@@ -544,7 +544,7 @@ reference. Const qualification is preserved and propagated appropriately
 target function object that is const or, if the target function object
 is held by value, the adapter is const - these semantics have nothing to
 do with the const qualification of a member function, which is referring
-to the type of object pointed to by [^this], which is specified with the
+to the type of object pointed to by [^this] that is specified with the
 first element in the sequence passed to the adapter).
 
 If the target function is a pointer to a members function, the corresponding
