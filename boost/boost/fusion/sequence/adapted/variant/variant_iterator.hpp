@@ -2,7 +2,7 @@
     Copyright (c) 2001-2006 Joel de Guzman
     Copyright (c) 2005-2006 Dan Marsden
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(BOOST_FUSION_VARIANT_ITERATOR_12112006_1617)
@@ -19,8 +19,9 @@
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/variant/get.hpp>
+#include <boost/detail/workaround.hpp>
 
-namespace boost { namespace fusion 
+namespace boost { namespace fusion
 {
     struct forward_traversal_tag;
 
@@ -39,7 +40,7 @@ namespace boost { namespace fusion
         struct next
         {
             typedef variant_iterator<
-                typename Iterator::variant_type, 
+                typename Iterator::variant_type,
                 typename mpl::next<typename Iterator::iterator>::type> type;
 
             static type
@@ -73,18 +74,32 @@ namespace boost { namespace fusion
         template <typename Iterator>
         struct deref
         {
-            typedef typename 
+            typedef typename
                 mpl::eval_if<
                     is_const<typename Iterator::variant_type>
                   , add_const<typename mpl::deref<typename Iterator::iterator>::type>
                   , mpl::deref<typename Iterator::iterator>
-                >::type 
+                >::type
             value_type;
 
-            typedef typename 
+            typedef typename
                 add_reference<value_type>::type
             type;
 
+#if BOOST_WORKAROUND(BOOST_MSVC, < 1400)
+// for some unknown reason (compiler bug) VC7.1 gets confused with
+// variant and optional get functions.
+            static type
+            call(Iterator const & it)
+            {
+                boost::detail::variant::get_visitor<type> v;
+                typedef typename mpl::deref<typename Iterator::iterator>::type type;
+                if (type* result = it.var_.apply_visitor(v))
+                    return *result;
+                it.var_ = type(); // prime the variant
+                return *it.var_.apply_visitor(v); // no-throw!
+            }
+#else
             static type
             call(Iterator const & it)
             {
@@ -94,6 +109,7 @@ namespace boost { namespace fusion
                 it.var_ = type(); // prime the variant
                 return *boost::get<type>(&it.var_); // no-throw!
             }
+#endif
         };
     };
 }}
