@@ -99,36 +99,36 @@
                 typedef void type;
             };
 
-            template<typename T, typename U = T> 	 
-            struct result_of_fixup 	 
-              : mpl::if_<is_function<T>, T *, U> 	 
-            {}; 	 
-         
-            template<typename T, typename U> 	 
-            struct result_of_fixup<T &, U> 	 
-              : result_of_fixup<T, T> 	 
-            {}; 	 
-         
-            template<typename T, typename U> 	 
-            struct result_of_fixup<T *, U> 	 
-              : result_of_fixup<T, U> 	 
-            {}; 	 
-         
-            template<typename T, typename U> 	 
-            struct result_of_fixup<T const, U> 	 
-              : result_of_fixup<T, U> 	 
-            {}; 	 
-         
-            //// Tests for result_of_fixup 	 
-            //struct bar {}; 	 
-            //BOOST_MPL_ASSERT((is_same<bar,        result_of_fixup<bar>::type>)); 	 
-            //BOOST_MPL_ASSERT((is_same<bar const,  result_of_fixup<bar const>::type>)); 	 
-            //BOOST_MPL_ASSERT((is_same<bar,        result_of_fixup<bar &>::type>)); 	 
-            //BOOST_MPL_ASSERT((is_same<bar const,  result_of_fixup<bar const &>::type>)); 	 
-            //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(*)()>::type>)); 	 
-            //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(* const)()>::type>)); 	 
-            //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(* const &)()>::type>)); 	 
-            //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(&)()>::type>)); 
+            template<typename T, typename U = T>
+            struct result_of_fixup
+              : mpl::if_<is_function<T>, T *, U>
+            {};
+
+            template<typename T, typename U>
+            struct result_of_fixup<T &, U>
+              : result_of_fixup<T, T>
+            {};
+
+            template<typename T, typename U>
+            struct result_of_fixup<T *, U>
+              : result_of_fixup<T, U>
+            {};
+
+            template<typename T, typename U>
+            struct result_of_fixup<T const, U>
+              : result_of_fixup<T, U>
+            {};
+
+            //// Tests for result_of_fixup
+            //struct bar {};
+            //BOOST_MPL_ASSERT((is_same<bar,        result_of_fixup<bar>::type>));
+            //BOOST_MPL_ASSERT((is_same<bar const,  result_of_fixup<bar const>::type>));
+            //BOOST_MPL_ASSERT((is_same<bar,        result_of_fixup<bar &>::type>));
+            //BOOST_MPL_ASSERT((is_same<bar const,  result_of_fixup<bar const &>::type>));
+            //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(*)()>::type>));
+            //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(* const)()>::type>));
+            //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(* const &)()>::type>));
+            //BOOST_MPL_ASSERT((is_same<void(*)(),  result_of_fixup<void(&)()>::type>));
 
             struct dont_care
             {
@@ -226,11 +226,11 @@
         template<typename Expr, typename Context>
         struct default_eval<Expr, Context, proto::tag::terminal, 1>
         {
-            typedef 
+            typedef
                 typename mpl::if_<
                     is_const<Expr>
-                  , typename proto::result_of::arg<Expr>::const_reference 
-                  , typename proto::result_of::arg<Expr>::reference 
+                  , typename proto::result_of::arg<Expr>::const_reference
+                  , typename proto::result_of::arg<Expr>::reference
                 >::type
             result_type;
 
@@ -407,7 +407,7 @@
                 static no_type check(typename inner_context::private_type_ const &);
                 BOOST_STATIC_CONSTANT(bool, value =
                     (
-                        sizeof(yes_type) == 
+                        sizeof(yes_type) ==
                         sizeof(
                             check(
                                 sprivate_(
