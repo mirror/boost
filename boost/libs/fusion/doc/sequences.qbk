@@ -200,7 +200,7 @@ __bidirectional_sequence__
 [variablelist Notation
     [[`s`]       [A Random Access Sequence]]
     [[`S`]       [A Random Access Sequence type]]
-    [[`N`]       [An integral constant]]
+    [[`N`]       [An __mpl_integral_constant__]]
     [[`o`]       [An arbitrary object]]
     [[`e`]       [A Sequence element]]
 ]
@@ -491,7 +491,7 @@ time). The runtime cost of access to each element is peculiarly constant
     [[`car`]            [An arbitrary data]]
     [[`cdr`]            [Another `cons` list]]
     [[`s`]              [A __forward_sequence__]]
-    [[`N`]              [An Integral Constant]]
+    [[`N`]              [An __mpl_integral_constant__]]
 ]
 
 [heading Expression Semantics]
@@ -519,8 +519,8 @@ constant (see __recursive_inline__).]
 [heading Example]
 
     cons<int, cons<float> > l(12, cons<float>(5.5f));
-    std::cout << __at__<0>(l) << std::endl;
-    std::cout << __at__<1>(l) << std::endl;
+    std::cout << __at_c__<0>(l) << std::endl;
+    std::cout << __at_c__<1>(l) << std::endl;
 
 [endsect]
 
@@ -576,7 +576,7 @@ including any Fusion header to change the default. Example:
     [[`l`]              [An instance of `list`]]
     [[`e0`...`en`]      [Heterogeneous values]]
     [[`s`]              [A __forward_sequence__]]
-    [[`N`]              [An Integral Constant]]
+    [[`N`]              [An __mpl_integral_constant__]]
 ]
 
 [heading Expression Semantics]
@@ -602,8 +602,8 @@ constant (see __recursive_inline__).]
 [heading Example]
 
     list<int, float> l(12, 5.5f);
-    std::cout << __at__<0>(l) << std::endl;
-    std::cout << __at__<1>(l) << std::endl;
+    std::cout << __at_c__<0>(l) << std::endl;
+    std::cout << __at_c__<1>(l) << std::endl;
 
 [endsect]
 
@@ -1678,7 +1678,7 @@ Returns the N-th element from the beginning of the sequence.
 [table
     [[Parameter]    [Requirement]                           [Description]]
     [[`seq`]        [Model of __random_access_sequence__]   [The sequence we wish to investigate.]]
-    [[`N`]          [An __mpl__ integral constant]          [An index from the beginning of the 
+    [[`N`]          [An __mpl_integral_constant__]          [An index from the beginning of the 
                                                              sequence.]]
 ]
 
