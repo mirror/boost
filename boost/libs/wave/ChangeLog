@@ -101,7 +101,7 @@ CHANGELOG
 - Fixed a problem in the SLex C++ lexer (cpp_tokens example).
 - Fixed a runtime problem in the Re2C generated lexers when feeded with
   empty input files (thanks to Leo Davis for reporting and providing a patch).
-- Added the is_empty() function to token classes, returning true if the token
+- Added the is_eoi() function to token classes, returning true if the token
   has been initialized to be the end of input token (T_EOI) (thanks to Ovanes 
   Markarian for suggesting this).
 
