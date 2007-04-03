@@ -104,6 +104,7 @@ CHANGELOG
 - Added the is_eoi() function to token classes, returning true if the token
   has been initialized to be the end of input token (T_EOI) (thanks to Ovanes 
   Markarian for suggesting this).
+- Added missing #include <cstring> to flex_string.hpp.
 
 Boost V1.34.0
 - Wave Version 1.2.4

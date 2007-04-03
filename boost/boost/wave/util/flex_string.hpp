@@ -98,6 +98,7 @@ class StoragePolicy
 #include <limits>
 #include <stdexcept>
 #include <cstddef>
+#include <cstring>
 
 // this must occur after all of the includes and before any code appears
 #ifdef BOOST_HAS_ABI_HEADERS
