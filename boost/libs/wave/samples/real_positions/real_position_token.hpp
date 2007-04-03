@@ -55,6 +55,7 @@ public:
     position_type const &get_position() const { return pos; }
     position_type const &get_corrected_position() const 
         { return corrected_pos; }
+    bool is_empty() const { id == T_EOI; }
 
     void set_token_id (boost::wave::token_id id_) { id = id_; }
     void set_value (string_type const &value_) { value = value_; }
