@@ -226,10 +226,10 @@ make_simple_repeat(quant_spec const &spec, sequence<BidiIter> &seq)
 }
 
 //////////////////////////////////////////////////////////////////////////
-// make_exprtional
+// make_optional
 template<typename BidiIter>
 inline void
-make_exprtional(quant_spec const &spec, sequence<BidiIter> &seq)
+make_optional(quant_spec const &spec, sequence<BidiIter> &seq)
 {
     typedef shared_matchable<BidiIter> xpr_type;
     seq += make_dynamic<BidiIter>(alternate_end_matcher());
@@ -246,10 +246,10 @@ make_exprtional(quant_spec const &spec, sequence<BidiIter> &seq)
 }
 
 //////////////////////////////////////////////////////////////////////////
-// make_exprtional
+// make_optional
 template<typename BidiIter>
 inline void
-make_exprtional(quant_spec const &spec, sequence<BidiIter> &seq, int mark_nbr)
+make_optional(quant_spec const &spec, sequence<BidiIter> &seq, int mark_nbr)
 {
     typedef shared_matchable<BidiIter> xpr_type;
     seq += make_dynamic<BidiIter>(alternate_end_matcher());
@@ -285,7 +285,7 @@ make_repeat(quant_spec const &spec, sequence<BidiIter> &seq)
     // if min is 0, the repeat must be made optional
     if(0 == spec.min_)
     {
-        make_exprtional(spec, seq);
+        make_optional(spec, seq);
     }
 }
 
@@ -320,7 +320,7 @@ make_repeat(quant_spec const &spec, sequence<BidiIter> &seq, int mark_nbr)
     // if min is 0, the repeat must be made optional
     if(0 == spec.min_)
     {
-        make_exprtional(spec, seq, mark_nbr);
+        make_optional(spec, seq, mark_nbr);
     }
 }
 

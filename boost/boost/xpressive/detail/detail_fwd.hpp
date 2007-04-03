@@ -358,10 +358,10 @@ namespace boost { namespace xpressive { namespace detail
     void make_repeat(quant_spec const &spec, sequence<BidiIter> &seq);
 
     template<typename BidiIter>
-    void make_exprtional(quant_spec const &spec, sequence<BidiIter> &seq);
+    void make_optional(quant_spec const &spec, sequence<BidiIter> &seq);
 
     template<typename BidiIter>
-    void make_exprtional(quant_spec const &spec, sequence<BidiIter> &seq, int mark_nbr);
+    void make_optional(quant_spec const &spec, sequence<BidiIter> &seq, int mark_nbr);
 
 }}} // namespace boost::xpressive::detail
 

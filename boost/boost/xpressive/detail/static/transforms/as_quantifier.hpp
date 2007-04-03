@@ -22,9 +22,11 @@
 #include <boost/xpressive/detail/utility/cons.hpp>
 #include <boost/xpressive/proto/transform/branch.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
+#include <boost/xpressive/proto/transform/conditional.hpp>
 
 // BUGBUG move quant traits here
 #include <boost/xpressive/detail/static/productions/quant_traits.hpp>
+#include <boost/xpressive/detail/static/productions/quant_transforms.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -144,6 +146,80 @@ namespace boost { namespace xpressive { namespace detail
             typename apply<Expr, State, Visitor>::type that = {{begin}, {marked_sub, {end}}};
             return that;
         }
+    };
+
+    struct MarkerPattern;
+    struct DefaultGreedyQuantifier;
+
+    struct OptionalMark
+      : proto::unary_expr<proto::_, proto::or_<MarkerPattern, DefaultGreedyQuantifier> > 
+    {};
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // as_default_optional
+    template<typename Grammar, bool Greedy>
+    struct as_default_optional
+      : Grammar
+    {
+        as_default_optional();
+
+        template<typename Expr, typename State, typename Visitor>
+        struct apply
+        {
+            typedef optional_matcher<
+                typename Grammar::template apply<Expr, alternate_end_xpression, Visitor>::type
+              , Greedy
+            > type;
+        };
+
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)
+        {
+            return typename apply<Expr, State, Visitor>::type(
+                Grammar::call(expr, alternate_end_xpression(), visitor)
+            );
+        }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // as_mark_optional
+    template<typename Grammar, bool Greedy>
+    struct as_mark_optional
+      : Grammar
+    {
+        as_mark_optional();
+
+        template<typename Expr, typename State, typename Visitor>
+        struct apply
+        {
+            typedef optional_mark_matcher<
+                typename Grammar::template apply<Expr, alternate_end_xpression, Visitor>::type
+              , Greedy
+            > type;
+        };
+
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)
+        {
+            typename Grammar::template apply<Expr, alternate_end_xpression, Visitor>::type const &
+                marked_expr = Grammar::call(expr, alternate_end_xpression(), visitor);
+            return typename apply<Expr, State, Visitor>::type(marked_expr, marked_expr.mark_number_);
+        }
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // as_optional
+    template<typename Grammar, bool Greedy>
+    struct as_optional
+      : proto::trans::conditional<
+            proto::matches<mpl::_, OptionalMark>
+          , as_mark_optional<Grammar, Greedy>
+          , as_default_optional<Grammar, Greedy>
+        >
+    {
+        as_optional();
     };
 
 }}}
