@@ -11,7 +11,8 @@
 #if !defined(CPP_CHLIT_GRAMMAR_HPP_9527D349_6592_449A_A409_42A001E6C64C_INCLUDED)
 #define CPP_CHLIT_GRAMMAR_HPP_9527D349_6592_449A_A409_42A001E6C64C_INCLUDED
 
-#include <limits>     // sid::numeric_limits
+#include <limits>     // std::numeric_limits
+#include <climits>    // CHAR_BIT
 
 #include <boost/static_assert.hpp>
 #include <boost/cstdint.hpp>
