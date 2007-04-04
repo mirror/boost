@@ -46,6 +46,8 @@
 
 #if defined(BOOST_REGEX_FI_WIN32_DIR)
 
+#include <cstddef>
+
 namespace boost{
    namespace re_detail{
 

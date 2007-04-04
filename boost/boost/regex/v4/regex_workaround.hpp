@@ -26,6 +26,7 @@
 #include <cstddef>
 #include <cassert>
 #include <cstdio>
+#include <climits>
 #include <string>
 #include <stdexcept>
 #include <iterator>
@@ -128,7 +129,7 @@ inline void pointer_construct(T* p, const T& t)
 
 #ifdef __cplusplus
 namespace boost{ namespace re_detail{
-#if BOOST_WORKAROUND(BOOST_MSVC,>=1400) && defined(_CPPLIB_VER) && !(defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
+#if BOOST_WORKAROUND(BOOST_MSVC,>=1400) && defined(_CPPLIB_VER) && defined(BOOST_DINKUMWARE_STDLIB) && !(defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION))
    //
    // MSVC 8 will either emit warnings or else refuse to compile
    // code that makes perfectly legitimate use of std::copy, when
