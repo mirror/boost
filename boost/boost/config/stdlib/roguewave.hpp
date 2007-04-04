@@ -28,8 +28,14 @@
 
 #ifndef _RWSTD_VER
 #  define BOOST_STDLIB "Rogue Wave standard library version (Unknown version)"
+#elif _RWSTD_VER < 0x04010200
+ #  define BOOST_STDLIB "Rogue Wave standard library version " BOOST_STRINGIZE(_RWSTD_VER)
 #else
-#  define BOOST_STDLIB "Rogue Wave standard library version " BOOST_STRINGIZE(_RWSTD_VER)
+#  ifdef _RWSTD_VER_STR
+#    define BOOST_STDLIB "Apache STDCXX standard library version " _RWSTD_VER_STR
+#  else
+#    define BOOST_STDLIB "Apache STDCXX standard library version " BOOST_STRINGIZE(_RWSTD_VER)
+#  endif
 #endif
 
 //
@@ -125,3 +131,4 @@
 #if !defined(_RWSTD_LONG_LONG) && defined(BOOST_HAS_LONG_LONG)
 #  undef BOOST_HAS_LONG_LONG
 #endif
+
