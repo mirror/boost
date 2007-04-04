@@ -6,6 +6,7 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include <sstream>
+#include <boost/version.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/min_max.hpp>
 #include <boost/mpl/eval_if.hpp>
