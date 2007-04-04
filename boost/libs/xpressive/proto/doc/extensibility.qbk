@@ -204,37 +204,30 @@ Here is the code. It is described below.
     // expression, and combines the result.
     template<typename Size = std::size_t>
     struct lazy_subscript_context
-      : proto::context< lazy_subscript_context<Size> >
     {
-        typedef lazy_subscript_context<Size> this_type;
-
         lazy_subscript_context(Size subscript)
           : subscript_(subscript)
         {}
 
-        // Use the default context for all the operations ...
-        template<typename Sig>
-        struct result
-          : proto::context< this_type >::template result<Sig>
+        // Use default_eval for all the operations ...
+        template<typename Expr, typename Tag = typename Expr::tag_type>
+        struct eval
+          : proto::default_eval<Expr, lazy_subscript_context>
         {};
 
         // ... except for terminals, which we index with our subscript
-        template<typename This, typename Vector>
-        struct result<This(proto::tag::terminal, Vector &)>
+        template<typename Expr>
+        struct eval<Expr, proto::tag::terminal>
         {
-            typedef typename Vector::value_type type;
+            typedef typename proto::result_of::arg<Expr>::type::value_type result_type;
+
+            template<typename Expr>
+            result_type operator()( Expr const & expr, lazy_subscript_context & ctx ) const
+            {
+                return proto::arg( expr )[ ctx.subscript_ ];
+            }
         };
 
-        using proto::context< this_type >::operator();
-
-        template<typename Vector>
-        typename Vector::value_type
-        operator()(proto::tag::terminal, Vector &expr)
-        {
-            return expr[this->subscript_];
-        }
-
-    private:
         Size subscript_;
     };
 

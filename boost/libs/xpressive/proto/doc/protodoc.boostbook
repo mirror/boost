@@ -124,6 +124,9 @@
     </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::mem_ptr</template-arg><template-arg>2</template-arg></specialization><typedef name="result_type"><type><emphasis>unspecified</emphasis></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="ctx"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
+    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::assign</template-arg><template-arg>2</template-arg></specialization><typedef name="result_type"><type><emphasis>unspecified</emphasis></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="ctx"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
+      <template-type-parameter name="Expr"/>
+      <template-type-parameter name="Context"/>
     </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::left_shift_assign</template-arg><template-arg>2</template-arg></specialization><typedef name="result_type"><type><emphasis>unspecified</emphasis></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="ctx"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
@@ -155,9 +158,6 @@
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
     </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::terminal</template-arg><template-arg>1</template-arg></specialization><typedef name="result_type"><type>mpl::if_&lt; is_const &lt; Expr &gt;, typename <classname>proto::result_of::arg</classname>&lt; Expr &gt;::const_reference, typename <classname>proto::result_of::arg</classname>&lt; Expr &gt;::reference &gt;::<classname>type</classname></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name=""><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
-      <template-type-parameter name="Expr"/>
-      <template-type-parameter name="Context"/>
-    </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::assign</template-arg><template-arg>2</template-arg></specialization><typedef name="result_type"><type><emphasis>unspecified</emphasis></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="ctx"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
       <template-type-parameter name="Expr"/>
       <template-type-parameter name="Context"/>
     </template><specialization><template-arg>Expr</template-arg><template-arg>Context</template-arg><template-arg>proto::tag::post_inc</template-arg><template-arg>1</template-arg></specialization><typedef name="result_type"><type><emphasis>unspecified</emphasis></type></typedef><method-group name="public member functions"><method name="operator()" cv="const"><type>result_type</type><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter><parameter name="ctx"><paramtype>Context &amp;</paramtype></parameter></method></method-group></struct-specialization><struct-specialization name="default_eval"><template>
@@ -717,9 +717,9 @@
       <template-type-parameter name="Context"/>
     </template><struct name="result"><template>
       <template-type-parameter name="Expr"/>
-    </template><typedef name="type"><type><emphasis>unspecified</emphasis></type></typedef></struct><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result</classname>&lt; Expr &gt;::<classname>type</classname></type><template>
+    </template><typedef name="type"><type>Context::template eval&lt; typename remove_reference&lt; Expr &gt;::type &gt;::result_type</type></typedef></struct><method-group name="public member functions"><method name="operator()" cv="const"><type><classname>result</classname>&lt; Expr &gt;::<classname>type</classname></type><template>
           <template-type-parameter name="Expr"/>
-        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter></method></method-group><constructor><parameter name="ctx"><paramtype>Context &amp;</paramtype></parameter></constructor></struct><function name="children_of"><type><classname>children</classname>&lt; Expr &gt;</type><template>
+        </template><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter></method></method-group><constructor><parameter name="ctx"><paramtype>Context &amp;</paramtype></parameter></constructor></struct><function name="children_of"><type><classname>children</classname>&lt; Expr &gt;</type><template>
           <template-type-parameter name="Expr"/>
         </template><parameter name="expr"><paramtype>Expr &amp;</paramtype></parameter></function></namespace></namespace></header><header name="boost/xpressive/proto/generate.hpp"><para>Contains definition of generate&lt;&gt; class template, which end users can specialize for generating domain-specific expression wrappers. </para><namespace name="boost"><namespace name="proto"><struct name="generate"><template>
       <template-type-parameter name="Domain"/>
@@ -1655,7 +1655,30 @@
           <template-type-parameter name="Expr"/>
           <template-type-parameter name="State"/>
           <template-type-parameter name="Visitor"/>
-        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name=""><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/construct.hpp"><para>For constructing an arbitrary type from a bunch of transforms. This assumes that all the grammars corresponding to the transforms are equivalent; that is, that they match the same expressions. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct-specialization name="construct"><template>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name=""><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/compose.hpp"><para>A special-purpose proto transform for composing two transfomations. Given two Grammars, expressions that match the first grammar are transformed according to that grammar, and the result is forwarded to the second for further transformation. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct name="compose"><template>
+      <template-type-parameter name="Grammar1"/>
+      <template-type-parameter name="Grammar2"/>
+    </template><struct name="apply"><template>
+      <template-type-parameter name="Expr"/>
+      <template-type-parameter name="State"/>
+      <template-type-parameter name="Visitor"/>
+    </template><typedef name="type"><type>Grammar2::template <classname>apply</classname>&lt; typename Grammar1::template <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type, State, Visitor &gt;::type</type></typedef></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::<classname>type</classname></type><template>
+          <template-type-parameter name="Expr"/>
+          <template-type-parameter name="State"/>
+          <template-type-parameter name="Visitor"/>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state"><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/conditional.hpp"><para>A special-purpose proto transform for selecting between two transforms based on a compile-time predicate. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct name="conditional"><template>
+      <template-type-parameter name="Predicate"/>
+      <template-type-parameter name="Grammar0"/>
+      <template-type-parameter name="Grammar1"/>
+    </template><struct name="apply"><template>
+      <template-type-parameter name="Expr"/>
+      <template-type-parameter name="State"/>
+      <template-type-parameter name="Visitor"/>
+    </template><typedef name="grammar_type"><type>mpl::if_&lt; typename mpl::apply1&lt; Predicate, Expr &gt;::type, Grammar0, Grammar1 &gt;::type</type></typedef><typedef name="type"><type>grammar_type::template <classname>apply</classname>&lt; Expr, State, Visitor &gt;::type</type></typedef></struct><method-group name="public member functions"/><constructor/><method-group name="public static functions"><method name="call" cv=""><type>static <classname>apply</classname>&lt; Expr, State, Visitor &gt;::<classname>type</classname></type><template>
+          <template-type-parameter name="Expr"/>
+          <template-type-parameter name="State"/>
+          <template-type-parameter name="Visitor"/>
+        </template><parameter name="expr"><paramtype>Expr const &amp;</paramtype></parameter><parameter name="state"><paramtype>State const &amp;</paramtype></parameter><parameter name="visitor"><paramtype>Visitor &amp;</paramtype></parameter></method></method-group><data-member name="mpl_assertion_in_line_28" specifiers="static"><type>const std::size_t</type></data-member></struct></namespace></namespace></namespace></header><header name="boost/xpressive/proto/transform/construct.hpp"><para>For constructing an arbitrary type from a bunch of transforms. This assumes that all the grammars corresponding to the transforms are equivalent; that is, that they match the same expressions. </para><namespace name="boost"><namespace name="proto"><namespace name="transform"><struct-specialization name="construct"><template>
       <template-type-parameter name="Type"/>
       <template-type-parameter name="Grammar0"/>
     </template><specialization><template-arg>Type</template-arg><template-arg>Grammar0</template-arg><template-arg>void</template-arg><template-arg>void</template-arg><template-arg>void</template-arg><template-arg>void</template-arg><template-arg>void</template-arg></specialization><struct-specialization name="construct"><template>

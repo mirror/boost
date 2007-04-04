@@ -200,7 +200,7 @@ considerably:
         double operator()(proto::tag::terminal, placeholder1) const
         {
             return this->d1_;
-        }        
+        }
         
         double operator()(proto::tag::terminal, placeholder2) const
         {

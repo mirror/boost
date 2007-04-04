@@ -59,4 +59,7 @@ grammar and semantic action framework. The expression tree data structure
 is similar to Fusion data structures in many respects, and is interoperable
 with Fusion's iterators and algorithms.
 
+The syntax for the pattern-matching features of `proto::matches<>` is inspired
+by MPL's lambda expressions.
+
 [endsect]
