@@ -5,6 +5,11 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <boost/version.hpp>
+#if BOOST_VERSION < 103500
+# error This test only works on Boost v1.35
+#endif
+
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/fusion.hpp>
 #include <boost/fusion/algorithm/iteration/for_each.hpp>

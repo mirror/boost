@@ -17,9 +17,15 @@
 #include <boost/xpressive/proto/transform/arg.hpp>
 #include <boost/xpressive/proto/transform/construct.hpp>
 #include <boost/xpressive/proto/transform/fold_to_list.hpp>
+#if BOOST_VERSION < 103500
+# include <boost/spirit/fusion/algorithm/for_each.hpp>
+# include <boost/spirit/fusion/algorithm/fold.hpp>
+# include <boost/spirit/fusion/algorithm/any.hpp>
+#else
 #include <boost/fusion/algorithm/iteration/for_each.hpp>
 #include <boost/fusion/algorithm/iteration/fold.hpp>
 #include <boost/fusion/algorithm/query/any.hpp>
+#endif
 #include <boost/test/unit_test.hpp>
 
 namespace boost
@@ -399,11 +405,19 @@ namespace boost { namespace spirit2
           : with_reset(begin, end)
         {}
 
+#if BOOST_VERSION < 103500
+        template<typename, typename> // used by fusion::fold
+        struct apply
+        {
+            typedef bool type;
+        };
+#else
         template<typename, typename> // used by fusion::fold
         struct result
         {
             typedef bool type;
         };
+#endif
 
         template<typename T>
         bool operator()(T const &t, bool success) const // used by fusion::fold

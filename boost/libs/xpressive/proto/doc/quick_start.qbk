@@ -18,6 +18,7 @@ and then execute it.
     #include <iostream>
     #include <boost/xpressive/proto/proto.hpp>
     #include <boost/xpressive/proto/context.hpp>
+    #include <boost/typeof/std/ostream.hpp>
     using namespace boost;
 
     proto::terminal< std::ostream & >::type cout_ = { std::cout };

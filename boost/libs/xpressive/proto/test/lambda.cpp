@@ -10,8 +10,17 @@
 #include <boost/mpl/min_max.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/next_prior.hpp>
-#include <boost/fusion/tuple.hpp>
+#if BOOST_VERSION < 103500
+# include <boost/spirit/fusion/sequence/at.hpp>
+# include <boost/spirit/fusion/sequence/tuple.hpp>
+namespace boost { namespace fusion { namespace result_of { using namespace meta; }}}
+#else
+# include <boost/fusion/tuple.hpp>
+#endif
 #include <boost/typeof/typeof.hpp>
+#include <boost/typeof/std/sstream.hpp>
+#include <boost/typeof/std/ostream.hpp>
+#include <boost/typeof/std/iostream.hpp>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/xpressive/proto/proto.hpp>
@@ -89,7 +98,11 @@ struct lambda_context
         typedef typename fusion::result_of::at<Tuple, index>::type result_type;
         result_type operator()(Expr const &expr, lambda_context<Tuple> &ctx)
         {
+#if BOOST_VERSION < 103500
+            return fusion::at<index::value>(ctx.args_);
+#else
             return fusion::at<index>(ctx.args_);
+#endif
         }
     };
 
