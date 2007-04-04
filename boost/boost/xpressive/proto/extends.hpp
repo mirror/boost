@@ -219,13 +219,13 @@ namespace boost { namespace proto
     ///     struct my_terminal
     ///     {
     ///         BOOST_PROTO_EXTENDS(
-    ///             typename proto::terminal<T>::type
-    ///           , my_terminal<T>
+    ///             typename proto::terminal\<T\>::type
+    ///           , my_terminal\<T\>
     ///           , default_domain
     ///         )
     ///     };
     ///
-    ///     my_terminal<int> _1, _2;
+    ///     my_terminal\<int\> _1, _2;
     ///     _1 + _2; // OK, uses proto::operator+
     ///
     /// Without the second Dummy template parameter, Proto's operator 
@@ -233,7 +233,7 @@ namespace boost { namespace proto
     struct is_proto_expr
     {};
 
-    /// \brief extends<> class template for adding behaviors to a proto expression template
+    /// \brief extends\<\> class template for adding behaviors to a proto expression template
     ///
     template<typename Expr, typename Derived, typename Domain>
     struct extends
