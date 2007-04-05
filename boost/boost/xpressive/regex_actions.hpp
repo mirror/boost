@@ -134,7 +134,7 @@ namespace boost { namespace xpressive
             template<typename This, typename Sequence>
             struct result<This(Sequence &)>
             {
-                typedef 
+                typedef
                     typename mpl::if_<
                         is_const<Sequence>
                       , typename Sequence::const_reference
@@ -158,7 +158,7 @@ namespace boost { namespace xpressive
             template<typename This, typename Sequence>
             struct result<This(Sequence &)>
             {
-                typedef 
+                typedef
                     typename mpl::if_<
                         is_const<Sequence>
                       , typename Sequence::const_reference
@@ -182,7 +182,7 @@ namespace boost { namespace xpressive
             template<typename This, typename Sequence>
             struct result<This(Sequence &)>
             {
-                typedef 
+                typedef
                     typename mpl::if_<
                         is_const<Sequence>
                       , typename Sequence::value_type const &
@@ -343,17 +343,17 @@ namespace boost { namespace xpressive
       : proto::extends<typename proto::terminal<T>::type, value<T> >
     {
         typedef proto::extends<typename proto::terminal<T>::type, value<T> > base_type;
-        
+
         value()
           : base_type()
         {}
-        
+
         explicit value(T const &t)
           : base_type(base_type::type::make(t))
         {}
-        
+
         using base_type::operator =;
-        
+
         T &get()
         {
             return proto::arg(*this);
@@ -370,11 +370,11 @@ namespace boost { namespace xpressive
       : proto::extends<typename proto::terminal<reference_wrapper<T> >::type, reference<T> >
     {
         typedef proto::extends<typename proto::terminal<reference_wrapper<T> >::type, reference<T> > base_type;
-        
+
         explicit reference(T &t)
           : base_type(base_type::type::make(boost::ref(t)))
         {}
-        
+
         using base_type::operator =;
 
         T &get() const
@@ -394,12 +394,12 @@ namespace boost { namespace xpressive
       , proto::extends<typename proto::terminal<reference_wrapper<T> >::type, local<T> >
     {
         typedef proto::extends<typename proto::terminal<reference_wrapper<T> >::type, local<T> > base_type;
-        
+
         local()
           : detail::value_wrapper<T>()
           , base_type(base_type::type::make(boost::ref(detail::value_wrapper<T>::value)))
         {}
-        
+
         explicit local(T const &t)
           : detail::value_wrapper<T>(t)
           , base_type(base_type::type::make(boost::ref(detail::value_wrapper<T>::value)))
@@ -410,16 +410,16 @@ namespace boost { namespace xpressive
           : detail::value_wrapper<T>()
           , base_type(that)
         {}
-        
+
         // copies refer to the value in that, not this!
         local &operator =(local const &that)
         {
             *static_cast<base_type *>(this) = *static_cast<base_type const *>(&that);
             return *this;
         }
-        
+
         using base_type::operator =;
-        
+
         T &get()
         {
             return proto::arg(*this);

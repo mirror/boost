@@ -79,7 +79,7 @@ namespace boost { namespace proto
         template<typename Expr>
         struct result
         {
-            typedef 
+            typedef
                 typename Context::template eval<
                     typename remove_reference<Expr>::type
                 >::result_type

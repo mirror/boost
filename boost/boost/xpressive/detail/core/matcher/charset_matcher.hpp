@@ -36,6 +36,11 @@ namespace boost { namespace xpressive { namespace detail
         {
         }
 
+        void inverse()
+        {
+            this->charset_.inverse();
+        }
+
         template<typename BidiIter, typename Next>
         bool match(state_type<BidiIter> &state, Next const &next) const
         {

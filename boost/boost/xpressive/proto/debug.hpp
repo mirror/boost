@@ -110,7 +110,7 @@ namespace boost { namespace proto
             template<typename Tag, typename Args>
             void operator()(expr<Tag, Args, 1> const &expr) const
             {
-                this->sout_ << std::setw(this->depth_) << (this->first_? "" : ", ") 
+                this->sout_ << std::setw(this->depth_) << (this->first_? "" : ", ")
                     << proto_tag_name(Tag()) << "(\n";
                 display_expr display(this->depth_ + 4, this->sout_);
                 display(proto::arg(expr));
@@ -121,7 +121,7 @@ namespace boost { namespace proto
             template<typename Tag, typename Args>
             void operator()(expr<Tag, Args, 2> const &expr) const
             {
-                this->sout_ << std::setw(this->depth_) << (this->first_? "" : ", ") 
+                this->sout_ << std::setw(this->depth_) << (this->first_? "" : ", ")
                     << proto_tag_name(Tag()) << "(\n";
                 display_expr display(this->depth_ + 4, this->sout_);
                 display(proto::left(expr));

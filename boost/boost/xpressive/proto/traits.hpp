@@ -140,7 +140,7 @@
 
             // left
                 // BUGBUG this forces the instantiation of Expr. Couldn't we
-                // partially specialize left<> on expr< T, A > and 
+                // partially specialize left<> on expr< T, A > and
                 // ref< expr< T, A > > and return A::arg0 ?
             template<typename Expr>
             struct left
@@ -470,7 +470,7 @@
         /// \overload
         ///
         template<typename N, typename Expr>
-        typename result_of::arg<Expr, N>::reference 
+        typename result_of::arg<Expr, N>::reference
         arg(Expr &expr BOOST_PROTO_DISABLE_IF_IS_CONST(Expr))
         {
             return result_of::arg<Expr, N>::call(expr);
@@ -479,7 +479,7 @@
         /// \overload
         ///
         template<typename N, typename Expr>
-        typename result_of::arg<Expr, N>::const_reference 
+        typename result_of::arg<Expr, N>::const_reference
         arg(Expr const &expr)
         {
             return result_of::arg<Expr, N>::call(expr);

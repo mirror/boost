@@ -97,20 +97,20 @@ namespace boost { namespace xpressive { namespace detail
               , typename proto::result_of::right<Expr>::const_reference
               , typename proto::result_of::right<Expr>::reference
             >::type>::type right_type;
-            
+
             typedef typename remove_reference<typename mpl::if_<
                 is_const<Expr>
               , typename proto::result_of::left<Expr>::const_reference
               , typename proto::result_of::left<Expr>::reference
             >::type>::type left_type;
-            
+
             typedef
                 typename proto::result_of::arg<
                     typename proto::result_of::arg_c<right_type, 0>::type
                 >::type
             function_type;
 
-            typedef 
+            typedef
                 fusion::transform_view<
                     typename fusion::result_of::push_front<
                         typename fusion::result_of::pop_front<proto::children<right_type> >::type const
@@ -176,7 +176,7 @@ namespace boost { namespace xpressive { namespace detail
         struct apply
           : proto::terminal<sub_match<typename State::iterator> >
         {};
-        
+
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &state, Visitor &visitor)
@@ -199,7 +199,7 @@ namespace boost { namespace xpressive { namespace detail
         struct apply
           : proto::terminal<sub_match<typename State::iterator> >
         {};
-        
+
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &state, Visitor &)
@@ -222,7 +222,7 @@ namespace boost { namespace xpressive { namespace detail
         struct apply
           : proto::terminal<typename proto::result_of::arg<Expr>::const_reference>
         {};
-        
+
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &state, Visitor &)

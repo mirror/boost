@@ -130,7 +130,7 @@ namespace boost { namespace xpressive { namespace detail
             typedef typename proto::result_of::arg<Expr>::type arg_type;
             typename InsertMark::apply<arg_type, State, Visitor>::type const &
                 marked_sub = InsertMark::call(proto::arg(expr), state, visitor);
-            
+
             // Get the mark_number from the begin_mark_matcher
             int mark_number = proto::arg(proto::left(marked_sub)).mark_number_;
             BOOST_ASSERT(0 != mark_number);

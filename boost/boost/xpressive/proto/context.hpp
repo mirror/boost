@@ -392,7 +392,7 @@
             {
                 inner_context();
                 using Context::operator ();
-                struct private_type_ {};
+                struct private_type_ { private_type_ const &operator,(int) const { return *this; } };
                 typedef private_type_ const &(*pointer_to_function)(BOOST_PP_ENUM_PARAMS(BOOST_PP_INC(N), detail::dont_care BOOST_PP_INTERCEPT));
                 operator pointer_to_function() const;
             };
@@ -412,10 +412,10 @@
                         sizeof(yes_type) ==
                         sizeof(
                             check(
-                                sprivate_(
+                                (sprivate_(
                                     typename Expr::tag_type()
                                     BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_ARG_N, sexpr_)
-                                )
+                                ), 0)
                             )
                     )));
                 typedef mpl::bool_<value> type;

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file generate.hpp
-/// Contains definition of generate\<\> class template, which end users can 
+/// Contains definition of generate\<\> class template, which end users can
 /// specialize for generating domain-specific expression wrappers.
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost

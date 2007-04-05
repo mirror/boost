@@ -53,7 +53,7 @@
             BOOST_STATIC_CONSTANT(long, size = N);
             BOOST_PP_REPEAT(N, BOOST_PROTO_DEFINE_ARG_N, ~)
             BOOST_PP_REPEAT_FROM_TO(N, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_DEFINE_VOID_N, ~)
-            
+
             /// INTERNAL ONLY
             ///
             typedef BOOST_PP_CAT(Arg, BOOST_PP_DEC(N)) back_;

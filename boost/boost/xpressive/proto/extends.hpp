@@ -228,7 +228,7 @@ namespace boost { namespace proto
     ///     my_terminal\<int\> _1, _2;
     ///     _1 + _2; // OK, uses proto::operator+
     ///
-    /// Without the second Dummy template parameter, Proto's operator 
+    /// Without the second Dummy template parameter, Proto's operator
     /// overloads would not be considered by name lookup.
     struct is_proto_expr
     {};

@@ -1,7 +1,7 @@
 #ifndef BOOST_PP_IS_ITERATING
     ///////////////////////////////////////////////////////////////////////////////
     /// \file pass_through.hpp
-    /// TODO 
+    /// TODO
     //
     //  Copyright 2004 Eric Niebler. Distributed under the Boost
     //  Software License, Version 1.0. (See accompanying file
@@ -76,7 +76,7 @@
         };
 
     }
-    
+
     template<typename Grammar>
     struct has_pass_through_transform
     {
@@ -94,7 +94,7 @@
             return apply<Expr, State, Visitor>::call(expr, state, visitor);
         }
     };
-   
+
     }}
 
     #endif

@@ -58,6 +58,12 @@ struct set_matcher
         this->set_[0] = traits.translate(ch);
     }
 
+    void inverse()
+    {
+        this->not_ = !this->not_;
+    }
+
+    // TODO remove me
     void complement()
     {
         this->not_ = !this->not_;

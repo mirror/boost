@@ -31,7 +31,7 @@ struct BOOST_PP_CAT(funop, BOOST_PP_ITERATION())
     )
     {
         type that = {
-            {expr} 
+            {expr}
             BOOST_PP_ENUM_TRAILING(BOOST_PP_ITERATION(), BOOST_PROTO_AS_OP, _)
         };
         return that;

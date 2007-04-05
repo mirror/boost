@@ -14,6 +14,7 @@
 #endif
 
 #include <boost/mpl/not.hpp>
+#include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/transform/fold.hpp>
 #include <boost/xpressive/detail/static/transforms/as_matcher.hpp>
@@ -21,6 +22,7 @@
 #include <boost/xpressive/detail/static/transforms/as_sequence.hpp>
 #include <boost/xpressive/detail/static/transforms/as_quantifier.hpp>
 #include <boost/xpressive/detail/static/transforms/as_marker.hpp>
+#include <boost/xpressive/detail/static/transforms/as_set.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
 #include <boost/xpressive/proto/transform/compose.hpp>
 
@@ -37,7 +39,7 @@ namespace boost { namespace xpressive { namespace detail
     {};
 
     struct Grammar;
-    
+
     struct Sequence
       : proto::right_shift<Grammar, Grammar>
     {};
@@ -81,22 +83,41 @@ namespace boost { namespace xpressive { namespace detail
         >
     {};
 
+    struct ListSet
+      : proto::or_<
+            proto::comma<ListSet, proto::terminal<char> >
+          , proto::assign<set_initializer_type, proto::terminal<char> >
+        >
+    {};
+
+    struct SetMatcher
+      : proto::or_<
+            as_list_set<ListSet>
+          , proto::trans::right<proto::subscript<set_initializer_type, as_set<Grammar> > >
+        >
+    {};
+
     // These sub-expressions generate simple matcher types
     // that must be placed in sequence.
-    struct NonSequence
+    struct Matchers
       : proto::or_<
             as_matcher<Terminal>
           , as_alternate<Alternate>
+
           , as_simple_quantifier<SimpleGreedyQuantifier, true>
           , proto::trans::arg<proto::unary_minus<as_simple_quantifier<SimpleGreedyQuantifier, false> > >
+
+          , SetMatcher
+          , inverse<proto::trans::arg<proto::complement<SetMatcher> > >
         >
     {};
 
     // These sub-expressions require further processing.
-    struct Transforms
+    struct Composites
       : proto::or_<
             as_default_quantifier<DefaultGreedyQuantifier, true>
           , proto::trans::arg<proto::unary_minus<as_default_quantifier<DefaultGreedyQuantifier, false> > >
+
           , as_marker<Mark>
         >
     {};
@@ -104,8 +125,8 @@ namespace boost { namespace xpressive { namespace detail
     struct Grammar
       : proto::or_<
             proto::trans::reverse_fold<Sequence>
-          , proto::trans::compose<Transforms, Grammar>
-          , in_sequence<NonSequence>
+          , proto::trans::compose<Composites, Grammar>
+          , in_sequence<Matchers>
         >
     {};
 
@@ -113,6 +134,7 @@ namespace boost { namespace xpressive { namespace detail
     typename Grammar::apply<Expr, end_xpression, Visitor>::type
     transform(Expr const &expr, Visitor &visitor)
     {
+        BOOST_MPL_ASSERT((proto::matches<Expr, Grammar>));
         return Grammar::call(expr, end_xpression(), visitor);
     }
 
