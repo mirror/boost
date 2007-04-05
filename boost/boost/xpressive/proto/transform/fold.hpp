@@ -28,10 +28,10 @@
         namespace detail
         {
             template<typename Grammar, typename Expr, typename State, typename Visitor, long Arity = Expr::arity::value>
-            struct fold_impl;
+            struct fold_impl {};
 
             template<typename Grammar, typename Expr, typename State, typename Visitor, long Arity = Expr::arity::value>
-            struct reverse_fold_impl;
+            struct reverse_fold_impl {};
 
             #define BOOST_PROTO_ARG_N_TYPE(n)\
                 BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)

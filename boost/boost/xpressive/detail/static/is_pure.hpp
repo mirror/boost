@@ -64,7 +64,7 @@ namespace boost { namespace xpressive { namespace detail
     // is_pure
     //
     template<typename Expr, typename Tag = typename Expr::tag_type>
-    struct is_pure;
+    struct is_pure {};
 
     template<typename Expr>
     struct is_pure<Expr, proto::tag::terminal>
@@ -88,7 +88,7 @@ namespace boost { namespace xpressive { namespace detail
     {};
 
     template<typename Left>
-    struct is_pure_assign;
+    struct is_pure_assign {};
 
     template<>
     struct is_pure_assign<basic_mark_tag>

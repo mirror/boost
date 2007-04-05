@@ -60,10 +60,12 @@
     {
 
         template<typename Expr, typename Context, typename Tag = typename Expr::tag_type, long Arity = Expr::arity::value>
-        struct default_eval;
+        struct default_eval
+        {};
 
         template<typename Expr, typename Context, long Arity = Expr::arity::value>
-        struct callable_eval;
+        struct callable_eval
+        {};
 
         namespace detail
         {

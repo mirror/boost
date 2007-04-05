@@ -207,7 +207,7 @@
             }
 
             template<typename Sig>
-            struct result;
+            struct result {};
 
             template<typename This>
             struct result<This()>

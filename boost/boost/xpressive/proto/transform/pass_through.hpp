@@ -24,7 +24,7 @@
         namespace detail
         {
             template<typename Grammar, typename Expr, typename State, typename Visitor, typename Tag = typename Expr::tag_type, long Arity = Expr::arity::value>
-            struct pass_through_impl;
+            struct pass_through_impl {};
 
             #define BOOST_PROTO_DEFINE_META_COMPILE(z, n, data)\
                 typename Grammar::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)\

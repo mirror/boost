@@ -50,7 +50,7 @@ namespace boost { namespace xpressive { namespace detail
 struct icase_modifier
 {
     template<typename Visitor>
-    struct apply;
+    struct apply {};
 
     template<typename BidiIter, typename ICase, typename Traits>
     struct apply<xpression_visitor<BidiIter, ICase, Traits> >
@@ -109,7 +109,7 @@ struct locale_modifier
     }
 
     template<typename Visitor>
-    struct apply;
+    struct apply {};
 
     template<typename BidiIter, typename ICase, typename OtherTraits>
     struct apply<xpression_visitor<BidiIter, ICase, OtherTraits> >

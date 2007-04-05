@@ -158,7 +158,7 @@
         namespace detail
         {
             template<typename T, typename EnableIf = void>
-            struct if_vararg;
+            struct if_vararg {};
 
             template<typename T>
             struct if_vararg<T, typename T::boost_proto_is_vararg_>
@@ -303,7 +303,7 @@
             struct as_expr
             {
                 template<typename Sig>
-                struct result;
+                struct result {};
 
                 template<typename This, typename T>
                 struct result<This(T)>
@@ -326,7 +326,7 @@
             struct as_arg
             {
                 template<typename Sig>
-                struct result;
+                struct result {};
 
                 template<typename This, typename T>
                 struct result<This(T)>
@@ -352,7 +352,7 @@
             struct arg_c
             {
                 template<typename Sig>
-                struct result;
+                struct result {};
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
@@ -376,7 +376,7 @@
             struct arg
             {
                 template<typename Sig>
-                struct result;
+                struct result {};
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
@@ -399,7 +399,7 @@
             struct left
             {
                 template<typename Sig>
-                struct result;
+                struct result {};
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>
@@ -422,7 +422,7 @@
             struct right
             {
                 template<typename Sig>
-                struct result;
+                struct result {};
 
                 template<typename This, typename Expr>
                 struct result<This(Expr)>

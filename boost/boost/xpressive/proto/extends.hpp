@@ -187,7 +187,7 @@ namespace boost { namespace proto
         ///
     #define BOOST_PROTO_EXTENDS_FUNCTION_(Expr, Derived, Domain)\
         template<typename Sig>\
-        struct result;\
+        struct result {};\
         \
         template<typename This>\
         struct result<This()>\

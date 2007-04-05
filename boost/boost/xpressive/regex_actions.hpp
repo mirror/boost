@@ -129,7 +129,7 @@ namespace boost { namespace xpressive
         struct front
         {
             template<typename Sig>
-            struct result;
+            struct result {};
 
             template<typename This, typename Sequence>
             struct result<This(Sequence &)>
@@ -153,7 +153,7 @@ namespace boost { namespace xpressive
         struct back
         {
             template<typename Sig>
-            struct result;
+            struct result {};
 
             template<typename This, typename Sequence>
             struct result<This(Sequence &)>
@@ -177,7 +177,7 @@ namespace boost { namespace xpressive
         struct top
         {
             template<typename Sig>
-            struct result;
+            struct result {};
 
             template<typename This, typename Sequence>
             struct result<This(Sequence &)>
@@ -201,7 +201,7 @@ namespace boost { namespace xpressive
         struct first
         {
             template<typename Sig>
-            struct result;
+            struct result {};
 
             template<typename This, typename Pair>
             struct result<This(Pair &)>
@@ -219,7 +219,7 @@ namespace boost { namespace xpressive
         struct second
         {
             template<typename Sig>
-            struct result;
+            struct result {};
 
             template<typename This, typename Pair>
             struct result<This(Pair &)>
@@ -248,7 +248,7 @@ namespace boost { namespace xpressive
         struct length
         {
             template<typename Sig>
-            struct result;
+            struct result {};
 
             template<typename This, typename Sub>
             struct result<This(Sub &)>
@@ -266,7 +266,7 @@ namespace boost { namespace xpressive
         struct str
         {
             template<typename Sig>
-            struct result;
+            struct result {};
 
             template<typename This, typename Sub>
             struct result<This(Sub &)>
