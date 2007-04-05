@@ -23,6 +23,7 @@
 #include <boost/xpressive/detail/static/transforms/as_quantifier.hpp>
 #include <boost/xpressive/detail/static/transforms/as_marker.hpp>
 #include <boost/xpressive/detail/static/transforms/as_set.hpp>
+#include <boost/xpressive/detail/static/transforms/as_independent.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
 #include <boost/xpressive/proto/transform/compose.hpp>
 
@@ -68,10 +69,17 @@ namespace boost { namespace xpressive { namespace detail
         >
     {};
 
+    typedef
+        use_simple_repeat<
+            proto::result_of::arg<mpl::_>
+          , proto::tag_of<proto::result_of::arg<mpl::_> >
+        >
+    UseSimpleRepeat;
+
     struct SimpleGreedyQuantifier
       : proto::and_<
             GreedyQuantifier
-          , proto::if_<use_simple_repeat<proto::result_of::arg<mpl::_>, proto::tag_of<proto::result_of::arg<mpl::_> > > >
+          , proto::if_<UseSimpleRepeat>
           , proto::trans::arg<GreedyQuantifier>
         >
     {};
@@ -79,7 +87,7 @@ namespace boost { namespace xpressive { namespace detail
     struct DefaultGreedyQuantifier
       : proto::and_<
             GreedyQuantifier
-          , proto::if_<mpl::not_<use_simple_repeat<proto::result_of::arg<mpl::_>, proto::tag_of<proto::result_of::arg<mpl::_> > > > >
+          , proto::if_<mpl::not_<UseSimpleRepeat> >
         >
     {};
 
@@ -90,10 +98,12 @@ namespace boost { namespace xpressive { namespace detail
         >
     {};
 
-    struct SetMatcher
+    struct InvertibleMatcher
       : proto::or_<
             as_list_set<ListSet>
           , proto::trans::right<proto::subscript<set_initializer_type, as_set<Grammar> > >
+          , proto::trans::arg<proto::unary_expr<lookahead_tag<true>, as_lookahead<Grammar> > >
+          , proto::trans::arg<proto::unary_expr<lookbehind_tag<true>, as_lookbehind<Grammar> > >
         >
     {};
 
@@ -107,8 +117,10 @@ namespace boost { namespace xpressive { namespace detail
           , as_simple_quantifier<SimpleGreedyQuantifier, true>
           , proto::trans::arg<proto::unary_minus<as_simple_quantifier<SimpleGreedyQuantifier, false> > >
 
-          , SetMatcher
-          , inverse<proto::trans::arg<proto::complement<SetMatcher> > >
+          , InvertibleMatcher
+          , inverse<proto::trans::arg<proto::complement<InvertibleMatcher> > >
+
+          , proto::trans::arg<proto::unary_expr<keeper_tag, as_keeper<Grammar> > >
         >
     {};
 

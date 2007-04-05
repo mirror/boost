@@ -43,6 +43,11 @@ namespace boost { namespace xpressive { namespace detail
                 "Variable-width look-behind assertions are not supported");
         }
 
+        void inverse()
+        {
+            this->not_ = !this->not_;
+        }
+
         template<typename BidiIter, typename Next>
         bool match(state_type<BidiIter> &state, Next const &next) const
         {
