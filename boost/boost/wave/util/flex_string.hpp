@@ -91,6 +91,7 @@ class StoragePolicy
 #endif
 
 #include <memory>
+#include <new>
 #include <string>
 #include <vector>
 #include <algorithm>
@@ -99,6 +100,7 @@ class StoragePolicy
 #include <stdexcept>
 #include <cstddef>
 #include <cstring>
+#include <cstdlib>
 
 // this must occur after all of the includes and before any code appears
 #ifdef BOOST_HAS_ABI_HEADERS
