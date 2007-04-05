@@ -24,6 +24,7 @@
 #include <boost/xpressive/detail/core/matcher/action_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/predicate_matcher.hpp>
 #include <boost/xpressive/detail/utility/ignore_unused.hpp>
+#include <boost/typeof/std/string.hpp> // very often needed by client code.
 
 namespace boost { namespace xpressive
 {
