@@ -125,7 +125,7 @@ private:
       , not_(false)
       , icase_(that.icase_)
     {
-        std::copy(that.begin(), that.end(), this->set_);
+        std::copy(that.begin(), that.end(), static_cast<char_type *>(this->set_));
         this->set_[ Size - 1 ] = traits.translate(ch);
     }
 };
