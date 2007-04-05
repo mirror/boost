@@ -26,15 +26,15 @@
 
 namespace boost { namespace xpressive { namespace detail
 {
-    //template<typename Tag>
-    //struct is_generic_quant_tag
-    //  : mpl::false_
-    //{};
+    template<typename Tag>
+    struct is_generic_quant_tag
+      : mpl::false_
+    {};
 
-    //template<unsigned Min, unsigned Max>
-    //struct is_generic_quant_tag<generic_quant_tag<Min, Max> >
-    //  : mpl::true_
-    //{};
+    template<unsigned Min, unsigned Max>
+    struct is_generic_quant_tag<generic_quant_tag<Min, Max> >
+      : mpl::true_
+    {};
 
     struct Grammar;
     
@@ -58,24 +58,12 @@ namespace boost { namespace xpressive { namespace detail
       : proto::or_<
             proto::unary_plus<Grammar>
           , proto::unary_star<Grammar>
-          //, proto::and_<
-          //      proto::unary_expr<proto::_, Grammar>
-          //    , proto::if_<is_generic_quant_tag<proto::tag_of<mpl::_> > >
-          //  >
+          , proto::logical_not<Grammar>
+          , proto::and_<
+                proto::unary_expr<proto::_, Grammar>
+              , proto::if_<is_generic_quant_tag<proto::tag_of<mpl::_> > >
+            >
         >
-    {};
-
-    struct GreedyOptional
-      : proto::trans::arg<
-            //proto::or_<
-                proto::logical_not<Grammar>
-            //  , proto::unary_expr<generic_quant_tag<0, 1>, Grammar>
-            //>
-        >
-    {};
-
-    struct NonGreedyQuantifier
-      : proto::unary_minus<GreedyQuantifier>
     {};
 
     struct SimpleGreedyQuantifier
@@ -99,18 +87,16 @@ namespace boost { namespace xpressive { namespace detail
       : proto::or_<
             as_matcher<Terminal>
           , as_alternate<Alternate>
-          , as_optional<GreedyOptional, false>
-          , proto::trans::arg<proto::unary_minus<as_optional<GreedyOptional, true> > >
-          , as_simple_quantifier<SimpleGreedyQuantifier, false>
-          , proto::trans::arg<proto::unary_minus<as_simple_quantifier<SimpleGreedyQuantifier, true> > >
+          , as_simple_quantifier<SimpleGreedyQuantifier, true>
+          , proto::trans::arg<proto::unary_minus<as_simple_quantifier<SimpleGreedyQuantifier, false> > >
         >
     {};
 
     // These sub-expressions require further processing.
     struct Transforms
       : proto::or_<
-            as_default_quantifier<DefaultGreedyQuantifier, false>
-          , proto::trans::arg<proto::unary_minus<as_default_quantifier<DefaultGreedyQuantifier, true> > >
+            as_default_quantifier<DefaultGreedyQuantifier, true>
+          , proto::trans::arg<proto::unary_minus<as_default_quantifier<DefaultGreedyQuantifier, false> > >
           , as_marker<Mark>
         >
     {};

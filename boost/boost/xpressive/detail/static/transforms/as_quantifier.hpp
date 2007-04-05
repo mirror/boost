@@ -22,6 +22,7 @@
 #include <boost/xpressive/detail/utility/cons.hpp>
 #include <boost/xpressive/proto/transform/branch.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
+#include <boost/xpressive/proto/transform/compose.hpp>
 #include <boost/xpressive/proto/transform/conditional.hpp>
 
 // BUGBUG move quant traits here
@@ -106,13 +107,10 @@ namespace boost { namespace xpressive { namespace detail
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
-    // as_defult_quantifier
-    template<typename Grammar, bool Greedy>
-    struct as_default_quantifier
-      : Grammar
+    // as_default_quantifier_impl
+    template<bool Greedy, uint_t Min, uint_t Max>
+    struct as_default_quantifier_impl
     {
-        as_default_quantifier();
-
         template<typename Expr, typename State, typename Visitor>
         struct apply
           : proto::right_shift<
@@ -148,78 +146,95 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
-    struct MarkerPattern;
-    struct DefaultGreedyQuantifier;
+    // TODO use optional_matcher and optional_mark_matcher
+    template<bool Greedy>
+    struct make_optional_
+    {
+        template<typename Expr, typename State, typename Visitor>
+        struct apply
+          : proto::bitwise_or<
+                Expr
+              , proto::terminal<epsilon_matcher>::type
+            >
+        {};
 
-    struct OptionalMark
-      : proto::unary_expr<proto::_, proto::or_<MarkerPattern, DefaultGreedyQuantifier> > 
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)
+        {
+            typename apply<Expr, State, Visitor>::type that = {expr, {epsilon_matcher()}};
+            return that;
+        }
+    };
+
+    template<>
+    struct make_optional_<false>
+    {
+        template<typename Expr, typename State, typename Visitor>
+        struct apply
+          : proto::bitwise_or<
+                proto::terminal<epsilon_matcher>::type
+              , Expr
+            >
+        {};
+
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)
+        {
+            typename apply<Expr, State, Visitor>::type that = {{epsilon_matcher()}, expr};
+            return that;
+        }
+    };
+
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // as_default_quantifier_impl
+    template<bool Greedy, uint_t Max>
+    struct as_default_quantifier_impl<Greedy, 0, Max>
+      : proto::trans::compose<
+            as_default_quantifier_impl<Greedy, 1, Max>
+          , make_optional_<Greedy>
+        >
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
-    // as_default_optional
-    template<typename Grammar, bool Greedy>
-    struct as_default_optional
-      : Grammar
-    {
-        as_default_optional();
-
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
-        {
-            typedef optional_matcher<
-                typename Grammar::template apply<Expr, alternate_end_xpression, Visitor>::type
-              , Greedy
-            > type;
-        };
-
-        template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
-        {
-            return typename apply<Expr, State, Visitor>::type(
-                Grammar::call(expr, alternate_end_xpression(), visitor)
-            );
-        }
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // as_mark_optional
-    template<typename Grammar, bool Greedy>
-    struct as_mark_optional
-      : Grammar
-    {
-        as_mark_optional();
-
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
-        {
-            typedef optional_mark_matcher<
-                typename Grammar::template apply<Expr, alternate_end_xpression, Visitor>::type
-              , Greedy
-            > type;
-        };
-
-        template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
-        {
-            typename Grammar::template apply<Expr, alternate_end_xpression, Visitor>::type const &
-                marked_expr = Grammar::call(expr, alternate_end_xpression(), visitor);
-            return typename apply<Expr, State, Visitor>::type(marked_expr, marked_expr.mark_number_);
-        }
-    };
-
-    ///////////////////////////////////////////////////////////////////////////////
-    // as_optional
-    template<typename Grammar, bool Greedy>
-    struct as_optional
-      : proto::trans::conditional<
-            proto::matches<mpl::_, OptionalMark>
-          , as_mark_optional<Grammar, Greedy>
-          , as_default_optional<Grammar, Greedy>
+    // as_default_quantifier_impl
+    template<bool Greedy>
+    struct as_default_quantifier_impl<Greedy, 0, 1>
+      : proto::trans::compose<
+            proto::trans::arg<proto::_>
+          , make_optional_<Greedy>
         >
+    {};
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // as_default_quantifier
+    template<typename Grammar, bool Greedy>
+    struct as_default_quantifier
+      : Grammar
     {
-        as_optional();
+        as_default_quantifier();
+
+        template<typename Expr, typename State, typename Visitor>
+        struct apply
+          : as_default_quantifier_impl<
+                Greedy
+              , min_type<typename Expr::tag_type>::value
+              , max_type<typename Expr::tag_type>::value
+            >::template apply<Expr, State, Visitor>
+        {};
+
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)
+        {
+            return as_default_quantifier_impl<
+                Greedy
+              , min_type<typename Expr::tag_type>::value
+              , max_type<typename Expr::tag_type>::value
+            >::call(expr, state, visitor);
+        }
     };
 
 }}}
