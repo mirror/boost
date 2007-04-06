@@ -32,63 +32,10 @@
 
 namespace boost { namespace xpressive { namespace detail
 {
-    template<typename Tag>
-    struct is_generic_quant_tag
-      : mpl::false_
-    {};
-
-    template<unsigned Min, unsigned Max>
-    struct is_generic_quant_tag<generic_quant_tag<Min, Max> >
-      : mpl::true_
-    {};
-
     struct Grammar;
 
-    struct Sequence
-      : proto::right_shift<Grammar, Grammar>
-    {};
-
-    struct Alternate
-      : proto::bitwise_or< Grammar, Grammar >
-    {};
-
-    struct Terminal
-      : proto::terminal< proto::_ >
-    {};
-
-    struct Mark
-      : proto::assign<basic_mark_tag, Grammar>
-    {};
-
-    struct GreedyQuantifier
-      : proto::or_<
-            proto::unary_plus<Grammar>
-          , proto::unary_star<Grammar>
-          , proto::logical_not<Grammar>
-          , proto::and_<
-                proto::if_<is_generic_quant_tag<proto::tag_of<mpl::_> > >
-              , proto::unary_expr<proto::_, Grammar>
-            >
-        >
-    {};
-
-    typedef use_simple_repeat<proto::result_of::arg<mpl::_> > UseSimpleRepeat;
-
-    struct SimpleGreedyQuantifier
-      : proto::and_<
-            GreedyQuantifier
-          , proto::if_<UseSimpleRepeat>
-          , proto::trans::arg<GreedyQuantifier>
-        >
-    {};
-
-    struct DefaultGreedyQuantifier
-      : proto::and_<
-            GreedyQuantifier
-          , proto::if_<mpl::not_<UseSimpleRepeat> >
-        >
-    {};
-
+    ///////////////////////////////////////////////////////////////////////////
+    // ListSet
     struct ListSet
       : proto::or_<
             proto::comma<ListSet, proto::terminal<char> >
@@ -96,60 +43,228 @@ namespace boost { namespace xpressive { namespace detail
         >
     {};
 
-    struct InvertibleMatcher
+    ///////////////////////////////////////////////////////////////////////////
+    // NonGreedyRepeatCases
+    struct NonGreedyRepeatCases
+    {
+        template<typename Tag>
+        struct case_
+          : proto::not_<proto::_>
+        {};
+    };
+
+    template<>
+    struct NonGreedyRepeatCases::case_<proto::tag::unary_star>
+      : proto::trans::conditional<
+            use_simple_repeat<proto::result_of::arg<mpl::_> >
+          , as_simple_quantifier<proto::trans::arg<proto::unary_star<Grammar> >, false>
+          , as_default_quantifier<proto::unary_star<Grammar>, false>
+        >
+    {};
+
+    template<>
+    struct NonGreedyRepeatCases::case_<proto::tag::unary_plus>
+      : proto::trans::conditional<
+            use_simple_repeat<proto::result_of::arg<mpl::_> >
+          , as_simple_quantifier<proto::trans::arg<proto::unary_plus<Grammar> >, false>
+          , as_default_quantifier<proto::unary_plus<Grammar>, false>
+        >
+    {};
+
+    template<>
+    struct NonGreedyRepeatCases::case_<proto::tag::logical_not>
+      : proto::trans::conditional<
+            use_simple_repeat<proto::result_of::arg<mpl::_> >
+          , as_simple_quantifier<proto::trans::arg<proto::logical_not<Grammar> >, false>
+          , as_default_quantifier<proto::logical_not<Grammar>, false>
+        >
+    {};
+
+    template<uint_t Min, uint_t Max>
+    struct NonGreedyRepeatCases::case_<generic_quant_tag<Min, Max> >
+      : proto::trans::conditional<
+            use_simple_repeat<proto::result_of::arg<mpl::_> >
+          , as_simple_quantifier<proto::trans::arg<proto::unary_expr<generic_quant_tag<Min, Max>, Grammar> >, false>
+          , as_default_quantifier<proto::unary_expr<generic_quant_tag<Min, Max>, Grammar>, false>
+        >
+    {};
+
+    ///////////////////////////////////////////////////////////////////////////
+    // InvertibleCases
+    struct InvertibleCases
+    {
+        template<typename Tag>
+        struct case_
+          : proto::not_<proto::_>
+        {};
+    };
+
+    template<>
+    struct InvertibleCases::case_<proto::tag::comma>
+      : as_list_set<ListSet>
+    {};
+
+    template<>
+    struct InvertibleCases::case_<proto::tag::assign>
+      : as_list_set<ListSet>
+    {};
+
+    template<>
+    struct InvertibleCases::case_<proto::tag::subscript>
+      : proto::trans::right<proto::subscript<set_initializer_type, as_set<Grammar> > >
+    {};
+
+    template<>
+    struct InvertibleCases::case_<lookahead_tag<true> >
+      : proto::trans::arg<proto::unary_expr<lookahead_tag<true>, as_lookahead<Grammar> > >
+    {};
+
+    template<>
+    struct InvertibleCases::case_<lookbehind_tag<true> >
+      : proto::trans::arg<proto::unary_expr<lookbehind_tag<true>, as_lookbehind<Grammar> > >
+    {};
+
+    template<>
+    struct InvertibleCases::case_<proto::tag::terminal>
       : proto::or_<
-            as_list_set<ListSet>
-          , proto::trans::right<proto::subscript<set_initializer_type, as_set<Grammar> > >
-          , proto::trans::arg<proto::unary_expr<lookahead_tag<true>, as_lookahead<Grammar> > >
-          , proto::trans::arg<proto::unary_expr<lookbehind_tag<true>, as_lookbehind<Grammar> > >
-          , as_matcher<proto::terminal<posix_charset_placeholder> >
+            as_matcher<proto::terminal<posix_charset_placeholder> >
           , as_matcher<proto::terminal<range_placeholder<proto::_> > >
           , as_matcher<proto::terminal<char> >
         >
     {};
 
-    // These sub-expressions generate simple matcher types
-    // that must be placed in sequence.
-    struct Matchers
-      : proto::or_<
-            as_matcher<Terminal>
-          , as_alternate<Alternate>
+    ///////////////////////////////////////////////////////////////////////////
+    // Cases
+    struct Cases
+    {
+        template<typename Tag>
+        struct case_
+          : proto::not_<proto::_>
+        {};
+    };
 
-          , as_simple_quantifier<SimpleGreedyQuantifier, true>
-          , proto::trans::arg<proto::unary_minus<as_simple_quantifier<SimpleGreedyQuantifier, false> > >
+    template<>
+    struct Cases::case_<proto::tag::right_shift>
+      : proto::trans::reverse_fold<proto::right_shift<Grammar, Grammar> >
+    {};
 
-          , InvertibleMatcher
-          , as_inverse<proto::trans::arg<proto::complement<InvertibleMatcher> > >
+    template<>
+    struct Cases::case_<proto::tag::terminal>
+      : in_sequence<as_matcher<proto::terminal<proto::_> > >
+    {};
 
-          , proto::trans::arg<proto::unary_expr<keeper_tag, as_keeper<Grammar> > >
+    template<>
+    struct Cases::case_<proto::tag::bitwise_or>
+      : in_sequence<as_alternate<proto::bitwise_or<Grammar, Grammar> > >
+    {};
 
-          , proto::or_<
-                proto::trans::arg<proto::unary_expr<optional_tag<true>, as_optional<Grammar, true> > >
-              , proto::trans::arg<proto::unary_expr<optional_tag<false>, as_optional<Grammar, false> > >
+    template<bool Greedy>
+    struct Cases::case_<optional_tag<Greedy> >
+      : in_sequence<proto::trans::arg<proto::unary_expr<optional_tag<Greedy>, as_optional<Grammar, Greedy> > > >
+    {};
+
+    template<>
+    struct Cases::case_<proto::tag::unary_star>
+      : proto::trans::conditional<
+            use_simple_repeat<proto::result_of::arg<mpl::_> >
+          , in_sequence<as_simple_quantifier<proto::trans::arg<proto::unary_star<Grammar> >, true> >
+          , proto::trans::compose<as_default_quantifier<proto::unary_star<Grammar>, true>, Grammar>
+        >
+    {};
+
+    template<>
+    struct Cases::case_<proto::tag::unary_plus>
+      : proto::trans::conditional<
+            use_simple_repeat<proto::result_of::arg<mpl::_> >
+          , in_sequence<as_simple_quantifier<proto::trans::arg<proto::unary_plus<Grammar> >, true> >
+          , proto::trans::compose<as_default_quantifier<proto::unary_plus<Grammar>, true>, Grammar>
+        >
+    {};
+
+    template<>
+    struct Cases::case_<proto::tag::logical_not>
+      : proto::trans::conditional<
+            use_simple_repeat<proto::result_of::arg<mpl::_> >
+          , in_sequence<as_simple_quantifier<proto::trans::arg<proto::logical_not<Grammar> >, true> >
+          , proto::trans::compose<as_default_quantifier<proto::logical_not<Grammar>, true>, Grammar>
+        >
+    {};
+
+    template<uint_t Min, uint_t Max>
+    struct Cases::case_<generic_quant_tag<Min, Max> >
+      : proto::trans::conditional<
+            use_simple_repeat<proto::result_of::arg<mpl::_> >
+          , in_sequence<as_simple_quantifier<proto::trans::arg<proto::unary_expr<generic_quant_tag<Min, Max>, Grammar> >, true> >
+          , proto::trans::compose<as_default_quantifier<proto::unary_expr<generic_quant_tag<Min, Max>, Grammar>, true>, Grammar>
+        >
+    {};
+
+    template<>
+    struct Cases::case_<proto::tag::unary_minus>
+      : proto::and_<
+            proto::unary_minus<proto::switch_<NonGreedyRepeatCases> >
+          , proto::trans::conditional<
+                use_simple_repeat<proto::result_of::arg<proto::result_of::arg<mpl::_> > >
+              , in_sequence<proto::trans::arg<proto::unary_minus<proto::switch_<NonGreedyRepeatCases> > > >
+              , proto::trans::compose<proto::trans::arg<proto::unary_minus<proto::switch_<NonGreedyRepeatCases> > >, Grammar>
             >
         >
     {};
 
-    // These sub-expressions require further processing.
-    struct Composites
-      : proto::or_<
-            as_default_quantifier<DefaultGreedyQuantifier, true>
-          , proto::trans::arg<proto::unary_minus<as_default_quantifier<DefaultGreedyQuantifier, false> > >
+    template<>
+    struct Cases::case_<proto::tag::complement>
+      : in_sequence<as_inverse<proto::trans::arg<proto::complement<proto::switch_<InvertibleCases> > > > >
+    {};
 
-          , as_marker<Mark>
-          , as_action<proto::subscript<Grammar, proto::_> >
+    template<>
+    struct Cases::case_<modifier_tag>
+      : as_modifier<proto::binary_expr<modifier_tag, proto::_, Grammar> >
+    {};
+
+    template<>
+    struct Cases::case_<lookahead_tag<true> >
+      : in_sequence<proto::trans::arg<proto::unary_expr<lookahead_tag<true>, as_lookahead<Grammar> > > >
+    {};
+
+    template<>
+    struct Cases::case_<lookbehind_tag<true> >
+      : in_sequence<proto::trans::arg<proto::unary_expr<lookbehind_tag<true>, as_lookbehind<Grammar> > > >
+    {};
+
+    template<>
+    struct Cases::case_<keeper_tag>
+      : in_sequence<proto::trans::arg<proto::unary_expr<keeper_tag, as_keeper<Grammar> > > >
+    {};
+
+    template<>
+    struct Cases::case_<proto::tag::comma>
+      : in_sequence<as_list_set<ListSet> >
+    {};
+
+    template<>
+    struct Cases::case_<proto::tag::assign>
+      : proto::or_<
+            proto::trans::compose<as_marker<proto::assign<basic_mark_tag, Grammar> >, Grammar>
+          , in_sequence<as_list_set<ListSet> >
         >
     {};
 
+    template<>
+    struct Cases::case_<proto::tag::subscript>
+      : proto::or_<
+            in_sequence<proto::trans::right<proto::subscript<set_initializer_type, as_set<Grammar> > > >
+          , proto::trans::compose<as_action<proto::subscript<Grammar, proto::_> >, Grammar>
+        >
+    {};
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Grammar
     struct Grammar
-      : proto::or_<
-            proto::trans::reverse_fold<Sequence>
-          , in_sequence<Matchers>
-          , proto::trans::compose<Composites, Grammar>
-          , as_modifier<proto::binary_expr<modifier_tag, proto::_, Grammar> >
-        >
+      : proto::switch_<Cases>
     {};
 
+    ///////////////////////////////////////////////////////////////////////////
+    // transform()
     template<typename Expr, typename Visitor>
     typename Grammar::apply<Expr, end_xpression, Visitor>::type
     transform(Expr const &expr, Visitor &visitor)

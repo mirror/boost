@@ -239,7 +239,7 @@
             // handle proto::switch_
             template<typename Expr, typename Cases>
             struct matches_impl<Expr, switch_<Cases> >
-              : matches_impl<Expr, typename Cases::template case_<Expr>::type>
+              : matches_impl<Expr, typename Cases::template case_<typename Expr::tag_type>::type>
             {};
 
         }
@@ -298,14 +298,14 @@
 
             template<typename Expr, typename State, typename Visitor>
             struct apply
-              : Cases::template case_<Expr>::template apply<Expr, State, Visitor>
+              : Cases::template case_<typename Expr::tag_type>::template apply<Expr, State, Visitor>
             {};
 
             template<typename Expr, typename State, typename Visitor>
             static typename apply<Expr, State, Visitor>::type
             call(Expr const &expr, State const &state, Visitor &visitor)
             {
-                return Cases::template case_<Expr>::call(expr, state, visitor);
+                return Cases::template case_<typename Expr::tag_type>::call(expr, state, visitor);
             }
         };
 

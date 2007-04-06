@@ -62,21 +62,21 @@ void a_function() {}
 
 struct MyCases
 {
-    template<typename Expr, typename Tag = typename Expr::tag_type>
+    template<typename Tag>
     struct case_
       : proto::not_<proto::_>
     {};
-
-    template<typename Expr>
-    struct case_<Expr, proto::tag::right_shift>
-      : proto::_
-    {};
-
-    template<typename Expr>
-    struct case_<Expr, proto::tag::add>
-      : proto::_
-    {};
 };
+
+template<>
+struct MyCases::case_<proto::tag::right_shift>
+  : proto::_
+{};
+
+template<>
+struct MyCases::case_<proto::tag::add>
+  : proto::_
+{};
 
 void test_matches()
 {

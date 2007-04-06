@@ -20,6 +20,8 @@
 #include <boost/xpressive/proto/context.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
 
+#include <boost/xpressive/detail/static/productions/modify_compiler.hpp>
+
 namespace boost { namespace xpressive { namespace detail
 {
 
