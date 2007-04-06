@@ -24,6 +24,7 @@
 #include <boost/xpressive/detail/static/transforms/as_marker.hpp>
 #include <boost/xpressive/detail/static/transforms/as_set.hpp>
 #include <boost/xpressive/detail/static/transforms/as_independent.hpp>
+#include <boost/xpressive/detail/static/transforms/as_modifier.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
 #include <boost/xpressive/proto/transform/compose.hpp>
 
@@ -139,6 +140,7 @@ namespace boost { namespace xpressive { namespace detail
             proto::trans::reverse_fold<Sequence>
           , proto::trans::compose<Composites, Grammar>
           , in_sequence<Matchers>
+          , as_modifier<proto::binary_expr<modifier_tag, proto::_, Grammar> >
         >
     {};
 
