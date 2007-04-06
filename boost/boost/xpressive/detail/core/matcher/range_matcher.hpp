@@ -43,6 +43,11 @@ namespace boost { namespace xpressive { namespace detail
         {
         }
 
+        void inverse()
+        {
+            this->not_ = !this->not_;
+        }
+
         bool in_range(Traits const &traits, char_type ch, mpl::false_) const // case-sensitive
         {
             return traits.in_range(this->ch_min_, this->ch_max_, ch);

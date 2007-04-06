@@ -33,10 +33,14 @@ namespace boost { namespace xpressive { namespace detail
         typedef mpl::bool_<ICase> icase_type;
         char_type ch_;
 
+        typedef literal_matcher<Traits, ICase, !Not> inverse_type;
+        explicit literal_matcher(inverse_type that)
+          : ch_(that.ch_)
+        {}
+
         literal_matcher(char_type ch, Traits const &traits)
           : ch_(detail::translate(ch, traits, icase_type()))
-        {
-        }
+        {}
 
         template<typename BidiIter, typename Next>
         bool match(state_type<BidiIter> &state, Next const &next) const

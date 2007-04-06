@@ -55,28 +55,33 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // width_of_terminal
     //
-    template<typename Expr>
+    template<typename Expr, bool IsXpr = is_xpr<Expr>::value>
     struct width_of_terminal
+      : mpl::size_t<Expr::width>      // char literals
+    {};
+
+    template<typename Expr>
+    struct width_of_terminal<Expr, false>
       : mpl::size_t<1>      // char literals
     {};
 
     template<typename Expr>
-    struct width_of_terminal<Expr *>
+    struct width_of_terminal<Expr *, false>
       : unknown_width       // string literals
     {};
 
     template<typename Char, std::size_t N>
-    struct width_of_terminal<Char (&) [N]>
+    struct width_of_terminal<Char (&) [N], false>
       : mpl::size_t<N-1>    // string literals
     {};
 
     template<typename Char, std::size_t N>
-    struct width_of_terminal<Char const (&) [N]>
+    struct width_of_terminal<Char const (&) [N], false>
       : mpl::size_t<N-1>    // string literals
     {};
 
     template<typename BidiIter>
-    struct width_of_terminal<tracking_ptr<regex_impl<BidiIter> > >
+    struct width_of_terminal<tracking_ptr<regex_impl<BidiIter> >, false>
       : unknown_width       // basic_regex
     {};
 

@@ -35,28 +35,33 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // is_terminal_pure
     //
-    template<typename Expr>
+    template<typename Expr, bool IsXpr = is_xpr<Expr>::value>
     struct is_terminal_pure
+      : mpl::bool_<Expr::pure>  // xpression types
+    {};
+
+    template<typename Expr>
+    struct is_terminal_pure<Expr, false>
       : mpl::true_      // char literals
     {};
 
     template<typename Expr>
-    struct is_terminal_pure<Expr *>
+    struct is_terminal_pure<Expr *, false>
       : mpl::true_      // string literals
     {};
 
     template<typename Char, std::size_t N>
-    struct is_terminal_pure<Char (&) [N]>
+    struct is_terminal_pure<Char (&) [N], false>
       : mpl::true_      // string literals
     {};
 
     template<typename Char, std::size_t N>
-    struct is_terminal_pure<Char const (&) [N]>
+    struct is_terminal_pure<Char const (&) [N], false>
       : mpl::true_      // string literals
     {};
 
     template<typename BidiIter>
-    struct is_terminal_pure<tracking_ptr<regex_impl<BidiIter> > >
+    struct is_terminal_pure<tracking_ptr<regex_impl<BidiIter> >, false>
       : mpl::false_     // basic_regex
     {};
 
@@ -185,34 +190,6 @@ namespace boost { namespace xpressive { namespace detail
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
-    // use_simple_repeat_terminal
-    //
-    template<typename Char>
-    struct use_simple_repeat_terminal
-      : mpl::true_      // char literals
-    {};
-
-    template<typename Char>
-    struct use_simple_repeat_terminal<Char *>
-      : mpl::true_      // string literals
-    {};
-
-    template<typename Char, std::size_t N>
-    struct use_simple_repeat_terminal<Char (&) [N]>
-      : mpl::true_      // string literals
-    {};
-
-    template<typename Char, std::size_t N>
-    struct use_simple_repeat_terminal<Char const (&) [N]>
-      : mpl::true_      // string literals
-    {};
-
-    template<typename BidiIter>
-    struct use_simple_repeat_terminal<tracking_ptr<regex_impl<BidiIter> > >
-      : mpl::false_     // basic_regex
-    {};
-
-    ///////////////////////////////////////////////////////////////////////////////
     // use_simple_repeat
     //
     template<typename Expr, typename Tag>
@@ -221,12 +198,6 @@ namespace boost { namespace xpressive { namespace detail
     {
         // should never try to repeat something of 0-width
         BOOST_MPL_ASSERT_RELATION(0, !=, width_of<Expr>::value);
-    };
-
-    template<typename Expr>
-    struct use_simple_repeat<Expr, proto::tag::terminal>
-      : use_simple_repeat_terminal<typename proto::result_of::arg<Expr>::type>
-    {
     };
 
 }}} // namespace boost::xpressive::detail

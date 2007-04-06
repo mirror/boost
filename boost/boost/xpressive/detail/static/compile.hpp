@@ -26,6 +26,8 @@
 #include <boost/xpressive/detail/static/productions/visitor.hpp>
 #include <boost/xpressive/detail/static/productions/domain_tags.hpp>
 
+//#include <boost/xpressive/detail/static/transforms/transform.hpp>
+
 namespace boost { namespace xpressive { namespace detail
 {
 
@@ -40,7 +42,9 @@ namespace boost { namespace xpressive { namespace detail
         // "compile" the regex and wrap it in an xpression_adaptor.
         xpression_visitor<BidiIter, mpl::false_, Traits> visitor(traits, impl);
         intrusive_ptr<matchable_ex<BidiIter> const> adxpr = make_adaptor<matchable_ex<BidiIter> >(
-            proto::compile(xpr, end_xpression(), visitor, seq_tag()));
+            //detail::transform(xpr, visitor)
+            proto::compile(xpr, end_xpression(), visitor, seq_tag())
+        );
 
         // Link and optimize the regex
         common_compile(adxpr, *impl, visitor.traits());

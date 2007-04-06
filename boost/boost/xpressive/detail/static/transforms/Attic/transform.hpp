@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // transform.hpp
 //
-//  Copyright 2004 Eric Niebler. Distributed under the Boost
+//  Copyright 2007 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
@@ -25,6 +25,7 @@
 #include <boost/xpressive/detail/static/transforms/as_set.hpp>
 #include <boost/xpressive/detail/static/transforms/as_independent.hpp>
 #include <boost/xpressive/detail/static/transforms/as_modifier.hpp>
+#include <boost/xpressive/detail/static/transforms/as_inverse.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
 #include <boost/xpressive/proto/transform/compose.hpp>
 
@@ -64,8 +65,8 @@ namespace boost { namespace xpressive { namespace detail
           , proto::unary_star<Grammar>
           , proto::logical_not<Grammar>
           , proto::and_<
-                proto::unary_expr<proto::_, Grammar>
-              , proto::if_<is_generic_quant_tag<proto::tag_of<mpl::_> > >
+                proto::if_<is_generic_quant_tag<proto::tag_of<mpl::_> > >
+              , proto::unary_expr<proto::_, Grammar>
             >
         >
     {};
@@ -105,6 +106,9 @@ namespace boost { namespace xpressive { namespace detail
           , proto::trans::right<proto::subscript<set_initializer_type, as_set<Grammar> > >
           , proto::trans::arg<proto::unary_expr<lookahead_tag<true>, as_lookahead<Grammar> > >
           , proto::trans::arg<proto::unary_expr<lookbehind_tag<true>, as_lookbehind<Grammar> > >
+          , as_matcher<proto::terminal<posix_charset_placeholder> >
+          , as_matcher<proto::terminal<range_placeholder<proto::_> > >
+          , as_matcher<proto::terminal<char> >
         >
     {};
 
@@ -119,7 +123,7 @@ namespace boost { namespace xpressive { namespace detail
           , proto::trans::arg<proto::unary_minus<as_simple_quantifier<SimpleGreedyQuantifier, false> > >
 
           , InvertibleMatcher
-          , inverse<proto::trans::arg<proto::complement<InvertibleMatcher> > >
+          , as_inverse<proto::trans::arg<proto::complement<InvertibleMatcher> > >
 
           , proto::trans::arg<proto::unary_expr<keeper_tag, as_keeper<Grammar> > >
         >

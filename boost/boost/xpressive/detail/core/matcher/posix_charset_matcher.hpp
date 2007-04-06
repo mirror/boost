@@ -40,6 +40,11 @@ namespace boost { namespace xpressive { namespace detail
             BOOST_ASSERT(0 != this->mask_);
         }
 
+        void inverse()
+        {
+            this->not_ = !this->not_;
+        }
+
         template<typename BidiIter, typename Next>
         bool match(state_type<BidiIter> &state, Next const &next) const
         {
