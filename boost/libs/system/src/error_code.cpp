@@ -261,18 +261,18 @@ namespace
     decoder_element() : ed(0), md(0), wmd(0) {}
   };
 
-  const decoder_element init_decoders[] =
-#ifdef BOOST_WINDOWS_API
-  { decoder_element( errno_ed, errno_md, errno_wmd ),
-    decoder_element( windows_ed, windows_md, windows_wmd) };
-#else
-  { decoder_element( errno_ed, errno_md, errno_wmd ) };
-#endif
-
   typedef std::vector< decoder_element > decoder_vec_type;
 
   decoder_vec_type & decoder_vec()
   {
+    static const decoder_element init_decoders[] =
+#ifdef BOOST_WINDOWS_API
+    { decoder_element( errno_ed, errno_md, errno_wmd ),
+      decoder_element( windows_ed, windows_md, windows_wmd) };
+#else
+    { decoder_element( errno_ed, errno_md, errno_wmd ) };
+#endif
+
     static decoder_vec_type dv( init_decoders,
       init_decoders + sizeof(init_decoders)/sizeof(decoder_element));
     return dv;
