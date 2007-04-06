@@ -146,47 +146,108 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
-    // TODO use optional_matcher and optional_mark_matcher
+    ///////////////////////////////////////////////////////////////////////////////
+    // optional_tag
+    template<bool Greedy>
+    struct optional_tag
+    {};
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // as_default_optional
+    template<typename Grammar, bool Greedy>
+    struct as_default_optional
+      : Grammar
+    {
+        as_default_optional();
+
+        template<typename Expr, typename State, typename Visitor>
+        struct apply
+        {
+            typedef optional_matcher<
+                typename Grammar::template apply<Expr, alternate_end_xpression, Visitor>::type
+              , Greedy
+            > type;
+        };
+
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)
+        {
+            return typename apply<Expr, State, Visitor>::type(
+                Grammar::call(expr, alternate_end_xpression(), visitor)
+            );
+        };
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // as_mark_optional
+    template<typename Grammar, bool Greedy>
+    struct as_mark_optional
+      : Grammar
+    {
+        as_mark_optional();
+
+        template<typename Expr, typename State, typename Visitor>
+        struct apply
+        {
+            typedef optional_mark_matcher<
+                typename Grammar::template apply<Expr, alternate_end_xpression, Visitor>::type
+              , Greedy
+            > type;
+        };
+
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)
+        {
+            int mark_number = proto::arg(proto::left(expr)).mark_number_;
+            return typename apply<Expr, State, Visitor>::type(
+                Grammar::call(expr, alternate_end_xpression(), visitor)
+              , mark_number
+            );
+        };
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // IsMarkerOrRepeater
+    struct IsMarkerOrRepeater
+      : proto::or_<
+            proto::right_shift<proto::terminal<repeat_begin_matcher>, proto::_>
+          , proto::assign<proto::terminal<mark_placeholder>, proto::_>
+        >
+    {};
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // as_optional
+    template<typename Grammar, bool Greedy>
+    struct as_optional
+      : proto::trans::conditional<
+            proto::matches<mpl::_, IsMarkerOrRepeater>
+          , as_mark_optional<Grammar, Greedy>
+          , as_default_optional<Grammar, Greedy>
+        >
+    {
+        as_optional();
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // make_optional_
     template<bool Greedy>
     struct make_optional_
     {
         template<typename Expr, typename State, typename Visitor>
         struct apply
-          : proto::bitwise_or<
-                Expr
-              , proto::terminal<epsilon_matcher>::type
-            >
+          : proto::unary_expr<optional_tag<Greedy>, Expr>
         {};
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
-            typename apply<Expr, State, Visitor>::type that = {expr, {epsilon_matcher()}};
+            typename apply<Expr, State, Visitor>::type that = {expr};
             return that;
         }
     };
-
-    template<>
-    struct make_optional_<false>
-    {
-        template<typename Expr, typename State, typename Visitor>
-        struct apply
-          : proto::bitwise_or<
-                proto::terminal<epsilon_matcher>::type
-              , Expr
-            >
-        {};
-
-        template<typename Expr, typename State, typename Visitor>
-        static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)
-        {
-            typename apply<Expr, State, Visitor>::type that = {{epsilon_matcher()}, expr};
-            return that;
-        }
-    };
-
 
     ///////////////////////////////////////////////////////////////////////////////
     // as_default_quantifier_impl

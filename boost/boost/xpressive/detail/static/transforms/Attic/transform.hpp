@@ -126,6 +126,11 @@ namespace boost { namespace xpressive { namespace detail
           , as_inverse<proto::trans::arg<proto::complement<InvertibleMatcher> > >
 
           , proto::trans::arg<proto::unary_expr<keeper_tag, as_keeper<Grammar> > >
+
+          , proto::or_<
+                proto::trans::arg<proto::unary_expr<optional_tag<true>, as_optional<Grammar, true> > >
+              , proto::trans::arg<proto::unary_expr<optional_tag<false>, as_optional<Grammar, false> > >
+            >
         >
     {};
 
