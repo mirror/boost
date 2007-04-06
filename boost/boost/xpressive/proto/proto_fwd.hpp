@@ -230,6 +230,12 @@ namespace boost { namespace proto
     template<typename Pred>
     struct if_;
 
+    template<typename Cases>
+    struct switch_;
+
+    template<typename Grammar>
+    struct not_;
+
     template<typename Expr, typename Grammar, typename Return = void>
     struct if_matches;
 

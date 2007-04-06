@@ -26,6 +26,7 @@
     #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
     #include <boost/config.hpp>
     #include <boost/mpl/or.hpp>
+    #include <boost/mpl/not.hpp>
     #include <boost/mpl/bool.hpp>
     #include <boost/mpl/apply.hpp>
     #include <boost/mpl/aux_/template_arity.hpp>
@@ -229,6 +230,18 @@
               : mpl::apply1<Pred, Expr>::type
             {};
 
+            // handle proto::not_
+            template<typename Expr, typename Grammar>
+            struct matches_impl<Expr, not_<Grammar> >
+              : mpl::not_<matches_impl<Expr, typename Grammar::type> >
+            {};
+
+            // handle proto::switch_
+            template<typename Expr, typename Cases>
+            struct matches_impl<Expr, switch_<Cases> >
+              : matches_impl<Expr, typename Cases::template case_<Expr>::type>
+            {};
+
         }
 
         template<typename Expr, typename Grammar>
@@ -278,6 +291,24 @@
             }
         };
 
+        template<typename Cases>
+        struct switch_
+        {
+            typedef switch_ type;
+
+            template<typename Expr, typename State, typename Visitor>
+            struct apply
+              : Cases::template case_<Expr>::template apply<Expr, State, Visitor>
+            {};
+
+            template<typename Expr, typename State, typename Visitor>
+            static typename apply<Expr, State, Visitor>::type
+            call(Expr const &expr, State const &state, Visitor &visitor)
+            {
+                return Cases::template case_<Expr>::call(expr, state, visitor);
+            }
+        };
+
         struct _ : has_identity_transform
         {
             typedef _ type;
@@ -287,6 +318,12 @@
         struct if_ : has_identity_transform
         {
             typedef if_ type;
+        };
+
+        template<typename Pred>
+        struct not_ : has_identity_transform
+        {
+            typedef not_ type;
         };
 
         template<typename Grammar>

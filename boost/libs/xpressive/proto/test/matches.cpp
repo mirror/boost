@@ -60,6 +60,24 @@ struct Anything
 
 void a_function() {}
 
+struct MyCases
+{
+    template<typename Expr, typename Tag = typename Expr::tag_type>
+    struct case_
+      : proto::not_<proto::_>
+    {};
+
+    template<typename Expr>
+    struct case_<Expr, proto::tag::right_shift>
+      : proto::_
+    {};
+
+    template<typename Expr>
+    struct case_<Expr, proto::tag::add>
+      : proto::_
+    {};
+};
+
 void test_matches()
 {
     assert_matches< _ >( lit(1) );
@@ -163,6 +181,10 @@ void test_matches()
     assert_not_matches< function< terminal<int>, vararg< terminal<char> > > >( lit(1)('a','b','c',"d") );
 
     assert_matches< Anything >( cout_ << 1 << +lit('a') << lit(1)('a','b','c',"d") );
+
+    assert_matches< proto::switch_<MyCases> >( lit(1) >> 'a' );
+    assert_matches< proto::switch_<MyCases> >( lit(1) + 'a' );
+    assert_not_matches< proto::switch_<MyCases> >( lit(1) << 'a' );
 }
 
 using namespace unit_test;

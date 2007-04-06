@@ -72,12 +72,7 @@ namespace boost { namespace xpressive { namespace detail
         >
     {};
 
-    typedef
-        use_simple_repeat<
-            proto::result_of::arg<mpl::_>
-          , proto::tag_of<proto::result_of::arg<mpl::_> >
-        >
-    UseSimpleRepeat;
+    typedef use_simple_repeat<proto::result_of::arg<mpl::_> > UseSimpleRepeat;
 
     struct SimpleGreedyQuantifier
       : proto::and_<

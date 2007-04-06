@@ -29,7 +29,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // use_simple_repeat
     //
-    template<typename Expr, typename Tag = typename Expr::tag_type>
+    template<typename Expr>
     struct use_simple_repeat;
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -192,7 +192,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // use_simple_repeat
     //
-    template<typename Expr, typename Tag>
+    template<typename Expr>
     struct use_simple_repeat
       : mpl::bool_<width_of<Expr>::value != unknown_width::value && is_pure<Expr>::value>
     {
