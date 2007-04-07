@@ -759,7 +759,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, class ALLOC>
-    typename zero_vector<T, ALLOC>::const_value_type zero_vector<T, ALLOC>::zero_ (0);
+    typename zero_vector<T, ALLOC>::const_value_type zero_vector<T, ALLOC>::zero_ = T(/*zero*/);
 
 
     // Unit vector class
@@ -971,9 +971,9 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, class ALLOC>
-    typename unit_vector<T, ALLOC>::const_value_type unit_vector<T, ALLOC>::zero_ (0);
+    typename unit_vector<T, ALLOC>::const_value_type unit_vector<T, ALLOC>::zero_ = T(/*zero*/);
     template<class T, class ALLOC>
-    typename unit_vector<T, ALLOC>::const_value_type unit_vector<T, ALLOC>::one_ (1);
+    typename unit_vector<T, ALLOC>::const_value_type unit_vector<T, ALLOC>::one_ (1);  // ISSUE: need 'one'-traits here
 
 
     // Scalar vector class

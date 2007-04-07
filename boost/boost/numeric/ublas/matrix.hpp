@@ -2328,7 +2328,7 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, class ALLOC>
-    const typename zero_matrix<T, ALLOC>::value_type zero_matrix<T, ALLOC>::zero_ (0);
+    const typename zero_matrix<T, ALLOC>::value_type zero_matrix<T, ALLOC>::zero_ = T(/*zero*/);
 
 
     // Identity matrix class
@@ -2710,9 +2710,9 @@ namespace boost { namespace numeric { namespace ublas {
     };
 
     template<class T, class ALLOC>
-    const typename identity_matrix<T, ALLOC>::value_type identity_matrix<T, ALLOC>::zero_ (0);
+    const typename identity_matrix<T, ALLOC>::value_type identity_matrix<T, ALLOC>::zero_ = T(/*zero*/);
     template<class T, class ALLOC>
-    const typename identity_matrix<T, ALLOC>::value_type identity_matrix<T, ALLOC>::one_ (1);
+    const typename identity_matrix<T, ALLOC>::value_type identity_matrix<T, ALLOC>::one_ (1); // ISSUE: need 'one'-traits here
 
 
     // Scalar matrix class
