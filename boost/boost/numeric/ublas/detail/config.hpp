@@ -177,7 +177,7 @@ namespace std {
 
 
 // Enable performance options in RELEASE mode
-#ifdef NDEBUG
+#if defined (NDEBUG) || defined (BOOST_UBLAS_NDEBUG)
 
 #ifndef BOOST_UBLAS_INLINE
 #define BOOST_UBLAS_INLINE inline
