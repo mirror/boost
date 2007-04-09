@@ -5,7 +5,7 @@
 //  shared_ptr.hpp
 //
 //  (C) Copyright Greg Colvin and Beman Dawes 1998, 1999.
-//  Copyright (c) 2001-2006 Peter Dimov
+//  Copyright (c) 2001-2007 Peter Dimov
 //
 //  Distributed under the Boost Software License, Version 1.0. (See
 //  accompanying file LICENSE_1_0.txt or copy at
@@ -192,6 +192,12 @@ public:
 
     template<class Y>
     shared_ptr(shared_ptr<Y> const & r): px(r.px), pn(r.pn) // never throws
+    {
+    }
+
+    // aliasing
+    template< class Y >
+    shared_ptr( shared_ptr<Y> const & r, T * p ): px( p ), pn( r.pn ) // never throws
     {
     }
 
