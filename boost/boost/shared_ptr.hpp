@@ -327,6 +327,11 @@ public:
         this_type( p, d, a ).swap( *this );
     }
 
+    template<class Y> void reset( shared_ptr<Y> const & r, T * p )
+    {
+        this_type( r, p ).swap( *this );
+    }
+
     reference operator* () const // never throws
     {
         BOOST_ASSERT(px != 0);

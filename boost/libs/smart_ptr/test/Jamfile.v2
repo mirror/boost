@@ -28,5 +28,6 @@ import testing ;
           [ run pointer_cast_test.cpp ]
           [ compile pointer_to_other_test.cpp ]
           [ run auto_ptr_rv_test.cpp ]
+          [ run shared_ptr_alias_test.cpp ]
         ;
 }
