@@ -88,6 +88,21 @@ template<class T, class Y> void sp_enable_shared_from_this( shared_count const &
     if(pe != 0) pe->_internal_weak_this._internal_assign(const_cast<Y*>(px), pn);
 }
 
+#ifdef _MANAGED
+
+// Avoid C4793, ... causes native code generation
+
+struct sp_any_pointer
+{
+    template<class T> sp_any_pointer( T* ) {}
+};
+
+inline void sp_enable_shared_from_this( shared_count const & /*pn*/, sp_any_pointer, sp_any_pointer )
+{
+}
+
+#else // _MANAGED
+
 #ifdef sgi
 // Turn off: the last argument of the varargs function "sp_enable_shared_from_this" is unnamed
 # pragma set woff 3506
@@ -100,6 +115,8 @@ inline void sp_enable_shared_from_this( shared_count const & /*pn*/, ... )
 #ifdef sgi
 # pragma reset woff 3506
 #endif
+
+#endif // _MANAGED
 
 #if !defined( BOOST_NO_SFINAE ) && !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION ) && !defined( BOOST_NO_AUTO_PTR )
 
