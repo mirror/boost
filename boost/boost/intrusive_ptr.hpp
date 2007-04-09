@@ -105,6 +105,11 @@ public:
         return *this;
     }
 
+    void reset( T * rhs )
+    {
+        this_type( rhs ).swap( *this );
+    }
+
     T * get() const
     {
         return p_;
