@@ -40,9 +40,9 @@
 
 #include <boost/detail/lightweight_test.hpp>
 
-#include <cstring>
 #include <iostream>
 #include <set>
+#include <string.h>
 
 class Incomplete;
 
