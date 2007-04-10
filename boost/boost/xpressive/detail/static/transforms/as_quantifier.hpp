@@ -38,28 +38,30 @@ namespace boost { namespace xpressive { namespace detail
     struct as_simple_quantifier
       : Grammar
     {
+        typedef proto::trans::arg<Grammar> grammar_type;
         as_simple_quantifier();
 
         template<typename Expr, typename State, typename Visitor>
         struct apply
         {
-            typedef simple_repeat_matcher<
-                typename Grammar::template apply<Expr, true_xpression, Visitor>::type
-              , Greedy
-            > type;
+            typedef typename grammar_type::template apply<Expr, true_xpression, Visitor>::type xpr_type;
+            typedef simple_repeat_matcher<xpr_type, Greedy> matcher_type;
+            typedef typename proto::terminal<matcher_type>::type type;
         };
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
-            typename Grammar::template apply<Expr, true_xpression, Visitor>::type const &xpr =
-                Grammar::call(expr, true_xpression(), visitor);
-            return typename apply<Expr, State, Visitor>::type(
-                xpr
-              , min_type<typename Expr::tag_type>::value
-              , max_type<typename Expr::tag_type>::value
-              , xpr.get_width().value()
+            typename apply<Expr, State, Visitor>::xpr_type const &xpr =
+                grammar_type::call(expr, true_xpression(), visitor);
+            return apply<Expr, State, Visitor>::type::make(
+                typename apply<Expr, State, Visitor>::matcher_type(
+                    xpr
+                  , min_type<typename Expr::tag_type>::value
+                  , max_type<typename Expr::tag_type>::value
+                  , xpr.get_width().value()
+                )
             );
         }
     };

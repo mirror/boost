@@ -44,6 +44,17 @@ namespace boost { namespace xpressive { namespace detail
     {};
 
     ///////////////////////////////////////////////////////////////////////////
+    // as_repeat
+    template<typename Tag, bool Greedy>
+    struct as_repeat
+      : proto::trans::conditional<
+            use_simple_repeat<proto::result_of::arg<mpl::_> >
+          , as_simple_quantifier<proto::unary_expr<Tag, Grammar>, Greedy>
+          , as_default_quantifier<proto::unary_expr<Tag, Grammar>, Greedy>
+        >
+    {};
+
+    ///////////////////////////////////////////////////////////////////////////
     // NonGreedyRepeatCases
     struct NonGreedyRepeatCases
     {
@@ -55,38 +66,22 @@ namespace boost { namespace xpressive { namespace detail
 
     template<>
     struct NonGreedyRepeatCases::case_<proto::tag::unary_star>
-      : proto::trans::conditional<
-            use_simple_repeat<proto::result_of::arg<mpl::_> >
-          , as_simple_quantifier<proto::trans::arg<proto::unary_star<Grammar> >, false>
-          , as_default_quantifier<proto::unary_star<Grammar>, false>
-        >
+      : as_repeat<proto::tag::unary_star, false>
     {};
 
     template<>
     struct NonGreedyRepeatCases::case_<proto::tag::unary_plus>
-      : proto::trans::conditional<
-            use_simple_repeat<proto::result_of::arg<mpl::_> >
-          , as_simple_quantifier<proto::trans::arg<proto::unary_plus<Grammar> >, false>
-          , as_default_quantifier<proto::unary_plus<Grammar>, false>
-        >
+      : as_repeat<proto::tag::unary_plus, false>
     {};
 
     template<>
     struct NonGreedyRepeatCases::case_<proto::tag::logical_not>
-      : proto::trans::conditional<
-            use_simple_repeat<proto::result_of::arg<mpl::_> >
-          , as_simple_quantifier<proto::trans::arg<proto::logical_not<Grammar> >, false>
-          , as_default_quantifier<proto::logical_not<Grammar>, false>
-        >
+      : as_repeat<proto::tag::logical_not, false>
     {};
 
     template<uint_t Min, uint_t Max>
     struct NonGreedyRepeatCases::case_<generic_quant_tag<Min, Max> >
-      : proto::trans::conditional<
-            use_simple_repeat<proto::result_of::arg<mpl::_> >
-          , as_simple_quantifier<proto::trans::arg<proto::unary_expr<generic_quant_tag<Min, Max>, Grammar> >, false>
-          , as_default_quantifier<proto::unary_expr<generic_quant_tag<Min, Max>, Grammar>, false>
-        >
+      : as_repeat<generic_quant_tag<Min, Max>, false>
     {};
 
     ///////////////////////////////////////////////////////////////////////////
@@ -165,49 +160,29 @@ namespace boost { namespace xpressive { namespace detail
 
     template<>
     struct Cases::case_<proto::tag::unary_star>
-      : proto::trans::conditional<
-            use_simple_repeat<proto::result_of::arg<mpl::_> >
-          , in_sequence<as_simple_quantifier<proto::trans::arg<proto::unary_star<Grammar> >, true> >
-          , proto::trans::compose<as_default_quantifier<proto::unary_star<Grammar>, true>, Grammar>
-        >
+      : proto::trans::compose<as_repeat<proto::tag::unary_star, true>, Grammar>
     {};
 
     template<>
     struct Cases::case_<proto::tag::unary_plus>
-      : proto::trans::conditional<
-            use_simple_repeat<proto::result_of::arg<mpl::_> >
-          , in_sequence<as_simple_quantifier<proto::trans::arg<proto::unary_plus<Grammar> >, true> >
-          , proto::trans::compose<as_default_quantifier<proto::unary_plus<Grammar>, true>, Grammar>
-        >
+      : proto::trans::compose<as_repeat<proto::tag::unary_plus, true>, Grammar>
     {};
 
     template<>
     struct Cases::case_<proto::tag::logical_not>
-      : proto::trans::conditional<
-            use_simple_repeat<proto::result_of::arg<mpl::_> >
-          , in_sequence<as_simple_quantifier<proto::trans::arg<proto::logical_not<Grammar> >, true> >
-          , proto::trans::compose<as_default_quantifier<proto::logical_not<Grammar>, true>, Grammar>
-        >
+      : proto::trans::compose<as_repeat<proto::tag::logical_not, true>, Grammar>
     {};
 
     template<uint_t Min, uint_t Max>
     struct Cases::case_<generic_quant_tag<Min, Max> >
-      : proto::trans::conditional<
-            use_simple_repeat<proto::result_of::arg<mpl::_> >
-          , in_sequence<as_simple_quantifier<proto::trans::arg<proto::unary_expr<generic_quant_tag<Min, Max>, Grammar> >, true> >
-          , proto::trans::compose<as_default_quantifier<proto::unary_expr<generic_quant_tag<Min, Max>, Grammar>, true>, Grammar>
-        >
+      : proto::trans::compose<as_repeat<generic_quant_tag<Min, Max>, true>, Grammar>
     {};
 
     template<>
     struct Cases::case_<proto::tag::unary_minus>
-      : proto::and_<
-            proto::unary_minus<proto::switch_<NonGreedyRepeatCases> >
-          , proto::trans::conditional<
-                use_simple_repeat<proto::result_of::arg<proto::result_of::arg<mpl::_> > >
-              , in_sequence<proto::trans::arg<proto::unary_minus<proto::switch_<NonGreedyRepeatCases> > > >
-              , proto::trans::compose<proto::trans::arg<proto::unary_minus<proto::switch_<NonGreedyRepeatCases> > >, Grammar>
-            >
+      : proto::trans::compose<
+            proto::trans::arg<proto::unary_minus<proto::switch_<NonGreedyRepeatCases> > >
+          , Grammar
         >
     {};
 
