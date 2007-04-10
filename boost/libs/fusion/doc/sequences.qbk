@@ -1,11 +1,11 @@
 [section Sequences]
 
-Like __mpl__, the Sequence is a fundamental concept in Fusion. A Sequence 
-may or may not actually store or contain data. __containers__ are sequences 
-that hold data. __views__, on the other hand, are sequences that do not 
-store any data. Instead, they are proxies that impart an alternative 
-presentation over another sequence. All models of Sequence have an 
-associated __iterator__ type that can be used to iterate through the 
+Like __mpl__, the Sequence is a fundamental concept in Fusion. A Sequence
+may or may not actually store or contain data. __containers__ are sequences
+that hold data. __views__, on the other hand, are sequences that do not
+store any data. Instead, they are proxies that impart an alternative
+presentation over another sequence. All models of Sequence have an
+associated __iterator__ type that can be used to iterate through the
 Sequence's elements.
 
 [heading Header]
@@ -14,31 +14,31 @@ Sequence's elements.
 
 [section Concepts]
 
-Fusion Sequences are organized into a hierarchy of concepts. 
+Fusion Sequences are organized into a hierarchy of concepts.
 
 [heading Traversal]
 
-Fusion's sequence traversal related concepts parallel Fusion's 
-__iterator_concepts__. __forward_sequence__ is the most basic concept. 
-__bidirectional_sequence__ is a refinement of __forward_sequence__. 
-__random_access_sequence__ is a refinement of __bidirectional_sequence__. 
+Fusion's sequence traversal related concepts parallel Fusion's
+__iterator_concepts__. __forward_sequence__ is the most basic concept.
+__bidirectional_sequence__ is a refinement of __forward_sequence__.
+__random_access_sequence__ is a refinement of __bidirectional_sequence__.
 These concepts pertain to sequence traversal.
 
 [heading Associativity]
 
-The __associative_sequence__ concept is orthogonal to traversal. An Associative 
+The __associative_sequence__ concept is orthogonal to traversal. An Associative
 Sequence allows efficient retrieval of elements based on keys.
 
 [section Forward Sequence]
 
 [heading Description]
 
-A Forward Sequence is a Sequence whose elements are arranged in a definite 
-order. The ordering is guaranteed not to change from iteration to 
-iteration. The requirement of a definite ordering allows the definition of 
-element-by-element equality (if the container's element type is Equality 
-Comparable) and of lexicographical ordering (if the container's element 
-type is LessThan Comparable). 
+A Forward Sequence is a Sequence whose elements are arranged in a definite
+order. The ordering is guaranteed not to change from iteration to
+iteration. The requirement of a definite ordering allows the definition of
+element-by-element equality (if the container's element type is Equality
+Comparable) and of lexicographical ordering (if the container's element
+type is LessThan Comparable).
 
 [variablelist Notation
     [[`s`]       [A Forward Sequence]]
@@ -61,9 +61,9 @@ For any Forward Sequence the following expressions must be valid:
                         Convertible to bool.]       []                      [Constant]]
     [[`__front__(s)`]       [Any type]                  []                      [Constant]]
     [[`__front__(s) = o`]   [Any type]                  [`s` is mutable and
-                                                    `e = o`, where `e` 
-                                                    is the first element 
-                                                    in the sequence, is 
+                                                    `e = o`, where `e`
+                                                    is the first element
+                                                    in the sequence, is
                                                     a valid expression.]    [Constant]]
 ]
 
@@ -85,8 +85,8 @@ For any Forward Sequence the following expressions must be valid:
     [[`__begin__(s)`]       [An iterator to the first element of the sequence; see __begin__.]]
     [[`__end__(s)`]         [A past-the-end iterator to the sequence; see __end__.]]
     [[`__size__(s)`]        [The size of the sequence; see __size__.]]
-    [[`__empty__(s)`]       [A boolean Integral Constant `c` such that 
-                        `c::value == true` if and only if the sequence 
+    [[`__empty__(s)`]       [A boolean Integral Constant `c` such that
+                        `c::value == true` if and only if the sequence
                         is empty; see __empty__.]]
     [[`__front__(s)`]       [The first element in the sequence; see __front__.]]
 ]
@@ -96,10 +96,10 @@ For any Forward Sequence the following expressions must be valid:
 For any Forward Sequence s the following invariants always hold:
 
 * `[__begin__(s), __end__(s))` is always a valid range.
-* An __algorithm__ that iterates through the range `[__begin__(s), __end__(s))` 
+* An __algorithm__ that iterates through the range `[__begin__(s), __end__(s))`
   will pass through every element of `s` exactly once.
 * `__begin__(s)` is identical to `__end__(s))` if and only if `s` is empty.
-* Two different iterations through `s` will access its elements in 
+* Two different iterations through `s` will access its elements in
   the same order.
 
 [heading Models]
@@ -124,7 +124,7 @@ For any Forward Sequence s the following invariants always hold:
 
 [heading Description]
 
-A Bidirectional Sequence is a __forward_sequence__ whose iterators model 
+A Bidirectional Sequence is a __forward_sequence__ whose iterators model
 __bidirectional_iterator__.
 
 [heading Refinement of]
@@ -140,7 +140,7 @@ __forward_sequence__
 
 [heading Valid Expressions]
 
-In addition to the requirements defined in __forward_sequence__, for any 
+In addition to the requirements defined in __forward_sequence__, for any
 Bidirectional Sequence the following must be met:
 
 [table
@@ -149,15 +149,15 @@ Bidirectional Sequence the following must be met:
     [[`__end__(s)`]         [__bidirectional_iterator__]    []                      [Constant]]
     [[`__back__(s)`]        [Any type]                      []                      [Constant]]
     [[`__back__(s) = o`]    [Any type]                      [`s` is mutable and
-                                                        `e = o`, where `e` 
-                                                        is the first element 
-                                                        in the sequence, is 
+                                                        `e = o`, where `e`
+                                                        is the first element
+                                                        in the sequence, is
                                                         a valid expression.]    [Constant]]
 ]
 
 [heading Result Type Expressions]
 
-[table 
+[table
     [[Expression]                   [Compile Time Complexity]]
     [[`__result_of_begin__<S>::type`]  [Amortized constant time]]
     [[`__result_of_end__<S>::type`]    [Amortized constant time]]
@@ -166,10 +166,10 @@ Bidirectional Sequence the following must be met:
 
 [heading Expression Semantics]
 
-The semantics of an expression are defined only where they differ from, or 
+The semantics of an expression are defined only where they differ from, or
 are not defined in __forward_sequence__.
 
-[table 
+[table
     [[Expression]       [Semantics]]
     [[`__back__(s)`]        [The last element in the sequence; see __back__.]]
 ]
@@ -189,9 +189,9 @@ are not defined in __forward_sequence__.
 
 [heading Description]
 
-A Random Access Sequence is a __bidirectional_sequence__ whose iterators 
-model __random_access_iterator__. It guarantees constant time access to 
-arbitrary sequence elements. 
+A Random Access Sequence is a __bidirectional_sequence__ whose iterators
+model __random_access_iterator__. It guarantees constant time access to
+arbitrary sequence elements.
 
 [heading Refinement of]
 
@@ -207,7 +207,7 @@ __bidirectional_sequence__
 
 [heading Valid Expressions]
 
-In addition to the requirements defined in __bidirectional_sequence__, for 
+In addition to the requirements defined in __bidirectional_sequence__, for
 any Random Access Sequence the following must be met:
 
 [table
@@ -216,15 +216,15 @@ any Random Access Sequence the following must be met:
     [[`__end__(s)`]         [__random_access_iterator__]    []                      [Constant]]
     [[`__at__<N>(s)`]       [Any type]                      []                      [Constant]]
     [[`__at__<N>(s) = o`]   [Any type]                      [`s` is mutable and
-                                                        `e = o`, where `e` 
-                                                        is the first element 
-                                                        in the sequence, is 
+                                                        `e = o`, where `e`
+                                                        is the first element
+                                                        in the sequence, is
                                                         a valid expression.]    [Constant]]
 ]
 
 [heading Result Type Expressions]
 
-[table 
+[table
     [[Expression]                           [Compile Time Complexity]]
     [[`__result_of_begin__<S>::type`]          [Amortized constant time]]
     [[`__result_of_end__<S>::type`]            [Amortized constant time]]
@@ -232,18 +232,18 @@ any Random Access Sequence the following must be met:
     [[`__result_of_value_at__<S, N>::type`]    [Amortized constant time]]
 ]
 
-[blurb __note__ `__result_of_at__<S, N>` returns the actual type returned by 
-`__at__<N>(s)`. In most cases, this is a reference. Hence, there is no way to 
-know the exact element type using `__result_of_at__<S, N>`.The element at `N` 
-may actually be a reference to begin with. For this purpose, you can use 
+[blurb __note__ `__result_of_at__<S, N>` returns the actual type returned by
+`__at__<N>(s)`. In most cases, this is a reference. Hence, there is no way to
+know the exact element type using `__result_of_at__<S, N>`.The element at `N`
+may actually be a reference to begin with. For this purpose, you can use
 `__result_of_value_at__<S, N>`.]
 
 [heading Expression Semantics]
 
-The semantics of an expression are defined only where they differ from, or 
+The semantics of an expression are defined only where they differ from, or
 are not defined in __bidirectional_sequence__.
 
-[table 
+[table
     [[Expression]       [Semantics]]
     [[`__at__<N>(s)`]       [The Nth element from the beginning of the sequence; see __at__.]]
 ]
@@ -263,14 +263,14 @@ are not defined in __bidirectional_sequence__.
 
 [heading Description]
 
-An Associative Sequence allows efficient retrieval of elements based on keys. 
-Like associative sequences in __mpl__, and unlike associative containers in 
-__stl__, Fusion associative sequences have no implied ordering relation. 
-Instead, type identity is used to impose an equivalence relation on keys, and 
-the order in which sequence elements are traversed during iteration is left 
-unspecified. In addition, unlike __stl__, Associative Sequences have mutable 
-iterators. This is due to the fact that there is no associated ordering relation 
-and the runtime value of the keys themselves do not have any effect on the 
+An Associative Sequence allows efficient retrieval of elements based on keys.
+Like associative sequences in __mpl__, and unlike associative containers in
+__stl__, Fusion associative sequences have no implied ordering relation.
+Instead, type identity is used to impose an equivalence relation on keys, and
+the order in which sequence elements are traversed during iteration is left
+unspecified. In addition, unlike __stl__, Associative Sequences have mutable
+iterators. This is due to the fact that there is no associated ordering relation
+and the runtime value of the keys themselves do not have any effect on the
 associativity of the sequence.
 
 
@@ -292,36 +292,36 @@ For any Associative Sequence the following expressions must be valid:
                             Convertible to bool.]       []                      [Constant]]
     [[`__at_key__<K>(s)`]       [Any type]                  []                      [Constant]]
     [[`__at_key__<K>(s) = o`]   [Any type]                  [`s` is mutable and
-                                                        `e = o`, where `e` 
-                                                        is the first element 
-                                                        in the sequence, is 
+                                                        `e = o`, where `e`
+                                                        is the first element
+                                                        in the sequence, is
                                                         a valid expression.]    [Constant]]
 ]
 
 [heading Result Type Expressions]
 
-[table 
+[table
     [[Expression]                               [Compile Time Complexity]]
     [[`__result_of_has_key__<S, K>::type`]         [Amortized constant time]]
     [[`__result_of_at_key__<S, K>::type`]          [Amortized constant time]]
     [[`__result_of_value_at_key__<S, K>::type`]    [Amortized constant time]]
 ]
 
-[blurb __note__ `__result_of_at_key__<S, K>` returns the actual type returned 
-by `__at_key__<K>(s)`. In most cases, this is a reference. Hence, there is no 
-way to know the exact element type using `__result_of_at_key__<S, K>`.The 
-element at `K` may actually be a reference to begin with. For this purpose, 
+[blurb __note__ `__result_of_at_key__<S, K>` returns the actual type returned
+by `__at_key__<K>(s)`. In most cases, this is a reference. Hence, there is no
+way to know the exact element type using `__result_of_at_key__<S, K>`.The
+element at `K` may actually be a reference to begin with. For this purpose,
 you can use `__result_of_value_at_key__<S, N>`.]
 
 [heading Expression Semantics]
 
-[table 
+[table
     [[Expression]       [Semantics]]
-    [[`__has_key__<K>(s)`]  [A boolean Integral Constant `c` such that 
-                        `c::value == true` if and only if there is 
-                        one or more elements with the key `k` in `s`; 
+    [[`__has_key__<K>(s)`]  [A boolean Integral Constant `c` such that
+                        `c::value == true` if and only if there is
+                        one or more elements with the key `k` in `s`;
                         see __has_key__.]]
-    [[`__at_key__<K>(s)`]   [The element associated with the key 
+    [[`__at_key__<K>(s)`]   [The element associated with the key
                         `K` in the sequence `s`; see __at__.]]
 ]
 
@@ -336,7 +336,7 @@ you can use `__result_of_value_at_key__<S, N>`.]
 
 [section Containers]
 
-Fusion provides a few predefined sequences out of the box. These 
+Fusion provides a few predefined sequences out of the box. These
 /containers/ actually hold heterogenously typed data; unlike
 __views__. These containers are more or less counterparts of those in __stl__.
 
@@ -348,9 +348,9 @@ __views__. These containers are more or less counterparts of those in __stl__.
 
 [heading Description]
 
-`vector` is a __random_access_sequence__ of heterogenous typed 
-data structured as a simple `struct` where each element is held 
-as a member variable. `vector` is the simplest of the Fusion 
+`vector` is a __random_access_sequence__ of heterogenous typed
+data structured as a simple `struct` where each element is held
+as a member variable. `vector` is the simplest of the Fusion
 sequence container, and in many cases the most efficient.
 
 [heading Header]
@@ -374,15 +374,15 @@ sequence container, and in many cases the most efficient.
 
     template <typename T0>
     struct vector1;
-    
+
     template <typename T0, typename T1>
     struct vector2;
-    
+
     template <typename T0, typename T1, typename T2>
     struct vector3;
-    
+
     ...
-    
+
     template <typename T0, typename T1, typename T2..., typename TN>
     struct vectorN;
 
@@ -401,13 +401,13 @@ The numbered form accepts the exact number of elements. Example:
 
     vector3<int, char, double>
 
-The variadic form accepts `0` to `FUSION_MAX_VECTOR_SIZE` elements, where 
-`FUSION_MAX_VECTOR_SIZE` is a user definable predefined maximum that 
+The variadic form accepts `0` to `FUSION_MAX_VECTOR_SIZE` elements, where
+`FUSION_MAX_VECTOR_SIZE` is a user definable predefined maximum that
 defaults to `10`. Example:
 
     vector<int, char, double>
 
-You may define the preprocessor constant `FUSION_MAX_VECTOR_SIZE` before 
+You may define the preprocessor constant `FUSION_MAX_VECTOR_SIZE` before
 including any Fusion header to change the default. Example:
 
     #define FUSION_MAX_VECTOR_SIZE 20
@@ -432,7 +432,7 @@ including any Fusion header to change the default. Example:
 
 [heading Expression Semantics]
 
-Semantics of an expression is defined only where it differs from, or is not 
+Semantics of an expression is defined only where it differs from, or is not
 defined in __random_access_sequence__.
 
 [table
@@ -455,12 +455,12 @@ defined in __random_access_sequence__.
 
 [heading Description]
 
-`cons` is a simple __forward_sequence__. It is a lisp style recursive list 
-structure where `car` is the /head/ and `cdr` is the /tail/: usually 
-another cons structure or `nil`: the empty list. Fusion's __list__ is built 
-on top of this more primitive data structure. It is more efficient than 
-__vector__ when the target sequence is constructed piecemeal (a data at a 
-time). The runtime cost of access to each element is peculiarly constant 
+`cons` is a simple __forward_sequence__. It is a lisp style recursive list
+structure where `car` is the /head/ and `cdr` is the /tail/: usually
+another cons structure or `nil`: the empty list. Fusion's __list__ is built
+on top of this more primitive data structure. It is more efficient than
+__vector__ when the target sequence is constructed piecemeal (a data at a
+time). The runtime cost of access to each element is peculiarly constant
 (see __recursive_inline__).
 
 [heading Header]
@@ -496,7 +496,7 @@ time). The runtime cost of access to each element is peculiarly constant
 
 [heading Expression Semantics]
 
-Semantics of an expression is defined only where it differs from, or is not 
+Semantics of an expression is defined only where it differs from, or is not
 defined in __forward_sequence__.
 
 [table
@@ -510,10 +510,10 @@ defined in __forward_sequence__.
     [[`__at__<N>(l)`]           [The Nth element from the beginning of the sequence; see __at__.]]
 ]
 
-[blurb __note__ `__at__<N>(l)` is provided for convenience and compatibility 
-with the original __tuple__ library, despite `cons` being a 
-__forward_sequence__ only (`at` is supposed to be a 
-__random_access_sequence__ requirement). The runtime complexity of __at__ is 
+[blurb __note__ `__at__<N>(l)` is provided for convenience and compatibility
+with the original __tuple__ library, despite `cons` being a
+__forward_sequence__ only (`at` is supposed to be a
+__random_access_sequence__ requirement). The runtime complexity of __at__ is
 constant (see __recursive_inline__).]
 
 [heading Example]
@@ -528,9 +528,9 @@ constant (see __recursive_inline__).]
 
 [heading Description]
 
-`list` is a __forward_sequence__ of heterogenous typed data built on top of 
-__cons__. It is more efficient than __vector__ when the target sequence is 
-constructed piecemeal (a data at a time). The runtime cost of access to 
+`list` is a __forward_sequence__ of heterogenous typed data built on top of
+__cons__. It is more efficient than __vector__ when the target sequence is
+constructed piecemeal (a data at a time). The runtime cost of access to
 each element is peculiarly constant (see __recursive_inline__).
 
 [heading Header]
@@ -549,17 +549,17 @@ each element is peculiarly constant (see __recursive_inline__).
     >
     struct list;
 
-The variadic class interface accepts `0` to `FUSION_MAX_LIST_SIZE` 
-elements, where `FUSION_MAX_LIST_SIZE` is a user definable predefined 
+The variadic class interface accepts `0` to `FUSION_MAX_LIST_SIZE`
+elements, where `FUSION_MAX_LIST_SIZE` is a user definable predefined
 maximum that defaults to `10`. Example:
 
     list<int, char, double>
 
-You may define the preprocessor constant `FUSION_MAX_LIST_SIZE` before 
+You may define the preprocessor constant `FUSION_MAX_LIST_SIZE` before
 including any Fusion header to change the default. Example:
 
     #define FUSION_MAX_LIST_SIZE 20
-    
+
 [heading Template parameters]
 
 [table
@@ -581,7 +581,7 @@ including any Fusion header to change the default. Example:
 
 [heading Expression Semantics]
 
-Semantics of an expression is defined only where it differs from, or is not 
+Semantics of an expression is defined only where it differs from, or is not
 defined in __forward_sequence__.
 
 [table
@@ -593,10 +593,10 @@ defined in __forward_sequence__.
     [[`__at__<N>(l)`]           [The Nth element from the beginning of the sequence; see __at__.]]
 ]
 
-[blurb __note__ `__at__<n>(l)` is provided for convenience and compatibility 
-with the original __tuple__ library, despite `list` being a 
-__forward_sequence__ only (__at__ is supposed to be a 
-__random_access_sequence__ requirement). The runtime complexity of __at__ is 
+[blurb __note__ `__at__<n>(l)` is provided for convenience and compatibility
+with the original __tuple__ library, despite `list` being a
+__forward_sequence__ only (__at__ is supposed to be a
+__random_access_sequence__ requirement). The runtime complexity of __at__ is
 constant (see __recursive_inline__).]
 
 [heading Example]
@@ -611,10 +611,10 @@ constant (see __recursive_inline__).]
 
 [heading Description]
 
-set is an __associative_sequence__ of heteregenous typed data elements. 
-Type identity is used to impose an equivalence relation on keys. The 
-element's type is its key. A set may contain at most one element for each 
-key. Membership testing and element key lookup has constant runtime 
+set is an __associative_sequence__ of heteregenous typed data elements.
+Type identity is used to impose an equivalence relation on keys. The
+element's type is its key. A set may contain at most one element for each
+key. Membership testing and element key lookup has constant runtime
 complexity (see __overloaded_functions__).
 
 [heading Header]
@@ -632,13 +632,13 @@ complexity (see __overloaded_functions__).
     >
     struct set;
 
-The variadic class interface accepts `0` to `FUSION_MAX_SET_SIZE` elements, 
-where `FUSION_MAX_SET_SIZE` is a user definable predefined maximum that 
+The variadic class interface accepts `0` to `FUSION_MAX_SET_SIZE` elements,
+where `FUSION_MAX_SET_SIZE` is a user definable predefined maximum that
 defaults to `10`. Example:
 
     set<int, char, double>
 
-You may define the preprocessor constant `FUSION_MAX_SET_SIZE` before 
+You may define the preprocessor constant `FUSION_MAX_SET_SIZE` before
 including any Fusion header to change the default. Example:
 
     #define FUSION_MAX_SET_SIZE 20
@@ -664,7 +664,7 @@ including any Fusion header to change the default. Example:
 
 [heading Expression Semantics]
 
-Semantics of an expression is defined only where it differs from, or is not 
+Semantics of an expression is defined only where it differs from, or is not
 defined in __random_access_sequence__ and __associative_sequence__.
 
 [table
@@ -689,11 +689,11 @@ defined in __random_access_sequence__ and __associative_sequence__.
 
 [heading Description]
 
-map is an __associative_sequence__ of heteregenous typed data elements. 
-Each element is a key/data pair (see __fusion_pair__) where the key has no 
-data (type only). Type identity is used to impose an equivalence relation 
-on keys. A map may contain at most one element for each key. Membership 
-testing and element key lookup has constant runtime complexity (see 
+map is an __associative_sequence__ of heteregenous typed data elements.
+Each element is a key/data pair (see __fusion_pair__) where the key has no
+data (type only). Type identity is used to impose an equivalence relation
+on keys. A map may contain at most one element for each key. Membership
+testing and element key lookup has constant runtime complexity (see
 __overloaded_functions__).
 
 [heading Header]
@@ -711,13 +711,13 @@ __overloaded_functions__).
     >
     struct map;
 
-The variadic class interface accepts `0` to `FUSION_MAX_MAP_SIZE` elements, 
-where `FUSION_MAX_MAP_SIZE` is a user definable predefined maximum that 
+The variadic class interface accepts `0` to `FUSION_MAX_MAP_SIZE` elements,
+where `FUSION_MAX_MAP_SIZE` is a user definable predefined maximum that
 defaults to `10`. Example:
 
     map<__pair__<int, char>, __pair__<char, char>, __pair__<double, char> >
 
-You may define the preprocessor constant `FUSION_MAX_MAP_SIZE` before 
+You may define the preprocessor constant `FUSION_MAX_MAP_SIZE` before
 including any Fusion header to change the default. Example:
 
     #define FUSION_MAX_MAP_SIZE 20
@@ -743,7 +743,7 @@ including any Fusion header to change the default. Example:
 
 [heading Expression Semantics]
 
-Semantics of an expression is defined only where it differs from, or is not 
+Semantics of an expression is defined only where it differs from, or is not
 defined in __random_access_sequence__ and __associative_sequence__.
 
 [table
@@ -758,15 +758,15 @@ defined in __random_access_sequence__ and __associative_sequence__.
 
     typedef map<
         __pair__<int, char>
-      , __pair__<double, std::string> > 
+      , __pair__<double, std::string> >
     map_type;
-    
+
     map_type m(
         __fusion_make_pair__<int>('X')
       , __fusion_make_pair__<double>("Men"));
-    
-    std::cout << __at__<int>(m) << std::endl;
-    std::cout << __at__<double>(m) << std::endl;
+
+    std::cout << __at_key__<int>(m) << std::endl;
+    std::cout << __at_key__<double>(m) << std::endl;
 
 [endsect]
 
@@ -774,12 +774,12 @@ defined in __random_access_sequence__ and __associative_sequence__.
 
 [section Views]
 
-Views are sequences that do not actually contain data, but instead impart 
-an alternative presentation over the data from one or more underlying 
-sequences. Views are proxies. They provide an efficient yet purely 
-functional way to work on potentially expensive sequence operations. Views 
-are inherently lazy. Their elements are only computed on demand only when 
-the elements of the underlying sequence(s) are actually accessed. Views' 
+Views are sequences that do not actually contain data, but instead impart
+an alternative presentation over the data from one or more underlying
+sequences. Views are proxies. They provide an efficient yet purely
+functional way to work on potentially expensive sequence operations. Views
+are inherently lazy. Their elements are only computed on demand only when
+the elements of the underlying sequence(s) are actually accessed. Views'
 lazy nature make them very cheap to copy and be passed around by value.
 
 [heading Header]
@@ -818,7 +818,7 @@ lazy nature make them very cheap to copy and be passed around by value.
 
 [heading Expression Semantics]
 
-Semantics of an expression is defined only where it differs from, or is not 
+Semantics of an expression is defined only where it differs from, or is not
 defined in __forward_sequence__.
 
 [table
@@ -839,9 +839,9 @@ defined in __forward_sequence__.
 
 [heading Description]
 
-`filter_view` is a view into a subset of its underlying sequence's elements 
-satisfying a given predicate (an __mpl__ metafunction). The `filter_view` 
-presents only those elements for which its predicate evaluates to 
+`filter_view` is a view into a subset of its underlying sequence's elements
+satisfying a given predicate (an __mpl__ metafunction). The `filter_view`
+presents only those elements for which its predicate evaluates to
 `mpl::true_`.
 
 [heading Header]
@@ -858,7 +858,7 @@ presents only those elements for which its predicate evaluates to
 [table
     [[Parameter]            [Description]               [Default]]
     [[`Sequence`]           [A __forward_sequence__]    []]
-    [[`Pred`]               [Unary Metafunction 
+    [[`Pred`]               [Unary Metafunction
                              returning an `mpl::bool_`] []]
 ]
 
@@ -874,7 +874,7 @@ presents only those elements for which its predicate evaluates to
 
 [heading Expression Semantics]
 
-Semantics of an expression is defined only where it differs from, or is not 
+Semantics of an expression is defined only where it differs from, or is not
 defined in __forward_sequence__.
 
 [table
@@ -902,7 +902,7 @@ defined in __forward_sequence__.
 
 [heading Description]
 
-`iterator_range` presents a sub-range of its underlying sequence delimited 
+`iterator_range` presents a sub-range of its underlying sequence delimited
 by a pair of iterators.
 
 [heading Header]
@@ -935,7 +935,7 @@ by a pair of iterators.
 
 [heading Expression Semantics]
 
-Semantics of an expression is defined only where it differs from, or is not 
+Semantics of an expression is defined only where it differs from, or is not
 defined in __forward_sequence__.
 
 [table
@@ -1000,7 +1000,7 @@ defined in __forward_sequence__.
 
 [heading Expression Semantics]
 
-Semantics of an expression is defined only where it differs from, or is not 
+Semantics of an expression is defined only where it differs from, or is not
 defined in __forward_sequence__.
 
 [table
@@ -1057,7 +1057,7 @@ is constructed from a __sequence__ of references to the component __sequence__s.
 
 [heading Expression Semantics]
 
-Semantics of an expression is defined only where it differs from, or is not 
+Semantics of an expression is defined only where it differs from, or is not
 defined in __forward_sequence__.
 
 [table
@@ -1079,9 +1079,9 @@ defined in __forward_sequence__.
 
 [section transform_view]
 
-`transform_view` presents a transformed view of its underlying sequence 
-given a unary __poly_func_obj__. The `transform_view` inherits the 
-traversal characteristics (see __traversal_concept__) of its underlying 
+`transform_view` presents a transformed view of its underlying sequence
+given a unary __poly_func_obj__. The `transform_view` inherits the
+traversal characteristics (see __traversal_concept__) of its underlying
 sequence.
 
 [heading Header]
@@ -1112,8 +1112,8 @@ sequence.
 
 [heading Model of]
 
-* __forward_sequence__, __bidirectional_sequence__ or 
-__random_access_sequence__ depending on the traversal characteristics (see 
+* __forward_sequence__, __bidirectional_sequence__ or
+__random_access_sequence__ depending on the traversal characteristics (see
 __traversal_concept__) of its underlying sequence.
 
 [variablelist Notation
@@ -1129,16 +1129,16 @@ __traversal_concept__) of its underlying sequence.
 
 [heading Expression Semantics]
 
-Semantics of an expression is defined only where it differs from, or is not 
-defined in __forward_sequence__, __bidirectional_sequence__ or 
-__random_access_sequence__ depending on the traversal characteristics (see 
+Semantics of an expression is defined only where it differs from, or is not
+defined in __forward_sequence__, __bidirectional_sequence__ or
+__random_access_sequence__ depending on the traversal characteristics (see
 __traversal_concept__) of its underlying sequence.
 
 [table
     [[Expression]           [Semantics]]
-    [[`UTV(s, f)`]          [Creates a unary `transform_view` given sequence, 
+    [[`UTV(s, f)`]          [Creates a unary `transform_view` given sequence,
                              `s` and unary __poly_func_obj__, `f`.]]
-    [[`BTV(s1, s2, f)`]     [Creates a binary `transform_view` given sequences, `s1` and `s2` 
+    [[`BTV(s1, s2, f)`]     [Creates a binary `transform_view` given sequences, `s1` and `s2`
                              and unary __poly_func_obj__, `f`.]]
     [[`TV(tv)`]             [Copy constructs a `transform_view` from another `transform_view`, `tv`.]]
     [[`tv = tv2`]           [Assigns to a `transform_view`, `tv`, from another `transform_view`, `tv2`.]]
@@ -1153,7 +1153,7 @@ __traversal_concept__) of its underlying sequence.
         {
             typedef T type;
         };
-    
+
         template <typename T>
         T operator()(T x) const
         {
@@ -1171,7 +1171,7 @@ __traversal_concept__) of its underlying sequence.
 
 [section reverse_view]
 
-`reverse_view` presents a reversed view of underlying sequence. The first 
+`reverse_view` presents a reversed view of underlying sequence. The first
 element will be its last and the last element will be its first.
 
 [heading Header]
@@ -1202,7 +1202,7 @@ element will be its last and the last element will be its first.
 
 [heading Expression Semantics]
 
-Semantics of an expression is defined only where it differs from, or is not 
+Semantics of an expression is defined only where it differs from, or is not
 defined in __bidirectional_sequence__.
 
 [table
@@ -1226,13 +1226,13 @@ defined in __bidirectional_sequence__.
 
 [section Adapted]
 
-Fusion provides a couple of adapters for other sequences such as 
-`std::pair`, __mpl__ sequences, and `boost::array`. These adapters are 
-written using Fusion's non-intrusive __extension__ mechanism. If you wish 
-to use these sequences with fusion, simply include the necessary files and 
-they will be regarded as first-class, fully conforming fusion sequences 
-[footnote Fusion sequences may also be adapted as fully conforming __mpl__ 
-sequences (see __intrinsics__). That way, we can have 2-way adaptation to 
+Fusion provides a couple of adapters for other sequences such as
+`std::pair`, __mpl__ sequences, and `boost::array`. These adapters are
+written using Fusion's non-intrusive __extension__ mechanism. If you wish
+to use these sequences with fusion, simply include the necessary files and
+they will be regarded as first-class, fully conforming fusion sequences
+[footnote Fusion sequences may also be adapted as fully conforming __mpl__
+sequences (see __intrinsics__). That way, we can have 2-way adaptation to
 and from __mpl__ and Fusion].
 
 [heading Header]
@@ -1241,7 +1241,7 @@ and from __mpl__ and Fusion].
 
 [section std::pair]
 
-This module provides adapters for `std::pair`. Including the module header 
+This module provides adapters for `std::pair`. Including the module header
 makes `std::pair` a fully conforming __random_access_sequence__.
 
 [heading Header]
@@ -1267,7 +1267,7 @@ __std_pair_doc__, __tr1_tuple_pair__
 
 [section mpl sequence]
 
-This module provides adapters for __mpl__ sequences. Including the module 
+This module provides adapters for __mpl__ sequences. Including the module
 header makes all __mpl__ sequences fully conforming fusion sequences.
 
 [heading Header]
@@ -1286,7 +1286,7 @@ header makes all __mpl__ sequences fully conforming fusion sequences.
     fusion::vector2<int, long> v(vec_c);
     std::cout << __at_c__<0>(v) << std::endl;
     std::cout << __at_c__<1>(v) << std::endl;
-    
+
     v = mpl::vector_c<int, 456, 789>();
     std::cout << __at_c__<0>(v) << std::endl;
     std::cout << __at_c__<1>(v) << std::endl;
@@ -1299,7 +1299,7 @@ __mpl__
 
 [section boost::array]
 
-This module provides adapters for `boost::array`. Including the module 
+This module provides adapters for `boost::array`. Including the module
 header makes `boost::array` a fully conforming __random_access_sequence__.
 
 [heading Header]
@@ -1327,7 +1327,7 @@ __boost_array_library__
 [endsect]
 
 [section boost::tuple]
-This module provides adapters for `boost::tuple`. Including the module 
+This module provides adapters for `boost::tuple`. Including the module
 header makes `boost::tuple` a fully conforming __forward_sequence__.
 
 [heading Header]
@@ -1351,7 +1351,7 @@ __boost_tuple_library__
 [endsect]
 
 [section boost::variant]
-This module provides adapters for `boost::variant`. Including the module 
+This module provides adapters for `boost::variant`. Including the module
 header makes `boost::variant` a fully conforming __forward_sequence__.
 The variant acts as a sequence of the types that can be contained in the variant.
 Accessing types not currently stored int the variant will lead to the variant
@@ -1382,11 +1382,11 @@ __boost_variant_library__
 
 [section Intrinsics]
 
-Intrinsics form the essential interface of Fusion __sequence__s. __stl__ 
-counterparts of these functions are usually implemented as member 
-functions. Intrinsic functions, unlike __algorithms__, are not generic 
-across the full __sequence__ repertoire. They need to be implemented for 
-each Fusion __sequence__[footnote In practice, many of intrinsic functions 
+Intrinsics form the essential interface of Fusion __sequence__s. __stl__
+counterparts of these functions are usually implemented as member
+functions. Intrinsic functions, unlike __algorithms__, are not generic
+across the full __sequence__ repertoire. They need to be implemented for
+each Fusion __sequence__[footnote In practice, many of intrinsic functions
 have default implementations that will work in majority of cases].
 
 [heading Header]
@@ -1422,8 +1422,8 @@ Returns an iterator pointing to the first element in the sequence.
 
     begin(seq);
 
-[*Return type]: __forward_iterator__ if `seq` is a __forward_sequence__ 
-else, __bidirectional_iterator__ if `seq` is a __bidirectional_sequence__ 
+[*Return type]: __forward_iterator__ if `seq` is a __forward_sequence__
+else, __bidirectional_iterator__ if `seq` is a __bidirectional_sequence__
 else, __random_access_iterator__ if `seq` is a __random_access_sequence__.
 
 [*Semantics]: Returns an iterator pointing to the first element in the sequence.
@@ -1466,11 +1466,11 @@ Returns an iterator pointing to one element past the end of the sequence.
 
     end(seq);
 
-[*Return type]: __forward_iterator__ if `seq` is a __forward_sequence__ 
-else, __bidirectional_iterator__ if `seq` is a __bidirectional_sequence__ 
+[*Return type]: __forward_iterator__ if `seq` is a __forward_sequence__
+else, __bidirectional_iterator__ if `seq` is a __bidirectional_sequence__
 else, __random_access_iterator__ if `seq` is a __random_access_sequence__.
 
-[*Semantics]: Returns an iterator pointing to one element past the end of 
+[*Semantics]: Returns an iterator pointing to one element past the end of
 the sequence.
 
 [heading Header]
@@ -1488,7 +1488,7 @@ the sequence.
 
 [heading Description]
 
-Returns a type convertible to `bool` that evaluates to `true` if the 
+Returns a type convertible to `bool` that evaluates to `true` if the
 sequence is empty, else, evaluates to `false`.
 
 [heading Synopsis]
@@ -1510,7 +1510,7 @@ sequence is empty, else, evaluates to `false`.
 
 [*Return type]: Convertible to `bool`.
 
-[*Semantics]: Evaluates to `true` if the sequence is empty, else, evaluates 
+[*Semantics]: Evaluates to `true` if the sequence is empty, else, evaluates
 to `false`.
 
 [heading Header]
@@ -1551,9 +1551,9 @@ Returns the first element in the sequence.
 
     front(seq);
 
-[*Return type]: Returns a reference to the first element in the sequence 
-`seq` if `seq` is mutable and `e = o`, where `e` is the first element in 
-the sequence, is a valid expression. Else, returns a type convertable to 
+[*Return type]: Returns a reference to the first element in the sequence
+`seq` if `seq` is mutable and `e = o`, where `e` is the first element in
+the sequence, is a valid expression. Else, returns a type convertable to
 the first element in the sequence.
 
 [*Precondition]: `__empty__(seq) == false`
@@ -1598,9 +1598,9 @@ Returns the last element in the sequence.
 
     back(seq);
 
-[*Return type]: Returns a reference to the last element in the sequence 
-`seq` if `seq` is mutable and `e = o`, where `e` is the last element in the 
-sequence, is a valid expression. Else, returns a type convertable to the 
+[*Return type]: Returns a reference to the last element in the sequence
+`seq` if `seq` is mutable and `e = o`, where `e` is the last element in the
+sequence, is a valid expression. Else, returns a type convertable to the
 last element in the sequence.
 
 [*Precondition]: `__empty__(seq) == false`
@@ -1622,7 +1622,7 @@ last element in the sequence.
 
 [heading Description]
 
-Returns a type convertible to `int` that evaluates the number of elements 
+Returns a type convertible to `int` that evaluates the number of elements
 in the sequence.
 
 [heading Synopsis]
@@ -1678,7 +1678,7 @@ Returns the N-th element from the beginning of the sequence.
 [table
     [[Parameter]    [Requirement]                           [Description]]
     [[`seq`]        [Model of __random_access_sequence__]   [The sequence we wish to investigate.]]
-    [[`N`]          [An __mpl_integral_constant__]          [An index from the beginning of the 
+    [[`N`]          [An __mpl_integral_constant__]          [An index from the beginning of the
                                                              sequence.]]
 ]
 
@@ -1686,10 +1686,10 @@ Returns the N-th element from the beginning of the sequence.
 
     at<N>(seq);
 
-[*Return type]: Returns a reference to the N-th element from the beginning 
-of the sequence `seq` if `seq` is mutable and `e = o`, where `e` is the N-th 
-element from the beginning of the sequence, is a valid expression. Else, 
-returns a type convertable to the N-th element from the beginning of the 
+[*Return type]: Returns a reference to the N-th element from the beginning
+of the sequence `seq` if `seq` is mutable and `e = o`, where `e` is the N-th
+element from the beginning of the sequence, is a valid expression. Else,
+returns a type convertable to the N-th element from the beginning of the
 sequence.
 
 [*Precondition]: `0 <= N::value < __size__(s)`
@@ -1730,7 +1730,7 @@ Returns the N-th element from the beginning of the sequence.
 [table
     [[Parameter]    [Requirement]                           [Description]]
     [[`seq`]        [Model of __random_access_sequence__]   [The sequence we wish to investigate.]]
-    [[`N`]          [An integral constant]                  [An index from the beginning of the 
+    [[`N`]          [An integral constant]                  [An index from the beginning of the
                                                              sequence.]]
 ]
 
@@ -1738,10 +1738,10 @@ Returns the N-th element from the beginning of the sequence.
 
     at_c<N>(seq);
 
-[*Return type]: Returns a reference to the N-th element from the beginning 
-of the sequence `seq` if `seq` is mutable and `e = o`, where `e` is the N-th 
-element from the beginning of the sequence, is a valid expression. Else, 
-returns a type convertable to the N-th element from the beginning of the 
+[*Return type]: Returns a reference to the N-th element from the beginning
+of the sequence `seq` if `seq` is mutable and `e = o`, where `e` is the N-th
+element from the beginning of the sequence, is a valid expression. Else,
+returns a type convertable to the N-th element from the beginning of the
 sequence.
 
 [*Precondition]: `0 <= N < __size__(s)`
@@ -1765,8 +1765,8 @@ sequence.
 
 [heading Description]
 
-Returns a type convertible to `bool` that evaluates to `true` if the 
-sequence contains an element associated with a Key, else, evaluates to 
+Returns a type convertible to `bool` that evaluates to `true` if the
+sequence contains an element associated with a Key, else, evaluates to
 `false`.
 
 [heading Synopsis]
@@ -1789,7 +1789,7 @@ sequence contains an element associated with a Key, else, evaluates to
 
 [*Return type]: Convertible to `bool`.
 
-[*Semantics]: Evaluates to `true` if the sequence contains an element 
+[*Semantics]: Evaluates to `true` if the sequence contains an element
 associated with Key, else, evaluates to `false`.
 
 [heading Header]
@@ -1831,9 +1831,9 @@ Returns the element associated with a Key from the sequence.
 
     at_key<Key>(seq);
 
-[*Return type]: Returns a reference to the element associated with Key from 
-the sequence `seq` if `seq` is mutable and `e = o`, where `e` is the 
-element associated with Key, is a valid expression. Else, returns a type 
+[*Return type]: Returns a reference to the element associated with Key from
+the sequence `seq` if `seq` is mutable and `e = o`, where `e` is the
+element associated with Key, is a valid expression. Else, returns a type
 convertable to the element associated with Key.
 
 [*Precondition]: `has_key<Key>(seq) == true`
@@ -1875,7 +1875,7 @@ Returns the result type of __begin__.
 [heading Expression Semantics]
     result_of::begin<Seq>::type
 
-[*Return type]: An iterator modelling the same traversal concept as `Seq`. 
+[*Return type]: An iterator modelling the same traversal concept as `Seq`.
 
 [*Semantics]: Returns the type of an iterator to the first element of `Seq`.
 
@@ -2063,7 +2063,7 @@ Returns the result type of __size__.
 
 [heading Description]
 
-Returns the result type of __at__[footnote __result_of_at__ reflects the 
+Returns the result type of __at__[footnote __result_of_at__ reflects the
 actual return type of the function __at__. __sequence__s typically return
 references to its elements via the __at__ function. If you want to get
 the actual element type, use __result_of_value_at__].
@@ -2103,9 +2103,9 @@ the actual element type, use __result_of_value_at__].
 
 [heading Description]
 
-Returns the result type of __at_c__[footnote __result_of_at_c__ reflects 
-the actual return type of the function __at_c__. __sequence__s typically 
-return references to its elements via the __at_c__ function. If you want to 
+Returns the result type of __at_c__[footnote __result_of_at_c__ reflects
+the actual return type of the function __at_c__. __sequence__s typically
+return references to its elements via the __at_c__ function. If you want to
 get the actual element type, use __result_of_value_at_c__].
 
 [heading Synopsis]
@@ -2254,9 +2254,9 @@ Returns the result type of __has_key__.
 
 [heading Description]
 
-Returns the result type of __at_key__[footnote __result_of_at_key__ 
-reflects the actual return type of the function __at_key__. __sequence__s 
-typically return references to its elements via the __at_key__ function. If 
+Returns the result type of __at_key__[footnote __result_of_at_key__
+reflects the actual return type of the function __at_key__. __sequence__s
+typically return references to its elements via the __at_key__ function. If
 you want to get the actual element type, use __result_of_value_at_key__].
 
 [heading Synopsis]
@@ -2315,7 +2315,7 @@ Returns the actual element type associated with a Key from the __sequence__.
 
 [*Return type]: Any type.
 
-[*Semantics]: Returns the actual element type associated with key type 
+[*Semantics]: Returns the actual element type associated with key type
 `Key` in `Seq`.
 
 [heading Header]
@@ -2333,15 +2333,15 @@ Returns the actual element type associated with a Key from the __sequence__.
 
 [section Generation]
 
-These are the functions that you can use to generate various forms of 
-__containers__ from elemental values. 
+These are the functions that you can use to generate various forms of
+__containers__ from elemental values.
 
 [heading Header]
 
     #include <boost/fusion/sequence/generation.hpp>
 
 [section Functions]
-    
+
 [section make_list]
 
 [heading Description]
@@ -2354,9 +2354,9 @@ Create a __list__ from one or more values.
     typename __result_of_make_list__<T0, T1,... TN>::type
     make_list(T0 const& x0, T1 const& x1... TN const& xN);
 
-The variadic function accepts `0` to `FUSION_MAX_LIST_SIZE` elements, where 
-`FUSION_MAX_LIST_SIZE` is a user definable predefined maximum that defaults 
-to `10`. You may define the preprocessor constant `FUSION_MAX_LIST_SIZE` 
+The variadic function accepts `0` to `FUSION_MAX_LIST_SIZE` elements, where
+`FUSION_MAX_LIST_SIZE` is a user definable predefined maximum that defaults
+to `10`. You may define the preprocessor constant `FUSION_MAX_LIST_SIZE`
 before including any Fusion header to change the default. Example:
 
     #define FUSION_MAX_LIST_SIZE 20
@@ -2384,7 +2384,7 @@ before including any Fusion header to change the default. Example:
 
     make_list(123, "hello", 12.5)
 
-[heading See also] 
+[heading See also]
 
 __note_boost_ref__
 
@@ -2394,7 +2394,7 @@ __note_boost_ref__
 
 [heading Description]
 
-Create a __cons__ from `car` (/head/) and optional `cdr` (/tail/). 
+Create a __cons__ from `car` (/head/) and optional `cdr` (/tail/).
 
 [heading Synopsis]
 
@@ -2421,7 +2421,7 @@ Create a __cons__ from `car` (/head/) and optional `cdr` (/tail/).
 [*Return type]: __result_of_make_cons__`<Car, Cdr>::type` or
 __result_of_make_cons__`<Car>::type`
 
-[*Semantics]: Create a __cons__ from `car` (/head/) and optional `cdr` (/tail/). 
+[*Semantics]: Create a __cons__ from `car` (/head/) and optional `cdr` (/tail/).
 
 [heading Header]
 
@@ -2431,7 +2431,7 @@ __result_of_make_cons__`<Car>::type`
 
     make_cons('x', make_cons(123))
 
-[heading See also] 
+[heading See also]
 
 __note_boost_ref__
 
@@ -2449,10 +2449,10 @@ Create a __vector__ from one or more values.
     typename __result_of_make_vector__<T0, T1,... TN>::type
     make_vector(T0 const& x0, T1 const& x1... TN const& xN);
 
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE` elements, 
-where `FUSION_MAX_VECTOR_SIZE` is a user definable predefined maximum that 
-defaults to `10`. You may define the preprocessor constant 
-`FUSION_MAX_VECTOR_SIZE` before including any Fusion header to change the 
+The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE` elements,
+where `FUSION_MAX_VECTOR_SIZE` is a user definable predefined maximum that
+defaults to `10`. You may define the preprocessor constant
+`FUSION_MAX_VECTOR_SIZE` before including any Fusion header to change the
 default. Example:
 
     #define FUSION_MAX_VECTOR_SIZE 20
@@ -2480,7 +2480,7 @@ default. Example:
 
     make_vector(123, "hello", 12.5)
 
-[heading See also] 
+[heading See also]
 
 __note_boost_ref__
 
@@ -2498,11 +2498,11 @@ Create a __set__ from one or more values.
     typename __result_of_make_set__<T0, T1,... TN>::type
     make_set(T0 const& x0, T1 const& x1... TN const& xN);
 
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE`[footnote 
+The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE`[footnote
 `set` is implemented in terms of the vector. That is why we reuse
-`FUSION_MAX_VECTOR_SIZE`] elements, where `FUSION_MAX_VECTOR_SIZE` is a user 
-definable predefined maximum that defaults to `10`. You may define the 
-preprocessor constant `FUSION_MAX_VECTOR_SIZE` before including any Fusion 
+`FUSION_MAX_VECTOR_SIZE`] elements, where `FUSION_MAX_VECTOR_SIZE` is a user
+definable predefined maximum that defaults to `10`. You may define the
+preprocessor constant `FUSION_MAX_VECTOR_SIZE` before including any Fusion
 header to change the default. Example:
 
     #define FUSION_MAX_VECTOR_SIZE 20
@@ -2532,7 +2532,7 @@ header to change the default. Example:
 
     make_set(123, "hello", 12.5)
 
-[heading See also] 
+[heading See also]
 
 __note_boost_ref__
 
@@ -2542,7 +2542,7 @@ __note_boost_ref__
 
 [heading Description]
 
-Create a __map__ from one or more key/data pairs. 
+Create a __map__ from one or more key/data pairs.
 
 [heading Synopsis]
 
@@ -2552,11 +2552,11 @@ Create a __map__ from one or more key/data pairs.
     typename __result_of_make_map__<K0, K0,... KN, T0, T1,... TN>::type
     make_map(T0 const& x0, T1 const& x1... TN const& xN);
 
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE`[footnote 
+The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE`[footnote
 `map` is implemented in terms of the vector. That is why we reuse
-`FUSION_MAX_VECTOR_SIZE`] elements, where `FUSION_MAX_VECTOR_SIZE` is a user 
-definable predefined maximum that defaults to `10`. You may define the 
-preprocessor constant `FUSION_MAX_VECTOR_SIZE` before including any Fusion 
+`FUSION_MAX_VECTOR_SIZE`] elements, where `FUSION_MAX_VECTOR_SIZE` is a user
+definable predefined maximum that defaults to `10`. You may define the
+preprocessor constant `FUSION_MAX_VECTOR_SIZE` before including any Fusion
 header to change the default. Example:
 
     #define FUSION_MAX_VECTOR_SIZE 20
@@ -2575,7 +2575,7 @@ header to change the default. Example:
 
 [*Return type]: __result_of_make_map__`<K0, K0,... KN, T0, T1,... TN>::type`
 
-[*Semantics]: Create a __map__ from `K0, K1,... KN` keys and 
+[*Semantics]: Create a __map__ from `K0, K1,... KN` keys and
 `x0, x1,... xN` data.
 
 [*Precondition]: There may be no duplicate key types.
@@ -2590,7 +2590,7 @@ header to change the default. Example:
         __fusion_make_pair__<int>('X')
       , __fusion_make_pair__<double>("Men"))
 
-[heading See also] 
+[heading See also]
 
 __note_boost_ref__, __fusion_pair__
 
@@ -2598,8 +2598,8 @@ __note_boost_ref__, __fusion_pair__
 
 [section Tiers]
 
-Tiers are sequences, where all elements are non-const reference types. They 
-are constructed with a call to a couple of /tie/ function templates. The 
+Tiers are sequences, where all elements are non-const reference types. They
+are constructed with a call to a couple of /tie/ function templates. The
 succeeding sections document the various /tier/ flavors.
 
 * __list_tie__
@@ -2608,29 +2608,29 @@ succeeding sections document the various /tier/ flavors.
 
 Example:
 
-    int i; char c; double d; 
+    int i; char c; double d;
       ...
     __vector_tie__(i, c, a);
 
 The __vector_tie__ function creates a __vector__ of type
-`__vector__<int&, char&, double&>`. The same result could be achieved with the call 
+`__vector__<int&, char&, double&>`. The same result could be achieved with the call
 __make_vector__(__boost_ref_call__(i), __boost_ref_call__(c), __boost_ref_call__(a))
 [footnote see __boost_ref__ for details about `ref`].
 
 A /tie/ can be used to 'unpack' another tuple into variables. E.g.:
 
-    int i; char c; double d; 
+    int i; char c; double d;
     __vector_tie__(i, c, d) = __make_vector__(1,'a', 5.5);
     std::cout << i << " " <<  c << " " << d;
 
-This code prints 1 a 5.5 to the standard output stream. A sequence 
-unpacking operation like this is found for example in ML and Python. It is 
+This code prints 1 a 5.5 to the standard output stream. A sequence
+unpacking operation like this is found for example in ML and Python. It is
 convenient when calling functions which return sequences.
 
 [heading Ignore]
 
-There is also an object called /ignore/ which allows you to ignore an 
-element assigned by a sequence. The idea is that a function may return a 
+There is also an object called /ignore/ which allows you to ignore an
+element assigned by a sequence. The idea is that a function may return a
 sequence, only part of which you are interested in. For example:
 
     char c;
@@ -2650,9 +2650,9 @@ Constructs a tie using a __list__ sequence.
     __list__<T0&, T1&,... TN&>
     list_tie(T0& x0, T1& x1... TN& xN);
 
-The variadic function accepts `0` to `FUSION_MAX_LIST_SIZE` elements, where 
-`FUSION_MAX_LIST_SIZE` is a user definable predefined maximum that defaults 
-to `10`. You may define the preprocessor constant `FUSION_MAX_LIST_SIZE` 
+The variadic function accepts `0` to `FUSION_MAX_LIST_SIZE` elements, where
+`FUSION_MAX_LIST_SIZE` is a user definable predefined maximum that defaults
+to `10`. You may define the preprocessor constant `FUSION_MAX_LIST_SIZE`
 before including any Fusion header to change the default. Example:
 
     #define FUSION_MAX_LIST_SIZE 20
@@ -2696,10 +2696,10 @@ Constructs a tie using a __vector__ sequence.
     __vector__<T0&, T1&,... TN&>
     vector_tie(T0& x0, T1& x1... TN& xN);
 
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE` elements, 
-where `FUSION_MAX_VECTOR_SIZE` is a user definable predefined maximum that 
-defaults to `10`. You may define the preprocessor constant 
-`FUSION_MAX_VECTOR_SIZE` before including any Fusion header to change the 
+The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE` elements,
+where `FUSION_MAX_VECTOR_SIZE` is a user definable predefined maximum that
+defaults to `10`. You may define the preprocessor constant
+`FUSION_MAX_VECTOR_SIZE` before including any Fusion header to change the
 default. Example:
 
     #define FUSION_MAX_VECTOR_SIZE 20
@@ -2743,10 +2743,10 @@ Constructs a tie using a __map__ sequence.
     __map__<__pair__<K0, D0&>, __pair__<K1, D1&>,... __pair__<KN, DN&> >
     map_tie(D0& d0, D1& d1... DN& dN);
 
-The variadic function accepts `0` to `FUSION_MAX_MAP_SIZE` elements, 
-where `FUSION_MAX_MAP_SIZE` is a user definable predefined maximum that 
-defaults to `10`, and a corresponding number of key types. 
-You may define the preprocessor constant  `FUSION_MAX_MAP_SIZE` before 
+The variadic function accepts `0` to `FUSION_MAX_MAP_SIZE` elements,
+where `FUSION_MAX_MAP_SIZE` is a user definable predefined maximum that
+defaults to `10`, and a corresponding number of key types.
+You may define the preprocessor constant  `FUSION_MAX_MAP_SIZE` before
 including any Fusion header to change the default. Example:
 
     #define FUSION_MAX_MAP_SIZE 20
@@ -2785,7 +2785,7 @@ including any Fusion header to change the default. Example:
 [endsect]
 
 [section MetaFunctions]
-    
+
 [section make_list]
 
 [heading Description]
@@ -2797,9 +2797,9 @@ Returns the result type of __make_list__.
     template <typename T0, typename T1,... typename TN>
     struct make_list;
 
-The variadic function accepts `0` to `FUSION_MAX_LIST_SIZE` elements, where 
-`FUSION_MAX_LIST_SIZE` is a user definable predefined maximum that defaults 
-to `10`. You may define the preprocessor constant `FUSION_MAX_LIST_SIZE` 
+The variadic function accepts `0` to `FUSION_MAX_LIST_SIZE` elements, where
+`FUSION_MAX_LIST_SIZE` is a user definable predefined maximum that defaults
+to `10`. You may define the preprocessor constant `FUSION_MAX_LIST_SIZE`
 before including any Fusion header to change the default. Example:
 
     #define FUSION_MAX_LIST_SIZE 20
@@ -2815,7 +2815,7 @@ before including any Fusion header to change the default. Example:
 
     result_of::make_list<T0, T1,... TN>::type
 
-[*Return type]: A __list__ with elements of types converted following the 
+[*Return type]: A __list__ with elements of types converted following the
 rules for __element_conversion__.
 
 [*Semantics]: Create a __list__ from `T0, T1,... TN`.
@@ -2834,7 +2834,7 @@ rules for __element_conversion__.
 
 [heading Description]
 
-Returns the result type of __make_cons__. 
+Returns the result type of __make_cons__.
 
 [heading Synopsis]
 
@@ -2853,10 +2853,10 @@ Returns the result type of __make_cons__.
 
     result_of::make_cons<Car, Cdr>::type
 
-[*Return type]: A __cons__ with head element, `Car`, of type converted 
+[*Return type]: A __cons__ with head element, `Car`, of type converted
 following the rules for __element_conversion__, and tail, `Cdr`.
 
-[*Semantics]: Create a __cons__ from `Car` (/head/) and optional `Cdr` (/tail/). 
+[*Semantics]: Create a __cons__ from `Car` (/head/) and optional `Cdr` (/tail/).
 
 [heading Header]
 
@@ -2879,10 +2879,10 @@ Returns the result type of __make_vector__.
     template <typename T0, typename T1,... typename TN>
     struct make_vector;
 
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE` elements, 
-where `FUSION_MAX_VECTOR_SIZE` is a user definable predefined maximum that 
-defaults to `10`. You may define the preprocessor constant 
-`FUSION_MAX_VECTOR_SIZE` before including any Fusion header to change the 
+The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE` elements,
+where `FUSION_MAX_VECTOR_SIZE` is a user definable predefined maximum that
+defaults to `10`. You may define the preprocessor constant
+`FUSION_MAX_VECTOR_SIZE` before including any Fusion header to change the
 default. Example:
 
     #define FUSION_MAX_VECTOR_SIZE 20
@@ -2898,7 +2898,7 @@ default. Example:
 
     result_of::make_vector<T0, T1,... TN>::type
 
-[*Return type]: A __vector__ with elements of types converted following the 
+[*Return type]: A __vector__ with elements of types converted following the
 rules for __element_conversion__.
 
 [*Semantics]: Create a __vector__ from `T0, T1,... TN`.
@@ -2924,11 +2924,11 @@ Returns the result type of __make_set__.
     template <typename T0, typename T1,... typename TN>
     struct make_set;
 
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE`[footnote 
+The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE`[footnote
 `set` is implemented in terms of the vector. That is why we reuse
-`FUSION_MAX_VECTOR_SIZE`] elements, where `FUSION_MAX_VECTOR_SIZE` is a user 
-definable predefined maximum that defaults to `10`. You may define the 
-preprocessor constant `FUSION_MAX_VECTOR_SIZE` before including any Fusion 
+`FUSION_MAX_VECTOR_SIZE`] elements, where `FUSION_MAX_VECTOR_SIZE` is a user
+definable predefined maximum that defaults to `10`. You may define the
+preprocessor constant `FUSION_MAX_VECTOR_SIZE` before including any Fusion
 header to change the default. Example:
 
     #define FUSION_MAX_VECTOR_SIZE 20
@@ -2944,7 +2944,7 @@ header to change the default. Example:
 
     result_of::make_set<T0, T1,... TN>::type
 
-[*Return type]: A __set__ with elements of types converted following the 
+[*Return type]: A __set__ with elements of types converted following the
 rules for __element_conversion__.
 
 [*Semantics]: Create a __set__ from `T0, T1,... TN`.
@@ -2974,11 +2974,11 @@ Returns the result type of __make_map__.
       , typename T0, typename T1,... typename TN>
     struct make_map;
 
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE`[footnote 
+The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE`[footnote
 `map` is implemented in terms of the vector. That is why we reuse
-`FUSION_MAX_VECTOR_SIZE`] elements, where `FUSION_MAX_VECTOR_SIZE` is a user 
-definable predefined maximum that defaults to `10`. You may define the 
-preprocessor constant `FUSION_MAX_VECTOR_SIZE` before including any Fusion 
+`FUSION_MAX_VECTOR_SIZE`] elements, where `FUSION_MAX_VECTOR_SIZE` is a user
+definable predefined maximum that defaults to `10`. You may define the
+preprocessor constant `FUSION_MAX_VECTOR_SIZE` before including any Fusion
 header to change the default. Example:
 
     #define FUSION_MAX_VECTOR_SIZE 20
@@ -2997,7 +2997,7 @@ header to change the default. Example:
 
 [*Return type]: __result_of_make_map__`<K0, K0,... KN, T0, T1,... TN>::type`
 
-[*Semantics]: A __map__ with __fusion_pair__ elements where the 
+[*Semantics]: A __map__ with __fusion_pair__ elements where the
 `second_type` is converted following the rules for __element_conversion__.
 
 [*Precondition]: There may be no duplicate key types.
@@ -3010,7 +3010,7 @@ header to change the default. Example:
 
     result_of::make_map<int, double, char, double>::type
 
-[heading See also] 
+[heading See also]
 
 __fusion_pair__
 
@@ -3027,9 +3027,9 @@ Returns the result type of __list_tie__.
     template <typename T0, typename T1,... typename TN>
     struct list_tie;
 
-The variadic function accepts `0` to `FUSION_MAX_LIST_SIZE` elements, where 
-`FUSION_MAX_LIST_SIZE` is a user definable predefined maximum that defaults 
-to `10`. You may define the preprocessor constant `FUSION_MAX_LIST_SIZE` 
+The variadic function accepts `0` to `FUSION_MAX_LIST_SIZE` elements, where
+`FUSION_MAX_LIST_SIZE` is a user definable predefined maximum that defaults
+to `10`. You may define the preprocessor constant `FUSION_MAX_LIST_SIZE`
 before including any Fusion header to change the default. Example:
 
     #define FUSION_MAX_LIST_SIZE 20
@@ -3070,10 +3070,10 @@ Returns the result type of __vector_tie__.
     template <typename T0, typename T1,... typename TN>
     struct vector_tie;
 
-The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE` elements, 
-where `FUSION_MAX_VECTOR_SIZE` is a user definable predefined maximum that 
-defaults to `10`. You may define the preprocessor constant 
-`FUSION_MAX_VECTOR_SIZE` before including any Fusion header to change the 
+The variadic function accepts `0` to `FUSION_MAX_VECTOR_SIZE` elements,
+where `FUSION_MAX_VECTOR_SIZE` is a user definable predefined maximum that
+defaults to `10`. You may define the preprocessor constant
+`FUSION_MAX_VECTOR_SIZE` before including any Fusion header to change the
 default. Example:
 
     #define FUSION_MAX_VECTOR_SIZE 20
@@ -3114,10 +3114,10 @@ Returns the result type of __map_tie__.
     template <typename K0, typename K1,... typename KN, typename D0, typename D1,... typename DN>
     struct map_tie;
 
-The variadic function accepts `0` to `FUSION_MAX_MAP_SIZE` elements, 
-where `FUSION_MAX_MAP_SIZE` is a user definable predefined maximum that 
-defaults to `10`. You may define the preprocessor constant 
-`FUSION_MAX_MAP_SIZE` before including any Fusion header to change the 
+The variadic function accepts `0` to `FUSION_MAX_MAP_SIZE` elements,
+where `FUSION_MAX_MAP_SIZE` is a user definable predefined maximum that
+defaults to `10`. You may define the preprocessor constant
+`FUSION_MAX_MAP_SIZE` before including any Fusion header to change the
 default. Example:
 
     #define FUSION_MAX_MAP_SIZE 20
@@ -3157,7 +3157,7 @@ default. Example:
 
 [section Conversion]
 
-All fusion sequences can be converted to one of the __containers__ types 
+All fusion sequences can be converted to one of the __containers__ types
 using one of these conversion functions.
 
 [heading Header]
@@ -3245,7 +3245,7 @@ Convert a fusion sequence to a __vector__.
 [heading Example]
 
     as_vector(__make_list__('x', 123, "hello"))
-    
+
 [endsect]
 
 [section as_set]
@@ -3322,7 +3322,7 @@ Convert a fusion sequence to a __map__.
 
 [*Semantics]: Convert a fusion sequence, `seq`, to a __map__.
 
-[*Precondition]: The elements of the sequence are assumed to be 
+[*Precondition]: The elements of the sequence are assumed to be
 __fusion_pair__s. There may be no duplicate __fusion_pair__ key types.
 
 [heading Header]
@@ -3363,7 +3363,7 @@ Returns the result type of __as_list__.
 
     result_of::as_list<Sequence>::type;
 
-[*Return type]: A __list__ with same elements as the input sequence, 
+[*Return type]: A __list__ with same elements as the input sequence,
 `Sequence`.
 
 [*Semantics]: Convert a fusion sequence, `Sequence`, to a __list__.
@@ -3400,7 +3400,7 @@ Returns the result type of __as_vector__.
 
     result_of::as_vector<Sequence>::type;
 
-[*Return type]: A __vector__ with same elements as the input sequence, 
+[*Return type]: A __vector__ with same elements as the input sequence,
 `Sequence`.
 
 [*Semantics]: Convert a fusion sequence, `Sequence`, to a __vector__.
@@ -3412,7 +3412,7 @@ Returns the result type of __as_vector__.
 [heading Example]
 
     result_of::as_vector<__list__<char, int> >::type
-    
+
 [endsect]
 
 [section as_set]
@@ -3437,7 +3437,7 @@ Returns the result type of __as_set__.
 
     result_of::as_set<Sequence>::type;
 
-[*Return type]: A __set__ with same elements as the input sequence, 
+[*Return type]: A __set__ with same elements as the input sequence,
 `Sequence`.
 
 [*Semantics]: Convert a fusion sequence, `Sequence`, to a __set__.
@@ -3476,12 +3476,12 @@ Returns the result type of __as_map__.
 
     result_of::as_map<Sequence>::type;
 
-[*Return type]: A __map__ with same elements as the input sequence, 
+[*Return type]: A __map__ with same elements as the input sequence,
 `Sequence`.
 
 [*Semantics]: Convert a fusion sequence, `Sequence`, to a __map__.
 
-[*Precondition]: The elements of the sequence are assumed to be 
+[*Precondition]: The elements of the sequence are assumed to be
 __fusion_pair__s. There may be no duplicate __fusion_pair__ key types.
 
 [heading Header]
@@ -3502,24 +3502,24 @@ __fusion_pair__s. There may be no duplicate __fusion_pair__ key types.
 
 [section Operators]
 
-These operators, like the __algorithms__, work generically on all Fusion 
-sequences. All conforming Fusion sequences automatically get these 
-operators for free. 
+These operators, like the __algorithms__, work generically on all Fusion
+sequences. All conforming Fusion sequences automatically get these
+operators for free.
 
 [section I/O]
 
-The I/O operators: `<<` and `>>` work generically on all Fusion sequences. 
-The global `operator<<` has been overloaded for generic output streams such 
-that __sequence__s are output by recursively calling `operator<<` for each 
-element. Analogously, the global `operator>>` has been overloaded to 
-extract __sequence__s from generic input streams by recursively calling 
+The I/O operators: `<<` and `>>` work generically on all Fusion sequences.
+The global `operator<<` has been overloaded for generic output streams such
+that __sequence__s are output by recursively calling `operator<<` for each
+element. Analogously, the global `operator>>` has been overloaded to
+extract __sequence__s from generic input streams by recursively calling
 `operator>>` for each element.
 
-The default delimiter between the elements is space, and the __sequence__ 
+The default delimiter between the elements is space, and the __sequence__
 is enclosed in parenthesis. For Example:
 
     __vector__<float, int, std::string> a(1.0f, 2, std::string("Howdy folks!");
-    cout << a; 
+    cout << a;
 
 outputs the __vector__ as: (1.0 2 Howdy folks!)
 
@@ -3531,7 +3531,7 @@ The library defines three manipulators for changing the default behavior:
     [[`tuple_delimiter(arg)`]   [Defines the delimiter character between elements.]]
 ]
 
-The argument to `tuple_open`, `tuple_close` and `tuple_delimiter` may be a 
+The argument to `tuple_open`, `tuple_close` and `tuple_delimiter` may be a
 `char`, `wchar_t`, a C-string, or a wide C-string.
 
 Example:
@@ -3540,7 +3540,7 @@ Example:
 
 outputs the same __vector__, `a` as: [1.0, 2, Howdy folks!]
 
-The same manipulators work with `operator>>` and `istream` as well. Suppose 
+The same manipulators work with `operator>>` and `istream` as well. Suppose
 the `std::cin` stream contains the following data:
 
     (1 2 3) [4:5]
@@ -3556,9 +3556,9 @@ The code:
 
 reads the data into the __vector__s `i` and `j`.
 
-Note that extracting __sequence__s with `std::string` or C-style string 
-elements does not generally work, since the streamed __sequence__ 
-representation may not be unambiguously parseable. 
+Note that extracting __sequence__s with `std::string` or C-style string
+elements does not generally work, since the streamed __sequence__
+representation may not be unambiguously parseable.
 
 [heading Header]
 
@@ -3645,9 +3645,9 @@ Write a __sequence__ to an output stream.
 
 [section Comparison]
 
-The Comparison operators: `==`, `!=`, `<`, `<=`, `>=` and `>=` work 
+The Comparison operators: `==`, `!=`, `<`, `<=`, `>=` and `>=` work
 generically on all Fusion sequences. Comparison operators are "short-
-circuited": elementary comparisons start from the first elements and are 
+circuited": elementary comparisons start from the first elements and are
 performed only until the result is clear.
 
 [heading Header]
@@ -3679,19 +3679,19 @@ Compare two sequences for equality.
 
 [*Return type]: `bool`
 
-[*Requirements]: 
+[*Requirements]:
 
-For each element, `e1`, in  sequence `a`, and for each element, `e2`, in 
-sequence `b`, `a == b` is a valid expression returning a type that is 
+For each element, `e1`, in  sequence `a`, and for each element, `e2`, in
+sequence `b`, `a == b` is a valid expression returning a type that is
 convertible to bool.
 
-An attempt to compare two Sequences of different lengths results in a 
+An attempt to compare two Sequences of different lengths results in a
 compile time error.
 
-[*Semantics]: 
+[*Semantics]:
 
-For each element, `e1`, in  sequence `a`, and for each element, `e2`, in 
-sequence `b`, `e1 == e2` returns true. For any 2 zero length __sequence__s, 
+For each element, `e1`, in  sequence `a`, and for each element, `e2`, in
+sequence `b`, `e1 == e2` returns true. For any 2 zero length __sequence__s,
 e and f, e == f  returns true.
 
 [heading Header]
@@ -3729,16 +3729,16 @@ Compare two sequences for inequality.
 
 [*Return type]: `bool`
 
-[*Requirements]: 
+[*Requirements]:
 
-For each element, `e1`, in  sequence `a`, and for each element, `e2`, in 
-sequence `b`, `a == b` is a valid expression returning a type that is 
+For each element, `e1`, in  sequence `a`, and for each element, `e2`, in
+sequence `b`, `a == b` is a valid expression returning a type that is
 convertible to bool.
 
-An attempt to compare two Sequences of different lengths results in a 
+An attempt to compare two Sequences of different lengths results in a
 compile time error.
 
-[*Semantics]: 
+[*Semantics]:
 
 Returns !(a == b).
 
@@ -3779,13 +3779,13 @@ Lexicographically compare two sequences.
 
 [*Return type]: `bool`
 
-[*Requirements]: 
+[*Requirements]:
 
-For each element, `e1`, in  sequence `a`, and for each element, `e2`, in 
-sequence `b`, `a < b` is a valid expression returning a type that is 
+For each element, `e1`, in  sequence `a`, and for each element, `e2`, in
+sequence `b`, `a < b` is a valid expression returning a type that is
 convertible to bool.
 
-An attempt to compare two Sequences of different lengths results in a 
+An attempt to compare two Sequences of different lengths results in a
 compile time error.
 
 [*Semantics]: Returns the lexicographical comparison of between `a` and `b`.
@@ -3827,13 +3827,13 @@ Lexicographically compare two sequences.
 
 [*Return type]: `bool`
 
-[*Requirements]: 
+[*Requirements]:
 
-For each element, `e1`, in  sequence `a`, and for each element, `e2`, in 
-sequence `b`, `a < b` is a valid expression returning a type that is 
+For each element, `e1`, in  sequence `a`, and for each element, `e2`, in
+sequence `b`, `a < b` is a valid expression returning a type that is
 convertible to bool.
 
-An attempt to compare two Sequences of different lengths results in a 
+An attempt to compare two Sequences of different lengths results in a
 compile time error.
 
 [*Semantics]: Returns !(b < a).
@@ -3875,13 +3875,13 @@ Lexicographically compare two sequences.
 
 [*Return type]: `bool`
 
-[*Requirements]: 
+[*Requirements]:
 
-For each element, `e1`, in  sequence `a`, and for each element, `e2`, in 
-sequence `b`, `a < b` is a valid expression returning a type that is 
+For each element, `e1`, in  sequence `a`, and for each element, `e2`, in
+sequence `b`, `a < b` is a valid expression returning a type that is
 convertible to bool.
 
-An attempt to compare two Sequences of different lengths results in a 
+An attempt to compare two Sequences of different lengths results in a
 compile time error.
 
 [*Semantics]: Returns b < a.
@@ -3923,13 +3923,13 @@ Lexicographically compare two sequences.
 
 [*Return type]: `bool`
 
-[*Requirements]: 
+[*Requirements]:
 
-For each element, `e1`, in  sequence `a`, and for each element, `e2`, in 
-sequence `b`, `a < b` is a valid expression returning a type that is 
+For each element, `e1`, in  sequence `a`, and for each element, `e2`, in
+sequence `b`, `a < b` is a valid expression returning a type that is
 convertible to bool.
 
-An attempt to compare two Sequences of different lengths results in a 
+An attempt to compare two Sequences of different lengths results in a
 compile time error.
 
 [*Semantics]: Returns !(a < b).
