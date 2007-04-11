@@ -81,12 +81,17 @@ namespace boost { namespace xpressive { namespace detail
       : quant_style_assertion
     {
         typedef typename Traits::char_type char_type;
+        typedef typename Traits::char_class_type char_class_type;
 
         assert_word_matcher(Traits const &traits)
           : word_(lookup_classname(traits, "w"))
         {
             BOOST_ASSERT(0 != this->word_);
         }
+
+        assert_word_matcher(char_class_type word)
+          : word_(word)
+        {}
 
         bool is_word(Traits const &traits, char_type ch) const
         {
@@ -104,7 +109,13 @@ namespace boost { namespace xpressive { namespace detail
             return Cond::eval(prevword, thisword, state) && next.match(state);
         }
 
-        typename Traits::char_class_type word_;
+        char_class_type word() const
+        {
+            return this->word_;
+        }
+
+    private:
+        char_class_type word_;
     };
 
 }}}

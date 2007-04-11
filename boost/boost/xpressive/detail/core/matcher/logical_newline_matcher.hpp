@@ -68,6 +68,11 @@ namespace boost { namespace xpressive { namespace detail
             return false;
         }
 
+        char_class_type newline() const
+        {
+            return this->newline_;
+        }
+
     private:
         char_class_type newline_;
         char_type nl_, cr_;

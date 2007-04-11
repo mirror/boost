@@ -113,7 +113,12 @@
                     >
                 > type;
 
+    #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+                template<typename Expr2, typename State2, typename Visitor2>
+                static type call(Expr2 const &expr, State2 const &state, Visitor2 &visitor)
+    #else
                 static type call(Expr const &expr, State const &state, Visitor &visitor)
+    #endif
                 {
                     type that = {
                         BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_COMPILE, ~)

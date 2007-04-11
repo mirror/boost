@@ -42,6 +42,27 @@ namespace boost { namespace xpressive { namespace detail
         }
     };
 
+    template<typename Traits>
+    struct inverter<logical_newline_matcher<Traits> >
+    {
+        // ~_ln matches any one character that is not in the "newline" character class
+        typedef posix_charset_matcher<Traits> type;
+        static type call(logical_newline_matcher<Traits> t)
+        {
+            return type(t.newline(), true);
+        }
+    };
+
+    template<typename Traits>
+    struct inverter<assert_word_matcher<word_boundary<true>, Traits> >
+    {
+        typedef assert_word_matcher<word_boundary<false>, Traits> type;
+        static type call(assert_word_matcher<word_boundary<true>, Traits> t)
+        {
+            return type(t.word());
+        }
+    };
+
     template<typename T>
     typename inverter<T>::type invert(T const &t)
     {
