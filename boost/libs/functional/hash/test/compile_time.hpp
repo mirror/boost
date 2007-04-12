@@ -12,5 +12,5 @@ void compile_time_tests(T*)
 {
     BOOST_STATIC_ASSERT((boost::is_base_and_derived<
         std::unary_function<T, std::size_t>, HASH_NAMESPACE::hash<T> >::value));
-};
+}
 
