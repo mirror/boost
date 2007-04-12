@@ -88,17 +88,21 @@ void test_matches()
     assert_matches< terminal<int> >( as_arg(1) );
     assert_matches< terminal<int> >( as_expr(1) );
 
-    assert_matches< terminal<int> >( lit('a') );
-    assert_matches< terminal<int> >( as_arg('a') );
-    assert_matches< terminal<int> >( as_expr('a') );
+    assert_not_matches< terminal<int> >( lit('a') );
+    assert_not_matches< terminal<int> >( as_arg('a') );
+    assert_not_matches< terminal<int> >( as_expr('a') );
+
+    assert_matches< terminal<convertible_to<int> > >( lit('a') );
+    assert_matches< terminal<convertible_to<int> > >( as_arg('a') );
+    assert_matches< terminal<convertible_to<int> > >( as_expr('a') );
 
     assert_not_matches< terminal<int> >( lit((int_convertible())) );
     assert_not_matches< terminal<int> >( as_arg((int_convertible())) );
     assert_not_matches< terminal<int> >( as_expr((int_convertible())) );
 
-    assert_matches< terminal<_> >( lit(1) );
-    assert_matches< terminal<_> >( as_arg(1) );
-    assert_matches< terminal<_> >( as_expr(1) );
+    assert_matches< terminal<convertible_to<int> > >( lit((int_convertible())) );
+    assert_matches< terminal<convertible_to<int> > >( as_arg((int_convertible())) );
+    assert_matches< terminal<convertible_to<int> > >( as_expr((int_convertible())) );
 
     assert_matches< if_<is_same<proto::result_of::arg<mpl::_>, int> > >( lit(1) );
     assert_not_matches< if_<is_same<proto::result_of::arg<mpl::_>, int> > >( lit('a') );
@@ -137,17 +141,29 @@ void test_matches()
     assert_matches< terminal<std::basic_string<_> > >( as_arg(std::string("hello")) );
     assert_matches< terminal<std::basic_string<_> > >( as_expr(std::string("hello")) );
 
+    assert_not_matches< terminal<std::basic_string<_> > >( lit(1) );
+    assert_not_matches< terminal<std::basic_string<_> > >( as_arg(1) );
+    assert_not_matches< terminal<std::basic_string<_> > >( as_expr(1) );
+
+    assert_not_matches< terminal<std::basic_string<_,_,_> > >( lit(1) );
+    assert_not_matches< terminal<std::basic_string<_,_,_> > >( as_arg(1) );
+    assert_not_matches< terminal<std::basic_string<_,_,_> > >( as_expr(1) );
+
     assert_matches< terminal<std::basic_string<_> const & > >( lit(std::string("hello")) );
     assert_matches< terminal<std::basic_string<_> const & > >( as_arg(std::string("hello")) );
-    assert_matches< terminal<std::basic_string<_> const & > >( as_expr(std::string("hello")) );
+    assert_not_matches< terminal<std::basic_string<_> const & > >( as_expr(std::string("hello")) );
 
     assert_matches< terminal< void(&)() > >( lit(a_function) );
     assert_matches< terminal< void(&)() > >( as_arg(a_function) );
     assert_matches< terminal< void(&)() > >( as_expr(a_function) );
 
-    assert_matches< terminal< void(*)() > >( lit(a_function) );
-    assert_matches< terminal< void(*)() > >( as_arg(a_function) );
-    assert_matches< terminal< void(*)() > >( as_expr(a_function) );
+    assert_not_matches< terminal< void(*)() > >( lit(a_function) );
+    assert_not_matches< terminal< void(*)() > >( as_arg(a_function) );
+    assert_not_matches< terminal< void(*)() > >( as_expr(a_function) );
+
+    assert_matches< terminal< convertible_to<void(*)()> > >( lit(a_function) );
+    assert_matches< terminal< convertible_to<void(*)()> > >( as_arg(a_function) );
+    assert_matches< terminal< convertible_to<void(*)()> > >( as_expr(a_function) );
 
     assert_matches< terminal< void(*)() > >( lit(&a_function) );
     assert_matches< terminal< void(*)() > >( as_arg(&a_function) );
@@ -155,7 +171,7 @@ void test_matches()
 
     assert_matches< terminal< void(* const &)() > >( lit(&a_function) );
     assert_matches< terminal< void(* const &)() > >( as_arg(&a_function) );
-    assert_matches< terminal< void(* const &)() > >( as_expr(&a_function) );
+    assert_not_matches< terminal< void(* const &)() > >( as_expr(&a_function) );
 
     assert_matches<
         or_<

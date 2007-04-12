@@ -40,17 +40,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////
     // CharLiteral
     template<typename Char>
-    struct CharLiteral
-      : proto::or_<
-            proto::terminal<char>
-          , proto::terminal<Char>
-        >
-    {};
-
-    template<>
-    struct CharLiteral<char>
-      : proto::terminal<char>
-    {};
+    struct CharLiteral;
 
     ///////////////////////////////////////////////////////////////////////////
     // ListSet

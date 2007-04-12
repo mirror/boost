@@ -213,6 +213,9 @@ namespace boost { namespace proto
     template<typename T>
     struct exact;
 
+    template<typename T>
+    struct convertible_to;
+
     template<
         typename Grammar0
       , typename Grammar1

@@ -11,7 +11,7 @@
     #ifndef BOOST_PROTO_MATCHES_HPP_EAN_11_03_2006
     #define BOOST_PROTO_MATCHES_HPP_EAN_11_03_2006
 
-    #include <boost/xpressive/proto/detail/prefix.hpp>
+    #include <boost/xpressive/proto/detail/prefix.hpp> // must be first include
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/arithmetic/dec.hpp>
     #include <boost/preprocessor/arithmetic/sub.hpp>
@@ -25,17 +25,17 @@
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
     #include <boost/config.hpp>
-    #include <boost/mpl/or.hpp>
-    #include <boost/mpl/not.hpp>
-    #include <boost/mpl/bool.hpp>
+    #include <boost/mpl/logical.hpp>
     #include <boost/mpl/apply.hpp>
     #include <boost/mpl/aux_/template_arity.hpp>
     #include <boost/mpl/aux_/lambda_arity_param.hpp>
     #include <boost/utility/enable_if.hpp>
     #include <boost/type_traits/is_convertible.hpp>
+    #include <boost/type_traits/is_reference.hpp>
+    #include <boost/type_traits/is_pointer.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/traits.hpp>
-    #include <boost/xpressive/proto/detail/suffix.hpp>
+    #include <boost/xpressive/proto/detail/suffix.hpp> // must be last include
 
     namespace boost { namespace proto
     {
@@ -69,43 +69,18 @@
             template<typename T, typename U
                 BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(long Arity = mpl::aux::template_arity<U>::value)
             >
-            struct lambda_matches_impl
-              : is_same<T, U>
+            struct lambda_matches
+              : mpl::false_
             {};
 
             template<typename T>
-            struct lambda_matches_impl<T, proto::_ BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1)>
+            struct lambda_matches<T, proto::_ BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1)>
               : mpl::true_
             {};
 
             template<template<typename> class T, typename Expr0, typename Grammar0>
-            struct lambda_matches_impl<T<Expr0>, T<Grammar0> BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(1) >
-              : lambda_matches_impl<Expr0, Grammar0>
-            {};
-
-            // wrap_terminal
-            template<typename T>
-            struct wrap_terminal
-            {
-                wrap_terminal(T const &);
-            };
-
-            template<typename T>
-            struct wrap_terminal<T &>
-            {
-                wrap_terminal(T &);
-            };
-
-            template<typename T>
-            struct wrap_terminal<T const &>
-            {
-                wrap_terminal(T const &);
-            };
-
-            // TODO: this is a little too loose; it allows "foo<T> const &" to match "foo<_> &"
-            template<typename T, typename U>
-            struct lambda_matches
-              : lambda_matches_impl<typename remove_cv_ref<T>::type, typename remove_cv_ref<U>::type>
+            struct lambda_matches<T<Expr0>, T<Grammar0> BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(1) >
+              : lambda_matches<Expr0, Grammar0>
             {};
 
             // vararg_matches_impl
@@ -131,17 +106,119 @@
                 >
             {};
 
+            // How terminal_matches<> handles references and cv-qualifiers.
+            // The cv and ref matter *only* if the grammar has a top-level ref.
+            //
+            // Expr     |   Grammar  |  Match
+            // ------------------------------
+            // T            T           yes
+            // T &          T           yes
+            // T const &    T           yes
+            // T            T &         no
+            // T &          T &         yes
+            // T const &    T &         no
+            // T            T const &   no
+            // T &          T const &   no
+            // T const &    T const &   yes
+
+            template<typename T, typename U>
+            struct is_cv_ref_compatible
+              : mpl::true_
+            {};
+
+            template<typename T, typename U>
+            struct is_cv_ref_compatible<T, U &>
+              : mpl::false_
+            {};
+
+            template<typename T, typename U>
+            struct is_cv_ref_compatible<T &, U &>
+              : mpl::bool_<is_const<T>::value == is_const<U>::value>
+            {};
+
+        #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+            // MSVC-7.1 has lots of problems with array types that have been
+            // deduced. Partially specializing terminal_matches<> on array types
+            // doesn't seem to work.
+            template<
+                typename T
+              , typename U
+              , bool B = is_array<typename remove_cv_ref<T>::type>::value
+            >
+            struct terminal_array_matches
+              : mpl::false_
+            {};
+
+            template<typename T, typename U, std::size_t M>
+            struct terminal_array_matches<T, U(&)[M], true>
+              : is_convertible<T, U(&)[M]>
+            {};
+
+            template<typename T, typename U>
+            struct terminal_array_matches<T, U(&)[proto::N], true>
+              : is_convertible<T, U *>
+            {};
+
+            template<typename T, typename U>
+            struct terminal_array_matches<T, U *, true>
+              : is_convertible<T, U *>
+            {};
+
             // terminal_matches
-            template<typename Expr, typename Grammar>
+            template<typename T, typename U>
             struct terminal_matches
               : mpl::or_<
-                    lambda_matches<Expr, Grammar>
-                  , is_convertible<Expr, wrap_terminal<Grammar> >
+                    mpl::and_<
+                        is_cv_ref_compatible<T, U>
+                      , lambda_matches<
+                            typename remove_cv_ref<T>::type
+                          , typename remove_cv_ref<U>::type
+                        >
+                    >
+                  , terminal_array_matches<T, U>
+                >
+            {};
+        #else
+            // terminal_matches
+            template<typename T, typename U>
+            struct terminal_matches
+              : mpl::and_<
+                    is_cv_ref_compatible<T, U>
+                  , lambda_matches<
+                        typename remove_cv_ref<T>::type
+                      , typename remove_cv_ref<U>::type
+                    >
                 >
             {};
 
-            template<typename Expr>
-            struct terminal_matches<Expr, proto::_>
+            template<typename T, std::size_t M>
+            struct terminal_matches<T(&)[M], T(&)[proto::N]>
+              : mpl::true_
+            {};
+
+            template<typename T, std::size_t M>
+            struct terminal_matches<T(&)[M], T *>
+              : mpl::true_
+            {};
+        #endif
+
+            template<typename T>
+            struct terminal_matches<T, T>
+              : mpl::true_
+            {};
+
+            template<typename T>
+            struct terminal_matches<T &, T>
+              : mpl::true_
+            {};
+
+            template<typename T>
+            struct terminal_matches<T const &, T>
+              : mpl::true_
+            {};
+
+            template<typename T>
+            struct terminal_matches<T, proto::_>
               : mpl::true_
             {};
 
@@ -150,9 +227,9 @@
               : mpl::true_
             {};
 
-            template<typename T, std::size_t M, typename U>
-            struct terminal_matches<T(&)[M], U(&)[proto::N]>
-              : is_convertible<T(&)[M], U(&)[M]>
+            template<typename T, typename U>
+            struct terminal_matches<T, proto::convertible_to<U> >
+              : is_convertible<T, U>
             {};
 
             // matches_impl
@@ -209,7 +286,7 @@
             >
 
         #define BOOST_PROTO_DEFINE_LAMBDA_MATCHES(z, n, data)\
-            lambda_matches_impl<\
+            lambda_matches<\
                 BOOST_PP_CAT(Expr, n)\
               , BOOST_PP_CAT(Grammar, n)\
             >
@@ -430,7 +507,7 @@
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename Expr)
                 BOOST_PP_ENUM_TRAILING_PARAMS(N, typename Grammar)
             >
-            struct lambda_matches_impl<T<BOOST_PP_ENUM_PARAMS(N, Expr)>, T<BOOST_PP_ENUM_PARAMS(N, Grammar)> BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(N) >
+            struct lambda_matches<T<BOOST_PP_ENUM_PARAMS(N, Expr)>, T<BOOST_PP_ENUM_PARAMS(N, Grammar)> BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(N) >
               : BOOST_PP_CAT(and, N)<
                     BOOST_PROTO_DEFINE_LAMBDA_MATCHES(~, 0, ~)::value,
                     BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_DEFINE_LAMBDA_MATCHES, ~)

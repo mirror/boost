@@ -33,10 +33,28 @@ namespace boost { namespace xpressive { namespace detail
         {};
     };
 
+    ///////////////////////////////////////////////////////////////////////////
+    // CharLiteral
+    template<typename Char>
+    struct CharLiteral
+      : proto::or_<
+            proto::terminal<char>
+          , proto::terminal<Char>
+        >
+    {};
+
+    template<>
+    struct CharLiteral<char>
+      : proto::terminal<char>
+    {};
+
+    ///////////////////////////////////////////////////////////////////////////
+    // SetSize
+    template<typename Char>
     struct SetSize
       : proto::or_<
-            increment<proto::trans::left<proto::comma<SetSize, proto::terminal<char> > > >
-          , proto::trans::always<proto::assign<set_initializer_type, proto::terminal<char> >, mpl::int_<1> >
+            increment<proto::trans::left<proto::comma<SetSize<Char>, CharLiteral<Char> > > >
+          , proto::trans::always<proto::assign<set_initializer_type, CharLiteral<Char> >, mpl::int_<1> >
         >
     {};
 
@@ -73,7 +91,7 @@ namespace boost { namespace xpressive { namespace detail
         {
             typedef set_matcher<
                 typename Visitor::traits_type
-              , SetSize::apply<Expr, State, Visitor>::type::value
+              , SetSize<typename Visitor::char_type>::template apply<Expr, State, Visitor>::type::value
             > type;
         };
 
@@ -81,10 +99,11 @@ namespace boost { namespace xpressive { namespace detail
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
+            typedef typename Visitor::char_type char_type;
             typename apply<Expr, State, Visitor>::type set(visitor.traits());
-            SetFillContext<typename Visitor::char_type> ctx(set.set_);
+            SetFillContext<char_type> ctx(set.set_);
             proto::eval(expr, ctx);
-            int const size = SetSize::apply<Expr, State, Visitor>::type::value;
+            int const size = SetSize<char_type>::template apply<Expr, State, Visitor>::type::value;
             for(int i = 0; i < size; ++i)
             {
                 set.set_[i] = visitor.traits().translate(set.set_[i]);

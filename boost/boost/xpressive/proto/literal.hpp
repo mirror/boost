@@ -57,7 +57,14 @@ namespace boost { namespace proto
     template<typename T>
     inline literal<T const &> lit(T const &t)
     {
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4180) // warning C4180: qualifier applied to function type has no meaning; ignored
+#endif
         return literal<T const &>(t);
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
     }
 
 }}
