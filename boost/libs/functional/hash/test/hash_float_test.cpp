@@ -125,12 +125,17 @@ void float_tests(char const* name, T* = 0)
     BOOST_TEST(x1(half_max) != x1(three_quarter_max));
     BOOST_TEST(x1(three_quarter_max) == x1(three_quarter_max));
 
+// Intel with gcc stdlib sometimes segfaults on calls to asin and acos.
+#if !((defined(__INTEL_COMPILER) || defined(__ICL) || \
+        defined(__ICC) || defined(__ECC)) && \
+    (defined(__GLIBCPP__) || defined(__GLIBCXX__)))
     T v1 = asin((T) 1);
     T v2 = acos((T) 0);
     if(v1 == v2)
         BOOST_TEST(x1(v1) == x1(v2));
     BOOST_TEST(x1(v1) == HASH_NAMESPACE::hash_value(v1));
     BOOST_TEST(x1(v2) == HASH_NAMESPACE::hash_value(v2));
+#endif
 
     BOOST_TEST(x1(boost::hash_detail::limits<T>::epsilon()) ==
             HASH_NAMESPACE::hash_value(boost::hash_detail::limits<T>::epsilon()));
