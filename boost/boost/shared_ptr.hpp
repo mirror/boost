@@ -306,6 +306,38 @@ public:
 
 #endif // BOOST_NO_AUTO_PTR
 
+// Move support
+
+#if defined( BOOST_HAS_RVALUE_REFS )
+
+    shared_ptr( shared_ptr && r ): px( r.px ), pn() // never throws
+    {
+        pn.swap( r.pn );
+    }
+
+    template<class Y>
+    shared_ptr( shared_ptr<Y> && r ): px( r.px ), pn() // never throws
+    {
+        pn.swap( r.pn );
+    }
+
+    shared_ptr & operator=( shared_ptr && r ) // never throws
+    {
+        px = r.px;
+        pn.swap( r.pn );
+        return *this;
+    }
+
+    template<class Y>
+    shared_ptr & operator=( shared_ptr<Y> && r ) // never throws
+    {
+        px = r.px;
+        pn.swap( r.pn );
+        return *this;
+    }
+
+#endif
+
     void reset() // never throws in 1.30+
     {
         this_type().swap(*this);
