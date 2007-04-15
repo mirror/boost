@@ -313,26 +313,26 @@ public:
     shared_ptr( shared_ptr && r ): px( r.px ), pn() // never throws
     {
         pn.swap( r.pn );
+        r.px = 0;
     }
 
     template<class Y>
     shared_ptr( shared_ptr<Y> && r ): px( r.px ), pn() // never throws
     {
         pn.swap( r.pn );
+        r.px = 0;
     }
 
     shared_ptr & operator=( shared_ptr && r ) // never throws
     {
-        px = r.px;
-        pn.swap( r.pn );
+        this_type( static_cast< shared_ptr && >( r ) ).swap( *this );
         return *this;
     }
 
     template<class Y>
     shared_ptr & operator=( shared_ptr<Y> && r ) // never throws
     {
-        px = r.px;
-        pn.swap( r.pn );
+        this_type( static_cast< shared_ptr<Y> && >( r ) ).swap( *this );
         return *this;
     }
 
