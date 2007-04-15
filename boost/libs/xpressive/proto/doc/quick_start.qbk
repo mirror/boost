@@ -45,12 +45,12 @@ hello, world
 This program builds an object representing the output operation and passes
 it to an `evaluate()` function, which then executes it.
 
-Notice that in order to build a Proto expression template, at least one 
-argument in the expression must be a Proto-ified. In this case, that is done 
-with the _terminal_ class template, which is used to wrap `std::cout`. That 
-"infects" the expression, and brings Proto's operator overloads into 
+Notice that in order to build a Proto expression template, at least one
+argument in the expression must be a Proto-ified. In this case, that is done
+with the _terminal_ class template, which is used to wrap `std::cout`. That
+"infects" the expression, and brings Proto's operator overloads into
 consideration. Any literals in the expression are then Proto-ified by wrapping
-them in a Proto terminal before they are combined into larger Proto 
+them in a Proto terminal before they are combined into larger Proto
 expressions. The use of _default_context_ assigns the standard meanings to the
 operators in the expression. (By using a different context, you could give
 the operators in your expressions different semantics. By default, Proto
@@ -59,17 +59,17 @@ makes no assumptions about what operators actually /mean/.)
 [blurb [*Proto Design Philosophy]\n
 \n
 Before we continue, let's use the above example to illustrate an important
-design principle of Proto's. The expression template created in the ['hello 
+design principle of Proto's. The expression template created in the ['hello
 world] example is totally general and abstract. It is not tied in any way to
-any particular domain or application, nor does it have any particular meaning 
-or behavior on its own, until it is evaluated in a /context/. Expression 
-templates are really just heterogeneous trees, which might mean something in 
+any particular domain or application, nor does it have any particular meaning
+or behavior on its own, until it is evaluated in a /context/. Expression
+templates are really just heterogeneous trees, which might mean something in
 one domain, and something else entirely in a different one.\n
 \n
 As we'll see later, there is a way to create Proto expression trees that are
 ['not] purely abstract, and that have meaning and behaviors independent of any
 context. There is also a way to control which operators are overloaded for your
-particular domain. But that is not the default behavior. We'll see later why 
+particular domain. But that is not the default behavior. We'll see later why
 the default is often a good thing.]
 
 [h2 Proto's Tool-Box]
@@ -78,17 +78,17 @@ Let's begin with the nickel tour of the utilities Proto provides.
 
 [table Proto's Tool-Box
     [[Tool]                     [Description]]
-    [[_expr_]                   [The structure from which Proto's expression 
+    [[_expr_]                   [The structure from which Proto's expression
                                     trees are built.]]
-    [[_ref_]                    [A wrapper for holding an _expr_ by reference 
+    [[_ref_]                    [A wrapper for holding an _expr_ by reference
                                     within another _expr_.]]
     [[_unref_]                  [Removes a top-level reference, be it a real
                                     reference or a _ref_ wrapper.]]
-    [[_deep_copy_]              [A function for transforming an expression 
+    [[_deep_copy_]              [A function for transforming an expression
                                     tree such that all nodes are held by value
                                     instead of by reference.]]
-    [[_as_expr_, _as_arg_]      [_as_expr_ is a function that Proto-ifies an 
-                                    object if it is not already a Proto 
+    [[_as_expr_, _as_arg_]      [_as_expr_ is a function that Proto-ifies an
+                                    object if it is not already a Proto
                                     expression. _as_arg_ is similar except
                                     the argument is stored by reference.]]
     [[_is_expr_]                [Tests a type to see if it is a Proto
@@ -97,17 +97,17 @@ Let's begin with the nickel tour of the utilities Proto provides.
                                     of the specified expression.]]
     [[_arg_, _arg_c_]           [For extracting the ['N]th child expression
                                     from a proto expression tree.]]
-    [[_left_, _right_]          [For extracting the left or right child 
+    [[_left_, _right_]          [For extracting the left or right child
                                     expression from a binary proto expression
                                     tree.]]
-    [[_extends_]                [A domain-specific wrapper for giving an 
+    [[_extends_]                [A domain-specific wrapper for giving an
                                     expression additional behaviors.]]
     [[_literal_, _lit_]         [A wrapper for a Proto terminal, and a function
                                     for generating them, respectively.]]
     [[_terminal_, _unary_expr_,
-        _binary_expr_, /etc./]  [Expression type generators. For example, 
+        _binary_expr_, /etc./]  [Expression type generators. For example,
                                     `right_shift<A, B>::type` is the type
-                                    of a right-shift expression with `A` and 
+                                    of a right-shift expression with `A` and
                                     `B` as children. These are also used for
                                     specifying productions in meta-grammars.]]
     [[_matches_]                [A compile-time predicate for determining
@@ -117,10 +117,10 @@ Let's begin with the nickel tour of the utilities Proto provides.
                                     Proto meta-grammar.]]
     [[_and_]                    [For specifying a compound production in a
                                     Proto meta-grammar.]]
-    [[_if_]                     [Allows an arbitrary compile-time predicate 
-                                    to be used as a production in a Proto 
+    [[_if_]                     [Allows an arbitrary compile-time predicate
+                                    to be used as a production in a Proto
                                     meta-grammar.]]
-    [[_exact_]                  [Used to specify that a terminal type must 
+    [[_exact_]                  [Used to specify that a terminal type must
                                     match exactly in a Proto meta-grammar.
                                     (By default, matches are ['fuzzy].)]]
     [[_default_context_]        [An evaluation context which assignes the
@@ -137,7 +137,7 @@ Let's begin with the nickel tour of the utilities Proto provides.
                                     expressions are in a Fusion sequence.]]
 ]
 
-Now that you know a bit about the tools proto provides, let's look at how to 
+Now that you know a bit about the tools proto provides, let's look at how to
 use them to implement some domain-specific embedded languages.
 
 [endsect]

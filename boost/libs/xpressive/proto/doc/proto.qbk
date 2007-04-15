@@ -6,7 +6,7 @@
     [category template]
     [id proto]
     [dirname proto]
-    [purpose 
+    [purpose
         Generic expression template, meta-grammar and
         tree-transformation framework.
     ]
@@ -52,6 +52,7 @@
 [def _and_                  [classref boost::proto::and_ `and_<>`]]
 [def _if_                   [classref boost::proto::if_ `if_<>`]]
 [def _exact_                [classref boost::proto::exact `exact<>`]]
+[def _convertible_to_       [classref boost::proto::convertible_to `convertible_to<>`]]
 [def _is_expr_              [classref boost::proto::is_expr `is_expr<>`]]
 [def _tag_of_               [classref boost::proto::tag_of `tag_of<>`]]
 [def _arg_                  [funcref boost::proto::arg `arg()`]]
