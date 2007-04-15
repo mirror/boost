@@ -18,10 +18,8 @@
 #include <boost/xpressive/detail/core/icase.hpp>
 #include <boost/xpressive/detail/core/matchers.hpp>
 #include <boost/xpressive/detail/static/compile.hpp>
-#include <boost/xpressive/detail/static/grammar.hpp>
 #include <boost/xpressive/detail/static/modifier.hpp>
 #include <boost/xpressive/detail/utility/ignore_unused.hpp>
-#include <boost/xpressive/detail/static/productions/productions.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -636,75 +634,6 @@ imbue(Locale const &loc)
     return mod;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-/// \brief For checking if an expression matches xpressive's grammar
-///
-/// validator\<\> can be used to see if a given expression is a valid
-/// xpressive regular expression. If it is, it will simply return it.
-/// If it isn't, it will cause a simple and short compile-time error.
-/// You may use it as follows:
-///   validator\<char\> validate;
-///   sregex rx = validate( _ << "oops" );
-///
-/// See also xpressive::validate and xpressive::wvalidate.
-///
-/// \param Char The character type of the regular expression.
-template<typename Char>
-struct validator
-{
-private:
-    struct some_valid_expression
-      : proto::extends<typename proto::terminal<Char>::type, some_valid_expression>
-    {
-        template<typename Xpr>
-        some_valid_expression(Xpr const &);
-    };
-
-    struct expression_does_not_match_xpressive_grammar
-      : mpl::false_
-    {};
-
-public:
-    template<typename Xpr>
-    typename mpl::if_
-    <
-        proto::matches<Xpr, XpressiveGrammar<Char> >
-      , Xpr const &
-      , some_valid_expression
-    >::type operator ()(Xpr const &xpr) const
-    {
-        typedef typename mpl::if_
-        <
-            proto::matches<Xpr, XpressiveGrammar<Char> >
-          , mpl::true_
-          , expression_does_not_match_xpressive_grammar
-        >::type does_expression_match_xpressive_grammar;
-
-        BOOST_MPL_ASSERT((does_expression_match_xpressive_grammar));
-        return xpr;
-    }
-};
-
-///////////////////////////////////////////////////////////////////////////////
-/// \brief For checking if an expression matches xpressive's grammar
-///
-/// validate() can be used to see if a given expression is a valid narrow
-/// xpressive regular expression. If it is, it will simply return it.
-/// If it isn't, it will cause a simple and short compile-time error.
-/// You may use it as follows:
-///   sregex rx = validate( _ << "oops" );
-validator<char> const validate = {};
-
-///////////////////////////////////////////////////////////////////////////////
-/// \brief For checking if an expression matches xpressive's grammar
-///
-/// wvalidate() can be used to see if a given expression is a valid wide
-/// xpressive regular expression. If it is, it will simply return it.
-/// If it isn't, it will cause a simple and short compile-time error.
-/// You may use it as follows:
-///   wsregex rx = wvalidate( _ << L"oops" );
-validator<wchar_t> const wvalidate = {};
-
 namespace detail
 {
     inline void ignore_unused_regex_primitives()
@@ -739,8 +668,6 @@ namespace detail
         ignore_unused(s7);
         ignore_unused(s8);
         ignore_unused(s9);
-        ignore_unused(validate);
-        ignore_unused(wvalidate);
     }
 }
 

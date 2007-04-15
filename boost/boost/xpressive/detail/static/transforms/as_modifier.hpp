@@ -17,13 +17,28 @@
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/proto/proto.hpp>
-#include <boost/xpressive/proto/context.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
-
-#include <boost/xpressive/detail/static/productions/modify_compiler.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // regex operator tags
+    struct modifier_tag
+      : proto::tag::binary
+    {
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // scoped_swap
+    //  for swapping state back after proto::compile returns
+    template<typename Old, typename New>
+    struct scoped_swap
+    {
+        ~scoped_swap() { this->old_->swap(*this->new_); }
+        Old *old_;
+        New *new_;
+    };
 
     ///////////////////////////////////////////////////////////////////////////////
     // as_modifier

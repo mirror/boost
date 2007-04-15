@@ -17,8 +17,6 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
-#include <boost/xpressive/detail/static/transforms/fold_to_xxx.hpp>
-#include <boost/xpressive/detail/core/matcher/alternate_matcher.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {

@@ -17,7 +17,6 @@
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/proto/proto.hpp>
-#include <boost/xpressive/proto/context.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
 
 namespace boost { namespace xpressive { namespace detail

@@ -23,10 +23,8 @@
 #include <boost/xpressive/detail/core/adaptor.hpp>
 #include <boost/xpressive/detail/core/matcher/end_matcher.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
-#include <boost/xpressive/detail/static/productions/visitor.hpp>
-#include <boost/xpressive/detail/static/productions/domain_tags.hpp>
-
-//#include <boost/xpressive/detail/static/transforms/transform.hpp>
+#include <boost/xpressive/detail/static/visitor.hpp>
+#include <boost/xpressive/detail/static/grammar.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -36,14 +34,14 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Xpr, typename BidiIter, typename Traits>
     void static_compile_impl2(Xpr const &xpr, shared_ptr<regex_impl<BidiIter> > const &impl, Traits const &traits)
     {
+        typedef typename iterator_value<BidiIter>::type char_type;
         impl->tracking_clear();
         impl->traits_ = new traits_holder<Traits>(traits);
 
         // "compile" the regex and wrap it in an xpression_adaptor.
         xpression_visitor<BidiIter, mpl::false_, Traits> visitor(traits, impl);
         intrusive_ptr<matchable_ex<BidiIter> const> adxpr = make_adaptor<matchable_ex<BidiIter> >(
-            //detail::transform(xpr, visitor)
-            proto::compile(xpr, end_xpression(), visitor, seq_tag())
+            Grammar<char_type>::call(xpr, end_xpression(), visitor)
         );
 
         // Link and optimize the regex

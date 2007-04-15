@@ -18,7 +18,6 @@
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/detail/static/transforms/as_quantifier.hpp>
 #include <boost/xpressive/proto/proto.hpp>
-#include <boost/xpressive/proto/context.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
 
 namespace boost { namespace xpressive { namespace detail
@@ -68,7 +67,7 @@ namespace boost { namespace xpressive { namespace detail
             typedef typename apply_type::matcher_type matcher_type;
 
             typename apply_type::marked_expr_type marked_expr =
-                marker_transform::call(proto::left(expr), state, visitor);
+                InsertMark::call(proto::left(expr), state, visitor);
 
             typename apply_type::type that =
             {

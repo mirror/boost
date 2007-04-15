@@ -13,12 +13,14 @@
 # pragma once
 #endif
 
+#include <boost/mpl/assert.hpp>
 #include <boost/mpl/sizeof.hpp>
-#include <boost/xpressive/detail/detail_fwd.hpp>
-#include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/context.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
+#include <boost/xpressive/detail/detail_fwd.hpp>
+#include <boost/xpressive/detail/static/static.hpp>
+#include <boost/xpressive/detail/utility/chset/chset.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -64,7 +66,6 @@ namespace boost { namespace xpressive { namespace detail
     {
         explicit SetFillContext(Char *buf)
           : buffer(buf)
-          , index(0)
         {}
 
         typedef xpressive::detail::set_initializer result_type;
@@ -72,12 +73,11 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Tag, typename Left, typename Right>
         result_type operator()(Tag, Left const &left, Right const &ch)
         {
-            this->buffer[this->index++] = proto::arg(ch);
+            *this->buffer++ = proto::arg(ch);
             return proto::eval(left, *this);
         }
 
         Char *buffer;
-        int index;
     };
 
     template<typename Grammar>
@@ -103,6 +103,7 @@ namespace boost { namespace xpressive { namespace detail
             typename apply<Expr, State, Visitor>::type set(visitor.traits());
             SetFillContext<char_type> ctx(set.set_);
             proto::eval(expr, ctx);
+            BOOST_MPL_ASSERT((proto::matches<Expr, SetSize<char_type> >));
             int const size = SetSize<char_type>::template apply<Expr, State, Visitor>::type::value;
             for(int i = 0; i < size; ++i)
             {

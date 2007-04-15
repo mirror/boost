@@ -13,288 +13,275 @@
 # pragma once
 #endif
 
-#include <boost/mpl/or.hpp>
+#include <boost/mpl/if.hpp>
+#include <boost/mpl/bool.hpp>
 #include <boost/mpl/assert.hpp>
-#include <boost/xpressive/proto/proto_fwd.hpp>
-#include <boost/xpressive/proto/matches.hpp>
-#include <boost/xpressive/proto/traits.hpp>
+#include <boost/xpressive/proto/proto.hpp>
+#include <boost/xpressive/proto/transform/arg.hpp>
+#include <boost/xpressive/proto/transform/fold.hpp>
+#include <boost/xpressive/proto/transform/compose.hpp>
+#include <boost/xpressive/detail/static/transforms/as_matcher.hpp>
+#include <boost/xpressive/detail/static/transforms/as_alternate.hpp>
+#include <boost/xpressive/detail/static/transforms/as_sequence.hpp>
+#include <boost/xpressive/detail/static/transforms/as_quantifier.hpp>
+#include <boost/xpressive/detail/static/transforms/as_marker.hpp>
+#include <boost/xpressive/detail/static/transforms/as_set.hpp>
+#include <boost/xpressive/detail/static/transforms/as_independent.hpp>
+#include <boost/xpressive/detail/static/transforms/as_modifier.hpp>
+#include <boost/xpressive/detail/static/transforms/as_inverse.hpp>
+#include <boost/xpressive/detail/static/transforms/as_action.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 
-#ifdef BOOST_XPRESSIVE_BETTER_ERRORS
-# define BOOST_XPRESSIVE_CHECK_GRAMMAR(Expr, Char)\
-    BOOST_MPL_ASSERT((boost::proto::matches<Expr, boost::xpressive::XpressiveGrammar<Char> >))
-#else
-# define BOOST_XPRESSIVE_CHECK_GRAMMAR(Expr, Char)\
-    BOOST_MPL_ASSERT((mpl::true_))
-#endif
+#define BOOST_XPRESSIVE_CHECK_REGEX(Expr, Char)\
+    BOOST_MPL_ASSERT\
+    ((\
+        typename boost::mpl::if_<\
+            boost::xpressive::is_valid_regex<Expr, Char>\
+          , boost::mpl::true_\
+          , boost::xpressive::INVALID_REGULAR_EXPRESSION\
+        >::type\
+    ));
 
 namespace boost { namespace xpressive
-{
+{ 
+    template<typename Char>
+    struct Grammar;
+
     namespace detail
     {
-        // is_generic_repeat
-        template<typename T>
-        struct is_generic_repeat
-          : mpl::false_
-        {};
-
-        template<uint_t Min, uint_t Max>
-        struct is_generic_repeat<generic_quant_tag<Min, Max> >
-          : mpl::true_
-        {};
-
-        // is_xpressive_literal_impl
-        template<typename Char, typename T>
-        struct is_xpressive_literal_impl
-          : mpl::false_
-        {};
-
+        ///////////////////////////////////////////////////////////////////////////
+        // CharLiteral
         template<typename Char>
-        struct is_xpressive_literal_impl<Char, Char>
-          : mpl::true_
-        {};
+        struct CharLiteral;
 
+        ///////////////////////////////////////////////////////////////////////////
+        // ListSet
         template<typename Char>
-        struct is_xpressive_literal_impl<Char, Char const *>
-          : mpl::true_
-        {};
-
-        template<typename Char, std::size_t N>
-        struct is_xpressive_literal_impl<Char, Char (&)[N]>
-          : mpl::true_
-        {};
-
-        template<typename Char, std::size_t N>
-        struct is_xpressive_literal_impl<Char, Char const (&)[N]>
-          : mpl::true_
-        {};
-
-        template<typename Char>
-        struct is_xpressive_literal_impl<Char, not_literal_placeholder<Char> >
-          : mpl::true_
-        {};
-
-        template<typename Char, typename Traits, typename Alloc>
-        struct is_xpressive_literal_impl<Char, std::basic_string<Char, Traits, Alloc> >
-          : mpl::true_
-        {};
-
-        // is_xpressive_literal
-        template<typename Char, typename T>
-        struct is_xpressive_literal
-          : mpl::or_<
-                is_xpressive_literal_impl<Char, T>
-              , is_xpressive_literal_impl<char, T>
+        struct ListSet
+          : proto::or_<
+                proto::comma<ListSet<Char>, CharLiteral<Char> >
+              , proto::assign<set_initializer_type, CharLiteral<Char> >
             >
         {};
 
-        template<typename T>
-        struct is_xpressive_literal<char, T>
-          : is_xpressive_literal_impl<char, T>
-        {};
-
-        // is_xpressive_terminal
-        template<typename Char, typename T>
-        struct is_xpressive_terminal
-          : is_xpressive_literal<Char, T>
-        {};
-
-        template<typename Char>
-        struct is_xpressive_terminal<Char, posix_charset_placeholder>
-          : mpl::true_
-        {};
-
-        template<typename Char>
-        struct is_xpressive_terminal<Char, assert_bos_matcher>
-          : mpl::true_
-        {};
-
-        template<typename Char>
-        struct is_xpressive_terminal<Char, assert_eos_matcher>
-          : mpl::true_
-        {};
-
-        template<typename Char>
-        struct is_xpressive_terminal<Char, epsilon_matcher>
-          : mpl::true_
-        {};
-
-        template<typename Char>
-        struct is_xpressive_terminal<Char, assert_bol_placeholder>
-          : mpl::true_
-        {};
-
-        template<typename Char>
-        struct is_xpressive_terminal<Char, assert_eol_placeholder>
-          : mpl::true_
-        {};
-
-        template<typename Char, typename Cond>
-        struct is_xpressive_terminal<Char, assert_word_placeholder<Cond> >
-          : mpl::true_
-        {};
-
-        template<typename Char>
-        struct is_xpressive_terminal<Char, logical_newline_placeholder>
-          : mpl::true_
-        {};
-
-        template<typename Char>
-        struct is_xpressive_terminal<Char, any_matcher>
-          : mpl::true_
-        {};
-
-        template<typename Char>
-        struct is_xpressive_terminal<Char, self_placeholder>
-          : mpl::true_
-        {};
-
-        template<typename Char>
-        struct is_xpressive_terminal<Char, mark_placeholder>
-          : mpl::true_
-        {};
-
-        template<typename Char>
-        struct is_xpressive_terminal<Char, range_placeholder<Char> >
-          : mpl::true_
-        {};
-
-        template<typename Char, typename BidiIter>
-        struct is_xpressive_terminal<Char, regex_byref_placeholder<BidiIter> >
-          : mpl::true_
-        {};
-
-        template<typename Char, typename BidiIter>
-        struct is_xpressive_terminal<Char, tracking_ptr<regex_impl<BidiIter> > >
-          : mpl::true_
-        {};
-    }
-
-    template<typename Char>
-    struct XpressiveGrammar;
-
-    template<typename Char>
-    struct XpressiveListSet
-      : proto::or_<
-            proto::comma< XpressiveListSet<Char>, proto::terminal<Char> >
-          , proto::comma< XpressiveListSet<Char>, proto::terminal<char> >
-          , proto::assign<detail::set_initializer_type, proto::terminal<Char> >
-          , proto::assign<detail::set_initializer_type, proto::terminal<char> >
-        >
-    {};
-
-    template<>
-    struct XpressiveListSet<char>
-      : proto::or_<
-            proto::comma< XpressiveListSet<char>, proto::terminal<char> >
-          , proto::assign<detail::set_initializer_type, proto::terminal<char> >
-        >
-    {};
-
-    template<typename Char>
-    struct XpressiveSet
-      : proto::or_<
-            proto::subscript<detail::set_initializer_type, XpressiveGrammar<Char> >
-          , XpressiveListSet<Char>
-        >
-    {};
-
-    template<typename Char>
-    struct XpressiveTaggedSubExpression
-      : proto::assign< detail::basic_mark_tag, XpressiveGrammar<Char> >
-    {};
-
-    template<typename Char>
-    struct XpressiveLookAroundAssertion
-      : proto::or_<
-            proto::unary_expr<detail::lookahead_tag<true>, XpressiveGrammar<Char> >
-          , proto::unary_expr<detail::lookbehind_tag<true>, XpressiveGrammar<Char> >
-        >
-    {};
-
-    template<typename Char>
-    struct XpressiveIndependentSubExpression
-      : proto::unary_expr<detail::keeper_tag, XpressiveGrammar<Char> >
-    {};
-
-    template<typename Char>
-    struct XpressiveModifiedSubExpression
-      : proto::binary_expr<detail::modifier_tag, proto::_, XpressiveGrammar<Char> >
-    {};
-
-    template<typename Char>
-    struct XpressiveComplementedCharacterLiteral
-      : proto::or_<
-            proto::complement<proto::terminal<detail::not_literal_placeholder<Char> > >
-          , proto::complement<proto::terminal<detail::not_literal_placeholder<char> > >
-        >
-    {};
-
-    template<>
-    struct XpressiveComplementedCharacterLiteral<char>
-      : proto::complement<proto::terminal<detail::not_literal_placeholder<char> > >
-    {};
-
-    template<typename Char>
-    struct XpressiveComplementedExpression
-      : proto::and_<
-            proto::complement<proto::_>
-          , proto::or_<
-                proto::complement<proto::terminal<detail::posix_charset_placeholder> >
-              , proto::complement<proto::terminal<detail::logical_newline_placeholder> >
-              , XpressiveComplementedCharacterLiteral<Char>
-              , proto::complement<XpressiveSet<Char> >
-              , proto::complement<XpressiveLookAroundAssertion<Char> >
+        ///////////////////////////////////////////////////////////////////////////
+        // as_repeat
+        template<typename Char, typename Tag, bool Greedy>
+        struct as_repeat
+          : proto::trans::conditional<
+                use_simple_repeat<proto::result_of::arg<mpl::_> >
+              , as_simple_quantifier<proto::unary_expr<Tag, Grammar<Char> >, Greedy>
+              , as_default_quantifier<proto::unary_expr<Tag, Grammar<Char> >, Greedy>
             >
-        >
-    {};
+        {};
 
+        ///////////////////////////////////////////////////////////////////////////
+        // NonGreedyRepeatCases
+        template<typename Char>
+        struct NonGreedyRepeatCases
+        {
+            template<typename Tag, typename Dummy = void>
+            struct case_
+              : proto::not_<proto::_>
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::unary_star, Dummy>
+              : as_repeat<Char, proto::tag::unary_star, false>
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::unary_plus, Dummy>
+              : as_repeat<Char, proto::tag::unary_plus, false>
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::logical_not, Dummy>
+              : as_repeat<Char, proto::tag::logical_not, false>
+            {};
+
+            template<uint_t Min, uint_t Max, typename Dummy>
+            struct case_<generic_quant_tag<Min, Max>, Dummy>
+              : as_repeat<Char, generic_quant_tag<Min, Max>, false>
+            {};
+        };
+
+        ///////////////////////////////////////////////////////////////////////////
+        // InvertibleCases
+        template<typename Char>
+        struct InvertibleCases
+        {
+            template<typename Tag, typename Dummy = void>
+            struct case_
+              : proto::not_<proto::_>
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::comma, Dummy>
+              : as_list_set<ListSet<Char> >
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::assign, Dummy>
+              : as_list_set<ListSet<Char> >
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::subscript, Dummy>
+              : proto::trans::right<proto::subscript<set_initializer_type, as_set<Grammar<Char> > > >
+            {};
+
+            template<typename Dummy>
+            struct case_<lookahead_tag<true>, Dummy>
+              : proto::trans::arg<proto::unary_expr<lookahead_tag<true>, as_lookahead<Grammar<Char> > > >
+            {};
+
+            template<typename Dummy>
+            struct case_<lookbehind_tag<true>, Dummy>
+              : proto::trans::arg<proto::unary_expr<lookbehind_tag<true>, as_lookbehind<Grammar<Char> > > >
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::terminal, Dummy>
+              : proto::or_<
+                    as_matcher<CharLiteral<Char> >
+                  , as_matcher<proto::terminal<posix_charset_placeholder> >
+                  , as_matcher<proto::terminal<range_placeholder<proto::_> > >
+                  , as_matcher<proto::terminal<logical_newline_placeholder> >
+                  , as_matcher<proto::terminal<assert_word_placeholder<word_boundary<true> > > >
+                >
+            {};
+        };
+
+        ///////////////////////////////////////////////////////////////////////////
+        // Cases
+        template<typename Char>
+        struct Cases
+        {
+            template<typename Tag, typename Dummy = void>
+            struct case_
+              : proto::not_<proto::_>
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::right_shift, Dummy>
+              : proto::trans::reverse_fold<proto::right_shift<Grammar<Char>, Grammar<Char> > >
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::terminal, Dummy>
+              : in_sequence<as_matcher<proto::terminal<proto::_> > >
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::bitwise_or, Dummy>
+              : in_sequence<as_alternate<proto::bitwise_or<Grammar<Char>, Grammar<Char> > > >
+            {};
+
+            template<typename Dummy, bool Greedy>
+            struct case_<optional_tag<Greedy> , Dummy>
+              : in_sequence<proto::trans::arg<proto::unary_expr<optional_tag<Greedy>, as_optional<Grammar<Char>, Greedy> > > >
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::unary_star, Dummy>
+              : proto::trans::compose<as_repeat<Char, proto::tag::unary_star, true>, Grammar<Char> >
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::unary_plus, Dummy>
+              : proto::trans::compose<as_repeat<Char, proto::tag::unary_plus, true>, Grammar<Char> >
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::logical_not, Dummy>
+              : proto::trans::compose<as_repeat<Char, proto::tag::logical_not, true>, Grammar<Char> >
+            {};
+
+            template<uint_t Min, uint_t Max, typename Dummy>
+            struct case_<generic_quant_tag<Min, Max> , Dummy>
+              : proto::trans::compose<as_repeat<Char, generic_quant_tag<Min, Max>, true>, Grammar<Char> >
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::unary_minus, Dummy>
+              : proto::trans::compose<
+                    proto::trans::arg<proto::unary_minus<proto::switch_<NonGreedyRepeatCases<Char> > > >
+                  , Grammar<Char>
+                >
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::complement, Dummy>
+              : in_sequence<as_inverse<
+                    proto::trans::arg<proto::complement<proto::switch_<InvertibleCases<Char> > > >
+                > >
+            {};
+
+            template<typename Dummy>
+            struct case_<modifier_tag, Dummy>
+              : as_modifier<proto::binary_expr<modifier_tag, proto::_, Grammar<Char> > >
+            {};
+
+            template<typename Dummy>
+            struct case_<lookahead_tag<true> , Dummy>
+              : in_sequence<proto::trans::arg<proto::unary_expr<lookahead_tag<true>, as_lookahead<Grammar<Char> > > > >
+            {};
+
+            template<typename Dummy>
+            struct case_<lookbehind_tag<true> , Dummy>
+              : in_sequence<proto::trans::arg<proto::unary_expr<lookbehind_tag<true>, as_lookbehind<Grammar<Char> > > > >
+            {};
+
+            template<typename Dummy>
+            struct case_<keeper_tag, Dummy>
+              : in_sequence<proto::trans::arg<proto::unary_expr<keeper_tag, as_keeper<Grammar<Char> > > > >
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::comma, Dummy>
+              : in_sequence<as_list_set<ListSet<Char> > >
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::assign, Dummy>
+              : proto::or_<
+                    proto::trans::compose<as_marker<proto::assign<basic_mark_tag, Grammar<Char> > >, Grammar<Char> >
+                  , in_sequence<as_list_set<ListSet<Char> > >
+                >
+            {};
+
+            template<typename Dummy>
+            struct case_<proto::tag::subscript, Dummy>
+              : proto::or_<
+                    in_sequence<proto::trans::right<proto::subscript<set_initializer_type, as_set<Grammar<Char> > > > >
+                  , proto::trans::compose<as_action<proto::subscript<Grammar<Char>, proto::_> >, Grammar<Char> >
+                >
+            {};
+        };
+
+    } // namespace detail
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Grammar
     template<typename Char>
-    struct XpressiveAction
-      : proto::subscript< XpressiveGrammar<Char>, proto::_ >
+    struct Grammar
+      : proto::switch_<detail::Cases<Char> >
     {};
 
-    template<typename Char>
-    struct XpressiveTerminal
-      : proto::or_<
-            proto::and_<
-                proto::terminal<proto::_>
-              , proto::if_<detail::is_xpressive_terminal<Char, proto::result_of::arg<mpl::_> > >
-            >
-          , XpressiveComplementedExpression<Char>
-          , XpressiveTaggedSubExpression<Char>
-          , XpressiveLookAroundAssertion<Char>
-          , XpressiveModifiedSubExpression<Char>
-          , XpressiveIndependentSubExpression<Char>
-          , XpressiveSet<Char>
-          , XpressiveAction<Char>
-        >
+    ///////////////////////////////////////////////////////////////////////////
+    // INVALID_REGULAR_EXPRESSION
+    struct INVALID_REGULAR_EXPRESSION
+      : mpl::false_
     {};
 
-    template<typename Char>
-    struct XpressiveQuantified
-      : proto::and_<
-            proto::unary_expr<proto::_, XpressiveGrammar<Char> >
-          , proto::or_<
-                proto::unary_star< proto::_ >
-              , proto::unary_plus< proto::_ >
-              , proto::logical_not< proto::_ >
-              , proto::if_<detail::is_generic_repeat<proto::tag_of<mpl::_> > >
-            >
-        >
+    ///////////////////////////////////////////////////////////////////////////
+    // is_valid_regex
+    template<typename Expr, typename Char>
+    struct is_valid_regex
+      : proto::matches<Expr, Grammar<Char> >
     {};
 
-    template<typename Char>
-    struct XpressiveGrammar
-      : proto::or_<
-            proto::right_shift< XpressiveGrammar<Char>, XpressiveGrammar<Char> >
-          , proto::bitwise_or< XpressiveGrammar<Char>, XpressiveGrammar<Char> >
-          , proto::unary_minus< XpressiveQuantified<Char> >
-          , XpressiveQuantified<Char>
-          , XpressiveTerminal<Char>
-        >
-    {};
-
-}}
+}} // namespace boost::xpressive
 
 #endif

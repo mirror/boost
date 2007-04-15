@@ -5,8 +5,8 @@
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_XPRESSIVE_DETAIL_STATIC_PRODUCTIONS_VISITOR_HPP_EAN_10_04_2005
-#define BOOST_XPRESSIVE_DETAIL_STATIC_PRODUCTIONS_VISITOR_HPP_EAN_10_04_2005
+#ifndef BOOST_XPRESSIVE_DETAIL_STATIC_VISITOR_HPP_EAN_10_04_2005
+#define BOOST_XPRESSIVE_DETAIL_STATIC_VISITOR_HPP_EAN_10_04_2005
 
 // MS compatible compilers support #pragma once
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
@@ -17,7 +17,7 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/regex_impl.hpp>
-#include <boost/xpressive/detail/static/productions/transmogrify.hpp>
+#include <boost/xpressive/detail/static/transmogrify.hpp>
 #include <boost/xpressive/detail/core/matcher/mark_begin_matcher.hpp>
 
 namespace boost { namespace xpressive { namespace detail

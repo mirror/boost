@@ -17,7 +17,6 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
-#include <boost/xpressive/detail/static/transforms/fold_to_xxx.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -47,22 +46,6 @@ namespace boost { namespace xpressive { namespace detail
             );
         }
     };
-
-    //template<typename Grammar>
-    //struct as_sequence
-    //  : reverse_fold_to_xxx<
-    //        typename Grammar::tag_type
-    //      , typename Grammar::arg0_type
-    //      , in_sequence
-    //    >
-    //{
-    //    BOOST_MPL_ASSERT((
-    //        is_same<
-    //            typename Grammar::arg0_type
-    //          , typename Grammar::arg1_type
-    //        >
-    //    ));
-    //};
 
 }}}
 

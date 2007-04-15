@@ -84,7 +84,8 @@ public:
     basic_regex(Expr const &expr)
       : base_type()
     {
-        this->operator =(expr);
+        BOOST_XPRESSIVE_CHECK_REGEX(Expr, char_type);
+        this->compile_(expr, is_valid_regex<Expr, char_type>());
     }
 
     /// Construct from a static regular expression.
@@ -98,8 +99,8 @@ public:
     template<typename Expr>
     basic_regex<BidiIter> &operator =(Expr const &expr)
     {
-        BOOST_XPRESSIVE_CHECK_GRAMMAR(Expr, char_type);
-        detail::static_compile(expr, proto::arg(*this).get());
+        BOOST_XPRESSIVE_CHECK_REGEX(Expr, char_type);
+        this->compile_(expr, is_valid_regex<Expr, char_type>());
         return *this;
     }
 
@@ -176,6 +177,21 @@ private:
     bool invalid_() const
     {
         return !proto::arg(*this) || !proto::arg(*this)->xpr_;
+    }
+
+    // Compiles valid static regexes into a state machine.
+    /// INTERNAL ONLY
+    template<typename Expr>
+    void compile_(Expr const &expr, mpl::true_)
+    {
+        detail::static_compile(expr, proto::arg(*this).get());
+    }
+
+    // No-op for invalid static regexes.
+    /// INTERNAL ONLY
+    template<typename Expr>
+    void compile_(Expr const &expr, mpl::false_)
+    {
     }
 
     /// INTERNAL ONLY

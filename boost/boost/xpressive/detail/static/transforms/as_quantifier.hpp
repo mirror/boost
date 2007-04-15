@@ -17,20 +17,48 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
-#include <boost/xpressive/detail/static/transforms/fold_to_xxx.hpp>
-#include <boost/xpressive/detail/core/matcher/alternate_matcher.hpp>
-#include <boost/xpressive/detail/utility/cons.hpp>
-#include <boost/xpressive/proto/transform/branch.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
 #include <boost/xpressive/proto/transform/compose.hpp>
 #include <boost/xpressive/proto/transform/conditional.hpp>
 
-// BUGBUG move quant traits here
-#include <boost/xpressive/detail/static/productions/quant_traits.hpp>
-#include <boost/xpressive/detail/static/productions/quant_transforms.hpp>
-
 namespace boost { namespace xpressive { namespace detail
 {
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // generic_quant_tag
+    template<uint_t Min, uint_t Max>
+    struct generic_quant_tag
+      : proto::tag::unary
+    {
+        typedef mpl::integral_c<uint_t, Min> min_type;
+        typedef mpl::integral_c<uint_t, Max> max_type;
+    };
+
+    ///////////////////////////////////////////////////////////////////////////////
+    // min_type / max_type
+    template<typename Tag>
+    struct min_type : Tag::min_type {};
+
+    template<>
+    struct min_type<proto::tag::unary_plus> : mpl::integral_c<uint_t, 1> {};
+
+    template<>
+    struct min_type<proto::tag::unary_star> : mpl::integral_c<uint_t, 0> {};
+
+    template<>
+    struct min_type<proto::tag::logical_not> : mpl::integral_c<uint_t, 0> {};
+
+    template<typename Tag>
+    struct max_type : Tag::max_type {};
+
+    template<>
+    struct max_type<proto::tag::unary_plus> : mpl::integral_c<uint_t, UINT_MAX-1> {};
+
+    template<>
+    struct max_type<proto::tag::unary_star> : mpl::integral_c<uint_t, UINT_MAX-1> {};
+
+    template<>
+    struct max_type<proto::tag::logical_not> : mpl::integral_c<uint_t, 1> {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // as_simple_quantifier
