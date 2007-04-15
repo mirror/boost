@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// misc1.hpp
+// misc2.hpp
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
@@ -19,8 +19,10 @@ void test_complement()
     sregex rx1 = ~_n >> ~(set='a') >> ~(set='a','b') >> ~set['a'] >> ~_ln
         >> ~before('a') >> ~after('a') >> ~alpha >> ~range('a','b') >> ~_b >> ~as_xpr('a');
 
+#ifndef BOOST_XPRESSIVE_NO_WREGEX
     wsregex rx2 = ~_n >> ~(set=L'a') >> ~(set=L'a',L'b') >> ~set[L'a'] >> ~_ln
         >> ~before(L'a') >> ~after(L'a') >> ~alpha >> ~range(L'a',L'b') >> ~_b >> ~as_xpr(L'a');
+#endif
 }
 
 ///////////////////////////////////////////////////////////////////////////////
