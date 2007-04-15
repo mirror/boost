@@ -184,22 +184,4 @@ inline void display_type(T const &)
     display_type2<T>();
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// test_compile
-//  try to compile a given static regular expression
-template<typename BidiIter, typename Xpr>
-inline void test_compile(Xpr const &xpr)
-{
-    typedef typename boost::iterator_value<BidiIter>::type char_type;
-    typedef boost::xpressive::regex_traits<char_type> traits_type;
-    boost::xpressive::detail::xpression_visitor<BidiIter, boost::mpl::false_, traits_type> visitor;
-
-    display_type(boost::proto::compile(
-        xpr
-      , boost::xpressive::detail::end_xpression()
-      , visitor
-      , boost::xpressive::detail::seq_tag()
-    ));
-}
-
 #endif
