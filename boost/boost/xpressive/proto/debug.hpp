@@ -107,29 +107,6 @@ namespace boost { namespace proto
                 this->first_ = false;
             }
 
-            template<typename Tag, typename Args>
-            void operator()(expr<Tag, Args, 1> const &expr) const
-            {
-                this->sout_ << std::setw(this->depth_) << (this->first_? "" : ", ")
-                    << proto_tag_name(Tag()) << "(\n";
-                display_expr display(this->depth_ + 4, this->sout_);
-                display(proto::arg(expr));
-                this->sout_ << std::setw(this->depth_) << "" << ")\n";
-                this->first_ = false;
-            }
-
-            template<typename Tag, typename Args>
-            void operator()(expr<Tag, Args, 2> const &expr) const
-            {
-                this->sout_ << std::setw(this->depth_) << (this->first_? "" : ", ")
-                    << proto_tag_name(Tag()) << "(\n";
-                display_expr display(this->depth_ + 4, this->sout_);
-                display(proto::left(expr));
-                display(proto::right(expr));
-                this->sout_ << std::setw(this->depth_) << "" << ")\n";
-                this->first_ = false;
-            }
-
         #define BOOST_PROTO_ARG(z, n, data)\
             display(proto::arg_c<n>(expr));\
             /**/
@@ -147,7 +124,7 @@ namespace boost { namespace proto
             }\
             /**/
 
-        #define BOOST_PP_LOCAL_LIMITS (3, BOOST_PROTO_MAX_ARITY)
+        #define BOOST_PP_LOCAL_LIMITS (1, BOOST_PROTO_MAX_ARITY)
         #include BOOST_PP_LOCAL_ITERATE()
         #undef BOOST_PROTO_ARG
 
