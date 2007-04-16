@@ -28,6 +28,7 @@
     #include <boost/utility/result_of.hpp>
     #include <boost/type_traits/is_const.hpp>
     #include <boost/type_traits/is_function.hpp>
+    #include <boost/type_traits/remove_cv.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/tags.hpp>
     #include <boost/xpressive/proto/eval.hpp>
@@ -388,10 +389,13 @@
         private:
             /// INTERNAL ONLY
             ///
-            struct inner_context : Context
+            typedef typename remove_cv<Context>::type context_type;
+            /// INTERNAL ONLY
+            ///
+            struct inner_context
+              : context_type
             {
                 inner_context();
-                using Context::operator ();
                 struct private_type_ { private_type_ const &operator,(int) const { return *this; } };
                 typedef private_type_ const &(*pointer_to_function)(BOOST_PP_ENUM_PARAMS(BOOST_PP_INC(N), detail::dont_care BOOST_PP_INTERCEPT));
                 operator pointer_to_function() const;

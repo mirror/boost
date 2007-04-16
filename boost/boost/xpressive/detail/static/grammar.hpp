@@ -57,12 +57,7 @@ namespace boost { namespace xpressive
         ///////////////////////////////////////////////////////////////////////////
         // ListSet
         template<typename Char>
-        struct ListSet
-          : proto::or_<
-                proto::comma<ListSet<Char>, CharLiteral<Char> >
-              , proto::assign<set_initializer_type, CharLiteral<Char> >
-            >
-        {};
+        struct ListSet;
 
         ///////////////////////////////////////////////////////////////////////////
         // as_repeat

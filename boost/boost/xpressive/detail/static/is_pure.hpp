@@ -13,7 +13,7 @@
 # pragma once
 #endif
 
-#include <boost/static_assert.hpp>
+#include <boost/mpl/and.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
@@ -22,7 +22,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // equivalent to mpl::and_<X, Y>
 #define BOOST_XPR_AND_PURE_(X, Y)                                                                   \
-    mpl::bool_<X::value && Y::value>
+    mpl::and_<X, Y >
 
 namespace boost { namespace xpressive { namespace detail
 {

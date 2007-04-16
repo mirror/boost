@@ -13,8 +13,13 @@
 # pragma once
 #endif
 
+#include <boost/mpl/if.hpp>
+#include <boost/mpl/or.hpp>
+#include <boost/mpl/plus.hpp>
+#include <boost/mpl/times.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/size_t.hpp>
+#include <boost/mpl/equal_to.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/proto/traits.hpp>
@@ -22,32 +27,29 @@
 ///////////////////////////////////////////////////////////////////////////////
 // add widths
 #define BOOST_XPR_ADD_WIDTH_(X, Y)                                                                  \
-    mpl::size_t                                                                                     \
-    <                                                                                               \
-        X::value == unknown_width::value || Y::value == unknown_width::value                        \
-      ? unknown_width::value                                                                        \
-      : X::value + Y::value                                                                         \
-    >
+    mpl::if_<                                                                                       \
+        mpl::or_<mpl::equal_to<X, unknown_width>, mpl::equal_to<Y, unknown_width> >                 \
+      , unknown_width                                                                               \
+      , mpl::plus<X, Y >                                                                            \
+    >::type
 
 ///////////////////////////////////////////////////////////////////////////////
 // multiply widths
 #define BOOST_XPR_MULT_WIDTH_(X, Y)                                                                 \
-    mpl::size_t                                                                                     \
-    <                                                                                               \
-        X::value == unknown_width::value || Y::value == unknown_width::value                        \
-      ? unknown_width::value                                                                        \
-      : X::value * Y::value                                                                         \
-    >
+    mpl::if_<                                                                                       \
+        mpl::or_<mpl::equal_to<X, unknown_width>, mpl::equal_to<Y, unknown_width> >                 \
+      , unknown_width                                                                               \
+      , mpl::times<X, Y >                                                                           \
+    >::type
 
 ///////////////////////////////////////////////////////////////////////////////
 // check widths for equality
 #define BOOST_XPR_EQUAL_WIDTH_(X, Y)                                                                \
-    mpl::size_t                                                                                     \
-    <                                                                                               \
-        X::value == Y::value                                                                        \
-      ? X::value                                                                                    \
-      : unknown_width::value                                                                        \
-    >
+    mpl::if_<                                                                                       \
+        mpl::equal_to<X, Y >                                                                        \
+      , X                                                                                           \
+      , unknown_width                                                                               \
+    >::type
 
 namespace boost { namespace xpressive { namespace detail
 {

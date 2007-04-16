@@ -41,14 +41,14 @@ namespace boost { namespace proto
             {};
 
             template<typename Expr, typename Context>
-            typename Context::template eval<Expr>::result_type
+            typename proto::result_of::eval<Expr, Context>::type
             operator ()(Expr &expr, Context &context) const
             {
                 return typename Context::template eval<Expr>()(expr, context);
             }
 
             template<typename Expr, typename Context>
-            typename Context::template eval<Expr>::result_type
+            typename proto::result_of::eval<Expr, Context>::type
             operator ()(Expr &expr, Context const &context) const
             {
                 return typename Context::template eval<Expr>()(expr, context);

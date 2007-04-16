@@ -26,7 +26,7 @@ namespace boost { namespace xpressive { namespace detail
 {
 
     template<typename Grammar>
-    struct increment
+    struct next
       : Grammar
     {
         template<typename Expr, typename State, typename Visitor>
@@ -51,11 +51,11 @@ namespace boost { namespace xpressive { namespace detail
     {};
 
     ///////////////////////////////////////////////////////////////////////////
-    // SetSize
+    // ListSet
     template<typename Char>
-    struct SetSize
+    struct ListSet
       : proto::or_<
-            increment<proto::trans::left<proto::comma<SetSize<Char>, CharLiteral<Char> > > >
+            next<proto::trans::left<proto::comma<ListSet<Char>, CharLiteral<Char> > > >
           , proto::trans::always<proto::assign<set_initializer_type, CharLiteral<Char> >, mpl::int_<1> >
         >
     {};
@@ -91,7 +91,7 @@ namespace boost { namespace xpressive { namespace detail
         {
             typedef set_matcher<
                 typename Visitor::traits_type
-              , SetSize<typename Visitor::char_type>::template apply<Expr, State, Visitor>::type::value
+              , Grammar::template apply<Expr, State, Visitor>::type::value
             > type;
         };
 
@@ -103,8 +103,7 @@ namespace boost { namespace xpressive { namespace detail
             typename apply<Expr, State, Visitor>::type set(visitor.traits());
             SetFillContext<char_type> ctx(set.set_);
             proto::eval(expr, ctx);
-            BOOST_MPL_ASSERT((proto::matches<Expr, SetSize<char_type> >));
-            int const size = SetSize<char_type>::template apply<Expr, State, Visitor>::type::value;
+            int const size = Grammar::template apply<Expr, State, Visitor>::type::value;
             for(int i = 0; i < size; ++i)
             {
                 set.set_[i] = visitor.traits().translate(set.set_[i]);
