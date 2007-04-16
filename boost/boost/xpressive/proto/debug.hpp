@@ -118,7 +118,7 @@ namespace boost { namespace proto
                 this->sout_ << std::setw(this->depth_) << (this->first_? "" : ", ")\
                     << proto_tag_name(Tag()) << "(\n";\
                 display_expr display(this->depth_ + 4, this->sout_);\
-                BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, BOOST_PROTO_ARG, _)\
+                BOOST_PP_REPEAT(N, BOOST_PROTO_ARG, _)\
                 this->sout_ << std::setw(this->depth_) << "" << ")\n";\
                 this->first_ = false;\
             }\
