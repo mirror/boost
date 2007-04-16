@@ -401,30 +401,6 @@
                 operator pointer_to_function() const;
             };
 
-            /// INTERNAL ONLY
-            ///
-            struct has_proper_function_overload
-            {
-                static inner_context &sprivate_;
-                static Expr &sexpr_;
-                typedef char yes_type;
-                typedef char (&no_type)[2];
-                template<typename T> static yes_type check(T const &);
-                static no_type check(typename inner_context::private_type_ const &);
-                BOOST_STATIC_CONSTANT(bool, value =
-                    (
-                        sizeof(yes_type) ==
-                        sizeof(
-                            check(
-                                (sprivate_(
-                                    typename Expr::tag_type()
-                                    BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_ARG_N, sexpr_)
-                                ), 0)
-                            )
-                    )));
-                typedef mpl::bool_<value> type;
-            };
-
         public:
             typedef
                 typename boost::result_of<
@@ -437,12 +413,27 @@
 
             result_type operator ()(Expr &expr, Context &context) const
             {
-                return (*this)(expr, context, typename has_proper_function_overload::type());
+                BOOST_STATIC_CONSTANT(bool, value =
+                    (
+                        sizeof(yes_type) ==
+                        sizeof(
+                            callable_eval::check(
+                                (static_cast<inner_context &>(const_cast<context_type &>(context))(
+                                    typename Expr::tag_type()
+                                    BOOST_PP_ENUM_TRAILING(N, BOOST_PROTO_ARG_N, expr)
+                                ), 0)
+                            )
+                    )));
+                return (*this)(expr, context, mpl::bool_<value>());
             }
 
         private:
-            /// INTERNAL ONLY
-            ///
+
+            typedef char yes_type;
+            typedef char (&no_type)[2];
+            template<typename T> static yes_type check(T const &);
+            static no_type check(typename inner_context::private_type_ const &);
+
             result_type operator ()(Expr &expr, Context &context, mpl::true_) const
             {
                 return context(
@@ -451,8 +442,6 @@
                 );
             }
 
-            /// INTERNAL ONLY
-            ///
             result_type operator ()(Expr &expr, Context &context, mpl::false_) const
             {
                 return default_eval<Expr, Context>()(expr, context);
