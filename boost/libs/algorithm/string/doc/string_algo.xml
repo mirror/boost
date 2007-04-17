@@ -44,7 +44,7 @@
     <xi:include href="quickref.xml"/>
     <xi:include href="design.xml"/>
     <xi:include href="concept.xml"/>
-    <xi:include href="autodoc.boostbook"/>
+    <xi:include href="autodoc.xml"/>
     <xi:include href="rationale.xml"/>
     <xi:include href="environment.xml"/>
     <xi:include href="credits.xml"/>
