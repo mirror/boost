@@ -221,7 +221,6 @@ Here is the code. It is described below.
         {
             typedef typename proto::result_of::arg<Expr>::type::value_type result_type;
 
-            template<typename Expr>
             result_type operator()( Expr const & expr, lazy_subscript_context & ctx ) const
             {
                 return proto::arg( expr )[ ctx.subscript_ ];
@@ -260,7 +259,7 @@ Here is the code. It is described below.
         typedef typename proto::terminal< std::vector<T> >::type expr_type;
 
         lazy_vector( std::size_t size = 0, T const & value = T() )
-          : lazy_vector_expr( expr_type::make( std::vector<T>( size, value ) ) )
+          : lazy_vector_expr<expr_type>( expr_type::make( std::vector<T>( size, value ) ) )
         {}
 
         template< typename Expr >
@@ -305,19 +304,26 @@ following:
     double d1 = ( v2 + v3 )[ 2 ];   // Look ma, no temporaries!
 
     // Subtract two vectors and add the result to a third vector.
-    v1 += v2 - v3;                  // Still no temporaries!
+    v1 += v2 - v3;                  // Hmm, trouble here.
 
-    // But what does this do?
+    // What does this do?
     (v2 + v3) += v1;
 
-The last line is clearly a bug. It is nonsensical to add two vectors and then
-assign to the result. But strangely, this code compiles! And even more
-strangely, it had no effect! It is building an expression template and then
+The line `v1 += v2 - v3` is somewhat ambiguous. Clearly we want it to use the
+`lazy_vector<>::operator+=` we defined above, but it could also mean to
+construct an even larger expression template using proto's `operator+=`. At
+least one compiler actually believes the call to be ambiguous! We have to tell
+the compiler which.
+
+And the last line is clearly a bug. It is nonsensical to add two vectors and
+then assign /to/ the result. But strangely, this line of code compiles! And even
+more strangely, it has no effect! It is building an expression template and then
 discarding it. We would like this to be a compile error, instead. We can make
-it an error by disabling Proto's `operator+=` overload, and all the other
-overloaded operators that don't make sense in our domain. To do that, we define
-the grammar for our domain. Let's say we want to allow addition and subtraction
-of our vector terminals. Our grammar looks like this:
+it an error, and solve the ambiguity problem, by disabling Proto's `operator+=`
+overload, and all the other overloaded operators that don't make sense in our
+domain. To do that, we define the grammar for our domain. Let's say we want to
+allow addition and subtraction of our vector terminals. Our grammar looks like
+this:
 
     using proto::_;
 
@@ -341,7 +347,7 @@ as:
       : proto::domain< LazyVectorGrammar >
     {};
 
-And that's it! Now, all operators that do not produce valid lazy-vector
+And that's it! Now, all operators that do not produce valid lazy vector
 expressions are automatically disabled.
 
 [endsect]
