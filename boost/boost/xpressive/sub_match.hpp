@@ -58,6 +58,8 @@ struct sub_match
   : std::pair<BidiIter, BidiIter>
 {
 private:
+    /// INTERNAL ONLY
+    ///
     struct dummy { int i_; };
     typedef int dummy::*bool_type;
 

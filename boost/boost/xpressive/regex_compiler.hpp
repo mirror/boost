@@ -81,7 +81,7 @@ struct regex_compiler
     // getloc
     /// Get the locale used by a regex_compiler.
     ///
-    /// \param loc The locale that this regex_compiler uses.
+    /// \return The locale used by this regex_compiler.
     locale_type getloc() const
     {
         return this->traits_.getloc();

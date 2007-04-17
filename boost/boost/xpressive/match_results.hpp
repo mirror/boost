@@ -226,6 +226,8 @@ template<typename BidiIter>
 struct match_results
 {
 private:
+    /// INTERNAL ONLY
+    ///
     struct dummy { int i_; };
     typedef int dummy::*bool_type;
 
@@ -337,8 +339,8 @@ public:
     }
 
     /// If !(*this)[sub].matched then returns -1. Otherwise returns std::distance(base, (*this)[sub].first),
-    /// where base is the start iterator of the sequence that was searched. [Note – unless this is part
-    /// of a repeated search with a regex_iterator then base is the same as prefix().first – end note]
+    /// where base is the start iterator of the sequence that was searched. [Note - unless this is part
+    /// of a repeated search with a regex_iterator then base is the same as prefix().first - end note]
     difference_type position(size_type sub = 0) const
     {
         return this->sub_matches_[ sub ].matched ? std::distance(this->base_, this->sub_matches_[ sub ].first) : -1;
