@@ -22,3 +22,8 @@ exe calc3
     :
         calc3.cpp
     ;
+
+exe lazy_vector
+    :
+        lazy_vector.cpp
+    ;
