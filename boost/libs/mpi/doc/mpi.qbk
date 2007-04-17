@@ -1362,7 +1362,7 @@ Boost.MPI.
 
 [endsect]
 
-[xinclude mpi_autodoc.boostbook]
+[xinclude mpi_autodoc.xml]
 
 [section:python Python Bindings]
 [python]

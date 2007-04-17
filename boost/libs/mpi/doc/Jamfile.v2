@@ -8,7 +8,8 @@ using quickbook ;
 using doxygen ;
 
 doxygen mpi_autodoc 
-  : ../../../boost/mpi.hpp
+  : [ glob
+    ../../../boost/mpi.hpp
     ../../../boost/mpi/allocator.hpp
     ../../../boost/mpi/collectives.hpp
     ../../../boost/mpi/collectives_fwd.hpp
@@ -28,12 +29,15 @@ doxygen mpi_autodoc
     ../../../boost/mpi/request.hpp
     ../../../boost/mpi/timer.hpp
     ../../../boost/mpi/python.hpp
+    ]
   : <doxygen:param>MACRO_EXPANSION=YES
-    <doxygen:param>MACRO_ONLY_PREDEF=YES
+    <doxygen:param>EXPAND_ONLY_PREDEF=YES
     <doxygen:param>"PREDEFINED=BOOST_MPI_HAS_MEMORY_ALLOCATION= BOOST_MPI_HAS_NOARG_INITIALIZATION= MPI_VERSION=2 BOOST_MPI_DOXYGEN="
   ;
 
-boostbook mpi : mpi.qbk mpi_autodoc 
+xml mpi : mpi.qbk ;
+
+boostbook standalone : mpi mpi_autodoc 
               # Uncomment this line when generating PDF output
               # <xsl:param>max-columns=66
               ;
