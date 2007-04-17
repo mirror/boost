@@ -103,7 +103,7 @@ and dynamic.
 
 [endsect]
 
-[xinclude autodoc.boostbook]
+[xinclude autodoc.xml]
 
 [include acknowledgements.qbk]
 
