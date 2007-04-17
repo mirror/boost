@@ -10,7 +10,7 @@
 import toolset ;
 toolset.using doxygen ;
 
-boostbook string_algo : string_algo.xml ;
+boostbook string_algo : string_algo.xml autodoc ;
 
 doxygen autodoc
     :   
