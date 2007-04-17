@@ -6,3 +6,19 @@ exe hello
     :
         hello.cpp
     ;
+
+
+exe calc1
+    :
+        calc1.cpp
+    ;
+
+exe calc2
+    :
+        calc2.cpp
+    ;
+
+exe calc3
+    :
+        calc3.cpp
+    ;
