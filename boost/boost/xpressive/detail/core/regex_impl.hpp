@@ -30,7 +30,7 @@ struct finder
   : counted_base<finder<BidiIter> >
 {
     virtual ~finder() {}
-    virtual bool operator ()(state_type<BidiIter> &state) const = 0;
+    virtual bool operator ()(match_state<BidiIter> &state) const = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

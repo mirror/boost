@@ -42,7 +42,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter, typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
             // prevent repeated zero-width sub-matches from causing infinite recursion
             sub_match_impl<BidiIter> &br = state.sub_match(this->mark_number_);
@@ -66,7 +66,7 @@ namespace boost { namespace xpressive { namespace detail
 
         // greedy, variable-width quantifier
         template<typename BidiIter, typename Next>
-        bool match_(state_type<BidiIter> &state, Next const &next, mpl::true_) const
+        bool match_(match_state<BidiIter> &state, Next const &next, mpl::true_) const
         {
             sub_match_impl<BidiIter> &br = state.sub_match(this->mark_number_);
 
@@ -90,7 +90,7 @@ namespace boost { namespace xpressive { namespace detail
 
         // non-greedy, variable-width quantifier
         template<typename BidiIter, typename Next>
-        bool match_(state_type<BidiIter> &state, Next const &next, mpl::false_) const
+        bool match_(match_state<BidiIter> &state, Next const &next, mpl::false_) const
         {
             sub_match_impl<BidiIter> &br = state.sub_match(this->mark_number_);
 

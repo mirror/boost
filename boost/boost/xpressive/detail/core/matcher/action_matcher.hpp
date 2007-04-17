@@ -260,10 +260,10 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter, typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
             // Bind the arguments
-            typedef typename BindActionArgs::apply<Actor, state_type<BidiIter>, int>::type action_type;
+            typedef typename BindActionArgs::apply<Actor, match_state<BidiIter>, int>::type action_type;
             action<BidiIter, action_type> actor(BindActionArgs::call(this->actor_, state, this->sub_));
 
             // Put the action in the action list

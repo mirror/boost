@@ -30,7 +30,7 @@ namespace boost { namespace xpressive { namespace detail
       : quant_style_assertion
     {
         template<typename BidiIter, typename Next>
-        static bool match(state_type<BidiIter> &state, Next const &)
+        static bool match(match_state<BidiIter> &state, Next const &)
         {
             BidiIter const tmp = state.cur_;
             sub_match_impl<BidiIter> &s0 = state.sub_match(0);

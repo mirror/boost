@@ -41,7 +41,7 @@ struct xpression_adaptor
     {
     }
 
-    virtual bool match(state_type<iterator_type> &state) const
+    virtual bool match(match_state<iterator_type> &state) const
     {
         typedef typename unwrap_reference<Xpr const>::type xpr_type;
         return implicit_cast<xpr_type &>(this->xpr_).match(state);

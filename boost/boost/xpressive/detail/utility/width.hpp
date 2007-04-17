@@ -48,7 +48,7 @@ struct width
 
     width &operator |=(width const &that)
     {
-        this->value_ = 
+        this->value_ =
             this->value_ == that.value_
           ? this->value_
           : unknown_width();

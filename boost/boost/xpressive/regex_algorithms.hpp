@@ -60,7 +60,7 @@ inline bool regex_match
     {
         // the state object holds matching state and
         // is passed by reference to all the matchers
-        detail::state_type<BidiIter> state(begin, end, what, *access::get_regex_impl(re), flags);
+        detail::match_state<BidiIter> state(begin, end, what, *access::get_regex_impl(re), flags);
         state.flags_.match_all_ = true;
         state.sub_match(0).begin_ = begin;
 
@@ -204,7 +204,7 @@ namespace detail
 template<typename BidiIter>
 inline bool regex_search_impl
 (
-    state_type<BidiIter> &state
+    match_state<BidiIter> &state
   , basic_regex<BidiIter> const &re
   , bool not_initial_null = false
 )
@@ -343,7 +343,7 @@ inline bool regex_search
     {
         // the state object holds matching state and
         // is passed by reference to all the matchers
-        detail::state_type<BidiIter> state(begin, end, what, *access::get_regex_impl(re), flags);
+        detail::match_state<BidiIter> state(begin, end, what, *access::get_regex_impl(re), flags);
         return detail::regex_search_impl(state, re);
     }
 
@@ -508,7 +508,7 @@ inline OutIter regex_replace
 
     BidiIter cur = begin;
     match_results<BidiIter> what;
-    detail::state_type<BidiIter> state(begin, end, what, *access::get_regex_impl(re), flags);
+    detail::match_state<BidiIter> state(begin, end, what, *access::get_regex_impl(re), flags);
     bool const yes_copy = (0 == (flags & format_no_copy));
 
     if(detail::regex_search_impl(state, re))

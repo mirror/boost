@@ -35,21 +35,21 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter, typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
             return this->match_(state, next, mpl::bool_<Greedy>());
         }
 
     private:
         template<typename BidiIter, typename Next>
-        bool match_(state_type<BidiIter> &state, Next const &next, mpl::true_) const // Greedy
+        bool match_(match_state<BidiIter> &state, Next const &next, mpl::true_) const // Greedy
         {
             return this->xpr_.BOOST_NESTED_TEMPLATE push_match<Next>(state)
                 || next.match(state);
         }
 
         template<typename BidiIter, typename Next>
-        bool match_(state_type<BidiIter> &state, Next const &next, mpl::false_) const // Non-greedy
+        bool match_(match_state<BidiIter> &state, Next const &next, mpl::false_) const // Non-greedy
         {
             return next.match(state)
                 || this->xpr_.BOOST_NESTED_TEMPLATE push_match<Next>(state);
@@ -61,7 +61,7 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // optional_mark_matcher
     template<typename BidiIter, typename Next>
-    inline bool match_next(state_type<BidiIter> &state, Next const &next, int mark_number)
+    inline bool match_next(match_state<BidiIter> &state, Next const &next, int mark_number)
     {
         sub_match_impl<BidiIter> &br = state.sub_match(mark_number);
 
@@ -93,21 +93,21 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter, typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
             return this->match_(state, next, mpl::bool_<Greedy>());
         }
 
     private:
         template<typename BidiIter, typename Next>
-        bool match_(state_type<BidiIter> &state, Next const &next, mpl::true_) const // Greedy
+        bool match_(match_state<BidiIter> &state, Next const &next, mpl::true_) const // Greedy
         {
             return this->xpr_.BOOST_NESTED_TEMPLATE push_match<Next>(state)
                 || match_next(state, next, this->mark_number_);
         }
 
         template<typename BidiIter, typename Next>
-        bool match_(state_type<BidiIter> &state, Next const &next, mpl::false_) const // Non-greedy
+        bool match_(match_state<BidiIter> &state, Next const &next, mpl::false_) const // Non-greedy
         {
             return match_next(state, next, this->mark_number_)
                 || this->xpr_.BOOST_NESTED_TEMPLATE push_match<Next>(state);

@@ -42,7 +42,7 @@ struct invalid_xpression
         intrusive_ptr_add_ref(this); // keep alive forever
     }
 
-    bool match(state_type<BidiIter> &) const
+    bool match(match_state<BidiIter> &) const
     {
         BOOST_ASSERT(false);
         return false;
@@ -75,7 +75,7 @@ struct dynamic_xpression
     {
     }
 
-    virtual bool match(state_type<BidiIter> &state) const
+    virtual bool match(match_state<BidiIter> &state) const
     {
         return this->Matcher::match(state, *this->next_.matchable());
     }
@@ -179,7 +179,7 @@ struct matcher_wrapper
     }
 
     template<typename BidiIter>
-    bool match(state_type<BidiIter> &state) const
+    bool match(match_state<BidiIter> &state) const
     {
         return this->Matcher::match(state, matcher_wrapper<true_matcher>());
     }

@@ -42,7 +42,7 @@ namespace boost { namespace xpressive { namespace detail
     template<typename BidiIter, typename Next>
     struct alt_match_pred
     {
-        alt_match_pred(state_type<BidiIter> &state)
+        alt_match_pred(match_state<BidiIter> &state)
           : state_(&state)
         {
         }
@@ -54,7 +54,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
     private:
-        state_type<BidiIter> *state_;
+        match_state<BidiIter> *state_;
     };
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ namespace boost { namespace xpressive { namespace detail
     template<typename BidiIter, typename Next>
     inline bool alt_match
     (
-        alternates_vector<BidiIter> const &alts, state_type<BidiIter> &state, Next const &
+        alternates_vector<BidiIter> const &alts, match_state<BidiIter> &state, Next const &
     )
     {
         return detail::any(alts.begin(), alts.end(), alt_match_pred<BidiIter, Next>(state));
@@ -72,7 +72,7 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Head, typename Tail, typename BidiIter, typename Next>
     inline bool alt_match
     (
-        alternates_list<Head, Tail> const &alts, state_type<BidiIter> &state, Next const &
+        alternates_list<Head, Tail> const &alts, match_state<BidiIter> &state, Next const &
     )
     {
         return fusion::any(alts, alt_match_pred<BidiIter, Next>(state));
@@ -101,7 +101,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter, typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
             if(!state.eos() && !this->can_match_(*state.cur_, traits_cast<Traits>(state)))
             {

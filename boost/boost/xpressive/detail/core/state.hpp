@@ -84,10 +84,10 @@ struct match_flags
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// state_type
+// match_state
 //
 template<typename BidiIter>
-struct state_type
+struct match_state
   : noncopyable
 {
     typedef BidiIter iterator;
@@ -117,7 +117,7 @@ struct state_type
 
     ///////////////////////////////////////////////////////////////////////////////
     //
-    state_type
+    match_state
     (
         BidiIter begin
       , BidiIter end
@@ -303,7 +303,7 @@ struct memento
 // save_sub_matches
 //
 template<typename BidiIter>
-inline memento<BidiIter> save_sub_matches(state_type<BidiIter> &state)
+inline memento<BidiIter> save_sub_matches(match_state<BidiIter> &state)
 {
     memento<BidiIter> mem =
     {
@@ -319,7 +319,7 @@ inline memento<BidiIter> save_sub_matches(state_type<BidiIter> &state)
 // restore_sub_matches
 //
 template<typename BidiIter>
-inline void restore_sub_matches(memento<BidiIter> const &mem, state_type<BidiIter> &state)
+inline void restore_sub_matches(memento<BidiIter> const &mem, match_state<BidiIter> &state)
 {
     typedef core_access<BidiIter> access;
     nested_results<BidiIter> &nested = access::get_nested_results(*state.context_.results_ptr_);
@@ -335,7 +335,7 @@ inline void restore_sub_matches(memento<BidiIter> const &mem, state_type<BidiIte
 // reclaim_sub_matches
 //
 template<typename BidiIter>
-inline void reclaim_sub_matches(memento<BidiIter> const &mem, state_type<BidiIter> &state, bool success)
+inline void reclaim_sub_matches(memento<BidiIter> const &mem, match_state<BidiIter> &state, bool success)
 {
     std::size_t count = state.context_.results_ptr_->nested_results().size() - mem.nested_results_count_;
     if(count == 0)
@@ -356,7 +356,7 @@ inline void reclaim_sub_matches(memento<BidiIter> const &mem, state_type<BidiIte
 // traits_cast
 //
 template<typename Traits, typename BidiIter>
-inline Traits const &traits_cast(state_type<BidiIter> const &state)
+inline Traits const &traits_cast(match_state<BidiIter> const &state)
 {
     return state.template get_traits<Traits>();
 }

@@ -34,7 +34,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter, typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
             sub_match_impl<BidiIter> &br = state.sub_match(this->mark_number_);
 

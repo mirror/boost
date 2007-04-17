@@ -80,7 +80,7 @@ struct regex_iterator_impl
     }
 
     match_results<BidiIter> what_;
-    state_type<BidiIter> state_;
+    match_state<BidiIter> state_;
     basic_regex<BidiIter> const *const rex_;
     regex_constants::match_flag_type const flags_;
     bool not_null_;

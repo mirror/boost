@@ -42,7 +42,7 @@ struct stacked_xpression
     // match
     //  delegates to Next
     template<typename BidiIter>
-    bool match(state_type<BidiIter> &state) const
+    bool match(match_state<BidiIter> &state) const
     {
         return static_cast<Next const *>(this)->
             BOOST_NESTED_TEMPLATE push_match<Top>(state);
@@ -52,7 +52,7 @@ struct stacked_xpression
     //   jump back to the xpression on top of the xpression stack,
     //   and keep the xpression on the stack.
     template<typename BidiIter>
-    static bool top_match(state_type<BidiIter> &state, void const *top)
+    static bool top_match(match_state<BidiIter> &state, void const *top)
     {
         return static_cast<Top const *>(top)->
             BOOST_NESTED_TEMPLATE push_match<Top>(state);
@@ -62,7 +62,7 @@ struct stacked_xpression
     //   jump back to the xpression on top of the xpression stack,
     //   pop the xpression off the stack.
     template<typename BidiIter>
-    static bool pop_match(state_type<BidiIter> &state, void const *top)
+    static bool pop_match(match_state<BidiIter> &state, void const *top)
     {
         return static_cast<Top const *>(top)->match(state);
     }
@@ -71,7 +71,7 @@ struct stacked_xpression
     //   pop the xpression off the top of the stack and ignore it; call
     //   match on next.
     template<typename BidiIter>
-    bool skip_match(state_type<BidiIter> &state) const
+    bool skip_match(match_state<BidiIter> &state) const
     {
         // could be static_xpression::skip_impl or stacked_xpression::skip_impl
         // depending on if there is 1 or more than 1 xpression on the
@@ -84,7 +84,7 @@ struct stacked_xpression
     // skip_impl
     //   implementation of skip_match.
     template<typename That, typename BidiIter>
-    static bool skip_impl(That const &that, state_type<BidiIter> &state)
+    static bool skip_impl(That const &that, match_state<BidiIter> &state)
     {
         return that.BOOST_NESTED_TEMPLATE push_match<Top>(state);
     }
@@ -131,7 +131,7 @@ struct static_xpression
     // match
     //  delegates to the Matcher
     template<typename BidiIter>
-    bool match(state_type<BidiIter> &state) const
+    bool match(match_state<BidiIter> &state) const
     {
         return this->Matcher::match(state, this->next_);
     }
@@ -140,7 +140,7 @@ struct static_xpression
     //   call match on this, but also push "Top" onto the xpression
     //   stack so we know what we are jumping back to later.
     template<typename Top, typename BidiIter>
-    bool push_match(state_type<BidiIter> &state) const
+    bool push_match(match_state<BidiIter> &state) const
     {
         return this->Matcher::match(state, stacked_xpression_cast<Top>(this->next_));
     }
@@ -148,7 +148,7 @@ struct static_xpression
     // skip_impl
     //   implementation of skip_match, called from stacked_xpression::skip_match
     template<typename That, typename BidiIter>
-    static bool skip_impl(That const &that, state_type<BidiIter> &state)
+    static bool skip_impl(That const &that, match_state<BidiIter> &state)
     {
         return that.match(state);
     }

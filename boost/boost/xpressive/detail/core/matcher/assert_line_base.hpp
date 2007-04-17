@@ -39,7 +39,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter>
-            bool is_line_break(state_type<BidiIter> &state) const
+            bool is_line_break(match_state<BidiIter> &state) const
         {
             BOOST_ASSERT(!state.bos() || state.flags_.match_prev_avail_);
             BidiIter tmp = state.cur_;

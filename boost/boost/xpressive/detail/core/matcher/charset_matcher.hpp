@@ -42,7 +42,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter, typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
             if(state.eos() || !this->charset_.test(*state.cur_, traits_cast<Traits>(state), icase_type()))
             {

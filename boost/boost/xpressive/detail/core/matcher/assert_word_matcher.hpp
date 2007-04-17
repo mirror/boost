@@ -28,7 +28,7 @@ namespace boost { namespace xpressive { namespace detail
     struct word_boundary
     {
         template<typename BidiIter>
-        static bool eval(bool prevword, bool thisword, state_type<BidiIter> &state)
+        static bool eval(bool prevword, bool thisword, match_state<BidiIter> &state)
         {
             if((state.flags_.match_not_bow_ && state.bos()) || (state.flags_.match_not_eow_ && state.eos()))
             {
@@ -45,7 +45,7 @@ namespace boost { namespace xpressive { namespace detail
     struct word_begin
     {
         template<typename BidiIter>
-        static bool eval(bool prevword, bool thisword, state_type<BidiIter> &state)
+        static bool eval(bool prevword, bool thisword, match_state<BidiIter> &state)
         {
             if(state.flags_.match_not_bow_ && state.bos())
             {
@@ -62,7 +62,7 @@ namespace boost { namespace xpressive { namespace detail
     struct word_end
     {
         template<typename BidiIter>
-        static bool eval(bool prevword, bool thisword, state_type<BidiIter> &state)
+        static bool eval(bool prevword, bool thisword, match_state<BidiIter> &state)
         {
             if(state.flags_.match_not_eow_ && state.eos())
             {
@@ -99,7 +99,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter, typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
             BidiIter cur = state.cur_;
             bool const thisword = !state.eos() && this->is_word(traits_cast<Traits>(state), *cur);

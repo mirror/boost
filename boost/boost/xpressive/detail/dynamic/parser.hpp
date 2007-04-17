@@ -86,7 +86,7 @@ inline sequence<BidiIter> make_any_xpression
     set_matcher s(traits);
     s.set_[0] = newline;
     s.set_[1] = 0;
-    s.complement();
+    s.inverse();
 
     switch(((int)not_dot_newline | not_dot_null) & flags)
     {

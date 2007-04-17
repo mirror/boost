@@ -116,13 +116,13 @@ namespace boost { namespace xpressive { namespace detail
       : is_pure<typename proto::result_of::arg<Expr>::type>
     {};
 
-    template<typename Expr, bool Positive>
-    struct is_pure<Expr, lookahead_tag<Positive> >
+    template<typename Expr>
+    struct is_pure<Expr, lookahead_tag>
       : is_pure<typename proto::result_of::arg<Expr>::type>
     {};
 
-    template<typename Expr, bool Positive>
-    struct is_pure<Expr, lookbehind_tag<Positive> >
+    template<typename Expr>
+    struct is_pure<Expr, lookbehind_tag>
       : is_pure<typename proto::result_of::arg<Expr>::type>
     {};
 

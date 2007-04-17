@@ -137,13 +137,13 @@ namespace boost { namespace xpressive { namespace detail
       : width_of<typename proto::result_of::right<Expr>::type>
     {};
 
-    template<typename Expr, bool Positive>
-    struct width_of<Expr, lookahead_tag<Positive> >
+    template<typename Expr>
+    struct width_of<Expr, lookahead_tag>
       : mpl::size_t<0>
     {};
 
-    template<typename Expr, bool Positive>
-    struct width_of<Expr, lookbehind_tag<Positive> >
+    template<typename Expr>
+    struct width_of<Expr, lookbehind_tag>
       : mpl::size_t<0>
     {};
 

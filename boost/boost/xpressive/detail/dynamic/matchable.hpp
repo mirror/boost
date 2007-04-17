@@ -43,7 +43,7 @@ struct matchable
     typedef BidiIter iterator_type;
     typedef typename iterator_value<iterator_type>::type char_type;
     virtual ~matchable() {}
-    virtual bool match(state_type<BidiIter> &state) const = 0;
+    virtual bool match(match_state<BidiIter> &state) const = 0;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -82,23 +82,23 @@ struct matchable_ex
     //
 
     template<typename Top>
-    bool push_match(state_type<BidiIter> &state) const
+    bool push_match(match_state<BidiIter> &state) const
     {
         BOOST_MPL_ASSERT((is_same<Top, matchable_ex<BidiIter> >));
         return this->match(state);
     }
 
-    static bool top_match(state_type<BidiIter> &state, void const *top)
+    static bool top_match(match_state<BidiIter> &state, void const *top)
     {
         return static_cast<matchable_ex<BidiIter> const *>(top)->match(state);
     }
 
-    static bool pop_match(state_type<BidiIter> &state, void const *top)
+    static bool pop_match(match_state<BidiIter> &state, void const *top)
     {
         return static_cast<matchable_ex<BidiIter> const *>(top)->match(state);
     }
 
-    bool skip_match(state_type<BidiIter> &state) const
+    bool skip_match(match_state<BidiIter> &state) const
     {
         return this->match(state);
     }
@@ -141,7 +141,7 @@ struct shared_matchable
         return this->xpr_;
     }
 
-    bool match(state_type<BidiIter> &state) const
+    bool match(match_state<BidiIter> &state) const
     {
         return this->xpr_->match(state);
     }
@@ -158,7 +158,7 @@ struct shared_matchable
 
     // BUGBUG yuk!
     template<typename Top>
-    bool push_match(state_type<BidiIter> &state) const
+    bool push_match(match_state<BidiIter> &state) const
     {
         BOOST_MPL_ASSERT((is_same<Top, matchable_ex<BidiIter> >));
         return this->match(state);

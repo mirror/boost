@@ -216,10 +216,8 @@ namespace boost { namespace xpressive { namespace detail
 
     struct seq_tag;
 
-    template<bool Positive>
     struct lookahead_tag;
 
-    template<bool Positive>
     struct lookbehind_tag;
 
     struct keeper_tag;
@@ -241,7 +239,7 @@ namespace boost { namespace xpressive { namespace detail
     struct core_access;
 
     template<typename BidiIter>
-    struct state_type;
+    struct match_state;
 
     template<typename BidiIter>
     struct matchable;
@@ -304,7 +302,7 @@ namespace boost { namespace xpressive { namespace detail
     struct traits;
 
     template<typename Traits, typename BidiIter>
-    Traits const &traits_cast(state_type<BidiIter> const &state);
+    Traits const &traits_cast(match_state<BidiIter> const &state);
 
     template<typename Char>
     struct basic_chset;

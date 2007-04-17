@@ -37,7 +37,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter, typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
             sub_match<BidiIter> const &sub = state.sub_match(this->sub_);
             return proto::arg(this->predicate_).pred(sub) && next.match(state);

@@ -568,14 +568,14 @@ keep(Expr const &expr)
 template<typename Expr>
 inline typename proto::unary_expr
 <
-    detail::lookahead_tag<true>
+    detail::lookahead_tag
   , typename proto::result_of::as_expr<Expr>::type
 >::type const
 before(Expr const &expr)
 {
     typename proto::unary_expr
     <
-        detail::lookahead_tag<true>
+        detail::lookahead_tag
       , typename proto::result_of::as_expr<Expr>::type
     >::type that = {proto::as_expr(expr)};
     return that;
@@ -599,14 +599,14 @@ before(Expr const &expr)
 template<typename Expr>
 inline typename proto::unary_expr
 <
-    detail::lookbehind_tag<true>
+    detail::lookbehind_tag
   , typename proto::result_of::as_expr<Expr>::type
 >::type const
 after(Expr const &expr)
 {
     typename proto::unary_expr
     <
-        detail::lookbehind_tag<true>
+        detail::lookbehind_tag
       , typename proto::result_of::as_expr<Expr>::type
     >::type that = {proto::as_expr(expr)};
     return that;

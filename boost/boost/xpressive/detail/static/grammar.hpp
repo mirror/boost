@@ -43,7 +43,7 @@
     ));
 
 namespace boost { namespace xpressive
-{ 
+{
     template<typename Char>
     struct Grammar;
 
@@ -127,13 +127,13 @@ namespace boost { namespace xpressive
             {};
 
             template<typename Dummy>
-            struct case_<lookahead_tag<true>, Dummy>
-              : proto::trans::arg<proto::unary_expr<lookahead_tag<true>, as_lookahead<Grammar<Char> > > >
+            struct case_<lookahead_tag, Dummy>
+              : proto::trans::arg<proto::unary_expr<lookahead_tag, as_lookahead<Grammar<Char> > > >
             {};
 
             template<typename Dummy>
-            struct case_<lookbehind_tag<true>, Dummy>
-              : proto::trans::arg<proto::unary_expr<lookbehind_tag<true>, as_lookbehind<Grammar<Char> > > >
+            struct case_<lookbehind_tag, Dummy>
+              : proto::trans::arg<proto::unary_expr<lookbehind_tag, as_lookbehind<Grammar<Char> > > >
             {};
 
             template<typename Dummy>
@@ -219,13 +219,13 @@ namespace boost { namespace xpressive
             {};
 
             template<typename Dummy>
-            struct case_<lookahead_tag<true> , Dummy>
-              : in_sequence<proto::trans::arg<proto::unary_expr<lookahead_tag<true>, as_lookahead<Grammar<Char> > > > >
+            struct case_<lookahead_tag, Dummy>
+              : in_sequence<proto::trans::arg<proto::unary_expr<lookahead_tag, as_lookahead<Grammar<Char> > > > >
             {};
 
             template<typename Dummy>
-            struct case_<lookbehind_tag<true> , Dummy>
-              : in_sequence<proto::trans::arg<proto::unary_expr<lookbehind_tag<true>, as_lookbehind<Grammar<Char> > > > >
+            struct case_<lookbehind_tag, Dummy>
+              : in_sequence<proto::trans::arg<proto::unary_expr<lookbehind_tag, as_lookbehind<Grammar<Char> > > > >
             {};
 
             template<typename Dummy>

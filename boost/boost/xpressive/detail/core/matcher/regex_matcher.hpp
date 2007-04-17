@@ -46,7 +46,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
             // regex_matcher is used for embeding a dynamic regex in a static regex. As such,
             // Next will always point to a static regex.

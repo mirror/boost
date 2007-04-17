@@ -49,7 +49,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
             BOOST_ASSERT(this->pimpl_ == this->wimpl_.lock().get());
             ensure(this->pimpl_->xpr_, regex_constants::error_badref, "bad regex reference");

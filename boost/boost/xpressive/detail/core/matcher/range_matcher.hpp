@@ -59,7 +59,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter, typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
             if(state.eos() || this->not_ ==
                 this->in_range(traits_cast<Traits>(state), *state.cur_, icase_type()))

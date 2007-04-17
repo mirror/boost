@@ -38,7 +38,7 @@ struct core_access
         return rex.invalid_();
     }
 
-    static bool match(basic_regex<BidiIter> const &rex, state_type<BidiIter> &state)
+    static bool match(basic_regex<BidiIter> const &rex, match_state<BidiIter> &state)
     {
         return rex.match_(state);
     }

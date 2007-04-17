@@ -28,7 +28,7 @@ template<typename BidiIter>
 inline bool push_context_match
 (
     regex_impl<BidiIter> const &impl
-  , state_type<BidiIter> &state
+  , match_state<BidiIter> &state
   , matchable<BidiIter> const &next
 )
 {
@@ -53,7 +53,7 @@ inline bool push_context_match
 // pop_context_match
 //
 template<typename BidiIter>
-inline bool pop_context_match(state_type<BidiIter> &state)
+inline bool pop_context_match(match_state<BidiIter> &state)
 {
     // save state
     // BUGBUG nested regex could have changed state.traits_

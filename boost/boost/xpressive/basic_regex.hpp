@@ -167,7 +167,7 @@ private:
     basic_regex(string_type const &);
 
     /// INTERNAL ONLY
-    bool match_(detail::state_type<BidiIter> &state) const
+    bool match_(detail::match_state<BidiIter> &state) const
     {
         return proto::arg(*this)->xpr_->match(state);
     }

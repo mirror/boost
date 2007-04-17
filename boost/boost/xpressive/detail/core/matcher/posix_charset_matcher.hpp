@@ -46,7 +46,7 @@ namespace boost { namespace xpressive { namespace detail
         }
 
         template<typename BidiIter, typename Next>
-        bool match(state_type<BidiIter> &state, Next const &next) const
+        bool match(match_state<BidiIter> &state, Next const &next) const
         {
             if(state.eos() || this->not_ == traits_cast<Traits>(state).isctype(
                 *state.cur_, this->mask_))
