@@ -78,6 +78,32 @@ struct MyCases::case_<proto::tag::add>
   : proto::_
 {};
 
+enum binary_representation_enum
+{
+    magnitude
+  , two_complement
+};
+
+typedef
+    mpl::integral_c<binary_representation_enum, magnitude>
+magnitude_c;
+
+typedef
+    mpl::integral_c<binary_representation_enum, two_complement>
+two_complement_c;
+
+template<typename Type, typename Representation>
+struct number
+{};
+
+struct NumberGrammar
+  : proto::or_ <
+        proto::terminal<number<proto::_, two_complement_c> >
+      , proto::terminal<number<proto::_, magnitude_c> >
+    >
+{};
+
+
 void test_matches()
 {
     assert_matches< _ >( lit(1) );
@@ -201,6 +227,9 @@ void test_matches()
     assert_matches< proto::switch_<MyCases> >( lit(1) >> 'a' );
     assert_matches< proto::switch_<MyCases> >( lit(1) + 'a' );
     assert_not_matches< proto::switch_<MyCases> >( lit(1) << 'a' );
+
+    number<int, two_complement_c> num;
+    assert_matches<NumberGrammar>(proto::as_expr(num));
 }
 
 using namespace unit_test;

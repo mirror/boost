@@ -78,6 +78,11 @@
               : mpl::true_
             {};
 
+            template<typename T>
+            struct lambda_matches<T, T BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(-1)>
+              : mpl::true_
+            {};
+
             template<template<typename> class T, typename Expr0, typename Grammar0>
             struct lambda_matches<T<Expr0>, T<Grammar0> BOOST_MPL_AUX_LAMBDA_ARITY_PARAM(1) >
               : lambda_matches<Expr0, Grammar0>
