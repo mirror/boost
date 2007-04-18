@@ -30,6 +30,14 @@
 #endif
 #include <boost/function_equal.hpp>
 
+// Define BOOST_FUNCTION_STD_NS to the namespace that contains type_info.
+#ifdef BOOST_NO_EXCEPTION_STD_NAMESPACE
+// Embedded VC++ does not have type_info in namespace std
+#  define BOOST_FUNCTION_STD_NS
+#else
+#  define BOOST_FUNCTION_STD_NS std
+#endif
+
 // Borrowed from Boost.Python library: determines the cases where we
 // need to use std::type_info::name to compare instead of operator==.
 # if (defined(__GNUC__) && __GNUC__ >= 3) \
@@ -215,8 +223,8 @@ namespace boost {
               // DPG TBD: Since we're only storing a pointer, it's
               // possible that the user could ask for a base class or
               // derived class. Is that okay?
-              const std::type_info& check_type = 
-                *static_cast<const std::type_info*>(out_buffer.const_obj_ptr);
+              const BOOST_FUNCTION_STD_NS::type_info& check_type = 
+                *static_cast<const BOOST_FUNCTION_STD_NS::type_info*>(out_buffer.const_obj_ptr);
               if (BOOST_FUNCTION_COMPARE_TYPE_ID(check_type, typeid(F)))
                 out_buffer.obj_ptr = in_buffer.obj_ptr;
               else
@@ -265,8 +273,8 @@ namespace boost {
           else if (op == destroy_functor_tag)
             out_buffer.func_ptr = 0;
           else /* op == check_functor_type_tag */ {
-            const std::type_info& check_type = 
-              *static_cast<const std::type_info*>(out_buffer.const_obj_ptr);
+            const BOOST_FUNCTION_STD_NS::type_info& check_type = 
+              *static_cast<const BOOST_FUNCTION_STD_NS::type_info*>(out_buffer.const_obj_ptr);
             if (BOOST_FUNCTION_COMPARE_TYPE_ID(check_type, typeid(Functor)))
               out_buffer.obj_ptr = &in_buffer.func_ptr;
             else
@@ -287,8 +295,8 @@ namespace boost {
             // Some compilers (Borland, vc6, ...) are unhappy with ~functor_type.
             reinterpret_cast<functor_type*>(&out_buffer.data)->~Functor();
           } else /* op == check_functor_type_tag */ {
-            const std::type_info& check_type = 
-              *static_cast<const std::type_info*>(out_buffer.const_obj_ptr);
+            const BOOST_FUNCTION_STD_NS::type_info& check_type = 
+              *static_cast<const BOOST_FUNCTION_STD_NS::type_info*>(out_buffer.const_obj_ptr);
             if (BOOST_FUNCTION_COMPARE_TYPE_ID(check_type, typeid(Functor)))
               out_buffer.obj_ptr = &in_buffer.data;
             else
@@ -348,8 +356,8 @@ namespace boost {
 #  endif // BOOST_NO_STD_ALLOCATOR
             out_buffer.obj_ptr = 0;
           } else /* op == check_functor_type_tag */ {
-            const std::type_info& check_type = 
-              *static_cast<const std::type_info*>(out_buffer.const_obj_ptr);
+            const BOOST_FUNCTION_STD_NS::type_info& check_type = 
+              *static_cast<const BOOST_FUNCTION_STD_NS::type_info*>(out_buffer.const_obj_ptr);
             if (BOOST_FUNCTION_COMPARE_TYPE_ID(check_type, typeid(Functor)))
               out_buffer.obj_ptr = in_buffer.obj_ptr;
             else
@@ -480,13 +488,13 @@ public:
 
   /** Retrieve the type of the stored function object, or typeid(void)
       if this is empty. */
-  const std::type_info& target_type() const
+  const BOOST_FUNCTION_STD_NS::type_info& target_type() const
   {
     if (!vtable) return typeid(void);
 
     detail::function::function_buffer type;
     vtable->manager(functor, type, detail::function::get_functor_type_tag);
-    return *static_cast<const std::type_info*>(type.const_obj_ptr);
+    return *static_cast<const BOOST_FUNCTION_STD_NS::type_info*>(type.const_obj_ptr);
   }
 
   template<typename Functor>
