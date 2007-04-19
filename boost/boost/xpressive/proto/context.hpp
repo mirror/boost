@@ -332,7 +332,7 @@
             ///
             template<typename Expr>
             struct eval
-              : default_eval<Expr, default_context>
+              : default_eval<Expr, default_context const>
             {};
         };
 
