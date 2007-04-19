@@ -31,11 +31,6 @@ namespace boost { namespace proto
         }
     };
 
-    template<typename Domain, typename Expr, typename EnableIf>
-    struct is_allowed
-      : matches<Expr, typename Domain::grammar>
-    {};
-
     namespace detail
     {
         struct empty
@@ -44,12 +39,17 @@ namespace boost { namespace proto
         template<typename Domain, typename Expr>
         struct generate_if
           : mpl::if_<
-                is_allowed<Domain, Expr>
+                matches<Expr, typename Domain::grammar>
               , generate<Domain, Expr>
               , detail::empty
             >::type
         {};
 
+        // Optimization, generate fewer templates...
+        template<typename Expr>
+        struct generate_if<proto::default_domain, Expr>
+          : generate<proto::default_domain, Expr>
+        {};
     }
 
 }}
