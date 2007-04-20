@@ -1,7 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 // No include guard. This file is meant to be included many times
@@ -46,7 +46,7 @@
             BOOST_PP_ENUM_BINARY_PARAMS(
                 N, typename detail::call_param<T, >::type _))
             : BOOST_PP_ENUM(N, FUSION_MEMBER_INIT, _) {}
-        
+
         BOOST_PP_CAT(vector_data, N)(
             BOOST_PP_CAT(vector_data, N) const& other)
             : BOOST_PP_ENUM(N, FUSION_COPY_INIT, _) {}
@@ -75,7 +75,7 @@
     struct BOOST_PP_CAT(vector, N)
         : BOOST_PP_CAT(vector_data, N)<
             BOOST_PP_CAT(vector, N)<BOOST_PP_ENUM_PARAMS(N, T)>
-          , BOOST_PP_ENUM_PARAMS(N, T)> 
+          , BOOST_PP_ENUM_PARAMS(N, T)>
     {
         typedef BOOST_PP_CAT(vector, N)<BOOST_PP_ENUM_PARAMS(N, T)> this_type;
         typedef BOOST_PP_CAT(vector_data, N)<this_type, BOOST_PP_ENUM_PARAMS(N, T)> base_type;
@@ -85,7 +85,7 @@
         typedef mpl::false_ is_view;
         typedef random_access_traversal_tag category;
         typedef mpl::int_<N> size;
-    
+
         BOOST_PP_CAT(vector, N)() {}
 
 #if (N == 1)
@@ -104,7 +104,10 @@
         template <typename Sequence>
         BOOST_PP_CAT(vector, N)(
             Sequence const& seq
-          , typename disable_if<is_convertible<Sequence, T0> >::type* dummy = 0)
+#if (N == 1)
+          , typename disable_if<is_convertible<Sequence, T0> >::type* dummy = 0
+#endif
+            )
             : base_type(base_type::init_from_sequence(seq)) {}
 
         template <BOOST_PP_ENUM_PARAMS(N, typename U)>
@@ -125,18 +128,18 @@
             BOOST_PP_REPEAT(N, FUSION_DEREF_MEMBER_ASSIGN, _)
             return *this;
         }
-        
+
         BOOST_PP_REPEAT(N, FUSION_AT_IMPL, _)
 
         template<typename I>
-        typename add_reference<typename mpl::at<types, I>::type>::type 
+        typename add_reference<typename mpl::at<types, I>::type>::type
         at_impl(I i)
         {
             return this->at_impl(mpl::int_<I::value>());
         }
 
         template<typename I>
-        typename add_reference<typename add_const<typename mpl::at<types, I>::type>::type>::type 
+        typename add_reference<typename add_const<typename mpl::at<types, I>::type>::type>::type
         at_impl(I i) const
         {
             return this->at_impl(mpl::int_<I::value>());
