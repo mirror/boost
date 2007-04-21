@@ -364,7 +364,7 @@ secs = time_duration::num_fractional_digits();
           
 	  <row>
             <entry valign="top" morerows="1"><screen>time_duration::ticks_per_second()</screen></entry>
-            <entry>Return the number of ticks in a second.  For example, if the duration supports nanoseconds then the returned result will be 1000000.</entry>
+            <entry>Return the number of ticks in a second.  For example, if the duration supports nanoseconds then the returned result will be 1,000,000,000 (1e+9).</entry>
 	  </row>
 	  <row>
             <entry><screen>std::cout &lt;&lt; time_duration::ticks_per_second();</screen></entry>
