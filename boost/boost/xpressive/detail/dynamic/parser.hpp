@@ -83,7 +83,7 @@ inline sequence<BidiIter> make_any_xpression
     typedef literal_matcher<Traits, false, true> literal_matcher;
 
     char_type const newline = traits.widen('\n');
-    set_matcher s(traits);
+    set_matcher s;
     s.set_[0] = newline;
     s.set_[1] = 0;
     s.inverse();

@@ -39,7 +39,7 @@ struct set_matcher
     bool not_;
     bool icase_;
 
-    set_matcher(Traits const &)
+    set_matcher()
       : set_()
       , not_(false)
       , icase_(false)

@@ -13,10 +13,9 @@
 # pragma once
 #endif
 
-#include <boost/ref.hpp>
-#include <boost/mpl/not.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/iterator/iterator_traits.hpp>
+#include <boost/type_traits/is_convertible.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 
 namespace boost { namespace xpressive { namespace detail
@@ -40,36 +39,6 @@ struct is_static_xpression<static_xpression<Matcher, Next> >
 template<typename Top, typename Next>
 struct is_static_xpression<stacked_xpression<Top, Next> >
   : mpl::true_
-{
-};
-
-///////////////////////////////////////////////////////////////////////////////
-// is_regex
-//
-template<typename Xpr>
-struct is_regex
-  : mpl::false_
-{
-};
-
-template<typename BidiIter>
-struct is_regex<basic_regex<BidiIter> >
-  : mpl::true_
-{
-};
-
-template<typename BidiIter>
-struct is_regex<reference_wrapper<basic_regex<BidiIter> > >
-  : mpl::true_
-{
-};
-
-///////////////////////////////////////////////////////////////////////////////
-// is_modifiable
-//
-template<typename Xpr>
-struct is_modifiable
-  : mpl::not_<is_regex<Xpr> >
 {
 };
 

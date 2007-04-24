@@ -21,6 +21,7 @@
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
 #include <boost/xpressive/detail/utility/chset/chset.hpp>
+#include <boost/xpressive/detail/utility/traits_utils.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -60,24 +61,28 @@ namespace boost { namespace xpressive { namespace detail
         >
     {};
 
-    template<typename Char>
+    template<typename Traits>
     struct SetFillContext
-      : proto::callable_context<SetFillContext<Char> >
+      : proto::callable_context<SetFillContext<Traits> >
     {
-        explicit SetFillContext(Char *buf)
-          : buffer(buf)
+        typedef typename Traits::char_type char_type;
+        explicit SetFillContext(char_type *buffer, Traits const &traits)
+          : buffer_(buffer)
+          , traits_(traits)
         {}
 
         typedef xpressive::detail::set_initializer result_type;
 
         template<typename Tag, typename Left, typename Right>
-        result_type operator()(Tag, Left const &left, Right const &ch)
+        result_type operator()(Tag, Left const &left, Right const &right)
         {
-            *this->buffer++ = proto::arg(ch);
+            char_type ch = char_cast<char_type>(proto::arg(right), this->traits_);
+            *this->buffer_++ = this->traits_.translate(ch);
             return proto::eval(left, *this);
         }
 
-        Char *buffer;
+        char_type *buffer_;
+        Traits const &traits_;
     };
 
     template<typename Grammar>
@@ -99,15 +104,9 @@ namespace boost { namespace xpressive { namespace detail
         static typename apply<Expr, State, Visitor>::type
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
-            typedef typename Visitor::char_type char_type;
-            typename apply<Expr, State, Visitor>::type set(visitor.traits());
-            SetFillContext<char_type> ctx(set.set_);
+            typename apply<Expr, State, Visitor>::type set;
+            SetFillContext<typename Visitor::traits_type> ctx(set.set_, visitor.traits());
             proto::eval(expr, ctx);
-            int const size = Grammar::template apply<Expr, State, Visitor>::type::value;
-            for(int i = 0; i < size; ++i)
-            {
-                set.set_[i] = visitor.traits().translate(set.set_[i]);
-            }
             return set;
         }
     };
