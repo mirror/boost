@@ -396,7 +396,7 @@
               : context_type
             {
                 inner_context();
-                struct private_type_ { private_type_ const &operator,(int) const { return *this; } };
+                struct private_type_ { private_type_ const &operator,(int) const; };
                 typedef private_type_ const &(*pointer_to_function)(BOOST_PP_ENUM_PARAMS(BOOST_PP_INC(N), detail::dont_care BOOST_PP_INTERCEPT));
                 operator pointer_to_function() const;
             };

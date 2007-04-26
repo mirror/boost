@@ -16,7 +16,6 @@
 #include <boost/mpl/assert.hpp>
 #include <boost/mpl/sizeof.hpp>
 #include <boost/xpressive/proto/proto.hpp>
-#include <boost/xpressive/proto/context.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/static/static.hpp>
@@ -26,14 +25,44 @@
 namespace boost { namespace xpressive { namespace detail
 {
 
+    template<typename I>
+    typename I::next next_(I)
+    {
+        return typename I::next();
+    }
+
     template<typename Grammar>
     struct next
       : Grammar
     {
+        next();
+
         template<typename Expr, typename State, typename Visitor>
         struct apply
-          : mpl::next<typename Grammar::template apply<Expr, State, Visitor>::type>
+          : Grammar::template apply<Expr, State, Visitor>::type::next
         {};
+
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)
+        {
+            return detail::next_(Grammar::call(expr, state, visitor));
+        }
+    };
+
+    template<typename Grammar>
+    struct push_back
+      : Grammar
+    {
+        push_back();
+
+        template<typename Expr, typename State, typename Visitor>
+        static typename Grammar::template apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &state, Visitor &visitor)
+        {
+            visitor.accept(proto::arg(expr));
+            return Grammar::call(expr, state, visitor);
+        }
     };
 
     ///////////////////////////////////////////////////////////////////////////
@@ -53,38 +82,44 @@ namespace boost { namespace xpressive { namespace detail
 
     ///////////////////////////////////////////////////////////////////////////
     // ListSet
+    //  matches expressions like (set= 'a','b','c')
+    //  calculates the size of the set
+    //  populates an array of characters
     template<typename Char>
     struct ListSet
-      : proto::or_<
-            next<proto::trans::left<proto::comma<ListSet<Char>, CharLiteral<Char> > > >
-          , proto::trans::always<proto::assign<set_initializer_type, CharLiteral<Char> >, mpl::int_<1> >
+      : proto::trans::left<
+            proto::or_<
+                proto::comma<
+                    next<ListSet<Char> >
+                  , push_back<CharLiteral<Char> >
+                >
+              , proto::assign<
+                    proto::trans::always<set_initializer_type, mpl::int_<1> >
+                  , push_back<CharLiteral<Char> >
+                >
+            >
         >
     {};
 
+    ///////////////////////////////////////////////////////////////////////////
+    // set_fill_visitor
     template<typename Traits>
-    struct SetFillContext
-      : proto::callable_context<SetFillContext<Traits> >
+    struct set_fill_visitor
     {
-        typedef typename Traits::char_type char_type;
-        explicit SetFillContext(char_type *buffer, Traits const &traits)
-          : buffer_(buffer)
-          , traits_(traits)
-        {}
-
-        typedef xpressive::detail::set_initializer result_type;
-
-        template<typename Tag, typename Left, typename Right>
-        result_type operator()(Tag, Left const &left, Right const &right)
+        template<typename Char>
+        void accept(Char ch)
         {
-            char_type ch = char_cast<char_type>(proto::arg(right), this->traits_);
-            *this->buffer_++ = this->traits_.translate(ch);
-            return proto::eval(left, *this);
+            *this->buffer_++ = this->traits_.translate(
+                char_cast<typename Traits::char_type>(ch, this->traits_)
+            );
         }
 
-        char_type *buffer_;
+        typename Traits::char_type *buffer_;
         Traits const &traits_;
     };
 
+    ///////////////////////////////////////////////////////////////////////////////
+    // as_list_set
     template<typename Grammar>
     struct as_list_set
       : Grammar
@@ -94,9 +129,10 @@ namespace boost { namespace xpressive { namespace detail
         template<typename Expr, typename State, typename Visitor>
         struct apply
         {
+            typedef typename Visitor::traits_type traits_type;
             typedef set_matcher<
-                typename Visitor::traits_type
-              , Grammar::template apply<Expr, State, Visitor>::type::value
+                traits_type
+              , Grammar::template apply<Expr, State, set_fill_visitor<traits_type> >::type::value
             > type;
         };
 
@@ -105,8 +141,8 @@ namespace boost { namespace xpressive { namespace detail
         call(Expr const &expr, State const &state, Visitor &visitor)
         {
             typename apply<Expr, State, Visitor>::type set;
-            SetFillContext<typename Visitor::traits_type> ctx(set.set_, visitor.traits());
-            proto::eval(expr, ctx);
+            set_fill_visitor<typename Visitor::traits_type> filler = {set.set_, visitor.traits()};
+            Grammar::call(expr, state, filler);
             return set;
         }
     };
