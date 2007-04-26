@@ -580,7 +580,9 @@ public:
   model a <a href="random-concepts.html#random-dist">random distribution</a>.
   A <code>geometric_distribution</code> random distribution produces integer
   values <em>i</em> &gt;= 1 with p(i) = (1-p) * p<sup>i-1</sup>. p is the
-  parameter of the distribution.</p>
+  parameter of the distribution.
+  Each invocation of the UniformRandomNumberGenerator shall result in a 
+  floating-point value in the range [0,1).</p>
 
   <h3>Members</h3>
   <pre>
@@ -626,7 +628,9 @@ public:
   model a <a href="random-concepts.html#random-dist">random distribution</a>.
   The returned floating-point values <code>x</code> satisfy <code>a &lt;= x
   &lt;= c</code>; <code>x</code> has a triangle distribution, where
-  <code>b</code> is the most probable value for <code>x</code>.</p>
+  <code>b</code> is the most probable value for <code>x</code>.
+  Each invocation of the UniformRandomNumberGenerator shall result in a 
+  floating-point value in the range [0,1). </p>
 
   <h3>Members</h3>
   <pre>
@@ -665,7 +669,9 @@ public:
   model a <a href="random-concepts.html#random-dist">random distribution</a>.
   Such a distribution produces random numbers x &gt; 0 distributed with
   probability density function p(x) = lambda * exp(-lambda * x), where lambda
-  is the parameter of the distribution.</p>
+  is the parameter of the distribution.
+  Each invocation of the UniformRandomNumberGenerator shall result in a 
+  floating-point value in the range [0,1).  </p>
 
   <h3>Members</h3>
   <pre>
@@ -715,7 +721,8 @@ public:
   a distribution produces random numbers x distributed with probability
   density function p(x) = 1/sqrt(2*pi*sigma) * exp(- (x-mean)<sup>2</sup> /
   (2*sigma<sup>2</sup>) ), where mean and sigma are the parameters of the
-  distribution.</p>
+  distribution.  Each invocation of the UniformRandomNumberGenerator shall
+  result in a floating-point value in the range [0,1).</p>
 
   <h3>Members</h3>
   <pre>
@@ -770,7 +777,9 @@ public:
   * sqrt(2*pi)) * exp( -(log(x)-normal_mean)<sup>2</sup> /
   (2*normal_sigma<sup>2</sup>) ) for x &gt; 0, where normal_mean =
   log(mean<sup>2</sup>/sqrt(sigma<sup>2</sup> + mean<sup>2</sup>)) and
-  normal_sigma = sqrt(log(1 + sigma<sup>2</sup>/mean<sup>2</sup>)).</p>
+  normal_sigma = sqrt(log(1 + sigma<sup>2</sup>/mean<sup>2</sup>)).
+  Each invocation of the UniformRandomNumberGenerator shall result in a
+  floating-point value in the range [0,1).  </p>
 
   <h3>Members</h3>
   <pre>
@@ -813,7 +822,9 @@ public:
   sphere of arbitrary dimension <code>dim</code>. The <code>Cont</code>
   template parameter must be a STL-like container type with
   <code>begin</code> and <code>end</code> operations returning non-const
-  ForwardIterators of type <code>Cont::iterator</code>.</p>
+  ForwardIterators of type <code>Cont::iterator</code>.
+  Each invocation of the UniformRandomNumberGenerator shall result in a 
+  floating-point value in the range [0,1).  </p>
 
   <h3>Members</h3>
   <pre>
@@ -832,7 +843,7 @@ explicit uniform_on_sphere(int dim = 2)
   <!--webbot bot="Timestamp" s-type="EDITED" s-format="%d %B, %Y" startspan -->05
   December, 2006<!--webbot bot="Timestamp" endspan i-checksum="38516" --></p>
 
-  <p><i>Copyright &copy; 2000-2004 <a href=
+  <p><i>Copyright &copy; 2000-2007 <a href=
   "../../people/jens_maurer.htm">Jens Maurer</a></i></p>
 
   <p><i>Distributed under the Boost Software License, Version 1.0. (See
