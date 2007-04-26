@@ -409,7 +409,7 @@ public:
   typedef UniformRandomNumberGenerator base_type;
   typedef RealType result_type;
   static const bool has_fixed_range = false;
-  explicit uniform_01(base_type &amp; rng);
+  explicit uniform_01(base_type rng);
   result_type operator()();
   result_type min() const;
   result_type max() const;
@@ -425,6 +425,13 @@ public:
   <code>std::numeric_limits&lt;RealType&gt;::digits</code> random binary
   digits, i.e. the mantissa of the floating-point value is completely filled
   with random bits. [<em>Note:</em> Should this be configurable?]</p>
+
+  <p><em>WARNING:</em> As an exception / historic accident, this class
+  takes a UniformRandomNumberGenerator as its constructor parameter,
+  and BY VALUE.  Usually, you want reference semantics so that the
+  state of the passed-in generator is changed in-place and not copied.
+  In that case, explicitly supply a reference type for the template
+  parameter UniformRandomNumberGenerator.</p>
 
   <p>The template parameter <code>RealType</code> shall denote a float-like
   value type with support for binary operators +, -, and /. It must be large
@@ -442,7 +449,7 @@ public:
 
   <h3>Members</h3>
   <pre>
-explicit uniform_01(base_type &amp; rng)
+explicit uniform_01(base_type rng)
 </pre>
 
   <p><strong>Effects:</strong> Constructs a <code>uniform_01</code> functor
