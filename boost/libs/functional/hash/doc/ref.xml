@@ -387,6 +387,25 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         </method>
       </struct-specialization>
 
+      <struct-specialization name="hash">
+        <template>
+          <template-type-parameter name="T"/>
+        </template>
+        <specialization>
+          <template-arg>T*</template-arg>
+        </specialization>
+        <method name="operator()" cv="const">
+          <type>std::size_t</type>
+          <parameter name="val">
+            <paramtype>T*</paramtype>
+          </parameter>
+          <returns>
+            <para>Unspecified in TR1, except that equal arguments yield the same result.</para>
+          </returns>
+          <throws><para>Doesn't throw</para></throws>
+        </method>
+      </struct-specialization>
+
       <!--
         boost::hash_combine
         -->
