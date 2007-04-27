@@ -550,21 +550,21 @@ namespace boost { namespace xpressive
     {
         inline void ignore_unused_regex_actions()
         {
-            ignore_unused(repeat_max);
-            ignore_unused(push);
-            ignore_unused(push_back);
-            ignore_unused(push_front);
-            ignore_unused(pop);
-            ignore_unused(pop_back);
-            ignore_unused(pop_front);
-            ignore_unused(top);
-            ignore_unused(back);
-            ignore_unused(front);
-            ignore_unused(first);
-            ignore_unused(second);
-            ignore_unused(matched);
-            ignore_unused(length);
-            ignore_unused(str);
+            ignore_unused(xpressive::repeat_max);
+            ignore_unused(xpressive::push);
+            ignore_unused(xpressive::push_back);
+            ignore_unused(xpressive::push_front);
+            ignore_unused(xpressive::pop);
+            ignore_unused(xpressive::pop_back);
+            ignore_unused(xpressive::pop_front);
+            ignore_unused(xpressive::top);
+            ignore_unused(xpressive::back);
+            ignore_unused(xpressive::front);
+            ignore_unused(xpressive::first);
+            ignore_unused(xpressive::second);
+            ignore_unused(xpressive::matched);
+            ignore_unused(xpressive::length);
+            ignore_unused(xpressive::str);
         }
     }
 
