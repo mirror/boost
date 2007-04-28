@@ -18,7 +18,7 @@ namespace boost { namespace fusion
         template <typename Sequence, typename T>
         struct push_front
         {
-            typedef single_view<typename detail::as_fusion_element<T>::type> single_view;
+            typedef fusion::single_view<typename detail::as_fusion_element<T>::type> single_view;
             typedef joint_view<single_view const, Sequence> type;
         };
     }

@@ -78,16 +78,16 @@ namespace boost { namespace fusion
 
             explicit segmented_range(Sequence &sequence_)
               : sequence(sequence_type(sequence_))
-              , where(fusion::begin(sequence))
+              , where_(fusion::begin(sequence))
             {}
 
-            segmented_range(sequence_type sequence_, iterator_type const &where_)
+            segmented_range(sequence_type sequence_, iterator_type const &wh)
               : sequence(sequence_)
-              , where(where_)
+              , where_(wh)
             {}
 
             sequence_type sequence;
-            iterator_type where;
+            iterator_type where_;
         };
     }
 
@@ -139,7 +139,7 @@ namespace boost { namespace fusion
                 typedef typename Sequence::iterator_type type;
                 static type call(Sequence &seq)
                 {
-                    return seq.where;
+                    return seq.where_;
                 }
             };
         };
@@ -175,7 +175,7 @@ namespace boost { namespace fusion
 
             static type call(segmented_range<Sequence, Iterator, IsSegmented> const &rng)
             {
-                return type(rng.sequence, fusion::next(rng.where));
+                return type(rng.sequence, fusion::next(rng.where_));
             }
         };
 

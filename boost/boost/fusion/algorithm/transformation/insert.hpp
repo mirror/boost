@@ -30,7 +30,7 @@ namespace boost { namespace fusion
 
             typedef iterator_range<first_type, pos_type> left_type;
             typedef iterator_range<pos_type, last_type> right_type;
-            typedef single_view<element_type> single_view;
+            typedef fusion::single_view<element_type> single_view;
             typedef joint_view<left_type, single_view const> left_insert_type;
             typedef joint_view<left_insert_type, right_type> type;
         };
