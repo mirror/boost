@@ -1,6 +1,6 @@
 #  Boost.SmartPtr Library test Jamfile
 #
-#  Copyright (c) 2003-2006 Peter Dimov
+#  Copyright (c) 2003-2007 Peter Dimov
 #  Copyright (c) 2003 Dave Abrahams
 #
 #  Distributed under the Boost Software License, Version 1.0. (See
@@ -34,6 +34,8 @@ DEPENDS all : smart_ptr ;
           [ compile pointer_to_other_test.cpp ]
           [ run auto_ptr_rv_test.cpp ]
           [ run shared_ptr_alias_test.cpp ]
+          [ run shared_ptr_rv_test.cpp ]
+          [ run shared_ptr_move_test.cpp ]
         ;
     
     # this one is too slow to run unless explicitly requested, and ALL
