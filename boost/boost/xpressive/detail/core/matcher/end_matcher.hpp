@@ -53,8 +53,8 @@ namespace boost { namespace xpressive { namespace detail
 
                 return true;
             }
-            else if(state.flags_.match_all_ && !state.eos() ||
-                    state.flags_.match_not_null_ && state.cur_ == s0.begin_)
+            else if((state.flags_.match_all_ && !state.eos()) ||
+                    (state.flags_.match_not_null_ && state.cur_ == s0.begin_))
             {
                 return false;
             }

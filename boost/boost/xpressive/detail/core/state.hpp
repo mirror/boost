@@ -92,13 +92,13 @@ struct match_state
 {
     typedef BidiIter iterator;
     typedef core_access<BidiIter> access;
-    typedef match_context<BidiIter> match_context;
-    typedef results_extras<BidiIter> results_extras;
-    typedef regex_impl<BidiIter> regex_impl;
-    typedef matchable<BidiIter> matchable;
-    typedef match_results<BidiIter> match_results;
-    typedef sub_match_impl<BidiIter> sub_match_impl;
-    typedef actionable<BidiIter> actionable;
+    typedef detail::match_context<BidiIter> match_context;
+    typedef detail::results_extras<BidiIter> results_extras;
+    typedef detail::regex_impl<BidiIter> regex_impl;
+    typedef detail::matchable<BidiIter> matchable;
+    typedef xpressive::match_results<BidiIter> match_results;
+    typedef detail::sub_match_impl<BidiIter> sub_match_impl;
+    typedef detail::actionable<BidiIter> actionable;
 
     BidiIter cur_;
     sub_match_impl *sub_matches_;

@@ -227,7 +227,7 @@ inline sequence<BidiIter> make_charset_xpression
     if(optimize)
     {
         typedef basic_chset<char_type> charset_type;
-        charset_type charset(chset.basic_chset());
+        charset_type charset(chset.base());
         if(icase)
         {
             charset_matcher<Traits, true, charset_type> matcher(charset);
@@ -243,7 +243,7 @@ inline sequence<BidiIter> make_charset_xpression
     }
 
     // special case to make [[:digit:]] fast
-    else if(chset.basic_chset().empty() && chset.posix_no().empty())
+    else if(chset.base().empty() && chset.posix_no().empty())
     {
         BOOST_ASSERT(0 != chset.posix_yes());
         posix_charset_matcher<Traits> matcher(chset.posix_yes(), chset.is_inverted());

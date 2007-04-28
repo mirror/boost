@@ -20,6 +20,7 @@
 #include <utility>
 #include <iterator>
 #include <typeinfo>
+#include <boost/config.hpp>
 #include <boost/assert.hpp>
 #include <boost/integer.hpp>
 #include <boost/mpl/assert.hpp>
@@ -97,7 +98,7 @@ enum transform_scope { Next, Rest };
 //
 template<typename OutputIterator, typename Char>
 struct case_converting_iterator
-  : std::iterator<std::output_iterator_tag, Char, void, void, void>
+  : std::iterator<std::output_iterator_tag, Char, void, void, case_converting_iterator<OutputIterator, Char> >
 {
     case_converting_iterator(OutputIterator const &out, traits<Char> const *traits)
       : out_(out)
@@ -183,8 +184,9 @@ inline bool set_transform(Iterator &, transform_op, transform_scope)
 ///////////////////////////////////////////////////////////////////////////////
 // noop_output_iterator
 //
+template<typename Char>
 struct noop_output_iterator
-  : std::iterator<std::output_iterator_tag, void, void, void, void>
+  : std::iterator<std::output_iterator_tag, Char, void, void, noop_output_iterator<Char> >
 {
     noop_output_iterator &operator ++()
     {
@@ -201,14 +203,13 @@ struct noop_output_iterator
         return *this;
     }
 
-    template<typename T>
-    noop_output_iterator &operator =(T const &)
+    noop_output_iterator &operator =(Char const &)
     {
         return *this;
     }
 };
 
-} // namespace detail
+} // detail
 
 ///////////////////////////////////////////////////////////////////////////////
 // match_results
@@ -703,7 +704,7 @@ private:
     OutputIterator format_all_impl_(ForwardIterator &cur, ForwardIterator end, OutputIterator out, bool metacolon = false) const
     {
         int max = 0, sub = 0;
-        detail::noop_output_iterator noop;
+        detail::noop_output_iterator<char_type> noop;
 
         while(cur != end)
         {
@@ -935,6 +936,7 @@ private:
             break;
 
         default:
+            // BUGBUG what about backreferences like \12 ?
             if(0 < this->traits_->value(ch, 10))
             {
                 int sub = this->traits_->value(ch, 10);
@@ -985,5 +987,25 @@ private:
 };
 
 }} // namespace boost::xpressive
+
+#ifdef BOOST_HAS_CONCEPTS
+// Better living through concepts. :-P
+namespace std
+{
+    template<typename Iter_, typename Char_>
+    concept_map OutputIterator<
+        boost::xpressive::detail::case_converting_iterator<Iter_, Char_>
+      , Char_
+    >
+    {};
+
+    template<typename Char_>
+    concept_map OutputIterator<
+        boost::xpressive::detail::noop_output_iterator<Char_>
+      , Char_
+    >
+    {};
+}
+#endif
 
 #endif

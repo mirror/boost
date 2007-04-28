@@ -69,12 +69,12 @@ namespace boost { namespace xpressive { namespace detail
             typedef typename action_arg<Type, Int>::reference result_type;
             result_type operator()(Expr &expr, action_context const &ctx) const
             {
-                action_args_type::const_iterator where = ctx.args().find(&typeid(proto::arg(expr)));
-                if(where == ctx.args().end())
+                action_args_type::const_iterator where_ = ctx.args().find(&typeid(proto::arg(expr)));
+                if(where_ == ctx.args().end())
                 {
                     throw regex_error(regex_constants::error_badarg, "An argument to an action was unspecified");
                 }
-                return proto::arg(expr).cast(where->second);
+                return proto::arg(expr).cast(where_->second);
             }
         };
 

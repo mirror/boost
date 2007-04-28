@@ -45,7 +45,7 @@ struct compound_charset
 
     ///////////////////////////////////////////////////////////////////////////////
     // accessors
-    basic_chset<char_type> const &basic_chset() const
+    basic_chset<char_type> const &base() const
     {
         return *this;
     }
