@@ -17,6 +17,10 @@
 #include <iterator>
 #include <boost/range/end.hpp>
 #include <boost/range/begin.hpp>
+#include <boost/mpl/identity.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_pointer.hpp>
+#include <boost/type_traits/remove_const.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/detail/utility/save_restore.hpp>
@@ -102,14 +106,15 @@ inline bool regex_match
 template<typename Char>
 inline bool regex_match
 (
-    Char const *begin
-  , match_results<Char const*> &what
-  , basic_regex<Char const*> const &re
+    typename mpl::identity<Char *>::type begin
+  , match_results<Char *> &what
+  , basic_regex<Char *> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
     // BUGBUG this is inefficient
-    Char const *end = begin + std::char_traits<Char>::length(begin);
+    typedef typename remove_const<Char>::type char_type;
+    Char *end = begin + std::char_traits<char_type>::length(begin);
     return regex_match(begin, end, what, re, flags);
 }
 
@@ -122,6 +127,7 @@ inline bool regex_match
   , match_results<BidiIter> &what
   , basic_regex<BidiIter> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
+  , typename disable_if<is_pointer<BidiRange> >::type * = 0
 )
 {
     // Note that the result iterator of the range must be convertible
@@ -139,6 +145,7 @@ inline bool regex_match
   , match_results<BidiIter> &what
   , basic_regex<BidiIter> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
+  , typename disable_if<is_pointer<BidiRange> >::type * = 0
 )
 {
     // Note that the result iterator of the range must be convertible
@@ -152,13 +159,13 @@ inline bool regex_match
 template<typename Char>
 inline bool regex_match
 (
-    Char const *begin
-  , basic_regex<Char const *> const &re
+    typename mpl::identity<Char *>::type begin
+  , basic_regex<Char *> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
     // BUGBUG this is inefficient
-    match_results<Char const *> what;
+    match_results<Char *> what;
     return regex_match(begin, what, re, flags);
 }
 
@@ -170,6 +177,7 @@ inline bool regex_match
     BidiRange &rng
   , basic_regex<BidiIter> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
+  , typename disable_if<is_pointer<BidiRange> >::type * = 0
 )
 {
     // BUGBUG this is inefficient
@@ -185,6 +193,7 @@ inline bool regex_match
     BidiRange const &rng
   , basic_regex<BidiIter> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
+  , typename disable_if<is_pointer<BidiRange> >::type * = 0
 )
 {
     // BUGBUG this is inefficient
@@ -372,14 +381,15 @@ inline bool regex_search
 template<typename Char>
 inline bool regex_search
 (
-    Char const *begin
-  , match_results<Char const*> &what
-  , basic_regex<Char const*> const &re
+    typename mpl::identity<Char *>::type begin
+  , match_results<Char *> &what
+  , basic_regex<Char *> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
     // BUGBUG this is inefficient
-    Char const *end = begin + std::char_traits<Char>::length(begin);
+    typedef typename remove_const<Char>::type char_type;
+    Char *end = begin + std::char_traits<char_type>::length(begin);
     return regex_search(begin, end, what, re, flags);
 }
 
@@ -392,6 +402,7 @@ inline bool regex_search
   , match_results<BidiIter> &what
   , basic_regex<BidiIter> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
+  , typename disable_if<is_pointer<BidiRange> >::type * = 0
 )
 {
     // Note that the result iterator of the range must be convertible
@@ -409,6 +420,7 @@ inline bool regex_search
   , match_results<BidiIter> &what
   , basic_regex<BidiIter> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
+  , typename disable_if<is_pointer<BidiRange> >::type * = 0
 )
 {
     // Note that the result iterator of the range must be convertible
@@ -422,13 +434,13 @@ inline bool regex_search
 template<typename Char>
 inline bool regex_search
 (
-    Char const *begin
-  , basic_regex<Char const *> const &re
+    typename mpl::identity<Char *>::type begin
+  , basic_regex<Char *> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
 )
 {
     // BUGBUG this is inefficient
-    match_results<Char const *> what;
+    match_results<Char *> what;
     return regex_search(begin, what, re, flags);
 }
 
@@ -440,6 +452,7 @@ inline bool regex_search
     BidiRange &rng
   , basic_regex<BidiIter> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
+  , typename disable_if<is_pointer<BidiRange> >::type * = 0
 )
 {
     // BUGBUG this is inefficient
@@ -455,6 +468,7 @@ inline bool regex_search
     BidiRange const &rng
   , basic_regex<BidiIter> const &re
   , regex_constants::match_flag_type flags = regex_constants::match_default
+  , typename disable_if<is_pointer<BidiRange> >::type * = 0
 )
 {
     // BUGBUG this is inefficient

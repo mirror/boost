@@ -10,7 +10,6 @@
 #define BOOST_PROTO_TAGS_HPP_EAN_04_01_2005
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
