@@ -1,15 +1,13 @@
 ///////////////////////////////////////////////////////////////////////////////
 /// \file tags.hpp
-/// Contains the tags for all the overloadable operators in C++, as well as
-/// the base tags unary, binary and nary, as well as the is_unary\<\>,
-/// is_binary\<\> and is_nary\<\> predicates.
+/// Contains the tags for all the overloadable operators in C++
 //
 //  Copyright 2004 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_PROTO_OP_TAGS_HPP_EAN_04_01_2005
-#define BOOST_PROTO_OP_TAGS_HPP_EAN_04_01_2005
+#ifndef BOOST_PROTO_TAGS_HPP_EAN_04_01_2005
+#define BOOST_PROTO_TAGS_HPP_EAN_04_01_2005
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
@@ -19,59 +17,137 @@
 namespace boost { namespace proto { namespace tag
 {
 
-    ///////////////////////////////////////////////////////////////////////////////
-    // Operator tags
-    struct unary {};
-    struct binary {};
-    struct nary {}; // for operator()
+    /// Tag type for terminals; aka, leaves in the expression tree.
+    struct terminal {};
 
-    struct terminal : unary {};
-    struct unary_plus : unary {};
-    struct unary_minus : unary {};
-    struct unary_star : unary {};
-    struct complement : unary {};
-    struct address_of : unary {};
-    struct logical_not : unary {};
-    struct pre_inc : unary {};
-    struct pre_dec : unary {};
-    struct post_inc : unary {};
-    struct post_dec : unary {};
+    /// Tag type for the unary + operator.
+    struct posit {};        
 
-    struct left_shift : binary {};
-    struct right_shift : binary {};
-    struct multiply : binary {};
-    struct divide : binary {};
-    struct modulus : binary {};
-    struct add : binary {};
-    struct subtract : binary {};
-    struct less : binary {};
-    struct greater : binary {};
-    struct less_equal : binary {};
-    struct greater_equal : binary {};
-    struct equal : binary {};
-    struct not_equal : binary {};
-    struct logical_or : binary {};
-    struct logical_and : binary {};
-    struct bitwise_and : binary {};
-    struct bitwise_or : binary {};
-    struct bitwise_xor : binary {};
-    struct comma : binary {};
-    struct mem_ptr : binary {};
+    /// Tag type for the unary - operator.
+    struct negate {};
 
-    struct assign : binary {};
-    struct left_shift_assign : binary {};
-    struct right_shift_assign : binary {};
-    struct multiply_assign : binary {};
-    struct divide_assign : binary {};
-    struct modulus_assign : binary {};
-    struct add_assign : binary {};
-    struct subtract_assign : binary {};
-    struct bitwise_and_assign : binary {};
-    struct bitwise_or_assign : binary {};
-    struct bitwise_xor_assign : binary {};
-    struct subscript : binary {};
+    /// Tag type for the unary * operator.
+    struct dereference {};
 
-    struct function : nary {};
+    /// Tag type for the unary ~ operator.
+    struct complement {};
+
+    /// Tag type for the unary & operator.
+    struct address_of {};
+
+    /// Tag type for the unary ! operator.
+    struct logical_not {};
+
+    /// Tag type for the unary prefix ++ operator.
+    struct pre_inc {};
+
+    /// Tag type for the unary prefix -- operator.
+    struct pre_dec {};
+
+    /// Tag type for the unary postfix ++ operator.
+    struct post_inc {};
+
+    /// Tag type for the unary postfix -- operator.
+    struct post_dec {};
+
+    /// Tag type for the binary \<\< operator.
+    struct left_shift {};
+
+    /// Tag type for the binary \>\> operator.
+    struct right_shift {};
+
+    /// Tag type for the binary * operator.
+    struct multiplies {};
+
+    /// Tag type for the binary / operator.
+    struct divides {};
+
+    /// Tag type for the binary % operator.
+    struct modulus {};
+
+    /// Tag type for the binary + operator.
+    struct plus {};
+
+    /// Tag type for the binary - operator.
+    struct minus {};
+
+    /// Tag type for the binary \< operator.
+    struct less {};
+
+    /// Tag type for the binary \> operator.
+    struct greater {};
+
+    /// Tag type for the binary \<= operator.
+    struct less_equal {};
+
+    /// Tag type for the binary \>= operator.
+    struct greater_equal {};
+
+    /// Tag type for the binary == operator.
+    struct equal_to {};
+
+    /// Tag type for the binary != operator.
+    struct not_equal_to {};
+
+    /// Tag type for the binary || operator.
+    struct logical_or {};
+
+    /// Tag type for the binary && operator.
+    struct logical_and {};
+
+    /// Tag type for the binary & operator.
+    struct bitwise_and {};
+
+    /// Tag type for the binary | operator.
+    struct bitwise_or {};
+
+    /// Tag type for the binary ^ operator.
+    struct bitwise_xor {};
+
+    /// Tag type for the binary , operator.
+    struct comma {};
+
+    /// Tag type for the binary ->* operator.
+    struct mem_ptr {};
+
+    /// Tag type for the binary = operator.
+    struct assign {};
+
+    /// Tag type for the binary \<\<= operator.
+    struct left_shift_assign {};
+
+    /// Tag type for the binary \>\>= operator.
+    struct right_shift_assign {};
+
+    /// Tag type for the binary *= operator.
+    struct multilpies_assign {};
+
+    /// Tag type for the binary /= operator.
+    struct divides_assign {};
+
+    /// Tag type for the binary %= operator.
+    struct modulus_assign {};
+
+    /// Tag type for the binary += operator.
+    struct plus_assign {};
+
+    /// Tag type for the binary -= operator.
+    struct minus_assign {};
+
+    /// Tag type for the binary &= operator.
+    struct bitwise_and_assign {};
+
+    /// Tag type for the binary |= operator.
+    struct bitwise_or_assign {};
+
+    /// Tag type for the binary ^= operator.
+    struct bitwise_xor_assign {};
+
+    /// Tag type for the binary subscript operator.
+    struct subscript {};
+
+    /// Tag type for the nary function call operator.
+    struct function {};
 
 }}}
 

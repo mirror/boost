@@ -126,28 +126,28 @@ An example should make it clear.
 
         // Handle addition:
         template< typename Left, typename Right >
-        double operator()(proto::tag::add, Left const &left, Right const &right) const
+        double operator()(proto::tag::plus, Left const &left, Right const &right) const
         {
             return proto::eval(left, *this) + proto::eval(right, *this);
         }
 
         // Handle subtraction:
         template< typename Left, typename Right >
-        double operator()(proto::tag::subtract, Left const &left, Right const &right) const
+        double operator()(proto::tag::minus, Left const &left, Right const &right) const
         {
             return proto::eval(left, *this) - proto::eval(right, *this);
         }
 
         // Handle multiplication:
         template< typename Left, typename Right >
-        double operator()(proto::tag::multiply, Left const &left, Right const &right) const
+        double operator()(proto::tag::multiplies, Left const &left, Right const &right) const
         {
             return proto::eval(left, *this) * proto::eval(right, *this);
         }
 
         // Handle division:
         template< typename Left, typename Right >
-        double operator()(proto::tag::divide, Left const &left, Right const &right) const
+        double operator()(proto::tag::divides, Left const &left, Right const &right) const
         {
             return proto::eval(left, *this) / proto::eval(right, *this);
         }

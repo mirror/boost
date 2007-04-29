@@ -398,20 +398,20 @@ compiler will enforce that for us. We only must enforce that the arguments to
 the operators must themselves conform to the `CalculatorGrammar` that we
 forward-declared above.
 
-    struct Add
-      : add< CalculatorGrammar, CalculatorGrammar >
+    struct Plus
+      : plus< CalculatorGrammar, CalculatorGrammar >
     {};
 
-    struct Subtract
-      : subtract< CalculatorGrammar, CalculatorGrammar >
+    struct Minus
+      : minus< CalculatorGrammar, CalculatorGrammar >
     {};
 
-    struct Multiply
-      : multiply< CalculatorGrammar, CalculatorGrammar >
+    struct Multiplies
+      : multiplies< CalculatorGrammar, CalculatorGrammar >
     {};
 
-    struct Divide
-      : divide< CalculatorGrammar, CalculatorGrammar >
+    struct Divides
+      : divides< CalculatorGrammar, CalculatorGrammar >
     {};
 
 Now that we've defined all the parts of the grammar, we can define
@@ -420,10 +420,10 @@ Now that we've defined all the parts of the grammar, we can define
     struct CalculatorGrammar
       : or_<
             Terminal
-          , Add
-          , Subtract
-          , Multiply
-          , Divide
+          , Plus
+          , Minus
+          , Multiplies
+          , Divides
         >
     {};
 

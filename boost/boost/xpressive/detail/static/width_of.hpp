@@ -160,12 +160,12 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     template<typename Expr>
-    struct width_of<Expr, proto::tag::unary_plus>
+    struct width_of<Expr, proto::tag::posit>
       : unknown_width
     {};
 
     template<typename Expr>
-    struct width_of<Expr, proto::tag::unary_star>
+    struct width_of<Expr, proto::tag::dereference>
       : unknown_width
     {};
 
@@ -185,7 +185,7 @@ namespace boost { namespace xpressive { namespace detail
     {};
 
     template<typename Expr>
-    struct width_of<Expr, proto::tag::unary_minus>
+    struct width_of<Expr, proto::tag::negate>
       : width_of<typename proto::result_of::arg<Expr>::type>
     {};
 

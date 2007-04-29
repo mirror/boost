@@ -247,7 +247,7 @@ namespace boost { namespace spirit2
             return true;
         }
 
-        // parse function for complemented thingies (where thingies are assumed 
+        // parse function for complemented thingies (where thingies are assumed
         // to be 1 character wide).
         template<typename Expr>
         bool operator()(proto::tag::complement, Expr const &expr)
@@ -283,7 +283,7 @@ namespace boost { namespace spirit2
 
         // for *A, greedily match A as many times as possible.
         template<typename Expr>
-        bool operator()(proto::tag::unary_star, Expr const &expr)
+        bool operator()(proto::tag::dereference, Expr const &expr)
         {
             iterator where = this->first;
             while(proto::eval(expr, *this))
@@ -295,7 +295,7 @@ namespace boost { namespace spirit2
 
         // for +A, greedily match A one or more times.
         template<typename Expr>
-        bool operator()(proto::tag::unary_plus, Expr const &expr)
+        bool operator()(proto::tag::posit, Expr const &expr)
         {
             return proto::eval(expr, *this) && proto::eval(*expr, *this);
         }
@@ -312,7 +312,7 @@ namespace boost { namespace spirit2
 
         // for (A - B), matches when A but not B matches.
         template<typename Left, typename Right>
-        bool operator()(proto::tag::subtract, Left const &left, Right const &right)
+        bool operator()(proto::tag::minus, Left const &left, Right const &right)
         {
             iterator where = this->first;
             return !proto::eval(right, *this) && proto::eval(left, this->reset(where));
@@ -463,7 +463,7 @@ namespace boost { namespace spirit2
         struct apply
         {
             typedef typename proto::right_shift<
-                typename proto::unary_star<State>::type
+                typename proto::dereference<State>::type
               , Expr
             >::type type;
         };
@@ -516,9 +516,9 @@ namespace boost { namespace spirit2
       : proto::or_<
             proto::bitwise_or< Grammar, Grammar >
           , proto::right_shift< Grammar, Grammar >
-          , proto::subtract< Grammar, Grammar >
-          , proto::unary_star< Grammar >
-          , proto::unary_plus< Grammar >
+          , proto::minus< Grammar, Grammar >
+          , proto::dereference< Grammar >
+          , proto::posit< Grammar >
           , proto::logical_not< Grammar >
         >
     {};
@@ -606,7 +606,7 @@ namespace boost { namespace spirit2
     //      Transform the expression template to insert the skip parser
     //      in between all sequenced parsers. That is, transform (A >> B)
     //      to (*skip >> A >> *skip >> B). This has the advantage of making
-    //      it unnecessary to pass the scanner to all the parsers, which 
+    //      it unnecessary to pass the scanner to all the parsers, which
     //      means its type doesn't show up in function signatures, avoiding
     //      the Scanner Business.
     // Recommendation:

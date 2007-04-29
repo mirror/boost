@@ -26,8 +26,8 @@ using proto::_;
 struct LazyVectorGrammar
   : proto::or_<
         proto::terminal< std::vector<_> >
-      , proto::add< LazyVectorGrammar, LazyVectorGrammar>
-      , proto::subtract< LazyVectorGrammar, LazyVectorGrammar>
+      , proto::plus< LazyVectorGrammar, LazyVectorGrammar>
+      , proto::minus< LazyVectorGrammar, LazyVectorGrammar>
     >
 {};
 

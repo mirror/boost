@@ -25,7 +25,6 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // regex operator tags
     struct modifier_tag
-      : proto::tag::binary
     {
     };
 

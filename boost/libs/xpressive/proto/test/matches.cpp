@@ -74,7 +74,7 @@ struct MyCases::case_<proto::tag::right_shift>
 {};
 
 template<>
-struct MyCases::case_<proto::tag::add>
+struct MyCases::case_<proto::tag::plus>
   : proto::_
 {};
 

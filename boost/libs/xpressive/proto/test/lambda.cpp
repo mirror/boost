@@ -78,7 +78,7 @@ struct lambda_arity
   : LambdaGrammar::apply<Expr, mpl::int_<0>, mpl::void_>
 {};
 
-// The lambda context is the same as the default context 
+// The lambda context is the same as the default context
 // with the addition of special handling for lambda placeholders
 template<typename Tuple>
 struct lambda_context
@@ -118,7 +118,7 @@ struct lambda
     BOOST_PROTO_EXTENDS(T, lambda<T>, lambda_domain)
     BOOST_PROTO_EXTENDS_ASSIGN(T, lambda<T>, lambda_domain)
     BOOST_PROTO_EXTENDS_SUBSCRIPT(T, lambda<T>, lambda_domain)
-    
+
     // Careful not to evaluate the return type of the nullary function
     // unless we have a nullary lambda!
     typedef typename mpl::eval_if<

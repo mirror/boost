@@ -18,13 +18,10 @@
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
-BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::unary)
-BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::binary)
-BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::nary)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::terminal)
-BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::unary_plus)
-BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::unary_minus)
-BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::unary_star)
+BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::posit)
+BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::negate)
+BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::dereference)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::complement)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::address_of)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::logical_not)
@@ -34,17 +31,17 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::post_inc)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::post_dec)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::left_shift)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::right_shift)
-BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::multiply)
-BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::divide)
+BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::multiplies)
+BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::divides)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::modulus)
-BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::add)
-BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::subtract)
+BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::plus)
+BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::minus)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::less)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::greater)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::less_equal)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::greater_equal)
-BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::equal)
-BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::not_equal)
+BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::equal_to)
+BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::not_equal_to)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::logical_or)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::logical_and)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::bitwise_and)
@@ -55,11 +52,11 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::mem_ptr)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::assign)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::left_shift_assign)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::right_shift_assign)
-BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::multiply_assign)
-BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::divide_assign)
+BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::multilpies_assign)
+BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::divides_assign)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::modulus_assign)
-BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::add_assign)
-BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::subtract_assign)
+BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::plus_assign)
+BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::minus_assign)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::bitwise_and_assign)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::bitwise_or_assign)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::bitwise_xor_assign)
@@ -68,7 +65,7 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::function)
 
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::ref, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::expr, (typename)(typename)(long))
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::terminal, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::literal, (typename)(typename))
 
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args1, 1)
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args2, 2)
@@ -97,6 +94,36 @@ BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args9, 9)
 #endif
 #if BOOST_PROTO_MAX_ARITY >= 10
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args10, 10)
+#endif
+#if BOOST_PROTO_MAX_ARITY >= 11
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args11, 11)
+#endif
+#if BOOST_PROTO_MAX_ARITY >= 12
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args12, 12)
+#endif
+#if BOOST_PROTO_MAX_ARITY >= 13
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args13, 13)
+#endif
+#if BOOST_PROTO_MAX_ARITY >= 14
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args14, 14)
+#endif
+#if BOOST_PROTO_MAX_ARITY >= 15
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args15, 15)
+#endif
+#if BOOST_PROTO_MAX_ARITY >= 16
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args16, 16)
+#endif
+#if BOOST_PROTO_MAX_ARITY >= 17
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args17, 17)
+#endif
+#if BOOST_PROTO_MAX_ARITY >= 18
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args18, 18)
+#endif
+#if BOOST_PROTO_MAX_ARITY >= 19
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args19, 19)
+#endif
+#if BOOST_PROTO_MAX_ARITY >= 20
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::args20, 20)
 #endif
 
 #define BOOST_PROTO_AUTO(Var, Expr) BOOST_AUTO(Var, boost::proto::deep_copy(Expr))

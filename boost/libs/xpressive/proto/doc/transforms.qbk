@@ -149,14 +149,14 @@ patience) on `X` resulting in `Y`, and then reassemble the expression as
 So, to put a few things together, consider the calculator expression `+ _1`,
 which would have the following type:
 
-    expr< tag::unary_plus, arg1<
+    expr< tag::posit, arg1<
         expr< tag::terminal, arg1< placeholder1 > >
     > >
 
 If we executed the `unary_expr< _, CalculatorGrammar >` transform on this
 expression, we would expect to get:
 
-    expr< tag::unary_plus, arg1<
+    expr< tag::posit, arg1<
         mpl::int_<1>
     > >
 

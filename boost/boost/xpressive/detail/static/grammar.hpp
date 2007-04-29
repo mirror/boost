@@ -81,13 +81,13 @@ namespace boost { namespace xpressive
             {};
 
             template<typename Dummy>
-            struct case_<proto::tag::unary_star, Dummy>
-              : as_repeat<Char, proto::tag::unary_star, false>
+            struct case_<proto::tag::dereference, Dummy>
+              : as_repeat<Char, proto::tag::dereference, false>
             {};
 
             template<typename Dummy>
-            struct case_<proto::tag::unary_plus, Dummy>
-              : as_repeat<Char, proto::tag::unary_plus, false>
+            struct case_<proto::tag::posit, Dummy>
+              : as_repeat<Char, proto::tag::posit, false>
             {};
 
             template<typename Dummy>
@@ -179,13 +179,13 @@ namespace boost { namespace xpressive
             {};
 
             template<typename Dummy>
-            struct case_<proto::tag::unary_star, Dummy>
-              : proto::trans::compose<as_repeat<Char, proto::tag::unary_star, true>, Grammar<Char> >
+            struct case_<proto::tag::dereference, Dummy>
+              : proto::trans::compose<as_repeat<Char, proto::tag::dereference, true>, Grammar<Char> >
             {};
 
             template<typename Dummy>
-            struct case_<proto::tag::unary_plus, Dummy>
-              : proto::trans::compose<as_repeat<Char, proto::tag::unary_plus, true>, Grammar<Char> >
+            struct case_<proto::tag::posit, Dummy>
+              : proto::trans::compose<as_repeat<Char, proto::tag::posit, true>, Grammar<Char> >
             {};
 
             template<typename Dummy>
@@ -199,9 +199,9 @@ namespace boost { namespace xpressive
             {};
 
             template<typename Dummy>
-            struct case_<proto::tag::unary_minus, Dummy>
+            struct case_<proto::tag::negate, Dummy>
               : proto::trans::compose<
-                    proto::trans::arg<proto::unary_minus<proto::switch_<NonGreedyRepeatCases<Char> > > >
+                    proto::trans::arg<proto::negate<proto::switch_<NonGreedyRepeatCases<Char> > > >
                   , Grammar<Char>
                 >
             {};

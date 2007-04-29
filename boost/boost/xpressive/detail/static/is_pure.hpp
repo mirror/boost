@@ -165,12 +165,12 @@ namespace boost { namespace xpressive { namespace detail
 
     // Quantified expressions are pure IFF they use the simple_repeat_matcher
     template<typename Expr>
-    struct is_pure<Expr, proto::tag::unary_plus>
+    struct is_pure<Expr, proto::tag::posit>
       : use_simple_repeat<typename proto::result_of::arg<Expr>::type>
     {};
 
     template<typename Expr>
-    struct is_pure<Expr, proto::tag::unary_star>
+    struct is_pure<Expr, proto::tag::dereference>
       : use_simple_repeat<typename proto::result_of::arg<Expr>::type>
     {};
 
@@ -185,7 +185,7 @@ namespace boost { namespace xpressive { namespace detail
     {};
 
     template<typename Expr>
-    struct is_pure<Expr, proto::tag::unary_minus>
+    struct is_pure<Expr, proto::tag::negate>
       : is_pure<typename proto::result_of::arg<Expr>::type>
     {};
 

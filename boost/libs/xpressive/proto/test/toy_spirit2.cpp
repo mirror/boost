@@ -102,7 +102,7 @@ namespace boost { namespace spirit2
 
     // Composite parser that contains a Fusion cons-list of other parsers
     // OR
-    // A compiler that compiles an expression and wraps the result in 
+    // A compiler that compiles an expression and wraps the result in
     // a composite<> wrapper
     template<typename Tag, typename List>
     struct composite
@@ -264,7 +264,7 @@ namespace boost { namespace spirit2
 
         template<typename Expr, typename State, typename Visitor>
         static typename apply<Expr, State, Visitor>::type
-        call(Expr const &expr, State const &state, Visitor &visitor)       
+        call(Expr const &expr, State const &state, Visitor &visitor)
         {
             return apply<Expr, State, Visitor>::call(Grammar::call(expr, state, visitor));
         }
@@ -306,7 +306,7 @@ namespace boost { namespace spirit2
             proto::trans::arg< AnyChar >
           , case_sensitive< proto::trans::arg< CharLiteral > >
           , case_sensitive< proto::trans::arg< NTBSLiteral > >
-          , case_sensitive< 
+          , case_sensitive<
                 proto::trans::arg< proto::trans::arg_c< CharParser, 1 > >   // char_('a')
             >
           , case_sensitive<

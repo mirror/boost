@@ -50,14 +50,10 @@ namespace boost { namespace proto
     // Operator tags
     namespace tag
     {
-        struct unary;
-        struct binary;
-        struct nary;
-
         struct terminal;
-        struct unary_plus;
-        struct unary_minus;
-        struct unary_star;
+        struct posit;
+        struct negate;
+        struct dereference;
         struct complement;
         struct address_of;
         struct logical_not;
@@ -68,17 +64,17 @@ namespace boost { namespace proto
 
         struct left_shift;
         struct right_shift;
-        struct multiply;
-        struct divide;
+        struct multiplies;
+        struct divides;
         struct modulus;
-        struct add;
-        struct subtract;
+        struct plus;
+        struct minus;
         struct less;
         struct greater;
         struct less_equal;
         struct greater_equal;
-        struct equal;
-        struct not_equal;
+        struct equal_to;
+        struct not_equal_to;
         struct logical_or;
         struct logical_and;
         struct bitwise_and;
@@ -90,11 +86,11 @@ namespace boost { namespace proto
         struct assign;
         struct left_shift_assign;
         struct right_shift_assign;
-        struct multiply_assign;
-        struct divide_assign;
+        struct multilpies_assign;
+        struct divides_assign;
         struct modulus_assign;
-        struct add_assign;
-        struct subtract_assign;
+        struct plus_assign;
+        struct minus_assign;
         struct bitwise_and_assign;
         struct bitwise_or_assign;
         struct bitwise_xor_assign;
@@ -102,61 +98,6 @@ namespace boost { namespace proto
 
         struct function;
     }
-
-    // for backwards compatibility
-    typedef tag::unary unary_type;
-    typedef tag::binary binary_tag;
-    typedef tag::nary nary_tag;
-    typedef tag::terminal terminal_tag;
-    typedef tag::unary_plus unary_plus_tag;
-    typedef tag::unary_minus unary_minus_tag;
-    typedef tag::unary_star unary_star_tag;
-    typedef tag::complement complement_tag;
-    typedef tag::address_of address_of_tag;
-    typedef tag::logical_not logical_not_tag;
-    typedef tag::pre_inc pre_inc_tag;
-    typedef tag::pre_dec pre_dec_tag;
-    typedef tag::post_inc post_inc_tag;
-    typedef tag::post_dec post_dec_tag;
-    typedef tag::left_shift left_shift_tag;
-    typedef tag::right_shift right_shift_tag;
-    typedef tag::multiply multiply_tag;
-    typedef tag::divide divide_tag;
-    typedef tag::modulus modulus_tag;
-    typedef tag::add add_tag;
-    typedef tag::subtract subtract_tag;
-    typedef tag::less less_tag;
-    typedef tag::greater greater_tag;
-    typedef tag::less_equal less_equal_tag;
-    typedef tag::greater_equal greater_equal_tag;
-    typedef tag::equal equal_tag;
-    typedef tag::not_equal not_equal_tag;
-    typedef tag::logical_or logical_or_tag;
-    typedef tag::logical_and logical_and_tag;
-    typedef tag::bitwise_and bitwise_and_tag;
-    typedef tag::bitwise_or bitwise_or_tag;
-    typedef tag::bitwise_xor bitwise_xor_tag;
-    typedef tag::comma comma_tag;
-    typedef tag::mem_ptr mem_ptr_tag;
-    typedef tag::assign assign_tag;
-    typedef tag::left_shift_assign left_shift_assign_tag;
-    typedef tag::right_shift_assign right_shift_assign_tag;
-    typedef tag::multiply_assign multiply_assign_tag;
-    typedef tag::divide_assign divide_assign_tag;
-    typedef tag::modulus_assign modulus_assign_tag;
-    typedef tag::add_assign add_assign_tag;
-    typedef tag::subtract_assign subtract_assign_tag;
-    typedef tag::bitwise_and_assign bitwise_and_assign_tag;
-    typedef tag::bitwise_or_assign bitwise_or_assign_tag;
-    typedef tag::bitwise_xor_assign bitwise_xor_assign_tag;
-    typedef tag::subscript subscript_tag;
-    typedef tag::function function_tag;
-    typedef bitwise_or_tag bitor_tag;
-    typedef bitwise_and_tag bitand_tag;
-    typedef bitwise_xor_tag bitxor_tag;
-    typedef bitwise_or_assign_tag bitor_assign_tag;
-    typedef bitwise_and_assign_tag bitand_assign_tag;
-    typedef bitwise_xor_assign_tag bitxor_assign_tag;
 
     template<typename Tag, typename Args, long Arity = Args::size>
     struct expr;
@@ -332,9 +273,9 @@ namespace boost { namespace proto
 
     // Specific expression generators, for convenience
     template<typename T> struct terminal;
-    template<typename T> struct unary_plus;
-    template<typename T> struct unary_minus;
-    template<typename T> struct unary_star;
+    template<typename T> struct posit;
+    template<typename T> struct negate;
+    template<typename T> struct dereference;
     template<typename T> struct complement;
     template<typename T> struct address_of;
     template<typename T> struct logical_not;
@@ -345,17 +286,17 @@ namespace boost { namespace proto
 
     template<typename T, typename U> struct left_shift;
     template<typename T, typename U> struct right_shift;
-    template<typename T, typename U> struct multiply;
-    template<typename T, typename U> struct divide;
+    template<typename T, typename U> struct multiplies;
+    template<typename T, typename U> struct divides;
     template<typename T, typename U> struct modulus;
-    template<typename T, typename U> struct add;
-    template<typename T, typename U> struct subtract;
+    template<typename T, typename U> struct plus;
+    template<typename T, typename U> struct minus;
     template<typename T, typename U> struct less;
     template<typename T, typename U> struct greater;
     template<typename T, typename U> struct less_equal;
     template<typename T, typename U> struct greater_equal;
-    template<typename T, typename U> struct equal;
-    template<typename T, typename U> struct not_equal;
+    template<typename T, typename U> struct equal_to;
+    template<typename T, typename U> struct not_equal_to;
     template<typename T, typename U> struct logical_or;
     template<typename T, typename U> struct logical_and;
     template<typename T, typename U> struct bitwise_and;
@@ -367,11 +308,11 @@ namespace boost { namespace proto
     template<typename T, typename U> struct assign;
     template<typename T, typename U> struct left_shift_assign;
     template<typename T, typename U> struct right_shift_assign;
-    template<typename T, typename U> struct multiply_assign;
-    template<typename T, typename U> struct divide_assign;
+    template<typename T, typename U> struct multilpies_assign;
+    template<typename T, typename U> struct divides_assign;
     template<typename T, typename U> struct modulus_assign;
-    template<typename T, typename U> struct add_assign;
-    template<typename T, typename U> struct subtract_assign;
+    template<typename T, typename U> struct plus_assign;
+    template<typename T, typename U> struct minus_assign;
     template<typename T, typename U> struct bitwise_and_assign;
     template<typename T, typename U> struct bitwise_or_assign;
     template<typename T, typename U> struct bitwise_xor_assign;

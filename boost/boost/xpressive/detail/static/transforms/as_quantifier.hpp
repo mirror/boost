@@ -28,7 +28,6 @@ namespace boost { namespace xpressive { namespace detail
     // generic_quant_tag
     template<uint_t Min, uint_t Max>
     struct generic_quant_tag
-      : proto::tag::unary
     {
         typedef mpl::integral_c<uint_t, Min> min_type;
         typedef mpl::integral_c<uint_t, Max> max_type;
@@ -40,10 +39,10 @@ namespace boost { namespace xpressive { namespace detail
     struct min_type : Tag::min_type {};
 
     template<>
-    struct min_type<proto::tag::unary_plus> : mpl::integral_c<uint_t, 1> {};
+    struct min_type<proto::tag::posit> : mpl::integral_c<uint_t, 1> {};
 
     template<>
-    struct min_type<proto::tag::unary_star> : mpl::integral_c<uint_t, 0> {};
+    struct min_type<proto::tag::dereference> : mpl::integral_c<uint_t, 0> {};
 
     template<>
     struct min_type<proto::tag::logical_not> : mpl::integral_c<uint_t, 0> {};
@@ -52,10 +51,10 @@ namespace boost { namespace xpressive { namespace detail
     struct max_type : Tag::max_type {};
 
     template<>
-    struct max_type<proto::tag::unary_plus> : mpl::integral_c<uint_t, UINT_MAX-1> {};
+    struct max_type<proto::tag::posit> : mpl::integral_c<uint_t, UINT_MAX-1> {};
 
     template<>
-    struct max_type<proto::tag::unary_star> : mpl::integral_c<uint_t, UINT_MAX-1> {};
+    struct max_type<proto::tag::dereference> : mpl::integral_c<uint_t, UINT_MAX-1> {};
 
     template<>
     struct max_type<proto::tag::logical_not> : mpl::integral_c<uint_t, 1> {};

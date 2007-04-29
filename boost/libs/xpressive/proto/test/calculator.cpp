@@ -33,25 +33,25 @@ struct calculator : proto::callable_context<calculator const>
     }
 
     template<typename Left, typename Right>
-    int operator()(proto::tag::add, Left const &left, Right const &right) const
+    int operator()(proto::tag::plus, Left const &left, Right const &right) const
     {
         return proto::eval(left, *this) + proto::eval(right, *this);
     }
 
     template<typename Left, typename Right>
-    int operator()(proto::tag::subtract, Left const &left, Right const &right) const
+    int operator()(proto::tag::minus, Left const &left, Right const &right) const
     {
         return proto::eval(left, *this) - proto::eval(right, *this);
     }
 
     template<typename Left, typename Right>
-    int operator()(proto::tag::multiply, Left const &left, Right const &right) const
+    int operator()(proto::tag::multiplies, Left const &left, Right const &right) const
     {
         return proto::eval(left, *this) * proto::eval(right, *this);
     }
 
     template<typename Left, typename Right>
-    int operator()(proto::tag::divide, Left const &left, Right const &right) const
+    int operator()(proto::tag::divides, Left const &left, Right const &right) const
     {
         return proto::eval(left, *this) / proto::eval(right, *this);
     }
@@ -68,7 +68,7 @@ struct functor
     functor(Expr const &expr)
       : expr_(expr)
     {}
-    
+
     template<typename T>
     result_type operator()(T const &t) const
     {
