@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     local<std::stack<std::string> > strings;
 
     // The rules in the dynamic regex grammar
-    cregex regex, alts, seq, quant, repeat, atom, escape, group, lit;
+    cregex regex, alts, seq, quant, repeat, atom, escape, group, lit, charset, setelem;
 
     lit     = ~(set='.','^','$','*','+','?','(',')','{','}','[',']','\\','|')
             ;
@@ -68,14 +68,26 @@ int main(int argc, char *argv[])
             | _             [top(strings) += " as_xpr('" + _ + "') "]
             ;
 
-    group   = as_xpr("?:")  [top(strings) += " ( "]         >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?i:") [top(strings) += " icase( "]    >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?>")  [top(strings) += " keep( "]     >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?=")  [top(strings) += " before( "]   >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?!")  [top(strings) += " ~before( "]  >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?<=") [top(strings) += " after( "]    >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?<!") [top(strings) += " ~after( "]   >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | nil [top(strings) += " ( s" + as<std::string>(++mark_nbr) + "= "] >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+    group   = as_xpr("?:")  [top(strings) += " ( "]         >> by_ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+            | as_xpr("?i:") [top(strings) += " icase( "]    >> by_ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+            | as_xpr("?>")  [top(strings) += " keep( "]     >> by_ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+            | as_xpr("?=")  [top(strings) += " before( "]   >> by_ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+            | as_xpr("?!")  [top(strings) += " ~before( "]  >> by_ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+            | as_xpr("?<=") [top(strings) += " after( "]    >> by_ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+            | as_xpr("?<!") [top(strings) += " ~after( "]   >> by_ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+            | nil [top(strings) += " ( s" + as<std::string>(++mark_nbr) + "= "] >> by_ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+            ;
+
+    setelem = as_xpr('\\') >> _ [top(strings) += " as_xpr('" + _ + "') "]
+            | "[:" >> !as_xpr('^') [top(strings) += "~"] >> (+_w) [top(strings) += _ ] >> ":]"
+            | ((s1=~as_xpr(']')) >> '-' >> (s2=~as_xpr(']'))) [top(strings) += "range('" + s1 + "','" + s2 + "')"]
+            ;
+
+    charset = !as_xpr('^') [top(strings) += " ~ "]
+            >> nil [top(strings) += " set[ "]
+            >> (setelem | (~as_xpr(']')) [top(strings) += " as_xpr('" + _ + "') "])
+            >> *( nil [ top(strings) += " | " ] >> (setelem | (~as_xpr(']')) [ top(strings) += "'" + _ + "'" ] ) )
+            >> as_xpr(']') [top(strings) += " ] "]
             ;
 
     atom    = (+(lit >> ~before((set='*','+','?','{'))) | lit) [top(strings) += " as_xpr(\"" + _ + "\") "]
@@ -84,6 +96,7 @@ int main(int argc, char *argv[])
             | as_xpr('$') [top(strings) += eos]
             | '\\' >> escape
             | '(' >> group
+            | '[' >> charset
             ;
 
     repeat  = as_xpr('{') [top(strings) += " repeat<"]
