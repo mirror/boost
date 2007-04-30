@@ -465,12 +465,16 @@ namespace boost { namespace xpressive
         return proto::as_expr(p);
     }
 
-    template<typename T, int I = 0>
-    struct arg
-      : proto::extends<typename proto::terminal<detail::action_arg<T, mpl::int_<I> > >::type, arg<T, I> >
+    template<typename T, int I = 0, typename Dummy = proto::is_proto_expr>
+    struct placeholder
     {
-        typedef proto::extends<typename proto::terminal<detail::action_arg<T, mpl::int_<I> > >::type, arg<T, I> > base_type;
-        using base_type::operator =;
+        typedef placeholder<T, I, Dummy> this_type;
+        typedef typename proto::terminal<detail::action_arg<T, mpl::int_<I> > >::type action_arg_type;
+
+        BOOST_PROTO_EXTENDS(action_arg_type, this_type, proto::default_context)
+        BOOST_PROTO_EXTENDS_ASSIGN(action_arg_type, this_type, proto::default_context)
+        BOOST_PROTO_EXTENDS_SUBSCRIPT(action_arg_type, this_type, proto::default_context)
+        BOOST_PROTO_EXTENDS_FUNCTION(action_arg_type, this_type, proto::default_context)
     };
 
     /// construct

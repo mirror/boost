@@ -114,15 +114,15 @@ void test4()
 void test4_aux()
 {
     using namespace boost::xpressive;
-    arg< std::map<std::string, int> > map;
+    placeholder< std::map<std::string, int> > const _map = {};
 
-    sregex pair = ( (s1= +_w) >> "=>" >> (s2= +_d) )[ map[s1] = as<int>(s2) ];
+    sregex pair = ( (s1= +_w) >> "=>" >> (s2= +_d) )[ _map[s1] = as<int>(s2) ];
     sregex rx = pair >> *(+_s >> pair);
 
     std::string str("aaa=>1 bbb=>23 ccc=>456");
     smatch what;
     std::map<std::string, int> result;
-    what.let(map = result); // bind the argument!
+    what.let(_map = result); // bind the argument!
 
     if(!regex_match(str, what, rx))
     {
