@@ -441,13 +441,11 @@ proto::op::as_expr const as_xpr = {};
 ///
 /// \param rex The basic_regex object to embed by reference.
 template<typename BidiIter>
-inline typename proto::terminal<detail::regex_byref_placeholder<BidiIter> >::type const
+inline typename proto::terminal<reference_wrapper<basic_regex<BidiIter> const> >::type const
 by_ref(basic_regex<BidiIter> const &rex)
 {
-    typedef detail::core_access<BidiIter> access;
-    shared_ptr<detail::regex_impl<BidiIter> > impl = access::get_regex_impl(rex);
-    detail::regex_byref_placeholder<BidiIter> rex_ref(impl);
-    return proto::terminal<detail::regex_byref_placeholder<BidiIter> >::type::make(rex_ref);
+    reference_wrapper<basic_regex<BidiIter> const> ref(rex);
+    return proto::terminal<reference_wrapper<basic_regex<BidiIter> const> >::type::make(ref);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

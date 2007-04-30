@@ -13,6 +13,7 @@
 # pragma once
 #endif
 
+#include <boost/ref.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/plus.hpp>
@@ -84,6 +85,16 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename BidiIter>
     struct width_of_terminal<tracking_ptr<regex_impl<BidiIter> >, false>
+      : unknown_width       // basic_regex
+    {};
+
+    template<typename BidiIter>
+    struct width_of_terminal<reference_wrapper<basic_regex<BidiIter> >, false>
+      : unknown_width       // basic_regex
+    {};
+
+    template<typename BidiIter>
+    struct width_of_terminal<reference_wrapper<basic_regex<BidiIter> const>, false>
       : unknown_width       // basic_regex
     {};
 

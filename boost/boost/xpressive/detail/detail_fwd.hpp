@@ -44,9 +44,6 @@ namespace boost { namespace xpressive { namespace detail
 
     struct mark_placeholder;
 
-    template<typename BidiIter>
-    struct regex_byref_placeholder;
-
     struct posix_charset_placeholder;
 
     template<typename Cond>

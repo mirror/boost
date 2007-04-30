@@ -13,6 +13,7 @@
 # pragma once
 #endif
 
+#include <boost/ref.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/assert.hpp>
@@ -62,6 +63,16 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename BidiIter>
     struct is_terminal_pure<tracking_ptr<regex_impl<BidiIter> >, false>
+      : mpl::false_     // basic_regex
+    {};
+
+    template<typename BidiIter>
+    struct is_terminal_pure<reference_wrapper<basic_regex<BidiIter> >, false>
+      : mpl::false_     // basic_regex
+    {};
+
+    template<typename BidiIter>
+    struct is_terminal_pure<reference_wrapper<basic_regex<BidiIter> const>, false>
       : mpl::false_     // basic_regex
     {};
 

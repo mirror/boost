@@ -43,22 +43,6 @@ struct mark_placeholder
 };
 
 ///////////////////////////////////////////////////////////////////////////////
-// regex_byref_placeholder
-//
-template<typename BidiIter>
-struct regex_byref_placeholder
-{
-    BOOST_XPR_QUANT_STYLE(quant_variable_width, unknown_width::value, false)
-
-    shared_ptr<regex_impl<BidiIter> > impl_;
-
-    regex_byref_placeholder(shared_ptr<regex_impl<BidiIter> > const &impl)
-      : impl_(impl)
-    {
-    }
-};
-
-///////////////////////////////////////////////////////////////////////////////
 // posix_charset_placeholder
 //
 struct posix_charset_placeholder

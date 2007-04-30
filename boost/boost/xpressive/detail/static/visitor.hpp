@@ -13,6 +13,7 @@
 # pragma once
 #endif
 
+#include <boost/ref.hpp>
 #include <boost/mpl/bind.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
@@ -63,10 +64,16 @@ namespace boost { namespace xpressive { namespace detail
         {
         }
 
-        void visit_(regex_byref_placeholder<BidiIter> const &rex)
+        void visit_(reference_wrapper<basic_regex<BidiIter> > const &rex)
         {
             // when visiting an embedded regex, track the references
-            this->self_->track_reference(*rex.impl_);
+            this->self_->track_reference(*detail::core_access<BidiIter>::get_regex_impl(rex.get()));
+        }
+
+        void visit_(reference_wrapper<basic_regex<BidiIter> const> const &rex)
+        {
+            // when visiting an embedded regex, track the references
+            this->self_->track_reference(*detail::core_access<BidiIter>::get_regex_impl(rex.get()));
         }
 
         void visit_(tracking_ptr<regex_impl<BidiIter> > const &rex)

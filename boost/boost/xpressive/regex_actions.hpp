@@ -17,6 +17,7 @@
 #include <boost/ref.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/int.hpp>
+#include <boost/noncopyable.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
@@ -390,33 +391,23 @@ namespace boost { namespace xpressive
 
     template<typename T>
     struct local
-      : detail::value_wrapper<T>
-      , proto::extends<typename proto::terminal<reference_wrapper<T> >::type, local<T> >
+      : private noncopyable
+      , detail::value_wrapper<T>
+      , proto::terminal<reference_wrapper<T> >::type
     {
-        typedef proto::extends<typename proto::terminal<reference_wrapper<T> >::type, local<T> > base_type;
+        typedef typename proto::terminal<reference_wrapper<T> >::type base_type;
 
         local()
-          : detail::value_wrapper<T>()
-          , base_type(base_type::type::make(boost::ref(detail::value_wrapper<T>::value)))
+          : noncopyable()
+          , detail::value_wrapper<T>()
+          , base_type(base_type::make(boost::ref(detail::value_wrapper<T>::value)))
         {}
 
         explicit local(T const &t)
-          : detail::value_wrapper<T>(t)
-          , base_type(base_type::type::make(boost::ref(detail::value_wrapper<T>::value)))
+          : noncopyable()
+          , detail::value_wrapper<T>(t)
+          , base_type(base_type::make(boost::ref(detail::value_wrapper<T>::value)))
         {}
-
-        // copies refer to the value in that, not this!
-        local(local const &that)
-          : detail::value_wrapper<T>()
-          , base_type(that)
-        {}
-
-        // copies refer to the value in that, not this!
-        local &operator =(local const &that)
-        {
-            *static_cast<base_type *>(this) = *static_cast<base_type const *>(&that);
-            return *this;
-        }
 
         using base_type::operator =;
 

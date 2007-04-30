@@ -206,14 +206,26 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     template<typename BidiIter, typename ICase, typename Traits>
-    struct transmogrify<BidiIter, ICase, Traits, regex_byref_placeholder<BidiIter> >
+    struct transmogrify<BidiIter, ICase, Traits, reference_wrapper<basic_regex<BidiIter> > >
     {
         typedef regex_byref_matcher<BidiIter> type;
 
         template<typename Matcher2>
         static type call(Matcher2 const &m, dont_care)
         {
-            return type(m.impl_);
+            return type(detail::core_access<BidiIter>::get_regex_impl(m.get()));
+        }
+    };
+
+    template<typename BidiIter, typename ICase, typename Traits>
+    struct transmogrify<BidiIter, ICase, Traits, reference_wrapper<basic_regex<BidiIter> const> >
+    {
+        typedef regex_byref_matcher<BidiIter> type;
+
+        template<typename Matcher2>
+        static type call(Matcher2 const &m, dont_care)
+        {
+            return type(detail::core_access<BidiIter>::get_regex_impl(m.get()));
         }
     };
 
