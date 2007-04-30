@@ -205,7 +205,7 @@ public:
     operator token_id() const { return token_id(*data); }
     string_type const &get_value() const { return data->get_value(); }
     position_type const &get_position() const { return data->get_position(); }
-    bool is_eoi() const { token_id(*data) == T_EOI; }
+    bool is_eoi() const { return token_id(*data) == T_EOI; }
 
     void set_token_id (token_id id_) { make_unique(); data->set_token_id(id_); }
     void set_value (string_type const &value_) { make_unique(); data->set_value(value_); }
