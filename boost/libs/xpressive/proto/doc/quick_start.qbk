@@ -80,10 +80,20 @@ Let's begin with the nickel tour of the utilities Proto provides.
     [[Tool]                     [Description]]
     [[_expr_]                   [The structure from which Proto's expression
                                     trees are built.]]
-    [[_ref_]                    [A wrapper for holding an _expr_ by reference
-                                    within another _expr_.]]
-    [[_unref_]                  [Removes a top-level reference, be it a real
-                                    reference or a _ref_ wrapper.]]
+    [[_arg_, _arg_c_]           [For extracting the ['N]th child expression
+                                    from a proto expression tree.]]
+    [[_left_, _right_]          [For extracting the left or right child
+                                    expression from a binary proto expression
+                                    tree.]]
+    [[_eval_]                   [A proto expression evaluator. Given an 
+                                    expression and a /context/, it evaluates
+                                    the expression in that context.]]
+    [[_default_context_]        [An evaluation context for use with _eval_ 
+                                    which assignes the standard meanings to the
+                                    operators and uses Boost.Typeof to deduce
+                                    return types.]]
+    [[_callable_context_]       [An alternate evaluation context that is easier
+                                    to use in some situations.]]
     [[_deep_copy_]              [A function for transforming an expression
                                     tree such that all nodes are held by value
                                     instead of by reference.]]
@@ -91,19 +101,6 @@ Let's begin with the nickel tour of the utilities Proto provides.
                                     object if it is not already a Proto
                                     expression. _as_arg_ is similar except
                                     the argument is stored by reference.]]
-    [[_is_expr_]                [Tests a type to see if it is a Proto
-                                    expression type.]]
-    [[_tag_of_]                 [Meta-function which returns the node type
-                                    of the specified expression.]]
-    [[_arg_, _arg_c_]           [For extracting the ['N]th child expression
-                                    from a proto expression tree.]]
-    [[_left_, _right_]          [For extracting the left or right child
-                                    expression from a binary proto expression
-                                    tree.]]
-    [[_extends_]                [A domain-specific wrapper for giving an
-                                    expression additional behaviors.]]
-    [[_literal_, _lit_]         [A wrapper for a Proto terminal, and a function
-                                    for generating them, respectively.]]
     [[_terminal_, _unary_expr_,
         _binary_expr_, /etc./]  [Expression type generators. For example,
                                     `right_shift<A, B>::type` is the type
@@ -123,11 +120,14 @@ Let's begin with the nickel tour of the utilities Proto provides.
     [[_exact_]                  [Used to specify that a terminal type must
                                     match exactly in a Proto meta-grammar.
                                     (By default, matches are ['fuzzy].)]]
-    [[_default_context_]        [An evaluation context which assignes the
-                                    standard meanings to the operators and
-                                    uses Boost.Typeof to deduce return types.]]
-    [[_callable_context_]       [An alternate evaluation context that is easier
-                                    to use in some situations.]]
+    [[_extends_]                [A domain-specific wrapper for giving an
+                                    expression additional behaviors.]]
+    [[_literal_, _lit_]         [A wrapper for a Proto terminal, and a function
+                                    for generating them, respectively.]]
+    [[_is_expr_]                [Tests a type to see if it is a Proto
+                                    expression type.]]
+    [[_tag_of_]                 [Meta-function which returns the node type
+                                    of the specified expression.]]
 ]
 
 [/
