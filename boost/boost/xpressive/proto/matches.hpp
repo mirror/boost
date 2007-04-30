@@ -112,7 +112,7 @@
             {};
 
             // How terminal_matches<> handles references and cv-qualifiers.
-            // The cv and ref matter *only* if the grammar has a top-level ref.
+            // The cv and ref_ matter *only* if the grammar has a top-level ref_.
             //
             // Expr     |   Grammar  |  Match
             // ------------------------------

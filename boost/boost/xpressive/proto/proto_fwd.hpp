@@ -103,7 +103,7 @@ namespace boost { namespace proto
     struct expr;
 
     template<typename Expr>
-    struct ref;
+    struct ref_;
 
     template<typename OpTag, typename DomainTag, typename EnableIf = void>
     struct compiler;

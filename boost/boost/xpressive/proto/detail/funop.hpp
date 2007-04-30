@@ -16,7 +16,7 @@ struct BOOST_PP_CAT(funop, BOOST_PP_ITERATION())
     typedef expr<
         tag::function
       , BOOST_PP_CAT(args, BOOST_PP_INC(BOOST_PP_ITERATION()))<
-            ref<Expr>
+            ref_<Expr>
             BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
                 BOOST_PP_ITERATION()
               , typename result_of::as_arg<A

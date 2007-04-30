@@ -56,10 +56,10 @@ namespace boost { namespace proto
 
     template<typename Expr>
     struct children
-      : proto::ref<Expr>
+      : proto::ref_<Expr>
     {
         children(Expr &expr)
-          : proto::ref<Expr>(proto::ref<Expr>::make(expr))
+          : proto::ref_<Expr>(proto::ref_<Expr>::make(expr))
         {}
     };
 
@@ -350,13 +350,13 @@ namespace boost { namespace fusion
                 typedef typename Sequence::tag_type tag_type;
 
                 typedef fusion::transform_view<
-                    proto::ref<Sequence>
+                    proto::ref_<Sequence>
                   , as_element<tag_type>
                 > type;
 
                 static type call(Sequence &sequence)
                 {
-                    proto::ref<Sequence> r = {sequence};
+                    proto::ref_<Sequence> r = {sequence};
                     return type(r, as_element<tag_type>());
                 }
             };
@@ -496,7 +496,7 @@ namespace boost { namespace fusion
 //    };
 //
 //    template<typename Expr>
-//    struct sequence_tag<proto::ref<Expr> >
+//    struct sequence_tag<proto::ref_<Expr> >
 //    {
 //        typedef proto::proto_expr_tag type;
 //    };

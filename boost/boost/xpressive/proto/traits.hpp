@@ -135,7 +135,7 @@
             template<typename T>
             struct as_arg<T, typename T::is_boost_proto_expr_>
             {
-                typedef ref<T> type;
+                typedef ref_<T> type;
             };
 
             template<typename Expr, typename N>
@@ -146,7 +146,7 @@
             // left
                 // BUGBUG this forces the instantiation of Expr. Couldn't we
                 // partially specialize left<> on expr< T, A > and
-                // ref< expr< T, A > > and return A::arg0 ?
+                // ref_< expr< T, A > > and return A::arg0 ?
             template<typename Expr>
             struct left
               : unref<typename Expr::arg0_type>

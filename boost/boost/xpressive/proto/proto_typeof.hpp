@@ -63,7 +63,7 @@ BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::bitwise_xor_assign)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::subscript)
 BOOST_TYPEOF_REGISTER_TYPE(boost::proto::tag::function)
 
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::ref, (typename))
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::ref_, (typename))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::expr, (typename)(typename)(long))
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::proto::literal, (typename)(typename))
 

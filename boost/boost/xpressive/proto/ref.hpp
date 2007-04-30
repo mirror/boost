@@ -27,7 +27,7 @@ namespace boost { namespace proto
     /**/
 
     template<typename Expr>
-    struct ref
+    struct ref_
     {
         typedef typename Expr::type type;
         typedef typename Expr::tag_type tag_type;
@@ -47,18 +47,18 @@ namespace boost { namespace proto
             return this->expr.cast();
         }
 
-        static ref<Expr> make(Expr &expr)
+        static ref_<Expr> make(Expr &expr)
         {
-            ref<Expr> that = {expr};
+            ref_<Expr> that = {expr};
             return that;
         }
 
         Expr &expr;
     };
 
-    // ref-to-ref is not allowed. this will cause a compile error.
+    // ref_-to-ref_ is not allowed. this will cause a compile error.
     template<typename Expr>
-    struct ref<ref<Expr> >
+    struct ref_<ref_<Expr> >
     {};
 
 #undef BOOST_PROTO_ARG
@@ -74,7 +74,7 @@ namespace boost { namespace proto
         };
 
         template<typename T>
-        struct unref<ref<T> >
+        struct unref<ref_<T> >
         {
             typedef typename T::boost_proto_expr_type_ type;
             typedef T &reference;
@@ -139,13 +139,13 @@ namespace boost { namespace proto
             }
 
             template<typename T>
-            T &operator()(ref<T> &t) const
+            T &operator()(ref_<T> &t) const
             {
                 return t.expr;
             }
 
             template<typename T>
-            T &operator()(ref<T> const &t) const
+            T &operator()(ref_<T> const &t) const
             {
                 return t.expr;
             }

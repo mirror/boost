@@ -545,7 +545,6 @@ namespace boost { namespace xpressive
     {
         inline void ignore_unused_regex_actions()
         {
-            ignore_unused(xpressive::repeat_max);
             ignore_unused(xpressive::push);
             ignore_unused(xpressive::push_back);
             ignore_unused(xpressive::push_front);

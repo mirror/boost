@@ -109,37 +109,37 @@ namespace boost { namespace proto
 
     #define BOOST_PROTO_EXTENDS_ASSIGN(Expr, Derived, Domain)\
         template<typename A>\
-        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref<Derived >, typename boost::proto::result_of::as_arg<A>::type> > >::type const\
+        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref_<Derived >, typename boost::proto::result_of::as_arg<A>::type> > >::type const\
         operator =(A &a)\
         {\
-            typedef boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref<Derived >, typename boost::proto::result_of::as_arg<A>::type> > that_type;\
+            typedef boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref_<Derived >, typename boost::proto::result_of::as_arg<A>::type> > that_type;\
             that_type that = {{*static_cast<Derived *>(this)}, boost::proto::as_arg(a)};\
             return boost::proto::generate<Domain, that_type>::make(that);\
         }\
         \
         template<typename A>\
-        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref<Derived >, typename boost::proto::result_of::as_arg<A const>::type> > >::type const\
+        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref_<Derived >, typename boost::proto::result_of::as_arg<A const>::type> > >::type const\
         operator =(A const &a)\
         {\
-            typedef boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref<Derived >, typename boost::proto::result_of::as_arg<A const>::type> > that_type;\
+            typedef boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref_<Derived >, typename boost::proto::result_of::as_arg<A const>::type> > that_type;\
             that_type that = {{*static_cast<Derived *>(this)}, boost::proto::as_arg(a)};\
             return boost::proto::generate<Domain, that_type>::make(that);\
         }\
         \
         template<typename A>\
-        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref<Derived const>, typename boost::proto::result_of::as_arg<A>::type> > >::type const\
+        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref_<Derived const>, typename boost::proto::result_of::as_arg<A>::type> > >::type const\
         operator =(A &a) const\
         {\
-            typedef boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref<Derived const>, typename boost::proto::result_of::as_arg<A>::type> > that_type;\
+            typedef boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref_<Derived const>, typename boost::proto::result_of::as_arg<A>::type> > that_type;\
             that_type that = {{*static_cast<Derived const *>(this)}, boost::proto::as_arg(a)};\
             return boost::proto::generate<Domain, that_type>::make(that);\
         }\
         \
         template<typename A>\
-        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref<Derived const>, typename boost::proto::result_of::as_arg<A const>::type> > >::type const\
+        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref_<Derived const>, typename boost::proto::result_of::as_arg<A const>::type> > >::type const\
         operator =(A const &a) const\
         {\
-            typedef boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref<Derived const>, typename boost::proto::result_of::as_arg<A const>::type> > that_type;\
+            typedef boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref_<Derived const>, typename boost::proto::result_of::as_arg<A const>::type> > that_type;\
             that_type that = {{*static_cast<Derived const *>(this)}, boost::proto::as_arg(a)};\
             return boost::proto::generate<Domain, that_type>::make(that);\
         }\
@@ -147,37 +147,37 @@ namespace boost { namespace proto
 
     #define BOOST_PROTO_EXTENDS_SUBSCRIPT(Expr, Derived, Domain)\
         template<typename A>\
-        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref<Derived >, typename boost::proto::result_of::as_arg<A>::type> > >::type const\
+        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref_<Derived >, typename boost::proto::result_of::as_arg<A>::type> > >::type const\
         operator [](A &a)\
         {\
-            typedef boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref<Derived >, typename boost::proto::result_of::as_arg<A>::type> > that_type;\
+            typedef boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref_<Derived >, typename boost::proto::result_of::as_arg<A>::type> > that_type;\
             that_type that = {{*static_cast<Derived *>(this)}, boost::proto::as_arg(a)};\
             return boost::proto::generate<Domain, that_type>::make(that);\
         }\
         \
         template<typename A>\
-        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref<Derived >, typename boost::proto::result_of::as_arg<A const>::type> > >::type const\
+        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref_<Derived >, typename boost::proto::result_of::as_arg<A const>::type> > >::type const\
         operator [](A const &a)\
         {\
-            typedef boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref<Derived >, typename boost::proto::result_of::as_arg<A const>::type> > that_type;\
+            typedef boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref_<Derived >, typename boost::proto::result_of::as_arg<A const>::type> > that_type;\
             that_type that = {{*static_cast<Derived *>(this)}, boost::proto::as_arg(a)};\
             return boost::proto::generate<Domain, that_type>::make(that);\
         }\
         \
         template<typename A>\
-        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref<Derived const>, typename boost::proto::result_of::as_arg<A>::type> > >::type const\
+        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref_<Derived const>, typename boost::proto::result_of::as_arg<A>::type> > >::type const\
         operator [](A &a) const\
         {\
-            typedef boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref<Derived const>, typename boost::proto::result_of::as_arg<A>::type> > that_type;\
+            typedef boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref_<Derived const>, typename boost::proto::result_of::as_arg<A>::type> > that_type;\
             that_type that = {{*static_cast<Derived const *>(this)}, boost::proto::as_arg(a)};\
             return boost::proto::generate<Domain, that_type>::make(that);\
         }\
         \
         template<typename A>\
-        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref<Derived const>, typename boost::proto::result_of::as_arg<A const>::type> > >::type const\
+        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref_<Derived const>, typename boost::proto::result_of::as_arg<A const>::type> > >::type const\
         operator [](A const &a) const\
         {\
-            typedef boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref<Derived const>, typename boost::proto::result_of::as_arg<A const>::type> > that_type;\
+            typedef boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref_<Derived const>, typename boost::proto::result_of::as_arg<A const>::type> > that_type;\
             that_type that = {{*static_cast<Derived const *>(this)}, boost::proto::as_arg(a)};\
             return boost::proto::generate<Domain, that_type>::make(that);\
         }\
@@ -192,13 +192,13 @@ namespace boost { namespace proto
         template<typename This>\
         struct result<This()>\
         {\
-            typedef typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::function, boost::proto::args1<boost::proto::ref<Derived const> > > >::type type;\
+            typedef typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::function, boost::proto::args1<boost::proto::ref_<Derived const> > > >::type type;\
         };\
         \
-        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::function, boost::proto::args1<boost::proto::ref<Derived const> > > >::type const\
+        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::function, boost::proto::args1<boost::proto::ref_<Derived const> > > >::type const\
         operator ()() const\
         {\
-            typedef boost::proto::expr<boost::proto::tag::function, boost::proto::args1<boost::proto::ref<Derived const> > > that_type;\
+            typedef boost::proto::expr<boost::proto::tag::function, boost::proto::args1<boost::proto::ref_<Derived const> > > that_type;\
             that_type that = {{*static_cast<Derived const *>(this)}};\
             return boost::proto::generate<Domain, that_type>::make(that);\
         }\

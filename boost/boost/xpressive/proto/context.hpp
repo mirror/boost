@@ -141,9 +141,9 @@
             };
 
         #if BOOST_WORKAROUND(BOOST_MSVC, == 1400)
-            template<typename T> T &ref_(T &t);
-            template<typename T> T const &ref_(T const &t);
-            #define BOOST_PROTO_REF(x) detail::ref_(x)
+            template<typename T> T &make_ref_(T &t);
+            template<typename T> T const &make_ref_(T const &t);
+            #define BOOST_PROTO_REF(x) detail::make_ref_(x)
         #else
             #define BOOST_PROTO_REF(x) x
         #endif
