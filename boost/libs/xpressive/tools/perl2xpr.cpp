@@ -18,6 +18,7 @@ using namespace boost::xpressive;
 int main(int argc, char *argv[])
 {
     int i = 1;
+    bool nocase = false;
     char const *dot = " ~_n ";
     char const *bos = " bos ";
     char const *eos = " eos ";
@@ -26,6 +27,9 @@ int main(int argc, char *argv[])
     {
         switch(argv[i][1])
         {
+        case 'i':           // perl /i modifier
+            nocase = true;
+            break;
         case 's':           // perl /s modifier
             dot = " _ ";
             break;
@@ -41,7 +45,7 @@ int main(int argc, char *argv[])
 
     if(i == argc)
     {
-        std::cerr << "Usage:\n    perl2xpr [-s] [-m] 're'\n";
+        std::cerr << "Usage:\n    perl2xpr [-i] [-s] [-m] 're'\n";
         return -1;
     }
 
@@ -68,14 +72,14 @@ int main(int argc, char *argv[])
             | _             [top(strings) += " as_xpr('" + _ + "') "]
             ;
 
-    group   = as_xpr("?:")  [top(strings) += " ( "]         >> by_ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?i:") [top(strings) += " icase( "]    >> by_ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?>")  [top(strings) += " keep( "]     >> by_ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?=")  [top(strings) += " before( "]   >> by_ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?!")  [top(strings) += " ~before( "]  >> by_ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?<=") [top(strings) += " after( "]    >> by_ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?<!") [top(strings) += " ~after( "]   >> by_ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | nil [top(strings) += " ( s" + as<std::string>(++mark_nbr) + "= "] >> by_ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+    group   = as_xpr("?:")  [top(strings) += " ( "]         >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+            | as_xpr("?i:") [top(strings) += " icase( "]    >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+            | as_xpr("?>")  [top(strings) += " keep( "]     >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+            | as_xpr("?=")  [top(strings) += " before( "]   >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+            | as_xpr("?!")  [top(strings) += " ~before( "]  >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+            | as_xpr("?<=") [top(strings) += " after( "]    >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+            | as_xpr("?<!") [top(strings) += " ~after( "]   >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+            | nil [top(strings) += " ( s" + as<std::string>(++mark_nbr) + "= "] >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
             ;
 
     setelem = as_xpr('\\') >> _ [top(strings) += " as_xpr('" + _ + "') "]
@@ -141,6 +145,10 @@ int main(int argc, char *argv[])
     {
         std::cerr << "ERROR: unrecognized regular expression" << std::endl;
         return -1;
+    }
+    else if(nocase)
+    {
+        std::cout << "icase( " << strings.get().top() << " )" << std::endl;
     }
     else
     {
