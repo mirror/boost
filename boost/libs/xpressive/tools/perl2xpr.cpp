@@ -60,81 +60,109 @@ int main(int argc, char *argv[])
     lit     = ~(set='.','^','$','*','+','?','(',')','{','}','[',']','\\','|')
             ;
 
-    escape  = as_xpr("b")   [top(strings) += " _b "]
-            | as_xpr("B")   [top(strings) += " ~_b "]
-            | as_xpr("d")   [top(strings) += " _d "]
-            | as_xpr("D")   [top(strings) += " ~_d "]
-            | as_xpr("s")   [top(strings) += " _s "]
-            | as_xpr("S")   [top(strings) += " ~_s "]
-            | as_xpr("w")   [top(strings) += " _w "]
-            | as_xpr("W")   [top(strings) += " ~_w "]
-            | _d            [top(strings) += " s" + _ + " "]
-            | _             [top(strings) += " as_xpr('" + _ + "') "]
+    escape  = as_xpr('b')               [top(strings) += " _b "]
+            | as_xpr('B')               [top(strings) += " ~_b "]
+            | as_xpr('d')               [top(strings) += " _d "]
+            | as_xpr('D')               [top(strings) += " ~_d "]
+            | as_xpr('s')               [top(strings) += " _s "]
+            | as_xpr('S')               [top(strings) += " ~_s "]
+            | as_xpr('w')               [top(strings) += " _w "]
+            | as_xpr('W')               [top(strings) += " ~_w "]
+            | _d                        [top(strings) += " s" + _ + " "]
+            | _                         [top(strings) += " as_xpr('" + _ + "') "]
             ;
 
-    group   = as_xpr("?:")  [top(strings) += " ( "]         >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?i:") [top(strings) += " icase( "]    >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?>")  [top(strings) += " keep( "]     >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?=")  [top(strings) += " before( "]   >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?!")  [top(strings) += " ~before( "]  >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?<=") [top(strings) += " after( "]    >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | as_xpr("?<!") [top(strings) += " ~after( "]   >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
-            | nil [top(strings) += " ( s" + as<std::string>(++mark_nbr) + "= "] >> ref(regex) >> as_xpr(')') [top(strings) += " ) "]
+    group   = (
+                  as_xpr("?:")          [top(strings) += " ( "]
+                | as_xpr("?i:")         [top(strings) += " icase( "]
+                | as_xpr("?>")          [top(strings) += " keep( "]
+                | as_xpr("?=")          [top(strings) += " before( "]
+                | as_xpr("?!")          [top(strings) += " ~before( "]
+                | as_xpr("?<=")         [top(strings) += " after( "]
+                | as_xpr("?<!")         [top(strings) += " ~after( "]
+                | nil                   [top(strings) += " ( s" + as<std::string>(++mark_nbr) + "= "]
+              )
+            >> ref(regex)
+            >> as_xpr(')')              [top(strings) += " ) "]
             ;
 
-    setelem = as_xpr('\\') >> _ [top(strings) += " as_xpr('" + _ + "') "]
-            | "[:" >> !as_xpr('^') [top(strings) += "~"] >> (+_w) [top(strings) += _ ] >> ":]"
-            | ((s1=~as_xpr(']')) >> '-' >> (s2=~as_xpr(']'))) [top(strings) += "range('" + s1 + "','" + s2 + "')"]
+    setelem = as_xpr('\\') >> _         [top(strings) += " as_xpr('" + _ + "') "]
+            | "[:" >> !as_xpr('^')      [top(strings) += "~"]
+                >> (+_w)                [top(strings) += _ ]
+                >> ":]"
+            | (
+                   (s1=~as_xpr(']')) 
+                >> '-'
+                >> (s2=~as_xpr(']'))
+              )                         [top(strings) += "range('" + s1 + "','" + s2 + "')"]
             ;
 
-    charset = !as_xpr('^') [top(strings) += " ~ "]
-            >> nil [top(strings) += " set[ "]
-            >> (setelem | (~as_xpr(']')) [top(strings) += " as_xpr('" + _ + "') "])
-            >> *( nil [ top(strings) += " | " ] >> (setelem | (~as_xpr(']')) [ top(strings) += "'" + _ + "'" ] ) )
-            >> as_xpr(']') [top(strings) += " ] "]
+    charset = !as_xpr('^')              [top(strings) += " ~ "]
+            >> nil                      [top(strings) += " set[ "]
+            >> (
+                    setelem
+                  | (~as_xpr(']'))      [top(strings) += " as_xpr('" + _ + "') "]
+               )
+            >>*(
+                    nil                 [top(strings) += " | "]
+                 >> (
+                        setelem
+                      | (~as_xpr(']'))  [top(strings) += "'" + _ + "'"]
+                    )
+               )
+            >> as_xpr(']')              [top(strings) += " ] "]
             ;
 
-    atom    = (+(lit >> ~before((set='*','+','?','{'))) | lit) [top(strings) += " as_xpr(\"" + _ + "\") "]
-            | as_xpr('.') [top(strings) += dot]
-            | as_xpr('^') [top(strings) += bos]
-            | as_xpr('$') [top(strings) += eos]
+    atom    = (
+                  +(lit >> ~before((set='*','+','?','{')))
+                | lit
+              )                         [top(strings) += " as_xpr(\"" + _ + "\") "]
+            | as_xpr('.')               [top(strings) += dot]
+            | as_xpr('^')               [top(strings) += bos]
+            | as_xpr('$')               [top(strings) += eos]
             | '\\' >> escape
             | '(' >> group
             | '[' >> charset
             ;
 
-    repeat  = as_xpr('{') [top(strings) += " repeat<"]
-            >> (+_d) [top(strings) += _]
+    repeat  = as_xpr('{')               [tmp = " repeat<"]
+            >> (+_d)                    [tmp += _]
             >> !(
-                    as_xpr(',') [top(strings) += ","]
+                    as_xpr(',')         [tmp += ","]
                  >> (
-                        (+_d) [top(strings) += _]
-                      | nil   [top(strings) += "inf"]
+                        (+_d)           [tmp += _]
+                      | nil             [tmp += "inf"]
                     )
                 )
-            >> as_xpr('}') [top(strings) += ">(", tmp += " ) "]
+            >> as_xpr('}')              [top(strings) = tmp + ">( " + top(strings) + " ) "]
             ;
 
-    quant   = nil [push(strings, "")]
-            >> atom [tmp = top(strings), pop(strings)]
+    quant   = nil                       [push(strings, "")]
+            >> atom
             >> !(
-                    nil [push(strings, "")]
-                 >> (
-                        as_xpr("*") [top(strings) += " * "]
-                      | as_xpr("+") [top(strings) += " + "]
-                      | as_xpr("?") [top(strings) += " ! "]
+                    (
+                        as_xpr("*")     [insert(top(strings), 0, " * ")] // [strings->*top()->*insert(0, " * ")]
+                      | as_xpr("+")     [insert(top(strings), 0, " + ")] // [strings->*top()->*insert(0, " + ")]
+                      | as_xpr("?")     [insert(top(strings), 0, " ! ")] // [strings->*top()->*insert(0, " ! ")]
                       | repeat
                     )
-                 >> !( as_xpr('?') [ top(strings) = " - " + top(strings) ] )
-                 >> nil [ tmp = top(strings) + tmp, pop(strings) ]
+                 >> !as_xpr('?')        [insert(top(strings), 0, " - ")]
                 )
-            >> nil [top(strings) += tmp]
+            >> nil                      [tmp = top(strings), pop(strings), top(strings) += tmp]
             ;
 
-    seq     = quant >> *( nil [top(strings) += " >> "] >> quant )
+    seq     = quant
+            >> *(
+                    nil                 [top(strings) += " >> "]
+                 >> quant
+                )
             ;
 
-    alts    = seq >> *( as_xpr('|') [top(strings) += " | "] >> seq )
+    alts    = seq
+            >> *(
+                    as_xpr('|')         [top(strings) += " | "]
+                 >> seq
+                )
             ;
 
     regex   = alts
