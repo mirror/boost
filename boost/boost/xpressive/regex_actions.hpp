@@ -16,10 +16,13 @@
 
 #include <boost/ref.hpp>
 #include <boost/mpl/if.hpp>
+#include <boost/mpl/or.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_const.hpp>
+#include <boost/type_traits/is_integral.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/detail/core/matcher/action_matcher.hpp>
@@ -322,6 +325,95 @@ namespace boost { namespace xpressive
                 return T(a0, a1, a2);
             }
         };
+
+        // This codifies the return types of the various insert member
+        // functions found in sequence containers, the 2 flavors of
+        // associative containers, and strings.
+        struct insert
+        {
+            template<typename Sig, typename EnableIf = void>
+            struct result;
+
+            // assoc containers
+            template<typename This, typename Cont, typename Value>
+            struct result<This(Cont &, Value &), void>
+            {
+                static Cont &scont_;
+                static Value &svalue_;
+                typedef char yes_type;
+                typedef char (&no_type)[2];
+                static yes_type check_insert_return(typename Cont::iterator);
+                static no_type check_insert_return(std::pair<typename Cont::iterator, bool>);
+                BOOST_STATIC_CONSTANT(bool, is_iterator = (sizeof(yes_type) == sizeof(check_insert_return(scont_.insert(svalue_)))));
+                typedef
+                    typename mpl::if_c<
+                        is_iterator
+                      , typename Cont::iterator
+                      , std::pair<typename Cont::iterator, bool>
+                    >::type
+                type;
+            };
+
+            // sequence containers, assoc containers, strings
+            template<typename This, typename Cont, typename It, typename Value>
+            struct result<This(Cont &, It &, Value &),
+                typename disable_if<mpl::or_<is_integral<It>, is_same<It, Value> > >::type>
+            {
+                typedef typename Cont::iterator type;
+            };
+
+            // strings
+            template<typename This, typename Cont, typename Size, typename T>
+            struct result<This(Cont &, Size &, T &),
+                typename enable_if<is_integral<Size> >::type>
+            {
+                typedef Cont &type;
+            };
+
+            // assoc containers
+            template<typename This, typename Cont, typename It>
+            struct result<This(Cont &, It &, It &), void>
+            {
+                typedef void type;
+            };
+
+            // sequence containers, strings
+            template<typename This, typename Cont, typename It, typename Size, typename Value>
+            struct result<This(Cont &, It &, Size &, Value &),
+                typename disable_if<is_integral<It> >::type>
+            {
+                typedef void type;
+            };
+
+            // strings
+            template<typename This, typename Cont, typename Size, typename A0, typename A1>
+            struct result<This(Cont &, Size &, A0 &, A1 &),
+                typename enable_if<is_integral<Size> >::type>
+            {
+                typedef Cont &type;
+            };
+
+            template<typename Cont, typename A0>
+            typename result<insert(Cont &, A0 &)>::type
+            operator()(Cont &cont, A0 &a0) const
+            {
+                return cont.insert(a0);
+            }
+
+            template<typename Cont, typename A0, typename A1>
+            typename result<insert(Cont &, A0 &, A1 &)>::type
+            operator()(Cont &cont, A0 &a0, A1 &a1) const
+            {
+                return cont.insert(a0, a1);
+            }
+
+            template<typename Cont, typename A0, typename A1, typename A2>
+            typename result<insert(Cont &, A0 &, A1 &, A2 &)>::type
+            operator()(Cont &cont, A0 &a0, A1 &a1, A2 &a2) const
+            {
+                return cont.insert(a0, a1, a2);
+            }
+        };
     }
 
     proto::terminal<op::push>::type const push = {{}};
@@ -338,6 +430,7 @@ namespace boost { namespace xpressive
     proto::terminal<op::matched>::type const matched = {{}};
     proto::terminal<op::length>::type const length = {{}};
     proto::terminal<op::str>::type const str = {{}};
+    proto::terminal<op::insert>::type const insert = {{}};
 
     template<typename T>
     struct value
@@ -384,11 +477,6 @@ namespace boost { namespace xpressive
         }
     };
 
-#ifdef _MSC_VER
-#pragma warning(push)
-#pragma warning(disable: 4522) // Warning: multiple assignment operators specified
-#endif
-
     template<typename T>
     struct local
       : private noncopyable
@@ -421,10 +509,6 @@ namespace boost { namespace xpressive
             return proto::arg(*this);
         }
     };
-
-#ifdef _MSC_VER
-#pragma warning(pop)
-#endif
 
     template<typename T, typename D>
     typename proto::function<
@@ -559,6 +643,7 @@ namespace boost { namespace xpressive
             ignore_unused(xpressive::matched);
             ignore_unused(xpressive::length);
             ignore_unused(xpressive::str);
+            ignore_unused(xpressive::insert);
         }
     }
 
