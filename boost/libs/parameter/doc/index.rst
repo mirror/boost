@@ -1067,8 +1067,8 @@ With the declaration above, the following two calls are equivalent:
 
 .. parsed-literal::
 
-  def("f", f, **some_policies**, **"Documentation for f"**);
-  def("f", f, **"Documentation for f"**, **some_policies**);
+  def("f", &f, **some_policies**, **"Documentation for f"**);
+  def("f", &f, **"Documentation for f"**, **some_policies**);
 
 .. @example.prepend('''
    int main()
@@ -1081,7 +1081,7 @@ specify the parameter name explicitly, as follows:
 .. parsed-literal::
 
   def(
-      "f", f
+      "f", &f
      , **_policies = some_policies**, "Documentation for f");
 
 .. @example.append('}')
@@ -1114,7 +1114,8 @@ be used within the body of a class::
   };
 
 .. @example.prepend('''
-   #include <boost/parameter.hpp>''')
+   #include <boost/parameter.hpp>
+   #include <iostream>''')
 
 .. @test('compile')
 
@@ -1701,7 +1702,10 @@ its function call operator:
     , optional<tag::\ index, is_convertible<_,int> >
   > spec;
 
-  int z0 = print_name_and_index( **spec(**\ "sam", 12\ **)** );
+  char const sam[] = "sam";
+  int twelve = 12;
+
+  int z0 = print_name_and_index( **spec(**\ sam, twelve\ **)** );
 
   int z1 = print_name_and_index( 
      **spec(**\ _index=12, _name="sam"\ **)** 
@@ -1719,6 +1723,11 @@ its function call operator:
    {}''')
 
 .. @test('run', howmany='all')
+
+Note that because of the `forwarding problem`_, ``parameter::parameters::operator()``
+can't accept non-const rvalues.
+
+.. _`forwarding problem`: http://std.dkuug.dk/jtc1/sc22/wg21/docs/papers/2002/n1385.htm
 
 Extracting Parameter Types
 ==========================
@@ -1770,7 +1779,9 @@ case we can use the ``binding< … >`` metafunction introduced
    BOOST_PARAMETER_NAME(index)
 
    template <class ArgumentPack>
-   typename parameter::binding<ArgumentPack, tag::index, int>::type
+   typename remove_reference<
+       typename parameter::binding<ArgumentPack, tag::index, int>::type
+   >::type
    twice_index(ArgumentPack const& args)
    {
        return 2 * args[_index|42];
@@ -1778,21 +1789,44 @@ case we can use the ``binding< … >`` metafunction introduced
 
    int six = twice_index(_index = 3);
 
-.. TODO: binding<> returns a reference. We should use value_type<> here.
-
 .. @example.prepend('''
    #include <boost/parameter.hpp>
+   #include <boost/type_traits/remove_reference.hpp>
    #include <cassert>
 
-   namespace parameter = boost::parameter;''')
+   namespace parameter = boost::parameter;
+   using boost::remove_reference;''')
+
+Note that the ``remove_reference< … >`` dance is necessary because
+``binding< … >`` will return a reference type when the argument
+is bound in the argument pack. If we don't strip the reference we
+end up returning a reference to the temporary created in the ``2 * …``
+expression. A convenient shortcut would be to use the ``value_type< … >``
+metafunction:
+
+.. parsed-literal::
+
+   template <class ArgumentPack>
+   typename **parameter::value_type<ArgumentPack, tag::index, int>**::type
+   twice_index(ArgumentPack const& args)
+   {
+       return 2 * args[_index|42];
+   }
+
+.. @example.wrap('namespace with_value_type {', '''
+   int six = twice_index(_index = 3);
+   }''')
+
+.. TODO: binding<> returns a reference. We should use value_type<> here.
 
 .. @example.append('''
    int main()
    {
        assert(six == 6);
+       assert(with_value_type::six == 6);
    }''')
 
-.. @test('run')
+.. @test('run', howmany='all')
 
 __ binding_intro_
 
@@ -1837,21 +1871,31 @@ when using |ArgumentPack|\ s explicitly, we need a tool other than
 In the example above, the string ``"hello, world"`` is constructed
 despite the fact that the user passed us a value for ``s3``.  To
 remedy that, we can compute the default value *lazily* (that is,
-only on demand), by combining the logical-or (“``||``”) operator
-with a function object built by the Boost Lambda_ library: [#bind]_
+only on demand), by using ``boost::bind()`` to create a function
+object.
+
+.. danielw: I'm leaving the text below in the source, because we might
+.. want to change back to it after 1.34, and if I remove it now we
+.. might forget about it.
+
+.. by combining the logical-or (“``||``”) operator
+.. with a function object built by the Boost Lambda_ library: [#bind]_
 
 .. parsed-literal::
 
-   namespace lambda = boost::lambda;
+   using boost::bind;
+   using boost::ref;
 
    typename parameter::binding<
        ArgumentPack, tag::s3, std::string
-   >::type s3 = args[_s3 **|| (lambda::var(s1)+lambda::var(s2))** ];
+   >::type s3 = args[_s3 **|| bind(std::plus<std::string>(), ref(s1), ref(s2))** ];
 
 .. @example.prepend('''
-   #include <boost/lambda/lambda.hpp>
+   #include <boost/bind.hpp>
+   #include <boost/ref.hpp>
    #include <boost/parameter.hpp>
    #include <string>
+   #include <functional>
 
    namespace parameter = boost::parameter;
 
@@ -1876,7 +1920,7 @@ with a function object built by the Boost Lambda_ library: [#bind]_
 
 .. @test('run')
 
-.. _Lambda: ../../../lambda/index.html
+.. .. _Lambda: ../../../lambda/index.html
 
 .. sidebar:: Mnemonics
 
@@ -1886,10 +1930,15 @@ with a function object built by the Boost Lambda_ library: [#bind]_
    Similarly, in ``color_map[param||f]``, ``f`` is only invoked if
    no ``color_map`` argument was supplied.
 
-The expression ``lambda::var(s1)+lambda::var(s2)`` yields a
-*function object* that, when invoked, adds the two strings
-together.  That function will only be invoked if no ``s3`` argument
-is supplied by the caller.
+The expression ``bind(std::plus<std::string>(), ref(s1), ref(s2))`` yields
+a *function object* that, when invoked, adds the two strings together.
+That function will only be invoked if no ``s3`` argument is supplied by 
+the caller.
+
+.. The expression ``lambda::var(s1)+lambda::var(s2)`` yields a
+.. *function object* that, when invoked, adds the two strings
+.. together.  That function will only be invoked if no ``s3`` argument
+.. is supplied by the caller.
 
 ================ 
  Best Practices
@@ -2251,17 +2300,17 @@ __ ../../../graph/doc/bgl_named_params.html
 
 .. _`ConceptC++`: http://www.generic-programming.org/software/ConceptGCC/
 
-.. [#bind] The Lambda library is known not to work on `some
-   less-conformant compilers`__.  When using one of those you could
-   use `Boost.Bind`_ to generate the function object::
+.. .. [#bind] The Lambda library is known not to work on `some
+..   less-conformant compilers`__.  When using one of those you could
+..   use `Boost.Bind`_ to generate the function object::
 
-      boost::bind(std::plus<std::string>(),s1,s2)
+..      boost::bind(std::plus<std::string>(),s1,s2)
 
 .. [#is_keyword_expression] Here we're assuming there's a predicate
    metafunction ``is_keyword_expression`` that can be used to
    identify models of Boost.Python's KeywordExpression concept.
 
-__ http://www.boost.org/regression/release/user/lambda.html
+.. .. __ http://www.boost.org/regression/release/user/lambda.html
 .. _Boost.Bind: ../../../bind/index.html
 
 
