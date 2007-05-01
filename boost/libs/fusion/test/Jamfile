@@ -125,6 +125,7 @@ import testing ;
     [ run functional/invoke.cpp : : : : ]
     [ run functional/invoke_function_object.cpp : : : : ]
     [ run functional/invoke_procedure.cpp : : : : ]
+    [ run sequence/swap.cpp :  :  :  : ]
 
 #   [ compile-fail xxx.cpp :  :  :  :  ]
 
