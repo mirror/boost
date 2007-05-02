@@ -1382,7 +1382,7 @@ __boost_variant_library__
 
 [section Intrinsics]
 
-Intrinsics form the essential interface of Fusion __sequence__s. __stl__
+Intrinsics form the essential interface of every Fusion __sequence__. __stl__
 counterparts of these functions are usually implemented as member
 functions. Intrinsic functions, unlike __algorithms__, are not generic
 across the full __sequence__ repertoire. They need to be implemented for
@@ -1848,6 +1848,44 @@ convertable to the element associated with Key.
 
     __set__<int, char, bool> s(1, 'x', true);
     assert(at_key<char>(s) == 'x');
+
+[endsect]
+
+[section swap]
+
+[heading Description]
+
+Performs an element by element swap of the elements in 2 sequences.
+
+[heading Synopsis]
+    template<typename Seq1, typename Seq2>
+    void swap(Seq1& seq1, Seq2& seq2);
+
+[heading Parameters]
+
+[table
+    [[Parameters]    [Requirement]                           [Description]]
+    [[`seq1`, `seq2`]        [Models of __forward_sequence__][The sequences whos elements we wish to swap.]]
+]
+
+[heading Expression Semantics]
+
+    swap(seq1, seq2);
+
+[*Return type]: `void`
+
+[*Precondition]: `__size__(seq1) == __size__(seq2)`
+
+[*Semantics]: Calls `swap(a1, b1)` for corresponding elements in `seq1` and `seq2`.
+
+[heading Header]
+    #include <boost/fusion/sequence/intrinsic/swap.hpp>
+
+[heading Example]
+    __vector__<int, std::string> v1(1, "hello"), v2(2, "world");
+    swap(v1, v2);
+    assert(v1 == __make_vector__(2, "world"));
+    assert(v2 == __make_vector__(1, "hello"));
 
 [endsect]
 
@@ -2324,6 +2362,35 @@ Returns the actual element type associated with a Key from the __sequence__.
 [heading Example]
     typedef __map__<__pair__<int, char>, __pair__<char, char>, __pair__<double, char> > mymap;
     BOOST_MPL_ASSERT((boost::is_same<__result_of_at_key__<mymap, int>::type, char>));
+
+[endsect]
+
+[section swap]
+
+[heading Description]
+Returns the return type of swap.
+
+[heading Synopsis]
+    template<typename Seq1, typename Seq2>
+    struct swap
+    {
+        typedef void type;
+    };
+
+[table Parameters
+    [[Parameters]    [Requirement]   [Description]]
+    [[`Seq1`, `Seq2`][Models of __forward_sequence__][The sequences being swapped]]
+]
+
+[heading Expression Semantics]
+    result_of::swap<Seq1, Seq2>::type
+
+[*Return type]: `void`.
+
+[*Semantics]: Always returns `void`.
+
+[heading Header]
+    #include <boost/fusion/sequence/intrinsic/swap.hpp>
 
 [endsect]
 
