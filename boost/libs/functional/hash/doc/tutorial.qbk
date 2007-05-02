@@ -119,7 +119,7 @@ When writing a hash function, first look at how the equality function works.
 Objects that are equal must generate the same hash value.
 When objects are not equal they should generate different hash values.
 In this object equality was based just on the id so the hash function
-only hash the id. If it was based on the object's name and author
+only hashes the id. If it was based on the object's name and author
 then the hash function should take them into account
 (how to do this is discussed in the next section).
 ]
