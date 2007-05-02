@@ -268,13 +268,18 @@ Free functions
   bool put(const std::string& name, dynamic_properties& dp, const Key& key, 
            const Value& value)
 
-This function adds a key-value pair to the property map with the matching name
-and key type. If no matching property map is found and a generator function was
-supplied at construction, then that function is used to create a new
-property map; if the ``dynamic_properties`` object was
-default-constructed, then ``property_not_found`` is
-thrown. Furthermore, if the property map found does not support put,
-``dynamic_const_put_error`` is thrown.
+This function adds a key-value pair to the property map with the
+matching name and key type. If no matching property map is found,
+behavior depends on the availability of a property map generator.  If
+a property map generator was supplied when the ``dynamic_properties``
+object was constructed, then that function is used to create a new
+property map.  If the generator fails to generate a property map
+(returns a null ``auto_ptr``), then the ``put`` function returns
+``false``.  If, on the other hand, the ``dynamic_properties`` object
+has no property map generator (meaning it was default-constructed),
+then ``property_not_found`` is thrown. If a candidate property map is
+found but it does not support ``put``, ``dynamic_const_put_error`` is
+thrown.
 
 ::
 
