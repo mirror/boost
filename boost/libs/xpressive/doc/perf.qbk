@@ -5,7 +5,7 @@
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
  /]
 
-[section:perf Appendix 3: Performance Comparison]
+[section:perf Appendix 4: Performance Comparison]
 
 The performance of xpressive is competitive with _regexpp_. I have run performance
 benchmarks comparing static xpressive, dynamic xpressive and _regexpp_ on two platforms:

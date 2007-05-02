@@ -93,6 +93,8 @@ and dynamic.
 
 [include grammars.qbk]
 
+[include actions.qbk]
+
 [include traits.qbk]
 
 [include tips_n_tricks.qbk]
@@ -108,6 +110,8 @@ and dynamic.
 [include acknowledgements.qbk]
 
 [section Appendices]
+
+[include history.qbk]
 
 [include nyi.qbk]
 

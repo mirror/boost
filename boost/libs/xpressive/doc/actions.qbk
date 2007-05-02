@@ -1,0 +1,92 @@
+[/
+ / Copyright (c) 2006 Eric Niebler
+ /
+ / Distributed under the Boost Software License, Version 1.0. (See accompanying
+ / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+ /]
+
+[section Semantic Actions and User-Defined Assertions]
+
+[h2 Overview]
+
+Imagine you want to parse an input string and build a `std::map<>` from it. For
+something like that, matching a regular expression isn't enough. You want to 
+/do something/ when parts of your regular expression matches. Xpressive lets
+you attach semantic actions to parts of your static regular expressions. This
+section shows you how.
+
+[h2 Semantic Actions]
+
+Consider the following code, which uses xpressive's semantic actions to parse
+of string of word/integer pairs and stuffs them into a `std::map<>`. It is
+described below.
+
+    #include <string>
+    #include <iostream>
+    #include <boost/xpressive/xpressive.hpp>
+    #include <boost/xpressive/regex_actions.hpp>
+    using namespace boost::xpressive;
+
+    int main()
+    {
+        std::map<std::string, int> result;
+        std::string str("aaa=>1 bbb=>23 ccc=>456");
+        
+        // Match a word and an integer, separated by =>,
+        // and then stuff the result into a std::map<>
+        sregex pair = ( (s1= +_w) >> "=>" >> (s2= +_d) )
+            [ ref(result)[s1] = as<int>(s2) ];
+        
+        // Match one or more word/iteger pairs, separated
+        // by whitespace.
+        sregex rx = pair >> *(+_s >> pair);
+
+        if(regex_match(str, rx))
+        {
+            std::cout << result["aaa"] << '\n';
+            std::cout << result["bbb"] << '\n';
+            std::cout << result["ccc"] << '\n';
+        }
+        
+        return 0;
+    }
+
+This program prints the following:
+
+[pre
+1
+23
+456
+]
+
+The regular expression `pair` has two parts: the pattern and the action. The 
+pattern says to match a word, capturing it in sub-match 1, and an integer,
+capturing it in sub-match 2, separated by `"=>"`. The action is the part in
+square brackets: `[ ref(result)[s1] = as<int>(s2) ]`. It says to take sub-match
+one and use it to index into the `results` map, and assign to it the result of
+converting sub-match 2 to an integer.
+
+How does this work? Just as the rest of the static regular expression, the part
+between brackets is an expression template. It encodes the action and executes
+it later. The expression `ref(result)` creates a lazy reference to the `result`
+object. The larger expression `ref(result)[s1]` is a lazy map index operation.
+Later, when this action is getting executed, `s1` gets replaced with the 
+first _sub_match_. Likewise, when `as<int>(s2)` gets executed, `s2` is replaced
+with the second _sub_match_. The `as<>` action converts its argument to the 
+requested type using Boost.Lexical_cast. The effect of the whole action is to
+insert a new word/integer pair into the map.
+
+[note There is an important difference between the function `boost::ref()` in
+`<boost/ref.hpp>` and `boost::xpressive::ref()` in 
+`<boost/xpressive/regex_actions.hpp>`. The first returns a plain 
+`reference_wrapper<>` which behaves in many respects like an ordinary
+reference. By contrast, `boost::xpressive::ref()` returns a /lazy/ reference
+that you can use in expressions that are executed lazily. That is why we can
+say `ref(result)[s1]`, even though `result` doesn't have an `operator[]` that
+would accept `s1`.]
+
+
+
+
+[endsect]
+
