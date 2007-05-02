@@ -80,8 +80,8 @@ she would have to specify something like this:
 Not exactly elegant.  To solve this problem (as well as some other problems), 
 the C++ standard committee is considering 
 a few additions to the standard language, such as `typeof/decltype` and `auto` (see 
-[@http://www.osl.iu.edu/~jajarvi/publications/papers/decltype_n1478.pdf
-http://www.osl.iu.edu/~jajarvi/publications/papers/decltype_n1478.pdf]).
+[@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1607.pdf
+http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2004/n1607.pdf]).
 
 The `typeof` operator (or `decltype`, which is a slightly different flavor of `typeof`) 
 allows one to determine the type of an expression at compile time.  Using `typeof`, 
@@ -844,7 +844,7 @@ as nested classes.  Instead, instantiations can be registered:
 
 [endsect]
 
-[section:ackn Acknoledgements]
+[section:ackn Acknowledgements]
 
 The idea of representing a type as multiple compile-time integers, 
 and passing these integers across function boundaries using sizeof(), 
