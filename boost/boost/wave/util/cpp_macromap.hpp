@@ -727,7 +727,7 @@ token_type startof_argument_list = *next;
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
                             if (boost::wave::need_variadics(ctx.get_language())) {
                             // store a placemarker as the argument
-                                argument->push_back(token_type(T_PLACEMARKER, "§", 
+                                argument->push_back(token_type(T_PLACEMARKER, "\xA7", // "§", 
                                     (*next).get_position()));
                                 ++count_arguments;
                             }
@@ -752,7 +752,7 @@ token_type startof_argument_list = *next;
 #if BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
                     if (boost::wave::need_variadics(ctx.get_language())) {
                     // store a placemarker as the argument
-                        argument->push_back(token_type(T_PLACEMARKER, "§", 
+                        argument->push_back(token_type(T_PLACEMARKER, "\xA7", // "§", 
                             (*next).get_position()));
                         ++count_arguments;
                     }
