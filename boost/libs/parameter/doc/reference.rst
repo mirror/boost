@@ -717,6 +717,66 @@ Approximate expansion:
     )
 
 
+
+``BOOST_PARAMETER_MEMBER_FUNCTION(result,name,tag_namespace,arguments)``
+------------------------------------------------------------------------
+
+:Defined in: `boost/parameter/preprocessor.hpp`__
+
+__ ../../../../boost/parameter/preprocessor.hpp
+
+See ``BOOST_PARAMETER_FUNCTION(result,name,tag_namespace,arguments)``
+
+
+
+``BOOST_PARAMETER_CONSTRUCTOR(cls, impl, tag_namespace, arguments)``
+--------------------------------------------------------------------
+
+:Defined in: `boost/parameter/preprocessor.hpp`__
+
+__ ../../../../boost/parameter/preprocessor.hpp
+
+:Requires: ``cls`` is the name of this class. ``impl`` is the 
+  parenthesized implementation base class for ``cls``.
+  ``tag_namespace`` is the namespace in which the keywords 
+  used by the function resides. ``arguments`` is
+  a list of *argument specifiers*, as defined in 
+  ``BOOST_PARAMETER_FUNCTION(result,name,tag_namespace,arguments)``.
+
+:Generated names in enclosing scope:
+  * ``boost_param_params_ ## __LINE__ ## ctor``
+  * ``constructor_parameters ## __LINE__``
+
+Approximate expansion:
+  **Where**:
+
+  * ``n`` denotes the *minimum* arity, as determined from ``arguments``.
+  * ``m`` denotes the *maximum* arity, as determined from ``arguments``.
+
+  .. parsed-literal::
+
+    struct boost_param_params\_ ## __LINE__ ## ctor
+      : boost::parameter::parameters<
+            *list of parameter specifications, based on arguments*
+        >
+    {};
+
+    typedef boost_param_params\_ ## __LINE__ ## **name** 
+      constructor_parameters ## __LINE__;
+
+    template <class A0, …, class A\ **n**>
+    *cls*\ (A0 const& a0, …, A\ **n** const& a\ **n**)
+      : *impl*\ (constructor_parameters ## __LINE__(a0, …, a\ **n**))
+    {}
+
+    :vellipsis:`⋮`
+
+    template <class A0, …, class A\ **m**>
+    *cls*\ (A0 const& a0, …, A\ **n** const& a\ **m**)
+      : *impl*\ (constructor_parameters ## __LINE__(a0, …, a\ **m**))
+    {}
+
+
 ``BOOST_PARAMETER_NAME(name)``
 ------------------------------
 
