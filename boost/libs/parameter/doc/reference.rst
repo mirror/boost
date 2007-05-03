@@ -253,7 +253,7 @@ argument type. In each row,
    +----------------------+--------------+--------------------------------+
    |Type                  |``A`` required|Condition ``A`` must satisfy    |
    +======================+==============+================================+
-   ||keyword|_\ ``<K>``   |no            |*n/a*                           |
+   |``K``                 |no            |*n/a*                           |
    +----------------------+--------------+--------------------------------+
    ||optional|_\ ``<K,F>``|no            |``mpl::apply<F,A>::type::value``|
    |                      |              |is ``true``.                    |
@@ -381,16 +381,15 @@ __ ../../../../boost/parameter/parameters.hpp
         };
 
         template <class A0>
-        |ArgumentPack|_ `operator()`_\(A0 const& a0) const;
+        |ArgumentPack|_ `operator()`_\(A0& a0) const;
 
         template <class A0, class A1>
-        |ArgumentPack|_ `operator()`_\(A0 const& a0, A1 const& a1) const; :vellipsis:`\ 
-       .
-       .
-       .
-     `
+        |ArgumentPack|_ `operator()`_\(A0& a0, A1& a1) const; 
+
+        :vellipsis:`⋮`
+
         template <class A0, class A1, …class A\ β>
-        |ArgumentPack|_ `operator()`_\(A0 const& a0, A1 const& a1, …A\ β const& a\ β) const;
+        |ArgumentPack|_ `operator()`_\(A0& a0, A1& a1, …A\ β& a\ β) const;
     };
 
 
@@ -403,13 +402,22 @@ __ ../../../../boost/parameter/parameters.hpp
   follows, for any argument type ``A``\ *i*:
 
 
+     | let ``D0`` the set [d0, …, d\ *j*] of all **deduced** *parameter specs* in [``P0``, …, ``P``\ β]
      | ``R``\ *i* is ``A``\ *i*\ 's |intended argument type|
      |
-     |  if ``A``\ *i* is a result type of ``keyword<T>::``\ |operator=|_
-     |  then 
-     |      ``K``\ *i* is ``T``
-     |  else 
-     |      ``K``\ *i* is ``P``\ *i*\ 's |keyword tag type|.
+     | if ``A``\ *i* is a result type of ``keyword<T>::``\ |operator=|_
+     | then 
+     |     ``K``\ *i* is ``T``
+     | else
+     |     if some ``A``\ *j* where *j*\ ≤\ *i* is a result type of ``keyword<T>::``\ |operator=|_
+     |     *or* some ``P``\ *j* in *j*\ ≤\ *i* is **deduced**
+     |     then
+     |         ``K``\ *i* is ``P``\ *i*\ 's |keyword tag type|.
+     |     else
+     |         if some *parameter spec* ``d``\ *j* in ``D``\ *i* matches ``A``\ *i*
+     |         then
+     |             ``K``\ *i* is ``d``\ *j*\ 's |keyword tag type|.
+     |             ``D``\ :sub:`i+1` is ``D``\ *i* - [``d``\ *j*]
 
 
 .. _match:
@@ -425,7 +433,7 @@ __ ../../../../boost/parameter/parameters.hpp
   every *j* in 0…β, either:
 
   * ``P``\ *j* is the *unspecified* default
-  * **or**, ``P``\ *j* is a specialization of |keyword|_,
+  * **or**, ``P``\ *j* is a *keyword tag type*
 
   * **or**, ``P``\ *j* is |optional|_ ``<X,F>`` and either
 
@@ -443,11 +451,10 @@ __ ../../../../boost/parameter/parameters.hpp
 ``operator()``
   .. parsed-literal::
 
-      template <class A0> |ArgumentPack|_ operator()(A0 const& a0) const; :vellipsis:`\ 
-        .
-        .
-        .
-       `
+      template <class A0> |ArgumentPack|_ operator()(A0 const& a0) const; 
+
+      :vellipsis:`⋮`
+
       template <class A0, …class A\ β> |ArgumentPack|_ `operator()`_\(A0 const& a0, …A\ β const& a\ β) const;
 
   :Returns:
@@ -487,6 +494,23 @@ The default value of ``Predicate`` is an unspecified |Metafunction|_ that return
 
 .. |Metafunction| replace:: :concept:`Metafunction`
 .. _Metafunction: ../../../mpl/doc/refmanual/metafunction.html
+
+
+``deduced``
+-----------
+
+This template is used to wrap the *keyword tag* argument to
+``optional`` or ``required``.
+
+:Defined in: `boost/parameter/parameters.hpp`__
+
+__ ../../../../boost/parameter/parameters.hpp
+
+.. parsed-literal::
+
+    template <class Tag>
+    struct deduced;
+
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -546,6 +570,37 @@ __ ../../../../boost/parameter/binding.hpp
   reference| exists, returns ``boost::``\ |result_of|_\ ``<F()>::type``. [#no_result_of]_
 
 
+``value_type``
+--------------
+
+Returns the result type of indexing an argument pack with a
+|keyword tag type| or with a |tagged default|.
+
+:Defined n: `boost/parameter/value_type.hpp`__
+
+__ ../../../../boost/parameter/value_type.hpp
+
+.. parsed-literal::
+
+    template <class A, class K, class D = void>
+    struct value_type
+    {
+        typedef … type;
+    };
+
+:Requires: ``A`` is a model of |ArgumentPack|_.
+
+:Returns: the type of the |tagged reference| in ``A``
+  having |keyword tag type| ``K``, if any.  If no such |tagged
+  reference| exists, returns ``D``. Equivalent to::
+
+    typename remove_reference<
+      typename binding<A, K, D>::type
+    >::type
+
+  … when ``D`` is not a reference type.
+
+
 //////////////////////////////////////////////////////////////////////////////
 
 Code Generation Macros
@@ -553,6 +608,7 @@ Code Generation Macros
 
 Macros in this section can be used to ease the writing of code
 using the Parameter libray by eliminating repetitive boilerplate.
+
 
 ``BOOST_PARAMETER_FUNCTION(result,name,tag_namespace,arguments)``
 -----------------------------------------------------------------
@@ -571,17 +627,20 @@ __ ../../../../boost/parameter/preprocessor.hpp
 :Argument specifiers syntax:
   .. parsed-literal::
 
-    argument-specifiers ::= specifier-group {specifier-group}
+    argument-specifiers ::= *specifier-group* {*specifier-group*}
 
-    specifier-group ::= ( '(' 'optional' optional-specifier {optional-specifier} ')' ) |
-                        ( '(' 'required' required-specifier {required-specifier} ')' )
+    specifier-group0 ::= *specifier-group1* |
+                         ( '**(**' '**deduced**' *specifier-group1* {*specifier-group1*} '**)**' )
 
-    optional-specifier ::= '(' name ',' restriction ',' default-value ')'
-    required-specifier ::= '(' name ',' restriction ')'
+    specifier-group1 ::= ( '**(**' '**optional**' *optional-specifier* {*optional-specifier*} '**)**' ) |
+                         ( '**(**' '**required**' *required-specifier* {*required-specifier*} '**)**' )
 
-    restriction ::= ('*' '(' lambda-expression ')' ) |
-                    ( '(' typename ')' ) |
-                    '*'
+    optional-specifier ::= '**(**' *name* '**,**' *restriction* '**,**' *default-value* ')'
+    required-specifier ::= '**(**' *name* '**,**' *restriction* ')'
+
+    restriction ::= ('*****' '**(**' *lambda-expression* '**)**' ) |
+                    ( '**(**' *typename* '**)**' ) |
+                    '*****'
 
   ``name`` is any valid C++ identifier. ``default-value`` is any valid
   C++ expression. ``typename`` is the name of a type.
@@ -631,11 +690,7 @@ Approximate expansion:
         *… forward to implementation …*
     }
 
-    :vellipsis:`\
-      .
-      .
-      .
-     `
+    :vellipsis:`⋮`
 
     template <class A0, …, class A\ **m**>
     *result type* **name**\ (
@@ -661,8 +716,88 @@ Approximate expansion:
       , *argument name*\ **m** ## _type& *argument name*\ **m**
     )
 
+
+``BOOST_PARAMETER_NAME(name)``
+------------------------------
+
+Declares a tag-type and keyword object.
+
+Expands to:
+
+**If** *name* is of the form:
+
+.. parsed-literal::
+
+  (*tag-name*, *namespace-name*) *object-name*
+
+**then**
+
+.. parsed-literal::
+
+  namespace *namespace-name* 
+  {
+    struct *tag-name*
+    {
+        static char const* keyword_name()
+        {
+            return ##\ *tag-name*;
+        }
+
+        typedef *implementation defined* _;
+        typedef *implementation defined* _1;
+    };
+  }
+
+  ::boost::parameter::keyword<*tag-namespace*\ ::\ *tag-name*\ > const& *object-name*
+      = ::boost::parameter::keyword<*tag-namespace*\ ::\ *tag-name*\ >::instance;
+
+**Else**
+
+.. parsed-literal::
+
+  namespace tag
+  {
+    struct *name*
+    {
+        static char const* keyword_name()
+        {
+            return ##\ *name*;
+        }
+
+        typedef *implementation defined* _;
+        typedef *implementation defined* _1;
+    };
+  }
+
+  ::boost::parameter::keyword<tag::\ *name*\ > const& _\ *name*
+      = ::boost::parameter::keyword<tag::\ *name*\ >::instance;
+
+
+``BOOST_PARAMETER_TEMPLATE_KEYWORD(name)``
+------------------------------------------
+
+Expands to:
+
+.. parsed-literal::
+
+  namespace tag
+  {
+    struct *name*;
+  }
+
+  template <class T>
+  struct *name* 
+    : ::boost::parameter::template_keyword<tag::\ *name*, T>
+  {};
+
+
 ``BOOST_PARAMETER_FUN(r,n,l,h,p)``
 ----------------------------------
+
+.. admonition:: Deprecated
+
+  This macro has been deprecated in favor of
+  ``BOOST_PARAMETER_FUNCTION``.
 
 Generates a sequence of `forwarding function`_ templates named
 ``n``, with arities ranging from ``l`` to ``h`` , returning ``r``,
@@ -694,11 +829,10 @@ Generates
       , typename **p**::match<A1,A2,…A\ **l**,A\ ##\ BOOST_PP_INC_\ (**l**)>::type p = **p**\ ())
     {
        return **name**\ _with_named_params(**p**\ (x1,x2,…x\ **l**,x\ ##\ BOOST_PP_INC_\ (**l**)));
-    } :vellipsis:`\ 
-      .
-      .
-      .
-     `
+    }
+
+    :vellipsis:`⋮`
+
     template <class A1, class A2, …class A\ **h**>
     r name(
         A1 const& a1, A2 const& a2, …A\ **h** const& x\ **h**
@@ -712,6 +846,11 @@ Generates
 
 ``BOOST_PARAMETER_KEYWORD(n,k)``
 --------------------------------
+
+.. admonition:: Deprecated
+
+  This macro has been deprecated in favor of
+  ``BOOST_PARAMETER_NAME``.
 
 Generates the declaration of a |keyword tag type| named ``k`` in
 namespace ``n``, and a corresponding |keyword object| definition in
