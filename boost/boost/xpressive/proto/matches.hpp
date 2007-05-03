@@ -37,6 +37,18 @@
     #include <boost/xpressive/proto/traits.hpp>
     #include <boost/xpressive/proto/detail/suffix.hpp> // must be last include
 
+    // Some compilers (like GCC) need extra help figuring out a template's arity.
+    // I use MPL's BOOST_MPL_AUX_LAMBDA_ARITY_PARAM() macro to disambiguate, which
+    // which is controlled by the BOOST_MPL_LIMIT_METAFUNCTION_ARITY macro. If
+    // You define BOOST_PROTO_MAX_ARITY to be greater than 
+    // BOOST_MPL_LIMIT_METAFUNCTION_ARITY on these compilers, things don't work.
+    // You must define BOOST_MPL_LIMIT_METAFUNCTION_ARITY to be greater.
+    #ifdef BOOST_MPL_CFG_EXTENDED_TEMPLATE_PARAMETERS_MATCHING
+    # if BOOST_PROTO_MAX_ARITY > BOOST_MPL_LIMIT_METAFUNCTION_ARITY
+    #  error BOOST_MPL_LIMIT_METAFUNCTION_ARITY must be at least as large as BOOST_PROTO_MAX_ARITY
+    # endif
+    #endif
+
     namespace boost { namespace proto
     {
 
@@ -296,7 +308,11 @@
               , BOOST_PP_CAT(Grammar, n)\
             >
 
-        #define BOOST_PP_ITERATION_PARAMS_1 (4, (2, BOOST_PROTO_MAX_LOGICAL_ARITY, <boost/xpressive/proto/matches.hpp>, 1))
+        #if BOOST_PROTO_MAX_LOGICAL_ARITY > BOOST_PROTO_MAX_ARITY
+            #define BOOST_PP_ITERATION_PARAMS_1 (4, (2, BOOST_PROTO_MAX_LOGICAL_ARITY, <boost/xpressive/proto/matches.hpp>, 1))
+        #else
+            #define BOOST_PP_ITERATION_PARAMS_1 (4, (2, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/matches.hpp>, 1))
+        #endif
         #include BOOST_PP_ITERATE()
 
         #define BOOST_PP_ITERATION_PARAMS_1 (4, (2, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/matches.hpp>, 2))
@@ -436,6 +452,20 @@
 
     #define N BOOST_PP_ITERATION()
 
+            template<bool B, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), typename P)>
+            struct BOOST_PP_CAT(and, N)
+              : BOOST_PP_CAT(and, BOOST_PP_DEC(N))<
+                    P0::value BOOST_PP_COMMA_IF(BOOST_PP_SUB(N,2))
+                    BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_DEC(N), P)
+                >
+            {};
+
+            template<BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), typename P)>
+            struct BOOST_PP_CAT(and, N)<false, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), P)>
+              : mpl::false_
+            {};
+
+        #if N <= BOOST_PROTO_MAX_LOGICAL_ARITY
             template<BOOST_PP_ENUM_PARAMS(N, typename G)>
             struct last<proto::and_<BOOST_PP_ENUM_PARAMS(N, G)> >
             {
@@ -457,19 +487,6 @@
                 typedef G0 which;
             };
 
-            template<bool B, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), typename P)>
-            struct BOOST_PP_CAT(and, N)
-              : BOOST_PP_CAT(and, BOOST_PP_DEC(N))<
-                    P0::value BOOST_PP_COMMA_IF(BOOST_PP_SUB(N,2))
-                    BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_DEC(N), P)
-                >
-            {};
-
-            template<BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), typename P)>
-            struct BOOST_PP_CAT(and, N)<false, BOOST_PP_ENUM_PARAMS(BOOST_PP_DEC(N), P)>
-              : mpl::false_
-            {};
-
             // handle proto::or_
             template<typename Expr, BOOST_PP_ENUM_PARAMS(N, typename G)>
             struct matches_impl<Expr, proto::or_<BOOST_PP_ENUM_PARAMS(N, G)> >
@@ -487,6 +504,7 @@
                     BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_DEFINE_MATCHES, ~)
                 >
             {};
+        #endif
 
     #undef N
 
