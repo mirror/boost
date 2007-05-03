@@ -19,8 +19,12 @@ img {
 }
 
 span.vellipsis {
-  line-height: 30% ;
-  font-size: 200% ;
+  display: block;
+  width: 5px;
+  height: 22px;
+  background: url("vellipsis.gif");
+  margin-left: 3em;
+  text-indent: -1000px;
 }
 
 
