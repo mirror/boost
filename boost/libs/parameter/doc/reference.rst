@@ -412,12 +412,12 @@ __ ../../../../boost/parameter/parameters.hpp
      |     if some ``A``\ *j* where *j*\ ≤\ *i* is a result type of ``keyword<T>::``\ |operator=|_
      |     *or* some ``P``\ *j* in *j*\ ≤\ *i* is **deduced**
      |     then
-     |         ``K``\ *i* is ``P``\ *i*\ 's |keyword tag type|.
-     |     else
      |         if some *parameter spec* ``d``\ *j* in ``D``\ *i* matches ``A``\ *i*
      |         then
      |             ``K``\ *i* is ``d``\ *j*\ 's |keyword tag type|.
      |             ``D``\ :sub:`i+1` is ``D``\ *i* - [``d``\ *j*]
+     |     else
+     |         ``K``\ *i* is ``P``\ *i*\ 's |keyword tag type|.
 
 
 .. _match:
