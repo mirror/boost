@@ -869,7 +869,6 @@ Unknown type element "<xsl:value-of select="local-name(.)"/>" in type.display.na
         <xsl:call-template name="fully-qualified-name">
           <xsl:with-param name="node" select="."/>
         </xsl:call-template>
-        <xsl:apply-templates select="specialization"/>
       </xsl:with-param>
       <xsl:with-param name="purpose" select="purpose/*|purpose/text()"/>
       <xsl:with-param name="anchor">

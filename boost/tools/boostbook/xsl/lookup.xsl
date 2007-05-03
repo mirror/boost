@@ -14,7 +14,15 @@
   <!-- Generate an ID for the entity referenced -->
   <xsl:template name="generate.id">
     <xsl:param name="node" select="."/>
-    <xsl:apply-templates select="$node" mode="generate.id"/>
+    <xsl:choose>
+      <xsl:when test="ancestor::class-specialization|ancestor::struct-specialization|ancestor::union-specialization">
+        <xsl:value-of select="generate-id(.)"/>
+        <xsl:text>-bb</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates select="$node" mode="generate.id"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="*" mode="generate.id">
@@ -22,19 +30,102 @@
     <xsl:text>-bb</xsl:text>
   </xsl:template>
 
-  <!-- Strip the qualifiers off a qualified name and return the unqualified
-       name. For instance, "boost::python::function" would become just
-       "function". -->
-  <xsl:template name="strip-qualifiers">
+  <xsl:template name="strip-qualifiers-non-template">
     <xsl:param name="name"/>
     <xsl:choose>
-      <xsl:when test="contains($name, '::') and not(contains(substring-before($name, '::'), '&lt;'))">
-        <xsl:call-template name="strip-qualifiers">
+      <xsl:when test="contains($name, '&gt;')">
+        <xsl:call-template name="strip-qualifiers-non-template">
+          <xsl:with-param name="name" select="substring-after($name, '&gt;')"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="contains($name, '::')">
+        <xsl:call-template name="strip-qualifiers-non-template">
           <xsl:with-param name="name" select="substring-after($name, '::')"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
         <xsl:value-of select="$name"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="strip-balanced">
+    <xsl:param name="name"/>
+    <xsl:param name="open" select="'&lt;'"/>
+    <xsl:param name="close" select="'&gt;'"/>
+    <xsl:param name="depth" select="0"/>
+    <xsl:choose>
+      <xsl:when test="contains($name, $open)
+                and not(contains(substring-before($name, $open), $close))">
+        <xsl:call-template name="strip-balanced">
+          <xsl:with-param name="name" select="substring-after($name, $open)"/>
+          <xsl:with-param name="open" select="$open"/>
+          <xsl:with-param name="close" select="$close"/>
+          <xsl:with-param name="depth" select="$depth + 1"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:when test="contains($name, $close) and ($depth &gt; 1)">
+        <xsl:call-template name="strip-balanced">
+          <xsl:with-param name="name" select="substring-after($name, $close)"/>
+          <xsl:with-param name="open" select="$open"/>
+          <xsl:with-param name="close" select="$close"/>
+          <xsl:with-param name="depth" select="$depth - 1"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="substring-after($name, $close)"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="strip-qualifiers-template">
+    <xsl:param name="name"/>
+    <xsl:choose>
+      <xsl:when test="contains($name, '::')
+                and not(contains(substring-before($name, '::'), '&lt;'))">
+        <xsl:call-template name="strip-qualifiers-template">
+          <xsl:with-param name="name" select="substring-after($name, '::')"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:variable name="rest">
+          <xsl:call-template name="strip-balanced">
+            <xsl:with-param name="name" select="$name"/>
+          </xsl:call-template>
+        </xsl:variable>
+        <xsl:choose>
+          <xsl:when test="$rest != ''">
+            <xsl:call-template name="strip-qualifiers-template">
+              <xsl:with-param name="name" select="$rest"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="$name"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <!-- Strip the qualifiers off a qualified name and return the unqualified
+       name. For instance, "boost::python::function" would become just
+       "function".
+       Must handle ns::foo                    -> foo 
+       Must handle ns::foo<bar::baz>          -> foo<bar::baz> 
+       Must handle ns::foo<bar::baz>::nested  -> nested  
+       Must handle ns::foo<x>::bar<y>         -> bar<y> -->
+  <xsl:template name="strip-qualifiers">
+    <xsl:param name="name"/>
+    <xsl:choose>
+      <xsl:when test="substring($name, string-length($name)) = '&gt;'">
+        <xsl:call-template name="strip-qualifiers-template">
+          <xsl:with-param name="name" select="$name"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="strip-qualifiers-non-template">
+          <xsl:with-param name="name" select="$name"/>
+        </xsl:call-template>
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -67,7 +158,9 @@
 
     <!-- Determine the set of ancestor namespaces -->
     <xsl:variable name="ancestors" 
-      select="ancestor::namespace|ancestor::class|ancestor::struct|ancestor::union"/>
+      select="ancestor::namespace|
+                  ancestor::class|ancestor::struct|ancestor::union|
+                  ancestor::class-specialization|ancestor::struct-specialization|ancestor::union-specialization"/>
 
     <xsl:choose>
       <xsl:when test="$depth &gt; count($ancestors)">
@@ -90,6 +183,29 @@
   <!-- Print the name of the current node -->
   <xsl:template match="*" mode="print-name">
     <xsl:value-of select="@name"/>
+  </xsl:template>
+
+  <xsl:template name="print-specialization-name">
+    <xsl:value-of select="@name"/>
+    <xsl:text>&lt;</xsl:text>
+    <xsl:value-of select="specialization/template-arg[position() = 1]/text()"/>
+    <xsl:for-each select="specialization/template-arg[position() &gt; 1]">
+      <xsl:text>,</xsl:text>
+      <xsl:value-of select="text()"/>
+    </xsl:for-each>
+    <xsl:text>&gt;</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="struct-specialization" mode="print-name">
+    <xsl:call-template name="print-specialization-name"/>
+  </xsl:template>
+
+  <xsl:template match="class-specialization" mode="print-name">
+    <xsl:call-template name="print-specialization-name"/>
+  </xsl:template>
+
+  <xsl:template match="union-specialization" mode="print-name">
+    <xsl:call-template name="print-specialization-name"/>
   </xsl:template>
 
   <xsl:template name="name-matches-node">
