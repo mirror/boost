@@ -1,0 +1,40 @@
+#  Boost.Intrusive library documentation Jamfile
+#
+#  Copyright Ion Gaztañaga 2006. 
+#  Distributed under the Boost Software License, Version 1.0.
+#     (See accompanying file LICENSE_1_0.txt or copy at
+#           http://www.boost.org/LICENSE_1_0.txt)
+#
+# See http://www.boost.org/libs/intrusive for documentation.
+
+
+project boost/intrusive/libs/doc ;
+
+import doxygen ;
+import quickbook ;
+
+doxygen intrusive_doxygen
+   :
+      [ glob ../../../boost/intrusive/*.hpp ]
+   :
+   <doxygen:param>HIDE_UNDOC_MEMBERS=YES
+   <doxygen:param>HIDE_UNDOC_CLASSES=YES
+   <doxygen:param>EXTRACT_PRIVATE=NO
+   <doxygen:param>ENABLE_PREPROCESSING=YES
+   <doxygen:param>MACRO_EXPANSION=YES
+   <doxygen:param>EXPAND_ONLY_PREDEF=YES
+   <doxygen:param>SEARCH_INCLUDES=YES
+   ;
+
+xml intrusive_xml : intrusive.qbk ;
+
+boostbook standalone
+   :
+      intrusive_xml
+      intrusive_doxygen
+   :
+        <xsl:param>boost.root=../../../..
+        <xsl:param>boost.libraries=../../../../libs/libraries.htm
+        <xsl:param>generate.section.toc.level=3
+        <xsl:param>chunk.first.sections=1
+   ;
