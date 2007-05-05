@@ -135,9 +135,7 @@
 
             struct dont_care
             {
-                template<typename T>
-                dont_care(T const &)
-                {}
+                dont_care(...);
             };
 
         #if BOOST_WORKAROUND(BOOST_MSVC, == 1400)
