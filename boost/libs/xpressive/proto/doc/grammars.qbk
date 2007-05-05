@@ -251,9 +251,9 @@ particular, _if_ and _and_.
 
 The _if_ template is used together with an MPL lambda expression, which is
 evaluated against expression types to find matches. The _and_ template is like
-_or_, except that each alternate must match in order for the _and_ to match.
-As an example, consider the definition of `CharString` above that uses _exact_.
-It could have been written without _exact_ as follows:
+_or_, except that each argument of the _and_ must match in order for the _and_
+to match. As an example, consider the definition of `CharString` above that
+uses _exact_. It could have been written without _exact_ as follows:
 
     struct CharString
       : and_<

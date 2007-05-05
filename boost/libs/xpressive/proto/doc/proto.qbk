@@ -38,7 +38,7 @@
 [def _spirit_fx_            [@http://spirit.sourceforge.net Spirit Parser Framework]]
 [def _spirit_               [@http://spirit.sourceforge.net Spirit]]
 [def _xpressive_            [@../../../libs/xpressive/doc/index.html Boost.Xpressive]]
-[def _expr_                 `expr<>`]
+[def _expr_                 [classref boost::proto::expr<Tag,Args,1> `expr<>`]]
 [def _ref_                  [classref boost::proto::ref_ `ref_<>`]]
 [def _unref_                [classref boost::proto::op::unref `unref()`]]
 [def _deep_copy_            [classref boost::proto::op::deep_copy `deep_copy()`]]
