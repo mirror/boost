@@ -43,9 +43,9 @@
 
     #define N BOOST_PP_ITERATION()
 
-        /// \brief A type sequence, for use as the 2nd parameter to the expr\<\> class template.
+        /// \brief A type sequence, for use as the 2nd parameter to the \c expr\<\> class template.
         ///
-        /// A type sequence, for use as the 2nd parameter to the expr\<\> class template.
+        /// A type sequence, for use as the 2nd parameter to the \c expr\<\> class template.
         /// The types in the sequence correspond to the children of a node in an expression tree.
         template< BOOST_PP_ENUM_PARAMS(N, typename Arg) >
         struct BOOST_PP_CAT(args, N)

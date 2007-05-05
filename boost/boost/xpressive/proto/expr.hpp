@@ -89,6 +89,27 @@
 
 #elif BOOST_PP_ITERATION_DEPTH() == 1
 
+        /// \brief Representation of a node in an expression tree.
+        /// 
+        /// \c proto::expr\<\> is a node in an expression template tree. It
+        /// is a container for its children sub-trees. It also serves as
+        /// the terminal nodes of the tree.
+        /// 
+        /// \c Tag is type that represents the operation encoded by
+        ///             this expression. It is typically one of the structs
+        ///             in the \c boost::proto::tag namespace, but it doesn't
+        ///             have to be. If the \c Tag type is \c boost::proto::tag::terminal
+        ///             then this \c expr\<\> type represents a leaf in the
+        ///             expression tree.
+        ///
+        /// \c Args is a type list representing the type of the children
+        ///             of this expression. It is an instantiation of one
+        ///             of \c proto::args1\<\>, \c proto::args2\<\>, etc. The 
+        ///             children types must all themselves be either \c expr\<\>
+        ///             or \c proto::ref_\<proto::expr\<\>\>, unless the \c Tag
+        ///             type is \c boost::proto::tag::terminal, in which case
+        ///             \c Args must be \c proto::args1\<T\>, where \c T can be any
+        ///             type.
         template<typename Tag, typename Args>
         struct expr<Tag, Args, BOOST_PP_ITERATION() >
         {
@@ -105,36 +126,23 @@
             BOOST_PP_REPEAT(BOOST_PP_ITERATION(), BOOST_PROTO_ARG, ~)
             BOOST_PP_REPEAT_FROM_TO(BOOST_PP_ITERATION(), BOOST_PROTO_MAX_ARITY, BOOST_PROTO_VOID, ~)
 
+            /// \return *this
+            ///
             expr &cast()
             {
                 return *this;
             }
 
+            /// \return *this
+            ///
             expr const &cast() const
             {
                 return *this;
             }
 
-        #if 1 == BOOST_PP_ITERATION()
-            // only terminals need this special case, because only
-            // they can contain non-const references
-            template<typename A0>
-            static expr make(A0 &a0)
-            {
-                expr that = {a0};
-                return that;
-            }
-
-            // HACKHACK proto overloads operator&, which means that proto-ified objects
-            // cannot have their addresses taken, unless we use the following hack to
-            // make &x implicitly convertible to X*.
-            typedef typename detail::address_of_hack<Tag, arg0_type>::type address_of_hack_type_;
-            operator address_of_hack_type_() const
-            {
-                return boost::addressof(this->arg0.expr);
-            }
-        #endif
-
+            /// \return A new \c expr\<\> object initialized with the specified
+            /// arguments.
+            ///
             template<BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), typename A)>
             static expr make(BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_ITERATION(), A, const &a))
             {
@@ -142,6 +150,38 @@
                 return that;
             }
 
+        #if 1 == BOOST_PP_ITERATION()
+            /// \overload
+            ///
+            template<typename A0>
+            static expr make(A0 &a0)
+            {
+                expr that = {a0};
+                return that;
+            }
+
+            /// If \c Tag is \c boost::proto::tag::address_of and \c arg0_type is
+            /// \c proto::ref_\<T\>, then \c address_of_hack_type_ is <tt>T*</tt>.
+            /// Otherwise, it is some undefined type.
+            typedef typename detail::address_of_hack<Tag, arg0_type>::type address_of_hack_type_;
+
+            /// \return The address of <tt>this->arg0</tt> if \c Tag is
+            /// \c boost::proto::tag::address_of. Otherwise, this function will
+            /// fail to compile.
+            ///
+            /// \attention Proto overloads <tt>operator&</tt>, which means that
+            /// proto-ified objects cannot have their addresses taken, unless we use
+            /// the following hack to make \c &x implicitly convertible to \c X*.
+            operator address_of_hack_type_() const
+            {
+                return boost::addressof(this->arg0.expr);
+            }
+        #endif
+
+            /// Assignment
+            ///
+            /// \param a The rhs.
+            /// \return A new \c expr\<\> node representing an assignment of \c a to \c *this.
             template<typename A>
             expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A>::type> > const
             operator =(A &a)
@@ -150,6 +190,8 @@
                 return that;
             }
 
+            /// \overload
+            ///
             template<typename A>
             expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > const
             operator =(A const &a)
@@ -158,6 +200,8 @@
                 return that;
             }
 
+            /// \overload
+            ///
             template<typename A>
             expr<tag::assign, args2<ref_<expr const>, typename result_of::as_arg<A>::type> > const
             operator =(A &a) const
@@ -166,6 +210,8 @@
                 return that;
             }
 
+            /// \overload
+            ///
             template<typename A>
             expr<tag::assign, args2<ref_<expr const>, typename result_of::as_arg<A const>::type> > const
             operator =(A const &a) const
@@ -174,6 +220,10 @@
                 return that;
             }
 
+            /// Subscript
+            ///
+            /// \param a The rhs.
+            /// \return A new \c expr\<\> node representing \c *this subscripted with \c a.
             template<typename A>
             expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A>::type> > const
             operator [](A &a)
@@ -182,6 +232,8 @@
                 return that;
             }
 
+            /// \overload
+            ///
             template<typename A>
             expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > const
             operator [](A const &a)
@@ -190,6 +242,8 @@
                 return that;
             }
 
+            /// \overload
+            ///
             template<typename A>
             expr<tag::subscript, args2<ref_<expr const>, typename result_of::as_arg<A>::type> > const
             operator [](A &a) const
@@ -198,6 +252,8 @@
                 return that;
             }
 
+            /// \overload
+            ///
             template<typename A>
             expr<tag::subscript, args2<ref_<expr const>, typename result_of::as_arg<A const>::type> > const
             operator [](A const &a) const
@@ -209,12 +265,17 @@
             template<typename Sig>
             struct result {};
 
+            /// Encodes the return type of \c expr\<\>::operator(), for use with \c boost::result_of\<\>
+            ///
             template<typename This>
             struct result<This()>
             {
                 typedef expr<tag::function, args1<ref_<expr const> > > type;
             };
 
+            /// Function call
+            ///
+            /// \return A new \c expr\<\> node representing the function invocation of \c (*this)().
             expr<tag::function, args1<ref_<expr const> > > const
             operator ()() const
             {
@@ -235,6 +296,8 @@
           : result_of::BOOST_PP_CAT(funop, N)<expr const BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename remove_reference<A, >::type BOOST_PP_INTERCEPT)>
         {};
 
+        /// \overload
+        ///
         template<BOOST_PP_ENUM_PARAMS(N, typename A)>
         typename result_of::BOOST_PP_CAT(funop, N)<expr const BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)>::type const
         operator ()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const &a)) const
