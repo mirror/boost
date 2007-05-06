@@ -271,13 +271,14 @@
             <xsl:with-param name="node" select="$node"/>
           </xsl:call-template>
         </xsl:variable>
-        
+
         <!-- The set of using directives for this context node -->
         <xsl:variable name="directives"
           select="$context/ancestor::*/using-namespace |
                   $context/ancestor::namespace |
                   $context/ancestor::*/using-class |
-                  $context/ancestor::class"/>
+                  $context/ancestor::class |
+                  $context/ancestor::struct"/>
         
         <!-- The name of the current directive -->
         <xsl:variable name="this-context">
