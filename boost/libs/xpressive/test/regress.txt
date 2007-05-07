@@ -1453,6 +1453,7 @@ flg=i
 br0=aA
 [end]
 
+; Test for backreferences over 9
 [test172]
 str=hellohello
 pat=()()()()()()()()()()()(hello)\12
@@ -1469,6 +1470,27 @@ br9=
 br10=
 br11=
 br12=hello
+[end]
+
+; test for named captures
+[test173]
+str=hellohello
+pat=(?P<this>he(ll)o)(?P=this)
+br0=hellohello
+br1=hello
+br2=ll
+[end]
+
+; test for named captures
+[test174]
+str=hellohello
+pat=(?P<this>he(ll)o)(?P=this)
+flg=p
+sub=\u\g<this>, world
+res=Hello, world
+br0=hellohello
+br1=hello
+br2=ll
 [end]
 
 ; tests pilfered from Boost.Regex test_tricky_cases.cpp

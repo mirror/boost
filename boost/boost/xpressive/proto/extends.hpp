@@ -33,19 +33,22 @@ namespace boost { namespace proto
     #define BOOST_PROTO_DEFINE_FUN_OP(Z, N, Data)\
         template<typename This BOOST_PP_ENUM_TRAILING_PARAMS_Z(Z, N, typename A)>\
         struct result<This(BOOST_PP_ENUM_PARAMS_Z(Z, N, A))>\
-          : boost::proto::generate<\
-                BOOST_PP_TUPLE_ELEM(3, 2, Data)\
-              , typename boost::proto::result_of::BOOST_PP_CAT(funop, N)<\
-                    BOOST_PP_TUPLE_ELEM(3, 1, Data) const\
-                    BOOST_PP_ENUM_TRAILING_BINARY_PARAMS_Z(\
-                        Z\
-                      , N\
-                      , typename boost::remove_reference<A\
-                      , >::type BOOST_PP_INTERCEPT\
-                    )\
+        {\
+            typedef\
+                typename boost::proto::generate<\
+                    BOOST_PP_TUPLE_ELEM(3, 2, Data)\
+                  , typename boost::proto::result_of::BOOST_PP_CAT(funop, N)<\
+                        BOOST_PP_TUPLE_ELEM(3, 1, Data) const\
+                        BOOST_PP_ENUM_TRAILING_BINARY_PARAMS_Z(\
+                            Z\
+                          , N\
+                          , typename boost::remove_reference<A\
+                          , >::type BOOST_PP_INTERCEPT\
+                        )\
+                    >::type\
                 >::type\
-            >\
-        {};\
+            type;\
+        };\
         \
         template<BOOST_PP_ENUM_PARAMS_Z(Z, N, typename A)>\
         typename boost::proto::generate<\
@@ -211,24 +214,28 @@ namespace boost { namespace proto
 
     /// \brief Empty type to be used as a dummy template parameter of
     ///     POD expression wrappers. It allows argument-dependent lookup
-    ///     to find proto's operator overloads.
+    ///     to find Proto's operator overloads.
     ///
-    /// For example:
+    /// \c proto::is_proto_expr allows argument-dependent lookup
+    ///     to find Proto's operator overloads. For example:
     ///
-    ///     template< typename T, typename Dummy = proto::is_proto_expr >
-    ///     struct my_terminal
-    ///     {
-    ///         BOOST_PROTO_EXTENDS(
-    ///             typename proto::terminal\<T\>::type
-    ///           , my_terminal\<T\>
-    ///           , default_domain
-    ///         )
-    ///     };
+    /// \code
+    /// template<typename T, typename Dummy = proto::is_proto_expr>
+    /// struct my_terminal
+    /// {
+    ///     BOOST_PROTO_EXTENDS(
+    ///         typename proto::terminal<T>::type
+    ///       , my_terminal<T>
+    ///       , default_domain
+    ///     )
+    /// };
     ///
-    ///     my_terminal\<int\> _1, _2;
-    ///     _1 + _2; // OK, uses proto::operator+
+    /// // ...
+    /// my_terminal<int> _1, _2;
+    /// _1 + _2; // OK, uses proto::operator+
+    /// \endcode
     ///
-    /// Without the second Dummy template parameter, Proto's operator
+    /// Without the second \c Dummy template parameter, Proto's operator
     /// overloads would not be considered by name lookup.
     struct is_proto_expr
     {};

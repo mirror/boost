@@ -231,13 +231,8 @@ struct compiler_traits
             case BOOST_XPR_CHAR_(char_type, '!'): ++begin; return token_negative_lookahead;
             case BOOST_XPR_CHAR_(char_type, 'R'): ++begin; return token_recurse;
             case BOOST_XPR_CHAR_(char_type, '$'):
-                this->eat_ws_(++begin, end);
-                for( name.clear(); begin != end && this->traits().isctype(*begin, this->alnum_); ++begin)
-                {
-                    name.push_back(*begin);
-                }
-                this->eat_ws_(begin, end);
-                detail::ensure(begin != end && !name.empty(), error_paren, "incomplete extension");
+                this->get_name_(++begin, end, name);
+                detail::ensure(begin != end, error_paren, "incomplete extension");
                 if(BOOST_XPR_CHAR_(char_type, '=') == *begin)
                 {
                     ++begin;
@@ -252,6 +247,23 @@ struct compiler_traits
                 {
                 case BOOST_XPR_CHAR_(char_type, '='): ++begin; return token_positive_lookbehind;
                 case BOOST_XPR_CHAR_(char_type, '!'): ++begin; return token_negative_lookbehind;
+                default:
+                    throw regex_error(error_badbrace, "unrecognized extension");
+                }
+
+            case BOOST_XPR_CHAR_(char_type, 'P'):
+                this->eat_ws_(++begin, end);
+                detail::ensure(begin != end, error_paren, "incomplete extension");
+                switch(*begin)
+                {
+                case BOOST_XPR_CHAR_(char_type, '<'):
+                    this->get_name_(++begin, end, name);
+                    detail::ensure(begin != end && BOOST_XPR_CHAR_(char_type, '>') == *begin++, error_paren, "incomplete extension");
+                    return token_named_mark;
+                case BOOST_XPR_CHAR_(char_type, '='):
+                    this->get_name_(++begin, end, name);
+                    detail::ensure(begin != end, error_paren, "incomplete extension");
+                    return token_named_mark_ref;
                 default:
                     throw regex_error(error_badbrace, "unrecognized extension");
                 }
@@ -387,6 +399,26 @@ private:
     bool is_space_(char_type ch) const
     {
         return this->traits().isctype(ch, this->space_);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // is_alnum_
+    bool is_alnum_(char_type ch) const
+    {
+        return this->traits().isctype(ch, this->alnum_);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // get_name_
+    void get_name_(iterator_type &begin, iterator_type end, string_type &name)
+    {
+        this->eat_ws_(begin, end);
+        for(name.clear(); begin != end && this->is_alnum_(*begin); ++begin)
+        {
+            name.push_back(*begin);
+        }
+        this->eat_ws_(begin, end);
+        detail::ensure(!name.empty(), regex_constants::error_paren, "incomplete extension");
     }
 
     ///////////////////////////////////////////////////////////////////////////////

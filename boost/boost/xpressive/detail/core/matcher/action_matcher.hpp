@@ -13,6 +13,7 @@
 # pragma once
 #endif
 
+#include <boost/version.hpp>
 #include <boost/ref.hpp>
 #include <boost/assert.hpp>
 #include <boost/mpl/if.hpp>
@@ -24,11 +25,13 @@
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/context.hpp>
-#include <boost/xpressive/proto/fusion.hpp>
-#include <boost/fusion/sequence/view/transform_view.hpp>
-#include <boost/fusion/functional/invocation/invoke.hpp>
-#include <boost/fusion/algorithm/transformation/push_front.hpp>
-#include <boost/fusion/algorithm/transformation/pop_front.hpp>
+#if BOOST_VERSION >= 103500
+# include <boost/xpressive/proto/fusion.hpp>
+# include <boost/fusion/sequence/view/transform_view.hpp>
+# include <boost/fusion/functional/invocation/invoke.hpp>
+# include <boost/fusion/algorithm/transformation/push_front.hpp>
+# include <boost/fusion/algorithm/transformation/pop_front.hpp>
+#endif
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -89,6 +92,7 @@ namespace boost { namespace xpressive { namespace detail
           : eval_terminal<Expr>
         {};
 
+#if BOOST_VERSION >= 103500
         template<typename Expr>
         struct eval<Expr, proto::tag::mem_ptr>
         {
@@ -135,6 +139,7 @@ namespace boost { namespace xpressive { namespace detail
                 );
             }
         };
+#endif
 
     private:
         action_args_type *action_args_;

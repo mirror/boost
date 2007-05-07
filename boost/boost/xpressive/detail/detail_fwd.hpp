@@ -304,6 +304,9 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Char>
     struct basic_chset;
 
+    template<typename Char>
+    struct named_mark;
+
     template<typename BidiIter>
     struct memento;
 

@@ -221,6 +221,8 @@ enum error_type
                                 ///<
     error_badref,               ///< An nested regex is uninitialized.
                                 ///<
+    error_badmark,              ///< An invalid use of a named capture.
+                                ///<
     error_badlookbehind,        ///< An attempt to create a variable-width look-behind assertion
                                 ///< was detected.
                                 ///<

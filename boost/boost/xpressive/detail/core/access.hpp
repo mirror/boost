@@ -13,6 +13,7 @@
 # pragma once
 #endif
 
+#include <vector>
 #include <boost/shared_ptr.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/dynamic/matchable.hpp>
@@ -77,9 +78,10 @@ struct core_access
       , intrusive_ptr<traits<char_type> const> const &traits
       , sub_match_impl<BidiIter> *sub_matches
       , std::size_t size
+      , std::vector<named_mark<char_type> > const &named_marks
     )
     {
-        what.init_(regex_id, traits, sub_matches, size);
+        what.init_(regex_id, traits, sub_matches, size, named_marks);
     }
 
     static sub_match_vector<BidiIter> &get_sub_match_vector(match_results<BidiIter> &what)

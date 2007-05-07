@@ -49,6 +49,8 @@ enum compiler_token_type
     token_recurse,                      // ?R
     token_rule_assign,                  // ?$[name]=
     token_rule_ref,                     // ?$[name]
+    token_named_mark,                   // ?P<name>
+    token_named_mark_ref,               // ?P=name
 
     token_assert_begin_sequence,        // \A
     token_assert_end_sequence,          // \Z

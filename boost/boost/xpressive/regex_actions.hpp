@@ -332,7 +332,8 @@ namespace boost { namespace xpressive
         struct insert
         {
             template<typename Sig, typename EnableIf = void>
-            struct result;
+            struct result
+            {};
 
             // assoc containers
             template<typename This, typename Cont, typename Value>
@@ -393,6 +394,8 @@ namespace boost { namespace xpressive
                 typedef Cont &type;
             };
 
+            /// operator()
+            ///
             template<typename Cont, typename A0>
             typename result<insert(Cont &, A0 &)>::type
             operator()(Cont &cont, A0 &a0) const
@@ -400,6 +403,8 @@ namespace boost { namespace xpressive
                 return cont.insert(a0);
             }
 
+            /// \overload
+            ///
             template<typename Cont, typename A0, typename A1>
             typename result<insert(Cont &, A0 &, A1 &)>::type
             operator()(Cont &cont, A0 &a0, A1 &a1) const
@@ -407,6 +412,8 @@ namespace boost { namespace xpressive
                 return cont.insert(a0, a1);
             }
 
+            /// \overload
+            ///
             template<typename Cont, typename A0, typename A1, typename A2>
             typename result<insert(Cont &, A0 &, A1 &, A2 &)>::type
             operator()(Cont &cont, A0 &a0, A1 &a1, A2 &a2) const

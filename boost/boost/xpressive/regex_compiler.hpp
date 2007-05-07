@@ -318,6 +318,37 @@ private:
                 return detail::make_dynamic<BidiIter>(detail::regex_byref_matcher<BidiIter>(impl));
             }
 
+        case token_named_mark:
+            mark_nbr = static_cast<int>(++this->mark_count_);
+            for(std::size_t i = 0; i < this->self_->named_marks_.size(); ++i)
+            {
+                detail::ensure(this->self_->named_marks_[i].name_ != name, error_badmark, "named mark already exists");
+            }
+            this->self_->named_marks_.push_back(detail::named_mark<char_type>(name, this->mark_count_));
+            seq = detail::make_dynamic<BidiIter>(detail::mark_begin_matcher(mark_nbr));
+            seq_end = detail::make_dynamic<BidiIter>(detail::mark_end_matcher(mark_nbr));
+            break;
+
+        case token_named_mark_ref:
+            detail::ensure
+            (
+                begin != end && token_group_end == this->traits_.get_token(begin, end)
+              , error_paren
+              , "mismatched parenthesis"
+            );
+            for(std::size_t i = 0; i < this->self_->named_marks_.size(); ++i)
+            {
+                if(this->self_->named_marks_[i].name_ == name)
+                {
+                    mark_nbr = static_cast<int>(this->self_->named_marks_[i].mark_nbr_);
+                    return detail::make_backref_xpression<BidiIter>
+                    (
+                        mark_nbr, this->traits_.flags(), this->rxtraits()
+                    );
+                }
+            }
+            throw regex_error(error_badmark, "invalid named back-reference");
+
         default:
             mark_nbr = static_cast<int>(++this->mark_count_);
             seq = detail::make_dynamic<BidiIter>(detail::mark_begin_matcher(mark_nbr));

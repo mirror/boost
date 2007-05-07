@@ -17,6 +17,7 @@
 #endif
 
 #include <map>
+#include <vector>
 #include <utility>
 #include <iterator>
 #include <typeinfo>
@@ -32,6 +33,7 @@
 #endif
 #include <boost/xpressive/regex_constants.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
+#include <boost/xpressive/detail/core/regex_impl.hpp>
 #include <boost/xpressive/detail/core/sub_match_vector.hpp>
 #include <boost/xpressive/detail/utility/sequence_stack.hpp>
 #include <boost/xpressive/detail/core/results_cache.hpp>
@@ -258,6 +260,7 @@ public:
       , extras_ptr_()
       , traits_()
       , args_()
+      , named_marks_()
     {
     }
 
@@ -281,6 +284,7 @@ public:
       , extras_ptr_()
       , traits_()
       , args_(that.args_)
+      , named_marks_(that.named_marks_)
     {
         if(that)
         {
@@ -358,16 +362,10 @@ public:
     /// matched marked sub-expression sub. If sub == 0 then returns a reference to a sub_match object
     /// representing the sequence that matched the whole regular expression.
     /// \pre sub \< (*this).size().
-    const_reference operator [](size_type sub) const
+    template<typename Index>
+    const_reference operator [](Index const &index) const
     {
-        return this->sub_matches_[ sub ];
-    }
-
-    /// \overload
-    ///
-    const_reference operator [](detail::basic_mark_tag const &mark) const
-    {
-        return this->sub_matches_[ detail::get_mark_number(mark) ];
+        return this->at_(index);
     }
 
     /// Returns a reference to the sub_match object representing the character sequence from
@@ -547,10 +545,12 @@ private:
       , intrusive_ptr<detail::traits<char_type> const> const &traits
       , detail::sub_match_impl<BidiIter> *sub_matches
       , size_type size
+      , std::vector<detail::named_mark<char_type> > const &named_marks
     )
     {
         this->traits_ = traits;
         this->regex_id_ = regex_id;
+        this->named_marks_ = named_marks;
         detail::core_access<BidiIter>::init_sub_match_vector(this->sub_matches_, sub_matches, size);
     }
 
@@ -607,6 +607,41 @@ private:
         {
             ibegin->set_base_(base);
         }
+    }
+
+    /// INTERNAL ONLY
+    ///
+    const_reference at_(size_type sub) const
+    {
+        return this->sub_matches_[ sub ];
+    }
+
+    /// INTERNAL ONLY
+    ///
+    const_reference at_(detail::basic_mark_tag const &mark) const
+    {
+        return this->sub_matches_[ detail::get_mark_number(mark) ];
+    }
+
+    /// INTERNAL ONLY
+    ///
+    const_reference at_(char_type const *name) const
+    {
+        for(std::size_t i = 0; i < this->named_marks_.size(); ++i)
+        {
+            if(this->named_marks_[i].name_ == name)
+            {
+                return this->sub_matches_[ this->named_marks_[i].mark_nbr_ ];
+            }
+        }
+        throw regex_error(regex_constants::error_badmark, "invalid named back-reference");
+    }
+
+    /// INTERNAL ONLY
+    ///
+    const_reference at_(string_type const &name) const
+    {
+        return (*this)[name.c_str()];
     }
 
     /// INTERNAL ONLY
@@ -674,7 +709,14 @@ private:
                 break;
 
             case BOOST_XPR_CHAR_(char_type, '\\'):
-                iout = this->format_escape_(++cur, end, iout);
+                if(++cur != end && BOOST_XPR_CHAR_(char_type, 'g') == *cur)
+                {
+                    iout = this->format_named_backref_(++cur, end, iout);
+                }
+                else
+                {
+                    iout = this->format_escape_(cur, end, iout);
+                }
                 break;
 
             default:
@@ -715,7 +757,14 @@ private:
                 break;
 
             case BOOST_XPR_CHAR_(char_type, '\\'):
-                out = this->format_escape_(++cur, end, out);
+                if(++cur != end && BOOST_XPR_CHAR_(char_type, 'g') == *cur)
+                {
+                    out = this->format_named_backref_(++cur, end, out);
+                }
+                else
+                {
+                    out = this->format_escape_(cur, end, out);
+                }
                 break;
 
             case BOOST_XPR_CHAR_(char_type, '('):
@@ -953,6 +1002,38 @@ private:
         return out;
     }
 
+    /// INTERNAL ONLY
+    ///
+    template<typename OutputIterator>
+    OutputIterator format_named_backref_
+    (
+        typename string_type::const_iterator &cur
+      , typename string_type::const_iterator end
+      , OutputIterator out
+    ) const
+    {
+        using namespace regex_constants;
+        detail::ensure(cur != end && BOOST_XPR_CHAR_(char_type, '<') == *cur++
+            , error_badmark, "invalid named back-reference");
+        typename string_type::const_iterator begin = cur;
+        for(; cur != end && BOOST_XPR_CHAR_(char_type, '>') != *cur; ++cur)
+        {}
+        detail::ensure(cur != begin && cur != end && BOOST_XPR_CHAR_(char_type, '>') == *cur
+            , error_badmark, "invalid named back-reference");
+
+        string_type name(begin, cur++);
+        for(std::size_t i = 0; i < this->named_marks_.size(); ++i)
+        {
+            if(this->named_marks_[i].name_ == name)
+            {
+                std::size_t sub = this->named_marks_[i].mark_nbr_;
+                return std::copy(this->sub_matches_[ sub ].first, this->sub_matches_[ sub ].second, out);
+            }
+        }
+
+        throw regex_error(error_badmark, "invalid named back-reference");
+    }
+
     regex_id_type regex_id_;
     detail::sub_match_vector<BidiIter> sub_matches_;
     BidiIter base_;
@@ -962,6 +1043,7 @@ private:
     intrusive_ptr<extras_type> extras_ptr_;
     intrusive_ptr<detail::traits<char_type> const> traits_;
     detail::action_args_type args_;
+    std::vector<detail::named_mark<char_type> > named_marks_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////

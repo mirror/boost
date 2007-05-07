@@ -13,6 +13,7 @@
 # pragma once
 #endif
 
+#include <vector>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/xpressive/regex_traits.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
@@ -44,6 +45,20 @@ struct traits
     virtual Char toupper(Char ch) const = 0;
     virtual bool in_range(Char from, Char to, Char ch) const = 0;
     virtual int value(Char ch, int radix) const = 0;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// named_mark
+template<typename Char>
+struct named_mark
+{
+    named_mark(std::basic_string<Char> name, std::size_t mark_nbr)
+      : name_(name)
+      , mark_nbr_(mark_nbr)
+    {}
+
+    std::basic_string<Char> name_;
+    std::size_t mark_nbr_;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -122,6 +137,7 @@ struct regex_impl
       , xpr_()
       , traits_()
       , finder_()
+      , named_marks_()
       , mark_count_(0)
       , hidden_mark_count_(0)
     {
@@ -135,6 +151,7 @@ struct regex_impl
       , xpr_(that.xpr_)
       , traits_(that.traits_)
       , finder_(that.finder_)
+      , named_marks_(that.named_marks_)
       , mark_count_(that.mark_count_)
       , hidden_mark_count_(that.hidden_mark_count_)
     {
@@ -156,6 +173,7 @@ struct regex_impl
         this->xpr_.swap(that.xpr_);
         this->traits_.swap(that.traits_);
         this->finder_.swap(that.finder_);
+        this->named_marks_.swap(that.named_marks_);
         std::swap(this->mark_count_, that.mark_count_);
         std::swap(this->hidden_mark_count_, that.hidden_mark_count_);
     }
@@ -163,6 +181,7 @@ struct regex_impl
     intrusive_ptr<matchable_ex<BidiIter> const> xpr_;
     intrusive_ptr<traits<char_type> const> traits_;
     intrusive_ptr<finder<BidiIter> > finder_;
+    std::vector<named_mark<char_type> > named_marks_;
     std::size_t mark_count_;
     std::size_t hidden_mark_count_;
 

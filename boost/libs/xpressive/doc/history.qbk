@@ -15,6 +15,7 @@ New Features:
 * Custom assertions
 * Better errors for invalid static regexes
 * Dynamic regex grammars
+* Named captures
 * Recursive dynamic regexes with [^(?R)] construct
 * Range-based regex algorithm interface
 * `format_perl`, `format_sed`, and `format_all`

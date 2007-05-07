@@ -273,7 +273,7 @@ private:
         this->sub_matches_ += impl.hidden_mark_count_;
 
         // initialize the match_results struct
-        access::init_match_results(what, id, impl.traits_, this->sub_matches_, this->mark_count_);
+        access::init_match_results(what, id, impl.traits_, this->sub_matches_, this->mark_count_, impl.named_marks_);
     }
 
     void uninit_(regex_impl const &impl, match_results &)
