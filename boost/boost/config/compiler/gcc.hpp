@@ -109,10 +109,16 @@
 #  define BOOST_HAS_VARIADIC_TMPL
 #endif
 
+// Rvalue reference support
+#ifdef __RVALUE_REFS
+#  define BOOST_HAS_RVALUE_REFS
+#endif
+
 // ConceptGCC compiler:
 //   http://www.generic-programming.org/software/ConceptGCC/
 #ifdef __GXX_CONCEPTS__
 #  define BOOST_HAS_CONCEPTS
+#  define BOOST_HAS_RVALUE_REFS
 #  define BOOST_COMPILER "ConceptGCC version " __VERSION__
 #endif
 
