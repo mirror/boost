@@ -1014,10 +1014,10 @@ namespace quickbook
 
     void xml_author::operator()(std::pair<std::string, std::string> const& author) const
     {
-        out << "    <author>\n"
-            << "      <firstname>" << author.first << "</firstname>\n"
-            << "      <surname>" << author.second << "</surname>\n"
-            << "    </author>\n";
+        out << "      <author>\n"
+            << "        <firstname>" << author.first << "</firstname>\n"
+            << "        <surname>" << author.second << "</surname>\n"
+            << "      </author>\n";
     }
 
     void xml_year::operator()(std::string const &year) const
@@ -1084,10 +1084,15 @@ namespace quickbook
             << "    xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n"
             << "  <" << actions.doc_type << "info>\n";
 
-        for_each(
-            actions.doc_authors.begin()
-          , actions.doc_authors.end()
-          , xml_author(out));
+        if(actions.doc_authors.empty())
+        {
+            out << "    <authorgroup>\n";
+            for_each(
+                actions.doc_authors.begin()
+              , actions.doc_authors.end()
+              , xml_author(out));
+            out << "    </authorgroup>\n";
+        }
 
         if (!actions.doc_copyright_holder.empty())
         {
