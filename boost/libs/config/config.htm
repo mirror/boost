@@ -67,6 +67,9 @@
          The best way to keep abreast of changes to the macros used in user code is to 
          monitor the discussions on the Boost developers list.</P>
       <h4><a name="config_script">Using the configure script</a></h4>
+      <P><STRONG>Note</STRONG>: this configure script only sets up the Boost headers for 
+         use with a particular compiler.&nbsp; <STRONG><EM>It has no effect on Boost.Build, or 
+               how the libraries are built</EM></STRONG>.</P>
       <p>If you know that boost is incorrectly configured for your particular setup, and 
          you are on a UNIX like platform, then you may want to try and improve things by 
          running the boost configure script. From a shell command prompt you will need 
@@ -1601,14 +1604,14 @@ int test()
          test system proceeds as:</p>
       <UL>
          <LI>
-            cd into libs/config/tools and run <EM>bjam --v2 </EM>: this generates the .cpp 
-            file test cases from the .ipp file, updates the Jamfile, config_test.cpp and 
-            config_info.cpp.</LI>
+            cd into libs/config/tools and run <EM>bjam --v2 </EM>
+         : this generates the .cpp file test cases from the .ipp file, updates the 
+         Jamfile, config_test.cpp and config_info.cpp.
          <LI>
             cd into libs/config/test and run <EM>bjam --v2 MACRONAME compiler-list</EM>&nbsp;: 
             where <EM>MACRONAME</EM> is the name of the new macro, and <EM>compiler-list</EM>
-            is the list of compilers to test with.&nbsp; You should see the tests pass with 
-            those compilers that don't have the defect, and fail with those that do.</LI>
+         is the list of compilers to test with.&nbsp; You should see the tests pass with 
+         those compilers that don't have the defect, and fail with those that do.
          <LI>
             cd into libs/config/test and run <EM>bjam --v2 config_info config_test 
                compiler-list</EM> : config_info should build and run cleanly for all the 
@@ -1617,14 +1620,14 @@ int test()
       <P>Then you should:</P>
       <UL>
          <LI>
-            Define the defect macro in those config headers that require it.</LI>
+         Define the defect macro in those config headers that require it.
          <LI>
-            Document the macro in this documentation (please do not forget this step!!)</LI>
+         Document the macro in this documentation (please do not forget this step!!)
          <LI>
-            Commit everything.</LI>
+         Commit everything.
          <LI>
-            Keep an eye on the regression tests for new failures in Boost.Config caused by 
-            the addition.</LI>
+         Keep an eye on the regression tests for new failures in Boost.Config caused by 
+         the addition.
          <LI>
             Start using the macro.</LI></UL>
       <h4><a name="feature_guidelines"></a>Adding New Feature Test Macros</h4>
