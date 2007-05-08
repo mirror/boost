@@ -37,6 +37,30 @@ namespace boost { namespace fusion { namespace extension
     struct struct_size<Struct const>
         : struct_size<Struct>
     {};
+
+    struct no_such_member;
+
+    template<typename Struct, typename Key>
+    struct struct_assoc_member
+    {
+        typedef no_such_member type;
+    };
+
+    template<typename Struct, typename Key>
+    struct struct_assoc_member<Struct const, Key>
+    {
+        typedef typename
+        add_const<typename struct_assoc_member<Struct, Key>::type>::type
+        type;
+
+        static type&
+        call(Struct const& struct_)
+        {
+            return struct_member<Struct, Key>::call(
+                const_cast<Struct&>(struct_));
+        }
+    };
+
 }}}
 
 #endif
