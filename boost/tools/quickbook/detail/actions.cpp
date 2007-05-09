@@ -1084,7 +1084,7 @@ namespace quickbook
             << "    xmlns:xi=\"http://www.w3.org/2001/XInclude\">\n"
             << "  <" << actions.doc_type << "info>\n";
 
-        if(actions.doc_authors.empty())
+        if(!actions.doc_authors.empty())
         {
             out << "    <authorgroup>\n";
             for_each(
@@ -1176,3 +1176,4 @@ namespace quickbook
         phrase.swap(out);
     }
 }
+
