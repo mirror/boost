@@ -41,13 +41,13 @@
             template<typename Tag, long Arity>
             struct make_expr_impl;
 
-        #define BOOST_PROTO_AS_EXPR(z, n, data) proto::as_expr(BOOST_PP_CAT(a, n))
+        #define BOOST_PROTO_AS_ARG(z, n, data) proto::as_arg(BOOST_PP_CAT(a, n))
         #define BOOST_PROTO_VALUE_AT(z, n, data) typename fusion::result_of::value_at_c< Sequence, n >::type
         #define BOOST_PROTO_AT(z, n, data) fusion::at_c< n >(data)
         #define BOOST_PP_ITERATION_PARAMS_1 (4, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/make_expr.hpp>, 1))
         #include BOOST_PP_ITERATE()
         #undef BOOST_PP_ITERATION_PARAMS_1
-        #undef BOOST_PROTO_AS_EXPR
+        #undef BOOST_PROTO_AS_ARG
         #undef BOOST_PROTO_VALUE_AT
         #undef BOOST_PROTO_AT
         }
@@ -67,7 +67,7 @@
             template<typename Tag, typename Sequence>
             struct unpack_expr
               : detail::make_expr_impl<Tag, fusion::result_of::size<Sequence>::type::value>
-                    ::BOOST_NESTED_TEMPLATE from_sequence_result_<Sequence>
+                    ::template from_sequence_result_<Sequence>
             {};
         }
 
@@ -94,7 +94,7 @@
                 struct result_
                 {
                     typedef expr<Tag, BOOST_PP_CAT(args, N)<
-                        BOOST_PP_ENUM_BINARY_PARAMS(N, typename result_of::as_expr<A, >::type BOOST_PP_INTERCEPT)
+                        BOOST_PP_ENUM_BINARY_PARAMS(N, typename result_of::as_arg<A, >::type BOOST_PP_INTERCEPT)
                     > > type;
                 };
 
@@ -110,8 +110,8 @@
                 typename result_<BOOST_PP_ENUM_PARAMS(N, const A)>::type
                 operator ()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const &a)) const
                 {
-                    typename result_<BOOST_PP_ENUM_PARAMS(N, A)>::type that =
-                        {BOOST_PP_ENUM(N, BOOST_PROTO_AS_EXPR, _)};
+                    typename result_<BOOST_PP_ENUM_PARAMS(N, const A)>::type that =
+                        {BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG, _)};
                     return that;
                 }
 
@@ -140,12 +140,12 @@
     {
         template<typename Tag BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
         struct make_expr<Tag BOOST_PP_ENUM_TRAILING_PARAMS(N, A)>
-          : detail::make_expr_impl<Tag, N>::BOOST_NESTED_TEMPLATE result_<BOOST_PP_ENUM_PARAMS(N, A)>
+          : detail::make_expr_impl<Tag, N>::template result_<BOOST_PP_ENUM_PARAMS(N, A)>
         {};
     }
 
     template<typename Tag BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-    typename detail::make_expr_impl<Tag, N>::BOOST_NESTED_TEMPLATE result_<BOOST_PP_ENUM_PARAMS(N, A)>::type
+    typename detail::make_expr_impl<Tag, N>::template result_<BOOST_PP_ENUM_PARAMS(N, const A)>::type
     make_expr(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const &a))
     {
         return detail::make_expr_impl<Tag, N>()(BOOST_PP_ENUM_PARAMS(N, a));

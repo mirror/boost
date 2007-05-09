@@ -30,21 +30,21 @@ namespace boost { namespace xpressive { namespace detail
     {
         typedef regex_constants::syntax_option_type opt_type;
 
-        template<typename Xpr>
+        template<typename Expr>
         struct apply
         {
             typedef typename proto::binary_expr<
                 modifier_tag
               , typename proto::terminal<Modifier>::type
-              , typename proto::result_of::as_expr<Xpr>::type
+              , typename proto::result_of::as_arg<Expr const>::type
             >::type type;
         };
 
-        template<typename Xpr>
-        typename apply<Xpr>::type const
-        operator ()(Xpr const &xpr) const
+        template<typename Expr>
+        typename apply<Expr>::type const
+        operator ()(Expr const &expr) const
         {
-            typename apply<Xpr>::type that = {{this->mod_}, proto::as_expr(xpr)};
+            typename apply<Expr>::type that = {{this->mod_}, proto::as_arg(expr)};
             return that;
         }
 

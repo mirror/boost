@@ -419,7 +419,7 @@ template<typename Expr>
 inline typename proto::binary_expr<
     modifier_tag
   , detail::icase_modifier
-  , typename proto::result_of::as_expr<Expr>::type
+  , typename proto::result_of::as_arg<Expr const>::type
 >::type const
 icase(Expr const &expr)
 {
@@ -427,8 +427,8 @@ icase(Expr const &expr)
     typename proto::binary_expr<
         modifier_tag
       , detail::icase_modifier
-      , typename proto::result_of::as_expr<Expr>::type
-    >::type that = {mod, proto::as_expr(expr)};
+      , typename proto::result_of::as_arg<Expr const>::type
+    >::type that = {mod, proto::as_arg(expr)};
     return that;
 }
 #else
@@ -469,13 +469,13 @@ range(Char ch_min, Char ch_max)
 /// \param expr The sub-expression to make optional.
 template<typename Expr>
 inline typename proto::logical_not<
-    typename proto::result_of::as_expr<Expr>::type
+    typename proto::result_of::as_arg<Expr const>::type
 >::type const
 optional(Expr const &expr)
 {
     typename proto::logical_not<
-        typename proto::result_of::as_expr<Expr>::type
-    >::type that = {proto::as_expr(expr)};
+        typename proto::result_of::as_arg<Expr const>::type
+    >::type that = {proto::as_arg(expr)};
     return that;
 }
 
@@ -494,33 +494,33 @@ template<unsigned int Min, unsigned int Max, typename Expr>
 inline typename proto::unary_expr
 <
     detail::generic_quant_tag<Min, Max>
-  , typename proto::result_of::as_expr<Expr>::type
+  , typename proto::result_of::as_arg<Expr const>::type
 >::type const
 repeat(Expr const &expr)
 {
     typename proto::unary_expr
     <
         detail::generic_quant_tag<Min, Max>
-      , typename proto::result_of::as_expr<Expr>::type
-    >::type that = {proto::as_expr(expr)};
+      , typename proto::result_of::as_arg<Expr const>::type
+    >::type that = {proto::as_arg(expr)};
     return that;
 }
 
 /// \overload
 ///
-template<unsigned int Count, typename Xpr2>
+template<unsigned int Count, typename Expr2>
 inline typename proto::unary_expr
 <
     detail::generic_quant_tag<Count, Count>
-  , typename proto::result_of::as_expr<Xpr2>::type
+  , typename proto::result_of::as_arg<Expr2 const>::type
 >::type const
-repeat(Xpr2 const &expr)
+repeat(Expr2 const &expr2)
 {
     typename proto::unary_expr
     <
         detail::generic_quant_tag<Count, Count>
-      , typename proto::result_of::as_expr<Xpr2>::type
-    >::type that = {proto::as_expr(expr)};
+      , typename proto::result_of::as_arg<Expr2 const>::type
+    >::type that = {proto::as_arg(expr2)};
     return that;
 }
 
@@ -538,15 +538,15 @@ template<typename Expr>
 inline typename proto::unary_expr
 <
     detail::keeper_tag
-  , typename proto::result_of::as_expr<Expr>::type
+  , typename proto::result_of::as_arg<Expr const>::type
 >::type const
 keep(Expr const &expr)
 {
     typename proto::unary_expr
     <
         detail::keeper_tag
-      , typename proto::result_of::as_expr<Expr>::type
-    >::type that = {proto::as_expr(expr)};
+      , typename proto::result_of::as_arg<Expr const>::type
+    >::type that = {proto::as_arg(expr)};
     return that;
 }
 
@@ -567,15 +567,15 @@ template<typename Expr>
 inline typename proto::unary_expr
 <
     detail::lookahead_tag
-  , typename proto::result_of::as_expr<Expr>::type
+  , typename proto::result_of::as_arg<Expr const>::type
 >::type const
 before(Expr const &expr)
 {
     typename proto::unary_expr
     <
         detail::lookahead_tag
-      , typename proto::result_of::as_expr<Expr>::type
-    >::type that = {proto::as_expr(expr)};
+      , typename proto::result_of::as_arg<Expr const>::type
+    >::type that = {proto::as_arg(expr)};
     return that;
 }
 
@@ -598,15 +598,15 @@ template<typename Expr>
 inline typename proto::unary_expr
 <
     detail::lookbehind_tag
-  , typename proto::result_of::as_expr<Expr>::type
+  , typename proto::result_of::as_arg<Expr const>::type
 >::type const
 after(Expr const &expr)
 {
     typename proto::unary_expr
     <
         detail::lookbehind_tag
-      , typename proto::result_of::as_expr<Expr>::type
-    >::type that = {proto::as_expr(expr)};
+      , typename proto::result_of::as_arg<Expr const>::type
+    >::type that = {proto::as_arg(expr)};
     return that;
 }
 

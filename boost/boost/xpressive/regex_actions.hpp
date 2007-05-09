@@ -520,13 +520,13 @@ namespace boost { namespace xpressive
     template<typename T, typename D>
     typename proto::function<
         typename proto::terminal<op::as<T> >::type
-      , typename proto::result_of::as_expr<D const>::type
+      , typename proto::result_of::as_arg<D const>::type
     >::type as(D const &d)
     {
         typename proto::function<
             typename proto::terminal<op::as<T> >::type
-          , typename proto::result_of::as_expr<D const>::type
-        >::type that = {{{}}, proto::as_expr(d)};
+          , typename proto::result_of::as_arg<D const>::type
+        >::type that = {{{}}, proto::as_arg(d)};
         return that;
     }
 
@@ -586,13 +586,13 @@ namespace boost { namespace xpressive
     template<typename T, typename A0>
     typename proto::function<
         typename proto::terminal<op::construct<T> >::type
-      , typename proto::result_of::as_expr<A0>::type
+      , typename proto::result_of::as_arg<A0>::type
     >::type construct(A0 &a0)
     {
         typename proto::function<
             typename proto::terminal<op::construct<T> >::type
-          , typename proto::result_of::as_expr<A0>::type
-        >::type that = {{{}}, proto::as_expr(a0)};
+          , typename proto::result_of::as_arg<A0>::type
+        >::type that = {{{}}, proto::as_arg(a0)};
         return that;
     }
 
@@ -601,15 +601,15 @@ namespace boost { namespace xpressive
     template<typename T, typename A0, typename A1>
     typename proto::function<
         typename proto::terminal<op::construct<T> >::type
-      , typename proto::result_of::as_expr<A0>::type
-      , typename proto::result_of::as_expr<A1>::type
+      , typename proto::result_of::as_arg<A0>::type
+      , typename proto::result_of::as_arg<A1>::type
     >::type construct(A0 &a0, A1 &a1)
     {
         typename proto::function<
             typename proto::terminal<op::construct<T> >::type
-          , typename proto::result_of::as_expr<A0>::type
-          , typename proto::result_of::as_expr<A1>::type
-        >::type that = {{{}}, proto::as_expr(a0), proto::as_expr(a1)};
+          , typename proto::result_of::as_arg<A0>::type
+          , typename proto::result_of::as_arg<A1>::type
+        >::type that = {{{}}, proto::as_arg(a0), proto::as_arg(a1)};
         return that;
     }
 
@@ -618,17 +618,17 @@ namespace boost { namespace xpressive
     template<typename T, typename A0, typename A1, typename A2>
     typename proto::function<
         typename proto::terminal<op::construct<T> >::type
-      , typename proto::result_of::as_expr<A0>::type
-      , typename proto::result_of::as_expr<A1>::type
-      , typename proto::result_of::as_expr<A2>::type
+      , typename proto::result_of::as_arg<A0>::type
+      , typename proto::result_of::as_arg<A1>::type
+      , typename proto::result_of::as_arg<A2>::type
     >::type construct(A0 &a0, A1 &a1, A2 &a2)
     {
         typename proto::function<
             typename proto::terminal<op::construct<T> >::type
-          , typename proto::result_of::as_expr<A0>::type
-          , typename proto::result_of::as_expr<A1>::type
-          , typename proto::result_of::as_expr<A2>::type
-        >::type that = {{{}}, proto::as_expr(a0), proto::as_expr(a1), proto::as_expr(a2)};
+          , typename proto::result_of::as_arg<A0>::type
+          , typename proto::result_of::as_arg<A1>::type
+          , typename proto::result_of::as_arg<A2>::type
+        >::type that = {{{}}, proto::as_arg(a0), proto::as_arg(a1), proto::as_arg(a2)};
         return that;
     }
 
