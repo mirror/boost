@@ -27,6 +27,7 @@
 #include <boost/cerrno.hpp>
 #include <vector>
 #include <cstdlib>
+#include <cassert>
 
 using namespace boost::system;
 
