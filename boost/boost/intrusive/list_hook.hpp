@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztañaga  2006-2007
+// (C) Copyright Ion Gaztanaga  2006-2007
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -17,13 +17,11 @@
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <boost/intrusive/detail/utilities.hpp>
-#include <boost/intrusive/detail/pointer_type.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/detail/list_node.hpp>
 #include <boost/intrusive/circular_list_algorithms.hpp>
 #include <boost/intrusive/linking_policy.hpp>
 #include <boost/intrusive/tag.hpp>
-#include <boost/get_pointer.hpp>
 #include <boost/static_assert.hpp>
 #include <stdexcept>
 
@@ -186,8 +184,7 @@ class list_base_hook
    //! <b>Throws</b>: Nothing. 
    static this_type_ptr to_hook_ptr(node_ptr p)
    {
-      using boost::get_pointer;
-      return this_type_ptr(static_cast<list_base_hook*> (get_pointer(p))); 
+      return this_type_ptr(static_cast<list_base_hook*> (detail::get_pointer(p))); 
    }
 
    //! <b>Effects</b>: Converts a const pointer to a node stored in a container into
@@ -196,8 +193,7 @@ class list_base_hook
    //! <b>Throws</b>: Nothing. 
    static const_this_type_ptr to_hook_ptr(const_node_ptr p)
    {
-      using boost::get_pointer;
-      return const_this_type_ptr(static_cast<const list_base_hook*> (get_pointer(p))); 
+      return const_this_type_ptr(static_cast<const list_base_hook*> (detail::get_pointer(p))); 
    }
 
    //! <b>Effects</b>: Returns a pointer to the node that this hook holds.
@@ -365,8 +361,7 @@ class list_member_hook
    //! <b>Throws</b>: Nothing. 
    static this_type_ptr to_hook_ptr(node_ptr p)
    {
-      using boost::get_pointer;
-      return this_type_ptr(static_cast<this_type*> (get_pointer(p))); 
+      return this_type_ptr(static_cast<this_type*> (detail::get_pointer(p))); 
    }
 
    //! <b>Effects</b>: Converts a const pointer to a node stored in a container into
@@ -375,8 +370,7 @@ class list_member_hook
    //! <b>Throws</b>: Nothing. 
    static const_this_type_ptr to_hook_ptr(const_node_ptr p)
    {
-      using boost::get_pointer;
-      return const_this_type_ptr(static_cast<const this_type*> (get_pointer(p))); 
+      return const_this_type_ptr(static_cast<const this_type*> (detail::get_pointer(p))); 
    }
 
    //! <b>Effects</b>: Returns a pointer to the node that this hook holds.

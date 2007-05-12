@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztañaga  2006-2007
+// (C) Copyright Ion Gaztanaga  2006-2007
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -14,17 +14,40 @@
 #define BOOST_INTRUSIVE_DETAIL_UTILITIES_HPP
 
 #include <boost/intrusive/detail/config_begin.hpp>
-#include <boost/intrusive/detail/pointer_type.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/detail/parent_from_member.hpp>
 #include <boost/intrusive/detail/ebo_holder.hpp>
 #include <boost/intrusive/linking_policy.hpp>
-#include <boost/get_pointer.hpp>
 #include <cstddef>
 
 namespace boost {
 namespace intrusive {
 namespace detail {
+
+template<class SmartPtr>
+struct smart_ptr_type
+{
+   typedef typename SmartPtr::value_type value_type;
+   typedef value_type *pointer;
+   static pointer get (const SmartPtr &smartptr)
+   {  return smartptr.get();}
+};
+
+template<class T>
+struct smart_ptr_type<T*>
+{
+   typedef T value_type;
+   typedef value_type *pointer;
+   static pointer get (pointer ptr)
+   {  return ptr;}
+};
+
+//!Overload for smart pointers to avoid ADL problems with get_pointer
+template<class Ptr>
+inline typename smart_ptr_type<Ptr>::pointer
+get_pointer(const Ptr &ptr)
+{  return smart_ptr_type<Ptr>::get(ptr);   }
+//{  using boost::get_pointer;  return get_pointer(ptr);   }
 
 //This functor compares a stored value
 //and the one passed as an argument
@@ -112,14 +135,12 @@ struct derivation_value_traits
 
    static pointer to_value_ptr(node_ptr n) 
    { 
-      using boost::get_pointer;
-      return static_cast<T*>(get_pointer(DerivationHookType::to_hook_ptr(n))); 
+      return static_cast<T*>(detail::get_pointer(DerivationHookType::to_hook_ptr(n))); 
    }
 
    static const_pointer to_value_ptr(const_node_ptr n)
    { 
-      using boost::get_pointer;
-      return static_cast<const T*>(get_pointer(DerivationHookType::to_hook_ptr(n))); 
+      return static_cast<const T*>(detail::get_pointer(DerivationHookType::to_hook_ptr(n))); 
    }
 };
 
@@ -158,27 +179,14 @@ struct member_value_traits
    //the needed bytes.
    static pointer to_value_ptr(node_ptr n)
    {
-      using boost::get_pointer;
-      return pointer(parent_from_member((MemberHookType*)get_pointer(n), P));
+      return pointer(parent_from_member<value_type, MemberHookType>
+         ((MemberHookType*)detail::get_pointer(n), P));
    }
 
    static const_pointer to_value_ptr(const_node_ptr n)
    {
-      using boost::get_pointer;
-      const_pointer(parent_from_member<value_type>((const MemberHookType*)get_pointer(n), P));
-   }
-
-   private:
-   //This function converts a pointer to data member into an offset.
-   //This function is not standard and it's compiler-dependent.
-   static std::size_t value_to_node_offset()
-   {
-      const MemberHookType T::* const p = P;
-      return *(const std::size_t*)(const void *)(&p);
-//      using boost::get_pointer;
-//      const typename node_traits::node *np =
-//         get_pointer((((const value_type *)get_pointer(n))->*P).to_node_ptr());
-//      return ((const char*)np - (const char*)(const value_type *)get_pointer(n));
+      const_pointer(parent_from_member<value_type, MemberHookType>
+         ((const MemberHookType*)detail::get_pointer(n), P));
    }
 };
 
@@ -206,7 +214,6 @@ struct key_node_ptr_compare
          (*ValueTraits::to_value_ptr(node1), *ValueTraits::to_value_ptr(node2)); 
    }
 };
-
 
 template<class F, class ValueTraits>
 struct value_to_node_cloner
@@ -243,14 +250,14 @@ struct dispatcher
 
 template<class Container>
 void destructor_impl(Container &cont, dispatcher<safe_link>)
-{  BOOST_ASSERT(!cont.is_linked());  }
+{  (void)cont; BOOST_ASSERT(!cont.is_linked());  }
 
 template<class Container>
 void destructor_impl(Container &cont, dispatcher<auto_unlink>)
 {  cont.unlink();  }
 
 template<class Container>
-void destructor_impl(Container &cont, dispatcher<normal_link>)
+void destructor_impl(Container &, dispatcher<normal_link>)
 {}
 
 template<class Node, class MaybeClass>
@@ -283,6 +290,32 @@ struct node_plus_pred
    {  return static_cast<const node_plus_pred*>(n);   }
 };
 
+#ifndef BOOST_INTRUSIVE_USE_ITERATOR_ENABLE_IF_CONVERTIBLE
+
+template <bool B, class T = void>
+struct enable_if_c {
+  typedef T type;
+};
+
+template <class T>
+struct enable_if_c<false, T> {};
+
+template <class Cond, class T = void>
+struct enable_if : public enable_if_c<Cond::value, T> {};
+
+template <class T, class U>
+class is_convertible
+{
+   typedef char true_t;
+   class false_t { char dummy[2]; };
+   static true_t dispatch(U);
+   static false_t dispatch(...);
+   static T trigger();
+   public:
+   enum { value = sizeof(dispatch(trigger())) == sizeof(true_t) };
+};
+
+#endif   //#ifndef BOOST_INTRUSIVE_USE_ITERATOR_ENABLE_IF_CONVERTIBLE
 
 } //namespace detail 
 } //namespace intrusive 

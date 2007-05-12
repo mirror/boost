@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gazta�ga  2007
+// (C) Copyright Ion Gaztanaga  2007
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -16,10 +16,8 @@
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <iterator>
 #include <boost/assert.hpp>
-#include <boost/intrusive/detail/pointer_type.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/circular_list_algorithms.hpp>
-#include <boost/get_pointer.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_convertible.hpp>
@@ -169,7 +167,6 @@ class hashtable_iterator
 
    void increment()
    {
-      using boost::get_pointer;
       size_type   buckets_len    = bucket_info_->buckets_len_;
       const_bucket_ptr  buckets  = bucket_info_->buckets_;
       const_local_iterator first = bucket_type::bucket_to_slist(buckets[0]).cend();

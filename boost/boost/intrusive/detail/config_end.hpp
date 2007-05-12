@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztañaga  2006-2007
+// (C) Copyright Ion Gaztanaga  2006-2007
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -9,14 +9,7 @@
 // See http://www.boost.org/libs/intrusive for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
-#include <boost/config.hpp>
-#include <boost/detail/workaround.hpp>
 
-#if defined _MSC_VER
+#if defined BOOST_MSVC
    #pragma warning (pop)
-#endif
-
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-#  pragma warn .8026
-#  pragma warn .8027
 #endif

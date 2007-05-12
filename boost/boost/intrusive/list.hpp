@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztañaga  2006-2007
+// (C) Copyright Ion Gaztanaga  2006-2007
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -20,10 +20,8 @@
 #include <boost/intrusive/intrusive_fwd.hpp>
 #include <boost/intrusive/list_hook.hpp>
 #include <boost/intrusive/circular_list_algorithms.hpp>
-#include <boost/intrusive/detail/pointer_type.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/linking_policy.hpp>
-#include <boost/get_pointer.hpp>
 #include <boost/static_assert.hpp>
 #include <iterator>
 #include <algorithm>
@@ -97,8 +95,8 @@ class list
    //Const cast emulation for smart pointers
    static node_ptr uncast(const_node_ptr ptr)
    {
-      using boost::get_pointer;
-      return node_ptr(const_cast<node*>(get_pointer(ptr)));
+      //return node_ptr(detail::get_pointer(ptr)));
+      return const_cast<node*>(detail::get_pointer(ptr));
    }
 
    node_ptr get_root_node()

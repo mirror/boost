@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztañaga  2006-2007
+// (C) Copyright Ion Gaztanaga  2006-2007
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -39,10 +39,5 @@
    #pragma warning (disable : 4267) //conversion from 'X' to 'Y', possible loss of data
 #endif
 
-#include <boost/config.hpp>
-#include <boost/detail/workaround.hpp>
-
-#if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
-#  pragma warn -8026 // shut up warning "cannot inline function because ..."
-#  pragma warn -8027 // shut up warning "cannot inline function because ..."
-#endif
+//#define BOOST_INTRUSIVE_USE_ITERATOR_FACADE
+//#define BOOST_INTRUSIVE_USE_ITERATOR_ENABLE_IF_CONVERTIBLE

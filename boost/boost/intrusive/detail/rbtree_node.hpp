@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztañaga  2006-2007.
+// (C) Copyright Ion Gaztanaga  2006-2007.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -17,16 +17,18 @@
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <iterator>
 #include <boost/assert.hpp>
-#include <boost/intrusive/detail/pointer_type.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/rbtree_algorithms.hpp>
-#include <boost/get_pointer.hpp>
 #include <boost/type_traits/alignment_of.hpp>
 #include <cstddef>
 #include <boost/detail/no_exceptions_support.hpp>
+#ifdef BOOST_INTRUSIVE_USE_ITERATOR_FACADE
 #include <boost/iterator/iterator_facade.hpp>
+#endif
+#ifdef BOOST_INTRUSIVE_USE_ITERATOR_ENABLE_IF_CONVERTIBLE
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_convertible.hpp>
+#endif
 #include <boost/intrusive/pointer_plus_bit.hpp>
 
 namespace boost {
@@ -186,6 +188,8 @@ struct rbtree_node_traits
 //                                                                         //
 /////////////////////////////////////////////////////////////////////////////
 
+#ifdef BOOST_INTRUSIVE_USE_ITERATOR_FACADE
+
 template<class T, class ValueTraits>
 class rbtree_iterator
   : public boost::iterator_facade
@@ -247,6 +251,104 @@ class rbtree_iterator
 
    node_ptr node_;
 };
+
+#else
+
+// rbtree_iterator provides some basic functions for a 
+// node oriented bidirectional iterator:
+template<class T, class ValueTraits>
+class rbtree_iterator
+   :  public std::iterator<std::bidirectional_iterator_tag, T>
+{
+   struct enabler{};
+   protected:
+   typedef typename ValueTraits::node_traits    node_traits;
+   typedef typename node_traits::node           node;
+   typedef typename node_traits::node_ptr       node_ptr;
+   typedef rbtree_algorithms<node_traits>       node_algorithms;
+ 
+   public:
+   typedef T & reference;
+   typedef T * pointer;
+
+   rbtree_iterator()
+      : node_ (0)
+   {}
+
+   explicit rbtree_iterator(node_ptr node)
+      : node_ (node)
+   {}
+
+   #ifdef BOOST_INTRUSIVE_USE_ITERATOR_ENABLE_IF_CONVERTIBLE
+   template <class OtherValue>
+   rbtree_iterator(rbtree_iterator<OtherValue, ValueTraits> const& other
+                ,typename boost::enable_if<
+                        boost::is_convertible<OtherValue*,T*>
+                     , enabler
+                     >::type = enabler()
+                 )
+      :  node_(other.pointed_node())
+   {}
+   #else
+   template <class OtherValue>
+   rbtree_iterator(rbtree_iterator<OtherValue, ValueTraits> const& other,
+                  typename enable_if<
+                        is_convertible<OtherValue*,T*>
+                  >::type* = 0)
+      :  node_(other.pointed_node())
+   {}
+   #endif
+
+   const node_ptr &pointed_node() const
+   { return node_; }
+
+   rbtree_iterator &operator=(const node_ptr &node)
+   {  node_ = node;  return static_cast<rbtree_iterator&>(*this);  }
+
+   public:
+   rbtree_iterator& operator++() 
+   { 
+      node_ = node_algorithms::next_node(node_); 
+      return static_cast<rbtree_iterator&> (*this); 
+   }
+   
+   rbtree_iterator operator++(int)
+   {
+      rbtree_iterator result (node_);
+      node_ = node_algorithms::next_node(node_);
+      return result;
+   }
+
+   rbtree_iterator& operator--() 
+   { 
+      node_ = node_algorithms::prev_node(node_); 
+      return static_cast<rbtree_iterator&> (*this); 
+   }
+   
+   rbtree_iterator operator--(int)
+   {
+      rbtree_iterator result (node_);
+      node_ = node_algorithms::prev_node(node_);
+      return result;
+   }
+
+   bool operator== (const rbtree_iterator& i) const
+   { return node_ == i.pointed_node(); }
+
+   bool operator!= (const rbtree_iterator& i) const
+   { return !operator== (i); }
+
+   T& operator*() const
+   { return *ValueTraits::to_value_ptr(node_); }
+
+   pointer operator->() const
+   { return detail::get_pointer(ValueTraits::to_value_ptr(node_)); }
+
+   private:
+   node_ptr node_;
+};
+
+#endif
 
 } //namespace detail 
 } //namespace intrusive 

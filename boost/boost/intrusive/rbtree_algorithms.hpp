@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztañaga  2006-2007.
+// (C) Copyright Ion Gaztanaga  2006-2007.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -43,12 +43,11 @@
 #include <iterator>
 #include <boost/assert.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
-#include <boost/intrusive/detail/pointer_type.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
-#include <boost/get_pointer.hpp>
 #include <boost/type_traits/alignment_of.hpp>
 #include <cstddef>
 #include <boost/detail/no_exceptions_support.hpp>
+#include <boost/interprocess/detail/utilities.hpp>
 
 
 namespace boost {
@@ -916,8 +915,7 @@ class rbtree_algorithms
    private:
    static node_ptr uncast(const_node_ptr ptr)
    {
-      using boost::get_pointer;
-      return node_ptr(const_cast<node*>(get_pointer(ptr)));
+      return node_ptr(const_cast<node*>(detail::get_pointer(ptr)));
    }
 
    //! <b>Requires</b>: z is the node to be inserted, par is its parent,

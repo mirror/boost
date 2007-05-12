@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztañaga  2006-2007
+// (C) Copyright Ion Gaztanaga  2006-2007
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -17,13 +17,15 @@
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <iterator>
 #include <boost/assert.hpp>
-#include <boost/intrusive/detail/pointer_type.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/circular_slist_algorithms.hpp>
-#include <boost/get_pointer.hpp>
+#ifdef BOOST_INTRUSIVE_USE_ITERATOR_FACADE
 #include <boost/iterator/iterator_facade.hpp>
+#endif
+#ifdef BOOST_INTRUSIVE_USE_ITERATOR_ENABLE_IF_CONVERTIBLE
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_convertible.hpp>
+#endif
 #include <cstddef>
 
 namespace boost {
@@ -55,6 +57,7 @@ struct slist_node_traits
    {  n->next_ = next;  }  
 };
 
+#ifdef BOOST_INTRUSIVE_USE_ITERATOR_FACADE
 
 // slist_iterator provides some basic functions for a 
 // node oriented forward iterator:
@@ -86,6 +89,7 @@ class slist_iterator
       :  node_ (node)
    {}
 
+   #ifdef BOOST_INTRUSIVE_USE_ITERATOR_ENABLE_IF_CONVERTIBLE
    template <class OtherValue>
    slist_iterator(slist_iterator<OtherValue, ValueTraits> const& other
                  ,typename boost::enable_if<
@@ -95,6 +99,15 @@ class slist_iterator
                   )
       :  node_(other.pointed_node())
    {}
+   #else
+   template <class OtherValue>
+   slist_iterator(slist_iterator<OtherValue, ValueTraits> const& other,
+                  typename enable_if<
+                        is_convertible<OtherValue*,T*>
+                  >::type* = 0)
+      :  node_(other.pointed_node())
+   {}
+   #endif
 
    const node_ptr &pointed_node() const
    { return node_; }
@@ -115,6 +128,85 @@ class slist_iterator
 
    node_ptr node_;
 };
+
+#else
+
+// slist_iterator provides some basic functions for a 
+// node oriented bidirectional iterator:
+template<class T, class ValueTraits>
+class slist_iterator
+   :  public std::iterator<std::forward_iterator_tag, T>
+{
+   struct enabler{};
+   protected:
+   typedef typename ValueTraits::node_traits    node_traits;
+   typedef typename node_traits::node           node;
+   typedef typename node_traits::node_ptr       node_ptr;
+ 
+   public:
+   typedef T & reference;
+   typedef T * pointer;
+
+   slist_iterator()
+      : node_ (0)
+   {}
+
+   explicit slist_iterator(node_ptr node)
+      : node_ (node)
+   {}
+/*
+   template <class OtherValue>
+   slist_iterator(slist_iterator<OtherValue, ValueTraits> const& other
+                ,typename boost::enable_if<
+                        boost::is_convertible<OtherValue*,T*>
+                     , enabler
+                     >::type = enabler()
+                 )
+      :  node_(other.pointed_node())
+   {}
+*/
+   template <class OtherValue>
+   slist_iterator(slist_iterator<OtherValue, ValueTraits> const& other)
+      :  node_(other.pointed_node())
+   {}
+
+   const node_ptr &pointed_node() const
+   { return node_; }
+
+   slist_iterator &operator=(const node_ptr &node)
+   {  node_ = node;  return static_cast<slist_iterator&>(*this);  }
+
+   public:
+   slist_iterator& operator++() 
+   { 
+      node_ = node_traits::get_next(node_); 
+      return static_cast<slist_iterator&> (*this); 
+   }
+   
+   slist_iterator operator++(int)
+   {
+      slist_iterator result (node_);
+      node_ = node_traits::get_next(node_);
+      return result;
+   }
+
+   bool operator== (const slist_iterator& i) const
+   { return node_ == i.pointed_node(); }
+
+   bool operator!= (const slist_iterator& i) const
+   { return !operator== (i); }
+
+   T& operator*() const
+   { return *ValueTraits::to_value_ptr(node_); }
+
+   pointer operator->() const
+   { return detail::get_pointer(ValueTraits::to_value_ptr(node_)); }
+
+   private:
+   node_ptr node_;
+};
+
+#endif
 
 } //namespace detail 
 } //namespace intrusive 

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztañaga  2006-2007
+// (C) Copyright Ion Gaztanaga  2006-2007
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -26,7 +26,6 @@
 #include <boost/functional/hash.hpp>
 //General intrusive utilities
 #include <boost/intrusive/intrusive_fwd.hpp>
-#include <boost/intrusive/detail/pointer_type.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/detail/hashtable_node.hpp>
 #include <boost/intrusive/linking_policy.hpp>
@@ -143,14 +142,12 @@ class hashtable
 
    static node_ptr uncast(const_node_ptr ptr)
    {
-      using boost::get_pointer;
-      return node_ptr(const_cast<node*>(get_pointer(ptr)));
+      return node_ptr(const_cast<node*>(detail::get_pointer(ptr)));
    }
 
    static bucket_info_ptr uncast(const_bucket_info_ptr ptr)
    {
-      using boost::get_pointer;
-      return bucket_info_ptr(const_cast<bucket_info_t*>(get_pointer(ptr)));
+      return bucket_info_ptr(const_cast<bucket_info_t*>(detail::get_pointer(ptr)));
    }
 
    static slist_impl &bucket_to_slist(bucket_type &b)
@@ -204,8 +201,7 @@ class hashtable
 
    iterator end()
    {
-      using boost::get_pointer;
-      bucket_info_t *info = get_pointer(this->priv_bucket_info());
+      bucket_info_t *info = detail::get_pointer(this->priv_bucket_info());
       return iterator(invalid_local_it(*info), 0);
    }
 
@@ -214,8 +210,7 @@ class hashtable
 
    const_iterator cend() const
    {  
-      using boost::get_pointer;
-      const bucket_info_t *info = get_pointer(this->priv_bucket_info());
+      const bucket_info_t *info = detail::get_pointer(this->priv_bucket_info());
       return const_iterator(invalid_local_it(*info), 0);
    }
 
@@ -231,9 +226,8 @@ class hashtable
          return !size();
       }
       else{
-         using boost::get_pointer;
          size_type buckets_len = this->priv_buckets_len();
-         const bucket_type *b = get_pointer(this->priv_buckets());
+         const bucket_type *b = detail::get_pointer(this->priv_buckets());
          for (size_type n = 0; n < buckets_len; ++n, ++b){
             if(!b->empty()){
                return false;
@@ -249,9 +243,8 @@ class hashtable
          return size_traits::get_size();
       else{
          size_type len = 0;
-         using boost::get_pointer;
          size_type buckets_len = this->priv_buckets_len();
-         const bucket_type *b = get_pointer(this->priv_buckets());
+         const bucket_type *b = detail::get_pointer(this->priv_buckets());
          for (size_type n = 0; n < buckets_len; ++n, ++b){
             len += b->size();
          }

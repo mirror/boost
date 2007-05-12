@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztañaga  2007
+// (C) Copyright Ion Gaztanaga  2007
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -12,6 +12,8 @@
 #ifndef BOOST_INTRUSIVE_PARENT_FROM_MEMBER_HPP
 #define BOOST_INTRUSIVE_PARENT_FROM_MEMBER_HPP
 
+#include <boost/intrusive/detail/config_begin.hpp>
+
 namespace boost {
 namespace intrusive {
 namespace detail {
@@ -20,9 +22,12 @@ template<class Parent, class Member>
 std::size_t offset_from_pointer_to_member(const Member Parent::* ptr_to_member)
 {
    //This works with gcc and msvc
+   //The implementation of a pointer to member is compiler dependent.
+   #if defined(BOOST_MSVC) || defined(__GNUC__) || defined(BOOST_INTEL)
    return *(const std::size_t*)(const void*)&ptr_to_member;
-   //Other compilers might need other transformation, depending how a
-   //pointer to data member is implemented.
+   #else //CW 9.4
+   return *(const std::size_t*)(const void*)&ptr_to_member - 1;
+   #endif
 }
 
 template<class Parent, class Member>
@@ -42,5 +47,7 @@ const Parent *parent_from_member(const Member *member, const Member Parent::* pt
 }  //namespace detail {
 }  //namespace intrusive {
 }  //namespace boost {
+
+#include <boost/intrusive/detail/config_end.hpp>
 
 #endif   //#ifndef BOOST_INTRUSIVE_PARENT_FROM_MEMBER_HPP

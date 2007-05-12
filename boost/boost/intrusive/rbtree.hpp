@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztañaga  2006-2007
+// (C) Copyright Ion Gaztanaga  2006-2007
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -20,7 +20,6 @@
 #include <boost/assert.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
-#include <boost/intrusive/detail/pointer_type.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/set_hook.hpp>
 #include <boost/intrusive/detail/rbtree_node.hpp>
@@ -107,8 +106,7 @@ class rbtree
 
    static node_ptr uncast(const_node_ptr ptr)
    {
-      using boost::get_pointer;
-      return node_ptr(const_cast<node*>(get_pointer(ptr)));
+      return node_ptr(const_cast<node*>(detail::get_pointer(ptr)));
    }
    /// @endcond
 
@@ -271,9 +269,8 @@ class rbtree
    //! <b>Complexity</b>: Constant.
    static rbtree &container_from_end_iterator(iterator end_iterator)
    {
-      using boost::get_pointer;
-      return *detail::parent_from_member
-         ( members_t::this_from_node(get_pointer(end_iterator.pointed_node()))
+      return *detail::parent_from_member<rbtree, members_t>
+         ( members_t::this_from_node(detail::get_pointer(end_iterator.pointed_node()))
          , &rbtree::members_);
    }
 
@@ -287,9 +284,8 @@ class rbtree
    //! <b>Complexity</b>: Constant.
    static const rbtree &container_from_end_iterator(const_iterator end_iterator)
    {
-      using boost::get_pointer;
-      return *detail::parent_from_member
-         ( members_t::this_from_node(get_pointer(end_iterator.pointed_node()))
+      return *detail::parent_from_member<rbtree, members_t>
+         ( members_t::this_from_node(detail::get_pointer(end_iterator.pointed_node()))
          , &rbtree::members_);
    }
 

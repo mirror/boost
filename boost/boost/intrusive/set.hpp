@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztañaga  2006-2007
+// (C) Copyright Ion Gaztanaga  2006-2007
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -234,7 +234,7 @@ class set
    //! <b>Complexity</b>: Constant.
    static set &container_from_end_iterator(iterator end_iterator)
    {
-      return *detail::parent_from_member
+      return *detail::parent_from_member<set, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
          , &set::tree_);
    }
@@ -249,7 +249,7 @@ class set
    //! <b>Complexity</b>: Constant.
    static const set &container_from_end_iterator(const_iterator end_iterator)
    {
-      return *detail::parent_from_member
+      return *detail::parent_from_member<set, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
          , &set::tree_);
    }
@@ -1126,7 +1126,7 @@ class multiset
    //! <b>Complexity</b>: Constant.
    static multiset &container_from_end_iterator(iterator end_iterator)
    {
-      return *detail::parent_from_member
+      return *detail::parent_from_member<multiset, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
          , &multiset::tree_);
    }
@@ -1141,7 +1141,7 @@ class multiset
    //! <b>Complexity</b>: Constant.
    static const multiset &container_from_end_iterator(const_iterator end_iterator)
    {
-      return *detail::parent_from_member
+      return *detail::parent_from_member<multiset, tree_type>
          ( &tree_type::container_from_end_iterator(end_iterator)
          , &multiset::tree_);
    }
