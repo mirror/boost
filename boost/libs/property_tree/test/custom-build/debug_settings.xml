@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<debug>
+    <filename>debug.log</filename>
+    <modules>
+        <module>Finance</module>
+        <module>Admin</module>
+        <module>HR</module>
+    </modules>
+    <level>2</level>
+</debug>

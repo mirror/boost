@@ -1,0 +1,17 @@
+subproject libs/property_tree/test ;
+
+# bring in rules for testing
+import testing ;
+
+# Make tests run by default.
+DEPENDS all : property_tree ;
+
+{
+    test-suite "property_tree"
+       : [ run test_property_tree.cpp ]
+         [ run test_info_parser.cpp ]
+         [ run test_json_parser.cpp ]
+         [ run test_ini_parser.cpp ]
+         [ run test_xml_parser_rapidxml.cpp ]
+    ;
+}
