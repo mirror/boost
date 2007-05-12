@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztañaga  2006-2007
+// (C) Copyright Ion Gaztanaga  2006-2007
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -13,6 +13,8 @@
 #ifndef BOOST_INTRUSIVE_TEST_COMMON_FUNCTORS_HPP
 #define BOOST_INTRUSIVE_TEST_COMMON_FUNCTORS_HPP
 
+#include<boost/intrusive/detail/utilities.hpp>
+
 namespace boost      {
 namespace intrusive  {
 namespace test       {
@@ -23,8 +25,7 @@ public:
    template <class Pointer>
       void operator()(Pointer p)
    {
-      using boost::get_pointer;
-      delete get_pointer(p); 
+      delete detail::get_pointer(p); 
    }
 };
 

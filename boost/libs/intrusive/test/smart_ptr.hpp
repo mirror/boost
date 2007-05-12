@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztañaga 2006. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2006. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -43,44 +43,36 @@ struct random_it
 
 template<> struct random_it<void>
 {
-   typedef void *             pointer;
    typedef const void *       const_pointer;
    typedef empty_type&        reference;
    typedef const empty_type&  const_reference;
-   typedef void               value_type;
    typedef empty_type         difference_type;
    typedef empty_type         iterator_category;
 };
 
 template<> struct random_it<const void>
 {
-   typedef const void *       pointer;
    typedef const void *       const_pointer;
    typedef const empty_type & reference;
    typedef const empty_type & const_reference;
-   typedef const void         value_type;
    typedef empty_type         difference_type;
    typedef empty_type         iterator_category;
 };
 
 template<> struct random_it<volatile void>
 {
-   typedef volatile void *       pointer;
    typedef const volatile void * const_pointer;
    typedef empty_type&           reference;
    typedef const empty_type&     const_reference;
-   typedef volatile void         value_type;
    typedef empty_type            difference_type;
    typedef empty_type            iterator_category;
 };
 
 template<> struct random_it<const volatile void>
 {
-   typedef const volatile void *    pointer;
    typedef const volatile void *    const_pointer;
    typedef const empty_type &       reference;
    typedef const empty_type &       const_reference;
-   typedef const volatile void      value_type;
    typedef empty_type               difference_type;
    typedef empty_type               iterator_category;
 };
@@ -96,7 +88,7 @@ template <class PointedType>
 class smart_ptr
 {
    typedef random_it<PointedType> random_it_t;
-   typedef smart_ptr<PointedType>                          self_t;
+   typedef smart_ptr<PointedType>                           self_t;
    typedef typename random_it_t::const_pointer              const_pointer_t;
    typedef typename random_it_t::const_reference            const_reference_t;
 
@@ -104,11 +96,11 @@ class smart_ptr
    typedef void (self_t::*unspecified_bool_type)() const;
 
    public:
-   typedef typename random_it_t::pointer                    pointer;
-   typedef typename random_it_t::reference                  reference;
-   typedef typename random_it_t::value_type                 value_type;
-   typedef typename random_it_t::difference_type            difference_type;
-   typedef typename random_it_t::iterator_category          iterator_category;
+   typedef PointedType *                           pointer;
+   typedef typename random_it_t::reference         reference;
+   typedef PointedType                             value_type;
+   typedef typename random_it_t::difference_type   difference_type;
+   typedef typename random_it_t::iterator_category iterator_category;
 
    PointedType *m_ptr;
 
@@ -163,7 +155,7 @@ class smart_ptr
    {}
 
    /*!Obtains raw pointer from offset. Never throws.*/
-   pointer get()const
+   pointer get() const
    {  return m_ptr;   }
 
    /*!Pointer-like -> operator. It can return 0 pointer. Never throws.*/
@@ -314,7 +306,7 @@ inline void swap (smart_ptr<T> &pt,
 /*!get_pointer() enables boost::mem_fn to recognize smart_ptr. 
    Never throws.*/
 template<class T>
-inline T * get_pointer(smart_ptr<T> const & p)
+inline T* get_pointer(const smart_ptr<T>  & p)
 {  return p.get();   }
 
 /*!Simulation of static_cast between pointers. Never throws.*/

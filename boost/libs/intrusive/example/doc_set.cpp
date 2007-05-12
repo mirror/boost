@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztañaga  2006-2007
+// (C) Copyright Ion Gaztanaga  2006-2007
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -34,6 +34,8 @@ class MyClass  :  public set_base_hook<>
       {  return a.get() < b.get();  }
    friend bool operator> (const MyClass &a, const MyClass &b)
       {  return a.get() > b.get();  }
+   friend bool operator== (const MyClass &a, const MyClass &b)
+      {  return a.get() < b.get();  }
 };
 
 //Define an set that will store MyClass

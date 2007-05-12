@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztañaga  2006-2007.
+// (C) Copyright Ion Gaztanaga  2006-2007.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -16,10 +16,8 @@
 #include "smart_ptr.hpp"
 #include "common_functors.hpp"
 #include <vector>
-#include <boost/intrusive/linking_policy.hpp>
-
-// Boost.Test
-#include "boost/test/included/test_exec_monitor.hpp"
+#include <boost/detail/lightweight_test.hpp>
+#include "test_macros.hpp"
 
 using namespace boost::intrusive;
 
@@ -66,26 +64,26 @@ void test_list<ValueTraits>
       , std::size_t 
       > list_type;
    list_type testlist;
-   BOOST_CHECK (testlist.empty());
+   BOOST_TEST (testlist.empty());
 
    testlist.push_back (values[0]);
-   BOOST_CHECK (testlist.size() == 1);
-   BOOST_CHECK (&testlist.front() == &values[0]);
-   BOOST_CHECK (&testlist.back() == &values[0]);
+   BOOST_TEST (testlist.size() == 1);
+   BOOST_TEST (&testlist.front() == &values[0]);
+   BOOST_TEST (&testlist.back() == &values[0]);
 
    testlist.push_front (values[1]);
-   BOOST_CHECK (testlist.size() == 2);
-   BOOST_CHECK (&testlist.front() == &values[1]);
-   BOOST_CHECK (&testlist.back() == &values[0]);
+   BOOST_TEST (testlist.size() == 2);
+   BOOST_TEST (&testlist.front() == &values[1]);
+   BOOST_TEST (&testlist.back() == &values[0]);
 
    testlist.pop_back();
-   BOOST_CHECK (testlist.size() == 1);
+   BOOST_TEST (testlist.size() == 1);
    const list_type &const_testlist = testlist;
-   BOOST_CHECK (&const_testlist.front() == &values[1]);
-   BOOST_CHECK (&const_testlist.back() == &values[1]);
+   BOOST_TEST (&const_testlist.front() == &values[1]);
+   BOOST_TEST (&const_testlist.back() == &values[1]);
 
    testlist.pop_front();
-   BOOST_CHECK (testlist.empty());
+   BOOST_TEST (testlist.empty());
 }  
 
 
@@ -95,7 +93,7 @@ void test_list<ValueTraits>
    ::test_sort(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type testvalue_t;
-   boost::test_tools::output_test_stream test_seq;
+   std::vector<int> expected;
    typedef boost::intrusive::list
       < ValueTraits
       , ValueTraits::value_type::constant_time_size
@@ -103,22 +101,17 @@ void test_list<ValueTraits>
       > list_type;
    list_type testlist(values.begin(), values.end());
 
-   std::copy (testlist.begin(), testlist.end(), 
-               std::ostream_iterator<testvalue_t> (test_seq));
-   BOOST_CHECK (test_seq.is_equal ("12345"));
+   {  int init_values [] = { 1, 2, 3, 4, 5 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testlist.begin() );  }
 
    testlist.sort (even_odd());
-   std::copy (testlist.rbegin(), testlist.rend(), 
-               std::ostream_iterator<testvalue_t> (test_seq));
-   BOOST_CHECK (test_seq.is_equal ("53142"));
+   {  int init_values [] = { 5, 3, 1, 4, 2 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testlist.rbegin() );  }
 
    testlist.reverse();
-   //test postincrement:
-   for (BOOST_DEDUCED_TYPENAME list_type::iterator i = 
-         testlist.begin(), e = testlist.end(); i != e; i++) 
-      test_seq << *i;
-   BOOST_CHECK (test_seq.is_equal ("53142"));
-}  
+   {  int init_values [] = { 5, 3, 1, 4, 2 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testlist.begin() );  }
+}
   
 //test: assign, insert, const_iterator, const_reverse_iterator, erase, iterator_to:
 template<class ValueTraits>
@@ -126,7 +119,7 @@ void test_list<ValueTraits>
    ::test_insert(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type testvalue_t;
-   boost::test_tools::output_test_stream test_seq;
+   std::vector<int> expected;
    typedef boost::intrusive::list
       < ValueTraits
       , ValueTraits::value_type::constant_time_size
@@ -136,29 +129,29 @@ void test_list<ValueTraits>
    testlist.assign (&values[0] + 2, &values[0] + 5);
 
    const list_type& const_testlist = testlist;
-   std::copy (const_testlist.begin(), const_testlist.end(), 
-               std::ostream_iterator<testvalue_t> (test_seq));
-   BOOST_CHECK (test_seq.is_equal ("345"));
+   {  int init_values [] = { 3, 4, 5 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, const_testlist.begin() );  }
 
-   BOOST_DEDUCED_TYPENAME list_type::iterator i = ++testlist.begin();
-   BOOST_CHECK (i->value_ == 4);
+   typename list_type::iterator i = ++testlist.begin();
+   BOOST_TEST (i->value_ == 4);
+
+   {
+   typename list_type::const_iterator ci = typename list_type::iterator();
+   //typename list_type::iterator i = typename list_type::const_iterator();
+   }
 
    testlist.insert (i, values[0]);
-   std::copy (const_testlist.rbegin(), const_testlist.rend(), 
-               std::ostream_iterator<testvalue_t> (test_seq));
-   BOOST_CHECK (test_seq.is_equal ("5413"));
+   {  int init_values [] = { 5, 4, 1, 3 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, const_testlist.rbegin() );  }
 
    i = testlist.iterator_to (values[4]);
-   BOOST_CHECK (&*i == &values[4]);
+   BOOST_TEST (&*i == &values[4]);
 
    i = testlist.erase (i);
-   BOOST_CHECK (i == testlist.end());
+   BOOST_TEST (i == testlist.end());
 
-   //test postincrement:
-   for (BOOST_DEDUCED_TYPENAME list_type::const_iterator i = 
-         const_testlist.begin(), e = const_testlist.end(); i != e; i++) 
-      test_seq << *i;
-   BOOST_CHECK (test_seq.is_equal ("314"));
+   {  int init_values [] = { 3, 1, 4 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, const_testlist.begin() );  }
 }
 
 template<class ValueTraits>
@@ -166,13 +159,13 @@ void test_list<ValueTraits>
    ::test_shift(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type testvalue_t;
-   boost::test_tools::output_test_stream test_seq;
    typedef boost::intrusive::list
       < ValueTraits
       , ValueTraits::value_type::constant_time_size
       , std::size_t 
       > list_type;
    list_type testlist;
+   std::vector<int> expected;
 
    const int num_values = (int)values.size();
    std::vector<int> expected_values(num_values);
@@ -184,13 +177,7 @@ void test_list<ValueTraits>
       for(int j = 0; j < num_values; ++j){
          expected_values[(j + num_values - i%num_values) % num_values] = (j + 1);
       }
-      std::copy (testlist.begin(), testlist.end(),
-                  std::ostream_iterator<testvalue_t> (test_seq));
-      std::stringstream stream;
-      std::copy (expected_values.begin(), expected_values.end(),
-                  std::ostream_iterator<testvalue_t> (stream));
-      stream << std::ends;
-      BOOST_CHECK (test_seq.is_equal (stream.str().c_str()));
+      TEST_INTRUSIVE_SEQUENCE_EXPECTED(expected_values, testlist.begin());
       testlist.clear();
    }
 
@@ -201,13 +188,7 @@ void test_list<ValueTraits>
       for(int j = 0; j < num_values; ++j){
          expected_values[(j + i) % num_values] = (j + 1);
       }
-      std::copy (testlist.begin(), testlist.end(),
-                  std::ostream_iterator<testvalue_t> (test_seq));
-      std::stringstream stream;
-      std::copy (expected_values.begin(), expected_values.end(),
-                  std::ostream_iterator<testvalue_t> (stream));
-      stream << std::ends;
-      BOOST_CHECK (test_seq.is_equal (stream.str().c_str()));
+      TEST_INTRUSIVE_SEQUENCE_EXPECTED(expected_values, testlist.begin());
       testlist.clear();
    }
 } 
@@ -218,68 +199,59 @@ void test_list<ValueTraits>
    ::test_swap(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type testvalue_t;
-   boost::test_tools::output_test_stream test_seq;
    typedef boost::intrusive::list
       <ValueTraits
       ,ValueTraits::value_type::constant_time_size, std::size_t 
       > list_type;
-
+   std::vector<int> expected;
    {
       list_type testlist1 (&values[0], &values[0] + 2);
       list_type testlist2;
       testlist2.insert (testlist2.end(), &values[0] + 2, &values[0] + 5);
       testlist1.swap (testlist2);
-      std::copy (testlist1.begin(), testlist1.end(), 
-                  std::ostream_iterator<testvalue_t> (test_seq));
-      BOOST_CHECK (test_seq.is_equal ("345"));
-      std::copy (testlist2.begin(), testlist2.end(), 
-                  std::ostream_iterator<testvalue_t> (test_seq));
-      BOOST_CHECK (test_seq.is_equal ("12"));
+
+      {  int init_values [] = { 3, 4, 5 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
+      {  int init_values [] = { 1, 2 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist2.begin() );  }
 
       testlist2.splice (++testlist2.begin(), testlist1);
-      std::copy (testlist2.begin(), testlist2.end(), 
-                  std::ostream_iterator<testvalue_t> (test_seq));
-      BOOST_CHECK (test_seq.is_equal ("13452"));
-      BOOST_CHECK (testlist1.empty());
+      {  int init_values [] = { 1, 3, 4, 5, 2 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist2.begin() );  }
+
+      BOOST_TEST (testlist1.empty());
 
       testlist1.splice (testlist1.end(), testlist2, ++(++testlist2.begin()));
-      std::copy (testlist1.begin(), testlist1.end(), 
-                  std::ostream_iterator<testvalue_t> (test_seq));
-      BOOST_CHECK (test_seq.is_equal ("4"));
-      std::copy (testlist2.begin(), testlist2.end(), 
-                  std::ostream_iterator<testvalue_t> (test_seq));
-      BOOST_CHECK (test_seq.is_equal ("1352"));
+      {  int init_values [] = { 4 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
+
+      {  int init_values [] = { 1, 3, 5, 2 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist2.begin() );  }
 
       testlist1.splice (testlist1.end(), testlist2, 
                         testlist2.begin(), ----testlist2.end());
-      std::copy (testlist1.begin(), testlist1.end(), 
-                  std::ostream_iterator<testvalue_t> (test_seq));
-      BOOST_CHECK (test_seq.is_equal ("413"));
-      std::copy (testlist2.begin(), testlist2.end(), 
-                  std::ostream_iterator<testvalue_t> (test_seq));
-      BOOST_CHECK (test_seq.is_equal ("52"));
+      {  int init_values [] = { 4, 1, 3 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
+      {  int init_values [] = { 5, 2 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist2.begin() );  }
 
       testlist1.erase (testlist1.iterator_to(values[0]), testlist1.end());
-      BOOST_CHECK (testlist1.size() == 1);
-      BOOST_CHECK (&testlist1.front() == &values[3]);
+      BOOST_TEST (testlist1.size() == 1);
+      BOOST_TEST (&testlist1.front() == &values[3]);
    }
    {
-      boost::test_tools::output_test_stream test_seq;
       list_type testlist1 (&values[0], &values[0] + 2);
       list_type testlist2 (&values[0] + 3, &values[0] + 5);
 
       values[0].swap_nodes(values[2]);
-      std::copy (testlist1.begin(), testlist1.end(), 
-                  std::ostream_iterator<testvalue_t> (test_seq));
-      BOOST_CHECK (test_seq.is_equal ("32"));
+      {  int init_values [] = { 3, 2 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
 
       values[2].swap_nodes(values[4]);
-      std::copy (testlist1.begin(), testlist1.end(), 
-                  std::ostream_iterator<testvalue_t> (test_seq));
-      BOOST_CHECK (test_seq.is_equal ("52"));
-      std::copy (testlist2.begin(), testlist2.end(), 
-                  std::ostream_iterator<testvalue_t> (test_seq));
-      BOOST_CHECK (test_seq.is_equal ("43"));
+      {  int init_values [] = { 5, 2 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
+      {  int init_values [] = { 4, 3 };
+         TEST_INTRUSIVE_SEQUENCE( init_values, testlist2.begin() );  }
    }
 }
 
@@ -288,7 +260,7 @@ void test_list<ValueTraits>
    ::test_clone(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type testvalue_t;
-   boost::test_tools::output_test_stream test_seq;
+   std::vector<int> expected;
    typedef boost::intrusive::list
       <ValueTraits
       ,ValueTraits::value_type::constant_time_size, std::size_t 
@@ -298,9 +270,9 @@ void test_list<ValueTraits>
       list_type testlist2;
 
       testlist2.clone_from(testlist1, test::new_cloner(), test::delete_destroyer());
-      BOOST_CHECK (testlist2 == testlist1);
+      BOOST_TEST (testlist2 == testlist1);
       testlist2.clear_and_destroy(test::delete_destroyer());
-      BOOST_CHECK (testlist2.empty());
+      BOOST_TEST (testlist2.empty());
 }
 
 template<class VoidPointer, bool constant_time_size>
@@ -314,10 +286,10 @@ class test_main_template
       for (int i = 0; i < 5; ++i)
          data[i].value_ = i + 1; 
 
-      test_list <typename testvalue_t::list_base_hook::template
+      test_list <typename testvalue_t::list_base_hook_t::template
          value_traits<testvalue_t> >::test_all(data);
 
-      test_list <typename testvalue_t::list_member_hook::template
+      test_list <typename testvalue_t::list_member_hook_t::template
             value_traits<testvalue_t, &testvalue_t::list_node_> >::test_all(data);
 
       return 0;
@@ -335,21 +307,21 @@ class test_main_template<VoidPointer, false>
       for (int i = 0; i < 5; ++i)
          data[i].value_ = i + 1; 
 
-      test_list <typename testvalue_t::list_base_hook::template
+      test_list <typename testvalue_t::list_base_hook_t::template
          value_traits<testvalue_t> >::test_all(data);
 
-      test_list <typename testvalue_t::list_member_hook::template
+      test_list <typename testvalue_t::list_member_hook_t::template
             value_traits<testvalue_t, &testvalue_t::list_node_> >::test_all(data);
 
-      test_list <typename testvalue_t::list_auto_base_hook::template
+      test_list <typename testvalue_t::list_auto_base_hook_t::template
          value_traits<testvalue_t> >::test_all(data);
 
-      test_list <typename testvalue_t::list_auto_member_hook::template
+      test_list <typename testvalue_t::list_auto_member_hook_t::template
             value_traits<testvalue_t, &testvalue_t::list_auto_node_> >::test_all(data);
       return 0;
    }
 };
-
+/*
 //Explicit instantiations of non-counted classes
 template class boost::intrusive::list<list_base_raw, false>;
 template class boost::intrusive::list<list_member_raw, false>;
@@ -365,12 +337,12 @@ template class boost::intrusive::list<list_base_raw_t, true>;
 template class boost::intrusive::list<list_member_raw_t, true>;
 template class boost::intrusive::list<list_base_smart_t, true>;
 template class boost::intrusive::list<list_member_smart_t, true>;
-
-int test_main( int, char* [] ) 
+*/
+int main( int, char* [] ) 
 {
    test_main_template<void*, false>()();
    test_main_template<boost::intrusive::smart_ptr<void>, false>()();
    test_main_template<void*, true>()();
    test_main_template<boost::intrusive::smart_ptr<void>, true>()();
-   return 0;
+   return boost::report_errors();
 }

@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztañaga  2006-2007.
+// (C) Copyright Ion Gaztanaga  2006-2007.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -16,11 +16,9 @@
 #include "itestvalue.hpp"
 #include "smart_ptr.hpp"
 #include "common_functors.hpp"
-
 #include <vector>
-
-// Boost.Test
-#include "boost/test/included/test_exec_monitor.hpp"
+#include <boost/detail/lightweight_test.hpp>
+#include "test_macros.hpp"
 
 using namespace boost::intrusive;
 
@@ -78,21 +76,17 @@ template<class ValueTraits>
 void test_multiset<ValueTraits>::test_sort(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type testvalue_t;
-   boost::test_tools::output_test_stream test_seq;
-
    typedef multiset
       <ValueTraits
       ,std::less<typename ValueTraits::value_type>
       ,ValueTraits::value_type::constant_time_size, std::size_t 
       > multiset_type;
    multiset_type testset1 (values.begin(), values.end());
+   {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
-   std::copy (testset1.begin(), testset1.end(), 
-               std::ostream_iterator<testvalue_t> (test_seq));
-   BOOST_CHECK (test_seq.is_equal ("122345"));
-     
    testset1.clear();
-   BOOST_CHECK (testset1.empty());
+   BOOST_TEST (testset1.empty());
 
    typedef multiset
       <ValueTraits
@@ -100,11 +94,11 @@ void test_multiset<ValueTraits>::test_sort(std::vector<typename ValueTraits::val
       ,ValueTraits::value_type::constant_time_size, std::size_t 
       > multiset_type2;
    multiset_type2 testset2 (&values[0], &values[0] + 6);
-   std::copy (testset2.rbegin(), testset2.rend(), 
-               std::ostream_iterator<testvalue_t> (test_seq));
-   BOOST_CHECK (test_seq.is_equal ("531422"));
-   BOOST_CHECK (testset2.begin()->value_ == 2);
-   BOOST_CHECK (testset2.rbegin()->value_ == 5);
+   {  int init_values [] = { 5, 3, 1, 4, 2, 2 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testset2.rbegin() );  }
+
+   BOOST_TEST (testset2.begin()->value_ == 2);
+   BOOST_TEST (testset2.rbegin()->value_ == 5);
 }  
   
 //test: insert, const_iterator, const_reverse_iterator, erase, iterator_to:
@@ -112,8 +106,6 @@ template<class ValueTraits>
 void test_multiset<ValueTraits>::test_insert(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type testvalue_t;
-   boost::test_tools::output_test_stream test_seq;
-
    typedef multiset
       <ValueTraits
       ,std::less<typename ValueTraits::value_type>
@@ -122,31 +114,24 @@ void test_multiset<ValueTraits>::test_insert(std::vector<typename ValueTraits::v
 
    multiset_type testset;
    testset.insert(&values[0] + 2, &values[0] + 5);
+   {  int init_values [] = { 1, 4, 5 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testset.begin() );  }
 
-   const multiset_type& const_testset = testset;
-   std::copy (const_testset.begin(), const_testset.end(), 
-               std::ostream_iterator<testvalue_t> (test_seq));
-   BOOST_CHECK (test_seq.is_equal ("145"));
-
-   BOOST_DEDUCED_TYPENAME multiset_type::iterator i = testset.begin();
-   BOOST_CHECK (i->value_ == 1);
+   typename multiset_type::iterator i = testset.begin();
+   BOOST_TEST (i->value_ == 1);
 
    i = testset.insert (i, values[0]);
-   BOOST_CHECK (&*i == &values[0]);
-     
-   std::copy (const_testset.rbegin(), const_testset.rend(), 
-               std::ostream_iterator<testvalue_t> (test_seq));
-   BOOST_CHECK (test_seq.is_equal ("5431"));
+   BOOST_TEST (&*i == &values[0]);
+
+   {  int init_values [] = { 5, 4, 3, 1 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testset.rbegin() );  }
 
    i = testset.iterator_to (values[2]);
-   BOOST_CHECK (&*i == &values[2]);
+   BOOST_TEST (&*i == &values[2]);
    testset.erase(i);
 
-   //test post-increment:
-   for (BOOST_DEDUCED_TYPENAME multiset_type::const_iterator i = const_testset.begin(),
-         e = const_testset.end(); i != e; i++)
-      test_seq << *i;
-   BOOST_CHECK (test_seq.is_equal ("135"));
+   {  int init_values [] = { 1, 3, 5 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testset.begin() );  }
 }  
 
 //test: insert (seq-version), swap, erase (seq-version), size:
@@ -154,7 +139,6 @@ template<class ValueTraits>
 void test_multiset<ValueTraits>::test_swap(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type testvalue_t;
-   boost::test_tools::output_test_stream test_seq;
    typedef multiset
       <ValueTraits
       ,std::less<typename ValueTraits::value_type>
@@ -164,19 +148,15 @@ void test_multiset<ValueTraits>::test_swap(std::vector<typename ValueTraits::val
    multiset_type testset2;
    testset2.insert (&values[0] + 2, &values[0] + 6);
    testset1.swap (testset2);
-   
-   std::copy (testset1.begin(), testset1.end(), 
-               std::ostream_iterator<testvalue_t> (test_seq));
-   BOOST_CHECK (test_seq.is_equal ("1245"));
-   //test post-increment:
-   for (BOOST_DEDUCED_TYPENAME multiset_type::iterator i = testset2.begin(),
-         e = testset2.end(); i != e; i++)
-      test_seq << *i;
-   BOOST_CHECK (test_seq.is_equal ("23"));
+
+   {  int init_values [] = { 1, 2, 4, 5 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
+   {  int init_values [] = { 2, 3 };
+      TEST_INTRUSIVE_SEQUENCE( init_values, testset2.begin() );  }
 
    testset1.erase (testset1.iterator_to(values[5]), testset1.end());
-   BOOST_CHECK (testset1.size() == 1);
-   BOOST_CHECK (&*testset1.begin() == &values[3]);
+   BOOST_TEST (testset1.size() == 1);
+   BOOST_TEST (&*testset1.begin() == &values[3]);
 }  
 
 //test: find, equal_range (lower_bound, upper_bound):
@@ -184,28 +164,27 @@ template<class ValueTraits>
 void test_multiset<ValueTraits>::test_find(std::vector<typename ValueTraits::value_type>& values)
 {
    typedef typename ValueTraits::value_type testvalue_t;
-   boost::test_tools::output_test_stream test_seq;
    typedef multiset
       <ValueTraits
       ,std::less<typename ValueTraits::value_type>
       ,ValueTraits::value_type::constant_time_size, std::size_t 
       > multiset_type;
    multiset_type testset (values.begin(), values.end());
-   typedef BOOST_DEDUCED_TYPENAME multiset_type::iterator iterator;
+   typedef typename multiset_type::iterator iterator;
 
    testvalue_t cmp_val;
    cmp_val.value_ = 2;
    iterator i = testset.find (cmp_val);
-   BOOST_CHECK (i->value_ == 2);
-   BOOST_CHECK ((++i)->value_ == 2);
+   BOOST_TEST (i->value_ == 2);
+   BOOST_TEST ((++i)->value_ == 2);
    std::pair<iterator,iterator> range = testset.equal_range (cmp_val);
      
-   BOOST_CHECK (range.first->value_ == 2);
-   BOOST_CHECK (range.second->value_ == 3);
-   BOOST_CHECK (std::distance (range.first, range.second) == 2);
+   BOOST_TEST (range.first->value_ == 2);
+   BOOST_TEST (range.second->value_ == 3);
+   BOOST_TEST (std::distance (range.first, range.second) == 2);
 
    cmp_val.value_ = 7;
-   BOOST_CHECK (testset.find (cmp_val) == testset.end());
+   BOOST_TEST (testset.find (cmp_val) == testset.end());
 } 
 
 template<class ValueTraits>
@@ -223,9 +202,9 @@ void test_multiset<ValueTraits>
       multiset_type testmultiset2;
 
       testmultiset2.clone_from(testmultiset1, test::new_cloner(), test::delete_destroyer());
-      BOOST_CHECK (testmultiset2 == testmultiset1);
+      BOOST_TEST (testmultiset2 == testmultiset1);
       testmultiset2.clear_and_destroy(test::delete_destroyer());
-      BOOST_CHECK (testmultiset2.empty());
+      BOOST_TEST (testmultiset2.empty());
 }
 
 template<class VoidPointer, bool constant_time_size>
@@ -240,10 +219,10 @@ class test_main_template
       for (int i = 0; i < 6; ++i)
          data[i].value_ = random_init[i]; 
 
-      test_multiset <typename testvalue_t::set_base_hook::template
+      test_multiset <typename testvalue_t::set_base_hook_t::template
          value_traits<testvalue_t> >::test_all(data);
 
-      test_multiset <typename testvalue_t::set_member_hook::template
+      test_multiset <typename testvalue_t::set_member_hook_t::template
             value_traits<testvalue_t, &testvalue_t::set_node_> >::test_all(data);
 
       return 0;
@@ -262,21 +241,21 @@ class test_main_template<VoidPointer, false>
       for (int i = 0; i < 6; ++i)
          data[i].value_ = random_init[i]; 
 
-      test_multiset <typename testvalue_t::set_base_hook::template
+      test_multiset <typename testvalue_t::set_base_hook_t::template
          value_traits<testvalue_t> >::test_all(data);
 
-      test_multiset <typename testvalue_t::set_member_hook::template
+      test_multiset <typename testvalue_t::set_member_hook_t::template
             value_traits<testvalue_t, &testvalue_t::set_node_> >::test_all(data);
 
-      test_multiset <typename testvalue_t::set_auto_base_hook::template
+      test_multiset <typename testvalue_t::set_auto_base_hook_t::template
          value_traits<testvalue_t> >::test_all(data);
 
-      test_multiset <typename testvalue_t::set_auto_member_hook::template
+      test_multiset <typename testvalue_t::set_auto_member_hook_t::template
             value_traits<testvalue_t, &testvalue_t::set_auto_node_> >::test_all(data);
       return 0;
    }
 };
-
+/*
 //Explicit instantiations of non-counted classes
 template class multiset
    <set_base_raw, std::less<set_base_raw::value_type>, false>;
@@ -304,14 +283,14 @@ template class multiset
    <set_base_smart_t, std::less<set_base_smart_t::value_type>, true>;
 template class multiset
    <set_member_smart_t, std::less<set_member_smart_t::value_type>, true>;
-
-int test_main( int, char* [] ) 
+*/
+int main( int, char* [] ) 
 {
    test_main_template<void*, false>()();
    test_main_template<smart_ptr<void>, false>()();
    test_main_template<void*, true>()();
    test_main_template<smart_ptr<void>, true>()();
-   return 0;
+   return boost::report_errors();
 }
 
 
