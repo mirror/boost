@@ -62,6 +62,13 @@ struct synthesize_mfp
     >
 { };
 
+template<typename S, typename R = typename mpl::at_c<S,0>::type,
+    typename C = typename mpl::at_c<S,1>::type>
+struct synthesize_mop
+{
+  typedef R C::* type;
+};
+
 #define BOOST_FT_variations BOOST_FT_function|BOOST_FT_member_pointer
 #define BOOST_FT_al_path boost/function_types/detail/synthesize_impl
 #include <boost/function_types/detail/pp_loop.hpp>

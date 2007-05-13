@@ -18,12 +18,11 @@ namespace boost
 { 
   namespace function_types 
   {
-    template< typename T, typename Tag = null_tag > 
+    template< typename T > 
     struct is_member_object_pointer
-      : function_types::represents
+      : function_types::detail::represents_impl
         < function_types::components<T>
-        , function_types::tag<Tag,detail::member_object_pointer_tag> 
-        >
+        , detail::member_object_pointer_tag >
     { 
       BOOST_MPL_AUX_LAMBDA_SUPPORT(2,is_member_object_pointer,(T,Tag))
     };
