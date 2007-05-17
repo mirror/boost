@@ -24,7 +24,7 @@
 
 namespace boost {
 
-// deterministic polar method, uses trigonometric functions
+// deterministic Box-Muller method, uses trigonometric functions
 template<class RealType = double>
 class normal_distribution
 {
