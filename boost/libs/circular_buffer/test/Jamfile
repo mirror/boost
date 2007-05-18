@@ -1,0 +1,19 @@
+# Boost circular_buffer test Jamfile.
+
+subproject libs/circular_buffer/test ;
+
+# Bring in rules for testing.
+SEARCH on testing.jam = $(BOOST_BUILD_PATH) ;
+include testing.jam ;
+
+# Make tests run by default.
+DEPENDS all : circular_buffer ;
+
+{
+    test-suite "circular_buffer"
+        : [ run base_test.cpp ]
+          [ run space_optimized_test.cpp ]
+          [ run soft_iterator_invalidation.cpp ]
+          [ compile bounded_buffer_comparison.cpp ]
+        ;
+}
