@@ -1262,11 +1262,12 @@ char const *current_name = include_next ? iter_ctx->real_filename.c_str() : 0;
 char const *current_name = 0;   // never try to match current file name
 #endif
 
-// call the include policy trace function
+// call the 'found_include_directive' hook function
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     ctx.get_hooks().found_include_directive(f, include_next);
 #else
-    ctx.get_hooks().found_include_directive(ctx, f, include_next);
+    if (!ctx.get_hooks().found_include_directive(ctx, f, include_next))
+        return true;    // client returned false: skip file to include 
 #endif
 
     file_path = util::impl::unescape_lit(file_path);

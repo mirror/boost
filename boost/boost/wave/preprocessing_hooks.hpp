@@ -175,6 +175,9 @@ struct default_preprocessing_hooks
     //  a #include_next directive and the BOOST_WAVE_SUPPORT_INCLUDE_NEXT
     //  preprocessing constant was defined to something != 0.
     //
+    //  The return value defines, whether the found file will be included 
+    //  (return true) or will be skipped (return false),
+    //
     ///////////////////////////////////////////////////////////////////////////
 #if BOOST_WAVE_USE_DEPRECIATED_PREPROCESSING_HOOKS != 0
     // old signature
@@ -184,10 +187,12 @@ struct default_preprocessing_hooks
 #else
     // new signature
     template <typename ContextT>
-    void 
+    bool 
     found_include_directive(ContextT const& ctx, std::string const& filename, 
         bool include_next) 
-    {}
+    {
+        return true;    // ok to include this file
+    }
 #endif
     
     ///////////////////////////////////////////////////////////////////////////

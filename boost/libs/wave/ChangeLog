@@ -106,6 +106,9 @@ CHANGELOG
   Markarian for suggesting this).
 - Added missing #includes <cstring>, <cstdlib>, and <new> to flex_string.hpp.
 - Added missing #include <climits> to cpp_chlit_grammar.hpp.
+- Changed found_include_directive hook function to return a bool indicating, 
+  whether the file should be included (true) or skipped (false). Thanks to 
+  Felipe Magno de Almeida for suggesting this feature.
 
 Boost V1.34.0
 - Wave Version 1.2.4
