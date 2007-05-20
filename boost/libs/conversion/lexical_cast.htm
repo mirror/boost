@@ -21,6 +21,10 @@
 			<li>
 				<a href="#bad_lexical_cast"><code>bad_lexical_cast</code></a></li>
 			<li>
+				<a href="#faq">Frequently Asked Questions</a></li>
+			<li>
+				<a href="#references">References</a></li>
+			<li>
 				<a href="#changes">Changes</a></li>
 		</ul>
 		<hr>
@@ -192,7 +196,39 @@ public:
 		failure.
 			<hr>
 		
+<h2><a name="faq">Frequently Asked Questions</h2>
+    <p> Q: Why does <code>lexical_cast&lt;int8_t&gt;("127")</code> throw <code>bad_lexical_cast</code>?
+    <br> A: The type <code>int8_t</code> is a typedef to <code>char</code> or <code>signed char</code>.
+    Lexical conversion to these types is simply reading a byte from source but since the source has
+    more than one byte, the exception is thrown.
+    <p>Please use other integer types such as <code>int</code> or <code>short int</code>. If bounds checking
+    is important, you can also call <a href="../../libs/numeric/conversion/doc/numeric_cast.html">numeric_cast</a>:
+
+<pre><a href="../../libs/numeric/conversion/doc/numeric_cast.html">numeric_cast</a>&lt;int8_t&gt;(lexical_cast&lt;int&gt;("127"));</pre>
+
+    <p> Q: What does <code>lexical_cast&lt;std::string&gt;</code> of an <code>int8_t</code> or <code>uint8_t</code> not do what I expect?
+    <br> A: As above, note that <code>int8_t</code> and <code>uint8_t</code> are actually chars and are formatted as such.  To avoid this, cast to an integer type first:
+
+<pre>lexical_cast&lt;std::string&gt;(static_cast&lt;int&gt;(n));</pre>
+
+    <p> Q: The implementation always resets the <code>ios_base::skipws</code> flag of an underlying stream object. It breaks my <code>operator&gt;&gt;</code> that works only in presence of this flag. Can you remove code that resets the flag?
+    <br> A: May be in a future version. There is no requirement in <a href="#n1973">[N1973]</a> to reset the flag but remember that <a href="#n1973">[N1973]</a> is not yet accepted by the committee. By the way, it's a great opportunity to make your <code>operator&gt;&gt;</code> conform to the standard. Read a good C++ book, study <code>std::sentry</code> and <a href="../../libs/io/doc/ios_state.html">ios_state_saver</a>.
+</ul>
+<h2><a name="references">References</h2>
+<ul type="square">
+    <a name="n1973"></a><li> [N1973] Kevlin Henney, Beman Dawes, Lexical Conversion Library Proposal for TR2,
+      <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n1973.html">N1973</a>.
+      <a name="tuning"></a><li> [Tuning] Alexander Nasonov, Fine Tuning for lexical_cast,
+      <a href="http://www.accu.org/var/uploads/journals/overload74.pdf">Overload #74</a>,
+      August 2006.</li>
+</ul>
 <h2><a name="changes">Changes</a></h2>
+<h3>August, October 2006:</h3>
+<ul type="square">
+    <li>Better performance for many combinations of <code>Source</code> and <code>Target</code>
+    types. Refer to <a href="#tuning">[Tuning]</a> for more details.
+  </li>
+</ul>
 <h3>June 2005:</h3>
 <ul type="square">
   <li>Call-by-const reference for the parameters. This requires partial specialization 
