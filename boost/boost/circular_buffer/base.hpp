@@ -113,7 +113,11 @@ public:
     typedef reverse_iterator<const_iterator> const_reverse_iterator;
 
     //! An iterator used to iterate backwards through a <code>circular_buffer</code>.
+#if BOOST_WORKAROUND(__GNUC__, > 4) || BOOST_WORKAROUND(__GNUC__, == 4 && (__GNUC_MINOR__ >= 3))
+    typedef ::reverse_iterator<iterator> reverse_iterator;
+#else
     typedef reverse_iterator<iterator> reverse_iterator;
+#endif
 
 // Container specific types
 
