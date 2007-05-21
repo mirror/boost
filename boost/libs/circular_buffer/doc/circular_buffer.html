@@ -68,8 +68,8 @@
     </h2>
     <p>
       In general the term <i>circular buffer</i> refers to an area in memory which is used to store incoming data. When
-      the buffer is filled, new data is written starting at the beginning of the buffer and overwriting the old.
-      <a href="#note1">[1]</a> (Also see the Figure.)
+      the buffer is filled, new data is written starting at the beginning of the buffer and overwriting the old. (Also
+      see the Figure.)
     </p>
     <p>
       The <code>circular_buffer</code> is a STL compliant container. It is a kind of sequence similar to <code><a href=
@@ -167,8 +167,8 @@ public:
 "#classboost_1_1circular__buffer_11b8a33f2dc8519b8a7d344ed4408c532">iterator</a>;
    typedef reverse_iterator&lt;const_iterator&gt; <a href=
 "#classboost_1_1circular__buffer_1ca423a848964c7915629c90fa7c58598">const_reverse_iterator</a>;
-   typedef reverse_iterator&lt;iterator&gt; <a href=
-"#classboost_1_1circular__buffer_1e5dbaec472f4b6ab6a8d4d0d6b15cbdb">reverse_iterator</a>;
+   typedef :: reverse_iterator&lt;iterator&gt; <a href=
+"#classboost_1_1circular__buffer_1abd0a428b275475339777776e417ae66">reverse_iterator</a>;
    typedef std::pair&lt;pointer, size_type&gt; <a href=
 "#classboost_1_1circular__buffer_126d279f91fef717e25459a0817ff242f">array_range</a>;
    typedef std::pair&lt;const_pointer, size_type&gt; <a href=
@@ -498,8 +498,8 @@ template &lt;class T, class Alloc&gt;
     <p>
       The <code>circular_buffer</code> should not be used for storing pointers to dynamically allocated objects. When a
       <code>circular_buffer</code> becomes full, further insertion will overwrite the stored pointers - resulting in a
-      <b>memory leak</b>. One recommend alternative is the use of smart pointers <a href="#note2">[2]</a>. (Any
-      container of <code>std::auto_ptr</code> is considered particularly hazardous. <a href="#note3">[3]</a> )
+      <b>memory leak</b>. One recommend alternative is the use of smart pointers <a href="#note1">[1]</a>. (Any
+      container of <code>std::auto_ptr</code> is considered particularly hazardous. <a href="#note2">[2]</a> )
     </p>
     <p>
       While internals of a <code>circular_buffer</code> are circular, iterators are <b>not</b>. Iterators of a
@@ -880,8 +880,8 @@ template &lt;class T, class Alloc&gt;
         </tr>
         <tr>
           <td>
-            <a id="classboost_1_1circular__buffer_1e5dbaec472f4b6ab6a8d4d0d6b15cbdb" name=
-            "classboost_1_1circular__buffer_1e5dbaec472f4b6ab6a8d4d0d6b15cbdb"><code>reverse_iterator</code></a>
+            <a id="classboost_1_1circular__buffer_1abd0a428b275475339777776e417ae66" name=
+            "classboost_1_1circular__buffer_1abd0a428b275475339777776e417ae66"><code>reverse_iterator</code></a>
           </td>
           <td>
             An iterator used to iterate backwards through a <code>circular_buffer</code>.
@@ -1918,7 +1918,7 @@ template &lt;class T, class Alloc&gt;
           <td>
             <a id="classboost_1_1circular__buffer_1db3d6b10b6763549f54d2627228fa7aa" name=
             "classboost_1_1circular__buffer_1db3d6b10b6763549f54d2627228fa7aa"></a><code><b><a href=
-            "#classboost_1_1circular__buffer_1e5dbaec472f4b6ab6a8d4d0d6b15cbdb">reverse_iterator</a>
+            "#classboost_1_1circular__buffer_1abd0a428b275475339777776e417ae66">reverse_iterator</a>
             rbegin();</b></code><br>
             <br>
             Get the iterator pointing to the beginning of the "reversed" <code>circular_buffer</code>.
@@ -1980,7 +1980,7 @@ template &lt;class T, class Alloc&gt;
           <td>
             <a id="classboost_1_1circular__buffer_1cff9236a50107188b8942847a4dc2697" name=
             "classboost_1_1circular__buffer_1cff9236a50107188b8942847a4dc2697"></a><code><b><a href=
-            "#classboost_1_1circular__buffer_1e5dbaec472f4b6ab6a8d4d0d6b15cbdb">reverse_iterator</a>
+            "#classboost_1_1circular__buffer_1abd0a428b275475339777776e417ae66">reverse_iterator</a>
             rend();</b></code><br>
             <br>
             Get the iterator pointing to the end of the "reversed" <code>circular_buffer</code>.
@@ -6770,18 +6770,11 @@ template &lt;class T, class Alloc&gt;
       <li>
         <a name="note1" id="note1"></a>
         <p>
-          An in-depth definition of a circular buffer can be found at <a href=
-          "http://en.wikipedia.org/wiki/Circular_buffer">Wikipedia</a>.
-        </p>
-      </li>
-      <li>
-        <a name="note2" id="note2"></a>
-        <p>
           A good implementation of smart pointers is included in <a href="../../smart_ptr/">Boost</a>.
         </p>
       </li>
       <li>
-        <a name="note3" id="note3"></a>
+        <a name="note2" id="note2"></a>
         <p>
           Never create a circular buffer of <code>std::auto_ptr</code>. Refer to <a href=
           "http://www.aristeia.com">Scott Meyers</a> ' excellent book <em>Effective STL</em> for a detailed discussion.
