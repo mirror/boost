@@ -27,7 +27,7 @@ boost::proto::terminal<char>::type g_ = {'g'};
 boost::proto::terminal<char>::type h_ = {'h'};
 boost::proto::terminal<char>::type i_ = {'i'};
 
-std::ostream &operator <<(std::ostream &sout, boost::proto::tag::right_shift)
+std::ostream &operator <<(std::ostream &sout, boost::proto::tag::shift_right)
 {
     return sout << ">>";
 }

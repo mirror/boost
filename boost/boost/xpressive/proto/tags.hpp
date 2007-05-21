@@ -50,10 +50,10 @@ namespace boost { namespace proto { namespace tag
     struct post_dec {};
 
     /// Tag type for the binary \<\< operator.
-    struct left_shift {};
+    struct shift_left {};
 
     /// Tag type for the binary \>\> operator.
-    struct right_shift {};
+    struct shift_right {};
 
     /// Tag type for the binary * operator.
     struct multiplies {};
@@ -113,10 +113,10 @@ namespace boost { namespace proto { namespace tag
     struct assign {};
 
     /// Tag type for the binary \<\<= operator.
-    struct left_shift_assign {};
+    struct shift_left_assign {};
 
     /// Tag type for the binary \>\>= operator.
-    struct right_shift_assign {};
+    struct shift_right_assign {};
 
     /// Tag type for the binary *= operator.
     struct multilpies_assign {};

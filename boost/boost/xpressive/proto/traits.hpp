@@ -236,8 +236,8 @@
         BOOST_PROTO_UNARY_GENERATOR(post_inc)
         BOOST_PROTO_UNARY_GENERATOR(post_dec)
 
-        BOOST_PROTO_BINARY_GENERATOR(left_shift)
-        BOOST_PROTO_BINARY_GENERATOR(right_shift)
+        BOOST_PROTO_BINARY_GENERATOR(shift_left)
+        BOOST_PROTO_BINARY_GENERATOR(shift_right)
         BOOST_PROTO_BINARY_GENERATOR(multiplies)
         BOOST_PROTO_BINARY_GENERATOR(divides)
         BOOST_PROTO_BINARY_GENERATOR(modulus)
@@ -258,8 +258,8 @@
         BOOST_PROTO_BINARY_GENERATOR(mem_ptr)
 
         BOOST_PROTO_BINARY_GENERATOR(assign)
-        BOOST_PROTO_BINARY_GENERATOR(left_shift_assign)
-        BOOST_PROTO_BINARY_GENERATOR(right_shift_assign)
+        BOOST_PROTO_BINARY_GENERATOR(shift_left_assign)
+        BOOST_PROTO_BINARY_GENERATOR(shift_right_assign)
         BOOST_PROTO_BINARY_GENERATOR(multilpies_assign)
         BOOST_PROTO_BINARY_GENERATOR(divides_assign)
         BOOST_PROTO_BINARY_GENERATOR(modulus_assign)

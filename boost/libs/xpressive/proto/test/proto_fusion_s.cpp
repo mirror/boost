@@ -17,7 +17,7 @@
 #include <boost/utility/addressof.hpp>
 #include <sstream>
 
-std::ostream &operator <<(std::ostream &sout, boost::proto::tag::right_shift)
+std::ostream &operator <<(std::ostream &sout, boost::proto::tag::shift_right)
 {
     return sout << ">>";
 }

@@ -31,9 +31,9 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename Expr, typename, typename>
         struct apply
-          : proto::right_shift<
+          : proto::shift_right<
                 proto::terminal<mark_begin_matcher>::type
-              , typename proto::right_shift<
+              , typename proto::shift_right<
                     typename proto::result_of::right<Expr>::type
                   , proto::terminal<mark_end_matcher>::type
                 >::type

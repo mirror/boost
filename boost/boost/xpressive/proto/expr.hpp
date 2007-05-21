@@ -71,11 +71,14 @@
 
         namespace result_of
         {
-        #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), <boost/xpressive/proto/detail/funop.hpp>))
+            template<typename Sig, typename This>
+            struct funop;
+
+        #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), <boost/xpressive/proto/detail/funop.hpp>))
         #include BOOST_PP_ITERATE()
         }
 
-    #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/expr.hpp>))
+    #define BOOST_PP_ITERATION_PARAMS_1 (3, (0, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/expr.hpp>))
     #include BOOST_PP_ITERATE()
 
     #undef BOOST_PROTO_ARG
@@ -110,28 +113,33 @@
         ///             type is \c boost::proto::tag::terminal, in which case
         ///             \c Args must be \c proto::args1\<T\>, where \c T can be any
         ///             type.
+    #if 0 == BOOST_PP_ITERATION()
+        #define IS_TERMINAL 1
+        #define ARG_COUNT 1
+        template<typename Args>
+        struct expr<proto::tag::terminal, Args, 1>
+        {
+            typedef proto::tag::terminal tag_type;
+            typedef mpl::long_<1> arity;
+    #else
+        #define IS_TERMINAL 0
+        #define ARG_COUNT BOOST_PP_ITERATION()
         template<typename Tag, typename Args>
         struct expr<Tag, Args, BOOST_PP_ITERATION() >
         {
             typedef Tag tag_type;
+            typedef mpl::long_<BOOST_PP_ITERATION() > arity;
+    #endif
             typedef expr type;
             typedef Args args_type;
             typedef default_domain domain;
-            typedef mpl::long_<BOOST_PP_ITERATION()> arity;
             typedef proto_expr_tag fusion_tag;
             typedef void is_boost_proto_expr_;
             typedef expr boost_proto_expr_type_;
 
             BOOST_PROTO_IDENTITY_TRANSFORM();
-            BOOST_PP_REPEAT(BOOST_PP_ITERATION(), BOOST_PROTO_ARG, ~)
-            BOOST_PP_REPEAT_FROM_TO(BOOST_PP_ITERATION(), BOOST_PROTO_MAX_ARITY, BOOST_PROTO_VOID, ~)
-
-            /// \return *this
-            ///
-            expr &cast()
-            {
-                return *this;
-            }
+            BOOST_PP_REPEAT(ARG_COUNT, BOOST_PROTO_ARG, ~)
+            BOOST_PP_REPEAT_FROM_TO(ARG_COUNT, BOOST_PROTO_MAX_ARITY, BOOST_PROTO_VOID, ~)
 
             /// \return *this
             ///
@@ -140,17 +148,24 @@
                 return *this;
             }
 
+            /// \overload
+            ///
+            expr &cast()
+            {
+                return *this;
+            }
+
             /// \return A new \c expr\<\> object initialized with the specified
             /// arguments.
             ///
-            template<BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), typename A)>
-            static expr make(BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_ITERATION(), A, const &a))
+            template<BOOST_PP_ENUM_PARAMS(ARG_COUNT, typename A)>
+            static expr make(BOOST_PP_ENUM_BINARY_PARAMS(ARG_COUNT, A, const &a))
             {
-                expr that = {BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), a)};
+                expr that = {BOOST_PP_ENUM_PARAMS(ARG_COUNT, a)};
                 return that;
             }
 
-        #if 1 == BOOST_PP_ITERATION()
+        #if IS_TERMINAL
             /// \overload
             ///
             template<typename A0>
@@ -159,7 +174,9 @@
                 expr that = {a0};
                 return that;
             }
+        #endif
 
+        #if 1 == BOOST_PP_ITERATION()
             /// If \c Tag is \c boost::proto::tag::address_of and \c arg0_type is
             /// \c proto::ref_\<T\>, then \c address_of_hack_type_ is <tt>T*</tt>.
             /// Otherwise, it is some undefined type.
@@ -183,26 +200,6 @@
             /// \param a The rhs.
             /// \return A new \c expr\<\> node representing an assignment of \c a to \c *this.
             template<typename A>
-            expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A>::type> > const
-            operator =(A &a)
-            {
-                expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
-                return that;
-            }
-
-            /// \overload
-            ///
-            template<typename A>
-            expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > const
-            operator =(A const &a)
-            {
-                expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
-                return that;
-            }
-
-            /// \overload
-            ///
-            template<typename A>
             expr<tag::assign, args2<ref_<expr const>, typename result_of::as_arg<A>::type> > const
             operator =(A &a) const
             {
@@ -220,30 +217,32 @@
                 return that;
             }
 
+        #if IS_TERMINAL
+            /// \overload
+            ///
+            template<typename A>
+            expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A>::type> > const
+            operator =(A &a)
+            {
+                expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
+                return that;
+            }
+
+            /// \overload
+            ///
+            template<typename A>
+            expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > const
+            operator =(A const &a)
+            {
+                expr<tag::assign, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
+                return that;
+            }
+        #endif
+
             /// Subscript
             ///
             /// \param a The rhs.
             /// \return A new \c expr\<\> node representing \c *this subscripted with \c a.
-            template<typename A>
-            expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A>::type> > const
-            operator [](A &a)
-            {
-                expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
-                return that;
-            }
-
-            /// \overload
-            ///
-            template<typename A>
-            expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > const
-            operator [](A const &a)
-            {
-                expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
-                return that;
-            }
-
-            /// \overload
-            ///
             template<typename A>
             expr<tag::subscript, args2<ref_<expr const>, typename result_of::as_arg<A>::type> > const
             operator [](A &a) const
@@ -262,16 +261,34 @@
                 return that;
             }
 
-            template<typename Sig>
-            struct result {};
+        #if IS_TERMINAL
+            /// \overload
+            ///
+            template<typename A>
+            expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A>::type> > const
+            operator [](A &a)
+            {
+                expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A>::type> > that = {{*this}, proto::as_arg(a)};
+                return that;
+            }
+
+            /// \overload
+            ///
+            template<typename A>
+            expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > const
+            operator [](A const &a)
+            {
+                expr<tag::subscript, args2<ref_<expr>, typename result_of::as_arg<A const>::type> > that = {{*this}, proto::as_arg(a)};
+                return that;
+            }
+        #endif
 
             /// Encodes the return type of \c expr\<\>::operator(), for use with \c boost::result_of\<\>
             ///
-            template<typename This>
-            struct result<This()>
-            {
-                typedef expr<tag::function, args1<ref_<expr const> > > type;
-            };
+            template<typename Sig>
+            struct result
+              : result_of::funop<Sig, expr>
+            {};
 
             /// Function call
             ///
@@ -283,18 +300,27 @@
                 return that;
             }
 
+        #if IS_TERMINAL
+            /// \overload
+            ///
+            expr<tag::function, args1<ref_<expr> > > const
+            operator ()()
+            {
+                expr<tag::function, args1<ref_<expr> > > that = {{*this}};
+                return that;
+            }
+        #endif
+
     #define BOOST_PP_ITERATION_PARAMS_2 (3, (1, BOOST_PP_DEC(BOOST_PROTO_MAX_ARITY), <boost/xpressive/proto/expr.hpp>))
     #include BOOST_PP_ITERATE()
         };
 
+    #undef ARG_COUNT
+    #undef IS_TERMINAL
+
 #elif BOOST_PP_ITERATION_DEPTH() == 2
 
     #define N BOOST_PP_ITERATION()
-
-        template<typename This BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-        struct result<This(BOOST_PP_ENUM_PARAMS(N, A))>
-          : result_of::BOOST_PP_CAT(funop, N)<expr const BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(N, typename remove_reference<A, >::type BOOST_PP_INTERCEPT)>
-        {};
 
         /// \overload
         ///
@@ -305,6 +331,18 @@
             return result_of::BOOST_PP_CAT(funop, N)<expr const BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)>
                 ::call(*this BOOST_PP_ENUM_TRAILING_PARAMS(N, a));
         }
+
+        #if IS_TERMINAL
+        /// \overload
+        ///
+        template<BOOST_PP_ENUM_PARAMS(N, typename A)>
+        typename result_of::BOOST_PP_CAT(funop, N)<expr BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)>::type const
+        operator ()(BOOST_PP_ENUM_BINARY_PARAMS(N, A, const &a))
+        {
+            return result_of::BOOST_PP_CAT(funop, N)<expr BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)>
+                ::call(*this BOOST_PP_ENUM_TRAILING_PARAMS(N, a));
+        }
+        #endif
 
     #undef N
 

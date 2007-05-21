@@ -62,8 +62,8 @@ namespace boost { namespace proto
         struct post_inc;
         struct post_dec;
 
-        struct left_shift;
-        struct right_shift;
+        struct shift_left;
+        struct shift_right;
         struct multiplies;
         struct divides;
         struct modulus;
@@ -84,8 +84,8 @@ namespace boost { namespace proto
         struct mem_ptr;
 
         struct assign;
-        struct left_shift_assign;
-        struct right_shift_assign;
+        struct shift_left_assign;
+        struct shift_right_assign;
         struct multilpies_assign;
         struct divides_assign;
         struct modulus_assign;
@@ -197,7 +197,7 @@ namespace boost { namespace proto
 
     typedef domain<> default_domain;
 
-    template<typename Expr, typename Derived, typename Domain = default_domain>
+    template<typename Expr, typename Derived, typename Domain = default_domain, typename Tag = typename Expr::tag_type>
     struct extends;
 
     struct default_context;
@@ -284,8 +284,8 @@ namespace boost { namespace proto
     template<typename T> struct post_inc;
     template<typename T> struct post_dec;
 
-    template<typename T, typename U> struct left_shift;
-    template<typename T, typename U> struct right_shift;
+    template<typename T, typename U> struct shift_left;
+    template<typename T, typename U> struct shift_right;
     template<typename T, typename U> struct multiplies;
     template<typename T, typename U> struct divides;
     template<typename T, typename U> struct modulus;
@@ -306,8 +306,8 @@ namespace boost { namespace proto
     template<typename T, typename U> struct mem_ptr;
 
     template<typename T, typename U> struct assign;
-    template<typename T, typename U> struct left_shift_assign;
-    template<typename T, typename U> struct right_shift_assign;
+    template<typename T, typename U> struct shift_left_assign;
+    template<typename T, typename U> struct shift_right_assign;
     template<typename T, typename U> struct multilpies_assign;
     template<typename T, typename U> struct divides_assign;
     template<typename T, typename U> struct modulus_assign;

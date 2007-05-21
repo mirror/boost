@@ -159,8 +159,8 @@ namespace boost { namespace xpressive
             {};
 
             template<typename Dummy>
-            struct case_<proto::tag::right_shift, Dummy>
-              : proto::trans::reverse_fold<proto::right_shift<Grammar<Char>, Grammar<Char> > >
+            struct case_<proto::tag::shift_right, Dummy>
+              : proto::trans::reverse_fold<proto::shift_right<Grammar<Char>, Grammar<Char> > >
             {};
 
             template<typename Dummy>

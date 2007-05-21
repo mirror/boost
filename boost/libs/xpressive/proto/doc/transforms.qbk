@@ -36,7 +36,7 @@ Let's say we have a meta-grammar called `Grammar`, an expression template
 object called `expr` that matches the meta-grammar, and `state` and `visitor`
 objects of your choosing. What happens when you call
 `Grammar::call(expr, state, visitor)`? Well, if `Grammar` were defined as
-`right_shift< Rule1, Rule2 >`, for instance, it might transform the left
+`shift_right< Rule1, Rule2 >`, for instance, it might transform the left
 child of `expr` according to `Rule1`'s transform, do the same thing to the
 right child using `Rule2`, and combine the results somehow. Of course, `Rule1`
 and `Rule2` might be defined in terms of other rules with other transforms, so
@@ -172,7 +172,7 @@ Which is exactly what we want.
 \n
 All the tools Proto provides for defining grammar rules have default transforms
 associated with them. Just as `unary_expr<>` has a pass-through transform,
-so too does `binary_expr<>`, `right_shift<>`, and all the others.
+so too does `binary_expr<>`, `shift_right<>`, and all the others.
 `proto::or_<>` has a default transform which evaluates the transform of the
 branch that matched. Even `proto::expr<>` and `proto::_` have no-op default
 transforms that simply return unmodified the expressions passed to them.

@@ -268,7 +268,7 @@ namespace boost { namespace spirit2
 
         // for A >> B, succeeds if A and B matches.
         template<typename Left, typename Right>
-        bool operator()(proto::tag::right_shift, Left const &left, Right const &right)
+        bool operator()(proto::tag::shift_right, Left const &left, Right const &right)
         {
             return proto::eval(left, *this) && proto::eval(right, *this);
         }
@@ -462,7 +462,7 @@ namespace boost { namespace spirit2
         template<typename Expr, typename State, typename Visitor>
         struct apply
         {
-            typedef typename proto::right_shift<
+            typedef typename proto::shift_right<
                 typename proto::dereference<State>::type
               , Expr
             >::type type;
@@ -515,7 +515,7 @@ namespace boost { namespace spirit2
     struct SpiritComposites
       : proto::or_<
             proto::bitwise_or< Grammar, Grammar >
-          , proto::right_shift< Grammar, Grammar >
+          , proto::shift_right< Grammar, Grammar >
           , proto::minus< Grammar, Grammar >
           , proto::dereference< Grammar >
           , proto::posit< Grammar >

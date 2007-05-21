@@ -103,9 +103,9 @@ namespace boost { namespace xpressive { namespace detail
 
         template<typename Expr, typename, typename>
         struct apply
-          : proto::right_shift<
+          : proto::shift_right<
                 proto::terminal<mark_begin_matcher>::type
-              , typename proto::right_shift<
+              , typename proto::shift_right<
                     Expr
                   , proto::terminal<mark_end_matcher>::type
                 >::type
@@ -142,9 +142,9 @@ namespace boost { namespace xpressive { namespace detail
     {
         template<typename Expr, typename State, typename Visitor>
         struct apply
-          : proto::right_shift<
+          : proto::shift_right<
                 proto::terminal<repeat_begin_matcher>::type
-              , typename proto::right_shift<
+              , typename proto::shift_right<
                     typename InsertMark::apply<typename proto::result_of::arg<Expr>::type, State, Visitor>::type
                   , typename proto::terminal<repeat_end_matcher<Greedy> >::type
                 >::type
@@ -241,7 +241,7 @@ namespace boost { namespace xpressive { namespace detail
     // IsMarkerOrRepeater
     struct IsMarkerOrRepeater
       : proto::or_<
-            proto::right_shift<proto::terminal<repeat_begin_matcher>, proto::_>
+            proto::shift_right<proto::terminal<repeat_begin_matcher>, proto::_>
           , proto::assign<proto::terminal<mark_placeholder>, proto::_>
         >
     {};

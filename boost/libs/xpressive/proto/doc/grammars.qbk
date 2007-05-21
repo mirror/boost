@@ -31,16 +31,16 @@ that we can execute later. To define patterns that match intput and output
 expressions of the form `cin_ >> i` and `cout_ << 1` we do this:
 
     struct Input
-      : right_shift< terminal< std::istream & >, _ >
+      : shift_right< terminal< std::istream & >, _ >
     {};
 
     struct Output
-      : left_shift< terminal< std::ostream & >, _ >
+      : shift_left< terminal< std::ostream & >, _ >
     {};
 
 We've seen the template `terminal<>` before, but here we're using it
 without accessing the nested `::type`. When used like this, it is a very simple
-pattern, as are `right_shift<>` and `left_shift<>`. The newcomer
+pattern, as are `shift_right<>` and `shift_left<>`. The newcomer
 here is `_` in the `proto` namespace. It is a wildcard that matches anything.
 The `Input` struct is a pattern that matches any right-shift expression that
 has a `std::istream` terminal as its left operand.
@@ -115,15 +115,15 @@ recursing. We can express this in our pattern using _or_. Here are the correct
 
     struct Input
       : or_<
-            right_shift< terminal< std::istream & >, _ >
-          , right_shift< Input, _ >
+            shift_right< terminal< std::istream & >, _ >
+          , shift_right< Input, _ >
         >
     {};
 
     struct Output
       : or_<
-            left_shift< terminal< std::ostream & >, _ >
-          , left_shift< Output, _ >
+            shift_left< terminal< std::ostream & >, _ >
+          , shift_left< Output, _ >
         >
     {};
 
@@ -137,9 +137,9 @@ rightly so because they must match a recursive data structure!
 When the `Output` pattern is evaluated against an expression like
 `cout_ << 1 << 2`, the first alternate of the _or_ is tried first. It will
 fail, because the expression `cout_ << 1 << 2` does not match the pattern
-`left_shift< terminal< std::ostream & >, _ >`. Then the second
+`shift_left< terminal< std::ostream & >, _ >`. Then the second
 alternate is tried. We match the expression against
-`left_shift< Output, _ >`. The expression is a left-shift, so we try
+`shift_left< Output, _ >`. The expression is a left-shift, so we try
 the operands. The right operand `2` matches `_` trivially. To see if
 the left operand `cout_ << 1` matches `Output`, we must recursively evaluate
 the `Output` pattern. This time we succeed, because `cout_ << 1` will match
@@ -245,7 +245,7 @@ constituents.
 [h3 Other Valid Patterns]
 
 We've already seen how to use expression generators like `terminal<>` and
-`right_shift<>` as patterns. We've also seen _or_, which we can use to
+`shift_right<>` as patterns. We've also seen _or_, which we can use to
 express a set of alternate patterns. There are a few others of interest; in
 particular, _if_ and _and_.
 

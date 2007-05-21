@@ -52,7 +52,7 @@ namespace boost { namespace xpressive { namespace detail
             matcher_type;
 
             typedef
-                typename proto::right_shift<
+                typename proto::shift_right<
                     marked_expr_type
                   , typename proto::terminal<matcher_type>::type
                 >::type

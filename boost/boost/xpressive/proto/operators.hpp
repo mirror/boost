@@ -158,8 +158,8 @@ namespace boost { namespace proto
     BOOST_PROTO_UNARY_OP(++, tag::pre_inc)
     BOOST_PROTO_UNARY_OP(--, tag::pre_dec)
 
-    BOOST_PROTO_BINARY_OP(<<, tag::left_shift)
-    BOOST_PROTO_BINARY_OP(>>, tag::right_shift)
+    BOOST_PROTO_BINARY_OP(<<, tag::shift_left)
+    BOOST_PROTO_BINARY_OP(>>, tag::shift_right)
     BOOST_PROTO_BINARY_OP(*, tag::multiplies)
     BOOST_PROTO_BINARY_OP(/, tag::divides)
     BOOST_PROTO_BINARY_OP(%, tag::modulus)
@@ -179,8 +179,8 @@ namespace boost { namespace proto
     BOOST_PROTO_BINARY_OP(BOOST_PP_COMMA(), tag::comma)
     BOOST_PROTO_BINARY_OP(->*, tag::mem_ptr)
 
-    BOOST_PROTO_BINARY_OP(<<=, tag::left_shift_assign)
-    BOOST_PROTO_BINARY_OP(>>=, tag::right_shift_assign)
+    BOOST_PROTO_BINARY_OP(<<=, tag::shift_left_assign)
+    BOOST_PROTO_BINARY_OP(>>=, tag::shift_right_assign)
     BOOST_PROTO_BINARY_OP(*=, tag::multilpies_assign)
     BOOST_PROTO_BINARY_OP(/=, tag::divides_assign)
     BOOST_PROTO_BINARY_OP(%=, tag::modulus_assign)

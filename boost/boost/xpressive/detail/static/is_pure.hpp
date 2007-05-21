@@ -88,7 +88,7 @@ namespace boost { namespace xpressive { namespace detail
     {};
 
     template<typename Expr>
-    struct is_pure<Expr, proto::tag::right_shift>
+    struct is_pure<Expr, proto::tag::shift_right>
       : BOOST_XPR_AND_PURE_(
             is_pure<typename proto::result_of::left<Expr>::type>
           , is_pure<typename proto::result_of::right<Expr>::type>

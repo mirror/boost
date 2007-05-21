@@ -36,15 +36,15 @@ struct int_convertible
 
 struct Input
   : or_<
-        right_shift< terminal< std::istream & >, _ >
-      , right_shift< Input, _ >
+        shift_right< terminal< std::istream & >, _ >
+      , shift_right< Input, _ >
     >
 {};
 
 struct Output
   : or_<
-        left_shift< terminal< std::ostream & >, _ >
-      , left_shift< Output, _ >
+        shift_left< terminal< std::ostream & >, _ >
+      , shift_left< Output, _ >
     >
 {};
 
@@ -69,7 +69,7 @@ struct MyCases
 };
 
 template<>
-struct MyCases::case_<proto::tag::right_shift>
+struct MyCases::case_<proto::tag::shift_right>
   : proto::_
 {};
 

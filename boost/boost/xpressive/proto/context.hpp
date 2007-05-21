@@ -37,7 +37,7 @@
     // If we're generating doxygen documentation, hide all the nasty
     // Boost.Typeof gunk.
     #ifndef BOOST_PROTO_DOXYGEN_INVOKED
-        #define BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL(Nested, Expr)\
+        #define BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL_(Nested, Expr)\
             BOOST_TYPEOF_NESTED_TYPEDEF_TPL(BOOST_PP_CAT(nested_and_hidden_, Nested), Expr)\
             struct Nested\
               : mpl::if_c<\
@@ -47,13 +47,16 @@
                 >\
             {};
 
-        #define BOOST_PROTO_TYPEOF(Expr, Type)\
-            BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL(BOOST_PP_CAT(nested_, Type), (Expr))\
+        #define BOOST_PROTO_DECLTYPE_(Expr, Type)\
+            BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL_(BOOST_PP_CAT(nested_, Type), (Expr))\
             typedef typename BOOST_PP_CAT(nested_, Type)::type Type;
     #else
         /// INTERNAL ONLY
         ///
-        #define BOOST_PROTO_TYPEOF(Expr, Type)\
+        #define BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL_(Nested, Expr)
+        /// INTERNAL ONLY
+        ///
+        #define BOOST_PROTO_DECLTYPE_(Expr, Type)\
             typedef detail::unspecified Type;
     #endif
 
@@ -81,7 +84,7 @@
             template<typename A0, typename A1>
             struct comma_result
             {
-                BOOST_PROTO_TYPEOF((detail::make<A0>(), detail::make<A1>()), type)
+                BOOST_PROTO_DECLTYPE_((detail::make<A0>(), detail::make<A1>()), type)
             };
 
             template<typename A0>
@@ -157,7 +160,7 @@
             static Expr &sexpr;\
             static Context &sctx;\
         public:\
-            BOOST_PROTO_TYPEOF(Op proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx), result_type)\
+            BOOST_PROTO_DECLTYPE_(Op proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx), result_type)\
             result_type operator()(Expr &expr, Context &ctx) const\
             {\
                 return Op proto::eval(proto::arg_c<0>(expr), ctx);\
@@ -175,7 +178,7 @@
             static Expr &sexpr;\
             static Context &sctx;\
         public:\
-            BOOST_PROTO_TYPEOF(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx) Op proto::eval(BOOST_PROTO_REF(proto::arg_c<1>(sexpr)), sctx), result_type)\
+            BOOST_PROTO_DECLTYPE_(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx) Op proto::eval(BOOST_PROTO_REF(proto::arg_c<1>(sexpr)), sctx), result_type)\
             result_type operator()(Expr &expr, Context &ctx) const\
             {\
                 return proto::eval(proto::arg_c<0>(expr), ctx) Op proto::eval(proto::arg_c<1>(expr), ctx);\
@@ -192,8 +195,8 @@
         BOOST_PROTO_UNARY_OP_RESULT(++, proto::tag::pre_inc)
         BOOST_PROTO_UNARY_OP_RESULT(--, proto::tag::pre_dec)
 
-        BOOST_PROTO_BINARY_OP_RESULT(<<, proto::tag::left_shift)
-        BOOST_PROTO_BINARY_OP_RESULT(>>, proto::tag::right_shift)
+        BOOST_PROTO_BINARY_OP_RESULT(<<, proto::tag::shift_left)
+        BOOST_PROTO_BINARY_OP_RESULT(>>, proto::tag::shift_right)
         BOOST_PROTO_BINARY_OP_RESULT(*, proto::tag::multiplies)
         BOOST_PROTO_BINARY_OP_RESULT(/, proto::tag::divides)
         BOOST_PROTO_BINARY_OP_RESULT(%, proto::tag::modulus)
@@ -213,8 +216,8 @@
         BOOST_PROTO_BINARY_OP_RESULT(->*, proto::tag::mem_ptr)
 
         BOOST_PROTO_BINARY_OP_RESULT(=, proto::tag::assign)
-        BOOST_PROTO_BINARY_OP_RESULT(<<=, proto::tag::left_shift_assign)
-        BOOST_PROTO_BINARY_OP_RESULT(>>=, proto::tag::right_shift_assign)
+        BOOST_PROTO_BINARY_OP_RESULT(<<=, proto::tag::shift_left_assign)
+        BOOST_PROTO_BINARY_OP_RESULT(>>=, proto::tag::shift_right_assign)
         BOOST_PROTO_BINARY_OP_RESULT(*=, proto::tag::multilpies_assign)
         BOOST_PROTO_BINARY_OP_RESULT(/=, proto::tag::divides_assign)
         BOOST_PROTO_BINARY_OP_RESULT(%=, proto::tag::modulus_assign)
@@ -249,7 +252,7 @@
             static Expr &sexpr;
             static Context &sctx;
         public:
-            BOOST_PROTO_TYPEOF(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx) ++, result_type)
+            BOOST_PROTO_DECLTYPE_(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx) ++, result_type)
             result_type operator()(Expr &expr, Context &ctx) const
             {
                 return proto::eval(proto::arg_c<0>(expr), ctx) ++;
@@ -264,7 +267,7 @@
             static Expr &sexpr;
             static Context &sctx;
         public:
-            BOOST_PROTO_TYPEOF(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx) --, result_type)
+            BOOST_PROTO_DECLTYPE_(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx) --, result_type)
             result_type operator()(Expr &expr, Context &ctx) const
             {
                 return proto::eval(proto::arg_c<0>(expr), ctx) --;
@@ -279,7 +282,7 @@
             static Expr &sexpr;
             static Context &sctx;
         public:
-            BOOST_PROTO_TYPEOF(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx)[proto::eval(BOOST_PROTO_REF(proto::arg_c<1>(sexpr)), sctx)], result_type)
+            BOOST_PROTO_DECLTYPE_(proto::eval(BOOST_PROTO_REF(proto::arg_c<0>(sexpr)), sctx)[proto::eval(BOOST_PROTO_REF(proto::arg_c<1>(sexpr)), sctx)], result_type)
             result_type operator()(Expr &expr, Context &ctx) const
             {
                 return proto::eval(proto::arg_c<0>(expr), ctx)[proto::eval(proto::arg_c<1>(expr), ctx)];
@@ -348,6 +351,9 @@
         };
 
     }}
+
+    #undef BOOST_PROTO_DECLTYPE_NESTED_TYPEDEF_TPL_
+    #undef BOOST_PROTO_DECLTYPE_
 
     #endif
 

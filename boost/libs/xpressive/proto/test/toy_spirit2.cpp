@@ -323,9 +323,9 @@ namespace boost { namespace spirit2
     // and wraps the result in a composite<> wrapper
     struct ToySpiritSequence
       : as_composite<
-            proto::tag::right_shift
+            proto::tag::shift_right
           , proto::trans::reverse_fold_to_list<
-                proto::right_shift<ToySpiritGrammar, ToySpiritGrammar>
+                proto::shift_right<ToySpiritGrammar, ToySpiritGrammar>
             >
         >
     {};
@@ -432,7 +432,7 @@ namespace boost { namespace spirit2
         }
 
         template<typename List>
-        bool operator()(composite<proto::tag::right_shift, List> const &sequence) const
+        bool operator()(composite<proto::tag::shift_right, List> const &sequence) const
         {
             return fusion::fold(sequence.elems, true, *this);
         }

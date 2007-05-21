@@ -114,7 +114,7 @@ Let's begin with the nickel tour of the utilities Proto provides.
                                     the argument is stored by reference.]]
     [[_terminal_, _unary_expr_,
         _binary_expr_, /etc./]  [Expression type generators. For example,
-                                    `right_shift<A, B>::type` is the type
+                                    `shift_right<A, B>::type` is the type
                                     of a right-shift expression with `A` and
                                     `B` as children. These are also used for
                                     specifying productions in meta-grammars.]]

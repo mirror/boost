@@ -110,7 +110,7 @@ namespace boost { namespace xpressive { namespace detail
     {};
 
     template<typename Expr>
-    struct width_of<Expr, proto::tag::right_shift>
+    struct width_of<Expr, proto::tag::shift_right>
       : BOOST_XPR_ADD_WIDTH_(
             width_of<typename proto::result_of::left<Expr>::type>
           , width_of<typename proto::result_of::right<Expr>::type>
