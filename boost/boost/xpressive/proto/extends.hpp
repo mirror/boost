@@ -198,7 +198,7 @@ namespace boost { namespace proto
         struct result\
         {\
             typedef\
-                typename boost::proto::generate<Domain, typename boost::proto::result_of::funop<Sig, Derived>::type>::type\
+                typename boost::proto::generate<Domain, typename boost::proto::result_of::funop<Sig, Derived >::type>::type\
             type;\
         };\
         /**/
