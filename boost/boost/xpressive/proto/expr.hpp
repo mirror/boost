@@ -287,8 +287,9 @@
             ///
             template<typename Sig>
             struct result
-              : result_of::funop<Sig, expr>
-            {};
+            {
+                typedef typename result_of::funop<Sig, expr>::type type;
+            };
 
             /// Function call
             ///
