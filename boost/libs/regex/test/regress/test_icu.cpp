@@ -39,8 +39,8 @@ class back_insert_iterator
 {
 private:
    Seq* container;
-   typedef const typename Seq::value_type value_type;
 public:
+   typedef const typename Seq::value_type value_type;
    typedef Seq                  container_type;
    typedef std::output_iterator_tag  iterator_category;
 

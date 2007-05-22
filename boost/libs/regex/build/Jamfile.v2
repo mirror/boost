@@ -45,6 +45,10 @@ rule check-icu-config ( )
             {
                gICU_CORE_LIB = icuuc ;
             }
+            else if [ GLOB $(dir)/lib : icuuc.* ]
+            {
+               gICU_CORE_LIB = icuuc ;
+            }
             else if [ GLOB $(dir)/lib : libicuuc.* ]
             {
                gICU_CORE_LIB = icuuc ;
@@ -181,6 +185,7 @@ lib boost_regex : ../src/$(SOURCES) $(ICU_EXTRA_SOURCE)
 	     <toolset>gcc-cygwin:<link>static
 	     $(BOOST_REGEX_ICU_OPTS)
     ;
+
 
 
 
