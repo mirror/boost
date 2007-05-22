@@ -22,10 +22,11 @@
 
 #   define  BOOST_PP_FILENAME_2 \
         <boost/fusion/functional/adapter/detail/pow2_explode.hpp>
-#   define  BOOST_PP_VALUE 1 << (N >> 4)
+#   define  BOOST_PP_VALUE (1 << N) >> 4 
 #   if BOOST_PP_VALUE > BOOST_PP_LIMIT_ITERATION
 #       error "Preprocessor limit exceeded."
 #   endif
+
 #   include BOOST_PP_ASSIGN_SLOT(2)
 #   define  BOOST_PP_ITERATION_LIMITS (0,BOOST_PP_DEC(BOOST_PP_SLOT_2()))
 #   include BOOST_PP_ITERATE()
