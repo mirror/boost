@@ -110,14 +110,10 @@ public:
     typedef cb_details::iterator< circular_buffer<T, Alloc>, cb_details::nonconst_traits<Alloc> > iterator;
 
     //! A const iterator used to iterate backwards through a <code>circular_buffer</code>.
-    typedef reverse_iterator<const_iterator> const_reverse_iterator;
+    typedef boost::reverse_iterator<const_iterator> const_reverse_iterator;
 
     //! An iterator used to iterate backwards through a <code>circular_buffer</code>.
-#if BOOST_WORKAROUND(__GNUC__, > 4) || BOOST_WORKAROUND(__GNUC__, == 4 && (__GNUC_MINOR__ >= 3))
-    typedef ::reverse_iterator<iterator> reverse_iterator;
-#else
-    typedef reverse_iterator<iterator> reverse_iterator;
-#endif
+    typedef boost::reverse_iterator<iterator> reverse_iterator;
 
 // Container specific types
 
