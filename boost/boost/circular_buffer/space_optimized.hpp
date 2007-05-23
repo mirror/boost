@@ -1300,7 +1300,11 @@ private:
     template <class Iterator>
     static size_type init_capacity(const capacity_type& capacity_ctrl, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
+#if BOOST_WORKAROUND(__BORLANDC__, > 0x551)
+        return init_capacity(capacity_ctrl, first, last, BOOST_ITERATOR_CATEGORY<Iterator>::type());
+#else
         return init_capacity(capacity_ctrl, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
+#endif
     }
 
     //! Specialized method for determining the initial capacity.

@@ -2002,7 +2002,11 @@ private:
     template <class Iterator>
     void initialize(Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
+#if BOOST_WORKAROUND(__BORLANDC__, > 0x551)
+        initialize(first, last, BOOST_ITERATOR_CATEGORY<Iterator>::type());
+#else
         initialize(first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
+#endif
     }
 
     //! Specialized initialize method.
@@ -2035,7 +2039,11 @@ private:
     template <class Iterator>
     void initialize(capacity_type capacity, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
+#if BOOST_WORKAROUND(__BORLANDC__, > 0x551)
+        initialize(capacity, first, last, BOOST_ITERATOR_CATEGORY<Iterator>::type());
+#else
         initialize(capacity, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
+#endif
     }
 
     //! Specialized initialize method.
@@ -2123,7 +2131,11 @@ private:
     template <class Iterator>
     void assign(Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
+#if BOOST_WORKAROUND(__BORLANDC__, > 0x551)
+        assign(first, last, BOOST_ITERATOR_CATEGORY<Iterator>::type());
+#else
         assign(first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
+#endif
     }
 
     //! Specialized assign method.
@@ -2156,7 +2168,11 @@ private:
     template <class Iterator>
     void assign(capacity_type new_capacity, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
+#if BOOST_WORKAROUND(__BORLANDC__, > 0x551)
+        assign(new_capacity, first, last, BOOST_ITERATOR_CATEGORY<Iterator>::type());
+#else
         assign(new_capacity, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
+#endif
     }
 
     //! Specialized assign method.
@@ -2265,7 +2281,11 @@ private:
     template <class Iterator>
     void insert(const iterator& pos, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
+#if BOOST_WORKAROUND(__BORLANDC__, > 0x551)
+        insert(pos, first, last, BOOST_ITERATOR_CATEGORY<Iterator>::type());
+#else
         insert(pos, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
+#endif
     }
 
     //! Specialized insert method.
@@ -2352,7 +2372,11 @@ private:
     template <class Iterator>
     void rinsert(const iterator& pos, Iterator first, Iterator last, const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
+#if BOOST_WORKAROUND(__BORLANDC__, > 0x551)
+        rinsert(pos, first, last, BOOST_ITERATOR_CATEGORY<Iterator>::type());
+#else
         rinsert(pos, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
+#endif
     }
 
     //! Specialized insert method.
