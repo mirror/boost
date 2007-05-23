@@ -17,6 +17,7 @@
     #include <boost/call_traits.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/expr.hpp>
+    #include <boost/xpressive/proto/generate.hpp>
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
     namespace boost { namespace proto
@@ -29,15 +30,14 @@
             template<typename Expr>
             struct deep_copy_impl<Expr, tag::terminal, 1>
             {
-                typedef typename terminal<
-                    typename result_of::arg<Expr>::type
-                >::type type;
+                typedef typename terminal<typename result_of::arg<Expr>::type>::type expr_type;
+                typedef typename generate<typename Expr::domain, expr_type>::type type;
 
                 template<typename Expr2>
                 static type call(Expr2 const &expr)
                 {
-                    type that = {proto::arg(expr)};
-                    return that;
+                    expr_type that = {proto::arg(expr)};
+                    return generate<typename Expr::domain, expr_type>::make(that);
                 }
             };
         }
@@ -76,10 +76,10 @@
         namespace detail
         {
         #define BOOST_PROTO_DEFINE_DEEP_COPY_TYPE(z, n, data)\
-            typename deep_copy_impl<typename Expr:: BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type) ::type>::type
+            typename deep_copy_impl<typename Expr::BOOST_PP_CAT(BOOST_PP_CAT(arg, n), _type)>::type
 
         #define BOOST_PROTO_DEFINE_DEEP_COPY_FUN(z, n, data)\
-            proto::deep_copy(expr.cast(). BOOST_PP_CAT(arg, n) .cast())
+            proto::deep_copy(expr.cast().BOOST_PP_CAT(arg, n))
 
         #define BOOST_PP_ITERATION_PARAMS_1 (3, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/deep_copy.hpp>))
 
@@ -103,15 +103,16 @@
             {
                 typedef expr<Tag, BOOST_PP_CAT(args, N)<
                     BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_TYPE, ~)
-                > > type;
+                > > expr_type;
+                typedef typename generate<typename Expr::domain, expr_type>::type type;
 
                 template<typename Expr2>
                 static type call(Expr2 const &expr)
                 {
-                    type that = {
+                    expr_type that = {
                         BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_FUN, ~)
                     };
-                    return that;
+                    return generate<typename Expr::domain, expr_type>::make(that);
                 }
             };
 
