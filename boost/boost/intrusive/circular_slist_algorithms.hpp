@@ -15,10 +15,7 @@
 #define BOOST_INTRUSIVE_CIRCULAR_SLIST_ALGORITHMS_HPP
 
 #include <boost/intrusive/detail/config_begin.hpp>
-#include <iterator>
-#include <boost/assert.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
-#include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <cstddef>
 
 namespace boost {
@@ -202,7 +199,8 @@ class circular_slist_algorithms
    //! <b>Throws</b>: Nothing.
    static void link_after(node_ptr prev_node, node_ptr this_node)
    {
-      NodeTraits::set_next(this_node, NodeTraits::get_next(prev_node));
+      node_ptr this_nxt = NodeTraits::get_next(prev_node);
+      NodeTraits::set_next(this_node, this_nxt);
       NodeTraits::set_next(prev_node, this_node);
    }
 

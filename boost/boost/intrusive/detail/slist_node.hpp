@@ -26,7 +26,6 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 #endif
-#include <cstddef>
 
 namespace boost {
 namespace intrusive {
@@ -154,21 +153,26 @@ class slist_iterator
    explicit slist_iterator(node_ptr node)
       : node_ (node)
    {}
-/*
+
+   #ifdef BOOST_INTRUSIVE_USE_ITERATOR_ENABLE_IF_CONVERTIBLE
    template <class OtherValue>
    slist_iterator(slist_iterator<OtherValue, ValueTraits> const& other
-                ,typename boost::enable_if<
+                 ,typename boost::enable_if<
                         boost::is_convertible<OtherValue*,T*>
                      , enabler
                      >::type = enabler()
-                 )
+                  )
       :  node_(other.pointed_node())
    {}
-*/
+   #else
    template <class OtherValue>
-   slist_iterator(slist_iterator<OtherValue, ValueTraits> const& other)
+   slist_iterator(slist_iterator<OtherValue, ValueTraits> const& other,
+                  typename enable_if<
+                        is_convertible<OtherValue*,T*>
+                  >::type* = 0)
       :  node_(other.pointed_node())
    {}
+   #endif
 
    const node_ptr &pointed_node() const
    { return node_; }

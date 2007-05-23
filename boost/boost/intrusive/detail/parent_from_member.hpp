@@ -21,11 +21,14 @@ namespace detail {
 template<class Parent, class Member>
 std::size_t offset_from_pointer_to_member(const Member Parent::* ptr_to_member)
 {
-   //This works with gcc and msvc
    //The implementation of a pointer to member is compiler dependent.
-   #if defined(BOOST_MSVC) || defined(__GNUC__) || defined(BOOST_INTEL)
+   #if defined(BOOST_MSVC)  || defined(__GNUC__) || \
+       defined(BOOST_INTEL) || defined(__HP_aCC) || \
+       defined(__EDG_VERSION__)
+   //This works with gcc, msvc, edg, ac++
    return *(const std::size_t*)(const void*)&ptr_to_member;
-   #else //CW 9.4
+   #else 
+   //This is the traditional C-front approach: CW 9.4, dmc
    return *(const std::size_t*)(const void*)&ptr_to_member - 1;
    #endif
 }

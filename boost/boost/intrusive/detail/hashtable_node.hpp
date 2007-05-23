@@ -18,9 +18,13 @@
 #include <boost/assert.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/circular_list_algorithms.hpp>
+#ifdef BOOST_INTRUSIVE_USE_ITERATOR_FACADE
 #include <boost/iterator/iterator_facade.hpp>
+#endif
+#ifdef BOOST_INTRUSIVE_USE_ITERATOR_ENABLE_IF_CONVERTIBLE
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_convertible.hpp>
+#endif
 #include <cstddef>
 
 namespace boost {
@@ -102,6 +106,8 @@ struct bucket_info_impl
    size_type   buckets_len_;
 };
 
+#ifdef BOOST_INTRUSIVE_USE_ITERATOR_FACADE
+
 template<class Value, class SlistImpl>
 class hashtable_iterator
   : public boost::iterator_facade
@@ -138,6 +144,8 @@ class hashtable_iterator
       :  local_it_ (ptr),   bucket_info_ (bucket_info)
    {}
 
+
+   #ifdef BOOST_INTRUSIVE_USE_ITERATOR_ENABLE_IF_CONVERTIBLE
    template <class OtherValue>
    hashtable_iterator(hashtable_iterator<OtherValue, SlistImpl> const& other
                      ,typename boost::enable_if<
@@ -147,6 +155,15 @@ class hashtable_iterator
                       )
       :  local_it_(other.local_it_), bucket_info_(other.bucket_info_)
    {}
+   #else
+   template <class OtherValue>
+   hashtable_iterator(hashtable_iterator<OtherValue, SlistImpl> const& other,
+                     typename enable_if<
+                           is_convertible<OtherValue*,T*>
+                     >::type* = 0)
+      :  local_it_(other.local_it_), bucket_info_(other.bucket_info_)
+   {}
+   #endif
 
    const local_iterator &local() const
    { return local_it_; }
@@ -194,6 +211,123 @@ class hashtable_iterator
    local_iterator          local_it_;
    const_bucket_info_ptr   bucket_info_;
 };
+
+#else
+
+template<class T, class SlistImpl>
+class hashtable_iterator
+  : public std::iterator<std::forward_iterator_tag, T>
+{
+   typedef typename SlistImpl::iterator                        local_iterator;
+   typedef typename SlistImpl::const_iterator                  const_local_iterator;
+   typedef typename SlistImpl::value_traits::node_ptr          node_ptr;
+   typedef typename SlistImpl::value_traits::const_node_ptr    const_node_ptr;
+
+   typedef bucket_type_impl<SlistImpl>                         bucket_type;
+   typedef typename boost::pointer_to_other
+      < typename SlistImpl::pointer, bucket_type>::type        bucket_ptr;
+   typedef typename boost::pointer_to_other
+      < typename SlistImpl::pointer, const bucket_type>::type  const_bucket_ptr;
+   typedef detail::bucket_info_impl<SlistImpl>                 bucket_info_t;
+   typedef typename boost::pointer_to_other
+      <bucket_ptr, bucket_info_t>::type                        bucket_info_ptr;
+   typedef typename boost::pointer_to_other
+      <bucket_ptr, const bucket_info_t>::type                  const_bucket_info_ptr;
+   typedef typename SlistImpl::size_type                       size_type;
+   struct enabler {};
+
+   public:
+   typedef T & reference;
+   typedef T * pointer;
+
+   hashtable_iterator ()
+   {}
+
+   explicit hashtable_iterator(local_iterator ptr, const_bucket_info_ptr bucket_info)
+      :  local_it_ (ptr),   bucket_info_ (bucket_info)
+   {}
+
+
+   #ifdef BOOST_INTRUSIVE_USE_ITERATOR_ENABLE_IF_CONVERTIBLE
+   template <class OtherValue>
+   hashtable_iterator(hashtable_iterator<OtherValue, SlistImpl> const& other
+                     ,typename boost::enable_if<
+                              boost::is_convertible<OtherValue*,T*>
+                           , enabler
+                           >::type = enabler()
+                      )
+      :  local_it_(other.local_it_), bucket_info_(other.bucket_info_)
+   {}
+   #else
+   template <class OtherValue>
+   hashtable_iterator(hashtable_iterator<OtherValue, SlistImpl> const& other,
+                     typename enable_if<
+                           is_convertible<OtherValue*,T*>
+                     >::type* = 0)
+      :  local_it_(other.local_it_), bucket_info_(other.bucket_info_)
+   {}
+   #endif
+
+   const local_iterator &local() const
+   { return local_it_; }
+
+   const_node_ptr pointed_node() const
+   { return local_it_.pointed_node(); }
+
+   const const_bucket_info_ptr &bucket_info() const
+   { return bucket_info_; }
+
+   public:
+   hashtable_iterator& operator++() 
+   { increment();   return *this;   }
+   
+   hashtable_iterator operator++(int)
+   {
+      hashtable_iterator result (*this);
+      increment();
+      return result;
+   }
+
+   friend bool operator== (const hashtable_iterator& i, const hashtable_iterator& i2)
+   { return i.pointed_node() == i2.pointed_node(); }
+
+   friend bool operator!= (const hashtable_iterator& i, const hashtable_iterator& i2)
+   { return !(i == i2); }
+
+   T& operator*() const
+   { return *local_it_; }
+
+   pointer operator->() const
+   { return &(*local_it_); }
+
+   private:
+   void increment()
+   {
+      size_type   buckets_len    = bucket_info_->buckets_len_;
+      const_bucket_ptr  buckets  = bucket_info_->buckets_;
+      const_local_iterator first = bucket_type::bucket_to_slist(buckets[0]).cend();
+      const_local_iterator last  = bucket_type::bucket_to_slist(buckets[buckets_len]).cend();
+
+      ++local_it_;
+      if(first.pointed_node() <= local_it_.pointed_node() && 
+         local_it_.pointed_node() <= last.pointed_node()){
+         size_type n_bucket = (size_type)
+               bucket_type::get_bucket_num(local_it_, buckets[0], buckets[buckets_len]);
+         do{
+            if (++n_bucket == buckets_len){
+               local_it_ = bucket_info_->buckets_->end();
+               break;
+            }
+            local_it_ = bucket_type::bucket_to_slist(bucket_info_->buckets_[n_bucket]).begin();
+         }
+         while (local_it_ == bucket_type::bucket_to_slist(bucket_info_->buckets_[n_bucket]).end());
+      }
+   }
+
+   local_iterator          local_it_;
+   const_bucket_info_ptr   bucket_info_;
+};
+#endif
 
 }  //namespace detail {
 }  //namespace intrusive {

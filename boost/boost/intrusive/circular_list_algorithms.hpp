@@ -15,10 +15,7 @@
 #define BOOST_INTRUSIVE_CIRCULAR_LIST_ALGORITHMS_HPP
 
 #include <boost/intrusive/detail/config_begin.hpp>
-#include <iterator>
-#include <boost/assert.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
-#include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <cstddef>
 
 namespace boost {
@@ -175,8 +172,10 @@ class circular_list_algorithms
    //! <b>Complexity</b>: Constant 
    //! 
    //! <b>Throws</b>: Nothing.
+/*
    static void swap_nodes(node_ptr this_node, node_ptr other_node)
    {
+
       if (other_node == this_node)
          return;
       bool empty1 = unique(this_node);
@@ -209,7 +208,8 @@ class circular_list_algorithms
          NodeTraits::set_previous(next_this, other_node);
       }
    }
-/*
+*/
+
    //Watanabe version
    private: 
    static void swap_prev(node_ptr this_node, node_ptr other_node) 
@@ -238,7 +238,7 @@ class circular_list_algorithms
       swap_next(this_node, other_node); 
       swap_prev(this_node, other_node); 
    }
-*/
+
    //! <b>Requires</b>: b and e must be nodes of the same circular list or an empty range.
    //!   and p must be a node of a different circular list or may not be an iterator in 
    //    [b, e).

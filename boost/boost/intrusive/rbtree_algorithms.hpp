@@ -40,11 +40,8 @@
 #define BOOST_INTRUSIVE_RBTREE_ALGORITHMS_HPP
 
 #include <boost/intrusive/detail/config_begin.hpp>
-#include <iterator>
 #include <boost/assert.hpp>
 #include <boost/intrusive/intrusive_fwd.hpp>
-#include <boost/intrusive/detail/pointer_to_other.hpp>
-#include <boost/type_traits/alignment_of.hpp>
 #include <cstddef>
 #include <boost/detail/no_exceptions_support.hpp>
 #include <boost/interprocess/detail/utilities.hpp>
@@ -66,7 +63,7 @@ namespace intrusive {
 //! 
 //! (2) when a node being deleted has two children its successor node is
 //! relinked into its place, rather than copied, so that the only
-//! iterators invalidated are those referring to the deleted node.
+//! pointers invalidated are those referring to the deleted node.
 //!
 //! rbtree_algorithms is configured with a NodeTraits class, which capsulates the
 //! information about the node to be manipulated. NodeTraits must support the

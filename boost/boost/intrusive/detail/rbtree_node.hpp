@@ -16,12 +16,8 @@
 
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <iterator>
-#include <boost/assert.hpp>
 #include <boost/intrusive/detail/pointer_to_other.hpp>
 #include <boost/intrusive/rbtree_algorithms.hpp>
-#include <boost/type_traits/alignment_of.hpp>
-#include <cstddef>
-#include <boost/detail/no_exceptions_support.hpp>
 #ifdef BOOST_INTRUSIVE_USE_ITERATOR_FACADE
 #include <boost/iterator/iterator_facade.hpp>
 #endif
@@ -219,6 +215,7 @@ class rbtree_iterator
       :  node_ (node)
    {}
 
+   #ifdef BOOST_INTRUSIVE_USE_ITERATOR_ENABLE_IF_CONVERTIBLE
    template <class OtherValue>
    rbtree_iterator(rbtree_iterator<OtherValue, ValueTraits> const& other
                 ,typename boost::enable_if<
@@ -228,6 +225,15 @@ class rbtree_iterator
                  )
       :  node_(other.pointed_node())
    {}
+   #else
+   template <class OtherValue>
+   rbtree_iterator(rbtree_iterator<OtherValue, ValueTraits> const& other,
+                  typename enable_if<
+                        is_convertible<OtherValue*,T*>
+                  >::type* = 0)
+      :  node_(other.pointed_node())
+   {}
+   #endif
 
    const node_ptr &pointed_node() const
    { return node_; }

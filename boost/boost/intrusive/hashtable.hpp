@@ -15,7 +15,6 @@
 #include <boost/intrusive/detail/config_begin.hpp>
 //std C++
 #include <functional>
-#include <iterator>
 #include <utility>
 #include <algorithm>
 //boost
@@ -33,7 +32,6 @@
 #include <boost/intrusive/unordered_set_hook.hpp>
 #include <boost/intrusive/slist.hpp>
 #include <cstddef>
-#include <iterator>
 
 namespace boost {
 namespace intrusive {
