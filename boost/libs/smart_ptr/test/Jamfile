@@ -36,6 +36,7 @@ DEPENDS all : smart_ptr ;
           [ run shared_ptr_alias_test.cpp ]
           [ run shared_ptr_rv_test.cpp ]
           [ run shared_ptr_move_test.cpp ]
+          [ compile-fail shared_ptr_pv_fail.cpp ]
         ;
     
     # this one is too slow to run unless explicitly requested, and ALL
