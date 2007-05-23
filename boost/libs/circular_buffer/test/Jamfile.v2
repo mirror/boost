@@ -13,5 +13,5 @@ test-suite "circular_buffer"
   : [ run base_test.cpp ]
     [ run space_optimized_test.cpp ]
     [ run soft_iterator_invalidation.cpp ]
-    [ compile bounded_buffer_comparison.cpp <threading>multi ]
+    [ compile bounded_buffer_comparison.cpp : <threading>multi : ]
   ;
