@@ -56,7 +56,7 @@ namespace boost { namespace fusion { namespace extension
         static type&
         call(Struct const& struct_)
         {
-            return struct_member<Struct, Key>::call(
+            return struct_assoc_member<Struct, Key>::call(
                 const_cast<Struct&>(struct_));
         }
     };
