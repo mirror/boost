@@ -10,8 +10,8 @@
 import testing ;
 
 test-suite "circular_buffer"
-  : [ run base_test.cpp ]
-    [ run space_optimized_test.cpp ]
-    [ run soft_iterator_invalidation.cpp ]
+  : [ run base_test.cpp : <threading>single : ]
+    [ run space_optimized_test.cpp : <threading>single : ]
+    [ run soft_iterator_invalidation.cpp : <threading>single : ]
     [ compile bounded_buffer_comparison.cpp : <threading>multi : ]
   ;
