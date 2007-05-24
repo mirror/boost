@@ -28,13 +28,12 @@ class shared_memory_data
          , boost::interprocess::offset_ptr<void> >  member_hook_t;
    member_hook_t list_hook_;
 };
-
 //]
 
 //[doc_offset_ptr_1
-
 #include <boost/interprocess/managed_shared_memory.hpp>
 #include <boost/interprocess/containers/vector.hpp>
+#include <boost/interprocess/allocators/allocator.hpp>
 
 //Definition of the shared memory friendly intrusive list
 typedef boost::intrusive::list< shared_memory_data::member_hook_t::
