@@ -11,6 +11,7 @@
 #include <list>
 #include <stack>
 #include <numeric>
+#include <boost/version.hpp>
 #include <boost/xpressive/xpressive_static.hpp>
 #include <boost/xpressive/regex_actions.hpp>
 #include <boost/test/unit_test.hpp>
@@ -66,8 +67,13 @@ void test3()
 
     std::list<int> result;
     std::string str("1 23 456 7890");
+#if BOOST_VERSION >= 103500
     sregex rx = (+_d)[ ref(result)->*push_back( as<int>(_) ) ] 
         >> *(' ' >> (+_d)[ ref(result)->*push_back( as<int>(_) ) ]);
+#else
+    sregex rx = (+_d)[ push_back(ref(result), as<int>(_) ) ] 
+        >> *(' ' >> (+_d)[ push_back(ref(result), as<int>(_) ) ]);
+#endif
 
     if(!regex_match(str, rx))
     {
