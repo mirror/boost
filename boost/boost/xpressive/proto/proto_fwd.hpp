@@ -16,6 +16,7 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
+#include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
 #include <boost/mpl/long.hpp>
 #include <boost/type_traits/remove_cv.hpp>
 #include <boost/type_traits/remove_reference.hpp>
@@ -245,6 +246,20 @@ namespace boost { namespace proto
 
         template<typename Expr, typename Context>
         struct eval;
+
+        template<
+            typename Tag
+            BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
+                BOOST_PROTO_MAX_ARITY
+              , typename A
+              , = void BOOST_PP_INTERCEPT
+            )
+          , typename _ = void
+        >
+        struct make_expr;
+
+        template<typename Tag, typename Sequence>
+        struct unpack_expr;
     }
 
     namespace detail
@@ -342,6 +357,18 @@ namespace boost { namespace proto
 
         template<long N>
         struct arg_c;
+
+        template<typename Tag>
+        struct make_expr;
+
+        template<typename Tag>
+        struct unpack_expr;
+
+        template<typename Tag>
+        struct unfused_expr_fun;
+
+        template<typename Tag>
+        struct unfused_expr;
     }
 
     namespace transform

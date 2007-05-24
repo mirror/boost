@@ -467,17 +467,7 @@ range(Char ch_min, Char ch_max)
 /// \brief Make a sub-expression optional. Equivalent to !as_xpr(expr).
 ///
 /// \param expr The sub-expression to make optional.
-template<typename Expr>
-inline typename proto::logical_not<
-    typename proto::result_of::as_arg<Expr const>::type
->::type const
-optional(Expr const &expr)
-{
-    typename proto::logical_not<
-        typename proto::result_of::as_arg<Expr const>::type
-    >::type that = {proto::as_arg(expr)};
-    return that;
-}
+proto::op::make_expr<proto::tag::logical_not> const optional = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Repeat a sub-expression multiple times.
@@ -491,37 +481,19 @@ optional(Expr const &expr)
 ///
 /// \param expr The sub-expression to repeat.
 template<unsigned int Min, unsigned int Max, typename Expr>
-inline typename proto::unary_expr
-<
-    detail::generic_quant_tag<Min, Max>
-  , typename proto::result_of::as_arg<Expr const>::type
->::type const
+typename proto::result_of::make_expr<detail::generic_quant_tag<Min, Max>, Expr const>::type const
 repeat(Expr const &expr)
 {
-    typename proto::unary_expr
-    <
-        detail::generic_quant_tag<Min, Max>
-      , typename proto::result_of::as_arg<Expr const>::type
-    >::type that = {proto::as_arg(expr)};
-    return that;
+    return proto::make_expr<detail::generic_quant_tag<Min, Max> >(expr);
 }
 
 /// \overload
 ///
 template<unsigned int Count, typename Expr2>
-inline typename proto::unary_expr
-<
-    detail::generic_quant_tag<Count, Count>
-  , typename proto::result_of::as_arg<Expr2 const>::type
->::type const
+typename proto::result_of::make_expr<detail::generic_quant_tag<Count, Count>, Expr2 const>::type const
 repeat(Expr2 const &expr2)
 {
-    typename proto::unary_expr
-    <
-        detail::generic_quant_tag<Count, Count>
-      , typename proto::result_of::as_arg<Expr2 const>::type
-    >::type that = {proto::as_arg(expr2)};
-    return that;
+    return proto::make_expr<detail::generic_quant_tag<Count, Count> >(expr2);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -534,21 +506,7 @@ repeat(Expr2 const &expr2)
 /// \attention keep(expr) is equivalent to the perl (?>...) extension.
 ///
 /// \param expr The sub-expression to modify.
-template<typename Expr>
-inline typename proto::unary_expr
-<
-    detail::keeper_tag
-  , typename proto::result_of::as_arg<Expr const>::type
->::type const
-keep(Expr const &expr)
-{
-    typename proto::unary_expr
-    <
-        detail::keeper_tag
-      , typename proto::result_of::as_arg<Expr const>::type
-    >::type that = {proto::as_arg(expr)};
-    return that;
-}
+proto::op::make_expr<detail::keeper_tag> const keep = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Look-ahead assertion.
@@ -563,21 +521,7 @@ keep(Expr const &expr)
 /// perl (?!...) extension.
 ///
 /// \param expr The sub-expression to put in the look-ahead assertion.
-template<typename Expr>
-inline typename proto::unary_expr
-<
-    detail::lookahead_tag
-  , typename proto::result_of::as_arg<Expr const>::type
->::type const
-before(Expr const &expr)
-{
-    typename proto::unary_expr
-    <
-        detail::lookahead_tag
-      , typename proto::result_of::as_arg<Expr const>::type
-    >::type that = {proto::as_arg(expr)};
-    return that;
-}
+proto::op::make_expr<detail::lookahead_tag> const before = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Look-behind assertion.
@@ -594,21 +538,7 @@ before(Expr const &expr)
 /// \param expr The sub-expression to put in the look-ahead assertion.
 ///
 /// \pre expr cannot match a variable number of characters.
-template<typename Expr>
-inline typename proto::unary_expr
-<
-    detail::lookbehind_tag
-  , typename proto::result_of::as_arg<Expr const>::type
->::type const
-after(Expr const &expr)
-{
-    typename proto::unary_expr
-    <
-        detail::lookbehind_tag
-      , typename proto::result_of::as_arg<Expr const>::type
-    >::type that = {proto::as_arg(expr)};
-    return that;
-}
+proto::op::make_expr<detail::lookbehind_tag> const after = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Specify a regex traits or a std::locale.
@@ -666,6 +596,11 @@ namespace detail
         ignore_unused(s7);
         ignore_unused(s8);
         ignore_unused(s9);
+        ignore_unused(as_xpr);
+        ignore_unused(optional);
+        ignore_unused(before);
+        ignore_unused(after);
+        ignore_unused(keep);
     }
 }
 

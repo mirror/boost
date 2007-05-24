@@ -24,6 +24,7 @@
 #include <boost/xpressive/proto/generate.hpp>
 #include <boost/xpressive/proto/operators.hpp>
 #include <boost/xpressive/proto/deep_copy.hpp>
+#include <boost/xpressive/proto/make_expr.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
 #endif
