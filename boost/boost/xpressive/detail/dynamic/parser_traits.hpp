@@ -34,11 +34,11 @@ namespace boost { namespace xpressive
 template<typename RegexTraits>
 struct compiler_traits
 {
-    typedef typename RegexTraits::char_type char_type;
-    typedef std::basic_string<char_type> string_type;
-    typedef typename string_type::const_iterator iterator_type;
     typedef RegexTraits regex_traits;
-    typedef typename RegexTraits::locale_type locale_type;
+    typedef typename regex_traits::char_type char_type;
+    typedef typename regex_traits::string_type string_type;
+    typedef typename regex_traits::locale_type locale_type;
+    typedef typename string_type::const_iterator iterator_type;
 
     ///////////////////////////////////////////////////////////////////////////////
     // constructor

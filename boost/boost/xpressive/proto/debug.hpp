@@ -88,7 +88,7 @@ namespace boost { namespace proto
     #undef BOOST_PROTO_DEFINE_TAG_NAME
     }
 
-    namespace op
+    namespace functional
     {
         // Display a proto expression tree
         struct display_expr
@@ -144,13 +144,13 @@ namespace boost { namespace proto
     template<typename Expr>
     void display_expr(Expr const &expr)
     {
-        op::display_expr()(expr);
+        functional::display_expr()(expr);
     }
 
     template<typename Expr>
     void display_expr(Expr const &expr, std::ostream &sout)
     {
-        op::display_expr(0, sout)(expr);
+        functional::display_expr(0, sout)(expr);
     }
 
 }}

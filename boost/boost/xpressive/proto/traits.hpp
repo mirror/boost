@@ -303,7 +303,7 @@
     #undef BOOST_PROTO_ARG
     #undef BOOST_PROTO_ARG_N_TYPE
 
-        namespace op
+        namespace functional
         {
             struct as_expr
             {
@@ -449,10 +449,10 @@
 
         }
 
-        op::as_expr const as_expr = {};
-        op::as_arg const as_arg = {};
-        op::left const left = {};
-        op::right const right = {};
+        functional::as_expr const as_expr = {};
+        functional::as_arg const as_arg = {};
+        functional::left const left = {};
+        functional::right const right = {};
 
         /// arg
         ///

@@ -433,7 +433,7 @@ icase(Expr const &expr)
 }
 #else
 // Re-use proto's as_expr function object as xpressive's as_xpr() function.
-proto::op::as_expr const as_xpr = {};
+proto::functional::as_expr const as_xpr = {};
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -467,7 +467,7 @@ range(Char ch_min, Char ch_max)
 /// \brief Make a sub-expression optional. Equivalent to !as_xpr(expr).
 ///
 /// \param expr The sub-expression to make optional.
-proto::op::make_expr<proto::tag::logical_not> const optional = {};
+proto::functional::make_expr<proto::tag::logical_not> const optional = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Repeat a sub-expression multiple times.
@@ -506,7 +506,7 @@ repeat(Expr2 const &expr2)
 /// \attention keep(expr) is equivalent to the perl (?>...) extension.
 ///
 /// \param expr The sub-expression to modify.
-proto::op::make_expr<detail::keeper_tag> const keep = {};
+proto::functional::make_expr<detail::keeper_tag> const keep = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Look-ahead assertion.
@@ -521,7 +521,7 @@ proto::op::make_expr<detail::keeper_tag> const keep = {};
 /// perl (?!...) extension.
 ///
 /// \param expr The sub-expression to put in the look-ahead assertion.
-proto::op::make_expr<detail::lookahead_tag> const before = {};
+proto::functional::make_expr<detail::lookahead_tag> const before = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Look-behind assertion.
@@ -538,7 +538,7 @@ proto::op::make_expr<detail::lookahead_tag> const before = {};
 /// \param expr The sub-expression to put in the look-ahead assertion.
 ///
 /// \pre expr cannot match a variable number of characters.
-proto::op::make_expr<detail::lookbehind_tag> const after = {};
+proto::functional::make_expr<detail::lookbehind_tag> const after = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Specify a regex traits or a std::locale.

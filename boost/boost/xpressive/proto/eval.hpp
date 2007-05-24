@@ -25,7 +25,7 @@ namespace boost { namespace proto
         };
     }
 
-    namespace op
+    namespace functional
     {
         struct eval
         {
@@ -56,7 +56,7 @@ namespace boost { namespace proto
         };
     }
 
-    op::eval const eval = {};
+    functional::eval const eval = {};
 }}
 
 #endif

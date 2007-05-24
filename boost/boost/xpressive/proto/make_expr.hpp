@@ -106,7 +106,7 @@
             };
         }
 
-        namespace op
+        namespace functional
         {
             template<typename Tag>
             struct make_expr

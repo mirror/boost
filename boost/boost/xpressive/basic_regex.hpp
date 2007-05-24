@@ -46,7 +46,7 @@ private:
 public:
     typedef BidiIter iterator_type;
     typedef typename iterator_value<BidiIter>::type char_type;
-    typedef std::basic_string<char_type> string_type;
+    typedef typename detail::string_type<char_type>::type string_type;
     typedef regex_constants::syntax_option_type flag_type;
 
     /// \post regex_id()    == 0

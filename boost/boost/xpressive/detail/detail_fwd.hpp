@@ -14,6 +14,8 @@
 #endif
 
 #include <map>
+#include <string>
+#include <vector>
 #include <climits> // for INT_MAX
 #include <typeinfo>
 #include <boost/mpl/bool.hpp>
@@ -360,6 +362,26 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename BidiIter>
     void make_optional(quant_spec const &spec, sequence<BidiIter> &seq, int mark_nbr);
+
+    template<typename Char>
+    struct string_type
+    {
+        typedef std::vector<Char> type;
+    };
+
+    template<>
+    struct string_type<char>
+    {
+        typedef std::string type;
+    };
+
+    #ifndef BOOST_XPRESSIVE_NO_WREGEX
+    template<>
+    struct string_type<wchar_t>
+    {
+        typedef std::wstring type;
+    };
+    #endif
 
 }}} // namespace boost::xpressive::detail
 

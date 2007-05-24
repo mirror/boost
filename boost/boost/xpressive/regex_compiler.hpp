@@ -45,11 +45,11 @@ struct regex_compiler
 {
     typedef BidiIter iterator_type;
     typedef typename iterator_value<BidiIter>::type char_type;
-    typedef std::basic_string<char_type> string_type;
     typedef regex_constants::syntax_option_type flag_type;
     typedef RegexTraits traits_type;
-    typedef typename traits_type::char_class_type char_class_type;
+    typedef typename traits_type::string_type string_type;
     typedef typename traits_type::locale_type locale_type;
+    typedef typename traits_type::char_class_type char_class_type;
 
     explicit regex_compiler(RegexTraits const &traits = RegexTraits())
       : mark_count_(0)

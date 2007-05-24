@@ -114,7 +114,7 @@ namespace boost { namespace proto
         };
     }
 
-    namespace op
+    namespace functional
     {
         struct unref
         {
@@ -152,7 +152,7 @@ namespace boost { namespace proto
         };
     }
 
-    op::unref const unref = {};
+    functional::unref const unref = {};
 }}
 
 #endif

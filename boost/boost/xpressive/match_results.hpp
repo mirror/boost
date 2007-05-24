@@ -236,7 +236,7 @@ private:
 
 public:
     typedef typename iterator_value<BidiIter>::type char_type;
-    typedef std::basic_string<char_type> string_type;
+    typedef typename detail::string_type<char_type>::type string_type;
     typedef std::size_t size_type;
     typedef sub_match<BidiIter> value_type;
     typedef typename iterator_difference<BidiIter>::type difference_type;

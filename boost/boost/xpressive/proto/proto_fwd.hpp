@@ -342,7 +342,7 @@ namespace boost { namespace proto
     template<typename Domain, typename Expr, typename EnableIf = void>
     struct is_allowed;
 
-    namespace op
+    namespace functional
     {
         struct compile;
         struct left;

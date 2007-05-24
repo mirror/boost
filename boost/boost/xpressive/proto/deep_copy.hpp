@@ -50,7 +50,7 @@
             {};
         }
 
-        namespace op
+        namespace functional
         {
             struct deep_copy
             {
@@ -71,7 +71,7 @@
             };
         }
 
-        op::deep_copy const deep_copy = {};
+        functional::deep_copy const deep_copy = {};
 
         namespace detail
         {

@@ -52,12 +52,14 @@ struct traits
 template<typename Char>
 struct named_mark
 {
-    named_mark(std::basic_string<Char> name, std::size_t mark_nbr)
+    typedef typename detail::string_type<Char>::type string_type;
+
+    named_mark(string_type name, std::size_t mark_nbr)
       : name_(name)
       , mark_nbr_(mark_nbr)
     {}
 
-    std::basic_string<Char> name_;
+    string_type name_;
     std::size_t mark_nbr_;
 };
 
