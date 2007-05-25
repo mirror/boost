@@ -71,7 +71,7 @@ class forced_extractor<Key,Key,KeyToBase>
         const_set_view_iterator<                                              \
                     BOOST_DEDUCED_TYPENAME CORE_INDEX::const_iterator   >,    \
     ::boost::bimaps::detail::                                                 \
-        const_set_view_iterator<                                              \
+              set_view_iterator<                                              \
                     BOOST_DEDUCED_TYPENAME CORE_INDEX::OTHER_ITER       >,    \
     ::boost::bimaps::detail::                                                 \
         const_set_view_iterator<                                              \
@@ -115,7 +115,7 @@ class forced_extractor<Key,Key,KeyToBase>
         const_set_view_iterator<                                              \
                     BOOST_DEDUCED_TYPENAME CORE_INDEX::const_iterator   >,    \
     ::boost::bimaps::detail::                                                 \
-        const_set_view_iterator<                                              \
+              set_view_iterator<                                              \
                     BOOST_DEDUCED_TYPENAME CORE_INDEX::OTHER_ITER       >,    \
     ::boost::bimaps::detail::                                                 \
         const_set_view_iterator<                                              \

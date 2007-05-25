@@ -130,15 +130,15 @@ struct const_set_view_iterator_base
 {
     typedef iterator_adaptor
     <
-        set_view_iterator< CoreIterator >,
+        const_set_view_iterator< CoreIterator >,
         CoreIterator,
         BOOST_DEDUCED_TYPENAME remove_reference
         <
-            BOOST_DEDUCED_TYPENAME CoreIterator::value_type::above_view_reference
+            BOOST_DEDUCED_TYPENAME CoreIterator::value_type::const_above_view_reference
 
         >::type,
         ::boost::use_default,
-        BOOST_DEDUCED_TYPENAME CoreIterator::value_type::above_view_reference
+        BOOST_DEDUCED_TYPENAME CoreIterator::value_type::const_above_view_reference
 
     > type;
 };
