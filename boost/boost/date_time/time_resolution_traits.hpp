@@ -120,11 +120,10 @@ namespace date_time {
                    + (fractional_seconds_type(minutes)*60) 
                    + seconds)*res_adjust()) + fs) * -1);
       }
-      else{
-        return (((fractional_seconds_type(hours)*3600) 
-                 + (fractional_seconds_type(minutes)*60) 
-                 + seconds)*res_adjust()) + fs;
-      }
+
+      return (((fractional_seconds_type(hours)*3600) 
+               + (fractional_seconds_type(minutes)*60) 
+               + seconds)*res_adjust()) + fs;
     }
     
   };
