@@ -1,0 +1,48 @@
+[/license
+
+Boost.Bimap
+
+Copyright (c) 2006-2007 Matias Capeletto
+
+Distributed under the Boost Software License, Version 1.0.
+(See accompanying file LICENSE_1_0.txt or copy at
+http://www.boost.org/LICENSE_1_0.txt)
+
+]
+
+[/ QuickBook Document version 1.4 ]
+
+[section Future work]
+
+
+[heading Rearrange Function]
+
+Boost.MultiIndex includes some others functions that can be included in the views.
+
+
+[heading Hooking Data]
+
+In general, programmers use maps to access information quickly.
+Boost.Bimap will allow the user to hook data inside the bimap so it is not
+necessary to maintain another map. This a possible code example:
+
+
+    typedef bimap< int, string, hook_data< string > > bm_type;
+    bm_type bm;
+
+    //...
+
+    bm.left_map.data(28928546) = "teacher";
+    bm.right_map.data("John Gray") = "singer";
+
+    bm_type::left_iterator iter = bm.left_map.find(23345647);
+    iter->data = "programmer";
+
+    bm_type::iterator iter = bm.find( bm_type::pair_by<member_at::left>(23345647,"Green Dert") );
+    iter->data = "student";
+
+    bm.insert( bm_type::value_type_by<member_at::left>(1456783342,"Fred Bypass","unemployed") );
+
+
+
+[endsect]

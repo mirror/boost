@@ -1,0 +1,60 @@
+# Boost.Bimap
+#
+# Copyright (c) 2006-2007 Matias Capeletto
+#
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+
+import quickbook ;
+
+xml bimap
+    :
+        bimap.qbk
+    ;
+
+boostbook standalone
+    :
+        bimap
+    :
+        <xsl:param>toc.max.depth=4
+        <xsl:param>toc.section.depth=4
+        <xsl:param>chunk.section.depth=2
+    ;
+
+# This generate the doxydocs and write "bimap.hdt". Delete this file if you want to regenerate the doxydocs again
+# TODO: Learn how to call user doxygen path rather than doxygen directly.
+
+import directdoxygen ;
+
+html-doxydocs bimap.hdt : bimap.hdf ;
+
+# Apply style...
+# TODO: Learn how to call user copy utility path rather than cp directly.
+
+import notfile ;
+
+notfile apply_style : @apply ;
+actions apply
+{
+    mkdir html/images
+    mkdir html/images/toc
+    mkdir html/images/bimap
+    mkdir html/images/extern
+    mkdir html/images/people
+    mkdir html/images/callouts
+    cp style/template/images/*.png html/images/
+    cp style/template/images/toc/*.png html/images/toc/
+    cp style/template/images/bimap/*.png html/images/bimap/
+    cp style/template/images/extern/*.png html/images/extern/
+    cp style/template/images/people/*.png html/images/people/
+    cp style/template/images/callouts/*.png html/images/callouts/
+    cp style/template/boostbook.css html/boostbook.css
+    cp style/template/index.html html/index.html
+    cp style/template/doxydoc/doxygen.css html/doxydoc/doxygen.css
+    cp style/template/doxydoc/tabs.css html/doxydoc/tabs.css
+    cp style/template/doxydoc/tab_r.gif html/doxydoc/tab_r.gif
+    cp style/template/doxydoc/tab_l.gif html/doxydoc/tab_l.gif
+    cp style/template/doxydoc/tab_b.gif html/doxydoc/tab_b.gif
+}
+

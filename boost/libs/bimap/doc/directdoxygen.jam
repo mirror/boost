@@ -1,0 +1,13 @@
+import type ;
+import generators ;
+
+type.register HTML_DOXYFILE : hdf ;
+type.register HTML_DOXYDOCS : hdt ;
+
+generators.register-standard directdoxygen.run : HTML_DOXYFILE : HTML_DOXYDOCS ;
+
+actions run
+{
+    "doxygen" $(>)
+    echo "Stamped" > "$(<)"
+}
