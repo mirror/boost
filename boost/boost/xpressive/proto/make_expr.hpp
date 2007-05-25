@@ -15,6 +15,7 @@
     #include <boost/preprocessor/cat.hpp>
     #include <boost/preprocessor/iterate.hpp>
     #include <boost/preprocessor/facilities/intercept.hpp>
+    #include <boost/preprocessor/tuple/elem.hpp>
     #include <boost/preprocessor/repetition/enum.hpp>
     #include <boost/preprocessor/repetition/enum_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
@@ -35,23 +36,31 @@
     #include <boost/xpressive/proto/detail/suffix.hpp>
 
     #define BOOST_PROTO_AS_ARG_TYPE(Z, N, DATA)                                                     \
-        typename proto::result_of::as_arg<BOOST_PP_CAT(DATA, N)>::type                              \
+        typename proto::result_of::as_arg<                                                          \
+            BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2, 0, DATA), N)                                        \
+          , BOOST_PP_TUPLE_ELEM(2, 1, DATA)                                                         \
+        >::type                                                                                     \
         /**/
 
     #define BOOST_PROTO_AS_ARG(Z, N, DATA)                                                          \
-        proto::as_arg(BOOST_PP_CAT(DATA, N))                                                        \
+        proto::as_arg<BOOST_PP_TUPLE_ELEM(2, 1, DATA) >(                                            \
+            BOOST_PP_CAT(BOOST_PP_TUPLE_ELEM(2, 0, DATA), N)                                        \
+        )                                                                                           \
         /**/
 
     #define BOOST_PROTO_AT_TYPE(Z, N, DATA)                                                         \
         typename result_of::as_arg<                                                                 \
             typename remove_reference<                                                              \
-                typename fusion::result_of::value_at_c<DATA, N >::type                              \
+                typename fusion::result_of::value_at_c<BOOST_PP_TUPLE_ELEM(2, 0, DATA), N >::type   \
             >::type                                                                                 \
+          , BOOST_PP_TUPLE_ELEM(2, 1, DATA)                                                         \
         >::type                                                                                     \
         /**/
 
     #define BOOST_PROTO_AT(Z, N, DATA)                                                              \
-        proto::as_arg(fusion::at_c<N >(DATA))                                                       \
+        proto::as_arg<BOOST_PP_TUPLE_ELEM(2, 1, DATA) >(                                            \
+            fusion::at_c<N >(BOOST_PP_TUPLE_ELEM(2, 0, DATA))                                       \
+        )                                                                                           \
         /**/
 
     namespace boost { namespace fusion
@@ -62,14 +71,14 @@
 
     namespace boost { namespace proto
     {
-        namespace result_of
+        namespace detail
         {
             template<typename Tag, typename Domain, typename Sequence, std::size_t Size>
-            struct unpack_expr_detail
+            struct unpack_expr_
             {};
 
             template<typename Domain, typename Sequence>
-            struct unpack_expr_detail<tag::terminal, Domain, Sequence, 1u>
+            struct unpack_expr_<tag::terminal, Domain, Sequence, 1u>
             {
                 typedef expr<
                     tag::terminal
@@ -91,11 +100,11 @@
                 BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(BOOST_PROTO_MAX_ARITY, typename A, = void BOOST_PP_INTERCEPT)
               , typename _ = void
             >
-            struct make_expr_detail
+            struct make_expr_
             {};
 
             template<typename Domain, typename A>
-            struct make_expr_detail<tag::terminal, Domain, A>
+            struct make_expr_<tag::terminal, Domain, A>
             {
                 typedef typename add_reference<A>::type reference;
                 typedef expr<tag::terminal, args1<reference> > expr_type;
@@ -113,27 +122,29 @@
             /**/
 
         #include BOOST_PP_ITERATE()
+        }
 
+        namespace result_of
+        {
             template<typename Tag, typename Sequence, typename, typename>
             struct unpack_expr
-              : unpack_expr_detail<Tag, default_domain, Sequence, fusion::result_of::size<Sequence>::type::value>
+              : detail::unpack_expr_<Tag, default_domain, Sequence, fusion::result_of::size<Sequence>::type::value>
             {};
 
             template<typename Tag, typename Domain, typename Sequence>
             struct unpack_expr<Tag, Domain, Sequence, typename Domain::boost_proto_is_domain_>
-              : unpack_expr_detail<Tag, Domain, Sequence, fusion::result_of::size<Sequence>::type::value>
+              : detail::unpack_expr_<Tag, Domain, Sequence, fusion::result_of::size<Sequence>::type::value>
             {};
 
             template<typename Tag BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, typename A), typename, typename>
             struct make_expr
-              : make_expr_detail<Tag, default_domain BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, A) >
+              : detail::make_expr_<Tag, default_domain BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, A) >
             {};
 
             template<typename Tag, typename Domain BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, typename A) >
             struct make_expr<Tag, Domain BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, A), typename Domain::boost_proto_is_domain_>
-              : make_expr_detail<Tag, Domain BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, A) >
+              : detail::make_expr_<Tag, Domain BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, A) >
             {};
-
         }
 
         namespace functional
@@ -272,11 +283,11 @@
     #define N BOOST_PP_ITERATION()
 
         template<typename Tag, typename Domain BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-        struct make_expr_detail<Tag, Domain BOOST_PP_ENUM_TRAILING_PARAMS(N, A) >
+        struct make_expr_<Tag, Domain BOOST_PP_ENUM_TRAILING_PARAMS(N, A) >
         {
             typedef expr<
                 Tag
-              , BOOST_PP_CAT(args, N)<BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG_TYPE, A) >
+              , BOOST_PP_CAT(args, N)<BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG_TYPE, (A, Domain)) >
             > expr_type;
 
             typedef typename generate<Domain, expr_type>::type type;
@@ -284,18 +295,18 @@
             static type const call(BOOST_PP_ENUM_BINARY_PARAMS(N, A, &a))
             {
                 expr_type that = {
-                    BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG, a)
+                    BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG, (a, Domain))
                 };
                 return generate<Domain, expr_type>::make(that);
             }
         };
 
         template<typename Tag, typename Domain, typename Sequence>
-        struct unpack_expr_detail<Tag, Domain, Sequence, N>
+        struct unpack_expr_<Tag, Domain, Sequence, N>
         {
             typedef expr<
                 Tag
-              , BOOST_PP_CAT(args, N)<BOOST_PP_ENUM(N, BOOST_PROTO_AT_TYPE, Sequence const) >
+              , BOOST_PP_CAT(args, N)<BOOST_PP_ENUM(N, BOOST_PROTO_AT_TYPE, (Sequence const, Domain)) >
             > expr_type;
 
             typedef typename generate<Domain, expr_type>::type type;
@@ -303,7 +314,7 @@
             static type const call(Sequence const &sequence)
             {
                 expr_type that = {
-                    BOOST_PP_ENUM(N, BOOST_PROTO_AT, sequence)
+                    BOOST_PP_ENUM(N, BOOST_PROTO_AT, (sequence, Domain))
                 };
                 return generate<Domain, expr_type>::make(that);
             }

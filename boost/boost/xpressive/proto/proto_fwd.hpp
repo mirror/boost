@@ -220,14 +220,11 @@ namespace boost { namespace proto
 
     namespace result_of
     {
-        template<typename T, typename EnableIf = void>
+        template<typename T, typename Domain = default_domain, typename EnableIf = void>
         struct as_expr;
 
-        template<typename T, typename EnableIf = void>
+        template<typename T, typename Domain = default_domain, typename EnableIf = void>
         struct as_arg;
-
-        template<typename Expr, typename State, typename Visitor, typename DomainTag>
-        struct compile;
 
         template<typename Expr, typename N = mpl::long_<0> >
         struct arg;
@@ -351,10 +348,14 @@ namespace boost { namespace proto
         struct compile;
         struct left;
         struct right;
-        struct as_expr;
-        struct as_arg;
         struct unref;
         struct deep_copy;
+
+        template<typename Domain = default_domain>
+        struct as_expr;
+
+        template<typename Domain = default_domain>
+        struct as_arg;
 
         template<typename N = mpl::long_<0> >
         struct arg;

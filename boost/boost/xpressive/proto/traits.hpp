@@ -42,8 +42,10 @@
 
     #if BOOST_WORKAROUND( BOOST_MSVC, == 1310 )
         #define BOOST_PROTO_IS_ARRAY_(T) boost::is_array<typename boost::remove_const<T>::type>
+        #define BOOST_PROTO_WITH_ALIAS_(X,Y) template<typename Y>
     #else
         #define BOOST_PROTO_IS_ARRAY_(T) boost::is_array<T>
+        #define BOOST_PROTO_WITH_ALIAS_(X,Y) typedef X Y;
     #endif
 
     #if BOOST_WORKAROUND( BOOST_MSVC, == 1400 )
@@ -79,7 +81,7 @@
         namespace result_of
         {
             // as_expr
-            template<typename T, typename EnableIf>
+            template<typename T, typename Domain, typename EnableIf>
             struct as_expr
             {
                 typedef typename mpl::if_<
@@ -88,54 +90,54 @@
                   , typename remove_cv<T>::type
                 >::type arg0_type;
 
-                typedef expr<proto::tag::terminal, args1<arg0_type> > type;
+                typedef expr<proto::tag::terminal, args1<arg0_type> > expr_type;
+                typedef typename generate<Domain, expr_type>::type type;
                 typedef type result_type;
 
-            #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
-                template<typename T2>
+                BOOST_PROTO_WITH_ALIAS_(T, T2)
                 static result_type call(T2 &t)
                 {
-                    return type::make(t);
+                    return generate<Domain, expr_type>::make(expr_type::make(t));
                 }
-            #else
-                static result_type call(T &t)
-                {
-                    return type::make(t);
-                }
-            #endif
             };
 
-            template<typename T>
-            struct as_expr<T, typename T::is_boost_proto_expr_>
+            template<typename T, typename Domain>
+            struct as_expr<T, Domain, typename T::is_boost_proto_expr_>
             {
                 typedef typename T::boost_proto_expr_type_ type;
                 typedef T &result_type;
 
-            #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
-                template<typename T2>
+                BOOST_PROTO_WITH_ALIAS_(T, T2)
                 static result_type call(T2 &t)
                 {
                     return t;
                 }
-            #else
-                static result_type call(T &t)
-                {
-                    return t;
-                }
-            #endif
             };
 
             // as_arg
-            template<typename T, typename EnableIf>
+            template<typename T, typename Domain, typename EnableIf>
             struct as_arg
             {
-                typedef expr<proto::tag::terminal, args1<T &> > type;
+                typedef expr<proto::tag::terminal, args1<T &> > expr_type;
+                typedef typename generate<Domain, expr_type>::type type;
+
+                BOOST_PROTO_WITH_ALIAS_(T, T2)
+                static type call(T2 &t)
+                {
+                    return generate<Domain, expr_type>::make(expr_type::make(t));
+                }
             };
 
-            template<typename T>
-            struct as_arg<T, typename T::is_boost_proto_expr_>
+            template<typename T, typename Domain>
+            struct as_arg<T, Domain, typename T::is_boost_proto_expr_>
             {
                 typedef ref_<T> type;
+
+                BOOST_PROTO_WITH_ALIAS_(T, T2)
+                static type call(T2 &t)
+                {
+                    return type::make(t);
+                }
             };
 
             template<typename Expr, typename N>
@@ -305,6 +307,7 @@
 
         namespace functional
         {
+            template<typename Domain>
             struct as_expr
             {
                 template<typename Sig>
@@ -312,22 +315,25 @@
 
                 template<typename This, typename T>
                 struct result<This(T)>
-                  : result_of::as_expr<typename remove_reference<T>::type>
+                  : result_of::as_expr<typename remove_reference<T>::type, Domain>
                 {};
 
                 template<typename T>
-                typename result_of::as_expr<T>::result_type operator()(T &t) const
+                typename result_of::as_expr<T, Domain>::result_type
+                operator ()(T &t) const
                 {
-                    return result_of::as_expr<T>::call(t);
+                    return result_of::as_expr<T, Domain>::call(t);
                 }
 
                 template<typename T>
-                typename result_of::as_expr<T const>::result_type operator()(T const &t) const
+                typename result_of::as_expr<T const, Domain>::result_type
+                operator ()(T const &t) const
                 {
-                    return result_of::as_expr<T const>::call(t);
+                    return result_of::as_expr<T const, Domain>::call(t);
                 }
             };
 
+            template<typename Domain>
             struct as_arg
             {
                 template<typename Sig>
@@ -335,21 +341,21 @@
 
                 template<typename This, typename T>
                 struct result<This(T)>
-                  : result_of::as_arg<typename remove_reference<T>::type>
+                  : result_of::as_arg<typename remove_reference<T>::type, Domain>
                 {};
 
                 template<typename T>
-                typename result_of::as_arg<T>::type operator()(T &t) const
+                typename result_of::as_arg<T, Domain>::type
+                operator ()(T &t) const
                 {
-                    typename result_of::as_arg<T>::type that = {t};
-                    return that;
+                    return result_of::as_arg<T, Domain>::call(t);
                 }
 
                 template<typename T>
-                typename result_of::as_arg<T const>::type operator()(T const &t) const
+                typename result_of::as_arg<T const, Domain>::type
+                operator ()(T const &t) const
                 {
-                    typename result_of::as_arg<T const>::type that = {t};
-                    return that;
+                    return result_of::as_arg<T const, Domain>::call(t);
                 }
             };
 
@@ -365,13 +371,13 @@
                 {};
 
                 template<typename Expr>
-                typename result_of::arg_c<Expr, N>::reference operator()(Expr &expr) const
+                typename result_of::arg_c<Expr, N>::reference operator ()(Expr &expr) const
                 {
                     return result_of::arg_c<Expr, N>::call(expr);
                 }
 
                 template<typename Expr>
-                typename result_of::arg_c<Expr, N>::const_reference operator()(Expr const &expr) const
+                typename result_of::arg_c<Expr, N>::const_reference operator ()(Expr const &expr) const
                 {
                     return result_of::arg_c<Expr, N>::call(expr);
                 }
@@ -389,13 +395,13 @@
                 {};
 
                 template<typename Expr>
-                typename result_of::arg<Expr, N>::reference operator()(Expr &expr) const
+                typename result_of::arg<Expr, N>::reference operator ()(Expr &expr) const
                 {
                     return result_of::arg<Expr, N>::call(expr);
                 }
 
                 template<typename Expr>
-                typename result_of::arg<Expr, N>::const_reference operator()(Expr const &expr) const
+                typename result_of::arg<Expr, N>::const_reference operator ()(Expr const &expr) const
                 {
                     return result_of::arg<Expr, N>::call(expr);
                 }
@@ -412,13 +418,13 @@
                 {};
 
                 template<typename Expr>
-                typename result_of::left<Expr>::reference operator()(Expr &expr) const
+                typename result_of::left<Expr>::reference operator ()(Expr &expr) const
                 {
                     return proto::unref(expr.cast().arg0);
                 }
 
                 template<typename Expr>
-                typename result_of::left<Expr>::const_reference operator()(Expr const &expr) const
+                typename result_of::left<Expr>::const_reference operator ()(Expr const &expr) const
                 {
                     return proto::unref(expr.cast().arg0);
                 }
@@ -435,13 +441,13 @@
                 {};
 
                 template<typename Expr>
-                typename result_of::right<Expr>::reference operator()(Expr &expr) const
+                typename result_of::right<Expr>::reference operator ()(Expr &expr) const
                 {
                     return proto::unref(expr.cast().arg1);
                 }
 
                 template<typename Expr>
-                typename result_of::right<Expr>::const_reference operator()(Expr const &expr) const
+                typename result_of::right<Expr>::const_reference operator ()(Expr const &expr) const
                 {
                     return proto::unref(expr.cast().arg1);
                 }
@@ -449,10 +455,80 @@
 
         }
 
-        functional::as_expr const as_expr = {};
-        functional::as_arg const as_arg = {};
         functional::left const left = {};
         functional::right const right = {};
+
+        /// as_expr
+        ///
+        template<typename T>
+        typename result_of::as_expr<T>::result_type
+        as_expr(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T))
+        {
+            return result_of::as_expr<T>::call(t);
+        }
+
+        /// \overload
+        ///
+        template<typename T>
+        typename result_of::as_expr<T const>::result_type
+        as_expr(T const &t)
+        {
+            return result_of::as_expr<T const>::call(t);
+        }
+
+        /// \overload
+        ///
+        template<typename Domain, typename T>
+        typename result_of::as_expr<T, Domain>::result_type
+        as_expr(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T))
+        {
+            return result_of::as_expr<T, Domain>::call(t);
+        }
+
+        /// \overload
+        ///
+        template<typename Domain, typename T>
+        typename result_of::as_expr<T const, Domain>::result_type
+        as_expr(T const &t)
+        {
+            return result_of::as_expr<T const, Domain>::call(t);
+        }
+
+        /// as_arg
+        ///
+        template<typename T>
+        typename result_of::as_arg<T>::type
+        as_arg(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T))
+        {
+            return result_of::as_arg<T>::call(t);
+        }
+
+        /// \overload
+        ///
+        template<typename T>
+        typename result_of::as_arg<T const>::type
+        as_arg(T const &t)
+        {
+            return result_of::as_arg<T const>::call(t);
+        }
+
+        /// \overload
+        ///
+        template<typename Domain, typename T>
+        typename result_of::as_arg<T, Domain>::type
+        as_arg(T &t BOOST_PROTO_DISABLE_IF_IS_CONST(T))
+        {
+            return result_of::as_arg<T, Domain>::call(t);
+        }
+
+        /// \overload
+        ///
+        template<typename Domain, typename T>
+        typename result_of::as_arg<T const, Domain>::type
+        as_arg(T const &t)
+        {
+            return result_of::as_arg<T const, Domain>::call(t);
+        }
 
         /// arg
         ///

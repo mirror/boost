@@ -433,7 +433,7 @@ icase(Expr const &expr)
 }
 #else
 // Re-use proto's as_expr function object as xpressive's as_xpr() function.
-proto::functional::as_expr const as_xpr = {};
+proto::functional::as_expr<> const as_xpr = {};
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
