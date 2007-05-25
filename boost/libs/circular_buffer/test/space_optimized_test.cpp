@@ -58,7 +58,26 @@ void min_capacity_test() {
     BOOST_CHECK(cb3.capacity().min_capacity() <= cb3.internal_capacity());
 }
 
-void some_constructor_tests() {
+void capacity_control_test() {
+
+    circular_buffer_space_optimized<int>::capacity_type c1 = 10;
+    circular_buffer_space_optimized<int>::capacity_type c2 = circular_buffer_space_optimized<int>::capacity_type(20, 5);
+    circular_buffer_space_optimized<int>::capacity_type c3 = c2;
+
+    BOOST_CHECK(c1.capacity() == 10);
+    BOOST_CHECK(c1.min_capacity() == 0);
+    BOOST_CHECK(c2.capacity() == 20);
+    BOOST_CHECK(c2.min_capacity() == 5);
+    BOOST_CHECK(c3.capacity() == 20);
+    BOOST_CHECK(c3.min_capacity() == 5);
+
+    c1 = c2;
+
+    BOOST_CHECK(c1.capacity() == 20);
+    BOOST_CHECK(c1.min_capacity() == 5);
+}
+
+void some_constructors_test() {
 
     cb_space_optimized cb1;
     BOOST_CHECK(cb1.capacity() == cb1.max_size());
@@ -80,7 +99,7 @@ void some_constructor_tests() {
     BOOST_CHECK(cb2.size() == 3);
 }
 
-void shrink_to_fit() {
+void shrink_to_fit_test() {
 
     cb_space_optimized cb(1000);
     cb.push_back(1);
@@ -162,8 +181,9 @@ test_suite* init_unit_test_suite(int /*argc*/, char* /*argv*/[]) {
     add_common_tests(tests);
 
     tests->add(BOOST_TEST_CASE(&min_capacity_test));
-    tests->add(BOOST_TEST_CASE(&some_constructor_tests));
-    tests->add(BOOST_TEST_CASE(&shrink_to_fit));
+    tests->add(BOOST_TEST_CASE(&capacity_control_test));
+    tests->add(BOOST_TEST_CASE(&some_constructors_test));
+    tests->add(BOOST_TEST_CASE(&shrink_to_fit_test));
     tests->add(BOOST_TEST_CASE(&iterator_invalidation_test));
 
     return tests;

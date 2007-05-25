@@ -52,7 +52,6 @@ public:
     typedef typename circular_buffer<T, Alloc>::param_value_type param_value_type;
     typedef typename circular_buffer<T, Alloc>::return_value_type return_value_type;
 
-#if defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
     //! Capacity controller of the space optimized circular buffer.
     /*!
         <p><pre>
@@ -75,12 +74,7 @@ public:
         <code>size_type</code> which allows to treat the capacity of the <code>circular_buffer_space_optimized</code>
         the same way as in the <code><a href="circular_buffer.html">circular_buffer</a></code>.</p>
     */
-    typedef cb_details::capacity_control<size_type, T, Alloc> capacity_type;
-#else
-    /*! \cond */
     typedef cb_details::capacity_control<size_type> capacity_type;
-    /*! \endcond */
-#endif // #if defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
 
 // Inherited
 
@@ -234,7 +228,7 @@ public:
     void resize(size_type new_size, param_value_type item = value_type()) {
         if (new_size > size()) {
             if (new_size > m_capacity_ctrl)
-                m_capacity_ctrl.m_capacity = new_size;
+                m_capacity_ctrl = capacity_type(new_size, m_capacity_ctrl.min_capacity());
             insert(end(), new_size - size(), item);
         } else {
             erase(end() - (size() - new_size), end());
@@ -300,7 +294,7 @@ public:
     void rresize(size_type new_size, param_value_type item = value_type()) {
         if (new_size > size()) {
             if (new_size > m_capacity_ctrl)
-                m_capacity_ctrl.m_capacity = new_size;
+                m_capacity_ctrl = capacity_type(new_size, m_capacity_ctrl.min_capacity());
             rinsert(begin(), new_size - size(), item);
         } else {
             rerase(begin(), end() - new_size);
@@ -337,7 +331,7 @@ public:
     explicit circular_buffer_space_optimized(
         capacity_type capacity_ctrl,
         const allocator_type& alloc = allocator_type())
-    : circular_buffer<T, Alloc>(capacity_ctrl.m_min_capacity, alloc)
+    : circular_buffer<T, Alloc>(capacity_ctrl.min_capacity(), alloc)
     , m_capacity_ctrl(capacity_ctrl) {}
 
     /*! \brief Create a full space optimized circular buffer with the specified capacity filled with
@@ -360,7 +354,7 @@ public:
         capacity_type capacity_ctrl,
         param_value_type item,
         const allocator_type& alloc = allocator_type())
-    : circular_buffer<T, Alloc>(capacity_ctrl.m_capacity, item, alloc)
+    : circular_buffer<T, Alloc>(capacity_ctrl.capacity(), item, alloc)
     , m_capacity_ctrl(capacity_ctrl) {}
 
     /*! \brief Create a space optimized circular buffer with the specified capacity filled with <code>n</code> copies
@@ -579,8 +573,7 @@ public:
     */
     void assign(size_type n, param_value_type item) {
         circular_buffer<T, Alloc>::assign(n, item);
-        m_capacity_ctrl.m_capacity = n;
-        m_capacity_ctrl.m_min_capacity = 0;
+        m_capacity_ctrl = capacity_type(n);
     }
 
     //! Assign <code>n</code> items into the space optimized circular buffer specifying the capacity.
@@ -610,8 +603,8 @@ public:
             <code>assign(capacity_type, InputIterator, InputIterator)</code>
     */
     void assign(capacity_type capacity_ctrl, size_type n, param_value_type item) {
-       BOOST_CB_ASSERT(capacity_ctrl.m_capacity >= n); // check for new capacity lower than n
-       circular_buffer<T, Alloc>::assign(std::max(capacity_ctrl.m_min_capacity, n), n, item);
+       BOOST_CB_ASSERT(capacity_ctrl.capacity() >= n); // check for new capacity lower than n
+       circular_buffer<T, Alloc>::assign(std::max(capacity_ctrl.min_capacity(), n), n, item);
        m_capacity_ctrl = capacity_ctrl;
     }
 
@@ -647,8 +640,7 @@ public:
     template <class InputIterator>
     void assign(InputIterator first, InputIterator last) {
         circular_buffer<T, Alloc>::assign(first, last);
-        m_capacity_ctrl.m_capacity = circular_buffer<T, Alloc>::capacity();
-        m_capacity_ctrl.m_min_capacity = 0;
+        m_capacity_ctrl = capacity_type(circular_buffer<T, Alloc>::capacity());
     }
 
     //! Assign a copy of the range into the space optimized circular buffer specifying the capacity.
@@ -1264,8 +1256,8 @@ private:
         size_type new_capacity = circular_buffer<T, Alloc>::capacity();
         while (new_capacity / 3 >= size()) { // (new_capacity / 3) -> avoid oscillations
             new_capacity /= 2;
-            if (new_capacity <= m_capacity_ctrl.m_min_capacity) {
-                new_capacity = m_capacity_ctrl.m_min_capacity;
+            if (new_capacity <= m_capacity_ctrl.min_capacity()) {
+                new_capacity = m_capacity_ctrl.min_capacity();
                 break;
             }
         }
@@ -1278,7 +1270,7 @@ private:
 
     //! Specialized method for reducing the capacity.
     void reduce_capacity(const true_type&) {
-        circular_buffer<T, Alloc>::set_capacity(std::max(m_capacity_ctrl.m_min_capacity, size()));
+        circular_buffer<T, Alloc>::set_capacity(std::max(m_capacity_ctrl.min_capacity(), size()));
     }
 
     //! Specialized method for reducing the capacity.
@@ -1286,8 +1278,8 @@ private:
 
     //! Determine the initial capacity.
     static size_type init_capacity(const capacity_type& capacity_ctrl, size_type n) {
-        BOOST_CB_ASSERT(capacity_ctrl.m_capacity >= n); // check for capacity lower than n
-        return std::max(capacity_ctrl.m_min_capacity, n);
+        BOOST_CB_ASSERT(capacity_ctrl.capacity() >= n); // check for capacity lower than n
+        return std::max(capacity_ctrl.min_capacity(), n);
     }
 
     //! Specialized method for determining the initial capacity.
@@ -1310,14 +1302,14 @@ private:
     //! Specialized method for determining the initial capacity.
     template <class InputIterator>
     static size_type init_capacity(const capacity_type& capacity_ctrl, InputIterator first, InputIterator last, const std::input_iterator_tag&) {
-        return capacity_ctrl.m_capacity;
+        return capacity_ctrl.capacity();
     }
 
     //! Specialized method for determining the initial capacity.
     template <class ForwardIterator>
     static size_type init_capacity(const capacity_type& capacity_ctrl, ForwardIterator first, ForwardIterator last, const std::forward_iterator_tag&) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
-        return std::max(capacity_ctrl.m_min_capacity, std::min(capacity_ctrl.m_capacity, static_cast<size_type>(std::distance(first, last))));
+        return std::max(capacity_ctrl.min_capacity(), std::min(capacity_ctrl.capacity(), static_cast<size_type>(std::distance(first, last))));
     }
 
     //! Specialized insert method.

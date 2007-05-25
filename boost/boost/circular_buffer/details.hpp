@@ -135,11 +135,7 @@ private:
     \struct capacity_control
     \brief Capacity controller of the space optimized circular buffer.
 */
-#if defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
-template <class Size, class T, class Alloc>
-#else
 template <class Size>
-#endif
 class capacity_control {
 
     //! The capacity of the space optimized circular buffer.
@@ -147,12 +143,6 @@ class capacity_control {
 
     //! The lowest guaranteed capacity of the adapted circular buffer.
     Size m_min_capacity;
-
-#if defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
-    friend circular_buffer_space_optimized<T, Alloc>;
-#else
-    template <class T, class Alloc> friend class circular_buffer_space_optimized;
-#endif
 
 public:
 
