@@ -215,6 +215,9 @@ namespace boost { namespace proto
     template<typename T, typename EnableIf = void>
     struct is_expr;
 
+    template<typename T, typename EnableIf = void>
+    struct is_domain;
+
     namespace result_of
     {
         template<typename T, typename EnableIf = void>
@@ -254,11 +257,12 @@ namespace boost { namespace proto
               , typename A
               , = void BOOST_PP_INTERCEPT
             )
-          , typename _ = void
+          , typename _1 = void
+          , typename _2 = void
         >
         struct make_expr;
 
-        template<typename Tag, typename Sequence>
+        template<typename Tag, typename DomainOrSequence, typename SequenceOrVoid = void, typename _ = void>
         struct unpack_expr;
     }
 
@@ -358,16 +362,16 @@ namespace boost { namespace proto
         template<long N>
         struct arg_c;
 
-        template<typename Tag>
+        template<typename Tag, typename Domain = default_domain>
         struct make_expr;
 
-        template<typename Tag>
+        template<typename Tag, typename Domain = default_domain>
         struct unpack_expr;
 
-        template<typename Tag>
+        template<typename Tag, typename Domain = default_domain>
         struct unfused_expr_fun;
 
-        template<typename Tag>
+        template<typename Tag, typename Domain = default_domain>
         struct unfused_expr;
     }
 
