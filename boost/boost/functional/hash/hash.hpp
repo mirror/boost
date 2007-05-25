@@ -96,42 +96,42 @@ namespace boost
     namespace hash_detail
     {
         template <class T>
-        inline size_t hash_value_signed(T val)
+        inline std::size_t hash_value_signed(T val)
         {
-             const int size_t_bits = std::numeric_limits<size_t>::digits;
+             const int size_t_bits = std::numeric_limits<std::size_t>::digits;
              // ceiling(std::numeric_limits<T>::digits / size_t_bits) - 1
              const int length = (std::numeric_limits<T>::digits - 1)
                  / size_t_bits;
 
-             size_t seed = 0;
+             std::size_t seed = 0;
              T positive = val < 0 ? -1 - val : val;
 
              // Hopefully, this loop can be unrolled.
              for(unsigned int i = length * size_t_bits; i > 0; i -= size_t_bits)
              {
-                 seed ^= (size_t) (positive >> i) + (seed<<6) + (seed>>2);
+                 seed ^= (std::size_t) (positive >> i) + (seed<<6) + (seed>>2);
              }
-             seed ^= (size_t) val + (seed<<6) + (seed>>2);
+             seed ^= (std::size_t) val + (seed<<6) + (seed>>2);
 
              return seed;
         }
 
         template <class T>
-        inline size_t hash_value_unsigned(T val)
+        inline std::size_t hash_value_unsigned(T val)
         {
-             const int size_t_bits = std::numeric_limits<size_t>::digits;
+             const int size_t_bits = std::numeric_limits<std::size_t>::digits;
              // ceiling(std::numeric_limits<T>::digits / size_t_bits) - 1
              const int length = (std::numeric_limits<T>::digits - 1)
                  / size_t_bits;
 
-             size_t seed = 0;
+             std::size_t seed = 0;
 
              // Hopefully, this loop can be unrolled.
              for(unsigned int i = length * size_t_bits; i > 0; i -= size_t_bits)
              {
-                 seed ^= (size_t) (val >> i) + (seed<<6) + (seed>>2);
+                 seed ^= (std::size_t) (val >> i) + (seed<<6) + (seed>>2);
              }
-             seed ^= (size_t) val + (seed<<6) + (seed>>2);
+             seed ^= (std::size_t) val + (seed<<6) + (seed>>2);
 
              return seed;
         }
