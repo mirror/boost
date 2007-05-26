@@ -24,6 +24,8 @@
 #include <boost/functional/hash.hpp>
 #include <boost/mpl/bool.hpp>
 
+#include <boost/concept_check.hpp>
+
 #include <boost/bimap/detail/concept_tags.hpp>
 
 #include <boost/bimap/detail/generate_index_binder.hpp>
@@ -124,6 +126,19 @@ struct unordered_set_of : public ::boost::bimaps::detail::set_type_of_tag
     /// Functor that compare two value_type objects for equality
     typedef EqualKey        key_equal;
 
+    struct lazy_concept_checked
+    {
+        BOOST_CLASS_REQUIRE ( value_type,
+                              boost, AssignableConcept );
+
+        BOOST_CLASS_REQUIRE3( hasher, std::size_t, value_type,
+                              boost, UnaryFunctionConcept );
+
+        BOOST_CLASS_REQUIRE4( key_equal, bool, value_type, value_type,
+                              boost, BinaryFunctionConcept );
+
+        typedef unordered_set_of type; 
+    };
 
     BOOST_BIMAP_GENERATE_INDEX_BINDER_2CP(
 

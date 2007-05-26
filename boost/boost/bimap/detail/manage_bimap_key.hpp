@@ -23,7 +23,9 @@
 #include <boost/bimap/tags/support/apply_to_value_type.hpp>
 
 // Boost.MPL
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/if.hpp>
+#include <boost/mpl/identity.hpp>
 #include <boost/mpl/placeholders.hpp>
 
 #include <boost/bimap/detail/is_set_type_of.hpp>
@@ -64,32 +66,48 @@ struct manage_bimap_key
     <
         SetType, DefaultTag
 
-    >::type tagged_set_type;
+    >::type tagged_type;
 
     // Then manage plain key types, were the set type of the collection
     // is not specified in the instantiation
 
     typedef BOOST_DEDUCED_TYPENAME
 
-       mpl::if_< BOOST_DEDUCED_TYPENAME is_set_type_of<
-                    BOOST_DEDUCED_TYPENAME tagged_set_type::value_type >::type,
+       mpl::eval_if< BOOST_DEDUCED_TYPENAME is_set_type_of<
+                     BOOST_DEDUCED_TYPENAME tagged_type::value_type >::type,
     // {
             // The type is
-            tagged_set_type,
+            mpl::identity< tagged_type >,
     // }
     // else
     // {
             // Default it to a set
-            BOOST_DEDUCED_TYPENAME tags::support::apply_to_value_type
-            <
-                set_of< mpl::_ >,
-                tagged_set_type
+            mpl::identity<
+                BOOST_DEDUCED_TYPENAME tags::support::apply_to_value_type
+                <
+                    set_of< mpl::_ >,
+                    tagged_type
 
-            >::type
+                >::type
+            >
     // }
+
+    >::type tagged_set_type;
+
+    // Returns tagged_set_type and evaluate the concept_checked_type
+
+    typedef BOOST_DEDUCED_TYPENAME mpl::if_c<true,
+
+        tagged_set_type,
+
+        BOOST_DEDUCED_TYPENAME
+        tagged_set_type::value_type::lazy_concept_checked::type
 
     >::type type;
 };
+
+
+
 
 #endif // BOOST_BIMAP_DOXYGEN_WILL_NOT_PROCESS_THE_FOLLOWING_LINES
 

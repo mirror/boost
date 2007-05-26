@@ -22,6 +22,8 @@
 
 #include <boost/mpl/bool.hpp>
 
+#include <boost/concept_check.hpp>
+
 #include <boost/bimap/detail/concept_tags.hpp>
 
 #include <boost/bimap/detail/generate_index_binder.hpp>
@@ -61,6 +63,14 @@ struct unconstrained_set_of : public ::boost::bimaps::detail::set_type_of_tag
 {
     /// Type of the object that will be stored in the set
     typedef KeyType value_type;
+
+    struct lazy_concept_checked
+    {
+        BOOST_CLASS_REQUIRE ( value_type,
+                              boost, AssignableConcept );
+
+        typedef unconstrained_set_of type;
+    };
 
     BOOST_BIMAP_GENERATE_INDEX_BINDER_FAKE
 

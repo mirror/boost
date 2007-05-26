@@ -18,7 +18,6 @@
 
 #include <boost/config.hpp>
 
-// Boost.MPL
 #include <boost/mpl/placeholders.hpp>
 #include <boost/mpl/push_front.hpp>
 #include <boost/mpl/if.hpp>
@@ -29,18 +28,16 @@
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/is_same.hpp>
 
+#include <boost/concept_check.hpp>
+
 // Boost.MultiIndex
 #include <boost/multi_index_container.hpp>
 #include <boost/multi_index/member.hpp>
 
-// Boost.Bimap.Relation
+// Boost.Bimap
 #include <boost/bimap/relation/relation.hpp>
 #include <boost/bimap/relation/member_at.hpp>
-
-// Boost.Bimap.Tags
 #include <boost/bimap/tags/support/apply_to_value_type.hpp>
-
-// Boost.Bimap
 #include <boost/bimap/detail/manage_bimap_key.hpp>
 #include <boost/bimap/detail/manage_additional_parameters.hpp>
 #include <boost/bimap/detail/map_view_iterator.hpp>
@@ -129,6 +126,14 @@ struct bimap_core
         typedef  left_key_type right_data_type;
 
     //@}
+
+
+    // Concept checks
+    // --------------------------------------------------------------------
+
+    //BOOST_CLASS_REQUIRE(  left_key_type, boost, AssignableConcept );
+    //BOOST_CLASS_REQUIRE( right_key_type, boost, AssignableConcept );
+
 
     // Manage the additional parameters
     // --------------------------------------------------------------------

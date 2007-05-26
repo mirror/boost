@@ -217,8 +217,6 @@ class associative_container_adaptor :
     >
         equal_range(const CompatibleKey & k)
     {
-        //TODO check this
-
         std::pair<
 
             BOOST_DEDUCED_TYPENAME Base::iterator,

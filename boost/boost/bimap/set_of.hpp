@@ -23,6 +23,8 @@
 #include <functional>
 #include <boost/mpl/bool.hpp>
 
+#include <boost/concept_check.hpp>
+
 #include <boost/bimap/detail/concept_tags.hpp>
 
 #include <boost/bimap/detail/generate_index_binder.hpp>
@@ -114,6 +116,16 @@ struct set_of : public ::boost::bimaps::detail::set_type_of_tag
     /// Functor that compare two keys
     typedef KeyCompare key_compare;
 
+    struct lazy_concept_checked
+    {
+        BOOST_CLASS_REQUIRE ( value_type,
+                              boost, AssignableConcept );
+
+        BOOST_CLASS_REQUIRE4( key_compare, bool, value_type, value_type,
+                              boost, BinaryFunctionConcept );
+
+        typedef set_of type;
+    };
 
     BOOST_BIMAP_GENERATE_INDEX_BINDER_1CP(
 
