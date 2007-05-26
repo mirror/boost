@@ -26,6 +26,8 @@
 
 #include <boost/serialization/nvp.hpp>
 
+#include <boost/operators.hpp>
+
 // Boost.Bimap
 #include <boost/bimap/tags/tagged.hpp>
 #include <boost/bimap/tags/support/default_tagged.hpp>
@@ -53,7 +55,12 @@ See also standard_relation.
 template< class TA, class TB >
 class standard_relation_view  :
 
-    public symmetrical_base<TA,TB>
+    public symmetrical_base<TA,TB>,
+
+    ::boost::totally_ordered<
+        standard_relation_view<TA,TB>
+
+    >
 {
 
     typedef symmetrical_base<TA,TB> base_;
@@ -66,16 +73,16 @@ class standard_relation_view  :
         typedef structured_pair<TA,TB,normal_layout> left_pair ;
         typedef structured_pair<TB,TA,mirror_layout> right_pair;
 
-        typedef standard_pair_view<TA,TB,false,normal_layout>
+        typedef standard_pair_view<TA,TB,normal_layout>
             left_pair_reference;
 
-        typedef standard_pair_view<TB,TA,false,mirror_layout>
+        typedef standard_pair_view<TB,TA,mirror_layout>
             right_pair_reference;
 
-        typedef const standard_pair_view<TA,TB,true,normal_layout>
+        typedef const const_standard_pair_view<TA,TB,normal_layout>
             const_left_pair_reference;
 
-        typedef const standard_pair_view<TB,TA,true,mirror_layout>
+        typedef const const_standard_pair_view<TB,TA,mirror_layout>
             const_right_pair_reference;
 
     //@}
@@ -160,6 +167,20 @@ class standard_relation_view  :
     {
         return ::boost::bimaps::relation::support::get<Tag>(*this);
     }
+
+    // totally_ordered - standard_relation_view
+
+    bool operator==(const standard_relation_view & r) const
+    {
+        return ( ( left  == r.left  ) &&
+                 ( right == r.right ) );
+    }
+
+    bool operator<(const standard_relation_view & r) const
+    {
+        return (  ( left  <  r.left  ) ||
+                 (( left == r.left ) && ( right < r.right )));
+    }
 };
 
 /** \brief Const Standard relation above view.
@@ -170,7 +191,15 @@ See also standard_relation_view, standard_relation.
 template< class TA, class TB >
 class const_standard_relation_view  :
 
-    public symmetrical_base<TA,TB>
+    public symmetrical_base<TA,TB>,
+
+    ::boost::totally_ordered<
+        const_standard_relation_view<TA,TB>,
+
+    ::boost::totally_ordered<
+        const_standard_relation_view<TA,TB>, standard_relation_view<TA,TB>
+
+    > >
 {
 
     typedef symmetrical_base<TA,TB> base_;
@@ -183,16 +212,16 @@ class const_standard_relation_view  :
         typedef structured_pair<TA,TB,normal_layout> left_pair ;
         typedef structured_pair<TB,TA,mirror_layout> right_pair;
 
-        typedef standard_pair_view<TA,TB,false,normal_layout>
+        typedef standard_pair_view<TA,TB,normal_layout>
             left_pair_reference;
 
-        typedef standard_pair_view<TB,TA,false,mirror_layout>
+        typedef standard_pair_view<TB,TA,mirror_layout>
             right_pair_reference;
 
-        typedef standard_pair_view<TA,TB,true,normal_layout>
+        typedef const const_standard_pair_view<TA,TB,normal_layout>
             const_left_pair_reference;
 
-        typedef standard_pair_view<TB,TA,true,mirror_layout>
+        typedef const const_standard_pair_view<TB,TA,mirror_layout>
             const_right_pair_reference;
 
     //@}
@@ -212,6 +241,12 @@ class const_standard_relation_view  :
     typedef standard_relation_view<TA,TB> relation_view;
 
     public:
+
+    const_standard_relation_view(const relation_view & rel) :
+
+        left (rel.left),
+        right(rel.right)
+    {}
 
     explicit const_standard_relation_view(const relation_force_mutable & rel) :
 
@@ -252,211 +287,36 @@ class const_standard_relation_view  :
         return ::boost::bimaps::relation::support::get<Tag>(*this);
     }
 
-    template< class Tag >
-    BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-        result_of::get<Tag,const_standard_relation_view>::type
-    get(BOOST_EXPLICIT_TEMPLATE_TYPE(Tag))
+    // totally ordered - standard_relation_view<TA,TB>
+
+    bool operator==(const standard_relation_view<TA,TB> & r) const
     {
-        return ::boost::bimaps::relation::support::get<Tag>(*this);
+        return ( ( left  == r.left  ) &&
+                 ( right == r.right ) );
     }
+
+    bool operator<(const standard_relation_view<TA,TB> & r) const
+    {
+        return (  ( left  <  r.left  ) ||
+                 (( left == r.left ) && ( right < r.right )));
+    }
+
+    // totally ordered - const_standard_relation_view<TA,TB>
+
+    bool operator==(const const_standard_relation_view & r) const
+    {
+        return ( ( left  == r.left  ) &&
+                 ( right == r.right ) );
+    }
+
+    bool operator<(const const_standard_relation_view & r) const
+    {
+        return (  ( left  <  r.left  ) ||
+                 (( left == r.left ) && ( right < r.right )));
+    }
+
+
 };
-
-// standard_relation_view - standard_relation_view
-
-template< class FirstType, class SecondType >
-bool operator==(const standard_relation_view<FirstType,SecondType> & a,
-                const standard_relation_view<FirstType,SecondType> & b)
-{
-    return ( ( a.left  == b.left  ) &&
-             ( a.right == b.right ) );
-}
-
-template< class FirstType, class SecondType >
-bool operator!=(const standard_relation_view<FirstType,SecondType> & a,
-                const standard_relation_view<FirstType,SecondType> & b)
-{
-    return ! ( a == b );
-}
-
-template< class FirstType, class SecondType >
-bool operator<(const standard_relation_view<FirstType,SecondType> & a,
-               const standard_relation_view<FirstType,SecondType> & b)
-{
-    return (  ( a.left  <  b.left  ) ||
-             (( a.left == b.left ) && ( a.right < b.right )));
-}
-
-template< class FirstType, class SecondType >
-bool operator<=(const standard_relation_view<FirstType,SecondType> & a,
-                const standard_relation_view<FirstType,SecondType> & b)
-{
-    return (  ( a.left  <  b.left  ) ||
-             (( a.left == b.left ) && ( a.right <= b.right )));
-}
-
-template< class FirstType, class SecondType >
-bool operator>(const standard_relation_view<FirstType,SecondType> & a,
-               const standard_relation_view<FirstType,SecondType> & b)
-{
-    return ( ( a.left  >  b.left  ) ||
-             (( a.left == b.left ) && ( a.right > b.right )));
-}
-
-template< class FirstType, class SecondType >
-bool operator>=(const standard_relation_view<FirstType,SecondType> & a,
-                const standard_relation_view<FirstType,SecondType> & b)
-{
-    return ( ( a.left  >  b.left  ) ||
-             (( a.left == b.left ) && ( a.right >= b.right )));
-}
-
-// const_standard_relation_view - const_standard_relation_view
-
-template< class FirstType, class SecondType >
-bool operator==(const const_standard_relation_view<FirstType,SecondType> & a,
-                const const_standard_relation_view<FirstType,SecondType> & b)
-{
-    return ( ( a.left  == b.left  ) &&
-             ( a.right == b.right ) );
-}
-
-template< class FirstType, class SecondType >
-bool operator!=(const const_standard_relation_view<FirstType,SecondType> & a,
-                const const_standard_relation_view<FirstType,SecondType> & b)
-{
-    return ! ( a == b );
-}
-
-template< class FirstType, class SecondType >
-bool operator<(const const_standard_relation_view<FirstType,SecondType> & a,
-               const const_standard_relation_view<FirstType,SecondType> & b)
-{
-    return (  ( a.left  <  b.left  ) ||
-             (( a.left == b.left ) && ( a.right < b.right )));
-}
-
-template< class FirstType, class SecondType >
-bool operator<=(const const_standard_relation_view<FirstType,SecondType> & a,
-                const const_standard_relation_view<FirstType,SecondType> & b)
-{
-    return (  ( a.left  <  b.left  ) ||
-             (( a.left == b.left ) && ( a.right <= b.right )));
-}
-
-template< class FirstType, class SecondType >
-bool operator>(const const_standard_relation_view<FirstType,SecondType> & a,
-               const const_standard_relation_view<FirstType,SecondType> & b)
-{
-    return ( ( a.left  >  b.left  ) ||
-             (( a.left == b.left ) && ( a.right > b.right )));
-}
-
-template< class FirstType, class SecondType >
-bool operator>=(const const_standard_relation_view<FirstType,SecondType> & a,
-                const const_standard_relation_view<FirstType,SecondType> & b)
-{
-    return ( ( a.left  >  b.left  ) ||
-             (( a.left == b.left ) && ( a.right >= b.right )));
-}
-
-// standard_relation_view - const_standard_relation_view
-
-template< class FirstType, class SecondType >
-bool operator==(const standard_relation_view<FirstType,SecondType> & a,
-                const const_standard_relation_view<FirstType,SecondType> & b)
-{
-    return ( ( a.left  == b.left  ) &&
-             ( a.right == b.right ) );
-}
-
-template< class FirstType, class SecondType >
-bool operator!=(const standard_relation_view<FirstType,SecondType> & a,
-                const const_standard_relation_view<FirstType,SecondType> & b)
-{
-    return ! ( a == b );
-}
-
-template< class FirstType, class SecondType >
-bool operator<(const standard_relation_view<FirstType,SecondType> & a,
-               const const_standard_relation_view<FirstType,SecondType> & b)
-{
-    return (  ( a.left  <  b.left  ) ||
-             (( a.left == b.left ) && ( a.right < b.right )));
-}
-
-template< class FirstType, class SecondType >
-bool operator<=(const standard_relation_view<FirstType,SecondType> & a,
-                const const_standard_relation_view<FirstType,SecondType> & b)
-{
-    return (  ( a.left  <  b.left  ) ||
-             (( a.left == b.left ) && ( a.right <= b.right )));
-}
-
-template< class FirstType, class SecondType >
-bool operator>(const standard_relation_view<FirstType,SecondType> & a,
-               const const_standard_relation_view<FirstType,SecondType> & b)
-{
-    return ( ( a.left  >  b.left  ) ||
-             (( a.left == b.left ) && ( a.right > b.right )));
-}
-
-template< class FirstType, class SecondType >
-bool operator>=(const standard_relation_view<FirstType,SecondType> & a,
-                const const_standard_relation_view<FirstType,SecondType> & b)
-{
-    return ( ( a.left  >  b.left  ) ||
-             (( a.left == b.left ) && ( a.right >= b.right )));
-}
-
-// const_standard_relation_view - standard_relation_view
-
-template< class FirstType, class SecondType >
-bool operator==(const const_standard_relation_view<FirstType,SecondType> & a,
-                const standard_relation_view<FirstType,SecondType> & b)
-{
-    return ( ( a.left  == b.left  ) &&
-             ( a.right == b.right ) );
-}
-
-template< class FirstType, class SecondType >
-bool operator!=(const const_standard_relation_view<FirstType,SecondType> & a,
-                const standard_relation_view<FirstType,SecondType> & b)
-{
-    return ! ( a == b );
-}
-
-template< class FirstType, class SecondType >
-bool operator<(const const_standard_relation_view<FirstType,SecondType> & a,
-               const standard_relation_view<FirstType,SecondType> & b)
-{
-    return (  ( a.left  <  b.left  ) ||
-             (( a.left == b.left ) && ( a.right < b.right )));
-}
-
-template< class FirstType, class SecondType >
-bool operator<=(const const_standard_relation_view<FirstType,SecondType> & a,
-                const standard_relation_view<FirstType,SecondType> & b)
-{
-    return (  ( a.left  <  b.left  ) ||
-             (( a.left == b.left ) && ( a.right <= b.right )));
-}
-
-template< class FirstType, class SecondType >
-bool operator>(const const_standard_relation_view<FirstType,SecondType> & a,
-               const standard_relation_view<FirstType,SecondType> & b)
-{
-    return ( ( a.left  >  b.left  ) ||
-             (( a.left == b.left ) && ( a.right > b.right )));
-}
-
-template< class FirstType, class SecondType >
-bool operator>=(const const_standard_relation_view<FirstType,SecondType> & a,
-                const standard_relation_view<FirstType,SecondType> & b)
-{
-    return ( ( a.left  >  b.left  ) ||
-             (( a.left == b.left ) && ( a.right >= b.right )));
-}
-
 
 } // namespace relation
 } // namespace bimaps

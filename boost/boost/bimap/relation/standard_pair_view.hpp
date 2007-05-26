@@ -23,6 +23,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/remove_const.hpp>
+#include <boost/utility/enable_if.hpp>
 
 #include <utility>
 
@@ -172,16 +173,42 @@ struct reference_binder_finder<FirstType,SecondType,constant,mirror_layout>
 See also standard_relation, const_standard_pair_view.
                                                                                 **/
 
-template< class FirstType, class SecondType, bool constant, class Layout >
+template< class FirstType, class SecondType, class Layout >
 class standard_pair_view :
 
-    public reference_binder_finder<FirstType,SecondType,constant,Layout>::type
+    public reference_binder_finder<FirstType,SecondType,false,Layout>::type,
+
+    ::boost::totally_ordered<
+        standard_pair_view<FirstType,SecondType,normal_layout>,
+
+    ::boost::totally_ordered<
+        standard_pair_view<FirstType,SecondType,mirror_layout>,
+
+    ::boost::totally_ordered<
+        standard_pair_view<FirstType,SecondType,normal_layout>,
+        standard_pair_view<FirstType,SecondType,mirror_layout>,
+
+    ::boost::totally_ordered<
+        standard_pair_view<FirstType,SecondType,normal_layout>,
+        structured_pair<FirstType,SecondType,normal_layout>,
+
+    ::boost::totally_ordered<
+        standard_pair_view<FirstType,SecondType,normal_layout>,
+        structured_pair<FirstType,SecondType,mirror_layout>,
+
+    ::boost::totally_ordered<
+        standard_pair_view<FirstType,SecondType,mirror_layout>,
+        structured_pair<FirstType,SecondType,normal_layout>,
+
+    ::boost::totally_ordered<
+        standard_pair_view<FirstType,SecondType,mirror_layout>,
+        structured_pair<FirstType,SecondType,mirror_layout>
+
+    > > > > > > >
 
 {
-    typedef BOOST_DEDUCED_TYPENAME reference_binder_finder<
-        FirstType,SecondType,constant,Layout
-
-    >::type base_;
+    typedef BOOST_DEDUCED_TYPENAME
+        reference_binder_finder<FirstType,SecondType,false,Layout>::type base_;
 
     public:
 
@@ -219,101 +246,229 @@ class standard_pair_view :
     {
         return ::boost::bimaps::relation::support::get<Tag>(*this);
     }
+
+    // totally_ordered - standard_pair_view
+
+    template< class OtherLayout >
+    bool operator==(const standard_pair_view<FirstType,SecondType,OtherLayout> & p) const
+    {
+        return ( ( base_::first  == p.first  ) &&
+                 ( base_::second == p.second ) );
+    }
+
+    template< class OtherLayout >
+    bool operator<(const standard_pair_view<FirstType,SecondType,OtherLayout> & p) const
+    {
+        return (  ( base_::first  <  p.first  ) ||
+                 (( base_::first == p.first ) && ( base_::second < p.second )));
+    }
+
+    // totally_ordered - structured_pair
+
+    template< class OtherLayout >
+    bool operator==(const structured_pair<FirstType,SecondType,OtherLayout> & p) const
+    {
+        return ( ( base_::first  == p.first  ) &&
+                 ( base_::second == p.second ) );
+    }
+
+    template< class OtherLayout >
+    bool operator<(const structured_pair<FirstType,SecondType,OtherLayout> & p) const
+    {
+        return (  ( base_::first  <  p.first  ) ||
+                 (( base_::first == p.first ) && ( base_::second < p.second )));
+    }
+
 };
 
-// standard_pair_view - standard_pair_view
 
-template< class First, class Second, bool C1, bool C2, class L1, class L2 >
-bool operator==(const standard_pair_view<First,Second,C1,L1> & a,
-                const standard_pair_view<First,Second,C2,L2> & b)
-{
-    return ( ( a.first  == b.first  ) &&
-             ( a.second == b.second ) );
-}
 
-template< class First, class Second, bool C1, bool C2, class L1, class L2 >
-bool operator!=(const standard_pair_view<First,Second,C1,L1> & a,
-                const standard_pair_view<First,Second,C2,L2> & b)
-{
-    return ! ( a == b );
-}
+/// \brief A side view of a relation that is full compliant with the standard.
+/**
 
-template< class First, class Second, bool C1, bool C2, class L1, class L2 >
-bool operator<(const standard_pair_view<First,Second,C1,L1> & a,
-               const standard_pair_view<First,Second,C2,L2> & b)
-{
-    return (  ( a.first  <  b.first  ) ||
-             (( a.first == b.first ) && ( a.second < b.second )));
-}
+See also standard_relation, const_standard_pair_view.
+                                                                                **/
 
-template< class First, class Second, bool C1, bool C2, class L1, class L2 >
-bool operator<=(const standard_pair_view<First,Second,C1,L1> & a,
-                const standard_pair_view<First,Second,C2,L2> & b)
-{
-    return (  ( a.first  <  b.first  ) ||
-             (( a.first == b.first ) && ( a.second <= b.second )));
-}
+template< class FirstType, class SecondType, class Layout >
+class const_standard_pair_view :
 
-template< class First, class Second, bool C1, bool C2, class L1, class L2 >
-bool operator>(const standard_pair_view<First,Second,C1,L1> & a,
-               const standard_pair_view<First,Second,C2,L2> & b)
-{
-    return ( ( a.first  >  b.first  ) ||
-             (( a.first == b.first ) && ( a.second > b.second )));
-}
+    public reference_binder_finder<FirstType,SecondType,true,Layout>::type,
 
-template< class First, class Second, bool C1, bool C2, class L1, class L2 >
-bool operator>=(const standard_pair_view<First,Second,C1,L1> & a,
-                const standard_pair_view<First,Second,C2,L2> & b)
+    ::boost::totally_ordered<
+        const_standard_pair_view<FirstType,SecondType,normal_layout>,
+
+    ::boost::totally_ordered<
+        const_standard_pair_view<FirstType,SecondType,mirror_layout>,
+
+    ::boost::totally_ordered<
+        const_standard_pair_view<FirstType,SecondType,normal_layout>,
+        const_standard_pair_view<FirstType,SecondType,mirror_layout>,
+
+    ::boost::totally_ordered<
+        const_standard_pair_view<FirstType,SecondType,normal_layout>,
+        standard_pair_view<FirstType,SecondType,normal_layout>,
+
+    ::boost::totally_ordered<
+        const_standard_pair_view<FirstType,SecondType,normal_layout>,
+        standard_pair_view<FirstType,SecondType,mirror_layout>,
+
+    ::boost::totally_ordered<
+        const_standard_pair_view<FirstType,SecondType,mirror_layout>,
+        standard_pair_view<FirstType,SecondType,normal_layout>,
+
+    ::boost::totally_ordered<
+        const_standard_pair_view<FirstType,SecondType,mirror_layout>,
+        standard_pair_view<FirstType,SecondType,mirror_layout>,
+
+    ::boost::totally_ordered<
+        const_standard_pair_view<FirstType,SecondType,normal_layout>,
+        structured_pair<FirstType,SecondType,normal_layout>,
+
+    ::boost::totally_ordered<
+        const_standard_pair_view<FirstType,SecondType,normal_layout>,
+        structured_pair<FirstType,SecondType,mirror_layout>,
+
+    ::boost::totally_ordered<
+        const_standard_pair_view<FirstType,SecondType,mirror_layout>,
+        structured_pair<FirstType,SecondType,normal_layout>,
+
+    ::boost::totally_ordered<
+        const_standard_pair_view<FirstType,SecondType,mirror_layout>,
+        structured_pair<FirstType,SecondType,mirror_layout>
+
+    > > > > > > > > > > >
+
 {
-    return ( ( a.first  >  b.first  ) ||
-             (( a.first == b.first ) && ( a.second >= b.second )));
-}
+    typedef BOOST_DEDUCED_TYPENAME
+        reference_binder_finder<FirstType,SecondType,true,Layout>::type base_;
+
+    public:
+
+    template< class OtherLayout >
+    const_standard_pair_view(const standard_pair_view<FirstType,SecondType,OtherLayout> & p) :
+        base_(p.first,p.second) {}
+
+    template< class Relation >
+    explicit const_standard_pair_view(Relation & r) :
+        base_(r) {}
+
+    // Interaction with structured pair
+
+    private:
+
+    typedef structured_pair<FirstType,SecondType,Layout> structured_pair_type;
+
+    public:
+
+    operator const structured_pair_type () const
+    {
+        return structured_pair_type(
+            base_::first, base_::second
+        );
+    }
+
+    template< class Tag >
+    const BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
+        result_of::get<Tag,const_standard_pair_view>::type
+    get(BOOST_EXPLICIT_TEMPLATE_TYPE(Tag)) const
+    {
+        return ::boost::bimaps::relation::support::get<Tag>(*this);
+    }
+
+    // totally_ordered - const_standard_pair_view
+
+    template< class OtherLayout >
+    bool operator==(const const_standard_pair_view<FirstType,SecondType,OtherLayout> & p) const
+    {
+        return ( ( base_::first  == p.first  ) &&
+                 ( base_::second == p.second ) );
+    }
+
+    template< class OtherLayout >
+    bool operator<(const const_standard_pair_view<FirstType,SecondType,OtherLayout> & p) const
+    {
+        return (  ( base_::first  <  p.first  ) ||
+                 (( base_::first == p.first ) && ( base_::second < p.second )));
+    }
+
+    // totally_ordered - standard_pair_view
+
+    template< class OtherLayout >
+    bool operator==(const standard_pair_view<FirstType,SecondType,OtherLayout> & p) const
+    {
+        return ( ( base_::first  == p.first  ) &&
+                 ( base_::second == p.second ) );
+    }
+
+    template< class OtherLayout >
+    bool operator<(const standard_pair_view<FirstType,SecondType,OtherLayout> & p) const
+    {
+        return (  ( base_::first  <  p.first  ) ||
+                 (( base_::first == p.first ) && ( base_::second < p.second )));
+    }
+
+    // totally_ordered - structured_pair
+
+    template< class OtherLayout >
+    bool operator==(const structured_pair<FirstType,SecondType,OtherLayout> & p) const
+    {
+        return ( ( base_::first  == p.first  ) &&
+                 ( base_::second == p.second ) );
+    }
+
+    template< class OtherLayout >
+    bool operator<(const structured_pair<FirstType,SecondType,OtherLayout> & p) const
+    {
+        return (  ( base_::first  <  p.first  ) ||
+                 (( base_::first == p.first ) && ( base_::second < p.second )));
+    }
+};
+
 
 
 // standard_pair_view - std::pair
 
-template< class First, class Second, bool C, class L, class F, class S >
-bool operator==(const standard_pair_view<First,Second,C,L> & a,
+template< class First, class Second, class L, class F, class S >
+bool operator==(const standard_pair_view<First,Second,L> & a,
                 const std::pair<F,S> & b)
 {
     return ( ( a.first  == b.first  ) &&
              ( a.second == b.second ) );
 }
 
-template< class First, class Second, bool C, class L, class F, class S >
-bool operator!=(const standard_pair_view<First,Second,C,L> & a,
+template< class First, class Second, class L, class F, class S >
+bool operator!=(const standard_pair_view<First,Second,L> & a,
                 const std::pair<F,S> & b)
 {
     return ! ( a == b );
 }
 
-template< class First, class Second, bool C, class L, class F, class S >
-bool operator<(const standard_pair_view<First,Second,C,L> & a,
+template< class First, class Second, class L, class F, class S >
+bool operator<(const standard_pair_view<First,Second,L> & a,
                const std::pair<F,S> & b)
 {
     return (  ( a.first  <  b.first  ) ||
              (( a.first == b.first ) && ( a.second < b.second )));
 }
 
-template< class First, class Second, bool C, class L, class F, class S >
-bool operator<=(const standard_pair_view<First,Second,C,L> & a,
+template< class First, class Second, class L, class F, class S >
+bool operator<=(const standard_pair_view<First,Second,L> & a,
                 const std::pair<F,S> & b)
 {
     return (  ( a.first  <  b.first  ) ||
              (( a.first == b.first ) && ( a.second <= b.second )));
 }
 
-template< class First, class Second, bool C, class L, class F, class S >
-bool operator>(const standard_pair_view<First,Second,C,L> & a,
+template< class First, class Second, class L, class F, class S >
+bool operator>(const standard_pair_view<First,Second,L> & a,
                const std::pair<F,S> & b)
 {
     return ( ( a.first  >  b.first  ) ||
              (( a.first == b.first ) && ( a.second > b.second )));
 }
 
-template< class First, class Second, bool C, class L, class F, class S >
-bool operator>=(const standard_pair_view<First,Second,C,L> & a,
+template< class First, class Second, class L, class F, class S >
+bool operator>=(const standard_pair_view<First,Second,L> & a,
                 const std::pair<F,S> & b)
 {
     return ( ( a.first  >  b.first  ) ||
@@ -323,148 +478,148 @@ bool operator>=(const standard_pair_view<First,Second,C,L> & a,
 
 // std::pair - standard_pair_view
 
-template< class First, class Second, bool C, class L, class F, class S >
+template< class First, class Second, class L, class F, class S >
 bool operator==(const std::pair<F,S> & a,
-                const standard_pair_view<First,Second,C,L> & b)
+                const standard_pair_view<First,Second,L> & b)
 {
     return ( ( a.first  == b.first  ) &&
              ( a.second == b.second ) );
 }
 
-template< class First, class Second, bool C, class L, class F, class S >
+template< class First, class Second, class L, class F, class S >
 bool operator!=(const std::pair<F,S> & a,
-                const standard_pair_view<First,Second,C,L> & b)
+                const standard_pair_view<First,Second,L> & b)
 {
     return ! ( a == b );
 }
 
-template< class First, class Second, bool C, class L, class F, class S >
+template< class First, class Second, class L, class F, class S >
 bool operator<(const std::pair<F,S> & a,
-               const standard_pair_view<First,Second,C,L> & b)
+               const standard_pair_view<First,Second,L> & b)
 {
     return (  ( a.first  <  b.first  ) ||
              (( a.first == b.first ) && ( a.second < b.second )));
 }
 
-template< class First, class Second, bool C, class L, class F, class S >
+template< class First, class Second, class L, class F, class S >
 bool operator<=(const std::pair<F,S> & a,
-                const standard_pair_view<First,Second,C,L> & b)
+                const standard_pair_view<First,Second,L> & b)
 {
     return (  ( a.first  <  b.first  ) ||
              (( a.first == b.first ) && ( a.second <= b.second )));
 }
 
-template< class First, class Second, bool C, class L, class F, class S >
+template< class First, class Second, class L, class F, class S >
 bool operator>(const std::pair<F,S> & a,
-               const standard_pair_view<First,Second,C,L> & b)
+               const standard_pair_view<First,Second,L> & b)
 {
     return ( ( a.first  >  b.first  ) ||
              (( a.first == b.first ) && ( a.second > b.second )));
 }
 
-template< class First, class Second, bool C, class L, class F, class S >
+template< class First, class Second, class L, class F, class S >
 bool operator>=(const std::pair<F,S> & a,
-                const standard_pair_view<First,Second,C,L> & b)
+                const standard_pair_view<First,Second,L> & b)
 {
     return ( ( a.first  >  b.first  ) ||
              (( a.first == b.first ) && ( a.second >= b.second )));
 }
 
 
-// structured_pair - standard_pair_view
+// const_standard_pair_view - std::pair
 
-template< class First, class Second, class L1, class L2, bool C >
-bool operator==(const structured_pair<First,Second,L1> & a,
-                const standard_pair_view<First,Second,C,L2> & b)
+template< class First, class Second, class L, class F, class S >
+bool operator==(const const_standard_pair_view<First,Second,L> & a,
+                const std::pair<F,S> & b)
 {
     return ( ( a.first  == b.first  ) &&
              ( a.second == b.second ) );
 }
 
-template< class First, class Second, class L1, class L2, bool C >
-bool operator!=(const structured_pair<First,Second,L1> & a,
-                const standard_pair_view<First,Second,C,L2> & b)
+template< class First, class Second, class L, class F, class S >
+bool operator!=(const const_standard_pair_view<First,Second,L> & a,
+                const std::pair<F,S> & b)
 {
     return ! ( a == b );
 }
 
-template< class First, class Second, class L1, class L2, bool C >
-bool operator<(const structured_pair<First,Second,L1> & a,
-               const standard_pair_view<First,Second,C,L2> & b)
+template< class First, class Second, class L, class F, class S >
+bool operator<(const const_standard_pair_view<First,Second,L> & a,
+               const std::pair<F,S> & b)
 {
     return (  ( a.first  <  b.first  ) ||
              (( a.first == b.first ) && ( a.second < b.second )));
 }
 
-template< class First, class Second, class L1, class L2, bool C >
-bool operator<=(const structured_pair<First,Second,L1> & a,
-                const standard_pair_view<First,Second,C,L2> & b)
+template< class First, class Second, class L, class F, class S >
+bool operator<=(const const_standard_pair_view<First,Second,L> & a,
+                const std::pair<F,S> & b)
 {
     return (  ( a.first  <  b.first  ) ||
              (( a.first == b.first ) && ( a.second <= b.second )));
 }
 
-template< class First, class Second, class L1, class L2, bool C >
-bool operator>(const structured_pair<First,Second,L1> & a,
-               const standard_pair_view<First,Second,C,L2> & b)
+template< class First, class Second, class L, class F, class S >
+bool operator>(const const_standard_pair_view<First,Second,L> & a,
+               const std::pair<F,S> & b)
 {
     return ( ( a.first  >  b.first  ) ||
              (( a.first == b.first ) && ( a.second > b.second )));
 }
 
-template< class First, class Second, class L1, class L2, bool C >
-bool operator>=(const structured_pair<First,Second,L1> & a,
-                const standard_pair_view<First,Second,C,L2> & b)
+template< class First, class Second, class L, class F, class S >
+bool operator>=(const const_standard_pair_view<First,Second,L> & a,
+                const std::pair<F,S> & b)
 {
     return ( ( a.first  >  b.first  ) ||
              (( a.first == b.first ) && ( a.second >= b.second )));
 }
 
 
-// standard_pair_view - structured_pair
+// std::pair - const_standard_pair_view
 
-template< class First, class Second, class L1, class L2, bool C >
-bool operator==(const standard_pair_view<First,Second,C,L1> & a,
-                const structured_pair<First,Second,L2> & b)
+template< class First, class Second, class L, class F, class S >
+bool operator==(const std::pair<F,S> & a,
+                const const_standard_pair_view<First,Second,L> & b)
 {
     return ( ( a.first  == b.first  ) &&
              ( a.second == b.second ) );
 }
 
-template< class First, class Second, class L1, class L2, bool C >
-bool operator!=(const standard_pair_view<First,Second,C,L1> & a,
-                const structured_pair<First,Second,L2> & b)
+template< class First, class Second, class L, class F, class S >
+bool operator!=(const std::pair<F,S> & a,
+                const const_standard_pair_view<First,Second,L> & b)
 {
     return ! ( a == b );
 }
 
-template< class First, class Second, class L1, class L2, bool C >
-bool operator<(const standard_pair_view<First,Second,C,L1> & a,
-               const structured_pair<First,Second,L2> & b)
+template< class First, class Second, class L, class F, class S >
+bool operator<(const std::pair<F,S> & a,
+               const const_standard_pair_view<First,Second,L> & b)
 {
     return (  ( a.first  <  b.first  ) ||
              (( a.first == b.first ) && ( a.second < b.second )));
 }
 
-template< class First, class Second, class L1, class L2, bool C >
-bool operator<=(const standard_pair_view<First,Second,C,L1> & a,
-                const structured_pair<First,Second,L2> & b)
+template< class First, class Second, class L, class F, class S >
+bool operator<=(const std::pair<F,S> & a,
+                const const_standard_pair_view<First,Second,L> & b)
 {
     return (  ( a.first  <  b.first  ) ||
              (( a.first == b.first ) && ( a.second <= b.second )));
 }
 
-template< class First, class Second, class L1, class L2, bool C >
-bool operator>(const standard_pair_view<First,Second,C,L1> & a,
-               const structured_pair<First,Second,L2> & b)
+template< class First, class Second, class L, class F, class S >
+bool operator>(const std::pair<F,S> & a,
+               const const_standard_pair_view<First,Second,L> & b)
 {
     return ( ( a.first  >  b.first  ) ||
              (( a.first == b.first ) && ( a.second > b.second )));
 }
 
-template< class First, class Second, class L1, class L2, bool C >
-bool operator>=(const standard_pair_view<First,Second,C,L1> & a,
-                const structured_pair<First,Second,L2> & b)
+template< class First, class Second, class L, class F, class S >
+bool operator>=(const std::pair<F,S> & a,
+                const const_standard_pair_view<First,Second,L> & b)
 {
     return ( ( a.first  >  b.first  ) ||
              (( a.first == b.first ) && ( a.second >= b.second )));

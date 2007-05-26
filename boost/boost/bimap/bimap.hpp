@@ -186,18 +186,26 @@ class bimap
     ------------------------------------------------------------------*/
 
     typedef BOOST_DEDUCED_TYPENAME base_::left_set_type left_set_type;
-    typedef BOOST_DEDUCED_TYPENAME left_set_type::BOOST_NESTED_TEMPLATE map_view_bind
-    <
-        BOOST_DEDUCED_TYPENAME base_::left_tag, base_
-
-    >::type left_map;
+    typedef BOOST_DEDUCED_TYPENAME
+        left_set_type::BOOST_NESTED_TEMPLATE map_view_bind<
+            BOOST_DEDUCED_TYPENAME base_::left_tag, base_
+        >::type left_map;
 
     typedef BOOST_DEDUCED_TYPENAME base_::right_set_type right_set_type;
-    typedef BOOST_DEDUCED_TYPENAME right_set_type::BOOST_NESTED_TEMPLATE map_view_bind
-    <
-        BOOST_DEDUCED_TYPENAME base_::right_tag, base_
+    typedef BOOST_DEDUCED_TYPENAME
+        right_set_type::BOOST_NESTED_TEMPLATE map_view_bind<
+            BOOST_DEDUCED_TYPENAME base_::right_tag, base_
+        >::type right_map;
 
-    >::type right_map;
+    typedef BOOST_DEDUCED_TYPENAME
+         left_map::reference        left_reference;
+    typedef BOOST_DEDUCED_TYPENAME
+         left_map::const_reference  left_const_reference;
+
+    typedef BOOST_DEDUCED_TYPENAME
+        right_map::reference       right_reference;
+    typedef BOOST_DEDUCED_TYPENAME
+        right_map::const_reference right_const_reference;
 
     /// Left map view
     left_map  left;

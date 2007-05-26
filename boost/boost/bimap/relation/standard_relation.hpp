@@ -118,16 +118,16 @@ class standard_relation
         typedef structured_pair<TA,TB,normal_layout> left_pair ;
         typedef structured_pair<TB,TA,mirror_layout> right_pair;
 
-        typedef standard_pair_view<TA,TB,false,normal_layout>
+        typedef standard_pair_view<TA,TB,normal_layout>
             left_pair_reference ;
 
-        typedef standard_pair_view<TB,TA,false,mirror_layout>
+        typedef standard_pair_view<TB,TA,mirror_layout>
             right_pair_reference;
 
-        typedef const standard_pair_view<TA,TB,true,normal_layout>
+        typedef const const_standard_pair_view<TA,TB,normal_layout>
             const_left_pair_reference ;
 
-        typedef const standard_pair_view<TB,TA,true,mirror_layout>
+        typedef const const_standard_pair_view<TB,TA,mirror_layout>
             const_right_pair_reference;
 
     //@}

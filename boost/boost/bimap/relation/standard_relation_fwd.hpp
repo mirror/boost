@@ -33,8 +33,11 @@ class standard_relation_view;
 template< class TA, class TB >
 class const_standard_relation_view;
 
-template< class FirstType, class SecondType, bool constant, class Layout >
+template< class FirstType, class SecondType, class Layout >
 class standard_pair_view;
+
+template< class FirstType, class SecondType, class Layout >
+class const_standard_pair_view;
 
 //-----------------------------------------------------------------------------
 
@@ -48,7 +51,7 @@ struct is_standard_pair_view :
 
 template< class FirstType, class SecondType, class Layout >
 struct is_standard_pair_view<
-    standard_pair_view<FirstType,SecondType,false,Layout> > :
+    standard_pair_view<FirstType,SecondType,Layout> > :
     ::boost::mpl::true_ {};
 
 template< class Type >

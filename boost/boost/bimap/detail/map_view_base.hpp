@@ -417,10 +417,17 @@ template <class T> inline const T&  make_const(const T& t) { return t; }
 /*===========================================================================*/
 #define BOOST_BIMAP_MAP_VIEW_RANGE_IMPLEMENTATION(BASE)                       \
                                                                               \
+typedef std::pair<                                                            \
+    BOOST_DEDUCED_TYPENAME base_::iterator,                                   \
+    BOOST_DEDUCED_TYPENAME base_::iterator> range_type;                       \
+                                                                              \
+typedef std::pair<                                                            \
+    BOOST_DEDUCED_TYPENAME base_::const_iterator,                             \
+    BOOST_DEDUCED_TYPENAME base_::const_iterator> const_range_type;           \
+                                                                              \
+                                                                              \
 template< class LowerBounder, class UpperBounder>                             \
-std::pair<BOOST_DEDUCED_TYPENAME BASE::iterator,                              \
-          BOOST_DEDUCED_TYPENAME BASE::iterator>                              \
-    range(LowerBounder lower,UpperBounder upper)                              \
+range_type range(LowerBounder lower,UpperBounder upper)                       \
 {                                                                             \
     std::pair<                                                                \
                                                                               \
@@ -429,11 +436,7 @@ std::pair<BOOST_DEDUCED_TYPENAME BASE::iterator,                              \
                                                                               \
     > r( this->base().range(lower,upper) );                                   \
                                                                               \
-    return std::pair                                                          \
-    <                                                                         \
-        BOOST_DEDUCED_TYPENAME BASE::iterator,                                \
-        BOOST_DEDUCED_TYPENAME BASE::iterator                                 \
-    >(                                                                        \
+    return range_type(                                                        \
         this->template functor<                                               \
             BOOST_DEDUCED_TYPENAME BASE::iterator_from_base                   \
         >()                                         ( r.first ),              \
@@ -444,9 +447,7 @@ std::pair<BOOST_DEDUCED_TYPENAME BASE::iterator,                              \
 }                                                                             \
                                                                               \
 template< class LowerBounder, class UpperBounder>                             \
-std::pair<BOOST_DEDUCED_TYPENAME BASE::const_iterator,                        \
-          BOOST_DEDUCED_TYPENAME BASE::const_iterator>                        \
-    range(LowerBounder lower,UpperBounder upper) const                        \
+const_range_type range(LowerBounder lower,UpperBounder upper) const           \
 {                                                                             \
     std::pair<                                                                \
                                                                               \
@@ -455,11 +456,7 @@ std::pair<BOOST_DEDUCED_TYPENAME BASE::const_iterator,                        \
                                                                               \
     > r( this->base().range(lower,upper) );                                   \
                                                                               \
-    return std::pair                                                          \
-    <                                                                         \
-        BOOST_DEDUCED_TYPENAME BASE::const_iterator,                          \
-        BOOST_DEDUCED_TYPENAME BASE::const_iterator                           \
-    >(                                                                        \
+    return const_range_type(                                                  \
         this->template functor<                                               \
             BOOST_DEDUCED_TYPENAME BASE::iterator_from_base                   \
         >()                                         ( r.first ),              \
