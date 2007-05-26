@@ -152,6 +152,16 @@ void test_bimap()
 
         b2.right = b1.right;
         BOOST_CHECK( b2 == b1 );
+
+        b1.clear();
+        b2.swap(b1);
+        BOOST_CHECK( b2.empty() && !b1.empty() );
+
+        b1.left.swap( b2.left );
+        BOOST_CHECK( b1.empty() && !b2.empty() );
+
+        b1.right.swap( b2.right );
+        BOOST_CHECK( b2.empty() && !b1.empty() );
     }
     //--------------------------------------------------------------------
 
