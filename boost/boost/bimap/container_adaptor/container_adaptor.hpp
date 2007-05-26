@@ -236,6 +236,11 @@ class container_adaptor
         );
     }
 
+    void swap( container_adaptor & c )
+    {
+        base().swap( c.base() );
+    }
+
     // Access to functors ----------------------------------------------------
 
     protected:
