@@ -119,4 +119,94 @@
   </fo:list-item>
 </xsl:template>
 
+<!-- 
+
+ The following rules apply syntax highlighting to phrases
+ that have been appropriately marked up, the highlighting
+ used is the same as that used by our CSS style sheets,
+ but potentially we have the option to do better here
+ since we can add bold and italic formatting quite easily
+ 
+ -->
+
+<xsl:template match="//programlisting/phrase[@role='keyword']">
+  <fo:inline color="#0000AA"><xsl:apply-templates/></fo:inline>
+</xsl:template>
+<xsl:template match="//programlisting/phrase[@role='special']">
+  <fo:inline color="#707070"><xsl:apply-templates/></fo:inline>
+</xsl:template>
+<xsl:template match="//programlisting/phrase[@role='preprocessor']">
+  <fo:inline color="#402080"><xsl:apply-templates/></fo:inline>
+</xsl:template>
+<xsl:template match="//programlisting/phrase[@role='char']">
+  <fo:inline color="teal"><xsl:apply-templates/></fo:inline>
+</xsl:template>
+<xsl:template match="//programlisting/phrase[@role='comment']">
+  <fo:inline color="#800000"><xsl:apply-templates/></fo:inline>
+</xsl:template>
+<xsl:template match="//programlisting/phrase[@role='string']">
+  <fo:inline color="teal"><xsl:apply-templates/></fo:inline>
+</xsl:template>
+<xsl:template match="//programlisting/phrase[@role='number']">
+  <fo:inline color="teal"><xsl:apply-templates/></fo:inline>
+</xsl:template>
+<xsl:template match="//programlisting/phrase[@role='white_bkd']">
+  <fo:inline color="#FFFFFF"><xsl:apply-templates/></fo:inline>
+</xsl:template>
+<xsl:template match="//programlisting/phrase[@role='dk_grey_bkd']">
+  <fo:inline color="#999999"><xsl:apply-templates/></fo:inline>
+</xsl:template>
+
+<!--
+Make all hyperlinks blue colored:
+-->
+<xsl:attribute-set name="xref.properties">
+  <xsl:attribute name="color">blue</xsl:attribute>
+</xsl:attribute-set>
+
+<!--
+Put a box around admonishments and keep them together:
+-->
+<xsl:attribute-set name="graphical.admonition.properties">
+  <xsl:attribute name="border-color">#FF8080</xsl:attribute>
+  <xsl:attribute name="border-width">1px</xsl:attribute>
+  <xsl:attribute name="border-style">solid</xsl:attribute>
+  <xsl:attribute name="padding-left">0.2cm</xsl:attribute>
+  <xsl:attribute name="padding-right">0.2cm</xsl:attribute>
+  <xsl:attribute name="padding-top">0.2cm</xsl:attribute>
+  <xsl:attribute name="padding-bottom">0.2cm</xsl:attribute>
+  <xsl:attribute name="keep-together">1</xsl:attribute>
+</xsl:attribute-set>
+
+<!--
+Put a box around code blocks, also set the font size
+and keep the block together if we can:
+-->
+<xsl:attribute-set name="monospace.verbatim.properties">
+  <xsl:attribute name="border-color">#DCDCDC</xsl:attribute>
+  <xsl:attribute name="border-width">1px</xsl:attribute>
+  <xsl:attribute name="border-style">solid</xsl:attribute>
+  <xsl:attribute name="padding-left">0.2cm</xsl:attribute>
+  <xsl:attribute name="padding-right">0.2cm</xsl:attribute>
+  <xsl:attribute name="padding-top">0.2cm</xsl:attribute>
+  <xsl:attribute name="padding-bottom">0.2cm</xsl:attribute>
+  <xsl:attribute name="keep-together">1</xsl:attribute>
+  <xsl:attribute name="font-size">9pt</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="table.cell.padding">
+  <xsl:attribute name="padding-left">0.2cm</xsl:attribute>
+  <xsl:attribute name="padding-right">0.2cm</xsl:attribute>
+  <xsl:attribute name="padding-top">0.2cm</xsl:attribute>
+  <xsl:attribute name="padding-bottom">0.2cm</xsl:attribute>
+</xsl:attribute-set>
+
+<xsl:attribute-set name="table.properties">
+  <xsl:attribute name="keep-together">1</xsl:attribute>
+</xsl:attribute-set>
+
+   <xsl:param name="table.frame.border.color">#DCDCDC</xsl:param>
+<xsl:param name="table.cell.border.color">#DCDCDC</xsl:param>
+
 </xsl:stylesheet>
+
