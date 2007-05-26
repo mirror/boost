@@ -39,7 +39,7 @@ namespace boost { namespace fusion {
             };
 
             template<typename Elem>
-            void operator()(Elem& e) const
+            void operator()(Elem const& e) const
             {
                 using std::swap;
                 swap(front(e), back(e));
