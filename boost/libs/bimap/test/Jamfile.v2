@@ -56,8 +56,10 @@ test-suite "bimap_test"
     [ run test_bimap_assign.cpp                                               ]
     [ run test_bimap_property_map.cpp                                         ]
     [ run test_bimap_modify.cpp                                               ]
+    [ run test_bimap_range.cpp                                                ]
     [ run test_bimap_operator_bracket.cpp                                     ]
     [ run test_bimap_lambda.cpp                                               ]
+    [ run test_bimap_mutable.cpp                                              ]
     [ run test_bimap_extra.cpp                                                ]
     [ run test_bimap_convenience_header.cpp                                   ]
     [ run test_bimap_project.cpp                                              ]
@@ -65,3 +67,10 @@ test-suite "bimap_test"
           /boost/serialization//boost_serialization                           ]
     ;
 
+test-suite "compile_fail_test"
+    :
+
+    [ compile-fail compile_fail/test_bimap_mutable_1.cpp                      ]
+    [ compile-fail compile_fail/test_bimap_mutable_2.cpp                      ]
+    [ compile-fail compile_fail/test_bimap_mutable_3.cpp                      ]
+    ;

@@ -21,27 +21,28 @@
 #include <boost/test/minimal.hpp>
 
 // Boost.Bimap
-#include <boost/bimap/support/lambda.hpp>
 #include <boost/bimap/bimap.hpp>
+#include <boost/bimap/list_of.hpp>
 
-void test_bimap_lambda()
+
+void test_bimap_mutable_3()
 {
     using namespace boost::bimaps;
 
-    typedef bimap<int,double> bm;
+    typedef bimap< int, list_of<int> > bm_type;
+    bm_type bm;
+    bm.insert( bm_type::value_type(1,1) );
 
-    bm b;
-    b.insert( bm::value_type(1,0.1) );
-
-    BOOST_CHECK( b.size() == 1 );
-    BOOST_CHECK( b.left.modify_key ( b.left.begin(),  _key =   2 ) );
-    BOOST_CHECK( b.left.modify_data( b.left.begin(), _data = 0.2 ) );
-    BOOST_CHECK( b.left.range( _key >= 1, _key < 3 ).first == b.left.begin() );
+    // fail test
+    {
+        bm.right.begin()->second = 10;
+    }
 }
+
 
 int test_main( int, char* [] )
 {
-    test_bimap_lambda();
+    test_bimap_mutable_3();
     return 0;
 }
 

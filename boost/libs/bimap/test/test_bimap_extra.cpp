@@ -38,31 +38,31 @@
 using namespace boost::bimaps;
 using namespace boost::bimaps::support;
 
-typedef bimap<int, unconstrained_set_of<double> > bm;
+typedef bimap<int, unconstrained_set_of<double> > bm_type;
 
 
 namespace support_metafunctions_test {
 
     typedef boost::is_same
     <
-        data_type_by< member_at::left , bm >::type,
-        key_type_by < member_at::right, bm >::type
+        data_type_by< member_at::left , bm_type >::type,
+        key_type_by < member_at::right, bm_type >::type
 
     >::type test_metafunction_1;
     BOOST_STATIC_ASSERT(test_metafunction_1::value);
 
     typedef boost::is_same
     <
-        data_type_by< member_at::right, bm >::type,
-        key_type_by < member_at::left , bm >::type
+        data_type_by< member_at::right, bm_type >::type,
+        key_type_by < member_at::left , bm_type >::type
 
     >::type test_metafunction_2;
     BOOST_STATIC_ASSERT(test_metafunction_2::value);
 
     typedef boost::is_same
     <
-        map_type_by  < member_at::left , bm >::type::value_type,
-        value_type_by< member_at::left , bm >::type
+        map_type_by  < member_at::left , bm_type >::type::value_type,
+        value_type_by< member_at::left , bm_type >::type
 
     >::type test_metafunction_3;
     BOOST_STATIC_ASSERT(test_metafunction_3::value);
@@ -71,13 +71,13 @@ namespace support_metafunctions_test {
 
 void test_bimap_extra()
 {
-    bm b;
-    b.left.insert( bm::left_value_type(1,0.1) );
+    // extra tests
+    // ---------------------------------------------------------------
+    // This section test small things... when a group of this checks
+    // can be related it is moved to a separate unit test file.
 
-    bm::left_iterator iter = (b.left.begin());
-    iter->second = 0.2;
 
-    b.begin()->right = 0.1;
+
 }
 
 
