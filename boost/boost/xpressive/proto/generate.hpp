@@ -11,8 +11,7 @@
 #define BOOST_PROTO_GENERATE_HPP_EAN_02_13_2007
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/bool.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/matches.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
@@ -70,16 +69,12 @@ namespace boost { namespace proto
 
     namespace detail
     {
-        struct empty
-        {};
-
         template<typename Domain, typename Expr>
         struct generate_if
-          : mpl::if_<
+          : lazy_enable_if<
                 matches<Expr, typename Domain::grammar>
               , typename Domain::template apply<Expr>
-              , detail::empty
-            >::type
+            >
         {};
 
         // Optimization, generate fewer templates...
@@ -87,11 +82,6 @@ namespace boost { namespace proto
         struct generate_if<proto::default_domain, Expr>
         {
             typedef Expr type;
-
-            static Expr const &make(Expr const &expr)
-            {
-                return expr;
-            }
         };
     }
 
