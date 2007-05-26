@@ -112,7 +112,7 @@ struct tolower_seekable_filter : public seekable_filter {
     { return boost::iostreams::put(s, (char) std::tolower(c)); }
 
     template<typename Sink>
-    stream_offset seek(Sink& s, stream_offset off, BOOST_IOS::seekdir way)
+    std::streampos seek(Sink& s, stream_offset off, BOOST_IOS::seekdir way)
     { return boost::iostreams::seek(s, off, way); }
 };
 

@@ -56,7 +56,7 @@
 <A NAME="ios_synopsis"></A>
 <H3>Synopsis</H3>
 
-<PRE CLASS='broken_ie'><SPAN CLASS='preprocessor'>#define</SPAN> <A CLASS='documented' HREF="#boost_iostreams_basic_ios">BOOST_IOSSTREAMS_BASIC_IOS</A>(ch, tr) ...
+<PRE CLASS='broken_ie'><SPAN CLASS='preprocessor'>#define</SPAN> <A CLASS='documented' HREF="#boost_iostreams_basic_ios">BOOST_IOSTREAMS_BASIC_IOS</A>(ch, tr) ...
 <SPAN CLASS='preprocessor'>#define</SPAN> <A CLASS='documented' HREF="#boost_ios">BOOST_IOS</A> ...
 <SPAN CLASS='preprocessor'>#define</SPAN> <A CLASS='documented' HREF="#boost_iostreams_failure">BOOST_IOSTREAMS_FAILURE</A> ...</PRE>
 
@@ -164,11 +164,11 @@
 
 <PRE CLASS='broken_ie'><SPAN CLASS='preprocessor'>#define</SPAN> <A CLASS='documented' HREF="#boost_iostreams_char_traits">BOOST_IOSTREAMS_CHAR_TRAITS</A>(ch) ...</PRE>
 
-<P>Expands to <CODE>std::char_traits&lt;ch&gt;</CODE> for standard libraries which support <CODE>std::char_traits</CODE>, and to a substitute for <CODE>std::char_traits&lt;char&gt;</CODE> otherwise.</P>
-
 <A NAME="boost_iostreams_char_traits"></A>
 <H4><CODE>BOOST_IOSTREAMS_CHAR_TRAITS</CODE></H4>
 
+
+<P>Expands to <CODE>std::char_traits&lt;ch&gt;</CODE> for standard libraries which support <CODE>std::char_traits</CODE>, and to a substitute for <CODE>std::char_traits&lt;char&gt;</CODE> otherwise.</P>
 <A NAME="component_access"></A>
 <H3>5. Chain Component Access</H3>
 
@@ -188,12 +188,14 @@
 <A NAME="boost_iostreams_component_type"></A>
 <H4><CODE>BOOST_IOSTREAMS_COMPONENT_TYPE</CODE></H4>
 
-<P>Used in place of <CODE>chain.component_type&lt;n&gt;</CODE> for compilers which don't support explicit specification of member function template arguments. <CODE>chain</CODE> can be an instance of <A HREF="../classes/filtering_stream.html"><CODE>filtering_stream</CODE></A>, <A HREF="../classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A> or <A HREF="../classes/chain.html"><CODE>basic_chain</CODE></A>.</P>
+<P>Used in place of <CODE>chain.component_type(n)</CODE> for compilers which don't support explicit specification of member function template arguments. <CODE>chain</CODE> can be an instance of <A HREF="../classes/filtering_stream.html"><CODE>filtering_stream</CODE></A>, <A HREF="../classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A> or <A HREF="../classes/chain.html"><CODE>basic_chain</CODE></A>.</P>
+
+<P><I>This macro is deprecated. Use <CODE>chain.component_type(n)</CODE> instead.</I></P>
 
 <A NAME="boost_iostreams_component"></A>
 <H4><CODE>BOOST_IOSTREAMS_COMPONENT</CODE></H4>
 
-<P>Used in place of <CODE>chain.component&lt;n, t&gt;</CODE> for compilers which don't support explicit specification of member function template arguments. <CODE>chain</CODE> can be an instance of <A HREF="../classes/filtering_stream.html"><CODE>filtering_stream</CODE></A>, <A HREF="../classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A> or <A HREF="../classes/chain.html"><CODE>basic_chain</CODE></A>.</P>
+<P>Used in place of <CODE>chain.component&lt;t&gt;(n)</CODE> for compilers which don't support explicit specification of member function template arguments. <CODE>chain</CODE> can be an instance of <A HREF="../classes/filtering_stream.html"><CODE>filtering_stream</CODE></A>, <A HREF="../classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A> or <A HREF="../classes/chain.html"><CODE>basic_chain</CODE></A>.</P>
 
 <HR STYLE="margin-top:1em">
 

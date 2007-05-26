@@ -77,7 +77,7 @@ consiting of one or more filters and an optional device, joined using <CODE>oper
 BOOST_IOSTREAMS_PIPABLE(my_filter, 0)
 </PRE>
 
-<P>No semicolon is required following the macro declaration. The following example shows a <A HREF="../classes/filtering_stream.html"><CODE>filtering_stream</CODE></A> constructed from a pipeline</CODE>.</P>
+<P>No semicolon is required (or allowed) following the macro invocation. The following example shows a <A HREF="../classes/filtering_stream.html"><CODE>filtering_stream</CODE></A> constructed from a pipeline</CODE>.</P>
 
 <PRE CLASS="broken_ie"><SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS='header' HREF='../../../../boost/iostreams/filtering_stream.hpp'><SPAN CLASS='literal'>&lt;boost/iostreams/filtering_stream.hpp&gt;</SPAN></A>
 <SPAN CLASS='preprocessor'>#include</SPAN> <A CLASS='header' HREF='../../../../boost/iostreams/device/file.hpp'><SPAN CLASS='literal'>&lt;boost/iostreams/device/file.hpp&gt;</SPAN></A>
@@ -106,9 +106,13 @@ BOOST_IOSTREAMS_PIPABLE(my_filter, 0)
 
 <PRE CLASS="broken_ie">
 
-<SPAN CLASS='preprocessor'>#define</SPAN> <A CLASS='documented' HREF="#boost_iostreams_pipable">BOOST_IOSTREAMS_PIPABLE</A>(filter, arity) <SPAN CLASS='omitted'>...</SPAN>
+<SPAN CLASS='preprocessor'>#define</SPAN> BOOST_IOSTREAMS_PIPABLE(filter, arity) <SPAN CLASS='omitted'>...</SPAN>
 
 </PRE>
+
+<H4>Description</H4>
+
+<P>Defines the overloads of <CODE>operator|</CODE> necessary for a <A HREF="../concepts/filter.html">Filter</A> to appear in pipelines.</P>
 
 <A NAME="macro_params"></A>
 <H4>Macro parameters</H4>

@@ -101,13 +101,15 @@
 <SPAN CLASS="keyword">public</SPAN>:
     <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='keyword'>char</SPAN>                      char_type;
     <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='omitted'>[implementation-defined]</SPAN>  category;
-    file_descriptor_source( <SPAN CLASS="keyword">const</SPAN> std::string& pathname, 
+    <A CLASS="documented" HREF="#file_descriptor_source_ctor">file_descriptor_source</A>( <SPAN CLASS="keyword">const</SPAN> std::string& pathname, 
                             std::ios_base::open_mode mode = 
                                 std::ios_base::in );
-    file_descriptor_source( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
+    <A CLASS="documented" HREF="#file_descriptor_source_ctor">file_descriptor_source</A>( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
 
     <SPAN CLASS='comment'>// Windows-only</SPAN>
-    file_descriptor_source( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
+    <A CLASS="documented" HREF="#file_descriptor_source_ctor">file_descriptor_source</A>( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
+
+    <SPAN CLASS="keyword">bool</SPAN> <A CLASS="documented" HREF="#file_descriptor_source_is_open">is_open</A>() <SPAN CLASS="keyword">const</SPAN>;
 };
 
 } } <SPAN CLASS='comment'>// End namespace boost::io</SPAN></PRE>
@@ -136,6 +138,13 @@
     The third member is the same as the second, except that it accepts a Windows file handle instead of a file descriptor. If the second argument is <CODE>true</CODE>, the file descriptor is closed when the <CODE>file_descriptor_source</CODE> being constructed &#8212; or one of its copies &#8212; is closed.
 </P>
 
+<A NAME="file_descriptor_source_is_open"></A>
+<H4><CODE>file_descriptor_source::is_open</CODE></H4>
+
+<PRE CLASS="broken_ie">    <SPAN CLASS="keyword">bool</SPAN> is_open() <SPAN CLASS="keyword">const</SPAN>;</PRE>
+    
+<P>Returns <CODE>true</CODE> if the underlying file was opened successfully.</P>
+
 <A NAME="file_descriptor_sink"></A>
 <H3>Class <CODE>file_descriptor_sink</CODE></H3>
 
@@ -151,13 +160,15 @@
 <SPAN CLASS="keyword">public</SPAN>:
     <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='keyword'>char</SPAN>                      char_type;
     <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='omitted'>[implementation-defined]</SPAN>  category;
-    file_descriptor_sink( <SPAN CLASS="keyword">const</SPAN> std::string& pathname, 
+    <A CLASS="documented" HREF="#file_descriptor_sink_ctor">file_descriptor_sink</A>( <SPAN CLASS="keyword">const</SPAN> std::string& pathname, 
                           std::ios_base::open_mode mode = 
                               std::ios_base::out );
-    file_descriptor_sink( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
+    <A CLASS="documented" HREF="#file_descriptor_sink_ctor">file_descriptor_sink</A>( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
 
     <SPAN CLASS='comment'>// Windows-only</SPAN>
-    file_descriptor_sink( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );  
+    <A CLASS="documented" HREF="#file_descriptor_sink_ctor">file_descriptor_sink</A>( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
+
+    <SPAN CLASS="keyword">bool</SPAN> <A CLASS="documented" HREF="#file_descriptor_sink_is_open">is_open</A>() <SPAN CLASS="keyword">const</SPAN>;
 };
 
 } } <SPAN CLASS='comment'>// End namespace boost::io</SPAN></PRE>
@@ -185,6 +196,13 @@
     The third member is the same as the second, except that it accepts a Windows file handle instead of a file descriptor. If the second argument is <CODE>true</CODE>, the file descriptor is closed when the new <CODE>file_descriptor_sink</CODE> &#8212; or one of its copies &#8212; is closed. 
 </P>
 
+<A NAME="file_descriptor_sink_is_open"></A>
+<H4><CODE>file_descriptor_sink::is_open</CODE></H4>
+
+<PRE CLASS="broken_ie">    <SPAN CLASS="keyword">bool</SPAN> is_open() <SPAN CLASS="keyword">const</SPAN>;</PRE>
+    
+<P>Returns <CODE>true</CODE> if the underlying file was opened successfully.</P>
+
 <A NAME="file_descriptor"></A>
 <H3>Class <CODE>file_descriptor</CODE></H3>
 
@@ -200,13 +218,15 @@
 <SPAN CLASS="keyword">public</SPAN>:
     <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='keyword'>char</SPAN>                      char_type;
     <SPAN CLASS='keyword'>typedef</SPAN> <SPAN CLASS='omitted'>[implementation-defined]</SPAN>  category;
-    file_descriptor( <SPAN CLASS="keyword">const</SPAN> std::string& pathname, 
+    <A CLASS="documented" HREF="#file_descriptor_constructor">file_descriptor</A>( <SPAN CLASS="keyword">const</SPAN> std::string& pathname, 
                      std::ios_base::open_mode mode = 
                          std::ios_base::in | std::ios_base::out );
-    file_descriptor( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );   
+    <A CLASS="documented" HREF="#file_descriptor_constructor">file_descriptor</A>( <SPAN CLASS="keyword">int</SPAN> fd, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );   
 
     <SPAN CLASS='comment'>// Windows-only</SPAN>
-    file_descriptor( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
+    <A CLASS="documented" HREF="#file_descriptor_constructor">file_descriptor</A>( HANDLE hFile, <SPAN CLASS="keyword">bool</SPAN> close_on_exit = <SPAN CLASS="keyword">false</SPAN> );
+
+    <SPAN CLASS="keyword">bool</SPAN> <A CLASS="documented" HREF="#file_descriptor_is_open">is_open</A>() <SPAN CLASS="keyword">const</SPAN>;
 };
 
 } } <SPAN CLASS='comment'>// End namespace boost::io</SPAN></PRE>
@@ -233,6 +253,13 @@
 <P>
     The third member is the same as the second, except that it accepts a Windows file handle instead of a file descriptor. If the second argument is <CODE>true</CODE>, the file descriptor is closed when the new <CODE>file_descriptor</CODE> &#8212; or one of its copies &#8212; is closed.
 </P>
+
+<A NAME="file_descriptor_is_open"></A>
+<H4><CODE>file_descriptor::is_open</CODE></H4>
+
+<PRE CLASS="broken_ie">    <SPAN CLASS="keyword">bool</SPAN> is_open() <SPAN CLASS="keyword">const</SPAN>;</PRE>
+    
+<P>Returns <CODE>true</CODE> if the underlying file was opened successfully.</P>
 
 <!-- Begin Footnotes -->
 

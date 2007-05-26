@@ -141,8 +141,8 @@ public:
         return iostreams::put(dest, c);
     }
 
-    template<typename Source>
-    void close(Source&, BOOST_IOS::openmode) { skip_ = false; }
+    template<typename Device>
+    void close(Device&, BOOST_IOS::openmode) { skip_ = false; }
 private:
     char comment_char_;
     bool skip_;

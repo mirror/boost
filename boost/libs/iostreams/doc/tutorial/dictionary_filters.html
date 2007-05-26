@@ -86,7 +86,7 @@
             <SPAN CLASS="keyword">if</SPAN> (c == <SPAN CLASS="numeric_literal">EOF</SPAN> || !std::isalpha((<SPAN CLASS="keyword">unsigned</SPAN> <SPAN CLASS="keyword">char</SPAN>) c)) {
                 dictionary_.replace(current_word_);
                 cout.write( current_word_.data(),
-                            static_cast&lt;streamsize&gt;(current_word_.size()) );
+                            <SPAN CLASS="keyword">static_cast</SPAN>&lt;streamsize&gt;(current_word_.size()) );
                 current_word_.erase();
                 <SPAN CLASS="keyword">if</SPAN> (c == <SPAN CLASS="numeric_literal">EOF</SPAN>)
                     break;
@@ -233,7 +233,7 @@
     <SPAN CLASS="keyword"><SPAN CLASS="keyword">bool</SPAN></SPAN> write_current_word(Sink& dest)
     {
         <SPAN CLASS="keyword">using</SPAN> <SPAN CLASS="keyword">namespace</SPAN> std;
-        streamsize amt = static_cast&lt;streamsize&gt;(current_word_.size() - off_);
+        streamsize amt = <SPAN CLASS="keyword">static_cast</SPAN>&lt;streamsize&gt;(current_word_.size() - off_);
         streamsize result =
             iostreams::write(dest, current_word_.data() + off_, amt);
         <SPAN CLASS="keyword">if</SPAN> (result == amt) {
@@ -290,7 +290,7 @@
             iostreams::write( 
                 dest,
                 current_word.data() + off, 
-                <SPAN CLASS="keyword">static_cast</SPAN><std::streamsize>(current_word.size() - off) 
+                <SPAN CLASS="keyword">static_cast</SPAN>&lt;std::streamsize&gt;(current_word.size() - off) 
             );
     }</PRE>
 

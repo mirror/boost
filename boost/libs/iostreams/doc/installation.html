@@ -76,7 +76,7 @@
 <H2>Building with Boost.Build</H2>
 
 <P>
-    To build with <A HREF="../../../tools/build/v1/build_system.htm" TARGET="_top">Boost.Build</A>, run <I>bjam</I> from the directory <A HREF="../build"><CODE>libs/iostreams/build</CODE></A>, or from the Boost root directory. If you want to use the compression filters, you may need to set several Boost.Build variables indicating where the source files or pre-built binaries are located. These variables are summarized in the following table.
+    To build with <A HREF="../../../tools/build/v1/build_system.htm" TARGET="_top">Boost.Build</A>, run <I>bjam</I> from the directory <CODE>libs/iostreams/build</CODE>, or from the Boost root directory. If you want to use the compression filters, you may need to set several Boost.Build variables indicating where the source files or pre-built binaries are located. These variables are summarized in the following table.
 </P>
 <P>
     On most UNIX systems, it should not be necessary to set any of these variables, since the zlib and libbz2 headers and binaries are already installed in locations where they will be found automatically. On Windows, the zlib and bzip2 filters are disabled by default; to enable support for these filters, you will need to set variables indicating the location of the source files, if building from the source, or the location of the headers and binaries, if using pre-built binaries.

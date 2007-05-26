@@ -41,7 +41,10 @@
     The fundamental building blocks of the Iostreams library are the concepts of a <A HREF="../concepts/source.html">Source</A>, which provides read access to a sequence of characters, a <A HREF="../concepts/sink.html">Sink</A>, which provides write access to a sequence of characters, an <A HREF="../concepts/input_filter.html">InputFilter</A>, which Filters input read from a Source, and an <A HREF="../concepts/output_filter.html">OutputFilter</A>, which Filters output written to a Sink. Sources, Sinks and their refinements are called <SPAN CLASS="term">Devices</SPAN>. InputFilters, OutputFilter and their refinements are called <SPAN CLASS="term">Filters</SPAN>.
 </P>
 <P>
-    In general, a Filter or Device may provide access to an <SPAN>input sequence</SPAN>, for reading, an <SPAN>output sequence</SPAN>, for writing, or both. The relationship between the two sequences, as well as the operations that may be performed on them, depends on the Filter or Device type. The various possible relationships between input and output are referred to as <A HREF="modes.html">modes</A>.<SUP><A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1">[1]</A></SUP> The Iostreams library provides one Device concept and one Filter concept for each of eight modes. Source, Sink, InputFilter and OutputFilter correspond to the the modes <A HREF="modes.html#input">input</A> and <A HREF="modes.html#output">output</A> and are by far the most important of the Filter and Device concepts.
+    Standard streams and stream buffers are Devices; for example, input streams are <A HREF="../concepts/source.html">Sources</A> and output streams are <A HREF="../concepts/sink.html">Sinks</A>.<A CLASS="footnote_ref" NAME="note_1_ref" HREF="#note_1"><SUP>[1]</SUP></A>
+</P>
+<P>
+    In general, a Filter or Device may provide access to an <SPAN>input sequence</SPAN>, for reading, an <SPAN>output sequence</SPAN>, for writing, or both. The relationship between the two sequences, as well as the operations that may be performed on them, depends on the Filter or Device type. The various possible relationships between input and output are referred to as <A HREF="modes.html">modes</A>.<SUP><A CLASS="footnote_ref" NAME="note_2_ref" HREF="#note_2">[2]</A></SUP> The Iostreams library provides one Device concept and one Filter concept for each of eight modes. Source, Sink, InputFilter and OutputFilter correspond to the the modes <A HREF="modes.html#input">input</A> and <A HREF="modes.html#output">output</A> and are by far the most important of the Filter and Device concepts.
 </P>
 <P>
     The most common Device and Filter concepts are documented individually. Readers new to the Iostreams library should familiarize themselves with the four central concepts <A HREF="../concepts/source.html">Source</A>, <A HREF="../concepts/sink.html">Sink</A>, <A HREF="../concepts/input_filter.html">InputFilter</A> and <A HREF="../concepts/output_filter.html">OutputFilter</A>. The full sets of requirements for the Filter and Device concepts are summarized in the definitions of the concepts <A HREF="../concepts/device.html">Device</A> and <A HREF="../concepts/filter.html">Filter</A> which form the roots of the concept hierarchies.
@@ -110,7 +113,11 @@
 <HR>
 
 <P>
-    <A CLASS="footnote_ref" NAME="note_1" HREF="#note_1_ref"><SUP>[1]</SUP></A>A more precise definition is given in <A HREF="modes.html">Modes</A>.
+    <A CLASS="footnote_ref" NAME="note_1" HREF="#note_1_ref"><SUP>[1]</SUP></A>For complete details, see <A HREF="../classes/mode.html"><CODE>mode_of</CODE></A>.
+</P>
+
+<P>
+    <A CLASS="footnote_ref" NAME="note_2" HREF="#note_2_ref"><SUP>[2]</SUP></A>A more precise definition is given in <A HREF="modes.html">Modes</A>.
 </P>
 
 <!-- End Footnotes -->

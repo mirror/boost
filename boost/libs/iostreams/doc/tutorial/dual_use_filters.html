@@ -29,7 +29,7 @@
 
 
 <P>
-    It can be confusing to maintain two separate filters &#8212; one for input and the other for output &#8212; to implement the same filtering algorithm. One way to avoid this is to use the <A HREF="writing_filters.html#filter_helpers">filter helpers</A> mentioned above. The filter helpers each produce filter which can be used for either input or output, but not both simultaneously. Such filters are called <A HREF="../concepts/dual_use_filter.html">Dual-Use Filters</A>.
+    It can be confusing to maintain two separate filters &#8212; one for input and the other for output &#8212; to implement the same filtering algorithm. One way to avoid this is to use the <A HREF="writing_filters.html#filter_helpers">filter helpers</A> mentioned above. The filter helpers produce filters which can be used for either input or output, but not both simultaneously. Such filters are called <A HREF="../concepts/dual_use_filter.html">Dual-Use Filters</A>.
 </P>
 
 <P>
@@ -42,7 +42,7 @@
 
 <SPAN CLASS='keyword'>namespace</SPAN> boost { <SPAN CLASS='keyword'>namespace</SPAN> iostreams { <SPAN CLASS='keyword'>namespace</SPAN> example {
 
-<SPAN CLASS="keyword">class</SPAN> shell_comments_input_filter : <SPAN CLASS="keyword"><SPAN CLASS="keyword"><SPAN CLASS="keyword">public</SPAN></SPAN></SPAN> input_filter {
+<SPAN CLASS="keyword">class</SPAN> shell_comments_input_filter : <SPAN CLASS="keyword"><SPAN CLASS="keyword"><SPAN CLASS="keyword">public</SPAN></SPAN></SPAN> dual_use_filter {
 <SPAN CLASS="keyword">public</SPAN>:
     <SPAN CLASS="keyword">explicit</SPAN> shell_comments_input_filter(<SPAN CLASS="keyword">char</SPAN> comment_char = <SPAN CLASS="literal">'#'</SPAN>)
         : comment_char_(comment_char), skip_(<SPAN CLASS="keyword">false</SPAN>)
@@ -60,8 +60,11 @@
         <SPAN CLASS='comment'>/* same as shell_comments_output_filter::put() */</SPAN>
     }
 
-    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Source&gt;
-    <SPAN CLASS="keyword">void</SPAN> close(Source&) { skip_ = <SPAN CLASS="keyword">false</SPAN>; }
+    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Device&gt;
+    <SPAN CLASS="keyword">void</SPAN> close(Device&, std::ios_base::openmode) 
+    { 
+        skip_ = <SPAN CLASS="keyword">false</SPAN>; 
+    }
 <SPAN CLASS="keyword">private</SPAN>:
     <SPAN CLASS="keyword">char</SPAN> comment_char_;
     <SPAN CLASS="keyword"><SPAN CLASS="keyword">bool</SPAN></SPAN> skip_;

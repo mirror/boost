@@ -32,7 +32,7 @@
     The class template <CODE>chain</CODE> is parameterized by a <A HREF='../guide/modes.html'>mode</A>. All the Filters and Devices which constitute a chain must have modes which refine the mode of the chain. For example, the class <CODE>chain&lt;input&gt;</CODE> has mode <A HREF="../guide/modes.html#input">input</A>. All <A HREF="../concepts/filter.html">Filters</A> pushed onto such a chain must at least be <A HREF="../concepts/input_filter.html">InputFilters</A>. Any <A HREF="../concepts/device.html">Device</A> pushed onto such a chain must at least be a <A HREF="../concepts/source.html">Source</A>.
 </P>
 <P>
-    Chains are <A HREF='../../../../doc/html/CopyConstructible.html' TARGET='top'>CopyConstructible</A> and <A HREF='../../../../doc/html/Assignable.html' TARGET='top'>Assignable</A>. A copy of a chain represents the same sequence of Filters and Devices as the original chain; the components are not copied.
+    Chains are <A HREF='../../../../doc/html/CopyConstructible.html' TARGET='_top'>CopyConstructible</A> and <A HREF='../../../../doc/html/Assignable.html' TARGET='_top'>Assignable</A>. A copy of a chain represents the same sequence of Filters and Devices as the original chain; the components are not copied.
 </P>
 
 <A NAME="headers"></A>
@@ -81,11 +81,10 @@
     std::streamsize <A CLASS='documented' HREF='#write'>write</A>(<SPAN CLASS='keyword'>const</SPAN> char_type* s, std::streamsize n);
     <A CLASS='documented' HREF='../functions/positioning.html#synopsis'>stream_offset</A> <A CLASS='documented' HREF='#seek'>seek</A>(<A CLASS='documented' HREF='../functions/positioning.html#synopsis'>stream_offset</A> off, std::ios_base::seekdir way);
 
-    <SPAN CLASS='keyword'>template</SPAN>&lt;<SPAN CLASS='keyword'>int</SPAN> N&gt;
-    <SPAN CLASS='keyword'>const</SPAN> std::type_info& <A CLASS='documented' HREF='#component_type'>component_type</A>() <SPAN CLASS='keyword'>const</SPAN>;
+    <SPAN CLASS='keyword'>const</SPAN> std::type_info& <A CLASS='documented' HREF='#component_type'>component_type</A>(<SPAN CLASS="keyword">int</SPAN> n) <SPAN CLASS='keyword'>const</SPAN>;
 
-    <SPAN CLASS='keyword'>template</SPAN>&lt;<SPAN CLASS='keyword'>int</SPAN> N, <SPAN CLASS='keyword'>typename</SPAN> T&gt;
-    T* <A CLASS='documented' HREF='#component'>component</A>() <SPAN CLASS='keyword'>const</SPAN>;
+    <SPAN CLASS='keyword'>template</SPAN>&lt;<SPAN CLASS='keyword'>typename</SPAN> T&gt;
+    T* <A CLASS='documented' HREF='#component'>component</A>(<SPAN CLASS="keyword">int</SPAN> n) <SPAN CLASS='keyword'>const</SPAN>;
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> T&gt;
     <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#policy_push">push</A>( <SPAN CLASS="keyword">const</SPAN> T& t,
@@ -106,6 +105,14 @@
     <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#set_auto_close">set_auto_close</A>(<SPAN CLASS='keyword'>bool</SPAN> close);
     <SPAN CLASS="keyword">bool</SPAN> <A CLASS="documented" HREF="#sync">sync</A>();
     <SPAN CLASS="keyword">bool</SPAN> <A CLASS="documented" HREF="#strict_sync">strict_sync</A>();
+
+        <SPAN CLASS='comment'>// Deprecated members</SPAN>
+
+    <SPAN CLASS='keyword'>template</SPAN>&lt;<SPAN CLASS='keyword'>int</SPAN> N&gt;
+    <SPAN CLASS='keyword'>const</SPAN> std::type_info& <A CLASS='documented' HREF='#component_type'>component_type</A>() <SPAN CLASS='keyword'>const</SPAN>;
+
+    <SPAN CLASS='keyword'>template</SPAN>&lt;<SPAN CLASS='keyword'>int</SPAN> N, <SPAN CLASS='keyword'>typename</SPAN> T&gt;
+    T* <A CLASS='documented' HREF='#component'>component</A>() <SPAN CLASS='keyword'>const</SPAN>;
 };
 
 } } // End namespace boost::io</PRE>
@@ -185,35 +192,50 @@
 <A NAME="component_type"></A>
 <H4><CODE>chain::component_type</CODE></H4>
 
-<PRE CLASS="broken_ie">    <SPAN CLASS='keyword'>template</SPAN>&lt;<SPAN CLASS='keyword'>int</SPAN> N&gt;
-    <SPAN CLASS='keyword'>const</SPAN> std::type_info& component_type() <SPAN CLASS='keyword'>const</SPAN>;
+<PRE CLASS="broken_ie">    <SPAN CLASS='keyword'>const</SPAN> std::type_info& component_type(<SPAN CLASS="keyword">int</SPAN> n) <SPAN CLASS='keyword'>const</SPAN>;
 </PRE>
 
 <P>
       Returns a reference to an instance <CODE>std::type_info</CODE> corresponding to the type of the <CODE>n</CODE><I>th</I> Filter or Device in this chain, which must have size at least <CODE>n + 1</CODE>. Components are numbered beginning at zero.
 </P>
+
+<PRE CLASS="broken_ie">    <SPAN CLASS='comment'>// Deprecated</SPAN>
+    <SPAN CLASS='keyword'>template</SPAN>&lt;<SPAN CLASS='keyword'>int</SPAN> N&gt;
+    <SPAN CLASS='keyword'>const</SPAN> std::type_info& component_type() <SPAN CLASS='keyword'>const</SPAN>;
+</PRE>
+
 <P>
-      The template argument <CODE>N</CODE> cannot be deduced, and must therefroe be explicitly specified.
+      Returns a reference to an instance <CODE>std::type_info</CODE> corresponding to the type of the <CODE>N</CODE><I>th</I> Filter or Device in this chain, which must have size at least <CODE>N + 1</CODE>. Components are numbered beginning at zero. The template argument <CODE>N</CODE> cannot be deduced, and must therefore be explicitly specified.
 </P>
+
 <P>
-      Users of Microsoft Visual Studio versions 6.0-7.0 must use the macro <A HREF='../macros/workarounds.html#boost_iostreams_component_type'><CODE>BOOST_IOSTREAMS_COMPONENT_TYPE</CODE></A> instead of this function.
+      <I>This member is deprecated; use the overload of <CODE>component_type</CODE> that takes an <CODE>int</CODE> argument instead.</I>
 </P>
 
 <A NAME="component"></A>
 <H4><CODE>chain::component</CODE></H4>
 
-<PRE CLASS="broken_ie">    <SPAN CLASS='keyword'>template</SPAN>&lt;<SPAN CLASS='keyword'>int</SPAN> N, <SPAN CLASS='keyword'>typename</SPAN> T&gt;
+<PRE CLASS="broken_ie">    <SPAN CLASS='keyword'>template</SPAN>&lt;<SPAN CLASS='keyword'>typename</SPAN> T&gt;
+    T* component(<SPAN CLASS="keyword">int</SPAN> n) <SPAN CLASS='keyword'>const</SPAN>;
+</PRE>
+
+<P>
+      Returns a pointer to the <CODE>n</CODE><I>th</I> Filter or Device in this chain, if this chain has size at least <CODE>n + 1</CODE> and the type of the <CODE>n</CODE><I>th</I> Filter or Device is equal to <CODE>T</CODE>. Otherwise, returns a null pointer. The template argument <CODE>T</CODE> cannot be deduced, and must therefore be explicitly specified.
+</P>
+<P>
+      Users of Microsoft Visual Studio versions 6.0-7.0 must use the macro <A HREF='../macros/workarounds.html#boost_iostreams_component'><CODE>BOOST_IOSTREAMS_COMPONENT</CODE></A> instead of this function.
+</P>
+
+<PRE CLASS="broken_ie">    <SPAN CLASS='comment'>// Deprecated</SPAN>
+    <SPAN CLASS='keyword'>template</SPAN>&lt;<SPAN CLASS='keyword'>int</SPAN> N, <SPAN CLASS='keyword'>typename</SPAN> T&gt;
     T* component() <SPAN CLASS='keyword'>const</SPAN>;
 </PRE>
 
 <P>
-      Returns a pointer to the <CODE>n</CODE><I>th</I> Filter or Device in this chain, if this chain has size at least <CODE>n + 1</CODE> and the type of the <CODE>n</CODE><I>th</I> Filter or Device is equal to <CODE>T</CODE>. Otherwise, returns a null pointer.
+      Returns a pointer to the <CODE>N</CODE><I>th</I> Filter or Device in this chain, if this chain has size at least <CODE>N + 1</CODE> and the type of the <CODE>N</CODE><I>th</I> Filter or Device is equal to <CODE>T</CODE>. Otherwise, returns a null pointer. The template arguments <CODE>N</CODE> and <CODE>T</CODE> cannot be deduced, and must therefore be explicitly specified.
 </P>
 <P>
-      The template arguments <CODE>N</CODE> and <CODE>T</CODE> cannot be deduced, and must therefroe be explicitly specified.
-</P>
-<P>
-      Users of Microsoft Visual Studio versions 6.0-7.0 must use the macro <A HREF='../macros/workarounds.html#boost_iostreams_component'><CODE>BOOST_IOSTREAMS_COMPONENT</CODE></A> instead of this function.
+      <I>This member is deprecated; use the overload of <CODE>component</CODE> that takes an <CODE>int</CODE> argument instead.</I>
 </P>
 
 <A NAME="policy_push"></A>
@@ -230,7 +252,7 @@
 <TR>
     <TR>
         <TD VALIGN="top"><I>T</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>A <A HREF="../../../../doc/html/CopyConstructible.html">CopyConstructible</A> model of one of the <A HREF="../guide/concepts.html#filter_concepts">Filter</A> or <A HREF="../guide/concepts.html#device_concepts">Device</A> concepts whose <A HREF="../guide/traits.html#char_type">character type</A> is <A HREF="#template_params"><CODE>Ch</CODE></A> and whose <A HREF="../guide/modes.html">mode</A> refines <A HREF="#template_params"><CODE>Mode</CODE></A></TD>
+        <TD>A <A HREF="../../../../doc/html/CopyConstructible.html" TARGET="_top">CopyConstructible</A> model of one of the <A HREF="../guide/concepts.html#filter_concepts">Filter</A> or <A HREF="../guide/concepts.html#device_concepts">Device</A> concepts whose <A HREF="../guide/traits.html#char_type">character type</A> is <A HREF="#template_params"><CODE>Ch</CODE></A> and whose <A HREF="../guide/modes.html">mode</A> refines <A HREF="#template_params"><CODE>Mode</CODE></A></TD>
     </TR>
     <TR>
         <TD VALIGN="top"><I>t</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
@@ -247,7 +269,7 @@
 </TABLE>
 
 <P>
-    An instance of a Filter or Device type <CODE>T</CODE> which is not <A HREF="../../../../doc/html/CopyConstructible.html">CopyConstructible</A> may be appended to the chain in one of two ways:
+    An instance of a Filter or Device type <CODE>T</CODE> which is not <A HREF="../../../../doc/html/CopyConstructible.html"  TARGET="_top">CopyConstructible</A> may be appended to the chain in one of two ways:
 </P>
 <UL>
     <LI>by using a <A HREF="../../../../doc/html/ref.html" TARGET="_top">reference wrapper</A>, or 
@@ -352,6 +374,7 @@
 <SPAN CLASS="keyword">class</SPAN> wchain;</PRE>
 
 <P>Identical to <CODE>chain</CODE>, except for the default character type.
+
 <!-- Begin Footer -->
 
 <HR>

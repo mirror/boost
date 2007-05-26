@@ -63,7 +63,7 @@ public:
     bool is_open() const { return pimpl_->flags_ != 0; }
     std::streamsize read(char_type* s, std::streamsize n);
     std::streamsize write(const char_type* s, std::streamsize n);
-    stream_offset seek(stream_offset off, BOOST_IOS::seekdir way);
+    std::streampos seek(stream_offset off, BOOST_IOS::seekdir way);
     void close();
 private:
     struct impl {

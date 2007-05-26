@@ -22,17 +22,17 @@
 
 <H2>Description</H2>
 
-<P>
-    A Sink provides write-access to a sequence of characters of a given type. A Sink may expose this sequence in two ways: 
-    <OL>
-        <LI STYLE="list-style-type:lower-roman">
-            by defining a member function <CODE>write</CODE>, invoked indirectly by the Iostreams library through the function <A HREF="../functions/write.html"><CODE>boost::iostreams::write</CODE></A>;
-        </LI>
-        <LI STYLE="list-style-type:lower-roman">
-            by defining a member function <CODE>output_sequence</CODE> returning a pair of pointers delimiting the sequence in its entirety.
-        </LI>
-    </OL>
-</P>
+<P>A Sink provides write-access to a sequence of characters of a given type. In general, a Sink may expose this sequence in two ways:</P> 
+<OL>
+    <LI STYLE="list-style-type:lower-roman">
+        by defining a member function <CODE>write</CODE>, invoked indirectly by the Iostreams library through the function <A HREF="../functions/write.html"><CODE>boost::iostreams::write</CODE></A>;
+    </LI>
+    <LI STYLE="list-style-type:lower-roman">
+        by defining a member function <CODE>output_sequence</CODE> returning a pair of pointers delimiting the sequence in its entirety.
+    </LI>
+</OL>
+
+<P>As a special case, Boost.Iostreams treats standard output streams as Sinks. (For details, see <A HREF="../functions/write.html"><CODE>write</CODE></A>.)</P>
 
 <P>The mode of a Sink is <A HREF="../guide/modes.html#output"><CODE>output</CODE></A> or one of its refinements.</P>
 

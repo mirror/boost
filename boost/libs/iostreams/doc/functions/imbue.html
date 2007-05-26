@@ -24,7 +24,7 @@
 <H2>Description</H2>
 
 <P>
-    The function template <CODE>imbue</CODE> is invoked automatically by the Iostreams library when the <CODE>std::locale</CODE> of a library stream or stream buffer is set using <CODE>std::basic_ios::imbue</CODE> or <CODE>std::basic_streambuf::pubimbue</CODE>. When the <CODE>std::locale</CODE> of an instance of <A HREF="../guide/generic_streams.html#stream_buffer"><CODE>stream_buffer</CODE></A> or <A HREF="../guide/generic_streams.html#stream"><CODE>stream</CODE></A> is set, <CODE>imbue</CODE> is invoked on the underlying instance of the policy type; when the <CODE>std::locale</CODE> of a <A HREF="../classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A> or <A HREF="../classes/filtering_streambuf.html"><CODE>filtering_stream</CODE></A> is set, <CODE>imbue</CODE> is invoked on each Filter and Device in the underlying chain.
+    The function template <CODE>imbue</CODE> is invoked automatically by the Iostreams library when the <CODE>std::locale</CODE> of a library stream or stream buffer is set using <CODE>std::basic_ios::imbue</CODE> or <CODE>std::basic_streambuf::pubimbue</CODE>. When the <CODE>std::locale</CODE> of an instance of <A HREF="../guide/generic_streams.html#stream_buffer"><CODE>stream_buffer</CODE></A> or <A HREF="../guide/generic_streams.html#stream"><CODE>stream</CODE></A> is set, <CODE>imbue</CODE> is invoked on the underlying Device; when the <CODE>std::locale</CODE> of a <A HREF="../classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A> or <A HREF="../classes/filtering_streambuf.html"><CODE>filtering_stream</CODE></A> is set, <CODE>imbue</CODE> is invoked on each Filter and Device in the underlying chain.
 </P>
 
 <A NAME="headers"></A>

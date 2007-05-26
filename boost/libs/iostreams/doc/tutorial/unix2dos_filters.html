@@ -78,11 +78,13 @@
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Source&gt;
     <SPAN CLASS="keyword">int</SPAN> get(Source& src)
     {
+        <SPAN CLASS='comment'>// Handle unfinished business</SPAN>
         <SPAN CLASS="keyword">if</SPAN> (has_linefeed_) {
             has_linefeed_ = <SPAN CLASS="keyword">false</SPAN>;
             <SPAN CLASS="keyword">return</SPAN> <SPAN CLASS="literal">'\n'</SPAN>;
         }
 
+        <SPAN CLASS='comment'>// Forward all characters except '\n'</SPAN>
         <SPAN CLASS="keyword">int</SPAN> c;
         if ((c = iostreams::get(src)) == <SPAN CLASS='literal'>'\n'</SPAN>) {
             has_linefeed_ = true;
@@ -100,7 +102,7 @@
 
 } } } <SPAN CLASS='comment'>// End namespace boost::iostreams:example</SPAN></PRE>
 
-<P>The implementation of <CODE>get</CODE> can be described as follows. Most of the time, you simply read a character from <CODE>src</CODE> and return it. The special values <CODE>EOF</CODE> and <CODE>WOULD_BLOCK</CODE> are treated the same way: the are simply forwarded <I>as-is</I>. The exception is when <CODE>iostreams::get</CODE> returns <CODE>'\n'</CODE>. In this case, you return <CODE>'\r'</CODE> instead and make a note to return <CODE>'\n'</CODE> the next time get is called.</P>
+<P>The implementation of <CODE>get</CODE> can be described as follows. Most of the time, you simply read a character from <CODE>src</CODE> and return it. The special values <CODE>EOF</CODE> and <CODE>WOULD_BLOCK</CODE> are treated the same way: they are simply forwarded <I>as-is</I>. The exception is when <CODE>iostreams::get</CODE> returns <CODE>'\n'</CODE>. In this case, you return <CODE>'\r'</CODE> instead and make a note to return <CODE>'\n'</CODE> the next time <CODE>get</CODE> is called.</P>
 
 <P>As usual, the member function <CODE>close</CODE> reset's the Filter's state:</P>
 

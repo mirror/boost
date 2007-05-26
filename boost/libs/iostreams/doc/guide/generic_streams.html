@@ -142,7 +142,7 @@
 <TR>
     <TR>
         <TD VALIGN="top"><A NAME="level"></A><I>T</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>A model of one of the <A HREF="concepts.html#device_concepts">Device</A> concepts.</TD>
+        <TD>A <A HREF="../../../../doc/html/CopyConstructible.html" TARGET="_top">CopyConstructible</A> model of one of the <A HREF="concepts.html#device_concepts">Device</A> concepts.</TD>
     </TR>
     <TR>
         <TD VALIGN="top"><A NAME="level"></A><I>Tr</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
@@ -154,7 +154,7 @@
     </TR>
     <TR>
         <TD VALIGN="top"><A NAME="level"></A><I>Mode</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>A mode tag <I>convertible to the <CODE>mode_of</CODE> of T</I>. This parameter is principally for internal use. Specifying a <A HREF="modes.html#mode_tags">mode tag</A> properly refined by the mode of T can prevent an unneeded buffer from being allocated in some cases. Defaults to the mode of T.</TD>
+        <TD>A mode tag <I>convertible to the <A HREF="modes.html">mode</A> of T</I>. This parameter is principally for internal use. Specifying a <A HREF="modes.html#mode_tags">mode tag</A> properly refined by the mode of T can prevent an unneeded buffer from being allocated in some cases. Defaults to the mode of T.</TD>
     </TR>
 </TABLE>
 
@@ -206,7 +206,7 @@
     <B>stream_buffer</B>([<SPAN CLASS="keyword">const</SPAN>] U1& u1, <SPAN CLASS="keyword">const</SPAN> U2& u2, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);</PRE>
 
 <P>
-    Each of these members constructs an instance of <CODE>stream_buffer</CODE> and associates it with an instance of the Device <CODE>T</CODE> constructed from the given lists of arguments. The <CODE>T</CODE> constructors involved must take all arguments by value or <CODE>const</CODE> reference. 
+    Each of these members constructs an instance of <CODE>stream_buffer</CODE> and associates it with an instance of the Device <CODE>T</CODE> constructed from the given lists of arguments. The <CODE>T</CODE> constructor must take all arguments other than the first by value or <CODE>const</CODE> reference. 
 </P>
 <P>
     It is not possible to specify a custom buffer size or putback buffer size using these constructors.
@@ -236,7 +236,7 @@
     <SPAN CLASS="keyword">void</SPAN> <B>open</B>(<SPAN CLASS="keyword">const</SPAN> U1& u1, <SPAN CLASS="omitted">...</SPAN>, <SPAN CLASS="keyword">const</SPAN> UN& uN);</PRE>
 
 <P>
-    Each of these members associates with <CODE>this</CODE> instance of <CODE>stream_buffer</CODE> a newly constructed instance of the Device <CODE>T</CODE> constructed from the given lists of arguments, if there is no such instance currently associated; otherwise, they throw <CODE>std::ios_base::failure</CODE>.  The <CODE>T</CODE> constructors involved must take all arguments by value or <CODE>const</CODE> reference. 
+    Each of these members associates with <CODE>this</CODE> instance of <CODE>stream_buffer</CODE> a newly constructed instance of the Device <CODE>T</CODE> constructed from the given lists of arguments, if there is no such instance currently associated; otherwise, they throw <CODE>std::ios_base::failure</CODE>.  The <CODE>T</CODE> constructor must take all arguments other than the first by value or <CODE>const</CODE> reference. 
 </P>
 <P>
     It is not possible to specify a custom buffer size or putback buffer size using these members.
@@ -354,7 +354,7 @@
 <TR>
     <TR>
         <TD VALIGN="top"><A NAME="level"></A><I>T</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>A model of one of the <A HREF="concepts.html#device_concepts">Device</A> concepts.</TD>
+        <TD>A <A HREF="../../../../doc/html/CopyConstructible.html" TARGET="_top">CopyConstructible</A> model of one of the <A HREF="concepts.html#device_concepts">Device</A> concepts.</TD>
     </TR>
     <TR>
         <TD VALIGN="top"><A NAME="level"></A><I>Tr</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
@@ -366,7 +366,7 @@
     </TR>
     <TR>
         <TD VALIGN="top"><A NAME="level"></A><I>Mode</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>A mode tag <I>convertible to the <CODE>mode_of</CODE> of T</I>. This parameter is principally for internal use. Specifying a <A HREF="modes.html#mode_tags">mode tag</A> properly refined by the mode of T can prevent an unneeded buffer from being allocated in some cases. Defaults to the mode of T.</TD>
+        <TD>A mode tag <I>convertible to the <A HREF="modes.html">mode</A> of T</I>. This parameter is principally for internal use. Specifying a <A HREF="modes.html#mode_tags">mode tag</A> properly refined by the mode of T can prevent an unneeded buffer from being allocated in some cases. Defaults to the mode of T.</TD>
     </TR>
 </TABLE>
 

@@ -21,7 +21,7 @@
   <DT><A href="#offsets">How do perform file positioning operations with large (64-bit) offsets?</A></DT>
   <DT><A href="#stl">How do I read from or write to an STL sequence?</A></DT>
   <DT><A href="#multibyte">How do I write a stream which can read or write multibyte character encodings?</A></DT>
-  <DT><A href="#auto_close">Can I swap Filters or Devices in the midle of a sequence of i/o operations?</CODE></A></DT>
+  <DT><A href="#auto_close">Can I swap Filters or Devices in the middle of a sequence of i/o operations?</CODE></A></DT>
   <DT><A href="#lifetime">Why does my filter chain work with <CODE>std::cout</CODE> but not with another <CODE>ostream</CODE>?</A></DT>
   <DT><A href="#pipe">Why do I get errors stating that <CODE>operator|</CODE> is ambiguous?</A></DT>
   <DT><A href="#finite_state">Why do I get errors when compiling the <CODE>finite_state_filter</CODE> examples?</A></DT>
@@ -92,7 +92,7 @@
 </P>
 
 <A NAME="auto_close"></A>
-<H4>Can I swap Filters or Devices in the midle of a sequence of i/o operations?</H4>
+<H4>Can I swap Filters or Devices in the middle of a sequence of i/o operations?</H4>
 
 <P>
      If you're performing output, and if all the Filters in you chain are <A HREF="concepts/flushable.html">Flushable</A>, then yes. First call <A HREF="classes/chain.html#strict_sync"><CODE>strict_sync</CODE></A>. If it returns <CODE>true</CODE>, you can safely call <CODE><A HREF="classes/chain.html#set_auto_close">set_auto_close</A>(false)</CODE> and <A HREF="classes/chain.html#pop"><CODE>pop</CODE></A> one or more components without closing the stream. This applies to instances of <A HREF="classes/filtering_stream.html"><CODE>filtering_stream</CODE></A>, <A HREF="classes/filtering_streambuf.html"><CODE>filtering_streambuf</CODE></A> and <A HREF="classes/chain.html"><CODE>chain</CODE></A>.

@@ -48,7 +48,7 @@
 <PRE CLASS="broken_ie">    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> Device&gt;
     <SPAN CLASS="keyword">void</SPAN> close(Device&amp;) { <SPAN CLASS="omitted"> ... </SPAN> }</PRE>
 <P>
-    For Filters and Devices controlling separate input and output sequences, the above signatures should be modified by adding a <CODE>std::ios_base::openmode</CODE> parameter at the beginning of the parameter list. The member will be called first with argument <CODE>std::ios_base::in</CODE> &#8212; to signal the closing of the input sequence &#8212; and later with argument <CODE>std::ios_base::out</CODE> &#8212; to signal the closing of the output sequence.
+    For Filters and Devices controlling separate input and output sequences, the above signatures should be modified by adding a <CODE>std::ios_base::openmode</CODE> parameter at the end of the parameter list. This function will be called twice: first with argument <CODE>std::ios_base::in</CODE>, to signal the closing of the input sequence, and later with argument <CODE>std::ios_base::out</CODE>, to signal the closing of the output sequence.
 </P>
     
 

@@ -27,7 +27,7 @@
 <A NAME="container_device"></A>
 <H2>2.1.4. Writing a <CODE>container_device</CODE></H2>
 
-<P>Suppose you want to write a Device for reading from and writing to an STL container. In order for combined reading and writing to be useful, you will also need to support seeking within the container. There are several types of Devices which combine reading and writing, whether there are two separate character sequences for input and output, or a single combined sequence, and on whether there are separate position indicators for reading and writing or a single read/write position indicator. <I>See</I> <A HREF="../guide/modes.html">Modes</A> for details.</P>
+<P>Suppose you want to write a Device for reading from and writing to an STL container. In order for combined reading and writing to be useful, you will also need to support seeking within the container. There are several types of Devices which combine reading and writing; they differ according to whether there are two separate character sequences for input and output, or a single combined sequence, and whether there are separate position indicators for reading and writing or a single read/write position indicator. <I>See</I> <A HREF="../guide/modes.html">Modes</A> for details.</P>
 
 
 <P>A narrow-character Device for read-write access to a single character sequence with a single position indicator is called a <A HREF="../concepts/seekable_device.html">SeekableDevice</A>. A typical SeekableDevice looks like this:</P>

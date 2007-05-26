@@ -51,9 +51,9 @@ public:
                     BOOST_IOS::in | BOOST_IOS::out );
     std::streamsize read(char_type* s, std::streamsize n);
     std::streamsize write(const char_type* s, std::streamsize n);
-    stream_offset seek( stream_offset off, BOOST_IOS::seekdir way, 
-                        BOOST_IOS::openmode which = 
-                            BOOST_IOS::in | BOOST_IOS::out );
+    std::streampos seek( stream_offset off, BOOST_IOS::seekdir way, 
+                         BOOST_IOS::openmode which = 
+                             BOOST_IOS::in | BOOST_IOS::out );
     void open( const std::string& path,
                BOOST_IOS::openmode mode =
                    BOOST_IOS::in | BOOST_IOS::out,
@@ -154,7 +154,7 @@ inline std::streamsize basic_file<Ch>::write
 { return pimpl_->file_.sputn(s, n); }
 
 template<typename Ch>
-stream_offset basic_file<Ch>::seek
+std::streampos basic_file<Ch>::seek
     ( stream_offset off, BOOST_IOS::seekdir way, 
       BOOST_IOS::openmode )
 { return iostreams::seek(pimpl_->file_, off, way); }

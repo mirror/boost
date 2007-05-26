@@ -22,17 +22,18 @@
 
 <H2>Description</H2>
 
-<P>
-    A Source provides read-access to a sequence of characters of a given type. A Source may expose this sequence in two ways: 
-    <OL>
-        <LI STYLE="list-style-type:lower-roman">
-            by defining a member function <CODE>read</CODE>; or
-        </LI>
-        <LI STYLE="list-style-type:lower-roman">
-            by defining a member function <CODE>input_sequence</CODE> returning a pair of pointers delimiting the sequence in its entirety.
-        </LI>
-    </OL>
-</P>
+<P>A Source provides read-access to a sequence of characters of a given type. In general, a Source may expose this sequence in two ways:</P> 
+
+<OL>
+    <LI STYLE="list-style-type:lower-roman">
+        by defining a member function <CODE>read</CODE>; or
+    </LI>
+    <LI STYLE="list-style-type:lower-roman">
+        by defining a member function <CODE>input_sequence</CODE> returning a pair of pointers delimiting the sequence in its entirety.
+    </LI>
+</OL>
+
+<P>As a special case, Boost.Iostreams treats standard input streams as Sources. (For details, see <A HREF="../functions/read.html"><CODE>read</CODE></A>.)</P>
 
 <P>The mode of a Source is <A HREF="../guide/modes.html#input"><CODE>input</CODE></A> or one of its refinements.</P>
 

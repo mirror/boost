@@ -77,6 +77,9 @@
     <SPAN CLASS="omitted">...</SPAN>
 };
 
+<SPAN CLASS="keyword">typedef</SPAN> basic_array_source&lt;<SPAN CLASS="keyword">char</SPAN>&gt;     <SPAN CLASS='defined'>array_source</SPAN>;
+<SPAN CLASS="keyword">typedef</SPAN> basic_array_source&lt;<SPAN CLASS="keyword">wchar_t</SPAN>&gt;  <SPAN CLASS='defined'>warray_source</SPAN>;
+
 } } <SPAN CLASS='comment'>// End namespace boost::io</SPAN></PRE>
 
 <A NAME="array_source_params"></A>
@@ -122,6 +125,9 @@ basic_array_source(<SPAN CLASS="keyword">const</SPAN> char_type* begin, std::siz
     <SPAN CLASS="comment">// Additional nember functions</SPAN>
 };
 
+<SPAN CLASS="keyword">typedef</SPAN> basic_array_sink&lt;<SPAN CLASS="keyword">char</SPAN>&gt;     <SPAN CLASS='defined'>array_sink</SPAN>;
+<SPAN CLASS="keyword">typedef</SPAN> basic_array_sink&lt;<SPAN CLASS="keyword">wchar_t</SPAN>&gt;  <SPAN CLASS='defined'>warray_sink</SPAN>;
+
 } } <SPAN CLASS='comment'>// End namespace boost::io</SPAN></PRE>
 
 <A NAME="array_sink_params"></A>
@@ -166,6 +172,9 @@ basic_array_sink(char_type* begin, std::size_t length);</PRE>
 
     <SPAN CLASS="comment">// Additional nember functions</SPAN>
 };
+
+<SPAN CLASS="keyword">typedef</SPAN> basic_array&lt;<SPAN CLASS="keyword">char</SPAN>&gt;     <SPAN CLASS='defined'>array</SPAN>;
+<SPAN CLASS="keyword">typedef</SPAN> basic_array&lt;<SPAN CLASS="keyword">wchar_t</SPAN>&gt;  <SPAN CLASS='defined'>warray</SPAN>;
 
 } } <SPAN CLASS='comment'>// End namespace boost::io</SPAN></PRE>
 
