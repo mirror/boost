@@ -116,9 +116,7 @@ void test1()
 ////////////////////////////////////////////////////////////////////////
 // Test that EXTENDS expression wrappers are also valid fusion sequences
 
-struct MyDomain
-  : boost::proto::domain<>
-{};
+struct MyDomain;
 
 template<typename Expr>
 struct My
@@ -129,18 +127,9 @@ struct My
     BOOST_PROTO_EXTENDS_FUNCTION(Expr, My<Expr>, MyDomain)
 };
 
-namespace boost { namespace proto
-{
-    template<typename Expr>
-    struct generate< MyDomain, Expr >
-    {
-        typedef My<Expr> type;
-        static type make(Expr const &expr)
-        {
-            return type::make(expr);
-        }
-    };
-}}
+struct MyDomain
+  : boost::proto::domain<boost::proto::pod_generator<My> >
+{};
 
 void test2()
 {

@@ -85,12 +85,12 @@
                   , args1<typename fusion::result_of::value_at_c<Sequence, 0>::type>
                 > expr_type;
 
-                typedef typename generate<Domain, expr_type>::type type;
+                typedef typename Domain::template apply<expr_type>::type type;
 
                 static type const call(Sequence const &sequence)
                 {
                     expr_type that = {fusion::at_c<0>(sequence)};
-                    return generate<Domain, expr_type>::make(that);
+                    return Domain::make(that);
                 }
             };
 
@@ -108,12 +108,12 @@
             {
                 typedef typename add_reference<A>::type reference;
                 typedef expr<tag::terminal, args1<reference> > expr_type;
-                typedef typename generate<Domain, expr_type>::type type;
+                typedef typename Domain::template apply<expr_type>::type type;
 
                 static type const call(reference a)
                 {
                     expr_type that = {a};
-                    return generate<Domain, expr_type>::make(that);
+                    return Domain::make(that);
                 }
             };
 
@@ -290,14 +290,14 @@
               , BOOST_PP_CAT(args, N)<BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG_TYPE, (A, Domain)) >
             > expr_type;
 
-            typedef typename generate<Domain, expr_type>::type type;
+            typedef typename Domain::template apply<expr_type>::type type;
 
             static type const call(BOOST_PP_ENUM_BINARY_PARAMS(N, A, &a))
             {
                 expr_type that = {
                     BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG, (a, Domain))
                 };
-                return generate<Domain, expr_type>::make(that);
+                return Domain::make(that);
             }
         };
 
@@ -309,14 +309,14 @@
               , BOOST_PP_CAT(args, N)<BOOST_PP_ENUM(N, BOOST_PROTO_AT_TYPE, (Sequence const, Domain)) >
             > expr_type;
 
-            typedef typename generate<Domain, expr_type>::type type;
+            typedef typename Domain::template apply<expr_type>::type type;
 
             static type const call(Sequence const &sequence)
             {
                 expr_type that = {
                     BOOST_PP_ENUM(N, BOOST_PROTO_AT, (sequence, Domain))
                 };
-                return generate<Domain, expr_type>::make(that);
+                return Domain::make(that);
             }
         };
 

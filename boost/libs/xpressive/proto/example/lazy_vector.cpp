@@ -33,9 +33,7 @@ struct LazyVectorGrammar
 
 // Expressions in the lazy vector domain must conform
 // to the lazy vector grammar
-struct lazy_vector_domain
-  : proto::domain< LazyVectorGrammar >
-{};
+struct lazy_vector_domain;
 
 // Here is an evaluation context that indexes into a lazy vector
 // expression, and combines the result.
@@ -118,20 +116,9 @@ struct lazy_vector
 
 // Tell proto that in the lazy_vector_domain, all
 // expressions should be wrapped in laxy_vector_expr<>
-namespace boost { namespace proto
-{
-    template< typename Expr >
-    struct generate< lazy_vector_domain, Expr >
-    {
-        typedef lazy_vector_expr<Expr> type;
-
-        static type make(Expr const &expr)
-        {
-            return type(expr);
-        }
-    };
-}}
-
+struct lazy_vector_domain
+  : proto::domain<proto::generator<lazy_vector_expr>, LazyVectorGrammar>
+{};
 
 int main()
 {

@@ -91,13 +91,13 @@
                 >::type arg0_type;
 
                 typedef expr<proto::tag::terminal, args1<arg0_type> > expr_type;
-                typedef typename generate<Domain, expr_type>::type type;
+                typedef typename Domain::template apply<expr_type>::type type;
                 typedef type result_type;
 
                 BOOST_PROTO_WITH_ALIAS_(T, T2)
                 static result_type call(T2 &t)
                 {
-                    return generate<Domain, expr_type>::make(expr_type::make(t));
+                    return Domain::make(expr_type::make(t));
                 }
             };
 
@@ -119,12 +119,12 @@
             struct as_arg
             {
                 typedef expr<proto::tag::terminal, args1<T &> > expr_type;
-                typedef typename generate<Domain, expr_type>::type type;
+                typedef typename Domain::template apply<expr_type>::type type;
 
                 BOOST_PROTO_WITH_ALIAS_(T, T2)
                 static type call(T2 &t)
                 {
-                    return generate<Domain, expr_type>::make(expr_type::make(t));
+                    return Domain::make(expr_type::make(t));
                 }
             };
 

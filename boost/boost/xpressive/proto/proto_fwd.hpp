@@ -193,7 +193,15 @@ namespace boost { namespace proto
 
     struct _;
 
-    template<typename Grammar = proto::_>
+    struct default_generator;
+
+    template<template<typename> class Extends>
+    struct generator;
+
+    template<template<typename> class Extends>
+    struct pod_generator;
+
+    template<typename Generator = default_generator, typename Grammar = proto::_>
     struct domain;
 
     typedef domain<> default_domain;
@@ -336,12 +344,6 @@ namespace boost { namespace proto
 
     template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PROTO_MAX_ARITY, typename A, void), typename Dummy = void>
     struct function;
-
-    template<typename Domain, typename Expr>
-    struct generate;
-
-    template<typename Domain, typename Expr, typename EnableIf = void>
-    struct is_allowed;
 
     namespace functional
     {

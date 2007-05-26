@@ -43,18 +43,12 @@ The first step to giving your calculator expressions extra behaviors is to
 define a calculator domain. All expressions within the calculator domain will
 be imbued with calculator-ness, as we'll see.
 
-    // A type to be used as a domain tag
-    struct calculator_domain
-      : proto::domain<>
-    {};
+    // A type to be used as a domain tag (to be defined below)
+    struct calculator_domain;
 
 We use this domain type when extending the _expr_ type, which we do with the
-_extends_ class template. The `proto::domain<>` class template lets you
-optionally specify a grammar to use to control the operator overloads in the
-domain. We'll see an example of that below.
-
-Here is our expression wrapper, which imbues an expression with
-calculator-ness. It is described below.
+_extends_ class template. Here is our expression wrapper, which imbues an
+expression with calculator-ness. It is described below.
 
     // The calculator<> expression wrapper makes expressions
     // function objects.
@@ -110,56 +104,31 @@ wrap the placeholders to imbue them with calculator-ness:
     calculator< proto::terminal< placeholder1 >::type > const _1;
     calculator< proto::terminal< placeholder2 >::type > const _2;
 
-[h3 The [^generate<>] Expression Generator]
+[h3 Expression Generators]
 
 The last thing that remains to be done is to tell Proto that it needs to wrap
 all of our calculator expressions in our `calculator<>` wrapper. We have
 already wrapped the placeholders, but we want /all/ expressions that involve
-the calculator placeholders to be calculators. We can do that by hooking
-Proto's expression generator.
+the calculator placeholders to be calculators. We can do that by specifying an
+expression generator when we define our `calculator_domain`, as follows:
 
-Proto uses a class template called _generate_ to generate expressions. After
-Proto has calculated a new expression type, it checks the domains of the
-children expressions. They must match. Assuming they do, Proto creates the
-new expression and passes it to `generate< Domain, Expr >::make()` for any
-additional processing. The default implementation of _generate_ looks like
-this:
+    // Define the calculator_domain we forward-declared above.
+    // Specify that all expression in this domain should be wrapped
+    // in the calculator<> expression wrapper.
+    struct calculator_domain
+      : proto::domain< proto::generator< calculator > >
+    {};
 
-    // The default implementation of proto::generate<>
-    template< typename Domain, typename Expr >
-    struct generate
-    {
-        typedef Expr type;
+Proto uses domains to generate expressions. After Proto has calculated a new
+expression type, it checks the domains of the children expressions. They must
+match. Assuming they do, Proto creates the new expression and passes it to
+`Domain::make()` for any additional processing. If we don't specify a
+generator, the new expression gets passed through unchanged. But since we've
+specified a generator above, `calculator_domain::make()` returns `calculator<>`
+objects.
 
-        static Expr const & make( Expr const & expr )
-        {
-            return expr;
-        }
-    };
-
-The default implementation just passes expression object through unchanged.
-But we want expressions in the calculator domain to be wrapped in our
-`calculator<>` wrapper, so we specialize the _generate_ template as follows:
-
-    namespace boost { namespace proto
-    {
-        // A specialization of generate<> that causes expression in the
-        // calculator_domain to be wrapped in the calculator<> wrapper.
-        template< typename Expr >
-        struct generate< calculator_domain, Expr >
-        {
-            typedef calculator< Expr > type;
-
-            static type make( Expr const & expr )
-            {
-                return type( expr );
-            }
-        };
-    }}
-
-This instructs Proto to wrap all expressions in the `calculator_domain` in the
-`calculator<>` wrapper. Now we can use calculator expressions as function
-objects to STL algorithms, as follows:
+Now we can use calculator expressions as function objects to STL algorithms, as
+follows:
 
     double data[] = {1., 2., 3., 4.};
 
@@ -196,9 +165,7 @@ that by defining an appropriate domain-specific expression wrapper.
 
 Here is the code. It is described below.
 
-    struct lazy_vector_domain
-      : proto::domain<>
-    {};
+    struct lazy_vector_domain;
 
     // Here is an evaluation context that indexes into an algebraic
     // expression, and combines the result.
@@ -274,19 +241,9 @@ Here is the code. It is described below.
         }
     };
 
-    namespace boost { namespace proto
-    {
-        template< typename Expr >
-        struct generate< lazy_vector_domain, Expr >
-        {
-            typedef lazy_vector_expr<Expr> type;
-
-            static type make(Expr const &expr)
-            {
-                return type(expr);
-            }
-        };
-    }}
+    struct lazy_vector_domain
+      : proto::domain< proto::generator< lazy_vector_expr > >
+    {};
 
 The `lazy_subscript_context<>` struct is used to evaluate expressions like
 `(v1 + v2)[2]` as if they were written `v1[2] + v2[2]`. The `lazy_vector_expr<>`
@@ -344,7 +301,10 @@ as:
     // Expressions in the lazy_vector_domain must conform to the
     // LazyVectorGrammar
     struct lazy_vector_domain
-      : proto::domain< LazyVectorGrammar >
+      : proto::domain<
+            proto::generator< lazy_vector_expr >
+          , LazyVectorGrammar
+        >
     {};
 
 And that's it! Now, all operators that do not produce valid lazy vector

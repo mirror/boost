@@ -19,6 +19,7 @@
 #include <boost/preprocessor/repetition/enum_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
+#include <boost/mpl/apply_wrap.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/traits.hpp>
 #include <boost/xpressive/proto/expr.hpp>
@@ -49,7 +50,7 @@ namespace boost { namespace proto
     ///
     #define BOOST_PROTO_DEFINE_FUN_OP_IMPL_(Z, N, Data, Const)\
         BOOST_PP_IF(N, BOOST_PROTO_TEMPLATE_YES_, BOOST_PROTO_TEMPLATE_NO_)(Z, N)\
-        typename boost::proto::generate<\
+        typename boost::mpl::apply_wrap1<\
             BOOST_PP_TUPLE_ELEM(3, 2, Data)\
           , typename boost::proto::result_of::BOOST_PP_CAT(funop, N)<\
                 BOOST_PP_TUPLE_ELEM(3, 1, Data) BOOST_PROTO_CONST ## Const\
@@ -62,7 +63,7 @@ namespace boost { namespace proto
                 BOOST_PP_TUPLE_ELEM(3, 1, Data) BOOST_PROTO_CONST ## Const\
                 BOOST_PP_ENUM_TRAILING_PARAMS_Z(Z, N, const A)\
             > funop;\
-            return boost::proto::generate<BOOST_PP_TUPLE_ELEM(3, 2, Data), typename funop::type>::make(\
+            return BOOST_PP_TUPLE_ELEM(3, 2, Data)::make(\
                 funop::call(*static_cast<BOOST_PP_TUPLE_ELEM(3, 1, Data) BOOST_PROTO_CONST ## Const *>(this) BOOST_PP_ENUM_TRAILING_PARAMS_Z(Z, N, a))\
             );\
         }\
@@ -129,21 +130,21 @@ namespace boost { namespace proto
         ///
     #define BOOST_PROTO_EXTENDS_ASSIGN_IMPL_(Expr, Derived, Domain, Const)\
         template<typename A>\
-        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref_<Derived BOOST_PROTO_CONST ## Const>, typename boost::proto::result_of::as_arg<A>::type> > >::type const\
+        typename boost::mpl::apply_wrap1<Domain, boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref_<Derived BOOST_PROTO_CONST ## Const>, typename boost::proto::result_of::as_arg<A>::type> > >::type const\
         operator =(A &a) BOOST_PROTO_CONST ## Const\
         {\
             typedef boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref_<Derived BOOST_PROTO_CONST ## Const>, typename boost::proto::result_of::as_arg<A>::type> > that_type;\
             that_type that = {{*static_cast<Derived BOOST_PROTO_CONST ## Const *>(this)}, boost::proto::as_arg(a)};\
-            return boost::proto::generate<Domain, that_type>::make(that);\
+            return Domain::make(that);\
         }\
         \
         template<typename A>\
-        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref_<Derived BOOST_PROTO_CONST ## Const>, typename boost::proto::result_of::as_arg<A const>::type> > >::type const\
+        typename boost::mpl::apply_wrap1<Domain, boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref_<Derived BOOST_PROTO_CONST ## Const>, typename boost::proto::result_of::as_arg<A const>::type> > >::type const\
         operator =(A const &a) BOOST_PROTO_CONST ## Const\
         {\
             typedef boost::proto::expr<boost::proto::tag::assign, boost::proto::args2<boost::proto::ref_<Derived BOOST_PROTO_CONST ## Const>, typename boost::proto::result_of::as_arg<A const>::type> > that_type;\
             that_type that = {{*static_cast<Derived BOOST_PROTO_CONST ## Const *>(this)}, boost::proto::as_arg(a)};\
-            return boost::proto::generate<Domain, that_type>::make(that);\
+            return Domain::make(that);\
         }\
         /**/
 
@@ -162,21 +163,21 @@ namespace boost { namespace proto
         ///
     #define BOOST_PROTO_EXTENDS_SUBSCRIPT_IMPL_(Expr, Derived, Domain, Const)\
         template<typename A>\
-        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref_<Derived BOOST_PROTO_CONST ## Const>, typename boost::proto::result_of::as_arg<A>::type> > >::type const\
+        typename boost::mpl::apply_wrap1<Domain, boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref_<Derived BOOST_PROTO_CONST ## Const>, typename boost::proto::result_of::as_arg<A>::type> > >::type const\
         operator [](A &a) BOOST_PROTO_CONST ## Const\
         {\
             typedef boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref_<Derived BOOST_PROTO_CONST ## Const>, typename boost::proto::result_of::as_arg<A>::type> > that_type;\
             that_type that = {{*static_cast<Derived BOOST_PROTO_CONST ## Const *>(this)}, boost::proto::as_arg(a)};\
-            return boost::proto::generate<Domain, that_type>::make(that);\
+            return Domain::make(that);\
         }\
         \
         template<typename A>\
-        typename boost::proto::generate<Domain, boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref_<Derived BOOST_PROTO_CONST ## Const>, typename boost::proto::result_of::as_arg<A const>::type> > >::type const\
+        typename boost::mpl::apply_wrap1<Domain, boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref_<Derived BOOST_PROTO_CONST ## Const>, typename boost::proto::result_of::as_arg<A const>::type> > >::type const\
         operator [](A const &a) BOOST_PROTO_CONST ## Const\
         {\
             typedef boost::proto::expr<boost::proto::tag::subscript, boost::proto::args2<boost::proto::ref_<Derived BOOST_PROTO_CONST ## Const>, typename boost::proto::result_of::as_arg<A const>::type> > that_type;\
             that_type that = {{*static_cast<Derived BOOST_PROTO_CONST ## Const *>(this)}, boost::proto::as_arg(a)};\
-            return boost::proto::generate<Domain, that_type>::make(that);\
+            return Domain::make(that);\
         }\
         /**/
 
@@ -198,7 +199,7 @@ namespace boost { namespace proto
         struct result\
         {\
             typedef\
-                typename boost::proto::generate<Domain, typename boost::proto::result_of::funop<Sig, Derived >::type>::type\
+                typename boost::mpl::apply_wrap1<Domain, typename boost::proto::result_of::funop<Sig, Derived >::type>::type\
             type;\
         };\
         /**/

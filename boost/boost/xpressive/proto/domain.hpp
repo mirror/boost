@@ -18,8 +18,9 @@
 namespace boost { namespace proto
 {
 
-    template<typename Grammar>
+    template<typename Generator, typename Grammar>
     struct domain
+      : Generator
     {
         typedef Grammar grammar;
 

@@ -95,9 +95,7 @@ struct calculator_arity
 
 // For expressions in the calculator domain, operator()
 // will be special; it will evaluate the expression.
-struct calculator_domain
-  : proto::domain<>
-{};
+struct calculator_domain;
 
 // Define a calculator context, for evaluating arithmetic expressions
 // (This is as before, in calc1.cpp and calc2.cpp)
@@ -167,18 +165,9 @@ struct calculator_expression
 };
 
 // Tell proto how to generate expressions in the calculator_domain
-namespace boost { namespace proto
-{
-    template<typename Expr>
-    struct generate<calculator_domain, Expr>
-    {
-        typedef calculator_expression<Expr> type;
-        static type make(Expr const &expr)
-        {
-            return type(expr);
-        }
-    };
-}}
+struct calculator_domain
+  : proto::domain<proto::generator<calculator_expression> >
+{};
 
 // Define some placeholders (notice they're wrapped in calculator_expression<>)
 calculator_expression<proto::terminal< arg< mpl::int_<1> > >::type> const _1;

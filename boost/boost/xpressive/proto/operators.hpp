@@ -37,20 +37,20 @@ namespace boost { namespace proto
                     Tag
                   , args2<
                         ref_<Left>
-                      , typename generate<typename Left::domain, expr<tag::terminal, args1<Right &> > >::type
+                      , typename Left::domain::template apply<expr<tag::terminal, args1<Right &> > >::type
                     >
                 >
             >
         {
             typedef expr<tag::terminal, args1<Right &> > term_type;
-            typedef expr<Tag, args2<ref_<Left>, typename generate<typename Left::domain, term_type>::type> > expr_type;
+            typedef expr<Tag, args2<ref_<Left>, typename Left::domain::template apply<term_type>::type> > expr_type;
 
-            static typename generate<typename Left::domain, expr_type>::type
+            static typename Left::domain::template apply<expr_type>::type
             make(Left &left, Right &right)
             {
                 term_type term = {right};
-                expr_type that = {{left}, generate<typename Left::domain, term_type>::make(term)};
-                return generate<typename Left::domain, expr_type>::make(that);
+                expr_type that = {{left}, Left::domain::make(term)};
+                return Left::domain::make(that);
             }
         };
 
@@ -61,21 +61,21 @@ namespace boost { namespace proto
               , expr<
                     Tag
                   , args2<
-                        typename generate<typename Right::domain, expr<tag::terminal, args1<Left &> > >::type
+                        typename Right::domain::template apply<expr<tag::terminal, args1<Left &> > >::type
                       , ref_<Right>
                     >
                 >
             >
         {
             typedef expr<tag::terminal, args1<Left &> > term_type;
-            typedef expr<Tag, args2<typename generate<typename Right::domain, term_type>::type, ref_<Right> > > expr_type;
+            typedef expr<Tag, args2<typename Right::domain::template apply<term_type>::type, ref_<Right> > > expr_type;
 
-            static typename generate<typename Right::domain, expr_type>::type
+            static typename Right::domain::template apply<expr_type>::type
             make(Left &left, Right &right)
             {
                 term_type term = {left};
-                expr_type that = {generate<typename Right::domain, term_type>::make(term), {right}};
-                return generate<typename Right::domain, expr_type>::make(that);
+                expr_type that = {Right::domain::make(term), {right}};
+                return Right::domain::make(that);
             }
         };
 
@@ -94,11 +94,11 @@ namespace boost { namespace proto
             typedef expr<Tag, args2<ref_<Left>, ref_<Right> > > expr_type;
             BOOST_MPL_ASSERT((is_same<typename Left::domain, typename Right::domain>));
 
-            static typename generate<typename Left::domain, expr_type>::type
+            static typename Left::domain::template apply<expr_type>::type
             make(Left &left, Right &right)
             {
                 expr_type that = {{left}, {right}};
-                return generate<typename Left::domain, expr_type>::make(that);
+                return Left::domain::make(that);
             }
         };
     } // detail
@@ -110,7 +110,7 @@ namespace boost { namespace proto
     {\
         typedef expr<tag, args1<ref_<typename Arg::boost_proto_expr_type_> > > that_type;\
         that_type that = {{arg}};\
-        return generate<typename Arg::domain, that_type>::make(that);\
+        return Arg::domain::make(that);\
     }\
     template<typename Arg>\
     inline typename detail::generate_if<typename Arg::domain, expr<tag, args1<ref_<typename Arg::boost_proto_expr_type_ const> > > >::type const\
@@ -118,7 +118,7 @@ namespace boost { namespace proto
     {\
         typedef expr<tag, args1<ref_<typename Arg::boost_proto_expr_type_ const> > > that_type;\
         that_type that = {{arg}};\
-        return generate<typename Arg::domain, that_type>::make(that);\
+        return Arg::domain::make(that);\
     }\
     /**/
 
@@ -199,7 +199,7 @@ namespace boost { namespace proto
     {
         typedef expr<tag::post_inc, args1<ref_<typename Arg::boost_proto_expr_type_> > > that_type;
         that_type that = {{arg}};
-        return generate<typename Arg::domain, that_type>::make(that);
+        return Arg::domain::make(that);
     }
 
     template<typename Arg>
@@ -208,7 +208,7 @@ namespace boost { namespace proto
     {
         typedef expr<tag::post_inc, args1<ref_<typename Arg::boost_proto_expr_type_ const> > > that_type;
         that_type that = {{arg}};
-        return generate<typename Arg::domain, that_type>::make(that);
+        return Arg::domain::make(that);
     }
 
     template<typename Arg>
@@ -217,7 +217,7 @@ namespace boost { namespace proto
     {
         typedef expr<tag::post_dec, args1<ref_<typename Arg::boost_proto_expr_type_> > > that_type;
         that_type that = {{arg}};
-        return generate<typename Arg::domain, that_type>::make(that);
+        return Arg::domain::make(that);
     }
 
     template<typename Arg>
@@ -226,7 +226,7 @@ namespace boost { namespace proto
     {
         typedef expr<tag::post_dec, args1<ref_<typename Arg::boost_proto_expr_type_ const> > > that_type;
         that_type that = {{arg}};
-        return generate<typename Arg::domain, that_type>::make(that);
+        return Arg::domain::make(that);
     }
 
 }}

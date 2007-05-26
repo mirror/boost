@@ -31,13 +31,13 @@
             struct deep_copy_impl<Expr, tag::terminal, 1>
             {
                 typedef typename terminal<typename result_of::arg<Expr>::type>::type expr_type;
-                typedef typename generate<typename Expr::domain, expr_type>::type type;
+                typedef typename Expr::domain::template apply<expr_type>::type type;
 
                 template<typename Expr2>
                 static type call(Expr2 const &expr)
                 {
                     expr_type that = {proto::arg(expr)};
-                    return generate<typename Expr::domain, expr_type>::make(that);
+                    return Expr::domain::make(that);
                 }
             };
         }
@@ -104,7 +104,7 @@
                 typedef expr<Tag, BOOST_PP_CAT(args, N)<
                     BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_TYPE, ~)
                 > > expr_type;
-                typedef typename generate<typename Expr::domain, expr_type>::type type;
+                typedef typename Expr::domain::template apply<expr_type>::type type;
 
                 template<typename Expr2>
                 static type call(Expr2 const &expr)
@@ -112,7 +112,7 @@
                     expr_type that = {
                         BOOST_PP_ENUM(N, BOOST_PROTO_DEFINE_DEEP_COPY_FUN, ~)
                     };
-                    return generate<typename Expr::domain, expr_type>::make(that);
+                    return Expr::domain::make(that);
                 }
             };
 

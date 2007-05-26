@@ -33,8 +33,19 @@ namespace boost { namespace fusion { namespace result_of { using namespace meta;
 
 using namespace boost;
 
-struct lambda_domain : proto::domain<> {};
-template<typename I> struct placeholder { typedef I arity; };
+// Forward declaration of the lambda expression wrapper
+template<typename T>
+struct lambda;
+
+struct lambda_domain
+  : proto::domain<proto::pod_generator<lambda> >
+{};
+
+template<typename I>
+struct placeholder
+{
+    typedef I arity;
+};
 
 // Some custom transforms for calculating the max arity of a lambda expression
 template<typename Grammar>
@@ -153,22 +164,6 @@ struct lambda
         return proto::eval(*this, ctx);
     }
 };
-
-namespace boost { namespace proto
-{
-    // This causes expressions in the lambda domain to
-    // be wrapped in a lambda<> expression wrapper.
-    template<typename Expr>
-    struct generate<lambda_domain, Expr>
-    {
-        typedef lambda<Expr> type;
-
-        static type make(Expr const &expr)
-        {
-            return type::make(expr);
-        }
-    };
-}}
 
 // Define some lambda placeholders
 lambda<proto::terminal<placeholder<mpl::int_<0> > >::type> const _1 = {{}};

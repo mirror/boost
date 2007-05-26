@@ -20,14 +20,51 @@
 namespace boost { namespace proto
 {
 
-    template<typename Domain, typename Expr>
-    struct generate
+    struct default_generator
     {
-        typedef Expr type;
+        template<typename Expr>
+        struct apply
+        {
+            typedef Expr type;
+        };
 
+        template<typename Expr>
         static Expr const &make(Expr const &expr)
         {
             return expr;
+        };
+    };
+
+    template<template<typename> class Extends>
+    struct generator
+    {
+        template<typename Expr>
+        struct apply
+        {
+            typedef Extends<Expr> type;
+        };
+
+        template<typename Expr>
+        static Extends<Expr> make(Expr const &expr)
+        {
+            return Extends<Expr>(expr);
+        }
+    };
+
+    template<template<typename> class Extends>
+    struct pod_generator
+    {
+        template<typename Expr>
+        struct apply
+        {
+            typedef Extends<Expr> type;
+        };
+
+        template<typename Expr>
+        static Extends<Expr> make(Expr const &expr)
+        {
+            Extends<Expr> that = {expr};
+            return that;
         }
     };
 
@@ -40,7 +77,7 @@ namespace boost { namespace proto
         struct generate_if
           : mpl::if_<
                 matches<Expr, typename Domain::grammar>
-              , generate<Domain, Expr>
+              , typename Domain::template apply<Expr>
               , detail::empty
             >::type
         {};
@@ -48,8 +85,14 @@ namespace boost { namespace proto
         // Optimization, generate fewer templates...
         template<typename Expr>
         struct generate_if<proto::default_domain, Expr>
-          : generate<proto::default_domain, Expr>
-        {};
+        {
+            typedef Expr type;
+
+            static Expr const &make(Expr const &expr)
+            {
+                return expr;
+            }
+        };
     }
 
 }}
