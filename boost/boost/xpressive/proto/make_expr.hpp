@@ -13,6 +13,8 @@
 
     #include <boost/xpressive/proto/detail/prefix.hpp>
     #include <boost/preprocessor/cat.hpp>
+    #include <boost/preprocessor/arithmetic/dec.hpp>
+    #include <boost/preprocessor/punctuation/comma_if.hpp>
     #include <boost/preprocessor/iterate.hpp>
     #include <boost/preprocessor/facilities/intercept.hpp>
     #include <boost/preprocessor/tuple/elem.hpp>
@@ -21,6 +23,7 @@
     #include <boost/preprocessor/repetition/enum_trailing_params.hpp>
     #include <boost/preprocessor/repetition/enum_binary_params.hpp>
     #include <boost/preprocessor/repetition/enum_trailing_binary_params.hpp>
+    #include <boost/preprocessor/repetition/enum_shifted_params.hpp>
     #include <boost/ref.hpp>
     #include <boost/utility/enable_if.hpp>
     #include <boost/type_traits/is_same.hpp>
@@ -49,17 +52,25 @@
         /**/
 
     #define BOOST_PROTO_AT_TYPE(Z, N, DATA)                                                         \
-        typename result_of::as_arg<                                                                 \
-            typename remove_reference<                                                              \
-                typename fusion::result_of::value_at_c<BOOST_PP_TUPLE_ELEM(2, 0, DATA), N >::type   \
-            >::type                                                                                 \
-          , BOOST_PP_TUPLE_ELEM(2, 1, DATA)                                                         \
+        typename remove_reference<                                                                  \
+            typename fusion::result_of::value_at_c<BOOST_PP_TUPLE_ELEM(2, 0, DATA), N >::type       \
         >::type                                                                                     \
         /**/
 
     #define BOOST_PROTO_AT(Z, N, DATA)                                                              \
+        fusion::at_c<N >(BOOST_PP_TUPLE_ELEM(2, 0, DATA))                                           \
+        /**/
+
+    #define BOOST_PROTO_AS_ARG_AT_TYPE(Z, N, DATA)                                                  \
+        typename result_of::as_arg<                                                                 \
+            BOOST_PROTO_AT_TYPE(Z, N, DATA)                                                         \
+          , BOOST_PP_TUPLE_ELEM(2, 1, DATA)                                                         \
+        >::type                                                                                     \
+        /**/
+
+    #define BOOST_PROTO_AS_ARG_AT(Z, N, DATA)                                                       \
         proto::as_arg<BOOST_PP_TUPLE_ELEM(2, 1, DATA) >(                                            \
-            fusion::at_c<N >(BOOST_PP_TUPLE_ELEM(2, 0, DATA))                                       \
+            BOOST_PROTO_AT(Z, N, DATA)                                                              \
         )                                                                                           \
         /**/
 
@@ -73,6 +84,36 @@
     {
         namespace detail
         {
+            template<
+                typename Domain
+                BOOST_PP_ENUM_TRAILING_BINARY_PARAMS(
+                    BOOST_PROTO_MAX_ARITY
+                  , typename A
+                  , = default_domain BOOST_PP_INTERCEPT
+                )
+            >
+            struct deduce_domain_
+            {
+                typedef Domain type;
+            };
+
+            template<BOOST_PP_ENUM_PARAMS(BOOST_PROTO_MAX_ARITY, typename A)>
+            struct deduce_domain_<
+                default_domain
+                BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, A)
+            >
+              : deduce_domain_<
+                    typename domain_of<A0>::type
+                  , BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, typename A)
+                >
+            {};
+
+            template<>
+            struct deduce_domain_<default_domain>
+            {
+                typedef default_domain type;
+            };
+
             template<typename Tag, typename Domain, typename Sequence, std::size_t Size>
             struct unpack_expr_
             {};
@@ -128,7 +169,7 @@
         {
             template<typename Tag, typename Sequence, typename, typename>
             struct unpack_expr
-              : detail::unpack_expr_<Tag, default_domain, Sequence, fusion::result_of::size<Sequence>::type::value>
+              : detail::unpack_expr_<Tag, deduce_domain, Sequence, fusion::result_of::size<Sequence>::type::value>
             {};
 
             template<typename Tag, typename Domain, typename Sequence>
@@ -138,12 +179,24 @@
 
             template<typename Tag BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, typename A), typename, typename>
             struct make_expr
-              : detail::make_expr_<Tag, default_domain BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, A) >
+              : make_expr<Tag, deduce_domain BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, A) >
             {};
 
             template<typename Tag, typename Domain BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, typename A) >
             struct make_expr<Tag, Domain BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, A), typename Domain::boost_proto_is_domain_>
               : detail::make_expr_<Tag, Domain BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, A) >
+            {};
+
+            template<typename Tag BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, typename A) >
+            struct make_expr<Tag, deduce_domain BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, A), void>
+              : detail::make_expr_<
+                    Tag
+                  , typename detail::deduce_domain_<
+                        typename domain_of<A0>::type
+                      , BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, A)
+                    >::type
+                    BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PROTO_MAX_ARITY, A)
+                >
             {};
         }
 
@@ -155,6 +208,13 @@
                 template<typename Sig>
                 struct result
                 {};
+
+                template<typename A>
+                typename result_of::make_expr<Tag, Domain, A>::type const
+                operator ()(A &a) const
+                {
+                    return result_of::make_expr<Tag, Domain, A>::call(a);
+                }
 
         #define BOOST_PP_ITERATION_PARAMS_1                                                         \
             (4, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/make_expr.hpp>, 2))               \
@@ -176,15 +236,15 @@
                 {};
 
                 template<typename A>
-                typename result_of::make_expr<tag::terminal, Domain, A &>::type operator ()(A &a) const
+                typename result_of::make_expr<tag::terminal, Domain, A>::type operator ()(A &a) const
                 {
-                    return result_of::make_expr<tag::terminal, Domain, A &>::call(a);
+                    return result_of::make_expr<tag::terminal, Domain, A>::call(a);
                 }
 
                 template<typename A>
-                typename result_of::make_expr<tag::terminal, Domain, A const &>::type operator ()(A const &a) const
+                typename result_of::make_expr<tag::terminal, Domain, A const>::type operator ()(A const &a) const
                 {
-                    return result_of::make_expr<tag::terminal, Domain, A const &>::call(a);
+                    return result_of::make_expr<tag::terminal, Domain, A const>::call(a);
                 }
             };
 
@@ -230,12 +290,8 @@
             {};
         }
 
-    #define BOOST_PP_ITERATION_PARAMS_1                                                             \
-        (4, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/make_expr.hpp>, 3))                   \
-        /**/
-
-    #include BOOST_PP_ITERATE()
-
+        /// unpack_expr
+        ///
         template<typename Tag, typename Sequence>
         typename lazy_disable_if<
             is_domain<Sequence>
@@ -246,13 +302,17 @@
             return result_of::unpack_expr<Tag, Sequence>::call(sequence);
         }
 
-        template<typename Tag, typename Domain, typename Sequence>
-        typename result_of::unpack_expr<Tag, Domain, Sequence>::type const
-        unpack_expr(Sequence const &sequence)
+        /// \overload
+        ///
+        template<typename Tag, typename Domain, typename Sequence2>
+        typename result_of::unpack_expr<Tag, Domain, Sequence2>::type const
+        unpack_expr(Sequence2 const &sequence2)
         {
-            return result_of::unpack_expr<Tag, Domain, Sequence>::call(sequence);
+            return result_of::unpack_expr<Tag, Domain, Sequence2>::call(sequence2);
         }
 
+        /// make_expr
+        ///
         template<typename Tag, typename A0>
         typename lazy_disable_if<
             is_domain<A0>
@@ -263,18 +323,28 @@
             return result_of::make_expr<Tag, A0>::call(a0);
         }
 
-        template<typename Tag, typename Domain, typename A0>
-        typename result_of::make_expr<Tag, Domain, A0>::type const
-        make_expr(A0 &a0 BOOST_PROTO_DISABLE_IF_IS_CONST(A0))
+        /// \overload
+        ///
+        template<typename Tag, typename Domain, typename B0>
+        typename result_of::make_expr<Tag, Domain, B0>::type const
+        make_expr(B0 &b0 BOOST_PROTO_DISABLE_IF_IS_CONST(B0))
         {
-            return result_of::make_expr<Tag, Domain, A0>::call(a0);
+            return result_of::make_expr<Tag, Domain, B0>::call(b0);
         }
+
+    #define BOOST_PP_ITERATION_PARAMS_1                                                             \
+        (4, (1, BOOST_PROTO_MAX_ARITY, <boost/xpressive/proto/make_expr.hpp>, 3))                   \
+        /**/
+
+    #include BOOST_PP_ITERATE()
     }}
 
-    #undef BOOST_PROTO_AS_ARG_TYPE
-    #undef BOOST_PROTO_AS_ARG
-    #undef BOOST_PROTO_AT_TYPE
     #undef BOOST_PROTO_AT
+    #undef BOOST_PROTO_AT_TYPE
+    #undef BOOST_PROTO_AS_ARG
+    #undef BOOST_PROTO_AS_ARG_TYPE
+    #undef BOOST_PROTO_AS_ARG_AT
+    #undef BOOST_PROTO_AS_ARG_AT_TYPE
 
     #endif // BOOST_PROTO_MAKE_EXPR_HPP_EAN_04_01_2005
 
@@ -306,7 +376,7 @@
         {
             typedef expr<
                 Tag
-              , BOOST_PP_CAT(args, N)<BOOST_PP_ENUM(N, BOOST_PROTO_AT_TYPE, (Sequence const, Domain)) >
+              , BOOST_PP_CAT(args, N)<BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG_AT_TYPE, (Sequence const, Domain)) >
             > expr_type;
 
             typedef typename Domain::template apply<expr_type>::type type;
@@ -314,11 +384,27 @@
             static type const call(Sequence const &sequence)
             {
                 expr_type that = {
-                    BOOST_PP_ENUM(N, BOOST_PROTO_AT, (sequence, Domain))
+                    BOOST_PP_ENUM(N, BOOST_PROTO_AS_ARG_AT, (sequence, Domain))
                 };
                 return Domain::make(that);
             }
         };
+
+        template<typename Tag, typename Sequence>
+        struct unpack_expr_<Tag, deduce_domain, Sequence, N>
+          : unpack_expr_<
+                Tag
+              , typename detail::deduce_domain_<
+                    typename domain_of<
+                        BOOST_PROTO_AT_TYPE(~, 0, (Sequence const, ~))
+                    >::type
+                    BOOST_PP_COMMA_IF(BOOST_PP_DEC(N))
+                    BOOST_PP_ENUM_SHIFTED(N, BOOST_PROTO_AT_TYPE, (Sequence const, ~))
+                >::type
+              , Sequence
+              , N
+            >
+        {};
 
     #undef N
 
@@ -354,6 +440,8 @@
 
     #define N BOOST_PP_ITERATION()
 
+        /// \overload
+        ///
         template<typename Tag BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
         typename lazy_disable_if<
             is_domain<A0>
@@ -366,12 +454,14 @@
             );
         }
 
-        template<typename Tag, typename Domain BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
-        typename result_of::make_expr<Tag, Domain BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)>::type const
-        make_expr(BOOST_PP_ENUM_BINARY_PARAMS(N, const A, &a))
+        /// \overload
+        ///
+        template<typename Tag, typename Domain BOOST_PP_ENUM_TRAILING_PARAMS(N, typename B)>
+        typename result_of::make_expr<Tag, Domain BOOST_PP_ENUM_TRAILING_PARAMS(N, const B)>::type const
+        make_expr(BOOST_PP_ENUM_BINARY_PARAMS(N, const B, &b))
         {
-            return result_of::make_expr<Tag, Domain BOOST_PP_ENUM_TRAILING_PARAMS(N, const A)>::call(
-                BOOST_PP_ENUM_PARAMS(N, a)
+            return result_of::make_expr<Tag, Domain BOOST_PP_ENUM_TRAILING_PARAMS(N, const B)>::call(
+                BOOST_PP_ENUM_PARAMS(N, b)
             );
         }
 

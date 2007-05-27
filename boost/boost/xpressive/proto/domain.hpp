@@ -13,6 +13,7 @@
 #include <boost/xpressive/proto/detail/prefix.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
+#include <boost/xpressive/proto/generate.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
 
 namespace boost { namespace proto
@@ -29,6 +30,10 @@ namespace boost { namespace proto
         typedef void boost_proto_is_domain_;
     };
 
+    struct deduce_domain
+      : domain<>
+    {};
+
     template<typename T, typename EnableIf>
     struct is_domain
       : mpl::false_
@@ -38,6 +43,18 @@ namespace boost { namespace proto
     struct is_domain<T, typename T::boost_proto_is_domain_>
       : mpl::true_
     {};
+
+    template<typename T, typename EnableIf>
+    struct domain_of
+    {
+        typedef default_domain type;
+    };
+
+    template<typename T>
+    struct domain_of<T, typename T::is_boost_proto_expr_>
+    {
+        typedef typename T::domain type;
+    };
 
 }}
 

@@ -467,7 +467,7 @@ range(Char ch_min, Char ch_max)
 /// \brief Make a sub-expression optional. Equivalent to !as_xpr(expr).
 ///
 /// \param expr The sub-expression to make optional.
-proto::functional::make_expr<proto::tag::logical_not> const optional = {};
+proto::functional::make_expr<proto::tag::logical_not, proto::default_domain> const optional = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Repeat a sub-expression multiple times.
@@ -481,19 +481,19 @@ proto::functional::make_expr<proto::tag::logical_not> const optional = {};
 ///
 /// \param expr The sub-expression to repeat.
 template<unsigned int Min, unsigned int Max, typename Expr>
-typename proto::result_of::make_expr<detail::generic_quant_tag<Min, Max>, Expr const>::type const
+typename proto::result_of::make_expr<detail::generic_quant_tag<Min, Max>, proto::default_domain, Expr const>::type const
 repeat(Expr const &expr)
 {
-    return proto::make_expr<detail::generic_quant_tag<Min, Max> >(expr);
+    return proto::make_expr<detail::generic_quant_tag<Min, Max>, proto::default_domain>(expr);
 }
 
 /// \overload
 ///
 template<unsigned int Count, typename Expr2>
-typename proto::result_of::make_expr<detail::generic_quant_tag<Count, Count>, Expr2 const>::type const
+typename proto::result_of::make_expr<detail::generic_quant_tag<Count, Count>, proto::default_domain, Expr2 const>::type const
 repeat(Expr2 const &expr2)
 {
-    return proto::make_expr<detail::generic_quant_tag<Count, Count> >(expr2);
+    return proto::make_expr<detail::generic_quant_tag<Count, Count>, proto::default_domain>(expr2);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -506,7 +506,7 @@ repeat(Expr2 const &expr2)
 /// \attention keep(expr) is equivalent to the perl (?>...) extension.
 ///
 /// \param expr The sub-expression to modify.
-proto::functional::make_expr<detail::keeper_tag> const keep = {};
+proto::functional::make_expr<detail::keeper_tag, proto::default_domain> const keep = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Look-ahead assertion.
@@ -521,7 +521,7 @@ proto::functional::make_expr<detail::keeper_tag> const keep = {};
 /// perl (?!...) extension.
 ///
 /// \param expr The sub-expression to put in the look-ahead assertion.
-proto::functional::make_expr<detail::lookahead_tag> const before = {};
+proto::functional::make_expr<detail::lookahead_tag, proto::default_domain> const before = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Look-behind assertion.
@@ -538,7 +538,7 @@ proto::functional::make_expr<detail::lookahead_tag> const before = {};
 /// \param expr The sub-expression to put in the look-ahead assertion.
 ///
 /// \pre expr cannot match a variable number of characters.
-proto::functional::make_expr<detail::lookbehind_tag> const after = {};
+proto::functional::make_expr<detail::lookbehind_tag, proto::default_domain> const after = {};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Specify a regex traits or a std::locale.

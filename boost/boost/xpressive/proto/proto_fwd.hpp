@@ -206,6 +206,8 @@ namespace boost { namespace proto
 
     typedef domain<> default_domain;
 
+    struct deduce_domain;
+
     template<typename Expr, typename Derived, typename Domain = default_domain, typename Tag = typename Expr::tag_type>
     struct extends;
 
@@ -281,6 +283,9 @@ namespace boost { namespace proto
 
     template<typename Expr>
     struct tag_of;
+
+    template<typename T, typename EnableIf = void>
+    struct domain_of;
 
     template<typename Expr>
     struct id;
@@ -365,16 +370,16 @@ namespace boost { namespace proto
         template<long N>
         struct arg_c;
 
-        template<typename Tag, typename Domain = default_domain>
+        template<typename Tag, typename Domain = deduce_domain>
         struct make_expr;
 
-        template<typename Tag, typename Domain = default_domain>
+        template<typename Tag, typename Domain = deduce_domain>
         struct unpack_expr;
 
-        template<typename Tag, typename Domain = default_domain>
+        template<typename Tag, typename Domain = deduce_domain>
         struct unfused_expr_fun;
 
-        template<typename Tag, typename Domain = default_domain>
+        template<typename Tag, typename Domain = deduce_domain>
         struct unfused_expr;
     }
 
