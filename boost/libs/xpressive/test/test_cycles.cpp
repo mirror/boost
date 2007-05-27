@@ -63,6 +63,7 @@ void test_main()
     if(0 != detail::regex_impl<std::string::const_iterator>::instances)
     {
         BOOST_ERROR("leaks detected (cycle test 1)");
+        detail::regex_impl<std::string::const_iterator>::instances = 0;
     }
 
     {
@@ -90,6 +91,7 @@ void test_main()
     if(0 != detail::regex_impl<std::string::const_iterator>::instances)
     {
         BOOST_ERROR("leaks detected (cycle test 2)");
+        detail::regex_impl<std::string::const_iterator>::instances = 0;
     }
 
     {
@@ -118,6 +120,7 @@ void test_main()
     if(0 != detail::regex_impl<std::string::const_iterator>::instances)
     {
         BOOST_ERROR("leaks detected (cycle test 3)");
+        detail::regex_impl<std::string::const_iterator>::instances = 0;
     }
 
     {
@@ -145,6 +148,7 @@ void test_main()
     if(0 != detail::regex_impl<std::string::const_iterator>::instances)
     {
         BOOST_ERROR("leaks detected (cycle test 4)");
+        detail::regex_impl<std::string::const_iterator>::instances = 0;
     }
 
     {
@@ -190,6 +194,7 @@ void test_main()
     if(0 != detail::regex_impl<std::string::const_iterator>::instances)
     {
         BOOST_ERROR("leaks detected (cycle test 5)");
+        detail::regex_impl<std::string::const_iterator>::instances = 0;
     }
 }
 
