@@ -79,7 +79,7 @@ int test_bimap_range()
     // left range
     {
 
-    bm_type::left_map::range_type r = bm.left.range( 2.0 < _key, _key < 4.0 );
+    bm_type::left_range_type r = bm.left.range( 2.0 < _key, _key < 4.0 );
     BOOST_CHECK( ! boost::empty(r) );
     BOOST_CHECK( boost::begin(r) == bm.left.upper_bound(2.0) );
     BOOST_CHECK( boost::end(r)   == bm.left.lower_bound(4.0) );
@@ -89,7 +89,7 @@ int test_bimap_range()
     // right range
     {
 
-    bm_type::right_map::range_type r = bm.right.range( 2 <= _key, _key <= 3 );
+    bm_type::right_range_type r = bm.right.range( 2 <= _key, _key <= 3 );
     BOOST_CHECK( ! boost::empty(r) );
     BOOST_CHECK( boost::begin(r) == bm.right.lower_bound(2) );
     BOOST_CHECK( boost::end(r)   == bm.right.upper_bound(3) );
@@ -99,8 +99,8 @@ int test_bimap_range()
     // const range from range
     {
 
-    bm_type:: left_map::const_range_type lr = bm. left.range( unbounded, _key < 4.0 );
-    bm_type::right_map::const_range_type rr = bm.right.range( 2 < _key ,  unbounded );
+    bm_type:: left_const_range_type lr = bm. left.range( unbounded, _key < 4.0 );
+    bm_type::right_const_range_type rr = bm.right.range( 2 < _key ,  unbounded );
 
     }
 
@@ -108,7 +108,7 @@ int test_bimap_range()
 
     // left const range
     {
-    bm_type:: left_map::const_range_type r = cbm.left.range( unbounded, unbounded );
+    bm_type:: left_const_range_type r = cbm.left.range( unbounded, unbounded );
     BOOST_CHECK( ! boost::empty(r) );
     BOOST_CHECK( boost::begin(r) == cbm.left.begin() );
 
@@ -117,7 +117,7 @@ int test_bimap_range()
     // right const range
     {
 
-    bm_type::right_map::const_range_type r = cbm.right.range( 1 < _key, _key < 1 );
+    bm_type::right_const_range_type r = cbm.right.range( 1 < _key, _key < 1 );
     BOOST_CHECK( boost::empty(r) );
 
     }
