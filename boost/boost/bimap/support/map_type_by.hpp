@@ -52,7 +52,7 @@ BOOST_BIMAP_SYMMETRIC_METADATA_ACCESS_BUILDER
     map_type_by,
     left_map,
     right_map
-);
+)
 
 
 

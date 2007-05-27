@@ -46,7 +46,7 @@ class list_set_view
     public ::boost::bimaps::detail::
         set_view_base< list_set_view< CoreIndex >, CoreIndex >
 {
-    BOOST_BIMAP_SET_VIEW_BASE_FRIEND(list_set_view,CoreIndex);
+    BOOST_BIMAP_SET_VIEW_BASE_FRIEND(list_set_view,CoreIndex)
 
     typedef BOOST_BIMAP_SEQUENCED_SET_VIEW_CONTAINER_ADAPTOR(
         list_adaptor,

@@ -95,7 +95,7 @@ BOOST_BIMAP_SYMMETRIC_ACCESS_RESULT_OF_BUILDER
 (
     get,
     value_type_of
-);
+)
 
 
 
@@ -109,7 +109,7 @@ BOOST_BIMAP_SYMMETRIC_ACCESS_IMPLEMENTATION_BUILDER
     rel,
     return rel.get_left(),
     return rel.get_right()
-);
+)
 
 
 // Interface

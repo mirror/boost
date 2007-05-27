@@ -53,7 +53,7 @@ BOOST_BIMAP_SYMMETRIC_METADATA_ACCESS_BUILDER
     key_type_by,
     left_key_type,
     right_key_type
-);
+)
 
 
 } // namespace support

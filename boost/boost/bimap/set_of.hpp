@@ -58,7 +58,7 @@ the following way:
 \code
 using namespace support;
 
-BOOST_STATIC_ASSERT( is_set_type_of< set_of<Type> >::value );
+BOOST_STATIC_ASSERT( is_set_type_of< set_of<Type> >::value )
 
 BOOST_STATIC_ASSERT
 (
@@ -74,7 +74,7 @@ BOOST_STATIC_ASSERT
         ordered_unique< tag<Tag>, KeyExtractor, KeyCompare >
 
     >::value
-);
+)
 
 typedef bimap
 <
@@ -96,7 +96,7 @@ BOOST_STATIC_ASSERT
         map_view< member_at::left, bimap_with_left_type_as_set >
 
     >::value
-);
+)
 
 \endcode
 
@@ -134,19 +134,19 @@ struct set_of : public ::boost::bimaps::detail::set_type_of_tag
 
         // with
         key_compare
-    );
+    )
 
     BOOST_BIMAP_GENERATE_MAP_VIEW_BINDER(
 
         // binds to
         views::map_view
-    );
+    )
 
     BOOST_BIMAP_GENERATE_SET_VIEW_BINDER(
 
         // binds to
         views::set_view
-    );
+    )
 
     typedef mpl::bool_<false> mutable_key;
 };
@@ -184,7 +184,7 @@ struct set_of_relation : public ::boost::bimaps::detail::set_type_of_relation_ta
 
         // with
         key_compare
-    );
+    )
 
     typedef mpl::bool_<false>  left_mutable_key;
     typedef mpl::bool_<false> right_mutable_key;

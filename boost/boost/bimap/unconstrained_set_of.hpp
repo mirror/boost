@@ -48,7 +48,7 @@ The first parameter is the type of the objects in the set.
 
 using namespace support;
 
-BOOST_STATIC_ASSERT( is_set_type_of< unconstrained_set_of<Type> >::value );
+BOOST_STATIC_ASSERT( is_set_type_of< unconstrained_set_of<Type> >::value )
 
 \endcode
 
@@ -78,13 +78,13 @@ struct unconstrained_set_of : public ::boost::bimaps::detail::set_type_of_tag
 
         // binds to
         views::unconstrained_map_view
-    );
+    )
 
     BOOST_BIMAP_GENERATE_SET_VIEW_BINDER(
 
         // binds to
         views::unconstrained_set_view
-    );
+    )
 
     typedef mpl::bool_<true> mutable_key;
 };
@@ -105,7 +105,7 @@ struct unconstrained_set_of_relation : public ::boost::bimaps::detail::set_type_
 
         // binds to
         unconstrained_set_of
-    );
+    )
 
     typedef mpl::bool_<true>  left_mutable_key;
     typedef mpl::bool_<true> right_mutable_key;

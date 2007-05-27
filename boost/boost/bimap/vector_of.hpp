@@ -58,7 +58,7 @@ the following way:
 \code
 using namespace support;
 
-BOOST_STATIC_ASSERT( is_set_type_of< vector_of<Type> >::value );
+BOOST_STATIC_ASSERT( is_set_type_of< vector_of<Type> >::value )
 
 BOOST_STATIC_ASSERT
 (
@@ -74,7 +74,7 @@ BOOST_STATIC_ASSERT
         random_access< tag<Tag>, KeyExtractor >
 
     >::value
-);
+)
 
 typedef bimap
 <
@@ -96,7 +96,7 @@ BOOST_STATIC_ASSERT
         vector_map_view< member_at::left, bimap_with_left_type_as_vector >
 
     >::value
-);
+)
 
 \endcode
 
@@ -121,19 +121,19 @@ struct vector_of : public ::boost::bimaps::detail::set_type_of_tag
 
         // binds to
         multi_index::random_access
-    );
+    )
 
     BOOST_BIMAP_GENERATE_MAP_VIEW_BINDER(
 
         // binds to
         views::vector_map_view
-    );
+    )
 
     BOOST_BIMAP_GENERATE_SET_VIEW_BINDER(
 
         // binds to
         views::vector_set_view
-    );
+    )
 
     typedef mpl::bool_<true> mutable_key;
 };
@@ -164,7 +164,7 @@ struct vector_of_relation : public ::boost::bimaps::detail::set_type_of_relation
 
         // binds to
         vector_of
-    );
+    )
 
     typedef mpl::bool_<true>  left_mutable_key;
     typedef mpl::bool_<true> right_mutable_key;

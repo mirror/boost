@@ -58,7 +58,7 @@ the following way:
 \code
 using namespace support;
 
-BOOST_STATIC_ASSERT( is_set_type_of< multiset_of<Type> >::value );
+BOOST_STATIC_ASSERT( is_set_type_of< multiset_of<Type> >::value )
 
 BOOST_STATIC_ASSERT
 (
@@ -75,7 +75,7 @@ BOOST_STATIC_ASSERT
         ordered_nonunique< tag<Tag>, KeyExtractor, KeyCompare >
 
     >::value
-);
+)
 
 typedef bimap
 <
@@ -96,7 +96,7 @@ BOOST_STATIC_ASSERT
         multimap_view< member_at::left, bimap_with_left_type_as_multiset >
 
     >::value
-);
+)
 
 \endcode
 
@@ -134,19 +134,19 @@ struct multiset_of : public ::boost::bimaps::detail::set_type_of_tag
 
         // with
         key_compare
-    );
+    )
 
     BOOST_BIMAP_GENERATE_MAP_VIEW_BINDER(
 
         // binds to
         views::multimap_view
-    );
+    )
 
     BOOST_BIMAP_GENERATE_SET_VIEW_BINDER(
 
         // binds to
         views::multiset_view
-    );
+    )
 
     typedef mpl::bool_<false> mutable_key;
 };
@@ -185,7 +185,7 @@ struct multiset_of_relation : public ::boost::bimaps::detail::set_type_of_relati
 
         // with
         key_compare
-    );
+    )
 
     typedef mpl::bool_<false>  left_mutable_key;
     typedef mpl::bool_<false> right_mutable_key;

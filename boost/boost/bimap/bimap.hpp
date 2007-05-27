@@ -59,6 +59,7 @@ the next step will be:
 
 // Boost.Bimap
 #include <boost/bimap/detail/bimap_core.hpp>
+#include <boost/bimap/detail/map_view_base.hpp>
 #include <boost/bimap/detail/modifier_adaptor.hpp>
 #include <boost/bimap/relation/support/data_extractor.hpp>
 #include <boost/bimap/relation/support/member_with_tag.hpp>
@@ -146,6 +147,7 @@ ones.
 
                                                                             **/
 
+
 template
 <
     class KeyTypeA, class KeyTypeB,
@@ -155,10 +157,27 @@ template
 >
 class bimap
 :
-    public ::boost::bimaps::detail::bimap_core<KeyTypeA,KeyTypeB,AP1,AP2,AP3>,
-    public ::boost::bimaps::detail::bimap_core<KeyTypeA,KeyTypeB,AP1,AP2,AP3>
-                ::relation_set
+	// Bimap Core, use mpl magic to find the desired bimap type
 
+    public ::boost::bimaps::detail::bimap_core<KeyTypeA,KeyTypeB,AP1,AP2,AP3>,
+
+	// You can use bimap as a collection of relations
+
+    public ::boost::bimaps::detail::bimap_core<KeyTypeA,KeyTypeB,AP1,AP2,AP3>
+                ::relation_set,
+
+	// Include extra typedefs (i.e. left_local_iterator for unordered_map)
+
+	public ::boost::bimaps::detail:: left_map_view_extra_typedefs< 
+		BOOST_DEDUCED_TYPENAME ::boost::bimaps::detail::left_map_view_type<
+			::boost::bimaps::detail::bimap_core<KeyTypeA,KeyTypeB,AP1,AP2,AP3>
+		>::type
+	>,
+	public ::boost::bimaps::detail::right_map_view_extra_typedefs< 
+		BOOST_DEDUCED_TYPENAME ::boost::bimaps::detail::right_map_view_type<
+			::boost::bimaps::detail::bimap_core<KeyTypeA,KeyTypeB,AP1,AP2,AP3>
+		>::type
+	>
 {
     typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::detail::
         bimap_core<KeyTypeA,KeyTypeB,AP1,AP2,AP3> base_;
@@ -185,17 +204,10 @@ class bimap
 
     ------------------------------------------------------------------*/
 
-    typedef BOOST_DEDUCED_TYPENAME base_::left_set_type left_set_type;
-    typedef BOOST_DEDUCED_TYPENAME
-        left_set_type::BOOST_NESTED_TEMPLATE map_view_bind<
-            BOOST_DEDUCED_TYPENAME base_::left_tag, base_
-        >::type left_map;
-
-    typedef BOOST_DEDUCED_TYPENAME base_::right_set_type right_set_type;
-    typedef BOOST_DEDUCED_TYPENAME
-        right_set_type::BOOST_NESTED_TEMPLATE map_view_bind<
-            BOOST_DEDUCED_TYPENAME base_::right_tag, base_
-        >::type right_map;
+	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::detail:: 
+          left_map_view_type<base_>::type  left_map;
+	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::detail::
+         right_map_view_type<base_>::type right_map;
 
     typedef BOOST_DEDUCED_TYPENAME
          left_map::reference        left_reference;

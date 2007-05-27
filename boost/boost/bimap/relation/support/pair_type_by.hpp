@@ -50,7 +50,7 @@ BOOST_BIMAP_SYMMETRIC_METADATA_ACCESS_BUILDER
     pair_type_by,
     left_pair,
     right_pair
-);
+)
 
 // Implementation of pair reference type by metafunction
 
@@ -59,7 +59,7 @@ BOOST_BIMAP_SYMMETRIC_METADATA_ACCESS_BUILDER
     pair_reference_type_by,
     left_pair_reference,
     right_pair_reference
-);
+)
 
 // Implementation of const pair reference type by metafunction
 
@@ -68,7 +68,7 @@ BOOST_BIMAP_SYMMETRIC_METADATA_ACCESS_BUILDER
     const_pair_reference_type_by,
     const_left_pair_reference,
     const_right_pair_reference
-);
+)
 
 
 } // namespace support

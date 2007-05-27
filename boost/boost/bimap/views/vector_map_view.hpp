@@ -54,7 +54,7 @@ class vector_map_view
 
     ) base_;
 
-    BOOST_BIMAP_MAP_VIEW_BASE_FRIEND(vector_map_view,Tag,BimapType);
+    BOOST_BIMAP_MAP_VIEW_BASE_FRIEND(vector_map_view,Tag,BimapType)
 
     typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::data_extractor
     <
@@ -261,6 +261,43 @@ class vector_map_view
 
 
 } // namespace views
+
+/*===========================================================================*/
+#define BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,TYPENAME)            \
+typedef BOOST_DEDUCED_TYPENAME MAP_VIEW::TYPENAME                             \
+	BOOST_PP_CAT(SIDE,BOOST_PP_CAT(_,TYPENAME));
+/*===========================================================================*/
+
+/*===========================================================================*/
+#define BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY(MAP_VIEW,SIDE)               \
+	BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,reverse_iterator)        \
+	BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,const_reverse_iterator)  \
+/*===========================================================================*/
+
+namespace detail {
+
+template< class Tag, class BimapType >
+ 
+struct left_map_view_extra_typedefs< ::boost::bimaps::views::vector_map_view<Tag,BimapType> >
+{
+    private: typedef ::boost::bimaps::views::vector_map_view<Tag,BimapType> map_view_;
+	public : BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY(map_view_,left)
+};
+
+template< class Tag, class BimapType >
+struct right_map_view_extra_typedefs< ::boost::bimaps::views::vector_map_view<Tag,BimapType> >
+{
+    private: typedef ::boost::bimaps::views::vector_map_view<Tag,BimapType> map_view_;
+	public : BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY(map_view_,right)
+};
+
+} // namespace detail
+
+/*===========================================================================*/
+#undef BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF
+#undef BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY
+/*===========================================================================*/
+
 } // namespace bimaps
 } // namespace boost
 

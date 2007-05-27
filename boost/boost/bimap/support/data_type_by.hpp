@@ -43,7 +43,7 @@ The following holds:
 BOOST_STATIC_ASSERT
 (
     is_same< data_type_by< member_at::left, bimap<A,B> >::type, A >::value
-);
+)
 
 \endcode
 
@@ -62,7 +62,7 @@ BOOST_BIMAP_SYMMETRIC_METADATA_ACCESS_BUILDER
     data_type_by,
     left_data_type,
     right_data_type
-);
+)
 
 } // namespace support
 } // namespace bimaps

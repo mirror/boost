@@ -53,7 +53,7 @@ class set_view
 
     ) base_;
 
-    BOOST_BIMAP_SET_VIEW_BASE_FRIEND(set_view,CoreIndex);
+    BOOST_BIMAP_SET_VIEW_BASE_FRIEND(set_view,CoreIndex)
 
     public:
 

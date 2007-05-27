@@ -19,6 +19,7 @@
 #include <boost/config.hpp>
 
 #include <stdexcept>
+#include <utility>
 
 #include <boost/type_traits/is_const.hpp>
 #include <boost/mpl/if.hpp>
@@ -398,6 +399,15 @@ struct unique_map_view_access
     >::type type;
 };
 
+// Map views specialize the following structs to provide to the bimap class
+// the extra side typedefs (i.e. left_local_iterator for unordered_maps, 
+// right_range_type for maps)
+
+template< class MapView >
+struct  left_map_view_extra_typedefs {};
+
+template< class MapView >
+struct right_map_view_extra_typedefs {};
 
 } // namespace detail
 

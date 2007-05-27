@@ -123,7 +123,7 @@ BOOST_BIMAP_SYMMETRIC_ACCESS_IMPLEMENTATION_BUILDER
     rel,
     return rel.get_left_pair(),
     return rel.get_right_pair()
-);
+)
 
 // Interface
 // --------------------------------------------------------------------------

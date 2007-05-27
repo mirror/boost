@@ -54,7 +54,7 @@ parameter.
 \code
 using namespace support;
 
-BOOST_STATIC_ASSERT( is_set_type_of< list_of<Type> >::value );
+BOOST_STATIC_ASSERT( is_set_type_of< list_of<Type> >::value )
 
 BOOST_STATIC_ASSERT
 (
@@ -70,7 +70,7 @@ BOOST_STATIC_ASSERT
         sequenced< tag<Tag>, KeyExtractor >
 
     >::value
-);
+)
 
 typedef bimap
 <
@@ -91,7 +91,7 @@ BOOST_STATIC_ASSERT
         list_map_view< member_at::left, bimap_with_left_type_as_list >
 
     >::value
-);
+)
 
 \endcode
 
@@ -116,19 +116,19 @@ struct list_of : public ::boost::bimaps::detail::set_type_of_tag
 
         // binds to
         multi_index::sequenced
-    );
+    )
 
     BOOST_BIMAP_GENERATE_MAP_VIEW_BINDER(
 
         // binds to
         views::list_map_view
-    );
+    )
 
     BOOST_BIMAP_GENERATE_SET_VIEW_BINDER(
 
         // binds to
         views::list_set_view
-    );
+    )
 
     typedef mpl::bool_<true> mutable_key;
 };
@@ -159,7 +159,7 @@ struct list_of_relation : public ::boost::bimaps::detail::set_type_of_relation_t
 
         // binds to
         list_of
-    );
+    )
 
     typedef mpl::bool_<true>  left_mutable_key;
     typedef mpl::bool_<true> right_mutable_key;

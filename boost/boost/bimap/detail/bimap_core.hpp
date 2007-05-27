@@ -486,6 +486,30 @@ struct bimap_core
     typedef bimap_core bimap_core_;
 };
 
+// Two auxiliar metafunctions to compute the map view types
+// The map view type can not be computed inside the bimap core because a 
+// they need the bimap core to be parsed first.
+
+template< class BimapBaseType >
+struct left_map_view_type
+{
+	typedef BOOST_DEDUCED_TYPENAME BimapBaseType::left_set_type left_set_type;
+    typedef BOOST_DEDUCED_TYPENAME
+        left_set_type::BOOST_NESTED_TEMPLATE map_view_bind<
+            BOOST_DEDUCED_TYPENAME BimapBaseType::left_tag, BimapBaseType
+        >::type type;
+};
+
+template< class BimapBaseType >
+struct right_map_view_type
+{
+	typedef BOOST_DEDUCED_TYPENAME BimapBaseType::right_set_type right_set_type;
+    typedef BOOST_DEDUCED_TYPENAME
+        right_set_type::BOOST_NESTED_TEMPLATE map_view_bind<
+            BOOST_DEDUCED_TYPENAME BimapBaseType::right_tag, BimapBaseType
+        >::type type;
+};
+
 } // namespace detail
 } // namespace bimaps
 } // namespace boost

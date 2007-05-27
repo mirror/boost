@@ -87,7 +87,7 @@ BOOST_BIMAP_SYMMETRIC_METADATA_ACCESS_BUILDER
     iterator_type_by,
     left_iterator,
     right_iterator
-);
+)
 
 // Implementation of const iterator type by metafunction
 
@@ -96,7 +96,7 @@ BOOST_BIMAP_SYMMETRIC_METADATA_ACCESS_BUILDER
     const_iterator_type_by,
     left_const_iterator,
     right_const_iterator
-);
+)
 
 
 // Implementation of reverse iterator type by metafunction
@@ -113,7 +113,7 @@ BOOST_BIMAP_SYMMETRIC_STATIC_ACCESS_BUILDER
     typedef BOOST_DEDUCED_TYPENAME BimapCore::core_type::BOOST_NESTED_TEMPLATE
         index<BOOST_DEDUCED_TYPENAME BimapCore::right_tag>
             ::type::reverse_iterator type
-);
+)
 
 template< class Tag, class BimapCore >
 struct reverse_iterator_type_by
@@ -141,7 +141,7 @@ BOOST_BIMAP_SYMMETRIC_STATIC_ACCESS_BUILDER
     typedef BOOST_DEDUCED_TYPENAME BimapCore::core_type::BOOST_NESTED_TEMPLATE
         index<BOOST_DEDUCED_TYPENAME BimapCore::right_tag>
             ::type::const_reverse_iterator type
-);
+)
 
 template< class Tag, class BimapCore >
 struct const_reverse_iterator_type_by
@@ -171,7 +171,7 @@ BOOST_BIMAP_SYMMETRIC_STATIC_ACCESS_BUILDER
     typedef BOOST_DEDUCED_TYPENAME BimapCore::core_type::BOOST_NESTED_TEMPLATE
         index<BOOST_DEDUCED_TYPENAME BimapCore::right_tag>
             ::type::local_iterator type
-);
+)
 
 
 template< class Tag, class BimapCore >
@@ -202,7 +202,7 @@ BOOST_BIMAP_SYMMETRIC_STATIC_ACCESS_BUILDER
     typedef BOOST_DEDUCED_TYPENAME BimapCore::core_type::BOOST_NESTED_TEMPLATE
         index<BOOST_DEDUCED_TYPENAME BimapCore::right_tag>
             ::type::const_local_iterator type
-);
+)
 
 template< class Tag, class BimapCore >
 struct const_local_iterator_type_by

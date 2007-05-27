@@ -49,7 +49,7 @@ BOOST_BIMAP_SYMMETRIC_METADATA_ACCESS_BUILDER
     opossite_tag,
     right_tag,
     left_tag
-);
+)
 
 } // namespace support
 } // namespace relation

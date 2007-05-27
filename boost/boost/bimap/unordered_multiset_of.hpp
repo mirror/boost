@@ -62,7 +62,7 @@ the following way:
 \code
 using namespace support;
 
-BOOST_STATIC_ASSERT( is_set_type_of< unordered_multiset_of<Type> >::value );
+BOOST_STATIC_ASSERT( is_set_type_of< unordered_multiset_of<Type> >::value )
 
 BOOST_STATIC_ASSERT
 (
@@ -79,7 +79,7 @@ BOOST_STATIC_ASSERT
         hashed_nonunique< tag<Tag>, KeyExtractor, HashFunctor, EqualKey >
 
     >::value
-);
+)
 
 typedef bimap
 <
@@ -105,7 +105,7 @@ BOOST_STATIC_ASSERT
         >
 
     >::value
-);
+)
 
 \endcode
 
@@ -151,19 +151,19 @@ struct unordered_multiset_of : public ::boost::bimaps::detail::set_type_of_tag
         // with
         hasher,
         key_equal
-    );
+    )
 
     BOOST_BIMAP_GENERATE_MAP_VIEW_BINDER(
 
         // binds to
         views::unordered_multimap_view
-    );
+    )
 
     BOOST_BIMAP_GENERATE_SET_VIEW_BINDER(
 
         // binds to
         views::unordered_multiset_view
-    );
+    )
 
     typedef mpl::bool_<false> mutable_key;
 };
@@ -210,7 +210,7 @@ struct unordered_multiset_of_relation : public ::boost::bimaps::detail::set_type
         // with
         hasher,
         key_equal
-    );
+    )
 
     typedef mpl::bool_<false>  left_mutable_key;
     typedef mpl::bool_<false> right_mutable_key;

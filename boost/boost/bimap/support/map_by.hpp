@@ -100,7 +100,7 @@ BOOST_BIMAP_SYMMETRIC_ACCESS_RESULT_OF_BUILDER
 (
     map_by,
     map_type_by
-);
+)
 
 // Implementation
 // -------------------------------------------------------------------------
@@ -112,7 +112,7 @@ BOOST_BIMAP_SYMMETRIC_ACCESS_IMPLEMENTATION_BUILDER
     b,
     return b.left,
     return b.right
-);
+)
 
 // Interface
 // --------------------------------------------------------------------------
@@ -122,7 +122,7 @@ BOOST_BIMAP_SYMMETRIC_ACCESS_IMPLEMENTATION_BUILDER
 BOOST_BIMAP_SYMMETRIC_ACCESS_INTERFACE_BUILDER
 (
     map_by
-);
+)
 
 } // namespace support
 } // namespace bimaps
