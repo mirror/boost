@@ -100,9 +100,9 @@ void result_type_tests()
 }
 
 #if defined(BOOST_MSVC) && BOOST_MSVC < 1400
-#		define BOOST_TEST_NO_VC71(cond) (void)((cond)?0:1)
+#   define BOOST_TEST_NO_VC71(cond) (void)((cond)?0:1)
 #else
-#		define BOOST_TEST_NO_VC71(cond) BOOST_TEST(cond)
+#   define BOOST_TEST_NO_VC71(cond) BOOST_TEST(cond)
 #endif
 
 int main()
