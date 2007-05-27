@@ -25,10 +25,14 @@
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
-#include <boost/xpressive/detail/core/matcher/action_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/predicate_matcher.hpp>
 #include <boost/xpressive/detail/utility/ignore_unused.hpp>
 #include <boost/typeof/std/string.hpp> // very often needed by client code.
+
+// Doxygen can't handle proto :-(
+#ifndef BOOST_XPRESSIVE_DOXYGEN_INVOKED
+# include <boost/xpressive/detail/core/matcher/action_matcher.hpp>
+#endif
 
 namespace boost { namespace xpressive
 {

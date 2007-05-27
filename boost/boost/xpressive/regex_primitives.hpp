@@ -13,13 +13,17 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
-#include <boost/xpressive/detail/core/icase.hpp>
 #include <boost/xpressive/detail/core/matchers.hpp>
-#include <boost/xpressive/detail/static/compile.hpp>
-#include <boost/xpressive/detail/static/modifier.hpp>
 #include <boost/xpressive/detail/utility/ignore_unused.hpp>
+
+// Doxygen can't handle proto :-(
+#ifndef BOOST_XPRESSIVE_DOXYGEN_INVOKED
+# include <boost/xpressive/proto/proto.hpp>
+# include <boost/xpressive/detail/core/icase.hpp>
+# include <boost/xpressive/detail/static/compile.hpp>
+# include <boost/xpressive/detail/static/modifier.hpp>
+#endif
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -387,9 +391,16 @@ mark_tag::type const s9 = {{9}};
 // NOTE: For the purpose of xpressive's documentation, make icase() look like an
 // ordinary function. In reality, it is a function object defined in detail/icase.hpp
 // so that it can serve double-duty as regex_constants::icase, the syntax_option_type.
-// Do the same for as_xpr(), which is actually defined below using proto's as_expr
-// function object.
 #ifdef BOOST_XPRESSIVE_DOXYGEN_INVOKED
+///////////////////////////////////////////////////////////////////////////////
+/// \brief Makes a sub-expression case-insensitive.
+///
+/// Use icase() to make a sub-expression case-insensitive. For instance,
+/// "foo" >> icase(set['b'] >> "ar") will match "foo" exactly followed by
+/// "bar" irrespective of case.
+template<typename Expr> detail::unspecified icase(Expr const &expr) { return 0; }
+#endif
+
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Makes a literal into a regular expression.
 ///
@@ -402,37 +413,9 @@ mark_tag::type const s9 = {{9}};
 /// For instance, as_xpr('a') will match an 'a'. You can also complement a
 /// character literal, as with ~as_xpr('a'). This will match any one character
 /// that is not an 'a'.
-template<typename Literal>
-inline typename proto::result_of::as_expr<Literal>::type
-as_xpr(Literal const &literal)
-{
-    return proto::as_expr(literal);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-/// \brief Makes a sub-expression case-insensitive.
-///
-/// Use icase() to make a sub-expression case-insensitive. For instance,
-/// "foo" >> icase(set['b'] >> "ar") will match "foo" exactly followed by
-/// "bar" irrespective of case.
-template<typename Expr>
-inline typename proto::binary_expr<
-    modifier_tag
-  , detail::icase_modifier
-  , typename proto::result_of::as_arg<Expr const>::type
->::type const
-icase(Expr const &expr)
-{
-    detail::icase_modifier mod;
-    typename proto::binary_expr<
-        modifier_tag
-      , detail::icase_modifier
-      , typename proto::result_of::as_arg<Expr const>::type
-    >::type that = {mod, proto::as_arg(expr)};
-    return that;
-}
+#ifdef BOOST_XPRESSIVE_DOXYGEN_INVOKED
+template<typename Literal> detail::unspecified as_xpr(Literal const &literal) { return 0; }
 #else
-// Re-use proto's as_expr function object as xpressive's as_xpr() function.
 proto::functional::as_expr<> const as_xpr = {};
 #endif
 
@@ -467,7 +450,11 @@ range(Char ch_min, Char ch_max)
 /// \brief Make a sub-expression optional. Equivalent to !as_xpr(expr).
 ///
 /// \param expr The sub-expression to make optional.
+#ifdef BOOST_XPRESSIVE_DOXYGEN_INVOKED
+template<typename Expr> detail::unspecified optional(Expr const &expr) { return 0; }
+#else
 proto::functional::make_expr<proto::tag::logical_not, proto::default_domain> const optional = {};
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Repeat a sub-expression multiple times.
@@ -506,7 +493,11 @@ repeat(Expr2 const &expr2)
 /// \attention keep(expr) is equivalent to the perl (?>...) extension.
 ///
 /// \param expr The sub-expression to modify.
+#ifdef BOOST_XPRESSIVE_DOXYGEN_INVOKED
+template<typename Expr> detail::unspecified keep(Expr const &expr) { return 0; }
+#else
 proto::functional::make_expr<detail::keeper_tag, proto::default_domain> const keep = {};
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Look-ahead assertion.
@@ -521,7 +512,11 @@ proto::functional::make_expr<detail::keeper_tag, proto::default_domain> const ke
 /// perl (?!...) extension.
 ///
 /// \param expr The sub-expression to put in the look-ahead assertion.
+#ifdef BOOST_XPRESSIVE_DOXYGEN_INVOKED
+template<typename Expr> detail::unspecified before(Expr const &expr) { return 0; }
+#else
 proto::functional::make_expr<detail::lookahead_tag, proto::default_domain> const before = {};
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Look-behind assertion.
@@ -538,7 +533,11 @@ proto::functional::make_expr<detail::lookahead_tag, proto::default_domain> const
 /// \param expr The sub-expression to put in the look-ahead assertion.
 ///
 /// \pre expr cannot match a variable number of characters.
+#ifdef BOOST_XPRESSIVE_DOXYGEN_INVOKED
+template<typename Expr> detail::unspecified after(Expr const &expr) { return 0; }
+#else
 proto::functional::make_expr<detail::lookbehind_tag, proto::default_domain> const after = {};
+#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief Specify a regex traits or a std::locale.
