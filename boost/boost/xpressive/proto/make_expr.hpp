@@ -104,7 +104,7 @@
             >
               : deduce_domain_<
                     typename domain_of<A0>::type
-                  , BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, typename A)
+                  , BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PROTO_MAX_ARITY, A)
                 >
             {};
 
