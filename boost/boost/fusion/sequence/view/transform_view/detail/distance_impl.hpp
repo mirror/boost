@@ -26,12 +26,10 @@ namespace boost { namespace fusion {
         {
             template<typename First, typename Last>
             struct apply
+                : result_of::distance<typename First::first_type, typename Last::first_type>
             {
-                typedef typename First::first_type first_type;
-                typedef typename Last::first_type last_type;
-                typedef typename result_of::distance<first_type, last_type>::type type;
-
-                static type
+                static 
+                typename result_of::distance<typename First::first_type, typename Last::first_type>::type
                 call(First const& first, Last const& last)
                 {
                     return boost::fusion::distance(first.first, last.first);
@@ -45,12 +43,10 @@ namespace boost { namespace fusion {
         {
             template<typename First, typename Last>
             struct apply
+                : result_of::distance<typename First::first1_type, typename Last::first1_type>
             {
-                typedef typename First::first1_type first1_type;
-                typedef typename Last::first1_type last1_type;
-                typedef typename result_of::distance<first1_type, last1_type>::type type;
-
-                static type
+                static 
+                typename result_of::distance<typename First::first1_type, typename Last::first1_type>::type
                 call(First const& first, Last const& last)
                 {
                     return boost::fusion::distance(first.first1, last.first1);

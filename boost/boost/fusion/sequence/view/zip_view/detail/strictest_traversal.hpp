@@ -54,6 +54,7 @@ namespace boost { namespace fusion {
             Sequence, fusion::random_access_traversal_tag, 
             strictest_traversal_impl<boost::mpl::_,boost::mpl::_> >
         {};
+
     }
 }}
 
