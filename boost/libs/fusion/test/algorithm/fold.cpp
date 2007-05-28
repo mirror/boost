@@ -10,6 +10,7 @@
 #include <boost/fusion/sequence/io/out.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
 #include <boost/fusion/algorithm/iteration/fold.hpp>
+#include <boost/fusion/algorithm/iteration/accumulate.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/next.hpp>
@@ -103,6 +104,40 @@ main()
         std::cout << n << std::endl;
         BOOST_TEST(n == 3);
     }
+
+    {
+        typedef vector<int, char, int, double> vector_type;
+        vector_type v(12345, 'x', 678910, 3.36);
+        int result = accumulate(v, 0, add_ints_only());
+        std::cout << result << std::endl;
+        BOOST_TEST(result == 12345+678910);
+    }
+
+    {
+        typedef vector<int> vector_type;
+        vector_type v(12345);
+
+        int n = fusion::accumulate(v, int_<0>(), count_ints());
+        std::cout << n << std::endl;
+        BOOST_TEST(n == 1);
+    }
+
+    {
+        typedef vector<int, char, int, double, int> vector_type;
+        vector_type v(12345, 'x', 678910, 3.36, 8756);
+
+        int n = fusion::accumulate(v, int_<0>(), count_ints());
+        std::cout << n << std::endl;
+        BOOST_TEST(n == 3);
+    }
+
+    {
+        typedef boost::mpl::vector<int, char, int, double, int> mpl_vec;
+        int n = fusion::accumulate(mpl_vec(), int_<0>(), count_ints());
+        std::cout << n << std::endl;
+        BOOST_TEST(n == 3);
+    }
+
 
     return boost::report_errors();
 }
