@@ -1,19 +1,19 @@
 /*=============================================================================
-    Copyright (c) 2001-2006 Joel de Guzman
+    Copyright (c) 2001-2007 Joel de Guzman
+    Copyright (c) 2007 Dan Marsden
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#if !defined(FUSION_FOR_EACH_05052005_1027)
-#define FUSION_FOR_EACH_05052005_1027
+#if !defined(BOOST_FUSION_FOR_EACH_20070527_0943)
+#define BOOST_FUSION_FOR_EACH_20070527_0943
 
-#include <boost/fusion/sequence/intrinsic/begin.hpp>
-#include <boost/fusion/sequence/intrinsic/end.hpp>
-#include <boost/fusion/iterator/equal_to.hpp>
 #include <boost/fusion/algorithm/iteration/detail/for_each.hpp>
 
-namespace boost { namespace fusion
-{
+#include <boost/fusion/support/category_of.hpp>
+
+namespace boost { namespace fusion {
+
     namespace result_of
     {
         template <typename Sequence, typename F>
@@ -23,32 +23,21 @@ namespace boost { namespace fusion
         };
     }
 
+    struct random_access_traversal_tag;
+
     template <typename Sequence, typename F>
     inline void
     for_each(Sequence& seq, F const& f)
     {
-        detail::for_each(
-                fusion::begin(seq)
-              , fusion::end(seq)
-              , f
-              , result_of::equal_to<
-                    typename result_of::begin<Sequence>::type
-                  , typename result_of::end<Sequence>::type>());
+        detail::for_each(seq, f, typename traits::category_of<Sequence>::type());
     }
 
     template <typename Sequence, typename F>
     inline void
     for_each(Sequence const& seq, F const& f)
     {
-        detail::for_each(
-                fusion::begin(seq)
-              , fusion::end(seq)
-              , f
-              , result_of::equal_to<
-                    typename result_of::begin<Sequence const>::type
-                  , typename result_of::end<Sequence const>::type>());
+        detail::for_each(seq, f, typename traits::category_of<Sequence>::type());
     }
 }}
 
 #endif
-

@@ -1,11 +1,5 @@
-/*=============================================================================
-    Copyright (c) 2001-2006 Joel de Guzman
-
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
-    file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
-==============================================================================*/
-#if !defined(FUSION_FOLD_05052005_1211)
-#define FUSION_FOLD_05052005_1211
+#if !defined(BOOST_FUSION_FOLD_HPP_20070528_1253)
+#define BOOST_FUSION_FOLD_HPP_20070528_1253
 
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/apply.hpp>
@@ -16,11 +10,16 @@
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/iterator/value_of.hpp>
 #include <boost/fusion/iterator/next.hpp>
+#include <boost/fusion/iterator/distance.hpp>
 
-namespace boost { namespace fusion { namespace detail
+namespace boost { namespace fusion {
+namespace result_of
 {
-    // Unary arguments version
-
+    template <typename Sequence, typename State, typename F>
+    struct fold;
+}
+namespace detail
+{
     template <typename F>
     struct apply_fold_result
     {
@@ -43,11 +42,11 @@ namespace boost { namespace fusion { namespace detail
     struct next_result_of_fold
     {
         typedef typename
-            static_fold<
-                typename result_of::next<First>::type
-              , Last
-              , typename fold_apply<First, State, F>::type
-              , F
+        static_fold<
+            typename result_of::next<First>::type
+            , Last
+            , typename fold_apply<First, State, F>::type
+            , F
             >::type
         type;
     };
@@ -56,20 +55,89 @@ namespace boost { namespace fusion { namespace detail
     struct static_fold
     {
         typedef typename
-            mpl::if_<
-                result_of::equal_to<First, Last>
-              , mpl::identity<State>
-              , next_result_of_fold<First, Last, State, F>
-            >::type
+        mpl::if_<
+            result_of::equal_to<First, Last>
+            , mpl::identity<State>
+            , next_result_of_fold<First, Last, State, F>
+        >::type
         result;
 
         typedef typename result::type type;
     };
 
+    template<typename I0, typename State, typename F, int N>
+    struct result_of_unrolled_fold;
+
+    template<int N>
+    struct unrolled_fold
+    {
+        template<typename I0, typename State, typename F>
+        static typename result_of_unrolled_fold<I0, State, F, N>::type
+        call(I0 const& i0, State const& state, F const& f)
+        {
+            typedef typename result_of::next<I0>::type I1;
+            I1 i1 = fusion::next(i0);
+            typedef typename result_of::next<I1>::type I2;
+            I2 i2 = fusion::next(i1);
+            typedef typename result_of::next<I2>::type I3;
+            I3 i3 = fusion::next(i2);
+            return f(*i0, f(*i1, f(*i2, unrolled_fold<N-3>::call(i3, state, f))));
+        }
+    };
+
+    template<>
+    struct unrolled_fold<3>
+    {
+        template<typename I0, typename State, typename F>
+        static typename result_of_unrolled_fold<I0, State, F, 3>::type 
+        call(I0 const& i0, State const& state, F const& f)
+        {
+            typedef typename result_of::next<I0>::type I1;
+            I1 i1 = fusion::next(i0);
+            typedef typename result_of::next<I1>::type I2;
+            I2 i2 = fusion::next(i1);
+            return f(*i0, f(*i1, f(*i2, state)));
+        }
+    };
+
+    template<>
+    struct unrolled_fold<2>
+    {
+        template<typename I0, typename State, typename F>
+        static typename result_of_unrolled_fold<I0, State, F, 2>::type 
+        call(I0 const& i0, State const& state, F const& f)
+        {
+            typedef typename result_of::next<I0>::type I1;
+            I1 i1 = fusion::next(i0);
+            return f(*i0, f(*i1, state));
+        }
+    };
+
+    template<>
+    struct unrolled_fold<1>
+    {
+        template<typename I0, typename State, typename F>
+        static typename result_of_unrolled_fold<I0, State, F, 1>::type 
+        call(I0 const& i0, State const& state, F const& f)
+        {
+            return f(*i0, state);
+        }
+    };
+
+    template<>
+    struct unrolled_fold<0>
+    {
+        template<typename I0, typename State, typename F>
+        static State call(I0 const&, State const& state, F const&)
+        {
+            return state;
+        }
+    };
+
     // terminal case
     template <typename First, typename Last, typename State, typename F>
     inline State const&
-    fold(First const&, Last const&, State const& state, F const&, mpl::true_)
+    linear_fold(First const&, Last const&, State const& state, F const&, mpl::true_)
     {
         return state;
     }
@@ -77,14 +145,14 @@ namespace boost { namespace fusion { namespace detail
     // non-terminal case
     template <typename First, typename Last, typename State, typename F>
     inline typename static_fold<First, Last, State, F>::type
-    fold(
+    linear_fold(
         First const& first
       , Last const& last
       , State const& state
       , F const& f
       , mpl::false_)
     {
-        return detail::fold(
+        return detail::linear_fold(
             fusion::next(first)
           , last
           , f(*first, state)
@@ -92,7 +160,102 @@ namespace boost { namespace fusion { namespace detail
           , result_of::equal_to<typename result_of::next<First>::type, Last>()
         );
     }
+
+    template<typename I0, typename State, typename F, int N>
+    struct result_of_unrolled_fold
+    {
+        typedef typename result_of::next<I0>::type I1;
+        typedef typename result_of::next<I1>::type I2;
+        typedef typename result_of::next<I2>::type I3;
+        typedef typename result_of::next<I3>::type I4;
+        typedef typename result_of_unrolled_fold<I4, State, F, N-4>::type Rest;
+        typedef typename fold_apply<I3, Rest, F>::type Rest2;
+        typedef typename fold_apply<I2, Rest2, F>::type Rest3;
+        typedef typename fold_apply<I1, Rest3, F>::type Rest4;
+        typedef typename fold_apply<I0, Rest4, F>::type type;
+    };
+
+    template<typename I0, typename State, typename F>
+    struct result_of_unrolled_fold<I0, State, F, 3>
+    {
+        typedef typename result_of::next<I0>::type I1;
+        typedef typename result_of::next<I1>::type I2;
+        typedef typename fold_apply<I2, State, F>::type Rest;
+        typedef typename fold_apply<I1, Rest, F>::type Rest2;
+        typedef typename fold_apply<I0, Rest2, F>::type type;
+    };
+
+    template<typename I0, typename State, typename F>
+    struct result_of_unrolled_fold<I0, State, F, 2>
+    {
+        typedef typename result_of::next<I0>::type I1;
+        typedef typename fold_apply<I1, State, F>::type Rest;
+        typedef typename fold_apply<I0, Rest, F>::type type;
+    };
+
+    template<typename I0, typename State, typename F>
+    struct result_of_unrolled_fold<I0, State, F, 1>
+    {
+        typedef typename fold_apply<I0, State, F>::type type;
+    };
+
+    template<typename I0, typename State, typename F>
+    struct result_of_unrolled_fold<I0, State, F, 0>
+    {
+        typedef State type;
+    };
+
+    template<typename Sequence, typename State, typename F, bool>
+    struct choose_fold;
+
+    template<typename Sequence, typename State, typename F>
+    struct choose_fold<Sequence, State, F, true>
+    {
+        typedef typename result_of::begin<Sequence>::type begin;
+        typedef typename result_of::end<Sequence>::type end;
+        typedef typename result_of_unrolled_fold<
+            begin, State, F, result_of::distance<begin, end>::value>::type type;
+    };
+
+    template<typename Sequence, typename State, typename F>
+    struct choose_fold<Sequence, State, F, false>
+    {
+        typedef typename
+        detail::static_fold<
+            typename result_of::begin<Sequence>::type
+            , typename result_of::end<Sequence>::type
+            , State
+            , F
+            >::type
+        type;
+    };
+
+    template<typename Sequence, typename State, typename F, typename Tag>
+    typename result_of::fold<Sequence, State, F>::type
+    fold(Sequence& seq, State const& state, F const& f, Tag)
+    {
+        return linear_fold(
+            fusion::begin(seq)
+          , fusion::end(seq)
+          , state
+          , f
+          , result_of::equal_to<
+                typename result_of::begin<Sequence>::type
+              , typename result_of::end<Sequence>::type>()
+        );
+    }
+
+    template<typename Sequence, typename State, typename F>
+    typename result_of::fold<Sequence, State, F>::type
+    fold(Sequence& seq, State const& state, F const& f, random_access_traversal_tag)
+    {
+        typedef typename result_of::begin<Sequence>::type begin;
+        typedef typename result_of::end<Sequence>::type end;
+        return unrolled_fold<result_of::distance<begin, end>::value>::call(
+            fusion::begin(seq)
+            , state
+            , f);
+    }
 }}}
 
 #endif
-
