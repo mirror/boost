@@ -264,21 +264,47 @@ void run_test_impl(xpr_test_case<Char> const &test)
 
         if(0 == (test.match_flags & regex_constants::format_first_only))
         {
-            // global search, use regex_iterator
-            std::vector<sub_match<iterator> > br;
-            regex_iterator<iterator> begin(test.str.begin(), test.str.end(), rx, test.match_flags), end;
-            for(; begin != end; ++begin)
             {
-                match_results<iterator> const &what = *begin;
-                br.insert(br.end(), what.begin(), what.end());
+                // global search, use regex_iterator
+                std::vector<sub_match<iterator> > br;
+                regex_iterator<iterator> begin(test.str.begin(), test.str.end(), rx, test.match_flags), end;
+                for(; begin != end; ++begin)
+                {
+                    match_results<iterator> const &what = *begin;
+                    br.insert(br.end(), what.begin(), what.end());
+                }
+
+                // match succeeded: was it expected to succeed?
+                BOOST_XPR_CHECK(br.size() == test.br.size());
+
+                for(std::size_t i = 0; i < br.size() && i < test.br.size(); ++i)
+                {
+                    BOOST_XPR_CHECK(!br[i].matched && test.br[i] == empty || test.br[i] == br[i].str());
+                }
             }
 
-            // match succeeded: was it expected to succeed?
-            BOOST_XPR_CHECK(br.size() == test.br.size());
-
-            for(std::size_t i = 0; i < br.size() && i < test.br.size(); ++i)
             {
-                BOOST_XPR_CHECK(!br[i].matched && test.br[i] == empty || test.br[i] == br[i].str());
+                // global search, use regex_token_iterator
+                std::vector<typename sub_match<iterator>::string_type> br2;
+                std::vector<int> subs(rx.mark_count() + 1, 0);
+                // regex_token_iterator will extract all sub_matches, in order:
+                for(std::size_t i = 0; i < subs.size(); ++i)
+                {
+                    subs[i] = static_cast<int>(i);
+                }
+                regex_token_iterator<iterator> begin2(test.str.begin(), test.str.end(), rx, subs, test.match_flags), end2;
+                for(; begin2 != end2; ++begin2)
+                {
+                    br2.push_back(*begin2);
+                }
+
+                // match succeeded: was it expected to succeed?
+                BOOST_XPR_CHECK(br2.size() == test.br.size());
+
+                for(std::size_t i = 0; i < br2.size() && i < test.br.size(); ++i)
+                {
+                    BOOST_XPR_CHECK(test.br[i] == br2[i]);
+                }
             }
         }
         else
