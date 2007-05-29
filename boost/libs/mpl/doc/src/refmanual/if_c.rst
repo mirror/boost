@@ -77,6 +77,23 @@ Example
     BOOST_MPL_ASSERT(( is_same<t2, long> ));
 
 
+.. parsed-literal::
+
+    // allocates space for an object of class T on heap or "inplace"
+    // depending on its size
+    template< typename T > struct lightweight
+    {
+        // ...
+        typedef typename if_c<
+              sizeof(T) <= sizeof(T*)
+            , inplace_storage<T>
+            , heap_storage<T>
+            >::type impl_t;
+
+        impl_t impl;
+    };
+
+
 See also
 --------
 
