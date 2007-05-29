@@ -250,6 +250,7 @@ public:
     /// \post regex_id() == 0
     /// \post size()     == 0
     /// \post empty()    == true
+    /// \post str()      == string_type()
     match_results()
       : regex_id_(0)
       , sub_matches_()
@@ -322,8 +323,9 @@ public:
         return *this;
     }
 
-    /// Returns the number of sub_match elements stored in *this.
-    ///
+    /// Returns one plus the number of marked sub-expressions in the regular 
+    /// expression that was matched if *this represents the result of a 
+    /// successful match. Otherwise returns 0.
     size_type size() const
     {
         return this->sub_matches_.size();
@@ -351,7 +353,7 @@ public:
         return this->sub_matches_[ sub ].matched ? std::distance(this->base_, this->sub_matches_[ sub ].first) : -1;
     }
 
-    /// Returns string_type((*this)[sub]).
+    /// Returns (*this)[sub].str().
     ///
     string_type str(size_type sub = 0) const
     {
@@ -359,13 +361,14 @@ public:
     }
 
     /// Returns a reference to the sub_match object representing the sequence that
-    /// matched marked sub-expression sub. If sub == 0 then returns a reference to a sub_match object
-    /// representing the sequence that matched the whole regular expression.
-    /// \pre sub \< (*this).size().
-    template<typename Index>
-    const_reference operator [](Index const &index) const
+    /// matched marked sub-expression sub. If sub == 0 then returns a reference to
+    /// a sub_match object representing the sequence that matched the whole regular
+    /// expression. If sub >= size() then returns a sub_match object representing an
+    /// unmatched sub-expression.
+    template<typename Sub>
+    const_reference operator [](Sub const &sub) const
     {
-        return this->at_(index);
+        return this->at_(sub);
     }
 
     /// Returns a reference to the sub_match object representing the character sequence from
@@ -400,7 +403,7 @@ public:
         return this->sub_matches_.end();
     }
 
-    /// Returns a true value if(*this)[0].matched, else returns a false value.
+    /// Returns a true value if (*this)[0].matched, else returns a false value.
     ///
     operator bool_type() const
     {

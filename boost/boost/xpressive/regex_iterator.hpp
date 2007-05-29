@@ -164,7 +164,7 @@ struct regex_iterator
     /// only if that fails and provided what[0].second != suffix().second does it look for a (possibly
     /// zero length) match starting from what[0].second + 1.  If no further match is found then sets
     /// *this equal to the end of sequence iterator.
-    /// \post (*this)-\>size() == pre-\>mark_count()
+    /// \post (*this)-\>size() == pre-\>mark_count() + 1
     /// \post (*this)-\>empty() == false
     /// \post (*this)-\>prefix().first == An iterator denoting the end point of the previous match found
     /// \post (*this)-\>prefix().last == (**this)[0].first

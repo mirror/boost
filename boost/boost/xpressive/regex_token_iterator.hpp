@@ -16,6 +16,7 @@
 #endif
 
 #include <vector>
+#include <boost/assert.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_convertible.hpp>
@@ -46,9 +47,10 @@ struct regex_token_iterator_impl
     )
       : iter_(begin, cur, end, rex, flags, not_null)
       , result_()
-      , n_((-2 == n) ? static_cast<int>(subs.size()) - 1 : n)
+      , n_((-2 == n) ? (int)subs.size() - 1 : n)
       , subs_()
     {
+        BOOST_ASSERT(0 != subs.size());
         this->subs_.swap(subs);
     }
 
@@ -57,30 +59,20 @@ struct regex_token_iterator_impl
         if(-1 != this->n_)
         {
             BidiIter cur = this->iter_.state_.cur_;
-            if(++this->n_ != static_cast<int>(this->subs_.size()))
+            if(0 != (++this->n_ %= (int)this->subs_.size()) || this->iter_.next())
             {
                 this->result_ = (-1 == this->subs_[ this->n_ ])
                     ? this->iter_.what_.prefix().str()
                     : this->iter_.what_[ this->subs_[ this->n_ ] ].str();
                 return true;
             }
-            else if(this->iter_.next())
+            else if(-1 == this->subs_[ this->n_-- ] && cur != this->iter_.state_.end_)
             {
-                this->n_ = 0;
-                this->result_ = (-1 == this->subs_[ this->n_ ])
-                    ? this->iter_.what_.prefix().str()
-                    : this->iter_.what_[ this->subs_[ this->n_ ] ].str();
-                return true;
-            }
-            else if(cur != this->iter_.state_.end_ && -1 == this->subs_[ 0 ])
-            {
-                this->n_ = -1;
                 this->result_ = value_type(cur, this->iter_.state_.end_);
                 return true;
             }
         }
 
-        this->n_ = -1;
         return false;
     }
 
@@ -150,11 +142,16 @@ struct regex_token_iterator
     /// INTERNAL ONLY
     typedef detail::regex_token_iterator_impl<BidiIter> impl_type_;
 
+    /// \post \c *this is the end of sequence iterator.
     regex_token_iterator()
       : impl_()
     {
     }
 
+    /// \param begin The beginning of the character range to search.
+    /// \param end The end of the character range to search.
+    /// \param rex The regex pattern to search for.
+    /// \pre \c [begin,end) is a valid range.
     regex_token_iterator
     (
         BidiIter begin
@@ -166,25 +163,33 @@ struct regex_token_iterator
         this->next_();
     }
 
-    template<typename SubMatches>
+    /// \param begin The beginning of the character range to search.
+    /// \param end The end of the character range to search.
+    /// \param rex The regex pattern to search for.
+    /// \pre \c [begin,end) is a valid range.
+    /// \pre \c subs is either an integer greater or equal to -1,
+    ///     or else an array or non-empty \c std::vector\<\> of such integers.
+    template<typename Subs>
     regex_token_iterator
     (
         BidiIter begin
       , BidiIter end
       , basic_regex<BidiIter> const &rex
-      , SubMatches const &sub_matches
+      , Subs const &subs
       , regex_constants::match_flag_type flags = regex_constants::match_default
     )
-      : impl_(new impl_type_(begin, begin, end, &rex, flags, detail::to_vector(sub_matches)))
+      : impl_(new impl_type_(begin, begin, end, &rex, flags, detail::to_vector(subs)))
     {
         this->next_();
     }
 
+    /// \post <tt>*this == that</tt>
     regex_token_iterator(regex_token_iterator<BidiIter> const &that)
       : impl_(that.impl_) // COW
     {
     }
 
+    /// \post <tt>*this == that</tt>
     regex_token_iterator<BidiIter> &operator =(regex_token_iterator<BidiIter> const &that)
     {
         this->impl_ = that.impl_; // COW
