@@ -64,19 +64,13 @@ intrusive_ptr<finder<BidiIter> > optimize_regex
     typedef typename iterator_value<BidiIter>::type char_type;
 
     // if we have a leading string literal, initialize a boyer-moore struct with it
-    std::pair<std::basic_string<char_type> const *, bool> str = peeker.get_string();
-    if(0 != str.first)
+    peeker_string<char_type> const &str = peeker.get_string();
+    if(str.begin_ != str.end_)
     {
         BOOST_ASSERT(1 == peeker.bitset().count());
         return intrusive_ptr<finder<BidiIter> >
         (
-            new boyer_moore_finder<BidiIter, Traits>
-            (
-                str.first->data()
-              , str.first->data() + str.first->size()
-              , traits
-              , str.second
-            )
+            new boyer_moore_finder<BidiIter, Traits>(str.begin_, str.end_, traits, str.icase_)
         );
     }
 

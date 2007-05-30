@@ -18,11 +18,11 @@
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/quant_style.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
+#include <boost/xpressive/detail/utility/algorithm.hpp>
 #include <boost/xpressive/detail/utility/traits_utils.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
-
     ///////////////////////////////////////////////////////////////////////////////
     // string_matcher
     //
@@ -31,23 +31,27 @@ namespace boost { namespace xpressive { namespace detail
       : quant_style_fixed_unknown_width
     {
         typedef typename Traits::char_type char_type;
+        typedef typename Traits::string_type string_type;
         typedef mpl::bool_<ICase> icase_type;
-        std::basic_string<char_type> str_;
+        string_type str_;
         char_type const *end_;
 
-        string_matcher(std::basic_string<char_type> const &str, Traits const &traits)
+        string_matcher(string_type const &str, Traits const &traits)
           : str_(str)
-          , end_(str_.data() + str_.size())
+          , end_()
         {
-            for(typename std::basic_string<char_type>::size_type i = 0; i < this->str_.size(); ++i)
+            typename range_iterator<string_type>::type cur = boost::begin(this->str_);
+            typename range_iterator<string_type>::type end = boost::end(this->str_);
+            for(; cur != end; ++cur)
             {
-                this->str_[i] = detail::translate(this->str_[i], traits, icase_type());
+                *cur = detail::translate(*cur, traits, icase_type());
             }
+            this->end_ = detail::data_end(str_);
         }
 
         string_matcher(string_matcher<Traits, ICase> const &that)
           : str_(that.str_)
-          , end_(str_.data() + str_.size())
+          , end_(detail::data_end(str_))
         {
         }
 
@@ -55,7 +59,7 @@ namespace boost { namespace xpressive { namespace detail
         bool match(match_state<BidiIter> &state, Next const &next) const
         {
             BidiIter const tmp = state.cur_;
-            char_type const *begin = this->str_.data();
+            char_type const *begin = detail::data_begin(this->str_);
             for(; begin != this->end_; ++begin, ++state.cur_)
             {
                 if(state.eos() ||
@@ -77,7 +81,7 @@ namespace boost { namespace xpressive { namespace detail
 
         detail::width get_width() const
         {
-            return this->str_.size();
+            return boost::size(this->str_);
         }
     };
 

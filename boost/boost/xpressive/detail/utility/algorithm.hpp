@@ -13,8 +13,14 @@
 # pragma once
 #endif
 
+#include <string>
 #include <climits>
 #include <algorithm>
+#include <boost/range/end.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/range/size.hpp>
+#include <boost/range/value_type.hpp>
+#include <boost/type_traits/remove_const.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 
 namespace boost { namespace xpressive { namespace detail
@@ -95,6 +101,67 @@ template<typename Iter, typename Diff>
 inline bool advance_to(Iter & iter, Diff diff, Iter end)
 {
     return detail::advance_to_impl(iter, diff, end, typename iterator_category<Iter>::type());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// range_data
+//
+template<typename T>
+struct range_data
+  : range_value<T>
+{};
+
+template<typename T>
+struct range_data<T *>
+  : remove_const<T>
+{};
+
+template<typename T> std::ptrdiff_t is_null_terminated(T const &) { return 0; }
+inline std::ptrdiff_t is_null_terminated(char const *) { return 1; }
+#ifndef BOOST_XPRESSIVE_NO_WREGEX
+inline std::ptrdiff_t is_null_terminated(wchar_t const *) { return 1; }
+#endif
+
+///////////////////////////////////////////////////////////////////////////////
+// data_begin/data_end
+//
+template<typename Cont>
+typename range_data<Cont>::type const *data_begin(Cont const &cont)
+{
+    return &*boost::begin(cont);
+}
+
+template<typename Cont>
+typename range_data<Cont>::type const *data_end(Cont const &cont)
+{
+    return &*boost::begin(cont) + boost::size(cont) - is_null_terminated(cont);
+}
+
+template<typename Char, typename Traits, typename Alloc>
+Char const *data_begin(std::basic_string<Char, Traits, Alloc> const &str)
+{
+    return str.data();
+}
+
+template<typename Char, typename Traits, typename Alloc>
+Char const *data_end(std::basic_string<Char, Traits, Alloc> const &str)
+{
+    return str.data() + str.size();
+}
+
+template<typename Char>
+Char const *data_begin(Char const *const &sz)
+{
+    return sz;
+}
+
+template<typename Char>
+Char const *data_end(Char const *const &sz)
+{
+    Char const *tmp = sz;
+    for(; *tmp; ++tmp)
+        ;
+    return tmp;
 }
 
 }}}

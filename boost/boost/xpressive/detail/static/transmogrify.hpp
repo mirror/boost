@@ -15,10 +15,10 @@
 
 #include <cstring> // for std::strlen
 #include <boost/mpl/if.hpp>
+#include <boost/mpl/or.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/assert.hpp>
-#include <boost/type_traits/is_array.hpp>
-#include <boost/type_traits/remove_reference.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/matchers.hpp>
 #include <boost/xpressive/detail/static/placeholders.hpp>
@@ -27,14 +27,9 @@
 
 namespace boost { namespace xpressive { namespace detail
 {
-    template<typename T>
-    struct is_string_literal
-      : is_array<typename remove_reference<T>::type>
-    {};
-
-    template<typename T>
-    struct is_string_literal<T *>
-      : mpl::true_
+    template<typename T, typename Char>
+    struct is_char_literal
+      : mpl::or_<is_same<T, Char>, is_same<T, char> >
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -43,33 +38,34 @@ namespace boost { namespace xpressive { namespace detail
     template<typename BidiIter, typename ICase, typename Traits, typename Matcher, typename EnableIf = void>
     struct default_transmogrify
     {
-        typedef typename iterator_value<BidiIter>::type char_type;
-        typedef std::basic_string<char_type> string_type;
+        typedef typename Traits::char_type char_type;
+        typedef typename Traits::string_type string_type;
 
         typedef typename mpl::if_
         <
-            is_string_literal<Matcher>
-          , string_matcher<Traits, ICase::value>
+            is_char_literal<Matcher, char_type>
           , literal_matcher<Traits, ICase::value, false>
+          , string_matcher<Traits, ICase::value>
         >::type type;
 
         template<typename Matcher2, typename Visitor>
         static type call(Matcher2 const &m, Visitor &visitor)
         {
-            return default_transmogrify::call_(m, visitor, is_string_literal<Matcher2>());
+            return default_transmogrify::call_(m, visitor, is_char_literal<Matcher2, char_type>());
         }
 
         template<typename Matcher2, typename Visitor>
-        static type call_(Matcher2 const &m, Visitor &visitor, mpl::false_)
+        static type call_(Matcher2 const &m, Visitor &visitor, mpl::true_)
         {
             char_type ch = char_cast<char_type>(m, visitor.traits());
             return type(ch, visitor.traits());
         }
 
         template<typename Matcher2, typename Visitor>
-        static type call_(Matcher2 const &m, Visitor &visitor, mpl::true_)
+        static type call_(Matcher2 const &m, Visitor &visitor, mpl::false_)
         {
-            return type(string_cast<char_type>(string_type(m), visitor.traits()), visitor.traits());
+            string_type str = string_cast<string_type>(m, visitor.traits());
+            return type(str, visitor.traits());
         }
     };
 

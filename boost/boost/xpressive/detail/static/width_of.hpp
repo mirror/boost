@@ -63,6 +63,7 @@ namespace boost { namespace xpressive { namespace detail
       : mpl::size_t<Expr::width>      // char literals
     {};
 
+    // BUGBUG this is wrong!!!
     template<typename Expr>
     struct width_of_terminal<Expr, false>
       : mpl::size_t<1>      // char literals

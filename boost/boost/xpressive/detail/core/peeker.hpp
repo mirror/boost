@@ -25,6 +25,7 @@
 #include <boost/xpressive/detail/core/matchers.hpp>
 #include <boost/xpressive/detail/utility/hash_peek_bitset.hpp>
 #include <boost/xpressive/detail/utility/never_true.hpp>
+#include <boost/xpressive/detail/utility/algorithm.hpp>
 
 namespace boost { namespace xpressive { namespace detail
 {
@@ -54,13 +55,23 @@ struct peek_next<repeat_begin_matcher>
 // xpression_peeker
 //
 template<typename Char>
+struct peeker_string
+{
+    Char const *begin_;
+    Char const *end_;
+    bool icase_;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// xpression_peeker
+//
+template<typename Char>
 struct xpression_peeker
 {
     template<typename Traits>
     xpression_peeker(hash_peek_bitset<Char> &bset, Traits const &traits)
       : bset_(bset)
-      , str_(0)
-      , str_icase_(false)
+      , str_()
       , line_start_(false)
       , traits_(0)
       , traits_type_(0)
@@ -70,9 +81,9 @@ struct xpression_peeker
 
     ///////////////////////////////////////////////////////////////////////////////
     // accessors
-    std::pair<std::basic_string<Char> const *, bool> get_string() const
+    peeker_string<Char> const &get_string() const
     {
-        return std::make_pair(this->str_, this->str_icase_);
+        return this->str_;
     }
 
     bool line_start() const
@@ -120,8 +131,9 @@ struct xpression_peeker
     mpl::false_ accept(string_matcher<Traits, ICase> const &xpr)
     {
         this->bset_.set_char(xpr.str_[0], ICase, this->get_traits_<Traits>());
-        this->str_ = &xpr.str_;
-        this->str_icase_ = ICase;
+        this->str_.begin_ = detail::data_begin(xpr.str_);
+        this->str_.end_ = detail::data_end(xpr.str_);
+        this->str_.icase_ = ICase;
         return mpl::false_();
     }
 
@@ -218,7 +230,7 @@ private:
     }
 
     hash_peek_bitset<Char> &bset_;
-    std::basic_string<Char> const *str_;
+    peeker_string<Char> str_;
     bool str_icase_;
     bool line_start_;
     void const *traits_;
