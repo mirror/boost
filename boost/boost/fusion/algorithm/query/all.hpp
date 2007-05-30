@@ -1,15 +1,14 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
+    Copyright (c) 2007 Dan Marsden
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#if !defined(FUSION_ALL_05052005_1238)
-#define FUSION_ALL_05052005_1238
+#if !defined(BOOST_FUSION_ALL_05052005_1238)
+#define BOOST_FUSION_ALL_05052005_1238
 
-#include <boost/fusion/sequence/intrinsic/begin.hpp>
-#include <boost/fusion/sequence/intrinsic/end.hpp>
-#include <boost/fusion/iterator/equal_to.hpp>
+#include <boost/fusion/support/category_of.hpp>
 #include <boost/fusion/algorithm/query/detail/all.hpp>
 
 namespace boost { namespace fusion
@@ -27,13 +26,7 @@ namespace boost { namespace fusion
     inline bool
     all(Sequence const& seq, F f)
     {
-        return detail::all(
-                fusion::begin(seq)
-              , fusion::end(seq)
-              , f
-              , result_of::equal_to<
-                    typename result_of::begin<Sequence>::type
-                  , typename result_of::end<Sequence>::type>());
+        return detail::all(seq, f, typename traits::category_of<Sequence>::type());
     }
 }}
 
