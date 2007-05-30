@@ -17,6 +17,7 @@
 
 #include <map>
 #include <stdexcept>
+#include <boost/next_prior.hpp>
 #include <boost/xpressive/basic_regex.hpp>
 #include <boost/xpressive/detail/dynamic/parser.hpp>
 #include <boost/xpressive/detail/dynamic/parse_charset.hpp>
@@ -60,7 +61,6 @@ struct regex_compiler
       , rules_()
     {
         this->upper_ = lookup_classname(this->rxtraits(), "upper");
-        BOOST_ASSERT(0 != this->upper_);
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -73,7 +73,6 @@ struct regex_compiler
     {
         locale_type oldloc = this->traits_.imbue(loc);
         this->upper_ = lookup_classname(this->rxtraits(), "upper");
-        BOOST_ASSERT(0 != this->upper_);
         return oldloc;
     }
 
@@ -468,7 +467,7 @@ private:
                 return detail::make_posix_charset_xpression<BidiIter>
                 (
                     esc.class_
-                  , this->rxtraits().isctype(*begin++, this->upper_)
+                  , this->is_upper_(*begin++)
                   , this->traits_.flags()
                   , this->rxtraits()
                 );
@@ -579,7 +578,7 @@ private:
                 if(literal.size() != 1)
                 {
                     begin = prev;
-                    literal.erase(literal.size() - 1);
+                    literal.erase(boost::prior(literal.end()));
                 }
                 return literal;
             }
@@ -588,10 +587,10 @@ private:
             case token_escape:
                 esc = this->parse_escape(tmp, end);
                 if(detail::escape_char != esc.type_) return literal;
-                literal += esc.ch_;
+                literal.insert(literal.end(), esc.ch_);
                 break;
             case token_literal:
-                literal += *tmp++;
+                literal.insert(literal.end(), *tmp++);
                 break;
             default:
                 return literal;
@@ -647,6 +646,11 @@ private:
 
         // Not a backreference, defer to the parse_escape helper
         return detail::parse_escape(begin, end, this->traits_);
+    }
+
+    bool is_upper_(char_type ch) const
+    {
+        return 0 != this->upper_ && this->rxtraits().isctype(ch, this->upper_);
     }
 
     std::size_t mark_count_;

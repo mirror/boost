@@ -107,10 +107,10 @@ inline sequence<BidiIter> make_any_xpression
 ///////////////////////////////////////////////////////////////////////////////
 // make_literal_xpression
 //
-template<typename BidiIter, typename Char, typename Traits>
+template<typename BidiIter, typename Traits>
 inline sequence<BidiIter> make_literal_xpression
 (
-    std::basic_string<Char> const &literal
+    typename Traits::string_type const &literal
   , regex_constants::syntax_option_type flags
   , Traits const &traits
 )
@@ -120,9 +120,6 @@ inline sequence<BidiIter> make_literal_xpression
     {
         return make_char_xpression<BidiIter>(literal[0], flags, traits);
     }
-
-    typedef typename iterator_value<BidiIter>::type char_type;
-    BOOST_MPL_ASSERT((is_same<char_type, Char>));
 
     if(0 != (regex_constants::icase_ & flags))
     {
@@ -147,7 +144,6 @@ inline sequence<BidiIter> make_backref_xpression
   , Traits const &traits
 )
 {
-    typedef typename iterator_value<BidiIter>::type char_type;
     if(0 != (regex_constants::icase_ & flags))
     {
         return make_dynamic<BidiIter>

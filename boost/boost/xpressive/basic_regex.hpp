@@ -138,7 +138,7 @@ public:
     /// Factory method for building a regex object from a string.
     /// Equivalent to regex_compiler\< BidiIter \>().compile(str, flags);
     ///
-    /// \param str The std::basic_string containing the regular expression.
+    /// \param str The string containing the regular expression.
     /// \param flags Optional bitmask of type syntax_option_type to control how str is interpreted.
     static basic_regex<BidiIter> compile(string_type const &str, flag_type flags = regex_constants::ECMAScript)
     {

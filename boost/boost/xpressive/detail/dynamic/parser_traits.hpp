@@ -48,8 +48,6 @@ struct compiler_traits
       , space_(lookup_classname(traits_, "space"))
       , alnum_(lookup_classname(traits_, "alnum"))
     {
-        BOOST_ASSERT(0 != this->space_);
-        BOOST_ASSERT(0 != this->alnum_);
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -85,7 +83,6 @@ struct compiler_traits
         locale_type oldloc = this->traits().imbue(loc);
         this->space_ = lookup_classname(this->traits(), "space");
         this->alnum_ = lookup_classname(this->traits(), "alnum");
-        BOOST_ASSERT(0 != this->space_);
         return oldloc;
     }
 
@@ -398,14 +395,14 @@ private:
     // is_space_
     bool is_space_(char_type ch) const
     {
-        return this->traits().isctype(ch, this->space_);
+        return 0 != this->space_ && this->traits().isctype(ch, this->space_);
     }
 
     ///////////////////////////////////////////////////////////////////////////
     // is_alnum_
     bool is_alnum_(char_type ch) const
     {
-        return this->traits().isctype(ch, this->alnum_);
+        return 0 != this->alnum_ && this->traits().isctype(ch, this->alnum_);
     }
 
     ///////////////////////////////////////////////////////////////////////////
