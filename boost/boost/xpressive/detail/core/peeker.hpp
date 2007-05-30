@@ -180,11 +180,8 @@ struct xpression_peeker
         return mpl::false_();
     }
 
-    template<typename Dummy = void>
-    struct is_char_8bit : mpl::bool_<1 == sizeof(Char)> {};
-
     template<bool ICase, typename Traits>
-    typename enable_if<is_char_8bit<Traits>, mpl::false_>::type
+    typename enable_if<is_narrow_char<typename Traits::char_type>, mpl::false_>::type
     accept(charset_matcher<Traits, ICase, basic_chset<Char> > const &xpr)
     {
         BOOST_ASSERT(0 != xpr.charset_.base().count());

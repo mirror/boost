@@ -77,8 +77,6 @@ struct null_regex_traits
     /// \return Elem(ch).
     char_type widen(char ch) const
     {
-        //BOOST_MPL_ASSERT((detail::never_true<char_type>));
-        BOOST_ASSERT(false);
         return char_type(ch);
     }
 

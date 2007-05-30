@@ -14,7 +14,6 @@
 #endif
 
 #include <boost/mpl/assert.hpp>
-#include <boost/mpl/sizeof.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
@@ -240,7 +239,7 @@ namespace boost { namespace xpressive { namespace detail
             // if sizeof(char_type)==1, merge everything into a basic_chset
             // BUGBUG this is not optimal.
             typedef typename mpl::if_<
-                mpl::equal_to<mpl::sizeof_<char_type>, mpl::size_t<1> >
+                is_narrow_char<char_type>
               , basic_chset<char_type>
               , compound_charset<typename Visitor::traits_type>
             >::type charset_type;

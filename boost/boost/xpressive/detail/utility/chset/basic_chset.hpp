@@ -135,6 +135,28 @@ struct basic_chset<unsigned char>
 #endif
 
 ///////////////////////////////////////////////////////////////////////////////
+// is_narrow_char
+template<typename Char>
+struct is_narrow_char
+  : mpl::false_
+{};
+
+template<>
+struct is_narrow_char<char>
+  : mpl::true_
+{};
+
+template<>
+struct is_narrow_char<signed char>
+  : mpl::true_
+{};
+
+template<>
+struct is_narrow_char<unsigned char>
+  : mpl::true_
+{};
+
+///////////////////////////////////////////////////////////////////////////////
 // helpers
 template<typename Char, typename Traits>
 void set_char(basic_chset<Char> &chset, Char ch, Traits const &traits, bool icase);

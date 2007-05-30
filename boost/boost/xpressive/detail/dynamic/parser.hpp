@@ -217,7 +217,7 @@ inline sequence<BidiIter> make_charset_xpression
 {
     typedef typename Traits::char_type char_type;
     bool const icase = (0 != (regex_constants::icase_ & flags));
-    bool const optimize = 1 == sizeof(char_type) && 0 != (regex_constants::optimize & flags);
+    bool const optimize = is_narrow_char<char_type>::value && 0 != (regex_constants::optimize & flags);
 
     // don't care about compile speed -- fold eveything into a bitset<256>
     if(optimize)
