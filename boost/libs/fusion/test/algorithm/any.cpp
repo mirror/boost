@@ -1,6 +1,7 @@
 /*=============================================================================
     Copyright (c) 2001-2006 Joel de Guzman
     Copyright (c) 2005 Eric Niebler
+    Copyright (c) Dan Marsden
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying 
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -11,6 +12,24 @@
 #include <boost/fusion/algorithm/query/any.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/mpl/vector_c.hpp>
+
+namespace
+{
+    struct search_for
+    {
+        explicit search_for(int search)
+            : search(search)
+        {}
+
+        template<typename T>
+        bool operator()(T const& v) const
+        {
+            return v == search;
+        }
+
+        int search;
+    };
+}
 
 int
 main()
@@ -27,8 +46,10 @@ main()
 
     {
         typedef boost::mpl::vector_c<int, 1, 2, 3> mpl_vec;
-        BOOST_TEST(boost::fusion::any(mpl_vec(), boost::lambda::_1 == 2));
-        BOOST_TEST(!boost::fusion::any(mpl_vec(), boost::lambda::_1 == 4));
+        // We cannot use lambda here as mpl vec iterators return
+        // rvalues, and lambda needs lvalues.
+        BOOST_TEST(boost::fusion::any(mpl_vec(), search_for(2)));
+        BOOST_TEST(!boost::fusion::any(mpl_vec(), search_for(4)));
     }
 
     return boost::report_errors();
