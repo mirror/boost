@@ -27,6 +27,23 @@
 
 namespace boost { namespace xpressive { namespace detail
 {
+    ///////////////////////////////////////////////////////////////////////////////
+    // is_char
+    //
+    template<typename T>
+    struct is_char
+      : mpl::false_
+    {};
+
+    template<>
+    struct is_char<char>
+      : mpl::true_
+    {};
+
+    template<>
+    struct is_char<wchar_t>
+      : mpl::true_
+    {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // width_of_terminal
@@ -58,12 +75,12 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Elem, std::size_t N, typename Char>
     struct width_of_terminal<Elem (&) [N], Char, false>
-      : mpl::size_t<N-1>    // string literals
+      : mpl::size_t<N-is_char<Elem>::value>    // string literals
     {};
 
     template<typename Elem, std::size_t N, typename Char>
     struct width_of_terminal<Elem const (&) [N], Char, false>
-      : mpl::size_t<N-1>    // string literals
+      : mpl::size_t<N-is_char<Elem>::value>    // string literals
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
