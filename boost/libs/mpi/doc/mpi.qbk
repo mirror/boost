@@ -1,6 +1,6 @@
 [library Boost.MPI
     [authors [Gregor, Douglas], [Troyer, Matthias] ]
-    [copyright 2005 2006 Douglas Gregor, Matthias Troyer]
+    [copyright 2005 2006 2007 Douglas Gregor, Matthias Troyer, Trustees of Indiana University]
     [purpose
         An generic, user-friendly interface to MPI, the Message
         Passing Interface.
@@ -1373,36 +1373,38 @@ are all instances of the [classref boost::mpi::communicator
   [[`MPI_COMM_EMPTY`] [a [classref boost::mpi::communicator `communicator`] that evaluates false]]
 ]
 
-Boost.MPI currently has no support for groups of processes, as
-specified in MPI 1.1. 
+Boost.MPI supports groups of processes through its [classref
+boost::mpi::group `group`] class.
 
 [table Group operations and constants
   [[C Function/Constant] [Boost.MPI Equivalent]]
 
-  [[`MPI_GROUP_EMPTY`] [unsupported]]
+  [[`MPI_GROUP_EMPTY`] [a default-constructed [classref
+  boost::mpi::group `group`]]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node97.html#Node97
-  `MPI_Group_size`]] [unsupported]]
+  `MPI_Group_size`]] [[memberref boost::mpi::group::size `group::size`]]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node97.html#Node97
-  `MPI_Group_rank`]] [unsupported]]
+  `MPI_Group_rank`]] [memberref boost::mpi::group::rank `group::rank`]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node97.html#Node97
-  `MPI_Group_translate_ranks`]] [unsupported]]
+  `MPI_Group_translate_ranks`]] [memberref boost::mpi::group::translate_ranks `group::translate_ranks`]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node97.html#Node97
-  `MPI_Group_compare`]] [unsupported]]
-  [[`MPI_IDENT`] [unsupported]]
-  [[`MPI_SIMILAR`] [unsupported]]
-  [[`MPI_UNEQUAL`] [unsupported]]
+  `MPI_Group_compare`]] [operators `==` and `!=`]]
+  [[`MPI_IDENT`] [operators `==` and `!=`]]
+  [[`MPI_SIMILAR`] [operators `==` and `!=`]]
+  [[`MPI_UNEQUAL`] [operators `==` and `!=`]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node98.html#Node98
-  `MPI_Comm_group`]] [unsupported]]
+  `MPI_Comm_group`]] [[classref
+  boost::mpi::group `group`] constructor]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node98.html#Node98
-  `MPI_Group_union`]] [unsupported]]
+  `MPI_Group_union`]] [operator `|` for groups]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node98.html#Node98
-  `MPI_Group_intersection`]] [unsupported]]
+  `MPI_Group_intersection`]] [operator `&` for groups]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node98.html#Node98
-  `MPI_Group_difference`]] [unsupported]]
+  `MPI_Group_difference`]] [operator `-` for groups]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node98.html#Node98
-  `MPI_Group_incl`]] [unsupported]]
+  `MPI_Group_incl`]] [[memberref boost::mpi::group::include `group::include`]]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node98.html#Node98
-  `MPI_Group_excl`]] [unsupported]]
+  `MPI_Group_excl`]] [[memberref boost::mpi::group::include `group::exclude`]]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node98.html#Node98
   `MPI_Group_range_incl`]] [unsupported]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node98.html#Node98

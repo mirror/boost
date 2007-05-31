@@ -759,7 +759,10 @@ class communicator
   void abort(int errcode) const;
 
  protected:
-  /* Function object that frees an MPI communicator and deletes the
+  /**
+   * INTERNAL ONLY
+   *
+   * Function object that frees an MPI communicator and deletes the
    * memory associated with it. Intended to be used as a deleter with
    * shared_ptr.
    */

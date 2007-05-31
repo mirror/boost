@@ -25,6 +25,7 @@ lib boost_mpi
     computation_tree.cpp
     content_oarchive.cpp
     environment.cpp
+    group.cpp
     mpi_datatype_cache.cpp
     mpi_datatype_oarchive.cpp
     packed_iarchive.cpp

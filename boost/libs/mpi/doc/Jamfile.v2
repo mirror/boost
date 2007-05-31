@@ -19,6 +19,7 @@ doxygen mpi_autodoc
     ../../../boost/mpi/datatype_fwd.hpp
     ../../../boost/mpi/environment.hpp
     ../../../boost/mpi/exception.hpp
+    ../../../boost/mpi/group.hpp
     ../../../boost/mpi/nonblocking.hpp
     ../../../boost/mpi/operations.hpp
     ../../../boost/mpi/packed_iarchive.hpp
