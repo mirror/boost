@@ -25,6 +25,7 @@ lib boost_mpi
     computation_tree.cpp
     content_oarchive.cpp
     environment.cpp
+    exception.cpp
     group.cpp
     mpi_datatype_cache.cpp
     mpi_datatype_oarchive.cpp
@@ -68,7 +69,7 @@ lib boost_mpi
         python/datatypes.cpp
         python/documentation.cpp
         python/py_environment.cpp
-        python/exception.cpp
+        python/py_exception.cpp
         python/module.cpp
         python/py_request.cpp
         python/skeleton_and_content.cpp

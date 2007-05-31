@@ -1571,7 +1571,7 @@ Boost.MPI translates MPI errors into exceptions, reported via the
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node148.html#Node148
   `MPI_Error_string`]] [used internally by Boost.MPI]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node149.html#Node149
-  `MPI_Error_class`]] [unsupported]]  
+  `MPI_Error_class`]] [[memberref boost::mpi::exception::error_class `exception::error_class`]]]
 ]
 
 The MPI timing facilities are exposed via the Boost.MPI [classref

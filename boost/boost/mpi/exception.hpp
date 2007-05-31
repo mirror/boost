@@ -15,6 +15,7 @@
 
 #include <mpi.h>
 #include <exception>
+#include <string>
 #include <boost/config.hpp>
 #include <boost/throw_exception.hpp>
 
@@ -41,26 +42,37 @@ class exception : public std::exception
    *   @param result_code The result code returned from the MPI
    *   routine that aborted with an error.
    */
-  exception(const char* routine, int result_code)
-    : routine_(routine), result_code_(result_code) { }
+  exception(const char* routine, int result_code);
+
+  virtual ~exception() throw();
 
   /**
-   * A description of the error that occured. At present, this refers
-   * only to the name of the MPI routine that failed.
+   * A description of the error that occurred. 
    */
   virtual const char * what () const throw ()
   {
-    return routine_;
+    return this->message.c_str();
   }
 
   /** Retrieve the name of the MPI routine that reported the error. */
   const char* routine() const { return routine_; }
 
   /**
-   * Retrieve the result code returned from the MPI routine that
-   * reported the error.
+   * @brief Retrieve the result code returned from the MPI routine
+   * that reported the error.
    */
   int result_code() const { return result_code_; }
+
+  /**
+   * @brief Returns the MPI error class associated with the error that
+   * triggered this exception.
+   */
+  int error_class() const 
+  { 
+    int result;
+    MPI_Error_class(result_code_, &result);
+    return result;
+  }
 
  protected:
   /// The MPI routine that triggered the error
@@ -68,6 +80,9 @@ class exception : public std::exception
 
   /// The failed result code reported by the MPI implementation.
   int result_code_;
+
+  /// The formatted error message
+  std::string message;
 };
 
 /**
