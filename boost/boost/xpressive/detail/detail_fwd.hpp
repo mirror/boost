@@ -213,8 +213,6 @@ namespace boost { namespace xpressive { namespace detail
 
     typedef proto::terminal<set_initializer>::type set_initializer_type;
 
-    struct seq_tag;
-
     struct lookahead_tag;
 
     struct lookbehind_tag;

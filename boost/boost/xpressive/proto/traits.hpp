@@ -28,11 +28,14 @@
     #include <boost/mpl/if.hpp>
     #include <boost/mpl/or.hpp>
     #include <boost/mpl/bool.hpp>
+    #include <boost/mpl/eval_if.hpp>
     #include <boost/static_assert.hpp>
     #include <boost/utility/result_of.hpp>
     #include <boost/type_traits/is_array.hpp>
     #include <boost/type_traits/is_function.hpp>
+    #include <boost/type_traits/remove_cv.hpp>
     #include <boost/type_traits/remove_const.hpp>
+    #include <boost/type_traits/add_reference.hpp>
     #include <boost/xpressive/proto/proto_fwd.hpp>
     #include <boost/xpressive/proto/ref.hpp>
     #include <boost/xpressive/proto/args.hpp>
@@ -84,10 +87,10 @@
             template<typename T, typename Domain, typename EnableIf>
             struct as_expr
             {
-                typedef typename mpl::if_<
+                typedef typename mpl::eval_if<
                     mpl::or_<BOOST_PROTO_IS_ARRAY_(T), is_function<T> >
-                  , T &
-                  , typename remove_cv<T>::type
+                  , add_reference<T>
+                  , remove_cv<T>
                 >::type arg0_type;
 
                 typedef expr<proto::tag::terminal, args1<arg0_type> > expr_type;
@@ -331,6 +334,22 @@
                 {
                     return result_of::as_expr<T const, Domain>::call(t);
                 }
+
+                #if BOOST_WORKAROUND(BOOST_MSVC, == 1310)
+                template<typename T, std::size_t N_>
+                typename result_of::as_expr<T(&)[N_], Domain>::result_type
+                operator ()(T (&t)[N_]) const
+                {
+                    return result_of::as_expr<T(&)[N_], Domain>::call(t);
+                }
+
+                template<typename T, std::size_t N_>
+                typename result_of::as_expr<T const(&)[N_], Domain>::result_type
+                operator ()(T const (&t)[N_]) const
+                {
+                    return result_of::as_expr<T const(&)[N_], Domain>::call(t);
+                }
+                #endif
             };
 
             template<typename Domain>

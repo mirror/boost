@@ -10,6 +10,7 @@
 #define BOOST_PROTO_TRANSFORM_ARG_HPP_EAN_12_16_2006
 
 #include <boost/xpressive/proto/detail/prefix.hpp>
+#include <boost/mpl/apply.hpp>
 #include <boost/xpressive/proto/proto_fwd.hpp>
 #include <boost/xpressive/proto/traits.hpp>
 #include <boost/xpressive/proto/detail/suffix.hpp>
@@ -169,6 +170,26 @@ namespace boost { namespace proto { namespace transform
     {
         identity();
         BOOST_PROTO_IDENTITY_TRANSFORM();
+    };
+
+    // Apply an MPL lambda, passing just Expr
+    template<typename Grammar, typename Placeholder>
+    struct apply1
+      : Grammar
+    {
+        apply1();
+
+        template<typename Expr, typename, typename>
+        struct apply
+          : mpl::apply1<Placeholder, Expr>
+        {};
+
+        template<typename Expr, typename State, typename Visitor>
+        static typename apply<Expr, State, Visitor>::type
+        call(Expr const &expr, State const &, Visitor &)
+        {
+            return Placeholder::call(expr);
+        }
     };
 
 }}}
