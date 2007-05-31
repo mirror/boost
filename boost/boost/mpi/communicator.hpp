@@ -87,6 +87,14 @@ const int any_tag = MPI_ANY_TAG;
 enum comm_create_kind { comm_duplicate, comm_take_ownership, comm_attach };
 
 /**
+ * INTERNAL ONLY
+ * 
+ * Forward-declaration of @c group needed for the @c group
+ * constructor.
+ */
+class group;
+
+/**
  * @brief A communicator that permits communication and
  * synchronization among a set of processes.
  *
@@ -134,6 +142,21 @@ class communicator
    *   managed by the user or MPI library (e.g., MPI_COMM_WORLD).
    */
   communicator(const MPI_Comm& comm, comm_create_kind kind);
+
+  /**
+   * Build a new Boost.MPI communicator based on a subgroup of another
+   * MPI communicator.
+   *
+   * This routine will construct a new communicator containing all of
+   * the processes from communicator @c comm that are listed within
+   * the group @c subgroup. Equivalent to @c MPI_Comm_create.
+   *
+   * @param comm An MPI communicator.
+   *
+   * @param subgroup A subgroup of the MPI communicator, @p comm, for
+   * which we will construct a new communicator.
+   */
+  communicator(const communicator& comm, const group& subgroup);
 
   /**
    * @brief Determine the rank of the executing process in a
@@ -944,6 +967,28 @@ class communicator
 
   shared_ptr<MPI_Comm> comm_ptr;
 };
+
+/**
+ * @brief Determines whether two communicators are identical.
+ *
+ * Equivalent to calling @c MPI_Comm_compare and checking whether the
+ * result is @c MPI_IDENT.
+ *
+ * @returns True when the two communicators refer to the same
+ * underlying MPI communicator.
+ */
+bool operator==(const communicator& comm1, const communicator& comm2);
+
+/**
+ * @brief Determines whether two communicators are different.
+ *
+ * @returns @c !(comm1 == comm2)
+ */
+inline bool operator!=(const communicator& comm1, const communicator& comm2)
+{
+  return !(comm1 == comm2);
+}
+
 
 /************************************************************************
  * Implementation details                                               *

@@ -921,6 +921,11 @@ rank 0 in the `local` (collector) communicator. It receives a message
 from a generator via the `world` communicator, then broadcasts the
 message to each of the collectors via the `local` communicator.
 
+For more control in the creation of communicators for subgroups of
+processes, the Boost.MPI [classref boost::mpi::group `group`] provides
+facilities to compute the union (`|`), intersection (`&`), and
+difference (`-`) of two groups, generate arbitrary subgroups, etc.
+
 [endsect]
 
 [section:skeleton_and_content Separating structure from content]
@@ -1425,12 +1430,13 @@ boost::mpi::communicator `communicator`] class.
   `MPI_Comm_rank`]] [[memberref boost::mpi::communicator::rank
   `communicator::rank`]]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node101.html#Node101
-  `MPI_Comm_compare`]] [unsupported]]
+  `MPI_Comm_compare`]] [operators `==` and `!=`]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node102.html#Node102
   `MPI_Comm_dup`]] [[classref boost::mpi::communicator `communicator`]
   class constructor using `comm_duplicate`]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node102.html#Node102
-  `MPI_Comm_create`]] [unsupported]]
+  `MPI_Comm_create`]] [[classref boost::mpi::communicator
+  `communicator`] constructor]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node102.html#Node102
   `MPI_Comm_split`]] [[memberref boost::mpi::communicator::split
   `communicator::split`]]]

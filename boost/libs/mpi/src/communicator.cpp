@@ -4,6 +4,7 @@
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 #include <boost/mpi/communicator.hpp>
+#include <boost/mpi/group.hpp>
 #include <boost/mpi/skeleton_and_content.hpp>
 #include <boost/mpi/detail/point_to_point.hpp>
 
@@ -52,7 +53,15 @@ communicator::communicator(const MPI_Comm& comm, comm_create_kind kind)
     comm_ptr.reset(new MPI_Comm(comm));
     break;
   }
- }
+}
+
+communicator::communicator(const communicator& comm, const group& subgroup)
+{
+  MPI_Comm newcomm;
+  BOOST_MPI_CHECK_RESULT(MPI_Comm_create, 
+                         ((MPI_Comm)comm, (MPI_Group)subgroup, &newcomm));
+  comm_ptr.reset(new MPI_Comm(newcomm), comm_free());
+}
 
 int communicator::size() const
 {
@@ -262,6 +271,14 @@ request communicator::irecv(int source, int tag) const
                          (MPI_BOTTOM, 0, MPI_PACKED,
                           source, tag, MPI_Comm(*this), &req.m_requests[0]));
   return req;
+}
+
+bool operator==(const communicator& comm1, const communicator& comm2)
+{
+  int result;
+  BOOST_MPI_CHECK_RESULT(MPI_Comm_compare,
+                         ((MPI_Comm)comm1, (MPI_Comm)comm2, &result));
+  return result == MPI_IDENT;
 }
 
 } } // end namespace boost::mpi
