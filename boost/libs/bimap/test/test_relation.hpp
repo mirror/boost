@@ -27,7 +27,6 @@
 #include <boost/bimap/tags/tagged.hpp>
 
 // Boost.Bimap.Relation
-#include <boost/bimap/relation/relation.hpp>
 #include <boost/bimap/relation/member_at.hpp>
 #include <boost/bimap/relation/support/get.hpp>
 #include <boost/bimap/relation/support/pair_by.hpp>
@@ -37,56 +36,6 @@
 #include <boost/bimap/relation/support/is_tag_of_member_at.hpp>
 
 
-
-/*
-namespace static_test {
-
-using namespace boost::bimaps::relation::member_at;
-using namespace boost::bimaps::relation;
-using namespace boost::bimaps::tags;
-
-template< class Relation, class LeftData, class RightData >
-struct untagged_test
-{
-    BOOST_BIMAP_CHECK_METADATA(Relation,left_value_type ,LeftData );
-    BOOST_BIMAP_CHECK_METADATA(Relation,right_value_type,RightData);
-
-    BOOST_BIMAP_CHECK_METADATA(Relation,left_tag ,left );
-    BOOST_BIMAP_CHECK_METADATA(Relation,right_tag,right);
-
-    typedef tagged<LeftData ,left > desired_tagged_left_type;
-    BOOST_BIMAP_CHECK_METADATA(
-        Relation,tagged_left_type ,desired_tagged_left_type 
-    );
-
-    typedef tagged<RightData,right> desired_tagged_right_type;
-    BOOST_BIMAP_CHECK_METADATA(
-        Relation,tagged_right_type,desired_tagged_right_type
-    );
-};
-
-template< class Relation, class LeftData, class RightData, class LeftTag, class RightTag >
-struct tagged_test
-{
-    BOOST_BIMAP_CHECK_METADATA(Relation,left_value_type ,left_data);
-    BOOST_BIMAP_CHECK_METADATA(Relation,right_value_type,right_data);
-
-    BOOST_BIMAP_CHECK_METADATA(Relation,left_tag ,left_tag  );
-    BOOST_BIMAP_CHECK_METADATA(Relation,right_tag,right_tag );
-
-    typedef tagged<left_data ,left_tag > desired_tagged_left_type;
-    BOOST_BIMAP_CHECK_METADATA(
-        Relation,tagged_left_type,desired_tagged_left_type
-    );
-
-    typedef tagged<right_data,right_tag> desired_tagged_right_type;
-    BOOST_BIMAP_CHECK_METADATA(
-        Relation,tagged_right_type,desired_tagged_right_type
-    );
-};
-
-} // namespace static_test
-*/
 
 template< class Relation >
 void test_relation_with_default_tags(Relation & rel,

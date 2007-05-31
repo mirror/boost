@@ -67,7 +67,7 @@ void using_range()
     /*<< `range_type` is a handy typedef equal to `std::pair<iterator,iterator>`.
          `const_range_type` is provided too, and it is equal to
          `std::pair<const_iterator,const_iterator>`  >>*/
-    bm_type::left_map::range_type r;
+    bm_type::left_range_type r;
 
     /*<< _key is a Boost.Lambda placeholder. To use it you have to include
         `<boost/bimap/support/lambda.hpp>` >>*/

@@ -140,6 +140,8 @@ do not exactly conform to the requirements for unordered associative containers.
         typedef ``['-unspecified-]`` local_iterator;
         typedef ``['-unspecified-]`` const_local_iterator;
 
+        typedef ``['-unspecified-]`` info_type;
+
         // construct/destroy/copy:
 
         this_type & operator=(const this_type & x);
@@ -262,6 +264,15 @@ do not exactly conform to the requirements for unordered associative containers.
             data_type & ``[link reference_unordered_set_of_at_key at]``(const CompatibleKey & k);
 
             // }
+
+            // Only if info_hook is used
+            // {
+
+            template< class CompatibleKey >
+            info_type & ``[link reference_unordered_set_of_info_at_key info_at]``(const CompatibleKey & k);
+
+            template< class CompatibleKey >
+            const info_type & ``[link reference_unordered_set_of_info_at_key info_at]``(const CompatibleKey & k) const;
 
           // }
 
@@ -665,7 +676,7 @@ to `x` (and only those).
 
 [endsect]
 
-[section at() and operator\[\] - set_of only]
+[section at(), info_at() and operator\[\] - set_of only]
 
 
 [#reference_unordered_set_of_at_key_const]
@@ -673,6 +684,7 @@ to `x` (and only those).
     template< class CompatibleKey >
     const data_type & at(const CompatibleKey & k) const;
 
+* [*Requires: ] `CompatibleKey` is a compatible key of `key_compare`.
 * [*Effects:] Returns the `data_type` reference that is associated with `k`, or
 throws `std::out_of_range` if such key does not exist.
 * [*Complexity:] Average case O(1) (constant), worst case O(n).
@@ -689,6 +701,7 @@ Tey are only provided if the other collection type is mutable
     template< class CompatibleKey >
     data_type & operator[](const CompatibleKey & k);
 
+* [*Requires: ] `CompatibleKey` is a compatible key of `key_compare`.
 * [*Effects: ] `return insert(value_type(k,data_type()))->second;`
 * [*Complexity:] If the insertion is performed O(I(n)), else: Average case
 O(1) (constant), worst case O(n).
@@ -701,6 +714,7 @@ type is mutable.
     template< class CompatibleKey >
     data_type & at(const CompatibleKey & k);
 
+* [*Requires: ] `CompatibleKey` is a compatible key of `key_compare`.
 * [*Effects: ] Returns the `data_type` reference that is associated with `k`, or
 throws `std::out_of_range` if such key does not exist.
 * [*Complexity:] Average case O(1) (constant), worst case O(n).
@@ -737,6 +751,21 @@ the order is O(log(n)). If it is used, the order is O(I(n)) if `k` was not
 in the bimap and O(R(n)) if it existed in the bimap.
 
 ]
+
+[#reference_unordered_set_of_info_at_key]
+
+    template< class CompatibleKey >
+    info_type & info_at(const CompatibleKey & k);
+
+    template< class CompatibleKey >
+    const info_type & info_at(const CompatibleKey & k) const;
+
+* [*Requires: ] `CompatibleKey` is a compatible key of `key_compare`.
+* [*Effects:] Returns the `info_type` reference that is associated with `k`, or
+throws `std::out_of_range` if such key does not exist.
+* [*Complexity:] Average case O(1) (constant), worst case O(n).
+* [*Note:] Only provided when `unordered_set_of` and `info_hook` are used
+
 
 [endsect]
 

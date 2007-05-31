@@ -4,7 +4,7 @@
 <title>set_of Reference</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
-<link rel="start" href="../../index.html" title="Chapter 1. Boost.bimap">
+<link rel="start" href="../../index.html" title="Chapter 1. Boost.Bimap">
 <link rel="up" href="../reference.html" title="Reference">
 <link rel="prev" href="bimap_reference.html" title="Bimap Reference">
 <link rel="next" href="unordered_set_of_reference.html" title="unordered_set_of
@@ -48,8 +48,8 @@
           operations</a></span></dt>
 <dt><span class="section"><a href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.range_operations">Range
           operations</a></span></dt>
-<dt><span class="section"><a href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.at___and_operator_______set_of_only">at()
-          and operator[] - set_of only</a></span></dt>
+<dt><span class="section"><a href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.at____info_at___and_operator_______set_of_only">at(),
+          info_at() and operator[] - set_of only</a></span></dt>
 <dt><span class="section"><a href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.serialization">Serialization</a></span></dt>
 </dl></dd>
 </dl></div>
@@ -143,8 +143,8 @@
           operations</a></span></dt>
 <dt><span class="section"><a href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.range_operations">Range
           operations</a></span></dt>
-<dt><span class="section"><a href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.at___and_operator_______set_of_only">at()
-          and operator[] - set_of only</a></span></dt>
+<dt><span class="section"><a href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.at____info_at___and_operator_______set_of_only">at(),
+          info_at() and operator[] - set_of only</a></span></dt>
 <dt><span class="section"><a href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.serialization">Serialization</a></span></dt>
 </dl></div>
 <p>
@@ -187,6 +187,8 @@
     <span class="keyword">typedef</span> <span class="emphasis"><em>-unspecified-</em></span> <span class="identifier">const_pointer</span><span class="special">;</span>
     <span class="keyword">typedef</span> <span class="emphasis"><em>-unspecified-</em></span> <span class="identifier">reverse_iterator</span><span class="special">;</span>
     <span class="keyword">typedef</span> <span class="emphasis"><em>-unspecified-</em></span> <span class="identifier">const_reverse_iterator</span><span class="special">;</span>
+
+    <span class="keyword">typedef</span> <span class="emphasis"><em>-unspecified-</em></span> <span class="identifier">info_type</span><span class="special">;</span>
 
     <span class="identifier">this_type</span> <span class="special">&amp;</span> <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">this_type</span> <span class="special">&amp;</span> <span class="identifier">x</span><span class="special">);</span>
 
@@ -321,6 +323,17 @@
 
         <span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">class</span> <span class="identifier">CompatibleKey</span> <span class="special">&gt;</span>
         <span class="identifier">data_type</span> <span class="special">&amp;</span> <a href="set_of_reference.html#reference_set_of_at_key">at</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">CompatibleKey</span> <span class="special">&amp;</span> <span class="identifier">k</span><span class="special">);</span>
+
+        <span class="comment">// }
+</span>
+        <span class="comment">// Only if info_hook is used
+</span>        <span class="comment">// {
+</span>
+        <span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">class</span> <span class="identifier">CompatibleKey</span> <span class="special">&gt;</span>
+        <span class="identifier">info_type</span> <span class="special">&amp;</span> <a href="set_of_reference.html#reference_set_of_info_at_key">info_at</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">CompatibleKey</span> <span class="special">&amp;</span> <span class="identifier">k</span><span class="special">);</span>
+
+        <span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">class</span> <span class="identifier">CompatibleKey</span> <span class="special">&gt;</span>
+        <span class="keyword">const</span> <span class="identifier">info_type</span> <span class="special">&amp;</span> <a href="set_of_reference.html#reference_set_of_info_at_key">info_at</a><span class="special">(</span><span class="keyword">const</span> <span class="identifier">CompatibleKey</span> <span class="special">&amp;</span> <span class="identifier">k</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
 
         <span class="comment">// }
 </span>
@@ -1124,9 +1137,9 @@
 </div>
 <div class="section" lang="en">
 <div class="titlepage"><div><div><h5 class="title">
-<a name="boost_bimap.reference.set_of_reference.__multi__set_of_views.at___and_operator_______set_of_only"></a><a href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.at___and_operator_______set_of_only" title="at()
-          and operator[] - set_of only">at()
-          and operator[] - set_of only</a>
+<a name="boost_bimap.reference.set_of_reference.__multi__set_of_views.at____info_at___and_operator_______set_of_only"></a><a href="set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.at____info_at___and_operator_______set_of_only" title="at(),
+          info_at() and operator[] - set_of only">at(),
+          info_at() and operator[] - set_of only</a>
 </h5></div></div></div>
 <a name="reference_set_of_at_key_const"></a><p>
           </p>
@@ -1204,6 +1217,34 @@
 <li>
 <span class="bold"><strong>Note:</strong></span> Only provided when <code class="computeroutput"><span class="identifier">set_of</span></code> is used and the other collection
               type is mutable.
+            </li>
+</ul></div>
+<a name="reference_set_of_info_at_key"></a><p>
+          </p>
+<pre class="programlisting">
+<span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">class</span> <span class="identifier">CompatibleKey</span> <span class="special">&gt;</span>
+<span class="identifier">info_type</span> <span class="special">&amp;</span> <span class="identifier">info_at</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">CompatibleKey</span> <span class="special">&amp;</span> <span class="identifier">k</span><span class="special">);</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span> <span class="keyword">class</span> <span class="identifier">CompatibleKey</span> <span class="special">&gt;</span>
+<span class="keyword">const</span> <span class="identifier">info_type</span> <span class="special">&amp;</span> <span class="identifier">info_at</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">CompatibleKey</span> <span class="special">&amp;</span> <span class="identifier">k</span><span class="special">)</span> <span class="keyword">const</span><span class="special">;</span>
+</pre>
+<div class="itemizedlist"><ul type="disc">
+<li>
+<span class="bold"><strong>Requires: </strong></span><code class="computeroutput"><span class="identifier">CompatibleKey</span></code>
+              is a compatible key of <code class="computeroutput"><span class="identifier">key_compare</span></code>.
+            </li>
+<li>
+<span class="bold"><strong>Effects:</strong></span> Returns the <code class="computeroutput"><span class="identifier">info_type</span></code> reference that is associated
+              with <code class="computeroutput"><span class="identifier">k</span></code>, or throws
+              <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">out_of_range</span></code> if such key does not
+              exist.
+            </li>
+<li>
+<span class="bold"><strong>Complexity:</strong></span> O(log(n)).
+            </li>
+<li>
+<span class="bold"><strong>Note:</strong></span> Only provided when <code class="computeroutput"><span class="identifier">set_of</span></code> and <code class="computeroutput"><span class="identifier">info_hook</span></code>
+              are used
             </li>
 </ul></div>
 </div>

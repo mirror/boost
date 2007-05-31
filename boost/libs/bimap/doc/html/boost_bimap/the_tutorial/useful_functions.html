@@ -4,7 +4,7 @@
 <title>Useful functions</title>
 <link rel="stylesheet" href="../../boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
-<link rel="start" href="../../index.html" title="Chapter 1. Boost.bimap">
+<link rel="start" href="../../index.html" title="Chapter 1. Boost.Bimap">
 <link rel="up" href="../the_tutorial.html" title="The tutorial">
 <link rel="prev" href="differences_with_standard_maps.html" title="Differences
       with standard maps">
@@ -365,9 +365,9 @@
 
 <span class="comment">// ...
 </span>
-<span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span> <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_iterator</span><span class="special">,</span>  <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_iterator</span> <span class="special">&gt;</span> <span class="identifier">r</span><span class="special">;</span>
+<span class="line_callout_bug"><a name="boost_bimap11co" href="useful_functions.html#boost_bimap11"><img src="../../images/callouts/1.png" alt="1" border="0"></a></span><span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_range_type</span> <span class="identifier">r</span><span class="special">;</span>
 
-<span class="line_callout_bug"><a name="boost_bimap11co" href="useful_functions.html#boost_bimap11"><img src="../../images/callouts/1.png" alt="1" border="0"></a></span><span class="identifier">r</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">range</span><span class="special">(</span> <span class="number">20</span> <span class="special">&lt;=</span> <span class="identifier">_key</span><span class="special">,</span> <span class="identifier">_key</span> <span class="special">&lt;=</span> <span class="number">50</span> <span class="special">);</span> <span class="comment">// [20,50]
+<span class="line_callout_bug"><a name="boost_bimap12co" href="useful_functions.html#boost_bimap12"><img src="../../images/callouts/2.png" alt="2" border="0"></a></span><span class="identifier">r</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">range</span><span class="special">(</span> <span class="number">20</span> <span class="special">&lt;=</span> <span class="identifier">_key</span><span class="special">,</span> <span class="identifier">_key</span> <span class="special">&lt;=</span> <span class="number">50</span> <span class="special">);</span> <span class="comment">// [20,50]
 </span>
 <span class="identifier">r</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">range</span><span class="special">(</span> <span class="number">20</span> <span class="special">&lt;</span>  <span class="identifier">_key</span><span class="special">,</span> <span class="identifier">_key</span> <span class="special">&lt;</span>  <span class="number">50</span> <span class="special">);</span> <span class="comment">// (20,50)
 </span>
@@ -379,11 +379,22 @@
           </p>
 <p>
             </p>
-<div class="calloutlist"><table border="0" summary="Callout list"><tr>
+<div class="calloutlist"><table border="0" summary="Callout list">
+<tr>
 <td width="5%" valign="top" align="left">
 <a name="boost_bimap11"></a><a href="#boost_bimap11co"><img src="../../images/callouts/1.png" alt="1" border="0"></a> </td>
-<td valign="top" align="left"><p> _key is a Boost.Lambda placeholder. To use it you have to include <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">bimap</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">lambda</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code> </p></td>
-</tr></table></div>
+<td valign="top" align="left"><p> <code class="computeroutput"><span class="identifier">range_type</span></code> is a handy
+            typedef equal to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">,</span><span class="identifier">iterator</span><span class="special">&gt;</span></code>. <code class="computeroutput"><span class="identifier">const_range_type</span></code>
+            is provided too, and it is equal to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span><span class="special">&lt;</span><span class="identifier">const_iterator</span><span class="special">,</span><span class="identifier">const_iterator</span><span class="special">&gt;</span></code> </p></td>
+</tr>
+<tr>
+<td width="5%" valign="top" align="left">
+<a name="boost_bimap12"></a><a href="#boost_bimap12co"><img src="../../images/callouts/2.png" alt="2" border="0"></a> </td>
+<td valign="top" align="left"><p> _key is a Boost.Lambda placeholder.
+            To use it you have to include <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">bimap</span><span class="special">/</span><span class="identifier">support</span><span class="special">/</span><span class="identifier">lambda</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+            </p></td>
+</tr>
+</table></div>
 <p>
           </p>
 <p>
@@ -407,7 +418,7 @@
 </span>
 <span class="identifier">r</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">range</span><span class="special">(</span> <span class="identifier">unbounded</span> <span class="special">,</span> <span class="identifier">_key</span> <span class="special">&lt;</span> <span class="number">50</span> <span class="special">);</span> <span class="comment">// (-inf,50)
 </span>
-<span class="line_callout_bug"><a name="boost_bimap12co" href="useful_functions.html#boost_bimap12"><img src="../../images/callouts/1.png" alt="1" border="0"></a></span><span class="identifier">r</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">range</span><span class="special">(</span> <span class="identifier">unbounded</span> <span class="special">,</span> <span class="identifier">unbounded</span> <span class="special">);</span> <span class="comment">// (-inf,inf)
+<span class="line_callout_bug"><a name="boost_bimap13co" href="useful_functions.html#boost_bimap13"><img src="../../images/callouts/1.png" alt="1" border="0"></a></span><span class="identifier">r</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left</span><span class="special">.</span><span class="identifier">range</span><span class="special">(</span> <span class="identifier">unbounded</span> <span class="special">,</span> <span class="identifier">unbounded</span> <span class="special">);</span> <span class="comment">// (-inf,inf)
 </span></pre>
 <p>
           </p>
@@ -417,7 +428,7 @@
             </p>
 <div class="calloutlist"><table border="0" summary="Callout list"><tr>
 <td width="5%" valign="top" align="left">
-<a name="boost_bimap12"></a><a href="#boost_bimap12co"><img src="../../images/callouts/1.png" alt="1" border="0"></a> </td>
+<a name="boost_bimap13"></a><a href="#boost_bimap13co"><img src="../../images/callouts/1.png" alt="1" border="0"></a> </td>
 <td valign="top" align="left"><p> This is equivalent to std::make_pair(s.begin(),s.end()) </p></td>
 </tr></table></div>
 <p>

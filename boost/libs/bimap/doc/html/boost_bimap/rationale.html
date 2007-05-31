@@ -4,8 +4,8 @@
 <title>Rationale</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
-<link rel="start" href="../index.html" title="Chapter 1. Boost.bimap">
-<link rel="up" href="../index.html" title="Chapter 1. Boost.bimap">
+<link rel="start" href="../index.html" title="Chapter 1. Boost.Bimap">
+<link rel="up" href="../index.html" title="Chapter 1. Boost.Bimap">
 <link rel="prev" href="release_notes.html" title="Release notes">
 <link rel="next" href="rationale/additional_features.html" title="Additional
       Features">
@@ -161,7 +161,7 @@
         as being simple and powerful. This is the general design.
       </p>
 <a name="boost_bimap.rationale.general_design.relation_implementation"></a><h5>
-<a name="id2716486"></a>
+<a name="id2725455"></a>
         <a href="rationale.html#boost_bimap.rationale.general_design.relation_implementation">Relation
         Implementation</a>
       </h5>
@@ -252,8 +252,25 @@
         both cases, because we require that the same code be compilable by any standards-compliant
         compiler.
       </p>
+<div class="note"><table border="0" summary="Note">
+<tr>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Note]" src="../images/note.png"></td>
+<th align="left">Note</th>
+</tr>
+<tr><td align="left" valign="top">
+<p>
+          </p>
+<p>
+            Testing this approach in all the supported compilers indicated that the
+            mutant idiom was always supported. The strictly compliant version was
+            removed from the code because it was never used.
+          </p>
+<p>
+        </p>
+</td></tr>
+</table></div>
 <a name="boost_bimap.rationale.general_design.bimap_implementation"></a><h5>
-<a name="id2717048"></a>
+<a name="id2726055"></a>
         <a href="rationale.html#boost_bimap.rationale.general_design.bimap_implementation">Bimap
         Implementation</a>
       </h5>

@@ -4,8 +4,8 @@
 <title>Future work</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
-<link rel="start" href="../index.html" title="Chapter 1. Boost.bimap">
-<link rel="up" href="../index.html" title="Chapter 1. Boost.bimap">
+<link rel="start" href="../index.html" title="Chapter 1. Boost.Bimap">
+<link rel="up" href="../index.html" title="Chapter 1. Boost.Bimap">
 <link rel="prev" href="test_suite.html" title="Test suite">
 <link rel="next" href="release_notes.html" title="Release notes">
 </head>
@@ -27,39 +27,13 @@
 <a name="boost_bimap.future_work"></a><a href="future_work.html" title="Future work">Future work</a>
 </h2></div></div></div>
 <a name="boost_bimap.future_work.rearrange_function"></a><h4>
-<a name="id2714148"></a>
+<a name="id2723520"></a>
       <a href="future_work.html#boost_bimap.future_work.rearrange_function">Rearrange Function</a>
     </h4>
 <p>
       Boost.MultiIndex includes some others functions that can be included in the
       views.
     </p>
-<a name="boost_bimap.future_work.hooking_data"></a><h4>
-<a name="id2714175"></a>
-      <a href="future_work.html#boost_bimap.future_work.hooking_data">Hooking Data</a>
-    </h4>
-<p>
-      In general, programmers use maps to access information quickly. Boost.Bimap
-      will allow the user to hook data inside the bimap so it is not necessary to
-      maintain another map. This a possible code example:
-    </p>
-<pre class="programlisting">
-<span class="keyword">typedef</span> <span class="identifier">bimap</span><span class="special">&lt;</span> <span class="keyword">int</span><span class="special">,</span> <span class="identifier">string</span><span class="special">,</span> <span class="identifier">hook_data</span><span class="special">&lt;</span> <span class="identifier">string</span> <span class="special">&gt;</span> <span class="special">&gt;</span> <span class="identifier">bm_type</span><span class="special">;</span>
-<span class="identifier">bm_type</span> <span class="identifier">bm</span><span class="special">;</span>
-
-<span class="comment">//...
-</span>
-<span class="identifier">bm</span><span class="special">.</span><span class="identifier">left_map</span><span class="special">.</span><span class="identifier">data</span><span class="special">(</span><span class="number">28928546</span><span class="special">)</span> <span class="special">=</span> <span class="string">"teacher"</span><span class="special">;</span>
-<span class="identifier">bm</span><span class="special">.</span><span class="identifier">right_map</span><span class="special">.</span><span class="identifier">data</span><span class="special">(</span><span class="string">"John Gray"</span><span class="special">)</span> <span class="special">=</span> <span class="string">"singer"</span><span class="special">;</span>
-
-<span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">left_iterator</span> <span class="identifier">iter</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">left_map</span><span class="special">.</span><span class="identifier">find</span><span class="special">(</span><span class="number">23345647</span><span class="special">);</span>
-<span class="identifier">iter</span><span class="special">-&gt;</span><span class="identifier">data</span> <span class="special">=</span> <span class="string">"programmer"</span><span class="special">;</span>
-
-<span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">iterator</span> <span class="identifier">iter</span> <span class="special">=</span> <span class="identifier">bm</span><span class="special">.</span><span class="identifier">find</span><span class="special">(</span> <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">pair_by</span><span class="special">&lt;</span><span class="identifier">member_at</span><span class="special">::</span><span class="identifier">left</span><span class="special">&gt;(</span><span class="number">23345647</span><span class="special">,</span><span class="string">"Green Dert"</span><span class="special">)</span> <span class="special">);</span>
-<span class="identifier">iter</span><span class="special">-&gt;</span><span class="identifier">data</span> <span class="special">=</span> <span class="string">"student"</span><span class="special">;</span>
-
-<span class="identifier">bm</span><span class="special">.</span><span class="identifier">insert</span><span class="special">(</span> <span class="identifier">bm_type</span><span class="special">::</span><span class="identifier">value_type_by</span><span class="special">&lt;</span><span class="identifier">member_at</span><span class="special">::</span><span class="identifier">left</span><span class="special">&gt;(</span><span class="number">1456783342</span><span class="special">,</span><span class="string">"Fred Bypass"</span><span class="special">,</span><span class="string">"unemployed"</span><span class="special">)</span> <span class="special">);</span>
-</pre>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

@@ -65,7 +65,11 @@ used in bimap documentation. Here is a list of them:
 
 [[[@../../example/tutorial_range.cpp
     tutorial_range.cpp                                                    ]]
-    [`range` tutorial                                                     ]]
+    [`range()` tutorial                                                   ]]
+
+[[[@../../example/tutorial_info_hook.cpp
+    tutorial_info_hook.cpp                                                ]]
+    [Additional information hooking                                       ]]
 
 [[[@../../example/unconstrained_collection.cpp
     unconstrained_collection.cpp                                          ]]
@@ -91,6 +95,10 @@ used in bimap documentation. Here is a list of them:
 [[[@../../example/bimap_and_boost/range.cpp
     range.cpp                                                             ]]
     [Bimap and Boost.Range: Using bimaps in the new range framework       ]]
+
+[[[@../../example/bimap_and_boost/foreach.cpp
+    foreach.cpp                                                           ]]
+    [Bimap and Boost.Foreach: Iterating over bimaps                       ]]
 
 [[[@../../example/bimap_and_boost/serialization.cpp
     serialization.cpp:                                                    ]]

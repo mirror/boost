@@ -23,6 +23,7 @@ test-suite "examples"
     [ run     tutorial_modify_and_replace.cpp                         ]
     [ run     tutorial_range.cpp                                      ]
     [ run     unconstrained_collection.cpp                            ]
+    [ run     tutorial_info_hook.cpp                                  ]
     [ run     projection.cpp                                          ]
     ;
 

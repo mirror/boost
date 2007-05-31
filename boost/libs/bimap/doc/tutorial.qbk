@@ -50,6 +50,9 @@ how to use this feature.
 mapping containers as a particular case. The section
 [link boost_bimap.the_tutorial.unconstrained_sets Unconstrained Sets] explains how they work.
 
+# The section [link boost_bimap.the_tutorial.hooking_information Hooking Information]
+explains how to hook additional information to each relation of a bimap.
+
 # The final section
 ([link boost_bimap.the_tutorial.complete_instantiation_scheme Complete Instantiation Scheme])
 summarizes bimap instantiation and explains how change the allocator type to be used.
@@ -117,57 +120,6 @@ maps.
 [import ../example/standard_map_comparison.cpp]
 
 [code_standard_map_comparison]
-
-[/
-
-__STD_PAIR__
-
-The designer of the STL observed that this was a directed relationship
-and named the data that it contains accordingly. A `std::pair` is a
-directed relation between *x* and *y*; hence the names `first` for *x* and
-`second` for *y* are natural. Note how the code looks.
-
-    X x;
-    Y y;
-
-    std::pair
-    <
-        X, /* ----> */ Y
-
-    > directed_relation(x,y);
-
-    directed_relation.first;
-    directed_relation.second;
-
-
-The one remaining task is to find a way to represent this framework in C++
-code so it is easy to read it and to remember how to write it. The first
-thing is to get rid of the std::pair representing the data contained by
-the bimap. The two collections are then at the same level, so it is
-incorrect to name them as `first`/`second` or `a`/`b`. These names clearly
-impose an ordering on the two values.
-
-The solution is to view *x* as the `left` member and *y* as the `right` one. The
-`left`-`right` naming puts the two values on the same level and allows us to
-refer to the view easily. We can now say: "The map indexed by the left
-member", and the meaning is very clear.
-
-__RELATION__
-
-The new type will be called `relation`. It will have two members: one
-called `left` and the other `right`. The code now looks as follows:
-
-    X x;
-    Y y;
-
-    boost::relation
-    <
-        X, /* <---> */ Y
-
-    > relation(x,y);
-
-    relation.left; relation.right;
-]
 
 [endsect]
 
@@ -888,48 +840,178 @@ But using a bimap has some benefits
 
 [endsect]
 
+[section Hooking Information]
+
+[import ../example/tutorial_info_hook.cpp]
+
+Bidirectional maps may have associated information about each relation.
+Suppose we want to represent a books and author bidirectional map.
+
+[code_tutorial_info_hook_nothing]
+
+Suppose now that we want to store abstract of each book.
+We have two options:
+
+# Books name are unique identifiers, so we can create a separate
+`std::map< string, string >` that relates books names with abstracts.
+# We can use __BOOST_MULTI_INDEX__ for the new beast.
+
+Option 1 is the wrong approach, if we go this path we lost what bimap has 
+won us. We now have to maintain the logic of two interdependent containers,
+there is an extra string stored for each book name, and the performance will
+be worse. This is far away from being a good solution.
+
+Option 2 is correct. We start thinking books as entries in a table. So it
+makes sense to start using Boost.MultiIndex. We can then add the year
+of publication, the price, etc... and we can index this new items too. So
+Boost.MultiIndex is a sound solution for our problem.
+
+The thing is that there are cases where we want to maintain bimap
+semantics (use `at()` to find an author given a book name and the other way
+around) and add information about the relations that we are sure we will not
+want to index later (like the abstracts). Option 1 is not possible, option 2
+neither.
+
+Boost.Bimap provides support for this kind of situations by means of
+information hooking.
+You can pass an extra parameter to a bimap with the type `info_hook< InfoType >`
+and an `info` member of type `InfoType` will appear in the relation and bimap 
+pairs.
+
+Relations and bimap pairs constructors can take an extra argument.
+If only two arguments are used, the information will be initialized with
+their default constructor.
+
+[code_tutorial_info_hook_first]
+
+Contrary to the two key types, the information will be mutable using iterators.
+
+[code_tutorial_info_hook_mutable]
+
+A new function is included in ['unique] map views: `info_at(key)`, that mimics the
+standard `at(key)` function but returned the associated information instead of
+the data.
+
+[code_tutorial_info_hook_info_at]
+
+[@../../example/tutorial_info_hook.cpp Go to source code]
+
+[endsect]
+
 [section Complete instantiation scheme]
 
 To summarize, this is the complete instantiation scheme.
 
-    typedef bimap< LeftCollectionType, RightCollectionType [, SetTypeOfRelation ] [,Allocator] > bm;
+    typedef bimap
+    <
+        LeftCollectionType, RightCollectionType
+
+        [ , SetTypeOfRelation  ]  // Default to left_based
+        [ , info_hook< Info >  ]  // Default to no info
+        [ , Allocator          ]  // Default to std::allocator<>
+
+    > bm;
 
 `{Side}CollectionType` can directly be a type. This defaults to
 `set_of<Type>`, or can be a `{CollectionType}_of<Type>` specification.
 Additionally, these two parameters can be tagged to specify other tags
-instead of the usual `member_at::-Side-` tags. The last two parameters are
-used to specify the collection type of the relation and the allocator type. If
-you want to specify a custom allocator type while relying on the default
+instead of the usual `member_at::-Side-` tags. 
+
+The possibles way to use the first parameter are:
+
+    bimap< Type, R >
+
+* Left type:                `Type`
+* Left collection type:     `set_of< Type >`
+* Left tag:                 `member_at::left`
+
+    bimap< `['CollectionType]`_of< Type >, R >
+
+* Left type:                `Type`
+* Left collection type:     ['CollectionType]`_of< LeftType >`
+* Left tag:                 `member_at::left`
+
+    bimap< tagged< Type, Tag >, R >
+
+* Left type:                `Type`
+* Left collection type:     `set_of< LeftType >`
+* Left tag:                 `Tag`
+
+    bimap< tagged< `['CollectionType]`_of< Type >, Tag >, R >
+
+* Left type:                `Type`
+* Left collection type:     ['CollectionType]`_of< LeftType >`
+* Left tag:                 `Tag`
+
+The same options are available for the second parameter.
+
+The last three parameters are used to specify the collection type of the relation,
+the information hook and the allocator type.
+If you want to specify a custom allocator type while relying on the default
 value of CollectionTypeOfRelation, you can do so by simply writing
 `bimap<LeftKeyType, RightKeyType, Allocator>`. Boost.Bimap's internal
 machinery detects that the third parameter in this case does not refer
 to the relation type but rather to an allocator.
 
-The following are the possible ways of instantiating a bimap:
+The following are the possible ways of instantiating the last three parameters
+of a bimap. You can ignore some of the parameter but the order must be respected.
 
 
-    bimap<LeftKeyType,RightKeyType>
+    bimap< L, R >
 
 * set_of_relation_type: based on the left key type
-* allocator:            default allocator
+* info:                 no info
+* allocator:            std::allocator
 
 
-    bimap<LeftKeyType,RightKeyType,Allocator>
+    bimap< L, R ,SetOfRelationType>
+
+* set_of_relation_type: SetOfRelationType
+* info:                 no info
+* allocator:            std::allocator
+
+
+    bimap< L, R , SetOfRelationType, info_hook<Info> >
+
+* set_of_relation_type: SetOfRelationType
+* info:                 Info
+* allocator:            std::allocator
+
+
+    bimap< L, R , SetOfRelationType, info_hook<Info>, Allocator>
+
+* set_of_relation_type: SetOfRelationType
+* info:                 Info
+* allocator:            Allocator
+
+
+    bimap< L, R , SetOfRelationType, Allocator>
+
+* set_of_relation_type: SetOfRelationType
+* info:                 no info
+* allocator:            Allocator
+
+
+    bimap< L, R , info_hook<Info> >
+
+* set_of_relation_type: based on the left key type
+* info:                 Info
+* allocator:            std::allocator
+
+
+    bimap< L, R , info_hook<Info>, Allocator>
 
 * set_of_relation_type: based on the left key type
 * allocator:            Allocator
 
 
-    bimap<LeftKeyType,RightKeyType,SetOfRelationType>
+    bimap< L, R , Allocator>
 
-* set_of_relation_type: SetOfRelationType
-* allocator:            default allocator
-
-
-    bimap<LeftKeyType,RightKeyType,SetOfRelationType,Allocator>
-
-* set_of_relation_type: SetOfRelationType
+* set_of_relation_type: based on the left key type
+* info:                 no info
 * allocator:            Allocator
+
+
 
 
 [endsect]

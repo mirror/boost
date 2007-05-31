@@ -1,4 +1,4 @@
-[library Boost.bimap
+[library Boost.Bimap
     [quickbook 1.4]
     [authors [Capeletto, Matias]]
     [copyright 2006-2007 Matias Capeletto]
@@ -54,7 +54,6 @@ Distributed under the Boost Software License, Version 1.0.
 [def __TIP__ [$images/tip.png]]
 [def __QUESTION_MARK__ [$images/question.png]]
 
-[def __UNDER_CONSTRUCTION__ [$images/under_construction.png]]
 
 [/ Boost Libraries ]
 
@@ -72,7 +71,7 @@ Distributed under the Boost Software License, Version 1.0.
 [def __BOOST_LAMBDA__ [@http://www.boost.org/doc/html/lambda.html [*Boost.Lambda]]]
 [def __BOOST_PROPERTY_MAP__ [@http://www.boost.org/doc/html/property_map.html [*Boost.PropertyMap]]]
 [def __BOOST_RANGE__ [@http://www.boost.org/doc/html/range.html [*Boost.Range]]]
-
+[def __BOOST_FOREACH__ [@http://www.boost.org/doc/html/foreach.html [*Boost.Foreach]]]
 [def __BOOST_TEST__ [@http://www.boost.org/libs/test/doc/index.html [*Boost.Test]]]
 
 

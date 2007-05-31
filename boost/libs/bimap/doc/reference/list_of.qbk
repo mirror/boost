@@ -87,6 +87,8 @@ requirements for these types of containers.
         typedef ``['-unspecified-]`` reverse_iterator;
         typedef ``['-unspecified-]`` const_reverse_iterator;
 
+        typedef ``['-unspecified-]`` info_type;
+
         // construct/copy/destroy
 
         this_type & operator=(const this_type & x);

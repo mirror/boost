@@ -181,6 +181,12 @@ the mutant approach allows to make ['LValue] iterators, we have to degrade
 them to ['Read Write] in both cases, because we require that the same code
 be compilable by any standards-compliant compiler.
 
+[note
+Testing this approach in all the supported compilers indicated that the
+mutant idiom was always supported. The strictly compliant version was
+removed from the code because it was never used.
+]
+
 
 [heading Bimap Implementation]
 

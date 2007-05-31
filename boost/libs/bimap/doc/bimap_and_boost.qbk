@@ -82,6 +82,10 @@ fits nicely here.
 
 ]
 
+You can also read 
+[link boost_bimap.the_tutorial.hooking_information Hooking Information] for more
+information about the relation of this two libraries.
+
 [endsect]
 
 [section Boost Libraries that work well with Boost.Bimap]
@@ -116,6 +120,11 @@ A new infrastructure for generic algorithms that builds on top of the new
 iterator concepts]
 [Thorsten Ottosen]
 [Range based algorithms]]
+
+[[ __BOOST_FOREACH__ ][
+BOOST_FOREACH macro for easily iterating over the elements of a sequence]
+[Eric Niebler]
+[Iteration]]
 
 [[ __BOOST_PROPERTY_MAP__ ][
 Concepts defining interfaces which map key objects to value objects]
@@ -255,6 +264,34 @@ We can use them with Boost.Bimap with the help of the `range` function.
 [code_bimap_and_boost_range]
 
 [@../../example/bimap_and_boost/range.cpp Go to source code]
+
+[endsect]
+
+[section Boost.Foreach]
+
+In C++, writing a loop that iterates over a sequence is tedious.
+We can either use iterators, which requires a considerable amount of
+boiler-plate, or we can use the std::for_each()  algorithm and move our
+loop body into a predicate, which requires no less boiler-plate and forces
+us to move our logic far from where it will be used. In contrast, some other
+languages, like Perl, provide a dedicated "foreach" construct that automates
+this process. BOOST_FOREACH is just such a construct for C++. It iterates
+over sequences for us, freeing us from having to deal directly with iterators
+or write predicates.
+
+You can use BOOST_FOREACH macro with Boost.Bimap views. The generated code will
+be as efficient as a std::for_each iteration.
+Here are some examples:
+
+[import ../example/bimap_and_boost/foreach.cpp]
+
+[code_bimap_and_boost_foreach]
+
+You can use it directly with ranges too:
+
+[code_bimap_and_boost_foreach_using_range]
+
+[@../../example/bimap_and_boost/foreach.cpp Go to source code]
 
 [endsect]
 

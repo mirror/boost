@@ -1,10 +1,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Chapter 1. Boost.bimap</title>
+<title>Chapter 1. Boost.Bimap</title>
 <link rel="stylesheet" href="boostbook.css" type="text/css">
 <meta name="generator" content="DocBook XSL Stylesheets V1.70.1">
-<link rel="start" href="index.html" title="Chapter 1. Boost.bimap">
+<link rel="start" href="index.html" title="Chapter 1. Boost.Bimap">
 <link rel="next" href="boost_bimap/introduction.html" title="Introduction">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -21,13 +21,13 @@
 <div class="chapter" lang="en">
 <div class="titlepage"><div>
 <div><h2 class="title">
-<a name="bimap"></a>Chapter 1. Boost.bimap</h2></div>
+<a name="bimap"></a>Chapter 1. Boost.Bimap</h2></div>
 <div><div class="author"><h3 class="author">
 <span class="firstname">Matias</span> <span class="surname">Capeletto</span>
 </h3></div></div>
 <div><p class="copyright">Copyright © 2006 -2007 Matias Capeletto</p></div>
 <div><div class="legalnotice">
-<a name="id2602537"></a><p>
+<a name="id2604803"></a><p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
@@ -93,6 +93,8 @@
       with user defined names</a></span></dt>
 <dt><span class="section"><a href="boost_bimap/the_tutorial/unconstrained_sets.html">Unconstrained
       Sets</a></span></dt>
+<dt><span class="section"><a href="boost_bimap/the_tutorial/hooking_information.html">Hooking
+      Information</a></span></dt>
 <dt><span class="section"><a href="boost_bimap/the_tutorial/complete_instantiation_scheme.html">Complete
       instantiation scheme</a></span></dt>
 </dl></dd>
@@ -109,6 +111,7 @@
 <dt><span class="section"><a href="boost_bimap/bimap_and_boost/boost_libraries_that_work_well_with_boost_bimap.html#boost_bimap.bimap_and_boost.boost_libraries_that_work_well_with_boost_bimap.boost_hash">Boost.Hash</a></span></dt>
 <dt><span class="section"><a href="boost_bimap/bimap_and_boost/boost_libraries_that_work_well_with_boost_bimap.html#boost_bimap.bimap_and_boost.boost_libraries_that_work_well_with_boost_bimap.boost_lambda">Boost.Lambda</a></span></dt>
 <dt><span class="section"><a href="boost_bimap/bimap_and_boost/boost_libraries_that_work_well_with_boost_bimap.html#boost_bimap.bimap_and_boost.boost_libraries_that_work_well_with_boost_bimap.boost_range">Boost.Range</a></span></dt>
+<dt><span class="section"><a href="boost_bimap/bimap_and_boost/boost_libraries_that_work_well_with_boost_bimap.html#boost_bimap.bimap_and_boost.boost_libraries_that_work_well_with_boost_bimap.boost_foreach">Boost.Foreach</a></span></dt>
 <dt><span class="section"><a href="boost_bimap/bimap_and_boost/boost_libraries_that_work_well_with_boost_bimap.html#boost_bimap.bimap_and_boost.boost_libraries_that_work_well_with_boost_bimap.boost_property_map">Boost.Property_map</a></span></dt>
 </dl></dd>
 <dt><span class="section"><a href="boost_bimap/bimap_and_boost/dependencies.html">Dependencies</a></span></dt>
@@ -166,8 +169,8 @@
           operations</a></span></dt>
 <dt><span class="section"><a href="boost_bimap/reference/set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.range_operations">Range
           operations</a></span></dt>
-<dt><span class="section"><a href="boost_bimap/reference/set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.at___and_operator_______set_of_only">at()
-          and operator[] - set_of only</a></span></dt>
+<dt><span class="section"><a href="boost_bimap/reference/set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.at____info_at___and_operator_______set_of_only">at(),
+          info_at() and operator[] - set_of only</a></span></dt>
 <dt><span class="section"><a href="boost_bimap/reference/set_of_reference.html#boost_bimap.reference.set_of_reference.__multi__set_of_views.serialization">Serialization</a></span></dt>
 </dl></dd>
 </dl></dd>
@@ -193,8 +196,8 @@
           copy and assignment</a></span></dt>
 <dt><span class="section"><a href="boost_bimap/reference/unordered_set_of_reference.html#boost_bimap.reference.unordered_set_of_reference.unordered___multi__set_of_views.modifiers">Modifiers</a></span></dt>
 <dt><span class="section"><a href="boost_bimap/reference/unordered_set_of_reference.html#boost_bimap.reference.unordered_set_of_reference.unordered___multi__set_of_views.lookup">Lookup</a></span></dt>
-<dt><span class="section"><a href="boost_bimap/reference/unordered_set_of_reference.html#boost_bimap.reference.unordered_set_of_reference.unordered___multi__set_of_views.at___and_operator_______set_of_only">at()
-          and operator[] - set_of only</a></span></dt>
+<dt><span class="section"><a href="boost_bimap/reference/unordered_set_of_reference.html#boost_bimap.reference.unordered_set_of_reference.unordered___multi__set_of_views.at____info_at___and_operator_______set_of_only">at(),
+          info_at() and operator[] - set_of only</a></span></dt>
 <dt><span class="section"><a href="boost_bimap/reference/unordered_set_of_reference.html#boost_bimap.reference.unordered_set_of_reference.unordered___multi__set_of_views.hash_policy">Hash
           policy</a></span></dt>
 <dt><span class="section"><a href="boost_bimap/reference/unordered_set_of_reference.html#boost_bimap.reference.unordered_set_of_reference.unordered___multi__set_of_views.serialization">Serialization</a></span></dt>
@@ -300,7 +303,7 @@
 <a name="bimap.preface"></a><a href="index.html#bimap.preface" title="Preface">Preface</a>
 </h2></div></div></div>
 <a name="bimap.preface.description"></a><h4>
-<a name="id2602576"></a>
+<a name="id2604842"></a>
       <a href="index.html#bimap.preface.description">Description</a>
     </h4>
 <p>
@@ -314,7 +317,7 @@
       containers.
     </p>
 <a name="bimap.preface.influences_and_related_work"></a><h4>
-<a name="id2566181"></a>
+<a name="id2568450"></a>
       <a href="index.html#bimap.preface.influences_and_related_work">Influences and Related
       Work</a>
     </h4>
@@ -326,7 +329,7 @@
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><small><p>Last revised: May 23, 2007 at 05:17:10 GMT</p></small></td>
+<td align="left"><small><p>Last revised: May 31, 2007 at 06:53:35 GMT</p></small></td>
 <td align="right"><small></small></td>
 </tr></table>
 <hr>

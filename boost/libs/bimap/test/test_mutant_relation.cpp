@@ -103,7 +103,7 @@ struct mutant_relation_builder
     struct build
     {
         typedef boost::bimaps::relation::
-            mutant_relation<LeftType,RightType,true> type;
+            mutant_relation<LeftType,RightType,::boost::mpl::na,true> type;
     };
 };
 

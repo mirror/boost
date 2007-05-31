@@ -26,12 +26,16 @@ offered by Boost.Bimap.
     test_tagged.cpp                                                 ]]
     [Tagged idiom checks                                            ]]
 
+[[[@../../test/test_mutant.cpp 
+    test_mutant.cpp                                                 ]]
+    [Test the mutant idiom                                          ]]
+
 [[[@../../test/test_structured_pair.cpp 
     test_structured_pair.cpp                                        ]]
     [Test structured pair class                                     ]]
 
-[[[@../../test/test_relation.cpp 
-    test_relation.cpp                                               ]]
+[[[@../../test/test_mutant_relation.cpp 
+    test_mutant_relation.cpp                                        ]]
     [Test the relation class                                        ]]
 
 [[[@../../test/test_bimap_set_of.cpp 
@@ -102,9 +106,42 @@ offered by Boost.Bimap.
     test_bimap_project.cpp                                          ]]
     [Projection of iterators support                                ]]
 
+[[[@../../test/test_bimap_operator_bracket.cpp 
+    test_bimap_operator_bracket.cpp                                 ]]
+    [`operator[]` and `at()` functions                              ]]
+
+[[[@../../test/test_bimap_info.cpp 
+    test_bimap_info.cpp                                             ]]
+    [Information hooking support                                    ]]
+
 [[[@../../test/test_bimap_extra.cpp 
     test_bimap_extra.cpp                                            ]]
     [Additional checks                                              ]]
+
+[[[@../../test/compile_fail/test_bimap_info_1.cpp 
+    test_bimap_info_1.cpp                                           ]]
+    [Information hooking compilation fail test                      ]]
+
+[[[@../../test/compile_fail/test_bimap_info_2.cpp 
+    test_bimap_info_2.cpp                                           ]]
+    [Information hooking compilation fail test                      ]]
+
+[[[@../../test/compile_fail/test_bimap_info_3.cpp 
+    test_bimap_info_3.cpp                                           ]]
+    [Information hooking compilation fail test                      ]]
+
+[[[@../../test/compile_fail/test_bimap_mutable_1.cpp 
+    test_bimap_mutable_1.cpp                                        ]]
+    [Mutable members compilation fail test                          ]]
+
+[[[@../../test/compile_fail/test_bimap_mutable_2.cpp 
+    test_bimap_mutable_2.cpp                                        ]]
+    [Mutable members compilation fail test                          ]]
+
+[[[@../../test/compile_fail/test_bimap_mutable_3.cpp 
+    test_bimap_mutable_3.cpp                                        ]]
+    [Mutable members compilation fail test                          ]]
+
 ]
 
 [endsect]

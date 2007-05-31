@@ -149,20 +149,15 @@ this tags.
         // Metadata
 
         typedef ``['-unspecified-]`` left_tag;
-        typedef ``['-unspecified-]`` left_value_type;
-        typedef ``['-unspecified-]`` left_key_type;
-        typedef ``['-unspecified-]`` left_data_type;
-        typedef ``['-unspecified-]`` left_iterator;
-        typedef ``['-unspecified-]`` left_const_iterator;
         typedef ``['-unspecified-]`` left_map;
 
         typedef ``['-unspecified-]`` right_tag;
-        typedef ``['-unspecified-]`` right_value_type;
-        typedef ``['-unspecified-]`` right_key_type;
-        typedef ``['-unspecified-]`` right_data_type;
-        typedef ``['-unspecified-]`` right_iterator;
-        typedef ``['-unspecified-]`` right_const_iterator;
         typedef ``['-unspecified-]`` right_map;
+
+        // Shortcuts
+        // typedef -side-_map::-type- -side-_-type-;
+
+        typedef ``['-unspecified-]`` info_type;
 
         // Map views
 

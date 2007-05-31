@@ -120,6 +120,8 @@ look at it as a whole, you will be using a set view.
         typedef ``['-unspecified-]`` reverse_iterator;
         typedef ``['-unspecified-]`` const_reverse_iterator;
 
+        typedef ``['-unspecified-]`` info_type;
+
         this_type & operator=(const this_type & x);
 
         allocator_type get_allocator() const;
@@ -253,6 +255,17 @@ look at it as a whole, you will be using a set view.
 
             template< class CompatibleKey >
             data_type & ``[link reference_set_of_at_key at]``(const CompatibleKey & k);
+
+            // }
+
+            // Only if info_hook is used
+            // {
+
+            template< class CompatibleKey >
+            info_type & ``[link reference_set_of_info_at_key info_at]``(const CompatibleKey & k);
+
+            template< class CompatibleKey >
+            const info_type & ``[link reference_set_of_info_at_key info_at]``(const CompatibleKey & k) const;
 
             // }
 
@@ -789,7 +802,7 @@ all values of type `key_type` satisfy.
 
 [endsect]
 
-[section at() and operator\[\] - set_of only]
+[section at(), info_at() and operator\[\] - set_of only]
 
 [#reference_set_of_at_key_const]
 
@@ -859,6 +872,22 @@ assignment is not allowed by one of the other views of the `bimap`.
 the order is O(log(n)). If it is used, the order is O(I(n)) if `k` was not
 in the bimap and O(R(n)) if it existed in the bimap.
 ]
+
+
+[#reference_set_of_info_at_key]
+
+    template< class CompatibleKey >
+    info_type & info_at(const CompatibleKey & k);
+
+    template< class CompatibleKey >
+    const info_type & info_at(const CompatibleKey & k) const;
+
+* [*Requires: ] `CompatibleKey` is a compatible key of `key_compare`.
+* [*Effects:] Returns the `info_type` reference that is associated with `k`, or
+throws `std::out_of_range` if such key does not exist.
+* [*Complexity:] O(log(n)).
+* [*Note:] Only provided when `set_of` and `info_hook` are used
+
 
 [endsect]
 
