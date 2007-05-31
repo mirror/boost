@@ -20,7 +20,6 @@
 
 // Boost
 #include <boost/serialization/nvp.hpp>
-#include <boost/type_traits/remove_reference.hpp>
 #include <boost/iterator/detail/enable_if.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/bimap/relation/support/get_pair_functor.hpp>
@@ -49,13 +48,7 @@ struct set_view_iterator_base
     <
         set_view_iterator< CoreIterator >,
         CoreIterator,
-        BOOST_DEDUCED_TYPENAME remove_reference
-        <
-            BOOST_DEDUCED_TYPENAME CoreIterator::value_type::above_view_reference
-
-        >::type,
-        ::boost::use_default,
-        BOOST_DEDUCED_TYPENAME CoreIterator::value_type::above_view_reference
+        BOOST_DEDUCED_TYPENAME CoreIterator::value_type::above_view
 
     > type;
 };
@@ -68,13 +61,6 @@ struct set_view_iterator : public set_view_iterator_base<CoreIterator>::type
     typedef BOOST_DEDUCED_TYPENAME set_view_iterator_base<CoreIterator>::type base_;
 
     public:
-
-    // The best way will be to pass the correct "value_type" to
-    // iterator_adaptor and to set the "pointer" to Reference*, but
-    // iterator_adaptor and iterator_facade defines "pointer" as 
-    // value_type* and do not allow this to be changed.
-
-    typedef BOOST_DEDUCED_TYPENAME CoreIterator::value_type::above_view value_type;
 
     set_view_iterator() {}
 
@@ -132,13 +118,7 @@ struct const_set_view_iterator_base
     <
         const_set_view_iterator< CoreIterator >,
         CoreIterator,
-        BOOST_DEDUCED_TYPENAME remove_reference
-        <
-            BOOST_DEDUCED_TYPENAME CoreIterator::value_type::const_above_view_reference
-
-        >::type,
-        ::boost::use_default,
-        BOOST_DEDUCED_TYPENAME CoreIterator::value_type::const_above_view_reference
+        const BOOST_DEDUCED_TYPENAME CoreIterator::value_type::above_view
 
     > type;
 };
@@ -157,13 +137,6 @@ struct const_set_view_iterator : public const_set_view_iterator_base<CoreIterato
     typedef BOOST_DEDUCED_TYPENAME const_set_view_iterator_base<CoreIterator>::type base_;
 
     public:
-
-    // The best way will be to pass the correct "value_type" to
-    // iterator_adaptor and to set the "pointer" to Reference*, but
-    // iterator_adaptor and iterator_facade defines "pointer" as value_type*
-    // and do not allow this to be changed.
-
-    typedef BOOST_DEDUCED_TYPENAME CoreIterator::value_type::above_view value_type;
 
     const_set_view_iterator() {}
 

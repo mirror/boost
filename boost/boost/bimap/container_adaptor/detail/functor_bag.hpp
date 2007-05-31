@@ -67,8 +67,10 @@ struct data_with_functor_bag :
     >::type
 {
     Data data;
+
     data_with_functor_bag() {}
-    data_with_functor_bag(BOOST_DEDUCED_TYPENAME add_reference<Data>::type const d) 
+
+    data_with_functor_bag(BOOST_DEDUCED_TYPENAME add_reference<Data>::type d)
         : data(d) {}
 
     template< class Functor >

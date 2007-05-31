@@ -30,12 +30,22 @@
 
 namespace boost {
 namespace bimaps {
+
+template< class Type >
+struct info_hook
+{
+    typedef Type value_type;
+};
+
 namespace detail {
 
 /// \brief Metafunction to check if a given type is a data_hook specification.
 
 template< class Type >
-struct is_data_hook : ::boost::mpl::false_ {};
+struct is_info_hook : ::boost::mpl::false_ {};
+
+template< class ValueType >
+struct is_info_hook< info_hook<ValueType> > : ::boost::mpl::true_ {};
 
 /** \struct boost::bimaps::detail::manage_additional_parameters
 \brief Utility class to extract the additional parameters from the template parameters.
@@ -67,102 +77,110 @@ struct manage_additional_parameters
     //         not_specified,not_specified,not_specified>
     //
     //     set_type_of_relation: based on the left key type
-    //     hook_data:            no additional data
+    //     info_hook:            no additional info
     //     allocator:            default allocator
 
     struct case_NNN
     {
         typedef left_based set_type_of_relation;
         typedef std::allocator<void> allocator;
+        typedef ::boost::mpl::na additional_info;
     };
 
     // (2) manage_additional_parameters<Allocator,not_specified,not_specified>
     //
     //     set_type_of_relation: based on the left key type
-    //     hook_data:            no additional data
+    //     info_hook:            no additional info
     //     allocator:            Allocator
 
     struct case_ANN
     {
         typedef left_based set_type_of_relation;
         typedef AP1 allocator;
+        typedef ::boost::mpl::na additional_info;
     };
 
     // (3) manage_additional_parameters<
     //         SetOfRelationType,not_specified,not_specified>
     //
     //     set_type_of_relation: SetTypeOfRelation
-    //     hook_data:            no additional data
+    //     info_hook:            no additional info
     //     allocator:            default allocator
 
     struct case_SNN
     {
         typedef AP1 set_type_of_relation;
         typedef std::allocator<void> allocator;
+        typedef ::boost::mpl::na additional_info;
     };
 
     // (4) manage_additional_parameters<
     //          SetTypeOfRelation,Allocator,not_specified>
     //
     //     set_type_of_relation: SetTypeOfRelation
-    //     hook_data:            no additional data
+    //     info_hook:            no additional info
     //     allocator:            Allocator
 
     struct case_SAN
     {
         typedef AP1 set_type_of_relation;
         typedef AP2 allocator;
+        typedef ::boost::mpl::na additional_info;
     };
 
-    // (5) manage_additional_parameters<DataToHook,not_specified,not_specified>
+    // (5) manage_additional_parameters<InfoToHook,not_specified,not_specified>
     //
     //     set_type_of_relation: based on the left key type
-    //     hook_data:            DataToHook
+    //     info_hook:            InfoToHook
     //     allocator:            default allocator
 
     struct case_HNN
     {
         typedef left_based set_type_of_relation;
         typedef std::allocator<void> allocator;
+        typedef BOOST_DEDUCED_TYPENAME AP1::value_type additional_info;
     };
 
     // (6) manage_additional_parameters<
-    //         SetTypeOfRelation,DataToHook,not_specified>
+    //         SetTypeOfRelation,InfoToHook,not_specified>
     //
     //     set_type_of_relation: SetTypeOfRelation
-    //     hook_data:            DataToHook
+    //     info_hook:            InfoToHook
     //     allocator:            default allocator
 
     struct case_SHN
     {
         typedef AP1 set_type_of_relation;
         typedef std::allocator<void> allocator;
+        typedef BOOST_DEDUCED_TYPENAME AP2::value_type additional_info;
     };
 
     // (7) manage_additional_parameters<
     //         DataToHook,Allocator,not_specified>
     //
     //     set_type_of_relation: SetTypeOfRelation
-    //     hook_data:            DataToHook
+    //     info_hook:            InfoToHook
     //     allocator:            default allocator
 
     struct case_HAN
     {
         typedef left_based set_type_of_relation;
         typedef AP2 allocator;
+        typedef BOOST_DEDUCED_TYPENAME AP1::value_type additional_info;
     };
 
     // (8) manage_additional_parameters<
     //         SetTypeOfRelation,DataToHook,Allocator>
     //
     //     set_type_of_relation: SetTypeOfRelation
-    //     hook_data:            DataToHook
+    //     info_hook:            InfoToHook
     //     allocator:            Allocator
 
     struct case_SHA
     {
         typedef AP1 set_type_of_relation;
         typedef AP2 allocator;
+        typedef BOOST_DEDUCED_TYPENAME AP2::value_type additional_info;
     };
 
     // Some annidated mpl::if_ and we are done!
@@ -180,7 +198,7 @@ struct manage_additional_parameters
                 case_SNN, // (3)
                 BOOST_DEDUCED_TYPENAME mpl::if_
                 <
-                    is_data_hook<AP1>,
+                    is_info_hook<AP1>,
                     case_HNN, // (5)
                     case_ANN  // (2)
 
@@ -192,11 +210,11 @@ struct manage_additional_parameters
                 ::boost::mpl::is_na<AP3>,
                 BOOST_DEDUCED_TYPENAME mpl::if_
                 <
-                    is_data_hook<AP1>,
+                    is_info_hook<AP1>,
                     case_HAN, // (7)
                     BOOST_DEDUCED_TYPENAME mpl::if_
                     <
-                        is_data_hook<AP2>,
+                        is_info_hook<AP2>,
                         case_SHN, // (6)
                         case_SAN  // (4)
 

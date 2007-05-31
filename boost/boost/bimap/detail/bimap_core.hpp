@@ -35,8 +35,9 @@
 #include <boost/multi_index/member.hpp>
 
 // Boost.Bimap
-#include <boost/bimap/relation/relation.hpp>
+#include <boost/bimap/relation/mutant_relation.hpp>
 #include <boost/bimap/relation/member_at.hpp>
+#include <boost/bimap/relation/support/data_extractor.hpp>
 #include <boost/bimap/tags/support/apply_to_value_type.hpp>
 #include <boost/bimap/detail/manage_bimap_key.hpp>
 #include <boost/bimap/detail/manage_additional_parameters.hpp>
@@ -147,7 +148,7 @@ struct bimap_core
     // --------------------------------------------------------------------
     public:
 
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::select_relation
+    typedef ::boost::bimaps::relation::mutant_relation
     <
 
         ::boost::bimaps::tags::tagged<
@@ -188,10 +189,13 @@ struct bimap_core
             right_tag
         >,
 
+        // It is ::boost::mpl::na if no info_hook was included
+        BOOST_DEDUCED_TYPENAME parameters::additional_info,
+
         // Force mutable keys
         true
 
-    >::type relation;
+    > relation;
 
     //@{
 
@@ -204,10 +208,12 @@ struct bimap_core
     // --------------------------------------------------------------------
     private:
 
-    typedef BOOST_MULTI_INDEX_MEMBER(relation, left_key_type, left)
+    typedef BOOST_DEDUCED_TYPENAME relation::storage_base relation_storage_base;
+
+    typedef BOOST_MULTI_INDEX_MEMBER(relation_storage_base, left_key_type, left)
         left_member_extractor;
 
-    typedef BOOST_MULTI_INDEX_MEMBER(relation,right_key_type,right)
+    typedef BOOST_MULTI_INDEX_MEMBER(relation_storage_base,right_key_type,right)
         right_member_extractor;
 
     // The core indices are somewhat complicated to calculate, because they
@@ -376,7 +382,7 @@ struct bimap_core
                 BOOST_DEDUCED_TYPENAME relation_set_type_of::
                 BOOST_NESTED_TEMPLATE index_bind
                 <
-                    multi_index::identity<relation>,
+                    ::boost::bimaps::relation::support::both_keys_extractor<relation>,
                     independent_index_tag
 
                 >::type

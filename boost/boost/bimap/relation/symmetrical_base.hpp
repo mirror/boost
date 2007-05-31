@@ -18,6 +18,9 @@
 
 #include <boost/config.hpp>
 
+#include <boost/mpl/if.hpp>
+#include <boost/type_traits/remove_const.hpp>
+
 // Boost.Bimap
 #include <boost/bimap/tags/tagged.hpp>
 #include <boost/bimap/tags/support/default_tagged.hpp>
@@ -34,7 +37,7 @@ namespace relation {
 
                                                            **/
 
-template< class TA, class TB >
+template< class TA, class TB, bool force_mutable = false >
 class symmetrical_base
 {
 
@@ -57,19 +60,29 @@ class symmetrical_base
     public:
 
     //@{
-
         /// The type stored in the relation
-        typedef BOOST_DEDUCED_TYPENAME tagged_left_type::value_type left_value_type;
-        typedef BOOST_DEDUCED_TYPENAME tagged_right_type::value_type right_value_type;
 
+        typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::if_c< force_mutable,
+
+            BOOST_DEDUCED_TYPENAME ::boost::remove_const<
+                BOOST_DEDUCED_TYPENAME tagged_left_type::value_type >::type,
+            BOOST_DEDUCED_TYPENAME tagged_left_type::value_type
+
+        >::type left_value_type;
+
+        typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::if_c< force_mutable,
+
+            BOOST_DEDUCED_TYPENAME ::boost::remove_const<
+                BOOST_DEDUCED_TYPENAME tagged_right_type::value_type >::type,
+            BOOST_DEDUCED_TYPENAME tagged_right_type::value_type
+
+        >::type right_value_type;
     //@}
 
     //@{
-
         /// The tag of the member. By default it is \c member_at::{side}
-        typedef BOOST_DEDUCED_TYPENAME tagged_left_type::tag left_tag;
+        typedef BOOST_DEDUCED_TYPENAME tagged_left_type ::tag  left_tag;
         typedef BOOST_DEDUCED_TYPENAME tagged_right_type::tag right_tag;
-
     //@}
 };
 

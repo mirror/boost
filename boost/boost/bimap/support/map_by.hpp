@@ -117,8 +117,6 @@ BOOST_BIMAP_SYMMETRIC_ACCESS_IMPLEMENTATION_BUILDER
 // Interface
 // --------------------------------------------------------------------------
 
-
-
 BOOST_BIMAP_SYMMETRIC_ACCESS_INTERFACE_BUILDER
 (
     map_by

@@ -157,27 +157,27 @@ template
 >
 class bimap
 :
-	// Bimap Core, use mpl magic to find the desired bimap type
+    // Bimap Core, use mpl magic to find the desired bimap type
 
     public ::boost::bimaps::detail::bimap_core<KeyTypeA,KeyTypeB,AP1,AP2,AP3>,
 
-	// You can use bimap as a collection of relations
+    // You can use bimap as a collection of relations
 
     public ::boost::bimaps::detail::bimap_core<KeyTypeA,KeyTypeB,AP1,AP2,AP3>
                 ::relation_set,
 
-	// Include extra typedefs (i.e. left_local_iterator for unordered_map)
+    // Include extra typedefs (i.e. left_local_iterator for unordered_map)
 
-	public ::boost::bimaps::detail:: left_map_view_extra_typedefs< 
-		BOOST_DEDUCED_TYPENAME ::boost::bimaps::detail::left_map_view_type<
-			::boost::bimaps::detail::bimap_core<KeyTypeA,KeyTypeB,AP1,AP2,AP3>
-		>::type
-	>,
-	public ::boost::bimaps::detail::right_map_view_extra_typedefs< 
-		BOOST_DEDUCED_TYPENAME ::boost::bimaps::detail::right_map_view_type<
-			::boost::bimaps::detail::bimap_core<KeyTypeA,KeyTypeB,AP1,AP2,AP3>
-		>::type
-	>
+    public ::boost::bimaps::detail:: left_map_view_extra_typedefs<
+        BOOST_DEDUCED_TYPENAME ::boost::bimaps::detail::left_map_view_type<
+            ::boost::bimaps::detail::bimap_core<KeyTypeA,KeyTypeB,AP1,AP2,AP3>
+        >::type
+    >,
+    public ::boost::bimaps::detail::right_map_view_extra_typedefs< 
+        BOOST_DEDUCED_TYPENAME ::boost::bimaps::detail::right_map_view_type<
+            ::boost::bimaps::detail::bimap_core<KeyTypeA,KeyTypeB,AP1,AP2,AP3>
+        >::type
+    >
 {
     typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::detail::
         bimap_core<KeyTypeA,KeyTypeB,AP1,AP2,AP3> base_;
@@ -204,9 +204,9 @@ class bimap
 
     ------------------------------------------------------------------*/
 
-	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::detail:: 
+    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::detail::
           left_map_view_type<base_>::type  left_map;
-	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::detail::
+    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::detail::
          right_map_view_type<base_>::type right_map;
 
     typedef BOOST_DEDUCED_TYPENAME
@@ -218,6 +218,8 @@ class bimap
         right_map::reference       right_reference;
     typedef BOOST_DEDUCED_TYPENAME
         right_map::const_reference right_const_reference;
+
+    typedef BOOST_DEDUCED_TYPENAME base_::relation::info_type info_type;
 
     /// Left map view
     left_map  left;

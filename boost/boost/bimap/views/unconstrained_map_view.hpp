@@ -33,6 +33,7 @@ class unconstrained_map_view
 
     typedef void reference;
     typedef void const_reference;
+    typedef void info_type;
 };
 
 } // namespace views

@@ -65,12 +65,14 @@ class unordered_multimap_view
     typedef std::pair<
         BOOST_DEDUCED_TYPENAME base_::iterator,
         BOOST_DEDUCED_TYPENAME base_::iterator
-	> range_type;
+    > range_type;
 
     typedef std::pair<
         BOOST_DEDUCED_TYPENAME base_::const_iterator,
         BOOST_DEDUCED_TYPENAME base_::const_iterator
-	> const_range_type;
+    > const_range_type;
+
+    typedef BOOST_DEDUCED_TYPENAME base_::value_type::info_type info_type;
 
     unordered_multimap_view(BOOST_DEDUCED_TYPENAME base_::base_type & c)
         : base_(c) {}
@@ -90,34 +92,33 @@ class unordered_multimap_view
 /*===========================================================================*/
 #define BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,TYPENAME)            \
 typedef BOOST_DEDUCED_TYPENAME MAP_VIEW::TYPENAME                             \
-	BOOST_PP_CAT(SIDE,BOOST_PP_CAT(_,TYPENAME));
+    BOOST_PP_CAT(SIDE,BOOST_PP_CAT(_,TYPENAME));
 /*===========================================================================*/
 
 /*===========================================================================*/
 #define BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY(MAP_VIEW,SIDE)               \
-	BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,local_iterator)          \
-	BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,const_local_iterator)    \
-	BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,range_type)	          \
-	BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,const_range_type)        \
-	BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,hasher)		          \
-	BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,key_equal)
+    BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,local_iterator)          \
+    BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,const_local_iterator)    \
+    BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,range_type)              \
+    BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,const_range_type)        \
+    BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,hasher)                  \
+    BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,key_equal)
 /*===========================================================================*/
 
 namespace detail {
 
 template< class Tag, class BimapType >
- 
 struct left_map_view_extra_typedefs< ::boost::bimaps::views::unordered_multimap_view<Tag,BimapType> >
 {
     private: typedef ::boost::bimaps::views::unordered_multimap_view<Tag,BimapType> map_view_;
-	public : BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY(map_view_,left)
+    public : BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY(map_view_,left)
 };
 
 template< class Tag, class BimapType >
 struct right_map_view_extra_typedefs< ::boost::bimaps::views::unordered_multimap_view<Tag,BimapType> >
 {
     private: typedef ::boost::bimaps::views::unordered_multimap_view<Tag,BimapType> map_view_;
-	public : BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY(map_view_,right)
+    public : BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY(map_view_,right)
 };
 
 } // namespace detail

@@ -20,7 +20,6 @@
 
 // Boost
 #include <boost/serialization/nvp.hpp>
-#include <boost/type_traits/remove_reference.hpp>
 #include <boost/iterator/detail/enable_if.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/bimap/relation/support/pair_by.hpp>
@@ -40,15 +39,8 @@ struct map_view_iterator_base
     <
         map_view_iterator< Tag, Relation, CoreIterator >,
         CoreIterator,
-        BOOST_DEDUCED_TYPENAME remove_reference
-        <
-            BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-                        pair_reference_type_by<Tag,Relation>::type
-
-        >::type,
-        ::boost::use_default,
         BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-                    pair_reference_type_by<Tag,Relation>::type
+            pair_type_by<Tag,Relation>::type
 
     > type;
 };
@@ -70,17 +62,6 @@ struct map_view_iterator : public map_view_iterator_base<Tag,Relation,CoreIterat
         map_view_iterator_base<Tag,Relation,CoreIterator>::type base_;
 
     public:
-
-    // The best way will be to pass the correct "value_type" to
-    // iterator_adaptor and to set the "pointer" to Reference*, but
-    // iterator_adaptor and iterator_facade defines "pointer" as value_type*
-    // and do not allow this to be changed.
-
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::pair_type_by
-    <
-        Tag, Relation
-
-    >::type value_type;
 
     map_view_iterator() {}
 
@@ -140,15 +121,8 @@ struct const_map_view_iterator_base
     <
         const_map_view_iterator< Tag, Relation, CoreIterator >,
         CoreIterator,
-        BOOST_DEDUCED_TYPENAME remove_reference
-        <
-            BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-                            const_pair_reference_type_by<Tag,Relation>::type
-
-        >::type,
-        ::boost::use_default,
-        BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-                            const_pair_reference_type_by<Tag,Relation>::type
+        const BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
+             pair_type_by<Tag,Relation>::type
 
     > type;
 };
@@ -170,17 +144,6 @@ struct const_map_view_iterator :
         const_map_view_iterator_base<Tag,Relation,CoreIterator>::type base_;
 
     public:
-
-    // The best way will be to pass the correct "value_type" to
-    // iterator_adaptor and to set the "pointer" to Reference*, but
-    // iterator_adaptor and iterator_facade defines "pointer" as 
-    // value_type* and do not allow this to be changed.
-
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::pair_type_by
-    <
-        Tag, Relation
-
-    >::type value_type;
 
     const_map_view_iterator() {}
 

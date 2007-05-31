@@ -24,17 +24,14 @@
 #include <boost/bimap/detail/set_view_iterator.hpp>
 #include <boost/bimap/relation/support/get_pair_functor.hpp>
 #include <boost/bimap/relation/detail/to_mutable_relation_functor.hpp>
-
+#include <boost/bimap/relation/mutant_relation.hpp>
 
 namespace boost {
 namespace bimaps {
 namespace detail {
 
-// This helper functor can be eliminated if the we do not
-// have to support the standard relation
-
 template< class Key, class Value, class KeyToBase >
-class forced_extractor
+class set_view_key_to_base
 {
     public:
     const Key operator()( const Value & v ) const
@@ -45,11 +42,31 @@ class forced_extractor
     KeyToBase keyToBase;
 };
 
-template< class Key, class KeyToBase >
-class forced_extractor<Key,Key,KeyToBase>
+template< class TA, class TB, class Info, class KeyToBase >
+class set_view_key_to_base<
+    BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::
+        mutant_relation<TA,TB,Info,true>::base_storage,
+    BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::
+        mutant_relation<TA,TB,Info,true>::base_storage,
+    KeyToBase
+>
 {
     public:
-    const Key & operator()( const Key & k ) const
+    const BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::
+        mutant_relation<TA,TB,Info,true>::base_storage &
+            operator()( const BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::
+                            mutant_relation<TA,TB,Info,false>::base_storage & k ) const
+    {
+        return ::boost::bimaps::relation::detail::mutate<
+            BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::
+                mutant_relation<TA,TB,Info,true>::base_storage
+        >(k);
+    }
+
+    const BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::
+        mutant_relation<TA,TB,Info,true>::base_storage &
+            operator()( const BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::
+                            mutant_relation<TA,TB,Info,true>::base_storage & k ) const
     {
         return k;
     }
@@ -92,7 +109,7 @@ class forced_extractor<Key,Key,KeyToBase>
     ::boost::bimaps::relation::support::                                      \
         get_above_view_functor<                                               \
             BOOST_DEDUCED_TYPENAME CORE_INDEX::value_type >,                  \
-    ::boost::bimaps::detail::forced_extractor<                                \
+    ::boost::bimaps::detail::set_view_key_to_base<                            \
         BOOST_DEDUCED_TYPENAME CORE_INDEX::key_type,                          \
         BOOST_DEDUCED_TYPENAME CORE_INDEX::value_type,                        \
         BOOST_DEDUCED_TYPENAME CORE_INDEX::key_from_value                     \

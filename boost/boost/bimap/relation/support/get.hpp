@@ -18,15 +18,9 @@
 
 #include <boost/config.hpp>
 
-#include <boost/bimap/relation/standard_relation_fwd.hpp>
-
 #include <boost/bimap/relation/support/value_type_of.hpp>
+
 #include <boost/bimap/relation/detail/access_builder.hpp>
-
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/or.hpp>
-#include <boost/utility/enable_if.hpp>
-
 
 
 #ifdef BOOST_BIMAP_ONLY_DOXYGEN_WILL_PROCESS_THE_FOLLOWING_LINES
@@ -115,48 +109,10 @@ BOOST_BIMAP_SYMMETRIC_ACCESS_IMPLEMENTATION_BUILDER
 // Interface
 //----------------------------------------------------------------------------
 
-template< class Tag, class Symmetric >
-BOOST_DEDUCED_TYPENAME enable_if<
-    ::boost::mpl::or_<
-        is_standard_pair_view< Symmetric >,
-        is_standard_relation_view< Symmetric >
-    >,
-BOOST_DEDUCED_TYPENAME result_of::get< Tag, Symmetric >::type
-
->::type
-get( Symmetric s )
-{
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-    member_with_tag
-    <
-        Tag, Symmetric
-
-    >::type member_at_tag;
-
-    return detail::get(member_at_tag(),s);
-}
-
-template< class Tag, class Symmetric >
-BOOST_DEDUCED_TYPENAME disable_if<
-    ::boost::mpl::or_<
-        is_standard_pair_view< Symmetric >,
-        is_standard_relation_view< Symmetric >
-    >,
-BOOST_DEDUCED_TYPENAME result_of::get< Tag, Symmetric >::type
-
->::type
-get( Symmetric & s )
-{
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-    member_with_tag
-    <
-        Tag, Symmetric
-
-    >::type member_at_tag;
-
-    return detail::get(member_at_tag(),s);
-}
-
+BOOST_BIMAP_SYMMETRIC_ACCESS_INTERFACE_BUILDER
+(
+    get
+)
 
 } // namespace support
 } // namespace relation

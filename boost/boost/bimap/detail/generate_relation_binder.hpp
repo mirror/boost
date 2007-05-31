@@ -49,7 +49,8 @@
         typedef SET_TYPE_OF                                                   \
         <                                                                     \
             Relation,                                                         \
-            BOOST_DEDUCED_TYPENAME mpl::apply<CP1,Relation>::type             \
+            BOOST_DEDUCED_TYPENAME mpl::apply<CP1,                            \
+                BOOST_DEDUCED_TYPENAME Relation::storage_base >::type         \
                                                                               \
         > type;                                                               \
                                                                               \
@@ -72,8 +73,10 @@
         typedef SET_TYPE_OF                                                   \
         <                                                                     \
             Relation,                                                         \
-            BOOST_DEDUCED_TYPENAME mpl::apply<CP1,Relation>::type,            \
-            BOOST_DEDUCED_TYPENAME mpl::apply<CP2,Relation>::type             \
+            BOOST_DEDUCED_TYPENAME mpl::apply<CP1,                            \
+                BOOST_DEDUCED_TYPENAME Relation::storage_base >::type,        \
+            BOOST_DEDUCED_TYPENAME mpl::apply<CP2,                            \
+                BOOST_DEDUCED_TYPENAME Relation::storage_base >::type         \
                                                                               \
         > type;                                                               \
                                                                               \

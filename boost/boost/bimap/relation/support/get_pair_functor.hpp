@@ -62,13 +62,13 @@ struct get_pair_functor
 template< class Relation >
 struct get_above_view_functor
 {
-    BOOST_DEDUCED_TYPENAME Relation::above_view_reference
+    BOOST_DEDUCED_TYPENAME Relation::above_view &
     operator()( Relation & r ) const
     {
         return r.get_view();
     }
 
-    BOOST_DEDUCED_TYPENAME Relation::const_above_view_reference
+    const BOOST_DEDUCED_TYPENAME Relation::above_view &
     operator()( const Relation & r ) const
     {
         return r.get_view();

@@ -18,12 +18,6 @@
 
 #include <boost/config.hpp>
 
-#include <boost/bimap/relation/standard_relation_fwd.hpp>
-
-#include <boost/type_traits/is_const.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/or.hpp>
-#include <boost/utility/enable_if.hpp>
 #include <boost/bimap/relation/support/pair_type_by.hpp>
 #include <boost/bimap/relation/detail/access_builder.hpp>
 
@@ -85,32 +79,14 @@ namespace support {
     };
 
     } // namespace result_of
-
 */
 
-// TODO
-// This works for Boost.Bimap but not for all the uses of Relation outside
-// Boost.Bimap. For now it will stay as is, because if standard_relation is
-// eliminated all the functions will be simplified.
-// It cannot be used directly BOOST_BIMAP_SYMMETRIC_ACCESS_RESULT_OF_BUILDER here.
+BOOST_BIMAP_SYMMETRIC_ACCESS_RESULT_OF_BUILDER
+(
+    pair_by,
+    pair_type_by
+)
 
-namespace result_of {
-
-template< class Tag, class Relation >
-struct pair_by
-{
-    typedef BOOST_DEDUCED_TYPENAME mpl::if_< is_const<Relation>,
-    // {
-           BOOST_DEDUCED_TYPENAME const_pair_reference_type_by< Tag,Relation >::type,
-    // }
-    // else
-    // {
-           BOOST_DEDUCED_TYPENAME pair_reference_type_by< Tag,Relation >::type
-    // }
-    >::type type;
-};
-
-} // namespace result_of
 
 
 // Implementation
@@ -128,47 +104,10 @@ BOOST_BIMAP_SYMMETRIC_ACCESS_IMPLEMENTATION_BUILDER
 // Interface
 // --------------------------------------------------------------------------
 
-template< class Tag, class Symmetric >
-BOOST_DEDUCED_TYPENAME enable_if<
-    ::boost::mpl::or_<
-        is_standard_pair_view< Symmetric >,
-        is_standard_relation_view< Symmetric >
-    >,
-BOOST_DEDUCED_TYPENAME result_of::pair_by< Tag, Symmetric >::type
-
->::type
-pair_by( Symmetric s )
-{
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-    member_with_tag
-    <
-        Tag, Symmetric
-
-    >::type member_at_tag;
-
-    return detail::pair_by(member_at_tag(),s);
-}
-
-template< class Tag, class Symmetric >
-BOOST_DEDUCED_TYPENAME disable_if<
-    ::boost::mpl::or_<
-        is_standard_pair_view< Symmetric >,
-        is_standard_relation_view< Symmetric >
-    >,
-BOOST_DEDUCED_TYPENAME result_of::pair_by< Tag, Symmetric >::type
-
->::type
-pair_by( Symmetric & s )
-{
-    typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
-    member_with_tag
-    <
-        Tag, Symmetric
-
-    >::type member_at_tag;
-
-    return detail::pair_by(member_at_tag(),s);
-}
+BOOST_BIMAP_SYMMETRIC_ACCESS_INTERFACE_BUILDER
+(
+    pair_by
+)
 
 } // namespace support
 } // namespace relation

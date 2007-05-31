@@ -82,6 +82,22 @@ struct data_extractor
     > type;
 };
 
+template< class Relation >
+struct both_keys_extractor
+{
+    typedef BOOST_DEDUCED_TYPENAME Relation::storage_base result_type;
+
+     const result_type & operator()(const Relation & rel) const
+    {
+        return rel;
+    }
+
+    result_type & operator()( Relation & rel) const
+    {
+        return rel;
+    }
+};
+
 } // namespace support
 } // namespace relation
 } // namespace bimaps
