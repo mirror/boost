@@ -26,8 +26,6 @@ namespace boost { namespace fusion
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/quant_style.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
-#include <boost/xpressive/detail/static/width_of.hpp>
-#include <boost/xpressive/detail/static/is_pure.hpp>
 #include <boost/xpressive/detail/dynamic/matchable.hpp>
 #include <boost/xpressive/detail/utility/hash_peek_bitset.hpp>
 #include <boost/xpressive/detail/utility/algorithm.hpp>

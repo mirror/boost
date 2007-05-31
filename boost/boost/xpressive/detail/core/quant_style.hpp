@@ -54,7 +54,7 @@ struct quant_style
     typedef void is_boost_xpressive_xpression_;
 
     // Which quantification strategy to use?
-    BOOST_STATIC_CONSTANT(quant_enum, quant = QuantStyle);
+    BOOST_STATIC_CONSTANT(int, quant = QuantStyle);
 
     // how many characters this matcher consumes
     BOOST_STATIC_CONSTANT(std::size_t, width = Width);
@@ -70,7 +70,7 @@ struct quant_style
 
 #define BOOST_XPR_QUANT_STYLE(Style, Width, Pure)\
     typedef void is_boost_xpressive_xpression_;\
-    BOOST_STATIC_CONSTANT(quant_enum, quant = Style);\
+    BOOST_STATIC_CONSTANT(int, quant = Style);\
     BOOST_STATIC_CONSTANT(std::size_t, width = Width);\
     BOOST_STATIC_CONSTANT(bool, pure = Pure);\
     static detail::width get_width() { return width; }\

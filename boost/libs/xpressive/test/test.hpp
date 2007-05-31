@@ -170,9 +170,9 @@ inline void display_type2()
     string_remove(str, "fusion::");
 
     //std::printf("%s\n\n", str.c_str());
-    std::printf("%s\nwdith=%d\nis_pure=%s\n\n", str.c_str()
-        , detail::width_of<T>::value
-        , detail::is_pure<T>::value ? "true" : "false");
+    std::printf("%s\nwdith=%d\nuse_simple_repeat=%s\n\n", str.c_str()
+        , detail::width_of<T, char>::value
+        , detail::use_simple_repeat<T, char>::value ? "true" : "false");
 }
 
 ///////////////////////////////////////////////////////////////////////////////

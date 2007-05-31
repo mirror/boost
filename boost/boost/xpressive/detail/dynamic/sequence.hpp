@@ -41,7 +41,7 @@ struct sequence
     sequence(intrusive_ptr<dynamic_xpression<Matcher, BidiIter> > const &xpr)
       : pure_(Matcher::pure)
       , width_(xpr->Matcher::get_width())
-      , quant_(Matcher::quant)
+      , quant_(static_cast<quant_enum>(Matcher::quant))
       , head_(xpr)
       , tail_(&xpr->next_)
       , alt_end_xpr_()

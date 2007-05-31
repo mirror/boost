@@ -16,6 +16,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/xpressive/detail/static/is_pure.hpp>
 #include <boost/xpressive/proto/proto.hpp>
 #include <boost/xpressive/proto/transform/arg.hpp>
 #include <boost/xpressive/proto/transform/fold.hpp>
@@ -64,7 +65,7 @@ namespace boost { namespace xpressive
         template<typename Char, typename Tag, bool Greedy>
         struct as_repeat
           : proto::trans::conditional<
-                use_simple_repeat<proto::result_of::arg<mpl::_> >
+                use_simple_repeat<proto::result_of::arg<mpl::_>, Char>
               , as_simple_quantifier<proto::unary_expr<Tag, Grammar<Char> >, Greedy>
               , as_default_quantifier<proto::unary_expr<Tag, Grammar<Char> >, Greedy>
             >

@@ -25,212 +25,201 @@
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/proto/traits.hpp>
 
-///////////////////////////////////////////////////////////////////////////////
-// add widths
-#define BOOST_XPR_ADD_WIDTH_(X, Y)                                                                  \
-    mpl::if_<                                                                                       \
-        mpl::or_<mpl::equal_to<X, unknown_width>, mpl::equal_to<Y, unknown_width> >                 \
-      , unknown_width                                                                               \
-      , mpl::plus<X, Y >                                                                            \
-    >::type
-
-///////////////////////////////////////////////////////////////////////////////
-// multiply widths
-#define BOOST_XPR_MULT_WIDTH_(X, Y)                                                                 \
-    mpl::if_<                                                                                       \
-        mpl::or_<mpl::equal_to<X, unknown_width>, mpl::equal_to<Y, unknown_width> >                 \
-      , unknown_width                                                                               \
-      , mpl::times<X, Y >                                                                           \
-    >::type
-
-///////////////////////////////////////////////////////////////////////////////
-// check widths for equality
-#define BOOST_XPR_EQUAL_WIDTH_(X, Y)                                                                \
-    mpl::if_<                                                                                       \
-        mpl::equal_to<X, Y >                                                                        \
-      , X                                                                                           \
-      , unknown_width                                                                               \
-    >::type
-
 namespace boost { namespace xpressive { namespace detail
 {
 
     ///////////////////////////////////////////////////////////////////////////////
     // width_of_terminal
     //
-    template<typename Expr, bool IsXpr = is_xpr<Expr>::value>
+    template<typename Expr, typename Char, bool IsXpr = is_xpr<Expr>::value>
     struct width_of_terminal
-      : mpl::size_t<Expr::width>      // char literals
+      : mpl::size_t<Expr::width>    // xpressive literals
     {};
 
-    // BUGBUG this is wrong!!!
-    template<typename Expr>
-    struct width_of_terminal<Expr, false>
+    template<typename Expr, typename Char>
+    struct width_of_terminal<Expr, Char, false>
+      : unknown_width       // unknown literals (eg, basic_string, basic_regex, etc.)
+    {};
+
+    template<typename Char>
+    struct width_of_terminal<Char, Char, false>
       : mpl::size_t<1>      // char literals
     {};
 
-    template<typename Expr>
-    struct width_of_terminal<Expr *, false>
-      : unknown_width       // string literals
+    template<typename Char>
+    struct width_of_terminal<char, Char, false>
+      : mpl::size_t<1>      // char literals
     {};
 
-    template<typename Char, std::size_t N>
-    struct width_of_terminal<Char (&) [N], false>
+    template<>
+    struct width_of_terminal<char, char, false>
+      : mpl::size_t<1>      // char literals
+    {};
+
+    template<typename Elem, std::size_t N, typename Char>
+    struct width_of_terminal<Elem (&) [N], Char, false>
       : mpl::size_t<N-1>    // string literals
     {};
 
-    template<typename Char, std::size_t N>
-    struct width_of_terminal<Char const (&) [N], false>
+    template<typename Elem, std::size_t N, typename Char>
+    struct width_of_terminal<Elem const (&) [N], Char, false>
       : mpl::size_t<N-1>    // string literals
-    {};
-
-    template<typename BidiIter>
-    struct width_of_terminal<tracking_ptr<regex_impl<BidiIter> >, false>
-      : unknown_width       // basic_regex
-    {};
-
-    template<typename BidiIter>
-    struct width_of_terminal<reference_wrapper<basic_regex<BidiIter> >, false>
-      : unknown_width       // basic_regex
-    {};
-
-    template<typename BidiIter>
-    struct width_of_terminal<reference_wrapper<basic_regex<BidiIter> const>, false>
-      : unknown_width       // basic_regex
     {};
 
     ///////////////////////////////////////////////////////////////////////////////
     // width_of
     //
-    template<typename Expr, typename Tag = typename Expr::tag_type>
-    struct width_of;
-
-    template<typename Expr>
-    struct width_of<Expr, proto::tag::terminal>
-      : width_of_terminal<typename proto::result_of::arg<Expr>::type>
+    template<typename Expr, typename Char, typename Tag = typename Expr::tag_type>
+    struct width_of
     {};
 
-    template<typename Expr>
-    struct width_of<Expr, proto::tag::shift_right>
-      : BOOST_XPR_ADD_WIDTH_(
-            width_of<typename proto::result_of::left<Expr>::type>
-          , width_of<typename proto::result_of::right<Expr>::type>
-        )
+    template<typename Expr, typename Char>
+    struct width_of<Expr, Char, proto::tag::terminal>
+      : width_of_terminal<typename proto::result_of::arg<Expr>::type, Char>
     {};
 
-    template<typename Expr>
-    struct width_of<Expr, proto::tag::bitwise_or>
-      : BOOST_XPR_EQUAL_WIDTH_(
-            width_of<typename proto::result_of::left<Expr>::type>
-          , width_of<typename proto::result_of::right<Expr>::type>
-        )
+    template<typename Expr, typename Char>
+    struct width_of<Expr, Char, proto::tag::shift_right>
+      : mpl::if_<
+            mpl::or_<
+                mpl::equal_to<unknown_width, width_of<typename Expr::arg0_type::type, Char> >
+              , mpl::equal_to<unknown_width, width_of<typename Expr::arg1_type::type, Char> >
+            >
+          , unknown_width
+          , mpl::plus<
+                width_of<typename Expr::arg0_type::type, Char>
+              , width_of<typename Expr::arg1_type::type, Char>
+            >
+        >::type
     {};
 
-    template<typename Expr, typename Left>
+    template<typename Expr, typename Char>
+    struct width_of<Expr, Char, proto::tag::bitwise_or>
+      : mpl::if_<
+            mpl::or_<
+                mpl::equal_to<unknown_width, width_of<typename Expr::arg0_type::type, Char> >
+              , mpl::not_equal_to<
+                    width_of<typename Expr::arg0_type::type, Char>
+                  , width_of<typename Expr::arg1_type::type, Char>
+                >
+            >
+          , unknown_width
+          , width_of<typename Expr::arg0_type::type, Char>
+        >::type
+    {};
+
+    template<typename Expr, typename Char, typename Left>
     struct width_of_assign;
 
-    template<typename Expr>
-    struct width_of_assign<Expr, basic_mark_tag>
-      : width_of<typename proto::result_of::right<Expr>::type>
+    template<typename Expr, typename Char>
+    struct width_of_assign<Expr, Char, basic_mark_tag>
+      : width_of<typename Expr::arg1_type::type, Char>
     {};
 
-    template<typename Expr>
-    struct width_of_assign<Expr, set_initializer_type>
+    template<typename Expr, typename Char>
+    struct width_of_assign<Expr, Char, set_initializer_type>
       : mpl::size_t<1>
     {};
 
-    template<typename Expr>
-    struct width_of<Expr, proto::tag::assign>
-      : width_of_assign<Expr, typename proto::result_of::left<Expr>::type>
+    template<typename Expr, typename Char>
+    struct width_of<Expr, Char, proto::tag::assign>
+      : width_of_assign<Expr, Char, typename Expr::arg0_type::type>
     {};
 
-    template<typename Expr>
-    struct width_of<Expr, modifier_tag>
-      : width_of<typename proto::result_of::right<Expr>::type>
+    template<typename Expr, typename Char>
+    struct width_of<Expr, Char, modifier_tag>
+      : width_of<typename Expr::arg1_type::type, Char>
     {};
 
-    template<typename Expr>
-    struct width_of<Expr, lookahead_tag>
+    template<typename Expr, typename Char>
+    struct width_of<Expr, Char, lookahead_tag>
       : mpl::size_t<0>
     {};
 
-    template<typename Expr>
-    struct width_of<Expr, lookbehind_tag>
+    template<typename Expr, typename Char>
+    struct width_of<Expr, Char, lookbehind_tag>
       : mpl::size_t<0>
     {};
 
     // keep() is used to turn off backtracking, so they should only be used
     // for things that are variable-width (eg. quantified)
-    template<typename Expr>
-    struct width_of<Expr, keeper_tag>
+    template<typename Expr, typename Char>
+    struct width_of<Expr, Char, keeper_tag>
       : unknown_width
     {
         // If this assert fires, you put something that doesn't require backtracking
         // in a keep(). In that case, the keep() is not necessary and you should just
         // remove it.
-        BOOST_MPL_ASSERT_RELATION(width_of<typename proto::result_of::arg<Expr>::type>::value, ==, unknown_width::value);
+        BOOST_MPL_ASSERT_RELATION((width_of<typename Expr::arg0_type::type, Char>::value), ==, unknown_width::value);
     };
 
-    template<typename Expr>
-    struct width_of<Expr, proto::tag::posit>
+    template<typename Expr, typename Char>
+    struct width_of<Expr, Char, proto::tag::posit>
       : unknown_width
     {};
 
-    template<typename Expr>
-    struct width_of<Expr, proto::tag::dereference>
+    template<typename Expr, typename Char>
+    struct width_of<Expr, Char, proto::tag::dereference>
       : unknown_width
     {};
 
-    template<typename Expr>
-    struct width_of<Expr, proto::tag::logical_not>
+    template<typename Expr, typename Char>
+    struct width_of<Expr, Char, proto::tag::logical_not>
       : unknown_width
     {};
 
-    template<typename Expr, uint_t Min, uint_t Max>
-    struct width_of<Expr, generic_quant_tag<Min, Max> >
+    template<typename Expr, typename Char, uint_t Min, uint_t Max>
+    struct width_of<Expr, Char, generic_quant_tag<Min, Max> >
       : unknown_width
     {};
 
-    template<typename Expr, uint_t Count>
-    struct width_of<Expr, generic_quant_tag<Count, Count> >
-      : BOOST_XPR_MULT_WIDTH_(width_of<typename proto::result_of::arg<Expr>::type>, mpl::size_t<Count>)
+    template<typename Expr, typename Char, uint_t Count>
+    struct width_of<Expr, Char, generic_quant_tag<Count, Count> >
+      : mpl::if_<
+            mpl::equal_to<unknown_width, width_of<typename Expr::arg0_type::type, Char> >
+          , unknown_width
+          , mpl::times<
+                width_of<typename Expr::arg0_type::type, Char>
+              , mpl::size_t<Count>
+            >
+        >::type
     {};
 
-    template<typename Expr>
-    struct width_of<Expr, proto::tag::negate>
-      : width_of<typename proto::result_of::arg<Expr>::type>
+    template<typename Expr, typename Char>
+    struct width_of<Expr, Char, proto::tag::negate>
+      : width_of<typename Expr::arg0_type::type, Char>
     {};
 
     // when complementing a set or an assertion, the width is that of the set (1) or the assertion (0)
-    template<typename Expr>
-    struct width_of<Expr, proto::tag::complement>
-      : width_of<typename proto::result_of::arg<Expr>::type>
+    template<typename Expr, typename Char>
+    struct width_of<Expr, Char, proto::tag::complement>
+      : width_of<typename Expr::arg0_type::type, Char>
     {};
 
     // The comma is used in list-initialized sets, and the width of sets are 1
-    template<typename Expr>
-    struct width_of<Expr, proto::tag::comma>
+    template<typename Expr, typename Char>
+    struct width_of<Expr, Char, proto::tag::comma>
       : mpl::size_t<1>
     {};
 
     // The subscript operator[] is used for sets, as in set['a' | range('b','h')],
     // or for actions as in (any >> expr)[ action ]
-    template<typename Expr, typename Left>
+    template<typename Expr, typename Char, typename Left>
     struct width_of_subscript
-      : width_of<Left>
+      : width_of<Left, Char>
     {};
 
-    template<typename Expr>
-    struct width_of_subscript<Expr, set_initializer_type>
+    template<typename Expr, typename Char>
+    struct width_of_subscript<Expr, Char, set_initializer_type>
       : mpl::size_t<1>
     {
         // If Left is "set" then make sure that Right has a width_of 1
-        BOOST_MPL_ASSERT_RELATION(1, ==, width_of<typename proto::result_of::right<Expr>::type>::value);
+        BOOST_MPL_ASSERT_RELATION(1, ==, (width_of<typename Expr::arg1_type::type, Char>::value));
     };
 
-    template<typename Expr>
-    struct width_of<Expr, proto::tag::subscript>
-      : width_of_subscript<Expr, typename proto::result_of::left<Expr>::type>
+    template<typename Expr, typename Char>
+    struct width_of<Expr, Char, proto::tag::subscript>
+      : width_of_subscript<Expr, Char, typename Expr::arg0_type::type>
     {};
 
 }}} // namespace boost::xpressive::detail
