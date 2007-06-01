@@ -767,6 +767,21 @@ class communicator
   communicator split(int color, int key) const;
 
   /**
+   * Determines whether this communicator has a Cartesian topology.
+   */
+  bool has_cartesian_topology() const;
+
+  /**
+   *  Determines whether this communicator has a graph topology. If
+   *  the communicator does have a graph topology, the communicator
+   *  itself can be viewed as a graph by the algorithms in the Boost
+   *  Graph Library. The communicator then meets the requirements of
+   *  the @c Graph, @c Incidence Graph, @c Adjacency Graph, @c Vertex
+   *  List Graph, and @c Edge List Graph concepts.
+   */
+  bool has_graph_topology() const;
+
+  /**
    *  Create a new communicator whose topology is described by the
    *  given graph. The vertex index map (@p index) gives the mapping
    *  from vertices in the graph to ranks within the

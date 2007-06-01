@@ -377,6 +377,10 @@ struct graph_traits<mpi::communicator> {
   { 
   };
 
+  /**
+   * @brief Returns a vertex descriptor that can never refer to any
+   * valid vertex.
+   */
   static vertex_descriptor null_vertex() { return -1; }
 
   // Incidence Graph requirements
@@ -396,6 +400,10 @@ struct graph_traits<mpi::communicator> {
 };
 
 // Property Graph requirements
+
+/**
+ * INTERNAL ONLY
+ */
 template<>
 struct property_map<mpi::communicator, vertex_index_t>
 {

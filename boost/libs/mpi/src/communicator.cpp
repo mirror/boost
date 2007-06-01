@@ -141,6 +141,22 @@ communicator communicator::split(int color, int key) const
   return communicator(newcomm, comm_take_ownership);
 }
 
+bool communicator::has_cartesian_topology() const
+{
+  int status;
+  BOOST_MPI_CHECK_RESULT(MPI_Topo_test, ((MPI_Comm)*this, &status));
+
+  return status == MPI_CART;
+}
+
+bool communicator::has_graph_topology() const
+{
+  int status;
+  BOOST_MPI_CHECK_RESULT(MPI_Topo_test, ((MPI_Comm)*this, &status));
+
+  return status == MPI_GRAPH;
+}
+
 void communicator::abort(int errcode) const
 {
   BOOST_MPI_CHECK_RESULT(MPI_Abort, (MPI_Comm(*this), errcode));

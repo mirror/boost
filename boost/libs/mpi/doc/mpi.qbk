@@ -1486,27 +1486,41 @@ Boost.MPI currently provides no support for attribute caching.
  `MPI_Attr_delete`]] [unsupported]]
 ]
 
-Boost.MPI currently provides no support for process topologies.
+Boost.MPI will provide complete support for creating communicators
+with different topologies and later querying those topologies. Support
+for graph topologies is provided via an interface to the
+[@http://www.boost.org/libs/graph/doc/index.html Boost Graph Library
+(BGL)], where a communicator can be created which matches the
+structure of any BGL graph, and the graph topology of a communicator
+can be viewed as a BGL graph for use in existing, generic graph
+algorithms.
 
 [table Process topologies
   [[C Function/Constant] [Boost.MPI Equivalent]]
   
-  [[`MPI_GRAPH`] [unsupported]]
-  [[`MPI_CART`] [unsupported]]
-  [[`MPI_UNDEFINED`] [unsupported]]
+  [[`MPI_GRAPH`] [unnecessary; use [memberref boost::mpi::communicator::has_graph_topology `communicator::has_graph_topology`]]]
+  [[`MPI_CART`] [unnecessary; use [memberref boost::mpi::communicator::has_cartesian_topology `communicator::has_cartesian_topology`]]]
 
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node133.html#Node133
   `MPI_Cart_create`]] [unsupported]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node134.html#Node134
   `MPI_Dims_create`]] [unsupported]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node135.html#Node135
-  `MPI_Graph_create`]] [unsupported]]
+  `MPI_Graph_create`]] [[memberref
+  boost::mpi::communicator::with_graph_topology
+  `communicator::with_graph_topology`]]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node136.html#Node136
-  `MPI_Topo_test`]] [unsupported]]
+  `MPI_Topo_test`]] [[memberref
+  boost::mpi::communicator::has_graph_topology
+  `communicator::has_graph_topology`], [memberref
+  boost::mpi::communicator::has_cartesian_topology
+  `communicator::has_cartesian_topology`]]] 
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node136.html#Node136
-  `MPI_Graphdims_get`]] [unsupported]]
+  `MPI_Graphdims_get`]] [[funcref boost::mpi::num_vertices
+  `num_vertices`], [funcref boost::mpi::num_edges `num_edges`]]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node136.html#Node136
-  `MPI_Graph_get`]] [unsupported]]
+  `MPI_Graph_get`]] [[funcref boost::mpi::vertices
+  `vertices`], [funcref boost::mpi::edges `edges`]]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node136.html#Node136
   `MPI_Cartdim_get`]] [unsupported]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node136.html#Node136
@@ -1516,9 +1530,11 @@ Boost.MPI currently provides no support for process topologies.
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node136.html#Node136
   `MPI_Cart_coords`]] [unsupported]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node136.html#Node136
-  `MPI_Graph_neighbors_count`]] [unsupported]]
+  `MPI_Graph_neighbors_count`]] [[funcref boost::mpi::out_degree
+  `out_degree`]]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node136.html#Node136
-  `MPI_Graph_neighbors`]] [unsupported]]
+  `MPI_Graph_neighbors`]] [[funcref boost::mpi::out_edges
+  `out_edges`], [funcref boost::mpi::adjacent_vertices `adjacent_vertices`]]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node137.html#Node137
   `MPI_Cart_shift`]] [unsupported]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node138.html#Node138
