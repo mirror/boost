@@ -23,6 +23,8 @@
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/is_integral.hpp>
+#include <boost/type_traits/remove_cv.hpp>
+#include <boost/type_traits/remove_reference.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/detail/core/matcher/predicate_matcher.hpp>
@@ -33,6 +35,9 @@
 #ifndef BOOST_XPRESSIVE_DOXYGEN_INVOKED
 # include <boost/xpressive/detail/core/matcher/action_matcher.hpp>
 #endif
+
+#define UNREF(x) typename remove_reference<x>::type
+#define UNCVREF(x) typename remove_cv<typename remove_reference<x>::type>::type
 
 namespace boost { namespace xpressive
 {
@@ -47,7 +52,7 @@ namespace boost { namespace xpressive
 
             reference cast(void *pv) const
             {
-                return *static_cast<typename remove_reference<T>::type *>(pv);
+                return *static_cast<UNREF(T) *>(pv);
             }
         };
 
@@ -140,13 +145,14 @@ namespace boost { namespace xpressive
             struct result {};
 
             template<typename This, typename Sequence>
-            struct result<This(Sequence &)>
+            struct result<This(Sequence)>
             {
+                typedef UNREF(Sequence) sequence_type;
                 typedef
                     typename mpl::if_<
-                        is_const<Sequence>
-                      , typename Sequence::const_reference
-                      , typename Sequence::reference
+                        is_const<sequence_type>
+                      , typename sequence_type::const_reference
+                      , typename sequence_type::reference
                     >::type
                 type;
             };
@@ -164,13 +170,14 @@ namespace boost { namespace xpressive
             struct result {};
 
             template<typename This, typename Sequence>
-            struct result<This(Sequence &)>
+            struct result<This(Sequence)>
             {
+                typedef UNREF(Sequence) sequence_type;
                 typedef
                     typename mpl::if_<
-                        is_const<Sequence>
-                      , typename Sequence::const_reference
-                      , typename Sequence::reference
+                        is_const<sequence_type>
+                      , typename sequence_type::const_reference
+                      , typename sequence_type::reference
                     >::type
                 type;
             };
@@ -188,13 +195,14 @@ namespace boost { namespace xpressive
             struct result {};
 
             template<typename This, typename Sequence>
-            struct result<This(Sequence &)>
+            struct result<This(Sequence)>
             {
+                typedef UNREF(Sequence) sequence_type;
                 typedef
                     typename mpl::if_<
-                        is_const<Sequence>
-                      , typename Sequence::value_type const &
-                      , typename Sequence::value_type &
+                        is_const<sequence_type>
+                      , typename sequence_type::value_type const &
+                      , typename sequence_type::value_type &
                     >::type
                 type;
             };
@@ -212,13 +220,13 @@ namespace boost { namespace xpressive
             struct result {};
 
             template<typename This, typename Pair>
-            struct result<This(Pair &)>
+            struct result<This(Pair)>
             {
-                typedef typename Pair::first_type type;
+                typedef UNREF(Pair)::first_type type;
             };
 
             template<typename Pair>
-            typename Pair::first_type operator()(Pair &p) const
+            typename Pair::first_type operator()(Pair const &p) const
             {
                 return p.first;
             }
@@ -230,13 +238,13 @@ namespace boost { namespace xpressive
             struct result {};
 
             template<typename This, typename Pair>
-            struct result<This(Pair &)>
+            struct result<This(Pair)>
             {
-                typedef typename Pair::second_type type;
+                typedef UNREF(Pair)::second_type type;
             };
 
             template<typename Pair>
-            typename Pair::second_type operator()(Pair &p) const
+            typename Pair::second_type operator()(Pair const &p) const
             {
                 return p.second;
             }
@@ -247,7 +255,7 @@ namespace boost { namespace xpressive
             typedef bool result_type;
 
             template<typename Sub>
-            bool operator()(Sub &sub) const
+            bool operator()(Sub const &sub) const
             {
                 return sub.matched;
             }
@@ -259,13 +267,13 @@ namespace boost { namespace xpressive
             struct result {};
 
             template<typename This, typename Sub>
-            struct result<This(Sub &)>
+            struct result<This(Sub)>
             {
-                typedef typename Sub::difference_type type;
+                typedef UNREF(Sub)::difference_type type;
             };
 
             template<typename Sub>
-            typename Sub::difference_type operator()(Sub &sub) const
+            typename Sub::difference_type operator()(Sub const &sub) const
             {
                 return sub.length();
             }
@@ -277,13 +285,13 @@ namespace boost { namespace xpressive
             struct result {};
 
             template<typename This, typename Sub>
-            struct result<This(Sub &)>
+            struct result<This(Sub)>
             {
-                typedef typename Sub::string_type type;
+                typedef UNREF(Sub)::string_type type;
             };
 
             template<typename Sub>
-            typename Sub::string_type operator()(Sub &sub) const
+            typename Sub::string_type operator()(Sub const &sub) const
             {
                 return sub.str();
             }
@@ -341,68 +349,70 @@ namespace boost { namespace xpressive
 
             // assoc containers
             template<typename This, typename Cont, typename Value>
-            struct result<This(Cont &, Value &), void>
+            struct result<This(Cont, Value), void>
             {
-                static Cont &scont_;
-                static Value &svalue_;
+                typedef UNREF(Cont) cont_type;
+                typedef UNREF(Value) value_type;
+                static cont_type &scont_;
+                static value_type &svalue_;
                 typedef char yes_type;
                 typedef char (&no_type)[2];
-                static yes_type check_insert_return(typename Cont::iterator);
-                static no_type check_insert_return(std::pair<typename Cont::iterator, bool>);
+                static yes_type check_insert_return(typename cont_type::iterator);
+                static no_type check_insert_return(std::pair<typename cont_type::iterator, bool>);
                 BOOST_STATIC_CONSTANT(bool, is_iterator = (sizeof(yes_type) == sizeof(check_insert_return(scont_.insert(svalue_)))));
                 typedef
                     typename mpl::if_c<
                         is_iterator
-                      , typename Cont::iterator
-                      , std::pair<typename Cont::iterator, bool>
+                      , typename cont_type::iterator
+                      , std::pair<typename cont_type::iterator, bool>
                     >::type
                 type;
             };
 
             // sequence containers, assoc containers, strings
             template<typename This, typename Cont, typename It, typename Value>
-            struct result<This(Cont &, It &, Value &),
-                typename disable_if<mpl::or_<is_integral<It>, is_same<It, Value> > >::type>
+            struct result<This(Cont, It, Value),
+                typename disable_if<mpl::or_<is_integral<UNCVREF(It)>, is_same<UNCVREF(It), UNCVREF(Value)> > >::type>
             {
-                typedef typename Cont::iterator type;
+                typedef UNREF(Cont)::iterator type;
             };
 
             // strings
             template<typename This, typename Cont, typename Size, typename T>
-            struct result<This(Cont &, Size &, T &),
-                typename enable_if<is_integral<Size> >::type>
+            struct result<This(Cont, Size, T),
+                typename enable_if<is_integral<UNCVREF(Size)> >::type>
             {
-                typedef Cont &type;
+                typedef UNREF(Cont) &type;
             };
 
             // assoc containers
             template<typename This, typename Cont, typename It>
-            struct result<This(Cont &, It &, It &), void>
+            struct result<This(Cont, It, It), void>
             {
                 typedef void type;
             };
 
             // sequence containers, strings
             template<typename This, typename Cont, typename It, typename Size, typename Value>
-            struct result<This(Cont &, It &, Size &, Value &),
-                typename disable_if<is_integral<It> >::type>
+            struct result<This(Cont, It, Size, Value),
+                typename disable_if<is_integral<UNCVREF(It)> >::type>
             {
                 typedef void type;
             };
 
             // strings
             template<typename This, typename Cont, typename Size, typename A0, typename A1>
-            struct result<This(Cont &, Size &, A0 &, A1 &),
-                typename enable_if<is_integral<Size> >::type>
+            struct result<This(Cont, Size, A0, A1),
+                typename enable_if<is_integral<UNCVREF(Size)> >::type>
             {
-                typedef Cont &type;
+                typedef UNREF(Cont) &type;
             };
 
             /// operator()
             ///
             template<typename Cont, typename A0>
-            typename result<insert(Cont &, A0 &)>::type
-            operator()(Cont &cont, A0 &a0) const
+            typename result<insert(Cont &, A0 const &)>::type
+            operator()(Cont &cont, A0 const &a0) const
             {
                 return cont.insert(a0);
             }
@@ -410,8 +420,8 @@ namespace boost { namespace xpressive
             /// \overload
             ///
             template<typename Cont, typename A0, typename A1>
-            typename result<insert(Cont &, A0 &, A1 &)>::type
-            operator()(Cont &cont, A0 &a0, A1 &a1) const
+            typename result<insert(Cont &, A0 const &, A1 const &)>::type
+            operator()(Cont &cont, A0 const &a0, A1 const &a1) const
             {
                 return cont.insert(a0, a1);
             }
@@ -419,10 +429,28 @@ namespace boost { namespace xpressive
             /// \overload
             ///
             template<typename Cont, typename A0, typename A1, typename A2>
-            typename result<insert(Cont &, A0 &, A1 &, A2 &)>::type
-            operator()(Cont &cont, A0 &a0, A1 &a1, A2 &a2) const
+            typename result<insert(Cont &, A0 const &, A1 const &, A2 const &)>::type
+            operator()(Cont &cont, A0 const &a0, A1 const &a1, A2 const &a2) const
             {
                 return cont.insert(a0, a1, a2);
+            }
+        };
+
+        struct make_pair
+        {
+            template<typename Sig>
+            struct result {};
+
+            template<typename This, typename First, typename Second>
+            struct result<This(First, Second)>
+            {
+                typedef std::pair<UNCVREF(First), UNCVREF(Second)> type;
+            };
+
+            template<typename First, typename Second>
+            std::pair<First, Second> operator()(First const &first, Second const &second) const
+            {
+                return std::make_pair(first, second);
             }
         };
     }
@@ -442,6 +470,7 @@ namespace boost { namespace xpressive
     proto::terminal<op::length>::type const length = {{}};
     proto::terminal<op::str>::type const str = {{}};
     proto::terminal<op::insert>::type const insert = {{}};
+    proto::terminal<op::make_pair>::type const make_pair = {{}};
 
     template<typename T>
     struct value
@@ -659,5 +688,9 @@ namespace boost { namespace xpressive
     }
 
 }}
+
+#undef UNREF
+#undef UNCVREF
+
 
 #endif // BOOST_XPRESSIVE_ACTIONS_HPP_EAN_03_22_2007
