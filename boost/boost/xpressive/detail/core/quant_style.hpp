@@ -13,11 +13,7 @@
 # pragma once
 #endif
 
-#include <boost/type_traits/is_base_and_derived.hpp>
-#include <boost/mpl/assert.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/and.hpp>
-#include <boost/mpl/not_equal_to.hpp>
+#include <boost/config.hpp>
 #include <boost/mpl/has_xxx.hpp>
 #include <boost/xpressive/detail/utility/width.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>

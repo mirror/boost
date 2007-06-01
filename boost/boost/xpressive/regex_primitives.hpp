@@ -11,6 +11,7 @@
 
 #include <climits>
 #include <boost/mpl/if.hpp>
+#include <boost/mpl/and.hpp>
 #include <boost/mpl/assert.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
@@ -48,6 +49,64 @@ namespace boost { namespace xpressive { namespace detail
 
         using proto::extends<basic_mark_tag, mark_tag>::operator =;
     };
+
+    template<typename Grammar>
+    struct push_back_sub
+      : Grammar
+    {
+        template<typename Expr, typename, typename>
+        struct apply { typedef Expr type; };
+
+        template<typename Expr, typename State, typename Visitor>
+        static Expr const &call(Expr const &expr, State const &, Visitor &subs)
+        {
+            subs.push_back(proto::arg(expr).mark_number_);
+            return expr;
+        }
+    };
+
+    template<typename Grammar>
+    struct push_back_int
+      : Grammar
+    {
+        template<typename Expr, typename, typename>
+        struct apply { typedef Expr type; };
+
+        template<typename Expr, typename State, typename Visitor>
+        static Expr const &call(Expr const &expr, State const &, Visitor &subs)
+        {
+            subs.push_back(-1);
+            return expr;
+        }
+    };
+
+    // s1 or -s1
+    struct SubMatch
+      : proto::or_<
+            push_back_sub< proto::terminal<mark_placeholder> >
+          , push_back_int< proto::negate<proto::terminal<mark_placeholder> > >
+        >
+    {};
+
+    struct SubMatchList
+      : proto::or_<
+            proto::comma<SubMatch, SubMatch>
+          , proto::comma<SubMatchList, SubMatch>
+        >
+    {};
+
+    template<typename Subs>
+    typename enable_if<
+        mpl::and_<proto::is_expr<Subs>, proto::matches<Subs, SubMatchList> >
+      , std::vector<int>
+    >::type
+    to_vector(Subs const &subs)
+    {
+        std::vector<int> subs_;
+        SubMatchList::call(subs, 0, subs_);
+        return subs_;
+    }
+
 
 /*
 ///////////////////////////////////////////////////////////////////////////////
