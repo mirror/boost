@@ -54,7 +54,11 @@ class relation_storage :
 {
     typedef symmetrical_base<LeftType,RightType,force_mutable> base_;
 
+	typedef relation_storage storage_;
+
     public:
+
+	typedef relation_storage<LeftType,RightType,false> non_mutable_storage;
 
     typedef ::boost::mpl::vector2
     <
@@ -63,7 +67,7 @@ class relation_storage :
 
     > mutant_views;
 
-    typedef relation_storage storage_;
+	
 
     //@{
         /// data

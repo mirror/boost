@@ -26,6 +26,8 @@
 
 #include <boost/bimap/detail/concept_tags.hpp>
 
+#include <boost/bimap/tags/support/value_type_of.hpp>
+
 #include <boost/bimap/detail/generate_index_binder.hpp>
 #include <boost/bimap/detail/generate_view_binder.hpp>
 #include <boost/bimap/detail/generate_relation_binder.hpp>
@@ -101,8 +103,13 @@ See also list_of_relation.
 template< class Type >
 struct list_of : public ::boost::bimaps::detail::set_type_of_tag
 {
+    /// User type, can be tagged
+    typedef Type user_type;
+
     /// Type of the object that will be stored in the list
-    typedef Type value_type;
+	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::tags::support::
+		value_type_of<user_type>::type value_type;
+
 
     struct lazy_concept_checked
     {

@@ -42,31 +42,16 @@ class set_view_key_to_base
     KeyToBase keyToBase;
 };
 
-template< class TA, class TB, class Info, class KeyToBase >
-class set_view_key_to_base<
-    BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::
-        mutant_relation<TA,TB,Info,true>::base_storage,
-    BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::
-        mutant_relation<TA,TB,Info,true>::base_storage,
-    KeyToBase
->
+template< class MutantRelationStorage, class KeyToBase >
+class set_view_key_to_base<MutantRelationStorage,MutantRelationStorage,KeyToBase>
 {
+	typedef BOOST_DEDUCED_TYPENAME MutantRelationStorage::non_mutable_storage non_mutable_storage;
     public:
-    const BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::
-        mutant_relation<TA,TB,Info,true>::base_storage &
-            operator()( const BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::
-                            mutant_relation<TA,TB,Info,false>::base_storage & k ) const
+    const MutantRelationStorage & operator()( const non_mutable_storage & k ) const
     {
-        return ::boost::bimaps::relation::detail::mutate<
-            BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::
-                mutant_relation<TA,TB,Info,true>::base_storage
-        >(k);
+        return ::boost::bimaps::relation::detail::mutate<MutantRelationStorage>(k);
     }
-
-    const BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::
-        mutant_relation<TA,TB,Info,true>::base_storage &
-            operator()( const BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::
-                            mutant_relation<TA,TB,Info,true>::base_storage & k ) const
+    const MutantRelationStorage & operator()( const MutantRelationStorage & k ) const
     {
         return k;
     }

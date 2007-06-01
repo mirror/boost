@@ -40,8 +40,8 @@ int main()
 
     typedef bimap
     <
-        tagged< unordered_set_of< std::string >, spanish >,
-        tagged< unordered_set_of< std::string >, english >,
+        unordered_set_of< tagged< std::string, spanish > >,
+        unordered_set_of< tagged< std::string, english > >,
         list_of_relation
 
     > translator;

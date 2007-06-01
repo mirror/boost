@@ -38,7 +38,8 @@
 #include <boost/bimap/relation/mutant_relation.hpp>
 #include <boost/bimap/relation/member_at.hpp>
 #include <boost/bimap/relation/support/data_extractor.hpp>
-#include <boost/bimap/tags/support/apply_to_value_type.hpp>
+#include <boost/bimap/tags/support/default_tagged.hpp>
+#include <boost/bimap/tags/tagged.hpp>
 #include <boost/bimap/detail/manage_bimap_key.hpp>
 #include <boost/bimap/detail/manage_additional_parameters.hpp>
 #include <boost/bimap/detail/map_view_iterator.hpp>
@@ -76,43 +77,49 @@ See also bimap.
 
 
 template< class LeftSetType, class RightSetType, class AP1, class AP2, class AP3 >
-struct bimap_core
+class bimap_core
 {
     // Manage bimap key instantiation
     // --------------------------------------------------------------------
-    private:
-
-    typedef BOOST_DEDUCED_TYPENAME manage_bimap_key
-    <
-        LeftSetType,
-        ::boost::bimaps::relation::member_at::left
-
-    >::type left_tagged_set_type;
-
-    typedef BOOST_DEDUCED_TYPENAME manage_bimap_key
-    <
-        RightSetType,
-        ::boost::bimaps::relation::member_at::right
-
-    >::type right_tagged_set_type;
-
-    // Construct the relation type to be used
-    // --------------------------------------------------------------------
     public:
 
-    //@{
+    typedef BOOST_DEDUCED_TYPENAME manage_bimap_key
+    <
+        LeftSetType
 
-        typedef BOOST_DEDUCED_TYPENAME  left_tagged_set_type::value_type  left_set_type;
-        typedef BOOST_DEDUCED_TYPENAME right_tagged_set_type::value_type right_set_type;
+    >::type left_set_type;
 
-    //@}
+    typedef BOOST_DEDUCED_TYPENAME manage_bimap_key
+    <
+        RightSetType
+    
+	>::type right_set_type;
 
-    //@{
+	
+	private:
 
-        typedef BOOST_DEDUCED_TYPENAME  left_tagged_set_type::tag  left_tag;
-        typedef BOOST_DEDUCED_TYPENAME right_tagged_set_type::tag right_tag;
+	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::tags::support::default_tagged
+	< 
+		BOOST_DEDUCED_TYPENAME left_set_type::user_type,
+		::boost::bimaps::relation::member_at::left 
+	
+	>::type left_tagged_type;
 
-    //@}
+	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::tags::support::default_tagged
+	< 
+		BOOST_DEDUCED_TYPENAME right_set_type::user_type,
+		::boost::bimaps::relation::member_at::right
+	
+	>::type right_tagged_type;
+
+	public:
+
+	//@{
+
+		typedef BOOST_DEDUCED_TYPENAME  left_tagged_type::tag  left_tag;
+		typedef BOOST_DEDUCED_TYPENAME right_tagged_type::tag right_tag;
+
+	//@}
 
     //@{
 
@@ -128,21 +135,11 @@ struct bimap_core
 
     //@}
 
-
-    // Concept checks
-    // --------------------------------------------------------------------
-
-    //BOOST_CLASS_REQUIRE(  left_key_type, boost, AssignableConcept );
-    //BOOST_CLASS_REQUIRE( right_key_type, boost, AssignableConcept );
-
-
     // Manage the additional parameters
     // --------------------------------------------------------------------
     private:
 
     typedef BOOST_DEDUCED_TYPENAME manage_additional_parameters<AP1,AP2,AP3>::type parameters;
-
-
 
     /// \brief Relation type stored by the bimap.
     // --------------------------------------------------------------------
@@ -277,12 +274,12 @@ struct bimap_core
 
         is_same< BOOST_DEDUCED_TYPENAME parameters::set_type_of_relation, left_based >,
     // {
-            left_tagged_set_type,
+            ::boost::bimaps::tags::tagged< left_set_type, left_tag >,
     // }
     /* else */ BOOST_DEDUCED_TYPENAME mpl::if_<
             is_same< BOOST_DEDUCED_TYPENAME parameters::set_type_of_relation, right_based >,
     // {
-            right_tagged_set_type,
+			::boost::bimaps::tags::tagged< right_set_type, right_tag >,
     // }
     // else
     // {

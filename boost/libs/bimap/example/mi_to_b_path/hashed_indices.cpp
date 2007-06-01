@@ -35,14 +35,9 @@ struct occurrences {};
 
 typedef bimap
 <
-    tagged<
-        multiset_of< unsigned int, std::greater<unsigned int> >, 
-        occurrences
-    >,
-    tagged<
-        unordered_set_of< std::string >,
-        word
-    >
+    
+     multiset_of< tagged<unsigned int,occurrences>, std::greater<unsigned int> >, 
+unordered_set_of< tagged< std::string,       word>                             >
 
 > word_counter;
 

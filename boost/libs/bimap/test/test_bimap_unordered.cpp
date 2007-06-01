@@ -86,8 +86,8 @@ void test_bimap()
     //--------------------------------------------------------------------
     {
         typedef bimap<
-            tagged< unordered_set_of<char>            , left_tag  >,
-            tagged< unordered_multiset_of<std::string>, right_tag >
+                 unordered_set_of< tagged< char       , left_tag  > >,
+            unordered_multiset_of< tagged< std::string, right_tag > >
 
         > bm_type;
 

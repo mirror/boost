@@ -26,6 +26,8 @@
 
 #include <boost/bimap/detail/concept_tags.hpp>
 
+#include <boost/bimap/tags/support/value_type_of.hpp>
+
 #include <boost/bimap/detail/generate_index_binder.hpp>
 #include <boost/bimap/detail/generate_view_binder.hpp>
 #include <boost/bimap/detail/generate_relation_binder.hpp>
@@ -61,8 +63,12 @@ template
 >
 struct unconstrained_set_of : public ::boost::bimaps::detail::set_type_of_tag
 {
-    /// Type of the object that will be stored in the set
-    typedef KeyType value_type;
+    /// User type, can be tagged
+    typedef KeyType user_type;
+
+    /// Type of the object that will be stored in the container
+	typedef BOOST_DEDUCED_TYPENAME ::boost::bimaps::tags::support::
+		value_type_of<user_type>::type value_type;
 
     struct lazy_concept_checked
     {
