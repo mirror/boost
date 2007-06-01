@@ -41,9 +41,6 @@ namespace boost { namespace xpressive { namespace detail
     ///////////////////////////////////////////////////////////////////////////////
     // placeholders
     //
-    template<typename Char>
-    struct not_literal_placeholder;
-
     struct mark_placeholder;
 
     struct posix_charset_placeholder;

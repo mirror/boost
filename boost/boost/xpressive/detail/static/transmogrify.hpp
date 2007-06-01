@@ -123,20 +123,6 @@ namespace boost { namespace xpressive { namespace detail
     };
 
     template<typename BidiIter, typename ICase, typename Traits, typename Char>
-    struct transmogrify<BidiIter, ICase, Traits, not_literal_placeholder<Char> >
-    {
-        typedef typename iterator_value<BidiIter>::type char_type;
-        typedef literal_matcher<Traits, ICase::value, true> type;
-
-        template<typename Matcher2, typename Visitor>
-        static type call(Matcher2 const &m, Visitor &visitor)
-        {
-            char_type ch = char_cast<char_type>(m.ch_, visitor.traits());
-            return type(ch, visitor.traits());
-        }
-    };
-
-    template<typename BidiIter, typename ICase, typename Traits, typename Char>
     struct transmogrify<BidiIter, ICase, Traits, range_placeholder<Char> >
     {
         // By design, we don't widen character ranges.

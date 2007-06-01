@@ -77,9 +77,9 @@ namespace boost { namespace xpressive { namespace detail
     template<typename Expr, typename Char>
     struct use_simple_repeat_<Expr, Char, proto::tag::bitwise_or>
       : mpl::and_<
-            use_simple_repeat_<typename Expr::arg0_type::type, Char>
+            mpl::not_equal_to<unknown_width, width_of<Expr, Char> >
+          , use_simple_repeat_<typename Expr::arg0_type::type, Char>
           , use_simple_repeat_<typename Expr::arg1_type::type, Char>
-          , mpl::not_equal_to<unknown_width, width_of<Expr, Char> >
         >
     {};
 

@@ -36,6 +36,59 @@
 namespace boost { namespace xpressive { namespace detail
 {
 
+    #if BOOST_VERSION >= 103500
+    ///////////////////////////////////////////////////////////////////////////////
+    // mem_ptr_eval
+    //  Rewrites expressions of the form x->*foo(a) into foo(x, a) and then
+    //  evaluates them.
+    template<typename Expr, typename Context>
+    struct mem_ptr_eval
+    {
+        typedef typename remove_reference<typename mpl::if_<
+            is_const<Expr>
+          , typename proto::result_of::right<Expr>::const_reference
+          , typename proto::result_of::right<Expr>::reference
+        >::type>::type right_type;
+
+        typedef typename remove_reference<typename mpl::if_<
+            is_const<Expr>
+          , typename proto::result_of::left<Expr>::const_reference
+          , typename proto::result_of::left<Expr>::reference
+        >::type>::type left_type;
+
+        typedef
+            typename proto::result_of::arg<
+                typename proto::result_of::arg_c<right_type, 0>::type
+            >::type
+        function_type;
+
+        typedef
+            fusion::transform_view<
+                typename fusion::result_of::push_front<
+                    typename fusion::result_of::pop_front<proto::children<right_type> >::type const
+                  , reference_wrapper<left_type>
+                >::type const
+              , proto::eval_fun<Context>
+            >
+        evaluated_args;
+
+        typedef
+            typename fusion::result_of::invoke<function_type, evaluated_args>::type
+        result_type;
+
+        result_type operator()(Expr &expr, Context &ctx) const
+        {
+            return fusion::invoke<function_type>(
+                proto::arg(proto::arg_c<0>(proto::right(expr)))
+              , evaluated_args(
+                    fusion::push_front(fusion::pop_front(proto::children_of(proto::right(expr))), boost::ref(proto::left(expr)))
+                  , proto::eval_fun<Context>(ctx)
+                )
+            );
+        }
+    };
+    #endif
+
     ///////////////////////////////////////////////////////////////////////////////
     // action_context
     //
@@ -92,54 +145,12 @@ namespace boost { namespace xpressive { namespace detail
           : eval_terminal<Expr>
         {};
 
-#if BOOST_VERSION >= 103500
+        #if BOOST_VERSION >= 103500
         template<typename Expr>
         struct eval<Expr, proto::tag::mem_ptr>
-        {
-            typedef typename remove_reference<typename mpl::if_<
-                is_const<Expr>
-              , typename proto::result_of::right<Expr>::const_reference
-              , typename proto::result_of::right<Expr>::reference
-            >::type>::type right_type;
-
-            typedef typename remove_reference<typename mpl::if_<
-                is_const<Expr>
-              , typename proto::result_of::left<Expr>::const_reference
-              , typename proto::result_of::left<Expr>::reference
-            >::type>::type left_type;
-
-            typedef
-                typename proto::result_of::arg<
-                    typename proto::result_of::arg_c<right_type, 0>::type
-                >::type
-            function_type;
-
-            typedef
-                fusion::transform_view<
-                    typename fusion::result_of::push_front<
-                        typename fusion::result_of::pop_front<proto::children<right_type> >::type const
-                      , reference_wrapper<left_type>
-                    >::type const
-                  , proto::eval_fun<action_context const>
-                >
-            evaluated_args;
-
-            typedef
-                typename fusion::result_of::invoke<function_type, evaluated_args>::type
-            result_type;
-
-            result_type operator()(Expr &expr, action_context const &ctx) const
-            {
-                return fusion::invoke<function_type>(
-                    proto::arg(proto::arg_c<0>(proto::right(expr)))
-                  , evaluated_args(
-                        fusion::push_front(fusion::pop_front(proto::children_of(proto::right(expr))), boost::ref(proto::left(expr)))
-                      , proto::eval_fun<action_context const>(ctx)
-                    )
-                );
-            }
-        };
-#endif
+          : mem_ptr_eval<Expr, action_context const>
+        {};
+        #endif
 
     private:
         action_args_type *action_args_;
@@ -241,8 +252,8 @@ namespace boost { namespace xpressive { namespace detail
     //
     struct BindActionArgs
       : proto::or_<
-            subreg_transform<proto::terminal<detail::any_matcher> >
-          , mark_transform<proto::terminal<detail::mark_placeholder> >
+            subreg_transform<proto::terminal<any_matcher> >
+          , mark_transform<proto::terminal<mark_placeholder> >
           , by_ref_transform<proto::terminal<proto::_> >
           , proto::nary_expr<proto::_, proto::vararg<BindActionArgs> >
         >

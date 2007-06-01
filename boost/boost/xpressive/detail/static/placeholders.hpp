@@ -22,17 +22,6 @@ namespace boost { namespace xpressive { namespace detail
 {
 
 ///////////////////////////////////////////////////////////////////////////////
-// not_literal_placeholder
-//
-template<typename Char>
-struct not_literal_placeholder
-{
-    BOOST_XPR_QUANT_STYLE(quant_fixed_width, 1, true)
-
-    Char ch_;
-};
-
-///////////////////////////////////////////////////////////////////////////////
 // mark_placeholder
 //
 struct mark_placeholder
@@ -115,6 +104,7 @@ struct predicate_placeholder
 {
     BOOST_XPR_QUANT_STYLE(quant_variable_width, unknown_width::value, false)
 
+    typedef Predicate predicate_type;
     Predicate pred;
 };
 
