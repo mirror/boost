@@ -95,6 +95,13 @@ gather(const communicator& comm, const T& in_value, T* out_values, int root)
 }
 
 template<typename T>
+void gather(const communicator& comm, const T& in_value, int root)
+{
+  BOOST_ASSERT(comm.rank() != root);
+  detail::gather_impl(comm, &in_value, 1, root, is_mpi_datatype<T>());
+}
+
+template<typename T>
 void
 gather(const communicator& comm, const T& in_value, std::vector<T>& out_values,
        int root)
@@ -105,13 +112,6 @@ gather(const communicator& comm, const T& in_value, std::vector<T>& out_values,
   } else {
     ::boost::mpi::gather(comm, in_value, root);
   }
-}
-
-template<typename T>
-void gather(const communicator& comm, const T& in_value, int root)
-{
-  BOOST_ASSERT(comm.rank() != root);
-  detail::gather_impl(comm, &in_value, 1, root, is_mpi_datatype<T>());
 }
 
 template<typename T>

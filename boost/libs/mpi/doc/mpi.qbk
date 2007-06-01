@@ -63,13 +63,14 @@ types, arbitrary function objects for collective algorithms, and the
 use of modern C++ library techniques to maintain maximal
 efficiency.
 
-At present, Boost.MPI supports only a limited subset of the
-functionality in MPI 1.1. However, the thin abstractions in
-Boost.MPI allow one to easily combine it with calls to the
-underlying C MPI library. Boost.MPI currently supports:
+At present, Boost.MPI supports the majority of functionality in MPI
+1.1. The thin abstractions in Boost.MPI allow one to easily combine it
+with calls to the underlying C MPI library. Boost.MPI currently
+supports:
 
 * Communicators: Boost.MPI supports the creation,
-  destruction, cloning, and splitting of MPI communicators.
+  destruction, cloning, and splitting of MPI communicators, along with
+  manipulation of process groups. 
 * Point-to-point communication: Boost.MPI supports
   point-to-point communication of primitive and user-defined data
   types with send and receive operations, with blocking and
@@ -1415,7 +1416,7 @@ boost::mpi::group `group`] class.
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node98.html#Node98
   `MPI_Group_range_excl`]] [unsupported]]
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node99.html#Node99
-  `MPI_Group_free`]] [unsupported]]
+  `MPI_Group_free`]] [used automatically in Boost.MPI]]
 ]
 
 Boost.MPI provides manipulation of communicators through the [classref

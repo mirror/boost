@@ -766,6 +766,66 @@ class communicator
    */
   communicator split(int color, int key) const;
 
+  /**
+   *  Create a new communicator whose topology is described by the
+   *  given graph. The vertex index map (@p index) gives the mapping
+   *  from vertices in the graph to ranks within the
+   *  communicator. There may be fewer vertices in the graph than
+   *  there are processes in the communicator; in this case, this
+   *  routine will return a NULL communicator.
+   *
+   *  To use this function, you will need to have included either all
+   *  of the Boost.MPI library (@c boost/mpi.hpp) or the
+   *  graph topology header (@c boost/mpi/graph_topology.hpp).
+   *
+   *  @param graph Any type that meets the requirements of the
+   *  IncidenceGraph and VertexListGraph concepts from the Boost Graph
+   *  Library. This structure of this graph will become the topology
+   *  of the communicator that is returned.
+   *
+   *  @param reorder Whether MPI is permitted to re-order the process
+   *  ranks within the returned communicator, to better optimize
+   *  communication. If false, the ranks of each process in the
+   *  returned process will match precisely the rank of that process
+   *  within the original communicator.
+   *
+   *  @param rank This map translates vertices in the @c graph into
+   *  ranks within the current communicator. It must be a Readable
+   *  Property Map (see the Boost Property Map library) whose key type
+   *  is the vertex type of the @p graph and whose value type is @c
+   *  int.
+   */
+  template<typename Graph, typename VertexIndexMap>
+  communicator 
+  with_graph_topology(const Graph& graph, bool reorder, VertexIndexMap rank);
+
+  /**
+   *  Create a new communicator whose topology is described by the
+   *  given graph. The mapping from vertices in the graph to ranks
+   *  within the communicator is provided by the internal @c
+   *  vertex_index property of the graph. There may be fewer vertices
+   *  in the graph than there are processes in the communicator; in
+   *  this case, this routine will return a NULL communicator.
+   *
+   *  To use this function, you will need to have included either all
+   *  of the Boost.MPI library (@c boost/mpi.hpp) or the
+   *  graph topology header (@c boost/mpi/graph_topology.hpp).
+   *
+   *  @param graph Any type that meets the requirements of the
+   *  IncidenceGraph and VertexListGraph concepts from the Boost Graph
+   *  Library. This structure of this graph will become the topology
+   *  of the communicator that is returned.
+   *
+   *  @param reorder Whether MPI is permitted to re-order the process
+   *  ranks within the returned communicator, to better optimize
+   *  communication. If false, the ranks of each process in the
+   *  returned process will match precisely the rank of that process
+   *  within the original communicator.
+   */
+  template<typename Graph>
+  communicator 
+  with_graph_topology(const Graph& graph, bool reorder = true);
+
   /** Abort all tasks in the group of this communicator.
    *
    *  Makes a "best attempt" to abort all of the tasks in the group of

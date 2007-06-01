@@ -26,6 +26,7 @@ lib boost_mpi
     content_oarchive.cpp
     environment.cpp
     exception.cpp
+    graph_topology.cpp
     group.cpp
     mpi_datatype_cache.cpp
     mpi_datatype_oarchive.cpp

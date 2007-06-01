@@ -30,6 +30,17 @@ namespace boost { namespace mpi {
  */
 class communicator;
 
+/**
+ * @brief A @c group is a representation of a subset of the processes
+ * within a @c communicator.
+ *
+ * The @c group class allows one to create arbitrary subsets of the
+ * processes within a communicator. One can compute the union,
+ * intersection, or difference of two groups, or create new groups by
+ * specifically including or excluding certain processes. Given a
+ * group, one can create a new communicator containing only the
+ * processes in that group.
+ */
 class group
 {
 public:

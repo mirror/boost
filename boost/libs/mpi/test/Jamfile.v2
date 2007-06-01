@@ -31,5 +31,6 @@ test-suite mpi
   [ mpi-test scatter_test  ]
   # Note: Microsoft MPI fails all skeleton-content tests
   [ mpi-test skeleton_content_test : : : 2 3 4 7 8 13 17 ]
+  [ mpi-test graph_topology_test : : : 2 7 13 ]
   ;
 }
