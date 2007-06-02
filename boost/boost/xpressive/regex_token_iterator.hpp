@@ -32,7 +32,7 @@ template<typename BidiIter>
 struct regex_token_iterator_impl
   : counted_base<regex_token_iterator_impl<BidiIter> >
 {
-    typedef typename sub_match<BidiIter>::string_type value_type;
+    typedef sub_match<BidiIter> value_type;
 
     regex_token_iterator_impl
     (
@@ -62,13 +62,13 @@ struct regex_token_iterator_impl
             if(0 != (++this->n_ %= (int)this->subs_.size()) || this->iter_.next())
             {
                 this->result_ = (-1 == this->subs_[ this->n_ ])
-                    ? this->iter_.what_.prefix().str()
-                    : this->iter_.what_[ this->subs_[ this->n_ ] ].str();
+                    ? this->iter_.what_.prefix()
+                    : this->iter_.what_[ this->subs_[ this->n_ ] ];
                 return true;
             }
             else if(-1 == this->subs_[ this->n_-- ] && cur != this->iter_.state_.end_)
             {
-                this->result_ = value_type(cur, this->iter_.state_.end_);
+                this->result_ = value_type(cur, this->iter_.state_.end_, true);
                 return true;
             }
         }
@@ -133,8 +133,8 @@ struct regex_token_iterator
 {
     typedef basic_regex<BidiIter> regex_type;
     typedef typename iterator_value<BidiIter>::type char_type;
-    typedef typename sub_match<BidiIter>::string_type value_type;
-    typedef typename iterator_difference<BidiIter>::type difference_type;
+    typedef sub_match<BidiIter> value_type;
+    typedef std::ptrdiff_t difference_type;
     typedef value_type const *pointer;
     typedef value_type const &reference;
     typedef std::forward_iterator_tag iterator_category;
