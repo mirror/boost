@@ -11,6 +11,7 @@
 #include <boost/fusion/algorithm/query/count_if.hpp>
 #include <boost/lambda/lambda.hpp>
 #include <boost/mpl/vector_c.hpp>
+#include <functional>
 
 int
 main()
@@ -27,8 +28,9 @@ main()
 
     {
         typedef boost::mpl::vector_c<int, 1, 2, 3> mpl_vec;
-        BOOST_TEST(boost::fusion::count_if(mpl_vec(), boost::lambda::_1 <= 2) == 2);
-        BOOST_TEST(boost::fusion::count_if(mpl_vec(), boost::lambda::_1 > 2) == 1);
+        // Cannot use lambda here as mpl iterators return rvalues and lambda needs lvalues
+        BOOST_TEST(boost::fusion::count_if(mpl_vec(), std::bind2nd(std::less_equal<int>(), 2)) == 2);
+        BOOST_TEST(boost::fusion::count_if(mpl_vec(), std::bind2nd(std::greater<int>(), 2)) == 1);
     }
 
     return boost::report_errors();
