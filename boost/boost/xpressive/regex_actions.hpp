@@ -554,7 +554,7 @@ namespace boost { namespace xpressive
     typename proto::function<
         typename proto::terminal<op::as<T> >::type
       , typename proto::result_of::as_arg<D const>::type
-    >::type as(D const &d)
+    >::type const as(D const &d)
     {
         typename proto::function<
             typename proto::terminal<op::as<T> >::type
@@ -564,25 +564,25 @@ namespace boost { namespace xpressive
     }
 
     template<typename T>
-    value<T> val(T const &t)
+    value<T> const val(T const &t)
     {
         return value<T>(t);
     }
 
     template<typename T>
-    reference<T> ref(T &t)
+    reference<T> const ref(T &t)
     {
         return reference<T>(t);
     }
 
     template<typename T>
-    reference<T const> cref(T const &t)
+    reference<T const> const cref(T const &t)
     {
         return reference<T const>(t);
     }
 
     template<typename Predicate>
-    typename proto::terminal<detail::predicate_placeholder<Predicate> >::type
+    typename proto::terminal<detail::predicate_placeholder<Predicate> >::type const
     check(Predicate const &pred)
     {
         detail::predicate_placeholder<Predicate> p = {pred};
@@ -606,7 +606,7 @@ namespace boost { namespace xpressive
     template<typename T>
     typename proto::function<
         typename proto::terminal<op::construct<T> >::type
-    >::type construct()
+    >::type const construct()
     {
         typename proto::function<
             typename proto::terminal<op::construct<T> >::type
@@ -620,7 +620,7 @@ namespace boost { namespace xpressive
     typename proto::function<
         typename proto::terminal<op::construct<T> >::type
       , typename proto::result_of::as_arg<A0>::type
-    >::type construct(A0 &a0)
+    >::type const construct(A0 &a0)
     {
         typename proto::function<
             typename proto::terminal<op::construct<T> >::type
@@ -636,7 +636,7 @@ namespace boost { namespace xpressive
         typename proto::terminal<op::construct<T> >::type
       , typename proto::result_of::as_arg<A0>::type
       , typename proto::result_of::as_arg<A1>::type
-    >::type construct(A0 &a0, A1 &a1)
+    >::type const construct(A0 &a0, A1 &a1)
     {
         typename proto::function<
             typename proto::terminal<op::construct<T> >::type
@@ -654,7 +654,7 @@ namespace boost { namespace xpressive
       , typename proto::result_of::as_arg<A0>::type
       , typename proto::result_of::as_arg<A1>::type
       , typename proto::result_of::as_arg<A2>::type
-    >::type construct(A0 &a0, A1 &a1, A2 &a2)
+    >::type const construct(A0 &a0, A1 &a1, A2 &a2)
     {
         typename proto::function<
             typename proto::terminal<op::construct<T> >::type
@@ -684,6 +684,7 @@ namespace boost { namespace xpressive
             ignore_unused(xpressive::length);
             ignore_unused(xpressive::str);
             ignore_unused(xpressive::insert);
+            ignore_unused(xpressive::make_pair);
         }
     }
 
@@ -691,6 +692,5 @@ namespace boost { namespace xpressive
 
 #undef UNREF
 #undef UNCVREF
-
 
 #endif // BOOST_XPRESSIVE_ACTIONS_HPP_EAN_03_22_2007
