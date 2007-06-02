@@ -320,19 +320,19 @@ namespace boost { namespace xpressive
             }
 
             template<typename A0>
-            T operator()(A0 &a0) const
+            T operator()(A0 const &a0) const
             {
                 return T(a0);
             }
 
             template<typename A0, typename A1>
-            T operator()(A0 &a0, A1 &a1) const
+            T operator()(A0 const &a0, A1 const &a1) const
             {
                 return T(a0, a1);
             }
 
             template<typename A0, typename A1, typename A2>
-            T operator()(A0 &a0, A1 &a1, A2 &a2) const
+            T operator()(A0 const &a0, A1 const &a1, A2 const &a2) const
             {
                 return T(a0, a1, a2);
             }
