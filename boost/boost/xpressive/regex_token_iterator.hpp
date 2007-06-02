@@ -275,6 +275,8 @@ private:
             // copy the match_results struct.
             if(-1 != this->impl_->n_ && this->impl_->n_ + 1 != static_cast<int>(this->impl_->subs_.size()))
             {
+                // BUGBUG This is expensive -- it causes the sequence_stack to be cleared.
+                // Find a better way
                 clone->iter_.what_ = this->impl_->iter_.what_;
             }
 

@@ -110,7 +110,7 @@ struct match_state
     bool found_partial_match_;
 
     match_context context_;
-    results_extras &extras_;
+    results_extras *extras_;
     actionable action_list_;
     actionable const **action_list_tail_;
     action_args_type *action_args_;
@@ -133,31 +133,31 @@ struct match_state
       , flags_(flags)
       , found_partial_match_(false)
       , context_() // zero-initializes the fields of context_
-      , extras_(core_access<BidiIter>::get_extras(what))
+      , extras_(&core_access<BidiIter>::get_extras(what))
       , action_list_()
       , action_list_tail_(&action_list_.next)
       , action_args_(&core_access<BidiIter>::get_action_args(what))
     {
         // reclaim any cached memory in the match_results struct
-        this->extras_.sub_match_stack_.unwind();
+        this->extras_->sub_match_stack_.unwind();
 
         // initialize the context_ struct
         this->init_(impl, what);
 
         // move all the nested match_results structs into the match_results cache
-        this->extras_.results_cache_.reclaim_all(access::get_nested_results(what));
+        this->extras_->results_cache_.reclaim_all(access::get_nested_results(what));
     }
 
     ///////////////////////////////////////////////////////////////////////////////
     // reset
-    //void reset(match_results &what, basic_regex const &rex)
     void reset(match_results &what, regex_impl const &impl)
     {
+        this->extras_ = &core_access<BidiIter>::get_extras(what);
         this->context_.prev_context_ = 0;
         this->found_partial_match_ = false;
-        this->extras_.sub_match_stack_.unwind();
+        this->extras_->sub_match_stack_.unwind();
         this->init_(impl, what);
-        this->extras_.results_cache_.reclaim_all(access::get_nested_results(what));
+        this->extras_->results_cache_.reclaim_all(access::get_nested_results(what));
     }
 
     ///////////////////////////////////////////////////////////////////////////////
@@ -170,7 +170,7 @@ struct match_state
 
         // create a new nested match_results for this regex
         nested_results<BidiIter> &nested = access::get_nested_results(*context.results_ptr_);
-        match_results &what = this->extras_.results_cache_.append_new(nested);
+        match_results &what = this->extras_->results_cache_.append_new(nested);
 
         // (re)initialize the match context
         this->init_(impl, what);
@@ -198,7 +198,7 @@ struct match_state
 
             // send the match_results struct back to the cache
             nested_results<BidiIter> &nested = access::get_nested_results(what);
-            this->extras_.results_cache_.reclaim_last(nested);
+            this->extras_->results_cache_.reclaim_last(nested);
         }
 
         // restore the state
@@ -269,7 +269,7 @@ private:
         this->context_.results_ptr_ = &what;
         this->context_.traits_ = impl.traits_.get();
         this->mark_count_ = impl.mark_count_ + 1;
-        this->sub_matches_ = this->extras_.sub_match_stack_.push_sequence(total_mark_count);
+        this->sub_matches_ = this->extras_->sub_match_stack_.push_sequence(total_mark_count);
         this->sub_matches_ += impl.hidden_mark_count_;
 
         // initialize the match_results struct
@@ -278,7 +278,7 @@ private:
 
     void uninit_(regex_impl const &impl, match_results &)
     {
-        extras_.sub_match_stack_.unwind_to(this->sub_matches_ - impl.hidden_mark_count_);
+        extras_->sub_match_stack_.unwind_to(this->sub_matches_ - impl.hidden_mark_count_);
     }
 
     bool found_partial_match()
@@ -307,7 +307,7 @@ inline memento<BidiIter> save_sub_matches(match_state<BidiIter> &state)
 {
     memento<BidiIter> mem =
     {
-        state.extras_.sub_match_stack_.push_sequence(state.mark_count_, no_fill)
+        state.extras_->sub_match_stack_.push_sequence(state.mark_count_, no_fill)
       , state.context_.results_ptr_->nested_results().size()
       , state.action_list_tail_
     };
@@ -324,9 +324,9 @@ inline void restore_sub_matches(memento<BidiIter> const &mem, match_state<BidiIt
     typedef core_access<BidiIter> access;
     nested_results<BidiIter> &nested = access::get_nested_results(*state.context_.results_ptr_);
     std::size_t count = nested.size() - mem.nested_results_count_;
-    state.extras_.results_cache_.reclaim_last_n(nested, count);
+    state.extras_->results_cache_.reclaim_last_n(nested, count);
     std::copy(mem.old_sub_matches_, mem.old_sub_matches_ + state.mark_count_, state.sub_matches_);
-    state.extras_.sub_match_stack_.unwind_to(mem.old_sub_matches_);
+    state.extras_->sub_match_stack_.unwind_to(mem.old_sub_matches_);
     state.action_list_tail_ = mem.action_list_tail_;
     *state.action_list_tail_ = 0;
 }
@@ -340,7 +340,7 @@ inline void reclaim_sub_matches(memento<BidiIter> const &mem, match_state<BidiIt
     std::size_t count = state.context_.results_ptr_->nested_results().size() - mem.nested_results_count_;
     if(count == 0)
     {
-        state.extras_.sub_match_stack_.unwind_to(mem.old_sub_matches_);
+        state.extras_->sub_match_stack_.unwind_to(mem.old_sub_matches_);
     }
     // else we have we must orphan this block of backrefs because we are using the stack
     // space above it.
