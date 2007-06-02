@@ -9,6 +9,7 @@
 #ifndef BOOST_XPRESSIVE_REGEX_PRIMITIVES_HPP_EAN_10_04_2005
 #define BOOST_XPRESSIVE_REGEX_PRIMITIVES_HPP_EAN_10_04_2005
 
+#include <vector>
 #include <climits>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/and.hpp>
@@ -21,6 +22,7 @@
 // Doxygen can't handle proto :-(
 #ifndef BOOST_XPRESSIVE_DOXYGEN_INVOKED
 # include <boost/xpressive/proto/proto.hpp>
+# include <boost/xpressive/proto/transform/arg.hpp>
 # include <boost/xpressive/detail/core/icase.hpp>
 # include <boost/xpressive/detail/static/compile.hpp>
 # include <boost/xpressive/detail/static/modifier.hpp>
@@ -52,47 +54,35 @@ namespace boost { namespace xpressive { namespace detail
 
     template<typename Grammar>
     struct push_back_sub
-      : Grammar
+      : proto::trans::identity<Grammar>
     {
-        template<typename Expr, typename, typename>
-        struct apply { typedef Expr type; };
-
-        template<typename Expr, typename State, typename Visitor>
-        static Expr const &call(Expr const &expr, State const &, Visitor &subs)
+        template<typename Sub>
+        static int to_sub(Sub const &sub, proto::tag::terminal)
         {
-            subs.push_back(proto::arg(expr).mark_number_);
-            return expr;
+            return proto::arg(sub).mark_number_;
         }
-    };
 
-    template<typename Grammar>
-    struct push_back_int
-      : Grammar
-    {
-        template<typename Expr, typename, typename>
-        struct apply { typedef Expr type; };
+        template<typename Sub>
+        static int to_sub(Sub const &, proto::tag::negate)
+        {
+            return -1;
+        }
 
         template<typename Expr, typename State, typename Visitor>
         static Expr const &call(Expr const &expr, State const &, Visitor &subs)
         {
-            subs.push_back(-1);
+            subs.push_back(push_back_sub::to_sub(expr, typename Expr::tag_type()));
             return expr;
         }
     };
 
     // s1 or -s1
     struct SubMatch
-      : proto::or_<
-            push_back_sub< proto::terminal<mark_placeholder> >
-          , push_back_int< proto::negate<proto::terminal<mark_placeholder> > >
-        >
+      : push_back_sub<proto::or_<basic_mark_tag, proto::negate<basic_mark_tag > > >
     {};
 
     struct SubMatchList
-      : proto::or_<
-            proto::comma<SubMatch, SubMatch>
-          , proto::comma<SubMatchList, SubMatch>
-        >
+      : proto::or_<SubMatch, proto::comma<SubMatchList, SubMatch> >
     {};
 
     template<typename Subs>
