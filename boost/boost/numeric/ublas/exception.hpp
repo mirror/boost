@@ -175,7 +175,6 @@ namespace boost { namespace numeric { namespace ublas {
         explicit singular (const char *)
             {}
         void raise () {
-            throw *this;
             std::abort ();
         }
 #endif
