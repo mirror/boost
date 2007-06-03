@@ -38,7 +38,6 @@ struct compiler_traits
     typedef typename regex_traits::char_type char_type;
     typedef typename regex_traits::string_type string_type;
     typedef typename regex_traits::locale_type locale_type;
-    typedef typename string_type::const_iterator iterator_type;
 
     ///////////////////////////////////////////////////////////////////////////////
     // constructor
@@ -96,7 +95,8 @@ struct compiler_traits
     ///////////////////////////////////////////////////////////////////////////////
     // get_token
     //  get a token and advance the iterator
-    regex_constants::compiler_token_type get_token(iterator_type &begin, iterator_type end)
+    template<typename FwdIter>
+    regex_constants::compiler_token_type get_token(FwdIter &begin, FwdIter end)
     {
         using namespace regex_constants;
         if(this->eat_ws_(begin, end) == end)
@@ -129,10 +129,11 @@ struct compiler_traits
 
     ///////////////////////////////////////////////////////////////////////////////
     // get_quant_spec
-    bool get_quant_spec(iterator_type &begin, iterator_type end, detail::quant_spec &spec)
+    template<typename FwdIter>
+    bool get_quant_spec(FwdIter &begin, FwdIter end, detail::quant_spec &spec)
     {
         using namespace regex_constants;
-        iterator_type old_begin;
+        FwdIter old_begin;
 
         if(this->eat_ws_(begin, end) == end)
         {
@@ -211,7 +212,8 @@ struct compiler_traits
 
     ///////////////////////////////////////////////////////////////////////////
     // get_group_type
-    regex_constants::compiler_token_type get_group_type(iterator_type &begin, iterator_type end, string_type &name)
+    template<typename FwdIter>
+    regex_constants::compiler_token_type get_group_type(FwdIter &begin, FwdIter end, string_type &name)
     {
         using namespace regex_constants;
         if(this->eat_ws_(begin, end) != end && BOOST_XPR_CHAR_(char_type, '?') == *begin)
@@ -283,7 +285,8 @@ struct compiler_traits
     //////////////////////////////////////////////////////////////////////////
     // get_charset_token
     //  NOTE: white-space is *never* ignored in a charset.
-    regex_constants::compiler_token_type get_charset_token(iterator_type &begin, iterator_type end)
+    template<typename FwdIter>
+    regex_constants::compiler_token_type get_charset_token(FwdIter &begin, FwdIter end)
     {
         using namespace regex_constants;
         BOOST_ASSERT(begin != end);
@@ -294,7 +297,7 @@ struct compiler_traits
         case BOOST_XPR_CHAR_(char_type, ']'): ++begin; return token_charset_end;
         case BOOST_XPR_CHAR_(char_type, '['):
             {
-                iterator_type next = begin; ++next;
+                FwdIter next = begin; ++next;
                 if(next != end && *next == BOOST_XPR_CHAR_(char_type, ':'))
                 {
                     begin = ++next;
@@ -304,7 +307,7 @@ struct compiler_traits
             break;
         case BOOST_XPR_CHAR_(char_type, ':'):
             {
-                iterator_type next = begin; ++next;
+                FwdIter next = begin; ++next;
                 if(next != end && *next == BOOST_XPR_CHAR_(char_type, ']'))
                 {
                     begin = ++next;
@@ -329,7 +332,8 @@ struct compiler_traits
 
     //////////////////////////////////////////////////////////////////////////
     // get_escape_token
-    regex_constants::compiler_token_type get_escape_token(iterator_type &begin, iterator_type end)
+    template<typename FwdIter>
+    regex_constants::compiler_token_type get_escape_token(FwdIter &begin, FwdIter end)
     {
         using namespace regex_constants;
         if(begin != end)
@@ -363,7 +367,8 @@ private:
 
     //////////////////////////////////////////////////////////////////////////
     // parse_mods_
-    regex_constants::compiler_token_type parse_mods_(iterator_type &begin, iterator_type end)
+    template<typename FwdIter>
+    regex_constants::compiler_token_type parse_mods_(FwdIter &begin, FwdIter end)
     {
         using namespace regex_constants;
         bool set = true;
@@ -407,7 +412,8 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////
     // get_name_
-    void get_name_(iterator_type &begin, iterator_type end, string_type &name)
+    template<typename FwdIter>
+    void get_name_(FwdIter &begin, FwdIter end, string_type &name)
     {
         this->eat_ws_(begin, end);
         for(name.clear(); begin != end && this->is_alnum_(*begin); ++begin)
@@ -420,7 +426,8 @@ private:
 
     ///////////////////////////////////////////////////////////////////////////////
     // eat_ws_
-    iterator_type &eat_ws_(iterator_type &begin, iterator_type end)
+    template<typename FwdIter>
+    FwdIter &eat_ws_(FwdIter &begin, FwdIter end)
     {
         if(0 != (regex_constants::ignore_white_space & this->flags()))
         {

@@ -16,7 +16,7 @@
 #endif
 
 #ifdef BOOST_XPRESSIVE_DEBUG_TRACKING_POINTER
-# include <iostream>
+# include <iosfwd>
 #endif
 #include <boost/mpl/bool.hpp>
 #include <boost/xpressive/regex_constants.hpp>
@@ -125,24 +125,60 @@ public:
     /// Swaps the contents of this basic_regex object with another.
     ///
     /// \param      that The other basic_regex object.
-    /// \attention  This is a shallow swap that does not do reference tracking. If you embed
-    /// a basic_regex object by reference in another regular expression and then swap its
-    /// contents with another basic_regex object, the change will not be visible to the enclosing
-    /// regular expression. It is done this way to ensure that swap() cannot throw.
-    /// \throw nothrow
+    /// \attention  This is a shallow swap that does not do reference tracking.
+    ///             If you embed a basic_regex object by reference in another
+    ///             regular expression and then swap its contents with another
+    ///             basic_regex object, the change will not be visible to the
+    ///             enclosing regular expression. It is done this way to ensure
+    ///             that swap() cannot throw.
+    /// \throw      nothrow
     void swap(basic_regex<BidiIter> &that) // throw()
     {
         proto::arg(*this).swap(proto::arg(that));
     }
 
-    /// Factory method for building a regex object from a string.
-    /// Equivalent to regex_compiler\< BidiIter \>().compile(str, flags);
+    /// Factory method for building a regex object from a range of characters.
+    /// Equivalent to regex_compiler\< BidiIter \>().compile(begin, end, flags);
     ///
-    /// \param str The string containing the regular expression.
-    /// \param flags Optional bitmask of type syntax_option_type to control how str is interpreted.
-    static basic_regex<BidiIter> compile(string_type const &str, flag_type flags = regex_constants::ECMAScript)
+    /// \param  begin The beginning of a range of characters representing the
+    ///         regular expression to compile.
+    /// \param  end The end of a range of characters representing the
+    ///         regular expression to compile.
+    /// \param  flags Optional bitmask that determines how the pat string is
+    ///         interpreted. (See syntax_option_type.)
+    /// \return A basic_regex object corresponding to the regular expression
+    ///         represented by the character range.
+    /// \pre    [begin,end) is a valid range.
+    /// \pre    The range of characters specified by [begin,end) contains a 
+    ///         valid string-based representation of a regular expression.
+    /// \throw  regex_error when the range of characters has invalid regular
+    ///         expression syntax.
+    template<typename InputIter>
+    static basic_regex<BidiIter> compile(InputIter begin, InputIter end, flag_type flags = regex_constants::ECMAScript)
     {
-        return regex_compiler<BidiIter>().compile(str, flags);
+        return regex_compiler<BidiIter>().compile(begin, end, flags);
+    }
+
+    /// \overload
+    ///
+    template<typename InputRange>
+    static basic_regex<BidiIter> compile(InputRange const &pat, flag_type flags = regex_constants::ECMAScript)
+    {
+        return regex_compiler<BidiIter>().compile(pat, flags);
+    }
+
+    /// \overload
+    ///
+    static basic_regex<BidiIter> compile(char_type const *begin, flag_type flags = regex_constants::ECMAScript)
+    {
+        return regex_compiler<BidiIter>().compile(begin, flags);
+    }
+
+    /// \overload
+    ///
+    static basic_regex<BidiIter> compile(char_type const *begin, std::size_t len, flag_type flags)
+    {
+        return regex_compiler<BidiIter>().compile(begin, len, flags);
     }
 
     //{{AFX_DEBUG
@@ -160,11 +196,14 @@ public:
 private:
     friend struct detail::core_access<BidiIter>;
 
-    // Avoid a common programming mistake. Construction from a string is ambiguous. It could mean
+    // Avoid a common programming mistake. Construction from a string is
+    // ambiguous. It could mean:
     //   sregex rx = sregex::compile(str); // compile the string into a regex
     // or
     //   sregex rx = as_xpr(str);          // treat the string as a literal
-    // Since there is no easy way to disambiguate, disallow it and force users to say what they mean
+    // Since there is no easy way to disambiguate, it is disallowed. You must
+    // say what you mean.
+
     /// INTERNAL ONLY
     basic_regex(char_type const *);
     /// INTERNAL ONLY
@@ -228,11 +267,12 @@ inline void basic_regex<BidiIter>::dump_(std::ostream &sout) const
 /// \param      left The first basic_regex object.
 /// \param      right The second basic_regex object.
 /// \attention  This is a shallow swap that does not do reference tracking.
-/// If you embed a basic_regex object by reference in another regular expression
-/// and then swap its contents with another basic_regex object, the change will
-/// not be visible to the enclosing regular expression. It is done this way to
-/// ensure that swap() cannot throw.
-/// \throw nothrow
+///             If you embed a basic_regex object by reference in another
+///             regular expression and then swap its contents with another
+///             basic_regex object, the change will not be visible to the
+///             enclosing regular expression. It is done this way to ensure
+///             that swap() cannot throw.
+/// \throw      nothrow
 template<typename BidiIter>
 inline void swap(basic_regex<BidiIter> &left, basic_regex<BidiIter> &right) // throw()
 {

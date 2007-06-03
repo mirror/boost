@@ -16,8 +16,13 @@
 #endif
 
 #include <map>
-#include <stdexcept>
+#include <boost/assert.hpp>
 #include <boost/next_prior.hpp>
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
+#include <boost/mpl/assert.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/iterator/iterator_traits.hpp>
 #include <boost/xpressive/basic_regex.hpp>
 #include <boost/xpressive/detail/dynamic/parser.hpp>
 #include <boost/xpressive/detail/dynamic/parse_charset.hpp>
@@ -88,21 +93,96 @@ struct regex_compiler
 
     ///////////////////////////////////////////////////////////////////////////
     // compile
-    /// Builds a basic_regex object from a std::string.
+    /// Builds a basic_regex object from a range of characters.
     ///
-    /// \param  pat A std::string containing the regular expression pattern.
-    /// \param  flags Optional bitmask that determines how the pat string is interpreted. (See syntax_option_type.)
-    /// \return A basic_regex object corresponding to the regular expression represented by the string.
-    /// \pre    The std::string pat contains a valid string-based representation of a regular expression.
-    /// \throw  regex_error when the string has invalid regular expression syntax.
-    basic_regex<BidiIter> compile(string_type pat, flag_type flags = regex_constants::ECMAScript)
+    /// \param  begin The beginning of a range of characters representing the
+    ///         regular expression to compile.
+    /// \param  end The end of a range of characters representing the
+    ///         regular expression to compile.
+    /// \param  flags Optional bitmask that determines how the pat string is
+    ///         interpreted. (See syntax_option_type.)
+    /// \return A basic_regex object corresponding to the regular expression
+    ///         represented by the character range.
+    /// \pre    InputIter is a model of the InputIterator concept.
+    /// \pre    [begin,end) is a valid range.
+    /// \pre    The range of characters specified by [begin,end) contains a 
+    ///         valid string-based representation of a regular expression.
+    /// \throw  regex_error when the range of characters has invalid regular
+    ///         expression syntax.
+    template<typename InputIter>
+    basic_regex<BidiIter> compile(InputIter begin, InputIter end, flag_type flags = regex_constants::ECMAScript)
     {
+        typedef typename iterator_category<InputIter>::type category;
+        return this->compile_(begin, end, flags, category());
+    }
+
+    /// \overload
+    ///
+    template<typename InputRange>
+    basic_regex<BidiIter> compile(InputRange const &pat, flag_type flags = regex_constants::ECMAScript)
+    {
+        return this->compile(boost::begin(pat), boost::end(pat), flags);
+    }
+
+    /// \overload
+    ///
+    basic_regex<BidiIter> compile(char_type const *begin, flag_type flags = regex_constants::ECMAScript)
+    {
+        BOOST_ASSERT(0 != begin);
+        char_type const *end = begin + std::char_traits<char_type>::length(begin);
+        return this->compile(begin, end, flags);
+    }
+
+    /// \overload
+    ///
+    basic_regex<BidiIter> compile(char_type const *begin, std::size_t size, flag_type flags)
+    {
+        BOOST_ASSERT(0 != begin);
+        char_type const *end = begin + size;
+        return this->compile(begin, end, flags);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // operator[]
+    /// Return a reference to the named regular expression. If no such named
+    /// regular expression exists, create a new regular expression and return
+    /// a reference to it.
+    ///
+    /// \param  name A std::string containing the name of the regular expression.
+    /// \pre    The string is not empty.
+    /// \throw  bad_alloc on allocation failure.
+    basic_regex<BidiIter> &operator [](string_type const &name)
+    {
+        BOOST_ASSERT(!name.empty());
+        return this->rules_[name];
+    }
+
+    /// \overload
+    ///
+    basic_regex<BidiIter> const &operator [](string_type const &name) const
+    {
+        BOOST_ASSERT(!name.empty());
+        return this->rules_[name];
+    }
+
+private:
+
+    typedef detail::escape_value<char_type, char_class_type> escape_value;
+    typedef detail::alternate_matcher<detail::alternates_vector<BidiIter>, RegexTraits> alternate_matcher;
+
+    ///////////////////////////////////////////////////////////////////////////
+    // compile_
+    /// INTERNAL ONLY
+    template<typename FwdIter>
+    basic_regex<BidiIter> compile_(FwdIter begin, FwdIter end, flag_type flags, std::forward_iterator_tag)
+    {
+        BOOST_MPL_ASSERT((is_same<char_type, typename iterator_value<FwdIter>::type>));
         using namespace regex_constants;
         this->reset();
         this->traits_.flags(flags);
 
         basic_regex<BidiIter> rextmp, *prex = &rextmp;
-        string_iterator begin = pat.begin(), end = pat.end(), tmp = begin;
+        FwdIter tmp = begin;
 
         // Check if this regex is a named rule:
         string_type name;
@@ -143,39 +223,14 @@ struct regex_compiler
     }
 
     ///////////////////////////////////////////////////////////////////////////
-    // operator[]
-    /// Return a reference to the named regular expression. If no such named
-    /// regular expression exists, create a new regular expression and return
-    /// a reference to it.
-    ///
-    /// \param  name A std::string containing the name of the regular expression.
-    /// \pre    The string is not empty.
-    /// \throw  bad_alloc on allocation failure, invalid_argument for empty string.
-    basic_regex<BidiIter> &operator [](string_type const &name)
+    // compile_
+    /// INTERNAL ONLY
+    template<typename InputIter>
+    basic_regex<BidiIter> compile_(InputIter begin, InputIter end, flag_type flags, std::input_iterator_tag)
     {
-        if(name.empty())
-        {
-            throw std::invalid_argument("bad regular expression name");
-        }
-        return this->rules_[name];
+        string_type pat(begin, end);
+        return this->compile_(boost::begin(pat), boost::end(pat), flags, std::forward_iterator_tag());
     }
-
-    /// \overload
-    ///
-    basic_regex<BidiIter> const &operator [](string_type const &name) const
-    {
-        if(name.empty())
-        {
-            throw std::invalid_argument("bad regular expression name");
-        }
-        return this->rules_[name];
-    }
-
-private:
-
-    typedef typename string_type::const_iterator string_iterator;
-    typedef detail::escape_value<char_type, char_class_type> escape_value;
-    typedef detail::alternate_matcher<detail::alternates_vector<BidiIter>, RegexTraits> alternate_matcher;
 
     ///////////////////////////////////////////////////////////////////////////
     // reset
@@ -206,11 +261,12 @@ private:
     ///////////////////////////////////////////////////////////////////////////
     // parse_alternates
     /// INTERNAL ONLY
-    detail::sequence<BidiIter> parse_alternates(string_iterator &begin, string_iterator end)
+    template<typename FwdIter>
+    detail::sequence<BidiIter> parse_alternates(FwdIter &begin, FwdIter end)
     {
         using namespace regex_constants;
         int count = 0;
-        string_iterator tmp = begin;
+        FwdIter tmp = begin;
         detail::sequence<BidiIter> seq;
 
         do switch(++count)
@@ -232,7 +288,8 @@ private:
     ///////////////////////////////////////////////////////////////////////////
     // parse_group
     /// INTERNAL ONLY
-    detail::sequence<BidiIter> parse_group(string_iterator &begin, string_iterator end)
+    template<typename FwdIter>
+    detail::sequence<BidiIter> parse_group(FwdIter &begin, FwdIter end)
     {
         using namespace regex_constants;
         int mark_nbr = 0;
@@ -243,7 +300,7 @@ private:
         string_type name;
 
         detail::sequence<BidiIter> seq, seq_end;
-        string_iterator tmp = string_iterator();
+        FwdIter tmp = FwdIter();
 
         syntax_option_type old_flags = this->traits_.flags();
 
@@ -390,7 +447,8 @@ private:
     ///////////////////////////////////////////////////////////////////////////
     // parse_charset
     /// INTERNAL ONLY
-    detail::sequence<BidiIter> parse_charset(string_iterator &begin, string_iterator end)
+    template<typename FwdIter>
+    detail::sequence<BidiIter> parse_charset(FwdIter &begin, FwdIter end)
     {
         detail::compound_charset<traits_type> chset;
 
@@ -408,11 +466,12 @@ private:
     ///////////////////////////////////////////////////////////////////////////
     // parse_atom
     /// INTERNAL ONLY
-    detail::sequence<BidiIter> parse_atom(string_iterator &begin, string_iterator end)
+    template<typename FwdIter>
+    detail::sequence<BidiIter> parse_atom(FwdIter &begin, FwdIter end)
     {
         using namespace regex_constants;
         escape_value esc = { 0, 0, 0, detail::escape_char };
-        string_iterator old_begin = begin;
+        FwdIter old_begin = begin;
 
         switch(this->traits_.get_token(begin, end))
         {
@@ -509,7 +568,8 @@ private:
     ///////////////////////////////////////////////////////////////////////////
     // parse_quant
     /// INTERNAL ONLY
-    detail::sequence<BidiIter> parse_quant(string_iterator &begin, string_iterator end)
+    template<typename FwdIter>
+    detail::sequence<BidiIter> parse_quant(FwdIter &begin, FwdIter end)
     {
         BOOST_ASSERT(begin != end);
         detail::quant_spec spec = { 0, 0, false, &this->hidden_mark_count_ };
@@ -539,7 +599,8 @@ private:
     ///////////////////////////////////////////////////////////////////////////
     // parse_sequence
     /// INTERNAL ONLY
-    detail::sequence<BidiIter> parse_sequence(string_iterator &begin, string_iterator end)
+    template<typename FwdIter>
+    detail::sequence<BidiIter> parse_sequence(FwdIter &begin, FwdIter end)
     {
         detail::sequence<BidiIter> seq;
 
@@ -562,7 +623,8 @@ private:
     // parse_literal
     //  scan ahead looking for char literals to be globbed together into a string literal
     /// INTERNAL ONLY
-    string_type parse_literal(string_iterator &begin, string_iterator end)
+    template<typename FwdIter>
+    string_type parse_literal(FwdIter &begin, FwdIter end)
     {
         using namespace regex_constants;
         BOOST_ASSERT(begin != end);
@@ -570,7 +632,7 @@ private:
         escape_value esc = { 0, 0, 0, detail::escape_char };
         string_type literal(1, *begin);
 
-        for(string_iterator prev = begin, tmp = ++begin; begin != end; prev = begin, begin = tmp)
+        for(FwdIter prev = begin, tmp = ++begin; begin != end; prev = begin, begin = tmp)
         {
             detail::quant_spec spec = { 0, 0, false, &this->hidden_mark_count_ };
             if(this->traits_.get_quant_spec(tmp, end, spec))
@@ -604,10 +666,11 @@ private:
     // parse_quote_meta
     //  scan ahead looking for char literals to be globbed together into a string literal
     /// INTERNAL ONLY
-    string_type parse_quote_meta(string_iterator &begin, string_iterator end)
+    template<typename FwdIter>
+    string_type parse_quote_meta(FwdIter &begin, FwdIter end)
     {
         using namespace regex_constants;
-        string_iterator old_begin = begin, old_end;
+        FwdIter old_begin = begin, old_end;
         while(end != (old_end = begin))
         {
             switch(this->traits_.get_token(begin, end))
@@ -624,7 +687,8 @@ private:
     ///////////////////////////////////////////////////////////////////////////////
     // parse_escape
     /// INTERNAL ONLY
-    escape_value parse_escape(string_iterator &begin, string_iterator end)
+    template<typename FwdIter>
+    escape_value parse_escape(FwdIter &begin, FwdIter end)
     {
         detail::ensure(begin != end, regex_constants::error_escape, "incomplete escape sequence");
 
@@ -632,7 +696,7 @@ private:
         if(0 < this->rxtraits().value(*begin, 10))
         {
             // Parse at most 3 decimal digits.
-            string_iterator tmp = begin;
+            FwdIter tmp = begin;
             int mark_nbr = detail::toi(tmp, end, this->rxtraits(), 10, 999);
 
             // If the resulting number could conceivably be a backref, then it is.
