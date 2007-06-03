@@ -334,7 +334,7 @@ struct cpp_regex_traits
     /// Convert a char to a Char
     ///
     /// \param ch The source character.
-    /// \return std::use_facet<std::ctype<char_type> >(this->getloc()).widen(ch).
+    /// \return std::use_facet\<std::ctype\<char_type\> \>(this->getloc()).widen(ch).
     char_type widen(char ch) const
     {
         return this->ctype_->widen(ch);
@@ -387,12 +387,11 @@ struct cpp_regex_traits
 
     /// Returns a string_type containing all the characters that compare equal
     /// disregrarding case to the one passed in. This function can only be called
-    /// if has_fold_case<cpp_regex_traits<Char> >::value is true.
+    /// if has_fold_case\<cpp_regex_traits\<Char\> \>::value is true.
     ///
     /// \param ch The source character.
     /// \return string_type containing all chars which are equal to ch when disregarding
     ///     case
-    //typedef array<char_type, 2> fold_case_type;
     string_type fold_case(char_type ch) const
     {
         BOOST_MPL_ASSERT((is_same<char_type, char>));
@@ -445,7 +444,7 @@ struct cpp_regex_traits
 
     /// Returns a sort key for the character sequence designated by the iterator range [F1, F2)
     /// such that if the character sequence [G1, G2) sorts before the character sequence [H1, H2)
-    /// then v.transform(G1, G2) < v.transform(H1, H2).
+    /// then v.transform(G1, G2) \< v.transform(H1, H2).
     ///
     /// \attention Not used in xpressive 1.0
     template<typename FwdIter>
@@ -461,7 +460,7 @@ struct cpp_regex_traits
     /// Returns a sort key for the character sequence designated by the iterator range [F1, F2)
     /// such that if the character sequence [G1, G2) sorts before the character sequence [H1, H2)
     /// when character case is not considered then
-    /// v.transform_primary(G1, G2) < v.transform_primary(H1, H2).
+    /// v.transform_primary(G1, G2) \< v.transform_primary(H1, H2).
     ///
     /// \attention Not used in xpressive 1.0
     template<typename FwdIter>
@@ -537,7 +536,7 @@ struct cpp_regex_traits
     /// \param radix The radix to use for the conversion.
     /// \pre radix is one of 8, 10, or 16.
     /// \return -1 if ch is not a digit character, the integer value of the character otherwise.
-    ///     The conversion is performed by imbueing a std::stringstream with this->getloc();
+    ///     The conversion is performed by imbueing a std::stringstream with this-\>getloc();
     ///     setting the radix to one of oct, hex or dec; inserting ch into the stream; and
     ///     extracting an int.
     int value(char_type ch, int radix) const

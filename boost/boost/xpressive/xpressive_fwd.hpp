@@ -134,6 +134,14 @@ namespace boost { namespace xpressive
     typedef basic_regex<wchar_t const *>                            wcregex;
     #endif
 
+    typedef sub_match<std::string::const_iterator>                  ssub_match;
+    typedef sub_match<char const *>                                 csub_match;
+
+    #ifndef BOOST_XPRESSIVE_NO_WREGEX
+    typedef sub_match<std::wstring::const_iterator>                 wssub_match;
+    typedef sub_match<wchar_t const *>                              wcsub_match;
+    #endif
+
     typedef regex_compiler<std::string::const_iterator>             sregex_compiler;
     typedef regex_compiler<char const *>                            cregex_compiler;
 
